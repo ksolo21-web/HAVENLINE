@@ -1,0 +1,31 @@
+name: Havenline T53-T61 Parallel Preparation
+
+on:
+  pull_request:
+    paths:
+      - 'Docs/Production/T53/**'
+      - 'Docs/Production/T54/**'
+      - 'Docs/Production/T55/**'
+      - 'Docs/Production/T56/**'
+      - 'Docs/Production/T57/**'
+      - 'Docs/Production/T58/**'
+      - 'Docs/Production/T59/**'
+      - 'Docs/Production/T60/**'
+      - 'Docs/Production/T61/**'
+      - 'Docs/Production/T53_T61_PARALLEL_PREP_MANIFEST.json'
+      - 'tools/havenline/t53_t61/**'
+      - '.github/workflows/havenline-t53-t61-preparation.yml'
+  workflow_dispatch:
+
+jobs:
+  validate-preparation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile activation preflight
+        run: python -m py_compile tools/havenline/t53_t61/prepare_activation.py
+      - name: Validate T53-T61 preparation
+        run: python tools/havenline/t53_t61/prepare_activation.py --all

@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "task_id": "T10",
+  "review_scope": "parallel preparation readiness only; not gameplay completion or approval",
+  "prepared_branch": "havenline/governance-t10-prep",
+  "source_integration_checkpoint": "f342e807786d1f9d582a75dd3a2fc9f656143116",
+  "internal_review": {
+    "reviewer_type": "internal review; no separate critic runtime claimed",
+    "preparation_readiness_score": 10.0,
+    "pass_rule": "> 9.0 with all mandatory preparation checks passing",
+    "task_approval_claimed": false,
+    "checks": [
+      {"id":"P01","name":"T10 frozen scope exists and separates T10 framework from T11 camp content","status":"PASS"},
+      {"id":"P02","name":"Dependencies fixed to T05/T08/T09 and runtime activation refuses unresolved dependency state","status":"PASS"},
+      {"id":"P03","name":"Planned T10 ownership is disjoint from active T09 reservation","status":"PASS"},
+      {"id":"P04","name":"Planned T10 ownership excludes integration-only main.gd and simulation.gd","status":"PASS"},
+      {"id":"P05","name":"C1/C2/C3/C4/C6/C7 critic contract matches dependency graph and critic matrix","status":"PASS"},
+      {"id":"P06","name":"Exact-once atomic transaction, replay protection, preview purity and progression integrity are mandatory requirements","status":"PASS"},
+      {"id":"P07","name":"T14 global save/versioning boundary preserved while component recovery contract is defined","status":"PASS"},
+      {"id":"P08","name":"Activation tooling syntax and preparation validation pass in GitHub Actions","status":"PASS"},
+      {"id":"P09","name":"Production registry validation, migration validation and production-tool regression pass in GitHub Actions","status":"PASS"},
+      {"id":"P10","name":"Future isolated candidate workflow is present and cannot run T10 production without an activated registry/base","status":"PASS"}
+    ]
+  },
+  "mandatory_prep_defects": [],
+  "runtime_blockers": [
+    {
+      "id": "B01",
+      "blocker": "T09 is not APPROVED/integrated yet",
+      "effect": "T10 may remain prepared but may not be assigned/built as a production runtime candidate",
+      "resolution": "Complete T09, then run prepare_activation.py --activate --base <exact-post-T09-integration-head>; only a passing preflight may stage T10 activation."
+    }
+  ],
+  "remaining_after_dependency_resolves": [
+    "Run activation preflight against exact post-T09 integration head.",
+    "Stage and validate T10 ownership/registry/dependency/task-gate activation.",
+    "Commit activation governance and cut havenline/T10-world-transformation from that checkpoint.",
+    "Build/test/review/fix/retest T10 runtime candidate under C1/C2/C3/C4/C6/C7 and strict >9.0 acceptance."
+  ],
+  "resume_from": "Docs/Production/T10/TASK_PACKET.md + ACTIVATION_CHECKLIST.json + tools/havenline/task10/prepare_activation.py"
+}

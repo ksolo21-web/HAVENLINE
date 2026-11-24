@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "task_id": "T03",
+  "audit_type": "USER_DIRECTED_POST_COMPLETION_VISUAL_REPLACEMENT",
+  "historical_accepted_source": "e1e7bb2d68d1d53025d1242011ad4c885f08c307",
+  "integration_authorization": "99c51e556c160f4b74d63e94d319165969328c2f",
+  "repair_branch": "havenline/T03-reference-art-20260926",
+  "user_direction": "The fence needs to be changed too; use the supplied render family, preserve approved gameplay geometry and behavior.",
+  "status": "NEW_VISUAL_CANDIDATE_REQUIRES_ENGINE_AND_USER_REVIEW",
+  "scope": ["fence_panel", "gate_post", "gate_leaf", "their authored material bindings"],
+  "reference_images": {
+    "18590.png": "three-quarter rope-bound palisade",
+    "18595.png": "front palisade and warm carved wood detail",
+    "18596.png": "double gate and diagonal bracing",
+    "18598.png": "straight fence and end-post rhythm"
+  },
+  "reference_semantics": "Art language and construction references, not literal dimensional blueprints. The new meshes fit old source envelopes while the existing runtime transforms remain untouched.",
+  "local_model_counts": {
+    "fence_panel": {"closed_components": 74, "triangles": 7992},
+    "gate_post": {"closed_components": 6, "triangles": 648},
+    "gate_leaf": {"closed_components": 28, "triangles": 2820}
+  },
+  "texture_provenance": {
+    "source": "18595.png",
+    "source_sha256": "bc95d8be5769951c7b75073952662d17d3a40e80017a14fdee2a6fe6ec8a79fc",
+    "crop_pixels": [416,780,530,895],
+    "derived_size": [48,96],
+    "palette_colors": 24,
+    "derived_png_sha256": "f85c0beb09a5110da4281e765abf659403e9234d7307898416a8363f2989c437",
+    "role": "cropped surface-color detail on modeled 3D logs and planks; not a flat scene replacement"
+  },
+  "preserved": ["camp_boundary.gd", "all portal IDs and openings", "hinges", "routes", "visual leaf length 1.85 and open angle 1.12", "terrain", "river", "lane shader", "T01 forest", "T04 camera", "T05 assets"],
+  "review_status": {"internal_local_topology": "PASS", "independent_critic": "NOT_RUN", "godot_evidence": "PENDING", "performance": "PENDING", "user_visual_approval": false},
+  "task_approved": false,
+  "effective_visual_approval": false
+}

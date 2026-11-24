@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "contract_path": "Docs/Production/T12/DOWNSTREAM_CONSUMER_CONTRACT.json",
+  "prepared_contract_git_blob_sha": "46d8c6c265f7c17922ec9fdc8a9c52ef924b0882",
+  "bindings": {
+    "T44": {"owned_band":"band_forest","owned_levels":[11,20],"may_read":["current_level_id","unlockable_level_ids","progression_intents"],"boundary":"T12 reserves stable progression slots only; T44 authors forest content."},
+    "T45": {"owned_band":"band_desert","owned_levels":[21,30],"may_read":["current_level_id","unlockable_level_ids","progression_intents"],"boundary":"T12 reserves stable progression slots only; T45 authors desert content."},
+    "T46": {"owned_band":"band_underwater","owned_levels":[31,40],"may_read":["current_level_id","unlockable_level_ids","progression_intents"],"boundary":"T12 reserves stable progression slots only; T46 authors underwater content."},
+    "T47": {"owned_band":"band_sky","owned_levels":[41,50],"may_read":["current_level_id","unlockable_level_ids","progression_intents"],"boundary":"T12 reserves stable progression slots only; T47 authors sky content."},
+    "T48": {"owned_band":"band_volcanic","owned_levels":[51,60],"may_read":["current_level_id","unlockable_level_ids","progression_intents"],"boundary":"T12 reserves stable progression slots only; T48 authors volcanic content."},
+    "T49": {"owned_band":"band_swamp","owned_levels":[61,70],"may_read":["current_level_id","unlockable_level_ids","progression_intents"],"boundary":"T12 reserves stable progression slots only; T49 authors swamp content."},
+    "T50": {"owned_band":"band_ruins","owned_levels":[71,80],"may_read":["current_level_id","unlockable_level_ids","progression_intents"],"boundary":"T12 reserves stable progression slots only; T50 authors ruins content."},
+    "T51": {"owned_band":"band_underground","owned_levels":[81,90],"may_read":["current_level_id","unlockable_level_ids","progression_intents"],"boundary":"T12 reserves stable progression slots only; T51 authors underground content."},
+    "T52": {"owned_band":"band_alien","owned_levels":[91,100],"may_read":["current_level_id","unlockable_level_ids","progression_intents"],"boundary":"T12 reserves stable progression slots only; T52 authors alien content."}
+  },
+  "activation_rule": "Fail closed if the current T12 downstream consumer contract blob or any region consumer row differs; reconcile via structured interface/change request before activation."
+}

@@ -1,0 +1,102 @@
+{
+  "batch": "buy-03",
+  "iteration": 1,
+  "assets": [
+    {
+      "asset": "activation_construction",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-fb07c302-2b2a-433f-abe0-5b62a6099fd4.png",
+      "sha256": "d04ca3c660b3cdc1436614cdbae20599e2d218b9616bb9c9c1d22cd4c39e0518",
+      "bytes": 1559494,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "reference_derived_visual_concept",
+      "score": 7.6,
+      "verdict": "FAIL",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ],
+      "evidence": [
+        "Gray snow-side idle material-spend field, castle/camp pictogram and log resource badge align with source.",
+        "Four separated white corners and visible reference-material-cost qualifier pass; all8represent idlegray state."
+      ],
+      "blocking_defects": [
+        {
+          "requirement": "R6",
+          "panel": "REAR RIGHT135",
+          "issue": "Price-strip edge is correct but reading direction is reversed180degrees. Currency/material badge is at lower-left rather than top/right end.",
+          "fix": "Rotate entire strip180degrees within current far upper-left edge. Badge toward top corner; digits run toward left/lower-left corner. Preserve actual reference number."
+        },
+        {
+          "requirement": "R6",
+          "panel": "0/90/180/270 versus diagonals",
+          "issue": "Cardinal square appears nearly top-down while diagonal footprint is compressed, unlike one fixed elevated ground plane.",
+          "fix": "Foreshorten cardinal depth and transform all attached glyphs with plane. Match the consistent elevated compression of diagonals; approx35degree presentation is a target, no native numeric calibration claimed."
+        }
+      ],
+      "minor_disposition": "Minor illustration variation is within static concept scope; exact native camera calibration is not certified."
+    },
+    {
+      "asset": "activation_work_zone",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-4552c0d2-ca53-42e6-ae6d-da295a691f46.png",
+      "sha256": "4cb3824809a1d50940bedd5212ee823928767ffd80137e38d323e049ba0b616b",
+      "bytes": 1434501,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "reference_derived_visual_concept",
+      "score": 7.2,
+      "verdict": "FAIL",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ],
+      "evidence": [
+        "Unfilled navy interior with green outline is correctly distinct from storage or material-payment fields.",
+        "12outline pieces retained:4corner arcs+3dashes on each long side+1dash at each short end."
+      ],
+      "blocking_defects": [
+        {
+          "requirement": "R6",
+          "panel": "225/315",
+          "issue": "These two diagonal geometries are swapped relative to the opposite45/135views.",
+          "fix": "225must share descending long-axis slope with45;315must share rising long-axis slope with135."
+        },
+        {
+          "requirement": "R6",
+          "panel": "90/270 relative0/180",
+          "issue": "End views are too tall/narrow for the same2:1world footprint and fixed elevated camera.",
+          "fix": "Use coherent ground-plane compression. Approximate35degree shape guide:0/180width:height3.5:1;90/270width:height0.87:1, with coherent overall scale. Preserve all12pieces and nofill."
+        }
+      ],
+      "minor_disposition": "The source outline is naturally180degree-symmetric; opposite silhouettes may legitimately match. Do not invent extra directional marks to manufacture asymmetry."
+    }
+  ],
+  "reviewer_agent": "/root/turnaround_critic",
+  "contract_version": "2026-11-23-plots-v1",
+  "contract_sha256": "c4ef53e38335f159aa23f1bbb5317b06fe0e402a9fca869229a5910600138498",
+  "gate": "Each score strictly above9.0 and all mandatory concept-image checks passed."
+}

@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/render_critic",
+  "created_utc": "2026-11-24T10:28:26.839758+00:00",
+  "scope": "Supplementary single static Recovery pose for composition; no replacement of required detail/action board",
+  "approval_threshold": {
+    "minimum_score": 9.5,
+    "all_mandatory_checks_must_pass": true,
+    "target": 10
+  },
+  "entries": [
+    {
+      "archetype_id": "ice_brute",
+      "asset_id": "ice-brute-recovery-reference-r1",
+      "board_type": "composition_recovery_reference",
+      "candidate_path": "attempts/ice-brute-recovery-reference-r1.png",
+      "sha256": "76fab4438ce2974f398b83c74cbf23f476a898b9985b840b44b423a477ae993a",
+      "score": 9.8,
+      "status": "PASS_COMPOSITION_REFERENCE",
+      "all_mandatory_checks_for_this_reference_passed": true,
+      "actual_full_sheet_inspected": true,
+      "checked_views_or_panels": [
+        "frontal crouched full body",
+        "both exposed feet",
+        "both fists",
+        "face and ice armor identity"
+      ],
+      "positive_evidence": [
+        "Both planted frontal feet clearly contain five connected toes, including mirrored large medial big toes.",
+        "Each fist has four curled fingers and one wrapped thumb, with coherent arm/wrist connections.",
+        "Bent knees, shins and feet connect naturally; arms are held beside the knees in a plausible static recovery crouch.",
+        "Same face, fur clumps, forehead/shoulder/forearm ice plates and blue-gray skin as the approved boss anatomy reference.",
+        "Complete figure is framed with a clean navy presentation and readable Recovery Pose label."
+      ],
+      "limitations": [
+        "Only a single static pose; this is not animation-cycle approval.",
+        "The final composed detail board must still be checked for successful insertion and regressions.",
+        "This approved intermediate does not increase or replace the six required board slots."
+      ]
+    }
+  ],
+  "summary": {
+    "approved_required_selected_boards": 5,
+    "required_selected_boards": 6,
+    "approved_supplementary_anatomy_reference": 1,
+    "approved_composition_pose_reference": 1,
+    "package_or_github_approval": false
+  }
+}

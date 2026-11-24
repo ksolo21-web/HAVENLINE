@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "task_id": "T11",
+  "purpose": "Dependency-safe spatial baseline for T11. It freezes approved T03/T04/T05 geometry and camera authorities, audits the approved T05 camp arrangement, and defines construction/upgrade anchors without activating T11 runtime or inventing shipping prices.",
+  "runtime_activation_allowed": false,
+  "authorities": {
+    "t03_boundary": {
+      "accepted_source": "5df9726e0b1c33f0f8865385b1c49aca229fd461",
+      "path": "HavenlineGodot/scripts/camp_boundary.gd",
+      "git_blob_sha": "be59a8642b4e42ae5ad7e0f8dbe06087f89acdb4",
+      "authority_id": "T03-gate-geometry-v3",
+      "constants": {
+        "side_x": 12.4,
+        "north_z": 8.8,
+        "side_gate_z": 2.4,
+        "north_gate_half": 2.15,
+        "side_gate_half": 2.05,
+        "river_gate_half": 2.7,
+        "lane_half": 1.3,
+        "camp_center": [0.0, 2.8],
+        "shelter_west": [-6.4, -0.4],
+        "shelter_east": [6.4, -0.4],
+        "river_gates_x": [-9.0, 1.5, 10.0]
+      },
+      "interior_lane_segments": {
+        "central-spine": [[1.5, 0.3], [0.0, 2.25], [0.0, 8.8]],
+        "cross-camp": [[-12.4, 2.4], [-2.8, 2.25], [0.0, 2.25], [12.4, 2.4]],
+        "west-shelter": [[-4.7, 2.25], [-5.5, 0.9], [-6.4, -0.4]],
+        "east-shelter": [[4.7, 2.25], [5.5, 0.9], [6.4, -0.4]],
+        "west-river-connector-interior": [[-8.3, 0.9], [-6.8, 2.25]],
+        "east-river-connector-interior": [[8.7, 0.9], [6.8, 2.25]]
+      }
+    },
+    "t02_river": {
+      "path": "HavenlineGodot/scripts/river_geometry.gd",
+      "git_blob_sha": "d0efc3533254e135a478debf4c2b77618b90740f",
+      "layout_version": "river_v1_mapspan",
+      "build_margin_components": {
+        "wet_edge": 0.3,
+        "bank_run": 0.7,
+        "snow_shoulder": 0.45,
+        "build_setback": 1.6
+      },
+      "anchors": [[-31.0, -8.6], [-24.0, -7.2], [-17.0, -9.0], [-10.0, -6.8], [-3.0, -8.7], [4.0, -6.9], [11.0, -8.5], [19.0, -6.7], [25.0, -8.1], [31.0, -7.3]],
+      "widths": [3.6, 4.05, 4.2, 4.25, 4.0, 4.25, 4.0, 4.25, 3.8, 3.6]
+    },
+    "t04_camera": {
+      "accepted_source": "e08fd37e9a999d878644c03089c4b4b253bd7472",
+      "path": "HavenlineGodot/scripts/camera_composition.gd",
+      "git_blob_sha": "4030ccb5eaa367ad8b95e021248c1d8db9f2dc4f",
+      "authority_id": "T04-reference-camera-v1",
+      "constants": {
+        "base_full_height": 14.3,
+        "maximum_full_height": 16.0,
+        "minimum_horizontal_span": 19.5,
+        "target_max_distance": 8.0,
+        "maximum_target_shift": 2.2,
+        "view_offset": [0.0, 6.8, 8.6]
+      }
+    },
+    "t05_station_catalog": {
+      "accepted_source": "fa6fa70f154f3757d22303522ca3f6de2c3d391f",
+      "path": "HavenlineGodot/assets/stations_v2/catalog.json",
+      "git_blob_sha": "ae27aa074e4ad9e5fa912259685741a55fc35c55",
+      "arrangement_key": "camp"
+    }
+  },
+  "construction_state_shells": {
+    "site-unbuilt": {
+      "description": "Reference-grounded preconstruction site. The approved T05 build pad occupies the same spatial anchor later used by the central heated station.",
+      "spawn": [
+        {"asset_id": "pad_build", "position_xz": [0.0, 0.2], "rotation_y": 0.0, "authority": "T11", "behavior": "walkable contextual ground pad only"}
+      ],
+      "shipping_price": null,
+      "t10_recipe_id": null
+    },
+    "camp-initial": {
+      "description": "Spatial shell based on the approved T05 camp arrangement. T11 may use approved art passively while later-task behavior remains disabled.",
+      "construction_replacement": {"remove_asset_id": "pad_build", "add_asset_id": "hearth_vessel", "position_xz": [0.0, 0.2]},
+      "upgrade_pad": {"asset_id": "pad_upgrade", "position_xz": [-3.0, -0.8], "rotation_y": 0.0},
+      "passive_visual_context_policy": {
+        "allowed_without_later_behavior": ["service_counter", "processing_counter", "pad_stock", "pad_payment", "wood_stack", "stone_stack", "metal_stack", "fuel_canister"],
+        "reserved_not_spawned_by_t11": ["defense_platform"],
+        "reason": "T16/T17/T22 retain their behavior authority; T11 may not pre-implement processing, payment/customer, or defense behavior."
+      },
+      "shipping_price": null,
+      "t10_recipe_id": null
+    }
+  },
+  "approved_t05_camp_baseline": [
+    {"asset_id": "hearth_vessel", "position_xz": [0.0, 0.2], "rotation_y": 0.0},
+    {"asset_id": "service_counter", "position_xz": [7.8, 5.1], "rotation_y": 0.0},
+    {"asset_id": "processing_counter", "position_xz": [-7.8, 5.1], "rotation_y": 0.0},
+    {"asset_id": "pad_upgrade", "position_xz": [-3.0, -0.8], "rotation_y": 0.0},
+    {"asset_id": "pad_stock", "position_xz": [7.8, 7.2], "rotation_y": 0.0},
+    {"asset_id": "pad_payment", "position_xz": [10.7, 7.1], "rotation_y": 0.0},
+    {"asset_id": "wood_stack", "position_xz": [-10.8, 7.4], "rotation_y": 0.0},
+    {"asset_id": "stone_stack", "position_xz": [-4.8, 7.4], "rotation_y": 0.0},
+    {"asset_id": "metal_stack", "position_xz": [-10.8, 4.8], "rotation_y": 0.0},
+    {"asset_id": "fuel_canister", "position_xz": [10.8, 4.8], "rotation_y": 0.0},
+    {"asset_id": "defense_platform", "position_xz": [3.5, 6.6], "rotation_y": 0.0}
+  ],
+  "spatial_acceptance": {
+    "fixed_boundary_rule": "Every audited hard footprint must remain inside west/east X = +/-12.4 and north Z = 8.8. The south boundary is checked against the T02 river permanent-build setback.",
+    "lane_rule": "Hard footprints may not intrude into the 1.3-unit half-width T03 lane corridors unless explicitly exempted. Clearances/sockets may overlap a lane because they are approach space, not solid geometry.",
+    "lane_overlap_exemptions": [
+      {"asset_id": "hearth_vessel", "lanes": ["central-spine", "cross-camp"], "reason": "T03 explicitly routes through the camp center/furnace zone; T05 approved this central station placement."},
+      {"asset_id": "pad_build", "lanes": ["central-spine", "cross-camp"], "reason": "The build pad is a walkable ground pad replacing the future hearth anchor, not a solid obstacle."}
+    ],
+    "camera_rule": "The construction anchor and active T11 upgrade pad must remain inside T04's 8.0-unit contextual target envelope and the critical interaction cluster must fit the minimum 19.5 horizontal span / 14.3 base full-height envelope.",
+    "later_task_behavior_forbidden": ["T16 processing", "T17 customer/payment/economy", "T22 defense/combat"]
+  }
+}

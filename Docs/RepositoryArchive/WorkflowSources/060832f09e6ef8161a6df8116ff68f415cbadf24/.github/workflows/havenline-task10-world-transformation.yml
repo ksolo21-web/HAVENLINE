@@ -1,0 +1,105 @@
+name: Havenline Task 10 world transformation candidate
+
+on:
+  push:
+    branches: ['havenline/T10-world-transformation']
+    paths:
+      - 'HavenlineGodot/scripts/world_transform.gd'
+      - 'HavenlineGodot/scripts/world_transform_view.gd'
+      - 'HavenlineGodot/data/world_transform_recipes.json'
+      - 'HavenlineGodot/assets/world_transform_v1/**'
+      - 'HavenlineGodot/tests/test_task10_*.gd'
+      - 'Docs/Production/T10/**'
+      - 'tools/havenline/task10/**'
+      - '.github/workflows/havenline-task10-*.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: havenline-task10-world-transformation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  first-builder-milestone:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Prepare pinned Godot
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/engine" task10-evidence/tests
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+
+      - name: Verify activation, candidate scope and source contract
+        env:
+          CANDIDATE: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
+          base=$(python3 - <<'PY'
+          import json
+          r=json.load(open('Docs/Production/WORKSTREAM_REGISTRY.json'))
+          row=next(x for x in r['workstreams'] if x['task_id']=='T10')
+          assert row['status'] not in ('LOCKED','PREPARED','APPROVED'), row['status']
+          print(row['base_commit'])
+          PY
+          )
+          python3 tools/havenline/production/workstream.py validate-candidate T10 --base "$base" --head "$CANDIDATE" --integration-head "$integration" | tee task10-evidence/candidate-scope.json
+          python3 tools/havenline/task10/validate_world_transform.py --candidate "$CANDIDATE" --output task10-evidence/source-contract.json
+          python3 tools/havenline/production/validate_migration.py > task10-evidence/governance.json
+          python3 -m unittest discover -s tools/havenline/production/tests -p 'test_*.py' > task10-evidence/tests/production-tools.log 2>&1
+
+      - name: Import and run impacted regression
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/bake_outpost_audio.py > task10-evidence/tests/audio-fixture.json
+          timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > task10-evidence/tests/import.log 2>&1
+          timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > task10-evidence/tests/motion-fixture.log 2>&1
+          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_outpost_runtime test_adaptive_devices test_task06_character1 test_task07_context_director test_task07_integration test_task08_inventory test_task08_integration test_task09_harvesting test_task09_integration test_task10_world_transform test_task10_integration; do
+            timeout 300 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" > "task10-evidence/tests/$suite.log" 2>&1
+          done
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' task10-evidence/tests/*.log; then exit 1; fi
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,os
+          rows=[]
+          for path in sorted(Path('task10-evidence/tests').glob('test_*.log')):
+              reports=[json.loads(line) for line in path.read_text().splitlines() if line.startswith('{')]
+              assert reports,path
+              report=reports[-1]
+              assert report.get('passed') is True and not report.get('failures'),(path,report.get('failures'))
+              checks=report.get('checks',[])
+              rows.append({'suite':path.stem,'checks':len(checks) if isinstance(checks,list) else int(checks),'passed':True})
+          assert len(rows)==14,len(rows)
+          output={'task':'T10-first-builder-milestone','source':os.environ['GITHUB_SHA'],'suite_count':len(rows),'total_checks':sum(row['checks'] for row in rows),'suites':rows,'all_passed':True,'task_approved':False}
+          Path('task10-evidence/tests.json').write_text(json.dumps(output,indent=2)); print(json.dumps(output))
+          PY
+
+      - name: Assert critic contract is unchanged
+        run: |
+          set -euo pipefail
+          python3 - <<'PY' | tee task10-evidence/critic-contract.json
+          import json
+          from pathlib import Path
+          matrix=json.loads(Path('Docs/Production/CRITIC_MATRIX.json').read_text())
+          required=['C1','C2','C3','C4','C6','C7']
+          assert matrix['task_applicability']['T10']==required
+          print(json.dumps({'task':'T10','required_critics':required,'minimum_operator':'>','threshold':9.0,'target':10.0,'task_approved':False},indent=2))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-task10-first-milestone-${{ github.sha }}
+          path: task10-evidence
+          if-no-files-found: error
+          retention-days: 14

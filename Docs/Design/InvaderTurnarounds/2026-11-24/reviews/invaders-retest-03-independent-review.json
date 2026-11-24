@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/render_critic",
+  "created_utc": "2026-11-24T10:12:37.610415+00:00",
+  "scope": "Independent actual-pixel static review; no animation/native/runtime certification",
+  "approval_threshold": {
+    "minimum_score": 9.5,
+    "all_mandatory_checks_must_pass": true,
+    "target": 10
+  },
+  "entries": [
+    {
+      "archetype_id": "raider",
+      "asset_id": "raider-details-r1",
+      "board_type": "detail_and_use_state_board",
+      "candidate_path": "attempts/raider-details-r1.png",
+      "sha256": "4c31515b2c8e4b95db5136f9cd3e95c2ba0202f72fd9e5434088f217b786e68b",
+      "score": 9.7,
+      "status": "PASS",
+      "all_mandatory_visual_checks_passed": true,
+      "checked_views_or_panels": [
+        "ready",
+        "wind_up",
+        "follow_through",
+        "face_and_hood",
+        "axe_concept",
+        "game_camera"
+      ],
+      "actual_full_sheet_inspected": true,
+      "closeup_evidence": [
+        "reviews/evidence/raider-details-r1-grip-states.png"
+      ],
+      "paired_approved_turnaround": {
+        "path": "attempts/raider-turnaround-r2.png",
+        "sha256": "bf8ffb985d964e2046d8d5a86041fef69801ee6a82e16bbb1f9a973049651c2c"
+      },
+      "findings": [],
+      "positive_evidence": [
+        "Hood, beard/face, shoulder mantle, forearm wraps, belt/pouches and boots match approved r2 turnaround.",
+        "Right-hand axe grip remains connected and consistently handed in ready, wind-up, follow-through and game-camera poses; two arms/two legs remain coherent.",
+        "Face/hood and axe closeups are readable; no unintended silhouette cropping in full-body panels.",
+        "Footer explicitly labels a proposed axe loadout and static pose concepts, so the new held prop does not falsely claim prior weapon approval."
+      ],
+      "static_scope_only": true
+    },
+    {
+      "archetype_id": "ice_brute",
+      "asset_id": "ice-brute-turnaround-r2",
+      "board_type": "eight_view_turnaround",
+      "candidate_path": "attempts/ice-brute-turnaround-r2.png",
+      "sha256": "cc1dbadd547111d9f028c90bde1055d44071bc0524c8465a369adb2a99f417dd",
+      "score": 8.9,
+      "status": "REPAIR_REQUIRED",
+      "all_mandatory_visual_checks_passed": false,
+      "checked_views_or_panels": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ],
+      "actual_full_sheet_inspected": true,
+      "closeup_evidence": [
+        "reviews/evidence/ice-brute-r2-front-hands-feet.png"
+      ],
+      "findings": [
+        {
+          "severity": "mandatory",
+          "views": [
+            "front0",
+            "front-left45",
+            "front-right315",
+            "visible_profiles"
+          ],
+          "issue": "Feet still show four exposed toes/nails per foot, inconsistent with fixed five-toe design lock.",
+          "repair": "Focused toe-only correction to five toes per foot with consistent count/occlusion in all relevant views. Preserve repaired hands and other successful design features."
+        }
+      ],
+      "positive_evidence": [
+        "Hands now show thumb plus four fingers with coherent opposite-side rotation; prior hand-count concern resolved.",
+        "All other style, framing and eight-direction checks retain prior favorable findings."
+      ],
+      "static_scope_only": true
+    }
+  ],
+  "summary": {
+    "approved_selected_boards": 4,
+    "required_selected_boards": 6,
+    "remaining": [
+      "ice_brute_turnaround",
+      "ice_brute_details"
+    ],
+    "package_or_github_approval": false
+  }
+}

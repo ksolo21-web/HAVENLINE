@@ -1,0 +1,441 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-24T10:58:29.687876+00:00",
+  "status": "REFERENCE_SCOPE_REOPENED_NOT_YET_RENDER_COVERAGE_APPROVED",
+  "rule": "User explicitly requested reference-based enemies. Runtime absence is not an exclusion rule. Subjects are grouped by observed role; source-defined names are not invented.",
+  "confirmed_new_enemy_appearances": 6,
+  "confirmed_new_hunting_appearance_preview_only": 1,
+  "existing_subjects_retained": [
+    {
+      "reference_subject_id": "hostile_wolf",
+      "working_name": "Hostile wolf",
+      "role": "existing runtime hostile",
+      "authority": "Current Godot simulation wolf key and wolf+serial instances; retained existing render subject.",
+      "source_path": "HavenlineGodot/scripts/simulation.gd",
+      "source_head": "4cc278f13462ad1678c3dbed9153e8badce59686"
+    },
+    {
+      "reference_subject_id": "historical_raider",
+      "working_name": "Prior raider concept",
+      "role": "earlier conversation hostile concept",
+      "authority": "Coordinator recovered prior user conversation; current visual reference variants must be mapped separately rather than assuming one generic raider covers them."
+    },
+    {
+      "reference_subject_id": "historical_ice_brute",
+      "working_name": "Prior Ice Brute prototype",
+      "role": "earlier prototype boss concept",
+      "authority": "Coordinator recovered prior assistant prototype; does not substitute for spined quadruped or red hooded boss."
+    }
+  ],
+  "reference_subjects": [
+    {
+      "reference_subject_id": "polar_bear_unarmored",
+      "working_name": "Unarmored white/polar bear",
+      "role": "hostile and huntable wildlife",
+      "role_confidence": "high",
+      "sources": [
+        {
+          "id": "primary_B",
+          "times_seconds": [
+            "2.5\u20136",
+            "14.5\u201320.5",
+            "32\u201338",
+            "43.5\u201352.5"
+          ]
+        },
+        {
+          "id": "WS-S08",
+          "times_seconds": [
+            "55\u201358.9 promotional illustration"
+          ]
+        }
+      ],
+      "distinctive_features": [
+        "Large quadrupedal bear silhouette",
+        "White fur, rounded ears, long muzzle, black nose and claws",
+        "No harness or ice armor; health bars and meat drops in primary B"
+      ],
+      "relation_to_existing_renders": "Missing from the original Wolf/Raider/Ice Brute selection; the companion brown bear and bipedal Ice Brute do not cover it.",
+      "render_mapping_status": "New polar-bear-turnaround-r1 candidate exists but is not reviewed in this coverage report. Required matched detail/use-state board remains pending.",
+      "evidence_review": "independent actual-pixel audit by /root/render_critic",
+      "source_policy": "Reference appearance is in scope irrespective of runtime implementation."
+    },
+    {
+      "reference_subject_id": "spined_white_quadruped",
+      "working_name": "Spined white quadrupedal hostile",
+      "role": "hostile beast; species/canonical name unresolved",
+      "role_confidence": "high for hostility; descriptive visual label only",
+      "sources": [
+        {
+          "id": "WS-S05",
+          "times_seconds": [
+            "43.5\u201349"
+          ]
+        }
+      ],
+      "distinctive_features": [
+        "Large white bear-like quadruped",
+        "Dark jagged dorsal spikes/plates",
+        "Red health bar, pursuit and attacks at electric perimeter"
+      ],
+      "relation_to_existing_renders": "Visually distinct from primary B plain polar bears and the prior bipedal Ice Brute. Requires explicit own variant mapping; cannot be silently folded into either.",
+      "render_mapping_status": "MISSING",
+      "evidence_review": "independent actual-pixel audit by /root/render_critic",
+      "source_policy": "Reference appearance is in scope irrespective of runtime implementation."
+    },
+    {
+      "reference_subject_id": "red_skull_hood_minion",
+      "working_name": "Small red-hooded skull-faced attacker",
+      "role": "hostile minion/horde unit",
+      "role_confidence": "high; whether skull is anatomy or a mask is unresolved",
+      "sources": [
+        {
+          "id": "WS-S08",
+          "times_seconds": [
+            "0\u201354"
+          ]
+        }
+      ],
+      "distinctive_features": [
+        "Small red pointed hoods",
+        "White/gray skull-like faces with dark eye sockets",
+        "Horde attacks gate, is hit by defense fire, leaves coin drops"
+      ],
+      "relation_to_existing_renders": "Prior Raider is a human with a beard and winter hood, without the skull face. Its individual visual approval does not establish coverage of this distinct reference appearance.",
+      "render_mapping_status": "MISSING",
+      "evidence_review": "independent actual-pixel audit by /root/render_critic",
+      "source_policy": "Reference appearance is in scope irrespective of runtime implementation."
+    },
+    {
+      "reference_subject_id": "red_skull_hood_boss",
+      "working_name": "Large red-hooded skull-faced boss",
+      "role": "hostile boss/large variant",
+      "role_confidence": "high; canonical name and precise gold/yellow weapon type unresolved",
+      "sources": [
+        {
+          "id": "WS-S08",
+          "times_seconds": [
+            "12.5\u201325.5",
+            "27\u201341",
+            "53.5\u201354"
+          ]
+        }
+      ],
+      "distinctive_features": [
+        "Much larger than surrounding matching minions at the same camera",
+        "Red hood/robe, pale skull-like face and dark eye sockets",
+        "Individual red health bar",
+        "Gold/yellow curved hand/weapon detail",
+        "Closeup also shows a yellow/beak-like central face protrusion; do not invent a specific canonical species or weapon from the low-resolution source."
+      ],
+      "relation_to_existing_renders": "Not covered by the white-furred ice-armored Ice Brute. A separate reference-to-render row is mandatory.",
+      "render_mapping_status": "MISSING",
+      "evidence_review": "independent actual-pixel audit by /root/render_critic",
+      "source_policy": "Reference appearance is in scope irrespective of runtime implementation."
+    },
+    {
+      "reference_subject_id": "red_rifle_infantry",
+      "working_name": "Red winter rifle infantry",
+      "role": "hostile ranged human unit",
+      "role_confidence": "high",
+      "sources": [
+        {
+          "id": "WS-S07",
+          "times_seconds": [
+            "36\u201340"
+          ],
+          "exact_evidence_frame": "detail-frames/WS-S07-038.png"
+        },
+        {
+          "id": "WS-S03",
+          "times_seconds": [
+            "20\u201322",
+            "52\u201356"
+          ],
+          "exact_evidence_frame": "detail-frames/WS-S03-054.png"
+        }
+      ],
+      "distinctive_features": [
+        "Small human scale relative to leaders",
+        "Red winter clothing and dark long firearms held in two hands",
+        "Visible muzzle flashes, opposing red/blue forces and health bars"
+      ],
+      "evidence_review": "Observed by source auditor; independently corroborated by /root/render_critic on the exact frames.",
+      "render_mapping_status": "MISSING_AT_AUDIT_START",
+      "naming_note": "Descriptive render label; no source-defined unit rank/name established."
+    },
+    {
+      "reference_subject_id": "red_heavy_rifle_leader",
+      "working_name": "Large red-coated rifle leader",
+      "role": "hostile large human/leader appearance variant",
+      "role_confidence": "high for hostile role and scale difference; source-defined rank unproven",
+      "sources": [
+        {
+          "id": "WS-S03",
+          "times_seconds": [
+            "20\u201322",
+            "52\u201356"
+          ],
+          "exact_evidence_frame": "detail-frames/WS-S03-054.png"
+        }
+      ],
+      "distinctive_features": [
+        "Substantially larger than adjacent red rifle infantry at the same camera",
+        "Red coat with pale trim and prominent white beard",
+        "Armed ranged-combat posture during red-versus-blue fight"
+      ],
+      "evidence_review": "Observed by source auditor; independently corroborated by /root/render_critic on the exact frame.",
+      "render_mapping_status": "MISSING_AT_AUDIT_START",
+      "naming_note": "Do not equate scale with a verified boss rank; use descriptive heavy/leader variant."
+    },
+    {
+      "reference_subject_id": "antlered_winter_wildlife",
+      "working_name": "Antlered winter deer / reindeer-like wildlife",
+      "role": "huntable wildlife; invasion/aggression unproven",
+      "role_confidence": "high for antlered ungulate appearance; medium for exact species",
+      "sources": [
+        {
+          "id": "YT11",
+          "video_id": "y3j0_R68Hmo",
+          "url": "https://www.youtube.com/watch?v=y3j0_R68Hmo",
+          "times_seconds": [
+            "approximately16\u201324"
+          ],
+          "evidence": "youtube-timelines/YT11-preview-timeline.png",
+          "retrieval_kind": "public storyboard previews"
+        }
+      ],
+      "distinctive_features": [
+        "Long legs and pale gray body",
+        "Large dark branching antlers",
+        "Health bars and hunting/contact context, visually distinct from later polar bears in the same clip"
+      ],
+      "evidence_review": "Source auditor inspected complete approximately1-second public preview sequence; source video stream not yet available at this checkpoint.",
+      "render_mapping_status": "SUPPORTED_HUNTABLE_SUBJECT_NOT_A_CONFIRMED_INVADER",
+      "naming_note": "Preserve the observable silhouette without inventing precise zoological identity or hostile behavior. Tundra Stag is the approved working render label, not a claim of canonical source species.",
+      "working_render_name": "Tundra Stag"
+    },
+    {
+      "reference_subject_id": "large_spotted_aquatic_targets",
+      "working_name": "Large blue spotted aquatic fishing targets",
+      "role": "aquatic harvest resource; hostility unproven",
+      "role_confidence": "high for fishing/harvest context; exact species descriptive",
+      "sources": [
+        {
+          "id": "WS-S06",
+          "times_seconds": [
+            "44\u201347"
+          ],
+          "exact_evidence_frame": "detail-frames/WS-S06-046.png"
+        }
+      ],
+      "distinctive_features": [
+        "Large broad heads and blue spotted bodies",
+        "Tall dorsal fins and large fish/shark-like silhouette",
+        "Visible casting/net target area beside the dock, with no attack shown"
+      ],
+      "evidence_review": "Actual MP4 timeline and1080\u00d71920 frame inspected.",
+      "render_mapping_status": "SEPARATE_FOOD_OR_HUNTING_ASSET_NOT_AUTOMATICALLY_ENEMY"
+    },
+    {
+      "reference_subject_id": "giant_food_fish_variants",
+      "working_name": "Large food fish and frozen fish resources",
+      "role": "fish harvest/processing subjects; no hostile role established",
+      "role_confidence": "high for resource role; exact species unresolved",
+      "sources": [
+        {
+          "id": "YT05",
+          "video_id": "nkmSmcEnSoc",
+          "times_seconds": [
+            "approximately0\u201358"
+          ],
+          "evidence": "youtube-timelines/YT05-preview-timeline.png"
+        },
+        {
+          "id": "YT06",
+          "video_id": "yA46HmBww3g",
+          "times_seconds": [
+            "approximately4\u201356"
+          ],
+          "evidence": "youtube-timelines/YT06-preview-timeline.png"
+        },
+        {
+          "id": "YT07",
+          "video_id": "WZ5sRcbsAbU",
+          "times_seconds": [
+            "approximately0\u201373"
+          ],
+          "evidence": "youtube-timelines/YT07-preview-timeline.png"
+        },
+        {
+          "id": "YT08",
+          "video_id": "c2YHDkoFGPE",
+          "times_seconds": [
+            "approximately0\u201352"
+          ],
+          "evidence": "youtube-timelines/YT08-preview-timeline.png"
+        }
+      ],
+      "distinctive_features": [
+        "Large pink/red and pale fish depicted in ice, on processing surfaces or feeding production lines",
+        "Preview titles about defense do not prove hostile behavior"
+      ],
+      "evidence_review": "Retrieved public preview sequences inspected; species details require full-resolution source before a species-specific render.",
+      "render_mapping_status": "SEPARATE_RESOURCE_COVERAGE"
+    },
+    {
+      "reference_subject_id": "giant_elk_broad_antlered_target",
+      "working_name": "Giant Elk (working interpretation)",
+      "role": "antlered combat target / hostile wildlife candidate",
+      "role_confidence": "medium-high for combat target, exact species and tier unconfirmed",
+      "sources": [
+        {
+          "id": "YT01",
+          "video_id": "t9uT27wb5U0",
+          "url": "https://www.youtube.com/watch?v=t9uT27wb5U0",
+          "retrieval_kind": "public storyboard previews only",
+          "approx_times_seconds": [
+            1403.816,
+            1861.798,
+            2329.737
+          ],
+          "cells": [
+            {
+              "sheet": 15,
+              "cell": 6,
+              "evidence": "tutorial header appearing to read Startled Giant Elk"
+            },
+            {
+              "sheet": 20,
+              "cell": 7,
+              "evidence": "brown/gold target with red bar and opposed contact effect"
+            },
+            {
+              "sheet": 26,
+              "cell": 0,
+              "evidence": "repeated brown/gold target appearance"
+            }
+          ],
+          "source_report": "archive-yt01-inspection/report.json",
+          "crop_provenance": "archive-yt01-inspection/crop-provenance.json"
+        }
+      ],
+      "distinctive_features": [
+        "Brown/dark quadrupedal body with pale face/chest",
+        "Broad golden branching horn/antler-like forms",
+        "Red target health bar with cyan attack/contact effect from opposing player group"
+      ],
+      "naming_note": "Root approved Giant Elk as a working render interpretation. Preview tutorial text is medium-confidence and does not establish exact behavior, rank or biological species. Distinct source appearance from the pale YT11 Tundra Stag.",
+      "evidence_review": "All38 sheets/342previewcells actually inspected by /root/github_archive; targeted appearances independently corroborated by /root/render_critic.",
+      "render_mapping_status": "See coordinator final image/review index; pair being built at merge checkpoint."
+    },
+    {
+      "reference_subject_id": "horned_snow_beast_white_gray_red",
+      "working_name": "Horned Snow Beast (working interpretation)",
+      "role": "distinct bulky white-furred combat target",
+      "role_confidence": "high for visible design and combat-target role; exact species and tier unconfirmed",
+      "sources": [
+        {
+          "id": "YT01",
+          "video_id": "t9uT27wb5U0",
+          "url": "https://www.youtube.com/watch?v=t9uT27wb5U0",
+          "retrieval_kind": "public storyboard previews only",
+          "approx_times_seconds": [
+            1433.684,
+            1971.316,
+            2041.009,
+            2090.789,
+            2777.763
+          ],
+          "cells": [
+            {
+              "sheet": 16,
+              "cell": 0
+            },
+            {
+              "sheet": 22,
+              "cell": 0
+            },
+            {
+              "sheet": 22,
+              "cell": 7
+            },
+            {
+              "sheet": 23,
+              "cell": 3
+            },
+            {
+              "sheet": 31,
+              "cell": 0
+            }
+          ],
+          "source_report": "archive-yt01-inspection/report.json",
+          "crop_provenance": "archive-yt01-inspection/crop-provenance.json"
+        }
+      ],
+      "distinctive_features": [
+        "Broad pale/white-furred body",
+        "Gray/dark facial region and heavy arm/forelimb-like masses",
+        "Red upper-head horn/crest tips",
+        "Red target health bar and encounter/contact effects in repeated areas"
+      ],
+      "relation_to_existing_renders": "Do not silently equate with blue crystalline Ice Brute or spined quadruped; distinct silhouette/material requires own mapping.",
+      "naming_note": "Root approved Horned Snow Beast as a working render interpretation. Exact species, source-defined name and tier remain unconfirmed.",
+      "evidence_review": "All38 sheets/342previewcells actually inspected by /root/github_archive; targeted appearances independently corroborated by /root/render_critic.",
+      "render_mapping_status": "See coordinator final image/review index; pair being built at merge checkpoint."
+    }
+  ],
+  "false_positive_controls": [
+    {
+      "subject": "Primary B red axe carriers",
+      "role": "purchased/hired wood workers",
+      "evidence": "Independent primaryB sequence review around26s; not hostile."
+    },
+    {
+      "subject": "WS-S05/WS-S07 cyan frozen HELP figures",
+      "role": "freezing survivors rescued/thawed into residents",
+      "evidence": "Actual MP4 sequences; article wording frozen enemies is contradicted by observed behavior."
+    },
+    {
+      "subject": "WS-S04 wool-textured white balls at34\u201338s",
+      "role": "resource objects, not verified sheep",
+      "evidence": "Actual frame detail-frames/WS-S04-035.png; no animal face/legs."
+    },
+    {
+      "subject": "Hit-white, red-flash or darkened bear/mob frames",
+      "role": "transient impact/status appearance",
+      "evidence": "Do not count as separate species/factions/tier."
+    },
+    {
+      "subject": "Small versus rearing plain polar bear",
+      "role": "poses of same body family",
+      "evidence": "Source posture alone does not prove a separate enemy tier."
+    },
+    {
+      "subject": "UNIT TYPES in18605.png",
+      "role": "worker/hunter/cook/scout/soldier/sharpshooter reference roles",
+      "evidence": "Coordinator pixel inspection; no enemy label on chart."
+    },
+    {
+      "subject": "PET COMPANIONS in18605.png",
+      "role": "wolf/bear/snow leopard/fox/mammoth/eagle across7 visual levels",
+      "evidence": "Coordinator pixel inspection; companion label retained, not erased to inflate enemy roster."
+    },
+    {
+      "subject": "YT01 small blue crouched/frozen humanoid-looking figures",
+      "role": "Unresolved; no hostile evidence in inspected previews",
+      "evidence": "No clear red hostile health bar in targeted crops. Do not invent a snowman enemy from this appearance."
+    }
+  ],
+  "independent_review_source": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/reviews/assigned-source-coverage-review.json",
+  "remaining_gaps": [
+    "YouTube direct stream download returned403; public preview sequences are available and labeled. Precise short-lived detail/gear cannot be certified from previews alone.",
+    "VidTao public catalog returned403; GOF3D9847_EN,GOF3D9437_EN,GOF3D7998_EN remain discovery leads rather than inspected enemy evidence.",
+    "All render rows require mapping to actual final images and independent visual review; this source audit does not grant artwork approval.",
+    "YT01 preview audit complete at approximately10-second spacing; this cannot certify absence of brief additional appearances or full attack/motion cycles. Full video stream remains unavailable."
+  ],
+  "updated_utc": "2026-11-24T11:09:01.618374+00:00",
+  "additional_combat_target_appearances_preview_only": 2,
+  "additional_source_supported_combat_appearances": 8,
+  "render_status_note": "Per-subject render status text is a source-audit checkpoint, not a current final-art approval. Final image selection and independent review are maintained by the coordinator."
+}

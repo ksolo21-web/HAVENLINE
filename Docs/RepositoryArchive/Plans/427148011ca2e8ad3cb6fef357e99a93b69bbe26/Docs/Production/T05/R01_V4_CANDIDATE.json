@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "task_id": "T05",
+  "subtask": "R01",
+  "revision": "V4",
+  "status": "SOURCE_CANDIDATE_NOT_APPROVED",
+  "previous_model_source": "b080906140b892f789a5f48a9f8cbeee1359c12e",
+  "corroboration": {
+    "source": "00bf344885ebb44f226f25325193b23ba1cff26f",
+    "run": 36290998804,
+    "artifact_id": 10922442178,
+    "artifact_sha256": "ad92e7160e38e3a873b249792e127cba1bcb7f98e5f82ec48b3ad38c18a70e19",
+    "renderer": "mobile",
+    "review_type": "internal_actual_pixels_and_source",
+    "independent_critic": false,
+    "front_axis": "negative-Z",
+    "firebox_present": true,
+    "reviewed_views": ["r01-front-right-day.png", "r01-front-left-day.png", "r01-firebox-detail-day.png", "r01-rear-day.png"]
+  },
+  "reference": {
+    "user_file": "18607.png",
+    "file_sha256": "d71d77c6e200b7ef8d225e573474ad99c2d466954d05c29eabd142f4901bbc0c",
+    "selected_asset": "Level 15 furnace",
+    "crop_box": [519, 101, 667, 268],
+    "role": "art language, not literal gameplay dimensions"
+  },
+  "bounded_repairs": [
+    {
+      "id": "R01-FRONT-01",
+      "symptom": "Smooth broad pressure shell and repeated rectangular lower staves read as oversimplified boiler forms.",
+      "change": "Closed curved forged platework with fasteners, authored matte pigment and geometry-bound short-range vertex occlusion."
+    },
+    {
+      "id": "R01-FRONT-02",
+      "symptom": "Side service construction remains minimal compared with the selected supplied furnace.",
+      "change": "Grounded framed service hatch, cross strap, hardware, shut-off wheel, gauge markings and pipe unions."
+    },
+    {
+      "id": "R01-FRONT-03",
+      "symptom": "Separated narrow flame spires read as candle-like spikes inside the existing visible firebox.",
+      "change": "Wider curved flame volumes, warm cores, contiguous ember bed and layered firebox reveal."
+    }
+  ],
+  "machine_model": {
+    "hearth_triangles": 25968,
+    "closed_outward_components": 238,
+    "kit_triangles": 49160,
+    "kit_storage_bytes": 1673036,
+    "expected_hearth_sha256": "6d32499229dd22dde1ee32940bb1b0a506a0647ea911a4787b3bce83fe60a8e7",
+    "local_source_integrity_passed": true,
+    "local_godot_task05_checks": 277,
+    "other_models_byte_identical": 21
+  },
+  "preserves": [
+    "T01/T02",
+    "T03 collision, portals, hinge/open transforms, gates, routes",
+    "T04 camera",
+    "all T05 catalog gameplay fields",
+    "all shared PBR definitions and 12-material budget",
+    "all other 21 station/prop GLBs",
+    "physics, economy, save, interaction and inventory semantics"
+  ],
+  "required_before_acceptance": [
+    "fresh committed-byte Mobile/Vulkan front/rear/detail/conditions and camera orbit",
+    "shipping-main contextual visual evidence",
+    "applicable independent C1/C2/C6 review",
+    "explicit user visual approval",
+    "final integration and Native validation"
+  ],
+  "critics_executed": false,
+  "task_approved": false,
+  "physical_4k60_verified": false
+}

@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/render_critic",
+  "created_utc": "2026-11-24T10:30:03.960286+00:00",
+  "scope": "Final actual-pixel independent static detail-sheet retest; individual mandatory checks all pass",
+  "approval_threshold": {
+    "minimum_score": 9.5,
+    "all_mandatory_checks_must_pass": true,
+    "target": 10
+  },
+  "entries": [
+    {
+      "archetype_id": "ice_brute",
+      "asset_id": "ice-brute-details-r5",
+      "board_type": "detail_and_use_state_board",
+      "candidate_path": "/workspace/scratch/9c51da47f878/havenline-invaders/renders/ice-brute-details-r5.png",
+      "sha256": "9725701e45fbe882a4d7b75089ad25b02e294b0d01e25bf60d6b9c18746f2bf7",
+      "paired_approved_turnaround": {
+        "path": "/workspace/scratch/9c51da47f878/havenline-invaders/renders/ice-brute-turnaround-r5.png",
+        "sha256": "b0f7488b196d459ad58b5bb3822ef9047e6f40d77329f0689b9f64d021b409fb"
+      },
+      "score": 9.7,
+      "status": "PASS",
+      "all_mandatory_visual_checks_passed": true,
+      "checked_views_or_panels": [
+        "guard",
+        "slam_wind_up",
+        "recovery",
+        "face",
+        "hand_and_foot",
+        "game_camera"
+      ],
+      "actual_full_sheet_inspected": true,
+      "closeup_evidence": [
+        "/workspace/scratch/9c51da47f878/havenline-invaders/reviews/evidence/ice-brute-details-r5-recovery-anatomy.png",
+        "/workspace/scratch/9c51da47f878/havenline-invaders/reviews/evidence/ice-brute-details-r5-hand-foot.png"
+      ],
+      "findings": [],
+      "positive_evidence": [
+        "Replacement Recovery figure has exactly five distinct connected toe lobes/nails per fully visible foot, with mirrored medial big toes.",
+        "Recovery fists retain four curled fingers plus a thumb each; arm, knee, shin and foot connections form a coherent planted recovery crouch.",
+        "Hand & Foot retains its correct five-toe geometry and five-digit open palm without the prior six-toe regression.",
+        "Guard and Game Camera retain five-toe feet. Wind-up retains the correct frontal foot and ordinary projected overlap in its turned far foot.",
+        "Face, cream sculpted fur, blue-gray skin, forehead/shoulder/forearm ice and proportions match the approved turnaround and anatomy anchor.",
+        "All six labeled panels retain complete framing and no duplicated or floating anatomy. Recovery is a distinct static use state.",
+        "Proposed-scale and static-concept labeling remain accurate; no native-size, mesh, rig or animation claim."
+      ],
+      "mandatory_checks": {
+        "same_character_identity_and_material_style": true,
+        "required_detail_and_use_state_panels_present": true,
+        "five_toe_anatomy_consistency": true,
+        "five_digit_hands": true,
+        "connected_anatomy_no_extra_or_floating_parts": true,
+        "complete_framing": true,
+        "clear_static_concept_scope": true
+      },
+      "static_scope_only": true
+    }
+  ],
+  "summary": {
+    "approved_selected_boards": 6,
+    "required_selected_boards": 6,
+    "approved_scoped_supplementary_references": 2,
+    "all_required_visuals_passed": true,
+    "package_or_github_approval": false
+  }
+}

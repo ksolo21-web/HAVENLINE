@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/render_critic",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-24T15:43:27.094330+00:00",
+  "scope": "Actual observations of two v1 candidates after new user finger-visibility steering. No new approval or v2 score; revised requirements are pending lock.",
+  "historical_requirements_sha256": "d7e1c4313b7cd49eb978edf25f4e199808e07c7a83e8ff60ad09e53c80b927e5",
+  "hand_reopening_report": "/workspace/scratch/9c51da47f878/havenline-character-style-360/reviews/hand-visibility-reopen-01.json",
+  "entries": [
+    {
+      "slot_id": "character-1-diagonal",
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/renders/character-1-diagonal-r1.png",
+      "sha256": "c4166ef3f6e672e42fd73b3595a659f473d5cd233a454f70c88c56b6f784272f",
+      "bytes": 1738793,
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "status": "WITHHELD_PENDING_V2_HAND_VISIBILITY_REPAIR",
+      "score": null,
+      "actual_full_sheet_inspected": true,
+      "reviewed_angles": [
+        45,
+        135,
+        225,
+        315
+      ],
+      "actual_inspection_views": [
+        "full sheet only"
+      ],
+      "findings": [
+        "Four actual distinct diagonal rotations in correct grid order; head/torso/boots and near/far arm projection coherent.",
+        "User identity, no-pack outfit, plain rear coat/down hood and gray studio style preserved.",
+        "Palm-down edge-on fingers remain overlapped and are insufficient for the new user-requested spread-finger visibility."
+      ],
+      "required_next_action": "Preserve design/style and create consistent splayed palm-forward body views plus explicit hand references under requirements-v2. Retest actual updated outputs; no final approval transferred."
+    },
+    {
+      "slot_id": "character-4-cardinal",
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-4-cardinal-r1.png",
+      "sha256": "19d92b409cbecf04da888afd8dfd436a7f42ec2353ba34c0bf22f32a5fcfe229",
+      "bytes": 1775258,
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "status": "WITHHELD_PENDING_V2_HAND_VISIBILITY_REPAIR",
+      "score": null,
+      "actual_full_sheet_inspected": true,
+      "reviewed_angles": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "actual_inspection_views": [
+        "full sheet",
+        "front-face",
+        "front-belt",
+        "left-profile-hand",
+        "right-profile-hand"
+      ],
+      "findings": [
+        "Source round curls, striped headband/orange accent, gold hoops, no glasses and fingerless gloves preserved.",
+        "Brown upper roll/pack, anatomical-left cup and sheathed red/orange handle, right hip pouch remain on correct sides.",
+        "Both actual end-on profile crops expose five connected finger tips; this does not satisfy revised clear spread-finger silhouette requirement in body frontal/back views."
+      ],
+      "required_next_action": "Preserve design/style and create consistent splayed palm-forward body views plus explicit hand references under requirements-v2. Retest actual updated outputs; no final approval transferred."
+    }
+  ],
+  "native_mesh_rig_animation_runtime_approval": false
+}

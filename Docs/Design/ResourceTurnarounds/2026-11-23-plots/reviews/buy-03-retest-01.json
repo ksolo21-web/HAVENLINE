@@ -1,0 +1,85 @@
+{
+  "reviewer_agent": "/root/turnaround_critic",
+  "contract_version": "2026-11-23-plots-v1",
+  "contract_sha256": "c4ef53e38335f159aa23f1bbb5317b06fe0e402a9fca869229a5910600138498",
+  "batch": "buy-03-retest",
+  "iteration": 2,
+  "assets": [
+    {
+      "asset": "activation_construction",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-6a24eca9-5272-40c8-a687-e165082aa9b2.png",
+      "score": 9.4,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "evidence": [
+        "Corrected 135-degree log/200 strip places log at top/right, digits toward left/lower-left.",
+        "All eight castle/build glyphs, cost-strip directions and four separated corners rotate together.",
+        "Source-specific idle gray field, reference material cost qualifier, ground flatness and low projection retained."
+      ],
+      "blocking_defects": [],
+      "minor_disposition": "Minor illustration variation is within static concept scope. A calibrated native camera or shared executable mesh is not certified.",
+      "sha256": "794db3977e24bb02e655dbc46a7b737b3510acabb20fafbdf9090884768854e8",
+      "bytes": 1611721,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "reference_derived_visual_concept",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ]
+    },
+    {
+      "asset": "activation_work_zone",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-9f336c8b-01f1-4abd-8aa5-3aa177009065.png",
+      "score": 8.3,
+      "verdict": "HOLD",
+      "evidence": [
+        "Corrected diagonal pairs: 45/225 descend right, 135/315 rise right.",
+        "Six views preserve 12 green pieces and unfilled navy floor; no cost, fill or raised frame.",
+        "90/270 regress to horizontal outlines with 10 pieces instead of 12."
+      ],
+      "blocking_defects": [
+        {
+          "requirement": "R4,R6",
+          "panel": "90,270",
+          "issue": "Short-end views use wrong horizontal projected silhouette and 10 outline pieces.",
+          "fix": "Repair only these two to slightly taller-than-wide projection with 12 pieces: four rounded corners, three vertical long-edge dashes each side, one short horizontal dash at top and bottom. Keep other six views unchanged."
+        }
+      ],
+      "minor_disposition": "Opposite symmetric views legitimately repeat shape; no extra directional landmarks required.",
+      "sha256": "23c5e511a542dfbc8ce0fc696ac864eb2b0f843efe3608c5f85587b1febaccdb",
+      "bytes": 1571162,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "reference_derived_visual_concept",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ]
+    }
+  ],
+  "gate": "PASS requires score strictly above 9.0 with all mandatory concept-image checks passed. Unseen or failed evidence remains blocked."
+}

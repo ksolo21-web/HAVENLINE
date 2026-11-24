@@ -1,0 +1,35 @@
+name: Havenline T13-T20 Parallel Preparation
+
+on:
+  pull_request:
+    paths:
+      - 'Docs/Production/T12/**'
+      - 'Docs/Production/T13/**'
+      - 'Docs/Production/T14/**'
+      - 'Docs/Production/T15/**'
+      - 'Docs/Production/T16/**'
+      - 'Docs/Production/T17/**'
+      - 'Docs/Production/T18/**'
+      - 'Docs/Production/T19/**'
+      - 'Docs/Production/T20/**'
+      - 'Docs/Production/T13_T20_PARALLEL_PREP_MANIFEST.json'
+      - 'tools/havenline/t13_t20/**'
+      - '.github/workflows/havenline-t13-t20-preparation.yml'
+  workflow_dispatch:
+
+jobs:
+  validate-parallel-preparation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile preparation validators
+        run: |
+          python -m py_compile tools/havenline/t13_t20/prepare_activation.py
+          python -m py_compile tools/havenline/t13_t20/validate_t12_consumer_bindings.py
+      - name: Validate T13-T20 preparation
+        run: python3 tools/havenline/t13_t20/prepare_activation.py --all
+      - name: Validate T13/T14 current T12 consumer bindings
+        run: python3 tools/havenline/t13_t20/validate_t12_consumer_bindings.py

@@ -1,0 +1,170 @@
+{
+  "schema_version": 1,
+  "task_id": "T11",
+  "purpose": "Exact approved T05 station/prop bindings available to T11. This document binds existing approved art/metadata only and does not authorize T11 to take later-task runtime behavior.",
+  "t05_authority": {
+    "catalog": "HavenlineGodot/assets/stations_v2/catalog.json",
+    "catalog_git_blob_sha": "ae27aa074e4ad9e5fa912259685741a55fc35c55",
+    "authority_id": "T05-station-kit-v1",
+    "accepted_t05_source": "fa6fa70f154f3757d22303522ca3f6de2c3d391f",
+    "mutation_allowed_from_t11": false
+  },
+  "direct_t11_bindings": [
+    {
+      "id": "hearth_vessel",
+      "asset": "res://assets/stations_v2/hearth_vessel.glb",
+      "sha256": "f7a10471db0085cead99aaa495493d1031dbd45cfb80612eb1d6c9c0098d1801",
+      "requirement": "T05-R01",
+      "t05_later_task": "T11",
+      "footprint": [2.6, 2.25],
+      "clearance": 0.55,
+      "triangles": 1736,
+      "sockets": {
+        "fx_heat": [0, 1.35, 0],
+        "input": [0, 0.45, -1.45],
+        "upgrade": [-1.55, 0, 0],
+        "worker": [1.55, 0, 0]
+      },
+      "t11_use": "central heated vessel/fire visual anchor and upgrade-ready camp composition",
+      "restriction": "T11 may place/reference the approved asset but may not rewrite its T05 source bytes. Active processing/input behavior remains whatever owning runtime contract authorizes."
+    },
+    {
+      "id": "pad_build",
+      "asset": "res://assets/stations_v2/pad_build.glb",
+      "sha256": "2ae7d7e699b2b3cb8812812d4e2d4afb6bbd491d78aa02422bbba49ab7f34fe1",
+      "requirement": "T05-R03",
+      "t05_later_task": "T11",
+      "footprint": [2.1, 2.1],
+      "clearance": 0.55,
+      "triangles": 372,
+      "sockets": {
+        "icon": [0, 0.45, 0],
+        "interaction": [0, 0.35, 0]
+      },
+      "visual_variant": {
+        "icon": "construction-frame",
+        "silhouette": "diamond",
+        "trim": "yellow"
+      },
+      "t11_use": "in-world initial camp construction pad",
+      "restriction": "Pad presentation may show T10-derived readiness/cost state; resource debit and transform authority remain T10."
+    },
+    {
+      "id": "pad_upgrade",
+      "asset": "res://assets/stations_v2/pad_upgrade.glb",
+      "sha256": "1e0617e0aaed8fc02ca03e7abac34c77f241436991c84fca897bd484db52a836",
+      "requirement": "T05-R03",
+      "t05_later_task": "T11",
+      "footprint": [2.1, 2.1],
+      "clearance": 0.55,
+      "triangles": 132,
+      "sockets": {
+        "icon": [0, 0.45, 0],
+        "interaction": [0, 0.35, 0]
+      },
+      "visual_variant": {
+        "icon": "upgrade-chevron",
+        "silhouette": "triangle",
+        "trim": "orange"
+      },
+      "t11_use": "in-world camp visual-upgrade pad",
+      "restriction": "T11 maps visual state to T10 lifecycle only; no alternate charging/progression authority."
+    }
+  ],
+  "passive_composition_bindings": [
+    {
+      "id": "service_counter",
+      "asset": "res://assets/stations_v2/service_counter.glb",
+      "sha256": "9260c40753c67420924824c19253187bf1b55f962ea1e4da52bb91e612f0f73b",
+      "t05_later_task": "T17",
+      "footprint": [3.45, 1.95],
+      "clearance": 0.55,
+      "triangles": 1476,
+      "sockets": {
+        "customer": [0, 0, -1.45],
+        "payment": [1.25, 1.3, 0],
+        "stock": [0, 1.3, 0],
+        "worker": [0, 0, 1.35]
+      },
+      "t11_use": "optional passive camp composition/readability fixture only",
+      "behavior_owner": "T17",
+      "t11_behavior_allowed": false
+    },
+    {
+      "id": "processing_counter",
+      "asset": "res://assets/stations_v2/processing_counter.glb",
+      "sha256": "086ffb770f7253da9e62454bac5238dd57a9bf7e373dc2df120f4cb016da9ec8",
+      "t05_later_task": "T16",
+      "footprint": [3.45, 1.95],
+      "clearance": 0.55,
+      "triangles": 2052,
+      "sockets": {
+        "input": [-0.72, 1.8, 0],
+        "output": [0.72, 1.8, 0],
+        "worker": [0, 0, 1.35]
+      },
+      "t11_use": "optional passive camp composition/readability fixture only",
+      "behavior_owner": "T16",
+      "t11_behavior_allowed": false
+    },
+    {
+      "id": "pad_stock",
+      "asset": "res://assets/stations_v2/pad_stock.glb",
+      "sha256": "46cf98ffcbe0f1a6798ba43b72c47cf9009f8538c68cbc5f0ae05c017cd7ba39",
+      "t05_later_task": "T17",
+      "footprint": [2.1, 2.1],
+      "clearance": 0.55,
+      "triangles": 756,
+      "sockets": {
+        "interaction": [0, 0.35, 0],
+        "stock": [0, 0.45, 0]
+      },
+      "visual_variant": {
+        "icon": "stock-crate",
+        "silhouette": "soft-rectangle",
+        "trim": "cream"
+      },
+      "t11_use": "optional passive stock-zone visual marker if needed for reference composition",
+      "behavior_owner": "T17",
+      "t11_behavior_allowed": false
+    }
+  ],
+  "resource_visuals_external_to_t11_state": [
+    {
+      "id": "wood_stack",
+      "asset": "res://assets/stations_v2/wood_stack.glb",
+      "sha256": "5d5707cc5ecc05a2c586b6a933d15075510a9d091defdd63a42bca693658320b",
+      "state_owner": "T08",
+      "rule": "T11 must not spawn a fake quantity or duplicate authoritative stock. Use only through the approved inventory/stockpile presentation contract."
+    },
+    {
+      "id": "stone_stack",
+      "asset": "res://assets/stations_v2/stone_stack.glb",
+      "sha256": "4fda08c4b117ba6c3c72212cfe02fbed9519dba1a74345f2c2c04bc548d554c7",
+      "state_owner": "T08",
+      "rule": "T11 must not spawn a fake quantity or duplicate authoritative stock. Use only through the approved inventory/stockpile presentation contract."
+    },
+    {
+      "id": "metal_stack",
+      "asset": "res://assets/stations_v2/metal_stack.glb",
+      "sha256": "44e3467f16ee777878b7881b0a76fc2b41d87cbf199cc2731831a9c881490338",
+      "state_owner": "T08",
+      "rule": "T11 must not spawn a fake quantity or duplicate authoritative stock. Use only through the approved inventory/stockpile presentation contract."
+    }
+  ],
+  "explicitly_excluded_from_t11_behavior": [
+    "pad_payment/T17 payment behavior",
+    "service_counter/T17 customer/payment behavior",
+    "processing_counter/T16 processing behavior",
+    "defense_platform/T22 firing/targeting/damage behavior",
+    "intake/conveyor/fishing production behavior",
+    "T08 resource quantity authority",
+    "T10 resource debit/atomicity/idempotency authority"
+  ],
+  "validation_rules": [
+    "Every direct T11 binding must match the approved T05 catalog ID, path and SHA-256 before use.",
+    "Passive composition bindings may be placed only without activating later-task behavior.",
+    "T11-authored new camp assets must live under the future T11 reservation and cannot overwrite stations_v2.",
+    "If a required T05 asset hash changes, T11 preparation becomes stale and must reconcile to the new approved T05 record rather than silently accepting it."
+  ]
+}

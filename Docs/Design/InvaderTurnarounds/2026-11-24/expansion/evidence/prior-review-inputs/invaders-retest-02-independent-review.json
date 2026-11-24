@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/render_critic",
+  "created_utc": "2026-11-24T10:09:56.176985+00:00",
+  "scope": "Independent actual-pixel static retest and matching detail-board review",
+  "approval_threshold": {
+    "minimum_score": 9.5,
+    "all_mandatory_checks_must_pass": true,
+    "target": 10
+  },
+  "entries": [
+    {
+      "archetype_id": "raider",
+      "asset_id": "raider-turnaround-r2",
+      "board_type": "eight_view_turnaround",
+      "candidate_path": "/workspace/scratch/9c51da47f878/havenline-invaders/renders/raider-turnaround-r2.png",
+      "sha256": "bf8ffb985d964e2046d8d5a86041fef69801ee6a82e16bbb1f9a973049651c2c",
+      "score": 9.7,
+      "status": "PASS",
+      "all_mandatory_visual_checks_passed": true,
+      "checked_views_or_panels": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ],
+      "actual_full_sheet_inspected": true,
+      "closeup_evidence": [
+        "/workspace/scratch/9c51da47f878/havenline-invaders/reviews/evidence/raider-r2-rear-pouch-detail.png"
+      ],
+      "positive_evidence": [
+        "Rear180 and both rear diagonals now expose plain thin pouch backs/edges with correct front-facing closure occlusion.",
+        "Full-sheet regression retains all8 correct directions, hood, mantle, arm wraps, twin pouches, anatomy, scale and complete framing."
+      ],
+      "findings": [],
+      "static_scope_only": true
+    },
+    {
+      "archetype_id": "hostile_wolf",
+      "asset_id": "hostile-wolf-details-r1",
+      "board_type": "detail_and_use_state_board",
+      "candidate_path": "/workspace/scratch/9c51da47f878/havenline-invaders/renders/hostile-wolf-details-r1.png",
+      "sha256": "23fcde1cf02070af0bf8993f1a962736cf9d297d79e602d266434735869ee41c",
+      "score": 9.7,
+      "status": "PASS",
+      "all_mandatory_visual_checks_passed": true,
+      "checked_views_or_panels": [
+        "alert",
+        "stalk",
+        "pounce_prep",
+        "face",
+        "paw_and_fur",
+        "game_camera"
+      ],
+      "actual_full_sheet_inspected": true,
+      "closeup_evidence": [
+        "/workspace/scratch/9c51da47f878/havenline-invaders/reviews/evidence/hostile-wolf-details-r1-pounce-detail.png",
+        "/workspace/scratch/9c51da47f878/havenline-invaders/reviews/evidence/hostile-wolf-details-r1-paws-detail.png"
+      ],
+      "positive_evidence": [
+        "Alert, stalk and pounce-prep poses each retain connected four-limb anatomy and plausible visible ground contacts.",
+        "Face mask, eyes, fur shapes/colors and unharnessed hostile identity match approved turnaround.",
+        "Actual paw closeup retains four main canine toes; pounce closeup shows coherent bent hindquarters and extended forelegs without floating or duplicate limbs.",
+        "Six requested detail/state/game-camera panels are readable and complete; footer correctly identifies static pose concepts."
+      ],
+      "findings": [],
+      "static_scope_only": true,
+      "paired_approved_turnaround": {
+        "path": "/workspace/scratch/9c51da47f878/havenline-invaders/renders/hostile-wolf-turnaround-r1.png",
+        "sha256": "651772c7dc82f57632e093c92902d62d1391089e65fdb26886e363ac98737115"
+      }
+    }
+  ],
+  "summary": {
+    "approved_selected_boards": 3,
+    "required_selected_boards": 6,
+    "remaining": [
+      "raider_details",
+      "ice_brute_turnaround",
+      "ice_brute_details"
+    ],
+    "package_or_github_approval": false
+  }
+}

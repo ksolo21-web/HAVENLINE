@@ -1,0 +1,57 @@
+{
+  "schema_version": 2,
+  "task_id": "T11",
+  "review_scope": "parallel preparation plus build-pending readiness; not final gameplay approval",
+  "prepared_branch": "havenline/governance-t11-prep",
+  "prepared_from_t10_checkpoint": "7e95338e339fb331a5d6b094874c15d5a7e96e16",
+  "internal_review": {
+    "reviewer_type": "internal review; no separate critic runtime claimed",
+    "preparation_readiness_score": 10.0,
+    "pass_rule": "> 9.0 with all mandatory preparation checks passing",
+    "task_approval_claimed": false,
+    "checks": [
+      {"id":"P01","name":"Frozen T11 scope separates camp content from T10 transaction/state authority","status":"PASS"},
+      {"id":"P02","name":"V2 build-pending policy allows isolated T11 build/test while final integration remains dependency-gated","status":"PASS"},
+      {"id":"P03","name":"Planned T11 ownership is disjoint from T09/T10 prepared reservations and integration-only paths","status":"PASS"},
+      {"id":"P04","name":"Reference B construction/upgrade moments are mapped into a machine-readable prebuild contract","status":"PASS"},
+      {"id":"P05","name":"Exact approved T05 asset IDs/hashes/footprints/sockets are bound for T11 reuse without source mutation","status":"PASS"},
+      {"id":"P06","name":"Later T16/T17/T22 behavior boundaries remain excluded from T11 despite passive visual reuse where permitted","status":"PASS"},
+      {"id":"P07","name":"Shipping price provenance rule prevents invented camp costs and test-fixture leakage","status":"PASS"},
+      {"id":"P08","name":"C2/C3/C4/C6 critic contract matches dependency graph and critic matrix","status":"PASS"},
+      {"id":"P09","name":"Required capture groups cover preconstruction, initial construction, upgrades, routes and adaptive layouts","status":"PASS"},
+      {"id":"P10","name":"Promotion tooling keeps final integration fail-closed until T10 approval/integration","status":"PASS"},
+      {"id":"P11","name":"Automated negative test proves final T11 promotion fails while T10 remains unfinished","status":"PASS"},
+      {"id":"P12","name":"Automated T05 binding tests fail on asset/path/hash/socket/owner drift","status":"PASS"},
+      {"id":"P13","name":"Preparation branch itself contains no HavenlineGodot runtime changes before the isolated builder branch is cut","status":"PASS"},
+      {"id":"P14","name":"Spatial baseline binds exact approved T02 river, T03 gate/lane, T04 camera and T05 camp authorities","status":"PASS"},
+      {"id":"P15","name":"Automated spatial tests verify camp footprints against river setback, fixed camp bounds and T03 lanes","status":"PASS"},
+      {"id":"P16","name":"Construction and upgrade pads remain inside T04 contextual-target and base composition envelope","status":"PASS"},
+      {"id":"P17","name":"No authoritative shipping camp-price source was found, so build-pending recipes must remain explicitly non-shipping/test-only until provenance exists","status":"PASS"}
+    ]
+  },
+  "mandatory_prep_defects": [],
+  "runtime_blockers": [
+    {
+      "id": "B01",
+      "blocker": "T10 is not APPROVED/integrated yet",
+      "effect": "Does not block isolated T11 build/test. It blocks promotion beyond BUILT_PENDING_DEPENDENCY to INTEGRATION_READY, final critics, integration and approval.",
+      "resolution": "Complete/integrate T10, reconcile the build-pending T11 candidate to the exact accepted T10 public interface/source, rerun dependency-sensitive tests/evidence, pass G1, then pass G14 before integration."
+    }
+  ],
+  "build_now": [
+    "Cut havenline/T11-camp-construction from the verified T11 preparation checkpoint.",
+    "Implement T11-owned camp content adapter/view/manifests and tests against the frozen T10 semantic contract using a deterministic mock/adapter.",
+    "Use only explicit non-shipping/test-only fixture costs until authoritative price provenance exists.",
+    "Run component, import/build, T03 route, T04 camera, T07 context, T05 binding and performance-budget tests.",
+    "Record the candidate as BUILT_PENDING_DEPENDENCY with exact source/evidence and unresolved dependency-sensitive test list."
+  ],
+  "remaining_after_dependency_resolves": [
+    "Reconcile the built T11 candidate against the exact accepted T10 public interface, recipe IDs and completion source.",
+    "Supply authoritative shipping price/tuning provenance for any recipe promoted to shipping.",
+    "Run final promotion preflight against the exact post-T10 integration head.",
+    "Rerun T10 exact-once and T08/T09-through-T10 conservation integration tests plus affected evidence.",
+    "Pass full impacted regression and G14 on the merged integration candidate.",
+    "Run independent C2/C3/C4/C6 review and repair/retest until every mandatory dimension is strictly >9.0 with zero unresolved mandatory defects."
+  ],
+  "resume_from": "Docs/Production/T11/FROZEN_SCOPE.md + BUILD_PENDING_POLICY.md + TASK_PACKET.md + PREBUILD_CONTRACT.json + T05_REUSE_BINDINGS.json + SPATIAL_BASELINE.json + ACTIVATION_CHECKLIST.json + tools/havenline/task11/prepare_activation.py"
+}

@@ -1,0 +1,119 @@
+{
+  "reviewer_agent": "/root/turnaround_critic",
+  "contract_version": "2026-11-23-plots-v1",
+  "contract_sha256": "c4ef53e38335f159aa23f1bbb5317b06fe0e402a9fca869229a5910600138498",
+  "batch": "storage-03",
+  "iteration": 1,
+  "assets": [
+    {
+      "asset": "storage_slate",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-d75708bb-9212-49bc-816b-49d361208d44.png",
+      "score": 9.4,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "evidence": [
+        "Three blue-gray slate layers retained in all eight actual panels.",
+        "Pale vein shifts from upper-left front view to opposite rear and correct end/diagonal positions; long-axis orbit follows pad.",
+        "Centered stack, natural pictogram occlusion, thin continuous tan perimeter and dark flush field retained."
+      ],
+      "blocking_defects": [],
+      "minor_disposition": "Minor edge-chip illustration variation does not change the slab count, silhouette or fixed vein direction.",
+      "sha256": "775831e14100d2ebf155ef9b5734de070f56b225c6450eca143f5b88c7c8b952",
+      "bytes": 1543620,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "proposed_resource_variant",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ]
+    },
+    {
+      "asset": "storage_metal_ore",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-926b8b76-4e95-45c3-bc11-e463b547144d.png",
+      "score": 9.4,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "evidence": [
+        "Single ore chunk with front large silver patch, right paired small nodules, rear single low nodule and left ochre seam remains coherent across eight views.",
+        "Front silver cluster hides on rear; ochre seam rotates into left view.",
+        "Whole-pad yaw, centered footprint, continuous thin edge and proposal boundary retained."
+      ],
+      "blocking_defects": [],
+      "minor_disposition": "Small faceting variations are acceptable within static concept illustration; no nodules added or removed beyond normal occlusion.",
+      "sha256": "9a7e8eee54910cb5d14fa77fe498a8a2518c207b1144e837b9aa6a5cf188b25f",
+      "bytes": 1501084,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "proposed_resource_variant",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ]
+    },
+    {
+      "asset": "storage_steel",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-ab945755-7d60-4fa0-965f-7319e7162e85.png",
+      "score": 8.7,
+      "verdict": "HOLD",
+      "evidence": [
+        "Two aligned blue-gray ingots, top recesses, continuous border and whole-pad yaw otherwise coherent.",
+        "Full sheet and actual chip closeups reveal LEFT 270 repeats RIGHT 90 near-left visible chip."
+      ],
+      "blocking_defects": [
+        {
+          "requirement": "R6",
+          "panel": "270",
+          "issue": "Top ingot fixed front-right chip is duplicated on near-left corner of opposite short end.",
+          "fix": "Remove only the near-left chipped notch at 270 and restore smooth bevel; the real front-right chip may be hidden at the far side. Preserve other seven panels and all geometry."
+        }
+      ],
+      "minor_disposition": "One visible identity landmark remains wrong; not approved.",
+      "sha256": "cf5d3cdd967e60db54c56675f80b6fd59cc0a9cf5a7f1c9f3bbd66cf8380a7f1",
+      "bytes": 1472717,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "proposed_resource_variant",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ]
+    }
+  ],
+  "gate": "PASS requires score strictly above 9.0 with all mandatory concept-image checks passed. Unseen or failed evidence remains blocked.",
+  "closeup_evidence": "/workspace/scratch/fc906e16b0fb/havenline-plot-renders/reviews/inspection-crops/steel-chip-orbit.png"
+}

@@ -1,0 +1,734 @@
+{
+  "schema_version": 1,
+  "frozen_at_utc": "2026-11-24T12:07:06.755910+00:00",
+  "generation_frozen": true,
+  "repository": "ksolo21-web/HAVENLINE",
+  "branch": "art/enemy-invaders-2026-11-24",
+  "parent_commit": "bb54c582916b3dbc5d542309f290e5101ab9e218",
+  "destination": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02",
+  "scope": "Eight authored enemy proposals; sixteen static boards. No source-roster exhaustiveness or runtime approval.",
+  "required_subject_count": 8,
+  "required_sheet_count": 16,
+  "generated_png_count": 17,
+  "generated_original_bytes": 33532139,
+  "declared_output_indexes": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/generation-index.json",
+      "sha256": "b07b366b5a1751539ce530468983ca6d0ca70d3c41a8a695401a8ec5c8dfa89d",
+      "git_blob_sha": "994bfcb0e374cee304f2e9867b597e0f37038f35",
+      "bytes": 9692,
+      "registered_outputs": 9
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/generation-index.json",
+      "sha256": "d43414f4d72fa8dc7aa491bb1b0f00b3f0fa841daab2909edc18604c6ff19922",
+      "git_blob_sha": "e7b55f05749ae1f00e310940e28f8efde45c856f",
+      "bytes": 7030,
+      "registered_outputs": 6
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/aerial-siege-builds/generation-index.json",
+      "sha256": "6b21c40da85836a3c6fcb7a034d87a21eeea34d313e8b9e49baec649677d41b3",
+      "git_blob_sha": "1d5b41c222577b2b3e3bb951b287bb554a8e5464",
+      "bytes": 2503,
+      "registered_outputs": 2
+    }
+  ],
+  "exact_reference_input_records": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/reference-inputs.json",
+      "sha256": "85bd28fa8eedfc783e7a49d2b86b67988f8444cbb4a5ca47c97fd9ee79654bce",
+      "git_blob_sha": "1f6dddc337a2f52dd2339ce217895619e8440a05",
+      "bytes": 4448
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/reference-inputs.json",
+      "sha256": "a83ad693ea27b50b08ca2cf1be02fb74613d7edc378d0fe0605de9c39917a1cb",
+      "git_blob_sha": "51e80b6be004b4e07f7049fdc959ffea355a1e9e",
+      "bytes": 2574
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/aerial-siege-builds/reference-inputs.json",
+      "sha256": "b62b819a405097c47e4b59da7e0e497b2f0a675536f6d30846fb73a1d9d279cb",
+      "git_blob_sha": "d164225b2d0e1bfed34662c715cf53fbeb843f79",
+      "bytes": 963
+    }
+  ],
+  "all_generated_attempts": [
+    {
+      "id": "shield-raider-turnaround-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/renders/shield-raider-turnaround-r1.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/attempts/shield-raider-turnaround-r1.png",
+      "sha256": "578177b4b6de9093c5df3b5655998b42a4aef17d1666c734b35fab64694eebd9",
+      "git_blob_sha": "9698c24f9bd6d7e995f88ba2738927819d74e725",
+      "bytes": 1895612,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/prompts/shield-raider-turnaround-r1.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/shield-raider-turnaround-r1.txt",
+      "prompt_sha256": "149e88b9b2e6a596d2da1f372ce55d976f089a12ebf5ee43fba107c7bad81029",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/generation-index.json"
+    },
+    {
+      "id": "harpoon-hunter-turnaround-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/renders/harpoon-hunter-turnaround-r1.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/attempts/harpoon-hunter-turnaround-r1.png",
+      "sha256": "1e25e1b578a0631f5de0d4c44dfc180415991f72bc577d7e7f5fbd7e83428fc3",
+      "git_blob_sha": "e0bb1a4250bed36267f65bec9170a2838dafd5ec",
+      "bytes": 1750050,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/prompts/harpoon-hunter-turnaround-r1.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/harpoon-hunter-turnaround-r1.txt",
+      "prompt_sha256": "526b3a5712c42b4ec9238ca4869047d461d9da85d1c0de2eed4e1e8a6c7b6552",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/generation-index.json"
+    },
+    {
+      "id": "powder-sapper-turnaround-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/renders/powder-sapper-turnaround-r1.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/attempts/powder-sapper-turnaround-r1.png",
+      "sha256": "b2891960f3792ad3443f157819503d010391ebf892d445e08fb2bee57115ddee",
+      "git_blob_sha": "1fd78773b2089192c6ceb3c2a156353e682df031",
+      "bytes": 1943472,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/prompts/powder-sapper-turnaround-r1.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/powder-sapper-turnaround-r1.txt",
+      "prompt_sha256": "66ce0bd6f1ffd0182857801fdb7600444bce4717158a5ddd581b57c60c6dd02e",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/generation-index.json"
+    },
+    {
+      "id": "frostwing-raptor-turnaround-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/renders/frostwing-raptor-turnaround-r1.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/attempts/frostwing-raptor-turnaround-r1.png",
+      "sha256": "17cfca8369bee4307647eaa729629843249684a848da40fea068d4166aaea720",
+      "git_blob_sha": "709a3042c90787c969801950fb70471a18d3c516",
+      "bytes": 2108607,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/prompts/frostwing-raptor-turnaround-r1.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/frostwing-raptor-turnaround-r1.txt",
+      "prompt_sha256": "b0aa8a595d12c2d7e5a538be196d600b47af4c59c6fa196fdef9aac014d8ddf0",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/generation-index.json"
+    },
+    {
+      "id": "armored-ram-sled-turnaround-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/renders/armored-ram-sled-turnaround-r1.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/attempts/armored-ram-sled-turnaround-r1.png",
+      "sha256": "db601515bb0eb3dc97ee02b01e97eb6506aab4e5d0dea18910c53647460c7998",
+      "git_blob_sha": "72aeee3c3eba32e60d0c282869f3d9ba9bd324a3",
+      "bytes": 1896419,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/prompts/armored-ram-sled-turnaround-r1.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/armored-ram-sled-turnaround-r1.txt",
+      "prompt_sha256": "3cee3bde12c4a8725d7763ac4e3c2bc946fc8da898d4ec4ec3ac3be96ac2824b",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/generation-index.json"
+    },
+    {
+      "id": "shield-raider-details-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/renders/shield-raider-details-r1.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/attempts/shield-raider-details-r1.png",
+      "sha256": "42e278ea790c853cff0116611ce8f8331d947b8bd02980b8d231550bb3ac3b63",
+      "git_blob_sha": "292e7f1e66463aeb66635e0ab05f08d6b7324f40",
+      "bytes": 1791928,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/prompts/shield-raider-details-r1.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/shield-raider-details-r1.txt",
+      "prompt_sha256": "7903678588faaf2ebee3d8416459e32f1d2a0cce3da4f10c30b6c88bbd223ce5",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/generation-index.json"
+    },
+    {
+      "id": "harpoon-hunter-details-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/renders/harpoon-hunter-details-r1.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/attempts/harpoon-hunter-details-r1.png",
+      "sha256": "1b66ac976df1755f65dc34edb8e4fdde78f7766abcaf1e0901e889ae8293b11b",
+      "git_blob_sha": "e8fa6b79fae825396a3a74898cbe5ba4b07e665b",
+      "bytes": 1744513,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/prompts/harpoon-hunter-details-r1.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/harpoon-hunter-details-r1.txt",
+      "prompt_sha256": "eb9ad4e06e2b29a764deb6dd96c527ee7fdc9e6c336f9e0a96f5cdf9db7e9075",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/generation-index.json"
+    },
+    {
+      "id": "powder-sapper-details-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/renders/powder-sapper-details-r1.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/attempts/powder-sapper-details-r1.png",
+      "sha256": "5ce78088384a52d0a86a3c9880f6a40faff92e692dfbe49784f93669d4739fa6",
+      "git_blob_sha": "8a7991178c4eee94a3502d92a8042c061757bf52",
+      "bytes": 1970461,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/prompts/powder-sapper-details-r1.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/powder-sapper-details-r1.txt",
+      "prompt_sha256": "9c92e5b08b051cb2ff1be38094d178bce7a0c77a21da24469891e67cf0969f75",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/generation-index.json"
+    },
+    {
+      "id": "harpoon-hunter-details-r2",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/renders/harpoon-hunter-details-r2.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/attempts/harpoon-hunter-details-r2.png",
+      "sha256": "2a01eb63c9332a367c7adc4853b004d8668ce7b668531311c78817da604e8ead",
+      "git_blob_sha": "a3dcef3c2fb9c1eb1eddd8e19f8e9768236fee27",
+      "bytes": 1773046,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/prompts/harpoon-hunter-details-r2.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/harpoon-hunter-details-r2.txt",
+      "prompt_sha256": "222eb832f449ec5280de0945ac4df90a388f407dbbbd3c7461bde238e37cd0db",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/generation-index.json"
+    },
+    {
+      "id": "frost-stalker-turnaround-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/renders/frost-stalker-turnaround-r1.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/attempts/frost-stalker-turnaround-r1.png",
+      "sha256": "f6453910e87076b31dd20a02ffa54d9e16d7f8203c09f77a1ab8c64f2b9615de",
+      "git_blob_sha": "e9858edb3d00d721c283395c939fd250ca9443a2",
+      "bytes": 2060275,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/prompts/frost-stalker-turnaround-r1.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/frost-stalker-turnaround-r1.txt",
+      "prompt_sha256": "c7b8c469d5fab91de7b302f58c3f07e8899783c4f34f9b07faf8a261804deff9",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/generation-index.json"
+    },
+    {
+      "id": "tusk-boar-turnaround-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/renders/tusk-boar-turnaround-r1.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/attempts/tusk-boar-turnaround-r1.png",
+      "sha256": "30efe732150ecf070dcbfb776f3e4030afdb5167fa2560541980d7c01a5bd374",
+      "git_blob_sha": "d2373b6a57e5e970d79ac63e58c7c051d9df78ee",
+      "bytes": 1971668,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/prompts/tusk-boar-turnaround-r1.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/tusk-boar-turnaround-r1.txt",
+      "prompt_sha256": "ebfb62f27bc8c0b8c7059f25be9e1f28d8ae856f30c2d78bd71bc8b7d9c3dea1",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/generation-index.json"
+    },
+    {
+      "id": "musk-ox-rampager-turnaround-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/renders/musk-ox-rampager-turnaround-r1.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/attempts/musk-ox-rampager-turnaround-r1.png",
+      "sha256": "bf5191691a1274aecdf34ef228de8a273d64f6f225fbda28e1f4052345c304eb",
+      "git_blob_sha": "add5d4c9818d6454548167b1c602353e9fcd7fff",
+      "bytes": 2099736,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/prompts/musk-ox-rampager-turnaround-r1.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/musk-ox-rampager-turnaround-r1.txt",
+      "prompt_sha256": "8de31e15a96034d25a05634c1f46010ca0fda48b95276c6e9f1dbb2e3f635e0c",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/generation-index.json"
+    },
+    {
+      "id": "frost-stalker-details-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/renders/frost-stalker-details-r1.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/attempts/frost-stalker-details-r1.png",
+      "sha256": "ac645a7835bb5c535ebe3f6c8ce55d166552c8f7e1b3780d8495ee108c782b99",
+      "git_blob_sha": "a909e3c18c7f0a43cbf12da6a06964568096852f",
+      "bytes": 2108028,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/prompts/frost-stalker-details-r1.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/frost-stalker-details-r1.txt",
+      "prompt_sha256": "7715d78b4c117294758f046ce947a6d07bd307f87294e541dec37e3d818c9011",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/generation-index.json"
+    },
+    {
+      "id": "tusk-boar-details-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/renders/tusk-boar-details-r1.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/attempts/tusk-boar-details-r1.png",
+      "sha256": "524546cb7fa78586c909e053d21a6ceea6d6481a923fd8f2a0b8007b22e81d9c",
+      "git_blob_sha": "a45b52f2692c968fb0cc6efd8017ee8541edac65",
+      "bytes": 2087889,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/prompts/tusk-boar-details-r1.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/tusk-boar-details-r1.txt",
+      "prompt_sha256": "f85df3294b9a42fe7bb5d0c6ebc240f6e8536b2c9a76653124977198e2992726",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/generation-index.json"
+    },
+    {
+      "id": "musk-ox-rampager-details-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/renders/musk-ox-rampager-details-r1.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/attempts/musk-ox-rampager-details-r1.png",
+      "sha256": "a2814d39d7f78463fb9ba5059cc5ef16af3840c6e7cf95b380754f45d7e63d95",
+      "git_blob_sha": "6f5e57b9380b9debdb02a2e900c8e563747f4192",
+      "bytes": 2215716,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/prompts/musk-ox-rampager-details-r1.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/musk-ox-rampager-details-r1.txt",
+      "prompt_sha256": "93565ec958d5c83e6039cb7d54d796fa8c986a776ee9863fb761a62403d27680",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/generation-index.json"
+    },
+    {
+      "id": "frostwing-raptor-details-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/aerial-siege-builds/renders/frostwing-raptor-details-r1.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/attempts/frostwing-raptor-details-r1.png",
+      "sha256": "3360f4de033e9269d426f9dbb989c2e28f98d5a7e79aa3ace7cb0a69f2b1306a",
+      "git_blob_sha": "04fa041639715a9a73e06cd5b447642c42ab1b6e",
+      "bytes": 2021184,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/aerial-siege-builds/prompts/frostwing-raptor-details-r1.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/frostwing-raptor-details-r1.txt",
+      "prompt_sha256": "e9e8879f42549a71a94dbf5d996505dfe4e8655fb83a1ea17b2dd921d2d59bcf",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/aerial-siege-builds/generation-index.json"
+    },
+    {
+      "id": "armored-ram-sled-details-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/aerial-siege-builds/renders/armored-ram-sled-details-r1.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/attempts/armored-ram-sled-details-r1.png",
+      "sha256": "687beebaad812666a07f9cd7dabff1fa36593f8bdd5174c49d0e7943a17c2183",
+      "git_blob_sha": "2ba0bed7da7882305a9b719f008f8b49b475a506",
+      "bytes": 2093535,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/aerial-siege-builds/prompts/armored-ram-sled-details-r1.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/armored-ram-sled-details-r1.txt",
+      "prompt_sha256": "60482224544ad399fb06f4d6d4f296d59ba8599eb440f663872c11e5a5207333",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/aerial-siege-builds/generation-index.json"
+    }
+  ],
+  "selected": [
+    {
+      "id": "shield-raider-turnaround-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/renders/shield-raider-turnaround-r1.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/selected/shield-raider-turnaround.png",
+      "sha256": "578177b4b6de9093c5df3b5655998b42a4aef17d1666c734b35fab64694eebd9",
+      "git_blob_sha": "9698c24f9bd6d7e995f88ba2738927819d74e725",
+      "bytes": 1895612,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/prompts/shield-raider-turnaround-r1.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/shield-raider-turnaround-r1.txt",
+      "prompt_sha256": "149e88b9b2e6a596d2da1f372ce55d976f089a12ebf5ee43fba107c7bad81029",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/generation-index.json",
+      "series_id": "shield-raider-turnaround",
+      "subject_id": "shield-raider",
+      "sheet_type": "turnaround",
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.6,
+      "all_mandatory_checks_passed": true,
+      "raw_review_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/reviews/roster-visual-review-02.json",
+      "raw_review_sha256": "72ae131dcacd46aa1962dcbf8bb856916d60cd4ff7689eedc3bdeab90beb792d"
+    },
+    {
+      "id": "shield-raider-details-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/renders/shield-raider-details-r1.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/selected/shield-raider-details.png",
+      "sha256": "42e278ea790c853cff0116611ce8f8331d947b8bd02980b8d231550bb3ac3b63",
+      "git_blob_sha": "292e7f1e66463aeb66635e0ab05f08d6b7324f40",
+      "bytes": 1791928,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/prompts/shield-raider-details-r1.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/shield-raider-details-r1.txt",
+      "prompt_sha256": "7903678588faaf2ebee3d8416459e32f1d2a0cce3da4f10c30b6c88bbd223ce5",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/generation-index.json",
+      "series_id": "shield-raider-details",
+      "subject_id": "shield-raider",
+      "sheet_type": "details",
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.8,
+      "all_mandatory_checks_passed": true,
+      "raw_review_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/reviews/roster-visual-review-05.json",
+      "raw_review_sha256": "47d82d8164b3346783aa0dea0266e043a58c8f41f455676382495133a3a0427c"
+    },
+    {
+      "id": "harpoon-hunter-turnaround-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/renders/harpoon-hunter-turnaround-r1.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/selected/harpoon-hunter-turnaround.png",
+      "sha256": "1e25e1b578a0631f5de0d4c44dfc180415991f72bc577d7e7f5fbd7e83428fc3",
+      "git_blob_sha": "e0bb1a4250bed36267f65bec9170a2838dafd5ec",
+      "bytes": 1750050,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/prompts/harpoon-hunter-turnaround-r1.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/harpoon-hunter-turnaround-r1.txt",
+      "prompt_sha256": "526b3a5712c42b4ec9238ca4869047d461d9da85d1c0de2eed4e1e8a6c7b6552",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/generation-index.json",
+      "series_id": "harpoon-hunter-turnaround",
+      "subject_id": "harpoon-hunter",
+      "sheet_type": "turnaround",
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.8,
+      "all_mandatory_checks_passed": true,
+      "raw_review_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/reviews/roster-visual-review-02.json",
+      "raw_review_sha256": "72ae131dcacd46aa1962dcbf8bb856916d60cd4ff7689eedc3bdeab90beb792d"
+    },
+    {
+      "id": "harpoon-hunter-details-r2",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/renders/harpoon-hunter-details-r2.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/selected/harpoon-hunter-details.png",
+      "sha256": "2a01eb63c9332a367c7adc4853b004d8668ce7b668531311c78817da604e8ead",
+      "git_blob_sha": "a3dcef3c2fb9c1eb1eddd8e19f8e9768236fee27",
+      "bytes": 1773046,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/prompts/harpoon-hunter-details-r2.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/harpoon-hunter-details-r2.txt",
+      "prompt_sha256": "222eb832f449ec5280de0945ac4df90a388f407dbbbd3c7461bde238e37cd0db",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/generation-index.json",
+      "series_id": "harpoon-hunter-details",
+      "subject_id": "harpoon-hunter",
+      "sheet_type": "details",
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.8,
+      "all_mandatory_checks_passed": true,
+      "raw_review_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/reviews/roster-visual-review-06.json",
+      "raw_review_sha256": "5525b52fced9ca35578163705091c14d3ea262bc6e0bbe4f57f4d6de591f0f73"
+    },
+    {
+      "id": "powder-sapper-turnaround-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/renders/powder-sapper-turnaround-r1.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/selected/powder-sapper-turnaround.png",
+      "sha256": "b2891960f3792ad3443f157819503d010391ebf892d445e08fb2bee57115ddee",
+      "git_blob_sha": "1fd78773b2089192c6ceb3c2a156353e682df031",
+      "bytes": 1943472,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/prompts/powder-sapper-turnaround-r1.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/powder-sapper-turnaround-r1.txt",
+      "prompt_sha256": "66ce0bd6f1ffd0182857801fdb7600444bce4717158a5ddd581b57c60c6dd02e",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/generation-index.json",
+      "series_id": "powder-sapper-turnaround",
+      "subject_id": "powder-sapper",
+      "sheet_type": "turnaround",
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.8,
+      "all_mandatory_checks_passed": true,
+      "raw_review_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/reviews/roster-visual-review-02.json",
+      "raw_review_sha256": "72ae131dcacd46aa1962dcbf8bb856916d60cd4ff7689eedc3bdeab90beb792d"
+    },
+    {
+      "id": "powder-sapper-details-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/renders/powder-sapper-details-r1.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/selected/powder-sapper-details.png",
+      "sha256": "5ce78088384a52d0a86a3c9880f6a40faff92e692dfbe49784f93669d4739fa6",
+      "git_blob_sha": "8a7991178c4eee94a3502d92a8042c061757bf52",
+      "bytes": 1970461,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/prompts/powder-sapper-details-r1.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/powder-sapper-details-r1.txt",
+      "prompt_sha256": "9c92e5b08b051cb2ff1be38094d178bce7a0c77a21da24469891e67cf0969f75",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/generation-index.json",
+      "series_id": "powder-sapper-details",
+      "subject_id": "powder-sapper",
+      "sheet_type": "details",
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.8,
+      "all_mandatory_checks_passed": true,
+      "raw_review_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/reviews/roster-visual-review-05.json",
+      "raw_review_sha256": "47d82d8164b3346783aa0dea0266e043a58c8f41f455676382495133a3a0427c"
+    },
+    {
+      "id": "frost-stalker-turnaround-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/renders/frost-stalker-turnaround-r1.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/selected/frost-stalker-turnaround.png",
+      "sha256": "f6453910e87076b31dd20a02ffa54d9e16d7f8203c09f77a1ab8c64f2b9615de",
+      "git_blob_sha": "e9858edb3d00d721c283395c939fd250ca9443a2",
+      "bytes": 2060275,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/prompts/frost-stalker-turnaround-r1.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/frost-stalker-turnaround-r1.txt",
+      "prompt_sha256": "c7b8c469d5fab91de7b302f58c3f07e8899783c4f34f9b07faf8a261804deff9",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/generation-index.json",
+      "series_id": "frost-stalker-turnaround",
+      "subject_id": "frost-stalker",
+      "sheet_type": "turnaround",
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.8,
+      "all_mandatory_checks_passed": true,
+      "raw_review_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/reviews/roster-visual-review-01.json",
+      "raw_review_sha256": "12845a79874dfc62b055f1e44f4ac8d44744f4f28e1c9db08818411f33efc347"
+    },
+    {
+      "id": "frost-stalker-details-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/renders/frost-stalker-details-r1.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/selected/frost-stalker-details.png",
+      "sha256": "ac645a7835bb5c535ebe3f6c8ce55d166552c8f7e1b3780d8495ee108c782b99",
+      "git_blob_sha": "a909e3c18c7f0a43cbf12da6a06964568096852f",
+      "bytes": 2108028,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/prompts/frost-stalker-details-r1.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/frost-stalker-details-r1.txt",
+      "prompt_sha256": "7715d78b4c117294758f046ce947a6d07bd307f87294e541dec37e3d818c9011",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/generation-index.json",
+      "series_id": "frost-stalker-details",
+      "subject_id": "frost-stalker",
+      "sheet_type": "details",
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.8,
+      "all_mandatory_checks_passed": true,
+      "raw_review_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/reviews/roster-visual-review-03.json",
+      "raw_review_sha256": "95faf356fda15be9690ea23c864c7fbebd7ae2f31a05e8df5b70cd2a2c6651aa"
+    },
+    {
+      "id": "tusk-boar-turnaround-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/renders/tusk-boar-turnaround-r1.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/selected/tusk-boar-turnaround.png",
+      "sha256": "30efe732150ecf070dcbfb776f3e4030afdb5167fa2560541980d7c01a5bd374",
+      "git_blob_sha": "d2373b6a57e5e970d79ac63e58c7c051d9df78ee",
+      "bytes": 1971668,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/prompts/tusk-boar-turnaround-r1.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/tusk-boar-turnaround-r1.txt",
+      "prompt_sha256": "ebfb62f27bc8c0b8c7059f25be9e1f28d8ae856f30c2d78bd71bc8b7d9c3dea1",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/generation-index.json",
+      "series_id": "tusk-boar-turnaround",
+      "subject_id": "tusk-boar",
+      "sheet_type": "turnaround",
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.8,
+      "all_mandatory_checks_passed": true,
+      "raw_review_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/reviews/roster-visual-review-01.json",
+      "raw_review_sha256": "12845a79874dfc62b055f1e44f4ac8d44744f4f28e1c9db08818411f33efc347"
+    },
+    {
+      "id": "tusk-boar-details-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/renders/tusk-boar-details-r1.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/selected/tusk-boar-details.png",
+      "sha256": "524546cb7fa78586c909e053d21a6ceea6d6481a923fd8f2a0b8007b22e81d9c",
+      "git_blob_sha": "a45b52f2692c968fb0cc6efd8017ee8541edac65",
+      "bytes": 2087889,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/prompts/tusk-boar-details-r1.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/tusk-boar-details-r1.txt",
+      "prompt_sha256": "f85df3294b9a42fe7bb5d0c6ebc240f6e8536b2c9a76653124977198e2992726",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/generation-index.json",
+      "series_id": "tusk-boar-details",
+      "subject_id": "tusk-boar",
+      "sheet_type": "details",
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.8,
+      "all_mandatory_checks_passed": true,
+      "raw_review_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/reviews/roster-visual-review-03.json",
+      "raw_review_sha256": "95faf356fda15be9690ea23c864c7fbebd7ae2f31a05e8df5b70cd2a2c6651aa"
+    },
+    {
+      "id": "musk-ox-rampager-turnaround-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/renders/musk-ox-rampager-turnaround-r1.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/selected/musk-ox-rampager-turnaround.png",
+      "sha256": "bf5191691a1274aecdf34ef228de8a273d64f6f225fbda28e1f4052345c304eb",
+      "git_blob_sha": "add5d4c9818d6454548167b1c602353e9fcd7fff",
+      "bytes": 2099736,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/prompts/musk-ox-rampager-turnaround-r1.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/musk-ox-rampager-turnaround-r1.txt",
+      "prompt_sha256": "8de31e15a96034d25a05634c1f46010ca0fda48b95276c6e9f1dbb2e3f635e0c",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/generation-index.json",
+      "series_id": "musk-ox-rampager-turnaround",
+      "subject_id": "musk-ox-rampager",
+      "sheet_type": "turnaround",
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.8,
+      "all_mandatory_checks_passed": true,
+      "raw_review_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/reviews/roster-visual-review-01.json",
+      "raw_review_sha256": "12845a79874dfc62b055f1e44f4ac8d44744f4f28e1c9db08818411f33efc347"
+    },
+    {
+      "id": "musk-ox-rampager-details-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/renders/musk-ox-rampager-details-r1.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/selected/musk-ox-rampager-details.png",
+      "sha256": "a2814d39d7f78463fb9ba5059cc5ef16af3840c6e7cf95b380754f45d7e63d95",
+      "git_blob_sha": "6f5e57b9380b9debdb02a2e900c8e563747f4192",
+      "bytes": 2215716,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/prompts/musk-ox-rampager-details-r1.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/musk-ox-rampager-details-r1.txt",
+      "prompt_sha256": "93565ec958d5c83e6039cb7d54d796fa8c986a776ee9863fb761a62403d27680",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/generation-index.json",
+      "series_id": "musk-ox-rampager-details",
+      "subject_id": "musk-ox-rampager",
+      "sheet_type": "details",
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.7,
+      "all_mandatory_checks_passed": true,
+      "raw_review_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/reviews/roster-visual-review-03.json",
+      "raw_review_sha256": "95faf356fda15be9690ea23c864c7fbebd7ae2f31a05e8df5b70cd2a2c6651aa"
+    },
+    {
+      "id": "frostwing-raptor-turnaround-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/renders/frostwing-raptor-turnaround-r1.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/selected/frostwing-raptor-turnaround.png",
+      "sha256": "17cfca8369bee4307647eaa729629843249684a848da40fea068d4166aaea720",
+      "git_blob_sha": "709a3042c90787c969801950fb70471a18d3c516",
+      "bytes": 2108607,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/prompts/frostwing-raptor-turnaround-r1.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/frostwing-raptor-turnaround-r1.txt",
+      "prompt_sha256": "b0aa8a595d12c2d7e5a538be196d600b47af4c59c6fa196fdef9aac014d8ddf0",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/generation-index.json",
+      "series_id": "frostwing-raptor-turnaround",
+      "subject_id": "frostwing-raptor",
+      "sheet_type": "turnaround",
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.8,
+      "all_mandatory_checks_passed": true,
+      "raw_review_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/reviews/roster-visual-review-04.json",
+      "raw_review_sha256": "bd15f66a97c44f67c74d7bdec33e65b8903efa075006b720d055a193a4df71f5"
+    },
+    {
+      "id": "frostwing-raptor-details-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/aerial-siege-builds/renders/frostwing-raptor-details-r1.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/selected/frostwing-raptor-details.png",
+      "sha256": "3360f4de033e9269d426f9dbb989c2e28f98d5a7e79aa3ace7cb0a69f2b1306a",
+      "git_blob_sha": "04fa041639715a9a73e06cd5b447642c42ab1b6e",
+      "bytes": 2021184,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/aerial-siege-builds/prompts/frostwing-raptor-details-r1.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/frostwing-raptor-details-r1.txt",
+      "prompt_sha256": "e9e8879f42549a71a94dbf5d996505dfe4e8655fb83a1ea17b2dd921d2d59bcf",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/aerial-siege-builds/generation-index.json",
+      "series_id": "frostwing-raptor-details",
+      "subject_id": "frostwing-raptor",
+      "sheet_type": "details",
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.7,
+      "all_mandatory_checks_passed": true,
+      "raw_review_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/reviews/roster-visual-review-06.json",
+      "raw_review_sha256": "5525b52fced9ca35578163705091c14d3ea262bc6e0bbe4f57f4d6de591f0f73"
+    },
+    {
+      "id": "armored-ram-sled-turnaround-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/renders/armored-ram-sled-turnaround-r1.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/selected/armored-ram-sled-turnaround.png",
+      "sha256": "db601515bb0eb3dc97ee02b01e97eb6506aab4e5d0dea18910c53647460c7998",
+      "git_blob_sha": "72aeee3c3eba32e60d0c282869f3d9ba9bd324a3",
+      "bytes": 1896419,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/prompts/armored-ram-sled-turnaround-r1.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/armored-ram-sled-turnaround-r1.txt",
+      "prompt_sha256": "3cee3bde12c4a8725d7763ac4e3c2bc946fc8da898d4ec4ec3ac3be96ac2824b",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/generation-index.json",
+      "series_id": "armored-ram-sled-turnaround",
+      "subject_id": "armored-ram-sled",
+      "sheet_type": "turnaround",
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.8,
+      "all_mandatory_checks_passed": true,
+      "raw_review_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/reviews/roster-visual-review-04.json",
+      "raw_review_sha256": "bd15f66a97c44f67c74d7bdec33e65b8903efa075006b720d055a193a4df71f5"
+    },
+    {
+      "id": "armored-ram-sled-details-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/aerial-siege-builds/renders/armored-ram-sled-details-r1.png",
+      "archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/selected/armored-ram-sled-details.png",
+      "sha256": "687beebaad812666a07f9cd7dabff1fa36593f8bdd5174c49d0e7943a17c2183",
+      "git_blob_sha": "2ba0bed7da7882305a9b719f008f8b49b475a506",
+      "bytes": 2093535,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt_local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/aerial-siege-builds/prompts/armored-ram-sled-details-r1.txt",
+      "prompt_archive_path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/prompts/armored-ram-sled-details-r1.txt",
+      "prompt_sha256": "60482224544ad399fb06f4d6d4f296d59ba8599eb440f663872c11e5a5207333",
+      "source_index": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/aerial-siege-builds/generation-index.json",
+      "series_id": "armored-ram-sled-details",
+      "subject_id": "armored-ram-sled",
+      "sheet_type": "details",
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.8,
+      "all_mandatory_checks_passed": true,
+      "raw_review_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/reviews/roster-visual-review-06.json",
+      "raw_review_sha256": "5525b52fced9ca35578163705091c14d3ea262bc6e0bbe4f57f4d6de591f0f73"
+    }
+  ],
+  "supplementary": [],
+  "independent_status": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/reviews/latest-independent-status.json",
+    "sha256": "e5e96b4f8e788945ea22c53d9e52d163492b5b56ac5139f4b1cc5217f93585e4",
+    "git_blob_sha": "393032ba326427a82fc22b789dcba19a2809e13f",
+    "bytes": 12131
+  },
+  "requirements": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/requirements.json",
+    "sha256": "f8743c5f137b4669ead14bf503590a0233ff8258e87d87e156292245c385e30a",
+    "git_blob_sha": "cea7c86d1f9193b6c9ab133f346797c9f1be16a7",
+    "bytes": 6592
+  },
+  "all_selected_mandatory_checks_passed": true,
+  "minimum_selected_score": 9.6,
+  "remote_delivery_verified": false,
+  "next_action": "Assemble the additive archive, independently check it, commit, then verify the live remote tree and original bytes."
+}

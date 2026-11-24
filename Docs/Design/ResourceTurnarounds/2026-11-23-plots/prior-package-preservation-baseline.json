@@ -1,0 +1,823 @@
+{
+  "commit": "8bc2c7577be100fcb5a8fab11517374f71888208",
+  "files_verified": 136,
+  "prior_selected_pngs": 33,
+  "files": [
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/.gitattributes",
+      "bytes": 96,
+      "sha256": "3c9e55eca3b7c3489ff716c69bb2dd8daaf9c9013383bfc0ac4fb4fc56c979c8",
+      "git_blob_sha": "9cff5b9cbdf0ea3d765b58f14217e0d4eb30c1a6"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/README.md",
+      "bytes": 3795,
+      "sha256": "b38f3a3fbbc5e4c093def5e085c5ba2538864ea616a7c920dee0c5e7598f5564",
+      "git_blob_sha": "92eac0b91ea01e855c22c39eff2979c48860c178"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/acceptance-contract.json",
+      "bytes": 3396,
+      "sha256": "624df42f9b74164be3b93348ddec28cce9465d9815defb6192a80daa32078d54",
+      "git_blob_sha": "874bd7ad6b8a5cfa11a95adf437b55a399aabb1d"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/archived-candidates/initial/01-wood.png",
+      "bytes": 1814696,
+      "sha256": "6f51e59e43bbeb0b2285b7688f6d8b994142e3d091df7852415a9c5965bdfa55",
+      "git_blob_sha": "b2b4c2fc9337e8b9f3b699aca2acb1f90e60bfb3"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/archived-candidates/initial/02-stone.png",
+      "bytes": 1688792,
+      "sha256": "28842deedc75e30ace11b2d26c8596fc1f092f08da73875879e08b7c75efaf4a",
+      "git_blob_sha": "398a9405ed0306becd2282ab760734f0b50bea52"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/archived-candidates/initial/03-slate.png",
+      "bytes": 1603816,
+      "sha256": "a66a498bebad82d73759e8b38aa7a86e668e399ff26eb51ec4586d24a5c5ea71",
+      "git_blob_sha": "1b134f72a20d5d167f4ee6824c634f1fbd51afa3"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/archived-candidates/initial/04-steel.png",
+      "bytes": 1561192,
+      "sha256": "0b30f99b6082b6de09ef906228c48b82ecd5b5495526ae08ebe5170381761dd3",
+      "git_blob_sha": "571177564f03e7da7c34ae19b81238cc19f31b99"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/archived-candidates/initial/05-metal-ore.png",
+      "bytes": 1770783,
+      "sha256": "0f3e2277315bd9e79457549751ff7ec17d339f56214bba33c783e76ce54c72ec",
+      "git_blob_sha": "7657ed14a24af8060ccf462303c982fb34f1ce00"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/archived-candidates/initial/06-fuel.png",
+      "bytes": 1779846,
+      "sha256": "c65b8e2d80856fdfec4f9f979c795c2ca4001758ed3f92ec7964b59f2186fd62",
+      "git_blob_sha": "4412c9140c1135942db139a0a49faa335f534f2e"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/archived-candidates/initial/07-meat.png",
+      "bytes": 1680004,
+      "sha256": "5fad1691733e5a446c1de3af422f916243037be761faadeedbb6e1288a57bdbf",
+      "git_blob_sha": "153e2e6abd6463122a5fd3150b902b90fc503cca"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/archived-candidates/initial/08-fish.png",
+      "bytes": 1595437,
+      "sha256": "33fc7f32dfbc9d484f13971cf8d5450b886eb767a15e105a254740fd7fc63551",
+      "git_blob_sha": "b2ee18b0a67b26efce9b52dcb0bf290829895e15"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/archived-candidates/initial/09-wheat.png",
+      "bytes": 1721802,
+      "sha256": "db64209303c634f7ec1516d084fd468bc5482f4433f68b324a371c78aeb6dcc6",
+      "git_blob_sha": "3daed8126631d9af08238e23cccc92c9187e1249"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/archived-candidates/initial/10-cooked-food.png",
+      "bytes": 1737385,
+      "sha256": "cd7e259af1609c61c9ffc0930a1d1f2754b63369e4fff6b84d3829f94208a472",
+      "git_blob_sha": "b1d9197ad3f666b7a5b95a2ba592e1f36fbce723"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/archived-candidates/initial/12-cargo.png",
+      "bytes": 1864857,
+      "sha256": "9ee558a625c66eff0136572b1406db64909d42ceca12dc978897bfb69a71fe79",
+      "git_blob_sha": "d28feb99cf93ab4f3ce33663a89bdabea2237e12"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/archived-candidates/superseded-repairs/exec-1dff713e-c4b5-4c89-a94d-2afce22b6017.png",
+      "bytes": 1710345,
+      "sha256": "dc9ca7e325194c186ea7b3d56ae595ad67003de0c0e26edee851d01c75c0d998",
+      "git_blob_sha": "786b79329186114e81257e32bb59307bec1e069d"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/blob-upload-receipts.json",
+      "bytes": 12950,
+      "sha256": "92719c5a13030c989b0d003a0e196ff0885e7e69f0ad5a34167d19fb04160998",
+      "git_blob_sha": "3a688c854b9c40771fad531e6fb8266e0f3370f9"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/build_git_package.py",
+      "bytes": 10106,
+      "sha256": "ead12889f7708fdc06b46cc7ad049cc050312a488eb173264904ad6d195d1dcc",
+      "git_blob_sha": "d4dc413293cc9f412be7180ff96f41aab1a27598"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/delivery-manifest.json",
+      "bytes": 25505,
+      "sha256": "dd6d37c55982543fc3672105d8bfe351bbe2f3040e5286233f9610d975860842",
+      "git_blob_sha": "a9c838e4dd5cd6d5869ae4c7f45c2805a7ccfb40"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/delivery-verification.json",
+      "bytes": 332,
+      "sha256": "4506e3fdf9c8ad4d0e6fd3b2fe644e3a5ce64dc2def35b0b18a7a3e7c03b7463",
+      "git_blob_sha": "1fc9b697a50491c88b3486e2e1b17002f2cf4edf"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/download-render-index.json",
+      "bytes": 4800,
+      "sha256": "87aa048a67fef291a985f56f8adfb52a0a95606c50bd25f7e25b483404258f8e",
+      "git_blob_sha": "d712f531acc498964bbb114180a049dc787e4898"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/prompts/prompts-batch1.json",
+      "bytes": 3808,
+      "sha256": "59709e097a597d890b436f4fb5c1112e9e9e7870f4b81b905d4c4d9e82f9d817",
+      "git_blob_sha": "21ad99e4821f89b5d74a7f70ab494fd2769eea97"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/prompts/prompts-batch2.json",
+      "bytes": 4508,
+      "sha256": "871b44905f117562bce7f020e52e034dea728e52bb3bc377efcdfecffa2cd40a",
+      "git_blob_sha": "c637b97503cb200a21503fd7eb5fc2a9b488437a"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/prompts/prompts-batch3.json",
+      "bytes": 4918,
+      "sha256": "98741c39657677c52468b76d3e02e0f448285195accc0d7ada0b946e049984c9",
+      "git_blob_sha": "e7aad32d359ccb016ec722bb1530470c3d07c4bc"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/prompts/prompts-batch4.json",
+      "bytes": 4676,
+      "sha256": "a80ee2f3e9e4f7b0ea5f4fcc4d2f1fd25dc2d4e8a1d97d4732db531d6f083a15",
+      "git_blob_sha": "0a6f0aea1ec4cc88ee86c3cd2ae0f80ff2982ac1"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/prompts/prompts-batch5-coal.json",
+      "bytes": 2690,
+      "sha256": "1903e40db2ecd6c503404dbfcba044987725fe4b64cf6290bc678411da86bff1",
+      "git_blob_sha": "64405aa95acce23a001dd8601e7fe0770e5b6b10"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/repairs/batch-01-repair-prompts.json",
+      "bytes": 4759,
+      "sha256": "b6692fd1f7b7b196fbb3bfa4ce7bde0a1d4104367680c301ab5be80231ddb8e5",
+      "git_blob_sha": "dbf52cfcd0ce65d9f2f314822624dbb988e24143"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/repairs/batch-01-repair-results.json",
+      "bytes": 3253,
+      "sha256": "1bd7fa4fd99453c141f38743284281009e878874a0a7d0e7821440dde721f112",
+      "git_blob_sha": "476d3d7d7019f59e36842cd14e3ecfe2cfae5872"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/repairs/batch-02-repair-prompts.json",
+      "bytes": 4266,
+      "sha256": "cad3b6805ef57c7e8501d9ee27fd4ff004e6ad2e5420a9b2481a322b1b938a72",
+      "git_blob_sha": "c043f0de769fa2c6e9a18d956d6b707cd527a8a3"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/repairs/batch-02-repair-results.json",
+      "bytes": 3257,
+      "sha256": "73966d492d71e7ba4281c0093827757876dd4c10c4c3568cd04fd6ea8a11b5c7",
+      "git_blob_sha": "6f4a9a3389a6e7d4de55555bcd6f01827c4814e2"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/repairs/batch-03-repair-prompts.json",
+      "bytes": 5047,
+      "sha256": "8b37bc7144d14809a9b6c651b1315958f129073638576e413d6969717f353f04",
+      "git_blob_sha": "56a1be36209247dd7deada033371c98b9f902625"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/repairs/batch-03-repair-results.json",
+      "bytes": 5047,
+      "sha256": "d889dcdf0eb05ce3c54005ed2223021634651ed5106c68db93f42e8841897698",
+      "git_blob_sha": "b8a7f3ce1dcf391f711163c5cc44355065240c4c"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/repairs/batch-04-repair-prompts.json",
+      "bytes": 3054,
+      "sha256": "ff25180d17fe51598fe47834a023b23900668bbd02a6011a74a76b2924d1d05a",
+      "git_blob_sha": "c14be8b46b2f643941af9f2938fa2be05ae1813f"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/repairs/batch-04-repair-results.json",
+      "bytes": 2256,
+      "sha256": "44502661ca783234b9751b0c4c8e0f2e66e97b667074cd1024830078619851fa",
+      "git_blob_sha": "d306a383c63c598117be8557b5935a2a41d5833c"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/repairs/wheat-repair-iteration-2.json",
+      "bytes": 2650,
+      "sha256": "ebdeae2019591c4e8901bbd2bbc57277b524c594c5cdc682c571e63d1def84cc",
+      "git_blob_sha": "287597882f15be88bf8af222e68d9e40f359c527"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/01-wood.png",
+      "bytes": 1830563,
+      "sha256": "3b528ed8c5485f4c7433cb82223c7eb8081e5858bf5f90f7222778106719641b",
+      "git_blob_sha": "c94ba1d94a3d7fdbb5c9cc096c5b3f30eb180cb4"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/02-stone.png",
+      "bytes": 1744944,
+      "sha256": "5360d9d44ed505f48c788b870e322105edce48c726525252d0e884549800016e",
+      "git_blob_sha": "c2a7e1a7cb2caa8fb1dc80699b5d02604adadbe1"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/03-slate.png",
+      "bytes": 1679538,
+      "sha256": "651269f18342422fb7aeac236e61c4b7b59c325040dc2a7b71d446afa2c37b64",
+      "git_blob_sha": "5280b3c6a69b01b39a1f5577686162228b177008"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/04-steel.png",
+      "bytes": 1583424,
+      "sha256": "905c74c92209963de34f80efca33408af2738f761ff6c82abe2fefff8f0a4347",
+      "git_blob_sha": "8030843df6055046f23b908c5c5c98c4aa6ceb33"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/05-metal-ore.png",
+      "bytes": 1731700,
+      "sha256": "9e6965c343e017052d14800a7c3d3673ec396552e1f648cac15e7fb26a5b4d4a",
+      "git_blob_sha": "c3bdeddef77ddf35f1a32bfc598bea809bb816c8"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/06-fuel.png",
+      "bytes": 1722442,
+      "sha256": "c9a17187e1009b9d466b024608a28887b86b7746da3aae8b378e6caee649c306",
+      "git_blob_sha": "ac409458a51373a09abb3874dc2f82a28eecca2a"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/07-meat.png",
+      "bytes": 1686291,
+      "sha256": "29671642ed2fbb9d4a7e39b34923f3b9576ee95282ffcea5bb5c16b4f3496254",
+      "git_blob_sha": "12dd418cf4ed3e38770a67442bb39beb6cf9180b"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/08-fish.png",
+      "bytes": 1706103,
+      "sha256": "b62af41e1c8e96ecd37016ded5b74f3ae34e5beb3fd3d2ad11b02d4498e80901",
+      "git_blob_sha": "e69e7fa6d68c2a112e8b12e9ae69e567e7a5c1fd"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/09-wheat.png",
+      "bytes": 1742411,
+      "sha256": "ba766eb586fdfbbb459dae6193091f1c9f68c9439f52685351322828102f80ff",
+      "git_blob_sha": "a87813358bad204455a32ab6f68bfbebfd28426c"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/10-cooked-food.png",
+      "bytes": 1615427,
+      "sha256": "ba237b6ecadaba5d8f9ae8f6d55ad5814fdfad5a263617f2d2e0553067dbc815",
+      "git_blob_sha": "2579fbaee59b771c9956d72dd580255498ade402"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/11-money.png",
+      "bytes": 1723964,
+      "sha256": "ad719c6bda631bfbbb56dcb47b1c70fba31502cd9a82768637fb0632f8f48bae",
+      "git_blob_sha": "74fe2dd9fcca9e2ad8e266b89d7bba61f5c8df21"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/12-cargo.png",
+      "bytes": 1949728,
+      "sha256": "507ee9985dff799b67c1d82d6217ece5e834d786f53771e3abebfe41196c2809",
+      "git_blob_sha": "0f00f3467086f520c62d4304a8900775e55e02f1"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/13-coal.png",
+      "bytes": 1543857,
+      "sha256": "860f781f8ac7425e4a7899d1f9748a5e1e5dc920ae33862a7b6180f244703b5d",
+      "git_blob_sha": "e2e0e11613a65ad01d3aa3255317a3de3bd89ba9"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviews/batch-01-initial-review.json",
+      "bytes": 4411,
+      "sha256": "d0637878eb17262c4f7677739e056c96380d30d2dc55eb989ac092b235168ff4",
+      "git_blob_sha": "2dd2f2dd67a20cec9724f66630167e7bf7de4343"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviews/batch-01-repair-review.json",
+      "bytes": 3549,
+      "sha256": "1f4a1b7920e3b889743004b539581cd2bf1d1336547d33f7f9dec02df8e8edd0",
+      "git_blob_sha": "dc6a93da29170621fdb3dac2ddf8c008684ad7ba"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviews/batch-02-initial-review.json",
+      "bytes": 3287,
+      "sha256": "248f549e008d96e07f5278ec507195888b1f3eefd3956bd1b1841434c6f7c577",
+      "git_blob_sha": "40713a01792dbc90e2c386286bdbe67f7f1580e4"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviews/batch-02-repair-review.json",
+      "bytes": 3266,
+      "sha256": "92d1e75246d32862b5c4d69e8dfa1c0125c2fd4cfd56d70c50f56bdb4e40efb2",
+      "git_blob_sha": "ef3957c4d08d1afe83e6771d2cf7cb452896c8d0"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviews/batch-03-initial-review.json",
+      "bytes": 3903,
+      "sha256": "96e9d333db17c5b06de8eab14f677dfcd16385a28afba7bfe111e4b383ee9005",
+      "git_blob_sha": "8abc3c2fef2a610265d35e6a90759b54fad9479d"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviews/batch-03-repair-review.json",
+      "bytes": 2481,
+      "sha256": "f2461bdf2f07375e3b606aa03501dada99ba648e71207675212cba89abac9466",
+      "git_blob_sha": "e6fa9b0a3aae46cddaef8dab41bb434e67a24f63"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviews/batch-04-initial-review.json",
+      "bytes": 2807,
+      "sha256": "407451b2ea24c221a3123933dbc194b2e85850adf625aa83fe7dff6cb262e876",
+      "git_blob_sha": "f03cfa9039fb9e661db25c9787ecbdba67a55d87"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviews/batch-04-repair-review.json",
+      "bytes": 1777,
+      "sha256": "79686103622070d1b25fea4150be22e742c0a7ad04f78bec8c9b9b2d77d8aa23",
+      "git_blob_sha": "efe7461b5b37e2ec45435531d2a8b6cb7d1f1626"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviews/batch-05-coal-review.json",
+      "bytes": 1019,
+      "sha256": "159affc96f009cbb8e90d51d27372b218111b737f06bbb97bb871b2cdf739a76",
+      "git_blob_sha": "08ae59284628fef7495ed41060758ffc82ea967b"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviews/final-independent-visual-review.json",
+      "bytes": 13631,
+      "sha256": "4899a25f7ccb9ed9e017163d37a964e4e7046078f12fc1a8713aec0dbb2a51c4",
+      "git_blob_sha": "4fe5f4eebc060ab4e846de4061c452483cd0944a"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviews/review-index.json",
+      "bytes": 2026,
+      "sha256": "faea490f75e4ff3455923cc38c66e21a4483d3aaead16fcc23003e0d44c7cd8e",
+      "git_blob_sha": "2b887f3c4e1af41d2187ee43892645298729889c"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/scope-addendum.json",
+      "bytes": 961,
+      "sha256": "6f93cc3586b6e79720b3dc401ac0722c08152dd8c4c175d24f529b07a0d5da92",
+      "git_blob_sha": "2406686ae947cbd176d8d4a5839e98c0f1fa052d"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/source-reference-provenance.json",
+      "bytes": 2876,
+      "sha256": "a75767362e27470a8870f20df7acb1df9d7d7251ff0dceb9bb93b25f6561288f",
+      "git_blob_sha": "4d6a1fe3999e560c263e933af18f4380f5771907"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/.gitattributes",
+      "bytes": 90,
+      "sha256": "61cdfbb1a60a7d967fe4ebba2c4be8f460cba77644a7d2cfa1e1a986bdb9a8cb",
+      "git_blob_sha": "2836922a7f248110e4e3f85c16f427a70ae8cf05"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/README.md",
+      "bytes": 5025,
+      "sha256": "6277c4100683ce323429af73dc9a862061a21a7f299f13e5d33bcae683bf88fd",
+      "git_blob_sha": "90b790bb97ff7763919e98a0ad9d1e4b00de0718"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/acceptance-contract.json",
+      "bytes": 6105,
+      "sha256": "e598ae4c552dd4b16dc661a5ce5f341b05c649a27bbc0548fd89e6c09ba567bd",
+      "git_blob_sha": "0fa12ec62470aca02b708c7249927a9395379cfd"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/animal-build/animal-candidates.json",
+      "bytes": 27273,
+      "sha256": "4659e203041967d6148f61cd55515f142ab2008693d440631cb6721cbda12600",
+      "git_blob_sha": "dbe562693831b007e5b553eb1e553fa42d78573d"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/animal-build/batch-01-prompts.json",
+      "bytes": 18954,
+      "sha256": "2d362b391c32e170e74bb4c43f17571d617b748a9aa5f09d6a03eb1d8d86594b",
+      "git_blob_sha": "324d6d02a05a26e94c27e89d0c8422917a2533de"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/animal-build/batch-01-results.json",
+      "bytes": 3837,
+      "sha256": "c7581172d3d09697bcb5fb2fb68b9300283c2e417703249e89859f5df672b82f",
+      "git_blob_sha": "ebd557aa559f3b344c6c94aeec149e4125ff9c8e"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/animal-build/batch-02-prompts.json",
+      "bytes": 19454,
+      "sha256": "5839ce824e5fe96e548973e86641ec37fbc0dd24f3216dc394f33ddc05c2e94f",
+      "git_blob_sha": "b7cc8b3da3e83bc25f57fae8848f9554bc8b5e0e"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/animal-build/batch-02-results.json",
+      "bytes": 3845,
+      "sha256": "65cd693c38e1cbf48fb3d09ee0c31e05c6b74a34b2dfa33a69cb93625b94c6aa",
+      "git_blob_sha": "e68543745c87a06448b8f6dc0973dacd1760cc26"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/animal-build/batch-03-prompts.json",
+      "bytes": 19358,
+      "sha256": "3d5237d32e552acf02285a1221f7e339cc413b6f6d499660bfc0a45eca9b9d46",
+      "git_blob_sha": "76f06b88c05416b0b5ee9c3b924d9c1029450934"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/animal-build/batch-03-results.json",
+      "bytes": 3844,
+      "sha256": "9304b02446df293f6adad1a0b4c13a13181051d20b6d4eabbd787b84e8fafe6a",
+      "git_blob_sha": "e6728d7aa9819b37a93ac1109004ed49944a8243"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/animal-build/batch-04-prompts.json",
+      "bytes": 7121,
+      "sha256": "c92171ff6ebd0ce0e3460f2b9ba8f9527c25970bd26bcb56cff46d729277208d",
+      "git_blob_sha": "5cd8873353091cda8d157bd7ca1c516ae9ea409f"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/animal-build/batch-04-results.json",
+      "bytes": 1314,
+      "sha256": "0a9054a3ea7e6c8a9b21b3d82beddceab9a87f32e69390f73d7be6afc154985c",
+      "git_blob_sha": "a08f698046caede8479d1f0e65232410ef98ff88"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/archived-candidates/initial/cooked-fish-exec-f43e6901-ebdc-422b-947a-764adf7bf876.png",
+      "bytes": 1814468,
+      "sha256": "5ae37a64a7b75a9021c9ca1025d30f640ba8a94ec31410d8b88d7bfd708669b4",
+      "git_blob_sha": "7b868ffcd1c005ac0097f4a048538fa210a5a309"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/archived-candidates/initial/hide-exec-7af29546-2f05-4a1e-ad12-ce5d331ce842.png",
+      "bytes": 1535409,
+      "sha256": "12b4e34e7ea1059d6dcd2efa6152506e0507f4d62a969c8c6dbbae6b539f8d8d",
+      "git_blob_sha": "a750b3c622c037e5f3b0d1d7fa7d7a0d3c3b3c0b"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/archived-candidates/initial/prepared-fish-fillet-exec-c60de7a4-8cee-42bf-9509-9dfd4eb763a0.png",
+      "bytes": 1628513,
+      "sha256": "267f0e9a5fe1886393222e5d95bc7c860261426bf7a7055464b6609b97d18c4e",
+      "git_blob_sha": "312eca7a0aad99282d4d0534a62ffdfdca9aed13"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/archived-candidates/initial/split-firewood-exec-1764d691-6c34-45c2-b0f3-8a29440936fe.png",
+      "bytes": 1542421,
+      "sha256": "1901b1c7f01e1a0ba67620126a198c81f5b31f5e4f01c69e912191fc6802309f",
+      "git_blob_sha": "b669ea840f1a4aaa2a2c95bbf6cf66a1430d1e0a"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/blob-upload-receipts.json",
+      "bytes": 14695,
+      "sha256": "b8d33e8a95c41a1f96d6f3d0bee66cb554f3e74edf7f52004bb9f9ac93a11575",
+      "git_blob_sha": "ee4716d4101a45f0193d8ab7dfd9ce026884e646"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/build_expansion_package.py",
+      "bytes": 15555,
+      "sha256": "2475c91ae7fd562486be417b018153c8659ed219457cdd03f7a81a0bc93a478a",
+      "git_blob_sha": "67f2a7638dabd81f12fa4f9b70c45cad1eca9aa7"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/build_source_coverage.py",
+      "bytes": 20185,
+      "sha256": "a842418262794eccd4a4d5d09b001a674bb1642c30653dda532975850e0fb133",
+      "git_blob_sha": "d345c580e7a4ecf077a29b6779e62432a19cbc4e"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/common-prompt.txt",
+      "bytes": 2208,
+      "sha256": "adfb7f40062eb53256d7161638339638ffe1e3f091305df57d9e8c6548c30a2b",
+      "git_blob_sha": "2b3c55dfdf2b36b7f64fa8e3b2cb3be057369b8d"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/delivery-manifest.json",
+      "bytes": 59079,
+      "sha256": "7814781fe08911c4e5eba8408907de150229237a052069e0ed773d4697eab238",
+      "git_blob_sha": "aa6d78c155dd205483479923599d95eb038efdb7"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/delivery-verification.json",
+      "bytes": 478,
+      "sha256": "ac6b2f25c4c4d76838c705f07914a7004249f17cd992d91b1bcc56bb3d263a55",
+      "git_blob_sha": "2121e9ea692ec628450df6a31d4315e3ba38a9fc"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/download-render-index.json",
+      "bytes": 44465,
+      "sha256": "5524ac3152ad7d80f79971e8e7f7d4dae4888cfecaf98e01974c7d829503cf15",
+      "git_blob_sha": "21f33d7302d9b27eb55bed5d8a636bbff3fd5e97"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/merge_blob_receipts.py",
+      "bytes": 1290,
+      "sha256": "4f48fcab8b32dcbc2f5b4c27ee917733ed38e1476968724c88ddcd007bb33ee8",
+      "git_blob_sha": "a4080cd2ea160caf239fe335b8e940434b17b83c"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/prior-package-preservation-baseline.json",
+      "bytes": 16883,
+      "sha256": "7792be6b2f172e5202049ae5f726c1b73d30c893e5c931efb0f91daf3db65c91",
+      "git_blob_sha": "8f781045fc72792bc5c50543a1982060b98bac04"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/processed-build/batch-01-prompts.json",
+      "bytes": 6276,
+      "sha256": "b1fea798ce43826c600bfe060a5242211c89965dadf831f9b70120b2cfff92a0",
+      "git_blob_sha": "692e61c7809e50cb64436628b77194f3b4908ae5"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/processed-build/batch-01-results.json",
+      "bytes": 1042,
+      "sha256": "af948a00aca1081257a7cf0bbb0dfcdea173658aa15d1718df6b8c729012fa3d",
+      "git_blob_sha": "58a44f2efdf10ae0110ed232a5713c22a8765898"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/processed-build/batch-02-prompts.json",
+      "bytes": 14088,
+      "sha256": "f6ea6828613ab84e1bc8759fef17cb29c504ba9272d81e1b3b71dd6e282194e5",
+      "git_blob_sha": "dd46176a30419bf03c61495eb67632ce7d844c93"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/processed-build/batch-02-results.json",
+      "bytes": 1042,
+      "sha256": "e50ef026a91291173937008fd201db9f3c62dba0421e271d643d21e652f7d1a6",
+      "git_blob_sha": "47a339c3b5f7294c7c6368794179585abee15dd6"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/processed-build/batch-03-prompts.json",
+      "bytes": 13464,
+      "sha256": "aaadea4a7190a841043724dba2381e841e0c09d9588036e5de7d29b76dba974b",
+      "git_blob_sha": "abfa01f1fdfc711a9028a82b05bfe9c9728a6d30"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/processed-build/batch-03-results.json",
+      "bytes": 1369,
+      "sha256": "f1115d097bbbd73ce771a13872d82ab757ad4903cea6f91473ac4a8b1bd2a1e7",
+      "git_blob_sha": "8740430d448aaef0a19cb0c4784400f4933bb15d"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/processed-build/batch-04-prompts.json",
+      "bytes": 5183,
+      "sha256": "80d8fd8c5a043d4975c7268847c3b83e9c28d6ccc98d45ff6a9cf061ca31f2a0",
+      "git_blob_sha": "017575949d812bea3e03bdbd0f9dae3d34d383d9"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/processed-build/batch-04-results.json",
+      "bytes": 691,
+      "sha256": "c60fa6880b427955b5ada9fc33c040310c087647d84adb25af0ac9bb7ba11a0e",
+      "git_blob_sha": "b9c74a11a68926494a91879f0de6e9a22c7bce02"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/processed-build/batch-05-repair-prompts.json",
+      "bytes": 2540,
+      "sha256": "23e5ea9e0d57a9694dc3821a75b34e33b648498590184524ce4b858cf9f56c58",
+      "git_blob_sha": "c818d406c65f5094621bf156860610d417395fca"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/processed-build/batch-05-results.json",
+      "bytes": 689,
+      "sha256": "c59d1cfd5ca713c9c315d0164ed2715256769972f41dbd1d7d62b7609e060ed5",
+      "git_blob_sha": "1db47d42e7b59ecfa6d7f0d4c1a014b1f57df238"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/processed-build/cooked-fish-repair-01-prompt.json",
+      "bytes": 1107,
+      "sha256": "05bcf62d3be516020f2d7fc74c237804f19f2a90423c6f0142c11be46671ecba",
+      "git_blob_sha": "7c8a86fd57183e0cb6c9fd44c2319bdd3898afef"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/processed-build/prepared-fish-repair-01-prompt.json",
+      "bytes": 1443,
+      "sha256": "4d0331e2c753df640ed31e8ab0f20739626e27ce5038cec3696397a80ea1d541",
+      "git_blob_sha": "e05bdb6f05343523abfc665d0aee579da113ee40"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/01-deer-meat.png",
+      "bytes": 1476935,
+      "sha256": "db54049e15db3e9a38232781f36e17d02dcc5ced1a6f7bd083af6abbfefc1d78",
+      "git_blob_sha": "3811a730e2898605a0f12ea095fc5154eb894208"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/02-boar-meat.png",
+      "bytes": 1669651,
+      "sha256": "6a9d06d3a6553c6ac3ecf4a443f9fc4bf9de5926a5f62f55386991cd03b1f637",
+      "git_blob_sha": "551e5d784d988d486554b08c178d5d8215963239"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/03-rabbit-meat.png",
+      "bytes": 1609278,
+      "sha256": "38ca37808c4f8e16e090f25c92b1fec7a2fbba5db42e6621152c1e9df796a4e1",
+      "git_blob_sha": "a7c18a70b15bbdb8e2aedc751f80fdd09f5ee324"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/04-moose-meat.png",
+      "bytes": 1651023,
+      "sha256": "fdacd8301b8ed9dbe2be1c1f08eddb2f30f988931454656873c2cf570df172e8",
+      "git_blob_sha": "efd01d83cae06d9d1dff5f6eba6959fdb1a8c18d"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/05-squirrel-meat.png",
+      "bytes": 1635640,
+      "sha256": "e5503021e745122f97b5e00c4e4665e924f2e145a987f0aecf6e33471bea8946",
+      "git_blob_sha": "313efa28de4cbc2950ea1b46ad6ef27e7649b499"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/06-wild-bear-meat.png",
+      "bytes": 1574420,
+      "sha256": "e0aaab670cb14ac858bf0188bcbde965829baaec8d02e982138156d9a3fb669b",
+      "git_blob_sha": "d221d4e1e9b3409502c63884ff067362fc62de48"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/07-wild-wolf-meat.png",
+      "bytes": 1646236,
+      "sha256": "8355dfdd8138108ab0ea9e8780ceb6eae5ce3a55182b1abc9fabfeee8902444a",
+      "git_blob_sha": "570a0316e935f1492f914de9639db37bddb8a57f"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/08-wild-fox-meat.png",
+      "bytes": 1528852,
+      "sha256": "6387f2532dfa7568012ffa18c6fc9adb034007ee24bacc08a1cb1221ce065c16",
+      "git_blob_sha": "390eef42d91cdea496f5dd8696b7ab3ba9f66e89"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/09-lynx-meat.png",
+      "bytes": 1724068,
+      "sha256": "8f42dcf699d8194718a0459721ac8935a32f64a803c5620de5b1d9b59eed35c6",
+      "git_blob_sha": "0ed492a32019479b9be86c2109bde15385184c5d"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/10-wolverine-meat.png",
+      "bytes": 1568562,
+      "sha256": "3419cc2f6df2fb8f985b46033735956176358ab475634cb3bca2c816a3f7ad2d",
+      "git_blob_sha": "0d75ef644cd1ef0819f37b43e6cfa57785856003"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/11-processed-meat-portion.png",
+      "bytes": 1614989,
+      "sha256": "0832968c2a7d3562b7a62caa5a4335c904b520edba7394b16d37e90b2010551e",
+      "git_blob_sha": "6c54f1be64b52ffd28a41e587060f8ee71c211d2"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/12-cooked-game-meat.png",
+      "bytes": 1767320,
+      "sha256": "9e18c914d25135cac8bb574d462bc627ee21102cae844cd77dfe10567c6eab33",
+      "git_blob_sha": "4734e01e81a8237e1316948f776ea74b73f85f01"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/13-dried-meat.png",
+      "bytes": 1658280,
+      "sha256": "3afb830bf28725de6d5265b9675d6f9fe9dec1cc8770eace80812ef4498424da",
+      "git_blob_sha": "33bf4a241a6d1df8b6f45bdf8d68f2cef8a980cc"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/14-prepared-fish-fillet.png",
+      "bytes": 1681343,
+      "sha256": "4013e8900958c4d31611fa663b3b4799bf71f164e150932d245eadf33b003ea2",
+      "git_blob_sha": "958895f09cbe60973c00046f389d0a1bcf33f438"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/15-cooked-fish.png",
+      "bytes": 1699586,
+      "sha256": "f05750afdd656c4aa2f9fae322bfea019ce55b1a6474d57a86cef14444a3cdb5",
+      "git_blob_sha": "1ef176e0f029f0bcc7d249e0b3de632b9ddebbfa"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/16-dried-fish.png",
+      "bytes": 1748028,
+      "sha256": "9991f21d19cbaee9f76527bda21bd5add8c19ec468fdb77d9beffdd23a685b38",
+      "git_blob_sha": "a696fb34c3962ea95d156d68b7c5cc763486f61e"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/17-timber-planks.png",
+      "bytes": 1603628,
+      "sha256": "122191d8f989aa3b739e7db9e2d76e8907493034004105ee14a023917ebf62c5",
+      "git_blob_sha": "a5228c65e84b1a617d821701680483a959694a41"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/18-split-firewood.png",
+      "bytes": 1709900,
+      "sha256": "64a866fffab5200234265ae1217070432d0a9cb491c8a468042c14a00949f06f",
+      "git_blob_sha": "44d01752e80d31af1694f07b6e2cd378f0e803ac"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/19-hide.png",
+      "bytes": 1694994,
+      "sha256": "c368be726122e041832c5ded3f197a83e54a42b68b79958cf11f7d178616d1bb",
+      "git_blob_sha": "467d026b3e091a970a52d95352335c545bc65d42"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/20-fur.png",
+      "bytes": 1536703,
+      "sha256": "f056da43eb6845742d211ade47ecd1ac9441d610b3c6fa5ed4ecb91e3e2dc06d",
+      "git_blob_sha": "de2c7f0f38f633e0336380337cdb42628ca1b026"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/animal-01-review.json",
+      "bytes": 3614,
+      "sha256": "3e3de6ba2a78d24b8542564d70f5fc7da7602dba5bd5f9c00c7a3caa0c9481ba",
+      "git_blob_sha": "7b1e2ff2ba60fc461deb4bcb5c39f2356b77d9de"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/animal-02-review.json",
+      "bytes": 3635,
+      "sha256": "ca5453e9f87286082acfd237332a8f2247dbd02d7ec2d3d7b47faeb105fe9b9e",
+      "git_blob_sha": "482394ba52833257b7cab4d06f61cd2ad25efa96"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/animal-03-review.json",
+      "bytes": 3479,
+      "sha256": "8aa2837e0144548a7546dfc04703fd666831c192650df9e057aef7fb96b29c13",
+      "git_blob_sha": "1af626ec57a0c4cf96e4458cfeb5ab5784ddafaa"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/animal-04-review.json",
+      "bytes": 1581,
+      "sha256": "8fca96c8b319eb34761ebe60c17a224936f934f885e4ca56abc4a048a7630ff3",
+      "git_blob_sha": "6181702737924a2f08953235b2934f12c3d7ffee"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/cross-set-and-source-audit.json",
+      "bytes": 3874,
+      "sha256": "490707738a69c534bcf3ad1b0485be7fede1f1e4cea1d2c48d2ddaa07370140d",
+      "git_blob_sha": "129b289bc54ad3e248b5fcf6413f862b0f869294"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/final-independent-visual-review.json",
+      "bytes": 55399,
+      "sha256": "a94904027f010dacee7417374353ba50715a028eee07cdbbe5fa55bf5845e9be",
+      "git_blob_sha": "2a07e852f70c21854ce8694dca59b107d0fc0d94"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/inspection-crops/animal-cuts-cross-set.png",
+      "bytes": 730020,
+      "sha256": "c1162c01dfa6a71d25db15eccd6bc003652d21a03b92c01b98d0bcdd782e1a59",
+      "git_blob_sha": "b833d9ad73fe746df263b31b13a8aa3e36400f30"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/inspection-crops/prepared-fish-right-90-inspection.png",
+      "bytes": 284189,
+      "sha256": "3ff830594074cee8d5793834181e7e685fba1f8bbbb8e3512fbc78f0b1f9a69a",
+      "git_blob_sha": "85934c2403e1379af5c792a044e91288371b549b"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/inspection-crops/world-atlas-resource-row.png",
+      "bytes": 469069,
+      "sha256": "fe1995d3c0d20e1059e1f571506cc4df8a08b54f1dad37097ea2b2989d72912b",
+      "git_blob_sha": "8b242db7bdc25a768232bd6ee1da13ed3a07ac32"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/metadata-package-audit.json",
+      "bytes": 13841,
+      "sha256": "9744a956938dae17abe15fc9d025c285571f8c75740e52de8f28088b384f7202",
+      "git_blob_sha": "702637d76383b0ba96af82314801cf62f41e14df"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/processed-01-review.json",
+      "bytes": 3959,
+      "sha256": "1ce5c5443b05189b3b44c5e170656ab8971150226bbe1cb67127eabce7ebce13",
+      "git_blob_sha": "674e7ab5caabc90918b73ddb7c57c7292cf3425d"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/processed-02-review.json",
+      "bytes": 4290,
+      "sha256": "d37f233447d67808d676fcd7d08ea7881d56b7eadc1a997ccee4e03f33692d83",
+      "git_blob_sha": "f20375794a4b1ee1a4e3411d02eab85a5068a281"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/processed-03-review.json",
+      "bytes": 4340,
+      "sha256": "3ce004a925c8c871936b50fff18cc23e560ade98071931768b577ac083e8270a",
+      "git_blob_sha": "8d26786fe7468bc289b87eb95e679ec72f43a7eb"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/processed-04-review.json",
+      "bytes": 1591,
+      "sha256": "7301f6e5ba4ce31b6b261ba880155dcad903d3bfdafceb218509f78a3c2192fa",
+      "git_blob_sha": "9291d9e2a382868488ef7eae8ecc8e4476ffc07f"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/processed-final-retest-01.json",
+      "bytes": 2846,
+      "sha256": "ede02278df67841bdac3d44c591d98a7712f8cffbd090094c0dd02af1eca7620",
+      "git_blob_sha": "125a09031fc5745114ad340e85ed647a37f957ba"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/processed-fish-retest-01.json",
+      "bytes": 2892,
+      "sha256": "7e2c10cc198d28e6dab129dfdf68018048dcba530067c0b93d2cff436e433cb6",
+      "git_blob_sha": "ac0919ef5147e00b91c871cb31b03aa8a309b57a"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/review-index.json",
+      "bytes": 7573,
+      "sha256": "9e46f8a509ebe0d9090fe9eb87bf1e5cd9d4138cedab8d5df1792846d871c260",
+      "git_blob_sha": "b9e96017d68bb0253ec5c489c65fd88bbed858de"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/source-equipment-coverage.json",
+      "bytes": 30888,
+      "sha256": "ac54d35cec0b55163d786d3dee92010cd572bd8b1f584bc943d9fff271c3e40e",
+      "git_blob_sha": "c35ef70315d9059213843f12452fa8ac22fb6c36"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/wildlife-source-provenance.json",
+      "bytes": 9170,
+      "sha256": "4e315103e75771e9c8040a5f03169a434485ec3d7bdc717c075a650af8e0b56e",
+      "git_blob_sha": "82696dffbed450162344010177844ec8106c3368"
+    }
+  ]
+}

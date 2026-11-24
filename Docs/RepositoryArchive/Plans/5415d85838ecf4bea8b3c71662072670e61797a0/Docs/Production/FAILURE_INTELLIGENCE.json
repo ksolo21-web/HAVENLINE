@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "policy": {
+    "historical_match_is_advisory_only": true,
+    "current_evidence_must_confirm_root_cause": true,
+    "no_auto_repair_from_history": true,
+    "verified_source_required": true,
+    "c0_queries_before_model_diagnosis": true
+  },
+  "records": [
+    {
+      "id": "FI-T09-001",
+      "task_id": "T09",
+      "scope": "cross_task_reusable",
+      "gate": "C5",
+      "classification": "TOOLING_DEFECT",
+      "signature_terms": ["png identity", "pixel rmse", "pose identity", "t=0", "skeleton pose", "c5 initialization"],
+      "symptom": "Motion validation failed because independently rendered image pixels were treated as pose identity after otherwise successful task validation.",
+      "root_cause": "Rendered-image equality is not a stable invariant for animation pose; lighting/AA/render initialization can differ while final skeleton transforms remain equivalent.",
+      "causal_repair": "Compare final Skeleton3D transforms/contact state after controlled warm-up; preserve frame hashes only for provenance.",
+      "protected_files": ["approved shipping character mesh", "approved shipping rig", "approved upstream animation clips unless transform evidence disproves them"],
+      "proof": ["pose-space transform limits pass", "pixel equality/RMSE is rejected as a pose gate", "upstream regression/performance remain green"],
+      "prevention_rule": "Motion gates use pose/contact space for motion identity and image hashes only for provenance.",
+      "source": "Docs/Production/T09/defect-ledger.json#T09-D004"
+    },
+    {
+      "id": "FI-T09-002",
+      "task_id": "T09",
+      "scope": "cross_task_reusable",
+      "gate": "C5",
+      "classification": "TOOLING_DEFECT",
+      "signature_terms": ["animationplayer", "speed_scale", "settle frames", "seek", "t=0 drift", "start drift", "warm-up"],
+      "symptom": "A supposedly fixed t=0 pose drifted substantially during settle frames.",
+      "root_cause": "The capture harness sought t=0 while leaving AnimationPlayer running, so real-time settle frames advanced the clip and invalidated the explicit sample.",
+      "causal_repair": "Freeze animation clock during sampled-pose settling while still allowing SkeletonModifier convergence.",
+      "protected_files": ["shipping animation clips", "pose thresholds"],
+      "proof": ["unchanged pose thresholds pass", "capture metadata proves frozen-clock sampling", "full task regression remains green"],
+      "prevention_rule": "Sampled-pose harnesses separate animation time from modifier convergence time.",
+      "source": "Docs/Production/T09/defect-ledger.json#T09-D006"
+    },
+    {
+      "id": "FI-T09-003",
+      "task_id": "T09",
+      "scope": "cross_task_reusable",
+      "gate": "governance",
+      "classification": "GOVERNANCE_DEFECT",
+      "signature_terms": ["unowned path", "qa-gov", "ownership", "governance files", "integration scope"],
+      "symptom": "A task candidate was rejected because newly added governance/control-plane files were not included in QA-GOV ownership.",
+      "root_cause": "Governance ownership metadata lagged behind the control-plane file set.",
+      "causal_repair": "Add the control-plane files to @ownership:QA-GOV and reproduce integration-scope validation without changing task runtime.",
+      "protected_files": ["task runtime", "approved gameplay"],
+      "proof": ["integration-scope validation passes", "runtime diff remains unchanged"],
+      "prevention_rule": "Every new control-plane authority is governance-owned in the same architecture change set.",
+      "source": "Docs/Production/T09/defect-ledger.json#T09-D005"
+    },
+    {
+      "id": "FI-T09-004",
+      "task_id": "T09",
+      "scope": "cross_task_reusable",
+      "gate": "workflow_startup",
+      "classification": "GOVERNANCE_DEFECT",
+      "signature_terms": ["startup_failure", "actions read", "reusable workflow", "github_token permissions", "zero jobs", "c0"],
+      "symptom": "A task workflow resolved the reusable C0 workflow but failed before creating jobs.",
+      "root_cause": "Reusable workflows cannot elevate GITHUB_TOKEN permissions above the caller; the caller omitted actions: read required to retrieve failed-run evidence.",
+      "causal_repair": "Grant the minimal read-only actions permission at the caller and enforce the caller permission contract in source validation.",
+      "protected_files": ["runtime", "critic thresholds", "write permissions"],
+      "proof": ["workflow creates jobs", "C0 evidence retrieval succeeds", "no write permission is added"],
+      "prevention_rule": "Reusable workflow caller permissions are validated statically before task CI is considered ready.",
+      "source": "Docs/Production/T09/defect-ledger.json#T09-D007"
+    }
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/render_critic",
+  "created_utc": "2026-11-24T10:24:45.298253+00:00",
+  "scope": "Actual-pixel independent static turnaround/detail review; all mandatory checks required individually",
+  "approval_threshold": {
+    "minimum_score": 9.5,
+    "all_mandatory_checks_must_pass": true,
+    "target": 10
+  },
+  "entries": [
+    {
+      "archetype_id": "ice_brute",
+      "asset_id": "ice-brute-turnaround-r5",
+      "board_type": "eight_view_turnaround",
+      "candidate_path": "attempts/ice-brute-turnaround-r5.png",
+      "sha256": "b0f7488b196d459ad58b5bb3822ef9047e6f40d77329f0689b9f64d021b409fb",
+      "score": 9.7,
+      "status": "PASS",
+      "all_mandatory_visual_checks_passed": true,
+      "checked_views_or_panels": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ],
+      "actual_full_sheet_inspected": true,
+      "closeup_evidence": [
+        "reviews/evidence/ice-brute-r5-feet-contact-sheet.png"
+      ],
+      "findings": [],
+      "positive_evidence": [
+        "Both fully exposed frontal feet have five actual toe lobes/nails with mirrored medial big toes.",
+        "Front diagonal near feet preserve all five toes; angled far feet and true profiles show appropriate projected overlap. Full rear correctly shows heels.",
+        "Both hand structures retain a thumb and four fingers, with normal finger overlap in side/rear views.",
+        "All eight directions are distinct and correctly oriented; sculpted fur, facial structure, ice placements and proportions remain coherent with the approved frontal anatomy reference.",
+        "Full silhouettes and labels are legible, with no unintended panel clipping."
+      ],
+      "mandatory_checks": {
+        "eight_distinct_correct_views": true,
+        "both_opposite_profiles_and_full_rear": true,
+        "same_character_identity_and_material_style": true,
+        "five_toe_anatomy_with_angle_appropriate_occlusion": true,
+        "five_digit_hands_with_angle_appropriate_occlusion": true,
+        "connected_anatomy_no_extra_or_floating_parts": true,
+        "same_scale_and_complete_framing": true,
+        "hostile_larger_boss_readability": true
+      },
+      "static_scope_only": true
+    },
+    {
+      "archetype_id": "ice_brute",
+      "asset_id": "ice-brute-details-r3",
+      "board_type": "detail_and_use_state_board",
+      "candidate_path": "attempts/ice-brute-details-r3.png",
+      "sha256": "086b3304bac1e6496db492e57c1c96715d8373bb37abc95b1d92329549c31143",
+      "score": 9.2,
+      "status": "REPAIR_REQUIRED",
+      "all_mandatory_visual_checks_passed": false,
+      "checked_views_or_panels": [
+        "guard",
+        "slam_wind_up",
+        "recovery",
+        "face",
+        "hand_and_foot",
+        "game_camera"
+      ],
+      "actual_full_sheet_inspected": true,
+      "closeup_evidence": [
+        "reviews/evidence/ice-brute-details-r3-feet-contact-sheet.png",
+        "reviews/evidence/ice-brute-details-r3-recovery-foot-context.png",
+        "reviews/evidence/ice-brute-details-r3-hand-foot-closeup.png"
+      ],
+      "findings": [
+        {
+          "severity": "mandatory",
+          "panel": "recovery",
+          "issue": "Image-left foot shows a fully exposed four-lobe forefoot: one large medial toe and only three smaller toes. Its complete outer toe edge is visible, so the missing fifth cannot be attributed to the fist or ankle covering it.",
+          "repair": "Change only the Recovery image-left foot to the established five-toe construction: large medial toe plus four smaller toes. Preserve its planted pose, ankle/leg connection, hand contact, and every other panel."
+        }
+      ],
+      "positive_evidence": [
+        "Guard, Game Camera and Hand & Foot show coherent five-toe feet; Hand & Foot also clearly shows a thumb and four fingers.",
+        "Wind-up frontal foot has five toes; the turned far foot has ordinary profile overlap.",
+        "Face, fur, ice plates and overall boss proportions match the approved turnaround and anatomy reference.",
+        "All limbs remain connected; guard, wind-up and recovery are distinct plausible static poses. Proposed-scale and static-concept labels avoid native-size or animation claims."
+      ],
+      "mandatory_checks": {
+        "same_character_identity_and_material_style": true,
+        "required_detail_and_use_state_panels_present": true,
+        "five_toe_anatomy_consistency": false,
+        "five_digit_hands": true,
+        "connected_anatomy_no_extra_or_floating_parts": true,
+        "complete_framing": true,
+        "clear_static_concept_scope": true
+      },
+      "static_scope_only": true
+    }
+  ],
+  "summary": {
+    "approved_selected_boards": 5,
+    "required_selected_boards": 6,
+    "approved_supplementary_images": 1,
+    "remaining_mandatory_visual_defect": "Recovery image-left foot on Ice Brute detail board",
+    "package_or_github_approval": false
+  }
+}

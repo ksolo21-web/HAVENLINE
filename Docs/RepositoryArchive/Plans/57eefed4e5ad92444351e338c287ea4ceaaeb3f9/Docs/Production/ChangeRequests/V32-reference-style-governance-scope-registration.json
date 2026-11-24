@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "architecture_version": "3.2",
+  "record_type": "bounded_governance_ownership_registration",
+  "status": "AUTHORIZED",
+  "requesting_task": "QA-GOV",
+  "target_path": [
+    "Docs/Production/PATH_OWNERSHIP.json"
+  ],
+  "requested_change": "Register exactly four newly introduced reference-style governance/reference files under @ownership:QA-GOV so integration-scope validation classifies them as governance-only.",
+  "exact_paths_to_register": [
+    "Docs/Design/ReferenceVideoLock/SUPPLEMENTAL_WHITEOUT_SURVIVAL_AD_REFERENCES.md",
+    "Docs/Design/ReferenceVideoLock/supplemental-whiteout-survival-ad-sources.json",
+    "Docs/Production/REFERENCE_STYLE_LOCK.json",
+    "Docs/Production/REFERENCE_STYLE_LOCK_STANDARD.md"
+  ],
+  "reason": "PR #98 introduced these four governance/reference files after PATH_OWNERSHIP was last updated. Integration push 35795963612 correctly rejected them as ownerless even though the style lock itself and all 381 safeguards passed. This repair adds ownership metadata only; it does not alter integration-scope rules.",
+  "dependency": "Preserve V3.1/V3.2 ownership, path collision, runtime, critic, performance, security, persistence, device, zero-primitive and human visual-signoff enforcement unchanged.",
+  "expected_behavior": "The four exact files classify as QA-GOV/governance-only. Unlisted sibling Docs/Design and Docs/Production paths continue to fail closed unless independently owned.",
+  "tests_required": [
+    "All four exact paths classify as GOVERNANCE_ONLY.",
+    "An arbitrary sibling path under Docs/Design/ReferenceVideoLock remains rejected as ownerless.",
+    "Existing runtime task ownership and integration-only authorization tests remain green.",
+    "Full production governance workflow passes on the repair branch and again after integration."
+  ],
+  "forbidden_changes": [
+    "No wildcard expansion for Docs/Design/ReferenceVideoLock/**.",
+    "No wildcard expansion for Docs/Production/REFERENCE_STYLE_LOCK*.",
+    "No changes to validate_integration_scope.py.",
+    "No changes to gameplay runtime.",
+    "No lowering of critic or quality thresholds.",
+    "No task approval or lifecycle state change."
+  ],
+  "integration_owner_disposition": "APPROVED_EXACT_REFERENCE_STYLE_GOVERNANCE_PATH_REGISTRATION",
+  "authorization": "Kaleb explicitly required the reference-style rule to be architecture-enforced without weakening anything else, and authorized the necessary architecture/governance update in this session.",
+  "gameplay_runtime_changed": false,
+  "task_approved": false,
+  "thresholds_unchanged": true
+}

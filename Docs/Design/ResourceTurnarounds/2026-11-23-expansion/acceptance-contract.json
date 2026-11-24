@@ -1,0 +1,148 @@
+{
+  "title": "Havenline Animal Meat and Processed Resource Expansion",
+  "version": "2026-11-23-expansion-v1",
+  "original_request": "we need the meat from the animals too and then all the processed resources too after its been through the equipment ingame too",
+  "preserves": {
+    "prior_set_sheets": 13,
+    "commit": "ba6b00e5018b658730b3a127e8c9a7896ce5a3a4",
+    "branch": "art/resource-turnarounds-2026-11-23"
+  },
+  "deliverable": "Add source-grounded animal meat concepts and reference-derived or explicitly proposed equipment output concepts, each as a matching 8-view static concept turnaround sheet. Preserve prior13 as separate accepted base set. Include equipment input/output coverage map and honest undefined recipe/drop flags.",
+  "new_sheets_target": 20,
+  "animal_meat_concepts": [
+    {
+      "id": "deer_meat",
+      "label": "DEER MEAT",
+      "status": "proposed_species_cut"
+    },
+    {
+      "id": "boar_meat",
+      "label": "BOAR MEAT",
+      "status": "proposed_species_cut"
+    },
+    {
+      "id": "rabbit_meat",
+      "label": "RABBIT MEAT",
+      "status": "proposed_species_cut"
+    },
+    {
+      "id": "moose_meat",
+      "label": "MOOSE MEAT",
+      "status": "proposed_species_cut"
+    },
+    {
+      "id": "squirrel_meat",
+      "label": "SQUIRREL MEAT",
+      "status": "proposed_species_cut"
+    },
+    {
+      "id": "wild_bear_meat",
+      "label": "WILD BEAR MEAT",
+      "status": "optional_wildlife_cut_food_eligibility_unfrozen"
+    },
+    {
+      "id": "wild_wolf_meat",
+      "label": "WILD WOLF MEAT",
+      "status": "optional_wildlife_cut_food_eligibility_unfrozen"
+    },
+    {
+      "id": "wild_fox_meat",
+      "label": "WILD FOX MEAT",
+      "status": "optional_wildlife_cut_food_eligibility_unfrozen"
+    },
+    {
+      "id": "lynx_meat",
+      "label": "LYNX MEAT",
+      "status": "optional_wildlife_cut_food_eligibility_unfrozen"
+    },
+    {
+      "id": "wolverine_meat",
+      "label": "WOLVERINE MEAT",
+      "status": "optional_wildlife_cut_food_eligibility_unfrozen"
+    }
+  ],
+  "processed_and_byproduct_concepts": [
+    {
+      "id": "processed_meat_portion",
+      "label": "PROCESSED MEAT",
+      "equipment": "cooker/processor",
+      "basis": "direct visible output in 32450 source crop and18567; rectangular red/brown meat with broad cream fat cap"
+    },
+    {
+      "id": "cooked_game_meat",
+      "label": "COOKED GAME MEAT",
+      "equipment": "cookfire/cookhouse",
+      "basis": "proposed output visual state of depicted cooking equipment, exact recipe unimplemented"
+    },
+    {
+      "id": "dried_meat",
+      "label": "DRIED MEAT",
+      "equipment": "drying rack",
+      "basis": "proposed dried state of meat visibly hung on primary18600/18603"
+    },
+    {
+      "id": "prepared_fish_fillet",
+      "label": "PREPARED FISH",
+      "equipment": "fish processing station",
+      "basis": "proposed portion form for recorded processing line; exact fillet recipe not frozen"
+    },
+    {
+      "id": "cooked_fish",
+      "label": "COOKED FISH",
+      "equipment": "cooker/cookhouse",
+      "basis": "reference A whole fish -> cooked items; proposed visual identity of cooked fish"
+    },
+    {
+      "id": "dried_fish",
+      "label": "DRIED FISH",
+      "equipment": "fish drying rack",
+      "basis": "proposed dried state from18603 rack"
+    },
+    {
+      "id": "timber_planks",
+      "label": "TIMBER PLANKS",
+      "equipment": "saw station/lumber mill",
+      "basis": "PLANK explicit atlas resource and saw/lumber equipment depicted; mapping proposed"
+    },
+    {
+      "id": "split_firewood",
+      "label": "SPLIT FIREWOOD",
+      "equipment": "chopping stump/station",
+      "basis": "depicted chopping and wood pile; proposed split-log output state"
+    },
+    {
+      "id": "hide",
+      "label": "HIDE",
+      "equipment": "animal harvest/butcher preparation",
+      "basis": "explicit atlas resource; species yield and processing rules undefined"
+    },
+    {
+      "id": "fur",
+      "label": "FUR",
+      "equipment": "animal harvest/preparation",
+      "basis": "explicit atlas resource; species yield and processing rules undefined"
+    }
+  ],
+  "reuse_previous_outputs": [
+    "steel",
+    "cooked_food (bread-like wheat output)"
+  ],
+  "constraints": [
+    "All10 raw meat forms are ART PROPOSALS based on wild-animal roster, not claims every wildlife species is edible, huntable, or an implemented drop. Companions are separate.",
+    "Do not depict protected companion outfits/characters as food. No companion animals reclassified.",
+    "Do not invent recipe quantities, yields, durations, costs, station functionality or claim runtime integration.",
+    "Do not invent flour, leather, canned meals, refined oil, steel plates or charcoal as established outputs.",
+    "Strong enemy variants may map to base species cut for visual planning; quantities/eligibility remain undefined.",
+    "Preserve first13 accepted images unchanged.",
+    "Use actual supplied Havenline reference pixels. Same chunky rounded polished game style, broad sculpted detail, readable resources.",
+    "Each image includes8 distinct clockwise directions with physically coherent silhouette, stable salient parts and details; 0/180 and90/270 actual opposite directions;45/225 share projection diagonal but opposite surfaces;135/315 share opposite diagonal.",
+    "Output labelled360 CONCEPT TURNAROUND; no claim native3D model.",
+    "Independent visual critic checks actual full sheets and necessary close detail; strictly >9.0 all mandatory checks. Repair and retest.",
+    "Save final images, source classification, prompts, revisions and evidence to GitHub; package new reviewed sheets for user."
+  ],
+  "genuine_dependencies": [
+    "No complete species/drop table or production recipe registry exists in inspected runtime. Current KINDS wood/stone/metal/fuel only.",
+    "Full future biome/equipment production coverage cannot be certified until actual recipe/drop specification exists."
+  ],
+  "next_action": "Generate20 concept additions in parallel raw-animal and output batches; independently review and repair."
+}

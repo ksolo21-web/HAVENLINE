@@ -1,0 +1,87 @@
+{
+  "reviewer_agent": "/root/turnaround_critic",
+  "contract_version": "2026-11-23-plots-v1",
+  "contract_sha256": "c4ef53e38335f159aa23f1bbb5317b06fe0e402a9fca869229a5910600138498",
+  "batch": "work-and-purchase-states",
+  "iteration": 1,
+  "assets": [
+    {
+      "asset": "activation_work_zone",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-0633578e-5619-482f-ab00-c6b61d0a70d9.png",
+      "score": 8.9,
+      "verdict": "HOLD",
+      "evidence": [
+        "Twelve outline segments, unfilled interior and correct yaw diagonal pairs retained.",
+        "90/270 now have near-square end silhouettes but their overall footprint is enlarged to about 210 by 215 pixels relative to unchanged front and diagonal views."
+      ],
+      "blocking_defects": [
+        {
+          "requirement": "R6",
+          "panel": "90,270",
+          "issue": "End-view footprint remains enlarged versus the fixed scale of the other six angles.",
+          "fix": "Shrink only these two outlines to about 80 percent in place, around 160 by 184 pixels, preserving all 12 segments and other six panels."
+        }
+      ],
+      "minor_disposition": "Exact camera calibration is outside scope, but plainly inconsistent footprint scale still blocks coherent concept turnaround.",
+      "sha256": "f8381ba40279bf69ce198c324284e3f34ae942857e1b65424d8029cd6d56ac95",
+      "bytes": 1635345,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "reference_derived_visual_concept",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ]
+    },
+    {
+      "asset": "purchase_activation_states",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-b0cf10c1-0345-40f1-9b20-f269bd587cc5.png",
+      "score": 8.6,
+      "verdict": "HOLD",
+      "format": "2_by_3_state_plate",
+      "view_count": 0,
+      "panel_count": 6,
+      "evidence": [
+        "One-time material row correctly shows idle 200 wood, payment with partial green fill and 200 retained, then marker removal and source-like hearth replacement.",
+        "Repeatable axe row correctly shows available $100, payment-active, and available again $200.",
+        "Actual B 05.40\u201306.60 detail sequence re-inspected; hearth silhouette and construction behavior align.",
+        "Full sheet plus closeup reveals raised physical tile edges, brackets, glyphs, price letters and log cost token in five marker panels."
+      ],
+      "blocking_defects": [
+        {
+          "requirement": "R1,R3,R9",
+          "panel": "All five marker panels",
+          "issue": "Ground graphics have become thick physical tiles with extruded details and physical 3D log cost token, inconsistent with source ground decals and approved turnarounds.",
+          "fix": "Surface-only flattening: no visible tile sidewall; brackets, action symbols, price and log icon printed flat without individual cast shadows. Preserve states, glyph identities, costs, green partial fill, captions, composition and hearth."
+        }
+      ],
+      "minor_disposition": "Behavior, source example prices and replacement silhouette pass; surface presentation still blocks approval.",
+      "sha256": "c060f28b184d8a7b5b09f6ea37572f8b58a072d3fae4684539ef74d3647a28c0",
+      "bytes": 1736339,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "source_status": "reference_derived_state_concept",
+      "actual_full_sheet_inspected": true
+    }
+  ],
+  "gate": "PASS requires score strictly above 9.0 with all mandatory concept-image checks passed. Unseen or failed evidence remains blocked.",
+  "closeup_evidence": "/workspace/scratch/fc906e16b0fb/havenline-plot-renders/reviews/inspection-crops/state-marker-surface.png",
+  "additional_source_inspected": {
+    "path": "/workspace/scratch/fc906e16b0fb/havenline-plot-renders/sources/B-05.40-06.60-detail-sequence.png",
+    "sha256": "40ca09ac06ac43958b1a4ea04c06ac139ffb2806b0e5a7d35f444ec9383ab9a5"
+  }
+}

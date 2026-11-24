@@ -1,0 +1,132 @@
+{
+  "reviewer_agent": "/root/turnaround_critic",
+  "contract_version": "2026-11-23-plots-v1",
+  "contract_sha256": "c4ef53e38335f159aa23f1bbb5317b06fe0e402a9fca869229a5910600138498",
+  "batch": "storage-01",
+  "iteration": 1,
+  "assets": [
+    {
+      "asset": "storage_empty",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-d05c9971-9c46-4c93-9b22-52826c1a907c.png",
+      "sha256": "f93a412b4aad270a78935eb7e082f72929f0b484d96db72ca176ebe9c4f32867",
+      "bytes": 1428249,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "direct_video_template",
+      "score": 9.5,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ],
+      "evidence": [
+        "Nearly zero-thickness warm dark field with continuous thin pale outline matches source storage vocabulary, distinctly unlike white-corner spend markers.",
+        "Single centered painted log pictogram reads as flat outlined art rather than physical stock; zero stored objects.",
+        "Cut-end direction rotates correctly:0near,45lower-left,90left,135upper-left,180far/upside-down,225upper-right,270right,315lower-right.",
+        "No billboarding, added props, capacity labels or numeric claims; framing and8view labels pass."
+      ],
+      "blocking_defects": [],
+      "minor_disposition": "Minor exact perspective variation is within concept scope; no exact measured camera or native mesh claim."
+    },
+    {
+      "asset": "storage_meat",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-9826036e-a277-4af8-9470-da3d89b491a3.png",
+      "sha256": "d63daa297231d4bce919dc1aa6fc640ecf426a5085daa9394e95ba2f73ae3b8d",
+      "bytes": 1730184,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "direct_video_type",
+      "score": 8.6,
+      "verdict": "HOLD",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ],
+      "evidence": [
+        "Two rigid stacks of3steak portions maintain6total physical items and correct broadstock orbit; materials match the approved generic meat concept.",
+        "Flat storage footprint and continuous pale outline remain correct.",
+        "Painted steak orientation and front-biased location rotate coherently; this is a centering defect, not a request to rebuild the whole orbit."
+      ],
+      "blocking_defects": [
+        {
+          "requirement": "R2/R6_center_anchor",
+          "panel": "all8; clearest0and180",
+          "issue": "Painted steak anchor is displaced toward the physical front region instead of the geometric pad center. At0it lies near front edge; at180far edge, remaining exposed behind stock.",
+          "fix": "Use one fixed geometric-center anchor in every panel. Permit natural stock occlusion instead of keeping entire icon exposed. Preserve the existing6portion count, stock positions, glyph orientation and pad."
+        }
+      ],
+      "minor_disposition": "Minor exact perspective variation is within concept scope; no exact measured camera or native mesh claim."
+    },
+    {
+      "asset": "storage_wood",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-61ec2bdf-826a-484e-8f81-4b95444bed36.png",
+      "sha256": "751f02dafc17ac2314c54bfcaaaae650a3bd04e3ea89939a9e38c51f1cd2472c",
+      "bytes": 1703679,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "direct_video_type",
+      "score": 6.5,
+      "verdict": "FAIL",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ],
+      "evidence": [
+        "Flat pad and continuous pale outline match source; physical3-log bundle with one tie retains broad stylized material and sensible knot visibility.",
+        "Failure is registration of the whole bundle and source glyph to the ground pad, not the material rendering."
+      ],
+      "blocking_defects": [
+        {
+          "requirement": "R2/R7",
+          "panel": "all8",
+          "issue": "Painted source single-log glyph became a3-bar log pictogram and sits in displaced clear areas.",
+          "fix": "Use exactly the accepted empty master single painted log at the geometric pad center; rotate the printed image with plane and permit occlusion."
+        },
+        {
+          "requirement": "R6",
+          "panel": "REAR RIGHT135 / REAR180 / REAR LEFT225",
+          "issue": "Bundle remains screen-rear instead of travelling with its fixed rear-half anchor as whole pad rotates.",
+          "fix": "At180stock comes to foreground. At135STOCK CENTROID is near lower-RIGHT; at225STOCK CENTROID is near lower-LEFT. The bundle cut ends themselves still face near imageLEFT at135 and near imageRIGHT at225. Preserve0/45/90/270/315 poses and one front knot."
+        }
+      ],
+      "minor_disposition": "Initial verbal centroid instructions conflated centroid and cut-end direction; builder caught the error before edits. Corrected positions above are authoritative and follow the approved empty glyph orbit."
+    }
+  ],
+  "gate": "Strictly above9.0 and every mandatory check; failed fixed-graphic placement cannot be averaged away."
+}

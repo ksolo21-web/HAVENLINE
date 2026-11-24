@@ -1,0 +1,155 @@
+{
+  "batch": "first-template-retests",
+  "iteration": 2,
+  "assets": [
+    {
+      "asset": "buy_axe_upgrade",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-7d3a558e-7033-4544-bfb1-a2bd24e015ca.png",
+      "sha256": "d89be771d69f41d7455ed111eb954f5b0eb7f5289f1cea23a1a49a3c284af980",
+      "bytes": 1677717,
+      "dimensions": [
+        1774,
+        887
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "reference_derived_visual_concept",
+      "score": 9.3,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ],
+      "evidence": [
+        "225price now occupies the far upper-right edge with dollar at right/lower-right end and digits toward upper-left.",
+        "All8axe,plus andprice directions now coherent; full-sheet regression retains4corners,flatfield andreference qualifier."
+      ],
+      "blocking_defects": [],
+      "minor_disposition": "Slight cardinal/diagonal projection variation is modest and does not switch to a top-down card; no metric camera certification."
+    },
+    {
+      "asset": "buy_expansion",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-fd0e50f0-49b5-4c3b-b31f-e780546bf3c2.png",
+      "sha256": "cd03662655e1e95ec2151f7318290b08ba6ffcb549cdef72e9ff5ec84ab9ee33",
+      "bytes": 1658586,
+      "dimensions": [
+        1672,
+        941
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "reference_derived_visual_concept",
+      "score": 8.6,
+      "verdict": "HOLD",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ],
+      "evidence": [
+        "225price placement and direction repaired; other6unaffected angles remain coherent.",
+        "135price is now on correct upper-left edge, but wrong reading direction remains."
+      ],
+      "blocking_defects": [
+        {
+          "requirement": "R6",
+          "panel": "135",
+          "issue": "Dollar remains at lower-left of strip, not top/right end.",
+          "fix": "Rotate entire$300strip180degrees in place, matching the correct axe135price direction; preserve other7views."
+        }
+      ],
+      "minor_disposition": "Minor illustration variation is within static concept scope; exact native camera calibration is not certified."
+    },
+    {
+      "asset": "storage_meat",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-f54d6843-7f2a-4a5c-8abe-e2ceb610f6dd.png",
+      "sha256": "eb8d3ea4fac95c3059664b32bfca39a4a7e0ba7982893ecc6f31015135ac64d3",
+      "bytes": 1787079,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "direct_video_type",
+      "score": 9.3,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ],
+      "evidence": [
+        "Painted center icon moved inward and now naturally occludes beneath stock across45/90/135/180/225/270/315.",
+        "Two stacks\u00d73portions and rigid orbit retained; all6physical pieces,materialshape andflatcontinuousborder pass."
+      ],
+      "blocking_defects": [],
+      "minor_disposition": "Small illustrated center-placement variation remains, but no obvious relocation to a clear edge to expose the complete symbol."
+    },
+    {
+      "asset": "storage_wood",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-c8c6865b-df58-49eb-a1c9-26c934b1a4f6.png",
+      "sha256": "575e82dbcb45686e87093e8d23c8df6c4b5dc76b562d57c3a3a824af0142d217",
+      "bytes": 1784847,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "direct_video_type",
+      "score": 7.8,
+      "verdict": "HOLD",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ],
+      "evidence": [
+        "Source single-log glyph restored; rear180/225bundle placement improved and major3log/1tie identity retained."
+      ],
+      "blocking_defects": [
+        {
+          "requirement": "R2/R6_center_anchor",
+          "panel": "0/180/225 clearest",
+          "issue": "Glyph remains displaced into clear near/far regions rather than the fixed geometric center.",
+          "fix": "Root-authorized centered bundle composition is permitted: one fixed centered3-log bundle over one fixed centered source glyph, allowing full icon occlusion; retain perimeter visibility and knot/endgrain orbit."
+        }
+      ],
+      "minor_disposition": "Minor illustration variation is within static concept scope; exact native camera calibration is not certified."
+    }
+  ],
+  "reviewer_agent": "/root/turnaround_critic",
+  "contract_version": "2026-11-23-plots-v1",
+  "contract_sha256": "c4ef53e38335f159aa23f1bbb5317b06fe0e402a9fca869229a5910600138498",
+  "gate": "Each score strictly above9.0 and all mandatory concept-image checks passed."
+}

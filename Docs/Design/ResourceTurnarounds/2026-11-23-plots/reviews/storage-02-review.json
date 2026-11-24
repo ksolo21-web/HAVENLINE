@@ -1,0 +1,121 @@
+{
+  "reviewer_agent": "/root/turnaround_critic",
+  "contract_version": "2026-11-23-plots-v1",
+  "contract_sha256": "c4ef53e38335f159aa23f1bbb5317b06fe0e402a9fca869229a5910600138498",
+  "batch": "storage-02",
+  "iteration": 1,
+  "assets": [
+    {
+      "asset": "storage_wood",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-0a4b846d-c49b-484c-8978-3b2c27a77e0b.png",
+      "score": 7.8,
+      "verdict": "HOLD",
+      "evidence": [
+        "All eight stock views now use centered three-log bundle; no displaced pictogram appears.",
+        "Knot, ends, opposite diagonals and three-log count remain coherent.",
+        "Full sheet reveals every pad perimeter repeats front-facing trapezoid while stock rotates."
+      ],
+      "blocking_defects": [
+        {
+          "requirement": "R6",
+          "panel": "45,90,135,225,270,315",
+          "issue": "Ground pad does not rotate with centered stock; identical front-view trapezoid repeated in every panel.",
+          "fix": "Rotate only pad field/perimeter to accepted empty-master yaw progression. Preserve current centered stock and permit centered glyph to stay occluded."
+        }
+      ],
+      "minor_disposition": "Center anchoring and glyph occlusion repaired; no approval until whole assembly orbit is coherent.",
+      "sha256": "f6bd6ce4b9479ef152c8ae0d29f2d54e89662bc8f8207db928961eedc7492e29",
+      "bytes": 1738750,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "direct_video_type",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ]
+    },
+    {
+      "asset": "storage_money",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-b9617043-1ef3-4ee3-9a5f-c63b4bae6dc3.png",
+      "score": 9.3,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "evidence": [
+        "Three aligned green bundle layers remain centered with cream band and top folded-corner landmark.",
+        "Actual eight-view inspection confirms broad/end faces and diagonals follow whole-pad yaw, including reversed rear face.",
+        "Continuous thin tan edge and dark flush field remain separate from physical stock; central glyph naturally occluded.",
+        "No cost, capacity or unit claim added; direct source storage type with illustrative stock."
+      ],
+      "blocking_defects": [],
+      "minor_disposition": "Aligned bands read as one continuous band over stacked bundles; three green layers remain distinguishable. Minor illustration variation is within static concept scope. A calibrated native camera or shared executable mesh is not certified.",
+      "sha256": "9aec36bfd0c00ae72e11df9c90a81df2d04e0b744e9dc849d380aebd7d155499",
+      "bytes": 1494455,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "direct_video_type",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ]
+    },
+    {
+      "asset": "storage_stone",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-b00b25e9-1141-4d58-b05f-7b12f110d8bd.png",
+      "score": 9.3,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "evidence": [
+        "Two warm-gray chunks remain a fixed large/small pair with coherent eight-view near/far ordering.",
+        "Large-left and small-right front becomes reversed rear, with correct occlusion at 90/270 and diagonal positions.",
+        "Continuous thin edge, centered stock, hidden central glyph, full border framing and low dark field retained.",
+        "Proposal metadata preserved; no extra gravel, raised foundation or invented storage capacity."
+      ],
+      "blocking_defects": [],
+      "minor_disposition": "Small facet variations accepted as concept illustration; silhouette, pair count and directional landmarks remain stable.",
+      "sha256": "e1f5461d9ae8cbebf7aac7252eadb66a8a33d88f3f85010686f06a97bd6df418",
+      "bytes": 1453946,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "proposed_resource_variant",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ]
+    }
+  ],
+  "gate": "PASS requires score strictly above 9.0 with all mandatory concept-image checks passed. Unseen or failed evidence remains blocked."
+}

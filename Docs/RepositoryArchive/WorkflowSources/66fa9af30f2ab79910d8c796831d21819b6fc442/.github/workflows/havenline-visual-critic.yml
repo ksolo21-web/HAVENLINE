@@ -1,0 +1,88 @@
+name: Havenline independent visual critic
+on:
+  push:
+    branches: ['codex/havenline-visual-critic']
+    paths: ['.github/workflows/havenline-visual-critic.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  visual-critic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      TOKENIZERS_PARALLELISM: 'false'
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/havenline-environment-review
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install public CPU inference runtime, no inference key or external paid endpoint
+        run: |
+          set -euo pipefail
+          python3 -m pip install 'torch==2.8.0' 'torchvision==0.23.0' --index-url https://download.pytorch.org/whl/cpu
+          python3 -m pip install 'transformers==4.57.3' 'accelerate==1.10.1' 'pillow==11.3.0'
+      - name: Run actual vision model on four independent review batches
+        run: |
+          set -euo pipefail
+          mkdir -p critic-results
+          python3 -u - <<'PY'
+          import hashlib,json,pathlib,os,platform,subprocess,time,traceback,urllib.request
+          import torch,transformers
+          from PIL import Image
+          from transformers import Qwen3VLForConditionalGeneration,AutoProcessor
+          out=pathlib.Path('critic-results');root=pathlib.Path('Docs/Art/EnvironmentReview/captures')
+          source=json.loads((root/'provenance.json').read_text())
+          model_id='Qwen/Qwen3-VL-2B-Instruct'
+          info=json.load(urllib.request.urlopen('https://huggingface.co/api/models/'+model_id,timeout=30));revision=info['sha']
+          torch.set_num_threads(4);torch.manual_seed(20260907)
+          flags=pathlib.Path('/proc/cpuinfo').read_text();dtype=torch.bfloat16 if 'avx512_bf16' in flags else torch.float32
+          provenance={'runner':'separate GitHub Actions CPU process','model':model_id,'model_revision':revision,'torch':torch.__version__,'transformers':transformers.__version__,'dtype':str(dtype),'source_capture_provenance':source,'runner_checkout':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'advisory_small_model':True,'independent_model_execution':False,'production_approved':False,'physical_performance_verified':False}
+          (out/'provenance.json').write_text(json.dumps(provenance,indent=2))
+          print('Loading independent public vision model:',model_id,revision,flush=True)
+          processor=AutoProcessor.from_pretrained(model_id,revision=revision,min_pixels=128*128,max_pixels=512*512)
+          model=Qwen3VLForConditionalGeneration.from_pretrained(model_id,revision=revision,dtype=dtype,device_map='cpu',attn_implementation='sdpa',low_cpu_mem_usage=True).eval()
+          guide='You are an independent visual QA critic. Inspect only the supplied actual game screenshots. The target is a finished premium stylized 3D winter-survival environment: detailed non-primitive silhouettes, crafted timber shelters, branching snow-covered evergreens, refined materials, readable lighting and clean geometry. It is stylized, NOT photorealism. Character rigging, missing NPCs, game completeness and FPS are outside this environment-art review. Do not invent hidden geometry defects or performance claims. Identify concrete visible issues with filename and location. Score honestly from 0 (not completed) to 10 (perfectly finished); never increase a score to satisfy the builder. Return compact JSON only, with keys scores (craft, materials, lighting, camera, geometry, each 0-10), defects (up to3 short strings), observed (2 specific visible details) and confidence (low/medium/high). No markdown. Keep the entire JSON below170 words.'
+          (out/'critic-instructions.txt').write_text(guide)
+          batches=[['mobile-render','mobile-three-quarter','outpost-night'],['outpost-shelter-detail','outpost-shelter-detail-rear','outpost-furnace-detail','outpost-tree-detail'],['mobile-rear','mobile-left','mobile-side','outpost-blizzard'],['outpost-native-4k','outpost-warmth4','outpost-gather']]
+          records=[]
+          for index,names in enumerate(batches):
+              start=time.time();images=[];content=[];evidence=[]
+              for name in names:
+                  p=root/name/'native-scene.png';raw=p.read_bytes();im=Image.open(p).convert('RGB');images.append(im)
+                  evidence.append({'view':name,'sha256':hashlib.sha256(raw).hexdigest(),'source_size':list(im.size)})
+                  content += [{'type':'text','text':'Evidence file: '+name+'/native-scene.png'},{'type':'image'}]
+              content += [{'type':'text','text':guide}]
+              text=processor.apply_chat_template([{'role':'user','content':content}],tokenize=False,add_generation_prompt=True)
+              inputs=processor(text=[text],images=images,padding=True,return_tensors='pt')
+              # Processor resizing is recorded; this is not a native-pixel or full-motion certificate.
+              record={'batch':index+1,'evidence':evidence,'processor_max_pixels':512*512,'input_tokens':int(inputs.input_ids.shape[1]),'image_grid_thw':inputs.image_grid_thw.tolist(),'raw_response':None,'parsed':None,'passed':False}
+              print('Review batch',index+1,names,'input tokens',record['input_tokens'],flush=True)
+              with torch.inference_mode():
+                  generated=model.generate(**inputs,max_new_tokens=300,do_sample=False,use_cache=True)
+              response=processor.batch_decode(generated[:,inputs.input_ids.shape[1]:],skip_special_tokens=True,clean_up_tokenization_spaces=False)[0]
+              record['raw_response']=response;record['elapsed_seconds']=round(time.time()-start,2)
+              try:
+                  parsed=json.loads(response);scores=parsed['scores'];required={'craft','materials','lighting','camera','geometry'}
+                  assert set(scores)==required and all(type(v) in (int,float) and 0<=v<=10 for v in scores.values())
+                  assert isinstance(parsed['defects'],list) and isinstance(parsed['observed'],list)
+                  record['parsed']=parsed;record['lowest_score']=min(scores.values());record['passed']=record['lowest_score']>9 and not parsed['defects']
+              except (ValueError,KeyError,AssertionError,TypeError) as e:record['validation_error']=str(e)
+              records.append(record);(out/f'batch-{index+1}.json').write_text(json.dumps(record,indent=2)+'\n')
+              print(response,flush=True)
+          provenance['independent_model_execution']=True
+          (out/'provenance.json').write_text(json.dumps(provenance,indent=2)+'\n')
+          summary={'independent_model_execution':True,'batches_completed':len(records),'screenshots_submitted':sum(len(r['evidence']) for r in records),'passed':all(r['passed'] for r in records),'lowest_score':min((r.get('lowest_score',0) for r in records),default=0),'limitations':['Small-model advisory critique; its claims must be checked against actual images.','Input images resized by processor to at most262144pixels; source originals and closeups retained.','No actual gameplay motion, physical device or sustained FPS evaluation.'],'production_approved':False}
+          (out/'summary.json').write_text(json.dumps(summary,indent=2)+'\n');print(json.dumps(summary),flush=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-independent-visual-critic
+          path: critic-results/
+          retention-days: 30
+          if-no-files-found: warn

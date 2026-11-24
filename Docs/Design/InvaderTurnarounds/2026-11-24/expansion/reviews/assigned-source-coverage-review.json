@@ -1,0 +1,197 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/render_critic",
+  "created_utc": "2026-11-24T10:50:23.499065+00:00",
+  "status": "ROSTER_COMPLETENESS_REOPENED",
+  "prior_individual_static_approvals_preserved": true,
+  "prior_three_type_complete_roster_claim_withdrawn": true,
+  "coverage_approval": false,
+  "scope": "Independent actual-pixel coverage audit of assigned primaryB and supplementalS05/S08. Other primary/supplemental/history sources are being audited by root and behind_panel_recall; this is not a full-corpus freeze.",
+  "sources_actually_inspected": [
+    {
+      "id": "primary_B",
+      "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/references/Media/Video-Misc/Screen_Recording_20260817_124510_YouTube.mp4",
+      "sha256": "4c9051cbea6df0efa3e7288b13b6d17da46e857274869b0b43d2f96ff6cc79d2",
+      "duration_seconds": 58.755567,
+      "inspected_interval_seconds": [
+        0,
+        53
+      ],
+      "sample_interval_seconds": 0.5,
+      "actual_sampled_frames_inspected": 106,
+      "timeline_sheets_inspected": 6,
+      "actual_full_size_frames_inspected": [
+        "B-006.00.png",
+        "B-028.00.png"
+      ],
+      "evidence_directory": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/reviews/evidence/primary-b",
+      "finding": "Large unarmored white/polar bears are attacked, have health bars, drop meat, and are targeted by camp defenses. Red-clad axe carriers are purchased workers, not enemy evidence."
+    },
+    {
+      "id": "WS-S05",
+      "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/source-audit/external-videos/WS-S05.mp4",
+      "sha256": "d49fca86e34a057b96f3b057b9c608dc79ea51fd79af2714070d87b112f16893",
+      "duration_seconds": 53.077333,
+      "inspected_interval_seconds": [
+        0,
+        53.077333
+      ],
+      "sample_interval_seconds": 0.5,
+      "actual_sampled_frames_inspected": 106,
+      "timeline_sheets_inspected": 6,
+      "actual_full_size_frames_inspected": [
+        "frame-093.jpg"
+      ],
+      "evidence_directory": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/reviews/evidence/WS-S05",
+      "finding": "Opening cyan HELP figures are freezing survivors who thaw into workers. Late43.5\u201349s shows large white quadrupedal hostiles with dark dorsal spikes/plates, red health bars, and pursuit/defense interactions."
+    },
+    {
+      "id": "WS-S08",
+      "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/source-audit/external-videos/WS-S08.mp4",
+      "sha256": "48628c03dcb5654c9a450f9c9b079285bd9a1cd6b92512b319e53bd3e9991c7b",
+      "duration_seconds": 58.901333,
+      "inspected_interval_seconds": [
+        0,
+        58.901333
+      ],
+      "sample_interval_seconds": 0.5,
+      "actual_sampled_frames_inspected": 118,
+      "timeline_sheets_inspected": 6,
+      "actual_full_size_frames_inspected": [
+        "frame-001.jpg",
+        "frame-039.jpg"
+      ],
+      "evidence_directory": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/reviews/evidence/WS-S08",
+      "finding": "Small red-hooded skull-faced/masked attackers and larger matching bosses attack camp. Damage flashes are not separate types. Final bear promotional shot supports the polar-bear family; its size/camera does not by itself establish another tier."
+    }
+  ],
+  "reference_to_render_rows": [
+    {
+      "reference_subject_id": "polar_bear_unarmored",
+      "working_name": "Unarmored white/polar bear",
+      "role": "hostile and huntable wildlife",
+      "role_confidence": "high",
+      "sources": [
+        {
+          "id": "primary_B",
+          "times_seconds": [
+            "2.5\u20136",
+            "14.5\u201320.5",
+            "32\u201338",
+            "43.5\u201352.5"
+          ]
+        },
+        {
+          "id": "WS-S08",
+          "times_seconds": [
+            "55\u201358.9 promotional illustration"
+          ]
+        }
+      ],
+      "distinctive_features": [
+        "Large quadrupedal bear silhouette",
+        "White fur, rounded ears, long muzzle, black nose and claws",
+        "No harness or ice armor; health bars and meat drops in primary B"
+      ],
+      "relation_to_existing_renders": "Missing from the original Wolf/Raider/Ice Brute selection; the companion brown bear and bipedal Ice Brute do not cover it.",
+      "render_mapping_status": "New polar-bear-turnaround-r1 candidate exists but is not reviewed in this coverage report. Required matched detail/use-state board remains pending."
+    },
+    {
+      "reference_subject_id": "spined_white_quadruped",
+      "working_name": "Spined white quadrupedal hostile",
+      "role": "hostile beast; species/canonical name unresolved",
+      "role_confidence": "high for hostility; descriptive visual label only",
+      "sources": [
+        {
+          "id": "WS-S05",
+          "times_seconds": [
+            "43.5\u201349"
+          ]
+        }
+      ],
+      "distinctive_features": [
+        "Large white bear-like quadruped",
+        "Dark jagged dorsal spikes/plates",
+        "Red health bar, pursuit and attacks at electric perimeter"
+      ],
+      "relation_to_existing_renders": "Visually distinct from primary B plain polar bears and the prior bipedal Ice Brute. Requires explicit own variant mapping; cannot be silently folded into either.",
+      "render_mapping_status": "MISSING"
+    },
+    {
+      "reference_subject_id": "red_skull_hood_minion",
+      "working_name": "Small red-hooded skull-faced attacker",
+      "role": "hostile minion/horde unit",
+      "role_confidence": "high; whether skull is anatomy or a mask is unresolved",
+      "sources": [
+        {
+          "id": "WS-S08",
+          "times_seconds": [
+            "0\u201354"
+          ]
+        }
+      ],
+      "distinctive_features": [
+        "Small red pointed hoods",
+        "White/gray skull-like faces with dark eye sockets",
+        "Horde attacks gate, is hit by defense fire, leaves coin drops"
+      ],
+      "relation_to_existing_renders": "Prior Raider is a human with a beard and winter hood, without the skull face. Its individual visual approval does not establish coverage of this distinct reference appearance.",
+      "render_mapping_status": "MISSING"
+    },
+    {
+      "reference_subject_id": "red_skull_hood_boss",
+      "working_name": "Large red-hooded skull-faced boss",
+      "role": "hostile boss/large variant",
+      "role_confidence": "high; canonical name and precise gold/yellow weapon type unresolved",
+      "sources": [
+        {
+          "id": "WS-S08",
+          "times_seconds": [
+            "12.5\u201325.5",
+            "27\u201341",
+            "53.5\u201354"
+          ]
+        }
+      ],
+      "distinctive_features": [
+        "Much larger than surrounding matching minions at the same camera",
+        "Red hood/robe, pale skull-like face and dark eye sockets",
+        "Individual red health bar",
+        "Gold/yellow curved hand/weapon detail",
+        "Closeup also shows a yellow/beak-like central face protrusion; do not invent a specific canonical species or weapon from the low-resolution source."
+      ],
+      "relation_to_existing_renders": "Not covered by the white-furred ice-armored Ice Brute. A separate reference-to-render row is mandatory.",
+      "render_mapping_status": "MISSING"
+    }
+  ],
+  "do_not_double_count": [
+    {
+      "subject": "PrimaryB red-clad axe carriers",
+      "disposition": "Purchased hired wood workers; observed after worker-pad spending around26s, exit gate and wood stock accumulates. Not enemy evidence."
+    },
+    {
+      "subject": "S05 cyan frozen figures",
+      "disposition": "Survivors with HELP/cold icons; they thaw into working residents at10.5\u201312s. Not enemy evidence."
+    },
+    {
+      "subject": "B bear rearing versus quadrupedal gait",
+      "disposition": "Different poses of same bear family, not separate enemy types."
+    },
+    {
+      "subject": "S08 white hit silhouettes",
+      "disposition": "Transient damage effects on existing red enemies, not an additional pale faction."
+    },
+    {
+      "subject": "S08 closing promotional bear",
+      "disposition": "Keep as visual reference for white-bear threat. Perspective and a rearing pose alone do not establish a distinct boss tier."
+    }
+  ],
+  "remaining_checks": [
+    "Merge root primaryA and behind_panel_recall other six supplemental audits into one corpus inventory.",
+    "Map every documented hostile and huntable wildlife subject, including established history/species lists, to an approved render or explicit pending row.",
+    "Resolve canonical names and weapon details without inventing species, tier or faction counts.",
+    "Inspect new polar-bear and subsequent assets against their mapped reference appearance before selecting them."
+  ],
+  "acceptance_boundary": "Reference subjects cannot be excluded merely because they are from Whiteout Survival or absent from current runtime names. Previously approved images remain valid within their individual static scope.",
+  "supplemental_closeup_note": "Small minion and boss source crops have now been actually viewed after enlargement. Labels remain descriptive; precise mask/anatomy and gold-detail identity unresolved."
+}

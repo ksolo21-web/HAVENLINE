@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-24T11:30:20.870809+00:00",
+  "reviewer": "/root/render_critic",
+  "independent": true,
+  "verdict": "PASS_EXACT_ARCHIVE_BINDINGS",
+  "score": 10,
+  "scope": "Local publication package exact-original bindings and image preservation; final remote delivery requires separate live readback.",
+  "retests": "package-binding-review-01.json",
+  "checked_manifest_sha256": "385082c034654a2b94f7d9e8dca13b21f0849268e5d0cef2aca2ba8ea2868d94",
+  "checked_manifest_path_count": 129,
+  "mandatory_checks": {
+    "all_bound_original_input_hashes_resolve_to_real_bytes": true,
+    "all15_canonical_resolver_bindings_exact": true,
+    "all_resolver_hash_paths_valid": true,
+    "all66_imported_documents_prompts_byte_identical": true,
+    "all129_current_manifest_paths_match": true,
+    "all27_originals_plus20_aliases_unchanged": true,
+    "all27_prompts_exact": true,
+    "only_allowed_parent_readme_changed_outside_new_prefix": true,
+    "raw_review_originals_for_prior_concepts_added_without_overwrite": true
+  },
+  "counts": {
+    "distinct_required_raw_review_hashes": 16,
+    "distinct_checked_bound_document_hashes": 30,
+    "resolver_binding_records": 15,
+    "byte_identical_imported_documents_and_prompts": 66,
+    "generated_originals": 27,
+    "selected_aliases": 18,
+    "supplementary_aliases": 2
+  },
+  "issues": [],
+  "publication_package_gate_passed": true,
+  "remaining_remote_gate": "Verify actual final refreshed manifest against live branch commit/tree; this newly written report may be appended before publication.",
+  "preserved_source_limits": "YT13 remains unresolved and unqualified entire-reference-roster approval remains false; original images and scoped coverage approvals are unaffected."
+}

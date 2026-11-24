@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-24T11:16:36.047028+00:00",
+  "reviewer": "/root/render_critic",
+  "independent": true,
+  "scope": "Local frozen image selection and attempt-preservation manifest only; canonical coverage and remote delivery remain separate gates.",
+  "input_manifest": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/final-freeze.json",
+  "input_sha256": "d51433826eebd3c8ade67daa822136b2a6dad1591bc73fed31275c710aee1198",
+  "verdict": "PASS_FROZEN_IMAGE_SELECTION",
+  "score": 10,
+  "mandatory_checks": {
+    "all_registered_generated_pngs_included": true,
+    "all_png_bytes_sha256_git_blobs_match": true,
+    "all_attempt_prompts_present_and_bound": true,
+    "all_selected_raw_reviews_present_and_bound": true,
+    "18_selected_exactly_match_independent_passes": true,
+    "two_supplementary_passes_separate": true,
+    "all_selected_aliases_reuse_attempt_blobs": true,
+    "archive_paths_unique_across_groups": true,
+    "original_attempts_not_counted_as_alias_duplicates": true,
+    "source_png_byte_total_matches": true
+  },
+  "counts": {
+    "required_selected": 18,
+    "scoped_supplementary": 2,
+    "distinct_original_attempts": 27,
+    "total_planned_png_paths_including_aliases": 47,
+    "original_png_bytes": 52633953
+  },
+  "issues": [],
+  "permitted_prior_file_exception": "Only Docs/Design/InvaderTurnarounds/2026-11-24/README.md may change for the coverage correction.",
+  "declared_scope": "Static concept sheets. Source-supported observed subjects; no claim of native models, rigs, completed animations or exhaustive inaccessible footage.",
+  "coverage_gate": "PENDING_CANONICAL_MATRIX",
+  "remote_gate": "NOT_YET_REVIEWED"
+}

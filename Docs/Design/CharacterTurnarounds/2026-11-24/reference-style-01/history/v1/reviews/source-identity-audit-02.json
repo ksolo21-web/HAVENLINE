@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/render_critic",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-24T15:34:02.876292+00:00",
+  "requirements_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/requirements.json",
+  "requirements_sha256": "d7e1c4313b7cd49eb978edf25f4e199808e07c7a83e8ff60ad09e53c80b927e5",
+  "scope": "Actual source-image inspection and identity-lock reconciliation only; no new generated sheet has been reviewed or approved.",
+  "status": "PASS_REFERENCE_AND_LAYOUT_READINESS",
+  "readiness_score": 9.8,
+  "references": [
+    {
+      "subject_id": "character-1",
+      "path": "/workspace/scratch/9c51da47f878/upload/1795533885648.png",
+      "sha256": "2a364995e105e8ceebad7b5c80db753f8220e1bce697b1405ae3a4afe02aaf13",
+      "bytes": 150185,
+      "dimensions": [
+        1536,
+        1536
+      ],
+      "actual_format": "JPEG",
+      "actual_full_image_inspected": true
+    },
+    {
+      "subject_id": "character-2",
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/references/character_2-approved-original.png",
+      "sha256": "126bbcb5b1320343ab6add290bbc2394348e2082b2ba065b48156bb72fcca5c7",
+      "bytes": 1812923,
+      "dimensions": [
+        1466,
+        1073
+      ],
+      "actual_format": "PNG",
+      "actual_full_image_inspected": true
+    },
+    {
+      "subject_id": "character-3",
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/references/character_3-approved-original.png",
+      "sha256": "715e51f1cc44a070e6d0caaccfd051bb6d270585062f4d336707a79bcd2e303f",
+      "bytes": 1843005,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "actual_format": "PNG",
+      "actual_full_image_inspected": true
+    },
+    {
+      "subject_id": "character-4",
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/references/character_4-approved-original.png",
+      "sha256": "9083d9708b6f2d0f1109652de7a7074fb817431b5497995edec41dbb4e575313",
+      "bytes": 1836414,
+      "dimensions": [
+        1466,
+        1073
+      ],
+      "actual_format": "PNG",
+      "actual_full_image_inspected": true
+    }
+  ],
+  "identity_observations": {
+    "character-1": [
+      "Authoritative new style and full identity: adult male, short tight curls, rectangular black glasses, trimmed connected beard and moustache.",
+      "Navy closed parka and neck warmer, orange shoulder/zipper/hem/pocket accents, down cream hood, cream cuffs, navy cargo trousers/knee pads and brown capped lace-up boots.",
+      "No pack, harness, belt, pouch, weapon or snow dressing."
+    ],
+    "character-2": [
+      "Side-swept straight dark bob, rectangular glasses and raised cream-lined hood; retain this woman's identity while adapting adult proportions.",
+      "One brown pack with blue horizontal upper bedroll; brown straps/chest strap and original side attachments.",
+      "Anatomical left silver cup and anatomical right brown hip pouch; full-finger dark gloves."
+    ],
+    "character-3": [
+      "Center-part dense curled bob, no glasses; open blue/orange coat over cream vest and burgundy neck/inner shirt.",
+      "Cream down hood, cuffs and coat hem; brown gloves and tall brown structured pack with tan top pad/flap.",
+      "Source profile shows large circular blue upper cylinder end behind shoulder and smaller blue item seated lower in side pocket. Rear shows lateral blue upper ends; preserve observed arrangement without inventing unsupported extra tanks.",
+      "Anatomical left cup and anatomical right hip pouch."
+    ],
+    "character-4": [
+      "Rounded dense curls, navy/gray headband with narrow orange accent, gold hoop earrings and no glasses.",
+      "Closed blue/orange coat, cream trim, chest buckle harness and brown pack with brown horizontal upper bedroll.",
+      "Fingerless gloves retain exposed coherent digits. Anatomical left cup and red/orange-handled sheathed item; anatomical right hip pouch."
+    ]
+  },
+  "actual_extra_inspection_evidence": [
+    {
+      "provenance_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/reviews/evidence/character3-source-crop-provenance.json",
+      "description": "Two actual source-only C3 pack crops inspected after full-sheet view; exact crop boxes/resizing are recorded in provenance."
+    }
+  ],
+  "accepted_layout": {
+    "required_subjects": 4,
+    "required_sheets": 8,
+    "required_views": 32,
+    "cardinals": [
+      0,
+      90,
+      180,
+      270
+    ],
+    "diagonals": [
+      45,
+      135,
+      225,
+      315
+    ],
+    "grid": "2x2 per square sheet"
+  },
+  "output_checks_pending": [
+    "Actual native dimensions and readable full-body framing",
+    "All four actual cardinal and diagonal output pairs",
+    "Five-digit coherent anatomy where exposed; ordinary profile occlusion allowed",
+    "True ordered rotations and consistent identity/outfit/gear placement",
+    "Exact archive and fresh remote integrity readback"
+  ],
+  "native_mesh_rig_animation_runtime_approval": false
+}

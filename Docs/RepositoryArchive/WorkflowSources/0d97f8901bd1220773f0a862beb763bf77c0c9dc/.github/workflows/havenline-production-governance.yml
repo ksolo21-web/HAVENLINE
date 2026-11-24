@@ -1,0 +1,61 @@
+name: Havenline production governance validation
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01','havenline/QA-integration']
+    paths:
+      - 'AGENTS.md'
+      - 'Docs/Production/**'
+      - 'tools/havenline/production/**'
+      - 'HavenlineGodot/tests/production_capture_harness.gd'
+      - 'HavenlineGodot/tests/production_motion_capture.gd'
+      - '.github/workflows/havenline-production-governance.yml'
+      - '.github/workflows/havenline-candidate-guard.yml'
+      - '.github/workflows/havenline-specialist-critic.yml'
+      - '.github/workflows/havenline-specialist-model-cache.yml'
+      - '.github/workflows/havenline-critic-safeguards.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: havenline-production-governance-${{ github.event.pull_request.head.ref || github.ref_name }}
+  cancel-in-progress: true
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Compile production accelerator and specialist critic tooling
+        run: python3 -m compileall -q tools/havenline/production
+      - name: Run governance and safeguard unit tests
+        run: python3 -m unittest discover -s tools/havenline/production/tests -p 'test_*.py' -v
+      - name: Validate workstream registry and ownership collisions
+        run: python3 tools/havenline/production/workstream.py validate-registry
+      - name: Validate complete V2 state
+        run: python3 tools/havenline/production/validate_migration.py
+      - name: Require C1-C11 execution readiness
+        run: python3 tools/havenline/production/validate_critic_readiness.py
+      - name: Regenerate frozen T03 task packet as a smoke test
+        run: |
+          python3 tools/havenline/production/task_packet.py T03
+          test -s Docs/Production/Evidence/T03/TASK_PACKET.md
+      - name: Classify governance-only or lifecycle-valid task integration impact
+        run: |
+          set -euo pipefail
+          base=$(git rev-parse HEAD^)
+          python3 tools/havenline/production/change_impact.py --base "$base" --head HEAD > /tmp/impact.json
+          python3 tools/havenline/production/validate_integration_scope.py --base "$base" --head HEAD --output /tmp/integration-scope.json
+          # T03 is already approved and has a historical defect ledger, so any
+          # later T03-owned runtime repair retains the stricter anti-loop check.
+          if jq -e '.task_id == "T03" and (.task_files.T03 | length > 0)' /tmp/integration-scope.json >/dev/null; then
+            python3 tools/havenline/production/validate_repair_cycle.py \
+              --ledger Docs/Production/T03/DEFECT_LEDGER.json \
+              --base e89818070603399cce27b595ff1116e40b8b3b2a \
+              --head HEAD
+          fi
+          cat /tmp/impact.json
+          cat /tmp/integration-scope.json
+# Full V2 state is validated every run; commit-local integration scope is lifecycle/ownership based rather than frozen to a task number.
+# Governance/QA only. This workflow cannot award a task critic score, approve gameplay, or bypass task-specific review.

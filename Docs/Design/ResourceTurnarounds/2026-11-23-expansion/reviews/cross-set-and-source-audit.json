@@ -1,0 +1,45 @@
+{
+  "reviewer_agent": "/root/turnaround_critic",
+  "date": "2026-11-23",
+  "verdict": "PASS_CONCEPT_SCOPE",
+  "actual_inspection_evidence": [
+    {
+      "path": "/workspace/scratch/fc906e16b0fb/havenline-resource-expansion/reviews/inspection-crops/animal-cuts-cross-set.png",
+      "sha256": "c1162c01dfa6a71d25db15eccd6bc003652d21a03b92c01b98d0bcdd782e1a59",
+      "purpose": "Inspection-only crop montage from actual unmodified production source PNGs; not a replacement deliverable."
+    },
+    {
+      "path": "/workspace/scratch/fc906e16b0fb/havenline-resource-expansion/reviews/inspection-crops/processed-cross-set.png",
+      "sha256": "047eb1dee45e7c1dd25f87a14c53c0476d1718008cfac2dd6ec821f7e7b5a82d",
+      "purpose": "Inspection-only crop montage from actual unmodified production source PNGs; not a replacement deliverable."
+    },
+    {
+      "path": "/workspace/scratch/fc906e16b0fb/havenline-resource-expansion/reviews/inspection-crops/world-atlas-resource-row.png",
+      "sha256": "fe1995d3c0d20e1059e1f571506cc4df8a08b54f1dad37097ea2b2989d72912b",
+      "purpose": "Inspection-only crop montage from actual unmodified production source PNGs; not a replacement deliverable."
+    }
+  ],
+  "animal_cut_distinction": {
+    "score": 9.4,
+    "result": "All10 use distinct broad silhouettes or part arrangements: deer low wedge, boar teardrop chop, rabbit paired long cuts, moose broad round bone-in shank, squirrel paired angular nuggets, bear fat slab with3nubs, wolf straight loin, fox curved loin, lynx paired cylindrical medallions, wolverine high joined-lobe shoulder. Species assignment is a design proposal, not anatomical proof or a food-eligibility claim."
+  },
+  "processed_state_distinction": {
+    "score": 9.3,
+    "result": "Reference-derived processed block differs from irregular raw cuts; browned bone-in roast and thin dark jerky differ from raw meat; peach skinned fillet, golden seared whole fish and flattened brown dried fish differ from intact raw fish. Planks show squared layers/wood grain; half-log retains split face and bark; hide is hairless and supple, fur is thick and tufted. Dried meat and planks both use one band around3parts but differ by thin irregular leathery edges, dark meat color, versus squared boards, wood grain and knot."
+  },
+  "source_classification_audit": {
+    "coverage_path": "/workspace/scratch/fc906e16b0fb/havenline-resource-expansion/source-equipment-coverage.json",
+    "coverage_sha256": "ac54d35cec0b55163d786d3dee92010cd572bd8b1f584bc943d9fff271c3e40e",
+    "render_mapping_count": 20,
+    "matches_contract_ids": true,
+    "result": "PASS after atlas labeling correction",
+    "correction": "STEEL is absent from the actual atlas resource row and is now attributed to the explicit original user request. Last can label is garbled OIEL and is now qualified as likely intended oil/fuel, not an exact explicit OIL label.",
+    "visible_output_findings": "Cooker crop supports rounded red/brown block with broad cream cap and orange edge. A016 supports whole golden fish with broad dark roast bands. Fillet, dried forms, cooked game cut and individual species cuts remain proposals.",
+    "implementation_boundary": "This critic independently reviewed the source pixels and source/proposal claim boundaries. Repository runtime audit was performed by the preservation agent and is attributed as such; no additional native runtime, recipe or mesh verification is claimed here."
+  },
+  "limitations": [
+    "This review is for static image concepts; no native mesh, exact metric camera or animation continuity is certified.",
+    "No implemented species drops, edible roster, processing quantities/yields/timings, equipment recipes or companion reclassification is implied.",
+    "The bounded20-sheet contract is covered; universal future-biome and future-equipment completeness is not established."
+  ]
+}

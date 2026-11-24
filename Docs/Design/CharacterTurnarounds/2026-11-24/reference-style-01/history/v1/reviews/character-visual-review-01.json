@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/render_critic",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-24T15:35:46.653464+00:00",
+  "scope": "One static cardinal sheet only; no diagonal, complete360, archival, native mesh, rig or runtime approval.",
+  "requirements_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/requirements.json",
+  "requirements_sha256": "d7e1c4313b7cd49eb978edf25f4e199808e07c7a83e8ff60ad09e53c80b927e5",
+  "entries": [
+    {
+      "slot_id": "character-1-cardinal",
+      "subject_id": "character-1",
+      "sheet_type": "cardinal",
+      "revision": "r1",
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/renders/character-1-cardinal-r1.png",
+      "sha256": "d7f83c1caa289fb54378a83896f1e435499f49b4a258c6a1baaae50af867f2eb",
+      "bytes": 1728022,
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "status": "PASS",
+      "score": 9.7,
+      "mandatory_visual_checks_passed": true,
+      "reviewed_angles": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "actual_full_sheet_inspected": true,
+      "reference_paths": [
+        "/workspace/scratch/9c51da47f878/upload/1795533885648.png"
+      ],
+      "reference_sha256": [
+        "2a364995e105e8ceebad7b5c80db753f8220e1bce697b1405ae3a4afe02aaf13"
+      ],
+      "crop_provenance_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/reviews/evidence/character-1-cardinal-r1-crop-provenance.json",
+      "actual_crops_inspected": [
+        "front-face",
+        "front-left-screen-hand",
+        "front-right-screen-hand",
+        "left-profile-hand",
+        "right-profile-hand",
+        "back-left-screen-hand",
+        "back-right-screen-hand"
+      ],
+      "checks": [
+        {
+          "id": "style_identity",
+          "status": "PASS",
+          "score": 9.8,
+          "finding": "Actual uploaded reference and full output compared: short tight curls, black rectangular glasses, trimmed beard/moustache, warm-brown skin, adult proportions and the same detailed blue/orange/cream/brown materials in gray studio lighting."
+        },
+        {
+          "id": "outfit_no_extra_gear",
+          "status": "PASS",
+          "score": 9.9,
+          "finding": "Closed navy parka, neck warmer, down fleece hood, orange shoulder/zipper/hem/pocket accents, cargo trousers/knee pads and capped lace-up boots preserved. No pack, belt, harness, pouch or weapon. Rear has plain coat and down hood, without a repeated front zipper or front patch pockets."
+        },
+        {
+          "id": "cardinal_rotation",
+          "status": "PASS",
+          "score": 9.8,
+          "finding": "Actual front, left profile, rear and right profile are present in correct 2x2 order. Nose direction, heel/toe geometry, coat opening and rear hood establish real opposing views."
+        },
+        {
+          "id": "body_hand_anatomy",
+          "status": "PASS",
+          "score": 9.7,
+          "finding": "Two arms and legs, coherent shoulder/elbow/wrist placement, aligned head and torso, flat boots. Both end-on profile hands show four fingers plus a thumb; front/rear edge-on overlap is natural and matches palm-down T-pose. No visibly exposed wrong digit count or detached parts."
+        },
+        {
+          "id": "framing_scale_readability",
+          "status": "PASS",
+          "score": 9.7,
+          "finding": "All fingertips and boots inside each quadrant, consistent figure height and soft ground shadows; titles and angle captions legible. Native1254x1254 output is smaller than requested2048 but actual face/hand geometry remains reviewable. No upscaling or native2048 claim."
+        }
+      ],
+      "required_repairs": [],
+      "pair_consistency_status": "PENDING_DIAGONAL_SHEET"
+    }
+  ],
+  "native_mesh_rig_animation_runtime_approval": false
+}

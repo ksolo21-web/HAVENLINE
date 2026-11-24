@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-24",
+  "reviewer": "/root/render_critic",
+  "independent": true,
+  "scope": "Individual static concept boards, interpreted reference subjects",
+  "pass_threshold": 9.5,
+  "target_score": 10,
+  "all_mandatory_checks_required": true,
+  "items": [
+    {
+      "id": "rival-leader-details-r1",
+      "source": {
+        "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/renders/rival-leader-details-r1.png",
+        "sha256": "ee725a638bdbe18b133c8bcdf65714896be5155348a82f13d1579289a9250203",
+        "bytes": 1977195,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.7,
+      "actually_reviewed": [
+        "Head closeup",
+        "Rifle hold/grip closeup",
+        "Leader versus infantry scale comparison",
+        "Aim, advance and brace full-body poses",
+        "Identity against approved leader turnaround and previously inspected S03 reference"
+      ],
+      "mandatory_checks": {
+        "same_heavy_older_bearded_identity": "PASS",
+        "consistent_rifle_and_handed_grip": "PASS",
+        "two_arms_two_legs": "PASS",
+        "static_support_and_aim_contact": "PASS",
+        "source_distinctive_leader_scale_readability": "PASS",
+        "detail_action_coverage": "PASS",
+        "full_body_framing": "PASS",
+        "havenline_style": "PASS",
+        "truthful_interpreted_static_scope": "PASS"
+      },
+      "findings": [
+        "Leader/infantry panel makes the heavier, larger appearance explicit without inventing a canonical numeric scale or rank.",
+        "Aim uses shoulder/hand support; advancing and braced poses retain exactly two connected legs and two hands with no gear clipping.",
+        "White brows/beard, red padded hood/coat, shearling and boots match the turnaround."
+      ],
+      "repairs_required": []
+    },
+    {
+      "id": "hooded-swarmer-details-r1",
+      "source": {
+        "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/renders/hooded-swarmer-details-r1.png",
+        "sha256": "605507d9ebe6ca20921ef0cca3ec574597f010f0db1ea1c8c74116301b81ab16",
+        "bytes": 1856494,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.7,
+      "actually_reviewed": [
+        "Mask/hood closeup",
+        "Profile closeup",
+        "Wraps/cuff/hem closeup",
+        "Rush, airborne lunge and grounded recover full figures",
+        "Identity against approved swarmer turnaround"
+      ],
+      "mandatory_checks": {
+        "same_socketed_face_and_amber_center": "PASS",
+        "consistent_red_hood_wraps_hem": "PASS",
+        "two_connected_arms_two_booted_legs": "PASS",
+        "readable_static_rush_lunge_recovery": "PASS",
+        "no_specific_invented_weapon": "PASS",
+        "detail_action_coverage": "PASS",
+        "framing_and_style": "PASS",
+        "truthful_interpretation": "PASS"
+      },
+      "findings": [
+        "Face sockets, amber beak-like center and pointed red hood remain coherent in closeup, profile and action moments.",
+        "Airborne lunge has two boots and two mittened arms attached to the same body; recover returns to planted support.",
+        "Mask is the Havenline design interpretation, not a claim that source imagery proves a removable object or unseen anatomy."
+      ],
+      "repairs_required": []
+    },
+    {
+      "id": "hooded-siege-boss-turnaround-r1",
+      "source": {
+        "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/renders/hooded-siege-boss-turnaround-r1.png",
+        "sha256": "e2cc1d7b2ae66c0efe15d756853bb1a81a2f2b1f1331919fc82d7ac714c10c41",
+        "bytes": 2054548,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.7,
+      "actually_reviewed": [
+        "All eight full-body angles",
+        "True rear/opposite profiles",
+        "Face/hood/shoulders/cuffs/long cape continuity",
+        "Two arm and two boot silhouettes",
+        "Comparison to previously inspected actual S08 large hooded hostile"
+      ],
+      "mandatory_checks": {
+        "source_large_red_hood_pale_socketed_face": "PASS",
+        "distinct_heavier_body_from_swarmer": "PASS",
+        "eight_distinct_views": "PASS",
+        "opposite_profiles_full_rear": "PASS",
+        "same_face_outfit_and_back_cape": "PASS",
+        "two_arms_two_legs": "PASS",
+        "no_invented_specific_weapon": "PASS",
+        "scale_framing_and_style": "PASS",
+        "honest_reverse_interpretation": "PASS"
+      },
+      "findings": [
+        "Heavy shoulders/body, broader arms/cuffs and longer back cape distinguish the boss appearance while preserving the source hood/face family.",
+        "Back and opposite side views correctly rotate cape folds, hood, cuffs and boots without duplicate frontal faces.",
+        "No weapon type or unsupported canonical faction is invented; unseen cloak/underbody details remain interpreted."
+      ],
+      "repairs_required": []
+    }
+  ],
+  "coverage_gate": "OPEN_PENDING_BOSS_DETAILS_AND_FINAL_MATRIX",
+  "animation_mesh_or_runtime_approval": false
+}

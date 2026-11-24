@@ -1,0 +1,79 @@
+{
+  "reviewer": "/root/turnaround_critic",
+  "contract_version": "2026-11-23-v1",
+  "iteration": 2,
+  "supersedes": "batch-01-initial-review.json for these exact three candidate files only",
+  "assets": [
+    {
+      "asset": "wood",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-6d28933c-29e3-4cac-8b3d-35ced34c98e8.png",
+      "sha256": "3b528ed8c5485f4c7433cb82223c7eb8081e5858bf5f90f7222778106719641b",
+      "inspected_full_sheet": true,
+      "score": 9.4,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "checks": {
+        "R3": "PASS",
+        "R4": "PASS",
+        "R5": "PASS_AT_CONCEPT_LEVEL",
+        "R6": "PASS",
+        "R8": "PASS_LABELLED_CONCEPT"
+      },
+      "changes_verified": [
+        "225\u00b0 cut ends now onimageRIGHT; knot remains hidden onrear",
+        "270\u00b0 knot appears onopposite image edge as90\u00b0",
+        "Three-log count and centered wrap retained"
+      ],
+      "blocking_defects": [],
+      "minor_disposition": "Minor surface-grain/facet illustration variation does not obscure direction or material identity; not evidence of exact mesh equivalence.",
+      "limits": "No exact metric 45\u00b0 camera proof, mesh file, gameplay, or runtime integration asserted."
+    },
+    {
+      "asset": "slate",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-c7f66b8c-4727-4ef1-af53-36b81e4903ea.png",
+      "sha256": "651269f18342422fb7aeac236e61c4b7b59c325040dc2a7b71d446afa2c37b64",
+      "inspected_full_sheet": true,
+      "score": 9.3,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "checks": {
+        "R3": "PASS",
+        "R4": "PASS",
+        "R5": "PASS_AT_CONCEPT_LEVEL",
+        "R6": "PASS",
+        "R8": "PASS_LABELLED_CONCEPT"
+      },
+      "changes_verified": [
+        "225\u00b0 now shows opposite rear corner and reversed diagonal",
+        "Three-slab layered form and single vein retained",
+        "Cardinal faces and 3Q silhouette differentiation coherent"
+      ],
+      "blocking_defects": [],
+      "minor_disposition": "Minor surface-grain/facet illustration variation does not obscure direction or material identity; not evidence of exact mesh equivalence.",
+      "limits": "No exact metric 45\u00b0 camera proof, mesh file, gameplay, or runtime integration asserted."
+    },
+    {
+      "asset": "stone",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-7372ee94-6dc1-49f1-a7db-d7a57e6f739b.png",
+      "sha256": "5360d9d44ed505f48c788b870e322105edce48c726525252d0e884549800016e",
+      "inspected_full_sheet": true,
+      "score": 9.2,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "checks": {
+        "R3": "PASS",
+        "R4": "PASS",
+        "R5": "PASS_AT_CONCEPT_LEVEL",
+        "R6": "PASS",
+        "R8": "PASS_LABELLED_CONCEPT"
+      },
+      "changes_verified": [
+        "45\u00b0 now reveals additional sideface and projected chip",
+        "225\u00b0 now shows distinct rear-to-left geometry",
+        "High shoulder and chip remain identifiable at concept-sheet level"
+      ],
+      "blocking_defects": [],
+      "minor_disposition": "Minor surface-grain/facet illustration variation does not obscure direction or material identity; not evidence of exact mesh equivalence.",
+      "limits": "No exact metric 45\u00b0 camera proof, mesh file, gameplay, or runtime integration asserted."
+    }
+  ],
+  "set_status": "3/6 assets reviewed sofar pass; later resources pending",
+  "gate": "Strictly >9.0 and no blocking concept-image defect; user approval remains separate."
+}

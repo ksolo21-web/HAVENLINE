@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/render_critic",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-24T16:01:06.585271+00:00",
+  "scope": "Final C2 diagonal repair retest and actual three-sheet C2 consistency.",
+  "requirements_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/requirements-v2.json",
+  "requirements_sha256": "a5253f143633b6b60e99ab527d562a5f33c657f88d772349c366a774becebadf",
+  "entries": [
+    {
+      "slot_id": "character-2-diagonal",
+      "subject_id": "character-2",
+      "sheet_type": "diagonal",
+      "revision": "r3",
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-2-diagonal-r3.png",
+      "sha256": "b02d572542e61fee89d337f12fc3e9e41ad8ba8abe1f32cd40c973f1c5e8d980",
+      "bytes": 1798894,
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "status": "PASS",
+      "score": 9.7,
+      "mandatory_visual_checks_passed": true,
+      "actual_full_sheet_inspected": true,
+      "reviewed_angles": [
+        45,
+        135,
+        225,
+        315
+      ],
+      "reference_paths": [
+        "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-2-cardinal-r2.png",
+        "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-2-hands-r1.png"
+      ],
+      "reference_sha256": [
+        "e684a4cde6a6b438463aec957f7355aa1d45e2f15ab755b7052b36c2b2182214",
+        "9f11aa80f9ccd9b5475fe10e89a8c0c555ee37298813fd4a7839a29385095875"
+      ],
+      "crop_provenance_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/reviews/evidence/character-2-diagonal-r3-crop-provenance.json",
+      "actual_crops_inspected": [
+        "45-far-hand",
+        "45-near-hand",
+        "135-near-hand",
+        "135-far-hand",
+        "225-far-hand",
+        "225-near-hand",
+        "315-near-hand",
+        "315-far-hand"
+      ],
+      "checks": [
+        {
+          "id": "rear_hand_surface_repair",
+          "status": "PASS",
+          "score": 9.7,
+          "finding": "All four135/225 hand closeups now show dorsal glove backs/seams without curved palmar pads. Corrected anatomy/orientation agrees with cardinal and hand boards."
+        },
+        {
+          "id": "front_hands_and_digits_regression",
+          "status": "PASS",
+          "score": 9.7,
+          "finding": "All four45/315 hand closeups remain palmar, with four fingers plus separate thumb, clear gaps and continuous palm/cuff. No repaired-hand digit or framing regression."
+        },
+        {
+          "id": "identity_gear_style_rotation",
+          "status": "PASS",
+          "score": 9.8,
+          "finding": "Actual full sheet retains four real ordered diagonals, coherent face/bob/glasses/up hood, blue bedroll/pack, left cup/right pouch and original coat/boots. Gray studio/adult proportions and body scale match cardinal."
+        },
+        {
+          "id": "framing_resolution",
+          "status": "PASS",
+          "score": 9.7,
+          "finding": "All hands/boots fully framed; labels correct; actual native1254x1254 recorded without upscaling/native2048 claim."
+        }
+      ],
+      "required_repairs": [],
+      "pair_consistency_status": "PASS_ALL_THREE_SHEETS",
+      "retest_of": {
+        "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-2-diagonal-r2.png",
+        "sha256": "f89e91d5e2d5f51289f5c7d4924c7b736b8beca5f04ae4fcc0615258bb5d56fb",
+        "raw_review_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/reviews/character-visual-review-11.json",
+        "resolved_defect": "Four rear-diagonal palmar glove constructions replaced with coherent dorsal backs; all eight hands and full sheet rechecked."
+      }
+    }
+  ],
+  "cross_sheet_consistency_reviews": [
+    {
+      "subject_id": "character-2",
+      "status": "PASS",
+      "score": 9.7,
+      "actual_all_three_sheets_compared": true,
+      "images": [
+        {
+          "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-2-cardinal-r2.png",
+          "sha256": "e684a4cde6a6b438463aec957f7355aa1d45e2f15ab755b7052b36c2b2182214",
+          "bytes": 1757412,
+          "dimensions": [
+            1254,
+            1254
+          ]
+        },
+        {
+          "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-2-diagonal-r3.png",
+          "sha256": "b02d572542e61fee89d337f12fc3e9e41ad8ba8abe1f32cd40c973f1c5e8d980",
+          "bytes": 1798894,
+          "dimensions": [
+            1254,
+            1254
+          ]
+        },
+        {
+          "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-2-hands-r1.png",
+          "sha256": "9f11aa80f9ccd9b5475fe10e89a8c0c555ee37298813fd4a7839a29385095875",
+          "bytes": 1818704,
+          "dimensions": [
+            1254,
+            1254
+          ]
+        }
+      ],
+      "checks": {
+        "identity_outfit_materials": true,
+        "eight_ordered_body_rotations": true,
+        "consistent_body_scale_and_tpose": true,
+        "same_hand_glove_coverage_and_cuffs": true,
+        "palm_forward_vs_dorsal_body_orientation": true,
+        "explicit_twenty_hand_detail_digits_correct_chirality": true,
+        "no_clipping_or_added_gear": true
+      },
+      "limitation": "Static visual reference only; no mesh, skinning, rig or motion validation."
+    }
+  ],
+  "native_mesh_rig_animation_runtime_approval": false
+}

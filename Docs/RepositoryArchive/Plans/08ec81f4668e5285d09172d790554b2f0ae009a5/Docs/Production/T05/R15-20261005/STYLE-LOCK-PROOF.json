@@ -1,0 +1,441 @@
+{
+  "task_id": "T05",
+  "candidate_commit": "95c11abd7c712a7d8122091682ab830593d28d8d",
+  "changed_visual_paths": [
+    "HavenlineGodot/assets/stations_v2/cargo_crate.glb",
+    "HavenlineGodot/assets/stations_v2/catalog.json",
+    "HavenlineGodot/assets/stations_v2/conveyor_straight.glb",
+    "HavenlineGodot/assets/stations_v2/cooked_food_stack.glb",
+    "HavenlineGodot/assets/stations_v2/cooker_processor.glb",
+    "HavenlineGodot/assets/stations_v2/defense_platform.glb",
+    "HavenlineGodot/assets/stations_v2/fish_crate.glb",
+    "HavenlineGodot/assets/stations_v2/fishing_rack.glb",
+    "HavenlineGodot/assets/stations_v2/fuel_canister.glb",
+    "HavenlineGodot/assets/stations_v2/intake_machine.glb",
+    "HavenlineGodot/assets/stations_v2/metal_stack.glb",
+    "HavenlineGodot/assets/stations_v2/money_stack.glb",
+    "HavenlineGodot/assets/stations_v2/pad_build.glb",
+    "HavenlineGodot/assets/stations_v2/pad_input.glb",
+    "HavenlineGodot/assets/stations_v2/pad_output.glb",
+    "HavenlineGodot/assets/stations_v2/pad_payment.glb",
+    "HavenlineGodot/assets/stations_v2/pad_stock.glb",
+    "HavenlineGodot/assets/stations_v2/pad_upgrade.glb",
+    "HavenlineGodot/assets/stations_v2/processing_counter.glb",
+    "HavenlineGodot/assets/stations_v2/service_counter.glb",
+    "HavenlineGodot/assets/stations_v2/stone_stack.glb",
+    "HavenlineGodot/assets/stations_v2/wood_stack.glb",
+    "HavenlineGodot/tests/test_task05_station_kit.gd"
+  ],
+  "coverage_complete": true,
+  "reference_pixels_reviewed": true,
+  "primary_reference_ids": [
+    "A",
+    "B"
+  ],
+  "material_inventory": [
+    {
+      "id": "cargo_crate",
+      "asset_sha256": "2343f1415a0f91da8e16f472ac8baf902008994e027cdace39236b6d9354ebe1",
+      "surface_materials": [
+        "blue",
+        "dark",
+        "metal",
+        "snow",
+        "wood",
+        "wood_light",
+        "yellow"
+      ],
+      "immutable": false
+    },
+    {
+      "id": "conveyor_straight",
+      "asset_sha256": "63b052198a067e7f903f8db4e1e1387c969c70ff28fef5dc67e814da057f73db",
+      "surface_materials": [
+        "blue",
+        "cream",
+        "dark",
+        "metal",
+        "orange",
+        "snow",
+        "wood",
+        "wood_light",
+        "yellow"
+      ],
+      "immutable": false
+    },
+    {
+      "id": "cooked_food_stack",
+      "asset_sha256": "4dfa9b9410b15b16bd11e587c15b1d0b1f703ce751d551bb65e70d82b652e4ed",
+      "surface_materials": [
+        "blue",
+        "cream",
+        "dark",
+        "orange",
+        "snow",
+        "wood",
+        "wood_light"
+      ],
+      "immutable": false
+    },
+    {
+      "id": "cooker_processor",
+      "asset_sha256": "5cc8ecec34b4c415513c0ea9896a5c022c96b0b948d8649ea45211fc3b6be2c0",
+      "surface_materials": [
+        "blue",
+        "cream",
+        "dark",
+        "metal",
+        "orange",
+        "snow",
+        "wood",
+        "wood_light",
+        "yellow"
+      ],
+      "immutable": false
+    },
+    {
+      "id": "defense_platform",
+      "asset_sha256": "e419915b62b9d3a23e78cf46984d7b53c1238b0aa00b138a43fd6176b5137d62",
+      "surface_materials": [
+        "blue",
+        "dark",
+        "metal",
+        "orange",
+        "snow",
+        "wood",
+        "wood_light",
+        "yellow"
+      ],
+      "immutable": false
+    },
+    {
+      "id": "fish_crate",
+      "asset_sha256": "b22df64bbb1e7f52d0b008d1979088f4fe41ec71fe7f93b3e6bb66581f10993e",
+      "surface_materials": [
+        "blue",
+        "cream",
+        "cyan",
+        "dark",
+        "snow",
+        "wood",
+        "wood_light"
+      ],
+      "immutable": false
+    },
+    {
+      "id": "fishing_rack",
+      "asset_sha256": "1492f10eccb7fdfdf50b6f57d53019e1965bfab5d951e84cd74e9532ccdee206",
+      "surface_materials": [
+        "blue",
+        "cream",
+        "cyan",
+        "dark",
+        "metal",
+        "orange",
+        "snow",
+        "wood",
+        "wood_light",
+        "yellow"
+      ],
+      "immutable": false
+    },
+    {
+      "id": "fuel_canister",
+      "asset_sha256": "c0caa236e87114203dd96fc6551b281746343ca9c918ad9c3bb6b44a5f6f2f34",
+      "surface_materials": [
+        "blue",
+        "cream",
+        "dark",
+        "metal",
+        "orange",
+        "snow",
+        "wood",
+        "wood_light",
+        "yellow"
+      ],
+      "immutable": false
+    },
+    {
+      "id": "hearth_vessel",
+      "asset_sha256": "6d32499229dd22dde1ee32940bb1b0a506a0647ea911a4787b3bce83fe60a8e7",
+      "surface_materials": [
+        "blue",
+        "cream",
+        "dark",
+        "metal",
+        "orange",
+        "snow",
+        "wood",
+        "wood_light",
+        "yellow"
+      ],
+      "immutable": true
+    },
+    {
+      "id": "intake_machine",
+      "asset_sha256": "d1755a28dcb47934ed1d4728e6e38c0c84dd545a404ea787b0c6c68281e5dda6",
+      "surface_materials": [
+        "blue",
+        "cream",
+        "cyan",
+        "dark",
+        "metal",
+        "orange",
+        "snow",
+        "wood",
+        "wood_light",
+        "yellow"
+      ],
+      "immutable": false
+    },
+    {
+      "id": "metal_stack",
+      "asset_sha256": "39bc27b930ee4c149d168b1173ca28959f5b209672ec92b145047bbb8c12c244",
+      "surface_materials": [
+        "blue",
+        "dark",
+        "metal",
+        "orange",
+        "snow",
+        "wood_light",
+        "yellow"
+      ],
+      "immutable": false
+    },
+    {
+      "id": "money_stack",
+      "asset_sha256": "3339bdffa283302829741574b8057b8e9b2655adbeafd61ef4bd9c175c0840b0",
+      "surface_materials": [
+        "blue",
+        "cream",
+        "dark",
+        "green",
+        "snow",
+        "wood",
+        "wood_light",
+        "yellow"
+      ],
+      "immutable": false
+    },
+    {
+      "id": "pad_build",
+      "asset_sha256": "fe5ad832e7782b8d5ab0f7df30e9187caf44ab5b3afbef882946316a11d5e9e8",
+      "surface_materials": [
+        "cream",
+        "dark",
+        "snow",
+        "wood",
+        "wood_light",
+        "yellow"
+      ],
+      "immutable": false
+    },
+    {
+      "id": "pad_input",
+      "asset_sha256": "58d3d4fd04f32dc5a19f0dd969c1c7a74c0ced94888144eb20dce235d45aed77",
+      "surface_materials": [
+        "cream",
+        "cyan",
+        "dark",
+        "metal",
+        "snow",
+        "wood",
+        "wood_light"
+      ],
+      "immutable": false
+    },
+    {
+      "id": "pad_output",
+      "asset_sha256": "ac4401bdc398c8f57954b6cf56c737cbda5f72cfd6d9cdd4196cd21f75be02e6",
+      "surface_materials": [
+        "blue",
+        "cream",
+        "dark",
+        "metal",
+        "snow",
+        "wood",
+        "wood_light"
+      ],
+      "immutable": false
+    },
+    {
+      "id": "pad_payment",
+      "asset_sha256": "20c881f715d1ed12f819681a2706e9489f3718155e6590f16444c250257a665d",
+      "surface_materials": [
+        "cream",
+        "dark",
+        "green",
+        "snow",
+        "wood",
+        "wood_light",
+        "yellow"
+      ],
+      "immutable": false
+    },
+    {
+      "id": "pad_stock",
+      "asset_sha256": "8e3c0597323146eb74fe0ff302d351cf3b3c71c83ac084864249c73617710fe9",
+      "surface_materials": [
+        "blue",
+        "cream",
+        "dark",
+        "snow",
+        "wood",
+        "wood_light"
+      ],
+      "immutable": false
+    },
+    {
+      "id": "pad_upgrade",
+      "asset_sha256": "8b4faea19de8262ce1b95ab745748ca79f7e094d8bc06bbf6588562017fc805e",
+      "surface_materials": [
+        "cream",
+        "dark",
+        "metal",
+        "orange",
+        "snow",
+        "wood",
+        "wood_light"
+      ],
+      "immutable": false
+    },
+    {
+      "id": "processing_counter",
+      "asset_sha256": "a84c5d50654582807fbf5434bef96ee2a9ee21f8a78bd42ad752be358432d6ab",
+      "surface_materials": [
+        "blue",
+        "cream",
+        "dark",
+        "metal",
+        "orange",
+        "snow",
+        "wood",
+        "wood_light",
+        "yellow"
+      ],
+      "immutable": false
+    },
+    {
+      "id": "service_counter",
+      "asset_sha256": "2aceab4775106dd23d42b721eb08f56226069f789300dd1ab71e9c25b7e7d1b0",
+      "surface_materials": [
+        "blue",
+        "cream",
+        "cyan",
+        "dark",
+        "green",
+        "metal",
+        "orange",
+        "snow",
+        "wood",
+        "wood_light",
+        "yellow"
+      ],
+      "immutable": false
+    },
+    {
+      "id": "stone_stack",
+      "asset_sha256": "233a65c159eb2446bc01b31fdd13930f806eb7d979b0256369a31e7b9e28457d",
+      "surface_materials": [
+        "blue",
+        "cream",
+        "dark",
+        "snow",
+        "wood",
+        "wood_light"
+      ],
+      "immutable": false
+    },
+    {
+      "id": "wood_stack",
+      "asset_sha256": "fb48ea6c36c0db8b4db3cc21f1ba0b227b4e7a8662c2bb76e9aa2a79c9322eae",
+      "surface_materials": [
+        "blue",
+        "cream",
+        "snow",
+        "wood",
+        "wood_light",
+        "yellow"
+      ],
+      "immutable": false
+    }
+  ],
+  "known_style_defects": [
+    {
+      "id": "C1-R15-01",
+      "candidate_path": "families/family-defense-detail.png",
+      "dimension": "reference_fidelity",
+      "visible_region": "blue pitched roof above the timber defense platform, approximately x445-834 y0-204 at1280x720",
+      "description": "The modified defense roof reads as an uninterrupted planar blue surface bounded by straight rails, while the watchtower/utility roofing in18600 and18607 uses visibly layered authored blue roof pieces and sculpted edge construction. This remains a simpler surface language at gameplay scale and in the native camp crop.",
+      "scope": "modified_surface",
+      "related_paths": [
+        "component/close-defense-reverse.png",
+        "native4k/native-gameplay-camp.png"
+      ],
+      "reference_paths": [
+        "/workspace/scratch/a81ce535cafe/references/18600.png",
+        "/workspace/scratch/a81ce535cafe/references/18607.png"
+      ],
+      "causal_material_mismatch": "Blue roof field lacks the reference layering and local surface contour separation; a color adjustment alone does not resolve this."
+    },
+    {
+      "id": "C1-R15-02",
+      "candidate_path": "families/family-defense-detail.png",
+      "dimension": "visual_language",
+      "visible_region": "white snow loading on blue roof and pale patches at tower feet",
+      "description": "The modified tower roof has a broad nearly flat uniformly pale snow patch with a cutout-like edge; the isolated tower-foot patches likewise read as flat pale ovals. The actual18600/18607 snow has rounded loaded thickness, localized draping and shaded volume. The native camp roof retains this flat white-patch appearance.",
+      "scope": "modified_surface",
+      "related_paths": [
+        "component/close-defense-reverse.png",
+        "native4k/native-gameplay-camp.png"
+      ],
+      "reference_paths": [
+        "/workspace/scratch/a81ce535cafe/references/18600.png",
+        "/workspace/scratch/a81ce535cafe/references/18607.png"
+      ],
+      "causal_material_mismatch": "HL_snow visible treatment is a largely uniform flat field without the reference volumetric contour/shading; this is surface construction and finish rather than a request for unrelated snow scenery."
+    },
+    {
+      "id": "C1-R15-03",
+      "candidate_path": "families/family-fishing-detail.png",
+      "dimension": "visual_language",
+      "visible_region": "fishing gantry uprights, horizontal top beam and lower crossed timber braces, approximately x824-1180 y48-382 at1280x720",
+      "description": "The modified fishing support timbers remain smooth broad brown extrusions with little visible authored wood surface character, and the service-counter legs/braces show the same simplified finish.18607 utility gantries and18600 timber work surfaces have shaped wood, localized grain/end details and richer contour separation. Some plank color variation is present, but the large structural timber still lacks that finish in1:1 native lakeshore pixels.",
+      "scope": "modified_surface",
+      "related_paths": [
+        "families/family-counters-detail.png",
+        "native4k/native-gameplay-lakeshore.png"
+      ],
+      "reference_paths": [
+        "/workspace/scratch/a81ce535cafe/references/18600.png",
+        "/workspace/scratch/a81ce535cafe/references/18607.png"
+      ],
+      "causal_material_mismatch": "HL_wood/HL_wood_light structural surfaces show broad uniform brown gradients instead of the localized authored timber shaping/variation of the authority. No arbitrary shader parameter is prescribed."
+    },
+    {
+      "id": "C1-R15-04",
+      "candidate_path": "component/close-hearth-front.png",
+      "dimension": "reference_fidelity",
+      "visible_region": "main vessel body, shoulder and chimney broad panels, approximately x497-756 y170-460 at1280x720",
+      "description": "The inherited protected hearth shows pale gray/silver broad vessel and chimney surfaces in daylight, whereas Furnace_b080906_4K uses a dominant dark blue-black metal vessel with strong contour highlights. Adjacent candidate pipes and rings remain dark, so this is a differential vessel surface-response mismatch rather than a claim that the entire capture must darken. Native daylight camp pixels reproduce it; night/blizzard lighting darkens it but does not establish the required daylight match.",
+      "scope": "inherited_protected_hearth",
+      "related_paths": [
+        "families/family-hearth-detail.png",
+        "native4k/native-gameplay-camp.png",
+        "gameplay/condition-day.png"
+      ],
+      "reference_paths": [
+        "/workspace/scratch/a81ce535cafe/references/Furnace_b080906_4K.png"
+      ],
+      "causal_material_mismatch": "Observed broad vessel/chimney metal response differs from the authoritative dark-metal finish; exact asset-side versus environment-response cause is not proven by pixels alone.",
+      "scope_disposition": "hearth_vessel.glb is immutable at6d32499229dd22dde1ee32940bb1b0a506a0647ea911a4787b3bce83fe60a8e7. Any causal repair that changes it or protected shared rendering requires a protected-scope change request; no unilateral asset or global darkening recommendation."
+    }
+  ],
+  "review_status": "FAIL_FRESH_C1_FULL_PACKET",
+  "actual_user_reference_hashes": {
+    "18600.png": "e372bf74be027cb63a0f83c4247a7843a8195a9c579e75a415ddcf3c0052eaec",
+    "18607.png": "d71d77c6e200b7ef8d225e573474ad99c2d466954d05c29eabd142f4901bbc0c",
+    "Furnace_b080906_4K.png": "ed48d5e98c3826f778c6a8117025cd2549f75a65db509facec13663dbfd2be6d"
+  },
+  "c1_raw_sha256": "fb23f87a9058ce8d8867cb5b30d9d77f743030004408a03640cb8f612d802c32"
+}

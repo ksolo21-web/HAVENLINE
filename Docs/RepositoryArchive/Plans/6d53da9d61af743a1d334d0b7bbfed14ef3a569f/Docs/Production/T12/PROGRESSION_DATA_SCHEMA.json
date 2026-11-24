@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "task_id": "T12",
+  "status": "PREPARATION_ONLY_SCHEMA",
+  "purpose": "Freeze the structural schema that future shipping T12 progression data must satisfy after activation. This file is not shipping progression data and contains no accepted T10/T11 IDs.",
+  "level_record": {
+    "required_fields": [
+      "level",
+      "level_id",
+      "region_band_id",
+      "prerequisite_level_ids",
+      "required_fact_ids",
+      "progression_effects",
+      "visible_progression_hook_ids",
+      "milestone_ids",
+      "one_time_event_ids"
+    ],
+    "field_contracts": {
+      "level": "integer 1..100; unique; exactly one record for every integer",
+      "level_id": "stable unique string matching ^t12\\.level\\.[0-9]{3}$ and corresponding exactly to level number",
+      "region_band_id": "one frozen connected-world band ID owned by T12 topology only",
+      "prerequisite_level_ids": "stable T12 level IDs only; level 1 empty; shipping graph acyclic and Level-1 reachable",
+      "required_fact_ids": "stable accepted fact/binding IDs; T10/T11 concrete IDs permitted only after resolved activation binding proof",
+      "progression_effects": "non-empty array of practical progression descriptors; no counter/stat-only filler; exact full effect payload may not be reused on another level as fake progression",
+      "visible_progression_hook_ids": "array of stable visible-change hook IDs; cadence validated independently",
+      "milestone_ids": "array of stable T12 milestone IDs that resolve in milestone data",
+      "one_time_event_ids": "globally unique stable T12 progression-event IDs; every level includes canonical t12.event.level.NNN.completed; replay-safe/idempotent"
+    },
+    "forbidden_eligibility_fields": [
+      "purchase_history",
+      "vip_status",
+      "vip_level",
+      "premium_spend",
+      "premium_currency_spend",
+      "spend_tier",
+      "payer_status",
+      "energy",
+      "energy_required",
+      "energy_cost"
+    ],
+    "authority_rules": [
+      "records describe eligibility and progression intent only",
+      "records never debit or grant inventory",
+      "records never commit T10 transforms",
+      "records never mutate T11 camp state",
+      "records never tune T13 difficulty",
+      "records never implement T14 global save/version/migration",
+      "records never author T32/T44-T52 region content"
+    ]
+  },
+  "milestone_record": {
+    "required_fields": [
+      "milestone_id",
+      "level",
+      "kind",
+      "progression_hook_ids",
+      "visible_change_required",
+      "owner_task"
+    ],
+    "field_contracts": {
+      "milestone_id": "stable unique string in ^t12\\.milestone\\.[a-z0-9_.-]+$ namespace; major milestone at level N uses exact t12.milestone.NNN",
+      "level": "integer 1..100 resolving to a shipping level",
+      "kind": "major or minor; every ten-level boundary has a major milestone unless a separately accepted exception stays within that band",
+      "progression_hook_ids": "stable hook IDs only",
+      "visible_change_required": "boolean",
+      "owner_task": "task responsible for authored presentation/content; T12 may own topology but not later-region assets"
+    }
+  },
+  "shipping_manifest": {
+    "required_top_level_fields": [
+      "schema_version",
+      "task_id",
+      "levels",
+      "milestones"
+    ],
+    "exact_level_count": 100,
+    "required_task_id": "T12",
+    "promotion_requires": [
+      "T07/T08/T10/T11 APPROVED",
+      "T10/T11 integrated at exact activation base",
+      "BINDING_RESOLUTION.json verified RESOLVED_FOR_ACTIVATION",
+      "T12 activation preflight PASS",
+      "future builder branch claimed with @reservation:T12"
+    ]
+  },
+  "notes": [
+    "This schema freezes structure, not final gameplay content, prices, difficulty, region assets or unfinished upstream IDs.",
+    "Any accepted upstream interface conflict blocks activation or requires a structured ChangeRequest; it is never guessed around."
+  ],
+  "shipping_files": {
+    "progression_levels_v1": {
+      "path": "HavenlineGodot/data/progression_levels_v1.json",
+      "required_top_level_fields": [
+        "schema_version",
+        "task_id",
+        "levels"
+      ],
+      "schema_version": 1,
+      "task_id": "T12"
+    },
+    "progression_milestones_v1": {
+      "path": "HavenlineGodot/data/progression_milestones_v1.json",
+      "required_top_level_fields": [
+        "schema_version",
+        "task_id",
+        "milestones"
+      ],
+      "schema_version": 1,
+      "task_id": "T12"
+    },
+    "cross_file_rule": "Both files must share schema_version/task_id and must be composed and validated together by validate_progression_contract.py --levels ... --milestones ... before runtime use or final disposition."
+  }
+}

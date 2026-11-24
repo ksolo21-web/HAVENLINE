@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/render_critic",
+  "created_utc": "2026-11-24T10:15:32.253438+00:00",
+  "scope": "Actual-pixel independent paired static review",
+  "approval_threshold": {
+    "minimum_score": 9.5,
+    "all_mandatory_checks_must_pass": true,
+    "target": 10
+  },
+  "entries": [
+    {
+      "archetype_id": "ice_brute",
+      "asset_id": "ice-brute-turnaround-r3",
+      "board_type": "eight_view_turnaround",
+      "candidate_path": "attempts/ice-brute-turnaround-r3.png",
+      "sha256": "a7b023222008b2200c1e143c9e6db0c997ae38fe2896a1e29dae151eb0f9a276",
+      "score": 8.9,
+      "status": "REPAIR_REQUIRED",
+      "all_mandatory_visual_checks_passed": false,
+      "checked_views_or_panels": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ],
+      "actual_full_sheet_inspected": true,
+      "closeup_evidence": [
+        "reviews/evidence/ice-brute-r3-front-feet.png"
+      ],
+      "findings": [
+        {
+          "severity": "mandatory",
+          "issue": "Front feet and front diagonals still show only four actual toe lobes/nails per foot; attempted toe repair did not satisfy five-toe lock.",
+          "repair": "Use correct five-toe closeup as geometry anchor for all full-body feet; retain appropriate opposite-foot anatomy and occlusion. Preserve already corrected hands and all other successful design features."
+        }
+      ],
+      "positive_evidence": [
+        "Previously corrected five-finger hands retained.",
+        "Eight-view framing, coherent full body, sculpted fur/ice and larger-boss silhouette retain favorable review."
+      ],
+      "static_scope_only": true
+    },
+    {
+      "archetype_id": "ice_brute",
+      "asset_id": "ice-brute-details-r1",
+      "board_type": "detail_and_use_state_board",
+      "candidate_path": "attempts/ice-brute-details-r1.png",
+      "sha256": "299bd46b6777d1c2340786bf7db3af87464157f665c51a4734cdab56a0425ae0",
+      "score": 8.9,
+      "status": "REPAIR_REQUIRED",
+      "all_mandatory_visual_checks_passed": false,
+      "checked_views_or_panels": [
+        "guard",
+        "slam_wind_up",
+        "recovery",
+        "face",
+        "hand_and_foot",
+        "game_camera"
+      ],
+      "actual_full_sheet_inspected": true,
+      "closeup_evidence": [
+        "reviews/evidence/ice-brute-details-r1-guard-feet.png",
+        "reviews/evidence/ice-brute-details-r1-correct-hand-foot-anchor.png"
+      ],
+      "findings": [
+        {
+          "severity": "mandatory",
+          "issue": "Hand & Foot closeup shows the correct five-toe design, but full-body Guard, Slam Wind-up, Recovery and Game Camera feet retain the conflicting four-toe form.",
+          "repair": "Use correct five-toe closeup as geometry anchor for all full-body feet; retain appropriate opposite-foot anatomy and occlusion. Preserve already corrected hands and all other successful design features."
+        }
+      ],
+      "positive_evidence": [
+        "Open palm clearly establishes thumb+four fingers.",
+        "Hand & Foot foot closeup correctly has five distinct toe lobes+nails and is useful as repair reference.",
+        "Same face, cream fur, blue-gray hands/feet and ice plates match turnaround; guard/wind-up/recovery poses retain connected limbs.",
+        "Game-camera comparison explicitly labels proposed scale and clearly communicates a larger boss without claiming native dimensions."
+      ],
+      "static_scope_only": true
+    }
+  ],
+  "summary": {
+    "approved_selected_boards": 4,
+    "required_selected_boards": 6,
+    "remaining_mandatory_visual_defect": "Five-toe foot consistency across both Ice Brute boards",
+    "package_or_github_approval": false
+  }
+}

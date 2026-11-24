@@ -1,0 +1,45 @@
+{
+  "reviewer_agent": "/root/turnaround_critic",
+  "evidence_type": "actual_original_video_sampled_sequence_not_complete_playback",
+  "source_video": {
+    "path": "/workspace/scratch/fc906e16b0fb/havenline-plot-reference-source/Media/Video-Misc/Screen_Recording_20260817_124510_YouTube.mp4",
+    "sha256": "4c9051cbea6df0efa3e7288b13b6d17da46e857274869b0b43d2f96ff6cc79d2"
+  },
+  "inspection_contact": {
+    "path": "/workspace/scratch/fc906e16b0fb/havenline-plot-renders/reviews/source-inspection/B-activation-sequence/sequence-contact.png",
+    "sha256": "1c887499344054d703acb9f2e6a2f55d277c0fdf973811cc35d9b0086d882ca9"
+  },
+  "sample_window_seconds": [
+    5,
+    8
+  ],
+  "sample_frequency_hz": 2,
+  "timestamp_caution": "Contact labels identify nominal half-second sampling bins; ffmpeg fps sampling does not establish exact transition boundaries.",
+  "observed_order": [
+    "Idle gray-brown flat build marker with white central build pictogram, log/material icon and reference-video cost.",
+    "Player approaches; logs transfer toward marker, marker shows green fill/green corner arcs while payment occurs.",
+    "Marker disappears; a small furnace/hearth appears.",
+    "Camp ground expands/clears around furnace, then palisade, resource storage mats and counter are present."
+  ],
+  "interpretation": "The green filled marker is an active material-spend/build interaction. The finished state is replacement/removal of the marker plus result context, not a permanent full green storage tile.",
+  "limits": [
+    "No canonical Havenline price, dwell timing, capacity, conversion recipe or runtime integration inferred.",
+    "Sequence supports a visible reference design state progression; exact build dependencies and all possible state transitions remain outside these sampled frames."
+  ],
+  "review_implication": "For build-state concepts, preserve distinct idle, payment-in-progress and completed-marker-removed meanings. Persistent completed green pads require explicit proposal labeling.",
+  "additional_sampled_sequences": [
+    {
+      "path": "/workspace/scratch/fc906e16b0fb/havenline-plot-renders/sources/A-paid-sequence.png",
+      "sha256": "29cc04eeffd3dfd92e6d2b8a9e87e2172bdc8f79a1781d64f47d67eb1afdde20",
+      "actual_pixels_inspected": true,
+      "observed": "Cash is collected from a black storage mat, carried to a separate brown upgrade marker; green payment is followed by construction glow and replacement of fishing rods with intake machinery. The work-area segmented outline is a distinct footprint."
+    },
+    {
+      "path": "/workspace/scratch/fc906e16b0fb/havenline-plot-renders/sources/B-upgrade-sequence.png",
+      "sha256": "41e8d97a042d35c2d7e7a441cecc50389431b1ca1f36b9da462496f964214039",
+      "actual_pixels_inspected": true,
+      "observed": "An expansion action changes camp/counter context; later the axe-plus marker shows green payment and completion glow, then remains/returns with a different displayed reference price. One-time marker removal cannot be generalized to repeatable upgrades."
+    }
+  ],
+  "differentiated_completion_rule": "One-time build/unlock markers can be removed/replaced by result context; repeatable upgrade markers can remain/return. State concepts must preserve this distinction and not imply every completed marker persists green or disappears."
+}

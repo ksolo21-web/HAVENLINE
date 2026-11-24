@@ -1,0 +1,39 @@
+name: Havenline T21-T32 Parallel Preparation
+
+on:
+  pull_request:
+    paths:
+      - 'Docs/Production/T12/**'
+      - 'Docs/Production/T21/**'
+      - 'Docs/Production/T22/**'
+      - 'Docs/Production/T23/**'
+      - 'Docs/Production/T24/**'
+      - 'Docs/Production/T25/**'
+      - 'Docs/Production/T26/**'
+      - 'Docs/Production/T27/**'
+      - 'Docs/Production/T28/**'
+      - 'Docs/Production/T29/**'
+      - 'Docs/Production/T30/**'
+      - 'Docs/Production/T31/**'
+      - 'Docs/Production/T32/**'
+      - 'Docs/Production/T21_T32_PARALLEL_PREP_MANIFEST.json'
+      - 'tools/havenline/t21_t32/**'
+      - '.github/workflows/havenline-t21-t32-preparation.yml'
+  workflow_dispatch:
+
+jobs:
+  validate-parallel-preparation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile preparation validators
+        run: |
+          python -m py_compile tools/havenline/t21_t32/prepare_activation.py
+          python -m py_compile tools/havenline/t21_t32/validate_t12_consumer_binding.py
+      - name: Validate T21-T32 preparation
+        run: python tools/havenline/t21_t32/prepare_activation.py --all
+      - name: Validate T32 current T12 consumer binding
+        run: python tools/havenline/t21_t32/validate_t12_consumer_binding.py

@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-24",
+  "reviewer": "/root/render_critic",
+  "independent": true,
+  "scope": "Horned snow beast static detail and supplementary anatomy retest",
+  "pass_threshold": 9.5,
+  "target_score": 10,
+  "all_mandatory_checks_required": true,
+  "items": [
+    {
+      "id": "horned-snow-beast-details-r1",
+      "source": {
+        "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/animal-builds/renders/horned-snow-beast-details-r1.png",
+        "sha256": "230590567d6e1375f466156a49b276648090888ef9a143408664c6ee47c1d7c2",
+        "bytes": 2167525,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "status": "REPAIR_REQUIRED",
+      "score": 8.9,
+      "actually_reviewed": [
+        "Full six-panel board",
+        "Hand and wrist closeup",
+        "Braced-swipe open palm",
+        "All other poses and foot closeup"
+      ],
+      "mandatory_checks": {
+        "same_beast_identity": "PASS",
+        "five_toe_feet": "PASS",
+        "five_hand_digits": "PASS",
+        "correct_palm_dorsal_surfaces": "FAIL",
+        "full_body_framing_and_pose_support": "PASS"
+      },
+      "findings": [
+        "Both hand closeup and extended swipe hand show nails on palm-facing surfaces, confirming the builder-identified surface error.",
+        "No additional confirmed defect was found in face/horns, feet/contact, alert/recovery or overall four-limb construction."
+      ],
+      "repair": "Correct only exposed palmar digit surfaces while preserving five digits, feet and other panels."
+    },
+    {
+      "id": "horned-snow-beast-anatomy-r2",
+      "source": {
+        "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/animal-builds/renders/horned-snow-beast-anatomy-r2.png",
+        "sha256": "a89cd34828ebd2971518c3fe352d815d6982272a05fe86498922a83af10c5087",
+        "bytes": 2062094,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "status": "PASS_SCOPED_REFERENCE",
+      "score": 9.7,
+      "required_sheet": false,
+      "retests": [
+        "horned-snow-beast-anatomy-r1"
+      ],
+      "actually_reviewed": [
+        "Full two-panel anatomy board",
+        "Five digit hand and palmar surfaces",
+        "Both five-toed feet and mirrored big toes"
+      ],
+      "mandatory_checks": {
+        "five_attached_hand_digits": "PASS",
+        "palmar_skin_pads_without_wrong_side_nails": "PASS",
+        "five_toes_each_foot": "PASS",
+        "mirrored_inner_big_toes": "PASS",
+        "dorsal_toenails_preserved": "PASS",
+        "framing_and_identity": "PASS"
+      },
+      "findings": [
+        "Four long fingers plus the thumb now show continuous palmar skin with no misplaced nail plates.",
+        "The two feet retain five separate toe/nail units and properly mirrored inner big toes.",
+        "Supplementary closeup reference only; it is not an additional required turnaround/detail sheet."
+      ],
+      "repairs_required": []
+    },
+    {
+      "id": "horned-snow-beast-details-r2",
+      "source": {
+        "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/animal-builds/renders/horned-snow-beast-details-r2.png",
+        "sha256": "224bc851fd6ec1dcf314bfa3363710c58bb1a3c7ef1cf14c3e29fb0055afebbe",
+        "bytes": 2159490,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.7,
+      "retests": [
+        "horned-snow-beast-details-r1"
+      ],
+      "actually_reviewed": [
+        "Full six-panel board",
+        "Corrected hand/wrist closeup",
+        "Corrected extended swipe hand",
+        "Both foot closeup and full-body feet",
+        "Face/horns, alert, braced swipe, recovery",
+        "Cross-sheet identity with approved turnaround r2"
+      ],
+      "mandatory_checks": {
+        "same_horned_beast_identity": "PASS",
+        "two_horns_face_fur_continuity": "PASS",
+        "five_attached_hand_digits": "PASS",
+        "correct_palmar_surfaces": "PASS",
+        "five_toed_feet": "PASS",
+        "four_continuous_limbs_static_support": "PASS",
+        "detail_and_action_coverage": "PASS",
+        "full_body_framing": "PASS",
+        "honest_static_interpretation": "PASS"
+      },
+      "findings": [
+        "Corrected open-palm closeup and extended swipe hand have five connected digits with continuous palmar pads/skin, without misplaced fingernails.",
+        "Closed-hand dorsal nails and five-toed feet remain appropriate; no new identity or contact regression was observed.",
+        "Face/horns, alert/recovery poses, foot contact and all full-figure borders remain coherent."
+      ],
+      "repairs_required": []
+    }
+  ],
+  "coverage_gate": "OPEN_PENDING_OTHER_FOUR_REQUIRED_SHEETS_AND_FINAL_MATRIX",
+  "animation_mesh_or_runtime_approval": false
+}

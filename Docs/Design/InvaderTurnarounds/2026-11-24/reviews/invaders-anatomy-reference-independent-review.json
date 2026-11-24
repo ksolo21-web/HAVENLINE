@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/render_critic",
+  "created_utc": "2026-11-24T10:20:41.307076+00:00",
+  "scope": "Supplementary static frontal anatomy reference only; not an eight-angle or detail/action-board replacement",
+  "approval_threshold": {
+    "minimum_score": 9.5,
+    "all_mandatory_checks_must_pass": true,
+    "target": 10
+  },
+  "entries": [
+    {
+      "archetype_id": "ice_brute",
+      "asset_id": "ice-brute-anatomy-reference-r1",
+      "board_type": "supplementary_front_anatomy_reference",
+      "candidate_path": "attempts/ice-brute-anatomy-reference-r1.png",
+      "sha256": "9c29b9142f3b32bf3aa8955c84bb91736c318a1c37910dd2f5dff959d9cfbade",
+      "score": 9.8,
+      "status": "PASS_SUPPLEMENTARY_REFERENCE",
+      "all_mandatory_checks_for_this_reference_passed": true,
+      "actual_full_sheet_inspected": true,
+      "checked_views_or_panels": [
+        "front full body",
+        "both feet closeup",
+        "both hands closeup"
+      ],
+      "closeup_evidence": [
+        "reviews/evidence/ice-brute-anatomy-reference-r1-feet.png",
+        "reviews/evidence/ice-brute-anatomy-reference-r1-hands.png"
+      ],
+      "positive_evidence": [
+        "Exactly five connected toe lobes with five nails on each fully exposed front foot.",
+        "Large medial big toe positions are correctly mirrored on opposite feet.",
+        "Each hand has a thumb plus four connected fingers; the outer little finger is partially occluded behind its ring finger, with a distinct contour visible.",
+        "Face, cream sculpted fur, blue-gray skin, cyan forehead/shoulder/forearm plates retain established boss identity.",
+        "Whole silhouette is framed without clipping and the reference is explicitly labeled anatomy reference."
+      ],
+      "limitations": [
+        "Only one frontal camera view; no multi-angle approval.",
+        "Does not approve the two required Ice Brute boards, whose new renders remain pending.",
+        "Static PNG reference only; no mesh, rig, runtime, scale or motion validation."
+      ]
+    }
+  ],
+  "summary": {
+    "approved_required_selected_boards": 4,
+    "required_selected_boards": 6,
+    "approved_supplementary_images": 1,
+    "remaining": "Rebuild and independently inspect Ice Brute eight-angle and detail/action boards from this correct anatomy.",
+    "package_or_github_approval": false
+  }
+}

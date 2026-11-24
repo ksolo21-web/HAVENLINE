@@ -1,0 +1,27 @@
+name: Havenline T13-T70 Prepared Stack Audit
+
+on:
+  pull_request:
+    paths:
+      - 'Docs/Production/T1[3-9]/**'
+      - 'Docs/Production/T[2-6][0-9]/**'
+      - 'Docs/Production/T70/**'
+      - 'Docs/Production/T44_T52_T12_CONSUMER_BINDINGS.json'
+      - 'Docs/Production/T*_PARALLEL_PREP_MANIFEST.json'
+      - 'Docs/Production/T62_T70_RELEASE_PREP_MANIFEST.json'
+      - 'tools/havenline/**'
+      - '.github/workflows/havenline-prepared-stack-audit.yml'
+  workflow_dispatch:
+
+jobs:
+  audit-prepared-stack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile cross-wave auditor
+        run: python -m py_compile tools/havenline/prepared_stack/audit_t13_t70.py
+      - name: Audit T13-T70 prepared stack
+        run: python tools/havenline/prepared_stack/audit_t13_t70.py

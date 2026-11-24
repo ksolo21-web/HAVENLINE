@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "consumer_task": "T32",
+  "contract_path": "Docs/Production/T12/DOWNSTREAM_CONSUMER_CONTRACT.json",
+  "prepared_contract_git_blob_sha": "46d8c6c265f7c17922ec9fdc8a9c52ef924b0882",
+  "may_read": ["current_level_id", "unlockable_level_ids", "current_region_band_id", "progression_intents"],
+  "owned_band": "band_opening_frozen",
+  "owned_levels": [1, 10],
+  "boundary": "T12 owns topology/hooks only; T32 authors/integrates the opening region and its concrete gameplay/content.",
+  "activation_rule": "Fail closed if the current T12 downstream consumer contract blob or T32 consumer row differs; reconcile through a structured interface/change request before activation."
+}

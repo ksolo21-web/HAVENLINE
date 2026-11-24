@@ -1,0 +1,36 @@
+name: Havenline T62-T70 Final Acceptance Preparation
+
+on:
+  pull_request:
+    paths:
+      - 'Docs/Production/T12/**'
+      - 'Docs/Production/T62/**'
+      - 'Docs/Production/T63/**'
+      - 'Docs/Production/T64/**'
+      - 'Docs/Production/T65/**'
+      - 'Docs/Production/T66/**'
+      - 'Docs/Production/T67/**'
+      - 'Docs/Production/T68/**'
+      - 'Docs/Production/T69/**'
+      - 'Docs/Production/T70/**'
+      - 'Docs/Production/T62_T70_RELEASE_PREP_MANIFEST.json'
+      - 'tools/havenline/t62_t70/**'
+      - '.github/workflows/havenline-t62-t70-preparation.yml'
+  workflow_dispatch:
+
+jobs:
+  validate-final-preparation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile preparation validators
+        run: |
+          python -m py_compile tools/havenline/t62_t70/prepare_activation.py
+          python -m py_compile tools/havenline/t62_t70/validate_t12_consumer_binding.py
+      - name: Validate T62-T70 preparation
+        run: python tools/havenline/t62_t70/prepare_activation.py --all
+      - name: Validate T62 current T12 consumer binding
+        run: python tools/havenline/t62_t70/validate_t12_consumer_binding.py

@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "task_id": "T05",
+  "audit_type": "POST_COMPLETION_VISUAL_AUDIT",
+  "date": "2026-09-26",
+  "result": "REPAIR_REQUIRED",
+  "historical_accepted_source": "fa6fa70f154f3757d22303522ca3f6de2c3d391f",
+  "audited_integration_head": "ff7c67285a67dc69a3bd97b207a9e61929e1e3c9",
+  "exact_owned_source_bytes_unchanged": {
+    "HavenlineGodot/scripts/station_kit.gd": true,
+    "HavenlineGodot/tests/test_task05_station_kit.gd": true,
+    "HavenlineGodot/tests/capture_task05_station_kit.gd": true,
+    "HavenlineGodot/assets/stations_v2/catalog.json": true
+  },
+  "evidence": {
+    "run": 34824259431,
+    "artifact_id": 10339801250,
+    "source_bound_images": 77
+  },
+  "machine_contract_disposition": "PRESERVE",
+  "visual_disposition": "REOPEN",
+  "primitive_runtime_disposition": "No Godot built-in primitive runtime dependency is required by T05; the failure is visual: custom-authored generated meshes still read as blockout primitives.",
+  "approved_reference_language": [
+    "chunky sculpted mobile-readable silhouettes",
+    "warm carved timber with visible construction hierarchy",
+    "dark blue-gray metal plates, brackets and rivets",
+    "orange/yellow heat and machinery accents",
+    "thick irregular snow accumulation integrated with silhouettes",
+    "purpose-specific mechanical subassemblies instead of generic boxes/cylinders",
+    "faceted stone/ore/crystal resources with snow contact",
+    "rope-bound logs with bark and cut ends",
+    "framed resource bins and constructed storage platforms",
+    "bundled physical money/currency stacks rather than flat tokens",
+    "physical camp pads/tiles instead of floating UI-like markers"
+  ],
+  "open_defects": [
+    "T05-D10",
+    "T05-D11",
+    "T05-D12",
+    "T05-D13"
+  ],
+  "repair_branch": "havenline/T05-visual-repair-20260926",
+  "first_repair_batch": [
+    "T05-R01",
+    "T05-R07"
+  ],
+  "next_action": "Rebuild hearth/furnace and resource-prop families first; render exact source-bound close/detail/gameplay views; do not touch gameplay, sockets, footprints, T03 authority or T04 camera."
+}

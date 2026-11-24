@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "task_id": "T11",
+  "task_name": "Camp construction and visual upgrade system",
+  "prepared_source": "fbb81ae34b9053f17fc937fb7e67895e3ef0584b",
+  "v32_architecture_start_head": "c35aac981dca87743cacb85e9d83539e6c7a03d5",
+  "builder_branch": "havenline/T11-camp-construction",
+  "builder_branch_cut_source": "fbb81ae34b9053f17fc937fb7e67895e3ef0584b",
+  "registry_historical_base_commit": "87a4346eb33473c3723c7b7c1bbf1dd04dba9131",
+  "dependencies": {
+    "T05": "fa6fa70f154f3757d22303522ca3f6de2c3d391f",
+    "T10": "eba0107def258824549fb10d81785290d0c81d97"
+  },
+  "ownership_alias": "@reservation:T11",
+  "required_critics": [
+    "C2",
+    "C3",
+    "C4",
+    "C6"
+  ],
+  "assignment_requirements": [
+    "T05 and T10 remain APPROVED on the exact authority used for assignment",
+    "builder branch is the prepared T11 branch and contains the T11 packet/scope",
+    "V3.2 ASSIGNED graduation gate passes",
+    "no runtime construction before a GRADUATION.json binds sentinel, focused tests, checkpoint and critic-package preflight"
+  ],
+  "stale_base_policy": {
+    "governance_only_drift": "may reconcile without resetting runtime work when existing V3 workstream policy classifies it governance-only",
+    "runtime_or_contract_drift": "must reconcile before build/integration and rerun impacted proof"
+  },
+  "quality_rule": {
+    "operator": ">",
+    "threshold": 9,
+    "unrounded": true,
+    "target": 10,
+    "zero_unresolved_mandatory_defects": true
+  },
+  "gameplay_runtime_modified_by_this_checklist": false
+}

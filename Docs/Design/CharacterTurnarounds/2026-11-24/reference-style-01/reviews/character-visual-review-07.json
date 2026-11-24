@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/render_critic",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-24T15:50:02.344327+00:00",
+  "scope": "One v2 cardinal sheet only. Complete set still requires four diagonals and four hand sheets.",
+  "requirements_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/requirements-v2.json",
+  "requirements_sha256": "a5253f143633b6b60e99ab527d562a5f33c657f88d772349c366a774becebadf",
+  "entries": [
+    {
+      "slot_id": "character-1-cardinal",
+      "subject_id": "character-1",
+      "sheet_type": "cardinal",
+      "revision": "r2",
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/renders/character-1-cardinal-r2.png",
+      "sha256": "345c20433f45654de02fd89ef7f537e9edabd214ee48f3af970fdada4e265dd1",
+      "bytes": 1718172,
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "status": "PASS",
+      "score": 9.7,
+      "mandatory_visual_checks_passed": true,
+      "reviewed_angles": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "actual_full_sheet_inspected": true,
+      "reference_paths": [
+        "/workspace/scratch/9c51da47f878/upload/1795533885648.png",
+        "/workspace/scratch/9c51da47f878/havenline-character-style-360/renders/character-1-cardinal-r1.png"
+      ],
+      "reference_sha256": [
+        "2a364995e105e8ceebad7b5c80db753f8220e1bce697b1405ae3a4afe02aaf13",
+        "d7f83c1caa289fb54378a83896f1e435499f49b4a258c6a1baaae50af867f2eb"
+      ],
+      "crop_provenance_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/reviews/evidence/character-1-cardinal-r2-crop-provenance.json",
+      "actual_crops_inspected": [
+        "front-right-hand",
+        "front-left-hand",
+        "rear-left-hand",
+        "rear-right-hand",
+        "left-profile-hand",
+        "right-profile-hand"
+      ],
+      "checks": [
+        {
+          "id": "style_identity_outfit",
+          "status": "PASS",
+          "score": 9.8,
+          "finding": "Full revised sheet compared with actual user reference and r1: tight curls/glasses/trimmed beard, adult proportions, detailed navy/orange coat/cream fleece/brown leather and gray studio remain coherent. No pack, harness, belt or added gear. Rear plain coat/down hood and original cargo/knee-pad/boot design retained."
+        },
+        {
+          "id": "ordered_cardinals_pose",
+          "status": "PASS",
+          "score": 9.8,
+          "finding": "Correct true front/left/back/right views, aligned head/torso, level T-pose and flat boots. Profile hands rotate with torso instead of facing each camera independently."
+        },
+        {
+          "id": "explicit_digits_and_gaps",
+          "status": "PASS",
+          "score": 9.7,
+          "finding": "Actual front/rear closeups each show four separate fingers plus thumb with visible gaps, continuous palm and cuff, natural length hierarchy and upward thumbs. No missing/extra/fused digit silhouettes."
+        },
+        {
+          "id": "palmar_dorsal_glove_continuity",
+          "status": "PASS",
+          "score": 9.7,
+          "finding": "Front brown gloves show palm padding; rear gloves show dorsal stitched lines. Opposed profile closeups preserve matching glove material and five-digit anatomy with expected foreshortening."
+        },
+        {
+          "id": "framing_scale_readability",
+          "status": "PASS",
+          "score": 9.7,
+          "finding": "All splayed fingertips/boots/body inside frames, consistent scale and clear captions. Actual native1254x1254 recorded; requested2048 was not returned, no upscaling or native2048 claim."
+        }
+      ],
+      "required_repairs": [],
+      "pair_consistency_status": "PENDING_DIAGONAL_AND_HAND_SHEETS"
+    }
+  ],
+  "native_mesh_rig_animation_runtime_approval": false
+}

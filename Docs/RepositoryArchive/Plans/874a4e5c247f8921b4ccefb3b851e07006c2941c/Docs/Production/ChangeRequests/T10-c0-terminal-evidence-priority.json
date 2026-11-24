@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "task_id": "T10",
+  "blockers": [
+    "C0-T10-B060",
+    "C0-T10-B061"
+  ],
+  "status": "AUTHORIZED",
+  "authorization": "Authorize the bounded T10 C0 terminal-evidence priority repair.",
+  "purpose": "Ensure C0 receives the strongest exact terminal artifact evidence before expected-negative or successful artifact prose, and exclude C0's own diagnostic job steps from the failed subject-job execution model.",
+  "authorized_paths": [
+    "tools/havenline/production/collect_artifact_diagnostics.py",
+    "tools/havenline/production/c0_root_cause_advisor.py",
+    ".github/workflows/havenline-c0-root-cause.yml",
+    "tools/havenline/production/tests/test_c0_builder.py",
+    "tools/havenline/production/validate_architecture_v32_t10.py",
+    "tools/havenline/production/tests/test_architecture_release_lock.py",
+    "Docs/Production/ChangeRequests/T10-c0-terminal-evidence-priority.json"
+  ],
+  "required_behavior": [
+    "Hard terminal ERROR/FATAL/Traceback/assertion/explicit passed=false artifact excerpts outrank expected-negative and successful test prose under the existing bounded request budget.",
+    "C0's own reusable diagnostic job is excluded from subject steps and subject unexecuted_checks.",
+    "The exact source-path, line, source-hash and SOURCE | EXACT_QUOTE grounding requirements remain unchanged.",
+    "A failed workflow step stopping downstream work is not sufficient evidence for INFRASTRUCTURE_FAILURE.",
+    "When specific causal terminal evidence is unavailable, C0 must prefer INSUFFICIENT_EVIDENCE over guessing."
+  ],
+  "forbidden_changes": [
+    "No C1-C11 threshold changes.",
+    "No gameplay approval authority.",
+    "No increase to C0 context or completion token budgets.",
+    "No weakening of exact quotation or repository-path grounding.",
+    "No product/runtime changes.",
+    "No treating C0 diagnostic steps as subject validation."
+  ]
+}

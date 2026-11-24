@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-24",
+  "reviewer": "/root/render_critic",
+  "independent": true,
+  "scope": "Individual static board and scoped repair references only",
+  "pass_threshold": 9.5,
+  "target_score": 10,
+  "all_mandatory_checks_required": true,
+  "items": [
+    {
+      "id": "tundra-stag-details-r1",
+      "source": {
+        "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/animal-builds/renders/tundra-stag-details-r1.png",
+        "sha256": "f3634b1dcb4394cee3092baa6572c5f783c31209c663717060e76bd8aa9ac6af",
+        "bytes": 1864806,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.7,
+      "actually_reviewed": [
+        "Full six-panel board",
+        "Head/antlers, coat and cloven-hoof closeups",
+        "Watchful, turning-step and settled-reset whole-body poses",
+        "Cross-sheet identity against approved turnaround"
+      ],
+      "mandatory_checks": {
+        "same_pale_stag_identity": "PASS",
+        "stable_antler_attachment": "PASS",
+        "stable_coat_and_tail": "PASS",
+        "four_continuous_limbs": "PASS",
+        "cloven_hooves_and_static_contact": "PASS",
+        "six_panel_coverage": "PASS",
+        "full_figure_framing": "PASS",
+        "truthful_static_scope": "PASS"
+      },
+      "findings": [
+        "Turning step exposes one raised foreleg with three grounded support feet; no duplicate leg or joint discontinuity was observed.",
+        "Dark antlers, lean pale body and cloven feet match the turnaround. Closeup cropping is appropriate to the labeled details.",
+        "No camp-invader or verified motion claim is made."
+      ],
+      "repairs_required": []
+    },
+    {
+      "id": "polar-bear-swipe-isolated-r4",
+      "source": {
+        "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/repair-builds/renders/polar-bear-swipe-isolated-r4.png",
+        "sha256": "567a895002515e4e5beaff4b6e5b930fb5cdd55928838f149725dc01d5fa9e88",
+        "bytes": 1813284,
+        "dimensions": [
+          1086,
+          1448
+        ]
+      },
+      "status": "PASS_SCOPED_REFERENCE",
+      "score": 9.7,
+      "required_sheet": false,
+      "actually_reviewed": [
+        "Full isolated reared-pose image",
+        "Raised-paw enlargement"
+      ],
+      "mandatory_checks": {
+        "same_polar_bear_identity": "PASS",
+        "five_visible_toe_pads_on_exposed_palm": "PASS",
+        "five_claws_present_with_one_partial_overlap": "PASS",
+        "five_claws_on_each_grounded_hind_paw": "PASS",
+        "four_connected_limbs_and_static_support": "PASS",
+        "framing": "PASS"
+      },
+      "findings": [
+        "Five distinct toe pads plus a sole pad are unambiguous. The fifth claw sits partly behind the adjacent toe but is visibly present. This is ordinary geometric overlap.",
+        "Both grounded hind paws have five separate connected claws. The curled other paw has natural curl/fur overlap rather than an exposed contradictory four-pad palm.",
+        "Approved for compositing the REAR & SWIPE pose only; final six-panel sheet requires a separate full-sheet regression review."
+      ],
+      "inspection_crops": [
+        {
+          "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/repair-builds/evidence/polar-bear-swipe-isolated-r4-raised-paw.png",
+          "source_sha256": "567a895002515e4e5beaff4b6e5b930fb5cdd55928838f149725dc01d5fa9e88",
+          "crop_box_ltrb": [
+            797,
+            119,
+            1043,
+            332
+          ],
+          "resize_scale": 2,
+          "resampling": "not reported",
+          "metadata_provider": "/root/behind_panel_recall"
+        }
+      ],
+      "repairs_required": []
+    },
+    {
+      "id": "horned-snow-beast-anatomy-r1",
+      "source": {
+        "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/animal-builds/renders/horned-snow-beast-anatomy-r1.png",
+        "sha256": "de00baa9fc1feb594eeddea3d431bbdd63f267d9b82f5a8a0c6f0297f56c5948",
+        "bytes": 2076324,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "status": "REPAIR_REQUIRED",
+      "score": 8.9,
+      "required_sheet": false,
+      "actually_reviewed": [
+        "Full two-panel anatomy reference",
+        "Open hand digits and palm/dorsal surfaces",
+        "Both feet digit counts"
+      ],
+      "mandatory_checks": {
+        "five_connected_hand_digits": "PASS",
+        "five_toes_on_each_foot": "PASS",
+        "mirrored_inner_big_toe_placement": "PASS",
+        "correct_palm_dorsal_anatomy": "FAIL",
+        "style_and_framing": "PASS"
+      },
+      "findings": [
+        "Digit counts are correct: four long fingers plus side thumb; five toes with mirrored inner big toes on each foot.",
+        "The hand displays palmar/thenar creases but broad fingernails on the palm-facing surfaces of four extended fingers. Their shown surface orientation is inconsistent.",
+        "The correctly constructed feet region can guide the required turnaround repair without propagating the hand error."
+      ],
+      "repair": "Keep five hand digits and the correct feet. Change the hand to a clear open palm with finger pads and nails hidden or only naturally edge-visible, or a genuinely dorsal hand without palm creases."
+    }
+  ],
+  "coverage_gate": "OPEN; supplementary references do not count toward 18 required sheets.",
+  "animation_mesh_or_runtime_approval": false
+}

@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "task_id": "T03",
+  "repair_family": "whole_frame_reference_fidelity_violation",
+  "status": "ITERATION_5_IMPLEMENTED_PENDING_ENGINE_CAPTURE_AND_USER_SIGNOFF",
+  "root_cause": "T03 depended on environment_v2 barricade/lantern assets whose manifest explicitly marks production_visual_approval=false; oversized gate-post scaling and dirty grey lane treatment amplified the mismatch.",
+  "preserves": [
+    "T02 accepted terrain/snow/water/work-floor outside the T03 lane mask",
+    "T03 gate widths",
+    "T03 collision panel authority",
+    "T03 six-gate topology",
+    "T03 river crossing reserves",
+    "T03 route network",
+    "save/navigation deterministic proof"
+  ],
+  "changes": [
+    "Remove timber geometry from the crown entirely so snow owns the full upper collar and point.",
+    "Shift fence/post timber toward the reference's pale warm salmon-brown.",
+    "Reduce material micro-contrast so the fence reads clean and sculpted at gameplay scale.",
+    "Keep tiny threshold warmth insets only.",
+    "Preserve T02 and all T03 route/collision geometry unchanged."
+  ],
+  "must_not_change": [
+    "HavenlineGodot/scripts/camp_boundary.gd geometry constants",
+    "HavenlineGodot/scripts/river_geometry.gd",
+    "T01 forest assets",
+    "T02 topology/water authority"
+  ],
+  "required_next_evidence": [
+    "Godot import/build pass",
+    "T03 mechanical regression",
+    "primitive/material audit zero findings",
+    "multi-angle gate/fence closeups",
+    "normal gameplay whole-frame capture",
+    "native 3840x2160 scale-1 captures",
+    "fresh C1/C2/C6 after visual preflight",
+    "explicit user visual signoff"
+  ],
+  "approval": false,
+  "review_repair_iteration": 5,
+  "iteration_1_disposition": "REJECTED_BY_INTERNAL_REFERENCE_REVIEW",
+  "iteration_1_findings": [
+    "Fence read as round log barricades rather than the reference's dense pointed palisade.",
+    "Large round snow caps read as marshmallow discs instead of thin pointed frosting.",
+    "Hanging blue/orange lantern assemblies were too industrial and visually dominant.",
+    "T03 lane tint remained broader/darker than the clean T02 work-floor treatment."
+  ],
+  "iteration_2_disposition": "REJECTED_BY_INTERNAL_REFERENCE_REVIEW",
+  "iteration_2_findings": [
+    "Palisade silhouette was much closer, but snow frosting covered too little of the pointed crown.",
+    "Picket gaps remained wider than the reference.",
+    "Rear rails were too dark/thick and competed with the vertical fence rhythm.",
+    "Gate markers still read as dark square boxes rather than quiet integrated threshold details."
+  ],
+  "iteration_3_disposition": "REJECTED_BY_INTERNAL_REFERENCE_REVIEW",
+  "iteration_3_findings": [
+    "Snow crown intersected the brown picket point and rendered as a white outline around a brown triangle.",
+    "Gate-post dark bands visually merged into a black block at gameplay scale.",
+    "Two visible rear rails still competed with the reference's vertical palisade rhythm."
+  ],
+  "iteration_4_disposition": "REJECTED_BY_INTERNAL_REFERENCE_REVIEW",
+  "iteration_4_findings": [
+    "Exact-source closeups showed a brown stripe cutting through the intended snow crown.",
+    "Fence timber remained more saturated orange than the pale salmon/brown reference fence.",
+    "Gate threshold warmth was acceptable but should stay even quieter."
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-24T11:26:23.151066+00:00",
+  "reviewer": "/root/render_critic",
+  "scope": "Publication package cryptographic review/input bindings only",
+  "verdict": "REPAIR_REQUIRED_PACKAGE_BINDINGS",
+  "score": 8.0,
+  "mandatory_checks": {
+    "artwork_and_prompt_bytes": "PASS_FROM_FREEZE_AND_ROOT_PACKAGE_CHECK",
+    "exact_frozen_review_input_bindings": "FAIL_IN_TRANSLATED_PACKAGE",
+    "retained_artwork_preservation": "NOT_CHANGED_BY_THIS_FINDING"
+  },
+  "observed_defect": "Path translation produced different document bytes while the matrix/audits continued naming original SHA256 values. A hash pair in a provenance table does not itself preserve the original hashed input bytes.",
+  "original_observation_examples": [
+    {
+      "path": "coverage-matrix.json",
+      "original": "8da0908545fa561e3aad93bb47e880bb997b8da05471d017bfb3776d3a41b6b6",
+      "translated": "7533c0ebad88c27dac1afe8b62ce912218c683ef9ff04e862a044db2dd17387c"
+    },
+    {
+      "path": "final-freeze.json",
+      "original": "d51433826eebd3c8ade67daa822136b2a6dad1591bc73fed31275c710aee1198",
+      "translated": "22619889a5a5653efafc21a787588169c8f0e6ea9b3f70f4ecf67c2834e2f43f"
+    },
+    {
+      "path": "reviews/expansion-visual-review-09.json",
+      "original": "909147413e999712d99e16481b979f88b61dc49f19c3d1c86022eb76de899e04",
+      "translated": "b156de6a1fb7b3e309daf2190c57d8a82dbeb4e833db3ff7eee54c647a2c1fda"
+    }
+  ],
+  "concurrent_repair_snapshot": [
+    {
+      "path": "coverage-matrix.json",
+      "bound_original_sha256": "8da0908545fa561e3aad93bb47e880bb997b8da05471d017bfb3776d3a41b6b6",
+      "package_sha256_at_read": "8da0908545fa561e3aad93bb47e880bb997b8da05471d017bfb3776d3a41b6b6",
+      "byte_equal_at_read": true
+    },
+    {
+      "path": "final-freeze.json",
+      "bound_original_sha256": "d51433826eebd3c8ade67daa822136b2a6dad1591bc73fed31275c710aee1198",
+      "package_sha256_at_read": "d51433826eebd3c8ade67daa822136b2a6dad1591bc73fed31275c710aee1198",
+      "byte_equal_at_read": true
+    },
+    {
+      "path": "reviews/expansion-visual-review-09.json",
+      "bound_original_sha256": "909147413e999712d99e16481b979f88b61dc49f19c3d1c86022eb76de899e04",
+      "package_sha256_at_read": "909147413e999712d99e16481b979f88b61dc49f19c3d1c86022eb76de899e04",
+      "byte_equal_at_read": true
+    }
+  ],
+  "retained_old_review_inputs_needing_new_exact_snapshots": [
+    "invaders-turnaround-r1-independent-review.json",
+    "invaders-retest-02-independent-review.json",
+    "invaders-retest-03-independent-review.json",
+    "invaders-retest-06-independent-review.json",
+    "invaders-retest-08-independent-review.json",
+    "latest-independent-status.json"
+  ],
+  "required_fix": "Preserve exact frozen originals at their canonical new paths; keep navigation in derived portable indexes/README. Add old bound raw-input snapshots under the new prefix plus an explicit original-hash-to-archive-path resolver; leave previous archive files unchanged. Retest the concrete packaged bytes and references before publication.",
+  "visual_and_bounded_coverage_approvals": "Preserved; no image or source-mapping defect found by this package review."
+}

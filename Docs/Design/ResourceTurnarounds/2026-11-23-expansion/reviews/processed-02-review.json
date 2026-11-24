@@ -1,0 +1,94 @@
+{
+  "reviewer_agent": "/root/turnaround_critic",
+  "contract_version": "2026-11-23-expansion-v1",
+  "batch": "processed-02",
+  "iteration": 1,
+  "assets": [
+    {
+      "asset": "cooked_game_meat",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-da634901-ef35-45d2-815f-68c03b70be9a.png",
+      "sha256": "9e18c914d25135cac8bb574d462bc627ee21102cae844cd77dfe10567c6eab33",
+      "bytes": 1767320,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "score": 9.4,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "source_classification": "proposed_equipment_output_visual_state",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "evidence": [
+        "One bone nub, three broad sears and one amber front patch remain stable.",
+        "Full taper/bone-end orbit is coherent.",
+        "Roasted brown state clearly differs from raw red cuts."
+      ],
+      "issues": [],
+      "blocking_defects": [],
+      "minor_disposition": "Illustrative materials and projected dimensions are accepted only within concept-image scope; exact recipes and native meshes are unverified."
+    },
+    {
+      "asset": "dried_meat",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-0421cc24-f14b-487b-936f-0ae56466aee9.png",
+      "sha256": "3afb830bf28725de6d5265b9675d6f9fe9dec1cc8770eace80812ef4498424da",
+      "bytes": 1658280,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "score": 9.2,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "source_classification": "proposed_equipment_output_visual_state",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "evidence": [
+        "Three flat irregular strips, one binding and one top-strip notch stay consistent.",
+        "Eight views include opposite short ends and correct diagonal sequence.",
+        "Mahogany leathery surface and thinner irregular edges distinguish it from timber boards."
+      ],
+      "issues": [],
+      "blocking_defects": [],
+      "minor_disposition": "Illustrative materials and projected dimensions are accepted only within concept-image scope; exact recipes and native meshes are unverified."
+    },
+    {
+      "asset": "prepared_fish_fillet",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-c60de7a4-8cee-42bf-9509-9dfd4eb763a0.png",
+      "sha256": "267f0e9a5fe1886393222e5d95bc7c860261426bf7a7055464b6609b97d18c4e",
+      "bytes": 1628513,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "score": 7.8,
+      "verdict": "FAIL",
+      "source_classification": "proposed_equipment_output_visual_state",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "evidence": [
+        "Cardinal tip and cut-end views are correct.",
+        "Four cream muscle bands confirmed in enlarged right-view inspection crop.",
+        "Peach flesh and thin blue skin clearly identify prepared fish."
+      ],
+      "issues": [
+        {
+          "severity": "blocking",
+          "panel": "FRONT RIGHT45\u00b0 and REAR RIGHT135\u00b0",
+          "issue": "Both show the broad cut end toward viewer; they should be tipward views.",
+          "fix": "45\u00b0: tip near lower right and cut end far upper left/mostly occluded.135\u00b0: tip near lower left and cut end far upper right/mostly occluded. Preserve other views and four bands."
+        }
+      ],
+      "blocking_defects": [
+        {
+          "severity": "blocking",
+          "panel": "FRONT RIGHT45\u00b0 and REAR RIGHT135\u00b0",
+          "issue": "Both show the broad cut end toward viewer; they should be tipward views.",
+          "fix": "45\u00b0: tip near lower right and cut end far upper left/mostly occluded.135\u00b0: tip near lower left and cut end far upper right/mostly occluded. Preserve other views and four bands."
+        }
+      ],
+      "minor_disposition": "Illustrative materials and projected dimensions are accepted only within concept-image scope; exact recipes and native meshes are unverified."
+    }
+  ],
+  "inspection_crop": "inspection-crops/prepared-fish-right-90-inspection.png",
+  "gate": "Strictly above 9.0 and all mandatory concept-image checks passed.",
+  "set_status": "10 of 20 expansion sheets passed; two repairs pending; eight unreviewed."
+}

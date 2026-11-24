@@ -1,0 +1,94 @@
+{
+  "reviewer_agent": "/root/turnaround_critic",
+  "contract_version": "2026-11-23-plots-v1",
+  "contract_sha256": "c4ef53e38335f159aa23f1bbb5317b06fe0e402a9fca869229a5910600138498",
+  "batch": "root-final-retests",
+  "iteration": 2,
+  "assets": [
+    {
+      "asset": "activation_work_zone",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-a501712e-5f57-4ab3-b54f-0d793c986791.png",
+      "score": 9.3,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "evidence": [
+        "90/270 scale now coherent with front/diagonal footprint, roughly 170-pixel near-square projection.",
+        "All eight retain exactly twelve green outline pieces and unfilled interior.",
+        "45/225 and 135/315 diagonal pairs remain correct; source-style flatness and no-cost presentation retained."
+      ],
+      "blocking_defects": [],
+      "minor_disposition": "Natural 180-degree symmetry is expected. Small projection variation does not constitute a native camera calibration claim.",
+      "sha256": "14d9b0b2ad407a1b2acf685b33d5c4d1aaf3ec272fcca82fcd651ce3d059441d",
+      "bytes": 1591183,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "reference_derived_visual_concept",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ]
+    },
+    {
+      "asset": "purchase_activation_states",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-066ef579-1972-4989-9249-0e1b9bc63589.png",
+      "score": 9.5,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "format": "2_by_3_state_plate",
+      "view_count": 0,
+      "panel_count": 6,
+      "evidence": [
+        "All five markers are now flat printed ground graphics without slab thickness, raised symbols or physical cost token.",
+        "One-time build retains idle 200 wood, partial active green with 200 unchanged, then marker removed and source-like hearth installed.",
+        "Repeatable axe retains available $100, active payment, next available $200; no universal completed checkmark marker.",
+        "Six-panel labels and reference-cost/illustrated-state boundary preserved."
+      ],
+      "blocking_defects": [],
+      "minor_disposition": "Static source-derived state examples only; no motion, duration, canonical economy or runtime integration certified.",
+      "sha256": "6cacd01472639d14417ac3cbb685c76d46f50909fa37bb79a615c4f11ebbf687",
+      "bytes": 1721704,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "source_status": "reference_derived_state_concept",
+      "actual_full_sheet_inspected": true
+    },
+    {
+      "asset": "storage_use_states",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-d946b7c3-0d23-4fd5-896c-e5c428938dfd.png",
+      "score": 9.5,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "format": "3_by_3_state_plate",
+      "view_count": 0,
+      "panel_count": 9,
+      "evidence": [
+        "Empty meat is now flat painted color with no raised rim or cast shadow.",
+        "Empty wood cut-end points near/bottom, aligned with accepted front master.",
+        "Other seven panels unchanged: same pad families, wood one/three logs, meat two/six portions, cash one/three visible banded stacks.",
+        "All nine labels and no-capacity qualifier clear; centered glyphs naturally occluded beneath physical stock."
+      ],
+      "blocking_defects": [],
+      "minor_disposition": "Stock amounts are visual examples; no maximum capacity, inventory unit or transformation timing implied.",
+      "sha256": "6a2f890ead04a196af104355dd8e942b97cbdef39bd071e45e5982dd08989ee6",
+      "bytes": 1683841,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "source_status": "reference_derived_state_concept",
+      "actual_full_sheet_inspected": true
+    }
+  ],
+  "gate": "PASS requires score strictly above 9.0 with all mandatory concept-image checks passed. Unseen or failed evidence remains blocked."
+}

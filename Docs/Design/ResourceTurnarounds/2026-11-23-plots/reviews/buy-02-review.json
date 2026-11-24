@@ -1,0 +1,149 @@
+{
+  "batch": "buy-02",
+  "iteration": 1,
+  "assets": [
+    {
+      "asset": "buy_worker_action",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-bac37b4d-06f5-40a1-8769-59395c749048.png",
+      "sha256": "0b33bd41bdf4ceb2d7d8f32d3b89bd4aa2d89b7d66093dda60c822e588cd5543",
+      "bytes": 1578208,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "reference_derived_visual_concept",
+      "score": 7.6,
+      "verdict": "FAIL",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ],
+      "evidence": [
+        "Observed worker/processing glyph matches actual source crop; no hire-function claim.",
+        "Four separated white corners, flat brown field, source160 and visible reference-price qualification pass.",
+        "Central worker glyph and other7price positions rotate coherently."
+      ],
+      "blocking_defects": [
+        {
+          "requirement": "R6",
+          "panel": "REAR RIGHT135",
+          "issue": "Price-strip edge is correct but reading direction is reversed180degrees. Currency/material badge is at lower-left rather than top/right end.",
+          "fix": "Rotate entire strip180degrees within current far upper-left edge. Badge toward top corner; digits run toward left/lower-left corner. Preserve actual reference number."
+        },
+        {
+          "requirement": "R6",
+          "panel": "0/90/180/270 versus diagonals",
+          "issue": "Cardinal square appears nearly top-down while diagonal footprint is compressed, unlike one fixed elevated ground plane.",
+          "fix": "Foreshorten cardinal depth and transform all attached glyphs with plane. Match the consistent elevated compression of diagonals; approx35degree presentation is a target, no native numeric calibration claimed."
+        }
+      ],
+      "minor_disposition": "Minor illustration variation is within static concept scope; exact native camera calibration is not certified."
+    },
+    {
+      "asset": "buy_hand_action",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-7b83384e-e056-4b31-b2ff-4202f89208d3.png",
+      "sha256": "2395720f00d6caed4204d661cc6adb6fede5aafad2c46ac587a5a1e7edd25c2d",
+      "bytes": 1508768,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "reference_derived_visual_concept",
+      "score": 7.6,
+      "verdict": "FAIL",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ],
+      "evidence": [
+        "Observed hand/placard glyph matches actual source crop; no unsupported action mechanic asserted.",
+        "Flat brown field,4corners and240reference qualifier pass; central hand rotation is coherent."
+      ],
+      "blocking_defects": [
+        {
+          "requirement": "R6",
+          "panel": "REAR RIGHT135",
+          "issue": "Price-strip edge is correct but reading direction is reversed180degrees. Currency/material badge is at lower-left rather than top/right end.",
+          "fix": "Rotate entire strip180degrees within current far upper-left edge. Badge toward top corner; digits run toward left/lower-left corner. Preserve actual reference number."
+        },
+        {
+          "requirement": "R6",
+          "panel": "0/90/180/270 versus diagonals",
+          "issue": "Cardinal square appears nearly top-down while diagonal footprint is compressed, unlike one fixed elevated ground plane.",
+          "fix": "Foreshorten cardinal depth and transform all attached glyphs with plane. Match the consistent elevated compression of diagonals; approx35degree presentation is a target, no native numeric calibration claimed."
+        }
+      ],
+      "minor_disposition": "Minor illustration variation is within static concept scope; exact native camera calibration is not certified."
+    },
+    {
+      "asset": "buy_fishing_upgrade",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-21485b8f-6813-463f-baef-1873c76fd151.png",
+      "sha256": "83b2882b8c5371ea67391048250a8472e058d49e5cf1066e83c91325685ba096",
+      "bytes": 1575827,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "reference_derived_visual_concept",
+      "score": 7.9,
+      "verdict": "FAIL",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ],
+      "evidence": [
+        "Rod/reel-like source pictogram with upgrade arrow rotates coherently through8angles.",
+        "Flat brown field,4corners and160reference qualifier pass."
+      ],
+      "blocking_defects": [
+        {
+          "requirement": "R6",
+          "panel": "REAR RIGHT135",
+          "issue": "Price-strip edge is correct but reading direction is reversed180degrees. Currency/material badge is at lower-left rather than top/right end.",
+          "fix": "Rotate entire strip180degrees within current far upper-left edge. Badge toward top corner; digits run toward left/lower-left corner. Preserve actual reference number."
+        },
+        {
+          "requirement": "R6",
+          "panel": "0/90/180/270 versus diagonals",
+          "issue": "Cardinal square appears nearly top-down while diagonal footprint is compressed, unlike one fixed elevated ground plane.",
+          "fix": "Foreshorten cardinal depth and transform all attached glyphs with plane. Match the consistent elevated compression of diagonals; approx35degree presentation is a target, no native numeric calibration claimed."
+        }
+      ],
+      "minor_disposition": "Minor illustration variation is within static concept scope; exact native camera calibration is not certified."
+    }
+  ],
+  "reviewer_agent": "/root/turnaround_critic",
+  "contract_version": "2026-11-23-plots-v1",
+  "contract_sha256": "c4ef53e38335f159aa23f1bbb5317b06fe0e402a9fca869229a5910600138498",
+  "gate": "Each score strictly above9.0 and all mandatory concept-image checks passed."
+}

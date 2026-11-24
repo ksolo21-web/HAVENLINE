@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "task": "T05",
+  "candidate_commit": "d979c6dc5264b9ed57d4376ddc8f1e59f9b0f6a6",
+  "review_kind": "INDEPENDENT_BOUNDED_QUICK_LOOK_SCOUT",
+  "reviewer": {
+    "runtime": "separate collaboration agent",
+    "session": "/root/t05_c0_critic",
+    "model_identifier": "not exposed to this agent"
+  },
+  "task_approval": false,
+  "native_android_approval": false,
+  "performance_approval": false,
+  "visual_only_score": 8.7,
+  "reference_style_exact_fidelity_10": false,
+  "confidence": "high for localized findings; whole task approval unavailable",
+  "coverage": {
+    "family_views_inspected_as_contact_sheets": 42,
+    "family_full_size_samples": [
+      "defense-detail",
+      "defense-front",
+      "defense-rear",
+      "counters-detail",
+      "resources-detail",
+      "pads-detail",
+      "processing-detail",
+      "fishing-detail"
+    ],
+    "integrated_views": [
+      "gameplay-camp",
+      "condition-night",
+      "condition-blizzard"
+    ],
+    "native_4k_frames_inspected": 3,
+    "defense_top_observation": "elevated detail, left/right family and three-quarter show roof; no separate overhead-only frame supplied",
+    "full_regression_review": "not performed by this scout",
+    "native_android_review": "not performed by this scout",
+    "C6_quantitative_review": "not performed by this scout"
+  },
+  "validated_improvements": [
+    "R11 warmer timber and deeper blue hardware retained",
+    "Watchtower upper enclosure is purposeful construction; old scaffold-dominant finding is not repeated",
+    "R12 replaces non-defense rectangular snow plates with localized rounded geometry",
+    "R12 adds visible member-oriented timber relief",
+    "Roof asymmetric snow outline reveals more blue construction than R11"
+  ],
+  "findings": [
+    {
+      "id": "R12-SCOUT-01",
+      "class": "PRODUCT_DEFECT",
+      "status": "PRODUCTION_FIX_REQUIRED",
+      "family": "authored timber relief",
+      "visible_symptom": "Repeated dotted black parallel rows on pads and crate board edges read like perforations or stippling rather than carved timber; effect also occurs on counter rails.",
+      "evidence": [
+        "local-evidence/r12/families/family-pads-detail.png",
+        "local-evidence/r12/families/family-resources-detail.png",
+        "local-evidence/r12/families/family-counters-detail.png"
+      ],
+      "region": "Pad boards and perimeter rails; cargo/fish crate board upper edges; counter work-surface strips",
+      "root_cause": "reference_surface_relief_v2.py _grain creates <=0.007-radius five-sided rods with pigment 0.42 partially buried inside timber faces. Their subpixel dark projections alias into dotted wires; the relief uses identical two-line construction for each eligible member.",
+      "production_files": [
+        "tools/havenline/task05/reference_surface_relief_v2.py",
+        "HavenlineGodot/assets/stations_v2/pad_*.glb",
+        "HavenlineGodot/assets/stations_v2/cargo_crate.glb",
+        "HavenlineGodot/assets/stations_v2/fish_crate.glb",
+        "HavenlineGodot/assets/stations_v2/service_counter.glb",
+        "HavenlineGodot/assets/stations_v2/processing_counter.glb"
+      ],
+      "smallest_causal_repair": "Replace high-contrast subpixel wires with limited, broader, tapered lower-contrast irregular grain strokes; maintain member-local orientation and avoid dense repeated lines. Verify both 1280 gameplay and native4K; do not change camera/lighting to hide aliasing.",
+      "proof": "Same-camera pads/resources/counters detail plus integrated gameplay before/after and unchanged geometry/material/socket/footprint budgets."
+    },
+    {
+      "id": "R12-SCOUT-02",
+      "class": "PRODUCT_DEFECT",
+      "status": "PRODUCTION_FIX_REQUIRED",
+      "family": "defense roof snow",
+      "visible_symptom": "Roof cap still reads as near-white planar icing with a sharp angular outline; dark ridge rail pokes through/slices the snow cap. Blue shingles are now visible but snow lacks the soft uneven piled volume present in 18600/18607.",
+      "evidence": [
+        "local-evidence/r12/families/family-defense-detail.png",
+        "local-evidence/r12/families/family-defense-front.png",
+        "local-evidence/r12/families/family-defense-rear.png",
+        "local-evidence/r12/native4k/native-gameplay-camp.png"
+      ],
+      "region": "Watchtower roof and snow/ridge intersection",
+      "root_cause": "reference_station_families_v3.py _roof_snow_bank supplies a constrained ridge-to-eave height field with prescribed normals and hard perimeter while the 2.83-high ridge bar projects through the cap. The visible broad cap has insufficient rounded height/normal breakup and edge taper.",
+      "production_files": [
+        "tools/havenline/task05/reference_station_families_v3.py",
+        "HavenlineGodot/assets/stations_v2/defense_platform.glb"
+      ],
+      "smallest_causal_repair": "Build coherent crowned rounded snow volume with softly tapered uneven edges and differentiated local normals; accumulate around/over the ridge according to physical contact while retaining exposed blue roof areas. Preserve silhouette purpose, footprint and immutable sockets.",
+      "proof": "Same-camera defense front/rear/left/right/three-quarter/detail and normal integrated day/night/blizzard; no camera or lighting change."
+    }
+  ],
+  "protected": [
+    "Exact hearth_vessel.glb identity",
+    "All sockets/footprints/clearances/catalog IDs/arrangements",
+    "T03 boundary and T04 camera authority",
+    "Gameplay/economy/save/runtime logic",
+    "Characters and previously approved inherited geometry"
+  ],
+  "next_action": "C0 reconcile these two residual product families and implement a materially different bounded surface/roof repair before an expensive critic matrix. Preserve d979c6d evidence and scores. Full task remains ACTIVE.",
+  "evidence_hashes": {
+    "local-evidence/r12/families/family-defense-detail.png": "5a1f52d5fc7d7f77b5b39515a18c7781e903b1d96af90615817ad593249dc413",
+    "local-evidence/r12/families/family-defense-front.png": "dc031ebe38e19c9f21b89d536ddfbe15cf54cd63c323367312e6915d4b87c63a",
+    "local-evidence/r12/families/family-defense-rear.png": "fe4b44039a164aa590dd9d283c7d1073d9f1cc6308a75a83a1e9ce1480d370a4",
+    "local-evidence/r12/families/family-pads-detail.png": "ba7b2139f0ac3a979368eed0e4c0276ba0ac6e6c00ff923e459049368ca2106a",
+    "local-evidence/r12/families/family-resources-detail.png": "227872cade64cda73b8a6b9cee3856d6e173e207460872b7dbb79db7435ae847",
+    "local-evidence/r12/families/family-counters-detail.png": "de536eb76be878721c7a32aaa35654939bb8f5c9e497705658a7be4c3c178118",
+    "local-evidence/r12/native4k/native-gameplay-camp.png": "598c67d30874db519ffa29db476ff29d9fe0ed624c5d363efb402e71795640ed",
+    "local-evidence/r12/native4k/native-gameplay-lakeshore.png": "39e23f60b489973cd2a6dddd5be23b71787d735b82e2a8cf436554d9614f572f",
+    "local-evidence/r12/native4k/native-gameplay-east-river-gate.png": "72b0aa8ba655e14933e2045cc9c4b786011e2ccd71ba8f686bdf1528a6725a44",
+    "references/18600.png": "e372bf74be027cb63a0f83c4247a7843a8195a9c579e75a415ddcf3c0052eaec",
+    "references/18607.png": "d71d77c6e200b7ef8d225e573474ad99c2d466954d05c29eabd142f4901bbc0c"
+  }
+}

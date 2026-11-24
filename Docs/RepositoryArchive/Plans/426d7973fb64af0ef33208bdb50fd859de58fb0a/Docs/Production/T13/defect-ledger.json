@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "task_id": "T13",
+  "preparation_status": "PREPARED_GOVERNANCE_ONLY",
+  "unresolved_preparation_defects": [],
+  "dependency_blockers": [{"dependency":"T12","condition":"must be APPROVED and integrated before runtime activation"}],
+  "notes": ["Dependency blockers are expected gating conditions, not preparation defects.","Any stale interface/path collision discovered at activation reopens preparation."]
+}

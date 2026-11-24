@@ -1,0 +1,293 @@
+name: Havenline Task 9 strict critic review
+
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths:
+      - '.github/workflows/havenline-task09-review.yml'
+      - 'tools/havenline/production/t09_c2_visual_review.py'
+      - 'tools/havenline/production/t09_c6_performance_review.py'
+      - 'tools/havenline/production/t09_build_specialist_input.py'
+      - 'tools/havenline/production/t09_closeout_preflight.py'
+      - 'Docs/Production/PATH_OWNERSHIP.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  # Frozen exact-source review identity. Update before merge if the active T09
+  # candidate/run is superseded; never silently review "latest".
+  EXPECTED_SOURCE: 'da52ff403cb766308e8f5112f04a0e7d2c7dec16'
+  PRIMARY_RUN_ID: '35134329102'
+  SOURCE_ARTIFACT: 'havenline-task09-integrated-candidate-da52ff403cb766308e8f5112f04a0e7d2c7dec16'
+
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    outputs:
+      candidate: '${{ steps.identity.outputs.candidate }}'
+      specialist_artifact: '${{ steps.identity.outputs.specialist_artifact }}'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ env.PRIMARY_RUN_ID }}'
+          name: '${{ env.SOURCE_ARTIFACT }}'
+          path: task09-evidence
+      - name: Prove exact-source candidate, tests, contact evidence and performance
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          root=Path('task09-evidence'); source=os.environ['EXPECTED_SOURCE']
+          manifest=json.loads((root/'candidate-manifest.json').read_text())
+          tests=json.loads((root/'tests.json').read_text())
+          capture=json.loads((root/'capture-summary.json').read_text())
+          perf=json.loads((root/'performance/delta.json').read_text())
+          assert manifest['candidate_commit']==tests['source']==capture['candidate']==perf['candidate']==source
+          assert tests['all_passed'] is True
+          assert capture['passed'] is True and capture['reports']==71 and capture['in_hand_views']==30 and capture['isolated_tool_turntables']==30
+          assert min(capture['sequence_frame_counts'].values())>=80
+          assert perf['passed'] is True and perf['physical_4k60_verified'] is False and perf['thermal_certified'] is False
+          reports=[json.loads(p.read_text()) for p in root.glob('captures/tool-*/capture-report.json')]
+          assert len(reports)==30
+          for report in reports:
+              final=report['final_harvest']
+              assert report['candidate']==source and final['contact_alignment_valid'] is True
+              assert final['grip_error_m']<=0.025 and final['impact_error_m']<=0.025 and final['secondary_grip_error_m']<=0.045
+          PY
+      - name: Materialize complete source-bound specialist input
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/production/t09_build_specialist_input.py \
+            --evidence-root task09-evidence \
+            --out critic-input \
+            --candidate "$EXPECTED_SOURCE" | tee task09-specialist-input-summary.json
+          for critic in C3 C4 C5; do
+            python3 tools/havenline/production/specialist_evidence_manifest.py validate "critic-input/$critic-manifest.json"
+          done
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          s=json.loads(Path('critic-input/input-summary.json').read_text())
+          assert s['c5_uses_every_captured_frame'] is True
+          assert min(s['full_cycle_frame_counts'].values())>=80
+          assert s['max_visual_items_per_group']<=18
+          PY
+      - id: identity
+        run: |
+          echo "candidate=$EXPECTED_SOURCE" >> "$GITHUB_OUTPUT"
+          echo "specialist_artifact=havenline-t09-specialist-input-$EXPECTED_SOURCE" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: 'havenline-t09-specialist-input-${{ env.EXPECTED_SOURCE }}'
+          path: critic-input
+          retention-days: 30
+          if-no-files-found: error
+
+  c2:
+    needs: preflight
+    runs-on: ubuntu-24.04
+    timeout-minutes: 95
+    env:
+      EXPECTED_SOURCE: '${{ needs.preflight.outputs.candidate }}'
+      EVIDENCE_ROOT: task09-evidence
+      REVIEW_OUTPUT: t09-c2-review
+      REVIEW_TIMEOUT_SECONDS: '1200'
+      HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ env.PRIMARY_RUN_ID }}'
+          name: '${{ env.SOURCE_ARTIFACT }}'
+          path: task09-evidence
+      - uses: actions/cache/restore@v4
+        id: reviewer-cache
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+      - name: Self-heal exact pinned reviewer runtime
+        run: |
+          set -euo pipefail
+          if [ ! -s "$HOME/.cache/havenline-t01-qwen35/manifest.json" ]; then sudo apt-get update -qq; sudo apt-get install -y aria2; fi
+          python3 tools/havenline/production/prepare_specialist_runtime.py > t09-c2-runtime-preparation.json
+      - uses: actions/cache/save@v4
+        if: steps.reviewer-cache.outputs.cache-hit != 'true'
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+      - run: python3 -m pip install pillow==11.3.0
+      - run: python3 -u tools/havenline/production/t09_c2_visual_review.py
+      - name: Enforce raw C2 strict gate
+        if: always()
+        run: |
+          test -f t09-c2-review/critic-record.json
+          python3 tools/havenline/production/critic_harness.py validate-raw --critic C2 --candidate "$EXPECTED_SOURCE" --raw t09-c2-review/critic-record.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: 'havenline-t09-C2-${{ needs.preflight.outputs.candidate }}'
+          path: |
+            t09-c2-review
+            t09-c2-runtime-preparation.json
+          retention-days: 30
+          if-no-files-found: error
+
+  c3:
+    needs: preflight
+    uses: ./.github/workflows/havenline-specialist-critic.yml
+    with:
+      critic_id: C3
+      candidate: '${{ needs.preflight.outputs.candidate }}'
+      evidence_artifact: '${{ needs.preflight.outputs.specialist_artifact }}'
+      manifest_name: C3-manifest.json
+      output_artifact: 'havenline-t09-C3-${{ needs.preflight.outputs.candidate }}'
+
+  c4:
+    needs: preflight
+    uses: ./.github/workflows/havenline-specialist-critic.yml
+    with:
+      critic_id: C4
+      candidate: '${{ needs.preflight.outputs.candidate }}'
+      evidence_artifact: '${{ needs.preflight.outputs.specialist_artifact }}'
+      manifest_name: C4-manifest.json
+      output_artifact: 'havenline-t09-C4-${{ needs.preflight.outputs.candidate }}'
+
+  c5:
+    needs: preflight
+    uses: ./.github/workflows/havenline-specialist-critic.yml
+    with:
+      critic_id: C5
+      candidate: '${{ needs.preflight.outputs.candidate }}'
+      evidence_artifact: '${{ needs.preflight.outputs.specialist_artifact }}'
+      manifest_name: C5-manifest.json
+      output_artifact: 'havenline-t09-C5-${{ needs.preflight.outputs.candidate }}'
+      timeout_minutes: 180
+
+  c6:
+    needs: preflight
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ env.PRIMARY_RUN_ID }}'
+          name: '${{ env.SOURCE_ARTIFACT }}'
+          path: task09-evidence
+      - run: python3 tools/havenline/production/t09_c6_performance_review.py --candidate '${{ needs.preflight.outputs.candidate }}' --record task09-evidence/performance/delta.json --out t09-c6/critic-record.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: 'havenline-t09-C6-${{ needs.preflight.outputs.candidate }}'
+          path: t09-c6
+          retention-days: 30
+          if-no-files-found: error
+
+  strict-review-gate:
+    needs: [preflight, c2, c3, c4, c5, c6]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: {name: 'havenline-t09-C2-${{ needs.preflight.outputs.candidate }}', path: review-C2}
+      - uses: actions/download-artifact@v4
+        with: {name: 'havenline-t09-C3-${{ needs.preflight.outputs.candidate }}', path: review-C3}
+      - uses: actions/download-artifact@v4
+        with: {name: 'havenline-t09-C4-${{ needs.preflight.outputs.candidate }}', path: review-C4}
+      - uses: actions/download-artifact@v4
+        with: {name: 'havenline-t09-C5-${{ needs.preflight.outputs.candidate }}', path: review-C5}
+      - uses: actions/download-artifact@v4
+        with: {name: 'havenline-t09-C6-${{ needs.preflight.outputs.candidate }}', path: review-C6}
+      - name: Require all exact-source critic records and strict thresholds
+        env:
+          CANDIDATE: '${{ needs.preflight.outputs.candidate }}'
+        run: |
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          source=os.environ['CANDIDATE']; rows={}
+          paths={
+            'C2':Path('review-C2/t09-c2-review/critic-record.json'),
+            'C3':Path('review-C3/specialist-review/critic-record.json'),
+            'C4':Path('review-C4/specialist-review/critic-record.json'),
+            'C5':Path('review-C5/specialist-review/critic-record.json'),
+            'C6':Path('review-C6/critic-record.json'),
+          }
+          for critic,path in paths.items():
+              assert path.is_file(), path
+              row=json.loads(path.read_text()); rows[critic]=row
+              if critic=='C6':
+                  assert row['candidate']==source and row['passed'] is True and not row['errors']
+              else:
+                  assert row['critic_id']==critic and row['candidate_hash']==source
+                  assert row['passed'] is True and row['coverage_complete'] is True and row['defects']==[]
+                  assert row['confidence'] in ('medium','high')
+                  assert row['scores'] and all(float(score)>9.0 for score in row['scores'].values())
+          c5=rows['C5']
+          cycle_groups=[g for g in c5.get('groups',[]) if '-cycle-' in g.get('group','')]
+          assert len(cycle_groups)>=15, 'C5 full-cycle group coverage missing'
+          result={'task':'T09','candidate':source,'source_run_id':os.environ['PRIMARY_RUN_ID'],'required_critics':['C2','C3','C4','C5','C6'],'strict_rule':'>9.0 unrounded; zero unresolved mandatory defects; no averaging waiver','c5_full_cycle_groups':len(cycle_groups),'critics':rows,'passed':True,'task_approved':False}
+          Path('t09-strict-review-decision.json').write_text(json.dumps(result,indent=2)+'\n')
+          print(json.dumps({'task':'T09','candidate':source,'source_run_id':os.environ['PRIMARY_RUN_ID'],'passed':True,'critics':list(rows),'c5_full_cycle_groups':len(cycle_groups)},indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: 'havenline-t09-strict-review-${{ needs.preflight.outputs.candidate }}'
+          path: t09-strict-review-decision.json
+          retention-days: 30
+          if-no-files-found: error
+
+  closeout-preflight:
+    needs: [preflight, strict-review-gate]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ env.PRIMARY_RUN_ID }}'
+          name: '${{ env.SOURCE_ARTIFACT }}'
+          path: task09-evidence
+      - uses: actions/download-artifact@v4
+        with:
+          name: 'havenline-t09-strict-review-${{ needs.preflight.outputs.candidate }}'
+          path: strict-review
+      - name: Prove T09 is ready only for integration-owner closeout
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/production/t09_closeout_preflight.py \
+            --candidate '${{ needs.preflight.outputs.candidate }}' \
+            --source-run-id "$PRIMARY_RUN_ID" \
+            --evidence-root task09-evidence \
+            --strict-review strict-review/t09-strict-review-decision.json \
+            --integration-head HEAD \
+            --out t09-closeout-preflight.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          row=json.loads(Path('t09-closeout-preflight.json').read_text())
+          assert row['passed'] is True and row['ready_for_integration_owner_closeout'] is True,row
+          assert row['approval_mutation_performed'] is False and row['integration_mutation_performed'] is False,row
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: 'havenline-t09-closeout-preflight-${{ needs.preflight.outputs.candidate }}'
+          path: t09-closeout-preflight.json
+          retention-days: 30
+          if-no-files-found: error

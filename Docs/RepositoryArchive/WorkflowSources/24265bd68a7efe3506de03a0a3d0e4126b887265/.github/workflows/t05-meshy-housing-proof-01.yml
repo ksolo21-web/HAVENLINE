@@ -1,0 +1,144 @@
+name: T05 Meshy housing proof 01
+on:
+  push:
+    branches:
+      - alfred/meshy-auth-check-20261119
+    paths:
+      - .github/workflows/t05-meshy-housing-proof-01.yml
+permissions: {}
+jobs:
+  geometry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 19
+    steps:
+      - name: Recover pinned original cooker views and isolate housing
+        run: |
+          set -eu
+          if ! /usr/bin/python3 -c 'import PIL'; then
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq python3-pil
+          fi
+          mkdir -p refs
+          for name in 32451.jpg 32450.jpg 32441.png; do
+            curl --fail --silent --show-error --max-time 30 --output "refs/$name" "https://raw.githubusercontent.com/ksolo21-web/HAVENLINE/5abfc29f1c3c51bef99247641cf1131581899942/Docs/Art/SourceReferences/T05/$name"
+          done
+          /usr/bin/python3 - refs <<'PY'
+          from PIL import Image, ImageDraw, ImageOps
+          import hashlib, pathlib, sys
+          p = pathlib.Path(sys.argv[1])
+          spec = {
+            "32451.jpg": ("70e9e04c329797490b19aaa383865a5a2e20129bd1e0250a6997b170fb0510e4",
+              [(436,446),(511,426),(548,366),(647,344),(772,342),(776,218),(965,216),(978,345),(1100,356),(1195,394),(1224,447),(1298,447),(1301,530),(1260,550),(1265,733),(1261,846),(1240,881),(1151,917),(1014,962),(973,972),(973,772),(881,747),(821,768),(777,738),(722,712),(696,732),(664,706),(607,695),(572,682),(543,686),(478,724),(479,555),(438,552)],
+              [[(1080,540),(1191,541),(1211,563),(1214,684),(1200,755),(1232,738),(1248,753),(1248,807),(1220,855),(1084,881),(1052,859),(1049,809),(1039,748),(1043,606),(1057,562)]]),
+            "32450.jpg": ("5b1831d03575e705f1baf5af5d4ac4b4ecd62e364b4287c7f841965625d4d719",
+              [(502,371),(540,345),(564,313),(608,288),(705,273),(706,177),(860,176),(872,272),(950,280),(1007,307),(1029,366),(1071,385),(1071,448),(1030,459),(1036,627),(1041,655),(1018,665),(987,661),(947,636),(897,609),(832,600),(798,622),(794,671),(769,670),(764,642),(748,626),(700,620),(666,636),(646,685),(603,688),(557,694),(538,709),(534,448),(508,424)],
+              []),
+            "32441.png": ("0ff99199e1eb4bedeffe4d9953f5253a97e49366a2118d5976132c9137d93510",
+              [(477,308),(485,259),(521,218),(574,189),(632,177),(677,178),(686,127),(831,126),(846,174),(934,177),(988,203),(1026,247),(1050,283),(1054,356),(1039,396),(1037,544),(1037,595),(1019,625),(976,642),(905,637),(866,624),(633,627),(573,642),(511,625),(490,581),(493,367)],
+              [])
+          }
+          for n,(sha, outline, exclusions) in spec.items():
+              raw=(p/n).read_bytes()
+              assert hashlib.sha256(raw).hexdigest()==sha, f"Original {n} did not match manifest"
+              im=Image.open(p/n).convert("RGB")
+              mask=Image.new("L",im.size)
+              d=ImageDraw.Draw(mask); d.polygon(outline,fill=255)
+              for polygon in exclusions: d.polygon(polygon,fill=0)
+              im.putalpha(mask)
+              im=Image.alpha_composite(Image.new("RGBA",im.size), im)
+              im=im.crop(mask.getbbox())
+              im.thumbnail((840,840), Image.Resampling.LANCZOS)
+              im=ImageOps.expand(im,border=48,fill=(0,0,0,0))
+              im.save(p/(n+".cut.png"),optimize=True)
+          PY
+      - name: Submit one geometry-only request and retrieve GLB
+        env:
+          MESHY_API_KEY: ${{ secrets.MESHY }}
+        run: |
+          /usr/bin/python3 - refs <<'PY'
+          import base64, hashlib, json, os, pathlib, struct, sys, time
+          from urllib.error import HTTPError
+          from urllib.parse import urlparse
+          from urllib.request import HTTPRedirectHandler, Request, build_opener
+
+          class NoRedirect(HTTPRedirectHandler):
+              def redirect_request(self, req, fp, code, msg, headers, newurl): return None
+
+          opener=build_opener(NoRedirect())
+          root=pathlib.Path(sys.argv[1])
+          proof=pathlib.Path("proof")
+          proof.mkdir(exist_ok=True)
+          key=os.environ.get("MESHY_API_KEY", "").strip()
+          if not key: sys.exit("Meshy repo secret unavailable")
+          base="https://api.meshy.ai/openapi/v1"
+
+          def api(path, payload=None):
+              request=Request(base+path,data=json.dumps(payload).encode() if payload is not None else None,
+                  headers={"Authorization":"Bearer "+key,"Content-Type":"application/json"},
+                  method="POST" if payload is not None else "GET")
+              try:
+                  with opener.open(request,timeout=30) as response:
+                      return json.loads(response.read(1048576))
+              except HTTPError as e:
+                  sys.exit(f"Meshy {'POST' if payload is not None else 'GET'} returned HTTP {e.code}.")
+              except Exception:
+                  sys.exit("Meshy request did not produce a usable response. No automatic POST retry.")
+
+          before=api("/balance").get("balance",0)
+          if type(before) is not int or before<25: sys.exit("Insufficient existing Meshy credits; no generation requested.")
+          views=[]
+          for n in ("32451.jpg","32450.jpg","32441.png"):
+              data=(root/(n+".cut.png")).read_bytes()
+              views.append("data:image/png;base64,"+base64.b64encode(data).decode("ascii"))
+          payload={"image_urls":views,"ai_model":"meshy-7.1","geometry_resolution":"2k",
+                   "should_texture":False,"should_remesh":False,"target_formats":["glb"]}
+          task=api("/multi-image-to-3d",payload).get("result")
+          if not isinstance(task,str) or not task or len(task)>100 or not all(c.isascii() and (c.isalnum() or c=="-") for c in task):
+              sys.exit("Meshy did not return a valid task ID. No automatic retry.")
+          (proof/"task.json").write_text(json.dumps({"id":task,"stage":"submitted","model":"meshy-7.1",
+              "input":"housing and carved posts, isolated from owner views","expected_credits":25})+"\n")
+          print("One geometry-only task submitted; no automatic generation retry.",flush=True)
+          for i in range(75):
+              state=api("/multi-image-to-3d/"+task)
+              status=state.get("status")
+              if status in ("FAILED","CANCELED","CANCELLED","EXPIRED"):
+                  sys.exit(f"Meshy reported terminal status: {status}.")
+              if status=="SUCCEEDED": break
+              time.sleep(10)
+          else: sys.exit("Meshy did not finish before the poll deadline; task ID archived.")
+
+          url=state.get("model_urls",{}).get("glb")
+          if not isinstance(url,str): sys.exit("Meshy did not return a GLB URL.")
+          uri=urlparse(url)
+          if uri.scheme!="https" or uri.netloc!="assets.meshy.ai":
+              sys.exit("Unexpected asset hostname; no download attempted.")
+          try:
+              with opener.open(Request(url),timeout=120) as response:
+                  data=response.read(200*1024*1024+1)
+          except Exception:
+              sys.exit("Meshy asset download failed.")
+          if len(data)<20 or len(data)>200*1024*1024 or struct.unpack_from("<4sII",data)!=(b"glTF",2,len(data)):
+              sys.exit("Downloaded model does not pass the GLB header check.")
+          chunk_len,chunk_type=struct.unpack_from("<I4s",data,12)
+          if chunk_type!=b"JSON" or 20+chunk_len>len(data): sys.exit("GLB JSON chunk missing.")
+          g=json.loads(data[20:20+chunk_len])
+          mesh_count=len(g.get("meshes",[]))
+          tris=sum(g["accessors"][p.get("indices",p["attributes"]["POSITION"])]["count"]//3
+              for m in g.get("meshes",[]) for p in m.get("primitives",[]) if p.get("mode",4)==4)
+          if not mesh_count or not tris: sys.exit("GLB contains no usable triangle geometry.")
+          (proof/"T05-Meshy-housing-geometry-01-UNAPPROVED.glb").write_bytes(data)
+          receipt={"id":task,"stage":"geometry_only_review_pending","model":"meshy-7.1","geometry":"2k",
+              "expected_credits":25,"reported_credits":state.get("consumed_credits"),"mesh_count":mesh_count,
+              "triangles":tris,"bytes":len(data),"sha256":hashlib.sha256(data).hexdigest(),
+              "shipping_changed":False,"saw_changed":False}
+          (proof/"task.json").write_text(json.dumps(receipt,indent=2)+"\n")
+          print(f"Validated geometry-only GLB: {mesh_count} mesh(es), {tris} triangles.",flush=True)
+          PY
+      - name: Archive prototype and receipt
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: t05-meshy-housing-proof-01
+          path: proof/
+          if-no-files-found: ignore
+          retention-days: 7

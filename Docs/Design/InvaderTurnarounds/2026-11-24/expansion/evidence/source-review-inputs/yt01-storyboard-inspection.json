@@ -1,0 +1,228 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/github_archive",
+  "source_id": "YT01",
+  "public_url": "https://www.youtube.com/watch?v=t9uT27wb5U0",
+  "source_title": "Snow Busters finally here! [actual ad gameplay in-game] Whiteout Survival Mini-Game",
+  "status": "PREVIEW_INSPECTION_COMPLETE_FULL_PLAYBACK_UNAVAILABLE",
+  "authority": "SUPPLEMENTAL; original locked A/B recordings retain precedence",
+  "inspection": {
+    "storyboard_sheets": 38,
+    "tiles_per_sheet": 9,
+    "preview_cells_inspected": 342,
+    "source_frame_size": [
+      320,
+      180
+    ],
+    "sheet_grid": [
+      3,
+      3
+    ],
+    "source_duration_seconds": 3405,
+    "preview_fps_metadata": 0.10044052863436123,
+    "approx_seconds_per_cell": 9.956140350877194,
+    "timing_method": "(sheet_index*9+zero_based_cell_index)/metadata_fps; approximate, not frame-accurate video timecodes",
+    "sheets": "source-audit/youtube-storyboards/YT01-00.jpg through YT01-37.jpg",
+    "targeted_diagnostic_crops": 18,
+    "crop_provenance": "archive-yt01-inspection/crop-provenance.json",
+    "generated_render_count": 0
+  },
+  "limitations": [
+    "Direct video retrieval returned403 in source-audit handoff. Inspection used recovered public storyboard preview JPEGs, not full video or audio playback.",
+    "The central portrait gameplay viewport occupies only about112x180 pixels inside each320x180 preview. Enlargements preserve source pixels and cannot recover fine anatomy, markings or unreadable labels.",
+    "Approximately10-second sampling can miss transient enemies and cannot establish full attack cycles, transitions, timing, locomotion or comprehensive absence of other enemies.",
+    "Observer labels below are neutral descriptions unless explicitly identified as a tentative visible-title transcription. No unsupported Havenline species, tier, faction or in-game names are being invented."
+  ],
+  "observations": [
+    {
+      "id": "YT01-O1",
+      "classification": "COMBAT_TARGET_CANDIDATE",
+      "neutral_label": "Brown/gold broad-antlered quadruped",
+      "cells": [
+        {
+          "sheet": 20,
+          "cell": 7
+        },
+        {
+          "sheet": 26,
+          "cell": 0
+        }
+      ],
+      "approx_time_ranges_seconds": [
+        [
+          1861.798,
+          1861.798
+        ],
+        [
+          2329.737,
+          2329.737
+        ]
+      ],
+      "visible_traits": [
+        "Brown/dark body with a pale face/chest region and broad golden horn/antler-like forms.",
+        "A red health bar appears above this target while a cyan attack/contact effect reaches toward it from the green-bar player group."
+      ],
+      "role_evidence": "Red target health bar and opposed contact effect support combat-target status in these stills.",
+      "confidence": {
+        "combat_target": "medium-high",
+        "species_or_tier": "unconfirmed"
+      },
+      "cross_reference": "YT01-O2 may describe this silhouette, but low-resolution pixels do not conclusively prove identity mapping.",
+      "recommended_disposition": "Include in source-to-render reconciliation as an observed hostile wildlife candidate. Use neutral label until source identity is corroborated."
+    },
+    {
+      "id": "YT01-O2",
+      "classification": "TUTORIAL_LABEL_EVIDENCE",
+      "neutral_label": "Tutorial title appearing to read Startled Giant Elk",
+      "cells": [
+        {
+          "sheet": 15,
+          "cell": 6
+        }
+      ],
+      "approx_time_ranges_seconds": [
+        [
+          1403.816,
+          1403.816
+        ]
+      ],
+      "visible_traits": [
+        "Tutorial header appears to read 'Startled Giant Elk'.",
+        "Illustrated brown antlered animal, pale-blue encounter/effect diagram and a following group/reward diagram are visible."
+      ],
+      "role_evidence": "Tutorial is gameplay-specific, but small paragraph text is unreadable at recovered preview resolution.",
+      "confidence": {
+        "visible_title": "medium",
+        "exact_behavior": "unconfirmed"
+      },
+      "recommended_disposition": "Keep exact source crop and seek independent corroboration before treating label/behavior as source-defined. Do not quote unreadable paragraphs."
+    },
+    {
+      "id": "YT01-O3",
+      "classification": "COMBAT_TARGET_CANDIDATE",
+      "neutral_label": "Bulky white-furred creature with gray face and red horn/crest tips",
+      "cells": [
+        {
+          "sheet": 16,
+          "cell": 0
+        },
+        {
+          "sheet": 22,
+          "cell": 0
+        },
+        {
+          "sheet": 22,
+          "cell": 7
+        },
+        {
+          "sheet": 23,
+          "cell": 3
+        },
+        {
+          "sheet": 31,
+          "cell": 0
+        }
+      ],
+      "approx_time_ranges_seconds": [
+        [
+          1433.684,
+          1433.684
+        ],
+        [
+          1971.316,
+          1971.316
+        ],
+        [
+          2041.009,
+          2041.009
+        ],
+        [
+          2090.789,
+          2090.789
+        ],
+        [
+          2777.763,
+          2777.763
+        ]
+      ],
+      "visible_traits": [
+        "Broad pale body, gray/dark facial region, heavy arm/forelimb-like masses and red upper-head horn/crest tips.",
+        "Appears larger and much paler than the brown/gold combat target; seen in multiple later gameplay areas.",
+        "A red target health bar is clear in sheet22/cell0 beside attack/contact effects."
+      ],
+      "role_evidence": "Repeated encounter positioning and red target health bar support a combat-target role.",
+      "confidence": {
+        "combat_target": "high",
+        "species_or_tier": "unconfirmed",
+        "distinct_visible_design": "high"
+      },
+      "recommended_disposition": "Reconcile as a distinct visible silhouette/material candidate. Do not automatically equate with the previous blue crystalline Ice Brute, or assert separate species/tier without source corroboration."
+    },
+    {
+      "id": "YT01-O4",
+      "classification": "NOT_SUFFICIENT_ENEMY_EVIDENCE",
+      "neutral_label": "Small blue frozen/crouched humanoid-looking figures",
+      "cells": [
+        {
+          "sheet": 2,
+          "cell": 3
+        },
+        {
+          "sheet": 3,
+          "cell": 8
+        },
+        {
+          "sheet": 8,
+          "cell": 4
+        },
+        {
+          "sheet": 10,
+          "cell": 0
+        },
+        {
+          "sheet": 14,
+          "cell": 5
+        }
+      ],
+      "approx_time_ranges_seconds": [
+        [
+          209.079,
+          209.079
+        ],
+        [
+          348.465,
+          348.465
+        ],
+        [
+          756.667,
+          756.667
+        ],
+        [
+          896.053,
+          896.053
+        ],
+        [
+          1304.254,
+          1304.254
+        ]
+      ],
+      "visible_traits": [
+        "Small blue human-shaped body, head and limbs in or beside icy patches.",
+        "No clear red hostile health bar in the inspected close crops; some appear adjacent to the player's green-bar group."
+      ],
+      "role_evidence": "Could be frozen/rescue-related figures; hostile role is not established.",
+      "confidence": {
+        "humanoid_form": "medium",
+        "hostility": "unverified"
+      },
+      "recommended_disposition": "Do not add a snowman enemy based on these previews. Retain as an unresolved role observation if another source clarifies it."
+    }
+  ],
+  "excluded_as_roster_evidence": [
+    "The streamer/presenter, decorative Whiteout background characters, promotional character art, store bundles and gear screens.",
+    "Tall carried stacks/posts, ground ice, blue attack effects and generic snow-covered trees."
+  ],
+  "coverage_verdict": "YT01 provides supplementary visual evidence for at least two distinct combat-target appearances, but this preview-only audit cannot certify a complete enemy roster or full behavior. No final art approval is issued.",
+  "next_action": "Root/source critic reconcile these candidates against primary B, other supplementary sources and earlier selected renders. Freeze the complete source-to-render matrix only after unresolved mandatory source/role gaps receive a disposition."
+}
+

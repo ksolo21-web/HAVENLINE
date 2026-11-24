@@ -1,0 +1,66 @@
+{
+  "reviewer": "/root/turnaround_critic",
+  "contract_version": "2026-11-23-v1",
+  "iteration": 1,
+  "assets": [
+    {
+      "asset": "money",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-9bdca611-ae55-4a35-8421-780136e8b62f.png",
+      "sha256": "ad719c6bda631bfbbb56dcb47b1c70fba31502cd9a82768637fb0632f8f48bae",
+      "inspected_full_sheet": true,
+      "score": 9.4,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "changes_verified": [
+        "Opposite-end, opposite-diagonal and cardinal views coherent",
+        "Band and curled corner act as identity landmarks",
+        "Color/geometry clear as fictional gamecurrency"
+      ],
+      "issues": [],
+      "scope": "Concept-image review only; no exact native geometry/runtime claim."
+    },
+    {
+      "asset": "cargo",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-a82bcd20-9537-4739-8af8-4a1145823cb4.png",
+      "sha256": "9ee558a625c66eff0136572b1406db64909d42ceca12dc978897bfb69a71fe79",
+      "inspected_full_sheet": true,
+      "score": 8.4,
+      "verdict": "HOLD",
+      "changes_verified": [],
+      "issues": [
+        {
+          "panel": "REAR LEFT225\u00b0",
+          "severity": "major",
+          "issue": "Topropes repeat135\u00b0 diagonal, indicating wrong yaw despite two plain faces.",
+          "fix": "Opposite rear corner so rope diagonal reverses and matches45\u00b0 handed perspective. Both visible faces remain plain; no frontbrace/tag/rightgrip."
+        }
+      ],
+      "scope": "Concept-image review only; no exact native geometry/runtime claim."
+    },
+    {
+      "asset": "cooked_food",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-aa55c5b7-e126-490a-a345-27ed6406cbbf.png",
+      "sha256": "cd7e259af1609c61c9ffc0930a1d1f2754b63369e4fff6b84d3829f94208a472",
+      "inspected_full_sheet": true,
+      "score": 8.5,
+      "verdict": "FAIL",
+      "changes_verified": [],
+      "issues": [
+        {
+          "panel": "REAR LEFT225\u00b0",
+          "severity": "blocking",
+          "issue": "Longaxis same diagonal as135\u00b0 rather than opposite rear corner.",
+          "fix": "Reverse225\u00b0 diagonal; unburned leftend near imageRIGHT."
+        },
+        {
+          "panel": "Allviews crustsurface",
+          "severity": "major",
+          "issue": "Porous/flaky crust is markedly more photographic than set sculpted/toy-like materials.",
+          "fix": "Simplify fine pores/flakes into broad sculpted crust planes, preserve3 scorecuts and toastcolors."
+        }
+      ],
+      "scope": "Concept-image review only; no exact native geometry/runtime claim."
+    }
+  ],
+  "gate": "All mandatory imagechecks and minimum >9.0",
+  "set_status": "9 pass,3 pendingrepairs outof12 reviewed;extra coalpending"
+}

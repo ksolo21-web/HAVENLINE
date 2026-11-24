@@ -1,0 +1,153 @@
+name: HAVENLINE Native Android Review
+
+on:
+  push:
+    branches: ['codex/havenline-godot-android', 'main']
+    paths: ['HavenlineGodot/**', 'tools/havenline/**', '.github/workflows/havenline-godot-android.yml']
+  workflow_dispatch:
+  pull_request:
+    paths: ['HavenlineGodot/**', 'tools/havenline/**', '.github/workflows/havenline-godot-android.yml']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: havenline-godot-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  native-review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+      - name: Archive exact native source for reproducible continuation
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/havenline-source"
+          git archive --format=zip HEAD HavenlineGodot tools/havenline Docs/AI AGENTS.md README.md .github/workflows/havenline-godot-android.yml > "$RUNNER_TEMP/havenline-source/HAVENLINE-native-source.zip"
+          git rev-parse HEAD > "$RUNNER_TEMP/havenline-source/COMMIT.txt"
+          cd "$RUNNER_TEMP/havenline-source"
+          sha256sum HAVENLINE-native-source.zip > SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: HAVENLINE-native-source-${{ github.sha }}
+          path: ${{ runner.temp }}/havenline-source/
+          retention-days: 30
+          if-no-files-found: error
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - name: Install pinned Godot and Android templates
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/godot" "$HOME/.local/share/godot/export_templates/4.7.2.stable"
+          cd "$RUNNER_TEMP/godot"
+          base='https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable'
+          curl -fL --retry 3 "$base/Godot_v4.7.2-stable_linux.x86_64.zip" -o editor.zip
+          echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  editor.zip' | sha512sum -c -
+          unzip -q editor.zip
+          chmod +x Godot_v4.7.2-stable_linux.x86_64
+          echo "$RUNNER_TEMP/godot" >> "$GITHUB_PATH"
+          curl -fL --retry 3 "$base/Godot_v4.7.2-stable_export_templates.tpz" -o templates.tpz
+          echo 'ca4d71c4d7b81dfc15d1a98baa07534aa95b03fdda78a0075b06672e1648d2e5f40980c9adc28d23e1b92e732ee7bf3461997aa804af74ec2fcd7a93ccb84079  templates.tpz' | sha512sum -c -
+          unzip -j -q templates.tpz templates/android_debug.apk templates/android_release.apk templates/version.txt -d "$HOME/.local/share/godot/export_templates/4.7.2.stable"
+          rm editor.zip templates.tpz
+          sdkmanager 'platform-tools' 'build-tools;35.0.1'
+      - name: Verify supplied assets and run real Godot tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          python3 tools/havenline/asset_audit.py --output artifacts/assets.json
+          python3 tools/havenline/bake_outpost_audio.py | tee artifacts/audio-bake.json
+          timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit 2>&1 | tee artifacts/import.log
+          timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd 2>&1 | tee artifacts/motion-bake.log
+          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_population test_outpost test_outpost_runtime; do
+            timeout 90 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" 2>&1 | tee "artifacts/$suite.log"
+          done
+          timeout 60 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/smoke_launch.gd 2>&1 | tee artifacts/launch.log
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' artifacts/*.log; then exit 1; fi
+          python3 tools/havenline/summarize_evidence.py --artifacts artifacts
+      - name: Render the actual Mobile scene with software Vulkan (not a device benchmark)
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq xvfb mesa-vulkan-drivers
+          mkdir -p artifacts/mobile-render
+          timeout 120 xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --audio-driver Dummy --fixed-fps 60 -- --render-review --motion=idle --phase=0 --capture="$PWD/artifacts/mobile-render" 2>&1 | tee artifacts/mobile-render.log
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path('artifacts/mobile-render/render-evidence.json').read_text())
+          assert report['renderer'] == 'mobile', 'Do not relabel a fallback renderer as Mobile Vulkan'
+          assert report['performance_certified'] is False
+          assert len(report['characters']) == 4
+          assert all(len(clips) >= 3 for clips in report['source_clips'].values())
+          PY
+      - name: Capture fresh rear, side and three-quarter scene evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          for view in rear side three-quarter; do
+            mkdir -p "artifacts/mobile-$view"
+            timeout 120 xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --audio-driver Dummy --fixed-fps 60 -- --render-review --view="$view" --capture="$PWD/artifacts/mobile-$view" 2>&1 | tee "artifacts/mobile-$view.log"
+          done
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' artifacts/mobile-*.log; then exit 1; fi
+      - name: Capture weather, warmth, interaction and native 4K evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          for pair in night:three-quarter blizzard:front warmth4:overhead gather:side; do
+            scenario="${pair%%:*}"
+            view="${pair##*:}"
+            mkdir -p "artifacts/outpost-$scenario"
+            timeout 180 xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --audio-driver Dummy --fixed-fps 60 -- --render-review --scenario="$scenario" --view="$view" --capture="$PWD/artifacts/outpost-$scenario" 2>&1 | tee "artifacts/outpost-$scenario.log"
+          done
+          mkdir -p artifacts/outpost-native-4k
+          timeout 240 xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --audio-driver Dummy --fixed-fps 60 -- --scenario=warmth2 --view=three-quarter --capture="$PWD/artifacts/outpost-native-4k" 2>&1 | tee artifacts/outpost-native-4k.log
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' artifacts/outpost-*.log; then exit 1; fi
+          python3 - <<'PYCODE'
+          import json, pathlib, struct
+          for p in pathlib.Path('artifacts').glob('outpost-*/render-evidence.json'):
+              r = json.loads(p.read_text())
+              assert r['renderer'] == 'mobile'
+              assert r['render_scale'] == 1.0 and not r['performance_certified']
+              assert len(r['characters']) == 4 and r['custom_c2_c4_rig_review_deferred']
+              assert r['outpost']['snow_instances'] == 640
+              assert len(r['npc_population']['missing_templates']) == 13
+          p = pathlib.Path('artifacts/outpost-native-4k')
+          r = json.loads((p/'render-evidence.json').read_text())
+          width, height = struct.unpack('>II', (p/'native-scene.png').read_bytes()[16:24])
+          assert width >= 3840 and height >= 2160
+          assert r['internal_render'] == [width, height]
+          assert not r['render_review'] and not r['outpost']['native_4k60_certified']
+          assert json.loads(pathlib.Path('artifacts/outpost-gather/render-evidence.json').read_text())['action_readout']['kind'] == 'gather'
+          PYCODE
+      - name: Export isolated ARM64 review APK
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/configure_android.py --sdk "$ANDROID_HOME" --java "$JAVA_HOME" --godot "$RUNNER_TEMP/godot/Godot_v4.7.2-stable_linux.x86_64"
+          mkdir -p HavenlineGodot/build
+          Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --export-debug 'Android Review' 2>&1 | tee artifacts/export.log
+          cp HavenlineGodot/build/HAVENLINE-native-review-arm64.apk artifacts/
+          sha256sum artifacts/*.apk > artifacts/SHA256SUMS.txt
+          cp HavenlineGodot/data/release-status.json artifacts/
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' artifacts/export.log; then exit 1; fi
+          "$ANDROID_HOME/build-tools/35.0.1/apksigner" verify --verbose --print-certs artifacts/HAVENLINE-native-review-arm64.apk > artifacts/apk-signature.txt
+          python3 tools/havenline/verify_apk.py artifacts/HAVENLINE-native-review-arm64.apk --output artifacts/apk-inspection.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: HAVENLINE-native-review-${{ github.sha }}
+          path: artifacts/
+          retention-days: 30
+          if-no-files-found: error

@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "requesting_task": "T12",
+  "target_path": "tools/havenline/task12/prepare_activation.py; Docs/Production/T12/ACTIVATION_HANDOFF.md; V3.2 build-only graduation policy",
+  "requested_change": "Consider a strictly isolated, nonshipping T12 functional build authorization when dependency gameplay contracts (T07/T08/T10/T11) are historically approved with exact integrated sources, but their separately scoped visual effective approvals are actively invalidated. Continue to block INTEGRATION_READY, production integration, final task APPROVED and player delivery until original reference/render mismatches are fixed and user has approved them. Make the path an explicit reviewed exception, not an automatic gate waiver.",
+  "reason": "The exact current-source T12 activation preflight at run 40670383421 passed 294 preparation tests, 100-level graph, T10/T11 exact source bindings, progression parity, fuzz and benchmark checks, but blocked runtime solely on active visual approval invalidations: T08 user-rejected whole-scene reference, T10 BoxMesh/CylinderMesh/StandardMaterial3D, and T11 BoxMesh/StandardMaterial3D shelters/markers. Without a safe isolated functional-development lane, all downstream T12-T70 build progress stalls while large art tasks are repaired. The user explicitly prioritized continuing the game through T70 with infrastructure only when a concrete blocker warrants it.",
+  "dependency": [
+    "T07 APPROVED gameplay contract",
+    "T08 APPROVED inventory functionality but visual effectively invalid",
+    "T10 APPROVED transaction functionality but primitive visual invalid",
+    "T11 APPROVED construction functionality but primitive visual invalid"
+  ],
+  "expected_behavior": [
+    "No T01-T11 accepted gameplay files modified by a T12 builder; all inherited deterministic/persistence/resource proofs preserved and re-tested.",
+    "Original active visual invalidations remain ACTIVE with explicit user rejection and no source-fidelity approval; nothing may be marked 9.5/10 or 10/10 without actual independent source-rendered review.",
+    "A separately named functional-only PREBUILD or BUILDING_ISOLATED_SANDBOX permission requires exact upstream accepted source/hash binding, current integration source, disjoint T12 path ownership and full test regression; no implicit APPROVED statuses.",
+    "T12 progression runtime/data must not ship or integrate into main while upstream effective visual approval fails; it may be assembled and tested only in a nonshipping isolated candidate if integration owner explicitly authorizes the exception.",
+    "INTEGRATION_READY/INTEGRATING/APPROVED, T13+ promotion and release remain governed by existing effective visual/user signoff gates. Do not weaken T70 or owner acceptance.",
+    "Only if an independent focused technical/art blocker cannot be addressed with existing approved mechanisms may this exceptional lane be approved. Prefer targeted visual repair if it can clear the blockers without excessive delay."
+  ],
+  "tests_required": [
+    "Existing T12 prepare_activation.py --activate remains FAIL_CLOSED in normal mode until exact effective visual approvals become true.",
+    "New optional isolated-build mode must fail if source lineage, T07/T08/T10/T11 historical approvals or T12 path ownership is invalid.",
+    "New optional isolated mode must not change shipping_visual_gate.py effective-approval results or any user rejection record.",
+    "T12 294 preparation tests, full 398-vector corpus, 100-level reachability and integration-preserving T01-T11 regressions remain mandatory.",
+    "Verify no runtime production modification/merge occurs from this request alone; require separate integration owner signoff after visual repair.",
+    "Test attempts to use optional mode to mark T12 INTEGRATION_READY or APPROVED are always rejected."
+  ],
+  "status": "PENDING_INTEGRATION_OWNER_DISPOSITION__NOT_AUTHORIZED__NO_RUNTIME_WRITES",
+  "integration_owner_disposition": null,
+  "source_evidence": {
+    "integration_ref": "codex/havenline-sequential-task-01",
+    "checked_pr": 106,
+    "source_sha": "715afd14d0315416c4c97636e202b72bdf6eed34",
+    "preflight_run": 40670383421,
+    "preparation_unit_tests_passed": 294,
+    "normal_activation_passed": false,
+    "effective_visual_dependencies_blocked": [
+      "T08",
+      "T10",
+      "T11"
+    ],
+    "user_rejected_T05_cooker_still_unapproved": true
+  },
+  "priority": "P1_DOWSTREAM_T12_T70_BLOCKING",
+  "safety": "Proposal only; no shipping gameplay or visual-quality exception has been enacted."
+}

@@ -1,0 +1,134 @@
+{
+  "reviewer_agent": "/root/turnaround_critic",
+  "contract_version": "2026-11-23-plots-v1",
+  "contract_sha256": "c4ef53e38335f159aa23f1bbb5317b06fe0e402a9fca869229a5910600138498",
+  "batch": "storage-04",
+  "iteration": 1,
+  "assets": [
+    {
+      "asset": "storage_wood",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-c568bf14-cde2-4085-be66-5e883ef5668b.png",
+      "score": 8.7,
+      "verdict": "HOLD",
+      "evidence": [
+        "All four diagonal pad rotations now corrected.",
+        "Centered three-log bundle, fixed knot and endgrain orbit remain coherent.",
+        "90/270 pads still broad/shallow compared directly with accepted empty master."
+      ],
+      "blocking_defects": [
+        {
+          "requirement": "R6",
+          "panel": "90,270",
+          "issue": "End-view pad field/perimeter remains too broad and shallow, close to repeated front-view shape, unlike the accepted empty master end-view rectangle.",
+          "fix": "Repair only 90/270 pad field and perimeter to accepted empty master narrower/deeper end-view silhouette, about 245 by 160 at this sheet scale. Preserve all stock, other six pads and naturally occluded central glyph."
+        }
+      ],
+      "minor_disposition": "Stock and diagonal-pad repair passed; two end-pad silhouettes remain blocked.",
+      "sha256": "86a73fb694821739c4dc626bad9b83cb1dd5c84da758adbd767fe0d2fbfca3dc",
+      "bytes": 1766974,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "direct_video_type",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ]
+    },
+    {
+      "asset": "storage_fuel",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-bcd86acf-e113-4f02-bb3a-af7b537c707d.png",
+      "score": 8.8,
+      "verdict": "HOLD",
+      "evidence": [
+        "One orange can with fixed front droplet label, rear unlabelled X, handle and cap rotates coherently across all eight.",
+        "Diagonal pad orientations and centered stock are coherent.",
+        "90/270 field and perimeter remain broad and shallow like the front footprint."
+      ],
+      "blocking_defects": [
+        {
+          "requirement": "R6",
+          "panel": "90,270",
+          "issue": "End-view pad field/perimeter remains too broad and shallow, close to repeated front-view shape, unlike the accepted empty master end-view rectangle.",
+          "fix": "Repair only 90/270 pad field and perimeter to accepted empty master narrower/deeper end-view silhouette, about 245 by 160 at this sheet scale. Preserve all stock, other six pads and naturally occluded central glyph."
+        }
+      ],
+      "minor_disposition": "Fuel resource readability and count pass; two end-pad footprints require repair.",
+      "sha256": "5688ddf0004dc4c6a7d17821dcb6083a7243d42e0f2214d9ac80a174e4915465",
+      "bytes": 1504316,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "proposed_resource_variant",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ]
+    },
+    {
+      "asset": "storage_coal",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-faa8af6c-62db-46f6-81c3-31cb7461d5a5.png",
+      "score": 8.8,
+      "verdict": "HOLD",
+      "evidence": [
+        "Single dark coal mass retains front broad facet, rear ridge and coherent eight-view shape, distinct from silver/ochre ore.",
+        "Continuous thin border, centered stock and diagonal orientations retained.",
+        "End-view pad silhouette is still front-like compared with master."
+      ],
+      "blocking_defects": [
+        {
+          "requirement": "R6",
+          "panel": "90,270",
+          "issue": "End-view pad field/perimeter remains too broad and shallow, close to repeated front-view shape, unlike the accepted empty master end-view rectangle.",
+          "fix": "Repair only 90/270 pad field and perimeter to accepted empty master narrower/deeper end-view silhouette, about 245 by 160 at this sheet scale. Preserve all stock, other six pads and naturally occluded central glyph."
+        }
+      ],
+      "minor_disposition": "Coal resource identity passes; only the two end-pad silhouettes are blocked.",
+      "sha256": "a32b35e6641480a3c022f2fc4be24718ad913ef00e2f964deec860e223897208",
+      "bytes": 1492451,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "proposed_resource_variant",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ]
+    }
+  ],
+  "gate": "PASS requires score strictly above 9.0 with all mandatory concept-image checks passed. Unseen or failed evidence remains blocked.",
+  "comparison_reference_actually_reinspected": "/workspace/scratch/fc906e16b0fb/generated_images/exec-d05c9971-9c46-4c93-9b22-52826c1a907c.png"
+}

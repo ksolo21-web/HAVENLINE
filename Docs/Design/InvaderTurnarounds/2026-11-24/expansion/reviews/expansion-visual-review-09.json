@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-24",
+  "reviewer": "/root/render_critic",
+  "independent": true,
+  "scope": "Retest individual static PNG boards; no final roster or native approval",
+  "pass_threshold": 9.5,
+  "target_score": 10,
+  "all_mandatory_checks_required": true,
+  "items": [
+    {
+      "id": "polar-bear-details-r5",
+      "source": {
+        "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/repair-builds/renders/polar-bear-details-r5.png",
+        "sha256": "07595edd15c1b1c26331a91dc1fa4e9343a1438f3628ced0861e9c4fad6f4cc3",
+        "bytes": 1892275,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.7,
+      "retests": [
+        "polar-bear-details-r1",
+        "polar-bear-details-r2",
+        "approved scoped polar-bear-swipe-isolated-r4"
+      ],
+      "actually_reviewed": [
+        "Full composed six-panel sheet",
+        "Raised-paw enlargement",
+        "Grounded hind-paw counts at full sheet resolution",
+        "All five other panels compared for visible regressions",
+        "Identity against approved polar bear turnaround"
+      ],
+      "mandatory_checks": {
+        "five_distinct_exposed_paw_digit_pads": "PASS",
+        "coherent_claws_with_ordinary_overlap": "PASS",
+        "five_clawed_grounded_hind_paws": "PASS",
+        "same_bear_identity_and_four_limbs": "PASS",
+        "all_six_panels_and_use_poses": "PASS",
+        "preserved_other_panel_designs": "PASS",
+        "framing_and_style": "PASS",
+        "truthful_static_scope": "PASS"
+      },
+      "findings": [
+        "Five distinct toe pads plus the sole pad are retained in the final raised swipe paw. Four claw tips are fully resolved; the upper adjacent-claw contour overlaps at this smaller scale. This is not a four-digit palm, and five individually separated visible tips are not asserted.",
+        "Both planted hind paws display five claws. The other curled paw has ordinary curl/fur occlusion.",
+        "HEAD, PAW & FUR, OVERHEAD, CHARGE and RECOVERY retain the same designs and poses without visible geometry or framing regressions. Image generation resampled pixels; byte-identical panel preservation is not claimed.",
+        "The same ivory bear identity, four connected limbs and braced support remain coherent."
+      ],
+      "inspection_crop": {
+        "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/repair-builds/evidence/polar-bear-details-r5-raised-paw.png",
+        "source_sha256": "07595edd15c1b1c26331a91dc1fa4e9343a1438f3628ced0861e9c4fad6f4cc3",
+        "crop_box_ltrb": [
+          842,
+          539,
+          940,
+          619
+        ],
+        "resize_scale": 4,
+        "resampling": "not reported",
+        "metadata_provider": "/root/behind_panel_recall; actual full candidate and crop inspected independently"
+      },
+      "repairs_required": []
+    },
+    {
+      "id": "horned-snow-beast-turnaround-r2",
+      "source": {
+        "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/animal-builds/renders/horned-snow-beast-turnaround-r2.png",
+        "sha256": "237871db525945fc7889d492a04d3d4f803e3eee26bc627fbf3cd651ab426502",
+        "bytes": 2123052,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.7,
+      "retests": [
+        "horned-snow-beast-turnaround-r1"
+      ],
+      "actually_reviewed": [
+        "Full eight-angle candidate",
+        "Front-foot enlargement",
+        "Side and quarter foot geometry",
+        "Horn/face/hand/body/full-rear regression checks"
+      ],
+      "mandatory_checks": {
+        "five_toes_on_exposed_front_feet": "PASS",
+        "mirrored_inner_big_toes": "PASS",
+        "consistent_foot_geometry_in_rotation": "PASS",
+        "two_horns_and_same_beast_identity": "PASS",
+        "eight_distinct_angles": "PASS",
+        "opposite_profiles_and_full_rear": "PASS",
+        "connected_arms_legs_and_curled_hands": "PASS",
+        "framing_and_havenline_style": "PASS",
+        "truthful_reverse_interpretation": "PASS"
+      },
+      "findings": [
+        "Enlargement clearly verifies five connected toe/nail units per frontal foot; large inner toes mirror correctly.",
+        "Side and rear-quarter views retain consistent paw anatomy with normal overlap; rear views show heels instead of invented visible toes.",
+        "The two red horns, slate face, white sculpted fur, hands, broad body and eight camera orientations have no visible regression.",
+        "This approval does not approve the separate anatomy-reference hand or the pending detail board."
+      ],
+      "crop_provenance": "expansion-review-09-crop-provenance.json",
+      "repairs_required": []
+    }
+  ],
+  "coverage_gate": "OPEN_PENDING_FIVE_REMAINING_SHEETS_AND_FINAL_COVERAGE_MATRIX",
+  "animation_mesh_or_runtime_approval": false
+}

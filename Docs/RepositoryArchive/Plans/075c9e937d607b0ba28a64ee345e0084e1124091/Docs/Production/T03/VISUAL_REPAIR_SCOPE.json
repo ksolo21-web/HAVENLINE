@@ -1,0 +1,210 @@
+{
+  "schema_version": 1,
+  "task_id": "T03",
+  "repair_family": "whole_frame_reference_fidelity_violation",
+  "status": "ITERATION_11C_CAUSAL_VISUAL_REPAIR_PENDING_EVIDENCE",
+  "root_cause": "Iteration 11B exact-source critics exposed one shared presentation-transform family: fence and gate meshes used an approximate common source length plus large visual overlap/deep root sinks, while gate families used divergent leaf/post transforms; the lane shader also spread contrast across the whole bed so directional ruts weakened at review scale.",
+  "preserves": [
+    "T02 accepted terrain/snow/water/work-floor outside the T03 lane mask",
+    "T03 gate widths",
+    "T03 collision panel authority",
+    "T03 six-gate topology",
+    "T03 river crossing reserves",
+    "T03 route network",
+    "save/navigation deterministic proof"
+  ],
+  "changes": [
+    "Keep camp_boundary.gd, all six collision openings, river reserves and lane route authority unchanged.",
+    "Fit fence and gate-leaf authored meshes with their exact source lengths (2.9409 and 2.90), reduce repeated-panel overlap to seam-only values and reduce deep visual root sinking.",
+    "Use one 1.85-unit, 1.12-radian visual leaf presentation and one post scale/height across all six gates; use only a small hinge backset and rigid endpoint seating so leaves, posts and fence rails stay structurally aligned.",
+    "Keep the broad lane bed near the underlying snow/work-floor palette while increasing physical and material emphasis on continuous paired ruts; no path plane or new material is introduced.",
+    "Retain the same three T03 boundary draw batches, the same authored mesh family and all protected T01/T02 authorities."
+  ],
+  "must_not_change": [
+    "HavenlineGodot/scripts/camp_boundary.gd geometry constants",
+    "HavenlineGodot/scripts/river_geometry.gd",
+    "T01 forest assets",
+    "T02 topology/water authority"
+  ],
+  "required_next_evidence": [
+    "Godot import/build pass",
+    "T01/T02 protected-source check",
+    "T01-T03 mechanical regression including visual-shore-outside-water assertion",
+    "primitive/material audit zero findings",
+    "fresh exact-source 47+11 capture",
+    "focused lane crops that exclude foreign T02/prop palette from C1 attribution",
+    "focused west work and west river threshold crops for C2",
+    "explicit user visual signoff"
+  ],
+  "approval": false,
+  "review_repair_iteration": 11,
+  "iteration_1_disposition": "REJECTED_BY_INTERNAL_REFERENCE_REVIEW",
+  "iteration_1_findings": [
+    "Fence read as round log barricades rather than the reference's dense pointed palisade.",
+    "Large round snow caps read as marshmallow discs instead of thin pointed frosting.",
+    "Hanging blue/orange lantern assemblies were too industrial and visually dominant.",
+    "T03 lane tint remained broader/darker than the clean T02 work-floor treatment."
+  ],
+  "iteration_2_disposition": "REJECTED_BY_INTERNAL_REFERENCE_REVIEW",
+  "iteration_2_findings": [
+    "Palisade silhouette was much closer, but snow frosting covered too little of the pointed crown.",
+    "Picket gaps remained wider than the reference.",
+    "Rear rails were too dark/thick and competed with the vertical fence rhythm.",
+    "Gate markers still read as dark square boxes rather than quiet integrated threshold details."
+  ],
+  "iteration_3_disposition": "REJECTED_BY_INTERNAL_REFERENCE_REVIEW",
+  "iteration_3_findings": [
+    "Snow crown intersected the brown picket point and rendered as a white outline around a brown triangle.",
+    "Gate-post dark bands visually merged into a black block at gameplay scale.",
+    "Two visible rear rails still competed with the reference's vertical palisade rhythm."
+  ],
+  "iteration_4_disposition": "REJECTED_BY_INTERNAL_REFERENCE_REVIEW",
+  "iteration_4_findings": [
+    "Exact-source closeups showed a brown stripe cutting through the intended snow crown.",
+    "Fence timber remained more saturated orange than the pale salmon/brown reference fence.",
+    "Gate threshold warmth was acceptable but should stay even quieter."
+  ],
+  "iteration_5_disposition": "REJECTED_BY_INTERNAL_REFERENCE_REVIEW",
+  "iteration_5_findings": [
+    "Fence silhouette and snow crowns were close to reference, but the open gate leaves were still swung picket-fence panels.",
+    "The authoritative reference uses solid framed warm timber gate leaves with diagonal bracing."
+  ],
+  "iteration_6_disposition": "REJECTED_BY_C1_C2_GATE_READABILITY_REVIEW",
+  "iteration_6_findings": [
+    "North-main framed leaves were too close to edge-on in normal gate views and could read as missing rather than intentionally open.",
+    "West-work gate showed a visible hinge/fence alignment seam in the affected visual group.",
+    "C6 passed after correcting its response-contract defect; preserve that performance proof because iteration 7 does not change mesh, material, batch count, physics or population."
+  ],
+  "iteration_7_disposition": "PARTIAL_PASS_TWO_REMAINING_VISUAL_DEFECT_FAMILIES",
+  "iteration_7_findings": [
+    "C1/C2 north-work gates passed after iteration-7 visual re-angle; the edge-on/missing-leaf and hinge seam defects are closed.",
+    "C1 lanes and conditions passed; the earlier dark-asphalt lane finding was critic misattribution to foreign task pads.",
+    "C1 river-gates failed because authoritative-length leaves remained too edge-on/distant to read as intentional framed future-crossing gates.",
+    "C2 palisade failed on visible panel joins and the recessed support rail reading as a ground-line artifact; C1 palisade style itself passed exactly."
+  ],
+  "iteration_8_preflight_repair": {
+    "failure": "East curved river gate visual clear width fell below 3.20 when visual leaf length was 1.40 at 0.72 radians.",
+    "repair": "Shorten visual-only river leaves from 1.40 to 1.30 while preserving the 0.72-radian readable face angle and 0.24 hinge overlap.",
+    "authority_preserved": "camp_boundary.gd collision/opening/route constants remain unchanged.",
+    "expected_east_clear_width": "~3.221 units, above the locked 3.20 minimum."
+  },
+  "iteration_8a_disposition": "REJECTED_BY_INTERNAL_PIXEL_PREFLIGHT_SUPPORT_RAIL_ARTIFACT",
+  "iteration_8a_findings": [
+    "Exact-source fence closeup still showed the dark structural support as a continuous front-facing horizontal stripe despite the earlier height raise.",
+    "The reference palisade is dominated by vertical snow-capped pickets; a strong exposed horizontal rail materially weakens that read."
+  ],
+  "iteration_8b_repair": {
+    "failure": "Support rail remained outside the picket face and read as a continuous ground-line/bar across the palisade.",
+    "repair": "Translate the existing support rail 0.11 local units inward on Z so it is fully contained inside the picket depth; keep its height, material, faces and triangle count unchanged.",
+    "performance_domain": "No triangle/material/shader/draw-batch/physics/animation/NPC increase; corrected iteration-6 C6 proof remains preserved.",
+    "authority_preserved": "No camp_boundary.gd, collision, route, gate-width, T01 or T02 change."
+  },
+  "iteration_8b_disposition": "REJECTED_BY_INTERNAL_PIXEL_PREFLIGHT_SUPPORT_RAIL_STILL_VISIBLE",
+  "iteration_8b_findings": [
+    "The support rail remained visibly continuous through the fence closeup even after depth recession.",
+    "Because the authoritative palisade is visually dominated by vertical snow-capped pickets, the horizontal stripe remained an avoidable reference-fidelity defect."
+  ],
+  "iteration_8c_repair": {
+    "failure": "Exposed horizontal support remained visible as a dark stripe across the palisade.",
+    "repair": "Delete the rail surface entirely from fence_panel.obj: remove 84 rail-only vertices/normals and 28 triangles; preserve all pickets, snow crowns and joins.",
+    "geometry_delta": "668 -> 640 triangles per source fence mesh; monotonic reduction only.",
+    "performance_domain": "No new surfaces, materials, shaders, draw batches, textures, physics, animation or NPC load; corrected C6 pass is preserved by monotonic workload reduction.",
+    "authority_preserved": "No camp_boundary.gd, collision, gate width, route, T01 or T02 change."
+  },
+  "iteration_8c_disposition": "REJECTED_BY_FINAL_C1_C2_WITH_TWO_REAL_DEFECT_FAMILIES_AND_ATTRIBUTION_NOISE",
+  "iteration_8c_findings": [
+    "C1 fence passed exact 10/10 style, but C2 identified real south continuous-panel seam/crown discontinuity.",
+    "C1 and C2 both identified insufficient T03 lane readability/continuity at gameplay scale.",
+    "C2 north/work gates scored 10/10 and C2 river gates passed; conflicting C1 gate omissions are attributed to compressed evidence boards, not deletion of authored gate assets.",
+    "Condition-scene C1 failures were whole-scene attribution noise; C2 conditions passed and exact pixels retain the same T03 material family under lighting changes."
+  ],
+  "iteration_9_repair": {
+    "gate_face_visibility": "Reduce visual-only gate-leaf terrain sinks from 0.40/0.56 to 0.14/0.18 so the existing solid framed X-braced faces are no longer buried. Gate/collision authority remains unchanged.",
+    "lanes": "Strengthen only the existing T03 lane-mask color separation and paired ruts within the accepted T02 surface; no path mesh/plane is added.",
+    "south_fence": "Use symmetric edge crown heights and stronger visual-only south-panel overlap to eliminate repeat-boundary crown jumps/daylight seams.",
+    "performance": "Fence remains 640 triangles; gate mesh/material/batch count unchanged; lane shader instruction topology unchanged (constant/color tuning only). Preserve corrected C6 pass."
+  },
+  "iteration_9_disposition": "PARTIAL_PASS_THREE_TARGETED_DEFECT_FAMILIES",
+  "iteration_9_findings": [
+    "C1 passed fence, north gate, work gates, river gates, central lanes and conditions; only bank-lane reference fidelity failed.",
+    "C2 passed fence, north gate, central lanes and conditions; failures were west work-gate hinge contact, west/east river inner-leaf threshold contact, and bank/crossing lane continuity.",
+    "Bank-lane color overcorrection could read as dark asphalt in the critic board while other views showed the wear fading before thresholds."
+  ],
+  "iteration_10_repair": {
+    "hinges": "Replace symmetric leaf overlap with a 0.30-unit hinge-only backset hidden beneath the threshold post. The free edge remains fixed, so visual/collision aperture is preserved.",
+    "bank_lanes": "Derive a visual-only union from the authoritative north-bank and river-apron polylines, widening those wear envelopes by 0.22 and filling each river threshold with a route-centered wear disk; no route/collision constants change.",
+    "lane_material": "Lighten packed snow to pale cool blue-white and warm-floor wear to salmon-brown; reduce rut/edge darkening to prevent asphalt-like contrast.",
+    "performance": "No new draw batches, textures, materials, physics, animations or NPCs. Visual-lane union is terrain-build-time only; shader instruction family remains unchanged. Preserve corrected C6 pass."
+  },
+  "iteration_10_disposition": "REJECTED_AFTER_COMPLETE_TARGETED_CRITIC_COLLECTION",
+  "iteration_10_complete_failure_set": {
+    "C1_lanes_bank": [
+      "Packed bank wear/ruts remained below perceptual/reference readability.",
+      "Whole-frame palette comments are attribution noise because T02 is user-accepted; the actionable T03 defect is lane wear visibility."
+    ],
+    "C2_lanes_bank": [
+      "Bank wear visually ended before/at the riverbank without a deliberate packed apron.",
+      "Gate-geometry complaint inside the lane group is cross-domain attribution; gate integrity is handled by gate critics."
+    ],
+    "C2_river_gates": [
+      "West river far threshold post/framed face collapsed in oblique evidence."
+    ],
+    "C2_work_gates": [
+      "West work leaf/post/fence contact still showed a hinge seam."
+    ]
+  },
+  "iteration_11_root_causes": [
+    {
+      "family": "bank_lane_perceptual_continuity",
+      "cause": "Iteration 10 widened the route-derived mask but reduced snow-lane contrast below readable gameplay scale and still stopped visual wear at the gameplay-dry margin (1.05), so the future-crossing approach did not read as a deliberate apron to the river.",
+      "causal_repair": "Extend presentation-only wear from each authoritative dry approach to a point at shore_distance=WET_EDGE+0.08, add bank-only physical compression, and restore pale cool rut contrast. Do not alter routes, collision, or water."
+    },
+    {
+      "family": "west_gate_threshold_contact",
+      "cause": "Leaf geometry exists, but small threshold posts plus oblique foreshortening let the west work seam and west river far leaf/post visually collapse.",
+      "causal_repair": "Increase work/river post footprint only, deepen hinge-only backset while keeping free leaf edges fixed, and rotate only the west river visual leaf family farther open. Do not change gate collision/opening authority."
+    }
+  ],
+  "iteration_11_anti_loop_gate": {
+    "complete_known_blocker_set_collected_before_repair": true,
+    "symptom_patching_prohibited": true,
+    "passed_domains_frozen": true,
+    "must_not_reopen": [
+      "T02",
+      "C1 fence/north-gate/work-gates/river-gates/lanes-central/conditions unless iteration-11 visible changes touch that domain",
+      "C2 fence/north-gate/lanes-central/conditions",
+      "C6 corrected performance pass"
+    ],
+    "proof_required": "Fresh exact-source captures plus focused high-resolution review of changed bank-lane and gate-contact domains."
+  },
+  "iteration_11_repair": {
+    "bank_lane": "Visual-only shore apron outside water + bank-only physical compression + readable pale-blue packed ruts.",
+    "work_gate": "Post footprint 1.18 and hinge-only backset 0.38; free edge/collision unchanged.",
+    "river_gate": "Post footprint 1.18; west visual angle 0.88; hinge-only backset 0.38; visual clear width can only increase from the angle change.",
+    "performance": "No new meshes, textures, materials, draw batches, physics bodies, animation or NPC load; scale/transform and terrain-build-time math only. C6 remains preserved."
+  },
+  "iteration_11b_preflight": {
+    "classification": "NON_VISUAL_PERFORMANCE_CAUSAL_FIX",
+    "finding": "The visual shore solver was called inside terrain sampling and recomputed the same three crossing points for each sample.",
+    "repair": "Cache exact solved shore points by snapped crossing X. No math/output/path/material/geometry values change.",
+    "visual_evidence_invalidation": "Required only because candidate SHA changed; expected pixels are output-identical.",
+    "anti_loop": "This does not open a new visual defect family and does not modify the iteration-11 repair target."
+  },
+  "iteration_11b_critic_disposition": {
+    "status": "REJECTED_BY_FRESH_C1_C2",
+    "evidence_run": "35984260224",
+    "critic_run": "36014619116",
+    "findings": [
+      "C1 found fence/post rhythm and gate rail alignment inconsistencies plus broad lane texture inconsistency.",
+      "C2 found gate/terrain seam and grounding issues, inconsistent gate-gap/leaf presentation and cross-view portal misalignment.",
+      "The actual 58-image evidence package was inspected before repair; the repeated-panel join seams, divergent portal presentation and broad lane treatment are visible in the cited frames."
+    ]
+  },
+  "iteration_11c_causal_repair": {
+    "protected_authority": "No camp_boundary.gd or river_geometry.gd change.",
+    "fence": "Exact fence mesh source-length fit, overlap reduced to 0.025 ordinary / 0.04 south / 0.05 corner, visual root sink reduced to 0.22.",
+    "gates": "Exact 2.90 leaf source-length fit; all gate families use 1.85 leaf length, 1.12 rad open angle, 0.08 hinge backset, 0.08/0.10 leaf embed and uniform 1.12 x 1.08 posts with 0.20 root sink.",
+    "lanes": "Broad compression depth 0.055, paired rut depth 0.085, shoulder 0.055; shader broad tint reduced and continuous rut contrast increased.",
+    "acceptance": "Fresh exact-source import/regression, 47+11 renders, C1/C2, C6 and final pixel signoff remain mandatory."
+  }
+}

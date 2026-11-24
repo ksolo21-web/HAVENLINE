@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "task": "T05",
+  "candidate_commit": "a6ab5633297f817fcc46008422871f42fc500a43",
+  "review_kind": "INDEPENDENT_BOUNDED_QUICK_LOOK_SCOUT",
+  "reviewer": {
+    "runtime": "separate collaboration agent",
+    "session": "/root/t05_c0_critic",
+    "model_identifier": "not exposed to this agent"
+  },
+  "task_approval": false,
+  "native_android_approval": false,
+  "performance_approval": false,
+  "visual_only_score": 8.9,
+  "reference_style_exact_fidelity_10": false,
+  "coverage": {
+    "family_views_inspected_as_contact_sheets": 42,
+    "full_resolution_samples": [
+      "defense-detail",
+      "defense-front",
+      "defense-rear",
+      "pads-detail",
+      "resources-detail",
+      "counters-detail"
+    ],
+    "integrated_r13_gameplay_reviewed": false,
+    "native_r13_4k_reviewed": false
+  },
+  "validated_improvements": [
+    "R13 lower-contrast relief makes timber noticeably cleaner than R12",
+    "Roof snow now visibly crowned with tapered softer perimeter and central ridge coverage",
+    "Previous ridge-slicing/flat angular roof cap symptoms are resolved in supplied affected views; do not repeat that defect without new contrary evidence",
+    "R11 warm timber/deep blue materials and purposeful upper enclosure retained",
+    "Non-defense localized rounded snow geometry retained"
+  ],
+  "findings": [
+    {
+      "id": "R13-SCOUT-01",
+      "class": "PRODUCT_DEFECT",
+      "status": "DIAGNOSING",
+      "family": "authored timber relief stippling",
+      "same_family_confirmed_review_strikes": 2,
+      "visible_symptom": "Lower-contrast continuous timber strokes are present, but evenly spaced dark dot/stipple rows remain beside strokes on pad boards/rails and fish/cargo crate board edges. They do not read as intentional carved grain.",
+      "evidence": [
+        "local-evidence/r13/families/family-pads-detail.png",
+        "local-evidence/r13/families/family-pads-three-quarter.png",
+        "local-evidence/r13/families/family-resources-detail.png"
+      ],
+      "region": "Pad boards and perimeter rails; crate upper board edges",
+      "root_cause_status": "Pixel defect corroborated; exact depth-versus-edge-aliasing mechanism needs a bounded diagnostic before further causal repair.",
+      "probable_root_causes": [
+        "Ribbon top surface offset only .0018 above the wood face may permit depth interference under current transforms/depth settings",
+        "Thin tapered ribbon edge projections may remain subpixel and alias despite lower top-surface pigment"
+      ],
+      "implicated_files": [
+        "tools/havenline/task05/reference_surface_relief_v2.py",
+        "HavenlineGodot/assets/stations_v2/pad_*.glb",
+        "HavenlineGodot/assets/stations_v2/fish_crate.glb",
+        "HavenlineGodot/assets/stations_v2/cargo_crate.glb"
+      ],
+      "next_action": "Freeze R13 and perform C0 bounded matched-camera isolation to distinguish depth interference from screen-space edge aliasing. Use disposable diagnostic offset/material/normal experiments, preserve baseline pixels and contracts, then choose one causal repair; do not continue serial width/pigment edits without identifying the pixel mechanism.",
+      "proof": "Source-bound same-camera pads/resources detail and normal gameplay at phone resolution plus native4K; no camera/light change hiding the residual defect."
+    }
+  ],
+  "protected": [
+    "Immutable hearth GLB",
+    "Catalog IDs sockets footprints arrangements clearances",
+    "Inherited T03/T04 boundary/camera and other approved runtime",
+    "Characters gameplay economy saves"
+  ],
+  "evidence_hashes": {
+    "family-defense-detail.png": "1ba5686212503d5d77f118bd941fc67609650c2b32fb478361926efa04626810",
+    "family-defense-front.png": "7c44a5ad88bddd0064160d3a16eb149db9c69f6dd5f2d81351842d0b562467f7",
+    "family-defense-rear.png": "3cae6b8362ec05859f17302dc8b4225691b6ff3a4e5cae9f4323e7b147e037ea",
+    "family-pads-detail.png": "e78e9755bba9ed54a9be2dd5680758b950f16dca9ad13a342d24410aef72ac4d",
+    "family-pads-three-quarter.png": "f98c18cb0cefda08073628ad43e0a9bdb290d47c19544dede3d4308ae3d0629c",
+    "family-resources-detail.png": "fe17c794854214d77f714c78fb1ee5297496348dfe994c1517427683e5d22588",
+    "family-counters-detail.png": "c2183ee1c28ef2cc3cf71bb11859cc91dac2c807a48321c829d75b7f94af9c0c"
+  },
+  "limitations": [
+    "No full applicable critic matrix",
+    "No fresh Native Android judgment",
+    "No quantitative C6 judgment",
+    "Scout score is not acceptance"
+  ],
+  "disposition": "QUICK_LOOK_FIX_REQUIRED; residual mandatory timber defect remains; roof defect resolved for this bounded supplied visual packet."
+}

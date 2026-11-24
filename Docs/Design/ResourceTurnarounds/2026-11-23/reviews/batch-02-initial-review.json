@@ -1,0 +1,87 @@
+{
+  "reviewer": "/root/turnaround_critic",
+  "contract_version": "2026-11-23-v1",
+  "iteration": 1,
+  "assets": [
+    {
+      "asset": "steel",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-98631c65-6688-4ed8-8ca3-1d9dc648a2ad.png",
+      "sha256": "0b30f99b6082b6de09ef906228c48b82ecd5b5495526ae08ebe5170381761dd3",
+      "inspected_full_sheet": true,
+      "score": 8.1,
+      "verdict": "FAIL",
+      "mandatory_failed": [
+        "R3"
+      ],
+      "dimension_scores": {
+        "style": 9.6,
+        "readability": 9.7,
+        "framing_labels": 9.7,
+        "turnaround": 8.1,
+        "identity": 9.1
+      },
+      "issues": [
+        {
+          "severity": "blocking",
+          "issue": "REAR LEFT225\u00b0 repeats the REAR RIGHT135\u00b0 handed yaw, with short end on imageLEFT.",
+          "fix": "Change225\u00b0 to opposite rear diagonal: short end on imageRIGHT and broad rear face imageLEFT; keep top recess and corner chip on same object locations."
+        }
+      ],
+      "scope": "Concept sheet only; exact native geometry/game integration not assessed."
+    },
+    {
+      "asset": "metal_ore",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-e4bbb811-d4f9-481b-b0dd-fa1b29d6d266.png",
+      "sha256": "0f3e2277315bd9e79457549751ff7ec17d339f56214bba33c783e76ce54c72ec",
+      "inspected_full_sheet": true,
+      "score": 8.7,
+      "verdict": "HOLD",
+      "mandatory_failed": [
+        "R3"
+      ],
+      "dimension_scores": {
+        "style": 9.4,
+        "readability": 9.7,
+        "framing_labels": 9.7,
+        "turnaround": 8.7,
+        "identity": 9.1
+      },
+      "issues": [
+        {
+          "severity": "major",
+          "issue": "FRONT RIGHT45\u00b0 is nearly identical to FRONT0\u00b0; lobes and body read essentially unchanged yaw.",
+          "fix": "Increase45\u00b0 yaw and right-face visibility. Large upper-left silver lobe and two lower-right nodules must project to different positions without changing arrangement."
+        }
+      ],
+      "scope": "Concept sheet only; exact native geometry/game integration not assessed."
+    },
+    {
+      "asset": "fuel",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-7118919c-6810-4175-a2b9-107d59c37f7d.png",
+      "sha256": "c65b8e2d80856fdfec4f9f979c795c2ca4001758ed3f92ec7964b59f2186fd62",
+      "inspected_full_sheet": true,
+      "score": 7.8,
+      "verdict": "FAIL",
+      "mandatory_failed": [
+        "R3"
+      ],
+      "dimension_scores": {
+        "style": 9.6,
+        "readability": 9.7,
+        "framing_labels": 9.7,
+        "turnaround": 7.8,
+        "identity": 9.1
+      },
+      "issues": [
+        {
+          "severity": "blocking",
+          "issue": "REAR LEFT225\u00b0 repeats REAR RIGHT135\u00b0 broad-face/side ordering.",
+          "fix": "At225\u00b0, broad rear face onimageLEFT, narrow side onimageRIGHT; cap on far side partly behind handle; no rear fuel label. Preserve orange can, base reinforcement, single cap and handle."
+        }
+      ],
+      "scope": "Concept sheet only; exact native geometry/game integration not assessed."
+    }
+  ],
+  "set_status": "6 reviewed,0 pass; view corrections required",
+  "gate": "Strictly >9.0 and every mandatory check"
+}

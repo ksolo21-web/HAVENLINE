@@ -1,0 +1,60 @@
+{
+  "critic_id": "C6",
+  "candidate": "9bc735502b265bfdd365004fb863b19c613e27dd",
+  "passed": true,
+  "errors": [],
+  "measurement": {
+    "task": "T09",
+    "candidate_commit": "9bc735502b265bfdd365004fb863b19c613e27dd",
+    "passed": true,
+    "scene_state": "shipping main scene; 30-frame warm-up; 180 measured active-harvest forced-render submissions",
+    "resolution": [
+      3840,
+      2160
+    ],
+    "renderer": "mobile",
+    "gpu": "llvmpipe (LLVM 20.1.2, 256 bits)",
+    "visible_triangles": 608397,
+    "draw_calls": 55,
+    "materials_visible": 82,
+    "texture_gpu_memory_mb": 512.0185546875,
+    "process_memory_mb": 1890.19921875,
+    "process_static_memory_mb": 61.8914861679077,
+    "physics_active_bodies": 0,
+    "animated_rigs_active": 4,
+    "npc_companion_active_population": 3,
+    "storage_download_mb": 0.17712974548339844,
+    "cpu_frame_ms": null,
+    "gpu_frame_ms_where_measurable": null,
+    "render_submission_p95_ms": 1880.894,
+    "render_submission_p99_ms": 1905.435,
+    "exact_base_delta": {
+      "p95_ms": -57.46199999999999,
+      "p99_ms": -322.05200000000013,
+      "average_draw_calls": 1.0,
+      "average_primitives": -714.5111111110309,
+      "process_static_memory_mb": 0.8845949172972993,
+      "materials_visible": 1,
+      "unique_shader_resources": 0,
+      "physics_active_bodies": 0.0,
+      "animation_players": 0,
+      "active_animations": 0,
+      "visible_rigs": 0,
+      "npc_companion_active_population": 0
+    },
+    "maximum_fragment_descriptors": 0,
+    "maximum_impact_pulses": 0,
+    "measurement_method": "Pinned Godot 4.7.2 same-script exact-base/candidate forced-render comparison; Godot visible draw/primitive/GPU-memory and scene inventory counters; GNU time maximum RSS; exact T09 runtime asset/source byte delta.",
+    "known_unmeasured_fields": [
+      "full_cpu_frame_ms",
+      "gpu_frame_ms_where_measurable",
+      "direct_gpu_shader_time_ms",
+      "physical_display_presentation",
+      "physical_device_thermal_behavior"
+    ],
+    "physical_device_certification": false,
+    "thermal_certified": false,
+    "errors": []
+  },
+  "note": "Quantitative specialist gate; not T68/T69 certification."
+}
