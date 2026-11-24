@@ -6,12 +6,12 @@ This separate preview is for the revised **opening**, not the full Level 1 game 
 
 Use a fresh disposable checkout of the replacement branch. Importing the project and pressing F5 runs the deliberately unchanged V8 baseline (`res://opening.tscn`), **not** this preview. To test the combined river, camp, HUD, and Character 1 animation, use the exact scene below.
 
-From the repository root with Python 3.11+ and Godot 4.7.2 (Linux/macOS shell; use an isolated runner with a desktop display for the final command):
+From the repository root with Python 3.11+ and Godot 4.7.2 (Linux shell; use an isolated runner with a desktop display for the final command):
 
 ```sh
 python3 HavenlineLevel1/tools/hydrate_assets.py
 profile="$(mktemp -d)"
-mkdir -m 700 "$profile"/{home,data,cache,config,runtime,tmp}
+mkdir -m 700 "$profile/home" "$profile/data" "$profile/cache" "$profile/config" "$profile/runtime" "$profile/tmp"
 export HOME="$profile/home" XDG_DATA_HOME="$profile/data" XDG_CACHE_HOME="$profile/cache"
 export XDG_CONFIG_HOME="$profile/config" XDG_RUNTIME_DIR="$profile/runtime" TMPDIR="$profile/tmp"
 godot --headless --path HavenlineLevel1 --editor --import --quit
