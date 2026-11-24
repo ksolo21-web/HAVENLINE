@@ -1,0 +1,3 @@
+# Combined opening cold reload verification
+
+Independent Godot 4.7.2 native headless: seven separately denied entry processes, 17 authorized writer, 13 paid cold reload, 15 staging obstruction, and 4 unpaid cold recovery checks passed. Paid and unpaid exact receipts stayed byte-identical. Failed staged-write attempt did not debit or unlock camp; earned gates reset closed by design and can reopen. Base V8 and ordinary combined preview stay untouched. Additive fixtures only, with explicit opt-in and dual-marked disposable profiles. No real save, interrupted process or power-loss guarantee, gameplay integration change, visual/device result, or full Level 1 approval.
