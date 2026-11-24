@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://previews/terrain_contact_preview.gd" id="1_contact"]
+
+[node name="TerrainContactOnly" type="Node3D"]
+script = ExtResource("1_contact")
+
+[node name="GroundVisual" type="MeshInstance3D" parent="."]
+
+[node name="GroundBody" type="StaticBody3D" parent="."]
+collision_layer = 2048
+collision_mask = 0
+
+[node name="GroundTriangles" type="CollisionShape3D" parent="GroundBody"]
