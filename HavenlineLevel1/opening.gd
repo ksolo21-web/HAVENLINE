@@ -338,7 +338,7 @@ func _commit_opening_progress(next: Ledger) -> bool:
 
 func sync_progress_visuals() -> void:
 	wood_stock_view.reflect_stock(int(ledger.stock.wood))
-	if ResourceTreeScript.TREE_ID in ledger.collected and resource_tree.phase != "credited":
+	if ResourceTreeScript.TREE_ID in ledger.collected and not resource_tree.starter_credit_seen:
 		if resource_tree.phase == "ready_to_credit":
 			resource_tree.mark_credited()
 		else:
@@ -375,7 +375,11 @@ func step_tree(dt: float) -> void:
 		return
 	resource_tree.advance(dt, actor.global_position, float(layout.actor_radius))
 	if resource_tree.phase == "ready_to_credit":
-		_collect_wood_source(ResourceTreeScript.TREE_ID)
+		if resource_tree.regrows and resource_tree.starter_credit_seen:
+			# Repeat falls are visual; the one-time opening ledger is unchanged.
+			resource_tree.mark_credited()
+		else:
+			_collect_wood_source(ResourceTreeScript.TREE_ID)
 	tree_button.visible = not persist_blocked and resource_tree.can_address(actor.global_position, tree_facing())
 	tree_button.text = tree_action_label(resource_tree.strikes)
 

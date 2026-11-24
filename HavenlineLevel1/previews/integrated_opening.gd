@@ -126,7 +126,7 @@ func _ready() -> void:
 			resource_tree.name = "StarterResourceTree_wood_a"
 			add_child(resource_tree)
 			resource_tree.position = point(row.xz)
-			resource_tree.build(CONIFERS[0])
+			resource_tree.build(CONIFERS[0], true)
 			continue
 		var piece := StarterGroundWoodView.new()
 		piece.name = "StarterGroundWood_%s" % String(row.id)
