@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/render_critic",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-24T11:56:42.257855+00:00",
+  "scope": "Actual pixel review of bird and siege-machine turnarounds. Details and remote delivery remain separate gates.",
+  "requirements_sha256": "f8743c5f137b4669ead14bf503590a0233ff8258e87d87e156292245c385e30a",
+  "evidence_method": "Both complete eight-view PNGs plus four independent feet/track closeups inspected; prior owl and snowplow style-reference PNGs inspected without transferring old companion/utility identity.",
+  "crop_provenance": "reviews/evidence/review-04-crop-provenance.json",
+  "results": [
+    {
+      "series_id": "frostwing-raptor-turnaround",
+      "subject_id": "frostwing-raptor",
+      "sheet_type": "turnaround",
+      "asset_id": "frostwing-raptor-turnaround-r1",
+      "path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/renders/frostwing-raptor-turnaround-r1.png",
+      "sha256": "17cfca8369bee4307647eaa729629843249684a848da40fea068d4166aaea720",
+      "bytes": 2108607,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.8,
+      "all_mandatory_checks_passed": true,
+      "mandatory_checks": {
+        "eight_distinct_ordered_views": "PASS",
+        "opposite_profiles_and_full_rear": "PASS",
+        "same_identity_and_part_topology": "PASS",
+        "coherent_connected_parts_and_ground_contact": "PASS",
+        "distinct_enemy_proposal_silhouette": "PASS",
+        "consistent_scale_and_full_framing": "PASS",
+        "no_extra_floating_or_intersecting_parts": "PASS",
+        "established_havenline_style": "PASS",
+        "new_authored_concept_label": "PASS",
+        "two_wings_two_legs_one_tail": "PASS",
+        "three_forward_toes_one_rear_hallux": "PASS",
+        "no_companion_gear_or_extra_arms": "PASS"
+      },
+      "reviewed_views": [
+        "0",
+        "45",
+        "90",
+        "135",
+        "180",
+        "225",
+        "270",
+        "315"
+      ],
+      "findings": "The eight folded-wing rotations show two attached wings, two legs and a single banded tail. Enlarged left-profile foot resolves three forward toes plus the back-facing hallux; frontal toes are three forward with ordinary rear-digit occlusion. Hooked beak, wedge head, feather layering and lack of companion equipment distinguish the prior pet owl.",
+      "nonblocking_notes": [
+        "Minor feather-clump placement variation is nonblocking."
+      ],
+      "repairs_required": []
+    },
+    {
+      "series_id": "armored-ram-sled-turnaround",
+      "subject_id": "armored-ram-sled",
+      "sheet_type": "turnaround",
+      "asset_id": "armored-ram-sled-turnaround-r1",
+      "path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/renders/armored-ram-sled-turnaround-r1.png",
+      "sha256": "db601515bb0eb3dc97ee02b01e97eb6506aab4e5d0dea18910c53647460c7998",
+      "bytes": 1896419,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.8,
+      "all_mandatory_checks_passed": true,
+      "mandatory_checks": {
+        "eight_distinct_ordered_views": "PASS",
+        "opposite_profiles_and_full_rear": "PASS",
+        "same_identity_and_part_topology": "PASS",
+        "coherent_connected_parts_and_ground_contact": "PASS",
+        "distinct_enemy_proposal_silhouette": "PASS",
+        "consistent_scale_and_full_framing": "PASS",
+        "no_extra_floating_or_intersecting_parts": "PASS",
+        "established_havenline_style": "PASS",
+        "new_authored_concept_label": "PASS",
+        "two_continuous_tracks": "PASS",
+        "four_small_plus_two_large_hubs_each_exposed_side": "PASS",
+        "one_centered_blunt_ram": "PASS",
+        "one_rear_engine_and_centered_stack": "PASS"
+      },
+      "reviewed_views": [
+        "0",
+        "45",
+        "90",
+        "135",
+        "180",
+        "225",
+        "270",
+        "315"
+      ],
+      "findings": "Each exposed track side resolves four small road-wheel hubs between two larger end-wheel hubs, with two continuous tread assemblies overall. The eight views retain one front-centered blunt capped wooden ram, one rear engine and one rear-centered short exhaust. Opposed profiles and rear establish coherent front/rear topology, distinct from the old worker snowplow.",
+      "nonblocking_notes": [
+        "Minor hardware/snow rendering variation is nonblocking; no physical mechanism or native model claim is made."
+      ],
+      "repairs_required": []
+    }
+  ],
+  "mandatory_pass_threshold": 9.5,
+  "target_score": 9.9,
+  "native_mesh_rig_animation_runtime_approval": false
+}

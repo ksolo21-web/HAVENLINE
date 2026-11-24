@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/render_critic",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-24T12:03:10.876855+00:00",
+  "scope": "Actual pixel review of three human detail/static-action boards against approved turnaround hashes. No runtime, mechanism-function or continuous-motion claim.",
+  "requirements_sha256": "f8743c5f137b4669ead14bf503590a0233ff8258e87d87e156292245c385e30a",
+  "evidence_method": "All complete six-panel PNGs plus enlarged hammer grip, two-hand spear/tether pose and crouched canister placement independently inspected.",
+  "crop_provenance": "reviews/evidence/review-05-crop-provenance.json",
+  "results": [
+    {
+      "series_id": "shield-raider-details",
+      "subject_id": "shield-raider",
+      "sheet_type": "details",
+      "asset_id": "shield-raider-details-r1",
+      "path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/renders/shield-raider-details-r1.png",
+      "sha256": "42e278ea790c853cff0116611ce8f8331d947b8bd02980b8d231550bb3ac3b63",
+      "bytes": 1791928,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "anchor_sha256": "578177b4b6de9093c5df3b5655998b42a4aef17d1666c734b35fab64694eebd9",
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.8,
+      "all_mandatory_checks_passed": true,
+      "mandatory_checks": {
+        "same_identity_as_approved_turnaround": "PASS",
+        "six_required_use_and_detail_panels": "PASS",
+        "two_connected_arms_two_legs": "PASS",
+        "coherent_static_support": "PASS",
+        "anatomical_handedness": "PASS",
+        "full_body_framing_and_intentional_detail_crops": "PASS",
+        "established_havenline_style": "PASS",
+        "new_authored_static_concept_label": "PASS",
+        "left_shield_right_hammer": "PASS",
+        "four_plank_outer_boss_and_plain_strapped_inner": "PASS",
+        "coherent_five_digit_hammer_grip": "PASS"
+      },
+      "reviewed_panels": [
+        "HEAD & HELMET",
+        "SHIELD FACES",
+        "HAMMER GRIP",
+        "GUARD",
+        "ADVANCE",
+        "STRIKE"
+      ],
+      "findings": "Same broad armored character and equipment as approved turnaround. Shield is on anatomical left and hammer right throughout all poses. Shield fronts have four planks and one boss, inner face has plain planks and two straps. Enlarged right-hand grip has four fingers and a thumb connected around the handle. Step and strike anatomy/contact and full framing are coherent.",
+      "nonblocking_notes": [
+        "Minor surface/snow variation is nonblocking."
+      ],
+      "repairs_required": []
+    },
+    {
+      "series_id": "harpoon-hunter-details",
+      "subject_id": "harpoon-hunter",
+      "sheet_type": "details",
+      "asset_id": "harpoon-hunter-details-r1",
+      "path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/renders/harpoon-hunter-details-r1.png",
+      "sha256": "1b66ac976df1755f65dc34edb8e4fdde78f7766abcaf1e0901e889ae8293b11b",
+      "bytes": 1744513,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "anchor_sha256": "1e25e1b578a0631f5de0d4c44dfc180415991f72bc577d7e7f5fbd7e83428fc3",
+      "status": "REPAIR_REQUIRED",
+      "score": 8.8,
+      "all_mandatory_checks_passed": false,
+      "mandatory_checks": {
+        "same_identity_as_approved_turnaround": "PASS",
+        "six_required_use_and_detail_panels": "PASS",
+        "two_connected_arms_two_legs": "PASS",
+        "coherent_static_support": "PASS",
+        "anatomical_handedness": "PASS",
+        "full_body_framing_and_intentional_detail_crops": "PASS",
+        "established_havenline_style": "PASS",
+        "new_authored_static_concept_label": "PASS",
+        "right_primary_left_supporting_aim_grip": "PASS",
+        "left_hip_coil_preserved": "PASS",
+        "aim_tether_attaches_visibly_to_harpoon_butt": "UNVERIFIED_REPAIR_REQUIRED"
+      },
+      "reviewed_panels": [
+        "HEAD & COAT",
+        "HARPOON GRIP",
+        "TETHER & COIL",
+        "READY",
+        "AIM",
+        "RECOVER"
+      ],
+      "findings": "Identity, six panels, main right grip, supporting left grip, left-hip coil and body anatomy are coherent. In AIM the rope emerges from beneath the rear right wrist/cuff while the harpoon butt is completely hidden by the glove/forearm. These pixels do not establish that the rope attaches to the shaft end rather than the wrist. Mandatory visible attachment/readability remains unverified; other five panels do not require redesign.",
+      "nonblocking_notes": [],
+      "repairs_required": [
+        {
+          "panel": "AIM",
+          "issue": "Rope emerges at underside of rear right cuff; shaft butt/rope junction is not visible and cannot be traced as attached to the harpoon.",
+          "required_change": "Expose a short wooden butt beyond the right controlling hand and show the rope attached directly to that end, outside the wrist/forearm. Preserve supporting left hand, left-hip coil, remaining identity and other five panels.",
+          "evidence": "reviews/evidence/harpoon-hunter-details-r1-aim-grips-tether.png"
+        }
+      ]
+    },
+    {
+      "series_id": "powder-sapper-details",
+      "subject_id": "powder-sapper",
+      "sheet_type": "details",
+      "asset_id": "powder-sapper-details-r1",
+      "path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/renders/powder-sapper-details-r1.png",
+      "sha256": "5ce78088384a52d0a86a3c9880f6a40faff92e692dfbe49784f93669d4739fa6",
+      "bytes": 1970461,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "anchor_sha256": "b2891960f3792ad3443f157819503d010391ebf892d445e08fb2bee57115ddee",
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.8,
+      "all_mandatory_checks_passed": true,
+      "mandatory_checks": {
+        "same_identity_as_approved_turnaround": "PASS",
+        "six_required_use_and_detail_panels": "PASS",
+        "two_connected_arms_two_legs": "PASS",
+        "coherent_static_support": "PASS",
+        "anatomical_handedness": "PASS",
+        "full_body_framing_and_intentional_detail_crops": "PASS",
+        "established_havenline_style": "PASS",
+        "new_authored_static_concept_label": "PASS",
+        "one_back_pack_two_bands_two_straps": "PASS",
+        "one_right_canister_left_empty": "PASS",
+        "coherent_place_pose_and_loop_grip": "PASS"
+      },
+      "reviewed_panels": [
+        "GOGGLES & COLLAR",
+        "PACK & STRAPS",
+        "CANISTER GRIP",
+        "CARRY",
+        "PLACE",
+        "RETREAT"
+      ],
+      "findings": "Same short stocky goggles/orange-coat character; one centered back pack with two bands and two shoulder straps, one small right-held canister and empty left hand throughout. PLACE has both boots planted, the same canister upright at the right boot and the right mitten still attached to its carry loop. Carry and alternate retreat poses keep coherent limbs, wrists, pack attachment and contact.",
+      "nonblocking_notes": [
+        "Minor surface/snow variation is nonblocking."
+      ],
+      "repairs_required": []
+    }
+  ],
+  "mandatory_pass_threshold": 9.5,
+  "target_score": 9.9,
+  "native_mesh_rig_animation_runtime_approval": false
+}

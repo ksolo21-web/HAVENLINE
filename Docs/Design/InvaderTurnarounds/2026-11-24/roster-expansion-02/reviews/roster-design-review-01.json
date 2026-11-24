@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/render_critic",
+  "independent": true,
+  "created_utc": "2026-11-24T11:44:08.985312+00:00",
+  "verdict": "PASS_ROSTER_PROPOSAL_DESIGN",
+  "score": 9.7,
+  "score_scope": "Design-plan variety and truthful concept labeling only; no new generated asset approved.",
+  "new_subjects": 8,
+  "required_new_sheets": 16,
+  "reviewed_prior_subjects": 12,
+  "evidence": "reviews/evidence/prior-roster-silhouettes.png",
+  "evidence_provenance": "reviews/evidence/prior-roster-silhouettes-provenance.json",
+  "subjects": [
+    {
+      "id": "shield-raider",
+      "distinct_design": "Defensive humanoid with dominant broad shield silhouette",
+      "comparison": "Prior Raider and rifle infantry",
+      "implementation_review_focus": "Lock shield hand and weapon hand; show attached shield grip/straps; defense posture must be distinct."
+    },
+    {
+      "id": "harpoon-hunter",
+      "distinct_design": "Long pole/harpoon and visible tether silhouette with pulling or casting posture",
+      "comparison": "Prior ranged rifle infantry and non-hostile fishing equipment",
+      "implementation_review_focus": "Keep hostile combat identity and tether attachment consistent; avoid using a rifle-shaped weapon or friendly fisher-only posing."
+    },
+    {
+      "id": "powder-sapper",
+      "distinct_design": "Compact carried ordnance load and setting/throwing posture",
+      "comparison": "Prior Raider and Rifleman",
+      "implementation_review_focus": "Readable pack/charge shape beyond recoloring; coherent hands and attached pack straps; artwork only."
+    },
+    {
+      "id": "frost-stalker",
+      "distinct_design": "Low lean feline, long thick tail, rounded cat muzzle and snow-leopard-like markings",
+      "comparison": "Hostile Wolf and Spined Frostbeast",
+      "implementation_review_focus": "Four legs, one tail, stable markings and natural feline paws; no added dorsal plate silhouette."
+    },
+    {
+      "id": "tusk-boar",
+      "distinct_design": "Low broad russet/cream bristled ungulate with paired rising tusks",
+      "comparison": "Existing bears, wolves and deer",
+      "implementation_review_focus": "Exactly paired tusks, cloven primary hooves, one short tail; consistent snout and tusk attachments."
+    },
+    {
+      "id": "musk-ox-rampager",
+      "distinct_design": "Massive shaggy shoulder and low swept lateral horns with broad bases",
+      "comparison": "Giant Elk, Tundra Stag and bipedal Horned Snow Beast",
+      "implementation_review_focus": "Four-legged shaggy body, cloven hooves and stable paired non-branching horns; distinguish from antlered deer and humanoid beasts."
+    },
+    {
+      "id": "frostwing-raptor",
+      "distinct_design": "Flying bird predator with two feathered wings, two legs and hooked beak",
+      "comparison": "No existing flying enemy among twelve selected prior subjects",
+      "implementation_review_focus": "Stable folded-wing rotation; spread-wing flight and landing details; one tail and attached coherent talons."
+    },
+    {
+      "id": "armored-ram-sled",
+      "distinct_design": "Hostile mechanical siege ram on a clearly built sled chassis",
+      "comparison": "No prior enemy machine; existing worker sled/snowplow equipment",
+      "implementation_review_focus": "Lock runner/support/ram counts and direction; distinct ram head and chassis, connected mechanics, contact and unclipped actions."
+    }
+  ],
+  "mandatory_plan_checks": {
+    "distinct_roles_and_silhouette_intents": true,
+    "twelve_existing_subjects_compared_in_actual_pixels": true,
+    "new_authored_concepts_not_unseen_source_claims": true,
+    "existing_approved_work_preserved": true,
+    "sixteen_required_sheets_remain_scope": true,
+    "minimum_9_5_and_all_mandatory_image_checks_required": true
+  },
+  "remaining_gates": [
+    "Actual full-sheet pixel and closeup review of sixteen outputs.",
+    "Cross-pair identity, anatomy or mechanical coherence, distinct opposite profiles and rear, framing/style and action-readability.",
+    "All attempts and exact raw review inputs preserved and independently verified in GitHub."
+  ],
+  "scope_limits": [
+    "Prior YT13 identity and inaccessible-source completeness gaps remain open.",
+    "No native mesh, rig, continuous motion or runtime certification."
+  ],
+  "asset_status": "0 of 16 reviewed at this checkpoint; all pending actual output."
+}

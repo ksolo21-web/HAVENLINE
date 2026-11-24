@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "corrections": [
+    {
+      "id": "harpoon-hunter-details-r2",
+      "kind": "prompt_file_metadata_correction",
+      "reason": "The generator used a prompt with no final newline. The first saved file had an extra final newline; root checked the actual imagegen string and authorized removing that one byte before freeze. No image generation or image-byte change occurred.",
+      "recorded_file_before": {
+        "sha256": "6a87fd4cf3846b0c12a3bfda21fdab4c7bd94215c5cdae7384ea34bfeba4db41",
+        "git_blob_sha": "2f97750303200a0ec0e53fff2a4b9f624bcf544c",
+        "bytes": 2050
+      },
+      "actual_generation_prompt_after": {
+        "sha256": "222eb832f449ec5280de0945ac4df90a388f407dbbbd3c7461bde238e37cd0db",
+        "git_blob_sha": "78597aa835ed07b4002eaf82a239c7a8986e3940",
+        "bytes": 2049
+      },
+      "historical_file": "provenance/prompt-record-corrections/harpoon-hunter-details-r2-file-before-newline-correction.txt",
+      "canonical_prompt": "prompts/harpoon-hunter-details-r2.txt",
+      "generated_render_count_change": 0
+    }
+  ]
+}
