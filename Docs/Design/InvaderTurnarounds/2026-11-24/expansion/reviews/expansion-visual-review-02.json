@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-24",
+  "reviewer": "/root/render_critic",
+  "independent": true,
+  "scope": "Static PNG visual review only; roster completeness remains reopened and unapproved.",
+  "threshold": {
+    "target": 10,
+    "working_pass_minimum": 9.5,
+    "all_mandatory_checks_required": true
+  },
+  "items": [
+    {
+      "id": "polar-bear-details-r1",
+      "source": {
+        "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/renders/polar-bear-details-r1.png",
+        "sha256": "a2e4eed0acc48241288ffd84671f9188ef626ab33cf5f0bf934e0c99b5066479",
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "status": "REPAIR_REQUIRED",
+      "score": 8.9,
+      "actually_reviewed": [
+        "Full six-panel sheet",
+        "Approved polar-bear turnaround r1 full sheet compared again",
+        "PAW & FUR closeup",
+        "Full REAR & SWIPE pose closeup",
+        "Raised-palm pixel enlargement"
+      ],
+      "mandatory_checks": {
+        "same_identity_as_turnaround": "PASS",
+        "source_polar_bear_identity": "PASS",
+        "polished_havenline_style": "PASS",
+        "six_requested_panels_and_framing": "PASS",
+        "coherent_limbs_and_contact": "PASS",
+        "consistent_paw_anatomy": "FAIL",
+        "truthful_static_scope": "PASS"
+      },
+      "findings": [
+        "The planted PAW & FUR closeup has five claws, consistent with the approved turnaround.",
+        "The fully exposed raised palm in REAR & SWIPE has only four distinct digit pads and four claws, creating a count/geometry inconsistency. This is not a distant partly occluded foot.",
+        "The same pose also shows four visible claws on each grounded hind paw; use the five-digit geometry consistently when repairing this pose.",
+        "HEAD, PAW & FUR, OVERHEAD, CHARGE and RECOVERY preserve the same unarmored ivory bear design, four connected limbs, rounded ears, blunt muzzle, short tail and sculpted clumps."
+      ],
+      "repair": "Replace only REAR & SWIPE with the same bear pose using five anatomical digits per paw; exposed palm must show five pads/claws. Preserve other five panels. A separately verified isolated pose may reduce dense-sheet edit ambiguity.",
+      "evidence": [
+        "evidence/polar-bear-details-r1-paw-closeup.png",
+        "evidence/polar-bear-details-r1-swipe-closeup.png",
+        "evidence/polar-bear-details-r1-raised-paw-count.png"
+      ]
+    },
+    {
+      "id": "rival-rifleman-turnaround-r1",
+      "source": {
+        "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/renders/rival-rifleman-turnaround-r1.png",
+        "sha256": "065e57e64c948888ffcb59ead0faf1f4f8b0a7bd569b5776d70781162a6e1b62",
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "status": "REPAIR_REQUIRED",
+      "score": 8.9,
+      "actually_reviewed": [
+        "Full sheet; front, front left, left, rear left, rear, rear right, right, front right",
+        "Actual source WS-S03-054 and WS-S07-038"
+      ],
+      "mandatory_checks": {
+        "source_rifle_infantry_appearance": "PASS",
+        "polished_havenline_style": "PASS",
+        "eight_distinct_views": "PASS",
+        "opposite_profiles_and_full_rear": "PASS",
+        "weapon_side_and_grip_consistency": "PASS",
+        "anatomy_scale_framing": "PASS",
+        "belt_pouch_orientation_continuity": "FAIL",
+        "truthful_static_scope": "PASS"
+      },
+      "findings": [
+        "Rear-facing views incorrectly repeat the front-facing pouch flaps/buttons; the front-mounted closure geometry must turn away with the model.",
+        "No additional confirmed anatomy, silhouette, weapon-handedness or framing failure was found in the actual full sheet.",
+        "Source rank and exact name remain descriptive rather than source-proven."
+      ],
+      "repair": "Root already owns the targeted rear pouch correction; review revised PNG before approval."
+    }
+  ],
+  "crop_provenance": "expansion-review-02-crop-provenance.json",
+  "coverage_gate": "OPEN; no overall complete-roster or native/runtime approval."
+}

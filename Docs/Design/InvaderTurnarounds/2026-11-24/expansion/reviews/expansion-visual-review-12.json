@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-24",
+  "reviewer": "/root/render_critic",
+  "independent": true,
+  "scope": "Final required static detail board",
+  "pass_threshold": 9.5,
+  "target_score": 10,
+  "all_mandatory_checks_required": true,
+  "items": [
+    {
+      "id": "hooded-siege-boss-details-r1",
+      "source": {
+        "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/renders/hooded-siege-boss-details-r1.png",
+        "sha256": "a5d25814237772ed62fd1058ae73fcd31e886671da6179d2ff0076650c5e4974",
+        "bytes": 2003993,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.7,
+      "actually_reviewed": [
+        "Mask and mantle closeup",
+        "Wraps, cuff, hem and boots closeup",
+        "Boss versus swarmer comparison",
+        "Advance full-body pose",
+        "Heavy-swing full-body pose",
+        "Recover full-body pose",
+        "Cross-sheet identity with approved boss turnaround"
+      ],
+      "mandatory_checks": {
+        "same_large_hooded_identity": "PASS",
+        "source_socketed_face_and_amber_center": "PASS",
+        "heavy_mass_distinct_from_swarmer": "PASS",
+        "consistent_cape_cuffs_wraps_and_boots": "PASS",
+        "two_arms_two_booted_legs": "PASS",
+        "coherent_static_pose_contacts": "PASS",
+        "six_panel_detail_action_coverage": "PASS",
+        "no_invented_specific_weapon": "PASS",
+        "framing_and_havenline_style": "PASS",
+        "truthful_static_interpretation": "PASS"
+      },
+      "findings": [
+        "Same pointed hood, pale socketed face, amber center, heavy shoulders, large cuffs, long cape and boots are retained across all panels.",
+        "Advance has one lifted forward boot and a grounded support boot; heavy swing has a broad planted stance with two connected arms. Recover returns to balanced support.",
+        "Boss/swarmer comparison clarifies interpreted relative bulk without claiming a source-measured numeric ratio.",
+        "No detached/floating gear, extra limbs, unintended clipping or unsupported weapon was observed."
+      ],
+      "repairs_required": []
+    }
+  ],
+  "coverage_gate": "Awaiting canonical source-to-render matrix; all 18 new sheets individually pass.",
+  "animation_mesh_or_runtime_approval": false
+}

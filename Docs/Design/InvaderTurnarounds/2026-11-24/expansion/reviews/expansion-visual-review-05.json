@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/render_critic",
+  "date": "2026-11-24",
+  "independent": true,
+  "scope": "Individual static PNG concept boards only",
+  "pass_threshold": 9.5,
+  "all_mandatory_checks_required": true,
+  "target_score": 10,
+  "items": [
+    {
+      "id": "giant-elk-details-r1",
+      "source": {
+        "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/animal-builds/renders/giant-elk-details-r1.png",
+        "sha256": "41df73e13524498b0b18205f47adc71076bdd8fd0db1a2c97326a2990d7cca31",
+        "bytes": 1951754,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.7,
+      "actually_reviewed": [
+        "Full six-panel sheet",
+        "Head/antler closeup on full-resolution board",
+        "Coat and antler root closeup",
+        "Cloven-hoof contact closeup",
+        "Alert, lowered-head and braced-reset whole-body static poses",
+        "Cross-sheet comparison with independently approved giant-elk turnaround r1"
+      ],
+      "mandatory_checks": {
+        "same_elk_identity": "PASS",
+        "coherent_antler_attachment_and_shape": "PASS",
+        "stable_fur_and_markings": "PASS",
+        "cloven_hooves_and_leg_anatomy": "PASS",
+        "four_limbs_and_clear_static_contact": "PASS",
+        "requested_detail_and_use_state_coverage": "PASS",
+        "full_body_framing": "PASS",
+        "havenline_style": "PASS",
+        "truthful_static_pose_scope": "PASS"
+      },
+      "findings": [
+        "The heavy chocolate mane, chestnut body, cream face/chest and amber antlers match the approved turnaround.",
+        "Closeup compositions intentionally show partial body regions; all three full-body poses keep all extremities inside their cells.",
+        "Lowered-head pose changes the neck angle without disconnecting the antlers, adding limbs or hiding the supporting hoof contacts.",
+        "The footer explicitly limits these to static poses and interpreted concepts; motion is not certified."
+      ],
+      "repairs_required": []
+    },
+    {
+      "id": "tundra-stag-turnaround-r1",
+      "source": {
+        "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/animal-builds/renders/tundra-stag-turnaround-r1.png",
+        "sha256": "e1d4cde67ec69290e3227786a4f177d5a12fb02c585983420709caf62e3a235a",
+        "bytes": 1805649,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.7,
+      "actually_reviewed": [
+        "All eight labeled angles at full sheet resolution",
+        "Both opposite profiles and true rear",
+        "Antler/body/marking continuity",
+        "All limb and hoof silhouettes",
+        "Comparison to actual YT11 timeline and source storyboard previously inspected"
+      ],
+      "mandatory_checks": {
+        "source_pale_lean_antlered_appearance": "PASS",
+        "eight_distinct_views": "PASS",
+        "opposite_profiles_and_full_rear": "PASS",
+        "stable_four_limb_anatomy": "PASS",
+        "stable_dark_antler_topology": "PASS",
+        "same_pale_markings_and_tail": "PASS",
+        "scale_framing_no_clipping": "PASS",
+        "havenline_style": "PASS",
+        "honest_huntable_role_and_interpretation": "PASS"
+      },
+      "findings": [
+        "Lean long-legged pale gray/white ungulate with dark branching antlers remains visibly distinct from the bulky brown/gold giant elk.",
+        "Continuous forelegs and bent hind hocks support four cloven hooves; frontal/rear limb overlap is natural.",
+        "All eight orientations and stable antler/coat/tail traits are readable without equipment or added hostile gear.",
+        "Tundra Stag is a descriptive label. The huntable-wildlife footer does not overclaim confirmed camp-invader behavior."
+      ],
+      "repairs_required": []
+    }
+  ],
+  "coverage_gate": "OPEN_PENDING_REMAINING_PAIRS_AND_COMPLETE_REFERENCE_MATRIX",
+  "animation_mesh_or_runtime_approval": false
+}

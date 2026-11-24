@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/render_critic",
+  "date": "2026-11-24",
+  "independent": true,
+  "scope": "Individual static concept PNGs only. Full source coverage remains open.",
+  "pass_threshold": 9.5,
+  "target_score": 10,
+  "all_mandatory_checks_required": true,
+  "items": [
+    {
+      "id": "giant-elk-turnaround-r1",
+      "source": {
+        "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/animal-builds/renders/giant-elk-turnaround-r1.png",
+        "sha256": "ba0b176330e5495fd45f2b8d26bf71c58812bb77bb910d44ea27dd879892a0e0",
+        "bytes": 1925855,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.7,
+      "actually_reviewed": [
+        "Full eight-angle sheet",
+        "Front antlers enlarged",
+        "Front-left antlers enlarged",
+        "Front-right antlers enlarged",
+        "Prior inspected actual YT01 preview composites compared for source-supported form/color"
+      ],
+      "mandatory_checks": {
+        "source_broad_form_and_color": "PASS",
+        "same_individual_anatomy_and_markings": "PASS",
+        "eight_distinct_views": "PASS",
+        "opposite_profiles_full_rear": "PASS",
+        "antler_attachment_and_main_branch_topology": "PASS",
+        "four_limb_ungulate_anatomy": "PASS",
+        "scale_framing_no_clipping": "PASS",
+        "havenline_sculpted_style": "PASS",
+        "honest_interpreted_reverse_scope": "PASS"
+      },
+      "findings": [
+        "Broad chestnut body, dark heavy neck mane, cream muzzle/chest, paired amber branching antlers and cloven hooves form a coherent Havenline interpretation of the low-resolution brown/gold antlered target.",
+        "Each antler remains attached continuously to the skull and preserves the main curved beam and branch organization. Different views have ordinary tine overlap; no unsupported detached or extra beam was observed.",
+        "Rear and both opposite profiles are genuine; leg overlap is natural and no extra or missing limb is exposed.",
+        "This approves the static turnaround; the detail/action sheet and final source-to-render coverage remain pending."
+      ],
+      "repairs_required": []
+    },
+    {
+      "id": "horned-snow-beast-turnaround-r1",
+      "source": {
+        "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/animal-builds/renders/horned-snow-beast-turnaround-r1.png",
+        "sha256": "37d25fd56e32aa6d132639d398431ffe61dcb5bd239d3e00925e8299319afb20",
+        "bytes": 2131264,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "status": "REPAIR_REQUIRED",
+      "score": 8.9,
+      "actually_reviewed": [
+        "Full eight-angle sheet",
+        "Front feet enlarged",
+        "Front hands enlarged",
+        "Prior inspected actual YT01 preview composite compared for broad pale/red-horned appearance"
+      ],
+      "mandatory_checks": {
+        "source_broad_form_and_color": "PASS",
+        "two_horns_continuity": "PASS",
+        "eight_distinct_views": "PASS",
+        "opposite_profiles_full_rear": "PASS",
+        "five_toe_geometry_per_prompt": "FAIL",
+        "hand_geometry": "NO_SEPARATE_CONFIRMED_DEFECT; curled fingers partly overlap",
+        "scale_framing_no_clipping": "PASS",
+        "havenline_sculpted_style": "PASS",
+        "honest_interpreted_reverse_scope": "PASS"
+      },
+      "findings": [
+        "The front view clearly exposes four toe/nail units per foot. The prompt expressly requires five-toed feet. Natural far-side occlusion does not explain the fully visible front feet.",
+        "Two coral-red horns, slate face, white sculpted fur, arms, legs and eight camera directions otherwise remain coherent.",
+        "The hands are curved with overlapping fingers; no independent missing-finger finding is asserted from this evidence. Preserve five-digit intent when repairing and expose anatomy in the subsequent detail board."
+      ],
+      "repair": "Correct the foot construction consistently across all eight views to five toes with a stable inner big toe and four smaller toes. Preserve the same beast and two-horn silhouette. Use a verified isolated anatomy anchor if direct dense-sheet correction fails."
+    }
+  ],
+  "crop_provenance": "expansion-review-03-crop-provenance.json",
+  "coverage_gate": "OPEN; individual sheet approval does not imply complete enemy roster or runtime approval."
+}

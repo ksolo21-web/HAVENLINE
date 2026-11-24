@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-24",
+  "reviewer": "/root/render_critic",
+  "independent": true,
+  "scope": "Individual static PNG turnaround approval only",
+  "pass_threshold": 9.5,
+  "target_score": 10,
+  "all_mandatory_checks_required": true,
+  "items": [
+    {
+      "id": "rival-rifleman-turnaround-r2",
+      "source": {
+        "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/renders/rival-rifleman-turnaround-r2.png",
+        "sha256": "764c806cba10cf0c018c55a5949429ac7c6a7a88bcc276d8da59c934588c2591",
+        "bytes": 1857152,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.7,
+      "retests": "expansion-visual-review-02.json/rival-rifleman-turnaround-r1",
+      "actually_reviewed": [
+        "Full eight-angle candidate",
+        "Affected rear-left, rear and rear-right pouch surfaces",
+        "All other views checked for visible regressions"
+      ],
+      "mandatory_checks": {
+        "source_rifle_infantry_appearance": "PASS",
+        "eight_distinct_views": "PASS",
+        "opposite_profiles_and_full_rear": "PASS",
+        "belt_pouch_orientation": "PASS",
+        "stable_outfit_proportions_and_weapon": "PASS",
+        "anatomy_and_grip": "PASS",
+        "scale_framing": "PASS",
+        "havenline_style": "PASS",
+        "truthful_static_interpretation": "PASS"
+      },
+      "findings": [
+        "The rear three views now expose plain side/back pouch surfaces, while front closure flaps/buttons remain on the front-facing surfaces.",
+        "Rifle stock, barrel, right-hand grip and left support remain attached and coherent across views.",
+        "No new silhouette, limb, framing or garment regression was observed."
+      ],
+      "repairs_required": []
+    },
+    {
+      "id": "spined-frostbeast-turnaround-r1",
+      "source": {
+        "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/renders/spined-frostbeast-turnaround-r1.png",
+        "sha256": "653a78923a0ae858c18ca3edecf560ea4a97bb1a74cd5b17ae26e5dfb9752239",
+        "bytes": 2003520,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.7,
+      "actually_reviewed": [
+        "Full eight-angle candidate",
+        "Actual source S05 spined white quadruped crop re-viewed side by side in the review sequence"
+      ],
+      "mandatory_checks": {
+        "source_white_quadruped_dark_dorsal_plates": "PASS",
+        "eight_distinct_views": "PASS",
+        "opposite_profiles_and_full_rear": "PASS",
+        "stable_spine_region_and_shape": "PASS",
+        "four_limb_continuity": "PASS",
+        "five_clawed_exposed_front_paws": "PASS",
+        "scale_and_no_clipping": "PASS",
+        "havenline_style": "PASS",
+        "truthful_reverse_interpretation": "PASS"
+      },
+      "findings": [
+        "Broad white bear-like quadruped and dark jagged dorsal plates preserve the distinctive actual S05 appearance.",
+        "Five exposed claws on front paws; ordinary overlap at side/rear paws; no duplicated or detached limbs.",
+        "Main dorsal spike sequence and smaller shoulder plates remain coherently attached and positioned through the rotation.",
+        "Spined Frostbeast is a descriptive Havenline interpretation; exact source species/tier is not established by the low-resolution source."
+      ],
+      "repairs_required": []
+    }
+  ],
+  "coverage_gate": "OPEN_PENDING_ALL_NEW_SUBJECT_PAIRS_AND_REFERENCE_MATRIX",
+  "animation_or_runtime_approval": false
+}

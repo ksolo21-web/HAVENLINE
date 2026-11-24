@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-24",
+  "reviewer": "/root/render_critic",
+  "independent": true,
+  "scope": "Individual static eight-view concept boards",
+  "pass_threshold": 9.5,
+  "target_score": 10,
+  "all_mandatory_checks_required": true,
+  "items": [
+    {
+      "id": "rival-leader-turnaround-r1",
+      "source": {
+        "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/renders/rival-leader-turnaround-r1.png",
+        "sha256": "450910b6c22e478c0c7bcb9027c645fe1d08335e4c16d70e90ebab79c46fcade",
+        "bytes": 1930493,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.7,
+      "actually_reviewed": [
+        "All eight full-body views",
+        "Opposite profiles/full rear",
+        "Face/beard/hood/belt/coat continuity",
+        "Connected hands and same rifle",
+        "Actual S03 source frame already independently inspected"
+      ],
+      "mandatory_checks": {
+        "source_heavy_white_bearded_red_coated_appearance": "PASS",
+        "eight_distinct_views": "PASS",
+        "opposite_profiles_and_full_rear": "PASS",
+        "stable_body_outfit_and_face": "PASS",
+        "two_arms_two_legs_and_weapon_grip": "PASS",
+        "framing_and_scale": "PASS",
+        "havenline_style": "PASS",
+        "descriptive_label_and_reverse_interpretation": "PASS"
+      },
+      "findings": [
+        "Broad older human silhouette, prominent white beard and red shearling coat preserve the separate source leader appearance rather than duplicating the young rifle infantry.",
+        "Rifle stock/barrel/hand relationship rotates coherently; no floating or repeated gear was observed.",
+        "Leader is a descriptive label; a source-defined boss tier is not asserted."
+      ],
+      "repairs_required": []
+    },
+    {
+      "id": "hooded-swarmer-turnaround-r1",
+      "source": {
+        "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/renders/hooded-swarmer-turnaround-r1.png",
+        "sha256": "00c6ba1405f5db6f49714a5b99873e275ac53e819d84103b29d23c5bdcfb0d3b",
+        "bytes": 1879770,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.7,
+      "actually_reviewed": [
+        "All eight full-body views",
+        "Opposite profiles/full rear",
+        "Bone-like face/sockets/amber center",
+        "Pointed hood, sleeve/cuff and hem continuity",
+        "Interpreted two booted legs and mittened arms",
+        "Actual S08 source minion crop and timeline previously inspected"
+      ],
+      "mandatory_checks": {
+        "source_red_hood_pale_socketed_face": "PASS",
+        "eight_distinct_views": "PASS",
+        "opposite_profiles_and_full_rear": "PASS",
+        "stable_face_hood_and_clothing": "PASS",
+        "coherent_two_arms_two_legs": "PASS",
+        "no_invented_specific_weapon": "PASS",
+        "framing_and_scale": "PASS",
+        "havenline_style": "PASS",
+        "honest_reverse_underbody_interpretation": "PASS"
+      },
+      "findings": [
+        "Pale face with large dark round eye openings and amber beak-like center remains coherent through front/quarter/profile views.",
+        "Red hood point, scarf fold, brown sleeves, amber cuffs and booted underbody stay consistent; reverse views expose the back, not duplicated face views.",
+        "Unseen source underbody anatomy and whether the face is a mask are not certified as source fact; the board truthfully presents a reference-based interpretation."
+      ],
+      "repairs_required": []
+    }
+  ],
+  "coverage_gate": "OPEN; detail/action companions and remaining subjects still pending",
+  "animation_mesh_or_runtime_approval": false
+}

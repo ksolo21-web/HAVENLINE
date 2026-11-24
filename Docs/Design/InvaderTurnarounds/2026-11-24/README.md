@@ -1,5 +1,7 @@
 # Havenline enemy-invader concept renders
 
+> **Coverage correction — 2026-11-24:** The original three-subject batch was incomplete against the supplied reference corpus. The [expanded current gallery](expansion/README.md) and [source-to-render coverage matrix](expansion/coverage-matrix.md) add nine identified reference subjects with 18 reviewed sheets and preserve explicit source-access/identity limits. The historical individual image approvals below remain valid within their original scope; they do not establish a complete enemy roster.
+
 **Six required sheets passed independent static-image review at 9.7/10, plus two scoped Ice Brute references at 9.8/10.** This archive retains all **17 produced PNGs**, including rejected versions and repairs. The eight selected/reference aliases reuse the same image bytes.
 
 ## Open the selected images

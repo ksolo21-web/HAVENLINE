@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-24",
+  "reviewer": "/root/render_critic",
+  "independent": true,
+  "scope": "Individual static PNG boards only",
+  "target_score": 10,
+  "pass_threshold": 9.5,
+  "all_mandatory_checks_required": true,
+  "items": [
+    {
+      "id": "rival-rifleman-details-r1",
+      "source": {
+        "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/renders/rival-rifleman-details-r1.png",
+        "sha256": "b93c9d60b6c3a6e54fb18112384cd589a31a49c5436245231ffa023df701be15",
+        "bytes": 1854486,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.6,
+      "actually_reviewed": [
+        "Full six-panel board",
+        "Head identity",
+        "Rifle-hold grip closeup",
+        "Rear equipment",
+        "Aim, advance and recover full-body poses",
+        "Cross-sheet match to approved turnaround r2"
+      ],
+      "mandatory_checks": {
+        "same_character_identity": "PASS",
+        "rifle_shape_handedness_and_grip": "PASS",
+        "rear_pouch_orientation": "PASS",
+        "two_arms_two_legs_and_contact": "PASS",
+        "six_requested_panels": "PASS",
+        "full_body_framing": "PASS",
+        "havenline_style": "PASS",
+        "truthful_static_pose_scope": "PASS"
+      },
+      "findings": [
+        "Hat, red padded coat, shearling trim, boots, silhouette and rifle remain consistent. Rifle hold/aim use connected hands and a shoulder-supported stock.",
+        "Advance and kneeling recovery show plausible static support with no duplicated leg or extra boot.",
+        "Rear pouch faces stay plain, consistent with the repaired turnaround.",
+        "Nonblocking finish difference: front pouch studs visible in the turnaround are simplified on this detail board; pouch placement, flap shape and orientation remain stable. This is a small finish deduction, not a failed identity/mechanism gate."
+      ],
+      "repairs_required": []
+    },
+    {
+      "id": "spined-frostbeast-details-r1",
+      "source": {
+        "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/renders/spined-frostbeast-details-r1.png",
+        "sha256": "c3a430b78cd463b975899768f46ed2253b8c7c24559e9f71e629ce8a3d25d98a",
+        "bytes": 1957637,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "status": "PASS_STATIC_CONCEPT",
+      "score": 9.7,
+      "actually_reviewed": [
+        "All six panels",
+        "Head and spines closeup",
+        "Five-claw paw closeup",
+        "Overhead body and spine attachment",
+        "Charge, brace and recovery full-body static poses",
+        "Cross-sheet match to approved turnaround r1"
+      ],
+      "mandatory_checks": {
+        "same_white_quadruped_identity": "PASS",
+        "dorsal_plate_attachment_and_region": "PASS",
+        "paw_closeup_has_five_claws": "PASS",
+        "coherent_four_limb_anatomy": "PASS",
+        "static_pose_readability_and_contact": "PASS",
+        "full_body_framing": "PASS",
+        "havenline_style": "PASS",
+        "truthful_static_interpretation": "PASS"
+      },
+      "findings": [
+        "Main dorsal row and smaller shoulder plates stay attached to the same back region.",
+        "Paw closeup clearly displays five claws; far-side toes in full-body poses have normal overlaps, without a fully exposed contradictory four-pad palm.",
+        "Charge has a coherent airborne stride; brace and recovery return to grounded support. No continuous-motion approval is inferred from static poses."
+      ],
+      "repairs_required": []
+    },
+    {
+      "id": "polar-bear-details-r2",
+      "source": {
+        "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/repair-builds/renders/polar-bear-details-r2.png",
+        "sha256": "54e8a0233675dd96f3940b1403f3de935f3ff4026051af0649ffc4a7d4248f34",
+        "bytes": 1869990,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "status": "REPAIR_REQUIRED",
+      "score": 8.9,
+      "actually_reviewed": [
+        "Full candidate sheet",
+        "Builder-supplied raised-paw enlargement"
+      ],
+      "mandatory_checks": {
+        "same_bear_identity": "PASS",
+        "six_panels_and_framing": "PASS",
+        "exposed_five_digit_paw_geometry": "FAIL"
+      },
+      "findings": [
+        "The raised swipe paw still has exactly four digit pads and four claws. The mandatory count/continuity defect is unresolved.",
+        "Other five panels retain the same bear and layout, but their preservation cannot compensate for the failed exposed-paw anatomy."
+      ],
+      "repair": "Builder is preparing a separately verified full reared-pose replacement rather than another ambiguous dense-board digit edit.",
+      "inspection_crop": {
+        "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/repair-builds/evidence/polar-bear-details-r2-raised-paw.png",
+        "source_sha256": "54e8a0233675dd96f3940b1403f3de935f3ff4026051af0649ffc4a7d4248f34",
+        "crop_box_ltrb": [
+          865,
+          529,
+          971,
+          623
+        ],
+        "resize_scale": 5,
+        "metadata_provider": "/root/behind_panel_recall; actual crop and full source were viewed independently",
+        "resampling": "not reported"
+      }
+    }
+  ],
+  "coverage_gate": "OPEN_PENDING_ALL_REQUIRED_SHEETS_AND_FINAL_REFERENCE_MATRIX",
+  "animation_mesh_or_runtime_approval": false
+}

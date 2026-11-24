@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/render_critic",
+  "created_utc": "2026-11-24T10:52:25.984804+00:00",
+  "scope": "Individual static PNG turnaround approval only; full enemy-roster coverage remains reopened",
+  "approval_threshold": {
+    "minimum_score": 9.5,
+    "all_mandatory_checks_must_pass": true,
+    "target": 10
+  },
+  "entries": [
+    {
+      "reference_subject_id": "polar_bear_unarmored",
+      "asset_id": "polar-bear-turnaround-r1",
+      "board_type": "eight_view_turnaround",
+      "candidate_path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/renders/polar-bear-turnaround-r1.png",
+      "sha256": "98a4f246b7992e360721ca1a8d092489f382e3ca276f99e8f91234760d74e754",
+      "score": 9.7,
+      "status": "PASS_STATIC_CONCEPT",
+      "all_mandatory_visual_checks_passed": true,
+      "actual_full_sheet_inspected": true,
+      "checked_views": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ],
+      "reference_evidence": [
+        {
+          "source": "PrimaryB original video",
+          "sha256": "4c9051cbea6df0efa3e7288b13b6d17da46e857274869b0b43d2f96ff6cc79d2",
+          "intervals_seconds": [
+            "2.5\u20136",
+            "14.5\u201320.5",
+            "32\u201338",
+            "43.5\u201352.5"
+          ],
+          "evidence_directory": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/reviews/evidence/primary-b"
+        },
+        {
+          "source": "Committed B-028.00 full frame and bear crop",
+          "sha256": "3e983101885a727eb32fcc0d132fcacf8be8c439d2dfefcb267b45326065ee18",
+          "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/reviews/evidence/primary-b/B-028.00.png"
+        },
+        {
+          "source": "Prior Havenline companion-brown-bear style reference",
+          "path": "/workspace/scratch/9c51da47f878/havenline-invaders/references/companion-brown-bear.png",
+          "use": "Material/shape grammar only; companion equipment intentionally absent."
+        }
+      ],
+      "inspection_crops": [
+        {
+          "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/reviews/evidence/polar-bear-turnaround-r1-front-paws.png",
+          "source_sha256": "98a4f246b7992e360721ca1a8d092489f382e3ca276f99e8f91234760d74e754",
+          "crop_box_xyxy": [
+            55,
+            350,
+            345,
+            438
+          ],
+          "resize_factor": 2
+        },
+        {
+          "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/reviews/evidence/polar-bear-turnaround-r1-profiles.png",
+          "source_sha256": "98a4f246b7992e360721ca1a8d092489f382e3ca276f99e8f91234760d74e754",
+          "crop_box_xyxy": [
+            750,
+            120,
+            1160,
+            860
+          ],
+          "resize_factor": 2,
+          "note": "Tight inspection crop; original full sheet was separately reviewed for framing."
+        }
+      ],
+      "mandatory_checks": {
+        "mapped_reference_subject_readable": true,
+        "eight_distinct_correct_angles": true,
+        "opposite_profiles_and_full_rear": true,
+        "coherent_four_limb_anatomy": true,
+        "stable_head_fur_tail_and_body_identity": true,
+        "unarmored_and_unharnessed_hostile_family": true,
+        "approved_havenline_sculpted_material_grammar": true,
+        "consistent_scale_and_no_candidate_clipping": true,
+        "no_duplicated_or_floating_parts": true,
+        "honest_static_reference_interpretation_label": true
+      },
+      "positive_evidence": [
+        "The plain white bear silhouette, rounded ears, dark nose/claws and quadrupedal body correspond to primaryB hostile wildlife rather than the bipedal Ice Brute.",
+        "Clumped polished fur follows Havenline style while the missing harness and hostile expression distinguish it from the companion bear.",
+        "Both opposing profiles preserve connected front/hind limb anatomy; front/diagonals, full rear and tail position form a coherent eight-view set.",
+        "Reference-based concept and reverse-views-interpreted footer accurately limits unseen-surface fidelity."
+      ],
+      "findings": [],
+      "limitations": [
+        "Matched detail/use-state sheet remains to be reviewed.",
+        "This is not native mesh, rig, animation or runtime approval.",
+        "Individual approval does not close the reopened full-reference roster gate."
+      ]
+    }
+  ],
+  "summary": {
+    "new_individually_approved_sheets": 1,
+    "this_subject_detail_board_pending": true,
+    "full_roster_coverage_approved": false
+  }
+}
