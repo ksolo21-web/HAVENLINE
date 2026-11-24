@@ -1,5 +1,6 @@
 extends "res://opening.gd"
 ## Opt-in candidate with no save path and no default launch change.
+const HeroLocomotion = preload("res://previews/hero_locomotion.gd")
 const CompactHUD = preload("res://previews/compact_opening_hud.gd")
 const Terrain = preload("res://terrain_source.gd")
 const DrySweep = preload("res://previews/fixture_dry_shore_sweep.gd")
@@ -8,6 +9,7 @@ const FLOOR_SHADE = preload("res://previews/integrated_camp_floor.gdshader")
 # Provisional, prior screened rigid relocation of the full V8 camp/woods module.
 const CAMP_SHIFT := Vector2(-3.25, 5.80)
 const ACTIVE_HALF := Vector2(14.2, 16.2)
+var hero_locomotion := HeroLocomotion.new()
 var ground: StaticBody3D
 var bound := false
 var bank_side := 0.0
@@ -103,6 +105,7 @@ func _ready() -> void:
 	shape.shape = capsule
 	actor.add_child(shape)
 	var hero_visual := model(HERO, actor, float(layout.actor_height))
+	hero_locomotion.bind(hero_visual)
 	wood_stock_view = WoodStockScript.new()
 	wood_stock_view.name = "TechnicalPublishedWoodStockView"
 	actor.add_child(wood_stock_view)
@@ -215,6 +218,7 @@ func _physics_process(dt: float) -> void:
 		bound = false
 		push_error("Combined candidate foot ownership stopped outside admitted dry surface.")
 		return
+	hero_locomotion.observe(here.distance_to(observed) / dt, actor.is_on_floor())
 	step_technical_gates(dt)
 	if flat.length() > .05:
 		actor.rotation.y = atan2(flat.x, flat.z)

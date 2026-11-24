@@ -1,0 +1,3 @@
+# Character 1 preview playback verification
+
+The opt-in combined opening now plays the existing stock Character 1 idle/walk/run animations based on observed grounded movement. The mesh, skeleton bytes, collision and default opening are unchanged. Independent Godot headless checks: 12 hero, 14 adverse/directional, 40 combined and 7 baseline wood. Rendered desktop confirmed arms-down idle at launch and after ordinary movement and turns; screenshot cadence did not verify the entire stride, foot planting or visual grade. Two-handed axe use and grip, foot-slide/ankle checks, coating fit, and device play are separate open gates. No real save written.
