@@ -1,0 +1,218 @@
+{
+  "schema_version": 2,
+  "user_request": "360 renders of characters 1-4, this style i want for all.",
+  "scope": "Four existing Havenline character identities in the supplied polished studio style; eight body-turnaround sheets covering 32 views, plus four explicit spread-finger hand-reference sheets covering 16 hand views. Static reference artwork only.",
+  "date": "2026-11-24",
+  "repository": "ksolo21-web/HAVENLINE",
+  "branch": "art/enemy-invaders-2026-11-24",
+  "parent_commit": "f3f86e7695e7b68e0d16456dde66788e25291d98",
+  "archive_prefix": "Docs/Design/CharacterTurnarounds/2026-11-24/reference-style-01",
+  "style_authority": {
+    "local_path": "/workspace/scratch/9c51da47f878/upload/1795533885648.png",
+    "sha256": "2a364995e105e8ceebad7b5c80db753f8220e1bce697b1405ae3a4afe02aaf13",
+    "actual_format": "JPEG",
+    "dimensions": [
+      1536,
+      1536
+    ],
+    "archive_relative_path": "inputs/user-style-reference.jpg",
+    "role": "User's latest authoritative style source; also Character1 identity/outfit source."
+  },
+  "style_locks": [
+    "Polished stylized3D with adult proportions similar to the supplied reference, approximately5.4 head heights for Character1; preserve each other character's identity without old oversized chibi proportions.",
+    "Clean light neutral gray studio background and soft contact shadows; smooth controlled lighting; no navy presentation background or decorative snow.",
+    "Detailed blue/orange winter cloth, cream shearling, leather, hair, face, glasses and boots; rendering quality/material language matches the supplied reference.",
+    "Hands have four fingers and one opposable thumb, each connected to a continuous palm. Use a natural open fan with visible gaps between all fingers. Preserve Character4 fingerless glove coverage; other characters retain their full fingered gloves.",
+    "No face/identity swaps: Characters2–4 use their existing source sheets for identity and outfit/pack arrangement, and user reference for style/proportion/lighting.",
+    "Body views use a neutral horizontal T-pose with open splayed hands and palms facing the same forward direction as the torso. Thumbs point generally upward. Palms rotate with the body, never independently toward every camera. Boots flat, head aligned with torso, full fingertips and boots framed."
+  ],
+  "sheets": [
+    {
+      "type": "cardinal",
+      "layout": "2x2",
+      "slots": [
+        {
+          "position": "top-left",
+          "angle": 0,
+          "label": "FRONT · 0°"
+        },
+        {
+          "position": "top-right",
+          "angle": 90,
+          "label": "LEFT · 90°"
+        },
+        {
+          "position": "bottom-left",
+          "angle": 180,
+          "label": "BACK · 180°"
+        },
+        {
+          "position": "bottom-right",
+          "angle": 270,
+          "label": "RIGHT · 270°"
+        }
+      ]
+    },
+    {
+      "type": "diagonal",
+      "layout": "2x2",
+      "slots": [
+        {
+          "position": "top-left",
+          "angle": 45,
+          "label": "FRONT LEFT · 45°"
+        },
+        {
+          "position": "top-right",
+          "angle": 135,
+          "label": "REAR LEFT · 135°"
+        },
+        {
+          "position": "bottom-left",
+          "angle": 225,
+          "label": "REAR RIGHT · 225°"
+        },
+        {
+          "position": "bottom-right",
+          "angle": 315,
+          "label": "FRONT RIGHT · 315°"
+        }
+      ]
+    },
+    {
+      "type": "hands",
+      "layout": "2x2",
+      "slots": [
+        {
+          "position": "top-left",
+          "label": "LEFT PALM",
+          "orientation": "Anatomical left palm facing camera; fingers upward and spread."
+        },
+        {
+          "position": "top-right",
+          "label": "RIGHT PALM",
+          "orientation": "Anatomical right palm facing camera; fingers upward and spread."
+        },
+        {
+          "position": "bottom-left",
+          "label": "LEFT BACK",
+          "orientation": "Back of anatomical left hand facing camera; fingers upward and spread."
+        },
+        {
+          "position": "bottom-right",
+          "label": "RIGHT BACK",
+          "orientation": "Back of anatomical right hand facing camera; fingers upward and spread."
+        }
+      ],
+      "requirements": [
+        "Exactly four clear closeups of the same character hand/glove construction, with wrist and cuff visible.",
+        "All five digits completely visible with clear gaps; no overlap hiding the count, no missing or duplicated digits.",
+        "Correct left/right chirality and thumb attachment. Middle finger longest, index/ring slightly shorter, little finger shortest; thumb has its own angle and two-segment silhouette.",
+        "Palmar and dorsal surfaces remain distinct. Character4 nails appear only on dorsal surfaces of exposed fingertips.",
+        "Same character-specific glove material, color, sleeve and shearling cuff as both body sheets."
+      ]
+    }
+  ],
+  "layout": {
+    "requested_native_dimensions": [
+      2048,
+      2048
+    ],
+    "actual_dimensions_must_be_recorded": true,
+    "rule": "Square 2x2 sheets. Body sheets show four whole-body rotations with generous fingertip/boot padding; hand sheets show four large wrist-and-hand closeups with clear gaps around every digit. Charcoal HAVENLINE | CHARACTER n titles and CARDINAL VIEWS, DIAGONAL VIEWS or HAND REFERENCE subtitles. Light gray studio background."
+  },
+  "subjects": [
+    {
+      "id": "character-1",
+      "builder": "root",
+      "identity": "Warm-brown-skinned adult man; short tight black curls, rectangular black glasses, connected trimmed beard and moustache.",
+      "outfit": "Navy ribbed neck warmer, navy parka with cream fleece hood/cuffs and orange shoulders/zip/hem/pocket flaps, navy cargo trousers and knee pads, full brown fingered gloves, brown lace-up capped boots with fleece cuffs.",
+      "locks": [
+        "Use attached reference for entire identity, proportions and outfit.",
+        "No backpack, harness, belt, waist pouch, weapons, extra gear or snow decorations.",
+        "Back has coherent down hood, plain navy coat and orange lower hem; front zipper and pocket flaps do not repeat on rear."
+      ]
+    },
+    {
+      "id": "character-2",
+      "builder": "builder-characters-2-4",
+      "identity": "Warm medium-skinned woman; side-swept straight dark bob and brown rectangular glasses.",
+      "outfit": "Blue/orange coat with cream hood worn up, gray scarf, charcoal full fingered gloves, blue/navy knee-padded trousers, brown boots; belt and brown backpack with blue horizontal bedroll, cream side attachments and silver cup.",
+      "locks": [
+        "Preserve glasses, straight bob and raised hood identity.",
+        "One brown backpack with BLUE horizontal bedroll.",
+        "Right-hip pouch and left-side silver cup remain on their anatomical sides.",
+        "Preserve original equipment layout across all eight views."
+      ]
+    },
+    {
+      "id": "character-3",
+      "builder": "builder-characters-2-4",
+      "identity": "Rich-brown-skinned woman; center-parted short dense curled bob, no glasses.",
+      "outfit": "Open blue/orange coat with cream shearling, burgundy inner neck/shirt and cream buttoned vest, brown fingered gloves, dark trousers, brown boots; tall brown framed pack, existing blue cylindrical side gear, tan top roll/pad and silver cup.",
+      "locks": [
+        "Preserve center-parted curls and no-glasses identity.",
+        "Open coat must keep burgundy inner garment and cream vest visible from front.",
+        "Keep original tall pack and blue cylindrical gear/tan top arrangement.",
+        "Right-hip pouch and left silver cup maintain their anatomical sides."
+      ]
+    },
+    {
+      "id": "character-4",
+      "builder": "builder-characters-2-4",
+      "identity": "Brown-skinned woman; rounded dense curls, navy/gray striped headband with narrow orange accent and gold hoop earrings.",
+      "outfit": "Closed blue/orange coat with cream trim, dark scarf, fingerless gloves, blue trousers and brown boots; chest buckle harness, brown backpack with brown horizontal bedroll, red/orange-handled sheathed belt item and silver cup.",
+      "locks": [
+        "Preserve headband and gold hoop earrings; no glasses.",
+        "One brown backpack with BROWN horizontal bedroll.",
+        "Preserve fingerless glove design with anatomically coherent five-digit hands.",
+        "Keep right-hip pouch, left-side cup and sheathed item on original sides."
+      ]
+    }
+  ],
+  "required_subject_count": 4,
+  "required_sheet_count": 12,
+  "required_total_views": 48,
+  "mandatory_checks": [
+    "All four identities and requested clothing/equipment features preserved in the new supplied style.",
+    "Eight real ordered rotational views per character: true front/back and distinct opposed side and diagonal views; no relabeled duplicate/mirror substitutes.",
+    "Coherent hands, limbs, orientation, face, clothing and gear; turnaround hands use the new spread-finger palm-forward T-pose. Every visible digit is anatomically consistent. No camera-facing wrist substitutions in profiles.",
+    "Cardinal and diagonal sheets match one another; no changed scale, outfit or identity between sheets.",
+    "Each character has a separate hand reference showing both palms and both backs with all five connected digits fully visible, naturally spread, and correctly labeled left/right. Profile occlusion in body views is resolved by these explicit hand closeups.",
+    "Every selected sheet independently scores at least9.5/10 and every mandatory check passes; aim9.9/10.",
+    "Every generated attempt, exact prompt, actual reference binding and QA evidence is saved unchanged to GitHub.",
+    "All existing repository files remain unchanged; append only in the declared new archive prefix.",
+    "Fresh independent GitHub ref/commit/untruncated-tree readback verifies all generated and selected file hashes and sizes."
+  ],
+  "milestones": [
+    {
+      "id": 1,
+      "name": "Recover identities and lock the supplied style",
+      "status": "references_recovered_requirements_locked"
+    },
+    {
+      "id": 2,
+      "name": "Build eight body sheets plus four hand-reference sheets",
+      "status": "v1_outputs_preserved_hand_pose_revision_in_progress"
+    },
+    {
+      "id": 3,
+      "name": "Independent critique, repair and retest",
+      "status": "v1_reviews_historical_v2_acceptance_reopened"
+    },
+    {
+      "id": 4,
+      "name": "Archive all outputs in GitHub and verify",
+      "status": "preparing_archive"
+    }
+  ],
+  "native_mesh_rig_animation_runtime_approval": false,
+  "supersedes_for_current_acceptance": {
+    "path": "requirements.json",
+    "sha256": "d7e1c4313b7cd49eb978edf25f4e199808e07c7a83e8ff60ad09e53c80b927e5",
+    "reason": "User requested all fingers visible and preferably spread for rigging."
+  },
+  "user_addition": "we need to be able to see all the fingers too. Preferably spread for rigging",
+  "required_body_view_count": 32,
+  "required_hand_view_count": 16
+}

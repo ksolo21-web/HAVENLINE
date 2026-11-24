@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/render_critic",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-24T15:50:41.147997+00:00",
+  "scope": "One actual v2 hand board; incorrect lower left/right labels block approval despite otherwise clear anatomy.",
+  "requirements_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/requirements-v2.json",
+  "requirements_sha256": "a5253f143633b6b60e99ab527d562a5f33c657f88d772349c366a774becebadf",
+  "entries": [
+    {
+      "slot_id": "character-4-hands",
+      "subject_id": "character-4",
+      "sheet_type": "hands",
+      "revision": "r1",
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-4-hands-r1.png",
+      "sha256": "345a0d1d8f8c30d528012d4c5bd715319d5b1bf4780ebcdc67d0c12c52af72d9",
+      "bytes": 1853650,
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "status": "REPAIR_REQUIRED",
+      "score": 8.8,
+      "mandatory_visual_checks_passed": false,
+      "actual_full_sheet_inspected": true,
+      "reviewed_views": [
+        "LEFT PALM",
+        "RIGHT PALM",
+        "LEFT BACK",
+        "RIGHT BACK"
+      ],
+      "actual_closeup_evidence": "The actual source sheet itself presents four large hand closeups; each inspected directly at1254square native output. No secondary crop required for count/surface judgment.",
+      "reference_paths": [
+        "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-4-cardinal-r2.png"
+      ],
+      "reference_sha256": [
+        "c80701149f7648f2933f81082927ea6b3d3f8faed9eff0e65561042963c67c1c"
+      ],
+      "checks": [
+        {
+          "id": "explicit_five_digits_and_gaps",
+          "status": "PASS",
+          "score": 9.8,
+          "finding": "All four large hands show four fingers plus thumb, continuous palm/wrist, clear gaps, natural length hierarchy and spread."
+        },
+        {
+          "id": "surface_and_character_materials",
+          "status": "PASS",
+          "score": 9.8,
+          "finding": "Top palms show pads/creases without nails; lower dorsal views show nail plates on exposed tips. Fingerless dark gloves, warm skin, blue sleeve and cream cuff match C4 design."
+        },
+        {
+          "id": "chirality_labels",
+          "status": "FAIL",
+          "score": 8.0,
+          "finding": "Top LEFT PALM thumb-left and RIGHT PALM thumb-right are correct. Bottom LEFT BACK has thumb-left and is actually anatomical RIGHT dorsum; RIGHT BACK has thumb-right and is actually anatomical LEFT dorsum. Lower depictions must exchange positions while captions remain fixed."
+        },
+        {
+          "id": "framing_readability",
+          "status": "PASS",
+          "score": 9.8,
+          "finding": "All fingers and cuff/wrist/sleeve transitions visible, no clipping, gray studio and clear labels. Native1254x1254 recorded accurately."
+        }
+      ],
+      "required_repairs": [
+        {
+          "views": [
+            "LEFT BACK",
+            "RIGHT BACK"
+          ],
+          "action": "Exchange only the two lower hand depictions so LEFT BACK has thumb image-right and RIGHT BACK has thumb image-left. Preserve top palms, all anatomy/materials, labels and layout."
+        }
+      ],
+      "no_score_averaging": true
+    }
+  ],
+  "native_mesh_rig_animation_runtime_approval": false
+}

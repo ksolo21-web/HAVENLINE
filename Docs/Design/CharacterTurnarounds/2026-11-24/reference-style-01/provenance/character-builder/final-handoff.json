@@ -1,0 +1,669 @@
+{
+  "schema_version": 1,
+  "owner": "/root/behind_panel_recall",
+  "frozen_at_utc": "2026-11-24T16:03:22.128224+00:00",
+  "status": "PASS_9_OF_9_LOCAL_BUILDER_SCOPE_FROZEN",
+  "requirements_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/requirements-v2.json",
+  "requirements_sha256": "a5253f143633b6b60e99ab527d562a5f33c657f88d772349c366a774becebadf",
+  "required_sheet_count": 9,
+  "approved_sheet_count": 9,
+  "generated_attempt_count": 17,
+  "preserved_unselected_attempt_count": 8,
+  "prepared_not_invoked": [
+    "character-4-diagonal-r1"
+  ],
+  "native_dimensions": [
+    1254,
+    1254
+  ],
+  "requested_native_dimensions": [
+    2048,
+    2048
+  ],
+  "resampled": false,
+  "minimum_selected_score": 9.7,
+  "selected": [
+    {
+      "id": "character-2-cardinal",
+      "subject_id": "character-2",
+      "sheet_type": "cardinal",
+      "required_angles": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "status": "PASS",
+      "selected_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-2-cardinal-r2.png",
+      "sha256": "e684a4cde6a6b438463aec957f7355aa1d45e2f15ab755b7052b36c2b2182214",
+      "score": 9.7,
+      "mandatory_checks_passed": true,
+      "raw_review_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/reviews/character-visual-review-06.json",
+      "raw_review_sha256": "e1c8aa066d7ec5008fb9890361816d18ac33bac2f0756163db685477fb054aa8",
+      "pair_consistency_status": "PASS_ALL_THREE_SHEETS",
+      "historical_v1_approval": {
+        "id": "character-2-cardinal",
+        "selected_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-2-cardinal-r1.png",
+        "sha256": "cbf0f553d75a363f90a877326b2ca93f60b69dcf73387c36fca471e717a9190a",
+        "score": 9.7,
+        "raw_review_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/reviews/character-visual-review-02.json",
+        "raw_review_sha256": "a1b459637e0ea356ce28ed6743ca33b78b64c733283139f3e62f6aa3e1932c63"
+      },
+      "generation_id": "character-2-cardinal-r2",
+      "bytes": 1757412,
+      "native_dimensions": [
+        1254,
+        1254
+      ],
+      "prompt_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/prompts/character-2-cardinal-r2.txt",
+      "prompt_sha256": "2fe969d67038321fb313c2ff2c402b075dbb722433eb8a76b110a4d6e6944583",
+      "actual_reference_bindings": [
+        {
+          "order": 1,
+          "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-2-cardinal-r1.png",
+          "sha256": "cbf0f553d75a363f90a877326b2ca93f60b69dcf73387c36fca471e717a9190a"
+        }
+      ]
+    },
+    {
+      "id": "character-2-diagonal",
+      "subject_id": "character-2",
+      "sheet_type": "diagonal",
+      "required_angles": [
+        45,
+        135,
+        225,
+        315
+      ],
+      "status": "PASS",
+      "selected_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-2-diagonal-r3.png",
+      "sha256": "b02d572542e61fee89d337f12fc3e9e41ad8ba8abe1f32cd40c973f1c5e8d980",
+      "score": 9.7,
+      "mandatory_checks_passed": true,
+      "raw_review_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/reviews/character-visual-review-12.json",
+      "raw_review_sha256": "ad823c7f4a17e64bae65b988b134935e782885f545c7cab8dc99e20041c129e6",
+      "candidate_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-2-diagonal-r3.png",
+      "candidate_sha256": "b02d572542e61fee89d337f12fc3e9e41ad8ba8abe1f32cd40c973f1c5e8d980",
+      "required_repairs": [],
+      "pair_consistency_status": "PASS_ALL_THREE_SHEETS",
+      "previous_failed_attempts": [
+        {
+          "candidate_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-2-diagonal-r2.png",
+          "candidate_sha256": "f89e91d5e2d5f51289f5c7d4924c7b736b8beca5f04ae4fcc0615258bb5d56fb",
+          "score": 8.8,
+          "raw_review_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/reviews/character-visual-review-11.json",
+          "raw_review_sha256": "b16700c68f6e9fed8d2f9366ba8c5c6a7bb969a09238b3615510c7767ec75eb1",
+          "required_repairs": [
+            {
+              "views": [
+                135,
+                225
+              ],
+              "affected_hands": "both hands in each view; four total",
+              "action": "Replace the curved palmar pads with dorsal glove backs/knuckle seams using C2 cardinal r2 and hands r1 references. Preserve digit count/gaps, thumb-up chirality, wrists/pose and all identity/gear."
+            }
+          ]
+        }
+      ],
+      "generation_id": "character-2-diagonal-r3",
+      "bytes": 1798894,
+      "native_dimensions": [
+        1254,
+        1254
+      ],
+      "prompt_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/prompts/character-2-diagonal-r3.txt",
+      "prompt_sha256": "56ca711b358b72beb11b8ec2f61bd766e582af3ebba018655a9f565990538b6c",
+      "actual_reference_bindings": [
+        {
+          "order": 1,
+          "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-2-diagonal-r2.png",
+          "sha256": "f89e91d5e2d5f51289f5c7d4924c7b736b8beca5f04ae4fcc0615258bb5d56fb"
+        },
+        {
+          "order": 2,
+          "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-2-cardinal-r2.png",
+          "sha256": "e684a4cde6a6b438463aec957f7355aa1d45e2f15ab755b7052b36c2b2182214"
+        },
+        {
+          "order": 3,
+          "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-2-hands-r1.png",
+          "sha256": "9f11aa80f9ccd9b5475fe10e89a8c0c555ee37298813fd4a7839a29385095875"
+        }
+      ]
+    },
+    {
+      "id": "character-2-hands",
+      "subject_id": "character-2",
+      "sheet_type": "hands",
+      "required_views": [
+        "LEFT PALM",
+        "RIGHT PALM",
+        "LEFT BACK",
+        "RIGHT BACK"
+      ],
+      "expected_image_thumb_sides": [
+        "left",
+        "right",
+        "right",
+        "left"
+      ],
+      "status": "PASS",
+      "selected_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-2-hands-r1.png",
+      "sha256": "9f11aa80f9ccd9b5475fe10e89a8c0c555ee37298813fd4a7839a29385095875",
+      "score": 9.8,
+      "mandatory_checks_passed": true,
+      "raw_review_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/reviews/character-visual-review-10.json",
+      "raw_review_sha256": "d63caa90cefd889d846c769c24f108aa86db639a8496e6b50e273fbf6add4bad",
+      "candidate_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-2-hands-r1.png",
+      "candidate_sha256": "9f11aa80f9ccd9b5475fe10e89a8c0c555ee37298813fd4a7839a29385095875",
+      "required_repairs": [],
+      "pair_consistency_status": "PASS_ALL_THREE_SHEETS",
+      "generation_id": "character-2-hands-r1",
+      "bytes": 1818704,
+      "native_dimensions": [
+        1254,
+        1254
+      ],
+      "prompt_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/prompts/character-2-hands-r1.txt",
+      "prompt_sha256": "1fadd1146b467f2b2730066f957797c0b48b6a0dda5aaf7b3f9e760d7cb30c30",
+      "actual_reference_bindings": [
+        {
+          "order": 1,
+          "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-2-cardinal-r2.png",
+          "sha256": "e684a4cde6a6b438463aec957f7355aa1d45e2f15ab755b7052b36c2b2182214"
+        }
+      ]
+    },
+    {
+      "id": "character-3-cardinal",
+      "subject_id": "character-3",
+      "sheet_type": "cardinal",
+      "required_angles": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "status": "PASS",
+      "selected_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-3-cardinal-r2.png",
+      "sha256": "2418a3fe2596d3faa2b6cbaad37a202b2256a50ec45af011ef5b8f6fbac11ec0",
+      "score": 9.7,
+      "mandatory_checks_passed": true,
+      "raw_review_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/reviews/character-visual-review-06.json",
+      "raw_review_sha256": "e1c8aa066d7ec5008fb9890361816d18ac33bac2f0756163db685477fb054aa8",
+      "pair_consistency_status": "PASS_ALL_THREE_SHEETS",
+      "historical_v1_approval": {
+        "id": "character-3-cardinal",
+        "selected_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-3-cardinal-r1.png",
+        "sha256": "f917fbd5375a398a07edc18841ddc48800bd818499c64e63c26f7726098dcc6c",
+        "score": 9.7,
+        "raw_review_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/reviews/character-visual-review-03.json",
+        "raw_review_sha256": "222d357e2de37fafca2fd3c7e7446e68e569d600e7ed4ae2dc556e30fa330edd"
+      },
+      "generation_id": "character-3-cardinal-r2",
+      "bytes": 1782944,
+      "native_dimensions": [
+        1254,
+        1254
+      ],
+      "prompt_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/prompts/character-3-cardinal-r2.txt",
+      "prompt_sha256": "251127604613b58e76456d987080e114e861bff7c0cc8cabe1996481670493e1",
+      "actual_reference_bindings": [
+        {
+          "order": 1,
+          "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-3-cardinal-r1.png",
+          "sha256": "f917fbd5375a398a07edc18841ddc48800bd818499c64e63c26f7726098dcc6c"
+        }
+      ]
+    },
+    {
+      "id": "character-3-diagonal",
+      "subject_id": "character-3",
+      "sheet_type": "diagonal",
+      "required_angles": [
+        45,
+        135,
+        225,
+        315
+      ],
+      "status": "PASS",
+      "selected_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-3-diagonal-r3.png",
+      "sha256": "518967a3c7cfc71d3ba15af288d3b5e16f73fac6678062ca6a2e7cfd5318d00f",
+      "score": 9.7,
+      "mandatory_checks_passed": true,
+      "raw_review_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/reviews/character-visual-review-11.json",
+      "raw_review_sha256": "b16700c68f6e9fed8d2f9366ba8c5c6a7bb969a09238b3615510c7767ec75eb1",
+      "candidate_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-3-diagonal-r3.png",
+      "candidate_sha256": "518967a3c7cfc71d3ba15af288d3b5e16f73fac6678062ca6a2e7cfd5318d00f",
+      "required_repairs": [],
+      "pair_consistency_status": "PASS_ALL_THREE_SHEETS",
+      "previous_failed_attempts": [
+        {
+          "candidate_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-3-diagonal-r2.png",
+          "candidate_sha256": "86313c2264d72b4a1a9ad923341269b31b1a1f1c6a393947849a36d04c2d5ff9",
+          "score": 8.8,
+          "raw_review_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/reviews/character-visual-review-09.json",
+          "raw_review_sha256": "30045becbc7a1fe17821d040322cd723487cdc95feff72505602d791e59f77e0",
+          "required_repairs": [
+            {
+              "views": [
+                135,
+                225
+              ],
+              "affected_hands": "both hands in each rear-diagonal view; four hands total",
+              "action": "Replace repeated palmar padding with matching dorsal knuckle/back seams from cardinal r2. Preserve five separated digits, thumb-up chirality, wrist/forearm/pose, outfit and gear."
+            }
+          ]
+        }
+      ],
+      "generation_id": "character-3-diagonal-r3",
+      "bytes": 1828002,
+      "native_dimensions": [
+        1254,
+        1254
+      ],
+      "prompt_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/prompts/character-3-diagonal-r3.txt",
+      "prompt_sha256": "c1d5b03f8d928fdfff46b9e66fa929b3c882dca90ac6eff8bc95e7eb1d17f799",
+      "actual_reference_bindings": [
+        {
+          "order": 1,
+          "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-3-diagonal-r2.png",
+          "sha256": "86313c2264d72b4a1a9ad923341269b31b1a1f1c6a393947849a36d04c2d5ff9"
+        },
+        {
+          "order": 2,
+          "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-3-cardinal-r2.png",
+          "sha256": "2418a3fe2596d3faa2b6cbaad37a202b2256a50ec45af011ef5b8f6fbac11ec0"
+        },
+        {
+          "order": 3,
+          "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-3-hands-r1.png",
+          "sha256": "b67c9dc5f4b0ff6d5a4cb995e8e44ce2f33c386cdf8bc69b78bcf12255f6e3ff"
+        }
+      ]
+    },
+    {
+      "id": "character-3-hands",
+      "subject_id": "character-3",
+      "sheet_type": "hands",
+      "required_views": [
+        "LEFT PALM",
+        "RIGHT PALM",
+        "LEFT BACK",
+        "RIGHT BACK"
+      ],
+      "expected_image_thumb_sides": [
+        "left",
+        "right",
+        "right",
+        "left"
+      ],
+      "status": "PASS",
+      "selected_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-3-hands-r1.png",
+      "sha256": "b67c9dc5f4b0ff6d5a4cb995e8e44ce2f33c386cdf8bc69b78bcf12255f6e3ff",
+      "score": 9.8,
+      "mandatory_checks_passed": true,
+      "raw_review_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/reviews/character-visual-review-10.json",
+      "raw_review_sha256": "d63caa90cefd889d846c769c24f108aa86db639a8496e6b50e273fbf6add4bad",
+      "candidate_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-3-hands-r1.png",
+      "candidate_sha256": "b67c9dc5f4b0ff6d5a4cb995e8e44ce2f33c386cdf8bc69b78bcf12255f6e3ff",
+      "required_repairs": [],
+      "pair_consistency_status": "PASS_ALL_THREE_SHEETS",
+      "generation_id": "character-3-hands-r1",
+      "bytes": 1671211,
+      "native_dimensions": [
+        1254,
+        1254
+      ],
+      "prompt_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/prompts/character-3-hands-r1.txt",
+      "prompt_sha256": "6ea55bd22f1d414c81ecbdee0ba76b66c5fb5f36dcb059f26f9f6795e649e24d",
+      "actual_reference_bindings": [
+        {
+          "order": 1,
+          "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-3-cardinal-r2.png",
+          "sha256": "2418a3fe2596d3faa2b6cbaad37a202b2256a50ec45af011ef5b8f6fbac11ec0"
+        }
+      ]
+    },
+    {
+      "id": "character-4-cardinal",
+      "subject_id": "character-4",
+      "sheet_type": "cardinal",
+      "required_angles": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "status": "PASS",
+      "selected_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-4-cardinal-r2.png",
+      "sha256": "c80701149f7648f2933f81082927ea6b3d3f8faed9eff0e65561042963c67c1c",
+      "score": 9.7,
+      "mandatory_checks_passed": true,
+      "raw_review_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/reviews/character-visual-review-05.json",
+      "raw_review_sha256": "a722de4c7a90ed68407285d5df61fee44918152a6756d86dee4e073ac9ff1e48",
+      "pair_consistency_status": "PASS_ALL_THREE_SHEETS",
+      "generation_id": "character-4-cardinal-r2",
+      "bytes": 1755121,
+      "native_dimensions": [
+        1254,
+        1254
+      ],
+      "prompt_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/prompts/character-4-cardinal-r2.txt",
+      "prompt_sha256": "1eb62efaf4728aa8c5ed8d56223c9e12629eaabe0f42564e16ee203945275e3c",
+      "actual_reference_bindings": [
+        {
+          "order": 1,
+          "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-4-cardinal-r1.png",
+          "sha256": "19d92b409cbecf04da888afd8dfd436a7f42ec2353ba34c0bf22f32a5fcfe229"
+        }
+      ]
+    },
+    {
+      "id": "character-4-diagonal",
+      "subject_id": "character-4",
+      "sheet_type": "diagonal",
+      "required_angles": [
+        45,
+        135,
+        225,
+        315
+      ],
+      "status": "PASS",
+      "selected_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-4-diagonal-r2.png",
+      "sha256": "dcf452c520d1bcdbee56c22fed0283b03b8ebf126f0b17288beaba475e471b15",
+      "score": 9.7,
+      "mandatory_checks_passed": true,
+      "raw_review_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/reviews/character-visual-review-09.json",
+      "raw_review_sha256": "30045becbc7a1fe17821d040322cd723487cdc95feff72505602d791e59f77e0",
+      "candidate_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-4-diagonal-r2.png",
+      "candidate_sha256": "dcf452c520d1bcdbee56c22fed0283b03b8ebf126f0b17288beaba475e471b15",
+      "required_repairs": [],
+      "pair_consistency_status": "PASS_ALL_THREE_SHEETS",
+      "generation_id": "character-4-diagonal-r2",
+      "bytes": 1823405,
+      "native_dimensions": [
+        1254,
+        1254
+      ],
+      "prompt_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/prompts/character-4-diagonal-r2.txt",
+      "prompt_sha256": "2ed0cdfb57acdd2adce818bf05df4860c6d89966f01be3dfc8708578dc585860",
+      "actual_reference_bindings": [
+        {
+          "order": 1,
+          "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-4-cardinal-r2.png",
+          "sha256": "c80701149f7648f2933f81082927ea6b3d3f8faed9eff0e65561042963c67c1c"
+        },
+        {
+          "order": 2,
+          "path": "/workspace/scratch/9c51da47f878/upload/1795533885648.png",
+          "sha256": "2a364995e105e8ceebad7b5c80db753f8220e1bce697b1405ae3a4afe02aaf13"
+        },
+        {
+          "order": 3,
+          "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/references/character_4-approved-original.png",
+          "sha256": "9083d9708b6f2d0f1109652de7a7074fb817431b5497995edec41dbb4e575313"
+        }
+      ]
+    },
+    {
+      "id": "character-4-hands",
+      "subject_id": "character-4",
+      "sheet_type": "hands",
+      "required_views": [
+        "LEFT PALM",
+        "RIGHT PALM",
+        "LEFT BACK",
+        "RIGHT BACK"
+      ],
+      "expected_image_thumb_sides": [
+        "left",
+        "right",
+        "right",
+        "left"
+      ],
+      "status": "PASS",
+      "selected_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-4-hands-r2.png",
+      "sha256": "51c84942dfe81d5d528ca71fc71b7910da62356ec3bdbedecd72e145e1737081",
+      "score": 9.8,
+      "mandatory_checks_passed": true,
+      "raw_review_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/reviews/character-visual-review-10.json",
+      "raw_review_sha256": "d63caa90cefd889d846c769c24f108aa86db639a8496e6b50e273fbf6add4bad",
+      "candidate_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-4-hands-r2.png",
+      "candidate_sha256": "51c84942dfe81d5d528ca71fc71b7910da62356ec3bdbedecd72e145e1737081",
+      "required_repairs": [],
+      "previous_failed_attempts": [
+        {
+          "candidate_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-4-hands-r1.png",
+          "candidate_sha256": "345a0d1d8f8c30d528012d4c5bd715319d5b1bf4780ebcdc67d0c12c52af72d9",
+          "score": 8.8,
+          "raw_review_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/reviews/character-visual-review-08.json",
+          "raw_review_sha256": "3297fb2148e8db9884dd07b7d3c0e20da4697e5638b15e6a3478fcf35aa9301e",
+          "required_repairs": [
+            {
+              "views": [
+                "LEFT BACK",
+                "RIGHT BACK"
+              ],
+              "action": "Exchange only the two lower hand depictions so LEFT BACK has thumb image-right and RIGHT BACK has thumb image-left. Preserve top palms, all anatomy/materials, labels and layout."
+            }
+          ]
+        }
+      ],
+      "pair_consistency_status": "PASS_ALL_THREE_SHEETS",
+      "generation_id": "character-4-hands-r2",
+      "bytes": 1805686,
+      "native_dimensions": [
+        1254,
+        1254
+      ],
+      "prompt_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/prompts/character-4-hands-r2.txt",
+      "prompt_sha256": "b4aa350daa5a93f2514d85d0bc58d8d967314ca022920a0fa740ca8aca50a8a1",
+      "actual_reference_bindings": [
+        {
+          "order": 1,
+          "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-4-hands-r1.png",
+          "sha256": "345a0d1d8f8c30d528012d4c5bd715319d5b1bf4780ebcdc67d0c12c52af72d9"
+        }
+      ]
+    }
+  ],
+  "independent_visual_status": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/reviews/latest-independent-status.json",
+    "sha256": "a9699f6ae802edd7723117bf9cfa65483c71e2f369e29e269c029e5004af01de"
+  },
+  "independent_final_set_audit": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/reviews/final-character-set-visual-audit.json",
+    "sha256": "99135c79fc60becb2d9aade755a978a01743998a093d8b50731049cfc8584535"
+  },
+  "owned_metadata_receipts": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/generation-index.json",
+      "sha256": "0cefc284f07624e892b36f3b5ec1f78b4e718d5493cc0a8dd9344be05e14f98b"
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/execution-log.json",
+      "sha256": "cff758d18d40902660e1c081279ffded92340a2a2859c4d5550cc4df895fd38d"
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/reference-inputs.json",
+      "sha256": "19c33dc09e46f2484bdc5b2e786fa904a906c030e5fadd1b2b0e35bc6fa55369"
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/builder-checkpoint.json",
+      "sha256": "a6e415e8ec9c40225584947cfab0dde1cb345febcd79a866266f73b128ae84d4"
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/identity-notes.md",
+      "sha256": "467888127f5a12caa79d125d5207da90762faa1dd39c755602e887e9c678975d"
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/approved-reference-provenance.json",
+      "sha256": "c80fb1f7e9d95dbed8ccabacf55a4f5484ea7b4b0a613026a586e3615068e53d"
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/builder-integrity-audit.json",
+      "sha256": "4f277db618e523d597d28b1b217ced5c6bda326f06974fb3348272a9a3b2fa38"
+    }
+  ],
+  "all_generated_attempts": [
+    {
+      "id": "character-2-cardinal-r1",
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-2-cardinal-r1.png",
+      "sha256": "cbf0f553d75a363f90a877326b2ca93f60b69dcf73387c36fca471e717a9190a",
+      "bytes": 1793827,
+      "selected": false,
+      "prompt": "prompts/character-2-cardinal-r1.txt",
+      "prompt_sha256": "f188813b65536189404fde3168bb2582eccf5e2767e1288d6953c967621a66e2"
+    },
+    {
+      "id": "character-3-cardinal-r1",
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-3-cardinal-r1.png",
+      "sha256": "f917fbd5375a398a07edc18841ddc48800bd818499c64e63c26f7726098dcc6c",
+      "bytes": 1822217,
+      "selected": false,
+      "prompt": "prompts/character-3-cardinal-r1.txt",
+      "prompt_sha256": "a24b154d433c2859749427d84c60d20a9735f066e77f479e424fcc65a0d708e0"
+    },
+    {
+      "id": "character-4-cardinal-r1",
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-4-cardinal-r1.png",
+      "sha256": "19d92b409cbecf04da888afd8dfd436a7f42ec2353ba34c0bf22f32a5fcfe229",
+      "bytes": 1775258,
+      "selected": false,
+      "prompt": "prompts/character-4-cardinal-r1.txt",
+      "prompt_sha256": "d1065cbe3e9ec4a2122c0937a3182950e3e8560411ad18cab89fa04a677a638e"
+    },
+    {
+      "id": "character-3-diagonal-r1",
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-3-diagonal-r1.png",
+      "sha256": "7ef75f030eb5fd2c2d4cff98091b3fbb0608a26d7463c4d7264a796e066c4af6",
+      "bytes": 1834634,
+      "selected": false,
+      "prompt": "prompts/character-3-diagonal-r1.txt",
+      "prompt_sha256": "96b151216c54a75f8a47b1afae342e28aa860cd8138b7682992e52294ad0e1d1"
+    },
+    {
+      "id": "character-2-diagonal-r1",
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-2-diagonal-r1.png",
+      "sha256": "692595400975000378cb501cb23da432c192b84c702183f1ff8b50aa9da933e9",
+      "bytes": 1820735,
+      "selected": false,
+      "prompt": "prompts/character-2-diagonal-r1.txt",
+      "prompt_sha256": "802fb50bee74c04a7774f5f9a8164da9aae61b64e525f27624d09ded4aa85dcd"
+    },
+    {
+      "id": "character-4-cardinal-r2",
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-4-cardinal-r2.png",
+      "sha256": "c80701149f7648f2933f81082927ea6b3d3f8faed9eff0e65561042963c67c1c",
+      "bytes": 1755121,
+      "selected": true,
+      "prompt": "prompts/character-4-cardinal-r2.txt",
+      "prompt_sha256": "1eb62efaf4728aa8c5ed8d56223c9e12629eaabe0f42564e16ee203945275e3c"
+    },
+    {
+      "id": "character-2-cardinal-r2",
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-2-cardinal-r2.png",
+      "sha256": "e684a4cde6a6b438463aec957f7355aa1d45e2f15ab755b7052b36c2b2182214",
+      "bytes": 1757412,
+      "selected": true,
+      "prompt": "prompts/character-2-cardinal-r2.txt",
+      "prompt_sha256": "2fe969d67038321fb313c2ff2c402b075dbb722433eb8a76b110a4d6e6944583"
+    },
+    {
+      "id": "character-3-cardinal-r2",
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-3-cardinal-r2.png",
+      "sha256": "2418a3fe2596d3faa2b6cbaad37a202b2256a50ec45af011ef5b8f6fbac11ec0",
+      "bytes": 1782944,
+      "selected": true,
+      "prompt": "prompts/character-3-cardinal-r2.txt",
+      "prompt_sha256": "251127604613b58e76456d987080e114e861bff7c0cc8cabe1996481670493e1"
+    },
+    {
+      "id": "character-4-hands-r1",
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-4-hands-r1.png",
+      "sha256": "345a0d1d8f8c30d528012d4c5bd715319d5b1bf4780ebcdc67d0c12c52af72d9",
+      "bytes": 1853650,
+      "selected": false,
+      "prompt": "prompts/character-4-hands-r1.txt",
+      "prompt_sha256": "13bc52a064d25d294ad837120c8b796af5dd91fe04d826f0e33fd1eba46ba851"
+    },
+    {
+      "id": "character-4-diagonal-r2",
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-4-diagonal-r2.png",
+      "sha256": "dcf452c520d1bcdbee56c22fed0283b03b8ebf126f0b17288beaba475e471b15",
+      "bytes": 1823405,
+      "selected": true,
+      "prompt": "prompts/character-4-diagonal-r2.txt",
+      "prompt_sha256": "2ed0cdfb57acdd2adce818bf05df4860c6d89966f01be3dfc8708578dc585860"
+    },
+    {
+      "id": "character-3-diagonal-r2",
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-3-diagonal-r2.png",
+      "sha256": "86313c2264d72b4a1a9ad923341269b31b1a1f1c6a393947849a36d04c2d5ff9",
+      "bytes": 1823816,
+      "selected": false,
+      "prompt": "prompts/character-3-diagonal-r2.txt",
+      "prompt_sha256": "ee06e4589255686204a4c8aa9154d063289555a6eaf7e378adf50b65c7135dc5"
+    },
+    {
+      "id": "character-2-diagonal-r2",
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-2-diagonal-r2.png",
+      "sha256": "f89e91d5e2d5f51289f5c7d4924c7b736b8beca5f04ae4fcc0615258bb5d56fb",
+      "bytes": 1789386,
+      "selected": false,
+      "prompt": "prompts/character-2-diagonal-r2.txt",
+      "prompt_sha256": "c7274a41af6a5f84bf7c7cbd80731e02796eb0fd97aba64208ecdfbce87de485"
+    },
+    {
+      "id": "character-2-hands-r1",
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-2-hands-r1.png",
+      "sha256": "9f11aa80f9ccd9b5475fe10e89a8c0c555ee37298813fd4a7839a29385095875",
+      "bytes": 1818704,
+      "selected": true,
+      "prompt": "prompts/character-2-hands-r1.txt",
+      "prompt_sha256": "1fadd1146b467f2b2730066f957797c0b48b6a0dda5aaf7b3f9e760d7cb30c30"
+    },
+    {
+      "id": "character-3-hands-r1",
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-3-hands-r1.png",
+      "sha256": "b67c9dc5f4b0ff6d5a4cb995e8e44ce2f33c386cdf8bc69b78bcf12255f6e3ff",
+      "bytes": 1671211,
+      "selected": true,
+      "prompt": "prompts/character-3-hands-r1.txt",
+      "prompt_sha256": "6ea55bd22f1d414c81ecbdee0ba76b66c5fb5f36dcb059f26f9f6795e649e24d"
+    },
+    {
+      "id": "character-4-hands-r2",
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-4-hands-r2.png",
+      "sha256": "51c84942dfe81d5d528ca71fc71b7910da62356ec3bdbedecd72e145e1737081",
+      "bytes": 1805686,
+      "selected": true,
+      "prompt": "prompts/character-4-hands-r2.txt",
+      "prompt_sha256": "b4aa350daa5a93f2514d85d0bc58d8d967314ca022920a0fa740ca8aca50a8a1"
+    },
+    {
+      "id": "character-3-diagonal-r3",
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-3-diagonal-r3.png",
+      "sha256": "518967a3c7cfc71d3ba15af288d3b5e16f73fac6678062ca6a2e7cfd5318d00f",
+      "bytes": 1828002,
+      "selected": true,
+      "prompt": "prompts/character-3-diagonal-r3.txt",
+      "prompt_sha256": "c1d5b03f8d928fdfff46b9e66fa929b3c882dca90ac6eff8bc95e7eb1d17f799"
+    },
+    {
+      "id": "character-2-diagonal-r3",
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-2-diagonal-r3.png",
+      "sha256": "b02d572542e61fee89d337f12fc3e9e41ad8ba8abe1f32cd40c973f1c5e8d980",
+      "bytes": 1798894,
+      "selected": true,
+      "prompt": "prompts/character-2-diagonal-r3.txt",
+      "prompt_sha256": "56ca711b358b72beb11b8ec2f61bd766e582af3ebba018655a9f565990538b6c"
+    }
+  ],
+  "scope_limits": [
+    "Static image references only; no native mesh, rig, animation or runtime certification.",
+    "Local metadata and art are frozen; GitHub publication and independent remote verification remain with parent/archive agent.",
+    "No byte-identical preservation of unchanged regions in generated edits is claimed; source originals and all attempts are preserved exactly."
+  ]
+}

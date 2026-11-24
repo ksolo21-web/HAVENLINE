@@ -1,0 +1,35 @@
+# Approved Character 2–4 identity recovery
+
+These notes describe actual pixels in the recovered approved originals. They are identity constraints for the new polished style study, not a new character proposal or a claim of rig/animation readiness.
+
+## Provenance
+
+The exact PNG bytes came from `ksolo21-web/HAVENLINE` commit `bb54c582916b3dbc5d542309f290e5101ab9e218`, under `Docs/Design/RenderArchive/2026-11-23/selected/characters-survivors-npcs/character_2.png` through `character_4.png`. Their exact blobs are unchanged in the saved, independently verified final archive tree for commit `f3f86e7695e7b68e0d16456dde66788e25291d98`. The adjacent JSON records file hashes, blob IDs and evidence paths. All three complete original sheets and the newly supplied style image were actually viewed in this task.
+
+## Character 2
+
+Warm medium skin, brown eyes, a straight dark chin-length bob with a broad side-swept fringe, and brown rectangular glasses. A blue hood with thick white fur framing is worn up. A charcoal-gray scarf surrounds the neck. The closed blue coat has orange shoulder accents, orange front/hem piping, white wrist cuffs, a brown waist belt with silver buckle, and brown chest/shoulder harness straps. Charcoal full gloves, navy cargo trousers with knee pads, white lower-leg cuffs, and brown lace-up boots complete the outfit.
+
+The brown backpack has a horizontal light-blue bedroll on top, pale side attachments, a light flap and multiple stitched brown pouches. A silver cup hangs on the character's left side; a brown utility pouch is on the character's right hip. Preserve the backpack and the blue bedroll. Small rear attachments are visually present but their precise functional names are not established by the sheet.
+
+## Character 3
+
+Rich brown skin, brown eyes, dark thick brows and a short dense curled bob with a center part. No glasses or headband are visible. The blue/orange outer coat is open at the upper chest, with broad cream shearling at the collar, wrists and hem. A burgundy neck/inner shirt and a cream buttoned vest are visible underneath. Brown full gloves, brown belts/harness and pouches, dark blue cargo trousers and brown lace-up boots with cream upper cuffs remain part of the identity.
+
+A tall brown framed backpack has a tan rolled top pad, a large long rear flap, multiple side pockets and blue circular-ended cylinders visible from side/rear angles. A silver cup hangs on the character's left side. The apparent exact topology of every small pack attachment varies slightly across the original concept views; preserve the main tall pack silhouette and its distinctive blue side gear without inventing a named tool.
+
+## Character 4
+
+Brown skin, brown eyes and a broad rounded silhouette of dense dark curls. A blue-gray striped headband with a narrow orange detail crosses the forehead. Gold hoop earrings are visible. The blue/orange coat is closed, with cream shearling collar, wrists and hem, a dark scarf, chest harness with silver clasp and brown waist belt. Dark fingerless gloves expose warm-toned fingertips. Blue cargo trousers and brown lace-up boots with cream upper cuffs remain consistent.
+
+A tall brown backpack carries a brown horizontal bedroll, stitched side pouches and a rounded rear pouch. A red/orange-handled sheathed item sits at the character's left front hip; the sheet does not prove its exact tool type. A silver cup hangs to that side and a brown pouch sits at the opposite hip. Preserve the brown bedroll, headband, hoops and fingerless gloves as clear distinctions from Characters 2 and 3.
+
+## Shared style translation
+
+The supplied new Character 1 reference uses taller stylized adult proportions, polished skin and cloth, modeled seams, softer material transitions, detailed cream shearling, dimensional leather boots and a neutral light-gray studio background. Apply those style/material/proportion cues while preserving each original identity, clothing layers and equipment. The supplied Character 1 face, glasses, beard and no-backpack configuration are not replacement identities for Characters 2–4.
+
+## Current stage
+
+All nine scoped Character 2–4 sheets have passed independent review against `requirements-v2.json`: six body-turnaround sheets covering 24 rotations, plus three hand-reference sheets covering 12 anatomical hand views. Every body sheet scored 9.7/10 and every selected hand sheet scored 9.8/10, with all mandatory checks and three-sheet identity consistency passed. Actual native dimensions are 1254 × 1254 pixels; no resampling or native 2048/4K claim is made.
+
+All 17 generated attempts, including superseded versions, remain preserved with exact prompts and input-reference bindings. The unused Character 4 diagonal r1 request is explicitly not counted as a generated output. The final handoff binds the nine selections to their exact independent raw reviews. The original source PNG bytes remain unchanged. These are static visual references; no native mesh, rig, animation, runtime or Meshy work was performed. GitHub publication/readback is owned by the parent archive workflow.

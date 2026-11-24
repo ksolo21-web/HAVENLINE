@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/render_critic",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-24T15:29:16.843255+00:00",
+  "scope": "Authoritative Character1/new-style reference inspection and planned layout review only. No generated sheet approved.",
+  "reference": {
+    "path": "/workspace/scratch/9c51da47f878/upload/1795533885648.png",
+    "sha256": "2a364995e105e8ceebad7b5c80db753f8220e1bce697b1405ae3a4afe02aaf13",
+    "bytes": 150185,
+    "dimensions": [
+      1536,
+      1536
+    ],
+    "actual_pixels_inspected": true
+  },
+  "observed_style": [
+    "Polished detailed stylized3D with adult body proportions, approximately5.4 head-heights in this reference; avoid reverting to the shorter prior chibi proportions.",
+    "Smooth clean skin and cloth rendering; shaped short curls, fleece tufts and leather details; no gritty photorealism.",
+    "Neutral gray studio backdrop and soft grounding shadows; no navy presentation board or added snow dressing."
+  ],
+  "character1_identity_locks": [
+    "Warm-brown skin; short tight black curls; rectangular black glasses; trimmed connected dark beard and moustache.",
+    "Navy ribbed neck warmer; cream fleece-lined hood down behind the neck, with cream sleeve and boot cuffs.",
+    "Navy parka with orange shoulder inserts, front zipper border, hem band and lower pocket-flap accents.",
+    "Navy cargo trousers, side pockets and knee pads; brown lace-up boots with dark capped toes and dark soles.",
+    "Brown gloves; two arms held in the reference horizontal T-pose; natural finger overlap is acceptable, clearly exposed wrong counts are not.",
+    "No backpack, backpack straps, weapon or added equipment."
+  ],
+  "layout_verdict": "PASS_LAYOUT_PLAN",
+  "layout_score": 9.8,
+  "layout_scope": "Two square four-view2\u00d72 sheets per character: cardinals0/90/180/270 and diagonals45/135/225/315; eight directions per character, eight required sheets total.",
+  "layout_risks": [
+    "Verify actual native image dimensions; a2048 prompt request alone does not establish2048 output.",
+    "Preserve complete T-pose arm span and boots with consistent scale; avoid tiny hands or duplicated/mislabeled front/rear views.",
+    "Cardinal profile foreshortening and ordinary hand overlap are expected, not automatically anatomy failures."
+  ],
+  "required_sheet_count": 8,
+  "approved_generated_sheet_count": 0,
+  "remaining_inputs": [
+    "Authoritative identity/clothing references for Characters2\u20134 from builder recovery.",
+    "Locked requirements and actual generated outputs."
+  ],
+  "no_native_mesh_rig_animation_or_runtime_approval": true
+}

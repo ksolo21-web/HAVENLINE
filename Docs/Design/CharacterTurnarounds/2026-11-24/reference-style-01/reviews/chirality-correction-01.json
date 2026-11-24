@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/render_critic",
+  "recorded_at_utc": "2026-11-24T15:48:05.065928+00:00",
+  "status": "CORRECTED_BEFORE_ANY_HAND_BOARD_APPROVAL",
+  "error": "My initial mental map for isolated upward-facing hand views was reversed. It is withdrawn.",
+  "correct_map": {
+    "LEFT PALM": "thumb image-left",
+    "RIGHT PALM": "thumb image-right",
+    "LEFT BACK": "thumb image-right",
+    "RIGHT BACK": "thumb image-left"
+  },
+  "independent_geometry_check": "Actual C4r2 body front shows anatomical-left palm on image-right, fingers pointing right and thumb up. Rotating that hand counterclockwise90 degrees puts fingers up and thumb left. Other palm and dorsal cases follow handedness and surface reversal.",
+  "actual_geometry_image": "/workspace/scratch/9c51da47f878/havenline-character-style-360/builder-characters-2-4/renders/character-4-cardinal-r2.png",
+  "actual_geometry_sha256": "c80701149f7648f2933f81082927ea6b3d3f8faed9eff0e65561042963c67c1c",
+  "actual_geometry_crop": "/workspace/scratch/9c51da47f878/havenline-character-style-360/reviews/evidence/character-4-cardinal-r2-front-anatomical-left-hand.png",
+  "source_page": "https://commons.wikimedia.org/wiki/File:Gray219.png",
+  "source_page_inspected": true,
+  "source_caption": "Bones of the left hand. Volar surface.",
+  "source_ref": "turn268146439view0",
+  "source_plate_pixels_inspected": false,
+  "plate_retrieval_limit": "Web-open returned an image placeholder and direct original download403. Geometry independently resolved from actual C4 body output and standard anatomical pose; do not claim plate pixels viewed.",
+  "affected_approved_images": [],
+  "action": "Corrected all four hand-slot thumb expectations before generating any critic hand-sheet verdict; retained historical message rather than rewriting it."
+}

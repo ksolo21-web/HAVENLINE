@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "purpose": "Correct left/right hand labels in fingers-up hand-reference sheets",
+  "confirmed_thumb_image_sides": {
+    "LEFT PALM": "left",
+    "RIGHT PALM": "right",
+    "LEFT BACK": "right",
+    "RIGHT BACK": "left"
+  },
+  "reasoning": "In the front T-pose, the anatomical left palm is on image-right, fingers point image-right, and thumb is upward. Rotate this isolated hand90 degrees counterclockwise to point fingers upward: thumb now points image-left. A dorsal view reverses the visible thumb side. The right hand is the anatomical counterpart.",
+  "independent_confirmation": "/root/render_critic verified this orientation against the actual Character4 cardinal r2 hand closeups; earlier opposite mental map was corrected before any hand-reference approval.",
+  "source_caption_confirmation": {
+    "url": "https://resources.saylor.org/wwwresources/archived/site/wp-content/uploads/2011/07/BIO302-ch2with6c6d.pdf",
+    "primary_work": "Gray, Anatomy of the Human Body,1918; figures219 and220",
+    "pdf_pages_zero_based": "210\u2013213",
+    "caption_summary": "Figure219 identifies left hand volar surface; Figure220 identifies left hand dorsal surface.",
+    "limitation": "Web screenshot returned a text image placeholder without accessible pixels. No claim is made of source-plate pixel inspection. Caption is supporting provenance; actual orientation check uses geometric rotation and rendered reference hands."
+  },
+  "generation_reference": false
+}
