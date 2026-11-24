@@ -1,15 +1,30 @@
 # Havenline Level 1 replacement
 
-**Branch checkpoint: source, assets and reviewed furnace purchase behavior. Not a release or the full Level 1 playtest.** This project lives separately from `HavenlineGodot/` during replacement work. Nothing in the canonical project is deleted, and no workflow or default branch is changed by this checkpoint.
+This separate preview is for the revised **opening**, not the full Level 1 game or a release. The canonical `HavenlineGodot/` project, its task plans and original assets stay intact. The development base is `codex/havenline-sequential-task-01` at `f74a84a2a288ab3d3935fba7a6cb9b975c2df239`.
 
-Base: `codex/havenline-sequential-task-01` at `f74a84a2a288ab3d3935fba7a6cb9b975c2df239`. The opening source is the independently retested V8-derived strict wood repair. It preserves the 3-wood price, rejects an inactive or unbound furnace pad without taking wood, and preserves the receipt across a clean restart. Independent scoped checks: 29 writer, 3 cold-reader, 10 adverse/eligibility, and 7 scripted movement/input checks. No live rendered or device pass, typed fish transfer, customer, enemy, or Level 2 unlock claim.
+## Run the current combined opening
 
-## Run this checkpoint
+Use a fresh disposable checkout of the replacement branch. Importing the project and pressing F5 runs the deliberately unchanged V8 baseline (`res://opening.tscn`), **not** this preview. To test the combined river, camp, HUD, and Character 1 animation, use the exact scene below.
 
-From the cloned repository root, run `python3 HavenlineLevel1/tools/hydrate_assets.py` (Python 3.11 or later). It verifies all four studio files and restores the exact furnace file from three Git-tracked pieces. No login, external download or alternative art is needed. Then import `HavenlineLevel1/project.godot` in Godot 4.7.2. For headless import in a disposable environment, run `godot --headless --path HavenlineLevel1 --editor --import --quit`. The full live, rendered and on-device verification remains separate. The Godot scene runs the revised opening only, not the full Level 1 progression.
+From the repository root with Python 3.11+ and Godot 4.7.2 (Linux/macOS shell; use an isolated runner with a desktop display for the final command):
 
-The one-camp replacement design and ownership boundaries are in [ONE_CAMP_DESIGN.md](docs/ONE_CAMP_DESIGN.md).
+```sh
+python3 HavenlineLevel1/tools/hydrate_assets.py
+profile="$(mktemp -d)"
+mkdir -m 700 "$profile"/{home,data,cache,config,runtime,tmp}
+export HOME="$profile/home" XDG_DATA_HOME="$profile/data" XDG_CACHE_HOME="$profile/cache"
+export XDG_CONFIG_HOME="$profile/config" XDG_RUNTIME_DIR="$profile/runtime" TMPDIR="$profile/tmp"
+godot --headless --path HavenlineLevel1 --editor --import --quit
+godot --path HavenlineLevel1 --scene res://previews/integrated_opening.tscn
+```
 
-## Next integration slice
+Hydration verifies all four studio files and restores the exact furnace from the tracked pieces. Do not pass save or fixture flags to the rendered run. Controls: WASD or arrows to move, **F** to chop, **E** to operate the nearest gate. The ordinary combined preview does not write opening saves.
 
-Keep the approved river and forest. Use the revised camp as the single active camp in this separate Level 1 project. Preserve the old project and original assets. First resolve the terrain bank and floor-height seam; then test both gates through ordinary input, fishing access, and loaded return routes on the exact integrated build. Do not enable a second camp ledger, a second fence network, or paths painted over exterior snow. Keep later tasks and the default branch untouched until independently verified in scope.
+## Evidence and limits
+
+- [Combined opening](docs/COMBINED_OPENING_VERIFICATION.md): independent scripted movement, raised resource pickup, paid camp and both gates; desktop smoke also confirmed the narrow HUD and animations below.
+- [Disposable cold restart](docs/COMBINED_COLD_VERIFICATION.md): scoped paid/unpaid receipts and failed staging write. These are explicit test fixtures, not shipped save behavior.
+- [Compact HUD](docs/COMPACT_HUD_VERIFICATION.md) and [Character 1 playback](docs/HERO_LOCOMOTION_VERIFICATION.md): desktop prompt clearance and no static idle T-pose. Full gait, foot contact and two-handed axe performance are not approved.
+- [Provisional dry-bank route](docs/MANUAL_SHORE_ROUTE_VERIFICATION.md): tested East-gate out and back, no casting, fishing grant or placement approval.
+
+Keep the approved river and forest, one revised camp, both gates, and exterior snow. Mobile/device quality, final visuals, fishing, customer/hostile actors, the full economy and the Level 2 handoff remain open. The [one-camp design](docs/ONE_CAMP_DESIGN.md) explains what this preview reuses and what must stay separate.
