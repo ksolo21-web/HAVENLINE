@@ -1,0 +1,3 @@
+# Compact opening HUD verification
+
+The optional combined opening now uses a smaller objective panel and stable bottom-right interaction targets. Independent functional Godot headless passed 64 bundled and 20 independent checks at 1160×720 and 414×720 logical, default HUD and 40 integrated gameplay regressions. A separate 1160×720 actual rendered desktop smoke showed the full objective, chop progress, paid acknowledgement and working South gate controls clear of the character and center. Uses a software OpenGL renderer, not device or frame-time proof. No real save, production default, game physics, artwork or character animation change. Impression of the overall game visuals remains unapproved.

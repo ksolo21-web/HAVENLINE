@@ -1,5 +1,6 @@
 extends "res://opening.gd"
 ## Opt-in candidate with no save path and no default launch change.
+const CompactHUD = preload("res://previews/compact_opening_hud.gd")
 const Terrain = preload("res://terrain_source.gd")
 const DrySweep = preload("res://previews/fixture_dry_shore_sweep.gd")
 const WORLD = preload("res://previews/terrain_water_preview.tscn")
@@ -135,7 +136,7 @@ func _ready() -> void:
 		push_warning("V5 pad presentation withheld: exact geometry or label binding failed.")
 	var overlay := CanvasLayer.new()
 	add_child(overlay)
-	opening_hud = OpeningHUD.new()
+	opening_hud = CompactHUD.new()
 	overlay.add_child(opening_hud)
 	gate_button = opening_hud.gate
 	tree_button = opening_hud.tree
