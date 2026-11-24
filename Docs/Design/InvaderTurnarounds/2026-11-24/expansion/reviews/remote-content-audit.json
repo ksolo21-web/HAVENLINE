@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/render_critic",
+  "independent": true,
+  "verdict": "PASS_REMOTE_CONTENT_CHECKPOINT",
+  "score": 10,
+  "scope": "Exact remote content checkpoint for the reviewed static expansion. A subsequent evidence-only commit is planned; final live-head delivery requires its own bounded readback.",
+  "repository": "ksolo21-web/HAVENLINE",
+  "branch": "art/enemy-invaders-2026-11-24",
+  "commit": "591d37df8c3cf769ad0050cfd40d66af83912459",
+  "tree": "957f94751abb92fcc8a0d1c09f9c8ef6b55d12f9",
+  "parent": "be4a66f4f80b6fbb0f58aa96b39fe4b24db8d902",
+  "base_tree": "98711757c6c85c51aeaf91a7812548cd29b580b1",
+  "expected_manifest_sha256": "045b51283234d776645b25d00b6792c4db54afb98eb4127b6f175db34994a0a5",
+  "mandatory_checks": {
+    "live_ref_points_to_checked_content_commit": true,
+    "commit_tree_matches": true,
+    "commit_parent_is_previous_archive": true,
+    "recursive_trees_complete": true,
+    "local_manifest_all_exact": true,
+    "all130_expected_paths_remote_exact": true,
+    "all_prior_files_retained": true,
+    "only_permitted_prior_readme_changed": true,
+    "no_outside_prefix_additions": true,
+    "exact_changed_path_set": true,
+    "all27_originals18_selected2_supplementary9_source_excerpts_present": true,
+    "all_prior_pngs_byte_preserved": true
+  },
+  "counts": {
+    "expected_changed_paths": 130,
+    "new_expansion_files": 129,
+    "base_file_objects": 2015,
+    "unchanged_prior_file_objects": 2014,
+    "modified_prior_files": 1,
+    "removed_prior_files": 0,
+    "total_remote_file_objects": 2144,
+    "generated_originals": 27,
+    "selected_aliases": 18,
+    "supplementary_aliases": 2,
+    "source_excerpts": 9,
+    "prior_png_files": 510
+  },
+  "modified_prior_files": [
+    "Docs/Design/InvaderTurnarounds/2026-11-24/README.md"
+  ],
+  "missing": [],
+  "mismatch": [],
+  "unlisted_changes": [],
+  "local_manifest_mismatches": [],
+  "observed_via": "Independent live GitHub GET for branch ref, Git commit, recursive current tree and immutable base recursive tree; Git blob hashes and byte sizes matched the locally recomputed manifest.",
+  "preserved_scope_limits": "Nine identified new subjects/18 sheets covered; three older concepts/six sheets retained. YT13 identity and inaccessible source media remain unresolved. No exhaustive roster, native mesh, rig, animation or runtime approval."
+}

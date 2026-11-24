@@ -4,6 +4,18 @@
 
 The independent coverage review passed for the nine identified new subjects and their 18 selected sheets. This is a bounded approval of the inspected evidence; unresolved YT13 identity and inaccessible footage remain explicitly limited.
 
+## Verified GitHub delivery
+
+All generated images and their selected aliases are committed in [content commit `591d37df8c3cf769ad0050cfd40d66af83912459`](https://github.com/ksolo21-web/HAVENLINE/commit/591d37df8c3cf769ad0050cfd40d66af83912459). The archiver and two independent readbacks verified the exact image and document blobs, all 129 added files, and preservation of 2,014 earlier files, including all 510 prior PNG paths. The sole pre-existing-file amendment is the parent README coverage correction.
+
+- [Completed requirements](delivery-status/requirements.json) and [current resumable checkpoint](delivery-status/resumable-checkpoint.json)
+- [Archiver content verification](evidence/content-remote-verification.json)
+- [Independent root verification](evidence/root-content-remote-verification.json)
+- [Independent critic verification, 10/10](reviews/remote-content-audit.json)
+- [Immutable content path manifest](evidence/content-path-manifest.json)
+
+These records attest the content commit above. The metadata-only child commit stores the receipts and completed status. The original top-level requirements and checkpoint remain unchanged as historical review inputs; use the completed records linked here for resumption. YT13 identity and inaccessible-source limits remain open.
+
 ## New reviewed gallery
 
 | Subject | Source role / boundary | Eight-angle turnaround | Details and static poses |
