@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/render_critic",
+  "created_utc": "2026-11-24T10:01:36.810102+00:00",
+  "scope": "Independent static Havenline invader concept review. No native mesh, rig, animation, or runtime approval.",
+  "expected_enemy_types": [
+    "hostile_wolf",
+    "human_raider",
+    "ice_brute"
+  ],
+  "expected_boards_per_type": [
+    "eight_view_turnaround",
+    "detail_and_use_state_board"
+  ],
+  "expected_total_boards": 6,
+  "approval_threshold": {
+    "minimum_score": 9.5,
+    "all_mandatory_checks_must_pass": true,
+    "target": 10
+  },
+  "references": [
+    {
+      "path": "https://github.com/ksolo21-web/HAVENLINE/blob/25b4ec6dd407c1c2530a3781527df64eabb63b99/Docs/Design/RenderArchive/2026-11-23/selected/characters-survivors-npcs/character_1.png",
+      "sha256": "a946b56c3401f9d0818de6dfd82137ea25f5c2364c5bf2da5792d4c928d8ec72",
+      "actual_pixels_inspected": true
+    },
+    {
+      "path": "https://github.com/ksolo21-web/HAVENLINE/blob/25b4ec6dd407c1c2530a3781527df64eabb63b99/Docs/Design/RenderArchive/2026-11-23/selected/animal-companions/pet_wolf_01.png",
+      "sha256": "fce42b24c4885ed5d816b47f35c40877c646c9946dfcc707a277d4c58faadff2",
+      "actual_pixels_inspected": true
+    },
+    {
+      "path": "https://github.com/ksolo21-web/HAVENLINE/blob/25b4ec6dd407c1c2530a3781527df64eabb63b99/Docs/Design/RenderArchive/2026-11-23/selected/animal-companions/pet_bear_01.png",
+      "sha256": "7fd1fcfb469d4772ba04222fc92cdbe12fe0bef265d26cc7688a0bb8465d96e6",
+      "actual_pixels_inspected": true
+    }
+  ],
+  "observed_style_basis": [
+    "Rounded chunky volumes and enlarged readable features; friendly character is compact and stylized.",
+    "Sculpted fur clumps and simplified layered winter clothing, leather straps, shearling trims and restrained metal.",
+    "Navy studio presentation, clean warm highlights, limited material noise and readable full silhouettes.",
+    "Existing friendly blues/orange are visual style references; hostile designs require distinct identity and allegiance cues."
+  ],
+  "mandatory_checks": [
+    "Source-bounded three-type roster, no invented faction or tier counts",
+    "Same enemy identity, anatomy, clothing and fixed gear across turnaround and detail/use-state boards",
+    "Eight meaningful views including full rear and both opposite profiles, consistent scale and complete framing",
+    "No duplicated limbs, missing or floating fixed gear, material/anatomical clipping or unreadable key features",
+    "Hostile wolf is unharnessed and visibly distinct from companion wolf",
+    "Raider has a distinct hostile design rather than only recoloring the friendly survivor",
+    "Ice Brute reads as larger boss while retaining polished Havenline shape and material grammar",
+    "Detail/use-state board depicts the same approved design and actual useful closer views/states",
+    "Static-image limits explicit; no animation or native-asset certification inferred"
+  ],
+  "approval_status": "WAITING_FOR_GENERATED_OUTPUTS"
+}

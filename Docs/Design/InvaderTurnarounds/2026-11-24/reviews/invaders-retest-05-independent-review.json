@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/render_critic",
+  "created_utc": "2026-11-24T10:18:44.762465+00:00",
+  "scope": "Actual-pixel independent paired static review",
+  "approval_threshold": {
+    "minimum_score": 9.5,
+    "all_mandatory_checks_must_pass": true,
+    "target": 10
+  },
+  "entries": [
+    {
+      "archetype_id": "ice_brute",
+      "asset_id": "ice-brute-turnaround-r4",
+      "board_type": "eight_view_turnaround",
+      "candidate_path": "attempts/ice-brute-turnaround-r4.png",
+      "sha256": "a4450342ec82dcaf2e7e6f796d4b4c6764cb492aaa698bbde0f8c85507e26504",
+      "score": 8.9,
+      "status": "REPAIR_REQUIRED",
+      "all_mandatory_visual_checks_passed": false,
+      "checked_views_or_panels": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ],
+      "actual_full_sheet_inspected": true,
+      "closeup_evidence": [
+        "reviews/evidence/ice-brute-r4-front-feet.png"
+      ],
+      "findings": [
+        {
+          "severity": "mandatory",
+          "issue": "Both fully exposed FRONT feet still have four distinct toe lobes/nails, so the five-toe geometry requirement remains failed.",
+          "repair": "Establish one unambiguous five-toe foot anatomy anchor; use it for coherent mirrored feet throughout the full-body and detail views, with ordinary angle-dependent occlusion only. Preserve successful hands, face, fur and ice features."
+        }
+      ],
+      "positive_evidence": [
+        "Existing five-digit hands retained.",
+        "Eight distinct views, including opposite profiles and full rear, retain consistent pose, identity, scale and framing."
+      ],
+      "static_scope_only": true
+    },
+    {
+      "archetype_id": "ice_brute",
+      "asset_id": "ice-brute-details-r2",
+      "board_type": "detail_and_use_state_board",
+      "candidate_path": "attempts/ice-brute-details-r2.png",
+      "sha256": "5c4181491e2a40d4abc1febfe897c170b543966c174323490e836876aa370542",
+      "score": 8.9,
+      "status": "REPAIR_REQUIRED",
+      "all_mandatory_visual_checks_passed": false,
+      "checked_views_or_panels": [
+        "guard",
+        "slam_wind_up",
+        "recovery",
+        "face",
+        "hand_and_foot",
+        "game_camera"
+      ],
+      "actual_full_sheet_inspected": true,
+      "closeup_evidence": [
+        "reviews/evidence/ice-brute-details-r2-six-toe-closeup.png",
+        "reviews/evidence/ice-brute-details-r2-windup-feet.png"
+      ],
+      "findings": [
+        {
+          "severity": "mandatory",
+          "issue": "HAND & FOOT now has six toe lobes/nails, regressing the correct five-toe r1 detail.",
+          "repair": "Establish one unambiguous five-toe foot anatomy anchor; use it for coherent mirrored feet throughout the full-body and detail views, with ordinary angle-dependent occlusion only. Preserve successful hands, face, fur and ice features."
+        },
+        {
+          "severity": "mandatory",
+          "issue": "SLAM WIND-UP image-left foot still has four toes while the opposite foot has five. This is exposed front geometry, not ordinary profile occlusion.",
+          "repair": "Establish one unambiguous five-toe foot anatomy anchor; use it for coherent mirrored feet throughout the full-body and detail views, with ordinary angle-dependent occlusion only. Preserve successful hands, face, fur and ice features."
+        }
+      ],
+      "positive_evidence": [
+        "Guard and game-camera feet improved to five toes.",
+        "Five-digit open palm, face/ice identity, static action poses and proposed-scale labeling remain favorable."
+      ],
+      "static_scope_only": true
+    }
+  ],
+  "summary": {
+    "approved_selected_boards": 4,
+    "required_selected_boards": 6,
+    "remaining_mandatory_visual_defect": "Five-toe foot consistency across both Ice Brute boards",
+    "package_or_github_approval": false
+  }
+}

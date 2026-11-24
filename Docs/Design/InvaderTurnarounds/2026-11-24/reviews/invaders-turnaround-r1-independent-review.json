@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/render_critic",
+  "created_utc": "2026-11-24T10:07:37.887801+00:00",
+  "requirements_path": "requirements.json",
+  "requirements_sha256": "28f13bbd139a7d685ce955e4741c521ecd27d9013299b64dee3e22e1594ebebf",
+  "scope": "Actual-pixel independent static turnaround review; no native mesh/rig/animation/runtime certification",
+  "approval_threshold": {
+    "minimum_score": 9.5,
+    "all_mandatory_checks_must_pass": true,
+    "target": 10
+  },
+  "supplemental_parent_design_lock": "Ice Brute five-toed feet and five-finger hands, confirmed in parent review request.",
+  "references": [
+    {
+      "path": "https://github.com/ksolo21-web/HAVENLINE/blob/25b4ec6dd407c1c2530a3781527df64eabb63b99/Docs/Design/RenderArchive/2026-11-23/selected/characters-survivors-npcs/character_1.png",
+      "sha256": "a946b56c3401f9d0818de6dfd82137ea25f5c2364c5bf2da5792d4c928d8ec72",
+      "actual_pixels_inspected": true
+    },
+    {
+      "path": "https://github.com/ksolo21-web/HAVENLINE/blob/25b4ec6dd407c1c2530a3781527df64eabb63b99/Docs/Design/RenderArchive/2026-11-23/selected/animal-companions/pet_wolf_01.png",
+      "sha256": "fce42b24c4885ed5d816b47f35c40877c646c9946dfcc707a277d4c58faadff2",
+      "actual_pixels_inspected": true
+    },
+    {
+      "path": "https://github.com/ksolo21-web/HAVENLINE/blob/25b4ec6dd407c1c2530a3781527df64eabb63b99/Docs/Design/RenderArchive/2026-11-23/selected/animal-companions/pet_bear_01.png",
+      "sha256": "7fd1fcfb469d4772ba04222fc92cdbe12fe0bef265d26cc7688a0bb8465d96e6",
+      "actual_pixels_inspected": true
+    }
+  ],
+  "entries": [
+    {
+      "archetype_id": "hostile_wolf",
+      "asset_id": "hostile-wolf-turnaround-r1",
+      "board_type": "eight_view_turnaround",
+      "candidate_path": "attempts/hostile-wolf-turnaround-r1.png",
+      "sha256": "651772c7dc82f57632e093c92902d62d1391089e65fdb26886e363ac98737115",
+      "score": 9.7,
+      "status": "PASS",
+      "all_mandatory_visual_checks_passed": true,
+      "checked_views": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ],
+      "actual_full_sheet_inspected": true,
+      "closeup_evidence": [
+        "reviews/evidence/hostile-wolf-r1-rear-right-detail.png"
+      ],
+      "findings": [],
+      "positive_evidence": [
+        "Eight meaningful directions include full rear and opposite profiles; head, body, legs and tail rotate coherently.",
+        "Unharnessed body, lowered brow and guarded expression distinguish hostile design from equipped friendly wolf.",
+        "Rounded sculpted fur clumps, navy studio, complete framing and clean material treatment retain Havenline grammar.",
+        "Enlarged rear-right leg inspection shows connected grounded limbs; dark rear carpal pads are not floating toes."
+      ],
+      "static_scope_only": true,
+      "paired_detail_board_status": "NOT_YET_GENERATED_OR_REVIEWED"
+    },
+    {
+      "archetype_id": "raider",
+      "asset_id": "raider-turnaround-r1",
+      "board_type": "eight_view_turnaround",
+      "candidate_path": "attempts/raider-turnaround-r1.png",
+      "sha256": "9f4759c4ed826c060b5351d7fece10b4cc287321da3f60eaefa2cad7301bf636",
+      "score": 8.9,
+      "status": "REPAIR_REQUIRED",
+      "all_mandatory_visual_checks_passed": false,
+      "checked_views": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ],
+      "actual_full_sheet_inspected": true,
+      "closeup_evidence": [
+        "reviews/evidence/raider-r1-gear-front-rear-left-rearleft.png"
+      ],
+      "findings": [
+        {
+          "severity": "mandatory",
+          "views": [
+            "rear-left135",
+            "rear180",
+            "rear-right225"
+          ],
+          "issue": "Hip pouches show full front closure flaps/buttons again from behind. The closures rotate toward the camera instead of remaining fixed to the same pouches.",
+          "repair": "Show correct plain backs, side edges or natural occlusion in rear views. Preserve source front/profile pouch positions and other design features."
+        }
+      ],
+      "positive_evidence": [
+        "Eight body/head directions and full framing are readable.",
+        "Maroon quilted hood, dark shoulder mantle, arm wraps, gloves and hostile brow provide a distinct design beyond survivor recolor.",
+        "Compact rounded winter figure matches style references."
+      ],
+      "static_scope_only": true,
+      "paired_detail_board_status": "NOT_YET_GENERATED_OR_REVIEWED"
+    },
+    {
+      "archetype_id": "ice_brute",
+      "asset_id": "ice-brute-turnaround-r1",
+      "board_type": "eight_view_turnaround",
+      "candidate_path": "attempts/ice-brute-turnaround-r1.png",
+      "sha256": "cd972bb9d634fa2b0f2d1beea0360098128ec3bdf7a0be04312fb1026df2a346",
+      "score": 8.8,
+      "status": "REPAIR_REQUIRED",
+      "all_mandatory_visual_checks_passed": false,
+      "checked_views": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ],
+      "actual_full_sheet_inspected": true,
+      "closeup_evidence": [
+        "reviews/evidence/ice-brute-r1-front-hands-feet.png",
+        "reviews/evidence/ice-brute-r1-front-left-hands-feet.png",
+        "reviews/evidence/ice-brute-r1-front-right-hands-feet.png"
+      ],
+      "findings": [
+        {
+          "severity": "mandatory",
+          "views": [
+            "front0",
+            "front-left45",
+            "front-right315",
+            "visible_profiles90_270"
+          ],
+          "issue": "Full front feet expose four toes/nails per foot, repeated in diagonals, against the parent-confirmed five-toe design lock; this is not ordinary profile occlusion.",
+          "repair": "Restore five coherent toes per foot wherever visible while preserving current overall design."
+        },
+        {
+          "severity": "evidence_pending",
+          "views": [
+            "hand_details"
+          ],
+          "issue": "Closed/curled hand views expose thumb plus three clear fingers; a possible hidden little finger prevents definitive five-digit verification.",
+          "repair": "Use the forthcoming open-hand closeup/detail board to establish five-digit anatomy; do not assert exact count from occluded views alone."
+        }
+      ],
+      "positive_evidence": [
+        "Large broad silhouette, long heavy arms, cream clumped fur, blue-gray skin and restrained ice plates read as a distinct boss.",
+        "Full rear, both profiles and opposing diagonals are distinct with stable forehead/shoulder/forearm ice features.",
+        "Surface treatment remains polished stylized Havenline, without photorealistic grit."
+      ],
+      "static_scope_only": true,
+      "paired_detail_board_status": "NOT_YET_GENERATED_OR_REVIEWED"
+    }
+  ],
+  "summary": {
+    "required_selected_boards": 6,
+    "turnarounds_reviewed": 3,
+    "turnarounds_passed": 1,
+    "turnarounds_repair_required": 2,
+    "detail_boards_reviewed": 0,
+    "package_or_github_approval": false
+  }
+}

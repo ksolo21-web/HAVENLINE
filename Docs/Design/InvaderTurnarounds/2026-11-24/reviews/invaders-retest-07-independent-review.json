@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/render_critic",
+  "created_utc": "2026-11-24T10:27:10.473064+00:00",
+  "scope": "Actual-pixel independent static detail-sheet retest",
+  "approval_threshold": {
+    "minimum_score": 9.5,
+    "all_mandatory_checks_must_pass": true,
+    "target": 10
+  },
+  "entries": [
+    {
+      "archetype_id": "ice_brute",
+      "asset_id": "ice-brute-details-r4",
+      "board_type": "detail_and_use_state_board",
+      "candidate_path": "attempts/ice-brute-details-r4.png",
+      "sha256": "720bd7649249c886f4cdae2224246c2b127f179961a54faa223fd9dbea893af7",
+      "score": 8.9,
+      "status": "REPAIR_REQUIRED",
+      "all_mandatory_visual_checks_passed": false,
+      "checked_views_or_panels": [
+        "guard",
+        "slam_wind_up",
+        "recovery",
+        "face",
+        "hand_and_foot",
+        "game_camera"
+      ],
+      "actual_full_sheet_inspected": true,
+      "closeup_evidence": [
+        "reviews/evidence/ice-brute-details-r4-recovery-foot.png",
+        "reviews/evidence/ice-brute-details-r4-six-toe-closeup.png"
+      ],
+      "findings": [
+        {
+          "severity": "mandatory",
+          "panel": "recovery",
+          "issue": "Image-left Recovery foot is unchanged with only four exposed toe lobes/nails.",
+          "repair": "Replace the Recovery panel with an independently verified five-toe Recovery pose derived from the approved anatomy reference."
+        },
+        {
+          "severity": "mandatory",
+          "panel": "hand_and_foot",
+          "issue": "Foot closeup regressed to six actual toe lobes/nails and lost the distinct large medial big-toe construction.",
+          "repair": "Use details r3 as the composition base, since its Hand & Foot closeup was already correct; retain that closeup unchanged."
+        }
+      ],
+      "positive_evidence": [
+        "Five other panels remain well framed and retain established material, face and body identity.",
+        "Hand count remains correct."
+      ],
+      "static_scope_only": true
+    }
+  ],
+  "summary": {
+    "approved_selected_boards": 5,
+    "required_selected_boards": 6,
+    "approved_supplementary_images": 1,
+    "package_or_github_approval": false
+  }
+}
