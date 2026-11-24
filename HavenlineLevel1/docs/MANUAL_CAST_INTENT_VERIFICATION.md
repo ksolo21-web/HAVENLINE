@@ -1,0 +1,3 @@
+# Optional manual cast intent checkpoint
+
+Default-inactive helper and headless fixture only. On the reviewed opening prior to the unrelated opt-in wood color block, independent Godot headless passed 44 fixture checks, 55 expanded checks and 40 normal opening regressions. It checks caller-admitted binding, actual reachable dry stance, target water, current camera/frustum, facing, and fresh ordered input. This is an intent, not casting, line-of-sight, inventory, timing timeout, fish grants, art or placement approval. Caller owns validated input and admitted world identity. This commit does not attach or enable it in the opening or change any existing files.
