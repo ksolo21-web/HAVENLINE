@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/render_critic",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-24 12:14:22 UTC",
+  "verdict": "PASS_REMOTE_CONTENT_CHECKPOINT",
+  "score": 10,
+  "score_scope": "Bounded remote storage integrity; selected static-image scores remain9.6–9.8.",
+  "repository": "ksolo21-web/HAVENLINE",
+  "branch": "art/enemy-invaders-2026-11-24",
+  "commit": "77a33512844a1c249f6e2ec1271ac2a76f1ef328",
+  "tree": "25ef5b5a33dcb4251beba43ef02a9259b0cb128d",
+  "parent": "bb54c582916b3dbc5d542309f290e5101ab9e218",
+  "base_tree": "edb050ca01bf19cee9bac69b3922e5fb76fb6946",
+  "evidence_method": "Fresh independent GitHub GET readback of live branch ref, exact commit and recursive published tree; compared against exact locally audited manifest and the independently retrieved immutable baseline Git tree.",
+  "manifest_sha256": "eabec44ed61d12540f311c27acc2b1dc236583a7f3b0c70b47e18af765ed0e3e",
+  "package_audit_sha256": "a562beef7d880cb836f58584391b3d76eb7bb8480ae9e043b8b8f51ba2933435",
+  "counts": {
+    "published_file_objects": 2283,
+    "expected_new_paths": 133,
+    "added_paths": 133,
+    "prior_files_preserved": 2150,
+    "prior_png_paths_preserved": 565,
+    "new_original_pngs": 17,
+    "selected_aliases": 16,
+    "exact_prompts": 17,
+    "qa_images": 30
+  },
+  "mandatory_checks": {
+    "correct_live_head": true,
+    "correct_commit_and_tree": true,
+    "single_exact_parent": true,
+    "untruncated_recursive_trees": true,
+    "all_133_paths_exact_hash_and_size": true,
+    "exactly_133_additions": true,
+    "no_prior_object_or_mode_changes": true,
+    "no_outside_prefix_additions": true,
+    "all_17_originals_and_16_selected_aliases_present": true,
+    "all_17_exact_prompts_present": true,
+    "exact_frozen_inputs_reviews_and_evidence_in_reviewed_package": true,
+    "authored_static_scope_preserved": true
+  },
+  "discrepancies": {
+    "manifest": [],
+    "changed_prior_paths": [],
+    "missing_expected": [],
+    "unlisted_additions": [],
+    "outside_prefix": []
+  },
+  "preserved_scope": "Eight new authored proposals and sixteen approved static sheets. Existing source-coverage limits, prior images/reviews and native/rig/motion/runtime exclusions remain unchanged.",
+  "next_gate": "A planned evidence/status-only child may archive these receipts. Its final live head, sole parent and bounded metadata delta require a separate final check; the artwork is frozen."
+}
