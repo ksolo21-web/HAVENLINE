@@ -1,0 +1,3 @@
+# Optional cast input preview
+
+Separate opt-in scene: `res://previews/manual_cast_input_preview.tscn`. Physical G or Cast touch acknowledges one eligible provisional dry-bank input. No catch, stock/grant, economy, placement approval, save, device or rendered claim. Independent headless passed 46 expanded, 32 original adverse, 23 input scope and 40 opening regression checks. Foreign or emulated same-index releases cannot rearm a touch; keyboard input cannot acknowledge a cast during an owned movement gesture. Both project emulation settings are off; ordinary unchanged scene still forwards synthetic screen movement as before, while this opted-in scene ignores it. No default or existing combined launch changes.
