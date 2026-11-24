@@ -3,6 +3,7 @@ extends "res://opening.gd"
 const HeroLocomotion = preload("res://previews/hero_locomotion.gd")
 const CompactHUD = preload("res://previews/compact_opening_hud.gd")
 const LooseWoodContrast = preload("res://previews/loose_wood_contrast.gd")
+const GateArtReview = preload("res://previews/gate_pair_study/gate_art_review.gd")
 const Terrain = preload("res://terrain_source.gd")
 const DrySweep = preload("res://previews/fixture_dry_shore_sweep.gd")
 const WORLD = preload("res://previews/terrain_water_preview.tscn")
@@ -184,6 +185,9 @@ func setup_camp() -> void:
 			hinge.position.y = float(hinge_on_terrain.height) - at.y
 			marker_at.y = float(Terrain.sample(Vector2(marker_at.x, marker_at.z)).height) + .72
 			block(camp_built, Vector3(.20, 1.44, .20), marker_at, Color("#47687a")).name = String(gate.id) + "-technical-marker"
+	if GateArtReview.REVIEW_FLAG in OS.get_cmdline_user_args():
+		if not GateArtReview.apply_all(gates, self, ground):
+			push_warning("Gate art candidate withheld: no technical gate visuals were changed.")
 	var vessel_root := Node3D.new()
 	vessel_root.name = "CenteredHearth_StudioTrialOnly"
 	camp_built.add_child(vessel_root)
