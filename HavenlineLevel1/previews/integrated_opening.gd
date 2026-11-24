@@ -2,6 +2,7 @@ extends "res://opening.gd"
 ## Opt-in candidate with no save path and no default launch change.
 const HeroLocomotion = preload("res://previews/hero_locomotion.gd")
 const CompactHUD = preload("res://previews/compact_opening_hud.gd")
+const LooseWoodContrast = preload("res://previews/loose_wood_contrast.gd")
 const Terrain = preload("res://terrain_source.gd")
 const DrySweep = preload("res://previews/fixture_dry_shore_sweep.gd")
 const WORLD = preload("res://previews/terrain_water_preview.tscn")
@@ -130,6 +131,9 @@ func _ready() -> void:
 		piece.name = "StarterGroundWood_%s" % String(row.id)
 		piece.position = point(row.xz)
 		add_child(piece)
+		if LooseWoodContrast.REVIEW_FLAG in OS.get_cmdline_user_args():
+			if not LooseWoodContrast.apply(piece):
+				push_warning("Loose wood contrast candidate withheld: exact surface binding failed.")
 		wood_visuals[row.id] = piece
 	purchase_pad_view = PadView.new()
 	purchase_pad_view.name = "ExactStudioV5_PresentationOnly"
