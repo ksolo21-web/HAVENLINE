@@ -1,0 +1,3 @@
+# Terrain source checkpoint
+
+Callable terrain/shore data only. Default opening, render, collision and movement are not changed. The T02 source has only a reversible import path edit; the separate adapter returns indexed mesh edge height at the closed domain perimeter. Independent Godot 4.7.2 passed 78 terrain checks, 992 exact original perimeter midpoints with zero mismatches, 4,960 expanded perimeter checks, 1,976 adjacent-triangle checks, 6 invalid/off-grid checks, 54 existing River checks and 7 existing ordinary scripted wood checks. No live gameplay, terrain installation, device or release pass.
