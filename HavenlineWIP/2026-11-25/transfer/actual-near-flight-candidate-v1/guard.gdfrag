@@ -1,0 +1,348 @@
+const EnduranceTerrain = preload("res://terrain_source.gd")
+const NEEDLE := .00008
+const EXACT_CROWN_R := .23545
+const BODY_PAD := Vector3(.025,.025,.025)
+const SCREEN_CAP_PX := 5.
+var live_owner: Examiner
+var accepted_flight_proof:Dictionary={}
+var expected_world_obstacles:Array[AABB]=[]
+var expected_body:AABB
+var release_turns= @TURNS@
+const EXPECTED_PREFIX = @PREFIX@
+var prefix_verified_flight := 0
+
+func phase_flight_prefix() -> void:
+	var trim:=_last_prefix_observed()
+	if trim.is_empty():
+		return
+	if EXPECTED_PREFIX.get(tick_count,"")!=trim:
+		prefix_bad=true
+	else:
+		prefix_verified_flight+=1
+
+var prefix_trial_digest := ""
+func _last_prefix_observed() -> String:
+	return prefix_trial_digest
+
+func grown_box(box:AABB, pad:Vector3) -> AABB:
+	return AABB(box.position-pad,box.size+2.*pad)
+
+func gap_box(a:AABB,b:AABB) -> float:
+	var d:Vector3=(a.position-b.end).max(b.position-a.end)
+	return maxf(maxf(d.x,d.y),d.z)
+
+func world_corners(x:AABB) -> Array[Vector3]:
+	var out:Array[Vector3]=[]
+	for i in range(8):
+		out.append(x.get_endpoint(i))
+	return out
+
+func body_live_box(view:Node3D) -> Array:
+	var anim:AnimationPlayer=game.hero_locomotion.player
+	var visual:Node3D
+	for c in game.actor.get_children():
+		if c.is_ancestor_of(anim):
+			visual=c
+	if visual==null:
+		return []
+	var out:=AABB()
+	var fresh:=true
+	for m in visual.find_children("*","MeshInstance3D",true,false):
+		if not m.is_visible_in_tree():
+			continue
+		var skel:=m.get_node_or_null(m.skeleton) as Skeleton3D
+		if skel==null or m.skin==null or m.skin.get_bind_count()!=66:
+			return []
+		skel.force_update_all_bone_transforms()
+		var poses:Array[Transform3D]=[]
+		for j in range(m.skin.get_bind_count()):
+			var b:=skel.find_bone(String(m.skin.get_bind_name(j))) if m.skin.get_bind_name(j)!=&"" else int(m.skin.get_bind_bone(j))
+			if b<0:
+				return []
+			poses.append(skel.get_bone_global_pose(b)*m.skin.get_bind_pose(j))
+		var map:Transform3D=view.global_transform.affine_inverse()*m.global_transform
+		for si in range(m.mesh.get_surface_count()):
+			var arr:Array=m.mesh.surface_get_arrays(si)
+			var vv:PackedVector3Array=arr[Mesh.ARRAY_VERTEX]
+			var wb:PackedFloat32Array=arr[Mesh.ARRAY_WEIGHTS]
+			var ix:PackedInt32Array=arr[Mesh.ARRAY_BONES]
+			if vv.is_empty() or wb.size()!=ix.size() or wb.size()%vv.size()!=0:
+				return []
+			var span:=int(wb.size()/float(vv.size()))
+			if span not in [4,8]:
+				return []
+			for k in range(vv.size()):
+				var p:=Vector3.ZERO
+				var sum:=0.
+				for j in range(span):
+					var idx:=k*span+j
+					if wb[idx]!=0.:
+						p+=(poses[ix[idx]]*vv[k])*wb[idx]
+						sum+=wb[idx]
+				if absf(sum-1.)>.0002:
+					return []
+				var q:=map*p
+				out=AABB(q,Vector3.ZERO) if fresh else out.expand(q)
+				fresh=false
+	if fresh:
+		return []
+	var cap:CollisionShape3D
+	for n in game.actor.get_children():
+		if n is CollisionShape3D:
+			cap=n
+	if cap==null or not cap.shape is CapsuleShape3D or cap.disabled:
+		return []
+	var r:float=cap.shape.radius
+	var h:float=cap.shape.height
+	var half:=Vector3(r,h*.5,r)
+	out=out.merge(view.global_transform.affine_inverse()*cap.global_transform*AABB(-half,half*2.))
+	return [out]
+
+func append_obstacle_bounds(n:Node, boxes:Array[AABB]) -> bool:
+	if n is CollisionShape3D:
+		var c:=n as CollisionShape3D
+		if c.disabled or not c.get_parent() is CollisionObject3D or c.get_parent().collision_layer!=1:
+			return false
+		var half:Vector3
+		if c.shape is BoxShape3D:
+			half=c.shape.size*.5
+		elif c.shape is CylinderShape3D:
+			half=Vector3(c.shape.radius,c.shape.height*.5,c.shape.radius)
+		else:
+			return false
+		boxes.append(c.global_transform*AABB(-half,2.*half))
+	for child in n.get_children():
+		if not append_obstacle_bounds(child,boxes):
+			return false
+	return true
+
+func exact_obstacles() -> Array:
+	var b:Array[AABB]=[]
+	for n in game.camp_colliders:
+		if not append_obstacle_bounds(n,b):
+			return []
+	for n in game.gates:
+		if not append_obstacle_bounds(n,b):
+			return []
+	return b
+
+func airborne_floor(box:AABB) -> float:
+	var roof:=-INF
+	for x in range(floori(box.position.x*4.),ceili(box.end.x*4.)+1):
+		for z in range(floori(box.position.z*4.),ceili(box.end.z*4.)+1):
+			var s:=EnduranceTerrain.sample(Vector2(x*.25,z*.25))
+			if not s.get("valid",false):
+				return -INF
+			roof=maxf(roof,s.height+.012)
+	return box.position.y-roof
+
+func projected_box(world:AABB, camera:Camera3D, x:Transform3D=Transform3D.IDENTITY) -> Rect2:
+	var p:=camera.unproject_position(x*world.get_endpoint(0))
+	var rect:=Rect2(p,Vector2.ZERO)
+	for i in range(1,8):
+		rect=rect.expand(camera.unproject_position(x*world.get_endpoint(i)))
+	return rect
+
+func finite_plan(plans:Array, ids:Array[int], mount:Node3D) -> Dictionary:
+	if ids!=stable_ids or prefix_bad or prefix_verified_flight!=57 or prefix_count!=57 or not game.actor.is_on_floor() or game.actor.velocity.length()>.005:
+		return {}
+	# Other paid accounting still runs unchanged. No pose writes / no forced camera.
+	var live_box:=body_live_box(mount)
+	if live_box.is_empty():
+		return {}
+	expected_body=grown_box(live_box[0],BODY_PAD)
+	expected_world_obstacles.assign(exact_obstacles())
+	if expected_world_obstacles.size()!=11:
+		return {}
+	var local:Transform3D=mount.global_transform.affine_inverse()
+	var results:Array=[]
+	for i in range(2):
+		var mesh:MeshInstance3D=mount.paid_crowns[i]
+		var geom:=mesh.get_aabb()
+		var p:Dictionary=plans[i]
+		var src:Transform3D=p.source
+		var dest:Transform3D=p.rest
+		var q1:Vector3=p.key[1]
+		var q2:Vector3=p.key[2]
+		var side:=Transform3D(src.basis,q1)
+		var hover:=Transform3D(dest.basis,q2)
+		# Source box is conservative (AABB), but plane tests stay in signed
+		# carry-local axes for the narrow original pair and whole closed body.
+		var box1:AABB=(src*geom).merge(side*geom)
+		var box3:AABB=(hover*geom).merge(dest*geom)
+		var rb:=Vector3.ONE*EXACT_CROWN_R
+		var box2:=AABB(q1.min(q2)-rb,q1.max(q2)-q1.min(q2)+2.*rb)
+		var local_base:=local*src
+		var local_dst:=local*dest
+		var local1:AABB=(local_base*geom).merge((local*side)*geom)
+		var local3:AABB=((local*hover)*geom).merge(local_dst*geom)
+		var lq1:Vector3=local*q1
+		var lq2:Vector3=local*q2
+		var local2:=AABB(lq1.min(lq2)-rb,lq1.max(lq2)-lq1.min(lq2)+2.*rb)
+		var other:Transform3D=plans[1].source if i==0 else plans[0].rest
+		var other_geom:AABB=mount.paid_crowns[1-i].get_aabb()
+		var other_box:AABB=other*other_geom
+		var other_local:AABB=(local*other)*other_geom
+		var world: Array[AABB]=[box1,box2,box3]
+		var fitted: Array[AABB]=[local1,local2,local3]
+		var row:Array=[]
+		for k in range(3):
+			var minima:=INF
+			for b in expected_world_obstacles:
+				minima=minf(minima,gap_box(world[k],b))
+			var actor_gap:=gap_box(fitted[k],expected_body)
+			var pair_gap:=maxf(gap_box(fitted[k],other_local),gap_box(world[k],other_box))
+			var floor_gap:=airborne_floor(world[k]) if k<2 else 0.
+			# Terminal vertical descent uses exact known frozen full-mesh
+			# clipped terrain envelope; no physical floor/support is invented.
+			if minf(minima,minf(actor_gap,pair_gap))<NEEDLE or (k<2 and floor_gap<NEEDLE):
+				print("EXAM_FLIGHT_GEOM_HOLD ",i," ",k," ",[minima,actor_gap,pair_gap,floor_gap])
+				return {}
+			row.append([minima,actor_gap,pair_gap,floor_gap])
+		results.append(row)
+	return {"swept_bounds":results,"terminal_floor":"existing exact visible +12mm seat; frozen independent seal","live_body_pad_m":.025}
+
+func full_proof(game_seen, plans:Array, ids:Array, pose:Transform3D) -> Dictionary:
+	if game_seen!=game or game.actor.global_transform!=pose:
+		return {}
+	var own_view:Node3D=game.wood_stock_view
+	var certified:=finite_plan(plans,ids,own_view)
+	if certified.is_empty():
+		return {}
+	for i in range(2):
+		var shape:AABB=own_view.paid_crowns[i].get_aabb()
+		var piece:Dictionary=plans[i]
+		var old_tf:Transform3D=piece.source
+		var cam:Camera3D=game.camera
+		var viewport:=cam.get_viewport().get_visible_rect()
+		for t in range(1,piece.ages[3]+1):
+			var now_tf:Transform3D=live_owner._sample(piece,t)
+			for point in world_corners(shape):
+				var q:=cam.unproject_position(now_tf*point)
+				var u:=cam.unproject_position(old_tf*point)
+				if not viewport.has_point(q) or q.distance_to(u)>SCREEN_CAP_PX:
+					return {}
+			old_tf=now_tf
+	# Negative occupancy control shares the exact finite shape data.
+	var sample:MeshInstance3D=own_view.paid_crowns[0]
+	var x:Transform3D=plans[0].rest
+	var stamp:AABB=x*sample.get_aabb()
+	if gap_box(stamp,stamp)>=0.:
+		return {}
+	accepted_flight_proof=certified
+	return {"walk_manifest":Examiner.WALK_SEAL,"rest_manifest":Examiner.REST_SEAL,"oracle":Examiner.ORACLE_SEAL,
+		"native_ids":ids,"plans":plans,"continuous_plan_checked":true,"original_walk_exact":true,
+		"anomalies_verified_elsewhere":release_turns,"fixed_leaf_transforms":true,"visual_floor_finite_support":true,
+		"geometry_negatives":true,"actual_settled_whole_actor":true}
+
+func parked_visibility() -> Dictionary:
+	var camera:Camera3D=game.camera
+	var view:Rect2=camera.get_viewport().get_visible_rect()
+	var body:Rect2=projected_box(expected_body,camera,game.wood_stock_view.global_transform)
+	var rects:Array[Rect2]=[]
+	var hulls:Array[PackedVector2Array]=[]
+	var blocked:=0
+	var rays:=0
+	var ds:PhysicsDirectSpaceState3D=game.actor.get_world_3d().direct_space_state
+	for i in range(2):
+		var item:MeshInstance3D=live_owner._pieces[i]
+		if item.global_transform!=Examiner.FROZEN_REST[i]:
+			return {}
+		var all:=PackedVector2Array()
+		for s in range(item.mesh.get_surface_count()):
+			var raw:Array=item.mesh.surface_get_arrays(s)
+			var vv:PackedVector3Array=raw[Mesh.ARRAY_VERTEX]
+			for p in vv:
+				var q:Vector3=item.to_global(p)
+				var u:=camera.unproject_position(q)
+				if not view.has_point(u):
+					return {}
+				all.append(u)
+				var from:=camera.project_ray_origin(u)
+				var rq:=PhysicsRayQueryParameters3D.create(from,from.lerp(q,.9999),1,[game.actor.get_rid()])
+				rays+=1
+				if not ds.intersect_ray(rq).is_empty():
+					blocked+=1
+		var hull:=Geometry2D.convex_hull(all)
+		if hull.size()<4:
+			return {}
+		var r:=Rect2(hull[0],Vector2.ZERO)
+		for a in hull:
+			r=r.expand(a)
+		rects.append(r)
+		hulls.append(hull)
+		if r.intersects(body,true):
+			return {}
+	var gap:=hull_gap(hulls[0],hulls[1])
+	if gap<=0. or blocked!=0:
+		return {}
+	return {"hull_gap_native_screen_units":gap,"vertex_clear_rays":rays,"headless_sample_no_pixel_readability":true}
+
+func execute_fixture(near_ok:bool) -> void:
+	if not near_ok or prefix_verified_flight!=57 or failures!=0:
+		print("EXAM_HOLD prefix")
+		quit(20)
+		return
+	live_owner=Examiner.new()
+	var rest:Array[Transform3D]=[]
+	rest.assign(Examiner.FROZEN_REST)
+	var wrong: Array[int]=[stable_ids[1],stable_ids[0]]
+	var before:PackedByteArray=var_to_bytes(game.ledger.snapshot())
+	# Native-denial controls should not call geometric commit.
+	if live_owner.examine_and_commit(game,"stone",stable_ids,rest,full_proof,"EXAMINER_ONLY_WEST_V1") or live_owner.examine_and_commit(game,"wood",wrong,rest,full_proof,"EXAMINER_ONLY_WEST_V1") or live_owner.examine_and_commit(game,"wood",stable_ids,rest,Callable(),"EXAMINER_ONLY_WEST_V1"):
+		print("EXAM_HOLD wrong authority control")
+		quit(21)
+		return
+	if not live_owner.examine_and_commit(game,"wood",stable_ids,rest,full_proof,"EXAMINER_ONLY_WEST_V1"):
+		print("EXAM_HOLD geometry, timed projection or live authority")
+		quit(22)
+		return
+	# Original meshes moved once into one fixture owner. Keep simulation, actor,
+	# camera, original stock and weather untouched; stop entire scene on drift.
+	if live_owner.examine_and_commit(game,"wood",stable_ids,rest,full_proof,"EXAMINER_ONLY_WEST_V1"):
+		print("EXAM_HOLD duplicate")
+		quit(23)
+		return
+	phase=""
+	var elapsed:=0
+	var open_motion_samples: Array[int]=[0,0]
+	var camera:Camera3D=game.camera
+	var previous:Array[Vector2]=[]
+	for item in live_owner._pieces:
+		previous.append(camera.unproject_position(item.global_position))
+	var speed_high:=0.
+	while live_owner._state==Examiner.IN_FLIGHT and elapsed<540:
+		await tick(1)
+		var actor:=body_live_box(game.wood_stock_view)
+		if actor.is_empty() or not expected_body.encloses(actor[0]) or exact_obstacles()!=expected_world_obstacles or not live_owner.frame_at_next_fixture_tick():
+			print("EXAM_HOLD post-commit transient: discard fixture, no qualified result")
+			quit(24)
+			return
+		var b:Rect2=projected_box(expected_body,camera,game.wood_stock_view.global_transform)
+		var frame_view:=camera.get_viewport().get_visible_rect()
+		for i in range(2):
+			var node:MeshInstance3D=live_owner._pieces[i]
+			var now:=camera.unproject_position(node.global_position)
+			var shift:=now.distance_to(previous[i])
+			speed_high=maxf(speed_high,shift)
+			var silhouette:=projected_box(node.get_aabb(),camera,node.global_transform)
+			if not frame_view.encloses(silhouette) or shift>SCREEN_CAP_PX+.25:
+				print("EXAM_HOLD live camera bounds")
+				quit(27)
+				return
+			var offset:int=0 if i==0 else live_owner._story[0].ages[3]+6
+			if elapsed>offset and elapsed<offset+live_owner._story[i].ages[3] and shift>.1 and not silhouette.intersects(b,true):
+				open_motion_samples[i]+=1
+			previous[i]=now
+		elapsed+=1
+	if live_owner._state!=Examiner.PARKED or before!=var_to_bytes(game.ledger.snapshot()):
+		print("EXAM_HOLD unqualified endpoint")
+		quit(25)
+		return
+	var vis:=parked_visibility()
+	if vis.is_empty() or mini(open_motion_samples[0],open_motion_samples[1])<6:
+		print("EXAM_HOLD endpoint normal-camera geometry")
+		quit(26)
+		return
+	print("EXAM_QUALIFIED ",JSON.stringify({"mode":"EXAMINER_SHADOW_ONLY","nominal_ticks":elapsed,"same_two_view_objects":true,"no_native_book_delta":true,"shadow_carry_wood":live_owner.shadow().carried.wood,"shadow_stored_wood":live_owner.shadow().stored.wood,"typed_claim_highwater":live_owner.shadow().deposit_through,"flight":accepted_flight_proof,"park_view":vis,"moving_vis_geom_samples":open_motion_samples,"peak_live_center_native_screen_units_per_tick":speed_high}))
+	quit(0)
