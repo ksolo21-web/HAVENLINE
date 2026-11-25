@@ -1,0 +1,34 @@
+--- a/character_kit.gd
++++ b/character_kit.gd
+@@ -22,4 +22,5 @@
+ var _sockets: Dictionary = {}
+ var _host: Node
++var _held_actor: Node3D
+ 
+ func install(host: Node, visual: Node3D, existing_locomotion) -> bool:
+@@ -33,4 +34,6 @@
+ 	_player = players[0]
+ 	_host = host
++	# The exact opening model() parents the visual directly to the actor.
++	_held_actor = visual.get_parent_node_3d()
+ 	var parsed = JSON.parse_string(FileAccess.get_file_as_string("res://assets/characters/character1_sockets.json"))
+ 	if typeof(parsed) != TYPE_DICTIONARY:
+@@ -135,11 +138,15 @@
+ 	var grip_mid := (float(grips[0]) + float(grips[1])) * 0.5
+ 	var hands_mid := (lower + upper) * 0.5
+-	var side := axis.cross(Vector3.FORWARD)
++	if not is_instance_valid(_held_actor):
++		return
++	var actor_frame := _held_actor.global_transform.basis.orthonormalized()
++	var side := axis.cross(actor_frame * Vector3.FORWARD)
+ 	if side.length() < 0.001:
+-		side = axis.cross(Vector3.RIGHT)
++		side = axis.cross(actor_frame * Vector3.RIGHT)
+ 	side = side.normalized()
+ 	tool.top_level = true
+ 	tool.global_position = hands_mid - axis * grip_mid * scale + side * 0.08
+-	tool.global_basis = _basis_y(axis)
++	# Share the lateral-offset axis with tool X so the held frame cannot disagree.
++	tool.global_basis = Basis(side, axis, side.cross(axis).normalized())
+ 	tool.scale = Vector3.ONE * scale
+ 	tool.show()
