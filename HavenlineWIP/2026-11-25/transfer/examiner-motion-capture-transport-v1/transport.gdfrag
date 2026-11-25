@@ -1,0 +1,33 @@
+# Optional private observer transport; it may fail independently of gameplay.
+const CAP_LIMIT := 4194304
+const CAP_MARKER := "HAVENLINE EXACT CAPTURE ONLY v1"
+var cap_file:FileAccess
+var cap_bytes := 0
+var cap_rows := 0
+
+func write_capture(tag:String,payload:String) -> void:
+	if bad_observer:
+		return
+	if cap_file==null:
+		var dst:=OS.get_environment("HVN_EXAM_CAPTURE_FILE").simplify_path()
+		if not dst.is_absolute_path() or dst.get_file()!="motion.private.ndjson" or FileAccess.file_exists(dst) or FileAccess.get_file_as_string(dst.get_base_dir().path_join("capture.owner"))!=CAP_MARKER:
+			bad_observer=true
+			return
+		cap_file=FileAccess.open(dst,FileAccess.WRITE)
+		if cap_file==null:
+			bad_observer=true
+			return
+	var line:=tag+" "+payload
+	var byte_len:=line.to_utf8_buffer().size()+1
+	if cap_bytes+byte_len>CAP_LIMIT or cap_rows>=135:
+		bad_observer=true
+		return
+	cap_file.store_line(line)
+	cap_file.flush()
+	if cap_file.get_error()!=OK:
+		bad_observer=true
+		return
+	cap_bytes+=byte_len
+	cap_rows+=1
+	if cap_rows==135:
+		cap_file.close()
