@@ -1,0 +1,20 @@
+# Level 1 furnace buy marker: plot-only v2
+
+Detached Python reference model, **not installed** and not a rendering or gameplay pass. Supersedes v1's rejected delayed furnace/camp visibility and retained hover. Does not touch or govern stock, receipt/save publication, spawn, terrain, collisions, gate/world state, or the separate dark storage plot.
+
+The supplied reference at ~5.30–6.18s in 124510 supports gray default, lime corners, green expanding from the cost edge following wood, then shrink on the same ground anchor. Retain Havenline's **3 WOOD**, white lettering/icon treatment, exact asset, geometry and placement; any future authored ramp must remain on the deck surface and not recolor background. Do **not** copy the ad's furnace timing by hiding real geometry. On exact successful receipt publication the furnace and whole camp remain visually immediate with their exact existing solid state, **during every stage** of the optional plot effect. Renderer view booleans solely test that reflection; there must be no adopted dependency from world visibility/logic to this diagnostic.
+
+| Condition | Optional plot output | Already-authoritative world |
+| --- | --- | --- |
+| Outside, stale, airborne, unqualified | Gray, white corners, zero fill | Unpaid unchanged |
+| Fresh eligible grounded overlap with no purchase yet | Lime corners only, no fill | Unpaid unchanged |
+| Fresh same physics tick + exact successful purchase + same-scene grounded observation of separate, owned, visible source-indexed native mounts for `wood-a/b/c` | Begin zero fill; exactly one callback per live known identity adds one third, smoothly advancing from the near edge. Full then hold, anchored scale and alpha fade. | Furnace/camp visibly already present immediately. |
+| Successful purchase, but missing/stale/wrong-owned/unseen optional observations | Hide, never run green fill | Same immediate paid furnace/camp |
+| Renderer misses deadline after successful purchase | Hide, no simulated fill | Already visibly paid, unchanged |
+| Failed save/receipt absent, old/duplicate/foreign event, unload/reload | No purchase effect, reload paid state without replay | Reflect exact existing snapshot |
+
+Unit tests inject synthetic observations with no native claims. Scene tokens/IDs and finite non-singular affines are necessary shape checks, **not** authority or evidence that a mesh actually exists. Actual baseline with 3 stock still only contains one representative source with 0 independent native unit bindings, as source-pinned `hvn-l1-furnace-plot-native-intake-v1` proves. It must take the paid-display fallback. No art/palette sampled in game. The 4-tick ramp, 5-tick hold, 8-tick shrink and 45-tick arrival deadline are first 60 Hz fixture numbers, not visual approvals.
+
+**Next opt-in step (one):** In a disposable copy, after the separate larger-log lane can expose actual one-to-one source IDs and transforms, wire only a new test-only plot subscriber. Sample the exact real purchase reach/stock/collision eligibility and the three mounted real objects before charging, during the same physics tick. On exact trusted native successful same-tick payment after optional save, keep existing immediate camp/furnace publication unchanged, and hand optional valid presentation subjects to one scene-local overlay independent of charge/send/save. The overlay may consume only that private settled-arrival stream, paint a clipped cost-edge ramp on the original `PurchaseDeck_Surface` (separate overlays for cost and icon), and remove its own scale/alpha from the exact frozen pad anchor; no change to world collisions, orientation, guides, or default path. If the overlay cannot guarantee exclusively owned render custody, current transforms, or actual same-tick success, decline it. A normal-game-camera native pass must cover old stock fallback, stale walking-away sample, failed save, valid three concrete subjects, actual paint/readability/overlap with fresh already-built world, and cold already-paid replay.
+
+Reproduce: `PYTHONDONTWRITEBYTECODE=1 python -m unittest -v`.
