@@ -1,0 +1,24 @@
+{
+  "original_source_patches_verified": true,
+  "canonical_legacy_samples": 4,
+  "independent_action_traces": 729,
+  "independent_successful_steps": 3420,
+  "modeled_deposit_two_unit_interruptions": {
+    "before": [
+      3,
+      3,
+      0,
+      0
+    ],
+    "after": [
+      3,
+      1,
+      2,
+      1
+    ]
+  },
+  "invalid_conserved_but_impossible_deposit_counter_rejected": true,
+  "stale_writer_after_byte_change_rejected": true,
+  "cold_boot_alone_does_not_revoke_old_live_reference_before_any_durable_change": true,
+  "scope": "single writer, well-formed generated envelopes, modeled cold stop; not runtime persistence or ingress"
+}
