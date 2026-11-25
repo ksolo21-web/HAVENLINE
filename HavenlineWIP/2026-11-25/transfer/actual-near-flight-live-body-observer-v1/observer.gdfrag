@@ -1,0 +1,23 @@
+func body_witness() -> Array:
+	return [pt(expected_body.position),pt(expected_body.end)]
+
+func support_six(a:AABB,b:AABB) -> Array:
+	var near_side:Vector3=b.position-a.end
+	var far_side:Vector3=a.position-b.end
+	return [near_side.x,far_side.x,near_side.y,far_side.y,near_side.z,far_side.z]
+
+func witness_input(plans:Array, mount:Node3D) -> void:
+	var coordinates:Array=[]
+	for p in plans:
+		var keys:Array=[]
+		for k in p.key:
+			keys.append(pt(k))
+		coordinates.append({"source":tf(p.source),"rest":tf(p.rest),"key":keys,"age_ticks":p.ages})
+	var cam:Camera3D=game.camera
+	print("EXAM_SUPPORT_INPUT ",JSON.stringify({"tick":tick_count,"body_padded_m":body_witness(),"pad_m":pt(BODY_PAD),"needle_m":NEEDLE,"mount":tf(mount.global_transform),"camera":tf(cam.global_transform),"camera_projection":cam.projection,"camera_size":cam.size,"plan":coordinates},"",true,true))
+
+func witness_gaps(idx:int, boxes:Array[AABB]) -> void:
+	var parts:Array=[]
+	for bounds in boxes:
+		parts.append(support_six(bounds,expected_body))
+	print("EXAM_SUPPORT_GAPS ",JSON.stringify({"i":idx,"signed_face_m":parts},"",true,true))
