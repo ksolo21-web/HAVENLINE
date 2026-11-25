@@ -1,0 +1,6 @@
+
+## Detached test binding only: consume published, validated progress for visuals.
+func sync_progress_visuals() -> void:
+	super.sync_progress_visuals()
+	if ledger.has_exact_paid_hearth():
+		wood_stock_view.reflect_admitted_paid_crowns(int(ledger.stock.wood), int(ledger.pine_occurrences))

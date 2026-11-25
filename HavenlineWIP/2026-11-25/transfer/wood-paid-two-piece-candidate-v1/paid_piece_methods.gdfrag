@@ -1,0 +1,59 @@
+
+## Detached presentation trial: match the earlier direct custody fixture's two
+## depth-separated centres under the existing actor-local stock frame.
+## This never creates gameplay stock, a launch path, pickup or receiver.
+func _install_paid_crown_pair() -> bool:
+	if paid_crown_fit_attempted:
+		return paid_crowns.size() == 2
+	if payload == null:
+		return false
+	paid_crown_fit_attempted = true
+	var source := HardwoodCrown.instantiate()
+	var source_crown: MeshInstance3D
+	for m in source.find_children("*", "MeshInstance3D", true, false):
+		if m.name == "Pickup LOD - Crown log" and m is MeshInstance3D and m.mesh != null:
+			if source_crown != null:
+				source.free()
+				return false
+			source_crown = m
+	if source_crown == null or source_crown.mesh.get_surface_count() != 2 or source_crown.transform != Transform3D.IDENTITY:
+		source.free()
+		return false
+	var mesh := source_crown.mesh
+	var box := mesh.get_aabb()
+	var centers: Array[Vector3] = []
+	for i in range(2):
+		var corner := fitted_bounds.get_center() - box.get_center() + Vector3(0.0, 0.0, (i - .5) * PAID_CROWN_PITCH)
+		var extents := AABB(box.position + corner, box.size)
+		if not fitted_bounds.encloses(extents) or box.size.z >= PAID_CROWN_PITCH:
+			source.free()
+			return false
+		centers.append(corner)
+	for i in range(2):
+		var crown := MeshInstance3D.new()
+		crown.name = "DetachedPaidCrownVisual_%d" % (i + 1)
+		crown.mesh = mesh
+		if crown.get_active_material(0) != source_crown.get_active_material(0) or crown.get_active_material(1) != source_crown.get_active_material(1):
+			crown.free()
+			for previous in paid_crowns:
+				previous.free()
+			paid_crowns.clear()
+			source.free()
+			return false
+		crown.position = centers[i]
+		crown.hide()
+		add_child(crown)
+		paid_crowns.append(crown)
+	source.free()
+	return paid_crowns.size() == 2
+
+func reflect_admitted_paid_crowns(published_wood: int, published_cut_occurrences: int) -> void:
+	# Caller must already be the exact paid opening receipt publication path.
+	# Zero remains hidden; >2 keeps the old technical bundle/label fallback,
+	# not a stock cap, fabricated third item, or visible second material.
+	if published_wood < 1 or published_wood > 2 or published_wood != published_cut_occurrences or published_wood != presented_units:
+		return
+	if _install_paid_crown_pair():
+		payload.hide()
+		for i in range(2):
+			paid_crowns[i].visible = i < published_wood
