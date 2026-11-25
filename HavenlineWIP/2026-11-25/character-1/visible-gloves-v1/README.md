@@ -1,0 +1,3 @@
+# First approved-scope visible glove reshape · rejected prototype
+
+The exact editable standalone glove and cuff arrays are included. The artist can reuse or inspect the pieces, but they were not attached to Character 1 or accepted. The portable build takes the exact inputs documented for axe-open-close-v1, plus `C1_GLOVE_TOPOLOGY_RESULT` pointing to the preceding exact report. In a disposable CPU Blender profile under the shared Blender lock, run the witness to regenerate indexed neutral and held geometry and QA. The exact compact stance and axe are unchanged. No closed two-hand grip or game integration.
