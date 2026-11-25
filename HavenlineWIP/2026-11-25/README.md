@@ -1,0 +1,9 @@
+# Level 1 work in progress · 2026-11-25
+
+These are the actual working files, preserved separately from the playable project. Do not mistake a prototype, test, or failed rig diagnostic for a new build. This directory is outside `HavenlineLevel1`, is not imported at launch, and does not change a workflow.
+
+- **Character 1:** the Blender heel-contact and split-support diagnostics plus the measured result. Run each with a compatible Blender Python environment, passing the exact Character 1 GLB as the final positional argument (the scripts check its SHA-256). The split pose leaves the right toe floating; these are not walk/run/chop replacements. No third-party motion files are included.
+- **Fence counter:** the actual Godot temporary north-bay fixture and the geometry/socket checker. The Godot script belongs in `HavenlineLevel1/tests/` only in a disposable test checkout with the same baseline. The socket checker takes a repository path containing the exact Git blobs named in the script. The fixture passed 66/66 independently; it is not finished counter art or customer service. The checker path argument is an export portability edit, not a runtime change.
+- **Buy plot:** the combined RC2 diff versus playable [11c14a1c](https://github.com/ksolo21-web/HAVENLINE/commit/11c14a1c41971067c7dc97db69375f720a408f68) and its actual purchase/controls test scripts. The diff includes the earlier local terrain-seated plot and visibility gate changes required to reproduce RC2. Apply only inside a disposable checkout of that baseline. Put the two scripts in its `HavenlineLevel1/tests/` directory to run them there. The 1.40 m plot uses the original 0.72 m payment range; price readability and the revised camera still need visual approval. Nothing here is a release.
+
+The active native dry-field regression lives in `HavenlineLevel1/tests/test_field_dry_roundtrip.gd`. It passed 40/40 independently; it does not add an enemy. Fishing remains outside Level 1.

@@ -1,0 +1,543 @@
+--- a/HavenlineLevel1/pad_v5_view.gd
++++ b/HavenlineLevel1/pad_v5_view.gd
+@@ -77,6 +77,16 @@
+ 	installed = true
+ 	return true
+ 
++## Integrated-only visual substitution. The same offer visibility and receipt
++## still own the whole visual subtree. No original geometry or material edit.
++func show_ground_reference_only() -> bool:
++	if not installed or not is_instance_valid(_model) or not is_instance_valid(_action) or not is_instance_valid(_cost):
++		return false
++	_model.hide()
++	_action.hide()
++	_cost.hide()
++	return true
++
+ ## Revision belongs to an authoritative stream; no revision may be reused across its lifetime.
+ ## Last trusted state is retained on stale, invalid or contradictory updates.
+ func apply_state(revision: int, phase: int, repeatable: bool, next_offer_available: bool, commit_confirmed: bool, action_text: String, cost_text: String) -> bool:
+--- a/HavenlineLevel1/previews/compact_opening_hud.gd
++++ b/HavenlineLevel1/previews/compact_opening_hud.gd
+@@ -9,12 +9,21 @@
+ const BUTTON_MAX := 238.0
+ const BUTTON_HEIGHT := 54.0
+ 
++var plot_cost_accessible := false
++
+ func reflow() -> void:
+ 	var viewport_size := get_viewport_rect().size
+ 	var rail_width := maxf(1.0, minf(OBJECTIVE_MAX, minf(viewport_size.x * OBJECTIVE_FRACTION, viewport_size.x - EDGE * 2.0)))
+ 	var content_width := maxf(1.0, rail_width - PADDING * 2.0)
+ 	stock.add_theme_font_size_override("font_size", 22)
+-	prompt.add_theme_font_size_override("font_size", 19)
++	var prompt_size := 19
++	if plot_cost_accessible:
++		# The offer is already in the existing objective. Preserve a physical
++		# font budget on small stretched views, without another canvas widget.
++		var physical := absf(get_viewport().get_final_transform().get_scale().y)
++		if physical > .01:
++			prompt_size = clampi(ceili(16.0 / physical), 19, 54)
++	prompt.add_theme_font_size_override("font_size", prompt_size)
+ 	plate.position = Vector2(EDGE, EDGE)
+ 	stock.position = plate.position + Vector2.ONE * PADDING
+ 	stock.size = Vector2(content_width, 30.0)
+--- /dev/null
++++ b/HavenlineLevel1/previews/construction_plot_ground.gd
+@@ -0,0 +1,83 @@
++extends RefCounted
++## Reference-only production art: exact indexed terrain triangles clipped to
++## a 1.40 m visual field only. Purchase still uses the separate .72 m anchor.
++const GRID = preload("res://accepted_t02_surface.gd")
++const TERRAIN = preload("res://terrain_source.gd")
++const SURFACE_ART = preload("res://previews/plot_art/construction_three_wood.svg")
++const FIELD := 1.40
++const FLUSH_GAP := .009
++
++static func build(anchor: Vector3, wood_cost: int) -> MeshInstance3D:
++	# This specific reviewed icon has a vector "3". A pricing change must
++	# supply updated art; no stale visible price may authorize a purchase.
++	if wood_cost != 3 or not anchor.is_finite():
++		return null
++	var center := Vector2(anchor.x, anchor.z)
++	var low := center - Vector2.ONE * FIELD * .5
++	var high := center + Vector2.ONE * FIELD * .5
++	var span := GRID.STEP
++	var start := Vector2i(((low + Vector2.ONE * GRID.HALF) / span).floor())
++	var end := Vector2i(((high + Vector2.ONE * GRID.HALF) / span).ceil())
++	var positions := PackedVector3Array()
++	var uv := PackedVector2Array()
++	for z in range(start.y, end.y):
++		for x in range(start.x, end.x):
++			var a := Vector2(x,z) * span - Vector2.ONE * GRID.HALF
++			var b := a + Vector2(span,0)
++			var c := a + Vector2(0,span)
++			var d := a + Vector2.ONE * span
++			# Same diagonal and winding as AcceptedGround's indexed source.
++			var first: Array[Vector2] = [a,b,c]
++			var second: Array[Vector2] = [b,d,c]
++			for source: Array[Vector2] in [first,second]:
++				var poly: Array[Vector2] = source
++				poly = _clip(poly, 0, low.x, true)
++				poly = _clip(poly, 0, high.x, false)
++				poly = _clip(poly, 1, low.y, true)
++				poly = _clip(poly, 1, high.y, false)
++				for i in range(1, poly.size() - 1):
++					if absf((poly[i] - poly[0]).cross(poly[i+1] - poly[0])) < .00000002:
++						continue
++					for p: Vector2 in [poly[0], poly[i], poly[i+1]]:
++						var sample := TERRAIN.sample(p)
++						if not sample.get("valid",false) or not sample.get("dry",false) or not is_finite(float(sample.height)):
++							return null
++						positions.append(Vector3(p.x-anchor.x,float(sample.height)-anchor.y+FLUSH_GAP,p.y-anchor.z))
++						uv.append((p-low)/FIELD)
++	if positions.is_empty():
++		return null
++	var arrays: Array = []
++	arrays.resize(Mesh.ARRAY_MAX)
++	arrays[Mesh.ARRAY_VERTEX] = positions
++	arrays[Mesh.ARRAY_TEX_UV] = uv
++	var mesh := ArrayMesh.new()
++	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
++	var paint := StandardMaterial3D.new()
++	paint.albedo_texture = SURFACE_ART
++	paint.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
++	paint.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR
++	paint.alpha_scissor_threshold = .42
++	paint.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
++	var marker := MeshInstance3D.new()
++	marker.name = "ReferenceConstructionPlot"
++	marker.mesh = mesh
++	marker.material_override = paint
++	marker.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
++	return marker
++
++static func _clip(input: Array[Vector2], axis: int, bound: float, keep_high: bool) -> Array[Vector2]:
++	var out: Array[Vector2] = []
++	if input.is_empty():
++		return out
++	var previous := input.back() as Vector2
++	var previous_inside := previous[axis] >= bound if keep_high else previous[axis] <= bound
++	for current in input:
++		var inside := current[axis] >= bound if keep_high else current[axis] <= bound
++		if inside != previous_inside:
++			var t := (bound - previous[axis]) / (current[axis] - previous[axis])
++			out.append(previous.lerp(current, t))
++		if inside:
++			out.append(current)
++		previous = current
++		previous_inside = inside
++	return out
+--- a/HavenlineLevel1/previews/integrated_opening.gd
++++ b/HavenlineLevel1/previews/integrated_opening.gd
+@@ -2,6 +2,7 @@
+ ## Opt-in candidate with no save path and no default launch change.
+ const HeroLocomotion = preload("res://previews/hero_locomotion.gd")
+ const CompactHUD = preload("res://previews/compact_opening_hud.gd")
++const GroundPlot = preload("res://previews/construction_plot_ground.gd")
+ const LooseWoodContrast = preload("res://previews/loose_wood_contrast.gd")
+ const GateArtReview = preload("res://previews/gate_pair_study/gate_art_review.gd")
+ const Terrain = preload("res://terrain_source.gd")
+@@ -11,10 +12,17 @@
+ # Provisional, prior screened rigid relocation of the full V8 camp/woods module.
+ const CAMP_SHIFT := Vector2(-3.25, 5.80)
+ const ACTIVE_HALF := Vector2(14.2, 16.2)
++# Orthographic visual proposal only. World/ownership reach is deliberately
++# independent of graphical footprint and the existing motion axis transform.
++const PREVIEW_CAMERA_OFFSET := Vector3(7, 20.30, 11)
++const PREVIEW_CAMERA_VERTICAL := 12.5
++const PREVIEW_CAMERA_PORTRAIT_MIN_WIDTH := 9.0
++const PREVIEW_CAMERA_MAX_VERTICAL := 16.5
+ var hero_locomotion := HeroLocomotion.new()
+ var ground: StaticBody3D
+ var bound := false
+ var bank_side := 0.0
++var _hud_offered_reference := false
+ var pad_anchor := Vector3(INF, INF, INF)
+ var wood_anchors: Dictionary = {}
+ 
+@@ -114,10 +122,12 @@
+ 	wood_stock_view.install(hero_visual)
+ 	camera = Camera3D.new()
+ 	camera.projection = Camera3D.PROJECTION_ORTHOGONAL
+-	camera.size = 13.0
++	camera.keep_aspect = Camera3D.KEEP_HEIGHT
+ 	add_child(camera)
++	get_viewport().size_changed.connect(_refresh_preview_camera_span)
++	_refresh_preview_camera_span()
+ 	camera.current = true
+-	camera.position = actor.position + Vector3(7, 11, 11)
++	camera.position = actor.position + PREVIEW_CAMERA_OFFSET
+ 	camera.look_at(actor.position)
+ 
+ 	for row in layout.wood_nodes:
+@@ -142,6 +152,9 @@
+ 	purchase_pad_view.position = point(layout.pad_xz)
+ 	if not purchase_pad_view.install_exact():
+ 		push_warning("V5 pad presentation withheld: exact geometry or label binding failed.")
++	elif not _mount_construction_plot():
++		purchase_pad_view.binding_ready = false
++		push_warning("Level 1 construction plot withheld: exact reference surface could not be mounted.")
+ 	var overlay := CanvasLayer.new()
+ 	add_child(overlay)
+ 	opening_hud = CompactHUD.new()
+@@ -204,6 +217,12 @@
+ 	obstacle.add_child(footprint)
+ 	camp_colliders.append(obstacle)
+ 
++func _refresh_preview_camera_span() -> void:
++	var extent := get_viewport().get_visible_rect().size
++	camera.size = PREVIEW_CAMERA_VERTICAL
++	if extent.x > 0.0 and extent.y > extent.x:
++		camera.size = clampf(PREVIEW_CAMERA_PORTRAIT_MIN_WIDTH * extent.y / extent.x, PREVIEW_CAMERA_VERTICAL, PREVIEW_CAMERA_MAX_VERTICAL)
++
+ func _physics_process(dt: float) -> void:
+ 	if not bound or not is_finite(dt) or dt <= 0.0:
+ 		return
+@@ -230,7 +249,7 @@
+ 	step_technical_gates(dt)
+ 	if flat.length() > .05:
+ 		actor.rotation.y = atan2(flat.x, flat.z)
+-	camera.position = camera.position.lerp(actor.position + Vector3(7, 11, 11), minf(dt * 8.0, 1.0))
++	camera.position = camera.position.lerp(actor.position + PREVIEW_CAMERA_OFFSET, minf(dt * 8.0, 1.0))
+ 	step_tree(dt)
+ 	if persist_blocked:
+ 		return
+@@ -248,14 +267,7 @@
+ 		return false
+ 	if receiver_id != Ledger.OFFER or material_id != "wood" or persist_blocked:
+ 		return false
+-	if actor == null or not ledger.receipt.is_empty():
+-		return false
+-	# The scene may retain the bridge after its exact asset installation failed.
+-	# Only charge against the currently attached, installed and offered pad.
+-	if not is_instance_valid(purchase_pad_view) or not purchase_pad_view.binding_ready or purchase_pad_view.get_parent() != self:
+-		return false
+-	var live_pad = purchase_pad_view.scene_view
+-	if not is_instance_valid(live_pad) or not live_pad.installed or live_pad.get_parent() != purchase_pad_view or not live_pad.is_visible_in_tree():
++	if actor == null or not _reference_offer_available():
+ 		return false
+ 	if not _within_logical_reach(pad_anchor, .72):
+ 		return false
+@@ -263,6 +275,43 @@
+ 	if not next.restore(ledger.snapshot()) or not next.pay_center_hearth():
+ 		return false
+ 	return _commit_opening_progress(next)
++
++func _reference_offer_available() -> bool:
++	if not ledger.receipt.is_empty() or persist_blocked or not is_instance_valid(purchase_pad_view) or purchase_pad_view.get_parent() != self:
++		return false
++	var expected := Transform3D(Basis.IDENTITY, pad_anchor)
++	if not purchase_pad_view.transform.is_equal_approx(expected):
++		return false
++	return purchase_pad_view.has_exact_reference_offer(camera)
++
++func _process(_dt: float) -> void:
++	# The authoritative view can be hidden, removed, or replaced independently
++	# of the old adapter. Never leave its price advertised after that change.
++	if bound and is_instance_valid(opening_hud) and _reference_offer_available() != _hud_offered_reference:
++		refresh_hud()
++
++func refresh_hud() -> void:
++	var exact_offer := _reference_offer_available()
++	_hud_offered_reference = exact_offer
++	(opening_hud as CompactHUD).plot_cost_accessible = exact_offer
++	if not exact_offer:
++		if persist_blocked or not ledger.receipt.is_empty():
++			super.refresh_hud()
++		else:
++			opening_hud.show_status(int(ledger.stock.wood), tr("The camp offer is unavailable."))
++		return
++	# Accessibility copy shares the existing objective label and authority.
++	var objective := tr("Fell one tree (F), collect two pickups, then build camp for %d wood.") % int(Ledger.COST.wood)
++	opening_hud.show_status(int(ledger.stock.wood), objective)
++
++func _mount_construction_plot() -> bool:
++	var reference := GroundPlot.build(pad_anchor, int(Ledger.COST.wood))
++	if reference == null:
++		return false
++	if purchase_pad_view.mount_ground_reference(reference):
++		return true
++	reference.free()
++	return false
+ 
+ func _input(event: InputEvent) -> void:
+ 	if bound:
+--- /dev/null
++++ b/HavenlineLevel1/previews/plot_art/construction_three_wood.svg
+@@ -0,0 +1,26 @@
++<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
++  <defs>
++    <linearGradient id="slate" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
++      <stop stop-color="#929aa4"/>
++      <stop offset="1" stop-color="#7f8793"/>
++    </linearGradient>
++  </defs>
++  <rect x="3" y="3" width="250" height="250" rx="35" fill="url(#slate)"/>
++  <path d="M16 59V42Q16 17 42 17H60 M196 17H214Q240 17 240 42V59 M240 197V215Q240 240 214 240H196 M60 240H42Q16 240 16 215V197"
++        fill="none" stroke="#f9fbff" stroke-width="12" stroke-linecap="round"/>
++  <path d="M76 107V56H94V69H107V56H120V67H136V56H149V69H162V56H180V107Z
++           M91 82H103V94H91Z M150 82H162V94H150Z"
++        fill="#f7f9fc" fill-rule="evenodd" stroke="#4d5665" stroke-width="3" stroke-linejoin="round"/>
++  <path d="M69 113H187V130H197V155H59V130H69Z M115 148H141V139Q141 127 128 127Q115 127 115 139Z"
++        fill="#f7f9fc" fill-rule="evenodd" stroke="#4d5665" stroke-width="3.5" stroke-linejoin="round"/>
++  <path d="M65 183L91 170Q101 166 111 177L126 195Q132 202 126 211L100 224Q88 230 80 221L64 203Q56 193 65 183Z"
++        fill="#956039" stroke="#482e21" stroke-width="4" stroke-linejoin="round"/>
++  <path d="M70 185L96 173M77 193L104 179M85 203L112 188"
++        fill="none" stroke="#b27a49" stroke-width="3" stroke-linecap="round"/>
++  <path d="M80 207Q84 199 96 193Q109 188 118 195Q125 202 116 211Q104 222 92 222Q83 222 80 215Q79 211 80 207Z"
++        fill="#f6bf59" stroke="#6b452a" stroke-width="3"/>
++  <path d="M89 209Q97 199 109 199Q116 202 107 211Q97 218 92 214Q90 210 101 205"
++        fill="none" stroke="#bb7539" stroke-width="1.7" stroke-linecap="round"/>
++  <path d="M151 176C160 169 181 168 190 175C198 182 195 193 183 198C197 200 201 212 193 222C184 232 163 233 148 225L152 215C166 222 180 221 183 215C187 208 178 204 162 204V194C174 194 183 190 182 184C180 179 166 178 155 184Z"
++        fill="#f9fbff" stroke="#646e7a" stroke-width="1.6" stroke-linejoin="round"/>
++</svg>
+--- a/HavenlineLevel1/purchase_pad_visual.gd
++++ b/HavenlineLevel1/purchase_pad_visual.gd
+@@ -2,7 +2,8 @@
+ ## Presentation bridge only; no trigger, stock mutation, grant, input or save.
+ const Adapter = preload("res://pad_v5_view.gd")
+ const Asset = preload("res://assets/studio/purchase_pad_v5.glb")
+-const FOOTPRINT_CAP := .80
++const FOOTPRINT_CAP := .80 # Exact legacy studio model fit; unchanged.
++const ReferenceGroundScript = preload("res://previews/construction_plot_ground.gd")
+ const SEAT_Y := .008
+ const SEAT_LABEL_GAP := .008
+ var binding_ready := false
+@@ -10,6 +11,13 @@
+ var original_bounds := AABB()
+ var scene_view: Adapter
+ var _revision := 0
++var _reference: MeshInstance3D
++var _reference_mesh: ArrayMesh
++var _reference_material: StandardMaterial3D
++var _reference_texture: Texture2D
++var _reference_bounds := AABB()
++var _reference_transform := Transform3D.IDENTITY
++var _reference_layers := 0
+ 
+ func install_exact() -> bool:
+ 	if scene_view != null:
+@@ -52,3 +60,50 @@
+ 	var phase := Adapter.Phase.ACCEPTED if accepted else Adapter.Phase.AVAILABLE
+ 	# Rendering receives only an offered or published commit; no faux progress states.
+ 	scene_view.apply_state(_revision, phase, false, false, accepted, "BUILD", "3 WOOD")
++
++
++## Preview-only replacement for the presentation, without changing the
++## exact installed studio asset, authority, or single purchase anchor.
++func mount_ground_reference(reference: MeshInstance3D) -> bool:
++	if not binding_ready or _reference_mesh != null or not is_instance_valid(reference) or reference.get_parent() != null or reference.name != &"ReferenceConstructionPlot":
++		return false
++	if not is_instance_valid(scene_view) or scene_view.has_node("ReferenceConstructionPlot"):
++		return false
++	var mesh := reference.mesh as ArrayMesh
++	var paint := reference.material_override as StandardMaterial3D
++	if mesh == null or mesh.get_surface_count() != 1 or paint == null or paint.albedo_texture == null:
++		return false
++	var bounds := mesh.get_aabb()
++	if not bounds.size.is_finite() or not is_equal_approx(bounds.size.x, ReferenceGroundScript.FIELD) or not is_equal_approx(bounds.size.z, ReferenceGroundScript.FIELD):
++		return false
++	if not scene_view.show_ground_reference_only():
++		return false
++	# The production projection is authored in pad-local coordinates. Undo
++	# the legacy studio-view fit while retaining its authoritative visibility.
++	scene_view.add_child(reference)
++	reference.transform = scene_view.transform.affine_inverse()
++	_reference = reference
++	_reference_mesh = mesh
++	_reference_material = paint
++	_reference_texture = paint.albedo_texture
++	_reference_bounds = bounds
++	_reference_transform = reference.transform
++	_reference_layers = reference.layers
++	return true
++
++## Exact visual availability for the integrated scene. Canonical v5 keeps
++## its own unchanged bridge. Reject stale, swapped, hidden, or orphaned views.
++func has_exact_reference_offer(camera: Camera3D) -> bool:
++	if not binding_ready or not is_instance_valid(scene_view) or not scene_view.installed or scene_view.get_parent() != self:
++		return false
++	if not is_instance_valid(_reference) or _reference.is_queued_for_deletion() or _reference.get_parent() != scene_view or not _reference.is_visible_in_tree():
++		return false
++	if scene_view.get_node_or_null("ReferenceConstructionPlot") != _reference:
++		return false
++	if not is_instance_valid(camera) or not camera.is_current() or camera.get_viewport() != _reference.get_viewport():
++		return false
++	if _reference.layers != _reference_layers or (_reference.layers & camera.cull_mask) == 0 or not is_zero_approx(_reference.transparency):
++		return false
++	if not _reference.transform.is_equal_approx(_reference_transform) or not (scene_view.transform * _reference.transform).is_equal_approx(Transform3D.IDENTITY):
++		return false
++	return _reference.mesh == _reference_mesh and _reference_mesh.get_surface_count() == 1 and _reference_mesh.get_aabb().is_equal_approx(_reference_bounds) and _reference.material_override == _reference_material and _reference_material.albedo_texture == _reference_texture
+--- /dev/null
++++ b/HavenlineLevel1/tests/test_integrated_reference_plot.gd
+@@ -0,0 +1,101 @@
++extends "res://tests/test_integrated_opening.gd"
++const AUTH = preload("res://previews/construction_plot_ground.gd")
++const CANONICAL = preload("res://opening.tscn")
++
++func _initialize() -> void:
++	call_deferred("run")
++
++func run() -> void:
++	root.size = Vector2i(1280,720)
++	await process_frame
++	game = GAME.instantiate()
++	game.position = Vector3(2.0,1.1,-3.0)
++	root.add_child(game)
++	await tick(10)
++	var pad = game.purchase_pad_view
++	check(game.bound and pad.binding_ready, "exact offered anchor and translated preview")
++	var marker := pad.scene_view.get_node_or_null("ReferenceConstructionPlot") as MeshInstance3D
++	check(marker != null and marker.is_visible_in_tree(), "one reference construction surface visible at spawn")
++	if marker == null:
++		quit(1)
++		return
++	var action := pad.scene_view.get_node("Action") as Label3D
++	var cost := pad.scene_view.get_node("Cost") as Label3D
++	check(not action.is_visible_in_tree() and not cost.is_visible_in_tree() and pad.scene_view.find_children("*","CanvasItem",true,false).is_empty(),"offer has no floating text, billboard, tether or clickable control")
++	var visible_meshes := 0
++	for mesh: MeshInstance3D in pad.find_children("*","MeshInstance3D",true,false):
++		if mesh.is_visible_in_tree():
++			visible_meshes += 1
++	check(visible_meshes == 1, "archived V5 hidden in preview; production marker only")
++	check(AUTH.build(game.pad_anchor, 4) == null, "unknown price cannot show or authorize stale art")
++	check(pad.global_position.is_equal_approx(game.to_global(game.pad_anchor)) and pad.find_children("*","CollisionObject3D",true,false).is_empty(), "same logical anchor without a collision or pedestal")
++	check(game.opening_hud.prompt.text.count("3 wood") == 1 and game.opening_hud.get_child_count() == 5,"one affordability cue in the existing objective, no additional widget")
++	var arrays := marker.mesh.surface_get_arrays(0)
++	var verts: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
++	var uvs: PackedVector2Array = arrays[Mesh.ARRAY_TEX_UV]
++	var clearance_error := 0.0
++	var uv_error := 0.0
++	for i in range(0,verts.size(),3):
++		var triangle: Array[Vector3] = [verts[i],verts[i+1],verts[i+2],(verts[i]+verts[i+1]+verts[i+2])/3.0,(verts[i]+verts[i+1])/2.0]
++		for vertex in triangle:
++			var point: Vector3 = game.to_local(marker.to_global(vertex))
++			var sample := Terrain.sample(Vector2(point.x,point.z))
++			clearance_error = maxf(clearance_error, absf(point.y - float(sample.height) - AUTH.FLUSH_GAP))
++		var expected := (Vector2(verts[i].x,verts[i].z)+Vector2.ONE*AUTH.FIELD*.5)/AUTH.FIELD
++		uv_error = maxf(uv_error,expected.distance_to(uvs[i]))
++	check(clearance_error < .00001 and uv_error < .00001 and verts.size() > 30 and verts.size() < 240,"aligned indexed terrain faces, flush to 9 mm without misplaced art")
++	var image: Image = marker.material_override.albedo_texture.get_image()
++	check(image.get_pixel(0,0).a < .01 and image.get_pixel(16,45).r > .9 and image.get_pixel(5,120).a > .9 and image.get_pixel(130,111).a > .9,"texture has rounded edge, bracket and continuous neutral face")
++	check(marker.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_OFF,"no extrusion or falsely suspended shadow")
++	print("terrain clearance max err=",clearance_error,"; UV err=",uv_error,"; triangles=",verts.size()/3)
++	for dims in [Vector2i(1280,720),Vector2i(844,390),Vector2i(640,360),Vector2i(390,844)]:
++		root.size = dims
++		await process_frame
++		await process_frame
++		var card := _screen_rect(marker,[Vector2(3,3),Vector2(253,3),Vector2(3,253),Vector2(253,253)])
++		var digit := _screen_rect(marker,[Vector2(148,169),Vector2(199,169),Vector2(148,232),Vector2(199,232)])
++		var approx_cap := _screen_rect(marker,[Vector2(171,169),Vector2(171,232)]).size.y
++		var final := root.get_final_transform()
++		var objective: Rect2 = final * game.opening_hud.plate.get_global_rect()
++		var label := game.opening_hud.prompt as Label
++		var font := label.get_theme_font("font")
++		var logical_font := label.get_theme_font_size("font_size")
++		var ts := TextServerManager.get_primary_interface()
++		var rid := font.get_rids()[0]
++		var glyph := ts.font_get_glyph_index(rid,logical_font,"H".unicode_at(0),0)
++		ts.font_render_glyph(rid,Vector2i(logical_font,0),glyph)
++		var physical_cap := float(ts.font_get_glyph_size(rid,Vector2i(logical_font,0),glyph).y)*final.get_scale().y
++		check(Rect2(Vector2.ZERO,Vector2(dims)).encloses(card) and digit.size.y > 2.0 and not objective.intersects(card) and physical_cap >= 12.0,"ground offer inside output and legible objective does not overlap it at "+str(dims))
++		print("objective physical glyph cap ",dims," ",physical_cap," HUD=",objective)
++		print("projection ",dims," face=",card.size," glyph bounds=",digit.size," cap centerline px=",approx_cap)
++	root.size = Vector2i(1280,720)
++	await process_frame
++	check(await travel(game.pad_anchor),"real movement reaches unpaid plot")
++	check(game.ledger.stock.wood == 0 and game.ledger.receipt.is_empty() and marker.is_visible_in_tree(),"unaffordable offer remains visible")
++	for source_id in ["wood-a","wood-b","wood-c"]:
++		check(game._collect_wood_source(source_id),"seed exact fixture source "+source_id)
++	await tick(4)
++	check(game.ledger.stock.wood == 0 and not game.ledger.receipt.is_empty() and game.camp_built.visible and not marker.is_visible_in_tree(),"single real proximity receipt hides every plot pixel")
++	check(not game.opening_hud.prompt.text.contains("3 wood") and not game.opening_hud.plot_cost_accessible,"paid receipt removes truthful affordability cue")
++	var paid := var_to_bytes(game.ledger.snapshot())
++	await tick(15)
++	check(paid == var_to_bytes(game.ledger.snapshot()),"staying on paid site never re-debits")
++	var canonical = CANONICAL.instantiate()
++	root.add_child(canonical)
++	canonical.set_physics_process(false)
++	check(canonical.purchase_pad_view.binding_ready and canonical.purchase_pad_view.scene_view.get_node_or_null("ReferenceConstructionPlot") == null and canonical.purchase_pad_view.scene_view.get_node("Action").is_visible_in_tree(),"default launch still uses original studio view")
++	print("reference plot checks=",checks," failures=",failures)
++	quit(1 if failures else 0)
++
++func _screen_rect(marker: MeshInstance3D, pixels: Array) -> Rect2:
++	var rect := Rect2()
++	var first := true
++	for px: Vector2 in pixels:
++		var local: Vector2 = (px/256.0-Vector2.ONE*.5)*AUTH.FIELD
++		var terrain_xz := Vector2(game.pad_anchor.x,game.pad_anchor.z)+local
++		var h: float = Terrain.sample(terrain_xz).height
++		var global := marker.to_global(Vector3(local.x,h-game.pad_anchor.y+AUTH.FLUSH_GAP,local.y))
++		var pixel: Vector2 = root.get_final_transform()*game.camera.unproject_position(global)
++		rect = Rect2(pixel,Vector2.ZERO) if first else rect.expand(pixel)
++		first = false
++	return rect
+--- /dev/null
++++ b/HavenlineLevel1/tests/test_integrated_reference_plot_guard.gd
+@@ -0,0 +1,65 @@
++extends "res://tests/test_integrated_opening.gd"
++
++func repeat_gate(condition: String) -> void:
++	game = GAME.instantiate()
++	root.add_child(game)
++	await tick(7)
++	var plot: MeshInstance3D = game.purchase_pad_view.scene_view.get_node("ReferenceConstructionPlot")
++	var anchor: Vector3 = game.pad_anchor
++	check(await travel(game.wood_anchors["wood-b"]), "first pickup ordinary "+condition)
++	check(await travel(game.wood_anchors["wood-c"]), "second pickup ordinary "+condition)
++	check(await travel(game.point([-.35,6.0])) and await travel(game.point([-.85,6.0])),"ordinary tree reach "+condition)
++	for i in 3:
++		press(KEY_F)
++		await tick(21)
++	check(await travel(game.point([0.0,6.0])), "clear native tree sweep "+condition)
++	await tick(58)
++	check(game.ledger.stock.wood == 3 and game.ledger.receipt.is_empty(),"full stock before approaching plot "+condition)
++	var adapter: Node3D = plot.get_parent()
++	match condition:
++		"hidden":
++			plot.hide()
++		"detached":
++			adapter.remove_child(plot)
++		"reparented":
++			plot.reparent(game)
++		"impostor":
++			var counterfeit := plot.duplicate() as MeshInstance3D
++			adapter.remove_child(plot)
++			counterfeit.name = "ReferenceConstructionPlot"
++			adapter.add_child(counterfeit)
++			check(counterfeit.is_visible_in_tree(), "counterfeit attached with indistinguishable mesh/name")
++		"freed":
++			plot.free()
++		"mesh-swapped":
++			plot.mesh = plot.mesh.duplicate()
++		"moved-offsite":
++			plot.position.x += 1.0
++		"hidden-by-camera":
++			game.camera.cull_mask &= ~plot.layers
++		"fully-transparent":
++			plot.transparency = 1.0
++		"failed-binding":
++			game.purchase_pad_view.binding_ready=false
++	if condition != "valid":
++		await process_frame
++		await process_frame
++		check(not game.opening_hud.prompt.text.contains("3 wood") and not game.opening_hud.plot_cost_accessible, "ordinary frame removes stale affordability cue for "+condition)
++	check(await travel(anchor), "actor moves into exact purchase location "+condition)
++	await tick(4)
++	if condition == "valid":
++		check(game.ledger.stock.wood == 0 and game.ledger.receipt.get("typed_debit") == {"wood":3} and not plot.is_visible_in_tree(),"normal marker pays exactly three and vanishes")
++	else:
++		check(game.ledger.stock.wood == 3 and game.ledger.receipt.is_empty() and not game.camp_built.visible,"withheld preview cannot debit from invisible space "+condition)
++		if condition in ["detached","impostor"]:
++			plot.free()
++	game.queue_free()
++	await process_frame
++
++func run() -> void:
++	root.size=Vector2i(1280,720)
++	await process_frame
++	for scenario in ["hidden","detached","reparented","impostor","freed","mesh-swapped","moved-offsite","hidden-by-camera","fully-transparent","failed-binding","valid"]:
++		await repeat_gate(scenario)
++	print("REFERENCE GUARD checks=",checks," failures=",failures)
++	quit(1 if failures else 0)
