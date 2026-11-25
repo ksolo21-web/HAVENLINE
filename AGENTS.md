@@ -299,6 +299,22 @@ Launch LiveOps retains The First Thaw, weekly gameplay event, weekly sale
 rotation, seasonal/holiday frameworks, server-authoritative time, automatic
 validated scheduling, pre-approved event composition and remote kill switch.
 
+Owner pledge (Kaleb Franklin, 2026-11-25): "I will not nickel and dime my
+customer and player base for my own personal gain." Every monetization,
+store, ad, and LiveOps decision must honor this pledge.
+
+- No loot boxes, gacha, randomized paid rewards, or paid chance mechanics
+  of any kind. Every purchase shows exactly what the player gets.
+- No forced, interstitial, or mid-play ads. Ads, if used at all, are
+  optional rewarded ads the player chooses to watch, with a fair reward,
+  and never required to progress.
+- Weekly sales and passes must show real, verifiable value. No pressure
+  countdowns, guilt pop-ups, or confusing bundles that hide real prices.
+- No purchase prompts aimed at children. Pricing must be clear enough for
+  a parent to understand.
+- If a feature would nickel and dime players, it is out of scope
+  regardless of revenue.
+
 ## Game Master owner accounts
 
 `GAME_MASTER_POLICY.json` is a mandatory forward contract for T13, T33-T37,
