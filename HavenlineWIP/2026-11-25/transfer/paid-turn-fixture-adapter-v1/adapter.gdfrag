@@ -1,0 +1,65 @@
+# Inherited fixture observer only; no gameplay code may call through this.
+var _turn_frames:Array[String] = []
+var _turn_warnings:Array[String] = []
+var _turn_fault := false
+var _turn_ticks:Array[int] = []
+var _turn_finish := false
+const TURN_EXPECTED := @EXPECTED@
+const TURN_FILES := @FILES@
+
+func _turn_record(bucket:Array[String], payload:Dictionary) -> void:
+	bucket.append(JSON.stringify(payload))
+
+func _turn_observe_owner(view:Node3D) -> void:
+	if phase == "" or _turn_finish:
+		_turn_fault = true
+	_turn_ticks.append(tick_count)
+	if game.persist_requested or game.persist_blocked or not game.bound or not game.actor.is_on_floor() or gate_drift != 0 or horizontal_body_contact != 0 or not count_mount(2) or stable_ids.size() != 2:
+		_turn_fault = true
+		return
+	for j in range(2):
+		var n:MeshInstance3D=view.paid_crowns[j]
+		if n.get_instance_id()!=stable_ids[j] or n.get_parent()!=view or n.mesh==null or not n.is_visible_in_tree():
+			_turn_fault = true
+
+func _turn_author_source() -> bool:
+	for path in TURN_FILES:
+		if FileAccess.get_sha256(path)!=TURN_FILES[path]:
+			return false
+	return true
+
+func _turn_fixture_admitted(native_summary:Dictionary) -> bool:
+	# No priority override, fallback callback, route/style tolerance, or reuse on another actor.
+	if _turn_finish or _turn_fault or not _turn_author_source() or not is_instance_valid(game):
+		return false
+	_turn_finish=true
+	if _turn_ticks.size()!=146 or _turn_ticks.back()!=1423:
+		return false
+	for i in range(1,_turn_ticks.size()):
+		if _turn_ticks[i]!=_turn_ticks[i-1]+1:
+			return false
+	if _turn_frames.size()!=6 or _turn_warnings.size()!=2 or not count_mount(2):
+		return false
+	for i in range(6):
+		if _turn_frames[i]!=TURN_EXPECTED.frames[i]:
+			return false
+	for i in range(2):
+		if _turn_warnings[i]!=TURN_EXPECTED.warnings[i]:
+			return false
+	return JSON.stringify(native_summary)==TURN_EXPECTED.summary and failures==1 and gate_drift==0 and horizontal_body_contact==0
+
+func _turn_phase_a_context(native_summary:Dictionary) -> Dictionary:
+	if not _turn_fixture_admitted(native_summary):
+		return {}
+	var r := {}
+	for i in range(2):
+		var warn:Dictionary=JSON.parse_string(_turn_warnings[i])
+		var raw:Dictionary=JSON.parse_string(_turn_frames[[1,4][i]])
+		var keys:Array[String]=[]
+		for crown in raw.crowns:
+			for observed in crown.midpoint_enclosing_shape_hits:
+				var key:String=observed.body+"#shape:"+str(int(observed.shape_index))
+				if not keys.has(key):
+					keys.append(key)
+		r[int(warn.tick)]={"foot":Vector3(warn.world[0],warn.world[1],warn.world[2]), "sphere":warn.fraction, "observed_obstacle_ids":keys, "swept_oriented_clearance_m":[.06017768240300922,.5362512348739141][i]}
+	return r
