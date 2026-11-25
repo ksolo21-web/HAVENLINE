@@ -1,0 +1,95 @@
+# Exactly first original crown, middle leg, live source and unchanged path.
+const SUPPORT_CROWN := "res://assets/studio/starter_ground_wood_lod.glb"
+const SUPPORT_CROWN_SHA := "31378ac3c6b21fbc0fdcfe597333794a7fe8b36c628a53956ad6bc0956fd1554"
+const NATIVE_INPUT_SHA := "@INPUT_SHA@"
+const OLD_SIGNED_FACE_M := -.00219279527664185
+const TURN_CELLS := 2048
+const FLOAT_BOUND_M := .000022
+var first_mid_certificate_m := 0.
+
+func exact_support_input(plans:Array,mount:Node3D) -> String:
+	var coordinates:Array=[]
+	for p in plans:
+		var keys:Array=[]
+		for k in p.key:
+			keys.append(pt(k))
+		coordinates.append({"source":tf(p.source),"rest":tf(p.rest),"key":keys,"age_ticks":p.ages})
+	var cam:Camera3D=game.camera
+	return JSON.stringify({"tick":tick_count,"body_padded_m":[pt(expected_body.position),pt(expected_body.end)],
+		"pad_m":pt(BODY_PAD),"needle_m":NEEDLE,"mount":tf(mount.global_transform),"camera":tf(cam.global_transform),
+		"camera_projection":cam.projection,"camera_size":cam.size,"plan":coordinates},"",true,true).sha256_text()
+
+func frob(m:Basis,n:Basis) -> float:
+	return sqrt((m.x-n.x).length_squared()+(m.y-n.y).length_squared()+(m.z-n.z).length_squared())
+
+func prove_first_only(plans:Array,mount:Node3D,mesh:MeshInstance3D,local:Transform3D,
+		original_gap:float) -> float:
+	if tick_count!=1333 or plans.size()!=2 or mesh!=mount.paid_crowns[0] or not mesh.is_visible_in_tree() or first_mid_certificate_m!=0.:
+		return -INF
+	if FileAccess.get_sha256(SUPPORT_CROWN)!=SUPPORT_CROWN_SHA:
+		return -INF
+	if absf(original_gap-OLD_SIGNED_FACE_M)>2e-7 or exact_support_input(plans,mount)!=NATIVE_INPUT_SHA:
+		return -INF
+	if mesh.mesh==null or mesh.mesh.get_surface_count()!=2:
+		return -INF
+	var distinct:Dictionary={}
+	var triangles:=0
+	var rad:=0.
+	for s in range(mesh.mesh.get_surface_count()):
+		if mesh.mesh.surface_get_primitive_type(s)!=Mesh.PRIMITIVE_TRIANGLES:
+			return -INF
+		var a:Array=mesh.mesh.surface_get_arrays(s)
+		var v:PackedVector3Array=a[Mesh.ARRAY_VERTEX]
+		var index:PackedInt32Array=a[Mesh.ARRAY_INDEX]
+		if index.is_empty() or index.size()%3!=0:
+			return -INF
+		triangles+=floori(float(index.size())/3.)
+		for i in index:
+			if i<0 or i>=v.size() or not v[i].is_finite():
+				return -INF
+			distinct[v[i]]=true
+	if distinct.size()!=834 or triangles!=1300:
+		return -INF
+	var cloud:=PackedVector3Array()
+	for k in distinct:
+		var v:Vector3=k
+		cloud.append(v)
+		rad=maxf(rad,v.length())
+	if rad>EXACT_CROWN_R:
+		return -INF
+	var p:Dictionary=plans[0]
+	var src:Transform3D=p.source
+	var dst:Transform3D=p.rest
+	var motion_a:Vector3=p.key[1]
+	var motion_b:Vector3=p.key[2]
+	var rot:=src.basis.orthonormalized()
+	var end_rot:=dst.basis.orthonormalized()
+	var rem:=rot.inverse()*src.basis
+	var rho:=frob(rem,Basis.IDENTITY)
+	var end_res:=frob(dst.basis,end_rot)
+	var a_q:=rot.get_rotation_quaternion()
+	var b_q:=end_rot.get_rotation_quaternion()
+	var theta:=2.*acos(clampf(absf(a_q.dot(b_q)),0.,1.))
+	var local_x:=Vector3(local.basis.x.x,local.basis.y.x,local.basis.z.x).length()
+	if not is_finite(local_x) or rho>.00001 or end_res>.00001 or theta<=0. or theta>=PI:
+		return -INF
+	# Each cell covers full continuous eased-parameter interval; monotone
+	# smoothstep maps actual phase onto [0,1]. All points share the same plane.
+	var excursion:float=(2.*rad*(1.+rho)*sin(theta/(4.*TURN_CELLS))
+		+rad*rho/(2.*TURN_CELLS)+motion_a.distance_to(motion_b)/(2.*TURN_CELLS)+2.*rad*end_res+FLOAT_BOUND_M)*local_x
+	var least:=INF
+	for n in range(TURN_CELLS):
+		var u:float=(float(n)+.5)/TURN_CELLS
+		var x:=local*Transform3D(rot.slerp(dst.basis,u)*Basis(
+			rem.x.lerp(Vector3.RIGHT,u),rem.y.lerp(Vector3.UP,u),rem.z.lerp(Vector3.BACK,u)),motion_a.lerp(motion_b,u))
+		var rightmost:=-INF
+		for v in cloud:
+			rightmost=maxf(rightmost,(x*v).x)
+		least=minf(least,expected_body.position.x-rightmost-excursion)
+	if not is_finite(least) or least<NEEDLE:
+		return -INF
+	first_mid_certificate_m=least
+	print("EXAM_FIRST_MID_SUPPORT ",JSON.stringify({"minimum_fixed_local_minus_x_clearance_m":least,
+		"old_bound_still_negative_m":original_gap,"cell_count":TURN_CELLS,"pad_m":pt(BODY_PAD),
+		"vertices":cloud.size(),"triangles":triangles,"unchanged_input_sha256":NATIVE_INPUT_SHA}))
+	return least
