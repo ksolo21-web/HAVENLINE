@@ -7,6 +7,8 @@ const OpeningHUD = preload("res://opening_hud.gd")
 const StarterGroundWoodView = preload("res://starter_ground_wood_view.gd")
 const WoodStockScript = preload("res://wood_stock_view.gd")
 const ResourceTreeScript = preload("res://resource_tree.gd")
+const ResourceRockScript = preload("res://resource_rock.gd")
+const CharacterKit = preload("res://character_kit.gd")
 const HERO = preload("res://assets/characters/Character1.glb")
 const HEARTH = preload("res://assets/studio/hearth_trial_02.glb")
 const CONIFERS := [
@@ -29,7 +31,10 @@ var purchase_pad_view: PadView
 var wood_stock_view: WoodStockScript
 var tree_button: Button
 var resource_tree: ResourceTreeScript
+var resource_rock: ResourceRockScript
+var character_kit = CharacterKit.new()
 var tree_input_sequence := 0
+var rock_input_sequence := 0
 var gates: Array[Gate] = []
 var nearest_gate: Gate
 var wood_visuals: Dictionary = {}
@@ -129,6 +134,8 @@ func _ready() -> void:
 	wood_stock_view.name = "TechnicalPublishedWoodStockView"
 	actor.add_child(wood_stock_view)
 	wood_stock_view.install(hero_visual)
+	_setup_rock()
+	character_kit.install(self, hero_visual, null)
 	camera = Camera3D.new()
 	camera.projection = Camera3D.PROJECTION_ORTHOGONAL
 	camera.size = 13.0
@@ -238,7 +245,10 @@ func clear_touch() -> void:
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_F:
-		request_tree_contact()
+		if _rock_is_target() and not _tree_is_target():
+			request_rock_contact()
+		else:
+			request_tree_contact()
 		return
 	if event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_E:
 		toggle_nearest_gate()
@@ -283,6 +293,7 @@ func _physics_process(dt: float) -> void:
 		actor.rotation.y = atan2(flat.x, flat.z)
 	camera.position = camera.position.lerp(actor.position + Vector3(7, 11, 11), minf(dt * 8.0, 1.0))
 	step_tree(dt)
+	_step_character(dt, flat.length() * 4.0)
 	if persist_blocked:
 		return
 	for row in layout.wood_nodes:
@@ -367,7 +378,40 @@ func request_tree_contact() -> void:
 	if not is_instance_valid(resource_tree) or persist_blocked:
 		return
 	tree_input_sequence += 1
-	resource_tree.strike(ResourceTreeScript.TREE_ID, tree_input_sequence, actor.global_position, tree_facing())
+	if resource_tree.strike(ResourceTreeScript.TREE_ID, tree_input_sequence, actor.global_position, tree_facing()):
+		character_kit.begin_action("chop")
+
+func request_rock_contact() -> void:
+	if not is_instance_valid(resource_rock) or persist_blocked:
+		return
+	rock_input_sequence += 1
+	if resource_rock.strike(ResourceRockScript.ROCK_ID, rock_input_sequence, actor.global_position, tree_facing()):
+		character_kit.begin_action("mine")
+
+func active_tool() -> String:
+	return character_kit.resolve_tool(_tree_is_target(), _rock_is_target())
+
+func _tree_is_target() -> bool:
+	return is_instance_valid(resource_tree) and is_instance_valid(actor) and resource_tree.can_address(actor.global_position, tree_facing())
+
+func _rock_is_target() -> bool:
+	return is_instance_valid(resource_rock) and is_instance_valid(actor) and resource_rock.can_address(actor.global_position, tree_facing())
+
+func _setup_rock() -> void:
+	var at := point([-6.0, 3.0])
+	if not at.is_finite():
+		return
+	resource_rock = ResourceRockScript.new()
+	resource_rock.name = "StarterResourceRock_stone_a"
+	add_child(resource_rock)
+	resource_rock.position = at
+	resource_rock.build()
+
+func _step_character(dt: float, speed: float) -> void:
+	if is_instance_valid(resource_rock):
+		resource_rock.advance(dt)
+	var carrying := int(ledger.stock.wood) > 0
+	character_kit.drive(dt, speed, true, _tree_is_target(), _rock_is_target(), carrying)
 
 func step_tree(dt: float) -> void:
 	if persist_blocked:

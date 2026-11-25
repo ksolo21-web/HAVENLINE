@@ -11,6 +11,7 @@ const BLEND_SECONDS := 0.10
 
 var player: AnimationPlayer
 var current := ""
+var suspend := false
 
 func bind(visual: Node3D) -> bool:
 	if not is_instance_valid(visual) or is_instance_valid(player):
@@ -20,7 +21,10 @@ func bind(visual: Node3D) -> bool:
 		return false
 	var imported := matches[0] as AnimationPlayer
 	if imported.has_animation_library(LOOP_LIBRARY):
-		return false
+		player = imported
+		if current.is_empty():
+			current = "idle"
+		return true
 	var clips := {}
 	for animation_name: StringName in imported.get_animation_list():
 		# glTF/scene import may sanitize colon separators, but no substring or
@@ -54,7 +58,7 @@ func bind(visual: Node3D) -> bool:
 	return true
 
 func observe(planar_speed: float, grounded: bool) -> void:
-	if not is_instance_valid(player):
+	if suspend or not is_instance_valid(player):
 		return
 	if not grounded or not is_finite(planar_speed) or planar_speed < MOVE_MIN:
 		_play("idle")

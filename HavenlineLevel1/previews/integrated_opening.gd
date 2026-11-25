@@ -112,6 +112,8 @@ func _ready() -> void:
 	wood_stock_view.name = "TechnicalPublishedWoodStockView"
 	actor.add_child(wood_stock_view)
 	wood_stock_view.install(hero_visual)
+	_setup_rock()
+	character_kit.install(self, hero_visual, hero_locomotion)
 	camera = Camera3D.new()
 	camera.projection = Camera3D.PROJECTION_ORTHOGONAL
 	camera.size = 13.0
@@ -226,7 +228,13 @@ func _physics_process(dt: float) -> void:
 		bound = false
 		push_error("Combined candidate foot ownership stopped outside admitted dry surface.")
 		return
-	hero_locomotion.observe(here.distance_to(observed) / dt, actor.is_on_floor())
+	var planar_speed := here.distance_to(observed) / dt
+	if character_kit.ready:
+		character_kit.drive(dt, planar_speed, actor.is_on_floor(), _tree_is_target(), _rock_is_target(), int(ledger.stock.wood) > 0)
+	else:
+		hero_locomotion.observe(planar_speed, actor.is_on_floor())
+	if is_instance_valid(resource_rock):
+		resource_rock.advance(dt)
 	step_technical_gates(dt)
 	if flat.length() > .05:
 		actor.rotation.y = atan2(flat.x, flat.z)
