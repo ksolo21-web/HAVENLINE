@@ -1,0 +1,12 @@
+--- a/pad_v5_view.gd
++++ b/pad_v5_view.gd
+@@ -73,7 +73,7 @@ func install(source: PackedScene) -> bool:
+ 		_paint.append(paint)
+ 	_model = instance as Node3D
+ 	add_child(_model)
+-	_action = _new_label("Action", -0.17, 0.0037)
+-	_cost = _new_label("Cost", 0.18, 0.0032)
++	_action = _new_label("Action", -0.17, 0.0047)
++	_cost = _new_label("Cost", 0.18, 0.0050)
+ 	installed = true
+ 	return true
