@@ -1,0 +1,37 @@
+--- v1/test_transfer_anchor.gd
++++ v2/test_transfer_anchor.gd
+@@ -26,6 +26,8 @@
+ var observing := false
+ var terrain_sites: Array[Dictionary]
+ var selected_shift := Vector2.ZERO
++var injected_surface: Material
++var previous_surface_override: Material
+ 
+ func tick(n: int) -> void:
+ 	for i in range(n):
+@@ -85,9 +87,11 @@
+ 	var transition_error := live.origin.distance_to(node.global_position)
+ 	var transition_basis := live.basis.is_equal_approx(node.global_basis)
+ 	if fault == "surface-override" and i == 1:
++		previous_surface_override = node.get_surface_override_material(1)
+ 		var bad := StandardMaterial3D.new()
+ 		bad.albedo_color = Color.MAGENTA
+-		node.set_surface_override_material(1, bad)
++		injected_surface = bad
++		node.set_surface_override_material(1, injected_surface)
+ 	check(transition_error < .00001 and transition_basis, "launch %s preserves live origin and basis (not request-time)" % i)
+ 	check(materials_ok(node), "launch %s retains both active materials/surface roles" % i)
+ 	launch_records.append({"pose": node.global_transform, "tick": clock_ticks})
+@@ -218,4 +222,12 @@
+ 	check(movers[0].get_parent() == landing_mount and movers[1].get_parent() == landing_mount, "both pieces finish inside the proposed ground mount")
+ 	check(var_to_bytes(game.ledger.snapshot()) == ledger_before, "witness did not touch inventory/payment/receipt")
+ 	check(game.camera.current and game.camera.projection == Camera3D.PROJECTION_ORTHOGONAL, "authored scene camera exists, headless only")
++	# Keep the test-only material alive until the node can no longer refer to
++	# its renderer handle. Both launch and landing checks above saw the fault.
++	if injected_surface != null:
++		var mutated := movers[1]
++		mutated.set_surface_override_material(1, previous_surface_override)
++		check(mutated.get_active_material(1) == material_refs[1], "control teardown restored the exact original active surface")
++		await process_frame
++		injected_surface = null
+ 	finish(1 if failures else 0)

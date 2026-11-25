@@ -1,0 +1,13 @@
+# Detached real-scene crown transfer: control teardown repair
+
+This is a narrowly scoped descendant of the exact original test freeze, SHA-256 of its SHA256SUMS `adc581aeb3c58cd3c456e1b42a35c13a887fde07f78a341dda0f2908b9749489`. The test stages two original-scale crown logs in a disposable copy of the exact Level 1 integrated opening. No playable files or model/material resources are edited; the proposed terrain landing site is not an approved storage location, and no live behavior, platform appearance or design approval is implied.
+
+The original clean run passed 157 checks; the stale-origin mutation failed at a late launch. The intended launch and landing material assertions also failed under the deliberately incorrect end-grain surface override, but an engine diagnostic at teardown invalidated the strict runner's three-scenario result.
+
+Only the injected control lifecycle changed: retain a strong reference to the test-only material, record the original override, assert that the mutation is detected at both launch and landing, restore the original override after those observations and before quit, check that the active material is the original exact surface, wait for the scene to process the change, and then release the held material. Normal and cached-origin scenarios are left unchanged. The runner is byte-identical to the original freeze; it still fails on Godot diagnostics and requires the expected native exit semantics.
+
+`bash run.sh <pinned checkout> <existing functional headless lock>` runs all three modes from one verified read-only archived checkout and separate temporary profiles. The expected initial source is commit `11c14a1c41971067c7dc97db69375f720a408f68`, Level 1 tree `d764a05246cbff96983aa27af17e2e919a946ae0`. See `sources.txt` and `repair.diff`.
+
+## Observed replay
+
+Native Godot 4.7.2 strict runner exited **0**. Clean: **157 checks, 0 failures**. Cached origin: **157 checks, one expected failure**; the late log jumped 0.47745 m from its live anchor. Material override: **158 checks, both expected failures** at launch and landing, and the added original-surface restoration check passed. There were no rejected Godot diagnostics. All original result JSON records reproduce exactly, except the material control's one added passing assertion. Original fault labels and tick observations also reproduce byte-for-byte. The tested actor moved 0.48871 m before late launch; the proposed site sampling and candidate landing transforms did not change. This is a detached control qualification, not an independent review, real receiver adoption, gameplay integration, or visual result.
