@@ -1,0 +1,23 @@
+# Left shoulder/armhole authorization bounds — no treatment admitted
+
+This exact indexed source-map is a read-only scope finding following the sealed local 52-joint shoulder Jacobian. It does **not** identify a verified garment seam, request a broad torso exception, change pins, apply pose offsets, edit/rebind weights, or alter tool/asset requirements.
+
+### What is known physically
+
+The protected chest author's **1,160** left projected-sensitive indexed rows are **1,037** distinct exact bind positions. Original triangle-edge connectivity gives 11 indexed components. Adding verifiably coincident physical aliases for analysis only (not welding or changing stored UVs) leaves **7** physical components: 957, 75 and five isolated positions. The largest component has 1,080 indexed rows, source X **181.871–215.832 mm**, Y **−42.988–128.430 mm**, Z **554.424–608.211 mm**; the 75-row second component is a separate lower branch, Z **242.061–296.792 mm**. The exact complement stays shoulder rank 3 when each physical component individually is *counterfactually* left unpinned. The large component's complement still has a smallest stacked singular value **0.010650 m/rad**. Even both large components absent leaves five isolated original pins at rank 3 (**0.000153 m/rad**), and each of their ten two-pin subpairs is independently rank 3. Each of the two large components alone has rank 3. Thus, treating entire connected components as hypothetical permission units, a nonzero shoulder tangent would require affecting both large components and at least four of the five isolated components. This is a necessary rank finding in this counterfactual, not a claim that modifying those rows is sufficient, that a smallest vertex-level edit exists, or that any such permission is advised. No row was actually unpinned.
+
+Immediate physical neighbors do not encode art ownership. The largest component's outer one-ring counts 176 physical spots / 187 indexed rows, of which 134 original indexed rows have **zero** left upper-arm weight. They are not automatically editable or part of an intended armhole. Source material schema is one primitive and one material; no verified separately authored armhole skin island or appearance-level boundary was identified. The exact weighted set is a diagnostic boundary, not a selectable material/garment island.
+
+### Preserve the actual sleeve and coat panels
+
+- Named current pure upper sleeve triangle **674738** is not a blend-support row. The closest sensitive point is **170.49 mm** away over 31 true source mesh edges (left-side graph original X>.12 m). The named fixed chest panel face **556546** likewise shares no physical sensitive vertex and uses spine/chest/frozen clavicle, not shoulder influence. Its closest positive-shoulder chart row is **63.69 mm** away over 3 exact source edges. These are graph distances, not a continuous surface geodesic, automatic reweight region, or material seam. No nearest-row edit is proposed.
+- Existing glove and cuff work does not cover altering/reweighting either coat or shoulder; changing only a wrist, elbow, pure sleeve panel, one majority blend component or arbitrary weight threshold cannot provide the required pin-conforming tangent under the current tested model. Do not take small positive weights as zero when exact identity is the gate.
+- A defensible next proposal would first define a **pose-compatible left shoulder transition** with explicit compensation or isolate a new authorized skin domain based on actual visual/source material evidence, not just the adjacency box. Scope any permission by positive source rows and physical/UV-alias continuity, preserving exact torso panel, core and body appearance, original weights elsewhere, original tool, cuff geometry, and identity. Even a narrowed reweight proposal would need a mathematically specified preserved torso response in the held and new poses, plus an independent actual profile/contact test. A geometric shoulder/coat reshaping, reweighting the pinned pure chest/sleeve panel, or allowing the protected torso chart to drift is not covered by the existing action.
+
+No repeated angle trials, engine, native/render, animation/contact, export, private geometry, spend, or remote changes. Reproduce with the exact sealed prior Jacobian and its source dependencies:
+
+```sh
+bash run.sh /path/to/exact/held_owner.npz > replay.json
+cmp replay.json result.json
+sha256sum -c SHA256SUMS
+```
