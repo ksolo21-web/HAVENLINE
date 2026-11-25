@@ -1,0 +1,41 @@
+func describe_turn_shape(body:CollisionObject3D, index:int) -> Dictionary:
+	var owner_id := body.shape_find_owner(index)
+	var node := body.shape_owner_get_owner(owner_id)
+	var shape:Shape3D
+	for j in range(body.shape_owner_get_shape_count(owner_id)):
+		if body.shape_owner_get_shape_index(owner_id,j)==index:
+			shape=body.shape_owner_get_shape(owner_id,j)
+	var desc := {"body":String(body.get_path()),"shape_index":index,"class":shape.get_class(),"shape_node":String(node.get_path()) if node is Node else "", "transform":tf(body.global_transform*body.shape_owner_get_transform(owner_id))}
+	if shape is BoxShape3D:
+		desc["size"]=pt(shape.size)
+	if shape is CylinderShape3D:
+		desc["radius"]=shape.radius
+		desc["height"]=shape.height
+	return desc
+
+func capture_turn(carrying:Node3D, curr:Array[Transform3D], ds:PhysicsDirectSpaceState3D) -> void:
+	var probes:Array=[]
+	for i in range(2):
+		var old:=previous[i]
+		var cur:=curr[i]
+		var delta:=old.basis.orthonormalized().get_rotation_quaternion().angle_to(cur.basis.orthonormalized().get_rotation_quaternion())
+		var rad:float=CROWN_RADIUS+carrying.paid_crowns[i].position.length()*(1.-cos(.5*delta))+.00002
+		var records:Array=[]
+		transparent_test.radius=rad
+		for pos in [old.origin,cur.origin]:
+			var hitinfo:Array=[]
+			for hit in ds.intersect_shape(shape_query(pos),32):
+				hitinfo.append(describe_turn_shape(hit.collider,hit.shape))
+			records.append(hitinfo)
+		var q:=shape_query(old.origin)
+		q.motion=cur.origin-old.origin
+		var cast:=ds.cast_motion(q)
+		transparent_test.radius=rad+q.motion.length()*.5+.0001
+		var broad:Array=[]
+		for hit in ds.intersect_shape(shape_query(old.origin.lerp(cur.origin,.5)),64):
+			broad.append(describe_turn_shape(hit.collider,hit.shape))
+		var crown:MeshInstance3D=carrying.paid_crowns[i]
+		probes.append({"index":i,"previous":tf(old),"current":tf(cur),"mounted_local":tf(crown.transform),"radius":rad,"yaw_delta":delta,"endpoint_shapes":records,"cast":Array(cast),"midpoint_enclosing_shape_hits":broad})
+	var anim:AnimationPlayer=game.hero_locomotion.player
+	print("TURN_DETAIL ",JSON.stringify({"tick":tick_count,"phase":phase,"actor":tf(game.actor.global_transform),"mount":tf(carrying.global_transform),"velocity":pt(game.actor.velocity),"grounded":game.actor.is_on_floor(),"animation":anim.current_animation,"anim_t":anim.current_animation_position,"crowns":probes}))
+
