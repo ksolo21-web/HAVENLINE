@@ -1,0 +1,2 @@
+# Detached reroute archive
+Decode editable_local_transition.npz.b64 to editable_local_transition.npz with base64 -d before checking the exact author seal (SHA-256 of SHA256SUMS: 30a9acaf59a17168ac00408245abb7a45a2c75177206a7d3fa8995049aa28d41). Nothing here is part of the playable project. The repaired local perimeter is one directed loop of 87 edges. Full assembly remains held for inherited collisions in the two measured poses and the sharp cuff fold.
