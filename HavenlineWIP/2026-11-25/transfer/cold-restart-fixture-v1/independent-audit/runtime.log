@@ -1,0 +1,15 @@
+OS cut before: PID 20 returned status 137; independently hashed bytes match across kill
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+{"checks":7,"evidence":{"cues":0,"primary":"59e4e0b13cbeece5e40a5c256e984c5a65fb54b172c2d2a3b972794b07862b15","stage":"2cbd5cc72697137dcccc30458a9315198f2000bd28aa52cee2d6699ee40e8491"},"failures":0,"phase":"writer-before","pid":20}
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+{"checks":11,"evidence":{"cues":[["op-52","receiver_test","wood",52]],"final_seq":1,"incoming_stage":"2cbd5cc72697137dcccc30458a9315198f2000bd28aa52cee2d6699ee40e8491","primary_after_attempt":"2cbd5cc72697137dcccc30458a9315198f2000bd28aa52cee2d6699ee40e8491","primary_before_load":"59e4e0b13cbeece5e40a5c256e984c5a65fb54b172c2d2a3b972794b07862b15"},"failures":0,"phase":"reader-before","pid":143}
+OS cut after: PID 166 returned status 137; independently hashed bytes match across kill
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+{"checks":7,"evidence":{"cues":0,"primary":"2cbd5cc72697137dcccc30458a9315198f2000bd28aa52cee2d6699ee40e8491","stage":null},"failures":0,"phase":"writer-after","pid":166}
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+{"checks":11,"evidence":{"cues":[["op-52-fresh","receiver_test","wood",52]],"final_seq":2,"incoming_stage":null,"primary_after_attempt":"61407e2cca2060903a0cce77e59d430ffad6c346aabfb4937d9284144e677ad2","primary_before_load":"2cbd5cc72697137dcccc30458a9315198f2000bd28aa52cee2d6699ee40e8491"},"failures":0,"phase":"reader-after","pid":229}
+Both process-restart cuts PASS (sequential leased Godot, isolated profiles cleaned).
