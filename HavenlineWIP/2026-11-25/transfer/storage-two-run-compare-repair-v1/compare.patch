@@ -1,0 +1,36 @@
+--- compare.py
++++ compare.py
+@@ -1,6 +1,16 @@
+ from pathlib import Path
+ import hashlib,json,re,sys
+ 
++# Exact A1306 opened left leaf and A1353 west wall, in order.
++EXPECTED_WARNINGS = (
++ '{"fraction":0.755859375,"grounded":true,"phase":"near_edge_approach","tick":1306,"unsafe":2,"world":[-4.90033340454102,0.307022362947464,8.00603199005127]}',
++ '{"fraction":0.9814453125,"grounded":true,"phase":"return_south","tick":1353,"unsafe":1,"world":[-6.50744485855103,-0.0412393510341644,6.0513162612915]}',
++)
++EXPECTED_SHAPES = (
++ '/root/CombinedNoSaveOpening/GrantOnlyCamp/gate-south/HingeLeft/@AnimatableBody3D@22#shape:0',
++ '/root/CombinedNoSaveOpening/GrantOnlyCamp/@StaticBody3D@18#shape:0',
++)
++
+ def require(p,s):
+  if not p: raise ValueError(s)
+ def rows(txt,label):
+@@ -16,6 +26,8 @@
+  x=obj(a,'PFX_A_STATUS')
+  require({k:x.get(k) for k in ['end_tick','prefix','observer_valid','request_dispatched']}=={'end_tick':1423,'prefix':57,'observer_valid':True,'request_dispatched':False},'full A')
+  require([r['tick'] for r in x['turn_records']]==[1306,1353] and all(r['ids'] and r['oriented_clearance']>.0001 for r in x['turn_records']),'A verified two original turns')
++ require(rows(a,'WALK_OBSTRUCTION')==list(EXPECTED_WARNINGS),'A warning content/order differs from exact turns 1306/1353')
++ require([r['ids'] for r in x['turn_records']]==[[i] for i in EXPECTED_SHAPES],'A obstacle differs from exact turn shape')
+  old=obj(a,'WALK_SUM');require((old['checks'],old['failures'],old['ticks'],old['obstructed_ticks'])==(26,1,146,2),'preserve original result')
+  aa=rows(a,'PFX_OBS')
+  require(len(aa)==57 and all(re.fullmatch(f'{1277+i} [0-9a-f]{{64}}',r) for i,r in enumerate(aa)),'missing or malformed prefix A')
+@@ -26,6 +38,7 @@
+  statuses=[obj(a,'PFX_A_STATUS'),obj(b,'PFX_B_STATUS')]
+  require(statuses[1]=={'admission_prefix':True,'prefix':57,'native_tick_end':1333,'request_dispatched':False,'reason':'UNPROVEN_EXACT_LIVE_FLIGHT_OR_RECEIVER_VISUAL_DEPTH'},'B only live prefix')
+  require(not rows(b,'WALK_SUM') and not rows(b,'TURN_ADMISSION') and len(rows(b,'WALK_OBSTRUCTION'))==1,'B has no post-near future proof')
++ require(rows(b,'WALK_OBSTRUCTION')==rows(a,'WALK_OBSTRUCTION')[:1],'B warning differs from exact A first turn 1306 (open South left leaf)')
+  aa=rows(a,'PFX_OBS');bb=rows(b,'PFX_OBS')
+  require(len(aa)==len(bb)==57 and all(re.fullmatch(f'{1277+i} [0-9a-f]{{64}}',r) for i,r in enumerate(aa)),'missing or malformed prefix')
+  require(aa==bb,'live prefix drift')
