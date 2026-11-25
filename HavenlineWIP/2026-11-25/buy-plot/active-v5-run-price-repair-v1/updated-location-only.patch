@@ -1,0 +1,12 @@
+--- a/HavenlineLevel1/pad_v5_view.gd
++++ b/HavenlineLevel1/pad_v5_view.gd
+@@ -73,7 +73,8 @@
+ 	_model = instance as Node3D
+ 	add_child(_model)
+ 	_action = _new_label("Action", -0.17, 0.0037)
+-	_cost = _new_label("Cost", 0.18, 0.0032)
++	_cost = _new_label("Cost", -0.362559, 0.0032)
++	_cost.position.x = 0.682963
+ 	installed = true
+ 	return true
+ 
