@@ -1,0 +1,3 @@
+# Detached Character 1 boot mount design
+
+This is not a posed rig. All archived results reflect existing held poses. The portable scripts validate the exact consumed `islands.json` (rather than private unused images from the source packet), exact generated poses, and both exact input assets. Set `C1_ISLAND_DIR` to sibling hardware-mask-v1, `C1_KNEE_DATA` to the generated prior pose data directory, and `C1_EXACT_GLB` / `C1_EXACT_BLEND` to the hashed rig sources. Run design then coverage with NumPy/SciPy in a disposable copy. Do not reuse this report as evidence of approved island boundaries or export.
