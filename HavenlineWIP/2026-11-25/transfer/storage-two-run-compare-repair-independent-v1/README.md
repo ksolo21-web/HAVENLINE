@@ -1,0 +1,3 @@
+# Independent scoped comparator repair
+
+Exact 6db033c0… reproduces the same sealed result, rejects our original Phase B later-warning substitution, and rejects a new A bad control that swaps the two **genuine** shape+index paths while preserving their set, exact warning lines and all other evidence. Both controls were accepted by the old reducer. The pairing repair is correct for the intended portable helper; no authentication or native/dispatch/transfer claim. Unchanged original A historical 25/26 and B admission-only semantics. No engine, remote, source or gameplay change. Replay python check.py with exact sealed siblings.
