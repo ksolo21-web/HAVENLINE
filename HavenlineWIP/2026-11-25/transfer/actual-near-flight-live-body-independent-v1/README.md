@@ -1,0 +1,7 @@
+# Independent same-plan first-crown turn proof
+
+Observer seal 7688c884…; same live Phase B 57 hashes, admission, and original -2.192795mm body rejection compared byte-for-byte with the actual original sealed logs. New observer captures the box from existing live CPU skinned actor+capsule grown by 25mm without changing its authority. It still refuses dispatch even in its unexpected-pass path. Exact same age keys [0,20,110,130], first crown middle turn only.
+
+Independently reconstruct the old signed six faces from unrounded mount/keys and full-radius envelope. Then decode all exact 834 points/1300 triangles, retain source matrix residue, compute finite shortest orientation via Rodrigues plus scalar support Lipschitz derivative proof across 8192 intervals, include measured destination residue and 22µm numerical pad. Every connecting time in that same turn is strictly separated on a single fixed negative carry-local X face from the unchanged live padded box. Independent bound ≥99.040841mm supports the producer's weaker 98.836mm. The bound is not a closest Euclidean distance. Same pre-dispatch old historical reject intentionally remains. No other stage/crown/contact/pace/visual/runtime/placement claim, actor box still needs current live monitoring if effects ever run. Only sanitized evidence; no raw source mesh, native run or remote.
+
+Replay python audit.py OWN_ACTUAL_OBSERVER_RAW_LOG; local raw log remains private.
