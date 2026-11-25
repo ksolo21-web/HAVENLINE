@@ -1,0 +1,33 @@
+--- a/opening.gd
++++ b/opening.gd
+@@ -382,7 +382,7 @@
+ 		character_kit.begin_action("chop")
+ 
+ func request_rock_contact() -> void:
+-	if not is_instance_valid(resource_rock) or persist_blocked:
++	if persist_blocked or not _rock_is_target():
+ 		return
+ 	rock_input_sequence += 1
+ 	if resource_rock.strike(ResourceRockScript.ROCK_ID, rock_input_sequence, actor.global_position, tree_facing()):
+@@ -395,7 +395,20 @@
+ 	return is_instance_valid(resource_tree) and is_instance_valid(actor) and resource_tree.can_address(actor.global_position, tree_facing())
+ 
+ func _rock_is_target() -> bool:
+-	return is_instance_valid(resource_rock) and is_instance_valid(actor) and resource_rock.can_address(actor.global_position, tree_facing())
++	if not is_instance_valid(resource_rock) or not is_instance_valid(actor) or not resource_rock.can_address(actor.global_position, tree_facing()):
++		return false
++	# Match the low pickaxe contact corridor. Camp blockers use physics layer 1.
++	var world := actor.get_world_3d()
++	if world == null:
++		return false
++	var space := world.direct_space_state
++	if space == null:
++		return false
++	var origin := actor.global_position + Vector3.UP * 0.35
++	var target := Vector3(resource_rock.global_position.x, origin.y, resource_rock.global_position.z)
++	var ray := PhysicsRayQueryParameters3D.create(origin, target, 1, [actor.get_rid()])
++	ray.hit_from_inside = true
++	return space.intersect_ray(ray).is_empty()
+ 
+ func _setup_rock() -> void:
+ 	var at := point([-6.0, 3.0])
