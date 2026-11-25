@@ -1,0 +1,261 @@
+{
+  "status": "HOLD_COMPLETE_LEFT_REQUIRES_PROXIMAL_REAUTHOR",
+  "full_glove_built": false,
+  "all_exact_source_open_edges_undirected": 82,
+  "open_loop_directed_only_including_existing_internal_defects": 85,
+  "original_L0_matched_edges": 76,
+  "missing_L0_rail_edges": 443,
+  "missing_bridge_edges": 6,
+  "independent_L1_perimeter_edges": 48,
+  "boundary_undirected_degree_two": true,
+  "six_edge_bridge_wrong_winding_on": [
+    79,
+    76
+  ],
+  "actual_same_directed_internal_edges": [
+    {
+      "vertices": [
+        0,
+        78
+      ],
+      "old_face_rows": [
+        0,
+        1
+      ],
+      "actual_directions": [
+        [
+          0,
+          78
+        ],
+        [
+          0,
+          78
+        ]
+      ]
+    },
+    {
+      "vertices": [
+        41,
+        78
+      ],
+      "old_face_rows": [
+        41,
+        42
+      ],
+      "actual_directions": [
+        [
+          78,
+          41
+        ],
+        [
+          78,
+          41
+        ]
+      ]
+    },
+    {
+      "vertices": [
+        41,
+        79
+      ],
+      "old_face_rows": [
+        42,
+        43
+      ],
+      "actual_directions": [
+        [
+          41,
+          79
+        ],
+        [
+          41,
+          79
+        ]
+      ]
+    }
+  ],
+  "fixed_pressure_anchor_face": 88,
+  "immutable_matched_cuff_rail_face": 1,
+  "odd_parity_connection_pressure_to_rail": [
+    {
+      "from_face": 1,
+      "to_face": 0,
+      "edge": [
+        0,
+        78
+      ],
+      "relative_flip_odd": true
+    },
+    {
+      "from_face": 0,
+      "to_face": 79,
+      "edge": [
+        77,
+        78
+      ],
+      "relative_flip_odd": false
+    },
+    {
+      "from_face": 79,
+      "to_face": 80,
+      "edge": [
+        78,
+        81
+      ],
+      "relative_flip_odd": false
+    },
+    {
+      "from_face": 80,
+      "to_face": 81,
+      "edge": [
+        78,
+        82
+      ],
+      "relative_flip_odd": false
+    },
+    {
+      "from_face": 81,
+      "to_face": 98,
+      "edge": [
+        79,
+        82
+      ],
+      "relative_flip_odd": false
+    },
+    {
+      "from_face": 98,
+      "to_face": 97,
+      "edge": [
+        79,
+        85
+      ],
+      "relative_flip_odd": false
+    },
+    {
+      "from_face": 97,
+      "to_face": 96,
+      "edge": [
+        79,
+        96
+      ],
+      "relative_flip_odd": false
+    },
+    {
+      "from_face": 96,
+      "to_face": 95,
+      "edge": [
+        79,
+        95
+      ],
+      "relative_flip_odd": false
+    },
+    {
+      "from_face": 95,
+      "to_face": 93,
+      "edge": [
+        93,
+        95
+      ],
+      "relative_flip_odd": false
+    },
+    {
+      "from_face": 93,
+      "to_face": 92,
+      "edge": [
+        92,
+        95
+      ],
+      "relative_flip_odd": false
+    },
+    {
+      "from_face": 92,
+      "to_face": 88,
+      "edge": [
+        91,
+        92
+      ],
+      "relative_flip_odd": false
+    }
+  ],
+  "faces_required_flipped_if_pressure_fixed": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70,
+    71,
+    72,
+    73,
+    74,
+    75,
+    76,
+    77
+  ],
+  "face_count_if_reversing_pressure_and_complement_instead": 44,
+  "proposed_full_native_skipped": true,
+  "reason": "Adding exterior faces at true boundary cannot alter pre-existing same-directed incidence on three internal edges."
+}
