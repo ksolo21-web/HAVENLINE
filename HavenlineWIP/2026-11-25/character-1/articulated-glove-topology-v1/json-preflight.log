@@ -1,0 +1,24 @@
+06:41:23 | INFO: Data are loaded, start creating Blender stuff
+06:41:23 | INFO: Blender create Mesh node t09_harvest_axe
+06:41:23 | INFO: glTF import finished in 0.01s
+Traceback (most recent call last):
+  File "witness.py", line 291, in <module>
+    (p/'result.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(out,indent=2),flush=True)
+                                 ~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ~~~~~~^^^^^
+  File "/usr/lib/python3.13/json/encoder.py", line 200, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "/usr/lib/python3.13/json/encoder.py", line 261, in iterencode
+    return _iterencode(o, 0)
+  File "/usr/lib/python3.13/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+                    f'is not JSON serializable')
+TypeError: Object of type int64 is not JSON serializable
+
+Error: script failed, file: 'hvn-l1-c1-axe-glove-topology-v1/witness.py', exiting.
+Blender 4.3.2
+Read blend: "c1-narrow-ready-witness.blend"
+
+Blender quit
