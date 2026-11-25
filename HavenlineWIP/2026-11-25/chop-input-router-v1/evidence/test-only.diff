@@ -1,0 +1,43 @@
+--- original-opening.gd
++++ test-only-opening.gd
+@@ -1,4 +1,6 @@
+ extends Node3D
++const ChopInputFixture = preload("res://chop_input_router.gd")
++var detached_test_chop_input: ChopInputFixture
+ const Ledger = preload("res://opening_ledger.gd")
+ const Save = preload("res://opening_save.gd")
+ const Gate = preload("res://technical_gate.gd")
+@@ -237,8 +239,13 @@
+ 	touch_now = Vector2.ZERO
+ 
+ func _input(event: InputEvent) -> void:
++	if detached_test_chop_input != null and detached_test_chop_input.release_only(event):
++		return
+ 	if event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_F:
+-		request_tree_contact()
++		if detached_test_chop_input != null:
++			detached_test_chop_input.capture_press(event)
++		else:
++			request_tree_contact()
+ 		return
+ 	if event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_E:
+ 		toggle_nearest_gate()
+@@ -247,12 +254,16 @@
+ 		if handle_gate_pointer_press(event, event.position):
+ 			return
+ 		if touches_tree_button(event.position):
+-			if event.device != InputEvent.DEVICE_ID_EMULATION:
++			if detached_test_chop_input != null:
++				detached_test_chop_input.capture_press(event)
++			elif event.device != InputEvent.DEVICE_ID_EMULATION:
+ 				request_tree_contact()
+ 		return
+ 	if event is InputEventScreenTouch:
+ 		if event.pressed and touches_tree_button(event.position):
+-			if event.device != InputEvent.DEVICE_ID_EMULATION:
++			if detached_test_chop_input != null:
++				detached_test_chop_input.capture_press(event, touch_id)
++			elif event.device != InputEvent.DEVICE_ID_EMULATION:
+ 				request_tree_contact()
+ 			return
+ 		if event.pressed and handle_gate_pointer_press(event, event.position):
