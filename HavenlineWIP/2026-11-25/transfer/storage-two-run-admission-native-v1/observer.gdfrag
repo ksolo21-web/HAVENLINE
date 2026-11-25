@@ -1,0 +1,97 @@
+var prefix_bad := false
+var prefix_count := 0
+var event_chain := "ordinary opening input v1".sha256_text()
+const OBS_MODE := "HVN_EXAMINER_FIXTURE_MODE"
+const Q := 100000.
+const BASELINE := "11c14a1c41971067c7dc97db69375f720a408f68"
+
+func fixed_obs(x:float) -> int:
+	return roundi(x*Q)
+
+func vec_obs(v:Vector3) -> Array[int]:
+	return [fixed_obs(v.x),fixed_obs(v.y),fixed_obs(v.z)]
+
+func tr_obs(t:Transform3D) -> Array:
+	return [vec_obs(t.origin),vec_obs(t.basis.x),vec_obs(t.basis.y),vec_obs(t.basis.z)]
+
+func body_obs(n:Node, out:Array) -> bool:
+	if n is CollisionShape3D:
+		var body:=n as CollisionShape3D
+		var desc:Variant=null
+		if body.shape is BoxShape3D:
+			desc=["box",vec_obs(body.shape.size)]
+		elif body.shape is CylinderShape3D:
+			desc=["cylinder",fixed_obs(body.shape.radius),fixed_obs(body.shape.height)]
+		elif body.shape is CapsuleShape3D:
+			desc=["capsule",fixed_obs(body.shape.radius),fixed_obs(body.shape.height)]
+		if desc==null or not is_instance_valid(body.get_parent()):
+			return false
+		out.append([String(game.get_path_to(body)),String(game.get_path_to(body.get_parent())),tr_obs(body.global_transform),body.disabled,desc])
+	for child in n.get_children():
+		if not body_obs(child,out):
+			return false
+	return true
+
+func prefix_observe() -> void:
+	if tick_count<1277 or tick_count>1333:
+		return
+	if tick_count!=1277+prefix_count or prefix_bad or not game.bound or game.persist_requested or game.persist_blocked or not game.actor.is_on_floor() or not count_mount(2):
+		prefix_bad=true
+		return
+	var view:Node3D=game.wood_stock_view
+	var carrying:Array=[]
+	for i in range(2):
+		var c:MeshInstance3D=view.paid_crowns[i]
+		if c.get_instance_id()!=stable_ids[i] or c.get_parent()!=view or not c.is_visible_in_tree() or c.mesh==null or c.mesh.get_surface_count()!=2:
+			prefix_bad=true
+			return
+		var mats:Array[String]=[]
+		for j in range(c.mesh.get_surface_count()):
+			mats.append(c.get_active_material(j).resource_name)
+		var bounds:AABB=c.get_aabb()
+		carrying.append([String(game.get_path_to(c)),tr_obs(c.global_transform),mats,vec_obs(bounds.position),vec_obs(bounds.size)])
+	var shapes:Array=[]
+	for c in game.camp_colliders:
+		if not body_obs(c,shapes):
+			prefix_bad=true
+			return
+	for g in game.gates:
+		if not body_obs(g,shapes):
+			prefix_bad=true
+			return
+	var capsule:Array=[]
+	for n in game.actor.get_children():
+		if n is CollisionShape3D and not body_obs(n,capsule):
+			prefix_bad=true
+			return
+	if capsule.size()!=1 or shapes.size()!=11:
+		prefix_bad=true
+		return
+	var anim:AnimationPlayer=game.hero_locomotion.player
+	var joints:Array=[]
+	var skels:Array[Node]=game.actor.find_children("*","Skeleton3D",true,false)
+	# All local bind/pose identities, without serializing any model or skin vertices.
+	for n in skels:
+		var sk:=n as Skeleton3D
+		var j:Array=[]
+		for k in range(sk.get_bone_count()):
+			j.append([String(sk.get_bone_name(k)),tr_obs(sk.get_bone_rest(k)),tr_obs(sk.get_bone_pose(k))])
+		joints.append([String(game.get_path_to(sk)),j])
+	if joints.is_empty():
+		prefix_bad=true
+		return
+	var cam:Camera3D=game.camera
+	var vp:Vector2=cam.get_viewport().get_visible_rect().size
+	var row:Dictionary={"t":tick_count,"input":event_chain,"raw_source":BASELINE,
+		"actor":tr_obs(game.actor.global_transform),"v":vec_obs(game.actor.velocity),
+		"camera":[tr_obs(cam.global_transform),fixed_obs(cam.size),cam.projection,fixed_obs(vp.x),fixed_obs(vp.y)],
+		"joints":JSON.stringify(joints,"",true,true).sha256_text(),"clip":String(anim.current_animation),"clip_t":fixed_obs(anim.current_animation_position),
+		"carry":carrying,"shapes":JSON.stringify(shapes,"",true,true).sha256_text(),"capsule":capsule,
+		"ledger":game.ledger.snapshot(),"gate_angles":[fixed_obs(game.gates[0].angle),fixed_obs(game.gates[1].angle)]}
+	print("PFX_OBS ", tick_count, " ", JSON.stringify(row,"",true,true).sha256_text())
+	prefix_count+=1
+	if tick_count==1333:
+		print("PFX_NEAR ",JSON.stringify({"t":tick_count,"p":row.actor[0],"v":row.v,"clip":row.clip,"clip_t":row.clip_t,"shapes":row.shapes,"camera":row.camera,"stock":row.ledger.get("stock"),"held_paths":[carrying[0][0],carrying[1][0]],"own_stable":stable_ids.size()==2 and stable_ids[0]!=stable_ids[1]},"",true,true))
+
+func input_obs(kind:String, values:Array) -> void:
+	event_chain=(event_chain+"\n"+JSON.stringify([tick_count,kind,values],"",true,true)).sha256_text()
