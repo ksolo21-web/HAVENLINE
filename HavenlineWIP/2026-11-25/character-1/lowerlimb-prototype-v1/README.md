@@ -1,0 +1,3 @@
+# Editable internal lower-limb prototype · rejected
+
+The OBJ is actual editable prototype geometry, not Character 1's visible skin or a playable boot. The original sole remains the contact source; the internal plates do not yet drive it. Run `build.py` with the exact `C1_KNEE_DATA` generated pose directory and `C1_EXACT_GLB` / `C1_EXACT_BLEND` assets set. The code regenerates the omitted diagnostic arrays and mesh. Run `verify.py` with the generated files in Blender (NumPy and mathutils) to reproduce the contact and overlap checks. The public launcher uses configurable input paths. No vertices, mesh, animation, or game changes were approved.

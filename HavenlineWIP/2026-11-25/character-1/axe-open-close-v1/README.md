@@ -1,0 +1,3 @@
+# Character 1 detached axe closure diagnostic
+
+This is a rejected static geometry proof, not a grip or swing. The portable script keeps the exact original source pins and test math while taking input paths from the environment. Set `C1_NARROW_READY_PACKET` to the exact sealed body-pose packet, `C1_EXACT_GLB` and `C1_EXACT_BLEND` to the exact identity assets, and `C1_AXE_GLB` to the hashed tool. In a disposable Blender 4.3.2 CPU profile with SciPy and NumPy, run `blender -b -t 2 -P witness.py` under the shared Blender lock. It writes a report, not a model or scene. The original evidence pathname is removed from the public log; source assets are not duplicated.
