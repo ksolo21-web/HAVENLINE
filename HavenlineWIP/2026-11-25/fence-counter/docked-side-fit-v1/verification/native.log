@@ -1,0 +1,106 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+PASS only fresh ephemeral ledger tick=10
+PASS one accepted ground and no flat layer tick=10
+PASS conformed receipt-only floor with no physical slab tick=10
+PASS wood visual and stable nonzero terrain anchor share frame tick=10
+PASS pad presentation and nonzero payment anchor share frame tick=10
+PASS walk using ordinary input to outside wood radius tick=49
+PASS outside .68 does not credit tick=49
+PASS walk to first elevated wood over physical terrain tick=65
+PASS first pickup awards exactly once tick=65
+PASS standing on consumed wood never duplicates tick=72
+PASS walk to second physical pickup tick=150
+PASS second distinct source exactly once tick=150
+PASS approach east of tree tick=192
+PASS face tree on westbound final approach tick=203
+PASS real chop in range and facing tick=203
+PASS occupied tree sweep blocks falling and credit tick=266
+PASS move clear of native tree sweep tick=282
+PASS normal chop gives third distinct resource tick=340
+PASS walk outside elevated pad reach tick=384
+PASS outside .72 never pays, reveals or debits tick=384
+PASS walk into disabled pad range tick=401
+PASS inactive/hidden pad cannot debit even in range tick=401
+PASS same ordinary tick pays once from authorized seated pad tick=404
+PASS standing on paid pad cannot pay again tick=414
+PASS exact donor ext_resource resolves to actual imported mesh tick=414
+PASS visual mesh adds no hidden collider tick=414
+PASS side fits add no collision objects tick=414
+PASS actual visible mesh OriginalNorthLeftVisualCrop tick=414
+mounted side fit bounds OriginalNorthLeftVisualCrop [P: (-5.0, 0.0, -0.15), S: (3.175, 0.95, 0.3)]
+PASS actual visible mesh OriginalNorthRightVisualCrop tick=414
+mounted side fit bounds OriginalNorthRightVisualCrop [P: (1.825, 0.0, -0.15), S: (3.175, 0.95, 0.3)]
+PASS actual visible mesh LeftArchiveTimberCap tick=414
+mounted side fit bounds LeftArchiveTimberCap [P: (-1.8705, 0.0, -0.1724), S: (0.336, 1.605, 0.3404)]
+PASS actual visible mesh RightArchiveTimberCap tick=414
+mounted side fit bounds RightArchiveTimberCap [P: (1.542761, 0.0, -0.1724), S: (0.336, 1.605, 0.3404)]
+PASS two crops and two timber imports tick=414
+PASS restored crops cover original flanks between exact endpoints/cut lines tick=414
+PASS imported timber AABBs straddle both cut lines tick=414
+PASS exact single layer-one, three-shape body tick=414
+PASS original Y/Z aligns SurvivingFenceLeft tick=414
+PASS original Y/Z aligns CounterSealedBridge tick=414
+PASS original Y/Z aligns SurvivingFenceRight tick=414
+PASS original gone and native body has three shapes tick=416
+PASS exact north original exchanged for sealed single compound body tick=416
+PASS gate-south HingeLeft hinge seated on exact ground tick=419
+PASS gate-south HingeRight hinge seated on exact ground tick=419
+PASS gate-east HingeLeft hinge seated on exact ground tick=419
+PASS gate-east HingeRight hinge seated on exact ground tick=419
+PASS South gate real approach tick=428
+PASS South gate seated-range binding tick=428
+PASS South gate opens once actor is clear tick=498
+PASS South gate physical outward traversal tick=561
+PASS South gate physical return traversal tick=624
+PASS inside cross-camp route east of hearth tick=657
+PASS East gate real approach tick=692
+PASS East gate seated-range binding tick=692
+PASS East gate opens once actor is clear tick=762
+PASS East gate physical outward traversal tick=825
+PASS East gate physical return traversal tick=888
+PASS east side approach around centered furnace tick=929
+PASS inboard x=0.000 ordinary approach tick=963
+PASS inboard x=0.000 opposite side denied tick=1041
+PASS inboard x=0.000 stays grounded at collision stop tick=1041
+inboard x=0.000 actual actor slide collider=/root/CombinedNoSaveOpening/GrantOnlyCamp/DetachedNorthCounterDonor/JoinedBarrier shapes/count during active input={ 1: 62 }
+PASS inboard x=0.000 actual actor slide hits exact JoinedBarrier tick=1041
+PASS inboard x=0.000 collision query isolates exact JoinedBarrier tick=1041
+PASS inboard x=-1.825 ordinary approach tick=1075
+PASS inboard x=-1.825 opposite side denied tick=1153
+PASS inboard x=-1.825 stays grounded at collision stop tick=1153
+inboard x=-1.825 actual actor slide collider=/root/CombinedNoSaveOpening/GrantOnlyCamp/DetachedNorthCounterDonor/JoinedBarrier shapes/count during active input={ 0: 32, 1: 30 }
+PASS inboard x=-1.825 actual actor slide hits exact JoinedBarrier tick=1153
+PASS inboard x=-1.825 collision query isolates exact JoinedBarrier tick=1153
+PASS inboard x=1.825 ordinary approach tick=1213
+PASS inboard x=1.825 opposite side denied tick=1291
+PASS inboard x=1.825 stays grounded at collision stop tick=1291
+inboard x=1.825 actual actor slide collider=/root/CombinedNoSaveOpening/GrantOnlyCamp/DetachedNorthCounterDonor/JoinedBarrier shapes/count during active input={ 1: 62 }
+PASS inboard x=1.825 actual actor slide hits exact JoinedBarrier tick=1291
+PASS inboard x=1.825 collision query isolates exact JoinedBarrier tick=1291
+PASS return to inside apron tick=1313
+PASS existing open East approach tick=1354
+PASS exit through designated gate, not counter tick=1417
+PASS outside East to northern snow tick=1506
+PASS snow-side staging before counter tick=1584
+PASS outboard x=0.000 ordinary approach tick=1617
+PASS outboard x=0.000 opposite side denied tick=1695
+PASS outboard x=0.000 stays grounded at collision stop tick=1695
+outboard x=0.000 actual actor slide collider=/root/CombinedNoSaveOpening/GrantOnlyCamp/DetachedNorthCounterDonor/JoinedBarrier shapes/count during active input={ 1: 61 }
+PASS outboard x=0.000 actual actor slide hits exact JoinedBarrier tick=1695
+PASS outboard x=0.000 collision query isolates exact JoinedBarrier tick=1695
+PASS outboard x=-1.825 ordinary approach tick=1729
+PASS outboard x=-1.825 opposite side denied tick=1807
+PASS outboard x=-1.825 stays grounded at collision stop tick=1807
+outboard x=-1.825 actual actor slide collider=/root/CombinedNoSaveOpening/GrantOnlyCamp/DetachedNorthCounterDonor/JoinedBarrier shapes/count during active input={ 1: 61 }
+PASS outboard x=-1.825 actual actor slide hits exact JoinedBarrier tick=1807
+PASS outboard x=-1.825 collision query isolates exact JoinedBarrier tick=1807
+PASS outboard x=1.825 ordinary approach tick=1867
+PASS outboard x=1.825 opposite side denied tick=1945
+PASS outboard x=1.825 stays grounded at collision stop tick=1945
+outboard x=1.825 actual actor slide collider=/root/CombinedNoSaveOpening/GrantOnlyCamp/DetachedNorthCounterDonor/JoinedBarrier shapes/count during active input={ 1: 61 }
+PASS outboard x=1.825 actual actor slide hits exact JoinedBarrier tick=1945
+PASS outboard x=1.825 collision query isolates exact JoinedBarrier tick=1945
+PASS fixture does not change fresh opening receipt tick=1945
+PASS actual CharacterBody floor contact across route tick=1945
+combined opening checks=93 failures=0 grounded=1940
