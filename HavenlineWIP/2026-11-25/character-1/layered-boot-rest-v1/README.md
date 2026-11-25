@@ -1,0 +1,3 @@
+# Closed leather backing trial · neutral rejected
+
+The authored new triangle patch is included as a small editable OBJ. It omits the rest of the boot and is not a playable prop. The portable Blender build regenerates the detached boot and arrays when `C1_VISIBLE_PANEL_DATA`, `C1_VISIBLE_BOOT_DATA`, and `C1_KNEE_DATA` resolve to the exact earlier fixture outputs. Run the build and then preflight in a disposable copy. The continuous leather and lower-region checks passed separately; the trim intersects the repaired backing, so no gait pose was run. The full detached Blender file is represented by its reconstruction and checksum.
