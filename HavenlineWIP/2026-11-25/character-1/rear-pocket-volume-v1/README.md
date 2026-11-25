@@ -1,0 +1,3 @@
+# Finite rear knee pocket overlay · rejected
+
+The editable OBJ solids depict the actual tested geometry at rest and the first held pose. They are not a replacement surface or transferable boot. Use the exact approved-rear and original pose fixture directories as `C1_APPROVED_REAR_DATA` and `C1_KNEE_DATA` to reconstruct the diagnostic arrays with construct.py; then run the verification in a disposable CPU Blender profile. The finite pockets intersect the retained shell, cross when bent and the return inverts along the defined path. This rejects the tested overlay, not every garment construction.
