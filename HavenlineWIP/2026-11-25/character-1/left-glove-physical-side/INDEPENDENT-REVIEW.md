@@ -1,0 +1,7 @@
+# Independent physical-side audit: exterior repair required
+
+The exact 44db716e542ece793bf1a43fb476001f091b57cbf9d938693fb8d67e0c6edefa manifest and its five members match. Recomputed both-pose target normals, group cut and first-hit classification from sealed witnesses. An independent double-precision solve against the 121-face local shell rederived all 2,278 local first-hit identities; distances agree within 2 µm for 2,275 and 17 µm for three, below the 0.1 mm classification threshold. External owner/retained BVHs were not rerun by this reviewer.
+
+Row 78 is first visible on 35/35 owner-side rays, with all 35 normals opposing, and only one dual/reverse in both poses. Sheltered cap 119 is outer-first on zero and reverse-first on 35 neutral/26 open rays. Its actual cover is 84×25, 97×9, 98×1 in each pose. Cream row 120 control never opposes on its 13/10 exposed probes. Dart 123 gives 35 opposing samples but 8 neutral/11 open dual rays, so its open shell outcome is not solid exterior proof.
+
+Qualifying exposure group: 78/82/83/84/85/105/106/108/111. Reversing those rows alone breaks nine exact joins, including the preserved cream seam 77–81 and locked outer edge 84–99. Reconstruct a connected exterior and return with consistent direction and actual both-pose ray/clearance proof. Retain fixed cuff rails, row 120 and dart UV, exact pressure/bearing, and protected tip; keep the sheltered cap distinct. No simple strip flip, texture swatch substitution, watertight claim, or visual/grip/game approval.
