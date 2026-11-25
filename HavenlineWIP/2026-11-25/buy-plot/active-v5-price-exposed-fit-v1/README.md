@@ -1,0 +1,9 @@
+# Active V5 cost legend: one detached on-deck relocation
+
+**Geometrically eligible in all five observed south stances, not yet approved.** At exact 11c14a1c this uses 256 real flat V5 roof faces, excludes all four inlay bounds and existing BUILD support, and subtracts actual camera-side CPU-skinned Character 1 projection from unfunded and funded .901/1.618 m and funded .791 m reached samples. Common supported exposed area is 0.225469 m². No reposing or V6 placement inputs.
+
+Proposed center relative to pad anchor is +.02886 m X and −.29516 m Z on the back/north deck. Quantized source X +.068295, Z −.702280 fits the entire deliberately oversized support rectangle, .321335 × .153155 m: prior .0050 trial scale bounds, 14-font-pixel modeled allowance per edge, and a further 3 mm clearance. Original placement was occluded in the actual near/prepay tests. The relocated patch keeps .0032 scale; the .0050 check (2.136 logical-pixel atlas-axis diagnostic) is an envelope reserve only, not an included size change.
+
+cost-location-only.patch moves only the original Cost Label3D horizontally, preserving font, scale, text, outline, Y/rotation, BUILD, art, .80 m footprint, price/reach/activation/payment and camera. No overlay. Blob 43f88e9deebb74d5eaf69290ced38681f59a8b36 → 10c747bf0b47afaf76a4eb992cba25f7d445ff24. Next independent check: actual relocated native transform, ordinary approach motion and post-commit hide, then actual raster contrast and supported phone views. No approved glyph legibility, timing envelope, or live build claim.
+
+Replay: python fit.py EXACT_PINNED_CHECKOUT EXACT_ORDINARY_V5_RAW_SAMPLE_DIR in a fresh sibling workspace with sealed native/route packets. Source sample digests pinned; do not archive source assets or raw geometry. No engine, renderer, external change or spend.
