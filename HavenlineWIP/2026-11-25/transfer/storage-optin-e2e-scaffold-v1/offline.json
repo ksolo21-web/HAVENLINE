@@ -1,0 +1,143 @@
+{
+  "claims": "Independent exact v3 oracle vector and one TEST pace/shape calculation only; no native motion or geometry admission",
+  "design_test_speed_cap_m_s": 4.4,
+  "halt_reasons": [
+    "original walk carries conservatively obstructed at ticks 1306 and 1353",
+    "native mount matrix/whole obstacle certificate for proposed transfer absent"
+  ],
+  "poses": [
+    {
+      "certified_world_geometry": false,
+      "estimated_only_anchor_world_m": [
+        -5.705293600883233,
+        1.0761801972985288,
+        7.322264413987702
+      ],
+      "key_positions_m": [
+        [
+          -5.705293600883233,
+          1.0761801972985288,
+          7.322264413987702
+        ],
+        [
+          -5.0912543397292875,
+          1.0761801972985288,
+          6.610537088559265
+        ],
+        [
+          -5.596517383444508,
+          1.0761801972985288,
+          5.796595472047229
+        ],
+        [
+          -5.596517383444508,
+          0.11266990300144689,
+          5.796595472047229
+        ]
+      ],
+      "max_speed_each_phase_m_s": [
+        4.229999999999999,
+        0.9580144562764147,
+        4.335796324336869
+      ],
+      "piece": 1,
+      "ticks": [
+        0,
+        20,
+        110,
+        130
+      ]
+    },
+    {
+      "certified_world_geometry": false,
+      "estimated_only_anchor_world_m": [
+        -5.784795071888666,
+        1.0761801972985288,
+        7.253674909590857
+      ],
+      "key_positions_m": [
+        [
+          -5.784795071888666,
+          1.0761801972985288,
+          7.253674909590857
+        ],
+        [
+          -5.17075581073472,
+          1.0761801972985288,
+          6.54194758416242
+        ],
+        [
+          -5.332379043071789,
+          1.0761801972985288,
+          5.796595202368235
+        ],
+        [
+          -5.332379043071789,
+          0.11283764523831509,
+          5.796595202368235
+        ]
+      ],
+      "max_speed_each_phase_m_s": [
+        4.229999999999999,
+        0.762674401220696,
+        4.335041484270962
+      ],
+      "piece": 2,
+      "ticks": [
+        136,
+        156,
+        246,
+        266
+      ]
+    }
+  ],
+  "tail_time_s": 4.433333333333334,
+  "transaction_after": {
+    "carried": {
+      "wood": 0
+    },
+    "collected": [
+      "wood-a",
+      "wood-b",
+      "wood-c"
+    ],
+    "deposit_through": 1,
+    "harvest_through": 2,
+    "receipt": {
+      "grant": "center-hearth",
+      "offer": "center-hearth",
+      "revision": 1,
+      "typed_debit": {
+        "wood": 3
+      }
+    },
+    "stored": {
+      "wood": 2
+    },
+    "version": 3
+  },
+  "transaction_before": {
+    "carried": {
+      "wood": 2
+    },
+    "collected": [
+      "wood-a",
+      "wood-b",
+      "wood-c"
+    ],
+    "deposit_through": 0,
+    "harvest_through": 2,
+    "receipt": {
+      "grant": "center-hearth",
+      "offer": "center-hearth",
+      "revision": 1,
+      "typed_debit": {
+        "wood": 3
+      }
+    },
+    "stored": {
+      "wood": 0
+    },
+    "version": 3
+  }
+}
