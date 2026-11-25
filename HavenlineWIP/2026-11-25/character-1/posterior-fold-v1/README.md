@@ -1,0 +1,2 @@
+# Character 1 visible posterior fold panel · rejected at first held key
+The actual editable patch is included as a rest OBJ. It is not a full limb or a free-standing asset. The portable scripts reconstruct the isolated candidate using the exact previous collar assembly and gait fixture, selected via `C1_COLLAR_DATA` and `C1_KNEE_DATA`. Run `build.py` and then `native.py` in private CPU Blender profiles. The new local panel cleared the named pair but worsened the wider first-pose intersections and fold counts. No full gait, rendering, or export accepted.
