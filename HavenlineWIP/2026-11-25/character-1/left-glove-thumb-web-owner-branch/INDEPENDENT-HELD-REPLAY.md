@@ -1,0 +1,5 @@
+# Independent held full-owner replay
+
+Reconstructed held positions from pre-existing sealed chest pose 642a4159… and narrow rig ccd17840… in a disposable background native evaluator; did not edit the candidate or original. Extracted exact evaluated positions and indices, then independently ray-cast outside Blender on the full unmasked original. All 727,442 native triangle indices match the original GLB, markers agree within 5.6e-17 metres, and geometric normal fans match.
+
+All 60 supplemental held first-hit triangle IDs reproduce; hit points agree within 0.680 µm. Counts for five fixed source rules reproduce [6,6,4,0,0]. All six original held blocked occluder IDs also reproduce, with distances 79.923–88.614 mm, outside the unchanged 18 mm cutoff. All independent candidate hits were previously replicated across both phases. The original-grid HOLD still applies. This closes the independent held check of the separate static source supplement only; no closure, visible rig, animation or gameplay approval.
