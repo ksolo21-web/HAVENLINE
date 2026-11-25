@@ -1,0 +1,3 @@
+# Character 1 rear garment: editable specialist handoff
+
+Extract `posterior-geometry-and-motion.tar.gz` beside these files. It holds the exact original editable OBJ and source-coordinate JSON, compressed without altering their bytes. Follow `GARMENT_TD_BRIEF.md`. This is a verified design input, not another candidate or an approved replacement. To regenerate in a disposable workspace, configure `C1_APPROVED_REAR_DATA`, `C1_REAR_POCKET_DATA`, `C1_REAR_CUT_DATA`, and `C1_KNEE_DATA` to the pinned generated fixture sets and run `build.py`. Run `verify.py` on the extracted packet as a shape/index sanity check.
