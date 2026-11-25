@@ -1,0 +1,3 @@
+# Detached right inner eyelet and backing proof
+
+The result failed. These files do not replace the visible mesh or install a pose. The portable scripts check the exact consumed reports and input asset hashes. Set `C1_MOUNT_DIR` to sibling boot-mount-design-v1, `C1_KNEE_DATA` to the prior generated pose directory, and `C1_EXACT_GLB` / `C1_EXACT_BLEND` to the exact assets. Run `OPENBLAS_NUM_THREADS=1 python3 mount.py` in a disposable copy to rebuild the indexed diagnostic geometry and measurements, then `blender -b -t 2 -P bvh.py` to evaluate the scoped overlap tests. The generated NPZ is not required in Git.
