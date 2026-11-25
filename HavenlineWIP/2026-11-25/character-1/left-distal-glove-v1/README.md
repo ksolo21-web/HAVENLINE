@@ -1,0 +1,3 @@
+# Left-only sewn distal glove · rejected
+
+The editable delta retains actual authored triangles, material/seam arrays and pose data. It omits only the donor-face ID enumeration, which the portable witness regenerates from exact inputs. Use environment variables documented in visible-gloves-v1, plus `C1_INTRINSIC_PANELS` for the exact sibling panel NPZ and `C1_STITCHED_CUFF_DATA` for regenerated exact prior splice and report. Run the witness with background CPU Blender and a shared lock. The left palm reaches the correct contact plane but the actual mesh folds extensively and UV/web routing is incomplete. Right hand unchanged. No mirrored or playable grip.
