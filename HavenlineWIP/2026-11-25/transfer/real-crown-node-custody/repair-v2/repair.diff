@@ -1,0 +1,166 @@
+--- test.gd.before
++++ test.gd
+@@ -17,6 +17,7 @@
+ var mesh: Mesh
+ var stone_snapshot: Array
+ var samples := 0
++var fault := "clean"
+ var key_samples: Array[Dictionary] = []
+ var ledger := {"carry":{"wood":4,"stone":5}, "receivers":{"fixture":{"wood":0}}, "receipts":{}}
+ 
+@@ -42,26 +43,50 @@
+ 	parent.add_child(node)
+ 	return node
+ 
++# Recursively inspect every visible MeshInstance3D under the lab, even nested
++# under a helper and even when an equivalent mesh is a different Resource.
++func visible_visuals(parent: Node) -> Array[MeshInstance3D]:
++	var visuals: Array[MeshInstance3D] = []
++	for child in parent.get_children(true):
++		if child is MeshInstance3D and child.is_visible_in_tree() and child.mesh != null:
++			visuals.append(child)
++		visuals.append_array(visible_visuals(child))
++	return visuals
++
+ func scan_others() -> Array:
+ 	var result := []
+-	for child in actor.get_children():
+-		if child.name.begins_with("Stone") and child is MeshInstance3D and child.is_visible_in_tree():
+-			result.append([String(child.name), child.get_instance_id(), child.transform, child.mesh.get_instance_id(), child.material_override.get_instance_id(), child.material_override.albedo_color])
++	for child in visible_visuals(lab):
++		if child.name.begins_with("Stone"):
++			var override_id := 0
++			var override_color := Color.TRANSPARENT
++			if child.material_override != null:
++				override_id = child.material_override.get_instance_id()
++				if child.material_override is StandardMaterial3D:
++					override_color = child.material_override.albedo_color
++			result.append([String(child.name), child.get_instance_id(), child.get_parent().get_instance_id(), actor.global_transform.affine_inverse() * child.global_transform, child.mesh.get_instance_id(), override_id, override_color])
+ 	return result
+ 
+ func scan_wood() -> Dictionary:
+ 	var result := {}
+-	for mount: Node3D in [actor,flight,landed]:
+-		for child in mount.get_children():
+-			if child is MeshInstance3D and child.mesh == mesh and child.is_visible_in_tree():
+-				var slot := str(child.get_meta("slot", "missing"))
+-				if not result.has(slot):
+-					result[slot] = []
+-				result[slot].append(child)
++	for child in visible_visuals(lab):
++		if child.mesh == mesh or child.get_meta("kind", "") == "wood" or log_ids.has(child.get_instance_id()):
++			var slot := str(child.get_meta("slot", "missing"))
++			if not result.has(slot):
++				result[slot] = []
++			result[slot].append(child)
+ 	return result
+ 
+-func validate(expected: Array, label: String) -> void:
++# Separate oracle in aligned-lab coordinates. Deliberately does not reuse the
++# presenter interpolation or its timing constants. Check actual scene poses.
++func oracle_flight(now_us: int, second_in_batch: bool, slot: int) -> Vector3:
++	var age := float(now_us - (11500 if second_in_batch else 0))
++	var x := -2.0 + (4.0 / 285000.0) * age
++	var y := 1.0 - age / 570000.0 + (2.6 / (285000.0 * 285000.0)) * age * (285000.0 - age)
++	return Vector3(x, y, (slot - 1.5) * 0.105)
++
++func validate(expected: Array, label: String, now_us := -1, first := 0) -> void:
+ 	var seen := scan_wood()
++	check(visible_visuals(lab).size() == 9, label + ": recursive all-mesh census")
+ 	check(seen.size() == 4, label + ": slot count")
+ 	var census := [0,0,0]
+ 	for i in range(4):
+@@ -71,10 +96,28 @@
+ 			continue
+ 		var node: MeshInstance3D = copies[0]
+ 		var owner: Node3D = expected[i]
++		var owner_by_oracle := owner
++		if now_us >= 0:
++			if i < first:
++				owner_by_oracle = landed
++			elif i >= first + 2:
++				owner_by_oracle = actor
++			else:
++				var start_us := 11500 if i == first + 1 else 0
++				owner_by_oracle = actor if now_us < start_us else (flight if now_us < 285000 + start_us else landed)
++		check(node.get_parent() == owner_by_oracle, label + ": independent phase")
++		check(node.mesh == mesh and node.material_override == null and node.get_meta("kind", "") == "wood", label + ": original crown and material")
+ 		check(node.get_parent() == owner and node.get_instance_id() == log_ids[i], label + ": owner and identity")
+ 		check(node.basis.is_equal_approx(Basis.IDENTITY) and is_equal_approx(node.position.z, (i - 1.5) * SPACING), label + ": orientation and separate corridor")
+ 		check(owner == flight or node.position.is_equal_approx(Vector3(-2 if owner == actor else 2,1 if owner == actor else 0.5,(i - 1.5) * SPACING)), label + ": terminal anchor")
+-		census[[actor,flight,landed].find(node.get_parent())] += 1
++		var lab_pos := lab.to_local(node.global_position)
++		if owner == flight:
++			check(lab_pos.distance_to(oracle_flight(now_us, i == first + 1, i)) <= 0.000005, label + ": XY arc oracle")
++		else:
++			check(lab_pos.distance_to(Vector3(-2 if owner == actor else 2, 1 if owner == actor else 0.5, (i - 1.5) * 0.105)) <= 0.000005, label + ": lab terminal")
++		var actual_owner := [actor,flight,landed].find(node.get_parent())
++		if actual_owner >= 0:
++			census[actual_owner] += 1
+ 	check(census[0]+census[1]+census[2] == 4, label + ": four pieces")
+ 	check(scan_others() == stone_snapshot, label + ": untouched row")
+ 	if not label.contains(":") or label.ends_with(":idle") or label.ends_with(":0") or label.ends_with(":285000") or label.ends_with(":296500"):
+@@ -117,8 +160,10 @@
+ 					node.reparent(flight,true)
+ 				var u := float(d)/float(FLIGHT_US)
+ 				node.position = Vector3(lerpf(-2,2,u),lerpf(1,.5,u)+.65*4*u*(1-u),(i-1.5)*SPACING)
++		if fault == "wild-xy" and ticket == "partial" and t == 16667:
++			logs[first].position += Vector3(34, -91, 0)
+ 		await process_frame
+-		validate(expected, "%s:%d" % [ticket,t])
++		validate(expected, "%s:%d" % [ticket,t], t, first)
+ 		check(ledger == committed, ticket + ": animation does not mutate ledger")
+ 	var expected_final := [landed,landed,actor,actor] if batch == 1 else [landed,landed,landed,landed]
+ 	validate(expected_final, ticket + ":idle")
+@@ -133,6 +178,12 @@
+ 	return result
+ 
+ func run() -> void:
++	var args := OS.get_cmdline_user_args()
++	if args.size() != 1 or args[0] not in ["clean", "nested-equivalent", "wild-xy", "nested-foreign"]:
++		printerr("Supply clean or a supported rejection control")
++		quit(2)
++		return
++	fault = args[0]
+ 	var path := "res://source.input"
+ 	var doc := GLTFDocument.new()
+ 	var state := GLTFState.new()
+@@ -183,6 +234,13 @@
+ 	check(legacy_visible(63,5)==[44,4] and legacy_visible(11,5)==[11,5], "legacy untouched stone visible count instability")
+ 	var legacy_delta := (.374+.09)*.5
+ 	check(is_equal_approx(legacy_delta,.232) and legacy_visible(52,5)==[44,4] and legacy_visible(0,5)==[0,5], "legacy full depletion: stone X .232 -> 0")
++	if fault in ["nested-equivalent", "nested-foreign"]:
++		var helper := make_mount(flight, "Nested")
++		var descendant := make_mount(helper, "MoreNested")
++		var duplicate_equivalent := make_visual(descendant, mesh.duplicate(), "UnexpectedVisible", Vector3.ZERO)
++		if fault == "nested-equivalent":
++			duplicate_equivalent.set_meta("slot", 0)
++			duplicate_equivalent.set_meta("kind", "wood")
+ 	validate([actor,actor,actor,actor],"initial")
+ 	# Mutations: prove the snapshots flag an extra draw, a slipped row, and visibility/material drift.
+ 	var duplicate := make_visual(flight,mesh,"InjectedDouble",Vector3.ZERO)
+@@ -203,7 +261,7 @@
+ 	stones[0].material_override = other_material
+ 	await simulate(0,"partial",1)
+ 	await simulate(2,"remaining",2)
+-	var packet := {"checks":checks,"failures":errors,"samples":samples,"final_wood_carried":ledger.carry.wood,"final_wood_received":ledger.receivers.fixture.wood,"final_stone_carried":ledger.carry.stone,"triangles":tris,"mesh_bounds_m":[box.size.x,box.size.y,box.size.z],"key_samples":key_samples,"pitch_z_m":SPACING,"place":"synthetic-only","renderer":"headless not image evidence"}
++	var packet := {"fault":fault,"checks":checks,"failures":errors,"samples":samples,"final_wood_carried":ledger.carry.wood,"final_wood_received":ledger.receivers.fixture.wood,"final_stone_carried":ledger.carry.stone,"triangles":tris,"mesh_bounds_m":[box.size.x,box.size.y,box.size.z],"key_samples":key_samples,"pitch_z_m":SPACING,"place":"synthetic-only","renderer":"headless not image evidence"}
+ 	print(JSON.stringify(packet))
+ 	lab.free()
+ 	quit(0 if errors.is_empty() else 1)
+--- run.sh.before
++++ run.sh
+@@ -3,6 +3,7 @@
+ here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ source_glb="${1:?Provide the pinned Level 1 starter ground GLB}"
+ lock="${2:?Provide existing Havenline Godot headless lock path}"
++fault="${3:-clean}"
+ test -f "$lock"
+ exec 9<>"$lock"
+ flock -n 9 || { echo 'Godot lease in use' >&2; exit 1; }
+@@ -14,4 +15,4 @@
+ cp "$here/"{project.godot,planner_upstream.gd,test.gd} "$scratch/project/"
+ cp "$source_glb" "$scratch/project/source.input"
+ printf '%s  %s\n' '0ae04e267c01a0163cc29f6eabb23c1d8cc93edb635ced9e865a5452dcde9151' "$scratch/project/planner_upstream.gd" '31378ac3c6b21fbc0fdcfe597333794a7fe8b36c628a53956ad6bc0956fd1554' "$scratch/project/source.input" | sha256sum --check --status
+-env HOME="$scratch/home" XDG_CONFIG_HOME="$scratch/config" XDG_CACHE_HOME="$scratch/cache" XDG_DATA_HOME="$scratch/data" XDG_STATE_HOME="$scratch/state" XDG_RUNTIME_DIR="$scratch/runtime" TMPDIR="$scratch/tmp" timeout 25 godot --headless --path "$scratch/project" --script res://test.gd
++env HOME="$scratch/home" XDG_CONFIG_HOME="$scratch/config" XDG_CACHE_HOME="$scratch/cache" XDG_DATA_HOME="$scratch/data" XDG_STATE_HOME="$scratch/state" XDG_RUNTIME_DIR="$scratch/runtime" TMPDIR="$scratch/tmp" timeout 25 godot --headless --path "$scratch/project" --script res://test.gd -- "$fault"
