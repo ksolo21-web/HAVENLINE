@@ -1,0 +1,7 @@
+# First native two-run admission-only result
+
+Godot 4.7.2, first and only exact attempt. Starting source and routes pinned in observer packet 96239426; generated script bytes identified in bridge.sha256. Independent disposable process/profile for each run. No parser fix, real user/save, rendering or content update.
+
+- A continued through 1423, paid exact three and made two real paid cuts. Expected engine exit 1 preserves the original broad 25/26 result. Six live observations and the two original warning values matched the exact tight adapter. The known open South hinge leaf and native camp wall admitted narrow reviewed orientation lower bounds 60.18 mm (1306) and 536.25 mm (1353), not a global guard override. All 146 monitored ticks grounded, no horizontal body or gate drift.
+- Fresh B repeated ordinary actual inputs, live 1306 check and settled at 1333. Exact match on 57 finite rows within 1e-5 encoded fields, own two stable mounted roles, count=2, zero velocity, original idle at near waypoint. Wrapper exit 0 is admission only. No dispatch, debit or credit, custody, postage timing, marker, or main/game authority.
+- Allowlisted logs omit raw native IDs, scans, meshes, CPU skin arrays and runtime paths; no engine diagnostics were observed or omitted. Compare exact logs with sibling observer compare.py. Need one new exact live flight/visibility corridor proof before any examiner action.
