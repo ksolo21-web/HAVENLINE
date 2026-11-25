@@ -1,0 +1,3 @@
+# Intrinsic cuff sewing and thumb-web section · local proof only
+
+The exact editable binary contains flat pattern coordinates, short tested continuations, seam and UV routing, and the separate web section. It is not a glove or finished grip. Use the exact inputs documented in visible-gloves-v1, plus `C1_STITCHED_CUFF_DATA` (regenerated full splice and result) and `C1_CONTACT_DATA` (exact contact fixture NPZ) with a disposable CPU Blender runtime and the shared lock. The portable runner validates the actual consumed reports and array hashes. Do not treat clear near rails as validated full hand, bearing or game evidence.
