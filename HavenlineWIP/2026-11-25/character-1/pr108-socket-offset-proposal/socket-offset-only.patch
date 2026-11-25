@@ -1,0 +1,52 @@
+diff --git a/HavenlineLevel1/character_kit.gd b/HavenlineLevel1/character_kit.gd
+--- a/HavenlineLevel1/character_kit.gd
++++ b/HavenlineLevel1/character_kit.gd
+@@ -6,6 +6,7 @@
+ const PICK_SCENE = preload("res://assets/tools/pickaxe.glb")
+ const ACTION_LIBRARY := &"l1_actions"
+ const MOVE_MIN := 0.08
++const SOCKET_OFFSET := ^"LocalOffset"
+ 
+ var ready := false
+ var equipped := ""
+@@ -114,18 +115,18 @@
+ 	if tool == null:
+ 		return
+ 	if sheathed or action.is_empty():
+-		_stick(tool, _sheath.global_transform, 0.72)
++		_stick(tool, _socket_world_transform(_sheath), 0.72)
+ 		tool.show()
+ 		return
+-	var lower := _palm_r.global_position
+-	var upper := _palm_l.global_position
++	var lower := _socket_world_transform(_palm_r).origin
++	var upper := _socket_world_transform(_palm_l).origin
+ 	if lower.y > upper.y:
+ 		var swap := lower
+ 		lower = upper
+ 		upper = swap
+ 	var span := upper - lower
+ 	if span.length() < 0.05:
+-		_stick(tool, _sheath.global_transform, 0.95)
++		_stick(tool, _socket_world_transform(_sheath), 0.95)
+ 		tool.show()
+ 		return
+ 	var axis := span.normalized()
+@@ -193,8 +194,16 @@
+ 	attachment.name = "Socket_" + bone
+ 	attachment.bone_name = bone
+ 	_skeleton.add_child(attachment)
+-	attachment.position = local
++	# Godot replaces the attachment transform on each skeleton update.
++	var marker := Node3D.new()
++	marker.name = "LocalOffset"
++	marker.position = local
++	attachment.add_child(marker)
+ 	return attachment
++
++func _socket_world_transform(attachment: BoneAttachment3D) -> Transform3D:
++	var marker := attachment.get_node(SOCKET_OFFSET) as Node3D
++	return marker.global_transform
+ 
+ func _host_tool(scene: PackedScene, node_name: String) -> Node3D:
+ 	var tool := scene.instantiate() as Node3D
