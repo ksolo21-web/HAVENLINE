@@ -1,0 +1,111 @@
+{
+  "axes": "unchanged glTF X length, Y up, Z depth; metres",
+  "source_sha256": "31378ac3c6b21fbc0fdcfe597333794a7fe8b36c628a53956ad6bc0956fd1554",
+  "crown_primitive_triangle_counts": [
+    1087,
+    213
+  ],
+  "crown_aabb_extents_m": [
+    0.28367315232753754,
+    0.10256047546863556,
+    0.10383449122309685
+  ],
+  "naive_pitch_m": 0.035,
+  "strict_at_pitch": {
+    "X": {
+      "strict_crossing_pair_count_lower_bound": 1593,
+      "strongest_witness": {
+        "triangle_a": 733,
+        "triangle_b": 732,
+        "overlap_m": 0.05675483989555867
+      }
+    },
+    "Y": {
+      "strict_crossing_pair_count_lower_bound": 746,
+      "strongest_witness": {
+        "triangle_a": 817,
+        "triangle_b": 840,
+        "overlap_m": 0.04184235511199651
+      }
+    },
+    "Z": {
+      "strict_crossing_pair_count_lower_bound": 789,
+      "strongest_witness": {
+        "triangle_a": 538,
+        "triangle_b": 415,
+        "overlap_m": 0.027765437576756483
+      }
+    }
+  },
+  "disjoint_box_axis_spacings_m_with_1mm_margin": [
+    0.28467315232753754,
+    0.10356047546863556,
+    0.10483449122309685
+  ],
+  "constructive_packing_cases_xyz": {
+    "(1, 1, 2)": [
+      0.28367315232753754,
+      0.10256047546863556,
+      0.2086689824461937
+    ],
+    "(1, 2, 1)": [
+      0.28367315232753754,
+      0.20612095093727112,
+      0.10383449122309685
+    ],
+    "(1, 2, 2)": [
+      0.28367315232753754,
+      0.20612095093727112,
+      0.2086689824461937
+    ],
+    "(1, 1, 26)": [
+      0.28367315232753754,
+      0.10256047546863556,
+      2.724696771800518
+    ],
+    "(1, 2, 26)": [
+      0.28367315232753754,
+      0.20612095093727112,
+      2.724696771800518
+    ],
+    "(1, 4, 13)": [
+      0.28367315232753754,
+      0.41324190187454224,
+      1.361848385900259
+    ]
+  },
+  "technical_carry_comparison": {
+    "box_m": [
+      0.3021056085575073,
+      0.19933912323573177,
+      0.24
+    ],
+    "same_axis_separated_cell_count": [
+      1,
+      1,
+      2
+    ],
+    "exact_role": "one visibility-only whole bundle plus count while wood > 0, not one mesh per unit",
+    "bind_center_m": [
+      0,
+      1.1900000000000002,
+      -0.5042180531276785
+    ]
+  },
+  "unbound_lip_comparison": {
+    "tested_support_xz_m": [
+      0.05,
+      0.05
+    ],
+    "aligned_crown_envelope_xz_m": [
+      0.28367315232753754,
+      0.10383449122309685
+    ],
+    "aligned_crown_envelope_area_vs_small_test_square_ratio": 11.782022978232762,
+    "roles": {
+      "inboard": "unbound_geometry_feasibility_only",
+      "outboard": "unbound_geometry_feasibility_only"
+    }
+  },
+  "scope": "Unchanged glTF mesh offline. Parallel aligned crown copies only. No minimum separation, actor/receiver fit, capacity, support, motion, or gameplay approval."
+}
