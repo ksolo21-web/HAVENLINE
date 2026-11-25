@@ -1,0 +1,376 @@
+--- /dev/null
++++ b/HavenlineLevel1/fixtures/pine_store/ledger.gd
+@@ -0,0 +1,69 @@
++extends "res://opening_ledger.gd"
++## Test-only composite adapter. Before the fixture's one deposit, exact legacy shape.
++var stored_wood := 0
++var deposit_through := 0
++
++func _advance_fields() -> Dictionary:
++	return {"version": 3, "collected": collected.duplicate(), "receipt": receipt.duplicate(true),
++		"harvest_through": pine_occurrences, "deposit_through": deposit_through,
++		"carried": stock.duplicate(true), "stored": {"wood": stored_wood}}
++
++func snapshot() -> Dictionary:
++	return super.snapshot() if deposit_through == 0 else _advance_fields()
++
++func restore(data: Variant) -> bool:
++	if not data is Dictionary:
++		return false
++	if not _whole(data.get("version"), 3):
++		if not super.restore(data):
++			return false
++		stored_wood = 0
++		deposit_through = 0
++		return true
++	if data.size() != 7 or not _whole(data.get("deposit_through"), 1):
++		return false
++	var harvest: Variant = data.get("harvest_through")
++	var carried: Variant = data.get("carried")
++	var stored: Variant = data.get("stored")
++	if not carried is Dictionary or carried.size() != 1 or not stored is Dictionary or stored.size() != 1:
++		return false
++	if not _count(harvest) or not _count(carried.get("wood")) or not _whole(stored.get("wood"), 1):
++		return false
++	if int(harvest) < 1 or int(carried.wood) + 1 != int(harvest):
++		return false
++	# Preserve old starter-ID and typed paid-receipt validation via the exact original v2 gate.
++	var legacy := {"version": 2, "collected": data.get("collected"), "receipt": data.get("receipt"),
++		"pine_occurrences": int(harvest), "stock": {"wood": int(harvest)}}
++	if not super.restore(legacy):
++		return false
++	stock = {"wood": int(carried.wood)}
++	stored_wood = 1
++	deposit_through = 1
++	return true
++
++func _count(n: Variant) -> bool:
++	if typeof(n) != TYPE_INT and typeof(n) != TYPE_FLOAT:
++		return false
++	return is_finite(float(n)) and n >= 0 and n <= MAX_PINE_OCCURRENCES and _whole(n, int(n))
++
++func has_exact_paid_hearth() -> bool:
++	if deposit_through == 0:
++		return super.has_exact_paid_hearth()
++	return deposit_through == 1 and stored_wood == 1 and receipt == _completed_receipt() and collected.size() == KNOWN_WOOD.size() and KNOWN_WOOD.all(func(id): return id in collected) and _count(stock.get("wood")) and stock.wood + stored_wood == pine_occurrences
++
++func _record_paid_pine(source: String, occurrence: int, expected_receipt: Dictionary) -> bool:
++	if deposit_through == 0:
++		return super._record_paid_pine(source, occurrence, expected_receipt)
++	if source != "wood-a" or not has_exact_paid_hearth() or receipt != expected_receipt or pine_occurrences >= MAX_PINE_OCCURRENCES or occurrence != pine_occurrences + 1:
++		return false
++	pine_occurrences = occurrence
++	stock.wood += 1
++	return true
++
++func fixture_record_deposit(id: int, material: String, n: int) -> bool:
++	if id != 1 or material != "wood" or n != 1 or deposit_through != 0 or not has_exact_paid_hearth() or stock.wood < 1:
++		return false
++	stock.wood -= 1
++	stored_wood = 1
++	deposit_through = 1
++	return true
+--- /dev/null
++++ b/HavenlineLevel1/fixtures/pine_store/store.gd
+@@ -0,0 +1,128 @@
++extends RefCounted
++## Disposable native profile only. The approved shell runner holds a separate
++## process-wide OS flock. This script does not implement directory fsync.
++const L = preload("res://fixtures/pine_store/ledger.gd")
++const FLAG := "--pine-store-fixture="
++const OWNER := "--pine-store-owner="
++const PREFIX := "havenline-pine-store-fixture-"
++const MARK := "PINE-STORE-TEST-OWNER"
++const PRIMARY := "pine-store-fixture.json"
++const STAGE := "pine-store-fixture.stage"
++const PIN := "e88468b70209be294e23a03b5200dcd60d9a69c71116f77637efbd960935efbd"
++var _root := ""
++var _owner := ""
++var _epoch := 0
++var _published_hash := ""
++
++func _matches(args: PackedStringArray, flag: String) -> PackedStringArray:
++	var out := PackedStringArray()
++	for arg in args:
++		if arg.begins_with(flag):
++			out.append(arg.trim_prefix(flag))
++	return out
++
++func configure(args: PackedStringArray) -> bool:
++	_root = ""
++	_owner = ""
++	_epoch = 0
++	_published_hash = ""
++	var paths := _matches(args, FLAG)
++	var owners := _matches(args, OWNER)
++	if paths.size() != 1 or owners.size() != 1:
++		return false
++	var leaf := paths[0].get_file()
++	var regex := RegEx.new()
++	if regex.compile("^" + PREFIX + "[A-Za-z0-9_-]{8,48}$") != OK or regex.search(leaf) == null or paths[0] != "/tmp/" + leaf:
++		return false
++	if regex.compile("^[0-9a-f]{32}$") != OK or regex.search(owners[0]) == null:
++		return false
++	_root = paths[0]
++	_owner = owners[0]
++	if not _safe():
++		_root = ""
++		_owner = ""
++		return false
++	return true
++
++func _safe() -> bool:
++	if _root.is_empty():
++		return false
++	var t := DirAccess.open("/tmp")
++	var d := DirAccess.open(_root)
++	if t == null or t.is_link(_root.get_file()) or d == null or d.is_link(MARK) or d.is_link(PRIMARY) or d.is_link(STAGE):
++		return false
++	var mark := FileAccess.open(_root.path_join(MARK), FileAccess.READ)
++	var expected := "HAVENLINE-PINE-NATIVE-FIXTURE\n" + PIN + "\n" + _owner + "\n"
++	return mark != null and mark.get_length() == expected.length() and mark.get_as_text() == expected
++
++func _decode(path: String) -> Dictionary:
++	var f := FileAccess.open(path, FileAccess.READ)
++	if f == null or f.get_length() > 8192:
++		return {}
++	var raw := f.get_as_text()
++	var data: Variant = JSON.parse_string(raw)
++	if not data is Dictionary or data.size() != 3 or data.get("version") != 1:
++		return {}
++	var payload: Variant = data.get("payload")
++	if not payload is String or payload.sha256_text() != data.get("sha256"):
++		return {}
++	var p: Variant = JSON.parse_string(payload)
++	if not p is Dictionary:
++		return {}
++	var ledger := L.new()
++	if p.has("fixture"):
++		if p.size() != 4 or p.get("fixture") != 1 or p.get("owner") != _owner or not ledger._count(p.get("epoch")) or int(p.epoch) < 1 or not ledger.restore(p.get("ledger")):
++			return {}
++		return {"epoch": int(p.epoch), "ledger": ledger.snapshot(), "identity": raw.sha256_text()}
++	if not ledger.restore(p) or not (L._whole(p.get("version"), 1) or L._whole(p.get("version"), 2)):
++		return {}
++	return {"epoch": 0, "ledger": ledger.snapshot(), "identity": raw.sha256_text()}
++
++func primary_path() -> String:
++	return _root.path_join(PRIMARY)
++func stage_path() -> String:
++	return _root.path_join(STAGE)
++
++func _write(next: L, epoch: int) -> bool:
++	if not _safe():
++		return false
++	var text := JSON.stringify({"fixture": 1, "owner": _owner, "epoch": epoch, "ledger": next.snapshot()})
++	var raw := JSON.stringify({"version": 1, "payload": text, "sha256": text.sha256_text()})
++	var d := DirAccess.open(_root)
++	if d.file_exists(STAGE) and d.remove(STAGE) != OK:
++		return false
++	var f := FileAccess.open(stage_path(), FileAccess.WRITE)
++	if f == null:
++		return false
++	f.store_string(raw)
++	f.flush()
++	var result := f.get_error()
++	f.close()
++	var checked := _decode(stage_path())
++	if result != OK or checked.get("ledger") != next.snapshot() or checked.get("epoch") != epoch or checked.get("identity") != raw.sha256_text() or not _safe():
++		return false
++	if DirAccess.rename_absolute(stage_path(), primary_path()) != OK:
++		return false
++	_published_hash = raw.sha256_text()
++	_epoch = epoch
++	return true
++
++func boot() -> L:
++	if not _safe():
++		return null
++	var next := L.new()
++	var epoch := 1
++	if FileAccess.file_exists(primary_path()):
++		var data := _decode(primary_path())
++		if data.is_empty() or not next.restore(data.ledger) or int(data.epoch) >= L.MAX_PINE_OCCURRENCES:
++			return null
++		epoch += int(data.epoch)
++	return next if _write(next, epoch) else null
++
++func commit(next: L) -> bool:
++	if _epoch <= 0 or not _safe():
++		return false
++	var previous := _decode(primary_path())
++	if previous.get("epoch") != _epoch or previous.get("identity") != _published_hash:
++		return false
++	return _write(next, _epoch)
+--- /dev/null
++++ b/HavenlineLevel1/fixtures/pine_store/opening.gd
+@@ -0,0 +1,53 @@
++extends "res://fixtures/pine_store/under_test.gd"
++## Private integration seam only: no world receiver, asset, placement or interaction.
++const Composite = preload("res://fixtures/pine_store/ledger.gd")
++const Backend = preload("res://fixtures/pine_store/store.gd")
++var storage := Backend.new()
++var _fixture_ticket: RefCounted
++var _fixture_stamp: Dictionary = {}
++
++func _ready() -> void:
++	var args := OS.get_cmdline_user_args()
++	# Never even open the original save path for this fixture.
++	if save.requested(args) or not storage.configure(args):
++		bound = false
++		return
++	var restored := storage.boot()
++	if restored == null:
++		bound = false
++		return
++	ledger = restored
++	super._ready()
++
++func _fixture_next_ledger() -> Ledger:
++	return Composite.new()
++
++func _commit_opening_progress(next: Ledger) -> bool:
++	# A shared baseline starter helper still stages its exact v1 payload. Adapt
++	# it through the same validated binder, not a new game ingress.
++	var proposal := Composite.new()
++	if not proposal.restore(next.snapshot()) or not storage.commit(proposal):
++		persist_blocked = true
++		persist_error = "Fixture save rejected before publication."
++		refresh_hud()
++		return false
++	return super._commit_opening_progress(proposal)
++
++func fixture_issue_owned_deposit(id: int, material: String, n: int) -> RefCounted:
++	if _fixture_ticket != null or not bound or persist_blocked or id != 1 or material != "wood" or n != 1:
++		return null
++	if not ledger.has_exact_paid_hearth() or ledger.deposit_through != 0 or ledger.stock.wood != 2 or ledger.pine_occurrences != 2:
++		return null
++	_fixture_stamp = ledger.snapshot()
++	_fixture_ticket = RefCounted.new()
++	return _fixture_ticket
++
++func fixture_publish_owned_deposit(ticket: RefCounted) -> bool:
++	if _fixture_ticket == null or ticket != _fixture_ticket or persist_blocked or not bound or ledger.snapshot() != _fixture_stamp:
++		return false
++	var next := Composite.new()
++	if not next.restore(_fixture_stamp) or not next.fixture_record_deposit(1, "wood", 1):
++		return false
++	_fixture_stamp.clear()
++	_fixture_ticket = null
++	return _commit_opening_progress(next)
+--- /dev/null
++++ b/HavenlineLevel1/fixtures/pine_store/route.gd
+@@ -0,0 +1,114 @@
++extends "res://tests/test_paid_pine_renewal.gd"
++const Fixture = preload("res://fixtures/pine_store/opening.gd")
++const Backend = preload("res://fixtures/pine_store/store.gd")
++const Composite = preload("res://fixtures/pine_store/ledger.gd")
++const PHASE := "--pine-store-test-phase="
++const EXPECTED := {"offer": "center-hearth", "grant": "center-hearth", "revision": 1, "typed_debit": {"wood": 3}}
++var mode := "route"
++
++func assert_fixture_state(occurrences: int, carried: int, stored: int, phase_note: String) -> void:
++	check(game.ledger.has_exact_paid_hearth() and game.ledger.receipt == EXPECTED, phase_note + " exact original receipt")
++	check(game.ledger.pine_occurrences == occurrences and game.ledger.stock.wood == carried and game.ledger.stored_wood == stored, phase_note + " typed values")
++	check(game.ledger.deposit_through == (0 if stored == 0 else 1), phase_note + " exact deposit high-water")
++
++func original_wood_and_paid_twice() -> void:
++	for id in ["wood-b", "wood-c"]:
++		check(await travel(game.wood_anchors[id]), "ordinary pickup route " + id)
++	await approach()
++	await settle(2, 3)
++	check(game.ledger.collected == ["wood-b", "wood-c", "wood-a"], "exact original starter ids")
++	check(await travel(game.pad_anchor), "walk to native paid fixture's unchanged game pad")
++	check(game.camp_built.visible and game.ledger.has_exact_paid_hearth() and game.ledger.snapshot().version == 1 and game.ledger.stock.wood == 0, "paid exact three; legacy v1 persisted")
++	await cross_south()
++	# Full absence allowance (do not alter original 5s tree clock if partly run
++	# during payment + the gate walk). Watch body motion/route like parent test.
++	await tick(300)
++	check(game.resource_tree.phase == "rooted" and game.ledger.stock.wood == 0, "regrowth alone still earns nothing")
++	for i in range(1, 3):
++		await approach()
++		await settle(i - 1, i)
++		assert_fixture_state(i, i, 0, "ordinary paid harvested %d" % i)
++		if i == 1:
++			await regrow(i)
++	check(game.ledger.snapshot().version == 2, "strict unchanged-shape v2 before deposit")
++
++func deposit_and_guard() -> void:
++	var old := Backend.new()
++	check(old.configure(OS.get_cmdline_user_args()), "shadow backend exact owner marker")
++	var read := old._decode(old.primary_path())
++	# Read-only imitation of a retained session against the same primary hash.
++	old._epoch = read.get("epoch", 0)
++	old._published_hash = read.get("identity", "")
++	var before := FileAccess.get_file_as_bytes(old.primary_path())
++	var expected: Dictionary = game.ledger.snapshot()
++	check(game.fixture_issue_owned_deposit(2, "wood", 1) == null and game.fixture_issue_owned_deposit(1, "food", 1) == null and game.fixture_issue_owned_deposit(1, "wood", 2) == null, "skipped/wrong type and oversized fixture requests denied")
++	var token: RefCounted = game.fixture_issue_owned_deposit(1, "wood", 1)
++	check(token != null and not game.fixture_publish_owned_deposit(RefCounted.new()) and expected == game.ledger.snapshot(), "fake ticket does not spend or consume live fixture ticket")
++	if mode == "forced_abort":
++		var path: String = old.stage_path()
++		check(DirAccess.make_dir_absolute(path) == OK, "own staging path blocked before promotion")
++		check(not game.fixture_publish_owned_deposit(token) and game.persist_blocked and game.ledger.snapshot() == expected and before == FileAccess.get_file_as_bytes(old.primary_path()), "failed staging leaves exact v2 primary wood and receipt")
++		check(DirAccess.remove_absolute(path) == OK, "own blocker directory removed")
++		return
++	check(game.fixture_publish_owned_deposit(token), "one abstract fixture deposit committed")
++	assert_fixture_state(2, 1, 1, "after deposit")
++	check(not game.fixture_publish_owned_deposit(token) and game.fixture_issue_owned_deposit(1, "wood", 1) == null, "actual previously consumed ticket and ID denied")
++	var proposal := Composite.new()
++	check(proposal.restore(expected), "validated stale shadow snapshot")
++	var fresh := FileAccess.get_file_as_bytes(old.primary_path())
++	check(fresh != before and not old.commit(proposal) and fresh == FileAccess.get_file_as_bytes(old.primary_path()), "same-epoch old published identity cannot clobber deposit")
++	var live_store: Backend = game.storage
++	var held_old_epoch: int = live_store._epoch
++	var holder := Backend.new()
++	check(holder.configure(OS.get_cmdline_user_args()) and holder.boot() != null, "simulated second fixture owner epoch, same process canonical guard")
++	var moved := FileAccess.get_file_as_bytes(old.primary_path())
++	check(holder._epoch == held_old_epoch + 1 and not live_store.commit(proposal) and moved == FileAccess.get_file_as_bytes(old.primary_path()), "prior epoch cannot overwrite new epoch")
++	check(game.ledger.snapshot().version == 3, "only actual deposit introduces fixture v3")
++	var forged: Dictionary = game.ledger.snapshot()
++	forged.carried.wood += 1
++	check(not proposal.restore(forged) and proposal.snapshot() == expected, "synthetic malformed v3 cannot alter validated ledger")
++
++func resume_and_harvest() -> void:
++	assert_fixture_state(2, 1, 1, "new process restores v3")
++	check(game.camp_built.visible and game.actor.position.is_equal_approx(game.point(game.layout.start_xz)) and game.actor.basis.is_equal_approx(Basis.IDENTITY), "restore keeps actual original spawn/basis and camp")
++	await tick(300)
++	# SceneTree.physics_frame is observed before the node's current callback;
++	# the cold ready frame provides no settled phase baseline clock.
++	check(game.ledger.stock.wood == 1, "restored five seconds offers no passive award")
++	await tick(1)
++	check(game.resource_tree.phase == "rooted" and game.ledger.stock.wood == 1, "rooted after the final cold-start callback adds no wood")
++	await approach()
++	await settle(1, 2)
++	assert_fixture_state(3, 2, 1, "next ordinary full paid cut")
++	var observed: Dictionary = game.storage._decode(game.storage.primary_path())
++	check(observed.get("ledger") == game.ledger.snapshot(), "cold successor primary and native authority exactly agree")
++
++func run() -> void:
++	for arg in OS.get_cmdline_user_args():
++		if arg.begins_with(PHASE):
++			mode = arg.trim_prefix(PHASE)
++	game = GAME.instantiate()
++	game.set_script(Fixture)
++	root.add_child(game)
++	if mode == "invalid_owner":
++		check(not game.bound and game.actor == null, "wrong fixture ownership refused before scene; no original save opened")
++		quit(1 if failures else 0)
++		return
++	check(game.bound and not game.persist_requested and not game.persist_blocked, "fixture loads only marked native profile; exact game otherwise bound")
++	if not game.bound:
++		quit(1)
++		return
++	if mode == "resume":
++		await resume_and_harvest()
++	elif mode == "read_v1":
++		assert_fixture_state(0, 0, 0, "native legacy v1 wrapper")
++		check(game.ledger.snapshot().version == 1, "v1 unchanged after wrapper migration")
++	elif mode == "read_v2" or mode == "read_abort":
++		assert_fixture_state(2, 2, 0, "native legacy v2 or aborted deposit read")
++		check(game.ledger.snapshot().version == 2, "no deposit recovered from v2")
++	else:
++		await tick(10)
++		await original_wood_and_paid_twice()
++		await deposit_and_guard()
++	print("pine-store native fixture checks=", checks, " failures=", failures, " grounded=", grounded)
++	quit(1 if failures else 0)
