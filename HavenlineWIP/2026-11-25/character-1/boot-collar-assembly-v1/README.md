@@ -1,0 +1,3 @@
+# Neutral-passing right boot collar assembly · gait failed
+
+The small editable OBJ preserves the actual authored trim and leather patch surfaces and corner UVs. It is not a full boot or rig. Exact binary Blender and arrays are produced by the detached scripts, not installed or shipped here. Set `C1_LAYERED_DATA`, `C1_VISIBLE_PANEL_DATA`, `C1_VISIBLE_BOOT_DATA`, and `C1_KNEE_DATA` to the prior exact fixture directories. In a disposable project, run `exact_stack.py`, then run `assemble.py`, `preflight.py`, and `held.py` with background Blender, NumPy and SciPy. The neutral assembly clears; the three gait samples still fail outside the trim. Read both results before reusing any piece.
