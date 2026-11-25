@@ -1,0 +1,73 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+WARNING: OBJ: Ambient light for material 'board' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'board_warm' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'board_soft' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'beam' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'brace_back' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'snow' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'metal' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'rope' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'rope_dark' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'board' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'board_warm' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'board_soft' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'beam' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'brace_back' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'snow' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'metal' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'rope' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'rope_dark' is ignored in PBR
+BEGIN baseline wall
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+WITNESS exact integrated rock and disposable runtime | observed | PASS
+OBSERVATION loose b reach=true actor=(-6.250029, 0.094444, 12.80001) stock={ "wood": 1 }
+OBSERVATION loose c reach=true actor=(-1.254516, 0.11622, 12.8) stock={ "wood": 2 }
+WITNESS ordinary loose wood | observed | PASS
+WITNESS ordinary west-facing tree approach | observed | PASS
+WITNESS tree active/cooldown naturally elapsed | observed | PASS
+WITNESS legal tree F advances exactly once before camp | observed | PASS
+WITNESS tree active/cooldown naturally elapsed | observed | PASS
+WITNESS legal tree F advances exactly once before camp | observed | PASS
+WITNESS tree active/cooldown naturally elapsed | observed | PASS
+WITNESS legal tree F advances exactly once before camp | observed | PASS
+WITNESS actual F accepted three wood actions | observed | PASS
+WITNESS clear falling tree sweep | observed | PASS
+WITNESS physical pad charges three wood | observed | PASS
+WITNESS inside western wall stop | observed | PASS
+WITNESS solid western wall and source-facing candidate | observed | PASS
+WITNESS wall target selection | target=true; baseline=true | PASS
+WITNESS west-wall F | strike 0 → 1 | PASS
+WITNESS west-wall ledger unchanged | wood=0 | PASS
+WITNESS ordinary south gate approach | observed | PASS
+WITNESS dry outside route and legal facing | observed | PASS
+WITNESS outside ray clear | clear command path | PASS
+WITNESS rock active/cooldown naturally elapsed | observed | PASS
+WITNESS legal outdoor F advances exactly once | observed | PASS
+WITNESS rock active/cooldown naturally elapsed | observed | PASS
+WITNESS legal outdoor F advances exactly once | observed | PASS
+WITNESS stone exhausted after three accepted hits | phase=mined tally=3 | PASS
+WITNESS ledger unchanged since payment | wood=0 | PASS
+END baseline wall
+BEGIN baseline repeat
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+WITNESS exact integrated ephemeral tree scene | observed | PASS
+WITNESS physical tree approach using input events | observed | PASS
+WITNESS chop exact runtime clip bound | observed | PASS
+WITNESS chop first F accepted from nonactive action | observed | PASS
+WITNESS chop actual overlap with expired source cooldown | observed | PASS
+WITNESS chop overlap expected strike/sequence delta | 1 -> 2 strikes; 1 -> 2 input seq; 1 -> 2 source seq | PASS
+WITNESS chop overlap ledger unchanged | paid/stock/pickup snapshot | PASS
+WITNESS chop existing action timer naturally expires | observed | PASS
+WITNESS chop legal F after action expiry advances once | strikes 2 -> 3; sequence 2 -> 3 | PASS
+TIMING {"baseline":true,"elapsed_s":0.345744,"first_after":{"action":"chop","clip":"l1_actions/chop","cooldown":0.32,"input_seq":1,"ledger":{"collected":[],"receipt":{},"stock":{"wood":0},"version":1},"phase":"rooted","playing":true,"position_s":0.0,"remaining_s":0.680000007152557,"source_seq":1,"strikes":1,"usec":5667146},"first_before":{"action":"chop","clip":"","cooldown":0.0,"input_seq":0,"ledger":{"collected":[],"receipt":{},"stock":{"wood":0},"version":1},"phase":"rooted","playing":false,"position_s":-1.0,"remaining_s":0.0,"source_seq":0,"strikes":0,"usec":5666851},"kind":"chop","next_after":{"action":"chop","clip":"l1_actions/chop","cooldown":0.32,"input_seq":3,"ledger":{"collected":[],"receipt":{},"stock":{"wood":0},"version":1},"phase":"falling","playing":true,"position_s":0.0,"remaining_s":0.680000007152557,"source_seq":3,"strikes":3,"usec":6709003},"next_before":{"action":"chop","clip":"","cooldown":0.0,"input_seq":2,"ledger":{"collected":[],"receipt":{},"stock":{"wood":0},"version":1},"phase":"rooted","playing":false,"position_s":-1.0,"remaining_s":0.0,"source_seq":2,"strikes":2,"usec":6708727},"overlap_after":{"action":"chop","clip":"l1_actions/chop","cooldown":0.32,"input_seq":2,"ledger":{"collected":[],"receipt":{},"stock":{"wood":0},"version":1},"phase":"rooted","playing":true,"position_s":0.347222222222222,"remaining_s":0.680000007152557,"source_seq":2,"strikes":2,"usec":6013007},"overlap_before":{"action":"chop","clip":"l1_actions/chop","cooldown":0.0,"input_seq":1,"ledger":{"collected":[],"receipt":{},"stock":{"wood":0},"version":1},"phase":"rooted","playing":true,"position_s":0.347222222222222,"remaining_s":0.31333334048589,"source_seq":1,"strikes":1,"usec":6012890}}
+WITNESS exact integrated ephemeral rock scene | observed | PASS
+WITNESS physical outdoor rock approach using input events | observed | PASS
+WITNESS mine exact runtime clip bound | observed | PASS
+WITNESS mine first F accepted from nonactive action | observed | PASS
+WITNESS mine actual overlap with expired source cooldown | observed | PASS
+WITNESS mine overlap expected strike/sequence delta | 1 -> 2 strikes; 1 -> 2 input seq; 1 -> 2 source seq | PASS
+WITNESS mine overlap ledger unchanged | paid/stock/pickup snapshot | PASS
+WITNESS mine existing action timer naturally expires | observed | PASS
+WITNESS mine legal F after action expiry advances once | strikes 2 -> 3; sequence 2 -> 3 | PASS
+TIMING {"baseline":true,"elapsed_s":0.34453,"first_after":{"action":"mine","clip":"l1_actions/mine","cooldown":0.32,"input_seq":1,"ledger":{"collected":[],"receipt":{},"stock":{"wood":0},"version":1},"phase":"seated","playing":true,"position_s":0.0,"remaining_s":0.699999988079071,"source_seq":1,"strikes":1,"usec":9253155},"first_before":{"action":"mine","clip":"","cooldown":0.0,"input_seq":0,"ledger":{"collected":[],"receipt":{},"stock":{"wood":0},"version":1},"phase":"seated","playing":false,"position_s":-1.0,"remaining_s":0.0,"source_seq":0,"strikes":0,"usec":9252968},"kind":"mine","next_after":{"action":"mine","clip":"l1_actions/mine","cooldown":0.32,"input_seq":3,"ledger":{"collected":[],"receipt":{},"stock":{"wood":0},"version":1},"phase":"mined","playing":true,"position_s":0.0,"remaining_s":0.699999988079071,"source_seq":3,"strikes":3,"usec":10308607},"next_before":{"action":"mine","clip":"","cooldown":0.0,"input_seq":2,"ledger":{"collected":[],"receipt":{},"stock":{"wood":0},"version":1},"phase":"seated","playing":false,"position_s":-1.0,"remaining_s":0.0,"source_seq":2,"strikes":2,"usec":10308333},"overlap_after":{"action":"mine","clip":"l1_actions/mine","cooldown":0.32,"input_seq":2,"ledger":{"collected":[],"receipt":{},"stock":{"wood":0},"version":1},"phase":"seated","playing":true,"position_s":0.3448,"remaining_s":0.699999988079071,"source_seq":2,"strikes":2,"usec":9597797},"overlap_before":{"action":"mine","clip":"l1_actions/mine","cooldown":0.0,"input_seq":1,"ledger":{"collected":[],"receipt":{},"stock":{"wood":0},"version":1},"phase":"seated","playing":true,"position_s":0.3448,"remaining_s":0.349999988079071,"source_seq":1,"strikes":1,"usec":9597685}}
+END baseline repeat
