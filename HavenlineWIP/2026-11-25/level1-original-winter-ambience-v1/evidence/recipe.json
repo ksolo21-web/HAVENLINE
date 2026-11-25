@@ -1,0 +1,23 @@
+{
+  "sample_rate_hz":16000,
+  "layer_seconds":6,
+  "seed":20261125,
+  "wind":{
+    "shape":"Smooth periodic wideband air with soft, slow variation; no weather changes or wind gust effect.",
+    "band_hz":[165,1150],
+    "target_peak_dbfs":-19
+  },
+  "hearth":{
+    "shape":"Soft filtered ember grain under sparse rounded crackles; no flare, timer, or confirmation cue.",
+    "band_hz":[240,2350],
+    "target_peak_dbfs":-17
+  },
+  "transition":{
+    "audition_seconds":9.0,
+    "earned_crossfade_start_s":2.0,
+    "earned_crossfade_seconds":0.7,
+    "first_segment_end_s":4.75,
+    "cold_paid_start_s":5.25,
+    "cold_fade_seconds":0.45
+  }
+}
