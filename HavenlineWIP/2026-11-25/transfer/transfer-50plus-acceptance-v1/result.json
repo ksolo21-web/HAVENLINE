@@ -1,0 +1,86 @@
+{
+  "existing": {
+    "first_piece_ticks": 130,
+    "fixed_step_hz": 60,
+    "native_shadow_transferred": 2,
+    "not_live_gameplay": true,
+    "second_piece_ticks": 130,
+    "serial_dwell_ticks": 6,
+    "serial_total_ticks": 266
+  },
+  "one_staged_overlap_hypothesis": {
+    "axis_order": [
+      "negative_x",
+      "positive_x",
+      "negative_y",
+      "positive_y",
+      "negative_z",
+      "positive_z"
+    ],
+    "concurrent_ticks": 20,
+    "fixed_source_path_and_anchors_only": true,
+    "frames": "first key2->3 fixed rest orientation; second key0->1 fixed source orientation; same smoothstep, no changing route/back-row/threshold",
+    "limits": "fixed-face sufficient pair bound only on interval; no safety/admission, source or camera integration; no stage duration target",
+    "mount_frame_normalized": {
+      "best_fixed_face_with_44um_reserve_m": 0.5427447623221247,
+      "endpoint_signed_axis_m": [
+        [
+          1.018907886025274,
+          -1.5714814432331097,
+          0.09700432030677378,
+          -0.30045783833621476,
+          -0.8928436036430745,
+          0.5427889138401204
+        ],
+        [
+          0.0789078828635214,
+          -0.6314814400713572,
+          1.0605146398973424,
+          -1.2639681579267834,
+          -0.8928434521250788,
+          0.5427887623221247
+        ]
+      ],
+      "fixed_face_uncushioned_lower_bound_m": [
+        0.0789078828635214,
+        -1.5714814432331097,
+        0.09700432030677378,
+        -1.2639681579267834,
+        -0.8928436036430745,
+        0.5427887623221247
+      ]
+    },
+    "nominal_combined_ticks_if_admitted": 240,
+    "required_existing_needle_m": 8e-05,
+    "second_start_tick": 110,
+    "world_frame": {
+      "best_fixed_face_with_44um_reserve_m": 0.46425230914176396,
+      "endpoint_signed_axis_m": [
+        [
+          -0.4833025987387251,
+          0.13071652980432588,
+          0.09700432030677378,
+          -0.30045783833621476,
+          1.1761793772264808,
+          -1.7262872535433087
+        ],
+        [
+          0.13055610105985888,
+          -0.4831421699942581,
+          1.0605146398973424,
+          -1.2639681579267834,
+          0.46429630914176395,
+          -1.014404185458592
+        ]
+      ],
+      "fixed_face_uncushioned_lower_bound_m": [
+        -0.4833025987387251,
+        -0.4831421699942581,
+        0.09700432030677378,
+        -1.2639681579267834,
+        0.46429630914176395,
+        -1.7262872535433087
+      ]
+    }
+  }
+}
