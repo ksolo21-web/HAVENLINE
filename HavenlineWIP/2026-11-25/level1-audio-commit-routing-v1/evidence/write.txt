@@ -1,0 +1,29 @@
+PASS single phase flag tick=0
+PASS exact combined fixture admitted tick=0
+PASS hydrate/publish emits no live cue tick=0
+PASS empty exact receipt/ledger start tick=5
+PASS real unfunded distant request denied tick=5
+PASS actual full approach while unfunded tick=62
+PASS unfunded at exact pad is silent tick=62
+PASS return to wood route before funding tick=119
+PASS walk to first actual wood tick=170
+PASS walk to second actual wood tick=248
+PASS approach east of native tree tick=290
+PASS face tree normally tick=301
+PASS occupied fall stays withheld tick=364
+PASS leave occupied fall area normally tick=380
+PASS three distinct grants, before pay tick=438
+PASS three distinct pickup events match normal accepted wood receipts tick=438
+PASS duplicate actual source refused tick=438
+PASS unknown receiver refused tick=438
+PASS wrong actual material refused tick=438
+PASS failed paths never enqueue cues tick=438
+PASS actual full approach while funded tick=495
+PASS real paid publication tick=503
+PASS exact one build event after durable promotion tick=503
+PASS duplicate purchase refused tick=503
+PASS held pad and duplicate request don't replay tick=503
+PASS unmuted presenter receives distinct pickup and receipt intent once each tick=503
+PASS no unclassified or repeated commit edges tick=503
+sfx-route phase=write accepted=["wood_pickup:wood-b", "wood_pickup:wood-c", "wood_pickup:wood-a", "hearth_build:center-hearth:1"] mixer_intents=["wood_pickup:wood-b", "wood_pickup:wood-c", "wood_pickup:wood-a", "hearth_build:center-hearth:1"]
+sfx-route checks=27 failures=0
