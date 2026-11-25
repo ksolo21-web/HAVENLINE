@@ -1,0 +1,7 @@
+# Independent review: HOLD
+
+Recomputed directed face incidence from the exact indexed source, not the builder's preflight code. All sealed inputs matched. There are 82 one-face edges, 139 two-face edges and no edges with more than two incident faces. Three existing two-face edges have both faces wound the same way: 0→78 (faces 0/1), 78→41 (41/42) and 41→79 (42/43). Appending faces to the perimeter cannot repair these incidences.
+
+The connected surface is orientable. Fixing the assigned pressure face 88 requires reversing 76 faces, including the locked cuff rail face 1; fixing the cuff instead reverses the pressure-side cohort. Perimeter vertex 0 has two incoming arcs (77→0 and 1→0), while vertex 79 has two outgoing arcs (79→76 and 79→93). Preserving every original directed perimeter arc is incompatible with a consistently oriented join. Removing transition faces 0 and 42 separates the dual graph into cuff/cuff/pressure components of 41/35/42 retained faces. Two touched neighborhoods are a minimum coverage result, not proof a replacement exists or proof that reversing a fixed edge is permitted.
+
+Reauthor the two local transitions with a physically valid non-locked bridge, preserve indexed cuff and pressure geometry/UV, and retest entire local interface polarity plus changed-zone collisions before adding shell geometry. No visual grade, full left glove, right glove, closure, swing, or gameplay approval.
