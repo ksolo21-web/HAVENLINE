@@ -1,0 +1,145 @@
+# Private normal-camera capture observer. It never gates or mutates gameplay.
+var captured_hero_mesh:MeshInstance3D
+var captured_skeleton:Skeleton3D
+var captured_bones:Array[int]=[]
+var bad_observer:=false
+var vertex_checks:Array=[]
+
+func capped_hero_sample() -> Dictionary:
+	if not is_instance_valid(captured_skeleton) or not is_instance_valid(captured_hero_mesh):
+		return {}
+	var bones:Array=[]
+	for b in captured_bones:
+		bones.append(tf(captured_skeleton.get_bone_global_pose(b)))
+	var a:AnimationPlayer=game.hero_locomotion.player
+	return {"mesh_world":tf(captured_hero_mesh.global_transform),
+		"skeleton_world":tf(captured_skeleton.global_transform),
+		"poses_by_skin_binding_slot":bones,
+		"clip":String(a.current_animation),"clip_t":a.current_animation_position,
+		"visibility":captured_hero_mesh.is_visible_in_tree()}
+
+func capture_model_start() -> void:
+	var p:AnimationPlayer=game.hero_locomotion.player
+	for c in game.actor.get_children():
+		if not c.is_ancestor_of(p):
+			continue
+		for m in c.find_children("*","MeshInstance3D",true,false):
+			if not m.is_visible_in_tree():
+				continue
+			if captured_hero_mesh!=null or m.skin==null or m.mesh==null or m.skin.get_bind_count()!=66 or m.mesh.get_blend_shape_count()!=0:
+				bad_observer=true
+				return
+			captured_hero_mesh=m
+	if captured_hero_mesh==null:
+		bad_observer=true
+		return
+	captured_skeleton=captured_hero_mesh.get_node_or_null(captured_hero_mesh.skeleton) as Skeleton3D
+	if captured_skeleton==null:
+		bad_observer=true
+		return
+	var bindings:Array=[]
+	for j in range(captured_hero_mesh.skin.get_bind_count()):
+		var r:Skin=captured_hero_mesh.skin
+		var n:String=r.get_bind_name(j)
+		var idx:=captured_skeleton.find_bone(n) if n!="" else r.get_bind_bone(j)
+		if idx<0:
+			bad_observer=true
+			return
+		captured_bones.append(idx)
+		bindings.append({"slot":j,"bone_idx":idx,"bone":String(captured_skeleton.get_bone_name(idx)),
+			"bind_inverse":tf(r.get_bind_pose(j)),
+			"bone_rest_local":tf(captured_skeleton.get_bone_rest(idx)),
+			"parent_idx":captured_skeleton.get_bone_parent(idx)})
+	var mat:Array=[]
+	for s in range(captured_hero_mesh.mesh.get_surface_count()):
+		var a:Array=captured_hero_mesh.mesh.surface_get_arrays(s)
+		var vs:PackedVector3Array=a[Mesh.ARRAY_VERTEX]
+		var ix:PackedInt32Array=a[Mesh.ARRAY_INDEX]
+		var bound_mat:Material=captured_hero_mesh.get_active_material(s)
+		if bound_mat==null:
+			bad_observer=true
+			return
+		var item:Dictionary={"slot":s,"name":bound_mat.resource_name,
+			"vertices":vs.size(),"indices":ix.size(),"material_class":bound_mat.get_class()}
+		if bound_mat is StandardMaterial3D:
+			item["albedo"] = [bound_mat.albedo_color.r,bound_mat.albedo_color.g,bound_mat.albedo_color.b,bound_mat.albedo_color.a]
+			for semantic in ["albedo_texture","normal_texture","roughness_texture","metallic_texture"]:
+				var t:Variant=bound_mat.get(semantic)
+				if t is Texture2D:
+					item[semantic]={"width":t.get_width(),"height":t.get_height(),"name":t.resource_name}
+		var joint:PackedInt32Array=a[Mesh.ARRAY_BONES]
+		var wgt:PackedFloat32Array=a[Mesh.ARRAY_WEIGHTS]
+		var uv:PackedVector2Array=a[Mesh.ARRAY_TEX_UV]
+		if vs.size()<16 or ix.is_empty() or uv.size()!=vs.size() or joint.size()!=wgt.size() or joint.size()%vs.size()!=0:
+			bad_observer=true
+			return
+		var width:=int(joint.size()/float(vs.size()))
+		if width not in [4,8]:
+			bad_observer=true
+			return
+		var hc:=HashingContext.new()
+		hc.start(HashingContext.HASH_SHA256)
+		hc.update(var_to_bytes([vs,ix,uv,joint,wgt]))
+		item["native_import_packed_godot_variant_sha256"]=hc.finish().hex_encode()
+		for row in [0, floori(vs.size()*.237), floori(vs.size()*.521), floori(vs.size()*.844), vs.size()-1]:
+			var b: Array[int]=[]
+			var w:Array[float]=[]
+			for h in range(width):
+				b.append(joint[row*width+h])
+				w.append(wgt[row*width+h])
+			vertex_checks.append({"surface":s,"row":row,"p":pt(vs[row]),
+				"uv":[uv[row].x,uv[row].y],"slot":b,"wgt":w})
+		mat.append(item)
+	var carry:Node3D=game.wood_stock_view
+	var own:Array=[]
+	for i in range(2):
+		var node:MeshInstance3D=carry.paid_crowns[i]
+		own.append({"role":String(node.name),"slot":i,"matrix":tf(node.global_transform),
+			"visible":node.is_visible_in_tree(),"source_owner":node.get_parent()==carry})
+	var floor_mesh:=game.camp_built.get_node_or_null("CampOnlySurface") as MeshInstance3D
+	var actual_floor:Dictionary={}
+	if floor_mesh!=null and floor_mesh.mesh!=null:
+		actual_floor={"is_native_visible":floor_mesh.is_visible_in_tree(),"matrix":tf(floor_mesh.global_transform),
+			"native_surface_count":floor_mesh.mesh.get_surface_count(),"node_path":String(game.get_path_to(floor_mesh))}
+	var start:=capped_hero_sample()
+	if start.is_empty():
+		bad_observer=true
+		return
+	print("CAP_PRIVATE_START ",JSON.stringify({"tick":tick_count,"owns_mounted":count_mount(2),
+		"carry":own,"character":start,"mesh_path":String(game.get_path_to(captured_hero_mesh)),
+		"skeleton_path":String(game.get_path_to(captured_skeleton)),"bindings":bindings,"surface_roles":mat,
+		"bones":captured_skeleton.get_bone_count(),"camera":tf(game.camera.global_transform),
+		"texture_inputs_pinned_separately":true,"sparse_native_uv_weight_basis_checks":vertex_checks,"native_floor_provenance":actual_floor},"",true,true))
+
+func capture_flight_sample(elapsed:int) -> void:
+	if bad_observer or elapsed%2!=0:
+		return
+	var hero:=capped_hero_sample()
+	if hero.is_empty():
+		bad_observer=true
+		return
+	var subjects:Array=[]
+	for i in range(2):
+		var item:MeshInstance3D=live_owner._pieces[i]
+		var start:int=0 if i==0 else live_owner._story[0].ages[3]+6
+		var end:int=start+live_owner._story[i].ages[3]
+		var state:String="queued_at_exact_launch" if elapsed<=start else ("parked" if elapsed>=end else "in_flight")
+		subjects.append({"slot":i,"role":String(item.name),"matrix":tf(item.global_transform),
+			"visible":item.is_visible_in_tree(),"identity_continues":item.get_instance_id()==stable_ids[i],
+			"one_fixture_owner":item.get_parent()==live_owner._hold,"flight_age":maxi(0,mini(end-start,elapsed-start)),"state":state})
+	var camera:Camera3D=game.camera
+	var tested:Array=[]
+	if elapsed in [0,40,100,266]:
+		for marker in vertex_checks:
+			var v:=Vector3(marker.p[0],marker.p[1],marker.p[2])
+			var q:=Vector3.ZERO
+			for h in range(marker.slot.size()):
+				var weight:float=marker.wgt[h]
+				if weight==0.:
+					continue
+				var slot:int=marker.slot[h]
+				q+=(captured_skeleton.get_bone_global_pose(captured_bones[slot])*captured_hero_mesh.skin.get_bind_pose(slot)*v)*weight
+			tested.append({"surface":marker.surface,"row":marker.row,"world":pt(captured_hero_mesh.to_global(q))})
+	print("CAP_PRIVATE_FRAME ",JSON.stringify({"age":elapsed,"tick":tick_count,"nominal_time_s":elapsed/60.0,
+		"camera":tf(camera.global_transform),"camera_size":camera.size,"projection":camera.projection,
+		"subject":subjects,"character":hero,"evaluated_sparse_native_markers":tested},"",true,true))
