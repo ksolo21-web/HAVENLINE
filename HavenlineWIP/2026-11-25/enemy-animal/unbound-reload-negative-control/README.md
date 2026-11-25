@@ -1,0 +1,14 @@
+# Level 1 enemy: unbound restored actor negative control
+
+This is test scaffolding only. No actor, route, damage, loot, historical waves, numbers, rewards, exit change or playable integration is introduced. The positive path remains gated on an approved runtime animal, visible authored contact, and an admitted exact encounter contract.
+
+The [historical read-only reference](https://github.com/ksolo21-web/HAVENLINE/blob/b80c61f13ba31bb0940792dd47976a8e2878dbf5/HavenlineGodot/tests/test_crew_and_persistence.gd#L116-L125) did not launch the new Level 1 project. It shows a simulation with a live restored-style wolf directly on the actor, a ready cooldown and presentation disabled. It verifies no player or camp damage and that animal health, encounter-active flag, timer and completion count are preserved. It does not test a real cold reload, per-actor presentation, drops or the Level 1 exit.
+
+## Required future native run
+1. Pin the approved runtime animal and encounter scene/revision, exact resource identities, presentation ownership/binding contract, gate/terrain baseline and isolated profile. Use a real cold reopen of a disposable save prepared by the runner, never an owner save.
+2. Restore one active encounter with the same logical animal already in actual actor contact geometry, cooldown ready and no approved/active presentation. Disable only the intended per-actor presentation binding, not the native update, ordinary movement, damage measurement, or ready-cooldown observation.
+3. Observe ordinary gameplay ticks and all transition/event receipts. Project the two actual snapshots and native event counts into the assertion script. Use cumulative observed counters and normalized typed custody and exit state; do not infer defaults from missing engines, event adapters, or fields. Bind native proof separately to exact revision, runner, asset hashes, test name, profile, start/stop, tick and contact/binding traces. The oracle can compare evidence but does not authenticate it.
+4. Verify no player/camp damage, drop, completion, timer advance or exit effect. Demand the same recoverable animal, health, encounter identity, and pending custody rather than hidden loss or a silent win. Run an independent valid-bound sister case using the approved ordinary dry-field encounter and actual visible contact; prove the binding gate is exercised, not all action disabled. Verify restore/recover behavior according to the approved contract before promotion.
+5. Replay original dry field gate round trip and original opening ledger. No animal species, rewards, placement, health values or timings are set by this test scaffold.
+
+Run unit controls with `python3 -m unittest -v`. Numbers and IDs in the tests are synthetic oracle fixtures, not a proposal or native result. Independent reviewer must review the native harness and evidence once available. No native enemy, dependency activation, device evidence or rendering.
