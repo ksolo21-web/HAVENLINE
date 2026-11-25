@@ -1,0 +1,5 @@
+# Independent review: positive supplemental source witness only
+
+Exact 72662dd9f5d15a0586695d2e22d3e175e3a6194b26ca9c61d8394d5703addf27 seal, nine member hashes, decompressed evidence, prior failures and frozen fairing arrays verified. Independently loaded the original 727,442-triangle GLB, reproduced the anatomical landmarks, three geodesic distances (35.151, 54.491, 43.284 mm), exact 273-face branch region and direct-neighbor source fans. Independent neutral full-mesh replay covered 110 owner first hits: 102 exact triangle IDs, eight adjacent-edge ties under 0.57 µm, both sides in the same authenticated branch. No admission impact. Held full-mesh receipts were checked arithmetically, not independently recomputed from an explicitly held source mesh.
+
+The fan and 25%-toward-side stress yield 11/11 neutral and 6/6 held in the supplied supplemental record. The 50% blend yields 5/11 and 4/6; the 75% and pure side each fail all. This is a separate material branch direction witness under static tests, not replacement of the old 17 recorded failures or visual, full glove, rig, or game approval.
