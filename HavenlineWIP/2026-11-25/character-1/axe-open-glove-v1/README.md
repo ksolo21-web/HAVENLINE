@@ -1,0 +1,3 @@
+# Open-glove pose adjustment · rejected
+
+The compact stance and exact game axe were kept; lower limbs did not move. The final sample still showed 269 overlap pairs, so finger closure was not attempted. This is not a new clip or gameplay change. For a disposable Blender CPU replay, use the same exact paths documented in sibling axe-open-close-v1, plus `C1_CHEST_RESULT` pointing to the exact sibling axe-chest-pose-v1 JSON and `C1_BIND_EVIDENCE` pointing to the original hashed bind measurements. The portable runner verifies the consumed evidence rather than archival files it never reads. Native log path reduced to a filename.
