@@ -1,0 +1,168 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+PASS first loose wood tick=61
+PASS second loose wood tick=139
+PASS walk to standing tree approach tick=181
+PASS face standing tree tick=192
+PASS two wood and in chop range tick=192
+PASS ordinary clear of fall tick=271
+PASS all wood earned tick=329
+PASS outside pay radius no debit tick=373
+PASS ordinary walk onto unchanged enabled pad tick=390
+PASS paid normally before mounting donor tick=390
+PASS exact donor ext_resource resolves to actual imported mesh tick=390
+PASS visual mesh adds no hidden collider tick=390
+PASS side fits add no collision objects tick=390
+PASS actual visible mesh OriginalNorthLeftVisualCrop tick=390
+mounted side fit bounds OriginalNorthLeftVisualCrop [P: (-5.0, 0.0, -0.15), S: (3.175, 0.95, 0.3)]
+PASS actual visible mesh OriginalNorthRightVisualCrop tick=390
+mounted side fit bounds OriginalNorthRightVisualCrop [P: (1.825, 0.0, -0.15), S: (3.175, 0.95, 0.3)]
+PASS actual visible mesh LeftArchiveTimberCap tick=390
+mounted side fit bounds LeftArchiveTimberCap [P: (-1.8705, 0.0, -0.1724), S: (0.336, 1.605, 0.3404)]
+PASS actual visible mesh RightArchiveTimberCap tick=390
+mounted side fit bounds RightArchiveTimberCap [P: (1.542761, 0.0, -0.1724), S: (0.336, 1.605, 0.3404)]
+PASS two crops and two timber imports tick=390
+PASS restored crops cover original flanks between exact endpoints/cut lines tick=390
+PASS imported timber AABBs straddle both cut lines tick=390
+PASS exact single layer-one, three-shape body tick=390
+PASS original Y/Z aligns SurvivingFenceLeft tick=390
+PASS original Y/Z aligns CounterSealedBridge tick=390
+PASS original Y/Z aligns SurvivingFenceRight tick=390
+PASS original gone and native body has three shapes tick=392
+PASS exact stock capsule; no collider change to actor tick=392
+PASS one additional invisible center guard tick=394
+PASS same native joined body frame and collision layers tick=394
+PASS exact original collider 0 unmodified tick=394
+PASS exact original collider 1 unmodified tick=394
+PASS exact original collider 2 unmodified tick=394
+PASS unchanged donor still visible tick=394
+PASS South unchanged gate real approach tick=403
+PASS South unchanged gate seated-range binding tick=403
+PASS South unchanged gate opens once actor is clear tick=473
+PASS South unchanged gate physical outward traversal tick=536
+PASS South unchanged gate physical return traversal tick=599
+PASS interior cross tick=632
+PASS East unchanged gate real approach tick=667
+PASS East unchanged gate seated-range binding tick=667
+PASS East unchanged gate opens once actor is clear tick=737
+PASS East unchanged gate physical outward traversal tick=800
+PASS East unchanged gate physical return traversal tick=863
+PASS actual inboard view station tick=904
+ROUTE_ONLY_NO_IMAGE 01-native-game-camera-inboard
+PASS inboard centerline reaches intended stance tick=938
+COUNTER_CENTER {"actor_local":"(0.0, -0.03539, 1.35)","phase":"stance","side":"inboard"}
+CPU_STANCE {"actual_renderer":"headless","animation":"l1_hero_preview/idle","animation_time":0.24136,"floor":true,"foot":[0.0,-0.03538978099823,1.34999990463257],"id":"center-inboard-stance","yaw":-1.74404096603394}
+PASS inboard centerline ordinary approach tick=953
+PASS inboard centerline exact authored stance remains reachable tick=953
+PASS inboard centerline opposite side denied tick=1031
+PASS inboard centerline expected moved center stop grounded tick=1031
+PASS inboard centerline actual shape slide includes new center guard tick=1031
+PASS inboard centerline ray contact exact expected body and center/seam tick=1031
+STOP_GUARD {"center":true,"feet":[0.0,-0.0360770225524902,1.19010424613953],"ray_shape":3,"shape_contact_indices":{"3":73},"side":"inboard","x_requested":0.0}
+PASS inboard feet stay on centerline tick=1031
+COUNTER_CENTER {"actor_local":"(0.0, -0.036077, 1.190104)","collider_contact":true,"phase":"stop","side":"inboard"}
+CPU_SURFACE {"actual_renderer":"headless","animation":"l1_hero_preview/idle","animation_time":1.39911844444444,"floor":true,"foot":[0.0,-0.0360770225524902,1.19010424613953],"id":"center-inboard-hard-stop","yaw":3.14159250259399}
+PASS center stop retreats freely before seam tick=1054
+PASS legal apron lateral approach tick=1085
+PASS retained seam -1.825 ordinary approach tick=1093
+PASS retained seam -1.825 opposite side denied tick=1171
+PASS retained seam -1.825 old seam stop grounded and position preserved tick=1171
+PASS retained seam -1.825 actual seam slides on old collider only tick=1171
+PASS retained seam -1.825 ray contact exact expected body and center/seam tick=1171
+STOP_GUARD {"center":false,"feet":[-1.82499980926514,-0.0364130735397339,0.460163593292236],"ray_shape":1,"shape_contact_indices":{"0":18,"1":44},"side":"inboard","x_requested":-1.825}
+CPU_STANCE {"actual_renderer":"headless","animation":"l1_hero_preview/idle","animation_time":1.262495,"floor":true,"foot":[-1.82499980926514,-0.0364130735397339,0.460163593292236],"id":"seam-inboard-left","yaw":-3.14159250259399}
+PASS actual CPU capture of retained seam tick=1183
+PASS center stop retreats freely before seam tick=1233
+PASS legal apron lateral approach tick=1264
+PASS retained seam 1.825 ordinary approach tick=1272
+PASS retained seam 1.825 opposite side denied tick=1350
+PASS retained seam 1.825 old seam stop grounded and position preserved tick=1350
+PASS retained seam 1.825 actual seam slides on old collider only tick=1350
+PASS retained seam 1.825 ray contact exact expected body and center/seam tick=1350
+STOP_GUARD {"center":false,"feet":[1.82500052452087,-0.0333989858627319,0.460147857666016],"ray_shape":1,"shape_contact_indices":{"1":46,"2":16},"side":"inboard","x_requested":1.825}
+CPU_STANCE {"actual_renderer":"headless","animation":"l1_hero_preview/idle","animation_time":1.25868,"floor":true,"foot":[1.82500052452087,-0.0333989858627319,0.460147857666016],"id":"seam-inboard-right","yaw":-3.14159250259399}
+PASS actual CPU capture of retained seam tick=1362
+PASS last seam retreats freely tick=1384
+PASS center edge diagonal legal start tick=1439
+PASS guard-end diagonal opposite side denied tick=1517
+PASS guard-end diagonal actual slide and grounded tick=1517
+PASS guard-end diagonal genuinely nudges the new guard tick=1517
+PASS actor center did reach outside the 1.50m guard-end plane tick=1517
+SHOULDER_ROUTE {"feet":[-1.80998516082764,-0.0365211963653564,0.473866701126099],"shape_contact_indices":{"1":55,"3":10},"side":"inboard","site":"left"}
+CPU_STANCE {"actual_renderer":"headless","animation":"l1_hero_preview/idle","animation_time":1.144736,"floor":true,"foot":[-1.80998516082764,-0.0365211963653564,0.473866701126099],"id":"shoulder-inboard-left","yaw":3.11561703681946}
+PASS guard-end nudge retreat stays clear tick=1551
+PASS center edge diagonal legal start tick=1605
+PASS guard-end diagonal opposite side denied tick=1683
+PASS guard-end diagonal actual slide and grounded tick=1683
+PASS guard-end diagonal genuinely nudges the new guard tick=1683
+PASS actor center did reach outside the 1.50m guard-end plane tick=1683
+SHOULDER_ROUTE {"feet":[1.81000638008118,-0.0339244604110718,0.47712516784668],"shape_contact_indices":{"1":55,"3":10},"side":"inboard","site":"right"}
+CPU_STANCE {"actual_renderer":"headless","animation":"l1_hero_preview/idle","animation_time":1.144736,"floor":true,"foot":[1.81000638008118,-0.0339244604110718,0.47712516784668],"id":"shoulder-inboard-right","yaw":-3.11564970016479}
+PASS guard-end nudge retreat stays clear tick=1717
+PASS apron returns to validated continuation line tick=1724
+PASS real exit then outboard viewing route tick=1995
+ROUTE_ONLY_NO_IMAGE 02-native-game-camera-outboard
+PASS outboard centerline reaches intended stance tick=2088
+COUNTER_CENTER {"actor_local":"(0.015446, -0.032938, -1.451931)","phase":"stance","side":"outboard"}
+CPU_STANCE {"actual_renderer":"headless","animation":"l1_hero_preview/idle","animation_time":0.248256,"floor":true,"foot":[0.0154457092285156,-0.03293776512146,-1.4519305229187],"id":"center-outboard-stance","yaw":-1.44644343852997}
+PASS outboard centerline ordinary approach tick=2103
+PASS outboard centerline exact authored stance remains reachable tick=2103
+PASS outboard centerline opposite side denied tick=2181
+PASS outboard centerline expected moved center stop grounded tick=2181
+PASS outboard centerline actual shape slide includes new center guard tick=2181
+PASS outboard centerline ray contact exact expected body and center/seam tick=2181
+STOP_GUARD {"center":true,"feet":[0.0140528678894043,-0.03293776512146,-1.19021248817444],"ray_shape":3,"shape_contact_indices":{"3":72},"side":"outboard","x_requested":0.0}
+PASS outboard feet stay on centerline tick=2181
+COUNTER_CENTER {"actor_local":"(0.014053, -0.032938, -1.190212)","collider_contact":true,"phase":"stop","side":"outboard"}
+CPU_SURFACE {"actual_renderer":"headless","animation":"l1_hero_preview/idle","animation_time":1.398408,"floor":true,"foot":[0.0140528678894043,-0.03293776512146,-1.19021248817444],"id":"center-outboard-hard-stop","yaw":-0.00532266031950712}
+PASS center stop retreats freely before seam tick=2204
+PASS legal apron lateral approach tick=2235
+PASS retained seam -1.825 ordinary approach tick=2242
+PASS retained seam -1.825 opposite side denied tick=2320
+PASS retained seam -1.825 old seam stop grounded and position preserved tick=2320
+PASS retained seam -1.825 actual seam slides on old collider only tick=2320
+PASS retained seam -1.825 ray contact exact expected body and center/seam tick=2320
+STOP_GUARD {"center":false,"feet":[-1.82499980926514,-0.0348459482192993,-0.460408449172974],"ray_shape":1,"shape_contact_indices":{"1":61},"side":"outboard","x_requested":-1.825}
+CPU_STANCE {"actual_renderer":"headless","animation":"l1_hero_preview/idle","animation_time":1.23690722222222,"floor":true,"foot":[-1.82499980926514,-0.0348459482192993,-0.460408449172974],"id":"seam-outboard-left","yaw":-0.000000178813934326172}
+PASS actual CPU capture of retained seam tick=2332
+PASS center stop retreats freely before seam tick=2382
+PASS legal apron lateral approach tick=2413
+PASS retained seam 1.825 ordinary approach tick=2420
+PASS retained seam 1.825 opposite side denied tick=2498
+PASS retained seam 1.825 old seam stop grounded and position preserved tick=2498
+PASS retained seam 1.825 actual seam slides on old collider only tick=2498
+PASS retained seam 1.825 ray contact exact expected body and center/seam tick=2498
+STOP_GUARD {"center":false,"feet":[1.82500004768372,-0.0331286191940308,-0.460411310195923],"ray_shape":2,"shape_contact_indices":{"1":61},"side":"outboard","x_requested":1.825}
+CPU_STANCE {"actual_renderer":"headless","animation":"l1_hero_preview/idle","animation_time":1.248176,"floor":true,"foot":[1.82500004768372,-0.0331286191940308,-0.460411310195923],"id":"seam-outboard-right","yaw":0.000000119209317972491}
+PASS actual CPU capture of retained seam tick=2510
+PASS last seam retreats freely tick=2532
+PASS center edge diagonal legal start tick=2587
+PASS guard-end diagonal opposite side denied tick=2665
+PASS guard-end diagonal actual slide and grounded tick=2665
+PASS guard-end diagonal genuinely nudges the new guard tick=2665
+PASS actor center did reach outside the 1.50m guard-end plane tick=2665
+SHOULDER_ROUTE {"feet":[-1.8099946975708,-0.034995436668396,-0.474902153015137],"shape_contact_indices":{"1":55,"3":11},"side":"outboard","site":"left"}
+CPU_STANCE {"actual_renderer":"headless","animation":"l1_hero_preview/idle","animation_time":1.145981,"floor":true,"foot":[-1.8099946975708,-0.034995436668396,-0.474902153015137],"id":"shoulder-outboard-left","yaw":0.0273886304348707}
+PASS guard-end nudge retreat stays clear tick=2699
+PASS center edge diagonal legal start tick=2753
+PASS guard-end diagonal opposite side denied tick=2831
+PASS guard-end diagonal actual slide and grounded tick=2831
+PASS guard-end diagonal genuinely nudges the new guard tick=2831
+PASS actor center did reach outside the 1.50m guard-end plane tick=2831
+SHOULDER_ROUTE {"feet":[1.80995965003967,-0.0332297086715698,-0.47574257850647],"shape_contact_indices":{"1":55,"3":10},"side":"outboard","site":"right"}
+CPU_STANCE {"actual_renderer":"headless","animation":"l1_hero_preview/idle","animation_time":1.13721022222222,"floor":true,"foot":[1.80995965003967,-0.0332297086715698,-0.47574257850647],"id":"shoulder-outboard-right","yaw":-0.0273572076112032}
+PASS guard-end nudge retreat stays clear tick=2865
+PASS apron returns to validated continuation line tick=2872
+PASS six physical directions, two skinned center stops and two stance samples tick=2872
+ROUTE_ONLY_NO_IMAGE full-inboard
+ROUTE_ONLY_NO_IMAGE seam-left-inboard-game-scale
+ROUTE_ONLY_NO_IMAGE seam-left-inboard-close
+ROUTE_ONLY_NO_IMAGE seam-right-inboard-game-scale
+ROUTE_ONLY_NO_IMAGE seam-right-inboard-close
+ROUTE_ONLY_NO_IMAGE full-outboard
+ROUTE_ONLY_NO_IMAGE seam-left-outboard-game-scale
+ROUTE_ONLY_NO_IMAGE seam-left-outboard-close
+ROUTE_ONLY_NO_IMAGE seam-right-outboard-game-scale
+ROUTE_ONLY_NO_IMAGE seam-right-outboard-close
+PASS no fixture or observer ledger mutation tick=2872
+DOCKED_CENTER_ROUTE_RESULT checks=123 failures=0 no_image_stages=24
