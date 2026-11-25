@@ -1,0 +1,5 @@
+# Character 1 left glove: full assembly HOLD
+
+This is a detached diagnostic, not a mesh approval or game change. It freezes the actual editable boundary, UV, and bridge specification plus the indexed parity check. See REPAIR-SELF-CHECK.md and result.json for the exact three defective edges and the two localized sectors to reauthor. Do not append a closing surface to the unchanged scaffold.
+
+Restore the binary using `base64 -d editable_missing_join_graph.npz.b64 > editable_missing_join_graph.npz`. Check decoded SHA-256: `2996318be78f9c752167d1fdc4c523eebfd2203d53a51bb41b275d80466f86b5`. The preflight expects three exact source packet folders as siblings with their original manifests (tip-diagonal, intrinsic-sewing, and coarse-sections); names and seals are pinned in the script. The original tip delta, intrinsic cuff and coarse seam work were archived at 89515672c125a49f4a7993cea29e616aaf72170b, 36a11594b0536d52b63537ea0200639c47800b33, and 644614b01e16009100e451abd52b5bf03fe35087 respectively. Keep the authored pressure surface and independently validated cuff rail intact. No right glove, closed grip, swing, rendering, or integration result is asserted.
