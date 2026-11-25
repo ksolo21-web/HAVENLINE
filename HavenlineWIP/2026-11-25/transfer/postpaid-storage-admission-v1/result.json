@@ -1,0 +1,42 @@
+{
+  "paths": {
+    "HavenlineLevel1/layout.json": "5bac3496d3cf1b952736e8ecafa70f9978ffdbf5",
+    "HavenlineLevel1/previews/integrated_opening.gd": "cc54fb10b5270f513baa2c3743d4879e29ebb41a",
+    "HavenlineLevel1/resources/typed_receiver.gd": "174241a3b635b43278bbbf60b5d0b686bec80312",
+    "HavenlineLevel1/docs/TYPED_RECEIVER_VERIFICATION.md": "1b63c913fd12f415c5116dbd4913092d4f55a8cc",
+    "HavenlineGodot/scripts/storage_stockpile.gd": "f32af74ec705b403545ad09400e338c69535dad1",
+    "HavenlineGodot/scripts/main.gd": "14332b963f29d756dde798422580aefcce84326f",
+    "HavenlineGodot/scripts/simulation.gd": "24097b56baeb44e0ccf2bc1974c2f6994ef0fe79",
+    "HavenlineGodot/assets/environment_v2/storage.glb": "49fa2c1204a58cbd16ec134990c0819225efd335",
+    "HavenlineGodot/assets/world/storage.glb": "4b0cc5db1fc5438f21a761f6dca24ad3a052195b"
+  },
+  "level1_storage_named_tracked_files": [],
+  "active_typed_receiver_sites": [
+    "11c14a1c:HavenlineLevel1/opening.gd:294:\tfund_opening_receiver(Ledger.OFFER, \"wood\")",
+    "11c14a1c:HavenlineLevel1/opening.gd:296:func fund_opening_receiver(receiver_id: Variant = null, material_id: Variant = null) -> bool:",
+    "11c14a1c:HavenlineLevel1/opening.gd:298:\tif typeof(receiver_id) != TYPE_STRING or typeof(material_id) != TYPE_STRING:",
+    "11c14a1c:HavenlineLevel1/opening.gd:300:\tif receiver_id != Ledger.OFFER or material_id != \"wood\" or persist_blocked:",
+    "11c14a1c:HavenlineLevel1/previews/integrated_opening.gd:243:\tfund_opening_receiver(Ledger.OFFER, \"wood\")",
+    "11c14a1c:HavenlineLevel1/previews/integrated_opening.gd:245:func fund_opening_receiver(receiver_id: Variant = null, material_id: Variant = null) -> bool:",
+    "11c14a1c:HavenlineLevel1/previews/integrated_opening.gd:247:\tif not bound or typeof(receiver_id) != TYPE_STRING or typeof(material_id) != TYPE_STRING:",
+    "11c14a1c:HavenlineLevel1/previews/integrated_opening.gd:249:\tif receiver_id != Ledger.OFFER or material_id != \"wood\" or persist_blocked:"
+  ],
+  "fit": {
+    "single_bounds_m": [
+      0.28367315232753754,
+      0.10256047546863556,
+      0.10383449122309685
+    ],
+    "two_parallel_side_by_side_box_m": [
+      0.28367315232753754,
+      0.10256047546863556,
+      0.2086689824461937
+    ],
+    "two_parallel_end_to_end_box_m": [
+      0.5683463046550751,
+      0.10256047546863556,
+      0.10383449122309685
+    ],
+    "type": "sufficient disjoint axis-aligned whole-bound rectangle with 1mm separation, not true minimum or stability"
+  }
+}
