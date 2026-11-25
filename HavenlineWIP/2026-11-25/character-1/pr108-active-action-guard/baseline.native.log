@@ -1,0 +1,40 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+WARNING: OBJ: Ambient light for material 'board' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'board_warm' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'board_soft' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'beam' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'brace_back' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'snow' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'metal' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'rope' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'rope_dark' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'board' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'board_warm' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'board_soft' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'beam' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'brace_back' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'snow' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'metal' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'rope' is ignored in PBR
+WARNING: OBJ: Ambient light for material 'rope_dark' is ignored in PBR
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+WITNESS exact integrated ephemeral tree scene | observed | PASS
+WITNESS physical tree approach using input events | observed | PASS
+WITNESS chop exact runtime clip bound | observed | PASS
+WITNESS chop first F accepted from nonactive action | observed | PASS
+WITNESS chop actual overlap with expired source cooldown | observed | PASS
+WITNESS chop overlap expected strike/sequence delta | 1 -> 2 strikes; 1 -> 2 input seq; 1 -> 2 source seq | PASS
+WITNESS chop overlap ledger unchanged | paid/stock/pickup snapshot | PASS
+WITNESS chop existing action timer naturally expires | observed | PASS
+WITNESS chop legal F after action expiry advances once | strikes 2 -> 3; sequence 2 -> 3 | PASS
+TIMING {"baseline":true,"elapsed_s":0.34434,"first_after":{"action":"chop","clip":"l1_actions/chop","cooldown":0.32,"input_seq":1,"ledger":{"collected":[],"receipt":{},"stock":{"wood":0},"version":1},"phase":"rooted","playing":true,"position_s":0.0,"remaining_s":0.680000007152557,"source_seq":1,"strikes":1,"usec":6360178},"first_before":{"action":"chop","clip":"","cooldown":0.0,"input_seq":0,"ledger":{"collected":[],"receipt":{},"stock":{"wood":0},"version":1},"phase":"rooted","playing":false,"position_s":-1.0,"remaining_s":0.0,"source_seq":0,"strikes":0,"usec":6359772},"kind":"chop","next_after":{"action":"chop","clip":"l1_actions/chop","cooldown":0.32,"input_seq":3,"ledger":{"collected":[],"receipt":{},"stock":{"wood":0},"version":1},"phase":"falling","playing":true,"position_s":0.0,"remaining_s":0.680000007152557,"source_seq":3,"strikes":3,"usec":7388021},"next_before":{"action":"chop","clip":"","cooldown":0.0,"input_seq":2,"ledger":{"collected":[],"receipt":{},"stock":{"wood":0},"version":1},"phase":"rooted","playing":false,"position_s":-1.0,"remaining_s":0.0,"source_seq":2,"strikes":2,"usec":7387720},"overlap_after":{"action":"chop","clip":"l1_actions/chop","cooldown":0.32,"input_seq":2,"ledger":{"collected":[],"receipt":{},"stock":{"wood":0},"version":1},"phase":"rooted","playing":true,"position_s":0.347222222222222,"remaining_s":0.680000007152557,"source_seq":2,"strikes":2,"usec":6704748},"overlap_before":{"action":"chop","clip":"l1_actions/chop","cooldown":0.0,"input_seq":1,"ledger":{"collected":[],"receipt":{},"stock":{"wood":0},"version":1},"phase":"rooted","playing":true,"position_s":0.347222222222222,"remaining_s":0.330000007152557,"source_seq":1,"strikes":1,"usec":6704518}}
+WITNESS exact integrated ephemeral rock scene | observed | PASS
+WITNESS physical outdoor rock approach using input events | observed | PASS
+WITNESS mine exact runtime clip bound | observed | PASS
+WITNESS mine first F accepted from nonactive action | observed | PASS
+WITNESS mine actual overlap with expired source cooldown | observed | PASS
+WITNESS mine overlap expected strike/sequence delta | 1 -> 2 strikes; 1 -> 2 input seq; 1 -> 2 source seq | PASS
+WITNESS mine overlap ledger unchanged | paid/stock/pickup snapshot | PASS
+WITNESS mine existing action timer naturally expires | observed | PASS
+WITNESS mine legal F after action expiry advances once | strikes 2 -> 3; sequence 2 -> 3 | PASS
+TIMING {"baseline":true,"elapsed_s":0.344244,"first_after":{"action":"mine","clip":"l1_actions/mine","cooldown":0.32,"input_seq":1,"ledger":{"collected":[],"receipt":{},"stock":{"wood":0},"version":1},"phase":"seated","playing":true,"position_s":0.0,"remaining_s":0.699999988079071,"source_seq":1,"strikes":1,"usec":9973183},"first_before":{"action":"mine","clip":"","cooldown":0.0,"input_seq":0,"ledger":{"collected":[],"receipt":{},"stock":{"wood":0},"version":1},"phase":"seated","playing":false,"position_s":-1.0,"remaining_s":0.0,"source_seq":0,"strikes":0,"usec":9972744},"kind":"mine","next_after":{"action":"mine","clip":"l1_actions/mine","cooldown":0.32,"input_seq":3,"ledger":{"collected":[],"receipt":{},"stock":{"wood":0},"version":1},"phase":"mined","playing":true,"position_s":0.0,"remaining_s":0.699999988079071,"source_seq":3,"strikes":3,"usec":11016899},"next_before":{"action":"mine","clip":"","cooldown":0.0,"input_seq":2,"ledger":{"collected":[],"receipt":{},"stock":{"wood":0},"version":1},"phase":"seated","playing":false,"position_s":-1.0,"remaining_s":0.0,"source_seq":2,"strikes":2,"usec":11015877},"overlap_after":{"action":"mine","clip":"l1_actions/mine","cooldown":0.32,"input_seq":2,"ledger":{"collected":[],"receipt":{},"stock":{"wood":0},"version":1},"phase":"seated","playing":true,"position_s":0.3448,"remaining_s":0.699999988079071,"source_seq":2,"strikes":2,"usec":10318054},"overlap_before":{"action":"mine","clip":"l1_actions/mine","cooldown":0.0,"input_seq":1,"ledger":{"collected":[],"receipt":{},"stock":{"wood":0},"version":1},"phase":"seated","playing":true,"position_s":0.3448,"remaining_s":0.349999988079071,"source_seq":1,"strikes":1,"usec":10317427}}

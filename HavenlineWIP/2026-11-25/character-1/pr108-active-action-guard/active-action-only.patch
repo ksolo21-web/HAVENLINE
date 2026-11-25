@@ -1,0 +1,19 @@
+--- a/opening.gd
++++ b/opening.gd
+@@ -375,14 +375,14 @@
+ 	return is_instance_valid(tree_button) and tree_button.visible and tree_button.get_global_rect().has_point(at)
+ 
+ func request_tree_contact() -> void:
+-	if not is_instance_valid(resource_tree) or persist_blocked:
++	if not is_instance_valid(resource_tree) or persist_blocked or character_kit.action_left > 0.0:
+ 		return
+ 	tree_input_sequence += 1
+ 	if resource_tree.strike(ResourceTreeScript.TREE_ID, tree_input_sequence, actor.global_position, tree_facing()):
+ 		character_kit.begin_action("chop")
+ 
+ func request_rock_contact() -> void:
+-	if not is_instance_valid(resource_rock) or persist_blocked:
++	if not is_instance_valid(resource_rock) or persist_blocked or character_kit.action_left > 0.0:
+ 		return
+ 	rock_input_sequence += 1
+ 	if resource_rock.strike(ResourceRockScript.ROCK_ID, rock_input_sequence, actor.global_position, tree_facing()):
