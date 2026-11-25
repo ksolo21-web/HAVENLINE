@@ -1,0 +1,35 @@
+{
+  "sealed_source_and_evidence": true,
+  "line_changes": [
+    [
+      283,
+      "var next := Ledger.new()",
+      "var next := _fixture_next_ledger()"
+    ],
+    [
+      329,
+      "var next := Ledger.new()",
+      "var next := _fixture_next_ledger()"
+    ]
+  ],
+  "total_source_verified_author_checks": 150,
+  "separate_phase_counts": {
+    "native_v2": 5,
+    "invalid_owner": 1,
+    "native_v1": 5,
+    "fresh_process_next": 20,
+    "import": 0,
+    "failed_stage": 53,
+    "ordinary_deposit": 61,
+    "restart_aborted": 5
+  },
+  "conservative_unreachable_noncanonical_v3_payload": {
+    "harvest_through": 1,
+    "carried": 0,
+    "stored": 1,
+    "deposit_through": 1
+  },
+  "independent_native_replay": false,
+  "fixture_writer_OS_lock_in_launcher_only": true,
+  "runtime_ready": false
+}
