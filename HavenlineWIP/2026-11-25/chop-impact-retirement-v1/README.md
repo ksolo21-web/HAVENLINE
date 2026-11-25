@@ -1,0 +1,3 @@
+# Replaying the isolated retirement guard
+
+This is WIP and does not wire or ship an animation. With the current branch checked out and the pinned base Git commit available, run the replay script with: an existing workspace containing the shared renderer lock, the repository path, `baseline` or `repair`, and a new log directory. Use the agreed headless lock or create that empty lock file before use. Do not run alongside another engine. The baseline executes the original sibling source and intentionally detects five failures; the repair checks that all new and previous tests pass. The export script changes only the baseline path to the archived GitHub sibling. The detached source/test logic and existing evidence are unchanged.

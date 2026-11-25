@@ -1,0 +1,29 @@
+--- baseline/chop_impact_bridge.gd
++++ repair/chop_impact_bridge.gd
+@@ -98,7 +98,7 @@
+ 	if not _enabled or _owner_ref == null or not _context_provider.is_valid():
+ 		return {}
+ 	var owner: Node = _owner_ref.get_ref()
+-	if owner == null or not owner.is_inside_tree():
++	if owner == null or not owner.is_inside_tree() or _queued_in_parent_chain(owner):
+ 		return {}
+ 	var live: Variant = _context_provider.call()
+ 	if not live is Dictionary or live.get("authorized", false) != true:
+@@ -107,6 +107,16 @@
+ 	var tree := live.get("tree") as TreeScript
+ 	if not is_instance_valid(actor) or not is_instance_valid(tree) or not actor.is_inside_tree() or not tree.is_inside_tree():
+ 		return {}
+-	if not owner.is_ancestor_of(actor) or not owner.is_ancestor_of(tree):
++	if not owner.is_ancestor_of(actor) or not owner.is_ancestor_of(tree) or _queued_in_parent_chain(actor) or _queued_in_parent_chain(tree):
+ 		return {}
+ 	return {"actor":actor, "tree":tree}
++
++## queue_free is deferred, but a queued node or parent is already retired
++## for transaction purposes. Descendants may still be inside the tree.
++static func _queued_in_parent_chain(start: Node) -> bool:
++	var node: Node = start
++	while node != null:
++		if node.is_queued_for_deletion():
++			return true
++		node = node.get_parent()
++	return false
