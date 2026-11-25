@@ -1,0 +1,3 @@
+# Sewn bilateral cuff and axe bearing prototype · rejected
+
+The compact editable archive retains the actual joined new/clipped geometry, UVs, poses, and web and seam maps. Only the large array enumerating unchanged donor-face IDs is omitted; the witness recreates it from the exact pinned donor. Use the same inputs as visible-gloves-v1 and set `C1_CONTACT_DATA` to the previously archived exact contact fixture NPZ. Run in a disposable CPU Blender session using the shared lock. Glove patches touch the intended tool surfaces, but extensive self-intersections and failed web/material routing block closure. This is not a new playable grip.
