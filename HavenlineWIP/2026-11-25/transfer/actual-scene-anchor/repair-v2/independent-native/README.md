@@ -1,0 +1,7 @@
+# Independent native actual-scene transfer replay
+
+Ran the unchanged `hvn-l1-transfer-actual-scene-anchor-repair-v2/run.sh` after verifying manifest SHA-256 `db8872b992dc84c09eb146a5ef90dae0e7f0c160bc453583254bc432a725e47f`. The runner archives immutable baseline `11c14a1c41971067c7dc97db69375f720a408f68`, Level 1 subtree `d764a05246cbff96983aa27af17e2e919a946ae0` into a disposable directory, validates crown and hearth asset hashes, isolates home/XDG/TMP for import and each native scenario, and uses the shared serial lease. Working-tree changes, project saves, graphics output, and production files were not used.
+
+Replay comparison: `python3 compare.py replay.log <exact builder repair replay.log>`. The clean case passes 157 checks; two independent fault controls produce precisely the intended failures, 1 of 157 for cached origin, 2 of 158 for overridden end grain; there is no native teardown diagnostic. The script and log cross-check require exact parity with the builder receipt.
+
+Scope stays source-seam functional validation only. Uses two actual crown meshes proposed for the existing scene and normal preview input handler with native physics before camp purchase; tests a launch boundary after motion and verifies known-instance custody/active material at specified phases. No approved physical mounts or receiving structure, actual inventory-transfer event or typed storage award, full recursive node census or swept collisions, rendered art/phone output, gameplay integration, or 52-instance benchmark.
