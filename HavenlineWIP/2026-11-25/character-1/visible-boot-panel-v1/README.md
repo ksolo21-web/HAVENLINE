@@ -1,0 +1,3 @@
+# Right boot lapped trim proof · neutral check failed
+
+`authored-trim-panel.obj` is the actual new editable trim only, with measured coordinates and per-corner UVs transcribed from the checked numeric fixture. It omits the parent boot, atlas textures, backing, and rig. The build and verification source reconstruct the separate Blender candidate when pointed at the exact preceding `C1_VISIBLE_BOOT_DATA` files and the exact `C1_KNEE_DATA` pose directory. The Blender build is not included as a binary. The targeted panel overlap cleared, but the base has five new open edges plus two previous lower overlaps, so no gait pose was run. Do not install this as playable art.
