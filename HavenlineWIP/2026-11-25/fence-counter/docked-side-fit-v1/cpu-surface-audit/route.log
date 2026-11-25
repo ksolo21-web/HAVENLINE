@@ -1,0 +1,82 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+PASS first loose wood tick=61
+PASS second loose wood tick=139
+PASS walk to standing tree approach tick=181
+PASS face standing tree tick=192
+PASS two wood and in chop range tick=192
+PASS ordinary clear of fall tick=271
+PASS all wood earned tick=329
+PASS outside pay radius no debit tick=373
+PASS ordinary walk onto unchanged enabled pad tick=390
+PASS paid normally before mounting donor tick=390
+PASS exact donor ext_resource resolves to actual imported mesh tick=390
+PASS visual mesh adds no hidden collider tick=390
+PASS side fits add no collision objects tick=390
+PASS actual visible mesh OriginalNorthLeftVisualCrop tick=390
+mounted side fit bounds OriginalNorthLeftVisualCrop [P: (-5.0, 0.0, -0.15), S: (3.175, 0.95, 0.3)]
+PASS actual visible mesh OriginalNorthRightVisualCrop tick=390
+mounted side fit bounds OriginalNorthRightVisualCrop [P: (1.825, 0.0, -0.15), S: (3.175, 0.95, 0.3)]
+PASS actual visible mesh LeftArchiveTimberCap tick=390
+mounted side fit bounds LeftArchiveTimberCap [P: (-1.8705, 0.0, -0.1724), S: (0.336, 1.605, 0.3404)]
+PASS actual visible mesh RightArchiveTimberCap tick=390
+mounted side fit bounds RightArchiveTimberCap [P: (1.542761, 0.0, -0.1724), S: (0.336, 1.605, 0.3404)]
+PASS two crops and two timber imports tick=390
+PASS restored crops cover original flanks between exact endpoints/cut lines tick=390
+PASS imported timber AABBs straddle both cut lines tick=390
+PASS exact single layer-one, three-shape body tick=390
+PASS original Y/Z aligns SurvivingFenceLeft tick=390
+PASS original Y/Z aligns CounterSealedBridge tick=390
+PASS original Y/Z aligns SurvivingFenceRight tick=390
+PASS original gone and native body has three shapes tick=392
+PASS South unchanged gate real approach tick=401
+PASS South unchanged gate seated-range binding tick=401
+PASS South unchanged gate opens once actor is clear tick=471
+PASS South unchanged gate physical outward traversal tick=534
+PASS South unchanged gate physical return traversal tick=597
+PASS interior cross tick=630
+PASS East unchanged gate real approach tick=665
+PASS East unchanged gate seated-range binding tick=665
+PASS East unchanged gate opens once actor is clear tick=735
+PASS East unchanged gate physical outward traversal tick=798
+PASS East unchanged gate physical return traversal tick=861
+PASS actual inboard view station tick=902
+ROUTE_ONLY_NO_IMAGE 01-native-game-camera-inboard
+PASS inboard centerline reaches intended stance tick=936
+COUNTER_CENTER {"actor_local":"(0.0, -0.03539, 1.35)","phase":"stance","side":"inboard"}
+ROUTE_ONLY_NO_IMAGE center-inboard-stance
+PASS inboard centerline ordinary approach tick=939
+PASS inboard centerline opposite side denied tick=1017
+PASS inboard centerline stays grounded at collision stop tick=1017
+inboard centerline actual actor slide collider=/root/CombinedNoSaveOpening/GrantOnlyCamp/DetachedNorthCounterDonor/JoinedBarrier shapes/count during active input={ 1: 62 }
+PASS inboard centerline actual actor slide hits exact JoinedBarrier tick=1017
+PASS inboard centerline collision query isolates exact JoinedBarrier tick=1017
+PASS inboard feet stay on centerline tick=1017
+COUNTER_CENTER {"actor_local":"(0.0, -0.03539, 0.46016)","collider_contact":true,"phase":"stop","side":"inboard"}
+CPU_SURFACE {"actual_renderer":"headless","animation":"l1_hero_preview/idle","animation_time":1.255624,"floor":true,"foot":[0.0,-0.03538978099823,0.460160255432129],"id":"center-inboard-hard-stop","yaw":-3.14159250259399}
+PASS real exit then outboard viewing route tick=1332
+ROUTE_ONLY_NO_IMAGE 02-native-game-camera-outboard
+PASS outboard centerline reaches intended stance tick=1425
+COUNTER_CENTER {"actor_local":"(0.015446, -0.032938, -1.451931)","phase":"stance","side":"outboard"}
+ROUTE_ONLY_NO_IMAGE center-outboard-stance
+PASS outboard centerline ordinary approach tick=1428
+PASS outboard centerline opposite side denied tick=1506
+PASS outboard centerline stays grounded at collision stop tick=1506
+outboard centerline actual actor slide collider=/root/CombinedNoSaveOpening/GrantOnlyCamp/DetachedNorthCounterDonor/JoinedBarrier shapes/count during active input={ 1: 61 }
+PASS outboard centerline actual actor slide hits exact JoinedBarrier tick=1506
+PASS outboard centerline collision query isolates exact JoinedBarrier tick=1506
+PASS outboard feet stay on centerline tick=1506
+COUNTER_CENTER {"actor_local":"(0.010169, -0.034119, -0.460402)","collider_contact":true,"phase":"stop","side":"outboard"}
+CPU_SURFACE {"actual_renderer":"headless","animation":"l1_hero_preview/idle","animation_time":1.242072,"floor":true,"foot":[0.0101690292358398,-0.0341194868087769,-0.46040153503418],"id":"center-outboard-hard-stop","yaw":-0.00532313669100404}
+ROUTE_ONLY_NO_IMAGE full-inboard
+ROUTE_ONLY_NO_IMAGE seam-left-inboard-game-scale
+ROUTE_ONLY_NO_IMAGE seam-left-inboard-close
+ROUTE_ONLY_NO_IMAGE seam-right-inboard-game-scale
+ROUTE_ONLY_NO_IMAGE seam-right-inboard-close
+ROUTE_ONLY_NO_IMAGE full-outboard
+ROUTE_ONLY_NO_IMAGE seam-left-outboard-game-scale
+ROUTE_ONLY_NO_IMAGE seam-left-outboard-close
+ROUTE_ONLY_NO_IMAGE seam-right-outboard-game-scale
+ROUTE_ONLY_NO_IMAGE seam-right-outboard-close
+PASS no fixture or observer ledger mutation tick=1518
+DOCKED_CENTER_ROUTE_RESULT checks=53 failures=0 no_image_stages=16
