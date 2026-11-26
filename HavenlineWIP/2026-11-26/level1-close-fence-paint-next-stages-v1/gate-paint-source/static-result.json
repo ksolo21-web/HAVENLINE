@@ -1,0 +1,31 @@
+{
+  "ok": true,
+  "test_type": "static only, no shader compile or rendered quality result",
+  "mesh_vertices_unchanged": true,
+  "source_surface_materials_unchanged": true,
+  "no_position_or_lighting_transform_writes": true,
+  "surface_override_census": {
+    "labels": [
+      "beam",
+      "board",
+      "board_soft",
+      "board_warm",
+      "brace_back",
+      "metal",
+      "rope",
+      "rope_dark",
+      "snow"
+    ],
+    "ordered_surfaces_per_leaf": 39,
+    "triangles_per_leaf": 3226
+  },
+  "gate_shader_max_emission_linear_per_channel": 0.24,
+  "graft_only_adds_preload_and_paint_call": true,
+  "runtime_checks_needed": [
+    "shader compile",
+    "actual material params/labels attached on all four leaves",
+    "gates and save regression",
+    "paid/swing/cold actual game camera",
+    "both orientations blind exact owner ref review"
+  ]
+}
