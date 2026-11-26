@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T01:11:57Z",
+  "observed_at_utc": "2026-11-26T01:40:56Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -50,14 +50,16 @@
       "id": "furnace-purchase",
       "role": "Gameplay and plot builder",
       "state": "in_progress",
-      "result": "Corner-only paint conditions verified in a paired isolated Godot test. No paid fill or shrink is installed.",
+      "result": "360 isolated baseline checks passed. Three starter logs each count, but the stock view shows just one shared carry bundle. Furnace purchase and save recovery work without an arrival effect.",
       "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/1fce69e1792a7042be05f6eb8ae1d0a202c7e1ab",
         "https://github.com/ksolo21-web/HAVENLINE/commit/872045d9253a765843cf88e2221e9a59121d0015",
         "https://github.com/ksolo21-web/HAVENLINE/commit/472d8a08ec300c28630694853b2563fe67f40f6e"
       ],
-      "next": "The native corner test and distinct pickup identities hold. A portable source-to-carry ownership bridge is tested, but the finish sweep needs real individual mounts and actual purchase-deck arrivals.",
+      "next": "Bind each carried log to a distinct visible slot, then verify real arrivals before attempting the optional pad animation.",
       "role_ids": [
-        "builder-camp-pads"
+        "builder-camp-pads",
+        "level1-verifier"
       ]
     },
     {
@@ -156,6 +158,17 @@
         "https://github.com/ksolo21-web/HAVENLINE/commit/f9398439bbd73a3022550a5d983241b7eab2333f"
       ],
       "updated_at_utc": "2026-11-26T00:14:26Z"
+    },
+    {
+      "role_id": "level1-verifier",
+      "state": "done",
+      "title": "Verified the stock wood bundle and furnace purchase",
+      "summary": "Three authoritative logs share one visual bundle. The independent source-and-log review confirmed the isolated headless run without a separate native rerun.",
+      "next": "Verify real per-source mounts and arrivals when a detached candidate is available.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/1fce69e1792a7042be05f6eb8ae1d0a202c7e1ab"
+      ],
+      "updated_at_utc": "2026-11-26T01:40:56Z"
     }
   ],
   "office_events": [
@@ -190,6 +203,17 @@
       "message": "Handoff summary: The first detached garment rebuild failed with six overlaps at rest. Keep it out of the game and verify any revised garment at rest before testing gait.",
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/tree/ac46ca6b6a977ce156ab783b933c727cb9d18b08/HavenlineWIP/2026-11-26/level1-c1-neutral-cavity-independent-v1"
+      ]
+    },
+    {
+      "id": "pad-mount-admission-reviewed-20261126",
+      "type": "handoff",
+      "at_utc": "2026-11-26T01:40:56Z",
+      "from_role_id": "level1-verifier",
+      "to_role_id": "builder-camp-pads",
+      "message": "Handoff summary: The stock bundle cannot show three individual arrivals. Keep purchase logic independent and test real per-log carry slots before adding the deck effect.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/1fce69e1792a7042be05f6eb8ae1d0a202c7e1ab"
       ]
     }
   ]
