@@ -1,0 +1,3 @@
+# Owner 33035 exact isolated gate-local material A/B
+
+Actual new material improved South 8.8 to 9.1 and East 7.8 to 9.0. Still held at owner 9.5 minimum. Paid East median encoded luma 0 to 39.16 while very dark pixels fell 1981 to 47 of 2225; South did not saturate red, median 62.94 to 59.52. Renderer proved both leaves and posts realized all 126 scoped overrides without geometry/scene/physics changes. Validated opening, closing and blocked passage, unchanged save and 78 desktop checks over scopes and 16 frames. Reference snow ridge still too narrow, sculpted grain fine, latch and knobs tiny. Separate silhouette remedy in progress; no device, full-fence or release claim.
