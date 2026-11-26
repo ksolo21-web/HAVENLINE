@@ -1,0 +1,31 @@
+{
+  "package_built_from": "92d5aebe1740d0d7beebdc1f6b01ffbcf0604736",
+  "reviewed_source": "37540b6d1d6e0657dd6776db136a46534e6a66d5",
+  "scene": "res://field_opening.tscn",
+  "full_project_git_paths_compared": 347,
+  "changed_project_files": {
+    "qa_field_minerals.gd": {
+      "in_build": "1a04f5a8552192c60c4c5af6d2f622cac52aa5a3",
+      "in_review": "db2dd190abb90ee727a300b8bd5ccb7962f0ecb9"
+    },
+    "qa_world_lifecycle.gd": {
+      "in_build": "c065382f4410d180ef6dd6582a5038b9fe154d27",
+      "in_review": "bd483475df9be4172fdeeee2ce9a874a9bf11efd"
+    }
+  },
+  "verified_review_manifest_files": 237,
+  "unchanged_review_manifest_files": 235,
+  "export_excludes": "tests/*,qa_*.gd,docs/*,tools/*",
+  "embedded_resource_probe": {
+    "active_scene_and_carry_present": true,
+    "paths_present": {
+      "res://qa_field_minerals.gd": false,
+      "res://qa_field_minerals.gd.remap": false,
+      "res://qa_field_minerals.gdc": false,
+      "res://qa_world_lifecycle.gd": false,
+      "res://qa_world_lifecycle.gd.remap": false,
+      "res://qa_world_lifecycle.gdc": false
+    }
+  },
+  "result": "The two source changes affect excluded QA scripts. Every runtime file in the reviewed project equals the packaged source. The shipped executable contains neither changed script, while the real entry scene and carry script are present."
+}

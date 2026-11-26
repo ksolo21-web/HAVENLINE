@@ -1,0 +1,31 @@
+{
+  "source": "37540b6d1d6e0657dd6776db136a46534e6a66d5",
+  "scope": [
+    "character.reference_fidelity",
+    "character.visual_language"
+  ],
+  "verifier": {
+    "git_commit": "5c8bb92fdfb9561aea14b19b1ea484c4b06ae55a",
+    "path": "Docs/QA/World-One-Critic-2026-11-26/Gate/verify_review.py",
+    "sha256": "5eae07703e7c786771707764e11a3685e6a32adf7b74bbe6e52c413197f4234e",
+    "scope_selection": "Only the two signed visual dimensions. All project thresholds, source, reviewer and evidence hash rules were preserved."
+  },
+  "unrounded_user_minimum": {
+    "threshold": 9.5,
+    "result": "pass",
+    "scores": {
+      "character.reference_fidelity": 9.5,
+      "character.visual_language": 9.75
+    }
+  },
+  "project_style_minimum": {
+    "threshold": 10,
+    "result": "hold",
+    "findings": [
+      "character.reference_fidelity: 9.5 (requires 10)",
+      "character.reference_fidelity: hold",
+      "character.visual_language: 9.75 (requires 10)",
+      "character.visual_language: hold"
+    ]
+  }
+}

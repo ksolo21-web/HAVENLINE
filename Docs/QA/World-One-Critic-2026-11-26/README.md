@@ -27,3 +27,7 @@ The stricter threshold also applies to later reviews of this World One trial. [A
 Run the following command from this directory. Exit code 1 identifies an open mandatory item.
 
     python3 Gate/verify_review.py 949af6f0916839ac702725cbd7a0a7c3f1033a5a
+
+## Subsequent character review
+
+[Character 1 follow-up, including its playable source and fresh scores](../Character-1-Fidelity-2026-11-26/README.md)

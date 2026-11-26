@@ -1,0 +1,569 @@
+{
+  "scene": "res://field_opening.tscn",
+  "baseline_source": "949af6f0916839ac702725cbd7a0a7c3f1033a5a",
+  "baseline_glb": "c27362d34459ce81ddfbadae19e91002985d69ae077fa25049dacae1247974f7",
+  "new_glb": "77a5cbf925a82004b003c8c73428d00492b858a3e01f36c483b9f5315e3223fe",
+  "owner_sheet_sha256": "d73c3860d5aca2cdf92a7c337c9a720acdda477c08f5b54dd1695dd7f312447c",
+  "job": "In-place clothing albedo treatment only",
+  "asset_checks": {
+    "only_changed_buffer_view": 7,
+    "total_unchanged_buffer_views": 465,
+    "byte_equal": "All geometry, skin weights, joints, animation channels, normal and metallic-roughness buffer views. Mesh, animation, node, skin, accessor, materials, sampler and texture bindings are equal as parsed JSON.",
+    "pixel_change_count": 817579,
+    "total_atlas_pixels": 4194304,
+    "other_pixels_bit_identical": 3376725,
+    "independent_recipe_output_sha256": "77a5cbf925a82004b003c8c73428d00492b858a3e01f36c483b9f5315e3223fe"
+  },
+  "target_srgb_medians": {
+    "blue": [
+      12.0,
+      70.0,
+      138.0
+    ],
+    "orange": [
+      215.0,
+      85.5,
+      22.0
+    ]
+  },
+  "method": "Godot 4.7.2 Compatibility, 1280 x 720. Fixed outdoor camera, actor facing four headings at actual 1x/2x. A separate unlit texture-ID capture projects the same authored diffuse pigment UVs into each image. Crops bound the hero. For each masked sample we compute median RGB and D65 CIE76 distance to the median of the front/back sheet samples in References/Measurements.json. Every one of the eight views has equal weight. A native static lighting comparison measures visual read and cannot prove gait cadence, identity or release approval.",
+  "before": {
+    "blue": {
+      "mean_DeltaE76_across_eight_views": 21.746,
+      "distinct_pixels_same_eight_body_masks": 3278
+    },
+    "orange": {
+      "mean_DeltaE76_across_eight_views": 13.482,
+      "distinct_pixels_same_eight_body_masks": 1223
+    }
+  },
+  "after": {
+    "blue": {
+      "mean_DeltaE76_across_eight_views": 14.45,
+      "distinct_pixels_same_eight_body_masks": 5027
+    },
+    "orange": {
+      "mean_DeltaE76_across_eight_views": 10.756,
+      "distinct_pixels_same_eight_body_masks": 1262
+    }
+  },
+  "all_native_samples": {
+    "before": {
+      "yaw0-z1": {
+        "blue": {
+          "sample_pixels": 428,
+          "distinct_color_pixels": 202,
+          "rgb": [
+            19.0,
+            44.0,
+            93.0
+          ],
+          "lab": [
+            18.93,
+            9.96,
+            -32.12
+          ],
+          "deltaE76": 15.44
+        },
+        "orange": {
+          "sample_pixels": 111,
+          "distinct_color_pixels": 80,
+          "rgb": [
+            188.0,
+            71.0,
+            20.0
+          ],
+          "lab": [
+            45.98,
+            44.98,
+            50.87
+          ],
+          "deltaE76": 10.23
+        }
+      },
+      "yaw0-z2": {
+        "blue": {
+          "sample_pixels": 1875,
+          "distinct_color_pixels": 950,
+          "rgb": [
+            18.0,
+            43.0,
+            96.0
+          ],
+          "lab": [
+            18.8,
+            11.84,
+            -34.3
+          ],
+          "deltaE76": 14.25
+        },
+        "orange": {
+          "sample_pixels": 568,
+          "distinct_color_pixels": 401,
+          "rgb": [
+            191.5,
+            69.0,
+            14.0
+          ],
+          "lab": [
+            46.22,
+            47.05,
+            53.31
+          ],
+          "deltaE76": 8.1
+        }
+      },
+      "yaw180-z1": {
+        "blue": {
+          "sample_pixels": 472,
+          "distinct_color_pixels": 198,
+          "rgb": [
+            13.0,
+            39.0,
+            90.5
+          ],
+          "lab": [
+            16.91,
+            11.8,
+            -33.73
+          ],
+          "deltaE76": 16.11
+        },
+        "orange": {
+          "sample_pixels": 60,
+          "distinct_color_pixels": 41,
+          "rgb": [
+            164.5,
+            59.0,
+            9.0
+          ],
+          "lab": [
+            39.74,
+            41.6,
+            48.12
+          ],
+          "deltaE76": 17.59
+        }
+      },
+      "yaw180-z2": {
+        "blue": {
+          "sample_pixels": 2026,
+          "distinct_color_pixels": 886,
+          "rgb": [
+            13.0,
+            39.0,
+            91.0
+          ],
+          "lab": [
+            16.95,
+            12.02,
+            -34.0
+          ],
+          "deltaE76": 15.95
+        },
+        "orange": {
+          "sample_pixels": 324,
+          "distinct_color_pixels": 202,
+          "rgb": [
+            160.5,
+            57.0,
+            8.0
+          ],
+          "lab": [
+            38.68,
+            41.02,
+            47.38
+          ],
+          "deltaE76": 19.01
+        }
+      },
+      "yaw270-z1": {
+        "blue": {
+          "sample_pixels": 374,
+          "distinct_color_pixels": 88,
+          "rgb": [
+            4.0,
+            21.0,
+            56.5
+          ],
+          "lab": [
+            7.7,
+            8.99,
+            -25.15
+          ],
+          "deltaE76": 28.53
+        },
+        "orange": {
+          "sample_pixels": 67,
+          "distinct_color_pixels": 43,
+          "rgb": [
+            180.0,
+            66.0,
+            26.0
+          ],
+          "lab": [
+            43.77,
+            44.46,
+            46.1
+          ],
+          "deltaE76": 15.18
+        }
+      },
+      "yaw270-z2": {
+        "blue": {
+          "sample_pixels": 1628,
+          "distinct_color_pixels": 430,
+          "rgb": [
+            4.0,
+            21.0,
+            56.0
+          ],
+          "lab": [
+            7.66,
+            8.75,
+            -24.86
+          ],
+          "deltaE76": 28.75
+        },
+        "orange": {
+          "sample_pixels": 344,
+          "distinct_color_pixels": 218,
+          "rgb": [
+            181.0,
+            63.5,
+            17.0
+          ],
+          "lab": [
+            43.47,
+            45.75,
+            49.53
+          ],
+          "deltaE76": 12.71
+        }
+      },
+      "yaw90-z1": {
+        "blue": {
+          "sample_pixels": 335,
+          "distinct_color_pixels": 93,
+          "rgb": [
+            6.0,
+            25.0,
+            59.0
+          ],
+          "lab": [
+            9.4,
+            7.33,
+            -24.19
+          ],
+          "deltaE76": 27.95
+        },
+        "orange": {
+          "sample_pixels": 69,
+          "distinct_color_pixels": 45,
+          "rgb": [
+            190.0,
+            69.0,
+            20.0
+          ],
+          "lab": [
+            45.98,
+            46.61,
+            51.03
+          ],
+          "deltaE76": 9.72
+        }
+      },
+      "yaw90-z2": {
+        "blue": {
+          "sample_pixels": 1489,
+          "distinct_color_pixels": 431,
+          "rgb": [
+            6.0,
+            25.0,
+            61.0
+          ],
+          "lab": [
+            9.57,
+            8.28,
+            -25.34
+          ],
+          "deltaE76": 26.99
+        },
+        "orange": {
+          "sample_pixels": 350,
+          "distinct_color_pixels": 193,
+          "rgb": [
+            171.0,
+            59.0,
+            10.0
+          ],
+          "lab": [
+            40.91,
+            44.01,
+            49.17
+          ],
+          "deltaE76": 15.32
+        }
+      }
+    },
+    "after": {
+      "yaw0-z1": {
+        "blue": {
+          "sample_pixels": 428,
+          "distinct_color_pixels": 296,
+          "rgb": [
+            21.0,
+            67.0,
+            122.0
+          ],
+          "lab": [
+            28.32,
+            6.12,
+            -35.69
+          ],
+          "deltaE76": 8.24
+        },
+        "orange": {
+          "sample_pixels": 111,
+          "distinct_color_pixels": 83,
+          "rgb": [
+            194.0,
+            73.0,
+            12.0
+          ],
+          "lab": [
+            47.32,
+            46.14,
+            54.81
+          ],
+          "deltaE76": 6.67
+        }
+      },
+      "yaw0-z2": {
+        "blue": {
+          "sample_pixels": 1875,
+          "distinct_color_pixels": 1286,
+          "rgb": [
+            20.0,
+            68.0,
+            126.0
+          ],
+          "lab": [
+            28.87,
+            6.99,
+            -37.32
+          ],
+          "deltaE76": 6.32
+        },
+        "orange": {
+          "sample_pixels": 568,
+          "distinct_color_pixels": 413,
+          "rgb": [
+            196.0,
+            71.0,
+            9.0
+          ],
+          "lab": [
+            47.32,
+            47.72,
+            55.73
+          ],
+          "deltaE76": 6.01
+        }
+      },
+      "yaw180-z1": {
+        "blue": {
+          "sample_pixels": 472,
+          "distinct_color_pixels": 357,
+          "rgb": [
+            15.0,
+            62.0,
+            118.0
+          ],
+          "lab": [
+            26.32,
+            7.28,
+            -36.4
+          ],
+          "deltaE76": 7.88
+        },
+        "orange": {
+          "sample_pixels": 60,
+          "distinct_color_pixels": 42,
+          "rgb": [
+            170.0,
+            60.5,
+            5.0
+          ],
+          "lab": [
+            40.97,
+            42.9,
+            50.61
+          ],
+          "deltaE76": 14.9
+        }
+      },
+      "yaw180-z2": {
+        "blue": {
+          "sample_pixels": 2026,
+          "distinct_color_pixels": 1538,
+          "rgb": [
+            15.0,
+            63.0,
+            121.0
+          ],
+          "lab": [
+            26.84,
+            7.86,
+            -37.45
+          ],
+          "deltaE76": 6.58
+        },
+        "orange": {
+          "sample_pixels": 324,
+          "distinct_color_pixels": 212,
+          "rgb": [
+            167.0,
+            59.0,
+            4.0
+          ],
+          "lab": [
+            40.17,
+            42.46,
+            50.17
+          ],
+          "deltaE76": 15.91
+        }
+      },
+      "yaw270-z1": {
+        "blue": {
+          "sample_pixels": 374,
+          "distinct_color_pixels": 137,
+          "rgb": [
+            5.0,
+            37.0,
+            74.5
+          ],
+          "lab": [
+            14.71,
+            5.11,
+            -26.47
+          ],
+          "deltaE76": 22.94
+        },
+        "orange": {
+          "sample_pixels": 67,
+          "distinct_color_pixels": 45,
+          "rgb": [
+            186.0,
+            69.0,
+            20.0
+          ],
+          "lab": [
+            45.29,
+            45.16,
+            50.2
+          ],
+          "deltaE76": 11.1
+        }
+      },
+      "yaw270-z2": {
+        "blue": {
+          "sample_pixels": 1628,
+          "distinct_color_pixels": 647,
+          "rgb": [
+            5.0,
+            37.0,
+            75.0
+          ],
+          "lab": [
+            14.75,
+            5.34,
+            -26.75
+          ],
+          "deltaE76": 22.67
+        },
+        "orange": {
+          "sample_pixels": 344,
+          "distinct_color_pixels": 224,
+          "rgb": [
+            188.0,
+            66.0,
+            13.0
+          ],
+          "lab": [
+            45.11,
+            47.1,
+            52.56
+          ],
+          "deltaE76": 9.42
+        }
+      },
+      "yaw90-z1": {
+        "blue": {
+          "sample_pixels": 335,
+          "distinct_color_pixels": 139,
+          "rgb": [
+            8.0,
+            40.0,
+            80.0
+          ],
+          "lab": [
+            16.25,
+            5.76,
+            -27.75
+          ],
+          "deltaE76": 20.87
+        },
+        "orange": {
+          "sample_pixels": 69,
+          "distinct_color_pixels": 46,
+          "rgb": [
+            191.0,
+            71.0,
+            16.0
+          ],
+          "lab": [
+            46.48,
+            46.01,
+            52.83
+          ],
+          "deltaE76": 8.37
+        }
+      },
+      "yaw90-z2": {
+        "blue": {
+          "sample_pixels": 1489,
+          "distinct_color_pixels": 627,
+          "rgb": [
+            8.0,
+            41.0,
+            82.0
+          ],
+          "lab": [
+            16.73,
+            5.92,
+            -28.33
+          ],
+          "deltaE76": 20.1
+        },
+        "orange": {
+          "sample_pixels": 350,
+          "distinct_color_pixels": 197,
+          "rgb": [
+            174.0,
+            60.5,
+            6.5
+          ],
+          "lab": [
+            41.69,
+            44.39,
+            50.96
+          ],
+          "deltaE76": 13.67
+        }
+      }
+    }
+  },
+  "sun_and_camera": "No gameplay light, camera, material BRDF, shader, engine settings or other character texture inputs changed."
+}
