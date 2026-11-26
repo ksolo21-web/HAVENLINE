@@ -27,6 +27,7 @@ func run() -> void:
 		var cool:float=f.lifecycle.cooling.get("qa-pause-proof",0)
 		var valid:bool=not f.persist_blocked and gap<.025 and f.player_hp==expected.hp and absf(float(expected.cooldown)-cool)<.08 and f.actor.position.distance_to(f.point(f.layout.start_xz))>32
 		print("WORLD_SESSION_REOPEN ",JSON.stringify({"passed":valid,"x":f.actor.position.x,"z":f.actor.position.z,"restored_hp":f.player_hp,"position_error_m":gap,"saved_timer":expected.cooldown,"remaining":cool,"wave":f.encounters.wave}))
+		await Session.drain_field_audio(self, f)
 		quit(0 if valid else 1)
 		return
 	var touch:=InputEventScreenTouch.new()

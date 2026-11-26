@@ -42,7 +42,7 @@ func run() -> void:
 	compare_surface(starter,"starter after a strike")
 	world.lifecycle.deplete(starter)
 	check(not starter._mesh.visible and starter.bank_body.collision_layer == 0,"depleted bank clears movement and draw")
-	world.lifecycle.advance(world.lifecycle.stone_seconds+.1)
+	world.lifecycle.advance(world.lifecycle.mining_seconds+.1)
 	await physics_frame
 	check(starter._mesh.visible and starter.bank_body.collision_layer == 1,"regrown bank restores movement and draw")
 	compare_surface(starter,"regrown bank")
@@ -79,6 +79,7 @@ func run() -> void:
 	await finish()
 
 func finish() -> void:
+	await preload("res://tests/lifecycle_test_profile.gd").drain_field_audio(self, world)
 	world.queue_free()
 	for i in 8: await process_frame
 	print(JSON.stringify({"checks":checks,"failures":failures}))

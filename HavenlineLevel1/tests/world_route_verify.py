@@ -34,7 +34,7 @@ with (run / "observations.jsonl").open() as fp:
         counts_by_token = f.get("unique_token_counts", {})
         if not counts_by_token:
             counts_by_token = collections.Counter(f["collected"].values())
-        for kind in ("wood", "stone", "meat"):
+        for kind in f["carried"]:
             spent = sum(receipt.get(kind, 0) for receipt in f["paid"].values())
             assert counts_by_token.get(kind, 0) == f["carried"][kind] + f["stored"][kind] + spent, (index, kind)
         for order_index, offer in enumerate(f["build_order"]):

@@ -63,7 +63,7 @@ func run() -> void:
 		for ratio: float in [1.,2.]:
 			zoom.set_ratio(camera,ratio)
 			for amount: int in [3,12,37,42,1000000]:
-				book.carried={"wood":amount,"stone":amount,"meat":amount}
+				for kind: String in Ledger.KINDS: book.carried[kind]=amount
 				carry.sync()
 				var lowest := 1.0
 				for pose: float in [0.,.85,3.14,4.71]:
@@ -76,10 +76,12 @@ func run() -> void:
 						check(item != null and item.global_position.is_equal_approx(carry._place("carry",kind,amount-1)),kind+" visible representative")
 						check(visible_count(kind)==amount if amount==3 or (amount==12 and ratio==1.) else visible_count(kind)<=amount,kind+" preserves ordinary loads")
 						check(book.carried[kind]==amount,kind+" count unchanged")
-						check(carry.pieces["carry/"+kind].size()<75,kind+" bounded pool")
+						check(carry.pieces["carry/"+kind].size()<(75 if kind in Ledger.ORIGINAL_KINDS else 200),kind+" bounded pool")
 					check(top("wood").position.x<top("stone").position.x and top("meat").position.z<top("wood").position.z,"segregated lanes")
 				check(lowest>=.08,"8 percent margin across views and turns")
-				cases.append({"viewport":str(format_),"zoom":ratio,"logical":amount,"visible":[visible_count("wood"),visible_count("stone"),visible_count("meat")],"min_headroom":snappedf(lowest,.001)})
+				var drawn := {}
+				for kind in Ledger.KINDS: drawn[kind]=visible_count(kind)
+				cases.append({"viewport":str(format_),"zoom":ratio,"logical":amount,"visible":drawn,"min_headroom":snappedf(lowest,.001)})
 	# A camera-only zoom update while stationary must change the visible cap.
 	view.size=Vector2i(1280,720)
 	zoom.set_ratio(camera,1.)
@@ -90,7 +92,7 @@ func run() -> void:
 	carry.advance(.02)
 	check(visible_count("wood")<full and carry.pieces["carry/wood"]==pool,"idle zoom reuses pool")
 	# Exercise real earned tokens, overflow receipts and a reload.
-	book.carried={"wood":0,"stone":0,"meat":0}
+	book.carried=Ledger.EMPTY.duplicate()
 	for i in 60: book.collect("tree-%d"%i,"wood")
 	carry.sync()
 	check(carry.pickup("one-more","wood",Vector3(2,0,1)),"overflow pickup")

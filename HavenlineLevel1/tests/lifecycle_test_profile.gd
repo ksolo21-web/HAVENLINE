@@ -38,3 +38,11 @@ static func isolated(tree: SceneTree, script:String) -> bool:
 	remove_owned(directory)
 	tree.quit(code)
 	return true
+
+## Fixed-FPS test frames can outrun the audio driver, which releases queued WAV
+## playback on its own thread. Let the mixer finish before freeing the scene.
+static func drain_field_audio(tree: SceneTree, field: Node) -> void:
+	field.sound.stop_playback()
+	for tick in 12:
+		OS.delay_msec(20)
+		await tree.process_frame

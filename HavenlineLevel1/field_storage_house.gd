@@ -1,11 +1,13 @@
 extends Node3D
 ## Visual and physical shell of the shared storehouse. Inventory owns physical
-## contents and counts; its three displays use these same shelf coordinates.
+## contents and counts; its displays use these same shelf coordinates.
 signal door_motion(opening:bool, at:Vector3)
 
 const SHELL := preload("res://assets/storage_house/camp_storehouse.glb")
-const BAYS := {"wood":Vector3(-1.15,.763,.25),"stone":Vector3(-1.15,.763,-.56),"meat":Vector3(0,.772,-.92)}
-const LABELS := {"wood":Vector3(-.83,.65,.15),"stone":Vector3(-.83,.65,-.64),"meat":Vector3(0,.68,-.625)}
+const BAYS := {"wood":Vector3(-1.15,.763,.25),"stone":Vector3(-1.15,.763,-.56),"meat":Vector3(0,.772,-.92),
+	"coal":Vector3(1.15,.763,.25),"slate":Vector3(-.68,.772,-.92),"metal":Vector3(.68,.772,-.92)}
+const LABELS := {"wood":Vector3(-.83,.65,.15),"stone":Vector3(-.83,.65,-.64),"meat":Vector3(0,.68,-.625),
+	"coal":Vector3(.84,.68,.20),"slate":Vector3(-.68,.68,-.625),"metal":Vector3(.68,.68,-.625)}
 const CUTAWAY := ["Roof","Gables","Signs","Track","RightWall","Facade"]
 const TIERS := ["starter","reinforced","advanced"]
 var actor: Node3D
@@ -36,7 +38,7 @@ func _ready() -> void:
 		_wall(Vector3(side*1.36,.68,0),Vector3(.53,1.36,2.15))
 		_wall(Vector3(side*1.18,.85,1.08),Vector3(.71,1.70,.20))
 	_wall(Vector3(0,.55,-.87),Vector3(1.77,1.10,.40))
-	for item in [["TIMBER",Vector3(-1.40,1.38,.524)],["MATERIALS",Vector3(-1.39,1.38,-.486)],["HIDES",Vector3(-.68,1.38,-.756)],["FOOD",Vector3(0,1.38,-.756)],["CARGO",Vector3(.68,1.38,-.756)],["FUEL",Vector3(1.12,1.38,.524)]]:
+	for item in [["TIMBER",Vector3(-1.40,1.38,.524)],["STONE",Vector3(-1.39,1.38,-.486)],["SLATE",Vector3(-.68,1.38,-.756)],["FOOD",Vector3(0,1.38,-.756)],["METAL ORE",Vector3(.68,1.38,-.756)],["COAL",Vector3(1.12,1.38,.524)]]:
 		var label:=Label3D.new()
 		label.text=item[0]
 		label.name="Bay"+String(item[0]).capitalize()

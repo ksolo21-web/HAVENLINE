@@ -98,7 +98,13 @@ func run() -> void:
 			var start: Vector3 = gate.position+Vector3.UP*.55+normal*1.8
 			var end: Vector3 = gate.position+Vector3.UP*.55-normal*1.8
 			var query := PhysicsRayQueryParameters3D.create(start,end,1)
-			query.exclude = [game.actor.get_rid()]
+			# Probe the gate and fence. A mobile wolf may occupy the exterior
+			# approach while the leaves are open.
+			var actors: Array[RID] = [game.actor.get_rid()]
+			for wolf in game.enemies:
+				for body in wolf.find_children("*", "CollisionObject3D", true, false):
+					actors.append(body.get_rid())
+			query.exclude = actors
 			# Offset from the narrow gap between both opposing leaf tips.
 			var offset: Vector3 = gate.global_basis.x*.20
 			query.from += offset
@@ -127,6 +133,7 @@ func run() -> void:
 			save_frame(folder,"stage-%d"%stage)
 			if stage == 1: await detail_views(game,folder)
 	print(JSON.stringify({"perimeter":rows,"failures":failures}))
+	await preload("res://tests/lifecycle_test_profile.gd").drain_field_audio(self, game)
 	game.queue_free()
 	for tick in 5: await process_frame
 	quit(1 if not failures.is_empty() else 0)

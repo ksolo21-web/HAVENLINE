@@ -7,7 +7,12 @@ signal unit_landed(kind: String, destination: String)
 const Inventory = preload("res://field_inventory.gd")
 const FRAME_PATH := "res://assets/field_pack/carry_frame.glb"
 const RACK_SHADER := preload("res://assets/field_pack/portable_material.gdshader")
-const WIDTH := {"wood": 0.47, "stone": 0.42, "meat": 0.31}
+const WIDTH := {"wood":.47, "stone":.42, "meat":.31, "coal":.29, "slate":.31, "metal":.30}
+const LANES := {
+	"wood":Vector2(-.23,-.36), "stone":Vector2(.23,-.36),
+	"meat":Vector2(-.23,-.67), "coal":Vector2(.23,-.71),
+	"slate":Vector2(-.23,-1.01), "metal":Vector2(.23,-1.06),
+}
 const StockLayout = preload("res://field_stock_layout.gd")
 const INTERVAL := 0.16
 const PICKUP_TIME := 0.29
@@ -32,7 +37,7 @@ var flights: Array[Dictionary] = []
 var cooldown := 0.0
 var measured := {}
 var hand_visible := {}
-var tier_height := {"wood": 0.13, "stone": 0.11, "meat": 0.145}
+var tier_height := {"wood":.13, "stone":.11, "meat":.145, "coal":.15, "slate":.12, "metal":.16}
 
 func setup(ledger: Inventory, character: Node3D, item_factory: Callable) -> void:
 	inventory = ledger
@@ -71,11 +76,9 @@ func set_storage_layout(layout: Callable, unit_scale := 1.0) -> void:
 	sync()
 
 func _pack_position(kind: String, index: int) -> Vector3:
-	# Two fixed lateral columns, with a separate outer shelf for red meat.
-	# The three stack footprints never switch when one type is exhausted.
-	var x := .23 if kind == "stone" else -.23
-	var z := -.67 if kind == "meat" else -.36
-	return Vector3(x, .655 + index * float(tier_height[kind]), z)
+	# Fixed left/right lanes keep every type separate at every load.
+	var lane: Vector2 = LANES[kind]
+	return Vector3(lane.x,.655 + index * float(tier_height[kind]),lane.y)
 
 func _pack_limit(kind: String) -> int:
 	var base := _pack_position(kind, 0)

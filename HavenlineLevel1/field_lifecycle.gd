@@ -1,11 +1,12 @@
 extends RefCounted
 ## Timers use played simulation seconds. Cooling sources keep their IDs when streamed out.
 const WOOD_REGROW_SECONDS := preload("res://resource_tree.gd").REGROW_SECONDS
-const STONE_REGROW_SECONDS := 32.0
+const MiningResources = preload("res://mining_resources.gd")
+const Inventory = preload("res://field_inventory.gd")
 const DROP_LIFETIME_SECONDS := 100.0
 const DROP_CAP := 72
 var wood_seconds := WOOD_REGROW_SECONDS
-var stone_seconds := STONE_REGROW_SECONDS
+var mining_seconds := MiningResources.REGROW_SECONDS
 var world: Node3D
 var loaded := {}
 var cooling := {}
@@ -17,8 +18,9 @@ func register(id: String, kind: String, node: Node3D) -> void:
 	node.set_meta("resource_kind",kind)
 	loaded[id] = node
 	if cooling.has(id):
+		cooling[id] = minf(cooling[id], wood_seconds if kind == "wood" else mining_seconds)
 		_set_available(node, false)
-		if kind == "wood": node.show_return(float(cooling[id]))
+		node.show_return(float(cooling[id]))
 	elif partial.has(id):
 		_restore_strikes(node,partial[id])
 
@@ -26,9 +28,7 @@ func _restore_strikes(node: Node3D, count: int) -> void:
 	if node.get_meta("resource_kind")=="wood":
 		node.restore_notches(count)
 	else:
-		node.strikes = count
-		node._mesh.scale=Vector3.ONE*(1.0-.18*count)
-		node._mesh.position.y=-node._mesh.mesh.get_aabb().position.y*node._mesh.scale.y
+		node.restore_strikes(count)
 
 func record_strike(node: Node3D) -> void:
 	var id: String = node.get_meta("field_source_id")
@@ -37,9 +37,10 @@ func record_strike(node: Node3D) -> void:
 func deplete(node: Node3D) -> void:
 	var id: String = node.get_meta("field_source_id")
 	var kind: String = node.get_meta("resource_kind")
+	if cooling.has(id): return
 	partial.erase(id)
 	availability_revision += 1
-	cooling[id] = wood_seconds if kind == "wood" else stone_seconds
+	cooling[id] = wood_seconds if kind == "wood" else mining_seconds
 	_set_available(node,false)
 
 func _set_available(node: Node3D, available: bool) -> void:
@@ -50,20 +51,14 @@ func _set_available(node: Node3D, available: bool) -> void:
 			node.phase = "credited"
 			node._pivot.hide()
 	else:
-		node.phase = "seated" if available else "mined"
-		node.strikes = 0 if available else 3
-		node._mesh.visible = available
-		node.set_bank_active(available)
-		if available:
-			node._mesh.scale = Vector3.ONE
-			node._mesh.position.y = -node._mesh.mesh.get_aabb().position.y
+		node.set_available(available)
 
 func advance(dt: float) -> void:
 	for id: String in cooling.keys():
 		cooling[id] -= maxf(dt,0.0)
 		if cooling[id] > .000001:
 			var active = loaded.get(id)
-			if is_instance_valid(active) and active.get_meta("resource_kind")=="wood" and cooling[id]<=active.RETURN_SECONDS:
+			if is_instance_valid(active) and cooling[id] <= active.RETURN_SECONDS:
 				active.show_return(cooling[id])
 			continue
 		cooling.erase(id)
@@ -117,6 +112,13 @@ func _restore_actor(state: Variant) -> void:
 	world.camera.position=pos+Vector3(7,11,11)
 	if world.tracks: world.tracks.reset_actor(world.actor)
 
+func _saved_source_kind(id: String, node) -> String:
+	if is_instance_valid(node): return node.get_meta("resource_kind")
+	if id == "starter-stone": return "stone"
+	if id == "starter-wood" or id.begins_with("pine@") or id.begins_with("grove@"): return "wood"
+	if id.begins_with("world1/"): return id.get_slice("/", 3)
+	return ""
+
 func restore(data: Dictionary) -> bool:
 	if data.is_empty(): return true
 	if data.get("version") != 1 or not data.get("cooling") is Dictionary or not data.get("drops") is Array or not data.get("pack") is Dictionary: return false
@@ -126,7 +128,7 @@ func restore(data: Dictionary) -> bool:
 		if not key is String or key.is_empty() or not _number(data.cooling[key]) or data.cooling[key]<0 or data.cooling[key]>86400: return false
 	var unique := {}
 	for d in data.drops:
-		if not d is Array or d.size()!=5 or not d[0] is String or d[0].is_empty() or unique.has(d[0]) or d[1] not in ["wood","stone","meat"]: return false
+		if not d is Array or d.size()!=5 or not d[0] is String or d[0].is_empty() or unique.has(d[0]) or d[1] not in Inventory.KINDS: return false
 		if not _number(d[2]) or not _number(d[3]) or not _number(d[4]) or d[4]<0 or d[4]>DROP_LIFETIME_SECONDS: return false
 		unique[d[0]]=true
 	var hits: Variant = data.get("partial",{})
@@ -145,13 +147,16 @@ func restore(data: Dictionary) -> bool:
 	availability_revision += 1
 	for id: String in cooling:
 		var entry = loaded.get(id)
-		# Old saves store seconds by stable ID, including unloaded sources.
-		# Their existing wood/stone naming remains consistent across chunks.
-		var wood: bool = (is_instance_valid(entry) and entry.get_meta("resource_kind")=="wood") or id=="starter-wood" or id.begins_with("pine@") or id.begins_with("grove@") or (id.begins_with("world1/") and id.get_slice("/",3)=="wood")
-		if wood: cooling[id]=minf(cooling[id],wood_seconds)
+		# Clamp known deposits from old versions even when their cell isn't loaded.
+		# Unrecognised IDs retain their timer until a source registers its kind.
+		var kind := _saved_source_kind(id, entry)
+		if kind == "wood":
+			cooling[id] = minf(cooling[id], wood_seconds)
+		elif kind in MiningResources.KINDS:
+			cooling[id] = minf(cooling[id], mining_seconds)
 		if is_instance_valid(entry):
 			_set_available(entry,false)
-			if wood: entry.show_return(cooling[id])
+			entry.show_return(float(cooling[id]))
 	for id in world.drops.keys(): world._remove_drop(id)
 	_restore_actor(data.get("player"))
 	world.drop_id = int(data.serial)

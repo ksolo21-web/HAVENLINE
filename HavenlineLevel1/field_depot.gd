@@ -92,7 +92,8 @@ func hint() -> String:
 	var stock := PackedStringArray()
 	for kind: String in world.Inventory.KINDS:
 		if world.inventory.storage_open(kind):
-			stock.append("%d %s" % [world.inventory.stored[kind],kind])
+			if kind not in world.Inventory.MINERALS or int(world.inventory.stored[kind])>0:
+				stock.append("%d %s" % [world.inventory.stored[kind],world.Inventory.TITLES[kind].to_lower()])
 	if not offer.is_empty() and (visit != "load" or stock.is_empty()):
 		var price := Rules.price_text(world.inventory.remaining(offer))
 		return "%s · %s" % [Rules.TITLES[offer], price] if stock.is_empty() else "Left: store · Right: %s · %s" % [Rules.TITLES[offer],price]

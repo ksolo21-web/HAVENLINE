@@ -20,13 +20,52 @@ func place(at: Vector3) -> void:
 	world.camera.position = at + Vector3(7,11,11)
 	await frames(20)
 
+func check_bank_streaming(land: Node, sample: Dictionary, kind: String) -> void:
+	var at := Vector3(sample.x, 0.0, sample.z)
+	await place(at + Vector3(9.5, 0, 0))
+	var chunk: Dictionary = land.chunks[land.chunk_for(at)]
+	var rows: Array = chunk.sources.filter(func(r: Dictionary): return r.id == sample.id)
+	if rows.size() != 1:
+		check(kind+" has a single stable row", false)
+		return
+	var row: Dictionary = rows[0]
+	check(kind+" shows the distant source proxy", row.proxy_visible and not is_instance_valid(row.live))
+	await place(at + Vector3(1.5,0,.4))
+	var live = world.lifecycle.loaded.get(row.id)
+	if not is_instance_valid(live):
+		check(kind+" promotes to a mineable bank", false)
+		return
+	check(kind+" promotes once with physical contact geometry", world.surfaces.has(live) and not row.proxy_visible and row.live == live)
+	var meshes: Array[MeshInstance3D] = []
+	world.meshes(live, meshes)
+	var batches: Array = chunk.batches[row.variant]
+	var parity := meshes.size() == batches.size() and not meshes.is_empty()
+	for i in mini(meshes.size(), batches.size()):
+		var batch: Dictionary = batches[i]
+		var proxy_mesh: Mesh = batch.mesh.mesh
+		var visual: MeshInstance3D = meshes[i]
+		parity = parity and (live.global_transform * batch.local).is_equal_approx(visual.global_transform)
+		parity = parity and proxy_mesh.get_aabb().is_equal_approx(visual.mesh.get_aabb()) and proxy_mesh.get_surface_count() == visual.mesh.get_surface_count()
+		for surface in proxy_mesh.get_surface_count():
+			var proxy_mat: Material = proxy_mesh.surface_get_material(surface)
+			var live_mat: Material = visual.get_active_material(surface)
+			parity = parity and proxy_mat != null and proxy_mat == live_mat
+	check(kind+" proxy uses the live bank scale, transform, bounds and surfaces", parity)
+	await place(at + Vector3(9.5,0,0))
+	check(kind+" returns to proxy on release", row.proxy_visible and not is_instance_valid(row.live) and not world.lifecycle.loaded.has(row.id))
+
 func run() -> void:
 	world = load("res://field_opening.tscn").instantiate()
 	root.add_child(world)
 	await frames(20)
 	var land = world.world_landscape
 	check("Normal entry creates the streamed world", land != null and land.limit == 16)
-	var counts := {"stone":0,"wood":0}
+	var counts := {"stone":0,"wood":0,"metal":0,"coal":0,"slate":0}
+	var nearest := {}
+	var clearance_ok := true
+	var repeatable := true
+	var legacy_digest := HashingContext.new()
+	legacy_digest.start(HashingContext.HASH_SHA256)
 	var unique := {}
 	var maximum := 0
 	var minimum := 1000
@@ -39,11 +78,30 @@ func run() -> void:
 			if not rows.is_empty(): occupied+=1
 			for row in rows:
 				counts[row.kind]+=1
+				if row.kind in ["wood","stone"]:
+					legacy_digest.update(var_to_bytes([row.id,row.kind,row.variant,row.position,row.yaw,row.scale]))
+				else:
+					var point: Vector3 = row.position
+					var distance := point.length()
+					if not nearest.has(row.kind) or distance < nearest[row.kind].distance:
+						nearest[row.kind] = {"id":row.id,"x":point.x,"z":point.z,"distance":distance}
+					clearance_ok = clearance_ok and distance >= land.FIRST_MINERAL_RADIUS
+					for other in rows:
+						if other.id != row.id:
+							clearance_ok = clearance_ok and point.distance_to(other.position) >= land.BANK_CLEARANCE
+					repeatable = repeatable and land.describe_chunk(Vector2i(x,z)).back() == row
 				unique[row.id]=true
-	report["census"] = {"wood":counts.wood,"stone":counts.stone,"distinct_ids":unique.size(),"populated_chunks":occupied,"min_sources":minimum,"max_sources":maximum}
+	report["nearest_minerals"] = nearest
+	report["census"] = {"resources":counts,"wood":counts.wood,"stone":counts.stone,"distinct_ids":unique.size(),"populated_chunks":occupied,"min_sources":minimum,"max_sources":maximum}
 	check("All 1,024 chunks contain usable resources",occupied == 1024)
-	check("All source keys are unique",unique.size() == counts.wood + counts.stone)
+	check("All source keys are unique",unique.size() == counts.wood + counts.stone + counts.metal + counts.coal + counts.slate)
+	check("All original source IDs, variants, transforms and ordering match the shipped map",legacy_digest.finish().hex_encode() == "cec2c42cd1b35a58bda20f42639445c0c05b9f9fd5d73339f578426ef6234c28")
+	check("Mineral banks recur in distant districts",counts.metal >= 10 and counts.coal >= 10 and counts.slate >= 10)
+	check("Mineral banks preserve the start, expedition and clearance",clearance_ok)
+	check("Mineral district placement is deterministic",repeatable)
 	check("One square kilometre contains both quarry and timber",counts.wood > 10000 and counts.stone > 1200)
+	for kind: String in nearest:
+		await check_bank_streaming(land, nearest[kind], kind)
 	var collision: StaticBody3D = world.get_node("SnowGround_NoPaintedPaths")
 	var shape: BoxShape3D = collision.find_children("*","CollisionShape3D",false,false)[0].shape
 	check("Ground collider is 1,024 metres square",shape.size.x == 1024.0 and shape.size.z == 1024.0)
@@ -84,7 +142,7 @@ func run() -> void:
 		await place(row.position+Vector3(1.45,0,.42))
 		live=world.lifecycle.loaded.get(row.id)
 		check("Revisiting cannot restore "+row.kind+" early",is_instance_valid(live) and not world.is_source_available(row.id))
-		world.lifecycle.advance(world.lifecycle.wood_seconds+world.lifecycle.stone_seconds)
+		world.lifecycle.advance(world.lifecycle.wood_seconds+world.lifecycle.mining_seconds)
 		check("Resource becomes harvestable after its timer "+row.kind,world.is_source_available(row.id) and live.phase in ["rooted","seated"])
 	await place(Vector3(16,0,-4))
 	# A real virtual stick travels past the old prototype boundary.
@@ -110,8 +168,7 @@ func run() -> void:
 	check("Actual walk on solid snow",not hit.is_empty() and absf(hit.position.y)<.02)
 	report["checks"]=checks
 	print("WORLD_LANDSCAPE_QA "+JSON.stringify(report))
-	world.sound.stop_playback()
-	await frames(25)
+	await preload("res://tests/lifecycle_test_profile.gd").drain_field_audio(self, world)
 	world.queue_free()
 	await frames(6)
 	quit(1 if false in checks.values() else 0)

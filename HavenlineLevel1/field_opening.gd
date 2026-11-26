@@ -4,6 +4,7 @@ const Progress = preload("res://field_progression.gd")
 const OfferFloor = preload("res://field_offer_floor.gd")
 const Inventory = preload("res://field_inventory.gd")
 const Carry = preload("res://field_carry.gd")
+const MiningResources = preload("res://mining_resources.gd")
 const FieldArt = preload("res://field_art.gd")
 const FieldEnvironment = preload("res://field_environment.gd")
 const FieldEnemy = preload("res://field_enemy.gd")
@@ -152,7 +153,9 @@ func _close_field() -> void:
 	set_physics_process(false)
 	sound.stop_playback()
 	# Let the audio server release queued streaming voices before exiting.
-	await get_tree().create_timer(.24,true,false,true).timeout
+	var release_at := Time.get_ticks_msec() + 240
+	while Time.get_ticks_msec() < release_at:
+		await get_tree().process_frame
 	if is_inside_tree(): get_tree().quit()
 
 func _exit_tree() -> void:
@@ -210,29 +213,34 @@ func retire_tree(tree: ResourceTreeScript, animate: bool) -> void:
 func is_source_available(id: String) -> bool:
 	return not lifecycle.cooling.has(id)
 
+func make_mineral_model(kind: String) -> Node3D:
+	var scene: PackedScene = SNOW_STONE if kind == "stone" else load(FieldArt.PATHS[kind])
+	var mount := Node3D.new()
+	var model := scene.instantiate() as Node3D
+	mount.add_child(model)
+	mount.scale = Vector3.ONE * MiningResources.bank_scale(kind)
+	var part := mount.find_children("*", "MeshInstance3D", true, false)[0] as MeshInstance3D
+	part.position.y = -part.mesh.get_aabb().position.y
+	return mount
+
 func add_resource_source(id: String, kind: String, at: Vector2, variant := 0) -> Node3D:
 	if is_instance_valid(lifecycle.loaded.get(id)): return lifecycle.loaded[id]
 	if kind=="wood":
 		return _add_pine(at,clampi(variant,0,CONIFERS.size()-1),id)
-	if kind!="stone" or id.is_empty(): return null
+	if kind not in MiningResources.KINDS or id.is_empty(): return null
 	var rock := ResourceRockScript.new()
-	rock.name="HarvestStone"
+	rock.name="Harvest" + kind.capitalize()
 	rock.position=Vector3(at.x,0,at.y)
 	add_child(rock,true)
-	var mount := Node3D.new()
+	var mount := make_mineral_model(kind)
 	rock.add_child(mount)
-	mount.scale=Vector3.ONE*ResourceRockScript.BANK_SCALE
-	var model := SNOW_STONE.instantiate() as Node3D
-	mount.add_child(model)
-	var part := model as MeshInstance3D
-	if not part: part=model.find_children("*","MeshInstance3D",true,false)[0]
-	rock._mesh=part
-	part.position.y=-part.mesh.get_aabb().position.y
+	var part := mount.find_children("*", "MeshInstance3D", true, false)[0] as MeshInstance3D
+	rock._mesh = part
 	if not trunk_cache.has(part.mesh): trunk_cache[part.mesh]=part.mesh.generate_triangle_mesh()
 	rock.attach_bank_body()
 	surfaces[rock]=[part,trunk_cache[part.mesh]]
 	rocks.append(rock)
-	lifecycle.register(id,"stone",rock)
+	lifecycle.register(id,kind,rock)
 	return rock
 
 func unload_resource_source(id: String) -> void:
@@ -294,7 +302,6 @@ func accept_contact(body: Node3D) -> bool:
 	elif body in rocks and body != resource_rock:
 		rock_input_sequence += 1
 		landed=body.strike(ResourceRockScript.ROCK_ID,rock_input_sequence,actor.position,body.position-actor.position)
-		if landed: body._mesh.position.y=-body._mesh.mesh.get_aabb().position.y*body._mesh.scale.y
 	else:
 		landed = super(body)
 	if not landed:
@@ -303,11 +310,12 @@ func accept_contact(body: Node3D) -> bool:
 		lifecycle.record_strike(body)
 		_event("impact_wood",body.global_position)
 	elif body in rocks:
+		var kind: String = body.get_meta("resource_kind")
 		lifecycle.record_strike(body)
-		_event("impact_stone",body.global_position)
+		_event("impact_"+kind,body.global_position)
 		if body.phase == "mined":
-			_event("deplete_stone",body.global_position)
-			_make_drops("stone",body.global_position,3)
+			_event("deplete_"+kind,body.global_position)
+			_make_drops(kind,body.global_position,3)
 			lifecycle.deplete(body)
 			_checkpoint_lifecycle()
 	else:
@@ -318,7 +326,6 @@ func accept_contact(body: Node3D) -> bool:
 func step_tree(dt: float) -> void:
 	tree_button.hide()
 	if persist_blocked or not field_ready: return
-	lifecycle.advance(dt)
 	for rock in rocks:
 		rock.set_meta("orbit_reach",SURFACE_REACH*character_kit.reach_scale)
 		if rock != resource_rock: rock.advance(dt)
@@ -454,6 +461,7 @@ func step_technical_gates(dt: float) -> void:
 func _physics_process(dt: float) -> void:
 	if not field_ready: return
 	simulation_time += dt
+	if not persist_blocked: lifecycle.advance(dt)
 	forest.advance(dt)
 	var last_turn: int = character_kit.turn_id
 	if reset_time > 0:

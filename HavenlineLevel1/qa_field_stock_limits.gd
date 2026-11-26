@@ -4,7 +4,7 @@ const Carry = preload("res://field_carry.gd")
 const Ledger = preload("res://field_inventory.gd")
 const Layout = preload("res://field_stock_layout.gd")
 const Art = preload("res://field_art.gd")
-const CAP := {"wood":1, "stone":2, "meat":7}
+const CAP := {"wood":1, "stone":2, "meat":7,"coal":2,"slate":2,"metal":2}
 const COUNT := 120
 var failures: Array[String] = []
 var arrived := 0
@@ -28,7 +28,9 @@ func check_display(carry: Carry, kind: String, count: int) -> void:
 
 func run() -> void:
 	var ledger := Ledger.new()
-	ledger.configure({"bulk":{"wood":COUNT, "stone":COUNT, "meat":COUNT}})
+	var cost := {}
+	for kind: String in Ledger.KINDS: cost[kind]=COUNT
+	ledger.configure({"bulk":cost})
 	var carry := Carry.new()
 	var actor := Node3D.new()
 	root.add_child(actor)
@@ -71,6 +73,6 @@ func run() -> void:
 			check_display(carry,kind,amount)
 			check(carry.pieces["storage/"+kind] == pool,kind+" stable million-unit pool")
 		await process_frame
-	check(arrived==COUNT*6 and ledger.complete("bulk"),"720 physical arrivals and exact mixed receipt")
+	check(arrived==COUNT*2*Ledger.KINDS.size() and ledger.complete("bulk"),"one physical arrival per deposited or paid unit")
 	print(JSON.stringify({"arrivals":arrived,"full_visual_instances":CAP,"max_balance_tested":1000000,"failures":failures}))
 	quit(0 if failures.is_empty() else 1)

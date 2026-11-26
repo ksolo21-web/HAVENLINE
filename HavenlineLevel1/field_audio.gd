@@ -37,6 +37,7 @@ const CUES := {
 	"tower_fire": [1,.25,-6.0,2], "tower_hit": [1,.16,-4.8,2]
 }
 const ALIASES := {"attack":"enemy_attack","wolf_attack":"enemy_attack"}
+const ORE_PITCH := {"metal": 1.19, "coal": 0.84, "slate": 1.08}
 const LOOP_NAMES := ["field_score","camp_score","threat_score","wind","fire"]
 const SETTINGS_PATH := "user://field-audio.cfg"
 
@@ -210,6 +211,9 @@ func _available_voice(priority: int) -> int:
 
 func emit_event(requested: String, world_position := NO_SOURCE) -> bool:
 	var cue: String = ALIASES.get(requested,requested)
+	var kind := requested.get_slice("_", 1)
+	if ORE_PITCH.has(kind):
+		cue = requested.trim_suffix(kind) + "stone"
 	if not CUES.has(cue):
 		push_warning("Unknown field audio event: "+requested)
 		rejected_event_count += 1
@@ -224,7 +228,8 @@ func emit_event(requested: String, world_position := NO_SOURCE) -> bool:
 	var serial := int(_counts.get(cue,0))
 	var variants: Array = _bank[cue]
 	voice.stream = variants[serial % variants.size()]
-	voice.pitch_scale = [1.0,.968,1.026][serial%3] if int(params[3]) < 3 else 1.0
+	var ore_pitch: float = ORE_PITCH.get(kind, 1.0)
+	voice.pitch_scale = ore_pitch * ([1.0,.968,1.026][serial%3] if int(params[3]) < 3 else 1.0)
 	var delta := world_position-_listener if world_position.is_finite() else Vector3.ZERO
 	var screen := get_viewport().get_visible_rect().size
 	voice.position = screen*.5 + Vector2(clampf(delta.x/12.0,-.75,.75)*screen.x*.5,0)

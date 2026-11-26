@@ -5,8 +5,11 @@ const PATHS := {
 	"stone": "res://assets/field/stone.glb",
 	"meat": "res://assets/field/meat.glb",
 	"wolf": "res://assets/field/hostile_wolf.glb",
+	"coal": "res://assets/field/coal.glb",
+	"metal": "res://assets/field/metal.glb",
+	"slate": "res://assets/field/slate.glb",
 }
-const WIDTHS := {"wood": .53, "stone": .40, "meat": .39, "wolf": 2.4}
+const WIDTHS := {"wood": .53, "stone": .40, "meat": .39, "wolf": 2.4, "coal": .39, "metal": .42, "slate": .47}
 static var source_bounds := {}
 
 static func _bounds(node: Node, parent_xform: Transform3D, found: Array[AABB]) -> void:

@@ -107,7 +107,7 @@ func stock_fixture() -> void:
 				ledger.payment(id,kind,false)
 		game._finish_purchase(id)
 	game._apply_hearth(true,false)
-	var stock := {"wood":7,"stone":4,"meat":3}
+	var stock := {"wood":7,"stone":4,"meat":3,"coal":2,"slate":5,"metal":6}
 	for kind: String in stock:
 		for i in stock[kind]:
 			ledger.collect("tree-test-stored-%s-%d" % [kind,i],kind)
@@ -135,7 +135,7 @@ func run() -> void:
 	prior.cooling={"starter-wood":21.5,"grove@10,20":13.8,"pine@77,55":21.1,"world1/4/-5/wood/1":15.,"world1/4/-5/stone/3":29.}
 	checks["load prior save"]=game.lifecycle.restore(prior)
 	checks["legacy loaded and unloaded wood capped to five"]=game.lifecycle.cooling["starter-wood"]==5. and game.lifecycle.cooling["grove@10,20"]==5. and game.lifecycle.cooling["pine@77,55"]==5. and game.lifecycle.cooling["world1/4/-5/wood/1"]==5.
-	checks["legacy stone duration retained"]=game.lifecycle.cooling["world1/4/-5/stone/3"]==29.
+	checks["legacy stone duration capped to five"]=game.lifecycle.cooling["world1/4/-5/stone/3"]==5.
 	print(JSON.stringify({"checks":checks,"evidence":evidence,"physics_hz":Engine.physics_ticks_per_second}))
 	game.sound.stop_playback()
 	game.queue_free()

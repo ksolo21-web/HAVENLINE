@@ -6,6 +6,9 @@ const OPENING_RADIUS := 20.5
 const WORLD_SEED := 860342
 const INTERACT_DISTANCE := 5.0
 const RELEASE_DISTANCE := 8.0
+const DISTRICT_MINERALS := ["metal", "coal", "slate"]
+const FIRST_MINERAL_RADIUS := 128.0
+const BANK_CLEARANCE := 3.6
 const PINE_SCALE := 0.69
 const QUARRY_SCALE := preload("res://resource_rock.gd").BANK_SCALE
 
@@ -28,6 +31,10 @@ func install(world: Node3D) -> void:
 	for pine: PackedScene in host.CONIFERS:
 		templates.append(_template(pine, false))
 	templates.append(_template(host.SNOW_STONE, true))
+	for kind: String in DISTRICT_MINERALS:
+		var bank: Node3D = host.make_mineral_model(kind)
+		templates.append(_mineral_template(bank))
+		bank.free()
 	_build_outer_drifts(float(host.layout.snow_extent_half))
 	_update_neighborhood()
 
@@ -97,6 +104,24 @@ func _template(scene: PackedScene, stone: bool) -> Array:
 	source.free()
 	return parts
 
+# Build from the same normalized, grounded model mounted on the live resource.
+# Preserve each surface's effective material, including node-level overrides.
+func _mineral_template(bank: Node3D) -> Array:
+	var meshes: Array[MeshInstance3D] = []
+	host.meshes(bank, meshes)
+	var parts := []
+	for part in meshes:
+		var local := part.transform
+		var ancestor := part.get_parent()
+		while ancestor is Node3D and ancestor != bank.get_parent():
+			local = ancestor.transform * local
+			ancestor = ancestor.get_parent()
+		var mesh: Mesh = part.mesh.duplicate()
+		for surface in mesh.get_surface_count():
+			mesh.surface_set_material(surface, host.graphics.filtered(part.get_active_material(surface)))
+		parts.append({"mesh": mesh, "local": local})
+	return parts
+
 func _physics_process(dt: float) -> void:
 	if host == null: return
 	next_scan -= dt
@@ -150,7 +175,10 @@ func _load_chunk(key: Vector2i) -> void:
 	root.position = Vector3(key.x*CHUNK_METRES, 0, key.y*CHUNK_METRES)
 	add_child(root)
 	var rows := describe_chunk(key)
-	var chunk := {"node":root, "sources":rows, "batches":[[], [], [], []]}
+	var batches := []
+	for variant in templates.size():
+		batches.append([])
+	var chunk := {"node":root, "sources":rows, "batches":batches}
 	for variant in templates.size():
 		var count := 0
 		for row in rows:
@@ -173,7 +201,7 @@ func _load_chunk(key: Vector2i) -> void:
 
 func _set_proxy(chunk: Dictionary, row: Dictionary, shown: bool) -> void:
 	var remaining_scale := 1.0
-	if row.kind == "stone":
+	if row.kind != "wood":
 		remaining_scale -= .18 * int(host.lifecycle.partial.get(row.id,0))
 	var basis := Basis(Vector3.UP, row.yaw).scaled(Vector3.ONE * float(row.scale) * remaining_scale)
 	var local: Vector3 = row.position - chunk.node.position
@@ -210,7 +238,29 @@ func describe_chunk(key: Vector2i) -> Array[Dictionary]:
 			if rng.randf() > density or not _outside_opening(at): continue
 			if rocks.any(func(p: Vector2): return p.distance_squared_to(at)<9.0): continue
 			rows.append(_source(key, "wood", z*8+x, at, rng.randi_range(0, 2), rng))
+	_append_district_bank(key, origin, rows)
 	return rows
+
+func _append_district_bank(key: Vector2i, origin: Vector2, rows: Array[Dictionary]) -> void:
+	# Append from an independent RNG stream so legacy stone and timber positions,
+	# yaw, size and persistent IDs are identical even when a new bank is skipped.
+	var rng := RandomNumberGenerator.new()
+	rng.seed = ("mineral/%d/%d/%d" % [WORLD_SEED, key.x, key.y]).sha256_text().left(15).hex_to_int()
+	if rng.randf() >= 0.40:
+		return
+	# Adjacent cells share a predominant bed across a 96 m geological district.
+	var bed := Vector2i(floori(key.x / 3.0), floori(key.y / 3.0))
+	var variant := ("bed/%d/%d/%d" % [WORLD_SEED, bed.x, bed.y]).sha256_text().left(8).hex_to_int() % DISTRICT_MINERALS.size()
+	for attempt in 12:
+		# Edge inset also protects every neighboring chunk's existing trees.
+		var at := origin + Vector2(rng.randf_range(5.0, 27.0), rng.randf_range(5.0, 27.0))
+		if at.length_squared() < FIRST_MINERAL_RADIUS * FIRST_MINERAL_RADIUS:
+			continue
+		var pos := Vector3(at.x, 0.0, at.y)
+		if rows.any(func(row: Dictionary): return pos.distance_squared_to(row.position) < BANK_CLEARANCE * BANK_CLEARANCE):
+			continue
+		rows.append(_source(key, DISTRICT_MINERALS[variant], 0, at, 4 + variant, rng))
+		return
 
 func _source(key: Vector2i, kind: String, i: int, at: Vector2, variant: int, rng: RandomNumberGenerator) -> Dictionary:
 	return {"id":"world1/%d/%d/%s/%d" % [key.x,key.y,kind,i], "kind":kind,

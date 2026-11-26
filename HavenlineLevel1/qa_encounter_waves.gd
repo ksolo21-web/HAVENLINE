@@ -49,4 +49,5 @@ func run() -> void:
 		if field.get_tree().get_nodes_in_group("swirl_hostiles").size()>0 or field.tracks.living.size()!=1:ok=false
 	var summary={"passed":ok and total==deaths and duplicate_loot==0 and peak<=4 and alphas>0 and alphas<200 and e.wave==starting_wave+200,"native_waves":e.wave-starting_wave,"actual_wolves":total,"actual_deaths":deaths,"actual_alphas":alphas,"peak_live":peak,"duplicate_loot":duplicate_loot,"orphan_wolves":field.get_tree().get_nodes_in_group("swirl_hostiles").size(),"remaining_trackers":field.tracks.living.size()}
 	print("ENCOUNTER_STRESS ",JSON.stringify(summary))
+	await preload("res://tests/lifecycle_test_profile.gd").drain_field_audio(self, field)
 	quit(0 if summary.passed else 1)

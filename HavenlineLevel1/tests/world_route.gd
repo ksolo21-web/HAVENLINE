@@ -37,7 +37,7 @@ func read_field() -> Dictionary:
 	state.erase("world_state")
 	if token_last!=field.inventory.collected.size():
 		token_last=field.inventory.collected.size()
-		token_totals={"wood":0,"stone":0,"meat":0}
+		token_totals=field.Inventory.EMPTY.duplicate()
 		for kind in field.inventory.collected.values():token_totals[kind]+=1
 	state["unique_token_counts"]=token_totals.duplicate()
 	state.erase("collected")

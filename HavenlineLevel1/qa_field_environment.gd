@@ -74,12 +74,12 @@ func run() -> void:
 	world.carry.advance(.35)
 	checks["shelf empties and east expansion receives exactly one unit"] = world.inventory.stored.wood==0 and world.inventory.paid.expansion_2.wood==1 and world.depot.labels.wood.text=="0" and not displayed.visible
 	var counts := {"wood":1000000,"stone":100001,"meat":101}
-	world.inventory.stored = counts
+	world.inventory.stored.merge(counts,true)
 	world.depot.refresh(true)
 	world.carry.sync()
 	checks["a million wood and overflow stone and meat stay inside bounded bins"] = world.carry.pieces["storage/wood"].size()==1 and world.carry.pieces["storage/stone"].size()==2 and world.carry.pieces["storage/meat"].size()==7
 	checks["bay labels retain full balances"] = world.depot.labels.wood.text=="1000000" and world.depot.labels.stone.text=="100001" and world.depot.labels.meat.text=="101"
-	world.inventory.stored = {"wood":0,"stone":0,"meat":0}
+	world.inventory.stored = world.Inventory.EMPTY.duplicate()
 	world.depot.refresh(true)
 	camp.set_upgrade_payment({"stone":0,"meat":0})
 	checks["paid upgrade retires its ground inlay"] = not camp.upgrade_anchor.is_visible_in_tree()

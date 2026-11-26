@@ -6,14 +6,18 @@ var build_order: Array = []
 var legacy_axes := false
 var world_state := {}
 
-const KINDS := ["wood", "stone", "meat"]
+const ORIGINAL_KINDS := ["wood", "stone", "meat"]
+const MINERALS := ["coal", "slate", "metal"]
+const KINDS := ["wood", "stone", "meat", "coal", "slate", "metal"]
+const EMPTY := {"wood":0, "stone":0, "meat":0, "coal":0, "slate":0, "metal":0}
+const TITLES := {"wood":"Wood", "stone":"Stone", "meat":"Meat", "coal":"Coal", "slate":"Slate", "metal":"Metal ore"}
 const MAX_COUNT := 1000000
 
 var costs := {}
 var paid := {}
 var collected := {}
-var carried := {"wood": 0, "stone": 0, "meat": 0}
-var stored := {"wood": 0, "stone": 0, "meat": 0}
+var carried := EMPTY.duplicate()
+var stored := EMPTY.duplicate()
 
 func configure(offers: Dictionary) -> bool:
 	if not costs.is_empty() or offers.is_empty():
@@ -60,7 +64,8 @@ func payment(id: String, kind: String, from_storage: bool) -> bool:
 	return true
 
 func storage_open(kind: String) -> bool:
-	return not staged or complete("storage_" + kind)
+	if kind not in KINDS: return false
+	return not staged or complete("storage_stone" if kind in MINERALS else "storage_" + kind)
 
 func offer_open(id: String) -> bool:
 	if not costs.has(id) or complete(id): return false
@@ -89,7 +94,7 @@ func complete(id: String) -> bool:
 func snapshot() -> Dictionary:
 	var state := {"version": 1, "collected": collected.duplicate(), "carried": carried.duplicate(), "stored": stored.duplicate(), "paid": paid.duplicate(true)}
 	if staged:
-		state.version = 2
+		state.version = 3
 		state.build_order = build_order.duplicate()
 		state.legacy_axes = legacy_axes
 		state.world = world_state.duplicate(true)
@@ -103,7 +108,7 @@ static func _natural(value: Variant) -> bool:
 func restore(data: Variant) -> bool:
 	if not data is Dictionary: return false
 	var old: bool = data.get("version") == 1
-	if (old and data.size() != 5) or (not old and (not staged or data.get("version") != 2 or data.size() != 8)): return false
+	if (old and data.size() != 5) or (not old and (not staged or (data.get("version") != 2 and data.get("version") != 3) or data.size() != 8)): return false
 	for key in ["collected", "carried", "stored", "paid"]:
 		if not data.get(key) is Dictionary:
 			return false
@@ -122,15 +127,20 @@ func restore(data: Variant) -> bool:
 		old_axes=data.legacy_axes
 	if data.collected.size() > MAX_COUNT or incoming.size() != costs.size():
 		return false
-	var balances := {"wood": 0, "stone": 0, "meat": 0}
+	# Older field saves contain exactly three balances. Expand both tables
+	# together, after validating their original keys and conservation.
+	var types: Array = KINDS
+	if data.version==2 or (old and data.carried.size()==ORIGINAL_KINDS.size()):
+		types=ORIGINAL_KINDS
+	var balances := EMPTY.duplicate()
 	for token in data.collected:
-		if not token is String or token.is_empty() or data.collected[token] not in KINDS:
+		if not token is String or token.is_empty() or data.collected[token] not in types:
 			return false
 		balances[data.collected[token]] += 1
 	for stock in [data.carried, data.stored]:
-		if stock.size() != KINDS.size():
+		if stock.size() != types.size():
 			return false
-		for kind in KINDS:
+		for kind in types:
 			if not _natural(stock.get(kind)):
 				return false
 			balances[kind] -= int(stock[kind])
@@ -174,8 +184,8 @@ func restore(data: Variant) -> bool:
 		world_state={} if old else data.world.duplicate(true)
 	collected = data.collected.duplicate()
 	for kind in KINDS:
-		carried[kind] = int(data.carried[kind])
-		stored[kind] = int(data.stored[kind])
+		carried[kind] = int(data.carried.get(kind,0))
+		stored[kind] = int(data.stored.get(kind,0))
 	for id in costs:
 		for kind in costs[id]:
 			paid[id][kind] = int(incoming[id][kind])

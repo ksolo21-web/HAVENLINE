@@ -7,7 +7,7 @@ counts=Counter(e['event'] for e in ee)
 assert all(b['tick']==a['tick']+1 for a,b in pairwise(rr))
 assert all(r['same_camera'] for r in rr)
 assert all(not r['field']['save_blocked'] for r in rr)
-assert rr[0]['field']['carried']=={'wood':0,'stone':0,'meat':0} and not rr[0]['camp_visible']
+assert not any(rr[0]['field']['carried'].values()) and not rr[0]['camp_visible']
 assert counts['impact_wood']>=6 and counts['deplete_wood']>=2
 assert counts['impact_stone']>=3 and counts['deplete_stone']>=1
 assert counts['hit']>=3 and counts['defeat']>=1 and counts['enemy_attack']>=1 and counts['player_hurt']>=1
@@ -16,7 +16,7 @@ assert counts['purchase']==2 and counts['build']==1 and counts['reveal']==1
 for kind,n in [('wood',3),('stone',3),('meat',2)]:
  assert counts['deposit_'+kind]>=n
  assert counts['spend_'+kind]=={'wood':3,'stone':2,'meat':1}[kind]
-assert max(min(r['field']['carried'].values()) for r in rr)>=2
+assert max(min(r['field']['carried'][k] for k in ('wood','stone','meat')) for r in rr)>=2
 busy=next(r for r in rr if r['stage']=='Read all three carried stacks')
 floor=next(r for r in rr if r['stage']=='Three dedicated floor stacks')
 items=busy['field']['vis_items']
@@ -50,7 +50,7 @@ for gate,axis,ortho,line,coordinate in [('gate-south',2,0,4,0),('gate-east',0,2,
   d='outward' if end>start else 'inward'
   legs.add(d);crossings.append({'gate':gate,'direction':d,'physics_s':round((a['tick']+t)/60.,3),'opening_center_offset_m':round(cross-coordinate,3)})
  assert legs=={'outward','inward'},(gate,legs)
-end=rr[-1]['field'];assert end['tool_count']==3 and end['stored']=={k:n-{'wood':0,'stone':2,'meat':1}[k] for k,n in floor['field']['stored'].items()} and end['carried']=={'wood':0,'stone':0,'meat':0} and end['paid']=={'center_hearth':{'wood':3},'orbit_upgrade':{'stone':2,'meat':1}}
+end=rr[-1]['field'];assert end['tool_count']==3 and end['stored']=={k:n-{'stone':2,'meat':1}.get(k,0) for k,n in floor['field']['stored'].items()} and not any(end['carried'].values()) and end['paid']=={'center_hearth':{'wood':3},'orbit_upgrade':{'stone':2,'meat':1}}
 from math import dist
 wolf_metrics={}
 for key in ['windup','lunge','recover']:

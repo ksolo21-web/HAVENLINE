@@ -32,13 +32,15 @@ The player has four HP. Outside camp, wolves approach, brace and lunge. A normal
 | Snowfield | 1,024 × 1,024 m, deterministic seed 860342 |
 | Streaming | 32 m cells, at most 3 × 3 cells resident. Nearby trees and quarries become individual interactable sources |
 | Wood | 5 played seconds after depletion, including the final 0.45-second return animation |
-| Stone | 32 played seconds after depletion |
+| Stone, metal ore, coal and slate | Three pickaxe contacts release three units of the same mineral. A bank returns five played seconds after depletion. During the final 0.45 seconds the bank becomes visible and grows back to full size. Collision and mining resume at five seconds. |
 | Meat | 2 per normal wolf or 5 per alpha. Replenished through encounters |
 | Encounter interval | 24 played seconds. A pack requests 2–4 wolves, up to 4 live wolves globally |
 | Boss | 18% chance per successful encounter. One alpha can replace a pack member, at 1.58× ordinary size and 8 HP versus 3 |
 | Tower | 13 m range, 1.65 s reload. The bolt deals damage on arrival |
 | Loose drops | Up to 72, with a 100 s lifetime |
 | Tracks | Boot and paw impressions on snow, with larger paws for the alpha. Tracks fade over 17 s, with a maximum of 720 active and 96 per 12 m cell |
+
+The starter quarry and outer stone quarries use the same timer as the metal ore, coal and slate districts beyond 128 m. The reinforced northwest storehouse accepts each mineral in its own bay. Previous saves keep their remaining cooldown up to the new five-second maximum.
 
 Resource and encounter timers use simulation time. Leaving a region preserves partial harvests and remaining cooldowns. Closing and reopening restores purchases, stocks, pack, player position and health, loose drops and remaining encounter time. A fallen player recovers through the normal recovery sequence. The opening prices and rates above are gameplay tuning decisions. The locked reference clips guide timing, camera proportions, and the order of visual feedback. Source comparisons are under `Docs/Design/ReferenceVideoLock/2026-11-26-field-loop/`.
 

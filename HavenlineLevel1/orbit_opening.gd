@@ -163,7 +163,7 @@ func selected_tool() -> String:
 			var distance := actor.global_position.distance_squared_to(body.global_position)
 			if distance < nearest:
 				nearest = distance
-				result = "pickaxe" if body == resource_rock or body.get_meta("resource_kind","")=="stone" else "axe"
+				result = "pickaxe" if body is ResourceRockScript else "axe"
 	return result
 
 func accept_contact(body: Node3D) -> bool:
@@ -174,8 +174,6 @@ func accept_contact(body: Node3D) -> bool:
 	if body == resource_rock:
 		rock_input_sequence += 1
 		var struck: bool = body.strike(ResourceRockScript.ROCK_ID, rock_input_sequence, actor.global_position, facing)
-		if struck:
-			body._mesh.position.y = -body._mesh.mesh.get_aabb().position.y * body._mesh.scale.y
 		return struck
 	return body.take_swirl_hit(character_kit.turn_id)
 

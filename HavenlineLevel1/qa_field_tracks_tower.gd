@@ -155,8 +155,7 @@ func run():
 	print("TRACK_TOWER ",JSON.stringify(results))
 	if not save_dir.is_empty():
 		var f:=FileAccess.open(save_dir.path_join("regression.json"),FileAccess.WRITE);f.store_string(JSON.stringify(results,"  "))
-	game.sound.stop_playback()
-	for i in 22:await physics_frame
+	await preload("res://tests/lifecycle_test_profile.gd").drain_field_audio(self, game)
 	game.queue_free()
 	for i in 5:await process_frame
 	quit(0 if ok else 1)

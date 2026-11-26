@@ -49,7 +49,7 @@ var reveal_tween: Tween
 
 func receiver_position(kind: String) -> Vector2:
 	if kind == "upgrade": return UPGRADE
-	if kind in ["wood","stone","meat"]: return Vector2(-3.60,-1.18)
+	if kind in world.Inventory.KINDS: return Vector2(-3.60,-1.18)
 	return BUY
 
 func install(host: Node3D) -> void:
