@@ -1,0 +1,16 @@
+{
+  "scope": "future detached interface only; no wiring, authority, persistence, or sound",
+  "inputs": {
+    "gate_channel": {"publisher": "registered opening-scene post-advance observer, non-mutating", "value": ["live_scene_epoch", "publication_order", "completed_physics_tick", "bound_gate_id", "transition=settled-close", "epoch_class=writer-live"]},
+    "hearth_channel_unchanged": {"publisher": "existing successful first purchase authority", "rule": "purchase proof is not accepted as gate input; receipt is only a publisher-side gate eligibility predicate"}
+  },
+  "consumer": {
+    "guard": "registered local publisher in same live scene only; never import playback stream, storage state, or replay/test transcript; epoch seed arms identity but never plays",
+    "dedupe_key": ["live_scene_epoch", "gate-channel", "bound_gate_id", "completed_physics_tick"],
+    "strict_order": "per scene, non-reused publication_order, producer-serialized after physics; if order is stale, duplicate, or discontinuous then drop and disarm, never buffer/replay",
+    "success": "one immutable SFX intent keyed level1.gate.close.settled plus gate ID, identity key and ordering; intent is not an audio receipt or instruction to mutate game",
+    "suppressed": ["unregistered publisher", "new or cold scene seed", "held/resume/open motion", "paid hearth event on distinct channel", "duplicate/stale event", "mute or disabled bus; consume once and never replay when unmuted", "no valid mapped approved cue"]
+  },
+  "required_before_use": ["separately reviewed exact live publisher", "separately reviewed compatible owned SFX consumer with gate cue allowlist", "separate approved sound and device proof"],
+  "t54": "locked"
+}
