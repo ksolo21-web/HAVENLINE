@@ -1,0 +1,137 @@
+{
+  "runtime": "Godot 4.7.2.stable.official.ed1daf0bf (Linux x86_64)",
+  "first_case": "Unpaced --headless --fixed-fps 60 --audio-driver Dummy; initial input was walking toward the south gate. SIGSEGV at ~tick 26.",
+  "thread": "ELF unwind bounds and compiler diagnostics identify StringName copy under native AudioServer::_mix_step and _driver_process. The Linux crash handler forwards NOTIFICATION_CRASH to SceneTree on the failing audio thread. SceneTree propagates it to the root, explaining the secondary cross-thread notification error.",
+  "trigger": "Exact trigger undetermined. No recurrence in the full baseline 60 fps or current 60/16 fps replays, or the additional 12 initial-approach trials. No engine or gameplay crash repair is claimed.",
+  "sources": [
+    "https://github.com/godotengine/godot/blob/4.7.2-stable/platform/linuxbsd/crash_handler_linuxbsd.cpp#L109",
+    "https://github.com/godotengine/godot/blob/4.7.2-stable/scene/main/scene_tree.cpp#L925",
+    "https://github.com/godotengine/godot/blob/4.7.2-stable/servers/audio/audio_server.cpp#L449"
+  ],
+  "crash_log": "production-replay/godot.log",
+  "stack_resolution": "crash-frames.txt",
+  "full_ordinary_input_replays": {
+    "production-baseline60": {
+      "physics_samples": 4323,
+      "verified_receipts": "receipts.json",
+      "phases": 31
+    },
+    "production-current60-retry": {
+      "physics_samples": 2288,
+      "verified_receipts": "receipts.json",
+      "phases": 31
+    },
+    "production-replay-16": {
+      "physics_samples": 2288,
+      "verified_receipts": "receipts.json",
+      "phases": 31
+    }
+  },
+  "additional_three_phase_trials": [
+    {
+      "case": "old-unpaced",
+      "trial": 1,
+      "exit": 0,
+      "crash": false,
+      "thread_error": false,
+      "reached_end": true
+    },
+    {
+      "case": "new-unpaced",
+      "trial": 1,
+      "exit": 0,
+      "crash": false,
+      "thread_error": false,
+      "reached_end": true
+    },
+    {
+      "case": "new-paced",
+      "trial": 1,
+      "exit": 0,
+      "crash": false,
+      "thread_error": false,
+      "reached_end": true
+    },
+    {
+      "case": "old-unpaced",
+      "trial": 2,
+      "exit": 0,
+      "crash": false,
+      "thread_error": false,
+      "reached_end": true
+    },
+    {
+      "case": "new-unpaced",
+      "trial": 2,
+      "exit": 0,
+      "crash": false,
+      "thread_error": false,
+      "reached_end": true
+    },
+    {
+      "case": "new-paced",
+      "trial": 2,
+      "exit": 0,
+      "crash": false,
+      "thread_error": false,
+      "reached_end": true
+    },
+    {
+      "case": "old-unpaced",
+      "trial": 3,
+      "exit": 0,
+      "crash": false,
+      "thread_error": false,
+      "reached_end": true
+    },
+    {
+      "case": "new-unpaced",
+      "trial": 3,
+      "exit": 0,
+      "crash": false,
+      "thread_error": false,
+      "reached_end": true
+    },
+    {
+      "case": "new-paced",
+      "trial": 3,
+      "exit": 0,
+      "crash": false,
+      "thread_error": false,
+      "reached_end": true
+    },
+    {
+      "case": "old-unpaced",
+      "trial": 4,
+      "exit": 0,
+      "crash": false,
+      "thread_error": false,
+      "reached_end": true
+    },
+    {
+      "case": "new-unpaced",
+      "trial": 4,
+      "exit": 0,
+      "crash": false,
+      "thread_error": false,
+      "reached_end": true
+    },
+    {
+      "case": "new-paced",
+      "trial": 4,
+      "exit": 0,
+      "crash": false,
+      "thread_error": false,
+      "reached_end": true
+    }
+  ],
+  "settlement_suite": {
+    "processes": 16,
+    "assertions": 208,
+    "pass": true,
+    "legacy_source": "/workspace/scratch/character-fidelity/Game",
+    "source": "/workspace/scratch/fold7-playtest/Game",
+    "receipt": "settlement-dev/Completion-results.json"
+  },
+  "separate_graphics_probe": "Host killed a separate X11/llvmpipe process with exit 137 during concurrent validation. No complete graphical result is claimed from this probe."
+}

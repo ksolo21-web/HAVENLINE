@@ -1,0 +1,27 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+QA {"data":{"action":"walk","label":"Reach the south gate from the earned hunt","p":[0.0,7.12],"timeout":15.0,"tol":0.16},"event":"enter","phase":"Reach the south gate from the earned hunt","t":0.0,"tick":0}
+ERROR: /root: The caller thread can't call the function `propagate_notification()` on this node. Use `call_deferred()` or `call_deferred_thread_group()` instead.
+   at: propagate_notification (scene/main/node.cpp:2578)
+
+================================================================
+handle_crash: Program crashed with signal 11
+Engine version: Godot Engine v4.7.2.stable.official (ed1daf0bf001b61586d9930840f2f1394092c079)
+Dumping the backtrace. Please include this when reporting the bug on: https://github.com/godotengine/godot/issues
+Load address: 7fe5af27e000
+
+QA {"data":{"audio_clock":0.366666666666667,"cue":"step_snow","voice":0},"event":"runtime_cue","phase":"Reach the south gate from the earned hunt","t":0.166666666666667,"tick":10}
+QA {"data":{"bus":"Field Effects","gain_db":-9.0,"path":"res://assets/audio/step_snow_1.wav","player":"/root/HavenlineFieldOpening/@Node@194/@AudioStreamPlayer2D@195"},"event":"audio_stream","phase":"Reach the south gate from the earned hunt","t":0.183333333333333,"tick":11}
+QA {"data":{"audio_clock":0.466666666666667,"cue":"tower_fire","voice":1},"event":"runtime_cue","phase":"Reach the south gate from the earned hunt","t":0.266666666666667,"tick":16}
+QA {"data":{"bus":"Field Effects","gain_db":-8.69233989715576,"path":"res://assets/audio/tower_fire.wav","player":"/root/HavenlineFieldOpening/@Node@194/@AudioStreamPlayer2D@196"},"event":"audio_stream","phase":"Reach the south gate from the earned hunt","t":0.283333333333333,"tick":17}
+[1] 7fe5af2bdd70 (main+3fd70) - /lib/x86_64-linux-gnu/libc.so.6(+0x3fd70) [0x7fe5af2bdd70]
+[2] 48f7c18 (godot+44f7c18) - godot() [0x48f7c18]
+[3] 3b19889 (godot+3719889) - godot() [0x3b19889]
+[4] 4d993d5 (godot+49993d5) - godot() [0x4d993d5]
+[5] 3b05157 (godot+3705157) - godot() [0x3b05157]
+[6] 4406195 (godot+4006195) - godot() [0x4406195]
+[7] 52e6c23 (godot+4ee6c23) - godot() [0x52e6c23]
+[8] 7fe5af3108bb (main+928bb) - /lib/x86_64-linux-gnu/libc.so.6(+0x928bb) [0x7fe5af3108bb]
+[9] 7fe5af38e370 (main+110370) - /lib/x86_64-linux-gnu/libc.so.6(__clone+0x40) [0x7fe5af38e370]
+-- END OF C++ BACKTRACE --
+================================================================
