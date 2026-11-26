@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T07:40:24Z",
+  "observed_at_utc": "2026-11-26T08:14:55Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -35,13 +35,13 @@
       "id": "wood-storage",
       "role": "Resource builder and reviewer",
       "state": "in_progress",
-      "result": "Verified two actual moving stock body poses. The same full-size log geometry clears them by ~29 mm in source analysis, with only ~4 mm above the clearance target. No live mount, transfer, full sweep or receiver is approved. Rear-East proposed seat has four exact source contacts in one pose.",
+      "result": "The same candidate pose for a full-size log clears 77 stock run samples (min 28.04 mm) and five stop/early unloaded Idle samples (min 28.21 mm). Only a geometric screen; no hardware clearance or installation.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/51645a6dd552e2f38655308258c29a081b95891a",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/4e7bd8c8ba55f73eccedc8484e0d1954857ba8df",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/308f202cd83a097f28080df1762cd8d3259f707f"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/2bd499de74dd80af764e8fac8355813783be8e78",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/4278be2ab12ed5b5982b9604ace277e697dbbf05",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/46f34e0c9cc1cb5c0e092136b123731152a6053f"
       ],
-      "next": "Prepare a separate natural Run cycle diagnostic to check clearance against the full cycle; the eventual one-log receiver still needs an approved low supported shell.",
+      "next": "Check the same offset on the independently verified stock +Z direction-change samples. Keep real attachment, physical storage, and continuous clearance separate.",
       "role_ids": [
         "builder-resource-cooker"
       ]
@@ -115,9 +115,9 @@
       "role_id": "alfred",
       "state": "done",
       "title": "Prepared Bot Office feed data",
-      "summary": "Verified actual moving poses and a two-frame geometric log screen. Kept broader carry/receiver unapproved.",
-      "next": "Prepare an ordinary full-cycle diagnostic before authoring a load-bearing attachment.",
-      "updated_at_utc": "2026-11-26T07:40:24Z"
+      "summary": "One full stock run cycle and five stop/idle samples verified above the numeric clearance target, with only ~3 mm margin. A separate turn geometry screen is active.",
+      "next": "Recheck the fixed proposed pose across heading/animation changes before authoring any game carry mount.",
+      "updated_at_utc": "2026-11-26T08:14:55Z"
     },
     {
       "role_id": "rig-character",
@@ -188,17 +188,6 @@
     }
   ],
   "office_events": [
-    {
-      "id": "pad-mount-admission-reviewed-20261126",
-      "type": "handoff",
-      "at_utc": "2026-11-26T01:40:56Z",
-      "from_role_id": "level1-verifier",
-      "to_role_id": "builder-camp-pads",
-      "message": "Handoff summary: The stock bundle cannot show three individual arrivals. Keep purchase logic independent and test real per-log carry slots before adding the deck effect.",
-      "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/1fce69e1792a7042be05f6eb8ae1d0a202c7e1ab"
-      ]
-    },
     {
       "id": "rig-fastener-neutral-review-20261126",
       "type": "handoff",
@@ -417,6 +406,18 @@
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/51645a6dd552e2f38655308258c29a081b95891a",
         "https://github.com/ksolo21-web/HAVENLINE/commit/4e7bd8c8ba55f73eccedc8484e0d1954857ba8df"
+      ]
+    },
+    {
+      "id": "l1-full-run-idle-geometric-screen-20261126",
+      "type": "handoff",
+      "at_utc": "2026-11-26T08:14:55Z",
+      "from_role_id": "level1-verifier",
+      "to_role_id": "rig-character",
+      "message": "Run and stop/early idle sampled fit passed. About 3 mm margin means do not assume between-frame motion, turns, or loaded fit.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/2bd499de74dd80af764e8fac8355813783be8e78",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/4278be2ab12ed5b5982b9604ace277e697dbbf05"
       ]
     }
   ]
