@@ -1,0 +1,183 @@
+{
+  "rest_shape_max_delta_art_mm": 5.638624705450656e-06,
+  "regions": {
+    "L": {
+      "outsole_changed_rows": 1401,
+      "distinct_carrier_rows_nonzero": {
+        "heel": 229,
+        "midfoot": 885,
+        "ball": 973,
+        "toe": 426
+      },
+      "pivots_original_vertex_rows": [
+        25583,
+        13389,
+        26178,
+        26332
+      ],
+      "sole_weight_table_rows_sha256": "075c804ef5b3b4414d688fa00a6acc23e6e46fcea7927dc3ba47cb2ffa72a499"
+    },
+    "R": {
+      "outsole_changed_rows": 1278,
+      "distinct_carrier_rows_nonzero": {
+        "heel": 257,
+        "midfoot": 804,
+        "ball": 828,
+        "toe": 370
+      },
+      "pivots_original_vertex_rows": [
+        51,
+        31206,
+        4641,
+        30408
+      ],
+      "sole_weight_table_rows_sha256": "db0ee44f3346f103da2f1f1ab4336719f341438f4c4b474e0b6ec4562e02d920"
+    }
+  },
+  "hardware_source_rows": 2112,
+  "hardware_weights_immutable": true,
+  "walk_patch_results": [
+    {
+      "tick": 20,
+      "loaded": "L",
+      "foot_ball_face": 84176,
+      "barycentric": [
+        0.3333333333333333,
+        0.3333333333333333,
+        0.3333333333333333
+      ],
+      "ground_target_xyz_m": [
+        -2.9377106385784404,
+        0.2414671062049691,
+        11.58602600007579
+      ],
+      "sole_toe_pulse_degrees": 10,
+      "isolated_toe_max_world_mm": 24.262454353686515,
+      "toe_dominant_signed_median_up_mm": 19.355977449661303,
+      "heel_and_non_toe_rows_delta_mm": 0.0,
+      "target_rest_skin_base_limb_lengths_mm": [
+        210.76245607925858,
+        219.6704706117753
+      ],
+      "total_leg_reach_margin_mm": 32.028165334692105,
+      "forward_knee_projection_mm": 80.4510724879205,
+      "observed_ball_witness_xyz_residual_mm": [
+        0.046647035103042356,
+        0.1637556609049018,
+        0.0
+      ],
+      "L": {
+        "signed_min_mm": -25.738852019209197,
+        "min_face": 86763,
+        "true_0_2_mm_band": {
+          "fragment_count": 275,
+          "components": 2,
+          "max_connected_lateral_mm": 247.56997988827223,
+          "unrestricted_union_lateral_mm": 247.56997988827223
+        }
+      },
+      "R": {
+        "signed_min_mm": -34.18643354658219,
+        "min_face": 41146,
+        "true_0_2_mm_band": {
+          "fragment_count": 359,
+          "components": 2,
+          "max_connected_lateral_mm": 247.5773035295319,
+          "unrestricted_union_lateral_mm": 275.1009876662263
+        }
+      },
+      "full_changed_rows": 8006,
+      "neighbor_distortion": {
+        "faces": 14939,
+        "minmax_ratio_ge1mm": [
+          0.12006936725077219,
+          2.9502625555469835
+        ],
+        "opposed_world_normals": 14
+      },
+      "hardware_incident_changed": {
+        "faces": 1877,
+        "minmax_ratio_ge1mm": [
+          0.3221384384733578,
+          2.9502625555469835
+        ],
+        "opposed_world_normals": 7
+      },
+      "raw_hardware_weights_changed": 0,
+      "hardware_max_world_delta_mm": 48.87403394097407,
+      "status": "HOLD if any required support, other-sole, deformation or knee gate fails"
+    },
+    {
+      "tick": 160,
+      "loaded": "R",
+      "foot_ball_face": 9899,
+      "barycentric": [
+        0.3333333333333333,
+        0.3333333333333333,
+        0.3333333333333333
+      ],
+      "ground_target_xyz_m": [
+        0.7630706778697389,
+        0.08332681780203163,
+        12.015146953491177
+      ],
+      "sole_toe_pulse_degrees": 10,
+      "isolated_toe_max_world_mm": 25.42845065969037,
+      "toe_dominant_signed_median_up_mm": 19.87627952230532,
+      "heel_and_non_toe_rows_delta_mm": 0.0,
+      "target_rest_skin_base_limb_lengths_mm": [
+        191.31410093611092,
+        247.42322452129486
+      ],
+      "total_leg_reach_margin_mm": 43.10953170898158,
+      "forward_knee_projection_mm": 89.91196045606439,
+      "observed_ball_witness_xyz_residual_mm": [
+        -0.021805150413167773,
+        0.27782845797033606,
+        0.0
+      ],
+      "L": {
+        "signed_min_mm": -59.855977510569616,
+        "min_face": 85435,
+        "true_0_2_mm_band": {
+          "fragment_count": 262,
+          "components": 1,
+          "max_connected_lateral_mm": 264.4906119202446,
+          "unrestricted_union_lateral_mm": 264.4906119202446
+        }
+      },
+      "R": {
+        "signed_min_mm": -5.105427200658749,
+        "min_face": 34867,
+        "true_0_2_mm_band": {
+          "fragment_count": 191,
+          "components": 2,
+          "max_connected_lateral_mm": 150.68583473777863,
+          "unrestricted_union_lateral_mm": 177.70494658306825
+        }
+      },
+      "full_changed_rows": 8233,
+      "neighbor_distortion": {
+        "faces": 15281,
+        "minmax_ratio_ge1mm": [
+          0.14132622572362602,
+          3.343148051073694
+        ],
+        "opposed_world_normals": 47
+      },
+      "hardware_incident_changed": {
+        "faces": 2158,
+        "minmax_ratio_ge1mm": [
+          0.26821396772089545,
+          3.3399822504597783
+        ],
+        "opposed_world_normals": 15
+      },
+      "raw_hardware_weights_changed": 0,
+      "hardware_max_world_delta_mm": 85.01170540817203,
+      "status": "HOLD if any required support, other-sole, deformation or knee gate fails"
+    }
+  ],
+  "asset_generation": false,
+  "no_stock_mutation": true
+}
