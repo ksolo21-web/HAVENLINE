@@ -1,0 +1,3 @@
+# Terrain-flush Level 1 construction marker, wide V1
+
+WIP presentation assets only, not imported into the playable scene by this checkpoint. Centered gray field and four detached rounded corners, castle marking, wood pictogram, and the canonical numeral. Runtime asserts the real ledger cost rather than importing reference example values. Same original .72 m interaction and no camera, gameplay, state or collision change is claimed. Static geometry and source properties have been inspected independently. Normal-camera, phone, and motion readability remain unverified. The original owner reference images and screenshots are not duplicated here.
