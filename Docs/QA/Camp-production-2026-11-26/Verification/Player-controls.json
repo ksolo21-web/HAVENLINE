@@ -1,0 +1,61 @@
+{
+  "source": "30524e3da7906e252e1de7dd4529250b060868be",
+  "scene": "res://field_opening.tscn",
+  "engine": "Godot 4.7.2",
+  "linux_archive_sha256": "e4fe392edcc5829ee589c78aee35a4b82b1ba6ef6f9fe9f9dfbace2f0f81de2b",
+  "native_linux_launch": {
+    "input": "Physical D key delivered to the game window via XTest. Fresh, private profile.",
+    "saved_distance_m": 2.197839705882949,
+    "exit_code": 0,
+    "saved_hp": 4
+  },
+  "input_verification": "Godot loaded the scene from the resource pack embedded in the shipped Linux binary. Keyboard, wheel and touch events went through Input.parse_input_event. The fresh run steered toward an enemy spawned by the scene and released the movement input as it approached. The expanded run used a private copy of the previous trial\u2019s earned checkpoint, operated the gate and walked across the boundary.",
+  "device_coverage": "Linux software renderer. Touch events injected in engine. Physical Android device pending.",
+  "runs": {
+    "fresh": {
+      "checks": {
+        "arrow_moves": true,
+        "auto_orbit_at_spawn": true,
+        "field_loaded": true,
+        "fresh_level": true,
+        "idle_orbit_hurt_enemy_without_attack_input": true,
+        "no_attack_button": true,
+        "touch_movement_reached_natural_enemy": true,
+        "two_finger_zoom": true,
+        "wheel_zoom": true
+      },
+      "details": {
+        "arrow_distance_m": 0.638060331344604,
+        "enemy_hp_after": 2,
+        "enemy_hp_before": 3,
+        "enemy_spawn_id": 1,
+        "travel_after_release_m": 0.333333551883698,
+        "window_pixels": "(960, 540)"
+      },
+      "passed": true,
+      "scene": "res://field_opening.tscn",
+      "source": "30524e3da7906e252e1de7dd4529250b060868be",
+      "package_executable_sha256": "0922396b6c746f5baa61c8b465b2a34cbbffc6811bfe6364a3fef881682648be"
+    },
+    "expanded": {
+      "checks": {
+        "E_toggles_near_gate": true,
+        "field_loaded": true,
+        "orbit_rearms_on_exit": true,
+        "orbit_stays_off_in_camp": true,
+        "paid_camp": true,
+        "tap_toggles_near_gate": true,
+        "touch_approaches_gate": true,
+        "touch_walk_inside": true,
+        "touch_walk_outside": true
+      },
+      "details": {
+        "window_pixels": "(432, 768)"
+      },
+      "passed": true,
+      "scene": "res://field_opening.tscn",
+      "source": "30524e3da7906e252e1de7dd4529250b060868be",
+      "package_executable_sha256": "0922396b6c746f5baa61c8b465b2a34cbbffc6811bfe6364a3fef881682648be"
+    }
+  }
+}

@@ -2,6 +2,18 @@
 
 The shared download contains the Linux archive and signed ARM64 Android debug APK. Both use the Level 1 trial application and the gameplay scene `res://field_opening.tscn`. The reviewed source on GitHub can also rebuild both packages. [Checksums](SHA256SUMS) · [Source build instructions](../Source/README.md)
 
+## Start Level 1
+
+On Linux, extract the archive and run `sh Play-Havenline.sh` from the extracted folder. On first launch, Character 1 starts in the snowfield. The launcher stores test progress in its own trial profile. On Android, install the ARM64 APK in a test profile and open Havenline.
+
+| Action | Linux | Touchscreen |
+| --- | --- | --- |
+| Move | WASD or arrow keys | Drag one finger on the playfield. A short drag walks and a longer drag runs. Lift to stop. |
+| Zoom | Mouse wheel | Pinch with two fingers, up to 2×. |
+| Open or close a gate | Stand near it and press E | Stand near it and tap the gate prompt. |
+
+Character 1’s weapon begins orbiting automatically in the snowy opening. Approach an enemy, tree or mineral until the orbit passes through it. The weapon stops inside a purchased camp and reactivates as you step outside. [Verified controls and automatic attack](../Verification/Player-controls.json)
+
 ## Try the machines immediately on Linux
 
 Download the Linux archive, `Play-expanded-camp.sh` and `Expanded-camp.save.json` into the same folder. Run the following commands there. The launcher makes a fresh private copy of an earned Level 1 checkpoint each time.
