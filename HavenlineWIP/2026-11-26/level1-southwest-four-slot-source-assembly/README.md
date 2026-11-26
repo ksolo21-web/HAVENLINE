@@ -1,0 +1,3 @@
+# Four-slot Southwest fence assembly: internal source passes, external held
+
+The isolated authored four-slot composition has 58 groups and 51,028 faces. All selected rail/rope geometry clears exact indexed terrain and all three internal scoped non-shared joins have zero strict intersections. The next unchanged West0 visual still intersects the assembled West1. No integrated gate or authentic imported tangent/normal material on this exact build, no native test and no installation. The source generator reproduces the composed local geometry; raw authored/derived textures are not in this archive. Source seal a9b0f22c7a3dac86a3843d6960e1be2d24bef0eb544a34a4ae2159daa94050fd.
