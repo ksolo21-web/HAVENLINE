@@ -1,0 +1,48 @@
+{
+  "assertion": "Each final stereo edit matches its own originating game-mixer samples. No postmixed sound.",
+  "test": "Decoded distinct left and right channels at 8 kHz; normalized cross-correlation in the middle of each edit, allowing \u00b180 ms encoder/concat timing variation.",
+  "lowest_correlation": 0.9999,
+  "chapters": [
+    {
+      "title": "Two axe recoils, tree fall and five-second return",
+      "originating_run": "regrowth-34df87a8",
+      "left": {
+        "r": 0.9999,
+        "lag_ms": 0.0
+      },
+      "right": {
+        "r": 0.9999,
+        "lag_ms": 0.0
+      },
+      "runtime_cues_at_this_edit": [
+        "carry",
+        "deplete_wood",
+        "drop_wood",
+        "impact_wood",
+        "pickup_full",
+        "pickup_partial",
+        "regrow_wood",
+        "step_snow",
+        "swing"
+      ]
+    },
+    {
+      "title": "Quarry regrows",
+      "originating_run": "regrowth-34df87a8",
+      "left": {
+        "r": 1.0,
+        "lag_ms": 0.0
+      },
+      "right": {
+        "r": 1.0,
+        "lag_ms": 0.0
+      },
+      "runtime_cues_at_this_edit": [
+        "equip_pickaxe",
+        "impact_stone",
+        "regrow_stone",
+        "swing"
+      ]
+    }
+  ]
+}

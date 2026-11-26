@@ -1,0 +1,188 @@
+{
+  "commit": "34df87a8195553c4636aa374ac3bfc11054a3bbd",
+  "raw_sources_sha256": {
+    "observations.jsonl": "f470b5488c2f00ccfddd0109a009f6fe3582206baa930396b1fd965e7ad91f01",
+    "events.jsonl": "2ae3b2ce69437e075d5ab3c84fa74184da5924293e219dd028668a1b0c7cd88d",
+    "world-events-complete.json": "4f92fc96c6fca4013c1d7242ca105828f90c86f81b0c51077f2851a614b5c5ef"
+  },
+  "ticks_hz": 60,
+  "phase": "hp-unpaid-34df87a8",
+  "camp_stages": [
+    0
+  ],
+  "hud_hp_transitions": [
+    {
+      "hp": 4,
+      "tick": 0,
+      "position": [
+        0.0,
+        0.0,
+        6.0
+      ],
+      "hud": "HP  4 / 4",
+      "camp_active": false,
+      "inside_camp": false
+    },
+    {
+      "hp": 3,
+      "tick": 318,
+      "position": [
+        10.2082386016846,
+        0.0,
+        4.20878458023071
+      ],
+      "hud": "HP  3 / 4",
+      "camp_active": false,
+      "inside_camp": false
+    },
+    {
+      "hp": 2,
+      "tick": 471,
+      "position": [
+        10.6074419021606,
+        0.0,
+        3.7044849395752
+      ],
+      "hud": "HP  2 / 4",
+      "camp_active": false,
+      "inside_camp": false
+    },
+    {
+      "hp": 1,
+      "tick": 570,
+      "position": [
+        10.6074419021606,
+        0.0,
+        3.7044849395752
+      ],
+      "hud": "HP  1 / 4",
+      "camp_active": false,
+      "inside_camp": false
+    },
+    {
+      "hp": 0,
+      "tick": 669,
+      "position": [
+        10.6074419021606,
+        0.0,
+        3.7044849395752
+      ],
+      "hud": "HP  0 / 4",
+      "camp_active": false,
+      "inside_camp": false
+    },
+    {
+      "hp": 4,
+      "tick": 732,
+      "position": [
+        0.0,
+        0.0,
+        2.40000009536743
+      ],
+      "hud": "HP  4 / 4",
+      "camp_active": false,
+      "inside_camp": false
+    }
+  ],
+  "knockdown_ticks": 63,
+  "unrecognized_audio_requests": 0,
+  "combat": {
+    "approach": {
+      "game_requests": 5,
+      "permitted_audio_voice_starts": 3,
+      "observed_playing_streams": 3
+    },
+    "enemy_attack": {
+      "game_requests": 5,
+      "permitted_audio_voice_starts": 5,
+      "observed_playing_streams": 5
+    },
+    "player_attack": {
+      "game_requests": 5,
+      "permitted_audio_voice_starts": 5,
+      "observed_playing_streams": 5
+    },
+    "hit": {
+      "game_requests": 5,
+      "permitted_audio_voice_starts": 5,
+      "observed_playing_streams": 5
+    },
+    "player_hurt": {
+      "game_requests": 4,
+      "permitted_audio_voice_starts": 4,
+      "observed_playing_streams": 4
+    },
+    "player_fall": {
+      "game_requests": 1,
+      "permitted_audio_voice_starts": 1,
+      "observed_playing_streams": 1
+    },
+    "defeat": {
+      "game_requests": 1,
+      "permitted_audio_voice_starts": 1,
+      "observed_playing_streams": 1
+    },
+    "reset": {
+      "game_requests": 1,
+      "permitted_audio_voice_starts": 1,
+      "observed_playing_streams": 1
+    }
+  },
+  "sampled_hurt_fall_recovery_streams": [
+    {
+      "cue": "player_hurt",
+      "voice_tick": 317,
+      "stream": {
+        "tick": 318,
+        "gain_db": -2.0,
+        "bus": "Field Effects"
+      }
+    },
+    {
+      "cue": "player_hurt",
+      "voice_tick": 470,
+      "stream": {
+        "tick": 471,
+        "gain_db": -2.0,
+        "bus": "Field Effects"
+      }
+    },
+    {
+      "cue": "player_hurt",
+      "voice_tick": 569,
+      "stream": {
+        "tick": 570,
+        "gain_db": -2.0,
+        "bus": "Field Effects"
+      }
+    },
+    {
+      "cue": "player_hurt",
+      "voice_tick": 668,
+      "stream": {
+        "tick": 669,
+        "gain_db": -2.0,
+        "bus": "Field Effects"
+      }
+    },
+    {
+      "cue": "player_fall",
+      "voice_tick": 668,
+      "stream": {
+        "tick": 669,
+        "gain_db": -5.0,
+        "bus": "Field Effects"
+      }
+    },
+    {
+      "cue": "reset",
+      "voice_tick": 731,
+      "stream": {
+        "tick": 732,
+        "gain_db": -8.93369960784912,
+        "bus": "Field Effects"
+      }
+    }
+  ],
+  "interpretation": "Voice start is an accepted Godot mixer request. Observed playing streams are direct AudioStreamPlayer readbacks and may count fewer voices when a stream stays continuously assigned across repeated cues. The gameplay film supplies the audible mix."
+}

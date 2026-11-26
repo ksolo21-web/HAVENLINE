@@ -1,0 +1,106 @@
+{
+  "scene": "res://field_opening.tscn",
+  "commit": "34df87a8195553c4636aa374ac3bfc11054a3bbd",
+  "selected_reference_commit": "30f4f037baf54b24652360c8b6880771e29cc19a",
+  "selected_boards": {
+    "starter": {
+      "sha256": "62f78575b7d928c3f3425fb0252b526b8b8f9b3e89a4600650d2576736732baf",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/30f4f037baf54b24652360c8b6880771e29cc19a/Docs/Design/StructureReferences/2026-11-26/upgradeable-storage-house/selected/storage-house-starter.png"
+    },
+    "reinforced": {
+      "sha256": "d69a7e651ff3045d2a07eb4643f354e9798ddb2bd0e949dbff0504d614b2f285",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/30f4f037baf54b24652360c8b6880771e29cc19a/Docs/Design/StructureReferences/2026-11-26/upgradeable-storage-house/selected/storage-house-reinforced.png"
+    },
+    "advanced": {
+      "sha256": "bbcd88237359ac2d3a9f63ad3f422ceafdca1f8342c16e0c57cd5e99e4e8975b",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/30f4f037baf54b24652360c8b6880771e29cc19a/Docs/Design/StructureReferences/2026-11-26/upgradeable-storage-house/selected/storage-house-advanced.png"
+    },
+    "organization": {
+      "sha256": "4f8df6ae1cf0c66eb2de1478a72c21db96bcf295dec17d072c3371e1737097c6",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/30f4f037baf54b24652360c8b6880771e29cc19a/Docs/Design/StructureReferences/2026-11-26/upgradeable-storage-house/selected/storage-house-organization.png"
+    }
+  },
+  "game_sources_verified_against_git": {
+    "field_storage_house.gd": "a062ea8caff70380600e2bda8a14f26c2dd5cd455a30233c565dc63f402f6916",
+    "field_depot.gd": "1d05bec959a7b6b25b37e74477af2c93e51ccf1a3b934ff87f64a3db4a992e11",
+    "qa_storage_house_art.gd": "e9b0ad66930a9785cdf9f7fec31a274e2e92a47d0b68e2e7a89893712f0ff29a",
+    "tools/art/make_storage_house.py": "7ed7d2605b8a56d0a46fd80738e27096c4f41c439634c614ffa69bbb64d5aa99",
+    "assets/storage_house/camp_storehouse.glb": "77a997ce275175cd8b26f96203b8aaabda720ba9a6d9bd4fc2ae56be993bd2b1"
+  },
+  "glb": {
+    "bytes": 2367688,
+    "triangles_including_all_optional_geometry": 34926,
+    "named_parts": 29
+  },
+  "native_engine": "Godot 4.7.2, Linux Compatibility, Mesa llvmpipe",
+  "renderer_resolutions": {
+    "gameplay": [
+      960,
+      540
+    ],
+    "standalone_gallery": [
+      680,
+      540
+    ]
+  },
+  "tests": {
+    "advanced": true,
+    "arrival -0.55": true,
+    "arrival 0.55": true,
+    "covered_loading": true,
+    "departure -0.55": true,
+    "departure 0.55": true,
+    "interior_remains_open": true,
+    "motion_cues_once": true,
+    "reinforced": true,
+    "six_zones": true,
+    "starter": true,
+    "stock_segregation": true,
+    "unbuilt_collision_removed": true,
+    "unpaid": true
+  },
+  "integrated": {
+    "contents_nodes_per_shelf_including_label": {
+      "meat": 4,
+      "stone": 3,
+      "wood": 2
+    },
+    "covered_loading_held": true,
+    "empty": {
+      "meat": 0,
+      "stone": 0,
+      "wood": 0
+    },
+    "inside": true,
+    "open": 1.0,
+    "stock": {
+      "meat": 3,
+      "stone": 4,
+      "wood": 6
+    },
+    "tier": 3
+  },
+  "capture_staging": "Actual game running in a disposable profile. Fixture funds the real inventory purchase handlers, then deposits six timber, four stone and three meat through the live ledger and synchronizes the deployed stock renderer. Camera follows the in-game offset and real zoom settings; explicit detail shot uses an independent close-up camera. The isolated tier gallery uses controlled lighting and no camera animation. Counts above the representative physical stacks are displayed as numeric balances. The close side view can occlude the meat count behind the open door.",
+  "images": {
+    "Storage-access-and-organization.jpg": "7e6b244aa96ba0a1fc860cc33c8c15ea67d9aede8bdb9596f55d6a86c61bbe56",
+    "Three-storage-tiers.jpg": "cf227ca20a948c520edc18ffff6dc58624f222177ad3c0caf52c2947e67a2d52",
+    "empty.jpg": "ba83cf59099133735764bead08832eea807513dcd168a3c43dd03700bcced5af",
+    "front.jpg": "b3bd4ad99934ca51c2b5ac467c39a8a5786f813e3156e6b9953ae8df63594ca6",
+    "game-closed-1x.jpg": "37e3239c22d142ce1723a6566b3dec96da43c47621e2fa453707d44aaaf2ed70",
+    "game-covered-loading.jpg": "e85c25d2558b6e1ffcfc1ba1828fefeba52c7456c587cf671650bb43e60e8e40",
+    "game-empty-2x.jpg": "52303d736b530c91426de0a0624ddb3b772cebceb1a3a609ceef56ad4efffbc3",
+    "game-interior-overhead.jpg": "38ada2cccea5cbccc15f174d91ef23789ea1a7faa2998034dadcc216c92bb2c8",
+    "game-stocked-1x.jpg": "ae707a0c7f3370f637fd251f3f4afe053d0bc41c2787e6f79f0c9ddd670deb3d",
+    "game-stocked-2x.jpg": "cf10e64bda5f9d9cd37ed9eeb1de84a1d222616a0a5c2f5c98b21dfaba322b3b",
+    "game-stocked-detail.jpg": "a8554ac2cd7f8039c25c8ed660b521b07b96997d7752e96ecd7675d966817465",
+    "game-tier-1.jpg": "0c5a1436172942ba5b8caf057d7d1d88358263814c2a5b160290be07069c5f33",
+    "game-tier-2.jpg": "d725cb091041499abc21bbc36eec5989b82a9135107e87e92eb0ca6ccc94e608",
+    "game-tier-3.jpg": "5fd9fd93e9187a423db5f9f8248f5ceaf720b5d98f8acdb6039332048ad08f67",
+    "rear.jpg": "5ddba6f74e90ba447b92ad9a4673b263d454138c87e0a2d2471924bc981cc786",
+    "tier-1.jpg": "63eba41ef8b0461cbdd721eda3826dffb916b90bf32ace3a111dbce33a653902",
+    "tier-2.jpg": "1cd060ddc654e42091da5dfbd4d2e3eaede3e5331582f1927647b24c4783c63f",
+    "tier-3.jpg": "74a48ca43c25b45d3a573565e668284943f4ec0e71f3996b21be9d4bfff6f429"
+  },
+  "authoring_reproduction": "Regenerated all 2,367,688 GLB bytes in an empty project from the frozen Python author and verified byte equality.",
+  "stock_tag_visibility": "The overhead inspection shows all three balances. The eye-level cutaway can hide the meat numeral behind an open door."
+}

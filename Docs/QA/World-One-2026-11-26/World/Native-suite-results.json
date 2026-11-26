@@ -1,5 +1,5 @@
 {
-  "source_commit": "87f703f2a62c3651314b66084bcfb32858728364",
+  "source_commit": "34df87a8195553c4636aa374ac3bfc11054a3bbd",
   "scene": "res://field_opening.tscn",
   "godot": "4.7.2.stable.official.ed1daf0bf",
   "tests": {
@@ -46,14 +46,16 @@
           }
         ],
         "engine_warnings": [
-          "WARNING: 26 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+          "WARNING: 21 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
         ],
         "errors": [
-          "ERROR: 7 resources still in use at exit (run with --verbose for details)."
+          "ERROR: 5 resources still in use at exit (run with --verbose for details)."
         ]
       },
       {
         "exit_code": 0,
+        "engine_warnings": [],
+        "errors": [],
         "results": [
           {
             "census": {
@@ -93,9 +95,7 @@
             "touch_travel_end_x": 28.0381126403809
           }
         ],
-        "engine_warnings": [],
-        "errors": [],
-        "test_mode": "Repeated at 60 Hz simulation with 8 ms headless frame delay. The first accelerated run reported retained engine resources on exit. The paced run closed cleanly."
+        "mode": "Paced recheck with native audio teardown and a distinct disposable session"
       }
     ],
     "qa_field_progression": [
@@ -103,55 +103,38 @@
         "exit_code": 0,
         "results": [
           {
-            "Build both beyond stage3 storage_meat": true,
-            "Build both beyond stage3 storage_stone": true,
+            "Built storage_meat": true,
+            "Built storage_stone": true,
+            "Built storage_wood": true,
+            "East expansion unlocks after all 3 tiers": true,
             "Existing field save reopens through modern migration": true,
-            "Expansion opens three independent plots storage_meat": true,
-            "Expansion opens three independent plots storage_stone": true,
+            "First expansion opens only starter house": true,
+            "Hearth opens only expansion": true,
+            "Historical missing tiers funded in order": true,
+            "Historical out-of-order purchase and partial retained": true,
+            "Insufficient funds storage_meat": true,
+            "Insufficient funds storage_stone": true,
+            "Insufficient funds storage_wood": true,
             "Migrate funded old axes and exact balances": true,
             "Migrated equipment purchase order round-trips": true,
             "Migration cannot spend unavailable stock": true,
-            "No premature purchase or deposit storage_meat": true,
-            "No premature purchase or deposit storage_stone": true,
+            "No duplicate debit storage_meat": true,
+            "No duplicate debit storage_stone": true,
+            "No duplicate debit storage_wood": true,
+            "No historical double charge": true,
+            "No premature storage purchase": true,
             "Original field save written through old schema": true,
-            "Paid hearth alone opens only expansion storage_meat": true,
-            "Paid hearth alone opens only expansion storage_stone": true,
+            "Partial payment storage_meat": true,
+            "Partial payment storage_stone": true,
+            "Partial payment storage_wood": true,
             "Post-migration stage commits atomically": true,
-            "Reject reordered completion storage_meat": true,
-            "Reject reordered completion storage_stone": true,
+            "Reject reordered unrelated completion": true,
             "Reload retains grandfathered equipment, stock and new stage": true,
-            "Tower and axes wait for expansion2 storage_meat": true,
-            "Tower and axes wait for expansion2 storage_stone": true,
-            "storage_meat cannot be bought twice storage_meat": true,
-            "storage_meat cannot be bought twice storage_stone": true,
-            "storage_meat partial reload storage_meat": true,
-            "storage_meat partial reload storage_stone": true,
-            "storage_meat partial storage_meat": true,
-            "storage_meat partial storage_stone": true,
-            "storage_meat purchase storage_meat": true,
-            "storage_meat purchase storage_stone": true,
-            "storage_meat remains owned storage_meat": true,
-            "storage_meat remains owned storage_stone": true,
-            "storage_stone cannot be bought twice storage_meat": true,
-            "storage_stone cannot be bought twice storage_stone": true,
-            "storage_stone partial reload storage_meat": true,
-            "storage_stone partial reload storage_stone": true,
-            "storage_stone partial storage_meat": true,
-            "storage_stone partial storage_stone": true,
-            "storage_stone purchase storage_meat": true,
-            "storage_stone purchase storage_stone": true,
-            "storage_stone remains owned storage_meat": true,
-            "storage_stone remains owned storage_stone": true,
-            "storage_wood cannot be bought twice storage_meat": true,
-            "storage_wood cannot be bought twice storage_stone": true,
-            "storage_wood partial reload storage_meat": true,
-            "storage_wood partial reload storage_stone": true,
-            "storage_wood partial storage_meat": true,
-            "storage_wood partial storage_stone": true,
-            "storage_wood purchase storage_meat": true,
-            "storage_wood purchase storage_stone": true,
-            "storage_wood remains owned storage_meat": true,
-            "storage_wood remains owned storage_stone": true
+            "Resume partial storage_meat": true,
+            "Resume partial storage_stone": true,
+            "Resume partial storage_wood": true,
+            "Retains tier and downstream goals": true,
+            "Visual tier independent from earned bays": true
           }
         ],
         "engine_warnings": [],
@@ -256,6 +239,25 @@
         "errors": []
       }
     ],
+    "qa_field_stock_limits": [
+      {
+        "exit_code": 0,
+        "results": [
+          {
+            "arrivals": 720,
+            "failures": [],
+            "full_visual_instances": {
+              "meat": 7,
+              "stone": 2,
+              "wood": 1
+            },
+            "max_balance_tested": 1000000
+          }
+        ],
+        "engine_warnings": [],
+        "errors": []
+      }
+    ],
     "qa_field_save": [
       {
         "exit_code": 0,
@@ -297,7 +299,7 @@
         "exit_code": 0,
         "results": [
           {
-            "route_physics_ticks": 1084,
+            "route_physics_ticks": 2770,
             "scene_checks": {
               "Actual game fresh save": true,
               "All construction is paid and offerings retire": true,
@@ -306,15 +308,23 @@
               "Existing unit flights and authored purchase cues executed": true,
               "Hearth reveals only first expansion and no storage": true,
               "Only the central hearth payment is initially visible": true,
+              "Original corner pads cannot accept payments or stock": true,
               "Payment commits before hearth reveal": true,
               "Second expansion is the next build": true,
-              "Three corner offers appear on first expansion": true,
-              "storage_meat re-entry deposits a separate physical unit": true,
-              "storage_meat shows only purchased stock and does not dump same visit": true,
-              "storage_stone re-entry deposits a separate physical unit": true,
-              "storage_stone shows only purchased stock and does not dump same visit": true,
-              "storage_wood re-entry deposits a separate physical unit": true,
-              "storage_wood shows only purchased stock and does not dump same visit": true
+              "Single starter offer after first expansion": true,
+              "Visits to retired corner positions cause no debit or deposit": true,
+              "storage_meat crossing the apron still requires leaving": true,
+              "storage_meat keeps only the authored apron visible": true,
+              "storage_meat left-side re-entry deposits through the shared apron": true,
+              "storage_meat purchased without chaining next tier": true,
+              "storage_stone crossing the apron still requires leaving": true,
+              "storage_stone keeps only the authored apron visible": true,
+              "storage_stone left-side re-entry deposits through the shared apron": true,
+              "storage_stone purchased without chaining next tier": true,
+              "storage_wood crossing the apron still requires leaving": true,
+              "storage_wood keeps only the authored apron visible": true,
+              "storage_wood left-side re-entry deposits through the shared apron": true,
+              "storage_wood purchased without chaining next tier": true
             }
           }
         ],
@@ -328,7 +338,7 @@
             "native_restart": {
               "All eight purchases restored in original order": true,
               "Independent native app slot reopened": true,
-              "Restored court has all three storage corners, no spent offer": true
+              "Restored court has one advanced storehouse and all paid bays": true
             }
           }
         ],
@@ -395,9 +405,7 @@
             "waves": 500
           }
         ],
-        "engine_warnings": [
-          "WARNING: 10 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
-        ],
+        "engine_warnings": [],
         "errors": []
       }
     ],
@@ -417,8 +425,77 @@
             "remaining_trackers": 1
           }
         ],
+        "engine_warnings": [
+          "WARNING: 22 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+        ],
+        "errors": [
+          "ERROR: 4 resources still in use at exit (run with --verbose for details)."
+        ]
+      },
+      {
+        "exit_code": 0,
+        "engine_warnings": [
+          "WARNING: 22 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+        ],
+        "errors": [
+          "ERROR: 4 resources still in use at exit."
+        ],
+        "results": [
+          {
+            "actual_alphas": 31,
+            "actual_deaths": 572,
+            "actual_wolves": 572,
+            "duplicate_loot": 0,
+            "native_waves": 200,
+            "orphan_wolves": 0,
+            "passed": true,
+            "peak_live": 4,
+            "remaining_trackers": 1
+          }
+        ],
+        "mode": "Paced recheck with native audio teardown and a distinct disposable session"
+      },
+      {
+        "exit_code": 0,
+        "results": [
+          {
+            "actual_alphas": 31,
+            "actual_deaths": 572,
+            "actual_wolves": 572,
+            "duplicate_loot": 0,
+            "native_waves": 200,
+            "orphan_wolves": 0,
+            "passed": true,
+            "peak_live": 4,
+            "remaining_trackers": 1
+          }
+        ],
+        "engine_warnings": [
+          "WARNING: 23 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+        ],
+        "errors": [
+          "ERROR: 4 resources still in use at exit (run with --verbose for details)."
+        ],
+        "mode": "Same 200-wave stress fixture; on passing the unchanged assertions, the test calls field._close_field() instead of terminating SceneTree immediately. Production source remains the pinned build."
+      },
+      {
+        "exit_code": 0,
+        "results": [
+          {
+            "actual_alphas": 31,
+            "actual_deaths": 572,
+            "actual_wolves": 572,
+            "duplicate_loot": 0,
+            "native_waves": 200,
+            "orphan_wolves": 0,
+            "passed": true,
+            "peak_live": 4,
+            "remaining_trackers": 1
+          }
+        ],
         "engine_warnings": [],
-        "errors": []
+        "errors": [],
+        "mode": "Same 200-wave stress fixture, stopping audio and allowing 120 additional process frames before invoking the normal application close. All 200-wave assertions are unchanged."
       }
     ],
     "qa_world_session_resume": [
@@ -436,9 +513,7 @@
             "z": 6.19311428070068
           }
         ],
-        "engine_warnings": [
-          "WARNING: 10 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
-        ],
+        "engine_warnings": [],
         "errors": []
       }
     ],
@@ -597,7 +672,10 @@
         "results": [
           {
             "checks": {
-              "counts identify only deposited typed stock": true,
+              "a million wood and overflow stone and meat stay inside bounded bins": true,
+              "bay labels retain full balances": true,
+              "earned display lands at the same shelf size position and count": true,
+              "east expansion can spend timber from its actual shelf": true,
               "future storage grove uses live harvestable trees": true,
               "gate-east inward crossing": true,
               "gate-east outward crossing": true,
@@ -605,30 +683,25 @@
               "gate-south outward crossing": true,
               "hearth centered in newly paid court": true,
               "hearth shows no free stockrooms": true,
-              "meat emptied plot recovers its painted type": true,
-              "meat floor source is the authored inlaid shell": true,
-              "meat receiver fits inside wall and clears furnace": true,
-              "meat receiver is flush with authored plate": true,
-              "meat stocked plot shows only physical units": true,
-              "meat units fill the reference stock arrangement": true,
+              "meat all purchases share one apron": true,
+              "meat physical shelf is inside house": true,
+              "meat retired corner is absent": true,
+              "one earned unit launches toward timber shelf": true,
+              "one spatial door cue per open and close": true,
               "original raised purchase pad is hidden": true,
               "paid upgrade retires its ground inlay": true,
-              "stone emptied plot recovers its painted type": true,
-              "stone floor source is the authored inlaid shell": true,
-              "stone receiver fits inside wall and clears furnace": true,
-              "stone receiver is flush with authored plate": true,
-              "stone stocked plot shows only physical units": true,
-              "stone units fill the reference stock arrangement": true,
+              "shelf empties and east expansion receives exactly one unit": true,
+              "spend originates at visible shelf mesh": true,
+              "stone all purchases share one apron": true,
+              "stone physical shelf is inside house": true,
+              "stone retired corner is absent": true,
               "storage grove clears build approach": true,
               "thaw removes retired grove from occupied plots": true,
               "thaw retires seasonal trees from harvest": true,
               "unpaid court and upgrade hidden": true,
-              "wood emptied plot recovers its painted type": true,
-              "wood floor source is the authored inlaid shell": true,
-              "wood receiver fits inside wall and clears furnace": true,
-              "wood receiver is flush with authored plate": true,
-              "wood stocked plot shows only physical units": true,
-              "wood units fill the reference stock arrangement": true
+              "wood all purchases share one apron": true,
+              "wood physical shelf is inside house": true,
+              "wood retired corner is absent": true
             },
             "suite": "actual_field_court"
           }
@@ -655,6 +728,127 @@
         "engine_warnings": [],
         "errors": []
       }
+    ],
+    "qa_world_combat": [
+      {
+        "exit_code": 0,
+        "results": [
+          {
+            "checks": {
+              "camp_safe_even_after_grace": true,
+              "continuous_full_hp_even_without_threat": true,
+              "damaging_and_receiving_sound_bank": true,
+              "paid_instant_health_and_trailing_bar": true,
+              "paid_invulnerability_blocks_repeat": true,
+              "paid_pursuit_windup_lunge_and_hp_loss": true,
+              "paid_recovery_clear_of_obstacles": true,
+              "paid_restores_hud_and_grace": true,
+              "paid_returns_to_correct_floor": true,
+              "paid_visible_fall_before_reset": true,
+              "paid_wolf_stagger_has_animated_damage": true,
+              "paid_zero_hp_disarms_and_changes_hud": true,
+              "unpaid_instant_health_and_trailing_bar": true,
+              "unpaid_invulnerability_blocks_repeat": true,
+              "unpaid_pursuit_windup_lunge_and_hp_loss": true,
+              "unpaid_recovery_clear_of_obstacles": true,
+              "unpaid_restores_hud_and_grace": true,
+              "unpaid_returns_to_correct_floor": true,
+              "unpaid_visible_fall_before_reset": true,
+              "unpaid_wolf_stagger_has_animated_damage": true,
+              "unpaid_zero_hp_disarms_and_changes_hud": true
+            },
+            "passed": true
+          }
+        ],
+        "engine_warnings": [],
+        "errors": []
+      }
+    ],
+    "qa_field_landmark_scale": [
+      {
+        "exit_code": 0,
+        "results": [
+          {
+            "checks": 9,
+            "failures": []
+          }
+        ],
+        "engine_warnings": [],
+        "errors": []
+      }
+    ],
+    "qa_tree_return": [
+      {
+        "exit_code": 0,
+        "results": [
+          {
+            "checks": {
+              "legacy loaded and unloaded wood capped to five": true,
+              "legacy stone duration retained": true,
+              "load prior save": true,
+              "real remote pine selected": true,
+              "starter-wood 5s elapsed": true,
+              "starter-wood natural damaging contacts": true,
+              "starter-wood one three-unit yield": true,
+              "starter-wood return appears before available": true,
+              "starter-wood stored quantities untouched": true,
+              "typed quantities established through inventory API": true,
+              "world1/3/-4/wood/1 5s elapsed": true,
+              "world1/3/-4/wood/1 natural damaging contacts": true,
+              "world1/3/-4/wood/1 one three-unit yield": true,
+              "world1/3/-4/wood/1 return appears before available": true,
+              "world1/3/-4/wood/1 stored quantities untouched": true,
+              "world1/3/-4/wood/1 unload did not restart timer": true
+            },
+            "evidence": {
+              "starter-wood": {
+                "chips": true,
+                "contact_events": 3,
+                "depletion_to_available_ticks": 300,
+                "fall_frame_seconds": 0.72,
+                "fell": true,
+                "game_seconds": 5.0,
+                "loose": 3,
+                "matches_blade_position_and_travel": true,
+                "return_visible": true,
+                "stored": {
+                  "meat": 0,
+                  "stone": 0,
+                  "wood": 0
+                },
+                "sway": true,
+                "wall_seconds": 0.466756
+              },
+              "world1/3/-4/wood/1": {
+                "chips": true,
+                "contact_events": 3,
+                "depletion_to_available_ticks": 300,
+                "fall_frame_seconds": 0.72,
+                "fell": true,
+                "game_seconds": 5.0,
+                "loose": 3,
+                "matches_blade_position_and_travel": true,
+                "return_visible": true,
+                "stored": {
+                  "meat": 3,
+                  "stone": 4,
+                  "wood": 7
+                },
+                "sway": true,
+                "wall_seconds": 0.351806
+              }
+            },
+            "physics_hz": 60
+          }
+        ],
+        "engine_warnings": [],
+        "errors": []
+      }
     ]
+  },
+  "summary": {
+    "suites": 17,
+    "functional_checks": "All suite processes returned 0; inspect the structured per-check results and additional separately captured integration evidence.",
+    "shutdown": "The outer-world and rapid 200-wave stress fixtures initially retained audio references on exit. The outer-world suite passed cleanly at paced playback. The wave fixture passed cleanly after audio stop plus 120 process frames. These teardown runs and initial observations are preserved below."
   }
 }

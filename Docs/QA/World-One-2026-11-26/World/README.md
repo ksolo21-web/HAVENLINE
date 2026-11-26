@@ -10,6 +10,14 @@ These two normal-camera frames are positioned inspections of the far world. The 
 
 [Western forest](West-forest.jpg) · [Northeastern snow ridge](Northeast-boundary.jpg) · [Streaming checks](World-streaming.json)
 
-On the expanded court, one native 1280 × 720 Ultra inspection submitted 301,691 visible primitives at 1× and 244,791 at 2×. The figures include the whole visible field at the sampled player position; the active pack, camera and view affect them. The supplied cost report records visible and shadow counters separately. These Linux software-renderer samples measure scene workload. Sustained frame times and thermals require target-device runs. [Native draw counters](Rendered-scene-cost.json)
+On the expanded court, one native 1280 × 720 Ultra inspection submitted 322,561 visible primitives at 1× and 251,079 at 2×. The figures include the whole visible field at the sampled player position; the active pack, camera and view affect them. The supplied cost report records visible and shadow counters separately. These Linux software-renderer samples measure scene workload. Sustained frame times and thermals require target-device runs. [Native draw counters](Rendered-scene-cost.json)
 
-The outer-world test passed all 23 assertions. Its first accelerated headless teardown reported seven resources still in use. A paced repeat passed the same 23 assertions with a clean shutdown. [Native suite receipts](Native-suite-results.json)
+The outer-world assertions passed in both runs. Accelerated shutdown initially reported five audio resources still in use. The same test exited cleanly on a paced repeat. The 200-wave diagnostic passed all combat assertions but retained four WAVs at test shutdown. It exited cleanly after stopping the audio and giving the mixer 120 additional process frames. The packaged Linux game also passed its ordinary close and save check. [Native suite receipts](Native-suite-results.json)
+
+## Tuning locations
+
+- `world_landscape.gd` defines the world seed, cell size, placement and near-source distances. `layout.json` contains the map extent and initial camp layout.
+- `field_lifecycle.gd` defines resource and loose-drop lifetimes. `field_encounters.gd` sets wave timing, group limits and boss probability. `field_enemy.gd` sets wolf sizes, health and combat behavior.
+- `field_progression.gd` sets construction prerequisites and prices. `field_environment.gd` owns the earned perimeter, gate presentation, floor and gate positions.
+- `weapon_orbit.gd` and `orbit_opening.gd` define the displayed tool and swept contact. `field_opening.gd` applies the earned boundary and connects combat, inventory, music and events.
+- `field_snow_tracks.gd` controls foot and paw registration, snow eligibility, size, aging and per-cell limits. `field_defense_tower.gd` controls tower range, reload, targeting and projectile hits.

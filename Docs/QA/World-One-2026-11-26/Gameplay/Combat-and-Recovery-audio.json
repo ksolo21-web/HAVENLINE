@@ -1,0 +1,199 @@
+{
+  "assertion": "Each final stereo edit matches its own originating game-mixer samples. No postmixed sound.",
+  "test": "Decoded distinct left and right channels at 8 kHz; normalized cross-correlation in the middle of each edit, allowing \u00b180 ms encoder/concat timing variation.",
+  "lowest_correlation": 0.976,
+  "chapters": [
+    {
+      "title": "Full health",
+      "originating_run": "hp-unpaid-34df87a8",
+      "left": {
+        "r": 0.9947,
+        "lag_ms": 0.0
+      },
+      "right": {
+        "r": 0.9947,
+        "lag_ms": 0.0
+      },
+      "runtime_cues_at_this_edit": []
+    },
+    {
+      "title": "Wolf braces and lunges",
+      "originating_run": "hp-unpaid-34df87a8",
+      "left": {
+        "r": 0.9795,
+        "lag_ms": -0.12
+      },
+      "right": {
+        "r": 0.9787,
+        "lag_ms": -0.12
+      },
+      "runtime_cues_at_this_edit": [
+        "approach",
+        "enemy_attack",
+        "hit",
+        "player_attack",
+        "step_snow",
+        "swing",
+        "wolf_brace"
+      ]
+    },
+    {
+      "title": "Wolf bite and visible HP loss",
+      "originating_run": "hp-unpaid-34df87a8",
+      "left": {
+        "r": 0.9769,
+        "lag_ms": 0.0
+      },
+      "right": {
+        "r": 0.9762,
+        "lag_ms": 0.0
+      },
+      "runtime_cues_at_this_edit": [
+        "approach",
+        "enemy_attack",
+        "hit",
+        "player_attack",
+        "swing",
+        "wolf_brace"
+      ]
+    },
+    {
+      "title": "Enemy falls and disappears",
+      "originating_run": "hp-unpaid-34df87a8",
+      "left": {
+        "r": 0.9998,
+        "lag_ms": 0.0
+      },
+      "right": {
+        "r": 0.9998,
+        "lag_ms": 0.0
+      },
+      "runtime_cues_at_this_edit": [
+        "enemy_attack",
+        "player_hurt",
+        "swing",
+        "wolf_brace"
+      ]
+    },
+    {
+      "title": "Knockdown and health restored at the first buy plot",
+      "originating_run": "hp-unpaid-34df87a8",
+      "left": {
+        "r": 0.9904,
+        "lag_ms": 0.0
+      },
+      "right": {
+        "r": 0.9907,
+        "lag_ms": 0.0
+      },
+      "runtime_cues_at_this_edit": [
+        "impact_wood",
+        "reset",
+        "swing"
+      ]
+    },
+    {
+      "title": "Safe at the first hearth plot",
+      "originating_run": "hp-unpaid-34df87a8",
+      "left": {
+        "r": 0.9971,
+        "lag_ms": 0.0
+      },
+      "right": {
+        "r": 0.9971,
+        "lag_ms": 0.0
+      },
+      "runtime_cues_at_this_edit": [
+        "swing"
+      ]
+    },
+    {
+      "title": "Separate fresh run - Full health",
+      "originating_run": "hp-paid-34df87a8",
+      "left": {
+        "r": 1.0,
+        "lag_ms": 0.0
+      },
+      "right": {
+        "r": 1.0,
+        "lag_ms": 0.0
+      },
+      "runtime_cues_at_this_edit": []
+    },
+    {
+      "title": "Separate fresh run - Wolf braces and lunges",
+      "originating_run": "hp-paid-34df87a8",
+      "left": {
+        "r": 0.978,
+        "lag_ms": 0.0
+      },
+      "right": {
+        "r": 0.9778,
+        "lag_ms": 0.0
+      },
+      "runtime_cues_at_this_edit": [
+        "approach",
+        "enemy_attack",
+        "hit",
+        "player_attack",
+        "step_snow",
+        "swing",
+        "wolf_brace"
+      ]
+    },
+    {
+      "title": "Separate fresh run - Enemy falls and disappears",
+      "originating_run": "hp-paid-34df87a8",
+      "left": {
+        "r": 0.9773,
+        "lag_ms": 0.12
+      },
+      "right": {
+        "r": 0.976,
+        "lag_ms": 0.12
+      },
+      "runtime_cues_at_this_edit": [
+        "carry",
+        "enemy_attack",
+        "hit",
+        "impact_wood",
+        "pickup_full",
+        "pickup_partial",
+        "player_attack",
+        "player_hurt",
+        "step_snow",
+        "swing",
+        "wolf_brace",
+        "wolf_return"
+      ]
+    },
+    {
+      "title": "Separate fresh run - Knockdown and health restored at the camp",
+      "originating_run": "hp-paid-34df87a8",
+      "left": {
+        "r": 0.9945,
+        "lag_ms": -0.12
+      },
+      "right": {
+        "r": 0.9947,
+        "lag_ms": -0.12
+      },
+      "runtime_cues_at_this_edit": [
+        "reset"
+      ]
+    },
+    {
+      "title": "Separate fresh run - Safe after camp rescue",
+      "originating_run": "hp-paid-34df87a8",
+      "left": {
+        "r": 0.9933,
+        "lag_ms": 0.0
+      },
+      "right": {
+        "r": 0.9933,
+        "lag_ms": 0.0
+      },
+      "runtime_cues_at_this_edit": []
+    }
+  ]
+}

@@ -1,38 +1,44 @@
 {
-  "source_commit": "87f703f2a62c3651314b66084bcfb32858728364",
+  "source_commit": "34df87a8195553c4636aa374ac3bfc11054a3bbd",
   "scene": "res://field_opening.tscn",
-  "manifest_sha256": "6b0e89b6ce94ecabbc6c59be0431aff8e0ec267083f4cbf83248d78b7d534f2b",
-  "reviewed_source_files_verified_by_prepare": 201,
+  "manifest_sha256": "5d8844f333ad2d2873998f5bf95c3730df3719c2aa7e136943c6539733bfe037",
+  "reviewed_source_files_verified_by_prepare": 219,
   "godot": "4.7.2.stable.official.ed1daf0bf",
   "deliverables": {
     "Havenline-World-One-Linux-x86_64.tar.gz": {
-      "sha256": "6eac539bfe9a118aba2f27b6d1856795387559ac027b9948d91ae0a21a19c407",
-      "bytes": 146781769
+      "sha256": "d03931601675a98336d2bacb400d89829b0ed4817193875b472c42cf3e87f10c",
+      "bytes": 147676920
     },
     "Havenline-World-One-Android-arm64-debug.apk": {
-      "sha256": "d95ca550c451ebcbfddefe87643c82e5d96e2d92fec37cf058a565a635b2badb",
-      "bytes": 147809005
+      "sha256": "9e0d8a5b1abb351c92aadc821015f4947930c7ab87175668c09153baa64518a7",
+      "bytes": 148825566
     },
     "Havenline-World-One-Godot-Source.zip": {
-      "sha256": "9f510e10a5fd8a7eb1491926127f2224bd0241b7ed54aba8c3ebb1a6a740fc0c",
-      "bytes": 77193332
+      "sha256": "84595f1d65841967ffdfc8acb6bed7fd1b5b08a5d8193e65a9a934976f257a83",
+      "bytes": 77691547
     }
   },
   "editor_source": {
     "archive": "Havenline-World-One-Godot-Source.zip",
     "project_root": "HavenlineLevel1/project.godot",
-    "manifested_files": 201,
+    "manifested_files": 219,
     "additional_files": [
       "export_presets.cfg",
       "export-artwork/field-icon-mono.png"
     ],
-    "verification": "all 203 file entries read back and hashed; ZIP CRCs passed"
+    "verification": "all 221 file entries read back and hashed; ZIP CRCs passed"
   },
   "linux": {
     "format": "ELF x86_64 release, embedded Godot PCK",
-    "binary_sha256": "a438cc2de91d7cbbd7ac9bceda8b1283a06f39284bd6dd1901a004295fdd1c02",
+    "binary_sha256": "4d6f1b3c04d8aeee6a56ae849f5508ac614328892c0a1eee6020929c78200e4d",
     "archive_check": "single executable, mode preserved, extracted-file digest equals tested executable",
     "native_headless_start": "passed",
+    "headless_startup_exit_warnings": [
+      "WARNING: 10 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+    ],
+    "window_warnings": [
+      "WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver."
+    ],
     "game_window": "passed",
     "normal_window_close": "WM_DELETE_WINDOW sent to the packaged game; exit code 0",
     "saved_in_isolated_test_profile": true,
@@ -42,7 +48,7 @@
         960,
         540
       ],
-      "sha256": "96ee99eb9bc664fa54449098552984dd06f5e5963c13a4b7d7844ae80ae0ef04"
+      "sha256": "1b7d33f622506fba335bfbbe7286c43738c9344457d693ec22ef4851f2caec73"
     },
     "renderer": [
       "OpenGL API 4.5 (Core Profile) Mesa 25.0.7-2+deb13u1 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 19.1.7, 256 bits)"
@@ -62,6 +68,10 @@
         "audio samples and score in pack": true,
         "default World One scene": true,
         "earned purchase order in initial level": true,
+        "final bound storage slot at high balance": true,
+        "final representative stock geometry counts": true,
+        "five-second source cooldown": true,
+        "installed camp storehouse and typed bays": true,
         "native World One profile under isolated XDG": true,
         "streamed 1024 metre field": true,
         "three expansion geometries and two gates": true,
@@ -72,7 +82,7 @@
         "music_and_ambience_loops": 5,
         "scene": "res://field_opening.tscn",
         "sound_effects": 52,
-        "storage_directory": "/tmp/hvn-world-release/session/data/Havenline-World-One-Review/world-one",
+        "storage_directory": "/tmp/hvn-world-release/session-34df87a8/data/Havenline-World-One-Review/world-one",
         "surface_metres": 1024.0
       }
     }
@@ -111,6 +121,9 @@
       "field_world/eastern_watchtower.glb": [
         "assets/.godot/imported/eastern_watchtower.glb-e324e382970ace676230378acea3aa7d.scn"
       ],
+      "storage_house/camp_storehouse.glb": [
+        "assets/.godot/imported/camp_storehouse.glb-31a2755f93dbbc2082329839dee98bb7.scn"
+      ],
       "field_world/snow_prints.png": [
         "assets/.godot/imported/snow_prints.png-87d3a480bf895b4dece18d05f9c28781.ctex"
       ],
@@ -132,5 +145,14 @@
     "apksigner verify --verbose --print-certs Havenline-World-One-Android-arm64-debug.apk",
     "zipalign -c -P 16 -v 4 Havenline-World-One-Android-arm64-debug.apk"
   ],
-  "reproduction_note": "A rebuilt APK may have a different archive digest or signing certificate, depending on the local signing key, timestamps and exporter. The supplied checksums identify these tested binaries."
+  "reproduction_note": "A rebuilt APK may have a different archive digest or signing certificate, depending on the local signing key, timestamps and exporter. The supplied checksums identify these tested binaries.",
+  "storehouse_atlas_proof": {
+    "frozen_glb_sha256": "77a997ce275175cd8b26f96203b8aaabda720ba9a6d9bd4fc2ae56be993bd2b1",
+    "embedded_atlas_equals_importer_input": true,
+    "embedded_jpeg_sha256": "020be4e83ac3470efd6cf917a1a50403915bcf0d02e2bef60e0d936f8cf0a447",
+    "android_compiled_assets_identical_to_verified_import": {
+      "assets/storage_house/camp_storehouse.glb": "5bae48d37731afb382bb54bc01688bba90d9b34f20a7dadd22528a7b624f8cc8",
+      "assets/storage_house/camp_storehouse_0.jpg": "ca7c4e883073335d24a4692b81cacd45b8c82f5336de1f3f71707a0ea1d25cb1"
+    }
+  }
 }
