@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T08:14:55Z",
+  "observed_at_utc": "2026-11-26T08:31:53Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -35,13 +35,13 @@
       "id": "wood-storage",
       "role": "Resource builder and reviewer",
       "state": "in_progress",
-      "result": "The same candidate pose for a full-size log clears 77 stock run samples (min 28.04 mm) and five stop/early unloaded Idle samples (min 28.21 mm). Only a geometric screen; no hardware clearance or installation.",
+      "result": "One fixed full-size log candidate cleared 77 run, five stop/idle and five turn geometry samples on the unloaded stock character. At the new heading the actor hides up to 67.7% of the modeled log. No mounted screenshot, actual attachment or transfer.",
       "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/5fd10dff46d0f5cd9c7c2d9fa4f7e91a85bbed4c",
         "https://github.com/ksolo21-web/HAVENLINE/commit/2bd499de74dd80af764e8fac8355813783be8e78",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/4278be2ab12ed5b5982b9604ace277e697dbbf05",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/46f34e0c9cc1cb5c0e092136b123731152a6053f"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/4278be2ab12ed5b5982b9604ace277e697dbbf05"
       ],
-      "next": "Check the same offset on the independently verified stock +Z direction-change samples. Keep real attachment, physical storage, and continuous clearance separate.",
+      "next": "Check exact imported Crown material before a visual-only test. Keep actual attachment, load, turning sweep and receiver authorization separate.",
       "role_ids": [
         "builder-resource-cooker"
       ]
@@ -115,9 +115,9 @@
       "role_id": "alfred",
       "state": "done",
       "title": "Prepared Bot Office feed data",
-      "summary": "One full stock run cycle and five stop/idle samples verified above the numeric clearance target, with only ~3 mm margin. A separate turn geometry screen is active.",
-      "next": "Recheck the fixed proposed pose across heading/animation changes before authoring any game carry mount.",
-      "updated_at_utc": "2026-11-26T08:14:55Z"
+      "summary": "Stock turn and stop geometry checked without touching gameplay. Candidate still held for true visual readability and physical support.",
+      "next": "Confirm importer fields; only then consider a matched visual-only run.",
+      "updated_at_utc": "2026-11-26T08:31:53Z"
     },
     {
       "role_id": "rig-character",
