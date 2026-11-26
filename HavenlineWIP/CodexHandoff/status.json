@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T02:46:26Z",
+  "observed_at_utc": "2026-11-26T02:58:44Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -21,13 +21,14 @@
       "id": "character-1",
       "role": "Rigging and independent review",
       "state": "blocked",
-      "result": "The detached right collar edit cleared the original crossing but created three nearby overlaps and left a fold. Independent review rejected it. The tested pose also still misses left heel contact.",
+      "result": "Independent review confirmed 35 crossings in the unchanged lower boot under the exact loaded test. A new shaft above that seam would not fix the lower shell. Existing sources checked do not provide a ready layered replacement.",
       "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/03e3a9283be50b8c1ea99b9c56af2ba17427d46a",
         "https://github.com/ksolo21-web/HAVENLINE/commit/ab0725e9bc04ec63a25e7cf7897a948d42fdac8c",
         "https://github.com/ksolo21-web/HAVENLINE/commit/e418fd2e50ebf2e43eaae041c3d1c5ef8d3bb368",
         "https://github.com/ksolo21-web/HAVENLINE/commit/e946060023623fa72e272f86d84739e0d3b28edf"
       ],
-      "next": "No collar-only boundary met the tested load and protection requirements. Keep this approach retired and evaluate a different animation-ready base or separately authorized design.",
+      "next": "Choose a genuinely animation-ready lower assembly or alternate Character 1 source before authoring another fit. No stock gait or collar-only retest.",
       "role_ids": [
         "rig-character",
         "critic-rig"
@@ -37,14 +38,15 @@
       "id": "wood-storage",
       "role": "Resource builder and reviewer",
       "state": "in_progress",
-      "result": "The detached repeat-pine test awarded one wood. The old save scripts refused to read or overwrite the newer save. Separate carry visuals and an authored second row remain unverified.",
+      "result": "The separate disposable pine save copy earned one wood and restored without replay. The previous version's scripts still read its preserved original copy. Separate carry visuals remain unverified.",
       "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/806b7cb607044b4c239dc28bb27f7f8cfa28c5f1",
         "https://github.com/ksolo21-web/HAVENLINE/commit/51d7edfe29f90c15b13c8e8edf40764f3e0c1e0d",
         "https://github.com/ksolo21-web/HAVENLINE/commit/5e6a4543a5cc814459d07e24fe0713ab05fb7986",
         "https://github.com/ksolo21-web/HAVENLINE/commit/f92609b35f6bf7986e7011418f97585ff170cb0f",
         "https://github.com/ksolo21-web/HAVENLINE/commit/7934368d88ee780c729122d49001f3bcec6fcd1f"
       ],
-      "next": "Keep the repeat-pine candidate detached until a save compatibility plan is approved. Separately verify real carry mounts before adding transfer effects.",
+      "next": "Use the isolated profile procedure for testing only. Production save adoption still needs a compatibility plan; independently validate the carry mounts.",
       "role_ids": [
         "builder-resource-cooker"
       ]
@@ -124,14 +126,13 @@
     {
       "role_id": "rig-character",
       "state": "blocked",
-      "title": "Right boot collar trial rejected",
-      "summary": "The original clash cleared, but the edit created nearby overlaps and a fold remained.",
-      "next": "Do not promote; a different bounded design needs evidence under load.",
+      "title": "Ruled out the shaft-only Character 1 repair",
+      "summary": "The unchanged lower boot showed loaded intersections below the proposed joint. No replacement from the inspected source inventory was ready.",
+      "next": "A different source or a separately scoped lower assembly is needed.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/e418fd2e50ebf2e43eaae041c3d1c5ef8d3bb368",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/e946060023623fa72e272f86d84739e0d3b28edf"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/03e3a9283be50b8c1ea99b9c56af2ba17427d46a"
       ],
-      "updated_at_utc": "2026-11-26T02:33:55Z"
+      "updated_at_utc": "2026-11-26T02:58:44Z"
     },
     {
       "role_id": "critic-rig",
@@ -170,13 +171,13 @@
     {
       "role_id": "level1-verifier",
       "state": "done",
-      "title": "Verified disposable repeat-pine save behavior",
-      "summary": "Sixty native checks passed. The older save code preserved the newer save by refusing to read or overwrite it; this is not backward compatibility.",
-      "next": "Hold durable adoption; continue tests only on disposable profiles.",
+      "title": "Verified separate disposable pine profiles",
+      "summary": "The copy alone earned wood, cold restore did not duplicate it, and the older reader still opened the preserved original.",
+      "next": "Keep this test-only separation; do not claim a production upgrade.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/51d7edfe29f90c15b13c8e8edf40764f3e0c1e0d"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/806b7cb607044b4c239dc28bb27f7f8cfa28c5f1"
       ],
-      "updated_at_utc": "2026-11-26T02:46:26Z"
+      "updated_at_utc": "2026-11-26T02:58:44Z"
     },
     {
       "role_id": "builder-customer-counter",
