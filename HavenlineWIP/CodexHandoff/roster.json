@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "project": "Havenline",
+  "scope": "Level 1",
+  "kind": "role_roster_not_worker_presence",
+  "avatar_count": 15,
+  "coordinator_count": 1,
+  "bot_role_count": 14,
+  "roles": [
+    {
+      "id": "alfred",
+      "display_name": "Alfred",
+      "role_family": "Coordinator",
+      "responsibility": "Assigns work, clears blockers and tracks handoffs.",
+      "animation_hint": "Moves a task card between stations."
+    },
+    {
+      "id": "planner",
+      "display_name": "Planning Bot",
+      "role_family": "Planning",
+      "responsibility": "Reads the GitHub task plan and prepares the next ready Level 1 jobs.",
+      "animation_hint": "Sorts and pins task cards on a planning board."
+    },
+    {
+      "id": "builder-camp-pads",
+      "display_name": "Camp & Pads Builder",
+      "role_family": "Builder",
+      "responsibility": "Builds the furnace, camp floor, gates, and purchase pads.",
+      "animation_hint": "Snaps a model piece into a camp layout."
+    },
+    {
+      "id": "builder-customer-counter",
+      "display_name": "Customer & Counter Builder",
+      "role_family": "Builder",
+      "responsibility": "Builds the counter, service geometry, and approved customer waiting spaces.",
+      "animation_hint": "Checks a model on a counter workbench."
+    },
+    {
+      "id": "builder-resource-cooker",
+      "display_name": "Resource & Cooker Builder",
+      "role_family": "Builder",
+      "responsibility": "Builds resource and cooker assets, carry rows, and receiver visuals.",
+      "animation_hint": "Sets a log or equipment part onto a material tray."
+    },
+    {
+      "id": "gameplay-integrator",
+      "display_name": "Gameplay Integrator",
+      "role_family": "Integration",
+      "responsibility": "Connects independently verified changes to the game and owns the integrated build.",
+      "animation_hint": "Connects two labeled modules at an integration desk."
+    },
+    {
+      "id": "rig-character",
+      "display_name": "Character Rigging Bot",
+      "role_family": "Rigging",
+      "responsibility": "Authors and checks Character 1's motions, joint weights, contact, and tool grip.",
+      "animation_hint": "Scrubs a character motion timeline."
+    },
+    {
+      "id": "rig-customer",
+      "display_name": "Customer NPC Rigging Bot",
+      "role_family": "Rigging",
+      "responsibility": "Handles NPC animation and rigging for customers and other admitted actors.",
+      "animation_hint": "Checks a small character rig beside a motion timeline."
+    },
+    {
+      "id": "repair-character",
+      "display_name": "Character Repair Bot",
+      "role_family": "Repair",
+      "responsibility": "Fixes character rejects and sends the corrected revision back to the independent critic.",
+      "animation_hint": "Repairs a marked joint and returns the review card."
+    },
+    {
+      "id": "repair-counter",
+      "display_name": "Counter Repair Bot",
+      "role_family": "Repair",
+      "responsibility": "Fixes counter rejects and returns the revised asset or test to the independent critic.",
+      "animation_hint": "Reworks a marked counter part and returns a review card."
+    },
+    {
+      "id": "critic-game",
+      "display_name": "Game Engineering Critic",
+      "role_family": "Independent Critic",
+      "responsibility": "Reviews gameplay, reference fit, and evidence without approving its own work.",
+      "animation_hint": "Compares two captures and marks a check or reject."
+    },
+    {
+      "id": "critic-rig",
+      "display_name": "Rigging Critic",
+      "role_family": "Independent Critic",
+      "responsibility": "Reviews motion, foot planting, and contact at game scale on the submitted revision.",
+      "animation_hint": "Compares two full-body avatar takes under a fixed camera."
+    },
+    {
+      "id": "level1-verifier",
+      "display_name": "Level 1 Verifier",
+      "role_family": "Verification",
+      "responsibility": "Replays authored test routes and checks exact build, inputs, and evidence.",
+      "animation_hint": "Runs a test board with separate pass, fail, and waiting lights."
+    },
+    {
+      "id": "live-playtester",
+      "display_name": "Live Playtester",
+      "role_family": "Playtesting",
+      "responsibility": "Plays the actual build at default camera and reports device and gameplay results.",
+      "animation_hint": "Uses a controller at a gameplay station."
+    },
+    {
+      "id": "audio-sfx",
+      "display_name": "Audio & SFX Bot",
+      "role_family": "Audio",
+      "responsibility": "Owns music, ambience, effects, cue routing, and mock and actual mix handoffs.",
+      "animation_hint": "Moves a fader and inspects three separate sound meters."
+    }
+  ],
+  "display_rules": {
+    "avatar_per_role": true,
+    "always_live": false,
+    "role_animation_is_telemetry": false,
+    "status_feed": "status.json",
+    "unknown_activity_when_unmapped": true
+  }
+}
