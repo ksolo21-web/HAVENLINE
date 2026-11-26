@@ -1,0 +1,99 @@
+{
+  "stamp": {
+    "commit": "73d79cb50311e1818bfb8545c60ad846c18641ef",
+    "manifest": {
+      "sha256": "8951cdc5e0731ade46dacc90a9fe5855855f066f61ac89bdf2fb652729a6245d",
+      "checked_files": 407
+    },
+    "runner": "cd758a74bd87962cd776cd6348a5ca5f8d0231499788e03c2b78e9c4074796e8"
+  },
+  "passed": true,
+  "runs": [
+    {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "log": "qa_field_owl-1.log",
+      "log_sha256": "112086d7f33feabaa0f28742ebced0dfd3076ba740dbbc93001faa233991ed27",
+      "summary": [
+        {
+          "braking_pitch": -0.277491986751556,
+          "checks": {
+            "asymmetric banking visibly rolls both wing pairs": true,
+            "both talons reach before first damage and rake during a planted brake": true,
+            "both wrists and primaries are independent mesh assemblies": true,
+            "contact recovery and cooldown enforced": true,
+            "each of three attack telegraphs fired once": true,
+            "first rendered claw touches wolf triangle at hit and stays planted": true,
+            "flight talons retract and extend before impact": true,
+            "live boss uses standard damage and health feedback": true,
+            "one defeat and exactly three physical contacts on moving wolf": true,
+            "paid purchase perches once on south gate": true,
+            "recall immediately cancels boss dive into safe camp": true,
+            "remote callback blocked outside contact": true,
+            "returns to the same physical post": true,
+            "setup is idempotent": true,
+            "six feather joints fold and flare without a one-frame angular snap": true,
+            "six sensors match the actual imported claw vertices in all three poses": true,
+            "spent contact authorization cleared": true,
+            "telegraphed takeoff before first damage": true,
+            "unpaid owl hidden and harmless": true,
+            "wing flap changes through the flight cycle": true
+          },
+          "grasp": 0.984351992607117,
+          "max_hit_error_m": 0.0,
+          "max_joint_step_rad_at_60hz": 0.225001946091652,
+          "max_mesh_error_m": 3.37174782316652e-07,
+          "max_plant_error_m": 2.38418579101562e-07,
+          "reach": 1.0,
+          "states": [
+            "locked",
+            "perched",
+            "takeoff",
+            "follow",
+            "bank",
+            "windup",
+            "dive",
+            "strike",
+            "recover",
+            "land"
+          ],
+          "strikes": [
+            [
+              239,
+              8.92332935333252,
+              1.20741093158722,
+              2.35156726837158,
+              2
+            ],
+            [
+              460,
+              8.68936920166016,
+              1.2951055765152,
+              2.27111744880676,
+              1
+            ],
+            [
+              678,
+              8.27576446533203,
+              1.55722844600677,
+              2.857990026474,
+              0
+            ],
+            [
+              1199,
+              9.54201889038086,
+              1.78245067596436,
+              1.99631130695343,
+              7
+            ]
+          ],
+          "wing_range_rad": [
+            -0.939315795898438,
+            0.939315795898438
+          ]
+        }
+      ]
+    }
+  ]
+}

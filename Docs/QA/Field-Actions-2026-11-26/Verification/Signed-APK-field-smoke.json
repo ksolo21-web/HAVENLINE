@@ -1,0 +1,52 @@
+{
+  "checks": {
+    "attacker_has_weighted_jaw_rig": true,
+    "compiled_android_scripts": true,
+    "damage_applies_to_player_and_hud": true,
+    "first_camp_plot_costs_200_wood": true,
+    "genuine_enemy_encounter": true,
+    "hud_shows_current_hp": true,
+    "loaded_in_disposable_profile": true,
+    "new_effects_and_three_scores_loaded": true,
+    "orbit_strikes_without_attack_input": true,
+    "owl_shipped_with_talon_shapes_and_six_contact_points": true,
+    "release_returns_to_idle": true,
+    "short_touch_drag_runs": true,
+    "signed_pack_entry_scene": true,
+    "thirty_hp_on_fresh_spawn": true,
+    "wearable_supports_in_signed_scene": true,
+    "wolf_starts_real_attack": true,
+    "worn_meshes_have_shadow_casting_off": true
+  },
+  "evidence": {
+    "combat_events": {
+      "enemy_attack": 1,
+      "player_attack": 1,
+      "player_hurt": 1
+    },
+    "first_contact_tick": 8,
+    "lowest_hp": 28,
+    "short_drag_distance_m": 2.01215553283691,
+    "short_drag_gait": "run",
+    "start_hp": 30
+  },
+  "failures": [],
+  "passed": true,
+  "apk_sha256": "64329b6586e27c0e7656546d051ad2385f28fb12dbd647414661f33dead747dd",
+  "apk_bytes": 171455560,
+  "packed_files": 577,
+  "identical_files_verified": 577,
+  "temporary_pack_bytes": 143506010,
+  "scripts": {
+    "orbit_opening.gdc": "179497b3692e49ff294d3d3b173e4f2cf0d34b7242b7686de93b7e41090c2a1d",
+    "weapon_orbit.gdc": "e647bec01592861c168e770e4a21253b14f8aa7d327a0e63f1ccc9a405c05b41",
+    "field_enemy.gdc": "2d4be75bcd7c2ac10e1f6bd9ad00b7312583898dc9568cb48f4de3cf27769cd3",
+    "field_opening.gdc": "a38ab5e831cdd741d17ba852a0741cc7c9a3f60a1bdf2981402ce29985211728",
+    "project.binary": "f9da523e2f184accf42ff3537bfa0558afd218242818fcf08b2c36fba99eb257"
+  },
+  "engine": "Godot 4.7.2 Linux x86_64 headless",
+  "signature_verification": "Android apksigner successful",
+  "operating_system_runtime": "Linux desktop, not Android or a Fold7",
+  "input": "synthetic screen-touch press, short drag, release, and steering toward a naturally spawned enemy. No damage was directly invoked.",
+  "source": "73d79cb50311e1818bfb8545c60ad846c18641ef"
+}

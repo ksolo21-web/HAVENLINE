@@ -1,0 +1,354 @@
+{
+  "source_branch": "trial/world-one-expansion-2026-11-26",
+  "reference_commit": "ee4251aee1b5c1f391d043b0a92b6838c1bbb858",
+  "reference_directory": "Docs/Design/ReferenceVideoLock/2026-11-26-field-loop/Locked-sequences",
+  "references": [
+    {
+      "mp4": "A-fishing-upgrade.mp4",
+      "sha256": "82cfe255735a8c4cdc399b217777dddeb2d8e24922c10ca2209a823f4581f79b",
+      "video_source_sha256": "62f7cfe644de3826cfdd6d91bc23c0ab8d9e4fde3e175c90f762e604547bb0ca",
+      "file_at_commit": "b80c61f13ba31bb0940792dd47976a8e2878dbf5:Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/A-12.00-13.40-detail-sequence.png",
+      "prices": "160 cash",
+      "read": "12.00 and 12.30 s",
+      "movement": "The actor approaches the fishing upgrade, cash visibly moves at 12.60\u201312.90 s, and the equipment rises by 13.20 s.",
+      "visits": 1
+    },
+    {
+      "mp4": "B-camp-purchase.mp4",
+      "sha256": "140eedc57630289a93ebb6d18187802ac5c64ec206e2efee15d3f02116ebc760",
+      "video_source_sha256": "4c9051cbea6df0efa3e7288b13b6d17da46e857274869b0b43d2f96ff6cc79d2",
+      "file_at_commit": "b80c61f13ba31bb0940792dd47976a8e2878dbf5:Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/B-05.40-06.60-detail-sequence.png",
+      "prices": "200 timber",
+      "read": "05.40 s",
+      "movement": "The initially gray build tile has a partial green fill at 05.70 s. The hearth is visible at 06.30 s and the snow around it has cleared by 06.60 s.",
+      "visits": 1
+    },
+    {
+      "mp4": "B-axe-upgrade.mp4",
+      "sha256": "23e9bccc761ec627aa05d0d46849db51c27701842cf8b7ac987255472235af4e",
+      "video_source_sha256": "4c9051cbea6df0efa3e7288b13b6d17da46e857274869b0b43d2f96ff6cc79d2",
+      "file_at_commit": "b80c61f13ba31bb0940792dd47976a8e2878dbf5:Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/B-13.00-14.20-detail-sequence.png",
+      "prices": "$100 for the axe-plus tile and $175 for the neighboring upgrade tile",
+      "read": "13.00\u201313.60 s",
+      "movement": "The actor carries a tall stack of cash. Bundles leave the pack by 13.60 s and the added axe is visible by 14.20 s.",
+      "visits": 1
+    }
+  ],
+  "design_translation": "200 timber is the direct opening-price match. Other material recipes and 10 raw units per carried bundle are Havenline tuning. The videos show no independently readable value per carried object and no complete one-source yield. Cash-priced ad upgrades provide a price range, not a material exchange rate.",
+  "route": {
+    "driver": "ordinary native touchscreen controls, 60 Hz fixed-step, headless, isolated empty field profile",
+    "actor_teleports": 0,
+    "granted_resources": 0,
+    "plots": [
+      {
+        "id": "center_hearth",
+        "cost": {
+          "wood": 200
+        },
+        "paid_raw_units": {
+          "wood": 200
+        },
+        "receipts": 20,
+        "last_receipt_s": 36.0
+      },
+      {
+        "id": "expansion_1",
+        "cost": {
+          "wood": 120,
+          "stone": 60
+        },
+        "paid_raw_units": {
+          "stone": 60,
+          "wood": 120
+        },
+        "receipts": 18,
+        "last_receipt_s": 189.617
+      },
+      {
+        "id": "storage_wood",
+        "cost": {
+          "wood": 100
+        },
+        "paid_raw_units": {
+          "wood": 100
+        },
+        "receipts": 10,
+        "last_receipt_s": 195.733
+      },
+      {
+        "id": "storage_stone",
+        "cost": {
+          "wood": 80,
+          "stone": 60
+        },
+        "paid_raw_units": {
+          "stone": 60,
+          "wood": 80
+        },
+        "receipts": 14,
+        "last_receipt_s": 200.133
+      },
+      {
+        "id": "storage_meat",
+        "cost": {
+          "wood": 70,
+          "meat": 50
+        },
+        "paid_raw_units": {
+          "meat": 50,
+          "wood": 70
+        },
+        "receipts": 12,
+        "last_receipt_s": 205.683
+      },
+      {
+        "id": "expansion_2",
+        "cost": {
+          "wood": 150,
+          "stone": 100
+        },
+        "paid_raw_units": {
+          "stone": 100,
+          "wood": 150
+        },
+        "receipts": 25,
+        "last_receipt_s": 216.633
+      },
+      {
+        "id": "watchtower",
+        "cost": {
+          "wood": 120,
+          "stone": 100
+        },
+        "paid_raw_units": {
+          "stone": 100,
+          "wood": 120
+        },
+        "receipts": 22,
+        "last_receipt_s": 221.9
+      },
+      {
+        "id": "orbit_upgrade",
+        "cost": {
+          "stone": 60,
+          "meat": 40
+        },
+        "paid_raw_units": {
+          "meat": 40,
+          "stone": 60
+        },
+        "receipts": 10,
+        "last_receipt_s": 225.85
+      },
+      {
+        "id": "survivor_plot",
+        "cost": {
+          "wood": 80
+        },
+        "paid_raw_units": {
+          "wood": 80
+        },
+        "receipts": 8,
+        "last_receipt_s": 102.25
+      }
+    ],
+    "start": {
+      "at": [
+        0.0,
+        0.0,
+        6.0
+      ],
+      "carried": {
+        "coal": 0,
+        "meat": 0,
+        "metal": 0,
+        "slate": 0,
+        "stone": 0,
+        "wood": 0
+      },
+      "hearth_floor": "200",
+      "order": [],
+      "paid": {
+        "center_hearth": {
+          "wood": 0
+        },
+        "expansion_1": {
+          "stone": 0,
+          "wood": 0
+        },
+        "expansion_2": {
+          "stone": 0,
+          "wood": 0
+        },
+        "orbit_upgrade": {
+          "meat": 0,
+          "stone": 0
+        },
+        "storage_meat": {
+          "meat": 0,
+          "wood": 0
+        },
+        "storage_stone": {
+          "stone": 0,
+          "wood": 0
+        },
+        "storage_wood": {
+          "wood": 0
+        },
+        "watchtower": {
+          "stone": 0,
+          "wood": 0
+        }
+      },
+      "stage": 0,
+      "survivor_paid": false,
+      "tokens": 0,
+      "wood_hud": "0"
+    },
+    "end": {
+      "at": [
+        7.51885175704956,
+        0.0785377398133278,
+        3.05444693565369
+      ],
+      "carried": {
+        "coal": 0,
+        "meat": 0,
+        "metal": 0,
+        "slate": 0,
+        "stone": 1,
+        "wood": 55
+      },
+      "hearth_floor": "0",
+      "order": [
+        "center_hearth",
+        "expansion_1",
+        "storage_wood",
+        "storage_stone",
+        "storage_meat",
+        "expansion_2",
+        "watchtower",
+        "orbit_upgrade"
+      ],
+      "paid": {
+        "center_hearth": {
+          "wood": 20
+        },
+        "expansion_1": {
+          "stone": 6,
+          "wood": 12
+        },
+        "expansion_2": {
+          "stone": 10,
+          "wood": 15
+        },
+        "orbit_upgrade": {
+          "meat": 4,
+          "stone": 6
+        },
+        "storage_meat": {
+          "meat": 5,
+          "wood": 7
+        },
+        "storage_stone": {
+          "stone": 6,
+          "wood": 8
+        },
+        "storage_wood": {
+          "wood": 10
+        },
+        "watchtower": {
+          "stone": 10,
+          "wood": 12
+        }
+      },
+      "stage": 3,
+      "survivor_paid": true,
+      "tokens": 196,
+      "wood_hud": "550"
+    },
+    "hearth_visits": [
+      {
+        "receipts": 9,
+        "first_receipt_s": 19.783,
+        "last_receipt_s": 20.45,
+        "paid_units": 90,
+        "floor_after": 110
+      },
+      {
+        "receipts": 11,
+        "first_receipt_s": 35.167,
+        "last_receipt_s": 36.0,
+        "paid_units": 110,
+        "floor_after": 0
+      }
+    ],
+    "milestones": {
+      "first_load": 18.583,
+      "first_visit_end": 20.45,
+      "second_load": 32.217,
+      "camp_paid": 36.0,
+      "ninth_paid_plot": 225.85
+    },
+    "measured_events": {
+      "approach": 17,
+      "step_snow": 474,
+      "impact_wood": 197,
+      "swing": 206,
+      "equip_pickaxe": 16,
+      "impact_stone": 39,
+      "equip_axe": 16,
+      "player_attack": 15,
+      "hit": 15,
+      "wolf_brace": 9,
+      "enemy_attack": 5,
+      "player_hurt": 3,
+      "defeat": 6,
+      "meat": 6,
+      "drop_meat": 6,
+      "deplete_wood": 59,
+      "drop_wood": 59,
+      "pickup_partial": 138,
+      "pickup_full": 57,
+      "carry": 57,
+      "regrow_wood": 53,
+      "spend_wood": 91,
+      "deplete_stone": 13,
+      "drop_stone": 13,
+      "wolf_return": 6,
+      "regrow_stone": 13,
+      "purchase": 9,
+      "build": 8,
+      "rise": 8,
+      "reveal": 7,
+      "gate": 17,
+      "gate_latch": 17,
+      "step_camp": 101,
+      "owl_equip": 1,
+      "survivor_rescued": 1,
+      "owl_dive": 1,
+      "owl_hit": 1,
+      "spend_stone": 38,
+      "spend_meat": 9,
+      "worker_pickup": 2,
+      "worker_delivery": 1,
+      "tower_fire": 3,
+      "tower_hit": 3,
+      "victory": 1
+    },
+    "physics_seconds": 227.05,
+    "all_plots_paid": true,
+    "files": {
+      "observations.jsonl": "56b847084721ffcc4a7daa451ef8c7a368110566f687d3e80eea742e70df9a83",
+      "events.jsonl": "193dd20e2a5f84e88142ef4c5a15d7c6d43a3dfe9e51c62c6993159881fd0c01",
+      "world-events-complete.json": "e4db1afb3750a5d8ef1924f9a863a454249ce9c80570773e3440c958e7e7a747"
+    }
+  },
+  "qa": {
+    "fresh_and_legacy_ledger_checks": 53,
+    "machine_conservation_checks": 15,
+    "prior_build_completion_checks": 208,
+    "fresh_process_completion_phases": 16,
+    "historical_v4_capture": "Independent audio agent verified the real preserved earned-input.save.json reopened with rescued survivor, owl, queues and prior stock."
+  }
+}

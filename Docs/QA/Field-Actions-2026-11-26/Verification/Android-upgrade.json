@@ -1,0 +1,367 @@
+{
+  "passed": true,
+  "source": "73d79cb50311e1818bfb8545c60ad846c18641ef",
+  "apk_sha256": "64329b6586e27c0e7656546d051ad2385f28fb12dbd647414661f33dead747dd",
+  "predecessor_apk_sha256": "c92ca5c993482d48ec2b560447c3ab3b4ea302d5c39f03ba8ec81b444c8e579c",
+  "immediately_previous_signer_matches": true,
+  "interim_v3_sha256": "b673bfd0bdc9316758db89e2e2c245069fe82cf3998244f25775ee11bbf5253f",
+  "same_package_and_signer": true,
+  "physical_device": false,
+  "method": "Booted the v2, v3 and v4 signed archives\u2019 game contents in Godot on Linux. Each marked v2 disposable save was tested directly in v4 and after v3 had reopened it.",
+  "runs": [
+    {
+      "case": "partial",
+      "checks": {
+        "commit old app receipt": true,
+        "loaded isolated profile": true,
+        "old owned center_hearth": true,
+        "partial-preupdate-center_hearth-wood-0": true,
+        "partial-preupdate-center_hearth-wood-1": true,
+        "partial-preupdate-center_hearth-wood-2": true,
+        "partial-preupdate-expansion_1-wood-0": true,
+        "previous three wood hearth": true,
+        "stock meat0": true,
+        "stock meat1": true,
+        "stock metal0": true,
+        "stock metal1": true,
+        "stock stone0": true,
+        "stock stone1": true,
+        "stock wood0": true,
+        "stock wood1": true,
+        "tested compiled game": true
+      },
+      "hp": 23,
+      "operation": "write-v2",
+      "owned": [
+        "center_hearth"
+      ],
+      "passed": true,
+      "remaining": {
+        "stone": 1,
+        "wood": 2
+      },
+      "stock": {
+        "coal": 0,
+        "meat": 2,
+        "metal": 2,
+        "slate": 0,
+        "stone": 2,
+        "wood": 2
+      },
+      "survivor": 1
+    },
+    {
+      "case": "owned",
+      "checks": {
+        "commit old app receipt": true,
+        "loaded isolated profile": true,
+        "old owned center_hearth": true,
+        "old owned expansion_1": true,
+        "old owned expansion_2": true,
+        "old owned orbit_upgrade": true,
+        "old owned storage_meat": true,
+        "old owned storage_stone": true,
+        "old owned storage_wood": true,
+        "old owned watchtower": true,
+        "owned-preupdate-center_hearth-wood-0": true,
+        "owned-preupdate-center_hearth-wood-1": true,
+        "owned-preupdate-center_hearth-wood-2": true,
+        "owned-preupdate-expansion_1-stone-0": true,
+        "owned-preupdate-expansion_1-wood-0": true,
+        "owned-preupdate-expansion_1-wood-1": true,
+        "owned-preupdate-expansion_1-wood-2": true,
+        "owned-preupdate-expansion_2-stone-0": true,
+        "owned-preupdate-expansion_2-stone-1": true,
+        "owned-preupdate-expansion_2-wood-0": true,
+        "owned-preupdate-expansion_2-wood-1": true,
+        "owned-preupdate-expansion_2-wood-2": true,
+        "owned-preupdate-orbit_upgrade-meat-0": true,
+        "owned-preupdate-orbit_upgrade-stone-0": true,
+        "owned-preupdate-orbit_upgrade-stone-1": true,
+        "owned-preupdate-storage_meat-meat-0": true,
+        "owned-preupdate-storage_meat-wood-0": true,
+        "owned-preupdate-storage_meat-wood-1": true,
+        "owned-preupdate-storage_stone-stone-0": true,
+        "owned-preupdate-storage_stone-wood-0": true,
+        "owned-preupdate-storage_stone-wood-1": true,
+        "owned-preupdate-storage_wood-wood-0": true,
+        "owned-preupdate-storage_wood-wood-1": true,
+        "owned-preupdate-watchtower-stone-0": true,
+        "owned-preupdate-watchtower-stone-1": true,
+        "owned-preupdate-watchtower-wood-0": true,
+        "owned-preupdate-watchtower-wood-1": true,
+        "owned-preupdate-watchtower-wood-2": true,
+        "previous three wood hearth": true,
+        "stock meat0": true,
+        "stock meat1": true,
+        "stock metal0": true,
+        "stock metal1": true,
+        "stock stone0": true,
+        "stock stone1": true,
+        "stock wood0": true,
+        "stock wood1": true,
+        "tested compiled game": true
+      },
+      "hp": 23,
+      "operation": "write-v2",
+      "owned": [
+        "center_hearth",
+        "expansion_1",
+        "storage_wood",
+        "storage_stone",
+        "storage_meat",
+        "expansion_2",
+        "watchtower",
+        "orbit_upgrade"
+      ],
+      "passed": true,
+      "remaining": {
+        "stone": 0,
+        "wood": 0
+      },
+      "stock": {
+        "coal": 0,
+        "meat": 2,
+        "metal": 2,
+        "slate": 0,
+        "stone": 2,
+        "wood": 2
+      },
+      "survivor": 2
+    },
+    {
+      "case": "partial",
+      "checks": {
+        "built camp still owned": true,
+        "health preserved": true,
+        "loaded isolated profile": true,
+        "new app accepts save and rewrites": true,
+        "one old contribution retained": true,
+        "partial survivor kept": true,
+        "stock count preserved meat": true,
+        "stock count preserved metal": true,
+        "stock count preserved stone": true,
+        "stock count preserved wood": true,
+        "tested compiled game": true,
+        "unstarted plot uses revised price": true
+      },
+      "hp": 23,
+      "operation": "read-v4",
+      "owned": [
+        "center_hearth"
+      ],
+      "passed": true,
+      "remaining": {
+        "stone": 1,
+        "wood": 2
+      },
+      "stock": {
+        "coal": 0,
+        "meat": 2,
+        "metal": 2,
+        "slate": 0,
+        "stone": 2,
+        "wood": 2
+      },
+      "survivor": 1
+    },
+    {
+      "case": "owned",
+      "checks": {
+        "all old plots still owned": true,
+        "built camp still owned": true,
+        "earned owl still owned": true,
+        "health preserved": true,
+        "loaded isolated profile": true,
+        "new app accepts save and rewrites": true,
+        "stock count preserved meat": true,
+        "stock count preserved metal": true,
+        "stock count preserved stone": true,
+        "stock count preserved wood": true,
+        "tested compiled game": true
+      },
+      "hp": 23,
+      "operation": "read-v4",
+      "owned": [
+        "center_hearth",
+        "expansion_1",
+        "storage_wood",
+        "storage_stone",
+        "storage_meat",
+        "expansion_2",
+        "watchtower",
+        "orbit_upgrade"
+      ],
+      "passed": true,
+      "remaining": {
+        "stone": 0,
+        "wood": 0
+      },
+      "stock": {
+        "coal": 0,
+        "meat": 2,
+        "metal": 2,
+        "slate": 0,
+        "stone": 2,
+        "wood": 2
+      },
+      "survivor": 2
+    },
+    {
+      "case": "partial",
+      "checks": {
+        "built camp still owned": true,
+        "health preserved": true,
+        "loaded isolated profile": true,
+        "new app accepts save and rewrites": true,
+        "one old contribution retained": true,
+        "partial survivor kept": true,
+        "stock count preserved meat": true,
+        "stock count preserved metal": true,
+        "stock count preserved stone": true,
+        "stock count preserved wood": true,
+        "tested compiled game": true,
+        "unstarted plot uses revised price": true
+      },
+      "hp": 23,
+      "operation": "read-v4-cold",
+      "owned": [
+        "center_hearth"
+      ],
+      "passed": true,
+      "remaining": {
+        "stone": 1,
+        "wood": 2
+      },
+      "stock": {
+        "coal": 0,
+        "meat": 2,
+        "metal": 2,
+        "slate": 0,
+        "stone": 2,
+        "wood": 2
+      },
+      "survivor": 1
+    },
+    {
+      "case": "owned",
+      "checks": {
+        "all old plots still owned": true,
+        "built camp still owned": true,
+        "earned owl still owned": true,
+        "health preserved": true,
+        "loaded isolated profile": true,
+        "new app accepts save and rewrites": true,
+        "stock count preserved meat": true,
+        "stock count preserved metal": true,
+        "stock count preserved stone": true,
+        "stock count preserved wood": true,
+        "tested compiled game": true
+      },
+      "hp": 23,
+      "operation": "read-v4-cold",
+      "owned": [
+        "center_hearth",
+        "expansion_1",
+        "storage_wood",
+        "storage_stone",
+        "storage_meat",
+        "expansion_2",
+        "watchtower",
+        "orbit_upgrade"
+      ],
+      "passed": true,
+      "remaining": {
+        "stone": 0,
+        "wood": 0
+      },
+      "stock": {
+        "coal": 0,
+        "meat": 2,
+        "metal": 2,
+        "slate": 0,
+        "stone": 2,
+        "wood": 2
+      },
+      "survivor": 2
+    },
+    {
+      "case": "partial",
+      "checks": {
+        "built camp still owned": true,
+        "health preserved": true,
+        "loaded isolated profile": true,
+        "new app accepts save and rewrites": true,
+        "one old contribution retained": true,
+        "partial survivor kept": true,
+        "stock count preserved meat": true,
+        "stock count preserved metal": true,
+        "stock count preserved stone": true,
+        "stock count preserved wood": true,
+        "tested compiled game": true,
+        "unstarted plot uses revised price": true
+      },
+      "hp": 23,
+      "operation": "read-v4-via-v3",
+      "owned": [
+        "center_hearth"
+      ],
+      "passed": true,
+      "remaining": {
+        "stone": 1,
+        "wood": 2
+      },
+      "stock": {
+        "coal": 0,
+        "meat": 2,
+        "metal": 2,
+        "slate": 0,
+        "stone": 2,
+        "wood": 2
+      },
+      "survivor": 1
+    },
+    {
+      "case": "owned",
+      "checks": {
+        "all old plots still owned": true,
+        "built camp still owned": true,
+        "earned owl still owned": true,
+        "health preserved": true,
+        "loaded isolated profile": true,
+        "new app accepts save and rewrites": true,
+        "stock count preserved meat": true,
+        "stock count preserved metal": true,
+        "stock count preserved stone": true,
+        "stock count preserved wood": true,
+        "tested compiled game": true
+      },
+      "hp": 23,
+      "operation": "read-v4-via-v3",
+      "owned": [
+        "center_hearth",
+        "expansion_1",
+        "storage_wood",
+        "storage_stone",
+        "storage_meat",
+        "expansion_2",
+        "watchtower",
+        "orbit_upgrade"
+      ],
+      "passed": true,
+      "remaining": {
+        "stone": 0,
+        "wood": 0
+      },
+      "stock": {
+        "coal": 0,
+        "meat": 2,
+        "metal": 2,
+        "slate": 0,
+        "stone": 2,
+        "wood": 2
+      },
+      "survivor": 2
+    }
+  ]
+}
