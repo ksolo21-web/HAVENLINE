@@ -1,0 +1,3 @@
+# Exact isolated matched-desktop two-gate functional witness
+
+Both ordinary open-close cycles per gate completed. All 57 inherited writer plus 23 new cycle checks and 10 separate fresh cold checks passed. Authentic consecutive measurements establish exactly two eligible closure triplets per gate, with a fully open rearm between them and none on cold restore. Isolated save bytes match exactly. The prior independent headless boot-guard failure is retained; this does not prove its exact cause. No occupied mid-swing case, audio playback, screenshot/readability, production asset, or installation in this run.
