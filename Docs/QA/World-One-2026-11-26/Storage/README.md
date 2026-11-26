@@ -1,6 +1,6 @@
 # Northwest storehouse
 
-The World One build at `34df87a8195553c4636aa374ac3bfc11054a3bbd` uses one northwest storehouse and one loading apron. The starter opens the timber bay, the reinforced house adds stone, and the advanced house adds meat. The three original receipt IDs, prices and balances persist across restarts. The east expansion unlocks when all three are paid. The playable scene is `res://field_opening.tscn`. [Build manifest](../Build/Reviewed-files.json)
+The World One build at `e978a44b1b112bb598f9ec1724b3616ec80e6970` uses one northwest storehouse and one loading apron. The starter opens the timber bay, the reinforced house adds stone, and the advanced house adds meat. The three original receipt IDs, prices and balances persist across restarts. The east expansion unlocks when all three are paid. The playable scene is `res://field_opening.tscn`. [Build manifest](../Build/Reviewed-files.json)
 
 | Tier | Price | Earned storage |
 | --- | --- | --- |
@@ -10,7 +10,15 @@ The World One build at `34df87a8195553c4636aa374ac3bfc11054a3bbd` uses one north
 
 At the shared apron, enter on the left to deposit and on the right to fund the next upgrade. Leave the apron before starting a new visit. A completed upgrade keeps the gold-edged loading slate clear. The HUD gives the price or the exact stored counts. Stand inside to see the stocked bays. The foreground door can partially hide the meat quantity from the default detailed camera angle. [Loading apron](House/game-covered-loading.jpg) · [Empty interior](House/game-empty-2x.jpg) · [Stocked interior](House/game-stocked-2x.jpg) · [Shelf detail](House/game-stocked-detail.jpg) · [Reference art and image hashes](House/source-and-tests.json)
 
-## Fresh-process checks
+## Carry update
+
+The successor changed the carried-packet presentation in `field_carry.gd`. The inventory ledger, save codec, house geometry, house progression, shelf layout and prices have identical source bytes on both commits. All 720 shelf flights and the full paid scene test were rerun on the successor. [Carry and transfer evidence](../Carry/README.md)
+
+## Earned route on e978a44b
+
+A fresh ordinary-input run on the frozen successor recorded 17,569 physics samples with exact token conservation. The player entered all three earned interiors for 158 ticks each, crossed both gates in both directions at each of the three perimeter sizes and traveled 100.787 m from camp. The run deposited 37 wood, seven stone and three meat and paid the full progression cost of 18 wood, eight stone and two meat. A separate process recovered all eight receipts and the final balance of 27 wood, one stone and three meat in storage. [Independent headless results](Earned-route-e978a44b.json)
+
+## Fresh-process checks on 34df87a8
 
 Godot 4.7.2 ran each suite against 219 verified source files, using separate temporary app-data roots. The normal desktop save writer and reader ran in separate processes. [Results and SHA-256 hashes](Validation.json)
 
@@ -25,6 +33,8 @@ Godot 4.7.2 ran each suite against 219 verified source files, using separate tem
 
 The staged scene checks and the art gallery use fixtures. The ordinary-input gameplay reel records the earned route. [Gameplay](../Gameplay/)
 
-## Earned route
+## Earned routes on 34df87a8
 
-An independent replay checked 17,478 consecutive physics ticks from a fresh, ordinary-input run on this commit. All eight purchases completed in order. The player crossed the threshold and stayed inside for 158 physics ticks at each real house tier. All 35 wood, seven stone and three meat deposits produced individual stock changes and mixer voice starts. The full progression debited 18 wood, eight stone and two meat with matching spend cues. Every captured tick conserved collected, carried, stored and paid quantities. The independently measured route crossed both gates in both directions at all three perimeter stages and reached 100.787 m from camp. The final stock was 25 wood, one stone and three meat. This run used the normal game camera in headless mode. [Tick-by-tick audit summary and source hashes](Earned-route.json)
+The native movie covered 17,303 consecutive physics samples across 288.367 seconds with the normal game camera. All eight purchases completed in order. The player occupied the doorway interior for 158 physics ticks at each earned house tier. The film recorded 38 wood, seven stone and three meat deposits. Every deposit and each of the 18 wood, eight stone and two meat debits had a matching mixer voice start and an actual playing WAV stream. Every tick conserved collected, carried, stored and paid quantities. The route crossed both gates in both directions at each perimeter stage and reached 100.787 m from camp. A fresh process reopened the filmed save with the same eight receipts and shelves holding 28 wood, one stone and three meat. [Filmed route verification](Filmed-route.json) · [Gameplay footage](../Gameplay/)
+
+A separate headless input run covered 17,478 ticks, visited all three earned interiors, recorded all 12 gate crossings and conserved every token. It ended with 25 wood, one stone and three meat in storage. [Independent headless results](Earned-route.json)

@@ -1,5 +1,5 @@
 {
-  "source_commit": "34df87a8195553c4636aa374ac3bfc11054a3bbd",
+  "source_commit": "e978a44b1b112bb598f9ec1724b3616ec80e6970",
   "scene": "res://field_opening.tscn",
   "godot": "4.7.2.stable.official.ed1daf0bf",
   "tests": {
@@ -46,7 +46,7 @@
           }
         ],
         "engine_warnings": [
-          "WARNING: 21 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+          "WARNING: 23 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
         ],
         "errors": [
           "ERROR: 5 resources still in use at exit (run with --verbose for details)."
@@ -54,8 +54,8 @@
       },
       {
         "exit_code": 0,
-        "engine_warnings": [],
         "errors": [],
+        "engine_warnings": [],
         "results": [
           {
             "census": {
@@ -95,7 +95,7 @@
             "touch_travel_end_x": 28.0381126403809
           }
         ],
-        "mode": "Paced recheck with native audio teardown and a distinct disposable session"
+        "mode": "Paced native recheck in another disposable profile. Audio mixer receives wall-clock time during closing."
       }
     ],
     "qa_field_progression": [
@@ -405,7 +405,9 @@
             "waves": 500
           }
         ],
-        "engine_warnings": [],
+        "engine_warnings": [
+          "WARNING: 10 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+        ],
         "errors": []
       }
     ],
@@ -425,77 +427,8 @@
             "remaining_trackers": 1
           }
         ],
-        "engine_warnings": [
-          "WARNING: 22 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
-        ],
-        "errors": [
-          "ERROR: 4 resources still in use at exit (run with --verbose for details)."
-        ]
-      },
-      {
-        "exit_code": 0,
-        "engine_warnings": [
-          "WARNING: 22 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
-        ],
-        "errors": [
-          "ERROR: 4 resources still in use at exit."
-        ],
-        "results": [
-          {
-            "actual_alphas": 31,
-            "actual_deaths": 572,
-            "actual_wolves": 572,
-            "duplicate_loot": 0,
-            "native_waves": 200,
-            "orphan_wolves": 0,
-            "passed": true,
-            "peak_live": 4,
-            "remaining_trackers": 1
-          }
-        ],
-        "mode": "Paced recheck with native audio teardown and a distinct disposable session"
-      },
-      {
-        "exit_code": 0,
-        "results": [
-          {
-            "actual_alphas": 31,
-            "actual_deaths": 572,
-            "actual_wolves": 572,
-            "duplicate_loot": 0,
-            "native_waves": 200,
-            "orphan_wolves": 0,
-            "passed": true,
-            "peak_live": 4,
-            "remaining_trackers": 1
-          }
-        ],
-        "engine_warnings": [
-          "WARNING: 23 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
-        ],
-        "errors": [
-          "ERROR: 4 resources still in use at exit (run with --verbose for details)."
-        ],
-        "mode": "Same 200-wave stress fixture; on passing the unchanged assertions, the test calls field._close_field() instead of terminating SceneTree immediately. Production source remains the pinned build."
-      },
-      {
-        "exit_code": 0,
-        "results": [
-          {
-            "actual_alphas": 31,
-            "actual_deaths": 572,
-            "actual_wolves": 572,
-            "duplicate_loot": 0,
-            "native_waves": 200,
-            "orphan_wolves": 0,
-            "passed": true,
-            "peak_live": 4,
-            "remaining_trackers": 1
-          }
-        ],
         "engine_warnings": [],
-        "errors": [],
-        "mode": "Same 200-wave stress fixture, stopping audio and allowing 120 additional process frames before invoking the normal application close. All 200-wave assertions are unchanged."
+        "errors": []
       }
     ],
     "qa_world_session_resume": [
@@ -513,8 +446,53 @@
             "z": 6.19311428070068
           }
         ],
-        "engine_warnings": [],
-        "errors": []
+        "engine_warnings": [
+          "WARNING: 22 ObjectDB instances were leaked at exit (run with `--verbose` for details).",
+          "WARNING: 10 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+        ],
+        "errors": [
+          "ERROR: 6 resources still in use at exit (run with --verbose for details)."
+        ]
+      },
+      {
+        "exit_code": 0,
+        "errors": [
+          "ERROR: 7 resources still in use at exit (run with --verbose for details)."
+        ],
+        "engine_warnings": [
+          "WARNING: 27 ObjectDB instances were leaked at exit (run with `--verbose` for details)."
+        ],
+        "results": [
+          {
+            "passed": true,
+            "position_error_m": 0.0,
+            "remaining": 8.25,
+            "restored_hp": 3,
+            "saved_timer": 8.25,
+            "wave": 1,
+            "x": -36.3580665588379,
+            "z": 6.19311428070068
+          }
+        ],
+        "mode": "Paced native recheck in another disposable profile. Audio mixer receives wall-clock time during closing."
+      },
+      {
+        "exit_code": 0,
+        "mode": "Original save/resume suite running at wall-clock time with both native processes capped at 60 fps and their own disposable save",
+        "results": [
+          {
+            "passed": true,
+            "position_error_m": 0.0,
+            "remaining": 8.25,
+            "restored_hp": 3,
+            "saved_timer": 8.25,
+            "wave": 1,
+            "x": -36.3580665588379,
+            "z": 6.19311428070068
+          }
+        ],
+        "errors": [],
+        "engine_warnings": []
       }
     ],
     "qa_world_orbit": [
@@ -715,7 +693,7 @@
         "exit_code": 0,
         "results": [
           {
-            "addressable_grove_pines": 116,
+            "addressable_grove_pines": 118,
             "physics_hz": 60,
             "scene": "field_opening.tscn",
             "tested_at": "(-7.0, 0.0, 7.45)",
@@ -817,7 +795,7 @@
                   "wood": 0
                 },
                 "sway": true,
-                "wall_seconds": 0.466756
+                "wall_seconds": 0.748747
               },
               "world1/3/-4/wood/1": {
                 "chips": true,
@@ -835,7 +813,7 @@
                   "wood": 7
                 },
                 "sway": true,
-                "wall_seconds": 0.351806
+                "wall_seconds": 0.450131
               }
             },
             "physics_hz": 60
@@ -844,11 +822,240 @@
         "engine_warnings": [],
         "errors": []
       }
+    ],
+    "qa_field_pack_bounds": [
+      {
+        "exit_code": 0,
+        "results": [
+          {
+            "cases": [
+              {
+                "logical": 3,
+                "min_headroom": 0.386,
+                "viewport": "(1280, 720)",
+                "visible": [
+                  3,
+                  3,
+                  3
+                ],
+                "zoom": 1.0
+              },
+              {
+                "logical": 12,
+                "min_headroom": 0.228,
+                "viewport": "(1280, 720)",
+                "visible": [
+                  12,
+                  12,
+                  12
+                ],
+                "zoom": 1.0
+              },
+              {
+                "logical": 37,
+                "min_headroom": 0.101,
+                "viewport": "(1280, 720)",
+                "visible": [
+                  19,
+                  23,
+                  37
+                ],
+                "zoom": 1.0
+              },
+              {
+                "logical": 42,
+                "min_headroom": 0.101,
+                "viewport": "(1280, 720)",
+                "visible": [
+                  19,
+                  23,
+                  39
+                ],
+                "zoom": 1.0
+              },
+              {
+                "logical": 1000000,
+                "min_headroom": 0.101,
+                "viewport": "(1280, 720)",
+                "visible": [
+                  19,
+                  23,
+                  39
+                ],
+                "zoom": 1.0
+              },
+              {
+                "logical": 3,
+                "min_headroom": 0.271,
+                "viewport": "(1280, 720)",
+                "visible": [
+                  3,
+                  3,
+                  3
+                ],
+                "zoom": 2.0
+              },
+              {
+                "logical": 12,
+                "min_headroom": 0.101,
+                "viewport": "(1280, 720)",
+                "visible": [
+                  8,
+                  10,
+                  12
+                ],
+                "zoom": 2.0
+              },
+              {
+                "logical": 37,
+                "min_headroom": 0.101,
+                "viewport": "(1280, 720)",
+                "visible": [
+                  8,
+                  10,
+                  17
+                ],
+                "zoom": 2.0
+              },
+              {
+                "logical": 42,
+                "min_headroom": 0.101,
+                "viewport": "(1280, 720)",
+                "visible": [
+                  8,
+                  10,
+                  17
+                ],
+                "zoom": 2.0
+              },
+              {
+                "logical": 1000000,
+                "min_headroom": 0.101,
+                "viewport": "(1280, 720)",
+                "visible": [
+                  8,
+                  10,
+                  17
+                ],
+                "zoom": 2.0
+              },
+              {
+                "logical": 3,
+                "min_headroom": 0.386,
+                "viewport": "(720, 1280)",
+                "visible": [
+                  3,
+                  3,
+                  3
+                ],
+                "zoom": 1.0
+              },
+              {
+                "logical": 12,
+                "min_headroom": 0.228,
+                "viewport": "(720, 1280)",
+                "visible": [
+                  12,
+                  12,
+                  12
+                ],
+                "zoom": 1.0
+              },
+              {
+                "logical": 37,
+                "min_headroom": 0.101,
+                "viewport": "(720, 1280)",
+                "visible": [
+                  19,
+                  23,
+                  37
+                ],
+                "zoom": 1.0
+              },
+              {
+                "logical": 42,
+                "min_headroom": 0.101,
+                "viewport": "(720, 1280)",
+                "visible": [
+                  19,
+                  23,
+                  39
+                ],
+                "zoom": 1.0
+              },
+              {
+                "logical": 1000000,
+                "min_headroom": 0.101,
+                "viewport": "(720, 1280)",
+                "visible": [
+                  19,
+                  23,
+                  39
+                ],
+                "zoom": 1.0
+              },
+              {
+                "logical": 3,
+                "min_headroom": 0.271,
+                "viewport": "(720, 1280)",
+                "visible": [
+                  3,
+                  3,
+                  3
+                ],
+                "zoom": 2.0
+              },
+              {
+                "logical": 12,
+                "min_headroom": 0.101,
+                "viewport": "(720, 1280)",
+                "visible": [
+                  8,
+                  10,
+                  12
+                ],
+                "zoom": 2.0
+              },
+              {
+                "logical": 37,
+                "min_headroom": 0.101,
+                "viewport": "(720, 1280)",
+                "visible": [
+                  8,
+                  10,
+                  17
+                ],
+                "zoom": 2.0
+              },
+              {
+                "logical": 42,
+                "min_headroom": 0.101,
+                "viewport": "(720, 1280)",
+                "visible": [
+                  8,
+                  10,
+                  17
+                ],
+                "zoom": 2.0
+              },
+              {
+                "logical": 1000000,
+                "min_headroom": 0.101,
+                "viewport": "(720, 1280)",
+                "visible": [
+                  8,
+                  10,
+                  17
+                ],
+                "zoom": 2.0
+              }
+            ],
+            "failures": []
+          }
+        ],
+        "engine_warnings": [],
+        "errors": []
+      }
     ]
-  },
-  "summary": {
-    "suites": 17,
-    "functional_checks": "All suite processes returned 0; inspect the structured per-check results and additional separately captured integration evidence.",
-    "shutdown": "The outer-world and rapid 200-wave stress fixtures initially retained audio references on exit. The outer-world suite passed cleanly at paced playback. The wave fixture passed cleanly after audio stop plus 120 process frames. These teardown runs and initial observations are preserved below."
   }
 }
