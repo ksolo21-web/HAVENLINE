@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T04:02:15Z",
+  "observed_at_utc": "2026-11-26T04:14:39Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -53,14 +53,12 @@
       "id": "furnace-purchase",
       "role": "Gameplay and plot builder",
       "state": "in_progress",
-      "result": "All four rebuilt timber leaves replaced the placeholders in the isolated Godot test. 67 checks and 12 real frames passed. Independent appearance hold: South 8.7/East 7.9. Separate one-panel 18595 fence draft held at 8.1; the old fence is out of contention as final art.",
+      "result": "The single isolated 18595-derived replacement panel passed 67 checks with its rope contact repair. Independent art review improved to 8.6 from 8.1 and held below 9.5. The rebuilt gate opening build passed independently; the separate physical closing replay is underway.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/028fb5ddbcdf957f99d81192884256561b0096a3",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/1270bce15cfb92dfb4d2f6a6592724574b0695dd",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/3ffc0efa7f0fcfa49b23182e3e2d8c3cf2535184",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/6598681410b478c05aa97610edc7cf054bae7fc7"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/0e142e4f38fcffdec63f747128706fb9143314fb",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/028fb5ddbcdf957f99d81192884256561b0096a3"
       ],
-      "next": "Continue separate approved-reference panel rope/cap work, gate-only material and detail repair, and a distinct active-E closing test. No game install.",
+      "next": "Improve visible rope crossings and the snow drape, not the old fence style. Finish actual ordinary closing replay before the gate-local material preview.",
       "role_ids": [
         "builder-camp-pads",
         "level1-verifier"
@@ -150,14 +148,14 @@
     {
       "role_id": "builder-camp-pads",
       "state": "working",
-      "title": "Staging source-matched reference fence panel",
-      "summary": "The 18595-led panel is separate from the old R17 art. A revised prototype has a broader snow drape; the rope contact repair is pending independent source review.",
-      "next": "Stage one module at the true gameplay camera after source review.",
+      "title": "Refining the 18595 fence panel after 8.6 review",
+      "summary": "Only the lower southwest section is revised in this isolated test. All gameplay checks passed; ropes and snow silhouette still miss the reference.",
+      "next": "Deliver a visibly different one-panel treatment before full-perimeter adoption.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/028fb5ddbcdf957f99d81192884256561b0096a3",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/1270bce15cfb92dfb4d2f6a6592724574b0695dd"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/0e142e4f38fcffdec63f747128706fb9143314fb",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/028fb5ddbcdf957f99d81192884256561b0096a3"
       ],
-      "updated_at_utc": "2026-11-26T04:02:15Z"
+      "updated_at_utc": "2026-11-26T04:14:39Z"
     },
     {
       "role_id": "audio-sfx",
@@ -342,6 +340,18 @@
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/028fb5ddbcdf957f99d81192884256561b0096a3",
         "https://github.com/ksolo21-web/HAVENLINE/commit/1270bce15cfb92dfb4d2f6a6592724574b0695dd"
+      ]
+    },
+    {
+      "id": "l1-reference-fence-v2-camera-reviewed-20261126",
+      "type": "handoff",
+      "at_utc": "2026-11-26T04:14:39Z",
+      "from_role_id": "level1-verifier",
+      "to_role_id": "builder-camp-pads",
+      "message": "Verified the exact one-panel normal-camera test. Visual 8.6 remains held below the 9.5 standard. Fix readability and snow drape; the rest of the fence in this case is control.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/0e142e4f38fcffdec63f747128706fb9143314fb",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/028fb5ddbcdf957f99d81192884256561b0096a3"
       ]
     }
   ]
