@@ -6,7 +6,7 @@ Open `res://field_opening.tscn` in Godot 4.7.2. The pinned source and extraction
 
 Move with a one-finger drag or WASD. A short drag walks and a longer drag runs. Pinch or use the wheel to zoom. Approach a gate to operate it with the on-screen control or E. The two leaves open together and the passage is usable from either side.
 
-Start on snow and gather wood. Outside a purchased camp, the equipped tool sweeps at waist height. Its visible head must reach a source for a strike to count. Three hits fell a pine or deplete a stone bank. Collect the wood after the fall or the loose stone after mining. Wolves drop meat when defeated. Each resource stays on its own section of the pack. Stand on a purchase plot while carrying or storing the required resources. The last payment arrives before the purchase completes.
+Start on snow and gather wood. Outside a purchased camp, the equipped tool sweeps at waist height. Its visible head must reach a source for a strike to count. Three hits fell a pine or deplete a stone bank. Collect the wood after the fall or the loose stone after mining. Wolves drop meat when defeated. Each resource stays on its own section of the pack. Large loads keep a visible top with room above it in both orientations and at pinch zoom. The HUD shows the full balance; incoming and outgoing units travel to and from the top visible bundle of their own material. Stand on a purchase plot while carrying or storing the required resources. The last payment arrives before the purchase completes.
 
 | Purchase | Price | What appears |
 | --- | --- | --- |

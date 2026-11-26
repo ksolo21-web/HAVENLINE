@@ -12,6 +12,9 @@ const StockLayout = preload("res://field_stock_layout.gd")
 const INTERVAL := 0.16
 const PICKUP_TIME := 0.29
 const SEND_TIME := 0.28
+# The full reference pack reaches at most 5.6 standing hero heights (1.75 m).
+const PACK_TOP := 9.8
+const TOP_MARGIN := .10
 const HAND := "carry"
 const STOCK := "storage"
 
@@ -28,6 +31,7 @@ var pieces := {}
 var flights: Array[Dictionary] = []
 var cooldown := 0.0
 var measured := {}
+var hand_visible := {}
 var tier_height := {"wood": 0.13, "stone": 0.11, "meat": 0.145}
 
 func setup(ledger: Inventory, character: Node3D, item_factory: Callable) -> void:
@@ -73,23 +77,33 @@ func _pack_position(kind: String, index: int) -> Vector3:
 	var z := -.67 if kind == "meat" else -.36
 	return Vector3(x, .655 + index * float(tier_height[kind]), z)
 
+func _pack_limit(kind: String) -> int:
+	var base := _pack_position(kind, 0)
+	var step := float(tier_height[kind])
+	var extent: Vector3 = measured.get(kind, Vector3(float(WIDTH[kind]),step,float(WIDTH[kind])))
+	var rise := PACK_TOP - base.y - extent.y
+	var camera := get_viewport().get_camera_3d()
+	if camera:
+		# The donor is grounded and centered in XZ. Its circumscribed radius
+		# covers every alternating tier yaw, including while the actor turns.
+		var up_screen := camera.get_camera_transform().basis.y
+		var horizontal := Vector3(up_screen.x,0,up_screen.z).normalized()
+		var radius := Vector2(extent.x,extent.z).length() * .5
+		var top := rack.to_global(base + Vector3.UP*extent.y) + horizontal*radius
+		var screen_y := camera.unproject_position(top).y
+		var pixels_per_metre := screen_y - camera.unproject_position(top+rack.global_basis.y).y
+		if pixels_per_metre > .001:
+			var allowed_y := get_viewport().get_visible_rect().size.y * TOP_MARGIN
+			rise = minf(rise, (screen_y - allowed_y) / pixels_per_metre)
+	return maxi(1, floori(rise / step) + 1)
+
+func _hand_slot(kind: String, logical_index: int) -> int:
+	return clampi(logical_index,0,_pack_limit(kind)-1)
+
 func _visible_units(kind: String, count: int, location: String) -> int:
 	if location == STOCK:
 		return mini(count, StockLayout.CENTERS[kind].size())
-	# The carried stack keeps its true tier. Cull only
-	# tiers above the actual game camera, with two metres for follow/zoom lag.
-	if count < 48:
-		return count
-	var camera := get_viewport().get_camera_3d()
-	if not camera:
-		return count
-	var base := rack.to_global(_pack_position(kind, 0))
-	var y := camera.unproject_position(base).y
-	var pixels_per_metre := y - camera.unproject_position(base + Vector3.UP).y
-	if pixels_per_metre <= 0.01:
-		return count
-	var visible_height := maxf(0.0, y / pixels_per_metre) + 2.0
-	return mini(count, ceili(visible_height / float(tier_height[kind])) + 1)
+	return mini(count,_pack_limit(kind))
 
 func _floor_position(kind: String, index: int) -> Vector3:
 	var slot := StockLayout.slot(kind, index)
@@ -142,12 +156,12 @@ func _tier_yaw(kind: String, index: int) -> float:
 
 func _heading(endpoint: String, kind: String, index: int) -> float:
 	if endpoint == HAND:
-		return actor.global_rotation.y + _tier_yaw(kind, index)
+		return actor.global_rotation.y + _tier_yaw(kind, _hand_slot(kind,index))
 	return _tier_yaw(kind, StockLayout.slot(kind, index)) if endpoint == STOCK else 0.0
 
 func _place(position_id: String, kind: String, n: int) -> Vector3:
 	if position_id == HAND:
-		return rack.to_global(_pack_position(kind, maxi(0, n)))
+		return rack.to_global(_pack_position(kind, _hand_slot(kind,n)))
 	if position_id == STOCK:
 		return _floor_position(kind, maxi(0,n))
 	return (receivers[position_id] as Node3D).global_position + Vector3.UP * .10
@@ -163,7 +177,16 @@ func sync() -> void:
 			var key := location + "/" + kind
 			var pool: Array = pieces.get(key, [])
 			var n := 0 if location == STOCK and not inventory.storage_open(kind) else _available(kind, location)
+			# Measure the first authored packet before computing capacity, even
+			# when a large existing balance is first restored into an empty pool.
+			if n > 0 and not measured.has(kind):
+				var first := _piece(kind)
+				if first:
+					var parent: Node3D = rack if location == HAND else storage_anchors[kind]
+					parent.add_child(first)
+					pool.append(first)
 			n = _visible_units(kind, n, location)
+			if location == HAND: hand_visible[kind] = n
 			while pool.size() < n:
 				var unit := _piece(kind)
 				if not unit:
@@ -252,6 +275,13 @@ func _physics_process(delta: float) -> void:
 	advance(delta)
 
 func advance(delta: float) -> void:
+	# The rack follows the actor without touching its nodes. Only a projection
+	# that changes a lane's visible count needs to reposition/show its pool.
+	for kind: String in Inventory.KINDS:
+		var count := _available(kind,HAND)
+		if count > 0 and _visible_units(kind,count,HAND) != int(hand_visible.get(kind,0)):
+			sync()
+			break
 	cooldown = maxf(0.0, cooldown - delta)
 	for flight in flights.duplicate():
 		if not flights.has(flight):
