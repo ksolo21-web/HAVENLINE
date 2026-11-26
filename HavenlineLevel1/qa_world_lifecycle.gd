@@ -165,4 +165,7 @@ func run() -> void:
 	check("dedicated_boss_and_tower_cues_loaded",["boss_arrival","boss_defeat","tower_fire","tower_hit"].all(func(id):return f.sound._bank.has(id) and f.sound._bank[id].size()==1))
 	check("all_four_semantic_cues_started_on_actions",["boss_arrival","boss_defeat","tower_fire","tower_hit"].all(func(id):return f.sound._counts.get(id,0)>0))
 	print(JSON.stringify({"checks":rows,"failed":fail,"waves":500,"bosses":boss_count,"paw_marks_before":old_marks,"paw_marks_after":f.tracks.total,"audible_boss_tower_cue_starts":{"boss_arrival":f.sound._counts.get("boss_arrival",0),"boss_defeat":f.sound._counts.get("boss_defeat",0),"tower_fire":f.sound._counts.get("tower_fire",0),"tower_hit":f.sound._counts.get("tower_hit",0)}}))
+	await preload("res://tests/lifecycle_test_profile.gd").drain_field_audio(self, f)
+	f.queue_free()
+	for i in 8: await process_frame
 	quit(0 if fail.is_empty() else 1)

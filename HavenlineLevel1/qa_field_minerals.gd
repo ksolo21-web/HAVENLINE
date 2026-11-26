@@ -14,6 +14,23 @@ func check(label: String, ok: bool) -> void:
 
 func _initialize() -> void: call_deferred("run")
 
+func carried_units_are_separate(world) -> bool:
+	# Adding a lower family moves the packets already on that column.
+	# Judge the simultaneously displayed units after each set of arrivals.
+	var occupied := {}
+	for kind: String in Inventory.KINDS:
+		var displayed := 0
+		for packet: Node3D in world.carry.pieces.get("carry/" + kind, []):
+			if not packet.is_visible_in_tree():
+				continue
+			if occupied.has(packet.position):
+				return false
+			occupied[packet.position] = kind
+			displayed += 1
+		if displayed != int(world.inventory.carried[kind]):
+			return false
+	return true
+
 func staged_ledger() -> Inventory:
 	var ledger:=Inventory.new()
 	ledger.configure(Rules.offers({"wood":3}))
@@ -73,15 +90,12 @@ func run() -> void:
 	if "--mineral-migrate" in args:
 		check("existing native receipts and zero minerals",ledger.complete("storage_wood") and Inventory.MINERALS.all(func(k):return ledger.carried[k]==0 and ledger.stored[k]==0))
 		var before: Dictionary=ledger.paid.duplicate(true)
-		var positions := []
 		for kind: String in SAMPLES:
 			check(kind+" alone cannot pay for ordinary construction",not ledger.payment("expansion_2",kind,false))
 			for i in int(SAMPLES[kind]):
 				check(kind+" dispatches unique earned pickup "+str(i),world.carry.pickup("mine-qa-"+kind+str(i),kind,Vector3(2,0,1)))
 			world.carry.advance(.4)
-			var packet: Node3D = world.carry.pieces["carry/"+kind][0]
-			check(kind+" separate backpack lane",not positions.has(packet.position))
-			positions.append(packet.position)
+			check(kind+" separate backpack lane",carried_units_are_separate(world))
 		check("visible six-material HUD and exact mineral counts",world.opening_hud.mineral_row.visible and Inventory.MINERALS.all(func(k):return int(world.opening_hud.numbers[k].text)==SAMPLES[k]))
 		check("pickup preserves all existing receipts",before==ledger.paid)
 		if not ledger.complete("storage_stone"):
