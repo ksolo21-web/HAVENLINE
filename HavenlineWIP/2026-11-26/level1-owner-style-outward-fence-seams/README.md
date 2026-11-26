@@ -1,0 +1,3 @@
+# Source outward terminals: exact neighboring fit and appearance hold
+
+The jointly authored replacement terminal bodies preserve fixed roots; all four rail caps fit within the exact shared post envelope. The previously measured residual neighboring donor intersections are now zero in the tested source, excluding intended seated contacts. Width and base-ring checks pass. Some rope/rail surfaces near the joint remain outside the shared hull and their visual continuity and grounding need independent review; no imported material, performance, art, whole fence, or native approval. Source seal c31c1ccfaf2795be6743cf667dfab9411cd6b44b641582bf521d12fd66ef08f8. No installation or credits.
