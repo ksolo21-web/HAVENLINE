@@ -391,7 +391,7 @@ func _step_drops(dt: float) -> void:
 		var unit: Node3D = drop.mesh
 		unit.position = (drop.from as Vector3).lerp(drop.at,t)+Vector3.UP*.30*sin(t*PI)
 		if t == 1.0 and reset_time <= 0.0 and actor.position.distance_to(unit.position) <= PICKUP_RADIUS:
-			if carry.pickup(token,drop.kind,unit.position):
+			if carry.pickup(token,drop.kind,unit.position,unit.global_rotation.y):
 				unit.queue_free()
 				drops.erase(token)
 

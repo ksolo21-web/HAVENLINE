@@ -77,7 +77,14 @@ func run() -> void:
 						check(visible_count(kind)==amount if amount==3 or (amount==12 and ratio==1.) else visible_count(kind)<=amount,kind+" preserves ordinary loads")
 						check(book.carried[kind]==amount,kind+" count unchanged")
 						check(carry.pieces["carry/"+kind].size()<(75 if kind in Ledger.ORIGINAL_KINDS else 200),kind+" bounded pool")
-					check(top("wood").position.x<top("stone").position.x and top("meat").position.z<top("wood").position.z,"segregated lanes")
+					check(top("wood").position.x < top("stone").position.x, "wood and stone occupy separate columns")
+					for column: Array in Carry.COLUMNS:
+						for section in range(1, column.size()):
+							var lower := top(column[section-1])
+							var upper: Node3D = carry.pieces["carry/"+column[section]][0]
+							var lower_extent: Vector3 = carry.measured[column[section-1]]
+							check(upper.position.y >= lower.position.y + lower_extent.y, "families occupy separate supported sections")
+							check(is_equal_approx(lower.position.x, upper.position.x), "sections share one neat column")
 				check(lowest>=.08,"8 percent margin across views and turns")
 				var drawn := {}
 				for kind in Ledger.KINDS: drawn[kind]=visible_count(kind)
@@ -110,5 +117,33 @@ func run() -> void:
 	var resumed := Ledger.new()
 	resumed.configure(book.costs)
 	check(resumed.restore(book.snapshot()) and resumed.carried.wood==59 and resumed.stored.wood==1 and resumed.paid.buy.wood==1 and resumed.collected.size()==61,"reload conserves all 61 tokens")
+	# With a single family both columns carry whole bundles, bark outward.
+	book.carried = Ledger.EMPTY.duplicate()
+	book.stored = Ledger.EMPTY.duplicate()
+	book.carried.wood = 6
+	actor.position = Vector3.ZERO
+	actor.rotation = Vector3.ZERO
+	zoom.set_ratio(camera, 1.0)
+	carry.sync()
+	var wood: Array = carry.pieces["carry/wood"]
+	check(wood[0].position.x < 0 and wood[1].position.x > 0 and is_equal_approx(wood[0].position.y, wood[1].position.y), "pure timber uses paired courses")
+	check(absf(sin(wood[0].rotation.y)) < .001 and wood[2].position.y > wood[0].position.y, "timber course presents broad bark faces")
+	var old_pos: Vector3 = wood[1].position
+	check(carry.pickup("switch-to-mixed", "stone", Vector3(2,0,1), .85), "typed stone pickup reserves the other column")
+	var entering: Dictionary = carry.flights[0]
+	check(is_equal_approx(entering.mesh.rotation.y,.85) and is_equal_approx(entering.mesh.scale.x,Art.WIDTHS.stone/Carry.WIDTH.stone), "flight starts at the real dropped heading and size")
+	check(wood[1].position.is_equal_approx(old_pos), "attached timber doesn't snap as the reserved column changes")
+	carry.advance(Carry.REFLOW_TIME * .5)
+	var halfway: Vector3 = wood[1].position
+	var target: Vector3 = carry._pack_position("wood",1)
+	check(halfway.distance_to(old_pos) > .01 and halfway.distance_to(target) > .01, "carried stock slides through an intermediate position")
+	carry.advance(.4)
+	check(wood[1].position.is_equal_approx(target) and entering.mesh.global_transform.is_equal_approx(top("stone").global_transform), "mixed pickup lands at its settled physical slot")
+	check(carry.pickup("while-depositing","wood",Vector3(1,0,2)), "same-kind token in flight")
+	var inbound: Node3D = carry.flights[0].mesh
+	check(carry.deposit_storage("wood"), "loaded wood departs during incoming wood")
+	carry.advance(.4)
+	check(inbound.global_transform.is_equal_approx(top("wood").global_transform), "overlapping deposit preserves incoming physical slot")
+	check(book.carried.wood == 6 and book.stored.wood == 1, "overlapping transfers preserve exact balances")
 	print(JSON.stringify({"cases":cases,"failures":failures}))
 	quit(1 if not failures.is_empty() else 0)
