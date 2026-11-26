@@ -1,0 +1,13 @@
+# Independent V4 repaired gate source admission
+
+Exact repaired donor manifest 9437e2669842bd3a9bb394c396fa55a19ab9616a3b81bc5773699f250b6f183f. Original excluded through own prior replay (35 strict positive angles each exact seat, including fully open). Repaired source uses exact same source-derived post/hinge offsets and expected rigid rotation; 46 unique selected and nominal stock physics angles including all prior positive checks, zero strict leaf-to-own-post triangle hits for all four. This is actual source geometry, not staged runtime or rendered art.
+
+Separate full triangle projection proof: for positive inward u over 0–90 degrees, any world outboard point is bounded by max(0,-z) and |world z|≥u. Clip each complete triangle by the actual each-material post's cross-axis bound plus 2 mm and vertex height range plus 2 mm. All resulting points stay inward of nearest timber (2.06 mm minimum) and orange post plane (2.05 mm minimum); none in admitted snow height bands. This is a continuous sufficient separation for each known seated post within the rigid transform contract. Bounds using the x axis alone are negative and insufficient; covered only with independent cross-axis/height separation. Asset does not alter fixed hinges or terrain.
+
+Closed geometry center gap 44 mm unchanged for both signs; each leaf clears central x=0 over any tested motion by at least 1.20 − hypot(1.178,.069)=~19.98 mm from source extents. Actual leaf height/orthogonal supports are unchanged except rear Z min tightened from -69 to -66mm. All nine original material labels and exact MTL remain, plus 23 exact original protected group triangle geometry/material signatures on each sign. 3,226 triangles per leaf; original wrapper hardcodes 1,360 and will fail by contract. No implicit promotion through stock fallback.
+
+This is static clearance admission for exact own threshold-post and center constraints, not the complete assembled wall/floor/rope attachment witness, every rig alignment, actual imported OBJ property, stock-camera shade/silhouette, mobile, or art acceptance. Native follow-up requires actual bound revised wrapper, no fallback, paired original and candidate closures/partials/fully open, baseline 67 route, cold unchanged, no source authority/asset creep. Evaluate stock visible bulk, snow, hinge/attachment silhouette, and all geometry outside this specific separation. If a face never becomes observable at fixed normal camera, mark untested. No renderer or game changes were made.
+
+Replay:
+  OPENBLAS_NUM_THREADS=1 python check.py PRIOR_TRIANGLES_PY ORIGINAL_V4_DIR REPAIRED_V4_DIR 9437e2669842bd3a9bb394c396fa55a19ab9616a3b81bc5773699f250b6f183f
+  python shape.py ORIGINAL_V4_DIR/donor REPAIRED_V4_DIR/donor
