@@ -234,10 +234,17 @@ func emit_event(requested: String, world_position := NO_SOURCE) -> bool:
 	cue_started.emit(cue,_clock,slot)
 	return true
 
-func _exit_tree() -> void:
+func stop_playback() -> void:
 	_ready_to_play = false
-	for voice in _voices: voice.stop()
-	for player: AudioStreamPlayer in _loops.values(): player.stop()
+	for voice in _voices:
+		voice.stop()
+		voice.stream = null
+	for player: AudioStreamPlayer in _loops.values():
+		player.stop()
+		player.stream = null
+
+func _exit_tree() -> void:
+	stop_playback()
 	# Remove the child sends before their common mix bus.
 	_owned_buses.reverse()
 	for bus_name in _owned_buses:

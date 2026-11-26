@@ -39,7 +39,10 @@ func run() -> void:
 		checks[kind+" receiver is flush with authored plate"] = absf(anchor.position.y-.005)<.001 and absf(surface.y-anchor.position.y)<.001
 		checks[kind+" floor source is the authored inlaid shell"] = anchor.get_child(0).scene_file_path == "res://assets/field_camp/wood_storage_empty.glb"
 		checks[kind+" receiver fits inside wall and clears furnace"] = absf(center.x)+1.4432<5 and absf(center.y)+1.1352<4 and center.length()>2.7
-		checks[kind+" six physical units fill one course"] = camp.landing_position(kind,6).y>surface.y and camp.landing_position(kind,18).y>camp.landing_position(kind,17).y
+		var columns := 2 if kind == "meat" else 3
+		var first_upper: Vector3 = camp.landing_position(kind,columns)
+		var last_lower: Vector3 = camp.landing_position(kind,columns-1)
+		checks[kind+" units fill the reference stock arrangement"] = is_equal_approx(last_lower.y,surface.y) and first_upper.y>surface.y and Vector2(first_upper.x,first_upper.z).is_equal_approx(Vector2(surface.x,surface.z))
 	camp.sync_stock({"wood":12,"stone":4,"meat":8})
 	checks["counts identify only deposited typed stock"] = camp.count_labels.wood.text=="12" and camp.count_labels.stone.text=="4" and camp.count_labels.meat.text=="8"
 	camp.set_upgrade_payment({"stone":0,"meat":0})

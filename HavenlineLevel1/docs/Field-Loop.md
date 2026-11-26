@@ -17,6 +17,8 @@ export XDG_DATA_HOME="$qa_dir/data" XDG_CONFIG_HOME="$qa_dir/config" XDG_CACHE_H
 export FIELD_QA_PLAN="$project_dir/tests/field_route.json" FIELD_QA_OUTPUT="$qa_dir" FIELD_QA_HEADLESS=1
 godot --headless --editor --path "$project_dir" --import
 godot --headless --path "$project_dir" --fixed-fps 60 --script res://tests/field_route.gd -- "--l1-disposable-profile=$profile_dir"
+python3 tests/field_route_verify.py "$qa_dir"
+godot --headless --path "$project_dir" --script res://tests/field_route_reload.gd -- "--l1-disposable-profile=$profile_dir"
 ```
 
 The source measurements and reference links are under `Docs/Design/ReferenceVideoLock/2026-11-26-field-loop/`. The original Havenline art controls resource identity and the creature design. The recorded ads guide screen proportions, timing and the relationship between an action and its reward.

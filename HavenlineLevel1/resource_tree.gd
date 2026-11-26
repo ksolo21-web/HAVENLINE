@@ -136,4 +136,5 @@ func _regrow() -> void:
 	phase = "rooted"
 
 func _pose(radians: float) -> void:
-	_pivot.basis = Basis(Vector3.UP.cross(fall_direction).normalized(), radians)
+	var local_direction := global_basis.inverse()*fall_direction if is_inside_tree() else fall_direction
+	_pivot.basis = Basis(Vector3.UP.cross(local_direction).normalized(), radians)

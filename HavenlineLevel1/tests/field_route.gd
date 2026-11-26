@@ -10,6 +10,8 @@ var touch_held:=false
 var last_input:=Vector2.ZERO
 var goal_tap_sent:=false
 var camera:Camera3D
+var death_movie:=OS.get_environment("FIELD_QA_DEATH_MOVIE")=="1"
+var render_begun:=false
 var out_dir:=OS.get_environment("FIELD_QA_OUTPUT")
 var stream:FileAccess
 var events:FileAccess
@@ -26,6 +28,9 @@ var replay_drops:=0
 var portrait:=OS.get_environment("FIELD_QA_PORTRAIT")=="1"
 var stills:Dictionary={}
 var taken:Dictionary={}
+var review_small:=OS.get_environment("FIELD_QA_SMALL")=="1"
+var shot_filter:=OS.get_environment("FIELD_QA_SHOT_FILTER").split(",",false)
+var action_stills:=OS.get_environment("FIELD_QA_DYNAMIC_STILLS")=="1"
 
 func _initialize()->void:
  call_deferred("run")
@@ -179,6 +184,17 @@ func execute(row:Dictionary)->void:
    if move_to([destination.x,destination.y],float(row.get("tol",.18))):advance()
   "walk":
    if move_to(row.p,float(row.get("tol",.20))):advance()
+  "facepack":
+   if field.events.any(func(e):return e.event=="reset"):
+    steer(Vector2.ZERO);advance()
+   elif field.reset_time>0:
+    steer(Vector2.ZERO)
+   else:
+    var n=field.enemy
+    for wolf in field.enemies:
+     if wolf.hp>0 and (n.hp<=0 or wolf.global_position.distance_squared_to(field.actor.global_position)<n.global_position.distance_squared_to(field.actor.global_position)):n=wolf
+    if n and n.hp>0:
+     move_to([n.global_position.x,n.global_position.z],.55)
   "hunt":
    var e=field.enemy
    if e.hp<=0:
@@ -222,16 +238,46 @@ func matches_observation(test:String,row:Dictionary)->bool:
   "built":return field.inventory.complete(row.id) and field.carry.flights.is_empty()
  return false
 
+func natural_plate()->void:
+ var name:=""
+ var stage:=String(phases[index].label)
+ var elapsed:=tick-stage_tick
+ if stage=="Close-range pack attacks and recovery" or stage=="Recovered with prior inventory":
+  if field.player_hp==0 and not taken.has("defeated-player"):
+   taken["defeated-player"]=true;take_still("defeated-player",tick)
+  elif stage=="Recovered with prior inventory" and elapsed>24 and not taken.has("recovered-player"):
+   taken["recovered-player"]=true;take_still("recovered-player",tick)
+  return
+ var ev:Dictionary=field.events.back() if not field.events.is_empty() else {}
+ var age:float=field.simulation_time-float(ev.get("t",-99.))
+ if stage.begins_with("Fresh snowfield") and elapsed>=26:name="01-before"
+ elif stage=="Cut the starter pine" and field.resource_tree.strikes==1:name="02-tree"
+ elif stage=="Break the mine with the pickaxe" and field.resource_rock.strikes>=1:name="03-mine"
+ elif stage.begins_with("Wolf encounter") and field.enemy.state=="lunge":name="04-wolf-lunge"
+ elif stage.begins_with("Collect the wolf meat") and elapsed>=4:name="05-wolf-defeat"
+ elif stage=="Read all three carried stacks" and elapsed>=22:name="06-loaded"
+ elif stage=="Completed hearth, fence and gates" and elapsed>=45:name="07-built"
+ elif field.inventory.paid.center_hearth.wood==1:name="07a-payment"
+ elif field.reveal_countdown>=0 and field.reveal_countdown<=.245:name="07b-reveal-start"
+ elif field.camp_active and ev.get("event","")=="reveal" and age>=.08:name="07c-reveal-rise"
+ elif stage=="Three dedicated floor stacks" and elapsed>=28:name="08-stocks"
+ elif stage=="Upgrade applied and visible" and elapsed>=28:name="09-upgraded"
+ elif field.inventory.paid.orbit_upgrade.stone==1:name="09a-upgrade-payment"
+ elif stage=="Unbroken snow outside the eastern fence" and elapsed>=27:name="10-gate-exterior"
+ if name!="" and not taken.has(name) and (shot_filter.is_empty() or name in shot_filter):
+  taken[name]=true;take_still(name,tick)
+
 func take_still(id:String,at:int)->void:
  await process_frame
  RenderingServer.force_draw(false,1./24.)
  var img:Image=root.get_texture().get_image()
  var dims:=Vector2i(2160,3840) if portrait else Vector2i(3840,2160)
+ if review_small:dims=Vector2i(720,1280) if portrait else Vector2i(1280,720)
  if img.get_size()!=dims or root.size!=dims or root.scaling_3d_scale!=1.:
   event("invalid4k",{"size":[img.get_width(),img.get_height()],"scale":root.scaling_3d_scale,"draw_calls":Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME),"rendered_primitives":Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME),"adapter":RenderingServer.get_video_adapter_name(),"actual_screen":str(DisplayServer.screen_get_size())});quit(7);return
  img.convert(Image.FORMAT_RGB8)
  img.save_png(out_dir.path_join(id+".png"))
- event("native_still",{"name":id,"requested_tick":at,"at_engine_tick":Engine.get_physics_frames()-first_tick,"width":img.get_width(),"height":img.get_height(),"scale":root.scaling_3d_scale,"draw_calls":Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME),"rendered_primitives":Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME),"adapter":RenderingServer.get_video_adapter_name(),"actual_screen":str(DisplayServer.screen_get_size())})
+ event("native_still",{"game_state":read_field(),"hud_hint":field.opening_hud.prompt.text,"name":id,"requested_tick":at,"at_engine_tick":Engine.get_physics_frames()-first_tick,"width":img.get_width(),"height":img.get_height(),"scale":root.scaling_3d_scale,"draw_calls":Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME),"rendered_primitives":Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME),"adapter":RenderingServer.get_video_adapter_name(),"actual_screen":str(DisplayServer.screen_get_size())})
  
 func observe_sound_node(node:Node)->void:
  if node.has_signal("cue_started"):
@@ -272,6 +318,11 @@ func run()->void:
  begin_phase()
  while not finished:
   tick=Engine.get_physics_frames()-first_tick
+  if death_movie and not render_begun and field.player_hp<field.MAX_HP:
+   render_begun=true
+   RenderingServer.set_render_loop_enabled(true)
+   event("clip_render_started",{"source_frame":Engine.get_process_frames(),"hp":field.player_hp})
+  if action_stills:natural_plate()
   if stills.has(str(tick)) and not taken.has(str(tick)):
    taken[str(tick)]=true;take_still(stills[str(tick)],tick)
   observe_audio()

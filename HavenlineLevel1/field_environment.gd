@@ -36,15 +36,14 @@ const SEASONAL_POCKETS := [
 ]
 var snow := ShaderMaterial.new()
 var reveal_tween: Tween
-var material_heights := {"wood":.402, "stone":.298, "meat":.179}
+const StockLayout = preload("res://field_stock_layout.gd")
 
 func receiver_position(kind: String) -> Vector2:
 	return UPGRADE if kind == "upgrade" else CENTERS.get(kind, BUY)
 
 func landing_position(kind: String, index: int) -> Vector3:
 	var base: Node3D = stock_anchors[kind]
-	var slot := maxi(0,index)
-	return base.to_global(Vector3((slot % 2 - .5)*.91,floorf(slot/6.)*float(material_heights[kind]),(floori(slot/2.)%3-1)*.51-.12))
+	return base.to_global(StockLayout.position(kind,index))
 
 func install(host: Node3D) -> void:
 	world = host
@@ -147,10 +146,11 @@ func canopy_ink(material: Material) -> Material:
 	if not canopy_materials.has(material):
 		var shaded := material.duplicate() as StandardMaterial3D
 		shaded.emission_enabled = true
-		shaded.emission = Color("6272a0")
-		shaded.emission_energy_multiplier = .30
-		shaded.emission_texture = shaded.albedo_texture
-		shaded.emission_operator = BaseMaterial3D.EMISSION_OP_MULTIPLY
+		shaded.emission = Color("637aa5")
+		shaded.emission_energy_multiplier = .40
+		# Uniform local skylight also reaches atlas-dark blue branch undersides.
+		shaded.emission_texture = null
+		shaded.emission_operator = BaseMaterial3D.EMISSION_OP_ADD
 		canopy_materials[material] = shaded
 	return canopy_materials[material]
 
@@ -238,6 +238,8 @@ func install_woods() -> void:
 			for i in multi.instance_count: multi.set_instance_transform(i,transforms[variant][i]*part.transform)
 			var grove := MultiMeshInstance3D.new()
 			grove.multimesh = multi
+			grove.set_meta("tree_variant",variant)
+			grove.set_meta("tree_placements",transforms[variant])
 			parent.add_child(grove)
 		tree.free()
 
@@ -302,7 +304,7 @@ func install_payment(anchor:Node3D, upgrade:bool) -> void:
 		if role=="gray":
 			var fill := ShaderMaterial.new()
 			fill.shader = FILL
-			fill.set_shader_parameter("grounded",Color("657345") if not upgrade else Color("5d5147"))
+			fill.set_shader_parameter("grounded",Color("69727a") if not upgrade else Color("5d5147"))
 			fill.set_shader_parameter("funded",Color("3bc615"))
 			payment_ink["upgrade" if upgrade else "buy"] = fill
 			mark.material_override = fill

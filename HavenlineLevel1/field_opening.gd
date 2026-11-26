@@ -22,6 +22,8 @@ var field_save := FieldSave.new()
 var enemy: FieldEnemy
 var enemies: Array[FieldEnemy] = []
 var trees: Array[Node3D] = []
+var forest := preload("res://field_forest.gd").new()
+var trunk_cache := {}
 var drops: Dictionary = {}
 var drop_id := 0
 var player_hp := MAX_HP
@@ -33,6 +35,8 @@ var events: Array[Dictionary] = []
 var step_phase := 0.0
 var first_physics := true
 var field_ready := false
+var original_auto_quit := true
+var closing := false
 var camp_active := false
 var reveal_countdown := -1.0
 var flash: ColorRect
@@ -101,25 +105,57 @@ func _ready() -> void:
 			register_hostile(wolf,wolf.contact_mesh())
 	enemy = enemies.front()
 	field_ready = true
+	original_auto_quit = get_tree().auto_accept_quit
+	get_tree().auto_accept_quit = false
+	get_window().close_requested.connect(_close_field)
+	forest.install.call_deferred(self)
 	_apply_hearth(inventory.complete(HEARTH_OFFER),false)
 	character_kit.set_upgraded(inventory.complete(UPGRADE_OFFER))
 	_refresh_field()
+
+func _close_field() -> void:
+	if closing: return
+	closing = true
+	set_physics_process(false)
+	sound.stop_playback()
+	# Let the audio server release queued streaming voices before exiting.
+	await get_tree().create_timer(.24,true,false,true).timeout
+	if is_inside_tree(): get_tree().quit()
+
+func _exit_tree() -> void:
+	if field_ready:
+		get_tree().auto_accept_quit = original_auto_quit
 
 # The base scene uses an older inventory envelope. This scene owns its own save.
 func load_opening_profile(_args: PackedStringArray) -> void:
 	pass
 
-func _add_pine(at: Vector2) -> ResourceTreeScript:
+func _add_pine(at: Vector2, variant := 0) -> ResourceTreeScript:
 	var tree := ResourceTreeScript.new()
-	tree.name = "SnowPineHarvest%d" % trees.size()
+	tree.name = "HarvestPine"
 	tree.position = Vector3(at.x,0,at.y)
-	add_child(tree)
-	tree.build(CONIFERS[0],true)
+	add_child(tree,true)
+	tree.build(CONIFERS[variant],true)
 	_configure_stem(tree)
-	var trunk_data: Array = surfaces[resource_tree]
-	var original_mesh: MeshInstance3D = trunk_data[0]
-	var part := tree._pivot.get_node(resource_tree._pivot.get_path_to(original_mesh)) as MeshInstance3D
-	surfaces[tree] = [part, trunk_data[1]]
+	var parts := tree._pivot.find_children("*","MeshInstance3D",true,false)
+	for part: MeshInstance3D in parts:
+		var mesh := part.mesh
+		if not mesh: continue
+		if not trunk_cache.has(mesh):
+			var faces := PackedVector3Array()
+			for surface in mesh.get_surface_count():
+				var material := mesh.surface_get_material(surface)
+				if material and material.resource_name.to_lower() == "trunk":
+					var arrays := mesh.surface_get_arrays(surface)
+					var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+					for index in arrays[Mesh.ARRAY_INDEX]:
+						faces.append(vertices[index])
+			if faces.is_empty(): continue
+			var trunk := TriangleMesh.new()
+			trunk.create_from_faces(faces)
+			trunk_cache[mesh] = trunk
+		surfaces[tree] = [part,trunk_cache[mesh]]
+		break
 	trees.append(tree)
 	return tree
 
@@ -149,6 +185,19 @@ func reachable(body: Node3D) -> bool:
 	if body in trees:
 		return body.can_address(actor.global_position, body.global_position-actor.global_position)
 	return super(body)
+
+func selected_tool() -> String:
+	# Inside a mixed grove, a trunk near the player's boots cannot intercept
+	# the cutting head at the edge of the orbit. Give a reachable stone on
+	# that sweep priority until depleted; contact still uses its real mesh.
+	if reachable(resource_rock):
+		var offset := resource_rock.global_position - actor.global_position
+		var side := offset.dot(Orbit.CAMERA_RIGHT) / Orbit.RADIUS_SIDE
+		var depth := offset.dot(Orbit.CAMERA_NEAR) / Orbit.RADIUS_DEPTH
+		var relative := Vector2(side,depth).length() / float(character_kit.reach_scale)
+		if relative >= .64 and relative <= 1.24:
+			return "pickaxe"
+	return super()
 
 func accept_contact(body: Node3D) -> bool:
 	if not field_ready or persist_blocked or reset_time > 0:
@@ -260,6 +309,7 @@ func step_technical_gates(dt: float) -> void:
 func _physics_process(dt: float) -> void:
 	if not field_ready: return
 	simulation_time += dt
+	forest.advance(dt)
 	var last_turn: int = character_kit.turn_id
 	if reset_time > 0:
 		hero_model.rotation.z = -.88*smoothstep(0.0,.42,1.05-reset_time)
@@ -432,10 +482,20 @@ func _refresh_hud_field(danger: bool) -> void:
 	elif danger: hint = "Wolf nearby  ·  Health %d/%d" % [player_hp,MAX_HP]
 	elif not inventory.complete(HEARTH_OFFER):
 		hint = "Fell pines and carry wood to the hearth."
+		if actor.position.distance_to(field_env.buy_anchor.position)<1.6:
+			hint = "Build hearth  ·  %d wood remaining" % inventory.remaining(HEARTH_OFFER).wood
 	elif not inventory.complete(UPGRADE_OFFER):
 		hint = "Bring stone and meat to the axe plot."
 	else:
 		hint = "Three axes equipped"
+	if camp_active and not danger and not persist_blocked:
+		for kind: String in Inventory.KINDS:
+			var store: Node3D = field_env.stock_anchors[kind]
+			if actor.position.distance_squared_to(store.global_position)<1.7:
+				hint = "%s storage  ·  %d" % [kind.capitalize(),inventory.stored[kind]]
+		if not inventory.complete(UPGRADE_OFFER) and actor.position.distance_squared_to(field_env.upgrade_anchor.global_position)<2.0:
+			var remaining := inventory.remaining(UPGRADE_OFFER)
+			hint = "Upgrade  ·  %d stone, %d meat remaining" % [remaining.stone,remaining.meat]
 	var tally := "Wood %d   Stone %d   Meat %d" % [inventory.carried.wood,inventory.carried.stone,inventory.carried.meat]
 	if tally+hint == last_notice: return
 	last_notice = tally+hint

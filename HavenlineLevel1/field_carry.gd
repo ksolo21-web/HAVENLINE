@@ -8,7 +8,7 @@ const Inventory = preload("res://field_inventory.gd")
 const FRAME_PATH := "res://assets/field_pack/carry_frame.glb"
 const RACK_SHADER := preload("res://assets/field_pack/portable_material.gdshader")
 const WIDTH := {"wood": 0.47, "stone": 0.42, "meat": 0.31}
-const FLOOR_WIDTH := {"wood": 0.60, "stone": 0.46, "meat": 0.35}
+const StockLayout = preload("res://field_stock_layout.gd")
 const INTERVAL := 0.16
 const PICKUP_TIME := 0.29
 const SEND_TIME := 0.28
@@ -88,8 +88,8 @@ func _visible_units(kind: String, count: int, location: String) -> int:
 	var course_height := float(tier_height[kind])
 	var per_course := 1
 	if location == STOCK:
-		course_height *= float(FLOOR_WIDTH[kind]) / float(WIDTH[kind])
-		per_course = 6
+		course_height = float(StockLayout.COURSE_HEIGHT[kind])
+		per_course = StockLayout.FOOTPRINT[kind].size()
 	return mini(count, per_course*(ceili(visible_height / course_height) + 1))
 
 func _floor_position(kind: String, index: int) -> Vector3:
@@ -97,7 +97,7 @@ func _floor_position(kind: String, index: int) -> Vector3:
 	if storage_layout.is_valid():
 		return storage_layout.call(kind, slot)
 	var anchor: Node3D = storage_anchors[kind]
-	return anchor.to_global(Vector3((slot % 2-.5)*.8, floori(slot/6.0)*.22, (floori(slot/2.0) % 3-1)*.35))
+	return anchor.to_global(StockLayout.position(kind, slot))
 
 func _outstanding(kind: String, endpoint: String, outgoing: bool) -> int:
 	var n := 0
@@ -183,7 +183,7 @@ func sync() -> void:
 					else:
 						unit.global_position = _floor_position(kind, i)
 						unit.global_rotation.y = _heading(STOCK, kind, i)
-						unit.scale = Vector3.ONE * (float(FLOOR_WIDTH[kind]) / float(WIDTH[kind]))
+						unit.scale = Vector3.ONE * (float(StockLayout.WIDTH[kind]) / float(WIDTH[kind]))
 			pieces[key] = pool
 	if frame:
 		frame.visible = loaded
@@ -228,7 +228,7 @@ func _send(kind: String, source: String, dest: String, dest_index: int) -> bool:
 		return false
 	var source_index := _available(kind, source) - 1
 	var start := _place(source, kind, source_index)
-	var stock_scale := float(FLOOR_WIDTH[kind]) / float(WIDTH[kind])
+	var stock_scale := float(StockLayout.WIDTH[kind]) / float(WIDTH[kind])
 	cooldown = INTERVAL
 	_start(unit, kind, source, dest, start, dest_index, SEND_TIME, stock_scale if source == STOCK else 1.0, stock_scale if dest == STOCK else 1.0, _heading(source, kind, source_index))
 	return true

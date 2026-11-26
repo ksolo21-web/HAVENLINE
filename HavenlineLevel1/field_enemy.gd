@@ -89,10 +89,10 @@ func _setup_visual() -> void:
 func _refresh_health() -> void:
 	if not health_bar: return
 	var pixels := Image.create_empty(72, 8, false, Image.FORMAT_RGBA8)
-	pixels.fill(Color("#231a1c"))
-	pixels.fill_rect(Rect2i(2,2,68,4),Color("#4e3c3d"))
+	pixels.fill(Color("#17222b"))
+	pixels.fill_rect(Rect2i(2,2,68,4),Color("#25333b"))
 	if hp > 0:
-		pixels.fill_rect(Rect2i(2,2,roundi(68.0 * hp / MAX_HEALTH),4),Color("#dd654f"))
+		pixels.fill_rect(Rect2i(2,2,roundi(68.0 * hp / MAX_HEALTH),4),Color("#58de6c"))
 	health_bar.texture = ImageTexture.create_from_image(pixels)
 	health_bar.visible = hp > 0
 
