@@ -1,0 +1,77 @@
+{
+  "source_manifest_sha256": "ee8acd183cf2fee88c574e03c93988db6ec6ca961874f2115853aef056f897fa",
+  "archived_evidence_manifest_sha256": "3509efdb4f325b3c73bb9316001513255f29415a6a522d613ca4f64424cc2cf1",
+  "source_files": {
+    "opening_ledger.gd": "a65fa1f6fdfa9f304550fe923cc5c14f3d79e6f7b38d59d8441a194caff28e90",
+    "opening_save.gd": "e07e922708c473b291c46fac87ebdc5a2e26d89617f741c4a8ae91bec5aa5f55",
+    "previews/integrated_opening.gd": "902eaf6f24356f9a85762888e409eb753e05bd65614d6931c57c796d0bb8f3f4",
+    "resources/typed_receiver.gd": "0ae04e267c01a0163cc29f6eabb23c1d8cc93edb635ced9e865a5452dcde9151",
+    "tests/test_typed_resource_receiver.gd": "8313343ce837215c9d0406b7897249e8a4838b659a85556cfe07b8fad050c893",
+    "tests/hvn_l1_combined_route.gd": "1f42c7a29a34c24a3bb22f51743eb878ac2fc18d8c729394cf3ae11915ebbfd1"
+  },
+  "archived_verified": {
+    "writer_checks": 57,
+    "cold_checks": 10,
+    "no_deposit": true
+  },
+  "arithmetic_examples": [
+    [
+      "earned control",
+      1,
+      1,
+      0,
+      true,
+      true
+    ],
+    [
+      "deposit one",
+      1,
+      0,
+      1,
+      false,
+      true
+    ],
+    [
+      "cold after deposit",
+      1,
+      0,
+      1,
+      false,
+      true
+    ],
+    [
+      "next legitimate renewal",
+      2,
+      1,
+      1,
+      false,
+      true
+    ],
+    [
+      "unexplained missing wood",
+      2,
+      1,
+      0,
+      false,
+      false
+    ],
+    [
+      "count credited twice",
+      2,
+      2,
+      1,
+      true,
+      false
+    ],
+    [
+      "negative stock",
+      1,
+      -1,
+      2,
+      false,
+      false
+    ]
+  ],
+  "runtime_receiver_admitted": false,
+  "engine_or_save_tested_here": false
+}
