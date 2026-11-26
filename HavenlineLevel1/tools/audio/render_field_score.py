@@ -217,6 +217,35 @@ def transitions():
     write('player_fall',scene(.53,[(.04,rub(.29,150,950,.04,.13),.35),(.22,thump(.3,58),.85),(.25,grit(.24,38,490,3200),.51)]))
 
 
+def world_one_events():
+    # Keep the two wolf accents distinct from the ordinary bark and body fall.
+    # Midrange resonances let the larger animal read on small speakers.
+    chest = [(330, 110, 1.0), (805, 165, .82), (1620, 280, .5)]
+    write('boss_arrival', scene(1.10, [
+        (0, vocal(.43, 98, 61, chest, .12), .9),
+        (.31, vocal(.72, 78, 49, chest, .17), 1.0),
+        (.38, rub(.38, 220, 1100, .055, .19), .24)
+    ]), .64)
+    # This snow collapse and short score resolution sit beneath the normal defeat event.
+    t = time(.72)
+    resolution = (np.sin(TAU*146.83*t) + .44*np.sin(TAU*220*t)) * edges(t, .025, .20) * np.exp(-t/.30)
+    write('boss_defeat', scene(.96, [
+        (0, thump(.32, 59), .80), (.075, grit(.31, 32, 360, 2650), .47),
+        (.15, resolution, .34), (.28, rub(.44, 125, 1020, .035, .21), .30)
+    ]), .58)
+    t = time(.29)
+    string = sum((np.sin(TAU*f*t) / (i+1)) * np.exp(-t*(16+i*12))
+                 for i, f in enumerate([197.0, 389.0, 581.0, 986.0]))
+    write('tower_fire', scene(.46, [
+        (0, wood(1.22, .19), .53), (.012, string * edges(t, .001, .05), .75),
+        (.044, swish(.28, 240, 4800), .45)
+    ]), .65)
+    write('tower_hit', scene(.39, [
+        (0, thump(.23, 93), .83), (.002, wood(1.7, .14), .54),
+        (.025, grit(.18, 25, 640, 3900), .39), (.08, rub(.22, 200, 1220, .024, .08), .25)
+    ]), .61)
+
+
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description='Rebuild Havenline’s original field score and effects.')
     parser.add_argument('--output',required=True,type=Path)
@@ -228,3 +257,4 @@ if __name__=='__main__':
     steps()
     music()
     transitions()
+    world_one_events()

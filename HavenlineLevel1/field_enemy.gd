@@ -4,6 +4,19 @@ signal player_hit(damage: int)
 signal defeated(at: Vector3)
 const Art = preload("res://field_art.gd")
 const MAX_HEALTH := 3
+const BOSS_HEALTH := 8
+var is_boss := false
+var spawn_id := 0
+
+func size_factor() -> float:
+	return 1.58 if is_boss else 1.0
+
+func sanctuary_margin() -> float:
+	return 1.25 * size_factor()
+
+func max_hp() -> int:
+	return BOSS_HEALTH if is_boss else MAX_HEALTH
+
 const WALK_SPEED := 1.18
 const NOTICE_RADIUS := 5.3
 const LEASH := 4.2
@@ -27,6 +40,7 @@ var attack_direction := Vector3.FORWARD
 var flank_sign := 0.0
 var configured := false
 var active := true
+static var _surface_cache: Dictionary = {}
 var _tint: StandardMaterial3D
 
 func _init() -> void:
@@ -37,7 +51,8 @@ func _ready() -> void:
 
 func _setup_visual() -> void:
 	if visual: return
-	visual = Art.make("wolf")
+	hp = max_hp()
+	visual = Art.make("wolf",2.4 * size_factor())
 	if not visual: return
 	add_child(visual)
 	body = AnimatableBody3D.new()
@@ -47,11 +62,11 @@ func _setup_visual() -> void:
 	body.collision_mask = 0
 	add_child(body)
 	var torso := CapsuleShape3D.new()
-	torso.radius = .39
-	torso.height = 1.68
+	torso.radius = .39 * size_factor()
+	torso.height = 1.68 * size_factor()
 	var shape := CollisionShape3D.new()
 	shape.shape = torso
-	shape.position = Vector3(0,.76,.04)
+	shape.position = Vector3(0,.76,.04) * size_factor()
 	shape.rotation.x = PI*.5
 	body.add_child(shape)
 	var meshes := visual.find_children("*", "MeshInstance3D", true, false)
@@ -69,14 +84,17 @@ func _setup_visual() -> void:
 		for clip in ["Walk", "Idle"]:
 			if animator.has_animation(clip):
 				animator.get_animation(clip).loop_mode = Animation.LOOP_LINEAR
-	if surface: hit_surface = surface.mesh.generate_triangle_mesh()
+	if surface:
+		if not _surface_cache.has(surface.mesh): _surface_cache[surface.mesh]=surface.mesh.generate_triangle_mesh()
+		hit_surface=_surface_cache[surface.mesh]
 	health_bar = Sprite3D.new()
 	health_bar.name = "WolfHealth"
 	health_bar.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	health_bar.shaded = false
 	health_bar.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	health_bar.pixel_size = .0095
-	health_bar.position.y = 1.78
+	health_bar.position.y = 1.78 * size_factor()
+	health_bar.pixel_size *= 1.32 if is_boss else 1.0
 	add_child(health_bar)
 	_refresh_health()
 	_tint = StandardMaterial3D.new()
@@ -92,7 +110,7 @@ func _refresh_health() -> void:
 	pixels.fill(Color("#17222b"))
 	pixels.fill_rect(Rect2i(2,2,68,4),Color("#25333b"))
 	if hp > 0:
-		pixels.fill_rect(Rect2i(2,2,roundi(68.0 * hp / MAX_HEALTH),4),Color("#58de6c"))
+		pixels.fill_rect(Rect2i(2,2,roundi(68.0 * hp / max_hp()),4),Color("#ffb953") if is_boss else Color("#58de6c"))
 	health_bar.texture = ImageTexture.create_from_image(pixels)
 	health_bar.visible = hp > 0
 
@@ -130,7 +148,7 @@ func receive_hit(amount: int = 1, impact: Vector3 = Vector3.ZERO) -> bool:
 	if hp == 0:
 		state = "defeated"
 		if body: body.collision_layer = 0
-		timer = .34
+		timer = .72
 		_play("Fall")
 		defeated.emit(global_position)
 	else:
@@ -151,7 +169,7 @@ func _move(direction: Vector3, distance: float, sweep: Callable) -> void:
 	if not sweep.is_valid() or sweep.call(global_position,next):
 		global_position = next
 
-func advance(delta: float, sweep_allowed: Callable = Callable()) -> void:
+func advance(delta: float, sweep_allowed: Callable = Callable(), player_exposed := true) -> void:
 	if not configured or not active or not is_instance_valid(target): return
 	var dt := clampf(delta,0.0,.08)
 	hurt_timer = maxf(0.0, hurt_timer - dt)
@@ -162,9 +180,13 @@ func advance(delta: float, sweep_allowed: Callable = Callable()) -> void:
 		if timer <= 0.0: hide()
 		return
 	# Give the player a visible shoulder and preserve space for the pack as it closes.
+	if not player_exposed and state in ["windup","lunge","stalk"]:
+		state="return"
+		timer=0.0
+	var reach_bonus := .54 if is_boss else 0.0
 	var space := global_position - target.global_position
 	space.y = 0.0
-	var clearance := CONTACT_DISTANCE if state == "lunge" else STALK_STOP
+	var clearance := (CONTACT_DISTANCE if state == "lunge" else STALK_STOP) + reach_bonus
 	if space.length() < clearance:
 		var away := space.normalized() if space.length_squared() > .0025 else -global_basis.z
 		_move(away, minf(clearance-space.length(), 5.8*dt), sweep_allowed)
@@ -173,8 +195,9 @@ func advance(delta: float, sweep_allowed: Callable = Callable()) -> void:
 		var separation: Vector3 = global_position-other.global_position
 		separation.y = 0.0
 		var gap := separation.length()
-		if gap > .01 and gap < .90:
-			_move(separation/gap,minf((.90-gap)*.5,dt*2.2),sweep_allowed)
+		var neighbor_gap: float = sanctuary_margin()+other.sanctuary_margin()
+		if gap > .01 and gap < neighbor_gap:
+			_move(separation/gap,minf((neighbor_gap-gap)*.5,dt*2.2),sweep_allowed)
 	# A wolf closing straight down the camera's sightline circles to a shoulder.
 	# Keep that side through the telegraph so the bite has a readable silhouette.
 	var sight := get_viewport().get_camera_3d()
@@ -204,28 +227,28 @@ func advance(delta: float, sweep_allowed: Callable = Callable()) -> void:
 				timer = .15
 				_play("Bite")
 		"lunge":
-			_move(attack_direction, minf(2.1*dt,maxf(0.0,distance-CONTACT_DISTANCE)),sweep_allowed)
+			_move(attack_direction, minf(2.1*dt,maxf(0.0,distance-CONTACT_DISTANCE-reach_bonus)),sweep_allowed)
 			if timer <= 0.0:
 				var remaining := target.global_position-global_position
 				remaining.y = 0.0
-				if remaining.length() <= BITE_RANGE and (remaining.length_squared() < .01 or remaining.normalized().dot(attack_direction) > .55):
-					player_hit.emit(1)
+				if player_exposed and remaining.length() <= BITE_RANGE+reach_bonus and (remaining.length_squared() < .01 or remaining.normalized().dot(attack_direction) > .55):
+					player_hit.emit(2 if is_boss else 1)
 				state = "recover"
 				timer = 1.08
 				_play("Idle")
 		_:
 			var to_home := home-global_position
 			to_home.y = 0.0
-			if distance <= NOTICE_RADIUS and target.global_position.distance_to(home) <= LEASH+.55:
+			if player_exposed and distance <= NOTICE_RADIUS and target.global_position.distance_to(home) <= LEASH+.55:
 				_face(toward,dt)
-				if distance <= STALK_STOP+.025:
+				if distance <= STALK_STOP+reach_bonus+.025:
 					state = "windup"
-					timer = .38
+					timer = .62 if is_boss else .38
 					attack_direction = toward
 					_play("Brace")
 				else:
 					state = "stalk"
-					_move(toward, minf(WALK_SPEED*dt,distance-STALK_STOP),sweep_allowed)
+					_move(toward, minf(WALK_SPEED*dt,distance-STALK_STOP-reach_bonus),sweep_allowed)
 					_play("Walk")
 			elif to_home.length() > .04:
 				state = "return"
@@ -237,7 +260,7 @@ func advance(delta: float, sweep_allowed: Callable = Callable()) -> void:
 				_play("Idle")
 
 func reset_encounter() -> void:
-	hp = MAX_HEALTH
+	hp = max_hp()
 	_refresh_health()
 	state = "guard"
 	last_turn = -1

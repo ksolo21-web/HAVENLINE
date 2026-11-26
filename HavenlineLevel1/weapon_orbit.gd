@@ -8,8 +8,12 @@ const TOOL_PLANE := Basis(Vector3.LEFT, Vector3.BACK, Vector3.UP)
 # Measured on the source B 5.40–6.50 s strip. Runtime uses the normal equipment camera.
 const PERIOD := .89
 const UPGRADED_RADIUS := 1.23
-const RADIUS_SIDE := 2.51
-const RADIUS_DEPTH := 2.80
+const RADIUS_SIDE := 2.36
+const RADIUS_DEPTH := 2.64
+# Model-space X crosses the blade, Y follows the shaft, Z is thickness.
+# Use the same local transform for the visible mesh and its swept contact samples.
+const TOOL_SCALE := Vector3(.64, .83, .50)
+const TRAIL_WIDTH := .235
 const CAMERA_NEAR := Vector3(.53687549,0,.84366149)
 const CAMERA_RIGHT := Vector3(.84366149,0,-.53687549)
 const AXE_EDGE := Vector3(-.64409602,.53566498,.03264396)
@@ -53,6 +57,8 @@ func show_tools() -> void:
 func rest() -> void:
 	active=false
 	equipped=""
+	hit_this_turn.clear()
+	current_tip=Vector3.ZERO
 	show_tools()
 
 func set_upgraded(upgraded: bool) -> void:
@@ -91,7 +97,7 @@ func pose() -> void:
 		var phase := TAU*(elapsed/PERIOD + float(i)/count)
 		var radial := offset(phase)
 		var azimuth := Basis(Vector3.UP, atan2(radial.x,radial.z))
-		var basis := (azimuth * TOOL_PLANE).scaled(Vector3.ONE*size)
+		var basis := (azimuth * TOOL_PLANE).scaled_local(TOOL_SCALE*size)
 		var head_at := center+radial
 		var head := PICK_HEAD if equipped=="pickaxe" else AXE_HEAD
 		var node: Node3D = s[equipped]
@@ -105,9 +111,10 @@ func pose() -> void:
 			var r := offset(phase-behind)
 			points.append(center+r+Vector3.UP*.002)
 			axes.append(r.normalized())
-		s.trail.redraw(points,axes,.285)
+		s.trail.redraw(points,axes,TRAIL_WIDTH)
 
 func advance(dt: float) -> void:
+	if not active: return
 	for s in slots: s.before=s.after
 	# Carry fractional time across loop boundaries so the measured period is not rounded to ticks.
 	reach_scale = move_toward(reach_scale, UPGRADED_RADIUS if count == 3 else 1.0, dt)
@@ -120,6 +127,7 @@ func advance(dt: float) -> void:
 	pose()
 
 func crosses_surface(part: MeshInstance3D, mesh: TriangleMesh) -> bool:
+	if not active: return false
 	var local := part.global_transform.affine_inverse()
 	var samples: Array = HeadContacts.PICKAXE if equipped=="pickaxe" else HeadContacts.AXE
 	for i in count:

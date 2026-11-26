@@ -13,6 +13,13 @@ func walk(direction: Vector3, frames: int) -> void:
 		world.actor.velocity = direction * 2.5
 		world.actor.move_and_slide()
 
+func pay(id: String) -> void:
+	for kind: String in world.inventory.costs[id]:
+		for i in int(world.inventory.costs[id][kind]):
+			world.inventory.collect("environment-%s-%s-%d" % [id,kind,i],kind)
+			world.inventory.payment(id,kind,false)
+	world._finish_purchase(id)
+
 func run() -> void:
 	world = Scene.instantiate()
 	root.add_child(world)
@@ -25,20 +32,26 @@ func run() -> void:
 	var base_trees: int = world.trees.size()-temporary.size()
 	checks["future storage grove uses live harvestable trees"] = not temporary.is_empty() and temporary.all(func(tree): return tree in world.trees and tree in world.surfaces and tree.phase=="rooted")
 	checks["storage grove clears build approach"] = temporary.all(func(tree): return Vector2(tree.position.x,tree.position.z).distance_to(camp.BUY)>2.0)
+	pay("center_hearth")
 	world._apply_hearth(true,true)
 	checks["thaw retires seasonal trees from harvest"] = world.trees.size()==base_trees and camp.seasonal_pines.is_empty() and temporary.all(func(tree): return not world.surfaces.has(tree))
 	for frame in 24: await physics_frame
 	checks["thaw removes retired grove from occupied plots"] = temporary.all(func(tree): return not is_instance_valid(tree))
-	checks["hearth centered in newly paid court"] = world.camp_built.get_node("CenteredHearth_StudioTrialOnly/RecoveredStoneFurnace").is_visible_in_tree() and not camp.buy_anchor.is_visible_in_tree() and camp.upgrade_anchor.is_visible_in_tree()
+	checks["hearth centered in newly paid court"] = world.camp_built.get_node("CenteredHearth_StudioTrialOnly/RecoveredStoneFurnace").is_visible_in_tree() and not camp.buy_anchor.is_visible_in_tree() and not camp.upgrade_anchor.is_visible_in_tree()
 	# Use the same scene targets and visibility as the purchase transition. No
 	# inventory or world state from this fixture is persisted.
+	checks["hearth shows no free stockrooms"] = camp.stock_anchors.values().all(func(a):return not a.is_visible_in_tree())
+	pay("expansion_1")
+	for kind: String in ["wood","stone","meat"]:
+		pay("storage_"+kind)
+	world._refresh_field()
 	for kind: String in ["wood","stone","meat"]:
 		var anchor: Node3D = camp.stock_anchors[kind]
 		var center: Vector2 = camp.receiver_position(kind)
 		var surface: Vector3 = camp.landing_position(kind,0)
 		checks[kind+" receiver is flush with authored plate"] = absf(anchor.position.y-.005)<.001 and absf(surface.y-anchor.position.y)<.001
 		checks[kind+" floor source is the authored inlaid shell"] = anchor.get_child(0).scene_file_path == "res://assets/field_camp/wood_storage_empty.glb"
-		checks[kind+" receiver fits inside wall and clears furnace"] = absf(center.x)+1.4432<5 and absf(center.y)+1.1352<4 and center.length()>2.7
+		checks[kind+" receiver fits inside wall and clears furnace"] = camp.is_inside_camp(Vector3(center.x-1.4432,0,center.y-1.1352)) and camp.is_inside_camp(Vector3(center.x+1.4432,0,center.y+1.1352)) and center.length()>2.7 and anchor.is_visible_in_tree()
 		var columns := 2 if kind == "meat" else 3
 		var first_upper: Vector3 = camp.landing_position(kind,columns)
 		var last_lower: Vector3 = camp.landing_position(kind,columns-1)

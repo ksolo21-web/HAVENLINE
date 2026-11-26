@@ -6,6 +6,7 @@ var world: Node3D
 var records: Array[Dictionary] = []
 var last_scan := Vector3.INF
 var elapsed := 0.0
+var last_availability := -1
 
 func install(host: Node3D) -> void:
 	world = host
@@ -24,9 +25,15 @@ func install(host: Node3D) -> void:
 		for i in placements_cpu.size():
 			var at: Transform3D = batch.global_transform * placements_cpu[i]
 			records.append({"source":batch,"index":i,"variant":variant,"transform":at,"live":null})
+	for row in records:
+		var p:Vector3=row.transform.origin
+		row["id"]="grove@%d,%d" % [roundi(p.x*1000),roundi(p.z*1000)]
+		row["proxy_visible"]=true
+	refresh_camp(false)
 	advance(0.25)
 
 func _show_pine(row: Dictionary, show: bool) -> void:
+	row.proxy_visible=show
 	if row.index < 0:
 		row.source.visible = show
 		return
@@ -37,26 +44,38 @@ func _show_pine(row: Dictionary, show: bool) -> void:
 		local.origin.y -= 12.0
 	batch.multimesh.set_instance_transform(row.index,local)
 
+func refresh_camp(animate: bool) -> void:
+	for row in records:
+		var occupied: bool = world.field_env.occupies_camp_ground(row.transform.origin)
+		if occupied == row.get("occupied",false): continue
+		row["occupied"] = occupied
+		if occupied and is_instance_valid(row.live):
+			world.retire_tree(row.live,animate)
+			row.live = null
+		_show_pine(row,not occupied)
+	last_scan = Vector3.INF
+
 func advance(dt: float) -> void:
 	if not world: return
 	elapsed += dt
 	if elapsed < .16: return
 	elapsed = 0.0
 	var here: Vector3 = world.actor.global_position
-	if here.distance_squared_to(last_scan)<.04: return
+	if here.distance_squared_to(last_scan)<.04 and last_availability==world.lifecycle.availability_revision: return
+	last_availability=world.lifecycle.availability_revision
 	last_scan = here
 	for row in records:
+		if row.get("occupied",false): continue
 		var at: Transform3D = row.transform
 		var distance := at.origin.distance_squared_to(here)
 		if distance < 18.5 and not is_instance_valid(row.live):
-			var tree = world._add_pine(Vector2(at.origin.x,at.origin.z),row.variant)
+			var tree = world.add_resource_source(row.id,"wood",Vector2(at.origin.x,at.origin.z),row.variant)
 			tree.global_transform = Transform3D(at.basis.scaled(Vector3.ONE/tree.TREE_SCALE),at.origin)
 			world.field_env.tint_canopy(tree)
 			row.live = tree
 			_show_pine(row,false)
 		elif distance > 40.0 and is_instance_valid(row.live):
-			var tree = row.live
-			if tree.phase == "rooted" and tree.strikes == 0:
-				world.retire_tree(tree,false)
-				row.live = null
-				_show_pine(row,true)
+			world.unload_resource_source(row.id)
+			row.live = null
+		var show_proxy:bool=not is_instance_valid(row.live) and world.is_source_available(row.id)
+		if show_proxy!=row.proxy_visible: _show_pine(row,show_proxy)

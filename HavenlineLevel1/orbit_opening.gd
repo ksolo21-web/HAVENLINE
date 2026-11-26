@@ -140,7 +140,8 @@ func active_tool() -> String:
 
 func register_hostile(body: Node3D, geometry: MeshInstance3D) -> void:
 	if body.is_in_group("swirl_hostiles") and body.has_method("take_swirl_hit") and body.has_method("can_receive_swirl") and (body == geometry or body.is_ancestor_of(geometry)):
-		surfaces[body] = [geometry, geometry.mesh.generate_triangle_mesh()]
+		var triangle_surface: TriangleMesh = body.hit_surface if "hit_surface" in body and body.hit_surface else geometry.mesh.generate_triangle_mesh()
+		surfaces[body] = [geometry, triangle_surface]
 		body.tree_exiting.connect(func(): surfaces.erase(body), CONNECT_ONE_SHOT)
 
 func reachable(body: Node3D) -> bool:
@@ -161,7 +162,7 @@ func selected_tool() -> String:
 			var distance := actor.global_position.distance_squared_to(body.global_position)
 			if distance < nearest:
 				nearest = distance
-				result = "pickaxe" if body == resource_rock else "axe"
+				result = "pickaxe" if body == resource_rock or body.get_meta("resource_kind","")=="stone" else "axe"
 	return result
 
 func accept_contact(body: Node3D) -> bool:
@@ -177,10 +178,14 @@ func accept_contact(body: Node3D) -> bool:
 		return struck
 	return body.take_swirl_hit(character_kit.turn_id)
 
+## Field subclasses override this with the current paid gate perimeter.
+func orbit_permitted_at(_world_position: Vector3) -> bool:
+	return true
+
 func _step_character(dt: float, speed: float) -> void:
 	character_kit.locomotion.observe(speed, true, dt)
 	resource_rock.advance(dt)
-	if persist_blocked:
+	if persist_blocked or not orbit_permitted_at(actor.global_position):
 		character_kit.rest()
 		return
 	var reach: float = SURFACE_REACH * character_kit.reach_scale
@@ -205,3 +210,4 @@ func _step_character(dt: float, speed: float) -> void:
 		if character_kit.crosses_surface(part, mesh) and accept_contact(body):
 			character_kit.hit_this_turn[body] = true
 			contacts.append({"target":body.name, "turn":character_kit.turn_id, "seconds":character_kit.elapsed})
+			if contacts.size()>1024: contacts.pop_front()

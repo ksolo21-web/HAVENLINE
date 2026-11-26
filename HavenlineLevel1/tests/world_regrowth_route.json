@@ -1,0 +1,9 @@
+[
+ {"action":"hold","label":"The untouched snowfield","s":0.7},
+ {"action":"farm","kind":"wood","count":3,"label":"Deplete the same starter pine","timeout":60},
+ {"action":"walk","p":[-2.4,8.55],"tol":0.2,"label":"Wait in sight of the stump"},
+ {"action":"renew","label":"The starter pine grows back","target":"starter-renewal","source_id":"starter-wood","kind":"wood","timeout":40},
+ {"action":"farm","kind":"stone","count":3,"label":"Mine the same starter rock","timeout":45},
+ {"action":"walk","p":[-5.5,5.5],"tol":0.2,"label":"Wait in sight of the empty quarry"},
+ {"action":"renew","label":"The starter rock returns","target":"starter-renewal","source_id":"starter-stone","kind":"stone","timeout":55}
+]

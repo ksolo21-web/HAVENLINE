@@ -1,18 +1,21 @@
 extends Node3D
 
-const CENTERS := {"wood":Vector2(-3.2,-2.1), "stone":Vector2(-3.2,.65), "meat":Vector2(2.8,-2.1)}
+const CENTERS := {"wood":Vector2(-3.6,-3.5), "stone":Vector2(5.5,-3.5), "meat":Vector2(-3.6,3.2)}
 const BUY := Vector2(0,2.4)
 const UPGRADE := Vector2(2.65,1.7)
 const FILL := preload("res://assets/field_camp/payment_fill.gdshader")
 const DONOR := "res://assets/field_camp/"
 const PLATE := preload("res://assets/field_camp/wood_storage_empty.glb")
-const PANEL := preload("res://assets/field_camp/opening_fence_panel.obj")
-const DOOR := preload("res://assets/field_camp/opening_gate_leaf.obj")
-const POST := preload("res://assets/field_camp/gate_post.obj")
+const PANEL := preload("res://assets/field_camp/snowbound_palisade.obj")
+const DOOR := preload("res://assets/field_camp/snowbound_gate_leaf.obj")
+const POST := preload("res://assets/field_camp/snowbound_gate_post.obj")
+const HINGE := preload("res://assets/field_camp/snowbound_hinges.obj")
+const KEEPER := preload("res://assets/field_camp/snowbound_latch_keeper.obj")
+const BOLT := preload("res://assets/field_camp/snowbound_sliding_bolt.obj")
 const HEARTH := preload("res://assets/field_camp/furnace.glb")
 const SNOW := preload("res://assets/field_camp/field_snow.gdshader")
 const TIMBER := preload("res://assets/field_camp/t03_boundary_v2.gdshader")
-const GRAIN := preload("res://assets/field_camp/opening_wood_grain.png")
+const GRAIN := preload("res://assets/field_camp/golden_timber_grain.png")
 const STOCK_PAINT := {"stone":preload("res://assets/field_camp/stone_storage.png"), "meat":preload("res://assets/field_camp/meat_storage.png")}
 var world
 var buy_anchor := Node3D.new()
@@ -26,6 +29,10 @@ var stock_surfaces := {}
 var empty_stock_paint := {}
 var count_labels := {}
 var payment_label: Label3D
+const COURTS := [Vector4(-5,-4,5,4),Vector4(-5.5,-5.5,7.5,5),Vector4(-5.5,-7,10,5.4)]
+var perimeter_stage := -1
+var palisades: MultiMeshInstance3D
+var perimeter_tween: Tween
 var camp_state := -1
 var palette := {}
 var canopy_materials := {}
@@ -59,10 +66,9 @@ func install(host: Node3D) -> void:
 	name = "SettledFieldEnvironment"
 	if get_parent() == null: world.add_child(self)
 	var snow_mesh: MeshInstance3D = world.get_node("SnowGround_NoPaintedPaths").find_children("*","MeshInstance3D", false, false)[0]
-	# The inherited private collider remains 40m across. Extend its visual
-	# surface beyond the corners of either camera orientation without adding travel.
+	# Keep the active snow surface on the same extent as the travel collider.
 	var snow_box := snow_mesh.mesh as BoxMesh
-	if snow_box: snow_box.size = Vector3(120.,snow_box.size.y,120.)
+	if snow_box: snow_box.size = Vector3(2.*world.layout.snow_extent_half,snow_box.size.y,2.*world.layout.snow_extent_half)
 	snow.shader = SNOW
 	snow_mesh.material_override = snow
 	world.camp_built.get_node("CampOnlySurface").hide()
@@ -87,11 +93,18 @@ func donor_mesh(source: Mesh) -> MeshInstance3D:
 		if not palette.has(code):
 			var ink := ShaderMaterial.new()
 			ink.shader = TIMBER
-			var colors := {"timber_dark":"795b41","snow":"e8f2f6","blue":"455966","rope":"cfb894","timber":"ffffff"}
+			var colors := {"timber_dark":"aa7039","iron":"343640","brass":"c69655","snow":"e8f2f6","blue":"455966","rope":"f2d299","timber":"ffffff"}
 			ink.set_shader_parameter("base_color",Color(colors.get(code,"85614a")))
 			ink.set_shader_parameter("detail_strength",.012)
 			if code in ["timber","timber_dark"]:
-				ink.set_shader_parameter("ground_bounce",.35)
+				ink.set_shader_parameter("ground_bounce",.43)
+				ink.set_shader_parameter("emission_color",Vector3(.048,.033,.017))
+			if code == "snow":
+				ink.set_shader_parameter("emission_color",Vector3(.29,.34,.40))
+			elif code == "rope":
+				ink.set_shader_parameter("emission_color",Vector3(.28,.216,.14))
+			elif code == "iron":
+				ink.set_shader_parameter("emission_color",Vector3(.038,.041,.046))
 			if code == "timber":
 				ink.set_shader_parameter("use_reference_grain",true)
 				ink.set_shader_parameter("reference_grain",GRAIN)
@@ -100,20 +113,20 @@ func donor_mesh(source: Mesh) -> MeshInstance3D:
 	return vis
 
 func install_walls() -> void:
+	var template := donor_mesh(PANEL)
+	var panel_mesh := PANEL.duplicate() as Mesh
+	for surface in panel_mesh.get_surface_count():
+		panel_mesh.surface_set_material(surface,template.get_active_material(surface))
+	template.free()
+	palisades = MultiMeshInstance3D.new()
+	palisades.name = "SnowboundPalisades"
+	var instances := MultiMesh.new()
+	instances.transform_format = MultiMesh.TRANSFORM_3D
+	instances.mesh = panel_mesh
+	palisades.multimesh = instances
+	world.camp_built.add_child(palisades)
 	for i in world.layout.walls_xz.size():
-		var row: Array = world.layout.walls_xz[i]
-		var body: StaticBody3D = world.camp_colliders[i]
-		body.get_child(0).hide()
-		var along_x := float(row[2]) > float(row[3])
-		var run := maxf(row[2], row[3])
-		var n := maxi(1, roundi(run / 2.6))
-		for j in n:
-			var vis := donor_mesh(PANEL)
-			body.add_child(vis)
-			var along := run*((j+.5)/n-.5)
-			vis.position = Vector3(along if along_x else 0.,-.49,0. if along_x else along)
-			vis.rotation.y = 0. if along_x else PI*.5
-			vis.scale = Vector3((run/n+.018)/2.94,.92,1.62)
+		world.camp_colliders[i].get_child(0).hide()
 	for gate in world.gates:
 		for i in 2:
 			var leaf: AnimatableBody3D = gate._leaf_bodies[i]
@@ -121,13 +134,102 @@ func install_walls() -> void:
 				if child is MeshInstance3D: child.hide()
 			var vis := donor_mesh(DOOR)
 			leaf.add_child(vis)
-			vis.position.y = -.5
-			vis.scale = Vector3(gate.LEAF_LENGTH/2.9,.93,1.15)
+			vis.position.y = -gate.LEAF_HEIGHT*.5
+			vis.scale.x = (2.*gate.HALF_SPAN-gate.LEAF_LENGTH-.01)/1.124
+			var sign_x := -1 if i == 0 else 1
+			var hinge := donor_mesh(HINGE)
+			leaf.add_child(hinge)
+			hinge.position = Vector3(sign_x*.505,-gate.LEAF_HEIGHT*.5,0.)
+			var keeper := donor_mesh(KEEPER)
+			leaf.add_child(keeper)
+			keeper.position = Vector3(-sign_x*.46,-gate.LEAF_HEIGHT*.5,0.)
+			if i == 0:
+				var bolt := donor_mesh(BOLT)
+				leaf.add_child(bolt)
+				bolt.position = Vector3(gate.LEAF_LENGTH*.5,-gate.LEAF_HEIGHT*.5,0.)
+				gate.hinge_moved.connect(func(angle: float):
+					bolt.position.x = gate.LEAF_LENGTH*.5-.34*clampf(angle/.18,0.,1.))
+
 			var post := donor_mesh(POST)
 			gate.add_child(post)
-			var sign_x := -1 if i==0 else 1
 			post.position = Vector3(sign_x*(gate.HALF_SPAN+.15),-.045,0)
-			post.scale = Vector3(.96,.9,.96)
+			post.scale = Vector3.ONE
+	set_perimeter(0,false)
+
+func is_inside_camp(pos: Vector3) -> bool:
+	if perimeter_stage < 1: return false
+	var r: Vector4 = COURTS[perimeter_stage-1]
+	return pos.x >= r.x and pos.x <= r.z and pos.z >= r.y and pos.z <= r.w
+
+# Keep crown skirts clear of the stockplots, walls and both swinging entrances.
+func occupies_camp_ground(pos: Vector3) -> bool:
+	if perimeter_stage < 1: return false
+	var r: Vector4 = COURTS[perimeter_stage-1]
+	return pos.x >= r.x-.32 and pos.x <= r.z+.32 and pos.z >= r.y-.32 and pos.z <= r.w+.32
+
+func set_perimeter(stage: int, animate: bool) -> void:
+	stage = clampi(stage,0,COURTS.size())
+	if stage == perimeter_stage: return
+	var previous := perimeter_stage
+	perimeter_stage = stage
+	var r: Vector4 = COURTS[maxi(0,stage-1)]
+	# Wall bodies retain their identity so restore and proximity checks keep
+	# using the same six collision shapes and the same two independent gates.
+	var gap := float(world.gates[0].HALF_SPAN)
+	var rows := [
+		[(r.x-gap)*.5,r.w,-gap-r.x,.30],[(gap+r.z)*.5,r.w,r.z-gap,.30],
+		[r.z,(r.y-gap)*.5,.30,-gap-r.y],[r.z,(gap+r.w)*.5,.30,r.w-gap],
+		[(r.x+r.z)*.5,r.y,r.z-r.x,.30],[r.x,(r.y+r.w)*.5,.30,r.w-r.y]
+	]
+	world.layout.camp_rect_xz = [r.x,r.y,r.z,r.w]
+	world.layout.walls_xz = rows
+	world.layout.gates[0].center_xz = [0.,r.w]
+	world.layout.gates[1].center_xz = [r.z,0.]
+	var transforms: Array[Transform3D] = []
+	for i in rows.size():
+		var row: Array = rows[i]
+		var body: StaticBody3D = world.camp_colliders[i]
+		body.position = Vector3(row[0],.475,row[1])
+		body.collision_layer = 1 if stage > 0 else 0
+		var collider: CollisionShape3D = body.get_child(1)
+		(collider.shape as BoxShape3D).size = Vector3(row[2],.95,row[3])
+		var along_x := float(row[2]) > float(row[3])
+		var length := maxf(row[2],row[3])
+		var count := maxi(1,roundi(length/2.6))
+		for j in count:
+			var offset := length*((j+.5)/count-.5)
+			var center := Vector3(row[0]+(offset if along_x else 0.),0.,row[1]+(0. if along_x else offset))
+			# Lashing crosses face outside on all four walls.
+			var angle := 0.0
+			if i in [2,3]: angle = PI*.5
+			elif i == 4: angle = PI
+			elif i == 5: angle = -PI*.5
+			var axes := Basis(Vector3.UP,angle)
+			axes.x *= length/(count*2.6)
+			transforms.append(Transform3D(axes,center))
+	var instances := palisades.multimesh
+	instances.instance_count = transforms.size()
+	for i in transforms.size(): instances.set_instance_transform(i,transforms[i])
+	palisades.visible = stage > 0
+	for i in world.gates.size():
+		var gate = world.gates[i]
+		gate.position = world.point(world.layout.gates[i].center_xz)
+		gate.set_earned(stage > 0)
+	var half_size := Vector2((r.z-r.x)*.5,(r.w-r.y)*.5)
+	var center := Vector2((r.x+r.z)*.5,(r.y+r.w)*.5)
+	if perimeter_tween: perimeter_tween.kill()
+	if animate and previous > 0 and stage > previous:
+		perimeter_tween = create_tween().set_parallel(true)
+		perimeter_tween.tween_method(func(v:Vector2): snow.set_shader_parameter("half_court",v),snow.get_shader_parameter("half_court"),half_size,.46)
+		perimeter_tween.tween_method(func(v:Vector2): snow.set_shader_parameter("court_center",v),snow.get_shader_parameter("court_center"),center,.46)
+		palisades.scale.y = .12
+		perimeter_tween.tween_property(palisades,"scale:y",1.,.38).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	else:
+		palisades.scale.y = 1.
+		snow.set_shader_parameter("half_court",half_size)
+		snow.set_shader_parameter("court_center",center)
+	if world.forest and not world.forest.records.is_empty():
+		world.forest.refresh_camp(animate)
 
 func install_hearth() -> void:
 	var base: Node3D = world.camp_built.get_node("CenteredHearth_StudioTrialOnly")
@@ -280,6 +382,7 @@ func install_plot(kind: String) -> void:
 	anchor.position = Vector3(center.x,.005,center.y)
 	world.camp_built.add_child(anchor)
 	stock_anchors[kind] = anchor
+	anchor.hide()
 	var deck := PLATE.instantiate() as Node3D
 	anchor.add_child(deck)
 	var meshes: Array[MeshInstance3D] = []
@@ -362,7 +465,7 @@ func set_upgrade_payment(remaining: Dictionary) -> void:
 	var meat := int(remaining.get("meat",0))
 	upgrade_pending = stone + meat > 0
 	upgrade_label.text = "Stone  %d    Meat  %d" % [stone,meat]
-	upgrade_anchor.visible = camp_state == 1 and upgrade_pending
+	upgrade_anchor.hide()
 
 func sync_stock(counts: Dictionary) -> void:
 	for kind in count_labels:
@@ -380,13 +483,14 @@ func sync_stock(counts: Dictionary) -> void:
 func set_built(built: bool, animate := true) -> void:
 	if camp_state == int(built): return
 	camp_state = int(built)
+	set_perimeter(maxi(1,perimeter_stage) if built else 0,animate)
 	if built:
 		for tree in seasonal_pines:
 			world.retire_tree(tree,animate)
 		seasonal_pines.clear()
 	world.purchase_pad_view.hide()
 	buy_anchor.visible = not built
-	upgrade_anchor.visible = built and upgrade_pending
+	upgrade_anchor.hide()
 	if reveal_tween: reveal_tween.kill()
 	if built and animate:
 		reveal_tween = create_tween().set_parallel(true)

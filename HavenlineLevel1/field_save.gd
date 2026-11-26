@@ -6,6 +6,8 @@ const Inventory = preload("res://field_inventory.gd")
 const PRIMARY := "field-inventory-v1.json"
 const LOCK := "field-inventory-v1.lock"
 const MAX_BYTES := 32 * 1024 * 1024
+const APP_DIRECTORY := "Havenline-World-One-Review"
+var native_profile := false
 var guard := Profile.new()
 var directory := ""
 var revision := ""
@@ -16,16 +18,26 @@ func requested(args: PackedStringArray) -> bool:
 func configure(args: PackedStringArray) -> bool:
 	directory = ""
 	revision = ""
-	if not guard.configure(args):
-		return false
-	directory = guard._dir
+	native_profile = not guard.requested(args)
+	if native_profile:
+		if not ProjectSettings.get_setting("application/config/use_custom_user_dir",false) or ProjectSettings.get_setting("application/config/custom_user_dir_name","") != APP_DIRECTORY:
+			return false
+		directory = OS.get_user_data_dir().path_join("world-one")
+		if DirAccess.make_dir_recursive_absolute(directory) != OK: return false
+	else:
+		if not guard.configure(args): return false
+		directory = guard._dir
 	return _safe()
 
 func _safe() -> bool:
 	if directory.is_empty():
 		return false
 	# Re-check the disposable sentinel, including symlink guards, on every I/O.
-	if not guard.configure(PackedStringArray([Profile.FLAG + directory])):
+	if native_profile:
+		if directory != OS.get_user_data_dir().path_join("world-one"): return false
+		var app_folder := DirAccess.open(OS.get_user_data_dir())
+		if not app_folder or app_folder.is_link("world-one"): return false
+	elif not guard.configure(PackedStringArray([Profile.FLAG + directory])):
 		return false
 	var dir := DirAccess.open(directory)
 	return dir != null and not dir.is_link(PRIMARY) and not dir.is_link(LOCK)
@@ -95,6 +107,7 @@ func _claim(dir: DirAccess) -> bool:
 	return false
 
 func _owner_alive(pid: int) -> bool:
+	if native_profile: return OS.is_process_running(pid)
 	if OS.get_name() == "Linux":
 		return DirAccess.dir_exists_absolute("/proc/" + str(pid))
 	# The disposable-profile policy is Unix-only. Signal zero tests process

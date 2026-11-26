@@ -163,7 +163,7 @@ func sync() -> void:
 				continue
 			var key := location + "/" + kind
 			var pool: Array = pieces.get(key, [])
-			var n := _available(kind, location)
+			var n := 0 if location == STOCK and not inventory.storage_open(kind) else _available(kind, location)
 			n = _visible_units(kind, n, location)
 			while pool.size() < n:
 				var unit := _piece(kind)
@@ -203,20 +203,20 @@ func pickup(token: String, kind: String, start: Vector3) -> bool:
 	return true
 
 func deposit_storage(kind: String) -> bool:
-	if cooldown > 0 or not storage_anchors.has(kind) or _available(kind, HAND) <= 0:
+	if cooldown > 0 or not inventory.storage_open(kind) or not storage_anchors.has(kind) or _available(kind, HAND) <= 0:
 		return false
 	var idx := int(inventory.stored[kind]) + _outstanding(kind, STOCK, false) - _outstanding(kind, STOCK, true)
 	return _send(kind, HAND, STOCK, idx)
 
 func contribute(id: String) -> bool:
-	if cooldown > 0 or not receivers.has(id) or inventory.complete(id):
+	if cooldown > 0 or not receivers.has(id) or not inventory.offer_open(id):
 		return false
 	var needs := inventory.remaining(id)
 	for kind: String in Inventory.KINDS:
 		if needs.get(kind, 0) <= _outstanding(kind, id, false):
 			continue
 		for origin: String in [HAND, STOCK]:
-			if origin == STOCK and not storage_anchors.has(kind):
+			if origin == STOCK and (not storage_anchors.has(kind) or not inventory.storage_open(kind)):
 				continue
 			if _available(kind, origin) > 0:
 				return _send(kind, origin, id, 0)

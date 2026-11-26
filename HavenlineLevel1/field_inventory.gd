@@ -1,5 +1,11 @@
 extends RefCounted
 
+const Progress = preload("res://field_progression.gd")
+var staged := false
+var build_order: Array = []
+var legacy_axes := false
+var world_state := {}
+
 const KINDS := ["wood", "stone", "meat"]
 const MAX_COUNT := 1000000
 
@@ -18,6 +24,8 @@ func configure(offers: Dictionary) -> bool:
 		for kind in offers[id]:
 			if kind not in KINDS or not _natural(offers[id][kind]) or offers[id][kind] == 0:
 				return false
+	staged = offers.has(Progress.FIRST)
+	if staged and (offers.size() != Progress.PREREQUISITES.size() or not Progress.PREREQUISITES.keys().all(func(id): return offers.has(id))): return false
 	costs = offers.duplicate(true)
 	for id in costs:
 		paid[id] = {}
@@ -33,20 +41,32 @@ func collect(source_token: String, kind: String) -> bool:
 	return true
 
 func deposit(kind: String) -> bool:
-	if kind not in KINDS or carried[kind] == 0:
+	if kind not in KINDS or carried[kind] == 0 or not storage_open(kind):
 		return false
 	carried[kind] -= 1
 	stored[kind] += 1
 	return true
 
 func payment(id: String, kind: String, from_storage: bool) -> bool:
-	if not costs.has(id) or not costs[id].has(kind) or paid[id][kind] >= costs[id][kind]:
+	if not offer_open(id) or not costs[id].has(kind) or paid[id][kind] >= costs[id][kind]:
 		return false
+	if from_storage and not storage_open(kind): return false
 	var stock := stored if from_storage else carried
 	if stock[kind] == 0:
 		return false
 	stock[kind] -= 1
 	paid[id][kind] += 1
+	if staged and complete(id): build_order.append(id)
+	return true
+
+func storage_open(kind: String) -> bool:
+	return not staged or complete("storage_" + kind)
+
+func offer_open(id: String) -> bool:
+	if not costs.has(id) or complete(id): return false
+	if not staged: return true
+	for predecessor in Progress.PREREQUISITES[id]:
+		if not complete(predecessor): return false
 	return true
 
 func remaining(id: String) -> Dictionary:
@@ -64,7 +84,13 @@ func complete(id: String) -> bool:
 	return true
 
 func snapshot() -> Dictionary:
-	return {"version": 1, "collected": collected.duplicate(), "carried": carried.duplicate(), "stored": stored.duplicate(), "paid": paid.duplicate(true)}
+	var state := {"version": 1, "collected": collected.duplicate(), "carried": carried.duplicate(), "stored": stored.duplicate(), "paid": paid.duplicate(true)}
+	if staged:
+		state.version = 2
+		state.build_order = build_order.duplicate()
+		state.legacy_axes = legacy_axes
+		state.world = world_state.duplicate(true)
+	return state
 
 static func _natural(value: Variant) -> bool:
 	if typeof(value) != TYPE_INT and typeof(value) != TYPE_FLOAT:
@@ -72,12 +98,26 @@ static func _natural(value: Variant) -> bool:
 	return value >= 0 and value <= MAX_COUNT and value == int(value)
 
 func restore(data: Variant) -> bool:
-	if not data is Dictionary or data.size() != 5 or data.get("version") != 1:
-		return false
+	if not data is Dictionary: return false
+	var old: bool = data.get("version") == 1
+	if (old and data.size() != 5) or (not old and (not staged or data.get("version") != 2 or data.size() != 8)): return false
 	for key in ["collected", "carried", "stored", "paid"]:
 		if not data.get(key) is Dictionary:
 			return false
-	if data.collected.size() > MAX_COUNT or data.paid.size() != costs.size():
+	var incoming: Dictionary = data.paid.duplicate(true)
+	var order: Array = []
+	var old_axes := false
+	if staged and old:
+		if incoming.size()!=2 or not incoming.has(Progress.HEARTH) or not incoming.has(Progress.AXES): return false
+		for id in costs:
+			if not incoming.has(id):
+				incoming[id]={}
+				for kind in costs[id]: incoming[id][kind]=0
+	elif staged:
+		if not data.get("build_order") is Array or not data.get("world") is Dictionary or not data.get("legacy_axes") is bool: return false
+		order=data.build_order.duplicate()
+		old_axes=data.legacy_axes
+	if data.collected.size() > MAX_COUNT or incoming.size() != costs.size():
 		return false
 	var balances := {"wood": 0, "stone": 0, "meat": 0}
 	for token in data.collected:
@@ -92,7 +132,7 @@ func restore(data: Variant) -> bool:
 				return false
 			balances[kind] -= int(stock[kind])
 	for id in costs:
-		var subtotal: Variant = data.paid.get(id)
+		var subtotal: Variant = incoming.get(id)
 		if not subtotal is Dictionary or subtotal.size() != costs[id].size():
 			return false
 		for kind in costs[id]:
@@ -101,11 +141,39 @@ func restore(data: Variant) -> bool:
 			balances[kind] -= int(subtotal[kind])
 	if balances.values().any(func(n): return n != 0):
 		return false
+	if staged:
+		var finished: Array = []
+		var funded: Array = []
+		for id in costs:
+			var full := true
+			for kind in costs[id]:
+				if int(incoming[id][kind]) > 0 and not funded.has(id): funded.append(id)
+				if int(incoming[id][kind]) != int(costs[id][kind]): full=false
+			if full: finished.append(id)
+		if old:
+			order=finished.duplicate()
+			old_axes=funded.has(Progress.AXES)
+		if order.size()!=finished.size(): return false
+		var earlier: Array = []
+		for id in order:
+			if not finished.has(id) or earlier.has(id): return false
+			var required: Array = [Progress.HEARTH] if id==Progress.AXES and old_axes else Progress.PREREQUISITES[id]
+			for previous in required:
+				if not earlier.has(previous): return false
+			earlier.append(id)
+		for id in funded:
+			var required: Array = [Progress.HEARTH] if id==Progress.AXES and old_axes else Progress.PREREQUISITES[id]
+			for previous in required:
+				if not finished.has(previous): return false
+		if old_axes and not funded.has(Progress.AXES): return false
+		build_order=order
+		legacy_axes=old_axes
+		world_state={} if old else data.world.duplicate(true)
 	collected = data.collected.duplicate()
 	for kind in KINDS:
 		carried[kind] = int(data.carried[kind])
 		stored[kind] = int(data.stored[kind])
 	for id in costs:
 		for kind in costs[id]:
-			paid[id][kind] = int(data.paid[id][kind])
+			paid[id][kind] = int(incoming[id][kind])
 	return true

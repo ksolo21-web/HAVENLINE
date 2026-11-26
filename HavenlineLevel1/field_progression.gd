@@ -1,0 +1,36 @@
+extends RefCounted
+
+const HEARTH := "center_hearth"
+const FIRST := "expansion_1"
+const SECOND := "expansion_2"
+const TOWER := "watchtower"
+const AXES := "orbit_upgrade"
+const STORAGE := ["storage_wood", "storage_stone", "storage_meat"]
+const PREREQUISITES := {
+	"center_hearth": [], "expansion_1": ["center_hearth"],
+	"storage_wood": ["expansion_1"], "storage_stone": ["expansion_1"], "storage_meat": ["expansion_1"],
+	"expansion_2": STORAGE, "watchtower": ["expansion_2"], "orbit_upgrade": ["expansion_2"]
+}
+const TITLES := {
+	"center_hearth":"Build hearth", "expansion_1":"Expand camp", "expansion_2":"Expand east",
+	"storage_wood":"Wood storage", "storage_stone":"Stone storage", "storage_meat":"Meat storage",
+	"watchtower":"Build watchtower", "orbit_upgrade":"Equip extra axes"
+}
+const POSITIONS := {"expansion_1":Vector2(2.6,-1.5), "expansion_2":Vector2(2.6,-1.5),
+	"watchtower":Vector2(8.1,-2.4), "orbit_upgrade":Vector2(7.6,2.9)}
+
+static func offers(hearth: Dictionary) -> Dictionary:
+	return {HEARTH:hearth, FIRST:{"wood":3,"stone":1},
+		"storage_wood":{"wood":2}, "storage_stone":{"wood":2,"stone":1}, "storage_meat":{"wood":2,"meat":1},
+		SECOND:{"wood":3,"stone":2}, TOWER:{"wood":3,"stone":2}, AXES:{"stone":2,"meat":1}}
+
+static func stage(ledger) -> int:
+	if ledger.complete(SECOND): return 3
+	if ledger.complete(FIRST): return 2
+	return 1 if ledger.complete(HEARTH) else 0
+
+static func price_text(remaining: Dictionary) -> String:
+	var words := PackedStringArray()
+	for kind in ["wood","stone","meat"]:
+		if int(remaining.get(kind,0)) > 0: words.append("%d %s" % [remaining[kind],kind])
+	return " · ".join(words)

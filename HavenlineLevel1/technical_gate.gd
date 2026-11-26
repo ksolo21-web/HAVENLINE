@@ -1,5 +1,7 @@
 extends Node3D
 ## One independent, conservative double-leaf technical gate; never grants progress.
+signal hinge_moved(radians: float)
+
 const HALF_SPAN := 1.20
 const LEAF_LENGTH := 1.18
 const LEAF_DEPTH := 0.14
@@ -89,3 +91,4 @@ func advance(dt: float, feet: Vector3, capsule_radius: float) -> void:
 func _update_hinges() -> void:
 	_pivots[0].rotation.y = angle
 	_pivots[1].rotation.y = -angle
+	hinge_moved.emit(angle)
