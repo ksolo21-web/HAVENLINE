@@ -1,0 +1,139 @@
+{
+  "source_art_commit": "25b4ec6dd407c1c2530a3781527df64eabb63b99",
+  "gameplay_scene": "res://field_opening.tscn",
+  "native_renderer": "Godot 4.7.2, Linux Compatibility / Mesa llvmpipe",
+  "staging": "The GLBs were instantiated through the live FieldArt factory in a separate viewer, at unit scale. Native render angles match the approved 0, 45 and 270 degree views. Image pairs are cropped and fitted independently, so these panels compare shape and material rather than world size. Integrated mining and pickup footage is separate.",
+  "source_art": {
+    "coal": {
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/25b4ec6dd407c1c2530a3781527df64eabb63b99/Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/13-coal.png",
+      "sha256": "860f781f8ac7425e4a7899d1f9748a5e1e5dc920ae33862a7b6180f244703b5d"
+    },
+    "metal": {
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/25b4ec6dd407c1c2530a3781527df64eabb63b99/Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/05-metal-ore.png",
+      "sha256": "9e6965c343e017052d14800a7c3d3673ec396552e1f648cac15e7fb26a5b4d4a"
+    },
+    "slate": {
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/25b4ec6dd407c1c2530a3781527df64eabb63b99/Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/03-slate.png",
+      "sha256": "651269f18342422fb7aeac236e61c4b7b59c325040dc2a7b71d446afa2c37b64"
+    }
+  },
+  "assets": {
+    "coal": {
+      "glb_sha256": "673b85d2e245ec18b18aa63efb3a4bf92d36606dd953414c53255fa042369cfd",
+      "glb_bytes": 71660,
+      "albedo_jpeg_sha256": "b627a8760363fc942d7d8925a9924c9aa143cf776680df8704cc1028e7ffa22e",
+      "hud_icon_sha256": "165e43c5f6cd1e612e829a2b41b5024bcf67601405e99c5288207409273e3fb7",
+      "triangles": 1150,
+      "single_identity_node": true,
+      "dimensions_x_y_z_m_at_unit_width": [
+        1.0,
+        0.77285,
+        0.94395
+      ],
+      "signed_volume": 0.37893,
+      "factory_default_width_m": 0.39,
+      "native_engine_bounds": {
+        "center_xz": "(0.0, 0.0)",
+        "ground_y": 0.0,
+        "mesh_count": 1,
+        "size": "(1.0, 0.772849, 0.943946)",
+        "surface_count": 1
+      }
+    },
+    "metal": {
+      "glb_sha256": "1a77a234c1757641f64f75742a1068a9e9c1affc362b84946481970d6772d61a",
+      "glb_bytes": 106608,
+      "albedo_jpeg_sha256": "21b26019fd732833f2640af44953bf66b86ad2f685dc718c9880be9d7f7ca110",
+      "hud_icon_sha256": "9b3f1fc4b23f1bece3d8d7bba80f3f5a97cd544f75c9985e54ee150f1c055747",
+      "triangles": 1568,
+      "single_identity_node": true,
+      "dimensions_x_y_z_m_at_unit_width": [
+        1.0,
+        0.72451,
+        0.77299
+      ],
+      "signed_volume": 0.3169,
+      "factory_default_width_m": 0.42,
+      "native_engine_bounds": {
+        "center_xz": "(0.0, 0.0)",
+        "ground_y": 0.0,
+        "mesh_count": 1,
+        "size": "(1.0, 0.724509, 0.772991)",
+        "surface_count": 1
+      }
+    },
+    "slate": {
+      "glb_sha256": "2583918e17023824f83c8d34c52b51bd65ea9f16d2aa384d3c3021faa3a78c13",
+      "glb_bytes": 71696,
+      "albedo_jpeg_sha256": "f3b98b4aec648829f438867e4150c61770db76bd030e8f8bc5f2ac23dcae0dbc",
+      "hud_icon_sha256": "94ec5031c0746c81d5793147e9b178fc15e5c4f3ab120beee340fa3f74ee7c5b",
+      "triangles": 572,
+      "single_identity_node": true,
+      "dimensions_x_y_z_m_at_unit_width": [
+        1.0,
+        0.19495,
+        0.52
+      ],
+      "signed_volume": 0.08342,
+      "factory_default_width_m": 0.47,
+      "native_engine_bounds": {
+        "center_xz": "(0.0, 0.0)",
+        "ground_y": 0.0,
+        "mesh_count": 1,
+        "size": "(1.0, 0.194945, 0.52)",
+        "surface_count": 1
+      }
+    }
+  },
+  "runtime_checks": {
+    "coal configured_width 0.39": true,
+    "coal configured_width 2.0": true,
+    "coal painted_pbr": true,
+    "coal single_mesh": true,
+    "coal surface_normals": true,
+    "coal unit_geometry": true,
+    "metal configured_width 0.42": true,
+    "metal configured_width 2.0": true,
+    "metal painted_pbr": true,
+    "metal single_mesh": true,
+    "metal surface_normals": true,
+    "metal unit_geometry": true,
+    "slate configured_width 0.47": true,
+    "slate configured_width 2.0": true,
+    "slate painted_pbr": true,
+    "slate single_mesh": true,
+    "slate surface_normals": true,
+    "slate unit_geometry": true
+  },
+  "working_sources": {
+    "tools/art/make_field_minerals.py": "5268c5c631a630cfa04f8bbe727455adc9b780d17e70504fd7cedfc5a565e5d7",
+    "field_art.gd": "d1d4452f1c0daceff21178430f81b1aa9808488d9f9af5e52c4148c694990d05",
+    "qa_field_mineral_art.gd": "9617417e4dd27f3a34f8c69d569a5942eae4d8ed9f41528dc0a59ee81c3ef3bb"
+  },
+  "methods": "Eight silhouettes constrain the closed stone volume. Coal fractures and ore inclusions have actual relief. The metal carries three additional embedded faceted silver nodules in the same mesh. The slate uses a chipped layered profile, two physical cleavage grooves, and the registered top-view quartz pattern. Every asset uses its own source-derived PBR albedo atlas and carries that same geometry at all requested sizes.",
+  "comparison_sha256": "84c5de90d1e333210c30ff54658618b33eacb1b76966e6dbd245999a6fd63141",
+  "frozen_source_commit": "fa9d3e987859a1e46c2533f94431b4e9cae3a9e5",
+  "frozen_import_test": {
+    "checks": {
+      "coal configured_width 0.39": true,
+      "coal configured_width 2.0": true,
+      "coal painted_pbr": true,
+      "coal single_mesh": true,
+      "coal surface_normals": true,
+      "coal unit_geometry": true,
+      "metal configured_width 0.42": true,
+      "metal configured_width 2.0": true,
+      "metal painted_pbr": true,
+      "metal single_mesh": true,
+      "metal surface_normals": true,
+      "metal unit_geometry": true,
+      "slate configured_width 0.47": true,
+      "slate configured_width 2.0": true,
+      "slate painted_pbr": true,
+      "slate single_mesh": true,
+      "slate surface_normals": true,
+      "slate unit_geometry": true
+    },
+    "suite": "field_mineral_art"
+  }
+}

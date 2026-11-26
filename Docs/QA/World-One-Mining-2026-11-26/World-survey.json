@@ -1,0 +1,125 @@
+{
+  "census": {
+    "distinct_ids": 34812,
+    "max_sources": 57,
+    "min_sources": 14,
+    "populated_chunks": 1024,
+    "resources": {
+      "coal": 91,
+      "metal": 114,
+      "slate": 127,
+      "stone": 2579,
+      "wood": 31901
+    },
+    "stone": 2579,
+    "wood": 31901
+  },
+  "checks": {
+    "Actual walk on solid snow": true,
+    "All 1,024 chunks contain usable resources": true,
+    "All original source IDs, variants, transforms and ordering match the shipped map": true,
+    "All source keys are unique": true,
+    "Ground collider is 1,024 metres square": true,
+    "Live joystick travels beyond the previous snow boundary": true,
+    "Loaded snow cell (-16, -16)": true,
+    "Loaded snow cell (-16, 15)": true,
+    "Loaded snow cell (15, -16)": true,
+    "Loaded snow cell (15, 15)": true,
+    "Loaded snow cell (2, -3)": true,
+    "Mineral banks preserve the start, expedition and clearance": true,
+    "Mineral banks recur in distant districts": true,
+    "Mineral district placement is deterministic": true,
+    "Normal entry creates the streamed world": true,
+    "One square kilometre contains both quarry and timber": true,
+    "Resource becomes harvestable after its timer stone": true,
+    "Resource becomes harvestable after its timer wood": true,
+    "Revisited cell has identical resource IDs": true,
+    "Revisiting cannot restore stone early": true,
+    "Revisiting cannot restore wood early": true,
+    "Snow ridge normals face the sky": true,
+    "Streamed stone uses actual harvest object": true,
+    "Streamed wood uses actual harvest object": true,
+    "Unloading preserves stone cooldown": true,
+    "Unloading preserves wood cooldown": true,
+    "World keeps at most nine cells resident": true,
+    "coal promotes once with physical contact geometry": true,
+    "coal proxy uses the live bank scale, transform, bounds and surfaces": true,
+    "coal returns to proxy on release": true,
+    "coal shows the distant source proxy": true,
+    "metal promotes once with physical contact geometry": true,
+    "metal proxy uses the live bank scale, transform, bounds and surfaces": true,
+    "metal returns to proxy on release": true,
+    "metal shows the distant source proxy": true,
+    "slate promotes once with physical contact geometry": true,
+    "slate proxy uses the live bank scale, transform, bounds and surfaces": true,
+    "slate returns to proxy on release": true,
+    "slate shows the distant source proxy": true
+  },
+  "max_resident_chunks": 9,
+  "nearest_minerals": {
+    "coal": {
+      "distance": 130.058227539062,
+      "id": "world1/3/1/coal/0",
+      "x": 116.14395904541,
+      "z": 58.5297012329102
+    },
+    "metal": {
+      "distance": 136.273956298828,
+      "id": "world1/-4/2/metal/0",
+      "x": -110.280158996582,
+      "z": 80.0554656982422
+    },
+    "slate": {
+      "distance": 141.823150634766,
+      "id": "world1/-5/-2/slate/0",
+      "x": -136.590103149414,
+      "z": -38.1699981689453
+    }
+  },
+  "touch_travel_end_x": 28.0381126403809,
+  "scene": "res://field_opening.tscn",
+  "godot": "4.7.2.stable.official.ed1daf0bf",
+  "method": "Full deterministic census of all 1,024 chunks, followed by disposable-profile streaming and physics checks on the game entry scene. The streaming fixture positions the player next to representative deposits; a real joystick also checks boundary travel.",
+  "existing_rows_sha256": "cec2c42cd1b35a58bda20f42639445c0c05b9f9fd5d73339f578426ef6234c28",
+  "minimum_mineral_radius_m": 128,
+  "occupied_cell_clearance_m": 3.6,
+  "prior_source_commit": "e978a44b1b112bb598f9ec1724b3616ec80e6970",
+  "east_expedition": [
+    {
+      "id": "world1/4/-1/metal/0",
+      "x": 141.357894897461,
+      "z": -5.61495971679688
+    },
+    {
+      "id": "world1/7/-1/coal/0",
+      "x": 234.652694702148,
+      "z": -7.72018051147461
+    },
+    {
+      "id": "world1/6/0/slate/0",
+      "x": 202.06787109375,
+      "z": 13.4494752883911
+    }
+  ],
+  "preflight_file_sha256": {
+    "world_landscape.gd": "0b9c8b66e45a867ba220cab1615d2396604bab7e14f43c4265261b140419ec2b",
+    "tests/world_landscape_qa.gd": "a0914ea78eee9167a33d89905051921db5a865d771cdc7b9563ba71f68605b80",
+    "mining_resources.gd": "f854eb0f6b78b00a54c52e7d56be1d176a375ccd419b898f3bbcfcd35b6cbee2",
+    "field_opening.gd": "531a783f4434c5ac20a06f79e92837b69e619ac9f34661e3e4a8b769bc02c3a7",
+    "field_art.gd": "d1d4452f1c0daceff21178430f81b1aa9808488d9f9af5e52c4148c694990d05",
+    "assets/field/metal.glb": "12ac7d4de3a95a979bc62781bc6cf65a7f7f1421f215c2010cd0171994cbdf27",
+    "assets/field/coal.glb": "b3c1583c29aa997b10a30757e806c70afdb8976ce8445987565c2a62e1a8b3ff",
+    "assets/field/slate.glb": "40e5c328b9aa9526768d5e068b842b27b0cb9ef93d7f8f69e91ed51bfab4ba64"
+  },
+  "tested_file_sha256": {
+    "world_landscape.gd": "0b9c8b66e45a867ba220cab1615d2396604bab7e14f43c4265261b140419ec2b",
+    "tests/world_landscape_qa.gd": "dc66e2c8f5c7d6f0191757911374544d87c867c8d06155c66554aee23b105170",
+    "mining_resources.gd": "f854eb0f6b78b00a54c52e7d56be1d176a375ccd419b898f3bbcfcd35b6cbee2",
+    "field_opening.gd": "8fb611f26be18766a910f668afc0ccdd9415690d587300624943f69b726bef38",
+    "field_art.gd": "d1d4452f1c0daceff21178430f81b1aa9808488d9f9af5e52c4148c694990d05",
+    "assets/field/metal.glb": "1a77a234c1757641f64f75742a1068a9e9c1affc362b84946481970d6772d61a",
+    "assets/field/coal.glb": "673b85d2e245ec18b18aa63efb3a4bf92d36606dd953414c53255fa042369cfd",
+    "assets/field/slate.glb": "2583918e17023824f83c8d34c52b51bd65ea9f16d2aa384d3c3021faa3a78c13"
+  },
+  "source_commit": "fa9d3e987859a1e46c2533f94431b4e9cae3a9e5"
+}
