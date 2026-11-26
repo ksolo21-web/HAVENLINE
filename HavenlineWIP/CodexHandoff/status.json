@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T02:09:41Z",
+  "observed_at_utc": "2026-11-26T02:33:55Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -21,11 +21,12 @@
       "id": "character-1",
       "role": "Rigging and independent review",
       "state": "blocked",
-      "result": "Six authorized fastener seams passed independent checks at rest. Small synthetic displacements revealed local fold risk; this detached patch does not fix the earlier boot collisions or clear gait.",
+      "result": "The detached right collar edit cleared the original crossing but created three nearby overlaps and left a fold. Independent review rejected it. The tested pose also still misses left heel contact.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/5e6a4543a5cc814459d07e24fe0713ab05fb7986"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/e418fd2e50ebf2e43eaae041c3d1c5ef8d3bb368",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/e946060023623fa72e272f86d84739e0d3b28edf"
       ],
-      "next": "Use an actual loaded contact pose for the next rig test; keep the seam patch out of the playable build.",
+      "next": "Do not iterate single vertices. Evaluate how the collar and fastener deform together under the same load before proposing a different repair. Nothing is installed.",
       "role_ids": [
         "rig-character",
         "critic-rig"
@@ -121,24 +122,26 @@
     {
       "role_id": "rig-character",
       "state": "blocked",
-      "title": "Built the six approved fastener seam changes",
-      "summary": "The detached test preserves original fasteners and overall look. It is not cleared for motion or installed.",
-      "next": "Use an actual loaded pose on the exact rig before any further gait decision.",
+      "title": "Right boot collar trial rejected",
+      "summary": "The original clash cleared, but the edit created nearby overlaps and a fold remained.",
+      "next": "Do not promote; a different bounded design needs evidence under load.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/5e6a4543a5cc814459d07e24fe0713ab05fb7986"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/e418fd2e50ebf2e43eaae041c3d1c5ef8d3bb368",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/e946060023623fa72e272f86d84739e0d3b28edf"
       ],
-      "updated_at_utc": "2026-11-26T02:04:33Z"
+      "updated_at_utc": "2026-11-26T02:33:55Z"
     },
     {
       "role_id": "critic-rig",
       "state": "done",
-      "title": "Verified fastener seams at rest only",
-      "summary": "Six detached seam edits passed scoped independent neutral checks. Small synthetic movements identified fold risks near two seams.",
-      "next": "Reject motion approval pending true loaded-pose evidence.",
+      "title": "Independently reproduced collar trial regressions",
+      "summary": "Two crossings were removed and three were introduced around the edited patch. The sole geometry stayed unchanged.",
+      "next": "Review an exact new candidate when permitted and frozen; no gait approval.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/5e6a4543a5cc814459d07e24fe0713ab05fb7986"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/e418fd2e50ebf2e43eaae041c3d1c5ef8d3bb368",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/e946060023623fa72e272f86d84739e0d3b28edf"
       ],
-      "updated_at_utc": "2026-11-26T02:04:33Z"
+      "updated_at_utc": "2026-11-26T02:33:55Z"
     },
     {
       "role_id": "builder-camp-pads",
@@ -252,6 +255,18 @@
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/7698f03b7c2f3e99b342052e8f93a030c18aa8f0",
         "https://github.com/ksolo21-web/HAVENLINE/commit/f66909ab05b0fea1c955c04f70ea1dd7fd6a6e82"
+      ]
+    },
+    {
+      "id": "rig-right-collar-rejected-20261126",
+      "type": "handoff",
+      "at_utc": "2026-11-26T02:33:55Z",
+      "from_role_id": "critic-rig",
+      "to_role_id": "rig-character",
+      "message": "Handoff summary: The original collar crossing cleared, but new neighboring overlaps and a remaining fold prevent approval. Keep the playable character unchanged.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/e418fd2e50ebf2e43eaae041c3d1c5ef8d3bb368",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/e946060023623fa72e272f86d84739e0d3b28edf"
       ]
     }
   ]
