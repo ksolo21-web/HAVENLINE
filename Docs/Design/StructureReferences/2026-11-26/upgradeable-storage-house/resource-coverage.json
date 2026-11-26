@@ -1,0 +1,504 @@
+{
+  "schema_version": 1,
+  "source_commit": "74817145ed7be6e8b9aef7eab1369d1e70112a64",
+  "source_path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/storage-resource-coverage-proposal.json",
+  "source_git_blob_sha": "1a05d5aef9ef4e56e4a069a5e0c6f495dfb24fbb",
+  "source_resource_count": 33,
+  "source_group_count": 11,
+  "proposed_zone_count": 6,
+  "zones": [
+    {
+      "id": "timber",
+      "label": "Timber racks",
+      "groups": [
+        "timber"
+      ],
+      "position": "left wall front",
+      "visual_contents": [
+        "logs",
+        "plank stack",
+        "split firewood"
+      ]
+    },
+    {
+      "id": "heavy",
+      "label": "Heavy material bins",
+      "groups": [
+        "mineral",
+        "metal"
+      ],
+      "position": "left wall rear",
+      "visual_contents": [
+        "rounded stones",
+        "flat slate slabs",
+        "rough ore chunks",
+        "steel ingots in separate slot"
+      ]
+    },
+    {
+      "id": "fuel",
+      "label": "Partitioned fuel locker",
+      "groups": [
+        "fuel"
+      ],
+      "position": "right wall front, separate enclosed service compartment with exterior right-side hatch",
+      "visual_contents": [
+        "sealed fuel containers",
+        "coal bin"
+      ]
+    },
+    {
+      "id": "food",
+      "label": "Food pantry",
+      "groups": [
+        "raw_meat",
+        "fish",
+        "grain",
+        "prepared_food"
+      ],
+      "position": "rear wall center",
+      "visual_contents": [
+        "separate covered raw-meat and fish boxes",
+        "distinct sealed prepared-food shelf",
+        "grain sack compartment"
+      ]
+    },
+    {
+      "id": "hide_fur",
+      "label": "Dry hide and fur cabinet",
+      "groups": [
+        "hide_fur"
+      ],
+      "position": "rear wall left",
+      "visual_contents": [
+        "folded leather hides",
+        "folded pale fur bundles"
+      ]
+    },
+    {
+      "id": "cargo_cash",
+      "label": "Cargo shelf and secure drawer",
+      "groups": [
+        "cargo",
+        "cash"
+      ],
+      "position": "rear wall right",
+      "visual_contents": [
+        "bound cargo parcels",
+        "closed cash lockbox"
+      ]
+    }
+  ],
+  "mapping": [
+    {
+      "resource_id": "wood",
+      "existing_visual_group": "timber",
+      "house_zone": "timber",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "direct_video_type"
+    },
+    {
+      "resource_id": "timber_planks",
+      "existing_visual_group": "timber",
+      "house_zone": "timber",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "proposed_extension_from_existing_reviewed_resource_art"
+    },
+    {
+      "resource_id": "split_firewood",
+      "existing_visual_group": "timber",
+      "house_zone": "timber",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "proposed_extension_from_existing_reviewed_resource_art"
+    },
+    {
+      "resource_id": "stone",
+      "existing_visual_group": "mineral",
+      "house_zone": "heavy",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "proposed_extension_from_existing_reviewed_resource_art"
+    },
+    {
+      "resource_id": "slate",
+      "existing_visual_group": "mineral",
+      "house_zone": "heavy",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "proposed_extension_from_existing_reviewed_resource_art"
+    },
+    {
+      "resource_id": "metal_ore",
+      "existing_visual_group": "mineral",
+      "house_zone": "heavy",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "proposed_extension_from_existing_reviewed_resource_art"
+    },
+    {
+      "resource_id": "steel",
+      "existing_visual_group": "metal",
+      "house_zone": "heavy",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "proposed_extension_from_existing_reviewed_resource_art"
+    },
+    {
+      "resource_id": "fuel",
+      "existing_visual_group": "fuel",
+      "house_zone": "fuel",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "proposed_extension_from_existing_reviewed_resource_art"
+    },
+    {
+      "resource_id": "coal",
+      "existing_visual_group": "fuel",
+      "house_zone": "fuel",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "proposed_extension_from_existing_reviewed_resource_art"
+    },
+    {
+      "resource_id": "meat",
+      "existing_visual_group": "raw_meat",
+      "house_zone": "food",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "direct_video_type"
+    },
+    {
+      "resource_id": "deer_meat",
+      "existing_visual_group": "raw_meat",
+      "house_zone": "food",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "proposed_species_contents_on_direct_video_meat_template",
+      "wildlife_eligibility": "Art proposal only. Species meat/drop/food eligibility remains unfrozen; no companion/pet classification or implemented drop is asserted."
+    },
+    {
+      "resource_id": "boar_meat",
+      "existing_visual_group": "raw_meat",
+      "house_zone": "food",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "proposed_species_contents_on_direct_video_meat_template",
+      "wildlife_eligibility": "Art proposal only. Species meat/drop/food eligibility remains unfrozen; no companion/pet classification or implemented drop is asserted."
+    },
+    {
+      "resource_id": "rabbit_meat",
+      "existing_visual_group": "raw_meat",
+      "house_zone": "food",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "proposed_species_contents_on_direct_video_meat_template",
+      "wildlife_eligibility": "Art proposal only. Species meat/drop/food eligibility remains unfrozen; no companion/pet classification or implemented drop is asserted."
+    },
+    {
+      "resource_id": "moose_meat",
+      "existing_visual_group": "raw_meat",
+      "house_zone": "food",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "proposed_species_contents_on_direct_video_meat_template",
+      "wildlife_eligibility": "Art proposal only. Species meat/drop/food eligibility remains unfrozen; no companion/pet classification or implemented drop is asserted."
+    },
+    {
+      "resource_id": "squirrel_meat",
+      "existing_visual_group": "raw_meat",
+      "house_zone": "food",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "proposed_species_contents_on_direct_video_meat_template",
+      "wildlife_eligibility": "Art proposal only. Species meat/drop/food eligibility remains unfrozen; no companion/pet classification or implemented drop is asserted."
+    },
+    {
+      "resource_id": "wild_bear_meat",
+      "existing_visual_group": "raw_meat",
+      "house_zone": "food",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "proposed_species_contents_on_direct_video_meat_template",
+      "wildlife_eligibility": "Art proposal only. Species meat/drop/food eligibility remains unfrozen; no companion/pet classification or implemented drop is asserted."
+    },
+    {
+      "resource_id": "wild_wolf_meat",
+      "existing_visual_group": "raw_meat",
+      "house_zone": "food",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "proposed_species_contents_on_direct_video_meat_template",
+      "wildlife_eligibility": "Art proposal only. Species meat/drop/food eligibility remains unfrozen; no companion/pet classification or implemented drop is asserted."
+    },
+    {
+      "resource_id": "wild_fox_meat",
+      "existing_visual_group": "raw_meat",
+      "house_zone": "food",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "proposed_species_contents_on_direct_video_meat_template",
+      "wildlife_eligibility": "Art proposal only. Species meat/drop/food eligibility remains unfrozen; no companion/pet classification or implemented drop is asserted."
+    },
+    {
+      "resource_id": "lynx_meat",
+      "existing_visual_group": "raw_meat",
+      "house_zone": "food",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "proposed_species_contents_on_direct_video_meat_template",
+      "wildlife_eligibility": "Art proposal only. Species meat/drop/food eligibility remains unfrozen; no companion/pet classification or implemented drop is asserted."
+    },
+    {
+      "resource_id": "wolverine_meat",
+      "existing_visual_group": "raw_meat",
+      "house_zone": "food",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "proposed_species_contents_on_direct_video_meat_template",
+      "wildlife_eligibility": "Art proposal only. Species meat/drop/food eligibility remains unfrozen; no companion/pet classification or implemented drop is asserted."
+    },
+    {
+      "resource_id": "fish",
+      "existing_visual_group": "fish",
+      "house_zone": "food",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "proposed_extension_from_existing_reviewed_resource_art"
+    },
+    {
+      "resource_id": "prepared_fish_fillet",
+      "existing_visual_group": "fish",
+      "house_zone": "food",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "proposed_extension_from_existing_reviewed_resource_art"
+    },
+    {
+      "resource_id": "cooked_fish",
+      "existing_visual_group": "fish",
+      "house_zone": "food",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "proposed_extension_from_existing_reviewed_resource_art"
+    },
+    {
+      "resource_id": "dried_fish",
+      "existing_visual_group": "fish",
+      "house_zone": "food",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "proposed_extension_from_existing_reviewed_resource_art"
+    },
+    {
+      "resource_id": "wheat",
+      "existing_visual_group": "grain",
+      "house_zone": "food",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "proposed_extension_from_existing_reviewed_resource_art"
+    },
+    {
+      "resource_id": "cooked_food",
+      "existing_visual_group": "prepared_food",
+      "house_zone": "food",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "proposed_extension_from_existing_reviewed_resource_art"
+    },
+    {
+      "resource_id": "processed_meat_portion",
+      "existing_visual_group": "prepared_food",
+      "house_zone": "food",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "proposed_extension_from_existing_reviewed_resource_art"
+    },
+    {
+      "resource_id": "cooked_game_meat",
+      "existing_visual_group": "prepared_food",
+      "house_zone": "food",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "proposed_extension_from_existing_reviewed_resource_art"
+    },
+    {
+      "resource_id": "dried_meat",
+      "existing_visual_group": "prepared_food",
+      "house_zone": "food",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "proposed_extension_from_existing_reviewed_resource_art"
+    },
+    {
+      "resource_id": "hide",
+      "existing_visual_group": "hide_fur",
+      "house_zone": "hide_fur",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "proposed_extension_from_existing_reviewed_resource_art"
+    },
+    {
+      "resource_id": "fur",
+      "existing_visual_group": "hide_fur",
+      "house_zone": "hide_fur",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "proposed_extension_from_existing_reviewed_resource_art"
+    },
+    {
+      "resource_id": "cargo",
+      "existing_visual_group": "cargo",
+      "house_zone": "cargo_cash",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "proposed_extension_from_existing_reviewed_resource_art"
+    },
+    {
+      "resource_id": "money",
+      "existing_visual_group": "cash",
+      "house_zone": "cargo_cash",
+      "available_visual_tiers": [
+        "starter",
+        "reinforced",
+        "advanced"
+      ],
+      "status": "Existing reference concept assigned to a proposed storage zone; runtime drop/recipe/capacity not asserted",
+      "source_type_status": "direct_video_type"
+    }
+  ],
+  "classification": "Complete visual coverage of the33existing resource concepts. Neither new species drop eligibility nor implemented recipes/capacity is implied.",
+  "coverage_revision": 2,
+  "supersedes_sha256": "177c25e25e5b127db7c4ce061ea91e529bf3358f8af5cc5d805788ba45a9ba2e",
+  "revision_reason": "Preserve exact per-resource origin and wildlife-eligibility distinctions from immutable source mapping; zone/group/33ID coverage unchanged."
+}

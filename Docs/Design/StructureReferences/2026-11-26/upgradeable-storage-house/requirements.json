@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-26",
+  "task": "Havenline upgradeable camp storage house",
+  "user_request": "let do a upgradeable storge house for all the in game materials/gathered resources that can sit in camp",
+  "scope": "Four static stylized3D reference render sheets, proposed visual upgrade progression and complete existing-resource coverage mapping",
+  "repository": "ksolo21-web/HAVENLINE",
+  "base_commit": "74817145ed7be6e8b9aef7eab1369d1e70112a64",
+  "base_tree": "e39e4d3197f387bf3786cdc528c64ac3433b2cb1",
+  "baseline_file_count": 4512,
+  "branch": "art/storage-house-2026-11-26",
+  "prefix": "Docs/Design/StructureReferences/2026-11-26/upgradeable-storage-house",
+  "selected_sheet_count": 4,
+  "sheets": [
+    {
+      "id": "storage-house-starter",
+      "views": [
+        "front0",
+        "right90",
+        "rear180",
+        "left270"
+      ]
+    },
+    {
+      "id": "storage-house-reinforced",
+      "views": [
+        "front0",
+        "right90",
+        "rear180",
+        "left270"
+      ]
+    },
+    {
+      "id": "storage-house-advanced",
+      "views": [
+        "front0",
+        "right90",
+        "rear180",
+        "left270"
+      ]
+    },
+    {
+      "id": "storage-house-organization",
+      "views": [
+        "large stocked roof-off cutaway",
+        "empty roof-off cutaway",
+        "open-front loading state"
+      ]
+    }
+  ],
+  "turnaround_view_count": 12,
+  "organization_state_count": 3,
+  "progression": [
+    {
+      "id": "starter",
+      "name": "Timber Storehouse",
+      "change": "Warm timber shell, simple blue pitched roof, basic divided shelves/crates; all6zones allocated from first stage"
+    },
+    {
+      "id": "reinforced",
+      "name": "Reinforced Storehouse",
+      "change": "Same footprint/entry; substantial gray stone footing, steel corner straps, improved roof and modular shelves/cabinets"
+    },
+    {
+      "id": "advanced",
+      "name": "Insulated Supply Depot",
+      "change": "Same footprint/entry; thicker blue/orange insulated envelope, steel reinforcements and taller denser internal shelving; no extra annex or footprint expansion"
+    }
+  ],
+  "design_lock": {
+    "form": "Compact enclosed rectangular gable-roof house, not a pad/bench/factory; centered broad paired front sliding doors with clear threshold; crate emblem in front gable; continuous substantial rounded construction",
+    "palette": "Warm orange-brown timber, royal/navy blue roof and selected panels, restrained orange hardware/trim, cream rope where appropriate, soft white sculpted snow, gray stone footing, brown leather details",
+    "footprint": "One unchanged compact rectangular building footprint and small front delivery apron across all3visual stages; vertical/material improvements only, no approved world-unit dimensions asserted",
+    "front": "Centered paired sliding doors, crate emblem in gable, short nearly flush dark delivery pad with thin pale border; no stocked items blocking entrance",
+    "right": "One orange-framed vented service hatch for the partitioned fuel compartment; wall is on viewer-right in front view",
+    "left": "One small high horizontal frosted window; wall is on viewer-left in front view",
+    "rear": "Closed wall with small high circular gable vent; no duplicated front doors or crate emblem",
+    "roof": "Front-to-rear pitched ridge, softly rounded blue roof panels, thick snow edges; roof geometry and hardware remain coherent across each tier sheet",
+    "interior": "U-shaped perimeter storage around a clear central aisle; all6zones fixed per resource-coverage.json; distinct raw/prepared/grain food compartments and fuel partition; no loose meat/fish on floor or touching fuel/minerals",
+    "view_convention": "Four elevated cardinal views; labels FRONT0, RIGHT90, REAR180, LEFT270. In RIGHT90 front end is image-left; in LEFT270 front end is image-right. Only camera changes within a tier sheet; closed exterior doors/hatches are identical in all4views. Organization sheet changes explicit open/empty/stocked states of the approved advanced shell.",
+    "presentation": "Polished chunky rounded stylized3D, unclipped whole-building views, light-gray studio background, soft daylight shadows and small snow base; small unobtrusive titles/angle labels. No humans, animals, scenery, smoke, furnace, weapons, fake HUD values or numeric prices/capacities."
+  },
+  "resource_coverage": {
+    "reference_concepts": 33,
+    "existing_visual_groups": 11,
+    "physical_zones": 6,
+    "mapping_file": "resource-coverage.json",
+    "visual_expectation": "Readable representative silhouettes and distinct compartments prove each zone;33individual resource labels or33exposed stacks are not required in a facade view."
+  },
+  "camp_placement_intent": "Proposed placement along inner camp perimeter with front facing camp and a clear loading approach. Preserve centered furnace, two usable bidirectional camp openings, existing character scale and snow beyond camp. No exact live scene placement/route clearance claim from static art.",
+  "mandatory_acceptance": [
+    "Four selected sheets exist:3distinct coherent upgrade-stage turnarounds plus3-state organization sheet",
+    "Each tier has correct front/right/rear/left views and fixed door/hatch/window/roof placement",
+    "Upgrades visibly retain same compact footprint, entry and design family while improving material/vertical storage",
+    "Rounded winter Havenline style matches inspected fence/character reference roles",
+    "A genuine enclosed roofed storage house is apparent, with usable unobstructed entry/loading pad",
+    "All33existing resource IDs map once to11sourcegroups and6physicalzones, with status distinctions preserved",
+    "Organization sheet visibly shows6zones, raw/prepared/grain food compartments, separate fuel, dry hide/fur, cargo/cash and clear aisle",
+    "Empty and stocked cutaways preserve shell/layout; open loading view matches advanced exterior and entry",
+    "No clipped building parts, floating shelves/resources, mismatched repeated geometry or unexplained footprint annexes",
+    "Separate critic inspects actual full renders/native closeups and allmandatorychecks pass>=9.5/10, aim9.9",
+    "Every generated original/repair, exact prompt/ordered actual image inputs, sources/bindings and critic evidence preserved in GitHub",
+    "Native returned sizes recorded honestly; no invented capacity/cost/unlock values or mesh/rig/runtime/scene-fit approval",
+    "Only additive new artprefix/branch; all4512baselinefiles retain exact blobs/modes and operational.github remains absent",
+    "Fresh final GitHub ref/commit/untruncatedtree readback verifies exact selected/original content identities"
+  ],
+  "milestones": [
+    {
+      "id": 1,
+      "name": "Source and resource coverage lock",
+      "depends_on": []
+    },
+    {
+      "id": 2,
+      "name": "Generate and independently review all4sheets",
+      "depends_on": [
+        1
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Verify additive GitHub package",
+      "depends_on": [
+        2
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Publish and verify exact files",
+      "depends_on": [
+        3
+      ]
+    }
+  ],
+  "scope_boundary": "New visual proposal only. No game code/scene edits, native model generation, Meshy credits, workflow changes, production scale changes or balance values."
+}

@@ -1,0 +1,47 @@
+{
+  "reviewer": "Independent critic agent /root/storage_house_critic",
+  "review_id": "critic-reinforced-r1",
+  "status": "PASS \u2014 REINFORCED CLOSED TURNAROUND ONLY",
+  "score": 9.8,
+  "requirements_sha256": "57a461e68519d03b81904eca38f43ad525d3ef61e7a795921e48ad47914e319b",
+  "image": {
+    "path": "renders/storage-house-reinforced-r1.png",
+    "sha256": "1ab8012c53f5050f8dce18e0aff4d701c6fcc88b0e76894d4fc1b2f90f2c6626",
+    "dimensions": [
+      1254,
+      1254
+    ]
+  },
+  "evidence": {
+    "full_image": "Inspected actual native1254x1254 image",
+    "native_detail_crops": "reviews/critic-reinforced-r1-detail-crops.png",
+    "crop_bounds": "reviews/critic-reinforced-r1-crop-bounds.json",
+    "crop_sha256": "deec84371fd423242067b9cef8da8966be6c368566f51f495a344384dcc4f048"
+  },
+  "mandatory_sheet_checks": {
+    "four_cardinal_views_and_labels": "PASS",
+    "right_hatch_left_window_rear_gable_vent": "PASS",
+    "front_pad_side_projection": "PASS \u2014 front end image-left inRIGHT90 and image-right inLEFT270",
+    "roof_shape_and_repeated_construction": "PASS",
+    "enclosed_compact_house_form": "PASS",
+    "unblocked_closed_entry_and_delivery_pad": "PASS",
+    "rounded_winter_style_and_palette": "PASS",
+    "whole_building_framing": "PASS",
+    "closed_state_consistency": "PASS"
+  },
+  "observations": [
+    "The single orange-framed service hatch, high frosted left window and circular rear vent remain separate and correctly oriented.",
+    "Paired blue front panels, crate emblem, large timber posts and metal bands are coherent across the four exterior directions.",
+    "Stone footing, soft sculpted snow, roof cap and apron present a compact winter-building concept."
+  ],
+  "door_evidence_boundary": "The compact visible rail does not establish full external door travel. A pocket or partially open mechanism is not asserted as fact. The organization sheet must show a credible clear central opening with consistent door panels and parking; conflict would reopen the affected exterior approval.",
+  "mandatory_defects_remaining_for_this_sheet": [],
+  "pending_global_checks": [
+    "Starter and advanced upgrade-stage coherence",
+    "Three-state organization sheet and resource-zone coverage",
+    "Credible visible open entry/use state",
+    "Complete additive GitHub archive and fresh final readback"
+  ],
+  "approval_limit": "Static closed exterior sheet only. No native mesh, world dimensions, collision, scene fit, storage capacity or door animation is approved.",
+  "freeze_rule": "Immutable review; any later defect or correction requires a new superseding review ID."
+}

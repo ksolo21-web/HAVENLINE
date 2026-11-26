@@ -1,0 +1,252 @@
+{
+  "reviewer": "Independent critic agent /root/storage_house_critic",
+  "review_id": "critic-final-visual-verdict-v1",
+  "reviewed_at_utc": "2026-11-26T12:33:20.806624+00:00",
+  "status": "PASS — VISUAL FREEZE ONLY; ARCHIVE/PUBLICATION PENDING",
+  "visual_score": 9.9,
+  "score_rule": "Bounded by the lowest selected-sheet score; mandatory failures are never averaged away. This is not overall delivery approval.",
+  "requirements_sha256": "57a461e68519d03b81904eca38f43ad525d3ef61e7a795921e48ad47914e319b",
+  "input_index_sha256": "9c265f5846e04809c6234e7da71d5a6c5139c8a2592b94df91045019668bfb14",
+  "resource_coverage_v2_sha256": "b94fb28af1c03a0a1e970be4b9ce00cecff4c2a0b41f62dde148eb7fb978476f",
+  "resource_coverage_v1_sha256": "177c25e25e5b127db7c4ce061ea91e529bf3358f8af5cc5d805788ba45a9ba2e",
+  "selected_images": [
+    {
+      "path": "renders/storage-house-starter-r1.png",
+      "sha256": "62f78575b7d928c3f3425fb0252b526b8b8f9b3e89a4600650d2576736732baf",
+      "bytes": 1895248,
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "id": "starter",
+      "score": 9.9,
+      "verdict": "reviews/critic-starter-r1-verdict.json",
+      "verdict_sha256": "a9b2ec2b97fc1e285f28a3f9c8e78f58e3adceed07fe4675c15a96846a796bf0"
+    },
+    {
+      "path": "renders/storage-house-reinforced-r2.png",
+      "sha256": "d69a7e651ff3045d2a07eb4643f354e9798ddb2bd0e949dbff0504d614b2f285",
+      "bytes": 1860322,
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "id": "reinforced",
+      "score": 9.9,
+      "verdict": "reviews/critic-reinforced-r2-verdict.json",
+      "verdict_sha256": "a2164c01a839aab31d2107cc709f15bf79538ad8bb880ea4954152983912eb0d"
+    },
+    {
+      "path": "renders/storage-house-advanced-r1.png",
+      "sha256": "bbcd88237359ac2d3a9f63ad3f422ceafdca1f8342c16e0c57cd5e99e4e8975b",
+      "bytes": 1947600,
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "id": "advanced",
+      "score": 9.9,
+      "verdict": "reviews/critic-advanced-r1-verdict.json",
+      "verdict_sha256": "2700a9bcdd73860410c8ac7e087718a459508df9d2f80f05b99331902cceaa5c"
+    },
+    {
+      "path": "renders/storage-house-organization-r2.png",
+      "sha256": "4f8df6ae1cf0c66eb2de1478a72c21db96bcf295dec17d072c3371e1737097c6",
+      "bytes": 2232066,
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "id": "organization",
+      "score": 9.9,
+      "verdict": "reviews/critic-organization-r2-verdict.json",
+      "verdict_sha256": "646aa5a4a482d35783a3d18bb6372f99c07592b9d459275e0091d640bb4f9b5e"
+    }
+  ],
+  "counts": {
+    "selected_sheets": 4,
+    "exterior_views": 12,
+    "organization_states": 3,
+    "zones": 6,
+    "unique_resource_ids": 33,
+    "source_visual_groups": 11
+  },
+  "input_bindings": [
+    {
+      "id": "approved-fence-style",
+      "path": "/workspace/scratch/9c51da47f878/havenline-structures-2026-11-25/renders/fence-oblique-r2.png",
+      "original_path": "/workspace/scratch/9c51da47f878/havenline-structures-2026-11-25/renders/fence-oblique-r2.png",
+      "role": "Construction style only: chunky rounded orange-brown timber, cream rope, soft sculpted snow; not storage-house geometry",
+      "sha256": "5cc7bb7ddf05ca053828b2c9202992a5fc4b104ca39f433454d56251d7e9641c",
+      "git_blob_sha": "2435b605089a027668497722eea8b5175aa93930",
+      "bytes": 1777860,
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "format": "PNG",
+      "source_commit": "74817145ed7be6e8b9aef7eab1369d1e70112a64",
+      "repository_path": "Docs/Design/StructureReferences/2026-11-25/selected/fence-oblique.png"
+    },
+    {
+      "id": "approved-character-palette",
+      "path": "/workspace/scratch/9c51da47f878/havenline-character1-18617-2026-11-26/renders/character-1-cardinal-r2.png",
+      "original_path": "/workspace/scratch/9c51da47f878/havenline-character1-18617-2026-11-26/renders/character-1-cardinal-r2.png",
+      "role": "Shared stylized3D finish and royal-blue/orange/brown/cream palette only; no character or human figure requested in house renders",
+      "sha256": "9423a17e8143e0278205704c6888a00d68a40e3bb5c9d33d4f1b56f7bec15195",
+      "git_blob_sha": "cff669a48d58e286016088546cd8bd27085f8a26",
+      "bytes": 1826207,
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "format": "PNG",
+      "source_commit": "74817145ed7be6e8b9aef7eab1369d1e70112a64",
+      "repository_path": "Docs/Design/CharacterTurnarounds/2026-11-26/character-1-design-18617/selected/character-1-cardinal.png"
+    }
+  ],
+  "source_coverage_checks": {
+    "status": "PASS",
+    "source_commit": "74817145ed7be6e8b9aef7eab1369d1e70112a64",
+    "source_path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/storage-resource-coverage-proposal.json",
+    "source_git_blob_sha": "1a05d5aef9ef4e56e4a069a5e0c6f495dfb24fbb",
+    "exact_source_classification_rows_verified": 33,
+    "all_previous_mapping_fields_and_six_zones_unchanged_in_v2": true,
+    "independent_source_review": "reviews/critic-source-coverage-check-v1.json",
+    "independent_v2_review": "reviews/critic-coverage-v2-check.json",
+    "boundary": "These are existing reviewed resource-art concepts, not proof of 33 implemented drops, species eligibility, recipes or inventory capacities."
+  },
+  "mandatory_acceptance": [
+    {
+      "id": "C01",
+      "check": "Four selected sheets, twelve exterior directions and three organization states",
+      "status": "PASS"
+    },
+    {
+      "id": "C02",
+      "check": "Correct cardinal direction labels and fixed front/right/rear/left door, hatch, window, vent and roof placement",
+      "status": "PASS"
+    },
+    {
+      "id": "C03",
+      "check": "Same compact apparent footprint, entry and apron with distinct timber, reinforced and insulated progression",
+      "status": "PASS"
+    },
+    {
+      "id": "C04",
+      "check": "Rounded winter Havenline style matches inspected fence-construction and Character 1 palette/finish reference roles",
+      "status": "PASS"
+    },
+    {
+      "id": "C05",
+      "check": "Enclosed roofed storage house and clear usable loading entry/apron",
+      "status": "PASS"
+    },
+    {
+      "id": "C06",
+      "check": "Thirty-three unique existing resource IDs map once to eleven source groups and six zones, preserving exact source classification distinctions",
+      "status": "PASS"
+    },
+    {
+      "id": "C07",
+      "check": "Six organization zones, covered raw food, sealed prepared food, grain cubby, partitioned fuel, dry hides/fur, cargo/cash and clear aisle",
+      "status": "PASS"
+    },
+    {
+      "id": "C08",
+      "check": "Stocked/empty furniture and layout retained; intact loading matches advanced exterior and visible repaired pantry",
+      "status": "PASS"
+    },
+    {
+      "id": "C09",
+      "check": "No material clipping, floating storage, contradictory repeated feature placement or unapproved annex visible",
+      "status": "PASS"
+    },
+    {
+      "id": "C10",
+      "check": "Genuinely separate full-image and native-crop reviews, all selected scores 9.9 and every mandatory static visual check passed",
+      "status": "PASS"
+    },
+    {
+      "id": "C11",
+      "check": "Every original/repair, exact prompt and ordered input, source binding and critic evidence preserved in GitHub",
+      "status": "PENDING ARCHIVE AUDIT AND PUBLICATION"
+    },
+    {
+      "id": "C12",
+      "check": "Native sizes honestly recorded; no invented capacity, price, unlock, mesh, rig, runtime or exact scene-fit approval",
+      "status": "PASS"
+    },
+    {
+      "id": "C13",
+      "check": "Additive art branch/prefix only; all 4,512 baseline files preserve exact blobs/modes and no operational .github changes",
+      "status": "PENDING ARCHIVE AUDIT AND PUBLICATION"
+    },
+    {
+      "id": "C14",
+      "check": "Fresh final GitHub ref, commit and untruncated tree readback verifies selected/original identities",
+      "status": "PENDING FINAL PUBLICATION"
+    }
+  ],
+  "revision_history": [
+    {
+      "render": "renders/storage-house-reinforced-r1.png",
+      "result": "Passed closed exterior at 9.8; superseded by voluntary rail refinement, not retrospectively failed."
+    },
+    {
+      "render": "renders/storage-house-reinforced-r2.png",
+      "result": "Passed at 9.9; selected long-rail anchor for later sheets."
+    },
+    {
+      "render": "renders/storage-house-organization-r1.png",
+      "result": "Repair required at 9.0 for uncovered raw-food boxes and mismatched FOOD/HIDES shelf geometry; immutable original and evidence retained."
+    },
+    {
+      "render": "renders/storage-house-organization-r2.png",
+      "result": "Passed at 9.9 after actual full/native retest of both repairs and unaffected zone/access identities."
+    }
+  ],
+  "mandatory_visual_defects_remaining": [],
+  "evidence_sha256": {
+    "reviews/critic-advanced-r1-crop-bounds.json": "134777d2415d5ab97038d920a1740394baf923cbefd5b7b5ed3b699eac6bd514",
+    "reviews/critic-advanced-r1-detail-crops.png": "bfa89f5e11b0a78482aeded58837eac3e3be1a95d6ad20c8c58249d8d0ca35b7",
+    "reviews/critic-advanced-r1-verdict.json": "2700a9bcdd73860410c8ac7e087718a459508df9d2f80f05b99331902cceaa5c",
+    "reviews/critic-coverage-v2-check.json": "322b74ba217a5977c8d1928061c87410d0c2e97ace4b2c0359c5f4c307e96013",
+    "reviews/critic-organization-r1-crop-bounds.json": "72836e5aed881b1ebe82d4bc66528fa6de3fb6042fd6045fcc0d83cc569acbf3",
+    "reviews/critic-organization-r1-geometry-bounds.json": "a8e6b2948eaa48629a6df44979db30d18894e06a0cdb8c437e434a78a3b4af87",
+    "reviews/critic-organization-r1-geometry-details.png": "65f05d15a2a6e519300a1e891622620096c9abbf1c06aaafa62192bad97da27c",
+    "reviews/critic-organization-r1-state-details.png": "97d4b9787ae4ca146fc41dba655e3780c630af50fcf12d6ed44d5af5d7f9d58d",
+    "reviews/critic-organization-r1-verdict.json": "bb0d0865383652bdfa7f7ea0454f6e8176e2d4d090a0b863eab2d4e85e369442",
+    "reviews/critic-organization-r2-access-details-bounds.json": "b591ad079d7e3691b010d942538d47a5c49b603cfd08bf0b6f7d34383cd6f256",
+    "reviews/critic-organization-r2-access-details.png": "e1d8257693ca22abe1aaecf456a1d4c050b7c8607efbb0d29c2493665d7ac30c",
+    "reviews/critic-organization-r2-state-details-bounds.json": "85232643a38f8f6c23dc1f0d86b1cc81e414e3737084761bd8591130b9e2f597",
+    "reviews/critic-organization-r2-state-details.png": "3589f7dbf17f8105f9c0c5f77f5aa528ecffde017bf8593f4ab5ce8ec192c1b7",
+    "reviews/critic-organization-r2-verdict.json": "646aa5a4a482d35783a3d18bb6372f99c07592b9d459275e0091d640bb4f9b5e",
+    "reviews/critic-preflight-v1.json": "46e995b4316b37435f46c38beb7fca17371bdd200368023352ffda5f3f394fc1",
+    "reviews/critic-reinforced-r1-crop-bounds.json": "31573fd58708adc289e61a87e1922cea6ffc9459fc876de6a3a27e977fc0222b",
+    "reviews/critic-reinforced-r1-detail-crops.png": "deec84371fd423242067b9cef8da8966be6c368566f51f495a344384dcc4f048",
+    "reviews/critic-reinforced-r1-verdict.json": "04fd62c2af2aa94984ec3e27292988496b927b72672db7feeba1d4e15e93b9ff",
+    "reviews/critic-reinforced-r2-crop-bounds.json": "22d282f2bfe29231d6151cd84d0b58ad347a6cdc43e7f63ad78eac49b16d5228",
+    "reviews/critic-reinforced-r2-detail-crops.png": "46126b57cc01bd3508a4ac926a57daaeaa64e04ba6fe93b54bba86dba047c3ff",
+    "reviews/critic-reinforced-r2-verdict.json": "a2164c01a839aab31d2107cc709f15bf79538ad8bb880ea4954152983912eb0d",
+    "reviews/critic-requirements-check-v1.json": "4073b31da4b6a110d5bef6c4396ecb84b0b864dd47dae20b65112dc5da21d735",
+    "reviews/critic-source-coverage-check-v1.json": "2fa3a0ad0c9d6bff37d62c3f79343e9e542de2073440053d01dd01d5cfe4b87e",
+    "reviews/critic-stage-front-comparison-v1.json": "1cc634ecde268ede98d9c72d33945176e52227ff5b1320cba4337cbc7f43aca1",
+    "reviews/critic-stage-front-comparison-v1.png": "b682f8a16d460b8abf61c97db9dc5c4a4649a60eab6ffc3b1577fc7ef973fe82",
+    "reviews/critic-starter-r1-crop-bounds.json": "360802db90f59d67d1225e3d60ccc1ff1994810ae5b0ce6f719d31f1803b501a",
+    "reviews/critic-starter-r1-detail-crops.png": "4ddade1d42736860311bd8db30e4a5aa7118ff184d6201d40444de1c1848fd2e",
+    "reviews/critic-starter-r1-verdict.json": "a9b2ec2b97fc1e285f28a3f9c8e78f58e3adceed07fe4675c15a96846a796bf0"
+  },
+  "scope_limits": [
+    "Static proposed architecture and render references; the cardinal sheets are not proof of one native 3D mesh or mathematical camera orbit.",
+    "Apparent unchanged camp-sized footprint is a design intention, not verified world-unit dimensions, collision or live scene route clearance.",
+    "Open and closed door depictions support visual access only; no working door animation has been tested.",
+    "No numerical storage capacity, upgrade cost, recipe or unlock balance is approved.",
+    "Roof/front cutaway exposure is illustrative; intact loading view supplies full-height door and shell evidence."
+  ],
+  "delivery_pending": [
+    "Frozen additive GitHub package audit",
+    "Fresh final published ref/commit/untruncated tree readback"
+  ],
+  "freeze_rule": "This file and all evidence hashes are immutable. Future changes or newly identified defects require a new superseding review; publication cannot be called complete from this visual verdict alone."
+}

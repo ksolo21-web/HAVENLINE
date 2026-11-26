@@ -1,0 +1,59 @@
+{
+  "reviewer": "Independent critic agent /root/storage_house_critic",
+  "review_id": "critic-organization-r2",
+  "reviewed_at_utc": "2026-11-26T12:33:20.791193+00:00",
+  "status": "PASS — ORGANIZATION STATIC VISUAL SHEET ONLY",
+  "score": 9.9,
+  "requirements_sha256": "57a461e68519d03b81904eca38f43ad525d3ef61e7a795921e48ad47914e319b",
+  "resource_coverage_sha256": "b94fb28af1c03a0a1e970be4b9ce00cecff4c2a0b41f62dde148eb7fb978476f",
+  "image": {
+    "path": "renders/storage-house-organization-r2.png",
+    "sha256": "4f8df6ae1cf0c66eb2de1478a72c21db96bcf295dec17d072c3371e1737097c6",
+    "bytes": 2232066,
+    "dimensions": [
+      1254,
+      1254
+    ]
+  },
+  "inspection": "Actual full native 1254×1254 render inspected, then both native-scale state and access detail montages inspected separately. No interpolation, retouching or regenerated evidence.",
+  "evidence_sha256": {
+    "reviews/critic-organization-r2-state-details.png": "3589f7dbf17f8105f9c0c5f77f5aa528ecffde017bf8593f4ab5ce8ec192c1b7",
+    "reviews/critic-organization-r2-state-details-bounds.json": "85232643a38f8f6c23dc1f0d86b1cc81e414e3737084761bd8591130b9e2f597",
+    "reviews/critic-organization-r2-access-details.png": "e1d8257693ca22abe1aaecf456a1d4c050b7c8607efbb0d29c2493665d7ac30c",
+    "reviews/critic-organization-r2-access-details-bounds.json": "b591ad079d7e3691b010d942538d47a5c49b603cfd08bf0b6f7d34383cd6f256"
+  },
+  "checks": {
+    "three_required_states": "PASS — stocked and empty cutaways plus intact open loading state",
+    "six_fixed_storage_zones": "PASS — timber, heavy, fuel, food, hide/fur and cargo/cash remain in their defined locations",
+    "raw_food_covered": "PASS — separate fitted closed transparent lids preserve readable meat and fish silhouettes",
+    "prepared_food_and_grain": "PASS — sealed prepared-food jars and separate grain cubby on the upper pantry shelf",
+    "stocked_empty_pantry_geometry": "PASS — matching upper shelf, vertical grain divider, paired lower boxes and lids; extra empty-state shelf removed",
+    "stocked_empty_hide_fur_geometry": "PASS — matching two-level cabinet with one dividing shelf",
+    "heavy_material_storage": "PASS — separate mineral bins and steel shelf remain distinct and retain empty-state structure",
+    "fuel_partition_and_coal_bin": "PASS — sealed cans, divided enclosure and blue-front coal bin; blue bin front persists when empty",
+    "cargo_cash": "PASS — parcels/crates on matching shelves and closed lockbox",
+    "clear_central_aisle": "PASS — loading path and interior center remain clear",
+    "advanced_shell_identity": "PASS — roof, crate emblem, palette, hatch, stone footing and front pad match the selected advanced design",
+    "intact_loading_doors": "PASS — full-height paired doors are parked laterally with their orange edges; no fixed center post blocks opening",
+    "pantry_visible_through_loading_entry": "PASS — same repaired stocked rear pantry, closed raw-food lids and two-level hides visible through intact loading shell",
+    "framing_and_repeated_details": "PASS — no material clipping, floating storage or unapproved annex visible"
+  },
+  "resolved_prior_defects": [
+    {
+      "id": "ORG-R1-FOOD-COVERS",
+      "result": "Closed transparent lids added and repeated in empty and visible loading states."
+    },
+    {
+      "id": "ORG-R1-EMPTY-SHELVES",
+      "result": "Empty pantry and hides now preserve stocked cabinet geometry; pantry grain divider repeated consistently."
+    }
+  ],
+  "mandatory_visual_defects_remaining": [],
+  "cutaway_convention": "Illustrative interior exposure with roof/front elements reduced for visibility. The separate loading view supplies the intact full-height open-door state; this is not a native geometric section or door-animation validation.",
+  "approval_limit": "Static reference art and visual organization only. No native mesh, dimensions, inventory capacity, collision, operating door animation or tested camp placement is approved.",
+  "global_pending": [
+    "Exact additive GitHub package audit",
+    "Final published ref/commit/untruncated-tree readback"
+  ],
+  "freeze_rule": "Immutable. Organization r1 and its failed review remain retained; any later defect requires a new superseding review ID."
+}

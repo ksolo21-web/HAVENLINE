@@ -1,0 +1,60 @@
+{
+  "reviewer": "Independent critic agent /root/storage_house_critic",
+  "review_id": "critic-organization-r1",
+  "status": "REPAIR REQUIRED \u2014 ORGANIZATION SHEET NOT APPROVED",
+  "score": 9.0,
+  "requirements_sha256": "57a461e68519d03b81904eca38f43ad525d3ef61e7a795921e48ad47914e319b",
+  "resource_coverage_sha256": "b94fb28af1c03a0a1e970be4b9ce00cecff4c2a0b41f62dde148eb7fb978476f",
+  "image": {
+    "path": "renders/storage-house-organization-r1.png",
+    "sha256": "ed658850c9c8d9127deccaab8c513445f86cddfbe7182e9872ff751bfc4aabb7",
+    "dimensions": [
+      1254,
+      1254
+    ]
+  },
+  "evidence": {
+    "full_image": "Actual full native image inspected",
+    "state_details": "reviews/critic-organization-r1-state-details.png",
+    "state_details_sha256": "97d4b9787ae4ca146fc41dba655e3780c630af50fcf12d6ed44d5af5d7f9d58d",
+    "state_bounds": "reviews/critic-organization-r1-crop-bounds.json",
+    "fuel_mineral_details": "reviews/critic-organization-r1-geometry-details.png",
+    "fuel_mineral_details_sha256": "65f05d15a2a6e519300a1e891622620096c9abbf1c06aaafa62192bad97da27c",
+    "fuel_mineral_bounds": "reviews/critic-organization-r1-geometry-bounds.json"
+  },
+  "mandatory_defects": [
+    {
+      "id": "ORG-R1-FOOD-COVERS",
+      "finding": "Stocked raw-meat and fish containers are visibly open, with no closed lids, while the frozen coverage requires separate covered boxes.",
+      "repair": "Add fitted closed clear lids to both containers so contents remain readable; repeat the same container/lid geometry in the empty state."
+    },
+    {
+      "id": "ORG-R1-EMPTY-SHELVES",
+      "finding": "EMPTY FOOD adds a horizontal shelf absent from the stocked pantry, and EMPTY HIDES has three levels while the stocked hides/fur cabinet has two.",
+      "repair": "Preserve the stocked furniture layout in EMPTY: one open upper pantry bay above the two raw-food boxes; two hide/fur compartments with one dividing shelf. If the pantry is refined with a grain divider, repeat the same divider in both states."
+    }
+  ],
+  "passed_checks": {
+    "six_named_storage_zones": "PASS",
+    "representative_timber_mineral_metal_food_hide_fur_cargo_cash_fuel_shapes": "PASS",
+    "separate_fuel_partition": "PASS",
+    "clear_central_aisle": "PASS",
+    "empty_mineral_bins_and_upper_steel_shelf": "PASS \u2014 three empty bins and steel shelf retained",
+    "coal_bin_front_retained": "PASS \u2014 native crop shows blue front and corner fasteners; flat gray plane can be the empty floor",
+    "cargo_two_level_layout": "PASS",
+    "open_loading_entry": "PASS \u2014 paired full-height doors parked laterally and no fixed center post; entrance remains clear",
+    "advanced_shell_and_palette": "PASS",
+    "whole_sheet_framing": "PASS"
+  },
+  "nonblocking_clarity_recommendation": "A short vertical divider between the prepared-food jars and grain sack would make the required grain compartment unambiguous; retain it in the empty state. The empty coal-bin cavity may be made deeper/more legible without changing the outer compartment.",
+  "cutaway_convention": "The cutaway is an illustrative interior exposure with front/roof elements reduced for visibility. The separate loading image supplies the intact full-height open-door state; this is not a native geometric section or door-animation validation.",
+  "repairs_must_preserve": [
+    "All six zone positions",
+    "Advanced exterior identity, front apron and clear aisle",
+    "Cargo shelf/cash box",
+    "Fuel enclosure, blue coal-bin front and service hatch",
+    "Door panels, lateral parking and long front rail"
+  ],
+  "global_approval": "Blocked by the two listed mandatory defects. Existing exterior-only approvals remain intact; archive/publication is pending.",
+  "freeze_rule": "Immutable failed candidate record; any repair gets a new rendered ID and new review."
+}
