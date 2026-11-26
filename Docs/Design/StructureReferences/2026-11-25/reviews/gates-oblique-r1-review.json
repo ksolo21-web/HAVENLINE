@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "reviewer": "structure_critic independent agent",
+  "utc": "2026-11-26T04:38:23.668131+00:00",
+  "requirements_path": "requirements.json",
+  "requirements_sha256": "c10ab73c075116d486afd2c7eca3390ddf1e4435c3d2699bfc1ed40b4efa137a",
+  "image_path": "renders/gates-oblique-r1.png",
+  "image_sha256": "87c663b087cfe4f1aa71be2dc32eac614570297c2828085dda9739d0d6966402",
+  "native_size": [
+    1254,
+    1254
+  ],
+  "full_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/gates-oblique-r1-front45-latch.png",
+      "box": [
+        248,
+        325,
+        325,
+        390
+      ],
+      "sha256": "b95f72844ad392b3b09222e1fe13953f268467f1f43c1300bcbf8a644e14bba4"
+    },
+    {
+      "path": "reviews/evidence/gates-oblique-r1-front315-latch.png",
+      "box": [
+        941,
+        890,
+        1010,
+        952
+      ],
+      "sha256": "de88bae7781bcab98f47beefc7723e42160363d4d136d1c26dad35b2e8377991"
+    },
+    {
+      "path": "reviews/evidence/gates-oblique-r1-rear-top-right.png",
+      "box": [
+        680,
+        95,
+        1200,
+        560
+      ],
+      "sha256": "c36decda4cb87e7ca05cb4538ddec7fa7b5bffccb5b41dbee6cef2cbdacc63f9"
+    },
+    {
+      "path": "reviews/evidence/gates-oblique-r1-rear-lower-left.png",
+      "box": [
+        60,
+        655,
+        590,
+        1120
+      ],
+      "sha256": "536e2f69e9a62fbb3e9a30a3a423ce068858c4e8231dc9ac354f12346cafd3d5"
+    }
+  ],
+  "crop_provenance_path": "reviews/evidence/gates-oblique-r1-crop-provenance.json",
+  "crop_provenance_sha256": "83ac35543525d5c629f9a1f475ed2f41f74742791d68f1190aec6bac970122d9",
+  "score": 8.9,
+  "pass_threshold": 9.5,
+  "status": "REPAIR_REQUIRED",
+  "checks": {
+    "source_identity_and_style": "PASS",
+    "four_distinct_oblique_rotations": "PASS",
+    "front_X_rear_plain_faces": "PASS",
+    "attached_post_hinge_leaf_structure": "PASS",
+    "direction_labels_match_camera": "FAIL",
+    "front_latch_pivot_consistency": "FAIL",
+    "readability_and_contact": "PASS"
+  },
+  "findings": [
+    "Top-right rear art has nearest post on image-right and is rear-left225; lower-left rear art has nearest post on image-left and is rear-right135. Captions are swapped.",
+    "Front45 latch crop shows the large pivot on image-right, reversing the approved front-left pivot. Front315 correctly retains the large pivot on image-left.",
+    "Snow-capped posts, cream ropes, framed leaves and X-front/plain-rear distinction remain coherent."
+  ],
+  "required_repairs": [
+    "Swap only the two rear captions, preserving their art.",
+    "Repair front45 latch alone: large pivot belongs on image-left, bar extends toward image-right, matching the accepted cardinal anchor and front315."
+  ],
+  "approval_boundary": "Static exact-image assessment only; any failed mandatory check blocks approval irrespective of overall visual polish. No native geometry, animation, collision or delivery approval."
+}

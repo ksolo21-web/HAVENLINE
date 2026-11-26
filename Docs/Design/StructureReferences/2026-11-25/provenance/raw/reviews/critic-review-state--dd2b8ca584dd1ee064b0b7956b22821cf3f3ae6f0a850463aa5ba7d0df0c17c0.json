@@ -1,0 +1,178 @@
+{
+  "reviewer": "structure_critic independent agent",
+  "requirements_path": "havenline-structures-2026-11-25/requirements.json",
+  "requirements_sha256": "c10ab73c075116d486afd2c7eca3390ddf1e4435c3d2699bfc1ed40b4efa137a",
+  "review_scope": "Static multi-angle render references; not native meshes or runtime verification",
+  "pass_threshold": 9.5,
+  "target": 10,
+  "mandatory_checks": [
+    "All three sourced construction identities preserved in the latest approved presentation style",
+    "Nine selected sheets, eight distinct meaningful horizontal rotation views per asset, plus required details/use states",
+    "Consistent object proportions, parts, color, snow, rope, hardware and counter register physical end across related views",
+    "Fence remains substantial from side and elevated angles; visible paired rails and crossed lashings",
+    "Gate leaves remain attached to their outer posts and open into a plausibly unobstructed central passage",
+    "Gate hinge and latch details agree with whole-object renders; no claim of actual animation or collision testing",
+    "Counter has clear customer/staff sides, staff-facing register controls, open transfer surface and consistent lower structure",
+    "Full objects and necessary closeups legible, uncropped, free of fused or floating structural components",
+    "Separate critic reviews actual images and crop evidence; all mandatory checks pass, score at least 9.5 and strictly above 9.0",
+    "Every generated original and repair, exact prompt, ordered actual reference inputs, review and source provenance retained",
+    "All output native image dimensions recorded honestly; no invented 4K or mesh/rig/animation claims",
+    "GitHub publication only adds to isolated new branch; all prior repository files and active work preserved byte for byte",
+    "Fresh exact-head remote verification proves selected images and every original are stored as real image blobs"
+  ],
+  "reference_bindings": [
+    {
+      "path": "havenline-structures-2026-11-25/references/style-reference.jpg",
+      "sha256": "2a364995e105e8ceebad7b5c80db753f8220e1bce697b1405ae3a4afe02aaf13"
+    },
+    {
+      "path": "havenline-structures-2026-11-25/references/service_counter.png",
+      "sha256": "c17e24914e387c33695d4badf5334beb499eacb18a6e22b9ce904390fc094716"
+    },
+    {
+      "path": "havenline-structures-2026-11-25/references/Fence_a4860b7_4K.png",
+      "sha256": "35992c83768390a2a71207a2e8a595a26dd79a518aa3afebfc68dbff07dfe496"
+    },
+    {
+      "path": "havenline-structures-2026-11-25/references/Gate_a4860b7.png",
+      "sha256": "ede8e55aad5e03339c8ef8efc274e3144c1c1288c91e5a2b97ef80ad0b2f2fba"
+    }
+  ],
+  "assets": {
+    "fence": {
+      "sheets": {
+        "fence-cardinal": {
+          "required_views": [
+            "front 0",
+            "right 90",
+            "rear 180",
+            "left 270"
+          ],
+          "status": "PASS_ANCHOR",
+          "approved_image": "renders/fence-cardinal-r1.png",
+          "image_sha256": "d616f90b5c0c98a02cafe93b8cfbb114280dc2c5ee74f26cf0e34b41dae1e734",
+          "score": 9.7,
+          "review": "reviews/fence-cardinal-r1-review.json"
+        },
+        "fence-oblique": {
+          "required_views": [
+            "front-right 45",
+            "rear-right 135",
+            "rear-left 225",
+            "front-left 315"
+          ],
+          "status": "REPAIR_REQUIRED",
+          "latest_image": "renders/fence-oblique-r1.png",
+          "image_sha256": "708eec012843900df7e2f54a257d37d31a7791b55cb5673bcdab2144f9eb76e5",
+          "score": 9.2,
+          "review": "reviews/fence-oblique-r1-review.json"
+        },
+        "fence-details": {
+          "required_views": [
+            "elevated top thickness",
+            "rope and rail attachment closeup",
+            "snow crown closeup",
+            "two adjacent joined modules"
+          ],
+          "status": "REPAIR_REQUIRED",
+          "latest_image": "renders/fence-details-r1.png",
+          "image_sha256": "0f632d74cb9397e6410597a31128c64bd4d78aa8e3fbe4adeb8c155f14f97552",
+          "score": 8.6,
+          "review": "reviews/fence-details-r1-review.json"
+        }
+      },
+      "status": "PENDING",
+      "score": 0
+    },
+    "gates": {
+      "sheets": {
+        "gates-cardinal": {
+          "required_views": [
+            "closed front 0",
+            "closed right 90",
+            "closed rear 180",
+            "closed left 270"
+          ],
+          "status": "PASS_ANCHOR",
+          "latest_image": "renders/gates-cardinal-r1.png",
+          "score": 9.7,
+          "review": "reviews/gates-cardinal-r2-review.json",
+          "approved_image": "renders/gates-cardinal-r2.png",
+          "image_sha256": "ee634acbfe1747b4e22fa130130ca064992543db9a1586c2cf0a658b8458f392"
+        },
+        "gates-oblique": {
+          "required_views": [
+            "closed front-right 45",
+            "closed rear-right 135",
+            "closed rear-left 225",
+            "closed front-left 315"
+          ],
+          "status": "REPAIR_REQUIRED",
+          "latest_image": "renders/gates-oblique-r1.png",
+          "image_sha256": "87c663b087cfe4f1aa71be2dc32eac614570297c2828085dda9739d0d6966402",
+          "score": 8.9,
+          "review": "reviews/gates-oblique-r1-review.json"
+        },
+        "gates-states": {
+          "required_views": [
+            "closed front",
+            "open approximately 90 degrees",
+            "elevated open clearance",
+            "hinge and center latch details"
+          ],
+          "status": "NO_OUTPUT_YET"
+        }
+      },
+      "status": "PENDING",
+      "score": 0
+    },
+    "customer-counter": {
+      "sheets": {
+        "customer-counter-cardinal": {
+          "required_views": [
+            "customer front 0",
+            "right end 90",
+            "staff rear 180",
+            "left end 270"
+          ],
+          "status": "PASS_ANCHOR",
+          "approved_image": "counter-builder/renders/customer-counter-cardinal-r1.png",
+          "image_sha256": "46309b01e07a15db044518fcf47b93dbd6741a3786a04135e88b3bb4e85158fb",
+          "score": 9.7,
+          "review": "reviews/customer-counter-cardinal-r1-review.json"
+        },
+        "customer-counter-oblique": {
+          "required_views": [
+            "front-right 45",
+            "rear-right 135",
+            "rear-left 225",
+            "front-left 315"
+          ],
+          "status": "REPAIR_REQUIRED",
+          "latest_image": "counter-builder/renders/customer-counter-oblique-r1.png",
+          "image_sha256": "70091b634b3c8c8b6fe79a235b6b0c3a75b9e27d2d829aaf24bd8bbedff610f9",
+          "score": 8.4,
+          "review": "reviews/customer-counter-oblique-r1-review.json"
+        },
+        "customer-counter-details": {
+          "required_views": [
+            "staff-facing register detail",
+            "top stock and transfer surface",
+            "lower shelf and legs",
+            "two repeated counter instances"
+          ],
+          "status": "REPAIR_REQUIRED",
+          "latest_image": "counter-builder/renders/customer-counter-details-r1.png",
+          "image_sha256": "599a1b6f6c95084f80f9dc206774e18ed259fe55874642bae3b60daf80aa053c",
+          "score": 8.8,
+          "review": "reviews/customer-counter-details-r1-review.json"
+        }
+      },
+      "status": "PENDING",
+      "score": 0
+    }
+  },
+  "overall_status": "PENDING",
+  "runtime_boundary": "No native mesh, animation or collision testing in this static reference review. Root confirmed prior requirement for at least two distinct bidirectional camp openings remains preserved for subsequent runtime/layout work, outside current static batch. Gate review here covers paired leaves and a plausible clear open passage only.",
+  "utc": "2026-11-26T04:28:08.686502+00:00"
+}

@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "reviewer": "structure_critic independent agent",
+  "utc": "2026-11-26T04:44:52.685374+00:00",
+  "requirements_path": "requirements.json",
+  "requirements_sha256": "c10ab73c075116d486afd2c7eca3390ddf1e4435c3d2699bfc1ed40b4efa137a",
+  "image_path": "counter-builder/renders/customer-counter-oblique-r3.png",
+  "image_sha256": "8fffe822fc7420398d5485119d09a297e3e7b91006f12c76028ca11fec8c38c9",
+  "native_size": [
+    1536,
+    1024
+  ],
+  "full_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/customer-counter-oblique-r3-rear135-register.png",
+      "box": [
+        1245,
+        82,
+        1410,
+        204
+      ],
+      "sha256": "a9094a4c5b078ded6ce51f38e9d69f118697028c3dfb649a3e0f50c93437144a"
+    },
+    {
+      "path": "reviews/evidence/customer-counter-oblique-r3-rear225-register.png",
+      "box": [
+        430,
+        575,
+        635,
+        735
+      ],
+      "sha256": "ed60353337590cef55222acfc1fa83d19a886971d46559ff270d7994c24a5bb5"
+    },
+    {
+      "path": "reviews/evidence/customer-counter-oblique-r3-rear225-full.png",
+      "box": [
+        115,
+        578,
+        675,
+        925
+      ],
+      "sha256": "4b729597c3ec56cd53f2f367b18b97517e2f8f635fb6f473b6e389bb7351c8ca"
+    }
+  ],
+  "crop_provenance_path": "reviews/evidence/customer-counter-oblique-r3-crop-provenance.json",
+  "crop_provenance_sha256": "b246befac13f150e0263154f6a3bdfe0aacedea908b186279f52db1f61280926",
+  "score": 9.7,
+  "pass_threshold": 9.5,
+  "status": "PASS",
+  "checks": {
+    "source_identity_and_style": "PASS",
+    "four_distinct_oblique_views": "PASS",
+    "fixed_register_physical_end": "PASS",
+    "rear135_far_right_orientation": "PASS",
+    "rear225_near_right_orientation": "PASS",
+    "front_views_preserved": "PASS",
+    "coherent_lower_structure": "PASS",
+    "readability_and_contact": "PASS"
+  },
+  "findings": [
+    "The225 register now has high housing on image-right and keypad sloping down-left, matching the accepted details-r2 staff closeup and cardinal270 end profile.",
+    "135 retains far-right register with correctly opposed control orientation. Front45 and315 keep the correct far-left and near-left plain register backs.",
+    "All four cameras now form distinct consistent rotations of the fixed counter and register; table supports and materials remain coherent."
+  ],
+  "required_repairs": [],
+  "approval_boundary": "Static visual evidence only. No native mesh, actual gate movement, collision or two-camp-entrance layout verification; those prior runtime/layout obligations remain preserved. Archive publication is separately gated.",
+  "retest_of": "reviews/customer-counter-oblique-r2-review.json",
+  "prior_review_sha256": "0fb4574237e633e2759418d18bb66e6ac74dba811dfd8471857a1c0b0cfb3c3e"
+}

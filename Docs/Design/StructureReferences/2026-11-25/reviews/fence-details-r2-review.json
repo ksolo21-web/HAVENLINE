@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "reviewer": "structure_critic independent agent",
+  "utc": "2026-11-26T04:44:52.698091+00:00",
+  "requirements_path": "requirements.json",
+  "requirements_sha256": "c10ab73c075116d486afd2c7eca3390ddf1e4435c3d2699bfc1ed40b4efa137a",
+  "image_path": "renders/fence-details-r2.png",
+  "image_sha256": "281b1b8cf0db37f0ec705855baaad5dfc574aeb7bd645ef40c81909548e7d45d",
+  "native_size": [
+    1254,
+    1254
+  ],
+  "full_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/fence-details-r2-top-eight-logs.png",
+      "box": [
+        50,
+        80,
+        535,
+        588
+      ],
+      "sha256": "60395fe3f4c35d10a7a8503876db7bd5423f30c6fede550e59d74d9853d690a5"
+    },
+    {
+      "path": "reviews/evidence/fence-details-r2-joined-sixteen-logs.png",
+      "box": [
+        585,
+        750,
+        1230,
+        1080
+      ],
+      "sha256": "5f534189130fae89ebc8ac5ecd3b8c6e1bc38231aeca4971f3ae0b4741bb4afd"
+    },
+    {
+      "path": "reviews/evidence/fence-details-r2-center-rail-seams.png",
+      "box": [
+        855,
+        835,
+        950,
+        1040
+      ],
+      "sha256": "496f51c3054b1d9c57a04c3aedd60557fc112dc959fefe244882f4d11f182ac7"
+    },
+    {
+      "path": "reviews/evidence/fence-details-r2-left-module-count.png",
+      "box": [
+        590,
+        750,
+        876,
+        1045
+      ],
+      "sha256": "60f553947f6e058af74b9e082192e0957288d83a48485eb839fa8d693a9d1152"
+    },
+    {
+      "path": "reviews/evidence/fence-details-r2-right-module-count.png",
+      "box": [
+        874,
+        750,
+        1220,
+        1065
+      ],
+      "sha256": "fb14ae041af239aba4a4e227ceaa8fc2feaf5c9c83f3c83205f7559554880338"
+    },
+    {
+      "path": "reviews/evidence/fence-details-r2-actual-rail-joint.png",
+      "box": [
+        845,
+        855,
+        901,
+        1030
+      ],
+      "sha256": "8972506a8acb170c9f9caeaeda6b50b6d917acacd3abaded0410704e8e79de65"
+    }
+  ],
+  "crop_provenance_path": "reviews/evidence/fence-details-r2-crop-provenance.json",
+  "crop_provenance_sha256": "0a83bf841aff96e10d4707a197be110c1fe2ca68baa14a79ea9cd2ffb1612a27",
+  "score": 9.0,
+  "pass_threshold": 9.5,
+  "status": "REPAIR_REQUIRED",
+  "checks": {
+    "source_identity_and_style": "PASS",
+    "elevated_single_module_eight_logs": "PASS",
+    "rope_and_snow_closeups": "PASS",
+    "visible_both_rail_butt_ends": "PASS",
+    "joined_pair_eight_plus_eight": "FAIL",
+    "contact_and_component_coherence": "PASS"
+  },
+  "findings": [
+    "Top panel correctly contains eight logs and crowns after repair.",
+    "Native isolated crops around the actual joint show seven logs in the LEFT module and eight in the RIGHT, fifteen total, not sixteen. Visual count is corroborated by fifteen distinct crown peak positions.",
+    "Small butt ends are resolved in BOTH rails near x873 of the full source; this joint currently falls after the seventh log. The preparatory crop filename joined-sixteen-logs refers to the requested count only and is not proof of observed count.",
+    "The rope and snow closeups remain successful."
+  ],
+  "required_repairs": [
+    "Repair only the joined-run panel: add one complete log/crown to the LEFT module, giving eight left plus eight right. Keep both rail joints aligned at the resulting8/9 boundary and preserve the right module and other three panels."
+  ],
+  "approval_boundary": "Static visual evidence only. No native mesh, actual gate movement, collision or two-camp-entrance layout verification; those prior runtime/layout obligations remain preserved. Archive publication is separately gated.",
+  "retest_of": "reviews/fence-details-r1-review.json",
+  "prior_review_sha256": "b55a5a4d27bb3bfea68aa164ad0ab1a771f46ac982e88acd886e0703e3bf200b"
+}

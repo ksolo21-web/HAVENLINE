@@ -1,0 +1,145 @@
+{
+  "reviewer": "structure_critic independent agent",
+  "requirements_path": "havenline-structures-2026-11-25/requirements.json",
+  "requirements_sha256": "c10ab73c075116d486afd2c7eca3390ddf1e4435c3d2699bfc1ed40b4efa137a",
+  "review_scope": "Static multi-angle render references; not native meshes or runtime verification",
+  "pass_threshold": 9.5,
+  "target": 9.9,
+  "mandatory_checks": [
+    "All three sourced construction identities preserved in the latest approved presentation style",
+    "Nine selected sheets, eight distinct meaningful horizontal rotation views per asset, plus required details/use states",
+    "Consistent object proportions, parts, color, snow, rope, hardware and counter register physical end across related views",
+    "Fence remains substantial from side and elevated angles; visible paired rails and crossed lashings",
+    "Gate leaves remain attached to their outer posts and open into a plausibly unobstructed central passage",
+    "Gate hinge and latch details agree with whole-object renders; no claim of actual animation or collision testing",
+    "Counter has clear customer/staff sides, staff-facing register controls, open transfer surface and consistent lower structure",
+    "Full objects and necessary closeups legible, uncropped, free of fused or floating structural components",
+    "Separate critic reviews actual images and crop evidence; all mandatory checks pass, score at least 9.5 and strictly above 9.0",
+    "Every generated original and repair, exact prompt, ordered actual reference inputs, review and source provenance retained",
+    "All output native image dimensions recorded honestly; no invented 4K or mesh/rig/animation claims",
+    "GitHub publication only adds to isolated new branch; all prior repository files and active work preserved byte for byte",
+    "Fresh exact-head remote verification proves selected images and every original are stored as real image blobs"
+  ],
+  "reference_bindings": [
+    {
+      "path": "havenline-structures-2026-11-25/references/style-reference.jpg",
+      "sha256": "2a364995e105e8ceebad7b5c80db753f8220e1bce697b1405ae3a4afe02aaf13"
+    },
+    {
+      "path": "havenline-structures-2026-11-25/references/service_counter.png",
+      "sha256": "c17e24914e387c33695d4badf5334beb499eacb18a6e22b9ce904390fc094716"
+    },
+    {
+      "path": "havenline-structures-2026-11-25/references/Fence_a4860b7_4K.png",
+      "sha256": "35992c83768390a2a71207a2e8a595a26dd79a518aa3afebfc68dbff07dfe496"
+    },
+    {
+      "path": "havenline-structures-2026-11-25/references/Gate_a4860b7.png",
+      "sha256": "ede8e55aad5e03339c8ef8efc274e3144c1c1288c91e5a2b97ef80ad0b2f2fba"
+    }
+  ],
+  "assets": {
+    "fence": {
+      "sheets": {
+        "fence-cardinal": {
+          "required_views": [
+            "front 0",
+            "right 90",
+            "rear 180",
+            "left 270"
+          ],
+          "status": "NO_OUTPUT_YET"
+        },
+        "fence-oblique": {
+          "required_views": [
+            "front-right 45",
+            "rear-right 135",
+            "rear-left 225",
+            "front-left 315"
+          ],
+          "status": "NO_OUTPUT_YET"
+        },
+        "fence-details": {
+          "required_views": [
+            "elevated top thickness",
+            "rope and rail attachment closeup",
+            "snow crown closeup",
+            "two adjacent joined modules"
+          ],
+          "status": "NO_OUTPUT_YET"
+        }
+      },
+      "status": "PENDING",
+      "score": 0
+    },
+    "gates": {
+      "sheets": {
+        "gates-cardinal": {
+          "required_views": [
+            "closed front 0",
+            "closed right 90",
+            "closed rear 180",
+            "closed left 270"
+          ],
+          "status": "NO_OUTPUT_YET"
+        },
+        "gates-oblique": {
+          "required_views": [
+            "closed front-right 45",
+            "closed rear-right 135",
+            "closed rear-left 225",
+            "closed front-left 315"
+          ],
+          "status": "NO_OUTPUT_YET"
+        },
+        "gates-states": {
+          "required_views": [
+            "closed front",
+            "open approximately 90 degrees",
+            "elevated open clearance",
+            "hinge and center latch details"
+          ],
+          "status": "NO_OUTPUT_YET"
+        }
+      },
+      "status": "PENDING",
+      "score": 0
+    },
+    "customer-counter": {
+      "sheets": {
+        "customer-counter-cardinal": {
+          "required_views": [
+            "customer front 0",
+            "right end 90",
+            "staff rear 180",
+            "left end 270"
+          ],
+          "status": "NO_OUTPUT_YET"
+        },
+        "customer-counter-oblique": {
+          "required_views": [
+            "front-right 45",
+            "rear-right 135",
+            "rear-left 225",
+            "front-left 315"
+          ],
+          "status": "NO_OUTPUT_YET"
+        },
+        "customer-counter-details": {
+          "required_views": [
+            "staff-facing register detail",
+            "top stock and transfer surface",
+            "lower shelf and legs",
+            "two repeated counter instances"
+          ],
+          "status": "NO_OUTPUT_YET"
+        }
+      },
+      "status": "PENDING",
+      "score": 0
+    }
+  },
+  "overall_status": "PENDING",
+  "runtime_boundary": "No native mesh, animation or collision testing in this static reference review. Root confirmed prior requirement for at least two distinct bidirectional camp openings remains preserved for subsequent runtime/layout work, outside current static batch. Gate review here covers paired leaves and a plausible clear open passage only.",
+  "utc": "2026-11-26T04:28:08.686502+00:00"
+}

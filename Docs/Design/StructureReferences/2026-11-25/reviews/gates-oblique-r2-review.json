@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "reviewer": "structure_critic independent agent",
+  "utc": "2026-11-26T04:44:52.694342+00:00",
+  "requirements_path": "requirements.json",
+  "requirements_sha256": "c10ab73c075116d486afd2c7eca3390ddf1e4435c3d2699bfc1ed40b4efa137a",
+  "image_path": "renders/gates-oblique-r2.png",
+  "image_sha256": "3ca392129045f9bddfa9115343f8c1d2e2aa04ee4a5f629ab1e95832221e1ac6",
+  "native_size": [
+    1254,
+    1254
+  ],
+  "full_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/gates-oblique-r2-front45-latch.png",
+      "box": [
+        245,
+        325,
+        328,
+        390
+      ],
+      "sha256": "76c2153938501cca069584e5e0c94df9d9fdb1e8f13fb490ec23b21454ea7a71"
+    },
+    {
+      "path": "reviews/evidence/gates-oblique-r2-rear225-label-context.png",
+      "box": [
+        675,
+        90,
+        1210,
+        627
+      ],
+      "sha256": "e8de617d1aabcc34f33641b622c6114c66cde3c8d42282a010d3e472c594d4bc"
+    },
+    {
+      "path": "reviews/evidence/gates-oblique-r2-rear135-label-context.png",
+      "box": [
+        60,
+        650,
+        605,
+        1200
+      ],
+      "sha256": "e19423c4a5ac29b9c2b42293855d4a2bb5136ff4d19817d40ae126c50146d9b9"
+    }
+  ],
+  "crop_provenance_path": "reviews/evidence/gates-oblique-r2-crop-provenance.json",
+  "crop_provenance_sha256": "bbd2848eac83446a87d5f065c1e25fbfb02a84dcf0dcfe5756ac37e845dd3b5f",
+  "score": 9.7,
+  "pass_threshold": 9.5,
+  "status": "PASS",
+  "checks": {
+    "source_identity_and_style": "PASS",
+    "four_distinct_oblique_rotations": "PASS",
+    "direction_labels_match_camera": "PASS",
+    "front_X_rear_plain_faces": "PASS",
+    "fixed_front_latch_pivot": "PASS",
+    "post_hinge_leaf_consistency": "PASS",
+    "readability_and_contact": "PASS"
+  },
+  "findings": [
+    "Top-right nearest-right rear art is now correctly labeled REAR-LEFT225; lower-left nearest-left rear art is REAR-RIGHT135.",
+    "Front45 latch now has its larger pivot on image-left, with bar extending right, agreeing with front315 and the accepted cardinal anchor.",
+    "Four views retain closed paired leaves, stout bound posts, snow and coherent X-front/plain-rear construction."
+  ],
+  "required_repairs": [],
+  "approval_boundary": "Static visual evidence only. No native mesh, actual gate movement, collision or two-camp-entrance layout verification; those prior runtime/layout obligations remain preserved. Archive publication is separately gated.",
+  "retest_of": "reviews/gates-oblique-r1-review.json",
+  "prior_review_sha256": "2211d6f8fcb9d04959f8fb6fe1d40071bc1a6da4637a07449941458eca1fa8ee"
+}

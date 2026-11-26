@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "reviewer": "structure_critic independent agent",
+  "utc": "2026-11-26T04:38:23.666312+00:00",
+  "requirements_path": "requirements.json",
+  "requirements_sha256": "c10ab73c075116d486afd2c7eca3390ddf1e4435c3d2699bfc1ed40b4efa137a",
+  "image_path": "renders/fence-oblique-r1.png",
+  "image_sha256": "708eec012843900df7e2f54a257d37d31a7791b55cb5673bcdab2144f9eb76e5",
+  "native_size": [
+    1254,
+    1254
+  ],
+  "full_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/fence-oblique-r1-rear-top-right.png",
+      "box": [
+        680,
+        95,
+        1210,
+        555
+      ],
+      "sha256": "9b2b160a7c57dcfe04e00bcd58cd3f732077438a57284b8b0ef37e7ef0b3a8ab"
+    },
+    {
+      "path": "reviews/evidence/fence-oblique-r1-rear-lower-left.png",
+      "box": [
+        60,
+        655,
+        590,
+        1110
+      ],
+      "sha256": "8d82b98684236fe361fea762997abe4e88d32a74e3ac48253d8c3920d1fb8a95"
+    },
+    {
+      "path": "reviews/evidence/fence-oblique-r1-front-45-count.png",
+      "box": [
+        60,
+        105,
+        590,
+        555
+      ],
+      "sha256": "f568d24df5935e9c28c3d609fd67d0dd0c3b53d63439ae49086dd6884a579f97"
+    },
+    {
+      "path": "reviews/evidence/fence-oblique-r1-front-315-count.png",
+      "box": [
+        665,
+        650,
+        1210,
+        1110
+      ],
+      "sha256": "ffe2282363703071eacf3b7c331cfd49c9ab0b8bc3641f55894f61825ec28e2b"
+    }
+  ],
+  "crop_provenance_path": "reviews/evidence/fence-oblique-r1-crop-provenance.json",
+  "crop_provenance_sha256": "17bc4c791ff452b4c2e194fe51b33a1081fc6c24183589607a7b87f692fda5e9",
+  "score": 9.2,
+  "pass_threshold": 9.5,
+  "status": "REPAIR_REQUIRED",
+  "checks": {
+    "source_identity_and_style": "PASS",
+    "four_distinct_oblique_rotations": "PASS",
+    "eight_logs_each_view": "PASS",
+    "front_only_rails_and_rear_wraps": "PASS",
+    "direction_labels_match_camera": "FAIL",
+    "readability_and_contact": "PASS"
+  },
+  "findings": [
+    "All four distinct oblique rotations are present and each view retains eight thick logs.",
+    "Top-right rear art has the nearest end on image-right, corresponding to rear-left225. Lower-left rear art has nearest end on image-left, corresponding to rear-right135. Their captions are exchanged.",
+    "Front45 and front315 labels and rail-side visibility are correct."
+  ],
+  "required_repairs": [
+    "Swap only the two rear captions: top-right becomes REAR-LEFT225; lower-left becomes REAR-RIGHT135. Preserve all object art."
+  ],
+  "approval_boundary": "Static exact-image assessment only; any failed mandatory check blocks approval irrespective of overall visual polish. No native geometry, animation, collision or delivery approval."
+}

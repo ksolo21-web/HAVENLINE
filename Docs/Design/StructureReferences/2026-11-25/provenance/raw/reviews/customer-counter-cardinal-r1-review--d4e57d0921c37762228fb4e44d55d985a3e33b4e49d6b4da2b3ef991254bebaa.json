@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "reviewer": "structure_critic independent agent",
+  "utc": "2026-11-26T04:32:41.525382+00:00",
+  "requirements_path": "requirements.json",
+  "requirements_sha256": "c10ab73c075116d486afd2c7eca3390ddf1e4435c3d2699bfc1ed40b4efa137a",
+  "image_path": "counter-builder/renders/customer-counter-cardinal-r1.png",
+  "image_sha256": "46309b01e07a15db044518fcf47b93dbd6741a3786a04135e88b3bb4e85158fb",
+  "native_size": [
+    1536,
+    1024
+  ],
+  "full_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/customer-counter-cardinal-r1-front-register.png",
+      "box": [
+        100,
+        120,
+        300,
+        280
+      ],
+      "sha256": "a6f76997c072759f902755021f180eacecbd8a346e6a54b5e75abb93212a5622"
+    },
+    {
+      "path": "reviews/evidence/customer-counter-cardinal-r1-right-end-register.png",
+      "box": [
+        1070,
+        95,
+        1225,
+        210
+      ],
+      "sha256": "3e92a6fe32dfe3a1f53be64bdad7fe828f543981b6a166a43b22b8260d60610f"
+    },
+    {
+      "path": "reviews/evidence/customer-counter-cardinal-r1-rear-register.png",
+      "box": [
+        500,
+        575,
+        680,
+        730
+      ],
+      "sha256": "329d82cf3ed3f80646864d818522ee75c31562b28cf7b2d37cd5c5195d963385"
+    },
+    {
+      "path": "reviews/evidence/customer-counter-cardinal-r1-left-end-register.png",
+      "box": [
+        1060,
+        580,
+        1240,
+        750
+      ],
+      "sha256": "1f99c2630aaa487e8c3fa51ed22822f943a58cce8b6f3f730209578d15a7cf4b"
+    },
+    {
+      "path": "reviews/evidence/customer-counter-cardinal-r1-front-lower-structure.png",
+      "box": [
+        100,
+        280,
+        690,
+        455
+      ],
+      "sha256": "0b9f16d02f8ca3b13057dc520b5db71686e07ef7928bfa7aa5c8836585e62775"
+    },
+    {
+      "path": "reviews/evidence/customer-counter-cardinal-r1-left-end-lower-structure.png",
+      "box": [
+        1030,
+        745,
+        1270,
+        920
+      ],
+      "sha256": "5638b2bfda903835ba1d9eee73fa08c7ca24dd5dc557aaeb0585b9d1d2bb7d47"
+    }
+  ],
+  "crop_provenance_path": "reviews/evidence/customer-counter-cardinal-r1-crop-provenance.json",
+  "crop_provenance_sha256": "5c5867a365007f217d85ed6f31fc37e72234bf7136f6294ca989833c820fd783",
+  "score": 9.7,
+  "pass_threshold": 9.5,
+  "status": "PASS_ANCHOR",
+  "checks": {
+    "source_identity": "PASS",
+    "latest_presentation_style": "PASS",
+    "four_distinct_cardinal_azimuths": "PASS",
+    "register_fixed_physical_end": "PASS",
+    "staff_facing_controls_chirality": "PASS",
+    "four_legs_and_lower_structure": "PASS",
+    "material_and_proportion_consistency": "PASS",
+    "readability_and_uncropped_objects": "PASS",
+    "coherent_contact_and_components": "PASS"
+  },
+  "findings": [
+    "Source timber counter identity preserved with thick planked top, four legs, lower shelf/support and one dark register.",
+    "Front shows register at viewer-left with plain back; rear shows viewer-right register with screen and keypad.",
+    "RIGHT90 looks from opposite end: register is far and staff direction projects image-right, so keypad slopes right. LEFT270 looks from register end: it is near and staff direction projects image-left, so keypad slopes left. Opposed profiles are physically consistent.",
+    "Lower shelf and square supports persist through views; rear legs are legitimately occluded at cardinal azimuths."
+  ],
+  "required_repairs": [],
+  "approval_boundary": "Only this exact static sheet is assessed. Related angles/details, native geometry, motion/collision and repository publication remain separately gated."
+}

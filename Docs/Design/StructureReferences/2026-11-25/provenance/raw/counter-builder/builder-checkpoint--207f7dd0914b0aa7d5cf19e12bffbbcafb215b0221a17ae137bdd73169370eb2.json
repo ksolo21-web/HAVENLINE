@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "recorded_utc": "2026-11-26T04:44:01.311245+00:00",
+  "scope": "Three static canonical customer-counter sheets",
+  "requirements_path": "../requirements.json",
+  "requirements_sha256": "c10ab73c075116d486afd2c7eca3390ddf1e4435c3d2699bfc1ed40b4efa137a",
+  "source_recovery_complete": true,
+  "generated_attempts": 6,
+  "required_selected_sheets": 3,
+  "independently_passed_sheets": 2,
+  "passed": {
+    "cardinal4": {
+      "generation_id": "customer-counter-cardinal-r1",
+      "sha256": "46309b01e07a15db044518fcf47b93dbd6741a3786a04135e88b3bb4e85158fb",
+      "score": 9.7,
+      "review_path": "../reviews/customer-counter-cardinal-r1-review.json",
+      "review_sha256": "d4e57d0921c37762228fb4e44d55d985a3e33b4e49d6b4da2b3ef991254bebaa"
+    },
+    "details4": {
+      "generation_id": "customer-counter-details-r2",
+      "sha256": "455defba0a6b24abb14536a24c2d999dd56540e4127481ced8072a37fc99cef4",
+      "score": 9.7,
+      "review_path": "../reviews/customer-counter-details-r2-review.json",
+      "review_sha256": "3a1c5cc3130d7997ffe6e63a45a537e116ab2b3d8d095c9de264bd2366278b39"
+    }
+  },
+  "pending_reviews": [
+    "customer-counter-oblique-r3"
+  ],
+  "suspected_defects": [],
+  "next_action": "Obtain independent full oblique-r3 and cross-sheet retest, then bind final review and freeze3selected images with all6attempts, prompts and inputs retained.",
+  "archive_owner": "/root/structure_archive",
+  "critic": "/root/structure_critic",
+  "root_owns": "fence/gate generation, root requirements/index, final archive",
+  "known_open_defects": [
+    "No current-candidate defect known after r3; final independent retest pending."
+  ],
+  "local_integrity_checks": {
+    "passed": 48,
+    "required": 48,
+    "report": "inspection/builder-integrity-audit.json"
+  }
+}

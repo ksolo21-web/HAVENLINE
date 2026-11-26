@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "recorded_utc": "2026-11-26T04:35:44.995149+00:00",
+  "scope": "Three static canonical customer-counter sheets",
+  "requirements_path": "../requirements.json",
+  "requirements_sha256": "c10ab73c075116d486afd2c7eca3390ddf1e4435c3d2699bfc1ed40b4efa137a",
+  "source_recovery_complete": true,
+  "generated_attempts": 3,
+  "required_selected_sheets": 3,
+  "independently_passed_sheets": 1,
+  "passed": {
+    "cardinal4": {
+      "generation_id": "customer-counter-cardinal-r1",
+      "sha256": "46309b01e07a15db044518fcf47b93dbd6741a3786a04135e88b3bb4e85158fb",
+      "score": 9.7,
+      "review_path": "../reviews/customer-counter-cardinal-r1-review.json",
+      "review_sha256": "d4e57d0921c37762228fb4e44d55d985a3e33b4e49d6b4da2b3ef991254bebaa"
+    }
+  },
+  "pending_reviews": [
+    "customer-counter-oblique-r1",
+    "customer-counter-details-r1"
+  ],
+  "suspected_defects": [
+    "Oblique135 register position appears wrong; awaiting critic."
+  ],
+  "next_action": "Use exact independent findings to repair any failed panel, then full-sheet retest; preserve every attempt and all ordered invocation input hashes.",
+  "archive_owner": "/root/structure_archive",
+  "critic": "/root/structure_critic",
+  "root_owns": "fence/gate generation, root requirements/index, final archive"
+}

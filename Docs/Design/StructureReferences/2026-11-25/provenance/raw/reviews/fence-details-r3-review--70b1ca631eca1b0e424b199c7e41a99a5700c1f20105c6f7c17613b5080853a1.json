@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "reviewer": "structure_critic independent agent",
+  "utc": "2026-11-26T04:46:48.576859+00:00",
+  "requirements_path": "requirements.json",
+  "requirements_sha256": "c10ab73c075116d486afd2c7eca3390ddf1e4435c3d2699bfc1ed40b4efa137a",
+  "image_path": "renders/fence-details-r3.png",
+  "image_sha256": "1672f1235a09e13c391d9f348f102ab0fd61697dc9a9ac19a258cb362cd481ae",
+  "native_size": [
+    1254,
+    1254
+  ],
+  "full_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/fence-details-r3-left-eight-logs.png",
+      "box": [
+        580,
+        750,
+        876,
+        1045
+      ],
+      "sha256": "c2bd23f31ab118f3a37100a0bfb9b777120e97ac84eeb5c98215f06b5d9e3b4e"
+    },
+    {
+      "path": "reviews/evidence/fence-details-r3-right-eight-logs.png",
+      "box": [
+        874,
+        750,
+        1220,
+        1065
+      ],
+      "sha256": "26796d045335405e811863913dfdefe253702d9fab4974659d2b7643febeb25d"
+    },
+    {
+      "path": "reviews/evidence/fence-details-r3-both-rail-joints.png",
+      "box": [
+        845,
+        855,
+        901,
+        1030
+      ],
+      "sha256": "05d4eae6941ce8ea0567674def58c786352a7fa97e87c5e4920a3416136ee9dc"
+    },
+    {
+      "path": "reviews/evidence/fence-details-r3-top-eight-logs.png",
+      "box": [
+        50,
+        80,
+        535,
+        588
+      ],
+      "sha256": "5b769bd74197db73836aba7277c13a67c27aa681ffbdd653346ee6874223e73c"
+    }
+  ],
+  "crop_provenance_path": "reviews/evidence/fence-details-r3-crop-provenance.json",
+  "crop_provenance_sha256": "1f8d83fc1ab4ad66ec383abc93a50903f4cd145d58205436fe50af38d462ecd6",
+  "retest_of": "reviews/fence-details-r2-review.json",
+  "prior_review_sha256": "8400781de321e0cbcdb75d606a0166d09bea53d7485dfef8c2f4689f29d09722",
+  "score": 9.7,
+  "pass_threshold": 9.5,
+  "status": "PASS",
+  "checks": {
+    "source_identity_and_style": "PASS",
+    "elevated_single_module_eight_logs": "PASS",
+    "rope_rail_attachment_closeup": "PASS",
+    "snow_crown_detail": "PASS",
+    "joined_left_module_eight_logs": "PASS",
+    "joined_right_module_eight_logs": "PASS",
+    "sixteen_total_logs": "PASS",
+    "both_rails_aligned_butt_join": "PASS",
+    "coherent_contact_and_continuous_rhythm": "PASS",
+    "readability": "PASS"
+  },
+  "findings": [
+    "Native isolated crops confirm eight complete logs/crowns LEFT of the joint and eight RIGHT, sixteen total.",
+    "Small rounded butt ends remain visible in both horizontal rails near x873, now between logs8 and9. Rails meet at consistent heights without an extra junction pole or a large gap.",
+    "Single elevated module still has eight logs with substantial round mass. Successful rope and snow closeups remain visually preserved."
+  ],
+  "required_repairs": [],
+  "approval_boundary": "Exact static reference sheet only. The completed visual set is separately summarized; native geometry, runtime and repository publication remain outside this per-sheet approval."
+}

@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-25",
+  "task": "Havenline fence, gates and customer counters",
+  "status": "CREATIVE_SCOPE_LOCKED",
+  "deliverable_type": "Static multi-angle render references; not native meshes or runtime verification",
+  "repository": "ksolo21-web/HAVENLINE",
+  "base_commit": "b80c61f13ba31bb0940792dd47976a8e2878dbf5",
+  "branch": "art/structures-2026-11-25",
+  "prefix": "Docs/Design/StructureReferences/2026-11-25",
+  "assets": [
+    {
+      "id": "fence",
+      "identity": "Modular section of dense rounded warm timber palisade with two horizontal front rails, cream crossed rope lashings and irregular pointed snow crowns",
+      "interpretation": "Eight-log representative segment of the longer supplied fence. Preserve substantial log thickness and continuous join rhythm; inferred concealed construction is reference clarification, not approved runtime geometry.",
+      "sheets": [
+        {"id": "fence-cardinal", "views": ["front 0", "right 90", "rear 180", "left 270"]},
+        {"id": "fence-oblique", "views": ["front-right 45", "rear-right 135", "rear-left 225", "front-left 315"]},
+        {"id": "fence-details", "views": ["elevated top thickness", "rope and rail attachment closeup", "snow crown closeup", "two adjacent joined modules"]}
+      ]
+    },
+    {
+      "id": "gates",
+      "identity": "Paired framed timber gate leaves with narrow vertical planking, diagonal/X bracing, stout round rope-bound snow-capped outer posts and snow on upper rails",
+      "interpretation": "Matched double swing gate based on supplied original. Modest dark hinges and meeting latch clarify unresolved details; no alternative gate design invented.",
+      "sheets": [
+        {"id": "gates-cardinal", "views": ["closed front 0", "closed right 90", "closed rear 180", "closed left 270"]},
+        {"id": "gates-oblique", "views": ["closed front-right 45", "closed rear-right 135", "closed rear-left 225", "closed front-left 315"]},
+        {"id": "gates-states", "views": ["closed front", "open approximately 90 degrees", "elevated open clearance", "hinge and center latch details"]}
+      ]
+    },
+    {
+      "id": "customer-counter",
+      "identity": "Canonical warm timber service counter with thick plank top, four square legs, lower shelf/support and dark end-mounted register",
+      "interpretation": "Gameplay references show repeated instances of this same counter, including two side by side. Internal processing machinery is a distinct asset, outside this customer-counter request.",
+      "sheets": [
+        {"id": "customer-counter-cardinal", "views": ["customer front 0", "right end 90", "staff rear 180", "left end 270"]},
+        {"id": "customer-counter-oblique", "views": ["front-right 45", "rear-right 135", "rear-left 225", "front-left 315"]},
+        {"id": "customer-counter-details", "views": ["staff-facing register detail", "top stock and transfer surface", "lower shelf and legs", "two repeated counter instances"]}
+      ]
+    }
+  ],
+  "required_selected_sheets": 9,
+  "required_turnaround_angles": 24,
+  "style": {
+    "authority": "Latest user supplied character style image, SHA256 2a364995e105e8ceebad7b5c80db753f8220e1bce697b1405ae3a4afe02aaf13",
+    "presentation": "Polished stylized 3D, soft material detail, rounded readable forms, neutral light-gray studio background and consistent soft shadows",
+    "construction_authority": "Recovered original fence/gate images and canonical service counter source, corroborated by gameplay frames",
+    "character_only_rules": "Character T-pose and spread-finger requirements do not apply to static structures"
+  },
+  "mandatory_acceptance": [
+    "All three sourced construction identities preserved in the latest approved presentation style",
+    "Nine selected sheets, eight distinct meaningful horizontal rotation views per asset, plus required details/use states",
+    "Consistent object proportions, parts, color, snow, rope, hardware and counter register physical end across related views",
+    "Fence remains substantial from side and elevated angles; visible paired rails and crossed lashings",
+    "Gate leaves remain attached to their outer posts and open into a plausibly unobstructed central passage",
+    "Gate hinge and latch details agree with whole-object renders; no claim of actual animation or collision testing",
+    "Counter has clear customer/staff sides, staff-facing register controls, open transfer surface and consistent lower structure",
+    "Full objects and necessary closeups legible, uncropped, free of fused or floating structural components",
+    "Separate critic reviews actual images and crop evidence; all mandatory checks pass, score at least 9.5 and strictly above 9.0",
+    "Every generated original and repair, exact prompt, ordered actual reference inputs, review and source provenance retained",
+    "All output native image dimensions recorded honestly; no invented 4K or mesh/rig/animation claims",
+    "GitHub publication only adds to isolated new branch; all prior repository files and active work preserved byte for byte",
+    "Fresh exact-head remote verification proves selected images and every original are stored as real image blobs"
+  ],
+  "milestones": [
+    {"id": 1, "name": "Recover and inspect source originals", "status": "COMPLETE"},
+    {"id": 2, "name": "Generate nine sheets and repair against independent critique", "status": "IN_PROGRESS", "depends_on": [1]},
+    {"id": 3, "name": "Freeze and verify complete archive package", "status": "PENDING", "depends_on": [2]},
+    {"id": 4, "name": "Publish and verify exact GitHub branch content", "status": "PENDING", "depends_on": [3]}
+  ],
+  "next_action": "Generate first cardinal sheets against the exact source originals and style image; review before dependent views"
+}

@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-25",
+  "stage": "INDEPENDENT_REPAIR_RETEST",
+  "requirements_sha256": "c10ab73c075116d486afd2c7eca3390ddf1e4435c3d2699bfc1ed40b4efa137a",
+  "required_selected_sheets": 9,
+  "root_originals": 10,
+  "counter_originals": 5,
+  "raw_reviews": [
+    {
+      "path": "reviews/customer-counter-cardinal-r1-review.json",
+      "sha256": "d4e57d0921c37762228fb4e44d55d985a3e33b4e49d6b4da2b3ef991254bebaa",
+      "image": "counter-builder/renders/customer-counter-cardinal-r1.png",
+      "status": "PASS_ANCHOR",
+      "score": 9.7
+    },
+    {
+      "path": "reviews/customer-counter-details-r1-review.json",
+      "sha256": "4b19a5581eb9022fcf00a5ba4cbb8fd74a134b14e685c5d02d06ed0979339551",
+      "image": "counter-builder/renders/customer-counter-details-r1.png",
+      "status": "REPAIR_REQUIRED",
+      "score": 8.8
+    },
+    {
+      "path": "reviews/customer-counter-details-r2-review.json",
+      "sha256": "3a1c5cc3130d7997ffe6e63a45a537e116ab2b3d8d095c9de264bd2366278b39",
+      "image": "counter-builder/renders/customer-counter-details-r2.png",
+      "status": "PASS",
+      "score": 9.7
+    },
+    {
+      "path": "reviews/customer-counter-oblique-r1-review.json",
+      "sha256": "3b08cd7bf8d40ff23d1f1923d7f6bae288fae4759063c06313d8a0fd9ee1f9b1",
+      "image": "counter-builder/renders/customer-counter-oblique-r1.png",
+      "status": "REPAIR_REQUIRED",
+      "score": 8.4
+    },
+    {
+      "path": "reviews/customer-counter-oblique-r2-review.json",
+      "sha256": "0fb4574237e633e2759418d18bb66e6ac74dba811dfd8471857a1c0b0cfb3c3e",
+      "image": "counter-builder/renders/customer-counter-oblique-r2.png",
+      "status": "REPAIR_REQUIRED",
+      "score": 9.0
+    },
+    {
+      "path": "reviews/fence-cardinal-r1-review.json",
+      "sha256": "f8119fa76a7880edb82864a9c9aa109dec10f61e6e66911733feb4aff4527277",
+      "image": "renders/fence-cardinal-r1.png",
+      "status": "PASS_ANCHOR",
+      "score": 9.7
+    },
+    {
+      "path": "reviews/fence-details-r1-review.json",
+      "sha256": "b55a5a4d27bb3bfea68aa164ad0ab1a771f46ac982e88acd886e0703e3bf200b",
+      "image": "renders/fence-details-r1.png",
+      "status": "REPAIR_REQUIRED",
+      "score": 8.6
+    },
+    {
+      "path": "reviews/fence-oblique-r1-review.json",
+      "sha256": "b8ca37dd2947ff08f2215a5b96a42a42b03cffc501efc49bfc461c3cb8354748",
+      "image": "renders/fence-oblique-r1.png",
+      "status": "REPAIR_REQUIRED",
+      "score": 9.2
+    },
+    {
+      "path": "reviews/gates-cardinal-r1-review.json",
+      "sha256": "fe6d2f5a50ac61d4773e68f4836ca9741f56c8746c77aaf083d6d29b0da870a4",
+      "image": "renders/gates-cardinal-r1.png",
+      "status": "REPAIR_REQUIRED",
+      "score": 8.9
+    },
+    {
+      "path": "reviews/gates-cardinal-r2-review.json",
+      "sha256": "0743373b40ba2a255096829671df26d41cfb80db66d6f7aed591c77f671fe22d",
+      "image": "renders/gates-cardinal-r2.png",
+      "status": "PASS_ANCHOR",
+      "score": 9.7
+    },
+    {
+      "path": "reviews/gates-oblique-r1-review.json",
+      "sha256": "2211d6f8fcb9d04959f8fb6fe1d40071bc1a6da4637a07449941458eca1fa8ee",
+      "image": "renders/gates-oblique-r1.png",
+      "status": "REPAIR_REQUIRED",
+      "score": 8.9
+    }
+  ],
+  "remaining": [
+    "Finish per-image repair retests",
+    "Independent final cross-sheet review",
+    "Freeze exact generation and reference indexes",
+    "Audit concrete GitHub package",
+    "Publish isolated branch and verify exact remote content"
+  ],
+  "next_action": "Inspect independent retest reports and repair any remaining mandatory defects",
+  "runtime_boundary": "Two distinct camp entrances remain an untested runtime/layout requirement outside static renders",
+  "github_ref_published": false
+}

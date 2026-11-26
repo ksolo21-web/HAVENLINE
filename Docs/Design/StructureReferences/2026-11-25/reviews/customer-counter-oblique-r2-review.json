@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "reviewer": "structure_critic independent agent",
+  "utc": "2026-11-26T04:41:17.890452+00:00",
+  "requirements_path": "requirements.json",
+  "requirements_sha256": "c10ab73c075116d486afd2c7eca3390ddf1e4435c3d2699bfc1ed40b4efa137a",
+  "image_path": "counter-builder/renders/customer-counter-oblique-r2.png",
+  "image_sha256": "61e456b9b6715b346bf3d22af919b08ea0ce85d5e22042c4cbaf911fe3a7c5b0",
+  "native_size": [
+    1536,
+    1024
+  ],
+  "full_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/customer-counter-oblique-r2-rear135-register.png",
+      "box": [
+        1245,
+        82,
+        1410,
+        204
+      ],
+      "sha256": "97077a1f576e15b412a0c6440296131fab076e42f9fd63a89f455eaf510a1a2f"
+    },
+    {
+      "path": "reviews/evidence/customer-counter-oblique-r2-rear225-register.png",
+      "box": [
+        440,
+        577,
+        640,
+        730
+      ],
+      "sha256": "79e31eeeb791e2ee3658a6bdf52dd78948dfd933b7918ceb5716b9ec9e399b25"
+    },
+    {
+      "path": "reviews/evidence/customer-counter-oblique-r2-rear225-table.png",
+      "box": [
+        115,
+        578,
+        675,
+        925
+      ],
+      "sha256": "48ed2668a0690aaceb74925ad8b208218f499d50b2b15020939fed906587c153"
+    }
+  ],
+  "crop_provenance_path": "reviews/evidence/customer-counter-oblique-r2-crop-provenance.json",
+  "crop_provenance_sha256": "7332c93397f2b65be12b10d020d7371e9e6da0635f8789c26f4a2ebfabba1326",
+  "retest_of": "reviews/customer-counter-oblique-r1-review.json",
+  "prior_review_sha256": "3b08cd7bf8d40ff23d1f1923d7f6bae288fae4759063c06313d8a0fd9ee1f9b1",
+  "score": 9.0,
+  "pass_threshold": 9.5,
+  "status": "REPAIR_REQUIRED",
+  "checks": {
+    "source_identity_and_style": "PASS",
+    "four_distinct_counter_azimuths": "PASS",
+    "fixed_register_position": "PASS",
+    "rear135_controls_orientation": "PASS",
+    "rear225_controls_orientation": "FAIL",
+    "front_panels_preserved": "PASS",
+    "lower_structure_and_contact": "PASS"
+  },
+  "findings": [
+    "Both rear register POSITIONS are now correct:135 at far-right and225 at near-right.",
+    "The225 register itself still duplicates135 orientation: high housing on image-left and keypad sloping down toward image-right. At225, staff direction projects image-left, so the keypad must slope down-left with the high housing at image-right. Native135 and225 register crops confirm the same orientation was reused.",
+    "Passed details-r2 STAFF REGISTER provides the correct near-right/left-sloping control orientation for225."
+  ],
+  "required_repairs": [
+    "Repair only the225 register orientation to match details-r2, preserving its near-right position, table and all other panels."
+  ],
+  "approval_boundary": "Exact static-sheet assessment only; one failed mandatory check blocks approval. Asset completion still requires all counter sheets and archive verification."
+}

@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "reviewer": "structure_critic independent agent",
+  "utc": "2026-11-26T04:44:52.696408+00:00",
+  "requirements_path": "requirements.json",
+  "requirements_sha256": "c10ab73c075116d486afd2c7eca3390ddf1e4435c3d2699bfc1ed40b4efa137a",
+  "image_path": "renders/fence-oblique-r2.png",
+  "image_sha256": "5cc7bb7ddf05ca053828b2c9202992a5fc4b104ca39f433454d56251d7e9641c",
+  "native_size": [
+    1254,
+    1254
+  ],
+  "full_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/fence-oblique-r2-rear225-label-context.png",
+      "box": [
+        680,
+        95,
+        1215,
+        625
+      ],
+      "sha256": "d7346d49fad1f99dc1986b404b62f76bf558a90449cd0601227bbd8989f59b36"
+    },
+    {
+      "path": "reviews/evidence/fence-oblique-r2-rear135-label-context.png",
+      "box": [
+        60,
+        650,
+        605,
+        1210
+      ],
+      "sha256": "284fe42237eab2ac86ad8aa98fb15e9bfee3f177f03264994bbf1cbf4c10b747"
+    }
+  ],
+  "crop_provenance_path": "reviews/evidence/fence-oblique-r2-crop-provenance.json",
+  "crop_provenance_sha256": "9994c7ca401b9599ea5092fad5d8df69413e4297eb01e4aaeca97ecc4ecf8ff3",
+  "score": 9.7,
+  "pass_threshold": 9.5,
+  "status": "PASS",
+  "checks": {
+    "source_identity_and_style": "PASS",
+    "four_distinct_oblique_rotations": "PASS",
+    "eight_logs_each_view": "PASS",
+    "direction_labels_match_camera": "PASS",
+    "front_only_rails_and_rear_wraps": "PASS",
+    "thick_round_mass": "PASS",
+    "readability_and_contact": "PASS"
+  },
+  "findings": [
+    "Rear labels now match the visible nearest ends: top-right is rear-left225 and lower-left is rear-right135.",
+    "All four distinct views retain eight logs/crowns; front-only rails, crossed front lashings and rear wraps remain coherent with cardinal anchor.",
+    "The two front views and all object art remain visually preserved; no new structural defect found."
+  ],
+  "required_repairs": [],
+  "approval_boundary": "Static visual evidence only. No native mesh, actual gate movement, collision or two-camp-entrance layout verification; those prior runtime/layout obligations remain preserved. Archive publication is separately gated.",
+  "retest_of": "reviews/fence-oblique-r1-review.json",
+  "prior_review_sha256": "b8ca37dd2947ff08f2215a5b96a42a42b03cffc501efc49bfc461c3cb8354748"
+}

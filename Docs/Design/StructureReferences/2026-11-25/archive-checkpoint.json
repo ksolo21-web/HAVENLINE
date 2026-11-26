@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "stage": "ASSEMBLED_FROZEN_CONTENT_PENDING_PACKAGE_AND_REMOTE_GATES",
+  "completed_milestones": 2,
+  "required_milestones": 4,
+  "milestones": [
+    {
+      "id": "M1",
+      "name": "Verify authoritative consolidated base and isolated archive destination",
+      "status": "PASS"
+    },
+    {
+      "id": "M2",
+      "name": "Register exact originals/prompts, freeze independently reviewed static references",
+      "status": "PASS"
+    },
+    {
+      "id": "M3",
+      "name": "Review and publish additive package on isolated branch",
+      "status": "PENDING"
+    },
+    {
+      "id": "M4",
+      "name": "Read back and retain bounded final delivery evidence",
+      "status": "PENDING"
+    }
+  ],
+  "next_action": "Independently review this exact staged candidate and obtain root verification; then create the isolated branch and publish using an expected-head lease. Delivery receipts are one additive child after remote readback.",
+  "remote_ref_changed": false,
+  "registered_generated_originals": 17,
+  "exact_document_snapshots": 73,
+  "qa_image_files": 68,
+  "qa_provenance_files": 24,
+  "pending_output_invocations": [],
+  "selected_aliases_created": 9,
+  "unique_binary_blobs_receipted": 60,
+  "upload_errors": 0,
+  "updated_utc": "2026-11-26T04:48:47.677829+00:00",
+  "generation_frozen": true,
+  "all_selected_mandatory_visual_checks_passed": true
+}

@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "reviewer": "structure_critic independent agent",
+  "utc": "2026-11-26T04:32:41.531933+00:00",
+  "requirements_path": "requirements.json",
+  "requirements_sha256": "c10ab73c075116d486afd2c7eca3390ddf1e4435c3d2699bfc1ed40b4efa137a",
+  "image_path": "renders/gates-cardinal-r1.png",
+  "image_sha256": "7f6dbde326cf31c805c57b2c4df62e3976803ead5940e7593d320916429022a9",
+  "native_size": [
+    1254,
+    1254
+  ],
+  "full_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/gates-cardinal-r1-front-latch.png",
+      "box": [
+        392,
+        320,
+        490,
+        416
+      ],
+      "sha256": "339a05ca50d1d30f2e3e26d3e6de5d90f4b2b8ff9f975ec992913034d9eb07d9"
+    },
+    {
+      "path": "reviews/evidence/gates-cardinal-r1-rear-latch.png",
+      "box": [
+        392,
+        884,
+        490,
+        980
+      ],
+      "sha256": "c37f9ac90145f641d1b6e020627bb3a3e375f38b5a7c518652250f0291299deb"
+    },
+    {
+      "path": "reviews/evidence/gates-cardinal-r1-front-upper-hinge.png",
+      "box": [
+        61,
+        225,
+        210,
+        311
+      ],
+      "sha256": "fb57d741bfbb29d0f1b107d39ea5098a52829a58903cd658f44f94eb16f88592"
+    },
+    {
+      "path": "reviews/evidence/gates-cardinal-r1-rear-upper-hinge.png",
+      "box": [
+        61,
+        788,
+        210,
+        875
+      ],
+      "sha256": "ac17d33d3bd1f0c196edeb0d2e6fed3ecde86074a41e5cb835b7ede087234028"
+    },
+    {
+      "path": "reviews/evidence/gates-cardinal-r1-right-end-hardware.png",
+      "box": [
+        985,
+        206,
+        1128,
+        509
+      ],
+      "sha256": "775ecded303ada5c326a467cfdeee621622dd6a2d0dbc48340875b1bb4e0e8cf"
+    },
+    {
+      "path": "reviews/evidence/gates-cardinal-r1-left-end-hardware.png",
+      "box": [
+        988,
+        789,
+        1136,
+        1086
+      ],
+      "sha256": "b1afb4cec093e708576f4e39e6ba0f57496543879bbc158ef5011c4fe3e47c32"
+    }
+  ],
+  "crop_provenance_path": "reviews/evidence/gates-cardinal-r1-crop-provenance.json",
+  "crop_provenance_sha256": "073b0b4740749823ffe8c02e79658dfdb7af21be6ea385f5f42ef25a75629610",
+  "score": 8.9,
+  "pass_threshold": 9.5,
+  "status": "REPAIR_REQUIRED",
+  "checks": {
+    "source_identity": "PASS",
+    "latest_presentation_style": "PASS",
+    "four_distinct_cardinal_azimuths": "PASS",
+    "paired_closed_leaves_and_outer_posts": "PASS",
+    "front_only_X_braces": "PASS",
+    "stout_snow_capped_rope_posts": "PASS",
+    "hinge_attachment_plausibility": "PASS",
+    "latch_physical_consistency": "FAIL",
+    "readability_and_uncropped_objects": "PASS"
+  },
+  "findings": [
+    "Full sheet preserves the source paired timber gate with narrow planks, substantial frames and X bracing only on front.",
+    "End views show stout post thickness and a thin closed gate plane on correctly opposed sides.",
+    "At center, front AND rear show the large latch pivot on viewer-left and the bar reaching viewer-right. One latch attached to a fixed physical leaf must mirror its image-side location under180 rotation. No reference or explicit design establishes separate reversed independent latches on both faces."
+  ],
+  "required_repairs": [
+    "Keep the front latch and all gate geometry. Repair rear only: show plain rear through-bolt/fastener ends corresponding to the front latch, or a consistent shared spindle pivot on viewer-right; do not silently add a reversed second latch."
+  ],
+  "approval_boundary": "Only this exact static sheet is assessed. Related angles/details, native geometry, motion/collision and repository publication remain separately gated."
+}

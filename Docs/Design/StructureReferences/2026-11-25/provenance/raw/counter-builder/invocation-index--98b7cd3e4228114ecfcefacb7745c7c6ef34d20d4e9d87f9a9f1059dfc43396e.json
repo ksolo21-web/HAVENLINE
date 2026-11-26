@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "invocations": [
+    {
+      "invocation_id": "customer-counter-cardinal-r1",
+      "asset_id": "customer-counter",
+      "sheet": "cardinal4",
+      "attempt": 1,
+      "status": "TOOL_RETURNED",
+      "recorded_utc": "2026-11-26T04:29:06.648871+00:00",
+      "tool": "image_gen.imagegen",
+      "mode": "built-in",
+      "transparent_background": false,
+      "prompt_path": "/workspace/scratch/9c51da47f878/havenline-structures-2026-11-25/counter-builder/prompts/customer-counter-cardinal-r1.txt",
+      "prompt_sha256": "98ba11a0f0e843c3b7405be01b143195a0a04121bddd13300aaa209614e46c15",
+      "prompt": "Use case: stylized-concept.\nCreate a landscape HAVENLINE customer service counter reference board: exactly FOUR large, clean, equally sized panels in a 2 by 2 grid on one continuous neutral light-gray studio background, softly lit with grounded contact shadows. Small centered heading: \"HAVENLINE / CUSTOMER COUNTER\". Short dark-gray captions under each panel only.\n\nInput image 1 is the authoritative counter identity and construction reference. Re-render that SAME counter, retaining its thick rounded rectangular timber plank top, four stout square timber legs, lower timber shelf and supporting rails, and one compact dark charcoal register fixed at ONE end of the tabletop. Do not redesign it into a shop kiosk or processing machine.\nInput image 2 is STYLE ONLY: match its polished, mature stylized 3D finish, gently rounded edges, restrained tactile material detail, soft clean lighting and light gray studio. Do not include the person, clothing or human anatomy.\n\nThe counter's warm chestnut/honey timber should have finished softly rounded bevels, subtle natural wood grain, convincing plank joins and coherent construction. The charcoal register has a blue-gray screen, pale distinct keypad buttons, a sloping staff-facing control surface and a plain rounded customer-facing back. Use the same wood, proportions, supports and register in every panel. Clear tabletop, no stock or extra props, no snow.\n\nRigid construction and handedness:\nDefine the customer-facing long edge as FRONT, the opposite long edge as STAFF REAR. The register is permanently anchored to the physical LEFT END as seen from the customer front. Its screen and keypad always face the STAFF REAR long edge; it NEVER rotates independently and NEVER changes ends.\nTOP LEFT: customer FRONT 0 degrees, exact frontal azimuth with modest elevation: full long face, register at viewer LEFT, plain BACK of register toward camera.\nTOP RIGHT: RIGHT END 90 degrees, exact narrow end view with the same modest elevation: view down the full tabletop length from the end OPPOSITE the register, so register is at the FAR end; the staff-facing keypad is seen only in side profile.\nBOTTOM LEFT: STAFF REAR 180 degrees, exact rear azimuth with modest elevation: full long face, register at viewer RIGHT, screen and keypad clearly face camera.\nBOTTOM RIGHT: LEFT END 270 degrees, opposite exact narrow end view with same modest elevation: view from the register end so register is NEAREST camera; staff-facing keypad is in the opposite side profile from the 90-degree panel.\n\nCaptions exactly:\n\"CUSTOMER FRONT 0\u00b0\"\n\"RIGHT END 90\u00b0\"\n\"STAFF REAR 180\u00b0\"\n\"LEFT END 270\u00b0\"\n\nEach panel is one complete full counter at generous readable scale. Perspective must correspond to the actual four cardinal camera directions, not four three-quarter views. All four legs, lower shelf and joints exist consistently even where correctly occluded. All feet rest on the same studio floor. Keep the whole counter and register inside each panel. No humans, arrows, diagram lines, measurements, prices, logos, machinery, duplicated registers, floating pieces, dramatic vignette, navy backgrounds or busy decorative borders. This is a static studio reference sheet, not a gameplay screenshot.\n",
+      "ordered_reference_inputs": [
+        {
+          "order": 1,
+          "local_path": "/workspace/scratch/9c51da47f878/havenline-structures-2026-11-25/references/service_counter.png",
+          "role": "counter identity/construction authority",
+          "sha256": "c17e24914e387c33695d4badf5334beb499eacb18a6e22b9ce904390fc094716",
+          "bytes": 1620047,
+          "dimensions": [
+            1536,
+            1024
+          ],
+          "viewed_before_invocation": true
+        },
+        {
+          "order": 2,
+          "local_path": "/workspace/scratch/9c51da47f878/havenline-structures-2026-11-25/references/style-reference.jpg",
+          "role": "latest user material/style/studio authority",
+          "sha256": "2a364995e105e8ceebad7b5c80db753f8220e1bce697b1405ae3a4afe02aaf13",
+          "bytes": 150185,
+          "dimensions": [
+            1536,
+            1536
+          ],
+          "viewed_before_invocation": true
+        }
+      ],
+      "requirements_sha256": "c10ab73c075116d486afd2c7eca3390ddf1e4435c3d2699bfc1ed40b4efa137a",
+      "parent_generation": null,
+      "output_path_pending": "/workspace/scratch/9c51da47f878/havenline-structures-2026-11-25/counter-builder/renders/customer-counter-cardinal-r1.png",
+      "completed_utc": "2026-11-26T04:30:02.256136+00:00",
+      "output": {
+        "native_original_path": "/workspace/scratch/9c51da47f878/generated_images/exec-066a6b53-55d4-40ba-aa4d-b5b07ee3b857.png",
+        "local_path": "/workspace/scratch/9c51da47f878/havenline-structures-2026-11-25/counter-builder/renders/customer-counter-cardinal-r1.png",
+        "sha256": "46309b01e07a15db044518fcf47b93dbd6741a3786a04135e88b3bb4e85158fb",
+        "bytes": 1685676,
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "format": "PNG"
+      }
+    }
+  ]
+}

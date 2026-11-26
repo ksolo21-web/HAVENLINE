@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "reviewer": "structure_critic independent agent",
+  "utc": "2026-11-26T04:38:23.661483+00:00",
+  "requirements_path": "requirements.json",
+  "requirements_sha256": "c10ab73c075116d486afd2c7eca3390ddf1e4435c3d2699bfc1ed40b4efa137a",
+  "image_path": "counter-builder/renders/customer-counter-details-r1.png",
+  "image_sha256": "599a1b6f6c95084f80f9dc206774e18ed259fe55874642bae3b60daf80aa053c",
+  "native_size": [
+    1536,
+    1024
+  ],
+  "full_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/customer-counter-details-r1-staff-register.png",
+      "box": [
+        70,
+        108,
+        755,
+        470
+      ],
+      "sha256": "f990276f380db082b22fddffb0accad12905d0435090a7bb1169c48618070e8c"
+    },
+    {
+      "path": "reviews/evidence/customer-counter-details-r1-stock-surface.png",
+      "box": [
+        860,
+        107,
+        1450,
+        456
+      ],
+      "sha256": "a89e308c48052b88755b1ccb2b42840d5726ccab62a7351724062f41bd0b10cf"
+    },
+    {
+      "path": "reviews/evidence/customer-counter-details-r1-shelf-supports.png",
+      "box": [
+        75,
+        555,
+        715,
+        940
+      ],
+      "sha256": "7034c73e8488d7fdbaf74656d94a4662a89b7c0c8af9f3eddcfc1cf5cadbe643"
+    },
+    {
+      "path": "reviews/evidence/customer-counter-details-r1-two-instances.png",
+      "box": [
+        800,
+        640,
+        1510,
+        870
+      ],
+      "sha256": "453f4a55732c8e46d7376fbe47eb791b8a03798baae8817bb5c484d762de7ba1"
+    }
+  ],
+  "crop_provenance_path": "reviews/evidence/customer-counter-details-r1-crop-provenance.json",
+  "crop_provenance_sha256": "b2094def1c4cbca6ceb9e4b09a00ffcde8a0303179586237a18158b01f362739",
+  "score": 8.8,
+  "pass_threshold": 9.5,
+  "status": "REPAIR_REQUIRED",
+  "checks": {
+    "source_identity": "PASS",
+    "latest_presentation_style": "PASS",
+    "readable_register_controls": "PASS",
+    "usable_stock_transfer_surface": "PASS",
+    "four_legs_and_shelf": "PASS",
+    "two_repeated_instances": "PASS",
+    "register_end_consistency_staff_panels": "FAIL",
+    "readability_and_contact": "PASS"
+  },
+  "findings": [
+    "Lower shelf/support closeup shows coherent four-leg structure. Two repeated front-facing instances match the customer-front register location.",
+    "Top STAFF REGISTER and STOCK SURFACE panels show the controls with register at the near-left table end, inheriting the same chirality reversal seen in the rejected oblique rear views. Their physical placement conflicts with the accepted cardinal anchor.",
+    "Usable counter surface and register controls themselves are clear; correction is limited to the top two panel orientations."
+  ],
+  "required_repairs": [
+    "Repair both top panels as coherent staff-side views with near-right register and tabletop extending far-left, or another explicitly consistent rear view. Preserve the lower shelf and two-counter panels."
+  ],
+  "approval_boundary": "Static exact-image assessment only; any failed mandatory check blocks approval irrespective of overall visual polish. No native geometry, animation, collision or delivery approval."
+}

@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "reviewer": "structure_critic independent agent",
+  "utc": "2026-11-26T04:38:23.654797+00:00",
+  "requirements_path": "requirements.json",
+  "requirements_sha256": "c10ab73c075116d486afd2c7eca3390ddf1e4435c3d2699bfc1ed40b4efa137a",
+  "image_path": "counter-builder/renders/customer-counter-oblique-r1.png",
+  "image_sha256": "70091b634b3c8c8b6fe79a235b6b0c3a75b9e27d2d829aaf24bd8bbedff610f9",
+  "native_size": [
+    1536,
+    1024
+  ],
+  "full_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/customer-counter-oblique-r1-front45-register.png",
+      "box": [
+        120,
+        100,
+        325,
+        235
+      ],
+      "sha256": "2ae5ee37dc35cf0a1664ee6c4752ac0eb4c6210c837b328954fb830d7aded7f3"
+    },
+    {
+      "path": "reviews/evidence/customer-counter-oblique-r1-rear135-full.png",
+      "box": [
+        870,
+        110,
+        1440,
+        475
+      ],
+      "sha256": "c5e5f4770ac5db0e254d908c7a524e26cfe7b1a83b023980f0f31cfdcb340117"
+    },
+    {
+      "path": "reviews/evidence/customer-counter-oblique-r1-rear225-full.png",
+      "box": [
+        120,
+        580,
+        680,
+        930
+      ],
+      "sha256": "ff7f7177edb8b67844a2680b3672d20c0c8db2221d521a7e22e05cd3686a09c4"
+    },
+    {
+      "path": "reviews/evidence/customer-counter-oblique-r1-front315-register.png",
+      "box": [
+        900,
+        580,
+        1115,
+        740
+      ],
+      "sha256": "eb96d4d742209607db16e9a0e662fdecfc55c06445f03dc40599cf96e2ffde6b"
+    }
+  ],
+  "crop_provenance_path": "reviews/evidence/customer-counter-oblique-r1-crop-provenance.json",
+  "crop_provenance_sha256": "492b49eadc01746e74fbc49903c204c9a19714e757f017fa97789486658cc0ca",
+  "score": 8.4,
+  "pass_threshold": 9.5,
+  "status": "REPAIR_REQUIRED",
+  "checks": {
+    "source_identity": "PASS",
+    "latest_presentation_style": "PASS",
+    "front45_and_front315_views": "PASS",
+    "four_distinct_oblique_views": "FAIL",
+    "fixed_register_end_in_rear_views": "FAIL",
+    "coherent_lower_structure": "PASS",
+    "readability_and_contact": "PASS"
+  },
+  "findings": [
+    "Front45 shows the correct far-left register back; front315 shows the correct near-left register back.",
+    "The two control-facing rear panels both repeat a near-left register and the same table direction. This reverses the fixed physical end established by the accepted cardinal180 view, which shows the controls on viewer-right.",
+    "Rear135 requires a far-right register on the existing near-left to far-right table direction; rear225 requires the opposite table direction with the register near-right."
+  ],
+  "required_repairs": [
+    "Repair top-right135: keep current table direction but move register to far-right, staff controls still correctly oriented.",
+    "Repair bottom-left225: reverse the table viewing direction and place register near-right. Keep both front panels and other construction unchanged."
+  ],
+  "approval_boundary": "Static exact-image assessment only; any failed mandatory check blocks approval irrespective of overall visual polish. No native geometry, animation, collision or delivery approval."
+}

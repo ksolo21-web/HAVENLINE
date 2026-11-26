@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "reviewer": "structure_critic independent agent",
+  "utc": "2026-11-26T04:34:43.980281+00:00",
+  "requirements_path": "requirements.json",
+  "requirements_sha256": "c10ab73c075116d486afd2c7eca3390ddf1e4435c3d2699bfc1ed40b4efa137a",
+  "image_path": "renders/gates-cardinal-r2.png",
+  "image_sha256": "ee634acbfe1747b4e22fa130130ca064992543db9a1586c2cf0a658b8458f392",
+  "native_size": [
+    1254,
+    1254
+  ],
+  "full_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/gates-cardinal-r2-front-latch.png",
+      "box": [
+        392,
+        320,
+        490,
+        416
+      ],
+      "sha256": "b3d433fef8378dae750af55714829bc41ea4295483a57e1ad0fa506b549b1cb4"
+    },
+    {
+      "path": "reviews/evidence/gates-cardinal-r2-rear-latch-bolts.png",
+      "box": [
+        392,
+        884,
+        490,
+        980
+      ],
+      "sha256": "191d70c0a0294afa2cdc9ee814187fc812f1cd833956fff0dfffc6001cc3fdd7"
+    }
+  ],
+  "crop_provenance_path": "reviews/evidence/gates-cardinal-r2-crop-provenance.json",
+  "crop_provenance_sha256": "f75254d741052b9d2a044223aaf020e97a74921206a3a7f56243c6ac732b3fd1",
+  "retest_of": "reviews/gates-cardinal-r1-review.json",
+  "prior_review_sha256": "fe6d2f5a50ac61d4773e68f4836ca9741f56c8746c77aaf083d6d29b0da870a4",
+  "score": 9.7,
+  "pass_threshold": 9.5,
+  "status": "PASS_ANCHOR",
+  "checks": {
+    "source_identity": "PASS",
+    "latest_presentation_style": "PASS",
+    "four_distinct_cardinal_azimuths": "PASS",
+    "paired_closed_leaves_and_outer_posts": "PASS",
+    "front_only_X_braces": "PASS",
+    "stout_snow_capped_rope_posts": "PASS",
+    "hinge_attachment_plausibility": "PASS",
+    "latch_physical_consistency": "PASS",
+    "readability_and_uncropped_objects": "PASS"
+  },
+  "findings": [
+    "The rear180 panel now has only two flush fastener heads. The slightly larger rear-right head corresponds to the front-left latch pivot; no reversed rear bar remains.",
+    "Front latch, paired frames, plank fields, X-front/plain-rear configuration, opposed end thickness, snow crowns, rope binding and hinges remain visually consistent with the previous review.",
+    "This retest resolves the specific r1 hardware contradiction. Whole-sheet inspection found no new structural defect. Whole-image bytes differ following tool regeneration; visual preservation is asserted, not byte identity."
+  ],
+  "required_repairs": [],
+  "approval_boundary": "Static closed cardinal anchor only. Gate open states and latch/hinge action details remain pending. Prior requirement for two distinct camp openings remains a subsequent runtime/layout gate; no animation or collision claim."
+}

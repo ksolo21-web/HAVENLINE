@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "reviewer": "structure_critic independent agent",
+  "utc": "2026-11-26T04:44:52.691716+00:00",
+  "requirements_path": "requirements.json",
+  "requirements_sha256": "c10ab73c075116d486afd2c7eca3390ddf1e4435c3d2699bfc1ed40b4efa137a",
+  "image_path": "renders/gates-states-r1.png",
+  "image_sha256": "50a39e09f42b48e981bd739a383dfea3fce664d1e09aec5498542c940d8331da",
+  "native_size": [
+    1254,
+    1254
+  ],
+  "full_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/gates-states-r1-open-passage.png",
+      "box": [
+        655,
+        105,
+        1215,
+        492
+      ],
+      "sha256": "f6c611b78e8d5b9de687157ea9af262ed79f329ccad77bcef2c9fa589abeb866"
+    },
+    {
+      "path": "reviews/evidence/gates-states-r1-elevated-clearance.png",
+      "box": [
+        35,
+        645,
+        605,
+        1125
+      ],
+      "sha256": "1bc8d2688ae83e677d15ac8583b22d1abbb6f5e3624c168566e85504be2c5be5"
+    },
+    {
+      "path": "reviews/evidence/gates-states-r1-hinge-detail.png",
+      "box": [
+        644,
+        690,
+        935,
+        1080
+      ],
+      "sha256": "50e2f7cae0d06de41554c5bd6472bf66a934cee156a6e76d3d006250b415aecc"
+    },
+    {
+      "path": "reviews/evidence/gates-states-r1-latch-detail.png",
+      "box": [
+        952,
+        690,
+        1230,
+        1080
+      ],
+      "sha256": "32ac20f27eb57be7c0c691a9b69cf81bdb71e2938f127a83cdb07de23b0276ce"
+    }
+  ],
+  "crop_provenance_path": "reviews/evidence/gates-states-r1-crop-provenance.json",
+  "crop_provenance_sha256": "e4aa980e5822c13785edabc8d106899886ef70a71d8b27d9d67b2ba6a2f37652",
+  "score": 9.7,
+  "pass_threshold": 9.5,
+  "status": "PASS",
+  "checks": {
+    "closed_identity_matches_anchor": "PASS",
+    "two_outer_hinge_axes": "PASS",
+    "paired_inward_open_leaves": "PASS",
+    "clear_central_passage": "PASS",
+    "elevated_depth_and_ground_clearance": "PASS",
+    "exterior_X_faces_rotate_with_leaves": "PASS",
+    "latch_remains_on_original_left_leaf": "PASS",
+    "hinge_and_latch_detail_matches_anchor": "PASS",
+    "materials_snow_and_contact": "PASS",
+    "readability": "PASS"
+  },
+  "findings": [
+    "Full closed front matches the approved gate anchor with large latch pivot on image-left.",
+    "Both open leaves remain attached at their own outer posts through paired hinges. Their free tips extend behind the post line; two open planes remain separated with a clear central entry.",
+    "The X exterior faces turn toward the passage under inward rotation and remain on those same faces in both open views.",
+    "Enlarged hinge shows a vertical pivot beside the post and a solid leaf plate; enlarged latch preserves front-left pivot and spans the closed seam.",
+    "Static perspective and raised leaf bottoms make the intended open clearance plausible."
+  ],
+  "required_repairs": [],
+  "approval_boundary": "Static visual evidence only. No native mesh, actual gate movement, collision or two-camp-entrance layout verification; those prior runtime/layout obligations remain preserved. Archive publication is separately gated."
+}

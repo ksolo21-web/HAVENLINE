@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "reviewer": "structure_critic independent agent",
+  "utc": "2026-11-26T04:38:23.663802+00:00",
+  "requirements_path": "requirements.json",
+  "requirements_sha256": "c10ab73c075116d486afd2c7eca3390ddf1e4435c3d2699bfc1ed40b4efa137a",
+  "image_path": "renders/fence-details-r1.png",
+  "image_sha256": "0f632d74cb9397e6410597a31128c64bd4d78aa8e3fbe4adeb8c155f14f97552",
+  "native_size": [
+    1254,
+    1254
+  ],
+  "full_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/fence-details-r1-top-seven-logs.png",
+      "box": [
+        50,
+        80,
+        530,
+        585
+      ],
+      "sha256": "4b2ea3bc1916247776818cd9b60726898ace6af7201e29f096c5559599690f64"
+    },
+    {
+      "path": "reviews/evidence/fence-details-r1-joined-fourteen-logs.png",
+      "box": [
+        580,
+        745,
+        1225,
+        1070
+      ],
+      "sha256": "bb48b6a0c30a91b24e18a0f7e24ea13a4f4c19a141d6c6dab1f20c7d640855cb"
+    },
+    {
+      "path": "reviews/evidence/fence-details-r1-unresolved-center-join.png",
+      "box": [
+        800,
+        830,
+        1000,
+        1030
+      ],
+      "sha256": "8301094d6326c4098a7824d51e61c9b4a4529ea8be9d88ead0b28ddd759e141d"
+    },
+    {
+      "path": "reviews/evidence/fence-details-r1-rope-attachment.png",
+      "box": [
+        655,
+        285,
+        1220,
+        500
+      ],
+      "sha256": "797d44b953718c82460fba0a9530e1d20cd688f8eaddfa0a0fdb7697535f4451"
+    }
+  ],
+  "crop_provenance_path": "reviews/evidence/fence-details-r1-crop-provenance.json",
+  "crop_provenance_sha256": "f3ab9f55e36deada55b109385a59ce8ae77b7bfb7ed80e77e36105e0ab143378",
+  "score": 8.6,
+  "pass_threshold": 9.5,
+  "status": "REPAIR_REQUIRED",
+  "checks": {
+    "source_identity_and_style": "PASS",
+    "elevated_rounded_mass": "PASS",
+    "single_module_eight_log_count": "FAIL",
+    "rope_rail_attachment_closeup": "PASS",
+    "snow_crown_detail": "PASS",
+    "joined_pair_sixteen_log_count": "FAIL",
+    "readable_module_rail_join": "FAIL",
+    "contact_and_component_coherence": "PASS"
+  },
+  "findings": [
+    "TOP AND THICKNESS shows seven log bodies and seven snow crowns, contradicting the eight-log approved module.",
+    "TWO JOINED MODULES shows fourteen crowns/logs rather than sixteen. It reads as one continuous rail run with no resolved center butt seam.",
+    "Rope and snow closeups are readable and preserve the thick rounded rail/log construction and soft pointed snow caps."
+  ],
+  "required_repairs": [
+    "Repair top-left only to exactly eight logs/crowns, preserving a visibly elevated view and rounded thickness.",
+    "Repair bottom-right to two eight-log modules, sixteen total logs, with a small aligned butt seam in BOTH rails between logs8 and9; retain continuous rhythm without a giant gap or new junction post.",
+    "Preserve the two successful detail closeups."
+  ],
+  "approval_boundary": "Static exact-image assessment only; any failed mandatory check blocks approval irrespective of overall visual polish. No native geometry, animation, collision or delivery approval."
+}

@@ -1,0 +1,405 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-25",
+  "task": "Havenline fence, gates and customer counters",
+  "generation_frozen": true,
+  "visual_status": "PASS",
+  "delivery_status": "PENDING_PACKAGE_AND_REMOTE",
+  "requirements": {
+    "path": "requirements.json",
+    "sha256": "c10ab73c075116d486afd2c7eca3390ddf1e4435c3d2699bfc1ed40b4efa137a"
+  },
+  "requirements_sha256": "c10ab73c075116d486afd2c7eca3390ddf1e4435c3d2699bfc1ed40b4efa137a",
+  "repository": "ksolo21-web/HAVENLINE",
+  "branch": "art/structures-2026-11-25",
+  "base_commit": "b80c61f13ba31bb0940792dd47976a8e2878dbf5",
+  "prefix": "Docs/Design/StructureReferences/2026-11-25",
+  "generation_index_bindings": [
+    {
+      "path": "generation-index.json",
+      "sha256": "11d61cc97c4e4a2cf6dfae8cf5a8af003de3c178c36845c97bd703ba4067fd6c"
+    },
+    {
+      "path": "invocation-index.json",
+      "sha256": "4914c3a932578c08a7113595420af30d04ba0feec41562529d1a01b6ce43649a"
+    },
+    {
+      "path": "counter-builder/generation-index.json",
+      "sha256": "617ba58059eb314e68c323d066fc15695b80e8015d6f472b02ec1adc5d911409"
+    },
+    {
+      "path": "counter-builder/invocation-index.json",
+      "sha256": "238aab64c5da2c5234864604b271a32c375d0927bb07175632dbe4ed5ad074dd"
+    }
+  ],
+  "final_independent_visual_review": {
+    "path": "reviews/critic-final-visual-acceptance.json",
+    "sha256": "2bd90f4965b1a2a83ad0d3094f5f804ba41956b74a573dbfbf7a1dc22f88b37b"
+  },
+  "root_visual_review": {
+    "path": "root-visual-review.json",
+    "sha256": "5acd9de9641386c2b0f6553e07307ac9c26e1466206b68b2a26aa15a93457931"
+  },
+  "root_input_verification": {
+    "path": "root-input-verification.json",
+    "sha256": "83c3dbe7b295e14cfca56c8b4ff7ce0b69f72fc58441e1aed03fda5956326c25"
+  },
+  "input_index": {
+    "path": "input-index.json",
+    "sha256": "11f43ed46b2f9e841c89e1bc3e80ce8e81ce750cef0a90b9973369014991f29a"
+  },
+  "counter_final_handoff": {
+    "path": "counter-builder/final-handoff.json",
+    "sha256": "d86b642002a80498516f09fc2f75bd6934e08e20ee369ae14412ab880ffdecd4"
+  },
+  "generated_original_count": 17,
+  "selected_count": 9,
+  "rejected_retained_count": 8,
+  "horizontal_rotation_count": 24,
+  "selected": [
+    {
+      "asset_id": "fence",
+      "series_id": "fence-cardinal",
+      "image_id": "fence-cardinal-r1",
+      "source_path": "renders/fence-cardinal-r1.png",
+      "sha256": "d616f90b5c0c98a02cafe93b8cfbb114280dc2c5ee74f26cf0e34b41dae1e734",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "per_sheet_review_path": "reviews/fence-cardinal-r1-review.json",
+      "per_sheet_review_sha256": "f8119fa76a7880edb82864a9c9aa109dec10f61e6e66911733feb4aff4527277",
+      "score": 9.7,
+      "required_views": [
+        "front 0",
+        "right 90",
+        "rear 180",
+        "left 270"
+      ],
+      "image_path": "renders/fence-cardinal-r1.png",
+      "attempt_id": "fence-cardinal-r1",
+      "git_blob_sha": "0f6fcd42f4dd078bc70dc89266b8dc30f8ea85cf",
+      "bytes": 1794624
+    },
+    {
+      "asset_id": "fence",
+      "series_id": "fence-oblique",
+      "image_id": "fence-oblique-r2",
+      "source_path": "renders/fence-oblique-r2.png",
+      "sha256": "5cc7bb7ddf05ca053828b2c9202992a5fc4b104ca39f433454d56251d7e9641c",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "per_sheet_review_path": "reviews/fence-oblique-r2-review.json",
+      "per_sheet_review_sha256": "bde5e3e25bbe35ac3ce3b276c6c99e50c412e16a2a2270e04ce73e2a4637fb75",
+      "score": 9.7,
+      "required_views": [
+        "front-right 45",
+        "rear-right 135",
+        "rear-left 225",
+        "front-left 315"
+      ],
+      "image_path": "renders/fence-oblique-r2.png",
+      "attempt_id": "fence-oblique-r2",
+      "git_blob_sha": "2435b605089a027668497722eea8b5175aa93930",
+      "bytes": 1777860
+    },
+    {
+      "asset_id": "fence",
+      "series_id": "fence-details",
+      "image_id": "fence-details-r3",
+      "source_path": "renders/fence-details-r3.png",
+      "sha256": "1672f1235a09e13c391d9f348f102ab0fd61697dc9a9ac19a258cb362cd481ae",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "per_sheet_review_path": "reviews/fence-details-r3-review.json",
+      "per_sheet_review_sha256": "70b1ca631eca1b0e424b199c7e41a99a5700c1f20105c6f7c17613b5080853a1",
+      "score": 9.7,
+      "required_views": [
+        "elevated top thickness",
+        "rope and rail attachment closeup",
+        "snow crown closeup",
+        "two adjacent joined modules"
+      ],
+      "image_path": "renders/fence-details-r3.png",
+      "attempt_id": "fence-details-r3",
+      "git_blob_sha": "f1fd9c0830a8258713cd04b846c37d86ab8822c9",
+      "bytes": 1804719
+    },
+    {
+      "asset_id": "gates",
+      "series_id": "gates-cardinal",
+      "image_id": "gates-cardinal-r2",
+      "source_path": "renders/gates-cardinal-r2.png",
+      "sha256": "ee634acbfe1747b4e22fa130130ca064992543db9a1586c2cf0a658b8458f392",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "per_sheet_review_path": "reviews/gates-cardinal-r2-review.json",
+      "per_sheet_review_sha256": "0743373b40ba2a255096829671df26d41cfb80db66d6f7aed591c77f671fe22d",
+      "score": 9.7,
+      "required_views": [
+        "closed front 0",
+        "closed right 90",
+        "closed rear 180",
+        "closed left 270"
+      ],
+      "image_path": "renders/gates-cardinal-r2.png",
+      "attempt_id": "gates-cardinal-r2",
+      "git_blob_sha": "00babe94f2a20cb72e57a44c137ac936a4d431c8",
+      "bytes": 1686217
+    },
+    {
+      "asset_id": "gates",
+      "series_id": "gates-oblique",
+      "image_id": "gates-oblique-r2",
+      "source_path": "renders/gates-oblique-r2.png",
+      "sha256": "3ca392129045f9bddfa9115343f8c1d2e2aa04ee4a5f629ab1e95832221e1ac6",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "per_sheet_review_path": "reviews/gates-oblique-r2-review.json",
+      "per_sheet_review_sha256": "49a03e5800e80c9b6569af022fe38194d91e04a30dc12be4780c675189ec6268",
+      "score": 9.7,
+      "required_views": [
+        "closed front-right 45",
+        "closed rear-right 135",
+        "closed rear-left 225",
+        "closed front-left 315"
+      ],
+      "image_path": "renders/gates-oblique-r2.png",
+      "attempt_id": "gates-oblique-r2",
+      "git_blob_sha": "35550038a93f0c13c2a5cdeecbef3228be97e2d6",
+      "bytes": 1723100
+    },
+    {
+      "asset_id": "gates",
+      "series_id": "gates-states",
+      "image_id": "gates-states-r1",
+      "source_path": "renders/gates-states-r1.png",
+      "sha256": "50a39e09f42b48e981bd739a383dfea3fce664d1e09aec5498542c940d8331da",
+      "native_size": [
+        1254,
+        1254
+      ],
+      "per_sheet_review_path": "reviews/gates-states-r1-review.json",
+      "per_sheet_review_sha256": "e9bc1f6b65626ad34bc40ecd24a861bac944d1c9b012b9accf5eaf759798fee1",
+      "score": 9.7,
+      "required_views": [
+        "closed front",
+        "open approximately 90 degrees",
+        "elevated open clearance",
+        "hinge and center latch details"
+      ],
+      "image_path": "renders/gates-states-r1.png",
+      "attempt_id": "gates-states-r1",
+      "git_blob_sha": "d8673ebf3b66b2416239c8701f10b88839f73623",
+      "bytes": 1796080
+    },
+    {
+      "asset_id": "customer-counter",
+      "series_id": "customer-counter-cardinal",
+      "image_id": "customer-counter-cardinal-r1",
+      "source_path": "counter-builder/renders/customer-counter-cardinal-r1.png",
+      "sha256": "46309b01e07a15db044518fcf47b93dbd6741a3786a04135e88b3bb4e85158fb",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "per_sheet_review_path": "reviews/customer-counter-cardinal-r1-review.json",
+      "per_sheet_review_sha256": "d4e57d0921c37762228fb4e44d55d985a3e33b4e49d6b4da2b3ef991254bebaa",
+      "score": 9.7,
+      "required_views": [
+        "customer front 0",
+        "right end 90",
+        "staff rear 180",
+        "left end 270"
+      ],
+      "image_path": "counter-builder/renders/customer-counter-cardinal-r1.png",
+      "attempt_id": "customer-counter-cardinal-r1",
+      "git_blob_sha": "28de551254813f51db75539b95f966f2ca929cbc",
+      "bytes": 1685676
+    },
+    {
+      "asset_id": "customer-counter",
+      "series_id": "customer-counter-oblique",
+      "image_id": "customer-counter-oblique-r3",
+      "source_path": "counter-builder/renders/customer-counter-oblique-r3.png",
+      "sha256": "8fffe822fc7420398d5485119d09a297e3e7b91006f12c76028ca11fec8c38c9",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "per_sheet_review_path": "reviews/customer-counter-oblique-r3-review.json",
+      "per_sheet_review_sha256": "acc004dff6000898f85357a766b02f1ed71bfebdfbab9d9117bfe85e0ad22b35",
+      "score": 9.7,
+      "required_views": [
+        "front-right 45",
+        "rear-right 135",
+        "rear-left 225",
+        "front-left 315"
+      ],
+      "image_path": "counter-builder/renders/customer-counter-oblique-r3.png",
+      "attempt_id": "customer-counter-oblique-r3",
+      "git_blob_sha": "0ba20bf5531fbde9d8ab02a3e45a6921db4d0652",
+      "bytes": 1727342
+    },
+    {
+      "asset_id": "customer-counter",
+      "series_id": "customer-counter-details",
+      "image_id": "customer-counter-details-r2",
+      "source_path": "counter-builder/renders/customer-counter-details-r2.png",
+      "sha256": "455defba0a6b24abb14536a24c2d999dd56540e4127481ced8072a37fc99cef4",
+      "native_size": [
+        1536,
+        1024
+      ],
+      "per_sheet_review_path": "reviews/customer-counter-details-r2-review.json",
+      "per_sheet_review_sha256": "3a1c5cc3130d7997ffe6e63a45a537e116ab2b3d8d095c9de264bd2366278b39",
+      "score": 9.7,
+      "required_views": [
+        "staff-facing register detail",
+        "top stock and transfer surface",
+        "lower shelf and legs",
+        "two repeated counter instances"
+      ],
+      "image_path": "counter-builder/renders/customer-counter-details-r2.png",
+      "attempt_id": "customer-counter-details-r2",
+      "git_blob_sha": "93a8564a6f87419246dc409ecc7210067e269ff2",
+      "bytes": 1816451
+    }
+  ],
+  "all_attempt_reviews": [
+    {
+      "path": "reviews/customer-counter-cardinal-r1-review.json",
+      "sha256": "d4e57d0921c37762228fb4e44d55d985a3e33b4e49d6b4da2b3ef991254bebaa",
+      "image_sha256": "46309b01e07a15db044518fcf47b93dbd6741a3786a04135e88b3bb4e85158fb",
+      "status": "PASS_ANCHOR",
+      "score": 9.7
+    },
+    {
+      "path": "reviews/customer-counter-details-r1-review.json",
+      "sha256": "4b19a5581eb9022fcf00a5ba4cbb8fd74a134b14e685c5d02d06ed0979339551",
+      "image_sha256": "599a1b6f6c95084f80f9dc206774e18ed259fe55874642bae3b60daf80aa053c",
+      "status": "REPAIR_REQUIRED",
+      "score": 8.8
+    },
+    {
+      "path": "reviews/customer-counter-details-r2-review.json",
+      "sha256": "3a1c5cc3130d7997ffe6e63a45a537e116ab2b3d8d095c9de264bd2366278b39",
+      "image_sha256": "455defba0a6b24abb14536a24c2d999dd56540e4127481ced8072a37fc99cef4",
+      "status": "PASS",
+      "score": 9.7
+    },
+    {
+      "path": "reviews/customer-counter-oblique-r1-review.json",
+      "sha256": "3b08cd7bf8d40ff23d1f1923d7f6bae288fae4759063c06313d8a0fd9ee1f9b1",
+      "image_sha256": "70091b634b3c8c8b6fe79a235b6b0c3a75b9e27d2d829aaf24bd8bbedff610f9",
+      "status": "REPAIR_REQUIRED",
+      "score": 8.4
+    },
+    {
+      "path": "reviews/customer-counter-oblique-r2-review.json",
+      "sha256": "0fb4574237e633e2759418d18bb66e6ac74dba811dfd8471857a1c0b0cfb3c3e",
+      "image_sha256": "61e456b9b6715b346bf3d22af919b08ea0ce85d5e22042c4cbaf911fe3a7c5b0",
+      "status": "REPAIR_REQUIRED",
+      "score": 9.0
+    },
+    {
+      "path": "reviews/customer-counter-oblique-r3-review.json",
+      "sha256": "acc004dff6000898f85357a766b02f1ed71bfebdfbab9d9117bfe85e0ad22b35",
+      "image_sha256": "8fffe822fc7420398d5485119d09a297e3e7b91006f12c76028ca11fec8c38c9",
+      "status": "PASS",
+      "score": 9.7
+    },
+    {
+      "path": "reviews/fence-cardinal-r1-review.json",
+      "sha256": "f8119fa76a7880edb82864a9c9aa109dec10f61e6e66911733feb4aff4527277",
+      "image_sha256": "d616f90b5c0c98a02cafe93b8cfbb114280dc2c5ee74f26cf0e34b41dae1e734",
+      "status": "PASS_ANCHOR",
+      "score": 9.7
+    },
+    {
+      "path": "reviews/fence-details-r1-review.json",
+      "sha256": "b55a5a4d27bb3bfea68aa164ad0ab1a771f46ac982e88acd886e0703e3bf200b",
+      "image_sha256": "0f632d74cb9397e6410597a31128c64bd4d78aa8e3fbe4adeb8c155f14f97552",
+      "status": "REPAIR_REQUIRED",
+      "score": 8.6
+    },
+    {
+      "path": "reviews/fence-details-r2-review.json",
+      "sha256": "8400781de321e0cbcdb75d606a0166d09bea53d7485dfef8c2f4689f29d09722",
+      "image_sha256": "281b1b8cf0db37f0ec705855baaad5dfc574aeb7bd645ef40c81909548e7d45d",
+      "status": "REPAIR_REQUIRED",
+      "score": 9.0
+    },
+    {
+      "path": "reviews/fence-details-r3-review.json",
+      "sha256": "70b1ca631eca1b0e424b199c7e41a99a5700c1f20105c6f7c17613b5080853a1",
+      "image_sha256": "1672f1235a09e13c391d9f348f102ab0fd61697dc9a9ac19a258cb362cd481ae",
+      "status": "PASS",
+      "score": 9.7
+    },
+    {
+      "path": "reviews/fence-oblique-r1-review.json",
+      "sha256": "b8ca37dd2947ff08f2215a5b96a42a42b03cffc501efc49bfc461c3cb8354748",
+      "image_sha256": "708eec012843900df7e2f54a257d37d31a7791b55cb5673bcdab2144f9eb76e5",
+      "status": "REPAIR_REQUIRED",
+      "score": 9.2
+    },
+    {
+      "path": "reviews/fence-oblique-r2-review.json",
+      "sha256": "bde5e3e25bbe35ac3ce3b276c6c99e50c412e16a2a2270e04ce73e2a4637fb75",
+      "image_sha256": "5cc7bb7ddf05ca053828b2c9202992a5fc4b104ca39f433454d56251d7e9641c",
+      "status": "PASS",
+      "score": 9.7
+    },
+    {
+      "path": "reviews/gates-cardinal-r1-review.json",
+      "sha256": "fe6d2f5a50ac61d4773e68f4836ca9741f56c8746c77aaf083d6d29b0da870a4",
+      "image_sha256": "7f6dbde326cf31c805c57b2c4df62e3976803ead5940e7593d320916429022a9",
+      "status": "REPAIR_REQUIRED",
+      "score": 8.9
+    },
+    {
+      "path": "reviews/gates-cardinal-r2-review.json",
+      "sha256": "0743373b40ba2a255096829671df26d41cfb80db66d6f7aed591c77f671fe22d",
+      "image_sha256": "ee634acbfe1747b4e22fa130130ca064992543db9a1586c2cf0a658b8458f392",
+      "status": "PASS_ANCHOR",
+      "score": 9.7
+    },
+    {
+      "path": "reviews/gates-oblique-r1-review.json",
+      "sha256": "2211d6f8fcb9d04959f8fb6fe1d40071bc1a6da4637a07449941458eca1fa8ee",
+      "image_sha256": "87c663b087cfe4f1aa71be2dc32eac614570297c2828085dda9739d0d6966402",
+      "status": "REPAIR_REQUIRED",
+      "score": 8.9
+    },
+    {
+      "path": "reviews/gates-oblique-r2-review.json",
+      "sha256": "49a03e5800e80c9b6569af022fe38194d91e04a30dc12be4780c675189ec6268",
+      "image_sha256": "3ca392129045f9bddfa9115343f8c1d2e2aa04ee4a5f629ab1e95832221e1ac6",
+      "status": "PASS",
+      "score": 9.7
+    },
+    {
+      "path": "reviews/gates-states-r1-review.json",
+      "sha256": "e9bc1f6b65626ad34bc40ecd24a861bac944d1c9b012b9accf5eaf759798fee1",
+      "image_sha256": "50a39e09f42b48e981bd739a383dfea3fce664d1e09aec5498542c940d8331da",
+      "status": "PASS",
+      "score": 9.7
+    }
+  ],
+  "visual_score": 9.7,
+  "remaining_gates": [
+    "Independent concrete package audit",
+    "Fresh exact-head remote publication verification"
+  ],
+  "scope_boundary": "Approval covers static rendered reference sheets only. No native meshes, rigs, animation, gate movement or collision tests were performed. The prior requirement for at least two distinct bidirectional camp openings remains preserved for subsequent runtime/layout work and is not proven by these sheets.",
+  "reopening_rule": "Any changed image, invoked prompt/input, selected review, requirement or index hash reopens this freeze; no further generation after freeze without a new revision."
+}

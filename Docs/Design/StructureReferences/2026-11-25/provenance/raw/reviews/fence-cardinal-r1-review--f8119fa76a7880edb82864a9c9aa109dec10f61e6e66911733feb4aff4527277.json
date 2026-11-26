@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "reviewer": "structure_critic independent agent",
+  "utc": "2026-11-26T04:33:31.842871+00:00",
+  "requirements_path": "requirements.json",
+  "requirements_sha256": "c10ab73c075116d486afd2c7eca3390ddf1e4435c3d2699bfc1ed40b4efa137a",
+  "image_path": "renders/fence-cardinal-r1.png",
+  "image_sha256": "d616f90b5c0c98a02cafe93b8cfbb114280dc2c5ee74f26cf0e34b41dae1e734",
+  "native_size": [
+    1254,
+    1254
+  ],
+  "full_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/fence-cardinal-r1-front-rail-lashing.png",
+      "box": [
+        75,
+        240,
+        380,
+        335
+      ],
+      "sha256": "229bf71f68fc91a7a54015003478dcfbc5872e66b210ced6b4120a6159dc8c9b"
+    },
+    {
+      "path": "reviews/evidence/fence-cardinal-r1-rear-ropes.png",
+      "box": [
+        75,
+        806,
+        380,
+        898
+      ],
+      "sha256": "916b7af5471316e2c2391a367d694d4a82afb48331ad53b3ef17edfcef8aba2d"
+    },
+    {
+      "path": "reviews/evidence/fence-cardinal-r1-right-end-thickness.png",
+      "box": [
+        930,
+        110,
+        1120,
+        555
+      ],
+      "sha256": "df84d02e83e1bccb8fdec90e493518c8e02304fab90260ca74c8887d2a187f73"
+    },
+    {
+      "path": "reviews/evidence/fence-cardinal-r1-left-end-thickness.png",
+      "box": [
+        944,
+        667,
+        1135,
+        1115
+      ],
+      "sha256": "640dd0850f56ddf902e18c53b328d742f15836f1385d0ab0b1cb432788a28966"
+    },
+    {
+      "path": "reviews/evidence/fence-cardinal-r1-front-eight-crowns.png",
+      "box": [
+        75,
+        137,
+        819,
+        273
+      ],
+      "sha256": "072f7e01e3fd043f822bfdffecc4d0b46ebe55148d0d1d232c29ca7c5f5cc41f"
+    }
+  ],
+  "crop_provenance_path": "reviews/evidence/fence-cardinal-r1-crop-provenance.json",
+  "crop_provenance_sha256": "068df9231d39fbe4181cd125831c8b5f3254bb00769a7fafe5b34848c5fbfdb5",
+  "score": 9.7,
+  "pass_threshold": 9.5,
+  "status": "PASS_ANCHOR",
+  "checks": {
+    "source_identity": "PASS",
+    "latest_presentation_style": "PASS",
+    "eight_log_count_front_rear": "PASS",
+    "four_distinct_cardinal_azimuths": "PASS",
+    "two_front_rails_and_rear_wraps": "PASS",
+    "paired_crossed_lashing_readability": "PASS",
+    "rounded_log_mass_end_views": "PASS",
+    "coherent_contact_and_components": "PASS",
+    "snow_and_material_consistency": "PASS",
+    "readability_and_uncropped_objects": "PASS"
+  },
+  "findings": [
+    "Exactly eight thick round log bodies and pointed snow crowns are visible in both long views.",
+    "The two front rail pieces remain absent on the rear face; cream wraps extend around the logs. Front crossing strands and their association with both rails remain distinct at native pixels.",
+    "RIGHT90 shows rail ends on image-left and LEFT270 on image-right, consistent with one physical front face. End views show cylindrical timber mass rather than a thin plane.",
+    "All logs contact the studio floor; no disconnected rails or floating pieces are visible."
+  ],
+  "required_repairs": [],
+  "approval_boundary": "Only this exact static cardinal sheet is approved. Elevated thickness, module join, oblique angles and archive delivery remain pending. No native mesh or runtime claims."
+}
