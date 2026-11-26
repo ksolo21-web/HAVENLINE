@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T11:37:19Z",
+  "observed_at_utc": "2026-11-26T13:33:18Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -20,12 +20,13 @@
     {
       "id": "character-1",
       "role": "Rigging and independent review",
-      "state": "blocked",
-      "result": "One exact owner 24-joint motion-only take had true toe flex but failed physical planted load. Separate static probe clears left flat load, not either toe-roll pose. No art/normal gameplay or two-handed grip approval.",
+      "state": "in_progress",
+      "result": "Both boots penetrate the snow in consecutive measured Walk poses. A blanket lift and per-foot translation failed the deformation and contact checks.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/dc85fd6b3ba316cc99b5aabb6889e486880b7e77"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/e241177d3ee71c5d300f89eb160abc82ea16ea6e",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/532ebd3ddf9ed00bcf7d30f3cb2b1a9ac5792295"
       ],
-      "next": "Choose a materially distinct legal planted-trajectory support case before authoring any further clip. No new boot edit.",
+      "next": "Test one newly authored heel-to-toe transfer on the existing model in isolation. No approved gait, grip, or rig change.",
       "role_ids": [
         "rig-character",
         "critic-rig"
@@ -34,15 +35,12 @@
     {
       "id": "wood-storage",
       "role": "Resource builder and reviewer",
-      "state": "in_progress",
-      "result": "Actual isolated bark-only frame makes wood brown before turning. Independent review still holds after-turn readability: it can look like a pack. No carry/storage commit or mount.",
+      "state": "blocked",
+      "result": "Read-only test confirmed the existing save logic conflates carried wood with lifetime earned wood. No receiver or native deposit test.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/2ac14d9a6199db04310fc698e9cae725b357bd27",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/fe22f28a27783ac3acbee6c96bbb3e5e578f0496",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/0bbce75d2a14196e6cff5097e6ce6e55a41d687c",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/87e5f292e5edd97a7a6ec7f9d0befcf129870af8"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/58f708b44d04ebeec91590f8b4cdd609e3575bb7"
       ],
-      "next": "Diagnose unchanged cut end and overlap in the existing native before/after frames without guessing at material or new placement.",
+      "next": "Keep earned and carried counts separate when a receiver and its durable transaction are authored.",
       "role_ids": [
         "builder-resource-cooker",
         "critic-game"
@@ -65,13 +63,12 @@
     {
       "id": "audio",
       "role": "Audio and independent playback QA",
-      "state": "in_progress",
-      "result": "47 Level 1 scenarios scoped. The isolated Godot audio player passed 131 checks across four modes without exit leaks. This verifies player behavior, not audible playback or installed game audio.",
+      "state": "blocked",
+      "result": "Current gate source does not publish a verified settled-close event. No audio behavior added.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/0e32f67c11c045fb3196e437826233a07b5cd9e0",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/f9398439bbd73a3022550a5d983241b7eab2333f"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/af3ae53ce4eae8b9dc9c0d7a5982ac9e3ad32564"
       ],
-      "next": "Stage a clearly opt-in listening preview; verify audible playback and device mix before any integration.",
+      "next": "Require an ordered runtime event and verified playback under the canonical audio task before calling a sound complete.",
       "role_ids": [
         "audio-sfx"
       ]
@@ -108,11 +105,12 @@
       "id": "level1-fence-gates",
       "role": "Fence and gate repairs, independent review, and Level 1 verification",
       "state": "in_progress",
-      "result": "Isolated gate callbacks passed two closures each and cold reload. Four-slot fence source passes internal joins but West0 and imported gentle finish remain held. Nothing installed.",
-      "next": "Check exact original embossed material only and occupied motion safety separately.",
+      "result": "South and East both passed isolated occupied-stop, reopen and clean-reload tests. Corrected fence shading still reads as wavy bands, and the detached crossed-rope carrier does not join stock timber.",
+      "next": "Keep the verified mechanical results and the fence art out of the playable build until a supported join and normal-camera reference match are verified.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/79cac497e9e104c801c06ec9832673abd9074aa3",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/17c93b9b1f2644806d8213b996eb977355231442"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/543bd0427dcf0979b9c05d3b9705ed2a4f6bdf7e",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/1742d2976b1a6f8c3030a482be420a7458606b4e",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/8a74a098d4264711f5f5fe498547e8cd38aa5711"
       ],
       "role_ids": [
         "builder-camp-pads",
@@ -133,116 +131,50 @@
     {
       "role_id": "alfred",
       "state": "in_progress",
-      "title": "Handing off ready work at each 15-minute check",
-      "summary": "Six workers were verified active across separate Level 1 assignments at dispatch. Their status can change. This is a checkpoint, not live telemetry.",
-      "next": "Give completed workers a distinct ready task without duplicating active work or sharing a renderer.",
+      "title": "Keeping isolated Level 1 work moving",
+      "summary": "15-minute checks of actual worker states; isolated progress only, not continuous telemetry.",
+      "next": "Hand off ready independent work and protect the playable baseline.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/fe22f28a27783ac3acbee6c96bbb3e5e578f0496",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/546a61aea8ff3f36c291bf7c4e860faddf16b8eb"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/1742d2976b1a6f8c3030a482be420a7458606b4e",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/e241177d3ee71c5d300f89eb160abc82ea16ea6e"
       ],
-      "updated_at_utc": "2026-11-26T10:42:20Z"
+      "updated_at_utc": "2026-11-26T13:33:18Z"
     },
     {
       "role_id": "rig-character",
-      "state": "blocked",
-      "title": "Held the real planted-center attempt",
-      "summary": "Both soles have broad support and the center is inside, but the real mixed-weight soles penetrate terrain. No walk/run change.",
-      "next": "Choose a distinct source contact strategy, not another local adjustment or retime.",
+      "state": "in_progress",
+      "title": "Checking one new foot-transfer candidate",
+      "summary": "The stock clip was measured; blanket lift and direct foot translation rejected.",
+      "next": "Verify planted stance and valid heel-to-toe roll before authoring further motion.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/4adb5e311fb78405473d9bde940582c06b635d8a"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/e241177d3ee71c5d300f89eb160abc82ea16ea6e",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/532ebd3ddf9ed00bcf7d30f3cb2b1a9ac5792295"
       ],
-      "updated_at_utc": "2026-11-26T09:53:52Z"
+      "updated_at_utc": "2026-11-26T13:33:18Z"
     },
     {
       "role_id": "critic-rig",
       "state": "done",
-      "title": "Independently reproduced collar trial regressions",
-      "summary": "Owner 24-joint source has plausible toe flex but exact loaded motion failed actual outsole support. It is not accepted for the normal game camera.",
-      "next": "Use real stock-view contact and the true loaded sole, not marker tuning.",
+      "title": "Reproduced the contact and deformation diagnosis",
+      "summary": "Independent geometry result, not a visual grade or approval for the complete gait.",
+      "next": "Review the next detached contact candidate.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/dc85fd6b3ba316cc99b5aabb6889e486880b7e77"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/e241177d3ee71c5d300f89eb160abc82ea16ea6e",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/532ebd3ddf9ed00bcf7d30f3cb2b1a9ac5792295"
       ],
-      "updated_at_utc": "2026-11-26T05:50:48Z"
-    },
-    {
-      "role_id": "builder-camp-pads",
-      "state": "blocked",
-      "title": "Four authored fence segments fit internally",
-      "summary": "The original west adjoining stock panel still affects the join. Detached exact material intake is prepared, but no installed fence.",
-      "next": "Verify the actual normal-map import isolated from gameplay and preserve the approved visual authority.",
-      "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/17c93b9b1f2644806d8213b996eb977355231442",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/b959ea07eb84317a577e51793fe7a57e9c075e9f"
-      ],
-      "updated_at_utc": "2026-11-26T11:37:19Z"
-    },
-    {
-      "role_id": "audio-sfx",
-      "state": "done",
-      "title": "Passed isolated playback-state and shutdown checks",
-      "summary": "All 131 checks passed. This verifies the player’s behavior, not sound on a phone or audio in the playable build.",
-      "next": "Run the opt-in listening preview on an authorized output-capable device.",
-      "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/f9398439bbd73a3022550a5d983241b7eab2333f"
-      ],
-      "updated_at_utc": "2026-11-26T00:14:26Z"
+      "updated_at_utc": "2026-11-26T13:33:18Z"
     },
     {
       "role_id": "level1-verifier",
-      "state": "in_progress",
-      "title": "Verified four original gate closure witnesses",
-      "summary": "An isolated known-desktop writer/cold test passed 90 checks with four closure triplets, no reload event and the exact previous save bytes. No sound or occupied moving gate proof.",
-      "next": "Develop independently scoped ordinary-input occupancy checks without repeating simple closures.",
-      "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/79cac497e9e104c801c06ec9832673abd9074aa3"
-      ],
-      "updated_at_utc": "2026-11-26T11:37:19Z"
-    },
-    {
-      "role_id": "builder-customer-counter",
       "state": "done",
-      "title": "Measured both north counter fence cuts",
-      "summary": "Dedicated flank lengths and exact cap clearance are now measured. No mesh or service was added.",
-      "next": "Use these planes when the north art can be staged separately.",
+      "title": "Verified both occupied gate tests",
+      "summary": "Both gates held and reopened, with no cold replay or change to the isolated saves.",
+      "next": "Gate mechanics do not approve art, placement or Level 1.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/cd37375b8d95a4740812fcef8bfd9283d255c71a"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/543bd0427dcf0979b9c05d3b9705ed2a4f6bdf7e",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/1742d2976b1a6f8c3030a482be420a7458606b4e"
       ],
-      "updated_at_utc": "2026-11-26T09:46:10Z"
-    },
-    {
-      "role_id": "critic-game",
-      "state": "in_progress",
-      "title": "Independently reviewed gate passes; checking fence material fixture",
-      "summary": "The real two-cycle and cold state were verified. New art material work remains isolated.",
-      "next": "Permit material-only import verification only if exact original embossed surface pins are intact.",
-      "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/79cac497e9e104c801c06ec9832673abd9074aa3",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/17c93b9b1f2644806d8213b996eb977355231442"
-      ],
-      "updated_at_utc": "2026-11-26T11:37:19Z"
-    },
-    {
-      "role_id": "gameplay-integrator",
-      "state": "blocked",
-      "title": "Gate appearance awaits the reference fence context",
-      "summary": "Freestanding tint and East keeper adjustment stayed unreadable at the gameplay camera; larger hardware would be off reference.",
-      "next": "Judge both entrances with a matching fence and verify front/rear and all operational states.",
-      "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/45b8f28ea190c0b9c8857aa3214d81c9355bbc1e"
-      ],
-      "updated_at_utc": "2026-11-26T10:32:21Z"
-    },
-    {
-      "role_id": "builder-resource-cooker",
-      "state": "in_progress",
-      "title": "Separating wood color from carry visibility",
-      "summary": "The bark-only native result brings back warm brown timber before the turn. Post-turn occlusion still makes it hard to recognize. Cooker V18 is held pending a qualified Level 1 placement.",
-      "next": "Diagnose the post-turn view from the existing exact geometry and frame evidence; do not change attachment or dark end coloration by guess.",
-      "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/2ac14d9a6199db04310fc698e9cae725b357bd27",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/b1cc3bca0981b7354a965d9d35a70f58dbfd80b7"
-      ],
-      "updated_at_utc": "2026-11-26T10:49:03Z"
+      "updated_at_utc": "2026-11-26T13:33:18Z"
     }
   ],
   "office_events": [
@@ -532,6 +464,18 @@
       "message": "World-space latch alignment is proven but the parts remain visually unreadable. Retire offset and tint tweaks; evaluate a coherent reference-based hardware silhouette within the same swing envelope.",
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/45b8f28ea190c0b9c8857aa3214d81c9355bbc1e"
+      ]
+    },
+    {
+      "id": "level1-rig-snow-walk-rethink-20261126",
+      "type": "handoff",
+      "at_utc": "2026-11-26T13:33:18Z",
+      "from_role_id": "critic-rig",
+      "to_role_id": "rig-character",
+      "message": "Handoff summary: both boots are under the snow in the consecutive samples. Reject the global lift; test one new planted transfer without changing the physics or camera.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/e241177d3ee71c5d300f89eb160abc82ea16ea6e",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/532ebd3ddf9ed00bcf7d30f3cb2b1a9ac5792295"
       ]
     }
   ]
