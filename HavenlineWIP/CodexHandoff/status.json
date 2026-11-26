@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T05:23:34Z",
+  "observed_at_utc": "2026-11-26T05:35:02Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -118,9 +118,9 @@
       "role_id": "alfred",
       "state": "done",
       "title": "Prepared Bot Office feed data",
-      "summary": "Owner-reference gate V3 passed 78 desktop checks and 16 exact native frames; art HOLD (South 9.2, East 9.1). One fence module is in a separate native check; no new Meshy credits.",
-      "next": "Independent comparison of the exact fence panel and offline review of the gate cross-brace revision.",
-      "updated_at_utc": "2026-11-26T05:23:34Z"
+      "summary": "Shaped gate V4 passed 78 desktop checks and 16 exact frames, art HOLD at 9.3 South and 9.2 East. Fence grain improved the single front panel from 8.9 to 9.1.",
+      "next": "Lower-rope repair native comparison underway; gate finish still below 9.5.",
+      "updated_at_utc": "2026-11-26T05:35:02Z"
     },
     {
       "role_id": "rig-character",
@@ -171,14 +171,15 @@
     {
       "role_id": "level1-verifier",
       "state": "working",
-      "title": "Owner-reference opening evidence",
-      "summary": "Both gate routes, active closing and cold restore passed 78 checks. V3 is not art approved or merged.",
-      "next": "Finish the one-module fence material A/B and keep mechanics and visuals separate.",
+      "title": "Owner-reference gate and fence verification",
+      "summary": "Two exact shaped-gate paths and restart checks passed. One fence panel's Meshy finish passed 67 checks; lower-rope repair remains in separate desktop verification.",
+      "next": "Finish lower-rope capture, then independent review of actual normal-camera readability.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/5315868792f9f67a0f5ff3629f7f6f84d026c43f",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/09cabefa91777cae8600b763c26f083c747a9cb9"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/b40bce8273a0079e04d54c453c14e43370eb1da8",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/92a143532bda7929dd08369e58de887ed43b8a0b",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/1c92f8a09b6c0b72d4a7b55fc6a2805ebce031ba"
       ],
-      "updated_at_utc": "2026-11-26T05:23:34Z"
+      "updated_at_utc": "2026-11-26T05:35:02Z"
     },
     {
       "role_id": "builder-customer-counter",
@@ -399,6 +400,18 @@
       "message": "Independent gate art HOLD at 9.2 South and 9.1 East; 78 mechanics checks passed. Keep motion, evaluate the wider front cross-braces separately.",
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/5315868792f9f67a0f5ff3629f7f6f84d026c43f"
+      ]
+    },
+    {
+      "id": "l1-gate-v4-fence-lower-check-20261126",
+      "type": "handoff",
+      "at_utc": "2026-11-26T05:35:02Z",
+      "from_role_id": "builder-camp-pads",
+      "to_role_id": "level1-verifier",
+      "message": "Keep the scoped Meshy grain. Lower front crossings are staged alone on one panel; compare against the previously graded 9.1 panel.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/92a143532bda7929dd08369e58de887ed43b8a0b",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/1c92f8a09b6c0b72d4a7b55fc6a2805ebce031ba"
       ]
     }
   ]
