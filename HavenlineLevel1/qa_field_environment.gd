@@ -40,30 +40,47 @@ func run() -> void:
 	checks["hearth centered in newly paid court"] = world.camp_built.get_node("CenteredHearth_StudioTrialOnly/RecoveredStoneFurnace").is_visible_in_tree() and not camp.buy_anchor.is_visible_in_tree() and not camp.upgrade_anchor.is_visible_in_tree()
 	# Use the same scene targets and visibility as the purchase transition. No
 	# inventory or world state from this fixture is persisted.
-	checks["hearth shows no free stockrooms"] = camp.stock_anchors.values().all(func(a):return not a.is_visible_in_tree())
+	checks["hearth shows no free stockrooms"] = not world.depot.apron.is_visible_in_tree() and not world.depot.house.is_visible_in_tree()
 	pay("expansion_1")
 	for kind: String in ["wood","stone","meat"]:
 		pay("storage_"+kind)
 	world._refresh_field()
 	for kind: String in ["wood","stone","meat"]:
-		var anchor: Node3D = camp.stock_anchors[kind]
-		var center: Vector2 = camp.receiver_position(kind)
-		var surface: Vector3 = camp.landing_position(kind,0)
-		checks[kind+" receiver is flush with authored plate"] = absf(anchor.position.y-.005)<.001 and absf(surface.y-anchor.position.y)<.001
-		checks[kind+" floor source is the authored inlaid shell"] = anchor.get_child(0).scene_file_path == "res://assets/field_camp/wood_storage_empty.glb"
-		checks[kind+" receiver fits inside wall and clears furnace"] = camp.is_inside_camp(Vector3(center.x-1.4432,0,center.y-1.1352)) and camp.is_inside_camp(Vector3(center.x+1.4432,0,center.y+1.1352)) and center.length()>2.7 and anchor.is_visible_in_tree()
-		var final_slot: int = {"wood":0, "stone":1, "meat":6}[kind]
-		var final_position: Vector3 = camp.landing_position(kind, final_slot)
-		checks[kind+" overflowing stock lands on final visible pile"] = camp.landing_position(kind,999999).is_equal_approx(final_position) and final_position.y < 0.6
-	camp.sync_stock({"wood":12,"stone":4,"meat":8})
-	checks["counts identify only deposited typed stock"] = camp.count_labels.wood.text=="12" and camp.count_labels.stone.text=="4" and camp.count_labels.meat.text=="8"
-	for kind: String in ["wood","stone","meat"]:
-		checks[kind+" stocked plot shows only physical units"] = camp.stock_surfaces[kind][0][0].get_active_material(camp.stock_surfaces[kind][0][1]).albedo_texture == camp.STOCKED_PAINT
-	camp.sync_stock({"wood":1000000,"stone":100001,"meat":101})
-	checks["quantity labels preserve overflow balances"] = camp.count_labels.wood.text=="1000000" and camp.count_labels.stone.text=="100001" and camp.count_labels.meat.text=="101"
-	camp.sync_stock({"wood":0,"stone":0,"meat":0})
-	for kind: String in ["wood","stone","meat"]:
-		checks[kind+" emptied plot recovers its painted type"] = camp.stock_surfaces[kind][0][0].get_active_material(camp.stock_surfaces[kind][0][1]).albedo_texture == camp.empty_stock_paint[kind]
+		var bin: Node3D = world.depot.bins[kind]
+		var first: Vector3 = world.depot.landing_position(kind,0)
+		checks[kind+" physical shelf is inside house"] = camp.is_inside_camp(first) and bin.global_position.distance_to(world.depot.house.global_position)<2.1 and bin.visible
+		checks[kind+" all purchases share one apron"] = world.carry.receivers["storage_"+kind] == world.depot.apron
+		checks[kind+" retired corner is absent"] = world.find_child(kind.capitalize()+"StoragePlot",true,false)==null
+	var storehouse = world.depot.house
+	world.actor.position=Vector3.ZERO
+	storehouse._physics_process(.4)
+	var events_before := int(world.events.size())
+	world.actor.position=world.depot.APRON
+	for i in 4: storehouse._physics_process(.15)
+	world.actor.position=Vector3.ZERO
+	for i in 4: storehouse._physics_process(.15)
+	var cues: Array = world.events.slice(events_before)
+	checks["one spatial door cue per open and close"] = cues.size()==2 and cues[0].event=="gate" and cues[1].event=="gate_latch" and absf(cues[0].x-world.depot.SITE.x)<.01
+	world.inventory.collect("world-storehouse-first","wood")
+	world.carry.sync()
+	checks["one earned unit launches toward timber shelf"] = world.carry.deposit_storage("wood")
+	var deposit: Dictionary = world.carry.flights[0]
+	world.carry.advance(.35)
+	var displayed: Node3D = world.carry.pieces["storage/wood"][0]
+	checks["earned display lands at the same shelf size position and count"] = world.inventory.stored.wood==1 and displayed.get_parent()==world.depot.bins.wood and displayed.global_position.is_equal_approx(deposit.mesh.global_position) and displayed.scale.is_equal_approx(deposit.mesh.scale) and world.depot.labels.wood.text=="1"
+	checks["east expansion can spend timber from its actual shelf"] = world.carry.contribute("expansion_2")
+	var debit: Dictionary = world.carry.flights[0]
+	checks["spend originates at visible shelf mesh"] = debit.from=="storage" and debit.mesh.global_position.is_equal_approx(displayed.global_position) and debit.mesh.scale.is_equal_approx(displayed.scale)
+	world.carry.advance(.35)
+	checks["shelf empties and east expansion receives exactly one unit"] = world.inventory.stored.wood==0 and world.inventory.paid.expansion_2.wood==1 and world.depot.labels.wood.text=="0" and not displayed.visible
+	var counts := {"wood":1000000,"stone":100001,"meat":101}
+	world.inventory.stored = counts
+	world.depot.refresh(true)
+	world.carry.sync()
+	checks["a million wood and overflow stone and meat stay inside bounded bins"] = world.carry.pieces["storage/wood"].size()==1 and world.carry.pieces["storage/stone"].size()==2 and world.carry.pieces["storage/meat"].size()==7
+	checks["bay labels retain full balances"] = world.depot.labels.wood.text=="1000000" and world.depot.labels.stone.text=="100001" and world.depot.labels.meat.text=="101"
+	world.inventory.stored = {"wood":0,"stone":0,"meat":0}
+	world.depot.refresh(true)
 	camp.set_upgrade_payment({"stone":0,"meat":0})
 	checks["paid upgrade retires its ground inlay"] = not camp.upgrade_anchor.is_visible_in_tree()
 	for gate in world.gates:

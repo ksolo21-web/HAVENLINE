@@ -51,7 +51,7 @@ func _ready() -> void:
 	# Keep hits on the visible native rock surface, including after depletion reduces its size.
 	var mount := Node3D.new()
 	resource_rock.add_child(mount)
-	mount.scale = Vector3.ONE * .68
+	mount.scale = Vector3.ONE * ResourceRockScript.BANK_SCALE
 	var stone := SNOW_STONE.instantiate() as Node3D
 	mount.add_child(stone)
 	var rock_part := stone as MeshInstance3D
@@ -60,6 +60,7 @@ func _ready() -> void:
 	resource_rock._mesh.queue_free()
 	resource_rock._mesh = rock_part
 	rock_part.position.y = -rock_part.mesh.get_aabb().position.y
+	resource_rock.attach_bank_body()
 	surfaces[resource_rock] = [rock_part, rock_part.mesh.generate_triangle_mesh()]
 	opening_hud.show_status(0, "Approach a resource to gather.")
 	tree_button.hide()

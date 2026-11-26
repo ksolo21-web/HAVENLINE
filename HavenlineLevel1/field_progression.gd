@@ -13,7 +13,7 @@ const PREREQUISITES := {
 }
 const TITLES := {
 	"center_hearth":"Build hearth", "expansion_1":"Expand camp", "expansion_2":"Expand east",
-	"storage_wood":"Wood storage", "storage_stone":"Stone storage", "storage_meat":"Meat storage",
+	"storage_wood":"Build storehouse", "storage_stone":"Reinforce storehouse", "storage_meat":"Advance storehouse",
 	"watchtower":"Build watchtower", "orbit_upgrade":"Equip extra axes"
 }
 const POSITIONS := {"expansion_1":Vector2(2.6,-1.5), "expansion_2":Vector2(2.6,-1.5),
@@ -34,3 +34,15 @@ static func price_text(remaining: Dictionary) -> String:
 	for kind in ["wood","stone","meat"]:
 		if int(remaining.get(kind,0)) > 0: words.append("%d %s" % [remaining[kind],kind])
 	return " · ".join(words)
+
+
+static func house_tier(ledger) -> int:
+	for i in range(STORAGE.size()-1,-1,-1):
+		if ledger.complete(STORAGE[i]): return i+1
+	return 0
+
+static func next_storage(ledger) -> String:
+	if not ledger.complete(FIRST): return ""
+	for id: String in STORAGE:
+		if not ledger.complete(id): return id
+	return ""

@@ -33,6 +33,9 @@ var turn_id := 0
 var hit_this_turn := {}
 var current_tip := Vector3.ZERO
 var height := .89
+var hit_geometry: MeshInstance3D
+var hit_position := Vector3.ZERO
+var hit_travel := Vector3.ZERO
 
 func install(scene: Node, hero: Node3D, _unused) -> bool:
 	actor = hero.get_parent()
@@ -127,6 +130,7 @@ func advance(dt: float) -> void:
 	pose()
 
 func crosses_surface(part: MeshInstance3D, mesh: TriangleMesh) -> bool:
+	hit_geometry = null
 	if not active: return false
 	var local := part.global_transform.affine_inverse()
 	var samples: Array = HeadContacts.PICKAXE if equipped=="pickaxe" else HeadContacts.AXE
@@ -134,5 +138,10 @@ func crosses_surface(part: MeshInstance3D, mesh: TriangleMesh) -> bool:
 		var before: Transform3D = local * slots[i].before
 		var after: Transform3D = local * slots[i].after
 		for p: Vector3 in samples:
-			if not mesh.intersect_segment(before*p,after*p).is_empty():return true
+			var intersection := mesh.intersect_segment(before*p,after*p)
+			if not intersection.is_empty():
+				hit_geometry = part
+				hit_position = part.to_global(intersection.position)
+				hit_travel = part.global_basis*((after*p)-(before*p))
+				return true
 	return false

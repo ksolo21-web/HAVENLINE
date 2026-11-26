@@ -7,7 +7,7 @@ const WORLD_SEED := 860342
 const INTERACT_DISTANCE := 5.0
 const RELEASE_DISTANCE := 8.0
 const PINE_SCALE := 0.69
-const QUARRY_SCALE := 0.68
+const QUARRY_SCALE := preload("res://resource_rock.gd").BANK_SCALE
 
 var host
 var chunks: Dictionary = {}
@@ -172,7 +172,10 @@ func _load_chunk(key: Vector2i) -> void:
 	chunks[key] = chunk
 
 func _set_proxy(chunk: Dictionary, row: Dictionary, shown: bool) -> void:
-	var basis := Basis(Vector3.UP, row.yaw).scaled(Vector3.ONE * float(row.scale))
+	var remaining_scale := 1.0
+	if row.kind == "stone":
+		remaining_scale -= .18 * int(host.lifecycle.partial.get(row.id,0))
+	var basis := Basis(Vector3.UP, row.yaw).scaled(Vector3.ONE * float(row.scale) * remaining_scale)
 	var local: Vector3 = row.position - chunk.node.position
 	if not shown:
 		local.y = -10.0

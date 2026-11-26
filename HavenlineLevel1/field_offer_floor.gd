@@ -2,6 +2,8 @@ extends Node3D
 
 const Progress = preload("res://field_progression.gd")
 const HUD = preload("res://field_hud.gd")
+var title: Label3D
+var icon: Sprite3D
 var price: Label3D
 var ink: ShaderMaterial
 
@@ -17,11 +19,11 @@ func install(environment, id: String, at: Vector3) -> void:
 				ink = mesh.material_override.duplicate()
 				mesh.material_override = ink
 				ink.set_shader_parameter("paid",0.)
-	var title: Label3D = environment.flat_label(self,Vector3(0,.008,-.19),.0061)
+	title = environment.flat_label(self,Vector3(0,.008,-.19),.0061)
 	title.text = Progress.TITLES[id]
 	price = environment.flat_label(self,Vector3(0,.008,.44),.0053)
 	if id.begins_with("storage_"):
-		var icon := Sprite3D.new()
+		icon = Sprite3D.new()
 		icon.texture = HUD.MATERIAL_ICONS[id.trim_prefix("storage_")]
 		icon.axis = Vector3.AXIS_Y
 		icon.pixel_size = .006
@@ -41,3 +43,13 @@ func set_due(ledger, id: String, active: bool) -> void:
 		total += int(ledger.costs[id][kind])
 		left += int(due[kind])
 	if ink: ink.set_shader_parameter("paid",1.-float(left)/maxi(total,1))
+
+func set_depot(ledger, id: String, owns_bays: bool) -> void:
+	# Once the building exists its GLB supplies the dark, gold-edged loading
+	# apron. The single shared receiver stays active behind the contextual HUD.
+	for part in get_children():
+		part.visible = not owns_bays
+	if owns_bays: return
+	set_due(ledger,id,true)
+	title.text = Progress.TITLES[id]
+	icon.texture = HUD.MATERIAL_ICONS[id.trim_prefix("storage_")]

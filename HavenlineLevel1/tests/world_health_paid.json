@@ -1,0 +1,91 @@
+[
+  {
+    "action": "hold",
+    "label": "Vitality on the untouched snow",
+    "s": 0.7,
+    "shot": "Full health",
+    "length": 0.7
+  },
+  {
+    "action": "farm",
+    "kind": "wood",
+    "count": 3,
+    "label": "Earn the first hearth",
+    "timeout": 100
+  },
+  {
+    "action": "walk",
+    "label": "Move toward the hearth along southern snow",
+    "p": [
+      0.2,
+      4.6
+    ],
+    "tol": 0.2,
+    "timeout": 45
+  },
+  {
+    "action": "buy",
+    "id": "center_hearth",
+    "label": "Earn and build the protected camp",
+    "timeout": 40
+  },
+  {
+    "action": "hold",
+    "label": "Allow the palisade to rise",
+    "s": 1.7
+  },
+  {
+    "action": "walk",
+    "label": "Stand clear of the southern gate swing",
+    "p": [
+      0,
+      1.85
+    ],
+    "tol": 0.2,
+    "timeout": 45
+  },
+  {
+    "action": "gate",
+    "label": "Tap the southern gate",
+    "gate": "gate-south"
+  },
+  {
+    "action": "walk",
+    "label": "Exit through the paid southern gate",
+    "p": [
+      0,
+      7.3
+    ],
+    "tol": 0.2,
+    "timeout": 45
+  },
+  {
+    "action": "farm",
+    "kind": "wood",
+    "count": 3,
+    "label": "Carry wood out with the adventurer",
+    "timeout": 100
+  },
+  {
+    "action": "walk",
+    "label": "Approach the eastern wolves on foot",
+    "p": [
+      8.7,
+      6.3
+    ],
+    "tol": 0.2,
+    "timeout": 45
+  },
+  {
+    "action": "facepack",
+    "label": "Take the real wolf attack",
+    "timeout": 160
+  },
+  {
+    "action": "hold",
+    "label": "Health restored inside the paid camp",
+    "s": 2,
+    "shot": "Safe after camp rescue",
+    "length": 2
+  }
+]

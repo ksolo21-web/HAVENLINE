@@ -1,6 +1,6 @@
 extends RefCounted
 ## Timers use played simulation seconds. Cooling sources keep their IDs when streamed out.
-const WOOD_REGROW_SECONDS := 22.0
+const WOOD_REGROW_SECONDS := preload("res://resource_tree.gd").REGROW_SECONDS
 const STONE_REGROW_SECONDS := 32.0
 const DROP_LIFETIME_SECONDS := 100.0
 const DROP_CAP := 72
@@ -18,12 +18,15 @@ func register(id: String, kind: String, node: Node3D) -> void:
 	loaded[id] = node
 	if cooling.has(id):
 		_set_available(node, false)
+		if kind == "wood": node.show_return(float(cooling[id]))
 	elif partial.has(id):
 		_restore_strikes(node,partial[id])
 
 func _restore_strikes(node: Node3D, count: int) -> void:
-	node.strikes = count
-	if node.get_meta("resource_kind")=="stone":
+	if node.get_meta("resource_kind")=="wood":
+		node.restore_notches(count)
+	else:
+		node.strikes = count
 		node._mesh.scale=Vector3.ONE*(1.0-.18*count)
 		node._mesh.position.y=-node._mesh.mesh.get_aabb().position.y*node._mesh.scale.y
 
@@ -50,6 +53,7 @@ func _set_available(node: Node3D, available: bool) -> void:
 		node.phase = "seated" if available else "mined"
 		node.strikes = 0 if available else 3
 		node._mesh.visible = available
+		node.set_bank_active(available)
 		if available:
 			node._mesh.scale = Vector3.ONE
 			node._mesh.position.y = -node._mesh.mesh.get_aabb().position.y
@@ -57,7 +61,11 @@ func _set_available(node: Node3D, available: bool) -> void:
 func advance(dt: float) -> void:
 	for id: String in cooling.keys():
 		cooling[id] -= maxf(dt,0.0)
-		if cooling[id] > 0.0: continue
+		if cooling[id] > .000001:
+			var active = loaded.get(id)
+			if is_instance_valid(active) and active.get_meta("resource_kind")=="wood" and cooling[id]<=active.RETURN_SECONDS:
+				active.show_return(cooling[id])
+			continue
 		cooling.erase(id)
 		availability_revision += 1
 		var node = loaded.get(id)
@@ -86,10 +94,10 @@ func _near_closed_boundary(p: Vector3) -> bool:
 	return (along_x and minf(absf(p.z-r[1]),absf(p.z-r[3]))<pad) or (along_z and minf(absf(p.x-r[0]),absf(p.x-r[2]))<pad)
 
 func safe_start() -> Vector3:
-	var p:Vector3=world.point(world.layout.start_xz)
-	if _near_closed_boundary(p):
-		p.z=float(world.layout.camp_rect_xz[3])+float(world.layout.actor_radius)+.8
-	return p
+	if world.inventory.complete(world.HEARTH_OFFER):
+		# Clear of the central furnace, both gate arcs, and the northwest apron.
+		return Vector3(1.72,0,1.8)
+	return world.point(world.layout.pad_xz)
 
 func _restore_actor(state: Variant) -> void:
 	if not state is Dictionary: return
@@ -135,8 +143,15 @@ func restore(data: Dictionary) -> bool:
 		if is_instance_valid(loaded.get(id)): _restore_strikes(loaded[id],int(partial[id]))
 	cooling = data.cooling.duplicate()
 	availability_revision += 1
-	for id in cooling:
-		if is_instance_valid(loaded.get(id)): _set_available(loaded[id],false)
+	for id: String in cooling:
+		var entry = loaded.get(id)
+		# Old saves store seconds by stable ID, including unloaded sources.
+		# Their existing wood/stone naming remains consistent across chunks.
+		var wood: bool = (is_instance_valid(entry) and entry.get_meta("resource_kind")=="wood") or id=="starter-wood" or id.begins_with("pine@") or id.begins_with("grove@") or (id.begins_with("world1/") and id.get_slice("/",3)=="wood")
+		if wood: cooling[id]=minf(cooling[id],wood_seconds)
+		if is_instance_valid(entry):
+			_set_available(entry,false)
+			if wood: entry.show_return(cooling[id])
 	for id in world.drops.keys(): world._remove_drop(id)
 	_restore_actor(data.get("player"))
 	world.drop_id = int(data.serial)

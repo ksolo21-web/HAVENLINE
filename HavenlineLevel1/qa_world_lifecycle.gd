@@ -139,7 +139,7 @@ func run() -> void:
 	pine=f.add_resource_source("qa-pine","wood",Vector2(34,20))
 	check("travel_while_pine_falling_resolves_once",not f.is_source_available("qa-pine") and pine.phase=="credited")
 	f.unload_resource_source("qa-pine")
-	f.lifecycle.advance(21.9)
+	f.lifecycle.advance(4.9)
 	check("wood_timer_distinct",not f.is_source_available("qa-pine"))
 	f.lifecycle.advance(.11)
 	pine=f.add_resource_source("qa-pine","wood",Vector2(34,20))

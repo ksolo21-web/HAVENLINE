@@ -18,6 +18,7 @@ const MAX_HP := 4
 const UPGRADE_GLINT = preload("res://assets/field_ui/upgrade_glint.svg")
 var world_landscape
 var tracks
+var depot := preload("res://field_depot.gd").new()
 var offer_floors := {}
 var exit_required := {}
 var inventory := Inventory.new()
@@ -54,6 +55,8 @@ var hero_model: Node3D
 var last_good: Dictionary
 var moving_gates := {}
 var hurt_time := 0.0
+var recoil_side := 1.0
+var rescue_time := 0.0
 var simulation_time := 0.0
 var last_notice := ""
 var current_music := ""
@@ -87,18 +90,13 @@ func _ready() -> void:
 	tracks.register_actor(actor,"human")
 	add_child(carry)
 	carry.setup(inventory, actor, FieldArt.make)
-	for kind: String in Inventory.KINDS:
-		carry.define_storage(kind,field_env.stock_anchors[kind])
-	carry.set_storage_layout(field_env.landing_position)
+	add_child(depot)
+	depot.install(self)
 	carry.define_receiver(HEARTH_OFFER, field_env.buy_anchor)
 	for id in inventory.costs:
-		if id == HEARTH_OFFER: continue
-		var at: Vector3
-		if id.begins_with("storage_"):
-			at = field_env.stock_anchors[id.trim_prefix("storage_")].position
-		else:
-			var anchor: Vector2 = Progress.POSITIONS[id]
-			at = Vector3(anchor.x,0,anchor.y)
+		if id == HEARTH_OFFER or id in Progress.STORAGE: continue
+		var anchor: Vector2 = Progress.POSITIONS[id]
+		var at := Vector3(anchor.x,0,anchor.y)
 		var floor_mark := OfferFloor.new()
 		field_env.add_child(floor_mark)
 		floor_mark.install(field_env,id,at)
@@ -130,6 +128,8 @@ func _ready() -> void:
 	elif not lifecycle.restore(inventory.world_state):
 		persist_blocked = true
 		persist_error = "Saved world state could not be restored."
+	# A saved position on the apron begins a new visit only after stepping out.
+	if not inventory.world_state.is_empty() and depot.at_apron(actor.position): depot.visit = "done"
 	field_ready = true
 	original_auto_quit = get_tree().auto_accept_quit
 	get_tree().auto_accept_quit = false
@@ -221,7 +221,7 @@ func add_resource_source(id: String, kind: String, at: Vector2, variant := 0) ->
 	add_child(rock,true)
 	var mount := Node3D.new()
 	rock.add_child(mount)
-	mount.scale=Vector3.ONE*.68
+	mount.scale=Vector3.ONE*ResourceRockScript.BANK_SCALE
 	var model := SNOW_STONE.instantiate() as Node3D
 	mount.add_child(model)
 	var part := model as MeshInstance3D
@@ -229,6 +229,7 @@ func add_resource_source(id: String, kind: String, at: Vector2, variant := 0) ->
 	rock._mesh=part
 	part.position.y=-part.mesh.get_aabb().position.y
 	if not trunk_cache.has(part.mesh): trunk_cache[part.mesh]=part.mesh.generate_triangle_mesh()
+	rock.attach_bank_body()
 	surfaces[rock]=[part,trunk_cache[part.mesh]]
 	rocks.append(rock)
 	lifecycle.register(id,"stone",rock)
@@ -282,9 +283,14 @@ func accept_contact(body: Node3D) -> bool:
 	if body in trees and character_kit.equipped != "axe": return false
 	if body in rocks and character_kit.equipped != "pickaxe": return false
 	var landed := false
-	if body in trees and body != resource_tree:
+	if body in trees:
 		tree_input_sequence += 1
-		landed = body.strike(ResourceTreeScript.TREE_ID,tree_input_sequence,actor.global_position,body.global_position-actor.global_position)
+		var geometry: MeshInstance3D = surfaces[body][0]
+		var matched: bool = character_kit.hit_geometry == geometry
+		var travel: Vector3 = character_kit.hit_travel if matched else Vector3.ZERO
+		var at: Vector3 = character_kit.hit_position if matched else Vector3.INF
+		character_kit.hit_geometry = null
+		landed = body.strike(ResourceTreeScript.TREE_ID,tree_input_sequence,actor.global_position,body.global_position-actor.global_position,travel,at)
 	elif body in rocks and body != resource_rock:
 		rock_input_sequence += 1
 		landed=body.strike(ResourceRockScript.ROCK_ID,rock_input_sequence,actor.position,body.position-actor.position)
@@ -389,9 +395,37 @@ func _wolf_defeated(at: Vector3, wolf: FieldEnemy) -> void:
 	_make_drops("meat",at,5 if wolf.is_boss else 2)
 	_checkpoint_lifecycle()
 
-func _player_hit(amount: int) -> void:
-	if player_invulnerability > 0.0 or reset_time > 0 or persist_blocked: return
-	player_hp = maxi(0,player_hp-amount)
+func _combat_number(at: Vector3, message: String, color: Color) -> void:
+	var number := Label3D.new()
+	number.name = "CombatFeedback"
+	number.text = message
+	number.font_size = 47
+	number.pixel_size = .009
+	number.outline_size = 10
+	number.modulate = color
+	number.outline_modulate = Color("#19232e")
+	number.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	number.no_depth_test = true
+	add_child(number)
+	number.position = at
+	var tween := number.create_tween().set_parallel(true)
+	tween.tween_property(number,"position",at+Vector3.UP*.60,.56).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_property(number,"modulate:a",0.0,.27).set_delay(.29)
+	tween.tween_property(number,"outline_modulate:a",0.0,.27).set_delay(.29)
+	tween.chain().tween_callback(number.queue_free)
+
+func _wolf_damage_feedback(amount: int, wolf: FieldEnemy) -> void:
+	_combat_number(wolf.global_position+Vector3.UP*(2.04*wolf.size_factor()),"−%d" % amount,Color("#ffebaf"))
+
+func _player_hit(amount: int, attacker: Node3D = null) -> void:
+	if amount <= 0 or player_invulnerability > 0.0 or reset_time > 0 or persist_blocked or field_env.is_inside_camp(actor.position): return
+	var loss := mini(player_hp, amount)
+	player_hp -= loss
+	if is_instance_valid(attacker):
+		var away := hero_model.global_basis.x.dot(actor.global_position-attacker.global_position)
+		recoil_side = signf(away) if absf(away)>.01 else 1.0
+	_combat_number(actor.position+Vector3.UP*2.16,"−%d" % loss,Color("#ff8469"))
+	opening_hud.set_health(player_hp,MAX_HP)
 	hurt_time = .32
 	player_invulnerability = 1.0
 	flash.color.a = .26
@@ -423,13 +457,18 @@ func _physics_process(dt: float) -> void:
 	forest.advance(dt)
 	var last_turn: int = character_kit.turn_id
 	if reset_time > 0:
-		hero_model.rotation.z = -.88*smoothstep(0.0,.42,1.05-reset_time)
+		var fall := smoothstep(0.0,.44,1.05-reset_time)
+		hero_model.rotation.z = -recoil_side*1.43*fall
+		hero_model.rotation.x = -.20*fall
+		flash.color.a = move_toward(flash.color.a,.09,dt*.52)
 		reset_time = maxf(0.0,reset_time-dt)
 		actor.velocity = Vector3.ZERO
 		clear_touch()
 		if reset_time <= 0:
 			actor.position = lifecycle.safe_start()
-			hero_model.rotation.z = 0.0
+			hero_model.rotation = Vector3(0,hero_model.rotation.y,0)
+			rescue_time = .32
+			hurt_time = 0
 			if tracks: tracks.reset_actor(actor)
 			camera.position = actor.position + Vector3(7,11,11)
 			player_hp = MAX_HP
@@ -442,7 +481,9 @@ func _physics_process(dt: float) -> void:
 					wolf._refresh_health()
 					if tracks: tracks.reset_actor(wolf)
 			_event("reset",actor.position)
+			_combat_number(actor.position+Vector3.UP*2.16,"+%d HP" % MAX_HP,Color("#83f4b1"))
 			_refresh_field()
+			_checkpoint_lifecycle()
 		return
 	var previous_tool: String = character_kit.equipped
 	super(dt)
@@ -450,7 +491,10 @@ func _physics_process(dt: float) -> void:
 	if not previous_tool.is_empty() and previous_tool != character_kit.equipped and character_kit.equipped in ["axe","pickaxe"]:
 		_event("equip_"+character_kit.equipped,actor.position)
 	hurt_time = maxf(0.0,hurt_time-dt)
-	hero_model.rotation.z = .14*sin(PI*hurt_time/.32)
+	rescue_time = maxf(0.0,rescue_time-dt)
+	var recoil := sin(PI*hurt_time/.32)
+	hero_model.rotation.z = -recoil_side*.23*recoil
+	hero_model.rotation.x = -.14*recoil+.18*smoothstep(0,.32,rescue_time)
 	sound.set_listener_position(actor.position)
 	if character_kit.active and character_kit.turn_id != last_turn and not first_physics:
 		_event("swing",actor.position)
@@ -460,6 +504,7 @@ func _physics_process(dt: float) -> void:
 	player_invulnerability = maxf(0.0,player_invulnerability-dt)
 	flash.color.a = maxf(0.0,flash.color.a-dt*.6)
 	var danger := encounters.advance(dt)
+	if reset_time > 0.0: return
 	defense_tower.advance(dt,inventory.complete("watchtower"))
 	_step_drops(dt)
 	if reveal_countdown >= 0:
@@ -507,7 +552,7 @@ func _landed(kind: String, dest: String) -> void:
 			_event("pickup_partial" if pending else "pickup_full",actor.position)
 			if not pending: _event("carry",actor.position)
 		"storage":
-			_event("deposit_"+kind,field_env.stock_anchors[kind].global_position)
+			_event("deposit_"+kind,depot.bins[kind].global_position)
 		_:
 			_event("spend_"+kind,carry.receivers[dest].global_position)
 
@@ -539,13 +584,13 @@ func _finish_purchase(id: String) -> void:
 		_event("build",anchor.global_position)
 		_event("rise",anchor.global_position)
 	else:
-		exit_required[id] = true
+		if id not in Progress.STORAGE: exit_required[id] = true
 		if id in [Progress.FIRST,Progress.SECOND]:
 			field_env.set_perimeter(Progress.stage(inventory),true)
 			if not orbit_permitted_at(actor.global_position): character_kit.rest()
 			if tracks: tracks.refresh_surface()
 		elif id.begins_with("storage_"):
-			_animate_stock(id.trim_prefix("storage_"))
+			depot.visit = "done"
 		elif id == UPGRADE_OFFER:
 			character_kit.set_upgraded(true)
 			_upgrade_sparks()
@@ -587,16 +632,11 @@ func _apply_hearth(built: bool, animate: bool) -> void:
 func orbit_permitted_at(world_position: Vector3) -> bool:
 	return not field_env.is_inside_camp(world_position)
 
-func _animate_stock(kind: String) -> void:
-	var anchor: Node3D = field_env.stock_anchors[kind]
-	anchor.show()
-	anchor.scale = Vector3(.68,1,.68)
-	var tween := create_tween()
-	tween.tween_property(anchor,"scale",Vector3.ONE,.32).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-
 func _step_receivers() -> void:
 	if reveal_countdown >= 0.: return
+	depot.step(actor.position)
 	for id in inventory.costs:
+		if id in Progress.STORAGE: continue
 		var anchor: Node3D = carry.receivers[id]
 		var close := actor.position.distance_squared_to(anchor.global_position) <= PAD_RADIUS * PAD_RADIUS
 		if not close:
@@ -605,42 +645,39 @@ func _step_receivers() -> void:
 		if exit_required.has(id): continue
 		if inventory.offer_open(id):
 			carry.contribute(id)
-		elif id.begins_with("storage_") and inventory.complete(id):
-			carry.deposit_storage(id.trim_prefix("storage_"))
 
 func _refresh_field() -> void:
-	field_env.sync_stock(inventory.stored)
+	depot.refresh(camp_active)
 	field_env.set_payment(inventory.remaining(HEARTH_OFFER))
 	field_env.upgrade_anchor.hide()
 	var left: int = inventory.remaining(HEARTH_OFFER).wood
 	field_env.set_payment_progress(1.0 - float(left) / inventory.costs[HEARTH_OFFER].wood)
 	for id in offer_floors:
 		offer_floors[id].set_due(inventory,id,camp_active and inventory.offer_open(id))
-	for kind in Inventory.KINDS:
-		field_env.stock_anchors[kind].visible = camp_active and inventory.storage_open(kind)
 	last_notice = ""
 	_refresh_hud_field(current_music == "threat")
 
 func _refresh_hud_field(danger: bool) -> void:
+	opening_hud.set_health(player_hp,MAX_HP)
 	var hint := ""
 	if persist_blocked: hint = persist_error
-	elif danger: hint = "Wolf nearby  ·  Health %d/%d" % [player_hp,MAX_HP]
+	elif reset_time > 0: hint = "Returning to camp…" if camp_active else "Returning to the hearth plot…"
+	elif danger: hint = "Wolves nearby"
 	else:
 		if not camp_active: hint = "Fell pines to build the hearth."
 		elif not inventory.complete(Progress.FIRST): hint = "Bring wood and stone to expand camp."
 		elif not inventory.complete(Progress.SECOND):
-			hint = "Build the three corner stores." if not inventory.offer_open(Progress.SECOND) else "Fund the east expansion."
+			hint = "Fund the east expansion." if depot.offer.is_empty() else Progress.TITLES[depot.offer] + " in the northwest."
 		elif not inventory.complete(Progress.TOWER) or not inventory.complete(UPGRADE_OFFER):
 			hint = "Fund the marked battlefield upgrades."
 		else: hint = "Watchtower built  ·  Extra axes equipped"
 		for id in inventory.costs:
+			if id in Progress.STORAGE: continue
 			var anchor: Node3D = carry.receivers[id]
 			if actor.position.distance_squared_to(anchor.global_position) > 1.6: continue
 			if inventory.offer_open(id) and (camp_active or id == HEARTH_OFFER):
 				hint = "%s  ·  %s" % [Progress.TITLES[id], Progress.price_text(inventory.remaining(id))]
-			elif id.begins_with("storage_") and inventory.complete(id):
-				var kind: String = id.trim_prefix("storage_")
-				hint = "%s storage  ·  %d stored" % [kind.capitalize(), inventory.stored[kind]]
+		if depot.apron.visible and depot.at_apron(actor.position): hint = depot.hint()
 	var notice := str(inventory.carried.values()) + hint
 	if notice == last_notice: return
 	last_notice = notice

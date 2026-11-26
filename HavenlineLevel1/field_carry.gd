@@ -18,6 +18,7 @@ const STOCK := "storage"
 var inventory: Inventory
 var actor: Node3D
 var factory: Callable
+var storage_unit_scale := 1.0
 var storage_layout: Callable
 var storage_anchors := {}
 var receivers := {}
@@ -60,7 +61,8 @@ func define_receiver(id: String, anchor: Node3D) -> void:
 	if inventory.costs.has(id) and id not in [HAND, STOCK]:
 		receivers[id] = anchor
 
-func set_storage_layout(layout: Callable) -> void:
+func set_storage_layout(layout: Callable, unit_scale := 1.0) -> void:
+	storage_unit_scale = unit_scale
 	storage_layout = layout
 	sync()
 
@@ -166,7 +168,7 @@ func sync() -> void:
 				var unit := _piece(kind)
 				if not unit:
 					break
-				var parent := rack if location == HAND else self
+				var parent: Node3D = rack if location == HAND else storage_anchors[kind]
 				parent.add_child(unit)
 				pool.append(unit)
 			for i in pool.size():
@@ -180,7 +182,7 @@ func sync() -> void:
 					else:
 						unit.global_position = _floor_position(kind, i)
 						unit.global_rotation.y = _heading(STOCK, kind, i)
-						unit.scale = Vector3.ONE * (StockLayout.width(kind, i) / float(WIDTH[kind]))
+						unit.scale = Vector3.ONE * (storage_unit_scale * StockLayout.width(kind, i) / float(WIDTH[kind]))
 			pieces[key] = pool
 	if frame:
 		frame.visible = loaded
@@ -225,8 +227,8 @@ func _send(kind: String, source: String, dest: String, dest_index: int) -> bool:
 		return false
 	var source_index := _available(kind, source) - 1
 	var start := _place(source, kind, source_index)
-	var start_scale := StockLayout.width(kind, source_index) / float(WIDTH[kind]) if source == STOCK else 1.0
-	var end_scale := StockLayout.width(kind, dest_index) / float(WIDTH[kind]) if dest == STOCK else 1.0
+	var start_scale := storage_unit_scale * StockLayout.width(kind, source_index) / float(WIDTH[kind]) if source == STOCK else 1.0
+	var end_scale := storage_unit_scale * StockLayout.width(kind, dest_index) / float(WIDTH[kind]) if dest == STOCK else 1.0
 	cooldown = INTERVAL
 	_start(unit, kind, source, dest, start, dest_index, SEND_TIME, start_scale, end_scale, _heading(source, kind, source_index))
 	return true

@@ -111,7 +111,8 @@ func run() -> void:
 			check(gate.request_toggle(start),gate.name+" reachable controls")
 			for i in 65: gate.advance(1./60.,start,.31)
 			for i in 2: await physics_frame
-			check(game.get_world_3d().direct_space_state.intersect_ray(query).is_empty(),gate.name+" open")
+			var blockage: Dictionary = game.get_world_3d().direct_space_state.intersect_ray(query)
+			check(blockage.is_empty(),"%s stage %d open (%s)" % [gate.name,stage,blockage.collider.get_path() if not blockage.is_empty() else "clear"])
 			query.from=end+offset
 			query.to=start+offset
 			check(game.get_world_3d().direct_space_state.intersect_ray(query).is_empty(),gate.name+" inbound open")

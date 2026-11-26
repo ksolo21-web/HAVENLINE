@@ -65,6 +65,9 @@ func storage_open(kind: String) -> bool:
 func offer_open(id: String) -> bool:
 	if not costs.has(id) or complete(id): return false
 	if not staged: return true
+	# Validate historical receipts against the original independent prerequisites
+	# during restore. New payments always fund the first missing house tier.
+	if id in Progress.STORAGE and Progress.next_storage(self) != id: return false
 	for predecessor in Progress.PREREQUISITES[id]:
 		if not complete(predecessor): return false
 	return true

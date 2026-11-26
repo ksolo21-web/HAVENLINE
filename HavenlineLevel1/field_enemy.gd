@@ -1,6 +1,7 @@
 extends Node3D
 
 signal player_hit(damage: int)
+signal damaged(amount: int)
 signal defeated(at: Vector3)
 const Art = preload("res://field_art.gd")
 const MAX_HEALTH := 3
@@ -18,8 +19,8 @@ func max_hp() -> int:
 	return BOSS_HEALTH if is_boss else MAX_HEALTH
 
 const WALK_SPEED := 1.18
-const NOTICE_RADIUS := 5.3
-const LEASH := 4.2
+const NOTICE_RADIUS := 7.1
+const LEASH := 7.5
 const BITE_RANGE := 1.52
 const STALK_STOP := 1.66
 const CONTACT_DISTANCE := 1.35
@@ -141,7 +142,9 @@ func take_swirl_hit(turn: int) -> bool:
 
 func receive_hit(amount: int = 1, impact: Vector3 = Vector3.ZERO) -> bool:
 	if amount <= 0 or not can_receive_swirl(): return false
-	hp = maxi(0, hp - amount)
+	var loss := mini(hp,amount)
+	hp -= loss
+	damaged.emit(loss)
 	_refresh_health()
 	hurt_timer = .16
 	if surface: surface.material_overlay = _tint

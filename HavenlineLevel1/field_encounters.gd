@@ -96,8 +96,9 @@ func _add(p: Vector3, boss: bool, id: int, home: Vector3) -> Wolf:
 	world.add_child(wolf)
 	wolf.configure(world.actor)
 	wolf.home=home
-	wolf.player_hit.connect(world._player_hit)
+	wolf.player_hit.connect(world._player_hit.bind(wolf))
 	wolf.defeated.connect(world._wolf_defeated.bind(wolf))
+	wolf.damaged.connect(world._wolf_damage_feedback.bind(wolf))
 	world.enemies.append(wolf)
 	if wolf.contact_mesh(): world.register_hostile(wolf,wolf.contact_mesh())
 	if "tracks" in world and world.tracks and world.tracks.has_method("register_actor"):

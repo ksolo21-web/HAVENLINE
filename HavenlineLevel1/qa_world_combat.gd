@@ -1,0 +1,77 @@
+extends SceneTree
+## Deterministic contact fixtures exercise the normal pack, HUD, hit and recovery handlers.
+const Session = preload("res://tests/lifecycle_test_profile.gd")
+var results := {}
+var scene
+func _initialize() -> void:
+	if not Session.isolated(self,"res://qa_world_combat.gd"): call_deferred("run")
+func check(key: String, ok: bool) -> void:
+	results[key]=ok
+	if not ok: printerr("Combat check failed ",key)
+func run() -> void:
+	scene=load("res://field_opening.tscn").instantiate()
+	root.add_child(scene)
+	await physics_frame
+	scene.set_physics_process(false)
+	scene.world_landscape.set_physics_process(false)
+	for wolf in scene.enemies.duplicate(): scene.encounters._remove(wolf)
+	await physics_frame
+	var hud=scene.opening_hud
+	check("continuous_full_hp_even_without_threat",hud.health_bar.is_visible_in_tree() and hud.health_text.text=="HP  4 / 4")
+	for paid: bool in [false,true]:
+		var phase := "paid" if paid else "unpaid"
+		if paid:
+			for kind in scene.inventory.costs[scene.HEARTH_OFFER]:
+				for unit in scene.inventory.costs[scene.HEARTH_OFFER][kind]:
+					scene.inventory.collect("combat-hearth-%d" % unit,kind)
+					scene.inventory.payment(scene.HEARTH_OFFER,kind,false)
+			scene._apply_hearth(true,false)
+		scene.actor.position=Vector3(16,0,4)
+		scene.player_invulnerability=0
+		var home: Vector3=scene.actor.position+Vector3(3.5,0,1.3)
+		scene.encounters.serial += 1
+		var wolf=scene.encounters._add(home,paid,scene.encounters.serial,home)
+		var phases := {}
+		for tick in 430:
+			scene.encounters.advance(1.0/60)
+			phases[wolf.state]=true
+			if scene.player_hp<scene.MAX_HP: break
+		check(phase+"_pursuit_windup_lunge_and_hp_loss",phases.has("stalk") and phases.has("windup") and phases.has("lunge") and scene.player_hp==(2 if paid else 3))
+		check(phase+"_instant_health_and_trailing_bar",hud.health_bar.value==scene.player_hp and hud.health_trail.value>scene.player_hp)
+		var hp_before:int=scene.player_hp
+		scene._player_hit(2,wolf)
+		check(phase+"_invulnerability_blocks_repeat",scene.player_hp==hp_before)
+		check(phase+"_wolf_stagger_has_animated_damage",wolf.take_swirl_hit(100) and wolf.state=="stagger" and wolf.animator.current_animation=="Hurt")
+		for tick in 650:
+			scene.player_invulnerability=maxf(0.0,scene.player_invulnerability-1.0/60)
+			scene.encounters.advance(1.0/60)
+			if scene.reset_time>0: break
+		check(phase+"_zero_hp_disarms_and_changes_hud",scene.player_hp==0 and not scene.character_kit.active and hud.health_bar.value==0)
+		for tick in 33: scene._physics_process(1.0/60)
+		check(phase+"_visible_fall_before_reset",absf(scene.hero_model.rotation.z)>1.2 and scene.player_hp==0)
+		for tick in 35:
+			if scene.reset_time>0: scene._physics_process(1.0/60)
+		var at: Vector3=scene.actor.position
+		var target: Vector3=Vector3(1.72,0,1.8) if paid else scene.point(scene.layout.pad_xz)
+		check(phase+"_returns_to_correct_floor",at.distance_to(target)<.01 and bool(scene.field_env.is_inside_camp(at))==paid)
+		check(phase+"_restores_hud_and_grace",scene.player_hp==4 and hud.health_bar.value==4 and scene.player_invulnerability>1.9)
+		var overlap=scene.actor.test_move(scene.actor.global_transform,Vector3.ZERO,null,.001,true)
+		check(phase+"_recovery_clear_of_obstacles",not overlap)
+		if paid:
+			scene.player_invulnerability=0
+			scene._player_hit(2,wolf)
+			check("camp_safe_even_after_grace",scene.player_hp==4)
+		scene.encounters._remove(wolf)
+		await physics_frame
+	check("damaging_and_receiving_sound_bank",scene.sound.CUES.has("player_hurt") and scene.sound.CUES.has("enemy_attack") and scene.sound.CUES.has("hit") and scene.sound.CUES.has("reset") and scene.sound.CUES.has("player_fall"))
+	var ok:=not results.values().has(false)
+	print("WORLD_COMBAT ",JSON.stringify({"passed":ok,"checks":results}))
+	scene.sound.stop_playback()
+	# The mixer releases stopped voices on its real-time audio thread even during a fixed-FPS test.
+	var release_deadline := Time.get_ticks_msec()+300
+	while Time.get_ticks_msec()<release_deadline:
+		OS.delay_msec(5)
+		await process_frame
+	scene.queue_free()
+	for i in 3: await process_frame
+	quit(0 if ok else 1)

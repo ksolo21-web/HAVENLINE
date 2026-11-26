@@ -2,12 +2,10 @@ extends Node3D
 
 signal perimeter_changed
 
-const CENTERS := {"wood":Vector2(-3.6,-3.5), "stone":Vector2(5.5,-3.5), "meat":Vector2(-3.6,3.2)}
 const BUY := Vector2(0,2.4)
 const UPGRADE := Vector2(2.65,1.7)
 const FILL := preload("res://assets/field_camp/payment_fill.gdshader")
 const DONOR := "res://assets/field_camp/"
-const PLATE := preload("res://assets/field_camp/wood_storage_empty.glb")
 const PANEL := preload("res://assets/field_camp/snowbound_palisade.obj")
 const DOOR := preload("res://assets/field_camp/snowbound_gate_leaf.obj")
 const POST := preload("res://assets/field_camp/snowbound_gate_post.obj")
@@ -18,18 +16,12 @@ const HEARTH := preload("res://assets/field_camp/furnace.glb")
 const SNOW := preload("res://assets/field_camp/field_snow.gdshader")
 const TIMBER := preload("res://assets/field_camp/t03_boundary_v2.gdshader")
 const GRAIN := preload("res://assets/field_camp/golden_timber_grain.png")
-const STOCK_PAINT := {"stone":preload("res://assets/field_camp/stone_storage.png"), "meat":preload("res://assets/field_camp/meat_storage.png")}
 var world
 var buy_anchor := Node3D.new()
 var upgrade_anchor := Node3D.new()
 var upgrade_label: Label3D
 var upgrade_pending := true
 var payment_ink := {}
-const STOCKED_PAINT := preload("res://assets/field_camp/stocked_plot_paint.png")
-var stock_anchors := {}
-var stock_surfaces := {}
-var empty_stock_paint := {}
-var count_labels := {}
 var payment_label: Label3D
 const COURTS := [Vector4(-5,-4,5,4),Vector4(-5.5,-5.5,7.5,5),Vector4(-5.5,-7,10,5.4)]
 var perimeter_stage := -1
@@ -54,14 +46,11 @@ const QUARRY_EDGE := [
 ]
 var snow := ShaderMaterial.new()
 var reveal_tween: Tween
-const StockLayout = preload("res://field_stock_layout.gd")
 
 func receiver_position(kind: String) -> Vector2:
-	return UPGRADE if kind == "upgrade" else CENTERS.get(kind, BUY)
-
-func landing_position(kind: String, index: int) -> Vector3:
-	var base: Node3D = stock_anchors[kind]
-	return base.to_global(StockLayout.position(kind,index))
+	if kind == "upgrade": return UPGRADE
+	if kind in ["wood","stone","meat"]: return Vector2(-3.60,-1.18)
+	return BUY
 
 func install(host: Node3D) -> void:
 	world = host
@@ -81,8 +70,6 @@ func install(host: Node3D) -> void:
 	install_walls()
 	install_hearth()
 	install_woods.call_deferred()
-	for kind: String in CENTERS:
-		install_plot(kind)
 	install_payment(buy_anchor,false)
 	install_payment(upgrade_anchor,true)
 	set_built(not world.ledger.receipt.is_empty(),false)
@@ -240,14 +227,15 @@ func install_hearth() -> void:
 	var base: Node3D = world.camp_built.get_node("CenteredHearth_StudioTrialOnly")
 	for child in base.get_children():
 		if not child is StaticBody3D: child.hide()
-	var shell: Node3D = world.model(HEARTH,base,2.25)
+	const HEARTH_SCALE := 0.76
+	var shell: Node3D = world.model(HEARTH,base,2.25 * HEARTH_SCALE)
 	shell.name = "RecoveredStoneFurnace"
 	var fire := OmniLight3D.new()
 	fire.name = "CoalGlow"
 	fire.light_color = Color("ffa457")
 	fire.light_energy = .62
-	fire.omni_range = 3.15
-	fire.position = Vector3(0,.60,.8)
+	fire.omni_range = 3.15 * HEARTH_SCALE
+	fire.position = Vector3(0,.60,.8) * HEARTH_SCALE
 	base.add_child(fire)
 	for m: MeshInstance3D in shell.find_children("*","MeshInstance3D",true,false):
 		m.layers = 2
@@ -256,7 +244,9 @@ func install_hearth() -> void:
 		if body is StaticBody3D:
 			var shape: CollisionShape3D = body.get_child(0)
 			var cylinder := shape.shape as CylinderShape3D
-			cylinder.radius = 1.14
+			cylinder.radius = 1.14 * HEARTH_SCALE
+			cylinder.height = 1.35 * HEARTH_SCALE
+			shape.position.y = cylinder.height * .5
 
 func canopy_ink(material: Material) -> Material:
 	if not material is StandardMaterial3D or material.resource_name.to_lower() not in ["crown","lip"]:
@@ -380,34 +370,6 @@ func flat_label(parent:Node3D, at:Vector3, px:float) -> Label3D:
 	parent.add_child(label)
 	return label
 
-func install_plot(kind: String) -> void:
-	var center: Vector2 = CENTERS[kind]
-	var anchor := Node3D.new()
-	anchor.name = kind.capitalize()+"StoragePlot"
-	anchor.position = Vector3(center.x,.005,center.y)
-	world.camp_built.add_child(anchor)
-	stock_anchors[kind] = anchor
-	anchor.hide()
-	var deck := PLATE.instantiate() as Node3D
-	anchor.add_child(deck)
-	var meshes: Array[MeshInstance3D] = []
-	world.meshes(deck,meshes)
-	stock_surfaces[kind] = []
-	for geometry in meshes:
-		for i in geometry.mesh.get_surface_count():
-			var mat := geometry.get_active_material(i) as StandardMaterial3D
-			if mat and mat.albedo_texture:
-				var local := mat.duplicate() as StandardMaterial3D
-				var type_paint: Texture2D = STOCK_PAINT.get(kind,mat.albedo_texture)
-				local.albedo_texture = type_paint
-				local.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
-				geometry.set_surface_override_material(i,local)
-				stock_surfaces[kind].append([geometry,i])
-				empty_stock_paint[kind] = type_paint
-	var label := flat_label(anchor,Vector3(0,.005,.79),.0068)
-	label.text = "0"
-	count_labels[kind] = label
-
 func install_payment(anchor:Node3D, upgrade:bool) -> void:
 	var data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(DONOR+"build_inlay.json"))
 	anchor.name = "OrbitUpgradeFloor" if upgrade else "ConstructionPaymentFloor"
@@ -472,19 +434,6 @@ func set_upgrade_payment(remaining: Dictionary) -> void:
 	upgrade_label.text = "Stone  %d    Meat  %d" % [stone,meat]
 	upgrade_anchor.hide()
 
-func sync_stock(counts: Dictionary) -> void:
-	for kind in count_labels:
-		var count := int(counts.get(kind,0))
-		count_labels[kind].text = str(count)
-		var paint: Texture2D = STOCKED_PAINT if count > 0 else empty_stock_paint[kind]
-		# Ultra replaces textured materials when the scene node enters the tree.
-		# Resolve the material currently bound to the visible surface on each change.
-		for surface: Array in stock_surfaces[kind]:
-			var geometry: MeshInstance3D = surface[0]
-			var ink := geometry.get_active_material(surface[1]) as StandardMaterial3D
-			if ink.albedo_texture != paint:
-				ink.albedo_texture = paint
-
 func set_built(built: bool, animate := true) -> void:
 	if camp_state == int(built): return
 	camp_state = int(built)
@@ -500,8 +449,5 @@ func set_built(built: bool, animate := true) -> void:
 	if built and animate:
 		reveal_tween = create_tween().set_parallel(true)
 		reveal_tween.tween_method(func(t:float): snow.set_shader_parameter("reveal",t),0.,1.,.3)
-		for plot in stock_anchors.values():
-			plot.scale = Vector3(.88,1.,.88)
-			reveal_tween.tween_property(plot,"scale",Vector3.ONE,.3).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	else:
 		snow.set_shader_parameter("reveal",1. if built else 0.)

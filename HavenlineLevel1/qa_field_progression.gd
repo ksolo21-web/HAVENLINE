@@ -35,26 +35,40 @@ func _initialize() -> void:
 		else:
 			quit(0 if db.load_into(book)==OK and book.build_order==[Rules.HEARTH] else 1)
 		return
-	for sequence in [["storage_meat","storage_wood","storage_stone"],["storage_stone","storage_meat","storage_wood"]]:
-		var book := ledger()
-		book.collect("plenty","wood")
-		check("No premature purchase or deposit "+sequence[0], not book.payment(Rules.FIRST,"wood",false) and not book.deposit("wood"))
-		check("Paid hearth alone opens only expansion "+sequence[0],fund(book,Rules.HEARTH) and Rules.stage(book)==1 and book.offer_open(Rules.FIRST) and not book.offer_open(sequence[0]))
-		check("Expansion opens three independent plots "+sequence[0],fund(book,Rules.FIRST) and Rules.stage(book)==2 and Rules.STORAGE.all(func(id):return book.offer_open(id)))
-		var order := [Rules.HEARTH, Rules.FIRST]
-		for id in sequence:
-			book.collect("partial-"+id,"wood")
-			check(id+" partial "+sequence[0],book.payment(id,"wood",false))
-			var fresh := ledger()
-			check(id+" partial reload "+sequence[0],fresh.restore(book.snapshot()) and fresh.snapshot()==book.snapshot())
-			book=fresh
-			check(id+" purchase "+sequence[0],fund(book,id))
-			order.append(id)
-			check(id+" remains owned "+sequence[0],book.build_order==order and book.storage_open(id.trim_prefix("storage_")))
-			check(id+" cannot be bought twice "+sequence[0],not book.payment(id,"wood",false))
-		check("Tower and axes wait for expansion2 "+sequence[0],not book.offer_open(Rules.TOWER) and not book.offer_open(Rules.AXES) and book.offer_open(Rules.SECOND))
-		check("Build both beyond stage3 "+sequence[0],fund(book,Rules.SECOND) and Rules.stage(book)==3 and fund(book,Rules.TOWER) and fund(book,Rules.AXES))
-		check("Reject reordered completion "+sequence[0],tampered_order_rejected(book))
+	var staged := ledger()
+	check("No premature storage purchase",not staged.offer_open("storage_wood") and not staged.deposit("wood"))
+	check("Hearth opens only expansion",fund(staged,Rules.HEARTH) and staged.offer_open(Rules.FIRST))
+	check("First expansion opens only starter house",fund(staged,Rules.FIRST) and Rules.next_storage(staged)=="storage_wood" and not staged.offer_open("storage_stone"))
+	for id: String in Rules.STORAGE:
+		check("Insufficient funds "+id,not staged.payment(id,"wood",false))
+		staged.collect("partial-"+id,"wood")
+		check("Partial payment "+id,staged.payment(id,"wood",false))
+		var fresh := ledger()
+		check("Resume partial "+id,fresh.restore(staged.snapshot()) and fresh.snapshot()==staged.snapshot())
+		staged=fresh
+		check("Built "+id,fund(staged,id) and staged.storage_open(id.trim_prefix("storage_")))
+		check("No duplicate debit "+id,not staged.payment(id,"wood",false))
+	check("East expansion unlocks after all 3 tiers",staged.offer_open(Rules.SECOND) and not staged.offer_open(Rules.TOWER))
+	check("Retains tier and downstream goals",fund(staged,Rules.SECOND) and fund(staged,Rules.TOWER) and fund(staged,Rules.AXES) and Rules.house_tier(staged)==3)
+	check("Reject reordered unrelated completion",tampered_order_rejected(staged))
+	# The original v2 schema let all 3 corners be purchased after expansion 1.
+	# Reproduce a mixed historical ledger with meat owned and stone part-funded.
+	var history := ledger()
+	fund(history,Rules.HEARTH)
+	fund(history,Rules.FIRST)
+	history.staged = false
+	fund(history,"storage_meat")
+	history.build_order.append("storage_meat")
+	history.collect("old-partial-stone","wood")
+	history.payment("storage_stone","wood",false)
+	history.collect("old-meat","meat")
+	history.deposit("meat")
+	history.staged = true
+	var migrated := ledger()
+	check("Historical out-of-order purchase and partial retained",migrated.restore(history.snapshot()) and migrated.snapshot()==history.snapshot())
+	check("Visual tier independent from earned bays",Rules.house_tier(migrated)==3 and migrated.storage_open("meat") and not migrated.storage_open("wood") and not migrated.storage_open("stone"))
+	check("Historical missing tiers funded in order",Rules.next_storage(migrated)=="storage_wood" and fund(migrated,"storage_wood") and migrated.remaining("storage_stone").wood==1 and fund(migrated,"storage_stone"))
+	check("No historical double charge",migrated.stored.meat==1 and migrated.complete("storage_meat") and not migrated.offer_open("storage_meat") and migrated.offer_open(Rules.SECOND))
 	var old := Inventory.new()
 	old.configure({"center_hearth":{"wood":3},"orbit_upgrade":{"stone":2,"meat":1}})
 	fund(old,Rules.HEARTH)

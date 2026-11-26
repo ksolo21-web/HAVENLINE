@@ -11,17 +11,19 @@ Start on snow and gather wood. Outside a purchased camp, the equipped tool sweep
 | Purchase | Price | What appears |
 | --- | --- | --- |
 | Hearth | 3 wood | A centered furnace, 10 × 8 m court, enclosing fence, and south and east gates |
-| First expansion | 3 wood, 1 stone | A 13 × 10.5 m court with three separate corner offers |
-| Wood storage | 2 wood | Northwest wood plot |
-| Stone storage | 2 wood, 1 stone | Northeast stone plot |
-| Meat storage | 2 wood, 1 meat | Southwest meat plot |
+| First expansion | 3 wood, 1 stone | A 13 × 10.5 m court with one northwest storehouse offer |
+| Starter storehouse | 2 wood | Rope-bound house with a timber bay |
+| Reinforced storehouse | 2 wood, 1 stone | The same building gains iron bands, a masonry base and a stone bay |
+| Advanced storehouse | 2 wood, 1 meat | Riveted blue siding and a cold-food bay |
 | Second expansion | 3 wood, 2 stone | After all three storage purchases, a 15.5 × 12.4 m court, eastern tower offer and extra-axes offer |
 | Eastern watchtower | 3 wood, 2 stone | A working defensive launcher facing the main approach |
 | Additional axes | 2 stone, 1 meat | Three orbiting tools outside the perimeter |
 
-The selected gate and wall boards are in the [structure art archive](https://github.com/ksolo21-web/HAVENLINE/tree/26bb649e0a8090c9c9af7e91e62f384fc86372d8/Docs/Design/StructureReferences/2026-11-25/selected). The separate corner plots follow the [reviewed storage concepts](https://github.com/ksolo21-web/HAVENLINE/tree/01664a73ddf5087f17f7e159fa0b6b4ed71367b5/Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts).
+Both double-leaf gates work at every camp size. The centered furnace occupies 76% of the preceding version’s linear dimensions. The mineable banks are larger in both the near geometry and streamed view. A physical pick stroke must still reach the rock.
 
-The southeast corner is reserved for future money storage. Each purchased floor plot accepts its corresponding material. The floor number shows the full balance. At high stock, the wood plot shows one tied three-log bundle, the stone plot shows two unequal rocks, and the meat plot shows two low piles and one loose cut. Each deposit and withdrawal still moves one unit. The carried stacks remain segregated. The player’s tools and hit detection stop at the earned boundary and resume upon exit. The tower continues to defend the camp while the player is inside.
+The storehouse occupies one northwest site. Return to the right side of its loading apron to pay for the next tier, or enter the left side to unload into owned bays. Step out before visiting again. Its sliding doors and cutaway reveal timber, stone, and meat in separate bays. Stored balances survive later upgrades and individual units fly out to pay for purchases. The first stages present one buy plot at a time. The final expansion offers the eastern tower and additional axes. [Storehouse art](https://github.com/ksolo21-web/HAVENLINE/tree/30f4f037baf54b24652360c8b6880771e29cc19a) · [Fence and gate art](https://github.com/ksolo21-web/HAVENLINE/tree/26bb649e0a8090c9c9af7e91e62f384fc86372d8/Docs/Design/StructureReferences/2026-11-25/selected)
+
+The player has four HP. Outside camp, wolves approach, brace and lunge. A normal bite costs one HP and an alpha bite costs two. Each registered hit shows a damage number, animates the struck character and plays an impact cue. The HUD keeps the health bar visible during exploration and combat. Zero HP stops the orbit and plays the fall. After the fall, the player returns to the original hearth plot if unpaid or inside the purchased camp at full health with two seconds of protection. Orbit contacts stop inside the paid perimeter and resume as the player exits.
 
 ## World and encounter settings
 
@@ -29,7 +31,7 @@ The southeast corner is reserved for future money storage. Each purchased floor 
 | --- | --- |
 | Snowfield | 1,024 × 1,024 m, deterministic seed 860342 |
 | Streaming | 32 m cells, at most 3 × 3 cells resident. Nearby trees and quarries become individual interactable sources |
-| Wood | 22 played seconds after depletion |
+| Wood | 5 played seconds after depletion, including the final 0.45-second return animation |
 | Stone | 32 played seconds after depletion |
 | Meat | 2 per normal wolf or 5 per alpha. Replenished through encounters |
 | Encounter interval | 24 played seconds. A pack requests 2–4 wolves, up to 4 live wolves globally |
@@ -50,11 +52,12 @@ qa_dir=$(mktemp -d)
 profile_dir=$(mktemp -d /tmp/havenline-l1-v3-world-XXXXXXXX)
 printf 'HAVENLINE-ALFRED-V3-DISPOSABLE\n' > "$profile_dir/L1-DISPOSABLE"
 export XDG_DATA_HOME="$qa_dir/data" XDG_CONFIG_HOME="$qa_dir/config" XDG_CACHE_HOME="$qa_dir/cache"
-export FIELD_QA_PLAN="$project_dir/tests/world_final_route.json" FIELD_QA_OUTPUT="$qa_dir" FIELD_QA_HEADLESS=1
+export FIELD_QA_PLAN="$project_dir/tests/world_house_route.json" FIELD_QA_OUTPUT="$qa_dir" FIELD_QA_HEADLESS=1
 godot --headless --editor --path "$project_dir" --import
-godot --headless --path "$project_dir" --fixed-fps 24 --script res://tests/world_final_route.gd -- "--l1-disposable-profile=$profile_dir"
+godot --headless --path "$project_dir" --fixed-fps 24 --script res://tests/world_house_route.gd -- "--l1-disposable-profile=$profile_dir"
 python3 tests/world_route_verify.py "$qa_dir"
 python3 tests/world_final_gate_verify.py "$qa_dir"
+python3 tests/world_house_verify.py "$qa_dir"
 ```
 
 The five music loops and event recordings are under `assets/audio/`. To regenerate the authored bank, install NumPy and SciPy and run `python3 tools/audio/render_field_score.py --output /tmp/havenline-world-audio-review`. The field mixer includes separate boss arrival, boss defeat, tower release and tower impact cues.
