@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T00:44:05Z",
+  "observed_at_utc": "2026-11-26T00:51:03Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -20,7 +20,7 @@
     {
       "id": "character-1",
       "role": "Rigging and independent review",
-      "state": "blocked",
+      "state": "in_progress",
       "result": "Fresh rig verified neutral controls and a planted key. Independent checks confirmed remaining posed boot, shin, and hem overlaps. No accepted walk or run.",
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/11ced1d317d79e328901ec99efe662cb9204eed6",
@@ -28,7 +28,11 @@
         "https://github.com/ksolo21-web/HAVENLINE/commit/600c2429f737a15b28aeddfc6cae400027b0e525",
         "https://github.com/ksolo21-web/HAVENLINE/commit/db191324f92b4c66549c5d267e35277bc3ba1651"
       ],
-      "next": "The local lower-garment rebuild is scoped and awaiting approval. It preserves the look and scale, and would still need an independent posed check before any use."
+      "next": "The detached, same-look lower-garment rebuild is approved for testing. Nothing is installed; it must pass a neutral appearance check and independent grounded-pose review.",
+      "role_ids": [
+        "rig-character",
+        "critic-rig"
+      ]
     },
     {
       "id": "wood-storage",
@@ -39,7 +43,10 @@
         "https://github.com/ksolo21-web/HAVENLINE/commit/f92609b35f6bf7986e7011418f97585ff170cb0f",
         "https://github.com/ksolo21-web/HAVENLINE/commit/7934368d88ee780c729122d49001f3bcec6fcd1f"
       ],
-      "next": "Build and verify larger carry mounts and the real transfer route; the current bundled display does not qualify."
+      "next": "Build and verify larger carry mounts and the real transfer route; the current bundled display does not qualify.",
+      "role_ids": [
+        "builder-resource-cooker"
+      ]
     },
     {
       "id": "furnace-purchase",
@@ -50,7 +57,10 @@
         "https://github.com/ksolo21-web/HAVENLINE/commit/872045d9253a765843cf88e2221e9a59121d0015",
         "https://github.com/ksolo21-web/HAVENLINE/commit/472d8a08ec300c28630694853b2563fe67f40f6e"
       ],
-      "next": "The native corner test and distinct pickup identities hold. A portable source-to-carry ownership bridge is tested, but the finish sweep needs real individual mounts and actual purchase-deck arrivals."
+      "next": "The native corner test and distinct pickup identities hold. A portable source-to-carry ownership bridge is tested, but the finish sweep needs real individual mounts and actual purchase-deck arrivals.",
+      "role_ids": [
+        "builder-camp-pads"
+      ]
     },
     {
       "id": "audio",
@@ -61,7 +71,10 @@
         "https://github.com/ksolo21-web/HAVENLINE/commit/0e32f67c11c045fb3196e437826233a07b5cd9e0",
         "https://github.com/ksolo21-web/HAVENLINE/commit/f9398439bbd73a3022550a5d983241b7eab2333f"
       ],
-      "next": "Stage a clearly opt-in listening preview; verify audible playback and device mix before any integration."
+      "next": "Stage a clearly opt-in listening preview; verify audible playback and device mix before any integration.",
+      "role_ids": [
+        "audio-sfx"
+      ]
     },
     {
       "id": "customer-counter",
@@ -69,7 +82,11 @@
       "state": "blocked",
       "result": "Detached stock-handling visibility and input preflight staged, no customer, serving or payment authority installed.",
       "evidence": [],
-      "next": "Compact input-observer source and donor evidence are ready, but a safe isolated native test host remains pending. No interaction or payment is implemented."
+      "next": "Compact input-observer source and donor evidence are ready, but a safe isolated native test host remains pending. No interaction or payment is implemented.",
+      "role_ids": [
+        "builder-customer-counter",
+        "level1-verifier"
+      ]
     },
     {
       "id": "enemy-animals",
@@ -77,7 +94,10 @@
       "state": "blocked",
       "result": "Enemy animals are in scope, fish are not. No approved runtime species, encounter or reward tied to this build.",
       "evidence": [],
-      "next": "Lock the authored Level 1 enemy asset and real encounter authority before adding combat or related sound."
+      "next": "Lock the authored Level 1 enemy asset and real encounter authority before adding combat or related sound.",
+      "role_ids": [
+        "planner"
+      ]
     }
   ],
   "roster": {
@@ -85,5 +105,83 @@
     "avatar_count": 15,
     "includes_coordinator": true,
     "represents_live_presence": false
-  }
+  },
+  "role_activity": [
+    {
+      "role_id": "alfred",
+      "state": "done",
+      "title": "Prepared Bot Office feed data",
+      "summary": "Mapped project lanes to their roster roles and verified the data with the deployed dashboard’s parser. This is reported work, not live worker monitoring.",
+      "next": "Keep role reports tied to verified results.",
+      "updated_at_utc": "2026-11-26T00:51:03Z"
+    },
+    {
+      "role_id": "rig-character",
+      "state": "working",
+      "title": "Detached Character 1 lower-garment rebuild",
+      "summary": "The same-look rebuild is authorized for testing only. The current playable build is unchanged.",
+      "next": "Build the detached candidate, then retest the grounded pose and submit it to the independent critic.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/db191324f92b4c66549c5d267e35277bc3ba1651"
+      ],
+      "updated_at_utc": "2026-11-26T00:51:03Z"
+    },
+    {
+      "role_id": "critic-rig",
+      "state": "done",
+      "title": "Reproduced Character 1 deformation failure",
+      "summary": "The independent grounded-pose test found the overlaps cross boots, knees, and hems. No walk or run was accepted.",
+      "next": "Review the detached rebuild after it exists.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/600c2429f737a15b28aeddfc6cae400027b0e525"
+      ],
+      "updated_at_utc": "2026-11-26T00:27:41Z"
+    },
+    {
+      "role_id": "builder-camp-pads",
+      "state": "done",
+      "title": "Verified the three starter wood sources",
+      "summary": "An isolated native test verified two loose pickups and the settled pine as three distinct committed sources. This is not a pass for individual carry visuals or the purchase sweep.",
+      "next": "Verify individual larger mounts and deliveries to the purchase deck.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/7934368d88ee780c729122d49001f3bcec6fcd1f"
+      ],
+      "updated_at_utc": "2026-11-26T00:41:28Z"
+    },
+    {
+      "role_id": "audio-sfx",
+      "state": "done",
+      "title": "Passed isolated playback-state and shutdown checks",
+      "summary": "All 131 checks passed. This verifies the player’s behavior, not sound on a phone or audio in the playable build.",
+      "next": "Run the opt-in listening preview on an authorized output-capable device.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/f9398439bbd73a3022550a5d983241b7eab2333f"
+      ],
+      "updated_at_utc": "2026-11-26T00:14:26Z"
+    }
+  ],
+  "office_events": [
+    {
+      "id": "independent-rig-review-20261126-0027",
+      "type": "handoff",
+      "at_utc": "2026-11-26T00:27:41Z",
+      "from_role_id": "critic-rig",
+      "to_role_id": "alfred",
+      "message": "Handoff summary: The independently reproduced overlaps span the boots, knees, and hems. The current pose stays rejected; one same-look detached rebuild is the next test.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/600c2429f737a15b28aeddfc6cae400027b0e525"
+      ]
+    },
+    {
+      "id": "starter-source-route-20261126-0041",
+      "type": "handoff",
+      "at_utc": "2026-11-26T00:41:28Z",
+      "from_role_id": "builder-camp-pads",
+      "to_role_id": "alfred",
+      "message": "Handoff summary: The three original starter pickups were verified as separate committed sources. The current grouped carry display stayed unchanged; it cannot trigger the purchase sweep.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/7934368d88ee780c729122d49001f3bcec6fcd1f"
+      ]
+    }
+  ]
 }
