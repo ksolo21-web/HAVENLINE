@@ -20,6 +20,7 @@ func take_segment(state: String, stick: Vector2, ticks: int) -> void:
 	move_input(stick)
 	var start: Vector3 = world.actor.global_position
 	var matched := 0
+	var settled_mismatches := 0
 	var expected_gait := "idle" if state=="upgraded" else state
 	var angles := []
 	for i in ticks:
@@ -27,7 +28,9 @@ func take_segment(state: String, stick: Vector2, ticks: int) -> void:
 		if DisplayServer.get_name() != "headless":
 			await RenderingServer.frame_post_draw
 		var kit = world.character_kit
-		if kit.locomotion.current == expected_gait and kit.active and kit.count==(3 if state=="upgraded" else 1): matched += 1
+		var correct: bool = kit.locomotion.current == expected_gait and kit.active and kit.count==(3 if state=="upgraded" else 1)
+		if correct: matched += 1
+		if i >= 32 and not correct: settled_mismatches += 1
 		var tip: Vector3 = kit.current_tip
 		var local_tip: Vector3 = tip - world.actor.global_position
 		angles.append(atan2(local_tip.x,local_tip.z))
@@ -40,8 +43,8 @@ func take_segment(state: String, stick: Vector2, ticks: int) -> void:
 	for i in range(1,angles.size()):
 		total += wrapf(angles[i]-angles[i-1],-PI,PI)
 	var dist: float = world.actor.global_position.distance_to(start)
-	measurements[state] = {"frames":ticks,"matching_state_and_visible_orbit":matched,"travel_m":dist,"degrees":rad_to_deg(total)}
-	if matched < ticks - 3 or total <= TAU: failures.append(state)
+	measurements[state] = {"frames":ticks,"mismatches_after_allowed_turn_and_brake":settled_mismatches,"matching_state_and_visible_orbit":matched,"travel_m":dist,"degrees":rad_to_deg(total)}
+	if settled_mismatches != 0 or total <= TAU: failures.append(state)
 	if state in ["walk","run"] and dist < .75: failures.append(state+" distance")
 
 func run() -> void:

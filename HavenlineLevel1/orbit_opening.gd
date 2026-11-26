@@ -1,4 +1,14 @@
 extends "res://opening.gd"
+const ZoomCamera = preload("res://orbit_camera.gd")
+const VisualQuality = preload("res://orbit_visual_quality.gd")
+var trial_camera := ZoomCamera.new()
+var graphics := VisualQuality.new()
+var hud_fingers: Dictionary = {}
+var gait_motor = preload("res://gait_motor.gd").new()
+
+func move_actor(input: Vector2, dt: float) -> float:
+	return gait_motor.step(self, input, dt)
+
 const Orbit = preload("res://weapon_orbit.gd")
 const FRESH_HERO = preload("res://assets/characters/Character1Fresh.glb")
 @export var upgraded_orbit := false
@@ -9,6 +19,9 @@ var contacts: Array[Dictionary] = []
 
 func model(resource: PackedScene, parent: Node3D, height: float) -> Node3D:
 	return super.model(FRESH_HERO if parent == actor and resource == HERO else resource, parent, height)
+
+func create_opening_hud() -> OpeningHUD:
+	return preload("res://orbit_hud.gd").new()
 
 func refresh_hud() -> void:
 	opening_hud.show_status(int(ledger.stock.wood), persist_error if persist_blocked else "Approach a resource to gather.")
@@ -50,8 +63,61 @@ func _ready() -> void:
 	surfaces[resource_rock] = [rock_part, rock_part.mesh.generate_triangle_mesh()]
 	opening_hud.show_status(0, "Approach a resource to gather.")
 	tree_button.hide()
+	add_child(graphics)
+	graphics.install(self, opening_hud)
+	set_zoom_ratio(1.0)
+	get_window().focus_exited.connect(clear_touch)
+
+func set_zoom_ratio(value: float) -> void:
+	trial_camera.set_ratio(camera, value)
+
+func get_zoom_ratio() -> float:
+	return trial_camera.zoom_ratio
+
+func clear_touch() -> void:
+	super.clear_touch()
+	trial_camera.reset_gesture()
+	hud_fingers.clear()
 
 func _input(event: InputEvent) -> void:
+	if event is InputEventScreenTouch or event is InputEventScreenDrag:
+		if event.device == InputEvent.DEVICE_ID_EMULATION:
+			return
+		if hud_fingers.has(event.index):
+			if event is InputEventScreenTouch and (event.canceled or not event.pressed):
+				hud_fingers.erase(event.index)
+			return
+		if event is InputEventScreenTouch and event.pressed and not event.canceled:
+			var quality_hit := graphics.quality_button.get_global_rect().has_point(event.position)
+			if quality_hit or touches_gate_button(event.position) or touches_tree_button(event.position):
+				hud_fingers[event.index] = true
+				if trial_camera.fingers.is_empty() and hud_fingers.size() == 1:
+					if quality_hit:
+						graphics.set_ultra(not graphics.ultra)
+					else:
+						super(event)
+				return
+		if trial_camera.consume(event, camera):
+			if trial_camera.pinching:
+				super.clear_touch()
+			return
+		if event is InputEventScreenTouch and (event.canceled or not event.pressed):
+			if touch_id == event.index:
+				super.clear_touch()
+			return
+		super(event)
+		return
+	if event is InputEventMouseButton and event.pressed and event.device != InputEvent.DEVICE_ID_EMULATION:
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP or event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			var step := 1.15 if event.button_index == MOUSE_BUTTON_WHEEL_UP else 1.0 / 1.15
+			set_zoom_ratio(get_zoom_ratio() * pow(step, event.factor if event.factor > 0 else 1.0))
+			return
+		if event.button_index == MOUSE_BUTTON_LEFT and graphics.quality_button.get_global_rect().has_point(event.position):
+			graphics.set_ultra(not graphics.ultra)
+			return
+	if event is InputEventMagnifyGesture and trial_camera.fingers.is_empty():
+		set_zoom_ratio(get_zoom_ratio() * event.factor)
+		return
 	if event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_U:
 		character_kit.set_upgraded(character_kit.count == 1)
 		return
@@ -112,7 +178,7 @@ func accept_contact(body: Node3D) -> bool:
 	return body.take_swirl_hit(character_kit.turn_id)
 
 func _step_character(dt: float, speed: float) -> void:
-	character_kit.locomotion.observe(speed, true)
+	character_kit.locomotion.observe(speed, true, dt)
 	resource_rock.advance(dt)
 	if persist_blocked:
 		character_kit.rest()

@@ -2,11 +2,11 @@
 config_version=5
 
 [application]
-config/name="Havenline Alfred L1 Independent V8"
+config/name="Havenline Character 1 Orbit Trial"
 config/features=PackedStringArray("4.7")
 config/use_custom_user_dir=true
-config/custom_user_dir_name="Havenline-Alfred-Private-L1-Independent-V8"
-run/main_scene="res://opening.tscn"
+config/custom_user_dir_name="Havenline-Character1-Orbit-Trial"
+run/main_scene="res://orbit_opening.tscn"
 
 [display]
 window/size/viewport_width=1280
@@ -16,6 +16,9 @@ window/handheld/orientation=0
 
 [rendering]
 renderer/rendering_method="gl_compatibility"
+textures/default_filters/anisotropic_filtering_level=3
+lights_and_shadows/directional_shadow/size=4096
+lights_and_shadows/directional_shadow/soft_shadow_filter_quality=2
 
 [input_devices]
 pointing/emulate_mouse_from_touch=false

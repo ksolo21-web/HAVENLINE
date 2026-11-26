@@ -98,6 +98,9 @@ func constrain_private_snow_travel() -> void:
 	foot.z = clampf(foot.z, -travel_limit, travel_limit)
 	actor.position = foot
 
+func create_opening_hud() -> OpeningHUD:
+	return OpeningHUD.new()
+
 func _ready() -> void:
 	layout = JSON.parse_string(FileAccess.get_file_as_string("res://layout.json"))
 	var world_light := DirectionalLight3D.new()
@@ -165,7 +168,7 @@ func _ready() -> void:
 		push_warning("V5 pad presentation withheld: exact geometry or label binding failed.")
 	var overlay := CanvasLayer.new()
 	add_child(overlay)
-	opening_hud = OpeningHUD.new()
+	opening_hud = create_opening_hud()
 	overlay.add_child(opening_hud)
 	gate_button = opening_hud.gate
 	tree_button = opening_hud.tree
@@ -284,16 +287,11 @@ func _physics_process(dt: float) -> void:
 		direction.x = float(Input.is_physical_key_pressed(KEY_D) or Input.is_physical_key_pressed(KEY_RIGHT)) - float(Input.is_physical_key_pressed(KEY_A) or Input.is_physical_key_pressed(KEY_LEFT))
 		direction.y = float(Input.is_physical_key_pressed(KEY_S) or Input.is_physical_key_pressed(KEY_DOWN)) - float(Input.is_physical_key_pressed(KEY_W) or Input.is_physical_key_pressed(KEY_UP))
 	direction = direction.limit_length()
-	var flat := Vector3(direction.x, 0, direction.y).rotated(Vector3.UP, atan2(7.0, 11.0))
-	actor.velocity = flat * 4.0
-	actor.move_and_slide()
-	constrain_private_snow_travel()
+	var gait_speed := move_actor(direction, dt)
 	step_technical_gates(dt)
-	if flat.length() > .05:
-		actor.rotation.y = atan2(flat.x, flat.z)
 	camera.position = camera.position.lerp(actor.position + Vector3(7, 11, 11), minf(dt * 8.0, 1.0))
 	step_tree(dt)
-	_step_character(dt, flat.length() * 4.0)
+	_step_character(dt, gait_speed)
 	if persist_blocked:
 		return
 	for row in layout.wood_nodes:
@@ -303,6 +301,15 @@ func _physics_process(dt: float) -> void:
 		if marker.visible and actor.position.distance_to(point(row.xz)) < .68:
 			_collect_wood_source(String(row.id))
 	fund_opening_receiver(Ledger.OFFER, "wood")
+
+func move_actor(direction: Vector2, _dt: float) -> float:
+	var flat := Vector3(direction.x, 0, direction.y).rotated(Vector3.UP, atan2(7.0, 11.0))
+	actor.velocity = flat * 4.0
+	actor.move_and_slide()
+	constrain_private_snow_travel()
+	if flat.length() > .05:
+		actor.rotation.y = atan2(flat.x, flat.z)
+	return flat.length() * 4.0
 
 func fund_opening_receiver(receiver_id: Variant = null, material_id: Variant = null) -> bool:
 	# Authorize the exact scene target, not caller-provided substitutions or quantities.
