@@ -1,0 +1,1 @@
+Sampled 49 yaw/pitch points, 37 under the all-pose tilt gate, 11 passing exact three-frame ≥25mm clearance, 0 passing later unblocked direct light. Best minimum gap 30.618483mm (yaw0/pitch+5). Source sealed 45aad84e755d34deeb49360be964f486860780bb9ae70970ff4b2a785cfe5a5d, full local numeric output pinned but not a rendered or general continuum conclusion.
