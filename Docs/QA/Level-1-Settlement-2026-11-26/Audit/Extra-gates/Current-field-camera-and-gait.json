@@ -1,0 +1,99 @@
+{
+  "qa_gait_motion": {
+    "source": "a0e83999064b666145a884eed767f68d4d127688",
+    "baseline_test_sha256": "d7f2f5efaf3985e8585e27756a321b462c85e248f8f1dda4cfd09efa8dccfbd9",
+    "current_test_sha256": "cafebb6f05886494ff9a77fc3c8159f3b57e24ac86fcfae4c0fc37aa5e817afe",
+    "exit_code": 0,
+    "metrics": [
+      {
+        "failures": [],
+        "idle": {
+          "gait_mismatches": 0,
+          "lowest_sole_m": -2.61361989828401e-08,
+          "max_yaw_delta_per_tick_deg": 0.0,
+          "median_near_ground_point_speed_m_s": 0.0,
+          "near_ground_vertex_pairs": 9417,
+          "p95_near_ground_point_speed_m_s": 0.0,
+          "settled_steps_per_minute": 0.0,
+          "settled_world_speed_m_s": 0.0,
+          "transition_p95_near_ground_point_speed_m_s": 2.86102294921875e-05
+        },
+        "reverse": {
+          "gait_mismatches": 0,
+          "lowest_sole_m": 0.000999840907752514,
+          "max_yaw_delta_per_tick_deg": 4.24944681572412,
+          "median_near_ground_point_speed_m_s": 0.015912328963168,
+          "near_ground_vertex_pairs": 990,
+          "p95_near_ground_point_speed_m_s": 0.0489693274721503,
+          "settled_steps_per_minute": 172.898320448433,
+          "settled_world_speed_m_s": 2.79999995231628,
+          "transition_p95_near_ground_point_speed_m_s": 6.39744189356861e-05
+        },
+        "run": {
+          "gait_mismatches": 0,
+          "lowest_sole_m": 0.00120792537927628,
+          "max_yaw_delta_per_tick_deg": 0.0,
+          "median_near_ground_point_speed_m_s": 0.0209336949046701,
+          "near_ground_vertex_pairs": 882,
+          "p95_near_ground_point_speed_m_s": 0.0492645450867712,
+          "settled_steps_per_minute": 172.898339028189,
+          "settled_world_speed_m_s": 2.79999995231628,
+          "transition_p95_near_ground_point_speed_m_s": 0.00857501872815192
+        },
+        "tested_sole_vertices": 174,
+        "walk": {
+          "gait_mismatches": 0,
+          "lowest_sole_m": 0.00106769800186157,
+          "max_yaw_delta_per_tick_deg": 8.44642366350204,
+          "median_near_ground_point_speed_m_s": 0.00605199340498075,
+          "near_ground_vertex_pairs": 2800,
+          "p95_near_ground_point_speed_m_s": 0.0707722920924425,
+          "settled_steps_per_minute": 128.238845773849,
+          "settled_world_speed_m_s": 1.11709845066071,
+          "transition_p95_near_ground_point_speed_m_s": 5.7220458984375e-05
+        }
+      }
+    ],
+    "diagnostics": [],
+    "changed": "Active field scene replaces preview scene; clean audio drain added."
+  },
+  "qa_orbit_camera": {
+    "source": "a0e83999064b666145a884eed767f68d4d127688",
+    "baseline_test_sha256": "81169ba8a12ebc7d7eec2c0714cb85fa7e8b8d51e6cfa585880827ae8626f387",
+    "current_test_sha256": "29d78085619a16a899a82b89d975468c69a141057fd5b19c57bfc5d4e845f255",
+    "exit_code": 0,
+    "metrics": [
+      {
+        "checks": {
+          "Ultra enabled at native resolution and 4x MSAA": true,
+          "Ultra preserves visible ground inside shadows": true,
+          "camera uses the short axis": true,
+          "canceled movement clears held input": true,
+          "default authored angle and normal span": true,
+          "focus loss cancels stick and pinch ownership": true,
+          "graphics control restores Ultra": true,
+          "graphics control selects standard without movement": true,
+          "new single-finger gesture acquires movement": true,
+          "one finger moves and an unrelated drag leaves it owned": true,
+          "pinch clamps at authored normal view": true,
+          "pinch clamps at two times": true,
+          "replacement finger rebases without zoom jump": true,
+          "second finger releases movement stick": true,
+          "span ratio drives proportional zoom": true,
+          "surviving finger cannot take over movement": true,
+          "textured scene materials use anisotropic filtering": true,
+          "third finger does not disturb active pinch": true,
+          "trial canvas fills the window": true
+        },
+        "filtered_materials": 39,
+        "framebuffer": "(64, 64)",
+        "quality": "Graphics \u00b7 Ultra",
+        "renderer": "gl_compatibility",
+        "scene_draw_scale": 1.0,
+        "suite": "orbit_camera"
+      }
+    ],
+    "diagnostics": [],
+    "changed": "Active field scene replaces preview scene; clean audio drain added. The obsolete 80-pixel two-line HUD and its unrelated simulated failure message are excluded; actual layout values were logged separately."
+  }
+}

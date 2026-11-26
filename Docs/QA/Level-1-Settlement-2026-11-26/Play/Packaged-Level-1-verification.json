@@ -1,0 +1,289 @@
+{
+  "source_commit": "a0e83999064b666145a884eed767f68d4d127688",
+  "source_manifest_sha256": "2255833a5da7378df6acc41f836b27dcd38cc2e8474fdfd7b31bfec0c26927ae",
+  "reviewed_files": 343,
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "embedded_elf_sha256": "61e981de2f02ad427b55cada459a581de7369efbf1660b0fd5ce01038ff869cc",
+  "scene_probe": {
+    "cooker": true,
+    "counter": true,
+    "live_scene_bindings": {
+      "cooker": "res://assets/lakeshore/cooker_workshop.glb",
+      "owl": "res://assets/settlement_people/expedition_owl.glb",
+      "trade_counter": "res://assets/customer_counter/canonical_counter.glb"
+    },
+    "normal_start": true,
+    "owl_single": true,
+    "plot": "Offer_survivor_plot",
+    "runtime": {
+      "field_counter": true,
+      "field_lakeshore": true,
+      "field_owl": true,
+      "field_processors": true,
+      "field_settlement_loop": true,
+      "field_survivor": true,
+      "field_worksites": true
+    },
+    "scene": "res://field_opening.tscn",
+    "score_audio": 0,
+    "source": "a0e83999064b666145a884eed767f68d4d127688",
+    "stone_zone": "stone",
+    "survivor_mesh": true,
+    "wood_zone": "wood"
+  },
+  "source_matches_shipped_elf": true,
+  "method": "Loaded each named PackedScene separately in the authored project and from the embedded resource pack. Compared every mesh surface vertex/index buffer, vertex and material colors, bound albedo native texture bytes, the owl foot morph and both decoded WAV sample buffers. The two independent reads were byte-identical. The extracted executable then opened the normal main scene with a fresh native profile.",
+  "comparison": {
+    "checks": {
+      "res://assets/audio/cook_griddle.wav": true,
+      "res://assets/audio/service_cash_paper.wav": true,
+      "res://assets/customer_counter/banded_notes.glb": true,
+      "res://assets/customer_counter/canonical_counter.glb": true,
+      "res://assets/customer_counter/cooked_game_meat.glb": true,
+      "res://assets/lakeshore/cooker_workshop.glb": true,
+      "res://assets/settlement_people/companion_axe.gltf": true,
+      "res://assets/settlement_people/companion_chop.json": true,
+      "res://assets/settlement_people/customer_female_01.glb": true,
+      "res://assets/settlement_people/customer_female_01.projection.json": true,
+      "res://assets/settlement_people/customer_male_01.glb": true,
+      "res://assets/settlement_people/customer_male_01.projection.json": true,
+      "res://assets/settlement_people/expedition_owl.glb": true,
+      "res://assets/settlement_people/survivor_male_01.glb": true,
+      "res://assets/settlement_people/survivor_male_01.projection.json": true,
+      "res://assets/shore_workshops/dressed_block.glb": true,
+      "res://assets/shore_workshops/finished_planks.glb": true,
+      "res://assets/shore_workshops/shore_quarry_drill.glb": true,
+      "res://assets/shore_workshops/shore_saw_bench.glb": true,
+      "res://assets/tools/axe-meshy_Image_0.jpg": true,
+      "res://assets/tools/axe-meshy_Image_1.png": true,
+      "res://assets/tools/axe-meshy_normal.png": true,
+      "talons_and_texture": true
+    },
+    "runtime_facts": {
+      "res://assets/audio/cook_griddle.wav": {
+        "decoded_sample_buffer_sha256": "b7b3a166ad01d24dda370ea24facc9a9ba6834209da5eff4fbaedda5ca46b65a",
+        "duration_seconds": 1.25,
+        "rate": 32000
+      },
+      "res://assets/audio/service_cash_paper.wav": {
+        "decoded_sample_buffer_sha256": "5ac9b6aaf926fac202be7310fa02b9c5f347211a28ae9ebd29a66a379952de35",
+        "duration_seconds": 0.49,
+        "rate": 32000
+      },
+      "res://assets/customer_counter/banded_notes.glb": {
+        "blend_shapes": [],
+        "bound_native_textures": {
+          "res://assets/customer_counter/banded_notes_banded_notes_paint.jpg": "5e6f8bbb60c472369c1fb43ecc17ff6dfbd73baf7fa2a80b575c0a7a89dcac11"
+        },
+        "indexed_surfaces_sha256": "bfb565f1bef38926b81eaff93167efd2aaf2e8eeccee128c6fe4d4f3c80334d8",
+        "mesh_nodes": [
+          "banded_notes"
+        ],
+        "vertex_and_material_colors_sha256": "98caa0eb97945188850f4417be1086db98808eea21628999643c0bea3f60b2a5",
+        "vertices": 5729
+      },
+      "res://assets/customer_counter/canonical_counter.glb": {
+        "blend_shapes": [],
+        "bound_native_textures": {
+          "res://assets/customer_counter/canonical_counter_CanonicalCounterPaint.jpg": "55e3a2ba9fc8b9f8191226006f5d2b993ff42e94c608aa863f25e850d688444b"
+        },
+        "indexed_surfaces_sha256": "ee853eb014626ea3cee6269198d400b0ab196f4cee72382bb05f3a6eb3ab8bfb",
+        "mesh_nodes": [
+          "CanonicalGoldenCounter"
+        ],
+        "vertex_and_material_colors_sha256": "98caa0eb97945188850f4417be1086db98808eea21628999643c0bea3f60b2a5",
+        "vertices": 10152
+      },
+      "res://assets/customer_counter/cooked_game_meat.glb": {
+        "blend_shapes": [],
+        "bound_native_textures": {
+          "res://assets/customer_counter/cooked_game_meat_cooked_game_meat_paint.jpg": "9e4686b3ec09865a24bb8f6b0982608b399c9cfea884c728a73118629e2992c3"
+        },
+        "indexed_surfaces_sha256": "1bb566d10c396333fc24ef708963011b9c83540e58e53ff22ec76563cf84e526",
+        "mesh_nodes": [
+          "cooked_game_meat"
+        ],
+        "vertex_and_material_colors_sha256": "98caa0eb97945188850f4417be1086db98808eea21628999643c0bea3f60b2a5",
+        "vertices": 6274
+      },
+      "res://assets/lakeshore/cooker_workshop.glb": {
+        "blend_shapes": [],
+        "bound_native_textures": {},
+        "indexed_surfaces_sha256": "17c73a2ddb3b3cd4dc729376d314e604f5738e451ddea3e5a1806fed4047d297",
+        "mesh_nodes": [
+          "CookerWorkshop",
+          "OriginalSaw"
+        ],
+        "vertex_and_material_colors_sha256": "ebb5c600b5d568869cbd890e16d7b04f78ff6192c1cdcc4655acac170a1083b4",
+        "vertices": 5898
+      },
+      "res://assets/settlement_people/companion_axe.gltf": {
+        "blend_shapes": [],
+        "bound_native_textures": {
+          "res://assets/tools/axe-meshy_Image_0.jpg": "c743bd796fb5f6744dafe4a8db6427aa0d2503d3e0f23b47c911b9a54704e32d"
+        },
+        "indexed_surfaces_sha256": "bf789556423d51e4781f71cace7a03719480d9061d545eaadb175036df46b0e2",
+        "mesh_nodes": [
+          "Mesh_0"
+        ],
+        "vertex_and_material_colors_sha256": "98caa0eb97945188850f4417be1086db98808eea21628999643c0bea3f60b2a5",
+        "vertices": 24362
+      },
+      "res://assets/settlement_people/companion_chop.json": {
+        "exported_bytes_sha256": "d7401880bbe12b01dbc6dfd197f578035be0bfc0a5a01790b5f250c390f290ac"
+      },
+      "res://assets/settlement_people/customer_female_01.glb": {
+        "blend_shapes": [],
+        "bound_native_textures": {
+          "res://assets/settlement_people/customer_female_01_customer_female_01_turnaround.jpg": "ac67511cda81b819d10b7d3c2e3dedcd98e7e0fa22facce3a55628bcce55e741"
+        },
+        "indexed_surfaces_sha256": "d11cf5ad168e9cd05c30ae526ba9186c749e8107439b3e725390dca9cce378e1",
+        "mesh_nodes": [
+          "Figure"
+        ],
+        "vertex_and_material_colors_sha256": "10caba5e24b5cb4c9460d6aa2128bb8183d22b0e7b1299b2b20fffaf7e3a7a0a",
+        "vertices": 35005
+      },
+      "res://assets/settlement_people/customer_female_01.projection.json": {
+        "exported_bytes_sha256": "cf437b40ec47a07de9c0eb97d17633faac9c357e63f75b7fdbf88f303678175d"
+      },
+      "res://assets/settlement_people/customer_male_01.glb": {
+        "blend_shapes": [],
+        "bound_native_textures": {
+          "res://assets/settlement_people/customer_male_01_customer_male_01_turnaround.jpg": "c4dd47f0650b73e2d98f630023ba7a75830607e44b954677dfd5e90521eaacd2"
+        },
+        "indexed_surfaces_sha256": "fb4f73d865628bccfcfd850be6f66f61ee0f2709996bdff1ee42f5017dd23cfb",
+        "mesh_nodes": [
+          "Figure"
+        ],
+        "vertex_and_material_colors_sha256": "3d2ad213cbb8d6244e07667bd6e9b57734aab96732780e4bb869b30ebb6d9a65",
+        "vertices": 39445
+      },
+      "res://assets/settlement_people/customer_male_01.projection.json": {
+        "exported_bytes_sha256": "2449c793e3c78988944099dac7eb962010d1f58a272d61a3f6c8b711ecea40c9"
+      },
+      "res://assets/settlement_people/expedition_owl.glb": {
+        "blend_shapes": [
+          "FlightTalons"
+        ],
+        "bound_native_textures": {
+          "res://assets/settlement_people/expedition_owl_OwlEightViewPlumage.jpg": "a748ba0936e342907b5a652d664f3dbce0f37e72e048e710e53e007cafbbb48c"
+        },
+        "indexed_surfaces_sha256": "a762e605b6860535b37d4e64286560e8200b98085f773acb447e191d0e267357",
+        "mesh_nodes": [
+          "EightViewOwl",
+          "PrimariesL",
+          "MantleL1",
+          "GreaterCovertsL",
+          "MantleL0",
+          "SecondariesL",
+          "CrownEarL",
+          "PrimariesR",
+          "MantleR1",
+          "GreaterCovertsR",
+          "MantleR0",
+          "SecondariesR",
+          "CrownEarR"
+        ],
+        "vertex_and_material_colors_sha256": "40266e03d646b125429423c54940d6b9aaa4ede1c0061d8e79998347970d3726",
+        "vertices": 30620
+      },
+      "res://assets/settlement_people/survivor_male_01.glb": {
+        "blend_shapes": [],
+        "bound_native_textures": {
+          "res://assets/settlement_people/survivor_male_01_survivor_male_01_turnaround.jpg": "428d68fec5c584ab4b28be25c9c55f00892cce56eafde9d503e1305ef32e3a71"
+        },
+        "indexed_surfaces_sha256": "71d299ea4b086855ab085a02982fb877c8e6d2746f7bc61796dd41fb8bad5663",
+        "mesh_nodes": [
+          "Figure"
+        ],
+        "vertex_and_material_colors_sha256": "7a11df117bba3d5a21a904c3df4ba0f071c65726249eb27c232cdb79779bb223",
+        "vertices": 33538
+      },
+      "res://assets/settlement_people/survivor_male_01.projection.json": {
+        "exported_bytes_sha256": "40e5429a589651483343040e98ee23f6c40752813661188596340e1e4e7fe942"
+      },
+      "res://assets/shore_workshops/dressed_block.glb": {
+        "blend_shapes": [],
+        "bound_native_textures": {
+          "res://assets/shore_workshops/dressed_block_0.jpg": "8fcc714ef75065a230aa3b434ec9833acc952f15781c7bd30a5249ce002ade4c"
+        },
+        "indexed_surfaces_sha256": "3a65aecd686ff46a4b8931caed86e40f62380d0faed2c42f835f19e69f7b49b6",
+        "mesh_nodes": [
+          "Frame"
+        ],
+        "vertex_and_material_colors_sha256": "98caa0eb97945188850f4417be1086db98808eea21628999643c0bea3f60b2a5",
+        "vertices": 96
+      },
+      "res://assets/shore_workshops/finished_planks.glb": {
+        "blend_shapes": [],
+        "bound_native_textures": {
+          "res://assets/shore_workshops/finished_planks_0.jpg": "8fcc714ef75065a230aa3b434ec9833acc952f15781c7bd30a5249ce002ade4c"
+        },
+        "indexed_surfaces_sha256": "583c8f858accd115ff49ea383774dd4a4ea20295d5684178c419f35ee7446bca",
+        "mesh_nodes": [
+          "Frame"
+        ],
+        "vertex_and_material_colors_sha256": "98caa0eb97945188850f4417be1086db98808eea21628999643c0bea3f60b2a5",
+        "vertices": 480
+      },
+      "res://assets/shore_workshops/shore_quarry_drill.glb": {
+        "blend_shapes": [],
+        "bound_native_textures": {
+          "res://assets/shore_workshops/shore_quarry_drill_0.jpg": "8fcc714ef75065a230aa3b434ec9833acc952f15781c7bd30a5249ce002ade4c"
+        },
+        "indexed_surfaces_sha256": "c35be3891cac828fd7525c68a4744899020b7efbd97dbe91f6f9b77aa5592bee",
+        "mesh_nodes": [
+          "Frame",
+          "DrillHead"
+        ],
+        "vertex_and_material_colors_sha256": "34141331845056cc8e05fb5b0f0d954ce81a3f3767aa62cc6e3fe21d9e999a47",
+        "vertices": 28806
+      },
+      "res://assets/shore_workshops/shore_saw_bench.glb": {
+        "blend_shapes": [],
+        "bound_native_textures": {
+          "res://assets/shore_workshops/shore_saw_bench_0.jpg": "8fcc714ef75065a230aa3b434ec9833acc952f15781c7bd30a5249ce002ade4c"
+        },
+        "indexed_surfaces_sha256": "63537317c3d569f3635553771e862a263013da4269f4adde287158dd36f9e42f",
+        "mesh_nodes": [
+          "Frame",
+          "SawRotor"
+        ],
+        "vertex_and_material_colors_sha256": "34141331845056cc8e05fb5b0f0d954ce81a3f3767aa62cc6e3fe21d9e999a47",
+        "vertices": 26244
+      },
+      "res://assets/tools/axe-meshy_Image_0.jpg": {
+        "imported_mipmapped_ctex_sha256": "c743bd796fb5f6744dafe4a8db6427aa0d2503d3e0f23b47c911b9a54704e32d"
+      },
+      "res://assets/tools/axe-meshy_Image_1.png": {
+        "imported_mipmapped_ctex_sha256": "726ae1e56d4dc83c3335c4c9478cc6e8a3b2bdf42c578542ef6962ab7f7ffa39"
+      },
+      "res://assets/tools/axe-meshy_normal.png": {
+        "imported_mipmapped_ctex_sha256": "e4421d65e6625e7bb287e643551e1b0a5ea3f58d448817ff660ff1ee061e55da"
+      }
+    },
+    "scene": "res://field_opening.tscn"
+  },
+  "authored_sha256": {
+    "assets/audio/cook_griddle.wav": "e1f3fc36cf34d2b14514b8f399db525dd1aeccec56a2326042c03f962cdcc987",
+    "assets/audio/service_cash_paper.wav": "a27c0fb59b8d4f695655aded138a55ca6cb5be5f07691250ffb38b4d95a142f2",
+    "assets/customer_counter/banded_notes.glb": "713a7e8e95ed00576a97130b1eab6632e1f4f410233e399a397316b2914177c7",
+    "assets/customer_counter/canonical_counter.glb": "7ead3e6206e64dd086263ce601521a52aab86694530ce4bd11d127eea7ce2eb1",
+    "assets/customer_counter/cooked_game_meat.glb": "ee79071d4e64884dee4c2e87da27fdfdce75963bdc8ba59a677278b17a9bb978",
+    "assets/lakeshore/cooker_workshop.glb": "1105f5c0f79b3b7b998dc59d76e0afdfd3c5cd339de14e17274c27cf39ddecde",
+    "assets/settlement_people/companion_axe.gltf": "330d957790edafaa2813bca2406c34c646e6a7702e35c586638a0ee3a2bbebcf",
+    "assets/settlement_people/companion_chop.json": "d7401880bbe12b01dbc6dfd197f578035be0bfc0a5a01790b5f250c390f290ac",
+    "assets/settlement_people/customer_female_01.glb": "44e6e294134eefa45e7bc417b1eac5999e47c8566294891c12e4a14f8b739a52",
+    "assets/settlement_people/customer_female_01.projection.json": "cf437b40ec47a07de9c0eb97d17633faac9c357e63f75b7fdbf88f303678175d",
+    "assets/settlement_people/customer_male_01.glb": "6d5aff94ad005f8626f6bb77d2910cbaaf1c70104da6ee498879ac03060379c3",
+    "assets/settlement_people/customer_male_01.projection.json": "2449c793e3c78988944099dac7eb962010d1f58a272d61a3f6c8b711ecea40c9",
+    "assets/settlement_people/expedition_owl.glb": "7bcfd1277b8ff0eebfc70e8ba8c726750e34c4e1a999cefb9463ae0fd3953f41",
+    "assets/settlement_people/survivor_male_01.glb": "08c4f621a7eca64413a429adb2392ce9169c9901a2ef72621c8a9f9ce9b25d19",
+    "assets/settlement_people/survivor_male_01.projection.json": "40e5429a589651483343040e98ee23f6c40752813661188596340e1e4e7fe942",
+    "assets/shore_workshops/dressed_block.glb": "bd0cc9a860cd434decc36fc30198b83c7c7423ccc19c610d2e4cdbd25a8f4914",
+    "assets/shore_workshops/finished_planks.glb": "a3fd09d12ace161b1b79dc96851ce6660024eb1cb5abb120fda13e98ea37c167",
+    "assets/shore_workshops/shore_quarry_drill.glb": "6742ea965cbaee023df443868faf294c92aa37ca95cc7eca134a44f9b0e91800",
+    "assets/shore_workshops/shore_saw_bench.glb": "0f8bd0a11cea058dfd0b711bcace5c5f2717dfe63a22dc012541f6fbb6c0701b"
+  }
+}

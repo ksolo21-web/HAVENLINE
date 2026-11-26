@@ -1,0 +1,11 @@
+# Southwest lakeshore workstations
+
+Follow the timber waypost west from the southern camp gate. The cooker sits by the inlet at **(−21, 16)**. The timber saw stands southeast of the cooker at **(−17, 20.5)**, and the quarry drill stands southwest of the saw at **(−20.4, 24.9)**. The player works on each station’s east apron. The waterline and workshop guards stop player motion.
+
+The saw converts one carried wood into one plank bundle. The cable drill converts one carried stone into one dressed block. Each cycle takes 1.45 seconds. The separate intake and outfeed points place the raw piece and finished goods on their own fixtures. The trays display up to four representative lots. The ledger and HUD retain the full quantities.
+
+The stills show the integrated field scene at both gameplay zooms in an isolated 960 × 540 session. For these art views, the fixture positioned the player at each apron, enabled the machine motion and supplied example output balances. The two native geometry and mechanism suites passed all 29 checks. The JSON records the individual results and source hashes.
+
+The wood and stone stations are newly authored 3D interpretations of Alfred’s eight-view saw and quarry-drill plates. The circular saw includes the original Git station’s wheel and axle and a distinct cutting edge. The quarry’s timber derrick, cable, driven bit, motor and winch follow the drill sheet. Source sheets, generators and checksums are identified in the JSON. [Saw sheet](https://github.com/ksolo21-web/HAVENLINE/blob/26bb649e0a8090c9c9af7e91e62f384fc86372d8/Docs/Design/RenderArchive/2026-11-23/selected/equipment/saw_station.png) · [Quarry sheet](https://github.com/ksolo21-web/HAVENLINE/blob/26bb649e0a8090c9c9af7e91e62f384fc86372d8/Docs/Design/RenderArchive/2026-11-23/selected/equipment/quarry_drill_station.png)
+
+The cooker is the recovered T05 station from Git. Its original model and materials remain in the build with its actual 164-triangle saw and axle separated for motion. The approved V18 binary still lacks a verified link to any recovered Git object. The closed inlet reuses the original river’s shape functions and water treatment. [Recovered cooker](https://github.com/ksolo21-web/HAVENLINE/blob/5abfc29f1c3c51bef99247641cf1131581899942/HavenlineGodot/assets/stations_v2/cooker_processor.glb)

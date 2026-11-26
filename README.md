@@ -1,5 +1,7 @@
 # HAVENLINE
 
+**Level 1 settlement trial.** This branch has a playable snow camp, one paid survivor, an attacking owl, three lakeshore workstations and a north-fence service counter. [Playthrough and T01–T11 audit](Docs/QA/Level-1-Settlement-2026-11-26/README.md) · [Prepare the reviewed project](Docs/QA/Level-1-Settlement-2026-11-26/Source/README.md)
+
 The active Android migration is **Godot 4.7.2**, in [`HavenlineGodot/`](HavenlineGodot/). This project builds independently of Unity. The older Unity project remains here as historical source, outside the Android export root.
 
 **This branch is an incomplete development migration, not the finished game.** The user's original premium stylized 3D design, non-primitive visual requirement, four-character crew and 4K/60 minimum remain the acceptance criteria. A successful APK export does not satisfy those criteria.

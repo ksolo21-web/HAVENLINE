@@ -1,0 +1,248 @@
+{
+  "source": "a0e83999064b666145a884eed767f68d4d127688",
+  "legacy_plan_checkout": "b35a9a65afa6b651116899603a48229928b30fc2",
+  "active_scene": "res://field_opening.tscn",
+  "dependency_method": "Recursive static res:// script and scene references reachable from the field scene. Dynamic data or fixture references are not treated as proof of runtime reachability. These results are supplemented by the walkthrough and native suites. Data assets are checked separately.",
+  "statically_reachable_gd_or_tscn": [
+    "assets/lakeshore/river_geometry.gd",
+    "character_kit.gd",
+    "field_art.gd",
+    "field_audio.gd",
+    "field_carry.gd",
+    "field_counter.gd",
+    "field_defense_tower.gd",
+    "field_depot.gd",
+    "field_encounters.gd",
+    "field_enemy.gd",
+    "field_environment.gd",
+    "field_forest.gd",
+    "field_hud.gd",
+    "field_human.gd",
+    "field_inventory.gd",
+    "field_lakeshore.gd",
+    "field_lifecycle.gd",
+    "field_offer_floor.gd",
+    "field_opening.gd",
+    "field_opening.tscn",
+    "field_owl.gd",
+    "field_processors.gd",
+    "field_progression.gd",
+    "field_save.gd",
+    "field_settlement.gd",
+    "field_settlement_loop.gd",
+    "field_snow_tracks.gd",
+    "field_stock_layout.gd",
+    "field_storage_house.gd",
+    "field_survivor.gd",
+    "field_tower_art.gd",
+    "field_worksites.gd",
+    "gait_motor.gd",
+    "mining_resources.gd",
+    "opening.gd",
+    "opening_hud.gd",
+    "opening_ledger.gd",
+    "opening_save.gd",
+    "orbit_camera.gd",
+    "orbit_head_contacts.gd",
+    "orbit_hud.gd",
+    "orbit_locomotion.gd",
+    "orbit_opening.gd",
+    "orbit_trail.gd",
+    "orbit_visual_quality.gd",
+    "pad_v5_view.gd",
+    "previews/hero_locomotion.gd",
+    "purchase_pad_visual.gd",
+    "resource_rock.gd",
+    "resource_tree.gd",
+    "starter_ground_wood_view.gd",
+    "technical_gate.gd",
+    "tool_select.gd",
+    "weapon_orbit.gd",
+    "wood_stock_view.gd",
+    "world_landscape.gd"
+  ],
+  "historical_test_bindings": {
+    "T01": {
+      "legacy_test": "HavenlineGodot/tests/test_reference_forest.gd",
+      "legacy_test_sha256": "44f017a6420a43ff84da799c020687860f365a5aab4c3317bfc5516e95e26ac8",
+      "full_suite_resource_dependencies": [
+        "assets/reference_forest/manifest.json",
+        "scripts/reference_forest.gd",
+        "scripts/scenery_batch.gd"
+      ],
+      "direct_dependency_paths_present_in_reachable_field_scripts_or_scenes": [],
+      "current_counterpart": "field_forest.gd",
+      "counterpart_is_reachable": true
+    },
+    "T02": {
+      "legacy_test": "HavenlineGodot/tests/test_task02_river.gd",
+      "legacy_test_sha256": "c91cccf81abb291a6daeef16e0c691596b755285f0b822ed0a2a3084fb62325a",
+      "full_suite_resource_dependencies": [
+        "data/reference-contract.json",
+        "scripts/main.gd",
+        "scripts/outpost_simulation.gd",
+        "scripts/outpost_surface.gd",
+        "scripts/reference_forest.gd",
+        "scripts/river_geometry.gd"
+      ],
+      "direct_dependency_paths_present_in_reachable_field_scripts_or_scenes": [],
+      "current_counterpart": "field_lakeshore.gd",
+      "counterpart_is_reachable": true
+    },
+    "T03": {
+      "legacy_test": "HavenlineGodot/tests/test_task03_boundary.gd",
+      "legacy_test_sha256": "bfd470bd7f141ed362b250a924f3f2d424afc2ef86f12f6929e5b8a5316ea29b",
+      "full_suite_resource_dependencies": [
+        "data/reference-contract.json",
+        "scripts/camp_boundary.gd",
+        "scripts/main.gd",
+        "scripts/outpost_simulation.gd",
+        "scripts/outpost_surface.gd",
+        "scripts/reference_forest.gd",
+        "scripts/river_geometry.gd"
+      ],
+      "direct_dependency_paths_present_in_reachable_field_scripts_or_scenes": [],
+      "current_counterpart": "field_environment.gd",
+      "counterpart_is_reachable": true
+    },
+    "T04": {
+      "legacy_test": "HavenlineGodot/tests/test_task04_camera.gd",
+      "legacy_test_sha256": "39306774026b3ea5cc2f8385bf98e590610c2ee2b1386ea14b68ac078a3177d4",
+      "full_suite_resource_dependencies": [
+        "scripts/camera_composition.gd",
+        "scripts/main.gd"
+      ],
+      "direct_dependency_paths_present_in_reachable_field_scripts_or_scenes": [],
+      "current_counterpart": "orbit_camera.gd",
+      "counterpart_is_reachable": true
+    },
+    "T05": {
+      "legacy_test": "HavenlineGodot/tests/test_task05_station_kit.gd",
+      "legacy_test_sha256": "aa55890f74a66b36ffafebad3b2c2a29576c22ce2f2098b2b7e1796576e5131d",
+      "full_suite_resource_dependencies": [
+        "scripts/camp_boundary.gd",
+        "scripts/river_geometry.gd",
+        "scripts/station_kit.gd"
+      ],
+      "direct_dependency_paths_present_in_reachable_field_scripts_or_scenes": [],
+      "current_counterpart": "field_processors.gd",
+      "counterpart_is_reachable": true
+    },
+    "T06": {
+      "legacy_test": "HavenlineGodot/tests/test_task06_character1.gd",
+      "legacy_test_sha256": "44a985cf0f17931faa722f994e574175af320fabdf7fc76f6f51850cd8ab6ffb",
+      "full_suite_resource_dependencies": [
+        "scripts/character1_motion.gd"
+      ],
+      "direct_dependency_paths_present_in_reachable_field_scripts_or_scenes": [],
+      "current_counterpart": "gait_motor.gd",
+      "counterpart_is_reachable": true
+    },
+    "T07": {
+      "legacy_test": "HavenlineGodot/tests/test_task07_context_director.gd",
+      "legacy_test_sha256": "15ba69d2261d8cdda6014d747edba3d102356ae5a73a773425a3b9d98be7ec3e",
+      "full_suite_resource_dependencies": [
+        "scripts/character1_motion.gd",
+        "scripts/context_director.gd",
+        "scripts/population_simulation.gd",
+        "scripts/simulation.gd"
+      ],
+      "direct_dependency_paths_present_in_reachable_field_scripts_or_scenes": [],
+      "current_counterpart": "field_worksites.gd",
+      "counterpart_is_reachable": true
+    },
+    "T08": {
+      "legacy_test": "HavenlineGodot/tests/test_task08_inventory.gd",
+      "legacy_test_sha256": "f12170c3e8307cc7c4aafd51d08d2eac15a5e7a324d089dc88c300681d7c8b09",
+      "full_suite_resource_dependencies": [
+        "scripts/carry_stack.gd",
+        "scripts/station_kit.gd",
+        "scripts/storage_stockpile.gd",
+        "scripts/transfer_feedback.gd"
+      ],
+      "direct_dependency_paths_present_in_reachable_field_scripts_or_scenes": [],
+      "current_counterpart": "field_carry.gd",
+      "counterpart_is_reachable": true
+    },
+    "T09": {
+      "legacy_test": "HavenlineGodot/tests/test_task09_harvesting.gd",
+      "legacy_test_sha256": "83c0cd45dd1e2c3a1eccaf2cddbbd6b631ba57503e1aa801ebf8da78fc3b14b0",
+      "full_suite_resource_dependencies": [
+        "scripts/harvest_presentation.gd"
+      ],
+      "direct_dependency_paths_present_in_reachable_field_scripts_or_scenes": [],
+      "current_counterpart": "resource_tree.gd",
+      "counterpart_is_reachable": true
+    },
+    "T10": {
+      "legacy_test": "HavenlineGodot/tests/test_task10_world_transform.gd",
+      "legacy_test_sha256": "ae337e64a7159901bf8fc6df7d1448af70bbedc34cd8b4b45f339672cb407c6e",
+      "full_suite_resource_dependencies": [
+        "scripts/world_transform.gd",
+        "scripts/world_transform_view.gd"
+      ],
+      "direct_dependency_paths_present_in_reachable_field_scripts_or_scenes": [],
+      "current_counterpart": "field_progression.gd",
+      "counterpart_is_reachable": true
+    },
+    "T11": {
+      "legacy_test": "HavenlineGodot/tests/test_task11_camp_construction.gd",
+      "legacy_test_sha256": "a18678a6d492d28b3e4d983f6b6db863f9657532c12c8f4e2fe80394cf1489c6",
+      "full_suite_resource_dependencies": [
+        "data/camp_construction_recipes.json",
+        "scripts/camp_construction_view.gd"
+      ],
+      "direct_dependency_paths_present_in_reachable_field_scripts_or_scenes": [],
+      "current_counterpart": "field_environment.gd",
+      "counterpart_is_reachable": true
+    }
+  },
+  "executed_exact_shared_components": {
+    "T01": {
+      "script": "tools/havenline/audit_task01_geometry.py",
+      "script_sha256": "a05483b335238bb7583778b49e4a4afaf73b5bb91d6a6f93e369073662aecbeb",
+      "mode": "Historical Python source byte-for-byte. Original test directory mounted read-only by reference to the active project forest GLB directory.",
+      "inputs": {
+        "pine_1": "e1fee75e9865b272b26869598706742759c3fe6b1b405c910725b1c0ef44a20b",
+        "pine_2": "3cf4c6f13a908d9b8fad2f990f478bb364cbbe5988d8666d5ac31e08f756f976",
+        "pine_3": "c5d329c4d73e4edf62cc5554f2800c67fee1a5c7933079feff5afcb1ce8d49e1"
+      },
+      "geometry_checks_passed": 9,
+      "evidence": "T01-nine-geometry-checks.json"
+    },
+    "T02": {
+      "historical_implementation": "HavenlineGodot/scripts/river_geometry.gd",
+      "field_path": "assets/lakeshore/river_geometry.gd",
+      "identical_sha256": "cc00520122197c273123f49c52474603f3f5bbb6e76cd8bb1e027e96ad22286e",
+      "mode": "Original test_task02_river.gd lines 13\u201337, unchanged. Import path adapted. 10 typed mathematical assertions in Godot 4.7.2 compare the shared river component; the subsequent historic Surface, Main, Sim and Forest tests have incompatible runtime dependencies.",
+      "checks_passed": 10,
+      "min_width": 3.6,
+      "max_width": 4.25,
+      "evidence": "T02-river-component.log"
+    }
+  },
+  "legacy_frameworks": {
+    "T07": {
+      "historical_call": "Director.preview(Vector2.ZERO, facing, role, candidates)",
+      "required_asset": "scripts/context_director.gd",
+      "actual_field": "field_opening.selected_tool chooses reachable rocks on the moving orbit, then orbit_opening.selected_tool chooses a reachable target. field_worksites._site selects a nearby paid plot or station. field_settlement_loop handles the separate service and Continue actions. This is not the historical ranked 128-candidate API."
+    },
+    "T10": {
+      "required_assets": [
+        "scripts/world_transform.gd",
+        "scripts/world_transform_view.gd"
+      ],
+      "actual_field": "Typed per-unit payments, build receipt, field_progression and field_settlement. No generic T10 preview/commit transaction engine in the scene."
+    },
+    "T11": {
+      "required_assets": [
+        "scripts/camp_construction_view.gd",
+        "data/camp_construction_recipes.json"
+      ],
+      "actual_field": "Eight field purchases and resulting camp physics. Original generic catalog is not bound to the field runtime."
+    },
+    "T12": {
+      "actual_field": "field_settlement_loop.enter_next_level records next_level and sets settlement.level to two in the current world. No production t12.fact.slot.002 consumer or new Level 2 content is bound."
+    }
+  }
+}

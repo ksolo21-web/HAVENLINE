@@ -1,8 +1,14 @@
-# Havenline Level 1 replacement
+# Havenline Level 1 settlement trial
+
+On this trial branch, `res://field_opening.tscn` opens World One. The player can build the camp, purchase the survivor plot, hunt with the owl, work the shore machines and serve customers through the north fence. The recorded playthrough starts with an empty test profile. [Gameplay, controls, downloads and audit](../Docs/QA/Level-1-Settlement-2026-11-26/README.md) · [Rebuild exactly this game](../Docs/QA/Level-1-Settlement-2026-11-26/Source/README.md)
+
+## Earlier opening experiments
+
+The instructions below describe the historical opening and its own entry point.
 
 This separate preview is for the revised **opening**, not the full Level 1 game or a release. The canonical `HavenlineGodot/` project, its task plans and original assets stay intact. The development base is `codex/havenline-sequential-task-01` at `f74a84a2a288ab3d3935fba7a6cb9b975c2df239`.
 
-## Run the current combined opening
+## Run the archived combined opening
 
 Use a fresh disposable checkout of the replacement branch. Importing the project and pressing F5 runs the deliberately unchanged V8 baseline (`res://opening.tscn`), **not** this preview. To test the combined river, camp, HUD, and Character 1 animation, use the exact scene below.
 

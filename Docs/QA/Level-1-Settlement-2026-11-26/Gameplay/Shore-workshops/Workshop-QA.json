@@ -1,0 +1,110 @@
+{
+  "scene": "res://field_opening.tscn",
+  "native_engine": "Godot 4.7.2, Mesa 25.0.7 llvmpipe OpenGL compatibility",
+  "frame_size": [
+    960,
+    540
+  ],
+  "fixture": "Isolated fresh profile. For art comparison the actor was placed at each real apron and work motion and output balances set directly. These stills test presentation, physical operation is covered by separate game route and regression suites.",
+  "reference_commit": "26bb649e0a8090c9c9af7e91e62f384fc86372d8",
+  "reference_dir": "Docs/Design/RenderArchive/2026-11-23/selected/equipment",
+  "reference_sha256": {
+    "saw_station.png": "8191ba20d0cec7c92c22d35c5befa87c53b8c894ca94341681b3c16834e24d15",
+    "quarry_drill_station.png": "ca532628e80dcc8e2af4b60d787393777718ba4d50b65ac9e799cd40d823463d"
+  },
+  "cooker_provenance": {
+    "verified_original_v18": false,
+    "recovered_commit": "5abfc29f1c3c51bef99247641cf1131581899942",
+    "original_path": "HavenlineGodot/assets/stations_v2/cooker_processor.glb",
+    "original_sha256": "985041e9e28eed01fa73366ff30870ac4071fba8a89520a2744c86439673d56d",
+    "moving_faces": 164
+  },
+  "source_sha256": {
+    "assets/lakeshore/cooker_workshop.glb": "1105f5c0f79b3b7b998dc59d76e0afdfd3c5cd339de14e17274c27cf39ddecde",
+    "assets/lakeshore/guide_board.png": "f1e8ead2be8b140a28c5096f600b0cbb4d4ee23041f6994356572da1d0c0067c",
+    "assets/lakeshore/hearth_smoke.gdshader": "e5edcde81485c843a6d4e4414eac1d01ee5e97682947bec0858ee028bcd22b21",
+    "assets/lakeshore/lakeshore_water.gdshader": "6cfa77a954f79f7b78030c76b7a9c01a7ab39cb278b26e31d1c4927641ea761a",
+    "assets/lakeshore/river_geometry.gd": "cc00520122197c273123f49c52474603f3f5bbb6e76cd8bb1e027e96ad22286e",
+    "assets/lakeshore/snow_bank.gdshader": "bb32a2171ef8bcd2785849cbe0b6c94932d7c1632009210a297a581f5d3659ea",
+    "assets/shore_workshops/dressed_block.glb": "bd0cc9a860cd434decc36fc30198b83c7c7423ccc19c610d2e4cdbd25a8f4914",
+    "assets/shore_workshops/dressed_block_0.jpg": "2cfd507d95c6be5000c4bc1456986c96cfcdcba71ec1a7c0c3177ab08b521a33",
+    "assets/shore_workshops/finished_planks.glb": "a3fd09d12ace161b1b79dc96851ce6660024eb1cb5abb120fda13e98ea37c167",
+    "assets/shore_workshops/finished_planks_0.jpg": "2cfd507d95c6be5000c4bc1456986c96cfcdcba71ec1a7c0c3177ab08b521a33",
+    "assets/shore_workshops/shore_quarry_drill.glb": "6742ea965cbaee023df443868faf294c92aa37ca95cc7eca134a44f9b0e91800",
+    "assets/shore_workshops/shore_quarry_drill_0.jpg": "2cfd507d95c6be5000c4bc1456986c96cfcdcba71ec1a7c0c3177ab08b521a33",
+    "assets/shore_workshops/shore_saw_bench.glb": "0f8bd0a11cea058dfd0b711bcace5c5f2717dfe63a22dc012541f6fbb6c0701b",
+    "assets/shore_workshops/shore_saw_bench_0.jpg": "2cfd507d95c6be5000c4bc1456986c96cfcdcba71ec1a7c0c3177ab08b521a33",
+    "field_lakeshore.gd": "a123212c9c507967a439763ffced1185818b8262d6310753247b320992ad67ca",
+    "field_processors.gd": "5b5ae1d931471fe44034f170ceab1c7e05c904ea8227b3f3bd4ffff648e9e834",
+    "qa_field_lakeshore.gd": "53be1f8d0ce7736b613e3b82df84fa21e6c76d43543e712657984ecf09fa689c",
+    "qa_field_processors.gd": "f18f6289f83e5921d9864087ece71eee14f1473aaa2b78b7a1bc9ccb25706e21",
+    "tools/art/build_lakeshore_cooker.py": "1187d5f5e0f746f86d48eda158aceac0dbb03e81679d44ad30c3e8238c3988ef",
+    "tools/art/build_shore_processors.py": "831e830559cc4b31fb6f2b1a96eef4ba916f991cc9b0843730043fbe243798ff"
+  },
+  "tests": [
+    {
+      "checks": {
+        "cooker_approach_separate": true,
+        "new_stock": true,
+        "restored_stock": true,
+        "stone_approach": true,
+        "stone_driven": true,
+        "stone_guard": true,
+        "stone_reserve": true,
+        "stone_service": true,
+        "stone_sockets": true,
+        "stone_still": true,
+        "wood_approach": true,
+        "wood_driven": true,
+        "wood_guard": true,
+        "wood_reserve": true,
+        "wood_service": true,
+        "wood_sockets": true,
+        "wood_still": true
+      },
+      "suite": "shore_workshops"
+    },
+    {
+      "apron": "(-19.65, 0.0, 16.65)",
+      "checks": {
+        "distinct real work sockets": true,
+        "dry final approach": true,
+        "idle saw and smoke": true,
+        "lake and station reserved": true,
+        "natural waterline matches both endpoints": true,
+        "paused work retains physical pose": true,
+        "requires working apron": true,
+        "restored lake position depenetrates": true,
+        "swept path cannot tunnel": true,
+        "water animation": true,
+        "west of both camp gates": true,
+        "working saw and smoke": true
+      },
+      "cooker": "(-21.0, 0.0, 16.0)",
+      "input": "(-20.12567, 1.0204, 15.44768)",
+      "output": "(-21.73455, 1.0204, 16.30293)",
+      "suite": "lakeshore"
+    }
+  ],
+  "visual_revision": "Saw has five separated heavy rails, splayed timber legs, bolted corners, driven crank, cut-end rings, coarse bark ribs and iron collars. Quarry has a blue cab, brighter mullioned glazing, orange power plant and running gear with dark separated shoes. Both station atlases supply local bounced light on previously black end faces.",
+  "station_apron_alternate_offset": [
+    0.8,
+    0,
+    -0.36
+  ],
+  "capture_sha256": {
+    "Workshop-reference-and-gameplay.jpg": "e6b68b17c47e730c1388fd5a4b6d396c1be4689ae4f99392f5de0ebf43b7c2de",
+    "cooker-1x.jpg": "7280875e7de4fd359f8c4ed09761c618a3f663651967dfd8ed1a2259fccf7526",
+    "cooker-2x.jpg": "667f3ed61641c0e196015811e02880a2b400054dc906ff39fd685c8d1c102c20",
+    "stone-1x.jpg": "e32a081528b5e5f54d50697b73108f7d9e51fa9554c4cdb1b6434555425f1214",
+    "stone-2x.jpg": "574c320452c3da214f754624fd89bd603556274b9918b8d8ad2a5911957a3590",
+    "stone-apron-1x.jpg": "8955d0fed98d989da9db7d0f09ada0da285b4266440c3e51a9c1ce6c6a946733",
+    "stone-apron-2x.jpg": "d03f4b23def7348faf5dd712b62e2bd54052346b23ee69dc9dd198b10fe25497",
+    "waypost-1x.jpg": "23142444b80c958f4d707cc18c232c00a7b1aec095e2dee1e72c9240e7fffdea",
+    "waypost-2x.jpg": "f84a550235348780b05da3a9dea292ec9f33c9c5172ad7433ba3f66f97b6aba8",
+    "wood-1x.jpg": "28fcabc10fb0a5cf96c795a69d91feb0948529aefdb4441fcb97d6769a79ab93",
+    "wood-2x.jpg": "3cf83aba73851a10c63f33f576dba17b4a05693cd01ded3fd92fed32e92771e8",
+    "wood-apron-1x.jpg": "c4c39b5170c8efbc0fd0f3fa737e044faad86a078aba86d42545fed7b6f13b06",
+    "wood-apron-2x.jpg": "5f8ffc2d19ad7c5581d942e3b2845d3e65748b387f68bbff42e6de174e484cf0"
+  }
+}

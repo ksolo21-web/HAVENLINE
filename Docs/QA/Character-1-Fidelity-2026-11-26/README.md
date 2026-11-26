@@ -21,3 +21,7 @@ The blue parka and orange trim now read more clearly at gameplay distance. Twelv
 A separate fresh-profile playthrough earned all eight purchases, conserved resources at every tick and crossed both gates in each direction at all three perimeter sizes. The automated regression run passed 22 suites across 23 invocations with zero reported errors or warnings. Collision checks found no cargo entering the character in 416 sampled poses and no orbiting tool entering cargo across 5,184 tested configurations. [Earned playthrough](Gameplay/Earned-route.json) · [Regression and rig audit](Regression/README.md) · [Skinned-body clearance](Regression/Geometry/Body-and-pack.json)
 
 The report covers Character 1. The gameplay capture and Linux package use commit `92d5aebe1740d0d7beebdc1f6b01ffbcf0604736`. The final reviewed commit is `37540b6d1d6e0657dd6776db136a46534e6a66d5` on `trial/world-one-expansion-2026-11-26`, scene `res://field_opening.tscn`. Its two additional changes affect export-excluded test fixtures. The independent critic rerendered the final commit and reproduced all 12 empty-pack views and 24 load projections. All test saves used isolated profiles. Meshy credits used for this correction total zero. [Final source replay](Critic/Final-source-equivalence.json) · [Package verification](Play/Final-source-compatibility.json)
+
+## Subsequent Level 1 playtest
+
+[Level 1 settlement trial, playthrough and T01–T11 audit](../Level-1-Settlement-2026-11-26/README.md)
