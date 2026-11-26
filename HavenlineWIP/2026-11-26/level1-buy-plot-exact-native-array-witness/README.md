@@ -1,0 +1,3 @@
+# Same-draw native mesh intake, both original buy-plot approach poses
+
+The corrected detached observer verified the ten actual mesh parts in exact order at both original draws, with intact binary array digests, original live Character 1 pose hashes, and one visible label record per pose. The three original screenshots and route/payment state matched and all 23 checks passed, with no persistence. The earlier rejected 11-count fixture remains rejected; its partial bytes were not reused. This is real acquisition only, for later source geometry and depth analysis, not a phone or visual confirmation. No live edits or spend.
