@@ -1,0 +1,332 @@
+{
+  "method": "Read original 48 kHz MovieWriter stereo PCM. Resample mix and event source to 16 kHz and high-pass 1.1 kHz. Compute normalized waveform correlation near runtime event, accounting for engine pitch and SFX variation; retain strongest example per cue.",
+  "duration_s": 53.2333125,
+  "peak_dbfs": -5.71999979019165,
+  "rms_dbfs": -24.09000015258789,
+  "silent_half_second_blocks": 0,
+  "stereo_rms_difference": 0.003401,
+  "runtime_cue_counts": {
+    "swing": 60,
+    "step_snow": 91,
+    "impact_wood": 12,
+    "deplete_wood": 3,
+    "drop_wood": 3,
+    "pickup_partial": 7,
+    "pickup_full": 7,
+    "carry": 6,
+    "equip_pickaxe": 1,
+    "impact_stone": 3,
+    "deplete_stone": 1,
+    "drop_stone": 1,
+    "equip_axe": 1,
+    "regrow_wood": 3,
+    "approach": 3,
+    "player_attack": 5,
+    "hit": 5,
+    "wolf_brace": 3,
+    "enemy_attack": 2,
+    "player_hurt": 1,
+    "defeat": 2,
+    "meat": 2,
+    "drop_meat": 2,
+    "regrow_stone": 1,
+    "spend_wood": 3,
+    "purchase": 2,
+    "build": 1,
+    "rise": 1,
+    "reveal": 1,
+    "step_camp": 53,
+    "gate": 2,
+    "gate_latch": 2,
+    "deposit_stone": 3,
+    "deposit_wood": 6,
+    "deposit_meat": 2,
+    "spend_stone": 2,
+    "wolf_return": 2,
+    "spend_meat": 1,
+    "victory": 1
+  },
+  "matched_cues": {
+    "swing": {
+      "correlation": 0.677,
+      "source": "swing_1.wav",
+      "matched_mix_s": 0.942,
+      "physics_cue_s": 0.7,
+      "matched_video_s": 0.742
+    },
+    "step_snow": {
+      "correlation": 0.725,
+      "source": "step_snow_1.wav",
+      "matched_mix_s": 1.209,
+      "physics_cue_s": 0.983,
+      "matched_video_s": 1.009
+    },
+    "impact_wood": {
+      "correlation": 0.53,
+      "source": "impact_wood_1.wav",
+      "matched_mix_s": 29.113,
+      "physics_cue_s": 28.867,
+      "matched_video_s": 28.913
+    },
+    "deplete_wood": {
+      "correlation": 0.803,
+      "source": "deplete_wood.wav",
+      "matched_mix_s": 5.209,
+      "physics_cue_s": 4.983,
+      "matched_video_s": 5.009
+    },
+    "drop_wood": {
+      "correlation": 0.168,
+      "source": "drop_wood.wav",
+      "matched_mix_s": 10.841,
+      "physics_cue_s": 10.617,
+      "matched_video_s": 10.641
+    },
+    "pickup_partial": {
+      "correlation": 0.634,
+      "source": "pickup_partial.wav",
+      "matched_mix_s": 6.009,
+      "physics_cue_s": 5.767,
+      "matched_video_s": 5.809
+    },
+    "pickup_full": {
+      "correlation": 0.876,
+      "source": "pickup_full.wav",
+      "matched_mix_s": 6.339,
+      "physics_cue_s": 6.117,
+      "matched_video_s": 6.139
+    },
+    "carry": {
+      "correlation": 0.652,
+      "source": "carry.wav",
+      "matched_mix_s": 6.339,
+      "physics_cue_s": 6.117,
+      "matched_video_s": 6.139
+    },
+    "equip_pickaxe": {
+      "correlation": 0.671,
+      "source": "equip_pickaxe.wav",
+      "matched_mix_s": 7.374,
+      "physics_cue_s": 7.133,
+      "matched_video_s": 7.174
+    },
+    "impact_stone": {
+      "correlation": 0.695,
+      "source": "impact_stone_2.wav",
+      "matched_mix_s": 8.611,
+      "physics_cue_s": 8.383,
+      "matched_video_s": 8.411
+    },
+    "deplete_stone": {
+      "correlation": 0.457,
+      "source": "deplete_stone.wav",
+      "matched_mix_s": 9.571,
+      "physics_cue_s": 9.333,
+      "matched_video_s": 9.371
+    },
+    "drop_stone": {
+      "correlation": 0.3,
+      "source": "drop_stone.wav",
+      "matched_mix_s": 9.571,
+      "physics_cue_s": 9.333,
+      "matched_video_s": 9.371
+    },
+    "equip_axe": {
+      "correlation": 0.193,
+      "source": "equip_axe.wav",
+      "matched_mix_s": 9.571,
+      "physics_cue_s": 9.35,
+      "matched_video_s": 9.371
+    },
+    "regrow_wood": {
+      "correlation": 0.595,
+      "source": "regrow_wood.wav",
+      "matched_mix_s": 10.211,
+      "physics_cue_s": 9.983,
+      "matched_video_s": 10.011
+    },
+    "approach": {
+      "correlation": 0.701,
+      "source": "approach.wav",
+      "matched_mix_s": 14.542,
+      "physics_cue_s": 14.3,
+      "matched_video_s": 14.342
+    },
+    "player_attack": {
+      "correlation": 0.703,
+      "source": "player_attack.wav",
+      "matched_mix_s": 15.203,
+      "physics_cue_s": 14.983,
+      "matched_video_s": 15.003
+    },
+    "hit": {
+      "correlation": 0.397,
+      "source": "hit.wav",
+      "matched_mix_s": 15.203,
+      "physics_cue_s": 14.983,
+      "matched_video_s": 15.003
+    },
+    "wolf_brace": {
+      "correlation": 0.454,
+      "source": "wolf_brace.wav",
+      "matched_mix_s": 15.609,
+      "physics_cue_s": 15.383,
+      "matched_video_s": 15.409
+    },
+    "enemy_attack": {
+      "correlation": 0.75,
+      "source": "enemy_attack.wav",
+      "matched_mix_s": 16.003,
+      "physics_cue_s": 15.767,
+      "matched_video_s": 15.803
+    },
+    "player_hurt": {
+      "correlation": 0.508,
+      "source": "player_hurt.wav",
+      "matched_mix_s": 16.174,
+      "physics_cue_s": 15.933,
+      "matched_video_s": 15.974
+    },
+    "defeat": {
+      "correlation": 0.34,
+      "source": "defeat.wav",
+      "matched_mix_s": 18.009,
+      "physics_cue_s": 17.783,
+      "matched_video_s": 17.809
+    },
+    "meat": {
+      "correlation": 0.557,
+      "source": "meat.wav",
+      "matched_mix_s": 19.641,
+      "physics_cue_s": 19.4,
+      "matched_video_s": 19.441
+    },
+    "drop_meat": {
+      "correlation": 0.193,
+      "source": "drop_meat.wav",
+      "matched_mix_s": 19.641,
+      "physics_cue_s": 19.4,
+      "matched_video_s": 19.441
+    },
+    "regrow_stone": {
+      "correlation": 0.6,
+      "source": "regrow_stone.wav",
+      "matched_mix_s": 22.542,
+      "physics_cue_s": 22.317,
+      "matched_video_s": 22.342
+    },
+    "spend_wood": {
+      "correlation": 0.73,
+      "source": "spend_wood.wav",
+      "matched_mix_s": 24.611,
+      "physics_cue_s": 24.367,
+      "matched_video_s": 24.411
+    },
+    "purchase": {
+      "correlation": 0.492,
+      "source": "purchase.wav",
+      "matched_mix_s": 45.241,
+      "physics_cue_s": 45.0,
+      "matched_video_s": 45.041
+    },
+    "build": {
+      "correlation": 0.261,
+      "source": "build.wav",
+      "matched_mix_s": 24.942,
+      "physics_cue_s": 24.7,
+      "matched_video_s": 24.742
+    },
+    "rise": {
+      "correlation": 0.362,
+      "source": "rise.wav",
+      "matched_mix_s": 24.942,
+      "physics_cue_s": 24.7,
+      "matched_video_s": 24.742
+    },
+    "reveal": {
+      "correlation": 0.569,
+      "source": "reveal.wav",
+      "matched_mix_s": 25.241,
+      "physics_cue_s": 25.017,
+      "matched_video_s": 25.041
+    },
+    "step_camp": {
+      "correlation": 0.433,
+      "source": "step_camp_1.wav",
+      "matched_mix_s": 48.707,
+      "physics_cue_s": 48.483,
+      "matched_video_s": 48.507
+    },
+    "gate": {
+      "correlation": 0.332,
+      "source": "gate_latch.wav",
+      "matched_mix_s": 26.905,
+      "physics_cue_s": 26.0,
+      "matched_video_s": 26.705
+    },
+    "gate_latch": {
+      "correlation": 0.332,
+      "source": "gate_latch.wav",
+      "matched_mix_s": 26.905,
+      "physics_cue_s": 26.667,
+      "matched_video_s": 26.705
+    },
+    "deposit_stone": {
+      "correlation": 0.576,
+      "source": "deposit_stone.wav",
+      "matched_mix_s": 36.878,
+      "physics_cue_s": 36.65,
+      "matched_video_s": 36.678
+    },
+    "deposit_wood": {
+      "correlation": 0.495,
+      "source": "deposit_wood.wav",
+      "matched_mix_s": 38.638,
+      "physics_cue_s": 38.417,
+      "matched_video_s": 38.438
+    },
+    "deposit_meat": {
+      "correlation": 0.482,
+      "source": "deposit_meat.wav",
+      "matched_mix_s": 42.009,
+      "physics_cue_s": 41.767,
+      "matched_video_s": 41.809
+    },
+    "spend_stone": {
+      "correlation": 0.719,
+      "source": "spend_stone.wav",
+      "matched_mix_s": 44.91,
+      "physics_cue_s": 44.667,
+      "matched_video_s": 44.71
+    },
+    "wolf_return": {
+      "correlation": 0.267,
+      "source": "wolf_return.wav",
+      "matched_mix_s": 46.638,
+      "physics_cue_s": 46.4,
+      "matched_video_s": 46.438
+    },
+    "spend_meat": {
+      "correlation": 0.499,
+      "source": "spend_meat.wav",
+      "matched_mix_s": 45.241,
+      "physics_cue_s": 45.0,
+      "matched_video_s": 45.041
+    },
+    "victory": {
+      "correlation": 0.49,
+      "source": "victory.wav",
+      "matched_mix_s": 45.241,
+      "physics_cue_s": 45.0,
+      "matched_video_s": 45.041
+    }
+  },
+  "original_pcm_48k": {
+    "sampling_hz": 48000,
+    "channels": 2,
+    "frames": 2555200,
+    "peak_dbfs": -5.73,
+    "rms_dbfs": -24.09,
+    "stereo_difference_rms": 0.003402
+  }
+}

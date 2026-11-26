@@ -1,6 +1,6 @@
 # Field, delivery and upgrade measurements
 
-The primary measurement is **H**, the standing hero's visible hood-to-sole distance excluding cargo. Width is horizontal screen width unless explicitly labeled long axis. Depth is projected screen height. Perspective, pose and partial occlusion give most bounds 15–25% uncertainty. These estimates come from the original 1080 × 2520 PNGs after removing the phone/video surround at y≈273–2192. The detail sheets have an independent crop and scale, so every ratio uses a hero from the same shot. [Source PNGs](https://github.com/ksolo21-web/HAVENLINE/tree/b80c61f13ba31bb0940792dd47976a8e2878dbf5/Docs/Production/T05/ReferenceFrames) · [Comparison board](Locked-B-field-and-stock.jpg)
+The primary measurement is **H**, the standing hero's visible hood-to-sole distance excluding cargo. Width is horizontal screen width unless explicitly labeled long axis. Depth is projected screen height. Perspective, pose and partial occlusion give most bounds 15–25% uncertainty. These estimates come from the original 1080 × 2520 PNGs after removing the phone/video surround at y≈273–2192. The detail sheets have an independent crop and scale, so every ratio uses a hero from the same shot. [Source PNGs](https://github.com/ksolo21-web/HAVENLINE/tree/b80c61f13ba31bb0940792dd47976a8e2878dbf5/Docs/Production/T05/ReferenceFrames) · [Comparison board](../../../QA/Field-Loop-2026-11-26/References/Locked-B-field-and-stock.jpg)
 
 | Recording and time | Visible evidence | Approximate screen-space bounds |
 |---|---|---|

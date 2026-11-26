@@ -1,0 +1,13 @@
+# Field environment frames
+
+The four JPEGs show the real game camera in 1280 × 720 landscape and 720 × 1280 portrait. The unpaid view starts at spawn. The paid view moves the player into the court and selects the completed camp state directly to show the geometry. The continuous route recording documents payment in play.
+
+Independent visual review compared forty normalized screen points in the upper 10.5–28.5% of the portrait. At roughly 34–37 points, tree crowns cover the field, compared with at least 34 in the locked B06 frame. The previous sparse candidate covered fewer than nine points. Sixteen harvestable pines now occupy the future storage footprint and recede as the camp thaws. A subsequent local crown material correction lifted the median of 4,235 previously dark, blue-dominant canopy pixels from RGB (12,26,44) to (37,48,67) in the matched native opening frame. The unpaid receiver changed from olive to slate. See [sampled frames](Canopy-grid.jpg).
+
+Field-court.json records 31 runtime checks, including physical crossings through the east and south gates in both directions, clearance around the approach, and retirement of harvest targets on purchase. All 31 passed. A separate paid disposable-profile reload restored all nine permanent harvest targets and zero seasonal trees. The current court and stock regression exits cleanly. The desktop scene also exits cleanly after receiving its normal window-close request.
+
+The earlier environment frames above use source SHA-256 `9a88b4d6d5fb9a5624d3d063363d8d4e2d55e1d6b553a1272d260c46f02a765e`. In the shipping review revision `994ace861fbf132c5924bacc320f5608d75d9187`, five trees were moved to expose the quarry and the occupied plot markings were corrected. [Final mining comparison](../Gameplay-Evidence/Mine-contact-before-after.jpg) · [Final stock comparison](../Gameplay-Evidence/Meat-plot-before-after.jpg) · [Exact-source regressions](../Gameplay-Evidence/Frozen-regressions.json)
+
+In an identical 3840 × 2160 paid-camp frame, regrouping the original timber faces by their existing materials reduced draw calls from 1,325 to 305. Both images rendered 405,150 primitives. Mean absolute pixel-channel difference was 0.00102 on the 0–255 scale. These are software-renderer counters. [Paired frame](Material-batching.jpg) · [Measurements](Material-batching.json)
+
+The headless and OpenGL backends read 117 unique CPU-authored exterior tree positions. Both registered an approaching harvest target at the measured world position and restored it to its render batch when the player left. [Placement test](Forest-placement.json)
