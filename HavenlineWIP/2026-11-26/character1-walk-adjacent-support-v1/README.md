@@ -1,0 +1,3 @@
+# Character 1 stock Walk: adjacent terrain mismatch
+
+One exact X11 no-RGB replay. All 174 original trace rows and the center skin bake/palette match exactly, and both sides are under the terrain for all three adjacent ticks 159–161. The worst measured depth is 48.814 mm. A 35 mm rigid visual lift does not clear all three frames. This indicates local persistence over sampled poses, not continuous contact, foot planting, visual grade, Run, equipment motion, or an approved correction. Keep the three frames and prior same-phase tick 20 as offline controls; no production change or private raw poses included.
