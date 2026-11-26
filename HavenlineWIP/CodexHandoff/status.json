@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T05:50:48Z",
+  "observed_at_utc": "2026-11-26T05:51:07Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -20,7 +20,7 @@
     {
       "id": "character-1",
       "role": "Rigging and independent review",
-      "state": "hold",
+      "state": "blocked",
       "result": "One exact owner 24-joint motion-only take had true toe flex but failed physical planted load. Separate static probe clears left flat load, not either toe-roll pose. No art/normal gameplay or two-handed grip approval.",
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/dc85fd6b3ba316cc99b5aabb6889e486880b7e77"
@@ -145,15 +145,15 @@
     },
     {
       "role_id": "builder-camp-pads",
-      "state": "working",
-      "title": "Building separate owner-matched fence and gate meshes",
-      "summary": "New six-sheet references control. The paid masters preserve look, but have wrong rear topology and cannot be used directly.",
+      "state": "blocked",
+      "title": "Next fence art comparison awaiting desktop",
+      "summary": "The steeper rope test is closed. Keep textured V3 as the best unapproved panel. An exact gate still comparison is staged but not running.",
       "next": "Keep the gates physically separate and verify all actual front/rear states and fence joins.",
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/923bcb7ce2e8aaa42c01f7e3138bb700fa8607d8",
         "https://github.com/ksolo21-web/HAVENLINE/commit/d6f54dbf0811cade021f501d40402fb2b4e4d31c"
       ],
-      "updated_at_utc": "2026-11-26T04:44:38Z"
+      "updated_at_utc": "2026-11-26T05:51:07Z"
     },
     {
       "role_id": "audio-sfx",
@@ -168,15 +168,15 @@
     },
     {
       "role_id": "level1-verifier",
-      "state": "working",
-      "title": "Owner-reference foreclosure on lower rope V4",
+      "state": "done",
+      "title": "Lower fence rope V4 rejected after native replay",
       "summary": "All 67 route/reload checks passed for one panel with unchanged disposable save. Visual hold means the steeper, narrower lower rope is rejected.",
       "next": "Keep V3 one-panel control, avoid more rope steepening.",
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/5a0e3d01aa44a05529eaf847a8ce5d64f5313466",
         "https://github.com/ksolo21-web/HAVENLINE/commit/b40bce8273a0079e04d54c453c14e43370eb1da8"
       ],
-      "updated_at_utc": "2026-11-26T05:50:48Z"
+      "updated_at_utc": "2026-11-26T05:51:07Z"
     },
     {
       "role_id": "builder-customer-counter",
