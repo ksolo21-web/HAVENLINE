@@ -1,0 +1,61 @@
+{
+  "approved_reference_commit": "b80c61f13ba31bb0940792dd47976a8e2878dbf5",
+  "approved_reference_path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/watchtower.png",
+  "approved_reference_git_blob": "bb0202ff89bb606d2213e4dd9bbda7b8882aa88b",
+  "approved_reference_sha256": "2fe796e4962b426b6542e6cbff3d6201f0a8fcb96c326e810c1097fa8adcbb18",
+  "geometry": {
+    "tower_bolt.glb": {
+      "bytes": 39636,
+      "sha256": "4e332aefc9759380e68894671d4942ad957088a9547c7dfac2974063319c61fc",
+      "triangles": 38
+    },
+    "tower_launcher.glb": {
+      "bytes": 50592,
+      "sha256": "527b31ddbda727d063ec5294088bd239209e5736b1827e2095a65fe785b28bdc",
+      "triangles": 224
+    },
+    "eastern_watchtower.glb": {
+      "bytes": 505644,
+      "sha256": "653d019195707be52faca773c2022fc59d1ccd0ca438cbd81a574a7176d576fb",
+      "triangles": 7118
+    }
+  },
+  "source_sha256": {
+    "field_tower_art.gd": "3c5ed7bbacc641052d95adb4547083181953cfd6ff2e16c283e0de63777f970c",
+    "field_snow_tracks.gd": "d5902a0c3b003d5243bf1ae20645b774c9b69718b7bd26d32e12462299672064",
+    "qa_field_tracks_tower.gd": "9a6aec77aff6975c732f555e875062d47146bdbe8f447b53b3875476b52b5ba2",
+    "assets/field_world/snow_print.gdshader": "183c77aba2ab23c53be7e5c912435dd9293ed36ca5665ebb782823cd37da71f2",
+    "assets/field_world/snow_prints.png": "44a3f5b108a778413eb408f08af3bf479d68e6b1210386b96c00883beae03cdd",
+    "tools/art/make_eastern_watchtower.py": "afa054c8b377a810f722c04128a1f97b23601617fdcea4ecc1bc9693c6836aea",
+    "tools/art/make_snow_prints.py": "2f1e909afaafc36ff484853f144bad7d862aa06772d600b0a2b3eafda384893f"
+  },
+  "screenshots": {
+    "Eastern-watchtower-gameplay-2x.jpg": "be256c9677c2ed4bf52f387f45b57b99f9af502ba7bf36ab02fbe70862c9de9b",
+    "Eastern-watchtower-detail.jpg": "3dd0babb8b5ac6d00d945388ca889971e3a8136917e0e37f8acd069c00b4cf7d",
+    "Snow-tracks-gameplay-2x.jpg": "d1ddbf0a5386761d3fd07c5d26560e51c10fb45041af7cb8eb3e26ff4dc1e03b",
+    "Track-fade-three-times.png": "1c6f6df8dcf805c0052419bf8c67e6b26eaf8700d3c6d88b33fc972c315f49ec"
+  },
+  "regression": "regression.json",
+  "staging": "Godot field scene. Actual input drives the human. Two QA wolves advance on parallel lanes with their genuine native Walk action and skinned paws for a scale comparison. Tower appearance is enabled at its eastern gameplay anchor. Detail view moves the orthographic camera and hides the player and HUD. Live purchase and attack routing are tested separately.",
+  "track_fade": {
+    "ages_seconds": [
+      2.88333333333332,
+      12.58,
+      29.58
+    ],
+    "summed_darkening_relative_to_fresh": [
+      1.0,
+      0.416,
+      0.0
+    ],
+    "capture": "Same boot, crop and camera target across three native reads. Residual camera settling shifts the boot a few pixels; measure summed contrast across the entire crop."
+  },
+  "game_source_commit": "87f703f2a62c3651314b66084bcfb32858728364",
+  "scene": "res://field_opening.tscn",
+  "passed_checks": 16,
+  "native_renderer": "Godot 4.7.2, Linux Compatibility / Mesa llvmpipe",
+  "resolution": [
+    1280,
+    720
+  ]
+}

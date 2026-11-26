@@ -1,0 +1,136 @@
+{
+  "source_commit": "87f703f2a62c3651314b66084bcfb32858728364",
+  "scene": "res://field_opening.tscn",
+  "manifest_sha256": "6b0e89b6ce94ecabbc6c59be0431aff8e0ec267083f4cbf83248d78b7d534f2b",
+  "reviewed_source_files_verified_by_prepare": 201,
+  "godot": "4.7.2.stable.official.ed1daf0bf",
+  "deliverables": {
+    "Havenline-World-One-Linux-x86_64.tar.gz": {
+      "sha256": "6eac539bfe9a118aba2f27b6d1856795387559ac027b9948d91ae0a21a19c407",
+      "bytes": 146781769
+    },
+    "Havenline-World-One-Android-arm64-debug.apk": {
+      "sha256": "d95ca550c451ebcbfddefe87643c82e5d96e2d92fec37cf058a565a635b2badb",
+      "bytes": 147809005
+    },
+    "Havenline-World-One-Godot-Source.zip": {
+      "sha256": "9f510e10a5fd8a7eb1491926127f2224bd0241b7ed54aba8c3ebb1a6a740fc0c",
+      "bytes": 77193332
+    }
+  },
+  "editor_source": {
+    "archive": "Havenline-World-One-Godot-Source.zip",
+    "project_root": "HavenlineLevel1/project.godot",
+    "manifested_files": 201,
+    "additional_files": [
+      "export_presets.cfg",
+      "export-artwork/field-icon-mono.png"
+    ],
+    "verification": "all 203 file entries read back and hashed; ZIP CRCs passed"
+  },
+  "linux": {
+    "format": "ELF x86_64 release, embedded Godot PCK",
+    "binary_sha256": "a438cc2de91d7cbbd7ac9bceda8b1283a06f39284bd6dd1901a004295fdd1c02",
+    "archive_check": "single executable, mode preserved, extracted-file digest equals tested executable",
+    "native_headless_start": "passed",
+    "game_window": "passed",
+    "normal_window_close": "WM_DELETE_WINDOW sent to the packaged game; exit code 0",
+    "saved_in_isolated_test_profile": true,
+    "window_image": {
+      "path": "Linux-packaged-opening.jpg",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "96ee99eb9bc664fa54449098552984dd06f5e5963c13a4b7d7844ae80ae0ef04"
+    },
+    "renderer": [
+      "OpenGL API 4.5 (Core Profile) Mesa 25.0.7-2+deb13u1 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 19.1.7, 256 bits)"
+    ],
+    "packed_probe": {
+      "checks": {
+        "assets/field/meat.glb": true,
+        "assets/field/stone.glb": true,
+        "assets/field/wood.glb": true,
+        "assets/field_camp/snowbound_gate_leaf.obj": true,
+        "assets/field_camp/snowbound_palisade.obj": true,
+        "assets/field_camp/snowbound_sliding_bolt.obj": true,
+        "assets/field_world/eastern_watchtower.glb": true,
+        "assets/field_world/snow_print.gdshader": true,
+        "assets/field_world/snow_prints.png": true,
+        "assets/field_world/tower_bolt.glb": true,
+        "audio samples and score in pack": true,
+        "default World One scene": true,
+        "earned purchase order in initial level": true,
+        "native World One profile under isolated XDG": true,
+        "streamed 1024 metre field": true,
+        "three expansion geometries and two gates": true,
+        "world sources and encounter controller": true
+      },
+      "facts": {
+        "active_chunks": 9,
+        "music_and_ambience_loops": 5,
+        "scene": "res://field_opening.tscn",
+        "sound_effects": 52,
+        "storage_directory": "/tmp/hvn-world-release/session/data/Havenline-World-One-Review/world-one",
+        "surface_metres": 1024.0
+      }
+    }
+  },
+  "android": {
+    "package": "com.havenline.worldonereview",
+    "name": "Havenline · World One",
+    "template": "Godot debug review package",
+    "signed": true,
+    "certificate_sha256": "b605f0903414da28ac8b22001a1ba62ea3b2d2a61a0321f46e60a04eacaac938",
+    "signature_verification": [
+      "Verified using v1 scheme (JAR signing): false",
+      "Verified using v2 scheme (APK Signature Scheme v2): true",
+      "Verified using v3 scheme (APK Signature Scheme v3): true",
+      "Verified using v3.1 scheme (APK Signature Scheme v3.1): false",
+      "Verified using v4 scheme (APK Signature Scheme v4): false"
+    ],
+    "version_name": "0.1.0-world-one-review",
+    "abi": [
+      "arm64-v8a"
+    ],
+    "launch_activity": "com.godot.game.GodotAppLauncher",
+    "archive_crc32": "all entries pass",
+    "archive_alignment": "zipalign -c -P 16 -v 4 passed",
+    "permissions": [],
+    "critical_imports": {
+      "field_camp/snowbound_palisade.obj": [
+        "assets/.godot/imported/snowbound_palisade.obj-3790019fbe7ecc42c5ad5090a13b8924.mesh"
+      ],
+      "field_camp/snowbound_gate_leaf.obj": [
+        "assets/.godot/imported/snowbound_gate_leaf.obj-efbdd086679e24efb48c72f2d96ece52.mesh"
+      ],
+      "field_camp/snowbound_sliding_bolt.obj": [
+        "assets/.godot/imported/snowbound_sliding_bolt.obj-d473a152a6deeb149bcd3d59ea6a4091.mesh"
+      ],
+      "field_world/eastern_watchtower.glb": [
+        "assets/.godot/imported/eastern_watchtower.glb-e324e382970ace676230378acea3aa7d.scn"
+      ],
+      "field_world/snow_prints.png": [
+        "assets/.godot/imported/snow_prints.png-87d3a480bf895b4dece18d05f9c28781.ctex"
+      ],
+      "field/hostile_wolf.glb": [
+        "assets/.godot/imported/hostile_wolf.glb-7fb2376bee7547271293257c2a77dee8.scn"
+      ],
+      "audio/gate_latch.wav": [
+        "assets/.godot/imported/gate_latch.wav-00bd2f79d3dce5f74374b832db6cb102.sample"
+      ]
+    },
+    "physical_handset_runtime": "unverified; no device attached"
+  },
+  "reproduce": [
+    "python prepare.py /path/to/HAVENLINE /new/empty/project",
+    "godot --headless --editor --path /new/empty/project --import",
+    "godot --headless --path /new/empty/project --export-release \"Linux World One Review\" /output/Havenline-World-One.x86_64",
+    "godot --headless --path /new/empty/project --export-debug \"Android World One Review\" /output/Havenline-World-One-Android-arm64-debug.apk",
+    "sha256sum -c Package-SHA256SUMS.txt",
+    "apksigner verify --verbose --print-certs Havenline-World-One-Android-arm64-debug.apk",
+    "zipalign -c -P 16 -v 4 Havenline-World-One-Android-arm64-debug.apk"
+  ],
+  "reproduction_note": "A rebuilt APK may have a different archive digest or signing certificate, depending on the local signing key, timestamps and exporter. The supplied checksums identify these tested binaries."
+}
