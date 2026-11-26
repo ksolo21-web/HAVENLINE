@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T03:09:32Z",
+  "observed_at_utc": "2026-11-26T03:18:29Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -23,9 +23,10 @@
       "state": "blocked",
       "result": "The separate boot-and-cuff prototype retained the original sole contact points, but independent review found genuine intersections at rest and under load. It was rejected.",
       "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/bd13884fcf0bee639132ea28f9527ed05617cd35",
         "https://github.com/ksolo21-web/HAVENLINE/commit/50c44d8c719220e5561258b94c6a1bcdeea94c33"
       ],
-      "next": "Do not promote this prototype or retime it. Another design needs clean rest geometry and independently verified contact and motion.",
+      "next": "The neutral build already has crossing layer surfaces; changing animation timing cannot make it safe. Keep the rejected prototype out of the game.",
       "role_ids": [
         "rig-character",
         "critic-rig"
@@ -52,14 +53,15 @@
       "id": "furnace-purchase",
       "role": "Gameplay and plot builder",
       "state": "in_progress",
-      "result": "A single detached opening route passed 67 headless checks: three wood, one centered furnace purchase, both gates in both directions, one repeat pine award, and a clean fresh-process restore. The three-log appearance and full rendered route are not verified.",
+      "result": "The exact detached opening passed all 67 checks on desktop software rendering. Six stock-camera frames were independently verified; the rendered paid camp still has placeholder wall and gate visuals.",
       "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/bd13884fcf0bee639132ea28f9527ed05617cd35",
         "https://github.com/ksolo21-web/HAVENLINE/commit/50c44d8c719220e5561258b94c6a1bcdeea94c33",
         "https://github.com/ksolo21-web/HAVENLINE/commit/1fce69e1792a7042be05f6eb8ae1d0a202c7e1ab",
         "https://github.com/ksolo21-web/HAVENLINE/commit/872045d9253a765843cf88e2221e9a59121d0015",
         "https://github.com/ksolo21-web/HAVENLINE/commit/472d8a08ec300c28630694853b2563fe67f40f6e"
       ],
-      "next": "Capture the exact route at the stock game camera, without changing the playable build or treating the test as device approval.",
+      "next": "Review a separately staged fence art candidate while preserving both physical gates and the purchase. No device/FPS or release claim.",
       "role_ids": [
         "builder-camp-pads",
         "level1-verifier"
@@ -169,13 +171,13 @@
     {
       "role_id": "level1-verifier",
       "state": "done",
-      "title": "Verified a continuous detached opening route",
-      "summary": "67 scoped headless checks cover the opening, earned furnace, both gates, repeat pine and new-process restore.",
-      "next": "Review the same route against actual native stock-camera images when captured.",
+      "title": "Verified the normal-camera opening captures",
+      "summary": "Six actual Godot frames match their native pixels; the exact route and disposable reload passed again. Desktop software only.",
+      "next": "Review the next detached fence asset after it is frozen.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/50c44d8c719220e5561258b94c6a1bcdeea94c33"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/bd13884fcf0bee639132ea28f9527ed05617cd35"
       ],
-      "updated_at_utc": "2026-11-26T03:09:32Z"
+      "updated_at_utc": "2026-11-26T03:18:29Z"
     },
     {
       "role_id": "builder-customer-counter",
@@ -290,6 +292,17 @@
       "message": "Handoff summary: The entire detached route passed its 67 functional checks. Use the same exact revision for visual proof; do not call this a full Level 1 release.",
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/50c44d8c719220e5561258b94c6a1bcdeea94c33"
+      ]
+    },
+    {
+      "id": "l1-stock-camera-route-reviewed-20261126",
+      "type": "handoff",
+      "at_utc": "2026-11-26T03:18:29Z",
+      "from_role_id": "level1-verifier",
+      "to_role_id": "builder-camp-pads",
+      "message": "Handoff summary: The detached opening and reload ran at the stock game camera. The original wall and gate visuals are placeholders and still need art review.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/bd13884fcf0bee639132ea28f9527ed05617cd35"
       ]
     }
   ]
