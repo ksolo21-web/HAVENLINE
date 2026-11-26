@@ -1,0 +1,3 @@
+# Native bark-only comparative evidence (not carry integration)
+
+Both native conditions use the same unmounted temporary log, positions, camera, stock geometry and casting OFF. The candidate changes one boolean on a test-lifetime copy of the existing bark material. Both conditions passed the original checker against two genuine historical controls. Outside the exact projected bark region no pixels change; local changes were 382, 297, 271 at three pinned moments. This proves a localized material appearance effect, not artistic approval, stable readable carry, or a change to the playable build. No spend. Seal 82fb5c20b4b8d0d2fda6eddd1d725f986b210bd228446ed77d3937d4f709913f.
