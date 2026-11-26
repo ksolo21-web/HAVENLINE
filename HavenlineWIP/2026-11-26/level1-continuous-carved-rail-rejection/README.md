@@ -1,0 +1,3 @@
+# Continuous carved fence lower rail trial: held
+
+The actual South and West whole lower sections kept their two crossed outside limbs physically separate, stayed 2.665 mm inside the visual width bound and showed zero strict cross-group intersections in the exact source check. But the wood nose loses the rounded owner silhouette across more than half the run, the two lower sections alone account for 73,308 triangles, and indexed terrain/support attachment are not proven. Stop this version; neither a game-ready asset, a visual pass nor a reason to alter the existing build. The original source seal 27e8b4e58d133c64a4ef5193db83b36be2c7a9f58716454e4237ea6aabdb3a6e pins the reproducible generator and detached mesh. No renderer or paid job.
