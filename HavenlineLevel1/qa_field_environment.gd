@@ -45,6 +45,11 @@ func run() -> void:
 		checks[kind+" units fill the reference stock arrangement"] = is_equal_approx(last_lower.y,surface.y) and first_upper.y>surface.y and Vector2(first_upper.x,first_upper.z).is_equal_approx(Vector2(surface.x,surface.z))
 	camp.sync_stock({"wood":12,"stone":4,"meat":8})
 	checks["counts identify only deposited typed stock"] = camp.count_labels.wood.text=="12" and camp.count_labels.stone.text=="4" and camp.count_labels.meat.text=="8"
+	for kind: String in ["wood","stone","meat"]:
+		checks[kind+" stocked plot shows only physical units"] = camp.stock_surfaces[kind][0][0].get_active_material(camp.stock_surfaces[kind][0][1]).albedo_texture == camp.STOCKED_PAINT
+	camp.sync_stock({"wood":0,"stone":0,"meat":0})
+	for kind: String in ["wood","stone","meat"]:
+		checks[kind+" emptied plot recovers its painted type"] = camp.stock_surfaces[kind][0][0].get_active_material(camp.stock_surfaces[kind][0][1]).albedo_texture == camp.empty_stock_paint[kind]
 	camp.set_upgrade_payment({"stone":0,"meat":0})
 	checks["paid upgrade retires its ground inlay"] = not camp.upgrade_anchor.is_visible_in_tree()
 	for gate in world.gates:
@@ -62,4 +67,10 @@ func run() -> void:
 		await walk(outside,80)
 		checks[gate.gate_id+" outward crossing"] = (world.actor.global_position-at).dot(outside)>.85
 	print(JSON.stringify({"suite":"actual_field_court","checks":checks}))
-	quit(1 if checks.values().has(false) else 0)
+	var code := 1 if checks.values().has(false) else 0
+	world.sound.stop_playback()
+	world.queue_free()
+	for i in 12:
+		OS.delay_msec(20)
+		await process_frame
+	quit(code)

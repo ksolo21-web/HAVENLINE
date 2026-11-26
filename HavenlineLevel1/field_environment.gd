@@ -20,7 +20,10 @@ var upgrade_anchor := Node3D.new()
 var upgrade_label: Label3D
 var upgrade_pending := true
 var payment_ink := {}
+const STOCKED_PAINT := preload("res://assets/field_camp/stocked_plot_paint.png")
 var stock_anchors := {}
+var stock_surfaces := {}
+var empty_stock_paint := {}
 var count_labels := {}
 var payment_label: Label3D
 var camp_state := -1
@@ -33,6 +36,12 @@ const SEASONAL_POCKETS := [
 	Vector2(-4.75,-1.94), Vector2(-3.18,-1.77), Vector2(-1.36,-2.11), Vector2(.40,-2.04), Vector2(2.05,-2.14),
 	Vector2(-4.5,-.19), Vector2(-2.9,-.27), Vector2(-1.1,-.53), Vector2(.80,-.73),
 	Vector2(-4.29,1.49), Vector2(-2.55,1.19),
+]
+# Five west-grove pines border the quarry work area. Their roots previously
+# landed on the stone or in front of its pick contact from the fixed camera.
+const QUARRY_EDGE := [
+	Vector2(-10.97,.76), Vector2(-9.45,6.79), Vector2(-10.55,-.68),
+	Vector2(-12.93,1.01), Vector2(-10.08,1.91)
 ]
 var snow := ShaderMaterial.new()
 var reveal_tween: Tween
@@ -214,6 +223,7 @@ func install_woods() -> void:
 	var transforms := [[],[],[]]
 	var occupied: Array[Vector2] = []
 	var initial := positions.size()
+	var quarry_tree := 0
 	for i in 32:
 		var offset := Vector2(1.35,0).rotated(2.39996*i)
 		var candidate: Vector2 = positions[i]+offset
@@ -223,6 +233,11 @@ func install_woods() -> void:
 		if blocked.any(func(p:Vector2): return p.distance_squared_to(at) < 3.2) or occupied.any(func(p:Vector2): return p.distance_squared_to(at) < 1.25):
 			continue
 		occupied.append(at)
+		# Keep the accepted grove count and mesh variants. The clearing applies
+		# to this occupied quarry, leaving the broader woodline intact.
+		if at.distance_squared_to(Vector2(-6,3)) < 2.4*2.4 and quarry_tree < QUARRY_EDGE.size():
+			at = QUARRY_EDGE[quarry_tree]
+			quarry_tree += 1
 		var scale_factor := (.72+.19*fposmod(i*.618,1)) if i<initial else (.48+.19*fposmod(i*.414,1))
 		var basis := Basis(Vector3.UP,i*2.39996).scaled(Vector3.ONE*scale_factor)
 		transforms[i%3].append(Transform3D(basis,Vector3(at.x,0,at.y)))
@@ -267,17 +282,20 @@ func install_plot(kind: String) -> void:
 	stock_anchors[kind] = anchor
 	var deck := PLATE.instantiate() as Node3D
 	anchor.add_child(deck)
-	if kind != "wood":
-		var meshes: Array[MeshInstance3D] = []
-		world.meshes(deck,meshes)
-		for geometry in meshes:
-			for i in geometry.mesh.get_surface_count():
-				var mat := geometry.get_active_material(i) as StandardMaterial3D
-				if mat and mat.albedo_texture:
-					var local := mat.duplicate() as StandardMaterial3D
-					local.albedo_texture = STOCK_PAINT[kind]
-					local.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
-					geometry.set_surface_override_material(i,local)
+	var meshes: Array[MeshInstance3D] = []
+	world.meshes(deck,meshes)
+	stock_surfaces[kind] = []
+	for geometry in meshes:
+		for i in geometry.mesh.get_surface_count():
+			var mat := geometry.get_active_material(i) as StandardMaterial3D
+			if mat and mat.albedo_texture:
+				var local := mat.duplicate() as StandardMaterial3D
+				var type_paint: Texture2D = STOCK_PAINT.get(kind,mat.albedo_texture)
+				local.albedo_texture = type_paint
+				local.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+				geometry.set_surface_override_material(i,local)
+				stock_surfaces[kind].append([geometry,i])
+				empty_stock_paint[kind] = type_paint
 	var label := flat_label(anchor,Vector3(0,.005,.79),.0068)
 	label.text = "0"
 	count_labels[kind] = label
@@ -348,7 +366,16 @@ func set_upgrade_payment(remaining: Dictionary) -> void:
 
 func sync_stock(counts: Dictionary) -> void:
 	for kind in count_labels:
-		count_labels[kind].text = str(int(counts.get(kind,0)))
+		var count := int(counts.get(kind,0))
+		count_labels[kind].text = str(count)
+		var paint: Texture2D = STOCKED_PAINT if count > 0 else empty_stock_paint[kind]
+		# Ultra replaces textured materials when the scene node enters the tree.
+		# Resolve the material currently bound to the visible surface on each change.
+		for surface: Array in stock_surfaces[kind]:
+			var geometry: MeshInstance3D = surface[0]
+			var ink := geometry.get_active_material(surface[1]) as StandardMaterial3D
+			if ink.albedo_texture != paint:
+				ink.albedo_texture = paint
 
 func set_built(built: bool, animate := true) -> void:
 	if camp_state == int(built): return
