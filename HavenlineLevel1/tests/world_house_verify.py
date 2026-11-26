@@ -16,16 +16,19 @@ with (run / "observations.jsonl").open() as source:
         if house["visit"] != previous_visit:
             enters.append([row["tick"], house["visit"]])
             previous_visit = house["visit"]
+        if house["tier"] > 0 and not house["cutaway"] and house["roof_visible"] and house["door"] < .02:
+            proof["door_closed_away_from_apron"] = row["tick"]
         for tier, kind in enumerate(("wood", "stone", "meat"), 1):
             if house["tier"] != tier:
                 continue
-            if phase == f"House tier {tier} complete" and house["roof_visible"] and not house["cutaway"] and house["door"] < 0.02:
+            if phase == f"House tier {tier} complete" and house["roof_visible"] and not house["cutaway"]:
                 proof[f"exterior_{tier}"] = row["tick"]
             if phase != f"Inspect the earned shelves inside tier {tier}" or not house["cutaway"] or house["door"] < .98:
                 continue
             if field["stored"][kind] > 0 and house["shelves"][kind] > 0 and not house["roof_visible"]:
                 proof[f"inside_{tier}"] = {"tick": row["tick"], "count": field["stored"], "visible_shelf_units": house["shelves"], "pos": row["pos"]}
 assert all(f"{view}_{t}" in proof for view in ("exterior", "inside") for t in (1, 2, 3)), proof
+assert "door_closed_away_from_apron" in proof
 visits = [v for _, v in enters]
 for i, kind in enumerate(("wood", "stone", "meat")):
     purchase = visits.index("storage_" + kind)

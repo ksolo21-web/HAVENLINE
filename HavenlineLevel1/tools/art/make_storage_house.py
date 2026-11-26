@@ -105,6 +105,13 @@ def crate_symbol(x,y,z,s,mat):
 G='Floor'
 for i in range(14):
     x=-1.54+(i+.5)*3.08/14;box(x,.09,0,3.08/14-.005,.14,2.35,[0,1,15][i%3])
+# Broad gray flagstones line the clear delivery aisle in the cutaway
+# board. A thin reveal between stones leaves the surrounding timber intact.
+for row in range(4):
+    for col in range(3):
+        x=(col-1)*.504
+        z=-.45+row*.442
+        box(x,.156,z,.497,.024+(row+col)%3*.0015,.435,7)
 for x in (-1.50,1.50):
     for z in (-1.10,1.10):
         column((x,.04,z),(x,1.92,z),.14,1)
