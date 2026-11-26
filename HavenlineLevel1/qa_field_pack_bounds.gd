@@ -40,6 +40,23 @@ func margin(kind: String) -> float:
 			edge=minf(edge,camera.unproject_position(vertex).y)
 	return edge/view.size.y
 
+func check_distinct_bays() -> void:
+	var footprint := {}
+	for kind: String in Ledger.KINDS:
+		var packets: Array = carry.pieces.get("carry/" + kind, [])
+		for i in mini(2, packets.size()):
+			var packet: Node3D = packets[i]
+			if not packet.visible: continue
+			var size: Vector3 = carry.measured[kind]
+			var box := packet.transform * AABB(Vector3(-size.x*.5, 0, -size.z*.5), size)
+			var floor_rect := Rect2(box.position.x, box.position.z, box.size.x, box.size.z)
+			for other_kind: String in footprint:
+				if other_kind != kind:
+					for other_rect: Rect2 in footprint[other_kind]:
+						check(not floor_rect.intersects(other_rect), kind + " occupies a physically separate bay from " + other_kind)
+			if not footprint.has(kind): footprint[kind] = []
+			footprint[kind].append(floor_rect)
+
 func run() -> void:
 	view.own_world_3d=true
 	root.add_child(view)
@@ -78,13 +95,8 @@ func run() -> void:
 						check(book.carried[kind]==amount,kind+" count unchanged")
 						check(carry.pieces["carry/"+kind].size()<(75 if kind in Ledger.ORIGINAL_KINDS else 200),kind+" bounded pool")
 					check(top("wood").position.x < top("stone").position.x, "wood and stone occupy separate columns")
-					for column: Array in Carry.COLUMNS:
-						for section in range(1, column.size()):
-							var lower := top(column[section-1])
-							var upper: Node3D = carry.pieces["carry/"+column[section]][0]
-							var lower_extent: Vector3 = carry.measured[column[section-1]]
-							check(upper.position.y >= lower.position.y + lower_extent.y, "families occupy separate supported sections")
-							check(is_equal_approx(lower.position.x, upper.position.x), "sections share one neat column")
+					check_distinct_bays()
+
 				check(lowest>=.08,"8 percent margin across views and turns")
 				var drawn := {}
 				for kind in Ledger.KINDS: drawn[kind]=visible_count(kind)
@@ -132,18 +144,66 @@ func run() -> void:
 	check(carry.pickup("switch-to-mixed", "stone", Vector3(2,0,1), .85), "typed stone pickup reserves the other column")
 	var entering: Dictionary = carry.flights[0]
 	check(is_equal_approx(entering.mesh.rotation.y,.85) and is_equal_approx(entering.mesh.scale.x,Art.WIDTHS.stone/Carry.WIDTH.stone), "flight starts at the real dropped heading and size")
-	check(wood[1].position.is_equal_approx(old_pos), "attached timber doesn't snap as the reserved column changes")
-	carry.advance(Carry.REFLOW_TIME * .5)
-	var halfway: Vector3 = wood[1].position
-	var target: Vector3 = carry._pack_position("wood",1)
-	check(halfway.distance_to(old_pos) > .01 and halfway.distance_to(target) > .01, "carried stock slides through an intermediate position")
+	check(wood[1].position.is_equal_approx(old_pos), "an incoming stone leaves the wood course in its bay")
 	carry.advance(.4)
-	check(wood[1].position.is_equal_approx(target) and entering.mesh.global_transform.is_equal_approx(top("stone").global_transform), "mixed pickup lands at its settled physical slot")
+	check(wood[1].position.is_equal_approx(old_pos) and entering.mesh.global_transform.is_equal_approx(top("stone").global_transform), "mixed pickup reaches its separate physical slot")
 	check(carry.pickup("while-depositing","wood",Vector3(1,0,2)), "same-kind token in flight")
 	var inbound: Node3D = carry.flights[0].mesh
 	check(carry.deposit_storage("wood"), "loaded wood departs during incoming wood")
 	carry.advance(.4)
 	check(inbound.global_transform.is_equal_approx(top("wood").global_transform), "overlapping deposit preserves incoming physical slot")
 	check(book.carried.wood == 6 and book.stored.wood == 1, "overlapping transfers preserve exact balances")
-	print(JSON.stringify({"cases":cases,"failures":failures}))
+	# Any combination of the six live resource types must keep its bays when
+	# another family is unloaded. Enumerate the full subset including every pair.
+	var combinations := 0
+	for mask in range(1, 1 << Ledger.KINDS.size()):
+		book.carried = Ledger.EMPTY.duplicate()
+		for i in Ledger.KINDS.size():
+			if mask & (1 << i): book.carried[Ledger.KINDS[i]] = 3
+		carry.sync()
+		check_distinct_bays()
+		var footprints := {}
+		for kind: String in Ledger.KINDS:
+			if book.carried[kind] > 0:
+				footprints[kind] = top(kind).transform
+		for removed: String in footprints:
+			book.carried[removed] = 0
+			carry.sync()
+			for kind: String in footprints:
+				if kind != removed:
+					check(top(kind).transform.is_equal_approx(footprints[kind]), "removing another family keeps " + kind + " stable")
+			book.carried[removed] = 3
+			carry.sync()
+		combinations += 1
+	check(combinations == 63, "all fifteen pairs and all six material families exercised")
+	# Rebuild all six different stacks from actual earned tokens, then unload
+	# just the top packet of each type before restoring an independent ledger.
+	book = Ledger.new()
+	book.configure({"buy":{"wood":3,"stone":2}})
+	carry.inventory = book
+	for kind: String in Ledger.KINDS:
+		carry.define_storage(kind, bin)
+		for i in 3:
+			check(carry.pickup("mixed-%s-%d" % [kind,i],kind,bin.position), kind+" pickup earned")
+			carry.advance(.5)
+		check(visible_count(kind)==3,kind+" three transfers seated")
+	for kind: String in Ledger.KINDS:
+		var departing := top(kind).global_transform
+		check(carry.deposit_storage(kind),kind+" deposit dispatched")
+		check(carry.flights.size()==1 and carry.flights[0].mesh.global_transform.is_equal_approx(departing),kind+" deposit starts at top of its bay")
+		carry.advance(.5)
+		check(visible_count(kind)==2 and book.carried[kind]==2 and book.stored[kind]==1,kind+" balances after one deposit")
+	var restored_book := Ledger.new()
+	restored_book.configure(book.costs)
+	check(restored_book.restore(book.snapshot()),"six-type earned inventory restores")
+	var restored_carry := Carry.new()
+	view.add_child(restored_carry)
+	restored_carry.setup(restored_book,actor,Art.make)
+	restored_carry.set_physics_process(false)
+	for kind: String in Ledger.KINDS:
+		for i in 2:
+			var original: Node3D = carry.pieces["carry/"+kind][i]
+			var reloaded: Node3D = restored_carry.pieces["carry/"+kind][i]
+			check(reloaded.visible and reloaded.transform.is_equal_approx(original.transform),kind+" reload preserves physical packet and heading")
+	print(JSON.stringify({"cases":cases,"mixed_subsets":combinations,"earned_reload_counts":restored_book.carried,"earned_reload_storage":restored_book.stored,"failures":failures}))
 	quit(1 if not failures.is_empty() else 0)

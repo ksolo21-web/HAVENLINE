@@ -27,16 +27,16 @@ func _initialize() -> void:
 				book.collect("%s-%s-%d"%[id,kind,n],kind)
 				book.payment(id,kind,false)
 	for kind: String in Rules.KINDS:
-		for i in 8: book.collect("trial-%s-%d"%[kind,i],kind)
+		for i in (8 + book.survivor_cost if kind=="wood" else 8): book.collect("trial-%s-%d"%[kind,i],kind)
 	var journal: Dictionary = book.settlement
 	for kind: String in Rules.KINDS:
 		book.carried[kind] -= 2
 		journal.hoppers[kind] = 2
 		journal.work_seconds[kind] = .42
 	journal.survivor_paid = true
-	journal.survivor_wood = 2
+	journal.survivor_wood = book.survivor_cost
 	journal.rescued = true
-	book.carried.wood -= 2
+	book.carried.wood -= book.survivor_cost
 	book.carried.stone -= 1
 	journal.worker_supply = "stone"
 	var queued: Dictionary = JSON.parse_string(JSON.stringify(book.snapshot()))
@@ -80,6 +80,14 @@ func _initialize() -> void:
 	check("sale removes exactly the held roast",Rules.waiting_meals(journal)==1 and candidate.restore(book.snapshot()))
 	var old: Dictionary = book.snapshot()
 	old.version = 4
+	old.erase("legacy_prices")
+	var old_prices := Progress.old_offers()
+	for id: String in PURCHASE_ORDER:
+		for kind: String in old.paid[id]:
+			old.carried[kind] += old.paid[id][kind] - old_prices[id][kind]
+		old.paid[id] = old_prices[id].duplicate()
+	old.carried.wood += old.settlement.survivor_wood - Progress.OLD_SURVIVOR_BUNDLES
+	old.settlement.survivor_wood = Progress.OLD_SURVIVOR_BUNDLES
 	for key in ["worker_supply","held_meal","hoppers","work_seconds"]: old.settlement.erase(key)
 	check("an old unserved receipt migrates onto its previous carrier",candidate.restore(JSON.parse_string(JSON.stringify(old))) and candidate.settlement.held_meal==1 and Rules.waiting_meals(candidate.settlement)==0)
 	old.settlement.served = 0

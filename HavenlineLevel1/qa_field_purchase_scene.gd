@@ -25,24 +25,25 @@ func exercise_partial_restart() -> void:
 	var is_read := "--house-partial-read" in OS.get_cmdline_user_args()
 	if not is_read:
 		for kind in ["wood","stone"]:
-			for i in (7 if kind=="wood" else 1):
+			var budget:int = game.inventory.costs[Rules.HEARTH].get(kind,0) + game.inventory.costs[Rules.FIRST].get(kind,0) + (game.inventory.costs.storage_wood.wood-1 if kind=="wood" else 0)
+			for i in budget:
 				game.inventory.collect("limited-%s-%s"%[kind,i],kind)
 		game.carry.sync()
-		approach(Rules.HEARTH,120)
+		approach(Rules.HEARTH,310)
 		game.reveal_countdown=-1.
 		game._apply_hearth(true,false)
-		approach(Rules.FIRST,120)
+		approach(Rules.FIRST,310)
 		approach("storage_wood",120,Vector3(.55,0,0))
-	check("Partial starter balance survives without free construction",game.inventory.paid.storage_wood.wood==1 and game.inventory.remaining("storage_wood").wood==1 and game.depot.house.tier==0 and game.depot.offer=="storage_wood")
+	check("Partial starter balance survives without free construction",game.inventory.paid.storage_wood.wood==game.inventory.costs.storage_wood.wood-1 and game.inventory.remaining("storage_wood").wood==1 and game.depot.house.tier==0 and game.depot.offer=="storage_wood")
 	if is_read:
 		check("Reopening on apron waits for new visit",game.depot.visit=="done")
 		game.inventory.collect("last-starter-timber","wood")
 		approach("storage_wood",120,Vector3(.55,0,0))
-		check("Reload cannot spend without departure",game.inventory.paid.storage_wood.wood==1)
+		check("Reload cannot spend without departure",game.inventory.paid.storage_wood.wood==game.inventory.costs.storage_wood.wood-1)
 		game.actor.position=Vector3.ZERO
 		game._step_receivers()
 		approach("storage_wood",120,Vector3(.55,0,0))
-		check("Existing partial consumed exactly once after re-entry",game.depot.house.tier==1 and game.inventory.paid.storage_wood.wood==2 and game.inventory.carried.wood==0 and game.depot.offer=="storage_stone")
+		check("Existing partial consumed exactly once after re-entry",game.depot.house.tier==1 and game.inventory.paid.storage_wood.wood==game.inventory.costs.storage_wood.wood and game.inventory.carried.wood==0 and game.depot.offer=="storage_stone")
 	print(JSON.stringify({"partial_restart":checks}))
 	game.sound.stop_playback()
 	game.queue_free()
@@ -71,22 +72,24 @@ func run() -> void:
 		return
 	check("Actual game fresh save",not game.persist_blocked and game.inventory.build_order.is_empty())
 	for kind in ["wood","stone","meat"]:
-		for i in 30: game.inventory.collect(kind+str(i),kind)
+		var budget := 3
+		for cost in game.inventory.costs.values(): budget+=int(cost.get(kind,0))
+		for i in budget: game.inventory.collect(kind+str(i),kind)
 	game.carry.sync()
 	check("Only the central hearth payment is initially visible",game.field_env.buy_anchor.visible and game.offer_floors.values().all(func(f):return not f.is_visible_in_tree()))
-	approach(Rules.HEARTH,100)
+	approach(Rules.HEARTH,310)
 	check("Payment commits before hearth reveal",game.inventory.complete(Rules.HEARTH) and game.reveal_countdown>0.)
 	game.reveal_countdown=-1.
 	game._apply_hearth(true,true)
 	check("Hearth reveals only first expansion and no storage",game.offer_floors[Rules.FIRST].is_visible_in_tree() and not game.depot.apron.is_visible_in_tree() and not game.depot.house.visible and not game.field_env.upgrade_anchor.is_visible_in_tree() and not game.offer_floors[Rules.AXES].is_visible_in_tree())
-	approach(Rules.FIRST,130)
+	approach(Rules.FIRST,310)
 	check("Single starter offer after first expansion",game.depot.offer=="storage_wood" and game.depot.apron.visible and not game.depot.house.visible and not game.offer_floors[Rules.SECOND].is_visible_in_tree())
 	for kind: String in ["wood","stone","meat"]:
 		var id := "storage_"+kind
 		game.actor.position=Vector3.ZERO
 		game._step_receivers()
 		var before_store: Dictionary=game.inventory.stored.duplicate()
-		approach(id,120,Vector3(.55,0,0))
+		approach(id,220,Vector3(.55,0,0))
 		check(id+" purchased without chaining next tier",game.inventory.complete(id) and game.depot.bins[kind].visible and game.depot.visit=="done")
 		check(id+" keeps only the authored apron visible",game.depot.apron.get_children().all(func(part):return not part.visible))
 		var order: Array = game.inventory.build_order.duplicate()
@@ -108,10 +111,10 @@ func run() -> void:
 	check("Visits to retired corner positions cause no debit or deposit",game.inventory.paid==receipts_before and game.inventory.stored==stored_before and game.carry.flights.is_empty())
 	check("Original corner pads cannot accept payments or stock",game.find_children("*StoragePlot","",true,false).is_empty() and Rules.STORAGE.all(func(id):return game.carry.receivers[id]==game.depot.apron))
 	check("Second expansion is the next build",game.offer_floors[Rules.SECOND].is_visible_in_tree() and not game.offer_floors[Rules.TOWER].is_visible_in_tree())
-	approach(Rules.SECOND,160)
+	approach(Rules.SECOND,370)
 	check("East tower and extra axe pads unlock together",game.offer_floors[Rules.TOWER].is_visible_in_tree() and game.offer_floors[Rules.AXES].is_visible_in_tree())
-	approach(Rules.TOWER,160)
-	approach(Rules.AXES,120)
+	approach(Rules.TOWER,370)
+	approach(Rules.AXES,190)
 	check("All construction is paid and offerings retire",game.inventory.build_order==[Rules.HEARTH,Rules.FIRST,"storage_wood","storage_stone","storage_meat",Rules.SECOND,Rules.TOWER,Rules.AXES] and game.offer_floors.values().all(func(f):return not f.visible))
 	check("Existing unit flights and authored purchase cues executed",launched>0 and game.events.any(func(e):return e.event=="spend_meat") and game.events.filter(func(e):return e.event=="purchase").size()==8)
 	var loader=game.FieldSave.new()

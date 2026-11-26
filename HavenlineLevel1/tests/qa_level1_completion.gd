@@ -38,7 +38,7 @@ func legacy() -> void:
 	book.collect("carried-legacy-meat","meat")
 	book.collect("second-carried-legacy-meat","meat")
 	for kind in ["wood","stone"]:
-		for i in 5:
+		for i in (11 if kind=="wood" else 5):
 			book.collect("legacy-spare-%s-%d"%[kind,i],kind)
 	var state: Dictionary = book.snapshot()
 	var store := Store.new()
@@ -52,19 +52,20 @@ func ledger_edges() -> void:
 	var opened=fresh_book()
 	var blank: Dictionary=opened.snapshot()
 	var premature: Dictionary=blank.duplicate(true)
+	premature.erase("legacy_prices")
 	premature["version"]=5
 	premature["settlement"]=book.settlement.duplicate(true)
 	premature.settlement.rescued=true
 	check("survivor receipt cannot precede first hearth",not opened.restore(premature) and opened.snapshot()==blank)
-	for n in 3:
+	for n in int(book.remaining("center_hearth").wood):
 		book.collect("first-hearth-%d" % n,"wood")
 		book.payment("center_hearth","wood",false)
 	book.settlement.rescued=true
 	check("paid hearth alone cannot release the survivor", not opened.restore(book.snapshot()) and opened.snapshot()==blank)
-	for i in 2:
+	for i in book.survivor_cost:
 		book.collect("trial-sponsor-%d"%i,"wood")
-	book.carried.wood -= 2
-	book.settlement.survivor_wood=2
+	book.carried.wood -= book.survivor_cost
+	book.settlement.survivor_wood=book.survivor_cost
 	book.settlement.survivor_paid=true
 	var early: Dictionary=book.snapshot()
 	check("paid survivor at first hearth survives without a storage purchase",opened.restore(early) and opened.settlement.rescued and opened.stored.wood==0)
@@ -139,14 +140,14 @@ func plot_partial() -> void:
 	check("unpaid plot cannot recruit even alongside the survivor",not game.rescue_survivor())
 	place(Vector3(-5.5,0,10.9))
 	check("first wood arrives as a separate survivor-plot receipt",await wait_for(func():return ledger.settlement.survivor_wood==1,180))
-	check("partial payment consumes one wood and keeps the survivor waiting",ledger.carried.wood==4 and not ledger.settlement.survivor_paid and not ledger.settlement.rescued)
+	check("partial payment consumes one wood and keeps the survivor waiting",ledger.carried.wood==10 and not ledger.settlement.survivor_paid and not ledger.settlement.rescued)
 
 func claim() -> void:
 	var ledger=game.inventory
-	check("partial survivor payment resumed before the second wood",ledger.settlement.survivor_wood==1 and ledger.carried.wood==4)
+	check("partial survivor payment resumed before the second wood",ledger.settlement.survivor_wood==1 and ledger.carried.wood==10)
 	place(Vector3(-5.5,0,10.9))
-	check("second wood completes the single survivor purchase",await wait_for(func():return ledger.settlement.survivor_paid,180))
-	check("purchase consumed exactly two raw wood",ledger.carried.wood==3 and ledger.settlement.survivor_wood==2)
+	check("remaining wood completes the single survivor purchase",await wait_for(func():return ledger.settlement.survivor_paid,300))
+	check("purchase consumed exactly the displayed raw amount",ledger.carried.wood==3 and ledger.settlement.survivor_wood==ledger.survivor_cost)
 	place(Vector3(-5.1,0,9.9))
 	check("rescue performed by reaching the survivor",await wait_for(func():return ledger.settlement.rescued,300))
 	check("rescue is idempotent",not game.rescue_survivor())

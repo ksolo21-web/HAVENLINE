@@ -87,12 +87,15 @@ func sync_if_needed() -> void:
 	if world.opening_hud.level_continue.visible != (ready() and journal.level == 1 and not world.persist_blocked):
 		sync()
 
-func commit_receipt(cue: String, at: Vector3) -> bool:
+func commit_receipt(cue: String, at: Vector3, audio_id := "") -> bool:
 	world._inventory_changed()
 	sync()
 	if world.persist_blocked: return false
 	world.carry.sync(true)
-	world._event(cue,at)
+	if audio_id.is_empty():
+		world._event(cue,at)
+	else:
+		world._event(cue,at,audio_id)
 	return true
 
 func rescue() -> bool:
@@ -161,7 +164,7 @@ func _finish_cycle(kind: String) -> bool:
 		journal.cooked += 1
 		return commit_receipt("meal_ready",world.lakeshore.cooker_output.global_position)
 	journal["processed_"+kind] += 1
-	return commit_receipt("process_done",world.processors.output_position(kind))
+	return commit_receipt("process_done",world.processors.output_position(kind), "plank_out" if kind == "wood" else "block_out")
 
 func _present_production(dt: float) -> float:
 	transfers.set_meal_stock(Rules.waiting_meals(world.inventory.settlement))
@@ -233,7 +236,7 @@ func hint(previous: String, danger: bool) -> String:
 		return "Stay in the snowfield or serve another meal."
 	if ready(): return "Level 1 playtest complete."
 	if works.plot.visible and world.actor.position.distance_to(works.PLOT_AT) < 2.0:
-		return "Rescue survivor  ·  %d wood left" % (2 - int(journal.survivor_wood))
+		return "Rescue survivor  ·  %d wood left" % Progress.units(world.inventory.survivor_cost - int(journal.survivor_wood))
 	if works.active in Rules.KINDS:
 		return {"wood":"Loading saw…","stone":"Loading drill…","meat":"Loading cooker…"}[works.active]
 	if not world.inventory.complete(Progress.SECOND):

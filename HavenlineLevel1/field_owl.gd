@@ -1,15 +1,28 @@
 extends Node3D
 ## The expedition owl follows the survivor purchase and only damages a wolf under its talons.
-const OwlArt := preload("res://assets/settlement_people/expedition_owl.glb")
+const OwlArt := preload("res://assets/settlement_people/expedition_owl_strike.glb")
 const SENSE := 7.4
 const RELOAD := 2.7
-const CUP := Vector3(.043,.013,.040)
+const WINDUP := .24
+const RAKE := .18
+const CHEST := Vector3(0,.34,-.03)
 var world: Node3D
 var art: Node3D
 var plumage: MeshInstance3D
 var shoulders: Array[Node3D] = []
 var elbows: Array[Node3D] = []
 var wrists: Array[Node3D] = []
+var claw_binds := PackedVector3Array()
+var claw_tucks := PackedVector3Array()
+var claw_reaches := PackedVector3Array()
+var claw_grips := PackedVector3Array()
+var talon_weights := Vector3.ZERO
+var dive_length := 1.0
+var approach_axis := Vector3.FORWARD
+var bank_side := 1.0
+var planted_claw := 0
+var planted_at := Vector3.ZERO
+var planted_local := Vector3.ZERO
 var state := "locked"
 var target: Node3D
 var elapsed := 0.0
@@ -33,7 +46,24 @@ func setup(host: Node3D) -> void:
 		shoulders.append(art.find_child("Shoulder"+suffix,true,false))
 		elbows.append(art.find_child("Elbow"+suffix,true,false))
 		wrists.append(art.find_child("Wrist"+suffix,true,false))
+	for foot in ["Left","Right"]:
+		for toe in range(3):
+			var sensor: Node3D = plumage.find_child("Claw%s%d" % [foot,toe],false,false)
+			claw_binds.append(sensor.position)
+			claw_tucks.append(sensor.get_child(0).position)
+			claw_reaches.append(sensor.get_child(1).position)
+			claw_grips.append(sensor.get_child(2).position)
 	hide()
+
+func claw_tip(index: int) -> Vector3:
+	var p := claw_binds[index] + claw_tucks[index] * talon_weights.x
+	p += claw_reaches[index] * talon_weights.y + claw_grips[index] * talon_weights.z
+	return plumage.to_global(p)
+
+func _tips() -> PackedVector3Array:
+	var tips := PackedVector3Array()
+	for i in claw_binds.size(): tips.append(claw_tip(i))
+	return tips
 
 func _perch() -> Vector3:
 	var gate: Node3D = world.gates[0]
@@ -86,7 +116,7 @@ func _lane() -> Vector3:
 
 func _recover() -> void:
 	var forward := global_basis.z
-	recovery = global_position+Vector3(forward.x*1.35,1.72,forward.z*1.35)
+	recovery = global_position+Vector3(forward.x*1.60,1.72,forward.z*1.60)
 	cooldown = RELOAD
 	target = null
 	_switch("recover")
@@ -131,56 +161,154 @@ func advance(delta: float) -> void:
 				if cooldown <= 0:
 					target = _nearest()
 					if target:
-						var axis: Vector3 = (target.global_position-global_position).slide(Vector3.UP).normalized()
-						if axis.length_squared()<.1: axis=Vector3.FORWARD
-						approach = -axis*1.25 + Vector3.UP*(2.2*target.size_factor())
+						approach_axis = (target.global_position-global_position).slide(Vector3.UP).normalized()
+						if approach_axis.length_squared()<.1: approach_axis=Vector3.FORWARD
+						bank_side = 1.0 if global_basis.x.dot(approach_axis)>=0 else -1.0
+						var flank := approach_axis.cross(Vector3.UP) * bank_side
+						approach = -approach_axis*1.68 + flank*.62 + Vector3.UP*(2.35*target.size_factor())
 						_switch("bank")
-			"bank","dive":
+			"bank","windup","dive":
 				if not _eligible(target) or target.global_position.distance_to(world.actor.global_position)>SENSE+1.8:
 					_recover()
 				elif state == "bank":
 					var staging: Vector3 = target.global_position+approach
 					_fly(staging,7.6,dt)
-					if global_position.distance_to(staging)<.12 and age>.20: _switch("dive")
+					if global_position.distance_to(staging)<.12 and age>.20: _switch("windup")
+				elif state == "windup":
+					var crest: Vector3 = target.global_position+approach+Vector3.UP*.24*sin(.5*PI*age/WINDUP)
+					global_position = global_position.move_toward(crest,4.0*dt)
+					_turn(target.global_position-global_position,dt*1.7)
+					if age>=WINDUP:
+						dive_length = maxf(.65,claw_tip(1).distance_to(_back(target)))
+						_switch("dive")
+						if world.has_method("_event"): world._event("owl_dive",global_position)
 				else:
-					var back := _back(target)
-					if back == Vector3.INF or age>.58:
-						_recover()
-					else:
-						var foot := art.to_global(CUP)
-						var other := art.to_global(Vector3(-CUP.x,CUP.y,CUP.z))
-						_fly(back+(global_position-foot)-Vector3.UP*.20,8.6,dt)
-						var hit := _intersection(target,foot,art.to_global(CUP))
-						if hit == Vector3.INF:
-							hit = _intersection(target,other,art.to_global(Vector3(-CUP.x,CUP.y,CUP.z)))
-						if hit != Vector3.INF:
-							contact_target = target
-							contact_point = hit
-							world.owl_contact(target, hit)
-							contact_target = null
-							contact_point = Vector3.INF
-							_recover()
+					_dive(dt)
+					return
+			"strike":
+				_pose(dt)
+				if is_instance_valid(target) and not target.is_queued_for_deletion():
+					planted_at = target.to_global(planted_local)
+				global_position += planted_at-claw_tip(planted_claw)
+				if age >= RAKE: _recover()
+				return
 			"recover":
-				_fly(recovery,5.8,dt)
-				if age>=.45: _switch("follow")
+				_fly(recovery,4.7,dt)
+				if age>=.56: _switch("follow")
 	_pose(dt)
 
-func _pose(dt: float) -> void:
-	var fly := state != "perched"
-	var extended := .72 if state=="dive" else (1. if fly else 0.)
-	if state == "land":
-		extended = clampf(global_position.distance_to(_perch())*1.65,.12,1.)
-	spread = move_toward(spread,extended,dt*4.0)
-	var frequency := 3.15 if state in ["recover","takeoff","land"] else 2.2
+func _dive(dt: float) -> void:
+	var back := _back(target)
+	if not back.is_finite() or age>.82:
+		_recover()
+		_pose(dt)
+		return
+	var before := _tips()
+	var remaining := claw_tip(1).distance_to(back)
+	var travel := clampf(1.0-remaining/dive_length,0,1)
+	_pose(dt,travel)
+	# Aim the center claw just through the back, so contact requires the actual
+	# curved vertex trajectory to intersect the target, including its lateral movement.
+	var goal := global_position + back - claw_tip(1) - Vector3.UP*.10
+	_fly(goal,lerpf(5.8,8.8,smoothstep(0,.55,travel)),dt)
+	var first := 2.0
+	var hit_at := Vector3.INF
+	for i in before.size():
+		var now := claw_tip(i)
+		var at := _intersection(target,before[i],now)
+		if not at.is_finite(): continue
+		var fraction := before[i].distance_to(at)/maxf(.0001,before[i].distance_to(now))
+		if fraction < first:
+			first = fraction
+			hit_at = at
+			planted_claw = i
+	if not hit_at.is_finite(): return
+	# Stop at first contact. Keep that animated claw planted while the body
+	# brakes and the toes close, even if the struck animal is still moving.
+	global_position += hit_at-claw_tip(planted_claw)
+	planted_at = hit_at
+	planted_local = target.to_local(hit_at)
+	contact_target = target
+	contact_point = hit_at
+	var landed: bool = world.owl_contact(target,hit_at)
+	contact_target = null
+	contact_point = Vector3.INF
+	if landed:
+		if is_instance_valid(target) and not target.is_queued_for_deletion():
+			planted_at = target.to_global(planted_local)
+			global_position += planted_at-claw_tip(planted_claw)
+		_switch("strike")
+	else: _recover()
+
+func _pose(dt: float, travel: float = 0.) -> void:
+	var extended := 0.0 if state=="perched" else 1.0
+	if state == "land": extended = clampf(global_position.distance_to(_perch())*1.65,.12,1.)
+	var frequency := 3.05 if state in ["recover","takeoff","land"] else 1.85
 	phase = fposmod(phase+dt*TAU*frequency,TAU)
-	var beat := sin(phase) * (.18 if state == "dive" else .76)
-	if plumage.get_blend_shape_count() == 1:
-		plumage.set_blend_shape_value(0,spread*(0. if state=="dive" else 1.))
-	var tilt := .86 if state=="dive" else (.58*spread)
-	art.rotation.x = lerp_angle(art.rotation.x,tilt,1.-exp(-9.*dt))
-	for i in range(2):
-		var s := -1. if i==0 else 1.
-		shoulders[i].scale = Vector3.ONE*lerpf(.025,1.,smoothstep(.02,.75,spread))
-		shoulders[i].rotation = Vector3(0,s*lerpf(1.27,.02,spread),s*lerpf(-.54,beat,spread))
-		elbows[i].rotation = Vector3(0,s*lerpf(.80,.04,spread),s*lerpf(-.42,.23*sin(phase-.62),spread))
-		wrists[i].rotation = Vector3(0,s*lerpf(.23,-.09,spread),s*lerpf(.12,.31*sin(phase-.93),spread))
+	var beat := .78*sin(phase)
+	var fold := 0.02
+	var elbow := .24*sin(phase-.64)
+	var wrist := .29*sin(phase-1.0)
+	var pitch := (.53+.075*cos(phase))*spread
+	var roll := .06*sin(phase*.5)*spread
+	var asymmetric := 0.0
+	var feet := Vector3(extended,0,0)
+	match state:
+		"bank":
+			roll = .37*bank_side
+			asymmetric = .16*bank_side
+		"windup":
+			var t := smoothstep(0.,WINDUP,age)
+			pitch = lerpf(.47,.16,t)
+			roll = bank_side*(1.-t)*.36
+			beat = lerpf(.36,1.04,t)
+			elbow = .18
+			wrist = -.31*t
+			fold = -.11
+		"dive":
+			var fan := smoothstep(.45,.90,travel)
+			extended = lerpf(.62,1.,fan)
+			pitch = lerpf(1.05,.30,fan)
+			roll = bank_side*.21*(1.-fan)
+			fold = lerpf(.87,-.15,fan)
+			beat = lerpf(-.35,.86,fan)
+			elbow = lerpf(-.47,.32,fan)
+			wrist = lerpf(-.62,-.19,fan)
+			var reach := smoothstep(.04,.68,travel)
+			feet = Vector3(1.-reach,reach,0.)
+		"strike":
+			var t := smoothstep(0.,RAKE,age)
+			pitch = lerpf(.30,-.43,t)
+			roll = bank_side*lerpf(.05,-.20,t)
+			beat = lerpf(.87,-.88,t)
+			elbow = lerpf(.35,-.51,t)
+			wrist = lerpf(-.18,.36,t)
+			fold = -.13
+			feet = Vector3(0,1.-t,t)
+		"recover":
+			var kick := smoothstep(0.,.27,age)
+			pitch = lerpf(-.34,.49,kick)
+			roll = -bank_side*.31*(1.-smoothstep(0.,.56,age))
+			beat = lerpf(-.88,beat,kick)
+			feet = Vector3(kick,0,1.-kick)
+	spread = move_toward(spread,extended,dt*4.5)
+	talon_weights = feet
+	for i in 3: plumage.set_blend_shape_value(i,feet[i])
+	var blend := 1.-exp((-24. if state=="strike" else -15.)*dt)
+	art.rotation.x = lerp_angle(art.rotation.x,pitch,blend)
+	art.rotation.z = lerp_angle(art.rotation.z,roll,blend)
+	art.position = CHEST-art.basis*CHEST
+	for i in 2:
+		var side := -1. if i==0 else 1.
+		shoulders[i].scale = Vector3.ONE*lerpf(.025,1.,smoothstep(.02,.55,spread))
+		_wing_joint(shoulders[i],side*lerpf(1.27,fold,spread),side*lerpf(-.54,beat+side*asymmetric,spread),dt)
+		_wing_joint(elbows[i],side*lerpf(.80,.32*fold,spread),side*lerpf(-.42,elbow,spread),dt)
+		_wing_joint(wrists[i],side*lerpf(.23,.22*fold-.09,spread),side*lerpf(.12,wrist,spread),dt)
+
+func _wing_joint(joint: Node3D, sweep: float, flap: float, dt: float) -> void:
+	var goal := Quaternion.from_euler(Vector3(0,sweep,flap))
+	var angle := joint.quaternion.angle_to(goal)
+	if angle <= .001:
+		joint.quaternion = goal
+	else:
+		joint.quaternion = joint.quaternion.slerp(goal,minf(1.,13.5*dt/angle)).normalized()

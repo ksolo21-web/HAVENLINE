@@ -32,15 +32,19 @@ const CUES := {
 	"reset": [1, .55, -7, 3], "meat": [1, .12, -4, 2], "victory": [1, .75, -4, 3],
 	"equip_axe": [1,.30,-10,1], "equip_pickaxe": [1,.30,-10,1],
 	"regrow_wood": [1,.35,-12,0], "regrow_stone": [1,.4,-11,0],
-	"wolf_brace": [1,.26,-9,2], "wolf_return": [1,.65,-13,0], "player_fall": [1,.75,-5,3],
+	"wolf_brace": [1,.26,-9,2], "wolf_return": [1,.8,-4,2], "player_fall": [1,.75,-5,3],
 	"boss_arrival": [1,.65,-3.5,3], "boss_defeat": [1,.7,-4,3],
 	"cook_griddle": [1, .45, -3.0, 1], "service_cash_paper": [1, .18, -2.0, 3],
-	"tower_fire": [1,.25,-6.0,2], "tower_hit": [1,.16,-4.8,2]
+	"saw_work": [1,.45,-3.5,1], "drill_work": [1,.45,-3.5,1],
+	"plank_out": [1,.12,-3.2,2], "block_out": [1,.12,-3.2,2],
+	"owl_dive": [1,.20,-3.2,1], "owl_hit": [1,.12,-2.5,2],
+	"owl_equip": [1,.40,-2,3], "rescue_answer": [1,.4,-2,3],
+	"roast_ready": [1,.22,-2.4,2], "tower_fire": [1,.25,-6.0,2], "tower_hit": [1,.16,-4.8,2]
 }
 const ALIASES := {"attack":"enemy_attack","wolf_attack":"enemy_attack",
-	"survivor_rescued":"reveal", "worker_pickup":"carry", "worker_delivery":"deposit_wood",
-	"cooker_start":"cook_griddle", "meal_ready":"pickup_full", "meal_served":"service_cash_paper",
-	"level_complete":"victory", "next_level":"reveal", "owl_hit":"hit", "process_wood":"impact_wood", "process_stone":"impact_stone", "process_done":"deposit_wood"}
+	"survivor_rescued":"rescue_answer", "worker_pickup":"carry", "worker_delivery":"deposit_wood",
+	"cooker_start":"cook_griddle", "meal_ready":"roast_ready", "meal_served":"service_cash_paper",
+	"level_complete":"victory", "next_level":"reveal", "process_wood":"saw_work", "process_stone":"drill_work", "process_done":"plank_out"}
 const ORE_PITCH := {"metal": 1.19, "coal": 0.84, "slate": 1.08}
 const LOOP_NAMES := ["field_score","camp_score","threat_score","wind","fire"]
 const SETTINGS_PATH := "user://field-audio.cfg"
@@ -192,9 +196,9 @@ func _process(dt: float) -> void:
 	var target_duck := -3.4 if _clock < _duck_until else 0.0
 	_duck_db = move_toward(_duck_db,target_duck,dt*(55.0 if target_duck < _duck_db else 9.0))
 	var target := {
-		"field_score":-1.8+_duck_db,
-		"camp_score":-4.5+_duck_db if _state=="camp" else -80.0,
-		"threat_score":-3.0+_duck_db if _state=="threat" else -80.0,
+		"field_score":(-1.8 if _state=="field" else -4.2)+_duck_db,
+		"camp_score":-.8+_duck_db if _state=="camp" else -80.0,
+		"threat_score":-1.3+_duck_db if _state=="threat" else -80.0,
 		"wind":-.7,
 		"fire":linear_to_db(maxf(.0001,_hearth))-.4
 	}
@@ -236,8 +240,10 @@ func emit_event(requested: String, world_position := NO_SOURCE) -> bool:
 	voice.pitch_scale = ore_pitch * ([1.0,.968,1.026][serial%3] if int(params[3]) < 3 else 1.0)
 	var delta := world_position-_listener if world_position.is_finite() else Vector3.ZERO
 	var screen := get_viewport().get_visible_rect().size
-	voice.position = screen*.5 + Vector2(clampf(delta.x/12.0,-.75,.75)*screen.x*.5,0)
-	voice.volume_db = float(params[2])-minf(8.0,maxf(0,delta.length()-5.0)*.34)
+	var camera := get_viewport().get_camera_3d()
+	var lateral := delta.dot(camera.global_basis.x) if camera else delta.x
+	voice.position = screen*.5 + Vector2(clampf(lateral/12.0,-.75,.75)*screen.x*.5,0)
+	voice.volume_db = float(params[2])-minf(28.0,maxf(0,delta.length()-5.0)*.65)
 	voice.play()
 	_last[cue] = _clock
 	_counts[cue] = serial+1

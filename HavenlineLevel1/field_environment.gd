@@ -2,6 +2,7 @@ extends Node3D
 
 signal perimeter_changed
 
+const Progress = preload("res://field_progression.gd")
 const BUY := Vector2(0,2.4)
 const UPGRADE := Vector2(2.65,1.7)
 const FILL := preload("res://assets/field_camp/payment_fill.gdshader")
@@ -414,7 +415,7 @@ func cost_row(parent:Node3D, kinds:Array, z:float) -> Node3D:
 func show_costs(row:Node3D, due:Dictionary) -> void:
 	for kind in due:
 		var number := row.get_node_or_null(NodePath(kind)) as Label3D
-		if number: number.text = str(due[kind])
+		if number: number.text = str(Progress.units(due[kind]))
 
 func install_payment(anchor:Node3D, upgrade:bool) -> void:
 	var data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(DONOR+"build_inlay.json"))
@@ -473,7 +474,7 @@ func install_payment(anchor:Node3D, upgrade:bool) -> void:
 		icon.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		anchor.add_child(icon)
 		upgrade_label = flat_label(anchor,Vector3(0,.007,.53),.0068)
-		upgrade_label.text = "Stone  2    Meat  1"
+		set_upgrade_payment(Progress.OFFERS[Progress.AXES])
 	else:
 		var castle := Sprite3D.new()
 		castle.name = "Castle"
@@ -484,7 +485,7 @@ func install_payment(anchor:Node3D, upgrade:bool) -> void:
 		castle.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		anchor.add_child(castle)
 		payment_costs = cost_row(anchor,["wood"],.49)
-		show_costs(payment_costs,{"wood":3})
+		show_costs(payment_costs,Progress.OFFERS[Progress.HEARTH])
 
 func set_payment(remaining: Dictionary) -> void:
 	show_costs(payment_costs,remaining)
@@ -496,7 +497,7 @@ func set_upgrade_payment(remaining: Dictionary) -> void:
 	var stone := int(remaining.get("stone",0))
 	var meat := int(remaining.get("meat",0))
 	upgrade_pending = stone + meat > 0
-	upgrade_label.text = "Stone  %d    Meat  %d" % [stone,meat]
+	upgrade_label.text = "Stone  %d    Meat  %d" % [Progress.units(stone),Progress.units(meat)]
 	upgrade_anchor.hide()
 
 func set_built(built: bool, animate := true) -> void:

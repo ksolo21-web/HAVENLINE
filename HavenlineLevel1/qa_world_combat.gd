@@ -33,6 +33,19 @@ func run() -> void:
 		scene.encounters.remaining = 90.0
 		scene.encounters.serial += 1
 		var wolf=scene.encounters._add(home,paid,scene.encounters.serial,home)
+		if not paid:
+			var center: Vector3 = wolf.global_position + Vector3.UP * (2.04 * wolf.size_factor())
+			var numbers := StringName("wolf_feedback_%d" % wolf.get_instance_id())
+			scene._wolf_damage_feedback(1,wolf)
+			scene._wolf_damage_feedback(1,wolf)
+			scene._wolf_damage_feedback(2,wolf)
+			var feedback := get_nodes_in_group(numbers)
+			var centers: Array[float] = []
+			for label: Label3D in feedback:
+				centers.append((label.global_position-center).dot(scene.camera.global_basis.x))
+			centers.sort()
+			check("simultaneous_hits_on_one_wolf_have_distinct_screen_lanes",centers.size()==3 and centers[1]-centers[0]>=.84 and centers[2]-centers[1]>=.84)
+			for label: Label3D in feedback: label.queue_free()
 		var phases := {}
 		var closing_ticks := 0
 		for tick in 430:

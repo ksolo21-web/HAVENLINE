@@ -64,7 +64,7 @@ func refresh(active: bool) -> void:
 	for kind: String in bins:
 		bins[kind].visible = active and ledger.storage_open(kind)
 		var label: Label3D = labels[kind]
-		label.text = shelf_quantity(ledger.stored[kind])
+		label.text = shelf_quantity(Rules.units(ledger.stored[kind]))
 		label.pixel_size = BALANCE_PIXEL_SIZE * minf(1.0, 3.25 / label.text.length())
 	_update_interior()
 
@@ -102,7 +102,7 @@ func hint() -> String:
 	var stock := PackedStringArray()
 	for kind: String in world.Inventory.KINDS:
 		if world.inventory.storage_open(kind):
-			stock.append("%d %s" % [world.inventory.stored[kind],world.Inventory.TITLES[kind].to_lower()])
+			stock.append("%d %s" % [Rules.units(world.inventory.stored[kind]),world.Inventory.TITLES[kind].to_lower()])
 	var amounts := "Stored · " + " · ".join(stock) if not stock.is_empty() else ""
 	if visit == "done":
 		return "Leave the apron to start another visit." + ("\n" + amounts if not amounts.is_empty() else "")

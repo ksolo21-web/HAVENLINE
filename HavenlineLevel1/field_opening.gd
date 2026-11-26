@@ -85,7 +85,7 @@ func _ready() -> void:
 	character_kit.locomotion.run_only = true
 	lifecycle.world = self
 	encounters.setup(self)
-	inventory.configure(Progress.offers(layout.furnace_cost))
+	inventory.configure(Progress.offers())
 	persist_requested = true
 	if not field_save.configure(OS.get_cmdline_user_args()):
 		persist_blocked = true
@@ -129,6 +129,8 @@ func _ready() -> void:
 	flash.color = Color(0.47,0.085,0.07,0.0)
 	opening_hud.get_parent().add_child(flash)
 	hero_model = character_kit.locomotion.tree.get_parent()
+	_disable_worn_shadow(hero_model)
+	_disable_worn_shadow(carry.rack)
 	last_good = inventory.snapshot()
 	lifecycle.register("starter-wood","wood",resource_tree)
 	lifecycle.register("starter-stone","stone",resource_rock)
@@ -418,7 +420,7 @@ func _wolf_defeated(at: Vector3, wolf: FieldEnemy) -> void:
 	_make_drops("meat",at,5 if wolf.is_boss else 2)
 	_checkpoint_lifecycle()
 
-func _combat_number(at: Vector3, message: String, color: Color) -> void:
+func _combat_number(at: Vector3, message: String, color: Color, target: Node3D = null) -> void:
 	var number := Label3D.new()
 	number.name = "CombatFeedback"
 	number.text = message
@@ -430,6 +432,23 @@ func _combat_number(at: Vector3, message: String, color: Color) -> void:
 	number.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	number.no_depth_test = true
 	add_child(number)
+	if target:
+		# A tool, tower and owl can hit one wolf within the same few frames.
+		# Compare live billboards on the camera's horizontal axis as the wolf moves.
+		var group := StringName("wolf_feedback_%d" % target.get_instance_id())
+		var peers := get_tree().get_nodes_in_group(group)
+		var right := camera.global_basis.x.normalized()
+		var width := maxf(.85, number.get_aabb().size.x + .14)
+		var lane := 0
+		var offset := 0.0
+		var occupied: Array[float] = []
+		for peer: Label3D in peers:
+			occupied.append((peer.global_position-at).dot(right))
+		while _feedback_lane_occupied(occupied,offset,width):
+			lane += 1
+			offset = ceilf(lane*.5)*width*(1.0 if lane%2 else -1.0)
+		at += right*offset
+		number.add_to_group(group)
 	number.position = at
 	var tween := number.create_tween().set_parallel(true)
 	tween.tween_property(number,"position",at+Vector3.UP*.60,.56).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
@@ -437,8 +456,14 @@ func _combat_number(at: Vector3, message: String, color: Color) -> void:
 	tween.tween_property(number,"outline_modulate:a",0.0,.27).set_delay(.29)
 	tween.chain().tween_callback(number.queue_free)
 
+func _feedback_lane_occupied(centers: Array[float], offset: float, width: float) -> bool:
+	for center: float in centers:
+		if absf(center-offset)<width-.001:
+			return true
+	return false
+
 func _wolf_damage_feedback(amount: int, wolf: FieldEnemy) -> void:
-	_combat_number(wolf.global_position+Vector3.UP*(2.04*wolf.size_factor()),"−%d" % amount,Color("#ffebaf"))
+	_combat_number(wolf.global_position+Vector3.UP*(2.04*wolf.size_factor()),"−%d" % amount,Color("#ffebaf"),wolf)
 
 func _player_hit(amount: int, attacker: Node3D = null) -> void:
 	if amount <= 0 or player_invulnerability > 0.0 or reset_time > 0 or persist_blocked or field_env.is_inside_camp(actor.position): return
@@ -564,7 +589,7 @@ func _physics_process(dt: float) -> void:
 	_step_receivers()
 	settlement_loop.advance(dt)
 	sound.set_hearth_proximity(clampf(1.0-actor.position.length()/7.0,0.0,1.0) if camp_active else 0.0)
-	var music := "threat" if danger else ("camp" if inside else "field")
+	var music := "camp" if inside else ("threat" if danger else "field")
 	if current_music != music:
 		current_music = music
 		sound.set_music_state(music)
@@ -586,10 +611,20 @@ func _step_foot_audio(inside: bool) -> void:
 	if landed:
 		_event("step_camp" if inside else "step_snow",actor.position)
 
-func _event(id: String, at: Vector3) -> void:
+# Only the player and worn stock suppress the moving ground silhouette.
+# These surfaces still receive light and shadows from their surroundings.
+func _disable_worn_shadow(part: Node) -> void:
+	if part is GeometryInstance3D:
+		part.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	if not part.child_entered_tree.is_connected(_disable_worn_shadow):
+		part.child_entered_tree.connect(_disable_worn_shadow)
+	for child in part.get_children():
+		_disable_worn_shadow(child)
+
+func _event(id: String, at: Vector3, audio_id := "") -> void:
 	events.append({"event":id,"t":snappedf(simulation_time,.001),"x":snappedf(at.x,.01),"z":snappedf(at.z,.01)})
 	if events.size()>1024: events.pop_front()
-	sound.emit_event(id,at)
+	sound.emit_event(id if audio_id.is_empty() else audio_id,at)
 
 func _landed(kind: String, dest: String) -> void:
 	if persist_blocked: return

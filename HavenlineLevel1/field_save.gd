@@ -57,7 +57,7 @@ func _read(inventory: Inventory, path: String) -> Dictionary:
 	if envelope.get("sha256") != digest:
 		return {}
 	var next := Inventory.new()
-	if parsed.parse(payload) != OK or not next.configure(inventory.costs) or not next.restore(parsed.data):
+	if parsed.parse(payload) != OK or not next.configure(inventory.configured_costs) or not next.restore(parsed.data):
 		return {}
 	return {"state":next.snapshot(), "revision":digest}
 
@@ -143,7 +143,7 @@ func _write_locked(inventory: Inventory) -> Error:
 	if previous_revision != revision:
 		return ERR_BUSY
 	var pending := Inventory.new()
-	if not pending.configure(inventory.costs) or not pending.restore(inventory.snapshot()):
+	if not pending.configure(inventory.configured_costs) or not pending.restore(inventory.snapshot()):
 		return ERR_INVALID_DATA
 	var payload := JSON.stringify(pending.snapshot())
 	var digest := payload.sha256_text()

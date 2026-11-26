@@ -7,20 +7,24 @@ signal unit_landed(kind: String, destination: String)
 const Inventory = preload("res://field_inventory.gd")
 const FieldArt = preload("res://field_art.gd")
 const FRAME_PATH := "res://assets/field_pack/carry_frame.glb"
+const WORN_RESOURCE := preload("res://assets/field_pack/worn_resource.gdshader")
 const RACK_SHADER := preload("res://assets/field_pack/portable_material.gdshader")
 const WIDTH := {"wood":.42, "stone":.32, "meat":.23, "coal":.20, "slate":.205, "metal":.20}
-# Largest units sit low. Each family occupies a continuous section of its own column.
-const COLUMNS := [["wood", "meat", "slate"], ["stone", "metal", "coal"]]
-const PACK_BASE := .655
-const COLUMN_X := .214
-const COLUMN_Z := -.70
+# Permanent bays keep unlike resources off one another even when a neighboring
+# bay empties. The wide timber bay has two side-by-side, bark-outward packets
+# per course; the other five bays each hold one vertical stack.
+const BAY_X := {"wood":0.0, "slate":-.565, "coal":-.455, "metal":-.165, "meat":.135, "stone":.48}
+const OUTER_ROW := ["coal", "metal", "meat", "stone"]
+const INNER_Z := -.635
+const OUTER_Z := -.965
+const PACK_BASE := .91
+const INNER_RISE := .10
 const TIMBER_PAIR_X := .212
-const TIMBER_PAIR_Z := -.76
-const DIVIDER_HEIGHT := .031
-const REFLOW_TIME := .14
-const DIVIDER_SCENE = preload("res://assets/field_pack/expedition_shelf.glb")
+const MAX_LAYERS := 24
+const SHELF_SCENE := preload("res://assets/field_pack/expedition_shelf.glb")
 const StockLayout = preload("res://field_stock_layout.gd")
 const INTERVAL := 0.16
+const PAYMENT_INTERVAL := 4.0 / 60.0
 const PICKUP_TIME := 0.29
 const SEND_TIME := 0.28
 # The full reference pack reaches at most 5.6 standing hero heights (1.75 m).
@@ -38,21 +42,17 @@ var storage_anchors := {}
 var receivers := {}
 var rack: Node3D
 var frame: Node3D
-var dividers := {}
-var section_origins := {}
-var shifting := {}
+var worn_materials := {}
+var shelves: Array[MeshInstance3D] = []
 var presented := {}
 var planned_counts := {}
-var minimum_headroom := Vector2i.ZERO
-var maximum_headroom := Vector2i.ZERO
-var paired_columns := false
-var screen_slope := 0.0
+var minimum_headroom := 0
+var maximum_headroom := 2147483647
 var pieces := {}
 var flights: Array[Dictionary] = []
 var cooldown := 0.0
 var measured := {}
 var station_material := ""
-var timber_pairs := false
 var tier_height := {"wood":.13, "stone":.11, "meat":.145, "coal":.15, "slate":.12, "metal":.16}
 
 func setup(ledger: Inventory, character: Node3D, item_factory: Callable) -> void:
@@ -62,30 +62,14 @@ func setup(ledger: Inventory, character: Node3D, item_factory: Callable) -> void
 	rack = Node3D.new()
 	rack.name = "FieldPack"
 	actor.add_child(rack)
+	rack.child_entered_tree.connect(_dress_carried_resource)
 	var scene := load(FRAME_PATH) as PackedScene
 	if scene:
 		frame = scene.instantiate() as Node3D
 		rack.add_child(frame)
 		frame.position = Vector3(0, 0.50, -0.36)
 		frame.scale = Vector3(.76, .78, .78)
-		# A shallow cross rail under each material transition keeps the families distinct.
-		# The divider uses the same authored timber as the base carrying frame.
-		var donor := DIVIDER_SCENE.instantiate()
-		var base_shelf := donor.get_node("MiddleSupport") as MeshInstance3D
-		var donor_mesh := base_shelf.mesh
-		base_shelf.owner = null
-		donor.remove_child(base_shelf)
-		frame.add_child(base_shelf)
-		donor.free()
-		var source_box := donor_mesh.get_aabb()
-		for column: Array in COLUMNS:
-			for kind: String in column.slice(1):
-				var divider := MeshInstance3D.new()
-				divider.name = kind.capitalize() + "Divider"
-				divider.mesh = donor_mesh
-				divider.scale = Vector3(.32, DIVIDER_HEIGHT, .24) / source_box.size
-				frame.add_sibling(divider)
-				dividers[kind] = divider
+		var donor := SHELF_SCENE.instantiate()
 		var palette := ShaderMaterial.new()
 		palette.shader = RACK_SHADER
 		palette.set_shader_parameter("surface_kind", 4)
@@ -93,9 +77,41 @@ func setup(ledger: Inventory, character: Node3D, item_factory: Callable) -> void
 			frame.material_override = palette
 		for part in frame.find_children("*", "MeshInstance3D", true, false):
 			part.material_override = palette
-		for divider: MeshInstance3D in dividers.values():
-			divider.material_override = palette
+		# The two original timber shelves support the actual packet footprints.
+		for row in 2:
+			var board := donor.get_node("MiddleSupport" if row == 0 else "RearSupport") as MeshInstance3D
+			board.owner = null
+			donor.remove_child(board)
+			rack.add_child(board)
+			board.material_override = palette
+			shelves.append(board)
+		donor.free()
 	sync()
+
+# Only the fixed packets on the actor receive a small head sightline.
+# Loose drops, stock, processors, transfers and the frame use their own paint.
+func _dress_carried_resource(unit: Node) -> void:
+	if not unit.has_meta("field_material"):
+		return
+	for part: MeshInstance3D in unit.find_children("*", "MeshInstance3D", true, false):
+		for i in part.mesh.get_surface_count():
+			var source := part.get_active_material(i) as StandardMaterial3D
+			if not source:
+				continue
+			if not worn_materials.has(source):
+				var material := ShaderMaterial.new()
+				material.shader = WORN_RESOURCE
+				material.set_shader_parameter("paint",source.albedo_texture)
+				material.set_shader_parameter("tint",source.albedo_color)
+				material.set_shader_parameter("roughness",source.roughness)
+				material.set_shader_parameter("metalness",source.metallic)
+				material.set_shader_parameter("specular",source.metallic_specular)
+				if source.emission_enabled:
+					material.set_shader_parameter("glow",source.emission)
+					material.set_shader_parameter("glow_map",source.emission_texture)
+					material.set_shader_parameter("glow_power",source.emission_energy_multiplier)
+				worn_materials[source] = material
+			part.set_surface_override_material(i, worn_materials[source])
 
 func define_storage(kind: String, anchor: Node3D) -> void:
 	if kind in Inventory.KINDS:
@@ -112,98 +128,70 @@ func set_storage_layout(layout: Callable, unit_scale := 1.0) -> void:
 	sync()
 
 func _pack_position(kind: String, index: int) -> Vector3:
-	var base: Vector3 = section_origins.get(kind, Vector3(0, PACK_BASE, COLUMN_Z))
-	if kind == "wood" and timber_pairs:
-		base.x = -TIMBER_PAIR_X if index % 2 == 0 else TIMBER_PAIR_X
-		base.z = TIMBER_PAIR_Z
+	var outer := kind in OUTER_ROW
+	var x := float(BAY_X[kind])
+	if kind == "wood":
+		x = -TIMBER_PAIR_X if index % 2 == 0 else TIMBER_PAIR_X
 		index = floori(index * .5)
-	return base + Vector3.UP * (index * float(tier_height[kind]))
+	return Vector3(x, PACK_BASE + (0.0 if outer else INNER_RISE) + index * float(tier_height[kind]), OUTER_Z if outer else INNER_Z)
 
-func _headroom_bucket(x: float) -> int:
-	var height := PACK_TOP - PACK_BASE
-	var camera := get_viewport().get_camera_3d()
-	if camera:
-		# Measure at the actual column, including simultaneous turning and pinching.
-		var base := rack.to_global(Vector3(x, PACK_BASE, TIMBER_PAIR_Z if timber_pairs else COLUMN_Z))
-		var screen_y := camera.unproject_position(base).y
-		var pixels_per_metre := screen_y - camera.unproject_position(base + Vector3.UP).y
-		if pixels_per_metre > .001:
-			var margin := get_viewport().get_visible_rect().size.y * TOP_MARGIN
-			height = minf(height, (screen_y - margin) / pixels_per_metre)
-	return maxi(1, floori(height * 100.0))
-
-func _view_limits() -> Vector2i:
-	var x := COLUMN_X if paired_columns else 0.0
-	return Vector2i(_headroom_bucket(-x), _headroom_bucket(x))
-
-func _required_height(column: Array, counts: Dictionary, cap: int) -> float:
-	var height := 0.0
-	var highest_corner := 0.0
-	for kind: String in column:
-		var n := mini(counts[kind], cap)
-		if n <= 0:
+func _fit_shelves(counts: Dictionary) -> void:
+	for row in shelves.size():
+		var left := INF
+		var right := -INF
+		var depth := 0.0
+		for kind: String in Inventory.KINDS:
+			if counts[kind] <= 0 or (kind in OUTER_ROW) != (row == 1):
+				continue
+			var unit: Vector3 = measured[kind]
+			var first := _pack_position(kind, 0).x
+			var last := _pack_position(kind, 1).x if kind == "wood" and counts[kind] > 1 else first
+			left = minf(left, first - unit.x * .5)
+			right = maxf(right, last + unit.x * .5)
+			depth = maxf(depth, unit.z)
+		var board := shelves[row]
+		board.visible = left <= right
+		if not board.visible:
 			continue
-		if height > 0.0:
-			height += DIVIDER_HEIGHT
-		var unit: Vector3 = measured[kind]
-		height += (n - 1) * float(tier_height[kind]) + unit.y
-		var radius := Vector2(unit.x, unit.z).length() * .5
-		if kind == "wood" and timber_pairs:
-			radius += TIMBER_PAIR_X
-		highest_corner = maxf(highest_corner, height + radius * screen_slope)
-	return highest_corner
+		var bounds := board.mesh.get_aabb()
+		board.scale = Vector3(right - left + .016, .035, depth + .026) / bounds.size
+		var top := Vector3((left + right) * .5, PACK_BASE + (INNER_RISE if row == 0 else 0.), INNER_Z if row == 0 else OUTER_Z)
+		board.position = top - Vector3(bounds.get_center().x, bounds.end.y, bounds.get_center().z) * board.scale
 
-func _layout_pack(counts: Dictionary, animate: bool) -> void:
-	timber_pairs = counts.wood >= 2 and Inventory.KINDS.all(func(k): return k == "wood" or counts[k] == 0)
-	var layers := counts.duplicate()
-	if timber_pairs:
-		layers.wood = ceili(counts.wood * .5)
-	var occupied := []
-	for column: Array in COLUMNS:
-		occupied.append(column.any(func(k): return counts[k] > 0))
-	paired_columns = occupied[0] and occupied[1]
-	var ceiling_buckets := _view_limits()
+func _headroom_bucket() -> int:
+	var room := PACK_TOP - PACK_BASE
 	var camera := get_viewport().get_camera_3d()
 	if camera:
-		var view_up := camera.get_camera_transform().basis.y
-		screen_slope = Vector2(view_up.x, view_up.z).length() / maxf(.001, view_up.y)
-	for c in COLUMNS.size():
-		var column: Array = COLUMNS[c]
-		var headroom := ceiling_buckets[c] / 100.0
-		var left := 1
-		# A full-height material stack sets a finite bound, even with a million in the ledger.
-		var right := 1
-		for kind: String in column:
-			right = maxi(right, mini(layers[kind], ceili(headroom / float(tier_height[kind])) + 1))
-		while left < right:
-			var middle := ceili((left + right) * .5)
-			if _required_height(column, layers, middle) <= headroom:
-				left = middle
-			else:
-				right = middle - 1
-		minimum_headroom[c] = ceili(_required_height(column, layers, left) * 100.0) if left > 1 else 0
-		maximum_headroom[c] = 2147483647
-		if column.any(func(k): return layers[k] > left):
-			maximum_headroom[c] = ceili(_required_height(column, layers, left + 1) * 100.0) - 1
-		var height := PACK_BASE
-		var x := (-COLUMN_X if c == 0 else COLUMN_X) if paired_columns else 0.0
-		for kind: String in column:
-			var units := mini(left, layers[kind])
-			presented[kind] = mini(left * 2, counts[kind]) if kind == "wood" and timber_pairs else units
-			var divider: MeshInstance3D = dividers.get(kind)
-			if divider:
-				var occupied_section := units > 0 and height > PACK_BASE
-				var previously_visible := divider.visible
-				divider.visible = occupied_section and _available(kind, HAND) > 0
-				if occupied_section:
-					# Align the authored shelf's top plane to the packet underside.
-					var bounds := divider.mesh.get_aabb()
-					var offset := Vector3(bounds.get_center().x, bounds.end.y, bounds.get_center().z) * divider.scale
-					height += DIVIDER_HEIGHT
-					_move_on_rack(divider, Vector3(x, height, COLUMN_Z) - offset, 0.0, animate and previously_visible and divider.visible)
-			section_origins[kind] = Vector3(x, height, COLUMN_Z)
-			if units > 0:
-				height += float(tier_height[kind]) * (units - 1) + measured[kind].y
+		var base := rack.global_position + Vector3.UP * PACK_BASE
+		var y := camera.unproject_position(base).y
+		var pixels_per_metre := y - camera.unproject_position(base + Vector3.UP).y
+		if pixels_per_metre > .001:
+			var view_up := camera.global_basis.y
+			var slope := Vector2(view_up.x, view_up.z).length() / maxf(.001, view_up.y)
+			# The farthest occupied shelf corner stays within 1.4 m of the
+			# character in plan, including both packet edges during a turn.
+			var safe_y := get_viewport().get_visible_rect().size.y * TOP_MARGIN
+			room = minf(room, (y - safe_y) / pixels_per_metre - 1.4 * slope)
+	return maxi(1, floori(room * 100.0))
+
+func _layout_pack(counts: Dictionary) -> void:
+	var room := _headroom_bucket() / 100.0
+	minimum_headroom = 0
+	maximum_headroom = 2147483647
+	for kind: String in Inventory.KINDS:
+		if counts[kind] <= 0:
+			presented[kind] = 0
+			continue
+		var units_per_layer := 2 if kind == "wood" else 1
+		var layers := ceili(float(counts[kind]) / units_per_layer)
+		var first_top := float(measured[kind].y) + (0.0 if kind in OUTER_ROW else INNER_RISE)
+		var step := float(tier_height[kind])
+		var visible_layers := clampi(1 + floori((room - first_top) / step), 1, mini(layers, MAX_LAYERS))
+		presented[kind] = mini(counts[kind], visible_layers * units_per_layer)
+		if visible_layers > 1:
+			minimum_headroom = maxi(minimum_headroom, ceili((first_top + (visible_layers - 1) * step) * 100.0))
+		if visible_layers < mini(layers, MAX_LAYERS):
+			maximum_headroom = mini(maximum_headroom, ceili((first_top + visible_layers * step) * 100.0) - 1)
 
 func _hand_slot(kind: String, logical_index: int) -> int:
 	return clampi(logical_index, 0, maxi(0, int(presented.get(kind, 0)) - 1))
@@ -244,7 +232,7 @@ func _piece(kind: String) -> Node3D:
 				var bounds := boxes[0]
 				for box in boxes:
 					bounds = bounds.merge(box)
-				tier_height[kind] = maxf(.02, bounds.size.y * .96)
+				tier_height[kind] = maxf(.02, bounds.size.y)
 				measured[kind] = bounds.size
 	return node
 
@@ -263,7 +251,7 @@ func _tier_yaw(kind: String, index: int) -> float:
 	return turn + deg_to_rad(float(posmod(index*7 + Inventory.KINDS.find(kind)*5, 5)-2))
 
 func _pack_yaw(kind: String, index: int) -> float:
-	if kind == "wood" and timber_pairs:
+	if kind == "wood":
 		return PI if posmod(floori(index * .5), 2) == 1 else 0.0
 	return _tier_yaw(kind, index)
 
@@ -279,32 +267,11 @@ func _place(position_id: String, kind: String, n: int) -> Vector3:
 		return _floor_position(kind, maxi(0,n))
 	return (receivers[position_id] as Node3D).global_position + Vector3.UP * .10
 
-func _move_on_rack(node: Node3D, point: Vector3, yaw: float, animate: bool) -> void:
-	# Adjacent pickups reserve their final places immediately. Only the existing
-	# packets and dividers slide when a section rises, empties or changes columns.
-	if animate and shifting.has(node) and shifting[node].target.is_equal_approx(point) and is_equal_approx(shifting[node].yaw, yaw):
-		return
-	if animate and (not node.position.is_equal_approx(point) or not is_zero_approx(angle_difference(node.rotation.y, yaw))):
-		shifting[node] = {"start":node.position, "start_yaw":node.rotation.y, "target":point, "yaw":yaw, "t":0.0}
-	else:
-		shifting.erase(node)
-		node.position = point
-		node.rotation.y = yaw
-
-func _advance_reflow(delta: float) -> void:
-	for node: Node3D in shifting.keys():
-		var move: Dictionary = shifting[node]
-		move.t = minf(1.0, float(move.t) + delta / REFLOW_TIME)
-		var weight := smoothstep(0.0, 1.0, float(move.t))
-		node.position = (move.start as Vector3).lerp(move.target, weight)
-		node.rotation.y = lerp_angle(move.start_yaw, move.yaw, weight)
-		if move.t >= 1.0:
-			shifting.erase(node)
-
-func sync(animate := false) -> void:
+func sync(_animate := false) -> void:
 	if not inventory or not rack:
 		return
 	var loaded := false
+	var seated := {}
 	var counts := {}
 	for kind: String in Inventory.KINDS:
 		counts[kind] = _available(kind, HAND) + _outstanding(kind, HAND, false)
@@ -315,7 +282,7 @@ func sync(animate := false) -> void:
 				unit.visible = false
 				rack.add_child(unit)
 				pieces[HAND + "/" + kind] = [unit]
-	_layout_pack(counts, animate)
+	_layout_pack(counts)
 	planned_counts = counts
 	for kind: String in Inventory.KINDS:
 		for location: String in [HAND, STOCK]:
@@ -334,6 +301,8 @@ func sync(animate := false) -> void:
 					pool.append(first)
 			if location == HAND and station_material == kind: n = maxi(0,n-1)
 			n = _visible_units(kind, n, location)
+			if location == HAND:
+				seated[kind] = n
 			while pool.size() < n:
 				var unit := _piece(kind)
 				if not unit:
@@ -344,12 +313,12 @@ func sync(animate := false) -> void:
 				pool.append(unit)
 			for i in pool.size():
 				var unit: Node3D = pool[i]
-				var previously_visible := unit.visible
 				unit.visible = i < n
 				if i < n:
 					if location == HAND:
 						loaded = true
-						_move_on_rack(unit, _pack_position(kind, i), _pack_yaw(kind, i), animate and previously_visible)
+						unit.position = _pack_position(kind, i)
+						unit.rotation.y = _pack_yaw(kind, i)
 					else:
 						unit.global_position = _floor_position(kind, i)
 						unit.global_rotation.y = _heading(STOCK, kind, i)
@@ -357,6 +326,7 @@ func sync(animate := false) -> void:
 			pieces[key] = pool
 	if frame:
 		frame.visible = loaded
+		_fit_shelves(seated)
 
 func pickup(token: String, kind: String, start: Vector3, start_yaw := 0.0) -> bool:
 	if kind not in Inventory.KINDS or token.is_empty() or inventory.collected.has(token):
@@ -410,7 +380,7 @@ func _send(kind: String, source: String, dest: String, dest_index: int) -> bool:
 		start_yaw = carried_unit.global_rotation.y
 	var start_scale := storage_unit_scale * StockLayout.width(kind, source_index) / float(WIDTH[kind]) if source == STOCK else 1.0
 	var end_scale := storage_unit_scale * StockLayout.width(kind, dest_index) / float(WIDTH[kind]) if dest == STOCK else 1.0
-	cooldown = INTERVAL
+	cooldown = INTERVAL if dest == STOCK else PAYMENT_INTERVAL
 	_start(unit, kind, source, dest, start, dest_index, SEND_TIME, start_scale, end_scale, start_yaw)
 	return true
 
@@ -426,7 +396,6 @@ func cancel_transfers() -> void:
 	for flight in flights:
 		(flight.mesh as Node3D).queue_free()
 	flights.clear()
-	shifting.clear()
 	cooldown = 0
 	sync()
 
@@ -437,10 +406,9 @@ func advance(delta: float) -> void:
 	# The rack follows the actor without touching its nodes. Only a projection
 	# that changes a lane's visible count needs to reposition/show its pool.
 	if frame and frame.visible:
-		var limits := _view_limits()
-		if limits.x < minimum_headroom.x or limits.y < minimum_headroom.y or limits.x > maximum_headroom.x or limits.y > maximum_headroom.y:
+		var limit := _headroom_bucket()
+		if limit < minimum_headroom or limit > maximum_headroom:
 			sync()
-	_advance_reflow(delta)
 	cooldown = maxf(0.0, cooldown - delta)
 	for flight in flights.duplicate():
 		if not flights.has(flight):

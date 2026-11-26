@@ -250,7 +250,7 @@ func field_status(counts:Dictionary,message:String) -> void:
 	var changed:=false
 	for kind:String in numbers:
 		var amount:Label=numbers[kind]
-		var next:=str(counts.get(kind,0))
+		var next:=str(Ledger.Progress.units(counts.get(kind,0)))
 		if amount.text!=next:
 			if int(next)>int(amount.text):
 				if pulses.has(kind): (pulses[kind] as Tween).kill()

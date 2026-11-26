@@ -28,6 +28,19 @@ const STRIKE_START := 2.14
 const BITE_RANGE := 1.52
 const STALK_STOP := 1.66
 const CONTACT_DISTANCE := 1.35
+# The authored Bite closes the mouth at 0.170 s in its 0.260 s clip.
+const BITE_DURATION := .26
+const JAW_CONTACT := .17
+const ALPHA_BITE_DURATION := .32
+
+func _brace_duration() -> float:
+	return .45 if is_boss else .30
+
+func _bite_duration() -> float:
+	return ALPHA_BITE_DURATION if is_boss else BITE_DURATION
+
+func _recovery_duration() -> float:
+	return .91 if is_boss else .76
 var hp := MAX_HEALTH
 var state := "guard"
 var last_turn := -1
@@ -87,6 +100,8 @@ func _setup_visual() -> void:
 	var players := visual.find_children("*", "AnimationPlayer", true, false)
 	if not players.is_empty():
 		animator = players[0] as AnimationPlayer
+		# Missing tracks return to rest when an attack gives way to idle or hurt.
+		animator.deterministic = true
 		for clip in ["Walk", "Idle"]:
 			if animator.has_animation(clip):
 				animator.get_animation(clip).loop_mode = Animation.LOOP_LINEAR
@@ -129,6 +144,15 @@ func _play(clip: String) -> void:
 		animator.speed_scale = CHASE_SPEED / WALK_SPEED if clip == "Walk" and state == "stalk" else 1.0
 		if animator.current_animation != clip:
 			animator.play(clip,.10)
+
+# Drive the authored attack pose from the same physics clock as contact. A slow
+# render frame can skip over closed jaws without delaying or repeating damage.
+func _attack_pose(clip: String, elapsed_fraction: float) -> void:
+	if not animator or not animator.has_animation(clip): return
+	if animator.current_animation != clip:
+		animator.play(clip, 0.0)
+	animator.speed_scale = 0.0
+	animator.seek(animator.get_animation(clip).length * clampf(elapsed_fraction, 0.0, 1.0), true)
 
 func configure(player: Node3D) -> void:
 	target = player
@@ -236,27 +260,36 @@ func advance(delta: float, sweep_allowed: Callable = Callable(), player_exposed 
 	var distance := offset.length()
 	var toward := offset.normalized()
 	match state:
-		"stagger", "recover":
+		"stagger":
+			if timer <= 0.0: state = "guard"
+		"recover":
+			_attack_pose("Recover", 1.0 - timer / _recovery_duration())
 			if timer <= 0.0: state = "guard"
 		"windup":
+			_attack_pose("Brace", 1.0 - timer / _brace_duration())
 			_face(toward,dt)
 			attack_direction = toward
 			if timer <= 0.0:
 				state = "lunge"
-				timer = .24
+				timer = _bite_duration()
 				bite_landed = false
-				_play("Bite")
+				_attack_pose("Bite", 0.0)
 		"lunge":
+			var duration := _bite_duration()
+			var elapsed := duration - timer
+			_attack_pose("Bite", elapsed / duration)
 			_move(attack_direction, minf(4.6*dt,maxf(0.0,distance-CONTACT_DISTANCE-reach_bonus)),sweep_allowed)
 			var remaining := target.global_position-global_position
 			remaining.y = 0.0
-			if not bite_landed and player_exposed and remaining.length() <= BITE_RANGE+reach_bonus and (remaining.length_squared() < .01 or remaining.normalized().dot(attack_direction) > .55):
+			var contact_at := duration * JAW_CONTACT / BITE_DURATION
+			var crosses_contact := elapsed >= contact_at and elapsed - dt < contact_at
+			if crosses_contact and not bite_landed and player_exposed and remaining.length() <= BITE_RANGE+reach_bonus and (remaining.length_squared() < .01 or remaining.normalized().dot(attack_direction) > .55):
 				bite_landed = true
 				player_hit.emit(BOSS_BITE_DAMAGE if is_boss else BITE_DAMAGE)
 			if timer <= 0.0:
 				state = "recover"
-				timer = .91 if is_boss else .76
-				_play("Idle")
+				timer = _recovery_duration()
+				_attack_pose("Recover", 0.0)
 		_:
 			var to_home := home-global_position
 			to_home.y = 0.0
@@ -264,9 +297,9 @@ func advance(delta: float, sweep_allowed: Callable = Callable(), player_exposed 
 				_face(toward,dt)
 				if distance <= STRIKE_START+reach_bonus+.025:
 					state = "windup"
-					timer = .45 if is_boss else .28
+					timer = _brace_duration()
 					attack_direction = toward
-					_play("Brace")
+					_attack_pose("Brace", 0.0)
 				else:
 					state = "stalk"
 					_pursue(toward, minf(CHASE_SPEED*dt,distance-STRIKE_START-reach_bonus),sweep_allowed)

@@ -15,7 +15,12 @@ const EMPTY := {"wood":0, "stone":0, "meat":0, "coal":0, "slate":0, "metal":0}
 const TITLES := {"wood":"Wood", "stone":"Stone", "meat":"Meat", "coal":"Coal", "slate":"Slate", "metal":"Metal ore"}
 const MAX_COUNT := 1000000
 
+var configured_costs := {}
 var costs := {}
+var legacy_prices: Array = []
+var survivor_cost: int:
+	get:
+		return Progress.OLD_SURVIVOR_BUNDLES if Progress.SURVIVOR in legacy_prices else Progress.SURVIVOR_BUNDLES
 var paid := {}
 var collected := {}
 var carried := EMPTY.duplicate()
@@ -32,6 +37,7 @@ func configure(offers: Dictionary) -> bool:
 				return false
 	staged = offers.has(Progress.FIRST)
 	if staged and (offers.size() != Progress.PREREQUISITES.size() or not Progress.PREREQUISITES.keys().all(func(id): return offers.has(id))): return false
+	configured_costs = offers.duplicate(true)
 	costs = offers.duplicate(true)
 	for id in costs:
 		paid[id] = {}
@@ -96,13 +102,12 @@ func complete(id: String) -> bool:
 func snapshot() -> Dictionary:
 	var state := {"version": 1, "collected": collected.duplicate(), "carried": carried.duplicate(), "stored": stored.duplicate(), "paid": paid.duplicate(true)}
 	if staged:
-		state.version = 3
+		state.version = 6
+		state.legacy_prices = legacy_prices.duplicate()
 		state.build_order = build_order.duplicate()
 		state.legacy_axes = legacy_axes
 		state.world = world_state.duplicate(true)
-		if settlement != Settlement.EMPTY:
-			state.version = 5
-			state.settlement = settlement.duplicate(true)
+		state.settlement = settlement.duplicate(true)
 	return state
 
 static func _natural(value: Variant) -> bool:
@@ -113,10 +118,11 @@ static func _natural(value: Variant) -> bool:
 func restore(data: Variant) -> bool:
 	if not data is Dictionary: return false
 	var old: bool = data.get("version") == 1
-	var has_settlement: bool = data.get("version") == 4 or data.get("version") == 5
+	var current: bool = data.get("version") == 6
+	var has_settlement: bool = current or data.get("version") == 4 or data.get("version") == 5
 	if old:
 		if data.size() != 5: return false
-	elif not staged or (data.get("version") != 2 and data.get("version") != 3 and not has_settlement) or data.size() != (9 if has_settlement else 8):
+	elif not staged or (data.get("version") != 2 and data.get("version") != 3 and not has_settlement) or data.size() != (10 if current else (9 if has_settlement else 8)):
 		return false
 	for key in ["collected", "carried", "stored", "paid"]:
 		if not data.get(key) is Dictionary:
@@ -153,18 +159,35 @@ func restore(data: Variant) -> bool:
 			if not _natural(stock.get(kind)):
 				return false
 			balances[kind] -= int(stock[kind])
-	for id in costs:
+	var restored_costs := configured_costs.duplicate(true)
+	var contracts: Array = []
+	if current and not data.get("legacy_prices") is Array: return false
+	if staged:
+		var former := Progress.old_offers()
+		for id in restored_costs:
+			var submitted: Variant = incoming.get(id)
+			if not submitted is Dictionary or not submitted.values().all(_natural): return false
+			var started: bool = submitted.values().any(func(n): return n > 0)
+			if started and (not current or id in data.legacy_prices):
+				contracts.append(id)
+				restored_costs[id] = former[id]
+		if has_settlement and data.get("settlement") is Dictionary and _natural(data.settlement.get("survivor_wood")) and data.settlement.survivor_wood > 0:
+			if not current or Progress.SURVIVOR in data.legacy_prices: contracts.append(Progress.SURVIVOR)
+		# A contract can only name a real, already-funded plot once.
+		if current and (data.legacy_prices.size() != contracts.size() or not contracts.all(func(id): return id in data.legacy_prices)): return false
+	for id in restored_costs:
 		var subtotal: Variant = incoming.get(id)
-		if not subtotal is Dictionary or subtotal.size() != costs[id].size():
+		if not subtotal is Dictionary or subtotal.size() != restored_costs[id].size():
 			return false
-		for kind in costs[id]:
-			if not _natural(subtotal.get(kind)) or subtotal[kind] > costs[id][kind]:
+		for kind in restored_costs[id]:
+			if not _natural(subtotal.get(kind)) or subtotal[kind] > restored_costs[id][kind]:
 				return false
 			balances[kind] -= int(subtotal[kind])
 	var next_settlement: Variant = data.get("settlement") if has_settlement else Settlement.EMPTY
 	if data.version == 4:
 		next_settlement = Settlement.from_legacy(next_settlement)
-	if not Settlement.valid(next_settlement,order,data.collected): return false
+	var survivor_due := Progress.OLD_SURVIVOR_BUNDLES if Progress.SURVIVOR in contracts else Progress.SURVIVOR_BUNDLES
+	if not Settlement.valid(next_settlement,order,data.collected,survivor_due): return false
 	for kind: String in Settlement.KINDS:
 		balances[kind] -= int(next_settlement.hoppers[kind])
 	if next_settlement.worker_supply != "": balances[next_settlement.worker_supply] -= 1
@@ -176,11 +199,11 @@ func restore(data: Variant) -> bool:
 	if staged:
 		var finished: Array = []
 		var funded: Array = []
-		for id in costs:
+		for id in restored_costs:
 			var full := true
-			for kind in costs[id]:
+			for kind in restored_costs[id]:
 				if int(incoming[id][kind]) > 0 and not funded.has(id): funded.append(id)
-				if int(incoming[id][kind]) != int(costs[id][kind]): full=false
+				if int(incoming[id][kind]) != int(restored_costs[id][kind]): full=false
 			if full: finished.append(id)
 		if old:
 			order=finished.duplicate()
@@ -198,10 +221,19 @@ func restore(data: Variant) -> bool:
 			for previous in required:
 				if not finished.has(previous): return false
 		if old_axes and not funded.has(Progress.AXES): return false
+		costs=restored_costs
+		legacy_prices=contracts
 		build_order=order
 		legacy_axes=old_axes
 		world_state={} if old else data.world.duplicate(true)
 		settlement = next_settlement.duplicate(true)
+		# JSON numbers are floats. Put validated receipts back in their native
+		# integer types so in-memory transactions and reopened snapshots agree.
+		for key in Settlement.EMPTY:
+			if Settlement.EMPTY[key] is int: settlement[key] = int(settlement[key])
+		for kind: String in Settlement.KINDS:
+			settlement.hoppers[kind] = int(settlement.hoppers[kind])
+			settlement.work_seconds[kind] = float(settlement.work_seconds[kind])
 	collected = data.collected.duplicate()
 	for kind in KINDS:
 		carried[kind] = int(data.carried.get(kind,0))

@@ -25,8 +25,8 @@ func refresh() -> void:
 	plot.visible = world.camp_active and not journal.survivor_paid
 	if last_paid != int(journal.survivor_wood):
 		last_paid = int(journal.survivor_wood)
-		world.field_env.show_costs(plot.price,{"wood":2-last_paid})
-		plot.ink.set_shader_parameter("paid",last_paid / 2.0)
+		world.field_env.show_costs(plot.price,{"wood":world.inventory.survivor_cost-last_paid})
+		plot.ink.set_shader_parameter("paid",float(last_paid) / world.inventory.survivor_cost)
 
 func _site() -> String:
 	var here: Vector3 = world.actor.global_position
@@ -91,10 +91,12 @@ func finish(site: String) -> bool:
 	var cue := "spend_"+raw
 	if site == "survivor_plot":
 		journal.survivor_wood += 1
-		journal.survivor_paid = journal.survivor_wood == 2
+		journal.survivor_paid = journal.survivor_wood == world.inventory.survivor_cost
 		cue = "purchase" if journal.survivor_paid else cue
 	else:
 		journal.hoppers[raw] += 1
 	var saved: bool = world.settlement_loop.commit_receipt(cue,target)
+	if saved and site == "survivor_plot" and journal.survivor_paid:
+		world._event("owl_equip",target)
 	refresh()
 	return saved

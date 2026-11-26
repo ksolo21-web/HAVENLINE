@@ -45,11 +45,11 @@ func run() -> void:
 	game._apply_hearth(true,false)
 	check(not game.rescue_survivor(),"cannot rescue at a distance")
 	game.actor.position=game.settlement_loop.works.PLOT_AT
-	for i in 2:
+	for i in game.inventory.survivor_cost:
 		check(game.inventory.collect("worker-rescue-payment-%d" % i,"wood"),"seed physical payment")
 	game.carry.sync(true)
-	for i in 60: game.settlement_loop.works.advance(1./60.)
-	check(game.inventory.settlement.survivor_paid and game.inventory.settlement.survivor_wood==2,"both wood physically spent on rescue plot")
+	for i in (30 * game.inventory.survivor_cost): game.settlement_loop.works.advance(1./60.)
+	check(game.inventory.settlement.survivor_paid and game.inventory.settlement.survivor_wood==game.inventory.survivor_cost,"all wood physically spent on rescue plot")
 	game.actor.position=worker.RESCUE
 	worker.advance(1./60.)
 	check(game.inventory.settlement.rescued,"rescue at actual purchased spot")

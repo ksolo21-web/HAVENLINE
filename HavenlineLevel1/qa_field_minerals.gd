@@ -15,9 +15,9 @@ func check(label: String, ok: bool) -> void:
 func _initialize() -> void: call_deferred("run")
 
 func carried_units_are_separate(world) -> bool:
-	# Adding a lower family moves the packets already on that column.
-	# Judge the simultaneously displayed units after each set of arrivals.
+	# Each X/Z seat holds only one material family, at every occupied level.
 	var occupied := {}
+	var families := {}
 	for kind: String in Inventory.KINDS:
 		var displayed := 0
 		for packet: Node3D in world.carry.pieces.get("carry/" + kind, []):
@@ -26,6 +26,10 @@ func carried_units_are_separate(world) -> bool:
 			if occupied.has(packet.position):
 				return false
 			occupied[packet.position] = kind
+			var seat := Vector2(packet.position.x, packet.position.z)
+			if families.has(seat) and families[seat] != kind:
+				return false
+			families[seat] = kind
 			displayed += 1
 		if displayed != int(world.inventory.carried[kind]):
 			return false
@@ -37,7 +41,8 @@ func staged_ledger() -> Inventory:
 	return ledger
 
 func old_profile(directory:String) -> void:
-	var ledger:=staged_ledger()
+	var ledger:=Inventory.new()
+	ledger.configure(Rules.old_offers())
 	for id: String in [Rules.HEARTH,Rules.FIRST,"storage_wood"]:
 		for kind: String in ledger.costs[id]:
 			for i in int(ledger.costs[id][kind]):
@@ -49,6 +54,8 @@ func old_profile(directory:String) -> void:
 	ledger.collect("carried-old-stone","stone")
 	var state:=ledger.snapshot()
 	state.version=2
+	state.erase("legacy_prices")
+	state.erase("settlement")
 	for kind in Inventory.MINERALS:
 		state.stored.erase(kind)
 		state.carried.erase(kind)
@@ -96,11 +103,17 @@ func run() -> void:
 				check(kind+" dispatches unique earned pickup "+str(i),world.carry.pickup("mine-qa-"+kind+str(i),kind,Vector3(2,0,1)))
 			world.carry.advance(.4)
 			check(kind+" separate backpack lane",carried_units_are_separate(world))
-		check("visible six-material HUD and exact mineral counts",world.opening_hud.mineral_row.visible and Inventory.MINERALS.all(func(k):return int(world.opening_hud.numbers[k].text)==SAMPLES[k]))
+		check("visible six-material HUD and exact mineral counts",world.opening_hud.mineral_row.visible and Inventory.MINERALS.all(func(k):return int(world.opening_hud.numbers[k].text)==Rules.units(SAMPLES[k])))
 		check("pickup preserves all existing receipts",before==ledger.paid)
 		if not ledger.complete("storage_stone"):
 			check("starter alone cannot bank ore",Inventory.MINERALS.all(func(k):return not world.carry.deposit_storage(k)))
-			for n in 3:
+			var attempts := 0
+			for raw: String in ledger.remaining("storage_stone"):
+				var remaining:int = ledger.remaining("storage_stone")[raw]
+				attempts += remaining
+				for n in maxi(0,remaining-ledger.carried[raw]-ledger.stored[raw]):
+					ledger.collect("reinforce-%s-%d"%[raw,n],raw)
+			for n in attempts:
 				check("ordinary reinforced payment "+str(n),world.carry.contribute("storage_stone"))
 				world.carry.advance(.4)
 		var shelves := []
@@ -113,14 +126,14 @@ func run() -> void:
 				var target: Node3D=pool[mini(i,pool.size()-1)]
 				check(kind+" landing meets its own bay",target.get_parent()==world.depot.bins[kind] and target.global_position.is_equal_approx(flight.mesh.global_position) and flight.kind==kind)
 			var bay: Node3D=world.depot.bins[kind]
-			check(kind+" distinct populated bin",not shelves.has(bay.global_position) and world.depot.labels[kind].text==str(SAMPLES[kind]-1))
+			check(kind+" distinct populated bin",not shelves.has(bay.global_position) and world.depot.labels[kind].text==str(Rules.units(SAMPLES[kind]-1)))
 			shelves.append(bay.global_position)
 		var damaged:=ledger.snapshot()
 		damaged.stored.erase("slate")
 		var unchanged:=ledger.snapshot()
 		check("missing new balance rejected atomically",not ledger.restore(damaged) and ledger.snapshot()==unchanged)
 	else:
-		check("normal scene restored paid original order",ledger.complete("storage_stone") and ledger.snapshot().version==3)
+		check("normal scene restored paid original order",ledger.complete("storage_stone") and ledger.snapshot().version==6)
 		for kind: String in SAMPLES:
 			check(kind+" typed balances reopen",ledger.carried[kind]==1 and ledger.stored[kind]==SAMPLES[kind]-1 and ledger.collected["mine-qa-"+kind+"0"]==kind and ledger.storage_open(kind))
 			check(kind+" repeated token rejected",not world.carry.pickup("mine-qa-"+kind+"0",kind,Vector3.ZERO))

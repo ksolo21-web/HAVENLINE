@@ -213,7 +213,9 @@ def transitions():
     write('regrow_wood',scene(.40,[(0,rub(.35,860,4300,.06,.11),.7),(.07,grit(.22,16,820,3800),.45)]))
     write('regrow_stone',scene(.35,[(0,grit(.24,23,360,2150),.55),(.10,stone(.53,.21),.23)]))
     write('wolf_brace',scene(.29,[(0,vocal(.25,77,70,[(380,120,.9),(900,145,.5)],.12),.52),(.06,rub(.18,220,920,.026,.06),.22)]))
-    write('wolf_return',scene(.32,[(.01,rub(.15,320,1300,.014,.065),.38),(.13,grit(.13,20,560,2500),.46)]))
+    # Preserve the existing RNG sequence for the following archived foley.
+    rub(.15,320,1300,.014,.065)
+    grit(.13,20,560,2500)
     write('player_fall',scene(.53,[(.04,rub(.29,150,950,.04,.13),.35),(.22,thump(.3,58),.85),(.25,grit(.24,38,490,3200),.51)]))
 
 
@@ -246,15 +248,79 @@ def world_one_events():
     ]), .61)
 
 
+def field_actions():
+    """Original one-shots voiced around the same 96 BPM score and game scale."""
+    global rng
+    rng = np.random.default_rng(266210)
+
+    # Tooth pulses rise out of a short belt run. The stable harmonics survive
+    # small mobile speakers while the under-bench motor provides the weight.
+    t = time(1.26)
+    spin = np.minimum(1., t/.21)
+    phase = TAU*np.cumsum(68.+15.*spin)/SR
+    motor = (.33*np.sin(phase)+.19*np.sin(2*phase+.2)+.12*np.sin(5*phase)) * edges(t,.12,.25)
+    teeth = (.52+.48*np.maximum(0.,np.sin(phase))**4) * noise(t,650,3700)
+    blades = np.sin(np.pi*np.clip((t-.14)/.86,0.,1.))**2
+    write("saw_work", scene(1.30,[(0,motor,.65),(0,teeth*blades,.52),
+          (.02,wood(.86,.12),.29),(1.09,wood(.82,.15),.32)]),.61)
+
+    t = time(1.23)
+    shaft = TAU*np.cumsum(97.+8.*np.sin(TAU*1.7*t))/SR
+    head = (.31*np.sin(shaft)+.16*np.sin(2*shaft)+.09*np.sin(4*shaft))*edges(t,.09,.16)
+    drilling = scene(1.26,[(0,head,.66)])
+    for index,at in enumerate((.14,.30,.45,.59,.73,.88,1.03)):
+        add(drilling,at,stone(.66+.035*(index%3),.14),.34+.06*(index%2))
+        add(drilling,at+.01,grit(.12,13,650,3200),.43)
+    write("drill_work",drilling,.60)
+    write("plank_out",scene(.43,[(0,rub(.19,360,2500,.019,.09),.42),
+          (.11,wood(1.13,.15),.7),(.19,wood(.81,.20),.73)]),.59)
+    write("block_out",scene(.48,[(0,grit(.16,27,480,3700),.55),
+          (.085,thump(.26,99),.7),(.093,stone(.67,.27),.80),(.23,stone(1.28,.15),.22)]),.58)
+
+    def owl_note(length,f0,f1):
+        t=time(length)
+        frequency=f0+(f1-f0)*np.sin(np.minimum(t/.14,1.)*np.pi/2)+3*np.sin(TAU*5.8*t)
+        phase=TAU*np.cumsum(frequency)/SR
+        env=edges(t,.048,.10)
+        return (np.sin(phase)+.26*np.sin(phase*2+.2)+.09*np.sin(phase*3)+.035*noise(t,550,1350))*env
+    write("owl_equip",scene(.96,[(0,owl_note(.32,410,458),.74),
+          (.34,owl_note(.48,452,346),.84),(.63,rub(.24,720,2950,.028,.09),.16)]),.57)
+    write("owl_dive",scene(.49,[(0,swish(.206,255,4600),.59),
+          (.13,swish(.31,180,3300),.81),(.025,owl_note(.19,550,462),.18)]),.59)
+    write("owl_hit",scene(.34,[(0,rub(.113,780,3900,.008,.035),.62),
+          (.017,thump(.23,128),.73),(.044,grit(.17,25,580,4200),.48),
+          (.11,rub(.22,390,1900,.028,.065),.44)]),.62)
+    # A long-range call identifies the pack; the growl, brace and lunge are
+    # separate closer attacks and share no input waveforms with this call.
+    t=time(1.21)
+    pitch=np.interp(t,[0,.19,.53,.82,1.21],[132,225,244,211,141])+3.2*np.sin(TAU*4*t)
+    phase=TAU*np.cumsum(pitch)/SR
+    howl=(np.sin(phase)+.44*np.sin(2*phase)+.29*np.sin(3*phase)+.15*np.sin(5*phase))
+    howl*=edges(t,.19,.34)*(.97+.03*np.sin(TAU*8.*t))
+    write("wolf_return",scene(1.40,[(0,howl,.81),(.15,rub(.88,300,1150,.16,.37),.08),
+          (.96,grit(.31,16,470,2400),.09)]),.50)
+    write("roast_ready",scene(.55,[(0,rub(.22,500,3300,.02,.09),.34),
+          (.14,thump(.20,130),.44),(.155,stone(1.25,.19),.30),
+          (.31,stone(1.66,.20),.23)]),.54)
+    t=time(.45)
+    def chime(frequency):
+        return (np.sin(TAU*frequency*t)+.37*np.sin(TAU*frequency*2.01*t))*np.exp(-t*7.)*edges(t,.009,.12)
+    write("rescue_answer",scene(.87,[(0,chime(293.66),.64),(.29,chime(440),.73),
+          (.11,rub(.26,560,2300,.06,.09),.15)]),.48)
+
+
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description='Rebuild Havenline’s original field score and effects.')
     parser.add_argument('--output',required=True,type=Path)
     parser.add_argument('--originals',type=Path,default=SOURCES)
+    parser.add_argument('--actions-only', action='store_true', help='Render only the workshop, wildlife and settlement one-shots.')
     args=parser.parse_args()
     BANK, SOURCES = args.output, args.originals
     BANK.mkdir(parents=True,exist_ok=True)
-    add_recovered()
-    steps()
-    music()
-    transitions()
-    world_one_events()
+    if not args.actions_only:
+        add_recovered()
+        steps()
+        music()
+        transitions()
+        world_one_events()
+    field_actions()

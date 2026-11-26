@@ -39,7 +39,7 @@ static func is_wood_drop(token: String) -> bool:
 	var suffix := token.trim_prefix("wood-")
 	return token.begins_with("wood-") and suffix.is_valid_int() and suffix.to_int() > 0 and suffix == str(suffix.to_int())
 
-static func valid(state: Variant, paid_order: Array, credits: Dictionary) -> bool:
+static func valid(state: Variant, paid_order: Array, credits: Dictionary, survivor_cost: int) -> bool:
 	if not state is Dictionary or state.size() != EMPTY.size():
 		return false
 	if not state.get("survivor_paid") is bool or not state.get("rescued") is bool or not state.get("worker_carry_token") is String:
@@ -63,7 +63,7 @@ static func valid(state: Variant, paid_order: Array, credits: Dictionary) -> boo
 	if not state.get("worker_supply") is String or (state.worker_supply != "" and (
 			state.worker_supply not in KINDS or not state.rescued or "expansion_2" not in paid_order or state.worker_carry_token != "")):
 		return false
-	if state.survivor_wood > 2 or state.survivor_paid != (state.survivor_wood == 2): return false
+	if state.survivor_wood > survivor_cost or state.survivor_paid != (state.survivor_wood == survivor_cost): return false
 	if state.survivor_wood > 0 and "center_hearth" not in paid_order: return false
 	if state.rescued and not state.survivor_paid: return false
 	if state.owl_hits > 0 and not state.survivor_paid: return false
