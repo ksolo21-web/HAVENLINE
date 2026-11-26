@@ -51,6 +51,7 @@ var pieces := {}
 var flights: Array[Dictionary] = []
 var cooldown := 0.0
 var measured := {}
+var station_material := ""
 var timber_pairs := false
 var tier_height := {"wood":.13, "stone":.11, "meat":.145, "coal":.15, "slate":.12, "metal":.16}
 
@@ -307,6 +308,7 @@ func sync(animate := false) -> void:
 	var counts := {}
 	for kind: String in Inventory.KINDS:
 		counts[kind] = _available(kind, HAND) + _outstanding(kind, HAND, false)
+		if station_material == kind: counts[kind] = maxi(0,counts[kind]-1)
 		if counts[kind] > 0 and not measured.has(kind):
 			var unit := _piece(kind)
 			if unit:
@@ -330,6 +332,7 @@ func sync(animate := false) -> void:
 					var parent: Node3D = rack if location == HAND else storage_anchors[kind]
 					parent.add_child(first)
 					pool.append(first)
+			if location == HAND and station_material == kind: n = maxi(0,n-1)
 			n = _visible_units(kind, n, location)
 			while pool.size() < n:
 				var unit := _piece(kind)
@@ -479,3 +482,15 @@ func _land(flight: Dictionary) -> void:
 		unit_landed.emit(kind, dest)
 		if dest not in [HAND, STOCK] and inventory.complete(dest):
 			purchase_completed.emit(dest)
+
+func available_to_station(kind: String) -> int:
+	return _available(kind, HAND)
+
+func show_station_transfer(kind: String) -> Vector3:
+	var origin := rack.global_position
+	if not kind.is_empty():
+		origin = _place(HAND,kind,maxi(0,_available(kind,HAND)-1))
+	if kind != station_material:
+		station_material = kind
+		sync(true)
+	return origin

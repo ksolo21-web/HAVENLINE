@@ -17,6 +17,13 @@ const PICKUP_RADIUS := 1.38
 const PAD_RADIUS := 1.0
 const MAX_HP := 4
 const UPGRADE_GLINT = preload("res://assets/field_ui/upgrade_glint.svg")
+var lakeshore
+var processors
+var owl
+var survivor
+var counter
+var settlement_loop
+var previous_dry_position := Vector3.INF
 var world_landscape
 var tracks
 var depot := preload("res://field_depot.gd").new()
@@ -131,6 +138,10 @@ func _ready() -> void:
 		persist_error = "Saved world state could not be restored."
 	# A saved position on the apron begins a new visit only after stepping out.
 	if not inventory.world_state.is_empty() and depot.at_apron(actor.position): depot.visit = "done"
+	settlement_loop = preload("res://field_settlement_loop.gd").new()
+	add_child(settlement_loop)
+	settlement_loop.install(self)
+	previous_dry_position = actor.position
 	field_ready = true
 	original_auto_quit = get_tree().auto_accept_quit
 	get_tree().auto_accept_quit = false
@@ -262,6 +273,8 @@ func _configure_stem(tree: ResourceTreeScript) -> void:
 	tree._marks.clear()
 
 func _input(event: InputEvent) -> void:
+	if field_ready and settlement_loop.handle_input(event):
+		return
 	if event is InputEventKey and event.physical_keycode == KEY_U:
 		return
 	super(event)
@@ -438,6 +451,7 @@ func _player_hit(amount: int, attacker: Node3D = null) -> void:
 	flash.color.a = .26
 	_event("player_hurt",actor.position)
 	if player_hp == 0:
+		settlement_loop.cancel_cooking()
 		_event("player_fall",actor.position)
 		reset_time = 1.05
 		character_kit.rest()
@@ -493,6 +507,7 @@ func _physics_process(dt: float) -> void:
 			_refresh_field()
 			_checkpoint_lifecycle()
 		return
+	previous_dry_position = actor.global_position
 	var previous_tool: String = character_kit.equipped
 	super(dt)
 	if persist_blocked: return
@@ -522,6 +537,7 @@ func _physics_process(dt: float) -> void:
 			_apply_hearth(true,true)
 			_event("reveal", Vector3.ZERO)
 	_step_receivers()
+	settlement_loop.advance(dt)
 	sound.set_hearth_proximity(clampf(1.0-actor.position.length()/7.0,0.0,1.0) if camp_active else 0.0)
 	var music := "threat" if danger else ("camp" if inside else "field")
 	if current_music != music:
@@ -637,6 +653,13 @@ func _apply_hearth(built: bool, animate: bool) -> void:
 	if built and not orbit_permitted_at(actor.global_position): character_kit.rest()
 	if field_ready: _refresh_field()
 
+func constrain_private_snow_travel() -> void:
+	super()
+	if lakeshore and previous_dry_position.is_finite():
+		actor.global_position = lakeshore.constrain_motion(previous_dry_position, actor.global_position, float(layout.actor_radius))
+		if processors:
+			actor.global_position = processors.constrain_motion(previous_dry_position,actor.global_position,float(layout.actor_radius))
+
 func orbit_permitted_at(world_position: Vector3) -> bool:
 	return not field_env.is_inside_camp(world_position)
 
@@ -686,7 +709,39 @@ func _refresh_hud_field(danger: bool) -> void:
 			if inventory.offer_open(id) and (camp_active or id == HEARTH_OFFER):
 				hint = "%s  ·  %s" % [Progress.TITLES[id], Progress.price_text(inventory.remaining(id))]
 		if depot.apron.visible and depot.at_apron(actor.position): hint = depot.hint()
+	if settlement_loop and not persist_blocked and reset_time <= 0:
+		hint = settlement_loop.hint(hint,danger)
 	var notice := str(inventory.carried.values()) + hint
 	if notice == last_notice: return
 	last_notice = notice
 	opening_hud.field_status(inventory.carried,hint)
+
+# Scene callbacks conclude a physical transfer and save its receipt before celebrating it.
+func rescue_survivor() -> bool:
+	return settlement_loop.rescue()
+
+func claim_worker_wood(token: String) -> bool:
+	return settlement_loop.claim_worker_wood(token)
+
+func receive_worker_wood() -> bool:
+	return settlement_loop.deliver_worker_wood()
+
+func cook_meal() -> bool:
+	return settlement_loop.cook()
+
+func serve_meal(order: int) -> bool:
+	return settlement_loop.serve(order)
+
+func enter_next_level() -> bool:
+	return settlement_loop.enter_next_level()
+
+func owl_contact(wolf, at: Vector3) -> bool:
+	if not settlement_loop.can_transact() or not inventory.settlement.survivor_paid or not enemies.has(wolf): return false
+	if not is_instance_valid(wolf) or not wolf.can_receive_swirl() or field_env.is_inside_camp(wolf.global_position) or not at.is_finite(): return false
+	if not owl.permits_contact(wolf,at): return false
+	# A fatal hit synchronously persists the loot. Include the owl receipt in that same checkpoint.
+	inventory.settlement.owl_hits += 1
+	if not wolf.receive_hit(1,at):
+		inventory.settlement.owl_hits -= 1
+		return false
+	return settlement_loop.commit_receipt("owl_hit",at)

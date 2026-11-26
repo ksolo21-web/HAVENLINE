@@ -34,7 +34,13 @@ func install(world: Node3D, hud: Control) -> void:
 
 func on_node_added(node: Node) -> void:
 	if node is MeshInstance3D and scene.is_ancestor_of(node):
-		configure_mesh.call_deferred(node)
+		_configure_added_mesh.call_deferred(node.get_instance_id())
+
+func _configure_added_mesh(id: int) -> void:
+	if not is_instance_id_valid(id): return
+	var mesh := instance_from_id(id) as MeshInstance3D
+	if mesh and mesh.is_inside_tree() and scene.is_ancestor_of(mesh):
+		configure_mesh(mesh)
 
 func filtered(source: Material) -> Material:
 	if not source is BaseMaterial3D or (source.albedo_texture == null and source.normal_texture == null):

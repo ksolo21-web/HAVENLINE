@@ -1,6 +1,8 @@
 extends RefCounted
 
 const Progress = preload("res://field_progression.gd")
+const Settlement = preload("res://field_settlement.gd")
+var settlement := Settlement.EMPTY.duplicate(true)
 var staged := false
 var build_order: Array = []
 var legacy_axes := false
@@ -98,6 +100,9 @@ func snapshot() -> Dictionary:
 		state.build_order = build_order.duplicate()
 		state.legacy_axes = legacy_axes
 		state.world = world_state.duplicate(true)
+		if settlement != Settlement.EMPTY:
+			state.version = 4
+			state.settlement = settlement.duplicate(true)
 	return state
 
 static func _natural(value: Variant) -> bool:
@@ -108,7 +113,11 @@ static func _natural(value: Variant) -> bool:
 func restore(data: Variant) -> bool:
 	if not data is Dictionary: return false
 	var old: bool = data.get("version") == 1
-	if (old and data.size() != 5) or (not old and (not staged or (data.get("version") != 2 and data.get("version") != 3) or data.size() != 8)): return false
+	var has_settlement: bool = data.get("version") == 4
+	if old:
+		if data.size() != 5: return false
+	elif not staged or (data.get("version") != 2 and data.get("version") != 3 and not has_settlement) or data.size() != (9 if has_settlement else 8):
+		return false
 	for key in ["collected", "carried", "stored", "paid"]:
 		if not data.get(key) is Dictionary:
 			return false
@@ -152,6 +161,11 @@ func restore(data: Variant) -> bool:
 			if not _natural(subtotal.get(kind)) or subtotal[kind] > costs[id][kind]:
 				return false
 			balances[kind] -= int(subtotal[kind])
+	var next_settlement: Variant = data.get("settlement") if has_settlement else Settlement.EMPTY
+	if not Settlement.valid(next_settlement,order,data.collected): return false
+	balances.meat -= int(next_settlement.cooked)
+	balances.wood -= int(next_settlement.survivor_wood) + int(next_settlement.processed_wood)
+	balances.stone -= int(next_settlement.processed_stone)
 	if balances.values().any(func(n): return n != 0):
 		return false
 	if staged:
@@ -182,6 +196,7 @@ func restore(data: Variant) -> bool:
 		build_order=order
 		legacy_axes=old_axes
 		world_state={} if old else data.world.duplicate(true)
+		settlement = next_settlement.duplicate(true)
 	collected = data.collected.duplicate()
 	for kind in KINDS:
 		carried[kind] = int(data.carried.get(kind,0))

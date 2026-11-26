@@ -34,9 +34,13 @@ const CUES := {
 	"regrow_wood": [1,.35,-12,0], "regrow_stone": [1,.4,-11,0],
 	"wolf_brace": [1,.26,-9,2], "wolf_return": [1,.65,-13,0], "player_fall": [1,.75,-5,3],
 	"boss_arrival": [1,.65,-3.5,3], "boss_defeat": [1,.7,-4,3],
+	"cook_griddle": [1, .45, -3.0, 1], "service_cash_paper": [1, .18, -2.0, 3],
 	"tower_fire": [1,.25,-6.0,2], "tower_hit": [1,.16,-4.8,2]
 }
-const ALIASES := {"attack":"enemy_attack","wolf_attack":"enemy_attack"}
+const ALIASES := {"attack":"enemy_attack","wolf_attack":"enemy_attack",
+	"survivor_rescued":"reveal", "worker_pickup":"carry", "worker_delivery":"deposit_wood",
+	"cooker_start":"cook_griddle", "meal_ready":"pickup_full", "meal_served":"service_cash_paper",
+	"level_complete":"victory", "next_level":"reveal", "owl_hit":"hit", "process_wood":"impact_wood", "process_stone":"impact_stone", "process_done":"deposit_wood"}
 const ORE_PITCH := {"metal": 1.19, "coal": 0.84, "slate": 1.08}
 const LOOP_NAMES := ["field_score","camp_score","threat_score","wind","fire"]
 const SETTINGS_PATH := "user://field-audio.cfg"

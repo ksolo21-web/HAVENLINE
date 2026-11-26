@@ -23,6 +23,7 @@ var upgrade_label: Label3D
 var upgrade_pending := true
 var payment_ink := {}
 var payment_costs: Node3D
+const CounterLayout = preload("res://field_counter.gd")
 const COURTS := [Vector4(-5,-4,5,4),Vector4(-5.5,-5.5,7.5,5),Vector4(-5.5,-7,10,5.4)]
 var perimeter_stage := -1
 var palisades: MultiMeshInstance3D
@@ -156,6 +157,8 @@ func is_inside_camp(pos: Vector3) -> bool:
 func occupies_camp_ground(pos: Vector3) -> bool:
 	if perimeter_stage < 1: return false
 	var r: Vector4 = COURTS[perimeter_stage-1]
+	if perimeter_stage == 3 and pos.x >= CounterLayout.CENTER_X-1.25 and pos.x <= CounterLayout.CENTER_X+3.54 and pos.z >= r.y-8.25 and pos.z < r.y:
+		return true
 	return pos.x >= r.x-.32 and pos.x <= r.z+.32 and pos.z >= r.y-.32 and pos.z <= r.w+.32
 
 func set_perimeter(stage: int, animate: bool) -> void:
@@ -186,18 +189,25 @@ func set_perimeter(stage: int, animate: bool) -> void:
 		(collider.shape as BoxShape3D).size = Vector3(row[2],.95,row[3])
 		var along_x := float(row[2]) > float(row[3])
 		var length := maxf(row[2],row[3])
-		var count := maxi(1,roundi(length/2.6))
-		for j in count:
-			var offset := length*((j+.5)/count-.5)
-			var center := Vector3(row[0]+(offset if along_x else 0.),0.,row[1]+(0. if along_x else offset))
-			# Lashing crosses face outside on all four walls.
-			var angle := 0.0
-			if i in [2,3]: angle = PI*.5
-			elif i == 4: angle = PI
-			elif i == 5: angle = -PI*.5
-			var axes := Basis(Vector3.UP,angle)
-			axes.x *= length/(count*2.6)
-			transforms.append(Transform3D(axes,center))
+		# Keep the north wall's original unbroken collider. Only split the visible
+		# palisade at the two fixed timber posts when the customer counter opens.
+		var spans := [Vector2(-length*.5,length*.5)]
+		if i == 4 and stage == 3:
+			var dock_offset := CounterLayout.CENTER_X-float(row[0])
+			spans = [Vector2(-length*.5,dock_offset-CounterLayout.HALF_BAY),Vector2(dock_offset+CounterLayout.HALF_BAY,length*.5)]
+		for span: Vector2 in spans:
+			var width := span.y-span.x
+			var count := maxi(1,roundi(width/2.6))
+			for j in count:
+				var offset := span.x + width*(j+.5)/count
+				var center := Vector3(row[0]+(offset if along_x else 0.),0.,row[1]+(0. if along_x else offset))
+				var angle := 0.0
+				if i in [2,3]: angle = PI*.5
+				elif i == 4: angle = PI
+				elif i == 5: angle = -PI*.5
+				var axes := Basis(Vector3.UP,angle)
+				axes.x *= width/(count*2.6)
+				transforms.append(Transform3D(axes,center))
 	var instances := palisades.multimesh
 	instances.instance_count = transforms.size()
 	for i in transforms.size(): instances.set_instance_transform(i,transforms[i])

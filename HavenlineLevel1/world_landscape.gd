@@ -239,6 +239,9 @@ func describe_chunk(key: Vector2i) -> Array[Dictionary]:
 			if rocks.any(func(p: Vector2): return p.distance_squared_to(at)<9.0): continue
 			rows.append(_source(key, "wood", z*8+x, at, rng.randi_range(0, 2), rng))
 	_append_district_bank(key, origin, rows)
+	# Filter after the seeded draws so existing deposits elsewhere keep their poses.
+	if host and host.lakeshore:
+		rows.assign(rows.filter(func(row): return not host.lakeshore.reserves(row.position) and (not host.processors or not host.processors.reserves(row.position))))
 	return rows
 
 func _append_district_bank(key: Vector2i, origin: Vector2, rows: Array[Dictionary]) -> void:

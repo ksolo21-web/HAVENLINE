@@ -47,6 +47,8 @@ func _show_pine(row: Dictionary, show: bool) -> void:
 func refresh_camp(animate: bool) -> void:
 	for row in records:
 		var occupied: bool = world.field_env.occupies_camp_ground(row.transform.origin)
+		if (world.lakeshore and world.lakeshore.reserves(row.transform.origin)) or (world.processors and world.processors.reserves(row.transform.origin)):
+			occupied = true
 		if occupied == row.get("occupied",false): continue
 		row["occupied"] = occupied
 		if occupied and is_instance_valid(row.live):

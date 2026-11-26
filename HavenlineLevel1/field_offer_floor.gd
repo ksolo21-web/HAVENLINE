@@ -9,6 +9,11 @@ var floor_art
 var ink: ShaderMaterial
 
 func install(environment, id: String, at: Vector3) -> void:
+	install_custom(environment,id,at,Progress.TITLES[id],Progress.offers({})[id].keys())
+	if id.begins_with("storage_"):
+		_install_storage_icon(id.trim_prefix("storage_"))
+
+func install_custom(environment, id:String, at:Vector3, caption:String, kinds:Array) -> void:
 	floor_art = environment
 	name = "Offer_" + id
 	position = at + Vector3.UP * .009
@@ -22,18 +27,19 @@ func install(environment, id: String, at: Vector3) -> void:
 				mesh.material_override = ink
 				ink.set_shader_parameter("paid",0.)
 	title = environment.flat_label(self,Vector3(0,.008,-.19),.0061)
-	title.text = Progress.TITLES[id]
+	title.text = caption
 	title.modulate = Color.WHITE
-	price = environment.cost_row(self,Progress.offers({})[id].keys(),.47)
-	if id.begins_with("storage_"):
-		icon = Sprite3D.new()
-		icon.texture = HUD.MATERIAL_ICONS[id.trim_prefix("storage_")]
-		icon.axis = Vector3.AXIS_Y
-		icon.pixel_size = .006
-		icon.position = Vector3(0,.009,-.62)
-		icon.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-		add_child(icon)
+	price = environment.cost_row(self,kinds,.47)
 	hide()
+
+func _install_storage_icon(kind: String) -> void:
+	icon = Sprite3D.new()
+	icon.texture = HUD.MATERIAL_ICONS[kind]
+	icon.axis = Vector3.AXIS_Y
+	icon.pixel_size = .006
+	icon.position = Vector3(0,.009,-.62)
+	icon.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	add_child(icon)
 
 func set_due(ledger, id: String, active: bool) -> void:
 	visible = active

@@ -39,16 +39,35 @@ func run() -> void:
 	drag.index=2
 	var right:Vector3=f.camera.global_basis.x
 	var near:=right.cross(Vector3.UP)
-	drag.position=touch.position+82*Vector2(Vector3.LEFT.dot(right),Vector3.LEFT.dot(near))
+	# Walk around the north end of the new inlet to reach the same west snowfield.
+	var north := Vector3.FORWARD
+	drag.position=touch.position+82*Vector2(north.dot(right),north.dot(near))
 	f._input(drag)
-	for tick in 1050:
+	for tick in 420:
+		await physics_frame
+		if f.actor.position.z < -6: break
+	var checkpoint: Vector3=f.actor.position
+	var sidestep:=0
+	var trace: Array=[]
+	for tick in 2000:
+		if tick%35==0:
+			trace.append(str(f.actor.position))
+			if tick>0 and f.actor.position.distance_squared_to(checkpoint)<.6:
+				sidestep=33
+			checkpoint=f.actor.position
+		var move:=Vector3.LEFT
+		if sidestep>0:
+			move=Vector3.FORWARD
+			sidestep-=1
+		drag.position=touch.position+82*Vector2(move.dot(right),move.dot(near))
+		f._input(drag)
 		await physics_frame
 		if f.actor.position.x < -36:break
 	touch.pressed=false
 	f._input(touch)
 	for tick in 45:await physics_frame
 	if f.actor.position.x>=-34 or f.persist_blocked:
-		printerr("ordinary travel did not reach west snowfield");quit(1);return
+		printerr("ordinary travel did not reach west snowfield at ",f.actor.position," route ",trace);await Session.drain_field_audio(self, f);quit(1);return
 	# Position came solely from movement input. Supply a non-default health and a timer
 	# here so a fresh process also detects accidental full healing or elapsed wall-clock.
 	f._player_hit(1)

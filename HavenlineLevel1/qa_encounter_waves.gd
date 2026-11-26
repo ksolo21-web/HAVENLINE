@@ -15,12 +15,15 @@ func run() -> void:
 	e.boss_chance=.18
 	for wolf in field.enemies.duplicate(): e._remove(wolf)
 	await process_frame
+	var permanent: Array = field.tracks.living.keys()
+	var expected: Array = [field.actor,field.survivor.actor]
+	var correct_actors: bool = permanent.size() == expected.size() and expected.all(func(a):return permanent.has(a))
 	var corners: Array[Vector3]=[Vector3.ZERO,Vector3(510,0,510),Vector3(-510,0,510),Vector3(510,0,-510),Vector3(-510,0,-510)]
 	var total:=0
 	var alphas:=0
 	var deaths:=0
 	var peak:=0
-	var ok:=true
+	var ok:=correct_actors
 	var duplicate_loot:=0
 	var starting_wave: int=e.wave
 	var previous_id:=0
@@ -46,8 +49,8 @@ func run() -> void:
 		field._step_drops(101)
 		await process_frame
 		await process_frame
-		if field.get_tree().get_nodes_in_group("swirl_hostiles").size()>0 or field.tracks.living.size()!=1:ok=false
-	var summary={"passed":ok and total==deaths and duplicate_loot==0 and peak<=4 and alphas>0 and alphas<200 and e.wave==starting_wave+200,"native_waves":e.wave-starting_wave,"actual_wolves":total,"actual_deaths":deaths,"actual_alphas":alphas,"peak_live":peak,"duplicate_loot":duplicate_loot,"orphan_wolves":field.get_tree().get_nodes_in_group("swirl_hostiles").size(),"remaining_trackers":field.tracks.living.size()}
+		if field.get_tree().get_nodes_in_group("swirl_hostiles").size()>0 or field.tracks.living.size()!=permanent.size() or not permanent.all(func(a):return field.tracks.living.has(a)):ok=false
+	var summary={"passed":ok and total==deaths and duplicate_loot==0 and peak<=4 and alphas>0 and alphas<200 and e.wave==starting_wave+200,"native_waves":e.wave-starting_wave,"actual_wolves":total,"actual_deaths":deaths,"actual_alphas":alphas,"peak_live":peak,"duplicate_loot":duplicate_loot,"orphan_wolves":field.get_tree().get_nodes_in_group("swirl_hostiles").size(),"remaining_trackers":field.tracks.living.size(),"preserved_player_and_survivor":correct_actors}
 	print("ENCOUNTER_STRESS ",JSON.stringify(summary))
 	await preload("res://tests/lifecycle_test_profile.gd").drain_field_audio(self, field)
 	quit(0 if summary.passed else 1)

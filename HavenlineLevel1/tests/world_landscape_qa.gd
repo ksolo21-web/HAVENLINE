@@ -66,21 +66,37 @@ func run() -> void:
 	var repeatable := true
 	var legacy_digest := HashingContext.new()
 	legacy_digest.start(HashingContext.HASH_SHA256)
+	# This source definition without a host describes the original seeded world,
+	# before the lake and workshops reserve their authored footprints.
+	var original = land.get_script().new()
+	original.district = land.district
+	var shoreline_only := true
+	var reserved := []
 	var unique := {}
 	var maximum := 0
 	var minimum := 1000
 	var occupied := 0
 	for z in range(-16,16):
 		for x in range(-16,16):
-			var rows: Array = land.describe_chunk(Vector2i(x,z))
+			var key := Vector2i(x,z)
+			var rows: Array = land.describe_chunk(key)
+			var expected := []
+			for row in original.describe_chunk(key):
+				if row.kind in ["wood","stone"]:
+					legacy_digest.update(var_to_bytes([row.id,row.kind,row.variant,row.position,row.yaw,row.scale]))
+				if world.lakeshore.reserves(row.position) or world.processors.reserves(row.position):
+					reserved.append(row.id)
+					var nearby := Rect2(-55,-4,44,41).has_point(Vector2(row.position.x,row.position.z))
+					shoreline_only = shoreline_only and nearby and row.kind in ["wood","stone"]
+				else:
+					expected.append(row)
+			shoreline_only = shoreline_only and rows == expected
 			maximum = maxi(maximum,rows.size())
 			minimum = mini(minimum,rows.size())
 			if not rows.is_empty(): occupied+=1
 			for row in rows:
 				counts[row.kind]+=1
-				if row.kind in ["wood","stone"]:
-					legacy_digest.update(var_to_bytes([row.id,row.kind,row.variant,row.position,row.yaw,row.scale]))
-				else:
+				if row.kind not in ["wood","stone"]:
 					var point: Vector3 = row.position
 					var distance := point.length()
 					if not nearest.has(row.kind) or distance < nearest[row.kind].distance:
@@ -91,6 +107,9 @@ func run() -> void:
 							clearance_ok = clearance_ok and point.distance_to(other.position) >= land.BANK_CLEARANCE
 					repeatable = repeatable and land.describe_chunk(Vector2i(x,z)).back() == row
 				unique[row.id]=true
+	original.free()
+	report["reserved_shoreline_ids"] = reserved
+	check("Only sources in the authored lake and workshop reservation are displaced",not reserved.is_empty() and shoreline_only)
 	report["nearest_minerals"] = nearest
 	report["census"] = {"resources":counts,"wood":counts.wood,"stone":counts.stone,"distinct_ids":unique.size(),"populated_chunks":occupied,"min_sources":minimum,"max_sources":maximum}
 	check("All 1,024 chunks contain usable resources",occupied == 1024)
