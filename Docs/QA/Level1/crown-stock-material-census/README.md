@@ -1,0 +1,5 @@
+# Level 1 Crown: exact stock material census
+
+A read-only native import census of the original wood-b mesh confirmed the Crown uses two original active material surfaces. The bark surface has 1,087 triangles and retains its decoded vertex-color stream, but the imported stock material does not use that stream as albedo. The 213-triangle end-grain surface is set to use vertex colors. Neither is overridden in the stock scene.
+
+The pinned upstream Godot importer evaluates its per-mesh vertex-color flag before decoding the current primitive. The original asset places bark first and the end grain second, which explains the two different flags. The exact native ordered streams, not raw GLB ordering, form the comparison fingerprint. No stock material setting was changed. A prior appearance observer never reached a frame because it expected both flags true. Any future matched visual-only test must preserve the actually imported stock settings; there is no prior visual grade from this diagnostic, recoloring approval, physical mount or inventory transfer.
