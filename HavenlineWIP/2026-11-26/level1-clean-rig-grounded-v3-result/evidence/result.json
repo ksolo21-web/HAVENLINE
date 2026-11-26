@@ -1,0 +1,91 @@
+{
+  "status": "REJECT_FRESH_RIG_CALIBRATED_V3_KEY",
+  "initial_new_rig_digest": "ce9551d2f34a90c9f5b1dd08c7854ecf471e8ba5965f3be99a41dfd6bb15943c",
+  "stride_m": 0.16,
+  "key_angle_deg": {
+    "L": [
+      -3.0,
+      0.0
+    ],
+    "R": [
+      4.0,
+      -4.0
+    ]
+  },
+  "pose_uses_exact_frozen_true_ankle_targets": true,
+  "whole_control_datum_mm": 39.96204038628691,
+  "final_pelvis_offset_world_mm": 27.025449776396474,
+  "original_neutral_floor_before_mm": {
+    "L": -31.56246274804189,
+    "R": -39.81204038628691
+  },
+  "corrected_neutral_floor_mm": {
+    "L": 8.399577284743664,
+    "R": 0.14999999999998348
+  },
+  "gameplay_root_transform_exact": true,
+  "parts": {
+    "L": {
+      "heel_or_ball_support": {
+        "largest_face_count": 99,
+        "largest_projected_face_area_sum_mm2": 3543.2611,
+        "components": 1
+      },
+      "internal_knee_deg": 166.45991039329832,
+      "grounded_leg_min_mm": 0.14999999999995572,
+      "frozen_world_ankle": [
+        -3.022752208181309,
+        0.3695288105935646,
+        11.906105718864993
+      ],
+      "guarded_edges": 17051,
+      "guard_failures": 0,
+      "guard_min_max_ratio": [
+        0.579437527898374,
+        1.362469354500097
+      ],
+      "worst_failed_raw_rows": [
+        39206,
+        39341
+      ]
+    },
+    "R": {
+      "heel_or_ball_support": {
+        "largest_face_count": 240,
+        "largest_projected_face_area_sum_mm2": 6232.0485,
+        "components": 1
+      },
+      "internal_knee_deg": 153.78200620077442,
+      "grounded_leg_min_mm": -0.8547107571370005,
+      "frozen_world_ankle": [
+        -3.458985389437867,
+        0.35794291972368,
+        11.735323822825443
+      ],
+      "guarded_edges": 17486,
+      "guard_failures": 33,
+      "guard_min_max_ratio": [
+        0.16291009266365689,
+        1.8656453456434103
+      ],
+      "worst_failed_raw_rows": [
+        36861,
+        36961
+      ]
+    }
+  },
+  "checked_lower_faces": 31576,
+  "strict_nonadjacent_pairs_rest_key": [
+    0,
+    366
+  ],
+  "new_strict_pairs": 366,
+  "prior_v1_named_pair_still_present": false,
+  "first_new_strict_pair": [
+    8794,
+    8891
+  ],
+  "orientation_alarms": 175,
+  "actual_game_world_camera_source": true,
+  "native_engine_or_render": false
+}
