@@ -1,0 +1,3 @@
+# Exact native inputs, offline buy-plot occlusion bounds
+
+The two real character poses and all ten exact same-frame meshes are verified. Conservative offline depth/terrain registration rejects the current larger 1.14 m layout as a phone-sized candidate if the present castle, numeral and bracket ink is held fixed. There is no complete 14 × 8 window at 960 or 844 after reserving the existing ink, and no complete 10 × 8 window either. There is one 14 × 8 shared window at 960 only if ignoring the existing ink; that's not an acceptable combined layout. This is not a phone test, GPU stencil or proof every design fails. Recompose the separate elements as a unit while preserving the original 0.72 m reach and three-wood purchase. No game changes.
