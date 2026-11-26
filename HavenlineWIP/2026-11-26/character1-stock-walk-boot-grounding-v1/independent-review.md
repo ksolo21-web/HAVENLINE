@@ -1,0 +1,3 @@
+# Independent review
+
+Replayed source and actual terrain calculations. All three stock Walk poses show both indexed boot patches sinking by 28–48 mm, despite the actor capsule reporting grounded. At normal 1280×720 camera scale the corresponding vertical geometry projects to 1.19–2.04 pixels; these are not observed RGB occlusions. A 35 mm rigid lift would leave the worst measured left boot approximately 13 mm under the terrain. The capsule/visual origin mismatch explains much but not all. This finding does not grade whole gait, stance timing, boot roll, Run or rig alternatives. No in-game changes.
