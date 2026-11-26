@@ -1,0 +1,39 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+PASS single phase tick=0
+PASS real source and detached owner armed tick=0
+PASS only three owned buses appended tick=0
+PASS second owner refuses collision without changing buses tick=0
+PASS separate owned music, beds and reserved SFX tick=0
+PASS restore or fresh state has no one-shot tick=0
+PASS foreign emitter and unknown exact key refused tick=0
+PASS healthy app session starts loops tick=0
+PASS dummy driver actually advanced an initialized music playback tick=4
+PASS dummy driver actually advanced an initialized ambience playback tick=4
+PASS Music bus only muted; ambience/SFX independent tick=4
+PASS Ambience bus only muted; music/SFX independent tick=4
+PASS Ambience explicitly resumes tick=4
+PASS unearned hearth no crackle tick=4
+PASS no unaffordable confirmation tick=4
+PASS SFX-only mute reaches real bus tick=4
+PASS first real pickup during mute tick=55
+PASS mute consumes only SFX event while other groups continue tick=55
+PASS SFX unmute reaches real bus tick=55
+PASS unmute does not replay tick=57
+PASS second real pickup latches at its ordinary committed range, not pad arrival tick=122
+PASS new committed cue after unmute starts once tick=122
+PASS earns exact imported pickup resource through own SFX player tick=122
+owned-cue W2 edge→sample ticks=0 us=144 distance=0.67159283161163 position=0.00266666663811
+PASS playback sampled in measured bounded window after real W2 edge tick=122
+PASS fresh pickup actual playback advanced prior to suspend tick=122
+PASS suspend pauses existing beds and flushes one-shots tick=122
+PASS resume does not replay last pickup tick=124
+PASS master still overrides locally enabled music tick=124
+PASS master clears to existing group controls tick=124
+PASS no voice overrun on authorized route tick=124
+PASS detached shutdown releases only owned buses and all beds tick=124
+PASS single-use owner denies re-arm; cannot append players or reopen prior events tick=124
+PASS retired owner denies all later commit calls tick=124
+owned-cue teardown diagnostic drain_frames=5 drain_us=275598
+PASS bounded natural mixer/update observation window tick=124
+PASS drain preserves exact stopped state and never restarts tick=124
+owned-cue checks=35 failures=0
