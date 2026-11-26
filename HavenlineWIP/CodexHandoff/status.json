@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T09:15:17Z",
+  "observed_at_utc": "2026-11-26T09:37:33Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -104,6 +104,25 @@
       "role_ids": [
         "planner"
       ]
+    },
+    {
+      "id": "level1-fence-gates",
+      "role": "Fence and gate repairs, independent review, and Level 1 verification",
+      "state": "in_progress",
+      "result": "Six workers were started in parallel. Fence best verified art score is 9.1 on one front-facing panel; gate best verified scores are South 9.3 and East 9.2. Both are below the 9.5 minimum and neither is installed.",
+      "next": "Fence and gate get distinct repair candidates. Independently review the exact approved renders, audit both-way travel and paid/restore visibility, and validate the north counter join. A sixth worker covers wood appearance without blocking these tasks.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/92a143532bda7929dd08369e58de887ed43b8a0b",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/b40bce8273a0079e04d54c453c14e43370eb1da8",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/7698f03b7c2f3e99b342052e8f93a030c18aa8f0"
+      ],
+      "role_ids": [
+        "builder-camp-pads",
+        "gameplay-integrator",
+        "critic-game",
+        "level1-verifier",
+        "builder-customer-counter"
+      ]
     }
   ],
   "roster": {
@@ -115,11 +134,15 @@
   "role_activity": [
     {
       "role_id": "alfred",
-      "state": "done",
-      "title": "Prepared Bot Office feed data",
-      "summary": "Stock turn and stop geometry checked without touching gameplay. Candidate still held for true visual readability and physical support.",
-      "next": "Confirm importer fields; only then consider a matched visual-only run.",
-      "updated_at_utc": "2026-11-26T08:31:53Z"
+      "state": "in_progress",
+      "title": "Coordinating six parallel work assignments",
+      "summary": "Verified six assigned workers running in the current session. This is a snapshot, not continuous worker telemetry.",
+      "next": "Take both art repairs through independent review and check the same in-game build before promotion.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/92a143532bda7929dd08369e58de887ed43b8a0b",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/b40bce8273a0079e04d54c453c14e43370eb1da8"
+      ],
+      "updated_at_utc": "2026-11-26T09:37:33Z"
     },
     {
       "role_id": "rig-character",
@@ -145,14 +168,14 @@
     },
     {
       "role_id": "builder-camp-pads",
-      "state": "blocked",
-      "title": "Grounded plot held after same-footprint test",
-      "summary": "Both exact alternatives kept price and payment behavior. Paired wood sign did not read. Do not rerun that art.",
-      "next": "Keep the gates physically separate and verify all actual front/rear states and fence joins.",
+      "state": "in_progress",
+      "title": "Repairing the approved timber fence",
+      "summary": "Owns panel shape, rope and snow fidelity, and repeated panel joins; not gate geometry.",
+      "next": "Return a detached, reference-matched repair or the measured blocker.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/432979199febdbbf0d4e650b60e56918dadf9cda"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/92a143532bda7929dd08369e58de887ed43b8a0b"
       ],
-      "updated_at_utc": "2026-11-26T07:08:47Z"
+      "updated_at_utc": "2026-11-26T09:37:33Z"
     },
     {
       "role_id": "audio-sfx",
@@ -167,37 +190,59 @@
     },
     {
       "role_id": "level1-verifier",
-      "state": "done",
-      "title": "Grounded icon V2 verified and held",
-      "summary": "New castle and numeral both read. Wood still looks like a coin. Original purchase unchanged in all 23 checks, no native install.",
-      "next": "Keep V3 one-panel control, avoid more rope steepening.",
+      "state": "in_progress",
+      "title": "Checking paid reveal, travel, and restore",
+      "summary": "Auditing detached evidence on both gates and the transition from furnace purchase, independently of art.",
+      "next": "Pin route, no clipping, two-way traversal, and cold-reload checks for the next valid candidate.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/5abfe336d301f0c8dcf2e767ee0ed557bc10e8f6"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/b40bce8273a0079e04d54c453c14e43370eb1da8"
       ],
-      "updated_at_utc": "2026-11-26T06:47:42Z"
+      "updated_at_utc": "2026-11-26T09:37:33Z"
     },
     {
       "role_id": "builder-customer-counter",
-      "state": "blocked",
-      "title": "Counter reach test rejected the original handling paths",
-      "summary": "Both sides are walkable. The original counter geometry obstructs the measured hand paths from both stances.",
-      "next": "Verify an alternate staged reach design before integration.",
+      "state": "in_progress",
+      "title": "Checking the fence-to-counter join",
+      "summary": "Owns the North counter adjacency check; not the fence/gate assets.",
+      "next": "Verify that the fence ends neither cover the counter nor encroach on usable routes.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/7698f03b7c2f3e99b342052e8f93a030c18aa8f0",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/f66909ab05b0fea1c955c04f70ea1dd7fd6a6e82"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/7698f03b7c2f3e99b342052e8f93a030c18aa8f0"
       ],
-      "updated_at_utc": "2026-11-26T02:09:41Z"
+      "updated_at_utc": "2026-11-26T09:37:33Z"
     },
     {
       "role_id": "critic-game",
-      "state": "done",
-      "title": "Diagnosed the held carried-log comparison",
-      "summary": "Only 17 of the first 864 unexpected pixels overlapped the modeled hero; the rest were predominantly bright snow before the change. The existing comparison cannot prove the cause.",
-      "next": "Use matched controls before accepting a shadow explanation or delivering the appearance.",
+      "state": "in_progress",
+      "title": "Checking fence and gate art against owner renders",
+      "summary": "Independent review of original gameplay-camera frames, with no art authored by this reviewer.",
+      "next": "Identify failing views and run a new review only when there are new validated frames.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/92a143532bda7929dd08369e58de887ed43b8a0b",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/b40bce8273a0079e04d54c453c14e43370eb1da8"
+      ],
+      "updated_at_utc": "2026-11-26T09:37:33Z"
+    },
+    {
+      "role_id": "gameplay-integrator",
+      "state": "in_progress",
+      "title": "Repairing separate South and East gate leaves",
+      "summary": "Owns gate appearance in a detached candidate; leaves and posts must remain separate and functional.",
+      "next": "Return a distinct art improvement without changing gate operation.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/b40bce8273a0079e04d54c453c14e43370eb1da8"
+      ],
+      "updated_at_utc": "2026-11-26T09:37:33Z"
+    },
+    {
+      "role_id": "builder-resource-cooker",
+      "state": "in_progress",
+      "title": "Scoping the wood-bark correction separately",
+      "summary": "Reference-matched bark correction is a separate source-only lane, not a fence/gate dependency.",
+      "next": "Preserve the original live build and test material only in a later approved detached comparison.",
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/0bbce75d2a14196e6cff5097e6ce6e55a41d687c"
       ],
-      "updated_at_utc": "2026-11-26T09:15:17Z"
+      "updated_at_utc": "2026-11-26T09:37:33Z"
     }
   ],
   "office_events": [
@@ -453,6 +498,18 @@
       "message": "Keep the carry position on hold. The original wood bark reads white in the rejected view; diagnose renderer shadows without widening the guard, and do not alter the live build.",
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/0bbce75d2a14196e6cff5097e6ce6e55a41d687c"
+      ]
+    },
+    {
+      "id": "l1-fence-gate-parallel-assignments-20261126",
+      "type": "handoff",
+      "at_utc": "2026-11-26T09:37:33Z",
+      "from_role_id": "alfred",
+      "to_role_id": "critic-game",
+      "message": "Keep the two visual repairs separate and require the exact owner references, normal-camera evidence, and independent 9.5 or higher scores before considering integration.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/92a143532bda7929dd08369e58de887ed43b8a0b",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/b40bce8273a0079e04d54c453c14e43370eb1da8"
       ]
     }
   ]
