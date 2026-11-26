@@ -1,0 +1,3 @@
+# Gate fixture import-only causes verified
+
+The exact root import completed, but the original guard correctly rejected changes. The four previously tracked OBJ sidecars have only an added parsed remap UID. No tracked source file outside those four changed. The importer additionally wrote extracted textures and cache/sidecar files in the temporary project. Newly generated files are not authority; they must be bound by exact hash/provenance and the four changes proven byte-exact after removing only the documented permitted UID line before a parser run. No gameplay, script execution, audio or credit spend.
