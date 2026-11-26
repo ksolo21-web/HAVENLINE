@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T06:21:48Z",
+  "observed_at_utc": "2026-11-26T06:40:49Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -52,13 +52,12 @@
       "id": "furnace-purchase",
       "role": "Gameplay and plot builder",
       "state": "in_progress",
-      "result": "Exact stock funded purchase removes 3 wood once and hides the offer, 23/23 scoped desktop checks. At the normal moving camera both price and BUILD fail to read. Keep shaped V4 gates (South 9.3/East 9.2 HOLD); V5 plank finish rejected. Textured V3 fence is still 9.1 HOLD, one front panel only.",
+      "result": "Stock and wider terrain-flush marker each passed 23 ordinary desktop route checks. Actual price remains three wood once; both instantly show the same stock scene after payment. Wide marker visual HOLD 8.2: 3 is more legible, but wood and castle icons remain ambiguous or occluded. Best gates/fence remain separate visual holds.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/19ba2341cb42f6d5c3a754b0688de9328c589e90",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/37dfd4190726401220f5674a6f45ac817f9c1e5c",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/92a143532bda7929dd08369e58de887ed43b8a0b"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/0893a6f1f7b2ffc800db83ba4190fc56aa0f54ba",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/19ba2341cb42f6d5c3a754b0688de9328c589e90"
       ],
-      "next": "Prepare a pad-local price redesign outside the moving character outline; independent desktop and device reviews remain.",
+      "next": "Review one reference-led clean pictogram placement at the same camera and payment radius; no fill/phone or install claim.",
       "role_ids": [
         "builder-camp-pads",
         "level1-verifier"
@@ -169,14 +168,13 @@
     {
       "role_id": "level1-verifier",
       "state": "done",
-      "title": "Lower fence rope V4 rejected after native replay",
-      "summary": "All 67 route/reload checks passed for one panel with unchanged disposable save. Visual hold means the steeper, narrower lower rope is rejected.",
+      "title": "Grounded plot A/B verified",
+      "summary": "46 combined scoped checks; only two funded area rasters differ, post-debit raster unchanged. Marker's appearance stayed below 9.5.",
       "next": "Keep V3 one-panel control, avoid more rope steepening.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/5a0e3d01aa44a05529eaf847a8ce5d64f5313466",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/b40bce8273a0079e04d54c453c14e43370eb1da8"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/0893a6f1f7b2ffc800db83ba4190fc56aa0f54ba"
       ],
-      "updated_at_utc": "2026-11-26T05:51:07Z"
+      "updated_at_utc": "2026-11-26T06:40:49Z"
     },
     {
       "role_id": "builder-customer-counter",
@@ -192,17 +190,6 @@
     }
   ],
   "office_events": [
-    {
-      "id": "starter-source-route-20261126-0041",
-      "type": "handoff",
-      "at_utc": "2026-11-26T00:41:28Z",
-      "from_role_id": "builder-camp-pads",
-      "to_role_id": "alfred",
-      "message": "Handoff summary: The three original starter pickups were verified as separate committed sources. The current grouped carry display stayed unchanged; it cannot trigger the purchase sweep.",
-      "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/7934368d88ee780c729122d49001f3bcec6fcd1f"
-      ]
-    },
     {
       "id": "independent-garment-neutral-reject-20261126-0056",
       "type": "handoff",
@@ -420,6 +407,17 @@
       "message": "23 stock checks established one valid 3-wood purchase. Native paid approach exposed character occlusion and unreadable price; repair the pad art only.",
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/19ba2341cb42f6d5c3a754b0688de9328c589e90"
+      ]
+    },
+    {
+      "id": "l1-wide-grounded-plot-native-hold-20261126",
+      "type": "handoff",
+      "at_utc": "2026-11-26T06:40:49Z",
+      "from_role_id": "level1-verifier",
+      "to_role_id": "builder-camp-pads",
+      "message": "The new price numeral reads in actual approach frames. Enlarge the visual form of the wood pictogram and relocate the build mark only if both can fit in a naturally visible region.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/0893a6f1f7b2ffc800db83ba4190fc56aa0f54ba"
       ]
     }
   ]
