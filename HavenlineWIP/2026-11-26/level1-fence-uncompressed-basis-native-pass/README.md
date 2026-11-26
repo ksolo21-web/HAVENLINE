@@ -1,0 +1,3 @@
+# Exact uncompressed author-basis fence import passed (geometry only)
+
+Changing only the isolated glTF import compression flag to disabled preserved the previously authored asset, source, parser, probe and host verifier hashes. The original rejecting comparison still exists. With the new option, Godot imported and returned all 11,952 faces in eight expected partitions with the expected clockwise culling, UV flip, tangent handedness and original numerical limits. This is a detached imported-geometry result only. It proves no texture sampling, normal map appearance, physical fit, integration, benchmark, or playable build change. No spend.
