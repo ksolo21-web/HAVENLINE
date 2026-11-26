@@ -1,0 +1,3 @@
+# Grounded 1.14 m buy-plot recomposition rejected in observed pose model
+
+Full simultaneous icon search found no readable authored arrangement at either modeled landscape resolution within the current grounded face. Replacing the rectangle requirement with a real recognizable chamfered log silhouette preserves a distinct cut end, but it still cannot fit with the separate castle, adjacent price and four corners. This does not reject a broader world-space display face by itself. Preserve the same three-wood price, operating distance, camera and four corner marks. No new assets, actual phone test, production or spending.
