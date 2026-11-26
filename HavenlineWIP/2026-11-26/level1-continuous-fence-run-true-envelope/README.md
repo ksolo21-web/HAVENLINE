@@ -1,0 +1,3 @@
+# Whole-run continuous fence envelope
+
+Exact full indexed terrain was clipped across both intended visible lines at all grid/diagonal breaks. The 128 × 113.1 mm rail's original nose leaves just 21.985 mm for rope under the guarded visibility depth, but an original physical strand alone requires 26.91 mm. To retain two independent physical and visibly exposed front limbs under that corridor implies at least a 20.38 mm controlled recess or a different shaped face. No simple outside overlay is acceptable. Geometry feasibility only; no visual grade, native build or spending. Original source seal 05b2c988c45e439ab0d1c4df715ec44bbfdbbc138c1c9614df5d6587d5f5064f.
