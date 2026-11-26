@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T03:35:58Z",
+  "observed_at_utc": "2026-11-26T03:44:11Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -53,14 +53,14 @@
       "id": "furnace-purchase",
       "role": "Gameplay and plot builder",
       "state": "in_progress",
-      "result": "The detached timber fence and thicker posts rendered in the paid camp. All 67 native checks passed, including both gates both ways and an exact reload. Independent visual review held the fence/gate presentation at 7.2/10; the gate leaves are still placeholders.",
+      "result": "Corrected inside-out timber and snow faces were tested in the real desktop paid camp. All 67 gameplay checks still pass; the paired art review remains on hold (7.8/10). Original gate leaves remain playable placeholders; the exact wooden donor intersects all four posts during swing.",
       "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/3ffc0efa7f0fcfa49b23182e3e2d8c3cf2535184",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/6598681410b478c05aa97610edc7cf054bae7fc7",
         "https://github.com/ksolo21-web/HAVENLINE/commit/7a8fcb639984865d10cb466c0f519c761807882f",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/f35c0831d7ea575089e302d658f04c9ae4082d1b",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/bd13884fcf0bee639132ea28f9527ed05617cd35",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/50c44d8c719220e5561258b94c6a1bcdeea94c33"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/f35c0831d7ea575089e302d658f04c9ae4082d1b"
       ],
-      "next": "Diagnose the near-black timber faces and stage separate wooden gate art without changing the tested gate collision, opening or saves.",
+      "next": "Replay fence-local shadow fill without changing the world lighting. Separately stage the detail panel and refit the first wooden plank, then verify the full gate sweep again.",
       "role_ids": [
         "builder-camp-pads",
         "level1-verifier"
@@ -99,9 +99,11 @@
       "id": "enemy-animals",
       "role": "Level 1 planning and gameplay verification",
       "state": "blocked",
-      "result": "Enemy animals are in scope, fish are not. No approved runtime species, encounter or reward tied to this build.",
-      "evidence": [],
-      "next": "Lock the authored Level 1 enemy asset and real encounter authority before adding combat or related sound.",
+      "result": "The authentic concept exists and is pinned. The scoped custody check found no matching runtime model, rig, or encounter. Fish remain outside Level 1.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/be51609d6ede94df44fd3255d39eccf774cd262f"
+      ],
+      "next": "Admit a source-matched detached asset before any dependent motion or encounter work.",
       "role_ids": [
         "planner"
       ]
@@ -148,14 +150,14 @@
     {
       "role_id": "builder-camp-pads",
       "state": "working",
-      "title": "Staging real wooden gate leaves",
-      "summary": "The functional route uses tested original hinges and technical leaves. This work is a separate visual candidate.",
-      "next": "Freeze a donor that fits both unchanged hinge envelopes.",
+      "title": "Preparing a reference-detail fence panel",
+      "summary": "A separate source candidate adds shaped snow and two rope ties without changing the fence footprint.",
+      "next": "Retain the existing collision; test a single representative panel first.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/7a8fcb639984865d10cb466c0f519c761807882f",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/f35c0831d7ea575089e302d658f04c9ae4082d1b"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/3ffc0efa7f0fcfa49b23182e3e2d8c3cf2535184",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/6598681410b478c05aa97610edc7cf054bae7fc7"
       ],
-      "updated_at_utc": "2026-11-26T03:35:58Z"
+      "updated_at_utc": "2026-11-26T03:44:11Z"
     },
     {
       "role_id": "audio-sfx",
@@ -171,14 +173,14 @@
     {
       "role_id": "level1-verifier",
       "state": "done",
-      "title": "Verified R17 fence route; art on hold",
-      "summary": "All six frames and 67 tests matched the captured result; review found nearly black timber and placeholder gate leaves.",
-      "next": "Review the next exact fence and gate candidate after its native run.",
+      "title": "Corrected fence route passed; visual hold",
+      "summary": "Native comparison confirmed warmer readable front timber, but two sides are still too dark. The wooden gate donor clips during swing.",
+      "next": "Review material-local fill separately and reject gate source until it clears all four posts.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/7a8fcb639984865d10cb466c0f519c761807882f",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/f35c0831d7ea575089e302d658f04c9ae4082d1b"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/3ffc0efa7f0fcfa49b23182e3e2d8c3cf2535184",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/6598681410b478c05aa97610edc7cf054bae7fc7"
       ],
-      "updated_at_utc": "2026-11-26T03:35:58Z"
+      "updated_at_utc": "2026-11-26T03:44:11Z"
     },
     {
       "role_id": "builder-customer-counter",
@@ -316,6 +318,18 @@
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/7a8fcb639984865d10cb466c0f519c761807882f",
         "https://github.com/ksolo21-web/HAVENLINE/commit/f35c0831d7ea575089e302d658f04c9ae4082d1b"
+      ]
+    },
+    {
+      "id": "l1-fence-winding-gate-overlap-20261126",
+      "type": "handoff",
+      "at_utc": "2026-11-26T03:44:11Z",
+      "from_role_id": "level1-verifier",
+      "to_role_id": "builder-camp-pads",
+      "message": "The fence winding correction preserved the known gameplay route. Improve shadow readability and reference detail; the separate timber gate still needs actual full-sweep clearance.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/3ffc0efa7f0fcfa49b23182e3e2d8c3cf2535184",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/6598681410b478c05aa97610edc7cf054bae7fc7"
       ]
     }
   ]
