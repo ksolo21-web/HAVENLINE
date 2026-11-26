@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T06:40:49Z",
+  "observed_at_utc": "2026-11-26T06:47:42Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -52,12 +52,12 @@
       "id": "furnace-purchase",
       "role": "Gameplay and plot builder",
       "state": "in_progress",
-      "result": "Stock and wider terrain-flush marker each passed 23 ordinary desktop route checks. Actual price remains three wood once; both instantly show the same stock scene after payment. Wide marker visual HOLD 8.2: 3 is more legible, but wood and castle icons remain ambiguous or occluded. Best gates/fence remain separate visual holds.",
+      "result": "Grounded V2 price numeral 3 and build icon are readable at both exact moving desktop route frames. Wood resembles a coin; visual HOLD 8.9 versus 8.2. 23/23 route checks and unchanged exact paid frame. No phone, animation, install, or all-Level 1 claim.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/0893a6f1f7b2ffc800db83ba4190fc56aa0f54ba",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/19ba2341cb42f6d5c3a754b0688de9328c589e90"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/5abfe336d301f0c8dcf2e767ee0ed557bc10e8f6",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/0893a6f1f7b2ffc800db83ba4190fc56aa0f54ba"
       ],
-      "next": "Review one reference-led clean pictogram placement at the same camera and payment radius; no fill/phone or install claim.",
+      "next": "Check one materially distinct wood sign only if actual exposed marker supports it; keep the current build icon, price and route.",
       "role_ids": [
         "builder-camp-pads",
         "level1-verifier"
@@ -146,13 +146,13 @@
     {
       "role_id": "builder-camp-pads",
       "state": "working",
-      "title": "Pad-local readability repair",
-      "summary": "Normal-camera stock price failed when the player approached. Detached appearance work only; payment timing and scope stay unchanged.",
+      "title": "Check usable space for a timber symbol",
+      "summary": "Keep the visible numeral/castle and match the same moving-camera pair. No extra runtimes without genuine source delta.",
       "next": "Keep the gates physically separate and verify all actual front/rear states and fence joins.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/19ba2341cb42f6d5c3a754b0688de9328c589e90"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/5abfe336d301f0c8dcf2e767ee0ed557bc10e8f6"
       ],
-      "updated_at_utc": "2026-11-26T06:21:48Z"
+      "updated_at_utc": "2026-11-26T06:47:42Z"
     },
     {
       "role_id": "audio-sfx",
@@ -168,13 +168,13 @@
     {
       "role_id": "level1-verifier",
       "state": "done",
-      "title": "Grounded plot A/B verified",
-      "summary": "46 combined scoped checks; only two funded area rasters differ, post-debit raster unchanged. Marker's appearance stayed below 9.5.",
+      "title": "Grounded icon V2 verified and held",
+      "summary": "New castle and numeral both read. Wood still looks like a coin. Original purchase unchanged in all 23 checks, no native install.",
       "next": "Keep V3 one-panel control, avoid more rope steepening.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/0893a6f1f7b2ffc800db83ba4190fc56aa0f54ba"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/5abfe336d301f0c8dcf2e767ee0ed557bc10e8f6"
       ],
-      "updated_at_utc": "2026-11-26T06:40:49Z"
+      "updated_at_utc": "2026-11-26T06:47:42Z"
     },
     {
       "role_id": "builder-customer-counter",
