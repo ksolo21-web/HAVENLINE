@@ -1,0 +1,575 @@
+{
+  "model_sha256": "dfe7c0a3695ac680b513c9a19e69e3a2685770ed2367e1f3a71a8fdd3d62f07e",
+  "gait_motor_sha256": "22838c607dea79ffb8195abebdc5f4aa16f099823c5db78f89cb34b4d8b22fc0",
+  "gait_animation_blender_sha256": "ed260bca13a6e54b9efdb655b67f43ab87aa885e54cbf707f775981d19b0740f",
+  "scene": "res://field_opening.tscn",
+  "criteria": "Over 7 consecutive frames/0.1 seconds at 60 Hz, match the same >=3 actual skinned shoe vertices continuously <5mm above the ground. Measure their median horizontal displacement. Report maximum median over 35 frames after a change of input. Minimum vertical checks use the entire sampled sole surface from insertion through controls.",
+  "phase_offset_ticks": {
+    "0": {
+      "worst_median_displacement_mm_by_continuous_six_tick_window": {
+        "walk": 192.6,
+        "run": 1.2,
+        "reverse": 7.3,
+        "idle": 80.7
+      },
+      "actual_minimum_transition_sole_y_mm": {
+        "walk": -0.248,
+        "run": -0.793,
+        "reverse": 1.336,
+        "idle": -0.073
+      },
+      "actor_trajectory": {
+        "walk": {
+          "peak_planar_mps": 1.117,
+          "peak_accel_mps2": 11.98,
+          "peak_heading_backward_root_mps": 0.104,
+          "transition_distance_m": 0.579,
+          "settled_span_last_15_ticks_m": 0.279
+        },
+        "run": {
+          "peak_planar_mps": 2.8,
+          "peak_accel_mps2": 8.0,
+          "peak_heading_backward_root_mps": 1.384,
+          "transition_distance_m": 1.496,
+          "settled_span_last_15_ticks_m": 0.7
+        },
+        "reverse": {
+          "peak_planar_mps": 2.8,
+          "peak_accel_mps2": 16.6,
+          "peak_heading_backward_root_mps": 2.464,
+          "transition_distance_m": 1.548,
+          "settled_span_last_15_ticks_m": 0.7
+        },
+        "idle": {
+          "peak_planar_mps": 2.433,
+          "peak_accel_mps2": 11.0,
+          "peak_heading_backward_root_mps": 0.0,
+          "transition_distance_m": 0.29,
+          "settled_span_last_15_ticks_m": 0.0
+        }
+      },
+      "settled_sole_and_cadence": {
+        "failures": [],
+        "idle": {
+          "gait_mismatches": 0,
+          "lowest_sole_m": -1.12567640826455e-05,
+          "max_yaw_delta_per_tick_deg": 0.0,
+          "median_near_ground_point_speed_m_s": 0.0,
+          "near_ground_vertex_pairs": 9712,
+          "p95_near_ground_point_speed_m_s": 0.0,
+          "settled_steps_per_minute": 0.0,
+          "settled_world_speed_m_s": 0.0,
+          "transition_p95_near_ground_point_speed_m_s": 0.0545365700963885
+        },
+        "reverse": {
+          "gait_mismatches": 0,
+          "lowest_sole_m": 0.00118287745863199,
+          "max_yaw_delta_per_tick_deg": 6.1955862763142,
+          "median_near_ground_point_speed_m_s": 0.0208893581293523,
+          "near_ground_vertex_pairs": 931,
+          "p95_near_ground_point_speed_m_s": 0.0516543025150895,
+          "settled_steps_per_minute": 172.898290296144,
+          "settled_world_speed_m_s": 2.79999995231628,
+          "transition_p95_near_ground_point_speed_m_s": 0.257653249427676
+        },
+        "run": {
+          "gait_mismatches": 0,
+          "lowest_sole_m": 0.00117811094969511,
+          "max_yaw_delta_per_tick_deg": 0.0,
+          "median_near_ground_point_speed_m_s": 0.0210692704422399,
+          "near_ground_vertex_pairs": 914,
+          "p95_near_ground_point_speed_m_s": 0.0492810364812613,
+          "settled_steps_per_minute": 172.898352087104,
+          "settled_world_speed_m_s": 2.79999995231628,
+          "transition_p95_near_ground_point_speed_m_s": 1.93468987941742
+        },
+        "tested_sole_vertices": 174,
+        "walk": {
+          "gait_mismatches": 0,
+          "lowest_sole_m": 0.0010699201375246,
+          "max_yaw_delta_per_tick_deg": 10.3132407221662,
+          "median_near_ground_point_speed_m_s": 0.00721323973266408,
+          "near_ground_vertex_pairs": 2985,
+          "p95_near_ground_point_speed_m_s": 0.0722408504225314,
+          "settled_steps_per_minute": 128.238845773849,
+          "settled_world_speed_m_s": 1.11709845066071,
+          "transition_p95_near_ground_point_speed_m_s": 3.71752671897411
+        }
+      }
+    },
+    "9": {
+      "worst_median_displacement_mm_by_continuous_six_tick_window": {
+        "walk": 192.6,
+        "run": 1.2,
+        "reverse": 85.0,
+        "idle": 122.2
+      },
+      "actual_minimum_transition_sole_y_mm": {
+        "walk": -0.248,
+        "run": -0.793,
+        "reverse": 1.21,
+        "idle": 0.001
+      },
+      "actor_trajectory": {
+        "walk": {
+          "peak_planar_mps": 1.117,
+          "peak_accel_mps2": 11.98,
+          "peak_heading_backward_root_mps": 0.104,
+          "transition_distance_m": 0.579,
+          "settled_span_last_15_ticks_m": 0.279
+        },
+        "run": {
+          "peak_planar_mps": 2.8,
+          "peak_accel_mps2": 8.0,
+          "peak_heading_backward_root_mps": 1.384,
+          "transition_distance_m": 1.496,
+          "settled_span_last_15_ticks_m": 0.7
+        },
+        "reverse": {
+          "peak_planar_mps": 2.8,
+          "peak_accel_mps2": 16.6,
+          "peak_heading_backward_root_mps": 2.464,
+          "transition_distance_m": 1.548,
+          "settled_span_last_15_ticks_m": 0.7
+        },
+        "idle": {
+          "peak_planar_mps": 2.433,
+          "peak_accel_mps2": 11.0,
+          "peak_heading_backward_root_mps": 0.0,
+          "transition_distance_m": 0.29,
+          "settled_span_last_15_ticks_m": 0.0
+        }
+      },
+      "settled_sole_and_cadence": {
+        "failures": [],
+        "idle": {
+          "gait_mismatches": 0,
+          "lowest_sole_m": 6.76055833537248e-06,
+          "max_yaw_delta_per_tick_deg": 0.0,
+          "median_near_ground_point_speed_m_s": 0.0,
+          "near_ground_vertex_pairs": 9713,
+          "p95_near_ground_point_speed_m_s": 0.0,
+          "settled_steps_per_minute": 0.0,
+          "settled_world_speed_m_s": 0.0,
+          "transition_p95_near_ground_point_speed_m_s": 2.3373656719923
+        },
+        "reverse": {
+          "gait_mismatches": 0,
+          "lowest_sole_m": 0.00119460094720125,
+          "max_yaw_delta_per_tick_deg": 6.1955862763142,
+          "median_near_ground_point_speed_m_s": 0.0204986304743215,
+          "near_ground_vertex_pairs": 803,
+          "p95_near_ground_point_speed_m_s": 0.0518079043831676,
+          "settled_steps_per_minute": 172.898316095462,
+          "settled_world_speed_m_s": 2.79999995231628,
+          "transition_p95_near_ground_point_speed_m_s": 5.40195152163506
+        },
+        "run": {
+          "gait_mismatches": 0,
+          "lowest_sole_m": 0.00117811094969511,
+          "max_yaw_delta_per_tick_deg": 0.0,
+          "median_near_ground_point_speed_m_s": 0.0210692704422399,
+          "near_ground_vertex_pairs": 920,
+          "p95_near_ground_point_speed_m_s": 0.0492810364812613,
+          "settled_steps_per_minute": 184.868227666398,
+          "settled_world_speed_m_s": 2.79999995231628,
+          "transition_p95_near_ground_point_speed_m_s": 1.93468987941742
+        },
+        "tested_sole_vertices": 174,
+        "walk": {
+          "gait_mismatches": 0,
+          "lowest_sole_m": 0.0010699201375246,
+          "max_yaw_delta_per_tick_deg": 10.3132407221662,
+          "median_near_ground_point_speed_m_s": 0.00721323973266408,
+          "near_ground_vertex_pairs": 2985,
+          "p95_near_ground_point_speed_m_s": 0.0722408504225314,
+          "settled_steps_per_minute": 128.238845773849,
+          "settled_world_speed_m_s": 1.11709845066071,
+          "transition_p95_near_ground_point_speed_m_s": 3.71752671897411
+        }
+      }
+    },
+    "18": {
+      "worst_median_displacement_mm_by_continuous_six_tick_window": {
+        "walk": 192.6,
+        "run": 1.2,
+        "reverse": 0.2,
+        "idle": 1.9
+      },
+      "actual_minimum_transition_sole_y_mm": {
+        "walk": -0.248,
+        "run": -0.793,
+        "reverse": 1.511,
+        "idle": -0.084
+      },
+      "actor_trajectory": {
+        "walk": {
+          "peak_planar_mps": 1.117,
+          "peak_accel_mps2": 11.98,
+          "peak_heading_backward_root_mps": 0.104,
+          "transition_distance_m": 0.579,
+          "settled_span_last_15_ticks_m": 0.279
+        },
+        "run": {
+          "peak_planar_mps": 2.8,
+          "peak_accel_mps2": 8.0,
+          "peak_heading_backward_root_mps": 1.384,
+          "transition_distance_m": 1.496,
+          "settled_span_last_15_ticks_m": 0.7
+        },
+        "reverse": {
+          "peak_planar_mps": 2.8,
+          "peak_accel_mps2": 16.6,
+          "peak_heading_backward_root_mps": 2.464,
+          "transition_distance_m": 1.548,
+          "settled_span_last_15_ticks_m": 0.7
+        },
+        "idle": {
+          "peak_planar_mps": 2.433,
+          "peak_accel_mps2": 11.0,
+          "peak_heading_backward_root_mps": 0.0,
+          "transition_distance_m": 0.29,
+          "settled_span_last_15_ticks_m": 0.0
+        }
+      },
+      "settled_sole_and_cadence": {
+        "failures": [],
+        "idle": {
+          "gait_mismatches": 0,
+          "lowest_sole_m": -3.27247471432202e-06,
+          "max_yaw_delta_per_tick_deg": 0.0,
+          "median_near_ground_point_speed_m_s": 0.0,
+          "near_ground_vertex_pairs": 9750,
+          "p95_near_ground_point_speed_m_s": 0.0,
+          "settled_steps_per_minute": 0.0,
+          "settled_world_speed_m_s": 0.0,
+          "transition_p95_near_ground_point_speed_m_s": 0.0163670838810503
+        },
+        "reverse": {
+          "gait_mismatches": 0,
+          "lowest_sole_m": 0.00121320970356464,
+          "max_yaw_delta_per_tick_deg": 6.1955862763142,
+          "median_near_ground_point_speed_m_s": 0.0204250600654632,
+          "near_ground_vertex_pairs": 818,
+          "p95_near_ground_point_speed_m_s": 0.051798663334921,
+          "settled_steps_per_minute": 172.89834189478,
+          "settled_world_speed_m_s": 2.79999995231628,
+          "transition_p95_near_ground_point_speed_m_s": 0.0159233598969877
+        },
+        "run": {
+          "gait_mismatches": 0,
+          "lowest_sole_m": 0.00117811094969511,
+          "max_yaw_delta_per_tick_deg": 0.0,
+          "median_near_ground_point_speed_m_s": 0.0208750058664009,
+          "near_ground_vertex_pairs": 1063,
+          "p95_near_ground_point_speed_m_s": 0.0489256263244897,
+          "settled_steps_per_minute": 196.83809464592,
+          "settled_world_speed_m_s": 2.79999995231628,
+          "transition_p95_near_ground_point_speed_m_s": 1.93468987941742
+        },
+        "tested_sole_vertices": 174,
+        "walk": {
+          "gait_mismatches": 0,
+          "lowest_sole_m": 0.0010699201375246,
+          "max_yaw_delta_per_tick_deg": 10.3132407221662,
+          "median_near_ground_point_speed_m_s": 0.00721323973266408,
+          "near_ground_vertex_pairs": 2985,
+          "p95_near_ground_point_speed_m_s": 0.0722408504225314,
+          "settled_steps_per_minute": 128.238845773849,
+          "settled_world_speed_m_s": 1.11709845066071,
+          "transition_p95_near_ground_point_speed_m_s": 3.71752671897411
+        }
+      }
+    },
+    "27": {
+      "worst_median_displacement_mm_by_continuous_six_tick_window": {
+        "walk": 192.6,
+        "run": 1.2,
+        "reverse": 0.2,
+        "idle": 200.6
+      },
+      "actual_minimum_transition_sole_y_mm": {
+        "walk": -0.248,
+        "run": -0.793,
+        "reverse": 1.287,
+        "idle": -0.063
+      },
+      "actor_trajectory": {
+        "walk": {
+          "peak_planar_mps": 1.117,
+          "peak_accel_mps2": 11.98,
+          "peak_heading_backward_root_mps": 0.104,
+          "transition_distance_m": 0.579,
+          "settled_span_last_15_ticks_m": 0.279
+        },
+        "run": {
+          "peak_planar_mps": 2.8,
+          "peak_accel_mps2": 8.0,
+          "peak_heading_backward_root_mps": 1.384,
+          "transition_distance_m": 1.496,
+          "settled_span_last_15_ticks_m": 0.7
+        },
+        "reverse": {
+          "peak_planar_mps": 2.8,
+          "peak_accel_mps2": 16.6,
+          "peak_heading_backward_root_mps": 2.464,
+          "transition_distance_m": 1.548,
+          "settled_span_last_15_ticks_m": 0.7
+        },
+        "idle": {
+          "peak_planar_mps": 2.433,
+          "peak_accel_mps2": 11.0,
+          "peak_heading_backward_root_mps": 0.0,
+          "transition_distance_m": 0.29,
+          "settled_span_last_15_ticks_m": 0.0
+        }
+      },
+      "settled_sole_and_cadence": {
+        "failures": [],
+        "idle": {
+          "gait_mismatches": 0,
+          "lowest_sole_m": -3.16718728754495e-06,
+          "max_yaw_delta_per_tick_deg": 0.0,
+          "median_near_ground_point_speed_m_s": 0.0,
+          "near_ground_vertex_pairs": 9713,
+          "p95_near_ground_point_speed_m_s": 0.0,
+          "settled_steps_per_minute": 0.0,
+          "settled_world_speed_m_s": 0.0,
+          "transition_p95_near_ground_point_speed_m_s": 0.0112458580406383
+        },
+        "reverse": {
+          "gait_mismatches": 0,
+          "lowest_sole_m": 0.0012105917558074,
+          "max_yaw_delta_per_tick_deg": 6.1955862763142,
+          "median_near_ground_point_speed_m_s": 0.020624152966775,
+          "near_ground_vertex_pairs": 816,
+          "p95_near_ground_point_speed_m_s": 0.0510993471834809,
+          "settled_steps_per_minute": 172.898353361144,
+          "settled_world_speed_m_s": 2.79999995231628,
+          "transition_p95_near_ground_point_speed_m_s": 1.18882946670055
+        },
+        "run": {
+          "gait_mismatches": 0,
+          "lowest_sole_m": 0.00117811094969511,
+          "max_yaw_delta_per_tick_deg": 0.0,
+          "median_near_ground_point_speed_m_s": 0.0209601904498413,
+          "near_ground_vertex_pairs": 1093,
+          "p95_near_ground_point_speed_m_s": 0.0488867203239352,
+          "settled_steps_per_minute": 208.807961625442,
+          "settled_world_speed_m_s": 2.79999995231628,
+          "transition_p95_near_ground_point_speed_m_s": 1.93468987941742
+        },
+        "tested_sole_vertices": 174,
+        "walk": {
+          "gait_mismatches": 0,
+          "lowest_sole_m": 0.0010699201375246,
+          "max_yaw_delta_per_tick_deg": 10.3132407221662,
+          "median_near_ground_point_speed_m_s": 0.00721323973266408,
+          "near_ground_vertex_pairs": 2985,
+          "p95_near_ground_point_speed_m_s": 0.0722408504225314,
+          "settled_steps_per_minute": 128.238845773849,
+          "settled_world_speed_m_s": 1.11709845066071,
+          "transition_p95_near_ground_point_speed_m_s": 3.71752671897411
+        }
+      }
+    },
+    "36": {
+      "worst_median_displacement_mm_by_continuous_six_tick_window": {
+        "walk": 192.6,
+        "run": 1.2,
+        "reverse": 74.3,
+        "idle": 0.9
+      },
+      "actual_minimum_transition_sole_y_mm": {
+        "walk": -0.248,
+        "run": -0.793,
+        "reverse": 1.507,
+        "idle": -0.146
+      },
+      "actor_trajectory": {
+        "walk": {
+          "peak_planar_mps": 1.117,
+          "peak_accel_mps2": 11.98,
+          "peak_heading_backward_root_mps": 0.104,
+          "transition_distance_m": 0.579,
+          "settled_span_last_15_ticks_m": 0.279
+        },
+        "run": {
+          "peak_planar_mps": 2.8,
+          "peak_accel_mps2": 8.0,
+          "peak_heading_backward_root_mps": 1.384,
+          "transition_distance_m": 1.496,
+          "settled_span_last_15_ticks_m": 0.7
+        },
+        "reverse": {
+          "peak_planar_mps": 2.8,
+          "peak_accel_mps2": 16.6,
+          "peak_heading_backward_root_mps": 2.464,
+          "transition_distance_m": 1.548,
+          "settled_span_last_15_ticks_m": 0.7
+        },
+        "idle": {
+          "peak_planar_mps": 2.433,
+          "peak_accel_mps2": 11.0,
+          "peak_heading_backward_root_mps": 0.0,
+          "transition_distance_m": 0.29,
+          "settled_span_last_15_ticks_m": 0.0
+        }
+      },
+      "settled_sole_and_cadence": {
+        "failures": [],
+        "idle": {
+          "gait_mismatches": 0,
+          "lowest_sole_m": -1.34885476654745e-05,
+          "max_yaw_delta_per_tick_deg": 0.0,
+          "median_near_ground_point_speed_m_s": 0.0,
+          "near_ground_vertex_pairs": 9750,
+          "p95_near_ground_point_speed_m_s": 0.0,
+          "settled_steps_per_minute": 0.0,
+          "settled_world_speed_m_s": 0.0,
+          "transition_p95_near_ground_point_speed_m_s": 0.0529875524807721
+        },
+        "reverse": {
+          "gait_mismatches": 0,
+          "lowest_sole_m": 0.00119012594223022,
+          "max_yaw_delta_per_tick_deg": 6.1955862763142,
+          "median_near_ground_point_speed_m_s": 0.020477672223933,
+          "near_ground_vertex_pairs": 795,
+          "p95_near_ground_point_speed_m_s": 0.051216131541878,
+          "settled_steps_per_minute": 172.898353361144,
+          "settled_world_speed_m_s": 2.79999995231628,
+          "transition_p95_near_ground_point_speed_m_s": 0.267860172316432
+        },
+        "run": {
+          "gait_mismatches": 0,
+          "lowest_sole_m": 0.00117811094969511,
+          "max_yaw_delta_per_tick_deg": 0.0,
+          "median_near_ground_point_speed_m_s": 0.020750924013555,
+          "near_ground_vertex_pairs": 1165,
+          "p95_near_ground_point_speed_m_s": 0.0487316690851003,
+          "settled_steps_per_minute": 220.777828604964,
+          "settled_world_speed_m_s": 2.79999995231628,
+          "transition_p95_near_ground_point_speed_m_s": 1.93468987941742
+        },
+        "tested_sole_vertices": 174,
+        "walk": {
+          "gait_mismatches": 0,
+          "lowest_sole_m": 0.0010699201375246,
+          "max_yaw_delta_per_tick_deg": 10.3132407221662,
+          "median_near_ground_point_speed_m_s": 0.00721323973266408,
+          "near_ground_vertex_pairs": 2985,
+          "p95_near_ground_point_speed_m_s": 0.0722408504225314,
+          "settled_steps_per_minute": 128.238845773849,
+          "settled_world_speed_m_s": 1.11709845066071,
+          "transition_p95_near_ground_point_speed_m_s": 3.71752671897411
+        }
+      }
+    }
+  },
+  "post_IK_phase_9_lower_limb": {
+    "walk": {
+      "L": {
+        "lateral_knee_from_hip_ankle_line_mm": [
+          -0.66,
+          8.98
+        ],
+        "toe_heading_deg": [
+          -0.0,
+          0.4
+        ]
+      },
+      "R": {
+        "lateral_knee_from_hip_ankle_line_mm": [
+          -0.66,
+          8.98
+        ],
+        "toe_heading_deg": [
+          -0.1,
+          0.1
+        ]
+      },
+      "ankle_separation_m": [
+        0.324,
+        0.333
+      ]
+    },
+    "run": {
+      "L": {
+        "lateral_knee_from_hip_ankle_line_mm": [
+          2.62,
+          11.5
+        ],
+        "toe_heading_deg": [
+          -0.2,
+          0.2
+        ]
+      },
+      "R": {
+        "lateral_knee_from_hip_ankle_line_mm": [
+          2.62,
+          11.52
+        ],
+        "toe_heading_deg": [
+          -0.5,
+          0.2
+        ]
+      },
+      "ankle_separation_m": [
+        0.326,
+        0.352
+      ]
+    },
+    "reverse": {
+      "L": {
+        "lateral_knee_from_hip_ankle_line_mm": [
+          2.63,
+          96.38
+        ],
+        "toe_heading_deg": [
+          -51.5,
+          0.3
+        ]
+      },
+      "R": {
+        "lateral_knee_from_hip_ankle_line_mm": [
+          -17.71,
+          11.52
+        ],
+        "toe_heading_deg": [
+          -28.2,
+          0.1
+        ]
+      },
+      "ankle_separation_m": [
+        0.235,
+        0.405
+      ]
+    },
+    "idle": {
+      "L": {
+        "lateral_knee_from_hip_ankle_line_mm": [
+          -5.3,
+          5.23
+        ],
+        "toe_heading_deg": [
+          -0.0,
+          0.0
+        ]
+      },
+      "R": {
+        "lateral_knee_from_hip_ankle_line_mm": [
+          -3.33,
+          9.63
+        ],
+        "toe_heading_deg": [
+          -0.2,
+          0.4
+        ]
+      },
+      "ankle_separation_m": [
+        0.324,
+        0.338
+      ]
+    }
+  }
+}

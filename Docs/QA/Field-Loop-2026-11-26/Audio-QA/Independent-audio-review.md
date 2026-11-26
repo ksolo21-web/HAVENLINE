@@ -12,3 +12,6 @@ Locked recording A is documented as having no audio stream. Recording B had an A
 In the 3.96-second native portrait purchase capture, the first two wood-payment samples matched their event frames within 5.7 and 9.7 ms. The completed purchase cue matched at 2.555 seconds, 13.7 ms after its event frame, and the reveal matched at 2.886 seconds, 11.1 ms after its event frame. The final wood debit shares its frame with the purchase and two construction cues. The audio stream confirms the purchase there, while the individual final wood, build and rise components fall below the independent waveform threshold.
 
 [Earned portrait purchase with game audio](../Gameplay-Evidence/Diagnostic-Portrait-Hearth-Purchase.mp4) · [Individual purchase cue correlations](Independent-purchase-waveforms.json)
+
+
+The exact e38ed1bb opening excerpt supplies 141 continuous 720p30 frames. In its recorded game audio, ten cue instances match their expected samples, including four wood impacts and footsteps in snow. The aligned starts fall about 3–43 ms after the corresponding frame. Eight other samples did not clear the individual match threshold. [Native opening excerpt](../Gameplay-Evidence/E38-checkpoint/Opening-gameplay-excerpt.mp4) · [Excerpt correlation results](Independent-e38-opening-waveforms.json)

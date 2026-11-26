@@ -1,0 +1,4474 @@
+{
+  "candidate": {
+    "path": "Character-1-Rigged.glb",
+    "sha256": "dfe7c0a3695ac680b513c9a19e69e3a2685770ed2367e1f3a71a8fdd3d62f07e"
+  },
+  "parts": [
+    {
+      "id": "Root",
+      "joints": [
+        "Root"
+      ]
+    },
+    {
+      "id": "Pelvis",
+      "joints": [
+        "Pelvis"
+      ]
+    },
+    {
+      "id": "Spine",
+      "joints": [
+        "Spine"
+      ]
+    },
+    {
+      "id": "Chest",
+      "joints": [
+        "Chest"
+      ]
+    },
+    {
+      "id": "Neck",
+      "joints": [
+        "Neck"
+      ]
+    },
+    {
+      "id": "Head",
+      "joints": [
+        "Head"
+      ]
+    },
+    {
+      "id": "Clavicle.L",
+      "joints": [
+        "Clavicle.L"
+      ]
+    },
+    {
+      "id": "UpperArm.L",
+      "joints": [
+        "UpperArm.L"
+      ]
+    },
+    {
+      "id": "Forearm.L",
+      "joints": [
+        "Forearm.L"
+      ]
+    },
+    {
+      "id": "Hand.L",
+      "joints": [
+        "Hand.L"
+      ]
+    },
+    {
+      "id": "mitten and internal digit chain.L",
+      "joints": [
+        "Index1.L",
+        "Index2.L",
+        "Index3.L",
+        "Middle1.L",
+        "Middle2.L",
+        "Middle3.L",
+        "Ring1.L",
+        "Ring2.L",
+        "Ring3.L",
+        "Little1.L",
+        "Little2.L",
+        "Little3.L",
+        "Thumb1.L",
+        "Thumb2.L"
+      ]
+    },
+    {
+      "id": "Clavicle.R",
+      "joints": [
+        "Clavicle.R"
+      ]
+    },
+    {
+      "id": "UpperArm.R",
+      "joints": [
+        "UpperArm.R"
+      ]
+    },
+    {
+      "id": "Forearm.R",
+      "joints": [
+        "Forearm.R"
+      ]
+    },
+    {
+      "id": "Hand.R",
+      "joints": [
+        "Hand.R"
+      ]
+    },
+    {
+      "id": "mitten and internal digit chain.R",
+      "joints": [
+        "Index1.R",
+        "Index2.R",
+        "Index3.R",
+        "Middle1.R",
+        "Middle2.R",
+        "Middle3.R",
+        "Ring1.R",
+        "Ring2.R",
+        "Ring3.R",
+        "Little1.R",
+        "Little2.R",
+        "Little3.R",
+        "Thumb1.R",
+        "Thumb2.R"
+      ]
+    },
+    {
+      "id": "Thigh.L",
+      "joints": [
+        "Thigh.L"
+      ]
+    },
+    {
+      "id": "Shin.L",
+      "joints": [
+        "Shin.L"
+      ]
+    },
+    {
+      "id": "Foot.L",
+      "joints": [
+        "Foot.L"
+      ]
+    },
+    {
+      "id": "Toe.L",
+      "joints": [
+        "Toe.L"
+      ]
+    },
+    {
+      "id": "Thigh.R",
+      "joints": [
+        "Thigh.R"
+      ]
+    },
+    {
+      "id": "Shin.R",
+      "joints": [
+        "Shin.R"
+      ]
+    },
+    {
+      "id": "Foot.R",
+      "joints": [
+        "Foot.R"
+      ]
+    },
+    {
+      "id": "Toe.R",
+      "joints": [
+        "Toe.R"
+      ]
+    },
+    {
+      "id": "face, glasses and hair",
+      "joints": []
+    },
+    {
+      "id": "parka body, belt, pouch and rear trim",
+      "joints": []
+    },
+    {
+      "id": "coat fur collar",
+      "joints": []
+    },
+    {
+      "id": "left fur cuff",
+      "joints": []
+    },
+    {
+      "id": "right fur cuff",
+      "joints": []
+    },
+    {
+      "id": "left boot upper, sole and forefoot",
+      "joints": []
+    },
+    {
+      "id": "right boot upper, sole and forefoot",
+      "joints": []
+    },
+    {
+      "id": "trouser center seam",
+      "joints": []
+    }
+  ],
+  "clips": [
+    "Idle",
+    "Walk",
+    "Run"
+  ],
+  "checks": [
+    {
+      "part": "*",
+      "clip": "*",
+      "check": "preservation",
+      "status": "PASS",
+      "evidence": [
+        "preservation.json"
+      ]
+    },
+    {
+      "part": "*",
+      "clip": "*",
+      "check": "skeleton_integrity",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json"
+      ]
+    },
+    {
+      "part": "*",
+      "clip": "*",
+      "check": "animation_integrity",
+      "status": "PASS",
+      "evidence": [
+        "seam-and-alignment.json"
+      ]
+    },
+    {
+      "part": "*",
+      "clip": "*",
+      "check": "export_integrity",
+      "status": "PASS",
+      "evidence": [
+        "audit.json"
+      ]
+    },
+    {
+      "part": "Root",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Root",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Root",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Root",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Pelvis",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Pelvis",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "FAIL",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Pelvis",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Pelvis",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Spine",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Spine",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Spine",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Spine",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Chest",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Chest",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Chest",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Chest",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Neck",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Neck",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Neck",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Neck",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Head",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Head",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Head",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Head",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Clavicle.L",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Clavicle.L",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Clavicle.L",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Clavicle.L",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "UpperArm.L",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "UpperArm.L",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "UpperArm.L",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "FAIL",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "UpperArm.L",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Forearm.L",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Forearm.L",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Forearm.L",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Forearm.L",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Hand.L",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Hand.L",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Hand.L",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Hand.L",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "mitten and internal digit chain.L",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "mitten and internal digit chain.L",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "mitten and internal digit chain.L",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "mitten and internal digit chain.L",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Clavicle.R",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Clavicle.R",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Clavicle.R",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Clavicle.R",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "UpperArm.R",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "UpperArm.R",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "UpperArm.R",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "UpperArm.R",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Forearm.R",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Forearm.R",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Forearm.R",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Forearm.R",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Hand.R",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Hand.R",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Hand.R",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Hand.R",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "mitten and internal digit chain.R",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "mitten and internal digit chain.R",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "mitten and internal digit chain.R",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "mitten and internal digit chain.R",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Thigh.L",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Thigh.L",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Thigh.L",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Thigh.L",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Shin.L",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Shin.L",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Shin.L",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Shin.L",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Foot.L",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Foot.L",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Foot.L",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Foot.L",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Toe.L",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Toe.L",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Toe.L",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Toe.L",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Thigh.R",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Thigh.R",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Thigh.R",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Thigh.R",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Shin.R",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Shin.R",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Shin.R",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Shin.R",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Foot.R",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Foot.R",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Foot.R",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Foot.R",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Toe.R",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "Toe.R",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Toe.R",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Toe.R",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "face, glasses and hair",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "face, glasses and hair",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "face, glasses and hair",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "face, glasses and hair",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "parka body, belt, pouch and rear trim",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "parka body, belt, pouch and rear trim",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "UNTESTED",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "parka body, belt, pouch and rear trim",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "parka body, belt, pouch and rear trim",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "coat fur collar",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "coat fur collar",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "coat fur collar",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "coat fur collar",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "left fur cuff",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "left fur cuff",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "left fur cuff",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "left fur cuff",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "right fur cuff",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "right fur cuff",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "right fur cuff",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "right fur cuff",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "left boot upper, sole and forefoot",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "left boot upper, sole and forefoot",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "left boot upper, sole and forefoot",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "left boot upper, sole and forefoot",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "right boot upper, sole and forefoot",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "right boot upper, sole and forefoot",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "right boot upper, sole and forefoot",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "right boot upper, sole and forefoot",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "trouser center seam",
+      "clip": "Idle",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "trouser center seam",
+      "clip": "Idle",
+      "check": "clearance",
+      "status": "UNTESTED",
+      "evidence": [
+        "part-sweep.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "trouser center seam",
+      "clip": "Idle",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Idle.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "trouser center seam",
+      "clip": "Idle",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Idle.jpg"
+      ]
+    },
+    {
+      "part": "*",
+      "clip": "Idle",
+      "check": "loop_continuity",
+      "status": "PASS",
+      "evidence": [
+        "seam-and-alignment.json",
+        "joint-checks.json"
+      ]
+    },
+    {
+      "part": "*",
+      "clip": "Idle",
+      "check": "contact",
+      "status": "PASS",
+      "evidence": [
+        "toe.json",
+        "audit.json"
+      ]
+    },
+    {
+      "part": "*",
+      "clip": "Idle",
+      "check": "motion_intent",
+      "status": "PASS",
+      "evidence": [
+        "Idle.jpg",
+        "rhythm.json"
+      ]
+    },
+    {
+      "part": "Root",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Root",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Root",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Root",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Pelvis",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Pelvis",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "FAIL",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Pelvis",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "FAIL",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Pelvis",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Spine",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Spine",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "FAIL",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Spine",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Spine",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Chest",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Chest",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Chest",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Chest",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Neck",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Neck",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Neck",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Neck",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Head",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Head",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "FAIL",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Head",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Head",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Clavicle.L",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Clavicle.L",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Clavicle.L",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Clavicle.L",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "UpperArm.L",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "UpperArm.L",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "FAIL",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "UpperArm.L",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "FAIL",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "UpperArm.L",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Forearm.L",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Forearm.L",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "FAIL",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Forearm.L",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Forearm.L",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Hand.L",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Hand.L",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Hand.L",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Hand.L",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "mitten and internal digit chain.L",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "mitten and internal digit chain.L",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "mitten and internal digit chain.L",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "mitten and internal digit chain.L",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Clavicle.R",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Clavicle.R",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Clavicle.R",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Clavicle.R",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "UpperArm.R",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "UpperArm.R",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "UpperArm.R",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "UpperArm.R",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Forearm.R",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Forearm.R",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "FAIL",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Forearm.R",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Forearm.R",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Hand.R",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Hand.R",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Hand.R",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Hand.R",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "mitten and internal digit chain.R",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "mitten and internal digit chain.R",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "mitten and internal digit chain.R",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "mitten and internal digit chain.R",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Thigh.L",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Thigh.L",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Thigh.L",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "FAIL",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Thigh.L",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Shin.L",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Shin.L",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "FAIL",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Shin.L",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Shin.L",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Foot.L",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Foot.L",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "FAIL",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Foot.L",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Foot.L",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Toe.L",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Toe.L",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Toe.L",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Toe.L",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Thigh.R",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Thigh.R",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "FAIL",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Thigh.R",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "FAIL",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Thigh.R",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Shin.R",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Shin.R",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "FAIL",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Shin.R",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Shin.R",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Foot.R",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Foot.R",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "FAIL",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Foot.R",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Foot.R",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Toe.R",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "Toe.R",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Toe.R",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Toe.R",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "face, glasses and hair",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "face, glasses and hair",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "UNTESTED",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "face, glasses and hair",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "face, glasses and hair",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "parka body, belt, pouch and rear trim",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "parka body, belt, pouch and rear trim",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "FAIL",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "parka body, belt, pouch and rear trim",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "UNTESTED",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "parka body, belt, pouch and rear trim",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "coat fur collar",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "coat fur collar",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "UNTESTED",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "coat fur collar",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "coat fur collar",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "left fur cuff",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "left fur cuff",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "UNTESTED",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "left fur cuff",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "left fur cuff",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "right fur cuff",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "right fur cuff",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "UNTESTED",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "right fur cuff",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "right fur cuff",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "left boot upper, sole and forefoot",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "left boot upper, sole and forefoot",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "UNTESTED",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "left boot upper, sole and forefoot",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "left boot upper, sole and forefoot",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "right boot upper, sole and forefoot",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "right boot upper, sole and forefoot",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "UNTESTED",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "right boot upper, sole and forefoot",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "right boot upper, sole and forefoot",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "trouser center seam",
+      "clip": "Walk",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "trouser center seam",
+      "clip": "Walk",
+      "check": "clearance",
+      "status": "UNTESTED",
+      "evidence": [
+        "part-sweep.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "trouser center seam",
+      "clip": "Walk",
+      "check": "deformation",
+      "status": "UNTESTED",
+      "evidence": [
+        "deformation.json",
+        "Walk.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "trouser center seam",
+      "clip": "Walk",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Walk.jpg"
+      ]
+    },
+    {
+      "part": "*",
+      "clip": "Walk",
+      "check": "loop_continuity",
+      "status": "PASS",
+      "evidence": [
+        "seam-and-alignment.json",
+        "joint-checks.json"
+      ]
+    },
+    {
+      "part": "*",
+      "clip": "Walk",
+      "check": "contact",
+      "status": "PASS",
+      "evidence": [
+        "toe.json",
+        "audit.json"
+      ]
+    },
+    {
+      "part": "*",
+      "clip": "Walk",
+      "check": "motion_intent",
+      "status": "PASS",
+      "evidence": [
+        "Walk.jpg",
+        "rhythm.json"
+      ]
+    },
+    {
+      "part": "Root",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Root",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Root",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Root",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Pelvis",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Pelvis",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "FAIL",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Pelvis",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "FAIL",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Pelvis",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Spine",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Spine",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "FAIL",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Spine",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Spine",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Chest",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Chest",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Chest",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Chest",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Neck",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Neck",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Neck",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Neck",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Head",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Head",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "FAIL",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Head",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Head",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Clavicle.L",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Clavicle.L",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Clavicle.L",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Clavicle.L",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "UpperArm.L",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "UpperArm.L",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "UpperArm.L",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "FAIL",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "UpperArm.L",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Forearm.L",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Forearm.L",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Forearm.L",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Forearm.L",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Hand.L",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Hand.L",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Hand.L",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Hand.L",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "mitten and internal digit chain.L",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "mitten and internal digit chain.L",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "mitten and internal digit chain.L",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "mitten and internal digit chain.L",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Clavicle.R",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Clavicle.R",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Clavicle.R",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Clavicle.R",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "UpperArm.R",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "UpperArm.R",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "UpperArm.R",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "UpperArm.R",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Forearm.R",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Forearm.R",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "FAIL",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Forearm.R",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Forearm.R",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Hand.R",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Hand.R",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Hand.R",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Hand.R",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "mitten and internal digit chain.R",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "mitten and internal digit chain.R",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "mitten and internal digit chain.R",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "mitten and internal digit chain.R",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Thigh.L",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Thigh.L",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "FAIL",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Thigh.L",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "FAIL",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Thigh.L",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Shin.L",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Shin.L",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "FAIL",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Shin.L",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Shin.L",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Foot.L",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Foot.L",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "FAIL",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Foot.L",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Foot.L",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Toe.L",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Toe.L",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Toe.L",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Toe.L",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Thigh.R",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Thigh.R",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "FAIL",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Thigh.R",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "FAIL",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Thigh.R",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Shin.R",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Shin.R",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "FAIL",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Shin.R",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Shin.R",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Foot.R",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Foot.R",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "FAIL",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Foot.R",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Foot.R",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Toe.R",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "Toe.R",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Toe.R",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "Toe.R",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "face, glasses and hair",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "face, glasses and hair",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "UNTESTED",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "face, glasses and hair",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "face, glasses and hair",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "parka body, belt, pouch and rear trim",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "parka body, belt, pouch and rear trim",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "UNTESTED",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "parka body, belt, pouch and rear trim",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "UNTESTED",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "parka body, belt, pouch and rear trim",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "coat fur collar",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "coat fur collar",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "UNTESTED",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "coat fur collar",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "coat fur collar",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "left fur cuff",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "left fur cuff",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "PASS",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "left fur cuff",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "left fur cuff",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "right fur cuff",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "right fur cuff",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "UNTESTED",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "right fur cuff",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "right fur cuff",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "left boot upper, sole and forefoot",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "left boot upper, sole and forefoot",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "FAIL",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "left boot upper, sole and forefoot",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "left boot upper, sole and forefoot",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "right boot upper, sole and forefoot",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "right boot upper, sole and forefoot",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "FAIL",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "right boot upper, sole and forefoot",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "PASS",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "right boot upper, sole and forefoot",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "trouser center seam",
+      "clip": "Run",
+      "check": "transforms",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "trouser center seam",
+      "clip": "Run",
+      "check": "clearance",
+      "status": "UNTESTED",
+      "evidence": [
+        "part-sweep.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "trouser center seam",
+      "clip": "Run",
+      "check": "deformation",
+      "status": "UNTESTED",
+      "evidence": [
+        "deformation.json",
+        "Run.jpg",
+        "surface-details.jpg"
+      ]
+    },
+    {
+      "part": "trouser center seam",
+      "clip": "Run",
+      "check": "temporal",
+      "status": "PASS",
+      "evidence": [
+        "joint-checks.json",
+        "seam-and-alignment.json",
+        "Run.jpg"
+      ]
+    },
+    {
+      "part": "*",
+      "clip": "Run",
+      "check": "loop_continuity",
+      "status": "PASS",
+      "evidence": [
+        "seam-and-alignment.json",
+        "joint-checks.json"
+      ]
+    },
+    {
+      "part": "*",
+      "clip": "Run",
+      "check": "contact",
+      "status": "PASS",
+      "evidence": [
+        "toe.json",
+        "audit.json"
+      ]
+    },
+    {
+      "part": "*",
+      "clip": "Run",
+      "check": "motion_intent",
+      "status": "PASS",
+      "evidence": [
+        "Run.jpg",
+        "rhythm.json"
+      ]
+    }
+  ],
+  "score": 8.7,
+  "status": "FAIL",
+  "note": "Local surface geometry flags use dominant weighted triangles, with garment subsets mapped to relevant bone regions. An ambiguous association gets UNTESTED instead of certifying an unidentified clothes seam. Gameplay evaluation is scored separately from authored clips."
+}

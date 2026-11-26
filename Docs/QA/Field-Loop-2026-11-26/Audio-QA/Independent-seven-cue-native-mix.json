@@ -1,0 +1,75 @@
+{
+  "control": "Second unmodified field music and wind-only take followed identical timing with the seven emit requests omitted. Subtraction includes any normal ducking response to an event. Coordinates and correlations are reported for the original full mix and paired difference.",
+  "source_scope": "Sampled successor mixer in a clean standalone Godot project with all five stream loops available, default game gains and field music state. Each new cue was requested separately via the actual emit_event method at neutral listener position. This demonstrates output paths. Full scene gameplay event conditions require the separate route.",
+  "container": "Lossless original two-channel MovieWriter audio, extracted to FLAC.",
+  "native_mixer_sha256": "70413cc4177ef53859a9262a3f2b7c7ef39e88fe2f61161ab49a073af92a5e46",
+  "audio_sha256": "46a815235b6623422aa6204a1e8375b33188e8d9c3dd5f0f9e1325c2ae1bace1",
+  "rate_hz_for_measurement": 12000,
+  "duration_s": 6.9,
+  "peak_dbFS": -11.82,
+  "events": [
+    {
+      "cue": "equip_axe",
+      "godot_process_frame": 32,
+      "correlated_start_seconds": 1.1128,
+      "offset_from_process_time_ms": 46.2,
+      "normalized_correlation": 0.28,
+      "paired_music_only_subtracted_correlation": 0.993,
+      "paired_difference_start_seconds": 1.1127
+    },
+    {
+      "cue": "equip_pickaxe",
+      "godot_process_frame": 56,
+      "correlated_start_seconds": 1.9128,
+      "offset_from_process_time_ms": 46.1,
+      "normalized_correlation": 0.28,
+      "paired_music_only_subtracted_correlation": 0.982,
+      "paired_difference_start_seconds": 1.9128
+    },
+    {
+      "cue": "regrow_wood",
+      "godot_process_frame": 80,
+      "correlated_start_seconds": 2.7128,
+      "offset_from_process_time_ms": 46.1,
+      "normalized_correlation": 0.514,
+      "paired_music_only_subtracted_correlation": 0.924,
+      "paired_difference_start_seconds": 2.7128
+    },
+    {
+      "cue": "regrow_stone",
+      "godot_process_frame": 104,
+      "correlated_start_seconds": 3.5128,
+      "offset_from_process_time_ms": 46.1,
+      "normalized_correlation": 0.356,
+      "paired_music_only_subtracted_correlation": 0.981,
+      "paired_difference_start_seconds": 3.5128
+    },
+    {
+      "cue": "wolf_brace",
+      "godot_process_frame": 128,
+      "correlated_start_seconds": 4.3128,
+      "offset_from_process_time_ms": 46.1,
+      "normalized_correlation": 0.539,
+      "paired_music_only_subtracted_correlation": 0.979,
+      "paired_difference_start_seconds": 4.3128
+    },
+    {
+      "cue": "wolf_return",
+      "godot_process_frame": 152,
+      "correlated_start_seconds": 5.1128,
+      "offset_from_process_time_ms": 46.1,
+      "normalized_correlation": 0.226,
+      "paired_music_only_subtracted_correlation": 0.986,
+      "paired_difference_start_seconds": 5.1128
+    },
+    {
+      "cue": "player_fall",
+      "godot_process_frame": 176,
+      "correlated_start_seconds": 5.9128,
+      "offset_from_process_time_ms": 46.1,
+      "normalized_correlation": 0.693,
+      "paired_music_only_subtracted_correlation": 0.983,
+      "paired_difference_start_seconds": 5.9128
+    }
+  ]
+}
