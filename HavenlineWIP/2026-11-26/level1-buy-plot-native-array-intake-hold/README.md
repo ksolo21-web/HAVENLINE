@@ -1,0 +1,3 @@
+# Buy-plot native-array intake: captured partial buffers, rejected
+
+Godot parser/import passed. The exact route continued and preserved the handoff/payment state, but both live array-helper witness checks rejected. The final fixture admitted only the historical paid frame, 25 total scoped checks with three failures: tick 346, tick 355 and the required ordered frame set. The earlier standalone live pose witness remains valid and does not justify using any partial buffer as a full native-array set. Diagnose the exact helper admission failure before considering any rerun. No usable stencil, phone result, production asset or spend.
