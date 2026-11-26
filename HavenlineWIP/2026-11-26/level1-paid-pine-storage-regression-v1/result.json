@@ -1,0 +1,56 @@
+{
+  "scope": "pinned source transcription and in-memory bytes only",
+  "pinned_sources": {
+    "opening_ledger.gd": "a65fa1f6fdfa9f304550fe923cc5c14f3d79e6f7b38d59d8441a194caff28e90",
+    "opening_save.gd": "e07e922708c473b291c46fac87ebdc5a2e26d89617f741c4a8ae91bec5aa5f55"
+  },
+  "synthetic_control_sha256_matches_real_archived_digest": "832e3f09cb5718634de49d89e1e358b70cc5789464612b2ca48ec6dab43bc415",
+  "cold_positive": true,
+  "negative_matrix": [
+    {
+      "name": "deposit_undercarry",
+      "restore": false,
+      "commit": "ERR_INVALID_DATA",
+      "cold": "ERR_FILE_CORRUPT",
+      "no_in_memory_state_change": true
+    },
+    {
+      "name": "overcarry_without_custody",
+      "restore": false,
+      "commit": "ERR_INVALID_DATA",
+      "cold": "ERR_FILE_CORRUPT",
+      "no_in_memory_state_change": true
+    },
+    {
+      "name": "next_repeat_still_one_stored",
+      "restore": false,
+      "commit": "ERR_INVALID_DATA",
+      "cold": "ERR_FILE_CORRUPT",
+      "no_in_memory_state_change": true
+    },
+    {
+      "name": "negative_carry",
+      "restore": false,
+      "commit": "ERR_INVALID_DATA",
+      "cold": "ERR_FILE_CORRUPT",
+      "no_in_memory_state_change": true
+    },
+    {
+      "name": "boolean_carry",
+      "restore": false,
+      "commit": "ERR_INVALID_DATA",
+      "cold": "ERR_FILE_CORRUPT",
+      "no_in_memory_state_change": true
+    },
+    {
+      "name": "fractional_carry",
+      "restore": false,
+      "commit": "ERR_INVALID_DATA",
+      "cold": "ERR_FILE_CORRUPT",
+      "no_in_memory_state_change": true
+    }
+  ],
+  "existing_corrupt_primary_refuses_replacement": true,
+  "hash_invalid_and_missing_controls": true,
+  "receiver_or_engine_or_real_save": false
+}
