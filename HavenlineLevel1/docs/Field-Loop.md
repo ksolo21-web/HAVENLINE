@@ -10,7 +10,7 @@ Start on snow and gather wood. Outside a purchased camp, the equipped tool sweep
 
 | Purchase | Price | What appears |
 | --- | --- | --- |
-| Hearth | 3 wood | A centered furnace, 10 × 8 m court, enclosing fence, and north and south gates |
+| Hearth | 3 wood | A centered furnace, 10 × 8 m court, enclosing fence, and south and east gates |
 | First expansion | 3 wood, 1 stone | A 13 × 10.5 m court with three separate corner offers |
 | Wood storage | 2 wood | Northwest wood plot |
 | Stone storage | 2 wood, 1 stone | Northeast stone plot |

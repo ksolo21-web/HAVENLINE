@@ -18,7 +18,13 @@ var repath := 0.0
 
 func setup(host: Node3D) -> void:
 	world = host
+	world.field_env.perimeter_changed.connect(_reconcile_perimeter)
 	rng.randomize()
+
+func _reconcile_perimeter() -> void:
+	for wolf in world.enemies.duplicate():
+		if not outside(wolf.position, wolf.sanctuary_margin()):
+			_remove(wolf)
 
 func _point_inside(p: Vector3) -> bool:
 	if world.field_env.has_method("is_inside_camp"):

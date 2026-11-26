@@ -58,17 +58,24 @@ class TimberKit:
     def tube(self, points, radius, material, twist=False, sides=9):
         pts=np.array(points,dtype=float)
         rings=[]
+        last_a=None
+        distance=0.
         for i,pt in enumerate(pts):
+            if i: distance+=np.linalg.norm(pt-pts[i-1])
             tangent=pts[min(i+1,len(pts)-1)]-pts[max(i-1,0)]
             tangent/=np.linalg.norm(tangent)
             ref=np.array([0.,1.,0.]) if abs(tangent[1])<.98 else np.array([0.,0.,1.])
-            a=np.cross(tangent,ref)
+            a=np.cross(tangent,ref) if last_a is None else last_a-np.dot(last_a,tangent)*tangent
             a/=np.linalg.norm(a)
+            last_a=a
             b=np.cross(tangent,a)
             ring=[]
             for j in range(sides):
+                # Rotate the clover cross-section as a whole to form three
+                # continuous, rounded plies with shadowed grooves.
                 angle=2*pi*j/sides
-                r=radius*(.90+.16*cos(3*angle-i*.96)) if twist else radius
+                r=radius*(.93+.13*cos(3*angle)) if twist else radius
+                if twist: angle+=distance*2*pi/(radius*9.)
                 ring.append(pt+(a*cos(angle)+b*sin(angle))*r)
             rings.append(ring)
         for i,(lo,hi) in enumerate(zip(rings,rings[1:])):
@@ -79,30 +86,40 @@ class TimberKit:
         for ring in (rings[0][::-1],rings[-1]):
             self.face(ring,material,[(.5,.5)]*sides)
 
+    def button(self,x,y,z,rx,ry,rz,material):
+        rings=[]
+        for v in np.linspace(-pi*.495,pi*.495,8):
+            rings.append([(x+rx*cos(v)*cos(2*pi*i/12),y+ry*sin(v),z+rz*cos(v)*sin(2*pi*i/12)) for i in range(12)])
+        for lo,hi in zip(rings,rings[1:]):
+            for i in range(12):
+                j=(i+1)%12
+                self.face([lo[j],lo[i],hi[i],hi[j]],material)
+
     def cap(self,x,z,r,h,phase):
         # The lip laps down the log in scallops. Its rounded outer shoulder
         # carries a little more powder on the windward face.
         rings=[]
-        for base,radius,ripple in [(h-.21,r*1.005,.041),(h-.178,r*1.055,.032),
-                                   (h-.09,r*1.075,.014),(h-.017,r*.96,.009),
-                                   (h+.03,r*.63,.006),(h+.045,r*.02,.001)]:
+        for base,radius,ripple in [(h-.214,r*.98,.058),(h-.184,r*1.04,.052),
+                                   (h-.121,r*1.066,.025),(h-.041,r*.93,.015),
+                                   (h+.043,r*.71,.011),(h+.101,r*.38,.006),
+                                   (h+.145,r*.085,.002),(h+.15,r*.009,0.)]:
             ring=[]
-            for j in range(12):
-                t=2*pi*j/12
+            for j in range(18):
+                t=2*pi*j/18
                 y=base+ripple*(sin(3*t+phase)+.45*cos(2*t-phase))
-                ring.append((x+radius*cos(t),y,z+radius*sin(t)))
+                ring.append((x+radius*cos(t)+.025*(1-radius/r),y,z+radius*sin(t)-.009*(1-radius/r)))
             rings.append(ring)
         for lo,hi in zip(rings,rings[1:]):
-            for j in range(12):
-                k=(j+1)%12
+            for j in range(18):
+                k=(j+1)%18
                 self.face([lo[k],lo[j],hi[j],hi[k]],"snow")
 
     def rope_turns(self,x,z,r,y,turns=2):
         points=[]
-        for j in range(24*turns+1):
-            t=2*pi*j/24
-            points.append((x+r*cos(t),y+.062*j/24,z+r*sin(t)))
-        self.tube(points,.037,"rope",True)
+        for j in range(64*turns+1):
+            t=2*pi*j/64
+            points.append((x+r*cos(t),y+.070*j/64,z+r*sin(t)))
+        self.tube(points,.039,"rope",True,9)
 
     def save(self):
         lines=["# Havenline golden timber perimeter","mtllib boundary_v2.mtl",f"o {self.name}","s off"]
@@ -120,7 +137,7 @@ class TimberKit:
                 if length < 1e-9:continue
                 for idx in tri:
                     xyz=tuple(np.round(self.vertices[idx-1][0],5))
-                    key=(xyz,material) if material in ("snow","rope","timber") else (idx,material)
+                    key=(xyz,material) if material in ("snow","rope","timber","iron","brass","timber_dark") else (idx,material)
                     normals[key]=normals.get(key,0.)+n/length
                     normal_keys[idx]=key
         for i in range(1,len(self.vertices)+1):
@@ -135,28 +152,46 @@ class TimberKit:
 # latest gate/construction boards while retaining its actual grain pattern.
 wood=np.asarray(Image.open(OUT/"opening_wood_grain.png").convert("RGB"),np.float32)
 tone=(wood[:,:,0]-wood[:,:,0].mean())[:,:,None]
-Image.fromarray(np.uint8(np.clip(np.array([202,141,75])+tone*np.array([.55,.46,.40]),0,255))).save(OUT/"golden_timber_grain.png")
+Image.fromarray(np.uint8(np.clip(np.array([199,121,55])+tone*np.array([1.2,1.02,.78]),0,255))).save(OUT/"golden_timber_grain.png")
 
 panel=TimberKit("snowbound_palisade")
 for i in range(8):
     x=-1.30+(i+.5)*.325
-    r,h=.177,(1.19,1.155,1.18,1.17,1.148,1.18,1.205,1.17)[i]
+    r,h=.177,(1.18,1.127,1.16,1.203,1.144,1.18,1.213,1.151)[i]
     z=(.0,.003,-.005,.002)[i%4]
-    panel.upright(x,z,[(-.02,r),(.13,r),(h-.2,r),(h-.035,r*.96)],"timber",sides=12,turn=0)
+    panel.upright(x,z,[(-.02,r),(.13,r),(h-.23,r),(h-.159,r*.956),(h-.082,r*.77)],"timber",sides=12,turn=0)
     panel.cap(x,z,r,h,i*1.51)
-for z in (-.167,.167):
-    for y in (.35,.82):
-        panel.tube([(-1.299,y,z),(1.299,y,z)],.071,"timber_dark")
-# Exterior crossing lashes bind both rounded rails, repeated across the run.
-for i in range(4):
-    x=-.975+i*.65
-    for direction in (-1,1):
-        a=np.array([x-.248,.585-direction*.23,.225])
-        b=np.array([x+.248,.585+direction*.23,.225])
-        path=[a+(b-a)*j/15+np.array([0,0,.01*sin(pi*j/15)]) for j in range(16)]
-        panel.tube(path,.029,"rope",True)
-    for x2 in (x-.248,x+.248):
-        panel.tube([(x2,.336,-.231),(x2,.836,-.231)],.023,"rope")
+# The front rail on each level has its own interlocking X lacing.
+# Both diagonal wraps continue round the far side of that same rail.
+for level in (.35,.82):
+    rail_z=.172
+    panel.tube([(-1.30,level,rail_z),(1.30,level,rail_z)],.074,"timber_dark",sides=12)
+    for i in range(8):
+        center=-1.30+(i+.5)*.325
+        for handed in (-1,1):
+            path=[]
+            # End both buried returns inside the solid stock. A smooth
+            # three-ply profile only needs to continue across its visible arc.
+            for j in range(17):
+                angle=pi*(-.72+j*1.44/16)
+                # The return arc sits against the face of its own stock.
+                x=center+handed*.157*sin(angle)
+                y=level+.099*sin(angle)
+                # Offset one overpass so the two plies visibly interlock.
+                z=rail_z+(.100+.025*(handed>0))*cos(angle)
+                path.append((x,y,z))
+            panel.tube(path,.029,"rope",True,9)
+    # The reverse of the lashings follows the outside curve of each stock,
+    # then dips into the narrowing at the seam before crossing the next.
+    for i in range(8):
+        center=-1.30+(i+.5)*.325
+        path=[]
+        for j in range(10):
+            t=j/9
+            dx=(t-.5)*.325
+            z=-max(.097,(.177**2-dx**2)**.5)-.018
+            path.append((center+dx,level+.010*cos(2*pi*t+i*.14),z))
+        panel.tube(path,.029,"rope",True,6)
 panel.save()
 
 leaf=TimberKit("snowbound_gate_leaf")
@@ -176,7 +211,7 @@ leaf.timber((-.562,1.326,0),(.562,1.326,0),.078,.225,"snow")
 leaf.save()
 
 post=TimberKit("snowbound_gate_post")
-post.upright(0,0,[(-.02,.203),(.12,.211),(1.47,.202),(1.56,.189)],"timber",sides=12)
+post.upright(0,0,[(-.02,.203),(.12,.211),(1.40,.202),(1.473,.18),(1.53,.141)],"timber",sides=12)
 post.cap(0,0,.207,1.62,.85)
 post.rope_turns(0,0,.211,.21)
 post.rope_turns(0,0,.207,1.19)
@@ -184,19 +219,29 @@ post.save()
 
 hinges=TimberKit("snowbound_hinges")
 for y in (.30,1.049):
-    hinges.timber((-.09,y,.127),(.11,y,.127),.097,.048,"iron")
-    hinges.tube([(0,y-.082,.143),(0,y+.082,.143)],.048,"iron")
-    for x in (-.075,.082):
-        hinges.timber((x,y-.016,.158),(x,y+.016,.158),.032,.021,"brass")
+    hinges.timber((-.08,y,.127),(.087,y,.127),.071,.036,"iron")
+    for x in (-.075,.078):
+        hinges.button(x,y,.132,.046,.048,.025,"iron")
+        hinges.button(x,y,.155,.020,.020,.012,"brass")
+    for h in (-.052,.052):
+        hinges.tube([(0,y+h-.026,.151),(0,y+h+.026,.151)],.037,"iron")
+    hinges.tube([(0,y-.093,.151),(0,y+.093,.151)],.021,"brass")
+    hinges.button(0,y+.089,.151,.031,.014,.031,"iron")
 hinges.save()
 
 keeper=TimberKit("snowbound_latch_keeper")
-keeper.timber((0,.622,.161),(0,.807,.161),.099,.073,"iron")
-keeper.timber((0,.674,.202),(0,.751,.202),.126,.074,"iron")
-keeper.timber((0,.615,-.092),(0,.785,-.092),.054,.039,"iron")
+# Round escutcheon and staple, with space around the sliding iron.
+keeper.button(0,.716,.145,.066,.115,.024,"iron")
+for y in (.635,.795):
+    keeper.button(0,y,.163,.021,.021,.013,"brass")
+    keeper.button(0,y,-.092,.032,.032,.017,"iron")
+path=[(0,.716+.062*cos(pi*j/16),.154+.122*sin(pi*j/16)) for j in range(17)]
+keeper.tube(path,.023,"iron")
 keeper.save()
 
 bolt=TimberKit("snowbound_sliding_bolt")
-bolt.timber((-.22,.714,.249),(.22,.714,.249),.062,.068,"iron")
-bolt.timber((-.161,.694,.269),(-.161,.797,.269),.039,.049,"iron")
+bolt.tube([(-.22,.714,.234),(.22,.714,.234)],.028,"iron")
+bolt.button(.218,.714,.234,.029,.028,.028,"iron")
+bolt.tube([(-.161,.714,.234),(-.161,.792,.274)],.019,"brass")
+bolt.button(-.161,.792,.274,.027,.026,.026,"brass")
 bolt.save()

@@ -1,5 +1,7 @@
 extends Node3D
 
+signal perimeter_changed
+
 const CENTERS := {"wood":Vector2(-3.6,-3.5), "stone":Vector2(5.5,-3.5), "meat":Vector2(-3.6,3.2)}
 const BUY := Vector2(0,2.4)
 const UPGRADE := Vector2(2.65,1.7)
@@ -66,9 +68,11 @@ func install(host: Node3D) -> void:
 	name = "SettledFieldEnvironment"
 	if get_parent() == null: world.add_child(self)
 	var snow_mesh: MeshInstance3D = world.get_node("SnowGround_NoPaintedPaths").find_children("*","MeshInstance3D", false, false)[0]
-	# Keep the active snow surface on the same extent as the travel collider.
+	# Extend the visible snow beneath the boundary drifts. The travel collider retains the playable extent.
 	var snow_box := snow_mesh.mesh as BoxMesh
-	if snow_box: snow_box.size = Vector3(2.*world.layout.snow_extent_half,snow_box.size.y,2.*world.layout.snow_extent_half)
+	if snow_box:
+		var backdrop_width := 2.0 * (float(world.layout.snow_extent_half) + 76.0)
+		snow_box.size = Vector3(backdrop_width, snow_box.size.y, backdrop_width)
 	snow.shader = SNOW
 	snow_mesh.material_override = snow
 	world.camp_built.get_node("CampOnlySurface").hide()
@@ -230,6 +234,7 @@ func set_perimeter(stage: int, animate: bool) -> void:
 		snow.set_shader_parameter("court_center",center)
 	if world.forest and not world.forest.records.is_empty():
 		world.forest.refresh_camp(animate)
+	perimeter_changed.emit()
 
 func install_hearth() -> void:
 	var base: Node3D = world.camp_built.get_node("CenteredHearth_StudioTrialOnly")

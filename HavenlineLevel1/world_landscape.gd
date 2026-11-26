@@ -35,19 +35,21 @@ func install(world: Node3D) -> void:
 # gameplay camera beyond the last walkable cell, including at the four corners.
 func _build_outer_drifts(extent: float) -> void:
 	var corners := [Vector2(-1,-1), Vector2(1,-1), Vector2(1,1), Vector2(-1,1)]
-	var offsets := PackedFloat32Array([-.6, 1.0, 4.5, 8.7, 14.0, 34.0, 76.0])
-	var heights := PackedFloat32Array([-.10, .36, 2.4, 5.1, 3.9, 1.1, -.14])
+	var offsets := PackedFloat32Array([-4.0, .1, 1.8, 4.5, 8.7, 14.0, 34.0, 76.0])
+	var heights := PackedFloat32Array([-.12, -.015, .22, 1.35, 4.8, 3.3, .8, -.14])
 	var vertices := PackedVector3Array()
 	var indices := PackedInt32Array()
-	var subdivisions := 128
+	var subdivisions := 256
 	for side in 4:
 		for column in subdivisions:
 			var ray: Vector2 = corners[side].lerp(corners[(side+1)%4], float(column)/subdivisions)
 			var base := ray * extent
 			var wave := district.get_noise_2d(base.x*.70, base.y*.70)
+			var local_drift := district.get_noise_2d(base.x*3.4+731.,base.y*3.4-553.)
+			var ridge_depth := 1.0 + wave*.55 + local_drift*.34
 			for band in offsets.size():
-				var xz := ray * (extent + offsets[band] * (1.0 + wave*.20))
-				var height := heights[band] * (1.0 + wave*.63)
+				var xz := ray * (extent + offsets[band] * ridge_depth)
+				var height := heights[band] * (1.0 + wave*.78 + local_drift*.55)
 				vertices.append(Vector3(xz.x,height,xz.y))
 	var bands := offsets.size()
 	for column in subdivisions*4:

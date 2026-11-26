@@ -1,6 +1,9 @@
 extends Node3D
 ## Real foot landings when the character has the Havenline rig. Unrigged agents
 ## use the same bounded renderer with distance-driven alternating contacts.
+## Add the living survivor or worker scene root to this group in its scene or
+## before add_child(). Its Havenline foot bones are used when available.
+const SURVIVOR_GROUP := &"snow_track_survivors"
 const LIFE := 17.0
 const CELL := 12.0
 const PER_CELL := 96
@@ -21,6 +24,19 @@ func _init() -> void:
 	material.set_shader_parameter("track_mask",preload("res://assets/field_world/snow_prints.png"))
 	plane.size = Vector2.ONE
 	plane.material = material
+
+func _ready() -> void:
+	get_tree().node_added.connect(_discover_survivor)
+	for survivor in get_tree().get_nodes_in_group(SURVIVOR_GROUP):
+		_discover_survivor(survivor)
+
+func _exit_tree() -> void:
+	if get_tree().node_added.is_connected(_discover_survivor):
+		get_tree().node_added.disconnect(_discover_survivor)
+
+func _discover_survivor(node: Node) -> void:
+	if node is Node3D and node.is_in_group(SURVIVOR_GROUP) and get_parent().is_ancestor_of(node):
+		register_actor(node, "human")
 
 func configure(snow_query: Callable) -> void:
 	mask = snow_query

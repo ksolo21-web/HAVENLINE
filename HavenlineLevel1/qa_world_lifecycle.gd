@@ -19,7 +19,10 @@ func run() -> void:
 	var all_initial_registered:=true
 	for wolf in f.enemies: all_initial_registered=all_initial_registered and f.tracks.living.has(wolf)
 	check("initial_wolves_have_track_registration",not f.enemies.is_empty() and all_initial_registered)
+	f.field_env.set_perimeter(2,false)
+	var boundary_wolf=e._add(Vector3(9.8,0,.3),false,100000,Vector3(11,0,.3))
 	f.field_env.set_perimeter(3,false)
+	check("perimeter_expansion_synchronously_retires_encroaching_wolf",not f.enemies.has(boundary_wolf) and not boundary_wolf.visible and not f.surfaces.has(boundary_wolf))
 	f.camp_active=true
 	var boss_count:=0
 	var blocked:=0

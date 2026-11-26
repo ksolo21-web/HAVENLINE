@@ -20,6 +20,7 @@ var event_clip_end := 0
 var last_seen := {}
 var stage_entered := {}
 var renewal_seen := -1
+var recovery_leg := -1
 
 var token_last := -1
 var token_totals := {}
@@ -167,6 +168,13 @@ func observe_clip(row: Dictionary) -> void:
 	if tick<event_clip_end:clip=event_clip
 	_set_clip(clip)
 
+func steer(direction: Vector2) -> void:
+	# Recovery discards the prior touch. A human starts a new drag on regaining control.
+	if field and touch_held and field.touch_id<0:
+		touch_held=false
+		last_input=Vector2.ZERO
+	super.steer(direction)
+
 func _in_patch(pos: Vector3, row: Dictionary) -> bool:
 	if not row.has("region"): return true
 	var b:Array=row.region
@@ -243,6 +251,13 @@ func execute(row: Dictionary) -> void:
 		tick_events.append(newest)
 		event_cursor=newest
 	observe_clip(row)
+	if tick_events.any(func(e):return e.event=="reset") and row.get("far_travel",false):recovery_leg=0
+	if recovery_leg>=0:
+		var retreat=[[0.,7.7],[13.,7.7],[13.,-.2]]
+		if move_to(retreat[recovery_leg],.25):
+			recovery_leg+=1
+			if recovery_leg==retreat.size():recovery_leg=-1
+		return
 	if tick-stage_tick>int(row.get("timeout",35))*60:
 		event("timeout",snapshot());finished=true;quit(4);return
 	match String(row.action):

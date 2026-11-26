@@ -16,7 +16,16 @@ func run():
 	var mask_warm: Array=[false]
 	var t:=Tracks.new();arena.add_child(t);t.set_physics_process(false)
 	t.configure(func(p:Vector3):return p.z<3.0 and (not mask_warm[0] or p.x>10.0))
-	var human:=Node3D.new();arena.add_child(human);t.register_actor(human)
+	var human:=Node3D.new()
+	human.add_to_group(Tracks.SURVIVOR_GROUP)
+	arena.add_child(human)
+	var prop:=Node3D.new()
+	arena.add_child(prop)
+	record("new survivor automatically discovered", t.living.has(human))
+	for i in 90:
+		prop.position.z+=.03
+		t._physics_process(1./60)
+	record("moving prop and stationary survivor leave no tracks", not t.living.has(prop) and t.total==0)
 	for i in 90:
 		human.position.x+=.03;t._physics_process(1./60)
 	record("unrigged survivor leaves alternating soles",t.total>=4 and t.living[human].step>=4)
