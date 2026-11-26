@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T05:02:40Z",
+  "observed_at_utc": "2026-11-26T05:23:34Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -118,9 +118,9 @@
       "role_id": "alfred",
       "state": "done",
       "title": "Prepared Bot Office feed data",
-      "summary": "Mapped project lanes to their roster roles and verified the data with the deployed dashboard’s parser. This is reported work, not live worker monitoring.",
-      "next": "Keep role reports tied to verified results.",
-      "updated_at_utc": "2026-11-26T00:51:03Z"
+      "summary": "Owner-reference gate V3 passed 78 desktop checks and 16 exact native frames; art HOLD (South 9.2, East 9.1). One fence module is in a separate native check; no new Meshy credits.",
+      "next": "Independent comparison of the exact fence panel and offline review of the gate cross-brace revision.",
+      "updated_at_utc": "2026-11-26T05:23:34Z"
     },
     {
       "role_id": "rig-character",
@@ -171,14 +171,14 @@
     {
       "role_id": "level1-verifier",
       "state": "working",
-      "title": "Owner-reference gates passed movement",
-      "summary": "All 16 checked captures show real separate doors and posts. Full 78-check source scene works; closed East art needs help.",
-      "next": "Check the private Meshy fence material sample and independent gate art-only fix.",
+      "title": "Owner-reference opening evidence",
+      "summary": "Both gate routes, active closing and cold restore passed 78 checks. V3 is not art approved or merged.",
+      "next": "Finish the one-module fence material A/B and keep mechanics and visuals separate.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/90147ec749152ed98e38433955deb8dc4b8362af",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/170f07672e01f45e4ed0ff4e34fe3e9571a7140e"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/5315868792f9f67a0f5ff3629f7f6f84d026c43f",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/09cabefa91777cae8600b763c26f083c747a9cb9"
       ],
-      "updated_at_utc": "2026-11-26T05:02:40Z"
+      "updated_at_utc": "2026-11-26T05:23:34Z"
     },
     {
       "role_id": "builder-customer-counter",
@@ -388,6 +388,17 @@
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/90147ec749152ed98e38433955deb8dc4b8362af",
         "https://github.com/ksolo21-web/HAVENLINE/commit/170f07672e01f45e4ed0ff4e34fe3e9571a7140e"
+      ]
+    },
+    {
+      "id": "l1-owner-gate-v3-review-20261126",
+      "type": "handoff",
+      "at_utc": "2026-11-26T05:23:34Z",
+      "from_role_id": "level1-verifier",
+      "to_role_id": "builder-camp-pads",
+      "message": "Independent gate art HOLD at 9.2 South and 9.1 East; 78 mechanics checks passed. Keep motion, evaluate the wider front cross-braces separately.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/5315868792f9f67a0f5ff3629f7f6f84d026c43f"
       ]
     }
   ]
