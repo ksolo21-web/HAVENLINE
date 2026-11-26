@@ -1,0 +1,3 @@
+# Dark wood end after the turn: source/actual-frame attribution
+
+Unchanged material is not the missing factor: the turn shows the opposite cut face. The positive-lit face before the turn has native median RGB (156,58,23), but after the turn the camera sees a face oriented away from the light, with all mapped rays also blocked toward the light by the character. The same exact end pixels are black with or without the bark flag. Offset alone can change the blocker but cannot change the negative incidence. The result is localized diagnosis, not a light edit or an approved carry pose. No render/repaint or installation in this study.
