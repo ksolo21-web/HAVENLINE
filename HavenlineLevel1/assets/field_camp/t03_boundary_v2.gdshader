@@ -5,6 +5,7 @@ uniform float roughness_value=0.85;
 uniform float metallic_value=0.0;
 uniform vec3 emission_color=vec3(0.0);
 uniform float detail_strength=0.05;
+uniform float ground_bounce=0.0;
 uniform float detail_scale=3.0;
 uniform bool use_reference_grain=false;
 uniform sampler2D reference_grain : source_color, filter_linear_mipmap, repeat_enable;
@@ -21,5 +22,5 @@ void fragment(){
     ALBEDO=clamp(albedo*(1.+g*detail_strength),vec3(0.),vec3(1.));
     ROUGHNESS=roughness_value;
     METALLIC=metallic_value;
-    EMISSION=emission_color;
+    EMISSION=emission_color+ground_bounce*(albedo*vec3(.85,.59,.41)+vec3(.11,.055,.025));
 }

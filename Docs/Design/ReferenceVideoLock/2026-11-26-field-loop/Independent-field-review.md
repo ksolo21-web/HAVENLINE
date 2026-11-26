@@ -19,6 +19,18 @@ This review currently includes the 14 naturally triggered revised 4K frames and 
 | Hearth and plots | B28 central heater is ~1.6–2 H wide. The darker storage plots are ~2.3–2.8 H wide and 1.4–1.9 H deep in screen projection. | Native camera gives the stone furnace ~1.85–1.95 H width and the three grounded insets ~2.2–2.4 H width × ~1.2–1.45 H depth. The stone mouth and embers remain readable, material plots are distinct, and a character standing on the meat plot briefly hides its icon. The compact widths are near the lower end of B. |
 | Campus and paid progression | B’s late camp is busy with separated service lanes, cash, towers and repeated upgrades. A has water, fishing, staff, machines and waiting customers. | Local inward/outward gate travel, typed storage, snow perimeter and the purchased axe upgrade have direct evidence. Crowd traffic, production, customer service, NPC harvesting, late defense and the complete A loop have no equivalent in this trial. |
 
+## Earned stock against the approved plot designs
+
+All three native landscape plots retain recognizable materials at game zoom. The earned state contains five wood bundles, two meat cuts and three stones. In portrait the camera follows the actor on the meat plot and clips part of the far-left stone pile at the viewport edge.
+
+| Material | Approved model and field readback |
+|---|---|
+| Wood | Repeated banded log bundles sit in ordered rows. Exposed cut ends and darker, less golden bark distinguish the game pile from the brighter single-bundle design. |
+| Meat | Broad red cuts show a light rim around each center and separate laterally. With two pieces, the native low-count plot exposes a single course. The design board shows layered columns and clearer marbling. The actor partly overlaps one cut while standing on the plot. |
+| Stone | The three irregular stones form a low, asymmetric cluster on the floor. Size and spacing are closer to the board than the earlier small, lane-aligned parcels. The board uses warmer, simpler facets. |
+
+[Three approved plot concepts and matched native crops](Approved-stock-vs-game.jpg) · [Approved concept source](https://github.com/ksolo21-web/HAVENLINE/tree/01664a73/Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts)
+
 ## Scoped verdict
 
 **9/10 for transaction legibility in this field route.** The green pad fills in installments, the last wood produces a visible hearth, the court changes, each typed stock appears on its own plot and an earned purchase increases the orbit from one to three. On the updated landscape and portrait routes the actor can briefly cover a floor icon. The contextual HUD independently resolves its type and quantity. Both aspect ratios show “Build hearth · 2 wood remaining”, “Meat storage · 2” and “Upgrade · 1 stone, 1 meat remaining” at the corresponding recorded states. The natural low-volume route makes individual red parcels harder to see at normal zoom than the HUD quantity. This is an independent practical score for this specific sequence.

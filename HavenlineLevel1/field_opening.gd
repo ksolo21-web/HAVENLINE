@@ -32,7 +32,9 @@ var reset_time := 0.0
 var rock_recovery := 0.0
 var respawns := {}
 var events: Array[Dictionary] = []
-var step_phase := 0.0
+var last_half_stride := -1
+var last_support_step := 0
+var procedural_step_last := false
 var first_physics := true
 var field_ready := false
 var original_auto_quit := true
@@ -336,11 +338,7 @@ func _physics_process(dt: float) -> void:
 		_event("swing",actor.position)
 	first_physics = false
 	var inside := camp_active and absf(actor.position.x)<5.0 and absf(actor.position.z)<4.0
-	# The authored gait contacts alternate at phase zero and half a stride.
-	step_phase += character_kit.locomotion.stride_hz * dt * 2.0
-	if step_phase >= 1.0:
-		step_phase = fmod(step_phase,1.0)
-		_event("step_camp" if inside else "step_snow",actor.position)
+	_step_foot_audio(inside)
 	player_invulnerability = maxf(0.0,player_invulnerability-dt)
 	flash.color.a = maxf(0.0,flash.color.a-dt*.6)
 	if rock_recovery > 0:
@@ -388,6 +386,22 @@ func _physics_process(dt: float) -> void:
 		current_music = music
 		sound.set_music_state(music)
 	_refresh_hud_field(danger)
+
+func _step_foot_audio(inside: bool) -> void:
+	var gait = character_kit.locomotion
+	var procedural: bool = gait_motor.procedural_steps_active
+	var serial: int = gait_motor.support_step_serial
+	var landed := serial != last_support_step
+	var authored_half := floori(2.0 * fposmod(float(gait.tree.get("parameters/walk/current_position")) / gait.walk_length, 1.0))
+	# A procedural boot can touch down on the same tick that the gait takes over.
+	# Re-seed its phase here so one physical step triggers one surface sound.
+	if not procedural and not procedural_step_last and last_half_stride >= 0:
+		landed = landed or (gait.stride_hz > .05 and authored_half != last_half_stride)
+	last_support_step = serial
+	last_half_stride = authored_half
+	procedural_step_last = procedural
+	if landed:
+		_event("step_camp" if inside else "step_snow",actor.position)
 
 func _event(id: String, at: Vector3) -> void:
 	events.append({"event":id,"t":snappedf(simulation_time,.001),"x":snappedf(at.x,.01),"z":snappedf(at.z,.01)})

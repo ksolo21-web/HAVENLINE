@@ -23,12 +23,12 @@ void fragment(){
 	float boundary=edge+.045*broad;
 	float court=(1.-smoothstep(-.13,.02,boundary))*smoothstep(length(p)*.12,length(p)*.12+.18,reveal);
 	vec3 snow=vec3(.845,.915,.976)+broad*vec3(.032,.023,.012)+fine*.01;
-	vec3 packed=vec3(.695,.533,.407)+broad*vec3(.047,.038,.021)+fine*.016;
+	vec3 packed=vec3(.95,.705,.57)+broad*vec3(.047,.038,.021)+fine*.016;
 	float amber=(1.-smoothstep(.04,.19,abs(reveal-length(p)*.12-.08)))*smoothstep(0.,.12,reveal)*(1.-smoothstep(.80,1.,reveal));
 	vec3 color=mix(snow,packed,court);
 	color=mix(color,vec3(.98,.69,.34),amber*court*.67);
 	ALBEDO=OUTPUT_IS_SRGB?color:pow(color,vec3(2.2));
-	EMISSION=vec3(.018,.021,.027)*(1.-court);
+	EMISSION=mix(vec3(.018,.021,.027),vec3(.040,.026,.020),court);
 	ROUGHNESS=.94;
 	SPECULAR=.15;
 }

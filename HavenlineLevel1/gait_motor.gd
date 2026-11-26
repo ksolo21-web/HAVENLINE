@@ -12,20 +12,292 @@ const PIVOT_TURN := 10.8
 var skeleton: Skeleton3D
 var bind_transforms: Dictionary = {}
 var samples: Array = []
-var previous_contacts := PackedVector3Array()
 var contact_world: Node3D
-var foot_offsets: Array[Vector3] = [Vector3.ZERO, Vector3.ZERO]
-var foot_twists := Vector2.ZERO
-var braking_or_turning := false
+var floor_pending := false
 var redirecting := false
-var stopping := false
-var settling_idle := false
-var settle_side := -1
-var settle_amount := 0.0
-var settle_from := Vector3.ZERO
-var settle_twist := 0.0
-var previous_headings := PackedVector3Array()
+var turn_beats := 4
+var support_step_serial := 0
+var procedural_steps_active: bool:
+	get:
+		return not special.is_empty() or bridge
+var lifted: Array[bool] = [false, false]
+var travel_speed := 0.0
+var previous_command_speed := 0.0
+var releasing := false
 var leg_chains: Array = []
+
+# A grounded redirection starts on one boot. The second boot returns the actor
+# to the normal walk or neutral stance without dragging both soles together.
+var special := ""
+var beat := 0
+var beat_time := 0.0
+var beat_duration := 0.17
+var support := 0
+var neutral_ankles: Array[Transform3D] = []
+var boot_from: Array[Transform3D] = []
+var toe_from: Array[Transform3D] = []
+var step_targets: Array[Transform3D] = []
+var toe_targets: Array[Transform3D] = []
+var final_heading := 0.0
+var gait_tree: AnimationTree
+var desired_touchdown := 0.05
+var authored_pose: Dictionary = {}
+var pelvis_index := -1
+var neutral_toes: Array[Transform3D] = []
+var bridge := false
+var bridge_time := 0.0
+var bridge_wait := 0.0
+var planned_landing := Transform3D.IDENTITY
+var landing_time := -.1
+var bridge_grounded := false
+var bridge_side := 0
+var bridge_origin := Transform3D.IDENTITY
+var bridge_toe := Transform3D.IDENTITY
+var initial_hold := 0.0
+var previous_request := false
+
+
+func _boot_world(side: int) -> Transform3D:
+	return skeleton.global_transform * skeleton.get_bone_global_pose(leg_chains[side][2])
+
+
+func _toe_relative(side: int) -> Transform3D:
+	return (
+		skeleton.get_bone_global_pose(leg_chains[side][2]).affine_inverse()
+		* skeleton.get_bone_global_pose(leg_chains[side][3])
+	)
+
+
+func _prepare_steps(mode: String, heading: float) -> void:
+	bridge = false
+	releasing = false
+	special = mode
+	beat = 0
+	beat_time = 0.0
+	initial_hold = .035 if mode == "pivot" else 0.0
+	final_heading = heading
+	boot_from = [_boot_world(0), _boot_world(1)]
+	toe_from = [_toe_relative(0), _toe_relative(1)]
+	var forward := Vector3(sin(heading), 0, cos(heading))
+	if mode in ["brake", "turn", "change_pace"]:
+		if mode in ["turn", "change_pace"] and contact_world.actor.velocity.length() > .2:
+			forward = contact_world.actor.velocity.normalized()
+		support = int(forward.dot(boot_from[1].origin - boot_from[0].origin) > 0)
+		var boot_heights := _heights()
+		if absf(boot_heights.x - boot_heights.y) > .012:
+			support = int(boot_heights.y < boot_heights.x)
+		beat_duration = .155 if mode in ["brake", "change_pace"] else .175
+		if mode in ["turn", "change_pace"]:
+			var support_lead: float = (
+				(boot_from[support].origin - contact_world.actor.global_position).dot(forward)
+			)
+			beat_duration = clampf(.12 + support_lead * .32, .075, .175)
+	else:
+		var rotation: float = angle_difference(contact_world.actor.rotation.y, heading)
+		support = int(rotation > 0)
+		beat_duration = .16
+	if mode == "turn":
+		turn_beats = clampi(
+			ceili(absf(angle_difference(contact_world.actor.rotation.y, heading)) / deg_to_rad(50)),
+			2,
+			4
+		)
+	var landing_side := support if mode != "turn" or turn_beats % 2 == 0 else 1 - support
+	desired_touchdown = .555 if landing_side == 1 else .055
+	var heights := _heights()
+	for side in 2:
+		lifted[side] = heights[side] > contact_world.actor.global_position.y + .025
+	_brief_targets()
+
+
+func _brief_targets() -> void:
+	var body: CharacterBody3D = contact_world.actor
+	var endpoint := body.global_transform
+	var speed := body.velocity.slide(Vector3.UP).length()
+	var travel := (
+		speed * speed / (2.0 * BRAKING) if special == "brake" else minf(.11, speed * beat_duration)
+	)
+	var facing := Vector3(sin(final_heading), 0, cos(final_heading))
+	endpoint.basis = Basis(Vector3.UP, final_heading)
+	endpoint.origin += facing * travel
+	if special == "change_pace":
+		var forecast := speed
+		endpoint.origin = body.global_position
+		for tick in ceili(60 * (beat_duration + .155 * .45)):
+			forecast = move_toward(
+				forecast, travel_speed, (ACCELERATION if travel_speed > forecast else BRAKING) / 60.
+			)
+			endpoint.origin += facing * forecast / 60.
+	if special == "pivot":
+		var yaw := rotate_toward(body.rotation.y, final_heading, 6.2 * beat_duration * 1.35)
+		endpoint.basis = Basis(Vector3.UP, yaw)
+	if special == "turn":
+		var yaw := body.rotation.y
+		var predicted_speed := speed
+		endpoint.origin = body.global_position
+		for tick in ceili(60 * (beat_duration + .175 * .45)):
+			var turn_speed := 4.45
+			yaw = rotate_toward(yaw, final_heading, turn_speed / 60.)
+			var direction := Vector3(sin(yaw), 0, cos(yaw))
+			var desired := (
+				travel_speed * lerpf(.38, 1.0, smoothstep(-.45, .85, direction.dot(facing)))
+			)
+			predicted_speed = move_toward(
+				predicted_speed,
+				desired,
+				(ACCELERATION if desired > predicted_speed else BRAKING) / 60.
+			)
+			endpoint.origin += direction * predicted_speed / 60.
+		endpoint.basis = Basis(Vector3.UP, yaw)
+	step_targets.clear()
+	toe_targets = neutral_toes.duplicate()
+	for side in 2:
+		step_targets.append(endpoint * neutral_ankles[side])
+
+
+func _heights() -> Vector2:
+	var h := Vector2(INF, INF)
+	var points := _contacts()
+	for i in points.size():
+		var side := int(Vector3(samples[i][0]).x < 0)
+		h[side] = minf(h[side], points[i].y)
+	return h
+
+
+func _place_boot(side: int, target: Transform3D, toe: Transform3D) -> void:
+	var current := _boot_world(side)
+	_adjust_leg(leg_chains[side], target.origin - current.origin, 0.0)
+	var boot := skeleton.get_bone_global_pose(leg_chains[side][2])
+	boot.basis = skeleton.global_basis.inverse() * target.basis
+	skeleton.set_bone_global_pose(leg_chains[side][2], boot)
+	skeleton.set_bone_global_pose(leg_chains[side][3], boot * toe)
+
+
+func _play_steps(dt: float) -> void:
+	var swing := 1 - support
+	var latest := _boot_world(swing)
+	var latest_toe := _toe_relative(swing)
+	var last_beat := releasing or beat >= (turn_beats - 1 if special == "turn" else 1)
+	var t := clampf(beat_time / beat_duration, 0.0, 1.0)
+	var u := smoothstep(0.0, 1.0, t)
+	var from := boot_from[swing]
+	var to := step_targets[swing]
+	var pelvis := skeleton.get_bone_global_pose(pelvis_index)
+	var pelvis_world := skeleton.to_global(pelvis.origin)
+	var toward := (boot_from[support].origin - pelvis_world).slide(Vector3.UP).normalized()
+	# Keep the planted ankle reachable as the hips turn over the support leg.
+	var thigh_position := skeleton.to_global(
+		skeleton.get_bone_global_pose(leg_chains[support][0]).origin
+	)
+	var knee_position := skeleton.to_global(
+		skeleton.get_bone_global_pose(leg_chains[support][1]).origin
+	)
+	var ankle_position := _boot_world(support).origin
+	var target := boot_from[support].origin
+	var reach := (
+		thigh_position.distance_to(knee_position) + knee_position.distance_to(ankle_position) - .006
+	)
+	var reach_gap := maxf(0, thigh_position.distance_to(target) - reach)
+	pelvis.origin += (
+		skeleton.global_basis.inverse()
+		* (target - thigh_position).normalized()
+		* minf(.17, reach_gap)
+	)
+	var transfer := sin(PI * t)
+	pelvis.origin += (
+		skeleton.global_basis.inverse() * (toward * .027 - Vector3.UP * .045) * transfer
+	)
+	skeleton.set_bone_global_pose(pelvis_index, pelvis)
+	if last_beat:
+		to = latest
+	var moving := from.interpolate_with(to, u)
+	moving.origin.y += .090 * sin(PI * t)
+	var yaw: float = contact_world.actor.rotation.y
+	var outward := Vector3(cos(yaw), 0, -sin(yaw)) * (1.0 if swing == 0 else -1.0)
+	var spacing: float = (moving.origin - boot_from[support].origin).dot(outward)
+	var step_weight := smoothstep(0.0, .30, t)
+	moving.origin += outward * maxf(0.0, .28 - spacing) * step_weight
+	var support_knee := skeleton.to_global(
+		skeleton.get_bone_global_pose(leg_chains[support][1]).origin
+	)
+	var body_center := skeleton.to_global(pelvis.origin)
+	var around_hip: float = (moving.origin - body_center).dot(outward)
+	moving.origin += outward * maxf(0.0, .115 - around_hip) * step_weight
+	var knee_space: float = (moving.origin - support_knee).dot(outward)
+	moving.origin += outward * maxf(0.0, .25 - knee_space) * step_weight
+	_place_boot(support, boot_from[support], toe_from[support])
+	_place_boot(
+		swing,
+		moving,
+		toe_from[swing].interpolate_with(latest_toe if last_beat else toe_targets[swing], u)
+	)
+	var h := _heights()[support]
+	var correction: float = clampf(contact_world.actor.global_position.y + .001 - h, -.05, .03)
+	if absf(correction) > .0015:
+		var held := _boot_world(support)
+		held.origin.y += correction
+		_place_boot(support, held, toe_from[support])
+	if t < 1.0:
+		beat_time = minf(beat_duration, beat_time + dt)
+		return
+	if last_beat:
+		bridge = true
+		bridge_time = 0.0
+		bridge_wait = 0.0
+		landing_time = -.1
+		bridge_grounded = false
+		bridge_side = support
+		bridge_origin = _boot_world(support)
+		bridge_toe = _toe_relative(support)
+		special = ""
+		return
+	boot_from = [_boot_world(0), _boot_world(1)]
+	toe_from = [_toe_relative(0), _toe_relative(1)]
+	support = swing
+	beat += 1
+	if special == "turn":
+		beat_duration = .175
+	if special == "change_pace":
+		beat_duration = .155
+	beat_time = 0.0
+	_brief_targets()
+
+
+func _release_last_foot(dt: float) -> void:
+	var live := _boot_world(bridge_side)
+	var toe := _toe_relative(bridge_side)
+	if not bridge_grounded:
+		var h := _heights()[1 - bridge_side]
+		if h <= contact_world.actor.global_position.y + .006 or bridge_wait >= .18:
+			bridge_grounded = true
+		else:
+			bridge_wait += dt
+			_place_boot(bridge_side, bridge_origin, bridge_toe)
+			return
+	if landing_time < 0.0:
+		var body: CharacterBody3D = contact_world.actor
+		var hz: float = contact_world.character_kit.locomotion.stride_hz
+		var phase: float = (
+			float(gait_tree.get("parameters/walk/current_position"))
+			/ contact_world.character_kit.locomotion.walk_length
+		)
+		var future_phase := .51 if bridge_side == 1 else .01
+		var remaining := fposmod(future_phase - phase, 1.0)
+		landing_time = clampf(remaining / maxf(.75, hz), .20, .35)
+		var endpoint := body.global_transform
+		var forward := body.velocity.slide(Vector3.UP)
+		var shoe_lead := minf(.29, forward.length() * .135)
+		endpoint.origin += forward * landing_time + forward.normalized() * shoe_lead
+		planned_landing = endpoint * neutral_ankles[bridge_side]
+	var t := clampf(bridge_time / landing_time, 0, 1)
+	var weight := smoothstep(0, 1, t)
+	var dest := bridge_origin.interpolate_with(planned_landing, weight)
+	dest = dest.interpolate_with(live, smoothstep(.55, 1.0, t))
+	dest.origin.y += .08 * sin(PI * t)
+	_place_boot(bridge_side, dest, bridge_toe.interpolate_with(toe, weight))
+	if t >= 1.0:
+		bridge = false
+	bridge_time += dt
 
 
 func _bind_soles(world: Node3D) -> void:
@@ -72,7 +344,19 @@ func _bind_soles(world: Node3D) -> void:
 					skeleton.find_bone("Toe" + side)
 				]
 			)
-		world.character_kit.locomotion.tree.mixer_applied.connect(_settle_support)
+		neutral_ankles = [
+			body.global_transform.affine_inverse() * _boot_world(0),
+			body.global_transform.affine_inverse() * _boot_world(1)
+		]
+		neutral_toes = [_toe_relative(0), _toe_relative(1)]
+		pelvis_index = skeleton.find_bone("Pelvis")
+		gait_tree = world.character_kit.locomotion.tree
+		var graph: AnimationNodeBlendTree = gait_tree.tree_root
+		graph.disconnect_node("output", 0)
+		graph.add_node("transfer_speed", AnimationNodeTimeScale.new())
+		graph.connect_node("transfer_speed", 0, "movement")
+		graph.connect_node("output", 0, "transfer_speed")
+		gait_tree.mixer_applied.connect(_settle_support)
 
 
 func _contacts() -> PackedVector3Array:
@@ -91,18 +375,8 @@ func _contacts() -> PackedVector3Array:
 	return result
 
 
-func _sole_headings() -> PackedVector3Array:
-	var headings := PackedVector3Array()
-	for leg: Array in leg_chains:
-		var toe := skeleton.get_bone_global_pose(leg[3]).origin
-		var ankle := skeleton.get_bone_global_pose(leg[2]).origin
-		headings.append((skeleton.global_basis * (toe - ankle)).slide(Vector3.UP).normalized())
-	return headings
-
-
-# Keep both authored link lengths and the original knee bend plane when the
-# sole stays planted during redirection or braking. The collision body is never
-# displaced by the animation.
+# Solve the original hip–knee–ankle chain in its authored bend plane.
+# Steering stays on the collision body; the foot targets affect only the rig.
 func _adjust_leg(chain: Array, delta: Vector3, turn: float) -> void:
 	var thigh := skeleton.get_bone_global_pose(chain[0])
 	var shin := skeleton.get_bone_global_pose(chain[1])
@@ -135,77 +409,36 @@ func _adjust_leg(chain: Array, delta: Vector3, turn: float) -> void:
 
 
 func _settle_support() -> void:
-	if previous_contacts.is_empty():
+	if special.is_empty() and not bridge and not floor_pending:
 		return
-	var after := _contacts()
-	var offsets: Array[Vector3] = [Vector3.ZERO, Vector3.ZERO]
-	var centers: Array[Vector3] = [Vector3.ZERO, Vector3.ZERO]
-	var counts := Vector2i.ZERO
-	var sole_height := Vector2(INF, INF)
-	var ground: float = contact_world.actor.global_position.y
-	for i in after.size():
-		var side := int(Vector3(samples[i][0]).x < 0.0)
-		sole_height[side] = minf(sole_height[side], after[i].y - ground)
-		if previous_contacts[i].y > ground + .005 or after[i].y > ground + .006:
-			continue
-		offsets[side] += (previous_contacts[i] - after[i]).slide(Vector3.UP)
-		centers[side] += after[i]
-		counts[side] += 1
-	previous_contacts.clear()
-	var headings := _sole_headings()
+	# The mixer does not write constant bone channels each tick. Restore
+	# their authored local transforms before the next animation sample.
+	authored_pose[pelvis_index] = skeleton.get_bone_pose(pelvis_index)
+	for chain: Array in leg_chains:
+		for bone: int in chain:
+			authored_pose[bone] = skeleton.get_bone_pose(bone)
 	var dt := 1.0 / Engine.physics_ticks_per_second
-	# Finish a brake by lifting each displaced boot back to its authored idle
-	# pose, one at a time, with the opposite boot supporting the body.
-	if settling_idle:
-		if settle_side < 0:
-			settle_side = int(foot_offsets[1].length_squared() > foot_offsets[0].length_squared())
-			settle_from = foot_offsets[settle_side]
-			settle_twist = foot_twists[settle_side]
-			if settle_from.length() < .012 and absf(settle_twist) < .04:
-				settling_idle = false
-				settle_side = -1
-			else:
-				settle_amount = 0.0
-		if settling_idle:
-			settle_amount = minf(1.0, settle_amount + dt / .16)
-			var weight := smoothstep(0.0, 1.0, settle_amount)
-			foot_offsets[settle_side] = settle_from * (1.0 - weight)
-			foot_twists[settle_side] = settle_twist * (1.0 - weight)
-			for side in 2:
-				var delta: Vector3 = skeleton.global_basis * foot_offsets[side]
-				if side == settle_side:
-					delta.y += .055 * sin(PI * settle_amount)
-				_adjust_leg(leg_chains[side], delta, foot_twists[side])
-			if settle_amount >= 1.0:
-				settle_side = -1
-			return
-	for side in 2:
-		var offset := Vector3.ZERO
-		var twist := 0.0
-		if braking_or_turning and counts[side] >= 2:
-			var ankle: Vector3 = skeleton.to_global(
-				skeleton.get_bone_global_pose(leg_chains[side][2]).origin
-			)
-			var lever: Vector3 = (centers[side] / float(counts[side]) - ankle).slide(Vector3.UP)
-			twist = clampf(
-				previous_headings[side].signed_angle_to(headings[side], Vector3.UP), -.90, .90
-			)
-			offset = offsets[side] / float(counts[side]) + lever - lever.rotated(Vector3.UP, -twist)
-		var target: Vector3 = (skeleton.global_basis.inverse() * offset).limit_length(.17)
-		var max_step: float = 2.4 * dt
-		foot_offsets[side] = foot_offsets[side].move_toward(target, max_step)
-		foot_twists[side] = move_toward(foot_twists[side], twist, 9.0 * dt)
-		var lift := maxf(0.0, -sole_height[side] + .0002)
-		if (
-			foot_offsets[side].length_squared() > .000001
-			or absf(foot_twists[side]) > .001
-			or lift > .001
-		):
-			_adjust_leg(
-				leg_chains[side],
-				skeleton.global_basis * foot_offsets[side] + Vector3.UP * lift,
-				foot_twists[side]
-			)
+	var protected_step := procedural_steps_active
+	if not special.is_empty():
+		_play_steps(dt)
+	elif bridge:
+		_release_last_foot(dt)
+	else:
+		var heights := _heights()
+		for side in 2:
+			var lift: float = contact_world.actor.global_position.y - heights[side] + .0002
+			if lift > .001:
+				_adjust_leg(leg_chains[side], Vector3.UP * lift, 0.0)
+
+	if protected_step:
+		var heights := _heights()
+		var ground: float = contact_world.actor.global_position.y
+		for side in 2:
+			if heights[side] > ground + .025:
+				lifted[side] = true
+			elif lifted[side] and heights[side] <= ground + .008:
+				lifted[side] = false
+				support_step_serial += 1
 
 
 func step(world: Node3D, input: Vector2, dt: float) -> float:
@@ -218,48 +451,86 @@ func step(world: Node3D, input: Vector2, dt: float) -> float:
 	var requested := remap(clampf(input.length(), DEAD_ZONE, 1.0), DEAD_ZONE, 1.0, 0.0, MAX_SPEED)
 	var forward := Vector3(sin(body.rotation.y), 0.0, cos(body.rotation.y))
 	var speed := previous_speed
+	travel_speed = requested
 	if requested > 0.0:
 		var view_right: Vector3 = world.camera.global_basis.x
 		var view_near: Vector3 = view_right.cross(Vector3.UP)
 		var wish: Vector3 = (view_right * input.x + view_near * input.y).normalized()
-		if speed >= 2.0 and forward.dot(wish) < 0.05:
+		var heading := atan2(wish.x, wish.z)
+		if (
+			skeleton
+			and special.is_empty()
+			and not redirecting
+			and speed < .14
+			and forward.dot(wish) < .72
+		):
+			_prepare_steps("pivot", heading)
+		var crossing_to_run := previous_command_speed < 1.7 and requested >= 1.7 and speed < 1.45
+		var crossing_to_walk := previous_command_speed > 1.7 and requested <= 1.7 and speed > 1.85
+		if (
+			skeleton
+			and special.is_empty()
+			and previous_request
+			and forward.dot(wish) > .60
+			and (crossing_to_run or crossing_to_walk)
+		):
+			_prepare_steps("change_pace", heading)
+		if special == "brake":
+			releasing = true
+		if special == "turn" and absf(angle_difference(final_heading, heading)) > .8:
+			final_heading = heading
+		if speed >= .08 and forward.dot(wish) < .91:
+			if not redirecting and special == "" and skeleton:
+				_prepare_steps("turn", heading)
 			redirecting = true
 		var turn_speed := lerpf(PIVOT_TURN, MOVING_TURN, clampf(speed / MAX_SPEED, 0.0, 1.0))
-		next_heading = rotate_toward(body.rotation.y, atan2(wish.x, wish.z), turn_speed * dt)
+		if special == "turn":
+			turn_speed = 4.45
+		if special == "pivot":
+			turn_speed = 6.2
+		if initial_hold > 0.0:
+			initial_hold -= dt
+		else:
+			next_heading = rotate_toward(body.rotation.y, atan2(wish.x, wish.z), turn_speed * dt)
 		forward = Vector3(sin(next_heading), 0.0, cos(next_heading))
 		# Preserve running cadence through the turn. At a standing start the
 		# body still pivots before carrying momentum into its first stride.
 		if redirecting and forward.dot(wish) > .995:
 			redirecting = false
 		var turn_floor := 0.88 * smoothstep(1.15, 2.0, speed)
+		if special == "turn":
+			turn_floor = .38
 		requested *= lerpf(turn_floor, 1.0, smoothstep(-0.45, 0.85, forward.dot(wish)))
+	if input.length() <= DEAD_ZONE and previous_request and previous_speed > .30 and skeleton:
+		_prepare_steps("brake", body.rotation.y)
+	previous_request = input.length() > DEAD_ZONE
+	previous_command_speed = travel_speed
 	speed = move_toward(speed, requested, (ACCELERATION if requested > speed else BRAKING) * dt)
-	if requested <= 0.001:
+	if requested <= .001:
 		redirecting = false
-		if previous_speed > 1.1:
-			stopping = true
-	if stopping and previous_speed <= .001:
-		stopping = false
-		settling_idle = true
-	if requested > .001:
-		stopping = false
-		settling_idle = false
-		settle_side = -1
-	braking_or_turning = redirecting or stopping
-	var changing_speed := absf(previous_speed - speed) > .005
-	if (
-		skeleton
-		and (
-			changing_speed
-			or braking_or_turning
-			or settling_idle
-			or not foot_offsets[0].is_zero_approx()
-			or not foot_offsets[1].is_zero_approx()
-			or not foot_twists.is_zero_approx()
-		)
-	):
-		previous_contacts = _contacts()
-		previous_headings = _sole_headings()
+	floor_pending = absf(previous_speed - speed) > .005
+	if gait_tree:
+		var scale_rate := 1.0
+		if special in ["turn", "change_pace"]:
+			var gait = world.character_kit.locomotion
+			var hz: float = gait.stride_hz
+			if hz > .12:
+				var phase: float = (
+					float(gait_tree.get("parameters/walk/current_position")) / gait.walk_length
+				)
+				var beats_left: int = (turn_beats if special == "turn" else 2) - 1 - beat
+				var future_duration := .175 if special == "turn" else beat_duration
+				var remaining := maxf(
+					dt,
+					(
+						(ceilf(future_duration / dt) + 1.0) * dt * beats_left
+						+ beat_duration
+						- beat_time
+					)
+				)
+				var err := wrapf(desired_touchdown - (phase + hz * remaining), -.5, .5)
+				scale_rate = clampf(1.0 + err / maxf(.045, hz * remaining), .05, 2.55)
+		gait_tree.set("parameters/transfer_speed/scale", scale_rate)
 	body.rotation.y = next_heading
 	body.velocity = forward * speed
 	body.move_and_slide()

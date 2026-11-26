@@ -81,6 +81,8 @@ func donor_mesh(source: Mesh) -> MeshInstance3D:
 			var colors := {"timber_dark":"795b41","snow":"e8f2f6","blue":"455966","rope":"cfb894","timber":"ffffff"}
 			ink.set_shader_parameter("base_color",Color(colors.get(code,"85614a")))
 			ink.set_shader_parameter("detail_strength",.012)
+			if code in ["timber","timber_dark"]:
+				ink.set_shader_parameter("ground_bounce",.35)
 			if code == "timber":
 				ink.set_shader_parameter("use_reference_grain",true)
 				ink.set_shader_parameter("reference_grain",GRAIN)

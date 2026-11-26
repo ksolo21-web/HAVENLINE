@@ -261,6 +261,7 @@ func natural_plate()->void:
  elif field.reveal_countdown>=0 and field.reveal_countdown<=.245:name="07b-reveal-start"
  elif field.camp_active and ev.get("event","")=="reveal" and age>=.08:name="07c-reveal-rise"
  elif stage=="Three dedicated floor stacks" and elapsed>=28:name="08-stocks"
+ elif stage=="Approach the two-material upgrade" and elapsed>=2:name="08b-stocks-clear"
  elif stage=="Upgrade applied and visible" and elapsed>=28:name="09-upgraded"
  elif field.inventory.paid.orbit_upgrade.stone==1:name="09a-upgrade-payment"
  elif stage=="Unbroken snow outside the eastern fence" and elapsed>=27:name="10-gate-exterior"
