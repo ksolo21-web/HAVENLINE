@@ -1,0 +1,3 @@
+# One pelvis-center correction — HOLD
+
+The pinned correction moved the measured center from -35.85 mm to +3.00 mm inside the recomputed support hull at unchanged actor/root, camera, terrain and both Heel/Ball transforms. The same left source row stays 6.004 mm above snow. Strict lower-body crossings rose from 1,436 to 1,445 (994 new, 985 removed), and transported-normal alarms rose from 1,010 to 1,050. Starting neutral had zero strict pairs; strict test excludes adjacency, tangency and coplanar cases. The historical right guard edge still compresses below threshold. Stop further pelvis-placement variants. Not a gait, a native test, or a playable modification. See replay instructions at package root.

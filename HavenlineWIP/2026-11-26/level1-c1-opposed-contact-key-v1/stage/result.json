@@ -1,0 +1,197 @@
+{
+  "source_commit": "11c14a1c41971067c7dc97db69375f720a408f68",
+  "source_input_manifest_sha256": "6d9c3a316def47cb4ccccba08cfba4465f0ceb399de423bcc5eb24b1835b13e2",
+  "current_art_and_clean_rig": {
+    "original_glb": "95e4fed3a2778656cdf8b73affd2eb3feda8a32f82f4a0c3f76d90c82633c099",
+    "rig.LOCAL.json": "ce9551d2f34a90c9f5b1dd08c7854ecf471e8ba5965f3be99a41dfd6bb15943c",
+    "skin.LOCAL.npz": "b22a32e9d0ebb28b626c757364c34a4bd00b326a5aac435c0f96ba8aae388220"
+  },
+  "stock_scene_script_sha256": "29fc86cd076f98169e730bf59aacb63b25b4c28aef4326459679324169e3eba9",
+  "stock_spawn_world": [
+    -3.25,
+    0.2510053217411041,
+    11.800000190734863
+  ],
+  "art_to_world_scale": 1.7863049233885069,
+  "rest_mesh_world_translation": [
+    -3.2498227772387875,
+    0.25100556434031435,
+    11.800190882212984
+  ],
+  "normal_view": {
+    "viewport": [
+      1280,
+      720
+    ],
+    "ortho_size": 13.0,
+    "camera_origin_world": [
+      3.75,
+      11.251005321741104,
+      22.800000190734863
+    ],
+    "camera_rows_right_up_back": [
+      [
+        0.8436614877321075,
+        0.0,
+        -0.5368754921931593
+      ],
+      [
+        -0.3461941859600781,
+        0.764324826145627,
+        -0.5440194350801227
+      ],
+      [
+        0.41034726723238446,
+        0.6448314199366041,
+        0.6448314199366041
+      ]
+    ]
+  },
+  "key_parameters": {
+    "foot_roll_art_x_deg": {
+      "L": [
+        -1.3,
+        0.0
+      ],
+      "R": [
+        1.8,
+        -0.8
+      ]
+    },
+    "target_contact_center_fore_aft_world_m": {
+      "L": 0.043,
+      "R": -0.043
+    },
+    "root_position_unchanged": true,
+    "pelvis_height_offset_world_m": -0.08077263297495915,
+    "hip_extended_reach_reserves_m": {
+      "L": 0.07888081908566878,
+      "R": 0.010999999999999984
+    }
+  },
+  "feet": {
+    "L": {
+      "role": "Heel",
+      "source_contact_row": 1371,
+      "source_bound_snow_target": [
+        -3.0461869704659796,
+        0.2454272329669859,
+        11.843000190734863
+      ],
+      "actual_marker_world": [
+        -3.0461869704659796,
+        0.25143169772285245,
+        11.843000190734863
+      ],
+      "mantained_marker_xz_residual_m": 0.0,
+      "actual_marker_ground_distance_m": 0.006004464755866551,
+      "whole_boot_floor_min_m": 0.00015000000000001124,
+      "support": {
+        "largest_face_count": 93,
+        "largest_projected_face_area_sum_mm2": 5085.0387,
+        "components": 1
+      },
+      "measured_indexed_snow": {
+        "xz": [
+          [
+            -3.25,
+            11.75
+          ],
+          [
+            -3.0,
+            11.75
+          ],
+          [
+            -3.25,
+            12.0
+          ],
+          [
+            -3.0,
+            12.0
+          ]
+        ],
+        "heights": [
+          0.2511885166168213,
+          0.24420678615570068,
+          0.25027257204055786,
+          0.24473978579044342
+        ],
+        "weights": [
+          0.0,
+          0.6279992370605498,
+          0.18474788186391855,
+          0.18725288107553162
+        ],
+        "min_grid_shore_m": 15.595315244457161
+      }
+    },
+    "R": {
+      "role": "Ball",
+      "source_contact_row": 18877,
+      "source_bound_snow_target": [
+        -3.5309908669313375,
+        0.2554099759128699,
+        11.757000190734864
+      ],
+      "actual_marker_world": [
+        -3.530990872796328,
+        0.256132627863145,
+        11.756994206620767
+      ],
+      "mantained_marker_xz_residual_m": 5.984114096690973e-06,
+      "actual_marker_ground_distance_m": 0.0007225504779734826,
+      "whole_boot_floor_min_m": 0.00014999999999998348,
+      "support": {
+        "largest_face_count": 196,
+        "largest_projected_face_area_sum_mm2": 5601.4116,
+        "components": 1
+      },
+      "measured_indexed_snow": {
+        "xz": [
+          [
+            -3.75,
+            11.75
+          ],
+          [
+            -3.5,
+            11.75
+          ],
+          [
+            -3.75,
+            12.0
+          ],
+          [
+            -3.5,
+            12.0
+          ]
+        ],
+        "heights": [
+          0.2567054033279419,
+          0.2553621232509613,
+          0.25246748328208923,
+          0.2528366148471832
+        ],
+        "weights": [
+          0.09596270478589375,
+          0.8760365322746502,
+          0.02800076293945608,
+          0.0
+        ],
+        "min_grid_shore_m": 17.612797719122142
+      }
+    }
+  },
+  "geometric_pelvis_over_contact_hull": {
+    "pelvis_center_xz": [
+      -3.22421721419701,
+      11.822598015941242
+    ],
+    "signed_margin_inside_m": -0.03584857950719034,
+    "positive_margin_means_inside": true,
+    "not_a_body_mass_or_dynamic_balance_claim": true
+  },
+  "stage_only": true,
+  "current_motion_not_approved": true,
+  "native_scene_measured": false,
+  "full_deformation_and_collision_checks_done": false
+}
