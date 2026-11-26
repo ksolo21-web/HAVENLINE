@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T00:03:30Z",
+  "observed_at_utc": "2026-11-26T00:07:12Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -21,11 +21,11 @@
       "id": "character-1",
       "role": "Rigging and independent review",
       "state": "in_progress",
-      "result": "Current stock walk and run were rejected at normal gameplay framing. The detached fingered rig has no accepted gait; its tested load deforms the boot-to-shin transition.",
+      "result": "Fastest development base selected: the existing game-ready model and rig, with the rejected walk and run replaced, not reused. Exact fingered alternatives still lack a verified gait export.",
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/11ced1d317d79e328901ec99efe662cb9204eed6"
       ],
-      "next": "Test a localized weights-only correction on the detached fingered rig, then independently verify a genuine cycle at the normal camera. Preserve the approved model."
+      "next": "Build a new planted-steps walk/run at normal game camera, and independently test genuine two-handed grip on the selected rig. Appearance and scale are unchanged."
     },
     {
       "id": "wood-storage",
@@ -50,12 +50,12 @@
     {
       "id": "audio",
       "role": "Audio and independent playback QA",
-      "state": "ready",
-      "result": "47 Level 1 scenarios mapped; pickup and furnace intent verified in isolation. Original drafts exist, no sound in playable build.",
+      "state": "in_progress",
+      "result": "47 Level 1 scenarios mapped; exact pickup/furnace intents verified. Native playback test stopped at a type error before sound played; no sound installed.",
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/0e32f67c11c045fb3196e437826233a07b5cd9e0"
       ],
-      "next": "Verify the repaired isolated player and real playback on a device when admitted."
+      "next": "Verify the isolated type-annotation fix and actual player progress before any device or mix approval."
     },
     {
       "id": "customer-counter",
@@ -73,5 +73,11 @@
       "evidence": [],
       "next": "Lock the authored Level 1 enemy asset and real encounter authority before adding combat or related sound."
     }
-  ]
+  ],
+  "roster": {
+    "path": "roster.json",
+    "avatar_count": 15,
+    "includes_coordinator": true,
+    "represents_live_presence": false
+  }
 }
