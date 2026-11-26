@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-25T23:58:00Z",
+  "observed_at_utc": "2026-11-26T00:03:30Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -21,24 +21,30 @@
       "id": "character-1",
       "role": "Rigging and independent review",
       "state": "in_progress",
-      "result": "Captured the current normal-camera stock walk and run. The stakeholder rejected those animations. The playable stock hero is not the newer fingers character.",
-      "evidence": ["https://github.com/ksolo21-web/HAVENLINE/commit/11ced1d317d79e328901ec99efe662cb9204eed6"],
-      "next": "Identify the exact newer fingered source and compare reference stance and gait at normal gameplay framing. Use it for a detached gait test only after exact mapping."
+      "result": "Current stock walk and run were rejected at normal gameplay framing. The detached fingered rig has no accepted gait; its tested load deforms the boot-to-shin transition.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/11ced1d317d79e328901ec99efe662cb9204eed6"
+      ],
+      "next": "Test a localized weights-only correction on the detached fingered rig, then independently verify a genuine cycle at the normal camera. Preserve the approved model."
     },
     {
       "id": "wood-storage",
       "role": "Resource builder and reviewer",
       "state": "in_progress",
-      "result": "Two larger logs and the storage emblem read at the normal camera in a detached far-side still. No integrated placement, carry, or transfer pass.",
-      "evidence": ["https://github.com/ksolo21-web/HAVENLINE/commit/f92609b35f6bf7986e7011418f97585ff170cb0f"],
-      "next": "Check the real terrain, supports and full-size carry path at the proposed anchor."
+      "result": "Two larger logs and the storage emblem read at the normal camera in the detached far-side still. The test-size carry mounts fail at the larger scale.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/f92609b35f6bf7986e7011418f97585ff170cb0f"
+      ],
+      "next": "Keep the verified visual size; design proper larger carry mounts and test the real route and transfer instead of enlarging the old mounts."
     },
     {
       "id": "furnace-purchase",
       "role": "Gameplay and plot builder",
       "state": "in_progress",
       "result": "Corner-only paint conditions verified in a paired isolated Godot test. No paid fill or shrink is installed.",
-      "evidence": ["https://github.com/ksolo21-web/HAVENLINE/commit/872045d9253a765843cf88e2221e9a59121d0015"],
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/872045d9253a765843cf88e2221e9a59121d0015"
+      ],
       "next": "Real-time frame legibility and proper paid fill are still unverified. The fill needs independently proved owned deliveries to the actual purchase destination."
     },
     {
@@ -46,7 +52,9 @@
       "role": "Audio and independent playback QA",
       "state": "ready",
       "result": "47 Level 1 scenarios mapped; pickup and furnace intent verified in isolation. Original drafts exist, no sound in playable build.",
-      "evidence": ["https://github.com/ksolo21-web/HAVENLINE/commit/0e32f67c11c045fb3196e437826233a07b5cd9e0"],
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/0e32f67c11c045fb3196e437826233a07b5cd9e0"
+      ],
       "next": "Verify the repaired isolated player and real playback on a device when admitted."
     },
     {
