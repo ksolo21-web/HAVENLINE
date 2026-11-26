@@ -70,7 +70,7 @@ func run() -> void:
 		var dt := 1./60.
 		game.lifecycle.advance(dt)
 		game.step_tree(dt)
-		for g in game.gates: g.advance(dt,game.actor.position,.28)
+		game.step_technical_gates(dt)
 		for token: String in game.drops: game.drops[token].age+=dt
 		worker.advance(dt)
 		var phase: String = worker.phase

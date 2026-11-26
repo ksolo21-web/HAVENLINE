@@ -20,6 +20,17 @@ func place(at: Vector3) -> void:
 	world.camera.position = at + Vector3(7,11,11)
 	await frames(20)
 
+# When a bank masks the player, the renderer temporarily overrides its surfaces.
+# Compare either its saved ordinary surfaces or the materials actually on screen.
+func bank_materials_match(visual: MeshInstance3D, proxy: Mesh, saved: Array = []) -> bool:
+	if visual.mesh.get_surface_count() != proxy.get_surface_count(): return false
+	for i in proxy.get_surface_count():
+		var surface := visual.get_active_material(i)
+		if not saved.is_empty():
+			surface = saved[i] if saved[i] else visual.mesh.surface_get_material(i)
+		if surface == null or surface != proxy.surface_get_material(i): return false
+	return true
+
 func check_bank_streaming(land: Node, sample: Dictionary, kind: String) -> void:
 	var at := Vector3(sample.x, 0.0, sample.z)
 	await place(at + Vector3(9.5, 0, 0))
@@ -30,7 +41,9 @@ func check_bank_streaming(land: Node, sample: Dictionary, kind: String) -> void:
 		return
 	var row: Dictionary = rows[0]
 	check(kind+" shows the distant source proxy", row.proxy_visible and not is_instance_valid(row.live))
-	await place(at + Vector3(1.5,0,.4))
+	# The bank promotes within five metres. Inspect its undamaged geometry
+	# before approaching the automatic orbiting pickaxe's contact range.
+	await place(at + Vector3(4.5,0,0))
 	var live = world.lifecycle.loaded.get(row.id)
 	if not is_instance_valid(live):
 		check(kind+" promotes to a mineable bank", false)
@@ -46,11 +59,19 @@ func check_bank_streaming(land: Node, sample: Dictionary, kind: String) -> void:
 		var visual: MeshInstance3D = meshes[i]
 		parity = parity and (live.global_transform * batch.local).is_equal_approx(visual.global_transform)
 		parity = parity and proxy_mesh.get_aabb().is_equal_approx(visual.mesh.get_aabb()) and proxy_mesh.get_surface_count() == visual.mesh.get_surface_count()
-		for surface in proxy_mesh.get_surface_count():
-			var proxy_mat: Material = proxy_mesh.surface_get_material(surface)
-			var live_mat: Material = visual.get_active_material(surface)
-			parity = parity and proxy_mat != null and proxy_mat == live_mat
+		parity = parity and bank_materials_match(visual, proxy_mesh)
 	check(kind+" proxy uses the live bank scale, transform, bounds and surfaces", parity)
+	await place(at + Vector3(1.5,0,.4))
+	var close_surfaces_match := true
+	for i in mini(meshes.size(), batches.size()):
+		var saved: Array = world.field_env.resource_sightline.opened.get(meshes[i], [])
+		close_surfaces_match = close_surfaces_match and bank_materials_match(meshes[i], batches[i].mesh.mesh, saved)
+	check(kind+" retains its authored surfaces during the close approach", close_surfaces_match)
+	await place(at + Vector3(4.5,0,0))
+	var restored: bool = row.live == live and not row.proxy_visible
+	for i in mini(meshes.size(), batches.size()):
+		restored = restored and bank_materials_match(meshes[i], batches[i].mesh.mesh)
+	check(kind+" restores the ordinary material while the same bank is still live", restored)
 	await place(at + Vector3(9.5,0,0))
 	check(kind+" returns to proxy on release", row.proxy_visible and not is_instance_valid(row.live) and not world.lifecycle.loaded.has(row.id))
 
