@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T04:44:38Z",
+  "observed_at_utc": "2026-11-26T05:02:40Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -53,12 +53,12 @@
       "id": "furnace-purchase",
       "role": "Gameplay and plot builder",
       "state": "in_progress",
-      "result": "The newer owner 33035–33040 sheets now control the gate and fence. Two high-detail Meshy masters were made; actual back views show duplicated front detail and the gate is welded, so neither raw mesh is a playable replacement. Exact detached owner-reference gate source has separate hinges and leaves, and needs a native import/gameplay/art check.",
+      "result": "New-reference separate leaves and matching posts pass all 78 actual native gameplay and cold checks; gate art remains 8.8 South / 7.8 East. New-reference one fence panel passed 67, held at 8.5; exact private Meshy surface transfer is the next normal-camera comparison.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/923bcb7ce2e8aaa42c01f7e3138bb700fa8607d8",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/d6f54dbf0811cade021f501d40402fb2b4e4d31c"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/90147ec749152ed98e38433955deb8dc4b8362af",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/170f07672e01f45e4ed0ff4e34fe3e9571a7140e"
       ],
-      "next": "Continue the independent two-sided fence weave and pinned gate OBJ import census. Preserve the already-verified 78 opening, closing, and save checks. No production install.",
+      "next": "Evaluate actual Meshy texture on the correctly sided private fence shape, then run a separate gate-local material comparison. West straight seam remains source-only. No game install.",
       "role_ids": [
         "builder-camp-pads",
         "level1-verifier"
@@ -170,15 +170,15 @@
     },
     {
       "role_id": "level1-verifier",
-      "state": "done",
-      "title": "Verified both gates close and block passage",
-      "summary": "11 active closing checks added to the 67 opening and reload checks. Actual camera captures are pinned, unchanged save.",
-      "next": "Independently review the separate reference fence and gate visual candidates.",
+      "state": "working",
+      "title": "Owner-reference gates passed movement",
+      "summary": "All 16 checked captures show real separate doors and posts. Full 78-check source scene works; closed East art needs help.",
+      "next": "Check the private Meshy fence material sample and independent gate art-only fix.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/5c3b0d43e5ea3190be42c06188b144b8c5b40129",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/0e142e4f38fcffdec63f747128706fb9143314fb"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/90147ec749152ed98e38433955deb8dc4b8362af",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/170f07672e01f45e4ed0ff4e34fe3e9571a7140e"
       ],
-      "updated_at_utc": "2026-11-26T04:20:51Z"
+      "updated_at_utc": "2026-11-26T05:02:40Z"
     },
     {
       "role_id": "builder-customer-counter",
@@ -376,6 +376,18 @@
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/923bcb7ce2e8aaa42c01f7e3138bb700fa8607d8",
         "https://github.com/ksolo21-web/HAVENLINE/commit/d6f54dbf0811cade021f501d40402fb2b4e4d31c"
+      ]
+    },
+    {
+      "id": "l1-new-owner-gate-native-20261126",
+      "type": "handoff",
+      "at_utc": "2026-11-26T05:02:40Z",
+      "from_role_id": "level1-verifier",
+      "to_role_id": "builder-camp-pads",
+      "message": "New owner-facing gate assembly passed the exact desktop movement and restore route. Keep correct gate leaves and posts. Visual holds and one-panel fence material test remain separate.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/90147ec749152ed98e38433955deb8dc4b8362af",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/170f07672e01f45e4ed0ff4e34fe3e9571a7140e"
       ]
     }
   ]
