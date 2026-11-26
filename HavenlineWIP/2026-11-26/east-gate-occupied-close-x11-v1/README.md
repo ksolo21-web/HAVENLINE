@@ -1,0 +1,3 @@
+# East gate occupied-close and fresh reload
+
+Independently replayed one matched X11 writer and separate cold process. East held at the same angle through three close-target and three reopen-target ticks while the grounded actor was in the tested outward stance, without leaf contact; ordinary retreat let it reopen fully. The South gate stayed active, open and unheld across all 371 paired East-tail ticks. No extra settled-close emission in the tail or cold process. Paid snapshot and original save bytes stayed exact. This tests this stance only; no visual, sound, phone, install, production or release claim. Raw logs, save/profile and process identifiers omitted.
