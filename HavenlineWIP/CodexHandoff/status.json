@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T07:08:47Z",
+  "observed_at_utc": "2026-11-26T07:40:24Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -34,13 +34,14 @@
     {
       "id": "wood-storage",
       "role": "Resource builder and reviewer",
-      "state": "blocked",
-      "result": "Rear-East interior receiver site was screened without changing gates, furnace or counter. Full-size wood does not bear on the tested flat plane; four exact shaped contact patches fit one pose. No actual receiver body, carry→store transaction, 50+ or phone approval.",
+      "state": "in_progress",
+      "result": "Verified two actual moving stock body poses. The same full-size log geometry clears them by ~29 mm in source analysis, with only ~4 mm above the clearance target. No live mount, transfer, full sweep or receiver is approved. Rear-East proposed seat has four exact source contacts in one pose.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/308f202cd83a097f28080df1762cd8d3259f707f",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/7db5bf8cebca5ff417d647c6534671849f5730a4"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/51645a6dd552e2f38655308258c29a081b95891a",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/4e7bd8c8ba55f73eccedc8484e0d1954857ba8df",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/308f202cd83a097f28080df1762cd8d3259f707f"
       ],
-      "next": "Confirm a low grounded empty/loaded silhouette and a recessed exact seat/receiver body; next true transfer must use one conserved typed wood ID.",
+      "next": "Prepare a separate natural Run cycle diagnostic to check clearance against the full cycle; the eventual one-log receiver still needs an approved low supported shell.",
       "role_ids": [
         "builder-resource-cooker"
       ]
@@ -114,9 +115,9 @@
       "role_id": "alfred",
       "state": "done",
       "title": "Prepared Bot Office feed data",
-      "summary": "Shaped gates still 9.3 South and 9.2 East after all 78 desktop checks. Rope V4 scored 9.0 below 9.1 Meshy-toned V3; no integration. Character 1 source probe also HOLD.",
-      "next": "Restore the isolated desktop slot before any single-frame gate look comparison; retain prior best fence.",
-      "updated_at_utc": "2026-11-26T05:50:48Z"
+      "summary": "Verified actual moving poses and a two-frame geometric log screen. Kept broader carry/receiver unapproved.",
+      "next": "Prepare an ordinary full-cycle diagnostic before authoring a load-bearing attachment.",
+      "updated_at_utc": "2026-11-26T07:40:24Z"
     },
     {
       "role_id": "rig-character",
@@ -187,17 +188,6 @@
     }
   ],
   "office_events": [
-    {
-      "id": "independent-garment-neutral-reject-20261126-0056",
-      "type": "handoff",
-      "at_utc": "2026-11-26T00:56:23Z",
-      "from_role_id": "critic-rig",
-      "to_role_id": "alfred",
-      "message": "Handoff summary: The first detached garment rebuild failed with six overlaps at rest. Keep it out of the game and verify any revised garment at rest before testing gait.",
-      "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/tree/ac46ca6b6a977ce156ab783b933c727cb9d18b08/HavenlineWIP/2026-11-26/level1-c1-neutral-cavity-independent-v1"
-      ]
-    },
     {
       "id": "pad-mount-admission-reviewed-20261126",
       "type": "handoff",
@@ -415,6 +405,18 @@
       "message": "The new price numeral reads in actual approach frames. Enlarge the visual form of the wood pictogram and relocate the build mark only if both can fit in a naturally visible region.",
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/0893a6f1f7b2ffc800db83ba4190fc56aa0f54ba"
+      ]
+    },
+    {
+      "id": "l1-two-exact-carry-pose-20261126",
+      "type": "handoff",
+      "at_utc": "2026-11-26T07:40:24Z",
+      "from_role_id": "level1-verifier",
+      "to_role_id": "rig-character",
+      "message": "Two real frames alone leave only about 4 mm over the carry clearance target. Capture a complete settled cycle before committing to the attachment.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/51645a6dd552e2f38655308258c29a081b95891a",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/4e7bd8c8ba55f73eccedc8484e0d1954857ba8df"
       ]
     }
   ]
