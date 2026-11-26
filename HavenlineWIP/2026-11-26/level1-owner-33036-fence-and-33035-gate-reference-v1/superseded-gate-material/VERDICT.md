@@ -1,0 +1,1 @@
+V1 gate-local paint passed all 67 desktop checks and exact reload. It made East more readable (median encoded luma 0 to 53.8), but oversaturated South, and the leaves stayed too thin. Independent hold East 8.6/South 8.5. The selective successor is now historical against the superseded design. No release.
