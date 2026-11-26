@@ -1,0 +1,3 @@
+# Native Crown shadow causality witnessed at three exact frames
+
+The two unchanged controls reproduced the route, pose, and rendered baseline. In both comparisons the temporary log with ordinary casting reproduced the exact original rejected pixel masks. The same diagnostic recipe with only casting disabled cleared those pixels and passed the unchanged checker twice at all three keys. The test establishes caster dependence for this exact capture, not how to change production shadow, whether bark is correct, or whether carry/storage is approved. No material or build change and no spend. Source and original logs stay scoped. Exact observer seal b5aa7272a869dfdef789fdb60474dccf342976f5a7f6187747aa19081b40ff90.
