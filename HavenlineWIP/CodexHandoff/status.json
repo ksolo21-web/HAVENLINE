@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T04:20:51Z",
+  "observed_at_utc": "2026-11-26T04:44:38Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -53,12 +53,12 @@
       "id": "furnace-purchase",
       "role": "Gameplay and plot builder",
       "state": "in_progress",
-      "result": "The rebuilt gates now opened and actively closed with ordinary input in the isolated desktop test. Both closed routes blocked grounded traversal and the disposable save was unchanged. 78 total checks passed. Gate art remains on hold and a cap-only reference fence candidate is running independently.",
+      "result": "The newer owner 33035–33040 sheets now control the gate and fence. Two high-detail Meshy masters were made; actual back views show duplicated front detail and the gate is welded, so neither raw mesh is a playable replacement. Exact detached owner-reference gate source has separate hinges and leaves, and needs a native import/gameplay/art check.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/5c3b0d43e5ea3190be42c06188b144b8c5b40129",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/0e142e4f38fcffdec63f747128706fb9143314fb"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/923bcb7ce2e8aaa42c01f7e3138bb700fa8607d8",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/d6f54dbf0811cade021f501d40402fb2b4e4d31c"
       ],
-      "next": "Review the fuller V3 fence caps at stock view, then test local gate art separately. No release or device verdict.",
+      "next": "Continue the independent two-sided fence weave and pinned gate OBJ import census. Preserve the already-verified 78 opening, closing, and save checks. No production install.",
       "role_ids": [
         "builder-camp-pads",
         "level1-verifier"
@@ -148,14 +148,14 @@
     {
       "role_id": "builder-camp-pads",
       "state": "working",
-      "title": "Refining the 18595 fence panel after 8.6 review",
-      "summary": "Only the lower southwest section is revised in this isolated test. All gameplay checks passed; ropes and snow silhouette still miss the reference.",
-      "next": "Deliver a visibly different one-panel treatment before full-perimeter adoption.",
+      "title": "Building separate owner-matched fence and gate meshes",
+      "summary": "New six-sheet references control. The paid masters preserve look, but have wrong rear topology and cannot be used directly.",
+      "next": "Keep the gates physically separate and verify all actual front/rear states and fence joins.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/0e142e4f38fcffdec63f747128706fb9143314fb",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/028fb5ddbcdf957f99d81192884256561b0096a3"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/923bcb7ce2e8aaa42c01f7e3138bb700fa8607d8",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/d6f54dbf0811cade021f501d40402fb2b4e4d31c"
       ],
-      "updated_at_utc": "2026-11-26T04:14:39Z"
+      "updated_at_utc": "2026-11-26T04:44:38Z"
     },
     {
       "role_id": "audio-sfx",
@@ -364,6 +364,18 @@
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/5c3b0d43e5ea3190be42c06188b144b8c5b40129",
         "https://github.com/ksolo21-web/HAVENLINE/commit/0e142e4f38fcffdec63f747128706fb9143314fb"
+      ]
+    },
+    {
+      "id": "gate-separable-owner-master-20261126",
+      "type": "handoff",
+      "at_utc": "2026-11-26T04:44:38Z",
+      "from_role_id": "level1-verifier",
+      "to_role_id": "builder-camp-pads",
+      "message": "New owner-reference static gate source is admitted to native import staging only. Preserve original hinges, physical behavior and exact scene scope.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/923bcb7ce2e8aaa42c01f7e3138bb700fa8607d8",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/d6f54dbf0811cade021f501d40402fb2b4e4d31c"
       ]
     }
   ]
