@@ -6,6 +6,8 @@ const Carry = preload("res://field_carry.gd")
 const Art = preload("res://field_art.gd")
 const Zoom = preload("res://orbit_camera.gd")
 var failures: Array[String] = []
+var minimum_joint_depth := INF
+var checked_joints := 0
 var cases := []
 var view := SubViewport.new()
 var actor := Node3D.new()
@@ -56,6 +58,36 @@ func check_distinct_bays() -> void:
 						check(not floor_rect.intersects(other_rect), kind + " occupies a physically separate bay from " + other_kind)
 			if not footprint.has(kind): footprint[kind] = []
 			footprint[kind].append(floor_rect)
+
+# A centerline leaving the inserted timber end must cross a real triangle
+# of the neighboring timber inside the tolerance. Bounds overlap is insufficient.
+func insertion(start: Vector3, midpoint: Vector3, timber: MeshInstance3D) -> float:
+	var from := timber.to_local(start)
+	var to := timber.to_local(midpoint)
+	var faces := timber.mesh.get_faces()
+	var depth := INF
+	for i in range(0,faces.size(),3):
+		var contact: Variant = Geometry3D.segment_intersects_triangle(from,to,faces[i],faces[i+1],faces[i+2])
+		if contact != null:
+			depth = minf(depth,start.distance_to(timber.to_global(contact)))
+	return depth
+
+func check_mount() -> void:
+	var frame_mesh := carry.frame.find_children("*","MeshInstance3D",true,false)[0] as MeshInstance3D
+	for row in carry.shelves.size():
+		var shelf: MeshInstance3D = carry.shelves[row]
+		for side in 2:
+			var brace: MeshInstance3D = carry.braces[row*2+side]
+			check(brace.visible==shelf.visible,"empty rows retract both supports")
+			if not shelf.visible: continue
+			var box := brace.mesh.get_aabb()
+			var heel := brace.to_global(Vector3(box.position.x,0,0))
+			var seat := brace.to_global(Vector3(box.end.x,0,0))
+			var middle := (heel+seat)*.5
+			for depth: float in [insertion(heel,middle,frame_mesh),insertion(seat,middle,shelf)]:
+				check(depth>=.002 and depth<.105,"brace ends meet actual frame and shelf triangles by at least 2 mm")
+				minimum_joint_depth=minf(minimum_joint_depth,depth)
+				checked_joints+=1
 
 func run() -> void:
 	view.own_world_3d=true
@@ -162,6 +194,7 @@ func run() -> void:
 			if mask & (1 << i): book.carried[Ledger.KINDS[i]] = 3
 		carry.sync()
 		check_distinct_bays()
+		check_mount()
 		var footprints := {}
 		for kind: String in Ledger.KINDS:
 			if book.carried[kind] > 0:
@@ -205,5 +238,5 @@ func run() -> void:
 			var original: Node3D = carry.pieces["carry/"+kind][i]
 			var reloaded: Node3D = restored_carry.pieces["carry/"+kind][i]
 			check(reloaded.visible and reloaded.transform.is_equal_approx(original.transform),kind+" reload preserves physical packet and heading")
-	print(JSON.stringify({"cases":cases,"mixed_subsets":combinations,"earned_reload_counts":restored_book.carried,"earned_reload_storage":restored_book.stored,"failures":failures}))
+	print(JSON.stringify({"cases":cases,"minimum_joint_insertion_mm":snappedf(minimum_joint_depth*1000,.001),"joint_checks":checked_joints,"mixed_subsets":combinations,"earned_reload_counts":restored_book.carried,"earned_reload_storage":restored_book.stored,"failures":failures}))
 	quit(1 if not failures.is_empty() else 0)

@@ -21,6 +21,7 @@ const PACK_BASE := .91
 const INNER_RISE := .10
 const TIMBER_PAIR_X := .212
 const MAX_LAYERS := 24
+const BEARER := preload("res://assets/field_pack/pack_bearer.tres")
 const SHELF_SCENE := preload("res://assets/field_pack/expedition_shelf.glb")
 const StockLayout = preload("res://field_stock_layout.gd")
 const INTERVAL := 0.16
@@ -43,6 +44,7 @@ var receivers := {}
 var rack: Node3D
 var frame: Node3D
 var worn_materials := {}
+var braces: Array[MeshInstance3D] = []
 var shelves: Array[MeshInstance3D] = []
 var presented := {}
 var planned_counts := {}
@@ -85,6 +87,13 @@ func setup(ledger: Inventory, character: Node3D, item_factory: Callable) -> void
 			rack.add_child(board)
 			board.material_override = palette
 			shelves.append(board)
+			for side in 2:
+				var brace := MeshInstance3D.new()
+				brace.name = "ShelfBrace%d_%d" % [row,side]
+				brace.mesh = BEARER
+				brace.material_override = palette
+				rack.add_child(brace)
+				braces.append(brace)
 		donor.free()
 	sync()
 
@@ -151,12 +160,30 @@ func _fit_shelves(counts: Dictionary) -> void:
 			depth = maxf(depth, unit.z)
 		var board := shelves[row]
 		board.visible = left <= right
+		for side in 2:
+			braces[row*2+side].visible = board.visible
 		if not board.visible:
 			continue
 		var bounds := board.mesh.get_aabb()
 		board.scale = Vector3(right - left + .016, .035, depth + .026) / bounds.size
 		var top := Vector3((left + right) * .5, PACK_BASE + (INNER_RISE if row == 0 else 0.), INNER_Z if row == 0 else OUTER_Z)
 		board.position = top - Vector3(bounds.get_center().x, bounds.end.y, bounds.get_center().z) * board.scale
+		# Attach both sides to the real transverse belt timber and to the
+		# intersections of the longitudinal runners and the shelf crosspiece.
+		# The endpoints are embedded within those timbers, never beyond the load.
+		var spread := minf(.19,(right-left)*.3)
+		var center := clampf(top.x,-.28+spread,.28-spread)
+		for side in 2:
+			var sign_x := -1.0 if side==0 else 1.0
+			var heel := Vector3(center+sign_x*spread,.619,-.505 if row==0 else -.527)
+			var seat := board.transform * Vector3(sign_x*.28,.158,-.40 if row==0 else -.82)
+			var axis := (seat-heel).normalized()
+			var width_axis := axis.cross(Vector3.UP).normalized()
+			var normal_axis := width_axis.cross(axis).normalized()
+			var size := BEARER.get_aabb().size
+			var basis := Basis(axis*heel.distance_to(seat)/size.x, normal_axis*.042/size.y, width_axis*.052/size.z)
+			braces[row*2+side].transform = Transform3D(basis,(heel+seat)*.5)
+
 
 func _headroom_bucket() -> int:
 	var room := PACK_TOP - PACK_BASE
