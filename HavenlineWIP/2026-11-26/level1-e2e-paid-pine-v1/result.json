@@ -1,0 +1,99 @@
+{
+  "baseline": "11c14a1c41971067c7dc97db69375f720a408f68",
+  "controlled_checkpoint": {
+    "byte_count": 326,
+    "outer_version": 1,
+    "payload_version": 2,
+    "primary_sha256": "832e3f09cb5718634de49d89e1e358b70cc5789464612b2ca48ec6dab43bc415",
+    "receipt_cost_wood": 3,
+    "renewals": 1,
+    "wood": 1
+  },
+  "engine": "v4.7.2.stable.official.ed1daf0bf",
+  "first_postpayment_repeat_recovered_without_rewrite": true,
+  "import_only_existing_obj_warnings": 18,
+  "original_three_distinct_sources_and_single_debit": true,
+  "owner_save_live_game_release_or_device_proof": false,
+  "paid_pine_patch": "e88468b70209be294e23a03b5200dcd60d9a69c71116f77637efbd960935efbd",
+  "phases": {
+    "cold": {
+      "checkpoints": [
+        {
+          "paid": true,
+          "phase": "pine-regrown",
+          "published_wood": 1,
+          "renewals": 1,
+          "tick": 301
+        },
+        {
+          "paid": true,
+          "phase": "cold-v2-no-replay",
+          "published_wood": 1,
+          "renewals": 1,
+          "tick": 439
+        }
+      ],
+      "checks": 10,
+      "failures": 0,
+      "log_sha256": "1a5c3d4b60a58abd511c90abb398261f665e3a2240ddfc65f2083033a473a14e"
+    },
+    "write": {
+      "checkpoints": [
+        {
+          "paid": false,
+          "phase": "fresh-spawn",
+          "published_wood": 0,
+          "renewals": 0,
+          "tick": 10
+        },
+        {
+          "paid": false,
+          "phase": "three-original-wood",
+          "published_wood": 3,
+          "renewals": 0,
+          "tick": 310
+        },
+        {
+          "paid": true,
+          "phase": "paid-first-frame",
+          "published_wood": 0,
+          "renewals": 0,
+          "tick": 357
+        },
+        {
+          "paid": true,
+          "phase": "south-bidirectional",
+          "published_wood": 0,
+          "renewals": 0,
+          "tick": 598
+        },
+        {
+          "paid": true,
+          "phase": "pine-regrown",
+          "published_wood": 0,
+          "renewals": 0,
+          "tick": 610
+        },
+        {
+          "paid": true,
+          "phase": "east-bidirectional",
+          "published_wood": 0,
+          "renewals": 0,
+          "tick": 862
+        },
+        {
+          "paid": true,
+          "phase": "writer-v2",
+          "published_wood": 1,
+          "renewals": 1,
+          "tick": 1156
+        }
+      ],
+      "checks": 57,
+      "failures": 0,
+      "log_sha256": "d9114191158c05b04e34378488ec2f9ba718edabb9f09c0fb922f66a91806db8"
+    }
+  },
+  "profile_snapshot_equal_across_cold": true,
+  "scope": "one exact detached revision and one controlled checkpoint across two fresh process environments; headless handler input only"
+}
