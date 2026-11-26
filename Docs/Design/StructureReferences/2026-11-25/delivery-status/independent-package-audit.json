@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "reviewer": "structure_critic independent agent",
+  "recorded_utc": "2026-11-26T04:57:57.786265+00:00",
+  "status": "PASS_LOCAL_PACKAGE_REMOTE_PENDING",
+  "score": 10,
+  "target_score": 10,
+  "pass_threshold": 9.5,
+  "candidate_tree": "ea7a18080b1bd081710624ffc93e80d397728a03",
+  "manifest_path": "archive-expected-paths.json",
+  "manifest_sha256": "fa2f08a709128765b24d8b37cb37f953fb66d23eef207f4057675dca2fdd4db9",
+  "base_commit": "b80c61f13ba31bb0940792dd47976a8e2878dbf5",
+  "base_tree": "598ca77bd0635e418e7eced4db6384658f9687d4",
+  "requirements_sha256": "c10ab73c075116d486afd2c7eca3390ddf1e4435c3d2699bfc1ed40b4efa137a",
+  "freeze_sha256": "2763fb34296c4eff3c74fa7343875aa3af304922f11ac06f3ae70820b4520fdb",
+  "visual_review_sha256": "2bd90f4965b1a2a83ad0d3094f5f804ba41956b74a573dbfbf7a1dc22f88b37b",
+  "all_mandatory_local_package_checks_passed": true,
+  "passed_checks": 10,
+  "required_checks": 10,
+  "checks": [
+    {
+      "name": "independent_fresh_baseline_and_manifest_identity",
+      "status": "PASS",
+      "detail": {
+        "fresh_baseline_leaves": 4144,
+        "base_tree": "598ca77bd0635e418e7eced4db6384658f9687d4",
+        "manifest_sha256": "fa2f08a709128765b24d8b37cb37f953fb66d23eef207f4057675dca2fdd4db9"
+      }
+    },
+    {
+      "name": "every_file_byte_mode_and_additive_tree",
+      "status": "PASS",
+      "detail": {
+        "new_paths": 295,
+        "valid_image_files": 103,
+        "tree": "ea7a18080b1bd081710624ffc93e80d397728a03",
+        "baseline_files_unchanged": 4144
+      }
+    },
+    {
+      "name": "frozen_creative_documents_and_indexes",
+      "status": "PASS",
+      "detail": {
+        "frozen_indexes": 4,
+        "frozen_creative_documents": 3,
+        "selected": 9,
+        "originals": 17
+      }
+    },
+    {
+      "name": "all_original_images_prompts_and_attempt_reviews",
+      "status": "PASS",
+      "detail": {
+        "native_originals_identical": 17,
+        "exact_prompts": 17,
+        "reviewed_attempts": 17,
+        "no_pointer_originals": true
+      }
+    },
+    {
+      "name": "nine_selected_aliases_and_independent_review_bindings",
+      "status": "PASS",
+      "detail": {
+        "same_blob_aliases": 9,
+        "mandatory_per_sheet_checks": "all pass",
+        "rotation_views": 24
+      }
+    },
+    {
+      "name": "exact_invoked_prompts_and_ordered_reference_inputs",
+      "status": "PASS",
+      "detail": {
+        "invocations": 17,
+        "exact_ordered_input_occurrences": 49
+      }
+    },
+    {
+      "name": "document_provenance_and_all_hash_locator_targets",
+      "status": "PASS",
+      "detail": {
+        "exact_document_records": 143,
+        "hash_resolver_entries": 232,
+        "locator_entries": 616,
+        "context_guide_repair": "resolved",
+        "immutable_existing_sources": 4
+      }
+    },
+    {
+      "name": "every_native_review_crop_and_provenance_version",
+      "status": "PASS",
+      "detail": {
+        "qa_images": 68,
+        "qa_provenance_or_observations": 24,
+        "review_crop_references_checked": 68,
+        "attempt_reviews": 17
+      }
+    },
+    {
+      "name": "gallery_navigation_and_delivery_claims",
+      "status": "PASS",
+      "detail": {
+        "unique_relative_navigation_targets": 26,
+        "preview_cells": 9,
+        "scope_and_native_size_statements": "verified"
+      }
+    },
+    {
+      "name": "complete_sha256_reference_scan",
+      "status": "PASS",
+      "detail": {
+        "unresolved_actual_image_prompt_review_inputs": 0,
+        "historical_source_video_hashes_only": {
+          "62f7cfe644de3826cfdd6d91bc23c0ab8d9e4fde3e175c90f762e604547bb0ca": [
+            {
+              "path": "sources/inspected-source-manifest.json",
+              "field": "source_videos.0.sha256"
+            },
+            {
+              "path": "sources/inspected-source-manifest.json",
+              "field": "inspected_images.6.source_video_sha256"
+            },
+            {
+              "path": "sources/inspected-source-manifest.json",
+              "field": "inspected_images.7.source_video_sha256"
+            },
+            {
+              "path": "provenance/raw/counter-builder/source-recovery/inspected-source-manifest--82c5eecec1baf1629a2b8fae26487e32c6858dc9f185a591b7524b6e31e55a58.json",
+              "field": "source_videos.0.sha256"
+            },
+            {
+              "path": "provenance/raw/counter-builder/source-recovery/inspected-source-manifest--82c5eecec1baf1629a2b8fae26487e32c6858dc9f185a591b7524b6e31e55a58.json",
+              "field": "inspected_images.6.source_video_sha256"
+            },
+            {
+              "path": "provenance/raw/counter-builder/source-recovery/inspected-source-manifest--82c5eecec1baf1629a2b8fae26487e32c6858dc9f185a591b7524b6e31e55a58.json",
+              "field": "inspected_images.7.source_video_sha256"
+            }
+          ],
+          "4c9051cbea6df0efa3e7288b13b6d17da46e857274869b0b43d2f96ff6cc79d2": [
+            {
+              "path": "sources/inspected-source-manifest.json",
+              "field": "source_videos.1.sha256"
+            },
+            {
+              "path": "provenance/raw/counter-builder/source-recovery/inspected-source-manifest--82c5eecec1baf1629a2b8fae26487e32c6858dc9f185a591b7524b6e31e55a58.json",
+              "field": "source_videos.1.sha256"
+            }
+          ]
+        },
+        "boundary": "These source-video provenance values are historical context, not generated artwork or actual imagegen inputs. All inspected stills are retained or bound to immutable baseline files."
+      }
+    }
+  ],
+  "audit_script": {
+    "path": "critic-package-audit.py",
+    "sha256": "7f84013582f352a5af452ba061190238a17780d19f1dae9a6e33d7059e162e88"
+  },
+  "audit_data": {
+    "path": "critic-package-audit-data.json",
+    "sha256": "baca457af6005877a93662b587db5c4c86e523d55e17fecf8ac186160f887ca5"
+  },
+  "fresh_baseline_evidence": [
+    {
+      "path": "critic-base-commit-fresh-readback.json",
+      "sha256": "389640225dcb933b4af9a467b3e0350eae5a64dd7afa08cd235db9ec0a919a09"
+    },
+    {
+      "path": "critic-base-tree-fresh-readback.json",
+      "sha256": "be1e0a56731a08317c7d866f4a8b27bed366d813e82d539ecbe1e415aa11ee76"
+    }
+  ],
+  "retest_of": {
+    "path": "reviews/critic-package-audit-r1.json",
+    "sha256": "dd7a165e1ff50049a263f62567938e419bd291ab306b2038a45349b92a7dfd5f"
+  },
+  "repair_resolution": "Exact prior context guide was added with provenance and hash/original-locator resolution. No frozen creative image, selected review or actual invocation changed.",
+  "outcome": "The complete candidate contains295 new paths only; all4144 fresh-baseline leaves and modes reconstruct unchanged. All17 originals equal actual native returned PNG bytes, all17 exact prompts and49 ordered input occurrences resolve, all9 selected aliases reuse approved image blobs, all68 native QA images and24 QA provenance records resolve.",
+  "unresolved_package_defects": [],
+  "publication_condition": "Publish only this exact candidate on the isolated authorized branch. A fresh ref/commit/tree readback must still prove remote storage before delivery approval. The subsequent evidence child may add receipts only and must not alter this frozen content.",
+  "no_extra_visual_testing_needed": true
+}

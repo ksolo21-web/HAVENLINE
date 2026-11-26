@@ -1,0 +1,2370 @@
+{
+  "base_commit": "b80c61f13ba31bb0940792dd47976a8e2878dbf5",
+  "base_tree": "598ca77bd0635e418e7eced4db6384658f9687d4",
+  "prefix": "Docs/Design/StructureReferences/2026-11-25",
+  "candidate_tree": "ea7a18080b1bd081710624ffc93e80d397728a03",
+  "allowed_preexisting_changes": [],
+  "baseline_files_unchanged": 4144,
+  "files": [
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/.gitattributes",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "7b672adba08e8620453ec8018aac75ac73c87804feff7f86a5d6a5b76da70d2a",
+      "git_blob_sha": "f790252816302d20c9dc26aea8f4deaa7d764f30",
+      "bytes": 100
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/GALLERY.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "5be10ce712106a7c606ed84b95cd7e53dd8b4434a53e342f57a571379545f87a",
+      "git_blob_sha": "27d40a2ecb5d9f625244eabdec7d0c556e6fea07",
+      "bytes": 1312
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "fdf4cc0f23ca0ccd9f03a24c3a802ba68e3a203dfa46fcf280043d80e19488af",
+      "git_blob_sha": "52037d99b90b461ecf71e94e543d5d90f64a6ee6",
+      "bytes": 3876
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/archive-checkpoint.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "859c55bb67eb13f59e432658a986566edf190609743ae3d836163143c1eda699",
+      "git_blob_sha": "2e7bad5d78248a0a25a1205fd05b0f2a90b8a5f7",
+      "bytes": 1391
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/archive-requirements.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "cfdcb8dbe2640640716312a7d7c615976a3c297deaac12853c6020bfc4364420",
+      "git_blob_sha": "98461bc9ba706d6a005ef88df8972134d6a375aa",
+      "bytes": 1886
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/attempts/customer-counter-cardinal-r1.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "46309b01e07a15db044518fcf47b93dbd6741a3786a04135e88b3bb4e85158fb",
+      "git_blob_sha": "28de551254813f51db75539b95f966f2ca929cbc",
+      "bytes": 1685676
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/attempts/customer-counter-details-r1.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "599a1b6f6c95084f80f9dc206774e18ed259fe55874642bae3b60daf80aa053c",
+      "git_blob_sha": "db7437c42a5a7bab6a3ec7d5b959097bdc42b8f1",
+      "bytes": 1821452
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/attempts/customer-counter-details-r2.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "455defba0a6b24abb14536a24c2d999dd56540e4127481ced8072a37fc99cef4",
+      "git_blob_sha": "93a8564a6f87419246dc409ecc7210067e269ff2",
+      "bytes": 1816451
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/attempts/customer-counter-oblique-r1.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "70091b634b3c8c8b6fe79a235b6b0c3a75b9e27d2d829aaf24bd8bbedff610f9",
+      "git_blob_sha": "0d2ee0cfd5fbf884cf5a6d90e46eea21f3b843f3",
+      "bytes": 1722571
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/attempts/customer-counter-oblique-r2.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "61e456b9b6715b346bf3d22af919b08ea0ce85d5e22042c4cbaf911fe3a7c5b0",
+      "git_blob_sha": "e2369dc837b68ac644930ca29daaf6fb6791a6f3",
+      "bytes": 1738362
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/attempts/customer-counter-oblique-r3.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "8fffe822fc7420398d5485119d09a297e3e7b91006f12c76028ca11fec8c38c9",
+      "git_blob_sha": "0ba20bf5531fbde9d8ab02a3e45a6921db4d0652",
+      "bytes": 1727342
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/attempts/fence-cardinal-r1.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "d616f90b5c0c98a02cafe93b8cfbb114280dc2c5ee74f26cf0e34b41dae1e734",
+      "git_blob_sha": "0f6fcd42f4dd078bc70dc89266b8dc30f8ea85cf",
+      "bytes": 1794624
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/attempts/fence-details-r1.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "0f632d74cb9397e6410597a31128c64bd4d78aa8e3fbe4adeb8c155f14f97552",
+      "git_blob_sha": "882beda5df2fd497f9ba748daea571cc12ff2f1c",
+      "bytes": 1858793
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/attempts/fence-details-r2.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "281b1b8cf0db37f0ec705855baaad5dfc574aeb7bd645ef40c81909548e7d45d",
+      "git_blob_sha": "31d4ea3566f3c038d48bc8269cc0e64b843db629",
+      "bytes": 1821869
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/attempts/fence-details-r3.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "1672f1235a09e13c391d9f348f102ab0fd61697dc9a9ac19a258cb362cd481ae",
+      "git_blob_sha": "f1fd9c0830a8258713cd04b846c37d86ab8822c9",
+      "bytes": 1804719
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/attempts/fence-oblique-r1.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "708eec012843900df7e2f54a257d37d31a7791b55cb5673bcdab2144f9eb76e5",
+      "git_blob_sha": "79801d6cc5a8741062f38b9a9a08c1892ef23658",
+      "bytes": 1810665
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/attempts/fence-oblique-r2.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "5cc7bb7ddf05ca053828b2c9202992a5fc4b104ca39f433454d56251d7e9641c",
+      "git_blob_sha": "2435b605089a027668497722eea8b5175aa93930",
+      "bytes": 1777860
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/attempts/gates-cardinal-r1.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "7f6dbde326cf31c805c57b2c4df62e3976803ead5940e7593d320916429022a9",
+      "git_blob_sha": "b212dda56d66a369d0b6c77208fb41ebee77c2ae",
+      "bytes": 1730094
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/attempts/gates-cardinal-r2.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "ee634acbfe1747b4e22fa130130ca064992543db9a1586c2cf0a658b8458f392",
+      "git_blob_sha": "00babe94f2a20cb72e57a44c137ac936a4d431c8",
+      "bytes": 1686217
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/attempts/gates-oblique-r1.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "87c663b087cfe4f1aa71be2dc32eac614570297c2828085dda9739d0d6966402",
+      "git_blob_sha": "6ec1a05bfbdbfbce2f5782915a2264f3ce476ba2",
+      "bytes": 1788645
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/attempts/gates-oblique-r2.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "3ca392129045f9bddfa9115343f8c1d2e2aa04ee4a5f629ab1e95832221e1ac6",
+      "git_blob_sha": "35550038a93f0c13c2a5cdeecbef3228be97e2d6",
+      "bytes": 1723100
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/attempts/gates-states-r1.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "50a39e09f42b48e981bd739a383dfea3fce664d1e09aec5498542c940d8331da",
+      "git_blob_sha": "d8673ebf3b66b2416239c8701f10b88839f73623",
+      "bytes": 1796080
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/checkpoint.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "3dd7168545da703ed16c36bf4f3c6cac7082fc8b6fe83ff06741bdb2ab0f9392",
+      "git_blob_sha": "7d445b133db4dac78147683e98ff653ba6912630",
+      "bytes": 1278
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/document-provenance.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "eee35f42e0a1969433359fe314f3936cbff4291ad6b47524a0b01d14e9093a48",
+      "git_blob_sha": "66972f72fa4bd83d51930a87e8b05a9b9dd79a47",
+      "bytes": 64417
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/evidence/baseline-image-attributes.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "cafd575f8edbc1bd05ea4e284b8840344ccd9896efa6433bdc6ee1e7d377620e",
+      "git_blob_sha": "57e27020f32db01634312a38d25bfc578a13f6ff",
+      "bytes": 5385
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/evidence/baseline-summary.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "c1990d6bb6bf036267b3965d003e61b5f26f570dfc5b6f8213dba798cbfe29b7",
+      "git_blob_sha": "d0aa212fea75b9fe9dc1c46e03b04f23a881f4f1",
+      "bytes": 429
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/evidence/baseline-tree.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "8b9dcf9406d3ca967dadb3860da14520d089ce989ac89ed552331301f0a46208",
+      "git_blob_sha": "3f99ea25fb88b4604dd934b492e021825bd3c0e5",
+      "bytes": 2866258
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/evidence/baseline-verification.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "aa2571a25af32af059689424492f74e0355c5844669ae66a695ad830e737e43c",
+      "git_blob_sha": "48fe4ee41b04f3e097f63fe2a1a1b5a80e976301",
+      "bytes": 524
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/evidence/live-source-context.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "6727294c3006f870074df38f6b3cd301c339469520914d3d4755ca599b847bc5",
+      "git_blob_sha": "f104a7bbb63c45307cf26c7ba7adeab270f17cc7",
+      "bytes": 106719
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/evidence/prior-art-tree.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "886871b0bfea4d135e08457543af069a2fa3192d00ca75cb282bb0d9268035b0",
+      "git_blob_sha": "68500964805f433592e7c93e7fbede66ef9bfdd8",
+      "bytes": 958468
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/evidence/source-history/A-009.00-gameplay.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "ad2ba56d6c211be84a1ed96886c4995ab780934a02378ef962387e3ffb26830b",
+      "git_blob_sha": "73acdd166907ac133eae95666ce8ca417964a310",
+      "bytes": 3081551
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/evidence/source-history/A-016-processing-counter-evidence.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "616de7eb88bb822c64debe0af7dd77dd4b4168169ee0afbaf7a33dce646c4798",
+      "git_blob_sha": "03a9764060336caeebff4d8a5578a990e2765db2",
+      "bytes": 269839
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/evidence/source-history/A-024-two-customer-counters-evidence.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "3f4a20794a6893dea5a1a3952f08d630338c2965b5f557cc154288ddc2a2f37c",
+      "git_blob_sha": "eea4f4c0c2664102c73bbc34b21dcaff01bbdebd",
+      "bytes": 487191
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/evidence/source-history/A-024.00-gameplay.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "fc792521a8098e9df5b33a7b24b7699e9cfca7a3edb147130a9e5db2a0a40bd9",
+      "git_blob_sha": "2e9cd6fe4fa78521ab34e792ad61ae91c21dfd93",
+      "bytes": 2752799
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/evidence/source-history/B-008-customer-counter-evidence.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "9f8b58493c9da79f2173040c95f9468b9f83150bd3e4959b420b63ce8a40d322",
+      "git_blob_sha": "c457325df36a3da9a913111fee33e13f93f44964",
+      "bytes": 231009
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/final-freeze.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "2763fb34296c4eff3c74fa7343875aa3af304922f11ac06f3ae70820b4520fdb",
+      "git_blob_sha": "84b6c28f2a6ed522b6aa912b167f146b64158e55",
+      "bytes": 15759
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/image-index.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "b855b67054be9bc3cc0c94ac25592b6af28c9151314e1c90dffcfdc8de316aae",
+      "git_blob_sha": "a4f46401ade88fd2bac7bfb1fedfc2b7ba28dfed",
+      "bytes": 18333
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/inputs/context/CHARACTER_STYLE_REFERENCE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "32be92026eb2f454f97c253fb32e0bbe79ffa15ad4eb3ec1b30086df18e3bcba",
+      "git_blob_sha": "8b7539b8ad338e4798bdf81309fb4c7acdd7afdf",
+      "bytes": 3936
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/inputs/input-index.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "11f43ed46b2f9e841c89e1bc3e80ce8e81ce750cef0a90b9973369014991f29a",
+      "git_blob_sha": "6a57a499c85cb450a9fab1eccd5547208e226401",
+      "bytes": 2321
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/inputs/source-originals/Fence_a4860b7_4K.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "35992c83768390a2a71207a2e8a595a26dd79a518aa3afebfc68dbff07dfe496",
+      "git_blob_sha": "f5937f0fd6001e87240cb1a976c4fa8174327c48",
+      "bytes": 3813662
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/inputs/source-originals/Gate_a4860b7.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "ede8e55aad5e03339c8ef8efc274e3144c1c1288c91e5a2b97ef80ad0b2f2fba",
+      "git_blob_sha": "1bd3c1fca12d985d0c8dd4b0132af80e02bb4ffb",
+      "bytes": 509606
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/inputs/source-originals/service_counter.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "c17e24914e387c33695d4badf5334beb499eacb18a6e22b9ce904390fc094716",
+      "git_blob_sha": "7427702548e15af1f3395e33ee3301df27f72117",
+      "bytes": 1620047
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/inputs/source-originals/style-reference.jpg",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "2a364995e105e8ceebad7b5c80db753f8220e1bce697b1405ae3a4afe02aaf13",
+      "git_blob_sha": "d855256d655a53fb6e8ee59fcf0ac51834971fb9",
+      "bytes": 150185
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/prompts/customer-counter-cardinal-r1.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "98ba11a0f0e843c3b7405be01b143195a0a04121bddd13300aaa209614e46c15",
+      "git_blob_sha": "7f5b4b1dc34a2ac4fe443296fffacb77d725368d",
+      "bytes": 3230
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/prompts/customer-counter-details-r1.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "9fde5ebc2716d4d5d25195c2c83fd94cdb2b827895c7bcb552b6eee398fa5c07",
+      "git_blob_sha": "dda217e2d13dd7218125185027f4fbf30624fbad",
+      "bytes": 3218
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/prompts/customer-counter-details-r2.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "44d1216789937e5e8c4d26d97f7da27261f411d2298742658a28f7516be6f283",
+      "git_blob_sha": "caed442f0d7ac6944b3e33d1a5adad5e8d3b3621",
+      "bytes": 2120
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/prompts/customer-counter-oblique-r1.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "0f96bfab0f782d6f7f09e24f6d21f8ab175ea075d52206ae39aa4eaced2b6249",
+      "git_blob_sha": "ffb504cab5f8bd63fcca2b34206c8e5b956fa8a7",
+      "bytes": 2737
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/prompts/customer-counter-oblique-r2.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "35a08cf1cf4849f9ffffab63480378dffaa62107d2bbdf95730cff75a5229b3a",
+      "git_blob_sha": "b8d930763f7941f31d27462461d38f1f0c7a8b16",
+      "bytes": 2135
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/prompts/customer-counter-oblique-r3.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "fcf4e8fe6ba58ca7d6b5fb5ec3fd527b2d94b37cffffc161ecfc97ac7547f1a9",
+      "git_blob_sha": "b88321b9b170693d073bf0094c933b40603cf6e5",
+      "bytes": 2073
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/prompts/fence-cardinal-r1.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "5857794afdd1cdf1f816a425be457f6789d5867ba6999362f3bb16f0c340b312",
+      "git_blob_sha": "73e31f1064d24b6a20c5494c8f7ccdfecd2a5e13",
+      "bytes": 2767
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/prompts/fence-details-r1.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "62e8cccf4f32d272a8417511eb6781d975bb85b2765f0bb4087b576fd796c2bc",
+      "git_blob_sha": "af277dc32b414c25b6cc97e3161e4fcb107f11a3",
+      "bytes": 2473
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/prompts/fence-details-r2.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "c28f0052dc455b24f356ed2edf31f97489ba650059ac2b1d51ebeb840a2da02b",
+      "git_blob_sha": "790a38c7f43ff36fb17e850fd26c42a081ad4308",
+      "bytes": 2226
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/prompts/fence-details-r3.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "f9a2c0cf032231dd2da7a273251bd4cdb702f04c850c7c981dbb6e428d618699",
+      "git_blob_sha": "6b1663a6181cc236e0bdd5504c3e0fdf9b206144",
+      "bytes": 2176
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/prompts/fence-oblique-r1.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "bafa767c4fc5c715a29f5d9dac697fefdbdde79077065c5352456f0ef8c7245b",
+      "git_blob_sha": "3ceedcb3b70eb5ab7ec2c52fac3366f7c426ddc1",
+      "bytes": 2070
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/prompts/fence-oblique-r2.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "7d5dab524ec902c8070a0ff250bf087e2a9269e5d27fbe46891909dbcfd12d92",
+      "git_blob_sha": "0a929eea04873449116722f254006d9029e7a905",
+      "bytes": 1110
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/prompts/gates-cardinal-r1.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "c944ef800a18be7e99a0cacfd0d5892dd279310f24ae5b444f565fd9b77b044c",
+      "git_blob_sha": "2c6ce9f01a715cd202ee9ec31dcf4364fbf65b4e",
+      "bytes": 3019
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/prompts/gates-cardinal-r2.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "d948a69aa74aa2b616a6b88f00293c2d304aa8f67ea1828e82addbff319597f8",
+      "git_blob_sha": "cd2654fec62269cf82330c751a73b5f57f99b3d5",
+      "bytes": 1401
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/prompts/gates-oblique-r1.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "dc3e149aef2fb6a1673c88db95fcfda2f44a7270514b68800aabb0f06d16d86e",
+      "git_blob_sha": "046a0bc8bc140f047127fe75c327215b91a29dac",
+      "bytes": 2266
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/prompts/gates-oblique-r2.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "143db75d654337ca8929092811d187ff15d0d3ca042132e38959c1235d5430e2",
+      "git_blob_sha": "c85f537d83442759e18f0461942c552c11a4ff35",
+      "bytes": 1649
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/prompts/gates-states-r1.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "ce11aed53c269723b3ea4c7ac3a1ea8d91ad65fef5e42d720136bf7267728099",
+      "git_blob_sha": "17d93db87fa970834b20dd8d60e322b68b06ecf4",
+      "bytes": 3164
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/archive/binary-blob-receipts.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "93e561ba338ca672b6f971f3520dcb75bdbceaf838482aa850726a1bad84a670",
+      "git_blob_sha": "3ff8e05c9f2531c0c6059ee3d9d96db08f6b8249",
+      "bytes": 68262
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/archive/generated-image-snapshot.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "6a7b116725557bc6741dcaa6e8d381dd48b5eba27af69d7a7459f7aec4bf0a4c",
+      "git_blob_sha": "47704cbee3019c4e26626d014989e997663c3efa",
+      "bytes": 18325
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/archive/package-config.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "50c7ce0b8ac7c16a53bff82985c4c8fc535057fa24f7d75b0f73a455cbc529b2",
+      "git_blob_sha": "60891fd7f8e891222762aa27bc6b58ed567fe892",
+      "bytes": 5459
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/archive/qa-evidence-snapshot.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "0401301fa9a30fff626ac5e70b33deb266cf874596bd1f8ad22e106eabc220cf",
+      "git_blob_sha": "c1f82c5856d0b0df728586c9b1bde6603ed5e48b",
+      "bytes": 71512
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/archive/raw-document-snapshot-index.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "598e1b04d46c70c1f25c070a4a120fd440a160745ae1d89e8b04078c8cdae6a3",
+      "git_blob_sha": "d2878235c5c8d4a6133bbe7f6b4f07d5cb58316f",
+      "bytes": 43455
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/archive/source-input-snapshot.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "7c2e05e319850492bf000d162f72a8764c146f78a756e563103c80e7f797b032",
+      "git_blob_sha": "72597f2876c7ce24713229b814c499ff516e4e02",
+      "bytes": 3506
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/counter-builder/builder-checkpoint.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "0cc66961b0aa1d581adefe5c1346b011bc5e9adf552bdce0fd130fa14bbf187b",
+      "git_blob_sha": "f28c0b99f5f073433f0b224a269b2d825e5ea130",
+      "bytes": 3338
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/counter-builder/final-handoff.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "d86b642002a80498516f09fc2f75bd6934e08e20ee369ae14412ab880ffdecd4",
+      "git_blob_sha": "55761894abe3cb31826cd224d8b070ea42ade3fd",
+      "bytes": 7073
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/counter-builder/generation-index.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "617ba58059eb314e68c323d066fc15695b80e8015d6f472b02ec1adc5d911409",
+      "git_blob_sha": "1dd36ef21aa49a4e7d7419a73a8083ab05af1497",
+      "bytes": 7789
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/counter-builder/invocation-index.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "238aab64c5da2c5234864604b271a32c375d0927bb07175632dbe4ed5ad074dd",
+      "git_blob_sha": "6ae4a9795325bd419c40f402b136c08603e53047",
+      "bytes": 38400
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/import-history/provenance/archive/raw-document-snapshot-index--693eacfff0881a67250f03265c27f19e51ea6c2b95f23d09d0efa428a2a9ce47.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "693eacfff0881a67250f03265c27f19e51ea6c2b95f23d09d0efa428a2a9ce47",
+      "git_blob_sha": "7e1d853ba4933a8af5948c80d71df7c31906c14a",
+      "bytes": 42921
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/import-history/provenance/tools/archive-assemble--fc9e5560b8be038982cb1d8027103749e8ff0211d222b8b4b338aead7551980e.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "fc9e5560b8be038982cb1d8027103749e8ff0211d222b8b4b338aead7551980e",
+      "git_blob_sha": "1ad26b59f27f6366448807741b911f81b85f5b75",
+      "bytes": 20405
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/import-history/provenance/tools/archive-tools--e2de50702c718b92990156abc98273ab19d82d9869ce1e561c7c9931bcc1f906.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "e2de50702c718b92990156abc98273ab19d82d9869ce1e561c7c9931bcc1f906",
+      "git_blob_sha": "bca4dddaee1a4ebcb279f62e188bbbbf50fbf78b",
+      "bytes": 23912
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/README-draft--93615e15ed0b0c764ee4040361a5f80efdbf8b461da182a2a95071911b5f67af.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "93615e15ed0b0c764ee4040361a5f80efdbf8b461da182a2a95071911b5f67af",
+      "git_blob_sha": "b708685e49952fc1f8d8d31544a2983f9ead75d3",
+      "bytes": 2653
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/checkpoint--3dd7168545da703ed16c36bf4f3c6cac7082fc8b6fe83ff06741bdb2ab0f9392.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "3dd7168545da703ed16c36bf4f3c6cac7082fc8b6fe83ff06741bdb2ab0f9392",
+      "git_blob_sha": "7d445b133db4dac78147683e98ff653ba6912630",
+      "bytes": 1278
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/checkpoint--883dd1cd7c2aa52b9f5378ef7f248ab7c4266f81ebc601e5355c2370e732e3fa.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "883dd1cd7c2aa52b9f5378ef7f248ab7c4266f81ebc601e5355c2370e732e3fa",
+      "git_blob_sha": "361fea775104f766425947c3f2e899c042b63a62",
+      "bytes": 3746
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/counter-builder/builder-checkpoint--0cc66961b0aa1d581adefe5c1346b011bc5e9adf552bdce0fd130fa14bbf187b.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "0cc66961b0aa1d581adefe5c1346b011bc5e9adf552bdce0fd130fa14bbf187b",
+      "git_blob_sha": "f28c0b99f5f073433f0b224a269b2d825e5ea130",
+      "bytes": 3338
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/counter-builder/builder-checkpoint--1f7829e0189b9ea7af56310a565995d805c8b860459456a08e4d7178124b20a3.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "1f7829e0189b9ea7af56310a565995d805c8b860459456a08e4d7178124b20a3",
+      "git_blob_sha": "5688dec8443413cbd2ce393efc64200658aa15ad",
+      "bytes": 1307
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/counter-builder/builder-checkpoint--207f7dd0914b0aa7d5cf19e12bffbbcafb215b0221a17ae137bdd73169370eb2.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "207f7dd0914b0aa7d5cf19e12bffbbcafb215b0221a17ae137bdd73169370eb2",
+      "git_blob_sha": "69c8c3256be0449585b19e68dbf826b18ffa3c14",
+      "bytes": 1804
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/counter-builder/final-handoff--d86b642002a80498516f09fc2f75bd6934e08e20ee369ae14412ab880ffdecd4.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "d86b642002a80498516f09fc2f75bd6934e08e20ee369ae14412ab880ffdecd4",
+      "git_blob_sha": "55761894abe3cb31826cd224d8b070ea42ade3fd",
+      "bytes": 7073
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/counter-builder/generation-index--2f02ebc929aa5c7c9e34bec330a9ff2f389960c7baa0b69f1bd1dd1b72f93539.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "2f02ebc929aa5c7c9e34bec330a9ff2f389960c7baa0b69f1bd1dd1b72f93539",
+      "git_blob_sha": "e271569755186aa143a6398c6104ab3eab625b99",
+      "bytes": 5720
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/counter-builder/generation-index--59be10f236dd1449ab26154580d9997c8d9c13dee1f880daa9eb9182ba350f94.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "59be10f236dd1449ab26154580d9997c8d9c13dee1f880daa9eb9182ba350f94",
+      "git_blob_sha": "926d6ef7ffd6398722bab35464a73d8c82c2db8c",
+      "bytes": 3308
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/counter-builder/generation-index--617ba58059eb314e68c323d066fc15695b80e8015d6f472b02ec1adc5d911409.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "617ba58059eb314e68c323d066fc15695b80e8015d6f472b02ec1adc5d911409",
+      "git_blob_sha": "1dd36ef21aa49a4e7d7419a73a8083ab05af1497",
+      "bytes": 7789
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/counter-builder/generation-index--7246aa31895b4dcb506cbc45da42db81b1e1fd17405db0791e47d47dc811fc92.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "7246aa31895b4dcb506cbc45da42db81b1e1fd17405db0791e47d47dc811fc92",
+      "git_blob_sha": "b993418a601f52de5e97f26d4a7fcac2bc76dcba",
+      "bytes": 1232
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/counter-builder/generation-index--acf5f482c39056bf24a7b83361dbe5024d53167f84bc03f70819bd327d7b6c20.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "acf5f482c39056bf24a7b83361dbe5024d53167f84bc03f70819bd327d7b6c20",
+      "git_blob_sha": "a6948e58666f3f20840a8248697b38dde0a77063",
+      "bytes": 1298
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/counter-builder/generation-index--df6d310ace8725b7c0e82a4bd06582f3db07e0b1f922609524e532288ebe953f.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "df6d310ace8725b7c0e82a4bd06582f3db07e0b1f922609524e532288ebe953f",
+      "git_blob_sha": "65cd351c7e293173ceab9bfe8bb6cb2f90f875aa",
+      "bytes": 7321
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/counter-builder/invocation-index--238aab64c5da2c5234864604b271a32c375d0927bb07175632dbe4ed5ad074dd.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "238aab64c5da2c5234864604b271a32c375d0927bb07175632dbe4ed5ad074dd",
+      "git_blob_sha": "6ae4a9795325bd419c40f402b136c08603e53047",
+      "bytes": 38400
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/counter-builder/invocation-index--52558d02add43885686b39442187d092f2a4698134978e28e2d638f349fad082.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "52558d02add43885686b39442187d092f2a4698134978e28e2d638f349fad082",
+      "git_blob_sha": "50126eacdb4af673e5e080684e6f9423dc20f911",
+      "bytes": 17360
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/counter-builder/invocation-index--8c37e81b7733c8de30b01199364edba6864cd1bae572ea5dabd680916d93a72c.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "8c37e81b7733c8de30b01199364edba6864cd1bae572ea5dabd680916d93a72c",
+      "git_blob_sha": "5a893c97868530bcb96cc0a0244a730ce3d24352",
+      "bytes": 31246
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/counter-builder/invocation-index--98b7cd3e4228114ecfcefacb7745c7c6ef34d20d4e9d87f9a9f1059dfc43396e.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "98b7cd3e4228114ecfcefacb7745c7c6ef34d20d4e9d87f9a9f1059dfc43396e",
+      "git_blob_sha": "0ef68ed6c567ea36d7413e955fbc98db80a90003",
+      "bytes": 5740
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/counter-builder/invocation-index--9f29695cbdd07f278ad4172757ef32c951268db297b6577c8af91d051b4e7670.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "9f29695cbdd07f278ad4172757ef32c951268db297b6577c8af91d051b4e7670",
+      "git_blob_sha": "db79a51fda57f523c4184d39c1fe1f1c8225fdcb",
+      "bytes": 18462
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/counter-builder/source-recovery/inspected-source-manifest--82c5eecec1baf1629a2b8fae26487e32c6858dc9f185a591b7524b6e31e55a58.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "82c5eecec1baf1629a2b8fae26487e32c6858dc9f185a591b7524b6e31e55a58",
+      "git_blob_sha": "0d9352e24a6733f8d533324904c4f4de5b0cd323",
+      "bytes": 10733
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/counter-builder/source-recovery/source-crop-provenance--a25f5d8f61184d5e909d35f24f9b5290617f00be12bcffa55394ea926a02e6af.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "a25f5d8f61184d5e909d35f24f9b5290617f00be12bcffa55394ea926a02e6af",
+      "git_blob_sha": "14309a7d6b7586dff63f573ce2df34e1757a2c43",
+      "bytes": 1346
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/counter-builder/source-recovery/source-recovery-report--dd69ed1210f688608a4afe07591c5f02d68351328be3a8a88939351dc7a8d9e8.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "dd69ed1210f688608a4afe07591c5f02d68351328be3a8a88939351dc7a8d9e8",
+      "git_blob_sha": "924c4972ff0bdaf9bac27c588870c9f254f3aca8",
+      "bytes": 10588
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/critic-base-commit-fresh-readback--389640225dcb933b4af9a467b3e0350eae5a64dd7afa08cd235db9ec0a919a09.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "389640225dcb933b4af9a467b3e0350eae5a64dd7afa08cd235db9ec0a919a09",
+      "git_blob_sha": "0410f0f5227bb0cb64d3f67884d44bbcdc24adf9",
+      "bytes": 1967
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/critic-base-tree-fresh-readback--be1e0a56731a08317c7d866f4a8b27bed366d813e82d539ecbe1e415aa11ee76.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "be1e0a56731a08317c7d866f4a8b27bed366d813e82d539ecbe1e415aa11ee76",
+      "git_blob_sha": "dc42c5d7e3a21e17fbc3f5a689737021f6b7d283",
+      "bytes": 2989227
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/final-freeze--2763fb34296c4eff3c74fa7343875aa3af304922f11ac06f3ae70820b4520fdb.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "2763fb34296c4eff3c74fa7343875aa3af304922f11ac06f3ae70820b4520fdb",
+      "git_blob_sha": "84b6c28f2a6ed522b6aa912b167f146b64158e55",
+      "bytes": 15759
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/freeze_batch--63407659104d2f5dfcf8e7103c7fce8bc0c2c8b03f0e73a0627b3becc281f72a.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "63407659104d2f5dfcf8e7103c7fce8bc0c2c8b03f0e73a0627b3becc281f72a",
+      "git_blob_sha": "7da77280ea596da429a0bb4f8139ed87f8df64ee",
+      "bytes": 5599
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/generation-index--11d61cc97c4e4a2cf6dfae8cf5a8af003de3c178c36845c97bd703ba4067fd6c.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "11d61cc97c4e4a2cf6dfae8cf5a8af003de3c178c36845c97bd703ba4067fd6c",
+      "git_blob_sha": "fcc9b3559c262017e24040f19d4ef1d786df8825",
+      "bytes": 9933
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/generation-index--2749f0de51b236ac2b8817057be73b74e6e0c70c7852d07f638f857bbe6631fc.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "2749f0de51b236ac2b8817057be73b74e6e0c70c7852d07f638f857bbe6631fc",
+      "git_blob_sha": "0cd4721ae240839aee4ed0ef27802fa3634e413f",
+      "bytes": 7127
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/generation-index--54d8b47d624e7538266188ee6d15720a982e0ec705333804c5c08c2c2eaca951.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "54d8b47d624e7538266188ee6d15720a982e0ec705333804c5c08c2c2eaca951",
+      "git_blob_sha": "30fab3708a9a8fbe41cb65054f7e64ed2e473bb4",
+      "bytes": 6486
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/generation-index--7e03d99c54b400d171411a51dc0ca3cc0e84bbc092950d8adc6fa9bfccc6e46e.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "7e03d99c54b400d171411a51dc0ca3cc0e84bbc092950d8adc6fa9bfccc6e46e",
+      "git_blob_sha": "3b4e378e31211bf40be284d9467e7edc9ed5e8ab",
+      "bytes": 4563
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/generation-index--90fc1b4e1248078cc996fce0dc201d929d3a02612ceffd407eaf27f8dab0265b.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "90fc1b4e1248078cc996fce0dc201d929d3a02612ceffd407eaf27f8dab0265b",
+      "git_blob_sha": "3d55dd88206f827b4b48d7c17b7a055542337c17",
+      "bytes": 2003
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/generation-index--fd0f2f9e2ee49cabe7fabb61d56aeb80e496fa5f3a17e221e42069b2f8eb695b.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "fd0f2f9e2ee49cabe7fabb61d56aeb80e496fa5f3a17e221e42069b2f8eb695b",
+      "git_blob_sha": "544dcebacdc0a46ed09a18a6316d5568da557d81",
+      "bytes": 1358
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/input-index--11f43ed46b2f9e841c89e1bc3e80ce8e81ce750cef0a90b9973369014991f29a.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "11f43ed46b2f9e841c89e1bc3e80ce8e81ce750cef0a90b9973369014991f29a",
+      "git_blob_sha": "6a57a499c85cb450a9fab1eccd5547208e226401",
+      "bytes": 2321
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/invocation-index--0bc58768b2374a173877e3eb57aa3ad6a77f78473711433977e2f88472db0ef3.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "0bc58768b2374a173877e3eb57aa3ad6a77f78473711433977e2f88472db0ef3",
+      "git_blob_sha": "851ec61a8ee53719410c3455f886e1aa84ad3619",
+      "bytes": 3193
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/invocation-index--3a8b0faabebe34b91c3fed889f4b3744044b2e4821fcbadfe270d204e196f327.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "3a8b0faabebe34b91c3fed889f4b3744044b2e4821fcbadfe270d204e196f327",
+      "git_blob_sha": "33db4613f39b907e19218c9cee56c5402e51f8bd",
+      "bytes": 5165
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/invocation-index--4914c3a932578c08a7113595420af30d04ba0feec41562529d1a01b6ce43649a.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "4914c3a932578c08a7113595420af30d04ba0feec41562529d1a01b6ce43649a",
+      "git_blob_sha": "af57fe2a5e800ca5a30479bc1260034104110325",
+      "bytes": 12979
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/invocation-index--4f86bd1df2a792542d809624604a746e832014bc13859e836c1c843dc3079d3e.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "4f86bd1df2a792542d809624604a746e832014bc13859e836c1c843dc3079d3e",
+      "git_blob_sha": "216c2350a8922f2273b9b9ab3ea8fe95c128651a",
+      "bytes": 10809
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/invocation-index--98b2ad982f38e1e763ace838b17049c634d013e660c1f133f91984236f13369e.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "98b2ad982f38e1e763ace838b17049c634d013e660c1f133f91984236f13369e",
+      "git_blob_sha": "331d26f7868fd02c5c465433b1ee05f9067a94d3",
+      "bytes": 1659
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/invocation-index--c7d2595ed3eedaacbfe74fbaacfd743eb04bb1ecaeba792f7f9fc0108bb96b86.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "c7d2595ed3eedaacbfe74fbaacfd743eb04bb1ecaeba792f7f9fc0108bb96b86",
+      "git_blob_sha": "7d29fd24c2c4aee20afdd9a500068d61653f47b5",
+      "bytes": 2209
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/invocation-index--d726f0ceb73ac43815eb7ecb5ba6e468c3b3390125c9540967bc9fd904fa11a2.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "d726f0ceb73ac43815eb7ecb5ba6e468c3b3390125c9540967bc9fd904fa11a2",
+      "git_blob_sha": "c7db8fe801d80561833724aa19ebbb755f171fb9",
+      "bytes": 11904
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/record_invocation--98c2e441c706da9004c854e0d55973b1beef51cb8242ad17b655d172cdc475d7.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "98c2e441c706da9004c854e0d55973b1beef51cb8242ad17b655d172cdc475d7",
+      "git_blob_sha": "c35e4b720d73ec1e73ef79d3f042b247c855ea5e",
+      "bytes": 1086
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/register_render--f7368f729c2f0b31ed3c96071650fc6d9d4fc7ad48e42898127c29a1c9187d37.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "f7368f729c2f0b31ed3c96071650fc6d9d4fc7ad48e42898127c29a1c9187d37",
+      "git_blob_sha": "3fda29c6fa5627adbbdc73092cf35a8cea2e7f41",
+      "bytes": 1124
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/requirements--c10ab73c075116d486afd2c7eca3390ddf1e4435c3d2699bfc1ed40b4efa137a.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "c10ab73c075116d486afd2c7eca3390ddf1e4435c3d2699bfc1ed40b4efa137a",
+      "git_blob_sha": "b5ed15f61318cbf165316c4033e3b9abca591aa9",
+      "bytes": 5803
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/reviews/critic-counter-source-audit--24329993ad844b6a3cb25b4e4f0af9ef5ba58b858325fd7febf668216f7cc1da.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "24329993ad844b6a3cb25b4e4f0af9ef5ba58b858325fd7febf668216f7cc1da",
+      "git_blob_sha": "a3a6ecf83bd0fdecb3ccd349a3dd19ca1d5446fc",
+      "bytes": 1902
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/reviews/critic-fence-gate-source-audit--bf3d16010b24c88271a184fbec77c62d4373154d13313ba4d9938223b77f87fe.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "bf3d16010b24c88271a184fbec77c62d4373154d13313ba4d9938223b77f87fe",
+      "git_blob_sha": "82714afc6ed7fa215062eedfe3c5c38fdb6b8559",
+      "bytes": 1450
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/reviews/critic-final-visual-acceptance--2bd90f4965b1a2a83ad0d3094f5f804ba41956b74a573dbfbf7a1dc22f88b37b.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "2bd90f4965b1a2a83ad0d3094f5f804ba41956b74a573dbfbf7a1dc22f88b37b",
+      "git_blob_sha": "c89f2df346ec69ffabbb59e6bcdeaffecc8a9ed2",
+      "bytes": 19902
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/reviews/critic-preliminary-style-audit--5ffb2989a3d4c7336662a1b95e73f4f39b770fe4b87c4a9fd44feb3e4bafe7b8.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "5ffb2989a3d4c7336662a1b95e73f4f39b770fe4b87c4a9fd44feb3e4bafe7b8",
+      "git_blob_sha": "26f3be5e4739712aaaf1abd323a9ba614cd34fd2",
+      "bytes": 2162
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/reviews/critic-review-state--26dc3f42a64413bc0f6e48eeff3d03804e2e5b4532eff157129b434b6e793af2.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "26dc3f42a64413bc0f6e48eeff3d03804e2e5b4532eff157129b434b6e793af2",
+      "git_blob_sha": "3235c5fccfe71799d6a334a932e2e36e212963f1",
+      "bytes": 6122
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/reviews/critic-review-state--46044fcadabec5bcd0549b45f21e661e51ebcd79a8908c9d1e18c6f65058371e.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "46044fcadabec5bcd0549b45f21e661e51ebcd79a8908c9d1e18c6f65058371e",
+      "git_blob_sha": "cee3f891b074f945ce9760ecf5f2d3ea2d21608e",
+      "bytes": 7852
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/reviews/critic-review-state--77d49987e29bf781160d39d3504144372b7c8d6dde9e545accd9a0c3839fe077.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "77d49987e29bf781160d39d3504144372b7c8d6dde9e545accd9a0c3839fe077",
+      "git_blob_sha": "5b6b3108d6080e95a5fc95a03865420d3c2d2806",
+      "bytes": 7997
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/reviews/critic-review-state--a1236968281ce3bcdc86f7231604e905faeb5fcc77421bda10f85c108948fa60.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "a1236968281ce3bcdc86f7231604e905faeb5fcc77421bda10f85c108948fa60",
+      "git_blob_sha": "dca066b57a4de872dffd2c8b024e2ec94e88a77b",
+      "bytes": 5700
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/reviews/critic-review-state--ba9feb0a75dfabc06abf37c70b7d08b3c30d4a687df4a3256ee92db210308895.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "ba9feb0a75dfabc06abf37c70b7d08b3c30d4a687df4a3256ee92db210308895",
+      "git_blob_sha": "b17b71f91570c57e2cd3ab93152ecc4cfc12066c",
+      "bytes": 6511
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/reviews/critic-review-state--dd2b8ca584dd1ee064b0b7956b22821cf3f3ae6f0a850463aa5ba7d0df0c17c0.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "dd2b8ca584dd1ee064b0b7956b22821cf3f3ae6f0a850463aa5ba7d0df0c17c0",
+      "git_blob_sha": "2ee5d889b6ce17b365c9f0d80c98f537d51b0915",
+      "bytes": 7776
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/reviews/critic-review-state--e52e4b92c96bc1f85ef455b908491e49c71b5f2a9f5f8e1e555f8cef5abd0a40.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "e52e4b92c96bc1f85ef455b908491e49c71b5f2a9f5f8e1e555f8cef5abd0a40",
+      "git_blob_sha": "fe14cf1b40003432430eae982c5d1456cbb194f6",
+      "bytes": 8916
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/reviews/customer-counter-cardinal-r1-review--d4e57d0921c37762228fb4e44d55d985a3e33b4e49d6b4da2b3ef991254bebaa.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "d4e57d0921c37762228fb4e44d55d985a3e33b4e49d6b4da2b3ef991254bebaa",
+      "git_blob_sha": "19927ee79f52d56d3f0a692203eee2baba7907a0",
+      "bytes": 3608
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/reviews/customer-counter-details-r1-review--4b19a5581eb9022fcf00a5ba4cbb8fd74a134b14e685c5d02d06ed0979339551.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "4b19a5581eb9022fcf00a5ba4cbb8fd74a134b14e685c5d02d06ed0979339551",
+      "git_blob_sha": "04d06a8a4f665ada95d4d85f85ba364de38808d0",
+      "bytes": 3139
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/reviews/customer-counter-details-r2-review--3a1c5cc3130d7997ffe6e63a45a537e116ab2b3d8d095c9de264bd2366278b39.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "3a1c5cc3130d7997ffe6e63a45a537e116ab2b3d8d095c9de264bd2366278b39",
+      "git_blob_sha": "63942fb63b2da3045b20795cccfeb9c9897a8c6f",
+      "bytes": 3066
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/reviews/customer-counter-oblique-r1-review--3b08cd7bf8d40ff23d1f1923d7f6bae288fae4759063c06313d8a0fd9ee1f9b1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "3b08cd7bf8d40ff23d1f1923d7f6bae288fae4759063c06313d8a0fd9ee1f9b1",
+      "git_blob_sha": "2a3ec4c21b5cad294bc1e9a80a0bf18ef0af43ed",
+      "bytes": 3152
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/reviews/customer-counter-oblique-r2-review--0fb4574237e633e2759418d18bb66e6ac74dba811dfd8471857a1c0b0cfb3c3e.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "0fb4574237e633e2759418d18bb66e6ac74dba811dfd8471857a1c0b0cfb3c3e",
+      "git_blob_sha": "c3e17d9c76962526e9e7d2f3b73d0a00b463a66c",
+      "bytes": 2907
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/reviews/customer-counter-oblique-r3-review--acc004dff6000898f85357a766b02f1ed71bfebdfbab9d9117bfe85e0ad22b35.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "acc004dff6000898f85357a766b02f1ed71bfebdfbab9d9117bfe85e0ad22b35",
+      "git_blob_sha": "f6f15bd24a009ce21d719beb677d942691c17652",
+      "bytes": 2800
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/reviews/fence-cardinal-r1-review--f8119fa76a7880edb82864a9c9aa109dec10f61e6e66911733feb4aff4527277.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "f8119fa76a7880edb82864a9c9aa109dec10f61e6e66911733feb4aff4527277",
+      "git_blob_sha": "6693e8ce087929c329a7898529b6996e9cddb47f",
+      "bytes": 3238
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/reviews/fence-details-r1-review--b55a5a4d27bb3bfea68aa164ad0ab1a771f46ac982e88acd886e0703e3bf200b.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "b55a5a4d27bb3bfea68aa164ad0ab1a771f46ac982e88acd886e0703e3bf200b",
+      "git_blob_sha": "edd7f883ca22803725f9b778dd6d8b31c2c64950",
+      "bytes": 3092
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/reviews/fence-details-r2-review--8400781de321e0cbcdb75d606a0166d09bea53d7485dfef8c2f4689f29d09722.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "8400781de321e0cbcdb75d606a0166d09bea53d7485dfef8c2f4689f29d09722",
+      "git_blob_sha": "5063897f0d79ec458a0d9294ab3b97e93c5b6a8a",
+      "bytes": 3758
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/reviews/fence-details-r3-review--70b1ca631eca1b0e424b199c7e41a99a5700c1f20105c6f7c17613b5080853a1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "70b1ca631eca1b0e424b199c7e41a99a5700c1f20105c6f7c17613b5080853a1",
+      "git_blob_sha": "dea106bcbcbc8a465c49aff8466ef1135580b8d2",
+      "bytes": 2980
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/reviews/fence-oblique-r1-review--b8ca37dd2947ff08f2215a5b96a42a42b03cffc501efc49bfc461c3cb8354748.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "b8ca37dd2947ff08f2215a5b96a42a42b03cffc501efc49bfc461c3cb8354748",
+      "git_blob_sha": "5dc96059a86b4e367122336c644471ba9575f0c1",
+      "bytes": 2746
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/reviews/fence-oblique-r2-review--bde5e3e25bbe35ac3ce3b276c6c99e50c412e16a2a2270e04ce73e2a4637fb75.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "bde5e3e25bbe35ac3ce3b276c6c99e50c412e16a2a2270e04ce73e2a4637fb75",
+      "git_blob_sha": "f7688feee24837ff7ec7738d7fca7d8e0d548f5a",
+      "bytes": 2343
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/reviews/gates-cardinal-r1-review--fe6d2f5a50ac61d4773e68f4836ca9741f56c8746c77aaf083d6d29b0da870a4.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "fe6d2f5a50ac61d4773e68f4836ca9741f56c8746c77aaf083d6d29b0da870a4",
+      "git_blob_sha": "bc598902e137473f7879f3d7a8d6ab8af6caa806",
+      "bytes": 3613
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/reviews/gates-cardinal-r2-review--0743373b40ba2a255096829671df26d41cfb80db66d6f7aed591c77f671fe22d.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "0743373b40ba2a255096829671df26d41cfb80db66d6f7aed591c77f671fe22d",
+      "git_blob_sha": "bb29e131f676d103a68c1a1b7b1bf03b9afffc77",
+      "bytes": 2674
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/reviews/gates-oblique-r1-review--2211d6f8fcb9d04959f8fb6fe1d40071bc1a6da4637a07449941458eca1fa8ee.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "2211d6f8fcb9d04959f8fb6fe1d40071bc1a6da4637a07449941458eca1fa8ee",
+      "git_blob_sha": "d04419323040d16b33e5bd39b1612bad56346687",
+      "bytes": 2949
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/reviews/gates-oblique-r2-review--49a03e5800e80c9b6569af022fe38194d91e04a30dc12be4780c675189ec6268.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "49a03e5800e80c9b6569af022fe38194d91e04a30dc12be4780c675189ec6268",
+      "git_blob_sha": "0b9eb4e836e1edbe829451fd709bec289745ec04",
+      "bytes": 2611
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/reviews/gates-states-r1-review--e9bc1f6b65626ad34bc40ecd24a861bac944d1c9b012b9accf5eaf759798fee1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "e9bc1f6b65626ad34bc40ecd24a861bac944d1c9b012b9accf5eaf759798fee1",
+      "git_blob_sha": "82cc6099d03627e375c48ec525720050e4ed5ace",
+      "bytes": 3100
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/root-input-verification--3169f04824d90d51c7eb364e04f1a5df5e9424fd17bd32135a344afd62688cc8.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "3169f04824d90d51c7eb364e04f1a5df5e9424fd17bd32135a344afd62688cc8",
+      "git_blob_sha": "5a3275e83cec58c1328ac843b170ed3e8c8d8694",
+      "bytes": 17689
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/root-input-verification--83c3dbe7b295e14cfca56c8b4ff7ce0b69f72fc58441e1aed03fda5956326c25.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "83c3dbe7b295e14cfca56c8b4ff7ce0b69f72fc58441e1aed03fda5956326c25",
+      "git_blob_sha": "d00b530eddd972a0c82f50c8fa9970d19cf5f2a1",
+      "bytes": 18571
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/root-visual-review--5acd9de9641386c2b0f6553e07307ac9c26e1466206b68b2a26aa15a93457931.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "5acd9de9641386c2b0f6553e07307ac9c26e1466206b68b2a26aa15a93457931",
+      "git_blob_sha": "6c40629baa63a0e0cdc2ea64bbfe86d6e8ed41f0",
+      "bytes": 3765
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/raw/verify_inputs--f83d984e786dfbe1e8b1bf681a6fa2f8748ad376aac586949e500c39e666ea6f.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "f83d984e786dfbe1e8b1bf681a6fa2f8748ad376aac586949e500c39e666ea6f",
+      "git_blob_sha": "f5f7e659319c81896d1edd751a90e8de28b50284",
+      "bytes": 4395
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/root/checkpoint.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "883dd1cd7c2aa52b9f5378ef7f248ab7c4266f81ebc601e5355c2370e732e3fa",
+      "git_blob_sha": "361fea775104f766425947c3f2e899c042b63a62",
+      "bytes": 3746
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/root/critic-base-commit-fresh-readback.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "389640225dcb933b4af9a467b3e0350eae5a64dd7afa08cd235db9ec0a919a09",
+      "git_blob_sha": "0410f0f5227bb0cb64d3f67884d44bbcdc24adf9",
+      "bytes": 1967
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/root/critic-base-tree-fresh-readback.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "be1e0a56731a08317c7d866f4a8b27bed366d813e82d539ecbe1e415aa11ee76",
+      "git_blob_sha": "dc42c5d7e3a21e17fbc3f5a689737021f6b7d283",
+      "bytes": 2989227
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/root/generation-index.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "11d61cc97c4e4a2cf6dfae8cf5a8af003de3c178c36845c97bd703ba4067fd6c",
+      "git_blob_sha": "fcc9b3559c262017e24040f19d4ef1d786df8825",
+      "bytes": 9933
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/root/invocation-index.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "4914c3a932578c08a7113595420af30d04ba0feec41562529d1a01b6ce43649a",
+      "git_blob_sha": "af57fe2a5e800ca5a30479bc1260034104110325",
+      "bytes": 12979
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/root/root-input-verification.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "83c3dbe7b295e14cfca56c8b4ff7ce0b69f72fc58441e1aed03fda5956326c25",
+      "git_blob_sha": "d00b530eddd972a0c82f50c8fa9970d19cf5f2a1",
+      "bytes": 18571
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/root/root-visual-review.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "5acd9de9641386c2b0f6553e07307ac9c26e1466206b68b2a26aa15a93457931",
+      "git_blob_sha": "6c40629baa63a0e0cdc2ea64bbfe86d6e8ed41f0",
+      "bytes": 3765
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/tools/archive-assemble.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "1dd9d60087a2ceaaa66e92ebe364a0968e576bba6916eb5ce50ec8a72e42f584",
+      "git_blob_sha": "f1ab8a094462034c0ebb1802e9f82b0635c8534f",
+      "bytes": 22932
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/tools/archive-tools.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "65c9cf31647a8c49d95e76565c659882192224948267c5472c9afdbd1f36b34e",
+      "git_blob_sha": "13dab201ad804e6de8797a11abafc91e0e60739f",
+      "bytes": 24467
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/tools/freeze_batch.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "63407659104d2f5dfcf8e7103c7fce8bc0c2c8b03f0e73a0627b3becc281f72a",
+      "git_blob_sha": "7da77280ea596da429a0bb4f8139ed87f8df64ee",
+      "bytes": 5599
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/tools/record_invocation.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "98c2e441c706da9004c854e0d55973b1beef51cb8242ad17b655d172cdc475d7",
+      "git_blob_sha": "c35e4b720d73ec1e73ef79d3f042b247c855ea5e",
+      "bytes": 1086
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/tools/register_render.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "f7368f729c2f0b31ed3c96071650fc6d9d4fc7ad48e42898127c29a1c9187d37",
+      "git_blob_sha": "3fda29c6fa5627adbbdc73092cf35a8cea2e7f41",
+      "bytes": 1124
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/provenance/tools/verify_inputs.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "f83d984e786dfbe1e8b1bf681a6fa2f8748ad376aac586949e500c39e666ea6f",
+      "git_blob_sha": "f5f7e659319c81896d1edd751a90e8de28b50284",
+      "bytes": 4395
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/reference-links.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "40b8f9036bf9a165cee152249e246d91fdad8af198aa45a2e782b22d98d6f73e",
+      "git_blob_sha": "5d06ea89c06cd32965228df0d8cfbfd17a685647",
+      "bytes": 36021
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/requirements.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "c10ab73c075116d486afd2c7eca3390ddf1e4435c3d2699bfc1ed40b4efa137a",
+      "git_blob_sha": "b5ed15f61318cbf165316c4033e3b9abca591aa9",
+      "bytes": 5803
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/counter-builder/inspection/builder-integrity-audit--babb583bf242c413807e5aca8785b402142dab6d3f3770f5bf5b940788476e48.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "babb583bf242c413807e5aca8785b402142dab6d3f3770f5bf5b940788476e48",
+      "git_blob_sha": "d8c8646a9ade554faabe10a77ec5b8ef947bff80",
+      "bytes": 2965
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/counter-builder/inspection/builder-integrity-audit--cdea8ac2ae935b17af12c89e3980ec97a81e5d3b20d05c43d43f1dcc52458505.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "cdea8ac2ae935b17af12c89e3980ec97a81e5d3b20d05c43d43f1dcc52458505",
+      "git_blob_sha": "7c28c9718e28afa732ccf407c19fd4e1ad20c3c3",
+      "bytes": 2999
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/counter-builder/inspection/cardinal-r1-builder-observation--20a1e91706b643441a2d3eac4e6d3ad60b0593ba428e2c8907d164a07faf180f.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "20a1e91706b643441a2d3eac4e6d3ad60b0593ba428e2c8907d164a07faf180f",
+      "git_blob_sha": "878d2b1d49c8ffaaa310e44cd29057f7e5b4307b",
+      "bytes": 1292
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/counter-builder/inspection/cardinal-r1-handedness-resolution--56d2a6a9cbad7c2f88ace5e35353c8fd43fa379d37a3285aa7da2f22813599b0.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "56d2a6a9cbad7c2f88ace5e35353c8fd43fa379d37a3285aa7da2f22813599b0",
+      "git_blob_sha": "2f23e027be1e1e72c8d21fe3835efbefb0c905cd",
+      "bytes": 550
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/counter-builder/inspection/dependent-r1-builder-observation--6fcda3083695af89ebc1b47fcc520162160cb588c1ad831a6936449dc998a16b.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "6fcda3083695af89ebc1b47fcc520162160cb588c1ad831a6936449dc998a16b",
+      "git_blob_sha": "b75d72606681cd74b6be1a346000d17712f7bfe5",
+      "bytes": 1103
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/counter-builder/inspection/final-review-binding-audit--986980185fe4b224e2c2be621803a818e34aee0efeb390d0b6bedc68a102ae83.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "986980185fe4b224e2c2be621803a818e34aee0efeb390d0b6bedc68a102ae83",
+      "git_blob_sha": "73e9f1e6a144cf4e99774c1c25bad14af5eaabc1",
+      "bytes": 4106
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/index.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "01d9d783b291c20519fc847ff0f50a634c00beb3fd83f272f092ac3c1e56b54e",
+      "git_blob_sha": "a4cec278349df0e83d213cbd9e7ea1f74907792e",
+      "bytes": 67556
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/customer-counter-cardinal-r1-crop-provenance--5c5867a365007f217d85ed6f31fc37e72234bf7136f6294ca989833c820fd783.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "5c5867a365007f217d85ed6f31fc37e72234bf7136f6294ca989833c820fd783",
+      "git_blob_sha": "42f366be619a527c9a2e98602488de5d7ea1eae7",
+      "bytes": 1896
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/customer-counter-cardinal-r1-front-lower-structure--0b9f16d02f8ca3b13057dc520b5db71686e07ef7928bfa7aa5c8836585e62775.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "0b9f16d02f8ca3b13057dc520b5db71686e07ef7928bfa7aa5c8836585e62775",
+      "git_blob_sha": "1cd2dda60bfda7554139fabdc65ac7a6b5c1e8b5",
+      "bytes": 100499
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/customer-counter-cardinal-r1-front-register--a6f76997c072759f902755021f180eacecbd8a346e6a54b5e75abb93212a5622.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "a6f76997c072759f902755021f180eacecbd8a346e6a54b5e75abb93212a5622",
+      "git_blob_sha": "0bc88b7612bdbe77a62d85feb68d31b7edd047cc",
+      "bytes": 31813
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/customer-counter-cardinal-r1-left-end-lower-structure--5638b2bfda903835ba1d9eee73fa08c7ca24dd5dc557aaeb0585b9d1d2bb7d47.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "5638b2bfda903835ba1d9eee73fa08c7ca24dd5dc557aaeb0585b9d1d2bb7d47",
+      "git_blob_sha": "3393c4eef3dbbf5cea2bfe3063fe56525d31b852",
+      "bytes": 45588
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/customer-counter-cardinal-r1-left-end-register--1f99c2630aaa487e8c3fa51ed22822f943a58cce8b6f3f730209578d15a7cf4b.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "1f99c2630aaa487e8c3fa51ed22822f943a58cce8b6f3f730209578d15a7cf4b",
+      "git_blob_sha": "2754da5dc3299e4a945694ecb50f250d50e5e050",
+      "bytes": 39869
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/customer-counter-cardinal-r1-rear-register--329d82cf3ed3f80646864d818522ee75c31562b28cf7b2d37cd5c5195d963385.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "329d82cf3ed3f80646864d818522ee75c31562b28cf7b2d37cd5c5195d963385",
+      "git_blob_sha": "a4bb92a692031b523ac8d58f7dc1f327c102fe24",
+      "bytes": 32276
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/customer-counter-cardinal-r1-right-end-register--3e92a6fe32dfe3a1f53be64bdad7fe828f543981b6a166a43b22b8260d60610f.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "3e92a6fe32dfe3a1f53be64bdad7fe828f543981b6a166a43b22b8260d60610f",
+      "git_blob_sha": "2413d7c66dbb0390c5029a8a2bbaabac40b88c64",
+      "bytes": 21751
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/customer-counter-details-r1-crop-provenance--b2094def1c4cbca6ceb9e4b09a00ffcde8a0303179586237a18158b01f362739.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "b2094def1c4cbca6ceb9e4b09a00ffcde8a0303179586237a18158b01f362739",
+      "git_blob_sha": "041930e8531b67f140f8063ca4eb9a622c1ea23f",
+      "bytes": 1309
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/customer-counter-details-r1-shelf-supports--7034c73e8488d7fdbaf74656d94a4662a89b7c0c8af9f3eddcfc1cf5cadbe643.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "7034c73e8488d7fdbaf74656d94a4662a89b7c0c8af9f3eddcfc1cf5cadbe643",
+      "git_blob_sha": "00b8f1c1b6b0d22ab10cb1c6b0a4493e11decf2e",
+      "bytes": 256283
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/customer-counter-details-r1-staff-register--f990276f380db082b22fddffb0accad12905d0435090a7bb1169c48618070e8c.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "f990276f380db082b22fddffb0accad12905d0435090a7bb1169c48618070e8c",
+      "git_blob_sha": "e8fa9a0f677252a9b8b01a8100f6c3248ebe9fa2",
+      "bytes": 290417
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/customer-counter-details-r1-stock-surface--a89e308c48052b88755b1ccb2b42840d5726ccab62a7351724062f41bd0b10cf.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "a89e308c48052b88755b1ccb2b42840d5726ccab62a7351724062f41bd0b10cf",
+      "git_blob_sha": "16a36bb54fc415391667dc8f341086894ca9fd86",
+      "bytes": 239720
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/customer-counter-details-r1-two-instances--453f4a55732c8e46d7376fbe47eb791b8a03798baae8817bb5c484d762de7ba1.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "453f4a55732c8e46d7376fbe47eb791b8a03798baae8817bb5c484d762de7ba1",
+      "git_blob_sha": "f9e96e2db0f6b78cdf1e38df500914f540a290fe",
+      "bytes": 178723
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/customer-counter-details-r2-crop-provenance--2efb3372000dde9fc7f24f2222c48979f2bdf203681b45e4dfb0b889d548c6d6.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "2efb3372000dde9fc7f24f2222c48979f2bdf203681b45e4dfb0b889d548c6d6",
+      "git_blob_sha": "6da640cd4052d49335f43ace400b54784f03fb44",
+      "bytes": 1310
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/customer-counter-details-r2-shelf-supports--df2841577e8dfc13545176e47bfa47eb699b2a5ae07c7e8fe1f514660e2c769d.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "df2841577e8dfc13545176e47bfa47eb699b2a5ae07c7e8fe1f514660e2c769d",
+      "git_blob_sha": "faec8209b5fbd4c08c49f4d14968d8846543a76b",
+      "bytes": 244622
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/customer-counter-details-r2-staff-register--d0733bdd285900c787db7e59fe7f9668fc37cf3ad4a23babde380550fe3bb0b9.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "d0733bdd285900c787db7e59fe7f9668fc37cf3ad4a23babde380550fe3bb0b9",
+      "git_blob_sha": "4da9d274ca39353d5002cf7a61db61a1f32cf961",
+      "bytes": 116470
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/customer-counter-details-r2-stock-surface--3663065341802e7b851d0f4f8066188bb61d481d49144e65f66a76900f492c82.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "3663065341802e7b851d0f4f8066188bb61d481d49144e65f66a76900f492c82",
+      "git_blob_sha": "eac361cb67af22158e898c56189882f299775c9c",
+      "bytes": 249213
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/customer-counter-details-r2-two-instances--c3c1d3b65fd0615158075aada667437b70f822bc0481a4916087962042dfbd03.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "c3c1d3b65fd0615158075aada667437b70f822bc0481a4916087962042dfbd03",
+      "git_blob_sha": "6c94f3a6cac9875fca8f91b5fb40fdc79dc32a92",
+      "bytes": 173158
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/customer-counter-oblique-r1-crop-provenance--492b49eadc01746e74fbc49903c204c9a19714e757f017fa97789486658cc0ca.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "492b49eadc01746e74fbc49903c204c9a19714e757f017fa97789486658cc0ca",
+      "git_blob_sha": "2f5492cb711b72c23df2367674e25d48624eb678",
+      "bytes": 1314
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/customer-counter-oblique-r1-front315-register--eb96d4d742209607db16e9a0e662fdecfc55c06445f03dc40599cf96e2ffde6b.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "eb96d4d742209607db16e9a0e662fdecfc55c06445f03dc40599cf96e2ffde6b",
+      "git_blob_sha": "1f6aa59e754ed483ade392a89da29be97b5d236a",
+      "bytes": 38126
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/customer-counter-oblique-r1-front45-register--2ae5ee37dc35cf0a1664ee6c4752ac0eb4c6210c837b328954fb830d7aded7f3.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "2ae5ee37dc35cf0a1664ee6c4752ac0eb4c6210c837b328954fb830d7aded7f3",
+      "git_blob_sha": "6de3341164ba39ef2085eaec9eb425c476fcf874",
+      "bytes": 29001
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/customer-counter-oblique-r1-rear135-full--c5e5f4770ac5db0e254d908c7a524e26cfe7b1a83b023980f0f31cfdcb340117.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "c5e5f4770ac5db0e254d908c7a524e26cfe7b1a83b023980f0f31cfdcb340117",
+      "git_blob_sha": "7210d4b1442fdf3178af18f37491f32e92856b51",
+      "bytes": 224971
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/customer-counter-oblique-r1-rear225-full--ff7f7177edb8b67844a2680b3672d20c0c8db2221d521a7e22e05cd3686a09c4.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "ff7f7177edb8b67844a2680b3672d20c0c8db2221d521a7e22e05cd3686a09c4",
+      "git_blob_sha": "3e9f2a12af407450cbc4ef67ade750e528d9523b",
+      "bytes": 217588
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/customer-counter-oblique-r2-crop-provenance--7332c93397f2b65be12b10d020d7371e9e6da0635f8789c26f4a2ebfabba1326.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "7332c93397f2b65be12b10d020d7371e9e6da0635f8789c26f4a2ebfabba1326",
+      "git_blob_sha": "83945ba4351acdd713008a6a506a243c49678fe9",
+      "bytes": 1063
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/customer-counter-oblique-r2-rear135-register--97077a1f576e15b412a0c6440296131fab076e42f9fd63a89f455eaf510a1a2f.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "97077a1f576e15b412a0c6440296131fab076e42f9fd63a89f455eaf510a1a2f",
+      "git_blob_sha": "1c86e8b09fe125db8fce72516eaeaa0ccb6453d2",
+      "bytes": 27579
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/customer-counter-oblique-r2-rear225-register--79e31eeeb791e2ee3658a6bdf52dd78948dfd933b7918ceb5716b9ec9e399b25.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "79e31eeeb791e2ee3658a6bdf52dd78948dfd933b7918ceb5716b9ec9e399b25",
+      "git_blob_sha": "4daf5f2e10228ef6dd7d850b1f457eac24900adb",
+      "bytes": 40853
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/customer-counter-oblique-r2-rear225-table--48ed2668a0690aaceb74925ad8b208218f499d50b2b15020939fed906587c153.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "48ed2668a0690aaceb74925ad8b208218f499d50b2b15020939fed906587c153",
+      "git_blob_sha": "6b8b623d42e7422a1a99b7a31a9b247cf5568079",
+      "bytes": 221440
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/customer-counter-oblique-r3-crop-provenance--b246befac13f150e0263154f6a3bdfe0aacedea908b186279f52db1f61280926.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "b246befac13f150e0263154f6a3bdfe0aacedea908b186279f52db1f61280926",
+      "git_blob_sha": "6e77e0279dda9114fa06f84e654b3f94c8cc575e",
+      "bytes": 1062
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/customer-counter-oblique-r3-rear135-register--a9094a4c5b078ded6ce51f38e9d69f118697028c3dfb649a3e0f50c93437144a.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "a9094a4c5b078ded6ce51f38e9d69f118697028c3dfb649a3e0f50c93437144a",
+      "git_blob_sha": "0b1452395d5ce22f165ab0332acbdfc6d811c9b0",
+      "bytes": 27473
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/customer-counter-oblique-r3-rear225-full--4b729597c3ec56cd53f2f367b18b97517e2f8f635fb6f473b6e389bb7351c8ca.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "4b729597c3ec56cd53f2f367b18b97517e2f8f635fb6f473b6e389bb7351c8ca",
+      "git_blob_sha": "6c1a61f51c7c6bbdcfd3d23820357fba3960b989",
+      "bytes": 220720
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/customer-counter-oblique-r3-rear225-register--ed60353337590cef55222acfc1fa83d19a886971d46559ff270d7994c24a5bb5.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "ed60353337590cef55222acfc1fa83d19a886971d46559ff270d7994c24a5bb5",
+      "git_blob_sha": "e84993ffa20f2312e4da1a6096034f6431f8dbc3",
+      "bytes": 44542
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-cardinal-r1-crop-provenance--068df9231d39fbe4181cd125831c8b5f3254bb00769a7fafe5b34848c5fbfdb5.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "068df9231d39fbe4181cd125831c8b5f3254bb00769a7fafe5b34848c5fbfdb5",
+      "git_blob_sha": "6d801e65be2116e1678d557b21c52c321341ae58",
+      "bytes": 1500
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-cardinal-r1-front-eight-crowns--072f7e01e3fd043f822bfdffecc4d0b46ebe55148d0d1d232c29ca7c5f5cc41f.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "072f7e01e3fd043f822bfdffecc4d0b46ebe55148d0d1d232c29ca7c5f5cc41f",
+      "git_blob_sha": "a670d62eb160624fe0389718c7a0c1f33f257826",
+      "bytes": 107602
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-cardinal-r1-front-rail-lashing--229bf71f68fc91a7a54015003478dcfbc5872e66b210ced6b4120a6159dc8c9b.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "229bf71f68fc91a7a54015003478dcfbc5872e66b210ced6b4120a6159dc8c9b",
+      "git_blob_sha": "9d2116bb3c58db1df582709718d2bf4c1e1c8b09",
+      "bytes": 47878
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-cardinal-r1-left-end-thickness--640dd0850f56ddf902e18c53b328d742f15836f1385d0ab0b1cb432788a28966.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "640dd0850f56ddf902e18c53b328d742f15836f1385d0ab0b1cb432788a28966",
+      "git_blob_sha": "32d566364febe0b6907e358518fac9a5365d2905",
+      "bytes": 109460
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-cardinal-r1-rear-ropes--916b7af5471316e2c2391a367d694d4a82afb48331ad53b3ef17edfcef8aba2d.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "916b7af5471316e2c2391a367d694d4a82afb48331ad53b3ef17edfcef8aba2d",
+      "git_blob_sha": "c5e233ac174fc898d49e16658e79257c98e59ddc",
+      "bytes": 39727
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-cardinal-r1-right-end-thickness--df84d02e83e1bccb8fdec90e493518c8e02304fab90260ca74c8887d2a187f73.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "df84d02e83e1bccb8fdec90e493518c8e02304fab90260ca74c8887d2a187f73",
+      "git_blob_sha": "2764a529a96e3642e94fbe6bbb2eaec12b1f0f26",
+      "bytes": 105813
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-details-r1-crop-provenance--f3ab9f55e36deada55b109385a59ce8ae77b7bfb7ed80e77e36105e0ab143378.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "f3ab9f55e36deada55b109385a59ce8ae77b7bfb7ed80e77e36105e0ab143378",
+      "git_blob_sha": "2b6174878a6e2fdd93ae950f9310d442b78c546a",
+      "bytes": 1258
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-details-r1-joined-fourteen-logs--bb48b6a0c30a91b24e18a0f7e24ea13a4f4c19a141d6c6dab1f20c7d640855cb.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "bb48b6a0c30a91b24e18a0f7e24ea13a4f4c19a141d6c6dab1f20c7d640855cb",
+      "git_blob_sha": "287454dc18cd31cddd3d70c8a04cae13fd12ad01",
+      "bytes": 267911
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-details-r1-rope-attachment--797d44b953718c82460fba0a9530e1d20cd688f8eaddfa0a0fdb7697535f4451.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "797d44b953718c82460fba0a9530e1d20cd688f8eaddfa0a0fdb7697535f4451",
+      "git_blob_sha": "9116dd5c3ee865e8219dba96cf84f46362f15bd5",
+      "bytes": 156413
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-details-r1-top-seven-logs--4b2ea3bc1916247776818cd9b60726898ace6af7201e29f096c5559599690f64.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "4b2ea3bc1916247776818cd9b60726898ace6af7201e29f096c5559599690f64",
+      "git_blob_sha": "701a69a0d351101e49788493e215f67127c2f79f",
+      "bytes": 297062
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-details-r1-unresolved-center-join--8301094d6326c4098a7824d51e61c9b4a4529ea8be9d88ead0b28ddd759e141d.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "8301094d6326c4098a7824d51e61c9b4a4529ea8be9d88ead0b28ddd759e141d",
+      "git_blob_sha": "01e16ab26cacc665c8acca3415e7e5bc5d501dec",
+      "bytes": 62229
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-details-r2-actual-rail-joint--8972506a8acb170c9f9caeaeda6b50b6d917acacd3abaded0410704e8e79de65.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "8972506a8acb170c9f9caeaeda6b50b6d917acacd3abaded0410704e8e79de65",
+      "git_blob_sha": "67531765ed00b69263ffc7111f5e398e80165bdf",
+      "bytes": 15177
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-details-r2-center-rail-seams--496f51c3054b1d9c57a04c3aedd60557fc112dc959fefe244882f4d11f182ac7.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "496f51c3054b1d9c57a04c3aedd60557fc112dc959fefe244882f4d11f182ac7",
+      "git_blob_sha": "c73df64701c47cd0572d661bfdd7a049fe57afcd",
+      "bytes": 29925
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-details-r2-crop-provenance--0a83bf841aff96e10d4707a197be110c1fe2ca68baa14a79ea9cd2ffb1612a27.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "0a83bf841aff96e10d4707a197be110c1fe2ca68baa14a79ea9cd2ffb1612a27",
+      "git_blob_sha": "b1c29b11fdcee963f4bf5c25142bb71e3f2e4969",
+      "bytes": 2029
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-details-r2-crop-provenance--7586befc61067f5e5607e057f5ca5c894b8df64b2d738455bd7447bcbce47bab.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "7586befc61067f5e5607e057f5ca5c894b8df64b2d738455bd7447bcbce47bab",
+      "git_blob_sha": "915419d8709be412fd328c95aea04ec5f0fb6459",
+      "bytes": 1008
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-details-r2-joined-sixteen-logs--5f534189130fae89ebc8ac5ecd3b8c6e1bc38231aeca4971f3ae0b4741bb4afd.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "5f534189130fae89ebc8ac5ecd3b8c6e1bc38231aeca4971f3ae0b4741bb4afd",
+      "git_blob_sha": "cb99249d56cdb49a8c6412cf89b479d83ffd74f3",
+      "bytes": 266002
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-details-r2-left-module-count--60f553947f6e058af74b9e082192e0957288d83a48485eb839fa8d693a9d1152.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "60f553947f6e058af74b9e082192e0957288d83a48485eb839fa8d693a9d1152",
+      "git_blob_sha": "21a1c0a6ee74b256d0d4409f1f3418badd3a7cb2",
+      "bytes": 111036
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-details-r2-right-module-count--fb14ae041af239aba4a4e227ceaa8fc2feaf5c9c83f3c83205f7559554880338.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "fb14ae041af239aba4a4e227ceaa8fc2feaf5c9c83f3c83205f7559554880338",
+      "git_blob_sha": "8eee82fc41b97b641043df2c61478a5e5b95f3ba",
+      "bytes": 139213
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-details-r2-top-eight-logs--60395fe3f4c35d10a7a8503876db7bd5423f30c6fede550e59d74d9853d690a5.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "60395fe3f4c35d10a7a8503876db7bd5423f30c6fede550e59d74d9853d690a5",
+      "git_blob_sha": "65996262d2648c39968ed0d53bc9de1cae915f5c",
+      "bytes": 294100
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-details-r3-both-rail-joints--05d4eae6941ce8ea0567674def58c786352a7fa97e87c5e4920a3416136ee9dc.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "05d4eae6941ce8ea0567674def58c786352a7fa97e87c5e4920a3416136ee9dc",
+      "git_blob_sha": "ad25b004e1ccf5156f93a4d326a29dd5b3141f15",
+      "bytes": 15095
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-details-r3-crop-provenance--1f8d83fc1ab4ad66ec383abc93a50903f4cd145d58205436fe50af38d462ecd6.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "1f8d83fc1ab4ad66ec383abc93a50903f4cd145d58205436fe50af38d462ecd6",
+      "git_blob_sha": "20da9f098c701bc69d30fe47f84fc871dc3e2567",
+      "bytes": 1247
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-details-r3-left-eight-logs--c2bd23f31ab118f3a37100a0bfb9b777120e97ac84eeb5c98215f06b5d9e3b4e.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "c2bd23f31ab118f3a37100a0bfb9b777120e97ac84eeb5c98215f06b5d9e3b4e",
+      "git_blob_sha": "a3ffd6a26118ab6dd86bf0de6365360de06403aa",
+      "bytes": 115229
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-details-r3-right-eight-logs--26796d045335405e811863913dfdefe253702d9fab4974659d2b7643febeb25d.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "26796d045335405e811863913dfdefe253702d9fab4974659d2b7643febeb25d",
+      "git_blob_sha": "e3e79f465464d680494c46f2994f356b051f6658",
+      "bytes": 137313
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-details-r3-top-eight-logs--5b769bd74197db73836aba7277c13a67c27aa681ffbdd653346ee6874223e73c.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "5b769bd74197db73836aba7277c13a67c27aa681ffbdd653346ee6874223e73c",
+      "git_blob_sha": "cb20575453ec1a55c6bb0c2d793f13df3b5a34f0",
+      "bytes": 288920
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-oblique-r1-crop-provenance--17bc4c791ff452b4c2e194fe51b33a1081fc6c24183589607a7b87f692fda5e9.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "17bc4c791ff452b4c2e194fe51b33a1081fc6c24183589607a7b87f692fda5e9",
+      "git_blob_sha": "0f959161a347a91053dd8679417a65350ab53d8c",
+      "bytes": 1243
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-oblique-r1-front-315-count--ffe2282363703071eacf3b7c331cfd49c9ab0b8bc3641f55894f61825ec28e2b.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "ffe2282363703071eacf3b7c331cfd49c9ab0b8bc3641f55894f61825ec28e2b",
+      "git_blob_sha": "24492f8bf3f921069bea30eaad8b4040061e663d",
+      "bytes": 295260
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-oblique-r1-front-45-count--f568d24df5935e9c28c3d609fd67d0dd0c3b53d63439ae49086dd6884a579f97.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "f568d24df5935e9c28c3d609fd67d0dd0c3b53d63439ae49086dd6884a579f97",
+      "git_blob_sha": "ebb786cedd4876b5b5ac08ec0b6147a5b8e9990c",
+      "bytes": 294154
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-oblique-r1-rear-lower-left--8d82b98684236fe361fea762997abe4e88d32a74e3ac48253d8c3920d1fb8a95.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "8d82b98684236fe361fea762997abe4e88d32a74e3ac48253d8c3920d1fb8a95",
+      "git_blob_sha": "d2a2bcfb8477f79dd71dfe895ec4af648f05c988",
+      "bytes": 268486
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-oblique-r1-rear-top-right--9b2b160a7c57dcfe04e00bcd58cd3f732077438a57284b8b0ef37e7ef0b3a8ab.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "9b2b160a7c57dcfe04e00bcd58cd3f732077438a57284b8b0ef37e7ef0b3a8ab",
+      "git_blob_sha": "520e5fd76098e57ee33bd73143661b86a21fa5c1",
+      "bytes": 274574
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-oblique-r2-crop-provenance--9994c7ca401b9599ea5092fad5d8df69413e4297eb01e4aaeca97ecc4ecf8ff3.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "9994c7ca401b9599ea5092fad5d8df69413e4297eb01e4aaeca97ecc4ecf8ff3",
+      "git_blob_sha": "2da45ebf4c622359a68c9dcf3b77eddf864b2905",
+      "bytes": 772
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-oblique-r2-rear135-label-context--284fe42237eab2ac86ad8aa98fb15e9bfee3f177f03264994bbf1cbf4c10b747.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "284fe42237eab2ac86ad8aa98fb15e9bfee3f177f03264994bbf1cbf4c10b747",
+      "git_blob_sha": "a778aca7689e741e0ba0ca3c889f760b649c929a",
+      "bytes": 317055
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/fence-oblique-r2-rear225-label-context--d7346d49fad1f99dc1986b404b62f76bf558a90449cd0601227bbd8989f59b36.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "d7346d49fad1f99dc1986b404b62f76bf558a90449cd0601227bbd8989f59b36",
+      "git_blob_sha": "2f3c5ed93b67fef1315a550206a828e8fd5429eb",
+      "bytes": 302987
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/gates-cardinal-r1-crop-provenance--073b0b4740749823ffe8c02e79658dfdb7af21be6ea385f5f42ef25a75629610.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "073b0b4740749823ffe8c02e79658dfdb7af21be6ea385f5f42ef25a75629610",
+      "git_blob_sha": "4a37622b960a973df04e2797649582447df948fa",
+      "bytes": 1723
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/gates-cardinal-r1-front-latch--339a05ca50d1d30f2e3e26d3e6de5d90f4b2b8ff9f975ec992913034d9eb07d9.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "339a05ca50d1d30f2e3e26d3e6de5d90f4b2b8ff9f975ec992913034d9eb07d9",
+      "git_blob_sha": "f46b04382cbb191167ad94b3f1e15b9065dc94f6",
+      "bytes": 10789
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/gates-cardinal-r1-front-upper-hinge--fb57d741bfbb29d0f1b107d39ea5098a52829a58903cd658f44f94eb16f88592.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "fb57d741bfbb29d0f1b107d39ea5098a52829a58903cd658f44f94eb16f88592",
+      "git_blob_sha": "97e6e944e36da951e285a0bf665b277772b10311",
+      "bytes": 19806
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/gates-cardinal-r1-left-end-hardware--b1afb4cec093e708576f4e39e6ba0f57496543879bbc158ef5011c4fe3e47c32.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "b1afb4cec093e708576f4e39e6ba0f57496543879bbc158ef5011c4fe3e47c32",
+      "git_blob_sha": "69cf32d20b73985fa2d640a7b992b16353d80276",
+      "bytes": 54508
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/gates-cardinal-r1-rear-latch--c37f9ac90145f641d1b6e020627bb3a3e375f38b5a7c518652250f0291299deb.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "c37f9ac90145f641d1b6e020627bb3a3e375f38b5a7c518652250f0291299deb",
+      "git_blob_sha": "d995b606bcb670fcd480b173a627132ad93c0acf",
+      "bytes": 10828
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/gates-cardinal-r1-rear-upper-hinge--ac17d33d3bd1f0c196edeb0d2e6fed3ecde86074a41e5cb835b7ede087234028.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "ac17d33d3bd1f0c196edeb0d2e6fed3ecde86074a41e5cb835b7ede087234028",
+      "git_blob_sha": "89cd04fe5625415b661dbc2aad62df66ccb320e8",
+      "bytes": 18800
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/gates-cardinal-r1-right-end-hardware--775ecded303ada5c326a467cfdeee621622dd6a2d0dbc48340875b1bb4e0e8cf.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "775ecded303ada5c326a467cfdeee621622dd6a2d0dbc48340875b1bb4e0e8cf",
+      "git_blob_sha": "a6c78177173b3fd7f6b4fc183e350fb606fe828e",
+      "bytes": 54295
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/gates-cardinal-r2-crop-provenance--f75254d741052b9d2a044223aaf020e97a74921206a3a7f56243c6ac732b3fd1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "f75254d741052b9d2a044223aaf020e97a74921206a3a7f56243c6ac732b3fd1",
+      "git_blob_sha": "d4bac142be039231391060ddf1021aa9a13cf36a",
+      "bytes": 824
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/gates-cardinal-r2-front-latch--b3d433fef8378dae750af55714829bc41ea4295483a57e1ad0fa506b549b1cb4.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "b3d433fef8378dae750af55714829bc41ea4295483a57e1ad0fa506b549b1cb4",
+      "git_blob_sha": "c5e30d65194d12c0b81824f30f49aa4fdce651b3",
+      "bytes": 9978
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/gates-cardinal-r2-rear-latch-bolts--191d70c0a0294afa2cdc9ee814187fc812f1cd833956fff0dfffc6001cc3fdd7.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "191d70c0a0294afa2cdc9ee814187fc812f1cd833956fff0dfffc6001cc3fdd7",
+      "git_blob_sha": "1b833083e719bd70508a103ff629584222ff7dd8",
+      "bytes": 9013
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/gates-oblique-r1-crop-provenance--83ac35543525d5c629f9a1f475ed2f41f74742791d68f1190aec6bac970122d9.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "83ac35543525d5c629f9a1f475ed2f41f74742791d68f1190aec6bac970122d9",
+      "git_blob_sha": "5d970c4bdde2864f42f301092bc82505cb16792e",
+      "bytes": 1241
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/gates-oblique-r1-front315-latch--de88bae7781bcab98f47beefc7723e42160363d4d136d1c26dad35b2e8377991.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "de88bae7781bcab98f47beefc7723e42160363d4d136d1c26dad35b2e8377991",
+      "git_blob_sha": "e23de2b6971e8383d763cfaafb574cd54a469825",
+      "bytes": 5630
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/gates-oblique-r1-front45-latch--b95f72844ad392b3b09222e1fe13953f268467f1f43c1300bcbf8a644e14bba4.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "b95f72844ad392b3b09222e1fe13953f268467f1f43c1300bcbf8a644e14bba4",
+      "git_blob_sha": "a4bd0cb8c4b171553ad905059ff0df80fde2aae1",
+      "bytes": 6432
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/gates-oblique-r1-rear-lower-left--536e2f69e9a62fbb3e9a30a3a423ce068858c4e8231dc9ac354f12346cafd3d5.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "536e2f69e9a62fbb3e9a30a3a423ce068858c4e8231dc9ac354f12346cafd3d5",
+      "git_blob_sha": "8f248465a5cd4101281ee050cb1daa659cee2d01",
+      "bytes": 261348
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/gates-oblique-r1-rear-top-right--c36decda4cb87e7ca05cb4538ddec7fa7b5bffccb5b41dbee6cef2cbdacc63f9.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "c36decda4cb87e7ca05cb4538ddec7fa7b5bffccb5b41dbee6cef2cbdacc63f9",
+      "git_blob_sha": "ab950bbe3a86a0e825075b53f5df6f633b0f73bd",
+      "bytes": 257796
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/gates-oblique-r2-crop-provenance--bbd2848eac83446a87d5f065c1e25fbfb02a84dcf0dcfe5756ac37e845dd3b5f.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "bbd2848eac83446a87d5f065c1e25fbfb02a84dcf0dcfe5756ac37e845dd3b5f",
+      "git_blob_sha": "6d9b28b6b5f96e19732c772283eb972a7a24be79",
+      "bytes": 1012
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/gates-oblique-r2-front45-latch--76c2153938501cca069584e5e0c94df9d9fdb1e8f13fb490ec23b21454ea7a71.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "76c2153938501cca069584e5e0c94df9d9fdb1e8f13fb490ec23b21454ea7a71",
+      "git_blob_sha": "07b458dac9c040b5fa415ebcd15865265ca617c9",
+      "bytes": 6623
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/gates-oblique-r2-rear135-label-context--e19423c4a5ac29b9c2b42293855d4a2bb5136ff4d19817d40ae126c50146d9b9.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "e19423c4a5ac29b9c2b42293855d4a2bb5136ff4d19817d40ae126c50146d9b9",
+      "git_blob_sha": "f6c7ceadb7674b6787a1258aea0f1c7840b0fe87",
+      "bytes": 295011
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/gates-oblique-r2-rear225-label-context--e8de617d1aabcc34f33641b622c6114c66cde3c8d42282a010d3e472c594d4bc.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "e8de617d1aabcc34f33641b622c6114c66cde3c8d42282a010d3e472c594d4bc",
+      "git_blob_sha": "aeb06fdfb604a2a8fd2bd439059b89bceb34a9bd",
+      "bytes": 283966
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/gates-states-r1-crop-provenance--e4aa980e5822c13785edabc8d106899886ef70a71d8b27d9d67b2ba6a2f37652.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "e4aa980e5822c13785edabc8d106899886ef70a71d8b27d9d67b2ba6a2f37652",
+      "git_blob_sha": "8e53d07c89dc4bf85ce97c4a561ade911bd4ea63",
+      "bytes": 1237
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/gates-states-r1-elevated-clearance--1bc8d2688ae83e677d15ac8583b22d1abbb6f5e3624c168566e85504be2c5be5.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "1bc8d2688ae83e677d15ac8583b22d1abbb6f5e3624c168566e85504be2c5be5",
+      "git_blob_sha": "5d5f0d3ad2f8b3ca9c4491f4ebf9680fae1ece28",
+      "bytes": 297350
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/gates-states-r1-hinge-detail--50e2f7cae0d06de41554c5bd6472bf66a934cee156a6e76d3d006250b415aecc.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "50e2f7cae0d06de41554c5bd6472bf66a934cee156a6e76d3d006250b415aecc",
+      "git_blob_sha": "939b8a1c98cb38ac719582a66e53fe50b6a5ecec",
+      "bytes": 147572
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/gates-states-r1-latch-detail--32ac20f27eb57be7c0c691a9b69cf81bdb71e2938f127a83cdb07de23b0276ce.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "32ac20f27eb57be7c0c691a9b69cf81bdb71e2938f127a83cdb07de23b0276ce",
+      "git_blob_sha": "f91a37acf5dc6a7b27e121e26acdcf648c017a34",
+      "bytes": 123434
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-evidence/reviews/evidence/gates-states-r1-open-passage--f6c611b78e8d5b9de687157ea9af262ed79f329ccad77bcef2c9fa589abeb866.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "f6c611b78e8d5b9de687157ea9af262ed79f329ccad77bcef2c9fa589abeb866",
+      "git_blob_sha": "3cca3390bab6aa77d6aadf21797adb98a10c3ac1",
+      "bytes": 233425
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/review-input-resolver.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "7ffb96321d127dbf9cfcbbc3753a9bce4fc867b66192af5d28672ca5efc08cff",
+      "git_blob_sha": "04345f1bc1fa11299933ff1bb0f0b295d1ff5d35",
+      "bytes": 193240
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/reviews/critic-counter-source-audit.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "24329993ad844b6a3cb25b4e4f0af9ef5ba58b858325fd7febf668216f7cc1da",
+      "git_blob_sha": "a3a6ecf83bd0fdecb3ccd349a3dd19ca1d5446fc",
+      "bytes": 1902
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/reviews/critic-fence-gate-source-audit.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "bf3d16010b24c88271a184fbec77c62d4373154d13313ba4d9938223b77f87fe",
+      "git_blob_sha": "82714afc6ed7fa215062eedfe3c5c38fdb6b8559",
+      "bytes": 1450
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/reviews/critic-final-visual-acceptance.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "2bd90f4965b1a2a83ad0d3094f5f804ba41956b74a573dbfbf7a1dc22f88b37b",
+      "git_blob_sha": "c89f2df346ec69ffabbb59e6bcdeaffecc8a9ed2",
+      "bytes": 19902
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/reviews/critic-preliminary-style-audit.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "5ffb2989a3d4c7336662a1b95e73f4f39b770fe4b87c4a9fd44feb3e4bafe7b8",
+      "git_blob_sha": "26f3be5e4739712aaaf1abd323a9ba614cd34fd2",
+      "bytes": 2162
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/reviews/critic-review-state.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "e52e4b92c96bc1f85ef455b908491e49c71b5f2a9f5f8e1e555f8cef5abd0a40",
+      "git_blob_sha": "fe14cf1b40003432430eae982c5d1456cbb194f6",
+      "bytes": 8916
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/reviews/customer-counter-cardinal-r1-review.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "d4e57d0921c37762228fb4e44d55d985a3e33b4e49d6b4da2b3ef991254bebaa",
+      "git_blob_sha": "19927ee79f52d56d3f0a692203eee2baba7907a0",
+      "bytes": 3608
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/reviews/customer-counter-details-r1-review.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "4b19a5581eb9022fcf00a5ba4cbb8fd74a134b14e685c5d02d06ed0979339551",
+      "git_blob_sha": "04d06a8a4f665ada95d4d85f85ba364de38808d0",
+      "bytes": 3139
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/reviews/customer-counter-details-r2-review.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "3a1c5cc3130d7997ffe6e63a45a537e116ab2b3d8d095c9de264bd2366278b39",
+      "git_blob_sha": "63942fb63b2da3045b20795cccfeb9c9897a8c6f",
+      "bytes": 3066
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/reviews/customer-counter-oblique-r1-review.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "3b08cd7bf8d40ff23d1f1923d7f6bae288fae4759063c06313d8a0fd9ee1f9b1",
+      "git_blob_sha": "2a3ec4c21b5cad294bc1e9a80a0bf18ef0af43ed",
+      "bytes": 3152
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/reviews/customer-counter-oblique-r2-review.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "0fb4574237e633e2759418d18bb66e6ac74dba811dfd8471857a1c0b0cfb3c3e",
+      "git_blob_sha": "c3e17d9c76962526e9e7d2f3b73d0a00b463a66c",
+      "bytes": 2907
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/reviews/customer-counter-oblique-r3-review.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "acc004dff6000898f85357a766b02f1ed71bfebdfbab9d9117bfe85e0ad22b35",
+      "git_blob_sha": "f6f15bd24a009ce21d719beb677d942691c17652",
+      "bytes": 2800
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/reviews/fence-cardinal-r1-review.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "f8119fa76a7880edb82864a9c9aa109dec10f61e6e66911733feb4aff4527277",
+      "git_blob_sha": "6693e8ce087929c329a7898529b6996e9cddb47f",
+      "bytes": 3238
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/reviews/fence-details-r1-review.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "b55a5a4d27bb3bfea68aa164ad0ab1a771f46ac982e88acd886e0703e3bf200b",
+      "git_blob_sha": "edd7f883ca22803725f9b778dd6d8b31c2c64950",
+      "bytes": 3092
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/reviews/fence-details-r2-review.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "8400781de321e0cbcdb75d606a0166d09bea53d7485dfef8c2f4689f29d09722",
+      "git_blob_sha": "5063897f0d79ec458a0d9294ab3b97e93c5b6a8a",
+      "bytes": 3758
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/reviews/fence-details-r3-review.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "70b1ca631eca1b0e424b199c7e41a99a5700c1f20105c6f7c17613b5080853a1",
+      "git_blob_sha": "dea106bcbcbc8a465c49aff8466ef1135580b8d2",
+      "bytes": 2980
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/reviews/fence-oblique-r1-review.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "b8ca37dd2947ff08f2215a5b96a42a42b03cffc501efc49bfc461c3cb8354748",
+      "git_blob_sha": "5dc96059a86b4e367122336c644471ba9575f0c1",
+      "bytes": 2746
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/reviews/fence-oblique-r2-review.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "bde5e3e25bbe35ac3ce3b276c6c99e50c412e16a2a2270e04ce73e2a4637fb75",
+      "git_blob_sha": "f7688feee24837ff7ec7738d7fca7d8e0d548f5a",
+      "bytes": 2343
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/reviews/gates-cardinal-r1-review.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "fe6d2f5a50ac61d4773e68f4836ca9741f56c8746c77aaf083d6d29b0da870a4",
+      "git_blob_sha": "bc598902e137473f7879f3d7a8d6ab8af6caa806",
+      "bytes": 3613
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/reviews/gates-cardinal-r2-review.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "0743373b40ba2a255096829671df26d41cfb80db66d6f7aed591c77f671fe22d",
+      "git_blob_sha": "bb29e131f676d103a68c1a1b7b1bf03b9afffc77",
+      "bytes": 2674
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/reviews/gates-oblique-r1-review.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "2211d6f8fcb9d04959f8fb6fe1d40071bc1a6da4637a07449941458eca1fa8ee",
+      "git_blob_sha": "d04419323040d16b33e5bd39b1612bad56346687",
+      "bytes": 2949
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/reviews/gates-oblique-r2-review.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "49a03e5800e80c9b6569af022fe38194d91e04a30dc12be4780c675189ec6268",
+      "git_blob_sha": "0b9eb4e836e1edbe829451fd709bec289745ec04",
+      "bytes": 2611
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/reviews/gates-states-r1-review.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "e9bc1f6b65626ad34bc40ecd24a861bac944d1c9b012b9accf5eaf759798fee1",
+      "git_blob_sha": "82cc6099d03627e375c48ec525720050e4ed5ace",
+      "bytes": 3100
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/root-input-verification.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "83c3dbe7b295e14cfca56c8b4ff7ce0b69f72fc58441e1aed03fda5956326c25",
+      "git_blob_sha": "d00b530eddd972a0c82f50c8fa9970d19cf5f2a1",
+      "bytes": 18571
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/root-visual-review.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "5acd9de9641386c2b0f6553e07307ac9c26e1466206b68b2a26aa15a93457931",
+      "git_blob_sha": "6c40629baa63a0e0cdc2ea64bbfe86d6e8ed41f0",
+      "bytes": 3765
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/scope-boundary.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "2a6d666a5cbb3b63d586e3e65ef8a485be87f37bfe75faf42234c108c87113f5",
+      "git_blob_sha": "e3e0b722a9f71bc9ca478d242fd5856a718d2ab0",
+      "bytes": 585
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/selected/customer-counter-cardinal.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "46309b01e07a15db044518fcf47b93dbd6741a3786a04135e88b3bb4e85158fb",
+      "git_blob_sha": "28de551254813f51db75539b95f966f2ca929cbc",
+      "bytes": 1685676
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/selected/customer-counter-details.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "455defba0a6b24abb14536a24c2d999dd56540e4127481ced8072a37fc99cef4",
+      "git_blob_sha": "93a8564a6f87419246dc409ecc7210067e269ff2",
+      "bytes": 1816451
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/selected/customer-counter-oblique.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "8fffe822fc7420398d5485119d09a297e3e7b91006f12c76028ca11fec8c38c9",
+      "git_blob_sha": "0ba20bf5531fbde9d8ab02a3e45a6921db4d0652",
+      "bytes": 1727342
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/selected/fence-cardinal.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "d616f90b5c0c98a02cafe93b8cfbb114280dc2c5ee74f26cf0e34b41dae1e734",
+      "git_blob_sha": "0f6fcd42f4dd078bc70dc89266b8dc30f8ea85cf",
+      "bytes": 1794624
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/selected/fence-details.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "1672f1235a09e13c391d9f348f102ab0fd61697dc9a9ac19a258cb362cd481ae",
+      "git_blob_sha": "f1fd9c0830a8258713cd04b846c37d86ab8822c9",
+      "bytes": 1804719
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/selected/fence-oblique.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "5cc7bb7ddf05ca053828b2c9202992a5fc4b104ca39f433454d56251d7e9641c",
+      "git_blob_sha": "2435b605089a027668497722eea8b5175aa93930",
+      "bytes": 1777860
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/selected/gates-cardinal.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "ee634acbfe1747b4e22fa130130ca064992543db9a1586c2cf0a658b8458f392",
+      "git_blob_sha": "00babe94f2a20cb72e57a44c137ac936a4d431c8",
+      "bytes": 1686217
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/selected/gates-oblique.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "3ca392129045f9bddfa9115343f8c1d2e2aa04ee4a5f629ab1e95832221e1ac6",
+      "git_blob_sha": "35550038a93f0c13c2a5cdeecbef3228be97e2d6",
+      "bytes": 1723100
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/selected/gates-states.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "50a39e09f42b48e981bd739a383dfea3fce664d1e09aec5498542c940d8331da",
+      "git_blob_sha": "d8673ebf3b66b2416239c8701f10b88839f73623",
+      "bytes": 1796080
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/selected-status.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "48c72c0d9cd52c12f67e8ff59b9cec7564b5f3c5e34056e032450d291934c694",
+      "git_blob_sha": "41f2b3453583932e2befa7ab7f1877956b581477",
+      "bytes": 6524
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/source-evidence-index.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "fa857efc8ac9fdc702e0701cebb185413ffb423dc9a42f65ea0be8df684e6d84",
+      "git_blob_sha": "d8baa49ba04c0184b69de1f26a96fe5bb09b1fa9",
+      "bytes": 8645
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/sources/inspected-source-manifest.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "82c5eecec1baf1629a2b8fae26487e32c6858dc9f185a591b7524b6e31e55a58",
+      "git_blob_sha": "0d9352e24a6733f8d533324904c4f4de5b0cd323",
+      "bytes": 10733
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/sources/source-crop-provenance.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "a25f5d8f61184d5e909d35f24f9b5290617f00be12bcffa55394ea926a02e6af",
+      "git_blob_sha": "14309a7d6b7586dff63f573ce2df34e1757a2c43",
+      "bytes": 1346
+    },
+    {
+      "path": "Docs/Design/StructureReferences/2026-11-25/sources/source-recovery-report.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha256": "dd69ed1210f688608a4afe07591c5f02d68351328be3a8a88939351dc7a8d9e8",
+      "git_blob_sha": "924c4972ff0bdaf9bac27c588870c9f254f3aca8",
+      "bytes": 10588
+    }
+  ]
+}

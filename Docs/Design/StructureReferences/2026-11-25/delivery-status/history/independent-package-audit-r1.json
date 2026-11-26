@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "reviewer": "structure_critic independent agent",
+  "recorded_utc": "2026-11-26T04:57:57.786265+00:00",
+  "status": "REPAIR_REQUIRED",
+  "score": 9.0,
+  "pass_threshold": 9.5,
+  "candidate_tree": "ab31d36c4f7d9e7ef82c7cf5b5395eb82b46e38f",
+  "manifest_path": "archive-before-context-fix-expected-paths.json",
+  "manifest_sha256": "74b8c33c8a0f2e67446fe5f98a580b4dc267f1effbc8712da77b699a07f2b535",
+  "finding": "Actually-read context guide CHARACTER_STYLE_REFERENCE.md SHA25632be92026eb2f454f97c253fb32e0bbe79ffa15ad4eb3ec1b30086df18e3bcba was hash-recorded by the independent preliminary style audit but absent from both content-hash and immutable-existing-source resolver maps.",
+  "failed_mandatory_check": "All actual review source inputs resolve durably by exact identity.",
+  "required_repair": "Preserve the exact context guide and add original-locator/content-hash resolution without changing creative freeze or image bytes.",
+  "observation_boundary": "Observed before the context-input repair in this session. This record preserves that failed candidate; complete local-package acceptance is in the subsequent exact-candidate audit.",
+  "visual_approval_reopened": false,
+  "delivery_approval_blocked": true
+}
