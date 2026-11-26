@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T10:32:21Z",
+  "observed_at_utc": "2026-11-26T10:42:20Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -34,15 +34,15 @@
     {
       "id": "wood-storage",
       "role": "Resource builder and reviewer",
-      "state": "blocked",
-      "result": "Independent review traced the extra darkening mostly to bright snow near the temporary log, not the hero. Its cause is not proven. Unchanged bark appears white in the rejected frame. No art pass, attachment, or transfer.",
+      "state": "in_progress",
+      "result": "Matched native controls prove the temporary log's cast setting causes the out-of-region snow darkening at all three pinned moments. No actual carry/storage or device approval.",
       "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/fe22f28a27783ac3acbee6c96bbb3e5e578f0496",
         "https://github.com/ksolo21-web/HAVENLINE/commit/0bbce75d2a14196e6cff5097e6ce6e55a41d687c",
         "https://github.com/ksolo21-web/HAVENLINE/commit/87e5f292e5edd97a7a6ec7f9d0befcf129870af8",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/5fd10dff46d0f5cd9c7c2d9fa4f7e91a85bbed4c",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/2bd499de74dd80af764e8fac8355813783be8e78"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/5fd10dff46d0f5cd9c7c2d9fa4f7e91a85bbed4c"
       ],
-      "next": "Plan a repeatable detached shadow control and assess a reference-matched bark correction independently. Do not change the original validation guard.",
+      "next": "Prepare a separate bark-only source test with the phase, casting and other materials unchanged.",
       "role_ids": [
         "builder-resource-cooker",
         "critic-game"
@@ -51,13 +51,14 @@
     {
       "id": "furnace-purchase",
       "role": "Gameplay and plot builder",
-      "state": "blocked",
-      "result": "Grounded pad V2 8.9 is best, with real desktop castle/3 readability and once-only payment. The paired wood scored 8.8 (two dashes). Retain V2 as unapproved; stop more tiny same-footprint variants.",
+      "state": "in_progress",
+      "result": "Independent source check is measuring a much more legible grounded purchase marker without changing reach or the existing cost. Prior paired/dash design remains rejected.",
       "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/5abfe336d301f0c8dcf2e767ee0ed557bc10e8f6",
         "https://github.com/ksolo21-web/HAVENLINE/commit/5abfe336d301f0c8dcf2e767ee0ed557bc10e8f6",
         "https://github.com/ksolo21-web/HAVENLINE/commit/432979199febdbbf0d4e650b60e56918dadf9cda"
       ],
-      "next": "A larger or differently arranged grounded marker proposal needs a meaningful visibility gain before a runtime comparison.",
+      "next": "Evaluate true 1.14m footprint in the unchanged camera and paid interactions before native staging.",
       "role_ids": [
         "builder-camp-pads",
         "level1-verifier"
@@ -134,14 +135,14 @@
     {
       "role_id": "alfred",
       "state": "in_progress",
-      "title": "Hourly coordination and 15-minute status checks",
-      "summary": "The latest direct check saw six terminal assignments and no ongoing worker among those six before two new independent tasks were dispatched. Not live telemetry.",
-      "next": "Keep fence art and Crown render diagnosis separate; one renderer only if later admitted.",
+      "title": "Handing off ready work at each 15-minute check",
+      "summary": "Six workers were verified active across separate Level 1 assignments at dispatch. Their status can change. This is a checkpoint, not live telemetry.",
+      "next": "Give completed workers a distinct ready task without duplicating active work or sharing a renderer.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/6f15b57bb20a919ff32a3fc4203252d3a87d8b37",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/0bbce75d2a14196e6cff5097e6ce6e55a41d687c"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/fe22f28a27783ac3acbee6c96bbb3e5e578f0496",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/546a61aea8ff3f36c291bf7c4e860faddf16b8eb"
       ],
-      "updated_at_utc": "2026-11-26T10:32:21Z"
+      "updated_at_utc": "2026-11-26T10:42:20Z"
     },
     {
       "role_id": "rig-character",
@@ -168,13 +169,13 @@
     {
       "role_id": "builder-camp-pads",
       "state": "in_progress",
-      "title": "Testing a new crossing approach while preserving round wood",
-      "summary": "The continuous carved rail fit the width but failed visual proportions and geometry budget. No game-ready fence.",
-      "next": "Test only one reference-first crossing sample with a unified exterior mesh and an independent rear course.",
+      "title": "Developing a full efficient fence module",
+      "summary": "The fused-cross source sample preserves the rounded rail but remains too expensive and incomplete for native staging.",
+      "next": "Test one genuine full module with both faces and durable mounting.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/6f15b57bb20a919ff32a3fc4203252d3a87d8b37"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/546a61aea8ff3f36c291bf7c4e860faddf16b8eb"
       ],
-      "updated_at_utc": "2026-11-26T10:32:21Z"
+      "updated_at_utc": "2026-11-26T10:42:20Z"
     },
     {
       "role_id": "audio-sfx",
@@ -189,14 +190,14 @@
     },
     {
       "role_id": "level1-verifier",
-      "state": "in_progress",
-      "title": "Preparing adjacent-frame gate closure witness",
-      "summary": "Prior exact purchase, both-way travel, blocking and restore receipts confirmed; no consecutive close-event samples or audible playback.",
-      "next": "Stage and test a detached witness contract without wiring sound.",
+      "state": "done",
+      "title": "Staged the read-only gate closure observer",
+      "summary": "Both real gate hooks can supply the planned witness. Rearm/closure still need a second ordinary test cycle and actual contiguous frames.",
+      "next": "Do not claim cue/audio from a source helper. A matching scene and authorized serial lease are needed.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/6855791dddd118367995af1c550415b777117d0c"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/e78cb972626817a8ea2ff3fdafc86f678dc61dc8"
       ],
-      "updated_at_utc": "2026-11-26T09:42:47Z"
+      "updated_at_utc": "2026-11-26T10:42:20Z"
     },
     {
       "role_id": "builder-customer-counter",
@@ -211,14 +212,14 @@
     },
     {
       "role_id": "critic-game",
-      "state": "done",
-      "title": "Rejected the alignment-only gate visual",
-      "summary": "Exact paid gameplay frame shows no floating but both East hardware pieces still read as tiny dark flecks.",
-      "next": "Do not run the broader suite with this candidate.",
+      "state": "in_progress",
+      "title": "Checking Level 1 animal readiness",
+      "summary": "Animal encounter preparation is being reconciled with exact approved design, runtime asset, and task prerequisites. No encounter implemented.",
+      "next": "Identify minimal missing production inputs without adding fish or inventing enemy gameplay.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/45b8f28ea190c0b9c8857aa3214d81c9355bbc1e"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/be51609d6ede94df44fd3255d39eccf774cd262f"
       ],
-      "updated_at_utc": "2026-11-26T09:53:52Z"
+      "updated_at_utc": "2026-11-26T10:42:20Z"
     },
     {
       "role_id": "gameplay-integrator",
@@ -234,13 +235,13 @@
     {
       "role_id": "builder-resource-cooker",
       "state": "in_progress",
-      "title": "Preparing paired cast-shadow controls",
-      "summary": "Independent read-only review found localized darkening on snow in the earlier native carried-log test. No installation or art pass.",
-      "next": "Prepare two repeatable controls and an isolated cast-only change; don't modify raw bark or the original acceptance guard.",
+      "title": "Pinning the existing cooker and separate wood follow-up",
+      "summary": "Exact Cooker adoption is a separate source check. The actual carried-log shadow anomaly is reproduced and isolated. No live change.",
+      "next": "Check exact approved Cooker/source prerequisites; keep future bark-only comparison on a separate worker and unchanged renderer guards.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/0bbce75d2a14196e6cff5097e6ce6e55a41d687c"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/fe22f28a27783ac3acbee6c96bbb3e5e578f0496"
       ],
-      "updated_at_utc": "2026-11-26T10:32:21Z"
+      "updated_at_utc": "2026-11-26T10:42:20Z"
     }
   ],
   "office_events": [
