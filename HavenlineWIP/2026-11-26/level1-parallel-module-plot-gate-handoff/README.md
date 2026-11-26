@@ -1,0 +1,3 @@
+# Separate Level 1 work lanes: detached source only
+
+Fence: new 11,952-triangle both-face reference-derived module clears tested source width and indexed terrain. No imported material, end join, mounted or native artwork pass. Plot: a larger grounded footprint partly helps the desktop proxy; two existing approach poses still fail to establish an exposed phone-size cost icon. Gate: pinned state-only observer staged; second ordinary close cycle/native identity and frame records remain missing. The generated fiber assets are reproducible from the submitted fence generator, not production games/maps. No playable changes or spending.
