@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T00:07:12Z",
+  "observed_at_utc": "2026-11-26T00:15:26Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -21,11 +21,11 @@
       "id": "character-1",
       "role": "Rigging and independent review",
       "state": "in_progress",
-      "result": "Fastest development base selected: the existing game-ready model and rig, with the rejected walk and run replaced, not reused. Exact fingered alternatives still lack a verified gait export.",
+      "result": "Selected the original game-ready rig as the base, not its rejected gait. An isolated stance solved ground contact and the fastener issue, but the ankle-to-shin transition still deforms; no accepted gait.",
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/11ced1d317d79e328901ec99efe662cb9204eed6"
       ],
-      "next": "Build a new planted-steps walk/run at normal game camera, and independently test genuine two-handed grip on the selected rig. Appearance and scale are unchanged."
+      "next": "Test the whole boot-to-shin deformation region with original shape and locked trim, soles, and toes. The two-handed pose is separate."
     },
     {
       "id": "wood-storage",
@@ -51,11 +51,12 @@
       "id": "audio",
       "role": "Audio and independent playback QA",
       "state": "in_progress",
-      "result": "47 Level 1 scenarios mapped; exact pickup/furnace intents verified. Native playback test stopped at a type error before sound played; no sound installed.",
+      "result": "47 Level 1 scenarios scoped. The isolated Godot audio player passed 131 checks across four modes without exit leaks. This verifies player behavior, not audible playback or installed game audio.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/0e32f67c11c045fb3196e437826233a07b5cd9e0"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/0e32f67c11c045fb3196e437826233a07b5cd9e0",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/f9398439bbd73a3022550a5d983241b7eab2333f"
       ],
-      "next": "Verify the isolated type-annotation fix and actual player progress before any device or mix approval."
+      "next": "Stage a clearly opt-in listening preview; verify audible playback and device mix before any integration."
     },
     {
       "id": "customer-counter",
