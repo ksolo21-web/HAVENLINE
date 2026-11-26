@@ -1,0 +1,6 @@
+# North counter signed flank cuts (source only)
+North world Z=1.80; left cut x=-5.075 uses u=x+5.075, right cut x=-1.425 uses u=-(x+1.425). Both flanks u=[-3.175,0]; u>0 is protected bay. Results include all 13 trial evenly spaced posts, pitch 244.230769mm and last center 122.115mm away from either cut. Negative control: two untrimmed 1.956m sections with 12mm nominal overlap exceed each flank by 725mm. No modeled flank geometry or moved components.
+
+Fixed actual cap timber/snow/rope vertices define the conservative signed no-contact plane, padded 2mm: u<=-47.500mm on left and u<=-55.76069mm on right. At the trial last center only 74.615mm left or 66.355mm right can extend toward the bay before generic cut; untrimmed end posts/hoops not allowed. If an intentional rail-to-cap socket is needed, verify named limited true contact into existing cap timber only, no overlap of caps/ropes/donor or art over the cut, and prove no visible join gap. Prior X-only timber overlap into old flank at min 7.303/17.619mm and nearest donor at min 9.358/15.564mm is not 3D or optical proof.
+
+Exact fixture scene hash pins all three original physical pieces and both original stances, two interaction reference positions and two inert rest witnesses. No serving, route, colliders, render, approval or publication in scope. Replay with python measure.py WORKSPACE.

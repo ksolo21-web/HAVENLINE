@@ -1,0 +1,45 @@
+{
+  "scope": "design/source admission only; no authored gait",
+  "asset_sha256": {
+    "owner24_primary_hypothesis": "9ffb00c49ca8cec0ab2561ab5b79c9f6fb3ea63a761f6cb3ba0010cc3dd042c9",
+    "fingered73_rejected_import_parity_as_now": "280d493b9ddedd728835a4df2ba8c1c810ae03e3dd52c4b323c773150d03d39c",
+    "stock66_baseline_only": "95e4fed3a2778656cdf8b73affd2eb3feda8a32f82f4a0c3f76d90c82633c099"
+  },
+  "tests_sealed": {
+    "hvn-l1-c1-source-choice-v1": "ba72b2f610bc1b5954a6875ba0ce5a2308969deca1575c5cd295b612f0c6c5f2",
+    "hvn-l1-c1-owner24-contact-v1": "6b1dbdc01d1a5dbeb6c9b50a17b62ff97ed501828e007a22db08124f42edc16a",
+    "hvn-l1-c1-owner24-support-screen-v1": "91d3dfffd6433f999dd8584bab5a8f700db5841d98fdae54cf58f3d1355cc976",
+    "hvn-l1-c1-owner24-roll-handoff-v1": "a32616279c5056f4884a8ce47328ab0995ae78f3ba65a12fa29f7a6c6df9cb3d",
+    "hvn-l1-c1-heel-entry-v1": "f40e72ff8f365844f9460f3430da7c83259cf0c2c85f7f4201a9ff4465fdbf28"
+  },
+  "stock_camera_and_terrain_origin_only_m": [
+    -0.0490780100226402,
+    -0.0156730692833662,
+    11.7998695373535
+  ],
+  "source_location_tick": 48,
+  "no_equivalence_claim_to_native_walk": true,
+  "owner24_fit_m": 1.75,
+  "old_owner24_witness_mm": {
+    "L_known_static_flat": 124.19780000000014,
+    "R_broad_existing_key_k43": 124.75844999999985,
+    "R_at_outgoing_L_roll_k39": 57.34563000000037,
+    "L_broad_existing_key_k7": 116.71918999999997,
+    "L_at_outgoing_R_roll_k72": 53.47167999999991
+  },
+  "distinct_bounded_test": {
+    "window": "one separately pose-authored walk double-support window: first bilateral broad before start cap; loaded narrow roll after transfer never counts as qualifying",
+    "samples": 15,
+    "intervals": 14,
+    "hz": 120,
+    "duration_s": 0.11666666666666667,
+    "speed_mps": 1.5,
+    "root_travel_m": 0.175,
+    "loaded_connected_width_floor_m": 0.1,
+    "no_load_claim_from_joint_points": true,
+    "target": "solve two indexed patch feasibility simultaneously with pinned world feet and allowed pelvis trajectories; share joint motion only after feasible patch/center path",
+    "compare_support_measurement_sha256": "a64f0665da4329326adc9f38acdd16028147020c68bf116a086e9e8adc4f82b1"
+  },
+  "exact_dependency": "two connected broad actual support components simultaneously feasible and center transfer through their interior without interference/skate; existing certificates validate either foot on separate times only, no common solution proved",
+  "gameplay_or_pose_changed": false
+}
