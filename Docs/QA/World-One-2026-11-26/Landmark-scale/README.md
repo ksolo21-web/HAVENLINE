@@ -1,5 +1,7 @@
 # Furnace clearance and mineable stone banks
 
+The focused captures below retain their original recording commits. The current playable version is `e978a44b1b112bb598f9ec1724b3616ec80e6970`. Its subsequent runtime change adjusted the backpack display. The geometry and mechanics measured here use the same source assets and implementation.
+
 Integrated source `34df87a8195553c4636aa374ac3bfc11054a3bbd`, scene `HavenlineLevel1/field_opening.tscn`. The paired scene views isolate the landmark change against checkpoint `1a91281d514a62264f55f6df7aa6b17ece1a47ce`. The integrated joystick run used the same landmark and orbit logic. All seven measured gameplay-script checksums match the pinned commit. [Pinned gameplay source](https://github.com/ksolo21-web/HAVENLINE/tree/34df87a8195553c4636aa374ac3bfc11054a3bbd/HavenlineLevel1)
 
 The revised stage-one furnace is **1.48 standing hero heights wide**, down from 1.95. Walking space across the center of the paid court increased from **3.75 to 4.93 furnace widths**. The court itself is the same size. The seated starter quarry now reaches the hero’s standing height, up from 0.59. The thinner hearth collider also opens a real walking lane. [Matched native before and after](Hearth-and-quarry-before-after.jpg) · [Measured coordinates, source hashes and collision checks](Measurements.json)

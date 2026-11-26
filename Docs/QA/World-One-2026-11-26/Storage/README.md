@@ -16,6 +16,8 @@ The successor changed the carried-packet presentation in `field_carry.gd`. The i
 
 ## Earned route on e978a44b
 
+The native movie covered 293.517 seconds and 17,612 physics samples. It entered each paid tier for 158 ticks, crossed all 12 gate directions and reached 100.787 m. Its 37 wood, seven stone and three meat deposits and 18 wood, eight stone and two meat spends each produced an observed game request, an accepted audio voice and a playing WAV. The final 27 wood, one stone and three meat, every carried unit and all eight receipts matched the separate process that reloaded the filmed save. [Native filmed route](Filmed-route-e978a44b.json)
+
 A fresh ordinary-input run on the frozen successor recorded 17,569 physics samples with exact token conservation. The player entered all three earned interiors for 158 ticks each, crossed both gates in both directions at each of the three perimeter sizes and traveled 100.787 m from camp. The run deposited 37 wood, seven stone and three meat and paid the full progression cost of 18 wood, eight stone and two meat. A separate process recovered all eight receipts and the final balance of 27 wood, one stone and three meat in storage. [Independent headless results](Earned-route-e978a44b.json)
 
 ## Fresh-process checks on 34df87a8

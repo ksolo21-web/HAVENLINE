@@ -10,9 +10,9 @@ These two normal-camera frames are positioned inspections of the far world. The 
 
 [Western forest](West-forest.jpg) · [Northeastern snow ridge](Northeast-boundary.jpg) · [Streaming checks](World-streaming.json)
 
-On the expanded court, one native 1280 × 720 Ultra inspection submitted 322,561 visible primitives at 1× and 251,079 at 2×. The figures include the whole visible field at the sampled player position; the active pack, camera and view affect them. The supplied cost report records visible and shadow counters separately. These Linux software-renderer samples measure scene workload. Sustained frame times and thermals require target-device runs. [Native draw counters](Rendered-scene-cost.json)
+On the expanded court, one native 1280 × 720 Ultra inspection submitted 311,947 visible primitives at 1× and 251,079 at 2×. The figures include the whole visible field at the sampled player position; the active pack, camera and view affect them. The supplied cost report records visible and shadow counters separately. These Linux software-renderer samples measure scene workload. Sustained frame times and thermals require target-device runs. [Native draw counters](Rendered-scene-cost.json)
 
-The outer-world assertions passed in both runs. Accelerated shutdown initially reported five audio resources still in use. The same test exited cleanly on a paced repeat. The 200-wave diagnostic passed all combat assertions but retained four WAVs at test shutdown. It exited cleanly after stopping the audio and giving the mixer 120 additional process frames. The packaged Linux game also passed its ordinary close and save check. [Native suite receipts](Native-suite-results.json)
+All 18 gameplay suites passed their assertions. Two fixed-speed test runs retained audio references as the process exited. The world test exited cleanly when paced, and the original two-process save and resume test exited cleanly with wall-clock pacing. The initial and repeated results are included. [Native suite receipts](Native-suite-results.json)
 
 ## Tuning locations
 

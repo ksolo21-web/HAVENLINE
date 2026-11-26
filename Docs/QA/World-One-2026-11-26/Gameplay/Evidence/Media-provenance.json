@@ -1,0 +1,92 @@
+{
+  "main_recorded_git_commit": "e978a44b1b112bb598f9ec1724b3616ec80e6970",
+  "media": {
+    "Combat-and-Recovery": {
+      "sha256": "2d8ced14965ca7c995748be52370bbe56296f52b30258942013852ef43046dd8",
+      "git_commit": "34df87a8195553c4636aa374ac3bfc11054a3bbd",
+      "scene": "res://field_opening.tscn",
+      "frames": 325,
+      "seconds": 13.541666666666666
+    },
+    "Resource-Regrowth": {
+      "sha256": "db5859f3faf442149a22960a4c86bc31a95b22287d14c46d6da50e696996ed23",
+      "git_commit": "34df87a8195553c4636aa374ac3bfc11054a3bbd",
+      "scene": "res://field_opening.tscn",
+      "frames": 266,
+      "seconds": 11.083333333333334
+    },
+    "World-One-Gameplay": {
+      "sha256": "78082cb3cb7a36f2fba2097679c6bffc7d850b4c9fc874ab259ccde06566665a",
+      "git_commit": "e978a44b1b112bb598f9ec1724b3616ec80e6970",
+      "scene": "res://field_opening.tscn",
+      "frames": 682,
+      "seconds": 28.416666666666668
+    }
+  },
+  "changed_runtime_files_from_standalone_films": [
+    "field_carry.gd"
+  ],
+  "all_other_recorded_runtime_sources_match": true,
+  "fresh_ordinary_low_load_checks_on_main_commit": {
+    "unpaid": {
+      "frames": 1873,
+      "observed_material_maxima": {
+        "wood": 0,
+        "stone": 0,
+        "meat": 4
+      },
+      "minimum_visible_lane_capacity_across_materials": 37,
+      "visibility_or_endpoint_differences": 0,
+      "whole_health_restored_at_xz": [
+        0,
+        2.4
+      ],
+      "respawn_seconds": 1.05,
+      "material_maxima_in_recorded_standalone_scenario": {
+        "wood": 0,
+        "stone": 0,
+        "meat": 0
+      }
+    },
+    "paid": {
+      "frames": 1945,
+      "observed_material_maxima": {
+        "wood": 3,
+        "stone": 0,
+        "meat": 3
+      },
+      "minimum_visible_lane_capacity_across_materials": 18,
+      "visibility_or_endpoint_differences": 0,
+      "whole_health_restored_at_xz": [
+        1.72,
+        1.8
+      ],
+      "respawn_seconds": 1.05,
+      "material_maxima_in_recorded_standalone_scenario": {
+        "wood": 3,
+        "stone": 0,
+        "meat": 5
+      }
+    },
+    "regen": {
+      "frames": 2815,
+      "observed_material_maxima": {
+        "wood": 3,
+        "stone": 3,
+        "meat": 0
+      },
+      "minimum_visible_lane_capacity_across_materials": 18,
+      "visibility_or_endpoint_differences": 0,
+      "source_return_seconds": {
+        "wood": 5.0,
+        "stone": 32.0
+      },
+      "material_maxima_in_recorded_standalone_scenario": {
+        "wood": 3,
+        "stone": 3,
+        "meat": 0
+      }
+    }
+  },
+  "comparison": "Each corrected-commit physics tick compared full visible count and endpoint/yaw of the displayed pickup/transfer slot to the prior low-load formula. The advanced backpack display differs on large hauls. Independent fresh saves produce different natural encounter rolls, so independent scenario outcomes are compared rather than claiming frame identity."
+}

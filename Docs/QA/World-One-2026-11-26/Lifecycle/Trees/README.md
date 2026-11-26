@@ -1,5 +1,7 @@
 # Tree contact and five-second return
 
+The focused captures below retain their original recording commits. The current playable version is `e978a44b1b112bb598f9ec1724b3616ec80e6970`. Its subsequent runtime change adjusted the backpack display. The geometry and mechanics measured here use the same source assets and implementation.
+
 In the Level 1 opening, each accepted axe-head intersection pushes the crown along the blade’s actual horizontal travel. Three wood splinters begin at its recorded point of contact, and four flecks of snow fall from the branches. The third accepted contact fells the pine away from the player. It reaches its full 80.8° tilt at 0.72 seconds. A completed fall starts one depletion event and produces three wood pickups.
 
 The starter pine and a pine in the outer north-east snowfield each became harvestable exactly **300 physics ticks after depletion at 60 Hz**. The returning tree rises over the last 0.45 seconds while the target remains unavailable. Leaving and re-entering the remote pine’s chunk during recovery preserved its remaining time. Old saves containing wood timers of up to 22 seconds are capped at five on load for starter, authored grove and streamed trees. Stone retains its separate timer.

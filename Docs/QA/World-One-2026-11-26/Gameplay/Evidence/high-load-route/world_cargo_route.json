@@ -1,0 +1,383 @@
+[
+  {
+    "action": "hold",
+    "label": "The untouched snowfield",
+    "s": 1.1,
+    "shot": "The untouched snowfield",
+    "length": 1.1,
+    "plate": "01-unpaid"
+  },
+  {
+    "action": "farm",
+    "label": "Fell and collect from the starter pine",
+    "kind": "wood",
+    "count": 3,
+    "choose_nearest": false,
+    "timeout": 240,
+    "shot": "Starter pine",
+    "offset": 3.0,
+    "length": 2.0
+  },
+  {
+    "action": "farm",
+    "label": "Quarry the starter stone",
+    "kind": "stone",
+    "count": 3,
+    "choose_nearest": false,
+    "timeout": 240,
+    "shot": "The quarry",
+    "offset": 2.0,
+    "length": 1.6
+  },
+  {
+    "action": "walk",
+    "label": "Walk across the southern snow to the hunting ground",
+    "p": [
+      6.6,
+      7.5
+    ],
+    "tol": 0.22,
+    "shot": "Travel on snow",
+    "length": 1.3
+  },
+  {
+    "action": "farm",
+    "label": "Track natural wolves and recover the meat",
+    "kind": "meat",
+    "count": 4,
+    "choose_nearest": false,
+    "timeout": 240,
+    "shot": "Wolf encounter",
+    "offset": 3.0,
+    "length": 3.0
+  },
+  {
+    "action": "walk",
+    "label": "Return along the south of the original clearing",
+    "p": [
+      1.8,
+      6.3
+    ],
+    "tol": 0.22
+  },
+  {
+    "action": "walk",
+    "label": "Bring the three resource types to the hearth",
+    "p": [
+      0,
+      3.75
+    ],
+    "tol": 0.22
+  },
+  {
+    "action": "buy",
+    "label": "Pay for the hearth and first palisade",
+    "id": "center_hearth",
+    "timeout": 30,
+    "shot": "Pay for the hearth and first palisade",
+    "length": 2.7
+  },
+  {
+    "action": "hold",
+    "label": "The hearth turns the clearing into camp",
+    "s": 1.6,
+    "shot": "First camp",
+    "length": 1.1,
+    "plate": "05-built",
+    "at_tick": 72
+  },
+  {
+    "action": "walk",
+    "label": "South gate release point",
+    "p": [
+      0,
+      1.85
+    ],
+    "tol": 0.22
+  },
+  {
+    "action": "gate",
+    "label": "Use the south gate control",
+    "gate": "gate-south"
+  },
+  {
+    "action": "walk",
+    "label": "First court south gate outward",
+    "p": [
+      0,
+      7.2
+    ],
+    "tol": 0.22,
+    "shot": "South gate outward",
+    "length": 1.6
+  },
+  {
+    "action": "walk",
+    "label": "Walk to the western timberline",
+    "p": [
+      -4.7,
+      8.6
+    ],
+    "tol": 0.22
+  },
+  {
+    "action": "farm",
+    "label": "Harvest the western timberline for supplies",
+    "kind": "wood",
+    "count": 45,
+    "choose_nearest": true,
+    "timeout": 240,
+    "region": [
+      -15.0,
+      7.0,
+      -2.0,
+      17.0
+    ],
+    "shot": "Working the timberline",
+    "offset": 4.0,
+    "length": 1.6
+  },
+  {
+    "action": "walk",
+    "label": "Skirt the western wall toward the quarry",
+    "p": [
+      -6.5,
+      7.2
+    ],
+    "tol": 0.22
+  },
+  {
+    "action": "farm",
+    "label": "Return to the restored stone source",
+    "kind": "stone",
+    "count": 9,
+    "choose_nearest": false,
+    "timeout": 240,
+    "region": [
+      -7.4,
+      1.8,
+      -5.0,
+      4.6
+    ],
+    "shot": "Returning quarry",
+    "offset": 1.2,
+    "length": 2.1
+  },
+  {
+    "action": "walk",
+    "label": "Skirt the western wall on the return leg",
+    "p": [
+      -6.7,
+      6.9
+    ],
+    "tol": 0.22
+  },
+  {
+    "action": "walk",
+    "label": "Approach the opened south gate from the snow",
+    "p": [
+      0.0,
+      7.1
+    ],
+    "tol": 0.22
+  },
+  {
+    "action": "walk",
+    "label": "Laden gate crossing",
+    "p": [
+      0.0,
+      2.6
+    ],
+    "tol": 0.22,
+    "shot": "South gate inward",
+    "length": 1.8
+  },
+  {
+    "action": "hold",
+    "label": "Pack held inside the first gate",
+    "s": 0.6
+  },
+  {
+    "action": "walk",
+    "label": "Pass to the east of the furnace",
+    "p": [
+      2.6,
+      1.75
+    ],
+    "tol": 0.22
+  },
+  {
+    "action": "walk",
+    "label": "First perimeter east latch",
+    "p": [
+      2.85,
+      0
+    ],
+    "tol": 0.19,
+    "timeout": 40
+  },
+  {
+    "action": "gate",
+    "label": "Tap the east gate",
+    "gate": "gate-east"
+  },
+  {
+    "action": "walk",
+    "label": "First perimeter east outward",
+    "p": [
+      7.2,
+      0
+    ],
+    "tol": 0.19,
+    "timeout": 40
+  },
+  {
+    "action": "walk",
+    "label": "First perimeter east inward",
+    "p": [
+      2.85,
+      0
+    ],
+    "tol": 0.19,
+    "timeout": 40
+  },
+  {
+    "action": "walk",
+    "label": "Back along the first expansion lane",
+    "p": [
+      2.6,
+      1.75
+    ],
+    "tol": 0.19,
+    "timeout": 40
+  },
+  {
+    "action": "buy",
+    "label": "Earn the first fence expansion",
+    "id": "expansion_1",
+    "timeout": 30,
+    "shot": "Earn the first fence expansion",
+    "length": 2.7
+  },
+  {
+    "action": "hold",
+    "label": "The first expansion opens the house project",
+    "s": 1.1,
+    "shot": "First expansion",
+    "length": 1.1,
+    "plate": "06-expansion-one"
+  },
+  {
+    "action": "walk",
+    "label": "Approach the northwestern storage yard",
+    "p": [
+      1.8,
+      -2.15
+    ],
+    "tol": 0.16,
+    "timeout": 28
+  },
+  {
+    "action": "walk",
+    "label": "Cross the clear north court",
+    "p": [
+      -1.6,
+      -1.25
+    ],
+    "tol": 0.16,
+    "timeout": 28
+  },
+  {
+    "action": "walk",
+    "label": "Pause outside the house apron",
+    "p": [
+      -3.05,
+      0.25
+    ],
+    "tol": 0.16,
+    "timeout": 28
+  },
+  {
+    "action": "walk",
+    "label": "Align with the upgrade sign for wood",
+    "p": [
+      -2.5,
+      0.3
+    ],
+    "tol": 0.12,
+    "timeout": 30
+  },
+  {
+    "action": "walk",
+    "label": "Enter the right side for wood",
+    "p": [
+      -2.5,
+      -1.18
+    ],
+    "tol": 0.12,
+    "timeout": 30
+  },
+  {
+    "action": "buy",
+    "label": "Earn the timber store",
+    "id": "storage_wood",
+    "timeout": 36
+  },
+  {
+    "action": "walk",
+    "label": "Leave tier 1 after its final payment",
+    "p": [
+      -2.5,
+      0.3
+    ],
+    "tol": 0.16,
+    "timeout": 28
+  },
+  {
+    "action": "hold",
+    "label": "House tier 1 complete",
+    "s": 1.4,
+    "plate": "house-tier-1"
+  },
+  {
+    "action": "walk",
+    "label": "Align with the loading sign for wood",
+    "p": [
+      -3.6,
+      0.3
+    ],
+    "tol": 0.12,
+    "timeout": 30
+  },
+  {
+    "action": "walk",
+    "label": "Carry earned wood to the common loading apron",
+    "p": [
+      -3.6,
+      -1.18
+    ],
+    "tol": 0.16,
+    "timeout": 28
+  },
+  {
+    "action": "hold",
+    "label": "Allow the wood deliveries to land",
+    "s": 5.2
+  },
+  {
+    "action": "walk",
+    "label": "Walk through the sliding doors of tier 1",
+    "p": [
+      -3.05,
+      -3.0
+    ],
+    "tol": 0.14,
+    "timeout": 35
+  },
+  {
+    "action": "hold",
+    "label": "Inspect the earned shelves inside tier 1",
+    "s": 1.3,
+    "plate": "house-interior-1"
+  }
+]

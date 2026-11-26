@@ -1,5 +1,7 @@
 # World One camp perimeter
 
+The focused captures below retain their original recording commits. The current playable version is `e978a44b1b112bb598f9ec1724b3616ec80e6970`. Its subsequent runtime change adjusted the backpack display. The geometry and mechanics measured here use the same source assets and implementation.
+
 The camp starts with a furnace and two working gates. Two paid expansions move the eastern and southern gates as the court grows. Each opening has a 2.4 m clear span.
 
 | Paid construction | Court bounds in metres (west, north, east, south) | South gate (x, z) | East gate (x, z) |
