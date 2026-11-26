@@ -1,0 +1,25 @@
+{
+  "commit":"11c14a1c41971067c7dc97db69375f720a408f68",
+  "native_host_has_original_285_files":true,
+  "native_host_has_original_94_cache_files":true,
+  "host_manifest_sha256":"5898404d4340940a2cccd292e2f8530415d5cef4cc71a62c2efa42ef4d32bc50",
+  "driver":"Godot 4.7.2 Dummy",
+  "authorized_retry_count":1,
+  "functional_checks_total":123,
+  "phases":{
+    "write":{"exit":0,"checks":31,"failures":0,"objectdb_exit_leaks":8},
+    "cold":{"exit":0,"checks":28,"failures":0,"objectdb_exit_leaks":6},
+    "fail":{"exit":0,"checks":31,"failures":0,"objectdb_exit_leaks":4},
+    "mute":{"exit":0,"checks":33,"failures":0,"objectdb_exit_leaks":4}
+  },
+  "fresh_post_unmute_playback":{
+    "exact_cue":"wood_pickup:wood-c",
+    "ticks_since_observed_edge":0,
+    "microseconds_since_observed_edge":189,
+    "actor_distance_to_anchor_m":0.67159283161163,
+    "stream_position_seconds":0.00266666663811
+  },
+  "teardown":"HOLD: ObjectDB leaks at quit despite successful explicit player and bus assertions; root cause not yet classified",
+  "audible_or_device_verified":false,
+  "playable_build_changed":false
+}

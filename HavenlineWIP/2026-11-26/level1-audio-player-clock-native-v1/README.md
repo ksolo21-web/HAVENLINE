@@ -1,0 +1,9 @@
+# Exact typed V3 no-import audio-native witness
+
+Authorized one-time retry of `9cf54fb3…` against the pinned retired private 11c host with its unchanged original Godot 4.7.2 import data. Four native Dummy invocations exit 0; 123 checks pass: write 31, true cold 28, real durable save denial 31, mute/unmute 33. This is actual Godot player/clock/bus behavior, not merely cue intents and not human-audible output. Exact loaded PCM guards ran for all five SHA-pinned WAVs. No editor/import was used. No game/build/save or old retired project/cache changes were made; the exact postcleanup 285-file/94-cache host manifest matched 5898404d…, and all owned residue was removed. No extra run.
+
+First genuinely new post-unmute wood-c pickup obtained the real active playback object in a zero-extra-tick, 189 µs observation window, at distance 0.671593 m and playback position 0.002667 seconds. Actual music/ambience clocks advanced, separate Music/Ambience/SFX mute and master/suspend checks held, only actual paid-near state played crackle, real failed furnace save stayed silent, and true cold restored ambience without purchase-success replay.
+
+**Teardown HOLD:** despite explicit successful owner stream-stop/bus-removal checks, the engine logged ObjectDB leaks on shutdown (write 8, cold 6, fail 4, mute 4). Don't report a clean runtime/lifecycle pass or attribute the leaks to the engine or module yet. A next separate diagnostic should compare exact no-audio/cue fixture lifecycle traces using verbose object types, wait out owned deferred cleanup, and distinguish actual audio ref leaks from scene fixture exit artifacts without weakening strict no-leak release requirements.
+
+See `result.json`, restored diagnostics in `evidence/*.txt` and exact rider hashes. No actual speaker, waveform, physical phone or game integration evidence.

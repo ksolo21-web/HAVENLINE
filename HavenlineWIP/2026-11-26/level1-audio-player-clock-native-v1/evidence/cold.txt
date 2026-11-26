@@ -1,0 +1,31 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+PASS single phase tick=0
+PASS real source and detached owner armed tick=0
+PASS only three owned buses appended tick=0
+PASS second owner refuses collision without changing buses tick=0
+PASS separate owned music, beds and reserved SFX tick=0
+PASS restore or fresh state has no one-shot tick=0
+PASS foreign emitter and unknown exact key refused tick=0
+PASS healthy app session starts loops tick=0
+PASS dummy driver actually advanced an initialized music playback tick=4
+PASS dummy driver actually advanced an initialized ambience playback tick=4
+PASS Music bus only muted; ambience/SFX independent tick=4
+PASS Ambience bus only muted; music/SFX independent tick=4
+PASS Ambience explicitly resumes tick=4
+PASS true paid cold state tick=4
+PASS paid cold far spawn does not play crackle tick=4
+PASS ordinary revisit already-awarded wood tick=55
+PASS ordinary south gate approach tick=106
+PASS ordinary near-paid hearth approach tick=233
+PASS nearby paid restoration starts bed without one-shot tick=233
+PASS ordinary retreat beyond paid hearth range tick=290
+PASS paid far again stops hearth without revoking paid state tick=290
+PASS re-enter paid hearth range tick=347
+PASS near hearth returns without stale purchase cue tick=347
+PASS cold route preserved bytes tick=347
+PASS no voice overrun on authorized route tick=347
+PASS detached shutdown releases only owned buses and all beds tick=347
+PASS single-use owner denies re-arm; cannot append players or reopen prior events tick=347
+PASS retired owner denies all later commit calls tick=347
+owned-cue checks=28 failures=0
+WARNING: 6 ObjectDB instances were leaked at exit (run with `--verbose` for details).
