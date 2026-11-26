@@ -51,7 +51,7 @@ func can_address(feet: Vector3, facing: Vector3) -> bool:
 	to_target.y = 0.0
 	var planar := Vector3(facing.x, 0, facing.z)
 	var dist := to_target.length()
-	return dist >= MIN_REACH and dist <= MAX_REACH and planar.normalized().dot(to_target.normalized()) >= MIN_FACING_DOT
+	return dist >= MIN_REACH and dist <= float(get_meta("orbit_reach", MAX_REACH)) and planar.normalized().dot(to_target.normalized()) >= MIN_FACING_DOT
 
 func strike(source: String, sequence: int, feet: Vector3, facing: Vector3) -> bool:
 	if source != TREE_ID or sequence <= last_sequence:

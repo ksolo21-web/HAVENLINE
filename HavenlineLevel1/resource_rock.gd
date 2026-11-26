@@ -35,7 +35,7 @@ func can_address(feet: Vector3, facing: Vector3) -> bool:
 	if to_target.length() < 0.001 or planar.length() < 0.001:
 		return false
 	var dist := to_target.length()
-	return dist >= MIN_REACH and dist <= MAX_REACH and planar.normalized().dot(to_target.normalized()) >= MIN_FACING_DOT
+	return dist >= MIN_REACH and dist <= float(get_meta("orbit_reach", MAX_REACH)) and planar.normalized().dot(to_target.normalized()) >= MIN_FACING_DOT
 
 func strike(source: String, sequence: int, feet: Vector3, facing: Vector3) -> bool:
 	if source != ROCK_ID or sequence <= last_sequence:
