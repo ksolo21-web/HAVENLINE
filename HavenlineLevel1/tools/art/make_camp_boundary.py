@@ -1,4 +1,7 @@
-"""Bake the paid camp timber kit from the 18600/18607 asset plates. Units are metres."""
+"""Bake the paid camp boundary in metres.
+The final art follows the fence and gate boards at art/structures-2026-11-25,
+Docs/Design/StructureReferences/2026-11-25/selected, commit 26bb649e.
+"""
 from pathlib import Path
 from math import cos, sin, pi
 from PIL import Image
@@ -198,7 +201,6 @@ leaf=TimberKit("snowbound_gate_leaf")
 for i in range(6):
     x=(i-2.5)*.183
     leaf.timber((x,.065,0),(x,1.31,0),.185,.165,"timber")
-    leaf.timber((x,1.302,0),(x,1.334+sin(i*1.7)*.008,0),.184,.165,"snow")
 # Golden front frame and diagonals. The inner face shows the sawn boards.
 for y in (.15,1.235):
     leaf.timber((-.559,y,.097),(.559,y,.097),.138,.067,"timber_dark")
@@ -206,8 +208,33 @@ for x in (-.49,.49):
     leaf.timber((x,.155,.093),(x,1.24,.093),.105,.063,"timber_dark")
 leaf.timber((-.452,.205,.111),(.452,1.18,.111),.117,.071,"timber_dark")
 leaf.timber((-.452,1.18,.127),(.452,.205,.127),.117,.066,"timber_dark")
-# A gently irregular ridge continues across both rectangular leaves.
-leaf.timber((-.562,1.326,0),(.562,1.326,0),.078,.225,"snow")
+# The rear elevation has a slim perimeter frame around plain vertical
+# boards. The center rail on either leaf carries just one through-pin.
+for x in (-.505,.505):
+    leaf.timber((x,.076,-.105),(x,1.307,-.105),.096,.058,"timber_dark")
+for y in (.123,1.264):
+    leaf.timber((-.463,y,-.101),(.463,y,-.101),.090,.056,"timber_dark")
+# Each leaf carries its own low, continuous drift. An elliptical profile
+# rounds over both edges; a few broad undulations keep the rail nearly level.
+rings=[]
+for i in range(25):
+    t=i/24
+    x=(t-.5)*1.124
+    end=min(1.,t*14.,(1.-t)*14.)
+    center=1.329+.007*sin(2*pi*t+.2)+.006*cos(4*pi*t-.6)
+    height=(.032+.007*cos(3*pi*t))*(.64+.36*end)
+    width=(.116+.004*cos(4*pi*t+.3))*(.8+.20*end)
+    ring=[]
+    for j in range(14):
+        angle=2*pi*j/14
+        ring.append((x,center+height*cos(angle),width*sin(angle)))
+    rings.append(ring)
+for left,right in zip(rings,rings[1:]):
+    for j in range(14):
+        k=(j+1)%14
+        leaf.face([left[j],left[k],right[k],right[j]],"snow")
+for end in (rings[0][::-1],rings[-1]):
+    leaf.face(end,"snow",[(.5,.5)]*len(end))
 leaf.save()
 
 post=TimberKit("snowbound_gate_post")
@@ -230,18 +257,17 @@ for y in (.30,1.049):
 hinges.save()
 
 keeper=TimberKit("snowbound_latch_keeper")
-# Round escutcheon and staple, with space around the sliding iron.
-keeper.button(0,.716,.145,.066,.115,.024,"iron")
-for y in (.635,.795):
-    keeper.button(0,y,.163,.021,.021,.013,"brass")
-    keeper.button(0,y,-.092,.032,.032,.017,"iron")
-path=[(0,.716+.062*cos(pi*j/16),.154+.122*sin(pi*j/16)) for j in range(17)]
-keeper.tube(path,.023,"iron")
+# The archived hinge/latch close-up shows a small round escutcheon
+# under each terminal, one rear through-pin, and a plain horizontal bolt.
+keeper.button(0,.714,.157,.034,.037,.015,"iron")
+keeper.button(0,.714,-.139,.021,.023,.014,"iron")
+path=[(0,.714+.027*cos(pi*j/12),.160+.049*sin(pi*j/12)) for j in range(13)]
+keeper.tube(path,.010,"iron")
 keeper.save()
 
 bolt=TimberKit("snowbound_sliding_bolt")
-bolt.tube([(-.22,.714,.234),(.22,.714,.234)],.028,"iron")
-bolt.button(.218,.714,.234,.029,.028,.028,"iron")
-bolt.tube([(-.161,.714,.234),(-.161,.792,.274)],.019,"brass")
-bolt.button(-.161,.792,.274,.027,.026,.026,"brass")
+# The moving bolt's pivot is 2 cm to the left of the closed gate seam.
+bolt.tube([(-.054,.714,.193),(.094,.714,.193)],.0145,"iron")
+for x in (-.054,.094):
+    bolt.button(x,.714,.194,.020,.020,.017,"iron")
 bolt.save()

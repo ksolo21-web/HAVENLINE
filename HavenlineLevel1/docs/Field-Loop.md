@@ -19,7 +19,9 @@ Start on snow and gather wood. Outside a purchased camp, the equipped tool sweep
 | Eastern watchtower | 3 wood, 2 stone | A working defensive launcher facing the main approach |
 | Additional axes | 2 stone, 1 meat | Three orbiting tools outside the perimeter |
 
-The southeast corner is reserved for future money storage. Each purchased floor plot accepts its corresponding material. The player’s tools and hit detection stop at the earned boundary and resume upon exit. The tower continues to defend the camp while the player is inside.
+The selected gate and wall boards are in the [structure art archive](https://github.com/ksolo21-web/HAVENLINE/tree/26bb649e0a8090c9c9af7e91e62f384fc86372d8/Docs/Design/StructureReferences/2026-11-25/selected). The separate corner plots follow the [reviewed storage concepts](https://github.com/ksolo21-web/HAVENLINE/tree/01664a73ddf5087f17f7e159fa0b6b4ed71367b5/Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts).
+
+The southeast corner is reserved for future money storage. Each purchased floor plot accepts its corresponding material. The floor number shows the full balance. At high stock, the wood plot shows one tied three-log bundle, the stone plot shows two unequal rocks, and the meat plot shows two low piles and one loose cut. Each deposit and withdrawal still moves one unit. The carried stacks remain segregated. The player’s tools and hit detection stop at the earned boundary and resume upon exit. The tower continues to defend the camp while the player is inside.
 
 ## World and encounter settings
 
@@ -48,9 +50,11 @@ qa_dir=$(mktemp -d)
 profile_dir=$(mktemp -d /tmp/havenline-l1-v3-world-XXXXXXXX)
 printf 'HAVENLINE-ALFRED-V3-DISPOSABLE\n' > "$profile_dir/L1-DISPOSABLE"
 export XDG_DATA_HOME="$qa_dir/data" XDG_CONFIG_HOME="$qa_dir/config" XDG_CACHE_HOME="$qa_dir/cache"
-export FIELD_QA_PLAN="$project_dir/tests/world_route.json" FIELD_QA_OUTPUT="$qa_dir" FIELD_QA_HEADLESS=1
+export FIELD_QA_PLAN="$project_dir/tests/world_final_route.json" FIELD_QA_OUTPUT="$qa_dir" FIELD_QA_HEADLESS=1
 godot --headless --editor --path "$project_dir" --import
-godot --headless --path "$project_dir" --fixed-fps 24 --script res://tests/world_route.gd -- "--l1-disposable-profile=$profile_dir"
+godot --headless --path "$project_dir" --fixed-fps 24 --script res://tests/world_final_route.gd -- "--l1-disposable-profile=$profile_dir"
+python3 tests/world_route_verify.py "$qa_dir"
+python3 tests/world_final_gate_verify.py "$qa_dir"
 ```
 
 The five music loops and event recordings are under `assets/audio/`. To regenerate the authored bank, install NumPy and SciPy and run `python3 tools/audio/render_field_score.py --output /tmp/havenline-world-audio-review`. The field mixer includes separate boss arrival, boss defeat, tower release and tower impact cues.

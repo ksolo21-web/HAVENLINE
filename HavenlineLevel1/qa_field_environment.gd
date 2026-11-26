@@ -52,14 +52,15 @@ func run() -> void:
 		checks[kind+" receiver is flush with authored plate"] = absf(anchor.position.y-.005)<.001 and absf(surface.y-anchor.position.y)<.001
 		checks[kind+" floor source is the authored inlaid shell"] = anchor.get_child(0).scene_file_path == "res://assets/field_camp/wood_storage_empty.glb"
 		checks[kind+" receiver fits inside wall and clears furnace"] = camp.is_inside_camp(Vector3(center.x-1.4432,0,center.y-1.1352)) and camp.is_inside_camp(Vector3(center.x+1.4432,0,center.y+1.1352)) and center.length()>2.7 and anchor.is_visible_in_tree()
-		var columns := 2 if kind == "meat" else 3
-		var first_upper: Vector3 = camp.landing_position(kind,columns)
-		var last_lower: Vector3 = camp.landing_position(kind,columns-1)
-		checks[kind+" units fill the reference stock arrangement"] = is_equal_approx(last_lower.y,surface.y) and first_upper.y>surface.y and Vector2(first_upper.x,first_upper.z).is_equal_approx(Vector2(surface.x,surface.z))
+		var final_slot: int = {"wood":0, "stone":1, "meat":6}[kind]
+		var final_position: Vector3 = camp.landing_position(kind, final_slot)
+		checks[kind+" overflowing stock lands on final visible pile"] = camp.landing_position(kind,999999).is_equal_approx(final_position) and final_position.y < 0.6
 	camp.sync_stock({"wood":12,"stone":4,"meat":8})
 	checks["counts identify only deposited typed stock"] = camp.count_labels.wood.text=="12" and camp.count_labels.stone.text=="4" and camp.count_labels.meat.text=="8"
 	for kind: String in ["wood","stone","meat"]:
 		checks[kind+" stocked plot shows only physical units"] = camp.stock_surfaces[kind][0][0].get_active_material(camp.stock_surfaces[kind][0][1]).albedo_texture == camp.STOCKED_PAINT
+	camp.sync_stock({"wood":1000000,"stone":100001,"meat":101})
+	checks["quantity labels preserve overflow balances"] = camp.count_labels.wood.text=="1000000" and camp.count_labels.stone.text=="100001" and camp.count_labels.meat.text=="101"
 	camp.sync_stock({"wood":0,"stone":0,"meat":0})
 	for kind: String in ["wood","stone","meat"]:
 		checks[kind+" emptied plot recovers its painted type"] = camp.stock_surfaces[kind][0][0].get_active_material(camp.stock_surfaces[kind][0][1]).albedo_texture == camp.empty_stock_paint[kind]

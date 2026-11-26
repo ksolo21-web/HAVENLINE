@@ -72,28 +72,25 @@ func _pack_position(kind: String, index: int) -> Vector3:
 	return Vector3(x, .655 + index * float(tier_height[kind]), z)
 
 func _visible_units(kind: String, count: int, location: String) -> int:
-	# The tower's logical and physical top is always its true tier. Cull only
+	if location == STOCK:
+		return mini(count, StockLayout.CENTERS[kind].size())
+	# The carried stack keeps its true tier. Cull only
 	# tiers above the actual game camera, with two metres for follow/zoom lag.
 	if count < 48:
 		return count
 	var camera := get_viewport().get_camera_3d()
 	if not camera:
 		return count
-	var base := rack.to_global(_pack_position(kind, 0)) if location == HAND else _floor_position(kind, 0)
+	var base := rack.to_global(_pack_position(kind, 0))
 	var y := camera.unproject_position(base).y
 	var pixels_per_metre := y - camera.unproject_position(base + Vector3.UP).y
 	if pixels_per_metre <= 0.01:
 		return count
 	var visible_height := maxf(0.0, y / pixels_per_metre) + 2.0
-	var course_height := float(tier_height[kind])
-	var per_course := 1
-	if location == STOCK:
-		course_height = float(StockLayout.COURSE_HEIGHT[kind])
-		per_course = StockLayout.FOOTPRINT[kind].size()
-	return mini(count, per_course*(ceili(visible_height / course_height) + 1))
+	return mini(count, ceili(visible_height / float(tier_height[kind])) + 1)
 
 func _floor_position(kind: String, index: int) -> Vector3:
-	var slot := maxi(0,index)
+	var slot := StockLayout.slot(kind, index)
 	if storage_layout.is_valid():
 		return storage_layout.call(kind, slot)
 	var anchor: Node3D = storage_anchors[kind]
@@ -144,7 +141,7 @@ func _tier_yaw(kind: String, index: int) -> float:
 func _heading(endpoint: String, kind: String, index: int) -> float:
 	if endpoint == HAND:
 		return actor.global_rotation.y + _tier_yaw(kind, index)
-	return _tier_yaw(kind, index) if endpoint == STOCK else 0.0
+	return _tier_yaw(kind, StockLayout.slot(kind, index)) if endpoint == STOCK else 0.0
 
 func _place(position_id: String, kind: String, n: int) -> Vector3:
 	if position_id == HAND:
@@ -183,7 +180,7 @@ func sync() -> void:
 					else:
 						unit.global_position = _floor_position(kind, i)
 						unit.global_rotation.y = _heading(STOCK, kind, i)
-						unit.scale = Vector3.ONE * (float(StockLayout.WIDTH[kind]) / float(WIDTH[kind]))
+						unit.scale = Vector3.ONE * (StockLayout.width(kind, i) / float(WIDTH[kind]))
 			pieces[key] = pool
 	if frame:
 		frame.visible = loaded
@@ -228,9 +225,10 @@ func _send(kind: String, source: String, dest: String, dest_index: int) -> bool:
 		return false
 	var source_index := _available(kind, source) - 1
 	var start := _place(source, kind, source_index)
-	var stock_scale := float(StockLayout.WIDTH[kind]) / float(WIDTH[kind])
+	var start_scale := StockLayout.width(kind, source_index) / float(WIDTH[kind]) if source == STOCK else 1.0
+	var end_scale := StockLayout.width(kind, dest_index) / float(WIDTH[kind]) if dest == STOCK else 1.0
 	cooldown = INTERVAL
-	_start(unit, kind, source, dest, start, dest_index, SEND_TIME, stock_scale if source == STOCK else 1.0, stock_scale if dest == STOCK else 1.0, _heading(source, kind, source_index))
+	_start(unit, kind, source, dest, start, dest_index, SEND_TIME, start_scale, end_scale, _heading(source, kind, source_index))
 	return true
 
 func _start(unit: Node3D, kind: String, source: String, dest: String, start: Vector3, index: int, duration: float, scale_start: float, scale_end: float, start_yaw: float) -> void:

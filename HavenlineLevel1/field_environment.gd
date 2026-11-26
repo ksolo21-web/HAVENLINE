@@ -146,7 +146,7 @@ func install_walls() -> void:
 			hinge.position = Vector3(sign_x*.505,-gate.LEAF_HEIGHT*.5,0.)
 			var keeper := donor_mesh(KEEPER)
 			leaf.add_child(keeper)
-			keeper.position = Vector3(-sign_x*.46,-gate.LEAF_HEIGHT*.5,0.)
+			keeper.position = Vector3(-sign_x*.537,-gate.LEAF_HEIGHT*.5,0.)
 			if i == 0:
 				var bolt := donor_mesh(BOLT)
 				leaf.add_child(bolt)

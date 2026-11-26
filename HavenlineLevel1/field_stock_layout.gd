@@ -1,19 +1,30 @@
 extends RefCounted
-## Storage display follows the approved stocked-plot turnaround sheets.
-## Coordinates leave the front of each inset clear for its painted quantity.
+## Representative stock on each paid plate. The world count label displays the
+## full balance. Positions leave room at the front for that painted quantity.
 
-const WIDTH := {"wood": .91, "stone": .84, "meat": .72}
-const FOOTPRINT := {
-	"wood": [Vector2(-.50,-.42), Vector2(.50,-.42), Vector2(0,.25)],
-	"stone": [Vector2(-.49,-.25), Vector2(.47,.10), Vector2(.45,-.55)],
-	"meat": [Vector2(-.43,-.15), Vector2(.43,-.15)],
+# Each wood mesh already contains the three tied logs. The rock pair uses
+# unequal sizes, and alternating meat slices form two low stacks with a loose cut in front.
+const WIDTHS := {
+	"wood": [1.52],
+	"stone": [1.06, .73],
+	"meat": [.72, .72, .72, .72, .72, .72, .62],
 }
-# Heights are measured on the scaled source meshes. Small overlaps seat the
-# irregular surfaces together and follow the bevel along the edge of each steak.
-const COURSE_HEIGHT := {"wood": .594, "stone": .525, "meat": .344}
+const CENTERS := {
+	"wood": [Vector3(0, 0, -.14)],
+	"stone": [Vector3(-.32, 0, -.23), Vector3(.43, 0, .03)],
+	"meat": [
+		Vector3(-.43, 0, -.15), Vector3(.43, 0, -.15),
+		Vector3(-.43, .26, -.15), Vector3(.43, .26, -.15),
+		Vector3(-.43, .52, -.15), Vector3(.43, .52, -.15),
+		Vector3(-.30, 0, .54),
+	],
+}
+
+static func slot(kind: String, index: int) -> int:
+	return clampi(index, 0, CENTERS[kind].size() - 1)
 
 static func position(kind: String, index: int) -> Vector3:
-	var slots: Array = FOOTPRINT[kind]
-	var n := maxi(0,index)
-	var center: Vector2 = slots[n % slots.size()]
-	return Vector3(center.x, floori(float(n)/slots.size()) * float(COURSE_HEIGHT[kind]), center.y)
+	return CENTERS[kind][slot(kind, index)]
+
+static func width(kind: String, index: int) -> float:
+	return WIDTHS[kind][slot(kind, index)]
