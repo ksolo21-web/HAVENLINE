@@ -24,10 +24,12 @@ func run() -> void:
 	actor.position=Vector3(0,0,3.45)
 	for i in 30:house._physics_process(1.0/60.0)
 	results.covered_loading=house.parts.Roof.visible and house.open_amount==1.0 and not house.is_interior_visible()
+	results.covered_full_leaves=house.parts.DoorLeft.visible and house.parts.DoorRight.visible and not house.parts.CutDoorLeft.visible and not house.parts.CutawayTrack.visible
 	for entry_side in [-.55,.55]:
 		actor.position=Vector3(entry_side,0,2.27)
 		for i in 30:house._physics_process(1.0/60.0)
 		results["arrival %.2f"%entry_side]=house.is_interior_visible() and house.open_amount==1.0 and house.parts.DoorLeft.position.x<-.6 and house.parts.DoorRight.position.x>.6 and not house.parts.Roof.visible and house.parts.CutawayPanels.visible
+		results.sectioned_front=house.parts.CutDoorLeft.visible and house.parts.CutDoorRight.visible and house.parts.CutawayTrack.visible and not house.parts.DoorLeft.visible and not house.parts.DoorRightArmor.visible
 		actor.position=Vector3(0,0,-.35)
 		house._physics_process(.1)
 		results.interior_remains_open=house.is_interior_visible()

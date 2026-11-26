@@ -114,13 +114,20 @@ for row in range(4):
         box(x,.156,z,.497,.024+(row+col)%3*.0015,.435,7)
 for x in (-1.50,1.50):
     for z in (-1.10,1.10):
-        column((x,.04,z),(x,1.92,z),.14,1)
+        if x>0 and z>0:
+            # Only the foreground right corner is sectioned in the organization board.
+            G='WholeRightPost';column((x,.04,z),(x,1.92,z),.14,1)
+            G='CutRightPost';column((x,.04,z),(x,1.23,z),.14,1)
+            G='Floor'
+        else:column((x,.04,z),(x,1.92,z),.14,1)
         for j in (0,1,2):
             a=j*2.0+.6;ell((x+.12*math.cos(a),.06,z+.12*math.sin(a)),(.16,.07,.13),6,8)
 G='StarterRope'
 for x in (-1.50,1.50):
     for z in (-1.10,1.10):
-        for y in (.23,1.65):rope(x,z,y)
+        for y in (.23,1.65):
+            G='RightPostRope' if x>0 and z>0 and y>1 else 'StarterRope'
+            rope(x,z,y)
 G='Footing'
 for z in (-1.105,1.105):
     for i in range(10):
@@ -132,6 +139,7 @@ for x in (-1.50,1.50):
 for x in (-1.50,1.50):
     for z in (-1.10,1.10):
         for y in (.32,1.7):
+            G='RightPostBand' if x>0 and z>0 and y>1 else 'Footing'
             column((x,y-.075,z),(x,y+.075,z),.157,8)
             for sx,sz in [(0,1),(1,0),(-1,0),(0,-1)]:fast(x+.15*sx,y,z+.15*sz)
 for sign in (-1,1):
@@ -190,6 +198,24 @@ for sign,name in [(-1,'DoorLeft'),(1,'DoorRight')]:
     for y in (.26,1.655):box(sign*.40,y,1.263,.72,.070,.048,4)
     for x in (.085,.699):
         for y in (.27,1.635):fast(sign*x,y,1.302,.025)
+# The cutaway sheet sections the door leaves at waist height and brings the
+# rollers down to the cut edge. Covered loading retains the full sliding doors.
+G='CutawayTrack'
+column((-.96,.899,1.214),(.96,.899,1.214),.040,8)
+for side,name in [(-1,'CutDoorLeft'),(1,'CutDoorRight')]:
+    G=name
+    x=side*.225
+    box(x,.480,1.188,.502,.666,.110,3)
+    box(x,.478,1.255,.417,.575,.053,5)
+    box(x,.477,1.284,.358,.505,.028,4)
+    for dx in (-.161,.161):
+        for y in (.256,.696):fast(x+dx,y,1.313,.020)
+    grip=x-side*.086
+    box(grip,.477,1.318,.057,.184,.038,8)
+    column((grip,.421,1.351),(grip,.534,1.351),.017,13)
+    box(x,.827,1.222,.079,.145,.064,8)
+    column((x,.899,1.198),(x,.899,1.282),.058,8)
+    fast(x,.899,1.290,.022)
 G='Roof'
 for s in (-1,1):
     # Broad blue planks run down the pitched roof and remain recognizable between snowbanks.
@@ -264,14 +290,23 @@ for s in [-1,1]:
                 box(x,.678,z+dz,.067,.899,.060,3)
     # The two active left-hand bins are open from above. The stock,
     # especially the rock pair, must remain readable from the gameplay camera.
-    if s>0:
-        for i in range(3):box(s*1.15,1.20,(i-1)*.733,.63,.082,.71,1)
-    else:
-        for z in (-.69,.05,.78):
-            box(-1.44,1.19,z,.08,.075,.71,1)
+    for z in (-.69,.05,.78):
+        box(s*1.44,1.19,z,.08,.075,.71,1)
+# Open fuel/coal liners separate these minerals from timber and food. The
+# deep steel side/back lips leave the near faces of incoming stock exposed.
+for z in (.05,.78):
+    box(1.166,.735,z,.542,.039,.676,8)
+    box(1.412,.864,z,.040,.255,.658,8)
+    for dz in (-.316,.316):
+        box(1.155,.819,z+dz,.533,.171,.032,8)
+    box(.901,.780,z,.033,.071,.658,5)
 for x in (-.68,0,.68):
     for y in (.259,.716,1.24):
-        if x==0 and y>1.2:continue
+        if y>1.2:
+            # Label crossbar and inset rear ledge above mineral and food
+            # cubbies. Leave their working stock visible from above.
+            box(x,1.23,-1.022,.655,.076,.106,1)
+            continue
         box(x,y,-.885,.655,.085,.42,1)
         box(x,y+.045,-.66,.654,.095,.045,3)
     for dx in (-.321,.321):box(x+dx,.81,-.711,.045,1.13,.053,3)

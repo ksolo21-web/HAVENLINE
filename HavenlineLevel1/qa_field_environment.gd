@@ -73,12 +73,14 @@ func run() -> void:
 	checks["spend originates at visible shelf mesh"] = debit.from=="storage" and debit.mesh.global_position.is_equal_approx(displayed.global_position) and debit.mesh.scale.is_equal_approx(displayed.scale)
 	world.carry.advance(.35)
 	checks["shelf empties and east expansion receives exactly one unit"] = world.inventory.stored.wood==0 and world.inventory.paid.expansion_2.wood==1 and world.depot.labels.wood.text=="0" and not displayed.visible
-	var counts := {"wood":1000000,"stone":100001,"meat":101}
+	var counts := {"wood":1000000,"stone":100001,"meat":101,"coal":1123,"slate":8900,"metal":999999}
 	world.inventory.stored.merge(counts,true)
 	world.depot.refresh(true)
 	world.carry.sync()
 	checks["a million wood and overflow stone and meat stay inside bounded bins"] = world.carry.pieces["storage/wood"].size()==1 and world.carry.pieces["storage/stone"].size()==2 and world.carry.pieces["storage/meat"].size()==7
-	checks["bay labels retain full balances"] = world.depot.labels.wood.text=="1000000" and world.depot.labels.stone.text=="100001" and world.depot.labels.meat.text=="101"
+	checks["bay labels show exact small balances and conservative compact lots"] = world.depot.labels.wood.text=="1M" and world.depot.labels.stone.text=="100k+" and world.depot.labels.meat.text=="101" and world.depot.labels.coal.text=="1k+" and world.depot.labels.metal.text=="999k+"
+	var hint:String=world.depot.hint()
+	checks["apron HUD retains exact values for all six resources"] = world.Inventory.KINDS.all(func(k):return hint.contains("%d %s"%[counts[k],world.Inventory.TITLES[k].to_lower()]))
 	world.inventory.stored = world.Inventory.EMPTY.duplicate()
 	world.depot.refresh(true)
 	camp.set_upgrade_payment({"stone":0,"meat":0})

@@ -98,14 +98,22 @@ class TimberKit:
                 j=(i+1)%12
                 self.face([lo[j],lo[i],hi[i],hi[j]],material)
 
-    def cap(self,x,z,r,h,phase):
+    def cap(self,x,z,r,h,phase, pointed=False):
         # The lip laps down the log in scallops. Its rounded outer shoulder
         # carries a little more powder on the windward face.
         rings=[]
-        for base,radius,ripple in [(h-.214,r*.98,.058),(h-.184,r*1.04,.052),
+        profile = [(h-.214,r*.98,.058),(h-.184,r*1.04,.052),
                                    (h-.121,r*1.066,.025),(h-.041,r*.93,.015),
                                    (h+.043,r*.71,.011),(h+.101,r*.38,.006),
-                                   (h+.145,r*.085,.002),(h+.15,r*.009,0.)]:
+                                   (h+.145,r*.085,.002),(h+.15,r*.009,0.)]
+        if pointed:
+            # A softly rounded point above a narrow, overhanging uneven lip.
+            profile = [(h-.201,r*.96,.038),(h-.171,r*1.04,.039),
+                       (h-.121,r*1.035,.025),(h-.050,r*.92,.013),
+                       (h+.025,r*.71,.008),(h+.098,r*.47,.005),
+                       (h+.162,r*.22,.002),(h+.193,r*.09,.001),
+                       (h+.201,r*.009,0.)]
+        for base,radius,ripple in profile:
             ring=[]
             for j in range(18):
                 t=2*pi*j/18
@@ -163,10 +171,12 @@ for i in range(8):
     r,h=.177,(1.18,1.127,1.16,1.203,1.144,1.18,1.213,1.151)[i]
     z=(.0,.003,-.005,.002)[i%4]
     panel.upright(x,z,[(-.02,r),(.13,r),(h-.23,r),(h-.159,r*.956),(h-.082,r*.77)],"timber",sides=12,turn=0)
-    panel.cap(x,z,r,h,i*1.51)
+    panel.cap(x,z,r,h,i*1.51,pointed=True)
 # The front rail on each level has its own interlocking X lacing.
 # Both diagonal wraps continue round the far side of that same rail.
-for level in (.35,.82):
+# Front cardinal render: the anchor rails cross the posts at 13% and
+# 71% of crown height, leaving a longer section of clear wood between.
+for level in (.164,.94):
     rail_z=.172
     panel.tube([(-1.30,level,rail_z),(1.30,level,rail_z)],.074,"timber_dark",sides=12)
     for i in range(8):

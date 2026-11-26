@@ -75,7 +75,9 @@ func snapshot() -> Dictionary:
 		var d: Dictionary = world.drops[id]
 		var at: Vector3 = d.at
 		ground.append([id,d.kind,at.x,at.z,maxf(0.0,DROP_LIFETIME_SECONDS-float(d.age))])
-	return {"version":1,"player":{"x":world.actor.position.x,"z":world.actor.position.z,"yaw":world.actor.rotation.y,"hp":world.player_hp},"cooling":cooling.duplicate(),"partial":partial.duplicate(),"drops":ground,"serial":world.drop_id,"pack":world.encounters.snapshot()}
+	var player := {"x":world.actor.position.x,"z":world.actor.position.z,"yaw":world.actor.rotation.y,
+		"hp":world.player_hp,"protection_left":world.player_invulnerability,"fall_left":world.reset_time}
+	return {"version":1,"player":player,"cooling":cooling.duplicate(),"partial":partial.duplicate(),"drops":ground,"serial":world.drop_id,"pack":world.encounters.snapshot()}
 
 static func _number(v: Variant) -> bool:
 	return (v is float or v is int) and is_finite(float(v))
@@ -108,7 +110,14 @@ func _restore_actor(state: Variant) -> void:
 	world.player_hp=world.MAX_HP
 	if _number(state.get("hp")) and state.hp==int(state.hp) and state.hp>=0 and state.hp<=world.MAX_HP:
 		world.player_hp=int(state.hp)
-	world.reset_time=1.05 if world.player_hp==0 else 0.0
+	world.player_invulnerability = 0.0
+	if _number(state.get("protection_left")):
+		world.player_invulnerability = clampf(float(state.protection_left),0.0,2.0)
+	world.reset_time = 0.0
+	if world.player_hp == 0:
+		world.reset_time = 1.05
+		if _number(state.get("fall_left")) and state.fall_left > 0:
+			world.reset_time = minf(float(state.fall_left),1.05)
 	world.camera.position=pos+Vector3(7,11,11)
 	if world.tracks: world.tracks.reset_actor(world.actor)
 

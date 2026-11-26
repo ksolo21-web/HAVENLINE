@@ -32,6 +32,8 @@ var storage_anchors := {}
 var receivers := {}
 var rack: Node3D
 var frame: Node3D
+var middle_support: Node3D
+var rear_support: Node3D
 var pieces := {}
 var flights: Array[Dictionary] = []
 var cooldown := 0.0
@@ -52,6 +54,10 @@ func setup(ledger: Inventory, character: Node3D, item_factory: Callable) -> void
 		rack.add_child(frame)
 		frame.position = Vector3(0, 0.50, -0.36)
 		frame.scale = Vector3(.84, .78, .83)
+		var shelf := preload("res://assets/field_pack/expedition_shelf.glb").instantiate()
+		frame.add_child(shelf)
+		middle_support = shelf.get_node("MiddleSupport")
+		rear_support = shelf.get_node("RearSupport")
 		var palette := ShaderMaterial.new()
 		palette.shader = RACK_SHADER
 		palette.set_shader_parameter("surface_kind", 4)
@@ -212,6 +218,8 @@ func sync() -> void:
 			pieces[key] = pool
 	if frame:
 		frame.visible = loaded
+		rear_support.visible = hand_visible.get("metal",0)>0 or hand_visible.get("slate",0)>0
+		middle_support.visible = rear_support.visible or hand_visible.get("meat",0)>0 or hand_visible.get("coal",0)>0
 
 func pickup(token: String, kind: String, start: Vector3) -> bool:
 	if kind not in Inventory.KINDS or token.is_empty() or inventory.collected.has(token):

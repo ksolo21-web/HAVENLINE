@@ -55,6 +55,18 @@ func run() -> void:
 		var target: Vector3=Vector3(1.72,0,1.8) if paid else scene.point(scene.layout.pad_xz)
 		check(phase+"_returns_to_correct_floor",at.distance_to(target)<.01 and bool(scene.field_env.is_inside_camp(at))==paid)
 		check(phase+"_restores_hud_and_grace",scene.player_hp==4 and hud.health_bar.value==4 and scene.player_invulnerability>1.9)
+		var recovered: Dictionary = scene.lifecycle.snapshot()
+		scene.player_invulnerability = 0.0
+		scene.lifecycle._restore_actor(recovered.player)
+		check(phase+"_remaining_protection_survives_restore",is_equal_approx(scene.player_invulnerability,2.0))
+		scene.player_invulnerability = .27
+		var partial: Dictionary = scene.lifecycle.snapshot().player
+		scene.lifecycle._restore_actor(partial)
+		check(phase+"_reload_does_not_refill_partial_protection",is_equal_approx(scene.player_invulnerability,.27))
+		partial.erase("protection_left")
+		partial.erase("fall_left")
+		scene.lifecycle._restore_actor(partial)
+		check(phase+"_old_player_records_restore_without_grace",scene.player_invulnerability==0 and scene.player_hp==scene.MAX_HP)
 		var overlap=scene.actor.test_move(scene.actor.global_transform,Vector3.ZERO,null,.001,true)
 		check(phase+"_recovery_clear_of_obstacles",not overlap)
 		if paid:

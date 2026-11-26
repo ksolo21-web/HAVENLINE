@@ -1,0 +1,119 @@
+{
+  "minimum": 9.5,
+  "inclusive": true,
+  "unrounded": true,
+  "scene": "res://field_opening.tscn",
+  "branch": "trial/world-one-expansion-2026-11-26",
+  "style_minimums": {
+    "reference_fidelity": 10.0,
+    "visual_language": 10.0
+  },
+  "scopes": {
+    "character": {
+      "title": "Character 1 locomotion and equipment deformation",
+      "dimensions": [
+        "walk_run_turns",
+        "coat_boot_skin",
+        "loaded_motion",
+        "reference_fidelity",
+        "visual_language"
+      ]
+    },
+    "orbit": {
+      "title": "Orbit, tool reach and geometry",
+      "dimensions": [
+        "reference_scale",
+        "cargo_clearance",
+        "hit_rail",
+        "reference_fidelity",
+        "visual_language"
+      ]
+    },
+    "field": {
+      "title": "Snow, pines, rocks and six resources",
+      "dimensions": [
+        "reference_fidelity",
+        "visual_language",
+        "resource_read",
+        "snow_and_forest"
+      ]
+    },
+    "resources": {
+      "title": "Gathering and return",
+      "dimensions": [
+        "five_second_return",
+        "strike_feedback",
+        "stream_and_reload"
+      ]
+    },
+    "boundary": {
+      "title": "Furnace, timber, gates and camp scale",
+      "dimensions": [
+        "reference_fidelity",
+        "visual_language",
+        "two_way_gates"
+      ]
+    },
+    "purchase": {
+      "title": "Buy plots, material payment and reveal",
+      "dimensions": [
+        "reference_fidelity",
+        "visual_language",
+        "gameplay_read",
+        "purchase_sequence"
+      ]
+    },
+    "storage": {
+      "title": "Sorted backpack, deposits and the corner storehouse",
+      "dimensions": [
+        "reference_fidelity",
+        "visual_language",
+        "load_and_shelves",
+        "ledger_and_transfers"
+      ]
+    },
+    "encounter": {
+      "title": "Player HP, pursuit, respawn, boss encounters and defense",
+      "dimensions": [
+        "attacks_and_hp",
+        "recovery_and_resume",
+        "waves_and_tower",
+        "reference_fidelity",
+        "visual_language"
+      ]
+    },
+    "world": {
+      "title": "Travel, camp safety and moving actors’ tracks",
+      "dimensions": [
+        "traversal",
+        "camp_boundary",
+        "footprints"
+      ]
+    },
+    "audio": {
+      "title": "Event audio, music and reference comparison",
+      "dimensions": [
+        "event_mix",
+        "music_states",
+        "reference_match"
+      ]
+    },
+    "ultra": {
+      "title": "Gameplay camera, zoom and native-device delivery",
+      "dimensions": [
+        "camera_read",
+        "native_4k",
+        "device_frame_pacing"
+      ]
+    },
+    "delivery": {
+      "title": "Playable packages, source identity and lifecycle",
+      "dimensions": [
+        "source_identity",
+        "desktop_export",
+        "android_export",
+        "graceful_exit"
+      ]
+    }
+  }
+}

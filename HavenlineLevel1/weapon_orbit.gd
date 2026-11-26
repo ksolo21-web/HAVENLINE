@@ -1,5 +1,5 @@
 extends RefCounted
-const AXE = preload("res://assets/tools/axe-meshy.glb")
+const AXE = preload("res://assets/tools/axe-field-grip.glb")
 const PICK = preload("res://assets/tools/pickaxe-meshy.glb")
 const HeadContacts = preload("res://orbit_head_contacts.gd")
 const Locomotion = preload("res://orbit_locomotion.gd")
@@ -12,7 +12,8 @@ const RADIUS_SIDE := 2.36
 const RADIUS_DEPTH := 2.64
 # Model-space X crosses the blade, Y follows the shaft, Z is thickness.
 # Use the same local transform for the visible mesh and its swept contact samples.
-const TOOL_SCALE := Vector3(.64, .83, .50)
+const AXE_SCALE := Vector3(.68, .74, .42)
+const PICK_SCALE := Vector3(.64, .83, .50)
 const TRAIL_WIDTH := .235
 const CAMERA_NEAR := Vector3(.53687549,0,.84366149)
 const CAMERA_RIGHT := Vector3(.84366149,0,-.53687549)
@@ -100,7 +101,8 @@ func pose() -> void:
 		var phase := TAU*(elapsed/PERIOD + float(i)/count)
 		var radial := offset(phase)
 		var azimuth := Basis(Vector3.UP, atan2(radial.x,radial.z))
-		var basis := (azimuth * TOOL_PLANE).scaled_local(TOOL_SCALE*size)
+		var model_scale := PICK_SCALE if equipped=="pickaxe" else AXE_SCALE
+		var basis := (azimuth * TOOL_PLANE).scaled_local(model_scale * size)
 		var head_at := center+radial
 		var head := PICK_HEAD if equipped=="pickaxe" else AXE_HEAD
 		var node: Node3D = s[equipped]

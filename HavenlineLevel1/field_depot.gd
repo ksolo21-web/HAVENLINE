@@ -7,6 +7,7 @@ const Offer = preload("res://field_offer_floor.gd")
 const SITE := Vector3(-3.05,0,-3.45)
 const APRON := Vector3(-3.05,0,-1.18)
 const BIN_SCALE := .38
+const BALANCE_PIXEL_SIZE := .0046
 var house
 var apron: Node3D
 var shelves := Node3D.new()
@@ -33,7 +34,7 @@ func install(host) -> void:
 		bin.global_position = house.bay_position(kind)
 		bins[kind] = bin
 		world.carry.define_storage(kind,bin)
-		var label: Label3D = world.field_env.flat_label(bin,Vector3.ZERO,.0046)
+		var label: Label3D = world.field_env.flat_label(bin,Vector3.ZERO,BALANCE_PIXEL_SIZE)
 		label.rotation = Vector3.ZERO
 		label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 		label.global_position = house.bay_label_position(kind)
@@ -62,7 +63,9 @@ func refresh(active: bool) -> void:
 		apron.set_depot(ledger,offer,tier > 0)
 	for kind: String in bins:
 		bins[kind].visible = active and ledger.storage_open(kind)
-		labels[kind].text = str(ledger.stored[kind])
+		var label: Label3D = labels[kind]
+		label.text = shelf_quantity(ledger.stored[kind])
+		label.pixel_size = BALANCE_PIXEL_SIZE * minf(1.0, 3.25 / label.text.length())
 	_update_interior()
 
 func _process(_dt:float) -> void:
@@ -87,14 +90,24 @@ func step(at: Vector3) -> void:
 	elif visit == offer:
 		world.carry.contribute(visit)
 
+static func shelf_quantity(amount: int) -> String:
+	if amount < 1000:
+		return str(amount)
+	if amount == 1000000:
+		return "1M"
+	# A trailing plus marks a lower bound. Never round stock up across a price.
+	return "%dk%s" % [floori(amount / 1000.0), "+" if amount % 1000 else ""]
+
 func hint() -> String:
-	if visit == "done": return "Leave the apron to start another visit."
 	var stock := PackedStringArray()
 	for kind: String in world.Inventory.KINDS:
 		if world.inventory.storage_open(kind):
-			if kind not in world.Inventory.MINERALS or int(world.inventory.stored[kind])>0:
-				stock.append("%d %s" % [world.inventory.stored[kind],world.Inventory.TITLES[kind].to_lower()])
+			stock.append("%d %s" % [world.inventory.stored[kind],world.Inventory.TITLES[kind].to_lower()])
+	var amounts := "Stored · " + " · ".join(stock) if not stock.is_empty() else ""
+	if visit == "done":
+		return "Leave the apron to start another visit." + ("\n" + amounts if not amounts.is_empty() else "")
 	if not offer.is_empty() and (visit != "load" or stock.is_empty()):
 		var price := Rules.price_text(world.inventory.remaining(offer))
-		return "%s · %s" % [Rules.TITLES[offer], price] if stock.is_empty() else "Left: store · Right: %s · %s" % [Rules.TITLES[offer],price]
-	return "Stored · " + " · ".join(stock)
+		var offer_text := "%s · %s" % [Rules.TITLES[offer], price]
+		return offer_text if amounts.is_empty() else "Left: store · Right: " + offer_text + "\n" + amounts
+	return amounts

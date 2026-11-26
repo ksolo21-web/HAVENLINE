@@ -6,9 +6,10 @@ signal door_motion(opening:bool, at:Vector3)
 const SHELL := preload("res://assets/storage_house/camp_storehouse.glb")
 const BAYS := {"wood":Vector3(-1.15,.763,.25),"stone":Vector3(-1.15,.763,-.56),"meat":Vector3(0,.772,-.92),
 	"coal":Vector3(1.15,.763,.25),"slate":Vector3(-.68,.772,-.92),"metal":Vector3(.68,.772,-.92)}
-const LABELS := {"wood":Vector3(-.83,.65,.15),"stone":Vector3(-.83,.65,-.64),"meat":Vector3(0,.68,-.625),
-	"coal":Vector3(.84,.68,.20),"slate":Vector3(-.68,.68,-.625),"metal":Vector3(.68,.68,-.625)}
-const CUTAWAY := ["Roof","Gables","Signs","Track","RightWall","Facade"]
+# Keep balances above each bay header, clear of the stock, rims and sliding leaves.
+const LABELS := {"wood":Vector3(-1.10,1.52,.66),"stone":Vector3(-1.09,1.52,-.36),"meat":Vector3(0,1.60,-.73),
+	"coal":Vector3(.89,1.52,.68),"slate":Vector3(-.68,1.60,-.73),"metal":Vector3(.68,1.60,-.73)}
+const CUTAWAY := ["Roof","Gables","Signs","Track","RightWall","Facade","DoorLeft","DoorRight","WholeRightPost"]
 const TIERS := ["starter","reinforced","advanced"]
 var actor: Node3D
 var model: Node3D
@@ -96,13 +97,16 @@ func _apply() -> void:
 	if last_tier!=tier or last_cutaway!=inside_view:
 		for key in CUTAWAY: parts[key].visible=not inside_view
 		parts.StarterRope.visible=tier==1
+		parts.RightPostRope.visible=tier==1 and not inside_view
+		parts.RightPostBand.visible=tier>=2 and not inside_view
 		parts.Footing.visible=tier>=2
-		for key in ["LeftArmor","BackArmor","DoorLeftArmor","DoorRightArmor","AdvancedShelves"]:
+		for key in ["LeftArmor","BackArmor","AdvancedShelves"]:
 			parts[key].visible=tier==3
-		for key in ["GableArmor","RoofStuds","RightArmor","FacadeArmor"]:
+		for key in ["GableArmor","RoofStuds","RightArmor","FacadeArmor","DoorLeftArmor","DoorRightArmor"]:
 			parts[key].visible=tier==3 and not inside_view
 		parts.RightDetail.visible=not inside_view
-		parts.CutawayPanels.visible=inside_view
+		for key in ["CutawayPanels","CutawayTrack","CutDoorLeft","CutDoorRight","CutRightPost"]:
+			parts[key].visible=inside_view
 		parts.Headers.visible=inside_view
 		parts.InteriorArmor.visible=inside_view and tier==3
 		for label in shelves:label.visible=inside_view
@@ -112,6 +116,8 @@ func _apply() -> void:
 		var slide:=smoothstep(0.,1.,open_amount)*.795
 		for key in ["DoorLeft","DoorLeftArmor"]:parts[key].position.x=-slide
 		for key in ["DoorRight","DoorRightArmor"]:parts[key].position.x=slide
+		parts.CutDoorLeft.position.x=-slide*.57
+		parts.CutDoorRight.position.x=slide*.57
 		last_slide=open_amount
 
 func is_interior_visible() -> bool:

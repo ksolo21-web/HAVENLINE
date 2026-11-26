@@ -4,10 +4,12 @@ const Progress = preload("res://field_progression.gd")
 const HUD = preload("res://field_hud.gd")
 var title: Label3D
 var icon: Sprite3D
-var price: Label3D
+var price: Node3D
+var floor_art
 var ink: ShaderMaterial
 
 func install(environment, id: String, at: Vector3) -> void:
+	floor_art = environment
 	name = "Offer_" + id
 	position = at + Vector3.UP * .009
 	scale = Vector3(.86,1,.86)
@@ -21,7 +23,8 @@ func install(environment, id: String, at: Vector3) -> void:
 				ink.set_shader_parameter("paid",0.)
 	title = environment.flat_label(self,Vector3(0,.008,-.19),.0061)
 	title.text = Progress.TITLES[id]
-	price = environment.flat_label(self,Vector3(0,.008,.44),.0053)
+	title.modulate = Color.WHITE
+	price = environment.cost_row(self,Progress.offers({})[id].keys(),.47)
 	if id.begins_with("storage_"):
 		icon = Sprite3D.new()
 		icon.texture = HUD.MATERIAL_ICONS[id.trim_prefix("storage_")]
@@ -36,7 +39,7 @@ func set_due(ledger, id: String, active: bool) -> void:
 	visible = active
 	if not active: return
 	var due: Dictionary = ledger.remaining(id)
-	price.text = Progress.price_text(due)
+	floor_art.show_costs(price,due)
 	var total := 0
 	var left := 0
 	for kind in due:

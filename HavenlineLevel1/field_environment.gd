@@ -22,7 +22,7 @@ var upgrade_anchor := Node3D.new()
 var upgrade_label: Label3D
 var upgrade_pending := true
 var payment_ink := {}
-var payment_label: Label3D
+var payment_costs: Node3D
 const COURTS := [Vector4(-5,-4,5,4),Vector4(-5.5,-5.5,7.5,5),Vector4(-5.5,-7,10,5.4)]
 var perimeter_stage := -1
 var palisades: MultiMeshInstance3D
@@ -370,6 +370,32 @@ func flat_label(parent:Node3D, at:Vector3, px:float) -> Label3D:
 	parent.add_child(label)
 	return label
 
+# Use the authored resource portraits on the floor so a player can read costs
+# without rotating to the screen HUD. Keep a material's slot stable as units land.
+func cost_row(parent:Node3D, kinds:Array, z:float) -> Node3D:
+	var row := Node3D.new()
+	row.position = Vector3(0,.009,z)
+	parent.add_child(row)
+	for i in kinds.size():
+		var kind: String = kinds[i]
+		var center := (i - (kinds.size()-1)*.5)*.88
+		var icon := Sprite3D.new()
+		icon.axis = Vector3.AXIS_Y
+		icon.texture = preload("res://field_hud.gd").MATERIAL_ICONS[kind]
+		icon.pixel_size = .0046
+		icon.position.x = center-.17
+		icon.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		row.add_child(icon)
+		var number := flat_label(row,Vector3(center+.21,0,0),.0092)
+		number.modulate = Color.WHITE
+		number.name = kind
+	return row
+
+func show_costs(row:Node3D, due:Dictionary) -> void:
+	for kind in due:
+		var number := row.get_node_or_null(NodePath(kind)) as Label3D
+		if number: number.text = str(due[kind])
+
 func install_payment(anchor:Node3D, upgrade:bool) -> void:
 	var data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(DONOR+"build_inlay.json"))
 	anchor.name = "OrbitUpgradeFloor" if upgrade else "ConstructionPaymentFloor"
@@ -377,24 +403,39 @@ func install_payment(anchor:Node3D, upgrade:bool) -> void:
 	var at := UPGRADE if upgrade else BUY
 	anchor.position = Vector3(at.x,.008,at.y)
 	if upgrade: anchor.scale = Vector3(.84,1.,.84)
-	for role in (["gray","brackets"] if upgrade else ["gray","brackets","castle"]):
+	for role in ["gray","brackets"]:
 		var brush := SurfaceTool.new()
 		brush.begin(Mesh.PRIMITIVE_TRIANGLES)
 		var layer := 0. if role=="gray" else .002
 		for p in data.vertices[role]:
 			brush.set_normal(Vector3.UP)
-			brush.add_vertex(Vector3(float(p[0])*2.64,layer,-float(p[2])*2.18))
+			var point := Vector2(float(p[0]),float(p[2]))
+			if role == "brackets":
+				# Measure along and across the donor stroke independently. The
+				# original has a circular elbow and a short straight tail on each arm.
+				var uv := point.abs()
+				var elbow := Vector2(.43,.43)
+				var centerline: Vector2
+				if uv.x < elbow.x:
+					centerline = Vector2(maxf(uv.x,.332),.506)
+				elif uv.y < elbow.y:
+					centerline = Vector2(.506,maxf(uv.y,.332))
+				else:
+					centerline = elbow + (uv-elbow).normalized()*.076
+				var pivot := Vector2(.506,.506)
+				point = point.sign()*(pivot+Vector2(.035,.035)+(centerline-pivot)*1.04+(uv-centerline)*2.65)
+			brush.add_vertex(Vector3(point.x*2.64,layer,-point.y*2.18))
 		var ink := StandardMaterial3D.new()
 		ink.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 		ink.cull_mode = BaseMaterial3D.CULL_DISABLED
-		ink.albedo_color = Color({"gray":"51bd37","brackets":"78df59","castle":"fff3d5"}[role])
+		ink.albedo_color = Color({"gray":"51bd37","brackets":"5be72e"}[role])
 		var mark := MeshInstance3D.new()
 		mark.name = role.capitalize()
 		mark.mesh = brush.commit()
 		if role=="gray":
 			var fill := ShaderMaterial.new()
 			fill.shader = FILL
-			fill.set_shader_parameter("grounded",Color("69727a") if not upgrade else Color("5d5147"))
+			fill.set_shader_parameter("grounded",Color("9eabb6") if not upgrade else Color("5d5147"))
 			fill.set_shader_parameter("funded",Color("3bc615"))
 			payment_ink["upgrade" if upgrade else "buy"] = fill
 			mark.material_override = fill
@@ -414,15 +455,19 @@ func install_payment(anchor:Node3D, upgrade:bool) -> void:
 		upgrade_label = flat_label(anchor,Vector3(0,.007,.53),.0068)
 		upgrade_label.text = "Stone  2    Meat  1"
 	else:
-		payment_label = flat_label(anchor,Vector3(0,.007,.57),.0068)
-		payment_label.text = "Wood  3"
+		var castle := Sprite3D.new()
+		castle.name = "Castle"
+		castle.axis = Vector3.AXIS_Y
+		castle.texture = preload("res://assets/field_camp/hearth_mark.svg")
+		castle.pixel_size = .0084
+		castle.position = Vector3(0,.006,-.29)
+		castle.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		anchor.add_child(castle)
+		payment_costs = cost_row(anchor,["wood"],.49)
+		show_costs(payment_costs,{"wood":3})
 
 func set_payment(remaining: Dictionary) -> void:
-	var caption := PackedStringArray()
-	for kind in ["wood","stone","meat"]:
-		if remaining.has(kind):
-			caption.append("%s  %d" % [kind.capitalize(),remaining[kind]])
-	payment_label.text = "    ".join(caption)
+	show_costs(payment_costs,remaining)
 
 func set_payment_progress(fraction:float, receiver: String = "buy") -> void:
 	if payment_ink.has(receiver): payment_ink[receiver].set_shader_parameter("paid",clampf(fraction,0,1))

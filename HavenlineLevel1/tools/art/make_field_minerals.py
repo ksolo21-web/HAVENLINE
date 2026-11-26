@@ -52,6 +52,50 @@ def write_glb(file,v,f,n,uv,atlas):
  j={'asset':{'version':'2.0','generator':'Havenline multi-view reconstruction'},'scene':0,'scenes':[{'nodes':[0]}],'nodes':[{'mesh':0,'name':file.stem}],'meshes':[{'primitives':[{'attributes':{'POSITION':vi,'NORMAL':ni,'TEXCOORD_0':ti},'indices':fi,'material':0}]}],'materials':[{'name':file.stem,'pbrMetallicRoughness':{'baseColorTexture':{'index':0},'metallicFactor':{'coal':.13,'metal':.21,'slate':0.}[file.stem],'roughnessFactor':{'coal':.64,'metal':.71,'slate':.88}[file.stem]}}],'images':[{'bufferView':iv,'mimeType':'image/jpeg'}],'textures':[{'source':0}],'buffers':[{'byteLength':len(blob)}],'bufferViews':views,'accessors':acc}
  head=json.dumps(j,separators=(',',':')).encode();head+=b' '*(-len(head)%4);blob.extend(b'\0'*(-len(blob)%4))
  file.write_bytes(struct.pack('<4sIII4s',b'glTF',2,28+len(head)+len(blob),len(head),b'JSON')+head+struct.pack('<I4s',len(blob),b'BIN\0')+blob)
+def fit_turnaround(v, normals, kind, views):
+ # Camera-registered volumetric reconstruction gives a useful starting point.
+ # Keep the calibrated x/z width while fitting the outer supports of all eight
+ # silhouettes. The smooth cage also carries the existing chips, veins and UVs.
+ from scipy.spatial import ConvexHull
+ from scipy.optimize import least_squares
+ def cage(p):
+  x,y,z=p.T
+  return np.stack([x,y,z,x*x,x*y,x*z,y*y,y*z,z*z,x**3,z**3,x*x*z,x*z*z],axis=1)
+ def deform(p, coeff):
+  return p+cage(p)@coeff
+ hull=v[ConvexHull(v).vertices].astype(float)
+ basis=cage(hull)
+ angles=np.arange(32)*math.tau/32
+ directions=np.stack([np.cos(angles),np.sin(angles)])
+ def outline(p):
+  low=p.min(0);high=p.max(0)
+  centered=p-np.array([(low[0]+high[0])*.5,low[1]])
+  return (centered@directions/(high[0]-low[0])).max(0)
+ cams=[];targets=[]
+ elevation=math.radians(29 if kind=='slate' else 14)
+ for i,(_,mask,_,_) in enumerate(views):
+  y,x=np.where(mask)
+  contour=np.stack([x,-y],axis=1)
+  targets.append(outline(contour[ConvexHull(contour).vertices]))
+  az=i*math.pi/4
+  cams.append(np.array([[math.cos(az),0,-math.sin(az)],[-math.sin(elevation)*math.sin(az),math.cos(elevation),-math.sin(elevation)*math.cos(az)]]).T)
+ def residual(c):
+  mesh=hull+basis@c.reshape(-1,3)
+  error=[(outline(mesh@cam)-reference)*(1.7 if i==0 else 1.) for i,(cam,reference) in enumerate(zip(cams,targets))]
+  return np.concatenate(error+[.09*c])
+ result=least_squares(residual,np.zeros(basis.shape[1]*3),bounds=(-.9,.9),max_nfev=100)
+ coeff=result.x.reshape(-1,3)
+ new=deform(v,coeff)
+ eps=1e-4
+ jacobian=np.stack([(deform(v+axis*eps,coeff)-deform(v-axis*eps,coeff))/(2*eps) for axis in np.eye(3)],axis=2)
+ assert np.linalg.det(jacobian).min()>.25
+ rotated=np.linalg.solve(jacobian.transpose(0,2,1),normals[:,:,None])[:,:,0]
+ rotated/=np.maximum(np.linalg.norm(rotated,axis=1,keepdims=True),1e-9)
+ new[:,1]-=new[:,1].min()
+ for axis in [0,2]:new[:,axis]-=(new[:,axis].min()+new[:,axis].max())*.5
+ new/=max(np.ptp(new[:,0]),np.ptp(new[:,2]))
+ return new,rotated
+
 def build(kind):
  views=segment(kind);scale=np.mean([views[i][3][2]-views[i][3][0] for i in [0,4]])
  # Width is finally normalized to 1.0 after geometry extraction.
@@ -110,21 +154,6 @@ def build(kind):
   v[:,0]-=nn[:,0]*.014*notch
   v[:,2]-=nn[:,2]*.014*notch
  v,f=fast_simplification.simplify(v,f,target_count={'coal':1150,'metal':1340,'slate':880}[kind])
- if kind=='slate':
-  # Slate cleaves into a compact slab. Its near-rectangular corners and two
-  # recessed fracture planes are physical geometry even on its narrow edge.
-  outline=np.array([[-.50,-.165],[-.466,-.248],[-.333,-.255],[-.172,-.248],[-.095,-.26],[.085,-.247],[.288,-.255],[.425,-.246],[.486,-.193],[.489,-.052],[.500,.002],[.485,.143],[.451,.231],[.330,.241],[.164,.250],[.084,.230],[-.016,.251],[-.174,.243],[-.26,.26],[-.419,.248],[-.486,.201],[-.482,.109],[-.50,.035],[-.487,-.058]])
-  verts=[];tris=[];n=len(outline)
-  for layer,(y0,sx,sz) in enumerate([(0,.936,.92),(.014,.976,.944),(.042,.988,.98),(.047,.947,.917),(.059,.988,.993),(.092,.99,1),(.099,.949,.928),(.112,.996,.994),(.155,1,1),(.169,.973,.958),(.178,.86,.82),(.184,.52,.54)]):
-   for j,(x,z) in enumerate(outline):
-    wave=(.007*np.sin(6.7*x+9.0*z)+.003*np.sin(14*x-7*z)+.0025*np.sin(j*3.3+layer*.2))*(min(y0/.028,1.))
-    verts.append([x*sx,y0+wave,z*sz])
-   if layer:
-    for j in range(n):
-     a=(layer-1)*n+j;b=(layer-1)*n+(j+1)%n;c=b+n;d=a+n
-     tris.extend([[a,d,c],[a,c,b]])
-  for j in range(1,n-1):tris.extend([[0,j,j+1],[(layer*n),layer*n+j+1,layer*n+j]])
-  v=np.array(verts);f=np.array(tris)
  nodule_start=len(v)
  if kind=='metal':
   # Each silver inclusion has its own buried root, bevel and exposed facets.
@@ -136,6 +165,10 @@ def build(kind):
    radius=((screen[1]-px)/(rx*scale))**2+((screen[0]-py)/(ry*sy))**2
    face_depth=np.quantile((v@eye)[radius<.43],.90)
    center=right*((px-cu)/scale)+up*((cv-py)/sy)+eye*(face_depth-rd*.48)
+   if k in (1,2):
+    # The 45° plate shows each small silver outcrop on the forward shoulder;
+    # bring its bevel forward while retaining the contact root within the host.
+    center+=eye*.045-right*.018
    points=[]
    for l,(height,r) in enumerate([(-1,.52),(-.43,.95),(.31,1.00),(.79,.71),(.94,.40)]):
     for j in range(8):
@@ -156,7 +189,14 @@ def build(kind):
  for i in range(3):np.add.at(norm,f[:,i],face_norm)
  norm/=np.maximum(np.linalg.norm(norm,axis=1,keepdims=True),1e-8)
  vm,indices,uv=xatlas.parametrize(v.astype('f'),f.astype(np.uint32));is_nodule=vm>=nodule_start;v=v[vm];norm=norm[vm];f=indices.astype(int)
+ fitted=v.copy();fitted_norm=norm.copy()
+ if kind in ('metal','slate'):
+  fitted[:,1]-=fitted[:,1].min()
+  for axis in [0,2]: fitted[:,axis]-=(fitted[:,axis].min()+fitted[:,axis].max())*.5
+  fitted/=max(np.ptp(fitted[:,0]),np.ptp(fitted[:,2]))
+  fitted,fitted_norm=fit_turnaround(fitted,norm,kind,views)
  res=512
+ paint_pos=np.zeros((res,res,3),dtype='f')
  posmap=np.zeros((res,res,3),dtype='f');normmap=posmap.copy();nodule=np.zeros((res,res),bool);m=np.zeros((res,res),bool)
  for tri in f:
   p=uv[tri]*res-.5;a,b,c=p;u=b-a;w=c-a;det=u[0]*w[1]-u[1]*w[0]
@@ -166,7 +206,7 @@ def build(kind):
   yy,xx=np.mgrid[lo[1]:hi[1],lo[0]:hi[0]];dx=xx-a[0];dy=yy-a[1]
   t=(dx*w[1]-dy*w[0])/det;q=(u[0]*dy-u[1]*dx)/det;inside=(t>=0)&(q>=0)&(t+q<=1)
   yy,xx=yy[inside],xx[inside];t=t[inside,None];q=q[inside,None]
-  for field,arr in [(posmap,v),(normmap,norm)]:
+  for field,arr in [(posmap,v),(normmap,norm),(paint_pos,fitted)]:
    c0,c1,c2=arr[tri];field[yy,xx]=c0+t*(c1-c0)+q*(c2-c0)
   m[yy,xx]=True;nodule[yy,xx]=is_nodule[tri[0]]
  pp=posmap[m];nn=normmap[m];nn/=np.maximum(1e-8,np.linalg.norm(nn,axis=1,keepdims=True))
@@ -185,12 +225,37 @@ def build(kind):
   q=nodule[m]
   rgb[q]=np.maximum([99.,93.,102.],.85*colors[0][q]+.15*rgb[q])
  if kind=='slate':
-  # Register the unbroken top sheet to the full front-view quartz vein.
-  # Side seams use the azimuth bake above, preserving its stratified edge.
-  x0,y0,x1,y1=views[0][3];c=views[0][0];top=nn[:,1]>.46
-  tx=x0+7+(pp[top,0]+.5)*(x1-x0-14)
-  ty=y0+11+(pp[top,2]+.26)/.52*(y1-y0-49)
-  rgb[top]=np.stack([nd.map_coordinates(c[:,:,ch],(ty,tx),order=1,mode='nearest') for ch in range(3)],axis=1)
+  # Calibrate each paint camera to the reconstructed silhouette. The rear
+  # three-quarter illustration exposes the complete bent pale quartz vein.
+  # A single registered paint projection keeps it continuous over the top.
+  pts=paint_pos[m]
+  # Keep separate side layers and scarps readable with their nearest reference azimuth.
+  def paint(view,pts):
+   c,_,_,(x0,y0,x1,y1)=views[view];right,up=proj[view][:2]
+   xx=fitted@right;yy=fitted@up
+   tx=x0+(pts@right-xx.min())/np.ptp(xx)*(x1-x0)
+   ty=y1-(pts@up-yy.min())/np.ptp(yy)*(y1-y0)
+   return np.stack([nd.map_coordinates(c[:,:,ch],(ty,tx),order=1,mode='nearest') for ch in range(3)],axis=1)
+  painted=np.stack([paint(i,pts) for i in range(8)],axis=1)
+  side_w=np.stack([np.maximum(nn@proj[i][2],.01)**28 for i in range(8)],1)
+  side=(painted*side_w[:,:,None]).sum(1)/side_w.sum(1,keepdims=True)
+  # Smooth transition from the seam running over the upper plate into the
+  # individual dark lateral cleavage beds.
+  top=np.clip((nn[:,1]-.27)/.30,0.,1.)
+  # Sample the front and back presentations on their respective surfaces.
+  # A narrow feather, limited to the middle of the long bed, keeps the pale
+  # seam connected without stretching an occluded edge over the whole top.
+  front=np.clip((pts[:,2]+.06)/.15,0.,1.)
+  front=front*front*(3.-2.*front)
+  # On the opposite rear flank the 135-degree camera can see the broken
+  # continuation of the vein behind the raised right corner.
+  rear_edge=np.clip((-.075-pts[:,2])/.075,0.,1.)
+  rear_edge=rear_edge*rear_edge*(3.-2.*rear_edge)
+  rear=painted[:,5]*(1-rear_edge[:,None])+painted[:,3]*rear_edge[:,None]
+  upper=painted[:,0]*front[:,None]+rear*(1-front[:,None])
+
+  rgb=(1.-top[:,None])*(.75*side+.25*rgb)+top[:,None]*upper
+
  below=nn[:,1]<-.42
  base={'coal':[32,31,35],'metal':[69,58,62],'slate':[50,62,80]}[kind]
  rgb[below]=np.asarray(base)*.55+rgb[below]*.45
@@ -199,6 +264,11 @@ def build(kind):
  v[:,1]-=v[:,1].min()
  for axis in [0,2]:v[:,axis]-=(v[:,axis].min()+v[:,axis].max())*.5
  v/=max(np.ptp(v[:,0]),np.ptp(v[:,2]))
+ if kind in ('metal','slate'):
+  v,norm=fitted,fitted_norm
+  # Retain short-range contrast in the existing projected mineral inclusions and strata.
+  rgb=tex.astype(float)
+  tex=np.clip(rgb+.30*(rgb-nd.gaussian_filter(rgb,(1.4,1.4,0))),0,255).astype('B')
  write_glb(out/(kind+'.glb'),v,f,norm,uv,tex);print('built',kind,'vertices',len(v),'triangles',len(f),np.ptp(v,axis=0))
 
 for kind in args.kinds or files:

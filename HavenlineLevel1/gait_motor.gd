@@ -41,7 +41,7 @@ var toe_targets: Array[Transform3D] = []
 var final_heading := 0.0
 var gait_tree: AnimationTree
 var desired_touchdown := 0.05
-var authored_pose: Dictionary = {}
+var sampled_scales: Dictionary = {}
 var pelvis_index := -1
 var neutral_toes: Array[Transform3D] = []
 var leg_tracking := 0.0
@@ -185,6 +185,16 @@ func _play_steps(dt: float) -> void:
 	var last_beat := releasing or beat >= (turn_beats - 1 if special == "turn" else 1)
 	var t := clampf(beat_time / beat_duration, 0.0, 1.0)
 	var u := smoothstep(0.0, 1.0, t)
+	if special == "turn":
+		# Accelerate into lift-off and brake into touchdown while maintaining
+		# an even speed through the airborne middle of the step.
+		var ramp := .14
+		if t < ramp:
+			u = t * t / (2.0 * ramp * (1.0 - ramp))
+		elif t > 1.0 - ramp:
+			u = 1.0 - (1.0 - t) * (1.0 - t) / (2.0 * ramp * (1.0 - ramp))
+		else:
+			u = (t - ramp * .5) / (1.0 - ramp)
 	var from := boot_from[swing]
 	var to := step_targets[swing]
 	var pelvis := skeleton.get_bone_global_pose(pelvis_index)
@@ -221,6 +231,10 @@ func _play_steps(dt: float) -> void:
 	var outward := Vector3(cos(yaw), 0, -sin(yaw)) * (1.0 if swing == 0 else -1.0)
 	var spacing: float = (moving.origin - boot_from[support].origin).dot(outward)
 	var step_weight := smoothstep(0.0, .30, t)
+	if special == "turn" and last_beat and travel_speed <= 1.7:
+		# Release the outward clearance offset as the authored foot lands.
+		# Otherwise the first frame after the turn pulls the planted boot sideways.
+		step_weight *= 1.0 - smoothstep(.63, 1.0, t)
 	moving.origin += outward * maxf(0.0, .28 - spacing) * step_weight
 	var support_knee := skeleton.to_global(
 		skeleton.get_bone_global_pose(leg_chains[support][1]).origin
@@ -242,6 +256,13 @@ func _play_steps(dt: float) -> void:
 		var held := _boot_world(support)
 		held.origin.y += correction
 		_place_boot(support, held, toe_from[support])
+	# A newly braked swing can arrive below the floor before the first beat.
+	if special == "brake":
+		var clearance: float = _heights()[swing] - contact_world.actor.global_position.y
+		if clearance < 0.0:
+			var raised := _boot_world(swing)
+			raised.origin.y += .0005 - clearance
+			_place_boot(swing, raised, _toe_relative(swing))
 	if t < 1.0:
 		beat_time = minf(beat_duration, beat_time + dt)
 		return
@@ -448,12 +469,13 @@ func _adjust_leg(chain: Array, delta: Vector3, turn: float, target_toe := Vector
 func _settle_support() -> void:
 	if special.is_empty() and not bridge and not floor_pending:
 		return
-	# The mixer does not write constant bone channels each tick. Restore
-	# their authored local transforms before the next animation sample.
-	authored_pose[pelvis_index] = skeleton.get_bone_pose(pelvis_index)
+	# IK repositions and rotates the legs. Preserve the sampled local scales:
+	# repeatedly decomposing a world-space boot or toe transform can introduce
+	# shear that the animation mixer treats as the next frame's static scale.
+	sampled_scales[pelvis_index] = skeleton.get_bone_pose_scale(pelvis_index)
 	for chain: Array in leg_chains:
 		for bone: int in chain:
-			authored_pose[bone] = skeleton.get_bone_pose(bone)
+			sampled_scales[bone] = skeleton.get_bone_pose_scale(bone)
 	var dt := 1.0 / Engine.physics_ticks_per_second
 	var protected_step := procedural_steps_active
 	if not special.is_empty():
@@ -466,6 +488,9 @@ func _settle_support() -> void:
 			var lift: float = contact_world.actor.global_position.y - heights[side] + .0002
 			if lift > .001:
 				_adjust_leg(leg_chains[side], Vector3.UP * lift, 0.0)
+
+	for bone: int in sampled_scales:
+		skeleton.set_bone_pose_scale(bone, sampled_scales[bone])
 
 	if protected_step:
 		var heights := _heights()
