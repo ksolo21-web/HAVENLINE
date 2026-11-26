@@ -153,7 +153,6 @@ func _walk(destination: Vector3, dt: float, carrying := false) -> bool:
 	var delta := destination-before
 	var walking := true
 	if gate.active and gate.position.distance_to(before)<2.45 and absf(before.x)<.90 and absf(delta.z)>.02:
-		if not gate.target_open: gate.request_toggle(before)
 		if gate.angle < 1.29 and absf(before.z-gate.position.z)<1.67: walking = false
 	if delta.length_squared() > .00003:
 		actor.rotation.y = lerp_angle(actor.rotation.y,atan2(delta.x,delta.z),clampf(dt*11,0,1))

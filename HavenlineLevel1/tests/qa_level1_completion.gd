@@ -445,10 +445,9 @@ func inspect_service_aisles() -> void:
 		var exit:Vector3=gate.global_position-inward*1.8
 		var entry:Vector3=gate.global_position+inward*1.8
 		place(exit)
-		if not gate.target_open: check(gate.gate_id+" opens from the exterior",gate.request_toggle(exit))
 		for tick in 90: game.step_technical_gates(1./60.)
 		await physics_frame
-		check(gate.gate_id+" fully opens",is_equal_approx(gate.angle,PI/2))
+		check(gate.gate_id+" automatically opens from the exterior",is_equal_approx(gate.angle,PI/2) and not game.gate_button.visible)
 		for endpoint:Vector3 in [entry,exit]:
 			var previous:Vector3=game.actor.global_position
 			game.actor.move_and_collide(endpoint-previous)

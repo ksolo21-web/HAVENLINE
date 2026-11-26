@@ -12,7 +12,6 @@ func move_actor(input: Vector2, dt: float) -> float:
 const Orbit = preload("res://weapon_orbit.gd")
 const FRESH_HERO = preload("res://assets/characters/Character1Fresh.glb")
 @export var upgraded_orbit := false
-const SURFACE_REACH := 3.15
 const SNOW_STONE := preload("res://assets/reference_forest/mine-stone.glb")
 var surfaces := {}
 var contacts: Array[Dictionary] = []
@@ -30,8 +29,8 @@ func _ready() -> void:
 	character_kit = Orbit.new()
 	super()
 	character_kit.set_upgraded(upgraded_orbit)
-	resource_tree.set_meta("orbit_reach",SURFACE_REACH)
-	resource_rock.set_meta("orbit_reach",SURFACE_REACH)
+	resource_tree.set_meta("orbit_reach",character_kit.maximum_radius())
+	resource_rock.set_meta("orbit_reach",character_kit.maximum_radius())
 	# The trial preloads the same art, camera and resource mechanics as the equipment scene.
 	var tree_parts := resource_tree._pivot.find_children("*", "MeshInstance3D", true, false)
 	for part: MeshInstance3D in tree_parts:
@@ -71,6 +70,20 @@ func _ready() -> void:
 
 func set_zoom_ratio(value: float) -> void:
 	trial_camera.set_ratio(camera, value)
+
+# Keep the near plane above foreground canopies across the full phone surface.
+# Moving along the viewing axis preserves the orthographic framing and angle.
+func fit_camera_depth(window_px: Vector2) -> void:
+	if window_px.x <= 0 or window_px.y <= 0: return
+	var screen_height := ZoomCamera.NORMAL_SPAN * maxf(1.0,window_px.y/window_px.x)
+	var backward := AUTHORED_CAMERA_OFFSET.normalized()
+	var world_up_on_screen := sqrt(1.0 - backward.y * backward.y)
+	var lowest_ray_height := AUTHORED_CAMERA_OFFSET.y - screen_height * .5 * world_up_on_screen
+	const FOREGROUND_CLEARANCE := 6.2
+	var retreat := maxf(0.0, (FOREGROUND_CLEARANCE - lowest_ray_height) / backward.y + camera.near)
+	var offset := AUTHORED_CAMERA_OFFSET + backward * retreat
+	camera.position += offset - camera_follow_offset
+	camera_follow_offset = offset
 
 func get_zoom_ratio() -> float:
 	return trial_camera.zoom_ratio
@@ -146,14 +159,22 @@ func register_hostile(body: Node3D, geometry: MeshInstance3D) -> void:
 		body.tree_exiting.connect(func(): surfaces.erase(body), CONNECT_ONE_SHOT)
 
 func reachable(body: Node3D) -> bool:
-	if not is_instance_valid(body) or not body.is_inside_tree():
+	if not is_instance_valid(body) or not body.is_inside_tree() or not surfaces.has(body):
 		return false
-	var offset := body.global_position - actor.global_position
-	if body == resource_tree:
-		return body.can_address(actor.global_position, offset)
-	if body == resource_rock:
-		return body.can_address(actor.global_position, offset)
-	return body.is_in_group("swirl_hostiles") and offset.length_squared() <= pow(SURFACE_REACH * character_kit.reach_scale, 2) and body.can_receive_swirl()
+	if body is ResourceTreeScript:
+		if body.phase != "rooted": return false
+	elif body is ResourceRockScript:
+		if body.phase != "seated": return false
+	elif not body.is_in_group("swirl_hostiles") or not body.can_receive_swirl():
+		return false
+	var part: MeshInstance3D = surfaces[body][0]
+	var box: AABB = part.global_transform * part.mesh.get_aabb()
+	var feet := actor.global_position
+	var nearest := feet.clamp(box.position,box.end)
+	# Conservative eligibility for tool selection only. Actual damage still
+	# needs contact on a triangle of the registered trunk, bank or enemy.
+	var limit: float = character_kit.maximum_radius()
+	return Vector2(feet.x-nearest.x,feet.z-nearest.z).length_squared() <= limit*limit
 
 func selected_tool() -> String:
 	var nearest := INF
@@ -170,10 +191,10 @@ func accept_contact(body: Node3D) -> bool:
 	var facing := (body.global_position - actor.global_position).normalized()
 	if body == resource_tree:
 		tree_input_sequence += 1
-		return body.strike(ResourceTreeScript.TREE_ID, tree_input_sequence, actor.global_position, facing)
+		return body.strike(ResourceTreeScript.TREE_ID, tree_input_sequence, actor.global_position, facing, Vector3.ZERO, Vector3.INF, character_kit.hit_geometry == surfaces[body][0])
 	if body == resource_rock:
 		rock_input_sequence += 1
-		var struck: bool = body.strike(ResourceRockScript.ROCK_ID, rock_input_sequence, actor.global_position, facing)
+		var struck: bool = body.strike(ResourceRockScript.ROCK_ID, rock_input_sequence, actor.global_position, facing, character_kit.hit_geometry == surfaces[body][0])
 		return struck
 	return body.take_swirl_hit(character_kit.turn_id)
 
@@ -187,7 +208,7 @@ func _step_character(dt: float, speed: float) -> void:
 	if persist_blocked or not orbit_permitted_at(actor.global_position):
 		character_kit.rest()
 		return
-	var reach: float = SURFACE_REACH * character_kit.reach_scale
+	var reach: float = character_kit.maximum_radius()
 	resource_tree.set_meta("orbit_reach",reach)
 	resource_rock.set_meta("orbit_reach",reach)
 	var tool := selected_tool()
@@ -198,11 +219,24 @@ func _step_character(dt: float, speed: float) -> void:
 		character_kit.equipped=tool
 		character_kit.show_tools()
 		character_kit.pose()
-	character_kit.advance(dt)
+	var end_position := actor.global_position
+	var start_position: Vector3 = character_kit.last_origin
+	if character_kit.discontinuous(start_position,end_position,dt):
+		start_position = end_position
+	var left := dt
+	while left > .0000001:
+		var step := minf(left, Orbit.PERIOD - character_kit.elapsed)
+		var sample := start_position.lerp(end_position,(dt - left + step) / dt)
+		character_kit.advance(step,sample)
+		_resolve_swirl_contacts()
+		left -= step
+		character_kit.finish_turn()
+
+func _resolve_swirl_contacts() -> void:
 	for body: Node3D in surfaces:
 		if character_kit.hit_this_turn.has(body) or not reachable(body):
 			continue
-		if (body == resource_rock and character_kit.equipped != "pickaxe") or (body == resource_tree and character_kit.equipped != "axe"):
+		if (body is ResourceRockScript and character_kit.equipped != "pickaxe") or (body is ResourceTreeScript and character_kit.equipped != "axe"):
 			continue
 		var part: MeshInstance3D = surfaces[body][0]
 		var mesh: TriangleMesh = surfaces[body][1]
@@ -210,3 +244,4 @@ func _step_character(dt: float, speed: float) -> void:
 			character_kit.hit_this_turn[body] = true
 			contacts.append({"target":body.name, "turn":character_kit.turn_id, "seconds":character_kit.elapsed})
 			if contacts.size()>1024: contacts.pop_front()
+		character_kit.hit_geometry = null

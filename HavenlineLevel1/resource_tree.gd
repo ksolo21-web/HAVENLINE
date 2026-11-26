@@ -65,11 +65,11 @@ func can_address(feet: Vector3, facing: Vector3) -> bool:
 	var dist := to_target.length()
 	return dist >= MIN_REACH and dist <= float(get_meta("orbit_reach", MAX_REACH)) and planar.normalized().dot(to_target.normalized()) >= MIN_FACING_DOT
 
-func strike(source: String, sequence: int, feet: Vector3, facing: Vector3, travel := Vector3.ZERO, hit_at := Vector3.INF) -> bool:
+func strike(source: String, sequence: int, feet: Vector3, facing: Vector3, travel := Vector3.ZERO, hit_at := Vector3.INF, surface_contact := false) -> bool:
 	if source != TREE_ID or sequence <= last_sequence:
 		return false
 	last_sequence = sequence
-	if cooldown > 0.0 or not can_address(feet, facing):
+	if cooldown > 0.0 or phase != "rooted" or (not surface_contact and not can_address(feet, facing)):
 		return false
 	cooldown = CONTACT_COOLDOWN
 	strikes += 1

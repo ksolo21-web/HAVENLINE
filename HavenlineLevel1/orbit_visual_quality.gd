@@ -1,9 +1,9 @@
 extends Node
 ## Render policy scoped to the orbit trial. The window keeps its native size.
 var ultra := true
+var last_window_size := Vector2i.ZERO
 var quality_button := Button.new()
 var lights: Array[Node] = []
-var snow_surface: MeshInstance3D
 var material_copies := {}
 var originals := {}
 var scene: Node3D
@@ -13,7 +13,6 @@ var original_orientation := DisplayServer.SCREEN_LANDSCAPE
 
 func install(world: Node3D, hud: Control) -> void:
 	scene = world
-	snow_surface = scene.get_node("SnowGround_NoPaintedPaths").find_children("*", "MeshInstance3D", false, false)[0]
 	original_canvas = get_window().content_scale_size
 	original_aspect = get_window().content_scale_aspect
 	if OS.has_feature("mobile"):
@@ -84,16 +83,21 @@ func refresh_window() -> void:
 	var viewport := get_viewport()
 	var window := get_window()
 	var window_px := Vector2(window.size)
+	# Touch coordinates from the old display surface cannot be reused after
+	# unfolding or rotating. A new gesture can start in the resized canvas.
+	if last_window_size != window.size:
+		last_window_size = window.size
+		scene.clear_touch()
 	var portrait := window_px.y > window_px.x
-	var canvas_base := Vector2i(720, 1280) if portrait else Vector2i(1280, 720)
+	# Expand a square logical base. The short screen edge stays 720 canvas
+	# units across a fold or rotation, including nearly square inner displays.
+	var canvas_base := Vector2i(720,720)
 	if window.content_scale_size != canvas_base:
 		window.content_scale_size = canvas_base
 	if window.content_scale_aspect != Window.CONTENT_SCALE_ASPECT_EXPAND:
 		window.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
 	scene.camera.keep_aspect = Camera3D.KEEP_WIDTH if portrait else Camera3D.KEEP_HEIGHT
-	# The taller view sees beyond the movement boundary. Extend only the
-	# ground's artwork; the original snow collider and travel bounds stay local.
-	snow_surface.scale = Vector3(2.5, 1, 2.5) if portrait else Vector3.ONE
+	scene.fit_camera_depth(window_px)
 	# Bound the 3D draw area to a 4K envelope, including rotated displays.
 	var limit := Vector2(3840, 2160) if window_px.x >= window_px.y else Vector2(2160, 3840)
 	var ratio := minf(1.0, minf(limit.x / maxf(1, window_px.x), limit.y / maxf(1, window_px.y)))
@@ -101,6 +105,9 @@ func refresh_window() -> void:
 	var canvas := viewport.get_visible_rect()
 	quality_button.size = Vector2(180, 48)
 	quality_button.position = canvas.end - quality_button.size - Vector2(16,16)
+	var hud := quality_button.get_parent()
+	if hud and hud.has_method("position_quality_button"):
+		hud.position_quality_button(quality_button,ultra)
 
 
 func _exit_tree() -> void:

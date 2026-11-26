@@ -20,6 +20,12 @@ func save_frame(folder: String, label: String) -> void:
 	RenderingServer.force_draw()
 	root.get_texture().get_image().save_jpg(folder.path_join(label+".jpg"),.94)
 
+func stand(game,feet:Vector3,ticks:int) -> void:
+	game.actor.global_position=feet
+	game.previous_dry_position=feet
+	game.actor.velocity=Vector3.ZERO
+	for i in ticks: await physics_frame
+
 func detail_views(game, folder: String) -> void:
 	game.set_zoom_ratio(2.)
 	for i in 3: await physics_frame
@@ -50,18 +56,14 @@ func detail_views(game, folder: String) -> void:
 		save_frame(folder,view.name)
 	eye.global_position = gate+Vector3(.33,1.64,2.05)
 	eye.look_at(gate+Vector3(0,.79,0))
-	var mechanism = game.gates[0]
 	var outside := gate+Vector3(0,0,1.95)
-	mechanism.request_toggle(outside)
-	for i in 15: mechanism.advance(1./60.,outside,.31)
+	await stand(game,outside,15)
 	await process_frame
 	save_frame(folder,"gate-unlatching")
-	for i in 60: mechanism.advance(1./60.,outside,.31)
+	await stand(game,outside,60)
 	await process_frame
 	save_frame(folder,"gate-open")
-	mechanism.request_toggle(outside)
-	for i in 70: mechanism.advance(1./60.,outside,.31)
-	game.actor.position = original_feet
+	await stand(game,original_feet,100)
 	game.opening_hud.show()
 	game.camera.current = true
 	eye.queue_free()
@@ -109,22 +111,17 @@ func run() -> void:
 			var offset: Vector3 = gate.global_basis.x*.20
 			query.from += offset
 			query.to += offset
-			if gate.angle > 0:
-				gate.request_toggle(start)
-				for i in 65: gate.advance(1./60.,start,.31)
-			for i in 2: await physics_frame
-			check(not game.get_world_3d().direct_space_state.intersect_ray(query).is_empty(),gate.name+" closed")
-			check(gate.request_toggle(start),gate.name+" reachable controls")
-			for i in 65: gate.advance(1./60.,start,.31)
-			for i in 2: await physics_frame
+			await stand(game,Vector3(2,0,-2),105)
+			check(is_zero_approx(gate.angle) and not game.get_world_3d().direct_space_state.intersect_ray(query).is_empty(),gate.name+" closed")
+			await stand(game,start-Vector3.UP*.55,65)
+			check(gate.target_open and gate.angle>1.56,gate.name+" opens automatically")
 			var blockage: Dictionary = game.get_world_3d().direct_space_state.intersect_ray(query)
 			check(blockage.is_empty(),"%s stage %d open (%s)" % [gate.name,stage,blockage.collider.get_path() if not blockage.is_empty() else "clear"])
 			query.from=end+offset
 			query.to=start+offset
 			check(game.get_world_3d().direct_space_state.intersect_ray(query).is_empty(),gate.name+" inbound open")
 			record.gates.append({"id":gate.gate_id,"center":str(gate.position)})
-			gate.request_toggle(start)
-			for i in 65: gate.advance(1./60.,start,.31)
+			await stand(game,Vector3(2,0,-2),105)
 		rows.append(record)
 		if OS.get_environment("CAMP_STAGE_STILLS") != "" and rows.size() <= 3:
 			game.actor.position = Vector3(1.7,0,rect.w+1.45)

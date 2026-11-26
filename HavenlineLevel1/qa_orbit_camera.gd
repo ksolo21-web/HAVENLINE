@@ -78,6 +78,19 @@ func run() -> void:
 	checks["trial canvas fills the window"] = root.content_scale_aspect == Window.CONTENT_SCALE_ASPECT_EXPAND and root.get_screen_transform().origin.length() < 2
 	checks["camera uses the short axis"] = world.camera.keep_aspect == (Camera3D.KEEP_WIDTH if root.size.y > root.size.x else Camera3D.KEEP_HEIGHT)
 	checks["Ultra preserves visible ground inside shadows"] = is_equal_approx(world.graphics.lights[0].shadow_opacity, .74)
+	# The bottom row on a 21:9 phone previously looked beneath the snow.
+	var initial_offset: Vector3 = world.camera_follow_offset
+	var close_surface_clear := true
+	var same_aim := true
+	for display: Vector2 in [Vector2(1080,2520),Vector2(1968,2184),Vector2(2184,1968),Vector2(2520,1080)]:
+		world.fit_camera_depth(display)
+		var vertical_span: float = 13.0 * maxf(1.0, display.y / display.x)
+		var lower_near: Vector3 = world.camera_follow_offset - basis.y * vertical_span * .5 - basis.z * world.camera.near
+		close_surface_clear = close_surface_clear and lower_near.y > 5.5
+		same_aim = same_aim and world.camera_follow_offset.normalized().is_equal_approx(basis.z) and world.camera.global_basis.is_equal_approx(basis)
+	world.fit_camera_depth(Vector2(root.size))
+	checks["near plane clears foreground snow and canopies on both Fold orientations"] = close_surface_clear
+	checks["folding preserves the camera aim and restores the previous offset"] = same_aim and world.camera_follow_offset.is_equal_approx(initial_offset)
 	var values := {"suite":"orbit_camera","checks":checks,"renderer":RenderingServer.get_current_rendering_method(),"framebuffer":str(root.size),"scene_draw_scale":root.scaling_3d_scale,"quality":world.graphics.quality_button.text,"filtered_materials":world.graphics.originals.size()}
 	print(JSON.stringify(values))
 	quit(1 if checks.values().has(false) else 0)

@@ -15,7 +15,9 @@ const HEARTH_OFFER := "center_hearth"
 const UPGRADE_OFFER := "orbit_upgrade"
 const PICKUP_RADIUS := 1.38
 const PAD_RADIUS := 1.0
-const MAX_HP := 4
+const RUN_STICK_DEAD_ZONE := 0.11
+const MAX_HP := 10 * FieldEnemy.MAX_HEALTH
+const RECOIL_SECONDS := .38
 const UPGRADE_GLINT = preload("res://assets/field_ui/upgrade_glint.svg")
 var lakeshore
 var processors
@@ -64,6 +66,7 @@ var last_good: Dictionary
 var moving_gates := {}
 var hurt_time := 0.0
 var recoil_side := 1.0
+var impact_lean := Vector2(1,0)
 var rescue_time := 0.0
 var simulation_time := 0.0
 var last_notice := ""
@@ -72,8 +75,14 @@ var current_music := ""
 func create_opening_hud() -> OpeningHUD:
 	return preload("res://field_hud.gd").new()
 
+func move_actor(input: Vector2, dt: float) -> float:
+	# The drag supplies a heading. Any deliberate displacement requests a run.
+	var heading := input.normalized() if input.length_squared() > RUN_STICK_DEAD_ZONE * RUN_STICK_DEAD_ZONE else Vector2.ZERO
+	return gait_motor.step(self, heading, dt)
+
 func _ready() -> void:
 	super()
+	character_kit.locomotion.run_only = true
 	lifecycle.world = self
 	encounters.setup(self)
 	inventory.configure(Progress.offers(layout.furnace_cost))
@@ -279,15 +288,9 @@ func _input(event: InputEvent) -> void:
 		return
 	super(event)
 
-func reachable(body: Node3D) -> bool:
-	if (body in trees or body in rocks) and is_instance_valid(body):
-		return body.can_address(actor.global_position, body.global_position-actor.global_position)
-	return super(body)
-
 func selected_tool() -> String:
-	# Inside a mixed grove, a trunk near the player's boots cannot intercept
-	# the cutting head at the edge of the orbit. Give a reachable stone on
-	# that sweep priority until depleted; contact still uses its real mesh.
+	# Prefer the pick when the orbit passes a bank in a mixed grove. Inner
+	# targets also participate through the usual nearest-target selection.
 	for rock in rocks:
 		if not reachable(rock): continue
 		var offset: Vector3 = rock.global_position - actor.global_position
@@ -311,10 +314,10 @@ func accept_contact(body: Node3D) -> bool:
 		var travel: Vector3 = character_kit.hit_travel if matched else Vector3.ZERO
 		var at: Vector3 = character_kit.hit_position if matched else Vector3.INF
 		character_kit.hit_geometry = null
-		landed = body.strike(ResourceTreeScript.TREE_ID,tree_input_sequence,actor.global_position,body.global_position-actor.global_position,travel,at)
+		landed = body.strike(ResourceTreeScript.TREE_ID,tree_input_sequence,actor.global_position,body.global_position-actor.global_position,travel,at,matched)
 	elif body in rocks and body != resource_rock:
 		rock_input_sequence += 1
-		landed=body.strike(ResourceRockScript.ROCK_ID,rock_input_sequence,actor.position,body.position-actor.position)
+		landed=body.strike(ResourceRockScript.ROCK_ID,rock_input_sequence,actor.position,body.position-actor.position,character_kit.hit_geometry == surfaces[body][0])
 	else:
 		landed = super(body)
 	if not landed:
@@ -340,10 +343,10 @@ func step_tree(dt: float) -> void:
 	tree_button.hide()
 	if persist_blocked or not field_ready: return
 	for rock in rocks:
-		rock.set_meta("orbit_reach",SURFACE_REACH*character_kit.reach_scale)
+		rock.set_meta("orbit_reach",character_kit.maximum_radius())
 		if rock != resource_rock: rock.advance(dt)
 	for tree in trees:
-		tree.set_meta("orbit_reach",SURFACE_REACH * character_kit.reach_scale)
+		tree.set_meta("orbit_reach",character_kit.maximum_radius())
 		tree.advance(dt,actor.position,float(layout.actor_radius))
 		if tree.phase == "ready_to_credit":
 			_credit_tree(tree)
@@ -441,14 +444,18 @@ func _player_hit(amount: int, attacker: Node3D = null) -> void:
 	if amount <= 0 or player_invulnerability > 0.0 or reset_time > 0 or persist_blocked or field_env.is_inside_camp(actor.position): return
 	var loss := mini(player_hp, amount)
 	player_hp -= loss
+	impact_lean = Vector2(1,0)
 	if is_instance_valid(attacker):
-		var away := hero_model.global_basis.x.dot(actor.global_position-attacker.global_position)
-		recoil_side = signf(away) if absf(away)>.01 else 1.0
+		var away := actor.global_position - attacker.global_position
+		var local_away := actor.global_basis.inverse() * away
+		if local_away.length_squared() > .0001:
+			impact_lean = Vector2(local_away.x,local_away.z).normalized()
+	recoil_side = signf(impact_lean.x) if absf(impact_lean.x)>.01 else 1.0
 	_combat_number(actor.position+Vector3.UP*2.16,"−%d" % loss,Color("#ff8469"))
 	opening_hud.set_health(player_hp,MAX_HP)
-	hurt_time = .32
+	hurt_time = RECOIL_SECONDS
 	player_invulnerability = 1.0
-	flash.color.a = .26
+	flash.color.a = .33
 	_event("player_hurt",actor.position)
 	if player_hp == 0:
 		settlement_loop.cancel_cooking()
@@ -459,18 +466,34 @@ func _player_hit(amount: int, attacker: Node3D = null) -> void:
 	_refresh_field()
 
 func step_technical_gates(dt: float) -> void:
-	var previous := {}
-	for gate in gates: previous[gate] = gate.angle
-	super(dt)
-	if not field_ready: return
+	var helper := Vector3.INF
+	if survivor and is_instance_valid(survivor.actor):
+		helper = survivor.actor.global_position
+	var bystanders: Array[Vector4] = []
+	for wolf in enemies:
+		if wolf.active and wolf.hp>0:
+			var feet:Vector3=wolf.global_position
+			bystanders.append(Vector4(feet.x,feet.y,feet.z,.39*wolf.size_factor()))
+	nearest_gate = null
+	# Level 1 gates open directly on approach from either side.
+	gate_button.hide()
 	for gate in gates:
-		if not is_equal_approx(gate.angle,previous[gate]):
-			if not moving_gates.has(gate):
-				moving_gates[gate] = true
-				_event("gate",gate.position)
-			if is_equal_approx(gate.angle,PI/2 if gate.target_open else 0.0):
-				moving_gates.erase(gate)
-				_event("gate_latch",gate.position)
+		var previous := gate.angle
+		gate.advance_automatic(dt,actor.global_position,float(layout.actor_radius),helper,bystanders)
+		if gate.interaction_in_range(actor.global_position):
+			nearest_gate = gate
+		if not field_ready or is_equal_approx(gate.angle,previous): continue
+		if not moving_gates.has(gate):
+			moving_gates[gate] = true
+			_event("gate",gate.position)
+		if is_equal_approx(gate.angle,PI/2 if gate.target_open else 0.0):
+			moving_gates.erase(gate)
+			_event("gate_latch",gate.position)
+
+func toggle_nearest_gate() -> void:
+	# Older opening scenes have a manual gate control. This scene's motion
+	# and latch use the approach sensor irrespective of keyboard or touch.
+	pass
 
 func _physics_process(dt: float) -> void:
 	if not field_ready: return
@@ -493,7 +516,7 @@ func _physics_process(dt: float) -> void:
 			rescue_time = .32
 			hurt_time = 0
 			if tracks: tracks.reset_actor(actor)
-			camera.position = actor.position + Vector3(7,11,11)
+			camera.position = actor.position + camera_follow_offset
 			player_hp = MAX_HP
 			player_invulnerability = 2.0
 			for wolf in enemies:
@@ -516,9 +539,10 @@ func _physics_process(dt: float) -> void:
 		_event("equip_"+character_kit.equipped,actor.position)
 	hurt_time = maxf(0.0,hurt_time-dt)
 	rescue_time = maxf(0.0,rescue_time-dt)
-	var recoil := sin(PI*hurt_time/.32)
-	hero_model.rotation.z = -recoil_side*.23*recoil
-	hero_model.rotation.x = -.14*recoil+.18*smoothstep(0,.32,rescue_time)
+	var hit_fraction := hurt_time / RECOIL_SECONDS
+	var recoil := smoothstep(0, .15, 1.0-hit_fraction) * smoothstep(0, .88, hit_fraction)
+	hero_model.rotation.z = -impact_lean.x*.33*recoil
+	hero_model.rotation.x = impact_lean.y*.30*recoil+.18*smoothstep(0,.32,rescue_time)
 	sound.set_listener_position(actor.position)
 	if character_kit.active and character_kit.turn_id != last_turn and not first_physics:
 		_event("swing",actor.position)
@@ -694,7 +718,6 @@ func _refresh_hud_field(danger: bool) -> void:
 	var hint := ""
 	if persist_blocked: hint = persist_error
 	elif reset_time > 0: hint = "Returning to camp…" if camp_active else "Returning to the hearth plot…"
-	elif danger: hint = "Wolves nearby"
 	else:
 		if not camp_active: hint = "Fell pines to build the hearth."
 		elif not inventory.complete(Progress.FIRST): hint = "Bring wood and stone to expand camp."
@@ -711,7 +734,8 @@ func _refresh_hud_field(danger: bool) -> void:
 				hint = "%s  ·  %s" % [Progress.TITLES[id], Progress.price_text(inventory.remaining(id))]
 		if depot.apron.visible and depot.at_apron(actor.position): hint = depot.hint()
 	if settlement_loop and not persist_blocked and reset_time <= 0:
-		hint = settlement_loop.hint(hint,danger)
+		hint = settlement_loop.hint(hint,false)
+	opening_hud.set_threat(danger and not persist_blocked and reset_time <= 0)
 	var notice := str(inventory.carried.values()) + hint
 	if notice == last_notice: return
 	last_notice = notice

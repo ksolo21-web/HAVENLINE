@@ -1,5 +1,6 @@
 shader_type spatial;
 render_mode diffuse_burley, specular_schlick_ggx;
+#include "res://assets/field_world/character_sightline.gdshaderinc"
 uniform vec4 base_color : source_color=vec4(1.0);
 uniform float roughness_value=0.85;
 uniform float metallic_value=0.0;
@@ -13,6 +14,7 @@ varying vec3 world_position;
 float h(vec3 q){q=fract(q*.1031);q+=dot(q,q.yzx+33.33);return fract((q.x+q.y)*q.z);}
 void vertex(){world_position=(MODEL_MATRIX*vec4(VERTEX,1.0)).xyz;}
 void fragment(){
+    if(covers_field_player(world_position, FRAGCOORD.xy, INV_VIEW_MATRIX[2].xyz)){ discard; }
     float g=(h(floor(world_position*detail_scale))-.5)*2.;
     vec3 albedo=base_color.rgb*COLOR.rgb;
     if(use_reference_grain){

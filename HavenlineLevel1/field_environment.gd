@@ -33,6 +33,7 @@ var perimeter_tween: Tween
 var camp_state := -1
 var palette := {}
 var canopy_materials := {}
+var resource_sightline := preload("res://field_resource_sightline.gd").new()
 var seasonal_pines: Array[Node3D] = []
 # Trees on the future storage ground merge with the permanent north/west woodline.
 const SEASONAL_POCKETS := [
@@ -49,6 +50,13 @@ const QUARRY_EDGE := [
 ]
 var snow := ShaderMaterial.new()
 var reveal_tween: Tween
+
+func _process(_delta: float) -> void:
+	if world and world.camera and world.actor:
+		resource_sightline.update(world)
+
+func _exit_tree() -> void:
+	RenderingServer.global_shader_parameter_set("field_player_eye", Vector3.ZERO)
 
 func receiver_position(kind: String) -> Vector2:
 	if kind == "upgrade": return UPGRADE

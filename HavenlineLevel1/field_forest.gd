@@ -2,6 +2,9 @@ extends RefCounted
 
 # Full groves share renderer instances. A nearby pine temporarily uses the
 # identical mesh as a harvest object so its trunk can take individual hits.
+# The tallest near-field crown can project 3.73 m from its roots. Include the
+# cutaway rim and one 0.16 s scan interval at full running speed.
+const LIVE_RADIUS := 5.0
 var world: Node3D
 var records: Array[Dictionary] = []
 var last_scan := Vector3.INF
@@ -70,7 +73,7 @@ func advance(dt: float) -> void:
 		if row.get("occupied",false): continue
 		var at: Transform3D = row.transform
 		var distance := at.origin.distance_squared_to(here)
-		if distance < 18.5 and not is_instance_valid(row.live):
+		if distance < LIVE_RADIUS * LIVE_RADIUS and not is_instance_valid(row.live):
 			var tree = world.add_resource_source(row.id,"wood",Vector2(at.origin.x,at.origin.z),row.variant)
 			tree.global_transform = Transform3D(at.basis.scaled(Vector3.ONE/tree.TREE_SCALE),at.origin)
 			world.field_env.tint_canopy(tree)

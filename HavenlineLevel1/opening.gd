@@ -24,6 +24,8 @@ var persist_error := ""
 var layout: Dictionary
 var actor: CharacterBody3D
 var camera: Camera3D
+const AUTHORED_CAMERA_OFFSET := Vector3(7,11,11)
+var camera_follow_offset := AUTHORED_CAMERA_OFFSET
 var camp_built: Node3D
 var opening_hud: OpeningHUD
 var gate_button: Button
@@ -144,7 +146,7 @@ func _ready() -> void:
 	camera.size = 13.0
 	add_child(camera)
 	camera.current = true
-	camera.position = actor.position + Vector3(7, 11, 11)
+	camera.position = actor.position + camera_follow_offset
 	camera.look_at(actor.position)
 
 	for row in layout.wood_nodes:
@@ -291,7 +293,7 @@ func _physics_process(dt: float) -> void:
 	direction = direction.limit_length()
 	var gait_speed := move_actor(direction, dt)
 	step_technical_gates(dt)
-	camera.position = camera.position.lerp(actor.position + Vector3(7, 11, 11), minf(dt * 8.0, 1.0))
+	camera.position = camera.position.lerp(actor.position + camera_follow_offset, minf(dt * 8.0, 1.0))
 	step_tree(dt)
 	_step_character(dt, gait_speed)
 	if persist_blocked:

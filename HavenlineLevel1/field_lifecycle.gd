@@ -5,6 +5,8 @@ const MiningResources = preload("res://mining_resources.gd")
 const Inventory = preload("res://field_inventory.gd")
 const DROP_LIFETIME_SECONDS := 100.0
 const DROP_CAP := 72
+const VERSION := 2
+const V1_PLAYER_MAX_HP := 4
 var wood_seconds := WOOD_REGROW_SECONDS
 var mining_seconds := MiningResources.REGROW_SECONDS
 var world: Node3D
@@ -77,7 +79,7 @@ func snapshot() -> Dictionary:
 		ground.append([id,d.kind,at.x,at.z,maxf(0.0,DROP_LIFETIME_SECONDS-float(d.age))])
 	var player := {"x":world.actor.position.x,"z":world.actor.position.z,"yaw":world.actor.rotation.y,
 		"hp":world.player_hp,"protection_left":world.player_invulnerability,"fall_left":world.reset_time}
-	return {"version":1,"player":player,"cooling":cooling.duplicate(),"partial":partial.duplicate(),"drops":ground,"serial":world.drop_id,"pack":world.encounters.snapshot()}
+	return {"version":VERSION,"player":player,"cooling":cooling.duplicate(),"partial":partial.duplicate(),"drops":ground,"serial":world.drop_id,"pack":world.encounters.snapshot()}
 
 static func _number(v: Variant) -> bool:
 	return (v is float or v is int) and is_finite(float(v))
@@ -96,7 +98,7 @@ func safe_start() -> Vector3:
 		return Vector3(1.72,0,1.8)
 	return world.point(world.layout.pad_xz)
 
-func _restore_actor(state: Variant) -> void:
+func _restore_actor(state: Variant, version: int = VERSION) -> void:
 	if not state is Dictionary: return
 	var pos:=safe_start()
 	var limit:=float(world.layout.snow_extent_half)-float(world.layout.private_travel_inset)-float(world.layout.actor_radius)
@@ -108,8 +110,9 @@ func _restore_actor(state: Variant) -> void:
 	world.actor.velocity=Vector3.ZERO
 	if _number(state.get("yaw")): world.actor.rotation.y=wrapf(float(state.yaw),-PI,PI)
 	world.player_hp=world.MAX_HP
-	if _number(state.get("hp")) and state.hp==int(state.hp) and state.hp>=0 and state.hp<=world.MAX_HP:
-		world.player_hp=int(state.hp)
+	var recorded_max: int = V1_PLAYER_MAX_HP if version == 1 else world.MAX_HP
+	if _number(state.get("hp")) and state.hp==int(state.hp) and state.hp>=0 and state.hp<=recorded_max:
+		world.player_hp = roundi(float(state.hp) * world.MAX_HP / recorded_max)
 	world.player_invulnerability = 0.0
 	if _number(state.get("protection_left")):
 		world.player_invulnerability = clampf(float(state.protection_left),0.0,2.0)
@@ -118,7 +121,7 @@ func _restore_actor(state: Variant) -> void:
 		world.reset_time = 1.05
 		if _number(state.get("fall_left")) and state.fall_left > 0:
 			world.reset_time = minf(float(state.fall_left),1.05)
-	world.camera.position=pos+Vector3(7,11,11)
+	world.camera.position=pos+world.camera_follow_offset
 	if world.tracks: world.tracks.reset_actor(world.actor)
 
 func _saved_source_kind(id: String, node) -> String:
@@ -130,7 +133,7 @@ func _saved_source_kind(id: String, node) -> String:
 
 func restore(data: Dictionary) -> bool:
 	if data.is_empty(): return true
-	if data.get("version") != 1 or not data.get("cooling") is Dictionary or not data.get("drops") is Array or not data.get("pack") is Dictionary: return false
+	if (data.get("version") != 1 and data.get("version") != VERSION) or not data.get("cooling") is Dictionary or not data.get("drops") is Array or not data.get("pack") is Dictionary: return false
 	if not _number(data.get("serial")) or data.serial < 0 or data.serial != int(data.serial) or data.serial > 9007199254740991: return false
 	if data.cooling.size() > 8192 or data.drops.size() > DROP_CAP: return false
 	for key in data.cooling:
@@ -167,7 +170,7 @@ func restore(data: Dictionary) -> bool:
 			_set_available(entry,false)
 			entry.show_return(float(cooling[id]))
 	for id in world.drops.keys(): world._remove_drop(id)
-	_restore_actor(data.get("player"))
+	_restore_actor(data.get("player"),int(data.version))
 	world.drop_id = int(data.serial)
 	for d in data.drops:
 		if world.inventory.collected.has(d[0]) or d[4]<=0: continue

@@ -6,6 +6,8 @@ signal defeated(at: Vector3)
 const Art = preload("res://field_art.gd")
 const MAX_HEALTH := 3
 const BOSS_HEALTH := 8
+const BITE_DAMAGE := 2
+const BOSS_BITE_DAMAGE := 4
 var is_boss := false
 var spawn_id := 0
 
@@ -18,9 +20,11 @@ func sanctuary_margin() -> float:
 func max_hp() -> int:
 	return BOSS_HEALTH if is_boss else MAX_HEALTH
 
-const WALK_SPEED := 1.18
-const NOTICE_RADIUS := 7.1
-const LEASH := 7.5
+const WALK_SPEED := 1.35
+const CHASE_SPEED := 2.65
+const NOTICE_RADIUS := 14.0
+const LEASH := 20.0
+const STRIKE_START := 2.14
 const BITE_RANGE := 1.52
 const STALK_STOP := 1.66
 const CONTACT_DISTANCE := 1.35
@@ -38,6 +42,7 @@ var surface: MeshInstance3D
 var animator: AnimationPlayer
 var home: Vector3
 var attack_direction := Vector3.FORWARD
+var bite_landed := false
 var flank_sign := 0.0
 var configured := false
 var active := true
@@ -120,8 +125,10 @@ func contact_segment(a: Vector3, b: Vector3, _radius: float = 0.0) -> bool:
 	return not hit_surface.intersect_segment(surface.to_local(a), surface.to_local(b)).is_empty()
 
 func _play(clip: String) -> void:
-	if animator and animator.has_animation(clip) and animator.current_animation != clip:
-		animator.play(clip,.10)
+	if animator and animator.has_animation(clip):
+		animator.speed_scale = CHASE_SPEED / WALK_SPEED if clip == "Walk" and state == "stalk" else 1.0
+		if animator.current_animation != clip:
+			animator.play(clip,.10)
 
 func configure(player: Node3D) -> void:
 	target = player
@@ -154,9 +161,9 @@ func receive_hit(amount: int = 1, impact: Vector3 = Vector3.ZERO) -> bool:
 		timer = .72
 		_play("Fall")
 		defeated.emit(global_position)
-	else:
+	elif state not in ["windup","lunge"]:
 		state = "stagger"
-		timer = .24
+		timer = .18
 		if impact != Vector3.ZERO:
 			_face(impact - global_position,.10)
 		_play("Hurt")
@@ -166,11 +173,20 @@ func _face(direction: Vector3, dt: float) -> void:
 	if direction.length_squared() > .00001:
 		rotation.y = rotate_toward(rotation.y, atan2(direction.x,direction.z), 7.4 * dt)
 
-func _move(direction: Vector3, distance: float, sweep: Callable) -> void:
+func _move(direction: Vector3, distance: float, sweep: Callable) -> bool:
 	var next := global_position + direction * distance
 	next.y = home.y
 	if not sweep.is_valid() or sweep.call(global_position,next):
 		global_position = next
+		return true
+	return false
+
+func _pursue(toward: Vector3, step: float, sweep: Callable) -> void:
+	if _move(toward,step,sweep): return
+	# A blocked wolf skirts its packmate or sanctuary rather than running in place.
+	var side := 1.0 if spawn_id % 2 == 0 else -1.0
+	for angle: float in [.76,-.76,1.48,-1.48]:
+		if _move(toward.rotated(Vector3.UP,angle*side),step,sweep): return
 
 func advance(delta: float, sweep_allowed: Callable = Callable(), player_exposed := true) -> void:
 	if not configured or not active or not is_instance_valid(target): return
@@ -227,31 +243,33 @@ func advance(delta: float, sweep_allowed: Callable = Callable(), player_exposed 
 			attack_direction = toward
 			if timer <= 0.0:
 				state = "lunge"
-				timer = .15
+				timer = .24
+				bite_landed = false
 				_play("Bite")
 		"lunge":
-			_move(attack_direction, minf(2.1*dt,maxf(0.0,distance-CONTACT_DISTANCE-reach_bonus)),sweep_allowed)
+			_move(attack_direction, minf(4.6*dt,maxf(0.0,distance-CONTACT_DISTANCE-reach_bonus)),sweep_allowed)
+			var remaining := target.global_position-global_position
+			remaining.y = 0.0
+			if not bite_landed and player_exposed and remaining.length() <= BITE_RANGE+reach_bonus and (remaining.length_squared() < .01 or remaining.normalized().dot(attack_direction) > .55):
+				bite_landed = true
+				player_hit.emit(BOSS_BITE_DAMAGE if is_boss else BITE_DAMAGE)
 			if timer <= 0.0:
-				var remaining := target.global_position-global_position
-				remaining.y = 0.0
-				if player_exposed and remaining.length() <= BITE_RANGE+reach_bonus and (remaining.length_squared() < .01 or remaining.normalized().dot(attack_direction) > .55):
-					player_hit.emit(2 if is_boss else 1)
 				state = "recover"
-				timer = 1.08
+				timer = .91 if is_boss else .76
 				_play("Idle")
 		_:
 			var to_home := home-global_position
 			to_home.y = 0.0
 			if player_exposed and distance <= NOTICE_RADIUS and target.global_position.distance_to(home) <= LEASH+.55:
 				_face(toward,dt)
-				if distance <= STALK_STOP+reach_bonus+.025:
+				if distance <= STRIKE_START+reach_bonus+.025:
 					state = "windup"
-					timer = .62 if is_boss else .38
+					timer = .45 if is_boss else .28
 					attack_direction = toward
 					_play("Brace")
 				else:
 					state = "stalk"
-					_move(toward, minf(WALK_SPEED*dt,distance-STALK_STOP-reach_bonus),sweep_allowed)
+					_pursue(toward, minf(CHASE_SPEED*dt,distance-STRIKE_START-reach_bonus),sweep_allowed)
 					_play("Walk")
 			elif to_home.length() > .04:
 				state = "return"

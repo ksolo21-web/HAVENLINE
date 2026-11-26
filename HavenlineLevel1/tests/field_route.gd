@@ -8,7 +8,6 @@ var first_tick:=0
 var stage_tick:=0
 var touch_held:=false
 var last_input:=Vector2.ZERO
-var goal_tap_sent:=false
 var camera:Camera3D
 var death_movie:=OS.get_environment("FIELD_QA_DEATH_MOVIE")=="1"
 var render_begun:=false
@@ -113,7 +112,6 @@ func read_field()->Dictionary:
 
 func begin_phase()->void:
  stage_tick=tick
- goal_tap_sent=false
  event("enter",phases[index])
 
 func advance()->void:
@@ -217,12 +215,9 @@ func execute(row:Dictionary)->void:
    if tick-stage_tick>=int(round(float(row.s)*60.)):advance()
   "gate":
    steer(Vector2.ZERO)
-   if goal_tap_sent and tick-stage_tick>30:advance();return
-   if not goal_tap_sent and field.gate_button.visible and field.nearest_gate!=null and field.nearest_gate.gate_id==row.gate:
-    if not field.nearest_gate.target_open:
-     var center:Vector2=field.gate_button.get_global_rect().get_center()
-     touch(3,center,true);touch(3,center,false)
-    goal_tap_sent=true
+   var gate=field.nearest_gate
+   if gate and gate.gate_id==row.gate and gate.target_open and gate.angle>=PI*.49:
+    advance()
   "wait":
    steer(Vector2.ZERO)
    if matches_observation(String(row.test),row):advance()

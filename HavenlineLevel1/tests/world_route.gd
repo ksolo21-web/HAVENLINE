@@ -267,9 +267,7 @@ func execute(row: Dictionary) -> void:
 			if gate and gate.gate_id==row.gate:
 				if gate.target_open and gate.angle>=PI*.49:
 					advance()
-				elif not gate.target_open and field.gate_button.visible and not goal_tap_sent:
-					var center:Vector2=field.gate_button.get_global_rect().get_center()
-					touch(3,center,true);touch(3,center,false);goal_tap_sent=true
+
 		"farm":_farm(row)
 		"buy":
 			var id:String=row.id

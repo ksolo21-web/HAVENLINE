@@ -90,9 +90,8 @@ func run() -> void:
 		var at: Vector3 = gate.global_position
 		world.actor.position = at + outside*1.45
 		await physics_frame
-		gate.request_toggle(world.actor.global_position)
 		for i in 66:
-			gate.advance(1./60.,world.actor.global_position,float(world.layout.actor_radius))
+			world.step_technical_gates(1./60.)
 			await physics_frame
 		var open: bool = gate.angle > 1.56
 		await walk(-outside,80)

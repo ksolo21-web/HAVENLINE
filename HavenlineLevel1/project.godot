@@ -13,6 +13,7 @@ run/main_scene="res://field_opening.tscn"
 window/size/viewport_width=1280
 window/size/viewport_height=720
 window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
 window/handheld/orientation=6
 
 [rendering]
@@ -25,3 +26,14 @@ lights_and_shadows/directional_shadow/soft_shadow_filter_quality=2
 [input_devices]
 pointing/emulate_mouse_from_touch=false
 pointing/emulate_touch_from_mouse=false
+
+[shader_globals]
+
+field_player_feet={
+"type": "vec3",
+"value": Vector3(0, 0, 0)
+}
+field_player_eye={
+"type": "vec3",
+"value": Vector3(0, 0, 0)
+}

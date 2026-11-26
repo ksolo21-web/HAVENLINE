@@ -13,6 +13,7 @@ var run_length := 0.0
 var gait_weight := 0.0
 var moving_weight := 0.0
 var stride_hz := 0.0
+var run_only := false
 
 func bind(visual: Node3D) -> bool:
 	var found := visual.find_children("*", "AnimationPlayer", true, false)
@@ -72,7 +73,7 @@ func observe(planar_speed: float, grounded: bool, dt: float = -1.0) -> void:
 	# Grow cadence and stride together. Blending strides by stick magnitude alone
 	# can briefly slow the feet as the player accelerates through the gait change.
 	var blend_hz := lerpf(BLEND_START / walk_stride, BLEND_END / run_stride, transition)
-	gait_weight = clampf(inverse_lerp(walk_stride, run_stride, speed / blend_hz), 0.0, 1.0)
+	gait_weight = 1.0 if run_only else clampf(inverse_lerp(walk_stride, run_stride, speed / blend_hz), 0.0, 1.0)
 	moving_weight = smoothstep(0.025, 0.45, speed)
 	stride_hz = speed / lerpf(walk_stride, run_stride, gait_weight)
 	tree.set("parameters/walk_rate/scale", stride_hz * walk_length)

@@ -154,6 +154,15 @@ func run() -> void:
 	legacy.erase("player")
 	var prior:Vector3=f.actor.position
 	check("older_snapshot_no_position_keeps_start_state",f.lifecycle.restore(legacy) and f.actor.position==prior)
+	var historical: Dictionary = f.lifecycle.snapshot()
+	historical.version = 1
+	for old_hp: int in [4,3,2,1,0]:
+		historical.player.hp = old_hp
+		historical.player.fall_left = .49 if old_hp == 0 else 0.
+		var expected := roundi(float(old_hp)*f.MAX_HP/4.)
+		check("legacy_v1_hp_%d_migrates_once"%old_hp,f.lifecycle.restore(historical) and f.player_hp==expected and f.lifecycle.snapshot().version==2)
+		var upgraded: Dictionary = JSON.parse_string(JSON.stringify(f.lifecycle.snapshot()))
+		check("version2_reopen_hp_%d_and_fall"%old_hp,f.lifecycle.restore(upgraded) and f.player_hp==expected and (old_hp!=0 or is_equal_approx(f.reset_time,.49)))
 	f.lifecycle._restore_actor({"x":1.0e9,"z":0,"hp":99,"yaw":0.0})
 	check("invalid_saved_position_and_health_recover",f.actor.position==f.lifecycle.safe_start() and f.player_hp==f.MAX_HP)
 	f.lifecycle._restore_actor({"x":10.0,"z":0.0,"hp":2,"yaw":0.0})
