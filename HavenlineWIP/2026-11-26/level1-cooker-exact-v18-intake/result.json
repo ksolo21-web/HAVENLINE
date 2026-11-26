@@ -1,0 +1,67 @@
+{
+  "scope": "Offline fixture-only source check; no model import, station placement, authorizations, material approval or gameplay verified",
+  "cooker_exact_sha256": "1173994824998d02c1d2cfa86ac4f0f7c88381eddc1715d81680a11c68cdcbba",
+  "fixture_knows_art_archive_alias_sha256": "1173994824998d02c1d2cfa86ac4f0f7c88381eddc1715d81680a11c68cdcbba",
+  "legacy_base_revision": "5abfc29f1c3c51bef99247641cf1131581899942",
+  "source_triangles": 251167,
+  "glb_counts": {
+    "nodes": 65,
+    "meshes": 60,
+    "materials": 56,
+    "animations": 0,
+    "images": 5
+  },
+  "current_level1_exact_checked_source": {
+    "opening.gd": "d1a8d6901a8d52a5c5084f19fe429c376800189c46dbeaea9a4012c7a72c59c1",
+    "layout.json": "e3fc7eb561ae7288d4dc77ffc47b05cac924e8bb2dc2b99ec789a33d430f4458",
+    "assets/characters/Character1.glb": "95e4fed3a2778656cdf8b73affd2eb3feda8a32f82f4a0c3f76d90c82633c099",
+    "assets/studio/hearth_trial_02.glb": "35d5529066168834ed87c09e0db6f98bf058f5a75b0175c57e0e78bbc2a70f5a",
+    "resources/cooker_station_interface.gd": "3d714d9375831fe056a59eab85c417066dcd97b97882e7cef1c5c7e1d9d2f38a"
+  },
+  "placement": "No current qualified T05 station anchor, route clearance or sockets supplied. Current center hearth remains protected. Legacy site result cannot be transferred.",
+  "current_hearth_authored_height_target_m": 1.8,
+  "historical_cooker_height_to_current_hearth_target": 0.6654040680991278,
+  "scale_comparisons": {
+    "historical_fit": {
+      "world_xyz_m": [
+        1.09357750415802,
+        1.19772732257843,
+        2.30000019073486
+      ],
+      "height_to_character1_target": 0.68441561290196,
+      "legacy_socket_plane_delta_on_either_z_end_positive_is_overhang_m": -0.19999990463257,
+      "decision": "historical-fit-only-native-current-site-unwitnessed"
+    },
+    "historical_test_+25_percent": {
+      "world_xyz_m": [
+        1.366971880197525,
+        1.4971591532230375,
+        2.875000238418575
+      ],
+      "height_to_character1_target": 0.85551951612745,
+      "legacy_socket_plane_delta_on_either_z_end_positive_is_overhang_m": 0.08750011920928746,
+      "decision": "reject-historical-frozen-depth-envelope"
+    },
+    "match_historical_conveyor_height": {
+      "world_xyz_m": [
+        1.3284787659813755,
+        1.45500004291534,
+        2.7940419435537884
+      ],
+      "height_to_character1_target": 0.8314285959516229,
+      "legacy_socket_plane_delta_on_either_z_end_positive_is_overhang_m": 0.04702097177689413,
+      "decision": "reject-historical-frozen-depth-envelope"
+    },
+    "match_current_hero_height": {
+      "world_xyz_m": [
+        1.5978266473512943,
+        1.75,
+        3.3605314481105015
+      ],
+      "height_to_character1_target": 1.0,
+      "legacy_socket_plane_delta_on_either_z_end_positive_is_overhang_m": 0.3302657240552507,
+      "decision": "reject-historical-frozen-depth-envelope"
+    }
+  },
+  "no_authority_controls": 6
+}

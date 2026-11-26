@@ -1,0 +1,3 @@
+# Exact T05 Cooker history and current Level 1 intake
+
+V18 exact GLB is recoverable and its historical isolated appearance and animation were verified, not the current opening runtime or sale/recipe authority. The old fitted body stood 1.198 m tall, about 68.4% of exact Character 1 target. A 25% blanket increase violates the existing transfer footprint. No modern socket or paid placement has been admitted. The Level 1 center hearth, swim routes, and no-fish scope stay unchanged. No engine, runtime or spending. Exact source packet aa3dc3b4a22aeb3150b213c1c406d00aeb261502e9ad317515fae39a2060dce5.
