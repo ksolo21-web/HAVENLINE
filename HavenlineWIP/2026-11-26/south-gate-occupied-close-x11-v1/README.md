@@ -1,0 +1,5 @@
+# South gate occupied close and clean reload
+
+One isolated interactive Godot 4.7.2 X11 writer and cold process passed. The player entered by ordinary input, stayed grounded, and had no recorded contact with the moving leaf. The angle stayed fixed for three close-target and three reopen-target ticks while the actor remained in the safety zone. The player stepped out and the gate reopened fully by tick 2798. East was inactive as a movement lane but still an active closed gate throughout this tail. Three-phase exits, output seal, raw writer/cold host joins and byte equality with the earlier 326-byte control save were independently replayed. No additional settled-close event or stale replay emitted. Only the test harness's external writer timeout changed from the previous run.
+
+Scope: one South stance, not a test of East occupancy or all collision positions. No sound, art, phone, branch installation or release conclusion. Test-user save data, instance/session identifiers, raw logs, private assets and raw media omitted.
