@@ -1,0 +1,5 @@
+# Detached southwest corner and gate-latch normal-camera checkpoint
+
+Fence: the new one-post corner works as a standalone source topology, not an installed join. It has one 284 mm timber and four concealed sockets, with exact intended seating and no strict opposite-arm crossing. The independent critic held it from native staging: must prove actual neighboring cut/terrain seats, continuous or correctly finished rope at the corner, and reduce or justify its 15,800-triangle prototype cost. The generator reconstructs the exact OBJ; its expected hash is in the source manifest.
+
+Gate: the native original-camera capture after paying for the furnace completed, with 26 route-prefix checks, unchanged ledger and 126 certified material/mesh mounts. All visible differences of 5+ RGB levels are in the bounded hardware region. The South lever high luma increased, while the East lever got darker. Pixel detection is not readability. Independent appearance is not approved and neither asset is installed. No raw private capture or Meshy credits.
