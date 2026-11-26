@@ -1,0 +1,51 @@
+{
+  "a_original_v1_read_unchanged": true,
+  "author_patch": "e88468b70209be294e23a03b5200dcd60d9a69c71116f77637efbd960935efbd",
+  "b_cold_v2_once": true,
+  "b_copied_v1_byte_for_byte": true,
+  "backup_v_verified_unchanged": true,
+  "checks": {
+    "new_cold": 9,
+    "new_earn": 19,
+    "old_read_preserved_a": 1,
+    "old_writer": 17
+  },
+  "engine": "v4.7.2.stable.official.ed1daf0bf",
+  "engine_logs_sha256": {
+    "new-cold": "17cdaf95c9b4c01df5efa11a79f37fce16b7d4480d6c2d4295e7a03bcab13217",
+    "new-earn": "bf440f92ea2d9812729e608a37e5e2a826e2ce7acee49c0fef45bccacc11c877",
+    "new-import": "fc254204d07afa4cc8ccb566b7cd273b25704b676eef32dc627d7cc160807a0f",
+    "old-generate": "5fc4946dfb74cadf7c69ad8e1a4c78fd01aa75168533d99cb9bb12b9eadc06f5",
+    "old-import": "74d5200a90e486824b9551738a42941d1b317abf48b016e29fb9e97225296364",
+    "old-read-a": "81dcd636081e7db01430109ad672a059c2c4db0c621a02fba11305fa7a9ff429"
+  },
+  "functional_assertions_total": 46,
+  "guard_explicit_denials_before_launch": {
+    "backup-as-candidate": "not-direct-nonlink-tmp",
+    "backup-as-old": "not-direct-nonlink-tmp",
+    "candidate-to-old": "wrong-minted-role-path",
+    "different-inode-even-with-valid-marker": "wrong-minted-role-path",
+    "hardlink-child": "nonregular-or-shared-child",
+    "minted-path-but-replaced-directory": "directory-identity-changed",
+    "old-to-candidate": "wrong-minted-role-path",
+    "roles-swapped-at-same-path": "wrong-owner-marker",
+    "same-role-symlink-alias": "not-direct-nonlink-tmp",
+    "upgraded-b-rejected-by-old-router": "wrong-minted-role-path",
+    "wrong-b-digest": "wrong-provenance-digest"
+  },
+  "import_only_diagnostics": {
+    "new-import": 18,
+    "old-import": 18
+  },
+  "no_cross_role_launch": true,
+  "no_raw_profiles_in_result": true,
+  "release_or_production_rollback": false,
+  "scope": "disposable branch selection, not legacy v2 upgrade/downgrade, production namespacing, or old-app test",
+  "source": "11c14a1c41971067c7dc97db69375f720a408f68",
+  "stage": "actual native separate-profile scratch fork",
+  "state_hashes": {
+    "a_preserved_paid_v1_sha256": "0859e89d751745d93dcf2317f386d1c4158a8dad3e7ce2f9188ec146ba335b78",
+    "b_upgraded_v2_sha256": "832e3f09cb5718634de49d89e1e358b70cc5789464612b2ca48ec6dab43bc415",
+    "v_backup_sha256": "0859e89d751745d93dcf2317f386d1c4158a8dad3e7ce2f9188ec146ba335b78"
+  }
+}
