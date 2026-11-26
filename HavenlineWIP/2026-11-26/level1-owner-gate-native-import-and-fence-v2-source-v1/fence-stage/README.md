@@ -1,0 +1,12 @@
+# Owner 33036/33037/33038 one-module native preflight
+
+**Staged only. No renderer, engine import, gameplay run, spending or deployment performed.**
+Candidate exact OBJ 694840c150cbf9150f9e66c5354a7048f3ad23d882913f7d11e6073abc24cdd0, source-only independent seal 1a87e626… . This preview replaces only the paid outer Southwest stock transform. The stock inherited physical source, one transformed panel mount slot, eleven remaining old visual wall controls, four old visual posts, both gate colliders/controllers, pad, camera, lighting and scene remain unchanged. The older nominal arts are controls, not reference approval.
+
+Physical articulated progress is the unchanged detached gold 57-write + 10-cold route; native expected six draws and isolated paid v2 cold save unchanged. Snapshot comparison uses earlier matched authored V3-cap frame only as a superseded same-camera baseline. Signed local bounds require inclusive containment in the old art envelope, not accidental shape equality. Native guards require five imported ordered triangle material surfaces, no emission/textures/overrides, expected per-slot RGB and triangle count (11,904 detail; 19,648 exact whole diagnostic wall/post census). Source OBJ has one contiguous material run per slot, five total; actual native counts are unmeasured here. A mismatch is an explicit rejecting result and does not allow fallback artwork or silent loosening; use an independently guarded import census before changing a failed assumption.
+
+Orientation: mount local +Z is actual exterior World +Z; rail and front-X geometry uses local +Z. Compare all six live captures' front camera cosine strictly .64–.66. Fixed stock (7,11,11) ortho direction means actual front and sign-verified oblique side are in view; no change of actor position under that camera exposes the rear. Rear render and if/how two plain parallel returns near each band read versus the owner's single course are deferred to a separate detached rear artist view. No full perimeter, corners, seams, terminal units, or handset certification.
+
+Root after explicit two locks/lease runs on desktop TTY:
+`bash hvn-l1-fence-owner-33036-v2-native-preflight/tty_capture.sh --sole-renderer-lease "$PWD/hvn-native-visual-smoke-leasefix-v1/desktop-render.lock"`
+Recreate from adjacent sealed baseline/donor/independent packages: `bash stage.sh` in fresh reproduction directory before hashing (staging intentionally refuses replacement of an existing project).
