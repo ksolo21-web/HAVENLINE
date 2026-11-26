@@ -1,0 +1,35 @@
+{
+  "status": "source-inspected; awaiting generated sheets",
+  "scope": "Static raster turnaround reference only; no proof of mesh, rig, or animation",
+  "source": {
+    "path": "/workspace/scratch/9c51da47f878/upload/18617.png",
+    "size": [
+      1229,
+      1536
+    ],
+    "sha256": "d73c3860d5aca2cdf92a7c337c9a720acdda477c08f5b54dd1695dd7f312447c"
+  },
+  "design_anchors": [
+    "Very short, stocky, large-headed chibi adult; approximately 2.4\u20132.5 head heights in source front view",
+    "Warm brown skin, compact textured dark curls, trimmed beard",
+    "Black square glasses with white temples",
+    "Royal-blue winter jacket, orange trim/zip/shoulder tabs, cream fur collar and cuffs, blue hood down on back, navy scarf",
+    "Brown belt and rectangular silver buckle",
+    "ONE brown flap pouch on anatomical RIGHT hip",
+    "Orange mountain-like patch on anatomical LEFT front jacket hem",
+    "Dark trousers with purple front knee pads",
+    "Orange-brown oversized boots, dark soles, cream fur collars"
+  ],
+  "required_checks": [
+    "3 sheets: four cardinal body views, four oblique body views, four hand-detail views",
+    "8 distinct labeled body angles with fixed neutral T-pose and coherent camera orbit",
+    "Front0 pouch viewer-left; rear180 viewer-right; right90 face image-right/near-side pouch; left270 face image-left/pouch naturally occluded",
+    "Hands: 5 separately articulated brown-gloved digits each; four fingers and anatomically plausible thumb, spread without fusion or extras",
+    "Palms forward for body pose; dedicated front/back hand details establish digit count and thumb chirality",
+    "Maintain source head-to-height, torso, trouser, and boot proportions across all angles",
+    "White temple, single pouch, left hem patch, hood, cuffs, knee pad, belt, boot, and clothing continuity",
+    "Inspect full images and actual native crops",
+    "Hash exact reviewed final image bytes; archive append-only, verify concrete fresh published GitHub contents"
+  ],
+  "pass_rule": "Score >=9.5/10 only with every mandatory static check passed; target 9.9. Failed or untested mandatory checks block approval."
+}

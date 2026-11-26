@@ -1,0 +1,36 @@
+{
+  "requirements_sha256": "336b431891e125ce56bae1ca71459d52c0579b4b9446dc789ad71dc164417f98",
+  "source_sha256": "d73c3860d5aca2cdf92a7c337c9a720acdda477c08f5b54dd1695dd7f312447c",
+  "reviewer": "Independent critic agent /root/c1_18617_critic",
+  "scope": "Static raster reference sheets only. No mesh, rig, skinning or motion proof.",
+  "review_id": "critic-hands-r1",
+  "status": "PASS \u2014 DEDICATED HAND STATIC SHEET",
+  "score": 9.9,
+  "reviewed_image": {
+    "path": "renders/character-1-hands-r1.png",
+    "sha256": "3e882d000cb90e59f1bdc0d1cd94748d50dfab2441c538a7ba4badf30d46cfbb",
+    "dimensions": [
+      1254,
+      1254
+    ]
+  },
+  "evidence": [
+    "Full actual image inspected",
+    "reviews/critic-hands-r1-right-palm.png",
+    "reviews/critic-hands-r1-right-back.png",
+    "reviews/critic-hands-r1-left-palm.png",
+    "reviews/critic-hands-r1-left-back.png",
+    "reviews/critic-hands-r1-crop-bounds.json"
+  ],
+  "checks": {
+    "right_palm": "PASS \u2014 four fingers plus thumb at viewer-right",
+    "right_back": "PASS \u2014 four fingers plus thumb at viewer-left",
+    "left_palm": "PASS \u2014 four fingers plus thumb at viewer-left",
+    "left_back": "PASS \u2014 four fingers plus thumb at viewer-right",
+    "separated_anatomy": "PASS \u2014 open gaps, distinct thumb webs, articulated stylized fingers, no extra/fused digits",
+    "surface_identity": "PASS \u2014 clear palm pads/creases versus dorsal knuckles/longitudinal seams",
+    "material_character_continuity": "PASS \u2014 brown leather, cream cuff and blue sleeve consistent with accepted body sheets",
+    "complete_framing_labels": "PASS \u2014 fingertips, thumbs and wrists uncropped; correct labels"
+  },
+  "mandatory_defects_remaining": []
+}

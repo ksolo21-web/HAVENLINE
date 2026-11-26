@@ -1,0 +1,16 @@
+{
+  "review_id": "critic-evidence-correction-001",
+  "reason": "Initial cardinal-r2 native montage reused cardinal-r1 profile-hand positions. R2 moved the profile hands, leaving the initial side crops incomplete. Both profile crop rectangles were recentered; the PNG montage and crop-bounds JSON were regenerated before the cardinal-r2 final verdict was written.",
+  "modified_evidence_only": [
+    "reviews/critic-cardinal-r2-hand-crops.png",
+    "reviews/critic-cardinal-r2-crop-bounds.json"
+  ],
+  "render_and_verdict_modified": false,
+  "current_evidence_sha256": {
+    "reviews/critic-cardinal-r2-hand-crops.png": "9ba4c300f1e796eda9ae39ad20d7a79b307200114cfad96e0acc6b1fed3b9562",
+    "reviews/critic-cardinal-r2-crop-bounds.json": "f617835c5a63acd88baaa31d5ee2ad77c207efe5521b520b597275a4ea9f67fd",
+    "reviews/critic-cardinal-r2-verdict.json": "17f4d705ae89f891034d246814d6dea60fd33bd1e1b24375ea3b53bfb04e10f9"
+  },
+  "approval_binding": "The cardinal-r2 verdict and aggregate visual verdict bind the corrected complete-hand evidence. Earlier staged evidence remains an intermediate archive history entry, not final acceptance evidence.",
+  "freeze_rule": "All current review evidence is now frozen. Any later correction must use a new review ID."
+}

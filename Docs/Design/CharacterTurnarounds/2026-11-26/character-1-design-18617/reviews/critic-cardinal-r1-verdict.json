@@ -1,0 +1,45 @@
+{
+  "review_id": "critic-cardinal-r1",
+  "status": "REPAIR REQUIRED",
+  "score": 8.6,
+  "reviewed_image": {
+    "path": "renders/character-1-cardinal-r1.png",
+    "sha256": "9446d04f92abb5c120aedeb4cc93347e70b2c7ac6460ef746f326cfb8aeb628a",
+    "dimensions": [
+      1254,
+      1254
+    ]
+  },
+  "requirements_sha256": "336b431891e125ce56bae1ca71459d52c0579b4b9446dc789ad71dc164417f98",
+  "source_sha256": "d73c3860d5aca2cdf92a7c337c9a720acdda477c08f5b54dd1695dd7f312447c",
+  "evidence": [
+    "Full original rendered image inspected",
+    "reviews/critic-cardinal-r1-hand-crops.png",
+    "reviews/critic-cardinal-r1-crop-bounds.json"
+  ],
+  "passed": [
+    "Compact large-headed source character visually retained; head-height estimate is only a qualitative identity anchor",
+    "Four labeled cardinal body directions, complete framing and gray studio presentation",
+    "Single right pouch, opposite left hem patch, white glasses temples, coherent face/curls/beard/hood/garments/boots",
+    "Front and rear hand silhouettes each show four fingers plus distinct upper thumb; no extra or fused visible digits"
+  ],
+  "failed": [
+    {
+      "id": "fixed-profile-hand-orientation",
+      "location": "RIGHT90 and LEFT270 near-side hands",
+      "finding": "Both broad palms face the profile camera, turning hands toward each camera rather than preserving the fixed forward-facing palms.",
+      "repair": "Keep arms in the fixed T-pose. Side cameras look along the corresponding arms; use natural hand foreshortening and edge-on palm planes. Overlapping digits are expected in exact side silhouettes."
+    },
+    {
+      "id": "rear-dorsal-hand-identity",
+      "location": "REAR180 both gloves",
+      "finding": "Visible oval padded regions and crease-like curved seams remain too palm-like; rear camera does not establish convincing dorsal glove surfaces.",
+      "repair": "Use unmistakable dorsal knuckle/finger-back seams or padding on rear gloves, preserving exactly four fingers and upper thumb, silhouette, size, cuffs and pose."
+    }
+  ],
+  "preserve": [
+    "Front view as identity and correct-palm anchor",
+    "All source body proportions, palette, clothing, pouch, patch, labels and framing"
+  ],
+  "approval_limit": "This is an intermediate static-raster review. No final freeze, archive, mesh, rig or motion approval."
+}

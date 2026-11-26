@@ -1,0 +1,37 @@
+{
+  "review_id": "critic-cardinal-r2",
+  "status": "PASS \u2014 CARDINAL STATIC SHEET ONLY",
+  "score": 9.8,
+  "reviewed_image": {
+    "path": "renders/character-1-cardinal-r2.png",
+    "sha256": "9423a17e8143e0278205704c6888a00d68a40e3bb5c9d33d4f1b56f7bec15195",
+    "dimensions": [
+      1254,
+      1254
+    ]
+  },
+  "requirements_sha256": "336b431891e125ce56bae1ca71459d52c0579b4b9446dc789ad71dc164417f98",
+  "source_sha256": "d73c3860d5aca2cdf92a7c337c9a720acdda477c08f5b54dd1695dd7f312447c",
+  "evidence": [
+    "Full original rendered image inspected",
+    "reviews/critic-cardinal-r2-hand-crops.png",
+    "reviews/critic-cardinal-r2-crop-bounds.json"
+  ],
+  "mandatory_cardinal_checks": {
+    "source_identity_proportions": "PASS \u2014 visually compact, large-headed, short legs and substantial boots retained; approximate source head-height ratio is an identity anchor, not a precision metric",
+    "four_labeled_angles": "PASS \u2014 FRONT0, RIGHT90 face image-right, REAR180, LEFT270 face image-left",
+    "pouch_patch_handedness": "PASS \u2014 one pouch on anatomical right; orange patch on anatomical left front; correct visibility by direction",
+    "outfit_identity_continuity": "PASS \u2014 face, hair, beard, white glasses temples, hood, scarf, cuffs, belt, knee pads and boots retained",
+    "fixed_t_pose": "PASS \u2014 front/rear arms horizontal and hands thumbs-up; exact side views naturally foreshortened",
+    "digit_counts": "PASS \u2014 readable front/rear hands have four separated fingers and one distinct upper thumb",
+    "palm_dorsal_identity": "PASS \u2014 front palms; rear clear longitudinal dorsal finger-back seams",
+    "whole_body_framing": "PASS \u2014 no cut fingertips, limbs or boots; grounded feet; consistent gray studio"
+  },
+  "r1_defects_retested": {
+    "fixed-profile-hand-orientation": "RESOLVED",
+    "rear-dorsal-hand-identity": "RESOLVED"
+  },
+  "mandatory_defects_remaining": [],
+  "use": "Approved as visual anchor for oblique and dedicated hand-detail sheets.",
+  "approval_limit": "Static cardinal reference approval only. Oblique, dedicated-hand, archive and published-content checks remain pending; no mesh, rig or motion proof."
+}

@@ -1,0 +1,33 @@
+{
+  "requirements_sha256": "336b431891e125ce56bae1ca71459d52c0579b4b9446dc789ad71dc164417f98",
+  "source_sha256": "d73c3860d5aca2cdf92a7c337c9a720acdda477c08f5b54dd1695dd7f312447c",
+  "reviewer": "Independent critic agent /root/c1_18617_critic",
+  "scope": "Static raster reference sheets only. No mesh, rig, skinning or motion proof.",
+  "review_id": "critic-oblique-r1",
+  "status": "PASS \u2014 OBLIQUE STATIC SHEET",
+  "score": 9.8,
+  "reviewed_image": {
+    "path": "renders/character-1-oblique-r1.png",
+    "sha256": "ca83b42b664aa90bda7c83cf65bfa3b96d667969aa186e1a05c95697a8f9ddf4",
+    "dimensions": [
+      1254,
+      1254
+    ]
+  },
+  "evidence": [
+    "Full actual image inspected",
+    "reviews/critic-oblique-r1-hand-crops.png",
+    "reviews/critic-oblique-r1-crop-bounds.json"
+  ],
+  "checks": {
+    "four_distinct_labeled_obliques": "PASS \u2014 front-right45, rear-right135, rear-left225, front-left315",
+    "source_and_cardinal_identity": "PASS \u2014 compact silhouette, head/face/curls, proportions, clothing and boots coherent",
+    "pouch_patch_handedness": "PASS \u2014 single anatomical-right pouch and anatomical-left front patch; visibility changes coherently",
+    "glasses_hood_outfit_continuity": "PASS",
+    "fixed_pose_projection": "PASS \u2014 coherent arms-out pose, upper thumbs, near/far foreshortening",
+    "eight_readable_hand_counts": "PASS \u2014 each has four fingers plus one upper thumb",
+    "palms_dorsal_surfaces": "PASS \u2014 front oblique palms and rear oblique dorsal seams",
+    "complete_framing_and_presentation": "PASS"
+  },
+  "mandatory_defects_remaining": []
+}

@@ -1,0 +1,100 @@
+{
+  "requirements_sha256": "336b431891e125ce56bae1ca71459d52c0579b4b9446dc789ad71dc164417f98",
+  "source_sha256": "d73c3860d5aca2cdf92a7c337c9a720acdda477c08f5b54dd1695dd7f312447c",
+  "reviewer": "Independent critic agent /root/c1_18617_critic",
+  "scope": "Static raster reference sheets only. No mesh, rig, skinning or motion proof.",
+  "review_id": "critic-final-visual-verdict-v1",
+  "status": "PASS \u2014 VISUAL FREEZE ONLY; ARCHIVE AND PUBLISHED CONTENT PENDING",
+  "score": 9.8,
+  "score_method": "Overall visual acceptance is bounded by the weakest accepted component; mandatory failures are not averaged away.",
+  "selected_images": [
+    {
+      "path": "renders/character-1-cardinal-r2.png",
+      "sha256": "9423a17e8143e0278205704c6888a00d68a40e3bb5c9d33d4f1b56f7bec15195",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "score": 9.8
+    },
+    {
+      "path": "renders/character-1-oblique-r1.png",
+      "sha256": "ca83b42b664aa90bda7c83cf65bfa3b96d667969aa186e1a05c95697a8f9ddf4",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "score": 9.8
+    },
+    {
+      "path": "renders/character-1-hands-r1.png",
+      "sha256": "3e882d000cb90e59f1bdc0d1cd94748d50dfab2441c538a7ba4badf30d46cfbb",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "score": 9.9
+    }
+  ],
+  "coverage": {
+    "selected_sheets": 3,
+    "body_angles": [
+      0,
+      45,
+      90,
+      135,
+      180,
+      225,
+      270,
+      315
+    ],
+    "dedicated_hand_views": [
+      "right palm",
+      "right back",
+      "left palm",
+      "left back"
+    ],
+    "readable_body_hands_counted": 12,
+    "profile_near_hands_reviewed_for_natural_foreshortening": 2
+  },
+  "mandatory_static_checks": {
+    "exact_supplied_character_identity": "PASS",
+    "eight_distinct_correct_body_angles_and_labels": "PASS",
+    "single_right_pouch_left_front_hem_patch_white_temples": "PASS",
+    "face_hair_beard_hood_scarf_jacket_belt_trousers_boots_continuity": "PASS",
+    "fixed_neutral_t_pose_grounded_feet_natural_side_occlusion": "PASS",
+    "exactly_four_fingers_plus_thumb_spread_where_physically_visible": "PASS",
+    "four_complete_correctly_labeled_hand_closeups_with_correct_chirality": "PASS",
+    "uncropped_bodies_and_hands_no_extra_limbs_or_floating_parts": "PASS",
+    "independent_full_images_and_native_crop_inspection": "PASS",
+    "native_dimensions_recorded_honestly": "PASS"
+  },
+  "mandatory_visual_defects_remaining": [],
+  "evidence_sha256": {
+    "reviews/critic-cardinal-r1-crop-bounds.json": "bd9feebb71bc21ef17202433b45283054c7529933d4a51c3691bab118ad1d12f",
+    "reviews/critic-cardinal-r1-hand-crops.png": "698e4b58d36ccfa8fadf6d0bc8ebaafb7cdbdf5221aa4af647fc15e60d32f0f0",
+    "reviews/critic-cardinal-r1-verdict.json": "03435048f3f598e4b954e96e4375e1e192099bd0f78677bc4e3f3de6820d8de0",
+    "reviews/critic-cardinal-r2-crop-bounds.json": "f617835c5a63acd88baaa31d5ee2ad77c207efe5521b520b597275a4ea9f67fd",
+    "reviews/critic-cardinal-r2-hand-crops.png": "9ba4c300f1e796eda9ae39ad20d7a79b307200114cfad96e0acc6b1fed3b9562",
+    "reviews/critic-cardinal-r2-verdict.json": "17f4d705ae89f891034d246814d6dea60fd33bd1e1b24375ea3b53bfb04e10f9",
+    "reviews/critic-evidence-correction-001.json": "7ad939935b387ae32ee559ff84f4abaaa4566ecea77b2f7481d4c7f623e0f092",
+    "reviews/critic-hands-r1-crop-bounds.json": "28eacd682d5dd75cbdc9a9537c0b05a37d6c81299706545e10b97c368a8532bf",
+    "reviews/critic-hands-r1-left-back.png": "a9934660f3587e898999c7fd73e81976abf4ad320a5d556a4bd46b5228ce3ab4",
+    "reviews/critic-hands-r1-left-palm.png": "6a3a889df779fdc1eec882d382f726be2ac3ed92195e927523c2912c0eda85d4",
+    "reviews/critic-hands-r1-right-back.png": "59166a6f0302502a24564ad23b6813da73f04cb0159ce195e642ac3b3340400d",
+    "reviews/critic-hands-r1-right-palm.png": "a668e865d586c8bba7d7e132aad8f044788466718858e4e371f02472182210cf",
+    "reviews/critic-hands-r1-verdict.json": "ebe1ba69c4f4cb6adbcca9cf694ace5448f5ffde677f083b21be1db83dc0e48d",
+    "reviews/critic-oblique-r1-crop-bounds.json": "011a40ac2db05cfda10d11ac2354f5af0bb81f621791bf8f95bc5afd12483980",
+    "reviews/critic-oblique-r1-hand-crops.png": "d6429c8d6c9e1172d76700c9ec8614c651361b471978ff14d83a9374488bd00a",
+    "reviews/critic-oblique-r1-verdict.json": "12415abd9bd567443cbd4036050a33ee5c3c272da7f09c9c736086d60d23fd93",
+    "reviews/critic-requirements-check.json": "a94000bdff3fb785cda382f081863eff3b87b7db4f5a797bce29a26e41a82af9",
+    "reviews/critic-source-audit.json": "8d0134fea936962776ea7fc290e969646daa27850df9d9fe45bcf6c3f3a5ebd7"
+  },
+  "archive_checks": "PENDING \u2014 all originals/repairs/prompts/inputs/evidence, append-only branch/prefix, baseline preservation, fresh remote exact-blob readback.",
+  "limitations": [
+    "Generated multi-angle raster references are not a mathematically derived camera orbit of a native mesh.",
+    "These static views do not establish a working mesh, skinned rig or animation.",
+    "No remote publication approval is implied by this visual-only freeze."
+  ],
+  "freeze_rule": "This verdict is immutable. Any subsequently discovered defect requires a new superseding verdict and explicit repair/retest."
+}

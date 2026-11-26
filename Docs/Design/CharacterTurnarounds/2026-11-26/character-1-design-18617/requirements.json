@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-26",
+  "task": "Havenline Character 1 supplied-design 18617 turnaround",
+  "user_request": "lets do the same 360 view of this character 1 design",
+  "deliverable_type": "Static multi-angle PNG reference sheets",
+  "source_authority": "Exact supplied image upload/18617.png, SHA256 d73c3860d5aca2cdf92a7c337c9a720acdda477c08f5b54dd1695dd7f312447c",
+  "repository": "ksolo21-web/HAVENLINE",
+  "base_commit": "26bb649e0a8090c9c9af7e91e62f384fc86372d8",
+  "base_tree": "55a829d09dfb11bf28d83515e37fddbad1323978",
+  "branch": "art/character-1-2026-11-26",
+  "prefix": "Docs/Design/CharacterTurnarounds/2026-11-26/character-1-design-18617",
+  "selected_sheet_count": 3,
+  "body_view_count": 8,
+  "hand_detail_view_count": 4,
+  "sheets": [
+    {
+      "id": "character-1-cardinal",
+      "views": [
+        "front 0",
+        "anatomical right 90",
+        "rear 180",
+        "anatomical left 270"
+      ]
+    },
+    {
+      "id": "character-1-oblique",
+      "views": [
+        "front-right 45",
+        "rear-right 135",
+        "rear-left 225",
+        "front-left 315"
+      ]
+    },
+    {
+      "id": "character-1-hands",
+      "views": [
+        "right palm",
+        "right back",
+        "left palm",
+        "left back"
+      ]
+    }
+  ],
+  "identity_lock": [
+    "Exact compact chibi adult silhouette, roughly 2.4 to 2.5 head-heights, oversized rounded head, compact torso, very short legs and substantial boots",
+    "Warm brown skin, short textured dark-brown curls, trimmed beard and moustache, large friendly eyes, black square glasses with white temple arms",
+    "Royal-blue winter jacket with orange zipper, hem and shoulder tabs; cream shearling collar and cuffs; dark navy scarf; blue hood resting on back",
+    "Brown utility belt, rectangular silver front buckle, one brown flap pouch with silver fastener on anatomical RIGHT hip",
+    "Small orange mountain-like jacket hem patch on anatomical LEFT front, opposite the pouch",
+    "Dark navy trousers, muted purple knee pads, orange-brown boots with dark soles, metal fasteners and cream shearling collars"
+  ],
+  "pose_and_hands": {
+    "pose": "Fixed neutral full T-pose, arms horizontal, legs slightly apart, feet grounded; only camera changes across body views",
+    "adaptation": "Replace the source's smooth mitten/nub hands with brown five-digit gloves: four separated fingers and one distinct opposed thumb per hand, comfortably spread",
+    "body_hand_orientation": "Palms forward in the fixed T-pose, fingers fan outward along the horizontal arms, thumbs separated on the UPPER side. Preserve physical hand orientation through camera rotation; dorsal hands face the rear camera and exact side views have natural edge-on foreshortening.",
+    "coverage": "Front/rear and readable obliques must show separated digits; exact side profiles retain physically natural foreshortening/occlusion. Dedicated palm/back closeups prove all five digits on each hand without forcing impossible visibility in side silhouettes.",
+    "upright_hand_detail_chirality": "With fingers up and wrist down: RIGHT PALM thumb viewer-RIGHT; RIGHT BACK thumb viewer-LEFT; LEFT PALM thumb viewer-LEFT; LEFT BACK thumb viewer-RIGHT. Four long fingers plus one thumb, not five long fingers plus a thumb."
+  },
+  "angle_convention": "Orbit from front toward anatomical right: RIGHT90 profile faces image-right and presents near-side pouch. LEFT270 faces image-left and pouch can be occluded. Front pouch viewer-left; rear pouch viewer-right. Camera changes do not mirror or move the pouch, patch, glasses arms or hands.",
+  "presentation": "Polished stylized 3D matching exact supplied character design, light-gray studio presentation consistent with the latest approved turnaround batch, soft shadows and readable tactile materials. Short unobtrusive angle labels. No extra characters or props.",
+  "mandatory_acceptance": [
+    "All three selected sheets preserve this exact supplied short-stocky character identity and proportions",
+    "Eight distinct correct body angles cover the full horizontal rotation; labels match actual views",
+    "Pouch remains on anatomical right, hem patch on anatomical left front, and white glasses arms remain consistent",
+    "Face, curls, beard, hood, scarf, jacket trim, belt, trousers, knee pads and boots remain coherent across views",
+    "A fixed neutral T-pose and grounded feet are preserved with natural side-view occlusion",
+    "Each glove has exactly four separated fingers and one distinct thumb; spread digits are clear wherever physically visible",
+    "Four dedicated hand closeups show all digits uncropped, with correct palm/back identity and thumb chirality",
+    "Whole bodies are uncropped, full arm span and fingertips fit, no extra limbs, fused digits or floating parts",
+    "Separate critic inspects actual full images and native closeups, passes every mandatory static check at least 9.5/10, aiming 9.9",
+    "All generated originals and repairs, exact prompts, ordered input hashes, attachment and review evidence are preserved in GitHub",
+    "Native returned dimensions are recorded honestly; static references do not imply a native mesh, skinned rig or animation test",
+    "Only a new additive art branch/prefix is published; all 4463 baseline files are preserved and active game work is untouched",
+    "Fresh remote branch, commit and untruncated tree readback proves the exact selected and original image blobs are saved"
+  ],
+  "milestones": [
+    {
+      "id": 1,
+      "name": "Inspect source and lock reference requirements",
+      "status": "COMPLETE"
+    },
+    {
+      "id": 2,
+      "name": "Generate, independently review and repair three sheets",
+      "status": "IN_PROGRESS",
+      "depends_on": [
+        1
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Verify complete additive archive package",
+      "status": "PENDING",
+      "depends_on": [
+        2
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Publish and verify exact GitHub content",
+      "status": "PENDING",
+      "depends_on": [
+        3
+      ]
+    }
+  ],
+  "scope_boundary": "This is a reference render task. No Meshy credits, native mesh edits, rigging, animations, runtime scale changes, scene integration or workflow changes are part of this batch.",
+  "requirements_revision": 2,
+  "supersedes_requirements_sha256": "d58d65df13e21e76e7d0b29d18ba79a2998a43f5e1ef99bc47b63c415e1fcd8f",
+  "revision_reason": "Independent preflight caught reversed thumb chirality in v1. Corrected the hand anatomy without changing the character identity, sheet scope or publication requirements. The first actual prompt/invocation is retained unchanged against v1."
+}
