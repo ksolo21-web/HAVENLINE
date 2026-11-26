@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T00:15:26Z",
+  "observed_at_utc": "2026-11-26T00:17:10Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -21,11 +21,11 @@
       "id": "character-1",
       "role": "Rigging and independent review",
       "state": "in_progress",
-      "result": "Selected the original game-ready rig as the base, not its rejected gait. An isolated stance solved ground contact and the fastener issue, but the ankle-to-shin transition still deforms; no accepted gait.",
+      "result": "Rejected both the stock walk/run and the isolated boot-transition repair. Planted feet alone did not prevent boot mesh intersections.",
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/11ced1d317d79e328901ec99efe662cb9204eed6"
       ],
-      "next": "Test the whole boot-to-shin deformation region with original shape and locked trim, soles, and toes. The two-handed pose is separate."
+      "next": "Build one fresh, detached rig on known Character 1 art instead of tuning the old auto-rig. Preserve appearance and scale; prove real heel-to-toe gait and a distinct two-hand contact test before install."
     },
     {
       "id": "wood-storage",
