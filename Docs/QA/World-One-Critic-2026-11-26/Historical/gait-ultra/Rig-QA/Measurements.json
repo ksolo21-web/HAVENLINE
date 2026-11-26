@@ -1,0 +1,885 @@
+{
+  "candidate": "v4",
+  "scope": "Character 1 forward walk/run including player turn. Local skinned surface, actual independent gameplay camera and actual in-engine movement route.",
+  "method": "Weld vertices at 1e-5 m to disregard topological neighbours. Remove T-pose overlap pairs. Sweep all remaining triangles at 120 Hz plus final frame. Exposure rays use original orthographic camera direction, three actor headings and a 1.5 mm surface tolerance, so grazing or near-surface folds can be flagged. Counts are triangle pairs, not visible separate defects.",
+  "previous_asset_sha256": "52330f41218a86c6fd3a8bca9f8a29d7d36394d09a8410dae1c124aba5533943",
+  "previous_surface_maximum": {
+    "Idle": 84,
+    "Walk": 414,
+    "Run": 444
+  },
+  "previous_rhythm": {
+    "Idle": {
+      "duration": 1.0,
+      "rotation_ranges_deg_yaw_pitch_roll": {
+        "Pelvis": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "Chest": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "Head": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "lateral_height_forward_pelvis_motion_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "arm_travel_z_m": 0.0005,
+      "same_side_arm_foot_forward_pearson": null,
+      "feet": {
+        "L": {
+          "grounded_snapshots": 120,
+          "support_patch_velocity_mps_median": 0.0,
+          "support_patch_velocity_p10_p90": [
+            0.0,
+            0.0
+          ]
+        },
+        "R": {
+          "grounded_snapshots": 120,
+          "support_patch_velocity_mps_median": 0.0,
+          "support_patch_velocity_p10_p90": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    "Run": {
+      "duration": 0.6,
+      "rotation_ranges_deg_yaw_pitch_roll": {
+        "Pelvis": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "Chest": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "Head": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "lateral_height_forward_pelvis_motion_m": [
+        0.036,
+        0.045,
+        0.0
+      ],
+      "arm_travel_z_m": 0.1576,
+      "same_side_arm_foot_forward_pearson": 0.186,
+      "feet": {
+        "L": {
+          "grounded_snapshots": 35,
+          "support_patch_velocity_mps_median": -2.054,
+          "support_patch_velocity_p10_p90": [
+            -2.155,
+            -1.981
+          ]
+        },
+        "R": {
+          "grounded_snapshots": 35,
+          "support_patch_velocity_mps_median": -2.061,
+          "support_patch_velocity_p10_p90": [
+            -2.155,
+            -1.985
+          ]
+        }
+      }
+    },
+    "Walk": {
+      "duration": 0.8,
+      "rotation_ranges_deg_yaw_pitch_roll": {
+        "Pelvis": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "Chest": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "Head": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "lateral_height_forward_pelvis_motion_m": [
+        0.036,
+        0.0292,
+        0.0
+      ],
+      "arm_travel_z_m": 0.0883,
+      "same_side_arm_foot_forward_pearson": -0.255,
+      "feet": {
+        "L": {
+          "grounded_snapshots": 62,
+          "support_patch_velocity_mps_median": -1.058,
+          "support_patch_velocity_p10_p90": [
+            -1.083,
+            -0.956
+          ]
+        },
+        "R": {
+          "grounded_snapshots": 62,
+          "support_patch_velocity_mps_median": -1.058,
+          "support_patch_velocity_p10_p90": [
+            -1.083,
+            -0.956
+          ]
+        }
+      }
+    }
+  },
+  "iterations": {
+    "v2": {
+      "sha256": "0287d239d54609ca08149e23515f2b46076fe366b8943ba919b2652930ee5cbc",
+      "new_intersecting_triangle_pairs_peak": {
+        "Idle": 79,
+        "Walk": 333,
+        "Run": 692
+      },
+      "walk_run_floor_mm": {
+        "Walk": [
+          1.51,
+          1.51
+        ],
+        "Run": [
+          2.65,
+          2.59
+        ]
+      },
+      "hand_foot_opposition_r": {
+        "Walk": -0.967,
+        "Run": -0.742
+      },
+      "peak_count_pose_exposure": {
+        "Walk": {
+          "time": 0.7166666666666667,
+          "longest_exposed_segment_mm": {
+            "right": 28.13,
+            "right toward": 4.45,
+            "half-away right": 25.23
+          }
+        },
+        "Run": {
+          "time": 0.05,
+          "longest_exposed_segment_mm": {
+            "right": 22.76,
+            "right toward": 2.91,
+            "half-away right": 22.76
+          }
+        }
+      }
+    },
+    "v3": {
+      "sha256": "56a31a07db572502c4a3f59e4e775658d824218f044d2b06847182650db4e7cf",
+      "new_intersecting_triangle_pairs_peak": {
+        "Idle": 23,
+        "Walk": 224,
+        "Run": 581
+      },
+      "walk_run_floor_mm": {
+        "Walk": [
+          1.51,
+          1.51
+        ],
+        "Run": [
+          2.51,
+          2.45
+        ]
+      },
+      "hand_foot_opposition_r": {
+        "Walk": -0.964,
+        "Run": -0.747
+      },
+      "peak_count_pose_exposure": {
+        "Walk": {
+          "time": 0.35833333333333334,
+          "longest_exposed_segment_mm": {
+            "right": 0,
+            "right toward": 8.83,
+            "half-away right": 1.21
+          }
+        },
+        "Run": {
+          "time": 0.11666666666666667,
+          "longest_exposed_segment_mm": {
+            "right": 6.45,
+            "right toward": 8.13,
+            "half-away right": 13.97
+          }
+        }
+      }
+    },
+    "v4": {
+      "sha256": "e52ac41ad523d89da65f095a074a8e27125816bd2505f2486600ed2d63cab45d",
+      "new_intersecting_triangle_pairs_peak": {
+        "Idle": 11,
+        "Walk": 109,
+        "Run": 394
+      },
+      "walk_run_floor_mm": {
+        "Walk": [
+          1.5,
+          1.5
+        ],
+        "Run": [
+          3.77,
+          3.76
+        ]
+      },
+      "hand_foot_opposition_r": {
+        "Walk": -0.967,
+        "Run": -0.751
+      },
+      "peak_count_pose_exposure": {
+        "Walk": {
+          "time": 0.05,
+          "longest_exposed_segment_mm": {
+            "right": 1.28,
+            "right toward": 2.17,
+            "half-away right": 6.42
+          }
+        },
+        "Run": {
+          "time": 0.125,
+          "longest_exposed_segment_mm": {
+            "right": 14.66,
+            "right toward": 2.08,
+            "half-away right": 14.66
+          }
+        }
+      }
+    },
+    "v5": {
+      "sha256": "1f19c822c78016996213ae28a68b96adfaf350900e0f4393e02ab266dd7c31a3",
+      "new_intersecting_triangle_pairs_peak": {
+        "Idle": 11,
+        "Walk": 109,
+        "Run": 455
+      },
+      "walk_run_floor_mm": {
+        "Walk": [
+          1.5,
+          1.5
+        ],
+        "Run": [
+          3.77,
+          3.76
+        ]
+      },
+      "hand_foot_opposition_r": {
+        "Walk": -0.967,
+        "Run": -0.751
+      },
+      "peak_count_pose_exposure": {
+        "Walk": {
+          "time": 0.05,
+          "longest_exposed_segment_mm": {
+            "right": 1.28,
+            "right toward": 2.17,
+            "half-away right": 6.42
+          }
+        },
+        "Run": {
+          "time": 0.125,
+          "longest_exposed_segment_mm": {
+            "right": 14.66,
+            "right toward": 2.08,
+            "half-away right": 14.66
+          }
+        }
+      }
+    },
+    "v6": {
+      "sha256": "7ef2a95138dde08b08596d2ab7bc11cd2d7c7837d7286eeb16a445613610aaa6",
+      "new_intersecting_triangle_pairs_peak": {
+        "Idle": 12,
+        "Walk": 105,
+        "Run": 416
+      },
+      "walk_run_floor_mm": {
+        "Walk": [
+          1.5,
+          1.5
+        ],
+        "Run": [
+          3.77,
+          3.76
+        ]
+      },
+      "hand_foot_opposition_r": {
+        "Walk": -0.967,
+        "Run": -0.751
+      },
+      "peak_count_pose_exposure": {
+        "Walk": {
+          "time": 0.05,
+          "longest_exposed_segment_mm": {
+            "right": 1.26,
+            "right toward": 2.16,
+            "half-away right": 6.42
+          }
+        },
+        "Run": {
+          "time": 0.125,
+          "longest_exposed_segment_mm": {
+            "right": 14.66,
+            "right toward": 2.44,
+            "half-away right": 14.66
+          }
+        }
+      }
+    }
+  },
+  "current_asset": {
+    "sha256": "e52ac41ad523d89da65f095a074a8e27125816bd2505f2486600ed2d63cab45d",
+    "source_sha256": "b18b2c6eca6e376359706de8cd542259a788cbd17e437f9bad53a850ee2abe93",
+    "height_m": 1.75,
+    "joints": {
+      "Root": 0,
+      "Pelvis": 4698,
+      "Spine": 2967,
+      "Chest": 2931,
+      "Neck": 0,
+      "Head": 7607,
+      "Clavicle.L": 0,
+      "UpperArm.L": 1155,
+      "Forearm.L": 1321,
+      "Hand.L": 511,
+      "Index1.L": 0,
+      "Index2.L": 10,
+      "Index3.L": 0,
+      "Middle1.L": 0,
+      "Middle2.L": 19,
+      "Middle3.L": 11,
+      "Ring1.L": 0,
+      "Ring2.L": 12,
+      "Ring3.L": 14,
+      "Little1.L": 0,
+      "Little2.L": 45,
+      "Little3.L": 43,
+      "Thumb1.L": 0,
+      "Thumb2.L": 0,
+      "Clavicle.R": 0,
+      "UpperArm.R": 1263,
+      "Forearm.R": 1290,
+      "Hand.R": 507,
+      "Index1.R": 0,
+      "Index2.R": 10,
+      "Index3.R": 0,
+      "Middle1.R": 0,
+      "Middle2.R": 18,
+      "Middle3.R": 8,
+      "Ring1.R": 0,
+      "Ring2.R": 13,
+      "Ring3.R": 20,
+      "Little1.R": 0,
+      "Little2.R": 46,
+      "Little3.R": 38,
+      "Thumb1.R": 0,
+      "Thumb2.R": 0,
+      "Thigh.L": 2764,
+      "Shin.L": 1623,
+      "Foot.L": 1418,
+      "Toe.L": 75,
+      "Thigh.R": 3101,
+      "Shin.R": 1584,
+      "Foot.R": 1388,
+      "Toe.R": 83
+    },
+    "clips": {
+      "Idle": {
+        "duration": 1.0,
+        "samples": 121,
+        "feet": {
+          "L": {
+            "min_max_sole_y_m": [
+              -0.0,
+              -0.0
+            ],
+            "low_at_s": 0.0,
+            "high_at_s": 0.0,
+            "forefoot_weighted_vertices": 75,
+            "toe_minus_heel_y_m": [
+              -0.0008999999845400453,
+              -0.0008999999845400453
+            ],
+            "stance_xz_track_span_m": [
+              0.06013000011444092,
+              0.06013000011444092
+            ]
+          },
+          "R": {
+            "min_max_sole_y_m": [
+              -0.0,
+              -0.0
+            ],
+            "low_at_s": 0.0,
+            "high_at_s": 0.0,
+            "forefoot_weighted_vertices": 83,
+            "toe_minus_heel_y_m": [
+              -0.0008999999845400453,
+              -0.0008999999845400453
+            ],
+            "stance_xz_track_span_m": [
+              0.06004000082612038,
+              0.06004000082612038
+            ]
+          }
+        },
+        "loop_max_vertex_offset_mm": 0.0,
+        "both_feet_above_1cm_percent": 0.0,
+        "root_displacement": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "seam_speed_error_over_peak": 0.10968,
+        "ankle_separation_m": [
+          0.324,
+          0.324
+        ]
+      },
+      "Run": {
+        "duration": 0.73333,
+        "samples": 90,
+        "feet": {
+          "L": {
+            "min_max_sole_y_m": [
+              0.0037700000684708357,
+              0.10711999982595444
+            ],
+            "low_at_s": 0.00833,
+            "high_at_s": 0.45,
+            "forefoot_weighted_vertices": 75,
+            "toe_minus_heel_y_m": [
+              -0.22883999347686768,
+              0.026839999482035637
+            ],
+            "stance_xz_track_span_m": [
+              -0.30838000774383545,
+              0.4073199927806854
+            ]
+          },
+          "R": {
+            "min_max_sole_y_m": [
+              0.003759999992325902,
+              0.10711999982595444
+            ],
+            "low_at_s": 0.375,
+            "high_at_s": 0.08333,
+            "forefoot_weighted_vertices": 83,
+            "toe_minus_heel_y_m": [
+              -0.22883999347686768,
+              0.026510000228881836
+            ],
+            "stance_xz_track_span_m": [
+              -0.30897000432014465,
+              0.40751001238822937
+            ]
+          }
+        },
+        "loop_max_vertex_offset_mm": 0.00062,
+        "both_feet_above_1cm_percent": 15.55556,
+        "root_displacement": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "seam_speed_error_over_peak": 0.58867,
+        "ankle_separation_m": [
+          0.326,
+          0.33816
+        ]
+      },
+      "Walk": {
+        "duration": 0.93333,
+        "samples": 114,
+        "feet": {
+          "L": {
+            "min_max_sole_y_m": [
+              0.001500000013038516,
+              0.08072999864816666
+            ],
+            "low_at_s": 0.00833,
+            "high_at_s": 0.71667,
+            "forefoot_weighted_vertices": 75,
+            "toe_minus_heel_y_m": [
+              -0.10239999741315842,
+              0.03443000093102455
+            ],
+            "stance_xz_track_span_m": [
+              -0.23061999678611755,
+              0.3408699929714203
+            ]
+          },
+          "R": {
+            "min_max_sole_y_m": [
+              0.001500000013038516,
+              0.08072999864816666
+            ],
+            "low_at_s": 0.475,
+            "high_at_s": 0.25,
+            "forefoot_weighted_vertices": 83,
+            "toe_minus_heel_y_m": [
+              -0.10239999741315842,
+              0.03401000052690506
+            ],
+            "stance_xz_track_span_m": [
+              -0.23095999658107758,
+              0.34097999334335327
+            ]
+          }
+        },
+        "loop_max_vertex_offset_mm": 0.00039,
+        "both_feet_above_1cm_percent": 0.0,
+        "root_displacement": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "seam_speed_error_over_peak": 0.41022,
+        "ankle_separation_m": [
+          0.326,
+          0.33216
+        ]
+      }
+    },
+    "weight_range": [
+      1.0,
+      1.0
+    ]
+  },
+  "anatomy_and_seam": {
+    "Idle": {
+      "support_motion_mps_median": {
+        "L": 0,
+        "R": 0
+      },
+      "knee_offset_from_projected_hip_ankle_line_m": {
+        "L": [
+          -0.0006610762510515511,
+          -0.0006610762510515511
+        ],
+        "R": [
+          -0.0006610762510515511,
+          -0.0006610762510515511
+        ]
+      },
+      "max_seam_velocity_delta_mps": 0.0007586200920752514,
+      "peak_internal_velocity_delta_mps": 0.0007485963726743285,
+      "max_point_speed_mps": 0.0069169410076622626,
+      "first_key_s": 0.0,
+      "maximum_surface_coverage_rate_hz": 120
+    },
+    "Run": {
+      "support_motion_mps_median": {
+        "L": -2.553327083587647,
+        "R": -2.545284032821664
+      },
+      "knee_offset_from_projected_hip_ankle_line_m": {
+        "L": [
+          0.002642213976581903,
+          0.01451780384120202
+        ],
+        "R": [
+          0.002639940410354036,
+          0.014517297295045334
+        ]
+      },
+      "max_seam_velocity_delta_mps": 0.8208302272922813,
+      "peak_internal_velocity_delta_mps": 1.5149840158779724,
+      "max_point_speed_mps": 4.502872452537032,
+      "first_key_s": 0.0,
+      "maximum_surface_coverage_rate_hz": 120
+    },
+    "Walk": {
+      "support_motion_mps_median": {
+        "L": -1.0777446627616867,
+        "R": -1.0738487541675605
+      },
+      "knee_offset_from_projected_hip_ankle_line_m": {
+        "L": [
+          0.003660615890633656,
+          0.0089901749553781
+        ],
+        "R": [
+          0.0036424922308355423,
+          0.008990211635611867
+        ]
+      },
+      "max_seam_velocity_delta_mps": 0.45153034297406347,
+      "peak_internal_velocity_delta_mps": 0.8643197372077225,
+      "max_point_speed_mps": 3.159019138960403,
+      "first_key_s": 0.0,
+      "maximum_surface_coverage_rate_hz": 120
+    }
+  },
+  "source_geometry_and_textures": {
+    "source_vertices": 17844,
+    "candidate_vertices": 17849,
+    "source_unique": 12656,
+    "candidate_unique": 12656,
+    "max_deviation_after_scale_floor_and_center_m": 1.3348812510944096e-07,
+    "source_images": [
+      "cf48864c654144b20eb4d2336e5e8dde598a6bccb580568cdfd750b0e5f262aa",
+      "5de1f03efa1690c043f21d2d454c3ea49dfff18da9ed2cd85da821e48be272d3",
+      "3b5aed26f044df30375860c282f52097bdd3ff5df3f6317489a7958751d9c3e1"
+    ],
+    "candidate_images": [
+      "3b5aed26f044df30375860c282f52097bdd3ff5df3f6317489a7958751d9c3e1",
+      "cf48864c654144b20eb4d2336e5e8dde598a6bccb580568cdfd750b0e5f262aa",
+      "5de1f03efa1690c043f21d2d454c3ea49dfff18da9ed2cd85da821e48be272d3"
+    ],
+    "height_scale": 1.839835524559021,
+    "triangle_counts": [
+      25264,
+      25264
+    ]
+  },
+  "rhythm_and_material_stance_speed": {
+    "Idle": {
+      "duration": 1.0,
+      "rotation_ranges_deg_yaw_pitch_roll": {
+        "Pelvis": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "Chest": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "Head": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "lateral_height_forward_pelvis_motion_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "arm_travel_z_m": 0.0005,
+      "same_side_arm_foot_forward_pearson": null,
+      "feet": {
+        "L": {
+          "grounded_snapshots": 120,
+          "support_patch_velocity_mps_median": 0.0,
+          "support_patch_velocity_p10_p90": [
+            0.0,
+            0.0
+          ]
+        },
+        "R": {
+          "grounded_snapshots": 120,
+          "support_patch_velocity_mps_median": 0.0,
+          "support_patch_velocity_p10_p90": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    "Run": {
+      "duration": 0.7333,
+      "rotation_ranges_deg_yaw_pitch_roll": {
+        "Pelvis": [
+          16.035,
+          0.52,
+          7.587
+        ],
+        "Chest": [
+          17.771,
+          1.654,
+          5.401
+        ],
+        "Head": [
+          3.204,
+          1.397,
+          1.306
+        ]
+      },
+      "lateral_height_forward_pelvis_motion_m": [
+        0.0639,
+        0.0518,
+        0.0
+      ],
+      "arm_travel_z_m": 0.3425,
+      "same_side_arm_foot_forward_pearson": -0.751,
+      "feet": {
+        "L": {
+          "grounded_snapshots": 35,
+          "support_patch_velocity_mps_median": -2.653,
+          "support_patch_velocity_p10_p90": [
+            -2.678,
+            -2.173
+          ]
+        },
+        "R": {
+          "grounded_snapshots": 35,
+          "support_patch_velocity_mps_median": -2.653,
+          "support_patch_velocity_p10_p90": [
+            -2.679,
+            -2.173
+          ]
+        }
+      }
+    },
+    "Walk": {
+      "duration": 0.9333,
+      "rotation_ranges_deg_yaw_pitch_roll": {
+        "Pelvis": [
+          12.595,
+          0.44,
+          8.035
+        ],
+        "Chest": [
+          13.033,
+          1.767,
+          4.242
+        ],
+        "Head": [
+          3.201,
+          1.395,
+          1.3
+        ]
+      },
+      "lateral_height_forward_pelvis_motion_m": [
+        0.078,
+        0.028,
+        0.0
+      ],
+      "arm_travel_z_m": 0.372,
+      "same_side_arm_foot_forward_pearson": -0.967,
+      "feet": {
+        "L": {
+          "grounded_snapshots": 73,
+          "support_patch_velocity_mps_median": -1.121,
+          "support_patch_velocity_p10_p90": [
+            -1.13,
+            -1.0
+          ]
+        },
+        "R": {
+          "grounded_snapshots": 73,
+          "support_patch_velocity_mps_median": -1.121,
+          "support_patch_velocity_p10_p90": [
+            -1.132,
+            -1.0
+          ]
+        }
+      }
+    }
+  },
+  "original_cuff_regression_cases": {
+    "Walk": {
+      "far_left": {
+        "initial_pairs": 0,
+        "first_clear_mm_shift_lateral": 0
+      },
+      "far_right": {
+        "initial_pairs": 0,
+        "first_clear_mm_shift_lateral": 0
+      }
+    },
+    "Run": {
+      "far_left": {
+        "initial_pairs": 0,
+        "first_clear_mm_shift_lateral": 0
+      },
+      "far_right": {
+        "initial_pairs": 0,
+        "first_clear_mm_shift_lateral": 0
+      }
+    }
+  },
+  "prior_worst_pose_exposure_mm": {
+    "v3-Walk": {
+      "right": 1.8,
+      "right toward": 6.0,
+      "half-away right": 1.3
+    },
+    "v3-Run": {
+      "right": 21.7,
+      "right toward": 1.5,
+      "half-away right": 21.7
+    },
+    "v2-Walk": {
+      "right": 1.9,
+      "right toward": 0,
+      "half-away right": 0.7
+    },
+    "v2-Run": {
+      "right": 29.7,
+      "right toward": 11.9,
+      "half-away right": 29.7
+    }
+  },
+  "godot_sole_sweep": {
+    "failures": [],
+    "idle": {
+      "gait_mismatches": 0,
+      "lowest_sole_m": -8.72241798788309e-08,
+      "max_yaw_delta_per_tick_deg": 0.0,
+      "median_near_ground_point_speed_m_s": 0.0,
+      "near_ground_vertex_pairs": 9750,
+      "p95_near_ground_point_speed_m_s": 0.0,
+      "settled_steps_per_minute": 0.0,
+      "settled_world_speed_m_s": 0.0,
+      "transition_p95_near_ground_point_speed_m_s": 1.55034307390451
+    },
+    "reverse": {
+      "gait_mismatches": 0,
+      "lowest_sole_m": 0.00117422174662352,
+      "max_yaw_delta_per_tick_deg": 9.20060632146568,
+      "median_near_ground_point_speed_m_s": 0.0193730351747945,
+      "near_ground_vertex_pairs": 820,
+      "p95_near_ground_point_speed_m_s": 0.0504028284922242,
+      "settled_steps_per_minute": 172.898301762507,
+      "settled_world_speed_m_s": 2.80000019073486,
+      "transition_p95_near_ground_point_speed_m_s": 5.41995450854301
+    },
+    "run": {
+      "gait_mismatches": 0,
+      "lowest_sole_m": 0.00117714237421751,
+      "max_yaw_delta_per_tick_deg": 0.0,
+      "median_near_ground_point_speed_m_s": 0.0210104347206652,
+      "near_ground_vertex_pairs": 909,
+      "p95_near_ground_point_speed_m_s": 0.0490258319769055,
+      "settled_steps_per_minute": 172.898352087104,
+      "settled_world_speed_m_s": 2.79999995231628,
+      "transition_p95_near_ground_point_speed_m_s": 2.03449867665768
+    },
+    "tested_sole_vertices": 174,
+    "walk": {
+      "gait_mismatches": 0,
+      "lowest_sole_m": 0.00106938555836678,
+      "max_yaw_delta_per_tick_deg": 10.3132407221662,
+      "median_near_ground_point_speed_m_s": 0.00721437434549443,
+      "near_ground_vertex_pairs": 2986,
+      "p95_near_ground_point_speed_m_s": 0.0722011621110141,
+      "settled_steps_per_minute": 128.238845773849,
+      "settled_world_speed_m_s": 1.11709845066071,
+      "transition_p95_near_ground_point_speed_m_s": 4.82258006930351
+    }
+  }
+}

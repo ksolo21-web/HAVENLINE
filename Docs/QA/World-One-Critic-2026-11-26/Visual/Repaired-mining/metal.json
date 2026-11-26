@@ -1,0 +1,217 @@
+{
+  "kind": "metal",
+  "observed_pick_intersections": [
+    {
+      "hit_world": [
+        141.298553466797,
+        0.815469264984131,
+        -6.16648864746094
+      ],
+      "physics_tick": 40,
+      "tool": "pickaxe",
+      "turn": 1
+    },
+    {
+      "hit_world": [
+        141.270538330078,
+        0.280004054307938,
+        -6.20709896087646
+      ],
+      "physics_tick": 93,
+      "tool": "pickaxe",
+      "turn": 2
+    },
+    {
+      "hit_world": [
+        141.359512329102,
+        0.280004054307938,
+        -6.08827209472656
+      ],
+      "physics_tick": 147,
+      "tool": "pickaxe",
+      "turn": 3
+    },
+    {
+      "hit_world": [
+        141.198455810547,
+        0.280004024505615,
+        -6.31101703643799
+      ],
+      "physics_tick": 466,
+      "tool": "pickaxe",
+      "turn": 9
+    }
+  ],
+  "source": {
+    "drop_ids_and_kinds": [
+      [
+        "metal-1",
+        "metal"
+      ],
+      [
+        "metal-2",
+        "metal"
+      ],
+      [
+        "metal-3",
+        "metal"
+      ]
+    ],
+    "elapsed_between_deplete_and_return_ticks": 300,
+    "source_center": [
+      141.357894897461,
+      0.0,
+      -5.61495971679688
+    ],
+    "source_id": "world1/4/-1/metal/0"
+  },
+  "stage_warp": "Fixture placed actor at genuine seeded coordinates; actual input systems and normal camera remained active.",
+  "stills": {
+    "before": {
+      "bank_available": true,
+      "camera": "/root/HavenlineFieldOpening/@Camera3D@61",
+      "collision": 1,
+      "mesh_scale": 1.0,
+      "physics": 37,
+      "scale_3d": 1.0,
+      "screen_bank_center": [
+        445,
+        363
+      ],
+      "since_depleted_ticks": -1,
+      "size": [
+        1280,
+        720
+      ],
+      "strikes": 0,
+      "tool": "axe",
+      "visible": true
+    },
+    "far-empty": {
+      "bank_available": false,
+      "camera": "/root/HavenlineFieldOpening/@Camera3D@61",
+      "physics": 596,
+      "scale_3d": 1.0,
+      "screen_bank_center": [
+        126,
+        409
+      ],
+      "since_depleted_ticks": -1,
+      "size": [
+        1280,
+        720
+      ],
+      "tool": "axe"
+    },
+    "far-proxy": {
+      "bank_available": true,
+      "camera": "/root/HavenlineFieldOpening/@Camera3D@61",
+      "physics": 882,
+      "scale_3d": 1.0,
+      "screen_bank_center": [
+        126,
+        409
+      ],
+      "since_depleted_ticks": -1,
+      "size": [
+        1280,
+        720
+      ],
+      "tool": "axe"
+    },
+    "restored": {
+      "bank_available": true,
+      "camera": "/root/HavenlineFieldOpening/@Camera3D@61",
+      "collision": 1,
+      "mesh_scale": 1.0,
+      "physics": 447,
+      "scale_3d": 1.0,
+      "screen_bank_center": [
+        504,
+        355
+      ],
+      "since_depleted_ticks": 300,
+      "size": [
+        1280,
+        720
+      ],
+      "strikes": 0,
+      "tool": "pickaxe",
+      "visible": true
+    },
+    "returning": {
+      "bank_available": false,
+      "camera": "/root/HavenlineFieldOpening/@Camera3D@61",
+      "collision": 0,
+      "mesh_scale": 0.537209749221802,
+      "physics": 434,
+      "scale_3d": 1.0,
+      "screen_bank_center": [
+        504,
+        355
+      ],
+      "since_depleted_ticks": 287,
+      "size": [
+        1280,
+        720
+      ],
+      "strikes": 3,
+      "tool": "axe",
+      "visible": true
+    },
+    "spent": {
+      "bank_available": false,
+      "camera": "/root/HavenlineFieldOpening/@Camera3D@61",
+      "collision": 0,
+      "mesh_scale": 0.46000000834465,
+      "physics": 147,
+      "scale_3d": 1.0,
+      "screen_bank_center": [
+        504,
+        355
+      ],
+      "since_depleted_ticks": 0,
+      "size": [
+        1280,
+        720
+      ],
+      "strikes": 3,
+      "tool": "pickaxe",
+      "visible": false
+    },
+    "strike": {
+      "bank_available": true,
+      "camera": "/root/HavenlineFieldOpening/@Camera3D@61",
+      "collision": 1,
+      "mesh_scale": 0.819999992847443,
+      "physics": 40,
+      "scale_3d": 1.0,
+      "screen_bank_center": [
+        504,
+        355
+      ],
+      "since_depleted_ticks": -1,
+      "size": [
+        1280,
+        720
+      ],
+      "strikes": 1,
+      "tool": "pickaxe",
+      "visible": true
+    }
+  },
+  "tests": {
+    "actual MultiMesh is buried during cooldown and rises to its bank position": true,
+    "depleted remote deposit disappears and comes back as far proxy": true,
+    "existing authored bank": true,
+    "next real pick is accepted after return": true,
+    "real loaded surface": true,
+    "subsurface until reveal, then full colliding visible bank": true,
+    "three actual mesh swept pick contacts before depletion": true,
+    "three distinct typed drops at terminal contact": true,
+    "typed token IDs conserved until fresh mining resumes": true,
+    "unavailable and noncolliding through entire five seconds": true,
+    "unworked surface captured before approach": true
+  },
+  "ticks_per_second": 60
+}

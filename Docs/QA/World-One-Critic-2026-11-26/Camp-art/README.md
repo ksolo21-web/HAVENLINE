@@ -1,0 +1,17 @@
+# Storehouse cutaway
+
+The selected organization board shows low framed blue door leaves in the cutaway. Full sliding leaves remain visible in its covered loading panel. On a 610 px-wide rendition of the board, the left blue cutaway door and its frame extend about 60 px vertically (x=195, y=245–305). The nearest left post spans about 150 px (x=64, y=132–282). The approximate apparent ratio is 0.40. In the native orthographic projection the door body to structural post span changed from 1.52/1.88 (0.81) to 0.666/1.88 (0.35). Perspective, snow, door hardware and frame trim affect the precise endpoints. The revised cutaway includes short handled leaves, a low track and less shelving above stored materials. Covered loading retains the full height doors.
+
+[Selected source from the owner's organization board](https://github.com/ksolo21-web/HAVENLINE/blob/30f4f037baf54b24652360c8b6880771e29cc19a/Docs/Design/StructureReferences/2026-11-26/upgradeable-storage-house/selected/storage-house-organization.png)
+
+## Readback
+
+The Godot gameplay scene was launched in a disposable test profile at 960×540. A diagnostic staged the advanced tier using the game's purchase, collection and deposit functions, then positioned the character on the loading apron. The normal and pinch views use the gameplay camera. The detail view uses a separate inspection camera and hides the actor and HUD. The before frames use the former art and the actor stands 0.34 m farther out.
+
+Real ledger balances are wood 6, stone 4, meat 3, coal 5, slate 2 and metal ore 7. In the earlier detail view the shelf hardware and tall doors obscure several balances. In the revised view they sit next to the corresponding header and clear stock and door geometry. For every digit we compared a blank native frame, ordinary depth-tested digits and digits drawn with depth testing disabled. Quantity-visibility.json gives ordinary-visible and ideal-visible pixels per digit in the same small window, counting channel differences above 25/255. All 18 digit/view checks matched their unobstructed pixel masks. This covers the stated profile and camera positions. It does not establish readability for all possible quantities or screen sizes.
+
+Storehouse-tests.log records 16 engine checks including side approaches, room and covered loading transitions, cue edges, tiers, shelves and unpaid collision. Runtime-sha256.txt fingerprints the revised runtime and asset-authoring files.
+
+The board also sections the near-right post beside the coal rack. In the final model that post is 1.19 m tall in cutaway and the full 1.88 m under the roof. A paired check at 1280×720 and 1× zoom toggled only the two physical coal meshes, first with the whole post and then with the sectioned post. Visible pixels attributable to coal in the shelf crop rose from 95 to 214 (+125%). See Coal-surface.json and compare 720p-game-1x.jpg with Post720p-game-1x.jpg. The latter is the final variant. The little printed bay names have limited legibility at normal zoom. The six numeric balances remain more legible than the printed nameplates.
+
+The high-balance regression checks the supported limit. World quantities use exact small numbers and exact integer thousands such as 20k. A trailing plus marks a conservative lower bound (100,001 appears as 100k+). Exactly 1,000,000 appears as 1M. The storage apron HUD lists full integer values, including all unlocked mineral slots. See High-game-1x.jpg and balance-check.log.

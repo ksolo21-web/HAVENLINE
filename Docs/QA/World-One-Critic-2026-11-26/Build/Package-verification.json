@@ -1,0 +1,255 @@
+{
+  "source_commit": "949af6f0916839ac702725cbd7a0a7c3f1033a5a",
+  "scene": "res://field_opening.tscn",
+  "source_manifest_sha256": "cd6e4bf03f21d694bb0307fc84ec57f55c6121d511c5c2011b4312bff89fcc85",
+  "source_files_verified": 237,
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "export_presets_sha256": "c7880dffe1fc33fe7e5097bd5b55a9bd49b5b4ab702add20701844d9cc738687",
+  "packages": {
+    "Havenline-World-One-Review-Linux-x86_64.tar.gz": {
+      "bytes": 149679376,
+      "sha256": "77ee103e971fed60f5a8ead418f37a40391396a9704bdf4489584252338d250a"
+    },
+    "Havenline-World-One-Review-Android-arm64-debug.apk": {
+      "bytes": 150847493,
+      "sha256": "6f161ada42d1ece6c1aae9a9d819d816f9b28429ba83148293492c9c720cd5f2"
+    }
+  },
+  "linux": {
+    "format": "Native x86_64 release ELF with embedded PCK and XDG-isolating Play-Havenline-Review.sh",
+    "archive_elf_sha256": "c13fd97ffd47ba7cc3ba51dd4298f41399a4beee228b14ad7b27398bba88a931",
+    "tested_elf_sha256": "c13fd97ffd47ba7cc3ba51dd4298f41399a4beee228b14ad7b27398bba88a931",
+    "native_exit": "OS window close (WM_DELETE_WINDOW)",
+    "native_game_window_exit": 0,
+    "renderer": [
+      "OpenGL API 4.5 (Core Profile) Mesa 25.0.7-2+deb13u1 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 19.1.7, 256 bits)"
+    ],
+    "native_screenshot": {
+      "name": "Linux-packaged-opening.jpg",
+      "size": [
+        800,
+        450
+      ],
+      "sha256": "f6c43c419f4426f4a80d6769d3278d9438024d5d385a80ab5f5e5e5318617865"
+    },
+    "probe_on_exported_pack": {
+      "checks": {
+        "5-second mineral regrowth": true,
+        "four pickaxe deposits": true,
+        "inventory/coal": true,
+        "inventory/metal": true,
+        "inventory/slate": true,
+        "inventory/stone": true,
+        "packaged art/coal": true,
+        "packaged art/metal": true,
+        "packaged art/slate": true,
+        "packaged axe-field-grip.glb": true,
+        "packaged covered loading has full blue doors": true,
+        "packaged cutaway has its own waist-height doors and track": true,
+        "packaged expedition_shelf.glb": true,
+        "packaged hearth_mark.svg": true,
+        "physical bank/coal": true,
+        "physical bank/metal": true,
+        "physical bank/slate": true,
+        "physical bank/stone": true,
+        "six physically distinct balances": true,
+        "stock opening and native isolated player save": true
+      },
+      "facts": {
+        "mining_types": [
+          "stone",
+          "metal",
+          "coal",
+          "slate"
+        ],
+        "profile": "/tmp/havenline-critic-package/session/data/havenline-critic-trial/Havenline-World-One-Review/world-one",
+        "regrowth_seconds": 5.0,
+        "start_scene": "res://field_opening.tscn"
+      }
+    },
+    "warnings": [
+      "WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver."
+    ],
+    "initial_window_run": "The unarchived executable rendered Linux-packaged-opening.jpg. Its first native-close request exceeded the 60-second diagnostic timeout. The later archive launcher run is the recorded graceful-close result.",
+    "launcher_proof": {
+      "receipt": "Launcher/Linux-launcher-and-movement.json",
+      "sha256": "27a9dc4ae48af2faf39a828d60bf802fd26a01f8cd712ee3ad653131f1f5e5e1",
+      "status": 0,
+      "distance_from_spawn_m": 1.3479181710245567,
+      "close_to_exit_s": 6.16,
+      "leaks": []
+    }
+  },
+  "android": {
+    "application_id": "com.havenline.criticreview",
+    "abi": "arm64-v8a",
+    "version_name": "0.2.0-critic-trial",
+    "variant": "debug review",
+    "advertised_sdk": [
+      "targetSdkVersion:'36'"
+    ],
+    "launcher_activity": "com.godot.game.GodotAppLauncher",
+    "permissions": [],
+    "signature": [
+      "Verified using v1 scheme (JAR signing): false",
+      "Verified using v2 scheme (APK Signature Scheme v2): true",
+      "Verified using v3 scheme (APK Signature Scheme v3): true",
+      "Verified using v3.1 scheme (APK Signature Scheme v3.1): false",
+      "Verified using v4 scheme (APK Signature Scheme v4): false",
+      "Signer #1 certificate SHA-256 digest: b605f0903414da28ac8b22001a1ba62ea3b2d2a61a0321f46e60a04eacaac938"
+    ],
+    "apksigner_exit": 0,
+    "archive_crc_errors": 0,
+    "zipalign_16k_exit": 0,
+    "verified_package_resource_mappings": {
+      "assets/reference_forest/mine-stone.glb": {
+        "entry": "assets/assets/reference_forest/mine-stone.glb.import",
+        "entry_sha256": "876008c67f88d71d81f9f6f3db93807e23aceef3b39529d0fc5d5e4692153522",
+        "resources": {
+          "assets/.godot/imported/mine-stone.glb-2ddbbd868c69be53de22b522efb7fb36.scn": "dc5f83579e1e9199e48fb4aef9b1abbedbf2e84a70c2602e33f3ff215822ba05"
+        }
+      },
+      "assets/field/coal.glb": {
+        "entry": "assets/assets/field/coal.glb.import",
+        "entry_sha256": "89c42e8d789d42f12fc0dfdc9b5454db5ab3d645c866daebb4646d9b8b1fb19d",
+        "resources": {
+          "assets/.godot/imported/coal.glb-ef55f6c6ae42b76290c68dc151b06cd3.scn": "2a58d09cc7c80ff55a517d4c17be2c98033cef2634bf8aa041438e8d2af3a8b8"
+        }
+      },
+      "assets/field/metal.glb": {
+        "entry": "assets/assets/field/metal.glb.import",
+        "entry_sha256": "d9e8a6b10e1de35ac3f31c9ba284be950fa1ed0940bc70f74012f3e2b6480aa3",
+        "resources": {
+          "assets/.godot/imported/metal.glb-0deaf1e28e6681fc06ab4990e85e9b4a.scn": "6cbb29ba10b659c510bafea4d0710cbd9d9b0ee830532920dc084a6c1b51a4e3"
+        }
+      },
+      "assets/field/slate.glb": {
+        "entry": "assets/assets/field/slate.glb.import",
+        "entry_sha256": "9b0c36013598cbb46f0a89e3d1a3695145b3964949df8e25ee51f06551e61c6f",
+        "resources": {
+          "assets/.godot/imported/slate.glb-87b461f39d1f7af68524f4ed776d8670.scn": "b4ec41d31a0edb2c842a26e74261d943815edd5a0c9c2b20821c66162406d7ca"
+        }
+      },
+      "assets/field/coal_0.jpg": {
+        "entry": "assets/assets/field/coal_0.jpg.import",
+        "entry_sha256": "8c38de17be4dd849d76d81abe0eb195159e52f75218c267811758874bed03993",
+        "resources": {
+          "assets/.godot/imported/coal_0.jpg-0d02503c4a0f55db801c1ce8df5e6603.ctex": "47b259d0da8ce198d878a64b802d2106d137c363e9e8e9ccae01d5574c6cbf5d"
+        }
+      },
+      "assets/field/metal_0.jpg": {
+        "entry": "assets/assets/field/metal_0.jpg.import",
+        "entry_sha256": "dbec2525cdd6358989749c6fa2d0332fd15e5b9a553c4e1fc1a77011e0b4aa31",
+        "resources": {
+          "assets/.godot/imported/metal_0.jpg-77d909088664c5213a26594e75124b85.ctex": "9a1b510bdbdb2867f73b4b1d102f3664725e739ba3e697cf0a56217e763e008d"
+        }
+      },
+      "assets/field/slate_0.jpg": {
+        "entry": "assets/assets/field/slate_0.jpg.import",
+        "entry_sha256": "f30836dc14a01b66ec586cdd986f704a8902d42f0f20d978b3bb3fc6736b0d92",
+        "resources": {
+          "assets/.godot/imported/slate_0.jpg-459cc96679efa2d0a8e3beb7682368eb.ctex": "3c725016d860bda0aba7a8b8fa84d72c0c8446544c848aa3450992844fe0e91c"
+        }
+      },
+      "mining_resources.gd": {
+        "entry": "assets/mining_resources.gd.remap",
+        "entry_sha256": "869b9fc39fdbbcf5f4de4710907eab5b5757ef5693128b5fd09d92b2e17c2c34",
+        "resources": {
+          "assets/mining_resources.gdc": "3e87b9e17a06242408a34446095e7a19545b248eca4856a101618bbcf1bf5272"
+        }
+      },
+      "field_opening.tscn": {
+        "entry": "assets/field_opening.tscn.remap",
+        "entry_sha256": "76a78e6dabc37025d0afda3e4464e48e50aed05869c07772517761b51d0c3706",
+        "resources": {
+          "assets/.godot/exported/133200997/export-eff8be0ea101f3ca889f6f0a6d57a938-field_opening.scn": "1b7845dff4a6f7e3e8acb3d7ef0e925ca2f2576e02684dd28dbe41ca6fb5f33d"
+        }
+      },
+      "field_inventory.gd": {
+        "entry": "assets/field_inventory.gd.remap",
+        "entry_sha256": "26d16b294ec0bf1cda86706cfe80621878a72d4bcb5c041d2ae24bcdb1677bb6",
+        "resources": {
+          "assets/field_inventory.gdc": "5018af665ee9c5566ee0a01a997218eb2b1409ed3b7c5d2d924009497b4c2064"
+        }
+      },
+      "field_lifecycle.gd": {
+        "entry": "assets/field_lifecycle.gd.remap",
+        "entry_sha256": "38437e3e6ce8b5b3f095da27e946b0c3092d42d56dd2c71998c2a267ed4b53a2",
+        "resources": {
+          "assets/field_lifecycle.gdc": "6d428cbc8c75a6523957ff8944666b4770f35a1f9c006d5e8d071ebf5230691c"
+        }
+      },
+      "world_landscape.gd": {
+        "entry": "assets/world_landscape.gd.remap",
+        "entry_sha256": "284624b06e7c2570c94f9bc4667fc439837c40a5234dc38b0d58df239a34fb26",
+        "resources": {
+          "assets/world_landscape.gdc": "c7f1627c1b513cfef26aefbd75132b68ee6c4cf2b8cded192e4b12f2da0af5b8"
+        }
+      },
+      "resource_rock.gd": {
+        "entry": "assets/resource_rock.gd.remap",
+        "entry_sha256": "cc025a34869c766fb99f8830a840272dd572d145ebdfd065762c868d8227b502",
+        "resources": {
+          "assets/resource_rock.gdc": "0f583068133af4794a65cda1131eb1ad8d26ba406c3db87f704348ba6068c1d1"
+        }
+      },
+      "field_storage_house.gd": {
+        "entry": "assets/field_storage_house.gd.remap",
+        "entry_sha256": "f77c3a39080196b8c32209b9548beb8528649ea79155ef1397a350b7e9ecff07",
+        "resources": {
+          "assets/field_storage_house.gdc": "0b54debefa3a4429360b8cf31bfcd86b7784578b13d19f1f8d6ea739c85433e0"
+        }
+      },
+      "assets/storage_house/camp_storehouse.glb": {
+        "entry": "assets/assets/storage_house/camp_storehouse.glb.import",
+        "entry_sha256": "6bfbf95c3b951545ef041ba82516f672a074da6a1a3fb43044e01608a954c488",
+        "resources": {
+          "assets/.godot/imported/camp_storehouse.glb-31a2755f93dbbc2082329839dee98bb7.scn": "2c69864364b7bee54d2c4616227d1370da34339e7b3433b0086ed6b7f9f36fb8"
+        }
+      },
+      "field_offer_floor.gd": {
+        "entry": "assets/field_offer_floor.gd.remap",
+        "entry_sha256": "fc3e89e0e21cba52e7c276370aa951a254f9f36190bdfd38b99648b0b1daf987",
+        "resources": {
+          "assets/field_offer_floor.gdc": "ee8bfa864f86dbab82b4f9933dfb1d7899288c2bada35e9dd5c20faf7425ee0f"
+        }
+      },
+      "field_carry.gd": {
+        "entry": "assets/field_carry.gd.remap",
+        "entry_sha256": "db0bc177b43149fe0e1ef77629584797842bcf3589eb32c1d8e023b029715129",
+        "resources": {
+          "assets/field_carry.gdc": "664404c7657b77944d5061687776872692591ec4473403fbbb77cb7d99fac2e9"
+        }
+      },
+      "weapon_orbit.gd": {
+        "entry": "assets/weapon_orbit.gd.remap",
+        "entry_sha256": "9ee8fcd108546a4bcff0d18bb6d3ee3476434c538033dd26fe1169b24b61011b",
+        "resources": {
+          "assets/weapon_orbit.gdc": "889dfc566213c840080db2d88c6fce91ca812d99159351f2c6d07c9c137f185e"
+        }
+      },
+      "assets/tools/axe-field-grip.glb": {
+        "entry": "assets/assets/tools/axe-field-grip.glb.import",
+        "entry_sha256": "28cd7495298c526876916240a1a2165f3708d6c56a13f39031727302d583fc82",
+        "resources": {
+          "assets/.godot/imported/axe-field-grip.glb-646a980abcc3cadd51f9b9cd841370cc.scn": "9a8e76e02d1eb66adfcd3f5352481ba6ea5167c44b714c2d5e306a2addea0070"
+        }
+      },
+      "assets/field_pack/expedition_shelf.glb": {
+        "entry": "assets/assets/field_pack/expedition_shelf.glb.import",
+        "entry_sha256": "79654fadfe5f11b9389bafbc9e137492cde4fd0ac7360ae3e9209f021f474b72",
+        "resources": {
+          "assets/.godot/imported/expedition_shelf.glb-0275777cc39bfb52493b10ab38039f8d.scn": "ab4ce3f2978a8851af03e2f7fe2e9a236ae813d1f96e6524c54f802905a0dd4a"
+        }
+      },
+      "assets/field_camp/hearth_mark.svg": {
+        "entry": "assets/assets/field_camp/hearth_mark.svg.import",
+        "entry_sha256": "b16c9dbbb02ec3c17180f003069385eb5c02dd7783337f6a42c70d5c6df70512",
+        "resources": {
+          "assets/.godot/imported/hearth_mark.svg-3be680dbc6ead1daedc1f310a12c9498.ctex": "35c3803d9863d81e271abe048341450058eafd466d43138e88d56f49d5130ae0"
+        }
+      }
+    },
+    "device_runtime": "Physical Android handset performance and installation unverified."
+  }
+}

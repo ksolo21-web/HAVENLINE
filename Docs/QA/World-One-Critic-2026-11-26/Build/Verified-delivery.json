@@ -1,0 +1,194 @@
+{
+  "source": "949af6f0916839ac702725cbd7a0a7c3f1033a5a",
+  "scene": "res://field_opening.tscn",
+  "reproduce": "Verified 237 files from 949af6f0916839ac702725cbd7a0a7c3f1033a5a in /tmp/hvn-final-source-audit-7rz0t_fl/project",
+  "manifest_files_verified": 237,
+  "manifest_sha256": "cd6e4bf03f21d694bb0307fc84ec57f55c6121d511c5c2011b4312bff89fcc85",
+  "active_checkout_mismatches": [],
+  "baseline_to_successor_audio_identical_files": 61,
+  "exact_audio_equivalence_covers": [
+    "field_audio.gd",
+    "field_encounters.gd",
+    "field_enemy.gd",
+    "field_opening.gd"
+  ],
+  "archive_sha256": {
+    "Havenline-World-One-Review-Linux-x86_64.tar.gz": "77ee103e971fed60f5a8ead418f37a40391396a9704bdf4489584252338d250a",
+    "Havenline-World-One-Review-Android-arm64-debug.apk": "6f161ada42d1ece6c1aae9a9d819d816f9b28429ba83148293492c9c720cd5f2"
+  },
+  "linux_elf": {
+    "file": "Havenline-Review.x86_64",
+    "sha256": "c13fd97ffd47ba7cc3ba51dd4298f41399a4beee228b14ad7b27398bba88a931",
+    "bytes": 196321632,
+    "arch": "ELF64 x86-64"
+  },
+  "linux_launcher": "#!/bin/sh\nset -eu\napp_dir=$(CDPATH= cd -- \"$(dirname -- \"$0\")\" && pwd)\nexport XDG_DATA_HOME=\"${XDG_DATA_HOME:-$HOME/.local/share}/havenline-critic-trial\"\nexec \"$app_dir/Havenline-Review.x86_64\" \"$@\"\n",
+  "apksigner": "Verifies\nVerified using v1 scheme (JAR signing): false\nVerified using v2 scheme (APK Signature Scheme v2): true\nVerified using v3 scheme (APK Signature Scheme v3): true\nVerified using v3.1 scheme (APK Signature Scheme v3.1): false\nVerified using v4 scheme (APK Signature Scheme v4): false\nVerified for SourceStamp: false\nNumber of signers: 1\nSigner #1 certificate DN: CN=Android Debug, O=Android, C=US\nSigner #1 certificate SHA-256 digest: b605f0903414da28ac8b22001a1ba62ea3b2d2a61a0321f46e60a04eacaac938\nSigner #1 certificate SHA-1 digest: cd8ad169ee211ae3885e19a288535269f4c657ae\nSigner #1 certificate MD5 digest: 37ee9bace608f6b8d07c13ff2c4e4c34\nSigner #1 key algorithm: RSA\nSigner #1 key size (bits): 2048\nSigner #1 public key SHA-256 digest: 979bc1bff868922593bb04004adb8b72f4954fac7363c8f57c2f6b4b6e567029\nSigner #1 public key SHA-1 digest: 0d6a657b010ec881b1af0711f16405aafee1c048\nSigner #1 public key MD5 digest: f9c8195c8d5d22e71f95d7b4946a71bb",
+  "alignment_16KiB": "Pass",
+  "apk_badging": [
+    "package: name='com.havenline.criticreview' versionCode='1' versionName='0.2.0-critic-trial' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'",
+    "targetSdkVersion:'36'",
+    "native-code: 'arm64-v8a'"
+  ],
+  "apk_crc_files_verified": 549,
+  "apk_compiled_resources": {
+    "assets/characters/Character1Fresh.glb": {
+      "packed_path": ".godot/imported/Character1Fresh.glb-d0e1661883afd2746cd17d3275dd9947.scn",
+      "compiled_sha256": "bcf30f28c3770371074a993ba68ce29341a1929d0c38f44ccb9ebc8f72b1e8d8",
+      "bytes": 775333
+    },
+    "assets/field/coal.glb": {
+      "packed_path": ".godot/imported/coal.glb-ef55f6c6ae42b76290c68dc151b06cd3.scn",
+      "compiled_sha256": "2a58d09cc7c80ff55a517d4c17be2c98033cef2634bf8aa041438e8d2af3a8b8",
+      "bytes": 35326
+    },
+    "assets/field/slate.glb": {
+      "packed_path": ".godot/imported/slate.glb-87b461f39d1f7af68524f4ed776d8670.scn",
+      "compiled_sha256": "b4ec41d31a0edb2c842a26e74261d943815edd5a0c9c2b20821c66162406d7ca",
+      "bytes": 27427
+    },
+    "assets/field/metal.glb": {
+      "packed_path": ".godot/imported/metal.glb-0deaf1e28e6681fc06ab4990e85e9b4a.scn",
+      "compiled_sha256": "6cbb29ba10b659c510bafea4d0710cbd9d9b0ee830532920dc084a6c1b51a4e3",
+      "bytes": 48502
+    },
+    "assets/studio/hearth_trial_02.glb": {
+      "packed_path": ".godot/imported/hearth_trial_02.glb-4f71d7751f7dcc11b34e2ed52a660888.scn",
+      "compiled_sha256": "13c970c42a7e25b757dfbd9a7070a4d575dc344f8df1423e0aa96a3dc8554a34",
+      "bytes": 23782158
+    },
+    "assets/audio/field_score.wav": {
+      "packed_path": ".godot/imported/field_score.wav-97a86cdcd9e8d40b2222dea03c358e11.sample",
+      "compiled_sha256": "800eddfdf9827c78e8471b89bd8b58d6ce861d48f52618ca21b99975e47f3425",
+      "bytes": 194647
+    },
+    "assets/audio/regrow_stone.wav": {
+      "packed_path": ".godot/imported/regrow_stone.wav-14699aed0523c0330e9849e297c12bfc.sample",
+      "compiled_sha256": "216395930a1fbc7780a482018789bd7b20bd205f8a95a484b8296b7430371366",
+      "bytes": 4943
+    },
+    "assets/audio/impact_stone_1.wav": {
+      "packed_path": ".godot/imported/impact_stone_1.wav-e0334c59b869ff16182de71cdfc8d561.sample",
+      "compiled_sha256": "deda1ebcf4c88e767898771a6fd50bc5b671d4b2b2c4adabc8b04508042808be",
+      "bytes": 5455
+    },
+    "assets/audio/impact_stone_2.wav": {
+      "packed_path": ".godot/imported/impact_stone_2.wav-2023aef2e006bdf3258789be01cc3e25.sample",
+      "compiled_sha256": "edafff4c1f2f0ea0ca84a515f9680b4d3b1b86a70d1a0439bf5582de64bd8315",
+      "bytes": 5455
+    },
+    "assets/audio/threat_score.wav": {
+      "packed_path": ".godot/imported/threat_score.wav-8ecbf8616718975b76659497b689d323.sample",
+      "compiled_sha256": "fe22148bba1efe148a7ab65328026312a49b932d036143bc5ce6151122d5b9f0",
+      "bytes": 258923
+    },
+    "assets/audio/camp_score.wav": {
+      "packed_path": ".godot/imported/camp_score.wav-dd8a935298f2c16ac241b13a8eac80d4.sample",
+      "compiled_sha256": "8214dabe14c2958c0682dbce421cb8ec3c6d83ffc4232d17bc28cc85b8ca1878",
+      "bytes": 258923
+    },
+    "assets/audio/fire.wav": {
+      "packed_path": ".godot/imported/fire.wav-db81e8e0e860cb4dd4a93b1ef835abf8.sample",
+      "compiled_sha256": "700f2136504c574cd36903e1aed28abaa9bd1e8e233873ee5824098dd0e8ee2d",
+      "bytes": 39247
+    },
+    "assets/audio/wind.wav": {
+      "packed_path": ".godot/imported/wind.wav-26bd3f95e99896071b625821c2f0df7a.sample",
+      "compiled_sha256": "7d1aea18681c418d9d5bcbd254195a22641578bfd680debdb5f23af1295683a9",
+      "bytes": 39247
+    },
+    "field_opening.tscn": {
+      "packed_path": ".godot/exported/133200997/export-eff8be0ea101f3ca889f6f0a6d57a938-field_opening.scn",
+      "compiled_sha256": "1b7845dff4a6f7e3e8acb3d7ef0e925ca2f2576e02684dd28dbe41ca6fb5f33d",
+      "bytes": 695
+    }
+  },
+  "adb_independent_port": "* daemon not running; starting now at tcp:5047\n* daemon started successfully\nList of devices attached",
+  "physical_android_device": false,
+  "primary_reference_media": [
+    {
+      "id": "A",
+      "has_audio_in_original": false,
+      "sha256": "62f7cfe644de3826cfdd6d91bc23c0ab8d9e4fde3e175c90f762e604547bb0ca",
+      "full_original_available_here": false
+    },
+    {
+      "id": "B",
+      "has_audio_in_original": true,
+      "sha256": "4c9051cbea6df0efa3e7288b13b6d17da46e857274869b0b43d2f96ff6cc79d2",
+      "full_original_available_here": false
+    }
+  ],
+  "verified_retained_visual_reference_cells": 41,
+  "verified_retained_reference_audio_tracks": 0,
+  "shared_mining_README_links": {
+    "Metal-ore-five-second-return.mp4": "Resolved locally",
+    "Mining-camera-comparison.jpg": "Resolved locally",
+    "Independent-mining-review.md": "Resolved locally",
+    "World-survey.json": "Resolved locally",
+    "Mineral-art/Reference-and-native.jpg": "Resolved locally",
+    "Build/README.md": "Resolved locally",
+    "Mining-return.json": "Resolved locally",
+    "Inventory/README.md": "Resolved locally",
+    "Native-suite-results.json": "Resolved locally",
+    "../world-one/Gameplay/World-One-Gameplay.mp4": "Resolved locally",
+    "../world-one/Independent-review.md": "Resolved locally",
+    "../world-one/Task-plan-review.md": "Resolved locally",
+    "https://github.com/ksolo21-web/HAVENLINE/blob/9069cf42964adb85aa5a2f58b1ff3a5ad9a9ae8b/Docs/Production/APPROVAL_INVALIDATIONS.json": "Pinned Git object exists"
+  },
+  "linux_native_independent_observation": {
+    "source_of_run": "Packaging agent recorded two normal native windows on this final package. This reviewer examined their logs, hashed the archive/embedded ELF/screenshot files, and decoded the before/after frames rather than launching a duplicate concurrent renderer.",
+    "normal_window_close_receipt": {
+      "launcher": "Play-Havenline-Review.sh",
+      "input": "Focus game window, hold physical D key for ten wall seconds through XTest on an isolated Xorg display, release, wait, then send WM_DELETE_WINDOW.",
+      "exit": 0,
+      "distance_from_spawn_m": 1.3479181710245567,
+      "saved_player": {
+        "fall_left": 0.0,
+        "hp": 4,
+        "protection_left": 0.0,
+        "x": 1.2382287979126,
+        "yaw": 2.13752555847168,
+        "z": 5.46739053726196
+      },
+      "close_to_exit_s": 6.16,
+      "profile_path_inside_private_XDG": "havenline-critic-trial/Havenline-World-One-Review/world-one/field-inventory-v1.json",
+      "files": {
+        "Havenline-World-One-Review-Linux-x86_64.tar.gz": "77ee103e971fed60f5a8ead418f37a40391396a9704bdf4489584252338d250a",
+        "Packaged-start.jpg": "50b4c6b0ff7c17e6de1df128c008618102583c197eb64c69984f6c1e04eb547c",
+        "Packaged-after-movement.jpg": "48788da764cb477711b8312952b72a8289f8f573865173f8d4c00b81f79be336"
+      },
+      "native_resolution": [
+        704,
+        396
+      ],
+      "warnings": [
+        "WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver."
+      ],
+      "leaks": [],
+      "renderer": "OpenGL API 4.5 (Core Profile) Mesa 25.0.7-2+deb13u1 - Compatibility - Using Device: Mesa - llvmpipe (LLVM 19.1.7, 256 bits)"
+    },
+    "rgb_mean_absolute_change": [
+      29.74168890610652,
+      30.56566732667585,
+      27.06155303030303
+    ],
+    "other_window_closed_normally": true,
+    "other_tested_elf_sha256": "c13fd97ffd47ba7cc3ba51dd4298f41399a4beee228b14ad7b27398bba88a931"
+  },
+  "android_resource_tool_diagnostic": {
+    "warning": "warn: resource com.godot.game:mipmap/themed_icon for config 'anydpi-v26' is a file reference to 'res/mipmap-anydpi-v26/themed_icon.xml' but no such path exists.",
+    "active_application_icon": "res/mipmap-anydpi-v26/icon.xml; its foreground, background and monochrome elements exist. Legacy aapt dump badging returned nonzero; aapt2 successfully decoded manifest/activity and primary adaptive icon. The unused themed_icon table path is still flagged. Android 13+ themed-launcher behavior is untested on hardware."
+  },
+  "ratings_out_of_ten": {
+    "source_and_package_identity": 9.8,
+    "linux_playable_desktop_delivery": 9.5,
+    "android_package_integrity": 9.6,
+    "graceful_desktop_shutdown": 9.5,
+    "shared_handoff_links_after_correction": 9.5,
+    "source_B_soundtrack_similarity": null,
+    "physical_android_4k60_120": null
+  },
+  "rating_scope": "Android grade covers archive integrity, executable ABI, configured launcher, signature and alignment. Linux grade includes recorded normal launched play and verified saved motion. Source rebuild verifies hashes, not an independent bit-identical signed rebuild.",
+  "source_audio_boundary": "A is silent according to the original ledger; B has an audio track but its waveform was unavailable. All three retained signed visual excerpts are silent. Native audio waveform measurements and music-state grades belonged to fa9d3e98, with 61 byte-identical sound inputs in 949af6f; those measurements do not establish soundtrack resemblance or mobile audio latency."
+}

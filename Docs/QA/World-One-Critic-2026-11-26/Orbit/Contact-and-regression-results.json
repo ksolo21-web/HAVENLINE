@@ -1,0 +1,623 @@
+{
+  "qa_world_orbit": {
+    "engine_errors": 0,
+    "result": {
+      "checks": 51,
+      "failures": [],
+      "suite": "world_orbit"
+    }
+  },
+  "qa_mining_return": {
+    "engine_errors": 0,
+    "result": {
+      "checks": {
+        "coal registered in real streamed districts": true,
+        "legacy starter and unloaded quarry restored at five seconds": true,
+        "metal registered in real streamed districts": true,
+        "short saved timers retained": true,
+        "slate registered in real streamed districts": true,
+        "starter-stone both yields enter typed inventory only once": true,
+        "starter-stone first pick contact": true,
+        "starter-stone five playable seconds incl reload": true,
+        "starter-stone one return with original drops": true,
+        "starter-stone one strike restored on real face": true,
+        "starter-stone one typed three-unit yield": true,
+        "starter-stone partial ledger restored": true,
+        "starter-stone restored full collider": true,
+        "starter-stone second fresh three-hit three-unit harvest": true,
+        "starter-stone stored balance unchanged": true,
+        "starter-stone two remaining pick contacts": true,
+        "starter-stone unhittable with collision off until availability": true,
+        "starter-stone visible growing bank before reopening": true,
+        "stone and all three distant minerals catalogued": true,
+        "stone registered in real streamed districts": true,
+        "world1/-7/-7/stone/1 both yields enter typed inventory only once": true,
+        "world1/-7/-7/stone/1 cooldown continues across real streaming": true,
+        "world1/-7/-7/stone/1 first pick contact": true,
+        "world1/-7/-7/stone/1 five playable seconds incl reload": true,
+        "world1/-7/-7/stone/1 one return with original drops": true,
+        "world1/-7/-7/stone/1 one strike restored on real face": true,
+        "world1/-7/-7/stone/1 one typed three-unit yield": true,
+        "world1/-7/-7/stone/1 partial ledger restored": true,
+        "world1/-7/-7/stone/1 restored full collider": true,
+        "world1/-7/-7/stone/1 second fresh three-hit three-unit harvest": true,
+        "world1/-7/-7/stone/1 stored balance unchanged": true,
+        "world1/-7/-7/stone/1 two remaining pick contacts": true,
+        "world1/-7/-7/stone/1 unhittable with collision off until availability": true,
+        "world1/-7/-7/stone/1 unloads partially worked face": true,
+        "world1/-7/-7/stone/1 visible growing bank before reopening": true,
+        "world1/4/-1/metal/0 both yields enter typed inventory only once": true,
+        "world1/4/-1/metal/0 cooldown continues across real streaming": true,
+        "world1/4/-1/metal/0 first pick contact": true,
+        "world1/4/-1/metal/0 five playable seconds incl reload": true,
+        "world1/4/-1/metal/0 one return with original drops": true,
+        "world1/4/-1/metal/0 one strike restored on real face": true,
+        "world1/4/-1/metal/0 one typed three-unit yield": true,
+        "world1/4/-1/metal/0 partial ledger restored": true,
+        "world1/4/-1/metal/0 restored full collider": true,
+        "world1/4/-1/metal/0 second fresh three-hit three-unit harvest": true,
+        "world1/4/-1/metal/0 stored balance unchanged": true,
+        "world1/4/-1/metal/0 two remaining pick contacts": true,
+        "world1/4/-1/metal/0 unhittable with collision off until availability": true,
+        "world1/4/-1/metal/0 unloads partially worked face": true,
+        "world1/4/-1/metal/0 visible growing bank before reopening": true,
+        "world1/6/0/slate/0 both yields enter typed inventory only once": true,
+        "world1/6/0/slate/0 cooldown continues across real streaming": true,
+        "world1/6/0/slate/0 first pick contact": true,
+        "world1/6/0/slate/0 five playable seconds incl reload": true,
+        "world1/6/0/slate/0 one return with original drops": true,
+        "world1/6/0/slate/0 one strike restored on real face": true,
+        "world1/6/0/slate/0 one typed three-unit yield": true,
+        "world1/6/0/slate/0 partial ledger restored": true,
+        "world1/6/0/slate/0 restored full collider": true,
+        "world1/6/0/slate/0 second fresh three-hit three-unit harvest": true,
+        "world1/6/0/slate/0 stored balance unchanged": true,
+        "world1/6/0/slate/0 two remaining pick contacts": true,
+        "world1/6/0/slate/0 unhittable with collision off until availability": true,
+        "world1/6/0/slate/0 unloads partially worked face": true,
+        "world1/6/0/slate/0 visible growing bank before reopening": true,
+        "world1/7/-1/coal/0 both yields enter typed inventory only once": true,
+        "world1/7/-1/coal/0 cooldown continues across real streaming": true,
+        "world1/7/-1/coal/0 first pick contact": true,
+        "world1/7/-1/coal/0 five playable seconds incl reload": true,
+        "world1/7/-1/coal/0 one return with original drops": true,
+        "world1/7/-1/coal/0 one strike restored on real face": true,
+        "world1/7/-1/coal/0 one typed three-unit yield": true,
+        "world1/7/-1/coal/0 partial ledger restored": true,
+        "world1/7/-1/coal/0 restored full collider": true,
+        "world1/7/-1/coal/0 second fresh three-hit three-unit harvest": true,
+        "world1/7/-1/coal/0 stored balance unchanged": true,
+        "world1/7/-1/coal/0 two remaining pick contacts": true,
+        "world1/7/-1/coal/0 unhittable with collision off until availability": true,
+        "world1/7/-1/coal/0 unloads partially worked face": true,
+        "world1/7/-1/coal/0 visible growing bank before reopening": true,
+        "writes legacy mine timers to disposable save": true,
+        "writes short timers to disposable save": true
+      },
+      "evidence": {
+        "starter-stone": {
+          "at": "(-6.0, 0.0, 3.0)",
+          "available_at_tick": 300,
+          "first_yield_ids": [
+            "stone-1",
+            "stone-2",
+            "stone-3"
+          ],
+          "initial_seconds": 5.0,
+          "kind": "stone",
+          "natural_contacts": [
+            1,
+            2
+          ],
+          "restored_before_available": true,
+          "return_mesh_visible": true,
+          "saved_remaining": 3.46666666666667,
+          "streamed_away": false
+        },
+        "world1/-7/-7/stone/1": {
+          "at": "(-201.0791, 0.0, -218.6376)",
+          "available_at_tick": 300,
+          "first_yield_ids": [
+            "stone-13",
+            "stone-14",
+            "stone-15"
+          ],
+          "initial_seconds": 5.0,
+          "kind": "stone",
+          "natural_contacts": [
+            1,
+            2
+          ],
+          "restored_before_available": true,
+          "return_mesh_visible": true,
+          "saved_remaining": 3.46666666666667,
+          "streamed_away": true
+        },
+        "world1/4/-1/metal/0": {
+          "at": "(141.3579, 0.0, -5.61496)",
+          "available_at_tick": 300,
+          "first_yield_ids": [
+            "metal-19",
+            "metal-20",
+            "metal-21"
+          ],
+          "initial_seconds": 5.0,
+          "kind": "metal",
+          "natural_contacts": [
+            1,
+            2
+          ],
+          "restored_before_available": true,
+          "return_mesh_visible": true,
+          "saved_remaining": 3.46666666666667,
+          "streamed_away": true
+        },
+        "world1/6/0/slate/0": {
+          "at": "(202.0679, 0.0, 13.44948)",
+          "available_at_tick": 300,
+          "first_yield_ids": [
+            "slate-40",
+            "slate-41",
+            "slate-42"
+          ],
+          "initial_seconds": 5.0,
+          "kind": "slate",
+          "natural_contacts": [
+            1,
+            2
+          ],
+          "restored_before_available": true,
+          "return_mesh_visible": true,
+          "saved_remaining": 3.46666666666667,
+          "streamed_away": true
+        },
+        "world1/7/-1/coal/0": {
+          "at": "(234.6527, 0.0, -7.720181)",
+          "available_at_tick": 300,
+          "first_yield_ids": [
+            "coal-31",
+            "coal-32",
+            "coal-33"
+          ],
+          "initial_seconds": 5.0,
+          "kind": "coal",
+          "natural_contacts": [
+            1,
+            2
+          ],
+          "restored_before_available": true,
+          "return_mesh_visible": true,
+          "saved_remaining": 3.46666666666667,
+          "streamed_away": true
+        }
+      },
+      "physics_hz": 60
+    }
+  },
+  "qa_tree_return": {
+    "engine_errors": 0,
+    "result": {
+      "checks": {
+        "legacy loaded and unloaded wood capped to five": true,
+        "legacy stone duration capped to five": true,
+        "load prior save": true,
+        "real remote pine selected": true,
+        "starter-wood 5s elapsed": true,
+        "starter-wood natural damaging contacts": true,
+        "starter-wood one three-unit yield": true,
+        "starter-wood return appears before available": true,
+        "starter-wood stored quantities untouched": true,
+        "typed quantities established through inventory API": true,
+        "world1/3/-4/wood/1 5s elapsed": true,
+        "world1/3/-4/wood/1 natural damaging contacts": true,
+        "world1/3/-4/wood/1 one three-unit yield": true,
+        "world1/3/-4/wood/1 return appears before available": true,
+        "world1/3/-4/wood/1 stored quantities untouched": true,
+        "world1/3/-4/wood/1 unload did not restart timer": true
+      },
+      "evidence": {
+        "starter-wood": {
+          "chips": true,
+          "contact_events": 3,
+          "depletion_to_available_ticks": 300,
+          "fall_frame_seconds": 0.72,
+          "fell": true,
+          "game_seconds": 5.0,
+          "loose": 3,
+          "matches_blade_position_and_travel": true,
+          "return_visible": true,
+          "stored": {
+            "coal": 0,
+            "meat": 0,
+            "metal": 0,
+            "slate": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "sway": true,
+          "wall_seconds": 0.195818
+        },
+        "world1/3/-4/wood/1": {
+          "chips": true,
+          "contact_events": 3,
+          "depletion_to_available_ticks": 300,
+          "fall_frame_seconds": 0.72,
+          "fell": true,
+          "game_seconds": 5.0,
+          "loose": 3,
+          "matches_blade_position_and_travel": true,
+          "return_visible": true,
+          "stored": {
+            "coal": 2,
+            "meat": 3,
+            "metal": 6,
+            "slate": 5,
+            "stone": 4,
+            "wood": 7
+          },
+          "sway": true,
+          "wall_seconds": 0.166105
+        }
+      },
+      "physics_hz": 60
+    }
+  },
+  "qa_field_pack_bounds": {
+    "engine_errors": 0,
+    "result": {
+      "cases": [
+        {
+          "logical": 3,
+          "min_headroom": 0.376,
+          "viewport": "(1280, 720)",
+          "visible": {
+            "coal": 3,
+            "meat": 3,
+            "metal": 3,
+            "slate": 3,
+            "stone": 3,
+            "wood": 3
+          },
+          "zoom": 1.0
+        },
+        {
+          "logical": 12,
+          "min_headroom": 0.228,
+          "viewport": "(1280, 720)",
+          "visible": {
+            "coal": 12,
+            "meat": 12,
+            "metal": 12,
+            "slate": 12,
+            "stone": 12,
+            "wood": 12
+          },
+          "zoom": 1.0
+        },
+        {
+          "logical": 37,
+          "min_headroom": 0.101,
+          "viewport": "(1280, 720)",
+          "visible": {
+            "coal": 29,
+            "meat": 37,
+            "metal": 31,
+            "slate": 37,
+            "stone": 23,
+            "wood": 19
+          },
+          "zoom": 1.0
+        },
+        {
+          "logical": 42,
+          "min_headroom": 0.101,
+          "viewport": "(1280, 720)",
+          "visible": {
+            "coal": 29,
+            "meat": 39,
+            "metal": 31,
+            "slate": 42,
+            "stone": 23,
+            "wood": 19
+          },
+          "zoom": 1.0
+        },
+        {
+          "logical": 1000000,
+          "min_headroom": 0.101,
+          "viewport": "(1280, 720)",
+          "visible": {
+            "coal": 29,
+            "meat": 39,
+            "metal": 31,
+            "slate": 54,
+            "stone": 23,
+            "wood": 19
+          },
+          "zoom": 1.0
+        },
+        {
+          "logical": 3,
+          "min_headroom": 0.252,
+          "viewport": "(1280, 720)",
+          "visible": {
+            "coal": 3,
+            "meat": 3,
+            "metal": 3,
+            "slate": 3,
+            "stone": 3,
+            "wood": 3
+          },
+          "zoom": 2.0
+        },
+        {
+          "logical": 12,
+          "min_headroom": 0.101,
+          "viewport": "(1280, 720)",
+          "visible": {
+            "coal": 12,
+            "meat": 12,
+            "metal": 12,
+            "slate": 12,
+            "stone": 10,
+            "wood": 8
+          },
+          "zoom": 2.0
+        },
+        {
+          "logical": 37,
+          "min_headroom": 0.101,
+          "viewport": "(1280, 720)",
+          "visible": {
+            "coal": 13,
+            "meat": 17,
+            "metal": 15,
+            "slate": 24,
+            "stone": 10,
+            "wood": 8
+          },
+          "zoom": 2.0
+        },
+        {
+          "logical": 42,
+          "min_headroom": 0.101,
+          "viewport": "(1280, 720)",
+          "visible": {
+            "coal": 13,
+            "meat": 17,
+            "metal": 15,
+            "slate": 24,
+            "stone": 10,
+            "wood": 8
+          },
+          "zoom": 2.0
+        },
+        {
+          "logical": 1000000,
+          "min_headroom": 0.101,
+          "viewport": "(1280, 720)",
+          "visible": {
+            "coal": 13,
+            "meat": 17,
+            "metal": 15,
+            "slate": 24,
+            "stone": 10,
+            "wood": 8
+          },
+          "zoom": 2.0
+        },
+        {
+          "logical": 3,
+          "min_headroom": 0.376,
+          "viewport": "(720, 1280)",
+          "visible": {
+            "coal": 3,
+            "meat": 3,
+            "metal": 3,
+            "slate": 3,
+            "stone": 3,
+            "wood": 3
+          },
+          "zoom": 1.0
+        },
+        {
+          "logical": 12,
+          "min_headroom": 0.228,
+          "viewport": "(720, 1280)",
+          "visible": {
+            "coal": 12,
+            "meat": 12,
+            "metal": 12,
+            "slate": 12,
+            "stone": 12,
+            "wood": 12
+          },
+          "zoom": 1.0
+        },
+        {
+          "logical": 37,
+          "min_headroom": 0.101,
+          "viewport": "(720, 1280)",
+          "visible": {
+            "coal": 29,
+            "meat": 37,
+            "metal": 31,
+            "slate": 37,
+            "stone": 23,
+            "wood": 19
+          },
+          "zoom": 1.0
+        },
+        {
+          "logical": 42,
+          "min_headroom": 0.101,
+          "viewport": "(720, 1280)",
+          "visible": {
+            "coal": 29,
+            "meat": 39,
+            "metal": 31,
+            "slate": 42,
+            "stone": 23,
+            "wood": 19
+          },
+          "zoom": 1.0
+        },
+        {
+          "logical": 1000000,
+          "min_headroom": 0.101,
+          "viewport": "(720, 1280)",
+          "visible": {
+            "coal": 29,
+            "meat": 39,
+            "metal": 31,
+            "slate": 54,
+            "stone": 23,
+            "wood": 19
+          },
+          "zoom": 1.0
+        },
+        {
+          "logical": 3,
+          "min_headroom": 0.252,
+          "viewport": "(720, 1280)",
+          "visible": {
+            "coal": 3,
+            "meat": 3,
+            "metal": 3,
+            "slate": 3,
+            "stone": 3,
+            "wood": 3
+          },
+          "zoom": 2.0
+        },
+        {
+          "logical": 12,
+          "min_headroom": 0.101,
+          "viewport": "(720, 1280)",
+          "visible": {
+            "coal": 12,
+            "meat": 12,
+            "metal": 12,
+            "slate": 12,
+            "stone": 10,
+            "wood": 8
+          },
+          "zoom": 2.0
+        },
+        {
+          "logical": 37,
+          "min_headroom": 0.101,
+          "viewport": "(720, 1280)",
+          "visible": {
+            "coal": 13,
+            "meat": 17,
+            "metal": 15,
+            "slate": 24,
+            "stone": 10,
+            "wood": 8
+          },
+          "zoom": 2.0
+        },
+        {
+          "logical": 42,
+          "min_headroom": 0.101,
+          "viewport": "(720, 1280)",
+          "visible": {
+            "coal": 13,
+            "meat": 17,
+            "metal": 15,
+            "slate": 24,
+            "stone": 10,
+            "wood": 8
+          },
+          "zoom": 2.0
+        },
+        {
+          "logical": 1000000,
+          "min_headroom": 0.101,
+          "viewport": "(720, 1280)",
+          "visible": {
+            "coal": 13,
+            "meat": 17,
+            "metal": 15,
+            "slate": 24,
+            "stone": 10,
+            "wood": 8
+          },
+          "zoom": 2.0
+        }
+      ],
+      "failures": []
+    }
+  },
+  "moving_contacts_30": [
+    "30Hz walk moving contacts=3 matching movement samples=66",
+    "30Hz run moving contacts=3 matching movement samples=64"
+  ],
+  "moving_contacts_60": [
+    "60Hz walk moving contacts=3 matching movement samples=131",
+    "60Hz run moving contacts=3 matching movement samples=128"
+  ],
+  "moving_contacts_120": [
+    "120Hz walk moving contacts=3 matching movement samples=263",
+    "120Hz run moving contacts=3 matching movement samples=257"
+  ],
+  "native_walking_tree_contacts_1x": [
+    {
+      "chip_anchor": "(-2.054483, 0.878178, 5.961727)",
+      "gait": "walk",
+      "head_position": "(-2.054483, 0.878178, 5.961727)",
+      "strikes": 1,
+      "tick": 30,
+      "tool": "axe",
+      "zoom": 1.0
+    },
+    {
+      "chip_anchor": "(-1.975471, 0.841407, 5.935848)",
+      "gait": "walk",
+      "head_position": "(-1.975471, 0.841407, 5.935848)",
+      "strikes": 2,
+      "tick": 86,
+      "tool": "axe",
+      "zoom": 1.0
+    },
+    {
+      "chip_anchor": "(-2.065247, 0.878178, 5.985245)",
+      "gait": "walk",
+      "head_position": "(-2.065247, 0.878178, 5.985245)",
+      "strikes": 3,
+      "tick": 141,
+      "tool": "axe",
+      "zoom": 1.0
+    }
+  ],
+  "native_walking_tree_contacts_2x": [
+    {
+      "chip_anchor": "(-2.054483, 0.878178, 5.961727)",
+      "gait": "walk",
+      "head_position": "(-2.054483, 0.878178, 5.961727)",
+      "strikes": 1,
+      "tick": 30,
+      "tool": "axe",
+      "zoom": 2.0
+    },
+    {
+      "chip_anchor": "(-1.975471, 0.841407, 5.935848)",
+      "gait": "walk",
+      "head_position": "(-1.975471, 0.841407, 5.935848)",
+      "strikes": 2,
+      "tick": 86,
+      "tool": "axe",
+      "zoom": 2.0
+    },
+    {
+      "chip_anchor": "(-2.065247, 0.878178, 5.985245)",
+      "gait": "walk",
+      "head_position": "(-2.065247, 0.878178, 5.985245)",
+      "strikes": 3,
+      "tick": 141,
+      "tool": "axe",
+      "zoom": 2.0
+    }
+  ]
+}

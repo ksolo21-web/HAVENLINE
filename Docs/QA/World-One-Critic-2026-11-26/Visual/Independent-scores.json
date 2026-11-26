@@ -1,0 +1,364 @@
+{
+  "status": "HOLD",
+  "scene": "res://field_opening.tscn",
+  "baseline": "fa9d3e987859a1e46c2533f94431b4e9cae3a9e5",
+  "candidate": "949af6f0916839ac702725cbd7a0a7c3f1033a5a",
+  "reviewer": "independent field visual critic; no game, art or release implementation",
+  "rubric": {
+    "practical_minimum": 9.5,
+    "required_reference_fidelity": 10,
+    "required_visual_language": 10,
+    "method": "No rounding or average. 10 means no meaningful discrepancy in the locked comparisons; 9.75 means all exercised practical comparisons passed with bounded detail variance; 9.5 means samples match the primary gameplay cues; 9.25 or below records a still-visible deviation from an authored cue. Null means unavailable."
+  },
+  "groups": {
+    "outdoor_snow_and_planting": {
+      "practical": 9.5,
+      "reference_fidelity": 9.5,
+      "visual_language": 9.5,
+      "basis": "Revised snow matches the flat B6 sample within one red code value. Camera, tree planting and free routes read clearly. The approved B canopy has more visibly tiered/scalloped shadow facets.",
+      "evidence": [
+        "Candidate-preview-measurements.json",
+        "Purchase-and-field.jpg"
+      ]
+    },
+    "world_resource_art": {
+      "practical": 9.5,
+      "reference_fidelity": 9.5,
+      "visual_language": 9.5,
+      "basis": "Eight registered side views and two independently replayed seeded banks confirm the ore inclusions and two slate seam orientations. At the normal game camera each is identifiable, depletes on real pick triangles, pays the right family and returns in 300/60 ticks. Slate remains rounder with smoother side ledges and stronger second vein than the 225-degree source.",
+      "evidence": [
+        "Repaired-mining-checks.json",
+        "Repaired-minerals-in-game.jpg",
+        "Mineral-repair-recheck.jpg",
+        "Repaired-mineral-silhouettes.json"
+      ]
+    },
+    "fences_gates_furnace": {
+      "practical": 9.5,
+      "reference_fidelity": 9.5,
+      "visual_language": 9.5,
+      "basis": "Proper lower and upper rail spacing, golden abutting timbers, X and rear straps, compact hardware and flat gate. The native sunny timber is more uniform and the stone furnace faces are darker and less differentiated than the approved inspection render.",
+      "evidence": [
+        "Perimeter-comparison.jpg",
+        "Repaired-perimeter-check.json",
+        "Independent-stills/Repaired-built.png",
+        "Earlier-evidence/Owner-stone-furnace.jpg"
+      ]
+    },
+    "build_plot_transition": {
+      "practical": 9.75,
+      "reference_fidelity": 9.75,
+      "visual_language": 9.75,
+      "basis": "Final marker contains four short detached green arcs, a white fort and a pictured log with its price. Source thick stroke now reads closer. Full projected paint width and price presentation still differ slightly, and there is no exact ad analog for every mixed-material payment.",
+      "evidence": [
+        "Purchase-and-field.jpg",
+        "Baseline-measurements.json",
+        "Candidate-preview-measurements.json",
+        "Baseline-earned-route.json",
+        "Green-bracket-components.json",
+        "Green-bracket-profile.png",
+        "Independent-stills/Final-unpaid-949af6f0.png"
+      ]
+    },
+    "storehouse": {
+      "practical": 9.5,
+      "reference_fidelity": 9.5,
+      "visual_language": 9.5,
+      "basis": "Author-approved low loading-apron slider in the cutaway and separately readable side bays. Tested all six balances in real normal and pinch cameras. Practical matches improved after observable occlusion repair; the real space and exterior decoration differ in detailing from the selected sheets.",
+      "evidence": [
+        "../Camp-art/Source-and-runtime.jpg",
+        "../Camp-art/Repaired-game-1x.jpg",
+        "../Camp-art/Quantity-visibility.json"
+      ]
+    },
+    "backpack_and_transfer": {
+      "practical": 9.5,
+      "reference_fidelity": 9.5,
+      "visual_language": 9.75,
+      "basis": "Bounded tall pile and neat visibly separate resource families; high-load gate, both pinches and 6 sorted shelf identities. Ad B48 only provides the original tall-stack visual behavior; it does not isolate a homologous six-lane load.",
+      "evidence": [
+        "Earlier-evidence/Tall-backpack-source-and-game.jpg",
+        "Earlier-evidence/Backpack-zoom-bounds.json",
+        "Earlier-evidence/Six-family-stock-before.png",
+        "Baseline-earned-route.json"
+      ]
+    },
+    "tree_quarry_furnace_scale": {
+      "practical": 9.5,
+      "reference_fidelity": null,
+      "visual_language": 9.5,
+      "basis": "Hearth footprint is inside normalized B8/10 heat-base range. New quarry and pine measurements come from real geometry at both zooms; the supplied B frames do not isolate the corresponding mineable bank.",
+      "evidence": [
+        "Earlier-evidence/Landmark-projections.json",
+        "Independent-stills/Repaired-built.png",
+        "Purchase-and-field.jpg"
+      ]
+    },
+    "enemy_field_read": {
+      "practical": 9.5,
+      "reference_fidelity": 9.5,
+      "visual_language": 9.5,
+      "basis": "Dark fur, ears and hunched/low body silhouette read against the bright field. Native wolf spans roughly 133 by 94 pixels beside the 87-pixel player in the measured pose. The ad animal is partly obscured and differently colored, so exact ad-relative wolf dimensions are unscored.",
+      "evidence": [
+        "../Orbit/after-1x.jpg",
+        "Purchase-and-field.jpg",
+        "Earlier-evidence/World-one-alpha.jpg"
+      ]
+    },
+    "orbit_scale": {
+      "practical": 9.5,
+      "reference_fidelity": 9.5,
+      "visual_language": 9.75,
+      "basis": "The revised blade and handle fit the native and source head-to-hero ratio ranges, with genuine walking touches at both zooms. The source carries a straighter shaft. The player uses the approved curved wood donor.",
+      "evidence": [
+        "../Orbit/Native-projections.json",
+        "../Orbit/Source-and-game.jpg",
+        "../Orbit/1x-walk-contact-1.jpg",
+        "../Orbit/2x-walk-contact-2.jpg"
+      ]
+    },
+    "normal_and_pinch_camera": {
+      "practical": 9.75,
+      "reference_fidelity": null,
+      "visual_language": null,
+      "basis": "Independent full image readback on the latest scene at 1, 2, 1; all 3840x2160, fixed game camera, internal scale 1.0. Natural actor, pine tiers, moving tools and plot remain recognizable. Camera restoration yields 0.509 of 255 display-code thumbnail mean difference including real game animation. No hardware throughput claim.",
+      "evidence": [
+        "Final-camera-readback.json",
+        "Final-camera-review.jpg",
+        "../Gameplay/closest-camera-4k.jpg",
+        "../Camp-art/Repaired-game-1x.jpg",
+        "../Orbit/after-2x.jpg"
+      ]
+    }
+  },
+  "policy_dimensions_independently_reviewed": {
+    "orbit.reference_fidelity": {
+      "score": 9.5,
+      "evidence": [
+        "../Orbit/Native-projections.json",
+        "../Orbit/Source-and-game.jpg",
+        "../Orbit/1x-walk-contact-1.jpg",
+        "../Orbit/2x-walk-contact-2.jpg"
+      ]
+    },
+    "orbit.visual_language": {
+      "score": 9.75,
+      "evidence": [
+        "../Orbit/Native-projections.json",
+        "../Orbit/Source-and-game.jpg",
+        "../Orbit/1x-walk-contact-1.jpg",
+        "../Orbit/2x-walk-contact-2.jpg"
+      ]
+    },
+    "orbit.reference_scale": {
+      "score": 9.5,
+      "evidence": [
+        "../Orbit/Native-projections.json",
+        "../Orbit/Source-and-game.jpg",
+        "../Orbit/1x-walk-contact-1.jpg",
+        "../Orbit/2x-walk-contact-2.jpg"
+      ]
+    },
+    "field.reference_fidelity": {
+      "score": 9.5,
+      "evidence": [
+        "Repaired-mining-checks.json",
+        "Repaired-minerals-in-game.jpg",
+        "Mineral-repair-recheck.jpg",
+        "Repaired-mineral-silhouettes.json"
+      ]
+    },
+    "field.visual_language": {
+      "score": 9.5,
+      "evidence": [
+        "Repaired-mining-checks.json",
+        "Repaired-minerals-in-game.jpg",
+        "Mineral-repair-recheck.jpg",
+        "Repaired-mineral-silhouettes.json"
+      ]
+    },
+    "field.resource_read": {
+      "score": 9.5,
+      "evidence": [
+        "Repaired-mining-checks.json",
+        "Repaired-minerals-in-game.jpg",
+        "Mineral-repair-recheck.jpg",
+        "Repaired-mineral-silhouettes.json"
+      ]
+    },
+    "boundary.reference_fidelity": {
+      "score": 9.5,
+      "evidence": [
+        "Perimeter-comparison.jpg",
+        "Repaired-perimeter-check.json",
+        "Independent-stills/Repaired-built.png",
+        "Earlier-evidence/Owner-stone-furnace.jpg"
+      ]
+    },
+    "boundary.visual_language": {
+      "score": 9.5,
+      "evidence": [
+        "Perimeter-comparison.jpg",
+        "Repaired-perimeter-check.json",
+        "Independent-stills/Repaired-built.png",
+        "Earlier-evidence/Owner-stone-furnace.jpg"
+      ]
+    },
+    "boundary.two_way_gates": {
+      "score": 10,
+      "evidence": [
+        "Perimeter-comparison.jpg",
+        "Repaired-perimeter-check.json",
+        "Independent-stills/Repaired-built.png",
+        "Earlier-evidence/Owner-stone-furnace.jpg"
+      ]
+    },
+    "purchase.reference_fidelity": {
+      "score": 9.75,
+      "evidence": [
+        "Purchase-and-field.jpg",
+        "Baseline-measurements.json",
+        "Candidate-preview-measurements.json",
+        "Baseline-earned-route.json",
+        "Green-bracket-components.json",
+        "Green-bracket-profile.png",
+        "Independent-stills/Final-unpaid-949af6f0.png"
+      ]
+    },
+    "purchase.visual_language": {
+      "score": 9.75,
+      "evidence": [
+        "Purchase-and-field.jpg",
+        "Baseline-measurements.json",
+        "Candidate-preview-measurements.json",
+        "Baseline-earned-route.json",
+        "Green-bracket-components.json",
+        "Green-bracket-profile.png",
+        "Independent-stills/Final-unpaid-949af6f0.png"
+      ]
+    },
+    "purchase.gameplay_read": {
+      "score": 9.75,
+      "evidence": [
+        "Purchase-and-field.jpg",
+        "Baseline-measurements.json",
+        "Candidate-preview-measurements.json",
+        "Baseline-earned-route.json",
+        "Green-bracket-components.json",
+        "Green-bracket-profile.png",
+        "Independent-stills/Final-unpaid-949af6f0.png"
+      ]
+    },
+    "purchase.purchase_sequence": {
+      "score": 9.75,
+      "evidence": [
+        "Purchase-and-field.jpg",
+        "Baseline-measurements.json",
+        "Candidate-preview-measurements.json",
+        "Baseline-earned-route.json"
+      ]
+    },
+    "storage.reference_fidelity": {
+      "score": 9.5,
+      "evidence": [
+        "../Camp-art/Source-and-runtime.jpg",
+        "../Camp-art/Repaired-game-1x.jpg",
+        "../Camp-art/Quantity-visibility.json"
+      ]
+    },
+    "storage.visual_language": {
+      "score": 9.5,
+      "evidence": [
+        "../Camp-art/Source-and-runtime.jpg",
+        "../Camp-art/Repaired-game-1x.jpg",
+        "../Camp-art/Quantity-visibility.json"
+      ]
+    },
+    "storage.load_and_shelves": {
+      "score": 9.5,
+      "evidence": [
+        "../Camp-art/Source-and-runtime.jpg",
+        "../Camp-art/Repaired-game-1x.jpg",
+        "../Camp-art/Quantity-visibility.json"
+      ]
+    },
+    "storage.ledger_and_transfers": {
+      "score": 9.75,
+      "evidence": [
+        "../Camp-art/Source-and-runtime.jpg",
+        "../Camp-art/Repaired-game-1x.jpg",
+        "../Camp-art/Quantity-visibility.json"
+      ]
+    },
+    "encounter.reference_fidelity": {
+      "score": 9.5,
+      "evidence": [
+        "../Orbit/after-1x.jpg",
+        "Purchase-and-field.jpg",
+        "Earlier-evidence/World-one-alpha.jpg"
+      ]
+    },
+    "encounter.visual_language": {
+      "score": 9.5,
+      "evidence": [
+        "../Orbit/after-1x.jpg",
+        "Purchase-and-field.jpg",
+        "Earlier-evidence/World-one-alpha.jpg"
+      ]
+    },
+    "ultra.camera_read": {
+      "score": 9.75,
+      "evidence": [
+        "Final-camera-readback.json",
+        "Final-camera-review.jpg",
+        "../Gameplay/closest-camera-4k.jpg",
+        "../Camp-art/Repaired-game-1x.jpg",
+        "../Orbit/after-2x.jpg"
+      ]
+    },
+    "ultra.native_4k": {
+      "score": 10,
+      "evidence": [
+        "Final-camera-readback.json",
+        "Final-camera-review.jpg",
+        "../Gameplay/Native-camera.json"
+      ]
+    }
+  },
+  "unscored": {
+    "ultra.device_frame_pacing": "No physical target capture.",
+    "locked_B_quarry_or_wolf_absolute_scale": "The original footage does not isolate a corresponding rock bank or a complete posed wolf at the same depth.",
+    "field_resource_families_outside_six": "Other material/equipment families were not integrated or exercised in this World One route.",
+    "T01\u2013T11_production": "Other production dimensions and runtimes lie outside the field visual review."
+  },
+  "review_examples": {
+    "original_B_snow_rgb": [
+      234,
+      247,
+      253
+    ],
+    "working_B6_jpeg_snow_rgb": [
+      234,
+      247,
+      255
+    ],
+    "baseline_snow_rgb": [
+      189,
+      205,
+      219
+    ],
+    "candidate_snow_rgb": [
+      233,
+      247,
+      255
+    ],
+    "original_B540_green_fraction": 0.04953591606133979,
+    "encoded_B540_green_fraction": 0.04903147699757869,
+    "candidate_green_fraction": 0.04862028915855661,
+    "source_timeline_review": "Owner camp purchase original 5.40\u20136.60 s and upgrade 13.00\u201314.20 s, 10 samples/s; A fishing upgrade 12.00\u201313.40 s supplies an additional activity reference but no homologous opening quarry.",
+    "final_green_fraction": 0.049180984420681646
+  },
+  "source": "949af6f0916839ac702725cbd7a0a7c3f1033a5a",
+  "frozen_route": "Final-earned-route.json",
+  "frozen_diagnostics": "Final-route-disposition.json"
+}
