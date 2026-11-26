@@ -1,0 +1,3 @@
+# Detached Southwest outer seams: source mechanical controls only
+
+Removing only two exact duplicated decorative end meshes (64 faces each) stopped the previously recorded overlaps. All 42 owner-to-corner groups are unchanged. Four short closed rails seat at the measured adjoining timber with positive terrain clearance and zero tested unintended intersections. The South upper transition inclines about 14.4 degrees and the 36 × 72 mm bridge profile lacks the approved uninterrupted large timber and front X lashing. No production or visual approval, renderer, or spending. Original sealed packet 3c3c11205d737641a489a78380e67371d59c9e8b41b326319e5f140e77bb4833.
