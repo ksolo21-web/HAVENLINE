@@ -1,0 +1,3 @@
+# Owner-width fence continuation: old terminal disqualified
+
+The approved-style rail section is 128 × 113.1 mm. At its required exterior alignment, its outer edge lies 70.58 mm or more beyond the exact retained terminal timber. All 164 axial section checks also fail even using a generous convex hull. Only shifting the rail inward by 75–80 mm yields a small convex-hull allowance, which would change the visible owner-style line. Retire that combination, not the approved rail style. The next zero-credit design scope is a properly proportioned new visual shared joint that preserves the underlying roots, actors, gates and collision. No engine, approval, raw art, or spend. Exact source seal b1f68c0676013b7ada505c040c02ff02befbef23ca49093659b348b81c750e2e.
