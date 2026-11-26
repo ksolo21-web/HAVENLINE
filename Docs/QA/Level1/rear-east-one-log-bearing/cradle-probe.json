@@ -1,0 +1,151 @@
+{
+  "verdict": "source-only kinematic feasibility for four exact contact islands in two axial zones; no authored receiver or physical stability pass",
+  "no_runtime": true,
+  "terrain_y_range_m": [
+    0.0002912674215622245,
+    0.0018312004161998628
+  ],
+  "camp_paint_overlay_m": 0.012,
+  "pose_orientation_only": {
+    "yaw_deg": 90,
+    "roll_deg": 7.75,
+    "pitch_deg": 0
+  },
+  "exact_contact_condition": "Seat is exactly coplanar with inset of indexed facets; vertical projection clipping all other nearby triangles proves no crossing at these islands only. No connecting surface assigned.",
+  "zone_candidate_counts": [
+    4,
+    7,
+    7,
+    9
+  ],
+  "projected_outer_hull_area_m2": 0.11620484577285911,
+  "projected_exact_island_area_total_m2": 0.003630783874758936,
+  "inset_aabb_center_proxy_hull_margin_m": 0.07173506403865423,
+  "first_order_contact_normal_displacement_minmax_m": {
+    "down_1mm": [
+      -0.0009993304232175486,
+      -0.0009506528257438894
+    ],
+    "up_1mm": [
+      0.0009506528257438894,
+      0.0009993304232175486
+    ],
+    "x_negative_1mm": [
+      -0.00029845419001755884,
+      0.00031004877904948876
+    ],
+    "x_positive_1mm": [
+      -0.00031004877904948876,
+      0.00029845419001755884
+    ],
+    "roll_minus_1deg_about_length_parallel_15mm_fixture_axis": [
+      -0.0012873113067623837,
+      0.0014129816683664306
+    ],
+    "roll_plus_1deg_about_length_parallel_15mm_fixture_axis": [
+      -0.0014129816683664306,
+      0.0012873113067623837
+    ]
+  },
+  "islands": [
+    {
+      "source_indexed_triangle": 869,
+      "projected_area_m2": 0.0004472070606848896,
+      "world_y_range_m": [
+        0.03030613177306604,
+        0.03389602934275879
+      ],
+      "relative_site_center_xz_range_m": [
+        [
+          -0.07910445022392865,
+          -0.41405976111690695
+        ],
+        [
+          -0.06536513479215031,
+          -0.3397299603974804
+        ]
+      ],
+      "support_xz_uphill_slopes": [
+        -0.27873366500103414,
+        0.02295557189340195
+      ],
+      "nearest_unrelated_mesh_triangle_vertical_gap_m": 0.2975569649846028
+    },
+    {
+      "source_indexed_triangle": 853,
+      "projected_area_m2": 0.0015054444706844893,
+      "world_y_range_m": [
+        0.019906215896396413,
+        0.03457782022860326
+      ],
+      "relative_site_center_xz_range_m": [
+        [
+          0.022891309649909614,
+          -0.40717766043615033
+        ],
+        [
+          0.07034743900369428,
+          -0.31274590875812464
+        ]
+      ],
+      "support_xz_uphill_slopes": [
+        0.3261430152557264,
+        0.011945511542144734
+      ],
+      "nearest_unrelated_mesh_triangle_vertical_gap_m": 0.30922868525648906
+    },
+    {
+      "source_indexed_triangle": 215,
+      "projected_area_m2": 0.0012210068812306683,
+      "world_y_range_m": [
+        0.02894377221634075,
+        0.033259184968961984
+      ],
+      "relative_site_center_xz_range_m": [
+        [
+          -0.06826609503686284,
+          0.15778599581907837
+        ],
+        [
+          -0.0563359528879684,
+          0.3673406316586486
+        ]
+      ],
+      "support_xz_uphill_slopes": [
+        -0.31275085100388167,
+        -0.016919451491507555
+      ],
+      "nearest_unrelated_mesh_triangle_vertical_gap_m": 0.3086886457482925
+    },
+    {
+      "source_indexed_triangle": 146,
+      "projected_area_m2": 0.0004571254621588889,
+      "world_y_range_m": [
+        0.03260221503704005,
+        0.03428132114429146
+      ],
+      "relative_site_center_xz_range_m": [
+        [
+          0.058238869638751675,
+          0.3483979979317381
+        ],
+        [
+          0.07317362006338773,
+          0.42187356490149935
+        ]
+      ],
+      "support_xz_uphill_slopes": [
+        0.03284547421085292,
+        0.01617635897689159
+      ],
+      "nearest_unrelated_mesh_triangle_vertical_gap_m": 0.31328544240159406
+    }
+  ],
+  "all_island_projection_xz_span_m": [
+    0.15227807028731638,
+    0.8359333260184063
+  ],
+  "axial_island_separation_m": 0.470531904577203,
+  "no_center_of_mass_or_torque_claim": true,
+  "remaining": "Need actual low dark plate underside support on native terrain; shell must stay below certified contact facets and out of log after authored integration; ramps/friction, contact shadow and normal camera appearance still untested."
+}

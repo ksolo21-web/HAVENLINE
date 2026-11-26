@@ -1,0 +1,35 @@
+{
+  "scope": "No asset, flat mathematical support fixture only; no live scene, friction, inertia or actual seat",
+  "trials": 1331,
+  "yaw_range_deg": [
+    85,
+    95,
+    1
+  ],
+  "roll_range_deg": [
+    -15,
+    15,
+    0.25
+  ],
+  "contact_tolerance_m": 0.0005,
+  "volume_approx_m3": 0.0851691283484153,
+  "edge_incidence_faults": 344,
+  "edge_winding_faults": 344,
+  "point_kind": "uniform-volume CG if closed and oriented, otherwise centered AABB assumed for rejection proxy only",
+  "max_exact_numerical_contact_vertices": 1,
+  "near_contact_population": 0,
+  "screening_gate": "10mm CG inside support hull; 100mm\u00b2 projected clipped bearing; 20mm minimum site edge; plus actual coplanar non-point simultaneous support; never accept based on tolerance hull alone",
+  "best_near_contact_proxy": {
+    "yaw": 85.0,
+    "roll": 7.75,
+    "numerical_contact_vertices": 1,
+    "loosened_bearing_patch_projected_m2": 5.434313964621122e-05,
+    "tolerance_hull_area_m2": 0.022407888682605084,
+    "uniform_cg_proxy_margin_m": 0.01624879783717758,
+    "proposed_site_edge_margin_m": 0.18955862149007574,
+    "analytic_flat_penetration_m": 0,
+    "plate_height_above_highest_exact_terrain_m": 0.013168799583800137
+  },
+  "max_tolerance_patch_m2": 6.67324628757873e-05,
+  "termination": "Screen did not prove physical-bearing support. Exact simultaneous sampled contacts remain point-like unless three+ noncollinear coplanar contacts with robust patch and torque proxy are shown; this discrete grid is not a global exclusion."
+}
