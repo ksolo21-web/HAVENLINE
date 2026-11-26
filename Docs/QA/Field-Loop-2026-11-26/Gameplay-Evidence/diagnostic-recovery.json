@@ -1,0 +1,125 @@
+{
+  "case": "Natural first hurt through death and respawn; wood earned before entering the pack. The camera and sound are the running Godot game. Only the rendered interval after the first wound is in the video. This diagnostic uses the source snapshot at 11:50 UTC, predating the release freeze.",
+  "sha256": "8eeb689b30881be537fb276a2011de821ca00d99a66711d5127f2d05f67c291f",
+  "source_file_manifest_sha256": "5adb80d1e00f32c0a79e3142cfa0b326da016f63aaa8c1eefce9473c07c335d9",
+  "source_commit": "working snapshot after dc365e967f8fbbc7173f71e543f12ae99e27b1c6; exact file hashes in diagnostic-source.json",
+  "movie": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "h264",
+        "codec_type": "video",
+        "width": 1280,
+        "height": 720,
+        "r_frame_rate": "24/1",
+        "duration": "8.375000",
+        "nb_frames": "201"
+      },
+      {
+        "codec_name": "aac",
+        "codec_type": "audio",
+        "sample_rate": "48000",
+        "channels": 2,
+        "r_frame_rate": "0/0",
+        "duration": "8.375000",
+        "nb_frames": "394"
+      }
+    ],
+    "format": {
+      "duration": "8.375000",
+      "size": "5302082"
+    }
+  },
+  "hp": [
+    4,
+    3,
+    2,
+    1,
+    0,
+    4
+  ],
+  "duration_from_zero_to_recovery_s": 1.05,
+  "restored_at_xz": [
+    0.0,
+    6.0
+  ],
+  "unchanged_stock_before_lethal_and_after_recovery": {
+    "carried": {
+      "meat": 3,
+      "stone": 0,
+      "wood": 3
+    },
+    "stored": {
+      "meat": 0,
+      "stone": 0,
+      "wood": 0
+    },
+    "paid": {
+      "center_hearth": {
+        "wood": 0
+      },
+      "orbit_upgrade": {
+        "meat": 0,
+        "stone": 0
+      }
+    },
+    "collected": {
+      "meat-10": "meat",
+      "meat-11": "meat",
+      "meat-7": "meat",
+      "wood-1": "wood",
+      "wood-2": "wood",
+      "wood-3": "wood"
+    }
+  },
+  "game_events": [
+    {
+      "event": "player_hurt",
+      "t": 10.817,
+      "x": 4.42,
+      "z": 8.94
+    },
+    {
+      "event": "player_hurt",
+      "t": 13.35,
+      "x": 9.91,
+      "z": 7.9
+    },
+    {
+      "event": "player_hurt",
+      "t": 15.633,
+      "x": 9.81,
+      "z": 10.1
+    },
+    {
+      "event": "player_hurt",
+      "t": 16.917,
+      "x": 11.59,
+      "z": 11.91
+    },
+    {
+      "event": "reset",
+      "t": 17.967,
+      "x": 0.0,
+      "z": 6.0
+    }
+  ],
+  "native_sound": {
+    "player_hurt": {
+      "correlation": 0.497,
+      "source": "player_hurt.wav",
+      "matched_mix_s": 16.963,
+      "physics_cue_s": 16.717,
+      "matched_video_s": 6.088
+    },
+    "reset": {
+      "correlation": 0.569,
+      "source": "reset.wav",
+      "matched_mix_s": 18.009,
+      "physics_cue_s": 17.767,
+      "matched_video_s": 7.134
+    }
+  },
+  "audio_peak_dbfs": -5.269999980926514
+}

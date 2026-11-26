@@ -1,0 +1,109 @@
+{
+  "case": "Natural portrait approach and three typed wood debits, followed by complete court reveal. All content derives from a single Godot game camera and the native 48 kHz stereo mix; encoder begins after gathering and before the pad.",
+  "source": "Immutable pre-freeze candidate with a local 720x1280 display configuration for MovieWriter. Exact fingerprints in diagnostic-portrait-source.json.",
+  "source_fingerprints_sha256": "63a5318620843a2e3e757925423b9808f7d8aa2c0d9e6bbdfaa3622f7ca06f88",
+  "video_sha256": "1f8f242af05cbfc94bfaac7eafd2b31f6047f03880ddd57d62c2bc2c8bc8aafe",
+  "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_type": "video",
+        "width": 720,
+        "height": 1280,
+        "r_frame_rate": "24/1",
+        "duration": "3.958333",
+        "nb_frames": "95"
+      },
+      {
+        "codec_type": "audio",
+        "sample_rate": "48000",
+        "r_frame_rate": "0/0",
+        "duration": "3.958000",
+        "nb_frames": "187"
+      }
+    ]
+  },
+  "audio_matches": {
+    "spend_wood": {
+      "correlation": 0.88,
+      "source": "spend_wood.wav",
+      "matched_mix_s": 24.547,
+      "physics_cue_s": 24.333,
+      "matched_video_s": 2.214
+    },
+    "purchase": {
+      "correlation": 0.435,
+      "source": "purchase.wav",
+      "matched_mix_s": 24.889,
+      "physics_cue_s": 24.667,
+      "matched_video_s": 2.556
+    },
+    "build": {
+      "correlation": 0.255,
+      "source": "build.wav",
+      "matched_mix_s": 24.889,
+      "physics_cue_s": 24.667,
+      "matched_video_s": 2.556
+    },
+    "rise": {
+      "correlation": 0.393,
+      "source": "rise.wav",
+      "matched_mix_s": 24.889,
+      "physics_cue_s": 24.667,
+      "matched_video_s": 2.556
+    },
+    "reveal": {
+      "correlation": 0.626,
+      "source": "reveal.wav",
+      "matched_mix_s": 25.219,
+      "physics_cue_s": 24.983,
+      "matched_video_s": 2.886
+    }
+  },
+  "audio_peak_dbfs": -8.8100004196167,
+  "native_typed_events": [
+    {
+      "event": "spend_wood",
+      "t": 24.533,
+      "x": 0.0,
+      "z": 2.4
+    },
+    {
+      "event": "spend_wood",
+      "t": 24.7,
+      "x": 0.0,
+      "z": 2.4
+    },
+    {
+      "event": "spend_wood",
+      "t": 24.867,
+      "x": 0.0,
+      "z": 2.4
+    },
+    {
+      "event": "purchase",
+      "t": 24.867,
+      "x": 0.0,
+      "z": 2.4
+    },
+    {
+      "event": "build",
+      "t": 24.867,
+      "x": 0.0,
+      "z": 2.4
+    },
+    {
+      "event": "rise",
+      "t": 24.867,
+      "x": 0.0,
+      "z": 2.4
+    },
+    {
+      "event": "reveal",
+      "t": 25.183,
+      "x": 0.0,
+      "z": 0.0
+    }
+  ]
+}
