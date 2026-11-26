@@ -17,6 +17,8 @@ var last_sequence := 0
 var cooldown := 0.0
 var falling_clock := 0.0
 var settle_clock := 0.0
+var fall_direction := FALL_DIR
+var fall_away := false
 var blocked := false
 var regrows := false
 var starter_credit_seen := false
@@ -64,15 +66,20 @@ func strike(source: String, sequence: int, feet: Vector3, facing: Vector3) -> bo
 	if strikes <= _marks.size():
 		_marks[strikes - 1].show()
 	if strikes == 3:
+		if fall_away:
+			var away := global_position - feet
+			away.y = 0.0
+			if away.length_squared() > .0001: fall_direction = away.normalized()
 		phase = "falling"
 	return true
 
 func sweep_clear(feet: Vector3, capsule_radius: float) -> bool:
 	var offset := feet - global_position
-	var along := offset.dot(FALL_DIR)
-	var across := offset.dot(Vector3(-FALL_DIR.z, 0, FALL_DIR.x))
+	var along := offset.dot(fall_direction)
+	var across := offset.dot(Vector3(-fall_direction.z, 0, fall_direction.x))
 	# Entire measured footprint: freezes proactively before any step. No push.
-	return along < -(1.0 + capsule_radius) or along > 2.4 + capsule_radius or absf(across) > 1.25 + capsule_radius
+	var heel := .18 if fall_away else 1.0
+	return along < -(heel + capsule_radius) or along > 2.4 + capsule_radius or absf(across) > 1.25 + capsule_radius
 
 func advance(dt: float, feet: Vector3, capsule_radius: float) -> void:
 	var step := clampf(dt, 0.0, .04)
@@ -129,4 +136,4 @@ func _regrow() -> void:
 	phase = "rooted"
 
 func _pose(radians: float) -> void:
-	_pivot.basis = Basis(Vector3.UP.cross(FALL_DIR).normalized(), radians)
+	_pivot.basis = Basis(Vector3.UP.cross(fall_direction).normalized(), radians)

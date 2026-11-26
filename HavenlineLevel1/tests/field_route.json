@@ -1,0 +1,311 @@
+[
+  {
+    "action": "hold",
+    "label": "Fresh snowfield and empty carry rack",
+    "s": 0.8
+  },
+  {
+    "action": "orbit",
+    "label": "Cut the starter pine",
+    "target": "tree",
+    "test": "tree_felled",
+    "timeout": 20
+  },
+  {
+    "action": "loot",
+    "label": "Pick up three fallen wood units",
+    "kind": "wood",
+    "count": 3,
+    "p": [
+      -2,
+      6
+    ],
+    "timeout": 15
+  },
+  {
+    "action": "orbit",
+    "label": "Break the mine with the pickaxe",
+    "target": "rock",
+    "test": "rock_mined",
+    "timeout": 20
+  },
+  {
+    "action": "loot",
+    "label": "Pick up three quarried stones",
+    "kind": "stone",
+    "count": 3,
+    "p": [
+      -6,
+      3
+    ],
+    "timeout": 15
+  },
+  {
+    "action": "pinch",
+    "label": "Pinch in for the hunt and pack",
+    "ratio": 1.52
+  },
+  {
+    "action": "walk",
+    "label": "Enter the eastern hunting ground",
+    "p": [
+      1.9,
+      7.7
+    ],
+    "tol": 0.18
+  },
+  {
+    "action": "hunt",
+    "label": "Wolf encounter and axe contact",
+    "timeout": 30
+  },
+  {
+    "action": "loot",
+    "label": "Collect the wolf meat",
+    "kind": "meat",
+    "count": 2,
+    "p": [
+      5,
+      9
+    ],
+    "timeout": 15
+  },
+  {
+    "action": "walk",
+    "label": "Carry all three materials toward camp",
+    "p": [
+      2.2,
+      5.4
+    ],
+    "tol": 0.18
+  },
+  {
+    "action": "hold",
+    "label": "Read all three carried stacks",
+    "s": 0.8
+  },
+  {
+    "action": "pinch",
+    "label": "Return to the field view",
+    "ratio": 0.6578947368421053
+  },
+  {
+    "action": "walk",
+    "label": "Approach the unpaid hearth pad",
+    "p": [
+      0,
+      2.45
+    ],
+    "tol": 0.18
+  },
+  {
+    "action": "wait",
+    "label": "Watch the three-wood purchase and reveal",
+    "test": "built",
+    "id": "center_hearth"
+  },
+  {
+    "action": "hold",
+    "label": "Completed hearth, fence and gates",
+    "s": 0.8
+  },
+  {
+    "action": "walk",
+    "label": "Approach the south gate from camp",
+    "p": [
+      0,
+      2
+    ],
+    "tol": 0.18
+  },
+  {
+    "action": "gate",
+    "label": "Open the south gate",
+    "gate": "gate-south"
+  },
+  {
+    "action": "walk",
+    "label": "South gate outward onto snow",
+    "p": [
+      0,
+      6.3
+    ],
+    "tol": 0.18
+  },
+  {
+    "action": "orbit",
+    "label": "Fell the regrown pine",
+    "target": "tree",
+    "test": "tree_felled",
+    "timeout": 20
+  },
+  {
+    "action": "loot",
+    "label": "Collect wood for the floor plot",
+    "kind": "wood",
+    "count": 3,
+    "p": [
+      -2,
+      6
+    ],
+    "timeout": 15
+  },
+  {
+    "action": "walk",
+    "label": "Return to the south gate outside",
+    "p": [
+      0,
+      6.05
+    ],
+    "tol": 0.18
+  },
+  {
+    "action": "walk",
+    "label": "South gate inward to camp",
+    "p": [
+      0,
+      2.65
+    ],
+    "tol": 0.18
+  },
+  {
+    "action": "walk",
+    "label": "Go around the furnace on its west side",
+    "p": [
+      -2.6,
+      2.1
+    ],
+    "tol": 0.18
+  },
+  {
+    "action": "plot",
+    "label": "Stack stone on its marked plot",
+    "kind": "stone"
+  },
+  {
+    "action": "wait",
+    "label": "Stone lands on the stone plot",
+    "test": "stored",
+    "kind": "stone",
+    "count": 3
+  },
+  {
+    "action": "hold",
+    "label": "Stone stack at the west flank",
+    "s": 0.45
+  },
+  {
+    "action": "plot",
+    "label": "Stack wood on its marked plot",
+    "kind": "wood"
+  },
+  {
+    "action": "wait",
+    "label": "Wood lands on the wood plot",
+    "test": "stored",
+    "kind": "wood",
+    "count": 3
+  },
+  {
+    "action": "hold",
+    "label": "Wood stack in its own bay",
+    "s": 0.45
+  },
+  {
+    "action": "walk",
+    "label": "Pass behind the furnace",
+    "p": [
+      -2.7,
+      -2.15
+    ],
+    "tol": 0.18
+  },
+  {
+    "action": "plot",
+    "label": "Stack meat on its marked plot",
+    "kind": "meat"
+  },
+  {
+    "action": "wait",
+    "label": "Meat lands on the meat plot",
+    "test": "stored",
+    "kind": "meat",
+    "count": 2
+  },
+  {
+    "action": "hold",
+    "label": "Three dedicated floor stacks",
+    "s": 1
+  },
+  {
+    "action": "walk",
+    "label": "Pass east of the furnace",
+    "p": [
+      3.0,
+      0.05
+    ],
+    "tol": 0.18
+  },
+  {
+    "action": "walk",
+    "label": "Approach the two-material upgrade",
+    "p": [
+      2.65,
+      1.7
+    ],
+    "tol": 0.18
+  },
+  {
+    "action": "wait",
+    "label": "Pay two stone and one meat",
+    "test": "built",
+    "id": "orbit_upgrade"
+  },
+  {
+    "action": "hold",
+    "label": "Upgrade applied and visible",
+    "s": 1
+  },
+  {
+    "action": "walk",
+    "label": "Reach the east-gate release point",
+    "p": [
+      3.0,
+      0.05
+    ],
+    "tol": 0.18
+  },
+  {
+    "action": "gate",
+    "label": "Open the east gate",
+    "gate": "gate-east"
+  },
+  {
+    "action": "walk",
+    "label": "East gate outward onto snow",
+    "p": [
+      7.4,
+      0
+    ],
+    "tol": 0.18
+  },
+  {
+    "action": "hold",
+    "label": "Unbroken snow outside the eastern fence",
+    "s": 0.9
+  },
+  {
+    "action": "walk",
+    "label": "East gate inward to camp",
+    "p": [
+      3.15,
+      0
+    ],
+    "tol": 0.18
+  },
+  {
+    "action": "hold",
+    "label": "Final camp and remaining stocks",
+    "s": 0.6
+  }
+]

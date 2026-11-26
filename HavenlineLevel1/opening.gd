@@ -174,7 +174,11 @@ func _ready() -> void:
 	tree_button = opening_hud.tree
 	get_viewport().size_changed.connect(clear_touch)
 	get_viewport().size_changed.connect(opening_hud.reflow)
-	var args := OS.get_cmdline_user_args()
+	load_opening_profile(OS.get_cmdline_user_args())
+	sync_progress_visuals()
+	refresh_hud()
+
+func load_opening_profile(args: PackedStringArray) -> void:
 	persist_requested = save.requested(args)
 	if persist_requested:
 		if not save.configure(args):
@@ -185,8 +189,6 @@ func _ready() -> void:
 			if recovered != OK and recovered != ERR_FILE_NOT_FOUND:
 				persist_blocked = true
 				persist_error = "Save rejected; no progress written."
-	sync_progress_visuals()
-	refresh_hud()
 
 func setup_exterior_conifers() -> void:
 	var placements: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://conifers.json"))
