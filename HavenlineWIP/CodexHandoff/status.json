@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T01:40:56Z",
+  "observed_at_utc": "2026-11-26T02:04:33Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -21,12 +21,11 @@
       "id": "character-1",
       "role": "Rigging and independent review",
       "state": "blocked",
-      "result": "Independent review rejected the first detached garment rebuild for six overlaps at rest. A later hem join cleared its neutral seam check, and the corrected left cuff was built but remains unverified. No walk or run is accepted.",
+      "result": "Six authorized fastener seams passed independent checks at rest. Small synthetic displacements revealed local fold risk; this detached patch does not fix the earlier boot collisions or clear gait.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/tree/ac46ca6b6a977ce156ab783b933c727cb9d18b08/HavenlineWIP/2026-11-26/level1-c1-neutral-cavity-independent-v1",
-        "https://github.com/ksolo21-web/HAVENLINE/tree/ac46ca6b6a977ce156ab783b933c727cb9d18b08/HavenlineWIP/2026-11-26/level1-c1-left-cuff-exact-contour-intake-v1"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/5e6a4543a5cc814459d07e24fe0713ab05fb7986"
       ],
-      "next": "Verify the corrected cuff against the original outline and check for overlaps. Resolve the visible seam decision before separating the fasteners. Nothing is installed.",
+      "next": "Use an actual loaded contact pose for the next rig test; keep the seam patch out of the playable build.",
       "role_ids": [
         "rig-character",
         "critic-rig"
@@ -36,12 +35,13 @@
       "id": "wood-storage",
       "role": "Resource builder and reviewer",
       "state": "in_progress",
-      "result": "Larger logs and the emblem read in the detached still. An isolated Godot route verified all three original starter pickups as distinct committed sources. Separate carried visuals are not installed.",
+      "result": "The original carry box cannot hold full-size logs. One separate fixed-side layout cleared the measured rest geometry, but the second row has no authored anchor.",
       "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/5e6a4543a5cc814459d07e24fe0713ab05fb7986",
         "https://github.com/ksolo21-web/HAVENLINE/commit/f92609b35f6bf7986e7011418f97585ff170cb0f",
         "https://github.com/ksolo21-web/HAVENLINE/commit/7934368d88ee780c729122d49001f3bcec6fcd1f"
       ],
-      "next": "Build and verify larger carry mounts and the real transfer route; the current bundled display does not qualify.",
+      "next": "Pin the adjacent row and check motion, doorway clearance and normal-camera readability before adding any storage or purchase arrivals.",
       "role_ids": [
         "builder-resource-cooker"
       ]
@@ -118,24 +118,24 @@
     {
       "role_id": "rig-character",
       "state": "blocked",
-      "title": "Built a correction for the left cuff",
-      "summary": "The original cuff contour is now in the detached test copy. It has not passed the outline, trim overlap, or motion checks.",
-      "next": "Resume neutral verification when a test workspace is usable; keep the visible seams unchanged pending a decision.",
+      "title": "Built the six approved fastener seam changes",
+      "summary": "The detached test preserves original fasteners and overall look. It is not cleared for motion or installed.",
+      "next": "Use an actual loaded pose on the exact rig before any further gait decision.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/tree/ac46ca6b6a977ce156ab783b933c727cb9d18b08/HavenlineWIP/2026-11-26/level1-c1-left-cuff-exact-contour-intake-v1"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/5e6a4543a5cc814459d07e24fe0713ab05fb7986"
       ],
-      "updated_at_utc": "2026-11-26T01:11:57Z"
+      "updated_at_utc": "2026-11-26T02:04:33Z"
     },
     {
       "role_id": "critic-rig",
       "state": "done",
-      "title": "Rejected six overlaps in the first garment rebuild",
-      "summary": "The independent check reproduced six overlaps before the legs moved. These are separate from the earlier overlaps seen when the rig was posed.",
-      "next": "Independently verify the corrected cuff before any gait test.",
+      "title": "Verified fastener seams at rest only",
+      "summary": "Six detached seam edits passed scoped independent neutral checks. Small synthetic movements identified fold risks near two seams.",
+      "next": "Reject motion approval pending true loaded-pose evidence.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/tree/ac46ca6b6a977ce156ab783b933c727cb9d18b08/HavenlineWIP/2026-11-26/level1-c1-neutral-cavity-independent-v1"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/5e6a4543a5cc814459d07e24fe0713ab05fb7986"
       ],
-      "updated_at_utc": "2026-11-26T00:56:23Z"
+      "updated_at_utc": "2026-11-26T02:04:33Z"
     },
     {
       "role_id": "builder-camp-pads",
@@ -214,6 +214,17 @@
       "message": "Handoff summary: The stock bundle cannot show three individual arrivals. Keep purchase logic independent and test real per-log carry slots before adding the deck effect.",
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/1fce69e1792a7042be05f6eb8ae1d0a202c7e1ab"
+      ]
+    },
+    {
+      "id": "rig-fastener-neutral-review-20261126",
+      "type": "handoff",
+      "at_utc": "2026-11-26T02:04:33Z",
+      "from_role_id": "critic-rig",
+      "to_role_id": "rig-character",
+      "message": "Handoff summary: The six seam changes are clear at rest. Keep the patch detached; small probe displacements exposed folds and no actual gait has passed.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/5e6a4543a5cc814459d07e24fe0713ab05fb7986"
       ]
     }
   ]
