@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T08:31:53Z",
+  "observed_at_utc": "2026-11-26T09:14:02Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -35,15 +35,17 @@
       "id": "wood-storage",
       "role": "Resource builder and reviewer",
       "state": "in_progress",
-      "result": "One fixed full-size log candidate cleared 77 run, five stop/idle and five turn geometry samples on the unloaded stock character. At the new heading the actor hides up to 67.7% of the modeled log. No mounted screenshot, actual attachment or transfer.",
+      "result": "Both normal-camera render runs captured the three pinned moments. At tick 128 the comparison changed 864 pixels outside the expected region, so art and readability approval remain on hold. No log attachment or transfer was added.",
       "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/87e5f292e5edd97a7a6ec7f9d0befcf129870af8",
         "https://github.com/ksolo21-web/HAVENLINE/commit/5fd10dff46d0f5cd9c7c2d9fa4f7e91a85bbed4c",
         "https://github.com/ksolo21-web/HAVENLINE/commit/2bd499de74dd80af764e8fac8355813783be8e78",
         "https://github.com/ksolo21-web/HAVENLINE/commit/4278be2ab12ed5b5982b9604ace277e697dbbf05"
       ],
-      "next": "Check exact imported Crown material before a visual-only test. Keep actual attachment, load, turning sweep and receiver authorization separate.",
+      "next": "Independent review is tracing the unexpected pixel changes from the existing frames only. No new render run is scheduled.",
       "role_ids": [
-        "builder-resource-cooker"
+        "builder-resource-cooker",
+        "critic-game"
       ]
     },
     {
@@ -185,6 +187,17 @@
         "https://github.com/ksolo21-web/HAVENLINE/commit/f66909ab05b0fea1c955c04f70ea1dd7fd6a6e82"
       ],
       "updated_at_utc": "2026-11-26T02:09:41Z"
+    },
+    {
+      "role_id": "critic-game",
+      "state": "in_progress",
+      "title": "Diagnosing the carried-log comparison",
+      "summary": "The pinned native comparison produced six frames but the difference check stopped on its first pair.",
+      "next": "Use the original frames and camera geometry to locate the cause without changing the checker or rerunning the game.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/87e5f292e5edd97a7a6ec7f9d0befcf129870af8"
+      ],
+      "updated_at_utc": "2026-11-26T09:14:02Z"
     }
   ],
   "office_events": [
@@ -418,6 +431,17 @@
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/2bd499de74dd80af764e8fac8355813783be8e78",
         "https://github.com/ksolo21-web/HAVENLINE/commit/4278be2ab12ed5b5982b9604ace277e697dbbf05"
+      ]
+    },
+    {
+      "id": "l1-crown-native-frame-compare-held-20261126",
+      "type": "handoff",
+      "at_utc": "2026-11-26T09:14:02Z",
+      "from_role_id": "level1-verifier",
+      "to_role_id": "critic-game",
+      "message": "All six native frames exist. The comparison stopped on its first pair. Trace the unexpected difference using the original captures only; no carry mount, new run, or art approval.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/87e5f292e5edd97a7a6ec7f9d0befcf129870af8"
       ]
     }
   ]
