@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T09:42:47Z",
+  "observed_at_utc": "2026-11-26T09:46:10Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -109,14 +109,12 @@
       "id": "level1-fence-gates",
       "role": "Fence and gate repairs, independent review, and Level 1 verification",
       "state": "in_progress",
-      "result": "Separate normal-camera latch test rejected for insufficient readability on East; V4 retains South 9.3/East 9.2. New one-post fence corner is offline only, held pending an exact mating test. Both gates formerly verified for bidirectional travel; no new asset installed.",
-      "next": "Repair one bounded East latch silhouette if swing permits. Fit the one-post southwest fence corner to actual neighboring panels and reduce rope geometry cost. Keep the customer bay and exact gate controls protected.",
+      "result": "Neutral corner rejected at actual Southwest terrain seats. Fence repair is adapting the shared timber to each adjacent run. Separately, an actual 69 mm East keeper height mismatch was measured and a source-only correction accepted for one detached native comparison, not for production.",
+      "next": "Verify a same-camera East-only candidate against exact V4. Confirm actual fence sockets, grounded rope and joins before a combined render.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/0d5e6a379a4472bee27f54c7490657e7344bccf2",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/6855791dddd118367995af1c550415b777117d0c",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/92a143532bda7929dd08369e58de887ed43b8a0b",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/b40bce8273a0079e04d54c453c14e43370eb1da8",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/7698f03b7c2f3e99b342052e8f93a030c18aa8f0"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/0de77bb16ec5f390cba3ca02c93c56f624db38c9",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/cd37375b8d95a4740812fcef8bfd9283d255c71a",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/0d5e6a379a4472bee27f54c7490657e7344bccf2"
       ],
       "role_ids": [
         "builder-camp-pads",
@@ -171,13 +169,13 @@
     {
       "role_id": "builder-camp-pads",
       "state": "in_progress",
-      "title": "Fitting one physical southwest corner",
-      "summary": "Standalone one-post topology passed source checks; it has not been fitted to the actual adjacent fence panels.",
-      "next": "Check exact panel trims, terrain seats, rope continuity and net geometry.",
+      "title": "Building a terrain-matched Southwest fence joint",
+      "summary": "The neutral fixture could not join the two real donor heights without touching retained art.",
+      "next": "Prove exact sockets, no unintended crossings, no visible sinking, and a trimmed geometry budget.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/0d5e6a379a4472bee27f54c7490657e7344bccf2"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/cd37375b8d95a4740812fcef8bfd9283d255c71a"
       ],
-      "updated_at_utc": "2026-11-26T09:42:47Z"
+      "updated_at_utc": "2026-11-26T09:46:10Z"
     },
     {
       "role_id": "audio-sfx",
@@ -203,36 +201,36 @@
     },
     {
       "role_id": "builder-customer-counter",
-      "state": "in_progress",
-      "title": "Checking two dedicated north flank cuts",
-      "summary": "Repeating the standard panels overruns each counter flank by 725 mm.",
-      "next": "Measure exact safe left and right cuts; preserve the approved counter, both caps and all access.",
+      "state": "done",
+      "title": "Measured both north counter fence cuts",
+      "summary": "Dedicated flank lengths and exact cap clearance are now measured. No mesh or service was added.",
+      "next": "Use these planes when the north art can be staged separately.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/6855791dddd118367995af1c550415b777117d0c"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/cd37375b8d95a4740812fcef8bfd9283d255c71a"
       ],
-      "updated_at_utc": "2026-11-26T09:42:47Z"
+      "updated_at_utc": "2026-11-26T09:46:10Z"
     },
     {
       "role_id": "critic-game",
       "state": "done",
-      "title": "Rejected the paid-frame latch-only change",
-      "summary": "Both normal-camera images were checked. South slightly clearer; East remains a dark fleck. No grade or integration change.",
-      "next": "Review exact new candidate only when there is a measurable repair.",
+      "title": "Reviewed the East height-only candidate",
+      "summary": "Source review allows one no-credit comparison. The screen projection changes but legibility is untested.",
+      "next": "Review exact native East frame if the independent geometry/runtime checks pass.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/0d5e6a379a4472bee27f54c7490657e7344bccf2"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/0de77bb16ec5f390cba3ca02c93c56f624db38c9"
       ],
-      "updated_at_utc": "2026-11-26T09:42:47Z"
+      "updated_at_utc": "2026-11-26T09:46:10Z"
     },
     {
       "role_id": "gameplay-integrator",
       "state": "in_progress",
-      "title": "Checking a clearer latch shape",
-      "summary": "Normal-camera paint-only revision rejected on East. A geometry option is being checked against actual moving and stationary clearance.",
-      "next": "Stage only if materially more legible and preserves exact operation.",
+      "title": "Staging the East keeper height test",
+      "summary": "Source candidate only adjusts the keeper to the lever's world height; no South or swing changes.",
+      "next": "Show an actual unchanged-scale East-only comparison against V4 before an independent legibility decision.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/0d5e6a379a4472bee27f54c7490657e7344bccf2"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/0de77bb16ec5f390cba3ca02c93c56f624db38c9"
       ],
-      "updated_at_utc": "2026-11-26T09:42:47Z"
+      "updated_at_utc": "2026-11-26T09:46:10Z"
     },
     {
       "role_id": "builder-resource-cooker",
