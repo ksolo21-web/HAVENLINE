@@ -29,7 +29,10 @@ const CUES := {
 	"approach": [1, 1.05, -5, 2], "enemy_attack": [1, .24, -3.8, 2],
 	"player_attack": [1, .17, -5, 2], "hit": [1, .11, -4, 2],
 	"player_hurt": [1, .24, -2, 3], "defeat": [1, .35, -3, 3],
-	"reset": [1, .55, -7, 3], "meat": [1, .12, -4, 2], "victory": [1, .75, -4, 3]
+	"reset": [1, .55, -7, 3], "meat": [1, .12, -4, 2], "victory": [1, .75, -4, 3],
+	"equip_axe": [1,.30,-10,1], "equip_pickaxe": [1,.30,-10,1],
+	"regrow_wood": [1,.35,-12,0], "regrow_stone": [1,.4,-11,0],
+	"wolf_brace": [1,.26,-9,2], "wolf_return": [1,.65,-13,0], "player_fall": [1,.75,-5,3]
 }
 const ALIASES := {"attack":"enemy_attack","wolf_attack":"enemy_attack"}
 const LOOP_NAMES := ["field_score","camp_score","threat_score","wind","fire"]

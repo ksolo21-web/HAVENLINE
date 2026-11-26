@@ -1,0 +1,55 @@
+[
+  {
+    "action": "hold",
+    "label": "Fresh snowfield and empty carry rack",
+    "s": 0.8
+  },
+  {
+    "action": "orbit",
+    "label": "Cut the starter pine",
+    "target": "tree",
+    "test": "tree_felled",
+    "timeout": 20
+  },
+  {
+    "action": "loot",
+    "label": "Pick up three fallen wood units",
+    "kind": "wood",
+    "count": 3,
+    "p": [
+      -2,
+      6
+    ],
+    "timeout": 15
+  },
+  {
+    "action": "walk",
+    "p": [
+      1.2,
+      13.1
+    ],
+    "tol": 0.37,
+    "label": "Enter the outer hunting snow",
+    "timeout": 20
+  },
+  {
+    "action": "walk",
+    "p": [
+      5.8,
+      14.2
+    ],
+    "tol": 0.65,
+    "label": "Approach the pack together",
+    "timeout": 20
+  },
+  {
+    "action": "facepack",
+    "label": "Close-range pack attacks and recovery",
+    "timeout": 35
+  },
+  {
+    "action": "hold",
+    "label": "Recovered with prior inventory",
+    "s": 1.2
+  }
+]

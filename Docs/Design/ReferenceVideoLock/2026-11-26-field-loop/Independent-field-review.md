@@ -2,7 +2,11 @@
 
 The playable field demonstrates the route from harvesting and hunting through delivery, paid camp construction, typed storage and a three-axe upgrade. The purchase and reveal remain legible at the gameplay camera. The owner’s recordings also show crowds, commercial production, taller late-game loads and active perimeter defenses. Those phases are absent from this field trial.
 
-This review currently includes the 14 naturally triggered revised 4K frames and the amended foliage, pad and loose-meat geometry. The final integrated movie and its frozen SHA will be identified below once verified.
+**November 26, 2026.** Frozen Git revision `e38ed1bb7d198327d6c05e74905a0921e4b3c91c`, Godot scene `res://field_opening.tscn`. I independently rehashed all 151 runtime source files. A new 240-sample projection on this frozen source reproduced the orbit measurements below and the measured loose-meat width. The original source-lock benchmarks come from Alfred’s tracked A/B material. The comparison below also uses the earlier annotated independent field plates. [Frozen source and projection](independent-frozen-source.json)
+
+The 141-frame continuous stereo opening excerpt is available with the checkpoint. The rest of the e38 course was documented through the native portrait stills and input logs. [E38 footage and scene evidence](../Gameplay-Evidence/E38-checkpoint/README.md)
+
+The frozen 53.217-second portrait route records the south gate outward at 27.608 s and inward at 33.818 s. The east gate was crossed outward at 48.627 s and inward at 51.806 s. The native view after the east exit shows continuous snow. [Before construction](../Gameplay-Evidence/E38-checkpoint/Portrait/01-before.png) · [After construction](../Gameplay-Evidence/E38-checkpoint/Portrait/07-built.png) · [Earned stocks and approved materials](Frozen-earned-stock-portrait.jpg)
 
 ## Gameplay measurements
 
@@ -21,12 +25,12 @@ This review currently includes the 14 naturally triggered revised 4K frames and 
 
 ## Earned stock against the approved plot designs
 
-All three native landscape plots retain recognizable materials at game zoom. The earned state contains five wood bundles, two meat cuts and three stones. In portrait the camera follows the actor on the meat plot and clips part of the far-left stone pile at the viewport edge.
+All three native landscape plots retain recognizable materials at game zoom. The development route banked five wood bundles, two meat cuts and three stones. The frozen portrait route banked six wood, two meat and three stone. The subsequent naturally earned frame at 44.03 s shows the actor clear of the meat plot, all three commodity piles, the printed counts and the brighter paid ground. While standing on meat the portrait camera clips part of the far-left stone pile. [Frozen native unoccluded stocks](../Gameplay-Evidence/E38-checkpoint/Portrait/08b-stocks-clear.png)
 
 | Material | Approved model and field readback |
 |---|---|
-| Wood | Repeated banded log bundles sit in ordered rows. Exposed cut ends and darker, less golden bark distinguish the game pile from the brighter single-bundle design. |
-| Meat | Broad red cuts show a light rim around each center and separate laterally. With two pieces, the native low-count plot exposes a single course. The design board shows layered columns and clearer marbling. The actor partly overlaps one cut while standing on the plot. |
+| Wood | Repeated banded log bundles sit in ordered rows. The final warm light and amber cut ends bring the wood closer to the approved board. The body of each bundle is still browner, with a subtler contrast between strap and bark. |
+| Meat | Broad red cuts show a light rim around each center and separate laterally. With two pieces, the native low-count plot exposes a single course. The design board shows layered columns and clearer marbling. The actor partly overlaps one cut while standing on the plot. After he moves away, the painted type icon between the cuts can look like a third red shape. |
 | Stone | The three irregular stones form a low, asymmetric cluster on the floor. Size and spacing are closer to the board than the earlier small, lane-aligned parcels. The board uses warmer, simpler facets. |
 
 [Three approved plot concepts and matched native crops](Approved-stock-vs-game.jpg) · [Approved concept source](https://github.com/ksolo21-web/HAVENLINE/tree/01664a73/Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts)
@@ -35,7 +39,7 @@ All three native landscape plots retain recognizable materials at game zoom. The
 
 **9/10 for transaction legibility in this field route.** The green pad fills in installments, the last wood produces a visible hearth, the court changes, each typed stock appears on its own plot and an earned purchase increases the orbit from one to three. On the updated landscape and portrait routes the actor can briefly cover a floor icon. The contextual HUD independently resolves its type and quantity. Both aspect ratios show “Build hearth · 2 wood remaining”, “Meat storage · 2” and “Upgrade · 1 stone, 1 meat remaining” at the corresponding recorded states. The natural low-volume route makes individual red parcels harder to see at normal zoom than the HUD quantity. This is an independent practical score for this specific sequence.
 
-The full production **NativeVisualCritic** gate is open. Its minimum is 9/10 with every critical item present. This single field scene does not include all four characters together, rescue, repairs, historical survivor harvesting, complete outfit contacts or physical device coverage. Rig and foot-plant findings belong to the separate movement review. The reference lock imposes a separate **10/10 in every mandatory area**. Missing A production, B customer/defense loops, full traceable source motion and comparable phone/tablet gameplay prevent whole-game signoff. Nonnative phone-sized resizes and calibrated software captures do not establish sustained physical 4K60.
+The full production **NativeVisualCritic** gate is open. Its minimum is 9/10 with every critical item present. This single field scene does not include all four characters together, rescue, repairs, historical survivor harvesting, complete outfit contacts or physical device coverage. The independent movement review gives this exact V12 character and motor 8.7/10. First 0.10-second planted contact windows moved at most 2.4 mm in its tested run-turn entries, but an about-face produced a measured 14 cm inward bend of the planted knee. [Exact rig and motion result](../Character/Independent-QA/V12-3b019100/Review.md) The reference lock imposes a separate **10/10 in every mandatory area**. Missing A production, B customer/defense loops, full traceable source motion and comparable phone/tablet gameplay prevent whole-game signoff. Nonnative phone-sized resizes and calibrated software captures do not establish sustained physical 4K60.
 
 | Full reference-lock area | Direct field evidence | Why 10/10 remains open |
 |---|---|---|

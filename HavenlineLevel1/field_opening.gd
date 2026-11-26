@@ -231,7 +231,10 @@ func step_tree(dt: float) -> void:
 	if persist_blocked or not field_ready: return
 	for tree in trees:
 		tree.set_meta("orbit_reach",SURFACE_REACH * character_kit.reach_scale)
+		var previous_phase: String = tree.phase
 		tree.advance(dt,actor.position,float(layout.actor_radius))
+		if previous_phase == "credited" and tree.phase == "rooted":
+			_event("regrow_wood",tree.global_position)
 		if tree.phase == "ready_to_credit":
 			_event("deplete_wood", tree.global_position)
 			_make_drops("wood",tree.global_position,3)
@@ -286,6 +289,7 @@ func _player_hit(amount: int) -> void:
 	flash.color.a = .26
 	_event("player_hurt",actor.position)
 	if player_hp == 0:
+		_event("player_fall",actor.position)
 		reset_time = 1.05
 		character_kit.rest()
 	_refresh_field()
@@ -329,8 +333,11 @@ func _physics_process(dt: float) -> void:
 			_event("reset",actor.position)
 			_refresh_field()
 		return
+	var previous_tool: String = character_kit.equipped
 	super(dt)
 	if persist_blocked: return
+	if not previous_tool.is_empty() and previous_tool != character_kit.equipped and character_kit.equipped in ["axe","pickaxe"]:
+		_event("equip_"+character_kit.equipped,actor.position)
 	hurt_time = maxf(0.0,hurt_time-dt)
 	hero_model.rotation.z = .14*sin(PI*hurt_time/.32)
 	sound.set_listener_position(actor.position)
@@ -349,6 +356,7 @@ func _physics_process(dt: float) -> void:
 			resource_rock._mesh.scale = Vector3.ONE
 			resource_rock._mesh.position.y = -resource_rock._mesh.mesh.get_aabb().position.y
 			resource_rock._mesh.show()
+			_event("regrow_stone",resource_rock.position)
 	var danger := false
 	for wolf in enemies:
 		if respawns.has(wolf):
@@ -356,11 +364,14 @@ func _physics_process(dt: float) -> void:
 			if respawns[wolf] <= 0.0 and actor.position.distance_to(wolf.home)>6.0:
 				respawns.erase(wolf)
 				wolf.reset_encounter()
+				_event("wolf_return",wolf.position)
 		var before := wolf.state
 		wolf.advance(dt,_wolf_sweep)
 		if before != wolf.state:
 			if wolf.state == "stalk" and before in ["guard","return"]:
 				_event("approach",wolf.position)
+			elif wolf.state == "windup":
+				_event("wolf_brace",wolf.position)
 			elif wolf.state == "lunge":
 				_event("enemy_attack",wolf.position)
 		danger = danger or wolf.state in ["stalk","windup","lunge","recover","stagger"]

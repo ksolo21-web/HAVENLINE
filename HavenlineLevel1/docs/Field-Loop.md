@@ -21,4 +21,17 @@ python3 tests/field_route_verify.py "$qa_dir"
 godot --headless --path "$project_dir" --script res://tests/field_route_reload.gd -- "--l1-disposable-profile=$profile_dir"
 ```
 
+For a separate defeat-and-recovery run, create a second fresh disposable profile and use `tests/field_route_recovery.json` as `FIELD_QA_PLAN`. The default verifier above checks the purchase route.
+
 The source measurements and reference links are under `Docs/Design/ReferenceVideoLock/2026-11-26-field-loop/`. The original Havenline art controls resource identity and the creature design. The recorded ads guide screen proportions, timing and the relationship between an action and its reward.
+
+
+## Rebuild the field audio
+
+The music changes with the eastern wolf encounter, the snowfield and the paid hearth. The effects follow tool changes, foot plants, strikes, depletion, resource return, pickups, deposits, installment arrivals, gate movement and latching, the wolf’s brace and bite, and player fall and recovery. The mixer reserves voices for purchases and player injury when several actions happen together.
+
+From the project folder, run the following with NumPy and SciPy installed. The generator verifies five original recordings in the shipped bank and writes the complete set into a separate output folder.
+
+```bash
+python3 tools/audio/render_field_score.py --output /tmp/havenline-field-audio-review
+```

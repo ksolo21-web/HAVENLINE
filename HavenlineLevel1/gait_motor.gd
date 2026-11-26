@@ -44,6 +44,8 @@ var desired_touchdown := 0.05
 var authored_pose: Dictionary = {}
 var pelvis_index := -1
 var neutral_toes: Array[Transform3D] = []
+var leg_tracking := 0.0
+var action_elapsed := 0.0
 var bridge := false
 var bridge_time := 0.0
 var bridge_wait := 0.0
@@ -69,6 +71,7 @@ func _toe_relative(side: int) -> Transform3D:
 
 
 func _prepare_steps(mode: String, heading: float) -> void:
+	action_elapsed = 0.0 if not procedural_steps_active else .08
 	bridge = false
 	releasing = false
 	special = mode
@@ -166,7 +169,7 @@ func _heights() -> Vector2:
 
 func _place_boot(side: int, target: Transform3D, toe: Transform3D) -> void:
 	var current := _boot_world(side)
-	_adjust_leg(leg_chains[side], target.origin - current.origin, 0.0)
+	_adjust_leg(leg_chains[side], target.origin - current.origin, 0.0, target.basis * toe.origin)
 	var boot := skeleton.get_bone_global_pose(leg_chains[side][2])
 	boot.basis = skeleton.global_basis.inverse() * target.basis
 	skeleton.set_bone_global_pose(leg_chains[side][2], boot)
@@ -174,6 +177,8 @@ func _place_boot(side: int, target: Transform3D, toe: Transform3D) -> void:
 
 
 func _play_steps(dt: float) -> void:
+	action_elapsed += dt
+	leg_tracking = smoothstep(0.0, .075, action_elapsed)
 	var swing := 1 - support
 	var latest := _boot_world(swing)
 	var latest_toe := _toe_relative(swing)
@@ -290,6 +295,7 @@ func _release_last_foot(dt: float) -> void:
 		endpoint.origin += forward * landing_time + forward.normalized() * shoe_lead
 		planned_landing = endpoint * neutral_ankles[bridge_side]
 	var t := clampf(bridge_time / landing_time, 0, 1)
+	leg_tracking = 1.0 - smoothstep(.55, 1.0, t)
 	var weight := smoothstep(0, 1, t)
 	var dest := bridge_origin.interpolate_with(planned_landing, weight)
 	dest = dest.interpolate_with(live, smoothstep(.55, 1.0, t))
@@ -377,7 +383,7 @@ func _contacts() -> PackedVector3Array:
 
 # Solve the original hip–knee–ankle chain in its authored bend plane.
 # Steering stays on the collision body; the foot targets affect only the rig.
-func _adjust_leg(chain: Array, delta: Vector3, turn: float) -> void:
+func _adjust_leg(chain: Array, delta: Vector3, turn: float, target_toe := Vector3.ZERO) -> void:
 	var thigh := skeleton.get_bone_global_pose(chain[0])
 	var shin := skeleton.get_bone_global_pose(chain[1])
 	var boot := skeleton.get_bone_global_pose(chain[2])
@@ -390,7 +396,38 @@ func _adjust_leg(chain: Array, delta: Vector3, turn: float) -> void:
 	)
 	var along := (distance * distance + upper * upper - lower * lower) / (2.0 * distance)
 	var bend := (shin.origin - thigh.origin).slide(axis).normalized()
-	var knee := thigh.origin + axis * along + bend * sqrt(maxf(0.0, upper * upper - along * along))
+	var radius := sqrt(maxf(0.0, upper * upper - along * along))
+	# When the ankle crosses its native rest line, follow the toe with the
+	# kneecap. The admissible arc preserves both skeletal link lengths.
+	if procedural_steps_active and radius > .0001:
+		var world_axis := skeleton.global_basis * (target - thigh.origin)
+		var side: float = 1.0 if chain[0] == leg_chains[0][0] else -1.0
+		var body_front: Vector3 = contact_world.actor.global_basis.z.slide(Vector3.UP).normalized()
+		var toe_front := (
+			target_toe.slide(Vector3.UP).normalized()
+			if target_toe.length_squared() > .000001
+			else body_front
+		)
+		var sagittal: Vector3 = body_front.slerp(toe_front, .58).normalized()
+		var lateral: Vector3 = Vector3.UP.cross(sagittal).normalized() * side
+		var frontal := lateral - Vector3.UP * world_axis.dot(lateral) / minf(-.001, world_axis.y)
+		var plane: Vector3 = (skeleton.global_basis.transposed() * frontal).slide(axis)
+		var sensitivity := radius * plane.length()
+		if sensitivity > .01:
+			plane = plane.normalized()
+			var toe := skeleton.get_bone_global_pose(chain[3]).origin
+			var toe_forward: Vector3 = (
+				(skeleton.global_basis * (toe - boot.origin)).slide(Vector3.UP).normalized()
+			)
+			var wanted := .004
+			var component := bend.dot(plane)
+			var corrected := clampf(
+				component, (wanted - .010) / sensitivity, (wanted + .023) / sensitivity
+			)
+			var value := lerpf(component, clampf(corrected, -.97, .97), leg_tracking)
+			var other := bend.slide(plane).normalized()
+			bend = (plane * value + other * sqrt(maxf(0, 1.0 - value * value))).normalized()
+	var knee := thigh.origin + axis * along + bend * radius
 	target = thigh.origin + axis * distance
 	var first := Quaternion(
 		(shin.origin - thigh.origin).normalized(), (knee - thigh.origin).normalized()
