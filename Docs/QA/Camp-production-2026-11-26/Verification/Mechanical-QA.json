@@ -1,0 +1,47 @@
+{
+  "scene": "res://field_opening.tscn",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "build": "30524e3da7906e252e1de7dd4529250b060868be",
+  "completion_assertions": 210,
+  "fresh_processes": 16,
+  "layout_observations": {
+    "aisle_probe_diameter_m": 0.959999978542328,
+    "counter service_sampling_error_m": 0.028,
+    "east gate_sampling_error_m": 0.156,
+    "grid_pitch_m": 0.26,
+    "kitchen feed_sampling_error_m": 0.078,
+    "reachable_samples": 2079,
+    "roast pickup_sampling_error_m": 0.058,
+    "saw feed_sampling_error_m": 0.108,
+    "south gate_sampling_error_m": 0.072,
+    "stone feed_sampling_error_m": 0.089,
+    "storehouse_sampling_error_m": 0.112
+  },
+  "focused_native": {
+    "shore": {
+      "assertions": 14,
+      "failures": [],
+      "log": "Native/qa_field_lakeshore-1.log"
+    },
+    "mills": {
+      "assertions": 19,
+      "failures": [],
+      "log": "Native/qa_field_processors-1.log"
+    },
+    "landscape": {
+      "assertions": 40,
+      "failures": [],
+      "log": "Native/world_landscape_qa-1.log"
+    }
+  },
+  "simulation": "Normal scene and physics clock, fixed at 60 Hz, isolated profile. The fixture positions the avatar at each real interaction. Player-supply phases park the rescued forester after its first normal delivery to isolate its optional second source of legitimate input. A separate live survivor route exercises the courier.",
+  "circulation": "Collision queries sampled the inside of the final perimeter at 0.26 m pitch with a 0.96 m diameter capsule. Gate crossing checks moved the actual character body through each open gate in both directions.",
+  "cold_failure_paths": "Held a live save lock during worker delivery, automatic cook completion, customer checkout and level transition. Prior payload SHA-256 matched exactly; fresh retries committed once.",
+  "bounds": "These tests verify game logic and walkable clearance. Render style, camera framing and target-device frame rate require separate review.",
+  "manifest": {
+    "sha256": "5c3925024e4ddb1ad14a95809ce2deaba6aaddf1cb6dcbc37cfa764ffba74f0b",
+    "checked_files": 357
+  },
+  "saw_camera": "At 1x and 2x the camera-facing rear cutaway removed the occluding roof, lowered the rear wall and kept the door and collider closed. Leaving the west saw restored the full roof and wall.",
+  "completion_receipt": "Completion/Completion-results.json"
+}

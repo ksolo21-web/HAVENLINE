@@ -1,0 +1,91 @@
+{
+  "source_commit": "b80c61f13ba31bb0940792dd47976a8e2878dbf5",
+  "scope": "Archived reference pixel samples and their labelled order. Original asset masters are identified by the extraction manifests. These excerpts carry no original audio.",
+  "inputs": {
+    "A-paid-sequence.png": {
+      "source": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/A-paid-sequence.png",
+      "sha256": "29cc04eeffd3dfd92e6d2b8a9e87e2172bdc8f79a1781d64f47d67eb1afdde20",
+      "recording_sha256": "62f7cfe644de3826cfdd6d91bc23c0ab8d9e4fde3e175c90f762e604547bb0ca",
+      "labels": "Nominal half-second bins from archived FFmpeg fps=2 sampling."
+    },
+    "A-wheat-sequence.png": {
+      "source": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/A-wheat-sequence.png",
+      "sha256": "018715e320c7d40fe462b21c046bd70507712851a63ed83245b2bf96ee0c1b0f",
+      "recording_sha256": "62f7cfe644de3826cfdd6d91bc23c0ab8d9e4fde3e175c90f762e604547bb0ca",
+      "labels": "Nominal half-second bins from archived FFmpeg fps=2 sampling."
+    },
+    "A-016.00.png": {
+      "source": "Docs/Production/T05/ReferenceFrames/A-016.00.png",
+      "sha256": "3afe3c0fe64702894b7cac3a0d1b271cac0b2d60e87490063a1def7ee111d5ba",
+      "recording_sha256": "62f7cfe644de3826cfdd6d91bc23c0ab8d9e4fde3e175c90f762e604547bb0ca",
+      "seek_seconds": 16
+    },
+    "B-008.00.png": {
+      "source": "Docs/Production/T05/ReferenceFrames/B-008.00.png",
+      "sha256": "8544aee9feba9bdb5d3060ec8449bd2ba07f7ad4092c70599979120e3d09c65b",
+      "recording_sha256": "4c9051cbea6df0efa3e7288b13b6d17da46e857274869b0b43d2f96ff6cc79d2",
+      "seek_seconds": 8
+    },
+    "B-010.00.png": {
+      "source": "Docs/Production/T05/ReferenceFrames/B-010.00.png",
+      "sha256": "10e434c1b949d18f76e9a510c8376895e4996413d7f8ae1b2f3df924aa848e8c",
+      "recording_sha256": "4c9051cbea6df0efa3e7288b13b6d17da46e857274869b0b43d2f96ff6cc79d2",
+      "seek_seconds": 10
+    },
+    "B-028.00.png": {
+      "source": "Docs/Production/T05/ReferenceFrames/B-028.00.png",
+      "sha256": "3e983101885a727eb32fcc0d132fcacf8be8c439d2dfefcb267b45326065ee18",
+      "recording_sha256": "4c9051cbea6df0efa3e7288b13b6d17da46e857274869b0b43d2f96ff6cc79d2",
+      "seek_seconds": 28
+    }
+  },
+  "excerpts": {
+    "A-paid-2fps.mp4": {
+      "source": "A-paid-sequence.png",
+      "sha256": "040a60783d28354245412e54827aec8cb555d0744798fe66d29db50ad9448299",
+      "frame_count": 15,
+      "recording_times_s": [
+        9.0,
+        9.5,
+        10.0,
+        10.5,
+        11.0,
+        11.5,
+        12.0,
+        12.5,
+        13.0,
+        13.5,
+        14.0,
+        14.5,
+        15.0,
+        15.5,
+        16.0
+      ]
+    },
+    "A-wheat-2fps.mp4": {
+      "source": "A-wheat-sequence.png",
+      "sha256": "134d599de2f26b72569c1f2088e2512f69717cd976b8119552a6335ea9f19a83",
+      "frame_count": 13,
+      "recording_times_s": [
+        37.0,
+        37.5,
+        38.0,
+        38.5,
+        39.0,
+        39.5,
+        40.0,
+        40.5,
+        41.0,
+        41.5,
+        42.0,
+        42.5,
+        43.0
+      ]
+    }
+  },
+  "board": {
+    "file": "Camp-production-reference.jpg",
+    "sha256": "980fdd789595abaa4734e63e544de3a7dca6c2492bb3d26c512c16c73f5b51d0",
+    "derivation": "Labelled crops of original archived gameplay samples. Crops are uniformly scaled; page text is editorial."
+  }
+}

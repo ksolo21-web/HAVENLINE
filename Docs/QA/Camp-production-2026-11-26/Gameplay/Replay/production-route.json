@@ -1,0 +1,305 @@
+[
+  {
+    "action": "walk",
+    "label": "Reach the south gate from the earned hunt",
+    "p": [
+      0,
+      7.12
+    ],
+    "tol": 0.16,
+    "timeout": 15
+  },
+  {
+    "action": "gate",
+    "gate": "gate-south",
+    "label": "Open the south gate"
+  },
+  {
+    "action": "walk",
+    "label": "Enter the paid camp",
+    "p": [
+      0,
+      3.65
+    ],
+    "tol": 0.16,
+    "timeout": 15
+  },
+  {
+    "action": "walk",
+    "label": "Follow the lane east of the furnace",
+    "p": [
+      2.1,
+      2.95
+    ],
+    "tol": 0.16,
+    "timeout": 15
+  },
+  {
+    "action": "walk",
+    "label": "Walk past the hearth toward the production area",
+    "p": [
+      2.1,
+      -3.05
+    ],
+    "tol": 0.16,
+    "timeout": 15
+  },
+  {
+    "action": "walk",
+    "label": "Cross the production aisle",
+    "p": [
+      -0.4,
+      -4.24
+    ],
+    "tol": 0.16,
+    "timeout": 15,
+    "film": "A production aisle inside the expanded camp",
+    "record_from": 0.06,
+    "record_until": 0.92
+  },
+  {
+    "action": "walk",
+    "label": "Round the front of the timber station",
+    "p": [
+      -0.75,
+      -5.65
+    ],
+    "tol": 0.16,
+    "timeout": 15,
+    "film": "A production aisle inside the expanded camp",
+    "record_from": 0,
+    "record_until": 0
+  },
+  {
+    "action": "walk",
+    "label": "Load real carried timber at the connected saw",
+    "p": [
+      -3.2,
+      -5.72
+    ],
+    "tol": 0.16,
+    "timeout": 15,
+    "film": "The sawmill runs after the player leaves",
+    "record_from": 0.46,
+    "record_until": 99
+  },
+  {
+    "action": "hold",
+    "label": "The input rack takes a small batch",
+    "s": 0.69,
+    "film": "The sawmill runs after the player leaves"
+  },
+  {
+    "action": "walk",
+    "label": "Leave the sawmill loading radius while the saw runs",
+    "p": [
+      -4.53,
+      -5.69
+    ],
+    "tol": 0.16,
+    "timeout": 15,
+    "film": "The sawmill runs after the player leaves"
+  },
+  {
+    "action": "hold",
+    "label": "Watch the outfeed without standing on the saw apron",
+    "s": 0.7,
+    "film": "The sawmill runs after the player leaves",
+    "record_from": 0,
+    "record_until": 0.36
+  },
+  {
+    "action": "walk",
+    "label": "Return through the wood station aisle",
+    "p": [
+      -0.8,
+      -5.65
+    ],
+    "tol": 0.16,
+    "timeout": 15
+  },
+  {
+    "action": "walk",
+    "label": "Follow the clear interior lane across camp",
+    "p": [
+      6.7,
+      -3.75
+    ],
+    "tol": 0.16,
+    "timeout": 15
+  },
+  {
+    "action": "walk",
+    "label": "Approach the stone input",
+    "p": [
+      7.8,
+      -5.7
+    ],
+    "tol": 0.16,
+    "timeout": 15,
+    "film": "The drill runs after the player leaves",
+    "record_from": 0.62,
+    "record_until": 99
+  },
+  {
+    "action": "hold",
+    "label": "Drop two raw stones",
+    "s": 0.75,
+    "film": "The drill runs after the player leaves"
+  },
+  {
+    "action": "walk",
+    "label": "Leave the drill behind to work on both stones",
+    "p": [
+      6.08,
+      -4.0
+    ],
+    "tol": 0.16,
+    "timeout": 15,
+    "film": "The drill runs after the player leaves"
+  },
+  {
+    "action": "hold",
+    "label": "Watch stone finish after leaving the drill",
+    "s": 0.75,
+    "film": "The drill runs after the player leaves",
+    "record_from": 0,
+    "record_until": 0.72
+  },
+  {
+    "action": "walk",
+    "label": "Walk the dry aisle back to the kitchen",
+    "p": [
+      1.2,
+      -4.1
+    ],
+    "tol": 0.16,
+    "timeout": 15
+  },
+  {
+    "action": "walk",
+    "label": "Load the cooker inlet",
+    "p": [
+      1.2,
+      -5.67
+    ],
+    "tol": 0.16,
+    "timeout": 15,
+    "film": "The cooker runs after the player leaves",
+    "record_from": 0.26,
+    "record_until": 99
+  },
+  {
+    "action": "hold",
+    "label": "Release carried meat to the intake",
+    "s": 0.73,
+    "film": "The cooker runs after the player leaves"
+  },
+  {
+    "action": "walk",
+    "label": "Walk away before the kitchen finishes",
+    "p": [
+      -1.05,
+      -3.85
+    ],
+    "tol": 0.16,
+    "timeout": 15,
+    "film": "The cooker runs after the player leaves"
+  },
+  {
+    "action": "hold",
+    "label": "Let both portions cook in the machine",
+    "s": 2.35,
+    "film": "The cooker runs after the player leaves",
+    "record_from": 0,
+    "record_until": 0.48
+  },
+  {
+    "action": "walk",
+    "label": "Walk to the distinct roast pickup position",
+    "p": [
+      -1.05,
+      -5.67
+    ],
+    "tol": 0.16,
+    "timeout": 15,
+    "film": "Collect the roast and carry it to the customer",
+    "record_from": 0.28,
+    "record_until": 99
+  },
+  {
+    "action": "hold",
+    "label": "Pick up one cooked portion",
+    "s": 0.48,
+    "film": "Collect the roast and carry it to the customer",
+    "record_from": 0,
+    "record_until": 0.27
+  },
+  {
+    "action": "walk",
+    "label": "Clear the kitchen pickup",
+    "p": [
+      -0.6,
+      -4.51
+    ],
+    "tol": 0.16,
+    "timeout": 15,
+    "film": "Collect the roast and carry it to the customer",
+    "record_from": 0,
+    "record_until": 0.4
+  },
+  {
+    "action": "walk",
+    "label": "Pass the kitchen from the center aisle",
+    "p": [
+      2.8,
+      -5.26
+    ],
+    "tol": 0.16,
+    "timeout": 15,
+    "film": "Collect the roast and carry it to the customer",
+    "record_from": 0,
+    "record_until": 0
+  },
+  {
+    "action": "walk",
+    "label": "Take the meal to the interior serving mat",
+    "p": [
+      2.8,
+      -7.46
+    ],
+    "tol": 0.16,
+    "timeout": 15,
+    "film": "Collect the roast and carry it to the customer",
+    "record_from": 0.14,
+    "record_until": 99
+  },
+  {
+    "action": "hold",
+    "label": "A waiting customer pays at the north fence",
+    "s": 2.6,
+    "film": "Collect the roast and carry it to the customer",
+    "record_from": 0,
+    "record_until": 0.82
+  },
+  {
+    "action": "walk",
+    "label": "Return from the counter to observe the transport aisle",
+    "p": [
+      1.9,
+      -4.3
+    ],
+    "tol": 0.16,
+    "timeout": 15
+  },
+  {
+    "action": "watch_feeder",
+    "label": "The survivor loads a workshop from stock while the player stands aside",
+    "timeout": 115
+  },
+  {
+    "action": "hold",
+    "label": "Collect trailing native audio",
+    "s": 0.36
+  }
+]
