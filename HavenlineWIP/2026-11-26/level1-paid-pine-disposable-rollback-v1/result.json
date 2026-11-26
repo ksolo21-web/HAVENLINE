@@ -1,0 +1,53 @@
+{
+  "candidate_earnings": {
+    "v1": {
+      "file_bytes": 303,
+      "file_sha256": "0859e89d751745d93dcf2317f386d1c4158a8dad3e7ce2f9188ec146ba335b78",
+      "payload_version": 1,
+      "repeat_occurrences": 0,
+      "save_envelope_version": 1,
+      "wood": 0
+    },
+    "v2": {
+      "file_bytes": 326,
+      "file_sha256": "832e3f09cb5718634de49d89e1e358b70cc5789464612b2ca48ec6dab43bc415",
+      "payload_version": 2,
+      "repeat_occurrences": 1,
+      "save_envelope_version": 1,
+      "wood": 1
+    }
+  },
+  "checks_total": 60,
+  "durable_installation": "HOLD, test confirms non-destructive old refusal, not an approved application rollback or namespace",
+  "engine": "v4.7.2.stable.official.ed1daf0bf",
+  "import_only_existing_obj_annotations": 18,
+  "legacy_load_v1": "OK",
+  "legacy_load_v2": "ERR_FILE_CORRUPT",
+  "legacy_stage_created": false,
+  "legacy_valid_write_over_v2": "ERR_FILE_CORRUPT",
+  "phases": {
+    "candidate": {
+      "checks": 39,
+      "failures": 0,
+      "log_sha256": "99e35d097ebfc1ddb017aad45914afe657d8b19cc2a015eb6b9b73fb8ec503ce"
+    },
+    "legacy-v1": {
+      "checks": 10,
+      "failures": 0,
+      "log_sha256": "1402a82949fbbd3077f6c59385d4faca3375d9c7653dc3fcca705d402315c6a5",
+      "matched_real_candidate_bytes": true,
+      "scratch_all_files_and_modes_unchanged": true
+    },
+    "legacy-v2": {
+      "checks": 11,
+      "failures": 0,
+      "load_commit_err_file_corrupt": 16,
+      "log_sha256": "d6811c9edbbfaf81a6295bbd3235cd6ed407698cc57cad39bf0f7b4fb47a627c",
+      "matched_real_candidate_bytes": true,
+      "scratch_all_files_and_modes_unchanged": true
+    }
+  },
+  "proof_scope": "functional headless with real disposable save operations; no app/production/user-save/profile migration or visual device claim",
+  "route": "exact patched integrated scene for candidate; legacy is only exact old Save/Ledger in a scratch script project",
+  "unexpected_scoped_save_paths": false
+}
