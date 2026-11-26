@@ -185,7 +185,8 @@ func run() -> void:
 		if remote.has(kind): await examine(remote[kind],true)
 	if remote.has("stone"): legacy_save(remote.stone.id)
 	print(JSON.stringify({"physics_hz":Engine.physics_ticks_per_second,"checks":checks,"evidence":evidence}))
-	world.sound.stop_playback()
+	world.set_physics_process(false)
+	await Isolated.drain_field_audio(self,world)
 	world.queue_free()
-	for i in 8: await process_frame
+	await process_frame
 	quit(1 if false in checks.values() else 0)

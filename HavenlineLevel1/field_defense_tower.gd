@@ -39,6 +39,7 @@ func advance(dt: float, paid: bool) -> void:
 			art.set_build_progress(raising)
 	presented=true
 	if not active or not art: return
+	art.update_sightline(world.actor.global_position,world.camera)
 	if raising<1.0:
 		raising=minf(1.0,raising+dt*1.6)
 		art.set_build_progress(raising)

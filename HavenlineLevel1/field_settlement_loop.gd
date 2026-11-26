@@ -5,12 +5,14 @@ const Progress = preload("res://field_progression.gd")
 const Shore = preload("res://field_lakeshore.gd")
 const Counter = preload("res://field_counter.gd")
 const Survivor = preload("res://field_survivor.gd")
-const COOK_SECONDS := 1.65
+const Transfers = preload("res://field_production_transfer.gd")
+const COOK_SECONDS: float = Rules.CYCLE_SECONDS.meat
 var world
 var works
-var ingredient: Node3D
-var transfer_from := Vector3.ZERO
-var cooking := 0.0
+var transfers
+var cooking: float:
+	get:
+		return float(world.inventory.settlement.work_seconds.meat) if world else 0.0
 var hot := false
 var announced_finish := false
 var finger := -1
@@ -35,13 +37,13 @@ func install(host: Node3D) -> void:
 	world.counter = Counter.new()
 	add_child(world.counter)
 	world.counter.setup(world,make_customer,serve)
-	ingredient = world.FieldArt.make("meat")
-	ingredient.name = "CookerInputPortion"
-	add_child(ingredient)
-	ingredient.hide()
+	transfers = Transfers.new()
+	add_child(transfers)
+	transfers.setup(world)
 	world.counter.set_active(world.inventory.complete(Progress.SECOND), int(world.inventory.settlement.served))
 	sync()
 	announced_finish = ready()
+	_present_production(0.)
 
 func make_customer(choice: String) -> Node3D:
 	return world.survivor.make_customer(choice)
@@ -50,7 +52,10 @@ func ready() -> bool:
 	return Rules.ready_to_continue(world.inventory.settlement, world.inventory.build_order)
 
 func can_transact() -> bool:
-	return world.field_ready and not world.persist_blocked and world.reset_time <= 0 and not world.closing
+	return _simulation_active() and world.reset_time <= 0
+
+func _simulation_active() -> bool:
+	return world.field_ready and not world.persist_blocked and not world.closing
 
 func sync() -> void:
 	var journal: Dictionary = world.inventory.settlement
@@ -61,31 +66,18 @@ func sync() -> void:
 func advance(dt: float) -> void:
 	world.survivor.advance(dt)
 	world.owl.advance(dt)
-	world.processors.tick(dt)
+	# Existing jobs advance even when nobody is on an apron. A new handoff enters
+	# the hopper after this step, so a late delivery cannot earn a head start.
+	_advance_production(dt)
 	works.advance(dt)
+	if can_transact(): collect_meal()
+	var progress := _present_production(dt)
 	world.counter.set_active(world.inventory.complete(Progress.SECOND),int(world.inventory.settlement.served))
-	world.counter.advance(dt)
-	var can_cook: bool = _can_cook()
-	if can_cook != hot:
-		hot = can_cook
-		world.lakeshore.update_activity(hot)
-		transfer_from = world.carry.show_station_transfer("meat" if hot else "")
-		ingredient.visible = hot
-		if hot: world._event("cooker_start",world.lakeshore.cooker_input.global_position)
-	world.lakeshore.tick(dt)
-	if can_cook:
-		cooking += dt
-		var path_fraction := clampf(cooking/.34,0,1)
-		ingredient.global_position = transfer_from.lerp(world.lakeshore.cooker_input.global_position,path_fraction) + Vector3.UP * .32 * sin(path_fraction*PI)
-		if cooking >= COOK_SECONDS:
-			cook()
-	else:
-		cooking = 0.0
+	if can_transact(): world.counter.advance(dt)
 	if ready() and not announced_finish:
 		announced_finish = true
 		world._event("level_complete",world.actor.global_position)
 	sync_if_needed()
-	var progress := cooking / COOK_SECONDS if hot else 0.0
 	if not works.active.is_empty():
 		progress = works.elapsed / works._duration()
 	world.opening_hud.settlement_status(world.inventory.settlement,progress)
@@ -111,7 +103,7 @@ func rescue() -> bool:
 
 func claim_worker_wood(token: String) -> bool:
 	if not can_transact() or not world.inventory.settlement.rescued or not world.inventory.storage_open("wood"): return false
-	if not world.inventory.settlement.worker_carry_token.is_empty() or world.inventory.collected.has(token): return false
+	if not world.inventory.settlement.worker_carry_token.is_empty() or not world.inventory.settlement.worker_supply.is_empty() or world.inventory.collected.has(token): return false
 	if not world.drops.has(token) or world.drops[token].kind != "wood" or not world.survivor.can_claim(token): return false
 	var position_: Vector3 = world.drops[token].at
 	world._remove_drop(token)
@@ -131,25 +123,83 @@ func deliver_worker_wood() -> bool:
 	journal.worker_deliveries += 1
 	return commit_receipt("worker_delivery",world.depot.bins.wood.global_position)
 
-func _can_cook() -> bool:
+func available_to_feeder(kind: String) -> bool:
+	return can_transact() and kind in Rules.KINDS and world.inventory.complete(Progress.SECOND) and int(world.inventory.settlement.hoppers[kind]) < Rules.HOPPER_CAPACITY
+
+func _running(kind: String) -> bool:
 	var journal: Dictionary = world.inventory.settlement
-	return can_transact() and world.inventory.complete(Progress.SECOND) and world.lakeshore.at_cooker(world.actor.global_position) and journal.cooked == journal.served and world.carry.available_to_station("meat") > 0
+	if not _simulation_active() or not world.inventory.complete(Progress.SECOND) or journal.hoppers[kind] <= 0: return false
+	return kind != "meat" or Rules.waiting_meals(journal) < Rules.ROAST_RACK_CAPACITY
+
+func advance_unattended(dt: float) -> void:
+	if not _simulation_active(): return
+	_advance_production(dt)
+	world.opening_hud.settlement_status(world.inventory.settlement,_present_production(dt))
+
+func _can_cook() -> bool:
+	return _running("meat")
+
+func _advance_production(dt: float) -> void:
+	for kind: String in Rules.KINDS:
+		if not _running(kind): continue
+		var seconds: float = Rules.CYCLE_SECONDS[kind]
+		var elapsed: Dictionary = world.inventory.settlement.work_seconds
+		if elapsed[kind] == 0:
+			var cue := "cooker_start" if kind == "meat" else "process_"+kind
+			var at: Vector3 = world.lakeshore.cooker_input.global_position if kind == "meat" else world.processors.input_position(kind)
+			world._event(cue,at)
+		elapsed[kind] = minf(seconds, float(elapsed[kind]) + dt)
+		if elapsed[kind] >= seconds and not _finish_cycle(kind):
+			return
+
+func _finish_cycle(kind: String) -> bool:
+	var journal: Dictionary = world.inventory.settlement
+	if not _running(kind) or journal.work_seconds[kind] < Rules.CYCLE_SECONDS[kind]: return false
+	journal.work_seconds[kind] = 0.0
+	journal.hoppers[kind] -= 1
+	if kind == "meat":
+		journal.cooked += 1
+		return commit_receipt("meal_ready",world.lakeshore.cooker_output.global_position)
+	journal["processed_"+kind] += 1
+	return commit_receipt("process_done",world.processors.output_position(kind))
+
+func _present_production(dt: float) -> float:
+	transfers.set_meal_stock(Rules.waiting_meals(world.inventory.settlement))
+	var progress := 0.0
+	for kind: String in Rules.KINDS:
+		var running := _running(kind)
+		var fraction := -1.0
+		if running:
+			fraction = float(world.inventory.settlement.work_seconds[kind]) / float(Rules.CYCLE_SECONDS[kind])
+			progress = maxf(progress, fraction)
+		transfers.show_cycle(kind,fraction)
+		if kind == "meat":
+			hot = running
+			world.lakeshore.update_activity(hot)
+		else:
+			world.processors.set_running(kind,running)
+	world.processors.tick(dt)
+	world.lakeshore.tick(dt)
+	return progress
 
 func cook() -> bool:
-	if cooking < COOK_SECONDS or not _can_cook(): return false
-	cooking = 0.0
-	world.carry.show_station_transfer("")
-	ingredient.hide()
-	world.inventory.carried.meat -= 1
-	world.inventory.settlement.cooked += 1
-	if not commit_receipt("meal_ready",world.lakeshore.cooker_output.global_position): return false
-	world.counter.collect_meal(world.lakeshore.cooker_output.global_position)
+	return _finish_cycle("meat")
+
+func collect_meal() -> bool:
+	var journal: Dictionary = world.inventory.settlement
+	if not can_transact() or not world.inventory.complete(Progress.SECOND) or not world.lakeshore.at_output(world.actor.global_position): return false
+	if journal.held_meal != 0 or Rules.waiting_meals(journal) <= 0 or world.counter.sale_order != 0: return false
+	journal.held_meal = 1
+	var at: Vector3 = world.lakeshore.cooker_output.global_position
+	if not commit_receipt("pickup_partial",at): return false
+	world.counter.collect_meal(at)
 	return true
 
 func serve(order: int) -> bool:
 	if not can_transact() or not world.counter.at_service(world.actor.global_position) or not world.counter.awaiting_payment(order): return false
 	var journal: Dictionary = world.inventory.settlement
-	if not world.inventory.complete(Progress.SECOND) or journal.served + 1 != order or journal.cooked <= journal.served: return false
+	if not world.inventory.complete(Progress.SECOND) or journal.served + 1 != order or journal.held_meal != 1: return false
+	journal.held_meal = 0
 	journal.served += 1
 	return commit_receipt("meal_served",world.actor.global_position)
 
@@ -184,33 +234,36 @@ func hint(previous: String, danger: bool) -> String:
 	if ready(): return "Level 1 playtest complete."
 	if works.plot.visible and world.actor.position.distance_to(works.PLOT_AT) < 2.0:
 		return "Rescue survivor  ·  %d wood left" % (2 - int(journal.survivor_wood))
-	if works.active in ["wood","stone"]:
-		return "Sawing planks…" if works.active == "wood" else "Cutting stone…"
+	if works.active in Rules.KINDS:
+		return {"wood":"Loading saw…","stone":"Loading drill…","meat":"Loading cooker…"}[works.active]
 	if not world.inventory.complete(Progress.SECOND):
 		if world.camp_active and not journal.rescued and world.survivor.at_rescue(world.actor.global_position):
 			return "Approach the survivor."
 		return previous
 	var hint_: String
 	var target := Vector3.INF
-	if journal.cooked > journal.served:
+	if journal.held_meal > 0:
 		hint_ = "Deliver the meal inside the north counter."
 		target = world.counter.service_point.global_position
+	elif Rules.waiting_meals(journal) > 0:
+		hint_ = "Collect a roast from the cooker outfeed."
+		target = world.lakeshore.OUTPUT_APRON
 	elif hot:
-		hint_ = "Cooking at the lakeshore…"
+		hint_ = "Cooking  ·  The roast will wait at the outfeed."
 	elif not journal.rescued:
 		hint_ = "Take two wood to the survivor southwest of the south gate." if not journal.survivor_paid else "Approach the survivor by the south grove."
 		target = works.PLOT_AT if not journal.survivor_paid else world.survivor.RESCUE
 	elif journal.served == 0:
-		hint_ = "Take meat to the southwest lakeshore cooker." if world.inventory.carried.meat > 0 else "Hunt for meat to cook at the southwest lakeshore."
+		hint_ = "Take meat to the camp cooker inlet." if world.inventory.carried.meat > 0 else "Hunt for meat to load the camp cooker."
 		if world.inventory.carried.meat > 0: target = world.lakeshore.APRON
 	elif not world.inventory.complete(Progress.TOWER) or not world.inventory.complete(Progress.AXES):
 		return previous
 	elif journal.processed_wood == 0:
-		hint_ = "Take wood to the lakeshore saw."
-		if world.inventory.carried.wood > 0: target = world.processors.input_position("wood")
+		hint_ = "Take wood to the saw inside the north fence."
+		if world.inventory.carried.wood > 0: target = world.processors.APRONS.wood
 	elif journal.processed_stone == 0:
-		hint_ = "Take stone to the lakeshore drill."
-		if world.inventory.carried.stone > 0: target = world.processors.input_position("stone")
+		hint_ = "Take stone to the drill inside the north fence."
+		if world.inventory.carried.stone > 0: target = world.processors.APRONS.stone
 	elif journal.owl_hits == 0:
 		hint_ = "Meet a wolf outside camp with your owl."
 	elif journal.worker_deliveries == 0:
@@ -226,10 +279,6 @@ func hint(previous: String, danger: bool) -> String:
 
 
 func cancel_cooking() -> void:
+	# A fallen carrier drops the in-flight presentation. Paid hopper stock and
+	# machine work remain in the settlement ledger for the next simulation tick.
 	works.cancel()
-	if not hot: return
-	cooking = 0.0
-	hot = false
-	world.carry.show_station_transfer("")
-	ingredient.hide()
-	world.lakeshore.update_activity(false)

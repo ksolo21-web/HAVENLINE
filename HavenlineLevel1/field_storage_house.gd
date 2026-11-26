@@ -9,7 +9,8 @@ const BAYS := {"wood":Vector3(-1.15,.763,.25),"stone":Vector3(-1.15,.763,-.56),"
 # Keep balances above each bay header, clear of the stock, rims and sliding leaves.
 const LABELS := {"wood":Vector3(-1.10,1.52,.66),"stone":Vector3(-1.09,1.52,-.36),"meat":Vector3(0,1.60,-.73),
 	"coal":Vector3(.89,1.52,.68),"slate":Vector3(-.68,1.60,-.73),"metal":Vector3(.68,1.60,-.73)}
-const CUTAWAY := ["Roof","Gables","Signs","Track","RightWall","Facade","DoorLeft","DoorRight","WholeRightPost"]
+const ROOF := ["Roof","Gables","Signs"]
+const CUTAWAY := ["Track","RightWall","Facade","DoorLeft","DoorRight","WholeRightPost"]
 const TIERS := ["starter","reinforced","advanced"]
 var actor: Node3D
 var model: Node3D
@@ -22,6 +23,9 @@ var parts := {}
 var shelves: Array[Label3D] = []
 var last_stock := {}
 var last_tier := -1
+var rear_occlusion := false
+var last_rear_occlusion := false
+var last_roof_visible := false
 var last_cutaway := false
 var last_slide := -1.0
 
@@ -69,6 +73,7 @@ func update_state(new_tier:int, stock:Dictionary) -> void:
 	tier=clampi(new_tier,0,3)
 	last_stock=stock.duplicate()
 	if tier==0:
+		rear_occlusion=false
 		inside_view=false
 		doors_open=false
 		open_amount=0.
@@ -86,14 +91,41 @@ func _physics_process(delta:float) -> void:
 		inside_view=absf(p.x)<2.03 and p.z> -1.25 and p.z<3.26
 	else:
 		inside_view=absf(p.x)<1.39 and p.z> -1.03 and p.z<2.85
+	rear_occlusion = _roof_covers_player(p)
 	if doors_open!=was_open:
 		door_motion.emit(doors_open,to_global(Vector3(0,1.1,1.22)))
 	open_amount=move_toward(open_amount,1.0 if doors_open else 0.0,delta*2.65)
 	_apply()
 
+# From the north work aisle the closed snow roof can sit between the player
+# and the gameplay camera. Lift the same authored roof used by the front
+# cutaway, without opening the doors or displaying warehouse UI at the saw.
+func _roof_covers_player(p:Vector3) -> bool:
+	if p.z >= -1.15 or p.z < -5.5 or absf(p.x)>4.5: return false
+	var camera := get_viewport().get_camera_3d()
+	if not camera: return false
+	var torso := p + Vector3.UP*.86
+	var toward_camera := to_local(camera.global_position)-torso
+	if camera.projection == Camera3D.PROJECTION_ORTHOGONAL:
+		toward_camera = global_basis.inverse()*camera.global_basis.z
+	var roof := (parts.Roof as MeshInstance3D).get_aabb().grow(.16 if rear_occlusion else .04)
+	return roof.intersects_segment(torso,torso+toward_camera.normalized()*8.) != null
+
 func _apply() -> void:
 	visible=tier>0
 	collision.collision_layer=1 if tier>0 else 0
+	var roof_visible := tier>0 and not inside_view and not rear_occlusion
+	if last_tier != tier or last_roof_visible != roof_visible:
+		for key in ROOF: parts[key].visible=roof_visible
+		parts.GableArmor.visible=roof_visible and tier==3
+		parts.RoofStuds.visible=roof_visible and tier==3
+		last_roof_visible=roof_visible
+	if last_rear_occlusion != rear_occlusion:
+		# Keep the blue lower wall and its steel facing together, like the
+		# lowered walls of the author’s front cutaway.
+		for key in ["BackWall","BackArmor"]:
+			parts[key].scale.y = .39 if rear_occlusion else 1.
+		last_rear_occlusion = rear_occlusion
 	if last_tier!=tier or last_cutaway!=inside_view:
 		for key in CUTAWAY: parts[key].visible=not inside_view
 		parts.StarterRope.visible=tier==1
@@ -102,7 +134,7 @@ func _apply() -> void:
 		parts.Footing.visible=tier>=2
 		for key in ["LeftArmor","BackArmor","AdvancedShelves"]:
 			parts[key].visible=tier==3
-		for key in ["GableArmor","RoofStuds","RightArmor","FacadeArmor","DoorLeftArmor","DoorRightArmor"]:
+		for key in ["RightArmor","FacadeArmor","DoorLeftArmor","DoorRightArmor"]:
 			parts[key].visible=tier==3 and not inside_view
 		parts.RightDetail.visible=not inside_view
 		for key in ["CutawayPanels","CutawayTrack","CutDoorLeft","CutDoorRight","CutRightPost"]:

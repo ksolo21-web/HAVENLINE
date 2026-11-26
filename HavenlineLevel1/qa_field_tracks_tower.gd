@@ -141,6 +141,18 @@ func run():
 	bolt.queue_free()
 	tower.set_build_progress(.35);record("frame builds before roof",not tower.frame.find_child("SlateRoof",true,false).visible)
 	tower.set_build_progress(1.);record("completed roof visible",tower.frame.find_child("SlateRoof",true,false).visible)
+	# The usual return from the stone drill crosses the projected roof.
+	var stone_route := Vector3(6.168,0,-4.102)
+	var muzzle: Transform3D = tower.swivel.global_transform
+	for zoom in [1.,2.]:
+		game.camera.position=stone_route+Vector3(7,11,11)
+		game.camera.look_at(stone_route)
+		game.set_zoom_ratio(zoom)
+		tower.update_sightline(stone_route,game.camera)
+		var framed: bool = tower.cutaway_active and tower.upper_parts.all(func(part): return part.visible and part.material_override==tower.sightline_material)
+		tower.update_sightline(Vector3(4.9,0,.2),game.camera)
+		var restored: bool = not tower.cutaway_active and tower.upper_parts.all(func(part): return part.visible and part.material_override==null)
+		record("tower reveals player on stone route and restores original roof at %dx" % zoom,framed and restored and muzzle.is_equal_approx(tower.swivel.global_transform))
 	game.camera.position=tower.global_position+Vector3(7,11,11);game.set_zoom_ratio(2.)
 	await process_frame;plate("Eastern-watchtower-gameplay-2x")
 	if DisplayServer.get_name()!="headless":

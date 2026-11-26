@@ -142,8 +142,9 @@ func settlement_status(journal:Dictionary, activity:float) -> void:
 	var heading := "Level 2  ·  Preview" if journal.level == 2 else "Level 1  ·  Snow camp"
 	var cash := "Cash  %d" % int(journal.served) if journal.served > 0 else ""
 	var stock_text := ""
-	if journal.processed_wood > 0 or journal.processed_stone > 0:
-		stock_text = "Workshop    Planks %d   ·   Blocks %d" % [journal.processed_wood,journal.processed_stone]
+	var tray_meals := int(journal.cooked)-int(journal.served)-int(journal.get("held_meal",0))
+	if journal.processed_wood > 0 or journal.processed_stone > 0 or tray_meals > 0:
+		stock_text = "Planks %d   ·   Blocks %d   ·   Meals on tray %d" % [journal.processed_wood,journal.processed_stone,tray_meals]
 	var layout_changed := chapter.text != heading or purse.text != cash or workshop_stock.text != stock_text or operation.visible != (activity > 0)
 	chapter.text = heading
 	purse.text = cash

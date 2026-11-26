@@ -24,7 +24,9 @@ var upgrade_pending := true
 var payment_ink := {}
 var payment_costs: Node3D
 const CounterLayout = preload("res://field_counter.gd")
-const COURTS := [Vector4(-5,-4,5,4),Vector4(-5.5,-5.5,7.5,5),Vector4(-5.5,-7,10,5.4)]
+# The last purchase opens a work aisle along the north wall. The gates and
+# the main lanes to the storehouse, hearth and eastern defense stay in place.
+const COURTS := [Vector4(-5,-4,5,4),Vector4(-5.5,-5.5,7.5,5),Vector4(-5.5,-9,10,5.4)]
 var perimeter_stage := -1
 var palisades: MultiMeshInstance3D
 var perimeter_tween: Tween

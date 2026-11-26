@@ -67,7 +67,7 @@ func run() -> void:
 	var legacy_digest := HashingContext.new()
 	legacy_digest.start(HashingContext.HASH_SHA256)
 	# This source definition without a host describes the original seeded world,
-	# before the lake and workshops reserve their authored footprints.
+	# before the exterior inlet reserves its authored footprint.
 	var original = land.get_script().new()
 	original.district = land.district
 	var shoreline_only := true
@@ -109,7 +109,7 @@ func run() -> void:
 				unique[row.id]=true
 	original.free()
 	report["reserved_shoreline_ids"] = reserved
-	check("Only sources in the authored lake and workshop reservation are displaced",not reserved.is_empty() and shoreline_only)
+	check("Only sources in the authored exterior inlet are displaced",not reserved.is_empty() and shoreline_only)
 	report["nearest_minerals"] = nearest
 	report["census"] = {"resources":counts,"wood":counts.wood,"stone":counts.stone,"distinct_ids":unique.size(),"populated_chunks":occupied,"min_sources":minimum,"max_sources":maximum}
 	check("All 1,024 chunks contain usable resources",occupied == 1024)

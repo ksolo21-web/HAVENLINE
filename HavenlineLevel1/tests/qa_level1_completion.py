@@ -82,7 +82,7 @@ def main():
         profile = Path(path)
         (profile / "L1-DISPOSABLE").write_text("HAVENLINE-ALFRED-V3-DISPOSABLE\n")
         private = profile / "xdg"
-        cases = ["ledger-edges", "legacy", "plot-partial", "claim", "delivery-interrupted", "cook",
+        cases = ["ledger-edges", "legacy", "layout", "plot-partial", "claim", "delivery-interrupted", "load-cooker", "cook-interrupted", "cook", "pickup-roast",
                  "interrupted", "serve", "machines-and-owl", "handoff-interrupted", "handoff", "second-launch"]
         for phase in cases:
             build = args.baseline_project.resolve() if phase == "legacy" and args.baseline_project else project
@@ -96,7 +96,7 @@ def main():
             print(phase, len(row["checks"]), "checks", flush=True)
         assert (profile / "opening-v3.json").exists() is False
         by_phase = {row["phase"]: row for row in rows}
-        for checkpoint, failed in [("claim","delivery-interrupted"), ("cook","interrupted"), ("machines-and-owl","handoff-interrupted")]:
+        for checkpoint, failed in [("claim","delivery-interrupted"), ("load-cooker","cook-interrupted"), ("pickup-roast","interrupted"), ("machines-and-owl","handoff-interrupted")]:
             assert by_phase[checkpoint]["durable_payload_sha256"] == by_phase[failed]["durable_payload_sha256"], "Interrupted attempt changed durable bytes"
     summary = dict(source=args.source, engine=subprocess.check_output(["godot", "--version"], text=True).strip(),
                    actual_processes=len(rows), private_profile=True,

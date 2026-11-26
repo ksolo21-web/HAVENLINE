@@ -6,6 +6,10 @@ const PINE := Vector2(-3.60,9.10)
 const STANCE := Vector3(-2.69,0,9.37)
 const READY := Vector3(-2.7,0,1.72)
 const SPEED := 1.80
+const SUPPLIES := ["wood","stone","meat"]
+# Follow the open aisle between the storehouse's east wall and the hearth.
+const SHELF_TURN := Vector3(-.82,0,-1.18)
+const NORTH_TURN := Vector3(-.82,0,-5.46)
 var world
 var actor: Node3D
 var tree
@@ -19,6 +23,7 @@ var pickup_token := ""
 var drop_floor := 0
 var waiting := .0
 var route: Array[Vector3] = []
+var supply_model: Node3D
 
 func make_customer(id: String) -> Node3D:
 	if id not in ["customer_male_01","customer_female_01"]: return null
@@ -36,7 +41,10 @@ func setup(host: Node3D) -> void:
 	actor.add_to_group("snow_track_survivors")
 	add_child(actor)
 	tree = world.add_resource_source("survivor-work-pine","wood",PINE,1)
-	if not world.inventory.settlement.worker_carry_token.is_empty():
+	if not world.inventory.settlement.worker_supply.is_empty():
+		actor.position = world.depot.APRON
+		_begin_supply_run(world.inventory.settlement.worker_supply)
+	elif not world.inventory.settlement.worker_carry_token.is_empty():
 		actor.position = STANCE
 		_begin_inbound(true)
 	elif world.inventory.settlement.rescued:
@@ -65,6 +73,79 @@ func _begin_outbound() -> void:
 	var portal: Vector3 = world.gates[0].position
 	route.assign([Vector3(-2.65,0,2.14),Vector3(0,0,portal.z-1.45),Vector3(0,0,portal.z+1.50),STANCE])
 	phase = "to_tree"
+
+func _supply_apron(kind: String) -> Vector3:
+	return world.lakeshore.APRON if kind == "meat" else world.processors.APRONS[kind]
+
+func _next_supply() -> String:
+	if not world.inventory.complete(world.Progress.SECOND): return ""
+	var journal: Dictionary = world.inventory.settlement
+	for offset in SUPPLIES.size():
+		var kind: String = SUPPLIES[(int(journal.worker_deliveries)+offset)%SUPPLIES.size()]
+		if not world.settlement_loop.available_to_feeder(kind): continue
+		var reserve := 0
+		for id: String in world.inventory.costs:
+			reserve += int(world.inventory.remaining(id).get(kind,0))
+		if world.carry.available_on_shelf(kind) > reserve: return kind
+	return ""
+
+func _begin_supply_run(kind: String) -> void:
+	supply_model = world.FieldArt.make(kind,.43)
+	actor.add_child(supply_model)
+	supply_model.position = Vector3(0,.58,.235)
+	route.assign([SHELF_TURN,NORTH_TURN,_supply_apron(kind)])
+	phase = "supply_out"
+
+func _leave_shelf() -> void:
+	var kind := _next_supply()
+	if kind.is_empty():
+		_begin_outbound()
+		return
+	world.inventory.stored[kind] -= 1
+	world.inventory.settlement.worker_supply = kind
+	if world.settlement_loop.commit_receipt("worker_pickup",actor.global_position):
+		_begin_supply_run(kind)
+
+func _advance_supply(dt: float) -> void:
+	var journal: Dictionary = world.inventory.settlement
+	var kind: String = journal.worker_supply
+	match phase:
+		"supply_out":
+			var reached := _walk_route(dt,true)
+			actor.bundle.hide()
+			if reached:
+				waiting = 0.0
+				phase = "supply_unload"
+		"supply_unload":
+			# The player may have filled this hopper during the trip. Carry the
+			# unit back to its own shelf instead of discarding it or overfilling.
+			if not world.settlement_loop.available_to_feeder(kind):
+				supply_model.position = Vector3(0,.58,.235)
+				route.assign([NORTH_TURN,SHELF_TURN,world.depot.APRON])
+				phase = "supply_return"
+				return
+			waiting += dt
+			var t := clampf(waiting/.36,0.,1.)
+			var target: Vector3 = world.lakeshore.cooker_input.global_position if kind=="meat" else world.processors.input_position(kind)
+			supply_model.global_position = actor.to_global(Vector3(0,.58,.235)).lerp(target,t)+Vector3.UP*.22*sin(PI*t)
+			if t >= 1.0:
+				journal.hoppers[kind] += 1
+				journal.worker_supply = ""
+				if world.settlement_loop.commit_receipt("spend_"+kind,target):
+					supply_model.queue_free()
+					route.assign([NORTH_TURN,SHELF_TURN,world.depot.APRON])
+					phase = "supply_back"
+		"supply_return":
+			var reached := _walk_route(dt,true)
+			actor.bundle.hide()
+			if reached:
+				world.inventory.stored[kind] += 1
+				journal.worker_supply = ""
+				if world.settlement_loop.commit_receipt("deposit_"+kind,actor.global_position):
+					supply_model.queue_free()
+					_begin_outbound()
+		"supply_back":
+			if _walk_route(dt,false): _begin_outbound()
 
 func _walk(destination: Vector3, dt: float, carrying := false) -> bool:
 	var gate = world.gates[0]
@@ -105,7 +186,16 @@ func advance(dt: float) -> void:
 		"waiting_storage":
 			step_cycle = fposmod(step_cycle+dt*.45,1)
 			actor.pose("idle",step_cycle)
-			if journal.rescued and world.inventory.storage_open("wood"): _begin_outbound()
+			if journal.rescued and world.inventory.storage_open("wood"):
+				if _next_supply().is_empty():
+					_begin_outbound()
+				else:
+					route.assign([world.depot.APRON])
+					phase = "supply_pickup"
+		"supply_pickup":
+			if _walk_route(dt,false): _leave_shelf()
+		"supply_out","supply_unload","supply_return","supply_back":
+			_advance_supply(dt)
 		"to_tree":
 			if _walk_route(dt,false):
 				actor.rotation.y = atan2(PINE.x-STANCE.x,PINE.y-STANCE.z)
@@ -145,7 +235,7 @@ func advance(dt: float) -> void:
 			actor.bundle.global_position = actor.to_global(Vector3(0,.58,.235)).lerp(target,u)+Vector3.UP*.28*sin(u*PI)
 			if u >= 1. and world.receive_worker_wood():
 				actor.bundle.position = Vector3(0,.58,.235)
-				_begin_outbound()
+				_leave_shelf()
 
 func _begin_swing() -> void:
 	actor.rotation.y = atan2(PINE.x-STANCE.x,PINE.y-STANCE.z)

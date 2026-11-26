@@ -1,13 +1,16 @@
 extends Node3D
 ## Authored river cross-sections form the closed inlet; movement uses the same wet outline.
 const River=preload("res://assets/lakeshore/river_geometry.gd")
-const Cooker=preload("res://assets/lakeshore/cooker_workshop.glb")
-const COOKER_AT:=Vector3(-21,0,16)
-const APRON:=Vector3(-19.65,0,16.65)
+const Cooker=preload("res://assets/lakeshore/cooker_camp_line.glb")
+const COOKER_AT := Vector3(-.10,0,-7.22)
+const APRON := Vector3(1.20,0,-5.67)
+const OUTPUT_APRON := Vector3(-1.05,0,-5.67)
+const ACCESS_RADIUS := .77
 const LAKE_XZ:=Vector2(-33.8,16.)
-const STATION_YAW:=-2.56
-const SIGN_AT:=Vector3(-7.10,0,11.72)
-const HALF_BODY:=Vector2(1.13,.81)
+const STATION_YAW := PI
+const STATION_SCALE := .94
+# At yaw PI the +X outfeed is on the west of the working cooker.
+const BODY := Rect2(-1.75 * STATION_SCALE,-.95 * STATION_SCALE,3.05 * STATION_SCALE,1.90 * STATION_SCALE)
 const SECTIONS:=108
 var cooker_input:Marker3D
 var cooker_output:Marker3D
@@ -19,6 +22,8 @@ var bounds:=Rect2()
 var water_material:=ShaderMaterial.new()
 var elapsed:=0.
 var working:=false
+var available := false
+var guard := StaticBody3D.new()
 
 func _init() -> void:
 	# Reuse the original map's Hermite shore bends and graded width. A closed
@@ -34,30 +39,38 @@ func _init() -> void:
 		bounds=Rect2(point,Vector2.ZERO) if i==0 else bounds.expand(point)
 
 func setup(host:Node3D) -> void:
-	name="WestLakeshore"
+	name="WestInletAndCampKitchen"
 	_build_inlet()
 	cooker=Cooker.instantiate()
-	cooker.name="ShoreCooker"
+	cooker.name="CampCooker"
 	add_child(cooker)
 	cooker.position=COOKER_AT+Vector3.UP*.024
 	cooker.rotation.y=STATION_YAW
-	cooker.scale=Vector3.ONE*.94
+	cooker.scale=Vector3.ONE*STATION_SCALE
 	saw=cooker.find_child("SawAxle",true,false)
 	cooker_input=_socket("RawInput",Vector3(-1.10,1.06,-.02))
-	cooker_output=_socket("CookedOutput",Vector3(.83,1.06,.16))
-	var solid:=StaticBody3D.new()
-	solid.name="CookerBody"
-	add_child(solid)
-	solid.position=COOKER_AT
-	solid.rotation.y=STATION_YAW
-	var collision:=CollisionShape3D.new()
-	var box:=BoxShape3D.new()
-	box.size=Vector3(2.*HALF_BODY.x,2.10,2.*HALF_BODY.y)
-	collision.shape=box
-	collision.position.y=box.size.y*.5
-	solid.add_child(collision)
+	cooker_output=_socket("CookedOutput",Vector3(1.40,1.045,.15))
+	guard.name = "CookerBody"
+	add_child(guard)
+	guard.position = COOKER_AT
+	var collision := CollisionShape3D.new()
+	var box := BoxShape3D.new()
+	box.size = Vector3(BODY.size.x,2.31,BODY.size.y)
+	collision.shape = box
+	collision.position = Vector3(BODY.get_center().x,box.size.y*.5,BODY.get_center().y)
+	guard.add_child(collision)
 	_build_smoke()
-	_build_waypost(host)
+	var camp = host.get("field_env")
+	if camp:
+		camp.perimeter_changed.connect(func(): set_available(camp.perimeter_stage == 3))
+	set_available(camp != null and camp.perimeter_stage == 3)
+
+func set_available(enabled:bool) -> void:
+	available = enabled
+	cooker.visible = enabled
+	guard.collision_layer = 1 if enabled else 0
+	if not enabled:
+		update_activity(false)
 
 func _socket(label:String,at:Vector3) -> Marker3D:
 	var marker:=Marker3D.new()
@@ -100,8 +113,8 @@ func _build_smoke() -> void:
 	smoke.emitting=false
 
 func update_activity(is_cooking:bool) -> void:
-	working=is_cooking
-	if smoke:smoke.emitting=is_cooking
+	working=available and is_cooking
+	if smoke:smoke.emitting=working
 
 func tick(dt:float) -> void:
 	elapsed=fmod(elapsed+dt,400.)
@@ -109,13 +122,22 @@ func tick(dt:float) -> void:
 	if working and saw:saw.rotate_z(dt*3.8)
 
 func at_cooker(at:Vector3) -> bool:
-	return Vector2(at.x-APRON.x,at.z-APRON.z).length()<=1.14 and not _inside_station(Vector2(at.x,at.z),0.)
+	return _at_apron(at,APRON)
+
+func at_output(at:Vector3) -> bool:
+	return _at_apron(at,OUTPUT_APRON)
+
+func _at_apron(at:Vector3,apron:Vector3) -> bool:
+	var p := Vector2(at.x,at.z)
+	return available and not _footprint(0.).has_point(p) and p.distance_squared_to(Vector2(apron.x,apron.z)) <= ACCESS_RADIUS * ACCESS_RADIUS
+
+func _footprint(radius:float) -> Rect2:
+	return Rect2(Vector2(COOKER_AT.x,COOKER_AT.z)+BODY.position,BODY.size).grow(radius)
 
 func reserves(at:Vector3) -> bool:
-	var p:=Vector2(at.x,at.z)
-	if p.distance_squared_to(Vector2(COOKER_AT.x,COOKER_AT.z))<12.25 or p.distance_squared_to(Vector2(SIGN_AT.x,SIGN_AT.z))<.85:return true
-	var approach:=Geometry2D.get_closest_point_to_segment(p,Vector2(-15.2,13.1),Vector2(APRON.x,APRON.z))
-	if p.distance_squared_to(approach)<1.25*1.25:return true
+	var p := Vector2(at.x,at.z)
+	if available and (_footprint(.35).has_point(p) or at_cooker(at) or at_output(at)):
+		return true
 	return bounds.grow(1.45).has_point(p) and (Geometry2D.is_point_in_polygon(p,shore) or p.distance_squared_to(_closest_bank(p))<1.45*1.45)
 
 func _closest_bank(p:Vector2) -> Vector2:
@@ -138,30 +160,35 @@ func _push_dry(p:Vector2,radius:float) -> Vector2:
 	if outward.length_squared()<.5:outward=(near-LAKE_XZ).normalized()
 	return near+outward*(radius+.007)
 
-func _station_local(p:Vector2) -> Vector2:
-	return (p-Vector2(COOKER_AT.x,COOKER_AT.z)).rotated(STATION_YAW)
-
-func _inside_station(p:Vector2,radius:float) -> bool:
-	var d:=_station_local(p).abs()
-	return d.x<HALF_BODY.x+radius and d.y<HALF_BODY.y+radius
-
-func _push_station(p:Vector2,radius:float) -> Vector2:
-	if not _inside_station(p,radius):return p
-	var q:=_station_local(p)
-	var extent:=HALF_BODY+Vector2.ONE*(radius+.004)
-	if extent.x-absf(q.x)<extent.y-absf(q.y):q.x=extent.x*(1. if q.x>=0. else -1.)
-	else:q.y=extent.y*(1. if q.y>=0. else -1.)
-	return q.rotated(-STATION_YAW)+Vector2(COOKER_AT.x,COOKER_AT.z)
+func _push_station(p:Vector2,box:Rect2) -> Vector2:
+	if not available or not box.has_point(p):
+		return p
+	var c := p - box.get_center()
+	var overlap := box.size*.5-c.abs()
+	if overlap.x < overlap.y:
+		p.x = box.end.x+.004 if c.x >= 0. else box.position.x-.004
+	else:
+		p.y = box.end.y+.004 if c.y >= 0. else box.position.y-.004
+	return p
 
 func constrain_motion(from:Vector3,to:Vector3,radius:float) -> Vector3:
-	var begin:=Vector2(from.x,from.z)
-	var end:=Vector2(to.x,to.z)
-	var search:=Rect2(begin,Vector2.ZERO).expand(end).grow(radius+.05)
-	if not search.intersects(bounds.grow(.05)) and not search.intersects(Rect2(Vector2(COOKER_AT.x-1.5,COOKER_AT.z-1.5),Vector2(3,3))):return to
-	var n:=maxi(1,ceili(begin.distance_to(end)/.18))
-	var d:=(end-begin)/float(n)
-	var current:=_push_station(_push_dry(begin,radius),radius)
-	for i in n:current=_push_station(_push_dry(current+d,radius),radius)
+	var begin := Vector2(from.x,from.z)
+	var end := Vector2(to.x,to.z)
+	var station := _footprint(radius)
+	var search := Rect2(begin,Vector2.ZERO).expand(end).grow(.01)
+	var near_lake := search.intersects(bounds.grow(radius+.05))
+	if not near_lake and not (available and search.intersects(station)):
+		return to
+	var n := maxi(1,ceili(begin.distance_to(end)/.18))
+	var d := (end-begin)/float(n)
+	var current := _push_dry(begin,radius) if near_lake else begin
+	if available and station.has_point(current):
+		# A previous build could save here before this work bay existed.
+		current.y = station.end.y+.004
+	for i in n:
+		current += d
+		if near_lake: current = _push_dry(current,radius)
+		current = _push_station(current,station)
 	return Vector3(current.x,to.y,current.y)
 
 func _build_inlet() -> void:
@@ -233,51 +260,3 @@ func _bank_row(i:int) -> Array:
 		levels.append([Vector3(at.x,row[1],at.y),row[2],normal])
 	return levels
 
-func _build_waypost(host:Node3D) -> void:
-	var post:=Node3D.new()
-	post.name="CookerWaypost"
-	add_child(post)
-	post.position=SIGN_AT
-	post.rotation.y=atan2(7.,11.)
-	var timber:MeshInstance3D
-	var source:=preload("res://assets/field_camp/snowbound_gate_post.obj")
-	if host.get("field_env"):
-		timber=host.field_env.donor_mesh(source)
-	else:
-		timber=MeshInstance3D.new()
-		timber.mesh=source
-	post.add_child(timber)
-	timber.scale=Vector3(.65,.68,.65)
-	var mesh:=SurfaceTool.new()
-	mesh.begin(Mesh.PRIMITIVE_TRIANGLES)
-	var paint:=StandardMaterial3D.new()
-	paint.albedo_texture=preload("res://assets/lakeshore/guide_board.png")
-	paint.roughness=.92
-	# Printed timber remains legible in conifer shade. Keep the outdoor
-	# key light on the board and a small reflected-light contribution from the print.
-	paint.emission_enabled=true
-	paint.emission_texture=paint.albedo_texture
-	paint.emission_energy_multiplier=.34
-	mesh.set_material(paint)
-	var outline:=[Vector2(-.80,-.015),Vector2(-.55,-.20),Vector2(.66,-.193),Vector2(.72,-.168),Vector2(.70,.15),Vector2(.65,.19),Vector2(-.54,.184)]
-	for side in [1.,-1.]:
-		for i in range(1,outline.size()-1):
-			# Godot's front faces are clockwise. The two sides face opposite ways.
-			for index in ([0,i+1,i] if side>0. else [0,i,i+1]):
-				var pt:Vector2=outline[index]
-				var u:float=(pt.x+.80)/1.52
-				mesh.set_uv(Vector2(u if side>0. else 1.-u,1.-(pt.y+.2)/.39))
-				mesh.set_normal(Vector3(0,0,side))
-				mesh.add_vertex(Vector3(pt.x,1.10+pt.y,.115+side*.032))
-	for i in outline.size():
-		var a:Vector2=outline[i]
-		var b:Vector2=outline[(i+1)%outline.size()]
-		var n:=Vector3((b-a).y,-(b-a).x,0).normalized()
-		for v in [Vector3(a.x,a.y,.083),Vector3(b.x,b.y,.147),Vector3(b.x,b.y,.083),Vector3(a.x,a.y,.083),Vector3(a.x,a.y,.147),Vector3(b.x,b.y,.147)]:
-			mesh.set_uv(Vector2((v.x+.80)/1.52,.065))
-			mesh.set_normal(n)
-			mesh.add_vertex(v+Vector3.UP*1.10)
-	var board:=MeshInstance3D.new()
-	board.name="CookerDirectionBoard"
-	board.mesh=mesh.commit()
-	post.add_child(board)

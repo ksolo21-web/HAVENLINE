@@ -282,7 +282,7 @@ func advance(dt: float) -> void:
 		_serve(dt)
 		return
 	var ledger: Dictionary = world.inventory.settlement
-	var ready: bool = int(ledger.cooked) > int(ledger.served)
+	var ready: bool = int(ledger.held_meal) == 1
 	_update_carried(dt,ready)
 	var order := int(ledger.served)+1
 	if ready and collect_time >= 1. and world.player_hp > 0 and at_service(world.actor.global_position) and front_ready(order):

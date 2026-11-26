@@ -486,6 +486,9 @@ func _land(flight: Dictionary) -> void:
 func available_to_station(kind: String) -> int:
 	return _available(kind, HAND)
 
+func available_on_shelf(kind: String) -> int:
+	return _available(kind, STOCK)
+
 func show_station_transfer(kind: String) -> Vector3:
 	var origin := rack.global_position
 	if not kind.is_empty():

@@ -479,6 +479,7 @@ func _physics_process(dt: float) -> void:
 	forest.advance(dt)
 	var last_turn: int = character_kit.turn_id
 	if reset_time > 0:
+		if not persist_blocked: settlement_loop.advance_unattended(dt)
 		var fall := smoothstep(0.0,.44,1.05-reset_time)
 		hero_model.rotation.z = -recoil_side*1.43*fall
 		hero_model.rotation.x = -.20*fall

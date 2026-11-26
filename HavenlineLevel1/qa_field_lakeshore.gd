@@ -11,16 +11,19 @@ func run()->void:
 	stage.add_child(bank)
 	bank.setup(stage)
 	await physics_frame
-	valid("west of both camp gates",bank.COOKER_AT.x < -18.)
+	valid("future kitchen is absent from the starter camp",not bank.cooker.is_visible_in_tree() and not bank.at_cooker(bank.APRON) and bank.guard.collision_layer==0)
+	bank.set_available(true)
+	valid("opening the service bay enables the cooker and its guard",bank.cooker.is_visible_in_tree() and bank.guard.collision_layer==1)
 	valid("natural waterline matches both endpoints",bank.shore.size()==108 and bank.get_node("SolidWaterline").get_child(0).shape.get_faces().size()==108*6)
 	var origin:=Vector3(bank.LAKE_XZ.x,0,bank.LAKE_XZ.y)
 	var dry:=bank.constrain_motion(origin,origin,.31)
 	valid("restored lake position depenetrates",dry.distance_to(origin)>4. and not Geometry2D.is_point_in_polygon(Vector2(dry.x,dry.z),bank.shore))
-	var stopped:=bank.constrain_motion(bank.APRON,Vector3(-51,0,16.65),.31)
+	var stopped:=bank.constrain_motion(Vector3(-19.65,0,16.65),Vector3(-51,0,16.65),.31)
 	valid("swept path cannot tunnel",stopped.x>-30. and not Geometry2D.is_point_in_polygon(Vector2(stopped.x,stopped.z),bank.shore))
-	var route_start:=Vector3(-14,0,12.6)
+	var route_start:=bank.APRON+Vector3.BACK*1.5
 	valid("dry final approach",bank.constrain_motion(route_start,bank.APRON,.31).distance_to(bank.APRON)<.03)
 	valid("requires working apron",bank.at_cooker(bank.APRON) and not bank.at_cooker(bank.COOKER_AT) and not bank.at_cooker(Vector3.ZERO))
+	valid("pickup and input aprons are distinct",bank.at_output(bank.OUTPUT_APRON) and not bank.at_cooker(bank.OUTPUT_APRON) and not bank.at_output(bank.APRON))
 	valid("lake and station reserved",bank.reserves(origin) and bank.reserves(bank.APRON) and not bank.reserves(Vector3(-6,0,3)))
 	valid("distinct real work sockets",bank.cooker_input.global_position.distance_to(bank.cooker_output.global_position)>1.75)
 	var shaft_before:Basis=bank.saw.basis

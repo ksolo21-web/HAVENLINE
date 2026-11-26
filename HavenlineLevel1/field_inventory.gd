@@ -101,7 +101,7 @@ func snapshot() -> Dictionary:
 		state.legacy_axes = legacy_axes
 		state.world = world_state.duplicate(true)
 		if settlement != Settlement.EMPTY:
-			state.version = 4
+			state.version = 5
 			state.settlement = settlement.duplicate(true)
 	return state
 
@@ -113,7 +113,7 @@ static func _natural(value: Variant) -> bool:
 func restore(data: Variant) -> bool:
 	if not data is Dictionary: return false
 	var old: bool = data.get("version") == 1
-	var has_settlement: bool = data.get("version") == 4
+	var has_settlement: bool = data.get("version") == 4 or data.get("version") == 5
 	if old:
 		if data.size() != 5: return false
 	elif not staged or (data.get("version") != 2 and data.get("version") != 3 and not has_settlement) or data.size() != (9 if has_settlement else 8):
@@ -162,7 +162,12 @@ func restore(data: Variant) -> bool:
 				return false
 			balances[kind] -= int(subtotal[kind])
 	var next_settlement: Variant = data.get("settlement") if has_settlement else Settlement.EMPTY
+	if data.version == 4:
+		next_settlement = Settlement.from_legacy(next_settlement)
 	if not Settlement.valid(next_settlement,order,data.collected): return false
+	for kind: String in Settlement.KINDS:
+		balances[kind] -= int(next_settlement.hoppers[kind])
+	if next_settlement.worker_supply != "": balances[next_settlement.worker_supply] -= 1
 	balances.meat -= int(next_settlement.cooked)
 	balances.wood -= int(next_settlement.survivor_wood) + int(next_settlement.processed_wood)
 	balances.stone -= int(next_settlement.processed_stone)

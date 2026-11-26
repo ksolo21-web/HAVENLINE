@@ -8,7 +8,7 @@ class TestHost extends Node3D:
 	var field_env = FieldEnvironment.new()
 	var actor := Node3D.new()
 	var player_hp := 100
-	var inventory := {"settlement":{"cooked":0,"served":0}}
+	var inventory := {"settlement":{"cooked":0,"served":0,"held_meal":0}}
 	var calls := []
 	var presentation_guard: Callable
 	func sale(order: int) -> bool:
@@ -16,6 +16,7 @@ class TestHost extends Node3D:
 		if not presentation_guard.call(order) or order != inventory.settlement.served+1 or inventory.settlement.cooked <= inventory.settlement.served:
 			return false
 		inventory.settlement.served = order
+		inventory.settlement.held_meal = 0
 		return true
 
 var failures := []
@@ -55,7 +56,8 @@ func run() -> void:
 	counter.setup(host, visitor_model, host.sale)
 	check("counter hidden and harmless before expansion",not counter.visible and counter.guard.collision_layer==0)
 	counter.set_active(true,0)
-	check("north plane and both stances",is_equal_approx(counter.position.z,-7.) and counter.service_point.global_position.z > -7. and counter.customer_point.global_position.z < -7.)
+	var north: float = FieldEnvironment.COURTS[-1].y
+	check("north plane and both stances",is_equal_approx(counter.position.z,north) and counter.service_point.global_position.z > north and counter.customer_point.global_position.z < north)
 	for i in 4: counter.set_active(true,0)
 	simulate(7.)
 	check("three physical waiting bodies",counter.queue.size()==3 and sighted(1))
@@ -64,10 +66,14 @@ func run() -> void:
 	var outside := true
 	for i in range(counter.queue.size()):
 		var body: Node3D = counter.queue[i].body
-		outside = outside and body.global_position.z < -8. and body.is_inside_tree()
+		outside = outside and body.global_position.z < north-1. and body.is_inside_tree()
 		if i: outside=outside and body.position.distance_to(counter.queue[i-1].body.position)>=Counter.SPACING-.005
 	check("outside FIFO with physical spacing",outside)
 	host.inventory.settlement.cooked=1
+	host.actor.global_position=counter.service_point.global_position
+	simulate(.6)
+	check("a meal on the cooker rack cannot initiate a remote sale",host.calls.is_empty() and not is_instance_valid(counter.meal))
+	host.inventory.settlement.held_meal=1
 	host.actor.global_position=counter.customer_point.global_position
 	simulate(1.)
 	check("outside cannot initiate meal service",host.calls.is_empty() and is_instance_valid(counter.meal))
@@ -90,6 +96,7 @@ func run() -> void:
 	counter.set_active(false,1)
 	counter.set_active(true,1)
 	host.inventory.settlement.cooked=2
+	host.inventory.settlement.held_meal=1
 	host.actor.global_position=Vector3.ZERO
 	simulate(7.)
 	check("saved meal restored with next order",sighted(2) and is_instance_valid(counter.meal) and host.calls==[1])
