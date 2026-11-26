@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T03:44:11Z",
+  "observed_at_utc": "2026-11-26T04:02:15Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -53,14 +53,14 @@
       "id": "furnace-purchase",
       "role": "Gameplay and plot builder",
       "state": "in_progress",
-      "result": "Corrected inside-out timber and snow faces were tested in the real desktop paid camp. All 67 gameplay checks still pass; the paired art review remains on hold (7.8/10). Original gate leaves remain playable placeholders; the exact wooden donor intersects all four posts during swing.",
+      "result": "All four rebuilt timber leaves replaced the placeholders in the isolated Godot test. 67 checks and 12 real frames passed. Independent appearance hold: South 8.7/East 7.9. Separate one-panel 18595 fence draft held at 8.1; the old fence is out of contention as final art.",
       "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/028fb5ddbcdf957f99d81192884256561b0096a3",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/1270bce15cfb92dfb4d2f6a6592724574b0695dd",
         "https://github.com/ksolo21-web/HAVENLINE/commit/3ffc0efa7f0fcfa49b23182e3e2d8c3cf2535184",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/6598681410b478c05aa97610edc7cf054bae7fc7",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/7a8fcb639984865d10cb466c0f519c761807882f",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/f35c0831d7ea575089e302d658f04c9ae4082d1b"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/6598681410b478c05aa97610edc7cf054bae7fc7"
       ],
-      "next": "Replay fence-local shadow fill without changing the world lighting. Separately stage the detail panel and refit the first wooden plank, then verify the full gate sweep again.",
+      "next": "Continue separate approved-reference panel rope/cap work, gate-only material and detail repair, and a distinct active-E closing test. No game install.",
       "role_ids": [
         "builder-camp-pads",
         "level1-verifier"
@@ -150,14 +150,14 @@
     {
       "role_id": "builder-camp-pads",
       "state": "working",
-      "title": "Preparing a reference-detail fence panel",
-      "summary": "A separate source candidate adds shaped snow and two rope ties without changing the fence footprint.",
-      "next": "Retain the existing collision; test a single representative panel first.",
+      "title": "Staging source-matched reference fence panel",
+      "summary": "The 18595-led panel is separate from the old R17 art. A revised prototype has a broader snow drape; the rope contact repair is pending independent source review.",
+      "next": "Stage one module at the true gameplay camera after source review.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/3ffc0efa7f0fcfa49b23182e3e2d8c3cf2535184",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/6598681410b478c05aa97610edc7cf054bae7fc7"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/028fb5ddbcdf957f99d81192884256561b0096a3",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/1270bce15cfb92dfb4d2f6a6592724574b0695dd"
       ],
-      "updated_at_utc": "2026-11-26T03:44:11Z"
+      "updated_at_utc": "2026-11-26T04:02:15Z"
     },
     {
       "role_id": "audio-sfx",
@@ -172,15 +172,15 @@
     },
     {
       "role_id": "level1-verifier",
-      "state": "done",
-      "title": "Corrected fence route passed; visual hold",
-      "summary": "Native comparison confirmed warmer readable front timber, but two sides are still too dark. The wooden gate donor clips during swing.",
-      "next": "Review material-local fill separately and reject gate source until it clears all four posts.",
+      "state": "working",
+      "title": "Native gate opening verified; closing fixture next",
+      "summary": "Both passages worked in both directions using actual rebuilt leaves. All 12 native captures and disposable reload are pinned. Final visual marks remain below 9.5.",
+      "next": "Test actual E-to-close behavior and review gate art improvements independently.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/3ffc0efa7f0fcfa49b23182e3e2d8c3cf2535184",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/6598681410b478c05aa97610edc7cf054bae7fc7"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/028fb5ddbcdf957f99d81192884256561b0096a3",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/1270bce15cfb92dfb4d2f6a6592724574b0695dd"
       ],
-      "updated_at_utc": "2026-11-26T03:44:11Z"
+      "updated_at_utc": "2026-11-26T04:02:15Z"
     },
     {
       "role_id": "builder-customer-counter",
@@ -330,6 +330,18 @@
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/3ffc0efa7f0fcfa49b23182e3e2d8c3cf2535184",
         "https://github.com/ksolo21-web/HAVENLINE/commit/6598681410b478c05aa97610edc7cf054bae7fc7"
+      ]
+    },
+    {
+      "id": "gate-timber-native-mount-20261126",
+      "type": "handoff",
+      "at_utc": "2026-11-26T04:02:15Z",
+      "from_role_id": "level1-verifier",
+      "to_role_id": "builder-camp-pads",
+      "message": "All four authored doors mounted and both gates passed gameplay. Hold art and continue the separately authored reference fence panel; do not reintroduce the old fence as final.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/028fb5ddbcdf957f99d81192884256561b0096a3",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/1270bce15cfb92dfb4d2f6a6592724574b0695dd"
       ]
     }
   ]
