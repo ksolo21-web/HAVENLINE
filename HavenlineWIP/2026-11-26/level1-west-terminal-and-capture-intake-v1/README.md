@@ -1,0 +1,3 @@
+# Independent Level 1 work in progress
+
+The West0 repair is a detached geometry result (28 measured contacts removed; 576 earlier faces unchanged). The builder source and structured evidence are retained here; original privately supplied media and the generated review OBJ are deliberately not included. Full replay therefore needs the same controlled inputs. No fence appearance, fit in the playable scene, or material approval is implied. The phone call sheet and Character 1 normal-camera intake are evidence protocols, not completed device or animation tests. No playable source or default scene changed.
