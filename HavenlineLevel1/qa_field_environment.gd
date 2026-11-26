@@ -67,7 +67,7 @@ func run() -> void:
 	var deposit: Dictionary = world.carry.flights[0]
 	world.carry.advance(.35)
 	var displayed: Node3D = world.carry.pieces["storage/wood"][0]
-	checks["earned display lands at the same shelf size position and count"] = world.inventory.stored.wood==1 and displayed.get_parent()==world.depot.bins.wood and displayed.global_position.is_equal_approx(deposit.mesh.global_position) and displayed.scale.is_equal_approx(deposit.mesh.scale) and world.depot.labels.wood.text=="1"
+	checks["earned display lands at the same shelf size position and count"] = world.inventory.stored.wood==1 and displayed.get_parent()==world.depot.bins.wood and displayed.global_position.is_equal_approx(deposit.mesh.global_position) and displayed.scale.is_equal_approx(deposit.mesh.scale) and world.depot.labels.wood.text=="10"
 	checks["east expansion can spend timber from its actual shelf"] = world.carry.contribute("expansion_2")
 	var debit: Dictionary = world.carry.flights[0]
 	checks["spend originates at visible shelf mesh"] = debit.from=="storage" and debit.mesh.global_position.is_equal_approx(displayed.global_position) and debit.mesh.scale.is_equal_approx(displayed.scale)
@@ -78,9 +78,14 @@ func run() -> void:
 	world.depot.refresh(true)
 	world.carry.sync()
 	checks["a million wood and overflow stone and meat stay inside bounded bins"] = world.carry.pieces["storage/wood"].size()==1 and world.carry.pieces["storage/stone"].size()==2 and world.carry.pieces["storage/meat"].size()==7
-	checks["bay labels show exact small balances and conservative compact lots"] = world.depot.labels.wood.text=="1M" and world.depot.labels.stone.text=="100k+" and world.depot.labels.meat.text=="101" and world.depot.labels.coal.text=="1k+" and world.depot.labels.metal.text=="999k+"
+	# The ledger counts bundles, while both stock readouts show raw material units.
+	checks["bay labels show the largest supported balance without rounding up"] = world.depot.labels.wood.text=="10000k" and world.depot.labels.stone.text=="1000k+" and world.depot.labels.coal.text=="11k+"
 	var hint:String=world.depot.hint()
-	checks["apron HUD retains exact values for all six resources"] = world.Inventory.KINDS.all(func(k):return hint.contains("%d %s"%[counts[k],world.Inventory.TITLES[k].to_lower()]))
+	checks["apron HUD retains exact raw units for all six resources"] = world.Inventory.KINDS.all(func(k):return hint.contains("%d %s"%[counts[k]*10,world.Inventory.TITLES[k].to_lower()]))
+	world.inventory.stored.wood=100000
+	world.inventory.stored.meat=10
+	world.depot.refresh(true)
+	checks["bay labels show one million and a small exact balance in raw units"] = world.depot.labels.wood.text=="1M" and world.depot.labels.meat.text=="100"
 	world.inventory.stored = world.Inventory.EMPTY.duplicate()
 	world.depot.refresh(true)
 	camp.set_upgrade_payment({"stone":0,"meat":0})
