@@ -1,0 +1,3 @@
+# Detached carried-Crown shadow isolation protocol
+
+The prior native held comparison darkened bright snow below the temporary log. First require two exact independent no-Crown controls. Then compare identical temporary log render placements/material with ordinary casting versus casting disabled. Preserve original validators and use their rejection in the cast-on branch as an expected observation, not as a waived or passed guard. The combined procedure is still source-only, no actual runner or rendered proof, no material approval, mount, production change, or spend. Seal 56f62816c302df8a5b1a895abcaffd56f88d42ac27d60ee8b6b1e1e7c3785f39.
