@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T04:14:39Z",
+  "observed_at_utc": "2026-11-26T04:20:51Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -21,12 +21,12 @@
       "id": "character-1",
       "role": "Rigging and independent review",
       "state": "blocked",
-      "result": "The separate boot-and-cuff prototype retained the original sole contact points, but independent review found genuine intersections at rest and under load. It was rejected.",
+      "result": "Fresh joint-only walking clip on the exact stock 66-joint rig retained the original character, but the independent check found real boot-ground penetration at two phases; rejected.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/bd13884fcf0bee639132ea28f9527ed05617cd35",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/50c44d8c719220e5561258b94c6a1bcdeea94c33"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/5c3b0d43e5ea3190be42c06188b144b8c5b40129",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/bd13884fcf0bee639132ea28f9527ed05617cd35"
       ],
-      "next": "The neutral build already has crossing layer surfaces; changing animation timing cannot make it safe. Keep the rejected prototype out of the game.",
+      "next": "Evaluate support using the actual weighted sole patch, not one toe marker or another upward lift.",
       "role_ids": [
         "rig-character",
         "critic-rig"
@@ -53,12 +53,12 @@
       "id": "furnace-purchase",
       "role": "Gameplay and plot builder",
       "state": "in_progress",
-      "result": "The single isolated 18595-derived replacement panel passed 67 checks with its rope contact repair. Independent art review improved to 8.6 from 8.1 and held below 9.5. The rebuilt gate opening build passed independently; the separate physical closing replay is underway.",
+      "result": "The rebuilt gates now opened and actively closed with ordinary input in the isolated desktop test. Both closed routes blocked grounded traversal and the disposable save was unchanged. 78 total checks passed. Gate art remains on hold and a cap-only reference fence candidate is running independently.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/0e142e4f38fcffdec63f747128706fb9143314fb",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/028fb5ddbcdf957f99d81192884256561b0096a3"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/5c3b0d43e5ea3190be42c06188b144b8c5b40129",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/0e142e4f38fcffdec63f747128706fb9143314fb"
       ],
-      "next": "Improve visible rope crossings and the snow drape, not the old fence style. Finish actual ordinary closing replay before the gate-local material preview.",
+      "next": "Review the fuller V3 fence caps at stock view, then test local gate art separately. No release or device verdict.",
       "role_ids": [
         "builder-camp-pads",
         "level1-verifier"
@@ -170,15 +170,15 @@
     },
     {
       "role_id": "level1-verifier",
-      "state": "working",
-      "title": "Native gate opening verified; closing fixture next",
-      "summary": "Both passages worked in both directions using actual rebuilt leaves. All 12 native captures and disposable reload are pinned. Final visual marks remain below 9.5.",
-      "next": "Test actual E-to-close behavior and review gate art improvements independently.",
+      "state": "done",
+      "title": "Verified both gates close and block passage",
+      "summary": "11 active closing checks added to the 67 opening and reload checks. Actual camera captures are pinned, unchanged save.",
+      "next": "Independently review the separate reference fence and gate visual candidates.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/028fb5ddbcdf957f99d81192884256561b0096a3",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/1270bce15cfb92dfb4d2f6a6592724574b0695dd"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/5c3b0d43e5ea3190be42c06188b144b8c5b40129",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/0e142e4f38fcffdec63f747128706fb9143314fb"
       ],
-      "updated_at_utc": "2026-11-26T04:02:15Z"
+      "updated_at_utc": "2026-11-26T04:20:51Z"
     },
     {
       "role_id": "builder-customer-counter",
@@ -352,6 +352,18 @@
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/0e142e4f38fcffdec63f747128706fb9143314fb",
         "https://github.com/ksolo21-web/HAVENLINE/commit/028fb5ddbcdf957f99d81192884256561b0096a3"
+      ]
+    },
+    {
+      "id": "l1-timber-gate-active-close-20261126",
+      "type": "handoff",
+      "at_utc": "2026-11-26T04:20:51Z",
+      "from_role_id": "level1-verifier",
+      "to_role_id": "alfred",
+      "message": "Rebuilt gates pass open and active closure in isolated gameplay, with hard blockers and exact unchanged restore. Art and device remain held.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/5c3b0d43e5ea3190be42c06188b144b8c5b40129",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/0e142e4f38fcffdec63f747128706fb9143314fb"
       ]
     }
   ]
