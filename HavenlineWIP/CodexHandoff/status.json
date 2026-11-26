@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T00:51:03Z",
+  "observed_at_utc": "2026-11-26T01:11:57Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -20,15 +20,13 @@
     {
       "id": "character-1",
       "role": "Rigging and independent review",
-      "state": "in_progress",
-      "result": "Fresh rig verified neutral controls and a planted key. Independent checks confirmed remaining posed boot, shin, and hem overlaps. No accepted walk or run.",
+      "state": "blocked",
+      "result": "Independent review rejected the first detached garment rebuild for six overlaps at rest. A later hem join cleared its neutral seam check, and the corrected left cuff was built but remains unverified. No walk or run is accepted.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/11ced1d317d79e328901ec99efe662cb9204eed6",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/d56816bcddda583648fe74bb70324a3c707b76ea",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/600c2429f737a15b28aeddfc6cae400027b0e525",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/db191324f92b4c66549c5d267e35277bc3ba1651"
+        "https://github.com/ksolo21-web/HAVENLINE/tree/ac46ca6b6a977ce156ab783b933c727cb9d18b08/HavenlineWIP/2026-11-26/level1-c1-neutral-cavity-independent-v1",
+        "https://github.com/ksolo21-web/HAVENLINE/tree/ac46ca6b6a977ce156ab783b933c727cb9d18b08/HavenlineWIP/2026-11-26/level1-c1-left-cuff-exact-contour-intake-v1"
       ],
-      "next": "The detached, same-look lower-garment rebuild is approved for testing. Nothing is installed; it must pass a neutral appearance check and independent grounded-pose review.",
+      "next": "Verify the corrected cuff against the original outline and check for overlaps. Resolve the visible seam decision before separating the fasteners. Nothing is installed.",
       "role_ids": [
         "rig-character",
         "critic-rig"
@@ -117,25 +115,25 @@
     },
     {
       "role_id": "rig-character",
-      "state": "working",
-      "title": "Detached Character 1 lower-garment rebuild",
-      "summary": "The same-look rebuild is authorized for testing only. The current playable build is unchanged.",
-      "next": "Build the detached candidate, then retest the grounded pose and submit it to the independent critic.",
+      "state": "blocked",
+      "title": "Built a correction for the left cuff",
+      "summary": "The original cuff contour is now in the detached test copy. It has not passed the outline, trim overlap, or motion checks.",
+      "next": "Resume neutral verification when a test workspace is usable; keep the visible seams unchanged pending a decision.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/db191324f92b4c66549c5d267e35277bc3ba1651"
+        "https://github.com/ksolo21-web/HAVENLINE/tree/ac46ca6b6a977ce156ab783b933c727cb9d18b08/HavenlineWIP/2026-11-26/level1-c1-left-cuff-exact-contour-intake-v1"
       ],
-      "updated_at_utc": "2026-11-26T00:51:03Z"
+      "updated_at_utc": "2026-11-26T01:11:57Z"
     },
     {
       "role_id": "critic-rig",
       "state": "done",
-      "title": "Reproduced Character 1 deformation failure",
-      "summary": "The independent grounded-pose test found the overlaps cross boots, knees, and hems. No walk or run was accepted.",
-      "next": "Review the detached rebuild after it exists.",
+      "title": "Rejected six overlaps in the first garment rebuild",
+      "summary": "The independent check reproduced six overlaps before the legs moved. These are separate from the earlier overlaps seen when the rig was posed.",
+      "next": "Independently verify the corrected cuff before any gait test.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/600c2429f737a15b28aeddfc6cae400027b0e525"
+        "https://github.com/ksolo21-web/HAVENLINE/tree/ac46ca6b6a977ce156ab783b933c727cb9d18b08/HavenlineWIP/2026-11-26/level1-c1-neutral-cavity-independent-v1"
       ],
-      "updated_at_utc": "2026-11-26T00:27:41Z"
+      "updated_at_utc": "2026-11-26T00:56:23Z"
     },
     {
       "role_id": "builder-camp-pads",
@@ -181,6 +179,17 @@
       "message": "Handoff summary: The three original starter pickups were verified as separate committed sources. The current grouped carry display stayed unchanged; it cannot trigger the purchase sweep.",
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/7934368d88ee780c729122d49001f3bcec6fcd1f"
+      ]
+    },
+    {
+      "id": "independent-garment-neutral-reject-20261126-0056",
+      "type": "handoff",
+      "at_utc": "2026-11-26T00:56:23Z",
+      "from_role_id": "critic-rig",
+      "to_role_id": "alfred",
+      "message": "Handoff summary: The first detached garment rebuild failed with six overlaps at rest. Keep it out of the game and verify any revised garment at rest before testing gait.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/tree/ac46ca6b6a977ce156ab783b933c727cb9d18b08/HavenlineWIP/2026-11-26/level1-c1-neutral-cavity-independent-v1"
       ]
     }
   ]
