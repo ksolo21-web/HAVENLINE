@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T03:18:29Z",
+  "observed_at_utc": "2026-11-26T03:35:58Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -53,15 +53,14 @@
       "id": "furnace-purchase",
       "role": "Gameplay and plot builder",
       "state": "in_progress",
-      "result": "The exact detached opening passed all 67 checks on desktop software rendering. Six stock-camera frames were independently verified; the rendered paid camp still has placeholder wall and gate visuals.",
+      "result": "The detached timber fence and thicker posts rendered in the paid camp. All 67 native checks passed, including both gates both ways and an exact reload. Independent visual review held the fence/gate presentation at 7.2/10; the gate leaves are still placeholders.",
       "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/7a8fcb639984865d10cb466c0f519c761807882f",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/f35c0831d7ea575089e302d658f04c9ae4082d1b",
         "https://github.com/ksolo21-web/HAVENLINE/commit/bd13884fcf0bee639132ea28f9527ed05617cd35",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/50c44d8c719220e5561258b94c6a1bcdeea94c33",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/1fce69e1792a7042be05f6eb8ae1d0a202c7e1ab",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/872045d9253a765843cf88e2221e9a59121d0015",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/472d8a08ec300c28630694853b2563fe67f40f6e"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/50c44d8c719220e5561258b94c6a1bcdeea94c33"
       ],
-      "next": "Review a separately staged fence art candidate while preserving both physical gates and the purchase. No device/FPS or release claim.",
+      "next": "Diagnose the near-black timber faces and stage separate wooden gate art without changing the tested gate collision, opening or saves.",
       "role_ids": [
         "builder-camp-pads",
         "level1-verifier"
@@ -148,14 +147,15 @@
     },
     {
       "role_id": "builder-camp-pads",
-      "state": "done",
-      "title": "Verified the three starter wood sources",
-      "summary": "An isolated native test verified two loose pickups and the settled pine as three distinct committed sources. This is not a pass for individual carry visuals or the purchase sweep.",
-      "next": "Verify individual larger mounts and deliveries to the purchase deck.",
+      "state": "working",
+      "title": "Staging real wooden gate leaves",
+      "summary": "The functional route uses tested original hinges and technical leaves. This work is a separate visual candidate.",
+      "next": "Freeze a donor that fits both unchanged hinge envelopes.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/7934368d88ee780c729122d49001f3bcec6fcd1f"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/7a8fcb639984865d10cb466c0f519c761807882f",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/f35c0831d7ea575089e302d658f04c9ae4082d1b"
       ],
-      "updated_at_utc": "2026-11-26T00:41:28Z"
+      "updated_at_utc": "2026-11-26T03:35:58Z"
     },
     {
       "role_id": "audio-sfx",
@@ -171,13 +171,14 @@
     {
       "role_id": "level1-verifier",
       "state": "done",
-      "title": "Verified the normal-camera opening captures",
-      "summary": "Six actual Godot frames match their native pixels; the exact route and disposable reload passed again. Desktop software only.",
-      "next": "Review the next detached fence asset after it is frozen.",
+      "title": "Verified R17 fence route; art on hold",
+      "summary": "All six frames and 67 tests matched the captured result; review found nearly black timber and placeholder gate leaves.",
+      "next": "Review the next exact fence and gate candidate after its native run.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/bd13884fcf0bee639132ea28f9527ed05617cd35"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/7a8fcb639984865d10cb466c0f519c761807882f",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/f35c0831d7ea575089e302d658f04c9ae4082d1b"
       ],
-      "updated_at_utc": "2026-11-26T03:18:29Z"
+      "updated_at_utc": "2026-11-26T03:35:58Z"
     },
     {
       "role_id": "builder-customer-counter",
@@ -303,6 +304,18 @@
       "message": "Handoff summary: The detached opening and reload ran at the stock game camera. The original wall and gate visuals are placeholders and still need art review.",
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/bd13884fcf0bee639132ea28f9527ed05617cd35"
+      ]
+    },
+    {
+      "id": "l1-r17-native-review-20261126",
+      "type": "handoff",
+      "at_utc": "2026-11-26T03:35:58Z",
+      "from_role_id": "level1-verifier",
+      "to_role_id": "builder-camp-pads",
+      "message": "Runtime passed; visual review held on flat placeholder gate leaves and near-black timber. Keep fixes separate from original gate mechanisms.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/7a8fcb639984865d10cb466c0f519c761807882f",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/f35c0831d7ea575089e302d658f04c9ae4082d1b"
       ]
     }
   ]
