@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T09:37:33Z",
+  "observed_at_utc": "2026-11-26T09:42:47Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -109,9 +109,11 @@
       "id": "level1-fence-gates",
       "role": "Fence and gate repairs, independent review, and Level 1 verification",
       "state": "in_progress",
-      "result": "Six workers were started in parallel. Fence best verified art score is 9.1 on one front-facing panel; gate best verified scores are South 9.3 and East 9.2. Both are below the 9.5 minimum and neither is installed.",
-      "next": "Fence and gate get distinct repair candidates. Independently review the exact approved renders, audit both-way travel and paid/restore visibility, and validate the north counter join. A sixth worker covers wood appearance without blocking these tasks.",
+      "result": "Separate normal-camera latch test rejected for insufficient readability on East; V4 retains South 9.3/East 9.2. New one-post fence corner is offline only, held pending an exact mating test. Both gates formerly verified for bidirectional travel; no new asset installed.",
+      "next": "Repair one bounded East latch silhouette if swing permits. Fit the one-post southwest fence corner to actual neighboring panels and reduce rope geometry cost. Keep the customer bay and exact gate controls protected.",
       "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/0d5e6a379a4472bee27f54c7490657e7344bccf2",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/6855791dddd118367995af1c550415b777117d0c",
         "https://github.com/ksolo21-web/HAVENLINE/commit/92a143532bda7929dd08369e58de887ed43b8a0b",
         "https://github.com/ksolo21-web/HAVENLINE/commit/b40bce8273a0079e04d54c453c14e43370eb1da8",
         "https://github.com/ksolo21-web/HAVENLINE/commit/7698f03b7c2f3e99b342052e8f93a030c18aa8f0"
@@ -135,25 +137,25 @@
     {
       "role_id": "alfred",
       "state": "in_progress",
-      "title": "Coordinating six parallel work assignments",
-      "summary": "Verified six assigned workers running in the current session. This is a snapshot, not continuous worker telemetry.",
-      "next": "Take both art repairs through independent review and check the same in-game build before promotion.",
+      "title": "Coordinating verified Level 1 repairs",
+      "summary": "Six workers ran in parallel earlier; latest check showed five running and the independent critic returned the current decision. Not continuous worker telemetry.",
+      "next": "Use the result to continue safe repairs without installing either held asset.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/92a143532bda7929dd08369e58de887ed43b8a0b",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/b40bce8273a0079e04d54c453c14e43370eb1da8"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/0d5e6a379a4472bee27f54c7490657e7344bccf2",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/6855791dddd118367995af1c550415b777117d0c"
       ],
-      "updated_at_utc": "2026-11-26T09:37:33Z"
+      "updated_at_utc": "2026-11-26T09:42:47Z"
     },
     {
       "role_id": "rig-character",
-      "state": "blocked",
-      "title": "Separate boot-and-cuff prototype rejected",
-      "summary": "Owner 24-joint source has plausible toe flex but exact loaded motion failed actual outsole support. It is not accepted for the normal game camera.",
-      "next": "Use real stock-view contact and the true loaded sole, not marker tuning.",
+      "state": "in_progress",
+      "title": "Scoping a better planted walk/run test",
+      "summary": "A worker is investigating a distinct contact-first test preserving the approved appearance and scale, not repeating rejected cuff or gait edits.",
+      "next": "Pin the exact baseline, support target and untested checks before any motion trial.",
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/dc85fd6b3ba316cc99b5aabb6889e486880b7e77"
       ],
-      "updated_at_utc": "2026-11-26T05:50:48Z"
+      "updated_at_utc": "2026-11-26T09:42:47Z"
     },
     {
       "role_id": "critic-rig",
@@ -169,13 +171,13 @@
     {
       "role_id": "builder-camp-pads",
       "state": "in_progress",
-      "title": "Repairing the approved timber fence",
-      "summary": "Owns panel shape, rope and snow fidelity, and repeated panel joins; not gate geometry.",
-      "next": "Return a detached, reference-matched repair or the measured blocker.",
+      "title": "Fitting one physical southwest corner",
+      "summary": "Standalone one-post topology passed source checks; it has not been fitted to the actual adjacent fence panels.",
+      "next": "Check exact panel trims, terrain seats, rope continuity and net geometry.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/92a143532bda7929dd08369e58de887ed43b8a0b"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/0d5e6a379a4472bee27f54c7490657e7344bccf2"
       ],
-      "updated_at_utc": "2026-11-26T09:37:33Z"
+      "updated_at_utc": "2026-11-26T09:42:47Z"
     },
     {
       "role_id": "audio-sfx",
@@ -191,58 +193,57 @@
     {
       "role_id": "level1-verifier",
       "state": "in_progress",
-      "title": "Checking paid reveal, travel, and restore",
-      "summary": "Auditing detached evidence on both gates and the transition from furnace purchase, independently of art.",
-      "next": "Pin route, no clipping, two-way traversal, and cold-reload checks for the next valid candidate.",
+      "title": "Preparing adjacent-frame gate closure witness",
+      "summary": "Prior exact purchase, both-way travel, blocking and restore receipts confirmed; no consecutive close-event samples or audible playback.",
+      "next": "Stage and test a detached witness contract without wiring sound.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/b40bce8273a0079e04d54c453c14e43370eb1da8"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/6855791dddd118367995af1c550415b777117d0c"
       ],
-      "updated_at_utc": "2026-11-26T09:37:33Z"
+      "updated_at_utc": "2026-11-26T09:42:47Z"
     },
     {
       "role_id": "builder-customer-counter",
       "state": "in_progress",
-      "title": "Checking the fence-to-counter join",
-      "summary": "Owns the North counter adjacency check; not the fence/gate assets.",
-      "next": "Verify that the fence ends neither cover the counter nor encroach on usable routes.",
+      "title": "Checking two dedicated north flank cuts",
+      "summary": "Repeating the standard panels overruns each counter flank by 725 mm.",
+      "next": "Measure exact safe left and right cuts; preserve the approved counter, both caps and all access.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/7698f03b7c2f3e99b342052e8f93a030c18aa8f0"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/6855791dddd118367995af1c550415b777117d0c"
       ],
-      "updated_at_utc": "2026-11-26T09:37:33Z"
+      "updated_at_utc": "2026-11-26T09:42:47Z"
     },
     {
       "role_id": "critic-game",
-      "state": "in_progress",
-      "title": "Checking fence and gate art against owner renders",
-      "summary": "Independent review of original gameplay-camera frames, with no art authored by this reviewer.",
-      "next": "Identify failing views and run a new review only when there are new validated frames.",
+      "state": "done",
+      "title": "Rejected the paid-frame latch-only change",
+      "summary": "Both normal-camera images were checked. South slightly clearer; East remains a dark fleck. No grade or integration change.",
+      "next": "Review exact new candidate only when there is a measurable repair.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/92a143532bda7929dd08369e58de887ed43b8a0b",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/b40bce8273a0079e04d54c453c14e43370eb1da8"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/0d5e6a379a4472bee27f54c7490657e7344bccf2"
       ],
-      "updated_at_utc": "2026-11-26T09:37:33Z"
+      "updated_at_utc": "2026-11-26T09:42:47Z"
     },
     {
       "role_id": "gameplay-integrator",
       "state": "in_progress",
-      "title": "Repairing separate South and East gate leaves",
-      "summary": "Owns gate appearance in a detached candidate; leaves and posts must remain separate and functional.",
-      "next": "Return a distinct art improvement without changing gate operation.",
+      "title": "Checking a clearer latch shape",
+      "summary": "Normal-camera paint-only revision rejected on East. A geometry option is being checked against actual moving and stationary clearance.",
+      "next": "Stage only if materially more legible and preserves exact operation.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/b40bce8273a0079e04d54c453c14e43370eb1da8"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/0d5e6a379a4472bee27f54c7490657e7344bccf2"
       ],
-      "updated_at_utc": "2026-11-26T09:37:33Z"
+      "updated_at_utc": "2026-11-26T09:42:47Z"
     },
     {
       "role_id": "builder-resource-cooker",
-      "state": "in_progress",
-      "title": "Scoping the wood-bark correction separately",
-      "summary": "Reference-matched bark correction is a separate source-only lane, not a fence/gate dependency.",
-      "next": "Preserve the original live build and test material only in a later approved detached comparison.",
+      "state": "done",
+      "title": "Isolated a bark-only source correction",
+      "summary": "A detached correction can toggle only the bark material on a temporary object. No render, live asset change or appearance approval.",
+      "next": "Hold rendering until the independent visual comparison is admitted.",
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/0bbce75d2a14196e6cff5097e6ce6e55a41d687c"
       ],
-      "updated_at_utc": "2026-11-26T09:37:33Z"
+      "updated_at_utc": "2026-11-26T09:42:47Z"
     }
   ],
   "office_events": [
@@ -510,6 +511,17 @@
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/92a143532bda7929dd08369e58de887ed43b8a0b",
         "https://github.com/ksolo21-web/HAVENLINE/commit/b40bce8273a0079e04d54c453c14e43370eb1da8"
+      ]
+    },
+    {
+      "id": "l1-charcoal-latch-no-go-20261126",
+      "type": "handoff",
+      "at_utc": "2026-11-26T09:42:47Z",
+      "from_role_id": "critic-game",
+      "to_role_id": "gameplay-integrator",
+      "message": "The exact paid frame showed no glow but not enough readability on East. Do not rerun this paint-only variant. Check a bounded shape option while respecting both moving and stationary gate clearance.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/0d5e6a379a4472bee27f54c7490657e7344bccf2"
       ]
     }
   ]
