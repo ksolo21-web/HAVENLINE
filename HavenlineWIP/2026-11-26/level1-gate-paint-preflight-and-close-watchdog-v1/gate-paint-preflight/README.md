@@ -1,0 +1,13 @@
+# Detached 18591 gate paint native preflight
+
+Frozen test source only. No engine, renderer, user profile, or release action was run. Anchor: passed native ordered-group clearance import v2, same explicit clearance scene, 144 exact source files and 12 already captured control witnesses. This variant is intentionally not the active-close or reference-fence lane.
+
+`stage.py` verifies both exact manifests and pinned old native evidence, materializes only into this capsule's `staged/`, and proves the delta is two additions and two modifications (146 files; 142 byte-identical). The original graft path, observer route and physical controls are kept; the graft gains only the previously reviewed visual hook. The additive observer can be subtracted byte-for-byte to recover the original. It checks all four visible/hidden-by-camp instances across each of the original 12 capture labels: exactly 39 ordered per-surface overrides per instance, same exact source geometry/material census, no whole-instance material override/overlay, active material identity matches the per-instance shader override, exact shader resource object, preserved source label and independently expected family/tones. A separate log validator requires 156 effective overrides on all 12 captures, exact original 57+10 route check checkpoints and unchanged disposable save digest. No captures are added or replaced. Control hashes and candidate hashes are paired at the same gate-only release comparison points; genuine exact before images remain in the old run. The published paper reference is not redistributed. Effect and aesthetics still need the actual independent review, gate-only against the exact owner art. Active closing and other device/perf checks remain out of scope.
+
+Run only as the parent schedules an actual verified native terminal lease, using the existing project-approved orchestration and private scratch profile:
+
+`bash ./tty_capture.sh --sole-renderer-lease ../hvn-native-visual-smoke-leasefix-v1/desktop-render.lock`
+
+The shell retains old import/warning/frame/path/hash checks and adds `gate-18591-paint-evidence.json`. Shader compilation and effective gate-only native rendering are explicitly unverified until this runs. If any paint probe or exact invariant fails, do not disable the guard. The prior unpainted controls remain untouched.
+
+Static setup checks passed: both input SHA manifests and tree identity checks; runner syntax; Python parse; synthetic matcher fixture validates six targeted negative cases. The synthetic fixture does **not** make native, gameplay or image evidence. Verify seal with `sha256sum -c SHA256SUMS`.
