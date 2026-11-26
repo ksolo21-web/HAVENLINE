@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T02:33:55Z",
+  "observed_at_utc": "2026-11-26T02:46:26Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -23,10 +23,11 @@
       "state": "blocked",
       "result": "The detached right collar edit cleared the original crossing but created three nearby overlaps and left a fold. Independent review rejected it. The tested pose also still misses left heel contact.",
       "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/ab0725e9bc04ec63a25e7cf7897a948d42fdac8c",
         "https://github.com/ksolo21-web/HAVENLINE/commit/e418fd2e50ebf2e43eaae041c3d1c5ef8d3bb368",
         "https://github.com/ksolo21-web/HAVENLINE/commit/e946060023623fa72e272f86d84739e0d3b28edf"
       ],
-      "next": "Do not iterate single vertices. Evaluate how the collar and fastener deform together under the same load before proposing a different repair. Nothing is installed.",
+      "next": "No collar-only boundary met the tested load and protection requirements. Keep this approach retired and evaluate a different animation-ready base or separately authorized design.",
       "role_ids": [
         "rig-character",
         "critic-rig"
@@ -36,13 +37,14 @@
       "id": "wood-storage",
       "role": "Resource builder and reviewer",
       "state": "in_progress",
-      "result": "The original carry box cannot hold full-size logs. One separate fixed-side layout cleared the measured rest geometry, but the second row has no authored anchor.",
+      "result": "The detached repeat-pine test awarded one wood. The old save scripts refused to read or overwrite the newer save. Separate carry visuals and an authored second row remain unverified.",
       "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/51d7edfe29f90c15b13c8e8edf40764f3e0c1e0d",
         "https://github.com/ksolo21-web/HAVENLINE/commit/5e6a4543a5cc814459d07e24fe0713ab05fb7986",
         "https://github.com/ksolo21-web/HAVENLINE/commit/f92609b35f6bf7986e7011418f97585ff170cb0f",
         "https://github.com/ksolo21-web/HAVENLINE/commit/7934368d88ee780c729122d49001f3bcec6fcd1f"
       ],
-      "next": "Pin the adjacent row and check motion, doorway clearance and normal-camera readability before adding any storage or purchase arrivals.",
+      "next": "Keep the repeat-pine candidate detached until a save compatibility plan is approved. Separately verify real carry mounts before adding transfer effects.",
       "role_ids": [
         "builder-resource-cooker"
       ]
@@ -168,13 +170,13 @@
     {
       "role_id": "level1-verifier",
       "state": "done",
-      "title": "Verified the stock wood bundle and furnace purchase",
-      "summary": "Three authoritative logs share one visual bundle. The independent source-and-log review confirmed the isolated headless run without a separate native rerun.",
-      "next": "Verify real per-source mounts and arrivals when a detached candidate is available.",
+      "title": "Verified disposable repeat-pine save behavior",
+      "summary": "Sixty native checks passed. The older save code preserved the newer save by refusing to read or overwrite it; this is not backward compatibility.",
+      "next": "Hold durable adoption; continue tests only on disposable profiles.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/1fce69e1792a7042be05f6eb8ae1d0a202c7e1ab"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/51d7edfe29f90c15b13c8e8edf40764f3e0c1e0d"
       ],
-      "updated_at_utc": "2026-11-26T01:40:56Z"
+      "updated_at_utc": "2026-11-26T02:46:26Z"
     },
     {
       "role_id": "builder-customer-counter",
@@ -267,6 +269,17 @@
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/e418fd2e50ebf2e43eaae041c3d1c5ef8d3bb368",
         "https://github.com/ksolo21-web/HAVENLINE/commit/e946060023623fa72e272f86d84739e0d3b28edf"
+      ]
+    },
+    {
+      "id": "pine-save-compatibility-review-20261126",
+      "type": "handoff",
+      "at_utc": "2026-11-26T02:46:26Z",
+      "from_role_id": "level1-verifier",
+      "to_role_id": "builder-resource-cooker",
+      "message": "Handoff summary: The first eligible repeat cut earned one wood. Older save code safely refused the newer payload; keep the change detached pending a compatibility plan.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/51d7edfe29f90c15b13c8e8edf40764f3e0c1e0d"
       ]
     }
   ]
