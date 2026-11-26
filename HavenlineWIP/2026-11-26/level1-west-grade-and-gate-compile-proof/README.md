@@ -1,0 +1,3 @@
+# Verified West fence grade and detached gate compile
+
+Both revised West lower fence parts now clear indexed terrain, and independent source review reproduced the signed intended seats and zero contacts against the protected opposite arm. The whole mounted assembly, material and art review are still pending. The separate gate fixture now imports and compiles exactly with all authenticated bytes: four exact known editor sidecar changes, 25 exact image derivatives and 156 unchanged source and test paths. No route executed, no audible or occupied-mid-swing evidence, no production changes or spend.
