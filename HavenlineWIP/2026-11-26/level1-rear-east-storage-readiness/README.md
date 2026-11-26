@@ -1,0 +1,3 @@
+# Rear-East wood receiver source intake: site retained, shell held
+
+The pinned reference shows a separate low dark wood field with a cut-wood marker, distinct from food, the counter and purchase prompts. The proposed site preserves the tested physical gate/counter margins. The existing four measured possible timber contact islands do not demonstrate a real receiver base or attachment; a reviewed top/profile and capable underside support source are still needed. No new gameplay, saves, purchased generation or promotion. Source seal 7e374b05ac87e4f69b29b4c582daa708fe14cd0499f388c69dc7d2f1337f2666.
