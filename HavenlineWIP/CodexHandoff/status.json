@@ -3,7 +3,7 @@
   "project": "Havenline",
   "scope": "Level 1",
   "coordinator": "Alfred",
-  "observed_at_utc": "2026-11-26T06:12:05Z",
+  "observed_at_utc": "2026-11-26T06:21:48Z",
   "stale_after_seconds": 5400,
   "source_branch": "alfred/level-1-replacement",
   "playable_baseline": {
@@ -52,13 +52,13 @@
       "id": "furnace-purchase",
       "role": "Gameplay and plot builder",
       "state": "in_progress",
-      "result": "Shaped owner-reference V4 gates passed 78 isolated desktop checks and 16 exact frames. Art remains below 9.5: South 9.3 and East 9.2. One southwest front fence panel with Meshy grain passed 67 isolated checks and scored 9.1. Lower-rope V4 scored 9.0 and was rejected; keep textured V3 as the best unapproved draft.",
+      "result": "Exact stock funded purchase removes 3 wood once and hides the offer, 23/23 scoped desktop checks. At the normal moving camera both price and BUILD fail to read. Keep shaped V4 gates (South 9.3/East 9.2 HOLD); V5 plank finish rejected. Textured V3 fence is still 9.1 HOLD, one front panel only.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/b40bce8273a0079e04d54c453c14e43370eb1da8",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/92a143532bda7929dd08369e58de887ed43b8a0b",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/5a0e3d01aa44a05529eaf847a8ce5d64f5313466"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/19ba2341cb42f6d5c3a754b0688de9328c589e90",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/37dfd4190726401220f5674a6f45ac817f9c1e5c",
+        "https://github.com/ksolo21-web/HAVENLINE/commit/92a143532bda7929dd08369e58de887ed43b8a0b"
       ],
-      "next": "Compare one exact paid V4/V5 gate frame before any later full route. No full fence, rear, phone or installation approval. The funded pre-purchase plot at normal camera remains unverified.",
+      "next": "Prepare a pad-local price redesign outside the moving character outline; independent desktop and device reviews remain.",
       "role_ids": [
         "builder-camp-pads",
         "level1-verifier"
@@ -146,15 +146,14 @@
     },
     {
       "role_id": "builder-camp-pads",
-      "state": "blocked",
-      "title": "Next fence art comparison awaiting desktop",
-      "summary": "The steeper rope test is closed. Keep textured V3 as the best unapproved panel. An exact gate still comparison is staged but not running.",
+      "state": "working",
+      "title": "Pad-local readability repair",
+      "summary": "Normal-camera stock price failed when the player approached. Detached appearance work only; payment timing and scope stay unchanged.",
       "next": "Keep the gates physically separate and verify all actual front/rear states and fence joins.",
       "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/923bcb7ce2e8aaa42c01f7e3138bb700fa8607d8",
-        "https://github.com/ksolo21-web/HAVENLINE/commit/d6f54dbf0811cade021f501d40402fb2b4e4d31c"
+        "https://github.com/ksolo21-web/HAVENLINE/commit/19ba2341cb42f6d5c3a754b0688de9328c589e90"
       ],
-      "updated_at_utc": "2026-11-26T05:51:07Z"
+      "updated_at_utc": "2026-11-26T06:21:48Z"
     },
     {
       "role_id": "audio-sfx",
@@ -193,17 +192,6 @@
     }
   ],
   "office_events": [
-    {
-      "id": "independent-rig-review-20261126-0027",
-      "type": "handoff",
-      "at_utc": "2026-11-26T00:27:41Z",
-      "from_role_id": "critic-rig",
-      "to_role_id": "alfred",
-      "message": "Handoff summary: The independently reproduced overlaps span the boots, knees, and hems. The current pose stays rejected; one same-look detached rebuild is the next test.",
-      "evidence": [
-        "https://github.com/ksolo21-web/HAVENLINE/commit/600c2429f737a15b28aeddfc6cae400027b0e525"
-      ]
-    },
     {
       "id": "starter-source-route-20261126-0041",
       "type": "handoff",
@@ -421,6 +409,17 @@
       "message": "The current 24-joint walk does not plant the boot under load. A viable next exact phase must demonstrate broad, stable physical outsole support; no new clip is admitted yet.",
       "evidence": [
         "https://github.com/ksolo21-web/HAVENLINE/commit/dc85fd6b3ba316cc99b5aabb6889e486880b7e77"
+      ]
+    },
+    {
+      "id": "l1-stock-funded-pad-native-hold-20261126",
+      "type": "handoff",
+      "at_utc": "2026-11-26T06:21:48Z",
+      "from_role_id": "level1-verifier",
+      "to_role_id": "builder-camp-pads",
+      "message": "23 stock checks established one valid 3-wood purchase. Native paid approach exposed character occlusion and unreadable price; repair the pad art only.",
+      "evidence": [
+        "https://github.com/ksolo21-web/HAVENLINE/commit/19ba2341cb42f6d5c3a754b0688de9328c589e90"
       ]
     }
   ]
