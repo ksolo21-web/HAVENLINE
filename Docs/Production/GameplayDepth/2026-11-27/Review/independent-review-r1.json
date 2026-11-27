@@ -1,0 +1,51 @@
+{
+  "reviewer": "/root/depth_critic",
+  "review_scope": "Actual draft plan artifact and planning helper only; no runtime or game score",
+  "status": "CHANGES_REQUESTED_BEFORE_FINAL_FREEZE",
+  "score": null,
+  "game_score": null,
+  "runtime_approval_allowed": false,
+  "candidate_base": "9d10c45a8bd46aeb6ab1b4009e87538c4796ef1c",
+  "helper_sha256": "e2eef91c33700ff0eb3afa9df5197d08fc03450ea4c934fb7d8a4e6173ddabc1",
+  "mandatory_check_blocked": "15: Meaningful executable plan validation / negative integrity probes",
+  "confirmed_findings": [
+    {
+      "probe": "all_AI_requirements_removed",
+      "errors": [],
+      "rejected": false
+    },
+    {
+      "probe": "all_design_decisions_removed",
+      "errors": [],
+      "rejected": false
+    },
+    {
+      "probe": "dog_replaced_with_player_lead",
+      "errors": [],
+      "rejected": false
+    },
+    {
+      "probe": "foundation_coal_renamed_to_invented_resource",
+      "errors": [],
+      "rejected": false
+    },
+    {
+      "probe": "duplicate_human_task_family_over_remainder",
+      "errors": [],
+      "rejected": false
+    },
+    {
+      "probe": "duplicate_animation_family_over_remainder",
+      "errors": [],
+      "rejected": false
+    }
+  ],
+  "additional_inspection_concern": "SOURCE_BINDINGS validator iterates supplied rows without checking required source census; verify empty/removed sources reject after complete crosswalk exists.",
+  "accepted_source_work_so_far": [
+    "Bounded Build11 risk and wallet observations independently verified from exact source",
+    "6 canonical / 6 foundation raw / 3 processed / 33 render inventory complete and scoped honestly",
+    "Survivor parity, ordinary delegated purchase accounting, seven species roles, full state/motion/audio scenarios substantively covered",
+    "No new runtime implementation approval, task IDs or dependencies inferred"
+  ],
+  "next_action": "Repair structural/source identity coverage; retain this rejection and rerun negative probes against frozen output."
+}

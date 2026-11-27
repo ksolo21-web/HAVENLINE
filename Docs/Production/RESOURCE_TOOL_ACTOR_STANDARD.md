@@ -2,6 +2,12 @@
 
 This standard supplements `Docs/Production/HAVENLINE_BUILD_PLAN_V2.md` without changing approved T01-T04 work or the already assigned T05 frozen scope.
 
+## Current whole-game forward requirements
+
+Apply the [gameplay-depth standard](GAMEPLAY_DEPTH_STANDARD.md), [18-requirement contract](GAMEPLAY_DEPTH_CONTRACT.json) and [task responsibility crosswalk](GameplayDepth/2026-11-27/TASK_GAMEPLAY_DEPTH_T01_T80.md) to new or modified components. They extend useful survivor assistance to the complete human work cycle, explicitly cover delegated plot payment and substantial mixed loads, require distinct useful companion roles and complete actor/equipment animation, and require a worthwhile purpose for each introduced item or currency. Existing frozen scope and historical evidence retain their original meaning; changes use the existing owner/scope process.
+
+The [dated source audit](GameplayDepth/2026-11-27/README.md) records unresolved canonical/foundation/render mappings and the `T23_FREEZE_REQUIRED` survivor-profile gap in metal/fuel. A registry's `production_ready` flag or schema pass does not certify those gaps, actual animations, the whole economy or gameplay. New planning checks verify source/inventory consistency only. Freeze each introducing task's useful contract before its integration, then let T31/T33 integrate those established contracts without adding a backward dependency.
+
 ## Purpose
 
 Havenline must never introduce a resource, helper, survivor, core companion, animal companion, tool, or weapon whose usable gameplay action is undefined or whose production animation is a generic placeholder.

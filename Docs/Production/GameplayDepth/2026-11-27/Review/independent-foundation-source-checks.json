@@ -1,0 +1,131 @@
+{
+  "reviewer": "/root/depth_critic",
+  "read_only": true,
+  "foundation_commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+  "runtime_executed": false,
+  "runtime_approval_allowed": false,
+  "source_files": [
+    {
+      "path": "HavenlineLevel1/field_opening.gd",
+      "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+      "sha256": "1eac14835bd10cb515d84ab878926c7f9795699e3ca460e584cd21465715ee2b",
+      "inspection": "Selected relevant declarations and functions; not exhaustive whole-runtime behavior tracing."
+    },
+    {
+      "path": "HavenlineLevel1/field_inventory.gd",
+      "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+      "sha256": "c6b9e470f9143174a90bcd6861c7866d6836ca9b250c83517c54152058f8a822",
+      "inspection": "Selected relevant declarations and functions; not exhaustive whole-runtime behavior tracing."
+    },
+    {
+      "path": "HavenlineLevel1/field_progression.gd",
+      "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+      "sha256": "99e5e44532fbd313e9e5ef9b3def04cac04bd43d9fc50760aa43b1ebcbed06a5",
+      "inspection": "Selected relevant declarations and functions; not exhaustive whole-runtime behavior tracing."
+    },
+    {
+      "path": "HavenlineLevel1/field_settlement.gd",
+      "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+      "sha256": "6651ccb12200cec1bf009626a500a7df2851ab73558e4c92d21b909e7e3fa208",
+      "inspection": "Selected relevant declarations and functions; not exhaustive whole-runtime behavior tracing."
+    },
+    {
+      "path": "HavenlineLevel1/field_settlement_loop.gd",
+      "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+      "sha256": "d6ffb19a15972ab1eb12e62878c6f6352b39aebdf9ece489ac9cedc3bb4701a0",
+      "inspection": "Selected relevant declarations and functions; not exhaustive whole-runtime behavior tracing."
+    },
+    {
+      "path": "HavenlineLevel1/field_logistics.gd",
+      "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+      "sha256": "82721c6b1247690711b4e1999d393138451b7deca39bf603a98e8fb02bc7c738",
+      "inspection": "Selected relevant declarations and functions; not exhaustive whole-runtime behavior tracing."
+    },
+    {
+      "path": "HavenlineLevel1/field_lifecycle.gd",
+      "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+      "sha256": "6efc7a1fc1049e9d45b5fcdbd648d03573c11383e6737e29db32ac9cea692f68",
+      "inspection": "Selected relevant declarations and functions; not exhaustive whole-runtime behavior tracing."
+    },
+    {
+      "path": "HavenlineLevel1/field_hud.gd",
+      "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+      "sha256": "c3798ac36bc119cf0942a980ad26f4516ca933d1c1677b1e5f9b2cb44ee4a23c",
+      "inspection": "Selected relevant declarations and functions; not exhaustive whole-runtime behavior tracing."
+    },
+    {
+      "path": "HavenlineLevel1/field_survivor.gd",
+      "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+      "sha256": "25977e73e1cd755d85354226eea9a9eb01cc4a6e9f1d9e3fb3c8b7062fad8102",
+      "inspection": "Selected relevant declarations and functions; not exhaustive whole-runtime behavior tracing."
+    },
+    {
+      "path": "HavenlineLevel1/field_counter.gd",
+      "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+      "sha256": "3d907d523c6bfe230d349ee3da20d90aa870f8207757a2f26d29e773d7b116e0",
+      "inspection": "Selected relevant declarations and functions; not exhaustive whole-runtime behavior tracing."
+    }
+  ],
+  "checks": [
+    {
+      "id": "damage_and_sanctuary",
+      "finding": "field_opening._player_hit rejects camp damage; positive damage reduces HP outside subject to other guards.",
+      "result": "SOURCE_VERIFIED_WITH_STATED_BOUNDARY"
+    },
+    {
+      "id": "zero_hp_return",
+      "finding": "field_opening zero-HP branch cancels work presentation and resets; reset assigns safe_start, MAX_HP, brief invulnerability and preserves living enemy HP.",
+      "result": "SOURCE_VERIFIED_WITH_STATED_BOUNDARY"
+    },
+    {
+      "id": "bounded_no_debit_finding",
+      "finding": "No explicit material/cash/plot/companion debit in the inspected player-hit/reset branches. This does not establish a whole-game guarantee or runtime pass.",
+      "result": "SOURCE_VERIFIED_WITH_STATED_BOUNDARY"
+    },
+    {
+      "id": "paid_machine_state",
+      "finding": "field_settlement_loop.cancel_cooking comments retain paid hopper stock and machine work; invokes works.cancel.",
+      "result": "SOURCE_VERIFIED_WITH_STATED_BOUNDARY"
+    },
+    {
+      "id": "raw_inventory_census",
+      "finding": "field_inventory.KINDS exactly wood, stone, meat, coal, slate, metal; metal titled Metal ore.",
+      "result": "SOURCE_VERIFIED_WITH_STATED_BOUNDARY"
+    },
+    {
+      "id": "offer_census",
+      "finding": "field_progression.OFFERS has 13 named offers using wood, stone, meat; survivor wood plot separately represented.",
+      "result": "SOURCE_VERIFIED_WITH_STATED_BOUNDARY"
+    },
+    {
+      "id": "worker_payment",
+      "finding": "worker_payment uses shared _pay_from on actual worker_load; requires rescued and excludes Progress.LINES.",
+      "result": "SOURCE_VERIFIED_WITH_STATED_BOUNDARY"
+    },
+    {
+      "id": "capacity_precision",
+      "finding": "WORKER_LIMIT = 500 / UNITS_PER_BUNDLE. Settlement validation and survivor._free_for enforce per-kind occupancy; do not call 500 a verified total mixed-load cap or throughput result.",
+      "result": "SOURCE_VERIFIED_WITH_STATED_BOUNDARY"
+    },
+    {
+      "id": "products_and_lanes",
+      "finding": "field_logistics.PRODUCT exactly wood->planks, stone->blocks, meat->meal; stored_meal and meal_to_store are lanes, not extra inventory kinds.",
+      "result": "SOURCE_VERIFIED_WITH_STATED_BOUNDARY"
+    },
+    {
+      "id": "cash_receipt_scope",
+      "finding": "serve consumes one qualifying meal and increments served; settlement EMPTY contains no distinct cash wallet; field_hud maps cash display directly from journal.served. Cash mesh alone is not a spendable wallet proof.",
+      "result": "SOURCE_VERIFIED_WITH_STATED_BOUNDARY"
+    },
+    {
+      "id": "bounded_sink_gap",
+      "finding": "Reviewed OFFERS/MACHINES/PRODUCT/STORE contracts do not show coal/slate/metal sinks or downstream plank/block spending. No claim of universal absence across every branch.",
+      "result": "SOURCE_VERIFIED_WITH_STATED_BOUNDARY"
+    },
+    {
+      "id": "drops_vs_owned_cargo",
+      "finding": "Lifecycle snapshots remaining loose-drop lifetime. This is not evidence of offline erosion or confiscating already owned cargo.",
+      "result": "SOURCE_VERIFIED_WITH_STATED_BOUNDARY"
+    }
+  ]
+}

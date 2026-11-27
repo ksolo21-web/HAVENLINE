@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "scope": "Planning audit consistency only; no game test or approval",
+  "passed": true,
+  "checks_passed": 11,
+  "checks_required": 11,
+  "base_commit": "9d10c45a8bd46aeb6ab1b4009e87538c4796ef1c",
+  "files": [
+    {
+      "path": "/workspace/scratch/e15437dc7c94/gameplay-depth-drafts/ACTORS_MOTION_REQUIREMENTS.json",
+      "bytes": 81201,
+      "sha256": "9fa0c4e40f432b2f2e53669a7697a131edfca5a3f635e471b84740e323fe540c"
+    },
+    {
+      "path": "/workspace/scratch/e15437dc7c94/gameplay-depth-drafts/ACTORS_MOTION_AUDIT.md",
+      "bytes": 39072,
+      "sha256": "1a2c988d52af8c152d10ee1c40f4564cec467852703d16d60685094357ce59a2"
+    }
+  ],
+  "counts": {
+    "sources": 12,
+    "human_families": 10,
+    "pet_roles": 7,
+    "ai_requirements": 14,
+    "animation_families": 12,
+    "acceptance_scenarios": 12,
+    "task_mapping_rows": 56
+  },
+  "checks": [
+    {
+      "name": "source_hashes_match_pinned_base",
+      "passed": true
+    },
+    {
+      "name": "task_map_uses_authentic_existing_ids",
+      "passed": true
+    },
+    {
+      "name": "inventory_matches_source_counts",
+      "passed": true
+    },
+    {
+      "name": "seven_companion_ids_exact",
+      "passed": true
+    },
+    {
+      "name": "render_bindings_are_unmodified_source_rows",
+      "passed": true
+    },
+    {
+      "name": "runtime_approval_not_claimed",
+      "passed": true
+    },
+    {
+      "name": "worker_capacity_stays_explicitly_unresolved",
+      "passed": true
+    },
+    {
+      "name": "full_human_scope_and_equipment_covered",
+      "passed": true
+    },
+    {
+      "name": "supporting_owners_include_transactions_save_audio_devices",
+      "passed": true
+    },
+    {
+      "name": "artifacts_are_outside_candidate",
+      "passed": true
+    },
+    {
+      "name": "markdown_contains_all_task_rows",
+      "passed": true
+    }
+  ]
+}

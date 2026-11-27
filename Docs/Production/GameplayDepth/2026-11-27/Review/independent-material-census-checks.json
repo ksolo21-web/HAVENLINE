@@ -1,0 +1,27 @@
+{
+  "scope": "Source inventories only; not runtime/value approval",
+  "render_pin": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+  "checks": [
+    {
+      "id": "six_canonical_ids",
+      "passed": true
+    },
+    {
+      "id": "thirtythree_render_ids",
+      "passed": true
+    },
+    {
+      "id": "thirteen_base_manifest_ids",
+      "passed": true
+    },
+    {
+      "id": "twenty_expansion_manifest_ids",
+      "passed": true
+    },
+    {
+      "id": "expansion_exact_source_classification",
+      "passed": true
+    }
+  ],
+  "review_script_correction": "Initial query assumed every manifest row had scope_status; source_classification is present on all20rows and is the audited copied value. No candidate defect."
+}

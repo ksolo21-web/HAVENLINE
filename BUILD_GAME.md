@@ -8,7 +8,13 @@
 
 Use the [2026-11-27 task-plan refresh](Docs/Production/TASK_PLAN_REFRESH_2026-11-27.md), [all T01–T80 requirements](Docs/Production/ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md), and [pinned GitHub render catalogue](Docs/Production/ReferenceRefresh/2026-11-27/RENDER_CATALOGUE.md) before new work. The newest verified receipt found is **Codex Build 11**, source `989edd9283148e9f712387fb937ea36038cbd9d2`, scene `res://field_opening.tscn`; [exact package and review scope](Docs/Production/ReferenceRefresh/2026-11-27/LATEST_BUILD_EVIDENCE.json). Main and the older active-source instructions below remain preserved snapshots/branches; this documentation does not merge or reset current gameplay. Follow the newer Codex foundation with its actual owner/source binding. Historical task states are not current candidate approvals.
 
+## Whole-game stakes, companions and resource value
+
+Use the [gameplay-depth standard](Docs/Production/GAMEPLAY_DEPTH_STANDARD.md) and [T01–T80 responsibility crosswalk](Docs/Production/GameplayDepth/2026-11-27/TASK_GAMEPLAY_DEPTH_T01_T80.md) before new feature work. These add explicit stakes/recovery, useful survivor and pet jobs, delegated plot funding, substantial mixed carrying, complete animation and resource-value requirements. The [source audit and open decisions](Docs/Production/GameplayDepth/2026-11-27/README.md) distinguish pinned Build 11 behavior from proposed whole-game design. They do not activate tasks or certify game behavior.
+
 ## Active source
+
+The gameplay-depth audit also records the newer observed `trial/world-one-expansion-2026-11-26` source at `3fad812b384335bd8ca9b5e47dc9d9557110eb4a`: [bounded current-source changes and evidence](Docs/Production/GameplayDepth/2026-11-27/CURRENT_BRANCH_NOTE.md). It supersedes the relevant Build 11 cash/carry/drop/hearth observations, without claiming a new validated build or merging that branch into main.
 
 Continue Level 1 development on **alfred/level-1-replacement**. The consolidated source snapshot is **2706cd6b0c6bfa7b4e8ad31d792a365aaf456d08**; the active branch may advance independently. Always resolve its actual head before starting another change.
 

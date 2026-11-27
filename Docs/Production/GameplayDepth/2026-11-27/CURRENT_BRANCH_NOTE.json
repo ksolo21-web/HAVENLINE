@@ -1,0 +1,961 @@
+{
+  "schema_version": 1,
+  "note_id": "havenline-current-branch-source-note-2026-11-27-3fad812",
+  "status": "OBSERVED_CURRENT_SOURCE_NOT_RUNTIME_APPROVAL",
+  "source_only": true,
+  "runtime_tested": false,
+  "runtime_approved": false,
+  "balance_approved": false,
+  "animation_approved": false,
+  "observed_at_utc": "2026-11-27T11:39:25Z",
+  "observed_branch": "trial/world-one-expansion-2026-11-26",
+  "observed_head": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+  "parent_head": "6435e5d4e58ec0d846dd89fbcf2efb8783e6af2e",
+  "historical_audit_build11_source": "989edd9283148e9f712387fb937ea36038cbd9d2",
+  "branch_url": "https://api.github.com/repos/ksolo21-web/HAVENLINE/branches/trial/world-one-expansion-2026-11-26",
+  "commit_url": "https://github.com/ksolo21-web/HAVENLINE/commit/3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+  "commit_message": "Repair field collection, camp trading, crew and character locomotion",
+  "committed_at": "2026-11-27T11:29:14Z",
+  "commit_changed_file_count": 80,
+  "commits_ahead_of_build11": 6,
+  "comparison_boundary": {
+    "immediate_parent_compare_complete_for_80_returned_files": true,
+    "build11_compare_returned_file_count": 300,
+    "build11_compare_file_list_may_be_capped": true,
+    "build11_compare_used_for": "ancestry only; direct pinned source reads establish findings",
+    "moving_branch_may_advance_again": true
+  },
+  "current_identifier_census": {
+    "raw_items": [
+      "wood",
+      "stone",
+      "meat",
+      "coal",
+      "slate",
+      "metal"
+    ],
+    "raw_item_count": 6,
+    "products": {
+      "wood": "planks",
+      "stone": "blocks",
+      "meat": "meal"
+    },
+    "processed_item_ids": [
+      "planks",
+      "blocks",
+      "meal"
+    ],
+    "processed_item_count": 3,
+    "goods_transfer_ids": [
+      "planks",
+      "blocks",
+      "meal",
+      "money"
+    ],
+    "goods_pack_ids": [
+      "planks",
+      "blocks",
+      "meal",
+      "money"
+    ],
+    "earned_currency_ids": [
+      "money"
+    ],
+    "earned_currency_count": 1,
+    "cash_custody_locations": [
+      {
+        "id": "till_balance()",
+        "storage": "derived",
+        "formula": "served - pocket_cash - house_cash"
+      },
+      {
+        "id": "pocket_cash",
+        "storage": "settlement field"
+      },
+      {
+        "id": "house_cash",
+        "storage": "settlement field"
+      }
+    ],
+    "cash_custody_location_count": 3,
+    "cash_locations_are_separate_currencies": false,
+    "new_settlement_fields": [
+      "owl_meat",
+      "owl_legacy",
+      "hand_products",
+      "pocket_cash",
+      "house_cash",
+      "withdrawn"
+    ],
+    "hand_products": [
+      "planks",
+      "blocks"
+    ],
+    "held_meal": "Existing meal custody field now supports batches",
+    "new_plot_ids": [
+      "owl_roost"
+    ],
+    "owl_meat": "Cumulative payment of existing meat, not new resource",
+    "owl_legacy": "Preserved ownership flag, not currency",
+    "transport_lanes": [
+      "wood",
+      "stone",
+      "meat",
+      "planks",
+      "blocks",
+      "meal",
+      "stored_meal",
+      "meal_to_store"
+    ],
+    "transport_route_aliases_not_new_products": [
+      "stored_meal",
+      "meal_to_store"
+    ],
+    "worker_raw_ids": [
+      "wood",
+      "stone",
+      "meat",
+      "coal",
+      "slate",
+      "metal"
+    ],
+    "worker_capacity_interpretation": "Existing 500 raw units / ten-unit bundle constant, validated per kind including in-flight token/supply; do not infer a single total mixed-capacity or universal parity.",
+    "offer_ids": [
+      "center_hearth",
+      "expansion_1",
+      "storage_wood",
+      "storage_stone",
+      "storage_meat",
+      "expansion_2",
+      "camp_cooker",
+      "saw_bench",
+      "quarry_drill",
+      "watchtower",
+      "orbit_upgrade",
+      "meal_conveyor",
+      "supply_conveyors"
+    ],
+    "offer_count": 13,
+    "offer_material_ids": [
+      "wood",
+      "stone",
+      "meat"
+    ],
+    "separate_survivor_plot": true,
+    "separate_owl_roost": true,
+    "offer_count_including_separate_plots_claimed": false,
+    "whole_game_inventory_exhaustiveness_claimed": false,
+    "scope": "Complete ID census of inspected current raw inventory, processor product, goods exchange, goods pack and crew ledger surfaces."
+  },
+  "supersedes_historical_interpretation": [
+    {
+      "finding": "cash_only_mesh_and_served_counter",
+      "old_scope": "989edd9283148e9f712387fb937ea36038cbd9d2",
+      "current_scope": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "current": "No longer applicable. Actual pocket/house/derived till custody now exists; HUD shows pocket_cash.",
+      "remaining_gap": "Cash spend/reinvestment sink absent from reviewed offers/exchange."
+    },
+    {
+      "finding": "processed_goods_only_output_store",
+      "old_scope": "989edd9283148e9f712387fb937ea36038cbd9d2",
+      "current_scope": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "current": "Player pickup, hand custody, deposit and withdrawal added for planks, blocks and meal.",
+      "remaining_gap": "Plank/block terminal spend or customer sale not found in reviewed contracts."
+    },
+    {
+      "finding": "oldest_loose_drop_removed_at_cap",
+      "old_scope": "989edd9283148e9f712387fb937ea36038cbd9d2",
+      "current_scope": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "current": "DROP_CAP and _place_drop cap deletion removed. Timed loose-drop expiry remains."
+    },
+    {
+      "finding": "camp_healing_general_description",
+      "old_scope": "989edd9283148e9f712387fb937ea36038cbd9d2",
+      "current_scope": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "current": "Gradual healing additionally requires hearth_fire.fired; restore_warmth feedback added."
+    },
+    {
+      "finding": "owl_bundled_with_survivor_progress",
+      "old_scope": "989edd9283148e9f712387fb937ea36038cbd9d2",
+      "current_scope": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "current": "Separate owl_roost meat tender, owl_meat ownership and owl_legacy migration introduced; prior ownership preserved."
+    }
+  ],
+  "cash_contract_observed": {
+    "earned_source": "One fulfilled meal increments served",
+    "uncollected_cash": "Inventory.till_balance derives remaining till stock from earned receipts minus pocket/house custody.",
+    "collection": "goods_exchange._counter excludes cash_in_exchange, adds collected cash to pocket_cash, commits receipt.",
+    "deposit": "goods_exchange._deposit transfers pocket_cash to house_cash.",
+    "withdrawal": "goods_exchange.withdraw transfers house_cash to pocket_cash and tracks withdrawn protection.",
+    "legacy_migration": "Settlement.from_pre_register banks earlier served receipts into house_cash.",
+    "validation": "Nonnegative integer balances; pocket_cash plus house_cash cannot exceed served.",
+    "hud": "field_hud.settlement_status reads pocket_cash, hand_products and held_meal.",
+    "no_spend_sink_in_reviewed_contracts": true,
+    "sink_audit_scope": [
+      "field_progression.gd::OFFERS",
+      "field_inventory.gd::_pay_from",
+      "field_goods_exchange.gd"
+    ],
+    "whole_branch_absence_claimed": false
+  },
+  "resource_sinks_observed": {
+    "wood": [
+      "13 material-offer table where applicable",
+      "separate survivor tender",
+      "saw input"
+    ],
+    "stone": [
+      "13 material-offer table where applicable",
+      "quarry drill input"
+    ],
+    "meat": [
+      "13 material-offer table where applicable",
+      "cooker input",
+      "new separate owl roost"
+    ],
+    "coal_slate_metal": "No sink in reviewed offer table or processor mapping.",
+    "planks_blocks": "Manual pickup/carry/store/withdraw added; no terminal consumption or customer sale found in reviewed contracts.",
+    "meal": "Real service consumption; supports batched personal and counter stock.",
+    "owl_roost": {
+      "source_constant_bundles": 6,
+      "source_units_per_bundle": 10,
+      "source_raw_meat_units": 60,
+      "numeric_values_are_observed_not_recommended_tuning": true,
+      "legacy_owners_repay": false
+    }
+  },
+  "risk_recovery_observed": {
+    "player_hit_function_unchanged": true,
+    "camp_damage_rejection": true,
+    "zero_hp": "Fall and return to safe_start; full HP; living enemy HP retained while encounters reset; owl now advances during reset.",
+    "owned_resource_loss": "No carried-material, product, cash, plot or companion debit found in inspected down/reset path. Not a whole-game guarantee.",
+    "production_on_fall": "Committed hoppers and machine work retained; cancel_cooking source unchanged.",
+    "gradual_healing": "Only when alive/injured, no reset/persist block/close, inside camp and hearth_fire.fired.",
+    "loose_drops": {
+      "played_seconds_lifetime": 100,
+      "timed_expiry_remains": true,
+      "old_cap_removed": true,
+      "oldest_drop_at_cap_deletion_removed": true,
+      "offline_clock_claimed": false
+    },
+    "new_severe_loss_policy_established": false
+  },
+  "crew_carry_observed": {
+    "worker_payment_unchanged": true,
+    "worker_payment_excludes": [
+      "meal_conveyor",
+      "supply_conveyors"
+    ],
+    "new_logic": [
+      "Early service opportunity before field shift",
+      "Customer meat demand check",
+      "Alternate gathering sites and mixed resource pickup before return",
+      "Bounded field-shift return logic",
+      "Mixed unload timing",
+      "Separate owl ownership/tender"
+    ],
+    "new_goods_pack": "Four fixed product/money bays with bounded representative pieces; journal owns logical quantity.",
+    "full_task_parity_proven": false,
+    "full_animation_quality_proven": false,
+    "whole_game_companion_intelligence_proven": false
+  },
+  "checks": {
+    "function_comparisons": [
+      {
+        "path": "HavenlineLevel1/field_inventory.gd",
+        "anchor": "worker_payment",
+        "byte_equal_after_trailing_whitespace_trim": true
+      },
+      {
+        "path": "HavenlineLevel1/field_inventory.gd",
+        "anchor": "_pay_from",
+        "byte_equal_after_trailing_whitespace_trim": true
+      },
+      {
+        "path": "HavenlineLevel1/field_opening.gd",
+        "anchor": "_player_hit",
+        "byte_equal_after_trailing_whitespace_trim": true
+      },
+      {
+        "path": "HavenlineLevel1/field_settlement_loop.gd",
+        "anchor": "cancel_cooking",
+        "byte_equal_after_trailing_whitespace_trim": true
+      }
+    ],
+    "raw6": true,
+    "products3": true,
+    "goods4": true,
+    "earned_money_transfer_id": true,
+    "offers13": true,
+    "source_files_hashed": 14
+  },
+  "source_hashes": [
+    {
+      "path": "HavenlineLevel1/field_inventory.gd",
+      "git_blob_sha": "425c8c52644e28366bc27f73cc207f8986f772e1",
+      "sha256": "e29ceacd0006b8697731911ac69bee6c75e49dccebf012ec2fd1465f507af773",
+      "bytes": 13922,
+      "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/3fad812b384335bd8ca9b5e47dc9d9557110eb4a/HavenlineLevel1/field_inventory.gd",
+      "inspection": "direct source read or exact reviewed patch; no runtime execution"
+    },
+    {
+      "path": "HavenlineLevel1/field_settlement.gd",
+      "git_blob_sha": "a2ea4fe7384fa40b5df08c4907ac87a022121377",
+      "sha256": "29081375e0f121b3b366c0c7bcbafdd971fc237de8f6f482cabcd1129838f27e",
+      "bytes": 10703,
+      "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/3fad812b384335bd8ca9b5e47dc9d9557110eb4a/HavenlineLevel1/field_settlement.gd",
+      "inspection": "direct source read or exact reviewed patch; no runtime execution"
+    },
+    {
+      "path": "HavenlineLevel1/field_logistics.gd",
+      "git_blob_sha": "e3095146e2ddf92e0c854f30916e2351ee3d6c8b",
+      "sha256": "8a7bfc9a2de3e4aa6f1a08442559ce79b65581e1407734a5e0d9f7087fa3cdc0",
+      "bytes": 3824,
+      "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/3fad812b384335bd8ca9b5e47dc9d9557110eb4a/HavenlineLevel1/field_logistics.gd",
+      "inspection": "direct source read or exact reviewed patch; no runtime execution"
+    },
+    {
+      "path": "HavenlineLevel1/field_goods_exchange.gd",
+      "git_blob_sha": "b5c94779c203384d99f9b860135f4e490cfb2783",
+      "sha256": "09b2b6f07bb2f3bc820024f8d98d347dfa738d0160ad5f9f1b27a6d2f8d069ae",
+      "bytes": 7743,
+      "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/3fad812b384335bd8ca9b5e47dc9d9557110eb4a/HavenlineLevel1/field_goods_exchange.gd",
+      "inspection": "direct source read or exact reviewed patch; no runtime execution"
+    },
+    {
+      "path": "HavenlineLevel1/field_goods_pack.gd",
+      "git_blob_sha": "4d89ee02173a6e796728e58beae20b751d20a4ce",
+      "sha256": "4e477f221db507956829d5c4ff063b6c7a948b42aa9d6672d9305c142973e499",
+      "bytes": 2524,
+      "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/3fad812b384335bd8ca9b5e47dc9d9557110eb4a/HavenlineLevel1/field_goods_pack.gd",
+      "inspection": "direct source read or exact reviewed patch; no runtime execution"
+    },
+    {
+      "path": "HavenlineLevel1/field_progression.gd",
+      "git_blob_sha": "868267f8406c9d516e515b30edf96b255987e10e",
+      "sha256": "395f8ef3129b107357bfad280aee07f7beec4c1de6a77c8fdabc3ef6d59f3a62",
+      "bytes": 4053,
+      "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/3fad812b384335bd8ca9b5e47dc9d9557110eb4a/HavenlineLevel1/field_progression.gd",
+      "inspection": "direct source read or exact reviewed patch; no runtime execution"
+    },
+    {
+      "path": "HavenlineLevel1/field_opening.gd",
+      "git_blob_sha": "d92185586e194ce51a515e71a9f5fb5fca1dbc4f",
+      "sha256": "109b58f9418cf413af20d060794d38ee8a2c3e97a24b2bba88e099e9e1c4ea5e",
+      "bytes": 41852,
+      "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/3fad812b384335bd8ca9b5e47dc9d9557110eb4a/HavenlineLevel1/field_opening.gd",
+      "inspection": "direct source read or exact reviewed patch; no runtime execution"
+    },
+    {
+      "path": "HavenlineLevel1/field_lifecycle.gd",
+      "git_blob_sha": "cc801c34665740f523e18cc7a7da0ffaf95fcc25",
+      "sha256": "60df9234222b8c25ad5f99fa9561de12a3455fd386c4bbba8b1cdce603495a7c",
+      "bytes": 9394,
+      "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/3fad812b384335bd8ca9b5e47dc9d9557110eb4a/HavenlineLevel1/field_lifecycle.gd",
+      "inspection": "direct source read or exact reviewed patch; no runtime execution"
+    },
+    {
+      "path": "HavenlineLevel1/field_counter.gd",
+      "git_blob_sha": "82aa9ca89fe414d864446b86f20f1bd007d69fed",
+      "sha256": "c09eb734ad2716c3d0d2203bbc921fabc49a4a96a98b9e2eee89036b9e0720cd",
+      "bytes": 17720,
+      "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/3fad812b384335bd8ca9b5e47dc9d9557110eb4a/HavenlineLevel1/field_counter.gd",
+      "inspection": "direct source read or exact reviewed patch; no runtime execution"
+    },
+    {
+      "path": "HavenlineLevel1/field_settlement_loop.gd",
+      "git_blob_sha": "686a0f52d9ca068e9de97859a32ee7342cf1af10",
+      "sha256": "3cc62800d9533de2a43b22da38af8a29e53bc848a80ec86738aa5b937722058e",
+      "bytes": 19393,
+      "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/3fad812b384335bd8ca9b5e47dc9d9557110eb4a/HavenlineLevel1/field_settlement_loop.gd",
+      "inspection": "direct source read or exact reviewed patch; no runtime execution"
+    },
+    {
+      "path": "HavenlineLevel1/field_hud.gd",
+      "git_blob_sha": "77b79dd75478d40049be48ae4135b70bb3e38b5e",
+      "sha256": "8495671347ce814daa77569299ddafb29d1d74903979e2bd6b0bb3236e6bb030",
+      "bytes": 21205,
+      "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/3fad812b384335bd8ca9b5e47dc9d9557110eb4a/HavenlineLevel1/field_hud.gd",
+      "inspection": "direct source read or exact reviewed patch; no runtime execution"
+    },
+    {
+      "path": "HavenlineLevel1/field_survivor.gd",
+      "git_blob_sha": "a7c2c73007acc1c015958b80fdb4de79847c07f2",
+      "sha256": "c2c7d9b368ee59d2dfbb691daa6bce2a1b750494da16b346d4cb01d1bcb8696f",
+      "bytes": 37860,
+      "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/3fad812b384335bd8ca9b5e47dc9d9557110eb4a/HavenlineLevel1/field_survivor.gd",
+      "inspection": "direct source read or exact reviewed patch; no runtime execution"
+    },
+    {
+      "path": "HavenlineLevel1/field_crew.gd",
+      "git_blob_sha": "ad26fabd3fca25d6330ceeb62f687f09f6a39bc6",
+      "sha256": "369296fdfe74f36e6171f9f313e7a91e359c4b6289247a98ed1a34432f6fc886",
+      "bytes": 1217,
+      "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/3fad812b384335bd8ca9b5e47dc9d9557110eb4a/HavenlineLevel1/field_crew.gd",
+      "inspection": "direct source read or exact reviewed patch; no runtime execution"
+    },
+    {
+      "path": "HavenlineLevel1/field_worksites.gd",
+      "git_blob_sha": "735edab1d5228591a734e1a6e9d2cad642e7d33a",
+      "sha256": "2e71383ad3741770e83afefd534b9df5237a1341366d5c1e0750c525ead2b803",
+      "bytes": 6147,
+      "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/3fad812b384335bd8ca9b5e47dc9d9557110eb4a/HavenlineLevel1/field_worksites.gd",
+      "inspection": "direct source read or exact reviewed patch; no runtime execution"
+    }
+  ],
+  "source_changed_files": [
+    {
+      "path": "Docs/QA/Camp-Field-2026-11-27/Source/export_presets.cfg",
+      "status": "added",
+      "git_blob_sha": "2b4daec66c80753a82f13985b5250962c4b8ae7b",
+      "changes": 37
+    },
+    {
+      "path": "HavenlineLevel1/assets/characters/Character2.glb",
+      "status": "added",
+      "git_blob_sha": "b7f1b21d300da999bb5e5aeb8a072f51626bf9c8",
+      "changes": 0
+    },
+    {
+      "path": "HavenlineLevel1/assets/characters/Character2.glb.import",
+      "status": "added",
+      "git_blob_sha": "6f63a81cd45c3306360373fca8052dc5e4eaa3ab",
+      "changes": 45
+    },
+    {
+      "path": "HavenlineLevel1/assets/characters/Character2_0.png",
+      "status": "added",
+      "git_blob_sha": "3b86d931b5f69fdde4f61ab4949b84d5d42ce6e4",
+      "changes": 0
+    },
+    {
+      "path": "HavenlineLevel1/assets/characters/Character2_0.png.import",
+      "status": "added",
+      "git_blob_sha": "1ab58e8b2c1c95b8f918632cb717f82a0c7df38f",
+      "changes": 43
+    },
+    {
+      "path": "HavenlineLevel1/assets/characters/Character3.glb",
+      "status": "added",
+      "git_blob_sha": "b5e9641d199e4286bd68f44b4b86ee337506a915",
+      "changes": 0
+    },
+    {
+      "path": "HavenlineLevel1/assets/characters/Character3.glb.import",
+      "status": "added",
+      "git_blob_sha": "173a2cff7ec32b02482eb2e651bb226d8ec7dcb8",
+      "changes": 45
+    },
+    {
+      "path": "HavenlineLevel1/assets/characters/Character3_0.png",
+      "status": "added",
+      "git_blob_sha": "02ac865bbe73bd1337e21b2f2ba730d8de90b5cc",
+      "changes": 0
+    },
+    {
+      "path": "HavenlineLevel1/assets/characters/Character3_0.png.import",
+      "status": "added",
+      "git_blob_sha": "89e017192bd3c787a6ce53a7258c231039a23906",
+      "changes": 43
+    },
+    {
+      "path": "HavenlineLevel1/assets/characters/Character4.glb",
+      "status": "added",
+      "git_blob_sha": "83e957d6584fdac8b38a57518db20f2354b1ffe5",
+      "changes": 0
+    },
+    {
+      "path": "HavenlineLevel1/assets/characters/Character4.glb.import",
+      "status": "added",
+      "git_blob_sha": "580353419d48360ad32f5ffa852d5c1c112901ff",
+      "changes": 45
+    },
+    {
+      "path": "HavenlineLevel1/assets/characters/Character4_0.png",
+      "status": "added",
+      "git_blob_sha": "7e9aaded25aa0bb13b778bb038a87d3933152986",
+      "changes": 0
+    },
+    {
+      "path": "HavenlineLevel1/assets/characters/Character4_0.png.import",
+      "status": "added",
+      "git_blob_sha": "3880893de35c611d9006e4f2ed8e108f153bf6db",
+      "changes": 43
+    },
+    {
+      "path": "HavenlineLevel1/assets/field_world/camp_ballista.glb",
+      "status": "modified",
+      "git_blob_sha": "ba51b59e6aa6698269eb5a10e670fac2c09ea96c",
+      "changes": 0
+    },
+    {
+      "path": "HavenlineLevel1/assets/field_world/tower_sightline.gdshader",
+      "status": "modified",
+      "git_blob_sha": "2efe3a5876ab9093acc5ddb9cdbcc0182acd5674",
+      "changes": 39
+    },
+    {
+      "path": "HavenlineLevel1/field_art.gd",
+      "status": "modified",
+      "git_blob_sha": "fdf1305f6786e8c5fc2f9019b183ac2069db7b2e",
+      "changes": 21
+    },
+    {
+      "path": "HavenlineLevel1/field_ballista_crew.gd",
+      "status": "modified",
+      "git_blob_sha": "0222658d544b0235d51a6165da2e5aa48275b245",
+      "changes": 26
+    },
+    {
+      "path": "HavenlineLevel1/field_camp_dock.gd",
+      "status": "modified",
+      "git_blob_sha": "4200cb255b6bbb65149e63f575c816fd36e38372",
+      "changes": 137
+    },
+    {
+      "path": "HavenlineLevel1/field_carry.gd",
+      "status": "modified",
+      "git_blob_sha": "7b940fdaec0a0ca73f5777af4726faf38344cdc7",
+      "changes": 112
+    },
+    {
+      "path": "HavenlineLevel1/field_conveyors.gd",
+      "status": "modified",
+      "git_blob_sha": "e2bddf7a9f6815c20a84ac4a26992f2f28fafb31",
+      "changes": 6
+    },
+    {
+      "path": "HavenlineLevel1/field_counter.gd",
+      "status": "modified",
+      "git_blob_sha": "82aa9ca89fe414d864446b86f20f1bd007d69fed",
+      "changes": 50
+    },
+    {
+      "path": "HavenlineLevel1/field_crew.gd",
+      "status": "added",
+      "git_blob_sha": "ad26fabd3fca25d6330ceeb62f687f09f6a39bc6",
+      "changes": 26
+    },
+    {
+      "path": "HavenlineLevel1/field_crew.gd.uid",
+      "status": "added",
+      "git_blob_sha": "ebfc745668d242a2c8456dc6ae599ceb73a1a1c7",
+      "changes": 1
+    },
+    {
+      "path": "HavenlineLevel1/field_defense_tower.gd",
+      "status": "modified",
+      "git_blob_sha": "73017948d70038ae4813485702b0b37dca75b680",
+      "changes": 2
+    },
+    {
+      "path": "HavenlineLevel1/field_depot.gd",
+      "status": "modified",
+      "git_blob_sha": "c2063e7bee2aaba267e1d55c684b19221bd44a62",
+      "changes": 8
+    },
+    {
+      "path": "HavenlineLevel1/field_glove_clearance.gd",
+      "status": "added",
+      "git_blob_sha": "c2345e2098ca853acaab8b6a689b74add0839095",
+      "changes": 52
+    },
+    {
+      "path": "HavenlineLevel1/field_goods_exchange.gd",
+      "status": "added",
+      "git_blob_sha": "b5c94779c203384d99f9b860135f4e490cfb2783",
+      "changes": 194
+    },
+    {
+      "path": "HavenlineLevel1/field_goods_exchange.gd.uid",
+      "status": "added",
+      "git_blob_sha": "40050e9ade309c2a28f1e26167f573b69ff30a94",
+      "changes": 1
+    },
+    {
+      "path": "HavenlineLevel1/field_goods_pack.gd",
+      "status": "added",
+      "git_blob_sha": "4d89ee02173a6e796728e58beae20b751d20a4ce",
+      "changes": 71
+    },
+    {
+      "path": "HavenlineLevel1/field_goods_pack.gd.uid",
+      "status": "added",
+      "git_blob_sha": "37379f444632e28f2238dcda9912bf8b85715679",
+      "changes": 1
+    },
+    {
+      "path": "HavenlineLevel1/field_hud.gd",
+      "status": "modified",
+      "git_blob_sha": "77b79dd75478d40049be48ae4135b70bb3e38b5e",
+      "changes": 10
+    },
+    {
+      "path": "HavenlineLevel1/field_human.gd",
+      "status": "modified",
+      "git_blob_sha": "82707780ccf21dbac190d9108f327822bcf72412",
+      "changes": 7
+    },
+    {
+      "path": "HavenlineLevel1/field_inventory.gd",
+      "status": "modified",
+      "git_blob_sha": "425c8c52644e28366bc27f73cc207f8986f772e1",
+      "changes": 42
+    },
+    {
+      "path": "HavenlineLevel1/field_lifecycle.gd",
+      "status": "modified",
+      "git_blob_sha": "cc801c34665740f523e18cc7a7da0ffaf95fcc25",
+      "changes": 5
+    },
+    {
+      "path": "HavenlineLevel1/field_logistics.gd",
+      "status": "modified",
+      "git_blob_sha": "e3095146e2ddf92e0c854f30916e2351ee3d6c8b",
+      "changes": 9
+    },
+    {
+      "path": "HavenlineLevel1/field_opening.gd",
+      "status": "modified",
+      "git_blob_sha": "d92185586e194ce51a515e71a9f5fb5fca1dbc4f",
+      "changes": 51
+    },
+    {
+      "path": "HavenlineLevel1/field_owl.gd",
+      "status": "modified",
+      "git_blob_sha": "e2dbe6f5eec6f8fa01328985327a3c3408f7b9d8",
+      "changes": 38
+    },
+    {
+      "path": "HavenlineLevel1/field_player_wardrobe.gd",
+      "status": "added",
+      "git_blob_sha": "e1edd8878d6c6790a7048c9f9b3a3e9f7a5d5cad",
+      "changes": 248
+    },
+    {
+      "path": "HavenlineLevel1/field_player_wardrobe.gd.uid",
+      "status": "added",
+      "git_blob_sha": "fe06bf4711a32a047e68c15a0275a9ba88670dcf",
+      "changes": 1
+    },
+    {
+      "path": "HavenlineLevel1/field_save.gd",
+      "status": "modified",
+      "git_blob_sha": "eacc67c49ed70472ab9e7a876b86214225acb865",
+      "changes": 67
+    },
+    {
+      "path": "HavenlineLevel1/field_settlement.gd",
+      "status": "modified",
+      "git_blob_sha": "a2ea4fe7384fa40b5df08c4907ac87a022121377",
+      "changes": 51
+    },
+    {
+      "path": "HavenlineLevel1/field_settlement_loop.gd",
+      "status": "modified",
+      "git_blob_sha": "686a0f52d9ca068e9de97859a32ee7342cf1af10",
+      "changes": 40
+    },
+    {
+      "path": "HavenlineLevel1/field_survivor.gd",
+      "status": "modified",
+      "git_blob_sha": "a7c2c73007acc1c015958b80fdb4de79847c07f2",
+      "changes": 122
+    },
+    {
+      "path": "HavenlineLevel1/field_tower_art.gd",
+      "status": "modified",
+      "git_blob_sha": "ff007f7e39437639d1b6da3444bc0a435b798bdd",
+      "changes": 52
+    },
+    {
+      "path": "HavenlineLevel1/field_tread_samples.gd",
+      "status": "added",
+      "git_blob_sha": "f9ba58325453fb96c717654b3b1c182629f6ab3e",
+      "changes": 72
+    },
+    {
+      "path": "HavenlineLevel1/field_tread_samples.gd.uid",
+      "status": "added",
+      "git_blob_sha": "c889a020fc364209847f1f30d3fb7491e8eae863",
+      "changes": 1
+    },
+    {
+      "path": "HavenlineLevel1/field_worksites.gd",
+      "status": "modified",
+      "git_blob_sha": "735edab1d5228591a734e1a6e9d2cad642e7d33a",
+      "changes": 25
+    },
+    {
+      "path": "HavenlineLevel1/forester_gait.gd",
+      "status": "modified",
+      "git_blob_sha": "81a4ced02d11d4f7f06199555edf6c505870a654",
+      "changes": 176
+    },
+    {
+      "path": "HavenlineLevel1/gait_motor.gd",
+      "status": "modified",
+      "git_blob_sha": "0e2a5afb8a319f24b263b64268568024bd825ccc",
+      "changes": 52
+    },
+    {
+      "path": "HavenlineLevel1/qa_field_counter.gd",
+      "status": "modified",
+      "git_blob_sha": "eda57a9cdcf3f1985ce129520eebdff04b097d41",
+      "changes": 34
+    },
+    {
+      "path": "HavenlineLevel1/qa_field_minerals.gd",
+      "status": "modified",
+      "git_blob_sha": "0a2c08b773104aab55703b3ebb4504941667cce4",
+      "changes": 2
+    },
+    {
+      "path": "HavenlineLevel1/qa_field_owl.gd",
+      "status": "modified",
+      "git_blob_sha": "f354be56c10db071ec4030125527dd3bd17fa930",
+      "changes": 5
+    },
+    {
+      "path": "HavenlineLevel1/qa_field_progression.gd",
+      "status": "modified",
+      "git_blob_sha": "fab94a24ff61b6d927bf8f69a6fd085c99f2d55a",
+      "changes": 12
+    },
+    {
+      "path": "HavenlineLevel1/qa_field_save.gd",
+      "status": "modified",
+      "git_blob_sha": "2b28a2dd49240b619b70f4034493f745b6185257",
+      "changes": 40
+    },
+    {
+      "path": "HavenlineLevel1/qa_field_tracks_tower.gd",
+      "status": "modified",
+      "git_blob_sha": "53ef66767ceda6aa89ec9172d3e3f175072a8eac",
+      "changes": 6
+    },
+    {
+      "path": "HavenlineLevel1/qa_mining_return.gd",
+      "status": "modified",
+      "git_blob_sha": "24cafeece9345e0037d714e7b853a03b24ee60d6",
+      "changes": 15
+    },
+    {
+      "path": "HavenlineLevel1/qa_tree_return.gd",
+      "status": "modified",
+      "git_blob_sha": "41d6ef84e3caa0883264273a000b20cafa2b5a43",
+      "changes": 14
+    },
+    {
+      "path": "HavenlineLevel1/tests/fixtures/legacy_rescued_worker.json",
+      "status": "added",
+      "git_blob_sha": "8144042af9161017dbb6e492fa982f8be334040c",
+      "changes": 1
+    },
+    {
+      "path": "HavenlineLevel1/tests/fixtures/storehouse-cash-build11.json",
+      "status": "added",
+      "git_blob_sha": "69b10f3948ed1d0c0646498513cd0ff707751167",
+      "changes": 1
+    },
+    {
+      "path": "HavenlineLevel1/tests/qa_camp_layout.gd",
+      "status": "modified",
+      "git_blob_sha": "573fa2320be7e9ccf638c56e82cc6f60c8a35711",
+      "changes": 9
+    },
+    {
+      "path": "HavenlineLevel1/tests/qa_connected_camp_lines.gd",
+      "status": "modified",
+      "git_blob_sha": "1fb0e0166787205667e7784503ead5207ddf7f9c",
+      "changes": 4
+    },
+    {
+      "path": "HavenlineLevel1/tests/qa_crew_haul.gd",
+      "status": "added",
+      "git_blob_sha": "ad5ee2ae245e4c39a059d2539b979ef2404e86a4",
+      "changes": 132
+    },
+    {
+      "path": "HavenlineLevel1/tests/qa_crew_haul.gd.uid",
+      "status": "added",
+      "git_blob_sha": "9cef7f53c5fe31dff3ba017a04705bba8edb856f",
+      "changes": 1
+    },
+    {
+      "path": "HavenlineLevel1/tests/qa_field_hud.gd",
+      "status": "modified",
+      "git_blob_sha": "a728fe7f4c3585ae95093e8c5cc4be8888edcd21",
+      "changes": 9
+    },
+    {
+      "path": "HavenlineLevel1/tests/qa_ground_sweep.gd",
+      "status": "added",
+      "git_blob_sha": "e808480e588c9f02877eb31a5a0c6fc2b7c65849",
+      "changes": 86
+    },
+    {
+      "path": "HavenlineLevel1/tests/qa_ground_sweep.gd.uid",
+      "status": "added",
+      "git_blob_sha": "c8bc5ce9d96e0d4956364a36524566e90121d8fc",
+      "changes": 1
+    },
+    {
+      "path": "HavenlineLevel1/tests/qa_level1_completion.gd",
+      "status": "modified",
+      "git_blob_sha": "5fa5f11c14cca2698e24ba180bcdade815cde0ee",
+      "changes": 13
+    },
+    {
+      "path": "HavenlineLevel1/tests/qa_owl_contract.gd",
+      "status": "added",
+      "git_blob_sha": "287e14a4a22798d5838c867991cec21e99afdcb9",
+      "changes": 85
+    },
+    {
+      "path": "HavenlineLevel1/tests/qa_owl_contract.gd.uid",
+      "status": "added",
+      "git_blob_sha": "00d26db8e336899fcdca80f53d4c83928ca17f9c",
+      "changes": 1
+    },
+    {
+      "path": "HavenlineLevel1/tests/qa_owl_gate_patrol.gd",
+      "status": "modified",
+      "git_blob_sha": "3b7a9b987fca47c6db192185a4bd1785b9ee2398",
+      "changes": 68
+    },
+    {
+      "path": "HavenlineLevel1/tests/qa_paid_conveyors.gd",
+      "status": "modified",
+      "git_blob_sha": "be8739c3310bc203768a0ba08f06d63e36c0117d",
+      "changes": 12
+    },
+    {
+      "path": "HavenlineLevel1/tests/qa_personal_goods.gd",
+      "status": "added",
+      "git_blob_sha": "652a2e01693382aeadafb361c803ac925c6aab1a",
+      "changes": 195
+    },
+    {
+      "path": "HavenlineLevel1/tests/qa_personal_goods.gd.uid",
+      "status": "added",
+      "git_blob_sha": "b27fe1f4a8c9f2fccbd67ea8872db40fa787e202",
+      "changes": 1
+    },
+    {
+      "path": "HavenlineLevel1/tests/qa_staffed_ballista.gd",
+      "status": "modified",
+      "git_blob_sha": "23388d47cac40af79a7caf875e645395b6d54edd",
+      "changes": 35
+    },
+    {
+      "path": "HavenlineLevel1/tests/qa_storage_stream.gd",
+      "status": "modified",
+      "git_blob_sha": "6c576be747b34925fcacdfec8e0ab8acf31488bc",
+      "changes": 13
+    },
+    {
+      "path": "HavenlineLevel1/tests/qa_warehouse_controls.gd",
+      "status": "added",
+      "git_blob_sha": "0d3f256b1d9257eadf72dee533cfc4cd9f268656",
+      "changes": 97
+    },
+    {
+      "path": "HavenlineLevel1/tests/qa_warehouse_controls.gd.uid",
+      "status": "added",
+      "git_blob_sha": "afd6cfe4ef2c44b9cb40e97e67aa127f791bff5c",
+      "changes": 1
+    },
+    {
+      "path": "HavenlineLevel1/tests/qa_worker_jobs.gd",
+      "status": "modified",
+      "git_blob_sha": "4c628dc5154f1081f59a630af4b7eae62652ca03",
+      "changes": 13
+    },
+    {
+      "path": "HavenlineLevel1/tests/qa_worker_supply.gd",
+      "status": "modified",
+      "git_blob_sha": "4266c66a4af6ab2d8619b1692e6f5043a7da7127",
+      "changes": 14
+    },
+    {
+      "path": "HavenlineLevel1/tests/qa_workshop_floor_access.gd",
+      "status": "modified",
+      "git_blob_sha": "c8221d48ccd54de2dfcf409f63025de181564c77",
+      "changes": 16
+    }
+  ],
+  "commits_since_historical_build11": [
+    {
+      "sha": "00a36773b68c5b41eee820a7d256d7ed6e2de258",
+      "message": "Review the selected gameplay HUD on Android Build 11",
+      "date": "2026-11-27T06:37:48Z"
+    },
+    {
+      "sha": "9617201b63318b6f9292a140cbe7eb79560a4b39",
+      "message": "Review the selected gameplay HUD on Android Build 11",
+      "date": "2026-11-27T06:38:26Z"
+    },
+    {
+      "sha": "6f35a670bac57a0002aa44b9abedbb257848fd30",
+      "message": "Automate the camp production floor and restore field feedback",
+      "date": "2026-11-27T09:51:34Z"
+    },
+    {
+      "sha": "e29cd536977083179943f01207b483ee58eb8220",
+      "message": "Exercise the visible tower bolt, public purchase routes and actual gate clearance",
+      "date": "2026-11-27T10:00:34Z"
+    },
+    {
+      "sha": "6435e5d4e58ec0d846dd89fbcf2efb8783e6af2e",
+      "message": "Record Build 12 production floor and field playtest",
+      "date": "2026-11-27T10:09:22Z"
+    },
+    {
+      "sha": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "message": "Repair field collection, camp trading, crew and character locomotion",
+      "date": "2026-11-27T11:29:14Z"
+    }
+  ],
+  "independent_source_confirmation": {
+    "reviewer": "/root/depth_critic",
+    "reported": "Agreed latest cash custody, product custody, roost, drop-cap removal and lit-hearth condition.",
+    "artifact_full_runtime_approval": false
+  },
+  "verification_not_performed": [
+    "Godot test execution",
+    "Android build",
+    "gameplay replay",
+    "save migration runtime test",
+    "economy tuning",
+    "late-game progression",
+    "full animation playback",
+    "companion AI scenario verification",
+    "audio playback",
+    "reference9.9/exact10 acceptance"
+  ],
+  "finalized_historical_artifacts_unchanged": [
+    "stakes-economy-audit.md",
+    "stakes-economy-inventory.json",
+    "stakes-economy-source-check.json"
+  ],
+  "note_filenames": [
+    "CURRENT_BRANCH_NOTE.md",
+    "CURRENT_BRANCH_NOTE.json"
+  ]
+}
+

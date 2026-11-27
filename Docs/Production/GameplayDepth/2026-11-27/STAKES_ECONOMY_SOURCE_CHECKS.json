@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "check_id": "stakes-economy-source-consistency-2026-11-27",
+  "date": "2026-11-27",
+  "passed": true,
+  "meaning": "Draft source identities, inventories and factual counts agree with inspected source pins. This is not game or runtime approval.",
+  "source_only": true,
+  "runtime_tested": false,
+  "runtime_approval": false,
+  "new_balance_approval": false,
+  "pins": {
+    "plan": "9d10c45a8bd46aeb6ab1b4009e87538c4796ef1c",
+    "foundation": "989edd9283148e9f712387fb937ea36038cbd9d2",
+    "render": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+    "foundation_receipt": "Docs/Production/ReferenceRefresh/2026-11-27/LATEST_BUILD_EVIDENCE.json"
+  },
+  "artifacts": [
+    {
+      "filename": "stakes-economy-audit.md",
+      "path": "/workspace/scratch/e15437dc7c94/gameplay-depth-drafts/stakes-economy-audit.md",
+      "sha256": "e46090fee2da3a5ba583c320d9027f36a60cebf86ed49912a511704ec4c1e3fa"
+    },
+    {
+      "filename": "stakes-economy-inventory.json",
+      "path": "/workspace/scratch/e15437dc7c94/gameplay-depth-drafts/stakes-economy-inventory.json",
+      "sha256": "b5edec82cd6cfbe61e99bca58d3d9603ce2d34f6cda1b29737e3a01f1bac6f10"
+    }
+  ],
+  "exact_counts": {
+    "canonical_registry_ids": 6,
+    "foundation_raw_ids": 6,
+    "foundation_processed_ids": 3,
+    "base_render_sheet_ids": 13,
+    "expansion_render_sheet_ids": 20,
+    "resource_render_sheet_ids": 33,
+    "foundation_offer_rows": 13,
+    "separate_survivor_plot": true,
+    "resource_plot_presentation_sheets": 29
+  },
+  "checks": [
+    {
+      "check": "canonical_registry_exact_six_entries_and_all_original_fields",
+      "count": 6,
+      "passed": true,
+      "source_commit": "9d10c45a8bd46aeb6ab1b4009e87538c4796ef1c",
+      "source_path": "Docs/Production/RESOURCE_ACTION_REGISTRY.json"
+    },
+    {
+      "check": "foundation_raw_ids",
+      "count": 6,
+      "ids": [
+        "wood",
+        "stone",
+        "meat",
+        "coal",
+        "slate",
+        "metal"
+      ],
+      "passed": true,
+      "source_commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+      "source_path": "HavenlineLevel1/field_inventory.gd",
+      "anchor": "KINDS"
+    },
+    {
+      "check": "foundation_processed_ids",
+      "count": 3,
+      "mapping": {
+        "wood": "planks",
+        "stone": "blocks",
+        "meat": "meal"
+      },
+      "passed": true,
+      "source_commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+      "source_path": "HavenlineLevel1/field_logistics.gd",
+      "anchor": "PRODUCT"
+    },
+    {
+      "check": "foundation_offer_count_and_materials",
+      "count": 13,
+      "materials": [
+        "wood",
+        "stone",
+        "meat"
+      ],
+      "passed": true,
+      "source_commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+      "source_path": "HavenlineLevel1/field_progression.gd",
+      "anchor": "OFFERS"
+    },
+    {
+      "check": "base_render_sheets_ids_hashes_and_source_classifications",
+      "count": 13,
+      "passed": true,
+      "source_commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+      "source_path": "Docs/Design/ResourceTurnarounds/2026-11-23/delivery-manifest.json"
+    },
+    {
+      "check": "expansion_render_sheets_ids_hashes_and_source_classifications",
+      "count": 20,
+      "passed": true,
+      "source_commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+      "source_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/delivery-manifest.json"
+    }
+  ],
+  "independent_review": {
+    "reviewer": "/root/depth_critic",
+    "status": "FACTUAL_SUBSET_REVIEWED_NO_BLOCKER_REPORTED",
+    "scope": "Full inventory JSON and first170 audit lines; direct pinned-source confirmation of damage/reset/sanctuary/heal, worker purchase exclusions, raw/product/offer IDs, cash from served count, production cancellation preservation and per-kind capacity nuance.",
+    "not_full_runtime_or_whole_game_acceptance": true
+  },
+  "preserved_boundaries": [
+    "worker limit validation is per-kind in inspected source; no assumed total mixed-capacity parity",
+    "cash display/mesh is not a proven spendable wallet",
+    "future purpose and loss/recovery designs unapproved",
+    "13+20 render sheets are not33 shipped economy IDs",
+    "9.9 reference and exact10 stronger rules preserved",
+    "T71-T80 undefined"
+  ],
+  "resumption": "Files finalized for root integration; no further edits without notifying root."
+}
+

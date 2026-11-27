@@ -1,0 +1,50 @@
+{
+  "scope": "Retest six original in-memory probes against actual repaired helper",
+  "helper_sha256": "63bf7f090ade083282f50a41fa05b00a0e82b0a350a5304b40798014f2a0254f",
+  "baseline_errors": [],
+  "probes": [
+    {
+      "probe": "all_AI_requirements_removed",
+      "errors": [
+        "ai_requirements: specific identities/unique coverage incomplete"
+      ],
+      "rejected": true
+    },
+    {
+      "probe": "all_design_decisions_removed",
+      "errors": [
+        "all five unresolved design decisions required"
+      ],
+      "rejected": true
+    },
+    {
+      "probe": "dog_replaced_with_player_lead",
+      "errors": [
+        "seven distinct companions required"
+      ],
+      "rejected": true
+    },
+    {
+      "probe": "foundation_coal_renamed_to_invented_resource",
+      "errors": [
+        "foundation_raw_inventory: source identities changed"
+      ],
+      "rejected": true
+    },
+    {
+      "probe": "duplicate_human_task_family_over_remainder",
+      "errors": [
+        "human_task_families: specific identities/unique coverage incomplete"
+      ],
+      "rejected": true
+    },
+    {
+      "probe": "duplicate_animation_family_over_remainder",
+      "errors": [
+        "animation_coverage_families: specific identities/unique coverage incomplete"
+      ],
+      "rejected": true
+    }
+  ],
+  "all_rejected": true
+}

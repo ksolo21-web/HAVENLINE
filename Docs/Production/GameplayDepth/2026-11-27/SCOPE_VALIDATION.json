@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "scope": "PLANNING_SOURCE_PRESERVATION_AND_LINKS_ONLY",
+  "base_commit": "9d10c45a8bd46aeb6ab1b4009e87538c4796ef1c",
+  "candidate_root": "/workspace/scratch/e15437dc7c94/HAVENLINE-gameplay-depth",
+  "passed": true,
+  "checks_passed": 13,
+  "checks_required": 13,
+  "changed_or_new_files": 48,
+  "allowed_tracked_edits": [
+    "BUILD_GAME.md",
+    "Docs/Production/HAVENLINE_BUILD_PLAN_V2.md",
+    "Docs/Production/RESOURCE_TOOL_ACTOR_STANDARD.md",
+    "Docs/Production/TASK_PACKET_TEMPLATE.md",
+    "REPOSITORY_INDEX.md",
+    "tools/havenline/production/task_packet.py"
+  ],
+  "game_approval_allowed": false,
+  "runtime_approval_allowed": false,
+  "checks": [
+    {
+      "name": "only_explicitly_allowed_changes",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "all_other_tracked_files_unchanged",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no_deletions_renames_or_symlink_substitution",
+      "passed": true,
+      "detail": {
+        "missing_or_nonfile": [],
+        "symlinks": []
+      }
+    },
+    {
+      "name": "existing_file_modes_preserved",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no_runtime_asset_archive_or_workflow_changes",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "preserved_package_ReferenceRefresh",
+      "passed": true,
+      "detail": {
+        "files": 20,
+        "changed_or_missing": []
+      }
+    },
+    {
+      "name": "preserved_package_AcceptanceTightening",
+      "passed": true,
+      "detail": {
+        "files": 17,
+        "changed_or_missing": []
+      }
+    },
+    {
+      "name": "task_state_ownership_invalidation_and_acceptance_authorities_preserved",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "canonical_task_packets_preserved",
+      "passed": true,
+      "detail": {
+        "files": 15,
+        "changed_or_missing": []
+      }
+    },
+    {
+      "name": "changed_and_new_json_parse_strictly",
+      "passed": true,
+      "detail": {
+        "files": 25,
+        "errors": []
+      }
+    },
+    {
+      "name": "new_markdown_relative_link_targets_resolve",
+      "passed": true,
+      "detail": {
+        "markdown_files": 19,
+        "relative_targets_checked": 42,
+        "errors": [],
+        "unresolved_references": [],
+        "sparse_HEAD_fallbacks": 0,
+        "fragment_validation": false,
+        "external_urls_not_rechecked": true
+      }
+    },
+    {
+      "name": "no_generated_python_cache_in_change",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "diff_whitespace_clean",
+      "passed": true,
+      "detail": null
+    }
+  ],
+  "changed_or_new_paths": [
+    "BUILD_GAME.md",
+    "Docs/Production/GAMEPLAY_DEPTH_CONTRACT.json",
+    "Docs/Production/GAMEPLAY_DEPTH_STANDARD.md",
+    "Docs/Production/GameplayDepth/2026-11-27/ACTORS_MOTION_AUDIT.md",
+    "Docs/Production/GameplayDepth/2026-11-27/ACTORS_MOTION_AUDIT_CHECKS.json",
+    "Docs/Production/GameplayDepth/2026-11-27/ACTORS_MOTION_REQUIREMENTS.json",
+    "Docs/Production/GameplayDepth/2026-11-27/CANDIDATE_FREEZE.json",
+    "Docs/Production/GameplayDepth/2026-11-27/CHECKPOINT.json",
+    "Docs/Production/GameplayDepth/2026-11-27/CURRENT_BRANCH_NOTE.json",
+    "Docs/Production/GameplayDepth/2026-11-27/CURRENT_BRANCH_NOTE.md",
+    "Docs/Production/GameplayDepth/2026-11-27/FINAL_REVIEW.json",
+    "Docs/Production/GameplayDepth/2026-11-27/README.md",
+    "Docs/Production/GameplayDepth/2026-11-27/RESOURCE_VALUE_LEDGER.json",
+    "Docs/Production/GameplayDepth/2026-11-27/Review/TaskPackets/T01.md",
+    "Docs/Production/GameplayDepth/2026-11-27/Review/TaskPackets/T10.md",
+    "Docs/Production/GameplayDepth/2026-11-27/Review/TaskPackets/T23.md",
+    "Docs/Production/GameplayDepth/2026-11-27/Review/TaskPackets/T24.md",
+    "Docs/Production/GameplayDepth/2026-11-27/Review/TaskPackets/T33.md",
+    "Docs/Production/GameplayDepth/2026-11-27/Review/TaskPackets/T54.md",
+    "Docs/Production/GameplayDepth/2026-11-27/Review/TaskPackets/T70.md",
+    "Docs/Production/GameplayDepth/2026-11-27/Review/branch-observations-before-publication.json",
+    "Docs/Production/GameplayDepth/2026-11-27/Review/independent-foundation-source-checks.json",
+    "Docs/Production/GameplayDepth/2026-11-27/Review/independent-inventory-census.json",
+    "Docs/Production/GameplayDepth/2026-11-27/Review/independent-latest-source-checks.json",
+    "Docs/Production/GameplayDepth/2026-11-27/Review/independent-material-census-checks.json",
+    "Docs/Production/GameplayDepth/2026-11-27/Review/independent-negative-probes-r1.json",
+    "Docs/Production/GameplayDepth/2026-11-27/Review/independent-negative-probes-r2.json",
+    "Docs/Production/GameplayDepth/2026-11-27/Review/independent-preservation-checks.json",
+    "Docs/Production/GameplayDepth/2026-11-27/Review/independent-review-checklist.md",
+    "Docs/Production/GameplayDepth/2026-11-27/Review/independent-review-r1.json",
+    "Docs/Production/GameplayDepth/2026-11-27/Review/independent-source-baseline.json",
+    "Docs/Production/GameplayDepth/2026-11-27/Review/independent-source-binding-probe-r1.json",
+    "Docs/Production/GameplayDepth/2026-11-27/Review/independent-task-packet-checks.json",
+    "Docs/Production/GameplayDepth/2026-11-27/SCOPE_VALIDATION.json",
+    "Docs/Production/GameplayDepth/2026-11-27/SOURCE_BINDINGS.json",
+    "Docs/Production/GameplayDepth/2026-11-27/STAKES_ECONOMY_AUDIT.md",
+    "Docs/Production/GameplayDepth/2026-11-27/STAKES_ECONOMY_SOURCE_CHECKS.json",
+    "Docs/Production/GameplayDepth/2026-11-27/TASK_GAMEPLAY_DEPTH_T01_T80.json",
+    "Docs/Production/GameplayDepth/2026-11-27/TASK_GAMEPLAY_DEPTH_T01_T80.md",
+    "Docs/Production/GameplayDepth/2026-11-27/VALIDATION.json",
+    "Docs/Production/GameplayDepth/2026-11-27/verify_scope.py",
+    "Docs/Production/HAVENLINE_BUILD_PLAN_V2.md",
+    "Docs/Production/RESOURCE_TOOL_ACTOR_STANDARD.md",
+    "Docs/Production/TASK_PACKET_TEMPLATE.md",
+    "REPOSITORY_INDEX.md",
+    "tools/havenline/production/gameplay_depth.py",
+    "tools/havenline/production/task_packet.py",
+    "tools/havenline/production/tests/test_gameplay_depth.py"
+  ]
+}

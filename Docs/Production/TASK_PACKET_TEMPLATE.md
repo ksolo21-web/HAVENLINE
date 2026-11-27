@@ -61,6 +61,19 @@ Mark every applicable gate REQUIRED or N/A with rationale.
 - G13 SCORE (current REFERENCE_ACCEPTANCE_POLICY: reference-sensitive final dimensions >=9.9, existing visual exact-10 gates preserved, other mandatory specialist dimensions >=9.5; unrounded, no averaging, complete independent evidence; a reference-sensitive 9.5 result is interim only)
 - G14 INTEGRATION
 
+## Whole-game stakes, companions and resource value
+
+Resolve the task's forward addendum using `python3 tools/havenline/production/gameplay_depth.py task TASK_ID` and the [gameplay-depth standard](GAMEPLAY_DEPTH_STANDARD.md).
+
+- Applicable GD requirement IDs and owner/consumer responsibilities:
+- Specific actor/motion requirements and source-bound render selections:
+- Meaningful source/use/payoff and custody proof for each introduced item/currency:
+- Failure/recovery, full-cycle animation and intelligent-assistance scenarios:
+- Unfrozen decisions, selected values, rationale and normal-play evidence:
+- Exact candidate evidence and unresolved defects:
+
+Owner/consumer labels do not create dependency edges or change frozen historical scope. Introducing tasks resolve their own resource/job obligations before integration; T33/T31 later reconcile/integrate. The planning checker cannot certify runtime or approve a task. Use existing change/scope processes for changes to previously approved work.
+
 ## Resource / tool / actor / animation contract
 Mark REQUIRED or N/A from `RESOURCE_ACTION_REGISTRY.json`.
 

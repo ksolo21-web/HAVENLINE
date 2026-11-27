@@ -35,6 +35,12 @@ Controls remain one primary movement joystick with auto collect, auto gather/har
 
 Launch remains Level 1–100 across a connected world, with practical visual progression every level, noticeable visual improvement at least every ~3 levels, major milestones approximately every 10 levels, spend-blind adaptive Challenge Director, seven companions (guardian dog, gray wolf, fox, owl, male lion, white tiger, brown bear), weather/day-night, survivor rescue/workers, production, defense, physical carrying, world transformation, monetization/VIP, LiveOps, security, adaptive phone/tablet/foldable support, and the existing final native-4K/60 physical-device target.
 
+## Whole-game stakes, capable companions and resource value
+
+The [gameplay-depth standard](GAMEPLAY_DEPTH_STANDARD.md) and [machine-readable requirements](GAMEPLAY_DEPTH_CONTRACT.json) add the current user requirements for meaningful player risk, smart and useful survivors/pets, all-human-task survivor assistance including delegated plot purchases and large mixed loads, full actor/equipment/enemy animation, and worthwhile materials/currencies. Use the [T01–T80 responsibility crosswalk](GameplayDepth/2026-11-27/TASK_GAMEPLAY_DEPTH_T01_T80.md) and [source audit](GameplayDepth/2026-11-27/README.md) with each forward task packet.
+
+These are forward requirements, not an assertion that the full game already implements them. Proposed loss policies, capacities, recipes, pet balance and currency names remain explicit owner decisions. Existing task definitions, dependency edges, statuses, ownership, historical evidence and stronger reference gates remain intact. Introducing tasks must prove useful resource/job contracts before their own integration; T33 and T31 later reconcile and integrate them, avoiding a backward dependency on those later tasks.
+
 ## Automatic resource / tool / actor / animation contract
 
 `Docs/Production/RESOURCE_TOOL_ACTOR_STANDARD.md` and its machine-readable registries are mandatory forward-governance inputs:

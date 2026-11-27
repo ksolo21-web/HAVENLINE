@@ -1,0 +1,130 @@
+{
+  "scope": "Bounded independent source comparison of newer observed gameplay head; no runtime test/build/score",
+  "historical_foundation": "989edd9283148e9f712387fb937ea36038cbd9d2",
+  "latest_observed_source": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+  "live_remote_head_independently_polled_by_this_agent": false,
+  "runtime_executed": false,
+  "runtime_approval_allowed": false,
+  "source_files": [
+    {
+      "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "path": "HavenlineLevel1/field_opening.gd",
+      "sha256": "109b58f9418cf413af20d060794d38ee8a2c3e97a24b2bba88e099e9e1c4ea5e",
+      "bytes": 41852
+    },
+    {
+      "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "path": "HavenlineLevel1/field_inventory.gd",
+      "sha256": "e29ceacd0006b8697731911ac69bee6c75e49dccebf012ec2fd1465f507af773",
+      "bytes": 13922
+    },
+    {
+      "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "path": "HavenlineLevel1/field_progression.gd",
+      "sha256": "395f8ef3129b107357bfad280aee07f7beec4c1de6a77c8fdabc3ef6d59f3a62",
+      "bytes": 4053
+    },
+    {
+      "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "path": "HavenlineLevel1/field_settlement.gd",
+      "sha256": "29081375e0f121b3b366c0c7bcbafdd971fc237de8f6f482cabcd1129838f27e",
+      "bytes": 10703
+    },
+    {
+      "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "path": "HavenlineLevel1/field_settlement_loop.gd",
+      "sha256": "3cc62800d9533de2a43b22da38af8a29e53bc848a80ec86738aa5b937722058e",
+      "bytes": 19393
+    },
+    {
+      "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "path": "HavenlineLevel1/field_logistics.gd",
+      "sha256": "8a7bfc9a2de3e4aa6f1a08442559ce79b65581e1407734a5e0d9f7087fa3cdc0",
+      "bytes": 3824
+    },
+    {
+      "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "path": "HavenlineLevel1/field_lifecycle.gd",
+      "sha256": "60df9234222b8c25ad5f99fa9561de12a3455fd386c4bbba8b1cdce603495a7c",
+      "bytes": 9394
+    },
+    {
+      "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "path": "HavenlineLevel1/field_hud.gd",
+      "sha256": "8495671347ce814daa77569299ddafb29d1d74903979e2bd6b0bb3236e6bb030",
+      "bytes": 21205
+    },
+    {
+      "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "path": "HavenlineLevel1/field_survivor.gd",
+      "sha256": "c2c7d9b368ee59d2dfbb691daa6bce2a1b750494da16b346d4cb01d1bcb8696f",
+      "bytes": 37860
+    },
+    {
+      "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "path": "HavenlineLevel1/field_counter.gd",
+      "sha256": "c09eb734ad2716c3d0d2203bbc921fabc49a4a96a98b9e2eee89036b9e0720cd",
+      "bytes": 17720
+    },
+    {
+      "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "path": "HavenlineLevel1/field_goods_exchange.gd",
+      "sha256": "09b2b6f07bb2f3bc820024f8d98d347dfa738d0160ad5f9f1b27a6d2f8d069ae",
+      "bytes": 7743
+    },
+    {
+      "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "path": "HavenlineLevel1/field_crew.gd",
+      "sha256": "369296fdfe74f36e6171f9f313e7a91e359c4b6289247a98ed1a34432f6fc886",
+      "bytes": 1217
+    }
+  ],
+  "checks": [
+    {
+      "id": "_player_hit_unchanged",
+      "passed": true,
+      "scope": "Function source text equality only"
+    },
+    {
+      "id": "worker_payment_unchanged",
+      "passed": true,
+      "scope": "Function source text equality only"
+    },
+    {
+      "id": "_pay_from_unchanged",
+      "passed": true,
+      "scope": "Function source text equality only"
+    },
+    {
+      "id": "latest_cash_custody",
+      "passed": true,
+      "finding": "Latest source explicitly records pocket/house earned-money custody and manual processed goods; do not repeat historical cash-presentation-only finding as current."
+    },
+    {
+      "id": "latest_cash_HUD",
+      "passed": true,
+      "finding": "Latest cash HUD uses pocket_cash, not journal.served directly."
+    },
+    {
+      "id": "latest_healing_guard",
+      "passed": true,
+      "finding": "Latest healing eligibility requires a fired hearth; this does not independently establish fuel consumption or environmental damage."
+    },
+    {
+      "id": "drop_cap_removed_expiry_retained",
+      "passed": true,
+      "finding": "Historical cap-based loose-drop removal is no longer in these latest functions; lifetime remains."
+    },
+    {
+      "id": "separate_owl_ownership",
+      "passed": true,
+      "finding": "Separate meat-funded owl-roost ownership and legacy entitlement migration exist in code; no whole-species AI/motion approval."
+    }
+  ],
+  "remaining_limits": [
+    "Reviewed exchange/payment/offer code shows earn/collect/deposit/withdraw but no cash purchase sink. Full reinvestment and runtime conservation remain unproved.",
+    "pocket_cash and house_cash are locations of one earned currency, not two currencies.",
+    "Raw6 and processed3 inventory families remain; newest branch work was not merged or modified by this review.",
+    "The original Build11 evidence remains correct as dated history only."
+  ]
+}

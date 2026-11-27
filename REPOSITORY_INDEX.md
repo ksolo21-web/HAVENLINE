@@ -10,7 +10,13 @@ Use the [2026-11-27 task-plan refresh](Docs/Production/TASK_PLAN_REFRESH_2026-11
 
 This index connects the active development source, production roadmap, reference locks and preserved evidence. It does not change task ownership, accepted source identities or approval state.
 
+## Whole-game gameplay-depth requirements
+
+[Stakes, useful companions, complete motion and resource value](Docs/Production/GAMEPLAY_DEPTH_STANDARD.md) now have an [18-requirement contract](Docs/Production/GAMEPLAY_DEPTH_CONTRACT.json), an [all-task crosswalk](Docs/Production/GameplayDepth/2026-11-27/TASK_GAMEPLAY_DEPTH_T01_T80.md), and a [source audit with unresolved design decisions](Docs/Production/GameplayDepth/2026-11-27/README.md). The ledger covers all six registered resources, six pinned-foundation raw IDs, three processed IDs and 33 resource render concepts. Counts are overlapping source inventories, not a count of shipped items. Future task packets include the relevant requirements automatically; source checks never grant runtime approval.
+
 ## Start here
+
+For the newer observed gameplay source `3fad812b384335bd8ca9b5e47dc9d9557110eb4a`, read the [dated source update](Docs/Production/GameplayDepth/2026-11-27/CURRENT_BRANCH_NOTE.md). The original Build 11 findings remain historical; actual new cash/carry and recovery-source changes are recorded separately and have no new runtime approval here.
 
 | Need | Source |
 |---|---|

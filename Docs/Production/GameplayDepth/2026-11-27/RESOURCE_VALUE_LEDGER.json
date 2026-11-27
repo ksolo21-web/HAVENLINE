@@ -1,0 +1,1325 @@
+{
+  "schema_version": 1,
+  "audit_id": "havenline-stakes-economy-source-audit-2026-11-27",
+  "status": "SOURCE_AUDIT_AND_PROPOSED_DESIGN_NOT_RUNTIME_ACCEPTANCE",
+  "date": "2026-11-27",
+  "pins": {
+    "plan": "9d10c45a8bd46aeb6ab1b4009e87538c4796ef1c",
+    "foundation": "989edd9283148e9f712387fb937ea36038cbd9d2",
+    "render": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+    "foundation_receipt": "Docs/Production/ReferenceRefresh/2026-11-27/LATEST_BUILD_EVIDENCE.json"
+  },
+  "boundaries": {
+    "runtime_edited": false,
+    "github_mutated": false,
+    "new_runtime_tests": false,
+    "playtest_claimed": false,
+    "live_branch_head_verified_by_this_agent": false,
+    "scope": "Source identified IDs across canonical registry, pinned foundation and 33 material concept sheets; not complete future recipe/drop database",
+    "task_range": "Authentic T01-T70; T71-T80 undefined",
+    "art_variants_are_not_automatically_economy_ids": true,
+    "proposed_design_approved": false
+  },
+  "counts": {
+    "canonical_registry_ids": 6,
+    "foundation_raw_ids": 6,
+    "foundation_processed_ids": 3,
+    "base_render_sheet_ids": 13,
+    "expansion_render_sheet_ids": 20,
+    "resource_render_sheet_ids": 33,
+    "foundation_offer_rows": 13,
+    "separate_survivor_plot": true,
+    "resource_plot_presentation_sheets": 29
+  },
+  "canonical_registry": [
+    {
+      "id": "wood",
+      "status": "RESOLVED_BASELINE",
+      "production_ready": true,
+      "resource_class": "natural",
+      "collection_method": "chop",
+      "tool_profile": "axe",
+      "player_animation_profile": "human_player_chop",
+      "helper_animation_profile": "human_helper_chop",
+      "survivor_animation_profile": "human_survivor_chop",
+      "carry_visual": "visible_wood_stack",
+      "delivery_destination": "contextual_storage_furnace_build",
+      "required_by_tasks": [
+        "T09",
+        "T32"
+      ],
+      "source": {
+        "commit": "9d10c45a8bd46aeb6ab1b4009e87538c4796ef1c",
+        "path": "Docs/Production/RESOURCE_ACTION_REGISTRY.json",
+        "anchor": "resources.wood"
+      },
+      "readiness_scope": "Acquisition/action contract; not whole-game economic or runtime approval"
+    },
+    {
+      "id": "stone",
+      "status": "RESOLVED_BASELINE",
+      "production_ready": true,
+      "resource_class": "natural",
+      "collection_method": "mine",
+      "tool_profile": "pickaxe",
+      "player_animation_profile": "human_player_mine",
+      "helper_animation_profile": "human_helper_mine",
+      "survivor_animation_profile": "human_survivor_mine",
+      "carry_visual": "visible_stone_stack",
+      "delivery_destination": "contextual_storage_furnace_build",
+      "required_by_tasks": [
+        "T09",
+        "T32"
+      ],
+      "source": {
+        "commit": "9d10c45a8bd46aeb6ab1b4009e87538c4796ef1c",
+        "path": "Docs/Production/RESOURCE_ACTION_REGISTRY.json",
+        "anchor": "resources.stone"
+      },
+      "readiness_scope": "Acquisition/action contract; not whole-game economic or runtime approval"
+    },
+    {
+      "id": "metal",
+      "status": "T09_FROZEN_ORE",
+      "production_ready": true,
+      "resource_class": "ore",
+      "collection_method": "mine",
+      "tool_profile": "pickaxe",
+      "player_animation_profile": "human_player_mine",
+      "helper_animation_profile": "human_helper_mine",
+      "survivor_animation_profile": "T23_FREEZE_REQUIRED",
+      "carry_visual": "visible_metal_stack",
+      "delivery_destination": "contextual_storage_processing_build",
+      "required_by_tasks": [
+        "T09",
+        "T32"
+      ],
+      "source": {
+        "commit": "9d10c45a8bd46aeb6ab1b4009e87538c4796ef1c",
+        "path": "Docs/Production/RESOURCE_ACTION_REGISTRY.json",
+        "anchor": "resources.metal"
+      },
+      "readiness_scope": "Acquisition/action contract; not whole-game economic or runtime approval"
+    },
+    {
+      "id": "fuel",
+      "status": "T09_FROZEN_SALVAGE",
+      "production_ready": true,
+      "resource_class": "fuel_salvage",
+      "collection_method": "dismantle",
+      "tool_profile": "salvage_pry_tool",
+      "player_animation_profile": "human_player_dismantle",
+      "helper_animation_profile": "human_helper_dismantle",
+      "survivor_animation_profile": "T23_FREEZE_REQUIRED",
+      "carry_visual": "visible_fuel_stack",
+      "delivery_destination": "contextual_furnace_storage",
+      "required_by_tasks": [
+        "T09",
+        "T32"
+      ],
+      "source": {
+        "commit": "9d10c45a8bd46aeb6ab1b4009e87538c4796ef1c",
+        "path": "Docs/Production/RESOURCE_ACTION_REGISTRY.json",
+        "anchor": "resources.fuel"
+      },
+      "readiness_scope": "Acquisition/action contract; not whole-game economic or runtime approval"
+    },
+    {
+      "id": "fish",
+      "status": "T16_FREEZE_REQUIRED",
+      "production_ready": false,
+      "resource_class": "food",
+      "collection_method": "fishing",
+      "tool_profile": "T16_FREEZE_REQUIRED",
+      "player_animation_profile": "T16_FREEZE_REQUIRED",
+      "helper_animation_profile": "T16_FREEZE_REQUIRED",
+      "survivor_animation_profile": "T23_FREEZE_REQUIRED",
+      "carry_visual": "T16_FREEZE_REQUIRED",
+      "delivery_destination": "food_processing",
+      "required_by_tasks": [
+        "T16",
+        "T18",
+        "T32"
+      ],
+      "source": {
+        "commit": "9d10c45a8bd46aeb6ab1b4009e87538c4796ef1c",
+        "path": "Docs/Production/RESOURCE_ACTION_REGISTRY.json",
+        "anchor": "resources.fish"
+      },
+      "readiness_scope": "Acquisition/action contract; not whole-game economic or runtime approval"
+    },
+    {
+      "id": "wheat",
+      "status": "T19_FREEZE_REQUIRED",
+      "production_ready": false,
+      "resource_class": "crop",
+      "collection_method": "crop_harvest",
+      "tool_profile": "T19_FREEZE_REQUIRED",
+      "player_animation_profile": "T19_FREEZE_REQUIRED",
+      "helper_animation_profile": "T19_FREEZE_REQUIRED",
+      "survivor_animation_profile": "T23_FREEZE_REQUIRED",
+      "carry_visual": "T19_FREEZE_REQUIRED",
+      "delivery_destination": "food_processing",
+      "required_by_tasks": [
+        "T19",
+        "T32"
+      ],
+      "source": {
+        "commit": "9d10c45a8bd46aeb6ab1b4009e87538c4796ef1c",
+        "path": "Docs/Production/RESOURCE_ACTION_REGISTRY.json",
+        "anchor": "resources.wheat"
+      },
+      "readiness_scope": "Acquisition/action contract; not whole-game economic or runtime approval"
+    }
+  ],
+  "foundation_raw_inventory": [
+    {
+      "id": "wood",
+      "category": "raw_item",
+      "existing_use": [
+        "camp_plot_costs",
+        "survivor_plot_cost",
+        "saw_input"
+      ],
+      "source_sink_status": "IMMEDIATE_FUNCTIONAL_SINK_EXISTS",
+      "proposal": "Retain early building; give planks a distinct useful construction/upgrade destination; author later demand and surplus.",
+      "source": {
+        "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+        "path": "HavenlineLevel1/field_inventory.gd",
+        "anchors": [
+          "KINDS",
+          "TITLES"
+        ]
+      },
+      "sink_evidence": {
+        "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+        "path": "HavenlineLevel1/field_progression.gd",
+        "anchors": [
+          "OFFERS",
+          "MACHINES"
+        ]
+      },
+      "proposed_design_approved": false
+    },
+    {
+      "id": "stone",
+      "category": "raw_item",
+      "existing_use": [
+        "camp_plot_costs",
+        "quarry_drill_input"
+      ],
+      "source_sink_status": "IMMEDIATE_FUNCTIONAL_SINK_EXISTS",
+      "proposal": "Keep foundations and author useful block output demand.",
+      "source": {
+        "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+        "path": "HavenlineLevel1/field_inventory.gd",
+        "anchors": [
+          "KINDS",
+          "TITLES"
+        ]
+      },
+      "sink_evidence": {
+        "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+        "path": "HavenlineLevel1/field_progression.gd",
+        "anchors": [
+          "OFFERS",
+          "MACHINES"
+        ]
+      },
+      "proposed_design_approved": false
+    },
+    {
+      "id": "meat",
+      "category": "raw_item",
+      "existing_use": [
+        "some_camp_plot_costs",
+        "cooker_input"
+      ],
+      "source_sink_status": "FOOD_SERVICE_PATH_EXISTS",
+      "proposal": "Review coherence of meat-denominated construction/axe prices; connect real service to earned-cash reinvestment.",
+      "source": {
+        "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+        "path": "HavenlineLevel1/field_inventory.gd",
+        "anchors": [
+          "KINDS",
+          "TITLES"
+        ]
+      },
+      "sink_evidence": {
+        "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+        "path": "HavenlineLevel1/field_progression.gd",
+        "anchors": [
+          "OFFERS",
+          "MACHINES"
+        ]
+      },
+      "proposed_design_approved": false
+    },
+    {
+      "id": "coal",
+      "category": "raw_item",
+      "existing_use": [
+        "collect_carry_store"
+      ],
+      "source_sink_status": "NO_SINK_IN_REVIEWED_OFFERS_OR_PROCESSORS",
+      "proposal": "Freeze a distinct fuel use or merge/retire; not interchangeable with canonical fuel without migration.",
+      "source": {
+        "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+        "path": "HavenlineLevel1/field_inventory.gd",
+        "anchors": [
+          "KINDS",
+          "TITLES"
+        ]
+      },
+      "sink_evidence": {
+        "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+        "path": "HavenlineLevel1/field_progression.gd",
+        "anchors": [
+          "OFFERS",
+          "MACHINES"
+        ]
+      },
+      "proposed_design_approved": false
+    },
+    {
+      "id": "slate",
+      "category": "raw_item",
+      "existing_use": [
+        "collect_carry_store"
+      ],
+      "source_sink_status": "NO_SINK_IN_REVIEWED_OFFERS_OR_PROCESSORS",
+      "proposal": "Specific architecture/region use or source/visual variant; avoid duplicate grind.",
+      "source": {
+        "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+        "path": "HavenlineLevel1/field_inventory.gd",
+        "anchors": [
+          "KINDS",
+          "TITLES"
+        ]
+      },
+      "sink_evidence": {
+        "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+        "path": "HavenlineLevel1/field_progression.gd",
+        "anchors": [
+          "OFFERS",
+          "MACHINES"
+        ]
+      },
+      "proposed_design_approved": false
+    },
+    {
+      "id": "metal",
+      "title": "Metal ore",
+      "category": "raw_item",
+      "existing_use": [
+        "collect_carry_store"
+      ],
+      "source_sink_status": "NO_SINK_IN_REVIEWED_OFFERS_OR_PROCESSORS",
+      "proposal": "Useful machine/tool/construction chain; explicitly map render metal_ore; do not equal steel.",
+      "source": {
+        "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+        "path": "HavenlineLevel1/field_inventory.gd",
+        "anchors": [
+          "KINDS",
+          "TITLES"
+        ]
+      },
+      "sink_evidence": {
+        "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+        "path": "HavenlineLevel1/field_progression.gd",
+        "anchors": [
+          "OFFERS",
+          "MACHINES"
+        ]
+      },
+      "proposed_design_approved": false
+    }
+  ],
+  "foundation_processed_inventory": [
+    {
+      "id": "planks",
+      "input": "wood",
+      "existing_use": [
+        "output_presentation",
+        "product_store",
+        "opening_milestone_receipt"
+      ],
+      "source_sink_status": "DOWNSTREAM_SPEND_OR_SALE_NOT_FOUND_IN_REVIEWED_CONTRACTS",
+      "candidate_render_alias": "timber_planks",
+      "proposal": "Selected construction/upgrade payoff or explicit finite goal.",
+      "category": "processed_item",
+      "source": {
+        "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+        "path": "HavenlineLevel1/field_logistics.gd",
+        "anchors": [
+          "PRODUCT",
+          "STORE"
+        ]
+      },
+      "proposed_design_approved": false
+    },
+    {
+      "id": "blocks",
+      "input": "stone",
+      "existing_use": [
+        "output_presentation",
+        "product_store",
+        "opening_milestone_receipt"
+      ],
+      "source_sink_status": "DOWNSTREAM_SPEND_OR_SALE_NOT_FOUND_IN_REVIEWED_CONTRACTS",
+      "candidate_render_alias": null,
+      "proposal": "Selected durable construction payoff; later source supersedes older art inventory's unknown cut-block status.",
+      "category": "processed_item",
+      "source": {
+        "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+        "path": "HavenlineLevel1/field_logistics.gd",
+        "anchors": [
+          "PRODUCT",
+          "STORE"
+        ]
+      },
+      "proposed_design_approved": false
+    },
+    {
+      "id": "meal",
+      "input": "meat",
+      "existing_use": [
+        "product_store",
+        "manual_worker_or_belt_customer_service"
+      ],
+      "source_sink_status": "CONSUMED_BY_REAL_CUSTOMER;CASH_REINVESTMENT_UNPROVED",
+      "asset_name": "cooked_game_meat",
+      "candidate_render_alias": "cooked_game_meat",
+      "proposal": "Persist and spend earned cash; do not automatically alias wheat-like cooked_food to this meat meal.",
+      "category": "processed_item",
+      "source": {
+        "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+        "path": "HavenlineLevel1/field_logistics.gd",
+        "anchors": [
+          "PRODUCT",
+          "STORE"
+        ]
+      },
+      "proposed_design_approved": false
+    }
+  ],
+  "base_render_sheets": [
+    {
+      "id": "wood",
+      "category": "raw_resource_art",
+      "candidate_canonical_or_foundation_id": "wood",
+      "mapping_status": "family_correspondence",
+      "source_boundary": "Physical wood stack; actual source-specific asset match still needs review.",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23/delivery-manifest.json"
+      },
+      "runtime_approval_claimed": false,
+      "render_sha256": "3b528ed8c5485f4c7433cb82223c7eb8081e5858bf5f90f7222778106719641b",
+      "render_filename": "reviewed-concepts/01-wood.png",
+      "historical_concept_score": 9.4,
+      "historical_score_is_current_approval": false
+    },
+    {
+      "id": "stone",
+      "category": "raw_resource_art",
+      "candidate_canonical_or_foundation_id": "stone",
+      "mapping_status": "family_correspondence",
+      "source_boundary": "Physical stone stack.",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23/delivery-manifest.json"
+      },
+      "runtime_approval_claimed": false,
+      "render_sha256": "5360d9d44ed505f48c788b870e322105edce48c726525252d0e884549800016e",
+      "render_filename": "reviewed-concepts/02-stone.png",
+      "historical_concept_score": 9.2,
+      "historical_score_is_current_approval": false
+    },
+    {
+      "id": "slate",
+      "category": "raw_resource_art",
+      "candidate_canonical_or_foundation_id": "slate",
+      "mapping_status": "foundation_same_id",
+      "source_boundary": "Foundation collectible; sink unproved.",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23/delivery-manifest.json"
+      },
+      "runtime_approval_claimed": false,
+      "render_sha256": "651269f18342422fb7aeac236e61c4b7b59c325040dc2a7b71d446afa2c37b64",
+      "render_filename": "reviewed-concepts/03-slate.png",
+      "historical_concept_score": 9.3,
+      "historical_score_is_current_approval": false
+    },
+    {
+      "id": "steel",
+      "category": "refined_material_concept",
+      "candidate_canonical_or_foundation_id": null,
+      "mapping_status": "UNRESOLVED",
+      "source_boundary": "Distinct from metal ore; recipe and function not frozen.",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23/delivery-manifest.json"
+      },
+      "runtime_approval_claimed": false,
+      "render_sha256": "905c74c92209963de34f80efca33408af2738f761ff6c82abe2fefff8f0a4347",
+      "render_filename": "reviewed-concepts/04-steel.png",
+      "historical_concept_score": 9.5,
+      "historical_score_is_current_approval": false
+    },
+    {
+      "id": "metal_ore",
+      "category": "ore_concept",
+      "candidate_canonical_or_foundation_id": "metal",
+      "mapping_status": "explicit_title_correspondence_not_migration",
+      "source_boundary": "Foundation metal title is Metal ore; preserve both source IDs and record alias.",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23/delivery-manifest.json"
+      },
+      "runtime_approval_claimed": false,
+      "render_sha256": "9e6965c343e017052d14800a7c3d3673ec396552e1f648cac15e7fb26a5b4d4a",
+      "render_filename": "reviewed-concepts/05-metal-ore.png",
+      "historical_concept_score": 9.3,
+      "historical_score_is_current_approval": false
+    },
+    {
+      "id": "fuel",
+      "category": "salvage_fuel_concept",
+      "candidate_canonical_or_foundation_id": "fuel",
+      "mapping_status": "canonical_registry_same_id",
+      "source_boundary": "No automatic coal/firewood equivalence.",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23/delivery-manifest.json"
+      },
+      "runtime_approval_claimed": false,
+      "render_sha256": "c9a17187e1009b9d466b024608a28887b86b7746da3aae8b378e6caee649c306",
+      "render_filename": "reviewed-concepts/06-fuel.png",
+      "historical_concept_score": 9.5,
+      "historical_score_is_current_approval": false
+    },
+    {
+      "id": "meat",
+      "category": "raw_food_concept",
+      "candidate_canonical_or_foundation_id": "meat",
+      "mapping_status": "foundation_same_id",
+      "source_boundary": "Does not approve all species drops.",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23/delivery-manifest.json"
+      },
+      "runtime_approval_claimed": false,
+      "render_sha256": "29671642ed2fbb9d4a7e39b34923f3b9576ee95282ffcea5bb5c16b4f3496254",
+      "render_filename": "reviewed-concepts/07-meat.png",
+      "historical_concept_score": 9.3,
+      "historical_score_is_current_approval": false
+    },
+    {
+      "id": "fish",
+      "category": "raw_food_concept",
+      "candidate_canonical_or_foundation_id": "fish",
+      "mapping_status": "canonical_registry_unready",
+      "source_boundary": "T16 freeze required.",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23/delivery-manifest.json"
+      },
+      "runtime_approval_claimed": false,
+      "render_sha256": "b62af41e1c8e96ecd37016ded5b74f3ae34e5beb3fd3d2ad11b02d4498e80901",
+      "render_filename": "reviewed-concepts/08-fish.png",
+      "historical_concept_score": 9.4,
+      "historical_score_is_current_approval": false
+    },
+    {
+      "id": "wheat",
+      "category": "crop_concept",
+      "candidate_canonical_or_foundation_id": "wheat",
+      "mapping_status": "canonical_registry_unready",
+      "source_boundary": "T19 freeze required.",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23/delivery-manifest.json"
+      },
+      "runtime_approval_claimed": false,
+      "render_sha256": "ba766eb586fdfbbb459dae6193091f1c9f68c9439f52685351322828102f80ff",
+      "render_filename": "reviewed-concepts/09-wheat.png",
+      "historical_concept_score": 9.3,
+      "historical_score_is_current_approval": false
+    },
+    {
+      "id": "cooked_food",
+      "category": "bread_like_output_concept",
+      "candidate_canonical_or_foundation_id": null,
+      "mapping_status": "UNRESOLVED",
+      "source_boundary": "Manifest says bread-like visual, not canonical recipe.",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23/delivery-manifest.json"
+      },
+      "runtime_approval_claimed": false,
+      "render_sha256": "ba237b6ecadaba5d8f9ae8f6d55ad5814fdfad5a263617f2d2e0553067dbc815",
+      "render_filename": "reviewed-concepts/10-cooked-food.png",
+      "historical_concept_score": 9.4,
+      "historical_score_is_current_approval": false
+    },
+    {
+      "id": "money",
+      "category": "earned_currency_presentation",
+      "candidate_canonical_or_foundation_id": null,
+      "mapping_status": "UNRESOLVED_WALLET",
+      "source_boundary": "Not a new material or premium-currency proof.",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23/delivery-manifest.json"
+      },
+      "runtime_approval_claimed": false,
+      "render_sha256": "ad719c6bda631bfbbb56dcb47b1c70fba31502cd9a82768637fb0632f8f48bae",
+      "render_filename": "reviewed-concepts/11-money.png",
+      "historical_concept_score": 9.4,
+      "historical_score_is_current_approval": false
+    },
+    {
+      "id": "cargo",
+      "category": "container_load_presentation",
+      "candidate_canonical_or_foundation_id": null,
+      "mapping_status": "NOT_ESTABLISHED_AS_INVENTORY_KIND",
+      "source_boundary": "Typed contents/custody wrapper.",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23/delivery-manifest.json"
+      },
+      "runtime_approval_claimed": false,
+      "render_sha256": "507ee9985dff799b67c1d82d6217ece5e834d786f53771e3abebfe41196c2809",
+      "render_filename": "reviewed-concepts/12-cargo.png",
+      "historical_concept_score": 9.5,
+      "historical_score_is_current_approval": false
+    },
+    {
+      "id": "coal",
+      "category": "supplementary_resource_concept",
+      "candidate_canonical_or_foundation_id": "coal",
+      "mapping_status": "later_foundation_same_id",
+      "source_boundary": "Original concept not registered gameplay claim; later foundation exists, sink unproved.",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23/delivery-manifest.json"
+      },
+      "runtime_approval_claimed": false,
+      "render_sha256": "860f781f8ac7425e4a7899d1f9748a5e1e5dc920ae33862a7b6180f244703b5d",
+      "render_filename": "reviewed-concepts/13-coal.png",
+      "historical_concept_score": 9.3,
+      "historical_score_is_current_approval": false
+    }
+  ],
+  "expansion_render_sheets": [
+    {
+      "id": "deer_meat",
+      "category": "source_or_visual_variant_candidate",
+      "source_status": "proposed_species_cut",
+      "proposed_inventory_mapping": "meat_family_source_variant_unless_distinct_use_frozen",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/delivery-manifest.json"
+      },
+      "recipe_or_drop_approval_claimed": false,
+      "runtime_approval_claimed": false,
+      "render_sha256": "db54049e15db3e9a38232781f36e17d02dcc5ced1a6f7bd083af6abbfefc1d78",
+      "render_filename": "01-deer-meat.png",
+      "historical_concept_score": 9.4,
+      "historical_score_is_current_approval": false
+    },
+    {
+      "id": "boar_meat",
+      "category": "source_or_visual_variant_candidate",
+      "source_status": "proposed_species_cut",
+      "proposed_inventory_mapping": "meat_family_source_variant_unless_distinct_use_frozen",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/delivery-manifest.json"
+      },
+      "recipe_or_drop_approval_claimed": false,
+      "runtime_approval_claimed": false,
+      "render_sha256": "6a9d06d3a6553c6ac3ecf4a443f9fc4bf9de5926a5f62f55386991cd03b1f637",
+      "render_filename": "02-boar-meat.png",
+      "historical_concept_score": 9.4,
+      "historical_score_is_current_approval": false
+    },
+    {
+      "id": "rabbit_meat",
+      "category": "source_or_visual_variant_candidate",
+      "source_status": "proposed_species_cut",
+      "proposed_inventory_mapping": "meat_family_source_variant_unless_distinct_use_frozen",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/delivery-manifest.json"
+      },
+      "recipe_or_drop_approval_claimed": false,
+      "runtime_approval_claimed": false,
+      "render_sha256": "38ca37808c4f8e16e090f25c92b1fec7a2fbba5db42e6621152c1e9df796a4e1",
+      "render_filename": "03-rabbit-meat.png",
+      "historical_concept_score": 9.2,
+      "historical_score_is_current_approval": false
+    },
+    {
+      "id": "moose_meat",
+      "category": "source_or_visual_variant_candidate",
+      "source_status": "proposed_species_cut",
+      "proposed_inventory_mapping": "meat_family_source_variant_unless_distinct_use_frozen",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/delivery-manifest.json"
+      },
+      "recipe_or_drop_approval_claimed": false,
+      "runtime_approval_claimed": false,
+      "render_sha256": "fdacd8301b8ed9dbe2be1c1f08eddb2f30f988931454656873c2cf570df172e8",
+      "render_filename": "04-moose-meat.png",
+      "historical_concept_score": 9.2,
+      "historical_score_is_current_approval": false
+    },
+    {
+      "id": "squirrel_meat",
+      "category": "source_or_visual_variant_candidate",
+      "source_status": "proposed_species_cut",
+      "proposed_inventory_mapping": "meat_family_source_variant_unless_distinct_use_frozen",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/delivery-manifest.json"
+      },
+      "recipe_or_drop_approval_claimed": false,
+      "runtime_approval_claimed": false,
+      "render_sha256": "e5503021e745122f97b5e00c4e4665e924f2e145a987f0aecf6e33471bea8946",
+      "render_filename": "05-squirrel-meat.png",
+      "historical_concept_score": 9.4,
+      "historical_score_is_current_approval": false
+    },
+    {
+      "id": "wild_bear_meat",
+      "category": "optional_species_variant_unfrozen",
+      "source_status": "optional_wildlife_cut_food_eligibility_unfrozen",
+      "proposed_inventory_mapping": "meat_family_source_variant_unless_distinct_use_frozen",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/delivery-manifest.json"
+      },
+      "recipe_or_drop_approval_claimed": false,
+      "runtime_approval_claimed": false,
+      "render_sha256": "e0aaab670cb14ac858bf0188bcbde965829baaec8d02e982138156d9a3fb669b",
+      "render_filename": "06-wild-bear-meat.png",
+      "historical_concept_score": 9.5,
+      "historical_score_is_current_approval": false
+    },
+    {
+      "id": "wild_wolf_meat",
+      "category": "optional_species_variant_unfrozen",
+      "source_status": "optional_wildlife_cut_food_eligibility_unfrozen",
+      "proposed_inventory_mapping": "meat_family_source_variant_unless_distinct_use_frozen",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/delivery-manifest.json"
+      },
+      "recipe_or_drop_approval_claimed": false,
+      "runtime_approval_claimed": false,
+      "render_sha256": "8355dfdd8138108ab0ea9e8780ceb6eae5ce3a55182b1abc9fabfeee8902444a",
+      "render_filename": "07-wild-wolf-meat.png",
+      "historical_concept_score": 9.5,
+      "historical_score_is_current_approval": false
+    },
+    {
+      "id": "wild_fox_meat",
+      "category": "optional_species_variant_unfrozen",
+      "source_status": "optional_wildlife_cut_food_eligibility_unfrozen",
+      "proposed_inventory_mapping": "meat_family_source_variant_unless_distinct_use_frozen",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/delivery-manifest.json"
+      },
+      "recipe_or_drop_approval_claimed": false,
+      "runtime_approval_claimed": false,
+      "render_sha256": "6387f2532dfa7568012ffa18c6fc9adb034007ee24bacc08a1cb1221ce065c16",
+      "render_filename": "08-wild-fox-meat.png",
+      "historical_concept_score": 9.3,
+      "historical_score_is_current_approval": false
+    },
+    {
+      "id": "lynx_meat",
+      "category": "optional_species_variant_unfrozen",
+      "source_status": "optional_wildlife_cut_food_eligibility_unfrozen",
+      "proposed_inventory_mapping": "meat_family_source_variant_unless_distinct_use_frozen",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/delivery-manifest.json"
+      },
+      "recipe_or_drop_approval_claimed": false,
+      "runtime_approval_claimed": false,
+      "render_sha256": "8f42dcf699d8194718a0459721ac8935a32f64a803c5620de5b1d9b59eed35c6",
+      "render_filename": "09-lynx-meat.png",
+      "historical_concept_score": 9.4,
+      "historical_score_is_current_approval": false
+    },
+    {
+      "id": "wolverine_meat",
+      "category": "optional_species_variant_unfrozen",
+      "source_status": "optional_wildlife_cut_food_eligibility_unfrozen",
+      "proposed_inventory_mapping": "meat_family_source_variant_unless_distinct_use_frozen",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/delivery-manifest.json"
+      },
+      "recipe_or_drop_approval_claimed": false,
+      "runtime_approval_claimed": false,
+      "render_sha256": "3419cc2f6df2fb8f985b46033735956176358ab475634cb3bca2c816a3f7ad2d",
+      "render_filename": "10-wolverine-meat.png",
+      "historical_concept_score": 9.5,
+      "historical_score_is_current_approval": false
+    },
+    {
+      "id": "processed_meat_portion",
+      "category": "processed_food_visual",
+      "source_status": "reference_derived_visible_cooker_output",
+      "proposed_inventory_mapping": "UNRESOLVED",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/delivery-manifest.json"
+      },
+      "recipe_or_drop_approval_claimed": false,
+      "runtime_approval_claimed": false,
+      "render_sha256": "0832968c2a7d3562b7a62caa5a4335c904b520edba7394b16d37e90b2010551e",
+      "render_filename": "11-processed-meat-portion.png",
+      "historical_concept_score": 9.4,
+      "historical_score_is_current_approval": false
+    },
+    {
+      "id": "cooked_game_meat",
+      "category": "processed_food_visual",
+      "source_status": "proposed_equipment_output_visual_state",
+      "proposed_inventory_mapping": "foundation meal uses named asset; not separate ledger product",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/delivery-manifest.json"
+      },
+      "recipe_or_drop_approval_claimed": false,
+      "runtime_approval_claimed": false,
+      "render_sha256": "9e18c914d25135cac8bb574d462bc627ee21102cae844cd77dfe10567c6eab33",
+      "render_filename": "12-cooked-game-meat.png",
+      "historical_concept_score": 9.4,
+      "historical_score_is_current_approval": false
+    },
+    {
+      "id": "dried_meat",
+      "category": "processed_food_visual",
+      "source_status": "proposed_equipment_output_visual_state",
+      "proposed_inventory_mapping": "UNRESOLVED",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/delivery-manifest.json"
+      },
+      "recipe_or_drop_approval_claimed": false,
+      "runtime_approval_claimed": false,
+      "render_sha256": "3afb830bf28725de6d5265b9675d6f9fe9dec1cc8770eace80812ef4498424da",
+      "render_filename": "13-dried-meat.png",
+      "historical_concept_score": 9.2,
+      "historical_score_is_current_approval": false
+    },
+    {
+      "id": "prepared_fish_fillet",
+      "category": "processed_food_visual",
+      "source_status": "proposed_fillet_form_not_implemented_recipe",
+      "proposed_inventory_mapping": "UNRESOLVED",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/delivery-manifest.json"
+      },
+      "recipe_or_drop_approval_claimed": false,
+      "runtime_approval_claimed": false,
+      "render_sha256": "4013e8900958c4d31611fa663b3b4799bf71f164e150932d245eadf33b003ea2",
+      "render_filename": "14-prepared-fish-fillet.png",
+      "historical_concept_score": 9.3,
+      "historical_score_is_current_approval": false
+    },
+    {
+      "id": "cooked_fish",
+      "category": "processed_food_visual",
+      "source_status": "reference_derived_whole_cooked_fish_from_A016",
+      "proposed_inventory_mapping": "UNRESOLVED",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/delivery-manifest.json"
+      },
+      "recipe_or_drop_approval_claimed": false,
+      "runtime_approval_claimed": false,
+      "render_sha256": "f05750afdd656c4aa2f9fae322bfea019ce55b1a6474d57a86cef14444a3cdb5",
+      "render_filename": "15-cooked-fish.png",
+      "historical_concept_score": 9.5,
+      "historical_score_is_current_approval": false
+    },
+    {
+      "id": "dried_fish",
+      "category": "processed_food_visual",
+      "source_status": "proposed_dried_state_from_visible_fish_drying_rack",
+      "proposed_inventory_mapping": "UNRESOLVED",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/delivery-manifest.json"
+      },
+      "recipe_or_drop_approval_claimed": false,
+      "runtime_approval_claimed": false,
+      "render_sha256": "9991f21d19cbaee9f76527bda21bd5add8c19ec468fdb77d9beffdd23a685b38",
+      "render_filename": "16-dried-fish.png",
+      "historical_concept_score": 9.3,
+      "historical_score_is_current_approval": false
+    },
+    {
+      "id": "timber_planks",
+      "category": "processed_material_visual",
+      "source_status": "atlas_resource_and_proposed_equipment_mapping",
+      "proposed_inventory_mapping": "candidate alias for foundation planks",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/delivery-manifest.json"
+      },
+      "recipe_or_drop_approval_claimed": false,
+      "runtime_approval_claimed": false,
+      "render_sha256": "122191d8f989aa3b739e7db9e2d76e8907493034004105ee14a023917ebf62c5",
+      "render_filename": "17-timber-planks.png",
+      "historical_concept_score": 9.5,
+      "historical_score_is_current_approval": false
+    },
+    {
+      "id": "split_firewood",
+      "category": "processed_material_visual",
+      "source_status": "proposed_split_log_output_state_from_chopping_reference",
+      "proposed_inventory_mapping": "UNRESOLVED",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/delivery-manifest.json"
+      },
+      "recipe_or_drop_approval_claimed": false,
+      "runtime_approval_claimed": false,
+      "render_sha256": "64a866fffab5200234265ae1217070432d0a9cb491c8a468042c14a00949f06f",
+      "render_filename": "18-split-firewood.png",
+      "historical_concept_score": 9.4,
+      "historical_score_is_current_approval": false
+    },
+    {
+      "id": "hide",
+      "category": "byproduct_visual",
+      "source_status": "atlas_named_hide_with_proposed_folded_pickup_and_unfrozen_yields",
+      "proposed_inventory_mapping": "UNRESOLVED",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/delivery-manifest.json"
+      },
+      "recipe_or_drop_approval_claimed": false,
+      "runtime_approval_claimed": false,
+      "render_sha256": "c368be726122e041832c5ded3f197a83e54a42b68b79958cf11f7d178616d1bb",
+      "render_filename": "19-hide.png",
+      "historical_concept_score": 9.4,
+      "historical_score_is_current_approval": false
+    },
+    {
+      "id": "fur",
+      "category": "byproduct_visual",
+      "source_status": "atlas_named_fur_with_proposed_folded_pickup_and_unfrozen_yields",
+      "proposed_inventory_mapping": "UNRESOLVED",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/delivery-manifest.json"
+      },
+      "recipe_or_drop_approval_claimed": false,
+      "runtime_approval_claimed": false,
+      "render_sha256": "f056da43eb6845742d211ade47ecd1ac9441d610b3c6fa5ed4ecb91e3e2dc06d",
+      "render_filename": "20-fur.png",
+      "historical_concept_score": 9.5,
+      "historical_score_is_current_approval": false
+    }
+  ],
+  "currencies_and_historical_terms": [
+    {
+      "id": "earned_cash_or_money",
+      "kind": "earned_currency_concept",
+      "status": "REFERENCE_PHYSICAL_PAYMENT;FOUNDATION_VISUAL_ONLY_WALLET_UNPROVED",
+      "name_frozen": false,
+      "purpose": "Visible reinvestment after eligible real service",
+      "sources": [
+        {
+          "commit": "9d10c45a8bd46aeb6ab1b4009e87538c4796ef1c",
+          "path": "Docs/Production/ReferenceRefresh/2026-11-27/RAW_REFERENCE_AUDIT.md",
+          "anchor": "RF05 / RF11"
+        },
+        {
+          "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+          "path": "HavenlineLevel1/field_counter.gd",
+          "anchor": "MONEY / _serve"
+        },
+        {
+          "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+          "path": "HavenlineLevel1/field_settlement_loop.gd",
+          "anchor": "serve"
+        },
+        {
+          "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+          "path": "HavenlineLevel1/field_settlement.gd",
+          "anchor": "EMPTY"
+        },
+        {
+          "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+          "path": "HavenlineLevel1/field_hud.gd",
+          "anchor": "settlement_status"
+        }
+      ],
+      "proposed_design_approved": false,
+      "foundation_cash_display": "field_hud.gd maps cash to journal.served; it is not evidence of a separately conserved spendable wallet."
+    },
+    {
+      "id": "credits",
+      "kind": "historical_runtime_term",
+      "status": "OLDER_SOURCE_VOCABULARY_NOT_SECOND_CURRENT_WALLET",
+      "source": {
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/source-equipment-coverage.json",
+        "anchor": "runtime-customers source citing f74a84a2a288ab3d3935fba7a6cb9b975c2df239"
+      },
+      "purpose": "Historical customer service credit; reconcile or retire explicitly"
+    },
+    {
+      "id": "primary_premium_currency",
+      "kind": "policy_slot_not_named_runtime_id",
+      "status": "ONE_PRIMARY_REQUIRED_BY_PLAN;NAME_AND_SCHEDULE_UNFROZEN",
+      "source": {
+        "commit": "9d10c45a8bd46aeb6ab1b4009e87538c4796ef1c",
+        "path": "Docs/Production/HAVENLINE_BUILD_PLAN_V2.md",
+        "anchor": "Economy"
+      },
+      "purpose": "Transparent optional paid/granted value under fair-economy policy",
+      "proposed_design_approved": false
+    }
+  ],
+  "noncurrency_and_unestablished_wallet_concepts": [
+    {
+      "id": "XP_or_experience",
+      "category": "unestablished_progression_counter",
+      "status": "NO_SPENDABLE_XP_WALLET_ESTABLISHED",
+      "source": {
+        "commit": "9d10c45a8bd46aeb6ab1b4009e87538c4796ef1c",
+        "path": "Docs/Production/T12/REFERENCE_RUNTIME_SEMANTICS.json",
+        "anchor": "initial_state / authoritative_fact_observation"
+      }
+    },
+    {
+      "id": "VIP",
+      "category": "permanent_entitlement",
+      "status": "PERMANENT_TRANSPARENT_PLAN_REQUIREMENT",
+      "source": {
+        "commit": "9d10c45a8bd46aeb6ab1b4009e87538c4796ef1c",
+        "path": "Docs/Production/HAVENLINE_BUILD_PLAN_V2.md",
+        "anchor": "Economy"
+      }
+    },
+    {
+      "id": "event_currency_or_token",
+      "category": "unestablished_future_wallet",
+      "status": "NO_CANONICAL_ID_FOUND_IN_REVIEWED_SCOPE"
+    },
+    {
+      "id": "stored_meal",
+      "category": "transport_lane",
+      "status": "SAME_MEAL_CUSTODY_NOT_NEW_PRODUCT",
+      "source": {
+        "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+        "path": "HavenlineLevel1/field_logistics.gd",
+        "anchor": "LANES"
+      }
+    },
+    {
+      "id": "meal_to_store",
+      "category": "transport_lane",
+      "status": "SAME_MEAL_CUSTODY_NOT_NEW_PRODUCT",
+      "source": {
+        "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+        "path": "HavenlineLevel1/field_logistics.gd",
+        "anchor": "LANES"
+      }
+    },
+    {
+      "id": "processed_wood",
+      "category": "ledger_counter",
+      "status": "NOT_AN_ADDITIONAL_COLLECTIBLE",
+      "source": {
+        "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+        "path": "HavenlineLevel1/field_settlement.gd",
+        "anchor": "EMPTY"
+      }
+    },
+    {
+      "id": "processed_stone",
+      "category": "ledger_counter",
+      "status": "NOT_AN_ADDITIONAL_COLLECTIBLE",
+      "source": {
+        "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+        "path": "HavenlineLevel1/field_settlement.gd",
+        "anchor": "EMPTY"
+      }
+    },
+    {
+      "id": "cooked",
+      "category": "ledger_counter",
+      "status": "NOT_AN_ADDITIONAL_COLLECTIBLE",
+      "source": {
+        "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+        "path": "HavenlineLevel1/field_settlement.gd",
+        "anchor": "EMPTY"
+      }
+    },
+    {
+      "id": "served",
+      "category": "ledger_counter",
+      "status": "NOT_AN_ADDITIONAL_COLLECTIBLE",
+      "source": {
+        "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+        "path": "HavenlineLevel1/field_settlement.gd",
+        "anchor": "EMPTY"
+      }
+    },
+    {
+      "id": "storage_and_purchase_pads",
+      "category": "29_resource_plot_presentation_sheets",
+      "status": "DESTINATIONS_USE_STATES_NOT_29_RESOURCE_IDS",
+      "source": {
+        "commit": "9d10c45a8bd46aeb6ab1b4009e87538c4796ef1c",
+        "path": "Docs/Production/ReferenceRefresh/2026-11-27/RENDER_SOURCE_REGISTER.json",
+        "anchor": "resources-2026-11-23-plots"
+      }
+    }
+  ],
+  "historical_unestablished_outputs": {
+    "source": {
+      "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/source-equipment-coverage.json",
+      "anchor": "excluded_unestablished_outputs"
+    },
+    "ids_or_terms": [
+      "flour",
+      "leather",
+      "canned meals",
+      "refined oil/fuel",
+      "steel plates",
+      "steel rods",
+      "charcoal",
+      "bricks",
+      "cut masonry blocks",
+      "workshop gears/nails"
+    ],
+    "boundary": "Not approved future output list. Later foundation blocks has independent evidence; do not retrospectively treat all other excluded terms as implemented."
+  },
+  "value_contract_required_fields": [
+    "canonical_identity_and_aliases",
+    "type_and_unit",
+    "source_and_acquisition",
+    "primary_use",
+    "visible_payoff",
+    "demand_and_progression",
+    "authored_costs_yields_effort",
+    "surplus_or_retirement",
+    "custody_and_idempotence",
+    "actor_and_full_action_presentation",
+    "actual_normal_play_and_free_route_evidence"
+  ],
+  "value_contract_not_required": [
+    "multiple_sinks_for_every_item",
+    "cash_conversion_for_every_item",
+    "infinite_recurring_demand",
+    "separate_inventory_id_for_every_visual_variant"
+  ],
+  "existing_risk_observations": [
+    {
+      "id": "field_damage_and_safe_camp",
+      "source": {
+        "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+        "path": "HavenlineLevel1/field_opening.gd",
+        "anchor": "_player_hit / _advance_camp_heal"
+      },
+      "observation": "Damage outside camp; camp rejects hits and gradually heals.",
+      "runtime_tested_by_this_audit": false
+    },
+    {
+      "id": "fall_and_return",
+      "source": {
+        "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+        "path": "HavenlineLevel1/field_opening.gd",
+        "anchor": "_player_hit / zero-HP reset branch"
+      },
+      "observation": "Zero HP falls/returns to safe_start/restores HP; living enemy HP preserved. No owned-material/cash/plot/companion debit in reviewed path.",
+      "runtime_tested_by_this_audit": false
+    },
+    {
+      "id": "paid_production_preserved",
+      "source": {
+        "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+        "path": "HavenlineLevel1/field_settlement_loop.gd",
+        "anchor": "cancel_cooking"
+      },
+      "observation": "In-flight presentation canceled; committed hopper stock and machine work retained.",
+      "runtime_tested_by_this_audit": false
+    },
+    {
+      "id": "loose_drop_expiry",
+      "source": {
+        "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+        "path": "HavenlineLevel1/field_lifecycle.gd",
+        "anchor": "DROP_LIFETIME_SECONDS / snapshot / advance",
+        "also_path": "HavenlineLevel1/field_opening.gd",
+        "also_anchors": [
+          "_place_drop",
+          "_step_drops"
+        ]
+      },
+      "observation": "Loose drops expire by played age; _place_drop removes oldest loose drop at DROP_CAP. Remaining life is saved. Not proof of offline penalties or owned-cargo confiscation.",
+      "runtime_tested_by_this_audit": false
+    }
+  ],
+  "existing_survivor_purchase_observation": {
+    "source": {
+      "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+      "path": "HavenlineLevel1/field_inventory.gd",
+      "anchor": "worker_payment / _pay_from"
+    },
+    "allows": "Rescued survivor contributes real worker_load to eligible material offers through shared validated payment.",
+    "excludes": "Progress.LINES (meal_conveyor and supply_conveyors)",
+    "does_not_prove": [
+      "earned_cash_wallet_or_purchases",
+      "all_task_parity",
+      "universal_purchase_authority",
+      "whole_game_capacity_or_animation_acceptance"
+    ],
+    "source_excerpt": "func worker_payment(id: String, kind: String, amount: int) -> bool:\n\tif not settlement.rescued or id in Progress.LINES: return false\n\treturn _pay_from(settlement.worker_load,id,kind,amount)\n\nfunc _pay_from(stock: Dictionary, id: String, kind: String, amount: int) -> bool:\n\tif amount <= 0 or not offer_open(id) or not costs[id].has(kind) or amount > costs[id][kind] - paid[id][kind]:\n\t\treturn false\n\tif stock[kind] < amount:\n\t\treturn false\n\tstock[kind] -= amount\n\tpaid[id][kind] += amount\n\tif staged and complete(id): build_order.append(id)\n\treturn true"
+  },
+  "proposed_stakes": [
+    {
+      "id": "recoverable_field_setback",
+      "proposal": "Preserve safe return; optionally author uniquely owned recoverable cargo cache with free recovery route.",
+      "approved": false,
+      "no_loss_percentage_assigned": true
+    },
+    {
+      "id": "repairable_site_interruption",
+      "proposal": "If raids adopted, readable local damage/repair objective with protected recovery supplies.",
+      "approved": false
+    },
+    {
+      "id": "companion_recovery",
+      "proposal": "If incapacitation adopted, temporary withdrawal/rescue and return to duty; not automatic permanent companion loss.",
+      "approved": false
+    },
+    {
+      "id": "protect_persistent_progress",
+      "proposal": "Protect land/upgrades/companion ownership/banked stock/purchased value; exact damaged-state and repair route if reversible damage adopted.",
+      "approved": false
+    },
+    {
+      "id": "no_surprise_offline_punishment",
+      "proposal": "Preserve valid saved custody and idempotent restore; no offline erosion as unreviewed default.",
+      "approved": false
+    },
+    {
+      "id": "region_contracts",
+      "proposal": "Each later-region hazard has specific warning, counterplay, consequence and free recovery; art alone does not freeze hazard mechanics.",
+      "approved": false
+    }
+  ],
+  "forbidden_or_unapproved_shortcuts": [
+    "arbitrary_loss_percentages",
+    "mandatory_pay_to_revive",
+    "forced_fatigue_or_energy_wait_wall",
+    "silently_approved_permanent_pet_loss",
+    "unapproved_finite_player_pack_cap",
+    "universal_raw_ore_ammunition_assumption",
+    "invented_premium_currency_name",
+    "treating_cash_mesh_as_wallet",
+    "treating_static_art_as_recipe_or_animation_proof"
+  ],
+  "acceptance_policy": {
+    "source": {
+      "commit": "9d10c45a8bd46aeb6ab1b4009e87538c4796ef1c",
+      "path": "Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json"
+    },
+    "reference_minimum_dimension_score": 9.9,
+    "exact10_where_stronger_visual_style_rules_apply": true,
+    "unapproved_reference_deviations_allowed": 0,
+    "missing_evidence_disposition": "BLOCKED",
+    "independent_review_required": true,
+    "whole_game_runtime_acceptance_claimed": false
+  },
+  "task_owners": {
+    "canonical_economy": "T33",
+    "source_actions": [
+      "T09",
+      "T16",
+      "T19",
+      "T21"
+    ],
+    "custody": [
+      "T08",
+      "T14",
+      "T18",
+      "T43",
+      "T53"
+    ],
+    "material_and_cash_spending": [
+      "T10",
+      "T11",
+      "T12",
+      "T17",
+      "T20"
+    ],
+    "risk_recovery": [
+      "T13",
+      "T21",
+      "T22"
+    ],
+    "survivor_competence": [
+      "T23",
+      "T31"
+    ],
+    "pets": [
+      "T24",
+      "T25",
+      "T26",
+      "T27",
+      "T28",
+      "T29",
+      "T30"
+    ],
+    "premium_vip": [
+      "T34",
+      "T35",
+      "T36"
+    ],
+    "events": [
+      "T37",
+      "T38",
+      "T39",
+      "T40"
+    ],
+    "later_regions": [
+      "T44",
+      "T45",
+      "T46",
+      "T47",
+      "T48",
+      "T49",
+      "T50",
+      "T51",
+      "T52"
+    ],
+    "full_game_evidence": [
+      "T32",
+      "T62",
+      "T63",
+      "T64",
+      "T67",
+      "T70"
+    ]
+  }
+}
