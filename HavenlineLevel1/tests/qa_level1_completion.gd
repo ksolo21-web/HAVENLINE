@@ -490,6 +490,10 @@ func inspect_service_aisles() -> void:
 		for endpoint:Vector3 in [entry,exit]:
 			var label:String=gate.gate_id+(" traverses inward" if endpoint==entry else " traverses outward")
 			var contacts:Dictionary={}
+			var through_gate:=true
+			var enters:bool=endpoint==entry
+			var start_inside:bool=game.field_env.is_inside_camp(game.actor.global_position)
+			var radius:float=game.layout.actor_radius
 			for tick in 100:
 				var previous:Vector3=game.actor.global_position
 				if previous.distance_to(endpoint)<.035:break
@@ -498,10 +502,17 @@ func inspect_service_aisles() -> void:
 				if hit:contacts[str(hit.get_collider().get_path())]=true
 				game.previous_dry_position=previous
 				game.constrain_private_snow_travel()
+				through_gate=through_gate and is_equal_approx(gate.angle,PI/2) and game.field_env.travel_clear(previous,game.actor.global_position,radius)
 				await physics_frame
 			var feet:Vector3=game.actor.global_position
-			observed[label]={"ending_xz":[feet.x,feet.z],"target_xz":[endpoint.x,endpoint.z],"contacts":contacts.keys()}
-			check(label,feet.distance_to(endpoint)<.04)
+			var outward_or_inward:Vector3=inward if enters else -inward
+			var depth:float=(feet-gate.global_position).dot(outward_or_inward)
+			# The full capsule must clear even a leaf swung toward this side.
+			# A wolf beyond the jamb can halt the actor after a complete exit.
+			var required:float=gate.LEAF_LENGTH+gate.LEAF_DEPTH*.5+radius
+			var inside:bool=game.field_env.is_inside_camp(feet)
+			observed[label]={"ending_xz":[feet.x,feet.z],"target_xz":[endpoint.x,endpoint.z],"contacts":contacts.keys(),"minimum_depth_m":required,"crossed_depth_m":depth,"started_inside":start_inside,"finished_inside":inside,"open_and_wall_clear":through_gate}
+			check(label,start_inside!=enters and inside==enters and depth>=required and through_gate)
 
 func run() -> void:
 	var args=OS.get_cmdline_user_args()

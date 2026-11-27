@@ -87,10 +87,18 @@ func run() -> void:
 		if not tower.flights.is_empty() and boss.hp==same:
 			var bolt:Node3D=tower.flights[0].mesh
 			if previous_bolt.is_finite():
-				traveled=bolt.global_position.distance_to(previous_bolt)>.05 and bolt.find_children("*","MeshInstance3D",true,false).size()>0
+				var geometry := bolt.find_children("*","MeshInstance3D",true,false)
+				if bolt is MeshInstance3D:
+					geometry.append(bolt)
+				var authored := geometry.any(func(part): return part.mesh == tower.art.bolt.mesh and part.get_active_material(0) == tower.art.bolt.get_active_material(0))
+				traveled = authored and bolt.global_position.distance_to(previous_bolt)>.05
 				break
 			previous_bolt=bolt.global_position
 	check("paid_tower_launches_authored_bolt_before_damage",traveled and boss.hp==same)
+	for i in 100:
+		tower.advance(1.0/60,true)
+		if boss.hp<same: break
+	check("the_first_authored_bolt_deals_one_point_on_arrival",boss.hp==same-1 and tower.flights.is_empty())
 	for i in 1200:
 		tower.advance(1.0/60,true)
 		if boss.hp==0:break

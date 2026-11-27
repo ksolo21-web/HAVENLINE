@@ -52,6 +52,8 @@ func run() -> void:
 	host.add_child(host.field_env)
 	host.field_env.add_child(host.field_env.buy_anchor)
 	host.field_env.add_child(host.field_env.upgrade_anchor)
+	# This counter-only fixture skips building the hearth and must own its unused fire node.
+	host.field_env.add_child(host.field_env.hearth_fire)
 	host.add_child(host.actor)
 	host.add_child(counter)
 	host.presentation_guard = counter.awaiting_payment

@@ -18,12 +18,40 @@ func touch_plot(point: Vector3, tolerance := .42) -> bool:
  steer(Vector2.ZERO)
  return false
 
+func walk_machine_plot(id:String) -> bool:
+ var site:Node3D=field.carry.receivers[id]
+ var floor=preload("res://field_conveyor_aisles.gd").new()
+ floor.install(field,field.settlement_loop.conveyors.network.routes)
+ var goal:=Vector3.INF
+ var closest:=INF
+ for cell:Vector2i in floor.public_cells:
+  var xz:Vector2=floor._at(cell)
+  var at:=Vector3(xz.x,0,xz.y)
+  if field.Reach.plot_distance(site,at)>.38:continue
+  var distance:float=at.distance_squared_to(field.actor.global_position)
+  if distance<closest:
+   closest=distance
+   goal=at
+ if not goal.is_finite():return false
+ for tick in 1200:
+  var feet:Vector3=field.actor.global_position
+  if field.inventory.complete(id) or field.Reach.plot_distance(site,feet)<=.40:
+   steer(Vector2.ZERO)
+   return true
+  var next:Vector3=floor.waypoint(feet,goal)
+  move_to([next.x,next.z],.045)
+  await physics_frame
+ steer(Vector2.ZERO)
+ return false
+
 func purchase(id: String, should_finish := true) -> void:
  var inv=field.inventory
  var before:Dictionary=inv.paid[id].duplicate()
- var target := point_for(id)
- if id in field.Progress.MACHINES.values(): target.z += 1.42
- var reached:=await touch_plot(target)
+ var reached:bool
+ if id in field.Progress.MACHINES.values():
+  reached=await walk_machine_plot(id)
+ else:
+  reached=await touch_plot(point_for(id))
  for i in 100: await physics_frame
  var pos:Vector3=field.actor.global_position
  visits.append({"id":id,"funded":inv.paid[id].duplicate(),"position":[pos.x,pos.z],"before":before,"next":field.next_project,"prompt":field.opening_hud.prompt.text})
@@ -84,12 +112,6 @@ func finish_build() -> void:
  verify("Completed advanced house retires its upgrade floor",not field.depot.upgrade_mark.is_visible_in_tree() and inv.stored.meat>=0)
  await touch_plot(Vector3(-1.86,0,-1.18))
  for id in BUILD_ORDER.slice(5):
-  if id == "camp_cooker":
-   await touch_plot(Vector3(4.6,0,-4.6))
-   await touch_plot(Vector3(.65,0,-5.45))
-  elif id == "quarry_drill":
-   await touch_plot(Vector3(-2.2,0,-5.05))
-   await touch_plot(Vector3(4.5,0,-5.1))
   verify_marker(id)
   await purchase(id)
  verify("All eleven offers retire with no duplicate purchases",inv.build_order==BUILD_ORDER and field.next_project.is_empty() and field.offer_floors.values().all(func(node):return not node.is_visible_in_tree()))
