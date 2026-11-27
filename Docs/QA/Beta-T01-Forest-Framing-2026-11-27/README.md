@@ -1,0 +1,15 @@
+# Havenline Beta T01 forest framing candidate
+
+**Approval remains open.** The candidate improves the forest composition around the founding clearing. The independent review verified the northeast change. Canopy overlap in the lower bank and gaps in the central canopy still fall short of locked B06. The candidate has no final critic grade. [Independent report](Review/Independent-T01-framing.md) · [Founding comparison](Founding-comparison.jpg)
+
+## Source and scope
+
+The runtime foundation is the Beta T01 trial at `fad3af0a45e94262737077ae513827b5042adb41`, built on signed Android Build 16 source `92fa91760a45eea306d7bda4da4b705b51b6f103`. The linked vehicle publication `69bd3eb921ce18838795b3ce21b232ec6e3b54b6` records the separate fuel, fabrication and fleet package and leaves runtime integration open. The current approval standard comes from GitHub main at `a4e643aeb563b6f9cfda8b840c0651d13326eec8`. Reference-sensitive dimensions require at least 9.9 and the mandatory C1 and C2 visual checks require exact 10. [Candidate identity](Candidate.json) · [Vehicle checkpoint](https://github.com/ksolo21-web/HAVENLINE/blob/69bd3eb921ce18838795b3ce21b232ec6e3b54b6/Docs/Production/VehicleEconomy/2026-11-27/CHECKPOINT.json)
+
+The candidate changes one of the 762 checked runtime files. It places 37 staggered pines around the southwest and southeast approaches and the northeast canopy gap. The existing harvest meshes, batching, tree lifecycle and camp perimeter clearance handle the new trees. The same 37 source IDs appear in both the founding and expanded camp captures. [Placements and routes](Verification/Placements-and-routes.json)
+
+## Gameplay proof
+
+- Normal touch control reached 24 of 24 waypoints across west, south and east. On the west route, the same harvested source restored after 5.000 simulation seconds and returned as a rooted live tree when revisited. [West](Verification/west/witness.json) · [South](Verification/south/witness.json) · [East](Verification/east/witness.json)
+- The three paid camp perimeter stages kept trees, walls, gates and drops clear. Wood harvesting, repeated survivor chopping and mining, and World One streaming also passed their existing native gameplay suites. [Perimeter](Verification/qa_forest_perimeter_safety.gd.log) · [Harvest](Verification/qa_field_forest.gd.log) · [Survivor](Verification/qa_worker_harvest.gd.log) · [Landscape](Verification/world_landscape_qa.gd.log)
+- The founding comparison used the green pad after ordinary proximity payments accepted 19 of 20 bundles in a seeded test profile. The expanded west comparison used a separate returning camp profile. The exact position and camera match within each candidate and baseline pair at 1× and 2×. The 460 × 760 frames and instantaneous renderer counters come from Godot 4.7.2 OpenGL Compatibility in software. Full visual and device performance evidence remains open. [Founding capture](Capture/r4-green-fresh/projections.json) · [West capture](Capture/r4-paid/projections.json)

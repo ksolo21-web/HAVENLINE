@@ -1,0 +1,516 @@
+{
+  "source_B06": {
+    "path": "/tmp/hvn-axe95/B-006-original.png",
+    "sha256": "fd59dfe77a27d0e690954e473f680b62e7ee5c496dcd0e6fab3cacb1692b16ea",
+    "threshold_results_percent": {
+      "6": {
+        "upper": 83.54,
+        "lower": 56.02
+      },
+      "8": {
+        "upper": 83.51,
+        "lower": 55.92
+      },
+      "10": {
+        "upper": 83.43,
+        "lower": 55.66
+      },
+      "12": {
+        "upper": 83.29,
+        "lower": 55.19
+      },
+      "14": {
+        "upper": 83.06,
+        "lower": 54.16
+      },
+      "16": {
+        "upper": 82.0,
+        "lower": 52.29
+      }
+    }
+  },
+  "method": "Color diagnostic, not manual canopy segmentation. Only relative within-renderer comparisons isolate visual change. B06 and candidate are distinct palettes and rendering scales. All coordinates after normalizing the game-only viewport to 460x760. Shared overlay masks reduce direct UI influence.",
+  "R1_founding_gray": [
+    {
+      "path": "/tmp/havenline-t01-framing/baseline-fresh/founding-1x.jpg",
+      "sha256": "c168291cd24494d19d910224b23c8b83dfc5c9c3088f76a998d1623a427d7ed4",
+      "threshold_results_percent": {
+        "6": {
+          "upper": 57.57,
+          "lower": 0.87
+        },
+        "8": {
+          "upper": 56.1,
+          "lower": 0.84
+        },
+        "10": {
+          "upper": 54.74,
+          "lower": 0.8
+        },
+        "12": {
+          "upper": 53.06,
+          "lower": 0.76
+        },
+        "14": {
+          "upper": 51.52,
+          "lower": 0.73
+        },
+        "16": {
+          "upper": 49.62,
+          "lower": 0.68
+        }
+      }
+    },
+    {
+      "path": "/tmp/havenline-t01-framing/candidate-fresh/founding-1x.jpg",
+      "sha256": "d6147c05be4aa7d4da6ed6beba7b160f74f12abc705d873999f27714913ab8b4",
+      "threshold_results_percent": {
+        "6": {
+          "upper": 57.57,
+          "lower": 36.77
+        },
+        "8": {
+          "upper": 56.1,
+          "lower": 35.45
+        },
+        "10": {
+          "upper": 54.74,
+          "lower": 34.29
+        },
+        "12": {
+          "upper": 53.06,
+          "lower": 32.95
+        },
+        "14": {
+          "upper": 51.52,
+          "lower": 31.59
+        },
+        "16": {
+          "upper": 49.62,
+          "lower": 30.0
+        }
+      }
+    }
+  ],
+  "R1_paired": [
+    {
+      "base": "baseline-fresh",
+      "candidate": "candidate-fresh",
+      "zoom": 1.0,
+      "same": {
+        "position": true,
+        "boot": true,
+        "camera_basis": true,
+        "zoom": true,
+        "camera_size": true,
+        "camp_stage": true
+      },
+      "baseline_records": 115,
+      "candidate_records": 140,
+      "physical_position": [
+        0.0,
+        0.0,
+        6.0
+      ],
+      "subject_region_changed_pct_gt6": 0.0,
+      "subject_region_xyxy": [
+        186,
+        300,
+        271,
+        446
+      ]
+    },
+    {
+      "base": "baseline-fresh",
+      "candidate": "candidate-fresh",
+      "zoom": 2.0,
+      "same": {
+        "position": true,
+        "boot": true,
+        "camera_basis": true,
+        "zoom": true,
+        "camera_size": true,
+        "camp_stage": true
+      },
+      "baseline_records": 115,
+      "candidate_records": 140,
+      "physical_position": [
+        0.0,
+        0.0,
+        6.0
+      ],
+      "subject_region_changed_pct_gt6": 0.0,
+      "subject_region_xyxy": [
+        176,
+        270,
+        261,
+        416
+      ]
+    },
+    {
+      "base": "baseline-paid",
+      "candidate": "candidate-paid",
+      "zoom": 1.0,
+      "same": {
+        "position": true,
+        "boot": true,
+        "camera_basis": true,
+        "zoom": true,
+        "camera_size": true,
+        "camp_stage": true
+      },
+      "baseline_records": 124,
+      "candidate_records": 148,
+      "physical_position": [
+        -12.7172889709473,
+        0.0,
+        12.0757608413696
+      ],
+      "subject_region_changed_pct_gt6": 0.0,
+      "subject_region_xyxy": [
+        186,
+        300,
+        271,
+        446
+      ]
+    },
+    {
+      "base": "baseline-paid",
+      "candidate": "candidate-paid",
+      "zoom": 2.0,
+      "same": {
+        "position": true,
+        "boot": true,
+        "camera_basis": true,
+        "zoom": true,
+        "camera_size": true,
+        "camp_stage": true
+      },
+      "baseline_records": 124,
+      "candidate_records": 148,
+      "physical_position": [
+        -12.7172889709473,
+        0.0,
+        12.0757608413696
+      ],
+      "subject_region_changed_pct_gt6": 0.0,
+      "subject_region_xyxy": [
+        176,
+        270,
+        261,
+        416
+      ]
+    }
+  ],
+  "R2_paired": [
+    {
+      "base": "green-baseline-fresh",
+      "candidate": "green-candidate-fresh",
+      "zoom": 1.0,
+      "same": {
+        "position": true,
+        "boot": true,
+        "camera_basis": true,
+        "zoom": true,
+        "camera_size": true,
+        "camp_stage": true
+      },
+      "baseline_records": 116,
+      "candidate_records": 146,
+      "physical_position": [
+        -0.0342290885746479,
+        0.0,
+        2.1897885799408
+      ],
+      "subject_region_changed_pct_gt6": 1.112,
+      "subject_region_xyxy": [
+        186,
+        300,
+        271,
+        446
+      ]
+    },
+    {
+      "base": "green-baseline-fresh",
+      "candidate": "green-candidate-fresh",
+      "zoom": 2.0,
+      "same": {
+        "position": true,
+        "boot": true,
+        "camera_basis": true,
+        "zoom": true,
+        "camera_size": true,
+        "camp_stage": true
+      },
+      "baseline_records": 116,
+      "candidate_records": 146,
+      "physical_position": [
+        -0.0342290885746479,
+        0.0,
+        2.1897885799408
+      ],
+      "subject_region_changed_pct_gt6": 0.451,
+      "subject_region_xyxy": [
+        176,
+        270,
+        261,
+        416
+      ]
+    }
+  ],
+  "R2_founding_green": [
+    {
+      "path": "/tmp/havenline-t01-framing/green-baseline-fresh/founding-1x.jpg",
+      "sha256": "53c3a854f23c5943c76dc84f3d8da6e2ec819dacf673c8d6efa4b0551aa278a9",
+      "threshold_results_percent": {
+        "6": {
+          "upper": 62.12,
+          "lower": 1.86
+        },
+        "8": {
+          "upper": 60.48,
+          "lower": 1.73
+        },
+        "10": {
+          "upper": 58.94,
+          "lower": 1.64
+        },
+        "12": {
+          "upper": 57.27,
+          "lower": 1.51
+        },
+        "14": {
+          "upper": 55.6,
+          "lower": 1.37
+        },
+        "16": {
+          "upper": 53.52,
+          "lower": 1.12
+        }
+      }
+    },
+    {
+      "path": "/tmp/havenline-t01-framing/green-candidate-fresh/founding-1x.jpg",
+      "sha256": "a53f3677715e16d42cc6f78e10885ea3eeb3ab566fbadf489055b326657dc905",
+      "threshold_results_percent": {
+        "6": {
+          "upper": 62.12,
+          "lower": 11.4
+        },
+        "8": {
+          "upper": 60.48,
+          "lower": 10.8
+        },
+        "10": {
+          "upper": 58.94,
+          "lower": 10.4
+        },
+        "12": {
+          "upper": 57.27,
+          "lower": 9.87
+        },
+        "14": {
+          "upper": 55.6,
+          "lower": 9.38
+        },
+        "16": {
+          "upper": 53.52,
+          "lower": 8.73
+        }
+      }
+    }
+  ],
+  "R4_green_paired": [
+    {
+      "base": "green-baseline-fresh",
+      "candidate": "r4-green-fresh",
+      "zoom": 1.0,
+      "same": {
+        "position": true,
+        "boot": true,
+        "camera_basis": true,
+        "zoom": true,
+        "camera_size": true,
+        "camp_stage": true
+      },
+      "baseline_records": 116,
+      "candidate_records": 155,
+      "physical_position": [
+        -0.0342290885746479,
+        0.0,
+        2.1897885799408
+      ],
+      "subject_region_changed_pct_gt6": 1.112,
+      "subject_region_xyxy": [
+        186,
+        300,
+        271,
+        446
+      ]
+    },
+    {
+      "base": "green-baseline-fresh",
+      "candidate": "r4-green-fresh",
+      "zoom": 2.0,
+      "same": {
+        "position": true,
+        "boot": true,
+        "camera_basis": true,
+        "zoom": true,
+        "camera_size": true,
+        "camp_stage": true
+      },
+      "baseline_records": 116,
+      "candidate_records": 155,
+      "physical_position": [
+        -0.0342290885746479,
+        0.0,
+        2.1897885799408
+      ],
+      "subject_region_changed_pct_gt6": 0.588,
+      "subject_region_xyxy": [
+        176,
+        270,
+        261,
+        416
+      ]
+    }
+  ],
+  "R4_founding_green": [
+    {
+      "path": "/tmp/havenline-t01-framing/green-baseline-fresh/founding-1x.jpg",
+      "sha256": "53c3a854f23c5943c76dc84f3d8da6e2ec819dacf673c8d6efa4b0551aa278a9",
+      "threshold_results_percent": {
+        "6": {
+          "upper": 62.12,
+          "lower": 1.86
+        },
+        "8": {
+          "upper": 60.48,
+          "lower": 1.73
+        },
+        "10": {
+          "upper": 58.94,
+          "lower": 1.64
+        },
+        "12": {
+          "upper": 57.27,
+          "lower": 1.51
+        },
+        "14": {
+          "upper": 55.6,
+          "lower": 1.37
+        },
+        "16": {
+          "upper": 53.52,
+          "lower": 1.12
+        }
+      }
+    },
+    {
+      "path": "/tmp/havenline-t01-framing/r4-green-fresh/founding-1x.jpg",
+      "sha256": "4eb9a5d0a04e39815d3b428d62ef0132bb74c61743b45a64dba03b9c52d8155c",
+      "threshold_results_percent": {
+        "6": {
+          "upper": 63.6,
+          "lower": 25.43
+        },
+        "8": {
+          "upper": 61.84,
+          "lower": 24.43
+        },
+        "10": {
+          "upper": 60.14,
+          "lower": 23.47
+        },
+        "12": {
+          "upper": 58.36,
+          "lower": 22.48
+        },
+        "14": {
+          "upper": 56.63,
+          "lower": 21.43
+        },
+        "16": {
+          "upper": 54.55,
+          "lower": 20.19
+        }
+      }
+    }
+  ],
+  "R4_paid_paired": [
+    {
+      "base": "baseline-paid",
+      "candidate": "r4-paid",
+      "zoom": 1.0,
+      "same": {
+        "position": true,
+        "boot": true,
+        "camera_basis": true,
+        "zoom": true,
+        "camera_size": true,
+        "camp_stage": true
+      },
+      "baseline_records": 124,
+      "candidate_records": 161,
+      "physical_position": [
+        -12.7172889709473,
+        0.0,
+        12.0757608413696
+      ],
+      "subject_region_changed_pct_gt6": 4.416,
+      "subject_region_xyxy": [
+        186,
+        300,
+        271,
+        446
+      ]
+    },
+    {
+      "base": "baseline-paid",
+      "candidate": "r4-paid",
+      "zoom": 2.0,
+      "same": {
+        "position": true,
+        "boot": true,
+        "camera_basis": true,
+        "zoom": true,
+        "camera_size": true,
+        "camp_stage": true
+      },
+      "baseline_records": 124,
+      "candidate_records": 161,
+      "physical_position": [
+        -12.7172889709473,
+        0.0,
+        12.0757608413696
+      ],
+      "subject_region_changed_pct_gt6": 0.024,
+      "subject_region_xyxy": [
+        176,
+        270,
+        261,
+        416
+      ]
+    }
+  ],
+  "R4_fixed_wedge_posthoc": {
+    "region_xyxy": [
+      330,
+      95,
+      447,
+      141
+    ],
+    "purpose": "Local treatment sizing on the previously identified R3 snow wedge. Same renderer. Not cross-game geometry.",
+    "samples": {
+      "r3-green-fresh": {
+        "blue_proxy_pct": 42.97658862876254,
+        "nearly_white_proxy_pct": 32.01412114455593
+      },
+      "r4-green-fresh": {
+        "blue_proxy_pct": 57.320698625046454,
+        "nearly_white_proxy_pct": 11.83574879227053
+      }
+    }
+  }
+}
