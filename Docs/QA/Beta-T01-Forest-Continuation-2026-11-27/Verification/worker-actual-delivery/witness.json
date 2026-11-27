@@ -1,0 +1,53 @@
+{
+	"checks": {
+		"a normal fallback job selects a formerly excluded groved source": true,
+		"alternate grove streams around worker while player remains in camp": true,
+		"alternate-source wood reaches storage while player stays in camp": true,
+		"normal survivor animation physically delivers three alternate chops": true,
+		"preferred tree is initially present in the fixture": true,
+		"valid rescue fixture is loaded": true
+	},
+	"loss": {
+		"chosen": "grove@-15000,14200",
+		"contact_events": [
+			{
+				"event": "survivor_chop_contact",
+				"t": 2.467,
+				"x": -14.94,
+				"z": 14.15
+			},
+			{
+				"event": "survivor_chop_contact",
+				"t": 4.033,
+				"x": -14.94,
+				"z": 14.15
+			},
+			{
+				"event": "survivor_chop_contact",
+				"t": 5.6,
+				"x": -14.94,
+				"z": 14.15
+			}
+		],
+		"depleted": "survivor-work-pine",
+		"existing_grove_nodes_before_choose": 5,
+		"isolated_worker_seed": "(-14.4, 0.0, 11.2)",
+		"temporarily_deferred": [
+			"starter-wood",
+			"pine@-5000,9300",
+			"pine@-8600,8500",
+			"pine@-8400,12000",
+			"pine@-5400,13500",
+			"pine@-11300,6300",
+			"pine@-10800,10400",
+			"pine@-8900,15000",
+			"pine@-12500,13100",
+			"survivor-work-pine"
+		],
+		"warehouse_after": 6,
+		"warehouse_before": 5,
+		"worker_seed_staged": true
+	},
+	"persistence": true,
+	"viewport": "(64, 64)"
+}

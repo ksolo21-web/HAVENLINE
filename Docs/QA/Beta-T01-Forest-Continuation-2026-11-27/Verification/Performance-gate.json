@@ -1,0 +1,104 @@
+{
+  "critic_id": "C6",
+  "candidate": "412ba65d4f46e3d1cd1c9293776c608e1aebaa39",
+  "passed": false,
+  "errors": [
+    "missing metric visible_triangles",
+    "missing metric materials_visible",
+    "missing metric texture_gpu_memory_mb",
+    "missing metric process_memory_mb",
+    "missing metric physics_active_bodies",
+    "missing metric animated_rigs_active",
+    "missing metric npc_companion_active_population",
+    "missing metric storage_download_mb",
+    "missing metric cpu_frame_ms"
+  ],
+  "measurement": {
+    "candidate_commit": "412ba65d4f46e3d1cd1c9293776c608e1aebaa39",
+    "scene_state": "Native local founding, paid west field and 4K founding",
+    "measurement_method": "Godot force_draw and engine rendering counters on llvmpipe software OpenGL. The total primitives counter includes draw passes. Wall time includes software graphics execution.",
+    "draw_calls": 388,
+    "scenes": {
+      "founding": {
+        "viewport_pixels": [
+          460,
+          760
+        ],
+        "render_scale": 1.0,
+        "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+        "graphics_method": "gl_compatibility",
+        "samples": 9,
+        "peak_render_counters": {
+          "draw_calls": 381,
+          "physics_active_objects": 5.0,
+          "primitives": 417784,
+          "process_static_bytes": 82967940.0,
+          "submit_draw_wall_usec": 2034047,
+          "texture_bytes": 726199750.0,
+          "video_memory_bytes": 829130178.0
+        },
+        "median_submit_draw_wall_ms": 1493.802,
+        "visible_skeleton_nodes": 5,
+        "active_enemy_roster": 2
+      },
+      "paid": {
+        "viewport_pixels": [
+          460,
+          760
+        ],
+        "render_scale": 1.0,
+        "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+        "graphics_method": "gl_compatibility",
+        "samples": 9,
+        "peak_render_counters": {
+          "draw_calls": 354,
+          "physics_active_objects": 2.0,
+          "primitives": 393039,
+          "process_static_bytes": 85551768.0,
+          "submit_draw_wall_usec": 948038,
+          "texture_bytes": 728262412.0,
+          "video_memory_bytes": 834731112.0
+        },
+        "median_submit_draw_wall_ms": 772.374,
+        "visible_skeleton_nodes": 8,
+        "active_enemy_roster": 1
+      },
+      "4k": {
+        "viewport_pixels": [
+          3840,
+          2160
+        ],
+        "render_scale": 1.0,
+        "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+        "graphics_method": "gl_compatibility",
+        "samples": 9,
+        "peak_render_counters": {
+          "draw_calls": 388,
+          "physics_active_objects": 3.0,
+          "primitives": 596711,
+          "process_static_bytes": 93723429.0,
+          "submit_draw_wall_usec": 7551347,
+          "texture_bytes": 1055962992.0,
+          "video_memory_bytes": 1158915132.0
+        },
+        "median_submit_draw_wall_ms": 6591.559,
+        "visible_skeleton_nodes": 5,
+        "active_enemy_roster": 2
+      }
+    },
+    "known_unmeasured_fields": {
+      "cpu_frame_ms": "Isolated CPU frame timing including simulation and graphics submission on target hardware.",
+      "gpu_frame_ms_where_measurable": "No physical GPU or timing query sample in the render sessions.",
+      "visible_triangles": "The engine has a submitted primitive total across passes in this diagnostic.",
+      "materials_visible": "No frame-visible unique material count was captured.",
+      "texture_gpu_memory_mb": "Software allocator texture-byte counter retained separately.",
+      "process_memory_mb": "Godot static allocation counter retained separately.",
+      "physics_active_bodies": "Godot active physics object counter retained separately.",
+      "animated_rigs_active": "Visible skeleton count retained separately.",
+      "npc_companion_active_population": "Active enemy roster retained separately.",
+      "storage_download_mb": "No new packaged candidate available."
+    },
+    "evidence_status": "software diagnostic only"
+  },
+  "note": "Quantitative specialist gate; not T68/T69 certification."
+}

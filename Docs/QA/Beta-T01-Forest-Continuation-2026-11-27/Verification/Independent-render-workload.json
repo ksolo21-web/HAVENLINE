@@ -1,0 +1,225 @@
+{
+  "format": "Havenline T01 captured rendering workload diagnostic",
+  "candidate_commit": "412ba65d4f46e3d1cd1c9293776c608e1aebaa39",
+  "independent_reviewer": "/root/independent",
+  "project_rules_pin": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+  "performance_budgets_sha256": "caacf4c782dacf256766a3c27aafbfd979c92acb7555a05c3012daa75591437a",
+  "performance_transport_sha256": "46da1e5683c874d53716d8f25688b292b557f3aa672c9b237e321d05c76c28e1",
+  "C6": "BLOCKED",
+  "C6_dimension_scores": null,
+  "measurement_method": "Nine native Godot Compatibility force-draw samples per real scene with the continuous rendering loop disabled. Linux Mesa llvmpipe and the original shipped target camera. 3D render scale 1.0. Each sample exposes software renderer workload and engine counters.",
+  "known_unmeasured": {
+    "cpu_frame_ms": "Force-draw elapsed time includes software rendering and synchronous submission, without an isolated CPU frame measurement.",
+    "gpu_frame_ms_where_measurable": "Software OpenGL adapter with no hardware GPU timestamps.",
+    "materials_visible": "No material audit counter captured by these witnesses.",
+    "process_memory_mb": "Godot static allocator count excludes native RSS and driver CPU memory.",
+    "animated_rigs_active": "Visible Skeleton3D nodes do not count active rig updates.",
+    "npc_companion_active_population": "Active enemy nodes alone omit the companion, pet, and customer population.",
+    "storage_download_mb": "Exact Android or distribution-signed packed size delta was not measured.",
+    "physical_presentation_and_fps": "No physical Android frame presentation measured.",
+    "physical_thermal_sustain": "No physical thermal workload was run."
+  },
+  "limitations": [
+    "Force-draw wall milliseconds serve only as software workload diagnostics, not app frame times or FPS.",
+    "The reported texture and video memory counters are engine estimates on the software renderer.",
+    "Entity populations and scene phase can differ across these views. These observations do not establish a matched performance baseline delta.",
+    "Physical-device certification and sustained native 4K/60 remain T68/T69 work."
+  ],
+  "observations": [
+    {
+      "scene": "outside on first paid pad, then post-purchase camp",
+      "receipt": "R19-founding/projections.json",
+      "receipt_sha256": "969d7696c55431957b6bef00a46890709ff43b1de40cee59942578f56c7bef88",
+      "source_files_bound": [
+        "assets/field_world/character_sightline.gdshaderinc",
+        "assets/field_world/resource_sightline.gdshader",
+        "assets/reference_forest/bank_pine_1.glb",
+        "assets/reference_forest/bank_pine_1.glb.import",
+        "assets/reference_forest/bank_pine_2.glb",
+        "assets/reference_forest/bank_pine_2.glb.import",
+        "assets/reference_forest/bank_pine_3.glb",
+        "assets/reference_forest/bank_pine_3.glb.import",
+        "field_environment.gd",
+        "field_forest.gd",
+        "field_opening.gd",
+        "field_resource_sightline.gd",
+        "field_thumbstick.gd"
+      ],
+      "viewport_px": [
+        460,
+        760
+      ],
+      "render_scale": 1.0,
+      "renderer_method": "gl_compatibility",
+      "renderer_adapter": "llvmpipe (LLVM 19.1.7, 256 bits)",
+      "samples": 9,
+      "draw_calls": {
+        "min": 381,
+        "median": 381,
+        "max": 381
+      },
+      "submitted_primitives": {
+        "min": 417784,
+        "median": 417784,
+        "max": 417784
+      },
+      "engine_texture_counter_mib": {
+        "min": 692.558,
+        "median": 692.558,
+        "max": 692.558
+      },
+      "engine_video_memory_counter_mib": {
+        "min": 790.72,
+        "median": 790.72,
+        "max": 790.72
+      },
+      "engine_static_allocator_mib": {
+        "min": 79.092,
+        "median": 79.097,
+        "max": 79.124
+      },
+      "physics_active_objects": {
+        "min": 4.0,
+        "median": 5.0,
+        "max": 5.0
+      },
+      "visible_skeleton_nodes": 5,
+      "active_enemy_nodes": 2,
+      "software_force_draw_host_wall_ms": {
+        "min": 1453.572,
+        "median": 1493.802,
+        "max": 2034.047
+      }
+    },
+    {
+      "scene": "paid west grove after actual held input and harvesting",
+      "receipt": "R19-paid/projections.json",
+      "receipt_sha256": "aba79ca4495f243010c0901b2c8b4202cb4e8c547d42a312f55bcd46c66d91a5",
+      "source_files_bound": [
+        "assets/field_world/character_sightline.gdshaderinc",
+        "assets/field_world/resource_sightline.gdshader",
+        "assets/reference_forest/bank_pine_1.glb",
+        "assets/reference_forest/bank_pine_1.glb.import",
+        "assets/reference_forest/bank_pine_2.glb",
+        "assets/reference_forest/bank_pine_2.glb.import",
+        "assets/reference_forest/bank_pine_3.glb",
+        "assets/reference_forest/bank_pine_3.glb.import",
+        "field_environment.gd",
+        "field_forest.gd",
+        "field_opening.gd",
+        "field_resource_sightline.gd",
+        "field_thumbstick.gd"
+      ],
+      "viewport_px": [
+        460,
+        760
+      ],
+      "render_scale": 1.0,
+      "renderer_method": "gl_compatibility",
+      "renderer_adapter": "llvmpipe (LLVM 19.1.7, 256 bits)",
+      "samples": 9,
+      "draw_calls": {
+        "min": 347,
+        "median": 347,
+        "max": 354
+      },
+      "submitted_primitives": {
+        "min": 392759,
+        "median": 392759,
+        "max": 393039
+      },
+      "engine_texture_counter_mib": {
+        "min": 694.525,
+        "median": 694.525,
+        "max": 694.525
+      },
+      "engine_video_memory_counter_mib": {
+        "min": 796.062,
+        "median": 796.062,
+        "max": 796.062
+      },
+      "engine_static_allocator_mib": {
+        "min": 81.497,
+        "median": 81.5,
+        "max": 81.589
+      },
+      "physics_active_objects": {
+        "min": 2.0,
+        "median": 2.0,
+        "max": 2.0
+      },
+      "visible_skeleton_nodes": 8,
+      "active_enemy_nodes": 1,
+      "software_force_draw_host_wall_ms": {
+        "min": 754.584,
+        "median": 772.374,
+        "max": 948.038
+      }
+    },
+    {
+      "scene": "landscape founding prepay",
+      "receipt": "R19-4k/projections.json",
+      "receipt_sha256": "ba733179e2cf1feb1e703a10b1c927b9dc0a745de34ac533b4b7237fd622ca64",
+      "source_files_bound": [
+        "assets/field_world/character_sightline.gdshaderinc",
+        "assets/field_world/resource_sightline.gdshader",
+        "assets/reference_forest/bank_pine_1.glb",
+        "assets/reference_forest/bank_pine_1.glb.import",
+        "assets/reference_forest/bank_pine_2.glb",
+        "assets/reference_forest/bank_pine_2.glb.import",
+        "assets/reference_forest/bank_pine_3.glb",
+        "assets/reference_forest/bank_pine_3.glb.import",
+        "field_environment.gd",
+        "field_forest.gd",
+        "field_opening.gd",
+        "field_resource_sightline.gd",
+        "field_thumbstick.gd"
+      ],
+      "viewport_px": [
+        3840,
+        2160
+      ],
+      "render_scale": 1.0,
+      "renderer_method": "gl_compatibility",
+      "renderer_adapter": "llvmpipe (LLVM 19.1.7, 256 bits)",
+      "samples": 9,
+      "draw_calls": {
+        "min": 378,
+        "median": 388,
+        "max": 388
+      },
+      "submitted_primitives": {
+        "min": 579395,
+        "median": 596707,
+        "max": 596711
+      },
+      "engine_texture_counter_mib": {
+        "min": 1005.878,
+        "median": 1007.045,
+        "max": 1007.045
+      },
+      "engine_video_memory_counter_mib": {
+        "min": 1104.06,
+        "median": 1105.228,
+        "max": 1105.228
+      },
+      "engine_static_allocator_mib": {
+        "min": 88.316,
+        "median": 89.362,
+        "max": 89.382
+      },
+      "physics_active_objects": {
+        "min": 2.0,
+        "median": 2.0,
+        "max": 3.0
+      },
+      "visible_skeleton_nodes": 5,
+      "active_enemy_nodes": 2,
+      "software_force_draw_host_wall_ms": {
+        "min": 6221.818,
+        "median": 6591.559,
+        "max": 7551.347
+      }
+    }
+  ]
+}

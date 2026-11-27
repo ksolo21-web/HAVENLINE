@@ -1,0 +1,225 @@
+{
+  "task_id": "T01",
+  "critic_id": "C2",
+  "candidate_hash": "412ba65d4f46e3d1cd1c9293776c608e1aebaa39",
+  "input_manifest_hash": "48137e90fc97a322e91fe4faf85230b7962037b3ab305fd653361641f103d438",
+  "complete_evidence_index_sha256": "82879bca841de871fae7bc0f614003fc8d1e1f64ef7c192c16a8ea1081e50156",
+  "reference_acceptance": {
+    "policy_id": "havenline-reference-acceptance-2026-11-27",
+    "policy_sha256": "c34c0cbe5b6d473be40ee5f0f0e08aab8f6ff42f97cfe2e7c93b2694e4dbaf43",
+    "phase": "final",
+    "scores_unrounded": true,
+    "score_averaging_used": false
+  },
+  "reference_sensitive_dimensions": [],
+  "scores": {
+    "geometry_contact": 10,
+    "clipping_seams": 10,
+    "intentional_gap_integrity": 10,
+    "cross_view_integrity": 10
+  },
+  "defects": [],
+  "passed": true,
+  "status": "PASS",
+  "approval_allowed": true,
+  "coverage_complete": true,
+  "confidence": "high",
+  "independent_runtime": true,
+  "reviewed_evidence": [
+    {
+      "path": "Docs/QA/Beta-T01-Forest-Continuation-2026-11-27/Reference/B-006.00.png",
+      "sha256": "fd59dfe77a27d0e690954e473f680b62e7ee5c496dcd0e6fab3cacb1692b16ea",
+      "kind": "image",
+      "category": "primary_reference",
+      "description": "Original locked B06 frame and gameplay area.",
+      "role": "reference",
+      "reference_id": "B"
+    },
+    {
+      "path": "Docs/QA/Beta-T01-Forest-Continuation-2026-11-27/Reference/Locked-A5-B2-forest.webp",
+      "sha256": "25b0e78c93f13ddadb8b815e7e19daf68485471d2be3fed0dd99bde8d00c48af",
+      "kind": "image",
+      "category": "reference_detail",
+      "description": "Original A5 pine crop and B2 bank crop with adjacent provenance.",
+      "role": "reference",
+      "reference_id": "A"
+    },
+    {
+      "path": "Docs/QA/Beta-T01-Forest-Continuation-2026-11-27/Reference/B-camp-purchase.mp4",
+      "sha256": "140eedc57630289a93ebb6d18187802ac5c64ec206e2efee15d3f02116ebc760",
+      "kind": "video",
+      "category": "reference_transition",
+      "description": "Locked B at 5.40\u20136.60 s. Actual source sample rate 10 fps.",
+      "role": "reference",
+      "reference_id": "B"
+    },
+    {
+      "path": "Docs/QA/Beta-T01-Forest-Continuation-2026-11-27/Capture/founding/founding-1x.jpg",
+      "sha256": "0387da433946b5f30f84af5e0d60865896dea8b914d0db47af27095d2bd5ff9f",
+      "kind": "image",
+      "category": "gameplay",
+      "description": "Actual green pad with 19 of 20 paid.",
+      "role": "candidate",
+      "camera": "founding-1x"
+    },
+    {
+      "path": "Docs/QA/Beta-T01-Forest-Continuation-2026-11-27/Capture/founding/founding-2x.jpg",
+      "sha256": "0ec70d59aae9ba25c52ef0ef681823e00904d336cb98077867b730ad1f24d500",
+      "kind": "image",
+      "category": "canopy_detail",
+      "description": "Native pinch around the same planting and actor.",
+      "role": "candidate",
+      "camera": "founding-pinch-2x"
+    },
+    {
+      "path": "Docs/QA/Beta-T01-Forest-Continuation-2026-11-27/Capture/founding/built-1x.jpg",
+      "sha256": "a675874d08ea2326cc52543aac056b248362fcf1fc307ad4e188fd606d33cc50",
+      "kind": "image",
+      "category": "transition",
+      "description": "First camp reveal with off-site foliage.",
+      "role": "candidate",
+      "camera": "first-purchase-1x"
+    },
+    {
+      "path": "Docs/QA/Beta-T01-Forest-Continuation-2026-11-27/Capture/4k/founding-1x.jpg",
+      "sha256": "daa9f004d201d431d14aff858991c5c744d380e49a800dcf022a15a1b43b4c97",
+      "kind": "image",
+      "category": "cross_view",
+      "description": "3840 \u00d7 2160 at scale 1.0 on the software renderer.",
+      "role": "candidate",
+      "camera": "landscape-4k"
+    },
+    {
+      "path": "Docs/QA/Beta-T01-Forest-Continuation-2026-11-27/Capture/paid/west-1x.jpg",
+      "sha256": "6135bb9e474c5ba774ebe045e8a9bd34767df6659ce417b5508f65831639ba0c",
+      "kind": "image",
+      "category": "gameplay",
+      "description": "West field after five touch waypoints.",
+      "role": "candidate",
+      "camera": "paid-west-1x"
+    },
+    {
+      "path": "Docs/QA/Beta-T01-Forest-Continuation-2026-11-27/Capture/paid/west-2x.jpg",
+      "sha256": "eaa2b71453f32317d253789560bad374f43f1a80e452b284c06394d61d54d2d4",
+      "kind": "image",
+      "category": "canopy_detail",
+      "description": "True pinch at the same paid west stance.",
+      "role": "candidate",
+      "camera": "paid-west-pinch-2x"
+    },
+    {
+      "path": "Docs/QA/Beta-T01-Forest-Continuation-2026-11-27/Capture/paid/orbit-000.jpg",
+      "sha256": "533835273c03babacd17b519e92ca3d3a2522465a040cebddee1bec67965c15d",
+      "kind": "image",
+      "category": "cutaway_contact",
+      "description": "Initial orbit and actual boot support.",
+      "role": "candidate",
+      "camera": "paid-west-pinch-2x"
+    },
+    {
+      "path": "Docs/QA/Beta-T01-Forest-Continuation-2026-11-27/Capture/paid/orbit-048.jpg",
+      "sha256": "5867c664bf594938083e946058efc594fba9331f08f3caf986973d4dc1bf3817",
+      "kind": "image",
+      "category": "cutaway_contact",
+      "description": "Crown overlap at a later released-stick orbit sector.",
+      "role": "candidate",
+      "camera": "paid-west-pinch-2x"
+    },
+    {
+      "path": "Docs/QA/Beta-T01-Forest-Continuation-2026-11-27/Capture/paid/touch-1.jpg",
+      "sha256": "40a5af53020fce8487f1fb83866e44553faa299824f99eb5fc7896a0bdda844b",
+      "kind": "image",
+      "category": "touch_control",
+      "description": "Visible held reverse input after its planted pivot.",
+      "role": "candidate",
+      "camera": "paid-west-reverse-2x"
+    },
+    {
+      "path": "Docs/QA/Beta-T01-Forest-Continuation-2026-11-27/Capture/paid/Sampled-orbit.mp4",
+      "sha256": "2f084b54a929f275015ad6fb20c842842c5dde913c3ab989aed78ad8ce28d82c",
+      "kind": "video",
+      "category": "orbit_sample",
+      "description": "Twenty native samples across the full orbit sectors. Sampling cadence 8 physics ticks.",
+      "role": "candidate",
+      "camera": "paid-west-pinch-2x"
+    },
+    {
+      "path": "Docs/QA/Beta-T01-Forest-Continuation-2026-11-27/Capture/worker/worker-to_tree-1x.jpg",
+      "sha256": "8232e465cf995edb01e6f17e9d3d90947896b091d9c228741d4f931b169b5ac7",
+      "kind": "image",
+      "category": "sightline",
+      "description": "Native player view of a staged worker approach.",
+      "role": "candidate",
+      "camera": "worker-approach-1x"
+    },
+    {
+      "path": "Docs/QA/Beta-T01-Forest-Continuation-2026-11-27/Capture/worker/worker-chopping-2x.jpg",
+      "sha256": "bfa5c78bda5ed8bf470a877f57aa453f774cb11ef24180ee57ed2fa5974d1b08",
+      "kind": "image",
+      "category": "sightline",
+      "description": "Native player view of a staged worker chopping, using game motion.",
+      "role": "candidate",
+      "camera": "worker-chop-2x"
+    },
+    {
+      "path": "Docs/QA/Beta-T01-Forest-Continuation-2026-11-27/Capture/founding/projections.json",
+      "sha256": "969d7696c55431957b6bef00a46890709ff43b1de40cee59942578f56c7bef88",
+      "kind": "json",
+      "category": "camera_binding",
+      "description": "Exact founding/purchase positions, dimensions, forest roots and engine observations."
+    },
+    {
+      "path": "Docs/QA/Beta-T01-Forest-Continuation-2026-11-27/Capture/paid/projections.json",
+      "sha256": "aba79ca4495f243010c0901b2c8b4202cb4e8c547d42a312f55bcd46c66d91a5",
+      "kind": "json",
+      "category": "camera_binding",
+      "description": "Actual multi-turn and interactive touch records and positions."
+    },
+    {
+      "path": "Docs/QA/Beta-T01-Forest-Continuation-2026-11-27/Capture/worker/witness.json",
+      "sha256": "00115a8569a81410cacafb69c445cc6fcce1f794aed1033c089f01192db04433",
+      "kind": "json",
+      "category": "worker_evidence",
+      "description": "Fixture receipt for moving and chopping worker positions."
+    },
+    {
+      "path": "Docs/QA/Beta-T01-Forest-Continuation-2026-11-27/Verification/Routes.json",
+      "sha256": "cb7a1523862f9fea7c45275cc0954318626ebb36149e4d349800376d997b1761",
+      "kind": "json",
+      "category": "traversal",
+      "description": "24 waypoints and five-second recovery."
+    },
+    {
+      "path": "Docs/QA/Beta-T01-Forest-Continuation-2026-11-27/Verification/regression/qa_forest_perimeter_safety.gd.log",
+      "sha256": "dd263dce4c8577fc1eb0bc7abd69dce5ef23c746f3ce29bcef4cab7845759558",
+      "kind": "text",
+      "category": "perimeter",
+      "description": "Three camp-stage fence and vegetation clearance proof."
+    },
+    {
+      "path": "Docs/QA/Beta-T01-Forest-Continuation-2026-11-27/Verification/save/read.log",
+      "sha256": "b41ddb89b57da81fd0aa5a29c59fa02e45ac016372d22586f45a15a6835784f6",
+      "kind": "text",
+      "category": "save_migration",
+      "description": "Moved source lookup, notch restoration and renewal."
+    }
+  ],
+  "pixel_review_complete": true,
+  "coverage_notes": [
+    "All 21 immutable items verified against their frozen files and inspected in packet order grouped by scenes.",
+    "The locked B recording sequence contains 13 actual crop samples. The paid orbit is a 20-sample render sequence at eight physics ticks between samples.",
+    "Worker sightline images use staged representative positions with the gameplay camera. Actual autonomous dispatch, alternate-source harvest, and deposit have separate runtime witnesses.",
+    "The same camera, source and stance at 1\u00d7 and true 2\u00d7 preserve readable soles and bark. The previously isolated +80 aperture stripe is resolved. The farther tree retains normal faceted branch underside geometry without new gaps.",
+    "This critic-specific record does not confer T01 closure or physical-device certification."
+  ],
+  "provider": "OpenAI",
+  "model": "GPT-6-based Codex",
+  "request_or_run_id": "/root/independent",
+  "format": "havenline-external-independent-review-v1",
+  "input_manifest_path": "Docs/QA/Beta-T01-Forest-Continuation-2026-11-27/Review/C2-input.json",
+  "review_transport": {
+    "kind": "external_independent_review_v1",
+    "session_path": "Docs/QA/Beta-T01-Forest-Continuation-2026-11-27/Review/C2-independent-session.json",
+    "session_sha256": "66158852d3c4f1696283c1598e57603d99bc0ece826773362738700212dee3cd"
+  }
+}
