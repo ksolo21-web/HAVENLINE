@@ -1,0 +1,30 @@
+{
+  "reviewer": "/root/ui_critic",
+  "scope": "Independent visual critique of three proposed static Havenline UI screens",
+  "status": "AWAITING_ACTUAL_OUTPUTS",
+  "score": 0,
+  "score_rule": "A selected screen must score at least 9.5/10, with every mandatory check passed; target 9.9. No score is approval without inspected evidence.",
+  "required_evidence": [
+    "Exact unmodified generated screen and its identity/hash",
+    "Full native view",
+    "Inspection copy at representative phone width, with effective content width recorded",
+    "Native crops of any disputed detail or observed defect",
+    "Cross-screen comparison after individual reviews"
+  ],
+  "mandatory_checks": [
+    {"id":"U01","check":"Readable copy, numbers, labels and names; no pseudo-text, duplicated or malformed glyphs"},
+    {"id":"U02","check":"Deliberate typography, spacing and alignment hierarchy rather than arbitrary decoration"},
+    {"id":"U03","check":"No material collisions, cropped controls, accidental overlap or edge/safe-area crowding"},
+    {"id":"U04","check":"Primary player action and current screen/state are understandable from the composition"},
+    {"id":"U05","check":"Meaningful, visually consistent icons; navigation and selected states are distinguishable"},
+    {"id":"U06","check":"Text and controls remain legible over their actual backgrounds at phone-scale inspection"},
+    {"id":"U07","check":"Havenline's approved rounded winter art and character/building identity are retained where referenced"},
+    {"id":"U08","check":"Displayed values, resource identities and proposed UI states do not contradict each other"},
+    {"id":"U09","check":"Three ideas/screens have distinct useful purposes and intentional visual treatment; no false claim of three alternative design systems"},
+    {"id":"U10","check":"Any camp scene preserves small camp intent, central furnace, two distinct usable openings and snow outside the camp"},
+    {"id":"U11","check":"All inspection evidence is tied to the exact reviewed output; repair history is preserved"},
+    {"id":"U12","check":"Claims remain bounded to static concepts; sample values are not presented as approved game balance and no runtime/touch/animation testing is invented"}
+  ],
+  "review_method": "Inspect outputs first, identify concrete visible problems, request narrow changes only where useful, then inspect the actual repaired image. Avoid speculative implementation gates for a static-art request.",
+  "scope_limit": "No native game integration, device usability study, real touch hit-area measurement, animation cycle or live game-state validation is implied by a static mockup review."
+}

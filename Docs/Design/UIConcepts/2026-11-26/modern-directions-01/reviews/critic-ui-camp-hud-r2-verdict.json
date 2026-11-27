@@ -1,0 +1,70 @@
+{
+  "reviewer": "Independent critic /root/ui_critic",
+  "review_id": "critic-ui-camp-hud-r2",
+  "requirements_sha256": "e1ec45323f961fa423cfd178da024370bc74ff93d533acdb58da24f7b5104eb5",
+  "input_index_sha256": "4bfc686ce438b410a3d98ed518ebc5e7a406f030f0aabbf83f0833aa706c47a0",
+  "image": {
+    "path": "renders/ui-camp-hud-r2.png",
+    "sha256": "1e8da0ac20132462efa49af4b534dd80d3b7b42500eb039debb670def5ee1ab0",
+    "bytes": 2149302,
+    "dimensions": [
+      1672,
+      941
+    ]
+  },
+  "invocation_prompt_sha256": "0d50f5cde7da29b460a47ebe932f59a0b6df299e0514b39cc1ae3eabe7bf76bb",
+  "actual_ordered_input_sha256": [
+    "768b42f94d00af886398be4e45c22c1d9270c57d0af83a738c422dc87708438c"
+  ],
+  "status": "PASS",
+  "score": 9.5,
+  "all_applicable_individual_mandatory_checks_passed": true,
+  "repair_of": "ui-camp-hud-r1",
+  "retained_prior_verdict": "reviews/critic-ui-camp-hud-r1-verdict.json",
+  "mandatory_defects": [],
+  "passed_checks": [
+    "Flat matte panels, restrained edge/shadow treatment, a slim selected underline and flat cut-corner Build button resolve CAMP-STYLE-01.",
+    "The red sealed fuel-can pictogram now identifies fuel reserves and matches the storage concept.",
+    "All requested text and counts remain clear at native resolution and800px landscape width.",
+    "One joystick, one contextual Build action and three management navigation items remain distinct; no attack-button clutter.",
+    "Two distinct opposite open gate passages, central furnace footing, approved small Character1, storage house and substantial fence remain recognizable.",
+    "Muted gray camp floor stays within the camp; surrounding snow shows no painted external road.",
+    "No material clipping, overlapping type/controls or loss of world readability found."
+  ],
+  "inspection": "Actual full native image and800x450 aspect-preserving landscape-phone-size copy, plus targeted native repair details.",
+  "evidence": [
+    {
+      "path": "reviews/critic-ui-camp-hud-r2-phone800.png",
+      "sha256": "e6bc03fc57205fd0266627e6257d831a46019b7b279ced10d9080ea830c2f496",
+      "dimensions": [
+        800,
+        450
+      ],
+      "kind": "Aspect-preserving landscape-phone-size inspection copy; not a device screenshot or touch test"
+    },
+    {
+      "path": "reviews/critic-ui-camp-hud-r2-chrome-native.png",
+      "sha256": "54239fa5b2de39f6f9e23357aa28e7bb1eee7df3a69a69814786c34fe281ebf9",
+      "bounds": [
+        395,
+        806,
+        1667,
+        937
+      ],
+      "kind": "Native-resolution evidence crop from the inspected original"
+    },
+    {
+      "path": "reviews/critic-ui-camp-hud-r2-fuel-native.png",
+      "sha256": "b28a345a3ed7236ce3076b6ba077ee43360e93dfbc045c9e2a149533fc876d28",
+      "bounds": [
+        1070,
+        10,
+        1265,
+        105
+      ],
+      "kind": "Native-resolution evidence crop from the inspected original"
+    }
+  ],
+  "approval_scope": "Static proposed UI only; no live gameplay, device usability, touch-target behavior, numerical balance or native implementation approval.",
+  "freeze_rule": "Immutable exact-version record; reopen only for a new actual defect or changed output."
+}

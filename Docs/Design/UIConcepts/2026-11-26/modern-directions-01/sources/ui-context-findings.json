@@ -1,0 +1,190 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/ui_references",
+  "scope": "Bounded read-only UI context audit for new static Havenline UI ideas; no runtime audit or modification",
+  "baseline_commit": "30f4f037baf54b24652360c8b6880771e29cc19a",
+  "baseline_tree": "36334ebfcd312188110f851ba91710f3aabcb448",
+  "fresh_tree_untruncated": true,
+  "baseline_files": 4569,
+  "source_documents": [
+    {
+      "path": "HavenlineLevel1/docs/COMPACT_HUD_VERIFICATION.md",
+      "source_commit": "30f4f037baf54b24652360c8b6880771e29cc19a",
+      "git_blob_sha": "231646ace08ba5f0893849222fbf02e31c6b6259",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/30f4f037baf54b24652360c8b6880771e29cc19a/HavenlineLevel1/docs/COMPACT_HUD_VERIFICATION.md",
+      "read_complete": true
+    },
+    {
+      "path": "HavenlineLevel1/docs/ONE_CAMP_DESIGN.md",
+      "source_commit": "30f4f037baf54b24652360c8b6880771e29cc19a",
+      "git_blob_sha": "746057360e8778bcf1ccece2b54eecce4a0cf020",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/30f4f037baf54b24652360c8b6880771e29cc19a/HavenlineLevel1/docs/ONE_CAMP_DESIGN.md",
+      "read_complete": true
+    },
+    {
+      "path": "HavenlineLevel1/project.godot",
+      "source_commit": "30f4f037baf54b24652360c8b6880771e29cc19a",
+      "git_blob_sha": "8f6b327bfff760c44c3223a1aa79234f644abdd4",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/30f4f037baf54b24652360c8b6880771e29cc19a/HavenlineLevel1/project.godot",
+      "read_complete": true
+    },
+    {
+      "path": "HavenlineLevel1/tests/test_hud_414_approved_labels.gd",
+      "source_commit": "30f4f037baf54b24652360c8b6880771e29cc19a",
+      "git_blob_sha": "55c4c2a34751f98aff44d0a46e46f43bb078c4bd",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/30f4f037baf54b24652360c8b6880771e29cc19a/HavenlineLevel1/tests/test_hud_414_approved_labels.gd",
+      "read_complete": true
+    },
+    {
+      "path": "HavenlineLevel1/opening_hud.gd",
+      "source_commit": "30f4f037baf54b24652360c8b6880771e29cc19a",
+      "git_blob_sha": "0f6048bad53eba7f43f495063be9ea927fce1183",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/30f4f037baf54b24652360c8b6880771e29cc19a/HavenlineLevel1/opening_hud.gd",
+      "read_complete": true
+    },
+    {
+      "path": "HavenlineGodot/project.godot",
+      "source_commit": "30f4f037baf54b24652360c8b6880771e29cc19a",
+      "git_blob_sha": "8de647a8082bb61d8cdfae5a02949aed50209d1f",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/30f4f037baf54b24652360c8b6880771e29cc19a/HavenlineGodot/project.godot",
+      "read_complete": true
+    },
+    {
+      "path": "HavenlineLevel1/previews/compact_opening_hud.gd",
+      "source_commit": "30f4f037baf54b24652360c8b6880771e29cc19a",
+      "git_blob_sha": "c20a20fe2162a64ff350e1c0b6ebe88516385122",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/30f4f037baf54b24652360c8b6880771e29cc19a/HavenlineLevel1/previews/compact_opening_hud.gd",
+      "read_complete": true
+    }
+  ],
+  "findings": {
+    "orientation": {
+      "evidence": "The native HavenlineGodot/project.godot uses a 1920x1080 viewport and1280x720 window override; the separate Level1 project uses1280x720. A narrow414x896 reflow appears in a label test, but is not proof of an approved portrait-first visual system.",
+      "decision": "Root chose landscape for these three concept explorations based on the native project. No further orientation research was requested.",
+      "boundary": "This is the immutable cumulative art baseline's source configuration, not a fresh audit of concurrent Codex runtime work."
+    },
+    "hud": {
+      "evidence": "COMPACT_HUD_VERIFICATION records a smaller objective panel and stable bottom-right action targets. The actual compact_opening_hud source keeps the center clear, reserves both action slots even when one is hidden and uses a compact upper-left status/objective panel.",
+      "reusable_intent": [
+        "Leave the playable center and character unobscured",
+        "Reserve stable positions for touch actions",
+        "Use one primary objective with concise status",
+        "Keep touch actions legible without keyboard-only suffixes"
+      ],
+      "boundary": "The document explicitly distinguishes functional/logical checks and desktop smoke from actual device/frame-time proof; overall game visuals remained unapproved at that documented checkpoint. No tests were executed for this audit."
+    },
+    "terminology": {
+      "observed": [
+        "HAVENLINE",
+        "Wood",
+        "gate",
+        "tree",
+        "stock",
+        "objective",
+        "camp",
+        "furnace"
+      ],
+      "new_design_labels": [
+        "Camp",
+        "Storage",
+        "Survivors",
+        "Upgrade",
+        "Loadout",
+        "Assign"
+      ],
+      "boundary": "The new design labels are proposed navigation wording. No approved storage-management or survivor-profile screen design, canonical character personal name, final rarity system, upgrade costs or survivor stat values was found in the targeted seven source files."
+    },
+    "camp": {
+      "evidence": "ONE_CAMP_DESIGN preserves a centered furnace and two gate routes, with no external painted lane. Its approved direction is explicitly distinct from exact coordinate/runtime approval.",
+      "reference_scene": "No suitable approved camp-overview screenshot was identified among the targeted local files. The baseline contains an older environment capture at Docs/Art/EnvironmentReview/captures/outpost-furnace-detail/native-scene.png, but it was not downloaded or inspected here and is not recommended as approved current camp evidence.",
+      "recommendation": "Create a clearly new illustrative camp composition from the verified component references; do not call it a live game screenshot or measured camp layout."
+    },
+    "data_values": {
+      "recommendation": "Any UI inventory totals, capacity, costs, timers, levels or character stats are illustrative concept data unless separately source-backed. Explain that in the concept notes/caption rather than exposing implementation caveats inside the player UI.",
+      "resource_boundary": "The recent storage-house mapping covers33 resource-art concepts across11 groups and6 storage zones. It is not evidence that every drop/recipe is implemented."
+    },
+    "input_model": {
+      "parent_context": "Root supplied personal-context direction to preserve one joystick with automatic gathering/attacking. This audit did not independently validate that behavior against the concurrent runtime.",
+      "recommendation": "Do not invent a second joystick or require dense manual skill-button clusters without a clear concept decision."
+    }
+  },
+  "verified_reference_images": [
+    {
+      "id": "character1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-character1-18617-2026-11-26/renders/character-1-cardinal-r2.png",
+      "repository_path": "Docs/Design/CharacterTurnarounds/2026-11-26/character-1-design-18617/selected/character-1-cardinal.png",
+      "bytes": 1826207,
+      "sha256": "9423a17e8143e0278205704c6888a00d68a40e3bb5c9d33d4f1b56f7bec15195",
+      "git_blob_sha": "cff669a48d58e286016088546cd8bd27085f8a26",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "pixel_inspected_by_this_agent": false,
+      "source_commit": "30f4f037baf54b24652360c8b6880771e29cc19a",
+      "immutable_url": "https://github.com/ksolo21-web/HAVENLINE/blob/30f4f037baf54b24652360c8b6880771e29cc19a/Docs/Design/CharacterTurnarounds/2026-11-26/character-1-design-18617/selected/character-1-cardinal.png"
+    },
+    {
+      "id": "storage-advanced",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-storage-house-2026-11-26/renders/storage-house-advanced-r1.png",
+      "repository_path": "Docs/Design/StructureReferences/2026-11-26/upgradeable-storage-house/selected/storage-house-advanced.png",
+      "bytes": 1947600,
+      "sha256": "bbcd88237359ac2d3a9f63ad3f422ceafdca1f8342c16e0c57cd5e99e4e8975b",
+      "git_blob_sha": "7a7d7c915aac8863bbe0e3c41e46764e369b14a1",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "pixel_inspected_by_this_agent": false,
+      "source_commit": "30f4f037baf54b24652360c8b6880771e29cc19a",
+      "immutable_url": "https://github.com/ksolo21-web/HAVENLINE/blob/30f4f037baf54b24652360c8b6880771e29cc19a/Docs/Design/StructureReferences/2026-11-26/upgradeable-storage-house/selected/storage-house-advanced.png"
+    },
+    {
+      "id": "storage-organization",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-storage-house-2026-11-26/renders/storage-house-organization-r2.png",
+      "repository_path": "Docs/Design/StructureReferences/2026-11-26/upgradeable-storage-house/selected/storage-house-organization.png",
+      "bytes": 2232066,
+      "sha256": "4f8df6ae1cf0c66eb2de1478a72c21db96bcf295dec17d072c3371e1737097c6",
+      "git_blob_sha": "82a15b0fc6d1342b56986aa567b397edd4c7764e",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "pixel_inspected_by_this_agent": false,
+      "source_commit": "30f4f037baf54b24652360c8b6880771e29cc19a",
+      "immutable_url": "https://github.com/ksolo21-web/HAVENLINE/blob/30f4f037baf54b24652360c8b6880771e29cc19a/Docs/Design/StructureReferences/2026-11-26/upgradeable-storage-house/selected/storage-house-organization.png"
+    },
+    {
+      "id": "fence",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-structures-2026-11-25/renders/fence-oblique-r2.png",
+      "repository_path": "Docs/Design/StructureReferences/2026-11-25/selected/fence-oblique.png",
+      "bytes": 1777860,
+      "sha256": "5cc7bb7ddf05ca053828b2c9202992a5fc4b104ca39f433454d56251d7e9641c",
+      "git_blob_sha": "2435b605089a027668497722eea8b5175aa93930",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "pixel_inspected_by_this_agent": false,
+      "source_commit": "30f4f037baf54b24652360c8b6880771e29cc19a",
+      "immutable_url": "https://github.com/ksolo21-web/HAVENLINE/blob/30f4f037baf54b24652360c8b6880771e29cc19a/Docs/Design/StructureReferences/2026-11-25/selected/fence-oblique.png"
+    },
+    {
+      "id": "furnace",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/references/furnace_level_01.png",
+      "repository_path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/furnace_level_01.png",
+      "bytes": 1727109,
+      "sha256": "e5b7f1f87fd668b435619c1c260e3bcdebfa0d21ad2978c08445205669addca5",
+      "git_blob_sha": "6021a356712b04d1d2885b008ee95ddfa26db2a8",
+      "dimensions": [
+        1672,
+        941
+      ],
+      "pixel_inspected_by_this_agent": false,
+      "source_commit": "30f4f037baf54b24652360c8b6880771e29cc19a",
+      "immutable_url": "https://github.com/ksolo21-web/HAVENLINE/blob/30f4f037baf54b24652360c8b6880771e29cc19a/Docs/Design/RenderArchive/2026-11-23/selected/equipment/furnace_level_01.png"
+    }
+  ],
+  "reference_input_boundary": "These are located and byte-bound candidate references. This agent did not inspect their pixels or supply them to imagegen. Root must inspect and record only the images it actually uses; this report does not silently add generation inputs.",
+  "remaining_research_required": false
+}

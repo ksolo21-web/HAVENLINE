@@ -1,0 +1,73 @@
+{
+  "reviewer": "Independent critic /root/ui_critic",
+  "requirements_sha256": "e1ec45323f961fa423cfd178da024370bc74ff93d533acdb58da24f7b5104eb5",
+  "input_index_sha256": "4bfc686ce438b410a3d98ed518ebc5e7a406f030f0aabbf83f0833aa706c47a0",
+  "inspection": "Actual full native1672x941 image, aspect-preserving800x450 landscape-phone-size copy, and bound native detail crops inspected.",
+  "approval_scope": "Static illustrative UI concept only. Sample quantities/stats/costs/roles are proposals; no live gameplay, touch behavior, accessibility measurement, performance or implementation approval.",
+  "freeze_rule": "Immutable exact-version record. Repairs require a new output ID and retest.",
+  "set_approval": "Pending accepted replacements for camp/storage and a final cross-screen review.",
+  "review_id": "critic-ui-survivor-r1",
+  "image": {
+    "path": "renders/ui-survivor-r1.png",
+    "sha256": "a699d125481a1c6c237ab98136df156e9b69b18dae2e99c1f002d5c23d0d1b19",
+    "bytes": 1767330,
+    "dimensions": [
+      1672,
+      941
+    ]
+  },
+  "invocation_prompt_sha256": "5b9da83d921eb15e1e5998f5affa7425863f31a5e521c020dc1c06dff0c03064",
+  "actual_ordered_input_sha256": [
+    "9423a17e8143e0278205704c6888a00d68a40e3bb5c9d33d4f1b56f7bec15195"
+  ],
+  "status": "PASS",
+  "score": 9.7,
+  "all_applicable_individual_mandatory_checks_passed": true,
+  "mandatory_defects": [],
+  "passed_checks": [
+    "Modern sans hierarchy, intentional dark/light composition and large character hero create a substantially stronger crafted direction than the rejected first two screens.",
+    "All requested copy remains readable in the native and800px landscape inspection.",
+    "Current compact Character1 identity is retained: hair, beard, black-front/white-arm glasses, blue-orange coat, brown belt/right-hip pouch and boots.",
+    "Character is in a natural relaxed stance; complete head, hands and boots are framed and grounded. No obvious visible hand/anatomy artifact in the native crop.",
+    "Health is100/100 with a full bar; stamina86/100 is depicted by an approximatelymatching partial bar; Morale is Ready.",
+    "Gathering is the sole selected assignment and primary action repeats that selected target.",
+    "Navigation, role controls, stat rows and main action have clear separation and no collisions.",
+    "The quiet blue/charcoal backdrop and restrained warm accents provide character presence without decorative sci-fi clutter."
+  ],
+  "nonblocking_notes": [
+    "The background tent/fire is illustrative menu staging, not approval of a new runtime camp asset."
+  ],
+  "evidence": [
+    {
+      "path": "reviews/critic-ui-survivor-r1-phone800.png",
+      "sha256": "5c0abd636cd3b8305a33e68adab44d1f6537c5db4c44023e1f3088d96c5b4ea2",
+      "dimensions": [
+        800,
+        450
+      ],
+      "kind": "Representative landscape-phone-size inspection copy"
+    },
+    {
+      "path": "reviews/critic-ui-survivor-r1-identity-native.png",
+      "sha256": "c6adabccac04d82da39d37102804c4620a8d6a6b68b226846ee061f58eada66b",
+      "bounds": [
+        394,
+        87,
+        842,
+        860
+      ],
+      "kind": "Native-resolution detail crop"
+    },
+    {
+      "path": "reviews/critic-ui-survivor-r1-stats-native.png",
+      "sha256": "63cff6d859a5b54aedd932f40d0e8b165d9c90efc7e41435927b9e20254d9129",
+      "bounds": [
+        942,
+        168,
+        1630,
+        382
+      ],
+      "kind": "Native-resolution detail crop"
+    }
+  ]
+}

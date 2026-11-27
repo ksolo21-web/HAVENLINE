@@ -1,0 +1,76 @@
+{
+  "reviewer": "Independent critic /root/ui_critic",
+  "requirements_sha256": "e1ec45323f961fa423cfd178da024370bc74ff93d533acdb58da24f7b5104eb5",
+  "input_index_sha256": "4bfc686ce438b410a3d98ed518ebc5e7a406f030f0aabbf83f0833aa706c47a0",
+  "inspection": "Actual full native1672x941 image, aspect-preserving800x450 landscape-phone-size copy, and bound native detail crops inspected.",
+  "approval_scope": "Static illustrative UI concept only. Sample quantities/stats/costs/roles are proposals; no live gameplay, touch behavior, accessibility measurement, performance or implementation approval.",
+  "freeze_rule": "Immutable exact-version record. Repairs require a new output ID and retest.",
+  "set_approval": "Pending accepted replacements for camp/storage and a final cross-screen review.",
+  "review_id": "critic-ui-storage-r1",
+  "image": {
+    "path": "renders/ui-storage-r1.png",
+    "sha256": "5d4415b1748bf56a5c384f5ca7e49b936abde9bd0eea95f8ecd76db4ff1a3c18",
+    "bytes": 1924794,
+    "dimensions": [
+      1672,
+      941
+    ]
+  },
+  "invocation_prompt_sha256": "eae92f166ba1374e859b5584c3cfe517a3f2d8489e4e56fcd8b108f422a068e8",
+  "actual_ordered_input_sha256": [
+    "bbcd88237359ac2d3a9f63ad3f422ceafdca1f8342c16e0c57cd5e99e4e8975b",
+    "4f8df6ae1cf0c66eb2de1478a72c21db96bcf295dec17d072c3371e1737097c6"
+  ],
+  "status": "REPAIR_REQUIRED",
+  "score": 8.3,
+  "all_applicable_individual_mandatory_checks_passed": false,
+  "mandatory_defects": [
+    {
+      "id": "STORAGE-STYLE-01",
+      "finding": "Times-like serif typography across the screen, the italic transition caption, browser-blue underlined View inside link and deeply beveled orange primary button make this read like an older web/editorial template rather than the requested modern game UI.",
+      "repair": "Keep the current hero/building, inventory grid, precise sample values and stage-state logic. Replace the entire serif/italic system with one crafted modern sans family and deliberate size/weight hierarchy. Use a quiet non-underlined secondary action and a flat cut-corner orange primary action."
+    }
+  ],
+  "passed_checks": [
+    "The exact copy and quantities are readable at native and800px landscape inspection.",
+    "Six resource thumbnails are distinct and match the intended materials, fuel, food and hides.",
+    "Stock640wood/240stone/48steel exceeds proposed180wood/80stone/20steel costs; no contradictory affordability warning.",
+    "Reinforced is marked current, Advanced is preview; upgrade caption and hero agree.",
+    "Approved blue/orange house retains crate emblem, paired sliding doors, stone footing, right service hatch and clear apron.",
+    "No text/control overlap or clipped building."
+  ],
+  "nonblocking_notes": [],
+  "evidence": [
+    {
+      "path": "reviews/critic-ui-storage-r1-phone800.png",
+      "sha256": "099aa9d4f55c4e64635c281b7c010a2ca8356862b06bddcf2e6c224e642c6bac",
+      "dimensions": [
+        800,
+        450
+      ],
+      "kind": "Representative landscape-phone-size inspection copy"
+    },
+    {
+      "path": "reviews/critic-ui-storage-r1-title-native.png",
+      "sha256": "394b991f1099d60b5d9d6abe89b89dc38d17974e6922744f2e013e934368d9fb",
+      "bounds": [
+        28,
+        65,
+        817,
+        240
+      ],
+      "kind": "Native-resolution detail crop"
+    },
+    {
+      "path": "reviews/critic-ui-storage-r1-actions-native.png",
+      "sha256": "3aa7baeb76b3d5a6df2318744ee3c0be65822430736cae5a5a03b7139fb990f7",
+      "bounds": [
+        155,
+        773,
+        1645,
+        936
+      ],
+      "kind": "Native-resolution detail crop"
+    }
+  ]
+}

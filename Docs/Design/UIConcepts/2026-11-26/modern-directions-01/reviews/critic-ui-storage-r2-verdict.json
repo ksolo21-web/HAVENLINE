@@ -1,0 +1,69 @@
+{
+  "reviewer": "Independent critic /root/ui_critic",
+  "review_id": "critic-ui-storage-r2",
+  "requirements_sha256": "e1ec45323f961fa423cfd178da024370bc74ff93d533acdb58da24f7b5104eb5",
+  "input_index_sha256": "4bfc686ce438b410a3d98ed518ebc5e7a406f030f0aabbf83f0833aa706c47a0",
+  "image": {
+    "path": "renders/ui-storage-r2.png",
+    "sha256": "440f7c621ecd960a747fd5918ea8d924eff9965119fd55b907581048fc9864a5",
+    "bytes": 1732976,
+    "dimensions": [
+      1672,
+      941
+    ]
+  },
+  "invocation_prompt_sha256": "e4634f183c98efc7c6790704d6306273d34c0dd6ce6645fbbc72a001d38b331c",
+  "actual_ordered_input_sha256": [
+    "5d4415b1748bf56a5c384f5ca7e49b936abde9bd0eea95f8ecd76db4ff1a3c18"
+  ],
+  "status": "PASS",
+  "score": 9.6,
+  "all_applicable_individual_mandatory_checks_passed": true,
+  "repair_of": "ui-storage-r1",
+  "retained_prior_verdict": "reviews/critic-ui-storage-r1-verdict.json",
+  "mandatory_defects": [],
+  "passed_checks": [
+    "A modern sans type system replaces the old serif/browser styling; View inside is a quiet icon-and-text action and Upgrade storage is a flat cut-corner CTA, resolving STORAGE-STYLE-01.",
+    "Building hero and representative six-item inventory remain visually distinct, aligned and readable at native and800px landscape inspection.",
+    "Counts remain Wood640, Stone240, Steel48, Fuel36, Food128 and Hides24.",
+    "The proposed180wood/80stone/20steel costs are affordable against visible stock; Reinforced current and Advanced preview remain unambiguous.",
+    "Approved architectural identity, front apron and right service hatch remain intact.",
+    "No material clipped text, control collision or illegible filler found."
+  ],
+  "inspection": "Actual full native image and800x450 aspect-preserving landscape-phone-size copy, plus targeted native repair details.",
+  "evidence": [
+    {
+      "path": "reviews/critic-ui-storage-r2-phone800.png",
+      "sha256": "a4f3cc1e8bbf24c5d32592acef868c3b0ff6eb362d9ec87bc0bb83234e977b31",
+      "dimensions": [
+        800,
+        450
+      ],
+      "kind": "Aspect-preserving landscape-phone-size inspection copy; not a device screenshot or touch test"
+    },
+    {
+      "path": "reviews/critic-ui-storage-r2-title-native.png",
+      "sha256": "eb3af9876a12348c7d0a1f0b38ac617e36ded8a68212be055d9f0d4cc5e6f113",
+      "bounds": [
+        28,
+        65,
+        817,
+        240
+      ],
+      "kind": "Native-resolution evidence crop from the inspected original"
+    },
+    {
+      "path": "reviews/critic-ui-storage-r2-actions-native.png",
+      "sha256": "d1f752ba4ba9cc8da1a9f7b109da001f1309fa5065d1269b06449c78e7e286f4",
+      "bounds": [
+        155,
+        773,
+        1645,
+        936
+      ],
+      "kind": "Native-resolution evidence crop from the inspected original"
+    }
+  ],
+  "approval_scope": "Static proposed UI only; no live gameplay, device usability, touch-target behavior, numerical balance or native implementation approval.",
+  "freeze_rule": "Immutable exact-version record; reopen only for a new actual defect or changed output."
+}

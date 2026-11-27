@@ -1,0 +1,206 @@
+{
+  "reviewer": "Independent critic /root/ui_critic",
+  "review_id": "critic-final-visual-verdict-v1",
+  "status": "PASS_VISUAL_SCOPE_ONLY_ARCHIVE_PUBLICATION_PENDING",
+  "visual_score": 9.5,
+  "score_rule": "Minimum selected-screen score, not an average. All applicable mandatory visual checks pass; no extra generation is required merely to increase the numeric score.",
+  "requirements_sha256": "e1ec45323f961fa423cfd178da024370bc74ff93d533acdb58da24f7b5104eb5",
+  "input_index_sha256": "4bfc686ce438b410a3d98ed518ebc5e7a406f030f0aabbf83f0833aa706c47a0",
+  "selected_images": [
+    {
+      "sheet": "camp-hud",
+      "id": "ui-camp-hud-r2",
+      "path": "renders/ui-camp-hud-r2.png",
+      "sha256": "1e8da0ac20132462efa49af4b534dd80d3b7b42500eb039debb670def5ee1ab0",
+      "bytes": 2149302,
+      "dimensions": [
+        1672,
+        941
+      ],
+      "score": 9.5,
+      "verdict": "reviews/critic-ui-camp-hud-r2-verdict.json",
+      "verdict_sha256": "1a443d2d729545447d34e2bd3cd0d805a7826f7d277bb0e918e1c2285a5a6c28"
+    },
+    {
+      "sheet": "storage",
+      "id": "ui-storage-r2",
+      "path": "renders/ui-storage-r2.png",
+      "sha256": "440f7c621ecd960a747fd5918ea8d924eff9965119fd55b907581048fc9864a5",
+      "bytes": 1732976,
+      "dimensions": [
+        1672,
+        941
+      ],
+      "score": 9.6,
+      "verdict": "reviews/critic-ui-storage-r2-verdict.json",
+      "verdict_sha256": "309c584b147226ae98a4e4400c714d6ee0b4ded8aaa44be0c0290c6c358f8791"
+    },
+    {
+      "sheet": "survivor",
+      "id": "ui-survivor-r1",
+      "path": "renders/ui-survivor-r1.png",
+      "sha256": "a699d125481a1c6c237ab98136df156e9b69b18dae2e99c1f002d5c23d0d1b19",
+      "bytes": 1767330,
+      "dimensions": [
+        1672,
+        941
+      ],
+      "score": 9.7,
+      "verdict": "reviews/critic-ui-survivor-r1-verdict.json",
+      "verdict_sha256": "2adb52f7192f26e7947bef8dbcf999b7f04112170bb215da39d3cec31133a08e"
+    }
+  ],
+  "counts": {
+    "selected_screens": 3,
+    "generated_originals": 5,
+    "initial_repair_required_versions": 2,
+    "reference_images": 6,
+    "native_resolution": [
+      1672,
+      941
+    ],
+    "representative_phone_inspection": [
+      800,
+      450
+    ]
+  },
+  "mandatory_visual_checks": [
+    {
+      "id": "U01",
+      "check": "All exact copy and sample counts readable; no observed pseudo-text.",
+      "status": "PASS"
+    },
+    {
+      "id": "U02",
+      "check": "Repairs replace dated serif/beveled treatments with deliberate modern hierarchy, surfaces and actions.",
+      "status": "PASS"
+    },
+    {
+      "id": "U03",
+      "check": "No material collisions, clipped controls or edge crowding in selected native/phone views.",
+      "status": "PASS"
+    },
+    {
+      "id": "U04",
+      "check": "Camp Build, Storage upgrade and Survivor assignment have clear primary-action hierarchy.",
+      "status": "PASS"
+    },
+    {
+      "id": "U05",
+      "check": "Controls/icons and selected states are understandable; camp fuel icon now agrees with storage fuel.",
+      "status": "PASS"
+    },
+    {
+      "id": "U06",
+      "check": "All selected screens inspected at800px landscape width and native resolution; visual readability passed.",
+      "status": "PASS"
+    },
+    {
+      "id": "U07",
+      "check": "Current Character1 and approved winter building/fence/furnace identities remain recognizable.",
+      "status": "PASS"
+    },
+    {
+      "id": "U08",
+      "check": "Stock/cost quantities, current-versus-preview stage and survivor status/selection are coherent as proposals.",
+      "status": "PASS"
+    },
+    {
+      "id": "U09",
+      "check": "Three complementary useful treatments: world-led HUD, bright object/inventory menu and dark survivor assignment. They are not claimed as three complete interchangeable UI systems.",
+      "status": "PASS"
+    },
+    {
+      "id": "U10",
+      "check": "Illustrated camp retains two open passages, a central furnace and snow outside with no painted external road; native scene fit is untested.",
+      "status": "PASS"
+    },
+    {
+      "id": "U11",
+      "check": "Actual originals and repair histories are separately identified; native/phone evidence is hash-bound.",
+      "status": "PASS"
+    },
+    {
+      "id": "U12",
+      "check": "Claims remain static-concept-only; no performance, touch, animation, implemented economy or live screenshot claim.",
+      "status": "PASS"
+    }
+  ],
+  "cross_screen_findings": [
+    "Camp concentrates management controls at the edges and keeps the compact world readable.",
+    "Storage uses a bright asymmetric building/inventory composition with legible material costs.",
+    "Survivor uses a dramatic character hero, dark backdrop and restrained assignment/state layout.",
+    "Blue/orange3D art, clear typography and cut-corner primary actions provide family resemblance while the three screen purposes remain distinct."
+  ],
+  "revision_history": [
+    {
+      "id": "ui-camp-hud-r1",
+      "score": 8.8,
+      "status": "REPAIR_REQUIRED",
+      "reason": "Dated inflated/beveled UI chrome; retained unchanged."
+    },
+    {
+      "id": "ui-storage-r1",
+      "score": 8.3,
+      "status": "REPAIR_REQUIRED",
+      "reason": "Old serif/browser-link styling and beveled action; retained unchanged."
+    },
+    {
+      "id": "ui-camp-hud-r2",
+      "score": 9.5,
+      "status": "PASS",
+      "reason": "Actual chrome/fuel-icon repair retested."
+    },
+    {
+      "id": "ui-storage-r2",
+      "score": 9.6,
+      "status": "PASS",
+      "reason": "Actual typography/action repair retested."
+    },
+    {
+      "id": "ui-survivor-r1",
+      "score": 9.7,
+      "status": "PASS",
+      "reason": "Passed original; no unnecessary regeneration."
+    }
+  ],
+  "mandatory_visual_defects_remaining": [],
+  "evidence_sha256": {
+    "reviews/critic-preflight-v1.json": "5553b45b754e0ee07e0d002eb274eccf71642ef19a20e682eff8773452da3f9b",
+    "reviews/critic-r1-native-crop-bounds.json": "3195e0bc9938518b9ca8f191d1743f34008c24b22771e58f41563f976c565235",
+    "reviews/critic-r1-phone-evidence.json": "aef84547dde9a9f5e9c168da05d3af0c975699a809396fe7a97c3dce31451427",
+    "reviews/critic-r2-native-crop-bounds.json": "c42317f569a8c2cba734aa12c482bfb815fa5c436843ca418ab20cd99f70ff47",
+    "reviews/critic-source-basis-v1.json": "6af5b81c23a38257732fdeca299e2a3b07150948275c207911417d152f1dcbe0",
+    "reviews/critic-ui-camp-hud-r1-chrome-native.png": "cf0fd0d332b048d28547e45142386f0f3f2364d36e76ac118687cbabbd5c71c9",
+    "reviews/critic-ui-camp-hud-r1-phone800.png": "1ad04879dc4b21e510766c25c5d05a9652cbf1f63447640727cd355766207af0",
+    "reviews/critic-ui-camp-hud-r1-verdict.json": "f213acc10bb843d92f6e4f2f4094ab9a42e343890ff1d9afc66a84dd2839ddc9",
+    "reviews/critic-ui-camp-hud-r2-chrome-native.png": "54239fa5b2de39f6f9e23357aa28e7bb1eee7df3a69a69814786c34fe281ebf9",
+    "reviews/critic-ui-camp-hud-r2-fuel-native.png": "b28a345a3ed7236ce3076b6ba077ee43360e93dfbc045c9e2a149533fc876d28",
+    "reviews/critic-ui-camp-hud-r2-phone800.png": "e6bc03fc57205fd0266627e6257d831a46019b7b279ced10d9080ea830c2f496",
+    "reviews/critic-ui-camp-hud-r2-verdict.json": "1a443d2d729545447d34e2bd3cd0d805a7826f7d277bb0e918e1c2285a5a6c28",
+    "reviews/critic-ui-storage-r1-actions-native.png": "3aa7baeb76b3d5a6df2318744ee3c0be65822430736cae5a5a03b7139fb990f7",
+    "reviews/critic-ui-storage-r1-phone800.png": "099aa9d4f55c4e64635c281b7c010a2ca8356862b06bddcf2e6c224e642c6bac",
+    "reviews/critic-ui-storage-r1-title-native.png": "394b991f1099d60b5d9d6abe89b89dc38d17974e6922744f2e013e934368d9fb",
+    "reviews/critic-ui-storage-r1-verdict.json": "203d85fa61a9f1a1e672d9a08f1fa5bf2debd6a3e90abc15022c940556d39dff",
+    "reviews/critic-ui-storage-r2-actions-native.png": "d1f752ba4ba9cc8da1a9f7b109da001f1309fa5065d1269b06449c78e7e286f4",
+    "reviews/critic-ui-storage-r2-phone800.png": "a4f3cc1e8bbf24c5d32592acef868c3b0ff6eb362d9ec87bc0bb83234e977b31",
+    "reviews/critic-ui-storage-r2-title-native.png": "eb3af9876a12348c7d0a1f0b38ac617e36ded8a68212be055d9f0d4cc5e6f113",
+    "reviews/critic-ui-storage-r2-verdict.json": "309c584b147226ae98a4e4400c714d6ee0b4ded8aaa44be0c0290c6c358f8791",
+    "reviews/critic-ui-survivor-r1-identity-native.png": "c6adabccac04d82da39d37102804c4620a8d6a6b68b226846ee061f58eada66b",
+    "reviews/critic-ui-survivor-r1-phone800.png": "5c0abd636cd3b8305a33e68adab44d1f6537c5db4c44023e1f3088d96c5b4ea2",
+    "reviews/critic-ui-survivor-r1-stats-native.png": "63cff6d859a5b54aedd932f40d0e8b165d9c90efc7e41435927b9e20254d9129",
+    "reviews/critic-ui-survivor-r1-verdict.json": "2adb52f7192f26e7947bef8dbcf999b7f04112170bb215da39d3cec31133a08e"
+  },
+  "scope_limits": [
+    "Original images are1672x941;1920x1080-style prompting does not make them native1920x1080.",
+    "Phone-size copies are inspection resamples, not physical-device screenshots or usability tests.",
+    "This is proposed static UI art; displayed costs, stock, stats and assignment roles are illustrative and not approved live game balance/canon.",
+    "Camp illustration/menu scenery is not evidence of native camp placement or implementation.",
+    "No touch-target behavior, performance, animation or runtime accessibility was tested."
+  ],
+  "publication_pending": [
+    "Concrete frozen GitHub package audit",
+    "Fresh published ref/commit/untruncated tree and new image-byte verification"
+  ],
+  "freeze_rule": "Immutable visual acceptance with historical rejections retained. Archive/publication requires its separate checks; no further pixel testing is necessary unless a real defect appears."
+}
