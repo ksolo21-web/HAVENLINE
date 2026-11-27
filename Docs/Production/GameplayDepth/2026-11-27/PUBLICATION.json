@@ -3,36 +3,34 @@
   "status": "CONTENT_PUBLICATION_VERIFIED",
   "scope": "Whole-game gameplay-depth planning/source audit only; no game implementation or runtime approval",
   "base_commit": "9d10c45a8bd46aeb6ab1b4009e87538c4796ef1c",
-  "content_commit": "bee3ce0238431fb6d4f58617abfdb0d7e836e513",
-  "content_tree": "62ab6e7fb47d79fcfcc9e86f25534a7ad0375208",
-  "freeze_sha256": "c346af7912079dcbff8bda8b497c11f46d389809738f92beebd78b3bd0857654",
+  "content_commit": "eb6dbe549ac001dbb8939fe55ad962bc4aacc097",
+  "content_tree": "8a8709e3309e159ff9c3d4647f1ec286111fe2e3",
+  "freeze_sha256": "6456f3f09ac9b069af254cfbba858a0e0f4429d6abeae88717b9911e40186525",
   "independent_plan_review": {
     "reviewer": "/root/depth_critic",
     "score": 10,
     "mandatory_checks_passed": 16,
     "mandatory_checks_required": 16,
-    "report": "FINAL_REVIEW.json"
+    "report": "FINAL_REVIEW.json",
+    "supplemental_validator_probes_passed": 12,
+    "report_sha256": "5ae37d36b21e456625100b17abfbc3073825fd9617d505b1c24b79fa4a207b13"
   },
   "runtime_tested": false,
   "runtime_approval_allowed": false,
   "game_score": null,
   "content_readback": {
-    "content_commit": "bee3ce0238431fb6d4f58617abfdb0d7e836e513",
-    "expected_tree": "62ab6e7fb47d79fcfcc9e86f25534a7ad0375208",
+    "content_commit": "eb6dbe549ac001dbb8939fe55ad962bc4aacc097",
+    "expected_tree": "8a8709e3309e159ff9c3d4647f1ec286111fe2e3",
     "main_verified": true,
     "tree_verified": true,
     "parent_verified": true,
     "file_readbacks": [
       {
-        "path": "Docs/Production/GAMEPLAY_DEPTH_STANDARD.md",
+        "path": "Docs/Production/GameplayDepth/2026-11-27/verify_scope.py",
         "exact_utf8_content_match": true
       },
       {
-        "path": "Docs/Production/GAMEPLAY_DEPTH_CONTRACT.json",
-        "exact_utf8_content_match": true
-      },
-      {
-        "path": "Docs/Production/GameplayDepth/2026-11-27/CURRENT_BRANCH_NOTE.json",
+        "path": "Docs/Production/GameplayDepth/2026-11-27/CANDIDATE_FREEZE.json",
         "exact_utf8_content_match": true
       },
       {
@@ -40,7 +38,7 @@
         "exact_utf8_content_match": true
       },
       {
-        "path": "tools/havenline/production/task_packet.py",
+        "path": "Docs/Production/GameplayDepth/2026-11-27/CHECKPOINT.json",
         "exact_utf8_content_match": true
       }
     ],
@@ -56,7 +54,7 @@
   },
   "ref_update": {
     "branch": "main",
-    "expected_sha": "9d10c45a8bd46aeb6ab1b4009e87538c4796ef1c",
+    "expected_sha": "bee3ce0238431fb6d4f58617abfdb0d7e836e513",
     "force": false
   },
   "prepublication_branches": [
@@ -824,7 +822,7 @@
     },
     {
       "name": "main",
-      "sha": "bee3ce0238431fb6d4f58617abfdb0d7e836e513"
+      "sha": "eb6dbe549ac001dbb8939fe55ad962bc4aacc097"
     },
     {
       "name": "repair/native-timeout-contract-20260926",
@@ -840,5 +838,42 @@
     }
   ],
   "receipt_boundary": "This receipt records the verified content publication. Its own later commit is read back separately by the integration agent; no self-referential commit hash is invented.",
-  "remaining_game_work": "Authored loss policy, capacity/recipe/currency decisions, actual full animation/audio/device evidence and normal-player AI/economy playtests remain with existing owners."
+  "remaining_game_work": "Authored loss policy, capacity/recipe/currency decisions, actual full animation/audio/device evidence and normal-player AI/economy playtests remain with existing owners.",
+  "previous_content_publication": {
+    "content_commit": "bee3ce0238431fb6d4f58617abfdb0d7e836e513",
+    "content_tree": "62ab6e7fb47d79fcfcc9e86f25534a7ad0375208",
+    "freeze_sha256": "c346af7912079dcbff8bda8b497c11f46d389809738f92beebd78b3bd0857654",
+    "content_readback": {
+      "content_commit": "bee3ce0238431fb6d4f58617abfdb0d7e836e513",
+      "expected_tree": "62ab6e7fb47d79fcfcc9e86f25534a7ad0375208",
+      "main_verified": true,
+      "tree_verified": true,
+      "parent_verified": true,
+      "file_readbacks": [
+        {
+          "path": "Docs/Production/GAMEPLAY_DEPTH_STANDARD.md",
+          "exact_utf8_content_match": true
+        },
+        {
+          "path": "Docs/Production/GAMEPLAY_DEPTH_CONTRACT.json",
+          "exact_utf8_content_match": true
+        },
+        {
+          "path": "Docs/Production/GameplayDepth/2026-11-27/CURRENT_BRANCH_NOTE.json",
+          "exact_utf8_content_match": true
+        },
+        {
+          "path": "Docs/Production/GameplayDepth/2026-11-27/FINAL_REVIEW.json",
+          "exact_utf8_content_match": true
+        },
+        {
+          "path": "tools/havenline/production/task_packet.py",
+          "exact_utf8_content_match": true
+        }
+      ],
+      "non_main_branches_unchanged": true,
+      "branch_count": 97
+    }
+  },
+  "source_formatting_disposition": "Original audit bytes remain exact. Terminal blank lines are disclosed formatting advisories; other whitespace and command diagnostics remain blocking. Independent 12-case retest and 43-file freeze verification passed."
 }
