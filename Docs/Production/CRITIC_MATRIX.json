@@ -1,8 +1,10 @@
 {
   "schema_version": 1,
   "forward_acceptance": {
-    "dimension_operator": ">",
-    "threshold": 9.0,
+    "dimension_operator": ">=",
+    "threshold": 9.5,
+    "scope": "All new candidate reviews and reapprovals; preserve historical receipts and stricter gates",
+    "legacy_validator_pass_is_sufficient": false,
     "unrounded": true,
     "target": 10.0,
     "no_average_waiver": true,

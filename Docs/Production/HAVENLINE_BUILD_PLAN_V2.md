@@ -15,7 +15,7 @@
 - T09 is APPROVED. Exact integrated source 5415d85838ecf4bea8b3c71662072670e61797a0 passed 17 suites / 1006 checks, 7/7 save cases, 6/6 device cases, 1193/1193 indexed hashes, G1-G14, and fresh independent C2/C3/C4/C5/C6 review with every mandatory dimension strictly above 9.0 and zero unresolved defects.
 - T10 World Transformation Framework is APPROVED at exact integrated source `eba0107def258824549fb10d81785290d0c81d97`; fresh impacted regression passed 7 suites / 653 checks, 7/7 save cases, 216/216 device projections and 36/36 native-4K captures. C1/C2/C3/C4 passed on the current candidate, C6/C7 were preserved under critic-specific invalidation with audited invariant proof, minimum mandatory dimension 9.350213966238757, zero unresolved defects.
 - T11 Camp construction and visual upgrade system is PREPARED on `havenline/T11-camp-construction` from T10 approval commit `87a4346eb33473c3723c7b7c1bbf1dd04dba9131`. T12+ remains dependency-gated.
-- Forward intermediate PASS requires every applicable mandatory reviewed dimension to be **strictly > 9.0 unrounded**, every mandatory gate to pass, and zero unresolved mandatory defects. Target remains 10/10.
+- Forward PASS requires each applicable mandatory critic dimension to score **at least 9.5/10, unrounded**. Exactly 9.5 passes the numerical floor. Aim for 9.9 or better; 10/10 is the ideal. All mandatory gates must pass with zero unresolved mandatory defects. See [current score enforcement](#current-critic-score-enforcement).
 
 ## Permanent Havenline product contract
 
@@ -78,8 +78,16 @@ Only the integration owner may integrate production candidates into the integrat
 - **G10 Security/economy — required for purchases, economy, LiveOps, cloud and competitive-value systems.**
 - **G11 Accessibility/adaptive UI — required for player-facing controls/UI where relevant.**
 - **G12 Critic coverage — every required critic has current complete evidence.**
-- **G13 Score — every applicable mandatory dimension is strictly >9.0 unrounded; no averaging; no unresolved mandatory defect.**
+- **G13 Score: each applicable mandatory dimension must score at least 9.5/10 unrounded; no averaging and no unresolved mandatory defect. Stricter named requirements still apply.**
 - **G14 Integration — the merged integration candidate, not merely the isolated branch, passes affected regression.**
+
+### Current critic score enforcement
+
+This rule applies game-wide to new reviews, changed candidates and reapprovals, not just Level 1. The [critic matrix](CRITIC_MATRIX.json) records the inclusive floor. An individual 9.499 does not pass; an individual 9.5 passes the numeric floor only. Keep independence, exact-source evidence, all other gates, owner sign-off where required, and stricter exact-10 shipping-art and reference requirements. Historical approval receipts are preserved as recorded, and an active invalidation is not cleared by this change.
+
+Some legacy validators and workflows still check the old numeric floor, including `validate_migration.py`. Their green result is not sufficient for a candidate to pass G13 or advance. Until those checks are migrated and boundary-tested, the integration owner must verify the raw required scores on the exact candidate against the current rubric before approval; missing scores fail closed. No task is unlocked and no automation is deployed by this policy update.
+
+[T01–T11 production reconciliation against Codex Build 9](T01_T11_PRODUCTION_RECONCILIATION_2026-11-27.md)
 
 ## Production sequence
 
