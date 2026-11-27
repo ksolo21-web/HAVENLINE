@@ -1,0 +1,216 @@
+{
+  "scene": "res://field_opening.tscn",
+  "base_source": "3669acb3a67f260c5f2e82b090b324c8981068b8",
+  "engine": "Godot 4.7.2",
+  "suites": {
+    "touch_and_mouse": {
+      "checks": {
+        "A customer pays for the real roast across the relocated fence": true,
+        "Cooker paid normally with the exact 120 wood and 80 stone": true,
+        "Exit returns player's gameplay camera and controls": true,
+        "Gameplay pinch still works after moving": true,
+        "Invalid destination leaves all equipment untouched": true,
+        "Malformed layout restore rejected without partial mutation": true,
+        "Meat handed off at relocated cooker produces a real meal": true,
+        "Model, guard, hopper, outfeed and both worker aprons move as a unit": true,
+        "Mouse opens identical layout controls": true,
+        "Moving up to the relocated house stocks its real FOOD shelf": true,
+        "Overlap rejected before it can persist": true,
+        "Relocated furnace light, art and solid footing stay together": true,
+        "Service point and queue meet across the relocated north fence bay": true,
+        "Spawn, defense side and gate are protected": true,
+        "Storehouse at new position accepts side loading": true,
+        "Touch opens layout and liberates joystick": true,
+        "Tower's paid physical footings stay on the moved defense side": true,
+        "Unowned cooker cannot be placed": true,
+        "Worker detours around the moved furnace without crossing its body": true,
+        "camp_cooker committed by confirmation": true,
+        "camp_cooker picked by tapping its actual artwork": true,
+        "camp_cooker previews its physical destination": true,
+        "center_hearth committed by confirmation": true,
+        "center_hearth picked by tapping its actual artwork": true,
+        "center_hearth previews its physical destination": true,
+        "north_counter committed by confirmation": true,
+        "north_counter inputs, outputs and guard follow": true,
+        "north_counter picked by tapping its actual artwork": true,
+        "north_counter previews its physical destination": true,
+        "quarry_drill committed by confirmation": true,
+        "quarry_drill inputs, outputs and guard follow": true,
+        "quarry_drill picked by tapping its actual artwork": true,
+        "quarry_drill previews its physical destination": true,
+        "saw_bench committed by confirmation": true,
+        "saw_bench inputs, outputs and guard follow": true,
+        "saw_bench picked by tapping its actual artwork": true,
+        "saw_bench previews its physical destination": true,
+        "storage_wood committed by confirmation": true,
+        "storage_wood inputs, outputs and guard follow": true,
+        "storage_wood picked by tapping its actual artwork": true,
+        "storage_wood previews its physical destination": true,
+        "watchtower committed by confirmation": true,
+        "watchtower picked by tapping its actual artwork": true,
+        "watchtower previews its physical destination": true
+      },
+      "placements": [
+        {
+          "camp_cooker": [
+            4.75,
+            2.75
+          ],
+          "center_hearth": [
+            -2.75,
+            -2.5
+          ],
+          "north_counter": [
+            4.0,
+            -9.0
+          ],
+          "quarry_drill": [
+            7.75,
+            -6.25
+          ],
+          "saw_bench": [
+            -3.5,
+            2.5
+          ],
+          "storage_wood": [
+            4.5,
+            -2.5
+          ],
+          "watchtower": [
+            8.0,
+            3.5
+          ]
+        }
+      ]
+    },
+    "cold_restart": {
+      "checks": {
+        "Cold process recovers moved furnace and defending tower": true,
+        "Cold process recovers relocated cooker, counter and storehouse": true,
+        "Cold process recovers saw and drill collision": true,
+        "Reloaded receipts and cooked meal survive relocation": true
+      },
+      "placements": [
+        {
+          "camp_cooker": [
+            4.75,
+            2.75
+          ],
+          "center_hearth": [
+            -2.75,
+            -2.5
+          ],
+          "north_counter": [
+            4.0,
+            -9.0
+          ],
+          "quarry_drill": [
+            7.75,
+            -6.25
+          ],
+          "saw_bench": [
+            -3.5,
+            2.5
+          ],
+          "storage_wood": [
+            4.5,
+            -2.5
+          ],
+          "watchtower": [
+            8.0,
+            3.5
+          ]
+        }
+      ]
+    },
+    "starter_tier": {
+      "checks": {
+        "Storehouse tier grows at the moved site through the moved upgrade plot": true,
+        "storage_wood committed by confirmation": true,
+        "storage_wood picked by tapping its actual artwork": true,
+        "storage_wood previews its physical destination": true
+      },
+      "placements": [
+        {
+          "storage_wood": [
+            -3.5,
+            -3.0
+          ]
+        }
+      ]
+    }
+  },
+  "passed": 52,
+  "input_and_setup": "The player bought the cooker at its world plot using the touch joystick with 120 wood and 80 stone seeded into inventory. Prerequisite receipts and later equipment were staged separately. Equipment selection, positioning, confirmation and cancel/reselect use the normal runtime handlers. Players, materials and the queue keep their ordinary simulation.",
+  "layout_sha256": "086b3ba8c286c6b2682dbb6d9835b186c68e7b83ec0c5bdf3d3ce16edf0538ed",
+  "test_sha256": "0fc92aa54265049767b6ca592b79596099e5cfc58923a9f7d52df904f31e925a",
+  "verified_layout_commit": "0e58e8ad4ff67149dd7e61ade05f33fe08501411",
+  "supplemental_occupancy": {
+    "Moving into same space after it clears succeeds": true,
+    "Moving onto ExactCharacter1 is refused": true,
+    "Moving onto RescuedForester is refused": true
+  },
+  "responsive_checks": {
+    "checks": {
+      "cover camera and controls cover both entrances while placing": true,
+      "inner camera and controls cover both entrances while placing": true,
+      "rotated camera and controls cover both entrances while placing": true
+    },
+    "viewports": {
+      "cover": {
+        "all_controls_fit": true,
+        "both_gates": true,
+        "logical_safe_canvas": "[P: (16.0, 16.0), S: (688.0, 1648.0)]",
+        "viewport": "(360, 840)"
+      },
+      "inner": {
+        "all_controls_fit": true,
+        "both_gates": true,
+        "logical_safe_canvas": "[P: (16.0, 16.0), S: (688.0, 767.0)]",
+        "viewport": "(492, 546)"
+      },
+      "rotated": {
+        "all_controls_fit": true,
+        "both_gates": true,
+        "logical_safe_canvas": "[P: (16.0, 16.0), S: (1648.0, 688.0)]",
+        "viewport": "(840, 360)"
+      }
+    }
+  },
+  "native_gameplay": {
+    "resolution": [
+      504,
+      892
+    ],
+    "renderer": "Godot 4.7.2 OpenGL Compatibility, Mesa llvmpipe 25.0.7",
+    "source_scene": "res://field_opening.tscn",
+    "counts": 44,
+    "captured_frames": 57,
+    "capture_fps": 12,
+    "runtime_physics_hz": 60,
+    "pictures": [
+      "00-cooker-unpaid.jpg",
+      "01-cooker-paid-gameplay.jpg",
+      "02-blocked-by-furnace.jpg",
+      "03-valid-cooker-footprint-and-service-aisle.jpg",
+      "04-serving-relocated-cooker.jpg",
+      "04b-cooker-at-gameplay-pinch.jpg",
+      "05-paid-equipment-and-counter-rearranged.jpg",
+      "05b-service-at-relocated-north-counter.jpg"
+    ]
+  },
+  "independent_review": {
+    "reviewer": "Codex integration lead",
+    "implementer": "Codex HUD and placement agent",
+    "scope": "Paid equipment placement and feedback",
+    "score": 9.5,
+    "out_of": 10,
+    "evidence": [
+      "Phone/02-blocked-by-furnace.jpg",
+      "Phone/03-valid-cooker-footprint-and-service-aisle.jpg",
+      "Phone/04-serving-relocated-cooker.jpg",
+      "Phone/04b-cooker-at-gameplay-pinch.jpg"
+    ],
+    "observation": "Blocked collision and clear working aisle read at the full-camp camera. The player holds the real roast at the moved cooker in the ordinary gameplay camera. Individual objects remain small in the full-camp editor on narrow phones."
+  }
+}

@@ -1,0 +1,181 @@
+{
+  "source": "17abe3795bb91e6a80b48d93bab7578ad2ad4aed",
+  "sha256": "575db44dd53482bf5ef705fa0d624ea0e72388dbc855a007ab74fbcd323f8712",
+  "cases": [
+    {
+      "previous": "build6",
+      "preceding_apk": "5e893c6f163d83d4a782eed0e5503a4587a9cf99a7936120533c5688eef5aa48",
+      "save_sha256": "e528909214282bdf5d8e6fd223f50af69a40bfb2c45b8b0efdb87f4d6e2f04b2",
+      "runs": [
+        {
+          "checks": {
+            "all 6 paid camp structures survived": true,
+            "all three machine receipts start unpaid": true,
+            "cooker paid at edge with carried inventory": true,
+            "existing prepared meal and cash retained": true,
+            "only purchased machine revealed": true,
+            "partial in-process goods retained": true,
+            "unpaid equipment absent": true,
+            "valid profile": true
+          },
+          "passed": true,
+          "phase": "upgrade"
+        },
+        {
+          "checks": {
+            "new machine ownership survives cold reload": true,
+            "new run initialized": true,
+            "single receipt for the charge": true,
+            "valid profile": true
+          },
+          "passed": true,
+          "phase": "reload"
+        }
+      ]
+    },
+    {
+      "previous": "build7",
+      "preceding_apk": "d256e6cd8093ab4099f805b0e6f226bf3fad4a6c27eb6233f29f962cf8abc640",
+      "save_sha256": "4df669370491e1ea24b1f58c92d5916ca0f66a323f4750c0443e7b3e2285347e",
+      "runs": [
+        {
+          "checks": {
+            "new machine ownership survives cold reload": true,
+            "new run initialized": true,
+            "single receipt for the charge": true,
+            "valid profile": true
+          },
+          "passed": true,
+          "phase": "reload"
+        }
+      ]
+    },
+    {
+      "previous": "build8",
+      "preceding_apk": "1f12cdc8b654ee07a6438317c0c8aa0152d714838a88afc25cff4a86f9d65735",
+      "save_sha256": "34de7ce67bf34d36745b3af94aec535454cece46ec8ab63aaa43df7d39e7e733",
+      "runs": [
+        {
+          "checks": {
+            "all owned input lanes are active": true,
+            "automated stock opens the house while player is away": true,
+            "food line does not activate raw line": true,
+            "food sale is a real paid counter exchange": true,
+            "meal_conveyor physically available": true,
+            "meal_conveyor purchased through actual plot": true,
+            "normalized partial paths persisted": true,
+            "opened valid isolated save": true,
+            "real roast reaches paying non-player customer": true,
+            "real v7 unlocked buildings and no gifted lines": true,
+            "supply_conveyors physically available": true,
+            "supply_conveyors purchased through actual plot": true,
+            "unpaid belts never move stock": true
+          },
+          "phase": "initial",
+          "receipts": [
+            {
+              "blocks": 0,
+              "cash": 1,
+              "cooked": 1,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 0,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "meal": 0,
+                "meat": 1,
+                "stone": 1,
+                "wood": 1
+              },
+              "planks": 0,
+              "progress": {
+                "meal": 0.0,
+                "meat": 0.026726932075405,
+                "stone": 0.0149765872990463,
+                "wood": 0.0228910697279267
+              },
+              "rack": 0,
+              "stored": {
+                "coal": 0,
+                "meat": 5,
+                "metal": 0,
+                "slate": 0,
+                "stone": 2,
+                "wood": 2
+              }
+            }
+          ]
+        },
+        {
+          "checks": {
+            "acquire competing lock": true,
+            "cold start restores moving load": true,
+            "opened valid isolated save": true,
+            "previous durable bytes stay intact": true,
+            "rejected landing pauses safely": true
+          },
+          "phase": "interrupt",
+          "receipts": []
+        },
+        {
+          "checks": {
+            "entire path conserved all goods": true,
+            "failed landing can be retried from saved input": true,
+            "idle empty lines cannot pay twice": true,
+            "one purchased input meal per completed order": true,
+            "opened valid isolated save": true,
+            "wood, stone and meals finish offscreen and earn cash": true
+          },
+          "phase": "finish",
+          "receipts": [
+            {
+              "blocks": 3,
+              "cash": 7,
+              "cooked": 7,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 0,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "meal": 0,
+                "meat": 0,
+                "stone": 0,
+                "wood": 0
+              },
+              "planks": 3,
+              "progress": {
+                "meal": 0.0,
+                "meat": 0.0,
+                "stone": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "stored": {
+                "coal": 0,
+                "meat": 0,
+                "metal": 0,
+                "slate": 0,
+                "stone": 0,
+                "wood": 0
+              }
+            }
+          ]
+        },
+        {
+          "checks": {
+            "earned cash and both purchases survive restart": true,
+            "idle storehouse cannot create extra product": true,
+            "opened valid isolated save": true
+          },
+          "phase": "cold",
+          "receipts": []
+        }
+      ]
+    }
+  ],
+  "device": "Linux Godot running unchanged signed assets, disposable profiles"
+}

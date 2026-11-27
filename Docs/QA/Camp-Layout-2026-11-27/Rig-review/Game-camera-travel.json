@@ -1,0 +1,38 @@
+{
+  "Final survivor": {
+    "nominal_body_height_m": 1.5,
+    "world_top_mps": 6.250009175021491,
+    "full_speed_samples": 68,
+    "projected_body_heights_per_second_p10_median_p90": [
+      3.942782668403079,
+      4.166673472276715,
+      5.4060090922457285
+    ],
+    "movement_frames_median": 91.5,
+    "method": "Fit the orthographic camera matrix from all visible recorded joint world/screen pairs at each frame. Project world displacement over a physics step into that camera and divide by the screen-projected nominal body height (1.50 m forester; 1.75 m hero). Count strides above 95% observed speed. Orientation of motion relative to the camera affects these numbers."
+  },
+  "Build 8 survivor": {
+    "nominal_body_height_m": 1.5,
+    "world_top_mps": 1.8000090667887614,
+    "full_speed_samples": 209,
+    "projected_body_heights_per_second_p10_median_p90": [
+      1.5603905418400534,
+      1.5603973365793269,
+      1.5604032949488478
+    ],
+    "movement_frames_median": 104.0,
+    "method": "Fit the orthographic camera matrix from all visible recorded joint world/screen pairs at each frame. Project world displacement over a physics step into that camera and divide by the screen-projected nominal body height (1.50 m forester; 1.75 m hero). Count strides above 95% observed speed. Orientation of motion relative to the camera affects these numbers."
+  },
+  "Final player": {
+    "nominal_body_height_m": 1.75,
+    "world_top_mps": 6.250107538079656,
+    "full_speed_samples": 139,
+    "projected_body_heights_per_second_p10_median_p90": [
+      3.015025535679638,
+      4.672666410169597,
+      4.672739433696932
+    ],
+    "movement_frames_median": 103.0,
+    "method": "Fit the orthographic camera matrix from all visible recorded joint world/screen pairs at each frame. Project world displacement over a physics step into that camera and divide by the screen-projected nominal body height (1.50 m forester; 1.75 m hero). Count strides above 95% observed speed. Orientation of motion relative to the camera affects these numbers."
+  }
+}

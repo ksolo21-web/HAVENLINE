@@ -1,0 +1,87 @@
+{
+  "stamp": {
+    "commit": "17abe3795bb91e6a80b48d93bab7578ad2ad4aed",
+    "manifest": {
+      "sha256": "5334a1669f3065f7a5d814ffe9e1e44fe129e3045900e9f3054c72226af8d13f",
+      "checked_files": 536
+    },
+    "runner": "fd0c7e2495df6970748acf7320e823a71787d90d34b3db6bcdd50dcb7d23e60f"
+  },
+  "passed": true,
+  "runs": [
+    {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "log": "qa_tree_return-1.log",
+      "log_sha256": "185ba6a02827e39f1d240b4e040466752882c8caf6d402f700a036a7e7423465",
+      "summary": [
+        {
+          "checks": {
+            "legacy loaded and unloaded wood capped to five": true,
+            "legacy stone duration capped to five": true,
+            "load prior save": true,
+            "real remote pine selected": true,
+            "starter-wood 5s elapsed": true,
+            "starter-wood natural damaging contacts": true,
+            "starter-wood one three-unit yield": true,
+            "starter-wood return appears before available": true,
+            "starter-wood stored quantities untouched": true,
+            "typed quantities established through inventory API": true,
+            "world1/3/-4/wood/1 5s elapsed": true,
+            "world1/3/-4/wood/1 natural damaging contacts": true,
+            "world1/3/-4/wood/1 one three-unit yield": true,
+            "world1/3/-4/wood/1 return appears before available": true,
+            "world1/3/-4/wood/1 stored quantities untouched": true,
+            "world1/3/-4/wood/1 unload did not restart timer": true
+          },
+          "evidence": {
+            "starter-wood": {
+              "chips": true,
+              "contact_events": 3,
+              "depletion_to_available_ticks": 300,
+              "fall_frame_seconds": 0.72,
+              "fell": true,
+              "game_seconds": 5.0,
+              "loose": 3,
+              "matches_blade_position_and_travel": true,
+              "return_visible": true,
+              "stored": {
+                "coal": 0,
+                "meat": 0,
+                "metal": 0,
+                "slate": 0,
+                "stone": 0,
+                "wood": 0
+              },
+              "sway": true,
+              "wall_seconds": 0.814622
+            },
+            "world1/3/-4/wood/1": {
+              "chips": true,
+              "contact_events": 3,
+              "depletion_to_available_ticks": 300,
+              "fall_frame_seconds": 0.72,
+              "fell": true,
+              "game_seconds": 5.0,
+              "loose": 3,
+              "matches_blade_position_and_travel": true,
+              "return_visible": true,
+              "stored": {
+                "coal": 2,
+                "meat": 3,
+                "metal": 6,
+                "slate": 5,
+                "stone": 4,
+                "wood": 7
+              },
+              "sway": true,
+              "wall_seconds": 0.684445
+            }
+          },
+          "physics_hz": 60
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "model_sha256": "e165a24b6b1205904165e0f1aad643c2fc2e00152df5d58de218e7ca7e375eff",
+  "scene": "res://field_opening.tscn",
+  "source": "normal touch controls in disposable open-world playtest",
+  "native_result": {
+    "checks": {
+      "body leans into a moving turn and retains running speed": true,
+      "boots keep moving through the airborne exchange": true,
+      "both boots settle above the snow at multiple release phases": true,
+      "both boots stay within their measured pitch through quarter turns": true,
+      "each snow impression begins under a contacting boot": true,
+      "full drag runs": true,
+      "hands pump as body leans into run": true,
+      "knee yields under load, extends at toe-off, then folds during recovery": true,
+      "release comes to rest": true,
+      "release stops within half a metre": true,
+      "run has visible stride, recovery and flight": true,
+      "run loads the snow through both steps": true,
+      "short drag runs": true,
+      "touch jitter stays idle": true,
+      "travel keeps the supported sole planted": true
+    },
+    "motion": {
+      "actual_print_count": 5,
+      "airborne_ticks": 35,
+      "boot_front_back_m": 0.794085502624512,
+      "braking_distance_m": 0.393329948186874,
+      "forward_trunk_lean_deg": 11.0175023377096,
+      "hand_front_back_m": 0.447110176086426,
+      "highest_print_contact_m": 0.00380133092403412,
+      "longest_broad_split_s": 0.0833333333333333,
+      "longest_two_boot_hold_s": 0.0,
+      "maximum_quarter_turn_lean_deg": 4.68036078263553,
+      "measured_stride_phases": [
+        {
+          "heel_above_toe_m": 0.144272381439805,
+          "knee_at_40_deg": 15.235811104646,
+          "knee_at_50_deg": 63.3874563003203,
+          "knee_at_80_deg": 96.7486273766555,
+          "loaded_cycle": 0.121212121212121,
+          "loaded_deg": 42.5252855182983,
+          "push_deg": 14.7106925008771,
+          "recovery_cycle": 0.696969696969697,
+          "recovery_deg": 118.723879936769
+        }
+      ],
+      "min_elbow_flex_deg": 56.4172345919439,
+      "minimum_quarter_turn_speed_m_s": 5.15000009536743,
+      "minimum_sole_y_m": 0.000481808907352388,
+      "simultaneous_flight_apex_m": 0.0381495542824268,
+      "stance_median_slip_m_s": 0.0866667623631656,
+      "steps_per_minute": 220.895217193197,
+      "supported_ticks": 49,
+      "swing_sole_clearance_m": 0.128968313336372,
+      "turn_and_brake_minimum_sole_m": -0.000460602343082428,
+      "world_speed": 6.25
+    },
+    "speeds_m_s": {
+      "full drag runs": 6.25,
+      "short drag runs": 6.25,
+      "touch jitter stays idle": 0.0
+    }
+  },
+  "test_source_sha256": "8fb93790fad2f3ac50356d24ac7aeecec7fcfab2e406acc63acb79c3cf312b3c",
+  "native_source_commit": "17abe3795bb91e6a80b48d93bab7578ad2ad4aed",
+  "native_source_evidence": "Hashes of source model, native contact and touch test match ../Source/Reviewed-files.json in the rerun export."
+}
