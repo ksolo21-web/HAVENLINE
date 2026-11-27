@@ -7,9 +7,11 @@ const PINE := Vector2(-3.60,9.10)
 const STANCE := Vector3(-4.54,0,9.04)
 const PINE_APPROACH := Vector3(-3.17,0,10.24)
 const READY := Vector3(-2.7,0,1.72)
-const SPEED := preload("res://gait_motor.gd").MAX_SPEED
-const ACCELERATION := 14.0
-const BRAKING := 18.0
+# Workers have their own travel pace in world metres per second.
+const EMPTY_SPEED := 3.6
+const LADEN_SPEED := 2.8
+const ACCELERATION := 7.2
+const BRAKING := 10.0
 const FOOT_RADIUS := .25
 const SUPPLIES := ["wood","stone","meat"]
 var world
@@ -20,6 +22,7 @@ var contacts := 0
 var contact_position := Vector3.INF
 var step_cycle := .0
 var travel_speed := 0.0
+var restored_service := ""
 var swing_time := .0
 var swing_landed := false
 var pickup_token := ""
@@ -82,9 +85,11 @@ func setup(host: Node3D) -> void:
 	field_cursor = posmod(int(journal.worker_deliveries),FIELD_DUTIES.size())
 	tree = world.add_resource_source("survivor-work-pine","wood",PINE,1)
 	if world.inventory.settlement.worker_meal > 0:
+		restored_service = "cooker_output"
 		actor.position = _cooked_apron()
 		_go_to_counter()
 	elif not world.inventory.settlement.worker_supply.is_empty():
+		restored_service = "store"
 		actor.position = _shelf_apron()
 		_begin_supply_run(world.inventory.settlement.worker_supply)
 	elif not world.inventory.settlement.worker_carry_token.is_empty():
@@ -132,15 +137,38 @@ func _begin_outbound() -> void:
 	route.assign([Vector3(-2.65,0,2.14),Vector3(0,0,portal.z-GATE_LANDING),Vector3(0,0,portal.z+GATE_LANDING),PINE_APPROACH,STANCE])
 	phase = "to_tree"
 
+func _paid_walkways():
+	if not world or not world.settlement_loop or not world.settlement_loop.conveyors or not world.camp_layout:
+		return null
+	var purchases: Array = world.inventory.build_order
+	if world.Progress.SUPPLY_LINE not in purchases and world.Progress.FOOD_LINE not in purchases:
+		return null
+	# Layout is restored after the survivor and conveyors are constructed.
+	# Rebuild before the first reservation or stride after a purchase or move.
+	var belts = world.settlement_loop.conveyors
+	belts.refresh_paths()
+	return belts.network
+
+func _service_apron(kind: String, ordinary: Vector3) -> Vector3:
+	var network = _paid_walkways()
+	if network:
+		return network.accessible_service(kind)
+	return Vector3(ordinary.x,0,ordinary.z)
+
 func _shelf_apron() -> Vector3:
-	var at: Vector3 = world.depot.apron.global_position
-	return Vector3(at.x,0,at.z)
+	return _service_apron("store",world.depot.apron.global_position)
 
 func _cooked_apron() -> Vector3:
-	return world.lakeshore.output_apron_position()
+	return _service_apron("cooker_output",world.lakeshore.output_apron_position())
+
+func _counter_apron() -> Vector3:
+	return _service_apron("counter",world.counter.service_point.global_position)
 
 func _supply_apron(kind: String) -> Vector3:
-	return world.lakeshore.apron_position() if kind == "meat" else world.processors.apron_position(kind)
+	var ordinary: Vector3 = world.lakeshore.apron_position() if kind == "meat" else world.processors.apron_position(kind)
+	# A worker can also carry building tender to a machine's unbuilt plot.
+	if not world.inventory.is_machine_owned(kind): return ordinary
+	return _service_apron(kind,ordinary)
 
 func _available_surplus(kind: String) -> int:
 	var stock: int = world.carry.available_on_shelf(kind)
@@ -153,7 +181,7 @@ func _next_supply() -> String:
 	if not world.inventory.complete(world.Progress.SECOND): return ""
 	for offset in SUPPLIES.size():
 		var kind: String = SUPPLIES[(dispatch_count+offset)%SUPPLIES.size()]
-		if world.settlement_loop.available_to_feeder(kind) and _available_surplus(kind)>0: return kind
+		if world.settlement_loop.available_to_feeder(kind) and _available_surplus(kind)>0 and _supply_apron(kind).is_finite(): return kind
 	return ""
 
 func _begin_supply_run(kind: String) -> void:
@@ -204,14 +232,20 @@ func _advance_supply(dt: float) -> void:
 	var kind: String = journal.worker_supply
 	match phase:
 		"supply_out":
-			route.assign([_supply_apron(kind)])
+			var apron := _supply_apron(kind)
+			if not apron.is_finite():
+				route.assign([_shelf_apron()])
+				phase = "supply_return"
+				return
+			route.assign([apron])
 			var reached := _walk_route(dt,true)
 			actor.bundle.hide()
 			if reached:
 				waiting = 0.0
 				phase = "supply_unload"
 		"supply_unload":
-			if actor.global_position.distance_to(_supply_apron(kind)) > .42:
+			var recognized: bool = world.lakeshore.at_cooker(actor.global_position) if kind == "meat" else world.processors.at_station(actor.global_position) == kind
+			if not recognized or actor.global_position.distance_to(_supply_apron(kind)) > .42:
 				supply_model.hide()
 				_sync_pack()
 				phase = "supply_out"
@@ -265,12 +299,26 @@ func _advance_supply(dt: float) -> void:
 func _travel_clear(start: Vector3, end: Vector3, radius: float) -> bool:
 	return world.field_env.travel_clear(start,end,radius)
 
+func _has_cargo() -> bool:
+	var journal: Dictionary = world.inventory.settlement
+	if journal.worker_meal > 0 or journal.worker_supply != "" or journal.worker_carry_token != "": return true
+	return journal.worker_load.values().any(func(amount): return amount > 0)
+
 func _walk(destination: Vector3, dt: float, carrying := false) -> bool:
 	var before := actor.global_position
+	if not destination.is_finite():
+		travel_speed = 0.
+		actor.pose("idle",step_cycle)
+		return false
 	destination.y = before.y
 	var waypoint := destination
-	if world.camp_active and world.field_env.is_inside_camp(before) and world.field_env.is_inside_camp(destination) and world.get("camp_layout"):
-		waypoint = world.camp_layout.next_waypoint(before,destination,FOOT_RADIUS)
+	var network = _paid_walkways()
+	if world.camp_active and world.field_env.is_inside_camp(before) and world.field_env.is_inside_camp(destination) and world.camp_layout:
+		if network:
+			waypoint = network.walker_waypoint(before,destination)
+			if not waypoint.is_finite(): waypoint = before
+		else:
+			waypoint = world.camp_layout.next_waypoint(before,destination,FOOT_RADIUS)
 	var heading := before.direction_to(waypoint)
 	var distance := before.distance_to(waypoint)
 	if distance <= .01:
@@ -279,11 +327,14 @@ func _walk(destination: Vector3, dt: float, carrying := false) -> bool:
 		return before.distance_to(destination) <= .025
 	var turn := angle_difference(actor.rotation.y,atan2(heading.x,heading.z))
 	actor.rotation.y += clampf(turn,-8.5*dt,8.5*dt)
-	var corner_limit := lerpf(SPEED,SPEED*.25,smoothstep(.3,1.9,absf(turn)))
+	var loaded := carrying or _has_cargo()
+	var cruise := LADEN_SPEED if loaded else EMPTY_SPEED
+	var corner_limit := lerpf(cruise,cruise*.38,smoothstep(.3,1.9,absf(turn)))
 	var speed_limit := minf(corner_limit,sqrt(2.*BRAKING*distance))
 	travel_speed = move_toward(travel_speed,speed_limit,(ACCELERATION if speed_limit > travel_speed else BRAKING)*dt)
 	var next := before.move_toward(waypoint,travel_speed*dt)
-	if not _travel_clear(before,next,FOOT_RADIUS):
+	var inside_step: bool = network != null and world.field_env.is_inside_camp(before) and world.field_env.is_inside_camp(next)
+	if not _travel_clear(before,next,FOOT_RADIUS) or (inside_step and not network.pedestrian_clear(before,next,FOOT_RADIUS)):
 		travel_speed = 0.
 		actor.pose("idle",step_cycle)
 		return false
@@ -291,7 +342,7 @@ func _walk(destination: Vector3, dt: float, carrying := false) -> bool:
 	var meters := before.distance_to(next)
 	var pace := meters/maxf(dt,.0001)
 	step_cycle = fposmod(step_cycle+meters/actor.forester_gait.stride_for_speed(pace),1.)
-	actor.travel_pose(step_cycle,pace,carrying)
+	actor.travel_pose(step_cycle,pace,loaded)
 	actor.bundle.hide()
 	return next.distance_to(destination) <= .015
 
@@ -302,6 +353,12 @@ func _walk_route(dt: float, carrying: bool) -> bool:
 
 func advance(dt: float) -> void:
 	if not actor or world.persist_blocked or world.reset_time>0: return
+	if not restored_service.is_empty():
+		var network = _paid_walkways()
+		if network:
+			var floor_point: Vector3 = network.accessible_service(restored_service)
+			if floor_point.is_finite(): actor.global_position = floor_point
+		restored_service = ""
 	var journal: Dictionary = world.inventory.settlement
 	if phase in ["carrying","bulk_return","supply_pickup","supply_return","supply_back","bin_delivery"] and world.inventory.storage_open("wood"):
 		var door := _shelf_apron()
@@ -328,12 +385,15 @@ func advance(dt: float) -> void:
 					route.assign([_shelf_apron()])
 					phase = "supply_pickup"
 		"meal_collect":
-			route.assign([_cooked_apron()])
+			if not _can_fetch_meal():
+				_return_to_shelf()
+				return
+			route.assign([_meal_pickup_apron()])
 			if _walk_route(dt,false):
 				if world.settlement_loop.collect_worker_meal(): _go_to_counter()
 				else: _return_to_shelf()
 		"meal_serve":
-			route.assign([world.counter.service_point.global_position])
+			route.assign([_counter_apron()])
 			if _walk_route(dt,false):
 				actor.rotation.y = PI
 				actor.pose("receive",.48 if world.counter.sale_order != 0 else .22)
@@ -453,10 +513,21 @@ func _nearest_new_bundle() -> String:
 
 func _can_fetch_meal() -> bool:
 	var journal: Dictionary = world.inventory.settlement
-	return world.counter and world.counter.active and world.inventory.is_machine_owned("meat") and journal.worker_meal == 0 and RAW_RULES.waiting_meals(journal) > 0
+	if not world.counter or not world.counter.active or journal.worker_meal > 0: return false
+	if world.settlement_loop.conveyors.unclaimed_orders()==0: return false
+	if not _counter_apron().is_finite(): return false
+	return _meal_pickup_apron().is_finite()
+
+func _meal_pickup_apron() -> Vector3:
+	var journal: Dictionary = world.inventory.settlement
+	if world.inventory.is_machine_owned("meat") and RAW_RULES.waiting_meals(journal)>0:
+		var cooked := _cooked_apron()
+		if cooked.is_finite(): return cooked
+	if int(journal.get("product_store",{}).get("meal",0))>0: return _shelf_apron()
+	return Vector3.INF
 
 func _to_cooker() -> void:
-	route.assign([_cooked_apron()])
+	route.assign([_meal_pickup_apron()])
 	phase = "meal_collect"
 
 func _go_to_counter() -> void:

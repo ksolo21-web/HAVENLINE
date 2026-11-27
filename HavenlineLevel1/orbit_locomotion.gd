@@ -6,7 +6,7 @@ const WALK_SPEED := 1.12
 const RUN_SPEED := 2.84
 # Backward speed of the planted outsole in the authored field clip. The
 # controller supplies actual travel after collisions to keep its footfalls in phase.
-const FIELD_STRIDE_SPEED := 4.63
+const FIELD_STRIDE_SPEED := 3.5651
 const BLEND_START := 1.12
 const BLEND_END := 2.35
 var player: AnimationPlayer

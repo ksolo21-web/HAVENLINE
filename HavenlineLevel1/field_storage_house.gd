@@ -4,6 +4,10 @@ extends Node3D
 signal door_motion(opening:bool, at:Vector3)
 
 const SHELL := preload("res://assets/storage_house/camp_storehouse.glb")
+const CONNECTIONS := preload("res://assets/storage_house/connected_storehouse.glb")
+const HATCH_SHADER:=preload("res://assets/storage_house/loading_hatches.gdshader")
+const PLACARD_SHADER:=preload("res://assets/storage_house/loading_placard.gdshader")
+const HATCH_WALLS:=["LeftWall","RightWall","BackWall","LeftArmor","RightArmor","BackArmor","RightDetail"]
 const BAYS := {"wood":Vector3(-1.15,.763,.25),"stone":Vector3(-1.15,.763,-.56),"meat":Vector3(0,.772,-.92),
 	"coal":Vector3(1.15,.763,.25),"slate":Vector3(-.68,.772,-.92),"metal":Vector3(.68,.772,-.92)}
 # Keep balances above each bay header, clear of the stock, rims and sliding leaves.
@@ -18,7 +22,6 @@ var tier := 0
 var open_amount := 0.0
 var inside_view := false
 var doors_open := false
-var supply_door_hold:=0.0
 var collision: StaticBody3D
 var parts := {}
 var shelves: Array[Label3D] = []
@@ -29,11 +32,37 @@ var last_rear_occlusion := false
 var last_roof_visible := false
 var last_cutaway := false
 var last_slide := -1.0
+var connections_paid := false
+var connection_roof: Node3D
+var dock_meshes := {}
+var dock_paints := {}
+var hatch_material:=ShaderMaterial.new()
 
 func _ready() -> void:
 	model=SHELL.instantiate()
 	add_child(model)
 	for child in model.get_children(): parts[String(child.name)]=child
+	var library:Node3D=CONNECTIONS.instantiate()
+	connection_roof=Node3D.new()
+	connection_roof.name="ConnectedSnowRoof"
+	model.add_child(connection_roof)
+	for mesh_part in library.get_children():
+		if mesh_part.name in [&"ConnectedRoof",&"RearVent",&"SnowAndRoof"]:
+			mesh_part.owner=null
+			library.remove_child(mesh_part)
+			connection_roof.add_child(mesh_part)
+		elif mesh_part is MeshInstance3D:
+			var id:=String(mesh_part.name)
+			dock_meshes[id]=mesh_part.mesh
+			var original:StandardMaterial3D=mesh_part.mesh.surface_get_material(0)
+			var paint:=ShaderMaterial.new()
+			paint.shader=PLACARD_SHADER
+			paint.set_shader_parameter("original_paint",original.albedo_texture)
+			dock_paints[id]=paint
+	library.free()
+	var paint:StandardMaterial3D=parts.BackWall.mesh.surface_get_material(0)
+	hatch_material.shader=HATCH_SHADER
+	hatch_material.set_shader_parameter("painted_timber",paint.albedo_texture)
 	collision=StaticBody3D.new()
 	collision.name="StorehouseWalls"
 	add_child(collision)
@@ -70,6 +99,45 @@ func _wall(center: Vector3, size_: Vector3) -> void:
 func configure(player:Node3D) -> void:
 	actor=player
 
+## Each external connection is bought separately. A machine-to-counter belt
+## alone does not replace the unconnected architecture on the house.
+func configure_connections(lanes:Array) -> void:
+	var paid:=false
+	for lane in lanes:
+		if lane in ["wood","stone","meat","planks","blocks","stored_meal","meal_to_store"]:
+			paid=true
+			break
+	hatch_material.set_shader_parameter("utility_receiving","planks" in lanes or "blocks" in lanes)
+	hatch_material.set_shader_parameter("utility_dispatch","wood" in lanes or "stone" in lanes)
+	hatch_material.set_shader_parameter("food_receiving","meal_to_store" in lanes)
+	hatch_material.set_shader_parameter("food_dispatch","stored_meal" in lanes)
+	hatch_material.set_shader_parameter("cold_dispatch","meat" in lanes)
+	if paid==connections_paid:return
+	for key in HATCH_WALLS:
+		parts[key].material_override=hatch_material if paid else null
+	connections_paid=paid
+	last_tier=-1
+	if model:_apply()
+
+func connection_frame(prepared_food:bool,inbound:bool=false) -> MeshInstance3D:
+	var id:="FoodDockFrame" if prepared_food else "UtilityDockFrame"
+	var frame:=MeshInstance3D.new()
+	frame.name=id
+	frame.mesh=dock_meshes[id]
+	frame.material_override=dock_paints[id]
+	var label:=Label3D.new()
+	label.name="Direction"
+	label.text="IN" if inbound else "OUT"
+	label.outline_size=0
+	label.pixel_size=.00146
+	label.font_size=64
+	label.position=Vector3(0.,.584,.074)
+	label.modulate=Color("#261c13")
+	label.shaded=false
+	label.double_sided=true
+	frame.add_child(label)
+	return frame
+
 func update_state(new_tier:int, stock:Dictionary) -> void:
 	tier=clampi(new_tier,0,3)
 	last_stock=stock.duplicate()
@@ -88,8 +156,6 @@ func _physics_process(delta:float) -> void:
 		doors_open=absf(p.x)<2.18 and p.z> -1.44 and p.z<3.99
 	else:
 		doors_open=absf(p.x)<1.56 and p.z> -1.10 and p.z<3.70
-	supply_door_hold=maxf(0.,supply_door_hold-delta)
-	doors_open=doors_open or supply_door_hold>0.
 	if inside_view:
 		inside_view=absf(p.x)<2.03 and p.z> -1.25 and p.z<3.26
 	else:
@@ -119,9 +185,11 @@ func _apply() -> void:
 	collision.collision_layer=1 if tier>0 else 0
 	var roof_visible := tier>0 and not inside_view and not rear_occlusion
 	if last_tier != tier or last_roof_visible != roof_visible:
-		for key in ROOF: parts[key].visible=roof_visible
-		parts.GableArmor.visible=roof_visible and tier==3
-		parts.RoofStuds.visible=roof_visible and tier==3
+		connection_roof.visible=roof_visible and connections_paid
+		var original_roof:=roof_visible and not connections_paid
+		for key in ROOF: parts[key].visible=original_roof
+		parts.GableArmor.visible=original_roof and tier==3
+		parts.RoofStuds.visible=original_roof and tier==3
 		last_roof_visible=roof_visible
 	if last_rear_occlusion != rear_occlusion:
 		# Keep the blue lower wall and its steel facing together, like the

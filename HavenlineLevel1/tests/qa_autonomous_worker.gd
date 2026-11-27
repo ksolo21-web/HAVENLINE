@@ -4,6 +4,8 @@ extends "res://tests/qa_worker_jobs.gd"
 ## use the field scene's real worker, drops, save, fence and placement systems.
 const HERE := "res://tests/qa_autonomous_worker.gd"
 var peak_speed := 0.
+var laden_peak := 0.
+var empty_peak := 0.
 var progress := []
 var receipts := []
 var last_pose := ""
@@ -33,13 +35,16 @@ func seed_rescue() -> void:
 
 func watch_step(dt: float, frame: int) -> void:
 	var before: Vector3 = worker.actor.position
+	var was_loaded: bool = worker._has_cargo()
 	tick(dt)
 	if worker.phase!=last_pose:
 		progress.append({"frame":frame,"phase":worker.phase,"x":worker.actor.position.x,"z":worker.actor.position.z})
 		last_pose=worker.phase
 	var speed:=before.distance_to(worker.actor.position)/dt
 	peak_speed=maxf(speed,peak_speed)
-	if speed>=4 and motion.size()<320:
+	if was_loaded: laden_peak=maxf(laden_peak,speed)
+	else: empty_peak=maxf(empty_peak,speed)
+	if speed>=2. and motion.size()<320:
 		var rig:Skeleton3D=worker.actor.skeleton
 		var knee_angles:=[0.,0.]
 		var ankle_pitch:=[0.,0.]
@@ -71,7 +76,7 @@ func run() -> void:
 	seed_rescue()
 	var book=game.inventory
 	var start:Dictionary=book.paid.duplicate(true)
-	for i in 60*250:
+	for i in 60*450:
 		watch_step(1./60.,i)
 		if book.settlement.worker_deliveries > 0 or game.persist_blocked: break
 	check(not game.persist_blocked,"every transaction was valid on disk")
@@ -79,10 +84,10 @@ func run() -> void:
 	check(book.complete(game.Progress.STORAGE[0]) and start[game.Progress.STORAGE[0]].wood==0,"worker gathered and bought first house with no prior storage or down payment")
 	check(book.settlement.worker_deliveries>0,"worker continued working after the house purchase")
 	check(book.carried.meat==1 and book.carried.wood==0 and book.carried.stone==0,"worker never spent the player's pocket inventory")
-	check(peak_speed >= game.gait_motor.MAX_SPEED-.05,"worker can match the player's full travel speed")
+	check(absf(empty_peak-worker.EMPTY_SPEED)<.05 and absf(laden_peak-worker.LADEN_SPEED)<.05 and peak_speed<game.gait_motor.MAX_SPEED,"empty and loaded trips reach their own capped speeds below Character 1")
 	var copy=game.Inventory.new()
 	check(copy.configure(book.configured_costs) and copy.restore(book.snapshot()),"the earned field, construction and store balances conserve receipts")
-	var result={"checks":checks,"errors":errors,"actual_peak_m_s":peak_speed,"phases":progress,"motion_samples":motion,"build_order":receipts,"elapsed":timelapsed,"ledger":book.settlement,"paid":book.paid,"stored":book.stored,"worker_feet":str(worker.actor.position),"remaining_waypoints":str(worker.route),"save_error":game.persist_error}
+	var result={"checks":checks,"errors":errors,"actual_peak_m_s":peak_speed,"loaded_peak_m_s":laden_peak,"empty_peak_m_s":empty_peak,"phases":progress,"motion_samples":motion,"build_order":receipts,"elapsed":timelapsed,"ledger":book.settlement,"paid":book.paid,"stored":book.stored,"worker_feet":str(worker.actor.position),"remaining_waypoints":str(worker.route),"save_error":game.persist_error}
 	print("Early worker ",checks.size()," checks, elapsed ",timelapsed,", failures ",errors," phase ",worker.phase," feet ",worker.actor.position)
 	if not output.is_empty():
 		var f:=FileAccess.open(output.path_join("Early-autonomous-camp.json"),FileAccess.WRITE)

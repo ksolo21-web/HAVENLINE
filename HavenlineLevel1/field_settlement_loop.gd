@@ -11,6 +11,8 @@ var world
 var works
 var transfers
 var conveyors
+var belt_audio_initialized := false
+var belt_was_blocked := false
 var cooking: float:
 	get:
 		return float(world.inventory.settlement.work_seconds.meat) if world else 0.0
@@ -38,6 +40,7 @@ func install(host: Node3D) -> void:
 	world.counter = Counter.new()
 	add_child(world.counter)
 	world.counter.setup(world,make_customer,serve)
+	world.counter.served.connect(_meal_received)
 	transfers = Transfers.new()
 	add_child(transfers)
 	transfers.setup(world)
@@ -74,10 +77,13 @@ func advance(dt: float) -> void:
 	# the hopper after this step, so a late delivery cannot earn a head start.
 	_advance_production(dt)
 	if _simulation_active(): conveyors.advance(dt)
+	_update_belt_mix()
 	works.advance(dt)
 	if can_transact(): collect_meal()
 	var progress := _present_production(dt)
 	world.counter.set_active(world.inventory.complete(Progress.SECOND),int(world.inventory.settlement.served))
+	if world.inventory.complete(Progress.FOOD_LINE):
+		world.counter.staff_food_line(Callable(conveyors,"buffer_position"))
 	if can_transact(): world.counter.advance(dt)
 	if ready() and not announced_finish:
 		announced_finish = true
@@ -132,13 +138,36 @@ func deliver_worker_wood() -> bool:
 	journal.worker_deliveries += 1
 	return commit_receipt("worker_delivery",world.depot.bins.wood.global_position)
 
+func _meal_received(_order: int) -> void:
+	world._event("meal_handoff", world.counter.customer_point.global_position)
+
+func _update_belt_mix() -> void:
+	var gain := 0.0
+	var journal: Dictionary = world.inventory.settlement
+	var blocked: bool = not conveyors.blocked_lane.is_empty() or journal.counter_stock >= Rules.COUNTER_RACK_CAPACITY
+	if _simulation_active():
+		for lane: String in conveyors.goods:
+			if journal.line_load[lane] == 0: continue
+			var cargo: Node3D = conveyors.goods[lane]
+			if not cargo.visible: continue
+			if float(journal.line_progress[lane]) >= 1.0:
+				blocked = true
+				continue
+			var distance := cargo.global_position.distance_to(world.actor.global_position)
+			gain = maxf(gain, clampf(1.0-distance/14.0, 0.0, 1.0))
+	if belt_audio_initialized and blocked != belt_was_blocked and _simulation_active():
+		world._event("conveyor_hold" if blocked else "conveyor_restart",world.depot.house.global_position)
+	belt_audio_initialized = true
+	belt_was_blocked = blocked
+	world.sound.set_conveyor_proximity(gain)
+
 func available_to_feeder(kind: String) -> bool:
 	return can_transact() and kind in Rules.KINDS and world.inventory.is_machine_owned(kind) and int(world.inventory.settlement.hoppers[kind])+int(world.inventory.settlement.line_load[kind])+world.carry.incoming(kind,kind) < Rules.HOPPER_CAPACITY
 
 func _running(kind: String) -> bool:
 	var journal: Dictionary = world.inventory.settlement
 	if not _simulation_active() or not world.inventory.is_machine_owned(kind) or journal.hoppers[kind] <= 0: return false
-	return kind != "meat" or Rules.waiting_meals(journal) < Rules.ROAST_RACK_CAPACITY
+	return Rules.Logistics.rack(journal,kind)<Rules.Logistics.WORK_RACK
 
 func advance_unattended(dt: float) -> void:
 	if not _simulation_active(): return
@@ -195,23 +224,32 @@ func _present_production(dt: float) -> float:
 func cook() -> bool:
 	return _finish_cycle("meat")
 
+func _meal_pickup(at:Vector3)->Vector3:
+	var j:Dictionary=world.inventory.settlement
+	if Rules.waiting_meals(j)>0 and world.lakeshore.at_output(at):
+		return world.lakeshore.cooker_output.global_position
+	if j.product_store.meal>0 and conveyors.unclaimed_orders()>0 and world.depot.at_loading_area(at):
+		j.product_store.meal-=1
+		return conveyors.shelf_position("meal")
+	return Vector3.INF
+
 func collect_meal() -> bool:
 	var journal: Dictionary = world.inventory.settlement
-	if not can_transact() or not world.inventory.is_machine_owned("meat") or not world.lakeshore.at_output(world.actor.global_position): return false
-	if journal.held_meal != 0 or Rules.waiting_meals(journal) <= 0 or world.counter.sale_order != 0: return false
-	journal.held_meal = 1
-	var at: Vector3 = world.lakeshore.cooker_output.global_position
-	if not commit_receipt("pickup_partial",at): return false
+	if not can_transact() or not world.inventory.is_machine_owned("meat") or journal.held_meal>0 or world.counter.sale_order!=0:return false
+	var at:=_meal_pickup(world.actor.global_position)
+	if not at.is_finite():return false
+	journal.held_meal=1
+	if not commit_receipt("pickup_partial",at):return false
 	world.counter.collect_meal(at)
 	return true
 
 func collect_worker_meal() -> bool:
-	var journal: Dictionary = world.inventory.settlement
-	if not can_transact() or not journal.rescued or not world.inventory.is_machine_owned("meat"): return false
-	if journal.worker_meal > 0 or Rules.waiting_meals(journal) <= 0 or not world.lakeshore.at_output(world.survivor.actor.global_position): return false
-	journal.worker_meal = 1
-	var at: Vector3 = world.lakeshore.cooker_output.global_position
-	if not commit_receipt("pickup_partial",at): return false
+	var journal:Dictionary=world.inventory.settlement
+	if not can_transact() or not journal.rescued or not world.inventory.is_machine_owned("meat") or journal.worker_meal>0 or conveyors.unclaimed_orders()==0:return false
+	var at:=_meal_pickup(world.survivor.actor.global_position)
+	if not at.is_finite():return false
+	journal.worker_meal=1
+	if not commit_receipt("pickup_partial",at):return false
 	world.counter.collect_worker_meal(at)
 	return true
 
@@ -257,8 +295,21 @@ func handle_input(event: InputEvent) -> bool:
 		return true
 	return false
 
+const BLOCKED_BELT := {
+	"wood":"Move the saw or storehouse to reconnect the wood belt.",
+	"planks":"Move the saw or storehouse to reconnect the plank belt.",
+	"stone":"Move the drill or storehouse to reconnect the stone belt.",
+	"blocks":"Move the drill or storehouse to reconnect the block belt.",
+	"meat":"Move the cooker or storehouse to reconnect the meat belt.",
+	"meal_to_store":"Move the cooker or storehouse to reconnect the roast belt.",
+	"meal":"Move the cooker or counter to reconnect meal service.",
+	"stored_meal":"Move the storehouse or counter to reconnect meal service."
+}
+
 func hint(previous: String, danger: bool) -> String:
 	if conveyors and not conveyors.menu.selected.is_empty() and world.inventory.offer_open(conveyors.menu.selected):return world.build_hint(conveyors.menu.selected)
+	if conveyors and not conveyors.blocked_lane.is_empty() and world.field_env.is_inside_camp(world.actor.global_position):
+		return BLOCKED_BELT[conveyors.blocked_lane]
 	var journal: Dictionary = world.inventory.settlement
 	if journal.level == 2 and world.next_project.is_empty():
 		return "Level 2 preview · All Level 1 plots complete. The camp is open."

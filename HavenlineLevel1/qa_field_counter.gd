@@ -11,12 +11,14 @@ class TestHost extends Node3D:
 	var inventory := {"settlement":{"cooked":0,"served":0,"held_meal":0}}
 	var calls := []
 	var presentation_guard: Callable
+	var service
 	func sale(order: int) -> bool:
 		calls.append(order)
 		if not presentation_guard.call(order) or order != inventory.settlement.served+1 or inventory.settlement.cooked <= inventory.settlement.served:
 			return false
 		inventory.settlement.served = order
-		inventory.settlement.held_meal = 0
+		if service.belt_serving: inventory.settlement.counter_stock -= 1
+		else: inventory.settlement.held_meal = 0
 		return true
 
 var failures := []
@@ -53,6 +55,7 @@ func run() -> void:
 	host.add_child(host.actor)
 	host.add_child(counter)
 	host.presentation_guard = counter.awaiting_payment
+	host.service = counter
 	counter.setup(host, visitor_model, host.sale)
 	check("counter hidden and harmless before expansion",not counter.visible and counter.guard.collision_layer==0)
 	counter.set_active(true,0)
@@ -105,6 +108,34 @@ func run() -> void:
 	check("second ticket commits exactly once",host.calls==[1,2])
 	counter.set_active(false,2)
 	check("visual and queue cleanup",counter.queue.is_empty() and counter.leaving.is_empty() and not counter.visible and counter.guard.collision_layer==0)
+	counter.set_active(true,2)
+	host.actor.global_position = Vector3(0,0,30)
+	simulate(6.)
+	host.inventory.settlement.cooked = 3
+	host.inventory.settlement.counter_stock = 1
+	simulate(.6)
+	check("stock alone cannot grant a remote sale",host.calls==[1,2])
+	var pickup := func(_slot:int)->Vector3: return counter.to_global(Vector3(-.64,.85,1.45))
+	counter.staff_food_line(pickup)
+	var start_point:Vector3=counter.attendant.body.global_position
+	simulate(.22)
+	check("cashier walks empty handed to buffer before payment",counter.belt_serving and counter.attendant.body.global_position.distance_to(start_point)>.12 and counter.meal.global_position.distance_to(pickup.call(0))<.015 and not counter.awaiting_payment(3))
+	var saw_lift:=false
+	var saw_carry:=false
+	var cash_on_register:=false
+	var min_staff_clearance:=INF
+	for tick in 270:
+		counter.advance(1./60.)
+		var feet:Vector3=counter.attendant.body.position
+		var closest:=Vector2(clampf(feet.x,-.64,.53),1.45)
+		min_staff_clearance=minf(min_staff_clearance,Vector2(feet.x,feet.z).distance_to(closest))
+		if counter.belt_serving and counter.attendant.step==counter.attendant.Step.LIFT: saw_lift=true
+		if counter.belt_serving and counter.attendant.step==counter.attendant.Step.CARRY and counter.meal.global_position.distance_to(counter.attendant.hand())<.075: saw_carry=true
+		if counter.sale_committed and counter.sale_elapsed>Counter.FOOD_TO_BOARD+Counter.EXCHANGE_TIME*.70:
+			cash_on_register=counter.cash.global_position.distance_to(counter.payment_rest.global_position)<.015
+	check("cashier clears the rounded end and standby roller lane on foot",min_staff_clearance>.52)
+	check("cashier lifts the stock and visibly carries it with an actual palm",saw_lift and saw_carry and counter.attendant.palm!=null)
+	check("one handed-off portion cleared the buffer and paid at the register",host.calls==[1,2,3] and host.inventory.settlement.counter_stock==0 and cash_on_register)
 	host.queue_free()
 	for i in 3: await process_frame
 	print(JSON.stringify({"checks":successes,"failures":failures}))

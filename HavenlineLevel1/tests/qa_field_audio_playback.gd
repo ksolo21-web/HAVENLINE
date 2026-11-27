@@ -59,6 +59,24 @@ func run() -> void:
 		var sample: Dictionary = await measure(.65)
 		report.music[state]=sample
 		check(sample.frames>2000 and sample.rms_dbfs > -55.,state+" music reaches Master")
+	# Monitor the actual conveyor stem on its own while the other ambience is muted.
+	bank.set_mix_levels(0,0,0,false)
+	AudioServer.add_bus()
+	var monitor := AudioServer.bus_count-1
+	AudioServer.set_bus_name(monitor,"QA Conveyor Monitor")
+	AudioServer.set_bus_send(monitor,FieldAudio.OUTPUT)
+	var motor: AudioStreamPlayer = bank._loops.conveyor_motor
+	motor.bus = "QA Conveyor Monitor"
+	bank.set_conveyor_proximity(1.)
+	await create_timer(.9).timeout
+	var running := await measure(.30)
+	bank.set_conveyor_proximity(0.)
+	await create_timer(1.8).timeout
+	var stopped := await measure(.30)
+	check(running.rms_dbfs > -42 and stopped.rms_dbfs < running.rms_dbfs - 35.,"moving conveyor is audible and idle conveyor fades")
+	report["conveyor_motor"] = {"working":running, "idle":stopped}
+	motor.bus = FieldAudio.AMBIENCE
+	AudioServer.remove_bus(monitor)
 	bank.set_mix_levels(0,0,1,false)
 	var routing: Dictionary = FieldAudio.ALIASES.duplicate()
 	for kind: String in FieldAudio.ORE_PITCH:

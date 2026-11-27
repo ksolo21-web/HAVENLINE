@@ -101,7 +101,7 @@ func _landing(kind: String) -> Vector3:
 	var result: Vector3 = outlets[kind]
 	if kind == "meat":
 		return result + _meal_slot(clampi(shown_meals, 0, 3))
-	var count := clampi(int(world.inventory.settlement["processed_" + kind]), 0, 3)
+	var count := clampi(preload("res://field_logistics.gd").rack(world.inventory.settlement,kind), 0, 3)
 	if kind == "wood":
 		return result + Vector3.UP * (.25 * count)
 	return result + Vector3(0, floori(count / 2.0) * .235, (count % 2 - .5) * .33)

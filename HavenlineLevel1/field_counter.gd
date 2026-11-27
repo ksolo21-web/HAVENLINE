@@ -35,6 +35,8 @@ var sale_elapsed := 0.0
 var sale_committed := false
 var worker_serving := false
 var belt_serving := false
+var attendant: RefCounted
+var staff_buffer: Callable
 var worker_palm: BoneAttachment3D
 var worker_roast: Node3D
 var worker_origin := Vector3.ZERO
@@ -102,6 +104,16 @@ func set_active(enabled: bool, last_served: int) -> void:
 	if not enabled and is_instance_valid(worker_roast):
 		worker_roast.queue_free()
 		worker_roast = null
+	if not enabled:
+		if attendant:
+			attendant.body.queue_free()
+			attendant = null
+		staff_buffer = Callable()
+		belt_serving = false
+		worker_serving = false
+		if is_instance_valid(parked_player_meal):
+			parked_player_meal.queue_free()
+		parked_player_meal = null
 	visible = enabled
 	guard.collision_layer = 1 if enabled else 0
 	if enabled:
@@ -120,6 +132,7 @@ func set_active(enabled: bool, last_served: int) -> void:
 func move_to_bay(x:float) -> void:
 	var shift := Vector3(x-global_position.x,0,0)
 	global_position += shift
+	if belt_serving: exchange_origin += shift
 	for group: Array in [queue,leaving]:
 		for visitor: Dictionary in group:
 			visitor.body.global_position -= shift
@@ -148,7 +161,7 @@ func front_ready(order: int) -> bool:
 	return (queue[0].body as Node3D).position.distance_to(customer_point.position) < .035
 
 func awaiting_payment(order: int) -> bool:
-	return order == sale_order and not sale_committed and sale_elapsed >= FOOD_TO_BOARD and front_ready(order)
+	return order == sale_order and not sale_committed and sale_elapsed >= FOOD_TO_BOARD and front_ready(order) and (not belt_serving or (attendant and attendant.step == attendant.Step.AT_BOARD and at_service(attendant.body.global_position)))
 
 func _slot(i: int) -> Vector3:
 	return customer_point.position + Vector3(0,0,-i*SPACING)
@@ -274,12 +287,18 @@ func _show_worker_meal(dt: float) -> void:
 func delivery_position(slot:int=0) -> Vector3:
 	return to_global(Vector3(-.75,1.09,.20+.34*slot))
 
+func staff_food_line(buffer: Callable) -> void:
+	if not active or attendant: return
+	staff_buffer = buffer
+	attendant = preload("res://field_counter_attendant.gd").new()
+	attendant.install(self,make_customer)
+
 func _server_position() -> Vector3:
-	if belt_serving:return service_point.global_position
+	if belt_serving:return attendant.body.global_position
 	return world.survivor.actor.global_position if worker_serving else world.actor.global_position
 
 func _server_hand() -> Vector3:
-	if belt_serving:return payment_rest.global_position+global_basis*Vector3(-.26,.08,.30)
+	if belt_serving:return attendant.hand()
 	return _worker_meal_point() if worker_serving else _carried_meal_point()
 
 func _guest_palm(entry: Dictionary, side: String) -> Vector3:
@@ -331,7 +350,19 @@ func _finish_worker_presentation(cancelled: bool) -> void:
 	parked_player_meal = null
 	worker_serving = false
 
+func _board_point() -> Vector3:
+	return to_global(Vector3(-.80,1.08,.47)) if belt_serving else food_rest.global_position
+
 func _serve(dt: float) -> void:
+	if belt_serving:
+		if not front_ready(sale_order) and not sale_committed:
+			sale_order = 0
+			_finish_worker_presentation(true)
+			return
+		if attendant.step != attendant.Step.AT_BOARD:
+			if not attendant.bring_to_board(dt,meal,staff_buffer.call(0)): return
+			exchange_origin = meal.global_position
+		attendant.present(dt,sale_elapsed,FOOD_TO_BOARD,EXCHANGE_TIME)
 	sale_elapsed += dt
 	if not sale_committed:
 		if not at_service(_server_position()) or (not worker_serving and not belt_serving and world.player_hp <= 0) or not front_ready(sale_order):
@@ -340,7 +371,7 @@ func _serve(dt: float) -> void:
 			collect_time = 0.
 			_finish_worker_presentation(true)
 			return
-		meal.global_position = _arc(exchange_origin,food_rest.global_position,sale_elapsed/FOOD_TO_BOARD,.30)
+		meal.global_position = _arc(exchange_origin,_board_point(),sale_elapsed/FOOD_TO_BOARD,.30)
 		if sale_elapsed < FOOD_TO_BOARD:
 			return
 		if not take_meal_payment.call(sale_order):
@@ -352,16 +383,19 @@ func _serve(dt: float) -> void:
 		sale_committed = true
 		cash = MONEY.instantiate()
 		add_child(cash)
-		exchange_event.emit("counter_trade", food_rest.global_position)
+		exchange_event.emit("counter_trade",_board_point())
 	var t := clampf((sale_elapsed-FOOD_TO_BOARD)/EXCHANGE_TIME,0,1)
 	var buyer_body: Node3D = queue[0].body
 	var receiving_point := _guest_palm(queue[0],"right") + buyer_body.global_basis * Vector3(-.15,.01,.04)
-	meal.global_position = _arc(food_rest.global_position,receiving_point,(t-.12)/.49,.24)
+	meal.global_position = _arc(_board_point(),receiving_point,(t-.12)/.49,.24)
 	meal.global_rotation.y = lerp_angle(meal.global_rotation.y,buyer_body.global_rotation.y,clampf(10.*dt,0,1))
 	if t < .48:
 		cash.global_position = _arc(_guest_palm(queue[0],"left"),payment_rest.global_position,t/.48,.30)
 	else:
-		cash.global_position = _arc(payment_rest.global_position, _server_hand(),(t-.60)/.40,.29)
+		if belt_serving:
+			cash.global_position = payment_rest.global_position
+		else:
+			cash.global_position = _arc(payment_rest.global_position, _server_hand(),(t-.60)/.40,.29)
 	if t >= 1.:
 		var receipt := sale_order
 		var buyer: Dictionary = queue.pop_front()
@@ -385,6 +419,7 @@ func advance(dt: float) -> void:
 		if not worker_serving: _show_worker_meal(dt)
 		_serve(dt)
 		return
+	if attendant: attendant.idle(dt)
 	var ledger: Dictionary = world.inventory.settlement
 	var ready: bool = int(ledger.held_meal) == 1
 	_update_carried(dt,ready)
@@ -394,7 +429,7 @@ func advance(dt: float) -> void:
 	var player_ready: bool = ready and collect_time >= 1. and world.player_hp > 0 and at_service(world.actor.global_position)
 	if not player_ready:
 		var worker_ready:bool=ledger.get("worker_meal",0)==1 and worker_transfer>=1. and at_service(world.survivor.actor.global_position)
-		if not worker_ready and ledger.get("counter_stock",0)==0:return
+		if not worker_ready and (not attendant or ledger.get("counter_stock",0)==0):return
 		parked_player_meal=meal
 		if worker_ready:
 			worker_serving=true
@@ -404,7 +439,8 @@ func advance(dt: float) -> void:
 			belt_serving=true
 			meal=make_meal()
 			add_child(meal)
-			meal.global_position=delivery_position()
+			meal.global_position=staff_buffer.call(0)
+			attendant.begin()
 	sale_order = order
 	sale_elapsed = 0.0
 	exchange_origin = meal.global_position

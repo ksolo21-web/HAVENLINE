@@ -176,7 +176,7 @@ func sync_outputs() -> void:
 	if not world or not world.get("inventory"):return
 	var settlement:Dictionary=world.inventory.settlement
 	for kind:String in CENTERS:
-		var count:=int(settlement.get("processed_"+kind,0))
+		var count:=preload("res://field_logistics.gd").rack(settlement,kind) if settlement.has("product_store") else int(settlement.get("processed_"+kind,0))
 		if balances[kind]==count:continue
 		balances[kind]=count
 		var stock:Node3D=trays[kind]

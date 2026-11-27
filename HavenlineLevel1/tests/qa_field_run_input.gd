@@ -34,7 +34,7 @@ func local_joint(skeleton: Skeleton3D, joint: String) -> Vector3:
 	return world.actor.to_local(skeleton.to_global(skeleton.get_bone_global_pose(bone).origin))
 
 # Align each measured gait cycle to the actual player's descending left boot.
-# At 60 Hz a steady run spans ~33 frames, so each phase has finite precision.
+# At 60 Hz the confirmed field cadence spans about 25 frames per full stride, so each phase has finite precision.
 func check_knee_sequence(clearances: Array[float], knee: Array[float], roll: Array[float]) -> void:
 	var landings: Array[int] = []
 	var raised := false
@@ -70,6 +70,42 @@ func check_knee_sequence(clearances: Array[float], knee: Array[float], roll: Arr
 	movement["measured_stride_phases"] = phases
 	checks["knee yields under load, extends at toe-off, then folds during recovery"] = sequence_ok
 
+# Measure the heel from the same tread samples used to place snow impressions.
+# An unsigned knee angle can look correct when the heel returns ahead of the body.
+func check_recovery_direction(sole_heights: Array, heels: Array) -> void:
+	var details: Array = []
+	var readable := true
+	for side in 2:
+		var contacts: Array[int] = []
+		var was_airborne := false
+		for index in sole_heights[side].size():
+			if sole_heights[side][index] > .05:
+				was_airborne = true
+			elif was_airborne and sole_heights[side][index] < .008:
+				contacts.append(index)
+				was_airborne = false
+		readable = readable and contacts.size() >= 2
+		for landing in range(1, contacts.size()):
+			var first: int = contacts[landing-1]
+			var cycle: int = contacts[landing] - first
+			var pass_phase := -1.0
+			var peak_height := 0.0
+			var peak_phase := -1.0
+			var rearward := false
+			for i in range(first + roundi(.32 * cycle), contacts[landing]):
+				var heel: Vector2 = heels[side][i]
+				var phase := float(i-first)/cycle
+				if heel.x < -.10: rearward = true
+				if rearward and heel.x >= 0.0 and pass_phase < 0.0: pass_phase = phase
+				if heel.y > peak_height:
+					peak_height = heel.y
+					peak_phase = phase
+			details.append({"side":["L","R"][side],"heel_above_snow_m":peak_height,
+				"peak_cycle":peak_phase,"heel_returns_forward_cycle":pass_phase})
+			readable = readable and peak_height > .265 and pass_phase >= .82 and pass_phase < .98
+	movement["heel_recovery"] = details
+	checks["recovering heel lifts behind the hips before the foot reaches forward"] = readable
+
 func inspect_stride() -> void:
 	var skeleton: Skeleton3D = world.gait_motor.skeleton
 	var slips: Array[float] = []
@@ -84,6 +120,12 @@ func inspect_stride() -> void:
 	var highest_print_contact := 0.0
 	var left_heights: Array[float] = []
 	var left_knee: Array[float] = []
+	var min_signed_knee := INF
+	var max_thigh_forward := -INF
+	var min_toe_forward := INF
+	var min_facing_along_travel := 1.0
+	var field_heels := [[], []]
+	var field_sole_heights := [[], []]
 	var heel_toe_roll: Array[float] = []
 	var sample_started: float = world.tracks.clock
 	var foot_spreads: Array[float] = []
@@ -103,9 +145,18 @@ func inspect_stride() -> void:
 		var lifted_left := INF
 		var heel := INF
 		var toe := INF
+		var sum_heel := [Vector3.ZERO, Vector3.ZERO]
+		var heel_counts := [0, 0]
+		var depths_by_side := Vector2(INF, INF)
 		for i in feet.size():
 			var height: float = feet[i].y - world.actor.global_position.y
 			lowest = minf(lowest, height)
+			var original: Vector3 = world.gait_motor.samples[i][0]
+			var side := int(original.x < 0.0)
+			depths_by_side[side] = minf(depths_by_side[side], height)
+			if original.z < -.045:
+				sum_heel[side] += world.actor.to_local(feet[i])
+				heel_counts[side] += 1
 			if Vector3(world.gait_motor.samples[i][0]).x > 0:
 				lifted_left = minf(lifted_left, height)
 				var rest: Vector3 = world.gait_motor.samples[i][0]
@@ -132,6 +183,23 @@ func inspect_stride() -> void:
 		flight_apex = maxf(flight_apex,lowest)
 		max_clearance = maxf(max_clearance, lifted_left)
 		prev = feet
+		var travel: Vector3 = world.actor.velocity.slide(Vector3.UP).normalized()
+		min_facing_along_travel = minf(min_facing_along_travel, world.actor.global_basis.z.dot(travel))
+		for side in 2:
+			var suffix: String = [".L", ".R"][side]
+			var hip := local_joint(skeleton, "Thigh"+suffix)
+			var knee := local_joint(skeleton, "Shin"+suffix)
+			var foot := local_joint(skeleton, "Foot"+suffix)
+			var tip := local_joint(skeleton, "Toe"+suffix)
+			var upper := knee-hip
+			var lower := foot-knee
+			var angle := rad_to_deg(atan2(upper.cross(lower).x, upper.dot(lower)))
+			min_signed_knee = minf(min_signed_knee, angle)
+			min_toe_forward = minf(min_toe_forward, tip.z-foot.z)
+			max_thigh_forward = maxf(max_thigh_forward, rad_to_deg(atan2(upper.z,-upper.y)))
+			var tread: Vector3 = sum_heel[side] / maxi(1,heel_counts[side])
+			field_heels[side].append(Vector2(tread.z-hip.z,tread.y))
+			field_sole_heights[side].append(depths_by_side[side])
 		var foot_z := local_joint(skeleton,"Foot.L").z
 		var depths := Vector2(foot_z, local_joint(skeleton,"Foot.R").z)
 		foot_spreads.append(absf(depths.x - depths.y))
@@ -170,14 +238,23 @@ func inspect_stride() -> void:
 		split_ticks = split_ticks + 1 if spread >= .85 * widest else 0
 		longest_split = maxi(longest_split, split_ticks)
 	check_knee_sequence(left_heights,left_knee,heel_toe_roll)
+	check_recovery_direction(field_sole_heights, field_heels)
+	movement["minimum_signed_knee_deg"] = min_signed_knee
+	movement["maximum_forward_thigh_deg"] = max_thigh_forward
+	movement["minimum_forward_toe_m"] = min_toe_forward
+	movement["minimum_facing_dot_travel"] = min_facing_along_travel
+	checks["both knee hinges and boots point along the actual run"] = min_signed_knee > 2.0 and min_toe_forward > .025 and min_facing_along_travel > .99
+	checks["forward thigh rotation stays below 65 degrees during recovery"] = max_thigh_forward < 65.0
 	movement["longest_broad_split_s"] = float(longest_split) / Engine.physics_ticks_per_second
 	movement["longest_two_boot_hold_s"] = float(longest_still) / Engine.physics_ticks_per_second
 	checks["boots keep moving through the airborne exchange"] = movement.longest_broad_split_s < .12 and longest_still <= 1
-	checks["run has visible stride, recovery and flight"] = max_foot-min_foot>.70 and max_clearance>.075 and flight_ticks>=3
+	checks["run has visible stride, recovery and flight"] = max_foot-min_foot>.50 and max_foot-min_foot<.68 and max_clearance>.075 and flight_ticks>=3
 	checks["hands pump as body leans into run"] = min_elbow_flex>55. and forward-rear>.34 and lean_sum/90.>10.
 	checks["each snow impression begins under a contacting boot"] = print_count >= 4 and highest_print_contact < .006
 	checks["run loads the snow through both steps"] = supported_ticks >= 42 and flight_apex < .055 and flight_ticks <= 43
-	checks["travel keeps the supported sole planted"] = min_surface>-.0025 and median<.15 and gait.stride_hz*120.>188. and gait.stride_hz*120.<229.
+	checks["travel keeps the supported sole planted"] = min_surface>-.0025 and median<.15 
+	# Two continuous unladen reference intervals show 6–7 source frames per step at 30 Hz.
+	checks["field cadence matches the unobstructed reference run"] = gait.stride_hz*120. >= 255. and gait.stride_hz*120. <= 305.
 
 func steer(displacement: Vector2) -> void:
 	var drag := InputEventScreenDrag.new()
@@ -197,15 +274,54 @@ func ankle_pitch_range() -> Vector2:
 		span.y = maxf(span.y, pitch)
 	return span
 
+func minimum_bend_along_facing() -> float:
+	var rig: Skeleton3D = world.gait_motor.skeleton
+	var forward: Vector3 = world.actor.global_basis.z
+	var side: Vector3 = forward.cross(Vector3.UP).normalized()
+	var minimum := 180.0
+	for chain: Array in world.gait_motor.leg_chains:
+		var hip := rig.to_global(rig.get_bone_global_pose(chain[0]).origin)
+		var knee := rig.to_global(rig.get_bone_global_pose(chain[1]).origin)
+		var ankle := rig.to_global(rig.get_bone_global_pose(chain[2]).origin)
+		var femur := (knee - hip).slide(side)
+		var tibia := (ankle - knee).slide(side)
+		minimum = minf(minimum, rad_to_deg(atan2(tibia.cross(femur).dot(side), tibia.dot(femur))))
+	return minimum
+
+
+# The normal hit event tilts the whole visible model after the legs have
+# settled. A lateral recoil at rest exposes a pivot below either boot.
+func inspect_recoil_contact() -> void:
+	var attacker := Node3D.new()
+	world.add_child(attacker)
+	attacker.global_position = world.actor.global_position + world.actor.global_basis.x
+	var starting_hp: int = world.player_hp
+	world.player_invulnerability = 0.0
+	world._player_hit(1, attacker)
+	var lowest := INF
+	var greatest_tilt := 0.0
+	for tick in 48:
+		await physics_frame
+		var heights: Vector2 = world.gait_motor._heights()
+		lowest = minf(lowest, minf(heights.x, heights.y) - world.actor.global_position.y)
+		var model: Node3D = world.hero_model
+		greatest_tilt = maxf(greatest_tilt, Vector2(model.rotation.x, model.rotation.z).length())
+	attacker.queue_free()
+	movement["recoil_lowest_tread_m"] = lowest
+	movement["recoil_peak_degrees"] = rad_to_deg(greatest_tilt)
+	checks["a real damage reaction tilts about the boot touching the snow"] = world.player_hp < starting_hp and greatest_tilt > .12 and lowest >= -.0025
+
+
 func inspect_turn_and_brake() -> void:
 	Engine.physics_ticks_per_second = 120
 	var turns_clear := true
 	var stops_clear := true
 	var lowest_sole := INF
 	var min_turn_speed := INF
+	var minimum_release_bend := 180.0
 	var peak_bank := 0.0
 	# Release on different phases of the stride, including both boot handoffs.
-	for approach_ticks in [75, 84, 102, 138]:
+	for approach_ticks in range(75, 75 + 52, 3):
 		world.actor.global_position = Vector3(12., 0., 25.)
 		world.actor.rotation.y = atan2(world.camera.global_basis.x.x, world.camera.global_basis.x.z)
 		var approach_heading: float = world.actor.rotation.y
@@ -225,10 +341,13 @@ func inspect_turn_and_brake() -> void:
 		for tick in 100:
 			await physics_frame
 			var pitch := ankle_pitch_range()
+			minimum_release_bend = minf(minimum_release_bend, minimum_bend_along_facing())
 			stops_clear = stops_clear and pitch.x > -134. and pitch.y < -32.
 			var soles: Vector2 = world.gait_motor._heights()
 			lowest_sole = minf(lowest_sole, minf(soles.x, soles.y) - world.actor.position.y)
 		stops_clear = stops_clear and released_at.distance_to(world.actor.position) < .48
+	movement["minimum_signed_knee_during_release_deg"] = minimum_release_bend
+	checks["braking keeps each knee on the anterior side throughout the stop"] = minimum_release_bend > 1.0
 	movement["turn_and_brake_minimum_sole_m"] = lowest_sole
 	movement["minimum_quarter_turn_speed_m_s"] = min_turn_speed
 	movement["maximum_quarter_turn_lean_deg"] = rad_to_deg(peak_bank)
@@ -256,6 +375,7 @@ func run() -> void:
 	movement["braking_distance_m"] = released_at.distance_to(world.actor.position)
 	checks["release stops within half a metre"] = movement.braking_distance_m < .48
 	checks["release comes to rest"] = world.actor.velocity.length() < .01 and world.character_kit.locomotion.current == "idle"
+	await inspect_recoil_contact()
 	await inspect_turn_and_brake()
 	print("FIELD_RUN ", JSON.stringify({"checks":checks, "speeds_m_s":speeds,"motion":movement}))
 	await Session.drain_field_audio(self,world)

@@ -194,6 +194,52 @@ func watch_counter() -> void:
 	game.set_physics_process(false)
 	check(game.actor.position.distance_to(target)<.75 and not game.counter.at_service(game.actor.position),"normal phone stick reached viewing aisle outside cashier zone")
 
+func test_stored_meal() -> void:
+	var b=game.inventory
+	var j:Dictionary=b.settlement
+	var belt=game.settlement_loop.conveyors
+	for kind:String in b.remaining(game.Progress.FOOD_LINE):
+		for i in int(b.remaining(game.Progress.FOOD_LINE)[kind]):
+			b.collect("worker-food-line-%s-%d"%[kind,i],kind)
+			b.payment(game.Progress.FOOD_LINE,kind,false)
+	game._finish_purchase(game.Progress.FOOD_LINE)
+	# Allow the paid belt to build stock before the first waiting customer.
+	# The worker reaches the loading door when this genuine finished meal lands.
+	game.counter.set_active(false,0)
+	game.inventory.stored.meat-=2
+	j.hoppers.meat+=2
+	for i in 1600:
+		game.settlement_loop.advance_unattended(1./60.)
+		belt.advance(1./60.)
+		if j.product_store.meal==2 or game.persist_blocked: break
+	check(j.cooked==2 and j.product_store.meal==2 and worker.RAW_RULES.waiting_meals(j)==0,"two cooked meals landed in the separate prepared-food bay")
+	game.counter.set_active(true,0)
+	check(not worker._can_fetch_meal(),"stock stays on its shelf while there are no customer orders")
+	for i in 400:
+		game.counter.advance(1./60.)
+		if game.counter.queue.size()==1: break
+	belt.advance(1./60.)
+	check(j.line_load.stored_meal==1 and j.product_store.meal==1 and not worker._can_fetch_meal(),"first guest already covered by a real belt reservation cannot draw another meal")
+	for i in 800:
+		game.counter.advance(1./60.)
+		if game.counter.queue.size()==2: break
+	worker.actor.position=game.depot.apron.global_position
+	worker.phase="waiting_storage"
+	worker.advance(1./60.)
+	check(worker.phase=="meal_collect" and not worker.route.is_empty() and game.depot.at_loading_area(worker.route.back()),"open second customer order sends the worker to the movable storage door")
+	for i in 60*4:
+		worker.advance(1./60.)
+		if j.worker_meal==1 or not game.depot.at_loading_area(worker.actor.global_position): break
+	check(game.depot.at_loading_area(worker.actor.global_position) and j.product_store.meal==0 and j.worker_meal==1 and belt.unclaimed_orders()==0,"worker physically claims exactly the second guest's meal")
+	var served_by_worker := false
+	for i in 2400:
+		tick(1./60.)
+		served_by_worker = served_by_worker or game.counter.worker_serving
+		if j.served>=2 and j.worker_meal==0: break
+	check(served_by_worker and j.served==2 and j.worker_meal==0 and j.counter_stock==0,"belt and worker fulfilled two physical customer orders exactly once")
+	var copy=game.Inventory.new()
+	check(not game.persist_blocked and copy.configure(b.configured_costs) and copy.restore(b.snapshot()),"stored-meal service conserved all paid resources")
+
 func test_relocation() -> void:
 	var moved := {}
 	var journal: Dictionary = game.inventory.settlement
@@ -265,9 +311,9 @@ func simulate(stop: String) -> void:
 func run() -> void:
 	var args:=OS.get_cmdline_user_args()
 	var mode: String = args[-1] if not args.is_empty() else ""
-	if not mode in ["jobs","capacity","interrupt","service","assist","relocate"]:
+	if not mode in ["jobs","capacity","interrupt","service","assist","relocate","stored_meal"]:
 		var status:=0
-		for group in [["jobs"],["capacity"],["assist"],["relocate"],["interrupt","service"]]:
+		for group in [["jobs"],["capacity"],["assist"],["relocate"],["stored_meal"],["interrupt","service"]]:
 			var directory:=Session.make_directory()
 			for step: String in group:
 				if status==0: status=Session.child(SELF,directory,step)
@@ -290,6 +336,8 @@ func run() -> void:
 		await test_capacity()
 	elif mode == "relocate":
 		test_relocation()
+	elif mode == "stored_meal":
+		test_stored_meal()
 	else:
 		if mode=="service":
 			check(game.inventory.settlement.worker_meal==1 and worker.phase=="meal_serve","cold load retains cooked order in worker hands")

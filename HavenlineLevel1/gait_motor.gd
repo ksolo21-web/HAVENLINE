@@ -50,6 +50,8 @@ var pelvis_index := -1
 var spine_index := -1
 var neck_index := -1
 var field_turn_lean := 0.0
+var recoil_height_offset := 0.0
+var tilting_for_hit := false
 var neutral_toes: Array[Transform3D] = []
 var leg_tracking := 0.0
 var action_elapsed := 0.0
@@ -428,6 +430,34 @@ func _contacts() -> PackedVector3Array:
 	return result
 
 
+# Gameplay recoil rotates the full figure after locomotion has solved both legs.
+# Restore the original model frame before solving the next step, then tilt about
+# the contacting outsole or its current airborne height.
+func clear_hit_pose(visual: Node3D) -> void:
+	if not tilting_for_hit:
+		return
+	visual.position.y -= recoil_height_offset
+	visual.rotation.x = 0.0
+	visual.rotation.z = 0.0
+	recoil_height_offset = 0.0
+	tilting_for_hit = false
+
+
+func apply_hit_pose(visual: Node3D, pitch: float, roll: float) -> void:
+	if is_zero_approx(pitch) and is_zero_approx(roll):
+		return
+	tilting_for_hit = true
+	var before := _heights() if skeleton else Vector2.ZERO
+	visual.rotation.x = pitch
+	visual.rotation.z = roll
+	if skeleton:
+		var after := _heights()
+		var gap := minf(before.x, before.y) - minf(after.x, after.y)
+		var up := (visual.get_parent_node_3d().global_basis.inverse() * Vector3.UP).y
+		recoil_height_offset = gap * up
+		visual.position.y += recoil_height_offset
+
+
 # Return the centre of each boot's supporting patch. The tread first lands
 # on a heel and rolls forward. Snow impressions stay under that actual patch.
 func snow_contact_points() -> PackedVector3Array:
@@ -497,6 +527,19 @@ func _adjust_leg(chain: Array, delta: Vector3, turn: float, target_toe := Vector
 			var value := lerpf(component, clampf(corrected, -.97, .97), leg_tracking)
 			var other := bend.slide(plane).normalized()
 			bend = (plane * value + other * sqrt(maxf(0, 1.0 - value * value))).normalized()
+	# A moving brake target can cross the projected knee, reversing the old
+	# estimate while the hips still face forward. Select the anatomical side
+	# of the sagittal plane during the stop, its handoff, and floor correction.
+	if top_speed == MAX_SPEED:
+		var facing: Vector3 = contact_world.actor.global_basis.z.slide(Vector3.UP).normalized()
+		var world_axis := skeleton.global_basis * axis
+		var sagittal_normal := facing + Vector3.UP * world_axis.dot(facing) / maxf(.001, -world_axis.y)
+		var anterior := (skeleton.global_basis.transposed() * sagittal_normal).normalized()
+		var projection := bend.dot(anterior)
+		if projection < .25:
+			var lateral_deflection := bend.slide(anterior).normalized()
+			var front_component := clampf(absf(projection), .25, 1.0)
+			bend = (anterior * front_component + lateral_deflection * sqrt(maxf(0., 1. - front_component * front_component))).normalized()
 	var knee := thigh.origin + axis * along + bend * radius
 	target = thigh.origin + axis * distance
 	var first := Quaternion(

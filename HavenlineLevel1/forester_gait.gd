@@ -2,7 +2,8 @@ extends RefCounted
 ## Calibrated to the forester's compact legs. Passage is animated in place;
 ## the world mover advances the same distance per cycle used by the stance foot.
 const STRIDE := .94
-const SPRINT_STRIDE := 2.22
+const JOG_STRIDE := 1.82
+const JOG_SUPPORT := .31
 # Each entry is (sole Y, sole Z, toe weight) relative to its ankle. The points
 # span the actual sole's supporting hull over the heel-to-toe pitch range.
 const FORESTER_SOLES := [
@@ -13,9 +14,9 @@ const FORESTER_SOLES := [
 # Full-stride forester knee landmarks. The slopes are single-valued at each
 # key and reverse only at load, push-off and the peak of recovery.
 const RUN_KNEE := [
-	Vector2(0.,18.),Vector2(.10,39.),Vector2(.15,43.5),Vector2(.235,27.),
-	Vector2(.325,14.),Vector2(.36,15.),Vector2(.45,41.),Vector2(.55,90.),
-	Vector2(.65,119.),Vector2(.75,100.),Vector2(.85,65.),Vector2(.94,22.),Vector2(.97,15.),Vector2(1.,18.)]
+	Vector2(0.,17.),Vector2(.10,33.),Vector2(.16,37.),Vector2(.26,25.),
+	Vector2(.36,15.),Vector2(.40,19.),Vector2(.48,41.),Vector2(.57,78.),
+	Vector2(.68,99.),Vector2(.77,84.),Vector2(.86,55.),Vector2(.94,23.),Vector2(.97,15.),Vector2(1.,17.)]
 
 func _knee_at(p: float) -> float:
 	var i := 0
@@ -23,7 +24,7 @@ func _knee_at(p: float) -> float:
 	var a:Vector2=RUN_KNEE[i]
 	var b:Vector2=RUN_KNEE[i+1]
 	var prev:Vector2=RUN_KNEE[i-1] if i>0 else Vector2(-.03,15.)
-	var following:Vector2=RUN_KNEE[i+2] if i+2<RUN_KNEE.size() else Vector2(1.1,39.)
+	var following:Vector2=RUN_KNEE[i+2] if i+2<RUN_KNEE.size() else Vector2(1.1,33.)
 	var mid := (b.y-a.y)/(b.x-a.x)
 	var left := (a.y-prev.y)/(a.x-prev.x)
 	var right := (following.y-b.y)/(following.x-b.x)
@@ -46,14 +47,14 @@ func bind(rig: Skeleton3D) -> void:
 		legs.append(ids)
 
 func stride_for_speed(speed: float) -> float:
-	return lerpf(STRIDE,SPRINT_STRIDE,smoothstep(.85,5.8,speed))
+	return lerpf(STRIDE,JOG_STRIDE,smoothstep(.70,3.60,speed))
 
 func _pitches(phase: float, pace: float) -> Vector4:
 	# While loaded the ankle moves backwards at exactly the actor's advance.
 	# After toe-off the short lower leg folds under the coat, then reaches again.
-	var run := smoothstep(.85,5.8,pace)
+	var run := smoothstep(.70,2.65,pace)
 	var stride := stride_for_speed(pace)
-	var support := lerpf(.53,.235,run)
+	var support := lerpf(.53,JOG_SUPPORT,run)
 	var half_sweep := .5*stride*support
 	var heel := lerpf(-.22,-.35,run)
 	var push := lerpf(.35,.66,run)
@@ -112,7 +113,7 @@ func update(phase: float, moving: bool, pace := 1.8) -> void:
 	var position := Vector3.ZERO
 	if moving: position.x=.009*cos(phase*TAU)
 	var u := fposmod(phase*2.,1.)
-	var run := smoothstep(.85,5.8,pace) if moving else 0.
+	var run := smoothstep(.70,2.65,pace) if moving else 0.
 	# Compress at weight acceptance and extend through push-off.
 	var lowest := lerpf(-.012,-.023,run)*pow(sin(PI*clampf(u/.53,0.,1.)),2.) if moving else 0.
 	lowest+=.065*run
@@ -129,7 +130,7 @@ func update(phase: float, moving: bool, pace := 1.8) -> void:
 		var span := lerpf(upper+lower-.004,sqrt(upper*upper+lower*lower+2.*upper*lower*cos(k)),run)
 		var horizontal := Vector2(ankle.x-hip.x,ankle.z-hip.z).length_squared()
 		var foot_phase := fposmod(phase+side*.5,1.)
-		var support := lerpf(.53,.235,run)
+		var support := lerpf(.53,JOG_SUPPORT,run)
 		# The paired hips share one height. Blend away from the support-length
 		# constraint only after toe-off and rejoin it before the next heel strike.
 		var release := smoothstep(support,support+.095,foot_phase)*(1.-smoothstep(.89,1.,foot_phase))
@@ -142,7 +143,7 @@ func update(phase: float, moving: bool, pace := 1.8) -> void:
 	for side in 2:
 		var ankle:Vector3=targets[side]-position
 		var f := fposmod(phase+side*.5,1.)
-		var support := lerpf(.53,.235,run)
+		var support := lerpf(.53,JOG_SUPPORT,run)
 		if moving and run > .001 and f > support:
 			var ids:Array=legs[side]
 			var hip := skeleton.get_bone_global_pose(ids[0]).origin
@@ -154,11 +155,14 @@ func update(phase: float, moving: bool, pace := 1.8) -> void:
 			var sole_floor := _sole_drop(side,angles[side].x,angles[side].y)+.003-position.y
 			var ideal_y := hip.y-sqrt(maxf(.001,d2-horizontal))
 			var clearance := .065*pow(maxf(0.,sin(PI*(f-support)/(1.-support))),1.4)*(1.-smoothstep(.56,.65,f))
+			# Keep the recovering heel clear until the final approach to contact.
+			var heel_swing := smoothstep(.70,.81,f)*(1.-smoothstep(.865,.98,f))
+			clearance += .032*heel_swing
 			var airborne_y := maxf(sole_floor+clearance,ideal_y)
 			# Recover behind the body before swinging through. Preserve limb
 			# length as the heel rises, so swing clearance cannot lock the knee.
-			if f < .65 and airborne_y > ideal_y:
+			if airborne_y > ideal_y and (f < .65 or f > .72):
 				var dz := sqrt(maxf(0.,d2-pow(ankle.x-hip.x,2.)-pow(airborne_y-hip.y,2.)))
-				ankle.z=lerpf(ankle.z,hip.z-dz,weight)
+				ankle.z=lerpf(ankle.z,hip.z+dz*(-1. if f<.65 else 1.),weight)
 			ankle.y=lerpf(ankle.y,airborne_y,weight)
 		_seat_leg(legs[side],ankle,angles[side].x,angles[side].y)

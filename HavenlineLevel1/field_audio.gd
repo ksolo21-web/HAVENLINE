@@ -37,6 +37,7 @@ const CUES := {
 	"cook_griddle": [1, .45, -3.0, 1], "service_cash_paper": [1, .18, -2.0, 3],
 	"saw_work": [1,.45,-3.5,1], "drill_work": [1,.45,-3.5,1],
 	"plank_out": [1,.12,-3.2,2], "block_out": [1,.12,-3.2,2],
+	"conveyor_hold":[1,.45,-6,1], "conveyor_restart":[1,.45,-9,1], "meal_handoff":[1,.16,-4.5,2],
 	"owl_dive": [1,.20,-3.2,1], "owl_hit": [1,.12,-2.5,2],
 	"owl_equip": [1,.40,-2,3], "rescue_answer": [1,.4,-2,3],
 	"roast_ready": [1,.22,-2.4,2], "tower_fire": [1,.25,-6.0,2], "tower_hit": [1,.16,-4.8,2]
@@ -46,7 +47,7 @@ const ALIASES := {"attack":"enemy_attack","wolf_attack":"enemy_attack",
 	"cooker_start":"cook_griddle", "meal_ready":"roast_ready", "meal_served":"service_cash_paper",
 	"level_complete":"victory", "next_level":"reveal", "process_wood":"saw_work", "process_stone":"drill_work", "process_done":"plank_out"}
 const ORE_PITCH := {"metal": 1.19, "coal": 0.84, "slate": 1.08}
-const LOOP_NAMES := ["field_score","camp_score","threat_score","wind","fire"]
+const LOOP_NAMES := ["field_score","camp_score","threat_score","wind","fire","conveyor_motor"]
 const SETTINGS_PATH := "user://field-audio.cfg"
 
 var _bank: Dictionary = {}
@@ -59,6 +60,7 @@ var _counts: Dictionary = {}
 var _owned_buses: Array[String] = []
 var _clock := 0.0
 var _duck_until := 0.0
+var _conveyor_gain := 0.0
 var _hearth := 0.0
 var _state := "field"
 var _listener := Vector3.ZERO
@@ -117,7 +119,7 @@ func _ready() -> void:
 		loop.loop_end = roundi(track.get_length()*track.mix_rate)
 		var player := AudioStreamPlayer.new()
 		player.stream = loop
-		player.bus = AMBIENCE if key == "wind" or key == "fire" else MUSIC
+		player.bus = AMBIENCE if key in ["wind","fire","conveyor_motor"] else MUSIC
 		player.volume_db = -80.0
 		add_child(player)
 		_loops[key] = player
@@ -182,6 +184,9 @@ func _sync_silence() -> void:
 func set_listener_position(world_position: Vector3) -> void:
 	_listener = world_position
 
+func set_conveyor_proximity(gain: float) -> void:
+	_conveyor_gain = clampf(gain, 0.0, 1.0)
+
 func set_hearth_proximity(gain: float) -> void:
 	_hearth = clampf(gain,0,1)
 
@@ -200,6 +205,7 @@ func _process(dt: float) -> void:
 		"camp_score":-.8+_duck_db if _state=="camp" else -80.0,
 		"threat_score":-1.3+_duck_db if _state=="threat" else -80.0,
 		"wind":-.7,
+		"conveyor_motor":linear_to_db(maxf(.0001,_conveyor_gain))-6.5+_duck_db,
 		"fire":linear_to_db(maxf(.0001,_hearth))-.4
 	}
 	for key: String in LOOP_NAMES:

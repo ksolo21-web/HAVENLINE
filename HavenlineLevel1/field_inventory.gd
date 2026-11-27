@@ -114,7 +114,7 @@ func complete(id: String) -> bool:
 func snapshot() -> Dictionary:
 	var state := {"version": 1, "collected": collected.duplicate(), "carried": carried.duplicate(), "stored": stored.duplicate(), "paid": paid.duplicate(true)}
 	if staged:
-		state.version = 8
+		state.version = 9
 		state.legacy_level2 = legacy_level2
 		state.legacy_prices = legacy_prices.duplicate()
 		state.build_order = build_order.duplicate()
@@ -132,11 +132,11 @@ func restore(data: Variant) -> bool:
 	if not data is Dictionary: return false
 	var old: bool = data.get("version") == 1
 	var version:Variant=data.get("version")
-	var current:bool = version==6 or version==7 or version==8
+	var current:bool = version==6 or version==7 or version==8 or version==9
 	var has_settlement: bool = current or data.get("version") == 4 or data.get("version") == 5
 	if old:
 		if data.size() != 5: return false
-	elif not staged or (data.get("version") != 2 and data.get("version") != 3 and not has_settlement) or data.size() != (11 if version==7 or version==8 else (10 if current else (9 if has_settlement else 8))):
+	elif not staged or (data.get("version") != 2 and data.get("version") != 3 and not has_settlement) or data.size() != (11 if version==7 or version==8 or version==9 else (10 if current else (9 if has_settlement else 8))):
 		return false
 	for key in ["collected", "carried", "stored", "paid"]:
 		if not data.get(key) is Dictionary:
@@ -219,8 +219,10 @@ func restore(data: Variant) -> bool:
 		next_settlement = Settlement.from_pre_worker(next_settlement)
 	if has_settlement and data.version < 8:
 		next_settlement = Settlement.from_pre_conveyors(next_settlement)
+	if has_settlement and data.version < 9:
+		next_settlement = Settlement.Logistics.from_previous(next_settlement,order)
 	var old_preview := false
-	if version==7 or version==8:
+	if version==7 or version==8 or version==9:
 		if not data.get("legacy_level2") is bool: return false
 		old_preview = data.legacy_level2
 	elif has_settlement and next_settlement is Dictionary:
@@ -277,6 +279,8 @@ func restore(data: Variant) -> bool:
 			if Settlement.EMPTY[key] is int: settlement[key] = int(settlement[key])
 		for kind: String in KINDS:
 			settlement.worker_load[kind] = int(settlement.worker_load[kind])
+		for product:String in Settlement.Logistics.STORE:
+			settlement.product_store[product]=int(settlement.product_store[product])
 		for lane: String in Settlement.LINE_EMPTY:
 			settlement.line_load[lane] = int(settlement.line_load[lane])
 			settlement.line_progress[lane] = float(settlement.line_progress[lane])

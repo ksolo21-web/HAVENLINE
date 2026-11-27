@@ -588,6 +588,7 @@ func toggle_nearest_gate() -> void:
 
 func _physics_process(dt: float) -> void:
 	if not field_ready: return
+	gait_motor.clear_hit_pose(hero_model)
 	simulation_time += dt
 	if not persist_blocked: lifecycle.advance(dt)
 	forest.advance(dt)
@@ -632,8 +633,7 @@ func _physics_process(dt: float) -> void:
 	rescue_time = maxf(0.0,rescue_time-dt)
 	var hit_fraction := hurt_time / RECOIL_SECONDS
 	var recoil := smoothstep(0, .15, 1.0-hit_fraction) * smoothstep(0, .88, hit_fraction)
-	hero_model.rotation.z = -impact_lean.x*.33*recoil
-	hero_model.rotation.x = impact_lean.y*.30*recoil+.18*smoothstep(0,.32,rescue_time)
+	gait_motor.apply_hit_pose(hero_model, impact_lean.y*.30*recoil+.18*smoothstep(0,.32,rescue_time), -impact_lean.x*.33*recoil)
 	sound.set_listener_position(actor.position)
 	if character_kit.active and character_kit.turn_id != last_turn and not first_physics:
 		_event("swing",actor.position)
@@ -815,6 +815,10 @@ func constrain_private_snow_travel() -> void:
 		actor.global_position = lakeshore.constrain_motion(previous_dry_position, actor.global_position, float(layout.actor_radius))
 		if processors:
 			actor.global_position = processors.constrain_motion(previous_dry_position,actor.global_position,float(layout.actor_radius))
+		if settlement_loop and settlement_loop.conveyors:
+			var network = settlement_loop.conveyors.network
+			if network:
+				actor.global_position = network.constrain_motion(previous_dry_position,actor.global_position,float(layout.actor_radius))
 
 func orbit_permitted_at(world_position: Vector3) -> bool:
 	return not field_env.is_inside_camp(world_position)

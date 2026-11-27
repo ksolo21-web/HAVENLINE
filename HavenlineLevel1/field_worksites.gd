@@ -32,8 +32,30 @@ func _site() -> String:
 	if world.camp_active and not world.inventory.settlement.survivor_paid and world.Reach.plot_distance(plot,here) <= world.Reach.NEAR:
 		return "survivor_plot"
 	if not world.inventory.complete(world.Progress.SECOND) or not world.field_env.is_inside_camp(here): return ""
-	if world.lakeshore.at_cooker(here): return "meat"
-	return world.processors.at_station(here)
+	# Adjacent worktables may both be in reach. Finish an in-flight handoff
+	# first, then prefer a compatible open inlet before comparing wall distance.
+	var best := ""
+	var best_rank := 4
+	var best_distance := INF
+	var floor_point := Vector2(here.x,here.z)
+	for kind: String in world.settlement_loop.Rules.KINDS:
+		if not world.inventory.is_machine_owned(kind): continue
+		var wall: Rect2 = world.lakeshore._footprint(0.) if kind == "meat" else world.processors._rect(kind,0.)
+		var distance: float = world.Reach.distance_to_rect(floor_point,wall)
+		if wall.has_point(floor_point) or distance > world.Reach.NEAR: continue
+		var rank := 3
+		if world.carry.incoming(kind,kind) > 0:
+			rank = 0
+		elif world.carry.available_to_station(kind) > 0 and world.settlement_loop.available_to_feeder(kind):
+			rank = 1
+		elif kind == "meat" and world.inventory.settlement.held_meal == 0 and world.settlement_loop.Rules.waiting_meals(world.inventory.settlement) > 0:
+			rank = 2
+		var tied_active := kind == active and is_equal_approx(distance,best_distance)
+		if rank < best_rank or (rank == best_rank and (distance < best_distance or tied_active)):
+			best = kind
+			best_rank = rank
+			best_distance = distance
+	return best
 
 func handoff_distance(at: Vector3) -> float:
 	var site := _site()
