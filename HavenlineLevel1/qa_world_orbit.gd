@@ -24,7 +24,8 @@ func test_threshold(world, gate: Node3D, normal: Vector3, stage: int) -> void:
 	var label := "%s stage %d" % [gate.name, stage]
 	world.actor.global_position = center + normal * .04
 	world._step_character(1./60.,0.)
-	check(kit.active and visible_slots(kit) == Vector2i(3,3), label + " active 4 cm outside")
+	var visible := visible_slots(kit)
+	check(kit.active and kit.count == 10 and visible.x > 0 and visible.x <= 10 and visible.y == visible.x, label + " clear tools active 4 cm outside")
 	for point: Vector3 in [center,center-normal*.04]:
 		world.actor.global_position = point
 		world._step_character(1./60.,0.)
@@ -37,7 +38,8 @@ func test_threshold(world, gate: Node3D, normal: Vector3, stage: int) -> void:
 		check(not kit.crosses_surface(world.surfaces[world.resource_rock][0],world.surfaces[world.resource_rock][1]), label + " no stored sweep hits")
 	world.actor.global_position = center + normal*.04
 	world._step_character(1./60.,0.)
-	check(kit.active and visible_slots(kit) == Vector2i(3,3), label + " active on first exterior step")
+	visible = visible_slots(kit)
+	check(kit.active and visible.x > 0 and visible.y == visible.x, label + " clear tools active on first exterior step")
 
 func _initialize() -> void:
 	call_deferred("run")
@@ -51,7 +53,16 @@ func run() -> void:
 	world.actor.global_position = Vector3.ZERO
 	world._step_character(1./60.,0.)
 	check(kit.active and visible_slots(kit) == Vector2i(1,1), "unpaid clearing still harvests")
+	check(kit.slots.size() == 1, "unpaid player instantiates only one slot")
+	check(is_equal_approx(kit.duration,.89), "the starter keeps its reference timing")
+	var phase: float = kit.elapsed / kit.duration
 	kit.set_upgraded(true)
+	check(is_equal_approx(kit.duration,.60), "ten tools complete a faster lap")
+	check(is_equal_approx(phase,kit.elapsed / kit.duration), "upgrading never skips angular phase")
+	kit.set_upgraded(false)
+	check(visible_slots(kit) == Vector2i(1,1), "returning to the starter hides the spare tools")
+	kit.set_upgraded(true)
+	check(kit.slots.size() == 10, "upgrading twice reuses the same ten slots")
 	for stage in [1,2,3]:
 		world.field_env.set_perimeter(stage,false)
 		test_threshold(world,world.gates[0],Vector3.BACK,stage)

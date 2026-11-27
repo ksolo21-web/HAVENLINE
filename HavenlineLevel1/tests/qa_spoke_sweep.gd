@@ -87,7 +87,7 @@ func measure_mode(upgraded: bool) -> void:
 		kit.begin(tool)
 		var farthest := 0.0
 		for frame in 180:
-			kit.advance(Orbit.PERIOD/180.,here)
+			kit.advance(kit.duration/180.,here)
 			farthest = maxf(farthest,Vector2(kit.current_tip.x-here.x,kit.current_tip.z-here.z).length())
 			kit.finish_turn()
 		measurements[mode+"_"+tool] = farthest

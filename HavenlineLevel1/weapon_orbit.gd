@@ -8,6 +8,8 @@ const Trail = preload("res://orbit_trail.gd")
 const TOOL_PLANE := Basis(Vector3.LEFT, Vector3.BACK, Vector3.UP)
 # Measured on the source B 5.40–6.50 s strip. Runtime uses the normal equipment camera.
 const PERIOD := .89
+const MAX_TOOLS := 10
+const MAX_TOOLS_PERIOD := .60
 const UPGRADED_RADIUS := 1.23
 const RADIUS_SIDE := 2.19
 const RADIUS_DEPTH := 2.46
@@ -15,6 +17,7 @@ const RADIUS_DEPTH := 2.46
 # Use the same local transform for the visible mesh and its swept contact samples.
 const AXE_SCALE := Vector3(.68, .74, .42)
 const PICK_SCALE := Vector3(.64, .83, .50)
+const TRAIL_ARC := deg_to_rad(57.0)
 const TRAIL_WIDTH := .235
 const CAMERA_NEAR := Vector3(.53687549,0,.84366149)
 const CAMERA_RIGHT := Vector3(.84366149,0,-.53687549)
@@ -29,8 +32,10 @@ const AXE_HEAD := Vector3(-.15,.65,0)
 const PICK_HEAD := Vector3(0,.67,0)
 var locomotion = Locomotion.new()
 var actor: Node3D
+var tool_parent: Node
 var perimeter: Node3D
 var safe_planes := PackedVector3Array()
+var primary_deflected := false
 var model_boxes := {}
 var slots: Array[Dictionary] = []
 var count := 1
@@ -51,20 +56,27 @@ var hit_travel := Vector3.ZERO
 
 func install(scene: Node, hero: Node3D, _unused) -> bool:
 	actor = hero.get_parent()
+	tool_parent = scene
 	if "field_env" in scene: perimeter = scene.field_env
-	for i in 3:
+	_create_missing_slots()
+	rest()
+	return locomotion.bind(hero)
+
+func _create_missing_slots() -> void:
+	for i in range(slots.size(),count):
 		var axe := AXE.instantiate() as Node3D
 		var pick := PICK.instantiate() as Node3D
 		var trail := Trail.new()
-		scene.add_child(axe)
-		scene.add_child(pick)
-		scene.add_child(trail)
+		axe.hide()
+		pick.hide()
+		trail.hide()
+		tool_parent.add_child(axe)
+		tool_parent.add_child(pick)
+		tool_parent.add_child(trail)
 		if i == 0:
 			model_boxes.axe = _bounds(axe)
 			model_boxes.pickaxe = _bounds(pick)
-		slots.append({"axe":axe,"pickaxe":pick,"trail":trail,"before":Transform3D.IDENTITY,"after":Transform3D.IDENTITY,"spokes":PackedVector3Array()})
-	rest()
-	return locomotion.bind(hero)
+		slots.append({"axe":axe,"pickaxe":pick,"trail":trail,"before":Transform3D.IDENTITY,"after":Transform3D.IDENTITY,"spokes":PackedVector3Array(),"clear":false})
 
 func _bounds(tool: Node3D) -> AABB:
 	var combined := AABB()
@@ -80,7 +92,7 @@ func _bounds(tool: Node3D) -> AABB:
 
 func show_tools() -> void:
 	for i in slots.size():
-		var show_slot := active and i<count
+		var show_slot: bool = active and i<count and slots[i].clear
 		slots[i].axe.visible = show_slot and equipped=="axe"
 		slots[i].pickaxe.visible = show_slot and equipped=="pickaxe"
 		slots[i].trail.visible = show_slot
@@ -95,11 +107,18 @@ func rest() -> void:
 	show_tools()
 
 func set_upgraded(upgraded: bool) -> void:
-	var next := 3 if upgraded else 1
+	var next := MAX_TOOLS if upgraded else 1
 	if count==next: return
 	count=next
+	# Increase laps per second with the equipped count while preserving the
+	# current phase if the upgrade is granted mid-turn.
+	var fraction := float(count - 1) / (MAX_TOOLS - 1)
+	var next_duration := 1.0 / lerpf(1.0 / PERIOD,1.0 / MAX_TOOLS_PERIOD,fraction)
+	elapsed *= next_duration / duration
+	duration = next_duration
+	if not is_instance_valid(tool_parent): return
+	_create_missing_slots()
 	if active:
-		show_tools()
 		pose()
 		for s in slots: s.before=s.after
 
@@ -111,7 +130,6 @@ func begin(tool: String) -> void:
 	hit_this_turn.clear()
 	elapsed=0
 	if first: height=desired_height()
-	show_tools()
 	pose()
 	for s in slots: s.before=s.after
 
@@ -153,7 +171,7 @@ func _clear_pose(center: Vector3, radial: Vector3) -> Transform3D:
 		var corrected := false
 		for plane in safe_planes:
 			var n := Vector3(plane.x,0.,plane.y)
-			var extent := half.x*absf(n.dot(pose_at.basis.x))+half.y*absf(n.dot(pose_at.basis.y))+half.z*absf(n.dot(pose_at.basis.z))
+			var extent := _projected_extent(pose_at.basis,half,n)
 			var push := plane.z + extent - n.dot(pose_at*box.get_center())
 			if push>.0001:
 				pose_at.origin += n*push
@@ -164,30 +182,67 @@ func _clear_pose(center: Vector3, radial: Vector3) -> Transform3D:
 func _exposed(point: Vector3) -> bool:
 	return not perimeter or safe_planes.is_empty() or perimeter.travel_clear(actor.global_position,point,0.)
 
+# The primary tool retains the tight, wall-following turn. Extra tools use the
+# open sectors instead of bunching together along a fence or gate leaf.
+func _orbit_pose(center: Vector3, radial: Vector3, slot: int) -> Transform3D:
+	return _clear_pose(center,radial) if slot == 0 else _tool_transform(center,radial)
+
+func _has_clearance(at: Transform3D, slot: int) -> bool:
+	if slot == 0 or safe_planes.is_empty(): return true
+	var bounds: AABB = model_boxes[equipped]
+	var center := at * bounds.get_center()
+	var half := bounds.size * .5
+	for plane in safe_planes:
+		var normal := Vector3(plane.x,0.,plane.y)
+		if normal.dot(center) - _projected_extent(at.basis,half,normal) < plane.z: return false
+	if not primary_deflected: return true
+	var primary: Transform3D = slots[0].after
+	var difference := center - primary * bounds.get_center()
+	# The model's X and Y axes are horizontal in both fixed blade poses.
+	for direction: Vector3 in [at.basis.x,at.basis.y,primary.basis.x,primary.basis.y]:
+		var axis := direction.normalized()
+		var extent := _projected_extent(at.basis,half,axis) + _projected_extent(primary.basis,half,axis)
+		if absf(axis.dot(difference)) >= extent + .04: return true
+	return false
+
+func _projected_extent(basis: Basis, half: Vector3, axis: Vector3) -> float:
+	return half.x*absf(axis.dot(basis.x)) + half.y*absf(axis.dot(basis.y)) + half.z*absf(axis.dot(basis.z))
+
 func pose(origin := Vector3.INF) -> void:
 	last_origin = actor.global_position if not origin.is_finite() else origin
 	if perimeter: safe_planes = perimeter.orbit_planes(last_origin,maximum_radius()+.44)
 	var center := last_origin + Vector3.UP*height
 	var distal := PICK_OUTER if equipped=="pickaxe" else AXE_OUTER
+	# Leave a gap between neighboring trails, even at the maximum count.
+	var trail_arc := minf(TRAIL_ARC,TAU * (2.0 / 3.0) / count)
+	var trail_segments := ceili(Trail.SEGMENTS * trail_arc / TRAIL_ARC)
 	for i in count:
 		var s := slots[i]
-		var phase := TAU*(elapsed/PERIOD + float(i)/count)
+		var phase := TAU*(elapsed/duration + float(i)/count)
 		var radial := offset(phase)
 		var node: Node3D = s[equipped]
-		node.global_transform = _clear_pose(center,radial)
+		node.global_transform = _orbit_pose(center,radial,i)
 		s.after = node.global_transform
-		if i == 0: current_tip = node.to_global(distal)
+		if i == 0:
+			current_tip = node.to_global(distal)
+			primary_deflected = not safe_planes.is_empty() and not s.after.is_equal_approx(_tool_transform(center,radial))
+		s.clear = _has_clearance(s.after,i)
+		if not s.clear: continue
 		var points := PackedVector3Array()
 		var axes := PackedVector3Array()
-		for j in range(Trail.SEGMENTS+1):
-			var behind := deg_to_rad(57.0)*float(j)/Trail.SEGMENTS
+		for j in range(trail_segments+1):
+			var behind := trail_arc*float(j)/trail_segments
 			var r := offset(phase-behind)
 			var point := center+r
 			if not safe_planes.is_empty():
-				point = _clear_pose(center,r)*(PICK_HEAD if equipped=="pickaxe" else AXE_HEAD)
+				var trail_pose := _orbit_pose(center,r,i)
+				if not _has_clearance(trail_pose,i): break
+				point = trail_pose * (PICK_HEAD if equipped=="pickaxe" else AXE_HEAD)
 			points.append(point+Vector3.UP*.002)
 			axes.append(r.normalized())
-		s.trail.redraw(points,axes,TRAIL_WIDTH,safe_planes)
+		if points.size() > 1: s.trail.redraw(points,axes,TRAIL_WIDTH,safe_planes)
+		else: s.trail.ribbon.clear_surfaces()
+	show_tools()
 
 func advance(dt: float, at := Vector3.INF) -> void:
 	if not active: return
@@ -197,29 +252,40 @@ func advance(dt: float, at := Vector3.INF) -> void:
 	var initial_height := height
 	var initial_scale := reach_scale
 	var initial_time := elapsed
-	for s in slots: s.before=s.after
+	for s in slots:
+		s.before = s.after
+		s.previous_clear = s.clear
 	# Carry fractional time across loop boundaries so the measured period is not rounded to ticks.
-	reach_scale = move_toward(reach_scale, UPGRADED_RADIUS if count == 3 else 1.0, dt)
+	reach_scale = move_toward(reach_scale, UPGRADED_RADIUS if count > 1 else 1.0, dt)
 	elapsed+=dt
 	height=move_toward(height,desired_height(),2.*dt)
 	pose(at)
 	# Repositioning a save, testing, or a respawn must never cut the space
 	# between unrelated positions. The new pose still has a live local spoke.
 	var warp := discontinuous(start_origin,at,dt)
-	var travel := TAU * dt / PERIOD
+	var travel := TAU * dt / duration
 	var steps := maxi(1, ceili(absf(travel) / ARC_STEP))
 	var distal := PICK_OUTER if equipped == "pickaxe" else AXE_OUTER
 	for i in count:
 		var slot := slots[i]
-		if warp: slot.before = slot.after
+		if not slot.clear:
+			slot.spokes = PackedVector3Array()
+			continue
+		var fresh := warp or not bool(slot.previous_clear)
+		if fresh: slot.before = slot.after
 		var points := PackedVector3Array()
-		var phi := TAU * (initial_time / PERIOD + float(i) / count)
+		var phi := TAU * (initial_time / duration + float(i) / count)
 		for j in range(steps+1):
-			var t := 1.0 if warp else float(j) / steps
+			var t := 1.0 if fresh else float(j) / steps
 			var origin := start_origin.lerp(at,t)
 			var center := origin + Vector3.UP * lerpf(initial_height,height,t)
 			var r := offset(phi + travel*t) * lerpf(initial_scale,reach_scale,t) / reach_scale
-			var tip := _clear_pose(center,r) * distal
+			var sample := _orbit_pose(center,r,i)
+			if not _has_clearance(sample,i):
+				slot.before = slot.after
+				points.clear()
+				continue
+			var tip := sample * distal
 			points.append(Vector3(center.x,tip.y,center.z))
 			points.append(tip)
 		slot.spokes = points
@@ -234,8 +300,8 @@ func discontinuous(start: Vector3, end: Vector3, dt: float) -> bool:
 	return start.distance_to(end) > maxf(.24,6.0 * dt + .06)
 
 func finish_turn() -> void:
-	if elapsed >= PERIOD - .0000001:
-		elapsed = maxf(0., fmod(elapsed + .0000001, PERIOD) - .0000001)
+	if elapsed >= duration - .0000001:
+		elapsed = maxf(0., fmod(elapsed + .0000001, duration) - .0000001)
 		turn_id += 1
 		hit_this_turn.clear()
 
@@ -266,6 +332,7 @@ func crosses_surface(part: MeshInstance3D, mesh: TriangleMesh) -> bool:
 	var local := part.global_transform.affine_inverse()
 	var samples: Array = HeadContacts.PICKAXE if equipped=="pickaxe" else HeadContacts.AXE
 	for i in count:
+		if not slots[i].clear: continue
 		var before: Transform3D = local * slots[i].before
 		var after: Transform3D = local * slots[i].after
 		var points: PackedVector3Array = slots[i].spokes

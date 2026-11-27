@@ -225,7 +225,7 @@ func _step_character(dt: float, speed: float) -> void:
 		start_position = end_position
 	var left := dt
 	while left > .0000001:
-		var step := minf(left, Orbit.PERIOD - character_kit.elapsed)
+		var step := minf(left, character_kit.duration - character_kit.elapsed)
 		var sample := start_position.lerp(end_position,(dt - left + step) / dt)
 		character_kit.advance(step,sample)
 		_resolve_swirl_contacts()

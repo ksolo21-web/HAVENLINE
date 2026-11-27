@@ -38,7 +38,7 @@ func run() -> void:
 	var field = load("res://field_opening.tscn").instantiate()
 	root.add_child(field)
 	var earn := "--sweep" in OS.get_cmdline_user_args()
-	checks["earned three-tool camp resumed"] = not field.persist_blocked and field.inventory.complete("orbit_upgrade") and field.camp_active
+	checks["earned ten-tool camp resumed"] = not field.persist_blocked and field.inventory.complete("orbit_upgrade") and field.camp_active and field.character_kit.count == 10
 	if earn:
 		# Raise existing credit history independently of the empty pack.
 		for i in 2500:

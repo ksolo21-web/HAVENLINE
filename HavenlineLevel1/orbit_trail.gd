@@ -1,5 +1,5 @@
 extends MeshInstance3D
-## Tapered white 57-degree blade afterimage sampled in the weapon's horizontal plane.
+## Tapered white afterimage sampled in the weapon's horizontal plane.
 const SEGMENTS := 16
 var ribbon := ImmediateMesh.new()
 var finish := ShaderMaterial.new()
@@ -14,7 +14,7 @@ func redraw(positions: PackedVector3Array, radial_axes: PackedVector3Array, widt
 	ribbon.clear_surfaces()
 	ribbon.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP, finish)
 	for i in range(positions.size()):
-		var progress := float(i)/SEGMENTS
+		var progress := float(i)/(positions.size()-1)
 		var half_width := width * .5 * pow(1.0-progress,.61)
 		ribbon.surface_set_uv(Vector2(progress,0)); ribbon.surface_add_vertex(_inside(positions[i]-radial_axes[i]*half_width,planes))
 		ribbon.surface_set_uv(Vector2(progress,1)); ribbon.surface_add_vertex(_inside(positions[i]+radial_axes[i]*half_width,planes))

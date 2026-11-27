@@ -1,5 +1,6 @@
 extends SceneTree
 const Opening = preload("res://orbit_opening.tscn")
+const Orbit = preload("res://weapon_orbit.gd")
 var world
 var output := OS.get_environment("HAVENLINE_ORBIT_TRAVEL")
 var frame := 0
@@ -28,13 +29,21 @@ func take_segment(state: String, stick: Vector2, ticks: int) -> void:
 		if DisplayServer.get_name() != "headless":
 			await RenderingServer.frame_post_draw
 		var kit = world.character_kit
-		var correct: bool = kit.locomotion.current == expected_gait and kit.active and kit.count==(3 if state=="upgraded" else 1)
+		var correct: bool = kit.locomotion.current == expected_gait and kit.active and kit.count==(10 if state=="upgraded" else 1)
 		if correct: matched += 1
 		if i >= 32 and not correct: settled_mismatches += 1
 		var tip: Vector3 = kit.current_tip
 		var local_tip: Vector3 = tip - world.actor.global_position
 		angles.append(atan2(local_tip.x,local_tip.z))
-		if frame > 0: max_delta = maxf(max_delta,tip.distance_to(last_tip))
+		if frame > 0:
+			var delta := tip.distance_to(last_tip)
+			max_delta = maxf(max_delta,delta)
+			# Preserve the old allowance and add only the arc travel due to
+			# the higher rotation rate at the same 60 Hz sampling interval.
+			var extra_speed := maxf(0.0,1.0 / kit.duration - 1.0 / Orbit.PERIOD)
+			var allowed := .48 + float(kit.maximum_radius()) * TAU * extra_speed / 60.0
+			if delta > allowed and "discontinuous tool path" not in failures:
+				failures.append("discontinuous tool path")
 		last_tip = tip
 		if DisplayServer.get_name() != "headless":
 			root.get_texture().get_image().save_jpg(output.path_join("%04d.jpg"%frame),.94)
@@ -64,7 +73,6 @@ func run() -> void:
 	await take_segment("run",Vector2(-.90,.14),85)
 	world.character_kit.set_upgraded(true)
 	await take_segment("upgraded",Vector2.ZERO,100)
-	if max_delta > .48: failures.append("discontinuous tool path")
 	var out := FileAccess.open(output.path_join("travel.json"),FileAccess.WRITE)
 	out.store_string(JSON.stringify({"states":measurements,"maximum_interframe_tip_displacement_m":max_delta,"failures":failures},"  "))
 	out.close()
