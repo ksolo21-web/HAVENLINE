@@ -9,9 +9,9 @@
 - [Build 13 dynamic gameplay audit](Havenline-Build-13-Dynamic-Gameplay-Audit.md) records source findings, gameplay gaps, the first tests that would prove fixes, and open design choices.
 - [Whole task-plan audit](Havenline-Whole-Task-Plan-Audit.md) contains the task-by-task findings for all 70 defined tasks and the ten undefined entries. World levels 71–80 belong to T50. Both submissions are preserved verbatim, including earlier wording. Use the owner decisions below to resolve conflicts between them.
 
-## Connected worlds
+## World 1 launch and later updates
 
-The campaign allocates Levels 1–100 across ten connected worlds, each with its own supply role, survival pressures, and two-way travel. The world plan maps local resources, what each world builds, and the crossing unlocked at each ten-level milestone. [World and resource progression](World-Progression.md)
+World 1, Frozen Home Camp, is the initial release focus. Worlds 2–10 follow as connected updates. Design World 1 as a continuous sandbox and test a 50-level local progression target. The camp keeps operating after its last milestone. The final count, global numbering and older Level 1–100 launch contract need reconciliation before production sign-off. [World 1 progression and adaptive sandbox](World-Progression.md)
 
 ## Owner decisions to carry forward
 
