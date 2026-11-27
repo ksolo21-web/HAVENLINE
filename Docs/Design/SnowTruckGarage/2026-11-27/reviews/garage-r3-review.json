@@ -1,0 +1,50 @@
+{
+  "reviewer": "/root/independent_critic",
+  "review_scope": "Generated garage turnaround static concept only",
+  "artifact": "generated_images/exec-cdac7897-7b43-417e-96d0-27ed5d727962.png",
+  "artifact_sha256": "b7b39a1131a71ca3d42a36f442d9bb56d687f0a4a914dd762ca891d13f3a44c2",
+  "directly_inspected": [
+    "Full sheet",
+    "Open garage detail",
+    "Cutaway/docking detail"
+  ],
+  "concept_score": 9.2,
+  "disposition": "REJECT_REPAIR_REQUIRED",
+  "production_approval": false,
+  "defects": [
+    {
+      "id": "GC01",
+      "status": "RESOLVED",
+      "finding": "Single truck in each use state."
+    },
+    {
+      "id": "GC02",
+      "status": "RESOLVED",
+      "finding": "Tall blue/cyan cab, rounded orange fenders, massive snow tires, horizontal grille and low discs now match truck R1 at concept level."
+    },
+    {
+      "id": "GC03",
+      "status": "OPEN",
+      "severity": "MAJOR",
+      "location": "CUTAWAY / DOCKING",
+      "finding": "Cab face toward viewer/cargo is rendered as front windshield with front corner lights although truck front/blades point toward far door.",
+      "repair": "Render blue rear bulkhead and small wide rear window, consistent with truck R1 rear."
+    },
+    {
+      "id": "GC04",
+      "status": "OPEN",
+      "severity": "MAJOR",
+      "location": "OPEN GARAGE",
+      "finding": "Blade front lies beyond exterior jamb/door plane; cannot represent fully parked automatic unloading state.",
+      "repair": "Move entire vehicle deeper inside garage preserving proportions and clear door track."
+    }
+  ],
+  "untested": [
+    "Actual 3D fit and geometry",
+    "Driving",
+    "Door and docking collision",
+    "Animations",
+    "Unloading",
+    "Audio"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "scope": "STANDALONE_NATIVE_VEHICLE_RULES_ONLY",
+  "observation": "Initial executed Godot 4.7.2 run before JSON metadata normalization and lifecycle recovery repairs",
+  "passed": 80,
+  "failed": 3,
+  "failed_checks": [
+    "JSON roundtrip exact replay including large cargo",
+    "restored request cannot duplicate unload",
+    "outside-loss tombstone persists through JSON reload"
+  ],
+  "cause": "JSON parsed integral metadata as floats; raw dictionary equality and immutable receipt replay differed despite equal canonical values",
+  "repair": "Normalize safely representable integral metadata after authorized restore while preserving decimal quantity strings",
+  "source_identity": "Initial exact source fingerprint was not captured; this is a factual rejection summary from the executed tool transcript, not a source-bound full receipt",
+  "superseded_by": "native-results.json",
+  "game_approval": false
+}

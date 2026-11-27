@@ -1,0 +1,48 @@
+{
+  "reviewer": "/root/independent_critic",
+  "review_scope": "Generated truck turnaround static concept only",
+  "artifact": "generated_images/exec-99383ab1-ec00-4bca-b7d4-f8d905179bbd.png",
+  "artifact_sha256": "a17a4a3cea042a375f5a10252f0182537723373b366d217f38aa6f98bef80b84",
+  "dimensions_px": [
+    1536,
+    1024
+  ],
+  "directly_inspected": [
+    "Full sheet",
+    "Front detail",
+    "Left profile",
+    "Three-quarter",
+    "Horizontal blade close-up",
+    "Storage-house style reference"
+  ],
+  "checks": {
+    "front_rear_both_sides": "PASS",
+    "opposite_sides_not_duplicated": "PASS",
+    "four_wheels_consistent": "PASS",
+    "horizontal_low_blades": "PASS",
+    "game_style_family": "PASS",
+    "readable_labels_and_framing": "PASS",
+    "mixed_cargo_communicated": "PASS"
+  },
+  "findings": [
+    {
+      "id": "TC01",
+      "severity": "NOTE",
+      "text": "Generated views are a design proposal, not dimensionally exact 3D geometry. Incidental cargo stacks and small fittings vary; 3D model needs one explicit geometry source and actual turntable validation."
+    }
+  ],
+  "concept_score": 9.7,
+  "concept_disposition": "INTERIM_STATIC_CONCEPT_REVIEW_ONLY",
+  "production_approval": false,
+  "untested": [
+    "3D model",
+    "drive controls",
+    "garage fit",
+    "collision and navigation",
+    "blade animation/contact",
+    "combat/harvest runtime",
+    "audio",
+    "device performance"
+  ],
+  "policy": "Existing final reference-sensitive and exact-10 production requirements remain unfulfilled; no passing runtime or shipping score is assigned."
+}

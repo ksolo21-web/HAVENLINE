@@ -1,0 +1,467 @@
+{
+  "schema_version": 1,
+  "feature_id": "snow_truck_garage",
+  "date": "2026-11-27",
+  "stage": "SPECIFIED_COMPONENT_EVIDENCE_PENDING_FINAL_BINDING",
+  "user_request_verbatim": "Continue with the Havenline gameplay gap fill in. Also lets add a 360 view render of a snow truck with horizontal blades at the bottom. It will be driveable by the user. It can be used to attack, cut down trees, smash rocks and other mining rock resources. It will cost a substantial amount of relevant resources. it will be bought on a plot inside the camp. but 1st the user will have to build a garage for it with the garage door will take place of a section of the fence. The truck can hold any resource and an unlimited amount. It has HP and if destroyed outside the camp, the user will lose all the inventory it has. Once the vehicle is parked back inside the garage, the resources will transfer from the truck to the storage house. So we need renders of the garage too.",
+  "scope": "Additive design/turnaround/standalone rules; no played-build or shipping approval",
+  "base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+  "game_source": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+  "user_requirements": [
+    {
+      "id": "VG01",
+      "requirement": "Player drives the snow truck.",
+      "required_evidence": [
+        "Actual controls, camera, driving and safe exit evidence"
+      ],
+      "mandatory": true,
+      "design_status": "SPECIFIED",
+      "runtime_status": "NOT_APPROVED"
+    },
+    {
+      "id": "VG02",
+      "requirement": "Low horizontal blades attack eligible enemies, fell trees and break stone and other mineable rock.",
+      "required_evidence": [
+        "Multi-angle blade-plane concept evidence",
+        "Actual typed contact, depletion, damage and motion evidence"
+      ],
+      "mandatory": true,
+      "design_status": "SPECIFIED",
+      "runtime_status": "NOT_APPROVED"
+    },
+    {
+      "id": "VG03",
+      "requirement": "Completed garage first; separate in-camp truck plot; substantial relevant obtainable-resource bill.",
+      "required_evidence": [
+        "Garage/purchase prerequisite checks",
+        "Real full-quantity acquisition proof",
+        "Measured free-player balance"
+      ],
+      "mandatory": true,
+      "design_status": "SPECIFIED",
+      "runtime_status": "NOT_APPROVED"
+    },
+    {
+      "id": "VG04",
+      "requirement": "Garage door replaces a section of camp fence.",
+      "required_evidence": [
+        "Multi-angle fence/door concept evidence",
+        "Measured topology, collision, door obstruction and navigation"
+      ],
+      "mandatory": true,
+      "design_status": "SPECIFIED",
+      "runtime_status": "NOT_APPROVED"
+    },
+    {
+      "id": "VG05",
+      "requirement": "Truck holds every resource type in unlimited quantity.",
+      "required_evidence": [
+        "All ordinary portable catalogue types accepted",
+        "Exact large-count arithmetic/save tests",
+        "Bounded visual representation independent of quantity"
+      ],
+      "mandatory": true,
+      "design_status": "SPECIFIED",
+      "runtime_status": "NOT_APPROVED"
+    },
+    {
+      "id": "VG06",
+      "requirement": "Truck has HP; outside-camp destruction loses all cargo still aboard.",
+      "required_evidence": [
+        "Contact/generation/cargo-loss tests",
+        "Actual damage/wreck/driver recovery playback"
+      ],
+      "mandatory": true,
+      "design_status": "SPECIFIED",
+      "runtime_status": "NOT_APPROVED"
+    },
+    {
+      "id": "VG07",
+      "requirement": "Parking fully inside garage transfers cargo to storage house.",
+      "required_evidence": [
+        "Whole-cargo docking/unload and interruption cases",
+        "Actual warehouse linkage/animation"
+      ],
+      "mandatory": true,
+      "design_status": "SPECIFIED",
+      "runtime_status": "NOT_APPROVED"
+    },
+    {
+      "id": "VG08",
+      "requirement": "Truck and garage 360-degree render sheets.",
+      "required_evidence": [
+        "Front/rear/left/right plus useful oblique/detail/use states",
+        "Honest static concept scope and user selection boundary"
+      ],
+      "mandatory": true,
+      "design_status": "SPECIFIED",
+      "runtime_status": "NOT_APPROVED"
+    },
+    {
+      "id": "VG09",
+      "requirement": "Existing approved work and original task scope remain preserved.",
+      "required_evidence": [
+        "Addition-only diff/base source proof",
+        "No changes to task identities/dependencies/statuses or live game/workflows"
+      ],
+      "mandatory": true,
+      "design_status": "SPECIFIED",
+      "runtime_status": "NOT_APPROVED"
+    }
+  ],
+  "selected_decisions": [
+    {
+      "id": "VD01",
+      "title": "Whole-cargo-or-hold deposit",
+      "decision": "An operational linked all-resource warehouse ledger has no gameplay capacity. A failed receive leaves the whole load on the truck; retry follows valid state recovery.",
+      "authority": "Selected implementation; reconciles concurrent partial-unload recommendation."
+    },
+    {
+      "id": "VD02",
+      "title": "Exact unlimited logical cargo",
+      "decision": "Use canonical decimal counts and bounded representative stacks; no float/64-bit gameplay cap.",
+      "authority": "Selected technical representation."
+    },
+    {
+      "id": "VD03",
+      "title": "Full-footprint loss boundary",
+      "decision": "Any meaningful truck footprint outside its camp at destruction triggers cargo loss; fully inside creates durable typed salvage.",
+      "authority": "Selected authored boundary rule; actual geometry proof required."
+    },
+    {
+      "id": "VD04",
+      "title": "Narrow generic-salvage exception",
+      "decision": "Only outside-camp truck cargo moves to lost sink; ordinary equipment/actor estates, player backpack and banked stock retain their own rules.",
+      "authority": "Explicit user override of generic GR13-style salvage."
+    },
+    {
+      "id": "VD05",
+      "title": "Independent driver inventory",
+      "decision": "Destroy truck, release driver, preserve separate personal inventory under existing player recovery and restore valid controls/camera.",
+      "authority": "Selected integration default; not implemented by ledger."
+    },
+    {
+      "id": "VD06",
+      "title": "Garage and truck repair lifecycle",
+      "decision": "Surviving truck repairs cost relevant damage-scaled materials; destroyed truck repurchased level1/new generation; garage repair/rebuild follows actual boundary/equipment ownership.",
+      "authority": "Selected extension of current repair/rebuy policy; quantities unmeasured."
+    },
+    {
+      "id": "VD07",
+      "title": "No fuel requirement",
+      "decision": "No fuel meter, consumption, refill wait or energy gate introduced. Any later fuel proposal requires explicit review.",
+      "authority": "Scope decision; no claim user prohibited all future fuel mechanics."
+    },
+    {
+      "id": "VD08",
+      "title": "Capability-gated progression",
+      "decision": "No fixed level assigned; garage placement, usable producers/routes/materials/storage precede truck.",
+      "authority": "Selected integration requirement; World1 local count remains proposal."
+    },
+    {
+      "id": "VD09",
+      "title": "Preserve camp circulation",
+      "decision": "Two distinct bidirectional pedestrian openings remain; garage never silently replaces them; no initial character rescale/furnace shift/exterior painted road.",
+      "authority": "Preserved prior owner constraints."
+    },
+    {
+      "id": "VD10",
+      "title": "No invented components currency",
+      "decision": "Use only actual catalogue IDs; metal remains ore, steel only if obtainable; engine/track/parts names are visual descriptions rather than new material IDs.",
+      "authority": "Selected resource-integrity rule."
+    },
+    {
+      "id": "VD11",
+      "title": "Safe camp travel and docking blades",
+      "decision": "Blades stopped for docking/service/unload and safe ordinary camp travel. Deliberate eligible-hostile defense inside camp is allowed with actual clearance/target rules; incidental friendly/owned-structure damage is prohibited.",
+      "authority": "Selected correction by integration owner; actual contact rules remain unimplemented."
+    },
+    {
+      "id": "VD12",
+      "title": "One world transaction owner",
+      "decision": "Existing game and standalone component must not both own duplicated balances; damage/unload/storage events serialize and restore through same world authority.",
+      "authority": "Mandatory integration architecture."
+    },
+    {
+      "id": "VD13",
+      "title": "Built-in garage deposit relationship",
+      "decision": "No additional unrequested conveyor purchase required; actual reachable warehouse relationship and clear feedback are still necessary.",
+      "authority": "Selected fulfillment of automatic garage transfer."
+    }
+  ],
+  "balance_proposals_pending": [
+    "Exact unlock capability thresholds and World1 placement",
+    "Exact garage/truck bills and free-player work time",
+    "HP/armor, speed/turning, attack cadence and typed harvesting rates",
+    "Repair coefficients, native dimensions and late-world transport eligibility"
+  ],
+  "registered_material_candidates": {
+    "garage": [
+      "wood",
+      "stone",
+      "planks",
+      "blocks",
+      "slate",
+      "metal"
+    ],
+    "truck": [
+      "metal",
+      "steel",
+      "planks",
+      "slate"
+    ],
+    "rule": "Candidates are not a fixed bill. Only actual registered and constructively obtainable IDs may be selected; steel remains conditional on its actual producer/input path. No invented parts ID."
+  },
+  "acceptance_cases": [
+    {
+      "id": "VA01",
+      "scope": "native_component",
+      "scenario": "Garage completion and correct in-camp purchase prerequisite",
+      "pass_condition": "Missing/incomplete/stale/wrong-camp garage blocks quote and purchase without debit.",
+      "mandatory": true,
+      "status": "REQUIRES_FROZEN_EVIDENCE"
+    },
+    {
+      "id": "VA02",
+      "scope": "actual_game",
+      "scenario": "Constructive acquisition and relevant dynamic bill",
+      "pass_condition": "All units and producer prerequisites are obtainable without the missing truck; fixed accepted quote survives changes and reload.",
+      "mandatory": true,
+      "status": "BLOCKED_ACTUAL_GAME_EVIDENCE_MISSING"
+    },
+    {
+      "id": "VA03",
+      "scope": "native_component",
+      "scenario": "Frozen purchase and generation",
+      "pass_condition": "Duplicate or changed requests cannot double-buy; existing live truck and occupied garage bay reject another purchase.",
+      "mandatory": true,
+      "status": "REQUIRES_FROZEN_EVIDENCE"
+    },
+    {
+      "id": "VA04",
+      "scope": "native_component",
+      "scenario": "Garage rebuild quote recovery",
+      "pass_condition": "Authorized garage-generation rebind retains exact bill, target generation and funded value; no price reroll.",
+      "mandatory": true,
+      "status": "REQUIRES_FROZEN_EVIDENCE"
+    },
+    {
+      "id": "VA05",
+      "scope": "native_component",
+      "scenario": "Exact quantities beyond 64-bit",
+      "pass_condition": "Large canonical decimal quantities, carry, add/subtract, unload, loss and restore retain every digit.",
+      "mandatory": true,
+      "status": "REQUIRES_FROZEN_EVIDENCE"
+    },
+    {
+      "id": "VA06",
+      "scope": "actual_game",
+      "scenario": "Complete resource catalogue",
+      "pass_condition": "Every actually shipped portable resource can load and bank; later catalogue additions migrate without loss; no mesh-based capacity.",
+      "mandatory": true,
+      "status": "BLOCKED_ACTUAL_GAME_EVIDENCE_MISSING"
+    },
+    {
+      "id": "VA07",
+      "scope": "native_component",
+      "scenario": "Conserved loading and changed requests",
+      "pass_condition": "One owned source debits once; stale/unreachable source, insufficient amount or request-payload mutation preserves all owners.",
+      "mandatory": true,
+      "status": "REQUIRES_FROZEN_EVIDENCE"
+    },
+    {
+      "id": "VA08",
+      "scope": "native_component",
+      "scenario": "Full parked hull and blades",
+      "pass_condition": "All authoritative envelope points inside parking volume and vehicle/blades stopped are required; partial/side contact does not unload.",
+      "mandatory": true,
+      "status": "REQUIRES_FROZEN_EVIDENCE"
+    },
+    {
+      "id": "VA09",
+      "scope": "native_component",
+      "scenario": "All-cargo-or-hold receiver",
+      "pass_condition": "Missing, stale, destroyed, disconnected, restricted or finite receiver leaves all cargo aboard; valid receiver gets all types exactly once.",
+      "mandatory": true,
+      "status": "REQUIRES_FROZEN_EVIDENCE"
+    },
+    {
+      "id": "VA10",
+      "scope": "actual_game",
+      "scenario": "Automatic hold recovery",
+      "pass_condition": "Returning warehouse/link readiness retries automatically without a second manual unloading chore or duplicate credit.",
+      "mandatory": true,
+      "status": "BLOCKED_ACTUAL_GAME_EVIDENCE_MISSING"
+    },
+    {
+      "id": "VA11",
+      "scope": "native_component",
+      "scenario": "Unload/destruction ordering",
+      "pass_condition": "Whichever valid event commits first determines custody; completed warehouse cargo cannot be lost as truck cargo.",
+      "mandatory": true,
+      "status": "REQUIRES_FROZEN_EVIDENCE"
+    },
+    {
+      "id": "VA12",
+      "scope": "native_component",
+      "scenario": "Outside and straddling wreck",
+      "pass_condition": "A meaningful footprint outside camp makes all remaining truck cargo lost once, with no salvage clone; concave boundaries are tested.",
+      "mandatory": true,
+      "status": "REQUIRES_FROZEN_EVIDENCE"
+    },
+    {
+      "id": "VA13",
+      "scope": "native_component",
+      "scenario": "Inside wreck salvage",
+      "pass_condition": "Fully inside wreck moves all cargo once into durable typed salvage; truck stays destroyed and duplicate claims cannot mint value.",
+      "mandatory": true,
+      "status": "REQUIRES_FROZEN_EVIDENCE"
+    },
+    {
+      "id": "VA14",
+      "scope": "actual_game",
+      "scenario": "Driver survival and recovery",
+      "pass_condition": "No trapped driver, invulnerable vehicle exploit or lost personal inventory; valid exit/recovery input and camera restore.",
+      "mandatory": true,
+      "status": "BLOCKED_ACTUAL_GAME_EVIDENCE_MISSING"
+    },
+    {
+      "id": "VA15",
+      "scope": "native_component",
+      "scenario": "Destroyed truck repurchase",
+      "pass_condition": "Only dead generation can be replaced at level1 after paid new quote; old cargo/contact/request cannot bind to replacement.",
+      "mandatory": true,
+      "status": "REQUIRES_FROZEN_EVIDENCE"
+    },
+    {
+      "id": "VA16",
+      "scope": "native_component",
+      "scenario": "Warehouse destruction and reopen",
+      "pass_condition": "Existing banked stock moves to one estate; newly rebuilt warehouse opens empty through authorized lifecycle generation; claims cannot target ruined storage.",
+      "mandatory": true,
+      "status": "REQUIRES_FROZEN_EVIDENCE"
+    },
+    {
+      "id": "VA17",
+      "scope": "native_component",
+      "scenario": "Save replay and tampering",
+      "pass_condition": "Invalid shape/authority/generation/event/receipt/digest or unauthorized older restore is rejected before changing current state.",
+      "mandatory": true,
+      "status": "REQUIRES_FROZEN_EVIDENCE"
+    },
+    {
+      "id": "VA18",
+      "scope": "actual_game",
+      "scenario": "Whole-world crash and old saves",
+      "pass_condition": "Crash before/after unload, loss, repair, replacement and storage destruction preserves one owner; migrate real old saves and cloud conflicts.",
+      "mandatory": true,
+      "status": "BLOCKED_ACTUAL_GAME_EVIDENCE_MISSING"
+    },
+    {
+      "id": "VA19",
+      "scope": "actual_game",
+      "scenario": "Two existing camp openings",
+      "pass_condition": "Two distinct pedestrian openings work both ways with garage closed, truck parked, delivery traffic and damaged perimeter.",
+      "mandatory": true,
+      "status": "BLOCKED_ACTUAL_GAME_EVIDENCE_MISSING"
+    },
+    {
+      "id": "VA20",
+      "scope": "actual_game",
+      "scenario": "Door obstruction and breach",
+      "pass_condition": "Original fence collision remains until one atomic completed replacement. Closing stops/reverses around occupied clearance; real damage/collision agree; no free breach, phantom closed wall or moving-object deletion.",
+      "mandatory": true,
+      "status": "BLOCKED_ACTUAL_GAME_EVIDENCE_MISSING"
+    },
+    {
+      "id": "VA21",
+      "scope": "actual_game",
+      "scenario": "Drive and safe exit",
+      "pass_condition": "Mobile steer/forward/reverse/brake/exit work on actual phone/tablet/foldable layouts; tight turns and blocked exits recover.",
+      "mandatory": true,
+      "status": "BLOCKED_ACTUAL_GAME_EVIDENCE_MISSING"
+    },
+    {
+      "id": "VA22",
+      "scope": "actual_game",
+      "scenario": "Blade contact and target exclusions",
+      "pass_condition": "Horizontal low blades hit only valid reachable enemies and resource nodes; intact barriers block attacks. Safe camp travel stops blades, but deliberate eligible-hostile camp defense is possible; incidental contact never damages friendlies or owned structures.",
+      "mandatory": true,
+      "status": "BLOCKED_ACTUAL_GAME_EVIDENCE_MISSING"
+    },
+    {
+      "id": "VA23",
+      "scope": "actual_game",
+      "scenario": "Harvest once and normal regeneration",
+      "pass_condition": "Overlapping colliders/player/worker contacts cannot duplicate depletion reward; every typed yield/regrowth follows source generation.",
+      "mandatory": true,
+      "status": "BLOCKED_ACTUAL_GAME_EVIDENCE_MISSING"
+    },
+    {
+      "id": "VA24",
+      "scope": "actual_game",
+      "scenario": "Repair and replacement feasibility",
+      "pass_condition": "Missing-HP repair consumes proper materials once; parking/reload never heals free; worst-case truck/garage loss remains manually recoverable.",
+      "mandatory": true,
+      "status": "BLOCKED_ACTUAL_GAME_EVIDENCE_MISSING"
+    },
+    {
+      "id": "VA25",
+      "scope": "actual_game",
+      "scenario": "Useful pets and threat presence",
+      "pass_condition": "Occupied truck retains player defender presence; empty truck is equipment; pet/worker routes, U3 provocation and away-camp threats remain correct.",
+      "mandatory": true,
+      "status": "BLOCKED_ACTUAL_GAME_EVIDENCE_MISSING"
+    },
+    {
+      "id": "VA26",
+      "scope": "actual_game",
+      "scenario": "Full animations and listening",
+      "pass_condition": "Complete driving/blade/door/harvest/hit/miss/interrupt/wreck/repair/unload cycles, driver joints/contact/clipping, actual sound and muted equivalents pass.",
+      "mandatory": true,
+      "status": "BLOCKED_ACTUAL_GAME_EVIDENCE_MISSING"
+    },
+    {
+      "id": "VA27",
+      "scope": "actual_game",
+      "scenario": "Performance and sustained use",
+      "pass_condition": "Huge cargo has bounded render/audio cost. Full-event replay gains measured journal/checkpoint compaction retaining receipts/tombstones and bounded resume time before shipping; long play, traffic, app pause and actual device limits pass.",
+      "mandatory": true,
+      "status": "BLOCKED_ACTUAL_GAME_EVIDENCE_MISSING"
+    },
+    {
+      "id": "VA28",
+      "scope": "static_concept",
+      "scenario": "Turnarounds and use states",
+      "pass_condition": "Truck/garage views expose required sides and low horizontal blades with coherent details; no claim that raster art is a mesh or animation.",
+      "mandatory": true,
+      "status": "PROPOSAL_REVIEWED_NOT_PRODUCTION_APPROVED"
+    },
+    {
+      "id": "VA29",
+      "scope": "preservation",
+      "scenario": "Original scope and source custody",
+      "pass_condition": "Only authorized additions/navigation changed; historical receipts, definitions, graph, assets and active branch source preserved.",
+      "mandatory": true,
+      "status": "REQUIRES_FROZEN_EVIDENCE"
+    },
+    {
+      "id": "VA30",
+      "scope": "actual_game",
+      "scenario": "Balance and progression integration",
+      "pass_condition": "Capability gate, costs, HP, speed, harvesting utility and recovery measured in World1 sandbox; no invented fixed unlock, fuel/energy wall or spend-based pricing.",
+      "mandatory": true,
+      "status": "BLOCKED_ACTUAL_GAME_EVIDENCE_MISSING"
+    }
+  ],
+  "review_policy": {
+    "mandatory_checks_all_pass": true,
+    "independent_critic_required": true,
+    "reference_dimension_minimum": 9.9,
+    "stronger_exact_10_gates_preserved": true,
+    "missing_evidence_blocks_scope_approval": true,
+    "bounded_component_review_is_not_game_approval": true
+  },
+  "game_score": null,
+  "runtime_approval_allowed": false
+}

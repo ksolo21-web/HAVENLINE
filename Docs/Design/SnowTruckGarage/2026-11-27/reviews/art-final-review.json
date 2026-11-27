@@ -1,0 +1,101 @@
+{
+  "reviewer": "/root/independent_critic",
+  "review_scope": "Truck and garage generated static concept sheets; final submitted art iteration for this review",
+  "artifacts": [
+    {
+      "role": "truck",
+      "path": "generated_images/exec-99383ab1-ec00-4bca-b7d4-f8d905179bbd.png",
+      "sha256": "a17a4a3cea042a375f5a10252f0182537723373b366d217f38aa6f98bef80b84",
+      "dimensions_px": [
+        1536,
+        1024
+      ],
+      "concept_score": 9.7
+    },
+    {
+      "role": "garage",
+      "path": "generated_images/exec-f628a729-5575-4209-a6bf-7dd36511d0a5.png",
+      "sha256": "30190841ffbbf7b9b8cb218e4a821017739cc5392ce56a55684125a47ae5a386",
+      "dimensions_px": [
+        1536,
+        1024
+      ],
+      "concept_score": 9.8
+    }
+  ],
+  "disposition": "PRESENTATION_READY_AUTHORED_CONCEPT_PROPOSALS",
+  "policy_disposition": "INTERIM_STATIC_CONCEPT_ONLY",
+  "production_approval": false,
+  "user_design_selection": "PENDING",
+  "inspected_evidence": [
+    "Truck full sheet",
+    "Truck front detail",
+    "Truck left profile",
+    "Truck rear",
+    "Truck three-quarter",
+    "Truck horizontal blade detail",
+    "Garage R1/R2/R3 rejects",
+    "Garage R4 full sheet",
+    "Garage R4 open docking detail",
+    "Garage R4 rear-facing cutaway",
+    "Source storage-house style reference"
+  ],
+  "mandatory_static_checks": {
+    "truck_cardinal_coverage": "PASS",
+    "truck_opposite_sides_distinct": "PASS",
+    "truck_four_wheel_silhouette": "PASS",
+    "truck_horizontal_low_rotary_blades": "PASS",
+    "truck_cargo_identity_readable": "PASS",
+    "garage_cardinal_coverage": "PASS",
+    "garage_door_at_fence_boundary": "PASS",
+    "garage_camp_side_circulation": "PASS",
+    "garage_single_coherent_vehicle": "PASS",
+    "garage_truck_identity": "PASS_AT_CONCEPT_LEVEL",
+    "garage_rear_window_orientation": "PASS",
+    "garage_full_parked_blade_clearance": "PASS_AS_DRAWN_ONLY",
+    "visual_family_match": "PASS_AT_CONCEPT_LEVEL",
+    "labels_framing_legibility": "PASS"
+  },
+  "defect_disposition": [
+    {
+      "id": "GC01",
+      "state": "RESOLVED_R2",
+      "summary": "Duplicate opposed cabin/truck removed."
+    },
+    {
+      "id": "GC02",
+      "state": "RESOLVED_R3",
+      "summary": "Original large rounded truck identity used."
+    },
+    {
+      "id": "GC03",
+      "state": "RESOLVED_R4",
+      "summary": "Rear cab is solid bulkhead with small rear window."
+    },
+    {
+      "id": "GC04",
+      "state": "RESOLVED_R4",
+      "summary": "Open garage truck and horizontal blades fully behind front doorway."
+    }
+  ],
+  "residual_notes": [
+    {
+      "id": "TC01",
+      "state": "DISCLOSED_CONCEPT_LIMIT",
+      "summary": "Generated views are not dimensionally exact geometry; incidental small fittings and cargo details vary. They need a single explicit modeling geometry and real multi-angle model review before production."
+    }
+  ],
+  "unverified_mandatory_production_evidence": [
+    "Editable/native vehicle and garage models",
+    "Measured whole-vehicle and blade collision clearance",
+    "Actual door/fence replacement and two camp exits",
+    "Driving controls, steering, suspension, stopping and reverse",
+    "Blade full cycles, contact/miss/interruption across enemy/tree/mineral targets",
+    "Docking/unloading animation and cargo accounting integration",
+    "Damage/death/repair/rebuy motion and sound",
+    "Actual listening and muted signals",
+    "Mobile device performance and input",
+    "Independent actual-scene final review and owner design approval"
+  ],
+  "score_interpretation": "No score here certifies implemented gameplay or final reference fidelity. The existing per-dimension9.9/exact10 production gates remain open. No average hides missing runtime evidence."
+}

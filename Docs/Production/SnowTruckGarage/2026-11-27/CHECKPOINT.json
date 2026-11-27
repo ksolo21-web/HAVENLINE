@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "feature_id": "snow_truck_garage",
+  "status": "FROZEN_PACKAGE_READY_FOR_INDEPENDENT_REVIEW",
+  "created_at_utc": "2026-11-27T15:53:46.314997+00:00",
+  "base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+  "branch": "feature/snow-truck-garage-2026-11-27",
+  "owner": "Alfred (/root)",
+  "current_stage": "Source recovery, authored concept sheets, feature specification and standalone native component are ready; exact full-package review and isolated GitHub readback remain.",
+  "completed_artifacts": [
+    "Practical feature specification",
+    "VG01-VG09 requirements",
+    "30 acceptance scenarios",
+    "Additive existing-task routing",
+    "Source recovery with19 bindings and concurrent audit dispositions",
+    "Owner acceptance copy"
+  ],
+  "verified_feature_milestones": null,
+  "runtime_integrated": false,
+  "runtime_approval_allowed": false,
+  "game_score": null,
+  "independent_final_review": "PENDING_EXACT_FREEZE",
+  "publication": "NOT_PERFORMED_BY_DOC_BUILDER",
+  "blocked_actual_game_areas": [
+    "Exact unlock capability thresholds and World1 placement",
+    "Exact garage/truck bills and free-player work time",
+    "HP/armor, speed/turning, attack cadence and typed harvesting rates",
+    "Repair coefficients, native dimensions and late-world transport eligibility",
+    "Live code/scene integration",
+    "Actual driving and mobile controls",
+    "Mining and enemy contact",
+    "Garage door/navigation and truck footprint fit",
+    "Repair/driver recovery/full-world save adapter",
+    "Full animation/audio and physical-device evidence",
+    "Measured long-session journal/checkpoint compaction with retained idempotency/tombstone proof and bounded resume time"
+  ],
+  "next_actions": [
+    {
+      "owner": "/root/independent_critic",
+      "action": "Complete exact frozen docs/component/art package review; actual game remains blocked."
+    },
+    {
+      "owner": "/root",
+      "action": "Publish reviewed isolated branch and verify exact remote commit and render blobs."
+    },
+    {
+      "owner": "Alfred and resolved Codex field integration owner",
+      "action": "Connect one-world custody and approved vehicle/garage assets to current field build, then prove driving/contact/door/save/motion/audio/device gates."
+    }
+  ],
+  "resumption_commands": [
+    "godot --headless --path tools/havenline/vehicle_rules --script res://tests/run_all.gd",
+    "git diff --stat a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+    "git status --short"
+  ],
+  "task_preservation": "70 authentic tasks preserved; no inventedT71\u2013T80 definitions or approvals.",
+  "standalone_native_verification": {
+    "passed": 107,
+    "failed": 0,
+    "engine": "4.7.2.stable.official.ed1daf0bf",
+    "source_manifest": "tools/havenline/vehicle_rules/evidence/source-manifest.json",
+    "root_retest": "Same exact source and byte-identical result re-executed by root; no game integration."
+  },
+  "resume_priority": "Read PUBLICATION.json and FINAL_REVIEW.json when present; this file preserves the prepublication freeze checkpoint and does not claim subsequent actions occurred."
+}

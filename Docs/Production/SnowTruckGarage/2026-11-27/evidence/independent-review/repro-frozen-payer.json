@@ -1,0 +1,72 @@
+{
+	"current_quote": {
+		"bill": {
+			"steel": "200",
+			"wood": "100"
+		},
+		"camp_id": "home",
+		"catalogue_version": "fixture-only",
+		"garage_generation": 1,
+		"garage_id": "garage",
+		"id": "q1",
+		"max_hp": 100,
+		"next_generation": 1,
+		"payer_generation": 1,
+		"payer_id": "warehouse",
+		"used": false,
+		"vehicle_id": "truck"
+	},
+	"destroy": {
+		"cache_id": "storage-estate:warehouse:1",
+		"moved": {
+			"steel": "1000",
+			"wood": "1000"
+		},
+		"ok": true,
+		"operation": "storage_destroyed",
+		"request_id": "destroy",
+		"sequence": "2"
+	},
+	"has_funding_rebind": false,
+	"initialize": {
+		"authority_id": "fixture-world",
+		"ok": true
+	},
+	"new_quote": {
+		"ok": false,
+		"reason": "existing_frozen_quote"
+	},
+	"old_quote_buy": {
+		"ok": false,
+		"reason": "unfunded"
+	},
+	"quote": {
+		"bill": {
+			"steel": "200",
+			"wood": "100"
+		},
+		"ok": true,
+		"operation": "admit_quote",
+		"quote_id": "q1",
+		"request_id": "q",
+		"sequence": "1"
+	},
+	"recover_funds": {
+		"moved": {
+			"steel": "1000",
+			"wood": "1000"
+		},
+		"ok": true,
+		"operation": "claim",
+		"request_id": "recover",
+		"sequence": "4"
+	},
+	"reopen": {
+		"generation": 2,
+		"ok": true,
+		"operation": "reopen_storage",
+		"request_id": "reopen",
+		"sequence": "3",
+		"storage_id": "warehouse"
+	}
+}

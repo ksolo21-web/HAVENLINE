@@ -1,0 +1,50 @@
+{
+  "reviewer": "/root/independent_critic",
+  "review_scope": "Generated garage turnaround static concept only",
+  "artifact": "generated_images/exec-17d815f5-1892-482c-9c24-5716428ecc4e.png",
+  "artifact_sha256": "ce86946d558dc1a7f556a72340659b459c923efe3481c4f4e9570410e93b9a62",
+  "dimensions_px": [
+    1536,
+    1024
+  ],
+  "inspected": [
+    "Full sheet",
+    "Open garage crop",
+    "Cutaway/docking crop"
+  ],
+  "disposition": "REJECT_REPAIR_REQUIRED",
+  "concept_score": 8.0,
+  "production_approval": false,
+  "checks": {
+    "front_rear_left_right": "PASS",
+    "garage_door_at_fence_boundary": "PASS",
+    "rear_camp_circulation_opening": "PASS",
+    "sides_differ_consistently_window_vent": "PASS",
+    "garage_style_family": "PASS",
+    "single_consistent_truck": "FAIL"
+  },
+  "defects": [
+    {
+      "id": "GC01",
+      "severity": "BLOCKING",
+      "location": "CUTAWAY / DOCKING panel",
+      "finding": "Two cabins/opposed trucks occupy one cargo arrangement. This is not one coherent vehicle.",
+      "repair": "One original truck, rear cargo nearest viewer and cabin facing closed external door."
+    },
+    {
+      "id": "GC02",
+      "severity": "MAJOR",
+      "location": "OPEN GARAGE and CUTAWAY / DOCKING panels",
+      "finding": "Depicted boxy small-cabin truck materially differs from the existing authored truck concept: tall rounded windshield/cabin and large rounded wheels/fenders replaced.",
+      "repair": "Use original truck identity in both use-state panels and preserve body proportions, tires, low twin blades."
+    }
+  ],
+  "untested": [
+    "Measured 3D clearance",
+    "Actual fence collision swap",
+    "Door obstruction",
+    "Vehicle/camp navigation",
+    "Driving/docking animation",
+    "Storage transfer behavior"
+  ]
+}

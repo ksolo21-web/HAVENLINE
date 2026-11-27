@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "status": "BLOCKED_AUTOMATIC_APPROVAL_REVIEW",
+  "feature_branch": "feature/snow-truck-garage-2026-11-27",
+  "destination_repository": "ksolo21-web/HAVENLINE",
+  "destination_url": "https://github.com/ksolo21-web/HAVENLINE.git",
+  "visibility": "public",
+  "prepared_content_commit": "3b0423fd5e3d730e54e6f2bbeb01b914a734414f",
+  "prepared_tree": "21323ed226d6d0e9dcc3c52588dc696510ffc014",
+  "frozen_content_files": 62,
+  "prepared_commit_files": 81,
+  "content_review": "FINAL_REVIEW.json",
+  "content_review_sha256": "5592058403d6d501ac31e8142d81ba6e08759f3a5eb465a6543ec479e2b740c1",
+  "remote_branch_created": false,
+  "remote_readback_complete": false,
+  "pull_request_created": false,
+  "runtime_integrated": false,
+  "attempts": [
+    {
+      "attempt": 1,
+      "result": "REJECTED",
+      "reason": "Automatic review did not accept authorization for publishing the 81-file code/documentation/render package to the remote."
+    },
+    {
+      "attempt": 2,
+      "result": "REJECTED_AFTER_DESTINATION_AND_PRIOR_AUTHORIZATION_CHECKS",
+      "reason": "Although the repository is public and the connected account has push access, automatic review requires direct user-authored authorization in the current trusted transcript to publish this new package externally."
+    }
+  ],
+  "checks_after_first_rejection": {
+    "connected_repository": "Confirmed exact owner/repository and public visibility through GitHub connector",
+    "connected_permissions": {
+      "push": true,
+      "admin": true
+    },
+    "prior_user_context": "Recovered prior requests to keep Havenline renders in GitHub and update the GitHub task plan; automatic review still required current direct authorization.",
+    "branch_readback": "No feature branch found after first rejected attempt; main remained a4e643aeb563b6f9cfda8b840c0651d13326eec8."
+  },
+  "next_action": {
+    "owner": "Alfred (/root)",
+    "requires": "Direct user instruction authorizing this exact public-repository package publication",
+    "action": "After authorization, recheck live refs, push this isolated branch normally, read back commit and complete render blobs, then create a draft PR if still appropriate."
+  },
+  "boundaries": [
+    "No alternate upload tool was used to bypass rejection.",
+    "No changes were made to main, the active field branch, or workflows.",
+    "This record reports a publication blocker, not a defect in the reviewed standalone component.",
+    "Actual-game integration gates remain in the acceptance checklist."
+  ]
+}

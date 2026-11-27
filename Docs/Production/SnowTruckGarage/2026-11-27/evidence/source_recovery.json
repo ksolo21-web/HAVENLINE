@@ -1,0 +1,411 @@
+{
+  "schema_version": 1,
+  "scope": "Read-only recovery of Havenline published plan, concurrent gameplay rules, latest audit progression, and storage policy for snow truck/garage addition.",
+  "author": "/root/recover_plan",
+  "user_request_verbatim": "Continue with the Havenline gameplay gap fill in. Also lets add a 360 view render of a snow truck with horizontal blades at the bottom. It will be driveable by the user. It can be used to attack, cut down trees, smash rocks and other mining rock resources. It will cost a substantial amount of relevant resources. it will be bought on a plot inside the camp. but 1st the user will have to build a garage for it with the garage door will take place of a section of the fence. The truck can hold any resource and an unlimited amount. It has HP and if destroyed outside the camp, the user will lose all the inventory it has. Once the vehicle is parked back inside the garage, the resources will transfer from the truck to the storage house. So we need renders of the garage too.",
+  "initial_live_refs_observed": {
+    "main": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+    "trial/world-one-expansion-2026-11-26": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+    "planning/build-13-audit": "a3c242aba744cc17c93f6e5601bc0e87d968a11a"
+  },
+  "initial_live_refs_method": "git ls-remote origin refs/heads/main refs/heads/trial/world-one-expansion-2026-11-26 refs/heads/planning/build-13-audit; initial observation during this child recovery task",
+  "new_extension_baseline": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+  "new_extension_worktree": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-snow-truck",
+  "wip_rules_worktree": "/workspace/scratch/e15437dc7c94/HAVENLINE-gameplay-rules",
+  "clean_game_worktree": "/workspace/scratch/e15437dc7c94/HAVENLINE-current-gameplay",
+  "reported_build13_game_commit": "2654f5019b7212968d28600cb071bf1c231c9030",
+  "wip_freeze_sha256": "29b11546165b8a32439a467c9b21cbd48f9c00b894734688468cac611bcb3f51",
+  "wip_frozen_file_count": 427,
+  "audit_source": {
+    "commit": "a3c242aba744cc17c93f6e5601bc0e87d968a11a",
+    "path": "Docs/Production/Build13Audit/World-Progression.md",
+    "git_blob": "09ccbcc581771879bbe7a1f9a2b15da8b7ac52a6",
+    "url": "https://github.com/ksolo21-web/HAVENLINE/blob/a3c242aba744cc17c93f6e5601bc0e87d968a11a/Docs/Production/Build13Audit/World-Progression.md",
+    "encoding": "utf-8",
+    "content": "# Havenline · World 1 launch and connected-world updates\n\n**Release direction:** Launch with World 1, Frozen Home Camp. Worlds 2–10 arrive as later updates and connect to the existing camps and supply routes. **Progression proposal:** Prototype World 1 with room for up to 50 local levels. The final count depends on how much distinct play the world supports. Fifty levels in each of ten worlds would mean 500 levels overall. Decide how local levels relate to a global level display before changing save IDs or the T12 progression contract. The earlier 100-level campaign supplies goals and region themes. [Earlier authored outcomes](https://github.com/ksolo21-web/HAVENLINE/blob/a4e643aeb563b6f9cfda8b840c0651d13326eec8/Docs/Production/Completeness/2026-11-27/PROGRESSION_ECONOMY_GAPS.md#the-100-authored-outcomes)\n\n## World 1 · Proposed progression\n\n| Local levels | What changes |\n|---|---|\n| **1–10 · Establish the camp** | Explore the clearing, gather wood, stone and food, build the hearth and gates, and open the first storage, trade and rescue opportunities. |\n| **11–20 · Open the supply routes** | Explore the woods, quarry and lakeshore. Choose which routes and producers to open first. Bridges, work shelters and alternate return paths change who can reach a site and how supplies get home. |\n| **21–30 · Grow trade and production** | Open more food and workshop options, varied self-service orders, and bulk hauling. Choose where helpers and conveyors will relieve a bottleneck. |\n| **31–40 · Defend an expanding camp** | Open new work areas within the frozen world. Choose perimeter and supply improvements, prepare for warned raids, and restore damage afterward. |\n| **41–50 · Run a resilient settlement** | Support several work areas by alternate routes, balance local demand with reserves, and finish major camp projects. The frozen sandbox keeps running after its last milestone. The forest link becomes playable with the World 2 update. |\n\nEach authored level needs a payoff such as a route, recipe, tool, worker capability, or visible camp improvement. Verify how many levels the distinct decisions can support.\n\n## How the sandbox adapts\n\n- Built and repaired routes, relocated machines, surviving workers, stock and camp damage affect the player's next options.\n- Pick optional orders and jobs from reachable routes, usable producers, available materials, stock and eligible goals. Keep accepted costs and orders stable through reload. Space and vary recurring offers and encounters.\n- Change the problems as the camp develops. Early choices are about where to gather and build. Later choices include rerouting cargo, opening another food or material line, shifting work to a different station, and deciding how to prepare for or recover from a raid. A larger quantity on the same delivery is insufficient to carry a level.\n- Keep the full five-minute raid warning and the separate cadence proposal. Test different threats and attack patterns as the camp grows. Check that ordinary play provides a viable path to recovery.\n- Test trade-first, exploration-first and defense-first approaches. Revisit the same places after expansion, damage and layout changes. Use long sessions and return visits to see whether decisions change and whether there is useful play after the final milestone.\n\n## Worlds and future updates\n\nThe level ranges and crossing milestones below come from the earlier ten-level-per-world plan. Its world themes, resources and connections guide the later updates. Choose the revised ranges and milestones after the World 1 sandbox trial.\n\n| World | Earlier levels | What players obtain and build | Survival and next connection |\n|---|---:|---|---|\n| **1 · Frozen Home Camp** · T32 | **1–10** | Wood, stone, hunted meat and the opening mineral sources for coal, slate and metal ore. Start the hearth, stock the warehouse, rescue the first worker, and make planks, blocks and cooked meals. Earn the first service cash. Planned later steps in this band introduce lakeshore fish and wheat for cooked fish and bread. | Snowy forest approaches, hostile wildlife and the first camp defenses. The hearth supports recovery. Open the **forest connection at 10**. |\n| **2 · Forest and Lakeshore** · T44 | **11–20** | Renewable timber, eligible game, hides and fur. Supply saws with timber, craft hauling harnesses and cold-weather fittings, and recruit survivors through rescue objectives. Use planks and blocks to bridge the creek. | Dense cover, isolated work parties and branch routes. Escorts, alternate paths and footbridges keep deliveries moving. Open the **canyon pass at 20**. |\n| **3 · Desert Canyons** · T45 | **21–30** | Canyon slate and metal ore, a steel workshop supplied by ore and coal, sheltered work gear and reinforced freight landings. Slate and planks build shade and weatherproof work lanes. | Exposed crossings and telegraphed dust gusts. Use shade, switchbacks and fixed bridges. Open the **underwater expedition dock at 30**. |\n| **4 · Underwater Refuges** · T46 | **31–40** | Fish, cooked-fish supply, and marked metal and fuel salvage. Build reach and lifting gear, restore pumps and reopen dry loading halls using planks, blocks and steel. | Currents and blocked underwater approaches change which routes are usable. Protected tunnels, dry platforms and fixed transport give people, pets and freight practical access. Open the **highland lift at 40**. |\n| **5 · Sky Islands** · T47 | **41–50** | Working cargo lifts, reinforced bridges, sheltered platforms and faster freight links. Build them with planks, steel and harness materials from connected camps. | Strong winds and exposed edges interrupt crossings and freight. Use timed crossing windows, sheltered bridges and safe recovery landings. Open the **volcanic freight link at 50**. |\n| **6 · Volcanic Forge** · T48 | **51–60** | Ore and coal in useful quantities, improved steel production, heat-protection equipment and stronger machine parts. Use blocks and slate for protected causeways. | Warned vent bursts and attacks on exposed worksites. Sheltered work islands and cooling points give crews an alternate route. Open the **wetland route at 60**. |\n| **7 · Swamp Boardwalks** · T49 | **61–70** | Fish and timber, a second food supply route, raised production platforms and reachable marsh workstations. Use planks and blocks for dry freight routes. | Flooded paths can interrupt a job. Reroute cargo over raised boardwalks and repair damaged crossings. Open the **old settlement road at 70**. |\n| **8 · Ruined Settlement** · T50 | **71–80** | Useful salvage and construction stock, restored courtyards and gates, a reopened workshop and counter, and rescued survivors. | Hostile occupation and damaged mechanisms break routes between work areas. Clear and reopen the usable streets, gates and freight yard. Open the **mine gateway at 80**. |\n| **9 · Underground Mines** · T51 | **81–90** | Deeper metal ore, coal and stone sources. Build lighting, reinforced passages and mine lifts using blocks and steel. Export minerals to earlier workshops. | Dark galleries, warned blockages and contested work faces. Use lit routes, supported passages and a separate return route. Open the **frontier transport at 90**. |\n| **10 · Alien Frontier** · T52 | **91–100** | Finite relay components, restored relay stations and the final network connection. Supply the frontier with food, planks, blocks and steel from the existing network. | Volatile relay states and hostile disruption require staged repairs and secure return points. **Level 100 completes the network and celebrates the campaign finish.** Exploration, trade and production continue afterward. |\n\n## What progress looks like\n\n- Keep useful and visible progression throughout each world. The earlier cadence used visible milestones at relative levels 3, 6 and 9 and a world connection at level 10. Reassess the milestone spacing against the World 1 sandbox trial. [Earlier progression scope](https://github.com/ksolo21-web/HAVENLINE/blob/a4e643aeb563b6f9cfda8b840c0651d13326eec8/Docs/Production/T12/FROZEN_SCOPE.md)\n- World entry comes through a real crossing or transport link. Players can return to earlier camps with their cargo and eligible companions. Built routes support walking and/or freight as specified. Every world needs an attainable free recovery route if a machine, helper or main crossing is lost. [Transport and region task map](Havenline-Whole-Task-Plan-Audit.md)\n- Resource families carry forward. Forest timber supports sky bridges and swamp boardwalks. Desert slate and volcanic steel strengthen landings and mines. Earlier camps feed and equip the frontier. Lake and swamp fish share the food family, and later ore sources feed the same economy. Regional access, jobs and upgrades give routes a reason to exist even when some resources overlap.\n- Check the full path to every resource before assigning an order or charging for an upgrade. Include its source, usable route, recipe, inputs, and any producer plot that can be afforded at that stage. Recheck that path after a raid or outage. A required recovery build needs accessible materials. [Build 13 gameplay audit](Havenline-Build-13-Dynamic-Gameplay-Audit.md)\n- The opening pet availability is a proposal from the authored plan. It places optional dog, owl and gray wolf opportunities in the frozen band, fox and bear in the forest, and lion and tiger in the canyon band. Companions must be earnable with ordinary gameplay. Your current casualty and repurchase rules govern active actors. Exact offer levels and replacement costs still need balancing. [Proposed pet availability](https://github.com/ksolo21-web/HAVENLINE/blob/a4e643aeb563b6f9cfda8b840c0651d13326eec8/Docs/Production/Completeness/2026-11-27/PROGRESSION_ECONOMY_GAPS.md#free-companion-and-weapon-availability)\n\n## Build 13 baseline\n\nBuild 13 already has wood, stone, meat, coal, slate and metal ore, with planks, blocks and cooked meals. The signed playtest has a Level 2 preview. The table records the earlier campaign themes and bands. The final World 1 count, save and update rules, and acceptance scope need to be reconciled with T12, T32, and the earlier Level 1–100 launch requirements before production sign-off. The saved audit governs self-service counters, survivor hunting, raids, structure damage and recovery where the older campaign text differs. Inter-region raid eligibility is still open. [Build 13 inventory](https://github.com/ksolo21-web/HAVENLINE/blob/2654f5019b7212968d28600cb071bf1c231c9030/HavenlineLevel1/field_inventory.gd) · [Current owner decisions](README.md)\n",
+    "interpretation": "World 1 launch focus and continuous sandbox are current audit direction. Up to 50 local levels is explicitly a proposal, not approved count. Later worlds retained as updates. Global numbering/save IDs/T12 and earlier Level1–100 launch contract require reconciliation.",
+    "bytes": 10665,
+    "sha256": "7bebb965eb2b55d170371bf8ae50d84ad4fd50e3206bc80f91845c8c0944886f",
+    "computed_git_blob": "09ccbcc581771879bbe7a1f9a2b15da8b7ac52a6",
+    "git_blob_matches_returned": true
+  },
+  "relevant_tasks": [
+    {
+      "id": "T03",
+      "role": "Gate topology and camp opening continuity"
+    },
+    {
+      "id": "T07",
+      "role": "Contextual controls and enter/exit driving inputs"
+    },
+    {
+      "id": "T08",
+      "role": "Visible inventory, typed custody and transfers"
+    },
+    {
+      "id": "T09",
+      "role": "Harvesting/contact and automatic acquisition"
+    },
+    {
+      "id": "T10",
+      "role": "World transformation and purchase state"
+    },
+    {
+      "id": "T11",
+      "role": "Camp construction, paid visual transformations"
+    },
+    {
+      "id": "T12",
+      "role": "Progression architecture and compatibility"
+    },
+    {
+      "id": "T13",
+      "role": "Challenge and threat scheduling"
+    },
+    {
+      "id": "T14",
+      "role": "Save/versioning and atomic transactions"
+    },
+    {
+      "id": "T20",
+      "role": "Road and vehicle customer service; does not by itself assign player-driveable truck"
+    },
+    {
+      "id": "T21",
+      "role": "Visible hostiles, hunting, attacks"
+    },
+    {
+      "id": "T22",
+      "role": "Defenses, breaches, repairs"
+    },
+    {
+      "id": "T32",
+      "role": "World 1 camp integration"
+    },
+    {
+      "id": "T33",
+      "role": "Balance and economy"
+    },
+    {
+      "id": "T53",
+      "role": "Transportation/inter-region continuity, no backward dependency for initial local vehicle"
+    }
+  ],
+  "task_preservation": "Authentic source defines T01–T70; T71–T80 remain missing-source questions. No new tasks invented, no existing statuses/dependencies changed.",
+  "storage_findings": [
+    {
+      "finding": "Storage-house visual package assigns no numerical capacity.",
+      "path": "Docs/Design/StructureReferences/2026-11-26/upgradeable-storage-house/README.md",
+      "source_branch": "art/storage-house-2026-11-26",
+      "evidence_quote": "No numeric capacity, price, unlock requirement, world-unit dimension or balance value is assigned by these renders."
+    },
+    {
+      "finding": "Build13 raw deposit increments typed stored quantity without gameplay-capacity check; storage_open separately gates raw types by paid storage stages.",
+      "path": "HavenlineLevel1/field_inventory.gd",
+      "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+      "functions": [
+        "deposit",
+        "storage_open"
+      ]
+    },
+    {
+      "finding": "Prepared storage ledger has no gameplay-capacity field. deposit_all checks type acceptance, destination operational generation and numeric overflow before one whole-cargo move.",
+      "path": "tools/havenline/gameplay_rules/bulk_counter.gd",
+      "functions": [
+        "register_storage",
+        "deposit_all"
+      ]
+    },
+    {
+      "finding": "Existing standalone numeric safety uses MAX_QUANTITY=9007199254740991; this is a technical exactness bound, not approval for a truck gameplay capacity.",
+      "path": "tools/havenline/gameplay_rules/bulk_counter.gd"
+    },
+    {
+      "finding": "Generic equipment destruction currently creates salvage. Outside-camp truck inventory destruction must explicitly use a lost-value sink rather than generic salvage.",
+      "path": "tools/havenline/gameplay_rules/camp_lifecycle.gd",
+      "functions": [
+        "_destroy"
+      ]
+    }
+  ],
+  "truck_deposit_recommendation": {
+    "classification": "Proposed integration choice consistent with current user instruction; not claimed implemented in existing game.",
+    "trigger": "Entire truck footprint parked in its own complete operational garage; speed zero, blades off, correct camp/garage/vehicle generation.",
+    "destination": "One linked operational warehouse-owned ledger accepts every ordinary resource family, with no gameplay-capacity limit. Bounded visible shelves/stacks are presentation only.",
+    "transaction": "Persist one transaction identity that debits all typed truck cargo and credits exactly the same typed quantities to warehouse in one atomic journal/snapshot; replay returns same receipt without a second credit.",
+    "storage_unavailable": "Leave all cargo in the truck, show explicit transfer hold, and automatically retry after warehouse recovery; no partial unload, type loss, overflow deletion or hidden cargo capacity.",
+    "destruction_ordering": "Serialize damage and unload commit. If outside-camp destruction commits first, all remaining truck cargo is lost exactly once. If valid unload committed first, transferred warehouse cargo is no longer truck inventory.",
+    "numeric_requirement": "Use exact logical quantities beyond render counts; decimal strings/arbitrary precision or equivalent proven representation needed if truly uncapped progression can exceed current native exact bound.",
+    "backward_compatibility": "Truck unlock/deposit contract may not inherit old raw-category storage gates that would reject cargo the truck is explicitly allowed to hold."
+  },
+  "remaining_runtime_gates": [
+    "No current native-rule import into field game",
+    "No truck driving implementation, collision fit or contact proof",
+    "No full animation/audio review",
+    "No actual prior-save migration or mixed-era transaction adapter proof",
+    "No playtested unlock/cost/HP/speed/raid balance",
+    "No physical-device performance approval"
+  ],
+  "latest_concurrent_audit": {
+    "commit": "afc6d5da3a8605ba7baeb01b7bcc847c0a814347",
+    "path": "Docs/Production/Build13Audit/World-Progression.md",
+    "git_blob": "1133c145d608e5d0fe275b0a7723666dcd92bad2",
+    "url": "https://github.com/ksolo21-web/HAVENLINE/blob/afc6d5da3a8605ba7baeb01b7bcc847c0a814347/Docs/Production/Build13Audit/World-Progression.md",
+    "content": "# Havenline · World 1 launch and connected-world updates\n\n**Release direction:** Launch with World 1, Frozen Home Camp. Worlds 2–10 arrive as later updates and connect to the existing camps and supply routes. **Progression proposal:** Prototype World 1 with room for up to 50 local levels. The final count depends on how much distinct play the world supports. Fifty levels in each of ten worlds would mean 500 levels overall. Decide how local levels relate to a global level display before changing save IDs or the T12 progression contract. The earlier 100-level campaign supplies goals and region themes. [Earlier authored outcomes](https://github.com/ksolo21-web/HAVENLINE/blob/a4e643aeb563b6f9cfda8b840c0651d13326eec8/Docs/Production/Completeness/2026-11-27/PROGRESSION_ECONOMY_GAPS.md#the-100-authored-outcomes)\n\n## World 1 · Proposed progression\n\n| Local levels | What changes |\n|---|---|\n| **1–10 · Establish the camp** | Explore the clearing, gather wood, stone and food, build the hearth and gates, and open the first storage, trade and rescue opportunities. |\n| **11–20 · Open the supply routes** | Explore the woods, quarry and lakeshore. Choose which routes and producers to open first. Bridges, work shelters and alternate return paths change who can reach a site and how supplies get home. |\n| **21–30 · Grow trade and production** | Open more food and workshop options, varied self-service orders, and bulk hauling. Choose where helpers and conveyors will relieve a bottleneck. |\n| **31–40 · Defend an expanding camp** | Open new work areas within the frozen world. Choose perimeter and supply improvements, prepare for warned raids, and restore damage afterward. |\n| **41–50 · Run a resilient settlement** | Support several work areas by alternate routes, build the garage and earn the snow truck, balance local demand with reserves, and finish major camp projects. The frozen sandbox keeps running after its last milestone. The forest link becomes playable with the World 2 update. |\n\nEach authored level needs a payoff such as a route, recipe, tool, worker capability, or visible camp improvement. Verify how many levels the distinct decisions can support.\n\n## World 1 snow truck and garage\n\n**Owner requirements.** The player builds a garage first. Its door replaces a fence section, opening a wide route between the camp and the field. After the garage is usable, a separate plot inside camp offers the snow truck for a substantial amount of obtainable World 1 resources. The player drives it. Its low horizontal blades damage eligible enemies, cut trees, and break stone and other mineable rock nodes. The truck has its own HP and can hold an unlimited amount of every resource type. Parking it inside the garage automatically transfers cargo to the storage house. If the truck is destroyed outside the camp, all cargo still held by the truck is lost.\n\n### Design recommendations for playtest\n\n- Make the garage and truck a late World 1 project. Start costing the garage with planks and stone blocks, and the truck with metal and parts the player can obtain in World 1. Check both bills against the live resource and unlock rules. Price and exact unlock are tuning decisions.\n- Give the garage opening the camp's normal closed-door collision and repair rules. Leave room for the truck to turn and workers to pass. Give the player readable enter, exit, reverse and brake inputs, plus a compact HP bar and cargo count in the gameplay HUD. Use the existing camp boundary to stop the blades inside camp and resume their use on a driven trip outside.\n- Apply one valid harvesting result per depleted source. Truck harvesting follows each resource's normal yield and regrowth rules. Cargo credited from a harvest or eligible enemy drop goes into the truck. Use the same collision boundaries that keep attacks from passing through intact obstructions.\n- Offer a repair interaction in the garage for a surviving truck, using parts and materials scaled to damage. Apply the equipment repurchase rule to a destroyed truck at Level 1. Decide truck-specific driver recovery, cargo disposition if the truck is destroyed inside the camp, and whether it needs fuel. A destroyed truck must release the driver and leave a playable route to recovery.\n- Use a separate cargo ledger with a visible, bounded unloading animation. Commit the warehouse credit and truck cargo removal together. If the warehouse is full or offline, the cargo the warehouse cannot receive stays in the truck and the HUD shows the pending amount. Cargo loss outside and completed unloading must each settle once across save and reload.\n\n### First tests\n\n| Scenario | Pass condition |\n|---|---|\n| Buy and leave camp | The garage is paid and complete before the truck offer is usable. Entry and exit work from different approaches. The garage door stays solid when closed, ordinary gates stay usable, and the blades are inactive inside. |\n| Drive in the field | Use the actual mobile controls through trees, quarry, minerals and enemy encounters. Hits land on valid contact. HP and cargo are readable at normal and pinch zoom. |\n| Return fully loaded | Haul a large mixed load, park, and unload into a usable warehouse. Repeat with a full destination, entry from another route, an interrupted unload and a reload. Every received unit settles once. |\n| Wreck outside camp | Destroy a loaded truck outside, then reload on either side of the destruction event. Cargo still on the truck is lost once. Previously banked stock and the player's separate inventory are accounted for. Restore player control and verify that replacement is attainable using World 1 resources. |\n\nThe existing plan provides interfaces for T03 gates, T07 controls, T08 stock, T09 harvesting, T10–T11 purchases and construction, T14 persistence, and T21–T22 combat and defenses. The new vehicle belongs in the T32 World 1 design. T53 should account for it if it can travel between worlds later. This is recorded for planning and review.\n\n## How the sandbox adapts\n\n- Built and repaired routes, relocated machines, surviving workers, stock and camp damage affect the player's next options.\n- Pick optional orders and jobs from reachable routes, usable producers, available materials, stock and eligible goals. Keep accepted costs and orders stable through reload. Space and vary recurring offers and encounters.\n- Change the problems as the camp develops. Early choices are about where to gather and build. Later choices include rerouting cargo, opening another food or material line, shifting work to a different station, and deciding how to prepare for or recover from a raid. A larger quantity on the same delivery is insufficient to carry a level.\n- Keep the full five-minute raid warning and the separate cadence proposal. Test different threats and attack patterns as the camp grows. Check that ordinary play provides a viable path to recovery.\n- Test trade-first, exploration-first and defense-first approaches. Revisit the same places after expansion, damage and layout changes. Use long sessions and return visits to see whether decisions change and whether there is useful play after the final milestone.\n\n## Worlds and future updates\n\nThe level ranges and crossing milestones below come from the earlier ten-level-per-world plan. Its world themes, resources and connections guide the later updates. Choose the revised ranges and milestones after the World 1 sandbox trial.\n\n| World | Earlier levels | What players obtain and build | Survival and next connection |\n|---|---:|---|---|\n| **1 · Frozen Home Camp** · T32 | **1–10** | Wood, stone, hunted meat and the opening mineral sources for coal, slate and metal ore. Start the hearth, stock the warehouse, rescue the first worker, and make planks, blocks and cooked meals. Earn the first service cash. Planned later steps in this band introduce lakeshore fish and wheat for cooked fish and bread. | Snowy forest approaches, hostile wildlife and the first camp defenses. The hearth supports recovery. Open the **forest connection at 10**. |\n| **2 · Forest and Lakeshore** · T44 | **11–20** | Renewable timber, eligible game, hides and fur. Supply saws with timber, craft hauling harnesses and cold-weather fittings, and recruit survivors through rescue objectives. Use planks and blocks to bridge the creek. | Dense cover, isolated work parties and branch routes. Escorts, alternate paths and footbridges keep deliveries moving. Open the **canyon pass at 20**. |\n| **3 · Desert Canyons** · T45 | **21–30** | Canyon slate and metal ore, a steel workshop supplied by ore and coal, sheltered work gear and reinforced freight landings. Slate and planks build shade and weatherproof work lanes. | Exposed crossings and telegraphed dust gusts. Use shade, switchbacks and fixed bridges. Open the **underwater expedition dock at 30**. |\n| **4 · Underwater Refuges** · T46 | **31–40** | Fish, cooked-fish supply, and marked metal and fuel salvage. Build reach and lifting gear, restore pumps and reopen dry loading halls using planks, blocks and steel. | Currents and blocked underwater approaches change which routes are usable. Protected tunnels, dry platforms and fixed transport give people, pets and freight practical access. Open the **highland lift at 40**. |\n| **5 · Sky Islands** · T47 | **41–50** | Working cargo lifts, reinforced bridges, sheltered platforms and faster freight links. Build them with planks, steel and harness materials from connected camps. | Strong winds and exposed edges interrupt crossings and freight. Use timed crossing windows, sheltered bridges and safe recovery landings. Open the **volcanic freight link at 50**. |\n| **6 · Volcanic Forge** · T48 | **51–60** | Ore and coal in useful quantities, improved steel production, heat-protection equipment and stronger machine parts. Use blocks and slate for protected causeways. | Warned vent bursts and attacks on exposed worksites. Sheltered work islands and cooling points give crews an alternate route. Open the **wetland route at 60**. |\n| **7 · Swamp Boardwalks** · T49 | **61–70** | Fish and timber, a second food supply route, raised production platforms and reachable marsh workstations. Use planks and blocks for dry freight routes. | Flooded paths can interrupt a job. Reroute cargo over raised boardwalks and repair damaged crossings. Open the **old settlement road at 70**. |\n| **8 · Ruined Settlement** · T50 | **71–80** | Useful salvage and construction stock, restored courtyards and gates, a reopened workshop and counter, and rescued survivors. | Hostile occupation and damaged mechanisms break routes between work areas. Clear and reopen the usable streets, gates and freight yard. Open the **mine gateway at 80**. |\n| **9 · Underground Mines** · T51 | **81–90** | Deeper metal ore, coal and stone sources. Build lighting, reinforced passages and mine lifts using blocks and steel. Export minerals to earlier workshops. | Dark galleries, warned blockages and contested work faces. Use lit routes, supported passages and a separate return route. Open the **frontier transport at 90**. |\n| **10 · Alien Frontier** · T52 | **91–100** | Finite relay components, restored relay stations and the final network connection. Supply the frontier with food, planks, blocks and steel from the existing network. | Volatile relay states and hostile disruption require staged repairs and secure return points. **Level 100 completes the network and celebrates the campaign finish.** Exploration, trade and production continue afterward. |\n\n## What progress looks like\n\n- Keep useful and visible progression throughout each world. The earlier cadence used visible milestones at relative levels 3, 6 and 9 and a world connection at level 10. Reassess the milestone spacing against the World 1 sandbox trial. [Earlier progression scope](https://github.com/ksolo21-web/HAVENLINE/blob/a4e643aeb563b6f9cfda8b840c0651d13326eec8/Docs/Production/T12/FROZEN_SCOPE.md)\n- World entry comes through a real crossing or transport link. Players can return to earlier camps with their cargo and eligible companions. Built routes support walking and/or freight as specified. Every world needs an attainable free recovery route if a machine, helper or main crossing is lost. [Transport and region task map](Havenline-Whole-Task-Plan-Audit.md)\n- Resource families carry forward. Forest timber supports sky bridges and swamp boardwalks. Desert slate and volcanic steel strengthen landings and mines. Earlier camps feed and equip the frontier. Lake and swamp fish share the food family, and later ore sources feed the same economy. Regional access, jobs and upgrades give routes a reason to exist even when some resources overlap.\n- Check the full path to every resource before assigning an order or charging for an upgrade. Include its source, usable route, recipe, inputs, and any producer plot that can be afforded at that stage. Recheck that path after a raid or outage. A required recovery build needs accessible materials. [Build 13 gameplay audit](Havenline-Build-13-Dynamic-Gameplay-Audit.md)\n- The opening pet availability is a proposal from the authored plan. It places optional dog, owl and gray wolf opportunities in the frozen band, fox and bear in the forest, and lion and tiger in the canyon band. Companions must be earnable with ordinary gameplay. Your current casualty and repurchase rules govern active actors. Exact offer levels and replacement costs still need balancing. [Proposed pet availability](https://github.com/ksolo21-web/HAVENLINE/blob/a4e643aeb563b6f9cfda8b840c0651d13326eec8/Docs/Production/Completeness/2026-11-27/PROGRESSION_ECONOMY_GAPS.md#free-companion-and-weapon-availability)\n\n## Build 13 baseline\n\nBuild 13 already has wood, stone, meat, coal, slate and metal ore, with planks, blocks and cooked meals. The signed playtest has a Level 2 preview. The table records the earlier campaign themes and bands. The final World 1 count, save and update rules, and acceptance scope need to be reconciled with T12, T32, and the earlier Level 1–100 launch requirements before production sign-off. The saved audit governs self-service counters, survivor hunting, raids, structure damage and recovery where the older campaign text differs. Inter-region raid eligibility is still open. [Build 13 inventory](https://github.com/ksolo21-web/HAVENLINE/blob/2654f5019b7212968d28600cb071bf1c231c9030/HavenlineLevel1/field_inventory.gd) · [Current owner decisions](README.md)\n",
+    "readme_commit": {
+      "sha": "afc6d5da3a8605ba7baeb01b7bcc847c0a814347",
+      "message": "Link the World 1 snow truck and garage design",
+      "created_at": "2026-11-27T15:38:14Z"
+    },
+    "dispositions": [
+      {
+        "area": "Owner truck requirements",
+        "status": "MATCH",
+        "decision": "The independently published audit records the same current user request; preserve it as supporting authority and avoid a duplicate competing owner specification."
+      },
+      {
+        "area": "Capacity/full destination wording",
+        "status": "RECONCILE_RECOMMENDATION",
+        "decision": "Audit explicitly labels partial/full-destination unloading as a playtest recommendation. Existing warehouse art does not define a finite cap and live raw storage has no capacity check. Proposed full-cargo transfer to an all-resource uncapped logical warehouse ledger avoids a new artificial cap; destroyed/offline warehouse keeps all cargo in truck on HOLD until automatic retry."
+      },
+      {
+        "area": "Fuel/inside-camp destruction/driver recovery",
+        "status": "OPEN_IN_CONCURRENT_AUDIT",
+        "decision": "Current new packet must select and clearly label these gameplay gap decisions; they are not asserted by the user request."
+      },
+      {
+        "area": "Task mapping",
+        "status": "ADDITIONAL_RELEVANT_TASKS",
+        "decision": "T03 gate topology and T07 controls accompany already recorded T08/T09/T10/T11/T14/T21/T22/T32, with T53 only for future regional vehicle travel."
+      }
+    ],
+    "bytes": 14518,
+    "sha256": "2c0b00d2bdf1126ecf1733cc6e56d4ca1f57f7f5e54242971ad457bea5452505",
+    "computed_git_blob": "1133c145d608e5d0fe275b0a7723666dcd92bad2",
+    "git_blob_matches_returned": true
+  },
+  "changes_made": "Only this recovery JSON and sibling Markdown artifact; all inspected repositories and existing source/evidence paths left unchanged.",
+  "artifact_observed_at_utc": "2026-11-27T15:42:15.892896+00:00",
+  "bindings": [
+    {
+      "source_root": "/workspace/scratch/e15437dc7c94/HAVENLINE-gameplay-rules",
+      "path": "Docs/Production/GAMEPLAY_RULES_STANDARD.md",
+      "role": "Concurrent uncommitted rule package; inspect only",
+      "exists": true,
+      "bytes": 20025,
+      "sha256": "b1dcab519fe32639ca9014962f10d9c65fa384eb60d88e4ca14ea3254cbc9423",
+      "git_blob": "f7feec0aabdba96450c43ff71ba2f869a50f4314"
+    },
+    {
+      "source_root": "/workspace/scratch/e15437dc7c94/HAVENLINE-gameplay-rules",
+      "path": "Docs/Production/GAMEPLAY_RULES_STANDARD.json",
+      "role": "Concurrent uncommitted rule package; inspect only",
+      "exists": false
+    },
+    {
+      "source_root": "/workspace/scratch/e15437dc7c94/HAVENLINE-gameplay-rules",
+      "path": "Docs/Production/GAMEPLAY_RULES_CONTRACT.json",
+      "role": "Concurrent uncommitted rule package; inspect only",
+      "exists": true,
+      "bytes": 39892,
+      "sha256": "28e19cd02597040901ab007e72c47eafc55f4680a82ea5820a4d664c7015cba3",
+      "git_blob": "09ee54dc2f0662dc1ee52915250e15fc2bfa0381"
+    },
+    {
+      "source_root": "/workspace/scratch/e15437dc7c94/HAVENLINE-gameplay-rules",
+      "path": "Docs/Production/CURRENT_GAMEPLAY_SOURCE.json",
+      "role": "Concurrent uncommitted rule package; inspect only",
+      "exists": true,
+      "bytes": 2253,
+      "sha256": "93b57e4fa5c8d52bfe807d28a89cecc9459e5e7e17649e6f42a784af5c0dcdbf",
+      "git_blob": "e38d81cf8ba6b9fa8a74309486b0ef96ad2d2703"
+    },
+    {
+      "source_root": "/workspace/scratch/e15437dc7c94/HAVENLINE-gameplay-rules",
+      "path": "Docs/Production/GameplayRules/2026-11-27/INTEGRATION_MAP.md",
+      "role": "Concurrent uncommitted rule package; inspect only",
+      "exists": true,
+      "bytes": 15522,
+      "sha256": "e8128d7461a8e29c4a631faa5ae95d89d189efcba0a87ef978ba5c6a846c4479",
+      "git_blob": "0b648550d7e375a471e5979dc3ef524a2c921298"
+    },
+    {
+      "source_root": "/workspace/scratch/e15437dc7c94/HAVENLINE-gameplay-rules",
+      "path": "Docs/Production/GameplayRules/2026-11-27/CANDIDATE_FREEZE.json",
+      "role": "Concurrent uncommitted rule package; inspect only",
+      "exists": true,
+      "bytes": 109461,
+      "sha256": "29b11546165b8a32439a467c9b21cbd48f9c00b894734688468cac611bcb3f51",
+      "git_blob": "97c7b05979f7224df5d7eefadeb771e99a103388"
+    },
+    {
+      "source_root": "/workspace/scratch/e15437dc7c94/HAVENLINE-gameplay-rules",
+      "path": "Docs/Production/GameplayRules/2026-11-27/CHECKPOINT.json",
+      "role": "Concurrent uncommitted rule package; inspect only",
+      "exists": true,
+      "bytes": 3751,
+      "sha256": "7460b1d94f6d1863893a8feafe82fff4545c635584b72d7b526a0619b0ff06f2",
+      "git_blob": "21260f738f70896deb098459bdf25ede4891be6d"
+    },
+    {
+      "source_root": "/workspace/scratch/e15437dc7c94/HAVENLINE-gameplay-rules",
+      "path": "Docs/Production/GameplayRules/2026-11-27/PUBLICATION.json",
+      "role": "Concurrent uncommitted rule package; inspect only",
+      "exists": true,
+      "bytes": 1008,
+      "sha256": "f13bb2ee091de9eb7ecfa643144144b3ab02d94263ac2a62630481cf60e98662",
+      "git_blob": "80ddef4698ef453a3bdba2a4f50b3c3236e82bb2"
+    },
+    {
+      "source_root": "/workspace/scratch/e15437dc7c94/HAVENLINE-gameplay-rules",
+      "path": "Docs/Production/GameplayRules/2026-11-27/VALIDATION.json",
+      "role": "Concurrent uncommitted rule package; inspect only",
+      "exists": true,
+      "bytes": 1705,
+      "sha256": "24e2bb14b2871781d33a82249c72707e871b5e7a1664ae8b49ce8e54ca0174ed",
+      "git_blob": "16046f01f8a949f74acb3eb9835aca3dfb6a1364"
+    },
+    {
+      "source_root": "/workspace/scratch/e15437dc7c94/HAVENLINE-gameplay-rules",
+      "path": "Docs/Production/GameplayRules/2026-11-27/ECONOMY_COUNTER_API.md",
+      "role": "Concurrent uncommitted rule package; inspect only",
+      "exists": true,
+      "bytes": 19471,
+      "sha256": "9d09d9027e08640f0f20d56e762491e0e8fec677573692412154e8488bd171bd",
+      "git_blob": "91d3e70559cd184a323b3b7c6c8e2f267a7d203d"
+    },
+    {
+      "source_root": "/workspace/scratch/e15437dc7c94/HAVENLINE-gameplay-rules",
+      "path": "tools/havenline/gameplay_rules/dynamic_economy.gd",
+      "role": "Concurrent uncommitted rule package; inspect only",
+      "exists": true,
+      "bytes": 41105,
+      "sha256": "0cf7a03cff95faf67b150fd5de13272df8750439dd924a423303494144580262",
+      "git_blob": "eab47fd63fc239fbd7937c023a33a6f364da1da3"
+    },
+    {
+      "source_root": "/workspace/scratch/e15437dc7c94/HAVENLINE-gameplay-rules",
+      "path": "tools/havenline/gameplay_rules/bulk_counter.gd",
+      "role": "Concurrent uncommitted rule package; inspect only",
+      "exists": true,
+      "bytes": 35425,
+      "sha256": "932ec6d70f183a47869c0aaedcaaf40dbf32c5dec6c09c5816a80ce966330744",
+      "git_blob": "504bc7853b701167407dc021491eb60621a2400f"
+    },
+    {
+      "source_root": "/workspace/scratch/e15437dc7c94/HAVENLINE-gameplay-rules",
+      "path": "tools/havenline/gameplay_rules/camp_lifecycle.gd",
+      "role": "Concurrent uncommitted rule package; inspect only",
+      "exists": true,
+      "bytes": 45094,
+      "sha256": "f5b4542803a67d2f7219c17b16c9a60a74eb4ce09b283166a8f293ca805bb270",
+      "git_blob": "714c69f955192fd645f5924e2200554f7039f72f"
+    },
+    {
+      "source_root": "/workspace/scratch/e15437dc7c94/HAVENLINE-gameplay-rules",
+      "path": "tools/havenline/gameplay_rules/threat_policy.gd",
+      "role": "Concurrent uncommitted rule package; inspect only",
+      "exists": true,
+      "bytes": 11069,
+      "sha256": "c63959c40adc47abcfb8583d7e01159b2f481755b3b5719dcd8e24062a0ae8fc",
+      "git_blob": "da2a5857e27642c67c5b0f7b2fd17a9bf22c506b"
+    },
+    {
+      "source_root": "/workspace/scratch/e15437dc7c94/HAVENLINE-current-gameplay",
+      "path": "HavenlineLevel1/field_storage_house.gd",
+      "role": "Verified clean detached game baseline",
+      "exists": true,
+      "bytes": 10094,
+      "sha256": "82c05042fbfe54763c0bb6f897f4a3407e39701db705fe71df2d816a473b4185",
+      "git_blob": "ac00ac544a9f349986bae2bd9f8bdc9b4a26ae7b"
+    },
+    {
+      "source_root": "/workspace/scratch/e15437dc7c94/HAVENLINE-current-gameplay",
+      "path": "HavenlineLevel1/field_inventory.gd",
+      "role": "Verified clean detached game baseline",
+      "exists": true,
+      "bytes": 13922,
+      "sha256": "e29ceacd0006b8697731911ac69bee6c75e49dccebf012ec2fd1465f507af773",
+      "git_blob": "425c8c52644e28366bc27f73cc207f8986f772e1"
+    },
+    {
+      "source_root": "/workspace/scratch/e15437dc7c94/HAVENLINE-current-gameplay",
+      "path": "HavenlineLevel1/field_settlement.gd",
+      "role": "Verified clean detached game baseline",
+      "exists": true,
+      "bytes": 10703,
+      "sha256": "29081375e0f121b3b366c0c7bcbafdd971fc237de8f6f482cabcd1129838f27e",
+      "git_blob": "a2ea4fe7384fa40b5df08c4907ac87a022121377"
+    },
+    {
+      "source_root": "/workspace/scratch/9c51da47f878/havenline-storage-house-2026-11-26/archive-repo",
+      "path": "Docs/Design/StructureReferences/2026-11-26/upgradeable-storage-house/README.md",
+      "role": "Existing storage render concept package; not numeric capacity approval",
+      "exists": true,
+      "bytes": 5865,
+      "sha256": "bb8a3a8c5300014aca53fcfde4042874c4776a6fef6743ff867e035286455339",
+      "git_blob": "f92f261037e1aee74c585e55f5977e9b8a151acc"
+    },
+    {
+      "source_root": "/workspace/scratch/9c51da47f878/havenline-storage-house-2026-11-26/archive-repo",
+      "path": "Docs/Design/StructureReferences/2026-11-26/upgradeable-storage-house/requirements.json",
+      "role": "Existing storage render concept package; not numeric capacity approval",
+      "exists": true,
+      "bytes": 7369,
+      "sha256": "57a461e68519d03b81904eca38f43ad525d3ef61e7a795921e48ad47914e319b",
+      "git_blob": "efccd85e39072ffa28b629f17eb4468038ef1d03"
+    }
+  ],
+  "missing_requested_binding": "GAMEPLAY_RULES_STANDARD.json does not exist; authoritative current standard is .md and machine contract is GAMEPLAY_RULES_CONTRACT.json.",
+  "final_live_read": {
+    "observed_at_utc": "2026-11-27T15:42:21.832827+00:00",
+    "exit_code": 0,
+    "stdout": "a4e643aeb563b6f9cfda8b840c0651d13326eec8\trefs/heads/main\nafc6d5da3a8605ba7baeb01b7bcc847c0a814347\trefs/heads/planning/build-13-audit\n2f46e72e300a719f34ca9b0e9b718282a5a88ddd\trefs/heads/trial/world-one-expansion-2026-11-26\n",
+    "stderr": ""
+  },
+  "final_live_refs": {
+    "main": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+    "planning/build-13-audit": "afc6d5da3a8605ba7baeb01b7bcc847c0a814347",
+    "trial/world-one-expansion-2026-11-26": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd"
+  },
+  "concurrent_ref_changes_since_initial": {
+    "planning/build-13-audit": {
+      "before": "a3c242aba744cc17c93f6e5601bc0e87d968a11a",
+      "after": "afc6d5da3a8605ba7baeb01b7bcc847c0a814347"
+    }
+  },
+  "publication_observed": {
+    "state": "REVIEWED_PACKAGE_PREPARED_AWAITING_EXPECTED_HEAD_PUBLICATION",
+    "content_commit": null,
+    "expected_parent": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+    "reviewed_freeze_sha256": "29b11546165b8a32439a467c9b21cbd48f9c00b894734688468cac611bcb3f51",
+    "frozen_files": 427,
+    "remote_readback_complete": false,
+    "runtime_integrated": false,
+    "runtime_approval_allowed": false,
+    "game_score": null
+  },
+  "validation_observed": {
+    "passed": true,
+    "native_checks_passed": 303,
+    "native_checks_required": 303,
+    "unittest_methods": 78,
+    "actual_scene_tests_run": false,
+    "animation_or_audio_review_performed": false,
+    "balance_approved": false,
+    "runtime_approval_allowed": false,
+    "game_score": null
+  },
+  "checkpoint_observed": {
+    "current_stage": "Latest concurrent raid-warning source reconciled; exact-input contract verification and final independent freeze review.",
+    "next_action": "Verify repaired candidate, independent22RC final review, expected-parent publication and remote readback.",
+    "game_score": null
+  },
+  "wip_status_observed": {
+    "head": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+    "branch": "plan/gameplay-rules-2026-11-27",
+    "changed_path_count": 437,
+    "final_review_json_exists": false,
+    "final_review_md_exists": false
+  }
+}

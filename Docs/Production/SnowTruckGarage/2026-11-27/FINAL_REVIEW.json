@@ -1,0 +1,191 @@
+{
+  "schema_version": 1,
+  "reviewer": {
+    "canonical_agent_task": "/root/independent_critic",
+    "role": "Separately spawned read-only product critic",
+    "production_files_modified_by_critic": false,
+    "evidence_directory": "evidence/critic"
+  },
+  "scope": "Additive feature specification, static concept proposals, and standalone native custody/rule component; not the integrated game",
+  "candidate_binding": {
+    "base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+    "freeze_path": "Docs/Production/SnowTruckGarage/2026-11-27/CANDIDATE_FREEZE.json",
+    "freeze_sha256": "2f95ffbf5f2ee05dc4115d1e2e25be4198abacf2c6dcec1f52059510aba33534",
+    "frozen_files": 62,
+    "independently_rehashed_files": 62,
+    "hash_or_size_mismatches": [],
+    "native_source_manifest": "reviewed-source-sha256.json",
+    "native_source_unchanged_after_independent_run": true
+  },
+  "policy_binding": {
+    "policy_path": "Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json",
+    "sha256": "c34c0cbe5b6d473be40ee5f0f0e08aab8f6ff42f97cfe2e7c93b2694e4dbaf43",
+    "stronger_9_9_and_exact10_production_gates_preserved": true
+  },
+  "disposition": "APPROVED_FOR_ISOLATED_FEATURE_PACKET_PUBLICATION_ONLY",
+  "scoped_scores": {
+    "design_documentation": 9.9,
+    "native_component_correctness": 9.8,
+    "native_component_robustness": 9.8,
+    "native_component_evidence": 9.8,
+    "archive_identity_and_preservation": 10.0,
+    "truck_static_concept": 9.7,
+    "garage_static_concept": 9.8
+  },
+  "score_interpretation": "Reviewer judgments of the named bounded scopes. Concept scores are interim presentation judgments, not final reference-sensitive native model/shipping approval. No average or score clears missing game evidence.",
+  "whole_game_score": null,
+  "runtime_integrated": false,
+  "runtime_approval": false,
+  "shipping_approval": false,
+  "user_design_selection": "PENDING",
+  "coverage": {
+    "owner_requirements_documented": 9,
+    "owner_requirement_ids": [
+      "VG01",
+      "VG02",
+      "VG03",
+      "VG04",
+      "VG05",
+      "VG06",
+      "VG07",
+      "VG08",
+      "VG09"
+    ],
+    "acceptance_scenarios": 30,
+    "native_scenarios": 13,
+    "actual_game_scenarios_blocked": 15,
+    "static_concept_scenarios": 1,
+    "preservation_scenarios": 1,
+    "native_logic_pass_ids": [
+      "VA01",
+      "VA03",
+      "VA04",
+      "VA05",
+      "VA07",
+      "VA08",
+      "VA09",
+      "VA11",
+      "VA12",
+      "VA13",
+      "VA15",
+      "VA16",
+      "VA17"
+    ],
+    "actual_game_blocked_ids": [
+      "VA02",
+      "VA06",
+      "VA10",
+      "VA14",
+      "VA18",
+      "VA19",
+      "VA20",
+      "VA21",
+      "VA22",
+      "VA23",
+      "VA24",
+      "VA25",
+      "VA26",
+      "VA27",
+      "VA30"
+    ]
+  },
+  "executed_validation": [
+    {
+      "test": "Builder-authored suite independently rerun on exact copied source",
+      "runtime": "Godot4.7.2.stable.official.ed1daf0bf",
+      "passed": 107,
+      "failed": 0,
+      "output": "native-suite-stdout.txt",
+      "stderr_empty": true
+    },
+    {
+      "test": "Independently authored coupled recovery sequence",
+      "passed": 16,
+      "failed": 0,
+      "output": "retest-recovery-cases.json",
+      "stderr_empty": true
+    },
+    {
+      "test": "Arbitrary precision arithmetic compared with Python integer oracle",
+      "cases": 120,
+      "assertions": 360,
+      "failed_case_indices": [],
+      "output": "exact-count-oracle-result.json",
+      "stderr_empty": true
+    }
+  ],
+  "independently_reviewed_content": [
+    "Owner request andVG01\u2013VG09 acceptance contract",
+    "README and current feature entrypoint",
+    "REQUIREMENTS selected decisions and30 cases",
+    "ACCEPTANCE evidence scopes",
+    "TASK_OVERLAY preservation of formal task identities and ownership",
+    "INTEGRATION_MAP current API, wider gap continuation and explicit unsupported scopes",
+    "SOURCE_BINDINGS and actual selected-art hashes",
+    "Actual source code, fixtures, native results and isolated rerun",
+    "Actual full artwork and meaningful closeups across rejected and repaired garage variants",
+    "All62 frozen file identities",
+    "All14 field-script names in integration map exist in pinned local current-game source",
+    "No existing tracked file changed from a4e643ae"
+  ],
+  "resolved_findings": [
+    {
+      "id": "VR01",
+      "finding": "Rebuilt storage could not become a valid next-generation unloading receiver",
+      "resolution": "Typed destruction estate and empty next-generation reopen; coupled native retest passed."
+    },
+    {
+      "id": "VR02",
+      "finding": "Accepted quote became permanently unpayable after garage generation changed",
+      "resolution": "Authorized garage rebind retains original full bill and quote; native tests passed."
+    },
+    {
+      "id": "VR03",
+      "finding": "Destroyed payer left frozen quote permanently unusable despite recovered funds",
+      "resolution": "Authorized unpaid funding-owner rebind retains original bill; independent original reproduction and16-step recovery retest preserved."
+    },
+    {
+      "id": "VR04",
+      "finding": "Actual JSON save/parse failed receipt/digest replay",
+      "resolution": "Exactly representable metadata normalization without resource-string conversion; save/load and outside-loss tests passed."
+    },
+    {
+      "id": "VR05",
+      "finding": "Salvage claim could bypass storage receiver availability",
+      "resolution": "Estate claims restricted to available actor recipients; storage routing uses its own validated deposit."
+    },
+    {
+      "id": "VR06",
+      "finding": "Different vehicle IDs could bypass a one-bay reservation",
+      "resolution": "Single pending/live vehicle per garage enforced and independently tested."
+    },
+    {
+      "id": "GC01-GC04",
+      "finding": "Duplicate truck, wrong identity, wrong rear cab face, and protruding parked blades",
+      "resolution": "GarageR4 actual image and closeups show corrected coherent truck and fully interior placement."
+    },
+    {
+      "id": "DC01",
+      "finding": "VA04 wording implied partial escrow preservation by standalone module",
+      "resolution": "Final case explicitly limits proof to unspent full bill/no custody movement; game escrow remains adapter work."
+    },
+    {
+      "id": "DC02",
+      "finding": "VA17 wording could imply standalone rollback-epoch detection",
+      "resolution": "Final case states component enforces trusted full-world authorizer refusal; epoch detection belongs to authorizer."
+    }
+  ],
+  "remaining_blocking_product_evidence": [
+    "Actual native truck/garage assets and user selection",
+    "Playable driving/input/camera and driver exit/recovery",
+    "Measured garage/fence fit, actual atomic boundary replacement, door obstruction and two pedestrian openings",
+    "Typed enemy/tree/mining contact, depletion and yield integration",
+    "One authoritative full-world inventory, partial-contribution escrow, verified lifecycle/acquisition/geometry adapter and automatic transfer retry",
+    "Real old-save and crash/cloud reconciliation; long-session journal compaction",
+    "Relevant substantial price/HP/speed/repair balance with attainable repeated-loss recovery",
+    "Full motion cycles, native material/reference comparison, listening/muted presentation and physical-device performance"
+  ],
+  "residual_nonblocking_concept_limit": "Generated sheets carry small fitting/cargo variance and do not constitute dimensionally exact model geometry. Final native reference gates are not passed.",
+  "publication_boundary": "This review permits preserving/publishing the isolated packet. It does not authorize a main merge, live-runtime mutation, workflow activation, or deployment. Post-review transport records and GitHub readback must bind their own bytes separately.",
+  "review_provenance": "Separate callable agent performed actual image inspection, code reading, independent source-copy runtime execution and adversarial recovery testing. Builder self-reports were not substituted for independent execution."
+}
