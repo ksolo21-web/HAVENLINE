@@ -1,0 +1,30 @@
+# How to compare Havenline's run and camp loop
+
+Build 6 review reopened after the owner reported floating boots on a Galaxy Z Fold7, an idle owl, point-sized deposits and machinery appearing for free. Start from the normal Level 1 scene, `res://field_opening.tscn`. A human-sized character, a cartoon owl, and the Havenline saw, drill and cooker have their own art. The recordings establish their on-screen proportions, movement and transaction sequence.
+
+## The run
+
+Frame out Character 1 from head to sole, then track how many standing body heights he travels relative to a fixed object on the ground. A following camera keeps a moving hero stationary on the screen. Compare fixed-ground travel, the cadence of the same boot, left/right support duration, longest period with both boots off the ground, and slip while planted. Keep snowprints in their original world positions. Use the actual deformed sole, heel and toe as the contact surface. A thigh angle or a joint origin can give the right number with a visibly floating boot.
+
+Johansen's locomotion research represents heel and toe together to estimate support and adjusts leg joints to place feet on terrain. Epic's stride-warping documentation explains the relationship between actual travel speed, leg length and stride length. Godot's animation documentation explains how root displacement can drive a character controller. Havenline uses a moving gameplay controller with in-place animation. Measure its actual collision-constrained travel when tuning the cycle, including braking and turning. Avoid applying the same displacement twice. [Johansen's thesis](https://runevision.com/thesis/rune_skovbo_johansen_thesis.pdf) · [Epic's pose-warping reference](https://dev.epicgames.com/documentation/unreal-engine/pose-warping-in-unreal-engine) · [Godot's AnimationTree documentation](https://docs.godotengine.org/en/stable/tutorials/animation/animation_tree.html)
+
+Compare locked A at 12.00–12.40 seconds, B at 13.00–13.50 and the higher-rate supplemental run around frames 231–249. At A 12.30 the boot visibly clears the ground. Elsewhere the far boot is often behind the coat or the pack. Those frames can establish silhouette and timing, but cannot resolve a one-centimetre clearance. Record whether a sample is measurable, and keep the original crop beside the shipping camera view. Test from rest, running unloaded and loaded, turning into a wall, leaving a gate and slowing to a stop. Inspect independent motion and contact evidence at 1× and 2×. [Locked clips and frame ledger](https://github.com/ksolo21-web/HAVENLINE/tree/76645004d91dc6b05425f1ddc8a18017e701b664/Docs/Design/ReferenceVideoLock/2026-11-26-field-loop/Locked-sequences)
+
+## Plot, equipment and service
+
+| Source event | What to compare during play |
+|---|---|
+| B 5.70–6.10 payment, 6.20 furnace, 6.30 glow, 6.40–6.60 thaw | Start paying while moving beside a printed edge. Follow a packet from its actual rack slot. The floor price and carried balance change on arrival. The final payment precedes the building and the warm ground spreads outward. |
+| A 12.50–13.10 payment, 13.20 equipment reveal, 13–16 processing | A visible purchase precedes the new working line. Watch the material enter, pass the moving tool and accumulate at the visible output. Walk away while the paid line runs. |
+| A 40.50–43.00 processing and counter, B 8.00–10.00 service | Separate the working aisle, accumulated output and fence counter. Follow a specific portion to its waiting customer and confirm the order advances and the payment is issued once. Repeat with a survivor serving while the player stays elsewhere. |
+| Original timber timing ledger B 21.53–22.43, supplemental two-fish f374–379 at 24 fps | Large storage streams settle in roughly 0.84–0.90 s in that shot. The pair of fish unloads in about 0.21 s in its shot. Inspect first release, first arrival and last arrival. The player can approach from the accessible sides. |
+
+The reference shows a fish line and a crop line. The exact prices for a timber saw, rock drill or meat cooker, the owl's attack timing and the survivor's 500-unit inventory are Havenline design decisions. Use the owner's equipment turnarounds for their appearance. Existing stock, pending payments and paid customer orders must survive an app restart.
+
+## Prevent false passes
+
+For profile tests using the game's disposable flag, use a real direct child of `/tmp` named `havenline-l1-v3-*` with the documented sentinel. Assert that persistence is active before counting a route as passed. For attack tests, disable competing damage sources in the controlled comparison, observe the owl making contact, then run an ordinary mixed encounter. For UI, review held touch, a changing price, genuine damage, a fold resize, and the full camera image including the corners. An isolated asset review and a gameplay integration review answer different questions.
+
+Compare the metal boot studs to their rest shape at touchdown as well as the planted sole. A first gait revision improved ground contact while the skin weights squeezed two rigid studs almost flat. In the HUD, open a fully stocked storehouse during the objective card's entrance animation. The sixth material initially wrapped over the upgrade caption even though all the outer layout rectangles fit. Both findings only became clear at the actual gameplay camera and pinch zoom.
+
+A boot can hold its shape while sliding, or plant correctly while its cuff folds through the metalwork. Kovar, Schreiner and Gleicher treat heel or toe contact as a world-space constraint over the support phase and blend into and out of it. Lewis, Cordner and Fong describe joint-pose-driven surface corrections. For Havenline, preserve the planted material points through stance; evaluate the deformable shaft separately from the rigid metal and check both in swing. [Footskate Cleanup for Motion Capture Editing](https://research.cs.wisc.edu/graphics/Papers/Gleicher/Mocap/cleanup.pdf) · [Pose Space Deformation](https://doi.org/10.1145/344779.344862)

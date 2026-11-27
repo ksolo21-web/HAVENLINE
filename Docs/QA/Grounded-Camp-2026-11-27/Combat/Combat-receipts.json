@@ -1,0 +1,6598 @@
+{
+  "base": "3ce0414d667d18533a110fa0f3770bb8647dacb3",
+  "branch_tip_before": "76645004d91dc6b05425f1ddc8a18017e701b664",
+  "scene": "res://field_opening.tscn",
+  "runtime": {
+    "field_owl.gd": "10a6caa9a2d9ba7f1780ce84ac8fa3332c17ae7e2a9c9dc9d7746d9c9e1e102f",
+    "field_enemy.gd": "837cc947c8f52a8b39f67524e548863f4b4d2bcb82478aa077425e00d3490731",
+    "field_encounters.gd": "1f96e9b48b1659ebcc703d017ec8fd7bfbfa8e0008d803eb9926b8d5c34bc1a6",
+    "field_pack_route.gd": "8742d2b968a4f7de5fa135f343b90cff5a7988d0fdb84cf6b9a9dd443fe7e034",
+    "assets/settlement_people/expedition_owl_authored.glb": "3b118dd58ec2c2ace61569c5424dd135c410789b0a186b767eae9ae8af530b8c",
+    "assets/field/hostile_wolf.glb": "74a35c0876e6ceb8ad242225928dd6eb217444cb70e8d59648007f7bf13338ee"
+  },
+  "control": {
+    "checks": {
+      "animal_finds_its_way_home_around_other_side_of_fence": true,
+      "paid_camp_perimeter_detours_to_a_real_bite": false,
+      "paid_camp_perimeter_footprint_stays_dry_and_outside": true,
+      "paid_camp_perimeter_no_stuck_chase": false,
+      "unbuilt_camp_inlet_detours_to_a_real_bite": true,
+      "unbuilt_camp_inlet_footprint_stays_dry_and_outside": false,
+      "unbuilt_camp_inlet_no_stuck_chase": true
+    },
+    "observations": {
+      "paid_camp_perimeter": {
+        "bite_seconds": -0.0166666666666667,
+        "longest_stuck_ticks": 884,
+        "route_xz": [
+          [
+            -6.76,
+            0.0
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ],
+          [
+            -6.25,
+            -0.17
+          ]
+        ],
+        "source": "(-6.8, 0.0, 0.0)",
+        "target": "(6.8, 0.0, 0.18)"
+      },
+      "unbuilt_camp_inlet": {
+        "bite_seconds": 4.65,
+        "longest_stuck_ticks": 0,
+        "route_xz": [
+          [
+            -40.33,
+            30.6
+          ],
+          [
+            -39.44,
+            30.6
+          ],
+          [
+            -38.56,
+            30.6
+          ],
+          [
+            -37.68,
+            30.6
+          ],
+          [
+            -36.79,
+            30.6
+          ],
+          [
+            -35.91,
+            30.6
+          ],
+          [
+            -35.03,
+            30.6
+          ],
+          [
+            -34.14,
+            30.6
+          ],
+          [
+            -33.26,
+            30.6
+          ],
+          [
+            -32.38,
+            30.6
+          ],
+          [
+            -31.49,
+            30.6
+          ],
+          [
+            -30.61,
+            30.6
+          ],
+          [
+            -29.73,
+            30.6
+          ],
+          [
+            -29.37,
+            30.6
+          ]
+        ],
+        "source": "(-40.36972, 0.0, 30.6)",
+        "target": "(-27.2329, 0.0, 30.6)"
+      }
+    },
+    "passed": false
+  },
+  "candidate": {
+    "checks": {
+      "animal_finds_its_way_home_around_other_side_of_fence": true,
+      "paid_camp_perimeter_detours_to_a_real_bite": true,
+      "paid_camp_perimeter_footprint_stays_dry_and_outside": true,
+      "paid_camp_perimeter_no_stuck_chase": true,
+      "unbuilt_camp_inlet_detours_to_a_real_bite": true,
+      "unbuilt_camp_inlet_footprint_stays_dry_and_outside": true,
+      "unbuilt_camp_inlet_no_stuck_chase": true,
+      "unengaged_wolf_patrols_its_territory_while_owner_is_safe": true
+    },
+    "observations": {
+      "paid_camp_perimeter": {
+        "bite_seconds": 6.31666666666667,
+        "longest_stuck_ticks": 0,
+        "patrol_excursion_m": 1.58038747310638,
+        "route_xz": [
+          [
+            -6.8,
+            0.06
+          ],
+          [
+            -6.72,
+            1.27
+          ],
+          [
+            -6.64,
+            2.49
+          ],
+          [
+            -6.56,
+            3.7
+          ],
+          [
+            -6.48,
+            4.92
+          ],
+          [
+            -5.61,
+            5.29
+          ],
+          [
+            -4.39,
+            5.31
+          ],
+          [
+            -3.18,
+            5.32
+          ],
+          [
+            -1.96,
+            5.34
+          ],
+          [
+            -0.74,
+            5.36
+          ],
+          [
+            0.47,
+            5.37
+          ],
+          [
+            1.69,
+            5.39
+          ],
+          [
+            2.91,
+            5.4
+          ],
+          [
+            4.12,
+            5.42
+          ],
+          [
+            5.34,
+            5.44
+          ],
+          [
+            6.34,
+            5.21
+          ],
+          [
+            6.45,
+            3.99
+          ],
+          [
+            6.56,
+            2.78
+          ],
+          [
+            6.6,
+            2.3
+          ]
+        ],
+        "source": "(-6.8, 0.0, 0.0)",
+        "target": "(6.8, 0.0, 0.18)"
+      },
+      "unbuilt_camp_inlet": {
+        "bite_seconds": 8.71666666666667,
+        "longest_stuck_ticks": 0,
+        "route_xz": [
+          [
+            -40.41,
+            30.64
+          ],
+          [
+            -41.29,
+            31.48
+          ],
+          [
+            -42.17,
+            32.32
+          ],
+          [
+            -43.05,
+            33.16
+          ],
+          [
+            -43.93,
+            34.0
+          ],
+          [
+            -43.03,
+            34.14
+          ],
+          [
+            -41.81,
+            34.14
+          ],
+          [
+            -40.6,
+            34.15
+          ],
+          [
+            -39.38,
+            34.16
+          ],
+          [
+            -38.16,
+            34.17
+          ],
+          [
+            -36.95,
+            34.17
+          ],
+          [
+            -35.73,
+            34.18
+          ],
+          [
+            -34.51,
+            34.19
+          ],
+          [
+            -33.3,
+            34.2
+          ],
+          [
+            -32.08,
+            34.2
+          ],
+          [
+            -30.86,
+            34.21
+          ],
+          [
+            -29.65,
+            34.22
+          ],
+          [
+            -28.43,
+            34.22
+          ],
+          [
+            -27.21,
+            34.23
+          ],
+          [
+            -26.0,
+            34.24
+          ],
+          [
+            -24.78,
+            34.25
+          ],
+          [
+            -23.56,
+            34.25
+          ],
+          [
+            -23.21,
+            33.95
+          ],
+          [
+            -24.14,
+            33.17
+          ],
+          [
+            -25.08,
+            32.39
+          ],
+          [
+            -25.45,
+            31.81
+          ],
+          [
+            -25.96,
+            31.47
+          ]
+        ],
+        "source": "(-40.36972, 0.0, 30.6)",
+        "target": "(-27.2329, 0.0, 30.6)"
+      }
+    },
+    "passed": true
+  },
+  "scoped_suites": {
+    "final-qa_pack_navigation": {
+      "checks": {
+        "animal_finds_its_way_home_around_other_side_of_fence": true,
+        "paid_camp_perimeter_detours_to_a_real_bite": true,
+        "paid_camp_perimeter_footprint_stays_dry_and_outside": true,
+        "paid_camp_perimeter_no_stuck_chase": true,
+        "unbuilt_camp_inlet_detours_to_a_real_bite": true,
+        "unbuilt_camp_inlet_footprint_stays_dry_and_outside": true,
+        "unbuilt_camp_inlet_no_stuck_chase": true,
+        "unengaged_wolf_patrols_its_territory_while_owner_is_safe": true
+      },
+      "passed": true,
+      "observed": {
+        "passed": true
+      }
+    },
+    "final-qa_world_lifecycle": {
+      "checks": {
+        "500_waves_camp_and_four_borders_have_room_and_clearance": true,
+        "all_four_semantic_cues_started_on_actions": true,
+        "boss_cannot_cross_third_perimeter": true,
+        "boss_left_real_paw_imprints": true,
+        "boss_model_health_hit_surface_and_real_paws": true,
+        "corpse_retained_for_fall": true,
+        "dead_actor_removed_from_orbit_and_pack": true,
+        "dead_player_resumes_existing_recovery": true,
+        "dedicated_boss_and_tower_cues_loaded": true,
+        "each_formed_wave_rolls_its_own_boss": true,
+        "exact_stone_timer_returns_actual_mesh": true,
+        "forced_boss_wave": true,
+        "forced_regular_wave": true,
+        "full_cap_retries_without_boss_roll": true,
+        "initial_wolves_have_track_registration": true,
+        "invalid_saved_position_and_health_recover": true,
+        "invalid_state_rejected_atomically": true,
+        "json_lifecycle_resume": true,
+        "legacy_v1_hp_0_migrates_once": true,
+        "legacy_v1_hp_1_migrates_once": true,
+        "legacy_v1_hp_2_migrates_once": true,
+        "legacy_v1_hp_3_migrates_once": true,
+        "legacy_v1_hp_4_migrates_once": true,
+        "old_ground_loot_retired": true,
+        "older_snapshot_no_position_keeps_start_state": true,
+        "one_source_three_fresh_drops": true,
+        "paid_tower_launches_authored_bolt_before_damage": true,
+        "partial_source_survives_stream": true,
+        "perimeter_expansion_synchronously_retires_encroaching_wolf": true,
+        "pine_regrown_no_duplicate_loot": true,
+        "regrown_round_new_loot": true,
+        "restored_actor_avoids_paid_closed_gate": true,
+        "restored_fall_returns_home_alive": true,
+        "returning_source_stays_unmineable_until_due": true,
+        "sanctuary_cancels_windup_and_bite": true,
+        "stone_hit_0": true,
+        "stone_hit_1": true,
+        "third_hit_visual_depletion": true,
+        "timer_while_unloaded": true,
+        "tower_defeats_actual_alpha_and_credits_typed_meat_once": true,
+        "tower_events_mark_launch_and_hit": true,
+        "travel_while_pine_falling_resolves_once": true,
+        "unpaid_tower_never_deals_damage": true,
+        "version2_reopen_hp_0_and_fall": true,
+        "version2_reopen_hp_1_and_fall": true,
+        "version2_reopen_hp_2_and_fall": true,
+        "version2_reopen_hp_3_and_fall": true,
+        "version2_reopen_hp_4_and_fall": true,
+        "wood_timer_held_until_due": true
+      },
+      "passed": true,
+      "observed": {
+        "bosses": 97,
+        "paw_marks_after": 6,
+        "paw_marks_before": 0,
+        "waves": 500
+      }
+    },
+    "final-qa_owl_gate_patrol": {
+      "checks": {
+        "controller_exits_the_gate": true,
+        "dive_and_contact_each_emit_their_native_cue": true,
+        "dive_strike_recovery_are_visible": true,
+        "held_player_inside_without_autoattack": true,
+        "owl_scores_from_safe_gate_without_hero_or_tower": true,
+        "purchase_unlocks_owl": true
+      },
+      "passed": true,
+      "observed": {
+        "controller_exits_the_gate": true,
+        "dive_and_contact_each_emit_their_native_cue": true,
+        "dive_strike_recovery_are_visible": true,
+        "held_player_inside_without_autoattack": true,
+        "owl_scores_from_safe_gate_without_hero_or_tower": true,
+        "purchase_unlocks_owl": true
+      }
+    },
+    "final-qa_world_combat": {
+      "checks": {
+        "camp_safe_even_after_grace": true,
+        "continuous_full_hp_even_without_threat": true,
+        "damaging_and_receiving_sound_bank": true,
+        "ordinary_spawn_bites_while_player_orbit_is_enabled": true,
+        "paid_bite_contact_within_five_seconds_from_ten_metres": true,
+        "paid_committed_lunge_retains_authored_bite": true,
+        "paid_directional_hero_recoil_and_hit_flash": true,
+        "paid_instant_health_and_trailing_bar": true,
+        "paid_invulnerability_blocks_repeat": true,
+        "paid_old_player_records_restore_without_grace": true,
+        "paid_pursuit_windup_lunge_and_hp_loss": true,
+        "paid_recovery_clear_of_obstacles": true,
+        "paid_reload_does_not_refill_partial_protection": true,
+        "paid_remaining_protection_survives_restore": true,
+        "paid_restores_hud_and_grace": true,
+        "paid_returns_to_correct_floor": true,
+        "paid_uncommitted_wolf_has_animated_damage": true,
+        "paid_visible_fall_before_reset": true,
+        "paid_zero_hp_disarms_and_changes_hud": true,
+        "simultaneous_hits_on_one_wolf_have_distinct_screen_lanes": true,
+        "unpaid_bite_contact_within_five_seconds_from_ten_metres": true,
+        "unpaid_committed_lunge_retains_authored_bite": true,
+        "unpaid_directional_hero_recoil_and_hit_flash": true,
+        "unpaid_instant_health_and_trailing_bar": true,
+        "unpaid_invulnerability_blocks_repeat": true,
+        "unpaid_old_player_records_restore_without_grace": true,
+        "unpaid_pursuit_windup_lunge_and_hp_loss": true,
+        "unpaid_recovery_clear_of_obstacles": true,
+        "unpaid_reload_does_not_refill_partial_protection": true,
+        "unpaid_remaining_protection_survives_restore": true,
+        "unpaid_restores_hud_and_grace": true,
+        "unpaid_returns_to_correct_floor": true,
+        "unpaid_uncommitted_wolf_has_animated_damage": true,
+        "unpaid_visible_fall_before_reset": true,
+        "unpaid_zero_hp_disarms_and_changes_hud": true
+      },
+      "passed": true,
+      "observed": {
+        "passed": true
+      }
+    },
+    "final-qa_field_owl": {
+      "checks": {
+        "asymmetric banking visibly rolls both wing pairs": true,
+        "both owned Meshy poses are present and only the folded Pathfinder is drawn on the post": true,
+        "both talons reach before first damage and rake during a planted brake": true,
+        "contact recovery and cooldown enforced": true,
+        "each of three attack telegraphs fired once": true,
+        "first rendered claw touches wolf triangle at hit and stays planted": true,
+        "flight talons retract and extend before impact": true,
+        "live boss uses standard damage and health feedback": true,
+        "one defeat and exactly three physical contacts on moving wolf": true,
+        "paid purchase perches once on south gate": true,
+        "recall immediately cancels boss dive into safe camp": true,
+        "remote callback blocked outside contact": true,
+        "returns to the same physical post": true,
+        "setup is idempotent": true,
+        "six feather joints fold and flare without a one-frame angular snap": true,
+        "six sensors match the actual imported claw vertices in all three poses": true,
+        "six wing bones deform original Sentinel feather vertices": true,
+        "spent contact authorization cleared": true,
+        "telegraphed takeoff before first damage": true,
+        "unpaid owl hidden and harmless": true,
+        "wing flap changes through the flight cycle": true
+      },
+      "passed": true,
+      "observed": {
+        "braking_pitch": -0.277050763368607,
+        "grasp": 0.984351992607117,
+        "max_hit_error_m": 1.19209289550781e-07,
+        "max_joint_step_rad_at_60hz": 0.225000873208046,
+        "max_mesh_error_m": 5.33120157797384e-07,
+        "max_plant_error_m": 9.5367431640625e-07,
+        "reach": 1.0
+      }
+    },
+    "final-qa_wolf_attack": {
+      "checks": {
+        "alpha_20hz_every_phase_plays": true,
+        "alpha_20hz_jaw_parented_to_head": true,
+        "alpha_20hz_jaw_weights_on_original_textured_fur": true,
+        "alpha_20hz_one_damage_at_closed_jaw": true,
+        "alpha_20hz_opens_and_settles": true,
+        "alpha_20hz_sanctuary_cancels": true,
+        "alpha_20hz_side_step_misses": true,
+        "alpha_20hz_springs_through_hips_shoulder_and_four_limb_chains": true,
+        "alpha_60hz_every_phase_plays": true,
+        "alpha_60hz_jaw_parented_to_head": true,
+        "alpha_60hz_jaw_weights_on_original_textured_fur": true,
+        "alpha_60hz_one_damage_at_closed_jaw": true,
+        "alpha_60hz_opens_and_settles": true,
+        "alpha_60hz_sanctuary_cancels": true,
+        "alpha_60hz_side_step_misses": true,
+        "alpha_60hz_springs_through_hips_shoulder_and_four_limb_chains": true,
+        "ridge_20hz_every_phase_plays": true,
+        "ridge_20hz_jaw_parented_to_head": true,
+        "ridge_20hz_jaw_weights_on_original_textured_fur": true,
+        "ridge_20hz_one_damage_at_closed_jaw": true,
+        "ridge_20hz_opens_and_settles": true,
+        "ridge_20hz_sanctuary_cancels": true,
+        "ridge_20hz_side_step_misses": true,
+        "ridge_20hz_springs_through_hips_shoulder_and_four_limb_chains": true,
+        "ridge_60hz_every_phase_plays": true,
+        "ridge_60hz_jaw_parented_to_head": true,
+        "ridge_60hz_jaw_weights_on_original_textured_fur": true,
+        "ridge_60hz_one_damage_at_closed_jaw": true,
+        "ridge_60hz_opens_and_settles": true,
+        "ridge_60hz_sanctuary_cancels": true,
+        "ridge_60hz_side_step_misses": true,
+        "ridge_60hz_springs_through_hips_shoulder_and_four_limb_chains": true
+      },
+      "passed": true,
+      "observed": {
+        "passed": true
+      }
+    },
+    "final-qa_encounter_waves": {
+      "checks": {
+        "actual_alphas": 31,
+        "actual_deaths": 572,
+        "actual_wolves": 572,
+        "duplicate_loot": 0,
+        "native_waves": 200,
+        "orphan_wolves": 0,
+        "passed": true,
+        "peak_live": 4,
+        "preserved_player_and_survivor": true,
+        "remaining_trackers": 2
+      },
+      "passed": true,
+      "observed": {
+        "actual_alphas": 31,
+        "actual_deaths": 572,
+        "actual_wolves": 572,
+        "duplicate_loot": 0,
+        "native_waves": 200,
+        "orphan_wolves": 0,
+        "passed": true,
+        "peak_live": 4,
+        "preserved_player_and_survivor": true,
+        "remaining_trackers": 2
+      }
+    }
+  },
+  "matched_old": {
+    "checks": {
+      "controller_exits_the_gate": true,
+      "dive_strike_recovery_are_visible": true,
+      "held_player_inside_without_autoattack": true,
+      "owl_scores_from_safe_gate_without_hero_or_tower": false,
+      "purchase_unlocks_owl": true,
+      "real_strike_sound_and_tell": true
+    },
+    "gate": {
+      "owl_hits": 0,
+      "perch": "(-1.35, 1.718, 4.0)",
+      "player_at": "(4.044188, 0.0, 0.728605)",
+      "wolf_hp": 3
+    },
+    "events": [
+      {
+        "event": "owl_dive",
+        "t": 11.217,
+        "x": 9.13,
+        "z": 1.38
+      },
+      {
+        "event": "owl_hit",
+        "t": 11.433,
+        "x": 9.78,
+        "z": 0.67
+      }
+    ],
+    "cue_starts": {
+      "owl_dive": 1,
+      "owl_equip": 1,
+      "owl_hit": 1
+    },
+    "trace": [
+      [
+        0,
+        "(2.8, 0.0, 0.008611)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        6,
+        "(2.85236, 0.0, 0.232472)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        12,
+        "(3.233754, 0.0, 0.601247)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        18,
+        "(3.849975, 0.0, 0.724566)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        24,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        30,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        36,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        42,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        48,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        54,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        60,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        66,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        72,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        78,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        84,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        90,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        96,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        102,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        108,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        114,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        120,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        126,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        132,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        138,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        144,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        150,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        156,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        162,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        168,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        174,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        180,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        186,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        192,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        198,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        204,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        210,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        216,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        222,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        228,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        234,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        240,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        246,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        252,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        258,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        264,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        270,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        276,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        282,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        288,
+        "(4.044188, 0.0, 0.728605)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        294,
+        "(4.172674, 0.0, 0.741856)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        300,
+        "(4.609523, 0.0, 0.786907)",
+        "perched",
+        "(-1.35, 1.718, 4.0)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        306,
+        "(5.287978, 0.0, 0.819063)",
+        "takeoff",
+        "(-1.393731, 1.922743, 4.067585)",
+        "stalk",
+        3,
+        0,
+        true,
+        30
+      ],
+      [
+        312,
+        "(5.987611, 0.0, 0.819064)",
+        "takeoff",
+        "(-1.481195, 2.33223, 4.202755)",
+        "stalk",
+        3,
+        0,
+        true,
+        30
+      ],
+      [
+        318,
+        "(6.682536, 0.0, 0.88694)",
+        "takeoff",
+        "(-1.568658, 2.741717, 4.337926)",
+        "stalk",
+        3,
+        0,
+        true,
+        30
+      ],
+      [
+        324,
+        "(7.374772, 0.0, 0.990902)",
+        "bank",
+        "(-1.351195, 2.730108, 4.260302)",
+        "windup",
+        3,
+        0,
+        true,
+        30
+      ],
+      [
+        330,
+        "(8.067008, 0.0, 1.094863)",
+        "bank",
+        "(-0.615345, 2.700132, 4.072619)",
+        "windup",
+        3,
+        0,
+        true,
+        30
+      ],
+      [
+        336,
+        "(8.759244, 0.0, 1.198825)",
+        "bank",
+        "(0.120244, 2.671988, 3.88364)",
+        "windup",
+        3,
+        0,
+        true,
+        30
+      ],
+      [
+        342,
+        "(9.191892, 0.0, 1.263801)",
+        "bank",
+        "(0.853619, 2.645307, 3.686044)",
+        "lunge",
+        3,
+        0,
+        true,
+        30
+      ],
+      [
+        348,
+        "(9.203429, 0.0, 1.265533)",
+        "bank",
+        "(1.587903, 2.618292, 3.491888)",
+        "lunge",
+        3,
+        0,
+        true,
+        30
+      ],
+      [
+        354,
+        "(9.203429, 0.0, 1.265533)",
+        "bank",
+        "(2.32221, 2.591269, 3.297819)",
+        "lunge",
+        3,
+        0,
+        true,
+        28
+      ],
+      [
+        360,
+        "(9.203429, 0.0, 1.265533)",
+        "bank",
+        "(3.054846, 2.564802, 3.097533)",
+        "recover",
+        3,
+        0,
+        true,
+        28
+      ],
+      [
+        366,
+        "(9.203429, 0.0, 1.265533)",
+        "bank",
+        "(3.785645, 2.538943, 2.890501)",
+        "recover",
+        3,
+        0,
+        true,
+        28
+      ],
+      [
+        372,
+        "(9.203429, 0.0, 1.265533)",
+        "bank",
+        "(4.516445, 2.513083, 2.683468)",
+        "stagger",
+        2,
+        0,
+        true,
+        28
+      ],
+      [
+        378,
+        "(9.203429, 0.0, 1.265533)",
+        "bank",
+        "(5.247245, 2.487223, 2.476437)",
+        "guard",
+        2,
+        0,
+        true,
+        28
+      ],
+      [
+        384,
+        "(9.203429, 0.0, 1.265533)",
+        "bank",
+        "(5.978045, 2.461363, 2.269406)",
+        "windup",
+        2,
+        0,
+        true,
+        28
+      ],
+      [
+        390,
+        "(9.203429, 0.0, 1.265533)",
+        "bank",
+        "(6.708844, 2.435503, 2.062374)",
+        "windup",
+        2,
+        0,
+        true,
+        28
+      ],
+      [
+        396,
+        "(9.203429, 0.0, 1.265533)",
+        "bank",
+        "(7.439644, 2.409642, 1.855343)",
+        "windup",
+        2,
+        0,
+        true,
+        28
+      ],
+      [
+        402,
+        "(9.203429, 0.0, 1.265533)",
+        "bank",
+        "(8.17769, 2.381088, 1.678981)",
+        "lunge",
+        2,
+        0,
+        true,
+        28
+      ],
+      [
+        408,
+        "(9.203429, 0.0, 1.265533)",
+        "windup",
+        "(8.865323, 2.37229, 1.567247)",
+        "lunge",
+        2,
+        0,
+        true,
+        28
+      ],
+      [
+        414,
+        "(9.203429, 0.0, 1.265533)",
+        "windup",
+        "(8.87812, 2.515963, 1.565167)",
+        "recover",
+        2,
+        0,
+        true,
+        28
+      ],
+      [
+        420,
+        "(9.203429, 0.0, 1.265533)",
+        "windup",
+        "(9.125131, 2.587207, 1.377855)",
+        "recover",
+        2,
+        0,
+        true,
+        28
+      ],
+      [
+        426,
+        "(9.203429, 0.0, 1.265533)",
+        "dive",
+        "(9.34865, 2.334535, 1.185772)",
+        "stagger",
+        1,
+        0,
+        true,
+        28
+      ],
+      [
+        432,
+        "(9.203429, 0.0, 1.265533)",
+        "dive",
+        "(9.756188, 1.901305, 0.839721)",
+        "windup",
+        1,
+        0,
+        true,
+        28
+      ],
+      [
+        438,
+        "(9.203429, 0.0, 1.265533)",
+        "strike",
+        "(9.818861, 1.753401, 0.732808)",
+        "defeated",
+        0,
+        1,
+        true,
+        28
+      ],
+      [
+        444,
+        "(9.203429, 0.0, 1.265533)",
+        "strike",
+        "(9.623383, 1.671551, 0.811389)",
+        "defeated",
+        0,
+        1,
+        true,
+        28
+      ],
+      [
+        450,
+        "(9.203429, 0.0, 1.265533)",
+        "recover",
+        "(9.743225, 1.871958, 0.68745)",
+        "defeated",
+        0,
+        1,
+        true,
+        28
+      ],
+      [
+        456,
+        "(9.203429, 0.0, 1.265533)",
+        "recover",
+        "(9.987665, 2.216086, 0.480749)",
+        "defeated",
+        0,
+        1,
+        true,
+        28
+      ],
+      [
+        462,
+        "(9.203429, 0.0, 1.265533)",
+        "recover",
+        "(10.23211, 2.560214, 0.274048)",
+        "defeated",
+        0,
+        1,
+        true,
+        28
+      ],
+      [
+        468,
+        "(9.203429, 0.0, 1.265533)",
+        "recover",
+        "(10.47655, 2.904343, 0.067346)",
+        "defeated",
+        0,
+        1,
+        true,
+        28
+      ],
+      [
+        474,
+        "(9.203429, 0.0, 1.265533)",
+        "recover",
+        "(10.72098, 3.248472, -0.139355)",
+        "defeated",
+        0,
+        1,
+        true,
+        28
+      ],
+      [
+        480,
+        "(9.203429, 0.0, 1.265533)",
+        "follow",
+        "(10.80201, 3.362539, -0.207869)",
+        "retired",
+        -1,
+        1,
+        true,
+        28
+      ],
+      [
+        486,
+        "(9.203429, 0.0, 1.265533)",
+        "follow",
+        "(10.25522, 3.089288, 0.013152)",
+        "retired",
+        -1,
+        1,
+        true,
+        28
+      ],
+      [
+        492,
+        "(9.203429, 0.0, 1.265533)",
+        "follow",
+        "(9.708286, 2.810435, 0.226688)",
+        "retired",
+        -1,
+        1,
+        true,
+        28
+      ],
+      [
+        498,
+        "(9.203429, 0.0, 1.265533)",
+        "follow",
+        "(9.161317, 2.523474, 0.429056)",
+        "retired",
+        -1,
+        1,
+        true,
+        28
+      ],
+      [
+        504,
+        "(9.203429, 0.0, 1.265533)",
+        "follow",
+        "(8.614786, 2.222735, 0.611439)",
+        "retired",
+        -1,
+        1,
+        true,
+        28
+      ],
+      [
+        510,
+        "(9.203429, 0.0, 1.265533)",
+        "follow",
+        "(8.257848, 1.998092, 0.689164)",
+        "retired",
+        -1,
+        1,
+        true,
+        28
+      ],
+      [
+        516,
+        "(9.203429, 0.0, 1.265533)",
+        "follow",
+        "(8.261544, 1.978219, 0.654226)",
+        "retired",
+        -1,
+        1,
+        true,
+        28
+      ],
+      [
+        522,
+        "(9.203429, 0.0, 1.265533)",
+        "follow",
+        "(8.263284, 1.957884, 0.619089)",
+        "retired",
+        -1,
+        1,
+        true,
+        28
+      ],
+      [
+        528,
+        "(9.203429, 0.0, 1.265533)",
+        "follow",
+        "(8.263058, 1.93742, 0.583896)",
+        "retired",
+        -1,
+        1,
+        true,
+        28
+      ],
+      [
+        534,
+        "(9.203429, 0.0, 1.265533)",
+        "follow",
+        "(8.260868, 1.917162, 0.548791)",
+        "retired",
+        -1,
+        1,
+        true,
+        28
+      ]
+    ]
+  },
+  "matched_candidate": {
+    "checks": {
+      "controller_exits_the_gate": true,
+      "dive_strike_recovery_are_visible": true,
+      "held_player_inside_without_autoattack": true,
+      "owl_scores_from_safe_gate_without_hero_or_tower": true,
+      "purchase_unlocks_owl": true,
+      "real_strike_sound_and_tell": true
+    },
+    "gate": {
+      "owl_hits": 1,
+      "perch": "(7.376884, 2.291041, 1.103361)",
+      "player_at": "(4.183238, 0.0, 0.455543)",
+      "wolf_hp": 2
+    },
+    "events": [
+      {
+        "event": "owl_dive",
+        "t": 5.317,
+        "x": 8.04,
+        "z": 0.49
+      },
+      {
+        "event": "owl_hit",
+        "t": 5.617,
+        "x": 9.71,
+        "z": 0.5
+      },
+      {
+        "event": "owl_dive",
+        "t": 9.333,
+        "x": 7.76,
+        "z": 1.25
+      },
+      {
+        "event": "owl_hit",
+        "t": 9.55,
+        "x": 8.48,
+        "z": 0.66
+      }
+    ],
+    "cue_starts": {
+      "owl_dive": 2,
+      "owl_equip": 1,
+      "owl_hit": 2
+    },
+    "trace": [
+      [
+        0,
+        "(2.8, 0.0, 0.006389)",
+        "land",
+        "(3.342921, 2.386908, 2.668846)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        6,
+        "(2.838848, 0.0, 0.172479)",
+        "land",
+        "(3.874823, 2.403308, 2.245512)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        12,
+        "(3.124298, 0.0, 0.447565)",
+        "land",
+        "(4.406725, 2.419708, 1.822179)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        18,
+        "(3.703564, 0.0, 0.545741)",
+        "takeoff",
+        "(4.734299, 2.695726, 1.699895)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        24,
+        "(4.131452, 0.0, 0.465281)",
+        "takeoff",
+        "(4.78, 2.748, 1.69)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        30,
+        "(4.183238, 0.0, 0.455543)",
+        "takeoff",
+        "(4.78, 2.748, 1.69)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        36,
+        "(4.183238, 0.0, 0.455543)",
+        "bank",
+        "(5.449836, 2.666177, 1.443172)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        42,
+        "(4.183238, 0.0, 0.455543)",
+        "bank",
+        "(6.38951, 2.551392, 1.096911)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        48,
+        "(4.183238, 0.0, 0.455543)",
+        "bank",
+        "(7.256471, 2.445489, 0.777444)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        54,
+        "(4.183238, 0.0, 0.455543)",
+        "windup",
+        "(7.989669, 2.370605, 0.507267)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        60,
+        "(4.183238, 0.0, 0.455543)",
+        "windup",
+        "(8.03818, 2.515963, 0.489391)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        66,
+        "(4.183238, 0.0, 0.455543)",
+        "windup",
+        "(8.03818, 2.587207, 0.489391)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        72,
+        "(4.183238, 0.0, 0.455543)",
+        "dive",
+        "(8.328456, 2.330372, 0.519383)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        78,
+        "(4.183238, 0.0, 0.455543)",
+        "dive",
+        "(8.861395, 1.883052, 0.562448)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        84,
+        "(4.183238, 0.0, 0.455543)",
+        "dive",
+        "(9.593691, 1.408407, 0.592915)",
+        "guard",
+        3,
+        0,
+        false,
+        30
+      ],
+      [
+        90,
+        "(4.183238, 0.0, 0.455543)",
+        "strike",
+        "(9.760847, 1.250756, 0.610587)",
+        "stagger",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        96,
+        "(4.183238, 0.0, 0.455543)",
+        "strike",
+        "(9.635093, 1.117232, 0.632026)",
+        "stagger",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        102,
+        "(4.183238, 0.0, 0.455543)",
+        "recover",
+        "(9.878118, 1.38682, 0.698393)",
+        "guard",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        108,
+        "(4.183238, 0.0, 0.455543)",
+        "recover",
+        "(10.18911, 1.730947, 0.774299)",
+        "patrol",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        114,
+        "(4.183238, 0.0, 0.455543)",
+        "recover",
+        "(10.50009, 2.075075, 0.850205)",
+        "patrol",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        120,
+        "(4.183238, 0.0, 0.455543)",
+        "recover",
+        "(10.81108, 2.419201, 0.92611)",
+        "patrol",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        126,
+        "(4.183238, 0.0, 0.455543)",
+        "recover",
+        "(11.12207, 2.763328, 1.002016)",
+        "patrol",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        132,
+        "(4.183238, 0.0, 0.455543)",
+        "follow",
+        "(10.9376, 2.800134, 0.968367)",
+        "patrol",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        138,
+        "(4.183238, 0.0, 0.455543)",
+        "follow",
+        "(9.594078, 2.687748, 0.707553)",
+        "patrol",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        144,
+        "(4.183238, 0.0, 0.455543)",
+        "follow",
+        "(8.364367, 2.586544, 0.473121)",
+        "patrol",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        150,
+        "(4.183238, 0.0, 0.455543)",
+        "follow",
+        "(7.238609, 2.495226, 0.263529)",
+        "patrol",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        156,
+        "(4.183238, 0.0, 0.455543)",
+        "follow",
+        "(6.207784, 2.412524, 0.077573)",
+        "patrol",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        162,
+        "(4.183238, 0.0, 0.455543)",
+        "follow",
+        "(5.263625, 2.337149, -0.085506)",
+        "patrol",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        168,
+        "(4.183238, 0.0, 0.455543)",
+        "follow",
+        "(4.398531, 2.2677, -0.225775)",
+        "patrol",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        174,
+        "(4.183238, 0.0, 0.455543)",
+        "follow",
+        "(3.605469, 2.20244, -0.341958)",
+        "patrol",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        180,
+        "(4.183238, 0.0, 0.455543)",
+        "follow",
+        "(2.875823, 2.138294, -0.429187)",
+        "return",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        186,
+        "(4.183238, 0.0, 0.455543)",
+        "follow",
+        "(2.334647, 2.078651, -0.4521)",
+        "return",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        192,
+        "(4.183238, 0.0, 0.455543)",
+        "follow",
+        "(2.321702, 2.065456, -0.420184)",
+        "return",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        198,
+        "(4.183238, 0.0, 0.455543)",
+        "follow",
+        "(2.310565, 2.050372, -0.387386)",
+        "return",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        204,
+        "(4.183238, 0.0, 0.455543)",
+        "follow",
+        "(2.301281, 2.033645, -0.353838)",
+        "return",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        210,
+        "(4.183238, 0.0, 0.455543)",
+        "follow",
+        "(2.293889, 2.01555, -0.319678)",
+        "return",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        216,
+        "(4.183238, 0.0, 0.455543)",
+        "follow",
+        "(2.288419, 1.996382, -0.285047)",
+        "return",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        222,
+        "(4.183238, 0.0, 0.455543)",
+        "follow",
+        "(2.284893, 1.976456, -0.250085)",
+        "return",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        228,
+        "(4.183238, 0.0, 0.455543)",
+        "follow",
+        "(2.283325, 1.956096, -0.214937)",
+        "return",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        234,
+        "(4.183238, 0.0, 0.455543)",
+        "follow",
+        "(2.283723, 1.935637, -0.179746)",
+        "return",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        240,
+        "(4.183238, 0.0, 0.455543)",
+        "follow",
+        "(2.286084, 1.915413, -0.144656)",
+        "return",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        246,
+        "(4.183238, 0.0, 0.455543)",
+        "follow",
+        "(2.290399, 1.895755, -0.109811)",
+        "return",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        252,
+        "(4.183238, 0.0, 0.455543)",
+        "follow",
+        "(2.296649, 1.876984, -0.075354)",
+        "guard",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        258,
+        "(4.183238, 0.0, 0.455543)",
+        "follow",
+        "(2.304811, 1.859408, -0.041425)",
+        "guard",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        264,
+        "(4.183238, 0.0, 0.455543)",
+        "bank",
+        "(3.129741, 1.924742, 0.153529)",
+        "guard",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        270,
+        "(4.183238, 0.0, 0.455543)",
+        "bank",
+        "(4.282585, 2.02417, 0.411351)",
+        "guard",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        276,
+        "(4.183238, 0.0, 0.455543)",
+        "bank",
+        "(5.346221, 2.115904, 0.649223)",
+        "guard",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        282,
+        "(4.183238, 0.0, 0.455543)",
+        "bank",
+        "(6.327552, 2.20054, 0.868688)",
+        "guard",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        288,
+        "(4.183238, 0.0, 0.455543)",
+        "bank",
+        "(7.232948, 2.278627, 1.071172)",
+        "guard",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        294,
+        "(4.277926, 0.0, 0.469773)",
+        "windup",
+        "(8.060494, 2.35, 1.256244)",
+        "guard",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        300,
+        "(4.599587, 0.0, 0.521747)",
+        "windup",
+        "(8.060494, 2.496103, 1.256244)",
+        "guard",
+        2,
+        1,
+        false,
+        30
+      ],
+      [
+        306,
+        "(5.143917, 0.0, 0.609701)",
+        "windup",
+        "(7.938899, 2.581822, 1.252103)",
+        "stalk",
+        2,
+        1,
+        true,
+        30
+      ],
+      [
+        312,
+        "(5.760913, 0.0, 0.709396)",
+        "dive",
+        "(7.963801, 2.389757, 1.181964)",
+        "stalk",
+        2,
+        1,
+        true,
+        30
+      ],
+      [
+        318,
+        "(6.37791, 0.0, 0.809092)",
+        "dive",
+        "(8.47046, 1.859802, 0.979126)",
+        "stalk",
+        2,
+        1,
+        true,
+        30
+      ],
+      [
+        324,
+        "(6.994907, 0.0, 0.908787)",
+        "strike",
+        "(8.622956, 1.479237, 0.855971)",
+        "windup",
+        1,
+        2,
+        true,
+        30
+      ],
+      [
+        330,
+        "(7.611904, 0.0, 1.008483)",
+        "strike",
+        "(8.828664, 1.423212, 0.87133)",
+        "windup",
+        1,
+        2,
+        true,
+        30
+      ],
+      [
+        336,
+        "(8.228901, 0.0, 1.108178)",
+        "recover",
+        "(9.136123, 1.55494, 0.738648)",
+        "windup",
+        1,
+        2,
+        true,
+        30
+      ],
+      [
+        342,
+        "(8.845783, 0.0, 1.20857)",
+        "recover",
+        "(9.346864, 1.899068, 0.497682)",
+        "lunge",
+        1,
+        2,
+        true,
+        30
+      ],
+      [
+        348,
+        "(9.209319, 0.0, 1.267816)",
+        "recover",
+        "(9.557604, 2.243196, 0.256717)",
+        "lunge",
+        1,
+        2,
+        true,
+        30
+      ],
+      [
+        354,
+        "(9.233994, 0.0, 1.271837)",
+        "recover",
+        "(9.768343, 2.587324, 0.015752)",
+        "lunge",
+        1,
+        2,
+        true,
+        28
+      ],
+      [
+        360,
+        "(9.233994, 0.0, 1.271837)",
+        "recover",
+        "(9.979083, 2.931453, -0.225213)",
+        "recover",
+        1,
+        2,
+        true,
+        28
+      ],
+      [
+        366,
+        "(9.233994, 0.0, 1.271837)",
+        "recover",
+        "(10.08406, 3.102876, -0.345246)",
+        "recover",
+        1,
+        2,
+        true,
+        28
+      ],
+      [
+        372,
+        "(9.233994, 0.0, 1.271837)",
+        "follow",
+        "(9.511521, 2.810742, 0.028703)",
+        "defeated",
+        0,
+        2,
+        true,
+        28
+      ],
+      [
+        378,
+        "(9.233994, 0.0, 1.271837)",
+        "follow",
+        "(8.88354, 2.491977, 0.446407)",
+        "defeated",
+        0,
+        2,
+        true,
+        28
+      ],
+      [
+        384,
+        "(9.233994, 0.0, 1.271837)",
+        "follow",
+        "(8.315243, 2.206288, 0.835692)",
+        "defeated",
+        0,
+        2,
+        true,
+        28
+      ],
+      [
+        390,
+        "(9.233994, 0.0, 1.271837)",
+        "follow",
+        "(7.880094, 1.993647, 1.156597)",
+        "defeated",
+        0,
+        2,
+        true,
+        28
+      ],
+      [
+        396,
+        "(9.233994, 0.0, 1.271837)",
+        "follow",
+        "(7.910365, 2.012939, 1.150638)",
+        "defeated",
+        0,
+        2,
+        true,
+        28
+      ],
+      [
+        402,
+        "(9.233994, 0.0, 1.271837)",
+        "follow",
+        "(7.940242, 2.031202, 1.142472)",
+        "defeated",
+        0,
+        2,
+        true,
+        28
+      ],
+      [
+        408,
+        "(9.233994, 0.0, 1.271837)",
+        "follow",
+        "(7.969602, 2.048136, 1.132134)",
+        "defeated",
+        0,
+        2,
+        true,
+        28
+      ],
+      [
+        414,
+        "(9.233994, 0.0, 1.271837)",
+        "follow",
+        "(7.998324, 2.063464, 1.119665)",
+        "retired",
+        -1,
+        2,
+        true,
+        28
+      ],
+      [
+        420,
+        "(9.233994, 0.0, 1.271837)",
+        "follow",
+        "(8.026292, 2.076936, 1.105117)",
+        "retired",
+        -1,
+        2,
+        true,
+        28
+      ],
+      [
+        426,
+        "(9.233994, 0.0, 1.271837)",
+        "follow",
+        "(8.053391, 2.088331, 1.088549)",
+        "retired",
+        -1,
+        2,
+        true,
+        28
+      ],
+      [
+        432,
+        "(9.233994, 0.0, 1.271837)",
+        "follow",
+        "(8.079509, 2.097463, 1.07003)",
+        "retired",
+        -1,
+        2,
+        true,
+        28
+      ],
+      [
+        438,
+        "(9.233994, 0.0, 1.271837)",
+        "follow",
+        "(8.10454, 2.104182, 1.049634)",
+        "retired",
+        -1,
+        2,
+        true,
+        28
+      ],
+      [
+        444,
+        "(9.233994, 0.0, 1.271837)",
+        "follow",
+        "(8.128381, 2.108378, 1.027445)",
+        "retired",
+        -1,
+        2,
+        true,
+        28
+      ],
+      [
+        450,
+        "(9.233994, 0.0, 1.271837)",
+        "follow",
+        "(8.150935, 2.109983, 1.003555)",
+        "retired",
+        -1,
+        2,
+        true,
+        28
+      ],
+      [
+        456,
+        "(9.233994, 0.0, 1.271837)",
+        "follow",
+        "(8.17211, 2.108971, 0.978061)",
+        "retired",
+        -1,
+        2,
+        true,
+        28
+      ],
+      [
+        462,
+        "(9.233994, 0.0, 1.271837)",
+        "follow",
+        "(8.191818, 2.105357, 0.951067)",
+        "retired",
+        -1,
+        2,
+        true,
+        28
+      ],
+      [
+        468,
+        "(9.233994, 0.0, 1.271837)",
+        "follow",
+        "(8.209979, 2.099201, 0.922685)",
+        "retired",
+        -1,
+        2,
+        true,
+        28
+      ],
+      [
+        474,
+        "(9.233994, 0.0, 1.271837)",
+        "follow",
+        "(8.226519, 2.090605, 0.893029)",
+        "retired",
+        -1,
+        2,
+        true,
+        28
+      ],
+      [
+        480,
+        "(9.233994, 0.0, 1.271837)",
+        "follow",
+        "(8.241369, 2.079707, 0.862222)",
+        "retired",
+        -1,
+        2,
+        true,
+        28
+      ],
+      [
+        486,
+        "(9.233994, 0.0, 1.271837)",
+        "follow",
+        "(8.25447, 2.066688, 0.83039)",
+        "retired",
+        -1,
+        2,
+        true,
+        28
+      ],
+      [
+        492,
+        "(9.233994, 0.0, 1.271837)",
+        "follow",
+        "(8.265767, 2.051759, 0.797663)",
+        "retired",
+        -1,
+        2,
+        true,
+        28
+      ],
+      [
+        498,
+        "(9.233994, 0.0, 1.271837)",
+        "follow",
+        "(8.275214, 2.035166, 0.764175)",
+        "retired",
+        -1,
+        2,
+        true,
+        28
+      ],
+      [
+        504,
+        "(9.233994, 0.0, 1.271837)",
+        "follow",
+        "(8.282773, 2.017178, 0.730064)",
+        "retired",
+        -1,
+        2,
+        true,
+        28
+      ],
+      [
+        510,
+        "(9.233994, 0.0, 1.271837)",
+        "follow",
+        "(8.288412, 1.998092, 0.695468)",
+        "retired",
+        -1,
+        2,
+        true,
+        28
+      ],
+      [
+        516,
+        "(9.233994, 0.0, 1.271837)",
+        "follow",
+        "(8.292109, 1.978219, 0.66053)",
+        "retired",
+        -1,
+        2,
+        true,
+        28
+      ],
+      [
+        522,
+        "(9.233994, 0.0, 1.271837)",
+        "follow",
+        "(8.293848, 1.957884, 0.625392)",
+        "retired",
+        -1,
+        2,
+        true,
+        28
+      ],
+      [
+        528,
+        "(9.233994, 0.0, 1.271837)",
+        "follow",
+        "(8.293622, 1.93742, 0.590199)",
+        "retired",
+        -1,
+        2,
+        true,
+        28
+      ],
+      [
+        534,
+        "(9.233994, 0.0, 1.271837)",
+        "follow",
+        "(8.291432, 1.917162, 0.555095)",
+        "retired",
+        -1,
+        2,
+        true,
+        28
+      ]
+    ]
+  },
+  "source_checks": {
+    "tests/qa_owl_gate_patrol.gd": "c51159bd6e419b0d816dcb83f1932e5f7cf918eb8e24f47d91105f1d983c05ec",
+    "tests/qa_pack_navigation.gd": "197d145c8f0aa911551ce0952367174915aa0d903c2eaec7b6aa759db6e0c713"
+  },
+  "reference": {
+    "owl_sheet": "Docs/Design/RenderArchive/2026-11-23/selected/animal-companions/pet_owl_01.png",
+    "owl_commit": "01664a73ddf5087f17f7e159fa0b6b4ed71367b5",
+    "owl_sha256": "0ae787ef27d7961ad3c8f760275c514457326b0a0aac9a371dd1470085529cd8",
+    "recording": "Screen_Recording_20260817_124510_YouTube.mp4",
+    "recording_sha256": "4c9051cbea6df0efa3e7288b13b6d17da46e857274869b0b43d2f96ff6cc79d2",
+    "timestamp": "6.0 s field animals in a group; 13.0\u201314.2 s weapon upgrade."
+  },
+  "extended_gameplay": {
+    "resolution": "620x688",
+    "renderer": "Mesa llvmpipe (LLVM 19.1.7, 256 bits), Godot 4.7.2 compatibility OpenGL",
+    "control": "Normal touchscreen movement and 2x magnify input. Disposable profile with staged resource supply, paid hearth/survivor unlock and controlled wolf spawn points. All movement and damage after fixture placement by game simulation. No paid tower.",
+    "frame_interval_seconds": 0.06666666666666667,
+    "part_frame_origins": {
+      "gate": 0,
+      "pack": 37
+    },
+    "start_hp": 30,
+    "end_hp": 20,
+    "owl_receipts": 2,
+    "audio_cue_starts": {
+      "enemy_attack": 6,
+      "owl_dive": 2,
+      "owl_hit": 2,
+      "player_hurt": 3,
+      "wolf_brace": 6
+    },
+    "contact_frames": [
+      {
+        "animals": [
+          [
+            5,
+            false,
+            2,
+            "stagger",
+            "(8.95, 0.0, 0.8)",
+            "Hurt"
+          ]
+        ],
+        "frame": 21,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "strike",
+        "owl_at": "(8.492211, 1.422648, 0.755446)",
+        "owl_hits": 1,
+        "part": "gate",
+        "player": "(4.094128, 0.0, 0.454004)",
+        "safe": true,
+        "simulation": 5.46666666666665,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            4,
+            "stagger",
+            "(13.31528, 0.0, 1.533214)",
+            "Hurt"
+          ],
+          [
+            7,
+            false,
+            1,
+            "windup",
+            "(9.396454, 0.0, -0.570967)",
+            "Brace"
+          ]
+        ],
+        "frame": 79,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "strike",
+        "owl_at": "(12.98062, 2.283386, 1.508538)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(11.01048, 0.0, -0.183002)",
+        "safe": false,
+        "simulation": 9.28333333333337,
+        "zoom": 2.0
+      }
+    ],
+    "trace": [
+      {
+        "animals": [
+          [
+            5,
+            false,
+            3,
+            "guard",
+            "(8.95, 0.0, 0.8)",
+            "Idle"
+          ]
+        ],
+        "frame": 0,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "land",
+        "owl_at": "(3.99275, 2.408886, 2.155208)",
+        "owl_hits": 0,
+        "part": "gate",
+        "player": "(2.7, 0.0, 0.006389)",
+        "safe": true,
+        "simulation": 4.06666666666666,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            3,
+            "guard",
+            "(8.95, 0.0, 0.8)",
+            "Idle"
+          ]
+        ],
+        "frame": 1,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "land",
+        "owl_at": "(4.346756, 2.419118, 1.872212)",
+        "owl_hits": 0,
+        "part": "gate",
+        "player": "(2.709191, 0.0, 0.095017)",
+        "safe": true,
+        "simulation": 4.13333333333332,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            3,
+            "guard",
+            "(8.95, 0.0, 0.8)",
+            "Idle"
+          ]
+        ],
+        "frame": 2,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "land",
+        "owl_at": "(4.700761, 2.429351, 1.589216)",
+        "owl_hits": 0,
+        "part": "gate",
+        "player": "(2.797506, 0.0, 0.263717)",
+        "safe": true,
+        "simulation": 4.19999999999999,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            3,
+            "guard",
+            "(8.95, 0.0, 0.8)",
+            "Idle"
+          ]
+        ],
+        "frame": 3,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "land",
+        "owl_at": "(4.845869, 2.240146, 1.473215)",
+        "owl_hits": 0,
+        "part": "gate",
+        "player": "(3.024298, 0.0, 0.447565)",
+        "safe": true,
+        "simulation": 4.26666666666666,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            3,
+            "guard",
+            "(8.95, 0.0, 0.8)",
+            "Idle"
+          ]
+        ],
+        "frame": 4,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "takeoff",
+        "owl_at": "(4.861578, 2.247466, 1.495555)",
+        "owl_hits": 0,
+        "part": "gate",
+        "player": "(3.398543, 0.0, 0.5522)",
+        "safe": true,
+        "simulation": 4.33333333333332,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            3,
+            "guard",
+            "(8.95, 0.0, 0.8)",
+            "Idle"
+          ]
+        ],
+        "frame": 5,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "takeoff",
+        "owl_at": "(4.81752, 2.517791, 1.600569)",
+        "owl_hits": 0,
+        "part": "gate",
+        "player": "(3.79858, 0.0, 0.509579)",
+        "safe": true,
+        "simulation": 4.39999999999999,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            3,
+            "guard",
+            "(8.95, 0.0, 0.8)",
+            "Idle"
+          ]
+        ],
+        "frame": 6,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "takeoff",
+        "owl_at": "(4.78, 2.748, 1.69)",
+        "owl_hits": 0,
+        "part": "gate",
+        "player": "(4.039535, 0.0, 0.46427)",
+        "safe": true,
+        "simulation": 4.46666666666666,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            3,
+            "guard",
+            "(8.95, 0.0, 0.8)",
+            "Idle"
+          ]
+        ],
+        "frame": 7,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "takeoff",
+        "owl_at": "(4.78, 2.748, 1.69)",
+        "owl_hits": 0,
+        "part": "gate",
+        "player": "(4.094128, 0.0, 0.454004)",
+        "safe": true,
+        "simulation": 4.53333333333332,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            3,
+            "guard",
+            "(8.95, 0.0, 0.8)",
+            "Idle"
+          ]
+        ],
+        "frame": 8,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "takeoff",
+        "owl_at": "(4.78, 2.748, 1.69)",
+        "owl_hits": 0,
+        "part": "gate",
+        "player": "(4.094128, 0.0, 0.454004)",
+        "safe": true,
+        "simulation": 4.59999999999999,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            3,
+            "guard",
+            "(8.95, 0.0, 0.8)",
+            "Idle"
+          ]
+        ],
+        "frame": 9,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "bank",
+        "owl_at": "(5.284814, 2.672366, 1.702734)",
+        "owl_hits": 0,
+        "part": "gate",
+        "player": "(4.094128, 0.0, 0.454004)",
+        "safe": true,
+        "simulation": 4.66666666666666,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            3,
+            "guard",
+            "(8.95, 0.0, 0.8)",
+            "Idle"
+          ]
+        ],
+        "frame": 10,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "bank",
+        "owl_at": "(5.927042, 2.576144, 1.718934)",
+        "owl_hits": 0,
+        "part": "gate",
+        "player": "(4.094128, 0.0, 0.454004)",
+        "safe": true,
+        "simulation": 4.73333333333332,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            3,
+            "guard",
+            "(8.95, 0.0, 0.8)",
+            "Idle"
+          ]
+        ],
+        "frame": 11,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "bank",
+        "owl_at": "(6.535697, 2.484951, 1.734287)",
+        "owl_hits": 0,
+        "part": "gate",
+        "player": "(4.094128, 0.0, 0.454004)",
+        "safe": true,
+        "simulation": 4.79999999999999,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            3,
+            "guard",
+            "(8.95, 0.0, 0.8)",
+            "Idle"
+          ]
+        ],
+        "frame": 12,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "bank",
+        "owl_at": "(7.112534, 2.398526, 1.748837)",
+        "owl_hits": 0,
+        "part": "gate",
+        "player": "(4.094128, 0.0, 0.454004)",
+        "safe": true,
+        "simulation": 4.86666666666665,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            3,
+            "guard",
+            "(8.95, 0.0, 0.8)",
+            "Idle"
+          ]
+        ],
+        "frame": 13,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "windup",
+        "owl_at": "(7.436416, 2.401945, 1.757007)",
+        "owl_hits": 0,
+        "part": "gate",
+        "player": "(4.094128, 0.0, 0.454004)",
+        "safe": true,
+        "simulation": 4.93333333333332,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            3,
+            "guard",
+            "(8.95, 0.0, 0.8)",
+            "Idle"
+          ]
+        ],
+        "frame": 14,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "windup",
+        "owl_at": "(7.436416, 2.496103, 1.757007)",
+        "owl_hits": 0,
+        "part": "gate",
+        "player": "(4.094128, 0.0, 0.454004)",
+        "safe": true,
+        "simulation": 4.99999999999999,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            3,
+            "guard",
+            "(8.95, 0.0, 0.8)",
+            "Idle"
+          ]
+        ],
+        "frame": 15,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "windup",
+        "owl_at": "(7.436416, 2.562882, 1.757007)",
+        "owl_hits": 0,
+        "part": "gate",
+        "player": "(4.094128, 0.0, 0.454004)",
+        "safe": true,
+        "simulation": 5.06666666666665,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            3,
+            "guard",
+            "(8.95, 0.0, 0.8)",
+            "Idle"
+          ]
+        ],
+        "frame": 16,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "windup",
+        "owl_at": "(7.436416, 2.589772, 1.757007)",
+        "owl_hits": 0,
+        "part": "gate",
+        "player": "(4.094128, 0.0, 0.454004)",
+        "safe": true,
+        "simulation": 5.13333333333332,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            3,
+            "guard",
+            "(8.95, 0.0, 0.8)",
+            "Idle"
+          ]
+        ],
+        "frame": 17,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "dive",
+        "owl_at": "(7.617625, 2.399186, 1.632505)",
+        "owl_hits": 0,
+        "part": "gate",
+        "player": "(4.094128, 0.0, 0.454004)",
+        "safe": true,
+        "simulation": 5.19999999999999,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            3,
+            "guard",
+            "(8.95, 0.0, 0.8)",
+            "Idle"
+          ]
+        ],
+        "frame": 18,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "dive",
+        "owl_at": "(7.878988, 2.129565, 1.454618)",
+        "owl_hits": 0,
+        "part": "gate",
+        "player": "(4.094128, 0.0, 0.454004)",
+        "safe": true,
+        "simulation": 5.26666666666665,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            3,
+            "guard",
+            "(8.95, 0.0, 0.8)",
+            "Idle"
+          ]
+        ],
+        "frame": 19,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "dive",
+        "owl_at": "(8.216882, 1.822193, 1.22659)",
+        "owl_hits": 0,
+        "part": "gate",
+        "player": "(4.094128, 0.0, 0.454004)",
+        "safe": true,
+        "simulation": 5.33333333333332,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            3,
+            "guard",
+            "(8.95, 0.0, 0.8)",
+            "Idle"
+          ]
+        ],
+        "frame": 20,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "dive",
+        "owl_at": "(8.632483, 1.52649, 0.941278)",
+        "owl_hits": 0,
+        "part": "gate",
+        "player": "(4.094128, 0.0, 0.454004)",
+        "safe": true,
+        "simulation": 5.39999999999999,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            2,
+            "stagger",
+            "(8.95, 0.0, 0.8)",
+            "Hurt"
+          ]
+        ],
+        "frame": 21,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "strike",
+        "owl_at": "(8.492211, 1.422648, 0.755446)",
+        "owl_hits": 1,
+        "part": "gate",
+        "player": "(4.094128, 0.0, 0.454004)",
+        "safe": true,
+        "simulation": 5.46666666666665,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            2,
+            "stagger",
+            "(8.95, 0.0, 0.8)",
+            "Hurt"
+          ]
+        ],
+        "frame": 22,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "strike",
+        "owl_at": "(8.398311, 1.3532, 0.828856)",
+        "owl_hits": 1,
+        "part": "gate",
+        "player": "(4.094128, 0.0, 0.454004)",
+        "safe": true,
+        "simulation": 5.53333333333332,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            2,
+            "stagger",
+            "(8.95, 0.0, 0.8)",
+            "Hurt"
+          ]
+        ],
+        "frame": 23,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "strike",
+        "owl_at": "(8.322453, 1.271823, 0.871312)",
+        "owl_hits": 1,
+        "part": "gate",
+        "player": "(4.094128, 0.0, 0.454004)",
+        "safe": true,
+        "simulation": 5.59999999999999,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            2,
+            "guard",
+            "(8.95, 0.0, 0.8)",
+            "Idle"
+          ]
+        ],
+        "frame": 24,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "recover",
+        "owl_at": "(8.42743, 1.42791, 0.77125)",
+        "owl_hits": 1,
+        "part": "gate",
+        "player": "(4.094128, 0.0, 0.454004)",
+        "safe": true,
+        "simulation": 5.66666666666665,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            2,
+            "guard",
+            "(8.95, 0.0, 0.8)",
+            "Idle"
+          ]
+        ],
+        "frame": 25,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "recover",
+        "owl_at": "(8.587846, 1.657328, 0.630497)",
+        "owl_hits": 1,
+        "part": "gate",
+        "player": "(4.094128, 0.0, 0.454004)",
+        "safe": true,
+        "simulation": 5.73333333333332,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            2,
+            "guard",
+            "(8.95, 0.0, 0.8)",
+            "Idle"
+          ]
+        ],
+        "frame": 26,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "recover",
+        "owl_at": "(8.748261, 1.886747, 0.489744)",
+        "owl_hits": 1,
+        "part": "gate",
+        "player": "(4.094128, 0.0, 0.454004)",
+        "safe": true,
+        "simulation": 5.79999999999998,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            2,
+            "patrol",
+            "(8.950391, 0.0, 0.822497)",
+            "Walk"
+          ]
+        ],
+        "frame": 27,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "recover",
+        "owl_at": "(8.908677, 2.116165, 0.348991)",
+        "owl_hits": 1,
+        "part": "gate",
+        "player": "(4.094128, 0.0, 0.454004)",
+        "safe": true,
+        "simulation": 5.86666666666665,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            2,
+            "patrol",
+            "(8.951955, 0.0, 0.912483)",
+            "Walk"
+          ]
+        ],
+        "frame": 28,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "recover",
+        "owl_at": "(9.069093, 2.345583, 0.208238)",
+        "owl_hits": 1,
+        "part": "gate",
+        "player": "(4.094128, 0.0, 0.454004)",
+        "safe": true,
+        "simulation": 5.93333333333332,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            2,
+            "patrol",
+            "(8.953519, 0.0, 1.002469)",
+            "Walk"
+          ]
+        ],
+        "frame": 29,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "recover",
+        "owl_at": "(9.229509, 2.575001, 0.067485)",
+        "owl_hits": 1,
+        "part": "gate",
+        "player": "(4.094128, 0.0, 0.454004)",
+        "safe": true,
+        "simulation": 5.99999999999998,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            2,
+            "patrol",
+            "(8.955083, 0.0, 1.092456)",
+            "Walk"
+          ]
+        ],
+        "frame": 30,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "recover",
+        "owl_at": "(9.389927, 2.804419, -0.073268)",
+        "owl_hits": 1,
+        "part": "gate",
+        "player": "(4.094128, 0.0, 0.454004)",
+        "safe": true,
+        "simulation": 6.06666666666665,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            2,
+            "patrol",
+            "(8.956647, 0.0, 1.182442)",
+            "Walk"
+          ]
+        ],
+        "frame": 31,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "recover",
+        "owl_at": "(9.509795, 2.975846, -0.178442)",
+        "owl_hits": 1,
+        "part": "gate",
+        "player": "(4.094128, 0.0, 0.454004)",
+        "safe": true,
+        "simulation": 6.13333333333332,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            2,
+            "patrol",
+            "(8.958211, 0.0, 1.272428)",
+            "Walk"
+          ]
+        ],
+        "frame": 32,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "follow",
+        "owl_at": "(9.297251, 2.948359, -0.194529)",
+        "owl_hits": 1,
+        "part": "gate",
+        "player": "(4.094128, 0.0, 0.454004)",
+        "safe": true,
+        "simulation": 6.19999999999998,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            2,
+            "patrol",
+            "(8.959775, 0.0, 1.362415)",
+            "Walk"
+          ]
+        ],
+        "frame": 33,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "follow",
+        "owl_at": "(8.4777, 2.843248, -0.255705)",
+        "owl_hits": 1,
+        "part": "gate",
+        "player": "(4.094128, 0.0, 0.454004)",
+        "safe": true,
+        "simulation": 6.26666666666665,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            2,
+            "patrol",
+            "(8.961339, 0.0, 1.452401)",
+            "Walk"
+          ]
+        ],
+        "frame": 34,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "follow",
+        "owl_at": "(7.704998, 2.745512, -0.311873)",
+        "owl_hits": 1,
+        "part": "gate",
+        "player": "(4.094128, 0.0, 0.454004)",
+        "safe": true,
+        "simulation": 6.33333333333332,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            2,
+            "patrol",
+            "(8.962902, 0.0, 1.542387)",
+            "Walk"
+          ]
+        ],
+        "frame": 35,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "follow",
+        "owl_at": "(6.976407, 2.654684, -0.363091)",
+        "owl_hits": 1,
+        "part": "gate",
+        "player": "(4.094128, 0.0, 0.454004)",
+        "safe": true,
+        "simulation": 6.39999999999998,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            2,
+            "patrol",
+            "(8.964464, 0.0, 1.632374)",
+            "Walk"
+          ]
+        ],
+        "frame": 36,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "follow",
+        "owl_at": "(6.289351, 2.570319, -0.409368)",
+        "owl_hits": 1,
+        "part": "gate",
+        "player": "(4.094128, 0.0, 0.454004)",
+        "safe": true,
+        "simulation": 6.46666666666665,
+        "zoom": 1.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            2,
+            "patrol",
+            "(8.964855, 0.0, 1.65487)",
+            "Walk"
+          ],
+          [
+            6,
+            true,
+            8,
+            "guard",
+            "(11.1, 0.0, 4.3)",
+            "Idle"
+          ],
+          [
+            7,
+            false,
+            3,
+            "guard",
+            "(13.1, 0.0, -2.6)",
+            "Idle"
+          ]
+        ],
+        "frame": 37,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "follow",
+        "owl_at": "(6.12389, 2.550165, -0.420186)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(4.100507, 0.0, 0.453653)",
+        "safe": true,
+        "simulation": 6.48333333333332,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            2,
+            "patrol",
+            "(8.966417, 0.0, 1.744856)",
+            "Walk"
+          ],
+          [
+            6,
+            true,
+            8,
+            "guard",
+            "(11.1, 0.0, 4.3)",
+            "Idle"
+          ],
+          [
+            7,
+            false,
+            3,
+            "guard",
+            "(13.1, 0.0, -2.6)",
+            "Idle"
+          ]
+        ],
+        "frame": 38,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "follow",
+        "owl_at": "(5.488708, 2.472499, -0.461136)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(4.189816, 0.0, 0.448727)",
+        "safe": true,
+        "simulation": 6.54999999999998,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            2,
+            "patrol",
+            "(8.967979, 0.0, 1.834843)",
+            "Walk"
+          ],
+          [
+            6,
+            true,
+            8,
+            "guard",
+            "(11.1, 0.0, 4.3)",
+            "Idle"
+          ],
+          [
+            7,
+            false,
+            3,
+            "guard",
+            "(13.1, 0.0, -2.6)",
+            "Idle"
+          ]
+        ],
+        "frame": 39,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "follow",
+        "owl_at": "(4.899108, 2.397694, -0.499886)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(4.381191, 0.0, 0.438173)",
+        "safe": true,
+        "simulation": 6.61666666666665,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            2,
+            "patrol",
+            "(8.924031, 0.0, 1.908215)",
+            "Walk"
+          ],
+          [
+            6,
+            true,
+            8,
+            "guard",
+            "(11.1, 0.0, 4.3)",
+            "Idle"
+          ],
+          [
+            7,
+            false,
+            3,
+            "guard",
+            "(13.1, 0.0, -2.6)",
+            "Idle"
+          ]
+        ],
+        "frame": 40,
+        "hp": 30,
+        "orbit_active": false,
+        "owl": "follow",
+        "owl_at": "(4.359167, 2.321662, -0.539512)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(4.674634, 0.0, 0.421991)",
+        "safe": true,
+        "simulation": 6.68333333333331,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            2,
+            "stalk",
+            "(8.823, 0.0, 1.917834)",
+            "Walk"
+          ],
+          [
+            6,
+            true,
+            8,
+            "stalk",
+            "(11.05636, 0.0, 4.257622)",
+            "Walk"
+          ],
+          [
+            7,
+            false,
+            3,
+            "stalk",
+            "(13.04557, 0.0, -2.572825)",
+            "Walk"
+          ]
+        ],
+        "frame": 41,
+        "hp": 30,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(3.873761, 2.232148, -0.588499)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(5.065707, 0.0, 0.400424)",
+        "safe": false,
+        "simulation": 6.74999999999998,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            2,
+            "stalk",
+            "(8.615133, 0.0, 1.791332)",
+            "Walk"
+          ],
+          [
+            6,
+            true,
+            8,
+            "stalk",
+            "(10.88378, 0.0, 4.086081)",
+            "Walk"
+          ],
+          [
+            7,
+            false,
+            3,
+            "stalk",
+            "(12.82976, 0.0, -2.460433)",
+            "Walk"
+          ]
+        ],
+        "frame": 42,
+        "hp": 30,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(3.715718, 2.109876, -0.663702)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(5.481741, 0.0, 0.37748)",
+        "safe": false,
+        "simulation": 6.81666666666665,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            2,
+            "stalk",
+            "(8.407267, 0.0, 1.66483)",
+            "Walk"
+          ],
+          [
+            6,
+            true,
+            8,
+            "stalk",
+            "(10.69709, 0.0, 3.951551)",
+            "Walk"
+          ],
+          [
+            7,
+            false,
+            3,
+            "stalk",
+            "(12.61574, 0.0, -2.344654)",
+            "Walk"
+          ]
+        ],
+        "frame": 43,
+        "hp": 30,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(4.117878, 2.108758, -0.669387)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(5.897776, 0.0, 0.354537)",
+        "safe": false,
+        "simulation": 6.88333333333331,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            2,
+            "stalk",
+            "(8.200109, 0.0, 1.537192)",
+            "Walk"
+          ],
+          [
+            6,
+            true,
+            8,
+            "stalk",
+            "(10.53365, 0.0, 3.771284)",
+            "Walk"
+          ],
+          [
+            7,
+            false,
+            3,
+            "stalk",
+            "(12.40275, 0.0, -2.226978)",
+            "Walk"
+          ]
+        ],
+        "frame": 44,
+        "hp": 30,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(4.520693, 2.106484, -0.674409)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(6.313811, 0.0, 0.331593)",
+        "safe": false,
+        "simulation": 6.94999999999998,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            2,
+            "windup",
+            "(8.200109, 0.0, 1.537192)",
+            "Brace"
+          ],
+          [
+            6,
+            true,
+            8,
+            "stalk",
+            "(10.70081, 0.0, 3.594448)",
+            "Walk"
+          ],
+          [
+            7,
+            false,
+            3,
+            "stalk",
+            "(12.19092, 0.0, -2.107226)",
+            "Walk"
+          ]
+        ],
+        "frame": 45,
+        "hp": 30,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(4.924188, 2.103072, -0.678802)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(6.729846, 0.0, 0.30865)",
+        "safe": false,
+        "simulation": 7.01666666666665,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            2,
+            "windup",
+            "(8.200109, 0.0, 1.537192)",
+            "Brace"
+          ],
+          [
+            6,
+            true,
+            8,
+            "stalk",
+            "(10.77883, 0.0, 3.49951)",
+            "Walk"
+          ],
+          [
+            7,
+            false,
+            3,
+            "stalk",
+            "(11.98041, 0.0, -1.985189)",
+            "Walk"
+          ]
+        ],
+        "frame": 46,
+        "hp": 30,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(5.328384, 2.098546, -0.682599)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(7.14588, 0.0, 0.285706)",
+        "safe": false,
+        "simulation": 7.08333333333331,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            2,
+            "windup",
+            "(8.200109, 0.0, 1.537192)",
+            "Brace"
+          ],
+          [
+            6,
+            true,
+            8,
+            "stalk",
+            "(10.85904, 0.0, 3.406436)",
+            "Walk"
+          ],
+          [
+            7,
+            false,
+            3,
+            "stalk",
+            "(11.77138, 0.0, -1.860611)",
+            "Walk"
+          ]
+        ],
+        "frame": 47,
+        "hp": 30,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(5.733304, 2.092938, -0.685835)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(7.561915, 0.0, 0.262763)",
+        "safe": false,
+        "simulation": 7.14999999999998,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            2,
+            "windup",
+            "(8.200109, 0.0, 1.537192)",
+            "Brace"
+          ],
+          [
+            6,
+            true,
+            8,
+            "stalk",
+            "(10.90456, 0.0, 3.297444)",
+            "Walk"
+          ],
+          [
+            7,
+            false,
+            3,
+            "stalk",
+            "(11.56409, 0.0, -1.733172)",
+            "Walk"
+          ]
+        ],
+        "frame": 48,
+        "hp": 30,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(6.138967, 2.086291, -0.688545)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(7.97795, 0.0, 0.239819)",
+        "safe": false,
+        "simulation": 7.21666666666665,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            2,
+            "lunge",
+            "(8.200109, 0.0, 1.537192)",
+            "Bite"
+          ],
+          [
+            6,
+            true,
+            8,
+            "stalk",
+            "(11.04545, 0.0, 3.113475)",
+            "Walk"
+          ],
+          [
+            7,
+            false,
+            3,
+            "stalk",
+            "(11.35885, 0.0, -1.602462)",
+            "Walk"
+          ]
+        ],
+        "frame": 49,
+        "hp": 30,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(6.545393, 2.078651, -0.690767)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(8.393984, 0.0, 0.216876)",
+        "safe": false,
+        "simulation": 7.28333333333331,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            2,
+            "lunge",
+            "(8.216276, 0.0, 1.42709)",
+            "Bite"
+          ],
+          [
+            6,
+            true,
+            8,
+            "stalk",
+            "(11.10868, 0.0, 2.890781)",
+            "Walk"
+          ],
+          [
+            7,
+            false,
+            3,
+            "stalk",
+            "(11.15687, 0.0, -1.466795)",
+            "Walk"
+          ]
+        ],
+        "frame": 50,
+        "hp": 30,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(6.915987, 2.070076, -0.690518)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(8.773407, 0.0, 0.195952)",
+        "safe": false,
+        "simulation": 7.34999999999998,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            1,
+            "lunge",
+            "(8.23954, 0.0, 1.268657)",
+            "Bite"
+          ],
+          [
+            6,
+            true,
+            8,
+            "stalk",
+            "(11.16664, 0.0, 2.66634)",
+            "Walk"
+          ],
+          [
+            7,
+            false,
+            3,
+            "stalk",
+            "(10.96122, 0.0, -1.322135)",
+            "Walk"
+          ]
+        ],
+        "frame": 51,
+        "hp": 30,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(7.150329, 2.060626, -0.707308)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(9.01578, 0.0, 0.157577)",
+        "safe": false,
+        "simulation": 7.41666666666665,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            1,
+            "lunge",
+            "(8.279021, 0.0, 0.999785)",
+            "Bite"
+          ],
+          [
+            6,
+            true,
+            8,
+            "stalk",
+            "(11.18655, 0.0, 2.423825)",
+            "Walk"
+          ],
+          [
+            7,
+            false,
+            3,
+            "windup",
+            "(10.86481, 0.0, -1.24792)",
+            "Brace"
+          ]
+        ],
+        "frame": 52,
+        "hp": 28,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(7.33797, 2.050372, -0.837395)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(9.210643, 0.0, 0.005533)",
+        "safe": false,
+        "simulation": 7.48333333333331,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            1,
+            "recover",
+            "(8.319779, 0.0, 0.722218)",
+            "Recover"
+          ],
+          [
+            6,
+            true,
+            8,
+            "stalk",
+            "(11.2106, 0.0, 2.181684)",
+            "Walk"
+          ],
+          [
+            7,
+            false,
+            3,
+            "windup",
+            "(10.86481, 0.0, -1.24792)",
+            "Brace"
+          ]
+        ],
+        "frame": 53,
+        "hp": 28,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(7.420535, 2.039387, -1.0457)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(9.299605, 0.0, -0.225062)",
+        "safe": false,
+        "simulation": 7.54999999999998,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            1,
+            "recover",
+            "(8.187193, 0.0, 0.862893)",
+            "Recover"
+          ],
+          [
+            6,
+            true,
+            7,
+            "stagger",
+            "(11.21678, 0.0, 2.121166)",
+            "Hurt"
+          ],
+          [
+            7,
+            false,
+            3,
+            "windup",
+            "(10.86481, 0.0, -1.24792)",
+            "Brace"
+          ]
+        ],
+        "frame": 54,
+        "hp": 28,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(7.3727, 2.027751, -1.26669)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(9.257333, 0.0, -0.468635)",
+        "safe": false,
+        "simulation": 7.61666666666664,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            1,
+            "recover",
+            "(8.187193, 0.0, 0.862893)",
+            "Recover"
+          ],
+          [
+            6,
+            true,
+            6,
+            "stagger",
+            "(11.21678, 0.0, 2.121166)",
+            "Hurt"
+          ],
+          [
+            7,
+            false,
+            3,
+            "windup",
+            "(10.86481, 0.0, -1.24792)",
+            "Brace"
+          ]
+        ],
+        "frame": 55,
+        "hp": 28,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(7.206252, 2.01555, -1.43152)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(9.095601, 0.0, -0.656299)",
+        "safe": false,
+        "simulation": 7.68333333333331,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            1,
+            "recover",
+            "(8.187193, 0.0, 0.862893)",
+            "Recover"
+          ],
+          [
+            6,
+            true,
+            6,
+            "stagger",
+            "(11.21678, 0.0, 2.121166)",
+            "Hurt"
+          ],
+          [
+            7,
+            false,
+            3,
+            "windup",
+            "(10.86481, 0.0, -1.24792)",
+            "Brace"
+          ]
+        ],
+        "frame": 56,
+        "hp": 28,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(6.967677, 2.002872, -1.485993)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(8.860888, 0.0, -0.733816)",
+        "safe": false,
+        "simulation": 7.74999999999998,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            1,
+            "recover",
+            "(8.167844, 0.0, 0.932194)",
+            "Recover"
+          ],
+          [
+            6,
+            true,
+            6,
+            "stalk",
+            "(11.21383, 0.0, 2.060405)",
+            "Walk"
+          ],
+          [
+            7,
+            false,
+            2,
+            "lunge",
+            "(10.71593, 0.0, -1.211247)",
+            "Bite"
+          ]
+        ],
+        "frame": 57,
+        "hp": 28,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(6.699728, 1.989809, -1.400621)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(8.59594, 0.0, -0.671656)",
+        "safe": false,
+        "simulation": 7.81666666666664,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            1,
+            "recover",
+            "(8.117583, 0.0, 1.214853)",
+            "Recover"
+          ],
+          [
+            6,
+            true,
+            6,
+            "stalk",
+            "(11.23298, 0.0, 2.071289)",
+            "Walk"
+          ],
+          [
+            7,
+            false,
+            2,
+            "lunge",
+            "(10.41816, 0.0, -1.137901)",
+            "Bite"
+          ]
+        ],
+        "frame": 58,
+        "hp": 28,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(6.447917, 1.976456, -1.134948)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(8.346262, 0.0, -0.42932)",
+        "safe": false,
+        "simulation": 7.88333333333331,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            1,
+            "recover",
+            "(8.089068, 0.0, 1.503446)",
+            "Recover"
+          ],
+          [
+            6,
+            true,
+            6,
+            "stalk",
+            "(11.29964, 0.0, 1.967991)",
+            "Walk"
+          ],
+          [
+            7,
+            false,
+            2,
+            "lunge",
+            "(10.12039, 0.0, -1.064554)",
+            "Bite"
+          ]
+        ],
+        "frame": 59,
+        "hp": 28,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(6.340509, 1.96291, -0.723263)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(8.240118, 0.0, -0.041055)",
+        "safe": false,
+        "simulation": 7.94999999999998,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            1,
+            "recover",
+            "(8.030306, 0.0, 1.885362)",
+            "Recover"
+          ],
+          [
+            6,
+            true,
+            6,
+            "stalk",
+            "(11.25595, 0.0, 1.963785)",
+            "Walk"
+          ],
+          [
+            7,
+            false,
+            2,
+            "lunge",
+            "(9.822626, 0.0, -0.991208)",
+            "Bite"
+          ]
+        ],
+        "frame": 60,
+        "hp": 28,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(6.450075, 1.949271, -0.302813)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(8.350074, 0.0, 0.355934)",
+        "safe": false,
+        "simulation": 8.01666666666664,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            1,
+            "recover",
+            "(7.920877, 0.0, 2.207788)",
+            "Recover"
+          ],
+          [
+            6,
+            true,
+            6,
+            "stalk",
+            "(11.14987, 0.0, 2.003349)",
+            "Walk"
+          ],
+          [
+            7,
+            false,
+            2,
+            "recover",
+            "(9.673742, 0.0, -0.954535)",
+            "Recover"
+          ]
+        ],
+        "frame": 61,
+        "hp": 28,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(6.69729, 1.935637, 0.056346)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(8.596806, 0.0, 0.691635)",
+        "safe": false,
+        "simulation": 8.08333333333331,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            1,
+            "recover",
+            "(7.83721, 0.0, 2.343159)",
+            "Recover"
+          ],
+          [
+            6,
+            true,
+            6,
+            "windup",
+            "(11.12886, 0.0, 1.946259)",
+            "Brace"
+          ],
+          [
+            7,
+            false,
+            2,
+            "recover",
+            "(9.673742, 0.0, -0.954535)",
+            "Recover"
+          ]
+        ],
+        "frame": 62,
+        "hp": 28,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(6.948318, 1.922108, 0.413339)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(8.846478, 0.0, 1.025214)",
+        "safe": false,
+        "simulation": 8.14999999999998,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            1,
+            "recover",
+            "(7.793472, 0.0, 2.387691)",
+            "Recover"
+          ],
+          [
+            6,
+            true,
+            6,
+            "windup",
+            "(11.20965, 0.0, 1.96961)",
+            "Brace"
+          ],
+          [
+            7,
+            false,
+            2,
+            "recover",
+            "(9.673742, 0.0, -0.954535)",
+            "Recover"
+          ]
+        ],
+        "frame": 63,
+        "hp": 28,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(7.200217, 1.908781, 0.770243)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(9.096149, 0.0, 1.358793)",
+        "safe": false,
+        "simulation": 8.21666666666665,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            0,
+            "defeated",
+            "(7.793472, 0.0, 2.387691)",
+            "Fall"
+          ],
+          [
+            6,
+            true,
+            6,
+            "windup",
+            "(11.51912, 0.0, 2.034105)",
+            "Brace"
+          ],
+          [
+            7,
+            false,
+            2,
+            "recover",
+            "(9.673742, 0.0, -0.954535)",
+            "Recover"
+          ]
+        ],
+        "frame": 64,
+        "hp": 28,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(7.452982, 1.895755, 1.127017)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(9.345821, 0.0, 1.692371)",
+        "safe": false,
+        "simulation": 8.28333333333332,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            0,
+            "defeated",
+            "(7.793472, 0.0, 2.387691)",
+            "Fall"
+          ],
+          [
+            6,
+            true,
+            6,
+            "windup",
+            "(11.79532, 0.0, 2.053335)",
+            "Brace"
+          ],
+          [
+            7,
+            false,
+            2,
+            "recover",
+            "(9.673742, 0.0, -0.954535)",
+            "Recover"
+          ]
+        ],
+        "frame": 65,
+        "hp": 28,
+        "orbit_active": true,
+        "owl": "bank",
+        "owl_at": "(7.778145, 1.989226, 1.451086)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(9.595493, 0.0, 2.02595)",
+        "safe": false,
+        "simulation": 8.34999999999999,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            0,
+            "defeated",
+            "(7.793472, 0.0, 2.387691)",
+            "Fall"
+          ],
+          [
+            6,
+            true,
+            6,
+            "windup",
+            "(12.02101, 0.0, 2.034422)",
+            "Brace"
+          ],
+          [
+            7,
+            false,
+            2,
+            "recover",
+            "(9.673742, 0.0, -0.954535)",
+            "Recover"
+          ]
+        ],
+        "frame": 66,
+        "hp": 28,
+        "orbit_active": true,
+        "owl": "bank",
+        "owl_at": "(8.319746, 2.376194, 1.661487)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(9.845166, 0.0, 2.359528)",
+        "safe": false,
+        "simulation": 8.41666666666666,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            0,
+            "defeated",
+            "(7.793472, 0.0, 2.387691)",
+            "Fall"
+          ],
+          [
+            6,
+            true,
+            6,
+            "windup",
+            "(12.17701, 0.0, 1.994834)",
+            "Brace"
+          ],
+          [
+            7,
+            false,
+            2,
+            "recover",
+            "(9.673742, 0.0, -0.954535)",
+            "Recover"
+          ]
+        ],
+        "frame": 67,
+        "hp": 28,
+        "orbit_active": true,
+        "owl": "bank",
+        "owl_at": "(8.859165, 2.727196, 1.843177)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(10.08752, 0.0, 2.683321)",
+        "safe": false,
+        "simulation": 8.48333333333333,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            0,
+            "defeated",
+            "(7.793472, 0.0, 2.387691)",
+            "Fall"
+          ],
+          [
+            6,
+            true,
+            6,
+            "windup",
+            "(12.2486, 0.0, 1.965246)",
+            "Brace"
+          ],
+          [
+            7,
+            false,
+            2,
+            "recover",
+            "(9.673742, 0.0, -0.954535)",
+            "Recover"
+          ]
+        ],
+        "frame": 68,
+        "hp": 28,
+        "orbit_active": true,
+        "owl": "bank",
+        "owl_at": "(9.386361, 3.049866, 1.999236)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(10.25212, 0.0, 2.889387)",
+        "safe": false,
+        "simulation": 8.55,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            0,
+            "defeated",
+            "(7.793472, 0.0, 2.387691)",
+            ""
+          ],
+          [
+            6,
+            true,
+            6,
+            "lunge",
+            "(12.16818, 0.0, 2.008193)",
+            "Bite"
+          ],
+          [
+            7,
+            false,
+            2,
+            "recover",
+            "(9.673742, 0.0, -0.954535)",
+            "Recover"
+          ]
+        ],
+        "frame": 69,
+        "hp": 28,
+        "orbit_active": true,
+        "owl": "bank",
+        "owl_at": "(9.886106, 3.355431, 2.14789)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(10.47405, 0.0, 2.998177)",
+        "safe": false,
+        "simulation": 8.61666666666667,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            0,
+            "defeated",
+            "(7.793472, 0.0, 2.387691)",
+            ""
+          ],
+          [
+            6,
+            true,
+            5,
+            "lunge",
+            "(12.29056, 0.0, 1.925488)",
+            "Bite"
+          ],
+          [
+            7,
+            false,
+            2,
+            "recover",
+            "(9.673742, 0.0, -0.954535)",
+            "Recover"
+          ]
+        ],
+        "frame": 70,
+        "hp": 28,
+        "orbit_active": true,
+        "owl": "bank",
+        "owl_at": "(10.36621, 3.636098, 2.262701)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(10.72033, 0.0, 2.977384)",
+        "safe": false,
+        "simulation": 8.68333333333334,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            0,
+            "defeated",
+            "(7.793472, 0.0, 2.387691)",
+            ""
+          ],
+          [
+            6,
+            true,
+            5,
+            "lunge",
+            "(12.54768, 0.0, 1.752404)",
+            "Bite"
+          ],
+          [
+            7,
+            false,
+            2,
+            "recover",
+            "(9.673742, 0.0, -0.954535)",
+            "Recover"
+          ]
+        ],
+        "frame": 71,
+        "hp": 28,
+        "orbit_active": true,
+        "owl": "windup",
+        "owl_at": "(10.66889, 3.745391, 2.165245)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(10.96963, 0.0, 2.792531)",
+        "safe": false,
+        "simulation": 8.75000000000001,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            0,
+            "defeated",
+            "(7.793472, 0.0, 2.387691)",
+            ""
+          ],
+          [
+            6,
+            true,
+            5,
+            "lunge",
+            "(12.82363, 0.0, 1.59549)",
+            "Bite"
+          ],
+          [
+            7,
+            false,
+            2,
+            "guard",
+            "(9.673742, 0.0, -0.954535)",
+            ""
+          ]
+        ],
+        "frame": 72,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "windup",
+        "owl_at": "(10.89068, 3.820526, 2.037709)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(11.12545, 0.0, 2.425116)",
+        "safe": false,
+        "simulation": 8.81666666666668,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            5,
+            false,
+            0,
+            "defeated",
+            "(7.793472, 0.0, 2.387691)",
+            ""
+          ],
+          [
+            6,
+            true,
+            5,
+            "lunge",
+            "(12.96164, 0.0, 1.546692)",
+            "Bite"
+          ],
+          [
+            7,
+            false,
+            2,
+            "stalk",
+            "(9.779222, 0.0, -0.735255)",
+            "Walk"
+          ]
+        ],
+        "frame": 73,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "windup",
+        "owl_at": "(11.1189, 3.904037, 1.928285)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(11.12898, 0.0, 2.008719)",
+        "safe": false,
+        "simulation": 8.88333333333335,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            5,
+            "recover",
+            "(13.19153, 0.0, 1.52943)",
+            "Recover"
+          ],
+          [
+            7,
+            false,
+            1,
+            "stagger",
+            "(9.806896, 0.0, -0.681082)",
+            "Hurt"
+          ]
+        ],
+        "frame": 74,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "dive",
+        "owl_at": "(11.37032, 3.951954, 1.877485)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(11.12411, 0.0, 1.59208)",
+        "safe": false,
+        "simulation": 8.95000000000002,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            5,
+            "recover",
+            "(13.31528, 0.0, 1.533214)",
+            "Recover"
+          ],
+          [
+            7,
+            false,
+            1,
+            "stagger",
+            "(9.714093, 0.0, -0.622025)",
+            "Hurt"
+          ]
+        ],
+        "frame": 75,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "dive",
+        "owl_at": "(11.62228, 3.662948, 1.823669)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(11.11662, 0.0, 1.175481)",
+        "safe": false,
+        "simulation": 9.01666666666669,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            5,
+            "recover",
+            "(13.31528, 0.0, 1.533214)",
+            "Recover"
+          ],
+          [
+            7,
+            false,
+            1,
+            "guard",
+            "(9.590356, 0.0, -0.543283)",
+            "Hurt"
+          ]
+        ],
+        "frame": 76,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "dive",
+        "owl_at": "(11.88957, 3.360718, 1.768144)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(11.10914, 0.0, 0.758882)",
+        "safe": false,
+        "simulation": 9.08333333333336,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            5,
+            "recover",
+            "(13.31528, 0.0, 1.533214)",
+            "Recover"
+          ],
+          [
+            7,
+            false,
+            1,
+            "windup",
+            "(9.559422, 0.0, -0.523598)",
+            "Brace"
+          ]
+        ],
+        "frame": 77,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "dive",
+        "owl_at": "(12.21188, 3.015486, 1.70208)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(11.10166, 0.0, 0.342282)",
+        "safe": false,
+        "simulation": 9.15000000000003,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            5,
+            "recover",
+            "(13.31528, 0.0, 1.533214)",
+            "Recover"
+          ],
+          [
+            7,
+            false,
+            1,
+            "windup",
+            "(9.540448, 0.0, -0.530653)",
+            "Brace"
+          ]
+        ],
+        "frame": 78,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "dive",
+        "owl_at": "(12.62251, 2.632953, 1.618587)",
+        "owl_hits": 1,
+        "part": "pack",
+        "player": "(11.09637, 0.0, 0.047885)",
+        "safe": false,
+        "simulation": 9.2166666666667,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            4,
+            "stagger",
+            "(13.31528, 0.0, 1.533214)",
+            "Hurt"
+          ],
+          [
+            7,
+            false,
+            1,
+            "windup",
+            "(9.396454, 0.0, -0.570967)",
+            "Brace"
+          ]
+        ],
+        "frame": 79,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "strike",
+        "owl_at": "(12.98062, 2.283386, 1.508538)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(11.01048, 0.0, -0.183002)",
+        "safe": false,
+        "simulation": 9.28333333333337,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            4,
+            "stagger",
+            "(13.31528, 0.0, 1.533214)",
+            "Hurt"
+          ],
+          [
+            7,
+            false,
+            1,
+            "windup",
+            "(9.180361, 0.0, -0.611628)",
+            "Brace"
+          ]
+        ],
+        "frame": 80,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "strike",
+        "owl_at": "(12.77878, 2.246107, 1.546241)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.81757, 0.0, -0.337517)",
+        "safe": false,
+        "simulation": 9.35000000000004,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            3,
+            "stagger",
+            "(13.31528, 0.0, 1.533214)",
+            "Hurt"
+          ],
+          [
+            7,
+            false,
+            1,
+            "lunge",
+            "(8.936555, 0.0, -0.651433)",
+            "Bite"
+          ]
+        ],
+        "frame": 81,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "strike",
+        "owl_at": "(12.67516, 2.163865, 1.562744)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.57267, 0.0, -0.370866)",
+        "safe": false,
+        "simulation": 9.41666666666671,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            3,
+            "stagger",
+            "(13.31528, 0.0, 1.533214)",
+            "Hurt"
+          ],
+          [
+            7,
+            false,
+            1,
+            "lunge",
+            "(9.043789, 0.0, -0.637718)",
+            "Bite"
+          ]
+        ],
+        "frame": 82,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "recover",
+        "owl_at": "(12.66977, 2.165605, 1.546798)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.34337, 0.0, -0.272226)",
+        "safe": false,
+        "simulation": 9.48333333333338,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            3,
+            "stagger",
+            "(13.31528, 0.0, 1.533214)",
+            ""
+          ],
+          [
+            7,
+            false,
+            1,
+            "lunge",
+            "(8.980612, 0.0, -0.661039)",
+            "Bite"
+          ]
+        ],
+        "frame": 83,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "recover",
+        "owl_at": "(12.87509, 2.395024, 1.488606)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.18436, 0.0, -0.049762)",
+        "safe": false,
+        "simulation": 9.55000000000005,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            3,
+            "stalk",
+            "(13.202, 0.0, 1.488842)",
+            "Walk"
+          ],
+          [
+            7,
+            false,
+            1,
+            "lunge",
+            "(9.137314, 0.0, -0.634167)",
+            "Bite"
+          ]
+        ],
+        "frame": 84,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "recover",
+        "owl_at": "(13.08042, 2.624442, 1.430414)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.15914, 0.0, 0.261912)",
+        "safe": false,
+        "simulation": 9.61666666666672,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            3,
+            "stalk",
+            "(12.97198, 0.0, 1.409603)",
+            "Walk"
+          ],
+          [
+            7,
+            false,
+            1,
+            "recover",
+            "(9.439568, 0.0, -0.582335)",
+            "Recover"
+          ]
+        ],
+        "frame": 85,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "recover",
+        "owl_at": "(13.28575, 2.853861, 1.372223)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.3129, 0.0, 0.574201)",
+        "safe": false,
+        "simulation": 9.68333333333339,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            3,
+            "windup",
+            "(12.91367, 0.0, 1.392277)",
+            "Brace"
+          ],
+          [
+            7,
+            false,
+            1,
+            "recover",
+            "(9.380651, 0.0, -0.658973)",
+            "Recover"
+          ]
+        ],
+        "frame": 86,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "recover",
+        "owl_at": "(13.49107, 3.08328, 1.314031)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.6243, 0.0, 0.776049)",
+        "safe": false,
+        "simulation": 9.75000000000006,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            3,
+            "windup",
+            "(13.10251, 0.0, 1.448979)",
+            "Brace"
+          ],
+          [
+            7,
+            false,
+            1,
+            "recover",
+            "(9.380651, 0.0, -0.658973)",
+            "Recover"
+          ]
+        ],
+        "frame": 87,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "recover",
+        "owl_at": "(13.6964, 3.312699, 1.255839)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(11.00351, 0.0, 0.790053)",
+        "safe": false,
+        "simulation": 9.81666666666673,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            3,
+            "windup",
+            "(13.32387, 0.0, 1.534815)",
+            "Brace"
+          ],
+          [
+            7,
+            false,
+            0,
+            "defeated",
+            "(9.380651, 0.0, -0.658973)",
+            "Fall"
+          ]
+        ],
+        "frame": 88,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "recover",
+        "owl_at": "(13.90172, 3.542119, 1.197648)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(11.32587, 0.0, 0.613959)",
+        "safe": false,
+        "simulation": 9.8833333333334,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            3,
+            "windup",
+            "(13.35307, 0.0, 1.550034)",
+            "Brace"
+          ],
+          [
+            7,
+            false,
+            0,
+            "defeated",
+            "(9.380651, 0.0, -0.658973)",
+            "Fall"
+          ]
+        ],
+        "frame": 89,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "recover",
+        "owl_at": "(14.10705, 3.771538, 1.139456)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(11.49179, 0.0, 0.333586)",
+        "safe": false,
+        "simulation": 9.95000000000007,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            3,
+            "windup",
+            "(13.35307, 0.0, 1.550034)",
+            "Brace"
+          ],
+          [
+            7,
+            false,
+            0,
+            "defeated",
+            "(9.380651, 0.0, -0.658973)",
+            "Fall"
+          ]
+        ],
+        "frame": 90,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "recover",
+        "owl_at": "(14.1578, 3.82825, 1.125071)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(11.48943, 0.0, 0.048432)",
+        "safe": false,
+        "simulation": 10.0166666666667,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            3,
+            "windup",
+            "(13.35307, 0.0, 1.550034)",
+            "Brace"
+          ],
+          [
+            7,
+            false,
+            0,
+            "defeated",
+            "(9.380651, 0.0, -0.658973)",
+            "Fall"
+          ]
+        ],
+        "frame": 91,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(13.68709, 3.614499, 0.973755)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(11.348, 0.0, -0.18154)",
+        "safe": false,
+        "simulation": 10.0833333333334,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            3,
+            "windup",
+            "(13.35307, 0.0, 1.550034)",
+            "Brace"
+          ],
+          [
+            7,
+            false,
+            0,
+            "defeated",
+            "(9.380651, 0.0, -0.658973)",
+            "Fall"
+          ]
+        ],
+        "frame": 92,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(13.0807, 3.353126, 0.764111)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(11.09377, 0.0, -0.357956)",
+        "safe": false,
+        "simulation": 10.1500000000001,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            3,
+            "lunge",
+            "(13.23523, 0.0, 1.451933)",
+            "Bite"
+          ],
+          [
+            7,
+            false,
+            0,
+            "defeated",
+            "(9.380651, 0.0, -0.658973)",
+            ""
+          ]
+        ],
+        "frame": 93,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(12.49137, 3.121001, 0.544306)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.7592, 0.0, -0.579933)",
+        "safe": false,
+        "simulation": 10.2166666666668,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            3,
+            "lunge",
+            "(12.99954, 0.0, 1.255731)",
+            "Bite"
+          ],
+          [
+            7,
+            false,
+            0,
+            "defeated",
+            "(9.380651, 0.0, -0.658973)",
+            ""
+          ]
+        ],
+        "frame": 94,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(11.91645, 2.918222, 0.31239)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.412, 0.0, -0.810293)",
+        "safe": false,
+        "simulation": 10.2833333333334,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            2,
+            "lunge",
+            "(12.76385, 0.0, 1.059528)",
+            "Bite"
+          ],
+          [
+            7,
+            false,
+            0,
+            "defeated",
+            "(9.380651, 0.0, -0.658973)",
+            ""
+          ]
+        ],
+        "frame": 95,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(11.35585, 2.743099, 0.069388)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.06481, 0.0, -1.040653)",
+        "safe": false,
+        "simulation": 10.3500000000001,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            2,
+            "lunge",
+            "(12.52817, 0.0, 0.863326)",
+            "Bite"
+          ],
+          [
+            7,
+            false,
+            0,
+            "defeated",
+            "(9.380651, 0.0, -0.658973)",
+            ""
+          ]
+        ],
+        "frame": 96,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(10.81094, 2.592842, -0.181882)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(9.778718, 0.0, -1.230469)",
+        "safe": false,
+        "simulation": 10.4166666666668,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            2,
+            "lunge",
+            "(12.29248, 0.0, 0.667124)",
+            "Bite"
+          ],
+          [
+            7,
+            false,
+            0,
+            "defeated",
+            "(9.380651, 0.0, -0.658973)",
+            ""
+          ]
+        ],
+        "frame": 97,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(10.28522, 2.462218, -0.429975)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(9.55626, 0.0, -1.318546)",
+        "safe": false,
+        "simulation": 10.4833333333334,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            2,
+            "recover",
+            "(12.17464, 0.0, 0.569023)",
+            "Recover"
+          ]
+        ],
+        "frame": 98,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(9.769293, 2.349673, -0.651345)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(9.312128, 0.0, -1.279974)",
+        "safe": false,
+        "simulation": 10.5500000000001,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            2,
+            "recover",
+            "(12.17464, 0.0, 0.569023)",
+            "Recover"
+          ]
+        ],
+        "frame": 99,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(9.25769, 2.252611, -0.818205)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(9.122564, 0.0, -1.121372)",
+        "safe": false,
+        "simulation": 10.6166666666668,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            2,
+            "recover",
+            "(12.17464, 0.0, 0.569023)",
+            "Recover"
+          ]
+        ],
+        "frame": 100,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(8.754549, 2.167709, -0.902507)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(9.041415, 0.0, -0.887181)",
+        "safe": false,
+        "simulation": 10.6833333333334,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            2,
+            "recover",
+            "(12.17464, 0.0, 0.569023)",
+            "Recover"
+          ]
+        ],
+        "frame": 101,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(8.277375, 2.090796, -0.862615)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(9.096889, 0.0, -0.62803)",
+        "safe": false,
+        "simulation": 10.7500000000001,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            2,
+            "recover",
+            "(12.17464, 0.0, 0.569023)",
+            "Recover"
+          ]
+        ],
+        "frame": 102,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(7.990015, 2.020912, -0.546668)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(9.303418, 0.0, -0.407054)",
+        "safe": false,
+        "simulation": 10.8166666666668,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            2,
+            "recover",
+            "(12.17464, 0.0, 0.569023)",
+            "Recover"
+          ]
+        ],
+        "frame": 103,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(8.336403, 2.031202, -0.442193)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(9.630155, 0.0, -0.312828)",
+        "safe": false,
+        "simulation": 10.8833333333335,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            2,
+            "recover",
+            "(12.17464, 0.0, 0.569023)",
+            "Recover"
+          ]
+        ],
+        "frame": 104,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(8.710483, 2.042657, -0.542141)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(9.984596, 0.0, -0.406123)",
+        "safe": false,
+        "simulation": 10.9500000000001,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            2,
+            "recover",
+            "(12.17464, 0.0, 0.569023)",
+            "Recover"
+          ]
+        ],
+        "frame": 105,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(8.99496, 2.053437, -0.820337)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.2497, 0.0, -0.676712)",
+        "safe": false,
+        "simulation": 11.0166666666668,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            2,
+            "recover",
+            "(12.17464, 0.0, 0.569023)",
+            "Recover"
+          ]
+        ],
+        "frame": 106,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(9.101891, 2.063464, -1.191423)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.33756, 0.0, -1.039251)",
+        "safe": false,
+        "simulation": 11.0833333333335,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            2,
+            "recover",
+            "(12.17464, 0.0, 0.569023)",
+            "Recover"
+          ]
+        ],
+        "frame": 107,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(9.128828, 2.072666, -1.447905)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.34576, 0.0, -1.286262)",
+        "safe": false,
+        "simulation": 11.1500000000001,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            1,
+            "stagger",
+            "(12.17464, 0.0, 0.569023)",
+            "Hurt"
+          ]
+        ],
+        "frame": 108,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(9.149087, 2.080975, -1.515278)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.34765, 0.0, -1.343257)",
+        "safe": false,
+        "simulation": 11.2166666666668,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            1,
+            "stagger",
+            "(12.17464, 0.0, 0.569023)",
+            "Hurt"
+          ]
+        ],
+        "frame": 109,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(9.16705, 2.088331, -1.526545)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.34765, 0.0, -1.343257)",
+        "safe": false,
+        "simulation": 11.2833333333335,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            1,
+            "stagger",
+            "(12.17464, 0.0, 0.569023)",
+            "Hurt"
+          ]
+        ],
+        "frame": 110,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(9.184578, 2.094681, -1.538679)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.34765, 0.0, -1.343257)",
+        "safe": false,
+        "simulation": 11.3500000000001,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            1,
+            "windup",
+            "(12.17464, 0.0, 0.569023)",
+            "Brace"
+          ]
+        ],
+        "frame": 111,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(9.201638, 2.099977, -1.551659)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.34765, 0.0, -1.343257)",
+        "safe": false,
+        "simulation": 11.4166666666668,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            1,
+            "windup",
+            "(12.17464, 0.0, 0.569023)",
+            "Brace"
+          ]
+        ],
+        "frame": 112,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(9.2182, 2.104182, -1.56546)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.34765, 0.0, -1.343257)",
+        "safe": false,
+        "simulation": 11.4833333333335,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            1,
+            "windup",
+            "(12.17464, 0.0, 0.569023)",
+            "Brace"
+          ]
+        ],
+        "frame": 113,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(9.234232, 2.107265, -1.580059)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.34765, 0.0, -1.343257)",
+        "safe": false,
+        "simulation": 11.5500000000002,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            1,
+            "windup",
+            "(12.17464, 0.0, 0.569023)",
+            "Brace"
+          ]
+        ],
+        "frame": 114,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(9.249706, 2.109203, -1.595428)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.34765, 0.0, -1.343257)",
+        "safe": false,
+        "simulation": 11.6166666666668,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            1,
+            "windup",
+            "(12.17464, 0.0, 0.569023)",
+            "Brace"
+          ]
+        ],
+        "frame": 115,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(9.264595, 2.109983, -1.611539)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.34765, 0.0, -1.343257)",
+        "safe": false,
+        "simulation": 11.6833333333335,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            1,
+            "windup",
+            "(12.17464, 0.0, 0.569023)",
+            "Brace"
+          ]
+        ],
+        "frame": 116,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(9.27887, 2.109599, -1.628363)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.34765, 0.0, -1.343257)",
+        "safe": false,
+        "simulation": 11.7500000000002,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            1,
+            "windup",
+            "(12.17464, 0.0, 0.569023)",
+            "Brace"
+          ]
+        ],
+        "frame": 117,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(9.292506, 2.108053, -1.64587)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.34765, 0.0, -1.343257)",
+        "safe": false,
+        "simulation": 11.8166666666668,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            1,
+            "lunge",
+            "(12.06871, 0.0, 0.458155)",
+            "Bite"
+          ]
+        ],
+        "frame": 118,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(9.305477, 2.105357, -1.664027)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.34765, 0.0, -1.343257)",
+        "safe": false,
+        "simulation": 11.8833333333335,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            1,
+            "lunge",
+            "(11.85687, 0.0, 0.23642)",
+            "Bite"
+          ]
+        ],
+        "frame": 119,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(9.317761, 2.10153, -1.682801)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.34765, 0.0, -1.343257)",
+        "safe": false,
+        "simulation": 11.9500000000002,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            1,
+            "lunge",
+            "(11.65326, 0.0, 0.023306)",
+            "Bite"
+          ]
+        ],
+        "frame": 120,
+        "hp": 24,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(9.329335, 2.096601, -1.702159)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.34765, 0.0, -1.343257)",
+        "safe": false,
+        "simulation": 12.0166666666668,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            0,
+            "defeated",
+            "(11.65326, 0.0, 0.023306)",
+            "Fall"
+          ]
+        ],
+        "frame": 121,
+        "hp": 20,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(9.340178, 2.090605, -1.722065)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.34765, 0.0, -1.343257)",
+        "safe": false,
+        "simulation": 12.0833333333335,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            0,
+            "defeated",
+            "(11.65326, 0.0, 0.023306)",
+            "Fall"
+          ]
+        ],
+        "frame": 122,
+        "hp": 20,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(9.35027, 2.083585, -1.742483)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.34765, 0.0, -1.343257)",
+        "safe": false,
+        "simulation": 12.1500000000002,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            0,
+            "defeated",
+            "(11.65326, 0.0, 0.023306)",
+            "Fall"
+          ]
+        ],
+        "frame": 123,
+        "hp": 20,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(9.359593, 2.075593, -1.763375)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.34765, 0.0, -1.343257)",
+        "safe": false,
+        "simulation": 12.2166666666669,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            0,
+            "defeated",
+            "(11.65326, 0.0, 0.023306)",
+            "Fall"
+          ]
+        ],
+        "frame": 124,
+        "hp": 20,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(9.36813, 2.066688, -1.784704)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.34765, 0.0, -1.343257)",
+        "safe": false,
+        "simulation": 12.2833333333335,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            0,
+            "defeated",
+            "(11.65326, 0.0, 0.023306)",
+            "Fall"
+          ]
+        ],
+        "frame": 125,
+        "hp": 20,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(9.375864, 2.056933, -1.806431)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.34765, 0.0, -1.343257)",
+        "safe": false,
+        "simulation": 12.3500000000002,
+        "zoom": 2.0
+      },
+      {
+        "animals": [
+          [
+            6,
+            true,
+            0,
+            "defeated",
+            "(11.65326, 0.0, 0.023306)",
+            "Fall"
+          ]
+        ],
+        "frame": 126,
+        "hp": 20,
+        "orbit_active": true,
+        "owl": "follow",
+        "owl_at": "(9.382783, 2.0464, -1.828516)",
+        "owl_hits": 2,
+        "part": "pack",
+        "player": "(10.34765, 0.0, -1.343257)",
+        "safe": false,
+        "simulation": 12.4166666666669,
+        "zoom": 2.0
+      }
+    ]
+  }
+}

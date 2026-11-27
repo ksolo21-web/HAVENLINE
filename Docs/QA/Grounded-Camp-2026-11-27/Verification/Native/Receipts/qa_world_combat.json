@@ -1,0 +1,83 @@
+{
+  "stamp": {
+    "commit": "ec989c640233e71ee86dd57e43076e2e932d612a",
+    "manifest": {
+      "sha256": "466fc3ac76a07ee3633f6af3da59a1a92f1b4f16bfaa32a178ad19ff8f915387",
+      "checked_files": 516
+    },
+    "runner": "b6c273375d779611f26c0fdb0b6313d0be56c8b8d6ee43ef3e71e6b149bd137f"
+  },
+  "passed": true,
+  "runs": [
+    {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "log": "qa_world_combat-1.log",
+      "log_sha256": "68f4c18fda4ee7852aa02027b67397e8f7c06e3e88445accf37e3dad0c6d3279",
+      "summary": [
+        {
+          "checks": {
+            "camp_safe_even_after_grace": true,
+            "continuous_full_hp_even_without_threat": true,
+            "damaging_and_receiving_sound_bank": true,
+            "ordinary_spawn_bites_while_player_orbit_is_enabled": true,
+            "paid_bite_contact_within_five_seconds_from_ten_metres": true,
+            "paid_committed_lunge_retains_authored_bite": true,
+            "paid_directional_hero_recoil_and_hit_flash": true,
+            "paid_instant_health_and_trailing_bar": true,
+            "paid_invulnerability_blocks_repeat": true,
+            "paid_old_player_records_restore_without_grace": true,
+            "paid_pursuit_windup_lunge_and_hp_loss": true,
+            "paid_recovery_clear_of_obstacles": true,
+            "paid_reload_does_not_refill_partial_protection": true,
+            "paid_remaining_protection_survives_restore": true,
+            "paid_restores_hud_and_grace": true,
+            "paid_returns_to_correct_floor": true,
+            "paid_uncommitted_wolf_has_animated_damage": true,
+            "paid_visible_fall_before_reset": true,
+            "paid_zero_hp_disarms_and_changes_hud": true,
+            "simultaneous_hits_on_one_wolf_have_distinct_screen_lanes": true,
+            "unpaid_bite_contact_within_five_seconds_from_ten_metres": true,
+            "unpaid_committed_lunge_retains_authored_bite": true,
+            "unpaid_directional_hero_recoil_and_hit_flash": true,
+            "unpaid_instant_health_and_trailing_bar": true,
+            "unpaid_invulnerability_blocks_repeat": true,
+            "unpaid_old_player_records_restore_without_grace": true,
+            "unpaid_pursuit_windup_lunge_and_hp_loss": true,
+            "unpaid_recovery_clear_of_obstacles": true,
+            "unpaid_reload_does_not_refill_partial_protection": true,
+            "unpaid_remaining_protection_survives_restore": true,
+            "unpaid_restores_hud_and_grace": true,
+            "unpaid_returns_to_correct_floor": true,
+            "unpaid_uncommitted_wolf_has_animated_damage": true,
+            "unpaid_visible_fall_before_reset": true,
+            "unpaid_zero_hp_disarms_and_changes_hud": true
+          },
+          "observed": {
+            "normal_wave": {
+              "closest_spawn_m": 6.78653621673584,
+              "orbit_enabled": true,
+              "remaining_hp": 28,
+              "seconds_to_player_bite": 1.96666666666667,
+              "wolves": 2
+            },
+            "paid": {
+              "first_hit_seconds": 2.86666666666667,
+              "health_after_first_bite": 26,
+              "start_range_m": 10.5801706314087,
+              "state_at_contact": "lunge"
+            },
+            "unpaid": {
+              "first_hit_seconds": 2.83333333333333,
+              "health_after_first_bite": 28,
+              "start_range_m": 10.5801706314087,
+              "state_at_contact": "lunge"
+            }
+          },
+          "passed": true
+        }
+      ]
+    }
+  ]
+}

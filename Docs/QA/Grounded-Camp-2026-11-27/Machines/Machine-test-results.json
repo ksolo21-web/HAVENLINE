@@ -1,0 +1,683 @@
+{
+  "level1_completion": {
+    "passed": true,
+    "processes": 16,
+    "total_assertions": 217,
+    "phases": [
+      {
+        "phase": "ledger-edges",
+        "checks": {
+          "fractional level cannot be accepted": true,
+          "ineligible level rejected on old hearth save": true,
+          "ineligible processed_stone rejected on old hearth save": true,
+          "ineligible processed_wood rejected on old hearth save": true,
+          "ineligible served rejected on old hearth save": true,
+          "ineligible worker_carry_token rejected on old hearth save": true,
+          "ineligible worker_deliveries rejected on old hearth save": true,
+          "paid hearth alone cannot release the survivor": true,
+          "paid survivor at first hearth survives without a storage purchase": true,
+          "survivor receipt cannot precede first hearth": true,
+          "uncommitted working receipt cannot alter previous checkpoint": true
+        },
+        "warnings_and_errors": [],
+        "log_sha256": "527af88dd49293fe6cbfbbd2abdc09e12ca9dd2d68e6a2a0c6e5133878998e58"
+      },
+      {
+        "phase": "legacy",
+        "checks": {
+          "prior build committed genuine version-3 save through its own writer": true,
+          "prior eight purchases represented exactly once": true,
+          "prior independent stocks preserved": true,
+          "prior purchase earned-center_hearth-wood-0": true,
+          "prior purchase earned-center_hearth-wood-1": true,
+          "prior purchase earned-center_hearth-wood-2": true,
+          "prior purchase earned-expansion_1-stone-0": true,
+          "prior purchase earned-expansion_1-wood-0": true,
+          "prior purchase earned-expansion_1-wood-1": true,
+          "prior purchase earned-expansion_1-wood-2": true,
+          "prior purchase earned-expansion_2-stone-0": true,
+          "prior purchase earned-expansion_2-stone-1": true,
+          "prior purchase earned-expansion_2-wood-0": true,
+          "prior purchase earned-expansion_2-wood-1": true,
+          "prior purchase earned-expansion_2-wood-2": true,
+          "prior purchase earned-orbit_upgrade-meat-0": true,
+          "prior purchase earned-orbit_upgrade-stone-0": true,
+          "prior purchase earned-orbit_upgrade-stone-1": true,
+          "prior purchase earned-storage_meat-meat-0": true,
+          "prior purchase earned-storage_meat-wood-0": true,
+          "prior purchase earned-storage_meat-wood-1": true,
+          "prior purchase earned-storage_stone-stone-0": true,
+          "prior purchase earned-storage_stone-wood-0": true,
+          "prior purchase earned-storage_stone-wood-1": true,
+          "prior purchase earned-storage_wood-wood-0": true,
+          "prior purchase earned-storage_wood-wood-1": true,
+          "prior purchase earned-watchtower-stone-0": true,
+          "prior purchase earned-watchtower-stone-1": true,
+          "prior purchase earned-watchtower-wood-0": true,
+          "prior purchase earned-watchtower-wood-1": true,
+          "prior purchase earned-watchtower-wood-2": true
+        },
+        "warnings_and_errors": [],
+        "log_sha256": "937dd9190c3cfaa55977ccace853d9e587e6e0f2138d5721dc1724f4ffe09b90"
+      },
+      {
+        "phase": "layout",
+        "checks": {
+          "counter service connects to the same 0.96 m clear aisle": true,
+          "counter service is inside the safe camp": true,
+          "east gate connects to the same 0.96 m clear aisle": true,
+          "east gate is inside the safe camp": true,
+          "gate-east automatically opens from the exterior": true,
+          "gate-east traverses inward": true,
+          "gate-east traverses outward": true,
+          "gate-south automatically opens from the exterior": true,
+          "gate-south traverses inward": true,
+          "gate-south traverses outward": true,
+          "kitchen feed connects to the same 0.96 m clear aisle": true,
+          "kitchen feed is inside the safe camp": true,
+          "leaving the saw restores its full roof and rear wall at 1x zoom": true,
+          "leaving the saw restores its full roof and rear wall at 2x zoom": true,
+          "rear cutaway keeps the physical storehouse closed at 1x zoom": true,
+          "rear cutaway keeps the physical storehouse closed at 2x zoom": true,
+          "roast pickup connects to the same 0.96 m clear aisle": true,
+          "roast pickup is inside the safe camp": true,
+          "saw feed connects to the same 0.96 m clear aisle": true,
+          "saw feed is inside the safe camp": true,
+          "separately paid camp_cookerstone": true,
+          "separately paid camp_cookerwood": true,
+          "separately paid quarry_drillstone": true,
+          "separately paid quarry_drillwood": true,
+          "separately paid saw_benchstone": true,
+          "separately paid saw_benchwood": true,
+          "shipping main scene loaded from disposable profile": true,
+          "south gate connects to the same 0.96 m clear aisle": true,
+          "south gate is inside the safe camp": true,
+          "stone feed connects to the same 0.96 m clear aisle": true,
+          "stone feed is inside the safe camp": true,
+          "storehouse connects to the same 0.96 m clear aisle": true,
+          "storehouse is inside the safe camp": true,
+          "the customer queue stays on the opposite side of the north fence": true,
+          "the retired shore sites have no loading actions": true,
+          "west saw stays visible at 1x zoom": true,
+          "west saw stays visible at 2x zoom": true
+        },
+        "warnings_and_errors": [],
+        "log_sha256": "dc91c6afd243c2b482778275cd94acae5c685ea0f10b111629504a4caa9a1975"
+      },
+      {
+        "phase": "plot-partial",
+        "checks": {
+          "all original receipts and both raw stocks survived migration": true,
+          "eight purchases alone cannot enter the next level": true,
+          "first wood arrives as a separate survivor-plot receipt": true,
+          "legacy v3 started in Level 1": true,
+          "no remote or duplicate worker grants before a physical pickup": true,
+          "partial payment consumes one wood and keeps the survivor waiting": true,
+          "remote cook and remote sale rejected": true,
+          "rescue cannot be claimed remotely": true,
+          "shipping main scene loaded from disposable profile": true,
+          "unpaid plot cannot recruit even alongside the survivor": true
+        },
+        "warnings_and_errors": [],
+        "log_sha256": "38ad377a3a19de38a4ea909d9cf155dc1abc01957eb51abbae776ac00e1e7a4a"
+      },
+      {
+        "phase": "claim",
+        "checks": {
+          "a cooked meal needs a matching consumed raw meat": true,
+          "duplicate worker pickup rejected": true,
+          "invalid cooked rejected atomically": true,
+          "invalid level rejected atomically": true,
+          "invalid served rejected atomically": true,
+          "invalid worker_deliveries rejected atomically": true,
+          "partial survivor payment resumed before the second wood": true,
+          "pending worker pickup left the ground and has no bank credit": true,
+          "purchase consumed exactly the displayed raw amount": true,
+          "remaining wood completes the single survivor purchase": true,
+          "rescue is idempotent": true,
+          "rescue performed by reaching the survivor": true,
+          "same build accepts the valid snapshot": true,
+          "shipping main scene loaded from disposable profile": true,
+          "unearned level 2 rejected atomically": true,
+          "worker claimed a real pine drop": true
+        },
+        "warnings_and_errors": [],
+        "log_sha256": "4698e562730280e7be07cf3f55bf5df69d733f20ce7fe0945e96c2246ec01061"
+      },
+      {
+        "phase": "delivery-interrupted",
+        "checks": {
+          "bank credit and receipt rolled back together": true,
+          "failed shelf receipt left the durable bytes intact": true,
+          "fixture acquires a live save lock": true,
+          "interrupted shelf credit paused new grants": true,
+          "shipping main scene loaded from disposable profile": true,
+          "worker returned with the same single pending token": true
+        },
+        "warnings_and_errors": [],
+        "log_sha256": "a1e89713e5f84437db273621998f2207e849cb00d8cce3dd061884d2f412df0d"
+      },
+      {
+        "phase": "load-cooker",
+        "checks": {
+          "all remaining raw meat can be reserved without cooking it": true,
+          "cancelled flights restored the two carried portions": true,
+          "cook advances after the player leaves": true,
+          "cooker accepts one raw portion through its loading apron": true,
+          "finished token cannot pay a second time": true,
+          "first raw portion can reserve a transfer": true,
+          "fresh process restored the in-progress wood delivery": true,
+          "loading a real hopper debits exactly one carried raw meat": true,
+          "one wood delivery credited exactly once, including any immediately reserved for a machine": true,
+          "partially finished cook is saved before shutdown": true,
+          "reserved outgoing raw portions cannot enter the hopper": true,
+          "shipping main scene loaded from disposable profile": true,
+          "visible HUD displays the unattended production cycle": true,
+          "worker delivers at the real storage shelf": true
+        },
+        "warnings_and_errors": [],
+        "log_sha256": "7985c37eda506c85d9d18a65274b9da299c0a725379f167889fb591aba3b9db0"
+      },
+      {
+        "phase": "cook-interrupted",
+        "checks": {
+          "failed output left the previous envelope intact": true,
+          "fixture acquires a live save lock": true,
+          "interrupted output commit returns its input to the hopper": true,
+          "queued meat and its running clock survived a fresh launch": true,
+          "shipping main scene loaded from disposable profile": true,
+          "unattended cooker reaches a durable transaction": true
+        },
+        "warnings_and_errors": [],
+        "log_sha256": "41432803e1adf3c73e354cc4c45c6344d153aa04487d975c70b27e2075e95804"
+      },
+      {
+        "phase": "cook",
+        "checks": {
+          "counter cannot sell remotely buffered food": true,
+          "empty input and proximity to the counter produce no reward": true,
+          "queued meat and its running clock survived a fresh launch": true,
+          "shipping main scene loaded from disposable profile": true,
+          "stocked or carried raw meat never auto-debits at a distance": true,
+          "unattended cooker reaches a durable transaction": true,
+          "unattended meat finishes once and becomes physical outfeed stock": true
+        },
+        "warnings_and_errors": [],
+        "log_sha256": "31a40359c21b3f378e38b084550fdf2cced6daba5143788323adc7d686765d6d"
+      },
+      {
+        "phase": "pickup-roast",
+        "checks": {
+          "collecting at the distinct output apron equips one cooked meal": true,
+          "output survived restart without teleporting to the player": true,
+          "pickup produces no payment or second input debit": true,
+          "shipping main scene loaded from disposable profile": true
+        },
+        "warnings_and_errors": [],
+        "log_sha256": "51f102938d8af3fa19e962857565922c58903492ac02994340c820264d279989"
+      },
+      {
+        "phase": "interrupted",
+        "checks": {
+          "actual first customer reached the outside marker": true,
+          "failed checkout left hot meal and currency unchanged": true,
+          "failed checkout left the durable envelope byte-identical": true,
+          "failed customer payment paused new grants": true,
+          "fixture acquires a live save lock": true,
+          "ready-to-serve meal persisted independently of the raw stock": true,
+          "service cannot claim a future customer": true,
+          "shipping main scene loaded from disposable profile": true,
+          "waiting customer cannot be served from the wrong side": true
+        },
+        "warnings_and_errors": [],
+        "log_sha256": "6d2dfa802a431236e1c63d85d727d9f2b1deac26ff8ea8a3ce3111cdf56e3f3a"
+      },
+      {
+        "phase": "serve",
+        "checks": {
+          "actual first customer reached the outside marker": true,
+          "exactly one customer paid for one actual meal": true,
+          "finishing the sale waits for the player's Continue action": true,
+          "no second reward without another meal": true,
+          "ready-to-serve meal persisted independently of the raw stock": true,
+          "receipt and currency survive repeated counter ticks": true,
+          "same customer cannot pay twice": true,
+          "service cannot claim a future customer": true,
+          "shipping main scene loaded from disposable profile": true,
+          "waiting customer cannot be served from the wrong side": true
+        },
+        "warnings_and_errors": [],
+        "log_sha256": "7ceb7a99879b62463f5f7c5efc80bc7b2a7801c0fb0a131b7f87ad55563322c9"
+      },
+      {
+        "phase": "machines-and-owl",
+        "checks": {
+          "a sale alone leaves the new production objectives open": true,
+          "both machines finish while the player is away": true,
+          "each completion consumes its own hopper input and saves its own product": true,
+          "empty hoppers cannot make a second batch": true,
+          "live hovering companion earns an actual contact receipt": true,
+          "owl hit saved with both production outputs": true,
+          "physical wolf spawned for owl contact": true,
+          "remote owl callback cannot manufacture a hit": true,
+          "remote stone cannot grant an input receipt": true,
+          "remote wood cannot grant an input receipt": true,
+          "shipping main scene loaded from disposable profile": true,
+          "stocked saw and stone mill operate concurrently": true,
+          "stone loading apron is accessible inside the paid camp": true,
+          "stone loading withdraws once from the player's pack": true,
+          "stone raw input transferred to its own hopper": true,
+          "wood loading apron is accessible inside the paid camp": true,
+          "wood loading withdraws once from the player's pack": true,
+          "wood raw input transferred to its own hopper": true
+        },
+        "warnings_and_errors": [],
+        "log_sha256": "f27cc0fa5625a92d47f7362ad0552a99f0a5812a9d7ebf63b4372ee0c2b31a28"
+      },
+      {
+        "phase": "handoff-interrupted",
+        "checks": {
+          "earned handoff button visible and enabled": true,
+          "failed level write preserves the Level 1 completion and cash": true,
+          "first-reward receipt survived in a new process": true,
+          "fixture acquires a live save lock": true,
+          "shipping main scene loaded from disposable profile": true
+        },
+        "warnings_and_errors": [],
+        "log_sha256": "1c16e95c91b2470b63b75ac443b6e34d2117b72677fd6a6eacc650cb9ccde2b5"
+      },
+      {
+        "phase": "handoff",
+        "checks": {
+          "continuation requires camp purchase camp_cooker": true,
+          "continuation requires camp purchase center_hearth": true,
+          "continuation requires camp purchase expansion_1": true,
+          "continuation requires camp purchase expansion_2": true,
+          "continuation requires camp purchase orbit_upgrade": true,
+          "continuation requires camp purchase quarry_drill": true,
+          "continuation requires camp purchase saw_bench": true,
+          "continuation requires camp purchase storage_meat": true,
+          "continuation requires camp purchase storage_stone": true,
+          "continuation requires camp purchase storage_wood": true,
+          "continuation requires camp purchase watchtower": true,
+          "continuation requires owl_hits": true,
+          "continuation requires processed_stone": true,
+          "continuation requires processed_wood": true,
+          "continuation requires rescued": true,
+          "continuation requires served": true,
+          "continuation requires worker_deliveries": true,
+          "earned handoff button visible and enabled": true,
+          "first-reward receipt survived in a new process": true,
+          "handoff cannot be applied twice": true,
+          "shipping main scene loaded from disposable profile": true,
+          "touching the displayed Continue button commits Level 2 once": true
+        },
+        "warnings_and_errors": [],
+        "log_sha256": "7dfe5a94527208d37b3a8a85f595644d458d42da7c174ba3d5525765ea0e726b"
+      },
+      {
+        "phase": "second-launch",
+        "checks": {
+          "Level 2 arrives in the normal visible gameplay chapter": true,
+          "already-claimed completion avoided a second transition": true,
+          "both finished-material counters match persistent balances": true,
+          "both processed balances and companion contact persisted": true,
+          "cash label reflects the one confirmed wallet payment": true,
+          "cold launch restored Level 2": true,
+          "eight prior purchases and the banked delivery survived": true,
+          "served receipt unchanged on cold launch": true,
+          "shipping main scene loaded from disposable profile": true,
+          "the resumed field shows all Level 1 plots finished and camp open": true,
+          "visible health reading matches the live player": true
+        },
+        "warnings_and_errors": [],
+        "log_sha256": "ff7dcb74dd1eea32829d7de5f749973a73a66dff426ebed2558f35a2ca08e560"
+      }
+    ]
+  },
+  "paid_workshops": {
+    "acquire-headless": {
+      "checks": {
+        "all production receipts conserved without remote forged grants": true,
+        "baseline save reopened": true,
+        "eight expansion receipts restore without machines": true,
+        "future meat model absent": true,
+        "future stone model absent": true,
+        "future wood model absent": true,
+        "meat (-1.0, 0.0) approach 0.51": true,
+        "meat (-1.0, 0.0) approach 1.1": true,
+        "meat (0.0, -1.0) approach 0.51": true,
+        "meat (0.0, -1.0) approach 1.1": true,
+        "meat (0.0, 1.0) approach 0.51": true,
+        "meat (0.0, 1.0) approach 1.1": true,
+        "meat (1.0, 0.0) approach 0.51": true,
+        "meat (1.0, 0.0) approach 1.1": true,
+        "meat buyer can leave following construction": true,
+        "meat buyer outside final solid on purchase frame": true,
+        "meat final receipt paid on nearby edge": true,
+        "meat model and collision earned": true,
+        "meat priced plot visible before touch": true,
+        "no collider or loading receipt before any station purchase": true,
+        "stone (-1.0, 0.0) approach 0.51": true,
+        "stone (-1.0, 0.0) approach 1.1": true,
+        "stone (0.0, -1.0) approach 0.51": true,
+        "stone (0.0, -1.0) approach 1.1": true,
+        "stone (0.0, 1.0) approach 0.51": true,
+        "stone (0.0, 1.0) approach 1.1": true,
+        "stone (1.0, 0.0) approach 0.51": true,
+        "stone (1.0, 0.0) approach 1.1": true,
+        "stone buyer can leave following construction": true,
+        "stone buyer outside final solid on purchase frame": true,
+        "stone final receipt paid on nearby edge": true,
+        "stone model and collision earned": true,
+        "stone priced plot visible before touch": true,
+        "v6 queue, prior work and cooked stock held intact before purchase": true,
+        "valid paid state": true,
+        "wood (-1.0, 0.0) approach 0.51": true,
+        "wood (-1.0, 0.0) approach 1.1": true,
+        "wood (0.0, -1.0) approach 0.51": true,
+        "wood (0.0, -1.0) approach 1.1": true,
+        "wood (0.0, 1.0) approach 0.51": true,
+        "wood (0.0, 1.0) approach 1.1": true,
+        "wood (1.0, 0.0) approach 0.51": true,
+        "wood (1.0, 0.0) approach 1.1": true,
+        "wood buyer can leave following construction": true,
+        "wood buyer outside final solid on purchase frame": true,
+        "wood final receipt paid on nearby edge": true,
+        "wood model and collision earned": true,
+        "wood priced plot visible before touch": true
+      },
+      "visits": {
+        "meat": {
+          "actor": [
+            0.673607409000397,
+            0.00899999961256981,
+            -4.83710098266602
+          ],
+          "elapsed_frames": 194,
+          "landed": {
+            "stone": 8,
+            "wood": 12
+          }
+        },
+        "stone": {
+          "actor": [
+            8.24768924713135,
+            0.00899999961256981,
+            -4.10515880584717
+          ],
+          "elapsed_frames": 429,
+          "landed": {
+            "stone": 12,
+            "wood": 10
+          }
+        },
+        "wood": {
+          "actor": [
+            -3.55329084396362,
+            0.0,
+            -4.93093204498291
+          ],
+          "elapsed_frames": 316,
+          "landed": {
+            "stone": 6,
+            "wood": 14
+          }
+        }
+      }
+    },
+    "reopen-headless": {
+      "checks": {
+        "all three individual purchases survived cold launch": true,
+        "baseline save reopened": true,
+        "original pending wood ran after purchase only": true,
+        "prior output stock preserved": true,
+        "valid paid state": true
+      },
+      "visits": {}
+    },
+    "acquire-render": {
+      "checks": {
+        "all production receipts conserved without remote forged grants": true,
+        "baseline save reopened": true,
+        "eight expansion receipts restore without machines": true,
+        "future meat model absent": true,
+        "future stone model absent": true,
+        "future wood model absent": true,
+        "meat (-1.0, 0.0) approach 0.51": true,
+        "meat (-1.0, 0.0) approach 1.1": true,
+        "meat (0.0, -1.0) approach 0.51": true,
+        "meat (0.0, -1.0) approach 1.1": true,
+        "meat (0.0, 1.0) approach 0.51": true,
+        "meat (0.0, 1.0) approach 1.1": true,
+        "meat (1.0, 0.0) approach 0.51": true,
+        "meat (1.0, 0.0) approach 1.1": true,
+        "meat buyer can leave following construction": true,
+        "meat buyer outside final solid on purchase frame": true,
+        "meat final receipt paid on nearby edge": true,
+        "meat model and collision earned": true,
+        "meat priced plot visible before touch": true,
+        "no collider or loading receipt before any station purchase": true,
+        "stone (-1.0, 0.0) approach 0.51": true,
+        "stone (-1.0, 0.0) approach 1.1": true,
+        "stone (0.0, -1.0) approach 0.51": true,
+        "stone (0.0, -1.0) approach 1.1": true,
+        "stone (0.0, 1.0) approach 0.51": true,
+        "stone (0.0, 1.0) approach 1.1": true,
+        "stone (1.0, 0.0) approach 0.51": true,
+        "stone (1.0, 0.0) approach 1.1": true,
+        "stone buyer can leave following construction": true,
+        "stone buyer outside final solid on purchase frame": true,
+        "stone final receipt paid on nearby edge": true,
+        "stone model and collision earned": true,
+        "stone priced plot visible before touch": true,
+        "v6 queue, prior work and cooked stock held intact before purchase": true,
+        "valid paid state": true,
+        "wood (-1.0, 0.0) approach 0.51": true,
+        "wood (-1.0, 0.0) approach 1.1": true,
+        "wood (0.0, -1.0) approach 0.51": true,
+        "wood (0.0, -1.0) approach 1.1": true,
+        "wood (0.0, 1.0) approach 0.51": true,
+        "wood (0.0, 1.0) approach 1.1": true,
+        "wood (1.0, 0.0) approach 0.51": true,
+        "wood (1.0, 0.0) approach 1.1": true,
+        "wood buyer can leave following construction": true,
+        "wood buyer outside final solid on purchase frame": true,
+        "wood final receipt paid on nearby edge": true,
+        "wood model and collision earned": true,
+        "wood priced plot visible before touch": true
+      },
+      "visits": {
+        "meat": {
+          "actor": [
+            0.668418407440186,
+            0.00899999961256981,
+            -4.8511848449707
+          ],
+          "elapsed_frames": 194,
+          "landed": {
+            "stone": 8,
+            "wood": 12
+          }
+        },
+        "stone": {
+          "actor": [
+            6.94585037231445,
+            0.00899999961256981,
+            -3.9678692817688
+          ],
+          "elapsed_frames": 431,
+          "landed": {
+            "stone": 12,
+            "wood": 10
+          }
+        },
+        "wood": {
+          "actor": [
+            -3.55330467224121,
+            0.0,
+            -4.93093204498291
+          ],
+          "elapsed_frames": 317,
+          "landed": {
+            "stone": 6,
+            "wood": 14
+          }
+        }
+      }
+    },
+    "reopen-render": {
+      "checks": {
+        "all three individual purchases survived cold launch": true,
+        "baseline save reopened": true,
+        "original pending wood ran after purchase only": true,
+        "prior output stock preserved": true,
+        "valid paid state": true
+      },
+      "visits": {}
+    }
+  },
+  "machine_subsystems": {
+    "qa_field_progression": {
+      "Built storage_meat": true,
+      "Built storage_stone": true,
+      "Built storage_wood": true,
+      "East expansion unlocks after all 3 tiers": true,
+      "Existing field save reopens through modern migration": true,
+      "First expansion opens only starter house": true,
+      "Hearth opens only expansion": true,
+      "Historical missing tiers funded in order": true,
+      "Historical out-of-order purchase and partial retained": true,
+      "Insufficient funds storage_meat": true,
+      "Insufficient funds storage_stone": true,
+      "Insufficient funds storage_wood": true,
+      "Migrate funded old axes and exact balances": true,
+      "Migrated equipment purchase order round-trips": true,
+      "Migration cannot spend unavailable stock": true,
+      "No duplicate debit storage_meat": true,
+      "No duplicate debit storage_stone": true,
+      "No duplicate debit storage_wood": true,
+      "No historical double charge": true,
+      "No premature storage purchase": true,
+      "Original field save written through old schema": true,
+      "Partial payment storage_meat": true,
+      "Partial payment storage_stone": true,
+      "Partial payment storage_wood": true,
+      "Post-migration stage commits atomically": true,
+      "Reject reordered unrelated completion": true,
+      "Reload retains grandfathered equipment, stock and new stage": true,
+      "Resume partial storage_meat": true,
+      "Resume partial storage_stone": true,
+      "Resume partial storage_wood": true,
+      "Retains tier and downstream goals": true,
+      "Visual tier independent from earned bays": true,
+      "json round-trip of funded price locks 0": true,
+      "json round-trip of funded price locks 1": true,
+      "json round-trip of funded price locks 2": true,
+      "old partial finishes without windfall; next expansion charges new price": true,
+      "old partially paid hearth still owes two packets": true,
+      "reject unauthorized or doubled price lock center_hearth 0": true,
+      "reject unauthorized or doubled price lock center_hearth 1": true,
+      "reject unauthorized or doubled price lock center_hearth 2": true,
+      "reject unauthorized or doubled price lock storage_stone 0": true,
+      "reject unauthorized or doubled price lock storage_stone 1": true,
+      "reject unauthorized or doubled price lock storage_stone 2": true,
+      "reject unauthorized or doubled price lock unknown 0": true,
+      "reject unauthorized or doubled price lock unknown 1": true,
+      "reject unauthorized or doubled price lock unknown 2": true,
+      "unstarted old install sees the same 200 timber as fresh": true,
+      "v5 partial expansion and earned camp migrate, survivor 0": true,
+      "v5 partial expansion and earned camp migrate, survivor 1": true,
+      "v5 partial expansion and earned camp migrate, survivor 2": true,
+      "v5 survivor contract and payment state retained, receipt 0": true,
+      "v5 survivor contract and payment state retained, receipt 1": true,
+      "v5 survivor contract and payment state retained, receipt 2": true
+    },
+    "qa_field_lakeshore": {
+      "apron": "(-1.04, 0.0, -6.06)",
+      "checks": {
+        "both accessible flanks support collection and supply": true,
+        "distinct real work sockets": true,
+        "dry final approach": true,
+        "future kitchen is absent from the starter camp": true,
+        "idle saw and smoke": true,
+        "lake and station reserved": true,
+        "natural waterline matches both endpoints": true,
+        "opening the service bay enables the cooker and its guard": true,
+        "paused work retains physical pose": true,
+        "requires working apron": true,
+        "restored lake position depenetrates": true,
+        "swept path cannot tunnel": true,
+        "water animation": true,
+        "working saw and smoke": true
+      },
+      "cooker": "(-0.1, 0.0, -7.22)",
+      "input": "(-1.04, 0.514, -7.16)",
+      "output": "(0.88, 0.544, -7.19)",
+      "suite": "lakeshore"
+    },
+    "qa_field_processors": {
+      "checks": {
+        "both_drives_run": true,
+        "cooker_approach_separate": true,
+        "cuttings_at_full_plunge": true,
+        "dry_mast_before_contact": true,
+        "idle_mast_has_no_cuttings": true,
+        "new_stock": true,
+        "restored_stock": true,
+        "stone_approach": true,
+        "stone_driven": true,
+        "stone_guard": true,
+        "stone_reserve": true,
+        "stone_service": true,
+        "stone_sockets": true,
+        "stone_still": true,
+        "unpaid_interior": true,
+        "wood_approach": true,
+        "wood_driven": true,
+        "wood_guard": true,
+        "wood_reserve": true,
+        "wood_service": true,
+        "wood_sockets": true,
+        "wood_still": true
+      },
+      "suite": "camp_workshops"
+    }
+  },
+  "genuine_old_save_migrations": {
+    "real-v5": {
+      "actual old format commit": true,
+      "contributed one of three": true,
+      "harvested one old bundle": true,
+      "real v5 writer": true
+    },
+    "real-new": {
+      "current v7 persisted": true,
+      "future offers at current price": true,
+      "load using current save adapter": true,
+      "no unpaid machine granted": true,
+      "old partial receipt honored": true,
+      "old receipt and pack reconciled": true
+    },
+    "real-cold": {
+      "current v7 persisted": true,
+      "future offers at current price": true,
+      "load using current save adapter": true,
+      "no unpaid machine granted": true,
+      "old partial receipt honored": true,
+      "old receipt and pack reconciled": true
+    },
+    "preview-migration": {
+      "migrated and saved": true,
+      "no machines gifted": true,
+      "preserved earned services and production": true,
+      "restore existing preview completed on eight paid plots": true
+    },
+    "preview-reopen": {
+      "migrated and saved": true,
+      "no machines gifted": true,
+      "preserved earned services and production": true,
+      "restore existing preview completed on eight paid plots": true
+    }
+  }
+}

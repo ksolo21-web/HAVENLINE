@@ -1,0 +1,71 @@
+extends "res://tests/field_route.gd"
+const Profile = preload("res://tests/lifecycle_test_profile.gd")
+var hud
+var checks={}
+var captured={}
+func screen(id):
+ if DisplayServer.get_name()=="headless":return
+ RenderingServer.force_draw(false)
+ var frame=root.get_texture().get_image()
+ frame.save_jpg(out_dir.path_join(id+".jpg"),.94)
+ captured[id]={"tick":Engine.get_physics_frames(),"size":str(frame.get_size()),"hp":field.player_hp,"hint":hud.prompt.text,"cam":field.get_zoom_ratio(),"wood_units":int(hud.numbers.wood.text),"flights":field.carry.flights.size()}
+func run():
+ field=load("res://field_opening.tscn").instantiate()
+ root.add_child(field)
+ current_scene=field
+ camera=field.camera
+ hud=field.opening_hud
+ for i in 8:await physics_frame
+ var safe:Rect2=hud._safe_rect()
+ origin=safe.position+safe.size*Vector2(.33,.72)
+ var plot:Vector3=field.field_env.buy_anchor.global_position
+ # Stage inventory only. From this point the character moves, donates, and reveals the hearth through normal controls.
+ for i in int(field.inventory.costs.center_hearth.wood):field.inventory.collect("hud-input-"+str(i),"wood")
+ field.carry.sync()
+ for i in 5:await physics_frame
+ screen("approach")
+ var got_transfer:=false
+ var got_run:=false
+ for i in 540:
+  await physics_frame
+  var gap:float=field.actor.global_position.distance_to(plot)
+  if gap>0.95:move_to([plot.x,plot.z],.32)
+  else:steer(Vector2.ZERO)
+  if not got_run and i>3 and field.touch_id>=0:
+   got_run=true
+   screen("steer")
+  if not got_transfer and field.inventory.paid.center_hearth.wood>0 and not field.inventory.complete("center_hearth"):
+   screen("pay")
+   got_transfer=true
+  if field.inventory.complete("center_hearth") and field.camp_active:break
+ steer(Vector2.ZERO)
+ for i in 55:await physics_frame
+ checks["paid by approaching"]=field.inventory.complete("center_hearth") and got_transfer
+ checks["real touch moved"]=got_run
+ screen("built")
+ var mid:Vector2=safe.get_center()
+ touch(5,mid-Vector2(60,0),true)
+ touch(6,mid+Vector2(60,0),true)
+ for i in 10:
+  for finger in [5,6]:
+   var drag=InputEventScreenDrag.new()
+   drag.index=finger
+   drag.position=mid+Vector2(60.+float(i+1)*6.,0)*(-1 if finger==5 else 1)
+   root.push_input(drag,true)
+  await physics_frame
+ touch(5,mid-Vector2(120,0),false)
+ touch(6,mid+Vector2(120,0),false)
+ for i in 12:await physics_frame
+ screen("pinch")
+ checks["pinch"]=field.get_zoom_ratio()>1.8
+ var q=field.graphics.quality_button
+ touch(9,q.get_global_rect().get_center(),true)
+ touch(9,q.get_global_rect().get_center(),false)
+ await physics_frame
+ checks["quality toggles without travel"]=not field.graphics.ultra and field.touch_id<0
+ var data={"checks":checks,"capture":captured,"viewport":str(root.size),"canvas":str(safe),"renderer":RenderingServer.get_video_adapter_name()}
+ var file=FileAccess.open(out_dir.path_join("replay.json"),FileAccess.WRITE);file.store_string(JSON.stringify(data,"  ")+"\n");file.close()
+ await Profile.drain_field_audio(self,field)
+ field.queue_free()
+ for i in 3:await process_frame
+ quit(1 if false in checks.values() else 0)

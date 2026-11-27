@@ -1,0 +1,19 @@
+# Paid Level 1 workshops
+
+The cooker, saw bench and quarry drill each require their own purchase. The east expansion opens the cooker offer. Paying for it opens the saw offer, followed by the drill. The prices displayed in the HUD are 120 wood and 80 stone, 140 wood and 60 stone, and 100 wood and 120 stone respectively. A physical bundle represents ten displayed units. Either carried or stored resources can settle an eligible plot.
+
+The pads sit in the north workshop aisle. Payment across an accessible pad edge streams physical goods, and the station appears after the final receipt. Unpurchased stations have no active collision, input, product pickup, operating sound or production. Each purchased machine consumes input locally. The survivor can deliver materials to a purchased machine. Cooked orders remain at the rack until the hero or survivor picks one up for a waiting customer at the fence counter.
+
+The cooker wheel, smoke, firelight, inbound raw cuts and finished roast rack reflect the production cycle. The saw arbor rotates and its held timber travels into the blade. The quarry winch lowers its steel cutting head into stone. Dust and chips escape through the mast at contact, before the cut block moves to the outfeed. An older pending hopper resumes only when its machine is purchased. Material already deposited, partially purchased projects and previously earned results survive an upgrade.
+
+## Reference and playback
+
+[The source-and-gameplay board](Reference-and-gameplay.jpg) pairs each GitHub equipment sheet with crops from the gameplay camera and pinch zoom. The nine full-frame JPGs in this directory retain the HUD and frame edges. [The purchase comparison](Reference-A-and-cooker.mp4) places the supplied recording A on the left and the current game on the right. [The unpaired gameplay clip](Cooker-purchase.mp4) shows the actual purchase input stream, completion flash and cooker reveal. Recording A at 12.5–13.2 seconds shows the payment and rising completion flash. Recording B at 5.7–6.2 seconds shows the camp purchase. The [locked sequence directory](https://github.com/ksolo21-web/HAVENLINE/tree/76645004d91dc6b05425f1ddc8a18017e701b664/Docs/Design/ReferenceVideoLock/2026-11-26-field-loop/Locked-sequences) contains the project’s clips. The saw bench and quarry designs come from Havenline's own turnarounds.
+
+[Model provenance](Models.json) includes source and production hashes, all three Meshy task identifiers and the observed 45-credit aggregate charge. The playable assets use 2,048-pixel color atlases. The captures used Godot 4.7.2's compatibility renderer at 630 × 800 on Linux. These clips establish game behavior at that camera and resolution. The owner's handset and 4K Ultra frame pacing need separate on-device measurement.
+
+## Reproduction and compatibility
+
+The shipping scene is `res://field_opening.tscn`. The purchase route in `res://tests/qa_paid_workshops.gd` stages resources, moves the player with synthetic touchscreen input and buys each machine through the game's ordinary transaction. After each purchase, the route examines the player's full capsule against the built machine, moves away, and confirms the transaction survives a cold launch. It probes eligibility near each edge of the machine's body, and rejects points beyond reach. The full progression suite also injects failed writes during wood delivery, cooking, serving and level handoff, then restarts.
+
+[Machine test results](Machine-test-results.json) contains captured assertions. Separate old checkouts wrote an actual v5 partial expansion with one survivor payment, a v6 eight-purchase camp with unfinished production and stock, and an already completed v6 Level 2 preview. All three were upgraded in disposable profiles. No paid-workshop receipts were granted during migration. Earlier terms of started purchases remained intact. Newly opened offers used current prices.

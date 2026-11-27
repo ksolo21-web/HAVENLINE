@@ -1,0 +1,70 @@
+{
+  "baseline_commit": "76645004d91dc6b05425f1ddc8a18017e701b664",
+  "scene": "res://field_opening.tscn",
+  "source_art_commit": "b80c61f13ba31bb0940792dd47976a8e2878dbf5",
+  "stations": [
+    {
+      "name": "Cooker",
+      "asset": "cooker_processor",
+      "source_sheet": "https://github.com/ksolo21-web/HAVENLINE/blob/b80c61f13ba31bb0940792dd47976a8e2878dbf5/Docs/Design/RenderArchive/2026-11-23/selected/equipment/cooker_processor.png",
+      "source_sheet_sha256": "773a82fdba15a3992dd547e7208d5affed12e94de235caea90115dfd0a8bbbe6",
+      "mesh_reference_upload_uuid": "26411101-63c9-4aa7-a993-46c2f2bb9a7b",
+      "meshy_task_id": "01a21aa4-984d-7753-9ee8-d9a392f6c69a",
+      "raw_glb_sha256": "950fc6b38608be1c0774c1c031bd1c754ad33d2495017105568bf9a1ec359b86",
+      "game_glb_sha256": "455b666d226025e3b0570b2c3dad1347d16b8a37e5e26ae4bc40970b664e351c",
+      "game_texture_sha256": "fe723aa9a1b3347d6c1a48502e45b9513b10c9fcd96ea7805207ffc781da6524"
+    },
+    {
+      "name": "Saw bench",
+      "asset": "saw_station",
+      "source_sheet": "https://github.com/ksolo21-web/HAVENLINE/blob/b80c61f13ba31bb0940792dd47976a8e2878dbf5/Docs/Design/RenderArchive/2026-11-23/selected/equipment/saw_station.png",
+      "source_sheet_sha256": "8191ba20d0cec7c92c22d35c5befa87c53b8c894ca94341681b3c16834e24d15",
+      "mesh_reference_upload_uuid": "c954b703-42ee-49ea-b5b7-bf29f74a4c20",
+      "meshy_task_id": "01a21aa4-9be4-75db-8d26-1c1ce52a0034",
+      "raw_glb_sha256": "c7cda226db30161e38744de58b7c06a95686f483808898d70226c23b1dccf49d",
+      "game_glb_sha256": "32873b680f55144e5d8418b725095d0778946c64112ca882dccc80fa103efa4e",
+      "game_texture_sha256": "844bcf046691a71b5bc4ac1edb5d58366dce7b1a325adc08c45ae5530c782798"
+    },
+    {
+      "name": "Quarry drill",
+      "asset": "quarry_drill_station",
+      "source_sheet": "https://github.com/ksolo21-web/HAVENLINE/blob/b80c61f13ba31bb0940792dd47976a8e2878dbf5/Docs/Design/RenderArchive/2026-11-23/selected/equipment/quarry_drill_station.png",
+      "source_sheet_sha256": "ca532628e80dcc8e2af4b60d787393777718ba4d50b65ac9e799cd40d823463d",
+      "mesh_reference_upload_uuid": "a23b67bb-fd96-4622-8c4e-002499537d51",
+      "meshy_task_id": "01a21aa4-9fe3-715b-bfb9-53425d3bb9ea",
+      "raw_glb_sha256": "2a6278dc84fc4d38914171a867b2d45ccb46d0e9757750f7053ac1567de22d71",
+      "game_glb_sha256": "20f82cd5a63f32fb72394179170aee79094a8aec61611da66132a6afd14c7c8f",
+      "game_texture_sha256": "6de65f042706bd592b425ad5fa130a6672d6d54e33438e5edebcbe663ca78494"
+    }
+  ],
+  "Meshy": {
+    "balance_before": 7435,
+    "balance_after": 7390,
+    "observed_charge_all_three": 45,
+    "individual_quotations": {
+      "geometry_credits": 5,
+      "texture_credits": 10
+    },
+    "individual_final_receipts_supplied": false
+  },
+  "mechanical_component": {
+    "source": "assets/shore_workshops/shore_quarry_drill.glb#DrillHead",
+    "game_file": "assets/paid_workshops/quarry_spindle.glb",
+    "sha256": "f9976598e64350560f2d45caea83fab4882eaa221acf735fbfe194de02a4c940",
+    "travel_m": 0.54,
+    "contact_cue": {
+      "powder_texture_sha256": "0f1f42636ff75d31666a7ae5a218a310126c127d3ff82029fa99ec10b0fdfcf0",
+      "cycle_interval": [
+        0.42,
+        0.866
+      ],
+      "rig_script_sha256": "d771ad9e7732206812fb27f361856a6f0dadc371c102c699630aee629a3b7775",
+      "appearance": "textured mineral powder in the front openings of the mast, plus fragments of the game stone mesh"
+    }
+  },
+  "production": {
+    "cap_material": "77 original positive end-grain triangles with their original UVs. Separate material preserves their local color in cast shadow.",
+    "animation": "independently powered saw arbor and workpiece, quarry winch and cutting head, and cooker axle; active work gates all three. Cooker steam and trays reflect current output.",
+    "textures": "One retained 2048px model color atlas per station. Native captures 630x800 OpenGL llvmpipe."
+  }
+}

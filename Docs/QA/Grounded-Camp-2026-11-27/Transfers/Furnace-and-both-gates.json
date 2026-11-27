@@ -1,0 +1,96 @@
+{
+  "checks": {
+    "Isolated writable world": true,
+    "approach east gate": true,
+    "camp built from the player's landed wood": true,
+    "cross clear courtyard": true,
+    "east entry": true,
+    "east entry reaches safety with orbit holstered": true,
+    "east exit": true,
+    "east exit reaches snow with orbit": true,
+    "fund hearth from the southern lip": true,
+    "south entry": true,
+    "south entry reaches safety with orbit holstered": true,
+    "south exit": true,
+    "south exit reaches snow with orbit": true
+  },
+  "physics_hz": 60,
+  "render_sample_hz": 20,
+  "timeline": [
+    {
+      "action": "opening snow before purchase",
+      "at": "(0.0, 0.0, 6.0)",
+      "camp": false,
+      "inside": false,
+      "orbit": true,
+      "seconds": 0.08
+    },
+    {
+      "action": "fund hearth from the southern lip",
+      "at": "(0.080193, 0.0, 3.531417)",
+      "camp": false,
+      "inside": false,
+      "orbit": true,
+      "seconds": 1.1
+    },
+    {
+      "action": "furnace revealed",
+      "at": "(0.012707, 0.0, 3.23768)",
+      "camp": true,
+      "inside": true,
+      "orbit": false,
+      "seconds": 1.72
+    },
+    {
+      "action": "south exit",
+      "at": "(-0.014336, 0.0, 6.42732)",
+      "camp": true,
+      "inside": false,
+      "orbit": true,
+      "seconds": 3.2
+    },
+    {
+      "action": "south entry",
+      "at": "(0.011445, 0.0, 2.362949)",
+      "camp": true,
+      "inside": true,
+      "orbit": false,
+      "seconds": 4.35
+    },
+    {
+      "action": "cross clear courtyard",
+      "at": "(1.972197, 0.0, 1.570531)",
+      "camp": true,
+      "inside": true,
+      "orbit": false,
+      "seconds": 5.02
+    },
+    {
+      "action": "approach east gate",
+      "at": "(3.518012, 0.0, 0.095816)",
+      "camp": true,
+      "inside": true,
+      "orbit": false,
+      "seconds": 5.65
+    },
+    {
+      "action": "east exit",
+      "at": "(7.477638, 0.0, -0.005825)",
+      "camp": true,
+      "inside": false,
+      "orbit": true,
+      "seconds": 6.58
+    },
+    {
+      "action": "east entry",
+      "at": "(3.385565, 0.0, 0.008356)",
+      "camp": true,
+      "inside": true,
+      "orbit": false,
+      "seconds": 7.75
+    }
+  ],
+  "source": "ec989c640233e71ee86dd57e43076e2e932d612a",
+  "scene": "res://field_opening.tscn",
+  "capture": "480 \u00d7 780 Linux Godot, 20 captured frames per game second at 60 physics ticks. A disposable test profile starts with 20 collected wood bundles so the purchase can be shown immediately. Every movement and payment in the recording uses normal touch input. Audio is recorded from the game mixer during the same take."
+}

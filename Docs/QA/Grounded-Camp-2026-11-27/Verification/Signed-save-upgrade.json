@@ -1,0 +1,42 @@
+{
+  "scene": "res://field_opening.tscn",
+  "source": "ec989c640233e71ee86dd57e43076e2e932d612a",
+  "old_apk": "5e893c6f163d83d4a782eed0e5503a4587a9cf99a7936120533c5688eef5aa48",
+  "apk": "d256e6cd8093ab4099f805b0e6f226bf3fad4a6c27eb6233f29f962cf8abc640",
+  "cases": [
+    {
+      "checks": {
+        "historical schema": true,
+        "old stock journal and tier saved": true,
+        "valid profile": true
+      },
+      "passed": true,
+      "phase": "old"
+    },
+    {
+      "checks": {
+        "all 6 paid camp structures survived": true,
+        "all three machine receipts start unpaid": true,
+        "cooker paid at edge with carried inventory": true,
+        "existing prepared meal and cash retained": true,
+        "only purchased machine revealed": true,
+        "partial in-process goods retained": true,
+        "unpaid equipment absent": true,
+        "valid profile": true
+      },
+      "passed": true,
+      "phase": "upgrade"
+    },
+    {
+      "checks": {
+        "new machine ownership survives cold reload": true,
+        "new run initialized": true,
+        "single receipt for the charge": true,
+        "valid profile": true
+      },
+      "passed": true,
+      "phase": "reload"
+    }
+  ],
+  "environment": "Unmodified signed APK payload run under Linux Godot, isolated real disposable; no physical phone present."
+}

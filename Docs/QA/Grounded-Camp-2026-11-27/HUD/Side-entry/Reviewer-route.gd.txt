@@ -1,0 +1,77 @@
+extends "res://tests/field_route.gd"
+const Session=preload("res://tests/lifecycle_test_profile.gd")
+var trace: Array=[]
+var pictures: Dictionary={}
+var paid_tick:=-1
+var built_tick:=-1
+var phase:="approach"
+var partial:=-1
+var away_tick:=-1
+var want_cancel:=false
+
+func photo(name_,i):
+ RenderingServer.force_draw(false)
+ var img=root.get_texture().get_image()
+ img.save_jpg(out_dir.path_join(name_+".jpg"),.93)
+ pictures[name_]={"frame":i,"paid":field.inventory.paid.center_hearth.wood,"position":str(field.actor.global_position),"flights":field.carry.flights.size(),"visible":field.camp_active,"hint":field.opening_hud.prompt.text,"glow":field.field_env.coal_glow.light_energy,"thaw":field.field_env.snow.get_shader_parameter("reveal")}
+
+func run():
+ field=load("res://field_opening.tscn").instantiate()
+ root.add_child(field)
+ current_scene=field
+ camera=field.camera
+ for i in 5:await physics_frame
+ var plot:Vector3=field.field_env.buy_anchor.global_position
+ field.actor.position=plot+Vector3(4.2,0,.12)
+ camera.position=field.actor.position+field.camera_follow_offset
+ var hud=field.opening_hud
+ origin=hud._safe_rect().position+hud._safe_rect().size*Vector2(.32,.7)
+ for i in 20:field.inventory.collect("edge-visual-"+str(i),"wood")
+ field.carry.sync(true)
+ for i in 500:
+  var paid:int=field.inventory.paid.center_hearth.wood
+  match phase:
+   "approach", "return":
+    if absf(field.actor.position.x-plot.x)>1.54:
+     move_to([plot.x+1.52,plot.z+.10],.09)
+    else:steer(Vector2.ZERO)
+    if phase=="approach" and field.carry.flights.size()>0:
+     photo("01-enter",i)
+     phase="withdraw"
+   "withdraw":
+    move_to([plot.x+3.65,plot.z+.10],.12)
+    if absf(field.actor.position.x-plot.x)>3.5:
+     phase="outside"
+     away_tick=i
+     steer(Vector2.ZERO)
+   "outside":
+    if i-away_tick==26:
+     partial=paid
+     photo("02-left",i)
+    if i-away_tick>=44:
+     want_cancel=paid==partial and 0<partial and partial<20 and not field.camp_active
+     phase="return"
+  if phase=="return" and paid>partial and not pictures.has("03-resume"):photo("03-resume",i)
+  if paid==20 and paid_tick<0:
+   paid_tick=i
+   photo("04-paid",i)
+  if field.camp_active and built_tick<0:
+   built_tick=i
+   photo("05-furnace",i)
+  if built_tick>=0:
+   steer(Vector2.ZERO)
+   var since=i-built_tick
+   if since==6:photo("06-ignition",i)
+   if since==12:photo("07-thaw",i)
+   if since==24:photo("08-perimeter",i)
+   if since==36:photo("09-settled",i)
+   if since>37:break
+  trace.append([i,paid,field.carry.flights.size(),phase])
+  await physics_frame
+ var checks={"cancel kept only airborne payments":want_cancel,"same edge resumes":pictures.has("03-resume"),"built after last due":paid_tick>=0 and built_tick>paid_tick}
+ var data={"checks":checks,"physics_hz":60,"pictures":pictures,"trace":trace,"source_scene":"res://field_opening.tscn"}
+ var f=FileAccess.open(out_dir.path_join("side-entry.json"),FileAccess.WRITE);f.store_string(JSON.stringify(data,"  ")+"\n");f.close()
+ await Session.drain_field_audio(self,field)
+ field.queue_free()
+ for i in 4:await process_frame
+ quit(1 if false in checks.values() else 0)

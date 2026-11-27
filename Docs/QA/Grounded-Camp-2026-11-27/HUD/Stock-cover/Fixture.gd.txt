@@ -1,0 +1,62 @@
+extends SceneTree
+const Session=preload("res://tests/lifecycle_test_profile.gd")
+var field
+var checks:={}
+func _initialize():run.call_deferred()
+func run():
+ field=load("res://field_opening.tscn").instantiate()
+ root.add_child(field)
+ current_scene=field
+ for i in 5:await physics_frame
+ # A staged ledger exercises the largest real layout. The separate touch replay earns the first hearth.
+ var seq=0
+ for id in ["center_hearth","expansion_1","storage_wood","storage_stone"]:
+  for kind in field.inventory.costs[id]:
+   for i in field.inventory.costs[id][kind]:
+    seq+=1
+    field.inventory.collect("stock-hud-%d"%seq,kind)
+    field.inventory.payment(id,kind,false)
+ field._apply_hearth(true,false)
+ field.reveal_countdown=-1.
+ field._refresh_field()
+ for kind in field.inventory.KINDS:
+  for i in 5:
+   seq+=1
+   field.inventory.collect("stock-hud-%d"%seq,kind)
+   if i<2:field.inventory.deposit(kind)
+ field.carry.sync(true)
+ var j=field.inventory.settlement
+ j.cooked=4
+ j.served=1
+ j.worker_meal=1
+ j.held_meal=1
+ j.processed_wood=10
+ j.processed_stone=6
+ field.actor.global_position=field.depot.APRON
+ field.camera.position=field.actor.position+field.camera_follow_offset
+ field._refresh_field()
+ var hud=field.opening_hud
+ field.set_physics_process(false)
+ field.carry.set_physics_process(false)
+ hud.settlement_status(j,.36)
+ field._refresh_hud_field(false)
+ hud.field_status(field.inventory.carried,field.depot.hint())
+ hud.reflow()
+ for mode in [1.,2.]:
+  field.set_zoom_ratio(mode)
+  for i in 4:await process_frame
+  RenderingServer.force_draw(false)
+  root.get_texture().get_image().save_jpg(OS.get_environment("FIELD_QA_OUTPUT").path_join("stock-%dx.jpg"%int(mode)),.94)
+ var safe:Rect2=hud._safe_rect()
+ for kind in hud.display_goods:
+  var c=hud.display_goods[kind]
+  checks[kind+" distinct visible good and numeric gap"]=c.is_visible_in_tree() and safe.encloses(c.get_global_rect()) and c.art.get_global_rect().end.x+2.<c.amount.get_global_rect().position.x
+ checks["in-transit meals excluded"]=hud.outputs.meals.text=="1"
+ checks["receipt text"]=hud.ticket.costs.size()==6
+ checks["cashboards stay clear of character"]=not hud.stock_row.get_global_rect().has_point(safe.get_center())
+ var json={"checks":checks,"projection":str(root.size),"stock":field.inventory.stored,"carry":field.inventory.carried,"sale":j.served,"hud":hud.prompt.text,"renderer":RenderingServer.get_video_adapter_name()}
+ var f=FileAccess.open(OS.get_environment("FIELD_QA_OUTPUT").path_join("late.json"),FileAccess.WRITE);f.store_string(JSON.stringify(json,"  ")+"\n");f.close()
+ await Session.drain_field_audio(self,field)
+ field.queue_free()
+ for i in 3:await process_frame
+ quit(int(checks.values().has(false)))

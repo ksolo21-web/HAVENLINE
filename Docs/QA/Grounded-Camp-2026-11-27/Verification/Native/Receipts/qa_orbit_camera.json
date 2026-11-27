@@ -1,0 +1,55 @@
+{
+  "stamp": {
+    "commit": "ec989c640233e71ee86dd57e43076e2e932d612a",
+    "manifest": {
+      "sha256": "466fc3ac76a07ee3633f6af3da59a1a92f1b4f16bfaa32a178ad19ff8f915387",
+      "checked_files": 516
+    },
+    "runner": "b6c273375d779611f26c0fdb0b6313d0be56c8b8d6ee43ef3e71e6b149bd137f"
+  },
+  "passed": true,
+  "runs": [
+    {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "log": "qa_orbit_camera-1.log",
+      "log_sha256": "69b34311566df4dd5ef0e1f3a6af05067a825fd43114f586e02dedf070344c7e",
+      "summary": [
+        {
+          "checks": {
+            "Ultra enabled at native resolution and 4x MSAA": true,
+            "Ultra preserves visible ground inside shadows": true,
+            "camera uses the short axis": true,
+            "canceled movement clears held input": true,
+            "compact status stays clear of centered orbit": true,
+            "default authored angle and normal span": true,
+            "focus loss cancels stick and pinch ownership": true,
+            "folding preserves the camera aim and restores the previous offset": true,
+            "graphics control restores Ultra": true,
+            "graphics control selects standard without movement": true,
+            "long status wraps in full inside the panel": true,
+            "near plane clears foreground snow and canopies on both Fold orientations": true,
+            "new single-finger gesture acquires movement": true,
+            "one finger moves and an unrelated drag leaves it owned": true,
+            "pinch clamps at authored normal view": true,
+            "pinch clamps at two times": true,
+            "replacement finger rebases without zoom jump": true,
+            "second finger releases movement stick": true,
+            "span ratio drives proportional zoom": true,
+            "surviving finger cannot take over movement": true,
+            "textured scene materials use anisotropic filtering": true,
+            "third finger does not disturb active pinch": true,
+            "trial canvas fills the window": true
+          },
+          "filtered_materials": 17,
+          "framebuffer": "(64, 64)",
+          "quality": "Graphics \u00b7 Ultra",
+          "renderer": "gl_compatibility",
+          "scene_draw_scale": 1.0,
+          "suite": "orbit_camera"
+        }
+      ]
+    }
+  ]
+}

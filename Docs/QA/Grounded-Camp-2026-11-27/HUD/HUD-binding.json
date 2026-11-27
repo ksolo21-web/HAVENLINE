@@ -1,0 +1,38 @@
+{
+  "builder": "hud_redesign",
+  "reviewer": "root",
+  "files": {
+    "field_hud.gd": "502ec2abae158c2f7537ff5c889d6020e2c0371f15036913a3594b958d21c8b5",
+    "field_hud_objective.gd": "320745c5395b4b0b6d3d7a282409659659b36a8b3adb283910584423b38dd628",
+    "field_thumbstick.gd": "a1fdabe3403bb51c0f52e60e5c8c60fcf698737ece7776932d58c8b80d0fae48",
+    "field_navigation.gd": "459d12c7ac838151d712782c3153d5d94b5de360ea6cd49896af1deb806ec8cb",
+    "tests/qa_field_hud.gd": "a821d875c6b1bdb7c1453baed13ec5db38905446897e3f7ad3677e6033c4e01b",
+    "assets/field_ui/camp_portrait.png": "e3248ee1267571260aa750638203d246d9eb6a018bb655a61f6bdf6b40547fe7",
+    "assets/field_ui/camp_goods.png": "e08abcbb14362b9e293dd52c71fc45f11700ddf570f2c1824fda94ad840fdf7a",
+    "assets/field_ui/portrait_medallion.gdshader": "3ba6405e63c1d2331b4b8d8236142205d85c9731ecf149d63e33cba8351bbd76"
+  },
+  "references": [
+    {
+      "id": "A",
+      "time": "00:03",
+      "scene": "cash counter, translucent movable thumbstick and ground price"
+    },
+    {
+      "id": "B",
+      "time": "00:28, 00:48",
+      "scene": "cash counter, inventory conveyed by props and supply piles"
+    }
+  ],
+  "reviewed_checkpoint": "10212ea439446634a23b8238eb4decc8e8ee8789",
+  "independent_reviewer": "root",
+  "status": "PASS",
+  "score": 9.5,
+  "scope": "Functional and responsive HUD on native covered, unfolded, zoomed, loaded and side-payment scenes",
+  "native_layout_checks": 44,
+  "home_navigation_checks": 35,
+  "limits": [
+    "Desktop Godot compatibility renderer rather than a physical Fold7",
+    "Original ad has fewer permanent controls",
+    "Independent rating covers this HUD, not the whole game"
+  ]
+}
