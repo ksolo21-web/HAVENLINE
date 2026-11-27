@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/conveyor_critic",
+  "recorded_utc": "2026-11-27T03:27:46.095155+00:00",
+  "candidate": "renders/conveyor-transport-r1.png",
+  "sha256": "2a03dfbc2c738d4092404db1d0c3b9280e929ef22dd7752005419af210a8afe0",
+  "native_size": [
+    1672,
+    941
+  ],
+  "prompt": "prompts/conveyor-transport-r1.txt",
+  "prompt_sha256": "28c3c386ff22c3d253ff6200b5d823ef6a056153112d58bb2b224b981385e660",
+  "full_native_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/conveyor-transport-r1-height-forward.png",
+      "box": [
+        1075,
+        105,
+        1660,
+        460
+      ],
+      "sha256": "41059510f956a10c69b1ef68fc69ad8b227e8e83c37caeb440340fd5f9712271"
+    },
+    {
+      "path": "reviews/evidence/conveyor-transport-r1-height-reverse.png",
+      "box": [
+        1075,
+        520,
+        1660,
+        875
+      ],
+      "sha256": "8cb60d7234ea47cd8164128df3a833d837b69e011f913014fc71cf5a7de85fd9"
+    },
+    {
+      "path": "reviews/evidence/conveyor-transport-r1-corner-forward.png",
+      "box": [
+        580,
+        105,
+        1065,
+        460
+      ],
+      "sha256": "0265850b41d23dd577f6e1f1d4e85fa88632ce2cb7a2de34abdbc10ca50abb01"
+    },
+    {
+      "path": "reviews/evidence/conveyor-transport-r1-corner-reverse.png",
+      "box": [
+        580,
+        520,
+        1065,
+        875
+      ],
+      "sha256": "9ba49f1dba01af149aa48e8486ea89ea996cf679f39a0a66be0c641d9cc2212c"
+    }
+  ],
+  "score": 8.7,
+  "threshold": 9.5,
+  "status": "REPAIR_REQUIRED",
+  "checks": {
+    "style_material_family": "PASS",
+    "three_modules_opposing_views": "PASS",
+    "supported_continuous_transfer_surfaces": "PASS",
+    "height_adapter_positive_cleats": "PASS",
+    "direction_consistency": "FAIL",
+    "corner_flow_direction_readability": "NEEDS_REPAIR",
+    "scope_truthfulness": "PASS"
+  },
+  "findings": [
+    {
+      "severity": "MANDATORY",
+      "location": "height-adapter top-right and bottom-right panels",
+      "issue": "Top view side chevron points from low left inlet uphill to high right discharge. Opposing view points from high left down toward low right. Direction reverses under camera rotation, contradicting same one-way module.",
+      "repair": "In bottom-right view, chevrons must point up-left toward the high end. Preserve geometry and the correct top view."
+    },
+    {
+      "severity": "MANDATORY_FOR_FLOW_READABILITY",
+      "location": "both corner panels",
+      "issue": "No direction cue identifies input/output or proves consistent handed one-way flow across the opposing views.",
+      "repair": "Add small coherent direction cues or IN/OUT endpoint markings in both views, with physical endpoints fixed under rotation. Keep rollers and rails intact."
+    },
+    {
+      "severity": "POSITIVE",
+      "location": "all panels",
+      "issue": "Orange rounded rails, charcoal carry surfaces, silver joins and blue drive match source; adjustable legs are grounded and transfer surfaces appear continuous; tapered corner rollers and incline cleats have clear functional purpose."
+    }
+  ],
+  "required_repairs": [
+    "Correct lower height-adapter arrow direction",
+    "Add coherent corner input/output direction cues"
+  ],
+  "approval_boundary": "Sheet only; exact routing geometry, integration states, storage/counter links, source inventory and publication remain independently pending. No numerical averaging waives failed direction."
+}

@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/conveyor_critic",
+  "recorded_utc": "2026-11-27T04:00:10.531231+00:00",
+  "candidate": "renders/conveyor-storage-r4.png",
+  "sha256": "5725429e5cd9539cf22c2ed2cdb3a4b3d6c92ec853fab5d257c0ad2003b9397b",
+  "native_size": [
+    1672,
+    941
+  ],
+  "prompt": "prompts/conveyor-storage-r4.txt",
+  "prompt_sha256": "3d16d1e1ae586336c6f97385a472b5d87cd3ae548e25c85166df1f374e315b33",
+  "requirements_sha256": "40a11533d116d78ebc7fe17bc52b7817b9595f62b32eaf78be89a91407487bc9",
+  "full_native_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/conveyor-storage-r4-utility-out-mark-tight.png",
+      "box": [
+        285,
+        385,
+        390,
+        458
+      ],
+      "sha256": "6b9c422a47b9dd5cbe31909b595f0142aba83c50451165a3a455ed1ce34750c4"
+    },
+    {
+      "path": "reviews/evidence/conveyor-storage-r4-food-out-mark-tight.png",
+      "box": [
+        1256,
+        328,
+        1338,
+        394
+      ],
+      "sha256": "b3dbc95a2605b8e2fb7355f06cba70a002780826be0a9da8166fd328052377b8"
+    }
+  ],
+  "retest_of": "reviews/conveyor-storage-r3-review.json",
+  "prior_review_sha256": "146d258dbb1c52eeed327375711ed67f2760c6c225c99f7175f9ad6ab3f65c3a",
+  "score": 9.2,
+  "threshold": 9.5,
+  "status": "REPAIR_REQUIRED_UNCHANGED_DEFECT",
+  "checks": {
+    "structural_and_local_transfer_corrections_retained": "PASS",
+    "inward_white_marks_removed_from_out_guards": "FAIL"
+  },
+  "findings": [
+    "Actual r4 pixels still retain the small double-chevron on upper-left utility OUT guard and faint arrow-shaped mark on upper-right food OUT guard. The required cleanup did not succeed.",
+    "Local utility low receiving/dispatch landings and lift, raised food same-rear-wall shuttle, original house features and clear front apron remain intact."
+  ],
+  "required_repairs": [
+    "Change only outbound guard treatment to remove contradictory inward marks. Proposed deep-blue OUT guards with explicit OUT plates are an acceptable new differentiation if geometry and role consistency are preserved."
+  ],
+  "approval_boundary": "No approval or score increase for an unchanged mandatory defect; final static storage sheet remains pending."
+}

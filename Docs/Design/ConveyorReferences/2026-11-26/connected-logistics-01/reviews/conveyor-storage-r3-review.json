@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/conveyor_critic",
+  "recorded_utc": "2026-11-27T03:55:10.380306+00:00",
+  "candidate": "renders/conveyor-storage-r3.png",
+  "sha256": "c11000057029e42d6d6fc89c2dfae5e3a73e49b381aabc58e4d823f5647d7834",
+  "native_size": [
+    1672,
+    941
+  ],
+  "prompt": "prompts/conveyor-storage-r3.txt",
+  "prompt_sha256": "1ec1260329da4f4cb724cd40773b2437b2857e9b1ff3dd370035740c8ca4440a",
+  "requirements_sha256": "40a11533d116d78ebc7fe17bc52b7817b9595f62b32eaf78be89a91407487bc9",
+  "full_native_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/conveyor-storage-r3-utility-out-mark-tight.png",
+      "box": [
+        285,
+        385,
+        390,
+        458
+      ],
+      "sha256": "c9b48de97775825fa01634a2c88a9989391ff0ccdf7a807dd420912c51aa1ea9"
+    },
+    {
+      "path": "reviews/evidence/conveyor-storage-r3-food-out-mark-tight.png",
+      "box": [
+        1256,
+        328,
+        1338,
+        394
+      ],
+      "sha256": "164a60dfdc423b9ab9a2b4ef06c9a51d4d7ba40b744ceb30b63922d783db62da"
+    },
+    {
+      "path": "reviews/evidence/conveyor-storage-r3-utility-low-docks.png",
+      "box": [
+        210,
+        560,
+        800,
+        870
+      ],
+      "sha256": "91c1fb317733e96c2744e4303c2a193ee56a6bdece861b5e29250e8917fd24f7"
+    },
+    {
+      "path": "reviews/evidence/conveyor-storage-r3-food-section.png",
+      "box": [
+        847,
+        523,
+        1657,
+        886
+      ],
+      "sha256": "f601504d1e6b4d641c5185552cbd2f6f232876c6af87e9c48ee46db7e9e3b33e"
+    }
+  ],
+  "threshold": 9.5,
+  "retest_of": "reviews/conveyor-storage-r2-review.json",
+  "prior_review_sha256": "fbea4e36e76ef5c4bc4fa07e8339f6b744d60c62c4bcfaf75bfa7ccceb859cef",
+  "score": 9.2,
+  "status": "REPAIR_REQUIRED",
+  "checks": {
+    "original_shell_features": "PASS",
+    "new_ports_explicit_proposal": "PASS",
+    "front_door_and_apron_clear": "PASS",
+    "food_same_rear_plane_and_elevation": "PASS",
+    "utility_low_receive_lift_dispatch_path": "PASS",
+    "indexed_item_forms": "PASS",
+    "local_bay_and_manual_zone_separation": "PASS",
+    "port_role_labels": "PASS",
+    "no_contradictory_direction_marks": "FAIL"
+  },
+  "findings": [
+    {
+      "severity": "MANDATORY_FINAL_CLEANUP",
+      "issue": "Top-left utility OUT rail retains a clear small white double chevron pointing inward; top-right food OUT rail retains a faint arrow-shaped white residue. Both conflict with the OUT role despite correct plaques.",
+      "repair": "Surgical orange-paint cleanup on those two native crop regions, preserving all geometry, text, material lighting and mechanisms."
+    },
+    {
+      "severity": "FIXED",
+      "issue": "Utility close section now exposes low IN and OUT landing trays, a continuous low dock/index rail and vertical lift to the timber/material compartments. The prior unexplained high-only receiving point is gone."
+    },
+    {
+      "severity": "PASS",
+      "issue": "Raised food cassette, paired rear-wall sleeves, local shuttle, prepared-food shelf and closed raw cabinets remain coherent; source window/vent/fuel hatch/front access remain separate."
+    }
+  ],
+  "required_repairs": [
+    "Remove final white inward-pointing rail marks on OUT cassettes"
+  ],
+  "approval_boundary": "All structural/interface fixes pass, but final contradictory direction cue still blocks sheet acceptance. No whole-building automation or runtime fit claim."
+}

@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/conveyor_critic",
+  "recorded_utc": "2026-11-27T04:15:22.384847+00:00",
+  "candidate": "renders/conveyor-camp-r3.png",
+  "sha256": "be1f1177fbafcfdfa856d2ba1e006f697e5ecd83d0d0b5678b5f82c68498e916",
+  "native_size": [
+    1672,
+    941
+  ],
+  "prompt": "prompts/conveyor-camp-r3.txt",
+  "prompt_sha256": "7170afa32af2c2e98e275f7d14746032896bd1e85af4fb9bae5e06115492123e",
+  "requirements_sha256": "40a11533d116d78ebc7fe17bc52b7817b9595f62b32eaf78be89a91407487bc9",
+  "full_native_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/conveyor-camp-r3-uncontrolled-confluence.png",
+      "box": [
+        490,
+        250,
+        1150,
+        495
+      ],
+      "sha256": "192f7993a3907eb81ccab4e0b01e6629e674130238394867c5f2a31244ed5ace"
+    },
+    {
+      "path": "reviews/evidence/conveyor-camp-r3-house-identity-service.png",
+      "box": [
+        90,
+        135,
+        565,
+        530
+      ],
+      "sha256": "f89c9b4e2ab615246cd40ad9f3f337b884f2fb077f96b15db9456519ff7d0b00"
+    },
+    {
+      "path": "reviews/evidence/conveyor-camp-r3-counter-orientation.png",
+      "box": [
+        1260,
+        455,
+        1590,
+        765
+      ],
+      "sha256": "f1e733e4d7c17f78bbad4fca2cbffee20c1834fab9af4b20aa8915121266aead"
+    },
+    {
+      "path": "reviews/evidence/conveyor-camp-r3-correct-raw-feed.png",
+      "box": [
+        835,
+        145,
+        1570,
+        360
+      ],
+      "sha256": "525e236cec252118da9fbee1b74c48300c0a0f71099fea0e51da63b4dc569d12"
+    }
+  ],
+  "retest_of": "reviews/conveyor-camp-r2-review.json",
+  "prior_review_sha256": "0a948e71d88ebf89ed02d65f9771ebd19fcee945116302824adfead005e8f9ce",
+  "threshold": 9.5,
+  "score": 8.7,
+  "status": "REPAIR_REQUIRED",
+  "checks": {
+    "raw_intake_to_east_cooker_input": "PASS",
+    "west_cooked_output_to_diverter": "PASS",
+    "surplus_branch_to_food_storage_in": "PASS_CONCEPT_ROLE",
+    "storage_out_independent_gated_merge_transfer": "FAIL",
+    "source_storage_front_gable_identity": "FAIL",
+    "source_storage_blue_out_guard_consistency": "FAIL",
+    "counter_east_boundary_customer_opening": "PASS",
+    "staff_register_cash_pickup_separate": "PASS",
+    "front_doors_and_gate_approaches_clear": "PASS",
+    "continuous_west_rear_service_access": "FAIL_UNPROVEN",
+    "no_food_or_utility_to_heater": "PASS"
+  },
+  "repaired_findings": [
+    "Whole cooker has been reversed so raw intake feeds east IN and cooked output leaves west OUT. The raw and prepared chains no longer meet at the intake.",
+    "The customer table now runs north-south at an east boundary opening, with register toward the south/customer-left end, staff controls inside, outside frontage unobstructed, and a separate guarded pickup buffer."
+  ],
+  "findings": [
+    {
+      "id": "C3-F1",
+      "severity": "blocking",
+      "observation": "At the confluence near native (780,355), horizontal storage OUT ends against the descending fresh branch side guard. There is no continuous shared transfer surface with separately controlled inlets. Two green gate assemblies farther downstream do not control those two source approaches."
+    },
+    {
+      "id": "C3-F2",
+      "severity": "blocking",
+      "observation": "The front gable above the original sliding doors now has a round vent instead of its crate emblem. The vent belongs on the rear, so this changes a canonical source feature."
+    },
+    {
+      "id": "C3-F3",
+      "severity": "blocking",
+      "observation": "The latest blue OUT dock guards/plates from selected storage r5 are missing; the utility OUT rail is orange again. Preserve the proposed receiving/dispatch distinction at the short dock sections."
+    },
+    {
+      "id": "C3-F4",
+      "severity": "blocking",
+      "observation": "The house remains crowded into the northwest corner. The view does not establish a continuous empty service strip around the outside of the utility footprint and behind the rear food docks. Roof occlusion also makes the paired same-rear-wall sleeve locations difficult to establish."
+    }
+  ],
+  "required_repairs": [
+    "Turn the actual confluence into a genuine supported gated merge. Gate the west/storage approach before the common surface and separately gate the north/fresh approach before the same surface. Keep one outgoing lane east. Remove the misleading gate pair farther downstream and replace it with ordinary supported transport.",
+    "Restore front crate emblem, retain rear vent only, and restore dock-specific blue OUT guards with OUT plates. General belt rails remain orange.",
+    "Modestly reduce/reposition the house or expand its reserved margin so continuous west/rear service floor is visibly connected to the gate corridor and cooker rear service strip. Preserve both food sleeves as one paired rear dock.",
+    "Retain the corrected raw feed, physical cooker handedness and east-boundary counter orientation. No wider redesign is required."
+  ],
+  "approval_boundary": "Static camp scene remains unapproved. Correct raw feed and counter access do not compensate for the failed storage dispatch interface and service evidence. Keep r3 and this review."
+}

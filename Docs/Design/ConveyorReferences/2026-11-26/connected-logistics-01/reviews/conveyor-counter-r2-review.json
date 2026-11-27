@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/conveyor_critic",
+  "recorded_utc": "2026-11-27T03:49:24.044106+00:00",
+  "candidate": "renders/conveyor-counter-r2.png",
+  "sha256": "c33aeb44c9989cc580e74718ab949802a16692076902a5ba89c4bff73c8669f7",
+  "native_size": [
+    1672,
+    941
+  ],
+  "prompt": "prompts/conveyor-counter-r2.txt",
+  "prompt_sha256": "2b77da0d29cbf45e3bbd08ad42afd076ab033c832dffd3f4c5dfac086441f29c",
+  "requirements_sha256": "40a11533d116d78ebc7fe17bc52b7817b9595f62b32eaf78be89a91407487bc9",
+  "full_native_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/conveyor-counter-r2-customer-side.png",
+      "box": [
+        15,
+        110,
+        826,
+        457
+      ],
+      "sha256": "4f92ce3f3aeb4a22aee5f381ce8c9590b062259fec54cb9b7d7eb07114a205c5"
+    },
+    {
+      "path": "reviews/evidence/conveyor-counter-r2-staff-side.png",
+      "box": [
+        846,
+        110,
+        1663,
+        457
+      ],
+      "sha256": "fab4eccc7c650f73d9b3121c549a4ffc3b04679be3c122a66193cd294aa1414c"
+    },
+    {
+      "path": "reviews/evidence/conveyor-counter-r2-ready-gate.png",
+      "box": [
+        14,
+        477,
+        630,
+        825
+      ],
+      "sha256": "bf55b460a789b1530f762fdd864d925a957f94fea56ce9f596e825937b9b20b1"
+    },
+    {
+      "path": "reviews/evidence/conveyor-counter-r2-full-gate.png",
+      "box": [
+        847,
+        477,
+        1455,
+        825
+      ],
+      "sha256": "7e159c7cb7604d38494d64998bd8acd2e584735e32c2cb210f598fd01c28d306"
+    }
+  ],
+  "threshold": 9.5,
+  "status": "REPAIR_REQUIRED",
+  "retest_of": "reviews/conveyor-counter-r1-review.json",
+  "prior_review_sha256": "5c1d8f0d03959951a02bdf988b149572f6de9c82631cac6a110ec329996fe2ef",
+  "score": 8.9,
+  "checks": {
+    "canonical_table_and_register": "PASS",
+    "staff_customer_role_separation": "PASS_CONCEPT_INTENT",
+    "stock_end_manual_pickup": "PASS",
+    "goods_cash_separation": "PASS",
+    "ready_full_item_counts": "PASS",
+    "continuous_curved_turn": "PASS",
+    "terminal_pickup_retention": "PASS",
+    "direction_roles": "PASS",
+    "gate_actually_crosses_lane": "FAIL"
+  },
+  "findings": [
+    {
+      "severity": "MANDATORY",
+      "issue": "Stop bar and posts sit across empty space at the inner bend rather than crossing the incoming conveyor. In FULL state it cannot physically hold the fourth tray. The same faulty attachment appears in all four panels.",
+      "repair": "Mount posts on opposite outer edges of the straight approach before the curve. Down bar spans actual carry lane; raised bar clears it. Preserve normal/full counts and terminal stop."
+    },
+    {
+      "severity": "FIXED",
+      "issue": "Tapered roller corner now gives a continuous supported turn into the stock buffer."
+    },
+    {
+      "severity": "FIXED",
+      "issue": "Terminal PICKUP fence creates a bounded dead end with separation from timber leg; staff handoff is explicit."
+    },
+    {
+      "severity": "FIXED",
+      "issue": "Plain rails with IN/PICKUP role plaques remove the prior direction reversal."
+    },
+    {
+      "severity": "POSITIVE",
+      "issue": "Source register position, customer rear face/staff controls, timber table, shelf, legs and open service frontage remain recognizable; cash absent from goods conveyor."
+    }
+  ],
+  "required_repairs": [
+    "Relocate entry stop mechanism across the actual straight inlet in every panel"
+  ],
+  "approval_boundary": "Static concept only; camp-level placement must preserve full staff access and external customer queue. One failed physical gate prevents sheet approval."
+}

@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/conveyor_critic",
+  "recorded_utc": "2026-11-27T04:23:07.928214+00:00",
+  "candidate": "renders/conveyor-camp-r5.png",
+  "sha256": "573b8b45e55a1500ccdfd1c1b65c5cd5b8f02c78b6c8d92f4aa63526caa61258",
+  "native_size": [
+    1671,
+    941
+  ],
+  "prompt": "prompts/conveyor-camp-r5.txt",
+  "prompt_sha256": "5dd0bac008ddc79d94584068c79de1f2067beffa92905bb992fc2c7d9e414f51",
+  "requirements_sha256": "40a11533d116d78ebc7fe17bc52b7817b9595f62b32eaf78be89a91407487bc9",
+  "full_native_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/conveyor-camp-r5-rear-in-out-intersection.png",
+      "box": [
+        320,
+        155,
+        780,
+        400
+      ],
+      "sha256": "fb65db452be0d77460682ae426422a32e1dc1e15f04dd305b081e5569f045c44"
+    },
+    {
+      "path": "reviews/evidence/conveyor-camp-r5-front-emblem-regression.png",
+      "box": [
+        330,
+        245,
+        495,
+        370
+      ],
+      "sha256": "fca17c7da5e28a90f5af9aecaabc0accbb9590879360d98720b3158e9de9fdd3"
+    },
+    {
+      "path": "reviews/evidence/conveyor-camp-r5-correct-blue-utility-out.png",
+      "box": [
+        160,
+        375,
+        355,
+        535
+      ],
+      "sha256": "4d097699b0dd35280e0cbe33482aa80eafd6908f96b77759df3f4926c68217a9"
+    }
+  ],
+  "retest_of": "reviews/conveyor-camp-r4-review.json",
+  "prior_review_sha256": "0f50cac3ec98c83210412b5c92d4a171e2f9510abb44b2d564d661dd96af233a",
+  "threshold": 9.5,
+  "score": 8.9,
+  "status": "REPAIR_REQUIRED_REGRESSION",
+  "checks": {
+    "raw_intake_to_east_cooker_input": "PASS",
+    "west_cooked_output_to_diverter": "PASS",
+    "supported_two_inlet_merge_and_single_outgoing": "PASS",
+    "blue_short_utility_and_food_out_guards": "PASS",
+    "paired_rear_ports_with_explicit_out_return": "PASS_CONCEPT_ORIGIN",
+    "fuel_hatch_separate_from_food_return": "PASS",
+    "continuous_in_route_to_rear_in_sleeve": "FAIL",
+    "in_out_no_crossing_or_common_junction": "FAIL",
+    "front_crate_emblem_retained": "FAIL_REGRESSION",
+    "counter_gate_front_door_access": "PASS",
+    "western_house_service_floor": "PASS_CONCEPT_ALLOCATION"
+  },
+  "repaired_findings": [
+    "Short utility OUT guard is visibly deep blue with OUT plate. Rear OUT has a blue-labelled dock and an explicit exterior return into the established west merge approach; this resolves the previous side-wall-only origin ambiguity.",
+    "Actual merge deck, independently raised gates, raw/cooked separation and counter orientation remain intact."
+  ],
+  "findings": [
+    {
+      "id": "C5-F1",
+      "severity": "blocking",
+      "observation": "The front gable crate emblem has regressed to a vent. This reopens the already repaired source-identity requirement."
+    },
+    {
+      "id": "C5-F2",
+      "severity": "blocking",
+      "observation": "At approximately (480,250), the long horizontal IN-marked approach points into or overlaps the diagonal OUT return. The actual orange rear IN stub lies separately to the west. A continuous route from surplus branch to that sleeve is not present without crossing the OUT route or joining it."
+    }
+  ],
+  "required_repairs": [
+    "Restore the front gable crate emblem from r4; the round vent belongs only at the rear.",
+    "Move the whole incoming storage route farther north behind the OUT return, with a visible gap and a supported final turn all the way into the separate orange rear IN sleeve. Do not solve by moving a label, leaving the IN stub disconnected, or hiding an unprovided vertical overpass.",
+    "Retain blue OUT guards, explicit OUT return, correctly gated merge, counter access, raw feed and expanded service floor."
+  ],
+  "approval_boundary": "The score decreases because new mandatory defects were introduced while prior ones were repaired. No averaging of passed geometry can approve a crossed/unconnected storage input."
+}

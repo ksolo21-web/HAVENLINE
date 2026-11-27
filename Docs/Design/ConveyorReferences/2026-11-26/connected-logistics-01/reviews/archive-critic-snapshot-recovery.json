@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/conveyor_reference_audit",
+  "recorded_utc": "2026-11-27T04:16:19.159106+00:00",
+  "source_report": "reviews/archive-critic-preflight-v1.json",
+  "source_report_input": "archive-generation-snapshot.json",
+  "recorded_expected_sha256": "234fe1a38166c09cc9b7ae68255ba0a8026f671782374586bc1af6d079055006",
+  "recovered_path": "reviews/archive-critic-recovered-generation-snapshot--234fe1a38166c09cc9b7ae68255ba0a8026f671782374586bc1af6d079055006.json",
+  "recovered_sha256": "234fe1a38166c09cc9b7ae68255ba0a8026f671782374586bc1af6d079055006",
+  "recovered_bytes": 70847,
+  "method": "Exact reconstruction from unchanged original invocation records plus the historical three pending IDs/statuses. Removed later camp-r2 and storage-r5 completed records and newly added failed_no_image_invocations schema field, restored count14 and rebuilt the seven historical baseline reference bindings. Tried bounded historical status variants; accepted only the candidate matching the independently recorded original SHA256. This is recovered exact data, not a claimed earlier retained copy.",
+  "status": "PASS_EXACT_HISTORICAL_DIGEST_MATCH",
+  "record_untouched": true,
+  "historical_boundary": "The recovered manifest honestly shows camp-r1 under pending with TOOL_FAILED_NO_IMAGE because the archive schema had not yet separated failed requests. The final manifest must represent that failure as zero generated images."
+}

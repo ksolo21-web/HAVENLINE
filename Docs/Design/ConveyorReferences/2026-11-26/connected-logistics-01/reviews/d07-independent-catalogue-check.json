@@ -1,0 +1,78 @@
+{
+  "catalogue_sha256": "bc72ba3281a8b3bcda4fbb127f6a964fd86fa73aa7f0c49e66416b9dbc0fe398",
+  "station_count": 37,
+  "route_count": 25,
+  "source_families": 14,
+  "covered_source_families": 14,
+  "checked_all_route_ports_and_carrier_families": true,
+  "automatic_storage_return_path": {
+    "food": false,
+    "utility": false
+  },
+  "errors": [],
+  "runtime_tested": false,
+  "semantic_review_boundary": "Accepted item forms are explicit proposal predicates, not frozen executable SKU enums; semantic row-by-row review performed separately.",
+  "explicit_proposals_without_external_refs": [
+    {
+      "route_id": "R-F04",
+      "status": "proposed_connection",
+      "interpretation": "Explicit new proposal; no external source claim is made."
+    },
+    {
+      "route_id": "R-F05",
+      "status": "proposed_connection",
+      "interpretation": "Explicit new proposal; no external source claim is made."
+    },
+    {
+      "route_id": "R-F06",
+      "status": "proposed_connection",
+      "interpretation": "Explicit new proposal; no external source claim is made."
+    },
+    {
+      "route_id": "R-F07",
+      "status": "proposed_connection",
+      "interpretation": "Explicit new proposal; no external source claim is made."
+    },
+    {
+      "route_id": "R-F08",
+      "status": "proposed_connection",
+      "interpretation": "Explicit new proposal; no external source claim is made."
+    },
+    {
+      "route_id": "R-F09",
+      "status": "proposed_connection",
+      "interpretation": "Explicit new proposal; no external source claim is made."
+    },
+    {
+      "route_id": "R-F10",
+      "status": "proposed_connection",
+      "interpretation": "Explicit new proposal; no external source claim is made."
+    },
+    {
+      "route_id": "R-U03",
+      "status": "proposed_connection",
+      "interpretation": "Explicit new proposal; no external source claim is made."
+    },
+    {
+      "route_id": "R-U04",
+      "status": "proposed_connection",
+      "interpretation": "Explicit new proposal; no external source claim is made."
+    },
+    {
+      "route_id": "R-U05",
+      "status": "proposed_connection",
+      "interpretation": "Explicit new proposal; no external source claim is made."
+    },
+    {
+      "route_id": "R-U06",
+      "status": "disabled_until_input_catalogue_defined",
+      "interpretation": "Explicit new proposal; no external source claim is made."
+    },
+    {
+      "route_id": "R-U07",
+      "status": "catalogue_gated_proposal",
+      "interpretation": "Explicit new proposal; no external source claim is made."
+    }
+  ],
+  "validation_rule_correction": "Initial checker required a nonempty external evidence list on all routes. The contract allows source-supported OR explicitly proposed routes; empty external evidence is correct for new proposals. Preserved initial result for transparency, then verified those 12 statuses independently."
+}

@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/conveyor_reference_audit",
+  "role": "Independent archive critic; no archive edits or GitHub writes",
+  "scope": "Exact additive conveyor art/design/research archive and its final public remote state",
+  "score_policy": {
+    "pass_minimum": 9.5,
+    "target": 10,
+    "all_mandatory_gates_required": true,
+    "missing_evidence_blocks": true
+  },
+  "baseline": {
+    "commit": "e3c787a4ecfffa7ae2013227d2db553f2e2829ef",
+    "tree": "62a12cbf7c564b2ba7eebafdaebd3fec27ed42db",
+    "leaves": 4618
+  },
+  "gates": [
+    {
+      "id": "A01",
+      "requirement": "Exact immutable baseline authenticated and independently reconstructed",
+      "status": "PASS_PREFLIGHT"
+    },
+    {
+      "id": "A02",
+      "requirement": "All old path/mode/blob leaves preserved; only permitted new prefix added",
+      "status": "PASS_PREFLIGHT_REMOTE_PENDING"
+    },
+    {
+      "id": "A03",
+      "requirement": "Every generated native original retained byte exactly, including rejected attempts",
+      "status": "PASS_FOR_14_REGISTERED_FINAL_COUNT_PENDING"
+    },
+    {
+      "id": "A04",
+      "requirement": "Failed tool calls retained as failed requests with no invented image count",
+      "status": "PENDING_FINAL_INVOCATION_LEDGER"
+    },
+    {
+      "id": "A05",
+      "requirement": "Exact prompt arguments distinct from newline-bearing authoring documents; ordered actual references and source hashes bound",
+      "status": "PASS_PREFLIGHT_FINAL_INVOCATIONS_PENDING"
+    },
+    {
+      "id": "A06",
+      "requirement": "Exactly seven final selected aliases match independent passing visual reviews at least 9.5 with all mandatory checks passed",
+      "status": "PENDING_FINAL_FREEZE"
+    },
+    {
+      "id": "A07",
+      "requirement": "Current design manifest and every original/revised review hash resolve, including historical checkpoint recovery",
+      "status": "PASS_PREFLIGHT"
+    },
+    {
+      "id": "A08",
+      "requirement": "Only positive-allowlisted third-party analytical excerpts; no full videos, broad timelines, complete storyboards or full articles",
+      "status": "PASS_PREFLIGHT"
+    },
+    {
+      "id": "A09",
+      "requirement": "Public notes honestly distinguish full-file sampled coverage, storyboard-only evidence, unavailable material and proposed behavior",
+      "status": "PASS_PREFLIGHT_FINAL_DOCS_PENDING"
+    },
+    {
+      "id": "A10",
+      "requirement": "Final frozen manifest exactly covers every staged byte with SHA256/Git blob and stable independent candidate root",
+      "status": "PENDING_FINAL_FREEZE"
+    },
+    {
+      "id": "A11",
+      "requirement": "Publication receipts match intended candidate, baseline parent and dedicated branch, with unchanged main/runtime/workflows",
+      "status": "PENDING_PUBLICATION"
+    },
+    {
+      "id": "A12",
+      "requirement": "Fresh remote complete tree matches all old and new paths, types, modes and blob IDs; not truncated",
+      "status": "PENDING_REMOTE_READBACK"
+    },
+    {
+      "id": "A13",
+      "requirement": "Fresh full immutable HTTP body readback for every new distinct blob, with every alias bound to it by fresh tree",
+      "status": "PENDING_REMOTE_READBACK"
+    },
+    {
+      "id": "A14",
+      "requirement": "If used, at most one bounded delivery-receipt child with exact one-file additive delta and validated final branch head",
+      "status": "PENDING_PUBLICATION_PLAN"
+    }
+  ],
+  "next_action": "Wait for exact seven-selection and complete package freeze. Produce a new final-package review file without mutating frozen included preflight history. Independently verify full remote tree and complete bodies after publication."
+}

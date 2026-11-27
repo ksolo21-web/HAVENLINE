@@ -1,0 +1,1825 @@
+{
+  "schema": "havenline-typed-routing-proposal-v1",
+  "scope": "D07 exact concept specification only; no runtime implementation or frozen recipes",
+  "source_equipment_file": "sources/docs/source-equipment-coverage.json",
+  "source_family_count": 14,
+  "runtime_kinds_from_source": [
+    "wood",
+    "stone",
+    "metal",
+    "fuel"
+  ],
+  "proposal_item_forms_are_not_runtime_ids": true,
+  "capacities_speeds_costs_recipe_quantities_world_dimensions": null,
+  "stations": [
+    {
+      "id": "fishing-rack",
+      "name": "Fishing rods / rack",
+      "equipment_families": [
+        "fish-line"
+      ],
+      "disposition": "manual_acquisition",
+      "ports": [
+        {
+          "id": "handoff",
+          "direction": "out",
+          "carrier_family": "raw_food",
+          "accepted_item_forms": [
+            "whole fish"
+          ],
+          "transfer_method": "staff_carry"
+        }
+      ],
+      "boundary": "No filleting or species conversion inferred",
+      "evidence_refs": [
+        "locked-video-chain",
+        "station-kit"
+      ]
+    },
+    {
+      "id": "shore-intake",
+      "name": "Shore intake machinery",
+      "equipment_families": [
+        "fish-line"
+      ],
+      "disposition": "proposed_conveyor_connection",
+      "ports": [
+        {
+          "id": "load",
+          "direction": "in",
+          "carrier_family": "raw_food",
+          "accepted_item_forms": [
+            "whole fish"
+          ],
+          "transfer_method": "staff_or_intake"
+        },
+        {
+          "id": "out",
+          "direction": "out",
+          "carrier_family": "raw_food",
+          "accepted_item_forms": [
+            "whole fish"
+          ],
+          "transfer_method": "belt"
+        }
+      ],
+      "boundary": "Front discharge and new cooker side adapter; raw fish form observed",
+      "evidence_refs": [
+        "locked-video-chain",
+        "video-A-016"
+      ]
+    },
+    {
+      "id": "cooker",
+      "name": "Cooker / processor",
+      "equipment_families": [
+        "fish-line",
+        "meat-processor"
+      ],
+      "disposition": "typed_recipe_variant_required",
+      "ports": [
+        {
+          "id": "raw-in",
+          "direction": "in",
+          "carrier_family": "raw_food",
+          "accepted_item_forms": [
+            "whole fish",
+            "raw meat portions (separate selected variant)"
+          ],
+          "transfer_method": "belt"
+        },
+        {
+          "id": "cooked-out",
+          "direction": "out",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "cooked whole-fish-shaped item",
+            "processed meat portion (separate selected variant)"
+          ],
+          "transfer_method": "belt"
+        }
+      ],
+      "boundary": "Observed visual associations; exact recipes, species, fuel and rates unfrozen",
+      "evidence_refs": [
+        "locked-video-chain",
+        "cooker-visible-crops",
+        "board-18567"
+      ]
+    },
+    {
+      "id": "food-output-buffer",
+      "name": "Finite cooked-output buffer",
+      "equipment_families": [
+        "fish-line"
+      ],
+      "disposition": "new_proposal",
+      "ports": [
+        {
+          "id": "in",
+          "direction": "in",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "selected compatible prepared-food form"
+          ],
+          "transfer_method": "belt"
+        },
+        {
+          "id": "out",
+          "direction": "out",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "same selected form"
+          ],
+          "transfer_method": "belt"
+        }
+      ],
+      "boundary": "Reserve output slot before processing starts",
+      "evidence_refs": [
+        "DESIGN_CHECKPOINT",
+        "NEW-V01",
+        "NEW-V02"
+      ]
+    },
+    {
+      "id": "food-router",
+      "name": "Demand router / release gate",
+      "equipment_families": [
+        "fish-line"
+      ],
+      "disposition": "new_proposal",
+      "ports": [
+        {
+          "id": "in",
+          "direction": "in",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "selected compatible prepared-food form"
+          ],
+          "transfer_method": "belt"
+        },
+        {
+          "id": "fresh-out",
+          "direction": "out",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "active counter allowed form"
+          ],
+          "transfer_method": "belt"
+        },
+        {
+          "id": "surplus-out",
+          "direction": "out",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "storage allowed prepared-food form"
+          ],
+          "transfer_method": "belt"
+        },
+        {
+          "id": "assembly-out",
+          "direction": "out",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "assembler accepted cooked form; unfrozen"
+          ],
+          "transfer_method": "belt"
+        }
+      ],
+      "boundary": "Every item has one destination; optional assembly mode does not copy the stream",
+      "evidence_refs": [
+        "DESIGN_CHECKPOINT",
+        "NEW-D01"
+      ]
+    },
+    {
+      "id": "food-storage-in",
+      "name": "Rear prepared-food receiving cassette",
+      "equipment_families": [
+        "logistics"
+      ],
+      "disposition": "new_proposal",
+      "ports": [
+        {
+          "id": "in",
+          "direction": "in",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "selected allowed prepared-food form"
+          ],
+          "transfer_method": "belt"
+        },
+        {
+          "id": "local-deposit",
+          "direction": "out",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "same form"
+          ],
+          "transfer_method": "local_tray_lift"
+        }
+      ],
+      "boundary": "Separate finite receiving tray; compatible inventory slot reserved",
+      "evidence_refs": [
+        "DESIGN_CHECKPOINT"
+      ]
+    },
+    {
+      "id": "food-inventory",
+      "name": "Local prepared-food inventory bay",
+      "equipment_families": [
+        "logistics"
+      ],
+      "disposition": "new_proposal",
+      "ports": [
+        {
+          "id": "receive",
+          "direction": "in",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "allowed prepared-food form"
+          ],
+          "transfer_method": "local_tray_lift"
+        },
+        {
+          "id": "release",
+          "direction": "out",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "requested allowed prepared-food form"
+          ],
+          "transfer_method": "local_tray_lift"
+        }
+      ],
+      "boundary": "Stock is retained until requested; no automatic recirculation",
+      "evidence_refs": [
+        "DESIGN_CHECKPOINT"
+      ]
+    },
+    {
+      "id": "food-storage-out",
+      "name": "Rear prepared-food dispatch cassette",
+      "equipment_families": [
+        "logistics"
+      ],
+      "disposition": "new_proposal",
+      "ports": [
+        {
+          "id": "load",
+          "direction": "in",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "requested allowed prepared-food form"
+          ],
+          "transfer_method": "local_tray_lift"
+        },
+        {
+          "id": "out",
+          "direction": "out",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "same requested form"
+          ],
+          "transfer_method": "belt"
+        }
+      ],
+      "boundary": "Independent dispatch tray serves local bay; no crossing central aisle",
+      "evidence_refs": [
+        "DESIGN_CHECKPOINT",
+        "NEW-V04"
+      ]
+    },
+    {
+      "id": "food-merge",
+      "name": "Gated fresh / stored merge",
+      "equipment_families": [
+        "logistics"
+      ],
+      "disposition": "new_proposal",
+      "ports": [
+        {
+          "id": "fresh-in",
+          "direction": "in",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "counter allowed form"
+          ],
+          "transfer_method": "belt"
+        },
+        {
+          "id": "stored-in",
+          "direction": "in",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "counter allowed form"
+          ],
+          "transfer_method": "belt"
+        },
+        {
+          "id": "out",
+          "direction": "out",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "same form"
+          ],
+          "transfer_method": "belt"
+        }
+      ],
+      "boundary": "One source owns each reserved counter slot; one item released at a time",
+      "evidence_refs": [
+        "DESIGN_CHECKPOINT"
+      ]
+    },
+    {
+      "id": "food-counter",
+      "name": "Canonical customer counter + new stock-end buffer",
+      "equipment_families": [
+        "fish-line",
+        "logistics"
+      ],
+      "disposition": "allowed_catalogue_required",
+      "ports": [
+        {
+          "id": "stock-in",
+          "direction": "in",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "explicit active menu catalogue"
+          ],
+          "transfer_method": "belt"
+        },
+        {
+          "id": "service",
+          "direction": "out",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "same stocked form"
+          ],
+          "transfer_method": "customer_handoff"
+        },
+        {
+          "id": "cash",
+          "direction": "out",
+          "carrier_family": "cash",
+          "accepted_item_forms": [
+            "credits / cash representation"
+          ],
+          "transfer_method": "staff_collection"
+        }
+      ],
+      "boundary": "Goods and cash routes separate; register, shelf, legs and customer frontage preserved",
+      "evidence_refs": [
+        "locked-video-chain",
+        "runtime-customers",
+        "DESIGN_CHECKPOINT"
+      ]
+    },
+    {
+      "id": "wheat-harvester",
+      "name": "Wheat patch / mechanized harvester",
+      "equipment_families": [
+        "wheat-food-line"
+      ],
+      "disposition": "reference_topology_recipe_unfrozen",
+      "ports": [
+        {
+          "id": "out",
+          "direction": "out",
+          "carrier_family": "plant_food",
+          "accepted_item_forms": [
+            "wheat"
+          ],
+          "transfer_method": "unspecified_reference_transfer"
+        }
+      ],
+      "boundary": "T19 freeze required; no flour intermediate inferred",
+      "evidence_refs": [
+        "locked-video-chain",
+        "resource-registry"
+      ]
+    },
+    {
+      "id": "wheat-processor",
+      "name": "Blue / orange food processor",
+      "equipment_families": [
+        "wheat-food-line"
+      ],
+      "disposition": "reference_topology_recipe_unfrozen",
+      "ports": [
+        {
+          "id": "in",
+          "direction": "in",
+          "carrier_family": "plant_food",
+          "accepted_item_forms": [
+            "wheat"
+          ],
+          "transfer_method": "unspecified_reference_transfer"
+        },
+        {
+          "id": "out",
+          "direction": "out",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "bread-like cooked-food stack"
+          ],
+          "transfer_method": "belt"
+        }
+      ],
+      "boundary": "Input/output visual chain observed; hidden stages and recipe undefined",
+      "evidence_refs": [
+        "locked-video-chain"
+      ]
+    },
+    {
+      "id": "optional-assembler",
+      "name": "Proposed dual-input assembly station",
+      "equipment_families": [],
+      "disposition": "disabled_until_recipe_catalogue_defined",
+      "ports": [
+        {
+          "id": "ingredient-a",
+          "direction": "in",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "bread-like form if recipe accepts it"
+          ],
+          "transfer_method": "belt"
+        },
+        {
+          "id": "ingredient-b",
+          "direction": "in",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "compatible cooked form if recipe accepts it"
+          ],
+          "transfer_method": "belt"
+        },
+        {
+          "id": "out",
+          "direction": "out",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "assembled menu item; identity unfrozen"
+          ],
+          "transfer_method": "belt"
+        }
+      ],
+      "boundary": "Topology observed A56.5\u201359s; separate magazines; no fixed ratios or hidden ingredients",
+      "evidence_refs": [
+        "A56.5-59s",
+        "critic-reference-amendment-v1"
+      ]
+    },
+    {
+      "id": "assembly-counter",
+      "name": "Future allowed-menu assembly counter",
+      "equipment_families": [],
+      "disposition": "disabled_until_menu_catalogue_defined",
+      "ports": [
+        {
+          "id": "stock-in",
+          "direction": "in",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "assembled menu item explicitly allowed"
+          ],
+          "transfer_method": "belt"
+        },
+        {
+          "id": "service",
+          "direction": "out",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "same form"
+          ],
+          "transfer_method": "customer_handoff"
+        }
+      ],
+      "boundary": "Direct output to service topology observed; Havenline geometry proposed",
+      "evidence_refs": [
+        "A57-58.25s"
+      ]
+    },
+    {
+      "id": "saw-variant",
+      "name": "Saw station / lumber mill / steam saw",
+      "equipment_families": [
+        "saw-lumber"
+      ],
+      "disposition": "alternative_variants_recipe_unfrozen",
+      "ports": [
+        {
+          "id": "manual-load",
+          "direction": "in",
+          "carrier_family": "utility_timber",
+          "accepted_item_forms": [
+            "timber / logs"
+          ],
+          "transfer_method": "staff_load"
+        },
+        {
+          "id": "proposed-out",
+          "direction": "out",
+          "carrier_family": "utility_timber",
+          "accepted_item_forms": [
+            "planks only if pairing approved"
+          ],
+          "transfer_method": "belt"
+        }
+      ],
+      "boundary": "Alternatives, not serial mandatory machines; PLANK noun does not establish a recipe",
+      "evidence_refs": [
+        "board-18607",
+        "board-18609",
+        "world-atlas"
+      ]
+    },
+    {
+      "id": "quarry",
+      "name": "Mining nodes / quarry drill",
+      "equipment_families": [
+        "stone-slate-quarry"
+      ],
+      "disposition": "typed_crate_feeder_proposed",
+      "ports": [
+        {
+          "id": "acquired",
+          "direction": "out",
+          "carrier_family": "utility_mineral",
+          "accepted_item_forms": [
+            "raw stone",
+            "raw metal ore"
+          ],
+          "transfer_method": "crate_handoff"
+        }
+      ],
+      "boundary": "Extraction preserves identity; no cut stone, bricks or smelting inferred",
+      "evidence_refs": [
+        "runtime-kinds",
+        "resource-registry",
+        "board-18609"
+      ]
+    },
+    {
+      "id": "utility-feeder",
+      "name": "Typed utility buffer / feeder",
+      "equipment_families": [
+        "logistics"
+      ],
+      "disposition": "new_proposal",
+      "ports": [
+        {
+          "id": "timber-in",
+          "direction": "in",
+          "carrier_family": "utility_timber",
+          "accepted_item_forms": [
+            "logs",
+            "approved plank form"
+          ],
+          "transfer_method": "source_held_queue"
+        },
+        {
+          "id": "mineral-in",
+          "direction": "in",
+          "carrier_family": "utility_mineral",
+          "accepted_item_forms": [
+            "raw stone",
+            "raw metal ore"
+          ],
+          "transfer_method": "source_held_queue"
+        },
+        {
+          "id": "out",
+          "direction": "out",
+          "carrier_family": "selected_utility_class",
+          "accepted_item_forms": [
+            "one selected timber or mineral form"
+          ],
+          "transfer_method": "belt"
+        }
+      ],
+      "boundary": "One class/batch at a time; wrong item held at source; no mixed pile",
+      "evidence_refs": [
+        "DESIGN_CHECKPOINT"
+      ]
+    },
+    {
+      "id": "utility-storage-in",
+      "name": "Left utility receiving cassette",
+      "equipment_families": [
+        "logistics"
+      ],
+      "disposition": "new_proposal",
+      "ports": [
+        {
+          "id": "in",
+          "direction": "in",
+          "carrier_family": "selected_utility_class",
+          "accepted_item_forms": [
+            "selected timber / mineral form"
+          ],
+          "transfer_method": "belt"
+        },
+        {
+          "id": "local-deposit",
+          "direction": "out",
+          "carrier_family": "selected_utility_class",
+          "accepted_item_forms": [
+            "same selected form"
+          ],
+          "transfer_method": "indexed_local_tray"
+        }
+      ],
+      "boundary": "Timber and mineral compartments separately indexed",
+      "evidence_refs": [
+        "DESIGN_CHECKPOINT"
+      ]
+    },
+    {
+      "id": "utility-inventory",
+      "name": "Local indexed utility inventory",
+      "equipment_families": [
+        "logistics"
+      ],
+      "disposition": "new_proposal",
+      "ports": [
+        {
+          "id": "receive",
+          "direction": "in",
+          "carrier_family": "selected_utility_class",
+          "accepted_item_forms": [
+            "selected timber / mineral form"
+          ],
+          "transfer_method": "indexed_local_tray"
+        },
+        {
+          "id": "release",
+          "direction": "out",
+          "carrier_family": "selected_utility_class",
+          "accepted_item_forms": [
+            "requested timber / mineral form"
+          ],
+          "transfer_method": "indexed_local_tray"
+        }
+      ],
+      "boundary": "Bounded per-class local slots. No food, hides, raw meat, fuel or cash",
+      "evidence_refs": [
+        "DESIGN_CHECKPOINT"
+      ]
+    },
+    {
+      "id": "utility-storage-out",
+      "name": "Left utility dispatch cassette",
+      "equipment_families": [
+        "logistics"
+      ],
+      "disposition": "new_proposal",
+      "ports": [
+        {
+          "id": "load",
+          "direction": "in",
+          "carrier_family": "selected_utility_class",
+          "accepted_item_forms": [
+            "requested timber / mineral form"
+          ],
+          "transfer_method": "indexed_local_tray"
+        },
+        {
+          "id": "out",
+          "direction": "out",
+          "carrier_family": "selected_utility_class",
+          "accepted_item_forms": [
+            "same requested form"
+          ],
+          "transfer_method": "belt"
+        }
+      ],
+      "boundary": "Dispatch consumes an explicit request and stock reservation",
+      "evidence_refs": [
+        "DESIGN_CHECKPOINT"
+      ]
+    },
+    {
+      "id": "reserved-workstation",
+      "name": "Reserved compatible workstation socket",
+      "equipment_families": [
+        "workshop"
+      ],
+      "disposition": "disabled_until_input_catalogue_defined",
+      "ports": [
+        {
+          "id": "reserved-in",
+          "direction": "in",
+          "carrier_family": "selected_utility_class",
+          "accepted_item_forms": [],
+          "transfer_method": "belt"
+        }
+      ],
+      "boundary": "No active conversion shown; outputs unspecified",
+      "evidence_refs": [
+        "board-18600",
+        "board-18607",
+        "DESIGN_CHECKPOINT"
+      ]
+    },
+    {
+      "id": "material-counter",
+      "name": "Explicitly permitted log / material counter",
+      "equipment_families": [
+        "logistics"
+      ],
+      "disposition": "allowed_catalogue_required",
+      "ports": [
+        {
+          "id": "stock-in",
+          "direction": "in",
+          "carrier_family": "selected_utility_class",
+          "accepted_item_forms": [
+            "logs or material specifically listed in active catalogue"
+          ],
+          "transfer_method": "belt"
+        },
+        {
+          "id": "service",
+          "direction": "out",
+          "carrier_family": "selected_utility_class",
+          "accepted_item_forms": [
+            "same form"
+          ],
+          "transfer_method": "customer_handoff"
+        }
+      ],
+      "boundary": "Raw resources can be sold if listed; not automatically every raw or prepared form",
+      "evidence_refs": [
+        "runtime-customers",
+        "DESIGN_CHECKPOINT"
+      ]
+    },
+    {
+      "id": "fuel-hatch",
+      "name": "Original right fuel-service hatch",
+      "equipment_families": [
+        "furnace-hearth",
+        "logistics"
+      ],
+      "disposition": "manual_only",
+      "ports": [
+        {
+          "id": "handoff",
+          "direction": "out",
+          "carrier_family": "fuel",
+          "accepted_item_forms": [
+            "approved fuel resource"
+          ],
+          "transfer_method": "staff_carry"
+        }
+      ],
+      "boundary": "Fuel excluded from first conveyor upgrade",
+      "evidence_refs": [
+        "DESIGN_CHECKPOINT"
+      ]
+    },
+    {
+      "id": "heater",
+      "name": "Central furnace / hearth vessel",
+      "equipment_families": [
+        "furnace-hearth"
+      ],
+      "disposition": "manual_warmth_service",
+      "ports": [
+        {
+          "id": "service",
+          "direction": "in",
+          "carrier_family": "fuel",
+          "accepted_item_forms": [
+            "approved fuel resource"
+          ],
+          "transfer_method": "staff_carry"
+        }
+      ],
+      "boundary": "Produces warmth/state changes, not smelted inventory. Wood/stone/metal upgrade debits are not transformation recipes",
+      "evidence_refs": [
+        "runtime-kinds",
+        "runtime-transfers"
+      ]
+    },
+    {
+      "id": "processing-counter",
+      "name": "Processing counter",
+      "equipment_families": [
+        "fish-line"
+      ],
+      "disposition": "manual_fixture_until_adapter_defined",
+      "ports": [],
+      "boundary": "Stock/preparation surface; no independent conversion inferred",
+      "evidence_refs": [
+        "station-kit",
+        "station-scope"
+      ]
+    },
+    {
+      "id": "cookfire-house",
+      "name": "Cookfire / cookhouse",
+      "equipment_families": [
+        "cookfire-cookhouse"
+      ],
+      "disposition": "manual_only_recipe_unfrozen",
+      "ports": [],
+      "boundary": "Depicted cooking equipment; generic species eligibility/fuel/recipes undefined",
+      "evidence_refs": [
+        "board-18607",
+        "board-18609"
+      ]
+    },
+    {
+      "id": "drying-racks",
+      "name": "Meat / fish drying racks",
+      "equipment_families": [
+        "drying-racks"
+      ],
+      "disposition": "manual_only_recipe_unfrozen",
+      "ports": [],
+      "boundary": "Hung contents observed; duration/yield/inventory transition not established",
+      "evidence_refs": [
+        "board-18600",
+        "board-18603"
+      ]
+    },
+    {
+      "id": "chopping",
+      "name": "Chopping stump / station",
+      "equipment_families": [
+        "chopping"
+      ],
+      "disposition": "manual_only",
+      "ports": [],
+      "boundary": "Split-firewood visual state does not establish separate inventory kind",
+      "evidence_refs": [
+        "board-18607",
+        "board-18600"
+      ]
+    },
+    {
+      "id": "butcher-prep",
+      "name": "Butcher table / animal harvest preparation",
+      "equipment_families": [
+        "animal-harvest-prep"
+      ],
+      "disposition": "manual_only_recipe_unfrozen",
+      "ports": [],
+      "boundary": "No species drop/edibility/tanning list; companions excluded from harvest assumptions",
+      "evidence_refs": [
+        "board-18607",
+        "world-atlas"
+      ]
+    },
+    {
+      "id": "greenhouse",
+      "name": "Greenhouse",
+      "equipment_families": [
+        "greenhouse"
+      ],
+      "disposition": "manual_or_future_unspecified",
+      "ports": [],
+      "boundary": "No established crop/output catalogue; no active belt endpoint",
+      "evidence_refs": [
+        "board-18609"
+      ]
+    },
+    {
+      "id": "workshop",
+      "name": "Workshop / equipment supply",
+      "equipment_families": [
+        "workshop"
+      ],
+      "disposition": "manual_or_future_unspecified",
+      "ports": [],
+      "boundary": "No nails, rods, gears, ammunition or weapon crafting recipe is inferred",
+      "evidence_refs": [
+        "board-18600",
+        "board-18607"
+      ]
+    },
+    {
+      "id": "storage-crates",
+      "name": "Stockpile / storage crates",
+      "equipment_families": [
+        "logistics"
+      ],
+      "disposition": "manual_handoff",
+      "ports": [
+        {
+          "id": "timber-handoff",
+          "direction": "out",
+          "carrier_family": "utility_timber",
+          "accepted_item_forms": [
+            "raw logs"
+          ],
+          "transfer_method": "staff_carry"
+        },
+        {
+          "id": "raw-food-handoff",
+          "direction": "out",
+          "carrier_family": "raw_food",
+          "accepted_item_forms": [
+            "raw meat only if explicit sales catalogue permits"
+          ],
+          "transfer_method": "staff_carry"
+        }
+      ],
+      "boundary": "Stores same goods; no conversion. Raw-food, hides, fuel, cargo and cash remain dedicated manual zones",
+      "evidence_refs": [
+        "board-18607",
+        "DESIGN_CHECKPOINT"
+      ]
+    },
+    {
+      "id": "manual-raw-sales",
+      "name": "Catalogue-gated raw-sales counter mode",
+      "equipment_families": [
+        "logistics"
+      ],
+      "disposition": "manual_only_explicit_catalogue",
+      "ports": [
+        {
+          "id": "manual-stock",
+          "direction": "in",
+          "carrier_family": "raw_food",
+          "accepted_item_forms": [
+            "raw meat only if explicitly listed"
+          ],
+          "transfer_method": "staff_carry"
+        }
+      ],
+      "boundary": "Separate allowed stock area / active menu mode; no raw food on prepared-food storage belts",
+      "evidence_refs": [
+        "DESIGN_CHECKPOINT",
+        "runtime-customers"
+      ]
+    },
+    {
+      "id": "cash-collection",
+      "name": "Staff cash collection area",
+      "equipment_families": [
+        "logistics"
+      ],
+      "disposition": "manual_only",
+      "ports": [
+        {
+          "id": "collect",
+          "direction": "in",
+          "carrier_family": "cash",
+          "accepted_item_forms": [
+            "credits / cash representation"
+          ],
+          "transfer_method": "staff_collection"
+        }
+      ],
+      "boundary": "Separate from product conveyor and customer queue",
+      "evidence_refs": [
+        "A58.5-59s",
+        "DESIGN_CHECKPOINT"
+      ]
+    },
+    {
+      "id": "fishing-winch",
+      "name": "Fishing winch",
+      "equipment_families": [
+        "logistics"
+      ],
+      "disposition": "manual_or_mechanical_acquisition",
+      "ports": [],
+      "boundary": "Transport/acquisition aid; no output transformation inferred",
+      "evidence_refs": [
+        "board-18607"
+      ]
+    },
+    {
+      "id": "sled-hauler",
+      "name": "Sled hauler",
+      "equipment_families": [
+        "logistics"
+      ],
+      "disposition": "manual_or_helper_transport",
+      "ports": [],
+      "boundary": "Moves same resource form; no conveyor or processing recipe inferred",
+      "evidence_refs": [
+        "board-18607"
+      ]
+    },
+    {
+      "id": "steel-oil-unassigned",
+      "name": "Unassigned steel / oil conversion equipment",
+      "equipment_families": [
+        "steel-oil"
+      ],
+      "disposition": "no_supported_machine_or_recipe",
+      "ports": [],
+      "boundary": "No smelter, refinery or charcoal line inferred from requested material concepts",
+      "evidence_refs": [
+        "prior-user-request",
+        "world-atlas"
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "id": "R-F01",
+      "source": {
+        "station": "fishing-rack",
+        "port": "handoff"
+      },
+      "destination": {
+        "station": "shore-intake",
+        "port": "load"
+      },
+      "direction": "source_to_destination",
+      "item_form": "whole fish",
+      "transport": "staff_or_intake",
+      "status": "reference_topology",
+      "release_condition": "compatible destination slot reserved",
+      "on_full": "hold at source / finite queue; stop upstream release",
+      "on_wrong_item": "source-held reject; never reroute into an incompatible destination",
+      "evidence_refs": [
+        "locked-video-chain"
+      ]
+    },
+    {
+      "id": "R-F02",
+      "source": {
+        "station": "shore-intake",
+        "port": "out"
+      },
+      "destination": {
+        "station": "cooker",
+        "port": "raw-in"
+      },
+      "direction": "source_to_destination",
+      "item_form": "whole fish",
+      "transport": "belt",
+      "status": "proposed_connection",
+      "release_condition": "compatible destination slot reserved",
+      "on_full": "hold at source / finite queue; stop upstream release",
+      "on_wrong_item": "source-held reject; never reroute into an incompatible destination",
+      "evidence_refs": [
+        "locked-video-chain",
+        "DESIGN_CHECKPOINT"
+      ]
+    },
+    {
+      "id": "R-F03",
+      "source": {
+        "station": "cooker",
+        "port": "cooked-out"
+      },
+      "destination": {
+        "station": "food-output-buffer",
+        "port": "in"
+      },
+      "direction": "source_to_destination",
+      "item_form": "selected compatible cooked item",
+      "transport": "belt",
+      "status": "proposed_connection",
+      "release_condition": "compatible destination slot reserved",
+      "on_full": "hold at source / finite queue; stop upstream release",
+      "on_wrong_item": "source-held reject; never reroute into an incompatible destination",
+      "evidence_refs": [
+        "locked-video-chain",
+        "DESIGN_CHECKPOINT"
+      ]
+    },
+    {
+      "id": "R-F04",
+      "source": {
+        "station": "food-output-buffer",
+        "port": "out"
+      },
+      "destination": {
+        "station": "food-router",
+        "port": "in"
+      },
+      "direction": "source_to_destination",
+      "item_form": "same cooked item",
+      "transport": "belt",
+      "status": "proposed_connection",
+      "release_condition": "compatible destination slot reserved",
+      "on_full": "hold at source / finite queue; stop upstream release",
+      "on_wrong_item": "source-held reject; never reroute into an incompatible destination",
+      "evidence_refs": []
+    },
+    {
+      "id": "R-F05",
+      "source": {
+        "station": "food-router",
+        "port": "fresh-out"
+      },
+      "destination": {
+        "station": "food-merge",
+        "port": "fresh-in"
+      },
+      "direction": "source_to_destination",
+      "item_form": "active counter allowed prepared item",
+      "transport": "belt",
+      "status": "proposed_connection",
+      "release_condition": "fresh lane selected; active menu match; merge owns counter stock reservation",
+      "on_full": "hold at source / finite queue; stop upstream release",
+      "on_wrong_item": "source-held reject; never reroute into an incompatible destination",
+      "evidence_refs": []
+    },
+    {
+      "id": "R-F06",
+      "source": {
+        "station": "food-router",
+        "port": "surplus-out"
+      },
+      "destination": {
+        "station": "food-storage-in",
+        "port": "in"
+      },
+      "direction": "source_to_destination",
+      "item_form": "storage allowed prepared item",
+      "transport": "belt",
+      "status": "proposed_connection",
+      "release_condition": "surplus mode selected; specific prepared-food inventory slot reserved",
+      "on_full": "hold at source / finite queue; stop upstream release",
+      "on_wrong_item": "source-held reject; never reroute into an incompatible destination",
+      "evidence_refs": []
+    },
+    {
+      "id": "R-F07",
+      "source": {
+        "station": "food-storage-in",
+        "port": "local-deposit"
+      },
+      "destination": {
+        "station": "food-inventory",
+        "port": "receive"
+      },
+      "direction": "source_to_destination",
+      "item_form": "same prepared item",
+      "transport": "local_tray_lift",
+      "status": "proposed_connection",
+      "release_condition": "compatible destination slot reserved",
+      "on_full": "hold at source / finite queue; stop upstream release",
+      "on_wrong_item": "source-held reject; never reroute into an incompatible destination",
+      "evidence_refs": []
+    },
+    {
+      "id": "R-F08",
+      "source": {
+        "station": "food-inventory",
+        "port": "release"
+      },
+      "destination": {
+        "station": "food-storage-out",
+        "port": "load"
+      },
+      "direction": "source_to_destination",
+      "item_form": "requested prepared item",
+      "transport": "local_tray_lift",
+      "status": "proposed_connection",
+      "release_condition": "explicit counter request AND stock reservation AND merge reservation",
+      "on_full": "hold at source / finite queue; stop upstream release",
+      "on_wrong_item": "source-held reject; never reroute into an incompatible destination",
+      "evidence_refs": []
+    },
+    {
+      "id": "R-F09",
+      "source": {
+        "station": "food-storage-out",
+        "port": "out"
+      },
+      "destination": {
+        "station": "food-merge",
+        "port": "stored-in"
+      },
+      "direction": "source_to_destination",
+      "item_form": "same requested prepared item",
+      "transport": "belt",
+      "status": "proposed_connection",
+      "release_condition": "stored source selected; exclusive ownership of counter slot",
+      "on_full": "hold at source / finite queue; stop upstream release",
+      "on_wrong_item": "source-held reject; never reroute into an incompatible destination",
+      "evidence_refs": []
+    },
+    {
+      "id": "R-F10",
+      "source": {
+        "station": "food-merge",
+        "port": "out"
+      },
+      "destination": {
+        "station": "food-counter",
+        "port": "stock-in"
+      },
+      "direction": "source_to_destination",
+      "item_form": "active counter allowed prepared item",
+      "transport": "belt",
+      "status": "proposed_connection",
+      "release_condition": "one source gate open; source and destination agree on item ownership",
+      "on_full": "hold at source / finite queue; stop upstream release",
+      "on_wrong_item": "source-held reject; never reroute into an incompatible destination",
+      "evidence_refs": []
+    },
+    {
+      "id": "R-A01",
+      "source": {
+        "station": "wheat-harvester",
+        "port": "out"
+      },
+      "destination": {
+        "station": "wheat-processor",
+        "port": "in"
+      },
+      "direction": "source_to_destination",
+      "item_form": "wheat",
+      "transport": "unspecified_reference_transfer",
+      "status": "reference_topology_recipe_unfrozen",
+      "release_condition": "compatible destination slot reserved",
+      "on_full": "hold at source / finite queue; stop upstream release",
+      "on_wrong_item": "source-held reject; never reroute into an incompatible destination",
+      "evidence_refs": [
+        "locked-video-chain"
+      ]
+    },
+    {
+      "id": "R-A02",
+      "source": {
+        "station": "wheat-processor",
+        "port": "out"
+      },
+      "destination": {
+        "station": "optional-assembler",
+        "port": "ingredient-a"
+      },
+      "direction": "source_to_destination",
+      "item_form": "bread-like form",
+      "transport": "separate_belt",
+      "status": "disabled_until_recipe_defined",
+      "release_condition": "recipe A accepts exact form; ingredient B and output also reserved",
+      "on_full": "hold at source / finite queue; stop upstream release",
+      "on_wrong_item": "source-held reject; never reroute into an incompatible destination",
+      "evidence_refs": [
+        "A56.5-59s"
+      ]
+    },
+    {
+      "id": "R-A03",
+      "source": {
+        "station": "food-router",
+        "port": "assembly-out"
+      },
+      "destination": {
+        "station": "optional-assembler",
+        "port": "ingredient-b"
+      },
+      "direction": "source_to_destination",
+      "item_form": "compatible cooked form; exact SKU unfrozen",
+      "transport": "separate_belt",
+      "status": "disabled_until_recipe_defined",
+      "release_condition": "optional assembly mode; recipe B accepts exact form; ingredient A and output also reserved",
+      "on_full": "hold at source / finite queue; stop upstream release",
+      "on_wrong_item": "source-held reject; never reroute into an incompatible destination",
+      "evidence_refs": [
+        "A56.5-59s"
+      ]
+    },
+    {
+      "id": "R-A04",
+      "source": {
+        "station": "optional-assembler",
+        "port": "out"
+      },
+      "destination": {
+        "station": "assembly-counter",
+        "port": "stock-in"
+      },
+      "direction": "source_to_destination",
+      "item_form": "assembled menu item; identity unfrozen",
+      "transport": "belt",
+      "status": "disabled_until_recipe_and_menu_defined",
+      "release_condition": "both accepted inputs and output reservation exist",
+      "on_full": "hold at source / finite queue; stop upstream release",
+      "on_wrong_item": "source-held reject; never reroute into an incompatible destination",
+      "evidence_refs": [
+        "A57-58.25s"
+      ]
+    },
+    {
+      "id": "R-U00",
+      "source": {
+        "station": "storage-crates",
+        "port": "timber-handoff"
+      },
+      "destination": {
+        "station": "utility-feeder",
+        "port": "timber-in"
+      },
+      "direction": "source_to_destination",
+      "item_form": "raw logs; form unchanged",
+      "transport": "staff_handoff",
+      "status": "proposed_connection",
+      "release_condition": "compatible destination slot reserved",
+      "on_full": "hold at source / finite queue; stop upstream release",
+      "on_wrong_item": "source-held reject; never reroute into an incompatible destination",
+      "evidence_refs": [
+        "runtime-kinds",
+        "DESIGN_CHECKPOINT"
+      ]
+    },
+    {
+      "id": "R-U01",
+      "source": {
+        "station": "saw-variant",
+        "port": "proposed-out"
+      },
+      "destination": {
+        "station": "utility-feeder",
+        "port": "timber-in"
+      },
+      "direction": "source_to_destination",
+      "item_form": "approved plank form; pairing provisional",
+      "transport": "source_queue",
+      "status": "disabled_until_pairing_defined",
+      "release_condition": "compatible destination slot reserved",
+      "on_full": "hold at source / finite queue; stop upstream release",
+      "on_wrong_item": "source-held reject; never reroute into an incompatible destination",
+      "evidence_refs": [
+        "board-18607",
+        "world-atlas"
+      ]
+    },
+    {
+      "id": "R-U02",
+      "source": {
+        "station": "quarry",
+        "port": "acquired"
+      },
+      "destination": {
+        "station": "utility-feeder",
+        "port": "mineral-in"
+      },
+      "direction": "source_to_destination",
+      "item_form": "raw stone / metal ore (identity retained)",
+      "transport": "typed_crate_handoff",
+      "status": "proposed_connection",
+      "release_condition": "compatible destination slot reserved",
+      "on_full": "hold at source / finite queue; stop upstream release",
+      "on_wrong_item": "source-held reject; never reroute into an incompatible destination",
+      "evidence_refs": [
+        "resource-registry",
+        "board-18609"
+      ]
+    },
+    {
+      "id": "R-U03",
+      "source": {
+        "station": "utility-feeder",
+        "port": "out"
+      },
+      "destination": {
+        "station": "utility-storage-in",
+        "port": "in"
+      },
+      "direction": "source_to_destination",
+      "item_form": "one selected utility form",
+      "transport": "belt",
+      "status": "proposed_connection",
+      "release_condition": "selected class and indexed receiving tray agree",
+      "on_full": "hold at source / finite queue; stop upstream release",
+      "on_wrong_item": "source-held reject; never reroute into an incompatible destination",
+      "evidence_refs": []
+    },
+    {
+      "id": "R-U04",
+      "source": {
+        "station": "utility-storage-in",
+        "port": "local-deposit"
+      },
+      "destination": {
+        "station": "utility-inventory",
+        "port": "receive"
+      },
+      "direction": "source_to_destination",
+      "item_form": "same utility form",
+      "transport": "indexed_local_tray",
+      "status": "proposed_connection",
+      "release_condition": "compatible destination slot reserved",
+      "on_full": "hold at source / finite queue; stop upstream release",
+      "on_wrong_item": "source-held reject; never reroute into an incompatible destination",
+      "evidence_refs": []
+    },
+    {
+      "id": "R-U05",
+      "source": {
+        "station": "utility-inventory",
+        "port": "release"
+      },
+      "destination": {
+        "station": "utility-storage-out",
+        "port": "load"
+      },
+      "direction": "source_to_destination",
+      "item_form": "requested utility form",
+      "transport": "indexed_local_tray",
+      "status": "proposed_connection",
+      "release_condition": "explicit destination request; chosen class stock reserved",
+      "on_full": "hold at source / finite queue; stop upstream release",
+      "on_wrong_item": "source-held reject; never reroute into an incompatible destination",
+      "evidence_refs": []
+    },
+    {
+      "id": "R-U06",
+      "source": {
+        "station": "utility-storage-out",
+        "port": "out"
+      },
+      "destination": {
+        "station": "reserved-workstation",
+        "port": "reserved-in"
+      },
+      "direction": "source_to_destination",
+      "item_form": "exact requested form not yet defined",
+      "transport": "belt",
+      "status": "disabled_until_input_catalogue_defined",
+      "release_condition": "no release until compatible input catalogue is frozen",
+      "on_full": "hold at source / finite queue; stop upstream release",
+      "on_wrong_item": "source-held reject; never reroute into an incompatible destination",
+      "evidence_refs": []
+    },
+    {
+      "id": "R-U07",
+      "source": {
+        "station": "utility-storage-out",
+        "port": "out"
+      },
+      "destination": {
+        "station": "material-counter",
+        "port": "stock-in"
+      },
+      "direction": "source_to_destination",
+      "item_form": "explicitly permitted log / material form",
+      "transport": "belt",
+      "status": "catalogue_gated_proposal",
+      "release_condition": "counter explicitly allows this exact raw/material form and reserves stock space",
+      "on_full": "hold at source / finite queue; stop upstream release",
+      "on_wrong_item": "source-held reject; never reroute into an incompatible destination",
+      "evidence_refs": []
+    },
+    {
+      "id": "R-M01",
+      "source": {
+        "station": "fuel-hatch",
+        "port": "handoff"
+      },
+      "destination": {
+        "station": "heater",
+        "port": "service"
+      },
+      "direction": "source_to_destination",
+      "item_form": "approved fuel resource",
+      "transport": "staff_carry",
+      "status": "manual_only",
+      "release_condition": "manual fuel/service task valid; no food or utility conveyor connection",
+      "on_full": "hold at source / finite queue; stop upstream release",
+      "on_wrong_item": "source-held reject; never reroute into an incompatible destination",
+      "evidence_refs": [
+        "runtime-transfers",
+        "DESIGN_CHECKPOINT"
+      ]
+    },
+    {
+      "id": "R-M02",
+      "source": {
+        "station": "storage-crates",
+        "port": "raw-food-handoff"
+      },
+      "destination": {
+        "station": "manual-raw-sales",
+        "port": "manual-stock"
+      },
+      "direction": "source_to_destination",
+      "item_form": "raw meat only if explicitly listed",
+      "transport": "staff_carry",
+      "status": "manual_only_catalogue_gated",
+      "release_condition": "exact raw item is in active sales catalogue; separate allowed stock area",
+      "on_full": "hold at source / finite queue; stop upstream release",
+      "on_wrong_item": "source-held reject; never reroute into an incompatible destination",
+      "evidence_refs": [
+        "DESIGN_CHECKPOINT"
+      ]
+    },
+    {
+      "id": "R-M03",
+      "source": {
+        "station": "food-counter",
+        "port": "cash"
+      },
+      "destination": {
+        "station": "cash-collection",
+        "port": "collect"
+      },
+      "direction": "source_to_destination",
+      "item_form": "credits / cash representation",
+      "transport": "staff_collection",
+      "status": "manual_only",
+      "release_condition": "sale completed; collect separately from products",
+      "on_full": "hold at source / finite queue; stop upstream release",
+      "on_wrong_item": "source-held reject; never reroute into an incompatible destination",
+      "evidence_refs": [
+        "A58.5-59s"
+      ]
+    }
+  ],
+  "source_family_coverage": [
+    {
+      "source_family": "furnace-hearth",
+      "source_equipment": [
+        "furnace",
+        "hearth vessel"
+      ],
+      "source_status": "confirmed_runtime",
+      "station_ids": [
+        "fuel-hatch",
+        "heater"
+      ],
+      "recipe_boundary": "No demonstrated ore -> steel, wood -> charcoal or fuel-refining conversion. Deposits and upgrades must not be relabelled smelting.",
+      "evidence_refs": [
+        "runtime-kinds",
+        "runtime-transfers",
+        "station-kit"
+      ]
+    },
+    {
+      "source_family": "fish-line",
+      "source_equipment": [
+        "fishing rods/rack",
+        "intake machinery",
+        "conveyor",
+        "cooker/processor",
+        "processing counter",
+        "service counter"
+      ],
+      "source_status": "locked_reference_design",
+      "station_ids": [
+        "fishing-rack",
+        "shore-intake",
+        "cooker",
+        "food-output-buffer",
+        "food-router",
+        "food-counter",
+        "processing-counter"
+      ],
+      "recipe_boundary": "Cooked whole fish appearance is directly evidenced. Prepared fillet is an explicit art proposal. T16 fish freeze is still required; recipe quantities, fuel use, timing and yields are unspecified.",
+      "evidence_refs": [
+        "locked-video-chain",
+        "video-A-016",
+        "resource-registry",
+        "station-kit",
+        "station-scope"
+      ]
+    },
+    {
+      "source_family": "meat-processor",
+      "source_equipment": [
+        "cooker/processor",
+        "raw meat crate",
+        "finished food tray"
+      ],
+      "source_status": "direct_visual_reference",
+      "station_ids": [
+        "cooker"
+      ],
+      "recipe_boundary": "Visual input/output association is evidenced; exact species and runtime conversion are not.",
+      "evidence_refs": [
+        "cooker-visible-crops",
+        "cooker-crop-receipt",
+        "board-18567",
+        "station-scope"
+      ]
+    },
+    {
+      "source_family": "cookfire-cookhouse",
+      "source_equipment": [
+        "cookfire",
+        "cookhouse"
+      ],
+      "source_status": "direct_visual_reference",
+      "station_ids": [
+        "cookfire-house"
+      ],
+      "recipe_boundary": "Equipment is depicted. No implemented generic cookhouse recipe, species eligibility or fuel requirement is established.",
+      "evidence_refs": [
+        "board-18607",
+        "board-18609"
+      ]
+    },
+    {
+      "source_family": "drying-racks",
+      "source_equipment": [
+        "meat drying rack",
+        "fish drying rack"
+      ],
+      "source_status": "direct_visual_reference",
+      "station_ids": [
+        "drying-racks"
+      ],
+      "recipe_boundary": "Rack contents are visible; drying duration, recipe IDs, state transitions and yields are unspecified.",
+      "evidence_refs": [
+        "board-18600",
+        "board-18603",
+        "board-18607"
+      ]
+    },
+    {
+      "source_family": "wheat-food-line",
+      "source_equipment": [
+        "wheat patch",
+        "mechanized harvester",
+        "blue/orange processing machinery"
+      ],
+      "source_status": "locked_reference_design",
+      "station_ids": [
+        "wheat-harvester",
+        "wheat-processor"
+      ],
+      "recipe_boundary": "T19 wheat freeze required. Do not invent a flour intermediate, mill recipe, baking recipe or greenhouse yield from the reference chain.",
+      "evidence_refs": [
+        "locked-video-chain",
+        "resource-registry",
+        "station-scope"
+      ]
+    },
+    {
+      "source_family": "saw-lumber",
+      "source_equipment": [
+        "saw station",
+        "lumber mill",
+        "steam saw"
+      ],
+      "source_status": "direct_visual_reference",
+      "station_ids": [
+        "saw-variant"
+      ],
+      "recipe_boundary": "No timber dimensions, conversion rate, machine tier or implemented plank recipe is established.",
+      "evidence_refs": [
+        "board-18607",
+        "board-18609",
+        "world-atlas"
+      ]
+    },
+    {
+      "source_family": "chopping",
+      "source_equipment": [
+        "chopping stump",
+        "chopping station"
+      ],
+      "source_status": "direct_visual_reference",
+      "station_ids": [
+        "chopping"
+      ],
+      "recipe_boundary": "Chopping acquisition and equipment are evidenced; a distinct split-firewood inventory kind or recipe is not.",
+      "evidence_refs": [
+        "board-18607",
+        "board-18600",
+        "resource-registry"
+      ]
+    },
+    {
+      "source_family": "animal-harvest-prep",
+      "source_equipment": [
+        "butcher table",
+        "harvest/preparation context"
+      ],
+      "source_status": "direct_visual_reference",
+      "station_ids": [
+        "butcher-prep"
+      ],
+      "recipe_boundary": "HIDE and FUR are explicit atlas nouns. No complete species drop table, skinning yields, edible roster or tanning route exists in inspected sources. Companions remain separate.",
+      "evidence_refs": [
+        "board-18607",
+        "world-atlas"
+      ]
+    },
+    {
+      "source_family": "stone-slate-quarry",
+      "source_equipment": [
+        "mining nodes",
+        "quarry drill"
+      ],
+      "source_status": "planned_or_depicted_equipment",
+      "station_ids": [
+        "quarry"
+      ],
+      "recipe_boundary": "A quarry drill is extraction equipment, not proof of cut blocks, bricks or finished slate tiles.",
+      "evidence_refs": [
+        "runtime-kinds",
+        "resource-registry",
+        "board-18609"
+      ]
+    },
+    {
+      "source_family": "steel-oil",
+      "source_equipment": [
+        "specific conversion equipment unspecified"
+      ],
+      "source_status": "request_concept_and_ambiguous_reference",
+      "station_ids": [
+        "steel-oil-unassigned"
+      ],
+      "recipe_boundary": "Neither the requested steel concept nor the ambiguous atlas can establishes an ore -> steel smelter or an oil/fuel refinery. The can is outside the current 20-sheet expansion; prior fuel and coal concepts do not establish conversion recipes.",
+      "evidence_refs": [
+        "prior-user-request",
+        "world-atlas",
+        "resource-registry",
+        "runtime-kinds"
+      ]
+    },
+    {
+      "source_family": "greenhouse",
+      "source_equipment": [
+        "greenhouse"
+      ],
+      "source_status": "planned_or_depicted_equipment",
+      "station_ids": [
+        "greenhouse"
+      ],
+      "recipe_boundary": "Depicted equipment only; no crop list or greenhouse-specific output is established.",
+      "evidence_refs": [
+        "board-18609"
+      ]
+    },
+    {
+      "source_family": "workshop",
+      "source_equipment": [
+        "workshop"
+      ],
+      "source_status": "planned_or_depicted_equipment",
+      "station_ids": [
+        "reserved-workstation",
+        "workshop"
+      ],
+      "recipe_boundary": "No supported inventory list of nails, rods, plates, gears or other workshop outputs. Do not fabricate them.",
+      "evidence_refs": [
+        "board-18600",
+        "board-18607"
+      ]
+    },
+    {
+      "source_family": "logistics",
+      "source_equipment": [
+        "stockpile",
+        "storage crates",
+        "conveyor",
+        "fishing winch",
+        "sled hauler",
+        "service counter"
+      ],
+      "source_status": "depicted_transport_storage_or_service",
+      "station_ids": [
+        "food-storage-in",
+        "food-inventory",
+        "food-storage-out",
+        "food-merge",
+        "food-counter",
+        "utility-feeder",
+        "utility-storage-in",
+        "utility-inventory",
+        "utility-storage-out",
+        "material-counter",
+        "fuel-hatch",
+        "storage-crates",
+        "manual-raw-sales",
+        "cash-collection",
+        "fishing-winch",
+        "sled-hauler"
+      ],
+      "recipe_boundary": "Transport, storage and service do not establish a new processed material.",
+      "evidence_refs": [
+        "board-18607",
+        "station-kit",
+        "runtime-customers",
+        "locked-video-chain"
+      ]
+    }
+  ],
+  "global_rules": [
+    "Carrier family and allowed form checked before release.",
+    "Reserve destination slot, stock and exclusive transfer owner before dispatch.",
+    "Reserve machine output before consuming inputs; a multi-input recipe reserves both ingredients together.",
+    "Wrong item remains source-held; a bounded reject area being full stops intake.",
+    "Full destination propagates wait upstream; no deletion, duplication or unbounded queue.",
+    "Storage OUT requires a request and never automatically returns to storage IN.",
+    "Food and utility cassettes serve local bays; original front aisle and right fuel hatch remain separate.",
+    "Fuel, raw-food storage, hides, cargo and cash remain manual in this upgrade.",
+    "No unlisted future recipe or production conversion is active."
+  ],
+  "validation": {
+    "source_families_covered": 14,
+    "station_count": 37,
+    "route_count": 25,
+    "all_route_ports_resolve": true,
+    "direction_consistency": true,
+    "automatic_storage_return_path_exists": false,
+    "runtime_tested": false
+  }
+}

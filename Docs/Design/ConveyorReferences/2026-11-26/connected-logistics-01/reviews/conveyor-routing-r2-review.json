@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/conveyor_critic",
+  "recorded_utc": "2026-11-27T03:42:46.805528+00:00",
+  "candidate": "renders/conveyor-routing-r2.png",
+  "sha256": "115e085f20ba222e65a333399b72043f931a7499bc4e1ad4ece44ea6444605ee",
+  "native_size": [
+    1672,
+    941
+  ],
+  "prompt": "prompts/conveyor-routing-r2.txt",
+  "prompt_sha256": "0b5ae9d1472c70a2f5159e3542c2e1ea6b2254af15521a951974d05e76801167",
+  "requirements_sha256": "40a11533d116d78ebc7fe17bc52b7817b9595f62b32eaf78be89a91407487bc9",
+  "full_native_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/conveyor-routing-r2-reverse-diverter.png",
+      "box": [
+        18,
+        520,
+        565,
+        872
+      ],
+      "sha256": "a06b01c2ea73c16e0d0f5d22fd5bba13b3a5493c5073600e0e1c9c9321a24e08"
+    },
+    {
+      "path": "reviews/evidence/conveyor-routing-r2-merge-pair.png",
+      "box": [
+        580,
+        105,
+        1080,
+        870
+      ],
+      "sha256": "28c69d60cefdaca74257d70eb4ca9aea68e8424c210dcfbfcab4011cee59f824"
+    },
+    {
+      "path": "reviews/evidence/conveyor-routing-r2-reverse-full-buffer.png",
+      "box": [
+        1090,
+        520,
+        1665,
+        872
+      ],
+      "sha256": "0103bad47a967c1f7307f5aedd3ee935f3ceee8140b920e86c5ab152e9724a36"
+    }
+  ],
+  "threshold": 9.5,
+  "score": 9.8,
+  "status": "PASS_STATIC_SHEET_ONLY",
+  "retest_of": "reviews/conveyor-routing-r1-review.json",
+  "prior_review_sha256": "c09c1dc045bb7aec8d0d64eba669ca45c366ab4c7822a20fd82ad11093d2fb68",
+  "checks": {
+    "style_material_family": "PASS",
+    "one_input_two_output_diverter": "PASS",
+    "two_input_one_output_gated_merge": "PASS",
+    "gates_before_conflict_zone": "PASS",
+    "finite_normal_full_buffer_states": "PASS",
+    "wrong_item_kept_off_food_line": "PASS",
+    "direction_consistency": "PASS",
+    "diverter_opposing_view": "PASS",
+    "buffer_opposing_view": "PASS",
+    "source_proposal_boundary": "PASS"
+  },
+  "findings": [
+    "Plain rails remove contradictory cues; labelled IN/OUT and branch arrows now agree with each module role.",
+    "Reverse diverter exposes the single inlet opposite the two outlets, with held incompatible timber off-line and FOOD ONLY classifier.",
+    "Gated merge preserves two independently gated feeders and one downstream lane under opposite view. It is for alternate supplies of the same accepted item, not a recipe-ingredient mixer.",
+    "Normal buffer has two occupied positions plus vacancy; reverse FULL state has three occupied, one upstream carrier and a closed intake barrier; terminal fence and PICKUP identify a finite handoff."
+  ],
+  "required_repairs": [],
+  "approval_boundary": "Exact static routing/buffer module sheet only. It depicts proposed behavior and illustrative tray positions, not tested inventory code or approved capacity values."
+}

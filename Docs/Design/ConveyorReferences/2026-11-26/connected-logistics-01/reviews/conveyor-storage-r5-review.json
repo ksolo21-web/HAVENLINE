@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/conveyor_critic",
+  "recorded_utc": "2026-11-27T04:07:35.852220+00:00",
+  "candidate": "renders/conveyor-storage-r5.png",
+  "sha256": "9e314d3595e8625ff4da6d4ed9d31a799eb0f0d47a707fcc75711f70b7ffc9f2",
+  "native_size": [
+    1672,
+    941
+  ],
+  "prompt": "prompts/conveyor-storage-r5.txt",
+  "prompt_sha256": "f74b609637d1c455cc3057e03528b0b87ddaa606ca2ec27076f681b280cff087",
+  "requirements_sha256": "40a11533d116d78ebc7fe17bc52b7817b9595f62b32eaf78be89a91407487bc9",
+  "full_native_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/conveyor-storage-r5-utility-out-guard.png",
+      "box": [
+        95,
+        300,
+        435,
+        500
+      ],
+      "sha256": "29afe622dcdd0b3a078481855a0f82432896d9091616c75feda5dd352b73a880"
+    },
+    {
+      "path": "reviews/evidence/conveyor-storage-r5-food-out-guard.png",
+      "box": [
+        1040,
+        250,
+        1370,
+        490
+      ],
+      "sha256": "21a3bb0935aca1b9e05eaede125e093232ab91b2922ac3eeff815036336a2518"
+    },
+    {
+      "path": "reviews/evidence/conveyor-storage-r5-utility-local-transfer.png",
+      "box": [
+        5,
+        520,
+        825,
+        890
+      ],
+      "sha256": "6e5e5a7ddc5d0dd67a97ad036c1a457e16799bde5c1f914c76076c7b16feaa7a"
+    },
+    {
+      "path": "reviews/evidence/conveyor-storage-r5-food-local-transfer.png",
+      "box": [
+        900,
+        525,
+        1668,
+        889
+      ],
+      "sha256": "ee03e5cd857903fa41f812b9e0381963e2cc65e0f7a50a1dbeefd14b29527177"
+    }
+  ],
+  "threshold": 9.5,
+  "retest_of": "reviews/conveyor-storage-r4-review.json",
+  "prior_review_sha256": "33a54a9de178bc93fad0bc5b7487e4267896fb753e02ce819c30afc6468018ff",
+  "score": 9.8,
+  "status": "PASS_STATIC_SHEET_ONLY",
+  "checks": {
+    "new_dock_upgrade_explicit": "PASS",
+    "source_house_architecture_identity": "PASS",
+    "front_door_apron_left_window_rear_vent_fuel_hatch_preserved": "PASS",
+    "utility_input_output_roles_and_low_landings": "PASS",
+    "local_indexed_utility_lift_to_distinct_bins": "PASS",
+    "rear_food_both_ports_same_wall_and_shelf_height": "PASS",
+    "food_horizontal_shuttle_above_closed_raw_cabinets": "PASS",
+    "in_out_consistent_across_opposing_cutaway_views": "PASS",
+    "new_blue_out_guards_no_contradictory_chevrons": "PASS",
+    "supported_width_height_transfer_surfaces": "PASS",
+    "central_aisle_not_crossed_by_hidden_belt": "PASS",
+    "material_and_prepared_food_separate": "PASS",
+    "no_full_storage_automation_claim": "PASS",
+    "four_actual_views_and_closeups_inspected": "PASS"
+  },
+  "findings": [
+    "r5 replaces the failed white inward OUT chevrons with visibly blue guards and rectangular OUT plates on exterior utility and food docks and the utility cutaway. IN remains orange. Tight native crops confirm the contradictory marks are gone.",
+    "The low utility input/output landings and horizontal rail to the local indexed lift remain visible, serving timber/material bins without an unseen central-aisle route.",
+    "Rear food sleeves remain at the prepared-food shelf elevation on one rear wall. The opposing inside view mirrors left/right correctly and shows local horizontal transfer above closed raw-food cabinets.",
+    "Original front doors and apron, high left window, round rear vent and separate right fuel hatch remain distinct. Six-zone whole-house disposition is preserved by the accompanying approved plan; this sheet intentionally cuts away only the two changed bays."
+  ],
+  "required_repairs": [],
+  "limitations": [
+    "Static generated concept illustration; no native 3D mesh, moving shuttle/lift cycle, precise dimensions or runtime collision evidence is claimed.",
+    "Tray counts, transfer speeds and recipe quantities remain illustrative/unapproved.",
+    "Exterior service-space fit is a separate camp-allocation acceptance gate."
+  ],
+  "approval_boundary": "Selected storage concept sheet only. All previous r1-r4 candidates and failed reviews must remain archived. This does not approve the camp scene or remote GitHub persistence."
+}

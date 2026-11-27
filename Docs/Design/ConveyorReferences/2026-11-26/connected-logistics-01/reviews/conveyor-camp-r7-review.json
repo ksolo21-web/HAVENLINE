@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/conveyor_critic",
+  "recorded_utc": "2026-11-27T04:36:41.698991+00:00",
+  "candidate": "renders/conveyor-camp-r7.png",
+  "sha256": "c1922b99ee6e0669e9b4d73e56fc57156c51c5dafe85f07be5f83715ec2ce92c",
+  "native_size": [
+    1672,
+    941
+  ],
+  "prompt": "prompts/conveyor-camp-r7.txt",
+  "prompt_sha256": "d490aa7f36507abd9013100553d1a2aee4dabac2edc10cc9bd67b9344114796e",
+  "requirements_sha256": "40a11533d116d78ebc7fe17bc52b7817b9595f62b32eaf78be89a91407487bc9",
+  "mode": "Initial serial storage-buffered deployment under approved scope-preservation preflight",
+  "mode_record": "D06-initial-deployment.json",
+  "mode_record_sha256": "eeab169419f029a35a0c52fc2d1a291ae4b7873446390fb120bf5bc1c38ab7e3",
+  "full_native_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/conveyor-camp-r7-dock-tips-and-wall-connections.png",
+      "box": [
+        720,
+        220,
+        1305,
+        435
+      ],
+      "sha256": "ee859eeca48f17bacda536c9c6dab363e7f1566a9741930addec5820f1621956"
+    },
+    {
+      "path": "reviews/evidence/conveyor-camp-r7-pond-west-gap.png",
+      "box": [
+        30,
+        190,
+        425,
+        485
+      ],
+      "sha256": "168281def17286dfd94b1418c20c7963a0cbe23fb402ec6d39029fa02f12c964"
+    },
+    {
+      "path": "reviews/evidence/conveyor-camp-r7-counter-fence-block.png",
+      "box": [
+        1370,
+        285,
+        1650,
+        665
+      ],
+      "sha256": "a84b1294c04f245a13167b4c222bde8e9b4f67a4d44b65455d61af475281947e"
+    }
+  ],
+  "threshold": 9.5,
+  "score": 8.2,
+  "status": "REPAIR_REQUIRED",
+  "checks": {
+    "initial_mode_label_and_no_false_merge": "PASS",
+    "intake_front_discharge_to_correct_cooker_raw_input": "PASS",
+    "rear_facing_house_same_wall_food_port_pair": "PASS",
+    "canonical_house_rear_vent_and_manual_fuel_hatch": "PASS",
+    "cooker_to_in_dock_tip_continuous_supported_transfer": "FAIL",
+    "out_dock_tip_to_counter_continuous_supported_transfer": "FAIL",
+    "counter_staff_keypad_stock_cash_roles": "PASS",
+    "counter_outside_customer_frontage": "FAIL",
+    "continuous_west_to_north_service_access": "FAIL",
+    "two_primary_gates_and_heater_approaches": "PASS"
+  },
+  "findings": [
+    {
+      "id": "C7-F1",
+      "severity": "blocking",
+      "observation": "The cooked output run reaches the wall/side area behind the IN platform, while its exposed forward dock tip remains a separate capped deck. No supported turn or transfer mechanism joins the actual IN tip."
+    },
+    {
+      "id": "C7-F2",
+      "severity": "blocking",
+      "observation": "The outgoing counter belt starts at the house right/fuel-wall area instead of the separate OUT platform tip. The OUT platform is still a standalone capped deck."
+    },
+    {
+      "id": "C7-F3",
+      "severity": "blocking",
+      "observation": "The north-south timber counter has the correct staff-facing keypad and stock/register ends, but the intact east fence remains directly behind the customer side. Outside customers cannot reach the tabletop."
+    },
+    {
+      "id": "C7-F4",
+      "severity": "blocking",
+      "observation": "Pond rim/rocks meet the west fence, leaving no continuous paved outer walk to the northern front-door service aisle. The new enclosed-water site has not yet delivered its declared access benefit."
+    }
+  ],
+  "required_repairs": [
+    "Extend both short dock decks forward by one belt width. Join the incoming cooker run to the exposed IN tip with a real supported curve/bridge, and let OUT travel forward from its own exposed tip before curving right to the stock buffer. Remove both mistaken wall connection stubs, including the fuel-wall attachment.",
+    "Open the east fence behind the customer face and seat the table in that service opening. Preserve correct staff keypad/register end and separate guarded pickup.",
+    "Inset/shrink the pond rim so an uninterrupted paved west strip visibly joins the north service aisle behind the rotated house. Preserve floor at the original far front-door side.",
+    "Retain the valid simple initial topology, source rear-house identity, correct raw feed, two main gates and central heater."
+  ],
+  "approval_boundary": "Initial mode remains valid as a design choice, but this particular image fails its actual physical connections and access. No reduced geometric standard is applied to the simpler mode."
+}

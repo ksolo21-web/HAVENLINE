@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/conveyor_critic",
+  "recorded_utc": "2026-11-27T04:27:04.464498+00:00",
+  "candidate": "renders/conveyor-camp-r6.png",
+  "sha256": "142a1e0365b16268f25e9b4628e7d2cd0cd558feb3a1a0b900942ba83ee819ad",
+  "native_size": [
+    1671,
+    941
+  ],
+  "prompt": "prompts/conveyor-camp-r6.txt",
+  "prompt_sha256": "aca483f4a6960d4b9ab86e27784c2398da673b8fe129e63515ddf744cd4bc573",
+  "requirements_sha256": "40a11533d116d78ebc7fe17bc52b7817b9595f62b32eaf78be89a91407487bc9",
+  "full_native_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/conveyor-camp-r6-wrong-output-dock-route.png",
+      "box": [
+        335,
+        150,
+        975,
+        345
+      ],
+      "sha256": "40d388444a521b66a1a458c36a189520f30fb56e7f846823dae083b8a8959658"
+    },
+    {
+      "path": "reviews/evidence/conveyor-camp-r6-detached-fresh-merge-inlet.png",
+      "box": [
+        675,
+        310,
+        890,
+        460
+      ],
+      "sha256": "62d566c574cfe424ae3443cd05041b34844b33b00f6beb47d25dd7259ef65084"
+    }
+  ],
+  "retest_of": "reviews/conveyor-camp-r5-review.json",
+  "prior_review_sha256": "4080a323bd5ea9f5da7c2df126ba918573cf8b63fa3c88f0ba36d2f58b871b3f",
+  "threshold": 9.5,
+  "score": 8.5,
+  "status": "REPAIR_REQUIRED_REGRESSION",
+  "checks": {
+    "front_crate_emblem_restored": "PASS",
+    "blue_utility_out_guard_retained": "PASS",
+    "raw_feed_and_customer_boundary_retained": "PASS",
+    "cooker_output_to_storage_in": "FAIL",
+    "storage_out_to_counter_merge": "FAIL",
+    "fresh_diverter_branch_continuous": "FAIL"
+  },
+  "findings": [
+    "The continuous northern prepared-food route now connects cooker OUT to the rear storage sleeve labelled OUT, violating receiving/dispatch direction.",
+    "The descending side return now originates at the rear IN-labelled sleeve, yet its lower segment still has an OUT label.",
+    "The diverter/fresh branch has disappeared; the north approach of the downstream two-input merge is a detached stub.",
+    "Front emblem and blue utility OUT guard are repaired, but these cannot compensate for the reversed storage roles and missing branch."
+  ],
+  "required_repairs": [
+    "Do not select this image. Rebuild a logically coherent deployment with typed ports and continuous supported paths. A documented initial serial storage-buffered variant is permitted by the original D06 requirement, subject to the separate deployment-change preflight."
+  ],
+  "approval_boundary": "Rejected full direct/overflow camp attempt. Preserve exact r6 PNG, invocation and failed review; no source labels or controls are approved by appearance alone."
+}

@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/conveyor_critic",
+  "recorded_utc": "2026-11-27T03:22:49.353412+00:00",
+  "amends": "reviews/critic-preflight-v1.json",
+  "reason": "Newly reviewed exact reference frames establish additional multi-input assembly topology missing from historical source summary.",
+  "sources": [
+    {
+      "path": "references/existing/A-detail-transfer-01.jpg",
+      "sha256": "2aac2987200c29556302a9b019b0264c27818f3fcd6703f0811e2d26fcdfa54a",
+      "review_method": "Actual full contact-sheet pixels inspected; timestamp selected frames, not full motion playback by this critic"
+    },
+    {
+      "path": "references/existing/A-detail-transfer-02.jpg",
+      "sha256": "64d9843696a2083e8c9c641f5f32cc7e226f53ea68f0a35322f50c8b75409e83",
+      "review_method": "Actual full contact-sheet pixels inspected; timestamp selected frames, not full motion playback by this critic"
+    }
+  ],
+  "original_video": "Screen_Recording_20260817_124839_YouTube.mp4",
+  "original_video_sha256": "62f7cfe644de3826cfdd6d91bc23c0ab8d9e4fde3e175c90f762e604547bb0ca",
+  "observations": [
+    {
+      "time": "56.50\u201359.00s",
+      "claim": "Blue burger-marked assembly machine has two adjacent feeder lanes approaching from fish-shaped cooked stack and round bread-like stack areas; source shows multi-input machine-to-machine flow."
+    },
+    {
+      "time": "57.00\u201358.25s",
+      "claim": "Short output conveyor feeds a timber vehicle-service counter with visible burger-shaped stacks and car customer demand."
+    },
+    {
+      "time": "58.50\u201359.00s",
+      "claim": "Green cash arcs separately from vehicle service toward cash ground pad; product conveyor is not a cash-return lane."
+    },
+    {
+      "time": "56.00\u201359.00s",
+      "claim": "Pedestrian counter queues and helper-carried stock continue separately. Direct automatic vehicle-counter connection does not prove every pedestrian counter already has automatic refill."
+    }
+  ],
+  "design_implications": [
+    "Include a distinct dual-input assembly adapter or separate typed feeders at the machine. A generic mixed-item merge cannot replace two separately metered ingredient inputs.",
+    "If future multi-input processing is depicted, expose both ingredient buffers, stop on missing ingredient, and reserve output space before consuming ingredients; these control rules are new system proposals, not observed exact engine behavior.",
+    "Fish identity, bread-like identity and burger-shaped output are visual descriptions; no exact species, quantity ratio, fuel, timing or hidden intermediate is established.",
+    "A directly connected vehicle-service counter is source-supported topology; adaptation to canonical Havenline counter needs visible new staff-side receiver/buffer, without changing register/customer roles.",
+    "Storehouse conveyor sleeves and internal retrieval remain new proposals; this additional source still does not prove universal storage automation."
+  ],
+  "candidate_status": "No new candidate scored; C02/C04/C06/C10 must include these newly observed distinctions."
+}

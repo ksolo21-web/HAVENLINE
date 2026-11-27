@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/conveyor_critic",
+  "recorded_utc": "2026-11-27T04:33:14.261021+00:00",
+  "candidate": "D06-initial-deployment.json",
+  "candidate_sha256": "eeab169419f029a35a0c52fc2d1a291ae4b7873446390fb120bf5bc1c38ab7e3",
+  "inputs": [
+    {
+      "path": "requirements.json",
+      "sha256": "40a11533d116d78ebc7fe17bc52b7817b9595f62b32eaf78be89a91407487bc9"
+    },
+    {
+      "path": "reviews/initial-deployment-preflight-v1.json",
+      "sha256": "b15cb2f220b545286bdc505eb1a2ca65157211c9d6259f52593c4737abd7bc30"
+    },
+    {
+      "path": "design/routing-catalogue.json",
+      "sha256": "bc72ba3281a8b3bcda4fbb127f6a964fd86fa73aa7f0c49e66416b9dbc0fe398"
+    },
+    {
+      "path": "README.md",
+      "sha256": "3080041acb43c8768e4f8ae6272c2c900c2bb24732898c3d36780e36e2affac9"
+    },
+    {
+      "path": "GALLERY.md",
+      "sha256": "5483ef93cfb23907f76740668c1cb983582386d137d3f9144f3f404633219741"
+    }
+  ],
+  "status": "PASS_SCOPED_TYPED_INITIAL_MODE_ONLY",
+  "score": 9.8,
+  "threshold": 9.5,
+  "counts": {
+    "stations": 9,
+    "routes": 8,
+    "reused_station_port_definitions": 8
+  },
+  "route_port_checks": [
+    {
+      "route": "I01",
+      "directions_and_carriers_match": true,
+      "proposal_status_explicit": true
+    },
+    {
+      "route": "I02",
+      "directions_and_carriers_match": true,
+      "proposal_status_explicit": true
+    },
+    {
+      "route": "I03",
+      "directions_and_carriers_match": true,
+      "proposal_status_explicit": true
+    },
+    {
+      "route": "I04",
+      "directions_and_carriers_match": true,
+      "proposal_status_explicit": true
+    },
+    {
+      "route": "I05",
+      "directions_and_carriers_match": true,
+      "proposal_status_explicit": true
+    },
+    {
+      "route": "I06",
+      "directions_and_carriers_match": true,
+      "proposal_status_explicit": true
+    },
+    {
+      "route": "I07",
+      "directions_and_carriers_match": true,
+      "proposal_status_explicit": true
+    },
+    {
+      "route": "I08",
+      "directions_and_carriers_match": true,
+      "proposal_status_explicit": true
+    }
+  ],
+  "reused_ports": [
+    {
+      "id": "shore-intake",
+      "port_definitions_identical": true
+    },
+    {
+      "id": "cooker",
+      "port_definitions_identical": true
+    },
+    {
+      "id": "food-output-buffer",
+      "port_definitions_identical": true
+    },
+    {
+      "id": "food-storage-in",
+      "port_definitions_identical": true
+    },
+    {
+      "id": "food-inventory",
+      "port_definitions_identical": true
+    },
+    {
+      "id": "food-storage-out",
+      "port_definitions_identical": true
+    },
+    {
+      "id": "food-counter",
+      "port_definitions_identical": true
+    },
+    {
+      "id": "cash-collection",
+      "port_definitions_identical": true
+    }
+  ],
+  "automatic_storage_out_to_in_path": false,
+  "errors": [],
+  "semantic_checks": {
+    "mode_distinct_from_full_D07_upgrade": "PASS",
+    "all_new_route_statuses_explicit_proposals": "PASS",
+    "raw_prepared_cash_carrier_separation": "PASS",
+    "cycle_start_output_reservation_distinct_from_dispatch": "PASS",
+    "finite_inventory_and_no_return": "PASS",
+    "receiving_full_allows_valid_outbound_dispatch": "PASS",
+    "manual_stock_handoff_and_separate_cash": "PASS",
+    "rotated_original_house_faces_and_access_declared": "PASS",
+    "enclosed_water_site_explicit_new_proposal": "PASS",
+    "initial_mode_and_full_upgrade_prose_distinction": "PASS",
+    "unchanged_D07_binding": "PASS"
+  },
+  "reviewed_prose": "Current README and GALLERY describe the initial serial mode, nine endpoints/eight transfers, different house placement, floor-strip access and fuller D02/D07 direct-feed upgrade without claiming both are the same footprint. Research evidence limits and static-only boundaries remain intact.",
+  "required_repairs": [],
+  "approval_boundary": "Typed concept-mode record and explanatory prose only. Actual new camp image remains unreviewed and must pass all physical route/interface/access checks. Frozen-package link validation and remote GitHub verification remain separate R14 obligations."
+}

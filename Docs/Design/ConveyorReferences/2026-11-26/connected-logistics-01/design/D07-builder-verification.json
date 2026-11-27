@@ -1,0 +1,96 @@
+{
+  "review_type": "builder verification, not independent approval",
+  "status": "BUILDER_VERIFIED_WITH_INDEPENDENT_SCOPED_PASS",
+  "outputs": [
+    {
+      "svg": "D07-01-directed-routing.svg",
+      "svg_parses": true,
+      "svg_bytes": 25612,
+      "png": "D07-01-directed-routing.png",
+      "png_dimensions": [
+        2200,
+        1850
+      ],
+      "svg_sha256": "1bb596314daaf0b46af4df8f42e8cf2ccbf0bd2e7c23301195a3529e1b620b73",
+      "png_sha256": "65577209dc8ca7357b9a8075ae269bdbd2460db7898743d2c1a61ca5ef9b4296",
+      "builder_review": "actual current full rendered image inspected; label fit/readability and repaired critical regions verified; independent r5 scoped pass is recorded separately"
+    },
+    {
+      "svg": "D07-02-camp-allocation.svg",
+      "svg_parses": true,
+      "svg_bytes": 25112,
+      "png": "D07-02-camp-allocation.png",
+      "png_dimensions": [
+        2200,
+        1450
+      ],
+      "svg_sha256": "63951059e1ad8f4e8f261c2f98fcfe810306e6fe985861263b13423d53446344",
+      "png_sha256": "1e804d0ac0959523bb2441476efdda7ca37c43d2a0953727bd7e161fab12f531",
+      "builder_review": "actual current full rendered image inspected; label fit/readability and repaired critical regions verified; independent r5 scoped pass is recorded separately"
+    }
+  ],
+  "catalogue_validation": {
+    "source_families_covered": 14,
+    "station_count": 37,
+    "route_count": 25,
+    "all_route_ports_resolve": true,
+    "direction_consistency": true,
+    "automatic_storage_return_path_exists": false,
+    "runtime_tested": false
+  },
+  "source_family_coverage": {
+    "expected": 14,
+    "covered": 14,
+    "missing": []
+  },
+  "repairs": [
+    "Measured card text fitting/wrapping replaced overflowing labels.",
+    "Moved gate labels clear of later layers.",
+    "Kept heater at camp centre while reducing physical symbol footprint; warmth halo behind structures.",
+    "Moved storage title and feature note away from local transfer arrows.",
+    "Added explicit unchanged-log, manual raw-sales and separate cash routes.",
+    "Utility IN selects either timber or mineral tray; OUT receives from selected tray and exits toward reserved endpoint.",
+    "Counter belt ends at a separate stock buffer; dashed gray staff-lift arrow replaces automatic wooden-table transfer.",
+    "Continuous service-access spine connects clear primary gate corridor with rear and left service aisles, outside belts.",
+    "R-F01 marked as new optional manual loading; manual rod phase not claimed to serially feed mechanized intake in observed source.",
+    "Assembler cycle-start checks both ingredients and reserved output space; completed-output dispatch depends only on accepted output and its destination reservation.",
+    "Rear food cassette uses a short horizontal tray/shuttle at prepared-food shelf height; utility cassette retains local tray/lift."
+  ],
+  "not_tested": [
+    "runtime simulation",
+    "runtime collision/pathfinding",
+    "world-scale clearance",
+    "recipe/balance implementation"
+  ],
+  "current_revision": "r5",
+  "catalogue_sha256": "bc72ba3281a8b3bcda4fbb127f6a964fd86fa73aa7f0c49e66416b9dbc0fe398",
+  "retained_reviewed_revisions": [
+    "revisions/draft-v1/",
+    "revisions/draft-v2/",
+    "revisions/draft-v3/",
+    "revisions/draft-v4/"
+  ],
+  "pixel_evidence": [
+    {
+      "path": "review-screenshots/utility-selector-r5.png",
+      "sha256": "bb55c127579a2719a58a25d7184672e51c1a541d5a9a99befd9b8d2c9d2a91f9"
+    },
+    {
+      "path": "review-screenshots/service-access-r5.png",
+      "sha256": "c22b17d5f89b059819082249db92f1caf4a2e0fc6cb2ed04d89600b40154d5cb"
+    },
+    {
+      "path": "review-screenshots/counter-handoff-r5.png",
+      "sha256": "fc454cfb554bcbd15390024ea44b4f63c6b5589e9b0b61934b648f8cc4d641e6"
+    }
+  ],
+  "independent_review": {
+    "reviewer": "/root/conveyor_critic",
+    "status": "PASS_SCOPED_DESIGN_ONLY",
+    "score": 9.8,
+    "mandatory_checks_passed": 14,
+    "report": "reviews/d07-final-scoped-review.json",
+    "report_sha256": "0696005fc33c650f6b59e7aeaad8ee8e3f3654026ea41d5279131cedb7bc5a40",
+    "boundary": "Concept specification only, not a runnable inventory engine, frozen SKU/recipe table, exact world-scale layout, mesh collision or runtime navigation certification. Static art package, research and GitHub verification remain separate mandatory gates; no task-wide approval."
+  }
+}

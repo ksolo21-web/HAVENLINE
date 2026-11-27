@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/conveyor_critic",
+  "recorded_utc": "2026-11-27T04:15:42.937478+00:00",
+  "task_status": "IN_PROGRESS_NO_OVERALL_APPROVAL",
+  "passed_render_studies": 6,
+  "required_render_studies": 7,
+  "scoped_passes": [
+    {
+      "report": "reviews/conveyor-transport-r2-review.json",
+      "sha256": "0f4ca491361292d49de8873e0d76b1cfe9e9a02d4e1ddce131cedf4818994873",
+      "score": 9.8,
+      "status": "PASS_STATIC_SHEET_ONLY"
+    },
+    {
+      "report": "reviews/conveyor-routing-r2-review.json",
+      "sha256": "af43e13742e07ac59973527d308aceb4cde2187f3dcef90b485f5811593fdb60",
+      "score": 9.8,
+      "status": "PASS_STATIC_SHEET_ONLY"
+    },
+    {
+      "report": "reviews/conveyor-storage-r5-review.json",
+      "sha256": "809f60d30bcc310d930dd19f7ee195e457827e4624c2006aaa6a2b4db448ed2d",
+      "score": 9.8,
+      "status": "PASS_STATIC_SHEET_ONLY"
+    },
+    {
+      "report": "reviews/conveyor-machines-r2-review.json",
+      "sha256": "a9e7ac77a269dea58afebbc7f0af8a28f9608d73904e91a4daa27e5638056e08",
+      "score": 9.8,
+      "status": "PASS_STATIC_SHEET_ONLY"
+    },
+    {
+      "report": "reviews/conveyor-assembly-r1-review.json",
+      "sha256": "d5e1e152540f6db55d6d37c406e970351de6168a50ce03f28c29d42220f51241",
+      "score": 9.8,
+      "status": "PASS_STATIC_SHEET_ONLY"
+    },
+    {
+      "report": "reviews/conveyor-counter-r3-review.json",
+      "sha256": "6e6385a6fc690e1bc8bb2248188f19d2da2c051581420ba6eeb24a63023bd0b7",
+      "score": 9.8,
+      "status": "PASS_STATIC_SHEET_ONLY"
+    },
+    {
+      "report": "reviews/d07-final-scoped-review.json",
+      "sha256": "0696005fc33c650f6b59e7aeaad8ee8e3f3654026ea41d5279131cedb7bc5a40",
+      "score": 9.8,
+      "status": "PASS_SCOPED_DESIGN_ONLY"
+    },
+    {
+      "report": "reviews/research-final-scoped-review.json",
+      "sha256": "ba5c1efb87f043c04e33a1782dbfe94881bbe185093e9d70a55b166e2906f2e6",
+      "score": 9.8,
+      "status": "PASS_DECLARED_RESEARCH_COVERAGE_ONLY"
+    }
+  ],
+  "current_blockers": [
+    {
+      "deliverable": "D06 camp",
+      "review": "reviews/conveyor-camp-r3-review.json",
+      "score": 8.7,
+      "issues": [
+        "Storage OUT terminates against fresh branch side rail before control gates",
+        "Front crate emblem replaced by rear-only vent",
+        "Latest short blue OUT dock guards missing",
+        "Continuous left/rear house service route not visibly established"
+      ]
+    },
+    {
+      "deliverable": "D08 GitHub persistence",
+      "status": "PENDING_ROOT_PUBLICATION_AND_REMOTE_READBACK"
+    },
+    {
+      "deliverable": "README publication links",
+      "review": "reviews/readme-evidence-review-v1.json",
+      "status": "Canonical references/ versus research/ destination mismatch requires final link validation"
+    }
+  ],
+  "planned_repair": "Put a genuine gated merge at actual fresh/store confluence and remove downstream false gate pair; restore crate emblem and blue short OUT guards; expose continuous house west/rear service floor. Preserve corrected raw feed and east-boundary counter.",
+  "next_action": "Review actual camp r4 pixels and critical confluence/service details when available, then map original mandatory checks to selected evidence.",
+  "history": "Keep all failed candidate PNGs, exact ordered input prompts/invocations and independent reviews; camp r1 was tool schema failure without an image.",
+  "approval_boundary": "No missing mandatory evidence is waived. Research and exact vector/catalogue passes do not override a visibly incorrect camp render or prove GitHub persistence."
+}

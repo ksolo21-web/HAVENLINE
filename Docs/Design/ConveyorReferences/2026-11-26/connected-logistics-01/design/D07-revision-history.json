@@ -1,0 +1,83 @@
+{
+  "deliverable": "D07",
+  "current_revision": "r5",
+  "current_independent_status": "PASS_SCOPED_DESIGN_ONLY",
+  "history_preservation": "All produced diagram PNGs, reviewed SVG versions, critical review crops and associated review notes are retained. Historical drafts are not current design authority.",
+  "revisions": [
+    {
+      "id": "draft-v1",
+      "directory": "revisions/draft-v1",
+      "status": "rejected_by_builder",
+      "findings": [
+        "Card text overflow",
+        "Gate-label occlusion",
+        "Storage annotation/arrow collision",
+        "Heater symbol overlapped apron"
+      ],
+      "superseded_by": "draft-v2"
+    },
+    {
+      "id": "draft-v2",
+      "directory": "revisions/draft-v2",
+      "status": "reviewed_defects_repaired_in_r3",
+      "findings": [
+        "Utility OUT arrow and per-class IN/OUT semantics ambiguous",
+        "Counter handoff incorrectly looked automatic",
+        "Left/rear service aisles lacked connected access"
+      ],
+      "superseded_by": "r3"
+    },
+    {
+      "id": "r3",
+      "directory": "revisions/draft-v3",
+      "status": "reviewed_catalogue_defects_repaired_in_r4",
+      "repairs": [
+        "Separate receiving and dispatch; both timber and mineral local trays selectable",
+        "Dashed staff lift from dead-end buffer to wooden counter",
+        "Continuous blue service spine outside conveyor paths"
+      ],
+      "detail_crops": [
+        "review-screenshots/utility-selector-r3.png",
+        "review-screenshots/service-access-r3.png",
+        "review-screenshots/counter-handoff-r3.png"
+      ],
+      "superseded_by": "r4"
+    },
+    {
+      "id": "r4",
+      "directory": "revisions/draft-v4",
+      "status": "graphical_repairs_passed_terminology_synced_in_r5",
+      "repairs": [
+        "Optional rack-to-intake loading correctly classified as proposal",
+        "Joint ingredient/output reservation belongs to cycle start",
+        "Completed assembler stock dispatch uses independent destination reservation",
+        "Manual-handoff legend includes staff lift and fuel"
+      ],
+      "detail_crops": [
+        "review-screenshots/utility-selector-r4.png",
+        "review-screenshots/service-access-r4.png",
+        "review-screenshots/counter-handoff-r4.png"
+      ],
+      "superseded_by": "r5"
+    },
+    {
+      "id": "r5",
+      "directory": ".",
+      "status": "PASS_SCOPED_DESIGN_ONLY",
+      "repairs": [
+        "Food tray/shuttle at prepared-food shelf height; utility indexed tray/lift"
+      ],
+      "detail_crops": [
+        "review-screenshots/utility-selector-r5.png",
+        "review-screenshots/service-access-r5.png",
+        "review-screenshots/counter-handoff-r5.png"
+      ],
+      "score": 9.8,
+      "independent_report": "reviews/d07-final-scoped-review.json"
+    }
+  ],
+  "scope_boundaries": [
+    "Editable design specification and conceptual space allocation only",
+    "No runtime, exact-scale, recipe-balance or collision fit approval"
+  ]
+}

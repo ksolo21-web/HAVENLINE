@@ -1,0 +1,64 @@
+{
+  "id": "conveyor-camp-r6",
+  "tool": "image_gen__imagegen",
+  "arguments": {
+    "prompt": "Make ONLY TWO precise repairs to the FIRST camp image. Use the SECOND image only as the reference for the correct orange crate emblem on the front of the house. Preserve the first image's paired rear food docks, visible exterior OUT return, blue OUT nameplates, correct merge, correct cooker/intake, customer counter, clear gates, furnace and all other successful geometry.\n\n1. FRONT BADGE: The circular louvered opening above the FRONT double doors is wrong. Replace that entire circular front opening with the solid orange CRATE EMBLEM shown above the same front doors in reference 2. It is a raised orange cube/crate badge, not a circular opening. Keep the snowy blue gable roof, doors, window and separate right service hatch unchanged. The front must match reference 2.\n\n2. UNCROSS THE TWO REAR FOOD ROUTES:\nIn reference 1, the horizontal incoming food belt near x=500,y=250 collides with the diagonal outgoing return. Keep the entire existing blue OUT sleeve and its descending exterior return exactly where they are.\nMove the WHOLE incoming FOOD IN approach farther NORTH/BACK, so it passes BEHIND and clearly SEPARATED from the OUT return. The incoming route goes from the cooker diverter toward the back fence, then WEST across the rear work area, then makes a supported 90-degree turn into the separate rear IN sleeve. It must connect to IN without crossing, touching or passing through any part of the OUT sleeve or its elbowed return.\nShow a continuous visible gap of empty space between both routes for their entire length. They remain at a coherent shelf-level carrying height with properly grounded support legs and real transfer surfaces. Do not draw an overpass or tunnel, do not hide a crossing behind the roof. Recess the rear fence slightly if needed so a continuous empty floor service strip still remains beyond this more northerly IN route and connects with the west service aisle. It is a spatial reroute, not an increase in conveyor elevation.\nRemove the redundant IN sign along the middle of the old approach; keep one actual IN label at the rear receiving sleeve. OUT is the neighboring blue rear dock, which follows its existing traceable exterior return into the west inlet of the merge. No belt enters the right fuel hatch. The incoming and outgoing lanes NEVER connect directly with each other.\n\nLEAVE THE REST ALONE. In particular do not move the now-correct two raised inlet gates or actual merge deck, do not add extra gates, do not alter the correctly oriented cooker, do not rotate the table, do not recolor the blue utility OUT guard, do not remove either open gate or block the foreground walking corridor. Original image style, lighting, scale, colors and header/footer are unchanged. One landscape 16:9 finished Havenline game-art camp image.",
+    "referenced_image_paths": [
+      "/workspace/scratch/9c51da47f878/havenline-conveyors-2026-11-26/renders/conveyor-camp-r5.png",
+      "/workspace/scratch/9c51da47f878/havenline-conveyors-2026-11-26/renders/conveyor-camp-r4.png"
+    ],
+    "transparent_background": false
+  },
+  "status": "GENERATED_AWAITING_REVIEW",
+  "reason": "Restore original front crate emblem and reroute rear food IN north of OUT return with explicit clearance, preserving passed geometry.",
+  "prompt_file": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-conveyors-2026-11-26/prompts/conveyor-camp-r6.txt",
+    "bytes": 2783,
+    "sha256": "aca483f4a6960d4b9ab86e27784c2398da673b8fe129e63515ddf744cd4bc573",
+    "git_blob_sha": "78d3ec545fa40c84abaf544d925b93d7e349e581"
+  },
+  "ordered_reference_inputs": [
+    {
+      "order": 1,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-conveyors-2026-11-26/renders/conveyor-camp-r5.png",
+      "bytes": 2243008,
+      "sha256": "573b8b45e55a1500ccdfd1c1b65c5cd5b8f02c78b6c8d92f4aa63526caa61258",
+      "git_blob_sha": "43880d48f1446fa763e563ec8a73a4b99219cd0d",
+      "dimensions": [
+        1671,
+        941
+      ],
+      "actual_format": "PNG"
+    },
+    {
+      "order": 2,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-conveyors-2026-11-26/renders/conveyor-camp-r4.png",
+      "bytes": 2346014,
+      "sha256": "47a1b95c1995a886ed19f9faf24ed79bb080e0961f7d5a573c49cbc8bd966d28",
+      "git_blob_sha": "ba686c5bceb0ca3eefd938c4206fed0c3b5603a3",
+      "dimensions": [
+        1672,
+        941
+      ],
+      "actual_format": "PNG"
+    }
+  ],
+  "requirements_at_generation": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-conveyors-2026-11-26/requirements.json",
+    "bytes": 7578,
+    "sha256": "40a11533d116d78ebc7fe17bc52b7817b9595f62b32eaf78be89a91407487bc9",
+    "git_blob_sha": "588d671838d4bd3cf52fb5506a98675c23bc523b"
+  },
+  "output": {
+    "native_returned_locator": "/workspace/scratch/9c51da47f878/generated_images/exec-5e4b4081-cffb-4470-b628-713667c0c17b.png",
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-conveyors-2026-11-26/renders/conveyor-camp-r6.png",
+    "bytes": 2182326,
+    "sha256": "142a1e0365b16268f25e9b4628e7d2cd0cd558feb3a1a0b900942ba83ee819ad",
+    "git_blob_sha": "479024d9749f51bdaddaf9d1662516463b44755b",
+    "dimensions": [
+      1671,
+      941
+    ],
+    "actual_format": "PNG"
+  }
+}

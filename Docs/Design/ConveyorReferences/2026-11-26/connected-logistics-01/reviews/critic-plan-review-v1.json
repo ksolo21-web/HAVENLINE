@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/conveyor_critic",
+  "recorded_utc": "2026-11-27T03:24:24.610822+00:00",
+  "status": "DESIGN_INTENT_COHERENT_REQUIRED_CLARIFICATIONS_BEFORE_FINAL_SELECTION",
+  "score": null,
+  "scope": "Pre-generation review of exact requirements and design checkpoint, not approval of rendered or working deliverables.",
+  "inputs": [
+    {
+      "path": "requirements.json",
+      "sha256": "40a11533d116d78ebc7fe17bc52b7817b9595f62b32eaf78be89a91407487bc9",
+      "bytes": 7578,
+      "read_in_full": true
+    },
+    {
+      "path": "DESIGN_CHECKPOINT.md",
+      "sha256": "a0c124811b39bf53c17e92e781789c670fa1930d34833830ab52e926ced1ca4e",
+      "bytes": 4953,
+      "read_in_full": true
+    }
+  ],
+  "passed_design_intent": [
+    "All three requested route families are named and source/proposal status is preserved.",
+    "Storage low sleeves/cassettes and internal short transfers are explicitly new; center aisle and old facade features preserved.",
+    "Manual zones and the finite automation scope are explicit.",
+    "Raw fish and cooked fish are separated; warmth furnace excluded from food/smelting; permitted raw-resource sales are retained.",
+    "Counter register/customer/staff/stock/cash roles remain distinct.",
+    "Full downstream, per-slot reservation, exclusive transfer ownership and no automatic store-in/store-out loop are defined.",
+    "Dual-input assembly route acknowledges original A56.5\u201359s observations without freezing recipes.",
+    "Normal/full states and multiple actual render views are required, with independent review and failed candidates retained."
+  ],
+  "required_clarifications": [
+    {
+      "id": "P01",
+      "priority": "REQUIRED_FOR_NEW_MACHINE_COVERAGE",
+      "item": "Add explicit dual-input assembler connection study or provide equivalent visible coverage in another study. Separate typed ingredient magazines/input ports; output has its own buffer. New Havenline machine geometry remains a proposal."
+    },
+    {
+      "id": "P02",
+      "priority": "REQUIRED_FOR_STORAGE_LOGIC",
+      "item": "Utility cassette must address timber vs mineral bay selection: bounded per-class local trays or exclusive typed batch operation. No single mixed pile reaches all shelves by invisible transport."
+    },
+    {
+      "id": "P03",
+      "priority": "REQUIRED_FOR_R09",
+      "item": "Render visible wrong-item/reject or source-held incompatible carrier state, not only normal/full. Show finite stop/reject behavior without deletion."
+    },
+    {
+      "id": "P04",
+      "priority": "REQUIRED_FOR_CAMP_PLAN",
+      "item": "Reserve illustrated perimeter space behind and beside storage for rear/left cassettes and service access; no attachments inside fence or obstruction of the two gate corridors."
+    }
+  ],
+  "nonblocking_precision_notes": [
+    "A future compatible workstation endpoint is a reserved planned socket until an input catalogue/recipe is established; do not show an unsupported active conversion.",
+    "D01/D02 multi-angle geometry must include transfer surfaces and stop gates rather than bury them under headings.",
+    "Per-slot reservation on concept art is a system proposal, not a claim the original advertisement uses that engine algorithm.",
+    "Any finite illustrated slot count is concept staging and does not set balance capacity."
+  ],
+  "pending_evidence": [
+    "Final typed route table and exact spatial/vector plan",
+    "Seven/equivalent selected render studies and their interface/full/reject views",
+    "Complete declared source inspection inventory and additional research",
+    "Exact GitHub publication readback"
+  ],
+  "approval_boundary": "No mandatory output check is waived. All final candidate images remain unreviewed at this checkpoint."
+}

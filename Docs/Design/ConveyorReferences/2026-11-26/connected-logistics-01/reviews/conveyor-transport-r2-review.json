@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/conveyor_critic",
+  "recorded_utc": "2026-11-27T03:32:26.171072+00:00",
+  "candidate": "renders/conveyor-transport-r2.png",
+  "sha256": "bcb4eb8ac4a65127ed4e2df847959a75d0d4ca1c01db674b7c9bd9354088e2bf",
+  "native_size": [
+    1672,
+    941
+  ],
+  "prompt": "prompts/conveyor-transport-r2.txt",
+  "prompt_sha256": "8cb60ed13ac65267c449b371e6c4a11dafba0b33a656762d5328c68f0a92d9ae",
+  "requirements_sha256": "40a11533d116d78ebc7fe17bc52b7817b9595f62b32eaf78be89a91407487bc9",
+  "full_native_image_inspected": true,
+  "threshold": 9.5,
+  "score": 9.8,
+  "status": "PASS_STATIC_SHEET_ONLY",
+  "retest_of": "reviews/conveyor-transport-r1-review.json",
+  "prior_review_sha256": "08dd79c30a46ab1deed1ed5fb36b6197ac56a28c6b4ca84f21f7e331f1752d68",
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/conveyor-transport-r2-height-reverse.png",
+      "box": [
+        1075,
+        520,
+        1660,
+        875
+      ],
+      "sha256": "e231a4c5a4a5835283d710a6c74246a69646222d84b30459ea875102e1366a31"
+    },
+    {
+      "path": "reviews/evidence/conveyor-transport-r2-corner-forward.png",
+      "box": [
+        580,
+        105,
+        1065,
+        460
+      ],
+      "sha256": "df664abf54a5b4d9b120dbac957828d920c94e43ec79cce3a11b70d3479cf69d"
+    },
+    {
+      "path": "reviews/evidence/conveyor-transport-r2-corner-reverse.png",
+      "box": [
+        580,
+        520,
+        1065,
+        875
+      ],
+      "sha256": "6c865954dc0d34dbe0fd0f693e81205f75d86b1a7b69d79584ba7db0d6b2d978"
+    }
+  ],
+  "checks": {
+    "style_material_family": "PASS",
+    "three_modules_opposing_views": "PASS",
+    "supported_continuous_transfer_surfaces": "PASS",
+    "height_adapter_positive_cleats": "PASS",
+    "direction_consistency": "PASS",
+    "corner_flow_direction_readability": "PASS",
+    "scope_truthfulness": "PASS"
+  },
+  "findings": [
+    "Reverse incline arrow now points uphill toward its high physical output; added IN/OUT badges reinforce the geometry.",
+    "Corner IN/OUT labels correctly swap image positions under the opposing camera while preserving the same one-way handed module.",
+    "Level straight, tapered roller corner and cleated incline remain grounded, consistently styled and visually compatible at transfer ends."
+  ],
+  "required_repairs": [],
+  "approval_boundary": "Exact module sheet only. This is a static proposed reference asset family; not native mesh, collision, world dimensions or transport behavior approval. Overall task and all integration/research/archive gates remain pending."
+}

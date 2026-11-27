@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/conveyor_critic",
+  "recorded_utc": "2026-11-27T03:42:47.263617+00:00",
+  "candidate": "renders/conveyor-machines-r1.png",
+  "sha256": "dd599c5c36b1c101eeb980240cd958a39102cb60cd558ee7fc5e0296f20fd756",
+  "native_size": [
+    1672,
+    941
+  ],
+  "prompt": "prompts/conveyor-machines-r1.txt",
+  "prompt_sha256": "2c64c5753a0389277c8b42d64154410a953558f2bbced4fe33d3fcf742be8ae4",
+  "requirements_sha256": "40a11533d116d78ebc7fe17bc52b7817b9595f62b32eaf78be89a91407487bc9",
+  "full_native_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/conveyor-machines-r1-whole-line.png",
+      "box": [
+        15,
+        115,
+        1659,
+        500
+      ],
+      "sha256": "8c25d1d3149171a687ef2fa1e5119f03d717994a8a2ae85243fa9a91cc777409"
+    },
+    {
+      "path": "reviews/evidence/conveyor-machines-r1-feed-joint.png",
+      "box": [
+        15,
+        520,
+        802,
+        855
+      ],
+      "sha256": "a5772025afe7249d645ea9f1407c379d3a082e02608a2bfc0a333c6a67c42769"
+    },
+    {
+      "path": "reviews/evidence/conveyor-machines-r1-output-state.png",
+      "box": [
+        821,
+        520,
+        1660,
+        855
+      ],
+      "sha256": "a2c06aa34dc52469b4bc6eeedc137f0e84191fdb3609eef2646e1f8f0eb6ca6b"
+    }
+  ],
+  "threshold": 9.5,
+  "score": 8.4,
+  "status": "REPAIR_REQUIRED",
+  "checks": {
+    "intake_front_discharge_not_rear_baskets": "PASS",
+    "input_height_adapter_and_bridge": "PASS",
+    "new_side_ports_explicit": "PASS",
+    "source_cooker_identity_and_front_access": "PASS",
+    "whole_fish_form_preserved": "PASS",
+    "powered_output_release": "FAIL",
+    "truthful_blocked_buffer_state": "FAIL",
+    "finite_output_terminal_retention": "FAIL"
+  },
+  "findings": [
+    {
+      "severity": "MANDATORY",
+      "issue": "Output collar ends in a level passive metal tray with no visible drive/roller/pusher to move cooked fish into downstream rollers.",
+      "repair": "Add a short powered roller floor, belt or bounded pusher mechanism to the tray, preserving side collar and pressure-hardware clearance."
+    },
+    {
+      "severity": "MANDATORY",
+      "issue": "Closed stop/amber lamp are used for waiting on a full downstream buffer, but the shown downstream roller area is empty in both main line and closeup.",
+      "repair": "Fill the actual bounded downstream positions and hold the next cooked fish upstream; alternatively show a normal open/green handoff, but required blocked-state proof must remain elsewhere."
+    },
+    {
+      "severity": "MANDATORY",
+      "issue": "Short finite output buffer has no terminal retaining fence and opens at the far end.",
+      "repair": "Provide terminal end-stop or clearly depicted downstream reserved stop so goods cannot simply run off the finite tray."
+    },
+    {
+      "severity": "POSITIVE",
+      "issue": "Original twin baskets remain at intake rear; front roller lip meets supported transition and cleated input run. Whole fish fit the newly framed left sleeve without ending against a solid wall."
+    },
+    {
+      "severity": "POSITIVE",
+      "issue": "Cooker timber/blue body, snow roof, chimney, centered control and right pressure hardware remain recognizable. New feed/output collars are explicitly proposed and clear of central front service area."
+    }
+  ],
+  "required_repairs": [
+    "Visible powered tray discharge",
+    "Actual full downstream state with upstream held fish",
+    "Terminal retention at finite output buffer"
+  ],
+  "approval_boundary": "Static proposed fish-capable cooker variant. No recipe parameters, native mechanism, simulation or runtime approval."
+}

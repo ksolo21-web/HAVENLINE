@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/conveyor_critic",
+  "recorded_utc": "2026-11-27T04:40:26.564402+00:00",
+  "candidate": "renders/conveyor-camp-r8.png",
+  "sha256": "b32b19d3d8050712eff2d00191afa7f8270d77f0f6b623ed74d69090a159ebea",
+  "native_size": [
+    1672,
+    941
+  ],
+  "prompt": "prompts/conveyor-camp-r8.txt",
+  "prompt_sha256": "fd07ee5f21e1f5a338c3b6d41aceaa5afceb81a45f7999b3cfa88ba9a72e079d",
+  "requirements_sha256": "40a11533d116d78ebc7fe17bc52b7817b9595f62b32eaf78be89a91407487bc9",
+  "mode": "Initial serial storage-buffered deployment",
+  "mode_record": "D06-initial-deployment.json",
+  "mode_record_sha256": "eeab169419f029a35a0c52fc2d1a291ae4b7873446390fb120bf5bc1c38ab7e3",
+  "mode_record_review": "reviews/initial-deployment-record-review-v1.json",
+  "full_native_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/conveyor-camp-r8-continuous-dock-connections.png",
+      "box": [
+        720,
+        230,
+        1255,
+        470
+      ],
+      "sha256": "8febe7e2f3809839e2593e6314b10f7d2b6a3c634fea813b74f0345bba41bb46"
+    },
+    {
+      "path": "reviews/evidence/conveyor-camp-r8-western-northern-service-path.png",
+      "box": [
+        35,
+        190,
+        925,
+        475
+      ],
+      "sha256": "1aecccb20c3172edf5989c8342d6d9bb09734960004a801f91cc4989a8944773"
+    },
+    {
+      "path": "reviews/evidence/conveyor-camp-r8-counter-service-opening.png",
+      "box": [
+        1280,
+        230,
+        1668,
+        650
+      ],
+      "sha256": "1e90b4c567b205970d52027e0cd15594ab1fe28e4b5d9acfdb0875ba9dca4de5"
+    },
+    {
+      "path": "reviews/evidence/conveyor-camp-r8-gates-heater-clearance.png",
+      "box": [
+        190,
+        435,
+        1465,
+        815
+      ],
+      "sha256": "e16d432f959bd64dccb1229278186a5f5b6f339526ed87b41a48bbe36a5076c0"
+    }
+  ],
+  "retest_of": "reviews/conveyor-camp-r7-review.json",
+  "prior_review_sha256": "a95cf648d5515e9ddb3f31df93252cf5e53cf0d37fb523c99fa6c763af3ed99f",
+  "threshold": 9.5,
+  "score": 9.8,
+  "status": "PASS_STATIC_SHEET_ONLY",
+  "checks": {
+    "initial_mode_label_and_typed_record_match": "PASS",
+    "intake_front_discharge_to_correct_cooker_raw_input": "PASS",
+    "raw_and_cooked_forms_separated": "PASS",
+    "rear_facing_house_same_wall_food_ports": "PASS",
+    "cooker_to_exposed_in_tip_supported_curve": "PASS",
+    "out_tip_forward_curve_to_counter": "PASS",
+    "no_wall_fuel_hatch_or_roof_product_connection": "PASS",
+    "source_rear_vent_and_dispatch_guard_identity": "PASS",
+    "two_independent_one_way_storage_connections": "PASS",
+    "no_external_storage_return_loop": "PASS",
+    "counter_outside_customer_opening": "PASS",
+    "staff_keypad_stock_manual_handoff_cash_separate": "PASS",
+    "guarded_finite_pickup_with_raised_ready_gate": "PASS",
+    "continuous_west_and_north_service_approach": "PASS_CONCEPT_ALLOCATION",
+    "two_primary_open_gate_corridors": "PASS",
+    "central_stone_heater_separate_from_goods": "PASS",
+    "style_supported_surfaces_and_grounded_feet": "PASS"
+  },
+  "findings": [
+    "Both projecting rear dock decks now connect through actual supported curved rollers/bridge surfaces. The incoming cooker run joins IN at its exposed forward tip; OUT leaves its own mouth and curves right toward the counter. Former wall attachments are absent.",
+    "Two independent food paths stay visually separated. Original rear vent sits above the paired sleeves and the right fuel hatch remains closed and unconnected. Blue OUT identification is clear.",
+    "Inset pond/rock rim leaves a visibly continuous paved west strip connecting to the northern service margin. Cooker front controls and the front gate corridor remain approachable.",
+    "The east fence is open at the table customer face. Register/keypad face staff inside, goods occupy the stock end, cash has a separate empty collection pad, and the belt stops at its own guarded PICKUP buffer before the table.",
+    "The stock gate is raised with green indication, consistent with the ordinary receiving state. Two main double gates are open and no food belt crosses their approaches.",
+    "This scene implements the explicitly documented initial serial mode. Full direct/overflow/merge and assembly upgrade coverage stays intact in the separate D02/D04B/D07 studies."
+  ],
+  "required_repairs": [],
+  "limitations": [
+    "Static concept scene only. It does not certify exact dimensions, native mesh clearance, runtime navigation, actual transfer motion, recipe quantities or tuned capacities.",
+    "The rotated original front-door facade is on the far side and partly roof-occluded; source identity is established by D03 multi-angle art and the orientation record, while this scene verifies the visible west/north approach allocation. It does not claim every facade is visible in one overview.",
+    "The full-storage waiting state is evidenced by D02 generic full receiving-buffer art plus the initial/D07 reservation rules; this scene is an ordinary connected state, not a separate full-house render."
+  ],
+  "approval_boundary": "Exact initial-deployment camp sheet only. All rejected r2-r7 camp attempts and the r1 no-image tool failure remain in history. Full R01-R13 content review and R14 archive/publication verification are separate gates."
+}

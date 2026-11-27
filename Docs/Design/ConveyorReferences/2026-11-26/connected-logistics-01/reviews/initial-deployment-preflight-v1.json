@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/conveyor_critic",
+  "recorded_utc": "2026-11-27T04:27:04.471795+00:00",
+  "review_type": "Scope-preservation preflight for alternate initial camp deployment",
+  "requirements_sha256": "40a11533d116d78ebc7fe17bc52b7817b9595f62b32eaf78be89a91407487bc9",
+  "original_D06_requirement": {
+    "id": "D06",
+    "name": "Connected camp study",
+    "views": "Compact perimeter routing with storage, production, customer counter, centered heater and two clear gates; no external painted roads."
+  },
+  "status": "COHERENT_SCOPE_PRESERVING_ALTERNATIVE_PENDING_ACTUAL_OUTPUT",
+  "score": null,
+  "decision": "An explicit initial serial storage-buffered deployment is a valid alternative D06 representative installation. The original requirement does not demand all direct/overflow or 25 catalogue routes in one overview. Full direct/overflow topology remains covered by the unchanged approved D02 and D07 artifacts.",
+  "required_initial_route_coverage": [
+    "Intake OUT -> cooker raw IN",
+    "Cooker cooked OUT -> prepared-food storage IN through finite holding/reserved receiving",
+    "Requested prepared-food storage OUT -> accepted counter buffer",
+    "Manual stock-buffer -> customer-table handoff; cash separate",
+    "Utility and fuel/manual zones remain separate"
+  ],
+  "conditions": [
+    "Label D06 and its gallery/README description as proposed initial serial storage-buffered deployment. Identify D07 as the fuller direct/overflow upgrade, not an exact layout match to the initial camp.",
+    "Add a small typed initial-deployment route record with item forms, source/destination ports, one-way direction, proposal status and stop/reservation rules. Preserve D07 bytes and all rejected full-route camp attempts.",
+    "Retain finite storage, finite customer stock, request-controlled OUT and output-space reservation. Full storage or counter propagates wait; no automatic OUT->IN path, duplication or deletion.",
+    "A 180-degree house rotation rotates its original door, utility, food and fuel faces together. Both rear food sleeves may face the camera, while a visibly connected service aisle must reach the original front-door side behind the house. Physical local left/right are not globally relabelled.",
+    "Retain the canonical counter and staff/customer/cash separation, centered heater, two clear bidirectional gate approaches, source style and actual supported transfers.",
+    "All prior mandatory checks still apply to the total package. A simpler valid representative deployment does not excuse wrong ports, missing transfers or inaccessible service faces."
+  ],
+  "R01_R13_coverage_reasoning": {
+    "R03_R04": "All requested route families remain explicitly represented across D04, D04B, D06 and D07; the new initial-route record makes its distinct topology reviewable.",
+    "R05_R09": "Single-source counter restock needs no two-source merge in this mode; material separation, finite receiving, reservations and no recirculation remain mandatory. The full merge behavior is still illustrated and specified in D02/D07.",
+    "R06_R07_R10_R11_R12": "Storage architecture/manual zones, counter identity, clear service paths/gates, heater and visual family stay mandatory under rotation.",
+    "R01_R02_R08_R13": "Evidence honesty, physical transfer review and actual independent output inspection are unchanged."
+  },
+  "approval_boundary": "Preflight only. No approval of a future camp image or new route record before their actual content is inspected; R14 publication remains separate."
+}

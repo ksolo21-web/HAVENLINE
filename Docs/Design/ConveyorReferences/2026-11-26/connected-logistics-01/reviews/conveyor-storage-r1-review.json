@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/conveyor_critic",
+  "recorded_utc": "2026-11-27T03:39:31.434336+00:00",
+  "candidate": "renders/conveyor-storage-r1.png",
+  "sha256": "dcac467ac81979f5aa40c41f10026e4fc36916dc3290c396de32b0d41b503810",
+  "native_size": [
+    1672,
+    941
+  ],
+  "prompt": "prompts/conveyor-storage-r1.txt",
+  "prompt_sha256": "b650c31709d6f81f10b9492f2b531ce4840cc6d2f503fbd8726d3151e16f25b0",
+  "requirements_sha256": "40a11533d116d78ebc7fe17bc52b7817b9595f62b32eaf78be89a91407487bc9",
+  "full_native_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/conveyor-storage-r1-utility-exterior.png",
+      "box": [
+        40,
+        110,
+        820,
+        490
+      ],
+      "sha256": "e94a81173fa93c8fd8af3fecc642abab362579f2d168869d8df1906ffcf3e0a0"
+    },
+    {
+      "path": "reviews/evidence/conveyor-storage-r1-food-exterior.png",
+      "box": [
+        850,
+        110,
+        1655,
+        495
+      ],
+      "sha256": "ac7173484483461facd4dadf7f60b12e3c6fef5a2a58bd145e6eaee4330e3d37"
+    },
+    {
+      "path": "reviews/evidence/conveyor-storage-r1-utility-section.png",
+      "box": [
+        12,
+        523,
+        828,
+        886
+      ],
+      "sha256": "fbf41b0af5c5e900d5db8c5b96201a8068d02c7ed5c59dcee95dd364847fa778"
+    },
+    {
+      "path": "reviews/evidence/conveyor-storage-r1-food-section.png",
+      "box": [
+        847,
+        523,
+        1657,
+        886
+      ],
+      "sha256": "f163773f4ec91033b9132b3ca1a04945fcdcccb74e4541075f0c05b630e41213"
+    }
+  ],
+  "threshold": 9.5,
+  "status": "REPAIR_REQUIRED",
+  "score": 7.2,
+  "checks": {
+    "original_shell_features": "PASS",
+    "new_ports_explicit_proposal": "PASS",
+    "front_door_and_apron_clear": "PASS",
+    "two_distinct_ports_per_dock": "PASS_EXTERIOR",
+    "direction_consistency": "FAIL",
+    "food_external_internal_height_match": "FAIL",
+    "food_ports_in_same_rear_wall": "FAIL",
+    "utility_internal_output_handoff_visible": "INCOMPLETE",
+    "six_zones_not_claimed_fully_automatic": "PASS",
+    "aisle_and_manual_raw_fuel_separation": "PARTIAL",
+    "literal_item_form_transfer": "CLARIFY"
+  },
+  "findings": [
+    {
+      "severity": "MANDATORY",
+      "issue": "IN and OUT plaques both point screen-right; exterior rail chevrons also do not consistently distinguish inward receiving from outward dispatch.",
+      "repair": "Use plain IN/OUT plaques or perspective-correct opposite flow cues. Remove ornamental rail chevrons so no cue contradicts the port role."
+    },
+    {
+      "severity": "MANDATORY",
+      "issue": "Rear food sleeves are low in exterior view, while food mechanism enters at prepared-food shelf height above raw cabinets in section. There is no depicted vertical lift between them.",
+      "repair": "Choose one coherent design: raise exterior rear cassette to shelf elevation (record this explicit proposal change) OR show separate local lifts from low ports. Match interface elevations in exterior and section."
+    },
+    {
+      "severity": "MANDATORY",
+      "issue": "Food section shows entry on left side wall and exit on right side wall, while exterior puts both sleeves side by side in the rear wall. It is a different topology.",
+      "repair": "Redraw the close section with two parallel sleeves through the same rear plane, distinct receiving/dispatch trays and one local shuttle; retain rear vent and closed raw cabinets."
+    },
+    {
+      "severity": "MANDATORY_INTERFACE_EVIDENCE",
+      "issue": "Utility cutaway depicts incoming tray/lift but does not expose a connected internal dispatch position for the separate OUT lane.",
+      "repair": "Expose both receiving and release positions tied to the same left-bay mechanism without crossing center aisle."
+    },
+    {
+      "severity": "CLARITY",
+      "issue": "Incoming timber is a rectangular plank bundle but the depicted timber bay is only logs; outgoing gray stone is paired with a visible MATERIALS bin containing silver ingots. Multiple stored SKUs could be valid, but their indexed handoffs are not visible.",
+      "repair": "Show matching demonstrated SKU in its actual receiving/retrieval compartment (planks and gray stones) or clearly separate indexed per-SKU bins; never imply form conversion during storage."
+    },
+    {
+      "severity": "POSITIVE",
+      "issue": "Advanced house front doors/apron, left window, rear vent and right fuel hatch remain recognizable. Exterior dock additions are supported and front approach is clear."
+    }
+  ],
+  "required_repairs": [
+    "Consistent inbound/outbound cues",
+    "Same rear food port plane and elevation inside/outside",
+    "Visible internal utility dispatch handoff",
+    "Matching demonstrated utility item compartments"
+  ],
+  "approval_boundary": "Exact static storage proposal only; no automatic six-zone storage, footprint/world-fit, working inventory or native mechanism approval."
+}

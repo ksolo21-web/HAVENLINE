@@ -1,0 +1,494 @@
+{
+  "schema": "havenline-initial-deployment-v1",
+  "date": "2026-11-26",
+  "deliverable": "D06",
+  "scope": "Initial serial storage-buffered deployment; static art and typed proposal only. This additive stage record preserves the reviewed D02/D07 direct-feed, surplus and gated-merge upgrade unchanged.",
+  "authority": {
+    "original_requirements": "requirements.json",
+    "requirements_sha256": "40a11533d116d78ebc7fe17bc52b7817b9595f62b32eaf78be89a91407487bc9",
+    "scope_preservation_review": "reviews/initial-deployment-preflight-v1.json",
+    "scope_preservation_review_sha256": "b15cb2f220b545286bdc505eb1a2ca65157211c9d6259f52593c4737abd7bc30",
+    "full_upgrade_catalogue": "design/routing-catalogue.json",
+    "full_upgrade_catalogue_sha256": "bc72ba3281a8b3bcda4fbb127f6a964fd86fa73aa7f0c49e66416b9dbc0fe398"
+  },
+  "phase_sequence": [
+    "Manual carrying",
+    "Helper-assisted carrying",
+    "D06: initial serial intake/cooker/storage/requested counter supply",
+    "D02/D07 upgrade: direct fresh counter supply, controlled surplus, exclusive fresh/stored merge; optional typed assembly"
+  ],
+  "relationship_to_full_upgrade": "Initial I03 bypasses the not-yet-installed demand router and sends compatible prepared stock to reserved storage IN. I05/I06 dispatch directly to the only stock source at the counter, so no merge reservation is referenced. The full upgrade adds the direct-feed alternative; storage is not compulsory in that later configuration.",
+  "station_port_definitions": [
+    {
+      "id": "shore-intake",
+      "name": "Shore intake machinery",
+      "equipment_families": [
+        "fish-line"
+      ],
+      "disposition": "proposed_conveyor_connection",
+      "ports": [
+        {
+          "id": "load",
+          "direction": "in",
+          "carrier_family": "raw_food",
+          "accepted_item_forms": [
+            "whole fish"
+          ],
+          "transfer_method": "staff_or_intake"
+        },
+        {
+          "id": "out",
+          "direction": "out",
+          "carrier_family": "raw_food",
+          "accepted_item_forms": [
+            "whole fish"
+          ],
+          "transfer_method": "belt"
+        }
+      ],
+      "boundary": "Front discharge and new cooker side adapter; raw fish form observed. A manual loading port is a new proposal, not an observed serial fishing-rack input.",
+      "evidence_refs": [
+        "locked-video-chain",
+        "video-A-016"
+      ]
+    },
+    {
+      "id": "cooker",
+      "name": "Cooker / processor",
+      "equipment_families": [
+        "fish-line",
+        "meat-processor"
+      ],
+      "disposition": "typed_recipe_variant_required",
+      "ports": [
+        {
+          "id": "raw-in",
+          "direction": "in",
+          "carrier_family": "raw_food",
+          "accepted_item_forms": [
+            "whole fish",
+            "raw meat portions (separate selected variant)"
+          ],
+          "transfer_method": "belt"
+        },
+        {
+          "id": "cooked-out",
+          "direction": "out",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "cooked whole-fish-shaped item",
+            "processed meat portion (separate selected variant)"
+          ],
+          "transfer_method": "belt"
+        }
+      ],
+      "boundary": "Observed visual associations; exact recipes, species, fuel and rates unfrozen",
+      "evidence_refs": [
+        "locked-video-chain",
+        "cooker-visible-crops",
+        "board-18567"
+      ]
+    },
+    {
+      "id": "food-output-buffer",
+      "name": "Finite cooked-output buffer",
+      "equipment_families": [
+        "fish-line"
+      ],
+      "disposition": "new_proposal",
+      "ports": [
+        {
+          "id": "in",
+          "direction": "in",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "selected compatible prepared-food form"
+          ],
+          "transfer_method": "belt"
+        },
+        {
+          "id": "out",
+          "direction": "out",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "same selected form"
+          ],
+          "transfer_method": "belt"
+        }
+      ],
+      "boundary": "Reserve output slot before processing starts",
+      "evidence_refs": [
+        "DESIGN_CHECKPOINT",
+        "NEW-V01",
+        "NEW-V02"
+      ]
+    },
+    {
+      "id": "food-storage-in",
+      "name": "Rear prepared-food receiving cassette",
+      "equipment_families": [
+        "logistics"
+      ],
+      "disposition": "new_proposal",
+      "ports": [
+        {
+          "id": "in",
+          "direction": "in",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "selected allowed prepared-food form"
+          ],
+          "transfer_method": "belt"
+        },
+        {
+          "id": "local-deposit",
+          "direction": "out",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "same form"
+          ],
+          "transfer_method": "local_horizontal_tray_shuttle"
+        }
+      ],
+      "boundary": "Separate finite receiving tray at prepared-food shelf height; short horizontal shuttle serves this bay; compatible inventory slot reserved",
+      "evidence_refs": [
+        "DESIGN_CHECKPOINT"
+      ]
+    },
+    {
+      "id": "food-inventory",
+      "name": "Local prepared-food inventory bay",
+      "equipment_families": [
+        "logistics"
+      ],
+      "disposition": "new_proposal",
+      "ports": [
+        {
+          "id": "receive",
+          "direction": "in",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "allowed prepared-food form"
+          ],
+          "transfer_method": "local_horizontal_tray_shuttle"
+        },
+        {
+          "id": "release",
+          "direction": "out",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "requested allowed prepared-food form"
+          ],
+          "transfer_method": "local_horizontal_tray_shuttle"
+        }
+      ],
+      "boundary": "Prepared-food shelf is above closed raw-food cabinets; stock is retained until requested; no automatic recirculation",
+      "evidence_refs": [
+        "DESIGN_CHECKPOINT"
+      ]
+    },
+    {
+      "id": "food-storage-out",
+      "name": "Rear prepared-food dispatch cassette",
+      "equipment_families": [
+        "logistics"
+      ],
+      "disposition": "new_proposal",
+      "ports": [
+        {
+          "id": "load",
+          "direction": "in",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "requested allowed prepared-food form"
+          ],
+          "transfer_method": "local_horizontal_tray_shuttle"
+        },
+        {
+          "id": "out",
+          "direction": "out",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "same requested form"
+          ],
+          "transfer_method": "belt"
+        }
+      ],
+      "boundary": "Independent dispatch tray/shuttle serves this shelf-height local bay; no crossing central aisle",
+      "evidence_refs": [
+        "DESIGN_CHECKPOINT",
+        "NEW-V04"
+      ]
+    },
+    {
+      "id": "food-counter",
+      "name": "Canonical customer counter + new stock-end buffer",
+      "equipment_families": [
+        "fish-line",
+        "logistics"
+      ],
+      "disposition": "allowed_catalogue_required",
+      "ports": [
+        {
+          "id": "stock-in",
+          "direction": "in",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "explicit active menu catalogue"
+          ],
+          "transfer_method": "belt"
+        },
+        {
+          "id": "service",
+          "direction": "out",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "same stocked form"
+          ],
+          "transfer_method": "staff_lift_then_customer_handoff"
+        },
+        {
+          "id": "cash",
+          "direction": "out",
+          "carrier_family": "cash",
+          "accepted_item_forms": [
+            "credits / cash representation"
+          ],
+          "transfer_method": "staff_collection"
+        }
+      ],
+      "boundary": "Belt ends at separate dead-end staff buffer; staff lift stock onto original timber table. Goods/cash routes separate; register, shelf, legs and customer frontage preserved",
+      "evidence_refs": [
+        "locked-video-chain",
+        "runtime-customers",
+        "DESIGN_CHECKPOINT"
+      ]
+    },
+    {
+      "id": "cash-collection",
+      "name": "Staff cash collection area",
+      "equipment_families": [
+        "logistics"
+      ],
+      "disposition": "manual_only",
+      "ports": [
+        {
+          "id": "collect",
+          "direction": "in",
+          "carrier_family": "cash",
+          "accepted_item_forms": [
+            "credits / cash representation"
+          ],
+          "transfer_method": "staff_collection"
+        }
+      ],
+      "boundary": "Separate from product conveyor and customer queue",
+      "evidence_refs": [
+        "A58.5-59s",
+        "DESIGN_CHECKPOINT"
+      ]
+    },
+    {
+      "id": "customer-handoff",
+      "name": "Accepted customer order handoff",
+      "disposition": "manual_service_endpoint",
+      "ports": [
+        {
+          "id": "receive",
+          "direction": "in",
+          "carrier_family": "prepared_food",
+          "accepted_item_forms": [
+            "same active-menu form"
+          ],
+          "transfer_method": "staff_lift_then_customer_handoff"
+        }
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "id": "I01",
+      "source": {
+        "station": "shore-intake",
+        "port": "out"
+      },
+      "destination": {
+        "station": "cooker",
+        "port": "raw-in"
+      },
+      "direction": "source_to_destination",
+      "carrier_family": "raw_food",
+      "item_form": "whole fish",
+      "transport": "belt",
+      "status": "proposed_initial_deployment",
+      "release_condition": "Compatible raw-input slot is reserved; selected whole-fish processing variant accepts this form.",
+      "on_full": "Retain item in its bounded source/queue; stop further upstream release. Full receiving does not disable already requested dispatch of stored stock.",
+      "on_wrong_item": "Hold at source or bounded reject; no incompatible reroute, deletion or duplication."
+    },
+    {
+      "id": "I02",
+      "source": {
+        "station": "cooker",
+        "port": "cooked-out"
+      },
+      "destination": {
+        "station": "food-output-buffer",
+        "port": "in"
+      },
+      "direction": "source_to_destination",
+      "carrier_family": "prepared_food",
+      "item_form": "selected cooked whole-fish-shaped item",
+      "transport": "belt",
+      "status": "proposed_initial_deployment",
+      "release_condition": "Completed item exists and owns its finite output-buffer slot; cycle start had reserved output space.",
+      "on_full": "Retain item in its bounded source/queue; stop further upstream release. Full receiving does not disable already requested dispatch of stored stock.",
+      "on_wrong_item": "Hold at source or bounded reject; no incompatible reroute, deletion or duplication."
+    },
+    {
+      "id": "I03",
+      "source": {
+        "station": "food-output-buffer",
+        "port": "out"
+      },
+      "destination": {
+        "station": "food-storage-in",
+        "port": "in"
+      },
+      "direction": "source_to_destination",
+      "carrier_family": "prepared_food",
+      "item_form": "same selected compatible prepared-food item",
+      "transport": "belt",
+      "status": "proposed_initial_deployment",
+      "release_condition": "Receiving tray and compatible prepared-food inventory slot are both reserved for this item.",
+      "on_full": "Retain item in its bounded source/queue; stop further upstream release. Full receiving does not disable already requested dispatch of stored stock.",
+      "on_wrong_item": "Hold at source or bounded reject; no incompatible reroute, deletion or duplication."
+    },
+    {
+      "id": "I04",
+      "source": {
+        "station": "food-storage-in",
+        "port": "local-deposit"
+      },
+      "destination": {
+        "station": "food-inventory",
+        "port": "receive"
+      },
+      "direction": "source_to_destination",
+      "carrier_family": "prepared_food",
+      "item_form": "same reserved prepared-food item",
+      "transport": "local_horizontal_tray_shuttle",
+      "status": "proposed_initial_deployment",
+      "release_condition": "Bounded local deposit uses the already owned inventory reservation; no central-aisle belt.",
+      "on_full": "Retain item in its bounded source/queue; stop further upstream release. Full receiving does not disable already requested dispatch of stored stock.",
+      "on_wrong_item": "Hold at source or bounded reject; no incompatible reroute, deletion or duplication."
+    },
+    {
+      "id": "I05",
+      "source": {
+        "station": "food-inventory",
+        "port": "release"
+      },
+      "destination": {
+        "station": "food-storage-out",
+        "port": "load"
+      },
+      "direction": "source_to_destination",
+      "carrier_family": "prepared_food",
+      "item_form": "requested active-menu item",
+      "transport": "local_horizontal_tray_shuttle",
+      "status": "proposed_initial_deployment",
+      "release_condition": "Explicit counter request, matching available stock, reserved dispatch tray and reserved counter stock slot. No merge reservation is required in this single-source phase.",
+      "on_full": "Retain item in its bounded source/queue; stop further upstream release. Full receiving does not disable already requested dispatch of stored stock.",
+      "on_wrong_item": "Hold at source or bounded reject; no incompatible reroute, deletion or duplication."
+    },
+    {
+      "id": "I06",
+      "source": {
+        "station": "food-storage-out",
+        "port": "out"
+      },
+      "destination": {
+        "station": "food-counter",
+        "port": "stock-in"
+      },
+      "direction": "source_to_destination",
+      "carrier_family": "prepared_food",
+      "item_form": "same requested active-menu item",
+      "transport": "belt",
+      "status": "proposed_initial_deployment",
+      "release_condition": "This item owns the compatible counter-stock reservation and transfer capacity; no return to receiving.",
+      "on_full": "Retain item in its bounded source/queue; stop further upstream release. Full receiving does not disable already requested dispatch of stored stock.",
+      "on_wrong_item": "Hold at source or bounded reject; no incompatible reroute, deletion or duplication."
+    },
+    {
+      "id": "I07",
+      "source": {
+        "station": "food-counter",
+        "port": "service"
+      },
+      "destination": {
+        "station": "customer-handoff",
+        "port": "receive"
+      },
+      "direction": "source_to_destination",
+      "carrier_family": "prepared_food",
+      "item_form": "same stocked menu item",
+      "transport": "staff_lift_then_customer_handoff",
+      "status": "proposed_initial_deployment",
+      "release_condition": "Worker lifts from guarded pickup to original wooden table and serves a matching order; belt ends before table.",
+      "on_full": "Retain item in its bounded source/queue; stop further upstream release. Full receiving does not disable already requested dispatch of stored stock.",
+      "on_wrong_item": "Hold at source or bounded reject; no incompatible reroute, deletion or duplication."
+    },
+    {
+      "id": "I08",
+      "source": {
+        "station": "food-counter",
+        "port": "cash"
+      },
+      "destination": {
+        "station": "cash-collection",
+        "port": "collect"
+      },
+      "direction": "source_to_destination",
+      "carrier_family": "cash",
+      "item_form": "sale cash / credit representation",
+      "transport": "staff_collection",
+      "status": "proposed_initial_deployment",
+      "release_condition": "Sale is completed; collection uses the separate cash pad, never a goods conveyor.",
+      "on_full": "Retain item in its bounded source/queue; stop further upstream release. Full receiving does not disable already requested dispatch of stored stock.",
+      "on_wrong_item": "Hold at source or bounded reject; no incompatible reroute, deletion or duplication."
+    }
+  ],
+  "layout": {
+    "house": "Rear food dock faces south/toward camera; original front doors/apron are on the far/north side. Both food sleeves remain on the same rear wall. The original utility/window and fuel sides rotate with the house; fuel remains manual.",
+    "production": "Intake/cooker to left of house in the northern work band; cooker output enters food IN; separate food OUT runs toward eastern counter. No diverter or merge in this initial installation.",
+    "water": "A small natural unfrozen water pocket is enclosed within the northwest camp work area. This site choice is a Havenline proposal, not a claim about the original reference. It leaves floor between the water/intake and west/north fence.",
+    "service_access": "Continuous west outer floor strip connects the left primary gate to the north service aisle behind the rotated house, going around rather than through pond, intake or conveyors. Side service and cooker front face remain accessible.",
+    "counter": "East boundary opening; staff and keypad west/inside, customers east/outside; register and cash at south end; guarded staff pickup at north stock end.",
+    "main_access": "Two wide open bidirectional gates in front boundary; clear continuous front walk; stone warmth furnace at camp center with open approaches.",
+    "dimensions": "Concept allocation only; no exact world dimensions, collision or runtime pathfinding approval."
+  },
+  "invariants": [
+    "All carriers have one transfer owner and retain identity outside their selected processing cycle.",
+    "All receiving, holding, inventory and reject capacity is finite; numerical values remain unfrozen.",
+    "The cooker reserves output capacity before a cycle; completed output dispatch does not depend on already consumed inputs.",
+    "Stored goods remain until explicitly requested; there is no automatic storage OUT-to-IN path.",
+    "Initial receiving-full backpressure must not stop a valid requested dispatch that can free inventory capacity.",
+    "Food never shares belts with utility materials, fuel, hides or cash.",
+    "Raw-food cabinets, fuel, hides/cargo and undefined future recipes stay manual.",
+    "This scene does not depict or disable the separate approved full-upgrade design."
+  ],
+  "evidence": {
+    "observed_topology": "Original A14\u201316s supports intake/whole-fish/cooker/output; A18\u201356s and late A/B sequences support staffed stock/service and separate cash.",
+    "new_proposals": "Serial warehouse buffering, request/reservation control, new food docks and this enclosed-water-pocket placement are Havenline proposals.",
+    "static_states_elsewhere": "D02/D04/D05 show finite receiving/output/stock full states; D03 shows exterior/internal storage interfaces. This overview depicts an ordinary connected state, not a full-house state."
+  },
+  "validation": {
+    "kind": "structural proposal check, not engine test",
+    "station_count": 9,
+    "route_count": 8,
+    "all_ports_directions_and_carrier_families_resolve": true,
+    "automatic_storage_out_to_in_path": false,
+    "errors": []
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/conveyor_critic",
+  "recorded_utc": "2026-11-27T03:55:10.679636+00:00",
+  "candidate": "renders/conveyor-counter-r3.png",
+  "sha256": "62f14cfd0f6d1acc6c84221e862b6f6ab14639b849a05dab1a4d1fb6154b8e3d",
+  "native_size": [
+    1672,
+    941
+  ],
+  "prompt": "prompts/conveyor-counter-r3.txt",
+  "prompt_sha256": "a8f78a3e00cd6ed845132e92f40d775cb0344f63b3676ba2af2f91ca5d7c0923",
+  "requirements_sha256": "40a11533d116d78ebc7fe17bc52b7817b9595f62b32eaf78be89a91407487bc9",
+  "full_native_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/conveyor-counter-r3-customer-side.png",
+      "box": [
+        15,
+        110,
+        826,
+        457
+      ],
+      "sha256": "09e1d876419ef75270ea6334a14751882dbf34e833d26f71a6eb3ab557d501a9"
+    },
+    {
+      "path": "reviews/evidence/conveyor-counter-r3-staff-side.png",
+      "box": [
+        846,
+        110,
+        1663,
+        457
+      ],
+      "sha256": "ae9eac7e0af866456ba2234fec28123b0ae38fabb1817d118073978b800fbcce"
+    },
+    {
+      "path": "reviews/evidence/conveyor-counter-r3-ready-gate.png",
+      "box": [
+        12,
+        475,
+        315,
+        650
+      ],
+      "sha256": "acac5833eb724c49a7455862460042089b3dbda8c318773513cdedde07e0b5a9"
+    },
+    {
+      "path": "reviews/evidence/conveyor-counter-r3-full-gate.png",
+      "box": [
+        845,
+        475,
+        1120,
+        650
+      ],
+      "sha256": "ea449c230f3107c7f778b194bf153fa3c12ceed8dbf2d3932c71ace744bdd6c6"
+    },
+    {
+      "path": "reviews/evidence/conveyor-counter-r3-terminal-pickup.png",
+      "box": [
+        475,
+        580,
+        812,
+        820
+      ],
+      "sha256": "791f51bf3f59f29469b877fd0d56cac191c03a022730186a06c8da4119a13abf"
+    }
+  ],
+  "threshold": 9.5,
+  "retest_of": "reviews/conveyor-counter-r2-review.json",
+  "prior_review_sha256": "cdbaa8f09482b9d1cac77242e90707d780570a01af0b3add656a631a17964429",
+  "score": 9.8,
+  "status": "PASS_STATIC_SHEET_ONLY",
+  "checks": {
+    "canonical_table_and_register": "PASS",
+    "staff_customer_role_separation": "PASS",
+    "stock_end_manual_pickup": "PASS",
+    "goods_cash_separation": "PASS",
+    "ready_full_item_counts": "PASS",
+    "continuous_curved_turn": "PASS",
+    "terminal_pickup_retention": "PASS",
+    "direction_roles": "PASS",
+    "gate_actually_crosses_lane": "PASS"
+  },
+  "findings": [
+    "Gate posts now mount at opposite edges of the straight approach before the curve; closed bar crosses the actual lane, not inner-corner air.",
+    "Green READY views lift the gate clear; amber FULL holds the fourth incoming tray before the curve while three finite stock positions are occupied.",
+    "Curved tapered rollers support the turn; terminal PICKUP guard retains stock before the timber table, with manual staff lift explicitly stated.",
+    "Canonical register back faces customer side and controls face staff side; fixed physical register end, table legs and lower shelf retained. Goods and cash stay separate."
+  ],
+  "required_repairs": [],
+  "approval_boundary": "Exact static restock-module concept and illustrated states only. Camp diagram must still preserve real staff/customer access; no native collision, service AI or tested inventory approval."
+}

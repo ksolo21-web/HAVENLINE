@@ -1,0 +1,560 @@
+{
+  "schema_version": 2,
+  "reviewer": "/root/conveyor_critic",
+  "reviewer_role": "Independent systems and visual critic; not the image/diagram builder or GitHub publisher",
+  "recorded_utc": "2026-11-27T04:42:36.909961+00:00",
+  "task": "Havenline conveyors and logical connections",
+  "status": "PASS_CONTENT_SCOPE_PENDING_R14_PUBLICATION",
+  "score": 9.8,
+  "threshold": 9.5,
+  "score_scope": "R01-R13 static art, research and typed proposal content only; not a task-wide completion score",
+  "requirements_binding": {
+    "path": "requirements.json",
+    "sha256": "40a11533d116d78ebc7fe17bc52b7817b9595f62b32eaf78be89a91407487bc9",
+    "bytes": 7578,
+    "original_status_fields_retained_as_history": true,
+    "baseline_commit": "e3c787a4ecfffa7ae2013227d2db553f2e2829ef",
+    "baseline_tree": "62a12cbf7c564b2ba7eebafdaebd3fec27ed42db",
+    "baseline_leaf_count": 4618
+  },
+  "approved_clarifications": [
+    {
+      "topic": "Rear food height",
+      "decision": "Rear sleeves sit at prepared-food shelf height above closed raw-food cabinets; low utility stays below window. Historical requirement/checkpoint bytes remain unchanged.",
+      "evidence": [
+        "README.md",
+        "renders/conveyor-storage-r5.png",
+        "design/routing-catalogue.json"
+      ]
+    },
+    {
+      "topic": "Initial representative camp",
+      "decision": "D06 depicts the explicitly proposed initial serial storage-buffered installation. D02/D07 retain the full direct-feed/surplus/merge upgrade unchanged; no requirement mandated all catalogue routes in one overview.",
+      "evidence": [
+        "reviews/initial-deployment-preflight-v1.json",
+        "D06-initial-deployment.json",
+        "README.md",
+        "GALLERY.md"
+      ]
+    },
+    {
+      "topic": "Storage-full evidence",
+      "decision": "Generic full receiving-buffer state plus explicit reservation/backpressure rules establish the proposed storage-full behavior. D03 and the ordinary camp scene are not misrepresented as full-house state panels.",
+      "evidence": [
+        "renders/conveyor-routing-r2.png",
+        "design/routing-catalogue.json",
+        "D06-initial-deployment.json",
+        "GALLERY.md"
+      ]
+    }
+  ],
+  "selected_render_studies": [
+    {
+      "deliverable": "D01",
+      "candidate": "renders/conveyor-transport-r2.png",
+      "sha256": "bcb4eb8ac4a65127ed4e2df847959a75d0d4ca1c01db674b7c9bd9354088e2bf",
+      "bytes": 1939920,
+      "native_size": [
+        1672,
+        941
+      ],
+      "actual_full_pixels_inspected": true,
+      "review": "reviews/conveyor-transport-r2-review.json",
+      "review_sha256": "0f4ca491361292d49de8873e0d76b1cfe9e9a02d4e1ddce131cedf4818994873",
+      "score": 9.8,
+      "prompt": "prompts/conveyor-transport-r2.txt",
+      "prompt_document_sha256": "8cb60ed13ac65267c449b371e6c4a11dafba0b33a656762d5328c68f0a92d9ae",
+      "invocation": "invocations/conveyor-transport-r2.json",
+      "invocation_sha256": "dfd6e0cf869c4695dbdc3de932acf52736427bc7d47dfb2e531ba71085df0e2c",
+      "exact_invoked_prompt_sha256": "aff3935b7d6321aacfe89db3fc6b0a530a52eb40d84904917d954497facbb18e",
+      "ordered_input_count": 1
+    },
+    {
+      "deliverable": "D02",
+      "candidate": "renders/conveyor-routing-r2.png",
+      "sha256": "115e085f20ba222e65a333399b72043f931a7499bc4e1ad4ece44ea6444605ee",
+      "bytes": 2022630,
+      "native_size": [
+        1672,
+        941
+      ],
+      "actual_full_pixels_inspected": true,
+      "review": "reviews/conveyor-routing-r2-review.json",
+      "review_sha256": "af43e13742e07ac59973527d308aceb4cde2187f3dcef90b485f5811593fdb60",
+      "score": 9.8,
+      "prompt": "prompts/conveyor-routing-r2.txt",
+      "prompt_document_sha256": "0b5ae9d1472c70a2f5159e3542c2e1ea6b2254af15521a951974d05e76801167",
+      "invocation": "invocations/conveyor-routing-r2.json",
+      "invocation_sha256": "b3d7eaf16add4048e627fc4b8ef050d02f0cd1fed80d8982acf47656c812c7b2",
+      "exact_invoked_prompt_sha256": "3c2e3a61138fdfeccbf73b9288b88e2fe56a029a832d487ea7af0f2967fe6d4c",
+      "ordered_input_count": 1
+    },
+    {
+      "deliverable": "D03",
+      "candidate": "renders/conveyor-storage-r5.png",
+      "sha256": "9e314d3595e8625ff4da6d4ed9d31a799eb0f0d47a707fcc75711f70b7ffc9f2",
+      "bytes": 2090253,
+      "native_size": [
+        1672,
+        941
+      ],
+      "actual_full_pixels_inspected": true,
+      "review": "reviews/conveyor-storage-r5-review.json",
+      "review_sha256": "809f60d30bcc310d930dd19f7ee195e457827e4624c2006aaa6a2b4db448ed2d",
+      "score": 9.8,
+      "prompt": "prompts/conveyor-storage-r5.txt",
+      "prompt_document_sha256": "f74b609637d1c455cc3057e03528b0b87ddaa606ca2ec27076f681b280cff087",
+      "invocation": "invocations/conveyor-storage-r5.json",
+      "invocation_sha256": "1f4b1d308f7f9b140b78694c7c57a47a08d5b2b4bbda2a5bb5aa73a3092d47c2",
+      "exact_invoked_prompt_sha256": "dcd70fc62e0dac198f9bd8b5eeea3bd19f0fc613d098083a8b4cf2763d39f818",
+      "ordered_input_count": 1
+    },
+    {
+      "deliverable": "D04",
+      "candidate": "renders/conveyor-machines-r2.png",
+      "sha256": "db26196aa7568109018b94a5f71a8bd4965262e5938c54fce3c51d192f3460d2",
+      "bytes": 2071167,
+      "native_size": [
+        1672,
+        941
+      ],
+      "actual_full_pixels_inspected": true,
+      "review": "reviews/conveyor-machines-r2-review.json",
+      "review_sha256": "a9e7ac77a269dea58afebbc7f0af8a28f9608d73904e91a4daa27e5638056e08",
+      "score": 9.8,
+      "prompt": "prompts/conveyor-machines-r2.txt",
+      "prompt_document_sha256": "779d558a5b609a456bbad68eb6a2189d9777553578ad46399e4c3fab062093d9",
+      "invocation": "invocations/conveyor-machines-r2.json",
+      "invocation_sha256": "4a2d46740159e5086276db463f91e29301d8373d4216fcf2e752d967b3a6050c",
+      "exact_invoked_prompt_sha256": "970d774c4afb933c154f09f89ea90e6d46a40a7e706f35ab14b97fd389cf2df5",
+      "ordered_input_count": 1
+    },
+    {
+      "deliverable": "D04B",
+      "candidate": "renders/conveyor-assembly-r1.png",
+      "sha256": "df561c77574c54e2b6325e1e69bbff080637cf45ecacba1518f0be8793e64c34",
+      "bytes": 1969259,
+      "native_size": [
+        1672,
+        941
+      ],
+      "actual_full_pixels_inspected": true,
+      "review": "reviews/conveyor-assembly-r1-review.json",
+      "review_sha256": "d5e1e152540f6db55d6d37c406e970351de6168a50ce03f28c29d42220f51241",
+      "score": 9.8,
+      "prompt": "prompts/conveyor-assembly-r1.txt",
+      "prompt_document_sha256": "18d5dfc836394cd99f9fe6a3bde2cd6086b16fe39c2e38f25b0388790cec4a8f",
+      "invocation": "invocations/conveyor-assembly-r1.json",
+      "invocation_sha256": "cdf7198c0b7973555243971de90b3ca6c0aab02e1658a4ec8b631f03f1250021",
+      "exact_invoked_prompt_sha256": "2e3e90cc31d2afaf9d602e0acc99b37f15a116fda9dbc59c94f0d1ab23a71482",
+      "ordered_input_count": 3
+    },
+    {
+      "deliverable": "D05",
+      "candidate": "renders/conveyor-counter-r3.png",
+      "sha256": "62f14cfd0f6d1acc6c84221e862b6f6ab14639b849a05dab1a4d1fb6154b8e3d",
+      "bytes": 1988035,
+      "native_size": [
+        1672,
+        941
+      ],
+      "actual_full_pixels_inspected": true,
+      "review": "reviews/conveyor-counter-r3-review.json",
+      "review_sha256": "6e6385a6fc690e1bc8bb2248188f19d2da2c051581420ba6eeb24a63023bd0b7",
+      "score": 9.8,
+      "prompt": "prompts/conveyor-counter-r3.txt",
+      "prompt_document_sha256": "a8f78a3e00cd6ed845132e92f40d775cb0344f63b3676ba2af2f91ca5d7c0923",
+      "invocation": "invocations/conveyor-counter-r3.json",
+      "invocation_sha256": "bc3954bd5e308e014abe51f8ff954d1921b72076187a58637c2a78415f780ea9",
+      "exact_invoked_prompt_sha256": "05148961cbca4402fc19c377d7e109448e077b7906d989cc0a5b8966fa111071",
+      "ordered_input_count": 1
+    },
+    {
+      "deliverable": "D06",
+      "candidate": "renders/conveyor-camp-r8.png",
+      "sha256": "b32b19d3d8050712eff2d00191afa7f8270d77f0f6b623ed74d69090a159ebea",
+      "bytes": 2465304,
+      "native_size": [
+        1672,
+        941
+      ],
+      "actual_full_pixels_inspected": true,
+      "review": "reviews/conveyor-camp-r8-review.json",
+      "review_sha256": "d6af7d44a836140fc4a7769a2bb65a1c62c3dc5d58917a2fdfdf82038d8d86f7",
+      "score": 9.8,
+      "prompt": "prompts/conveyor-camp-r8.txt",
+      "prompt_document_sha256": "fd07ee5f21e1f5a338c3b6d41aceaa5afceb81a45f7999b3cfa88ba9a72e079d",
+      "invocation": "invocations/conveyor-camp-r8.json",
+      "invocation_sha256": "e644eee1e6857533e7e86bff960131ccf8d3c0696e33dd14b61c8100b9d44a4c",
+      "exact_invoked_prompt_sha256": "078fbea2e4cce52f0861b0a7bd96dbc61c8470cdbe42c6473279d15a9ffc5332",
+      "ordered_input_count": 3
+    }
+  ],
+  "supporting_content_bindings": [
+    {
+      "path": "design/D07-01-directed-routing.svg",
+      "sha256": "1bb596314daaf0b46af4df8f42e8cf2ccbf0bd2e7c23301195a3529e1b620b73",
+      "bytes": 25612
+    },
+    {
+      "path": "design/D07-01-directed-routing.png",
+      "sha256": "65577209dc8ca7357b9a8075ae269bdbd2460db7898743d2c1a61ca5ef9b4296",
+      "bytes": 672058
+    },
+    {
+      "path": "design/D07-02-camp-allocation.svg",
+      "sha256": "63951059e1ad8f4e8f261c2f98fcfe810306e6fe985861263b13423d53446344",
+      "bytes": 25112
+    },
+    {
+      "path": "design/D07-02-camp-allocation.png",
+      "sha256": "1e804d0ac0959523bb2441476efdda7ca37c43d2a0953727bd7e161fab12f531",
+      "bytes": 490533
+    },
+    {
+      "path": "design/routing-catalogue.json",
+      "sha256": "bc72ba3281a8b3bcda4fbb127f6a964fd86fa73aa7f0c49e66416b9dbc0fe398",
+      "bytes": 55984
+    },
+    {
+      "path": "D06-initial-deployment.json",
+      "sha256": "eeab169419f029a35a0c52fc2d1a291ae4b7873446390fb120bf5bc1c38ab7e3",
+      "bytes": 19509
+    },
+    {
+      "path": "README.md",
+      "sha256": "3080041acb43c8768e4f8ae6272c2c900c2bb24732898c3d36780e36e2affac9",
+      "bytes": 18264
+    },
+    {
+      "path": "GALLERY.md",
+      "sha256": "5483ef93cfb23907f76740668c1cb983582386d137d3f9144f3f404633219741",
+      "bytes": 6051
+    },
+    {
+      "path": "reviews/d07-final-scoped-review.json",
+      "sha256": "0696005fc33c650f6b59e7aeaad8ee8e3f3654026ea41d5279131cedb7bc5a40",
+      "bytes": 6320
+    },
+    {
+      "path": "reviews/d07-independent-catalogue-check.json",
+      "sha256": "3667029f0ed52d2eeb5ed78badcbb57859ff0e5a9c53247d7cfd760de23165ae",
+      "bytes": 2886
+    },
+    {
+      "path": "reviews/research-final-scoped-review.json",
+      "sha256": "ba5c1efb87f043c04e33a1782dbfe94881bbe185093e9d70a55b166e2906f2e6",
+      "bytes": 9058
+    },
+    {
+      "path": "reviews/research-identity-and-coverage-check.json",
+      "sha256": "97fa7da093a7cb6d062e3e851ac4cd26154f3ab403b43cf514a2ed9ac8204077",
+      "bytes": 2240
+    },
+    {
+      "path": "reviews/initial-deployment-preflight-v1.json",
+      "sha256": "b15cb2f220b545286bdc505eb1a2ca65157211c9d6259f52593c4737abd7bc30",
+      "bytes": 3561
+    },
+    {
+      "path": "reviews/initial-deployment-record-review-v1.json",
+      "sha256": "d994cb5bc60ceafd40debfa6305bb508b57f0b225353e280a8db12b581ab9336",
+      "bytes": 4121
+    },
+    {
+      "path": "reviews/local-generation-history-check.json",
+      "sha256": "81cba85461a30e7d876a3eb72faf9a0fe7675274aa87616226daadadfa25dc21",
+      "bytes": 16101
+    },
+    {
+      "path": "reviews/source-inspection/source-manifest.json",
+      "sha256": "cdda6d912fa8618452473a776f01265ac7a7c06a03587cd56ec19ce3f3d3a86e",
+      "bytes": 8103
+    },
+    {
+      "path": "reviews/critic-preflight-v1.json",
+      "sha256": "48b25bc9c949bb3ed16601b882166ade9fab739b2920ba478b38b68d451cafaa",
+      "bytes": 11088
+    },
+    {
+      "path": "reviews/critic-plan-review-v1.json",
+      "sha256": "9b3b171ca3b6bc3764aa3ee94c3b96a596a51b1e2788d64e78f75d7d1365de92",
+      "bytes": 3776
+    },
+    {
+      "path": "references/existing/coverage.md",
+      "sha256": "eeefc3db54f25f0d9e7b181d03c85d0958e39b5aa2ae2941333b7cea5b359089",
+      "bytes": 6312
+    },
+    {
+      "path": "references/existing/public-source-index.json",
+      "sha256": "6e39c6376c6f86e7076341625db4aab0dd1b9634031ee3d384be187f5a4a40f0",
+      "bytes": 34968
+    },
+    {
+      "path": "references/existing/public-video-observations.json",
+      "sha256": "d846ae9381e226977145dd76096cee5ce65337042d6c4571a40e34397989ba62",
+      "bytes": 31712
+    },
+    {
+      "path": "references/existing/PUBLIC-ARCHIVE-MANIFEST.json",
+      "sha256": "193b0ab1d4ca106c3ec32d66fbd8934521f482e18cda017baed9084cee8fc243",
+      "bytes": 3005
+    },
+    {
+      "path": "references/new/new-source-register.json",
+      "sha256": "6c37a1dff5b504e915350e3d2a7b28b94950f36458e492448d2201239001ac81",
+      "bytes": 14595
+    },
+    {
+      "path": "references/new/research-findings.md",
+      "sha256": "568261758fc72df494f116bcb90e437a5148dbc1e6212a5490f82489b3d04e62",
+      "bytes": 5515
+    },
+    {
+      "path": "references/new/PUBLIC-ARCHIVE-MANIFEST.json",
+      "sha256": "8a2e18bce2f6efc022c2745344c327a31af82bb96e8172e40391c72ac40bd124",
+      "bytes": 2865
+    }
+  ],
+  "requirements_review": [
+    {
+      "id": "R01",
+      "original_requirement": "All registered reference identities inventoried; every accessible source actually visually inspected at a declared level; unavailable full footage not claimed watched.",
+      "status": "PASS_CONTENT_SCOPE",
+      "evidence": [
+        "reviews/research-final-scoped-review.json",
+        "references/existing/coverage.md",
+        "references/existing/public-source-index.json"
+      ],
+      "assessment": "All 23 registered existing video identities and six stills are accounted for. Source agents inspected available visual evidence at declared levels; independent identity checks cover 10 full MP4 hashes, 122 storyboard sheets, source documents and requested sample ranges.",
+      "boundary": "13 YouTube sources remain storyboard-only. No end-to-end playback, audio, continuous-motion or throughput claim; critic crosschecks and integrity review are distinguished from source-agent coverage."
+    },
+    {
+      "id": "R02",
+      "original_requirement": "Additional first-party videos/documentation inspected and linked; distinguish game footage, ad presentation and real-world technical analogy.",
+      "status": "PASS_CONTENT_SCOPE",
+      "evidence": [
+        "reviews/research-final-scoped-review.json",
+        "references/new/new-source-register.json",
+        "references/new/research-findings.md"
+      ],
+      "assessment": "Five actual first-party developer clips were visually sampled across three articles; additional first-party manufacturer pages/video descriptions inform physical analogies. Source topology, documented claims and design inference remain distinct.",
+      "boundary": "Two core and two additional video candidates are metadata/documentation-only. Five sampled clips are from one publisher, not five independent publishers."
+    },
+    {
+      "id": "R03",
+      "original_requirement": "Each route names item form, source/output, destination/input, transfer direction and evidence/proposal status.",
+      "status": "PASS_CONTENT_SCOPE",
+      "evidence": [
+        "design/routing-catalogue.json",
+        "reviews/d07-independent-catalogue-check.json",
+        "D06-initial-deployment.json",
+        "reviews/initial-deployment-record-review-v1.json"
+      ],
+      "assessment": "The full proposal has 37 station dispositions and 25 directed routes covering all 14 source equipment families. Initial mode adds a distinct nine-endpoint/eight-transfer record. Named ports resolve out-to-in, carrier families match, item forms and proposal/source status are explicit.",
+      "boundary": "Semantic item classes and allowed-catalogue predicates are not frozen executable SKU identifiers."
+    },
+    {
+      "id": "R04",
+      "original_requirement": "Machine-to-machine, machine-to-storage and storage-to-customer routes are explicit; future assembly recipe remains provisional.",
+      "status": "PASS_CONTENT_SCOPE",
+      "evidence": [
+        "renders/conveyor-machines-r2.png",
+        "renders/conveyor-assembly-r1.png",
+        "renders/conveyor-camp-r8.png",
+        "design/D07-01-directed-routing.png",
+        "D06-initial-deployment.json"
+      ],
+      "assessment": "Intake-to-cooker is visibly connected; separate A/B assembly inputs have their own study; initial camp visibly connects cooker to food storage and requested dispatch to counter buffer. Full direct/overflow/merge upgrade remains specified and rendered as modules. Exact assembly ingredients and ratios remain provisional."
+    },
+    {
+      "id": "R05",
+      "original_requirement": "No universal mixed-food/fuel/material loop; each outlet/filter declares compatible catalogue; raw log/meat sales allowed only by explicit counter catalogue.",
+      "status": "PASS_CONTENT_SCOPE",
+      "evidence": [
+        "renders/conveyor-routing-r2.png",
+        "design/routing-catalogue.json",
+        "D06-initial-deployment.json",
+        "README.md"
+      ],
+      "assessment": "Food-only classification, source-held incompatible timber and separate utility/material paths prevent universal mixed-resource circulation. Heater is warmth-only; raw logs/meat can be sold only when the explicit counter catalogue permits their actual form. No transport conversion of ore to ingots is asserted."
+    },
+    {
+      "id": "R06",
+      "original_requirement": "Storage original doors/apron, left window, rear vent and right fuel hatch preserved; low product sleeves are explicit new additions with local internal trays, not invisible routing.",
+      "status": "PASS_CONTENT_SCOPE",
+      "evidence": [
+        "renders/conveyor-storage-r5.png",
+        "renders/conveyor-camp-r8.png",
+        "D06-initial-deployment.json",
+        "README.md"
+      ],
+      "assessment": "D03 preserves original front doors/apron, high left window, rear vent and dedicated fuel hatch while explicitly adding new typed docks and local mechanisms. Utility has low landings and an indexed lift; food uses same-rear-wall shelf-height sleeves and a horizontal shuttle above closed raw-food cabinets. Camp rear-facing house has actual dock-tip connections and an unconnected closed fuel hatch.",
+      "boundary": "The early generic low-sleeve wording is explicitly clarified: only utility remains low; rear food is raised. Far front facade is occluded in the camp view and is evidenced by D03 plus the recorded whole-house rotation, not falsely claimed visible."
+    },
+    {
+      "id": "R07",
+      "original_requirement": "Storage fuel, raw food, hides, cash/cargo remain explicitly manual in this first conveyor upgrade; no false full-storage automation claim.",
+      "status": "PASS_CONTENT_SCOPE",
+      "evidence": [
+        "renders/conveyor-storage-r5.png",
+        "design/routing-catalogue.json",
+        "D06-initial-deployment.json",
+        "README.md"
+      ],
+      "assessment": "Fuel, raw-food cabinets, hides, cargo/cash and undefined future production remain manual or disabled. No full-storage automation or invented weapon/ammunition recipe is claimed. The six-zone storage disposition and central aisle remain represented by the approved layout and local-bay cutaways."
+    },
+    {
+      "id": "R08",
+      "original_requirement": "Actual connection renders show supported surfaces, matched widths/heights, bridge plates/adapters and no intersecting legs or control access.",
+      "status": "PASS_CONTENT_SCOPE",
+      "evidence": [
+        "renders/conveyor-transport-r2.png",
+        "renders/conveyor-machines-r2.png",
+        "renders/conveyor-storage-r5.png",
+        "renders/conveyor-counter-r3.png",
+        "renders/conveyor-camp-r8.png"
+      ],
+      "assessment": "Actual selected pixels show supported straight/corner/incline geometry, silver transitions, finite dock landings, matched visible handoffs and grounded supports. Final camp curves join projecting IN/OUT mouths instead of house walls; cooker controls and counter pickup remain accessible.",
+      "boundary": "Static reference-art physical readability only; no numerical dimensional fit, native mesh collision or moving-device test."
+    },
+    {
+      "id": "R09",
+      "original_requirement": "Finite buffers, blocked/full destinations, reject handling, reservation-based dispatch and prevention of store-in/store-out loops defined and illustrated.",
+      "status": "PASS_CONTENT_SCOPE",
+      "evidence": [
+        "renders/conveyor-routing-r2.png",
+        "renders/conveyor-machines-r2.png",
+        "renders/conveyor-assembly-r1.png",
+        "renders/conveyor-counter-r3.png",
+        "design/routing-catalogue.json",
+        "D06-initial-deployment.json"
+      ],
+      "assessment": "Generic receiving buffer shows ready/full with next carrier held upstream; output and counter studies show actual full downstream stock; assembly shows missing-input and full-output waits. Wrong items remain recoverable off-line. Both route records define reservation ownership, finite capacity and no automatic storage OUT-to-IN path. Initial receiving-full waits do not disable valid requested dispatch that can free inventory.",
+      "boundary": "D03 is an interface/mechanism sheet, not a full-house state illustration. Full storage behavior is evidenced by D02 receiving-full art plus the initial/D07 rules; no nonexistent panel is claimed."
+    },
+    {
+      "id": "R10",
+      "original_requirement": "Preserve canonical counter table/legs/shelf/register, staff controls, customer frontage; goods and cash separate.",
+      "status": "PASS_CONTENT_SCOPE",
+      "evidence": [
+        "renders/conveyor-counter-r3.png",
+        "renders/conveyor-camp-r8.png",
+        "D06-initial-deployment.json"
+      ],
+      "assessment": "Canonical timber table/register/legs/shelf remain recognizable. Standalone buffer ends at guarded PICKUP before the table; worker handoff is explicit. Final camp opens the outside customer face at the fence, keeps keypad and staff inside, and separates stock, cash collection pad and register."
+    },
+    {
+      "id": "R11",
+      "original_requirement": "Centered warmth furnace, two bidirectional gate approaches, storage entrance, staff paths and service clearance stay open; exact real-world scale/runtime fit not claimed.",
+      "status": "PASS_CONTENT_SCOPE",
+      "evidence": [
+        "design/D07-02-camp-allocation.png",
+        "renders/conveyor-camp-r8.png",
+        "D06-initial-deployment.json"
+      ],
+      "assessment": "Both selected layouts retain central stone warmth service and two distinct open bidirectional gate approaches. Final initial-mode camp has inset pond with continuous western paving into the northern service margin, clear cooker front and manual house-side access, and outside customer frontage. No conveyor crosses either main gate corridor.",
+      "boundary": "D06 is an explicitly different initial placement; D07 is the full-upgrade allocation. No claim that they share an identical footprint or that either is a runtime pathfinding/collision certification."
+    },
+    {
+      "id": "R12",
+      "original_requirement": "Source style: sculpted rounded blue/orange/silver machinery, dark carry surfaces, warm timber; use inspected approved image inputs; no character redesign.",
+      "status": "PASS_CONTENT_SCOPE",
+      "evidence": [
+        "reviews/source-inspection/source-manifest.json",
+        "renders/conveyor-transport-r2.png",
+        "renders/conveyor-routing-r2.png",
+        "renders/conveyor-storage-r5.png",
+        "renders/conveyor-machines-r2.png",
+        "renders/conveyor-assembly-r1.png",
+        "renders/conveyor-counter-r3.png",
+        "renders/conveyor-camp-r8.png"
+      ],
+      "assessment": "Seven selected studies follow the inspected rounded blue/orange/silver machinery, dark carrying surfaces, warm timber and winter camp assets. Original source images stay unchanged; docks/adapters/assembly are explicit proposals. No character redesign was introduced."
+    },
+    {
+      "id": "R13",
+      "original_requirement": "Separate critic inspects actual output multi-angle and use-state pixels, score at least 9.5 with every mandatory check passed; retain failed candidates and reviews.",
+      "status": "PASS_CONTENT_SCOPE",
+      "evidence": [
+        "reviews/conveyor-transport-r2-review.json",
+        "reviews/conveyor-routing-r2-review.json",
+        "reviews/conveyor-storage-r5-review.json",
+        "reviews/conveyor-machines-r2-review.json",
+        "reviews/conveyor-assembly-r1-review.json",
+        "reviews/conveyor-counter-r3-review.json",
+        "reviews/conveyor-camp-r8-review.json",
+        "reviews/d07-final-scoped-review.json",
+        "reviews/research-final-scoped-review.json",
+        "reviews/initial-deployment-record-review-v1.json",
+        "reviews/local-generation-history-check.json"
+      ],
+      "assessment": "A genuinely separate critic inspected all seven selected full native images, meaningful opposing views/interface closeups and ready/full/missing/wrong-item states across the set. Each selected study scores 9.8 with its mandatory checks passed. All 22 generated originals match their native returned bytes, invocation records and exact visual-review hashes; all failed versions and the no-image tool failure are locally retained.",
+      "boundary": "Retention and provenance are locally verified here. Durable remote preservation belongs to R14 and remains unapproved by this content report."
+    }
+  ],
+  "counts": {
+    "content_requirements_passed": 13,
+    "content_requirements_in_scope": 13,
+    "selected_render_studies_passed": 7,
+    "required_render_studies": 7,
+    "full_catalogue_stations": 37,
+    "full_catalogue_routes": 25,
+    "source_equipment_families_covered": 14,
+    "source_equipment_families_required": 14,
+    "initial_mode_endpoints": 9,
+    "initial_mode_typed_transfers": 8,
+    "generated_native_pngs_locally_verified": 22,
+    "tool_failures_with_no_image_retained": 1
+  },
+  "original_preflight_mapping": {
+    "C01_source_distinctions": "PASS",
+    "C02_complete_links": "PASS",
+    "C03_one_way_ownership": "PASS",
+    "C04_compatible_goods": "PASS",
+    "C05_storage_identity_interface": "PASS",
+    "C06_counter_roles": "PASS",
+    "C07_station_approach": "PASS",
+    "C08_physical_interfaces": "PASS_STATIC_REFERENCE_SCOPE",
+    "C09_sort_reject": "PASS",
+    "C10_blocked_destinations": "PASS_PROPOSED_STATES_AND_RULES",
+    "C11_restock_policy": "PASS",
+    "C12_camp_routes": "PASS_CONCEPT_ALLOCATION",
+    "C13_modular_family": "PASS",
+    "C14_actual_views_states": "PASS",
+    "C15_evidence_archive_integrity": {
+      "local_content_and_history": "PASS",
+      "remote_archive_and_publication": "PENDING_R14_NOT_WAIVED"
+    },
+    "C16_truthful_scope": "PASS"
+  },
+  "readme_gallery_review": {
+    "status": "PASS_CONTENT",
+    "README_sha256": "3080041acb43c8768e4f8ae6272c2c900c2bb24732898c3d36780e36e2affac9",
+    "GALLERY_sha256": "5483ef93cfb23907f76740668c1cb983582386d137d3f9144f3f404633219741",
+    "findings": "Current prose separates initial and full upgrade modes, corrected research/ archive paths, source observations/proposals, explicit unavailable-stream limits and static-only scope. It does not mislabel source sampling as full playback. Final frozen link/alias resolution remains the archive checker responsibility."
+  },
+  "unresolved_content_findings": [],
+  "missing_content_evidence": [],
+  "publication_gate": {
+    "id": "R14",
+    "status": "PENDING_SEPARATE_ARCHIVE_CRITIC_AND_REMOTE_READBACK",
+    "original_requirement": "Additive isolated art branch preserves baseline 4618 files and all originals; verified remote bodies/hash/path evidence; no runtime, workflow or main mutations.",
+    "required": "Verify isolated additive package, all baseline files retained, exact selected aliases/original histories/prompts, correct local links and complete remote bodies/hash/path evidence. Bind this report by exact hash in acceptance-status.json, then issue separate delivery/remote verification receipts.",
+    "not_approved_here": [
+      "GitHub branch publication",
+      "remote asset bodies",
+      "baseline preservation after push",
+      "main/runtime/workflow unchanged after publication"
+    ]
+  },
+  "scope_limits": [
+    "Static concept PNGs and exact editable vector/typed design specification; no native mesh, rig, moving simulation, structural or collision certificate.",
+    "No final recipes, numerical capacities, production speeds, costs or world dimensions.",
+    "Existing source coverage remains 10 full-file frame-sample audits plus 13 storyboard-only sources; no continuous playback or audio claim.",
+    "The critic independently validates selected actual pixels and source-audit outputs/identities; it does not claim to have replayed every source video.",
+    "D06 initial mode uses a new proposed enclosed-water site and rotated house; full-upgrade alternative placement remains in D07."
+  ],
+  "approval_boundary": "All 13 content-scope requirements pass with no mandatory content check waived. R14 is still a separate required gate. This report must not be described as task-wide completion or proof that images are already in GitHub. No score averaging was used to excuse failed candidates; all rejected revisions remain excluded from selection and retained in history."
+}

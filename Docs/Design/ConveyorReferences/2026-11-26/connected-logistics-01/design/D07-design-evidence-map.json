@@ -1,0 +1,241 @@
+{
+  "deliverable": "D07",
+  "scope": "Editable exact vector logic and conceptual camp allocation, with complete source-family disposition",
+  "source_input_receipts": [
+    {
+      "path": "requirements.json",
+      "sha256": "40a11533d116d78ebc7fe17bc52b7817b9595f62b32eaf78be89a91407487bc9"
+    },
+    {
+      "path": "DESIGN_CHECKPOINT.md",
+      "sha256": "56bcd1ba3bd4ca7f7582e67bee26c2d257160e125f165b2429b64c0ab93a919d"
+    },
+    {
+      "path": "sources/docs/source-equipment-coverage.json",
+      "sha256": "d66b8e9d2356d40dea8b140d050f75e923d49584e9776ca7fd8d16a2b5a0337e"
+    },
+    {
+      "path": "reviews/critic-reference-amendment-v1.json",
+      "sha256": "2d14b837e801f675408d3e2fec2b03003083953d2d50db4b8c0ebffa0e627832"
+    },
+    {
+      "path": "reviews/critic-plan-review-v1.json",
+      "sha256": "9b3b171ca3b6bc3764aa3ee94c3b96a596a51b1e2788d64e78f75d7d1365de92"
+    },
+    {
+      "path": "references/new/new-source-register.json",
+      "sha256": "6c37a1dff5b504e915350e3d2a7b28b94950f36458e492448d2201239001ac81"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "DS01",
+      "requirements": [
+        "R03",
+        "R05"
+      ],
+      "decision": "Every directed route names a source port, destination port, item form, release condition and evidence/proposal status. Food, utility and manual carrier families remain separate.",
+      "evidence": [
+        "DESIGN_CHECKPOINT.md",
+        "source-equipment-coverage.json",
+        "NEW-D01"
+      ],
+      "boundary": "Specification identifiers are not runtime item IDs."
+    },
+    {
+      "id": "DS02",
+      "requirements": [
+        "R04"
+      ],
+      "decision": "Shore intake feeds cooker through a proposed side adapter; cooked output reaches a finite buffer and an allowed counter branch.",
+      "evidence": [
+        "locked-video-chain",
+        "video-A-016",
+        "DESIGN_CHECKPOINT.md"
+      ],
+      "boundary": "Observed source chain; new connector hardware and control behavior."
+    },
+    {
+      "id": "DS03",
+      "requirements": [
+        "R04"
+      ],
+      "decision": "Optional assembler has separate ingredient A and B ports and its own allowed-menu output. Both accepted inputs and completed-output space are reserved at cycle start. Completed output dispatch requires its own counter reservation, and does not require consumed ingredients to remain available.",
+      "evidence": [
+        "original A56.5-59s",
+        "reviews/critic-reference-amendment-v1.json"
+      ],
+      "boundary": "Topology is observed; ingredient identities/eligibility, quantities, timing, fuel and new machine geometry are unfrozen."
+    },
+    {
+      "id": "DS04",
+      "requirements": [
+        "R04",
+        "R09"
+      ],
+      "decision": "Surplus food can enter rear storage. Stored food dispatch is request-controlled and merges with fresh stock only at a gated merge with exclusive slot ownership.",
+      "evidence": [
+        "DESIGN_CHECKPOINT.md",
+        "NEW-V01",
+        "NEW-V02",
+        "NEW-V04"
+      ],
+      "boundary": "New system proposal; no assertion that source advertisements implement reservations."
+    },
+    {
+      "id": "DS05",
+      "requirements": [
+        "R06",
+        "R09"
+      ],
+      "decision": "Left utility cassette has separate receiving and dispatch paths through an indexed local tray/lift. IN selects either timber or mineral tray; OUT receives from the selected tray and runs to a permitted endpoint. Rear food cassette has independent receiving/dispatch trays and a short horizontal shuttle at prepared-food shelf height, above the closed raw-food cabinets.",
+      "evidence": [
+        "DESIGN_CHECKPOINT.md",
+        "reviews/critic-plan-review-v1.json P02"
+      ],
+      "boundary": "No mixed pile, hidden whole-house sorting or through-belt across the central aisle."
+    },
+    {
+      "id": "DS06",
+      "requirements": [
+        "R07"
+      ],
+      "decision": "Fuel, raw-food storage/sales, hides/fur, cargo/cash, butcher/rack/cookfire/chopping fixtures remain manual. Undefined workshop/greenhouse outputs and steel/oil equipment receive no active recipe route.",
+      "evidence": [
+        "source-equipment-coverage.json: all 14 source families"
+      ],
+      "boundary": "No invented smelter, refinery, flour, tanning, ammunition, workshop parts or species drop table."
+    },
+    {
+      "id": "DS07",
+      "requirements": [
+        "R05",
+        "R10"
+      ],
+      "decision": "Raw logs/materials may reach explicitly permitted counters. Raw meat sales require explicit catalogue permission and a separate manually stocked area/mode. Cash collection is a separate staff route.",
+      "evidence": [
+        "runtime-customers",
+        "DESIGN_CHECKPOINT.md",
+        "original A58.5-59s"
+      ],
+      "boundary": "A catalogue permission is required; no universal raw-material or food sale assumption."
+    },
+    {
+      "id": "DS08",
+      "requirements": [
+        "R06",
+        "R11"
+      ],
+      "decision": "Storage front doors/apron, high left window, rear vent and original right fuel hatch are retained. A continuous blue service spine connects the primary gate corridor to both left and rear storage service aisles without crossing conveyors.",
+      "evidence": [
+        "DESIGN_CHECKPOINT.md",
+        "reviews/critic-plan-review-v1.json P04"
+      ],
+      "boundary": "Concept allocation; exact dimensions and runtime collisions not validated."
+    },
+    {
+      "id": "DS09",
+      "requirements": [
+        "R10",
+        "R11"
+      ],
+      "decision": "Product belt terminates at a dead-end staff-side stock buffer. A dashed gray staff-lift handoff moves stock onto the original timber table. Customer face/queue stay outside the fence; staff register/cash access joins the clear internal corridor. Both gate approaches remain bidirectional and free of belts.",
+      "evidence": [
+        "DESIGN_CHECKPOINT.md",
+        "original A56-59s",
+        "NEW-V06 documentation only"
+      ],
+      "boundary": "Physical queue/control logic is a proposal; manufacturer lift-gate clip was not viewed."
+    },
+    {
+      "id": "DS10",
+      "requirements": [
+        "R09"
+      ],
+      "decision": "Wrong item remains source-held. Full receiving or output space holds the next item and stops upstream release. No automatic path returns storage OUT to its own IN.",
+      "evidence": [
+        "DESIGN_CHECKPOINT.md",
+        "NEW-D01",
+        "NEW-D02",
+        "NEW-D03 indexed documentation"
+      ],
+      "boundary": "Structural graph checks only; no simulation or throughput testing."
+    },
+    {
+      "id": "DS11",
+      "requirements": [
+        "R03",
+        "R04"
+      ],
+      "decision": "Manual rod acquisition and mechanized shore intake are alternative source phases. Optional manual loading from a rack into an intake is explicitly a new proposal, not source-observed serial topology.",
+      "evidence": [
+        "locked-video-chain",
+        "independent D07 catalogue review"
+      ],
+      "boundary": "No claim that rods must feed the machine, or that this loading port exists in the reference."
+    }
+  ],
+  "diagram_files": [
+    "D07-01-directed-routing.svg",
+    "D07-02-camp-allocation.svg"
+  ],
+  "preview_files": [
+    "D07-01-directed-routing.png",
+    "D07-02-camp-allocation.png"
+  ],
+  "catalogue": "routing-catalogue.json",
+  "independent_review_status": {
+    "reviewer": "/root/conveyor_critic",
+    "status": "PASS_SCOPED_DESIGN_ONLY",
+    "score": 9.8,
+    "mandatory_checks_passed": 14,
+    "report": "reviews/d07-final-scoped-review.json",
+    "report_sha256": "0696005fc33c650f6b59e7aeaad8ee8e3f3654026ea41d5279131cedb7bc5a40",
+    "boundary": "Concept specification only, not a runnable inventory engine, frozen SKU/recipe table, exact world-scale layout, mesh collision or runtime navigation certification. Static art package, research and GitHub verification remain separate mandatory gates; no task-wide approval."
+  },
+  "limitations": [
+    "No exact-world-scale or runtime-fit claim.",
+    "No material processing recipes, capacities, rates or costs frozen.",
+    "The physical body of the heater stays clear of the storage apron; pale halo is warmth visualization.",
+    "Optional assembly pad is a reservation on the spatial plan; its full two-input topology is on D07.1."
+  ],
+  "current_revision": "r5",
+  "revision_repairs": [
+    {
+      "from": "draft-v2",
+      "fix": "Utility IN/OUT directions and class selection made explicit, with both timber/mineral options."
+    },
+    {
+      "from": "draft-v2",
+      "fix": "Stock-buffer-to-counter connection corrected to manual staff lift."
+    },
+    {
+      "from": "draft-v2",
+      "fix": "Added continuous service access from gate corridor to left and rear service aisles."
+    },
+    {
+      "from": "draft-v3",
+      "fix": "R-F01 is explicitly a new optional manual-loading proposal; source phases are not asserted as serial."
+    },
+    {
+      "from": "draft-v3",
+      "fix": "Assembler joint input/output reservation is a cycle-start rule; completed output dispatch uses its own destination reservation."
+    },
+    {
+      "from": "draft-v4",
+      "fix": "Synchronized rear prepared-food shelf-height tray/shuttle and low utility tray/lift terminology with root storage r3."
+    }
+  ],
+  "review_screenshots": [
+    "review-screenshots/utility-selector-r5.png",
+    "review-screenshots/service-access-r5.png",
+    "review-screenshots/counter-handoff-r5.png"
+  ],
+  "source_input_amendments": [
+    {
+      "path": "DESIGN_CHECKPOINT.md",
+      "sha256": "56bcd1ba3bd4ca7f7582e67bee26c2d257160e125f165b2429b64c0ab93a919d",
+      "applied_change": "Shelf-height rear food sleeves above original closed raw-food cabinets; low utility sleeves remain below original left window. Root storage r3 and critic require local horizontal food shuttle, utility lift."
+    }
+  ]
+}

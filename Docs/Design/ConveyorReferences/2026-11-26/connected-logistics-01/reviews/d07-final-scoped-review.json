@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/conveyor_critic",
+  "recorded_utc": "2026-11-27T03:59:18.408230+00:00",
+  "deliverable": "D07 typed route and camp allocation specification",
+  "candidate_version": "r5",
+  "status": "PASS_SCOPED_DESIGN_ONLY",
+  "score": 9.8,
+  "threshold": 9.5,
+  "inputs": [
+    {
+      "path": "design/D07-01-directed-routing.svg",
+      "sha256": "1bb596314daaf0b46af4df8f42e8cf2ccbf0bd2e7c23301195a3529e1b620b73",
+      "bytes": 25612,
+      "xml_parses": true
+    },
+    {
+      "path": "design/D07-01-directed-routing.png",
+      "sha256": "65577209dc8ca7357b9a8075ae269bdbd2460db7898743d2c1a61ca5ef9b4296",
+      "bytes": 672058,
+      "native_size": [
+        2200,
+        1850
+      ],
+      "full_pixels_inspected": true
+    },
+    {
+      "path": "design/D07-02-camp-allocation.svg",
+      "sha256": "63951059e1ad8f4e8f261c2f98fcfe810306e6fe985861263b13423d53446344",
+      "bytes": 25112,
+      "xml_parses": true
+    },
+    {
+      "path": "design/D07-02-camp-allocation.png",
+      "sha256": "1e804d0ac0959523bb2441476efdda7ca37c43d2a0953727bd7e161fab12f531",
+      "bytes": 490533,
+      "native_size": [
+        2200,
+        1450
+      ],
+      "full_pixels_inspected": true
+    },
+    {
+      "path": "design/routing-catalogue.json",
+      "sha256": "bc72ba3281a8b3bcda4fbb127f6a964fd86fa73aa7f0c49e66416b9dbc0fe398",
+      "bytes": 55984
+    }
+  ],
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/D07-r5-utility-direction.png",
+      "box": [
+        330,
+        448,
+        620,
+        720
+      ],
+      "source": "design/D07-02-camp-allocation.png",
+      "sha256": "c10462e801a16dfd43206fbb061449ca67bfa284c8b70373e7251916320aac38"
+    },
+    {
+      "path": "reviews/evidence/D07-r5-service-spine.png",
+      "box": [
+        74,
+        255,
+        830,
+        908
+      ],
+      "source": "design/D07-02-camp-allocation.png",
+      "sha256": "bf5144446e8f4a85d8fd5f762c2f4b599268fa327368789cd178341ef88ac247"
+    },
+    {
+      "path": "reviews/evidence/D07-r5-staff-handoff.png",
+      "box": [
+        1395,
+        535,
+        1695,
+        835
+      ],
+      "source": "design/D07-02-camp-allocation.png",
+      "sha256": "9d12a3e6a660051acd83c8e852e57607665cd69a2cd536d3c99e65ac3d3c6eb5"
+    },
+    {
+      "path": "reviews/evidence/D07-r5-assembly-conditional.png",
+      "box": [
+        45,
+        580,
+        1215,
+        950
+      ],
+      "source": "design/D07-01-directed-routing.png",
+      "sha256": "958474caa093d78c6e7e66b66768e6c2ea15ee55364990a998f9968cdf380a4b"
+    }
+  ],
+  "catalogue_validation": "reviews/d07-independent-catalogue-check.json",
+  "catalogue_validation_sha256": "3667029f0ed52d2eeb5ed78badcbb57859ff0e5a9c53247d7cfd760de23165ae",
+  "counts": {
+    "stations": 37,
+    "directed_routes": 25,
+    "source_equipment_families": 14,
+    "covered_source_equipment_families": 14
+  },
+  "checks": {
+    "all_ids_ports_directions_resolve": "PASS",
+    "carrier_families_match_each_route": "PASS",
+    "source_or_proposal_status_each_route": "PASS",
+    "all_equipment_families_have_disposition": "PASS",
+    "separate_assembler_A_B_inputs": "PASS",
+    "cycle_start_and_completed_dispatch_distinct": "PASS",
+    "no_automatic_storage_out_to_in_path": "PASS",
+    "typed_local_storage_transfer": "PASS",
+    "staff_counter_handoff_cash_separation": "PASS",
+    "two_bidirectional_gate_corridors": "PASS",
+    "continuous_front_left_rear_service_access": "PASS",
+    "manual_fuel_raw_food_hides_cargo_cash_boundary": "PASS",
+    "provisional_recipe_and_world_scale_boundaries": "PASS",
+    "actual_vector_raster_readability": "PASS"
+  },
+  "repaired_findings": [
+    {
+      "prior_revision": "design/revisions/draft-v2",
+      "finding": "Utility OUT arrow incorrectly pointed into mineral tray; incoming/outgoing branch ownership unclear.",
+      "result": "Separate indexed receiving branches enter timber/mineral; discharge collects from either bay and returns outward to OUT."
+    },
+    {
+      "prior_revision": "design/revisions/draft-v2",
+      "finding": "Product-coloured arrow continued into timber counter without staff handoff distinction.",
+      "result": "Belt ends at stock buffer; dashed gray staff lift is labelled, preserving manual service and cash path."
+    },
+    {
+      "prior_revision": "design/revisions/draft-v2",
+      "finding": "Left/rear service patches lacked visible continuous access around perimeter belts.",
+      "result": "West service spine links gate corridor with left branch and northern rear aisle, without crossing utility or prepared-food belt routes."
+    },
+    {
+      "prior_revision": "design/revisions/draft-v3",
+      "finding": "Fishing-rack\u2192intake loading was mislabeled source-observed serial topology.",
+      "result": "R-F01 and station boundaries explicitly call it a new optional manual-loading proposal, preserving rod/intake alternative phase distinction."
+    },
+    {
+      "prior_revision": "design/revisions/draft-v3",
+      "finding": "Completed assembler dispatch depended on ingredient reservations that may already have been consumed.",
+      "result": "Cycle start reserves ingredients/output; completion consumes exactly once; R-A04 dispatch checks completed item and its owned compatible counter reservation."
+    },
+    {
+      "prior_revision": "design/revisions/draft-v4",
+      "finding": "Food local lift terminology conflicted with raised shelf-height horizontal shuttle in selected storage design.",
+      "result": "Current SVG/PNG/catalogue use food tray/shuttle; utility retains indexed lift."
+    }
+  ],
+  "reasoning": "The graph permits direct production to service, controlled surplus to storage and requested restock through an exclusive merge. Separate utility classes avoid mixed-material contamination; unknown conversions remain disabled or manual. The allocation retains heater at camp center and two clear bidirectional gates, with front and side/rear storage access explicitly reserved.",
+  "required_repairs": [],
+  "approval_boundary": "Concept specification only, not a runnable inventory engine, frozen SKU/recipe table, exact world-scale layout, mesh collision or runtime navigation certification. Static art package, research and GitHub verification remain separate mandatory gates; no task-wide approval."
+}

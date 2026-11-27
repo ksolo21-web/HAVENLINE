@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/conveyor_critic",
+  "recorded_utc": "2026-11-27T03:39:31.919709+00:00",
+  "candidate": "renders/conveyor-counter-r1.png",
+  "sha256": "db1290ade54bb230ce70ec7da09bea347bc479ca48de3cc9e592db48273cda06",
+  "native_size": [
+    1672,
+    941
+  ],
+  "prompt": "prompts/conveyor-counter-r1.txt",
+  "prompt_sha256": "210c362bc6bef946e1cd3303fba85a990b577aeb7dd4fc611104f2a135de9764",
+  "requirements_sha256": "40a11533d116d78ebc7fe17bc52b7817b9595f62b32eaf78be89a91407487bc9",
+  "full_native_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/conveyor-counter-r1-customer-side.png",
+      "box": [
+        15,
+        110,
+        826,
+        457
+      ],
+      "sha256": "26538d5fc0d7b2cd31396ccb73c1f357e625ae9733a8512251fa125e50ec5580"
+    },
+    {
+      "path": "reviews/evidence/conveyor-counter-r1-staff-side.png",
+      "box": [
+        846,
+        110,
+        1663,
+        457
+      ],
+      "sha256": "76ecce65cb619092ce747c91cff3a21f5c81aeba6a5fff7290fc9bb24e0418e9"
+    },
+    {
+      "path": "reviews/evidence/conveyor-counter-r1-ready-junction.png",
+      "box": [
+        10,
+        477,
+        829,
+        876
+      ],
+      "sha256": "b5b8af010c9abc6de05ae1439cdee1d3c16e2201d9083ad9bebdfd1f67c37e14"
+    },
+    {
+      "path": "reviews/evidence/conveyor-counter-r1-full-junction.png",
+      "box": [
+        845,
+        477,
+        1663,
+        876
+      ],
+      "sha256": "ac8bb3cd29c81c4ad2c1e5b2c08b873ba803856f9f0398583d378bd7705fd591"
+    }
+  ],
+  "threshold": 9.5,
+  "status": "REPAIR_REQUIRED",
+  "score": 8.1,
+  "checks": {
+    "canonical_table_and_register": "PASS",
+    "staff_customer_role_separation": "PASS",
+    "stock_end_and_reach": "PASS",
+    "goods_cash_separation": "PASS",
+    "ready_full_item_counts": "PASS",
+    "supported_turn_into_buffer": "FAIL",
+    "terminal_guard_before_counter": "FAIL",
+    "direction_consistency_between_views": "FAIL"
+  },
+  "findings": [
+    {
+      "severity": "MANDATORY",
+      "issue": "Incoming straight conveyor meets straight buffer at a right angle without a curved roller section, directional transfer table/pusher or equivalent turn mechanism.",
+      "repair": "Use the already designed 90-degree module or explicit powered transfer deck, with continuous supported width through the turn. Gate must remain upstream of buffer."
+    },
+    {
+      "severity": "MANDATORY",
+      "issue": "Buffer terminal has no retaining guard; final tray is aimed into the timber table/leg. Prompt requires a guarded dead end and manual pickup.",
+      "repair": "Add visible terminal end-stop fence before the counter, leaving a narrow gap to the wood and manual lift access; preserve three tray positions."
+    },
+    {
+      "severity": "MANDATORY",
+      "issue": "Customer-front view rail chevrons point away from the stock-end buffer toward the rear approach, opposite restock flow shown elsewhere.",
+      "repair": "Remove decorative chevrons or correctly orient all marks from approach to terminal buffer under camera reversal."
+    },
+    {
+      "severity": "CLARITY",
+      "issue": "Overall views show green lamps with lowered gates while READY detail shows green/raised gate. This could be an intermediate gate cycle, but no such transient is labelled.",
+      "repair": "Prefer raised gates for overall READY states or label the intended hold state consistently."
+    },
+    {
+      "severity": "POSITIVE",
+      "issue": "Customer-facing register back and staff-facing controls remain at the same physical fixed end. Timber table, legs and shelf retained; buffer at free stock end, staff/customer frontage clear, cash excluded from food belt."
+    },
+    {
+      "severity": "POSITIVE",
+      "issue": "READY detail has two occupied positions and one empty; FULL has three downstream trays with fourth held upstream, no overlap. Staff handoff is explicitly named."
+    }
+  ],
+  "required_repairs": [
+    "Provide believable 90-degree transfer mechanism",
+    "Add terminal end-stop and clearance from wood",
+    "Resolve customer-side direction cue"
+  ],
+  "approval_boundary": "Counter concept and shown states only; not customer AI, working restock, collision or capacity/balance approval."
+}

@@ -1,0 +1,159 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/conveyor_critic",
+  "recorded_utc": "2026-11-27T03:20:09.757799+00:00",
+  "task": "Havenline conveyor source and systems preflight",
+  "base_commit": "e3c787a4ecfffa7ae2013227d2db553f2e2829ef",
+  "base_tree": "62a12cbf7c564b2ba7eebafdaebd3fec27ed42db",
+  "status": "PREFLIGHT_COMPLETE_CANDIDATE_NOT_YET_AVAILABLE",
+  "score": null,
+  "score_reason": "No new candidate has been reviewed; no completion score is awarded for a checklist.",
+  "sources": "reviews/source-inspection/source-manifest.json",
+  "actual_pixel_sheets_inspected": 11,
+  "scope": "Independent review of new static conveyor concept/routing design only; no runtime/model/GitHub modifications.",
+  "verified_constraints": [
+    "Advanced storage has fixed front paired sliding door/rail and crate apron, right orange-framed vented fuel hatch, left high frosted window, rear high round vent; no approved conveyor product ports.",
+    "Storage organization is U-shaped perimeter shelving with clear central aisle: timber left-front, minerals left-rear, hides rear-left, food rear-center, cargo/cash rear-right, fuel partition right-front. A proposed through-wall connection must explain how stock reaches the intended compartment.",
+    "Customer table has four legs and lower shelf; black register fixed to customer-left end with controls facing staff rear; table elsewhere remains stock/handoff surface. Blue processing station is a distinct asset.",
+    "Cooker/processor has raw wooden crate on physical left and metal output tray on right, central front access and side pressure hardware; new feeds need proposed attachable transitions at these sides.",
+    "Source straight conveyor is an inclined orange-rail black-roller unit with blue housing at low end; universal flat belt height cannot be assumed.",
+    "Intake has front roller lip and twin rear cylindrical basket forms; no interpretation that these cylinders are downstream conveyor sockets is established by static art.",
+    "Lumber/saw assets visibly support timber handling; plank association is a new production proposal with unknown recipe. Do not chain every depicted saw/mill as sequential conversions by default.",
+    "Furnace/hearth historical operation creates warmth/upgrades rather than metal or food output.",
+    "Whole fish to cooked whole-fish form and wheat to bread-like stack are locked observed references; quantities, timing, fuel, intermediate recipes and machine tier bindings are not established.",
+    "Raw logs or raw meat can be valid customer sale goods when the service catalogue explicitly allows them. A conveyor must preserve item identity: raw-material sale is not finished-goods conversion."
+  ],
+  "historical_attachment_warning": {
+    "source": "HavenlineGodot/assets/stations_v2/catalog.json",
+    "runtime_logic_included": false,
+    "visual_approval_claimed": false,
+    "socket_y_examples": {
+      "conveyor": 0.75,
+      "intake": 0.8,
+      "cooker": 0.65,
+      "processing_counter": 1.8,
+      "service_stock": 1.3
+    },
+    "meaning": "Historical GLB metadata has mismatched elevations and is not a binding for newer concept art. Require explicit adapter/adjustable-transfer proposals; do not silently adopt old numeric scale as approved."
+  },
+  "design_options": [
+    "A staff-transfer receiving/dispatch buffer beside the front apron preserves shell without new holes; identify worker handoff so automation is not implied through a wall.",
+    "A fully automatic storage extension needs explicit new typed sleeves and an internal transfer/buffer cutaway, separated from fuel hatch/window/vent and central entrance.",
+    "Prefer independent clean-food and utility/material lanes over a single mixed-resource loop. Label any mechanical standardization or modular upgrade as proposed."
+  ],
+  "mandatory_checks": [
+    {
+      "id": "C01",
+      "area": "Source distinctions",
+      "acceptance": "Every station/recipe/material route has a source or explicit proposal status; old visual kit is not claimed as live runtime evidence.",
+      "status": "PENDING_CANDIDATE"
+    },
+    {
+      "id": "C02",
+      "area": "Complete functional links",
+      "acceptance": "Show at least one meaningful machine-to-machine route, machine-to-storage route and storage/product-to-customer restock route, with named item form at each handoff.",
+      "status": "PENDING_CANDIDATE"
+    },
+    {
+      "id": "C03",
+      "area": "One-way ownership",
+      "acceptance": "Each lane has unambiguous arrows, exclusive transfer ownership and separate input/output; no immediate store-in/store-out loop or duplicated goods.",
+      "status": "PENDING_CANDIDATE"
+    },
+    {
+      "id": "C04",
+      "area": "Compatible goods",
+      "acceptance": "Food stays off fuel/mineral lanes; whole fish does not become fillet without a proposed recipe; ore never becomes ingot by transport; camp heater is not a production smelter. Raw log/meat sale is valid only where the counter catalogue permits that item; distinguish raw sale from conversion to a finished product.",
+      "status": "PENDING_CANDIDATE"
+    },
+    {
+      "id": "C05",
+      "area": "Storage identity and interface",
+      "acceptance": "Preserve centered front doors/apron, right fuel-service hatch, left window and rear high vent. Any new product opening/dock is explicit proposed geometry with interior receiving/dispatch explanation.",
+      "status": "PENDING_CANDIDATE"
+    },
+    {
+      "id": "C06",
+      "area": "Counter role separation",
+      "acceptance": "Preserve canonical timber table/register orientation, stock area, four legs/lower shelf, customer approach and staff position; end restock feed in staff-accessible buffer at free stock end; cash never rides product line.",
+      "status": "PENDING_CANDIDATE"
+    },
+    {
+      "id": "C07",
+      "area": "Station approach",
+      "acceptance": "Cooker central access/control remains clear; side adapters bridge actual input crate/output tray; historical socket-height mismatches are not hidden.",
+      "status": "PENDING_CANDIDATE"
+    },
+    {
+      "id": "C08",
+      "area": "Physical interfaces",
+      "acceptance": "Actual render shows compatible belt width/height, transition/bridge plate, continuous supported carry surface, guard clearance and believable ground contact without penetration/floating goods.",
+      "status": "PENDING_CANDIDATE"
+    },
+    {
+      "id": "C09",
+      "area": "Sorting and rejection",
+      "acceptance": "Typed outlets/filter or pre-sorted lane rule is visible; wrong/unknown items halt at input or enter bounded reject buffer; no accidental contamination or silent destruction.",
+      "status": "PENDING_CANDIDATE"
+    },
+    {
+      "id": "C10",
+      "area": "Blocked destinations",
+      "acceptance": "Counter full, storage full and downstream blocked states show stop-before-release/backpressure; upstream pauses before item overlap; no infinite belt queue or uncontrolled overflow.",
+      "status": "PENDING_CANDIDATE"
+    },
+    {
+      "id": "C11",
+      "area": "Restock policy",
+      "acceptance": "Counter dispatch follows accepted item/demand/reserve rule; surplus storage and later restock cannot endlessly recirculate or bypass stock limits.",
+      "status": "PENDING_CANDIDATE"
+    },
+    {
+      "id": "C12",
+      "area": "Camp routes",
+      "acceptance": "Plan keeps centered heater and two distinct usable bidirectional openings, clear player/operator walk lanes, storage front access and counter customer queues. Belt crossings are avoided or have explicit clearance solution.",
+      "status": "PENDING_CANDIDATE"
+    },
+    {
+      "id": "C13",
+      "area": "New modular family",
+      "acceptance": "New modules share rounded orange rails, dark roller/belt, silver joints and restrained blue fittings with source style; no change to source originals; all needed turns/branch/adapter parts in plan actually exist. Scope includes straight, corner, controlled merge, filter/priority diverter, stop/buffer and height/port adapters.",
+      "status": "PENDING_CANDIDATE"
+    },
+    {
+      "id": "C14",
+      "area": "Multiple views and use states",
+      "acceptance": "Inspect actual selected images including plan/topology, useful oblique/cardinal interfaces, closeups, normal loaded flow and blocked/full states. No approval from text or a single attractive hero view.",
+      "status": "PENDING_CANDIDATE"
+    },
+    {
+      "id": "C15",
+      "area": "Evidence and archive integrity",
+      "acceptance": "Exact prompts/ordered inputs, original+repair image hashes, source/video inspection levels, failed and passed reviews and final verified GitHub asset paths retained; publication verification belongs root.",
+      "status": "PENDING_CANDIDATE"
+    },
+    {
+      "id": "C16",
+      "area": "Truthful scope",
+      "acceptance": "Static reference concept is not native mesh, rig, collision, operational simulation, resolved recipes/rates/costs, precise world scale or physical-device performance approval.",
+      "status": "PENDING_CANDIDATE"
+    }
+  ],
+  "video_review_boundary": "Other reference agents own video playback audit and supplemental research. This preflight has read the exact lock, not claimed video playback.",
+  "next_action": "Root supplies exact requirements/routing plan before generation; critic checks graph and then reviews generated outputs with actual image evidence; fix and retest any failed mandatory check.",
+  "proposed_deliverable_scope": [
+    "Multi-angle modular straight/corner/merge/filter/stop-buffer and height-adapter kit",
+    "Explicit new storage receive/dispatch extension with visible transfer mechanism",
+    "Food production and customer-counter integration views",
+    "Exact overall route and clearance diagram"
+  ],
+  "recommended_storage_upgrade": {
+    "status": "NEW_PROPOSAL_NOT_REFERENCE_OBSERVED",
+    "placement": "One typed utility cassette on left wall, one clean finished-food cassette on rear wall; new low product sleeves remain separate from existing high window and rear round vent.",
+    "ports": "Each cassette has distinct one-way receive and dispatch ports with an interlocked bounded tray, short internal transfer lift and direct connection to its assigned perimeter bay.",
+    "initial_automation": "Utility timber/material bays and prepared-food compartment only. Raw food, fuel, hides/fur, cargo and cash remain independently staffed/manual unless further typed routes and mechanisms are explicitly provided.",
+    "preserved": "Existing front doors and full apron, center aisle, right fuel hatch, high left window, rear high vent and six-zone organization remain recognizable and usable.",
+    "footprint": "External cassettes add a small declared service footprint; this is a new logistics upgrade, not an assertion that previous house footprint already included them.",
+    "boundary": "Automatic through-wall transfer has no inherited source approval; proposed mechanism and receiving/dispatch states must be shown. A generic enclosed box does not prove sorting or storage automation."
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "reviewer": "/root/conveyor_reference_audit",
+  "stage": "PRE_FINAL_FREEZE",
+  "checks": [
+    {
+      "path": "generation-inputs/primary-a/A-014.000.jpg",
+      "declared_sha256_matches": true,
+      "archive_present": true,
+      "archived_bytes_match_original": true,
+      "dimensions_match": true
+    },
+    {
+      "path": "generation-inputs/primary-a/A-058.000.jpg",
+      "declared_sha256_matches": true,
+      "archive_present": true,
+      "archived_bytes_match_original": true,
+      "dimensions_match": true
+    },
+    {
+      "path": "reviews/evidence/conveyor-storage-r3-utility-out-mark-tight.png",
+      "declared_sha256_matches": true,
+      "archive_present": true,
+      "archived_bytes_match_original": true,
+      "dimensions_match": true,
+      "crop_pixels_exact": true,
+      "parent_hash_matches": true,
+      "raw_review_hash_matches": true
+    },
+    {
+      "path": "reviews/evidence/conveyor-storage-r3-food-out-mark-tight.png",
+      "declared_sha256_matches": true,
+      "archive_present": true,
+      "archived_bytes_match_original": true,
+      "dimensions_match": true,
+      "crop_pixels_exact": true,
+      "parent_hash_matches": true,
+      "raw_review_hash_matches": true
+    },
+    {
+      "path": "generation-inputs/derived/camp-allocation-reference-r3.png",
+      "declared_sha256_matches": true,
+      "archive_present": false,
+      "archived_bytes_match_original": null,
+      "dimensions_match": true
+    }
+  ],
+  "status": "PARTIAL_EXPECTED_DURING_UNFROZEN_STAGING",
+  "note": "Four allowlisted generation inputs already staged and byte exact. Camp authored layout exists, hashes correctly, not yet staged because camp generation remains pending."
+}

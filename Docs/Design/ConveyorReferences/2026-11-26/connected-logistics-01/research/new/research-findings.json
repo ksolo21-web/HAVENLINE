@@ -1,0 +1,123 @@
+{
+  "status": "Research deliverables ready for parent/independent review; public archive and Havenline implementation not performed by this agent.",
+  "verified_counts": {
+    "core_new_video_links": 6,
+    "core_full_files_downloaded_and_visually_sampled": 4,
+    "additional_full_files_downloaded_and_visually_sampled": 1,
+    "unviewed_additional_video_links": 2,
+    "unviewed_core_video_links": 2
+  },
+  "reading_boundary": "All visual observations come from actual decoded source-video frames across the full clip timeline. They are frame-sampling reviews, not claims of continuous video/audio playback. Official documentary descriptions are labeled separately. Existing Havenline footage was reviewed by the other audit agent.",
+  "decisions_for_parent": [
+    {
+      "priority": 1,
+      "proposal": "Use visibly directed connections. Each belt has one readable flow direction; each machine socket declares IN or OUT and accepted item type. Rotation must preserve arrow-to-port agreement.",
+      "basis": [
+        "NEW-V03",
+        "NEW-V09"
+      ],
+      "why": "Players can predict where an item lands before connecting a belt."
+    },
+    {
+      "priority": 1,
+      "proposal": "Treat storage receiving and dispatch as different functions with different visible adapters. Receiving adds to bounded inventory. Dispatch releases the requested resource toward a specified machine or counter.",
+      "basis": [
+        "NEW-V04",
+        "NEW-V07"
+      ],
+      "why": "A central building otherwise becomes a magical all-to-all pipe that cannot be understood from the camp view."
+    },
+    {
+      "priority": 1,
+      "proposal": "Keep direct machine-to-next-machine links for recipe intermediates; reserve a branch to storage for buffering and later requests. Do not require every intermediate to make an unnecessary round trip through the house.",
+      "basis": [
+        "NEW-V01",
+        "NEW-V02"
+      ],
+      "why": "Short connected chains are easier to read and fit a compact camp. This is a Havenline design inference, not an observed rule of the external games."
+    },
+    {
+      "priority": 1,
+      "proposal": "Give split, merge and filtered dispatch different functions and silhouettes. A splitter sends one stream to two destinations; a merger meters two arrivals into one free output position; a filter admits compatible items only.",
+      "basis": [
+        "NEW-D01",
+        "NEW-D02"
+      ],
+      "why": "A generic decorative intersection hides recipe and bottleneck behavior."
+    },
+    {
+      "priority": 1,
+      "proposal": "Use explicit full-output behavior: downstream full -> local output buffer holds -> machine waits -> upstream line backs up. No deletion, overlap or conversion of blocked items.",
+      "basis": [
+        "NEW-V07",
+        "NEW-D02",
+        "NEW-D03"
+      ],
+      "why": "Storage capacity and counter demand remain meaningful. Backpressure is documented externally; not measured in Havenline."
+    },
+    {
+      "priority": 1,
+      "proposal": "Bring finished sale stock into the rear or side of the customer counter. Keep service face, queue and cash collection readable and separately accessible.",
+      "basis": [
+        "existing-reference-audit-required"
+      ],
+      "why": "The other agent directly inspected the user reference showing food feeder lines into an assembler and a service/cash loop. NEW-V08 is metadata-only and must not be cited as visual proof for this."
+    },
+    {
+      "priority": 1,
+      "proposal": "Protect both bidirectional gate routes and the furnace access area. Use a deliberate bridge, below-grade duct or gate-controlled crossing only where necessary.",
+      "basis": [
+        "NEW-V06"
+      ],
+      "why": "A belt network must not divide the camp into unreachable islands. Manufacturer lift-gate evidence is an analogy, not a required industrial gate design."
+    },
+    {
+      "priority": 2,
+      "proposal": "Render the transfer itself: matched elevation, small bridging plate/roller at the handoff, containment on bends and a visible start/end bracket.",
+      "basis": [
+        "NEW-V05"
+      ],
+      "why": "Different item shapes cannot convincingly travel through empty gaps or sharp decorative corners."
+    },
+    {
+      "priority": 2,
+      "proposal": "Use a selected-line flow overlay that identifies destination and the blocked reason, with resource icon and capacity state. Keep the camp view uncluttered otherwise.",
+      "basis": [
+        "NEW-D04"
+      ],
+      "why": "The exact fault should be understandable without a permanent field of labels."
+    }
+  ],
+  "asset_requests": [
+    "short straight module",
+    "long straight module",
+    "90-degree turn with supported transfer",
+    "two-input one-output merger",
+    "one-input two-output splitter",
+    "type-filtered dispatch shutter",
+    "storage receiving collar",
+    "storage outward dispatch collar",
+    "machine input/output collars with clear arrows",
+    "counter rear-stock intake and holding tray",
+    "pedestrian crossing in its open and carrying states",
+    "empty/running/full/blocked operating-state reference"
+  ],
+  "acceptance_checks_for_parent": [
+    "Trace one approved resource from gathering through processing into storage without any missing transfer.",
+    "Trace one intermediate from one machine directly to the next relevant machine.",
+    "Trace a finished good from storage dispatch to counter rear intake and customer handoff.",
+    "Show both gate routes still traversable in both directions and preserve furnace access.",
+    "Show full storage and full counter stopping dispatch without lost or overlapping goods.",
+    "Show wrong item type rejected or retained safely at a labeled intake.",
+    "Confirm every visible arrow agrees with its connection, including bends and camera-facing reversals.",
+    "If a bridge/tunnel/gate crosses a walkway, show both traffic routes and appropriate clearance/open state."
+  ],
+  "not_established": [
+    "exact recipes or output ratios",
+    "production/throughput numbers",
+    "Havenline port dimensions or camp grid",
+    "run-time simulation correctness",
+    "render-to-runtime matching",
+    "a licence to republish full third-party source media"
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "purpose": "Positive allowlist for compact public GitHub archive; do not recursively add this directory.",
+  "archive_this_manifest": true,
+  "self_relative_path": "PUBLIC-ARCHIVE-MANIFEST.json",
+  "allowed_files": [
+    {
+      "relative_path": "coverage.md",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-conveyors-2026-11-26/references/existing/coverage.md",
+      "bytes": 6312,
+      "sha256": "eeefc3db54f25f0d9e7b181d03c85d0958e39b5aa2ae2941333b7cea5b359089",
+      "kind": "original analytical notes/index"
+    },
+    {
+      "relative_path": "public-source-index.json",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-conveyors-2026-11-26/references/existing/public-source-index.json",
+      "bytes": 34968,
+      "sha256": "6e39c6376c6f86e7076341625db4aab0dd1b9634031ee3d384be187f5a4a40f0",
+      "kind": "original analytical notes/index"
+    },
+    {
+      "relative_path": "public-video-observations.json",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-conveyors-2026-11-26/references/existing/public-video-observations.json",
+      "bytes": 31712,
+      "sha256": "d846ae9381e226977145dd76096cee5ce65337042d6c4571a40e34397989ba62",
+      "kind": "original analytical notes/index"
+    },
+    {
+      "relative_path": "public-excerpts/primary-route-excerpts.jpg",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-conveyors-2026-11-26/references/existing/public-excerpts/primary-route-excerpts.jpg",
+      "bytes": 411026,
+      "sha256": "553a4e53717e0059bcc2493ed45f4aff0c22b630bbea1ee0572082368bf07e7a",
+      "kind": "limited attributed analytical excerpt (owner-upload source)"
+    },
+    {
+      "relative_path": "public-excerpts/A-assembly-counter-excerpts.jpg",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-conveyors-2026-11-26/references/existing/public-excerpts/A-assembly-counter-excerpts.jpg",
+      "bytes": 817005,
+      "sha256": "eced0a2636e4ce9bdb0a4bb3c9a0509614af277b14bbd4fff605260f515d0a93",
+      "kind": "limited attributed analytical excerpt (owner-upload source)"
+    }
+  ],
+  "selected_source_frame_count": 9,
+  "total_allowed_bytes_excluding_this_manifest": 1301023,
+  "exclusions": [
+    "All MP4/video files",
+    "All broad *-timeline-*.jpg sheets",
+    "All *-storyboard-review-*.jpg sheets and original storyboard sprites",
+    "All raw frames/ directories",
+    "All source-docs/ copies (already versioned at immutable cited paths)",
+    "Initial phone screenshots/previews",
+    "Full local source-inventory.json; publish the sanitized compact public-source-index.json instead",
+    "Local full extraction manifests and scripts; kept as resumable research checkpoints"
+  ],
+  "source_ownership_note": "Third-party reference content is attributed in analytical excerpts; no ownership or reuse licence claim is made.",
+  "review_status": "Both allowed excerpt images visually inspected after creation; source hashes and source-doc blob hashes verified."
+}

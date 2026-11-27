@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/conveyor_critic",
+  "recorded_utc": "2026-11-27T03:51:37.131866+00:00",
+  "candidate": "renders/conveyor-machines-r2.png",
+  "sha256": "db26196aa7568109018b94a5f71a8bd4965262e5938c54fce3c51d192f3460d2",
+  "native_size": [
+    1672,
+    941
+  ],
+  "prompt": "prompts/conveyor-machines-r2.txt",
+  "prompt_sha256": "779d558a5b609a456bbad68eb6a2189d9777553578ad46399e4c3fab062093d9",
+  "requirements_sha256": "40a11533d116d78ebc7fe17bc52b7817b9595f62b32eaf78be89a91407487bc9",
+  "full_native_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/conveyor-machines-r2-whole-line.png",
+      "box": [
+        15,
+        115,
+        1659,
+        500
+      ],
+      "sha256": "c67bb99cd74d7286feec994b2c54c3915c41baef5180e582db1543684e0b15d9"
+    },
+    {
+      "path": "reviews/evidence/conveyor-machines-r2-feed-joint.png",
+      "box": [
+        15,
+        520,
+        802,
+        855
+      ],
+      "sha256": "078768d1a5a855294b2f95b42f9313bd2cf1a634fe61f1f840f8f883f5f41909"
+    },
+    {
+      "path": "reviews/evidence/conveyor-machines-r2-output-full-state.png",
+      "box": [
+        821,
+        520,
+        1660,
+        855
+      ],
+      "sha256": "f9f457e1d0ce21b3bb7443de8fcf0cd9ae3f680b73cb2d7cbabcd073374556ce"
+    }
+  ],
+  "threshold": 9.5,
+  "status": "PASS_STATIC_SHEET_ONLY",
+  "score": 9.8,
+  "required_repairs": [],
+  "retest_of": "reviews/conveyor-machines-r1-review.json",
+  "prior_review_sha256": "06c11ddc66a6c1008ae7f1d4ecea224f791f5bd3ac31ddb2076d21d661de24b2",
+  "checks": {
+    "intake_front_discharge_not_rear_baskets": "PASS",
+    "input_height_adapter_and_bridge": "PASS",
+    "new_side_ports_explicit": "PASS",
+    "source_cooker_identity_and_front_access": "PASS",
+    "whole_fish_form_preserved": "PASS",
+    "powered_output_release": "PASS",
+    "truthful_blocked_buffer_state": "PASS",
+    "finite_output_terminal_retention": "PASS"
+  },
+  "findings": [
+    "Input still joins the original front roller lip rather than either rear basket; supported cleated transport meets new open cooker feed sleeve.",
+    "Output now has a powered slatted/roller bed and visible under-tray motor.",
+    "Both overview and output closeup show the finite downstream buffer occupied, the next cooked fish safely upstream of the closed stop, and a terminal retention fence. OUTPUT FULL / CYCLE WAITS matches the visible state.",
+    "Whole raw silver fish and cooked whole fish remain distinguishable; front service door and pressure hardware stay accessible."
+  ],
+  "approval_boundary": "Static proposed fish-capable side-port upgrade only. No recipe, timer, orientation-tracking animation, native mechanism or runtime capacity approval."
+}

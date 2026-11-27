@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/conveyor_critic",
+  "recorded_utc": "2026-11-27T03:32:26.408372+00:00",
+  "candidate": "renders/conveyor-routing-r1.png",
+  "sha256": "ae3463bb5a5a9fb30bd2496688b9f37f8fc04f80504587a0682eb427842d6e13",
+  "native_size": [
+    1672,
+    941
+  ],
+  "prompt": "prompts/conveyor-routing-r1.txt",
+  "prompt_sha256": "e10cc151149243885ef61686c39f4d54a44565e83f194e11e78a88cc4af32f3e",
+  "requirements_sha256": "40a11533d116d78ebc7fe17bc52b7817b9595f62b32eaf78be89a91407487bc9",
+  "full_native_image_inspected": true,
+  "threshold": 9.5,
+  "score": 8.5,
+  "status": "REPAIR_REQUIRED",
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/conveyor-routing-r1-diverter-forward.png",
+      "box": [
+        20,
+        105,
+        560,
+        460
+      ],
+      "sha256": "26a4196414c2ab37eae234e645f541ef73a215921d0063171774bf3126380a38"
+    },
+    {
+      "path": "reviews/evidence/conveyor-routing-r1-diverter-state.png",
+      "box": [
+        20,
+        520,
+        565,
+        872
+      ],
+      "sha256": "610bfb36c45177c70d4079615cb1d017dd1909971726205a44caafb2a88cb3af"
+    },
+    {
+      "path": "reviews/evidence/conveyor-routing-r1-merge-forward.png",
+      "box": [
+        580,
+        105,
+        1080,
+        460
+      ],
+      "sha256": "d626ca6d1800961328a777e39d649f16b4c3aef09442cbd417706bf124853155"
+    },
+    {
+      "path": "reviews/evidence/conveyor-routing-r1-buffer-full.png",
+      "box": [
+        1090,
+        520,
+        1665,
+        872
+      ],
+      "sha256": "e86adc2ee0e1ae76f81b143c75d4ee07b8af3f6cd6cafab004d96f4c77787960"
+    }
+  ],
+  "checks": {
+    "style_material_family": "PASS",
+    "one_input_two_output_diverter": "PASS",
+    "two_input_one_output_gated_merge": "PASS",
+    "gates_before_conflict_zone": "PASS",
+    "finite_normal_full_buffer_states": "PASS",
+    "wrong_item_kept_off_food_line": "PASS_WITH_CLARITY_REPAIR",
+    "direction_consistency": "FAIL",
+    "diverter_opposing_view": "FAIL",
+    "buffer_opposing_view": "FAIL",
+    "source_proposal_boundary": "PASS"
+  },
+  "findings": [
+    {
+      "severity": "MANDATORY",
+      "location": "top-left diverter left rail",
+      "issue": "White rail chevrons point down toward the single IN stem, contrary to OUT plaque and working-surface arrow.",
+      "repair": "Remove conflicting rail chevrons or orient them away from junction toward the OUT branch."
+    },
+    {
+      "severity": "MANDATORY",
+      "location": "top-middle merge right rail",
+      "issue": "White rail chevrons point outward toward its IN end, contrary to two-input-to-one-output flow.",
+      "repair": "Remove conflicting rail chevrons or orient them toward the merge junction."
+    },
+    {
+      "severity": "MANDATORY_VIEW_COVERAGE",
+      "location": "lower-left diverter and lower-right buffer",
+      "issue": "These remain same-side views rather than opposite views requested in exact prompt. Their useful use states are present, but reverse physical geometry is uninspected.",
+      "repair": "Make lower diverter a true reverse view (stem far, branches near) while preserving off-line timber HOLD tray; make full-buffer state an opposing oblique with the same stop/fence/count. Alternatively provide an additional opposing-angle sheet and retain these as useful state panels."
+    },
+    {
+      "severity": "CLARITY",
+      "location": "lower-left wrong-item state",
+      "issue": "Timber is correctly held on a separate source-side HOLD pad, but the stop bar and food tray dominate the caption; compatible food could be mistaken for the rejected item.",
+      "repair": "Add FOOD ONLY at the diverter inlet/filter or equivalent clear item pictogram, retaining timber off the food line."
+    },
+    {
+      "severity": "POSITIVE",
+      "location": "right column",
+      "issue": "READY shows two occupied downstream positions and one free; FULL shows three occupied positions, closed intake stop and fourth tray upstream, with no overlap. Illustrative finite count is clearly visible."
+    },
+    {
+      "severity": "POSITIVE",
+      "location": "middle column",
+      "issue": "Independent gate bars sit before shared merge conflict zone; lower opposite view preserves geometry and holds a covered tray on its inbound lane."
+    }
+  ],
+  "required_repairs": [
+    "Resolve all direction arrows against IN/OUT roles",
+    "Provide true opposing diverter and buffer geometry evidence",
+    "Make allowed food vs held timber unambiguous"
+  ],
+  "approval_boundary": "No overall approval; physical-state panel correctness does not average away contradictory direction or missing promised opposing views."
+}

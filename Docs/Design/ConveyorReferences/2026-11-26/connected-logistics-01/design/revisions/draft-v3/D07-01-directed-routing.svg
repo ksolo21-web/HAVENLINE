@@ -1,0 +1,211 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2200" height="1850" viewBox="0 0 2200 1850" role="img" aria-labelledby="title desc">
+<title id="title">Connections that have a reason</title>
+<desc id="desc">D07.1 · Directed route specification · New hardware and control rules are proposals; recipe quantities remain unfrozen.</desc>
+<defs>
+<marker id="arrow-food" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1 L13,7 L1,13 Z" fill="#008b83"/></marker>
+<marker id="arrow-utility" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1 L13,7 L1,13 Z" fill="#ad7425"/></marker>
+<marker id="arrow-manual" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1 L13,7 L1,13 Z" fill="#6f7d8a"/></marker>
+<marker id="arrow-ref" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1 L13,7 L1,13 Z" fill="#3769a3"/></marker>
+<marker id="arrow-ink" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1 L13,7 L1,13 Z" fill="#183447"/></marker>
+<pattern id="reserve" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="12" stroke="#d7e1e6" stroke-width="3"/></pattern></defs>
+<style>text{font-family:Inter,"DejaVu Sans",Arial,sans-serif} .title{font-weight:700} .smallcap{font-weight:700;letter-spacing:2px}</style>
+<rect width="2200" height="1850" fill="#f5f8f8"/>
+<text x="60" y="58" font-size="19" fill="#536b78" font-weight="700" text-anchor="start" letter-spacing="2">HAVENLINE / LOGISTICS</text>
+<text x="60" y="118" font-size="44" fill="#183447" font-weight="700" text-anchor="start">Connections that have a reason</text>
+<text x="60" y="157" font-size="20" fill="#536b78" font-weight="400" text-anchor="start">D07.1 · Directed route specification · New hardware and control rules are proposals; recipe quantities remain unfrozen.</text>
+<rect x="60" y="190" width="349" height="26" rx="6" fill="#ecf2f8" stroke="none" stroke-width="0"/>
+<text x="68" y="208" font-size="13" fill="#3769a3" font-weight="700" text-anchor="start">Source forms observed; ports proposed</text>
+<rect x="435" y="190" width="421" height="26" rx="6" fill="#edf2f3" stroke="none" stroke-width="0"/>
+<text x="443" y="208" font-size="13" fill="#6f7d8a" font-weight="700" text-anchor="start">Dashed card = provisional recipe or equipment</text>
+<text x="1120" y="210" font-size="16" fill="#008b83" font-weight="700" text-anchor="start">FOOD</text>
+<text x="1265" y="210" font-size="16" fill="#ad7425" font-weight="700" text-anchor="start">UTILITY</text>
+<text x="1450" y="210" font-size="16" fill="#6f7d8a" font-weight="700" text-anchor="start">MANUAL SERVICE</text>
+<text x="60" y="267" font-size="23" fill="#183447" font-weight="700" text-anchor="start">01  FOOD · a destination owns every release</text>
+<rect x="60" y="300" width="250" height="120" rx="14" fill="#ffffff" stroke="#008b83" stroke-width="2"/>
+<rect x="60" y="316" width="5" height="88" rx="2" fill="#008b83"/>
+<text x="78" y="332" font-size="21" fill="#183447" font-weight="700" text-anchor="start">Shore intake</text>
+<text x="78" y="360" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">Whole fish output</text>
+<text x="78" y="383" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">Source form observed</text>
+<rect x="380" y="300" width="260" height="120" rx="14" fill="#ffffff" stroke="#008b83" stroke-width="2"/>
+<rect x="380" y="316" width="5" height="88" rx="2" fill="#008b83"/>
+<text x="398" y="332" font-size="21" fill="#183447" font-weight="700" text-anchor="start">Cooker / processor</text>
+<text x="398" y="360" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">Raw input → cooked form</text>
+<text x="398" y="383" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">New side adapter</text>
+<text x="398" y="406" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">proposed</text>
+<rect x="710" y="300" width="230" height="120" rx="14" fill="#ffffff" stroke="#008b83" stroke-width="2"/>
+<rect x="710" y="316" width="5" height="88" rx="2" fill="#008b83"/>
+<text x="728" y="332" font-size="17" fill="#183447" font-weight="700" text-anchor="start">Finite output buffer</text>
+<text x="728" y="360" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">Reserve a free slot</text>
+<text x="728" y="383" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">before processing</text>
+<rect x="1010" y="300" width="230" height="120" rx="14" fill="#ffffff" stroke="#008b83" stroke-width="2"/>
+<rect x="1010" y="316" width="5" height="88" rx="2" fill="#008b83"/>
+<text x="1028" y="332" font-size="21" fill="#183447" font-weight="700" text-anchor="start">Demand router</text>
+<text x="1028" y="360" font-size="16" fill="#536b78" font-weight="400" text-anchor="start">Allowed SKU + request</text>
+<text x="1028" y="382" font-size="16" fill="#536b78" font-weight="400" text-anchor="start">One destination per</text>
+<text x="1028" y="404" font-size="16" fill="#536b78" font-weight="400" text-anchor="start">item</text>
+<rect x="1510" y="300" width="230" height="120" rx="14" fill="#ffffff" stroke="#008b83" stroke-width="2"/>
+<rect x="1510" y="316" width="5" height="88" rx="2" fill="#008b83"/>
+<text x="1528" y="332" font-size="21" fill="#183447" font-weight="700" text-anchor="start">Gated merge</text>
+<text x="1528" y="360" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">Fresh OR stored stock</text>
+<text x="1528" y="383" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">One owner / stock slot</text>
+<rect x="1810" y="300" width="330" height="120" rx="14" fill="#ffffff" stroke="#008b83" stroke-width="2"/>
+<rect x="1810" y="316" width="5" height="88" rx="2" fill="#008b83"/>
+<text x="1828" y="332" font-size="21" fill="#183447" font-weight="700" text-anchor="start">Allowed food counter</text>
+<text x="1828" y="360" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">Belt ends at staff-side buffer</text>
+<text x="1828" y="383" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">Staff lifts stock onto timber table</text>
+<text x="1828" y="406" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">Cash / frontage stay separate</text>
+<path d="M 310,360 L 380,360" fill="none" stroke="#008b83" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-food)"/>
+<path d="M 640,360 L 710,360" fill="none" stroke="#008b83" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-food)"/>
+<path d="M 940,360 L 1010,360" fill="none" stroke="#008b83" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-food)"/>
+<path d="M 1240,360 L 1510,360" fill="none" stroke="#008b83" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-food)"/>
+<path d="M 1740,360 L 1810,360" fill="none" stroke="#008b83" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-food)"/>
+<rect x="267.875" y="430" width="154.25" height="23" rx="4" fill="#f5f8f8" stroke="none" stroke-width="0"/>
+<text x="345" y="445" font-size="15" fill="#536b78" font-weight="400" text-anchor="middle">supported adapter</text>
+<rect x="1288.8" y="321" width="172.4" height="24" rx="4" fill="#f5f8f8" stroke="none" stroke-width="0"/>
+<text x="1375" y="337" font-size="16" fill="#008b83" font-weight="400" text-anchor="middle">fresh, allowed SKU</text>
+<rect x="1739.125" y="430" width="71.75" height="23" rx="4" fill="#f5f8f8" stroke="none" stroke-width="0"/>
+<text x="1775" y="445" font-size="15" fill="#008b83" font-weight="400" text-anchor="middle">restock</text>
+<text x="60" y="485" font-size="18" fill="#536b78" font-weight="400" text-anchor="start">Reference fish path is observed; the port geometry, buffers and reservation logic are new design.</text>
+<rect x="1240" y="585" width="900" height="315" rx="20" fill="#eaf5f2" stroke="#bfded7" stroke-width="2"/>
+<text x="1270" y="625" font-size="20" fill="#008b83" font-weight="700" text-anchor="start">PREPARED-FOOD STORAGE · REAR CASSETTE</text>
+<rect x="1270" y="665" width="200" height="120" rx="14" fill="#ffffff" stroke="#008b83" stroke-width="2"/>
+<rect x="1270" y="681" width="5" height="88" rx="2" fill="#008b83"/>
+<text x="1288" y="697" font-size="21" fill="#183447" font-weight="700" text-anchor="start">Reserved IN</text>
+<text x="1288" y="725" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">Admit only when a</text>
+<text x="1288" y="748" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">typed slot is</text>
+<text x="1288" y="771" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">available</text>
+<rect x="1510" y="665" width="245" height="120" rx="14" fill="#ffffff" stroke="#008b83" stroke-width="2"/>
+<rect x="1510" y="681" width="5" height="88" rx="2" fill="#008b83"/>
+<text x="1528" y="697" font-size="18" fill="#183447" font-weight="700" text-anchor="start">Local food inventory</text>
+<text x="1528" y="725" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">Tray / lift serves this bay</text>
+<text x="1528" y="748" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">Stock remains here</text>
+<rect x="1800" y="665" width="310" height="120" rx="14" fill="#ffffff" stroke="#008b83" stroke-width="2"/>
+<rect x="1800" y="681" width="5" height="88" rx="2" fill="#008b83"/>
+<text x="1818" y="697" font-size="20" fill="#183447" font-weight="700" text-anchor="start">Request-controlled OUT</text>
+<text x="1818" y="725" font-size="16" fill="#536b78" font-weight="400" text-anchor="start">Dispatch chosen, compatible SKU</text>
+<text x="1818" y="747" font-size="16" fill="#536b78" font-weight="400" text-anchor="start">Only against an open reservation</text>
+<path d="M 1170,420 L 1170,520 L 1210,520 L 1210,725 L 1270,725" fill="none" stroke="#008b83" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-food)"/>
+<rect x="1153.5" y="539" width="113.00000000000001" height="23" rx="4" fill="#f5f8f8" stroke="none" stroke-width="0"/>
+<text x="1210" y="554" font-size="15" fill="#008b83" font-weight="400" text-anchor="middle">surplus only</text>
+<path d="M 1470,725 L 1510,725" fill="none" stroke="#008b83" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-food)"/>
+<path d="M 1755,725 L 1800,725" fill="none" stroke="#008b83" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-food)"/>
+<path d="M 1955,665 L 1955,525 L 1625,525 L 1625,420" fill="none" stroke="#008b83" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-food)"/>
+<rect x="1642.2" y="489" width="295.6" height="24" rx="4" fill="#f5f8f8" stroke="none" stroke-width="0"/>
+<text x="1790" y="505" font-size="16" fill="#008b83" font-weight="400" text-anchor="middle">counter request + reserved stock</text>
+<text x="1270" y="832" font-size="18" fill="#008b83" font-weight="400" text-anchor="start">Independent IN and OUT trays; no belt through the central storage aisle.</text>
+<text x="1270" y="860" font-size="18" fill="#008b83" font-weight="400" text-anchor="start">There is no automatic OUT → IN return route.</text>
+<text x="60" y="620" font-size="21" fill="#183447" font-weight="700" text-anchor="start">OPTIONAL ASSEMBLY · separate ingredient ports</text>
+<rect x="60" y="700" width="270" height="130" rx="14" fill="#ffffff" stroke="#008b83" stroke-width="2"/>
+<rect x="60" y="716" width="5" height="98" rx="2" fill="#008b83"/>
+<text x="78" y="732" font-size="17" fill="#183447" font-weight="700" text-anchor="start">Wheat processing chain</text>
+<text x="78" y="760" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">Harvest + processor</text>
+<text x="78" y="783" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">observed</text>
+<text x="78" y="806" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">No flour stage inferred</text>
+<rect x="390" y="700" width="180" height="130" rx="14" fill="#ffffff" stroke="#008b83" stroke-width="2" stroke-dasharray="8 6"/>
+<rect x="390" y="716" width="5" height="98" rx="2" fill="#008b83"/>
+<text x="408" y="732" font-size="16" fill="#183447" font-weight="700" text-anchor="start">Bread-like form</text>
+<text x="408" y="760" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">Output</text>
+<text x="408" y="783" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">appearance</text>
+<text x="408" y="806" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">Recipe unfrozen</text>
+<rect x="650" y="700" width="280" height="130" rx="14" fill="#ffffff" stroke="#008b83" stroke-width="2" stroke-dasharray="8 6"/>
+<rect x="650" y="716" width="5" height="98" rx="2" fill="#008b83"/>
+<text x="668" y="732" font-size="20" fill="#183447" font-weight="700" text-anchor="start">Optional assembler *</text>
+<text x="668" y="760" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">A: bread-like input</text>
+<text x="668" y="783" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">B: compatible cooked input</text>
+<rect x="990" y="700" width="200" height="130" rx="14" fill="#ffffff" stroke="#008b83" stroke-width="2" stroke-dasharray="8 6"/>
+<rect x="990" y="716" width="5" height="98" rx="2" fill="#008b83"/>
+<text x="1008" y="732" font-size="14" fill="#183447" font-weight="700" text-anchor="start">Own menu counter *</text>
+<text x="1008" y="760" font-size="16" fill="#536b78" font-weight="400" text-anchor="start">Accepts the</text>
+<text x="1008" y="782" font-size="16" fill="#536b78" font-weight="400" text-anchor="start">assembled</text>
+<text x="1008" y="804" font-size="16" fill="#536b78" font-weight="400" text-anchor="start">item only if allowed</text>
+<path d="M 330,765 L 390,765" fill="none" stroke="#008b83" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-food)"/>
+<path d="M 570,765 L 650,765" fill="none" stroke="#008b83" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-food)"/>
+<path d="M 930,765 L 990,765" fill="none" stroke="#008b83" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-food)"/>
+<path d="M 1070,420 L 1070,560 L 800,560 L 800,700" fill="none" stroke="#008b83" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="9 6" marker-end="url(#arrow-food)"/>
+<rect x="798.2" y="525" width="207.60000000000002" height="24" rx="4" fill="#f5f8f8" stroke="none" stroke-width="0"/>
+<text x="902" y="541" font-size="16" fill="#008b83" font-weight="400" text-anchor="middle">optional recipe mode *</text>
+<rect x="616" y="746" width="25" height="26" rx="6" fill="#ecf2f8" stroke="none" stroke-width="0"/>
+<text x="624" y="764" font-size="13" fill="#3769a3" font-weight="700" text-anchor="start">A</text>
+<rect x="810" y="664" width="25" height="26" rx="6" fill="#ecf2f8" stroke="none" stroke-width="0"/>
+<text x="818" y="682" font-size="13" fill="#3769a3" font-weight="700" text-anchor="start">B</text>
+<text x="60" y="885" font-size="18" fill="#536b78" font-weight="400" text-anchor="start">* A56.5–59s supports the dual-feeder topology and a direct service output.</text>
+<text x="60" y="912" font-size="18" fill="#536b78" font-weight="400" text-anchor="start">Ingredient eligibility, exact product identity, ratios, fuel and timing are not frozen.</text>
+<text x="60" y="939" font-size="18" fill="#536b78" font-weight="400" text-anchor="start">Both accepted ingredients and output space must be reserved together; otherwise WAIT.</text>
+<path d="M 60,1000 L 2140,1000" fill="none" stroke="#6f7d8a" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="60" y="1047" font-size="23" fill="#183447" font-weight="700" text-anchor="start">02  UTILITY · typed local storage, no food or fuel on this lane</text>
+<rect x="60" y="1100" width="280" height="120" rx="14" fill="#ffffff" stroke="#ad7425" stroke-width="2" stroke-dasharray="8 6"/>
+<rect x="60" y="1116" width="5" height="88" rx="2" fill="#ad7425"/>
+<text x="78" y="1132" font-size="19" fill="#183447" font-weight="700" text-anchor="start">Timber / saw variant *</text>
+<text x="78" y="1160" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">Logs unchanged; planks</text>
+<text x="78" y="1183" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">provisional</text>
+<text x="78" y="1206" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">Machines are alternatives</text>
+<rect x="60" y="1270" width="280" height="100" rx="14" fill="#ffffff" stroke="#ad7425" stroke-width="2"/>
+<rect x="60" y="1286" width="5" height="68" rx="2" fill="#ad7425"/>
+<text x="78" y="1302" font-size="21" fill="#183447" font-weight="700" text-anchor="start">Quarry / extraction</text>
+<text x="78" y="1330" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">Raw stone / ore; form</text>
+<text x="78" y="1353" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">preserved</text>
+<rect x="420" y="1100" width="250" height="170" rx="14" fill="#ffffff" stroke="#ad7425" stroke-width="2"/>
+<rect x="420" y="1116" width="5" height="138" rx="2" fill="#ad7425"/>
+<text x="438" y="1132" font-size="19" fill="#183447" font-weight="700" text-anchor="start">Typed feeder buffer</text>
+<text x="438" y="1160" font-size="16" fill="#536b78" font-weight="400" text-anchor="start">Separate held source</text>
+<text x="438" y="1182" font-size="16" fill="#536b78" font-weight="400" text-anchor="start">queues</text>
+<text x="438" y="1204" font-size="16" fill="#536b78" font-weight="400" text-anchor="start">One class / selected batch</text>
+<text x="438" y="1226" font-size="16" fill="#536b78" font-weight="400" text-anchor="start">Wrong item stays at</text>
+<text x="438" y="1248" font-size="16" fill="#536b78" font-weight="400" text-anchor="start">source</text>
+<rect x="750" y="1125" width="250" height="120" rx="14" fill="#ffffff" stroke="#ad7425" stroke-width="2"/>
+<rect x="750" y="1141" width="5" height="88" rx="2" fill="#ad7425"/>
+<text x="768" y="1157" font-size="21" fill="#183447" font-weight="700" text-anchor="start">Utility cassette IN</text>
+<text x="768" y="1185" font-size="16" fill="#536b78" font-weight="400" text-anchor="start">Select timber OR minerals</text>
+<text x="768" y="1207" font-size="16" fill="#536b78" font-weight="400" text-anchor="start">Reserved local receiving</text>
+<text x="768" y="1229" font-size="16" fill="#536b78" font-weight="400" text-anchor="start">tray</text>
+<rect x="1075" y="1125" width="285" height="120" rx="14" fill="#ffffff" stroke="#ad7425" stroke-width="2"/>
+<rect x="1075" y="1141" width="5" height="88" rx="2" fill="#ad7425"/>
+<text x="1093" y="1157" font-size="18" fill="#183447" font-weight="700" text-anchor="start">Indexed local inventory</text>
+<text x="1093" y="1185" font-size="16" fill="#536b78" font-weight="400" text-anchor="start">Bounded timber / mineral slots</text>
+<text x="1093" y="1207" font-size="16" fill="#536b78" font-weight="400" text-anchor="start">No mixed pile or hidden</text>
+<text x="1093" y="1229" font-size="16" fill="#536b78" font-weight="400" text-anchor="start">sorting</text>
+<rect x="1440" y="1125" width="245" height="120" rx="14" fill="#ffffff" stroke="#ad7425" stroke-width="2"/>
+<rect x="1440" y="1141" width="5" height="88" rx="2" fill="#ad7425"/>
+<text x="1458" y="1157" font-size="18" fill="#183447" font-weight="700" text-anchor="start">Utility cassette OUT</text>
+<text x="1458" y="1185" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">Chosen item + request</text>
+<text x="1458" y="1208" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">Independent dispatch</text>
+<text x="1458" y="1231" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">tray</text>
+<rect x="1770" y="1125" width="370" height="155" rx="14" fill="#ffffff" stroke="#ad7425" stroke-width="2" stroke-dasharray="8 6"/>
+<rect x="1770" y="1141" width="5" height="123" rx="2" fill="#ad7425"/>
+<text x="1788" y="1157" font-size="21" fill="#183447" font-weight="700" text-anchor="start">Permitted endpoint *</text>
+<text x="1788" y="1185" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">Compatible workstation socket, or</text>
+<text x="1788" y="1208" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">explicitly allowed log / material</text>
+<text x="1788" y="1231" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">counter</text>
+<text x="1788" y="1254" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">Unknown recipes remain disabled</text>
+<path d="M 340,1160 L 420,1160" fill="none" stroke="#ad7425" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-utility)"/>
+<path d="M 340,1320 L 380,1320 L 380,1230 L 420,1230" fill="none" stroke="#ad7425" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-utility)"/>
+<path d="M 670,1185 L 750,1185" fill="none" stroke="#ad7425" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-utility)"/>
+<path d="M 1000,1185 L 1075,1185" fill="none" stroke="#ad7425" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-utility)"/>
+<path d="M 1360,1185 L 1440,1185" fill="none" stroke="#ad7425" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-utility)"/>
+<path d="M 1685,1185 L 1770,1185" fill="none" stroke="#ad7425" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-utility)"/>
+<text x="750" y="1325" font-size="18" fill="#536b78" font-weight="400" text-anchor="start">No ore → ingot claim. No workshop parts, greenhouse yields or new recipe quantities are inferred.</text>
+<text x="750" y="1353" font-size="18" fill="#536b78" font-weight="400" text-anchor="start">A disabled future socket is a reserved interface, not an operating production line.</text>
+<rect x="60" y="1450" width="1110" height="235" rx="18" fill="#edf1f5" stroke="#ced7df" stroke-width="2"/>
+<text x="85" y="1490" font-size="21" fill="#6f7d8a" font-weight="700" text-anchor="start">03  MANUAL FUEL / WARMTH</text>
+<rect x="85" y="1520" width="365" height="115" rx="14" fill="#ffffff" stroke="#6f7d8a" stroke-width="2"/>
+<rect x="85" y="1536" width="5" height="83" rx="2" fill="#6f7d8a"/>
+<text x="103" y="1552" font-size="20" fill="#183447" font-weight="700" text-anchor="start">Original fuel-service handoff</text>
+<text x="103" y="1580" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">Dedicated right-side hatch</text>
+<text x="103" y="1603" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">Fuel route remains manual</text>
+<rect x="600" y="1520" width="525" height="115" rx="14" fill="#ffffff" stroke="#6f7d8a" stroke-width="2"/>
+<rect x="600" y="1536" width="5" height="83" rx="2" fill="#6f7d8a"/>
+<text x="618" y="1552" font-size="21" fill="#183447" font-weight="700" text-anchor="start">Central warming furnace</text>
+<text x="618" y="1580" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">Warmth / upgrade state, not a processed item</text>
+<text x="618" y="1603" font-size="17" fill="#536b78" font-weight="400" text-anchor="start">Not a smelter; receives no food conveyor</text>
+<path d="M 450,1575 L 600,1575" fill="none" stroke="#6f7d8a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 7" marker-end="url(#arrow-manual)"/>
+<rect x="469.6" y="1534" width="110.80000000000001" height="24" rx="4" fill="#f5f8f8" stroke="none" stroke-width="0"/>
+<text x="525" y="1550" font-size="16" fill="#6f7d8a" font-weight="400" text-anchor="middle">staff carry</text>
+<rect x="1210" y="1450" width="930" height="235" rx="18" fill="#edf1f5" stroke="#ced7df" stroke-width="2"/>
+<text x="1235" y="1490" font-size="21" fill="#6f7d8a" font-weight="700" text-anchor="start">MANUAL / NOT YET ELIGIBLE FOR BELTS</text>
+<text x="1235" y="1535" font-size="19" fill="#6f7d8a" font-weight="400" text-anchor="start">Raw-food storage / raw sales: manual + explicit catalogue</text>
+<text x="1235" y="1566" font-size="19" fill="#6f7d8a" font-weight="400" text-anchor="start">Hides / fur · cargo / cash · butcher tables · drying racks</text>
+<text x="1235" y="1597" font-size="19" fill="#6f7d8a" font-weight="400" text-anchor="start">Cookfire / cookhouse · chopping fixtures · crates / sled handoffs</text>
+<text x="1235" y="1628" font-size="19" fill="#6f7d8a" font-weight="400" text-anchor="start">Workshop / greenhouse outputs unspecified; no active recipe route.</text>
+<rect x="60" y="1730" width="2080" height="72" rx="14" fill="#183447" stroke="none" stroke-width="2"/>
+<text x="85" y="1775" font-size="22" fill="#ffffff" font-weight="700" text-anchor="start">FULL / WRONG ITEM: hold → stop upstream release. No deletion, duplication, mixed universal loop or unbounded queue.</text>
+</svg>

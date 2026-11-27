@@ -1,0 +1,275 @@
+{
+  "schema": "havenline-new-conveyor-evidence-v1",
+  "review_date_utc": "2026-11-27",
+  "scope": "New external research only; existing Havenline reference audit is separate. No source is Havenline canon or runtime proof.",
+  "core_video_count": 6,
+  "core_videos_visually_sampled": 4,
+  "additional_videos_visually_sampled": 1,
+  "continuous_real_time_playback_claimed": false,
+  "audio_reviewed": false,
+  "core_videos": [
+    {
+      "id": "NEW-V01",
+      "title": "Splitter belt compression: timing-gap example",
+      "publisher": "Wube Software / Factorio developer blog",
+      "published": "2019-03-22",
+      "url": "https://www.factorio.com/blog/post/fff-287",
+      "media_url": "https://cdn.factorio.com/assets/img/blog/fff-287-splitter-gap.mp4",
+      "refs": [
+        "turn616193405view1"
+      ],
+      "classification": "official developer demonstration; historical mechanics",
+      "local_media": "local-media/fff-287-splitter-gap.mp4",
+      "visual_review": "full-duration frame sampling at 1 fps; not continuous real-time playback",
+      "observed_windows": [
+        {
+          "start": 0,
+          "end": 28.833333,
+          "observation": "Small isolated belt arrangement with a feed entering from above, an inserter adding from a chest at lower left, and two splitters joining a rightward route. Items traverse the physical segments. White diagnostics move through the junctions."
+        }
+      ],
+      "documented_not_measured": "Developer article attributes the unwanted output spacing to item arrival timing at the splitter. No numerical throughput or item conservation was independently measured.",
+      "havenline_application": "Test a junction with intermittent input; preserve predictable item spacing and do not visually skip a physical transfer."
+    },
+    {
+      "id": "NEW-V02",
+      "title": "Splitter belt compression: corrected arrangement",
+      "publisher": "Wube Software / Factorio developer blog",
+      "published": "2019-03-22",
+      "url": "https://www.factorio.com/blog/post/fff-287",
+      "media_url": "https://cdn.factorio.com/assets/img/blog/fff-287-splitter-no-gap.mp4",
+      "refs": [
+        "turn616193405view1"
+      ],
+      "classification": "official developer demonstration; historical mechanics",
+      "local_media": "local-media/factorio-fixed.mp4",
+      "visual_review": "full-duration frame sampling at 1 fps plus native-resolution 18s detail; not continuous real-time playback",
+      "observed_windows": [
+        {
+          "start": 0,
+          "end": 28.833333,
+          "observation": "Same small connection arrangement continues to pass items from the feed/inserter through both junctions onto the output route."
+        }
+      ],
+      "documented_not_measured": "Article explains extending the splitter input ramp as a short buffer to resolve timing gaps. The exact correction is documented; this review does not claim a frame-accurate independent proof.",
+      "havenline_application": "Give mergers and dispatch shutters a small bounded holding position rather than letting simultaneous arrivals overlap."
+    },
+    {
+      "id": "NEW-V03",
+      "title": "Drop lane indication and flipping",
+      "publisher": "Wube Software / Factorio developer blog",
+      "published": "2026-06-12",
+      "url": "https://factorio.com/blog/post/fff-442",
+      "media_url": "https://cdn.factorio.com/assets/blog-sync/fff-442-inserter-drop-lane.mp4",
+      "refs": [
+        "turn436653953view0"
+      ],
+      "classification": "official developer demonstration; construction usability",
+      "local_media": "local-media/fff-442-inserter-drop-lane.mp4",
+      "visual_review": "full-duration frame sampling at 1 fps plus native-resolution 13s detail; not continuous real-time playback",
+      "observed_windows": [
+        {
+          "start": 0,
+          "end": 5,
+          "observation": "Four chest/inserter pairs have yellow output markers; belt placement previews appear beneath them and differ by validity."
+        },
+        {
+          "start": 8,
+          "end": 15,
+          "observation": "Selecting and adjusting individual inserters changes yellow drop-marker placement relative to belt lanes."
+        }
+      ],
+      "documented_not_measured": "Article says arrows indicate which belt side receives items and flip placement preserves intent. No Havenline two-lane belt requirement is implied.",
+      "havenline_application": "Show a durable direction arrow and explicit destination socket, including after rotation and mirroring. Prefer one readable lane for the compact Havenline camp."
+    },
+    {
+      "id": "NEW-V04",
+      "title": "Landing pad unloading bay demonstration",
+      "publisher": "Wube Software / Factorio developer blog",
+      "published": "2026-06-19",
+      "url": "https://www.factorio.com/blog/post/fff-443",
+      "media_url": "https://cdn.factorio.com/assets/blog-sync/fff-443-unloader-big.mp4",
+      "refs": [
+        "turn564682893view1"
+      ],
+      "classification": "official developer demonstration; storage-dispatch analogy",
+      "local_media": "local-media/fff-443-unloader-big.mp4",
+      "visual_review": "full-duration actual-source-frame sampling at 1 fps plus native-resolution 0s and 39s details; not continuous real-time playback",
+      "observed_windows": [
+        {
+          "start": 0,
+          "end": 10,
+          "observation": "Close view of receiving/cargo structures, many external transfer arms, parallel belts and rail corridors."
+        },
+        {
+          "start": 11,
+          "end": 38,
+          "observation": "Camera pulls back across repeated unloading rows and connected belt routes, exposing the separation of bulk storage area and outgoing transport."
+        },
+        {
+          "start": 39,
+          "end": 39.666667,
+          "observation": "The end transition starts to overlay a close cargo/transfer view on the pulled-back scene."
+        }
+      ],
+      "documented_not_measured": "Article permits inserters to unload to trains, chests or belts and discusses connection/range limits. Not a proof of any camp recipe, fair dispatch policy or maximum rate.",
+      "havenline_application": "Treat the storage house as inventory plus visible receiving and dispatch adapters; use short outward belts rather than copying factory scale."
+    },
+    {
+      "id": "NEW-V05",
+      "title": "Dorner Conveyor Transfers - In Line, 90 Degrees, Side-to-Side, Powered Transfers, Roller Transfers",
+      "publisher": "Dorner Conveyors",
+      "published": "2020-04-23",
+      "url": "https://www.youtube.com/watch?v=mNLTL6utJMY",
+      "supporting_url": "https://www.dornerconveyors.com/blog/conveyor-transfers-video",
+      "supporting_article_published": "2020-04-20",
+      "refs": [
+        "turn531011276youtube4",
+        "turn300811615view0"
+      ],
+      "classification": "first-party manufacturer video; physical-transfer analogy",
+      "visual_review": "NOT VIEWED: indexed official title/description and manufacturer page verified; public stream retrieval failed with HTTP403/unavailable format",
+      "observed_windows": [],
+      "documented_not_measured": "Official description identifies in-line, side-to-side and 90-degree transfer choices designed to prevent product loss.",
+      "havenline_application": "Give corners, height changes and machine handoffs actual transfer geometry; do not draw a belt ending against a wall or a gap larger than the item."
+    },
+    {
+      "id": "NEW-V06",
+      "title": "Lift Gate Conveyors: Create safe walkthroughs and maximize usable space",
+      "publisher": "Dorner Conveyors",
+      "published": "2020-12-10",
+      "url": "https://www.youtube.com/watch?v=pxoI3sYpfxo",
+      "supporting_url": "https://www.dornerconveyors.com/blog/lift-gates",
+      "supporting_article_published": "2020-08-14",
+      "refs": [
+        "turn531011276youtube5",
+        "turn472637066view0"
+      ],
+      "classification": "first-party manufacturer video; pedestrian-access analogy",
+      "visual_review": "NOT VIEWED: indexed official title/description and manufacturer page verified; official Wistia embed returned an error and no decoded video was available",
+      "observed_windows": [],
+      "documented_not_measured": "Manufacturer describes a lifting conveyor section, handles and counterbalance to provide walk-through access.",
+      "havenline_application": "Reserve both camp gate paths. When a belt must cross a walk route, show a deliberate bridge/tunnel or gated crossing with mutually exclusive foot and item traffic."
+    }
+  ],
+  "additional_videos": [
+    {
+      "id": "NEW-V07",
+      "title": "Accumulation System with Product Elevator",
+      "publisher": "Dorner Conveyors",
+      "published": "2021-04-13",
+      "url": "https://www.youtube.com/watch?v=vZrJtREuQsI",
+      "supporting_url": "https://www.dornerconveyors.com/videos/engineered-solutions",
+      "refs": [
+        "turn849782643youtube9",
+        "turn849782643search6"
+      ],
+      "classification": "first-party manufacturer video; finite buffer/dispatch analogy",
+      "visual_review": "NOT VIEWED: official indexed description and embedding confirmed only",
+      "observed_windows": [],
+      "documented_not_measured": "Description discusses temporary accumulation during downstream equipment stoppage, controlled loading to levels, and first-in-first-out reintroduction.",
+      "havenline_application": "A finite storage buffer absorbs a temporary stall; it is not a sink that erases goods. The precise stack counts and industrial rates do not belong in Havenline."
+    },
+    {
+      "id": "NEW-V08",
+      "title": "My Perfect Hotel",
+      "publisher": "SayGames",
+      "published": "2023-08-30",
+      "url": "https://www.youtube.com/watch?v=6rcVjMYFwg8",
+      "refs": [
+        "turn931156598youtube7"
+      ],
+      "classification": "official casual-game promotional trailer; candidate service-flow comparison",
+      "visual_review": "NOT VIEWED: official indexed metadata/description only",
+      "observed_windows": [],
+      "documented_not_measured": "Description establishes hotel management and service progression; it does not prove conveyor or cash routing.",
+      "havenline_application": "Candidate only. Do not cite as observed evidence for a customer-counter layout; the user\u2019s actual camp/reference footage should support that."
+    },
+    {
+      "id": "NEW-V09",
+      "title": "Machine rotation exposes a fluid-connection mismatch",
+      "publisher": "Wube Software / Factorio developer blog",
+      "published": "2026-06-12",
+      "url": "https://factorio.com/blog/post/fff-442",
+      "media_url": "https://cdn.factorio.com/assets/blog-sync/fff-442-em-plant-rotation.mp4",
+      "refs": [
+        "turn436653953view0"
+      ],
+      "classification": "official developer negative-case demonstration; fluid/port-validation analogy",
+      "local_media": "local-media/fff-442-em-plant-rotation.mp4",
+      "visual_review": "full-duration frame sampling at 2 fps; not continuous real-time playback",
+      "observed_windows": [
+        {
+          "start": 0,
+          "end": 3.5,
+          "observation": "Machine selection/rotation changes the resource-marked connector orientations next to an existing pipe run."
+        },
+        {
+          "start": 4,
+          "end": 8.5,
+          "observation": "A second pipe run is built from another port and fluid icons appear along it."
+        }
+      ],
+      "documented_not_measured": "The surrounding article identifies this as an unwanted fluid-filter/pass-through condition and discusses a fix. This is a defect example, not desired material mixing.",
+      "havenline_application": "After rotation or upgrade, revalidate port type/direction; incompatible goods should remain buffered and produce an understandable alert."
+    }
+  ],
+  "supporting_documents": [
+    {
+      "id": "NEW-D01",
+      "title": "Friday Facts #225 - Bots versus belts (part 2)",
+      "publisher": "Wube Software / Factorio developer blog",
+      "published": "2018-01-12",
+      "url": "https://www.factorio.com/blog/post/fff-225",
+      "refs": [
+        "turn616193405view0",
+        "turn438603094view0"
+      ],
+      "evidence": "Developer defines input priority, output priority and output filtering as different controls.",
+      "application": "Do not conflate splitting, priority and material filters in one unexplained junction."
+    },
+    {
+      "id": "NEW-D02",
+      "title": "Belt transport system",
+      "publisher": "Factorio official project wiki (community-maintained)",
+      "url": "https://wiki.factorio.com/Belt_transport_system",
+      "refs": [
+        "turn777002617search1",
+        "turn531011276search1"
+      ],
+      "evidence": "Documentation describes split/merge behavior, blocked outputs, priorities, filtered outputs and throughput bottlenecks.",
+      "application": "Blocked filtered items should not silently become an unrelated resource or escape through a wrong destination."
+    },
+    {
+      "id": "NEW-D03",
+      "title": "Conveyor Splitter",
+      "publisher": "Official Satisfactory Wiki (community-maintained)",
+      "url": "https://satisfactory.wiki.gg/wiki/Conveyor_Splitter",
+      "refs": [
+        "turn849782643search0"
+      ],
+      "evidence": "Indexed source describes routing among unblocked outputs and eventually stopping input after all outputs and internal buffer fill. Direct page open returned403; no visual evidence.",
+      "application": "Full destination -> finite output/transfer buffers -> upstream wait. Do not assume its game-specific nine-item buffer for Havenline."
+    },
+    {
+      "id": "NEW-D04",
+      "title": "Friday Facts #405 - Whole belt reader, New logistics GUI",
+      "publisher": "Wube Software / Factorio developer blog",
+      "published": "2024-04-05",
+      "url": "https://www.factorio.com/blog/post/fff-405",
+      "refs": [
+        "turn492360873view0"
+      ],
+      "evidence": "Developer explains reducing clutter while showing contents over a connected transport line.",
+      "application": "Use an optional flow-inspection overlay with destination and blocked reason; avoid permanent diagnostic clutter."
+    }
+  ],
+  "archive_policy": "Do not publish local-media, downloaded full HTML, or failed media responses. Commit register, original analysis and narrowly selected attributed evidence stills only as appropriate. No source-media licence was established.",
+  "visually_inspected_video_ids": [
+    "NEW-V01",
+    "NEW-V02",
+    "NEW-V03",
+    "NEW-V04",
+    "NEW-V09"
+  ]
+}

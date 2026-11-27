@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/conveyor_critic",
+  "recorded_utc": "2026-11-27T03:51:37.460614+00:00",
+  "candidate": "renders/conveyor-assembly-r1.png",
+  "sha256": "df561c77574c54e2b6325e1e69bbff080637cf45ecacba1518f0be8793e64c34",
+  "native_size": [
+    1672,
+    941
+  ],
+  "prompt": "prompts/conveyor-assembly-r1.txt",
+  "prompt_sha256": "18d5dfc836394cd99f9fe6a3bde2cd6086b16fe39c2e38f25b0388790cec4a8f",
+  "requirements_sha256": "40a11533d116d78ebc7fe17bc52b7817b9595f62b32eaf78be89a91407487bc9",
+  "full_native_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/conveyor-assembly-r1-front-feeds.png",
+      "box": [
+        408,
+        186,
+        1063,
+        527
+      ],
+      "sha256": "9ce72374610fbd3133f07b4df58eece5b504daa949f282d1a05e22b0cbdb9fd3"
+    },
+    {
+      "path": "reviews/evidence/conveyor-assembly-r1-missing-ingredient.png",
+      "box": [
+        18,
+        544,
+        808,
+        891
+      ],
+      "sha256": "6ceaf8cfdb38cc5b1159850358971030fb83c5ff570376eb3d8e57ac6aad53ee"
+    },
+    {
+      "path": "reviews/evidence/conveyor-assembly-r1-rear-full-state.png",
+      "box": [
+        822,
+        544,
+        1658,
+        891
+      ],
+      "sha256": "f91dcfdfe4cc518204fcf35b7f2d36bf4d6d2dba6b5d72a82e40ebd682674e9e"
+    }
+  ],
+  "threshold": 9.5,
+  "status": "PASS_STATIC_SHEET_ONLY",
+  "score": 9.8,
+  "required_repairs": [],
+  "checks": {
+    "new_proposal_identified": "PASS",
+    "separate_A_B_front_ports_and_magazines": "PASS",
+    "no_generic_mixed_merge": "PASS",
+    "independent_input_shutters": "PASS",
+    "single_separate_rear_output": "PASS",
+    "whole_overview_and_rear_opposing_view": "PASS",
+    "missing_B_wait_state": "PASS",
+    "actual_output_full_state": "PASS",
+    "supported_transfer_and_terminal_fence": "PASS",
+    "recipe_quantities_unfrozen": "PASS"
+  },
+  "findings": [
+    "Distinct front A and B lanes enter separate framed shutters; magazines remain identifiable, with no shared mixed feed junction.",
+    "Overview exposes two front inputs and one rear output; rear closeup gives opposite-side interface evidence.",
+    "WAITING FOR B shows A stock present, B magazine/lane empty and both shutters holding release; no product is spawned in that stalled panel.",
+    "OUTPUT FULL shows three separated finished examples downstream, terminal fence, closed inlet stop and fourth finished example held inside output sleeve.",
+    "Footer explicitly calls this new proposed design with recipe and ratios unfrozen; bread-like/fish-shaped inputs and burger-shaped examples remain reference-inspired placeholders for future recipe definition."
+  ],
+  "approval_boundary": "Exact static concept and illustrated state logic only. No implemented recipe, input ratios, complete mechanical CAD, working press or runtime transfer behavior approval."
+}

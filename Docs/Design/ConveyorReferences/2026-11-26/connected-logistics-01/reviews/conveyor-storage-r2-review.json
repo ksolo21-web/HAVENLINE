@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/conveyor_critic",
+  "recorded_utc": "2026-11-27T03:49:23.635988+00:00",
+  "candidate": "renders/conveyor-storage-r2.png",
+  "sha256": "e6b8ff0c4f4082b51416abaea7279386830d777183969f636e83487b5ce54377",
+  "native_size": [
+    1672,
+    941
+  ],
+  "prompt": "prompts/conveyor-storage-r2.txt",
+  "prompt_sha256": "1463e62771762ab08778777a45aad8fffbff140fb0a5e14685881a4017dd4ed9",
+  "requirements_sha256": "40a11533d116d78ebc7fe17bc52b7817b9595f62b32eaf78be89a91407487bc9",
+  "full_native_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/conveyor-storage-r2-utility-exterior.png",
+      "box": [
+        95,
+        305,
+        407,
+        495
+      ],
+      "sha256": "613ddb111bd133f7e26de529965728e4ef83947a9690360c55007067475b7c7f"
+    },
+    {
+      "path": "reviews/evidence/conveyor-storage-r2-food-exterior.png",
+      "box": [
+        1047,
+        245,
+        1352,
+        493
+      ],
+      "sha256": "457e301f16f7808fc74b08de8ffb6afdc31f69f80a1714ee5d96d6855e98e4bb"
+    },
+    {
+      "path": "reviews/evidence/conveyor-storage-r2-utility-mechanism.png",
+      "box": [
+        310,
+        555,
+        800,
+        820
+      ],
+      "sha256": "c143aa78393eeb35aaa1eddcddd463dba620edb58ded40bd6bf35ffc5672ca5d"
+    },
+    {
+      "path": "reviews/evidence/conveyor-storage-r2-food-section.png",
+      "box": [
+        847,
+        523,
+        1657,
+        886
+      ],
+      "sha256": "7e35cc1c440c38205c85ec8e59a4e00c1c6b9527313ea26d43cbc12982f2ebf2"
+    }
+  ],
+  "threshold": 9.5,
+  "status": "REPAIR_REQUIRED",
+  "retest_of": "reviews/conveyor-storage-r1-review.json",
+  "prior_review_sha256": "8be9bdf7302fb1575a8ef0e0f4b5942a8f05f86421a1abf341b7c8d29a412ce7",
+  "score": 8.8,
+  "checks": {
+    "original_shell_features": "PASS",
+    "new_ports_explicit_proposal": "PASS",
+    "front_door_and_apron_clear": "PASS",
+    "food_same_rear_plane": "PASS",
+    "food_external_internal_elevation": "PASS_AS_RAISED_CASSETTE_PROPOSAL",
+    "direction_consistency": "FAIL",
+    "utility_low_receive_to_lift_visible": "INCOMPLETE",
+    "utility_dispatch_and_matching_bins": "PASS",
+    "local_bays_not_whole_house_automation": "PASS"
+  },
+  "findings": [
+    {
+      "severity": "MANDATORY",
+      "issue": "Small white rail chevrons remain on exterior/cutaway OUT lanes and point toward the house, contrary to the corrected OUT plaques.",
+      "repair": "Remove every ornamental rail chevron from this sheet, preserving plain IN/OUT labels."
+    },
+    {
+      "severity": "MANDATORY_INTERFACE_EVIDENCE",
+      "issue": "Utility exterior IN is low, while the only labelled internal IN landing is at the upper timber shelf level. The vertical lift exists, but its low receiving dock/path from the exterior sleeve is not exposed.",
+      "repair": "Show a low IN landing continuous with its sleeve and the lift taking that carrier to the upper shelf; alternatively distinguish the loaded raised shuttle from a visible low receiving dock. No unexplained vertical jump."
+    },
+    {
+      "severity": "FIXED",
+      "issue": "Food exterior cassette is now raised to match prepared-food shelf; both interior sleeves are in the same rear wall and labels reverse image sides correctly. Closed raw cabinets remain below and apart from clean food lane."
+    },
+    {
+      "severity": "FIXED",
+      "issue": "Utility OUT internal position and indexed timber/material bins are now visible. Demonstrated plank parcel and gray stones match compartment contents."
+    },
+    {
+      "severity": "POSITIVE",
+      "issue": "Original doors/apron, left window, rear vent and right fuel hatch remain distinct and unobstructed."
+    }
+  ],
+  "required_repairs": [
+    "Remove contradictory rail chevrons",
+    "Expose utility low receiving dock and its connection to lift"
+  ],
+  "approval_boundary": "Static proposed storage extension only. Raised food ports must be reconciled with exact route/plan wording; no native implementation or full-house automatic retrieval claim."
+}

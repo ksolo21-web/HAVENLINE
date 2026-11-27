@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/conveyor_critic",
+  "recorded_utc": "2026-11-27T04:07:35.870425+00:00",
+  "candidate": "renders/conveyor-camp-r2.png",
+  "sha256": "962e48fc9e4813399c0bcd14827d591d37356237a4377e370a895a82f3527476",
+  "native_size": [
+    1672,
+    941
+  ],
+  "prompt": "prompts/conveyor-camp-r2.txt",
+  "prompt_sha256": "c23894aa5e6287b0c76b905df1a4e4e98e7ef2defa49fbb340b537ccdee72ea6",
+  "requirements_sha256": "40a11533d116d78ebc7fe17bc52b7817b9595f62b32eaf78be89a91407487bc9",
+  "full_native_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/conveyor-camp-r2-wrong-raw-finished-junction.png",
+      "box": [
+        760,
+        170,
+        1450,
+        365
+      ],
+      "sha256": "afe1397399e58075c946244d97cccdcd3937ebcc124b0f4f8d179bee10e382d3"
+    },
+    {
+      "path": "reviews/evidence/conveyor-camp-r2-storage-return-to-cooker-input.png",
+      "box": [
+        470,
+        150,
+        940,
+        370
+      ],
+      "sha256": "5aea0f784b88951d6e4d311ff71918684eab777454a837495d64d4079724e3c4"
+    },
+    {
+      "path": "reviews/evidence/conveyor-camp-r2-counter-closed-fence.png",
+      "box": [
+        1140,
+        370,
+        1620,
+        660
+      ],
+      "sha256": "1f8f564519752a6ba0c885a7c641a7729ba349506f6bd4deabf84136cafb0eac"
+    },
+    {
+      "path": "reviews/evidence/conveyor-camp-r2-west-service-gap.png",
+      "box": [
+        60,
+        125,
+        580,
+        525
+      ],
+      "sha256": "3e8da04ade641fdb67ec45f0d52c2d0ad1d64d2e3046c920ae986af33587cd62"
+    }
+  ],
+  "threshold": 9.5,
+  "score": 7.1,
+  "status": "REPAIR_REQUIRED",
+  "checks": {
+    "source_style_and_asset_family": "PASS",
+    "heater_central_and_separate_from_goods": "PASS",
+    "two_open_gate_approaches": "PASS",
+    "front_door_apron_and_open_centre": "PASS",
+    "raw_intake_to_cooker_input": "FAIL",
+    "cooked_output_diverter_to_storage_and_counter": "FAIL",
+    "storage_out_bypasses_cooker_and_reaches_gated_merge": "FAIL",
+    "counter_customer_face_accessible_outside_fence": "FAIL",
+    "continuous_house_left_rear_service_access": "FAIL_UNPROVEN",
+    "gate_state_indicator_consistency": "FAIL",
+    "no_external_painted_road": "PASS"
+  },
+  "findings": [
+    {
+      "id": "C2-F1",
+      "severity": "blocking",
+      "observation": "The right shore-intake discharge visibly joins the right cooked OUT route and customer branch. Raw whole fish and cooked output share the same junction. This contradicts the required raw-input / cooked-output topology."
+    },
+    {
+      "id": "C2-F2",
+      "severity": "blocking",
+      "observation": "Both rear storage lines approach the left cooker IN neck. The lower OUT line visibly carries prepared-food trays into a raw-fish feed. There is no distinct storage dispatch path to an exclusive fresh/store merge."
+    },
+    {
+      "id": "C2-F3",
+      "severity": "blocking",
+      "observation": "The timber counter remains freestanding inside the camp, with its long customer face toward the interior and a continuous east fence behind it. Outside customers cannot reach its serving face."
+    },
+    {
+      "id": "C2-F4",
+      "severity": "blocking",
+      "observation": "The west house utility dock is crowded against the fence. A continuous usable route from the gate corridor around the left utility equipment to the rear service strip is not visibly established."
+    },
+    {
+      "id": "C2-F5",
+      "severity": "blocking",
+      "observation": "Customer buffer has a green beacon while the striped stop bar spans the carrier path. Choose a coherent state: raised/ready or amber closed/full. The dedicated counter sheet already demonstrates both."
+    }
+  ],
+  "required_repairs": [
+    "Rotate the whole canonical cooker 180 degrees, preserving physical handedness: east raw IN from intake, west cooked OUT to diverter, front controls toward a clear northern service strip. Do not merely exchange labels on unchanged plumbing.",
+    "From the cooked output, show one-in/two-out diverter with separate surplus-to-storage-IN and fresh-to-counter branches. Route storage OUT independently into the second input of the gated counter merge, never the cooker.",
+    "Rotate the customer table north-south into a deliberate east fence serving opening. Keep register/keypad and staff approach inside/west, customer face outside/east, and a separate finite pickup buffer at the stock end.",
+    "Widen or recompose the rear/west storage margin so a continuous route from the gate corridor reaches the utility service face and rear sleeves without crossing belts.",
+    "Make the visible stop bar/beacon/item state coherent; retain the terminal pickup guard and separate manual tabletop handoff."
+  ],
+  "approval_boundary": "Actual physical topology fails. A disclaimer that this is conceptual cannot substitute for rerendering the visibly wrong connections. Keep r2 and its failed review; camp r1 was a tool-schema failure with no image and has no visual score."
+}

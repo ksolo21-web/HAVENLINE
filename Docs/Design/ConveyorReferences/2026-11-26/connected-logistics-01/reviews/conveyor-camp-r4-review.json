@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/conveyor_critic",
+  "recorded_utc": "2026-11-27T04:19:10.354308+00:00",
+  "candidate": "renders/conveyor-camp-r4.png",
+  "sha256": "47a1b95c1995a886ed19f9faf24ed79bb080e0961f7d5a573c49cbc8bd966d28",
+  "native_size": [
+    1672,
+    941
+  ],
+  "prompt": "prompts/conveyor-camp-r4.txt",
+  "prompt_sha256": "568af1ff4ca9e16cd6964e78ead48e576e82b1e7cabb0ec46109824c75b97ac3",
+  "requirements_sha256": "40a11533d116d78ebc7fe17bc52b7817b9595f62b32eaf78be89a91407487bc9",
+  "full_native_image_inspected": true,
+  "crop_evidence": [
+    {
+      "path": "reviews/evidence/conveyor-camp-r4-actual-gated-merge.png",
+      "box": [
+        525,
+        255,
+        930,
+        480
+      ],
+      "sha256": "b919644b4e59337b6bc35bc13cc5ef1c0557997c6adef45ff36328ebd979c0c5"
+    },
+    {
+      "path": "reviews/evidence/conveyor-camp-r4-storage-docks-fuel-hatch.png",
+      "box": [
+        170,
+        205,
+        645,
+        545
+      ],
+      "sha256": "68269dd2479c7b2be5ad243c7b8f79a52e3991f65a6b30f6dd3694c840c4815e"
+    },
+    {
+      "path": "reviews/evidence/conveyor-camp-r4-west-rear-service-strip.png",
+      "box": [
+        70,
+        155,
+        1010,
+        550
+      ],
+      "sha256": "d4e3cdaa1343ad35c03bd9544b8f1968a443f440da4844cad4b620511bd47bad"
+    },
+    {
+      "path": "reviews/evidence/conveyor-camp-r4-counter-and-terminal.png",
+      "box": [
+        1235,
+        475,
+        1570,
+        775
+      ],
+      "sha256": "f339927ccc0ef4b377afc3c2a5178c7dfa1090d72fd4d92f4c01336c68f818fb"
+    }
+  ],
+  "retest_of": "reviews/conveyor-camp-r3-review.json",
+  "prior_review_sha256": "a525237bca9b8fc3e581ba1bfbdb7ec4c43d7e185396cc8bd31fd640b64f18a7",
+  "threshold": 9.5,
+  "score": 9.3,
+  "status": "REPAIR_REQUIRED",
+  "checks": {
+    "raw_intake_to_east_cooker_input": "PASS",
+    "west_cooked_output_to_diverter": "PASS",
+    "two_inlet_gates_at_actual_merge": "PASS",
+    "supported_common_transfer_surface": "PASS",
+    "one_outgoing_lane_and_redundant_gates_removed": "PASS",
+    "front_crate_emblem_restored": "PASS",
+    "fuel_hatch_closed_and_not_used_as_port": "PASS",
+    "continuous_west_rear_service_floor": "PASS_CONCEPT_ALLOCATION",
+    "canonical_short_blue_out_guards": "FAIL",
+    "paired_same_rear_wall_food_out_origin": "FAIL_UNPROVEN",
+    "counter_east_boundary_customer_opening": "PASS",
+    "staff_register_cash_pickup_separate": "PASS",
+    "front_doors_and_two_gate_approaches_clear": "PASS",
+    "heater_kept_separate_from_goods": "PASS"
+  },
+  "repaired_findings": [
+    "Actual confluence now contains a common supported roller transfer deck and independent raised gates on the west/storage and north/fresh approaches. Its single outgoing lane reaches the stock buffer. The redundant downstream gate pair is removed.",
+    "Front crate emblem is restored and the visible fuel hatch is closed and not itself connected to a belt.",
+    "House footprint reduction creates a visibly connected west floor strip and rear service margin.",
+    "Correct raw intake/cooker handedness, counter orientation and guarded pickup remain intact."
+  ],
+  "findings": [
+    {
+      "id": "C4-F1",
+      "severity": "blocking",
+      "certainty": "direct visible defect",
+      "observation": "The selected storage r5 uses deep-blue short OUT dock guards with rectangular OUT plates. The r4 utility OUT guard remains orange and has no matching side plate; this requested identity repair did not apply."
+    },
+    {
+      "id": "C4-F2",
+      "severity": "blocking",
+      "certainty": "unresolved visual interface evidence",
+      "observation": "The food IN is at the rear roof edge, while the lower OUT line starts beside the visible right fuel-hatch wall. The hatch itself is distinct and unconnected, so this is not a claim that it has become the product port. However, the view does not establish the lower line originating from a second sleeve on the same rear wall as IN; it reads as a side-wall dispatch attachment."
+    }
+  ],
+  "required_repairs": [
+    "Make the short utility OUT guard unmistakably deep blue with its rectangular OUT plate, matching selected storage r5. Restore the equivalent short prepared-food OUT guard; do not recolor unrelated general transport rails.",
+    "Expose a short supported return/elbow from a paired rear food OUT sleeve into the existing lower/west merge approach. Both rear sleeve origins must be coherently placed on the rear wall while the original right fuel hatch remains an independent closed/manual feature.",
+    "Keep the now-correct merge deck, independent raised gates, raw feed, counter orientation, front emblem and expanded service floor."
+  ],
+  "approval_boundary": "All main flow and access repairs are retained as passes, but remaining storage identity/interface evidence is mandatory. No content-wide pass yet; no claim that the fuel hatch is actually used for goods."
+}
