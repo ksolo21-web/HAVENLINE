@@ -1,10 +1,32 @@
-# Havenline worlds · Levels 1–100
+# Havenline · World 1 launch and connected-world updates
 
-**Campaign structure:** 10 playable worlds on one connected map, 10 levels per world. Each world has local sources, a useful way to supply the network, a distinct survival challenge, and a return route. This plan uses the existing ten region bands and authored level goals. The level ranges and next-world milestones are locked to those bands. Local placements, yields, recipes, costs and encounter tuning still need implementation and playtesting. [All 100 authored level outcomes](https://github.com/ksolo21-web/HAVENLINE/blob/a4e643aeb563b6f9cfda8b840c0651d13326eec8/Docs/Production/Completeness/2026-11-27/PROGRESSION_ECONOMY_GAPS.md#the-100-authored-outcomes)
+**Release direction:** Launch with World 1, Frozen Home Camp. Worlds 2–10 arrive as later updates and connect to the existing camps and supply routes. **Progression proposal:** Prototype World 1 with room for up to 50 local levels. The final count depends on how much distinct play the world supports. Fifty levels in each of ten worlds would mean 500 levels overall. Decide how local levels relate to a global level display before changing save IDs or the T12 progression contract. The earlier 100-level campaign supplies goals and region themes. [Earlier authored outcomes](https://github.com/ksolo21-web/HAVENLINE/blob/a4e643aeb563b6f9cfda8b840c0651d13326eec8/Docs/Production/Completeness/2026-11-27/PROGRESSION_ECONOMY_GAPS.md#the-100-authored-outcomes)
 
-## Worlds, supplies and crossings
+## World 1 · Proposed progression
 
-| World | Levels | What players obtain and build | Survival and next connection |
+| Local levels | What changes |
+|---|---|
+| **1–10 · Establish the camp** | Explore the clearing, gather wood, stone and food, build the hearth and gates, and open the first storage, trade and rescue opportunities. |
+| **11–20 · Open the supply routes** | Explore the woods, quarry and lakeshore. Choose which routes and producers to open first. Bridges, work shelters and alternate return paths change who can reach a site and how supplies get home. |
+| **21–30 · Grow trade and production** | Open more food and workshop options, varied self-service orders, and bulk hauling. Choose where helpers and conveyors will relieve a bottleneck. |
+| **31–40 · Defend an expanding camp** | Open new work areas within the frozen world. Choose perimeter and supply improvements, prepare for warned raids, and restore damage afterward. |
+| **41–50 · Run a resilient settlement** | Support several work areas by alternate routes, balance local demand with reserves, and finish major camp projects. The frozen sandbox keeps running after its last milestone. The forest link becomes playable with the World 2 update. |
+
+Each authored level needs a payoff such as a route, recipe, tool, worker capability, or visible camp improvement. Verify how many levels the distinct decisions can support.
+
+## How the sandbox adapts
+
+- Built and repaired routes, relocated machines, surviving workers, stock and camp damage affect the player's next options.
+- Pick optional orders and jobs from reachable routes, usable producers, available materials, stock and eligible goals. Keep accepted costs and orders stable through reload. Space and vary recurring offers and encounters.
+- Change the problems as the camp develops. Early choices are about where to gather and build. Later choices include rerouting cargo, opening another food or material line, shifting work to a different station, and deciding how to prepare for or recover from a raid. A larger quantity on the same delivery is insufficient to carry a level.
+- Keep the full five-minute raid warning and the separate cadence proposal. Test different threats and attack patterns as the camp grows. Check that ordinary play provides a viable path to recovery.
+- Test trade-first, exploration-first and defense-first approaches. Revisit the same places after expansion, damage and layout changes. Use long sessions and return visits to see whether decisions change and whether there is useful play after the final milestone.
+
+## Worlds and future updates
+
+The level ranges and crossing milestones below come from the earlier ten-level-per-world plan. Its world themes, resources and connections guide the later updates. Choose the revised ranges and milestones after the World 1 sandbox trial.
+
+| World | Earlier levels | What players obtain and build | Survival and next connection |
 |---|---:|---|---|
 | **1 · Frozen Home Camp** · T32 | **1–10** | Wood, stone, hunted meat and the opening mineral sources for coal, slate and metal ore. Start the hearth, stock the warehouse, rescue the first worker, and make planks, blocks and cooked meals. Earn the first service cash. Planned later steps in this band introduce lakeshore fish and wheat for cooked fish and bread. | Snowy forest approaches, hostile wildlife and the first camp defenses. The hearth supports recovery. Open the **forest connection at 10**. |
 | **2 · Forest and Lakeshore** · T44 | **11–20** | Renewable timber, eligible game, hides and fur. Supply saws with timber, craft hauling harnesses and cold-weather fittings, and recruit survivors through rescue objectives. Use planks and blocks to bridge the creek. | Dense cover, isolated work parties and branch routes. Escorts, alternate paths and footbridges keep deliveries moving. Open the **canyon pass at 20**. |
@@ -19,7 +41,7 @@
 
 ## What progress looks like
 
-- Every level earns a useful result such as a shorter route, a working station, a new source or an upgrade. Levels ending in **3, 6 and 9** show visible changes. Each level ending in **0** completes a world milestone. Level 100 is the final connection. [Progression scope](https://github.com/ksolo21-web/HAVENLINE/blob/a4e643aeb563b6f9cfda8b840c0651d13326eec8/Docs/Production/T12/FROZEN_SCOPE.md)
+- Keep useful and visible progression throughout each world. The earlier cadence used visible milestones at relative levels 3, 6 and 9 and a world connection at level 10. Reassess the milestone spacing against the World 1 sandbox trial. [Earlier progression scope](https://github.com/ksolo21-web/HAVENLINE/blob/a4e643aeb563b6f9cfda8b840c0651d13326eec8/Docs/Production/T12/FROZEN_SCOPE.md)
 - World entry comes through a real crossing or transport link. Players can return to earlier camps with their cargo and eligible companions. Built routes support walking and/or freight as specified. Every world needs an attainable free recovery route if a machine, helper or main crossing is lost. [Transport and region task map](Havenline-Whole-Task-Plan-Audit.md)
 - Resource families carry forward. Forest timber supports sky bridges and swamp boardwalks. Desert slate and volcanic steel strengthen landings and mines. Earlier camps feed and equip the frontier. Lake and swamp fish share the food family, and later ore sources feed the same economy. Regional access, jobs and upgrades give routes a reason to exist even when some resources overlap.
 - Check the full path to every resource before assigning an order or charging for an upgrade. Include its source, usable route, recipe, inputs, and any producer plot that can be afforded at that stage. Recheck that path after a raid or outage. A required recovery build needs accessible materials. [Build 13 gameplay audit](Havenline-Build-13-Dynamic-Gameplay-Audit.md)
@@ -27,4 +49,4 @@
 
 ## Build 13 baseline
 
-Build 13 already has wood, stone, meat, coal, slate and metal ore, with planks, blocks and cooked meals. The signed playtest has a Level 2 preview. The world table records the campaign's design and separates later goals from measured gameplay. The saved audit governs self-service counters, survivor hunting, raids, structure damage and recovery where the older campaign text differs. Inter-region raid eligibility is still open. [Build 13 inventory](https://github.com/ksolo21-web/HAVENLINE/blob/2654f5019b7212968d28600cb071bf1c231c9030/HavenlineLevel1/field_inventory.gd) · [Current owner decisions](README.md)
+Build 13 already has wood, stone, meat, coal, slate and metal ore, with planks, blocks and cooked meals. The signed playtest has a Level 2 preview. The table records the earlier campaign themes and bands. The final World 1 count, save and update rules, and acceptance scope need to be reconciled with T12, T32, and the earlier Level 1–100 launch requirements before production sign-off. The saved audit governs self-service counters, survivor hunting, raids, structure damage and recovery where the older campaign text differs. Inter-region raid eligibility is still open. [Build 13 inventory](https://github.com/ksolo21-web/HAVENLINE/blob/2654f5019b7212968d28600cb071bf1c231c9030/HavenlineLevel1/field_inventory.gd) · [Current owner decisions](README.md)
