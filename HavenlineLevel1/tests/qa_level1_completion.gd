@@ -368,7 +368,7 @@ func second_launch() -> void:
 		if label.is_visible_in_tree(): labels.append(label.text)
 	var hud = game.opening_hud
 	check("Level 2 arrives in the normal visible gameplay chapter",hud.chapter.is_visible_in_tree() and hud.chapter.text=="Level 2  ·  Preview")
-	check("the resumed field provides a playable objective",labels.has("Stay in the snowfield or serve another meal."))
+	check("the resumed field shows all Level 1 plots finished and camp open",labels.has("Level 2 preview · All Level 1 plots complete. The camp is open."))
 	check("cash label reflects the one confirmed wallet payment",hud.purse.is_visible_in_tree() and hud.purse.text.strip_edges()=="Cash  1")
 	check("both finished-material counters match persistent balances",hud.workshop_stock.is_visible_in_tree() and hud.workshop_stock.text.contains("Planks 1") and hud.workshop_stock.text.contains("Blocks 1"))
 	check("visible health reading matches the live player",hud.health_bar.is_visible_in_tree() and int(hud.health_bar.value)==game.player_hp and int(hud.health_bar.max_value)==game.MAX_HP)
