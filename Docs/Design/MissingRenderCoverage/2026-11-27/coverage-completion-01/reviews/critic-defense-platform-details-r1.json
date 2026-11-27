@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/missing_world_audit",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-27T05:40:07.189834+00:00",
+  "status": "PASS \u2014 STATIC REFERENCE ONLY",
+  "score_method": "Minimum mandatory visual-area score; no averaging away a failed requirement.",
+  "actual_full_png_inspected": true,
+  "source_images_inspected": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/reviews/evidence/primary-b/B-048-gameplay.png",
+      "sha256": "609741bddc62b6e307740dee8bf5ac6bc86f167df9b322b377313421d042b7d4",
+      "bytes": 2464875
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/world/inputs/ballista_tower.png",
+      "sha256": "5c4562ba169b7d89d1880a3a6d2dfc94ae4752381e7f410cab63b437af89cbf2",
+      "bytes": 1994549
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-structures-2026-11-25/renders/fence-oblique-r2.png",
+      "sha256": "5cc7bb7ddf05ca053828b2c9202992a5fc4b104ca39f433454d56251d7e9641c",
+      "bytes": 1777860
+    }
+  ],
+  "all_mandatory_visual_checks_passed": true,
+  "mandatory_defects_remaining": [],
+  "native_mesh_rig_animation_runtime_approval": false,
+  "pending_separate_evidence": [
+    "GitHub additive archive and exact complete-content readback",
+    "Other missing-world/cast family coverage; this review approves only its exact PNG"
+  ],
+  "review_id": "defense-platform-details-r1-independent-world",
+  "reviewed_image": {
+    "source_path": "/workspace/scratch/9c51da47f878/generated_images/exec-bf3a5d0b-8f26-4238-84fe-8a0e894f145d.png",
+    "local_render_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/defense-platform-details-r1.png",
+    "source_sha256": "e2006aadd885dcdaf5737f295abf52e933619453facc5a0011b52ca85ec6bf1c",
+    "source_bytes": 2063785,
+    "source_dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "requirements_at_generation": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-input-snapshots/requirements--5f796ad94e89062c2d88e80a64516e73c144704bb6f56020cd9f444e1790f381.json",
+    "sha256": "5f796ad94e89062c2d88e80a64516e73c144704bb6f56020cd9f444e1790f381",
+    "bytes": 11299
+  },
+  "current_requirements_at_review": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/requirements.json",
+    "sha256": "5f796ad94e89062c2d88e80a64516e73c144704bb6f56020cd9f444e1790f381",
+    "bytes": 11299
+  },
+  "invocation": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/invocations/defense-platform-details-r1.json",
+    "sha256": "4dfe2f3380d2e75c1b157eb852789ac80b531c07087ef4aaa65d0151391327d8",
+    "bytes": 5418
+  },
+  "prompt": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-exact-invoked-prompts/defense-platform-details-r1.txt",
+    "sha256": "ec3690bd14e8c6e2c66eaa47d216fcf71d11082da58f90bc8f4914012ed99d6c",
+    "bytes": 2234
+  },
+  "score": 9.8,
+  "actual_native_crops_inspected": [
+    "world-defense-platform-details-r1-empty-socket-deck.png",
+    "world-defense-platform-details-r1-fitted-platform.png",
+    "world-defense-platform-details-r1-supply-crate-access.png",
+    "world-defense-platform-details-r1-repair-tools-and-grain.png"
+  ],
+  "crop_provenance": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-defense-platform-details-r1-crop-provenance.json",
+    "sha256": "f3fb6499a08332da303d15766564e174084c55a90f02f701df43ca1d1a519108",
+    "bytes": 2165
+  },
+  "areas": [
+    {
+      "id": "same_platform_across_sheets",
+      "score": 9.8,
+      "status": "PASS",
+      "finding": "Allfourdetailpanels retain the repairedturnaround shortopenframe, palesquarestoneplinth, timberdeck/bluefascia, centralcollar and fixed prop sides. Deckgrain orientation is coherent with the established worldspace boards."
+    },
+    {
+      "id": "empty_mount_detail",
+      "score": 9.9,
+      "status": "PASS",
+      "finding": "Round dark socket opening and thick blue squarecollar with bronze fasteners are clearly visible; supporting wooddeck is continuous, mountcontact is legible."
+    },
+    {
+      "id": "installed_static_use",
+      "score": 9.8,
+      "status": "PASS",
+      "finding": "Approvedballista aesthetic seats firmly into the same socket above a complete platform. Limb/string/singlebolt silhouette is coherent and stationary; no firing/realmechanicalclaim is made."
+    },
+    {
+      "id": "rear_supply_access",
+      "score": 9.8,
+      "status": "PASS",
+      "finding": "Supplycrate remains on rearface, lidopen with attached hinge and two sealed bluepackages. No frontstep/orangefronttab has been incorrectly moved to this rearview; clear approach is shown."
+    },
+    {
+      "id": "right_repair_access",
+      "score": 9.8,
+      "status": "PASS",
+      "finding": "Orange toolbox opens on the RIGHTface, hingedlid clears the nearbyframe, mallet/wrench sit inside and metalhandle remains attached above. Frontstep atleft anchorsorientation."
+    },
+    {
+      "id": "layout_materials",
+      "score": 9.9,
+      "status": "PASS",
+      "finding": "Fourlabels accuratelyidentify states, studio layout is clean, allneeded formsarevisible. Fullplatformonly inusepanels; intentionallycroppedtightmount/repairviews are appropriate detailcoverage."
+    }
+  ],
+  "cross_sheet_binding": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/defense-platform-turnaround-r2.png",
+    "sha256": "f8570231d40fcea9d6628b23838b71880de6d8226d6856eff33167c7504941d0",
+    "bytes": 1894922
+  }
+}

@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "review_id": "atlas-raider-sniper-pose-r3-independent",
+  "reviewer": "/root/missing_cast_critic",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-27T07:09:44.326372+00:00",
+  "status": "PASS \u2014 STATIC BODY REFERENCE ONLY",
+  "scope": "STATIC BODY REFERENCE ONLY",
+  "score_method": "Minimum mandatory visual-area score, not an average; every mandatory static visual check must pass strictly above 9.0.",
+  "reviewed_image": {
+    "native_returned_locator": "/workspace/scratch/9c51da47f878/generated_images/exec-8cfa739f-8d53-4632-ad2d-fa2a3258d23c.png",
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-raider-sniper-pose-r3.png",
+    "bytes": 1825636,
+    "sha256": "ac5e6cca9d9e47ce4c5e5b0c15466654d1444373581bb09e7ae62df54acad154",
+    "git_blob_sha": "1ce4c9c57397df7860522cc14ed7775c59d4edc4",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "actual_format": "PNG"
+  },
+  "requirements_at_generation": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/requirements.json",
+    "bytes": 157378,
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+    "git_blob_sha": "35cdd6921cdc9b88e6e890f538ecdc907d607a43"
+  },
+  "requirements_snapshot": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-input-snapshots/requirements--a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374.json",
+    "bytes": 157378,
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374"
+  },
+  "invocation": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/invocations/atlas-raider-sniper-pose-r3.json",
+    "bytes": 4596,
+    "sha256": "d3291e0c8eac8645911b5bb0a38c8bf04799be9358ef0cf45c773dcc96b8f17b"
+  },
+  "exact_actual_prompt": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-exact-invoked-prompts/atlas-raider-sniper-pose-r3.txt",
+    "bytes": 1269,
+    "sha256": "7b9892e4337bff039beec3ba20d6071a9df5c7e8700e8b9ab0c0c46fab41467c"
+  },
+  "source_images_inspected": [
+    {
+      "order": 1,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-raider-sniper-pose-r1.png",
+      "bytes": 1810524,
+      "sha256": "c919c89e7c07d042ddd564d6ca6a5ca33fc680a533870eae35d9d4b92923a5aa",
+      "git_blob_sha": "c8197c18beba6119467b1c7f43b2392dc3723c93",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "actual_format": "PNG"
+    },
+    {
+      "order": 2,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/sniper-source-shoulder-fittings.png",
+      "bytes": 12114,
+      "sha256": "fb5ec9b480afbd78ab9e4b9f57bc47b8afe40bc155f90619c9acfa7c8dc771d0",
+      "git_blob_sha": "688d546683186067958c6ad15476fe829a9ff836",
+      "dimensions": [
+        92,
+        66
+      ],
+      "actual_format": "PNG"
+    }
+  ],
+  "actual_full_native_png_inspected": true,
+  "crop_provenance": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/atlas-raider-sniper-pose-r3-crop-provenance.json",
+    "bytes": 4329,
+    "sha256": "26c868e8e1c89540706ff7747b3f850df2ac4b02005113db33a50aa8195e2433"
+  },
+  "actual_native_crops_inspected": [
+    "front-viewer-left-hand",
+    "front-viewer-right-hand",
+    "rear-viewer-left-hand",
+    "rear-viewer-right-hand",
+    "left-profile-hand",
+    "right-profile-hand",
+    "front-worn-fittings",
+    "rear-worn-fittings-and-attachments",
+    "left-worn-fittings-and-attachments",
+    "right-worn-fittings-and-attachments"
+  ],
+  "native_mesh_rig_animation_runtime_approval": false,
+  "pending_separate_evidence": [
+    "Matching Sniper hands/gear sheet must bind this exact r3 body, preserve slim stitched glove backs and source-visible external gear shapes. Native equip/use behavior is separate.",
+    "Full GitHub byte/blob readback and independent archive gate"
+  ],
+  "preservation": "All previous source identities, original accepted images, rejected iterations and exact prompts remain preserved.",
+  "retests_review": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/critic-atlas-raider-sniper-pose-r1.json",
+    "bytes": 8358,
+    "sha256": "4b2c3d339d0033da61436ffdd7eef2f0a4b7588c9bad940537be9779ffa79f27"
+  },
+  "areas": [
+    {
+      "id": "source_head_outfit_and_proportions",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Dark beard, rounded steel cap, dark head/neck wrap, brown armored coat, crossing belts, bracers and boots preserve the accepted Atlas Sniper body identity."
+    },
+    {
+      "id": "source_visible_worn_fitting_silhouettes",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Both source-visible shoulder fittings are restored: open elongated oval head above anatomical right shoulder (front viewer-left), smaller dark shaft with gray capped end above anatomical left shoulder (front viewer-right). The single ball-topped substitute is removed.",
+      "evidence": [
+        "front-worn-fittings",
+        "sniper-source-shoulder-fittings.png"
+      ]
+    },
+    {
+      "id": "four_cardinal_views_and_framing",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "All four complete cardinal views remain distinct and uncropped, with comparable proportions and preserved neutral pose."
+    },
+    {
+      "id": "five_digit_anatomy",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "All four front/rear native hand crops retain four separated fingers and one opposed thumb, with no merged or extra digits."
+    },
+    {
+      "id": "front_palm_rear_dorsal",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Front gloves show palm/thumb-root padding; rear gloves show slim longitudinal dorsal/finger stitches. No rear palm duplication appears."
+    },
+    {
+      "id": "neutral_profile_wrists",
+      "score": 9.6,
+      "status": "PASS",
+      "finding": "Both side views retain end-on spread hands with thumb above, wrists aligned to horizontal arms, and no stop-gesture wrist bend."
+    },
+    {
+      "id": "worn_fitting_sides_and_attachments",
+      "score": 9.5,
+      "status": "PASS",
+      "finding": "Rear screen positions correctly reverse: loop head at viewer-right, gray cap at viewer-left. Both profiles preserve the two distinct upper silhouettes behind the shoulders. The diagonal gray-ended holder and the partly occluded second fitting are consistently worn behind the body; their concealed reverse attachments remain authored interpretation.",
+      "evidence": [
+        "rear-worn-fittings-and-attachments",
+        "left-worn-fittings-and-attachments",
+        "right-worn-fittings-and-attachments"
+      ]
+    },
+    {
+      "id": "static_lower_limbs_and_materials",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Two trouser legs and grounded brown boots remain coherent. Warm leather, ochre sleeves and dark weathered steel preserve the source-guided Havenline material style."
+    }
+  ],
+  "mandatory_defects_remaining": [],
+  "resolved_defects": [
+    {
+      "id": "SN-D01",
+      "previous_image_sha256": "c919c89e7c07d042ddd564d6ca6a5ca33fc680a533870eae35d9d4b92923a5aa",
+      "resolution": "Restored both distinct source-visible shoulder silhouettes and their fixed anatomical sides in all four views; removed the single round ball-topped substitute."
+    }
+  ],
+  "additional_source_images_inspected": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-raider-sniper.png",
+      "bytes": 22100,
+      "sha256": "9be2a2056458683b8782a8b63f60bc1f2abba06159798158a77635bd3816d62b"
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png",
+      "bytes": 213976,
+      "sha256": "b342480ec487df11c9519bd756069deb56fa14ea7b5525cec2a12df66fdc16fa"
+    }
+  ],
+  "source_interpretation_limit": "The source establishes external shoulder silhouettes, not their function. This review assigns no speculative mechanism or tool identity; unseen rear attachment surfaces remain authored interpretation. No native rig, mesh or animation is approved.",
+  "minor_polish_limit": "Fine rust marks and stitched line endpoints vary slightly at native illustrated scale. Both shoulder fittings are coherent, but hidden attachment topology is not established by a static concept sheet.",
+  "score": 9.5,
+  "all_mandatory_visual_checks_passed": true
+}

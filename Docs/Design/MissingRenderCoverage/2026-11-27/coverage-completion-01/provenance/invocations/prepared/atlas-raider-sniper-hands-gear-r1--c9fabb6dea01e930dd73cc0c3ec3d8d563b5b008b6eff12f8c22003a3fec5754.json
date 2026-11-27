@@ -1,0 +1,42 @@
+{
+  "id": "atlas-raider-sniper-hands-gear-r1",
+  "deliverable_id": "atlas-raider-sniper-hands-gear",
+  "family_id": "atlas-raider-sniper",
+  "tool": "image_gen__imagegen",
+  "arguments": {
+    "prompt": "Create the HANDS AND GEAR reference for the SAME HAVENLINE ATLAS RAIDER SNIPER shown in image1 (approved neutral body sheet) and image2 (original source raider crop). Preserve the exact glove, bracer, armor material and source-specific equipment identity. Brown/gray helmeted bearded ranged bandit with distinct long precision-weapon silhouette. Bearded adult male with rounded steel cap over dark head/neck wrap, warm brown armored coat, broad dark belts, padded bracers and brown boots. Equipment: source-specific long precision ranged prop with wood/metal silhouette and small external sight, opaque decorative game asset, no inner firing details.\n\nSix large well-separated panels in a3-column by2-row landscape sheet, pale warm gray, premium sculpted Havenline finish. LEFT two columns are four large hand/wrist closeups with fingers pointing UP: top-left LEFT PALM (thumb on VIEWER LEFT), top-middle RIGHT PALM (thumb on VIEWER RIGHT), bottom-left LEFT BACK (thumb on VIEWER RIGHT), bottom-middle RIGHT BACK (thumb on VIEWER LEFT). Exactly FOUR fingers PLUS ONE short opposed thumb, FIVE total each. All20digits readable, natural finger-length hierarchy, clean gaps, distinct palm padding versus dorsal finger seams, matching armor/winter cuff from the approved body, no civilian cream cuff unless actually in this character. Same hand design and correct chirality, no palm texture on dorsal views.\n\nRIGHT column shows the detached source-visible equipment set from two opposite three-quarter sides, upper label GEAR FRONT, lower GEAR REAR. Complete uncropped props, consistent shape/materials and believable grasp surfaces. Any worn quiver/backpack can be included with the held prop when it belongs to the source role. These are exterior aesthetic fantasy game props at rest: opaque closed surfaces, no cutaway, no ammunition internals, dimensions, recipes, diagrams, assembly steps, firing or flames. Do not invent a second weapon if the source only shows one. Keep weapon silhouette exact to this role and sufficiently large to model from.\n\nHeader HAVENLINE | ATLAS RAIDER SNIPER | HANDS + GEAR. Clean legible panel labels, generous margins, no stats or lore. Hidden backs of equipment are restrained authored interpretation.",
+    "referenced_image_paths": [
+      "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-raider-sniper-pose-r3.png",
+      "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png"
+    ],
+    "transparent_background": false
+  },
+  "status": "PREPARED",
+  "reason": "Root-authorized dependent hand/gear preparation using the latest independently passed exact pose PNG; no generation invoked by this helper.",
+  "prepared_from_catalog": {
+    "path": "atlas-raider-render-catalog.json",
+    "sha256": "bda9464321592a61d2b2245a7d7287d037b1d1a760c268b14ac79a387d2638f8",
+    "entry_id": "atlas-raider-sniper-hands-gear"
+  },
+  "dependency_reference_template": [
+    "APPROVED_RENDER:atlas-raider-sniper-pose",
+    "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png"
+  ],
+  "resolved_approved_dependencies": [
+    {
+      "revision": 3,
+      "deliverable_id": "atlas-raider-sniper-pose",
+      "render_id": "atlas-raider-sniper-pose-r3",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-raider-sniper-pose-r3.png",
+      "bytes": 1825636,
+      "sha256": "ac5e6cca9d9e47ce4c5e5b0c15466654d1444373581bb09e7ae62df54acad154",
+      "git_blob_sha": "1ce4c9c57397df7860522cc14ed7775c59d4edc4",
+      "review_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/critic-atlas-raider-sniper-pose-r3.json",
+      "review_sha256": "c5c162d2b8ee5f93964f20681013a1b0b78bcdfd5fdb48d7e6a60f21bce30c71",
+      "review_status": "PASS — STATIC BODY REFERENCE ONLY",
+      "review_score": 9.5,
+      "reviewer": "/root/missing_cast_critic",
+      "all_mandatory_checks_passed": true
+    }
+  ]
+}

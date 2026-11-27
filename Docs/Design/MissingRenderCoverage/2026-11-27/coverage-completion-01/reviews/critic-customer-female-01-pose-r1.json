@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "review_id": "customer-female-01-pose-r1-independent",
+  "reviewer": "/root/missing_cast_critic",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-27T05:49:12.288868+00:00",
+  "status": "PASS \u2014 STATIC BODY REFERENCE ONLY",
+  "scope": "STATIC BODY REFERENCE ONLY",
+  "score_method": "Minimum mandatory visual-area score, not an average; every mandatory static visual check must pass strictly above 9.0.",
+  "reviewed_image": {
+    "native_returned_locator": "/workspace/scratch/9c51da47f878/generated_images/exec-6971894b-8752-4f48-ab18-bc98531e16c4.png",
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/customer-female-01-pose-r1.png",
+    "bytes": 1683730,
+    "sha256": "6ba418aa3f1799c9e49ba29c039f8a873b50ab6b2f538c9877769ee7c00dd398",
+    "git_blob_sha": "ecd87890c24a24765e768c3f6c2a50d8b20a321d",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "actual_format": "PNG"
+  },
+  "requirements_at_generation": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/requirements.json",
+    "bytes": 76934,
+    "sha256": "de5310df59126c273c7de33e4f971611faebb1accd04d3c4d9695f41870bbb66",
+    "git_blob_sha": "82ab3e83e8601419f92a02d2a7a1bc9af0fc7168"
+  },
+  "requirements_snapshot": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-input-snapshots/requirements--de5310df59126c273c7de33e4f971611faebb1accd04d3c4d9695f41870bbb66.json",
+    "bytes": 76934,
+    "sha256": "de5310df59126c273c7de33e4f971611faebb1accd04d3c4d9695f41870bbb66"
+  },
+  "invocation": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/invocations/customer-female-01-pose-r1.json",
+    "bytes": 5840,
+    "sha256": "51a91312e1a8572b0bdced33cf9750f795592a80060ce8121dbf54e1cacac57b"
+  },
+  "exact_actual_prompt": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-exact-invoked-prompts/customer-female-01-pose-r1.txt",
+    "bytes": 2625,
+    "sha256": "1e1a1a1bd26d89db3c5248fcfcadedbe6d2d32931984e34a9aea83dfd62454b8"
+  },
+  "source_images_inspected": [
+    {
+      "order": 1,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/prior-selected/customer_female_01.png",
+      "bytes": 1901295,
+      "sha256": "63154c84b09ccea0864b1d56a5f0a1f8f43c7ca907afba07cc0e8300298ffe8d",
+      "git_blob_sha": "be09b741f5851db36d6276434794a920646bd3aa",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "actual_format": "PNG"
+    },
+    {
+      "order": 2,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/customer-male-01-hands-r1.png",
+      "bytes": 1904537,
+      "sha256": "c7bfcfdfdd2c56b3a0fe6cdd36b154c2abd34815f33b902b1b3aac101fc30a13",
+      "git_blob_sha": "af70a15c611231530567e827b05d16343a151254",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "actual_format": "PNG"
+    }
+  ],
+  "actual_full_native_png_inspected": true,
+  "crop_provenance": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/customer-female-01-pose-r1-crop-provenance.json",
+    "bytes": 2667,
+    "sha256": "126ae2ff1c413f6d715b3b46b7746a07f0dfd161320067c2de7a828eb2f1454e"
+  },
+  "actual_native_crops_inspected": [
+    "front-viewer-left-hand",
+    "front-viewer-right-hand",
+    "rear-viewer-left-hand",
+    "rear-viewer-right-hand",
+    "left-profile-hand",
+    "right-profile-hand"
+  ],
+  "native_mesh_rig_animation_runtime_approval": false,
+  "pending_separate_evidence": [
+    "Dedicated customer female01 hand sheet and final cross-sheet review.",
+    "Full GitHub byte/blob readback and independent archive gate"
+  ],
+  "preservation": "All previous source identities, original accepted images, rejected iterations and exact prompts remain preserved.",
+  "areas": [
+    {
+      "id": "source_identity",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Approved warm-tan customer with large brown eyes, chestnut side-parted bob and friendly compact face retained; hair part and sweep remain consistent through views."
+    },
+    {
+      "id": "costume_and_materials",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Orange diamond-quilted jacket, navy shoulder yoke/zipper/pocket edging, cream shearling, navy trousers and tan boots preserved."
+    },
+    {
+      "id": "four_cardinal_views_and_framing",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Complete FRONT, LEFT, REAR and RIGHT bodies at consistent scale with opposite profile directions and no cropped limbs or digits."
+    },
+    {
+      "id": "five_digits_and_surface_separation",
+      "score": 9.6,
+      "status": "PASS",
+      "finding": "All four front/rear gloves contain four fingers plus an opposed thumb, separated by clean silhouette gaps. Front palms are distinct from the stitched dorsal backs."
+    },
+    {
+      "id": "neutral_wrists_and_profile_continuity",
+      "score": 9.6,
+      "status": "PASS",
+      "finding": "Front/rear fingers fan laterally from the forearm with thumb above; both profiles show end-on foreshortening of that same outstretched pose. No broad palm/downturned wrist change."
+    },
+    {
+      "id": "static_lower_body",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Neutral legs and complete grounded boots remain visible throughout the four views."
+    },
+    {
+      "id": "overall_style",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Rounded sculpted face, clothing quilting and fleece follow the approved Havenline reference rather than changing character identity."
+    }
+  ],
+  "mandatory_defects_remaining": [],
+  "reference_limitation": "Shared glove input male01-hands-r1 is used for glove construction only; that input failed for label chirality, which is not transferred to the body sheet.",
+  "minor_polish_limit": "The small full-body gloves are stylized and less anatomically explicit than the forthcoming large hand details; all body-sheet mandatory anatomy and pose checks pass.",
+  "score": 9.6,
+  "all_mandatory_visual_checks_passed": true
+}

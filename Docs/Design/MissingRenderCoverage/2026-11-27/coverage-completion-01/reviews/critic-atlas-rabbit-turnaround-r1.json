@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "review_id": "atlas-rabbit-turnaround-r1-independent",
+  "reviewer": "/root/missing_cast_critic",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-27T06:13:18.167054+00:00",
+  "status": "PASS \u2014 STATIC ANIMAL REFERENCE ONLY",
+  "scope": "STATIC ANIMAL REFERENCE ONLY",
+  "score_method": "Minimum mandatory visual-area score, not an average; every mandatory static visual check must pass strictly above 9.0.",
+  "reviewed_image": {
+    "native_returned_locator": "/workspace/scratch/9c51da47f878/generated_images/exec-473f842c-6547-4f6b-839a-ff669ce68d00.png",
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-rabbit-turnaround-r1.png",
+    "bytes": 1827042,
+    "sha256": "fe892010b10cec172a4d20bd93c4c5e96500bb85adbb58381185455c0acc7409",
+    "git_blob_sha": "c6ec5ad0de507fcf364c2bb50b6fd91af50eb0bc",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "actual_format": "PNG"
+  },
+  "requirements_at_generation": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/requirements.json",
+    "bytes": 157378,
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+    "git_blob_sha": "35cdd6921cdc9b88e6e890f538ecdc907d607a43"
+  },
+  "requirements_snapshot": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-input-snapshots/requirements--a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374.json",
+    "bytes": 157378,
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374"
+  },
+  "invocation": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/invocations/atlas-rabbit-turnaround-r1.json",
+    "bytes": 4669,
+    "sha256": "d03488bb9775353109f7d993a292ee6923638fbdce71c14b09e57d1e70a90672"
+  },
+  "exact_actual_prompt": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-exact-invoked-prompts/atlas-rabbit-turnaround-r1.txt",
+    "bytes": 1920,
+    "sha256": "d415b9b535d3c627ba0401e6a5ec7ee2d06dc4b22061f11525dd70934179c967"
+  },
+  "source_images_inspected": [
+    {
+      "order": 1,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/wildlife-labels.png",
+      "bytes": 143270,
+      "sha256": "ac0f57b6c2ef2c787936ca3b5e61865712bf90129c868d5f8129e9dcb074985f",
+      "git_blob_sha": "10bab2985a39d5d464a8b7456f8abc17469b50d4",
+      "dimensions": [
+        353,
+        280
+      ],
+      "actual_format": "PNG"
+    }
+  ],
+  "actual_full_native_png_inspected": true,
+  "crop_provenance": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/atlas-rabbit-turnaround-r1-crop-provenance.json",
+    "bytes": 2529,
+    "sha256": "f382f978c75f47280121e918fdc0a0ee5fedff1a90680a7975c4b9de3987257e"
+  },
+  "actual_native_crops_inspected": [
+    "front",
+    "left",
+    "rear",
+    "right",
+    "front-three-quarter",
+    "rear-three-quarter"
+  ],
+  "native_mesh_rig_animation_runtime_approval": false,
+  "pending_separate_evidence": [
+    "Full GitHub byte/blob readback and independent archive gate"
+  ],
+  "preservation": "All previous source identities, original accepted images, rejected iterations and exact prompts remain preserved.",
+  "areas": [
+    {
+      "id": "exact_atlas_identity",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Small seated brown-gray rabbit, pale muzzle/chest/belly, compact haunches, long upright ears and short light tail match the named source appearance; no armor or companion gear."
+    },
+    {
+      "id": "six_distinct_complete_views",
+      "score": 9.8,
+      "status": "PASS",
+      "finding": "Front, left, rear, right and two different obliques are correctly labeled, opposing profiles are distinct and all extremities remain inside frame."
+    },
+    {
+      "id": "ears_face_and_markings",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Two long ears retain coherent shape, fur backing and pale inner surfaces. Muzzle, facial blaze, eye color and pale chest are consistent through visible views."
+    },
+    {
+      "id": "limbs_haunches_and_grounding",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Two small forepaws and two folded hind limbs are established by front and oblique views, with sensible cardinal self-occlusion. Compact seated mass and all visible supporting paws meet the ground."
+    },
+    {
+      "id": "single_tail_and_attachment",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "One short pale tail attaches centrally at the rump; the rear view and both obliques resolve it without duplication or detached appendages."
+    },
+    {
+      "id": "cross_view_body_volume",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Compact chest, rounded haunches, neck/head size and fur color stay consistent throughout the rotations."
+    },
+    {
+      "id": "havenline_style_and_clarity",
+      "score": 9.8,
+      "status": "PASS",
+      "finding": "Rounded expressive sculpted form, grouped fur and clean studio lighting provide readable anatomy without snow, props or technical clutter."
+    }
+  ],
+  "mandatory_defects_remaining": [],
+  "additional_source_images_inspected": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-wildlife-rabbit.png",
+      "bytes": 10689,
+      "sha256": "399f0d47ba257adc1f76953687f1dad65dbb577ae03d3704f6a6ef7a69691b35"
+    }
+  ],
+  "source_interpretation_limit": "The small Atlas pose defines the visible animal identity. Reverse fur, exact paw subdivisions and hidden construction are authored interpretation; no native rig, animation or biological model certification is implied.",
+  "minor_polish_limit": "Small fur tufts and tail-tip fluff vary slightly across illustrated rotations; silhouette, attachment and anatomy remain consistent.",
+  "score": 9.7,
+  "all_mandatory_visual_checks_passed": true
+}

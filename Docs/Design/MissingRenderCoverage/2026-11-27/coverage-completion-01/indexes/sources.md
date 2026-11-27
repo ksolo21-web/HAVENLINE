@@ -1,0 +1,157 @@
+# Havenline · Source and input access
+
+[Selected galleries](../README.md) · [Actual invocations](invocations.md)
+
+Original user boards, individually scoped reference crops, and exact prior-art bindings support this package. Full third-party videos, web pages, audio, and broad downloaded frame collections are not republished.
+
+## Recovered original boards
+
+| Original source name | Exact archived bytes | Format note |
+| --- | --- | --- |
+| 18600.png | [Open original](../generation-inputs/original-boards/board-18600.jpg) | Historical .png name contains original JPEG bytes; archived .jpg alias preserves the exact bytes |
+| 18607.png | [Open original](../generation-inputs/original-boards/board-18607.jpg) | Historical .png name contains original JPEG bytes; archived .jpg alias preserves the exact bytes |
+| 18609.png | [Open original](../generation-inputs/original-boards/board-18609.jpg) | Historical .png name contains original JPEG bytes; archived .jpg alias preserves the exact bytes |
+| Havenline: Frostbound World Atlas.png | [Open original](../generation-inputs/original-boards/world-atlas.png) | Original PNG bytes |
+
+## Author-created geometry guides
+
+These are explicit authored aids, not recovered reference evidence. The double-gate guide uses exact half-arch equations and rigid 90° rotations toward y<0. Its colors, bar counts, and frame details are diagram conventions. Root and independent inspection are recorded separately from the code’s mathematical checks.
+
+| Authored revision | Diagram | Authoring provenance | Geometry checks |
+| --- | --- | --- | --- |
+| `fortress-double-gate-r1` | [PNG](../author-guides/fortress-double-gate-r1/fortress-double-gate-r1.png) | [Exact code/parameter bindings](../author-guides/fortress-double-gate-r1/provenance.json) | [Builder checks](../author-guides/fortress-double-gate-r1/geometry-checks.json) |
+| `fortress-double-gate-r2` | [PNG](../author-guides/fortress-double-gate-r2/fortress-double-gate-r2.png) | [Exact code/parameter bindings](../author-guides/fortress-double-gate-r2/provenance.json) | [Builder checks](../author-guides/fortress-double-gate-r2/geometry-checks.json) |
+| `six-post-bridge-r1` | [PNG](../author-guides/six-post-bridge-r1/six-post-bridge-r1.png) | [Exact code/parameter bindings](../author-guides/six-post-bridge-r1/provenance.json) | [Builder checks](../author-guides/six-post-bridge-r1/geometry-checks.json) |
+| `fortress-half-leaf-elevation-r1` | [PNG](../author-guides/fortress-half-leaf-elevation-r1/fortress-half-leaf-elevation-r1.png) | [Exact code/parameter bindings](../author-guides/fortress-half-leaf-elevation-r1/provenance.json) | [Builder checks](../author-guides/fortress-half-leaf-elevation-r1/geometry-checks.json) |
+
+## Exact inputs actually supplied
+
+Repeated uses are grouped by SHA256. The per-call manifest preserves the original order and the source’s role. Source-hidden faces and details remain authored interpretations.
+
+| Reference | Binding | SHA256 prefix |
+| --- | --- | --- |
+| [B-048-gameplay.png](../generation-inputs/primary-b-048-gameplay-crop.png) | explicit limited generation input | `609741bddc62b6e3` |
+| [raider-labels.png](../generation-inputs/atlas-crops/raider-labels.png) | explicit internal derived input | `b342480ec487df11` |
+| [strong-hostile-labels.png](../generation-inputs/atlas-crops/strong-hostile-labels.png) | explicit internal derived input | `3adcb46eb654a797` |
+| [wildlife-labels.png](../generation-inputs/atlas-crops/wildlife-labels.png) | explicit internal derived input | `ac0f57b6c2ef2c78` |
+| [customer_female_01.png](https://github.com/ksolo21-web/HAVENLINE/blob/d70fbfac21a852f99cc46b06b1944faf11ec7901/Docs/Design/RenderArchive/2026-11-23/selected/characters-survivors-npcs/customer_female_01.png) | immutable baseline image | `63154c84b09ccea0` |
+| [customer_female_02.png](https://github.com/ksolo21-web/HAVENLINE/blob/d70fbfac21a852f99cc46b06b1944faf11ec7901/Docs/Design/RenderArchive/2026-11-23/selected/characters-survivors-npcs/customer_female_02.png) | immutable baseline image | `cc4a6a4339c39a9f` |
+| [customer_male_01.png](https://github.com/ksolo21-web/HAVENLINE/blob/d70fbfac21a852f99cc46b06b1944faf11ec7901/Docs/Design/RenderArchive/2026-11-23/selected/characters-survivors-npcs/customer_male_01.png) | immutable baseline image | `1fcd7e8ed5f38f3d` |
+| [customer_male_02.png](https://github.com/ksolo21-web/HAVENLINE/blob/d70fbfac21a852f99cc46b06b1944faf11ec7901/Docs/Design/RenderArchive/2026-11-23/selected/characters-survivors-npcs/customer_male_02.png) | immutable baseline image | `194d548f6ad631d0` |
+| [survivor_female_01.png](https://github.com/ksolo21-web/HAVENLINE/blob/d70fbfac21a852f99cc46b06b1944faf11ec7901/Docs/Design/RenderArchive/2026-11-23/selected/characters-survivors-npcs/survivor_female_01.png) | immutable baseline image | `2c372b4de97428bc` |
+| [survivor_male_01.png](https://github.com/ksolo21-web/HAVENLINE/blob/d70fbfac21a852f99cc46b06b1944faf11ec7901/Docs/Design/RenderArchive/2026-11-23/selected/characters-survivors-npcs/survivor_male_01.png) | immutable baseline image | `03a84c4c781047b6` |
+| [A-wheat-sequence.png](https://github.com/ksolo21-web/HAVENLINE/blob/d70fbfac21a852f99cc46b06b1944faf11ec7901/Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/A-wheat-sequence.png) | immutable baseline image | `018715e320c7d40f` |
+| [ballista_tower.png](https://github.com/ksolo21-web/HAVENLINE/blob/d70fbfac21a852f99cc46b06b1944faf11ec7901/Docs/Design/RenderArchive/2026-11-23/selected/equipment/ballista_tower.png) | immutable baseline image | `5c4562ba169b7d89` |
+| [fortress-double-gate-r2.png](../author-guides/fortress-double-gate-r2/fortress-double-gate-r2.png) | explicit author created geometry guide | `fc335211cddd619a` |
+| [fortress-half-leaf-elevation-r1.png](../author-guides/fortress-half-leaf-elevation-r1/fortress-half-leaf-elevation-r1.png) | explicit author created geometry guide | `d851061e1e421020` |
+| [six-post-bridge-r1.png](../author-guides/six-post-bridge-r1/six-post-bridge-r1.png) | explicit author created geometry guide | `04b899469f7475f2` |
+| [atlas-axe-raider-hands-gear-r1.png](../attempts/atlas-axe-raider-hands-gear-r1.png) | this task generated original | `8534334fdf6bcfb4` |
+| [atlas-axe-raider-pose-r1.png](../attempts/atlas-axe-raider-pose-r1.png) | this task generated original | `8868064dbc424cc1` |
+| [atlas-bandit-archer-pose-r1.png](../attempts/atlas-bandit-archer-pose-r1.png) | this task generated original | `d18c696d876e9871` |
+| [atlas-bombardier-hands-gear-r1.png](../attempts/atlas-bombardier-hands-gear-r1.png) | this task generated original | `07c48f1249a6ea33` |
+| [atlas-bombardier-pose-r1.png](../attempts/atlas-bombardier-pose-r1.png) | this task generated original | `9492c4a9391d93b8` |
+| [atlas-bombardier-pose-r2.png](../attempts/atlas-bombardier-pose-r2.png) | this task generated original | `d061fa5c36469192` |
+| [atlas-flamethrower-hands-gear-r1.png](../attempts/atlas-flamethrower-hands-gear-r1.png) | this task generated original | `4d4f441038a74b2f` |
+| [atlas-flamethrower-pose-r1.png](../attempts/atlas-flamethrower-pose-r1.png) | this task generated original | `5da09dd6c85f9e27` |
+| [atlas-raider-boss-hands-gear-r1.png](../attempts/atlas-raider-boss-hands-gear-r1.png) | this task generated original | `44957945abec9f92` |
+| [atlas-raider-boss-pose-r1.png](../attempts/atlas-raider-boss-pose-r1.png) | this task generated original | `311ddc01ef621128` |
+| [atlas-raider-brute-pose-r1.png](../attempts/atlas-raider-brute-pose-r1.png) | this task generated original | `3b1d2fa5380303a0` |
+| [atlas-raider-brute-pose-r2.png](../attempts/atlas-raider-brute-pose-r2.png) | this task generated original | `3e8ef9d0cd9b091e` |
+| [atlas-raider-hands-gear-r1.png](../attempts/atlas-raider-hands-gear-r1.png) | this task generated original | `70e633530f13776b` |
+| [atlas-raider-pose-r1.png](../attempts/atlas-raider-pose-r1.png) | this task generated original | `fd8a8ba48ce28fb1` |
+| [atlas-raider-pose-r2.png](../attempts/atlas-raider-pose-r2.png) | this task generated original | `5b5b788cd683b9f4` |
+| [atlas-raider-sniper-hands-gear-r1.png](../attempts/atlas-raider-sniper-hands-gear-r1.png) | this task generated original | `0de19b87a3b6b81a` |
+| [atlas-raider-sniper-pose-r1.png](../attempts/atlas-raider-sniper-pose-r1.png) | this task generated original | `c919c89e7c07d042` |
+| [atlas-raider-sniper-pose-r3.png](../attempts/atlas-raider-sniper-pose-r3.png) | this task generated original | `ac5e6cca9d9e47ce` |
+| [atlas-shield-raider-hands-gear-r1.png](../attempts/atlas-shield-raider-hands-gear-r1.png) | this task generated original | `77f3cd342d121b3a` |
+| [atlas-shield-raider-pose-r1.png](../attempts/atlas-shield-raider-pose-r1.png) | this task generated original | `f50fb5c58eb54d2d` |
+| [atlas-spear-raider-hands-gear-r1.png](../attempts/atlas-spear-raider-hands-gear-r1.png) | this task generated original | `45e0c56b2a8448c1` |
+| [atlas-spear-raider-pose-r1.png](../attempts/atlas-spear-raider-pose-r1.png) | this task generated original | `bb182f2fd56587c3` |
+| [customer-female-02-pose-r1.png](../attempts/customer-female-02-pose-r1.png) | this task generated original | `541108b37acc5385` |
+| [customer-male-01-hands-r1.png](../attempts/customer-male-01-hands-r1.png) | this task generated original | `c7bfcfdfdd2c56b3` |
+| [customer-male-01-hands-r2.png](../attempts/customer-male-01-hands-r2.png) | this task generated original | `ff561117252acb40` |
+| [customer-male-01-pose-r1.png](../attempts/customer-male-01-pose-r1.png) | this task generated original | `92d6ea1e9170fb1e` |
+| [customer-male-01-pose-r2.png](../attempts/customer-male-01-pose-r2.png) | this task generated original | `1528d9d54fc8d3e8` |
+| [customer-male-02-hands-r1.png](../attempts/customer-male-02-hands-r1.png) | this task generated original | `c5e671707065f481` |
+| [defense-platform-turnaround-r1.png](../attempts/defense-platform-turnaround-r1.png) | this task generated original | `49881e593fb4c053` |
+| [defense-platform-turnaround-r2.png](../attempts/defense-platform-turnaround-r2.png) | this task generated original | `f8570231d40fcea9` |
+| [world-atlas-storage-r1.png](../attempts/world-atlas-storage-r1.png) | this task generated original | `f336533c50dc95af` |
+| [world-biomes-canyon-cliffs-r1.png](../attempts/world-biomes-canyon-cliffs-r1.png) | this task generated original | `5683aaf71843ccd2` |
+| [world-biomes-canyon-cliffs-r2.png](../attempts/world-biomes-canyon-cliffs-r2.png) | this task generated original | `e944973de9a61219` |
+| [world-bridges-r1.png](../attempts/world-bridges-r1.png) | this task generated original | `f8a257479f6a3385` |
+| [world-bridges-r2.png](../attempts/world-bridges-r2.png) | this task generated original | `48c9d4dad44774b2` |
+| [world-bridges-r3.png](../attempts/world-bridges-r3.png) | this task generated original | `7bc093328c6fe27d` |
+| [world-bridges-r4.png](../attempts/world-bridges-r4.png) | this task generated original | `94601eac2a8463aa` |
+| [world-bridges-r5.png](../attempts/world-bridges-r5.png) | this task generated original | `afdc2ac18b6cc50c` |
+| [world-bridges-r6.png](../attempts/world-bridges-r6.png) | this task generated original | `08bfe712364458fa` |
+| [world-bridges-rear-study-r1.png](../attempts/world-bridges-rear-study-r1.png) | this task generated original | `9a3a92a62def09ca` |
+| [world-bunkhouse-r1.png](../attempts/world-bunkhouse-r1.png) | this task generated original | `f4b8c2aa10016557` |
+| [world-cabins-r1.png](../attempts/world-cabins-r1.png) | this task generated original | `fb24e44d6a0634b8` |
+| [world-cabins-r2.png](../attempts/world-cabins-r2.png) | this task generated original | `43cfa470d01b82bd` |
+| [world-cannon-towers-r1.png](../attempts/world-cannon-towers-r1.png) | this task generated original | `297bcaec39ea9b58` |
+| [world-dog-kennels-r1.png](../attempts/world-dog-kennels-r1.png) | this task generated original | `bd42281cd535aa8c` |
+| [world-dog-kennels-r2.png](../attempts/world-dog-kennels-r2.png) | this task generated original | `776e5df04a3d4ae3` |
+| [world-fish-hut-r1.png](../attempts/world-fish-hut-r1.png) | this task generated original | `0de41ef9612f721e` |
+| [world-fortress-gates-closed-r1.png](../attempts/world-fortress-gates-closed-r1.png) | this task generated original | `9e2e3d7ad4a9c743` |
+| [world-fortress-gates-closed-r2.png](../attempts/world-fortress-gates-closed-r2.png) | this task generated original | `0a9130835ab8119b` |
+| [world-fortress-gates-open-r1.png](../attempts/world-fortress-gates-open-r1.png) | this task generated original | `234c3279f4cde254` |
+| [world-fortress-gates-open-r4.png](../attempts/world-fortress-gates-open-r4.png) | this task generated original | `d04bc419d9115720` |
+| [world-fortress-gates-open-r5.png](../attempts/world-fortress-gates-open-r5.png) | this task generated original | `70753a9c6a66c799` |
+| [world-fortress-walls-r1.png](../attempts/world-fortress-walls-r1.png) | this task generated original | `bfdb7c6d9ef57fba` |
+| [world-fortress-watchtowers-r1.png](../attempts/world-fortress-watchtowers-r1.png) | this task generated original | `52fa9097cd0e8bd8` |
+| [world-medical-early-r1.png](../attempts/world-medical-early-r1.png) | this task generated original | `b076dbfb933f401c` |
+| [world-medical-early-r2.png](../attempts/world-medical-early-r2.png) | this task generated original | `2cd0c01ab3c13932` |
+| [world-reinforced-palisades-r1.png](../attempts/world-reinforced-palisades-r1.png) | this task generated original | `8dad354002401581` |
+| [world-spike-barricade-r1.png](../attempts/world-spike-barricade-r1.png) | this task generated original | `9c82ae93c990b0c5` |
+| [world-spike-barricade-r2.png](../attempts/world-spike-barricade-r2.png) | this task generated original | `e510e657888cdca5` |
+| [world-stockpile-shelter-r1.png](../attempts/world-stockpile-shelter-r1.png) | this task generated original | `00099f76c3bc6fdc` |
+| [world-stockpile-shelter-r2.png](../attempts/world-stockpile-shelter-r2.png) | this task generated original | `428132f20a8a03eb` |
+| [world-stockpile-shelter-r3.png](../attempts/world-stockpile-shelter-r3.png) | this task generated original | `db3a8ae6851c0e69` |
+| [world-wheat-harvester-r1.png](../attempts/world-wheat-harvester-r1.png) | this task generated original | `ad5a8e459619f441` |
+| [world-wheat-harvester-r2.png](../attempts/world-wheat-harvester-r2.png) | this task generated original | `7d17f1186b9e6091` |
+| [world-worker-huts-r1.png](../attempts/world-worker-huts-r1.png) | this task generated original | `ea532ebc79cd48e8` |
+| [world-worker-huts-r2.png](../attempts/world-worker-huts-r2.png) | this task generated original | `dc9056ef105ef332` |
+| [world-worker-huts-r3.png](../attempts/world-worker-huts-r3.png) | this task generated original | `08e49b1d554a040c` |
+| [world-worker-huts-r4.png](../attempts/world-worker-huts-r4.png) | this task generated original | `b8283c2166f41061` |
+| [world-workshop-r1.png](../attempts/world-workshop-r1.png) | this task generated original | `cd1adf7d5287d74b` |
+| [atlas-axe-raider-pose-r1-rear-viewer-left-hand.png](../generation-inputs/generated-reference-crops/atlas-axe-raider-pose-r1-rear-viewer-left-hand.png) | explicit internal derived input | `eb130e92e80c7c5f` |
+| [atlas-bombardier-pose-r2-rear-viewer-left-hand.png](../generation-inputs/generated-reference-crops/atlas-bombardier-pose-r2-rear-viewer-left-hand.png) | explicit internal derived input | `abe7267c363f1497` |
+| [atlas-flamethrower-pose-r1-rear-pack-and-attachment.png](../generation-inputs/generated-reference-crops/atlas-flamethrower-pose-r1-rear-pack-and-attachment.png) | explicit internal derived input | `1f6d307db437fa18` |
+| [atlas-flamethrower-pose-r1-rear-viewer-left-hand.png](../generation-inputs/generated-reference-crops/atlas-flamethrower-pose-r1-rear-viewer-left-hand.png) | explicit internal derived input | `32f97d2e680fb605` |
+| [atlas-raider-boss-pose-r1-rear-viewer-left-hand.png](../generation-inputs/generated-reference-crops/atlas-raider-boss-pose-r1-rear-viewer-left-hand.png) | explicit internal derived input | `6c9a85f75d687e03` |
+| [atlas-raider-brute-pose-r2-rear-viewer-left-hand.png](../generation-inputs/generated-reference-crops/atlas-raider-brute-pose-r2-rear-viewer-left-hand.png) | explicit internal derived input | `fac398f295838007` |
+| [atlas-raider-pose-r2-rear-viewer-left-hand.png](../generation-inputs/generated-reference-crops/atlas-raider-pose-r2-rear-viewer-left-hand.png) | explicit internal derived input | `27920ade292cc656` |
+| [atlas-raider-sniper-pose-r3-rear-viewer-left-hand.png](../generation-inputs/generated-reference-crops/atlas-raider-sniper-pose-r3-rear-viewer-left-hand.png) | explicit internal derived input | `1caa4ce89e7fcfef` |
+| [atlas-raider-sniper-pose-r3-rear-worn-fittings-and-attachments.png](../generation-inputs/generated-reference-crops/atlas-raider-sniper-pose-r3-rear-worn-fittings-and-attachments.png) | explicit internal derived input | `fd305208de891727` |
+| [atlas-raider-source-lower-body.png](../generation-inputs/atlas-crops/atlas-raider-lower-body.png) | explicit internal derived input | `f8e5d51f9612be60` |
+| [atlas-shield-raider-pose-r1-rear-viewer-left-hand.png](../generation-inputs/generated-reference-crops/atlas-shield-raider-pose-r1-rear-viewer-left-hand.png) | explicit internal derived input | `ba3242d3a90f7ac0` |
+| [atlas-spear-raider-pose-r1-rear-viewer-left-hand.png](../generation-inputs/generated-reference-crops/atlas-spear-raider-pose-r1-rear-viewer-left-hand.png) | explicit internal derived input | `7ef2b67ce82bf66c` |
+| [bridge-r3-correct-far-midpost-keep-native.png](../generation-inputs/generated-reference-crops/bridge-r3-correct-far-midpost-keep-native.png) | explicit internal derived input | `d0b4729daeeabea7` |
+| [sniper-source-shoulder-fittings.png](../generation-inputs/atlas-crops/sniper-source-shoulder-fittings.png) | explicit internal derived input | `fb5ec9b480afbd78` |
+| [world-fortress-gates-closed-r2-a-grille-native.png](../generation-inputs/generated-reference-crops/world-fortress-gates-closed-r2-a-grille-native.png) | explicit internal derived input | `cea4ad826a3b39cb` |
+| [world-source-atlas-storage-native.png](../generation-inputs/board-crops/world-source-atlas-storage-native.png) | explicit internal derived input | `775bb178821ca474` |
+| [world-source-bunkhouse-native.png](../generation-inputs/board-crops/world-source-bunkhouse-native.png) | explicit internal derived input | `a53fc4086bbe2a66` |
+| [world-source-cannon-towers-native.png](../generation-inputs/board-crops/world-source-cannon-towers-native.png) | explicit internal derived input | `767e23eba05d3138` |
+| [world-source-fortress-gates-native.png](../generation-inputs/board-crops/world-source-fortress-gates-native.png) | explicit internal derived input | `f610c247bbac0aba` |
+| [world-source-fortress-wall-b-native.png](../generation-inputs/board-crops/world-source-fortress-wall-b-native.png) | explicit internal derived input | `6fe816c1455b1fe8` |
+| [world-source-fortress-watchtowers-native.png](../generation-inputs/board-crops/world-source-fortress-watchtowers-native.png) | explicit internal derived input | `fb02e3d18f2c075e` |
+| [world-source-kennel-improved-native.png](../generation-inputs/board-crops/world-source-kennel-improved-native.png) | explicit internal derived input | `7ed18649af3a140f` |
+| [world-source-medical-basic-native.png](../generation-inputs/board-crops/world-source-medical-basic-native.png) | explicit internal derived input | `ebb2604a82713e8e` |
+| [world-source-upgraded-cabin-native.png](../generation-inputs/board-crops/world-source-upgraded-cabin-native.png) | explicit internal derived input | `bc2006a8784f90e6` |
+| [world-source-worker-huts-native.png](../generation-inputs/board-crops/world-source-worker-huts-native.png) | explicit internal derived input | `47efee46e116e03d` |
+| [world-source-workshop-improved-exact.png](../generation-inputs/board-crops/workshop-improved-exact.png) | explicit internal derived input | `a8b810602470988c` |
+| [18600.png](../generation-inputs/original-boards/board-18600.jpg) | explicit limited generation input | `e372bf74be027cb6` |
+| [18607.png](../generation-inputs/original-boards/board-18607.jpg) | explicit limited generation input | `d71d77c6e200b7ef` |
+| [18609.png](../generation-inputs/original-boards/board-18609.jpg) | explicit limited generation input | `68d2fb572cc5370a` |
+| [Havenline: Frostbound World Atlas.png](../generation-inputs/original-boards/world-atlas.png) | explicit limited generation input | `5a9f9592d2e8a32b` |
+| [fence-oblique-r2.png](https://github.com/ksolo21-web/HAVENLINE/blob/d70fbfac21a852f99cc46b06b1944faf11ec7901/Docs/Design/StructureReferences/2026-11-25/selected/fence-oblique.png) | immutable baseline image | `5cc7bb7ddf05ca05` |
+
+## Full provenance
+
+- [Original-source allowlist](../generation-inputs/PUBLIC-INPUT-ALLOWLIST.json)
+- [Exact derived-source and native-detail provenance](../generation-inputs/INTERNAL-DERIVED-INPUTS.json)
+- [Full source/artifact mapping](../provenance/source-and-artifact-bindings.json)
+- [Complete generation manifest](../generation-manifest.json)
+- [Exact hash resolver](../provenance/hash-resolver.json)
+
+Prior artwork is linked to immutable baseline commit/blob identities when the exact bytes already exist. New images and source crops retain their original encoding. Enlarged inspection views, if present in review evidence, are separately documented and do not replace native source pixels.

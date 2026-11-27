@@ -1,0 +1,99 @@
+{
+  "id": "atlas-spear-raider-hands-gear-r1",
+  "deliverable_id": "atlas-spear-raider-hands-gear",
+  "family_id": "atlas-spear-raider",
+  "tool": "image_gen__imagegen",
+  "arguments": {
+    "prompt": "Create the HANDS AND GEAR reference for the SAME HAVENLINE ATLAS SPEAR RAIDER shown in image1 (approved neutral body sheet) and image2 (original source raider crop). Preserve the exact glove, bracer, armor material and source-specific equipment identity. Brown armored bearded bandit with dark helmet and long upright spear. Bearded adult male, dark pointed steel cap, warm brown layered leather chest armor with round central metal medallion, brown belts, bracers, knee guards and boots. Equipment: tall wooden spear with a single leaf-shaped bronze/iron tip. No harpoon hook or firearm.\n\nSix large well-separated panels in a3-column by2-row landscape sheet, pale warm gray, premium sculpted Havenline finish. LEFT two columns are four large hand/wrist closeups with fingers pointing UP: top-left LEFT PALM (thumb on VIEWER LEFT), top-middle RIGHT PALM (thumb on VIEWER RIGHT), bottom-left LEFT BACK (thumb on VIEWER RIGHT), bottom-middle RIGHT BACK (thumb on VIEWER LEFT). Exactly FOUR fingers PLUS ONE short opposed thumb, FIVE total each. All20digits readable, natural finger-length hierarchy, clean gaps, distinct palm padding versus dorsal finger seams, matching armor/winter cuff from the approved body, no civilian cream cuff unless actually in this character. Same hand design and correct chirality, no palm texture on dorsal views.\n\nRIGHT column shows the detached source-visible equipment set from two opposite three-quarter sides, upper label GEAR FRONT, lower GEAR REAR. Complete uncropped props, consistent shape/materials and believable grasp surfaces. Any worn quiver/backpack can be included with the held prop when it belongs to the source role. These are exterior aesthetic fantasy game props at rest: opaque closed surfaces, no cutaway, no ammunition internals, dimensions, recipes, diagrams, assembly steps, firing or flames. Do not invent a second weapon if the source only shows one. Keep weapon silhouette exact to this role and sufficiently large to model from.\n\nHeader HAVENLINE | ATLAS SPEAR RAIDER | HANDS + GEAR. Clean legible panel labels, generous margins, no stats or lore. Hidden backs of equipment are restrained authored interpretation.",
+    "referenced_image_paths": [
+      "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-spear-raider-pose-r1.png",
+      "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png"
+    ],
+    "transparent_background": false
+  },
+  "status": "GENERATED_AWAITING_REVIEW",
+  "reason": "Root-authorized dependent hand/gear preparation using the latest independently passed exact pose PNG; no generation invoked by this helper.",
+  "prepared_from_catalog": {
+    "path": "atlas-raider-render-catalog.json",
+    "sha256": "bda9464321592a61d2b2245a7d7287d037b1d1a760c268b14ac79a387d2638f8",
+    "entry_id": "atlas-spear-raider-hands-gear"
+  },
+  "dependency_reference_template": [
+    "APPROVED_RENDER:atlas-spear-raider-pose",
+    "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png"
+  ],
+  "resolved_approved_dependencies": [
+    {
+      "revision": 1,
+      "deliverable_id": "atlas-spear-raider-pose",
+      "render_id": "atlas-spear-raider-pose-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-spear-raider-pose-r1.png",
+      "bytes": 1799780,
+      "sha256": "bb182f2fd56587c3384cdd33060145b8440b83cd391b30fa86ddf1b4435d00b8",
+      "git_blob_sha": "a868c33ca03e62fef7441ffa1f232a7a08d2c5b9",
+      "review_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/critic-atlas-spear-raider-pose-r1.json",
+      "review_sha256": "ec816ae4404899ae3ae19413c5b72a07d7468eff9a6d00d095829f232d4aee95",
+      "review_status": "PASS \u2014 STATIC BODY REFERENCE ONLY",
+      "review_score": 9.6,
+      "reviewer": "/root/missing_cast_critic",
+      "all_mandatory_checks_passed": true
+    }
+  ],
+  "prompt_file": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/prompts/atlas-spear-raider-hands-gear-r1.txt",
+    "bytes": 2172,
+    "sha256": "baf7d2a914117ede2194d2cdc07ac4dd78f967957a8febf9c02360b1b5c0f386",
+    "git_blob_sha": "431dda57ad10c5152285c8ada530b62bdad8ac20"
+  },
+  "exact_actual_prompt_file": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-exact-invoked-prompts/atlas-spear-raider-hands-gear-r1.txt",
+    "bytes": 2171,
+    "sha256": "e104e2eb4a8ada957b6c5f645cfa5e8c465e164f078c21e5ab6e01e17042d4f2",
+    "git_blob_sha": "7d701ff4a610ec3a98f3f9ac0a36ea0bb295746f"
+  },
+  "ordered_reference_inputs": [
+    {
+      "order": 1,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-spear-raider-pose-r1.png",
+      "bytes": 1799780,
+      "sha256": "bb182f2fd56587c3384cdd33060145b8440b83cd391b30fa86ddf1b4435d00b8",
+      "git_blob_sha": "a868c33ca03e62fef7441ffa1f232a7a08d2c5b9",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "actual_format": "PNG"
+    },
+    {
+      "order": 2,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png",
+      "bytes": 213976,
+      "sha256": "b342480ec487df11c9519bd756069deb56fa14ea7b5525cec2a12df66fdc16fa",
+      "git_blob_sha": "1af9b55e0fd3bc87617804d3d550490c8ebb39ee",
+      "dimensions": [
+        458,
+        280
+      ],
+      "actual_format": "PNG"
+    }
+  ],
+  "requirements_at_generation": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/requirements.json",
+    "bytes": 157378,
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+    "git_blob_sha": "35cdd6921cdc9b88e6e890f538ecdc907d607a43"
+  },
+  "requirements_snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-input-snapshots/requirements--a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374.json",
+  "output": {
+    "native_returned_locator": "/workspace/scratch/9c51da47f878/generated_images/exec-7eaf2ae5-d98a-42c6-a68d-a5be69fe8f7b.png",
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-spear-raider-hands-gear-r1.png",
+    "bytes": 1975485,
+    "sha256": "45e0c56b2a8448c17ea628cdab403a14a48535d2d50ea01ba00ac26c57f89e5f",
+    "git_blob_sha": "58d138d07fa24140f6c45a9143624020bd65d477",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "actual_format": "PNG"
+  }
+}

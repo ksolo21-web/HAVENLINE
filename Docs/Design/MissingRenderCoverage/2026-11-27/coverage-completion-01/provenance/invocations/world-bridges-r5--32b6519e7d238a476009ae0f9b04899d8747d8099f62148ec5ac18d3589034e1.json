@@ -1,0 +1,73 @@
+{
+  "id": "world-bridges-r5",
+  "deliverable_id": "world-bridges",
+  "family_id": "bridges",
+  "tool": "image_gen__imagegen",
+  "arguments": {
+    "prompt": "Edit ONLY the lower-middle REINFORCED BRIDGE / REAR-RIGHT panel of image1. It currently shows FIVE capped posts. Restore exactly ONE missing small FAR-RAIL MIDDLE POST using image2, the native crop of that specific original post. Put it back in its original full-sheet area x650..697, y688..743, with its blue snow-topped cap centered about (676,710), behind the nearer wooden rail and between the existing left and center foreground posts. Copy the small post's size, perspective, blue cap, snow and timber from image2. Keep ALL FIVE existing posts in image1 untouched. This yields exactly SIX, three on each railing. Do not add any post around x797,y687; that was an extra and correctly remains absent. Preserve the other five image panels and every other feature in this panel: camera, ropes, timber rail, deck, hardware, water, snow and banks. One small missing post restoration only, using the precise cropped object and location supplied.",
+    "referenced_image_paths": [
+      "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-bridges-r4.png",
+      "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/bridge-r3-correct-far-midpost-keep-native.png"
+    ],
+    "transparent_background": false
+  },
+  "status": "GENERATED_AWAITING_REVIEW",
+  "reason": "BR02 five-vs-six: restore only the correct far-mid post using its exact original native crop.",
+  "prompt_file": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/prompts/world-bridges-r5.txt",
+    "bytes": 945,
+    "sha256": "112486b899a986fd1da020a5bc844d7b6610afd3fc362e4fd25aa3afe33932b6",
+    "git_blob_sha": "7c0c9a93791bb54826ad17fdfd092618e88dd075"
+  },
+  "exact_actual_prompt_file": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-exact-invoked-prompts/world-bridges-r5.txt",
+    "bytes": 944,
+    "sha256": "314e10fdf364399226189dbbe62a7c10f2334829863d16865453dfcf9affcda0",
+    "git_blob_sha": "aacc4c9ca4e54cd4ecac5daea8781dab0586e940"
+  },
+  "ordered_reference_inputs": [
+    {
+      "order": 1,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-bridges-r4.png",
+      "bytes": 2164646,
+      "sha256": "94601eac2a8463aa2e645ac975bb2019338acaebf988a7919cf8c7d9d119f156",
+      "git_blob_sha": "2de2903e7525865c869ce9abc79f37f84850cc11",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "actual_format": "PNG"
+    },
+    {
+      "order": 2,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/bridge-r3-correct-far-midpost-keep-native.png",
+      "bytes": 5440,
+      "sha256": "d0b4729daeeabea74ad4e3136c0cde3dc6513a7e6fa80039639f74d385a60127",
+      "git_blob_sha": "eb9427031d33bd4f7857c3c1e209ce52db82e70c",
+      "dimensions": [
+        47,
+        55
+      ],
+      "actual_format": "PNG"
+    }
+  ],
+  "requirements_at_generation": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/requirements.json",
+    "bytes": 157378,
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+    "git_blob_sha": "35cdd6921cdc9b88e6e890f538ecdc907d607a43"
+  },
+  "requirements_snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-input-snapshots/requirements--a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374.json",
+  "output": {
+    "native_returned_locator": "/workspace/scratch/9c51da47f878/generated_images/exec-7aeb963a-7dbb-43ca-870e-b805c90e6e9b.png",
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-bridges-r5.png",
+    "bytes": 2170908,
+    "sha256": "afdc2ac18b6cc50cb1c4c3fec4ac207be9c1c617bf48e8ad6e4c800e8703c57c",
+    "git_blob_sha": "7126f85cfd3aa6b9436aa8ff0b2b80a57b74a85f",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "actual_format": "PNG"
+  }
+}

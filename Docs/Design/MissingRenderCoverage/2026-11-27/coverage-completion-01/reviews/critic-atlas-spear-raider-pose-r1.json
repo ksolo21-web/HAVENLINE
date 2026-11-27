@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "review_id": "atlas-spear-raider-pose-r1-independent",
+  "reviewer": "/root/missing_cast_critic",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-27T06:22:59.845759+00:00",
+  "status": "PASS \u2014 STATIC BODY REFERENCE ONLY",
+  "scope": "STATIC BODY REFERENCE ONLY",
+  "score_method": "Minimum mandatory visual-area score, not an average; every mandatory static visual check must pass strictly above 9.0.",
+  "reviewed_image": {
+    "native_returned_locator": "/workspace/scratch/9c51da47f878/generated_images/exec-1395d573-c978-4103-bb7b-4c2c5aadb4a2.png",
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-spear-raider-pose-r1.png",
+    "bytes": 1799780,
+    "sha256": "bb182f2fd56587c3384cdd33060145b8440b83cd391b30fa86ddf1b4435d00b8",
+    "git_blob_sha": "a868c33ca03e62fef7441ffa1f232a7a08d2c5b9",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "actual_format": "PNG"
+  },
+  "requirements_at_generation": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/requirements.json",
+    "bytes": 157378,
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+    "git_blob_sha": "35cdd6921cdc9b88e6e890f538ecdc907d607a43"
+  },
+  "requirements_snapshot": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-input-snapshots/requirements--a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374.json",
+    "bytes": 157378,
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374"
+  },
+  "invocation": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/invocations/atlas-spear-raider-pose-r1.json",
+    "bytes": 5970,
+    "sha256": "6dc804c337eb9d029a053e8d62563db10d3b0e71e41df6022ad682b523d3d283"
+  },
+  "exact_actual_prompt": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-exact-invoked-prompts/atlas-spear-raider-pose-r1.txt",
+    "bytes": 2487,
+    "sha256": "b3886c2fb6a1fadb76563c770bfe21b9eea3eb5dee9ea3da9586596c797771ac"
+  },
+  "source_images_inspected": [
+    {
+      "order": 1,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png",
+      "bytes": 213976,
+      "sha256": "b342480ec487df11c9519bd756069deb56fa14ea7b5525cec2a12df66fdc16fa",
+      "git_blob_sha": "1af9b55e0fd3bc87617804d3d550490c8ebb39ee",
+      "dimensions": [
+        458,
+        280
+      ],
+      "actual_format": "PNG"
+    },
+    {
+      "order": 2,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/customer-male-01-pose-r2.png",
+      "bytes": 1715021,
+      "sha256": "1528d9d54fc8d3e80fb0654a1f897e634a3a4f44e3c7ae50d9218e887d493d88",
+      "git_blob_sha": "62f10921b82c9cb5e5a3ccfc5945039b7eeb0098",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "actual_format": "PNG"
+    }
+  ],
+  "actual_full_native_png_inspected": true,
+  "crop_provenance": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/atlas-spear-raider-pose-r1-crop-provenance.json",
+    "bytes": 3435,
+    "sha256": "344690fe3085a05d26ebee93f2222b97e11e3335047d678a19ddd5f6717e4dc2"
+  },
+  "actual_native_crops_inspected": [
+    "front-viewer-left-hand",
+    "front-viewer-right-hand",
+    "rear-viewer-left-hand",
+    "rear-viewer-right-hand",
+    "left-profile-hand",
+    "right-profile-hand",
+    "front-armor-belts",
+    "rear-armor-belts"
+  ],
+  "native_mesh_rig_animation_runtime_approval": false,
+  "pending_separate_evidence": [
+    "Matching Spear Raider hands/gear sheet must use this exact passed body and show the source-like spear; family coverage remains pending that sheet and cross-sheet review.",
+    "Full GitHub byte/blob readback and independent archive gate"
+  ],
+  "preservation": "All previous source identities, original accepted images, rejected iterations and exact prompts remain preserved.",
+  "additional_source_images_inspected": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-spear-raider.png",
+      "bytes": 18147,
+      "sha256": "b9803dc7b04fd354bc53ee7a0d9eb6a80a4c9e633ae4a69cacbe3516cd2545de"
+    }
+  ],
+  "areas": [
+    {
+      "id": "source_identity",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "The source Spear Raider remains a bearded adult bandit with dark pointed steel cap, brown layered chest armor, central round medallion, brown bracers, knee guards and boots. Held spear is intentionally deferred to the companion equipment sheet for clear hand reference."
+    },
+    {
+      "id": "source_costume_and_style",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Warm brown leather, pale padded undersleeves, metal shoulder rivets and circular knee guards preserve the Atlas appearance in the approved compact stylized material language."
+    },
+    {
+      "id": "four_cardinal_views_and_framing",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Four distinct readable cardinal views are complete, with consistent body scale and no cropped limbs, helmet or soles."
+    },
+    {
+      "id": "five_digit_anatomy",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "The four broadside front/rear hands each have four clearly separated fingers plus one opposed thumb, confirmed in native crops."
+    },
+    {
+      "id": "front_palm_rear_dorsal",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "The front hands have padded palm surfaces; rear hands have dorsal finger stitching and rivet-ended seam details. No rear palm duplication."
+    },
+    {
+      "id": "neutral_wrists_and_profile_projection",
+      "score": 9.6,
+      "status": "PASS",
+      "finding": "Both narrow side-view gloves have foreshortened end-on fingers and elevated thumb, agreeing with the straight horizontal wrists of the frontal and rear T-poses."
+    },
+    {
+      "id": "armor_and_belt_attachment",
+      "score": 9.6,
+      "status": "PASS",
+      "finding": "Cross straps and central front medallion align with shoulder straps; the rear crossing straps, two hip pouches, belt and riveted skirt remain physically coherent. Native front/rear crops expose attachment paths."
+    },
+    {
+      "id": "static_lower_limbs_and_grounding",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Paired knee discs remain front-facing with visible fastening bands around the rear. Boots, lower legs and grounded soles are complete in both profiles and cardinal faces."
+    }
+  ],
+  "mandatory_defects_remaining": [],
+  "source_interpretation_limit": "The Atlas supplies one small front oblique appearance. Hidden reverse details are consistent authored interpretation; the body sheet does not establish native topology, rigging or animation.",
+  "minor_polish_limit": "Minor illustrated buckle, fur and stitch variation remains at concept-reference scale without a mandatory silhouette, identity, anatomy or attachment contradiction.",
+  "score": 9.6,
+  "all_mandatory_visual_checks_passed": true
+}

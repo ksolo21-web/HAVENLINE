@@ -1,0 +1,174 @@
+# Havenline · Atlas raiders
+
+[All categories](../README.md) · [Every native original](../indexes/originals.md)
+
+**Final static selection: 20/20 sheets approved.**
+
+Ten Atlas appearances each require a four-view neutral body sheet and a matching hands/gear sheet. The detailed gloves must agree with the accepted body. Detached gear is opaque fictional visual reference; the images establish no technical internals or functioning weapon mechanisms.
+
+| Required sheet | Current selected native revision | Score | Access |
+| --- | --- | ---: | --- |
+| Raider · Body views | `atlas-raider-pose-r2` | 9.6 | [PNG](../selected/atlas-raider-pose.png) · [review](../reviews/critic-atlas-raider-pose-r2.json) |
+| Raider · Hands and gear | `atlas-raider-hands-gear-r2` | 9.6 | [PNG](../selected/atlas-raider-hands-gear.png) · [review](../reviews/critic-atlas-raider-hands-gear-r2.json) |
+| Spear Raider · Body views | `atlas-spear-raider-pose-r1` | 9.6 | [PNG](../selected/atlas-spear-raider-pose.png) · [review](../reviews/critic-atlas-spear-raider-pose-r1.json) |
+| Spear Raider · Hands and gear | `atlas-spear-raider-hands-gear-r2` | 9.6 | [PNG](../selected/atlas-spear-raider-hands-gear.png) · [review](../reviews/critic-atlas-spear-raider-hands-gear-r2.json) |
+| Axe Raider · Body views | `atlas-axe-raider-pose-r1` | 9.5 | [PNG](../selected/atlas-axe-raider-pose.png) · [review](../reviews/critic-atlas-axe-raider-pose-r1.json) |
+| Axe Raider · Hands and gear | `atlas-axe-raider-hands-gear-r2` | 9.6 | [PNG](../selected/atlas-axe-raider-hands-gear.png) · [review](../reviews/critic-atlas-axe-raider-hands-gear-r2.json) |
+| Shield Raider · Body views | `atlas-shield-raider-pose-r1` | 9.6 | [PNG](../selected/atlas-shield-raider-pose.png) · [review](../reviews/critic-atlas-shield-raider-pose-r1.json) |
+| Shield Raider · Hands and gear | `atlas-shield-raider-hands-gear-r2` | 9.6 | [PNG](../selected/atlas-shield-raider-hands-gear.png) · [review](../reviews/critic-atlas-shield-raider-hands-gear-r2.json) |
+| Bandit Archer · Body views | `atlas-bandit-archer-pose-r1` | 9.6 | [PNG](../selected/atlas-bandit-archer-pose.png) · [review](../reviews/critic-atlas-bandit-archer-pose-r1.json) |
+| Bandit Archer · Hands and gear | `atlas-bandit-archer-hands-gear-r1` | 9.5 | [PNG](../selected/atlas-bandit-archer-hands-gear.png) · [review](../reviews/critic-atlas-bandit-archer-hands-gear-r1.json) |
+| Raider Brute · Body views | `atlas-raider-brute-pose-r2` | 9.6 | [PNG](../selected/atlas-raider-brute-pose.png) · [review](../reviews/critic-atlas-raider-brute-pose-r2.json) |
+| Raider Brute · Hands and gear | `atlas-raider-brute-hands-gear-r1` | 9.6 | [PNG](../selected/atlas-raider-brute-hands-gear.png) · [review](../reviews/critic-atlas-raider-brute-hands-gear-r1.json) |
+| Flamethrower · Body views | `atlas-flamethrower-pose-r1` | 9.6 | [PNG](../selected/atlas-flamethrower-pose.png) · [review](../reviews/critic-atlas-flamethrower-pose-r1.json) |
+| Flamethrower · Hands and gear | `atlas-flamethrower-hands-gear-r2` | 9.5 | [PNG](../selected/atlas-flamethrower-hands-gear.png) · [review](../reviews/critic-atlas-flamethrower-hands-gear-r2.json) |
+| Raider Sniper · Body views | `atlas-raider-sniper-pose-r3` | 9.5 | [PNG](../selected/atlas-raider-sniper-pose.png) · [review](../reviews/critic-atlas-raider-sniper-pose-r3.json) |
+| Raider Sniper · Hands and gear | `atlas-raider-sniper-hands-gear-r2` | 9.5 | [PNG](../selected/atlas-raider-sniper-hands-gear.png) · [review](../reviews/critic-atlas-raider-sniper-hands-gear-r2.json) |
+| Bombardier · Body views | `atlas-bombardier-pose-r2` | 9.6 | [PNG](../selected/atlas-bombardier-pose.png) · [review](../reviews/critic-atlas-bombardier-pose-r2.json) |
+| Bombardier · Hands and gear | `atlas-bombardier-hands-gear-r2` | 9.6 | [PNG](../selected/atlas-bombardier-hands-gear.png) · [review](../reviews/critic-atlas-bombardier-hands-gear-r2.json) |
+| Raider Boss · Body views | `atlas-raider-boss-pose-r1` | 9.5 | [PNG](../selected/atlas-raider-boss-pose.png) · [review](../reviews/critic-atlas-raider-boss-pose-r1.json) |
+| Raider Boss · Hands and gear | `atlas-raider-boss-hands-gear-r2` | 9.6 | [PNG](../selected/atlas-raider-boss-hands-gear.png) · [review](../reviews/critic-atlas-raider-boss-hands-gear-r2.json) |
+
+## Raider · Body views
+
+`atlas-raider-pose-r2` · independent static score **9.6/10** · [Exact review](../reviews/critic-atlas-raider-pose-r2.json) · [Retained original](../attempts/atlas-raider-pose-r2.png)
+
+![Raider · Body views](../selected/atlas-raider-pose.png)
+
+
+## Raider · Hands and gear
+
+`atlas-raider-hands-gear-r2` · independent static score **9.6/10** · [Exact review](../reviews/critic-atlas-raider-hands-gear-r2.json) · [Retained original](../attempts/atlas-raider-hands-gear-r2.png)
+
+![Raider · Hands and gear](../selected/atlas-raider-hands-gear.png)
+
+
+## Spear Raider · Body views
+
+`atlas-spear-raider-pose-r1` · independent static score **9.6/10** · [Exact review](../reviews/critic-atlas-spear-raider-pose-r1.json) · [Retained original](../attempts/atlas-spear-raider-pose-r1.png)
+
+![Spear Raider · Body views](../selected/atlas-spear-raider-pose.png)
+
+
+## Spear Raider · Hands and gear
+
+`atlas-spear-raider-hands-gear-r2` · independent static score **9.6/10** · [Exact review](../reviews/critic-atlas-spear-raider-hands-gear-r2.json) · [Retained original](../attempts/atlas-spear-raider-hands-gear-r2.png)
+
+![Spear Raider · Hands and gear](../selected/atlas-spear-raider-hands-gear.png)
+
+
+## Axe Raider · Body views
+
+`atlas-axe-raider-pose-r1` · independent static score **9.5/10** · [Exact review](../reviews/critic-atlas-axe-raider-pose-r1.json) · [Retained original](../attempts/atlas-axe-raider-pose-r1.png)
+
+![Axe Raider · Body views](../selected/atlas-axe-raider-pose.png)
+
+
+## Axe Raider · Hands and gear
+
+`atlas-axe-raider-hands-gear-r2` · independent static score **9.6/10** · [Exact review](../reviews/critic-atlas-axe-raider-hands-gear-r2.json) · [Retained original](../attempts/atlas-axe-raider-hands-gear-r2.png)
+
+![Axe Raider · Hands and gear](../selected/atlas-axe-raider-hands-gear.png)
+
+
+## Shield Raider · Body views
+
+`atlas-shield-raider-pose-r1` · independent static score **9.6/10** · [Exact review](../reviews/critic-atlas-shield-raider-pose-r1.json) · [Retained original](../attempts/atlas-shield-raider-pose-r1.png)
+
+![Shield Raider · Body views](../selected/atlas-shield-raider-pose.png)
+
+
+## Shield Raider · Hands and gear
+
+`atlas-shield-raider-hands-gear-r2` · independent static score **9.6/10** · [Exact review](../reviews/critic-atlas-shield-raider-hands-gear-r2.json) · [Retained original](../attempts/atlas-shield-raider-hands-gear-r2.png)
+
+![Shield Raider · Hands and gear](../selected/atlas-shield-raider-hands-gear.png)
+
+
+## Bandit Archer · Body views
+
+`atlas-bandit-archer-pose-r1` · independent static score **9.6/10** · [Exact review](../reviews/critic-atlas-bandit-archer-pose-r1.json) · [Retained original](../attempts/atlas-bandit-archer-pose-r1.png)
+
+![Bandit Archer · Body views](../selected/atlas-bandit-archer-pose.png)
+
+
+## Bandit Archer · Hands and gear
+
+`atlas-bandit-archer-hands-gear-r1` · independent static score **9.5/10** · [Exact review](../reviews/critic-atlas-bandit-archer-hands-gear-r1.json) · [Retained original](../attempts/atlas-bandit-archer-hands-gear-r1.png)
+
+![Bandit Archer · Hands and gear](../selected/atlas-bandit-archer-hands-gear.png)
+
+
+## Raider Brute · Body views
+
+`atlas-raider-brute-pose-r2` · independent static score **9.6/10** · [Exact review](../reviews/critic-atlas-raider-brute-pose-r2.json) · [Retained original](../attempts/atlas-raider-brute-pose-r2.png)
+
+![Raider Brute · Body views](../selected/atlas-raider-brute-pose.png)
+
+
+## Raider Brute · Hands and gear
+
+`atlas-raider-brute-hands-gear-r1` · independent static score **9.6/10** · [Exact review](../reviews/critic-atlas-raider-brute-hands-gear-r1.json) · [Retained original](../attempts/atlas-raider-brute-hands-gear-r1.png)
+
+![Raider Brute · Hands and gear](../selected/atlas-raider-brute-hands-gear.png)
+
+
+## Flamethrower · Body views
+
+`atlas-flamethrower-pose-r1` · independent static score **9.6/10** · [Exact review](../reviews/critic-atlas-flamethrower-pose-r1.json) · [Retained original](../attempts/atlas-flamethrower-pose-r1.png)
+
+![Flamethrower · Body views](../selected/atlas-flamethrower-pose.png)
+
+
+## Flamethrower · Hands and gear
+
+`atlas-flamethrower-hands-gear-r2` · independent static score **9.5/10** · [Exact review](../reviews/critic-atlas-flamethrower-hands-gear-r2.json) · [Retained original](../attempts/atlas-flamethrower-hands-gear-r2.png)
+
+![Flamethrower · Hands and gear](../selected/atlas-flamethrower-hands-gear.png)
+
+
+## Raider Sniper · Body views
+
+`atlas-raider-sniper-pose-r3` · independent static score **9.5/10** · [Exact review](../reviews/critic-atlas-raider-sniper-pose-r3.json) · [Retained original](../attempts/atlas-raider-sniper-pose-r3.png)
+
+![Raider Sniper · Body views](../selected/atlas-raider-sniper-pose.png)
+
+
+## Raider Sniper · Hands and gear
+
+`atlas-raider-sniper-hands-gear-r2` · independent static score **9.5/10** · [Exact review](../reviews/critic-atlas-raider-sniper-hands-gear-r2.json) · [Retained original](../attempts/atlas-raider-sniper-hands-gear-r2.png)
+
+![Raider Sniper · Hands and gear](../selected/atlas-raider-sniper-hands-gear.png)
+
+
+## Bombardier · Body views
+
+`atlas-bombardier-pose-r2` · independent static score **9.6/10** · [Exact review](../reviews/critic-atlas-bombardier-pose-r2.json) · [Retained original](../attempts/atlas-bombardier-pose-r2.png)
+
+![Bombardier · Body views](../selected/atlas-bombardier-pose.png)
+
+
+## Bombardier · Hands and gear
+
+`atlas-bombardier-hands-gear-r2` · independent static score **9.6/10** · [Exact review](../reviews/critic-atlas-bombardier-hands-gear-r2.json) · [Retained original](../attempts/atlas-bombardier-hands-gear-r2.png)
+
+![Bombardier · Hands and gear](../selected/atlas-bombardier-hands-gear.png)
+
+
+## Raider Boss · Body views
+
+`atlas-raider-boss-pose-r1` · independent static score **9.5/10** · [Exact review](../reviews/critic-atlas-raider-boss-pose-r1.json) · [Retained original](../attempts/atlas-raider-boss-pose-r1.png)
+
+![Raider Boss · Body views](../selected/atlas-raider-boss-pose.png)
+
+
+## Raider Boss · Hands and gear
+
+`atlas-raider-boss-hands-gear-r2` · independent static score **9.6/10** · [Exact review](../reviews/critic-atlas-raider-boss-hands-gear-r2.json) · [Retained original](../attempts/atlas-raider-boss-hands-gear-r2.png)
+
+![Raider Boss · Hands and gear](../selected/atlas-raider-boss-hands-gear.png)
+
+
+## Acceptance boundary
+
+Every displayed selection has an independent score strictly above 9.0, all mandatory visual checks passed, and an exact PNG hash binding. Approval covers the shown static image only. Source-hidden geometry and surfaces are interpretations; native model, rig, animation, gameplay, and device testing are outside this archive’s approval.

@@ -1,0 +1,159 @@
+# Havenline · Every native original
+
+[Selected galleries](../README.md) · [Actual calls and failed requests](invocations.md)
+
+**138 complete native PNGs captured.** Each original is retained without resizing, recompression, or painted edits. A selected alias has the same exact bytes. Rejected versions remain accessible.
+
+| Native original | Required sheet | Review / selection state | Review |
+| --- | --- | --- | --- |
+| [atlas-axe-raider-hands-gear-r1](../attempts/atlas-axe-raider-hands-gear-r1.png) | Axe Raider · Hands and gear | REPAIR REQUIRED — STATIC HANDS + GEAR REFERENCE ONLY (8.7/10) | [Exact report](../reviews/critic-atlas-axe-raider-hands-gear-r1.json) |
+| [atlas-axe-raider-hands-gear-r2](../attempts/atlas-axe-raider-hands-gear-r2.png) | Axe Raider · Hands and gear | Current selected static PASS | [Exact report](../reviews/critic-atlas-axe-raider-hands-gear-r2.json) |
+| [atlas-axe-raider-pose-r1](../attempts/atlas-axe-raider-pose-r1.png) | Axe Raider · Body views | Current selected static PASS | [Exact report](../reviews/critic-atlas-axe-raider-pose-r1.json) |
+| [atlas-bandit-archer-hands-gear-r1](../attempts/atlas-bandit-archer-hands-gear-r1.png) | Bandit Archer · Hands and gear | Current selected static PASS | [Exact report](../reviews/critic-atlas-bandit-archer-hands-gear-r1.json) |
+| [atlas-bandit-archer-pose-r1](../attempts/atlas-bandit-archer-pose-r1.png) | Bandit Archer · Body views | Current selected static PASS | [Exact report](../reviews/critic-atlas-bandit-archer-pose-r1.json) |
+| [atlas-bear-turnaround-r1](../attempts/atlas-bear-turnaround-r1.png) | Bear · Turnaround | Current selected static PASS | [Exact report](../reviews/critic-atlas-bear-turnaround-r1.json) |
+| [atlas-boar-turnaround-r1](../attempts/atlas-boar-turnaround-r1.png) | Boar · Turnaround | Current selected static PASS | [Exact report](../reviews/critic-atlas-boar-turnaround-r1.json) |
+| [atlas-bombardier-hands-gear-r1](../attempts/atlas-bombardier-hands-gear-r1.png) | Bombardier · Hands and gear | REPAIR REQUIRED — STATIC HANDS AND EQUIPMENT REFERENCE ONLY (8.8/10) | [Exact report](../reviews/critic-atlas-bombardier-hands-gear-r1.json) |
+| [atlas-bombardier-hands-gear-r2](../attempts/atlas-bombardier-hands-gear-r2.png) | Bombardier · Hands and gear | Current selected static PASS | [Exact report](../reviews/critic-atlas-bombardier-hands-gear-r2.json) |
+| [atlas-bombardier-pose-r1](../attempts/atlas-bombardier-pose-r1.png) | Bombardier · Body views | REPAIR REQUIRED — STATIC BODY REFERENCE ONLY (8.7/10) | [Exact report](../reviews/critic-atlas-bombardier-pose-r1.json) |
+| [atlas-bombardier-pose-r2](../attempts/atlas-bombardier-pose-r2.png) | Bombardier · Body views | Current selected static PASS | [Exact report](../reviews/critic-atlas-bombardier-pose-r2.json) |
+| [atlas-deer-turnaround-r1](../attempts/atlas-deer-turnaround-r1.png) | Deer · Turnaround | Current selected static PASS | [Exact report](../reviews/critic-atlas-deer-turnaround-r1.json) |
+| [atlas-dire-wolf-turnaround-r1](../attempts/atlas-dire-wolf-turnaround-r1.png) | Dire Wolf · Turnaround | Current selected static PASS | [Exact report](../reviews/critic-atlas-dire-wolf-turnaround-r1.json) |
+| [atlas-elite-moose-turnaround-r1](../attempts/atlas-elite-moose-turnaround-r1.png) | Elite Moose · Turnaround | Current selected static PASS | [Exact report](../reviews/critic-atlas-elite-moose-turnaround-r1.json) |
+| [atlas-flamethrower-hands-gear-r1](../attempts/atlas-flamethrower-hands-gear-r1.png) | Flamethrower · Hands and gear | REPAIR REQUIRED — STATIC HANDS AND EQUIPMENT REFERENCE ONLY (8.7/10) | [Exact report](../reviews/critic-atlas-flamethrower-hands-gear-r1.json) |
+| [atlas-flamethrower-hands-gear-r2](../attempts/atlas-flamethrower-hands-gear-r2.png) | Flamethrower · Hands and gear | Current selected static PASS | [Exact report](../reviews/critic-atlas-flamethrower-hands-gear-r2.json) |
+| [atlas-flamethrower-pose-r1](../attempts/atlas-flamethrower-pose-r1.png) | Flamethrower · Body views | Current selected static PASS | [Exact report](../reviews/critic-atlas-flamethrower-pose-r1.json) |
+| [atlas-fox-turnaround-r1](../attempts/atlas-fox-turnaround-r1.png) | Fox · Turnaround | Current selected static PASS | [Exact report](../reviews/critic-atlas-fox-turnaround-r1.json) |
+| [atlas-giant-boar-turnaround-r1](../attempts/atlas-giant-boar-turnaround-r1.png) | Giant Boar · Turnaround | Current selected static PASS | [Exact report](../reviews/critic-atlas-giant-boar-turnaround-r1.json) |
+| [atlas-ice-lynx-turnaround-r1](../attempts/atlas-ice-lynx-turnaround-r1.png) | Ice Lynx · Turnaround | Current selected static PASS | [Exact report](../reviews/critic-atlas-ice-lynx-turnaround-r1.json) |
+| [atlas-lynx-turnaround-r1](../attempts/atlas-lynx-turnaround-r1.png) | Lynx · Turnaround | Current selected static PASS | [Exact report](../reviews/critic-atlas-lynx-turnaround-r1.json) |
+| [atlas-moose-turnaround-r1](../attempts/atlas-moose-turnaround-r1.png) | Moose · Turnaround | Current selected static PASS | [Exact report](../reviews/critic-atlas-moose-turnaround-r1.json) |
+| [atlas-rabbit-turnaround-r1](../attempts/atlas-rabbit-turnaround-r1.png) | Rabbit · Turnaround | Current selected static PASS | [Exact report](../reviews/critic-atlas-rabbit-turnaround-r1.json) |
+| [atlas-raider-boss-hands-gear-r1](../attempts/atlas-raider-boss-hands-gear-r1.png) | Raider Boss · Hands and gear | REPAIR REQUIRED — STATIC HANDS AND EQUIPMENT REFERENCE ONLY (8.8/10) | [Exact report](../reviews/critic-atlas-raider-boss-hands-gear-r1.json) |
+| [atlas-raider-boss-hands-gear-r2](../attempts/atlas-raider-boss-hands-gear-r2.png) | Raider Boss · Hands and gear | Current selected static PASS | [Exact report](../reviews/critic-atlas-raider-boss-hands-gear-r2.json) |
+| [atlas-raider-boss-pose-r1](../attempts/atlas-raider-boss-pose-r1.png) | Raider Boss · Body views | Current selected static PASS | [Exact report](../reviews/critic-atlas-raider-boss-pose-r1.json) |
+| [atlas-raider-brute-hands-gear-r1](../attempts/atlas-raider-brute-hands-gear-r1.png) | Raider Brute · Hands and gear | Current selected static PASS | [Exact report](../reviews/critic-atlas-raider-brute-hands-gear-r1.json) |
+| [atlas-raider-brute-pose-r1](../attempts/atlas-raider-brute-pose-r1.png) | Raider Brute · Body views | REPAIR REQUIRED — STATIC BODY REFERENCE ONLY (8.6/10) | [Exact report](../reviews/critic-atlas-raider-brute-pose-r1.json) |
+| [atlas-raider-brute-pose-r2](../attempts/atlas-raider-brute-pose-r2.png) | Raider Brute · Body views | Current selected static PASS | [Exact report](../reviews/critic-atlas-raider-brute-pose-r2.json) |
+| [atlas-raider-hands-gear-r1](../attempts/atlas-raider-hands-gear-r1.png) | Raider · Hands and gear | REPAIR REQUIRED — STATIC HANDS + GEAR REFERENCE ONLY (8.7/10) | [Exact report](../reviews/critic-atlas-raider-hands-gear-r1.json) |
+| [atlas-raider-hands-gear-r2](../attempts/atlas-raider-hands-gear-r2.png) | Raider · Hands and gear | Current selected static PASS | [Exact report](../reviews/critic-atlas-raider-hands-gear-r2.json) |
+| [atlas-raider-pose-r1](../attempts/atlas-raider-pose-r1.png) | Raider · Body views | REPAIR REQUIRED — STATIC BODY REFERENCE ONLY (8.8/10) | [Exact report](../reviews/critic-atlas-raider-pose-r1.json) |
+| [atlas-raider-pose-r2](../attempts/atlas-raider-pose-r2.png) | Raider · Body views | Current selected static PASS | [Exact report](../reviews/critic-atlas-raider-pose-r2.json) |
+| [atlas-raider-sniper-hands-gear-r1](../attempts/atlas-raider-sniper-hands-gear-r1.png) | Raider Sniper · Hands and gear | REPAIR REQUIRED — STATIC HANDS AND EQUIPMENT REFERENCE ONLY (8.7/10) | [Exact report](../reviews/critic-atlas-raider-sniper-hands-gear-r1.json) |
+| [atlas-raider-sniper-hands-gear-r2](../attempts/atlas-raider-sniper-hands-gear-r2.png) | Raider Sniper · Hands and gear | Current selected static PASS | [Exact report](../reviews/critic-atlas-raider-sniper-hands-gear-r2.json) |
+| [atlas-raider-sniper-pose-r1](../attempts/atlas-raider-sniper-pose-r1.png) | Raider Sniper · Body views | REPAIR REQUIRED — STATIC BODY REFERENCE ONLY (8.7/10) | [Exact report](../reviews/critic-atlas-raider-sniper-pose-r1.json) |
+| [atlas-raider-sniper-pose-r3](../attempts/atlas-raider-sniper-pose-r3.png) | Raider Sniper · Body views | Current selected static PASS | [Exact report](../reviews/critic-atlas-raider-sniper-pose-r3.json) |
+| [atlas-saber-wolf-turnaround-r1](../attempts/atlas-saber-wolf-turnaround-r1.png) | Saber Wolf · Turnaround | Current selected static PASS | [Exact report](../reviews/critic-atlas-saber-wolf-turnaround-r1.json) |
+| [atlas-shield-raider-hands-gear-r1](../attempts/atlas-shield-raider-hands-gear-r1.png) | Shield Raider · Hands and gear | REPAIR REQUIRED — STATIC HANDS + GEAR REFERENCE ONLY (8.7/10) | [Exact report](../reviews/critic-atlas-shield-raider-hands-gear-r1.json) |
+| [atlas-shield-raider-hands-gear-r2](../attempts/atlas-shield-raider-hands-gear-r2.png) | Shield Raider · Hands and gear | Current selected static PASS | [Exact report](../reviews/critic-atlas-shield-raider-hands-gear-r2.json) |
+| [atlas-shield-raider-pose-r1](../attempts/atlas-shield-raider-pose-r1.png) | Shield Raider · Body views | Current selected static PASS | [Exact report](../reviews/critic-atlas-shield-raider-pose-r1.json) |
+| [atlas-spear-raider-hands-gear-r1](../attempts/atlas-spear-raider-hands-gear-r1.png) | Spear Raider · Hands and gear | REPAIR REQUIRED — STATIC HANDS + GEAR REFERENCE ONLY (8.7/10) | [Exact report](../reviews/critic-atlas-spear-raider-hands-gear-r1.json) |
+| [atlas-spear-raider-hands-gear-r2](../attempts/atlas-spear-raider-hands-gear-r2.png) | Spear Raider · Hands and gear | Current selected static PASS | [Exact report](../reviews/critic-atlas-spear-raider-hands-gear-r2.json) |
+| [atlas-spear-raider-pose-r1](../attempts/atlas-spear-raider-pose-r1.png) | Spear Raider · Body views | Current selected static PASS | [Exact report](../reviews/critic-atlas-spear-raider-pose-r1.json) |
+| [atlas-squirrel-turnaround-r1](../attempts/atlas-squirrel-turnaround-r1.png) | Squirrel · Turnaround | Current selected static PASS | [Exact report](../reviews/critic-atlas-squirrel-turnaround-r1.json) |
+| [atlas-wolverine-turnaround-r1](../attempts/atlas-wolverine-turnaround-r1.png) | Wolverine · Turnaround | Current selected static PASS | [Exact report](../reviews/critic-atlas-wolverine-turnaround-r1.json) |
+| [customer-female-01-hands-r1](../attempts/customer-female-01-hands-r1.png) | Customer Female 01 · Hand details | Current selected static PASS | [Exact report](../reviews/critic-customer-female-01-hands-r1.json) |
+| [customer-female-01-pose-r1](../attempts/customer-female-01-pose-r1.png) | Customer Female 01 · Body views | Current selected static PASS | [Exact report](../reviews/critic-customer-female-01-pose-r1.json) |
+| [customer-female-02-hands-r1](../attempts/customer-female-02-hands-r1.png) | Customer Female 02 · Hand details | Current selected static PASS | [Exact report](../reviews/critic-customer-female-02-hands-r1.json) |
+| [customer-female-02-pose-r1](../attempts/customer-female-02-pose-r1.png) | Customer Female 02 · Body views | REPAIR REQUIRED — STATIC BODY REFERENCE ONLY (8.7/10) | [Exact report](../reviews/critic-customer-female-02-pose-r1.json) |
+| [customer-female-02-pose-r2](../attempts/customer-female-02-pose-r2.png) | Customer Female 02 · Body views | Current selected static PASS | [Exact report](../reviews/critic-customer-female-02-pose-r2.json) |
+| [customer-male-01-hands-r1](../attempts/customer-male-01-hands-r1.png) | Customer Male 01 · Hand details | REPAIR REQUIRED — STATIC REFERENCE ONLY (8.8/10) | [Exact report](../reviews/critic-customer-male-01-hands-r1.json) |
+| [customer-male-01-hands-r2](../attempts/customer-male-01-hands-r2.png) | Customer Male 01 · Hand details | Current selected static PASS | [Exact report](../reviews/critic-customer-male-01-hands-r2.json) |
+| [customer-male-01-pose-r1](../attempts/customer-male-01-pose-r1.png) | Customer Male 01 · Body views | REPAIR REQUIRED — STATIC REFERENCE ONLY (8.5/10) | [Exact report](../reviews/critic-customer-male-01-pose-r1.json) |
+| [customer-male-01-pose-r2](../attempts/customer-male-01-pose-r2.png) | Customer Male 01 · Body views | Current selected static PASS | [Exact report](../reviews/critic-customer-male-01-pose-r2.json) |
+| [customer-male-02-hands-r1](../attempts/customer-male-02-hands-r1.png) | Customer Male 02 · Hand details | REPAIR REQUIRED — STATIC HAND REFERENCE ONLY (8.8/10) | [Exact report](../reviews/critic-customer-male-02-hands-r1.json) |
+| [customer-male-02-hands-r2](../attempts/customer-male-02-hands-r2.png) | Customer Male 02 · Hand details | Current selected static PASS | [Exact report](../reviews/critic-customer-male-02-hands-r2.json) |
+| [customer-male-02-pose-r1](../attempts/customer-male-02-pose-r1.png) | Customer Male 02 · Body views | Current selected static PASS | [Exact report](../reviews/critic-customer-male-02-pose-r1.json) |
+| [defense-platform-details-r1](../attempts/defense-platform-details-r1.png) | Defense Platform Details | Current selected static PASS | [Exact report](../reviews/critic-defense-platform-details-r1.json) |
+| [defense-platform-turnaround-r1](../attempts/defense-platform-turnaround-r1.png) | Defense Platform · Turnaround | REPAIR REQUIRED — STATIC TURNAROUND ONLY (8.8/10) | [Exact report](../reviews/critic-defense-platform-turnaround-r1.json) |
+| [defense-platform-turnaround-r2](../attempts/defense-platform-turnaround-r2.png) | Defense Platform · Turnaround | Current selected static PASS | [Exact report](../reviews/critic-defense-platform-turnaround-r2.json) |
+| [survivor-female-01-hands-r1](../attempts/survivor-female-01-hands-r1.png) | Survivor Female 01 · Hand details | Current selected static PASS | [Exact report](../reviews/critic-survivor-female-01-hands-r1.json) |
+| [survivor-female-01-pose-r1](../attempts/survivor-female-01-pose-r1.png) | Survivor Female 01 · Body views | Current selected static PASS | [Exact report](../reviews/critic-survivor-female-01-pose-r1.json) |
+| [survivor-male-01-hands-r1](../attempts/survivor-male-01-hands-r1.png) | Survivor Male 01 · Hand details | Current selected static PASS | [Exact report](../reviews/critic-survivor-male-01-hands-r1.json) |
+| [survivor-male-01-pose-r1](../attempts/survivor-male-01-pose-r1.png) | Survivor Male 01 · Body views | Current selected static PASS | [Exact report](../reviews/critic-survivor-male-01-pose-r1.json) |
+| [world-archer-towers-r1](../attempts/world-archer-towers-r1.png) | Archer Towers | Current selected static PASS | [Exact report](../reviews/critic-world-archer-towers-r1.json) |
+| [world-atlas-storage-r1](../attempts/world-atlas-storage-r1.png) | Storage | REPAIR REQUIRED — NOT APPROVED (8.6/10) | [Exact report](../reviews/critic-world-atlas-storage-r1.json) |
+| [world-atlas-storage-r2](../attempts/world-atlas-storage-r2.png) | Storage | Current selected static PASS | [Exact report](../reviews/critic-world-atlas-storage-r2.json) |
+| [world-biomes-canyon-cliffs-r1](../attempts/world-biomes-canyon-cliffs-r1.png) | Biomes Canyon Cliffs | REPAIR REQUIRED — NOT APPROVED (8.7/10) | [Exact report](../reviews/critic-world-biomes-canyon-cliffs-r1.json) |
+| [world-biomes-canyon-cliffs-r2](../attempts/world-biomes-canyon-cliffs-r2.png) | Biomes Canyon Cliffs | REPAIR REQUIRED — NOT APPROVED (8.8/10) | [Exact report](../reviews/critic-world-biomes-canyon-cliffs-r2.json) |
+| [world-biomes-canyon-cliffs-r3](../attempts/world-biomes-canyon-cliffs-r3.png) | Biomes Canyon Cliffs | Current selected static PASS | [Exact report](../reviews/critic-world-biomes-canyon-cliffs-r3.json) |
+| [world-biomes-forest-lake-r1](../attempts/world-biomes-forest-lake-r1.png) | Biomes Forest Lake | Current selected static PASS | [Exact report](../reviews/critic-world-biomes-forest-lake-r1.json) |
+| [world-biomes-mines-r1](../attempts/world-biomes-mines-r1.png) | Biomes Mines | Current selected static PASS | [Exact report](../reviews/critic-world-biomes-mines-r1.json) |
+| [world-bridges-r1](../attempts/world-bridges-r1.png) | Bridges | REPAIR REQUIRED — NOT APPROVED (8.7/10) | [Exact report](../reviews/critic-world-bridges-r1.json) |
+| [world-bridges-r2](../attempts/world-bridges-r2.png) | Bridges | REPAIR REQUIRED — NOT APPROVED (8.8/10) | [Exact report](../reviews/critic-world-bridges-r2.json) |
+| [world-bridges-r3](../attempts/world-bridges-r3.png) | Bridges | REPAIR REQUIRED — NOT APPROVED (8.8/10) | [Exact report](../reviews/critic-world-bridges-r3.json) |
+| [world-bridges-r4](../attempts/world-bridges-r4.png) | Bridges | REPAIR REQUIRED — NOT APPROVED (8.8/10) | [Exact report](../reviews/critic-world-bridges-r4.json) |
+| [world-bridges-r5](../attempts/world-bridges-r5.png) | Bridges | REPAIR REQUIRED — NOT APPROVED (8.8/10) | [Exact report](../reviews/critic-world-bridges-r5.json) |
+| [world-bridges-r6](../attempts/world-bridges-r6.png) | Bridges | REPAIR REQUIRED — NOT APPROVED (8.8/10) | [Exact report](../reviews/critic-world-bridges-r6.json) |
+| [world-bridges-r7](../attempts/world-bridges-r7.png) | Bridges | Current selected static PASS | [Exact report](../reviews/critic-world-bridges-r7.json) |
+| [world-bridges-rear-study-r1](../attempts/world-bridges-rear-study-r1.png) | Bridges | PASS — AUXILIARY REAR STUDY FOR INTEGRATION ONLY (9.6/10) | [Exact report](../reviews/critic-world-bridges-rear-study-r1.json) |
+| [world-bunkhouse-r1](../attempts/world-bunkhouse-r1.png) | Bunkhouse | REPAIR REQUIRED — NOT APPROVED (8.9/10) | [Exact report](../reviews/critic-world-bunkhouse-r1.json) |
+| [world-bunkhouse-r2](../attempts/world-bunkhouse-r2.png) | Bunkhouse | Current selected static PASS | [Exact report](../reviews/critic-world-bunkhouse-r2.json) |
+| [world-cabins-r1](../attempts/world-cabins-r1.png) | Cabins | REPAIR REQUIRED — NOT APPROVED (8.9/10) | [Exact report](../reviews/critic-world-cabins-r1.json) |
+| [world-cabins-r2](../attempts/world-cabins-r2.png) | Cabins | REPAIR REQUIRED — NOT APPROVED (8.8/10) | [Exact report](../reviews/critic-world-cabins-r2.json) |
+| [world-cabins-r3](../attempts/world-cabins-r3.png) | Cabins | Current selected static PASS | [Exact report](../reviews/critic-world-cabins-r3.json) |
+| [world-camp-tiles-r1](../attempts/world-camp-tiles-r1.png) | Camp Tiles | Current selected static PASS | [Exact report](../reviews/critic-world-camp-tiles-r1.json) |
+| [world-cannon-towers-r1](../attempts/world-cannon-towers-r1.png) | Cannon Towers | REPAIR REQUIRED — NOT APPROVED (8.5/10) | [Exact report](../reviews/critic-world-cannon-towers-r1.json) |
+| [world-cannon-towers-r2](../attempts/world-cannon-towers-r2.png) | Cannon Towers | Current selected static PASS | [Exact report](../reviews/critic-world-cannon-towers-r2.json) |
+| [world-cold-storage-shed-r1](../attempts/world-cold-storage-shed-r1.png) | Cold Storage Shed | Current selected static PASS | [Exact report](../reviews/critic-world-cold-storage-shed-r1.json) |
+| [world-cookhouse-r1](../attempts/world-cookhouse-r1.png) | Cookhouse | Current selected static PASS | [Exact report](../reviews/critic-world-cookhouse-r1.json) |
+| [world-crystal-r1](../attempts/world-crystal-r1.png) | Crystal | Current selected static PASS | [Exact report](../reviews/critic-world-crystal-r1.json) |
+| [world-dog-kennels-r1](../attempts/world-dog-kennels-r1.png) | Dog Kennels | REPAIR REQUIRED — NOT APPROVED (8.8/10) | [Exact report](../reviews/critic-world-dog-kennels-r1.json) |
+| [world-dog-kennels-r2](../attempts/world-dog-kennels-r2.png) | Dog Kennels | REPAIR REQUIRED — NOT APPROVED (8.8/10) | [Exact report](../reviews/critic-world-dog-kennels-r2.json) |
+| [world-dog-kennels-r3](../attempts/world-dog-kennels-r3.png) | Dog Kennels | Current selected static PASS | [Exact report](../reviews/critic-world-dog-kennels-r3.json) |
+| [world-fish-hut-r1](../attempts/world-fish-hut-r1.png) | Fish Hut | REPAIR REQUIRED — NOT APPROVED (8.7/10) | [Exact report](../reviews/critic-world-fish-hut-r1.json) |
+| [world-fish-hut-r2](../attempts/world-fish-hut-r2.png) | Fish Hut | Current selected static PASS | [Exact report](../reviews/critic-world-fish-hut-r2.json) |
+| [world-fortress-gates-closed-r1](../attempts/world-fortress-gates-closed-r1.png) | Fortress Gates Closed | REPAIR REQUIRED — NOT APPROVED (8.5/10) | [Exact report](../reviews/critic-world-fortress-gates-closed-r1.json) |
+| [world-fortress-gates-closed-r2](../attempts/world-fortress-gates-closed-r2.png) | Fortress Gates Closed | Current selected static PASS | [Exact report](../reviews/critic-world-fortress-gates-closed-r2.json) |
+| [world-fortress-gates-open-r1](../attempts/world-fortress-gates-open-r1.png) | Fortress Gates Open | REPAIR REQUIRED — NOT APPROVED (8.4/10) | [Exact report](../reviews/critic-world-fortress-gates-open-r1.json) |
+| [world-fortress-gates-open-r2](../attempts/world-fortress-gates-open-r2.png) | Fortress Gates Open | REPAIR REQUIRED — NOT APPROVED (8.4/10) | [Exact report](../reviews/critic-world-fortress-gates-open-r2.json) |
+| [world-fortress-gates-open-r3](../attempts/world-fortress-gates-open-r3.png) | Fortress Gates Open | REPAIR REQUIRED — NOT APPROVED (8.6/10) | [Exact report](../reviews/critic-world-fortress-gates-open-r3.json) |
+| [world-fortress-gates-open-r4](../attempts/world-fortress-gates-open-r4.png) | Fortress Gates Open | REPAIR REQUIRED — NOT APPROVED (8.8/10) | [Exact report](../reviews/critic-world-fortress-gates-open-r4.json) |
+| [world-fortress-gates-open-r5](../attempts/world-fortress-gates-open-r5.png) | Fortress Gates Open | REPAIR REQUIRED — NOT APPROVED (8.9/10) | [Exact report](../reviews/critic-world-fortress-gates-open-r5.json) |
+| [world-fortress-gates-open-r6](../attempts/world-fortress-gates-open-r6.png) | Fortress Gates Open | Current selected static PASS | [Exact report](../reviews/critic-world-fortress-gates-open-r6.json) |
+| [world-fortress-walls-r1](../attempts/world-fortress-walls-r1.png) | Fortress Walls | REPAIR REQUIRED — NOT APPROVED (8.5/10) | [Exact report](../reviews/critic-world-fortress-walls-r1.json) |
+| [world-fortress-walls-r2](../attempts/world-fortress-walls-r2.png) | Fortress Walls | Current selected static PASS | [Exact report](../reviews/critic-world-fortress-walls-r2.json) |
+| [world-fortress-watchtowers-r1](../attempts/world-fortress-watchtowers-r1.png) | Fortress Watchtowers | REPAIR REQUIRED — NOT APPROVED (8.6/10) | [Exact report](../reviews/critic-world-fortress-watchtowers-r1.json) |
+| [world-fortress-watchtowers-r2](../attempts/world-fortress-watchtowers-r2.png) | Fortress Watchtowers | Current selected static PASS | [Exact report](../reviews/critic-world-fortress-watchtowers-r2.json) |
+| [world-greenhouse-r1](../attempts/world-greenhouse-r1.png) | Greenhouse | Current selected static PASS | [Exact report](../reviews/critic-world-greenhouse-r1.json) |
+| [world-herbs-r1](../attempts/world-herbs-r1.png) | Herbs | Current selected static PASS | [Exact report](../reviews/critic-world-herbs-r1.json) |
+| [world-improved-gatehouse-r1](../attempts/world-improved-gatehouse-r1.png) | Improved Gatehouse | Current selected static PASS | [Exact report](../reviews/critic-world-improved-gatehouse-r1.json) |
+| [world-late-furnaces-r1](../attempts/world-late-furnaces-r1.png) | Late Furnaces | Current selected static PASS | [Exact report](../reviews/critic-world-late-furnaces-r1.json) |
+| [world-medical-atlas-r1](../attempts/world-medical-atlas-r1.png) | Medical Atlas | Current selected static PASS | [Exact report](../reviews/critic-world-medical-atlas-r1.json) |
+| [world-medical-early-r1](../attempts/world-medical-early-r1.png) | Medical Early | REPAIR REQUIRED — NOT APPROVED (8.9/10) | [Exact report](../reviews/critic-world-medical-early-r1.json) |
+| [world-medical-early-r2](../attempts/world-medical-early-r2.png) | Medical Early | REPAIR REQUIRED — NOT APPROVED (8.8/10) | [Exact report](../reviews/critic-world-medical-early-r2.json) |
+| [world-medical-early-r3](../attempts/world-medical-early-r3.png) | Medical Early | Current selected static PASS | [Exact report](../reviews/critic-world-medical-early-r3.json) |
+| [world-reinforced-palisades-r1](../attempts/world-reinforced-palisades-r1.png) | Reinforced Palisades | REPAIR REQUIRED — NOT APPROVED (8.6/10) | [Exact report](../reviews/critic-world-reinforced-palisades-r1.json) |
+| [world-reinforced-palisades-r2](../attempts/world-reinforced-palisades-r2.png) | Reinforced Palisades | Current selected static PASS | [Exact report](../reviews/critic-world-reinforced-palisades-r2.json) |
+| [world-spike-barricade-r1](../attempts/world-spike-barricade-r1.png) | Spike Barricade | REPAIR REQUIRED — NOT APPROVED (8.6/10) | [Exact report](../reviews/critic-world-spike-barricade-r1.json) |
+| [world-spike-barricade-r2](../attempts/world-spike-barricade-r2.png) | Spike Barricade | REPAIR REQUIRED — NOT APPROVED (8.7/10) | [Exact report](../reviews/critic-world-spike-barricade-r2.json) |
+| [world-spike-barricade-r3](../attempts/world-spike-barricade-r3.png) | Spike Barricade | Current selected static PASS | [Exact report](../reviews/critic-world-spike-barricade-r3.json) |
+| [world-stockpile-shelter-r1](../attempts/world-stockpile-shelter-r1.png) | Stockpile Shelter | REPAIR REQUIRED — NOT APPROVED (8.9/10) | [Exact report](../reviews/critic-world-stockpile-shelter-r1.json) |
+| [world-stockpile-shelter-r2](../attempts/world-stockpile-shelter-r2.png) | Stockpile Shelter | REPAIR REQUIRED — NOT APPROVED (8.9/10) | [Exact report](../reviews/critic-world-stockpile-shelter-r2.json) |
+| [world-stockpile-shelter-r3](../attempts/world-stockpile-shelter-r3.png) | Stockpile Shelter | REPAIR REQUIRED — NOT APPROVED (8.8/10) | [Exact report](../reviews/critic-world-stockpile-shelter-r3.json) |
+| [world-stockpile-shelter-r4](../attempts/world-stockpile-shelter-r4.png) | Stockpile Shelter | Current selected static PASS | [Exact report](../reviews/critic-world-stockpile-shelter-r4.json) |
+| [world-survivor-tents-r1](../attempts/world-survivor-tents-r1.png) | Survivor Tents | Current selected static PASS | [Exact report](../reviews/critic-world-survivor-tents-r1.json) |
+| [world-wheat-harvester-r1](../attempts/world-wheat-harvester-r1.png) | Wheat Harvester | REPAIR REQUIRED — NOT APPROVED (8.7/10) | [Exact report](../reviews/critic-world-wheat-harvester-r1.json) |
+| [world-wheat-harvester-r2](../attempts/world-wheat-harvester-r2.png) | Wheat Harvester | REPAIR REQUIRED — NOT APPROVED (8.8/10) | [Exact report](../reviews/critic-world-wheat-harvester-r2.json) |
+| [world-wheat-harvester-r3](../attempts/world-wheat-harvester-r3.png) | Wheat Harvester | Current selected static PASS | [Exact report](../reviews/critic-world-wheat-harvester-r3.json) |
+| [world-wheat-processor-r1](../attempts/world-wheat-processor-r1.png) | Wheat Processor | Current selected static PASS | [Exact report](../reviews/critic-world-wheat-processor-r1.json) |
+| [world-worker-huts-r1](../attempts/world-worker-huts-r1.png) | Worker Huts | REPAIR REQUIRED — NOT APPROVED (8.6/10) | [Exact report](../reviews/critic-world-worker-huts-r1.json) |
+| [world-worker-huts-r2](../attempts/world-worker-huts-r2.png) | Worker Huts | REPAIR REQUIRED — NOT APPROVED (8.6/10) | [Exact report](../reviews/critic-world-worker-huts-r2.json) |
+| [world-worker-huts-r3](../attempts/world-worker-huts-r3.png) | Worker Huts | REPAIR REQUIRED — NOT APPROVED (8.8/10) | [Exact report](../reviews/critic-world-worker-huts-r3.json) |
+| [world-worker-huts-r4](../attempts/world-worker-huts-r4.png) | Worker Huts | REPAIR REQUIRED — NOT APPROVED (8.9/10) | [Exact report](../reviews/critic-world-worker-huts-r4.json) |
+| [world-worker-huts-r5](../attempts/world-worker-huts-r5.png) | Worker Huts | Current selected static PASS | [Exact report](../reviews/critic-world-worker-huts-r5.json) |
+| [world-workshop-r1](../attempts/world-workshop-r1.png) | Workshop | REPAIR REQUIRED — NOT APPROVED (8.8/10) | [Exact report](../reviews/critic-world-workshop-r1.json) |
+| [world-workshop-r2](../attempts/world-workshop-r2.png) | Workshop | Current selected static PASS | [Exact report](../reviews/critic-world-workshop-r2.json) |
+
+A failed tool request with no image is listed in the invocation index and is never counted as a native original. A prior PASS record does not make an older revision the current selection; the category galleries and frozen generation manifest identify the chosen revision.
+
+## Author-created guide images
+
+These new mathematical diagrams were rendered from their saved authoring code. They are separate from the image service’s native output count and from the final selected game-art sheets. Each authored revision remains accessible.
+
+| Guide revision | Image | Code | Exact parameters | Disposition |
+| --- | --- | --- | --- | --- |
+| `fortress-double-gate-r1` | [PNG](../author-guides/fortress-double-gate-r1/fortress-double-gate-r1.png) | [Python](../author-guides/fortress-double-gate-r1/guide.py) | [JSON](../author-guides/fortress-double-gate-r1/parameters.json) | superseded authoring study not used as input |
+| `fortress-double-gate-r2` | [PNG](../author-guides/fortress-double-gate-r2/fortress-double-gate-r2.png) | [Python](../author-guides/fortress-double-gate-r2/guide.py) | [JSON](../author-guides/fortress-double-gate-r2/parameters.json) | guide only pass root viewed authorized as geometry input |
+| `six-post-bridge-r1` | [PNG](../author-guides/six-post-bridge-r1/six-post-bridge-r1.png) | [Python](../author-guides/six-post-bridge-r1/guide.py) | [JSON](../author-guides/six-post-bridge-r1/parameters.json) | guide only pass root authorized as geometry input |
+| `fortress-half-leaf-elevation-r1` | [PNG](../author-guides/fortress-half-leaf-elevation-r1/fortress-half-leaf-elevation-r1.png) | [Python](../author-guides/fortress-half-leaf-elevation-r1/guide.py) | [JSON](../author-guides/fortress-half-leaf-elevation-r1/parameters.json) | guide only pass root authorized as geometry input |

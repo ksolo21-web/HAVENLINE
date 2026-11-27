@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "review_id": "atlas-raider-boss-hands-gear-r2-independent",
+  "reviewer": "/root/missing_cast_critic",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-27T07:26:05.622180+00:00",
+  "status": "PASS \u2014 STATIC HANDS AND EQUIPMENT REFERENCE ONLY",
+  "scope": "STATIC HANDS AND EQUIPMENT REFERENCE ONLY",
+  "score_method": "Minimum mandatory visual-area score, not an average; every mandatory static visual check must pass strictly above 9.0.",
+  "reviewed_image": {
+    "native_returned_locator": "/workspace/scratch/9c51da47f878/generated_images/exec-c0ed1ae3-2e6f-4bee-aa89-203191981aa7.png",
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-raider-boss-hands-gear-r2.png",
+    "bytes": 1980425,
+    "sha256": "603cc3ffeda0227d244d45a6a7af002efe94ffe2a13ffcaf2606f83a8a4737ff",
+    "git_blob_sha": "169678a805693be42aacd98becd78dfcbad93946",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "actual_format": "PNG"
+  },
+  "requirements_at_generation": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/requirements.json",
+    "bytes": 157378,
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+    "git_blob_sha": "35cdd6921cdc9b88e6e890f538ecdc907d607a43"
+  },
+  "requirements_snapshot": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-input-snapshots/requirements--a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374.json",
+    "bytes": 157378,
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374"
+  },
+  "invocation": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/invocations/atlas-raider-boss-hands-gear-r2.json",
+    "bytes": 3707,
+    "sha256": "bdbf208444e3ed12f14e008e5eea447041c8764a0b2aa4b781e00556ba92faa0"
+  },
+  "exact_actual_prompt": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-exact-invoked-prompts/atlas-raider-boss-hands-gear-r2.txt",
+    "bytes": 968,
+    "sha256": "6fe62d9fdeeac0cbe9001d9f6d036bc02b5341da9d2b9f62859c11aa70153ecd"
+  },
+  "source_images_inspected": [
+    {
+      "order": 1,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-raider-boss-hands-gear-r1.png",
+      "bytes": 2007361,
+      "sha256": "44957945abec9f9297c11c33ef6f7347dad0493b78eb52faec2ee54d748fc069",
+      "git_blob_sha": "7cb651832f6154f14b89aff8432cec52e0c7f88f",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "actual_format": "PNG"
+    }
+  ],
+  "actual_full_native_png_inspected": true,
+  "crop_provenance": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/atlas-raider-boss-hands-gear-r2-crop-provenance.json",
+    "bytes": 2563,
+    "sha256": "a1ab04a5918594bbb24c6ec0853be82c98469b6b343a0a4d2a3e5e40351908b8"
+  },
+  "actual_native_crops_inspected": [
+    "left-palm",
+    "right-palm",
+    "left-back",
+    "right-back",
+    "gear-front",
+    "gear-rear"
+  ],
+  "native_mesh_rig_animation_runtime_approval": false,
+  "pending_separate_evidence": [
+    "Full GitHub byte/blob readback and independent archive gate"
+  ],
+  "preservation": "All previous source identities, original accepted images, rejected iterations and exact prompts remain preserved.",
+  "retests_review": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/critic-atlas-raider-boss-hands-gear-r1.json",
+    "bytes": 8701,
+    "sha256": "acb73e09f8687d2d9002290796aa17d7078e0ff4402bece9b1b0ab3d1c9c9b91"
+  },
+  "areas": [
+    {
+      "id": "twenty_visible_digits",
+      "score": 9.8,
+      "status": "PASS",
+      "finding": "All four native hand panels preserve four separated fingers and one opposed thumb, complete fingertips and readable length hierarchy."
+    },
+    {
+      "id": "anatomical_chirality_and_labels",
+      "score": 9.8,
+      "status": "PASS",
+      "finding": "LEFT PALM thumb viewer-left; RIGHT PALM viewer-right; LEFT BACK viewer-right; RIGHT BACK viewer-left. All four labels remain correct."
+    },
+    {
+      "id": "palms_vs_backs",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Palm/thumb-root padding remains distinct from the accepted dorsal construction; no palm/back swap appears."
+    },
+    {
+      "id": "exact_body_glove_bracer_and_material_match",
+      "score": 9.6,
+      "status": "PASS",
+      "finding": "Both back views retain the flat rectangular stitched patch, plain finger backs and dark metal bracer with two riveted bands."
+    },
+    {
+      "id": "source_equipment_and_repair_resolution",
+      "score": 9.6,
+      "status": "PASS",
+      "finding": "The heavy faceted dark-steel mace with warm edging retains the same head, collar, wrapped grip and end cap. The new lower view reverses head/handle direction and clearly reveals the opposing exterior face.",
+      "evidence": [
+        "gear-front",
+        "gear-rear"
+      ]
+    },
+    {
+      "id": "opposing_equipment_view_evidence",
+      "score": 9.6,
+      "status": "PASS",
+      "finding": "The two gear panels now show distinct opposing three-quarter exterior views with complete props, coherent major shape and preserved materials."
+    },
+    {
+      "id": "framing_labels_and_surface_readability",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Four hand views and complete gear are well separated, labeled and uncropped under consistent studio lighting."
+    }
+  ],
+  "mandatory_defects_remaining": [],
+  "resolved_defects": [
+    {
+      "id": "BOSSG-D01",
+      "previous_image_sha256": "44957945abec9f9297c11c33ef6f7347dad0493b78eb52faec2ee54d748fc069",
+      "resolution": "The heavy faceted dark-steel mace with warm edging retains the same head, collar, wrapped grip and end cap. The new lower view reverses head/handle direction and clearly reveals the opposing exterior face."
+    }
+  ],
+  "accepted_body_comparison": {
+    "body_png": {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-raider-boss-pose-r1.png",
+      "bytes": 1837773,
+      "sha256": "311ddc01ef621128c85913dd8f6295348c861bfaf63316ba3175eda802d8a43a"
+    },
+    "body_review": {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/critic-atlas-raider-boss-pose-r1.json",
+      "bytes": 7704,
+      "sha256": "9701eac225fa71c9724a78a02e2a75e730748c8760dc712286ec99c27437ca7c"
+    },
+    "comparison_mode": "Direct critic comparison against exact accepted body and its native hand/accessory crops; repair invocation uses the prior detail sheet as its first input."
+  },
+  "additional_source_images_inspected": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-raider-boss.png",
+      "bytes": 23509,
+      "sha256": "ecf5c2a4d8918d4efb789e937c37c316d5a3216f7b05d98f183f1b1b80d82ed0"
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/atlas-raider-boss-pose-r1-rear-viewer-left-hand.png",
+      "bytes": 24397,
+      "sha256": "6c9a85f75d687e0317e50f3e7c3f4c7683e63a966fb67f2aa1bc42e467a6ec13"
+    }
+  ],
+  "paired_body_and_gear_acceptance": {
+    "body_image_sha256": "311ddc01ef621128c85913dd8f6295348c861bfaf63316ba3175eda802d8a43a",
+    "body_score": 9.5,
+    "body_compared_directly_by_critic": true,
+    "static_family_visual_coverage": "PASS: four cardinal body views plus four large hand surfaces and opposing source-equipment exteriors",
+    "remaining_native_production_scope": "Native mesh, rigging, animation, actual equip/use states and runtime remain separate untested deliverables."
+  },
+  "source_interpretation_limit": "The Atlas and exact accepted body govern visible identity. Hidden equipment faces and fine attachment surfaces are restrained authored static-reference interpretation. No native model, rig, animation or functional mechanism is established.",
+  "minor_polish_limit": "Small wear marks, stitch endpoints and reverse-surface details remain illustrative. Major glove construction, equipment silhouette and worn configuration remain consistent.",
+  "score": 9.6,
+  "all_mandatory_visual_checks_passed": true
+}

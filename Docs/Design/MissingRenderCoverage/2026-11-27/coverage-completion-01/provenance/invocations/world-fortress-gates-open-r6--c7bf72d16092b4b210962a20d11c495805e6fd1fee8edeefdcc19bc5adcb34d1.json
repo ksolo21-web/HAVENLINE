@@ -1,0 +1,73 @@
+{
+  "id": "world-fortress-gates-open-r6",
+  "deliverable_id": "world-fortress-gates-open",
+  "family_id": "fortress_gates",
+  "tool": "image_gen__imagegen",
+  "arguments": {
+    "prompt": "Make one precise grille-count correction to image1, the six-panel HAVENLINE FORTRESS GATES OPEN STUDIES sheet. Every gate leaf must have exactly TWO slender interior vertical bars inside its outer frame, creating THREE open vertical slots. Image2 is the exact native accepted CLOSED grille: copy that two-interior-bar construction and its two horizontal riveted crossrails. Count the low hinge upright and the tall free-edge upright as the outer FRAME, separate from the TWO interior bars. Thus each leaf has four upright pieces TOTAL: hinge frame + interior bar + interior bar + free-edge frame. Remove the extra interior uprights from every leaf in all six panels. Adjust the remaining two bars to evenly spaced one-third and two-thirds positions across each leaf. Preserve everything else in image1: its correct asymmetric half-arch top rises from the low hinge to the tallest free edge; leaf shapes and heights stay fixed, exactly two leaves swing outward toward the front, rear leaves recede behind the arch with correct occlusion, and all stonework, snow, A/B/C ornaments, blue/bronze materials, hardware, layout and labels remain unchanged. This edit changes ONLY interior vertical bar count and spacing. Image2 controls interior bar count, not the closed pose. Return the complete six-panel sheet in the same polished stylized 3D art style.",
+    "referenced_image_paths": [
+      "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-fortress-gates-open-r5.png",
+      "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-fortress-gates-closed-r2-a-grille-native.png"
+    ],
+    "transparent_background": false
+  },
+  "status": "GENERATED_AWAITING_REVIEW",
+  "reason": "GO03 restore source two interior uprights/three slots per original leaf using exact native accepted closed crop; retain corrected shape and swing.",
+  "prompt_file": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/prompts/world-fortress-gates-open-r6.txt",
+    "bytes": 1349,
+    "sha256": "548895c201c41e2fd476baa0e58089bfacdb6caf9f831619409039ba2df11229",
+    "git_blob_sha": "d81d8c45024190082d6b994ba46fb6cfadfd3a24"
+  },
+  "exact_actual_prompt_file": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-exact-invoked-prompts/world-fortress-gates-open-r6.txt",
+    "bytes": 1348,
+    "sha256": "9cbf61e069960a330c859a94c08cde0fb5dd139810123c329a370e5508f88ff6",
+    "git_blob_sha": "3e7e12c6775b271698fe753a0a019b06de67c06c"
+  },
+  "ordered_reference_inputs": [
+    {
+      "order": 1,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-fortress-gates-open-r5.png",
+      "bytes": 2028814,
+      "sha256": "70753a9c6a66c79912283350a36eafd4845bdb8216c3c138e2a6eed6844a54ca",
+      "git_blob_sha": "d27e9c7f80cae8cd8d224adf76d6d59659184703",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "actual_format": "PNG"
+    },
+    {
+      "order": 2,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-fortress-gates-closed-r2-a-grille-native.png",
+      "bytes": 45885,
+      "sha256": "cea4ad826a3b39cb3d97253ba2bdf552fbcb1d4cb7b08998ab1a122829e7571f",
+      "git_blob_sha": "5d9aca4d3a0405de1875a1a2a311b4b37968dae0",
+      "dimensions": [
+        150,
+        182
+      ],
+      "actual_format": "PNG"
+    }
+  ],
+  "requirements_at_generation": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/requirements.json",
+    "bytes": 157378,
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+    "git_blob_sha": "35cdd6921cdc9b88e6e890f538ecdc907d607a43"
+  },
+  "requirements_snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-input-snapshots/requirements--a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374.json",
+  "output": {
+    "native_returned_locator": "/workspace/scratch/9c51da47f878/generated_images/exec-bbe6365d-bae5-467c-8b2a-e909bb388161.png",
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-fortress-gates-open-r6.png",
+    "bytes": 1996222,
+    "sha256": "0b2d82c2b8035a88c897b7131374051ac0067afee6db9c3b5d5e867600cead90",
+    "git_blob_sha": "b8db2e7bbd9f51b6b84fd6d59c9edd7db0eea84b",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "actual_format": "PNG"
+  }
+}

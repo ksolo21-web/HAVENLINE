@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "review_id": "atlas-flamethrower-pose-r1-independent",
+  "reviewer": "/root/missing_cast_critic",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-27T06:35:45.381323+00:00",
+  "status": "PASS \u2014 STATIC BODY REFERENCE ONLY",
+  "scope": "STATIC BODY REFERENCE ONLY",
+  "score_method": "Minimum mandatory visual-area score, not an average; every mandatory static visual check must pass strictly above 9.0.",
+  "reviewed_image": {
+    "native_returned_locator": "/workspace/scratch/9c51da47f878/generated_images/exec-289112b9-1d06-48c2-8599-5d9d0077fc2a.png",
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-flamethrower-pose-r1.png",
+    "bytes": 1811944,
+    "sha256": "5da09dd6c85f9e27ac475fbf5f6987c96f07d5ef20e27c8dd129f0e4924cef45",
+    "git_blob_sha": "fe74aa13dd3739542708bdc7b3aff117c26613e6",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "actual_format": "PNG"
+  },
+  "requirements_at_generation": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/requirements.json",
+    "bytes": 157378,
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+    "git_blob_sha": "35cdd6921cdc9b88e6e890f538ecdc907d607a43"
+  },
+  "requirements_snapshot": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-input-snapshots/requirements--a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374.json",
+    "bytes": 157378,
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374"
+  },
+  "invocation": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/invocations/atlas-flamethrower-pose-r1.json",
+    "bytes": 6154,
+    "sha256": "c8ad825c3a35ef75f2403a3d8e77ea1dd768489543a7e2ef1558b26619393dad"
+  },
+  "exact_actual_prompt": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-exact-invoked-prompts/atlas-flamethrower-pose-r1.txt",
+    "bytes": 2671,
+    "sha256": "06cadf120d8c56dacd1922c1e4e60feb9546b3ed6bd77d9b5695d44c5d5d339b"
+  },
+  "source_images_inspected": [
+    {
+      "order": 1,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png",
+      "bytes": 213976,
+      "sha256": "b342480ec487df11c9519bd756069deb56fa14ea7b5525cec2a12df66fdc16fa",
+      "git_blob_sha": "1af9b55e0fd3bc87617804d3d550490c8ebb39ee",
+      "dimensions": [
+        458,
+        280
+      ],
+      "actual_format": "PNG"
+    },
+    {
+      "order": 2,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/customer-male-01-pose-r2.png",
+      "bytes": 1715021,
+      "sha256": "1528d9d54fc8d3e80fb0654a1f897e634a3a4f44e3c7ae50d9218e887d493d88",
+      "git_blob_sha": "62f10921b82c9cb5e5a3ccfc5945039b7eeb0098",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "actual_format": "PNG"
+    }
+  ],
+  "actual_full_native_png_inspected": true,
+  "crop_provenance": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/atlas-flamethrower-pose-r1-crop-provenance.json",
+    "bytes": 4263,
+    "sha256": "708022601ea8e8f7e5cb8bb25c628ac912d1d7b2b020bec2827743e785798f7c"
+  },
+  "actual_native_crops_inspected": [
+    "front-viewer-left-hand",
+    "front-viewer-right-hand",
+    "rear-viewer-left-hand",
+    "rear-viewer-right-hand",
+    "left-profile-hand",
+    "right-profile-hand",
+    "rear-pack-and-attachment",
+    "left-pack-and-attachment",
+    "right-pack-and-attachment",
+    "front-armor-and-belts"
+  ],
+  "native_mesh_rig_animation_runtime_approval": false,
+  "pending_separate_evidence": [
+    "Matching Flamethrower hands/gear sheet must use this exact passed body and preserve its closed pack exterior while showing the source-like nozzle prop. Family completion remains pending that sheet and cross-sheet comparison.",
+    "Full GitHub byte/blob readback and independent archive gate"
+  ],
+  "preservation": "All previous source identities, original accepted images, rejected iterations and exact prompts remain preserved.",
+  "additional_source_images_inspected": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-flamethrower.png",
+      "bytes": 21674,
+      "sha256": "91beee413d7135c7ed7953cb5a0ed07c00a18ba9811400a8da92de519a110954"
+    }
+  ],
+  "areas": [
+    {
+      "id": "source_identity",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Dark-bearded Atlas raider, small pointed steel helmet, tawny-brown layered armor, gray bracers, metal buckles and brown boots retain the source appearance. Held nozzle is deliberately absent for hand visibility; no gas mask, robot identity or discharge is introduced."
+    },
+    {
+      "id": "four_cardinal_views_and_framing",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "All four correctly labeled cardinal views are complete, at coherent scale, with full fingertips, headwear, pack and soles visible."
+    },
+    {
+      "id": "five_digit_anatomy",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Native front/rear glove crops each expose four separated fingers and one opposed thumb. No fusion, extra digit or concealed mitten form."
+    },
+    {
+      "id": "front_palm_rear_dorsal",
+      "score": 9.6,
+      "status": "PASS",
+      "finding": "Front palms carry rounded thumb-root padding and creases. Rear gloves show stitched rectangular dorsal construction and finger-back surface detail rather than the front palm oval."
+    },
+    {
+      "id": "neutral_wrists_and_profile_projection",
+      "score": 9.6,
+      "status": "PASS",
+      "finding": "Both profile gloves have foreshortened end-on fingers and elevated thumb in the same horizontal-arm, straight-wrist pose."
+    },
+    {
+      "id": "pack_count_position_and_attachment",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "One compact opaque cylindrical pack sits centrally on the upper back, with two bronze bands and a small top cap. Rear and both profile native crops agree on its shape, count, location, harness contact and closed exterior."
+    },
+    {
+      "id": "belts_pouches_and_static_lower_limbs",
+      "score": 9.6,
+      "status": "PASS",
+      "finding": "Chest straps, metal shoulder fittings, belt and paired hip pouch groups remain attached. Two complete legs and grounded boots are consistent in all four directions."
+    },
+    {
+      "id": "style_and_source_palette",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Warm leather, softened dark metal and compact strong proportions provide a coherent Havenline static-reference appearance."
+    }
+  ],
+  "mandatory_defects_remaining": [],
+  "source_interpretation_limit": "Reverse pack/harness surfaces are authored from the source-guided role. This is an opaque fantasy prop reference, with no inference about internal mechanisms, operation, native topology or rigging.",
+  "minor_polish_limit": "Small leather seams, rivet spacing and material wear vary illustratively without a count, location, identity or pose contradiction.",
+  "score": 9.6,
+  "all_mandatory_visual_checks_passed": true
+}

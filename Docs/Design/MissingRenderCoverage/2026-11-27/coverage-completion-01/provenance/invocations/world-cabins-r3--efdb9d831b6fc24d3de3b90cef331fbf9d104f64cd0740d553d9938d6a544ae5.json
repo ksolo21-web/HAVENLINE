@@ -1,0 +1,60 @@
+{
+  "id": "world-cabins-r3",
+  "deliverable_id": "world-cabins",
+  "family_id": "cabins",
+  "tool": "image_gen__imagegen",
+  "arguments": {
+    "prompt": "Make ONE localized correction to image1: in the BOTTOM-RIGHT UPGRADED CABIN / REAR-RIGHT panel, move the single chimney from the NEAR LEFT end of the roof ridge to the FAR RIGHT end of that same ridge. The opposite front-left panel correctly places the chimney near its left/front gable; rotating the whole cabin 180 degrees means the rear camera sees that fixed chimney at the far end, NOT above the near rear gable. So remove the chimney currently above the bottom-right panel's near gable/window and restore clean continuous roof there; redraw the same open square stone chimney at the far end of the ridge, just inside the rightmost ridge cap behind the roof. Exactly ONE chimney remains in this rear panel. Preserve the entire top row and entire bottom-left panel unchanged. Preserve the rear wall windows, shutters, simple rear gable, materials, full framing and all text. Do not add another chimney or copy the front view. This is a camera-consistency fix to one existing asset.",
+    "referenced_image_paths": [
+      "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-cabins-r2.png"
+    ],
+    "transparent_background": false
+  },
+  "status": "GENERATED_AWAITING_REVIEW",
+  "reason": "Repair exact independent source/geometry continuity defects without changing approved unaffected panels.",
+  "prompt_file": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/prompts/world-cabins-r3.txt",
+    "bytes": 986,
+    "sha256": "d2ba784017351e2fc14d7dc0c40adecd47b56eca6a5136fea805296b78692d0b",
+    "git_blob_sha": "b340754aa163a3d889ffaaf99c1556af490e8cfe"
+  },
+  "exact_actual_prompt_file": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-exact-invoked-prompts/world-cabins-r3.txt",
+    "bytes": 985,
+    "sha256": "861bf644235d2601b9f4522e87bae085cb8e40a399c0867fff770d0f2714d28e",
+    "git_blob_sha": "b167cd8ff7fc404b73e4033bb773cc43fba09259"
+  },
+  "ordered_reference_inputs": [
+    {
+      "order": 1,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-cabins-r2.png",
+      "bytes": 2086877,
+      "sha256": "43cfa470d01b82bd31b8445a8241f3d832fc8a26ac501f33ac2843fad896c37b",
+      "git_blob_sha": "2a2b67b593e5e5cece66be3eb656c9d66795d06e",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "actual_format": "PNG"
+    }
+  ],
+  "requirements_at_generation": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/requirements.json",
+    "bytes": 157378,
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+    "git_blob_sha": "35cdd6921cdc9b88e6e890f538ecdc907d607a43"
+  },
+  "requirements_snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-input-snapshots/requirements--a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374.json",
+  "output": {
+    "native_returned_locator": "/workspace/scratch/9c51da47f878/generated_images/exec-ec87ddc1-d1a0-44ca-9ac6-e51f1441fafc.png",
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-cabins-r3.png",
+    "bytes": 2092434,
+    "sha256": "2fa10afb676a6b508617094fc38ca80e643ea199f636a4d0f7c3816283c06274",
+    "git_blob_sha": "4393b198d6d4d3e4117bfcc051d955f89e790d47",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "actual_format": "PNG"
+  }
+}

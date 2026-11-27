@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "review_id": "defense-platform-turnaround-r1-independent",
+  "reviewer": "/root/missing_cast_critic",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-27T05:29:19.062633+00:00",
+  "status": "REPAIR REQUIRED \u2014 STATIC TURNAROUND ONLY",
+  "score": 8.8,
+  "score_method": "Minimum mandatory visual-area score, not an average. A mandatory inconsistency blocks approval.",
+  "reviewed_image": {
+    "source_path": "/workspace/scratch/9c51da47f878/generated_images/exec-7d2c6c3b-f4b6-45ed-a65f-28371e831b7f.png",
+    "source_sha256": "49881e593fb4c053c09cf4a23a4ec1a3b94b4745df88aff424f5004b45737184",
+    "source_bytes": 1930985,
+    "source_dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "requirements": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/requirements.json",
+    "sha256": "0f575e1d11f6c47de14c1bf24c0939907914c46ba465b72f35ad479e230b5e6c"
+  },
+  "invocation": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/invocations/defense-platform-turnaround-r1.json",
+    "sha256": "f9e266eede2170104bf1d26f2b106290cbddc6825068f9b905429a9f80d57b2d"
+  },
+  "prompt": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/prompts/defense-platform-turnaround-r1.txt",
+    "sha256": "fb8c740734ae3e16973c6a009719c73de3578b98a3096e23bbacf835436ebf0c"
+  },
+  "source_images_inspected": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/reviews/evidence/primary-b/B-048-gameplay.png",
+      "sha256": "609741bddc62b6e307740dee8bf5ac6bc86f167df9b322b377313421d042b7d4"
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/world/inputs/ballista_tower.png",
+      "sha256": "5c4562ba169b7d89d1880a3a6d2dfc94ae4752381e7f410cab63b437af89cbf2"
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-structures-2026-11-25/renders/fence-oblique-r2.png",
+      "sha256": "5cc7bb7ddf05ca053828b2c9202992a5fc4b104ca39f433454d56251d7e9641c"
+    }
+  ],
+  "actual_full_png_inspected": true,
+  "actual_native_crops_inspected": [
+    "front-supports",
+    "right-supports-toolbox",
+    "rear-supports-crate",
+    "left-supports",
+    "top-mount-planks",
+    "three-quarter-connections"
+  ],
+  "crop_provenance": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/defense-platform-turnaround-r1-crop-provenance.json",
+  "areas": [
+    {
+      "id": "source_identity",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Short square open timber X-braced pedestal on pale stone base matches sourceB048 appearance. Authored blue band/snow/toolbox/crate details are clearly a static interpretation; it is distinct from the earlier enclosed tower."
+    },
+    {
+      "id": "style_materials",
+      "score": 9.8,
+      "status": "PASS",
+      "finding": "Warm sculpted timber, blue metal, bronze fasteners, pale cut stone, clean snow and soft studio shadows fit the approved ballista/fence language."
+    },
+    {
+      "id": "view_set_and_labels",
+      "score": 9.5,
+      "status": "PASS",
+      "finding": "Six complete distinct panels: front identified by step/front orange tab, right by repair box/handle, rear by supply crate, left by blank service face with front-step edge to image-right, overhead and elevated front-right three-quarter."
+    },
+    {
+      "id": "cross_view_deck_plank_geometry",
+      "score": 8.8,
+      "status": "FAIL_REPAIR_REQUIRED",
+      "finding": "Overhead fixes deck plank long axes left\u2013right across the front, and the three-quarter image agrees. Both RIGHT and LEFT cardinal panels instead draw the deck boards/seams horizontally across their image, reproducing the FRONT deck orientation. With a quarter-turn camera the same long boards should run into depth and their seams/grain should recede toward the rear of those side panels. These are drawn board boundaries as well as grain; rotation consistency is not established.",
+      "evidence": [
+        "front-supports",
+        "right-supports-toolbox",
+        "left-supports",
+        "top-mount-planks",
+        "three-quarter-connections"
+      ]
+    },
+    {
+      "id": "frame_and_mount",
+      "score": 9.6,
+      "status": "PASS",
+      "finding": "Chunky four-corner structure, substantial deck, open X-braced faces and centered empty circular metal socket on square blue collar are legible. No roof/room/weapon or unsupported floating apparatus."
+    },
+    {
+      "id": "prop_side_assignments",
+      "score": 9.5,
+      "status": "PASS",
+      "finding": "Centered front step remains on front side; orange toolbox/handle belongs to right side; blue supply crate belongs to rear. Rear crate can be occluded by frame/deck in other elevations; no duplicated box on the wrong face was established."
+    },
+    {
+      "id": "framing_layout_and_readability",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "All six whole objects and relevant ledges are within panel bounds with generous margins and readable labels. The TOP socket interior and contact points are readable."
+    }
+  ],
+  "all_mandatory_visual_checks_passed": false,
+  "mandatory_defects_remaining": [
+    {
+      "id": "D01",
+      "severity": "mandatory_cross_view_geometry",
+      "panels": [
+        "RIGHT",
+        "LEFT"
+      ],
+      "repair": "Re-render only the deck-top plank orientation in the RIGHT and LEFT panels so existing board long axes rotate into depth, consistent with TOP/FRONT/THREE-QUARTER. Keep the socket centered, all four posts/braces, front step, right toolbox/handle, rear crate, materials, framing and labels intact. Do not replace the whole platform design."
+    }
+  ],
+  "preserve": [
+    "originalr1image and exact invocation",
+    "source-supported short open platform silhouette",
+    "frontstep/righttoolbox/rearcrate organization",
+    "approved materials, empty socket and readable six-panel layout"
+  ],
+  "pending_separate_evidence": [
+    "Details/use-state sheet, including installed nontechnical use reference",
+    "Cross-sheet consistency after repair",
+    "GitHub complete-content publication/readback"
+  ],
+  "native_mesh_rig_animation_runtime_approval": false
+}

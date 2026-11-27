@@ -1,0 +1,52 @@
+# Reopened Havenline Atlas cast census
+
+**The recovered Atlas establishes26explicit live-animal/enemy appearances.24are missing source-specific reference sets;2have existing accepted artwork providing appearance-level coverage. No canon aliases are created.**
+
+The previous audit is preserved as `cast-coverage-matrix-v1-prior-roster-checkpoint.json`. It counted37already rendered subjects; it did not establish completeness against this original Atlas. Existing approvals remain valid.
+
+| Atlas group | Named subjects | Confirmed missing appearances | Existing appearance-level coverage |
+|---|---:|---:|---:|
+| Wildlife |10|9|Ordinary gray Wolf → approved Hostile Wolf|
+| Stronger hostile animals |6|5|Snow Bear → approved Polar Bear|
+| Raider roles |10|10|None|
+
+## Source-to-image mapping
+
+| Source identity | Result | Pixel-based reason |
+|---|---|---|
+|DEER|CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE|Tundra Stag is pale gray/white with dark antlers. Giant Elk is much heavier, long-maned and broad-antlered. Neither supplies the Atlas brown deer treatment.|
+|RABBIT|CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE|No live rabbit in the selected cast/enemy sets. Rabbit meat reference does not provide live anatomy.|
+|SQUIRREL|CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE|No live squirrel in selected cast/enemy sets. Squirrel meat reference is not live anatomy.|
+|FOX|CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE|The orange companion fox is equipped with harness/bedroll/side bags and cannot establish the unobstructed wild fox anatomy; no selected wild-fox sheet found.|
+|BOAR|CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE|Selected Tusk Boar has russet/orange shaggy coat, large mane, longer pale cheek beard and much larger curved tusks. It is a distinct authored concept.|
+|WOLF|COVERED_VISIBLE_APPEARANCE_BY_EXISTING_ACCEPTED_ART|Selected Hostile Wolf matches this visible gray-white unarmored ordinary-wolf treatment and has full turn/detail coverage. Original generation was not bound to this Atlas. Reuse is appearance-level only, without a canon alias.|
+|BEAR|CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE|Existing brown companion is heavily harnessed/equipped, and Polar Bear is white. No selected unarmored brown-bear turnaround found.|
+|LYNX|CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE|Frost Stalker is pale with round ears and a long heavy ringed tail: a snow-leopard-like concept, not the Atlas short-tail lynx.|
+|MOOSE|CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE|Giant Elk has branching pointed antlers and shorter deer-like muzzle. Its accepted model interpretation does not match this palmate moose.|
+|WOLVERINE|CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE|No live wolverine in selected cast/enemy sets; meat resource art does not close it.|
+|DIRE WOLF|CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE|The ordinary tall gray-white Hostile Wolf does not supply this separately labeled bulky dark stronger tier.|
+|SNOW BEAR|COVERED_VISIBLE_APPEARANCE_BY_EXISTING_ACCEPTED_ART|The approved Polar Bear matches the visible white unarmored heavy bear treatment; Spined Frostbeast adds absent dorsal plates. Reuse is appearance-level only, without a canon alias.|
+|SABER WOLF|CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE|No approved subject has this golden saber-fanged appearance. Do not silently rename to a real-world species.|
+|GIANT BOAR|CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE|Selected russet Tusk Boar is a separate authored silhouette. It does not establish the Atlas heavy stronger-tier face/mane/tusk arrangement.|
+|ICE LYNX|CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE|The long-tailed round-ear Frost Stalker cannot substitute for this source-specific lynx stronger tier.|
+|ELITE MOOSE|CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE|Giant Elk has branching antlers; Musk Ox has swept horns. Neither matches the broad-palmate-antler elite moose.|
+|RAIDER|CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE|Prior Raider is red hooded and weapon-free in turn; Rival Rifleman is red/cream cap-and-coat. Both differ from Atlas brown armored bandit.|
+|SPEAR RAIDER|CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE|Harpoon Hunter is a lean woman in burgundy long coat and leather flight cap with tether coil, a different identity/equipment treatment.|
+|AXE RAIDER|CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE|No selected Atlas brown axe-role identity; red raider/rifle infantry do not establish it. Tiny source weapon pose must remain interpreted, not exact mechanism proof.|
+|SHIELD RAIDER|CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE|Existing Shield Raider is clean-shaven in red coat with tall rounded-rectangle shield and short hammer. The Atlas round-shield appearance remains missing.|
+|BANDIT ARCHER|CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE|Neither rifle infantry nor harpoon hunter supplies this bow-role Atlas silhouette.|
+|RAIDER BRUTE|CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE|Rival Leader is white-bearded in red hood; Ice Brute is nonhuman white-furred. Neither is the Atlas bulky brown human brute.|
+|FLAMETHROWER|CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE|Powder Sapper is a goggled orange-coated carrier with sealed canister; different role/body/equipment. New work should be fictional visual reference, no fuel/mechanism instructions.|
+|RAIDER SNIPER|CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE|Prior red-coated rifle infantry does not establish the Atlas brown specialist appearance.|
+|BOMBARDIER|CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE|Goggled orange-coated Powder Sapper with cylindrical backpack/closed bucket is visually distinct. Preserve uncertainty of tiny source implement; no construction details.|
+|RAIDER BOSS|CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE|Red white-bearded leader and skull-masked red hooded boss are distinct designs; neither supplies dark armor/horned helmet identity.|
+
+## Scope rules
+
+- Meat references do not count as live wildlife anatomy. Companion harnesses and packs do not prove unobstructed wild-animal forms.
+- Same or similar names do not prove matching designs: the two Shield Raider designs have visibly different faces, clothing and shield shape.
+- Branching elk antlers do not supply palmate moose antlers. Long-tail round-ear snow leopard art does not supply short-tail tufted lynx art.
+- Existing Hostile Wolf and Polar Bear provide the two appearance-level coverage mappings. Their original names/source provenance remain unchanged; this is not a canon alias or a claim that their earlier prompts used this Atlas.
+- All source cells are small single-pose concept illustrations. Unseen reverse anatomy/equipment is authored interpretation.
+- New humanoid reference renders should carry the user’s five-separated-digit standard; held-prop poses can occlude fingers naturally, with dedicated open-hand reference where needed.
+- Full Atlas PNG, native source cell crops, full selected sheets inspected for relevant near matches, all20approved enemy front pixels and exact hashes are linked in `atlas-cast-census-v2.json`.

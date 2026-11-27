@@ -1,0 +1,25 @@
+{
+  "reviewer": "/root/missing_world_audit",
+  "independent": true,
+  "sampled_top_points_per_leaf": 401,
+  "maximum_coordinate_error": 8.881784197001252e-16,
+  "checks": {
+    "closed_left_monotone_hinge_to_free": true,
+    "closed_left_unique_tall_free_edge": true,
+    "closed_left_bar_heights_match_profile": true,
+    "closed_left_matches_one_continuous_arch": true,
+    "closed_right_monotone_hinge_to_free": true,
+    "closed_right_unique_tall_free_edge": true,
+    "closed_right_bar_heights_match_profile": true,
+    "closed_right_matches_one_continuous_arch": true,
+    "isolated_left_monotone_hinge_to_free": true,
+    "isolated_left_unique_tall_free_edge": true,
+    "isolated_left_bar_heights_match_profile": true,
+    "isolated_right_monotone_hinge_to_free": true,
+    "isolated_right_unique_tall_free_edge": true,
+    "isolated_right_bar_heights_match_profile": true,
+    "drawn_paths_match_independent_formula": true
+  },
+  "status": "PASS_INDEPENDENT_HALF_ARCH_GEOMETRY",
+  "method": "AST extraction executes only builder coordinate arrays and draw_leaf against a recording axis. All emitted top curves and interior bar heights are checked against independent hinge-relative and closed-world formulas, without rendering or source writes."
+}

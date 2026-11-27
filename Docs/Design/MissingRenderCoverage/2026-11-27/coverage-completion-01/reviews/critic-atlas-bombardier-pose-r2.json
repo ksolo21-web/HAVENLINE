@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "review_id": "atlas-bombardier-pose-r2-independent",
+  "reviewer": "/root/missing_cast_critic",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-27T06:52:47.732822+00:00",
+  "status": "PASS \u2014 STATIC BODY REFERENCE ONLY",
+  "scope": "STATIC BODY REFERENCE ONLY",
+  "score_method": "Minimum mandatory visual-area score, not an average; every mandatory static visual check must pass strictly above 9.0.",
+  "reviewed_image": {
+    "native_returned_locator": "/workspace/scratch/9c51da47f878/generated_images/exec-1f4f5929-0b5c-4657-bccf-42d7cd1a1dd4.png",
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-bombardier-pose-r2.png",
+    "bytes": 1811893,
+    "sha256": "d061fa5c36469192433a039e4dc978fcbdd66cd0de5e169dd1b7c4dd26daffcc",
+    "git_blob_sha": "ae464eb8910101d686d20e171fbd56729bd998e8",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "actual_format": "PNG"
+  },
+  "requirements_at_generation": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/requirements.json",
+    "bytes": 157378,
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+    "git_blob_sha": "35cdd6921cdc9b88e6e890f538ecdc907d607a43"
+  },
+  "requirements_snapshot": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-input-snapshots/requirements--a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374.json",
+    "bytes": 157378,
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374"
+  },
+  "invocation": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/invocations/atlas-bombardier-pose-r2.json",
+    "bytes": 3782,
+    "sha256": "32970b85146e57961da12899a17237bda359b8d2b89e2805fe5df197215651ad"
+  },
+  "exact_actual_prompt": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-exact-invoked-prompts/atlas-bombardier-pose-r2.txt",
+    "bytes": 1080,
+    "sha256": "e3f9a27284f35228ff8f1a0281574325225e6382f80cdedeee0517beb458707e"
+  },
+  "source_images_inspected": [
+    {
+      "order": 1,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-bombardier-pose-r1.png",
+      "bytes": 1840165,
+      "sha256": "9492c4a9391d93b871bd0b9231e2b12f0cfec4dbc023e96cf0cd0eb589cb2547",
+      "git_blob_sha": "ab8a6dc6563a069df83b4d53ac185cd6c087357a",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "actual_format": "PNG"
+    }
+  ],
+  "actual_full_native_png_inspected": true,
+  "crop_provenance": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/atlas-bombardier-pose-r2-crop-provenance.json",
+    "bytes": 4211,
+    "sha256": "dabcea6dd0120d27dfa1ef2ebd845684627a640b60f04eab9ee7ae98841cea48"
+  },
+  "actual_native_crops_inspected": [
+    "front-viewer-left-hand",
+    "front-viewer-right-hand",
+    "rear-viewer-left-hand",
+    "rear-viewer-right-hand",
+    "left-profile-hand",
+    "right-profile-hand",
+    "rear-worn-accessory",
+    "left-worn-accessory",
+    "right-worn-accessory",
+    "front-armor-and-belts"
+  ],
+  "native_mesh_rig_animation_runtime_approval": false,
+  "pending_separate_evidence": [
+    "Matching Bombardier hands/gear sheet must use this exact r2 body and show the original orange round canister plus long oval-headed implement; family completion remains pending that sheet and cross-sheet comparison.",
+    "Full GitHub byte/blob readback and independent archive gate"
+  ],
+  "preservation": "All previous source identities, original accepted images, rejected iterations and exact prompts remain preserved.",
+  "retests_review": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/critic-atlas-bombardier-pose-r1.json",
+    "bytes": 7688,
+    "sha256": "214c7328517c556082d842c508e08ed010681cc824929c699614f64a8a0a23f2"
+  },
+  "builder_adoption_of_extra_authored_change": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/builder-decisions/bombardier-r2-roll-adoption.json",
+    "bytes": 867,
+    "sha256": "f5944cd3bddcedb5e0e0a1ac7758a0c4a69d2c122f496deb01c0b2814116809e"
+  },
+  "additional_source_images_inspected": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-bombardier.png",
+      "bytes": 22695,
+      "sha256": "742bfd6a704064bfe0d50e5dfced7fd68d57e39a4853b303531a9f70853d517c"
+    }
+  ],
+  "areas": [
+    {
+      "id": "BO_D01_accessory_consistency_retest",
+      "score": 9.6,
+      "status": "PASS",
+      "finding": "REAR, LEFT and RIGHT now show one coherent diagonal cylindrical roll/case with two retaining straps. Native crops confirm continuous cylindrical length, one rounded end form and no extra flap pouch or dangling case."
+    },
+    {
+      "id": "source_visible_body_identity_preserved",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Tan brimmed cap, dark beard, gray-blue sleeves, brown leather armor, crossing chest straps and layered waist belt retain the original Atlas Bombardier appearance."
+    },
+    {
+      "id": "four_cardinal_views_and_framing",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Four complete correctly labeled cardinal views retain the body proportions, clear fingers and complete boots."
+    },
+    {
+      "id": "five_digit_anatomy_regression",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "All four native front/rear hand crops retain exactly four separated fingers plus one opposed thumb per hand."
+    },
+    {
+      "id": "front_palm_rear_dorsal_regression",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Front palm/thumb-root padding and rear dorsal panels/seam rows remain distinct after the accessory edit."
+    },
+    {
+      "id": "neutral_profile_wrists_regression",
+      "score": 9.6,
+      "status": "PASS",
+      "finding": "Both profile native crops still show end-on gloves on straight wrists in the same arms-horizontal T-pose."
+    },
+    {
+      "id": "armor_belt_and_static_lower_limbs",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Front armor, chest fitting, belt pouches and two grounded legs/boots remain coherent; the accessory repair did not introduce a new limb or conceal a hand."
+    }
+  ],
+  "mandatory_defects_remaining": [],
+  "resolved_defects": [
+    {
+      "id": "BO-D01",
+      "previous_image_sha256": "9492c4a9391d93b871bd0b9231e2b12f0cfec4dbc023e96cf0cd0eb589cb2547",
+      "resolution": "One diagonal two-strapped cylinder is now consistent across all visible accessory views."
+    }
+  ],
+  "extra_change_vs_requested_edit": "Although the prompt requested FRONT and REAR unchanged, imagegen lengthened the rear cylinder into a coherent shoulder-to-midback diagonal roll. Root explicitly adopted this authored reverse interpretation after actual-image inspection. This is disclosed rather than described as a pixel-local edit.",
+  "source_interpretation_limit": "The Atlas does not specify the hidden reverse accessory. Its adopted revision is authored interpretation; source-visible identity and all substantive mandatory static checks remain unchanged.",
+  "score": 9.6,
+  "all_mandatory_visual_checks_passed": true
+}

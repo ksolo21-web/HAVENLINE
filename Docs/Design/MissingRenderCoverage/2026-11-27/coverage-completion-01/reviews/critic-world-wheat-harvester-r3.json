@@ -1,0 +1,145 @@
+{
+  "schema_version": 2,
+  "reviewer": "/root/missing_world_audit",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-27T06:28:45.656497+00:00",
+  "review_id": "world-wheat-harvester-r3-independent-world",
+  "status": "PASS — STATIC REFERENCE ONLY",
+  "score_method": "Minimum mandatory visual-area score; no averaging away a failed requirement.",
+  "score": 9.7,
+  "actual_full_png_inspected": true,
+  "reviewed_image": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-wheat-harvester-r3.png",
+    "sha256": "d937ac4dd65f5fd7bbae711c8e572a0592a98095b9514c7e6806d5e07f554b50",
+    "bytes": 2278327,
+    "native_original": {
+      "path": "/workspace/scratch/9c51da47f878/generated_images/exec-d47254b8-5efc-46c8-8b16-806c3615670d.png",
+      "sha256": "d937ac4dd65f5fd7bbae711c8e572a0592a98095b9514c7e6806d5e07f554b50",
+      "bytes": 2278327
+    },
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "actual_format": "PNG"
+  },
+  "invocation": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/invocations/world-wheat-harvester-r3.json",
+    "sha256": "afd992cbbffe85215be1fc2fedb1a8b133008a32c9314818dc5f5d1bbf546a30",
+    "bytes": 4464
+  },
+  "prompt": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-exact-invoked-prompts/world-wheat-harvester-r3.txt",
+    "sha256": "623345f0421c2875d2f7a65e27412cec4ca3edacbd79470db2f645959bf80a7f",
+    "bytes": 1713
+  },
+  "requirements_at_generation": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-input-snapshots/requirements--a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374.json",
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+    "bytes": 157378
+  },
+  "current_requirements_at_review": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/requirements.json",
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+    "bytes": 157378
+  },
+  "catalog_at_review": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/world-render-catalog.json",
+    "sha256": "cbc641ec53f5f496ffa059dee5f21ba0ee89e9f47b04511b32d8bf4bc7f84f8a",
+    "bytes": 348141
+  },
+  "actual_native_crops_inspected": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-wheat-harvester-r3-front-outlet.png",
+      "sha256": "b8dc5b249240b8d9fbfe1724c531d8579a146e9f7c5c1c292795ecbe7783abf0",
+      "bytes": 121977
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-wheat-harvester-r3-rear-outlet.png",
+      "sha256": "0fb0ea56032ade08f92607b4d4d3dc7ed5df644e2e5b1ba1c0a7dee7153c295d",
+      "bytes": 184575
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-wheat-harvester-r3-overhead.png",
+      "sha256": "84a01632b81bd9b8d8fe557cb52d0738681b6a392a2cc85164c7ec4e65871bcd",
+      "bytes": 304263
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-wheat-harvester-r3-interface.png",
+      "sha256": "54db4af026de223f4212fd6232e49f614149afa9e5028bd9cd07a68557ab3c4b",
+      "bytes": 429486
+    }
+  ],
+  "crop_provenance": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-wheat-harvester-r3-crop-provenance.json",
+      "sha256": "273f29eb90b4b747c24b690fce54316083f8764f920171501f8526fe8b66d1df",
+      "bytes": 2477
+    }
+  ],
+  "source_images_or_native_excerpts_inspected": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/world/inputs/A-wheat-sequence.png",
+      "sha256": "018715e320c7d40fe462b21c046bd70507712851a63ed83245b2bf96ee0c1b0f",
+      "bytes": 2983604
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-source-wheat-field-38.png",
+      "sha256": "111f4aa4cc0c9f4270c53f58606c6559dc1c2a4ed4b417f52ad1ebcf45ab5805",
+      "bytes": 218280
+    }
+  ],
+  "areas": [
+    {
+      "id": "WH01_source_identity_retest",
+      "score": 9.8,
+      "status": "PASS",
+      "finding": "The unrelated orange machine remains absent. The same source field identity is preserved: three silver curved heads, low blue repeated collectors and modest wheat/stubble context."
+    },
+    {
+      "id": "WH02_output_geometry_retest",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Native front/rear crops now place the outlet at the central part of the common spine, corresponding to the middle branch shown in the overhead. The former end outlet is removed. Three branch stations and low supports remain coherent through rotation."
+    },
+    {
+      "id": "interface_closeup_retest",
+      "score": 9.8,
+      "status": "PASS",
+      "finding": "The detail now shows the spine/output junction alone, with continuous belt surface and supported short blue outlet. No rotary head has been incorrectly placed on that junction; heads remain at the far branch ends."
+    },
+    {
+      "id": "layout_materials_scope",
+      "score": 9.9,
+      "status": "PASS",
+      "finding": "All four complete requested panels and labels remain. Rendered forms, blue-metal surfaces, wheat and source-interpretation footer are clear; the authored interface does not imply tested rates or runtime connectivity."
+    }
+  ],
+  "all_mandatory_visual_checks_passed": true,
+  "mandatory_defects_remaining": [],
+  "minimum_repairs": [],
+  "notes": [
+    "Both prior defects closed against actual r3 pixels. This is static layout reference only, not a moving or simulated harvesting system."
+  ],
+  "cross_sheet_bindings": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-wheat-harvester-r2.png",
+      "sha256": "7d17f1186b9e6091f72848374c62a67a512efb49a03a2c2260d4e437cab37b52",
+      "bytes": 2268258
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/critic-world-wheat-harvester-r2.json",
+      "sha256": "05f85c49f61059db5a3008ce76959ad44c7b9f02c7f0391055c1c0442637ab5c",
+      "bytes": 7597
+    }
+  ],
+  "native_mesh_rig_animation_runtime_approval": false,
+  "pending_separate_evidence": [
+    "Additive GitHub archive and complete-content remote readback",
+    "Other family coverage; this report reviews only the exact PNG identified above"
+  ],
+  "closed_defects": [
+    "WH01",
+    "WH02"
+  ]
+}

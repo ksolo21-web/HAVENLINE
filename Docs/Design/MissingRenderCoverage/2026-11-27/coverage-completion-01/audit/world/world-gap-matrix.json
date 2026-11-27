@@ -1,0 +1,2862 @@
+{
+  "schema_version": 2,
+  "date": "2026-11-27",
+  "agent": "/root/missing_world_audit",
+  "status": "REVISED_COMPLETE_NAMED_BOARD_CENSUS",
+  "supersedes": "world-gap-matrix-v1-superseded.json",
+  "correction": "V1 was a narrower equipment-chain audit and omitted many source-board building labels because original boards were unavailable. It was not a complete source-board census. V2 reopens its all-missing coverage conclusion.",
+  "baseline": {
+    "repository": "ksolo21-web/HAVENLINE",
+    "branch": "art/conveyors-2026-11-26",
+    "commit": "d70fbfac21a852f99cc46b06b1944faf11ec7901",
+    "tree_sha": "18c5641935b9cfaa7c1c82022bdbcbd5ad55ab77",
+    "leaf_count": 4955
+  },
+  "source_boards": {
+    "18600.png": {
+      "local_path": "havenline-missing-renders-2026-11-27/source-records/original-boards/18600.png",
+      "sha256": "e372bf74be027cb63a0f83c4247a7843a8195a9c579e75a415ddcf3c0052eaec",
+      "bytes": 282667,
+      "pixels_inspected": true,
+      "baseline_selected_render": false,
+      "role": "user source board recovered with exact prior-audit hash; not new generated artwork",
+      "actual_format": "JPEG"
+    },
+    "18607.png": {
+      "local_path": "havenline-missing-renders-2026-11-27/source-records/original-boards/18607.png",
+      "sha256": "d71d77c6e200b7ef8d225e573474ad99c2d466954d05c29eabd142f4901bbc0c",
+      "bytes": 342580,
+      "pixels_inspected": true,
+      "baseline_selected_render": false,
+      "role": "user source board recovered with exact prior-audit hash; not new generated artwork",
+      "actual_format": "JPEG"
+    },
+    "18609.png": {
+      "local_path": "havenline-missing-renders-2026-11-27/source-records/original-boards/18609.png",
+      "sha256": "68d2fb572cc5370a9746c7130f661438197ce36ac495a3b4ffeeaa4528d81ce7",
+      "bytes": 421303,
+      "pixels_inspected": true,
+      "baseline_selected_render": false,
+      "role": "user source board recovered with exact prior-audit hash; not new generated artwork",
+      "actual_format": "JPEG"
+    },
+    "Havenline: Frostbound World Atlas.png": {
+      "local_path": "havenline-missing-renders-2026-11-27/source-records/original-boards/Havenline: Frostbound World Atlas.png",
+      "sha256": "5a9f9592d2e8a32b3ae0c4117c2d851496d49023e2768c491dc1b211b7865edf",
+      "bytes": 2759727,
+      "pixels_inspected": true,
+      "baseline_selected_render": false,
+      "role": "user source board recovered with exact prior-audit hash; not new generated artwork",
+      "actual_format": "PNG"
+    }
+  },
+  "source_occurrence_counts": {
+    "18607.png": 32,
+    "18609.png": 31,
+    "18600.png": 20,
+    "Havenline: Frostbound World Atlas.png": 47,
+    "selected-status.json at d70fbfac21a852f99cc46b06b1944faf11ec7901": 1,
+    "referenceA37\u201343seconds": 2
+  },
+  "counts": {
+    "source_occurrence_rows": 133,
+    "distinct_missing_reference_families": 30,
+    "depicted_forms_to_cover_in_missing_families": 65,
+    "family_counts_by_gap_class": {
+      "PRIOR_FROZEN_BLOCKED_SLOT": 1,
+      "SOURCE_BOARD_BUILDING_FAMILY": 8,
+      "LOCKED_VIDEO_MACHINE_FAMILY": 2,
+      "ATLAS_RESOURCE_NOUN": 2,
+      "SOURCE_BOARD_MODULAR_VARIANTS": 1,
+      "SOURCE_BOARD_UPGRADE_VARIANTS": 5,
+      "SOURCE_BOARD_AND_ATLAS_VARIANTS": 1,
+      "SOURCE_VISIBLE_UNLABELLED_PROP": 1,
+      "ATLAS_LATE_RANGE_VARIANTS": 1,
+      "ATLAS_FUTURE_VARIANTS": 6,
+      "ATLAS_FUTURE_VISUAL_ALTERNATIVES": 1,
+      "ATLAS_FUTURE_REGION_CONCEPTS": 1
+    }
+  },
+  "family_gap_matrix": [
+    {
+      "id": "defense_platform",
+      "name": "Modular defense platform",
+      "source_variants_to_cover": [
+        "platform with mount, supply and repair interfaces"
+      ],
+      "variant_count": 1,
+      "gap_class": "PRIOR_FROZEN_BLOCKED_SLOT",
+      "why_distinct": "The only unfilled slot in prior69-slot contract. Ballista tower already exists, but platform/service interfaces have no selected PNG.",
+      "source_occurrences": [
+        {
+          "source": "selected-status.json at d70fbfac21a852f99cc46b06b1944faf11ec7901",
+          "label": "defense_platform",
+          "region": ""
+        }
+      ],
+      "existing_coverage": [
+        {
+          "id": "ballista_tower",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/ballista_tower.png",
+          "status": "PASS",
+          "score": 9.4,
+          "reason": "Related family or earlier tier only; does not close this source form."
+        },
+        {
+          "id": "guard_tower",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/guard_tower.png",
+          "status": "PASS",
+          "score": 9.4,
+          "reason": "Related family or earlier tier only; does not close this source form."
+        }
+      ],
+      "proposed_reference_format": "Family sheet(s) with readable opposing three-quarter views for each distinct form, plus use/open-state or material/detail panels where meaningful. Split into multiple sheets when variants become too small. No mandatory eight-angle repetition per form.",
+      "status": "MISSING_DEDICATED_SELECTED_REFERENCE_AT_BASELINE"
+    },
+    {
+      "id": "cookhouse",
+      "name": "Cookhouse",
+      "source_variants_to_cover": [
+        "early open-front cookhouse",
+        "expanded cookhouse"
+      ],
+      "variant_count": 2,
+      "gap_class": "SOURCE_BOARD_BUILDING_FAMILY",
+      "why_distinct": "Early18600 cooking shelter and expanded18609 form differ; do not substitute existing open cookfire.",
+      "source_occurrences": [
+        {
+          "source": "18609.png",
+          "label": "Expanded cookhouse",
+          "region": "second row"
+        },
+        {
+          "source": "18600.png",
+          "label": "open-front cooking shelter",
+          "region": "row1"
+        }
+      ],
+      "existing_coverage": [
+        {
+          "id": "cookfire",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/cookfire.png",
+          "status": "PASS",
+          "score": 9.3,
+          "reason": "Related family or earlier tier only; does not close this source form."
+        },
+        {
+          "id": "campfire_cooking_rack",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/campfire_cooking_rack.png",
+          "status": "PASS",
+          "score": 9.4,
+          "reason": "Related family or earlier tier only; does not close this source form."
+        }
+      ],
+      "proposed_reference_format": "Family sheet(s) with readable opposing three-quarter views for each distinct form, plus use/open-state or material/detail panels where meaningful. Split into multiple sheets when variants become too small. No mandatory eight-angle repetition per form.",
+      "status": "MISSING_DEDICATED_SELECTED_REFERENCE_AT_BASELINE"
+    },
+    {
+      "id": "greenhouse",
+      "name": "Greenhouse / warm grow hut",
+      "source_variants_to_cover": [
+        "glass framed grow hut"
+      ],
+      "variant_count": 1,
+      "gap_class": "SOURCE_BOARD_BUILDING_FAMILY",
+      "why_distinct": "Enclosed glass growing building is named on18609; crops, yields and recipes remain undefined.",
+      "source_occurrences": [
+        {
+          "source": "18609.png",
+          "label": "Greenhouse / Warm grow hut",
+          "region": "top buildings"
+        }
+      ],
+      "existing_coverage": [],
+      "proposed_reference_format": "Family sheet(s) with readable opposing three-quarter views for each distinct form, plus use/open-state or material/detail panels where meaningful. Split into multiple sheets when variants become too small. No mandatory eight-angle repetition per form.",
+      "status": "MISSING_DEDICATED_SELECTED_REFERENCE_AT_BASELINE"
+    },
+    {
+      "id": "workshop",
+      "name": "Workshop",
+      "source_variants_to_cover": [
+        "workshop level1",
+        "improved workshop"
+      ],
+      "variant_count": 2,
+      "gap_class": "SOURCE_BOARD_BUILDING_FAMILY",
+      "why_distinct": "18600 open-front workshop is an earlier illustration of the basic workshop family, not a third confirmed identity.",
+      "source_occurrences": [
+        {
+          "source": "18607.png",
+          "label": "Workshop (LVL1)",
+          "region": "lower building row"
+        },
+        {
+          "source": "18609.png",
+          "label": "Improved workshop",
+          "region": "top buildings"
+        },
+        {
+          "source": "18600.png",
+          "label": "open-front tool workshop",
+          "region": "row1"
+        }
+      ],
+      "existing_coverage": [],
+      "proposed_reference_format": "Family sheet(s) with readable opposing three-quarter views for each distinct form, plus use/open-state or material/detail panels where meaningful. Split into multiple sheets when variants become too small. No mandatory eight-angle repetition per form.",
+      "status": "MISSING_DEDICATED_SELECTED_REFERENCE_AT_BASELINE"
+    },
+    {
+      "id": "wheat_harvester",
+      "name": "Mechanized wheat harvester",
+      "source_variants_to_cover": [
+        "field-mounted rotary harvesting assembly"
+      ],
+      "variant_count": 1,
+      "gap_class": "LOCKED_VIDEO_MACHINE_FAMILY",
+      "why_distinct": "Stationary silver curved rotary heads, blue collection frame/rails; not a tractor.",
+      "source_occurrences": [
+        {
+          "source": "referenceA37\u201343seconds",
+          "label": "Mechanized wheat harvesting",
+          "region": ""
+        }
+      ],
+      "existing_coverage": [],
+      "proposed_reference_format": "Family sheet(s) with readable opposing three-quarter views for each distinct form, plus use/open-state or material/detail panels where meaningful. Split into multiple sheets when variants become too small. No mandatory eight-angle repetition per form.",
+      "status": "MISSING_DEDICATED_SELECTED_REFERENCE_AT_BASELINE"
+    },
+    {
+      "id": "wheat_processor",
+      "name": "Wheat food processor",
+      "source_variants_to_cover": [
+        "blue processor with wheat inlet and bread-like output tray"
+      ],
+      "variant_count": 1,
+      "gap_class": "LOCKED_VIDEO_MACHINE_FAMILY",
+      "why_distinct": "Distinct sourceA machine. Do not invent flour intermediate or exact recipe.",
+      "source_occurrences": [
+        {
+          "source": "referenceA37\u201343seconds",
+          "label": "Blue/orange wheat processor",
+          "region": ""
+        }
+      ],
+      "existing_coverage": [],
+      "proposed_reference_format": "Family sheet(s) with readable opposing three-quarter views for each distinct form, plus use/open-state or material/detail panels where meaningful. Split into multiple sheets when variants become too small. No mandatory eight-angle repetition per form.",
+      "status": "MISSING_DEDICATED_SELECTED_REFERENCE_AT_BASELINE"
+    },
+    {
+      "id": "herbs",
+      "name": "Herbs",
+      "source_variants_to_cover": [
+        "gathered herb resource"
+      ],
+      "variant_count": 1,
+      "gap_class": "ATLAS_RESOURCE_NOUN",
+      "why_distinct": "Additional explicit atlas noun beyond existing33 bounded resource concepts; no medicinal effect or recipe established.",
+      "source_occurrences": [
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Herbs",
+          "region": "resource types"
+        }
+      ],
+      "existing_coverage": [],
+      "proposed_reference_format": "Family sheet(s) with readable opposing three-quarter views for each distinct form, plus use/open-state or material/detail panels where meaningful. Split into multiple sheets when variants become too small. No mandatory eight-angle repetition per form.",
+      "status": "MISSING_DEDICATED_SELECTED_REFERENCE_AT_BASELINE"
+    },
+    {
+      "id": "crystal",
+      "name": "Crystal",
+      "source_variants_to_cover": [
+        "crystal resource cluster"
+      ],
+      "variant_count": 1,
+      "gap_class": "ATLAS_RESOURCE_NOUN",
+      "why_distinct": "Additional explicit atlas noun beyond existing33 bounded resource concepts; no power/element/drop table established.",
+      "source_occurrences": [
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Crystal",
+          "region": "resource types"
+        }
+      ],
+      "existing_coverage": [],
+      "proposed_reference_format": "Family sheet(s) with readable opposing three-quarter views for each distinct form, plus use/open-state or material/detail panels where meaningful. Split into multiple sheets when variants become too small. No mandatory eight-angle repetition per form.",
+      "status": "MISSING_DEDICATED_SELECTED_REFERENCE_AT_BASELINE"
+    },
+    {
+      "id": "camp_tiles",
+      "name": "Physical camp foundation and tile kit",
+      "source_variants_to_cover": [
+        "camp center tile",
+        "walkway tile",
+        "snow tile",
+        "storage pad"
+      ],
+      "variant_count": 4,
+      "gap_class": "SOURCE_BOARD_MODULAR_VARIANTS",
+      "why_distinct": "Existing storage/purchase plots are flat marked interaction zones; these are sculpted timber/stone/snow modules.",
+      "source_occurrences": [
+        {
+          "source": "18607.png",
+          "label": "Camp center tile",
+          "region": "upper-right camp foundations & tiles"
+        },
+        {
+          "source": "18607.png",
+          "label": "Walkway tile",
+          "region": "upper-right camp foundations & tiles"
+        },
+        {
+          "source": "18607.png",
+          "label": "Snow tile",
+          "region": "upper-right camp foundations & tiles"
+        },
+        {
+          "source": "18607.png",
+          "label": "Storage pad",
+          "region": "upper-right camp foundations & tiles"
+        },
+        {
+          "source": "18600.png",
+          "label": "snow ground tile",
+          "region": "row3"
+        },
+        {
+          "source": "18600.png",
+          "label": "plank floor tile",
+          "region": "row3"
+        }
+      ],
+      "existing_coverage": [],
+      "proposed_reference_format": "Family sheet(s) with readable opposing three-quarter views for each distinct form, plus use/open-state or material/detail panels where meaningful. Split into multiple sheets when variants become too small. No mandatory eight-angle repetition per form.",
+      "status": "MISSING_DEDICATED_SELECTED_REFERENCE_AT_BASELINE"
+    },
+    {
+      "id": "survivor_tents",
+      "name": "Survivor shelter tents",
+      "source_variants_to_cover": [
+        "beginner tent",
+        "survivor shelter tent with stove/chimney"
+      ],
+      "variant_count": 2,
+      "gap_class": "SOURCE_BOARD_UPGRADE_VARIANTS",
+      "why_distinct": "Compact early A-frame and larger midcamp insulated shelter are different visible forms; stove tent is not a medical tent.",
+      "source_occurrences": [
+        {
+          "source": "18607.png",
+          "label": "Beginner tent",
+          "region": "middle building row"
+        },
+        {
+          "source": "18609.png",
+          "label": "Survivor shelter tent",
+          "region": "second row"
+        },
+        {
+          "source": "18600.png",
+          "label": "blue/beige A-frame shelter",
+          "region": "row1"
+        }
+      ],
+      "existing_coverage": [],
+      "proposed_reference_format": "Family sheet(s) with readable opposing three-quarter views for each distinct form, plus use/open-state or material/detail panels where meaningful. Split into multiple sheets when variants become too small. No mandatory eight-angle repetition per form.",
+      "status": "MISSING_DEDICATED_SELECTED_REFERENCE_AT_BASELINE"
+    },
+    {
+      "id": "cabins",
+      "name": "Residential cabins",
+      "source_variants_to_cover": [
+        "wooden hut",
+        "upgraded cabin"
+      ],
+      "variant_count": 2,
+      "gap_class": "SOURCE_BOARD_UPGRADE_VARIANTS",
+      "why_distinct": "Both residential forms are absent from equipment and storehouse selections.",
+      "source_occurrences": [
+        {
+          "source": "18607.png",
+          "label": "Wooden hut",
+          "region": "middle building row"
+        },
+        {
+          "source": "18609.png",
+          "label": "Upgraded cabin",
+          "region": "top buildings"
+        }
+      ],
+      "existing_coverage": [],
+      "proposed_reference_format": "Family sheet(s) with readable opposing three-quarter views for each distinct form, plus use/open-state or material/detail panels where meaningful. Split into multiple sheets when variants become too small. No mandatory eight-angle repetition per form.",
+      "status": "MISSING_DEDICATED_SELECTED_REFERENCE_AT_BASELINE"
+    },
+    {
+      "id": "bunkhouse",
+      "name": "Bunkhouse",
+      "source_variants_to_cover": [
+        "bunkhouse"
+      ],
+      "variant_count": 1,
+      "gap_class": "SOURCE_BOARD_BUILDING_FAMILY",
+      "why_distinct": "Multi-room/multi-bed residence is a distinct named building, not a storage house.",
+      "source_occurrences": [
+        {
+          "source": "18609.png",
+          "label": "Bunkhouse",
+          "region": "top buildings"
+        }
+      ],
+      "existing_coverage": [],
+      "proposed_reference_format": "Family sheet(s) with readable opposing three-quarter views for each distinct form, plus use/open-state or material/detail panels where meaningful. Split into multiple sheets when variants become too small. No mandatory eight-angle repetition per form.",
+      "status": "MISSING_DEDICATED_SELECTED_REFERENCE_AT_BASELINE"
+    },
+    {
+      "id": "stockpile_shelter",
+      "name": "Stockpile shelter",
+      "source_variants_to_cover": [
+        "blue-roof open stockpile shelter"
+      ],
+      "variant_count": 1,
+      "gap_class": "SOURCE_BOARD_BUILDING_FAMILY",
+      "why_distinct": "Roofed open shelter with accessible stacked materials differs from enclosed general storehouse and loose crates.",
+      "source_occurrences": [
+        {
+          "source": "18607.png",
+          "label": "Stockpile",
+          "region": "middle building row"
+        }
+      ],
+      "existing_coverage": [
+        {
+          "path": "Docs/Design/StructureReferences/2026-11-26/upgradeable-storage-house/selected/storage-house-starter.png",
+          "status": "PRIOR_SELECTED_REFERENCE",
+          "reason": "Related approved family; new source form remains distinct."
+        },
+        {
+          "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/12-cargo.png",
+          "status": "PRIOR_SELECTED_REFERENCE",
+          "reason": "Related approved family; new source form remains distinct."
+        }
+      ],
+      "proposed_reference_format": "Family sheet(s) with readable opposing three-quarter views for each distinct form, plus use/open-state or material/detail panels where meaningful. Split into multiple sheets when variants become too small. No mandatory eight-angle repetition per form.",
+      "status": "MISSING_DEDICATED_SELECTED_REFERENCE_AT_BASELINE"
+    },
+    {
+      "id": "medical_facilities",
+      "name": "Clinic, medical huts and hospital concepts",
+      "source_variants_to_cover": [
+        "clinic / medic tent",
+        "basic green-roof medical hut",
+        "reinforced medical hut",
+        "atlas hospital example1",
+        "atlas hospital example2",
+        "atlas hospital example3"
+      ],
+      "variant_count": 6,
+      "gap_class": "SOURCE_BOARD_AND_ATLAS_VARIANTS",
+      "why_distinct": "Three early/midcamp forms plus three distinct atlas field-hospital forms. Atlas rows are examples, not six frozen numerical upgrade tiers.",
+      "source_occurrences": [
+        {
+          "source": "18607.png",
+          "label": "Clinic / Medic tent",
+          "region": "lower building row"
+        },
+        {
+          "source": "18609.png",
+          "label": "Reinforced medical hut",
+          "region": "second row"
+        },
+        {
+          "source": "18600.png",
+          "label": "green-roof medical hut",
+          "region": "row2"
+        },
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Hospital example1",
+          "region": "upgrade examples (some of many), Hospital column, row1"
+        },
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Hospital example2",
+          "region": "upgrade examples (some of many), Hospital column, row2"
+        },
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Hospital example3",
+          "region": "upgrade examples (some of many), Hospital column, row3"
+        }
+      ],
+      "existing_coverage": [],
+      "proposed_reference_format": "Family sheet(s) with readable opposing three-quarter views for each distinct form, plus use/open-state or material/detail panels where meaningful. Split into multiple sheets when variants become too small. No mandatory eight-angle repetition per form.",
+      "status": "MISSING_DEDICATED_SELECTED_REFERENCE_AT_BASELINE"
+    },
+    {
+      "id": "dog_kennels",
+      "name": "Dog kennel upgrades",
+      "source_variants_to_cover": [
+        "dog kennel level1",
+        "kennel level2"
+      ],
+      "variant_count": 2,
+      "gap_class": "SOURCE_BOARD_UPGRADE_VARIANTS",
+      "why_distinct": "Animal companion references do not supply kennel buildings.",
+      "source_occurrences": [
+        {
+          "source": "18607.png",
+          "label": "Dog kennel (LVL1)",
+          "region": "lower building row"
+        },
+        {
+          "source": "18609.png",
+          "label": "Kennel level2",
+          "region": "second row"
+        }
+      ],
+      "existing_coverage": [],
+      "proposed_reference_format": "Family sheet(s) with readable opposing three-quarter views for each distinct form, plus use/open-state or material/detail panels where meaningful. Split into multiple sheets when variants become too small. No mandatory eight-angle repetition per form.",
+      "status": "MISSING_DEDICATED_SELECTED_REFERENCE_AT_BASELINE"
+    },
+    {
+      "id": "cold_storage_shed",
+      "name": "Cold storage shed",
+      "source_variants_to_cover": [
+        "arched insulated cold storage shed"
+      ],
+      "variant_count": 1,
+      "gap_class": "SOURCE_BOARD_BUILDING_FAMILY",
+      "why_distinct": "Round-topped industrial shed with snowflake identity differs from latest gable-roof general storehouse. No refrigeration mechanic or capacity established.",
+      "source_occurrences": [
+        {
+          "source": "18609.png",
+          "label": "Cold storage shed",
+          "region": "second row"
+        }
+      ],
+      "existing_coverage": [
+        {
+          "path": "Docs/Design/StructureReferences/2026-11-26/upgradeable-storage-house/selected/storage-house-starter.png",
+          "status": "PRIOR_SELECTED_REFERENCE",
+          "reason": "Related approved family; new source form remains distinct."
+        }
+      ],
+      "proposed_reference_format": "Family sheet(s) with readable opposing three-quarter views for each distinct form, plus use/open-state or material/detail panels where meaningful. Split into multiple sheets when variants become too small. No mandatory eight-angle repetition per form.",
+      "status": "MISSING_DEDICATED_SELECTED_REFERENCE_AT_BASELINE"
+    },
+    {
+      "id": "bridges",
+      "name": "Camp crossing bridges",
+      "source_variants_to_cover": [
+        "rope bridge",
+        "reinforced bridge"
+      ],
+      "variant_count": 2,
+      "gap_class": "SOURCE_BOARD_UPGRADE_VARIANTS",
+      "why_distinct": "The bridge-builder cart is a separate mobile tool; it does not cover either actual crossing.",
+      "source_occurrences": [
+        {
+          "source": "18607.png",
+          "label": "Rope bridge",
+          "region": "middle right"
+        },
+        {
+          "source": "18609.png",
+          "label": "Reinforced bridge",
+          "region": "third row"
+        }
+      ],
+      "existing_coverage": [
+        {
+          "id": "bridge_builder_cart",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/bridge_builder_cart.png",
+          "status": "PASS",
+          "score": 9.3,
+          "reason": "Related family or earlier tier only; does not close this source form."
+        }
+      ],
+      "proposed_reference_format": "Family sheet(s) with readable opposing three-quarter views for each distinct form, plus use/open-state or material/detail panels where meaningful. Split into multiple sheets when variants become too small. No mandatory eight-angle repetition per form.",
+      "status": "MISSING_DEDICATED_SELECTED_REFERENCE_AT_BASELINE"
+    },
+    {
+      "id": "reinforced_palisades",
+      "name": "Reinforced timber palisades",
+      "source_variants_to_cover": [
+        "short reinforced palisade",
+        "tall reinforced palisade"
+      ],
+      "variant_count": 2,
+      "gap_class": "SOURCE_BOARD_UPGRADE_VARIANTS",
+      "why_distinct": "Current approved fence has cream ropes and warm timber;18609 forms have blue metal straps and distinct heights.18600 metal-banded variant belongs to this family.",
+      "source_occurrences": [
+        {
+          "source": "18609.png",
+          "label": "Reinforced palisade wall (short)",
+          "region": "third row"
+        },
+        {
+          "source": "18609.png",
+          "label": "Reinforced palisade wall (tall)",
+          "region": "third row"
+        },
+        {
+          "source": "18600.png",
+          "label": "metal-banded palisade",
+          "region": "row2"
+        }
+      ],
+      "existing_coverage": [
+        {
+          "path": "Docs/Design/StructureReferences/2026-11-25/selected/fence-cardinal.png",
+          "status": "PRIOR_SELECTED_REFERENCE",
+          "reason": "Related approved family; new source form remains distinct."
+        }
+      ],
+      "proposed_reference_format": "Family sheet(s) with readable opposing three-quarter views for each distinct form, plus use/open-state or material/detail panels where meaningful. Split into multiple sheets when variants become too small. No mandatory eight-angle repetition per form.",
+      "status": "MISSING_DEDICATED_SELECTED_REFERENCE_AT_BASELINE"
+    },
+    {
+      "id": "improved_gatehouse",
+      "name": "Improved gatehouse",
+      "source_variants_to_cover": [
+        "twin-tower timber gatehouse"
+      ],
+      "variant_count": 1,
+      "gap_class": "SOURCE_BOARD_BUILDING_FAMILY",
+      "why_distinct": "Current double swing gate has posts but no flanking roofed towers; source18609 gatehouse is distinct.",
+      "source_occurrences": [
+        {
+          "source": "18609.png",
+          "label": "Improved gatehouse",
+          "region": "third row"
+        }
+      ],
+      "existing_coverage": [
+        {
+          "path": "Docs/Design/StructureReferences/2026-11-25/selected/gates-cardinal.png",
+          "status": "PRIOR_SELECTED_REFERENCE",
+          "reason": "Related approved family; new source form remains distinct."
+        }
+      ],
+      "proposed_reference_format": "Family sheet(s) with readable opposing three-quarter views for each distinct form, plus use/open-state or material/detail panels where meaningful. Split into multiple sheets when variants become too small. No mandatory eight-angle repetition per form.",
+      "status": "MISSING_DEDICATED_SELECTED_REFERENCE_AT_BASELINE"
+    },
+    {
+      "id": "fish_hut",
+      "name": "Fish hut over ice",
+      "source_variants_to_cover": [
+        "raised fishing hut with ice access"
+      ],
+      "variant_count": 1,
+      "gap_class": "SOURCE_BOARD_BUILDING_FAMILY",
+      "why_distinct": "Existing ice fishing spot/rack/winch do not cover the elevated enclosing hut.",
+      "source_occurrences": [
+        {
+          "source": "18609.png",
+          "label": "Fish hut over ice",
+          "region": "third row"
+        }
+      ],
+      "existing_coverage": [
+        {
+          "id": "ice_fishing_spot",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/ice_fishing_spot.png",
+          "status": "PASS",
+          "score": 9.2,
+          "reason": "Related family or earlier tier only; does not close this source form."
+        },
+        {
+          "id": "fishing_winch",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/fishing_winch.png",
+          "status": "PASS",
+          "score": 9.3,
+          "reason": "Related family or earlier tier only; does not close this source form."
+        }
+      ],
+      "proposed_reference_format": "Family sheet(s) with readable opposing three-quarter views for each distinct form, plus use/open-state or material/detail panels where meaningful. Split into multiple sheets when variants become too small. No mandatory eight-angle repetition per form.",
+      "status": "MISSING_DEDICATED_SELECTED_REFERENCE_AT_BASELINE"
+    },
+    {
+      "id": "spike_barricade",
+      "name": "Timber spike barricade",
+      "source_variants_to_cover": [
+        "small crossed timber spike barricade"
+      ],
+      "variant_count": 1,
+      "gap_class": "SOURCE_VISIBLE_UNLABELLED_PROP",
+      "why_distinct": "18600 depicts a distinct grounded cluster of pointed timber stakes. This is an editorial working name, not a canonical source label or real construction plan.",
+      "source_occurrences": [
+        {
+          "source": "18600.png",
+          "label": "crossed timber spike barricade",
+          "region": "row3"
+        }
+      ],
+      "existing_coverage": [],
+      "proposed_reference_format": "Family sheet(s) with readable opposing three-quarter views for each distinct form, plus use/open-state or material/detail panels where meaningful. Split into multiple sheets when variants become too small. No mandatory eight-angle repetition per form.",
+      "status": "MISSING_DEDICATED_SELECTED_REFERENCE_AT_BASELINE"
+    },
+    {
+      "id": "late_furnaces",
+      "name": "Late camp furnace forms",
+      "source_variants_to_cover": [
+        "level51\u201370 form",
+        "level71\u201390 form",
+        "level91\u2013100 form"
+      ],
+      "variant_count": 3,
+      "gap_class": "ATLAS_LATE_RANGE_VARIANTS",
+      "why_distinct": "Existing ten furnace sheets cover named levels1\u201350. They do not cover the three additional late-stage forms shown by atlas.",
+      "source_occurrences": [
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Level51\u201370",
+          "region": "camp / furnace upgrade progression"
+        },
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Level71\u201390",
+          "region": "camp / furnace upgrade progression"
+        },
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Level91\u2013100",
+          "region": "camp / furnace upgrade progression"
+        }
+      ],
+      "existing_coverage": [
+        {
+          "id": "furnace_level_50",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/furnace_level_50.png",
+          "status": "PASS",
+          "score": 9.4,
+          "reason": "Related family or earlier tier only; does not close this source form."
+        }
+      ],
+      "proposed_reference_format": "Family sheet(s) with readable opposing three-quarter views for each distinct form, plus use/open-state or material/detail panels where meaningful. Split into multiple sheets when variants become too small. No mandatory eight-angle repetition per form.",
+      "status": "MISSING_DEDICATED_SELECTED_REFERENCE_AT_BASELINE"
+    },
+    {
+      "id": "fortress_walls",
+      "name": "Fortress wall upgrade examples",
+      "source_variants_to_cover": [
+        "atlas wall example1",
+        "atlas wall example2",
+        "atlas wall example3"
+      ],
+      "variant_count": 3,
+      "gap_class": "ATLAS_FUTURE_VARIANTS",
+      "why_distinct": "Stone/metal walls in atlas are distinct from timber palisades; three depicted examples, not an exhaustive future wall catalogue.",
+      "source_occurrences": [
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Walls example1",
+          "region": "upgrade examples (some of many), Walls column, row1"
+        },
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Walls example2",
+          "region": "upgrade examples (some of many), Walls column, row2"
+        },
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Walls example3",
+          "region": "upgrade examples (some of many), Walls column, row3"
+        }
+      ],
+      "existing_coverage": [
+        {
+          "path": "Docs/Design/StructureReferences/2026-11-25/selected/fence-cardinal.png",
+          "status": "PRIOR_SELECTED_REFERENCE",
+          "reason": "Related approved family; new source form remains distinct."
+        }
+      ],
+      "proposed_reference_format": "Family sheet(s) with readable opposing three-quarter views for each distinct form, plus use/open-state or material/detail panels where meaningful. Split into multiple sheets when variants become too small. No mandatory eight-angle repetition per form.",
+      "status": "MISSING_DEDICATED_SELECTED_REFERENCE_AT_BASELINE"
+    },
+    {
+      "id": "fortress_gates",
+      "name": "Fortress gate upgrade examples",
+      "source_variants_to_cover": [
+        "atlas gate example1",
+        "atlas gate example2",
+        "atlas gate example3"
+      ],
+      "variant_count": 3,
+      "gap_class": "ATLAS_FUTURE_VARIANTS",
+      "why_distinct": "Stone/metal piers and gate panels differ from existing rope posts/swing gate and midcamp timber gatehouse.",
+      "source_occurrences": [
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Gate example1",
+          "region": "upgrade examples (some of many), Gate column, row1"
+        },
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Gate example2",
+          "region": "upgrade examples (some of many), Gate column, row2"
+        },
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Gate example3",
+          "region": "upgrade examples (some of many), Gate column, row3"
+        }
+      ],
+      "existing_coverage": [
+        {
+          "path": "Docs/Design/StructureReferences/2026-11-25/selected/gates-cardinal.png",
+          "status": "PRIOR_SELECTED_REFERENCE",
+          "reason": "Related approved family; new source form remains distinct."
+        }
+      ],
+      "proposed_reference_format": "Family sheet(s) with readable opposing three-quarter views for each distinct form, plus use/open-state or material/detail panels where meaningful. Split into multiple sheets when variants become too small. No mandatory eight-angle repetition per form.",
+      "status": "MISSING_DEDICATED_SELECTED_REFERENCE_AT_BASELINE"
+    },
+    {
+      "id": "fortress_watchtowers",
+      "name": "Fortress watchtower upgrade examples",
+      "source_variants_to_cover": [
+        "atlas watchtower example1",
+        "atlas watchtower example2",
+        "atlas watchtower example3"
+      ],
+      "variant_count": 3,
+      "gap_class": "ATLAS_FUTURE_VARIANTS",
+      "why_distinct": "Three stone/metal tower forms differ from already-approved timber watchtower/guard tower.",
+      "source_occurrences": [
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Watch tower example1",
+          "region": "upgrade examples (some of many), Watch tower column, row1"
+        },
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Watch tower example2",
+          "region": "upgrade examples (some of many), Watch tower column, row2"
+        },
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Watch tower example3",
+          "region": "upgrade examples (some of many), Watch tower column, row3"
+        }
+      ],
+      "existing_coverage": [
+        {
+          "id": "watchtower",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/watchtower.png",
+          "status": "PASS",
+          "score": 9.3,
+          "reason": "Related family or earlier tier only; does not close this source form."
+        },
+        {
+          "id": "guard_tower",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/guard_tower.png",
+          "status": "PASS",
+          "score": 9.4,
+          "reason": "Related family or earlier tier only; does not close this source form."
+        }
+      ],
+      "proposed_reference_format": "Family sheet(s) with readable opposing three-quarter views for each distinct form, plus use/open-state or material/detail panels where meaningful. Split into multiple sheets when variants become too small. No mandatory eight-angle repetition per form.",
+      "status": "MISSING_DEDICATED_SELECTED_REFERENCE_AT_BASELINE"
+    },
+    {
+      "id": "archer_towers",
+      "name": "Archer tower upgrade examples",
+      "source_variants_to_cover": [
+        "atlas archer tower example1",
+        "atlas archer tower example2",
+        "atlas archer tower example3"
+      ],
+      "variant_count": 3,
+      "gap_class": "ATLAS_FUTURE_VARIANTS",
+      "why_distinct": "Atlas explicitly names this family separately from watchtower and cannon tower; existing ballista is a different asset.",
+      "source_occurrences": [
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Archer tower example1",
+          "region": "upgrade examples (some of many), Archer tower column, row1"
+        },
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Archer tower example2",
+          "region": "upgrade examples (some of many), Archer tower column, row2"
+        },
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Archer tower example3",
+          "region": "upgrade examples (some of many), Archer tower column, row3"
+        }
+      ],
+      "existing_coverage": [
+        {
+          "id": "ballista_tower",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/ballista_tower.png",
+          "status": "PASS",
+          "score": 9.4,
+          "reason": "Related family or earlier tier only; does not close this source form."
+        }
+      ],
+      "proposed_reference_format": "Family sheet(s) with readable opposing three-quarter views for each distinct form, plus use/open-state or material/detail panels where meaningful. Split into multiple sheets when variants become too small. No mandatory eight-angle repetition per form.",
+      "status": "MISSING_DEDICATED_SELECTED_REFERENCE_AT_BASELINE"
+    },
+    {
+      "id": "cannon_towers",
+      "name": "Cannon tower upgrade examples",
+      "source_variants_to_cover": [
+        "atlas cannon tower example1",
+        "atlas cannon tower example2",
+        "atlas cannon tower example3"
+      ],
+      "variant_count": 3,
+      "gap_class": "ATLAS_FUTURE_VARIANTS",
+      "why_distinct": "Three source-labelled fantasy game defensive tower forms; no real firing mechanism, ammunition recipe or runtime attack behavior inferred.",
+      "source_occurrences": [
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Cannon tower example1",
+          "region": "upgrade examples (some of many), Cannon tower column, row1"
+        },
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Cannon tower example2",
+          "region": "upgrade examples (some of many), Cannon tower column, row2"
+        },
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Cannon tower example3",
+          "region": "upgrade examples (some of many), Cannon tower column, row3"
+        }
+      ],
+      "existing_coverage": [],
+      "proposed_reference_format": "Family sheet(s) with readable opposing three-quarter views for each distinct form, plus use/open-state or material/detail panels where meaningful. Split into multiple sheets when variants become too small. No mandatory eight-angle repetition per form.",
+      "status": "MISSING_DEDICATED_SELECTED_REFERENCE_AT_BASELINE"
+    },
+    {
+      "id": "worker_huts",
+      "name": "Worker hut upgrade examples",
+      "source_variants_to_cover": [
+        "atlas worker hut example1",
+        "atlas worker hut example2",
+        "atlas worker hut example3"
+      ],
+      "variant_count": 3,
+      "gap_class": "ATLAS_FUTURE_VARIANTS",
+      "why_distinct": "Atlas names worker hut separately from workshop; these are authored lodging/worker-building appearances, not new job mechanics.",
+      "source_occurrences": [
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Worker hut example1",
+          "region": "upgrade examples (some of many), Worker hut column, row1"
+        },
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Worker hut example2",
+          "region": "upgrade examples (some of many), Worker hut column, row2"
+        },
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Worker hut example3",
+          "region": "upgrade examples (some of many), Worker hut column, row3"
+        }
+      ],
+      "existing_coverage": [],
+      "proposed_reference_format": "Family sheet(s) with readable opposing three-quarter views for each distinct form, plus use/open-state or material/detail panels where meaningful. Split into multiple sheets when variants become too small. No mandatory eight-angle repetition per form.",
+      "status": "MISSING_DEDICATED_SELECTED_REFERENCE_AT_BASELINE"
+    },
+    {
+      "id": "atlas_storage",
+      "name": "Atlas storage building alternatives",
+      "source_variants_to_cover": [
+        "atlas storage example1",
+        "atlas storage example2",
+        "atlas storage example3"
+      ],
+      "variant_count": 3,
+      "gap_class": "ATLAS_FUTURE_VISUAL_ALTERNATIVES",
+      "why_distinct": "Latest three-stage gable storehouse fully covers its approved contract. Atlas flat-roof fortified forms with barrel annexes are additional visual alternatives; do not replace current storehouse or imply its approval failed.",
+      "source_occurrences": [
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Storage example1",
+          "region": "upgrade examples (some of many), Storage column, row1"
+        },
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Storage example2",
+          "region": "upgrade examples (some of many), Storage column, row2"
+        },
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Storage example3",
+          "region": "upgrade examples (some of many), Storage column, row3"
+        }
+      ],
+      "existing_coverage": [
+        {
+          "path": "Docs/Design/StructureReferences/2026-11-26/upgradeable-storage-house/selected/storage-house-starter.png",
+          "status": "PRIOR_SELECTED_REFERENCE",
+          "reason": "Related approved family; new source form remains distinct."
+        }
+      ],
+      "proposed_reference_format": "Family sheet(s) with readable opposing three-quarter views for each distinct form, plus use/open-state or material/detail panels where meaningful. Split into multiple sheets when variants become too small. No mandatory eight-angle repetition per form.",
+      "status": "MISSING_DEDICATED_SELECTED_REFERENCE_AT_BASELINE"
+    },
+    {
+      "id": "biome_vignettes",
+      "name": "Future biome visual references",
+      "source_variants_to_cover": [
+        "pine forest",
+        "frozen lake",
+        "ice canyon",
+        "snow cliffs",
+        "abandoned mines"
+      ],
+      "variant_count": 5,
+      "gap_class": "ATLAS_FUTURE_REGION_CONCEPTS",
+      "why_distinct": "Five labelled atlas thumbnails define broad scene concepts, not a complete terrain mesh/node/prop list or playable world. Existing native environment captures are not dedicated approved versions of these five concept vignettes.",
+      "source_occurrences": [
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Pine forest",
+          "region": "biome variants (future regions)"
+        },
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Frozen lake",
+          "region": "biome variants (future regions)"
+        },
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Ice canyon",
+          "region": "biome variants (future regions)"
+        },
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Snow cliffs",
+          "region": "biome variants (future regions)"
+        },
+        {
+          "source": "Havenline: Frostbound World Atlas.png",
+          "label": "Abandoned mines",
+          "region": "biome variants (future regions)"
+        }
+      ],
+      "existing_coverage": [],
+      "proposed_reference_format": "Family sheet(s) with readable opposing three-quarter views for each distinct form, plus use/open-state or material/detail panels where meaningful. Split into multiple sheets when variants become too small. No mandatory eight-angle repetition per form.",
+      "status": "MISSING_DEDICATED_SELECTED_REFERENCE_AT_BASELINE"
+    }
+  ],
+  "source_occurrence_matrix": [
+    {
+      "source": "18607.png",
+      "source_label": "Furnace level 1",
+      "source_region": "upper-left furnace evolution",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "furnace_level_01",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/furnace_level_01.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "e5b7f1f87fd668b435619c1c260e3bcdebfa0d21ad2978c08445205669addca5"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18607.png",
+      "source_label": "Furnace level 5",
+      "source_region": "upper-left furnace evolution",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "furnace_level_05",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/furnace_level_05.png",
+          "status": "PASS",
+          "score": 9.3,
+          "sha256": "82995fe66684aa8e51f02b4ec26f7105e7d8f2b9be0f092c71e0a7fb449db396"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18607.png",
+      "source_label": "Furnace level 10",
+      "source_region": "upper-left furnace evolution",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "furnace_level_10",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/furnace_level_10.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "dcb83063d8a6a6fbe3f34604b4b0929ad6aa143efa212fe75e7cac17c84787a4"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18607.png",
+      "source_label": "Furnace level 15",
+      "source_region": "upper-left furnace evolution",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "furnace_level_15",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/furnace_level_15.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "a20f158698f6865ff80591f2b738d546c6befd2f7e6d8aec284764488d915ea5"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18607.png",
+      "source_label": "Furnace level 25",
+      "source_region": "upper-left furnace evolution",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "furnace_level_25",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/furnace_level_25.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "0378e3a5d6a3348c8e6ac079280434f0a0979a77f51516ba2e151f53967a52d3"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18607.png",
+      "source_label": "Camp center tile",
+      "source_region": "upper-right camp foundations & tiles",
+      "gap_family_id": "camp_tiles",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18607.png",
+      "source_label": "Walkway tile",
+      "source_region": "upper-right camp foundations & tiles",
+      "gap_family_id": "camp_tiles",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18607.png",
+      "source_label": "Snow tile",
+      "source_region": "upper-right camp foundations & tiles",
+      "gap_family_id": "camp_tiles",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18607.png",
+      "source_label": "Storage pad",
+      "source_region": "upper-right camp foundations & tiles",
+      "gap_family_id": "camp_tiles",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18607.png",
+      "source_label": "Beginner tent",
+      "source_region": "middle building row",
+      "gap_family_id": "survivor_tents",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18607.png",
+      "source_label": "Wooden hut",
+      "source_region": "middle building row",
+      "gap_family_id": "cabins",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18607.png",
+      "source_label": "Stockpile",
+      "source_region": "middle building row",
+      "gap_family_id": "stockpile_shelter",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18607.png",
+      "source_label": "Cookfire",
+      "source_region": "middle equipment row",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "cookfire",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/cookfire.png",
+          "status": "PASS",
+          "score": 9.3,
+          "sha256": "26d1ba7a36b59dd80ba00172b5f86436a70bea714fc6dc4f63c31565aa84b103"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18607.png",
+      "source_label": "Butcher table",
+      "source_region": "middle equipment row",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "butcher_table",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/butcher_table.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "6c4722fcb7d76cf267b88b37f59065ab57a1307ac911e4207651642f172292ad"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18607.png",
+      "source_label": "Drying rack",
+      "source_region": "middle equipment row",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "mixed_drying_rack",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/mixed_drying_rack.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "97fdf3c433eca40d786815d975938296d5f98c62b40084355accc6975abcccff"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18607.png",
+      "source_label": "Fishing spot",
+      "source_region": "middle equipment row",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "ice_fishing_spot",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/ice_fishing_spot.png",
+          "status": "PASS",
+          "score": 9.2,
+          "sha256": "35081db44c2208a46298fa4549f529abc7715b26f5b6b7d212de021b601ea713"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18607.png",
+      "source_label": "Rope bridge",
+      "source_region": "middle right",
+      "gap_family_id": "bridges",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18607.png",
+      "source_label": "Saw station",
+      "source_region": "lower building row",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "saw_station",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/saw_station.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "8191ba20d0cec7c92c22d35c5befa87c53b8c894ca94341681b3c16834e24d15"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18607.png",
+      "source_label": "Workshop (LVL1)",
+      "source_region": "lower building row",
+      "gap_family_id": "workshop",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18607.png",
+      "source_label": "Clinic / Medic tent",
+      "source_region": "lower building row",
+      "gap_family_id": "medical_facilities",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18607.png",
+      "source_label": "Dog kennel (LVL1)",
+      "source_region": "lower building row",
+      "gap_family_id": "dog_kennels",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18607.png",
+      "source_label": "Storage crates",
+      "source_region": "lower building row",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/12-cargo.png",
+          "status": "PRIOR_SELECTED_REFERENCE",
+          "git_blob_sha": "0f00f3467086f520c62d4304a8900775e55e02f1"
+        }
+      ],
+      "notes": "Cargo sheet visually inspected: wooden braced green-lid crate exactly covers this prop family; arrangement of multiple crates does not create a new identity."
+    },
+    {
+      "source": "18607.png",
+      "source_label": "Spiked palisade",
+      "source_region": "lower right defenses",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "path": "Docs/Design/StructureReferences/2026-11-25/selected/fence-cardinal.png",
+          "status": "PRIOR_SELECTED_REFERENCE",
+          "git_blob_sha": "0f6fcd42f4dd078bc70dc89266b8dc30f8ea85cf"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18607.png",
+      "source_label": "Tall fence post",
+      "source_region": "lower right defenses",
+      "gap_family_id": null,
+      "status": "COVERED_COMPONENT",
+      "existing_selected": [
+        {
+          "path": "Docs/Design/StructureReferences/2026-11-25/selected/gates-cardinal.png",
+          "status": "PRIOR_SELECTED_REFERENCE",
+          "git_blob_sha": "00babe94f2a20cb72e57a44c137ac936a4d431c8"
+        }
+      ],
+      "notes": "Tall rope-bound snowcapped outer post is covered within current gate reference. No separate confirmed new identity required."
+    },
+    {
+      "source": "18607.png",
+      "source_label": "Gate",
+      "source_region": "lower right defenses",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "path": "Docs/Design/StructureReferences/2026-11-25/selected/gates-cardinal.png",
+          "status": "PRIOR_SELECTED_REFERENCE",
+          "git_blob_sha": "00babe94f2a20cb72e57a44c137ac936a4d431c8"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18607.png",
+      "source_label": "Watchtower",
+      "source_region": "lower right defenses",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "watchtower",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/watchtower.png",
+          "status": "PASS",
+          "score": 9.3,
+          "sha256": "2fe796e4962b426b6542e6cbff3d6201f0a8fcb96c326e810c1097fa8adcbb18"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18607.png",
+      "source_label": "Torch post",
+      "source_region": "lower right defenses",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "torch_post",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/torch_post.png",
+          "status": "PASS",
+          "score": 9.3,
+          "sha256": "19aaa598f0725fd410a3e3871664547152308b3bf5620c081cfe9f2aba65f0b7"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18607.png",
+      "source_label": "Hand-push snowplow",
+      "source_region": "bottom early assistance machines",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "hand_push_snowplow",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/hand_push_snowplow.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "7fa7b2fffe071cb5c9adc1f51e108a008e8b56a5ef04bad13fe94819d3b4df94"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18607.png",
+      "source_label": "Chopping station",
+      "source_region": "bottom early assistance machines",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "chopping_station",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/chopping_station.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "a14631b8ac7c6e3315548b2f9e1d073e44afe0fd587e7c0a5e175126e4be9f85"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18607.png",
+      "source_label": "Fishing winch",
+      "source_region": "bottom early assistance machines",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "fishing_winch",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/fishing_winch.png",
+          "status": "PASS",
+          "score": 9.3,
+          "sha256": "8b4f8a7fbe969f448ae10c7f33f498fb70dde80e466119c3b3539d9fa70963e1"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18607.png",
+      "source_label": "Sled hauler",
+      "source_region": "bottom early assistance machines",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "sled_hauler",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/sled_hauler.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "6841faba0c4a528d0851536d63dac1010c9ab60e3bcd4e60a37d53bce4cf9697"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18607.png",
+      "source_label": "Rescue beacon",
+      "source_region": "bottom early assistance machines",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "rescue_beacon",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/rescue_beacon.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "3f613faa91bc896e94102dde2ae1b44c07a2e528f140eca1d8521fa4abbdb1ee"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18609.png",
+      "source_label": "Furnace 26",
+      "source_region": "upper-left furnace evolution",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "furnace_level_26",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/furnace_level_26.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "fe383670c510b42f0947013a9ad49671a3858ae1897c2f6eff70fbf64ad9f2f8"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18609.png",
+      "source_label": "Furnace 30",
+      "source_region": "upper-left furnace evolution",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "furnace_level_30",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/furnace_level_30.png",
+          "status": "PASS",
+          "score": 9.3,
+          "sha256": "0b7defe85da8d71e41c0d8c02e3ed2a7c83a0243d68ed79398996425097c0900"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18609.png",
+      "source_label": "Furnace 34",
+      "source_region": "upper-left furnace evolution",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "furnace_level_34",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/furnace_level_34.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "1d5f114774fc70e01bd7e43a8c422a03a4cb8fac65cde66cabbc8730ef9f53f4"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18609.png",
+      "source_label": "Furnace 42",
+      "source_region": "upper-left furnace evolution",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "furnace_level_42",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/furnace_level_42.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "b3e542173d6de45d9c0bc5d6b5aacc995de476fb6889035cff3e4a01fc0c2713"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18609.png",
+      "source_label": "Furnace 50",
+      "source_region": "upper-left furnace evolution",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "furnace_level_50",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/furnace_level_50.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "92efa76677db4c4e7ba42c34b583ffdf4e3984c05cdd5e511c6b9124952a18d4"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18609.png",
+      "source_label": "Upgraded cabin",
+      "source_region": "top buildings",
+      "gap_family_id": "cabins",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18609.png",
+      "source_label": "Bunkhouse",
+      "source_region": "top buildings",
+      "gap_family_id": "bunkhouse",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18609.png",
+      "source_label": "Improved workshop",
+      "source_region": "top buildings",
+      "gap_family_id": "workshop",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18609.png",
+      "source_label": "Greenhouse / Warm grow hut",
+      "source_region": "top buildings",
+      "gap_family_id": "greenhouse",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18609.png",
+      "source_label": "Expanded cookhouse",
+      "source_region": "second row",
+      "gap_family_id": "cookhouse",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18609.png",
+      "source_label": "Reinforced medical hut",
+      "source_region": "second row",
+      "gap_family_id": "medical_facilities",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18609.png",
+      "source_label": "Lumber mill",
+      "source_region": "second row",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "lumber_mill",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/lumber_mill.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "8a35e8c07eeeb8fa31cc54c740eb5eef72d8e602bbcb7e325b04d53fda8bc0ac"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18609.png",
+      "source_label": "Quarry drill station",
+      "source_region": "second row",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "quarry_drill_station",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/quarry_drill_station.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "ca532628e80dcc8e2af4b60d787393777718ba4d50b65ac9e799cd40d823463d"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18609.png",
+      "source_label": "Cold storage shed",
+      "source_region": "second row",
+      "gap_family_id": "cold_storage_shed",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18609.png",
+      "source_label": "Survivor shelter tent",
+      "source_region": "second row",
+      "gap_family_id": "survivor_tents",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18609.png",
+      "source_label": "Kennel level2",
+      "source_region": "second row",
+      "gap_family_id": "dog_kennels",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18609.png",
+      "source_label": "Reinforced palisade wall (short)",
+      "source_region": "third row",
+      "gap_family_id": "reinforced_palisades",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18609.png",
+      "source_label": "Reinforced palisade wall (tall)",
+      "source_region": "third row",
+      "gap_family_id": "reinforced_palisades",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18609.png",
+      "source_label": "Improved gatehouse",
+      "source_region": "third row",
+      "gap_family_id": "improved_gatehouse",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18609.png",
+      "source_label": "Guard tower",
+      "source_region": "third row",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "guard_tower",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/guard_tower.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "d2268b9dec0684842c8a1f4a2f2188dce628a812bf14ef82875d90ac6bcda4c1"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18609.png",
+      "source_label": "Ballista tower",
+      "source_region": "third row",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "ballista_tower",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/ballista_tower.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "5c4562ba169b7d89d1880a3a6d2dfc94ae4752381e7f410cab63b437af89cbf2"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18609.png",
+      "source_label": "Hunting blind",
+      "source_region": "third row",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "hunting_blind",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/hunting_blind.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "f395c42f944aeae0e18cfcf77ff3a0b3a7264b1fd7f97e77c94525f78c9df1ef"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18609.png",
+      "source_label": "Fish hut over ice",
+      "source_region": "third row",
+      "gap_family_id": "fish_hut",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18609.png",
+      "source_label": "Reinforced bridge",
+      "source_region": "third row",
+      "gap_family_id": "bridges",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18609.png",
+      "source_label": "Steam saw",
+      "source_region": "bottom assistance machines",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "steam_saw",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/steam_saw.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "ef72f45112916dd31116c2eecec1c96d67e4940c83c81c487f0ffda7dade17d7"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18609.png",
+      "source_label": "Cargo sled",
+      "source_region": "bottom assistance machines",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "cargo_sled",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/cargo_sled.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "eef12f5f0f3e4adabbadf017d34441ce428c040b3e7ae3af601ab34ccc0b046c"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18609.png",
+      "source_label": "Pulley crane",
+      "source_region": "bottom assistance machines",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "pulley_crane",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/pulley_crane.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "ca2a9667063038bf5e48951ee93d7ae91aa02e820e5ee5234daa2e8a6f520458"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18609.png",
+      "source_label": "Ice drill",
+      "source_region": "bottom assistance machines",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "ice_drill",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/ice_drill.png",
+          "status": "PASS",
+          "score": 9.3,
+          "sha256": "f332b785eb6a0a93bd5d0c22dea6ea8b6ad84804d228331ffaddf1680ec0ee29"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18609.png",
+      "source_label": "Snow-cat utility",
+      "source_region": "bottom assistance machines",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "snow_cat_utility",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/snow_cat_utility.png",
+          "status": "PASS",
+          "score": 9.3,
+          "sha256": "6377f5c4ed44abc8999a6973847348f9f5a17ac6fa0e62a104003d8b7ad2e43a"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18609.png",
+      "source_label": "Bridge-builder cart",
+      "source_region": "bottom assistance machines",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "bridge_builder_cart",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/bridge_builder_cart.png",
+          "status": "PASS",
+          "score": 9.3,
+          "sha256": "58b79604031cd084e0de87a67817567e03e486b2c24fb569e6732dd565b06eb5"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18609.png",
+      "source_label": "Supply sorting table",
+      "source_region": "bottom assistance machines",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "supply_sorting_table",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/supply_sorting_table.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "713c14e4a64a52158b232d2c19dc19793f853f3555a6f467da8cfc8e99fada0c"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18600.png",
+      "source_label": "stone firepit",
+      "source_region": "row1",
+      "gap_family_id": null,
+      "status": "COVERED_FAMILY",
+      "existing_selected": [
+        {
+          "id": "cookfire",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/cookfire.png",
+          "status": "PASS",
+          "score": 9.3,
+          "sha256": "26d1ba7a36b59dd80ba00172b5f86436a70bea714fc6dc4f63c31565aa84b103"
+        }
+      ],
+      "notes": "Unlabelled source variant; covered heater/cookfire family, not additional named numerical tier."
+    },
+    {
+      "source": "18600.png",
+      "source_label": "small heated vessel",
+      "source_region": "row1",
+      "gap_family_id": null,
+      "status": "COVERED_FAMILY",
+      "existing_selected": [
+        {
+          "id": "hearth_vessel",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/hearth_vessel.png",
+          "status": "PASS",
+          "score": 9.3,
+          "sha256": "54d70b39a75b8b8abb585eab3384b916010451742d49fa0be958cfe5f75ef10e"
+        }
+      ],
+      "notes": "Unlabelled source variant; covered heater/cookfire family, not additional named numerical tier."
+    },
+    {
+      "source": "18600.png",
+      "source_label": "larger heated vessel",
+      "source_region": "row1",
+      "gap_family_id": null,
+      "status": "COVERED_FAMILY",
+      "existing_selected": [
+        {
+          "id": "hearth_vessel",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/hearth_vessel.png",
+          "status": "PASS",
+          "score": 9.3,
+          "sha256": "54d70b39a75b8b8abb585eab3384b916010451742d49fa0be958cfe5f75ef10e"
+        }
+      ],
+      "notes": "Unlabelled source variant; covered heater/cookfire family, not additional named numerical tier."
+    },
+    {
+      "source": "18600.png",
+      "source_label": "blue/beige A-frame shelter",
+      "source_region": "row1",
+      "gap_family_id": "survivor_tents",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18600.png",
+      "source_label": "open-front tool workshop",
+      "source_region": "row1",
+      "gap_family_id": "workshop",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18600.png",
+      "source_label": "open-front cooking shelter",
+      "source_region": "row1",
+      "gap_family_id": "cookhouse",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18600.png",
+      "source_label": "green-roof medical hut",
+      "source_region": "row2",
+      "gap_family_id": "medical_facilities",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18600.png",
+      "source_label": "green-roof storage hut",
+      "source_region": "row2",
+      "gap_family_id": null,
+      "status": "COVERED_FAMILY_NEWER_DESIGN",
+      "existing_selected": [
+        {
+          "path": "Docs/Design/StructureReferences/2026-11-26/upgradeable-storage-house/selected/storage-house-starter.png",
+          "status": "PRIOR_SELECTED_REFERENCE",
+          "git_blob_sha": "e3e3a4e89f8afce2d2ba01347c83ff895552e53e"
+        }
+      ],
+      "notes": "Current user-requested three-tier storehouse supplies the general storage-building family. The green-roof early illustration is an older visual alternative; no claim of exact geometry reproduction."
+    },
+    {
+      "source": "18600.png",
+      "source_label": "timber lookout tower",
+      "source_region": "row2",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "watchtower",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/watchtower.png",
+          "status": "PASS",
+          "score": 9.3,
+          "sha256": "2fe796e4962b426b6542e6cbff3d6201f0a8fcb96c326e810c1097fa8adcbb18"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18600.png",
+      "source_label": "rope-bound palisade",
+      "source_region": "row2",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "path": "Docs/Design/StructureReferences/2026-11-25/selected/fence-cardinal.png",
+          "status": "PRIOR_SELECTED_REFERENCE",
+          "git_blob_sha": "0f6fcd42f4dd078bc70dc89266b8dc30f8ea85cf"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18600.png",
+      "source_label": "metal-banded palisade",
+      "source_region": "row2",
+      "gap_family_id": "reinforced_palisades",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18600.png",
+      "source_label": "palisade corner",
+      "source_region": "row2",
+      "gap_family_id": null,
+      "status": "EXISTING_FAMILY_CORNER_ASSEMBLY_VIEW_MISSING",
+      "existing_selected": [
+        {
+          "path": "Docs/Design/StructureReferences/2026-11-25/selected/fence-cardinal.png",
+          "status": "PRIOR_SELECTED_REFERENCE",
+          "git_blob_sha": "0f6fcd42f4dd078bc70dc89266b8dc30f8ea85cf"
+        }
+      ],
+      "notes": "Same approved basic fence identity, but current dedicated detail requirement shows only two adjacent modules, not an evidenced90-degree join. Add a corner-assembly detail using unchanged approved fence; do not count as a new building identity."
+    },
+    {
+      "source": "18600.png",
+      "source_label": "timber gate",
+      "source_region": "row3",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "path": "Docs/Design/StructureReferences/2026-11-25/selected/gates-cardinal.png",
+          "status": "PRIOR_SELECTED_REFERENCE",
+          "git_blob_sha": "00babe94f2a20cb72e57a44c137ac936a4d431c8"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18600.png",
+      "source_label": "axe in chopping stump",
+      "source_region": "row3",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "chopping_stump",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/chopping_stump.png",
+          "status": "PASS",
+          "score": 9.3,
+          "sha256": "21ccdfbc734fc25edee02c57d2a293813c732e0dd0b5e470743df3333be4baca"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18600.png",
+      "source_label": "meat/hide drying rack",
+      "source_region": "row3",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "mixed_drying_rack",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/mixed_drying_rack.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "97fdf3c433eca40d786815d975938296d5f98c62b40084355accc6975abcccff"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18600.png",
+      "source_label": "green-lidded metal-braced cargo crate",
+      "source_region": "row3",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/12-cargo.png",
+          "status": "PRIOR_SELECTED_REFERENCE",
+          "git_blob_sha": "0f00f3467086f520c62d4304a8900775e55e02f1"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18600.png",
+      "source_label": "torch post",
+      "source_region": "row3",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "id": "torch_post",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/torch_post.png",
+          "status": "PASS",
+          "score": 9.3,
+          "sha256": "19aaa598f0725fd410a3e3871664547152308b3bf5620c081cfe9f2aba65f0b7"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "18600.png",
+      "source_label": "crossed timber spike barricade",
+      "source_region": "row3",
+      "gap_family_id": "spike_barricade",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18600.png",
+      "source_label": "snow ground tile",
+      "source_region": "row3",
+      "gap_family_id": "camp_tiles",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "18600.png",
+      "source_label": "plank floor tile",
+      "source_region": "row3",
+      "gap_family_id": "camp_tiles",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Level1\u201310",
+      "source_region": "camp / furnace upgrade progression",
+      "gap_family_id": null,
+      "status": "COVERED_RANGE_FAMILY",
+      "existing_selected": [
+        {
+          "id": "furnace_level_01",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/furnace_level_01.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "e5b7f1f87fd668b435619c1c260e3bcdebfa0d21ad2978c08445205669addca5"
+        },
+        {
+          "id": "furnace_level_05",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/furnace_level_05.png",
+          "status": "PASS",
+          "score": 9.3,
+          "sha256": "82995fe66684aa8e51f02b4ec26f7105e7d8f2b9be0f092c71e0a7fb449db396"
+        },
+        {
+          "id": "furnace_level_10",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/furnace_level_10.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "dcb83063d8a6a6fbe3f34604b4b0929ad6aa143efa212fe75e7cac17c84787a4"
+        }
+      ],
+      "notes": "Existing named level selections cover this level range; not a claim that each thumbnail silhouette is an exact duplicate."
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Level11\u201320",
+      "source_region": "camp / furnace upgrade progression",
+      "gap_family_id": null,
+      "status": "COVERED_RANGE_FAMILY",
+      "existing_selected": [
+        {
+          "id": "furnace_level_15",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/furnace_level_15.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "a20f158698f6865ff80591f2b738d546c6befd2f7e6d8aec284764488d915ea5"
+        }
+      ],
+      "notes": "Existing named level selections cover this level range; not a claim that each thumbnail silhouette is an exact duplicate."
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Level21\u201330",
+      "source_region": "camp / furnace upgrade progression",
+      "gap_family_id": null,
+      "status": "COVERED_RANGE_FAMILY",
+      "existing_selected": [
+        {
+          "id": "furnace_level_25",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/furnace_level_25.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "0378e3a5d6a3348c8e6ac079280434f0a0979a77f51516ba2e151f53967a52d3"
+        },
+        {
+          "id": "furnace_level_26",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/furnace_level_26.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "fe383670c510b42f0947013a9ad49671a3858ae1897c2f6eff70fbf64ad9f2f8"
+        },
+        {
+          "id": "furnace_level_30",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/furnace_level_30.png",
+          "status": "PASS",
+          "score": 9.3,
+          "sha256": "0b7defe85da8d71e41c0d8c02e3ed2a7c83a0243d68ed79398996425097c0900"
+        }
+      ],
+      "notes": "Existing named level selections cover this level range; not a claim that each thumbnail silhouette is an exact duplicate."
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Level31\u201350",
+      "source_region": "camp / furnace upgrade progression",
+      "gap_family_id": null,
+      "status": "COVERED_RANGE_FAMILY",
+      "existing_selected": [
+        {
+          "id": "furnace_level_34",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/furnace_level_34.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "1d5f114774fc70e01bd7e43a8c422a03a4cb8fac65cde66cabbc8730ef9f53f4"
+        },
+        {
+          "id": "furnace_level_42",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/furnace_level_42.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "b3e542173d6de45d9c0bc5d6b5aacc995de476fb6889035cff3e4a01fc0c2713"
+        },
+        {
+          "id": "furnace_level_50",
+          "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/furnace_level_50.png",
+          "status": "PASS",
+          "score": 9.4,
+          "sha256": "92efa76677db4c4e7ba42c34b583ffdf4e3984c05cdd5e511c6b9124952a18d4"
+        }
+      ],
+      "notes": "Existing named level selections cover this level range; not a claim that each thumbnail silhouette is an exact duplicate."
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Level51\u201370",
+      "source_region": "camp / furnace upgrade progression",
+      "gap_family_id": "late_furnaces",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Level71\u201390",
+      "source_region": "camp / furnace upgrade progression",
+      "gap_family_id": "late_furnaces",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Level91\u2013100",
+      "source_region": "camp / furnace upgrade progression",
+      "gap_family_id": "late_furnaces",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Walls example1",
+      "source_region": "upgrade examples (some of many), Walls column, row1",
+      "gap_family_id": "fortress_walls",
+      "status": "GAP_FUTURE_SOURCE_EXAMPLE",
+      "existing_selected": [],
+      "notes": "One of three depicted source examples. No exact level, production recipe, upgrade cost or exhaustive family count is established."
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Walls example2",
+      "source_region": "upgrade examples (some of many), Walls column, row2",
+      "gap_family_id": "fortress_walls",
+      "status": "GAP_FUTURE_SOURCE_EXAMPLE",
+      "existing_selected": [],
+      "notes": "One of three depicted source examples. No exact level, production recipe, upgrade cost or exhaustive family count is established."
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Walls example3",
+      "source_region": "upgrade examples (some of many), Walls column, row3",
+      "gap_family_id": "fortress_walls",
+      "status": "GAP_FUTURE_SOURCE_EXAMPLE",
+      "existing_selected": [],
+      "notes": "One of three depicted source examples. No exact level, production recipe, upgrade cost or exhaustive family count is established."
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Gate example1",
+      "source_region": "upgrade examples (some of many), Gate column, row1",
+      "gap_family_id": "fortress_gates",
+      "status": "GAP_FUTURE_SOURCE_EXAMPLE",
+      "existing_selected": [],
+      "notes": "One of three depicted source examples. No exact level, production recipe, upgrade cost or exhaustive family count is established."
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Gate example2",
+      "source_region": "upgrade examples (some of many), Gate column, row2",
+      "gap_family_id": "fortress_gates",
+      "status": "GAP_FUTURE_SOURCE_EXAMPLE",
+      "existing_selected": [],
+      "notes": "One of three depicted source examples. No exact level, production recipe, upgrade cost or exhaustive family count is established."
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Gate example3",
+      "source_region": "upgrade examples (some of many), Gate column, row3",
+      "gap_family_id": "fortress_gates",
+      "status": "GAP_FUTURE_SOURCE_EXAMPLE",
+      "existing_selected": [],
+      "notes": "One of three depicted source examples. No exact level, production recipe, upgrade cost or exhaustive family count is established."
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Watch tower example1",
+      "source_region": "upgrade examples (some of many), Watch tower column, row1",
+      "gap_family_id": "fortress_watchtowers",
+      "status": "GAP_FUTURE_SOURCE_EXAMPLE",
+      "existing_selected": [],
+      "notes": "One of three depicted source examples. No exact level, production recipe, upgrade cost or exhaustive family count is established."
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Watch tower example2",
+      "source_region": "upgrade examples (some of many), Watch tower column, row2",
+      "gap_family_id": "fortress_watchtowers",
+      "status": "GAP_FUTURE_SOURCE_EXAMPLE",
+      "existing_selected": [],
+      "notes": "One of three depicted source examples. No exact level, production recipe, upgrade cost or exhaustive family count is established."
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Watch tower example3",
+      "source_region": "upgrade examples (some of many), Watch tower column, row3",
+      "gap_family_id": "fortress_watchtowers",
+      "status": "GAP_FUTURE_SOURCE_EXAMPLE",
+      "existing_selected": [],
+      "notes": "One of three depicted source examples. No exact level, production recipe, upgrade cost or exhaustive family count is established."
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Archer tower example1",
+      "source_region": "upgrade examples (some of many), Archer tower column, row1",
+      "gap_family_id": "archer_towers",
+      "status": "GAP_FUTURE_SOURCE_EXAMPLE",
+      "existing_selected": [],
+      "notes": "One of three depicted source examples. No exact level, production recipe, upgrade cost or exhaustive family count is established."
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Archer tower example2",
+      "source_region": "upgrade examples (some of many), Archer tower column, row2",
+      "gap_family_id": "archer_towers",
+      "status": "GAP_FUTURE_SOURCE_EXAMPLE",
+      "existing_selected": [],
+      "notes": "One of three depicted source examples. No exact level, production recipe, upgrade cost or exhaustive family count is established."
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Archer tower example3",
+      "source_region": "upgrade examples (some of many), Archer tower column, row3",
+      "gap_family_id": "archer_towers",
+      "status": "GAP_FUTURE_SOURCE_EXAMPLE",
+      "existing_selected": [],
+      "notes": "One of three depicted source examples. No exact level, production recipe, upgrade cost or exhaustive family count is established."
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Cannon tower example1",
+      "source_region": "upgrade examples (some of many), Cannon tower column, row1",
+      "gap_family_id": "cannon_towers",
+      "status": "GAP_FUTURE_SOURCE_EXAMPLE",
+      "existing_selected": [],
+      "notes": "One of three depicted source examples. No exact level, production recipe, upgrade cost or exhaustive family count is established."
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Cannon tower example2",
+      "source_region": "upgrade examples (some of many), Cannon tower column, row2",
+      "gap_family_id": "cannon_towers",
+      "status": "GAP_FUTURE_SOURCE_EXAMPLE",
+      "existing_selected": [],
+      "notes": "One of three depicted source examples. No exact level, production recipe, upgrade cost or exhaustive family count is established."
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Cannon tower example3",
+      "source_region": "upgrade examples (some of many), Cannon tower column, row3",
+      "gap_family_id": "cannon_towers",
+      "status": "GAP_FUTURE_SOURCE_EXAMPLE",
+      "existing_selected": [],
+      "notes": "One of three depicted source examples. No exact level, production recipe, upgrade cost or exhaustive family count is established."
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Worker hut example1",
+      "source_region": "upgrade examples (some of many), Worker hut column, row1",
+      "gap_family_id": "worker_huts",
+      "status": "GAP_FUTURE_SOURCE_EXAMPLE",
+      "existing_selected": [],
+      "notes": "One of three depicted source examples. No exact level, production recipe, upgrade cost or exhaustive family count is established."
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Worker hut example2",
+      "source_region": "upgrade examples (some of many), Worker hut column, row2",
+      "gap_family_id": "worker_huts",
+      "status": "GAP_FUTURE_SOURCE_EXAMPLE",
+      "existing_selected": [],
+      "notes": "One of three depicted source examples. No exact level, production recipe, upgrade cost or exhaustive family count is established."
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Worker hut example3",
+      "source_region": "upgrade examples (some of many), Worker hut column, row3",
+      "gap_family_id": "worker_huts",
+      "status": "GAP_FUTURE_SOURCE_EXAMPLE",
+      "existing_selected": [],
+      "notes": "One of three depicted source examples. No exact level, production recipe, upgrade cost or exhaustive family count is established."
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Storage example1",
+      "source_region": "upgrade examples (some of many), Storage column, row1",
+      "gap_family_id": "atlas_storage",
+      "status": "GAP_FUTURE_SOURCE_EXAMPLE",
+      "existing_selected": [],
+      "notes": "One of three depicted source examples. No exact level, production recipe, upgrade cost or exhaustive family count is established."
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Storage example2",
+      "source_region": "upgrade examples (some of many), Storage column, row2",
+      "gap_family_id": "atlas_storage",
+      "status": "GAP_FUTURE_SOURCE_EXAMPLE",
+      "existing_selected": [],
+      "notes": "One of three depicted source examples. No exact level, production recipe, upgrade cost or exhaustive family count is established."
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Storage example3",
+      "source_region": "upgrade examples (some of many), Storage column, row3",
+      "gap_family_id": "atlas_storage",
+      "status": "GAP_FUTURE_SOURCE_EXAMPLE",
+      "existing_selected": [],
+      "notes": "One of three depicted source examples. No exact level, production recipe, upgrade cost or exhaustive family count is established."
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Hospital example1",
+      "source_region": "upgrade examples (some of many), Hospital column, row1",
+      "gap_family_id": "medical_facilities",
+      "status": "GAP_FUTURE_SOURCE_EXAMPLE",
+      "existing_selected": [],
+      "notes": "One of three depicted source examples. No exact level, production recipe, upgrade cost or exhaustive family count is established."
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Hospital example2",
+      "source_region": "upgrade examples (some of many), Hospital column, row2",
+      "gap_family_id": "medical_facilities",
+      "status": "GAP_FUTURE_SOURCE_EXAMPLE",
+      "existing_selected": [],
+      "notes": "One of three depicted source examples. No exact level, production recipe, upgrade cost or exhaustive family count is established."
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Hospital example3",
+      "source_region": "upgrade examples (some of many), Hospital column, row3",
+      "gap_family_id": "medical_facilities",
+      "status": "GAP_FUTURE_SOURCE_EXAMPLE",
+      "existing_selected": [],
+      "notes": "One of three depicted source examples. No exact level, production recipe, upgrade cost or exhaustive family count is established."
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Pine forest",
+      "source_region": "biome variants (future regions)",
+      "gap_family_id": "biome_vignettes",
+      "status": "GAP_FUTURE_REGION_CONCEPT",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Frozen lake",
+      "source_region": "biome variants (future regions)",
+      "gap_family_id": "biome_vignettes",
+      "status": "GAP_FUTURE_REGION_CONCEPT",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Ice canyon",
+      "source_region": "biome variants (future regions)",
+      "gap_family_id": "biome_vignettes",
+      "status": "GAP_FUTURE_REGION_CONCEPT",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Snow cliffs",
+      "source_region": "biome variants (future regions)",
+      "gap_family_id": "biome_vignettes",
+      "status": "GAP_FUTURE_REGION_CONCEPT",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Abandoned mines",
+      "source_region": "biome variants (future regions)",
+      "gap_family_id": "biome_vignettes",
+      "status": "GAP_FUTURE_REGION_CONCEPT",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Wood",
+      "source_region": "resource types",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/01-wood.png",
+          "status": "PRIOR_SELECTED_REFERENCE",
+          "git_blob_sha": "c94ba1d94a3d7fdbb5c9cc096c5b3f30eb180cb4"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Stone",
+      "source_region": "resource types",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/02-stone.png",
+          "status": "PRIOR_SELECTED_REFERENCE",
+          "git_blob_sha": "c2a7e1a7cb2caa8fb1dc80699b5d02604adadbe1"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Iron ore",
+      "source_region": "resource types",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/05-metal-ore.png",
+          "status": "PRIOR_SELECTED_REFERENCE",
+          "git_blob_sha": "c3bdeddef77ddf35f1a32bfc598bea809bb816c8"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Coal",
+      "source_region": "resource types",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/13-coal.png",
+          "status": "PRIOR_SELECTED_REFERENCE",
+          "git_blob_sha": "e2e0e11613a65ad01d3aa3255317a3de3bd89ba9"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Meat",
+      "source_region": "resource types",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/07-meat.png",
+          "status": "PRIOR_SELECTED_REFERENCE",
+          "git_blob_sha": "12dd418cf4ed3e38770a67442bb39beb6cf9180b"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Hide",
+      "source_region": "resource types",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/19-hide.png",
+          "status": "PRIOR_SELECTED_REFERENCE",
+          "git_blob_sha": "467d026b3e091a970a52d95352335c545bc65d42"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Fur",
+      "source_region": "resource types",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/20-fur.png",
+          "status": "PRIOR_SELECTED_REFERENCE",
+          "git_blob_sha": "de2c7f0f38f633e0336380337cdb42628ca1b026"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Plank",
+      "source_region": "resource types",
+      "gap_family_id": null,
+      "status": "COVERED",
+      "existing_selected": [
+        {
+          "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/17-timber-planks.png",
+          "status": "PRIOR_SELECTED_REFERENCE",
+          "git_blob_sha": "a5228c65e84b1a617d821701680483a959694a41"
+        }
+      ],
+      "notes": ""
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Herbs",
+      "source_region": "resource types",
+      "gap_family_id": "herbs",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "Crystal",
+      "source_region": "resource types",
+      "gap_family_id": "crystal",
+      "status": "GAP",
+      "existing_selected": [],
+      "notes": ""
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "source_label": "OIEL (ambiguous can label)",
+      "source_region": "resource types",
+      "gap_family_id": null,
+      "status": "AMBIGUOUS_SOURCE_NOT_NEW_REFINED_RESOURCE",
+      "existing_selected": [
+        {
+          "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/06-fuel.png",
+          "status": "PRIOR_SELECTED_REFERENCE",
+          "git_blob_sha": "ac409458a51373a09abb3874dc2f82a28eecca2a"
+        }
+      ],
+      "notes": "Likely intended oil/fuel. Fuel can already covered; no distinct refined oil asset or recipe established."
+    },
+    {
+      "source": "selected-status.json at d70fbfac21a852f99cc46b06b1944faf11ec7901",
+      "source_label": "defense_platform",
+      "source_region": "",
+      "gap_family_id": "defense_platform",
+      "status": "PRIOR_BLOCKED_GENERATION",
+      "existing_selected": [],
+      "notes": "No output/selected PNG; still in prior69-slot roster."
+    },
+    {
+      "source": "referenceA37\u201343seconds",
+      "source_label": "Mechanized wheat harvesting",
+      "source_region": "",
+      "gap_family_id": "wheat_harvester",
+      "status": "GAP_LOCKED_VIDEO_ASSET",
+      "existing_selected": [],
+      "notes": "Source pixels in audit/world/inputs/A-wheat-sequence.png; actual hidden geometry interpreted."
+    },
+    {
+      "source": "referenceA37\u201343seconds",
+      "source_label": "Blue/orange wheat processor",
+      "source_region": "",
+      "gap_family_id": "wheat_processor",
+      "status": "GAP_LOCKED_VIDEO_ASSET",
+      "existing_selected": [],
+      "notes": "Source pixels in audit/world/inputs/A-wheat-sequence.png; actual hidden geometry interpreted."
+    }
+  ],
+  "covered_without_new_identity": [
+    "All51previous selected equipment sheets, including10furnacelevels1\u201350",
+    "All33previous bounded resource concepts",
+    "Original cargo crate/storage crates; exact green-lid crate pixel comparison inspected",
+    "Base rope-bound timber fence, tall gate posts and double gate",
+    "Current three-stage general storehouse contract",
+    "Previously approved conveyor/interface package",
+    "Existing two timber tower identities and ballista",
+    "All previously approved enemy/cast identities; lower-atlas cast census owned by independent cast auditor"
+  ],
+  "not_enumerated_as_physical_asset_requirements": [
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "labels": [
+        "Heat radius",
+        "Buildings",
+        "Defenses",
+        "Workers",
+        "Storage",
+        "Tech & tools",
+        "Enemy difficulty"
+      ],
+      "reason": "System improvement categories, not additional specific object designs."
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "labels": [
+        "Your camp",
+        "Resource node",
+        "Enemy camp",
+        "Rescue survivor",
+        "Special location",
+        "Unlock gate",
+        "Expand path",
+        "Locked region"
+      ],
+      "reason": "World-map legend categories and icons; not a complete specific location/prop identity catalogue."
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "labels": [
+        "Infinite expansion",
+        "New biomes",
+        "Stronger enemies",
+        "New resources",
+        "Special events",
+        "Raider outposts",
+        "Hidden caves",
+        "Boss encounters"
+      ],
+      "reason": "Feature promises, not a finite authored asset roster; named biome thumbnails are separately included."
+    },
+    {
+      "source": "Havenline: Frostbound World Atlas.png",
+      "labels": [
+        "Blizzard",
+        "Wolf attack",
+        "Raider raid",
+        "Resource boom",
+        "Rescue call",
+        "Boss hunt"
+      ],
+      "reason": "Event categories/icon examples; no separate physical object requirement or animation approval established."
+    },
+    {
+      "source": "18607.png /18600.png",
+      "labels": [
+        "How it fits together",
+        "assembled camp/palisade vignette"
+      ],
+      "reason": "Arrangement of already listed parts, not an extra object identity."
+    }
+  ],
+  "boundaries": [
+    "Static concept/reference art only; no native mesh, rig, motion, playable region or runtime approval.",
+    "Preserve original69-slot history, prior selected/rejected assets and current three-tier storehouse.",
+    "Atlas upgrade examples and future regions are explicit authored references, not implemented upgrade tables or an exhaustive future game catalogue.",
+    "No inferred recipes, crop lists, species drops, ammunition, powers, costs, capacity or exact world-unit dimensions.",
+    "Latest matching direct user design remains the identity authority; source-hidden rear/interior forms must be labelled interpreted.",
+    "Do not claim an existing family is absent merely because a board uses another visual variant. Covered-family rows name their exact coverage and limits."
+  ],
+  "source_scan_verification": {
+    "all_existing_paths_resolve_in_fresh_baseline": true,
+    "all4_original_board_hashes_match_prior_evidence": true,
+    "all3_named_boards_plus_atlas_upperhalf_and_resources_pixels_inspected": true,
+    "covered_resource_crate_and_empty_plot_pixels_inspected": true,
+    "new_generation_by_auditor": false,
+    "native_runtime_modified": false
+  },
+  "navigation_sources_read": [
+    "AGENTS.md",
+    "BUILD_GAME.md",
+    "REPOSITORY_INDEX.md"
+  ],
+  "supplemental_detail_gaps": [
+    {
+      "id": "basic_palisade_corner_join",
+      "source": "18600.png row2right",
+      "status": "MISSING_DEDICATED_ASSEMBLY_VIEW",
+      "asset_identity": "existing approved basic fence",
+      "existing_source": "havenline-structures-2026-11-25/requirements.json: fence-details views",
+      "proposed_delivery": "One additive90-degree corner-join detail within a boundary upgrade/connection sheet; preserve approved basefence unchanged.",
+      "new_identity": false
+    }
+  ]
+}

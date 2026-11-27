@@ -1,0 +1,42 @@
+{
+  "id": "atlas-bandit-archer-hands-gear-r1",
+  "deliverable_id": "atlas-bandit-archer-hands-gear",
+  "family_id": "atlas-bandit-archer",
+  "tool": "image_gen__imagegen",
+  "arguments": {
+    "prompt": "Create the HANDS AND GEAR reference for the SAME HAVENLINE ATLAS BANDIT ARCHER shown in image1 (approved neutral body sheet) and image2 (original source raider crop). Preserve the exact glove, bracer, armor material and source-specific equipment identity. Brown/gray bearded helmeted bandit holding a wooden bow/ranged-archer silhouette. Bearded adult male with dark metal helmet, muted gray sleeves and brown leather padded armor, tan belts and brown boots. Fixed back quiver with visible arrow tails as source. Equipment: slender warm wood curved bow with one simple taut string; source-like arrows without technical measurement.\n\nSix large well-separated panels in a3-column by2-row landscape sheet, pale warm gray, premium sculpted Havenline finish. LEFT two columns are four large hand/wrist closeups with fingers pointing UP: top-left LEFT PALM (thumb on VIEWER LEFT), top-middle RIGHT PALM (thumb on VIEWER RIGHT), bottom-left LEFT BACK (thumb on VIEWER RIGHT), bottom-middle RIGHT BACK (thumb on VIEWER LEFT). Exactly FOUR fingers PLUS ONE short opposed thumb, FIVE total each. All20digits readable, natural finger-length hierarchy, clean gaps, distinct palm padding versus dorsal finger seams, matching armor/winter cuff from the approved body, no civilian cream cuff unless actually in this character. Same hand design and correct chirality, no palm texture on dorsal views.\n\nRIGHT column shows the detached source-visible equipment set from two opposite three-quarter sides, upper label GEAR FRONT, lower GEAR REAR. Complete uncropped props, consistent shape/materials and believable grasp surfaces. Any worn quiver/backpack can be included with the held prop when it belongs to the source role. These are exterior aesthetic fantasy game props at rest: opaque closed surfaces, no cutaway, no ammunition internals, dimensions, recipes, diagrams, assembly steps, firing or flames. Do not invent a second weapon if the source only shows one. Keep weapon silhouette exact to this role and sufficiently large to model from.\n\nHeader HAVENLINE | ATLAS BANDIT ARCHER | HANDS + GEAR. Clean legible panel labels, generous margins, no stats or lore. Hidden backs of equipment are restrained authored interpretation.",
+    "referenced_image_paths": [
+      "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-bandit-archer-pose-r1.png",
+      "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png"
+    ],
+    "transparent_background": false
+  },
+  "status": "PREPARED",
+  "reason": "Root-authorized dependent hand/gear preparation using the latest independently passed exact pose PNG; no generation invoked by this helper.",
+  "prepared_from_catalog": {
+    "path": "atlas-raider-render-catalog.json",
+    "sha256": "bda9464321592a61d2b2245a7d7287d037b1d1a760c268b14ac79a387d2638f8",
+    "entry_id": "atlas-bandit-archer-hands-gear"
+  },
+  "dependency_reference_template": [
+    "APPROVED_RENDER:atlas-bandit-archer-pose",
+    "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png"
+  ],
+  "resolved_approved_dependencies": [
+    {
+      "revision": 1,
+      "deliverable_id": "atlas-bandit-archer-pose",
+      "render_id": "atlas-bandit-archer-pose-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-bandit-archer-pose-r1.png",
+      "bytes": 1807857,
+      "sha256": "d18c696d876e9871f4101f685cc90411cdffdcd830e6d9603f4cf1c3641357b2",
+      "git_blob_sha": "152a478b6a6719d538edf58454d83cd8b0c4e618",
+      "review_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/critic-atlas-bandit-archer-pose-r1.json",
+      "review_sha256": "11868b0e6dc6d8d8ecaf0ce03d000893fbeb5b7fd15c6dd4106f7f6531e11dc6",
+      "review_status": "PASS — STATIC BODY REFERENCE ONLY",
+      "review_score": 9.6,
+      "reviewer": "/root/missing_cast_critic",
+      "all_mandatory_checks_passed": true
+    }
+  ]
+}

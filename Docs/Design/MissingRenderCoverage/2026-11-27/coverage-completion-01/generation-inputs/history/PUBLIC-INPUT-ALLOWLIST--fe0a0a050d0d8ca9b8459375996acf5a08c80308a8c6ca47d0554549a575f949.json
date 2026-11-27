@@ -1,0 +1,231 @@
+{
+  "schema_version": 1,
+  "scope": "Individually bounded non-baseline image inputs actually passed to generation. No broad source-media copying.",
+  "allowed_inputs": [
+    {
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/reviews/evidence/primary-b/B-048-gameplay.png",
+      "bytes": 2464875,
+      "sha256": "609741bddc62b6e307740dee8bf5ac6bc86f167df9b322b377313421d042b7d4",
+      "git_blob_sha": "aeeab952525fa637334337364371a0c05680d541",
+      "archive_relative_path": "generation-inputs/primary-b-048-gameplay-crop.png",
+      "source_id": "PRIMARY-B-FRAME-048-GAMEPLAY-CROP",
+      "role": "First defense-platform invocation reference: square X-braced tower platform and camp defensive placement.",
+      "provenance": {
+        "kind": "PREEXISTING_LIMITED_SOURCE_FRAME_CROP",
+        "source_frame": {
+          "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/reviews/evidence/primary-b/B-048.00.png",
+          "bytes": 3873115,
+          "sha256": "ccf9a3160f5ead3d472f7540ac980aa60116de609b94954c4b880cf76d78a6dc",
+          "git_blob_sha": "0e4351b9175f6421ad618e8f7b6ccd7e23bf69ac",
+          "source_commit": "d70fbfac21a852f99cc46b06b1944faf11ec7901",
+          "repository_path": "Docs/Production/T05/ReferenceFrames/B-048.00.png",
+          "immutable_url": "https://github.com/ksolo21-web/HAVENLINE/blob/d70fbfac21a852f99cc46b06b1944faf11ec7901/Docs/Production/T05/ReferenceFrames/B-048.00.png"
+        },
+        "source_frame_dimensions": [
+          1080,
+          2520
+        ],
+        "crop_box_xyxy": [
+          0,
+          270,
+          1080,
+          2195
+        ],
+        "crop_dimensions": [
+          1080,
+          1925
+        ],
+        "verification": "Every decoded RGBA pixel matches the indicated rectangle of the exact retained source frame. The already-existing crop PNG is retained byte for byte; no new crop or re-encoding performed.",
+        "recorded_frame_timestamp_seconds": 48,
+        "timestamp_basis": "Original retained primary-b-source-frame-index.json labels B-048.00.png from source commit 25b4ec6dd407c1c2530a3781527df64eabb63b99."
+      }
+    },
+    {
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/source-records/original-boards/18600.png",
+      "bytes": 282667,
+      "sha256": "e372bf74be027cb63a0f83c4247a7843a8195a9c579e75a415ddcf3c0052eaec",
+      "git_blob_sha": "19e3962ba4b64fa092bb0d7526998c0aea45f30e",
+      "archive_relative_path": "generation-inputs/original-boards/board-18600.jpg",
+      "source_id": "board-18600",
+      "role": "user source board recovered with exact prior-audit hash; not new generated artwork",
+      "provenance": {
+        "kind": "EXACT_RECOVERED_USER_SUPPLIED_SOURCE_BOARD",
+        "original_filename": "18600.png",
+        "actual_image_format": "JPEG",
+        "dimensions": [
+          1536,
+          864
+        ],
+        "prior_source_recovery_key": {
+          "id": "board-18600",
+          "kind": "supplied_reference_pixels",
+          "source_filename": "18600.png",
+          "review_provenance": "preservation_agent_direct_pixel_review",
+          "evidence": "Depicts cooking, hung meat/drying rack, logs and workshop/wood-metal structures.",
+          "sha256": "e372bf74be027cb63a0f83c4247a7843a8195a9c579e75a415ddcf3c0052eaec",
+          "bytes": 282667
+        },
+        "board_census_sha256": "329ac1a975637914928aa383da0276c4acb6447e50d6b01030e7e0de448a8226",
+        "custody_boundary": "Exact user-supplied source-image bytes. Historical filenames are retained in provenance; archive extensions match actual content format, without conversion. Private transfer descriptors and signed download links excluded. This is source art, not a newly generated render or runtime asset."
+      }
+    },
+    {
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/source-records/original-boards/18607.png",
+      "bytes": 342580,
+      "sha256": "d71d77c6e200b7ef8d225e573474ad99c2d466954d05c29eabd142f4901bbc0c",
+      "git_blob_sha": "8d1057c5add16bfdb4236189300736d9096c7101",
+      "archive_relative_path": "generation-inputs/original-boards/board-18607.jpg",
+      "source_id": "board-18607",
+      "role": "user source board recovered with exact prior-audit hash; not new generated artwork",
+      "provenance": {
+        "kind": "EXACT_RECOVERED_USER_SUPPLIED_SOURCE_BOARD",
+        "original_filename": "18607.png",
+        "actual_image_format": "JPEG",
+        "dimensions": [
+          1536,
+          864
+        ],
+        "prior_source_recovery_key": {
+          "id": "board-18607",
+          "kind": "supplied_reference_pixels",
+          "source_filename": "18607.png",
+          "review_provenance": "preservation_agent_direct_pixel_review",
+          "evidence": "Depicts furnace, cookfire, butcher table, drying rack, fishing spot, saw station, chopping station, workshop, stockpile, storage crates, fishing winch and sled hauler.",
+          "sha256": "d71d77c6e200b7ef8d225e573474ad99c2d466954d05c29eabd142f4901bbc0c",
+          "bytes": 342580
+        },
+        "board_census_sha256": "329ac1a975637914928aa383da0276c4acb6447e50d6b01030e7e0de448a8226",
+        "custody_boundary": "Exact user-supplied source-image bytes. Historical filenames are retained in provenance; archive extensions match actual content format, without conversion. Private transfer descriptors and signed download links excluded. This is source art, not a newly generated render or runtime asset."
+      }
+    },
+    {
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/source-records/original-boards/18609.png",
+      "bytes": 421303,
+      "sha256": "68d2fb572cc5370a9746c7130f661438197ce36ac495a3b4ffeeaa4528d81ce7",
+      "git_blob_sha": "e0a031ff094e6c6e0c2b90b389a0105bf0db9649",
+      "archive_relative_path": "generation-inputs/original-boards/board-18609.jpg",
+      "source_id": "board-18609",
+      "role": "user source board recovered with exact prior-audit hash; not new generated artwork",
+      "provenance": {
+        "kind": "EXACT_RECOVERED_USER_SUPPLIED_SOURCE_BOARD",
+        "original_filename": "18609.png",
+        "actual_image_format": "JPEG",
+        "dimensions": [
+          1536,
+          864
+        ],
+        "prior_source_recovery_key": {
+          "id": "board-18609",
+          "kind": "supplied_reference_pixels",
+          "source_filename": "18609.png",
+          "review_provenance": "root_agent_direct_pixel_review",
+          "evidence": "Midcamp continuity board names lumber mill, quarry drill, steam saw, cookhouse and greenhouse; labels do not establish their recipes.",
+          "sha256": "68d2fb572cc5370a9746c7130f661438197ce36ac495a3b4ffeeaa4528d81ce7",
+          "bytes": 421303
+        },
+        "board_census_sha256": "329ac1a975637914928aa383da0276c4acb6447e50d6b01030e7e0de448a8226",
+        "custody_boundary": "Exact user-supplied source-image bytes. Historical filenames are retained in provenance; archive extensions match actual content format, without conversion. Private transfer descriptors and signed download links excluded. This is source art, not a newly generated render or runtime asset."
+      }
+    },
+    {
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/source-records/original-boards/Havenline: Frostbound World Atlas.png",
+      "bytes": 2759727,
+      "sha256": "5a9f9592d2e8a32b3ae0c4117c2d851496d49023e2768c491dc1b211b7865edf",
+      "git_blob_sha": "20b294d3882e650b154c321f214cafc90404e20e",
+      "archive_relative_path": "generation-inputs/original-boards/world-atlas.png",
+      "source_id": "world-atlas",
+      "role": "user source board recovered with exact prior-audit hash; not new generated artwork",
+      "provenance": {
+        "kind": "EXACT_RECOVERED_USER_SUPPLIED_SOURCE_BOARD",
+        "original_filename": "Havenline: Frostbound World Atlas.png",
+        "actual_image_format": "PNG",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "prior_source_recovery_key": {
+          "id": "world-atlas",
+          "kind": "supplied_reference_pixels",
+          "source_filename": "Havenline: Frostbound World Atlas.png",
+          "review_provenance": "root_agent_direct_pixel_review",
+          "evidence": "Enlarged resource row reads WOOD, STONE, IRON ORE, COAL, MEAT, HIDE, HERBS, FUR, CRYSTAL and PLANK. A can has an ambiguous/garbled 'OIEL' label, likely intended oil/fuel. STEEL is not explicitly named. Resource labels do not establish production routes, species drops or recipe parameters.",
+          "sha256": "5a9f9592d2e8a32b3ae0c4117c2d851496d49023e2768c491dc1b211b7865edf",
+          "bytes": 2759727
+        },
+        "board_census_sha256": "329ac1a975637914928aa383da0276c4acb6447e50d6b01030e7e0de448a8226",
+        "custody_boundary": "Exact user-supplied source-image bytes. Historical filenames are retained in provenance; archive extensions match actual content format, without conversion. Private transfer descriptors and signed download links excluded. This is source art, not a newly generated render or runtime asset."
+      }
+    },
+    {
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/author-guides/fortress-double-gate-r2/fortress-double-gate-r2.png",
+      "bytes": 357987,
+      "sha256": "fc335211cddd619a2a37dc0d1d6f472098f9d83e3554f062caf2aa41e3ac955b",
+      "git_blob_sha": "25b782b4b91b70022ceb06a9780cb2593e65a8e0",
+      "archive_relative_path": "author-guides/fortress-double-gate-r2/fortress-double-gate-r2.png",
+      "source_id": "author-created-fortress-double-gate-r2",
+      "source_kind": "AUTHOR_CREATED_MATHEMATICAL_GUIDE",
+      "role": "Author-created exact half-arch leaf geometry and outward 90-degree swing guide. Use the accepted closed-gate art as architecture/material authority. This is not recovered source evidence or selected final game art.",
+      "provenance": {
+        "origin": "AUTHOR_CREATED_MATHEMATICAL_GUIDE",
+        "author_agent": "/root/missing_archive",
+        "source_evidence": false,
+        "final_game_art": false,
+        "root_viewed_and_explicitly_authorized_as_input": true,
+        "authoring_files": [
+          {
+            "source_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/author-guides/fortress-double-gate-r2/guide.py",
+            "archive_path": "author-guides/fortress-double-gate-r2/guide.py",
+            "bytes": 15833,
+            "sha256": "93558ba5f7acf99dbc8c967a2efa238e3d797fae67a04ce7528e84b9c96345a5",
+            "git_blob_sha": "9170a5d7e6e71b16a75da05fc3acc9f7a5a80236"
+          },
+          {
+            "source_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/author-guides/fortress-double-gate-r2/parameters.json",
+            "archive_path": "author-guides/fortress-double-gate-r2/parameters.json",
+            "bytes": 1976,
+            "sha256": "e1c77668ab68e4591346a67862faf2e3e81f27433995b7cb54bf939bf4ae020a",
+            "git_blob_sha": "e6d194e471c5f114defeb82f9847eca12b59b706"
+          },
+          {
+            "source_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/author-guides/fortress-double-gate-r2/geometry-checks.json",
+            "archive_path": "author-guides/fortress-double-gate-r2/geometry-checks.json",
+            "bytes": 814,
+            "sha256": "4174c7f1f14c657ab42dac0f9fcee54de16a8fa40ffdacd77767b64cd38cdfdf",
+            "git_blob_sha": "604ff2cd1b94bc9ebab33499642b180ad09ee809"
+          },
+          {
+            "source_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/author-guides/fortress-double-gate-r2/provenance.json",
+            "archive_path": "author-guides/fortress-double-gate-r2/provenance.json",
+            "bytes": 3814,
+            "sha256": "c6db563a1760a18628e0157354f328a1219cce1b52aa42a2bf9b83a2f72d6674",
+            "git_blob_sha": "2bdedcd504777d2d782df732b8554638f87fc64b"
+          },
+          {
+            "source_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/author-guides/fortress-double-gate-r2/fortress-double-gate-r2.png",
+            "archive_path": "author-guides/fortress-double-gate-r2/fortress-double-gate-r2.png",
+            "bytes": 357987,
+            "sha256": "fc335211cddd619a2a37dc0d1d6f472098f9d83e3554f062caf2aa41e3ac955b",
+            "git_blob_sha": "25b782b4b91b70022ceb06a9780cb2593e65a8e0"
+          },
+          {
+            "source_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/author-guides/fortress-double-gate-r2/fortress-double-gate-r2.svg",
+            "archive_path": "author-guides/fortress-double-gate-r2/fortress-double-gate-r2.svg",
+            "bytes": 1197272,
+            "sha256": "f7e199d9d0c9298ee477ea8857e33203912c8308cf7eb07a937c2da486ae1f4f",
+            "git_blob_sha": "1b24ed489c61b96c601244f075f4a4c5c6082a28"
+          }
+        ],
+        "independent_guide_review": {
+          "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/critic-author-guide-fortress-double-gate-r2.json",
+          "bytes": 5653,
+          "sha256": "c8133cc70757bcc48fde217c8b8bab827d74c4a01221a5fe65959e790333aeb8",
+          "git_blob_sha": "684336f8dead41c8f8322cf3db911915e3070b39",
+          "score": 10,
+          "status": "PASS — AUTHOR-CREATED GEOMETRY GUIDE ONLY",
+          "approved_use": "Geometric perspective and unchanged half-arch shape input for the next image-generation repair, alongside the accepted CLOSED r2 art as the architecture/material authority."
+        },
+        "author_index_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/author-guides/index.json"
+      }
+    }
+  ]
+}

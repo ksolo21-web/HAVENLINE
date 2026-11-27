@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "scope": "Individually bounded non-baseline image inputs actually passed to generation. No broad source-media copying.",
+  "allowed_inputs": [
+    {
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/reviews/evidence/primary-b/B-048-gameplay.png",
+      "bytes": 2464875,
+      "sha256": "609741bddc62b6e307740dee8bf5ac6bc86f167df9b322b377313421d042b7d4",
+      "git_blob_sha": "aeeab952525fa637334337364371a0c05680d541",
+      "archive_relative_path": "generation-inputs/primary-b-048-gameplay-crop.png",
+      "source_id": "PRIMARY-B-FRAME-048-GAMEPLAY-CROP",
+      "role": "First defense-platform invocation reference: square X-braced tower platform and camp defensive placement.",
+      "provenance": {
+        "kind": "PREEXISTING_LIMITED_SOURCE_FRAME_CROP",
+        "source_frame": {
+          "local_path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/reviews/evidence/primary-b/B-048.00.png",
+          "bytes": 3873115,
+          "sha256": "ccf9a3160f5ead3d472f7540ac980aa60116de609b94954c4b880cf76d78a6dc",
+          "git_blob_sha": "0e4351b9175f6421ad618e8f7b6ccd7e23bf69ac",
+          "source_commit": "d70fbfac21a852f99cc46b06b1944faf11ec7901",
+          "repository_path": "Docs/Production/T05/ReferenceFrames/B-048.00.png",
+          "immutable_url": "https://github.com/ksolo21-web/HAVENLINE/blob/d70fbfac21a852f99cc46b06b1944faf11ec7901/Docs/Production/T05/ReferenceFrames/B-048.00.png"
+        },
+        "source_frame_dimensions": [
+          1080,
+          2520
+        ],
+        "crop_box_xyxy": [
+          0,
+          270,
+          1080,
+          2195
+        ],
+        "crop_dimensions": [
+          1080,
+          1925
+        ],
+        "verification": "Every decoded RGBA pixel matches the indicated rectangle of the exact retained source frame. The already-existing crop PNG is retained byte for byte; no new crop or re-encoding performed.",
+        "recorded_frame_timestamp_seconds": 48,
+        "timestamp_basis": "Original retained primary-b-source-frame-index.json labels B-048.00.png from source commit 25b4ec6dd407c1c2530a3781527df64eabb63b99."
+      }
+    }
+  ]
+}

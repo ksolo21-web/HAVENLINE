@@ -1,0 +1,60 @@
+{
+  "id": "world-bridges-r4",
+  "deliverable_id": "world-bridges",
+  "family_id": "bridges",
+  "tool": "image_gen__imagegen",
+  "arguments": {
+    "prompt": "Make a single localized correction in the LOWER-MIDDLE REINFORCED BRIDGE / REAR-RIGHT panel of this HAVENLINE CAMP CROSSING BRIDGES sheet. It currently has SEVEN blue-capped timber posts; the fixed bridge has SIX, three per rail. REMOVE ONLY the small extra FAR-RAIL post whose snow/blue cap is centered around full-sheet pixel (797, 687). It is the small cap immediately LEFT of the huge foreground-right post, and to the RIGHT of the smaller correct far-rail middle post near (676, 710). Delete that extra (797,687) cap and its short vertical timber, continuing the existing far-side rope/rail naturally through the gap. KEEP the six other posts: the three tall near-rail posts centered roughly x625, x725 and x900, and the far-rail posts roughly x560, x676 and x980. Their perspective positions and heights stay unchanged. Do not remove or duplicate any other blue cap. The final lower-middle panel has exactly six distinct capped posts, matching the lower-left front view's three-per-rail arrangement. Preserve the reverse camera, deck, bracing, ropes, banks, snow, all labels and the other five panels exactly. This is one extra post removal only.",
+    "referenced_image_paths": [
+      "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-bridges-r3.png"
+    ],
+    "transparent_background": false
+  },
+  "status": "GENERATED_AWAITING_REVIEW",
+  "reason": "BR02: remove exactly one extra far-rail post identified by independent native coordinate inspection.",
+  "prompt_file": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/prompts/world-bridges-r4.txt",
+    "bytes": 1153,
+    "sha256": "5feefec5b3163becd832054022b115721b79c9bb1ea1ce6939c873851042f3e3",
+    "git_blob_sha": "192636224ceb34176bd06b00db5d643342fe5b40"
+  },
+  "exact_actual_prompt_file": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-exact-invoked-prompts/world-bridges-r4.txt",
+    "bytes": 1152,
+    "sha256": "450baf39ae884486127438c4525023d15125906ec4890c6855f5dadf5c6ecd58",
+    "git_blob_sha": "b8f215bbf50d47210ebd302a80598a8b146ab0ff"
+  },
+  "ordered_reference_inputs": [
+    {
+      "order": 1,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-bridges-r3.png",
+      "bytes": 2174684,
+      "sha256": "7bc093328c6fe27d66150fbbce644715cfabf5b53e451cb6410aad9a5d12979d",
+      "git_blob_sha": "39c551fe9dcdb77641f1ccd07e969277314342f9",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "actual_format": "PNG"
+    }
+  ],
+  "requirements_at_generation": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/requirements.json",
+    "bytes": 157378,
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+    "git_blob_sha": "35cdd6921cdc9b88e6e890f538ecdc907d607a43"
+  },
+  "requirements_snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-input-snapshots/requirements--a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374.json",
+  "output": {
+    "native_returned_locator": "/workspace/scratch/9c51da47f878/generated_images/exec-937b4099-da09-4071-b62b-855c1d8ea99e.png",
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-bridges-r4.png",
+    "bytes": 2164646,
+    "sha256": "94601eac2a8463aa2e645ac975bb2019338acaebf988a7919cf8c7d9d119f156",
+    "git_blob_sha": "2de2903e7525865c869ce9abc79f37f84850cc11",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "actual_format": "PNG"
+  }
+}

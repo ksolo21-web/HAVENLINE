@@ -1,0 +1,126 @@
+# Havenline · Atlas animals
+
+[All categories](../README.md) · [Every native original](../indexes/originals.md)
+
+**Final static selection: 14/14 sheets approved.**
+
+Fourteen source-specific animal appearances receive their own static turnarounds. Source-visible species traits, horns/antlers, coats, armor, tail forms, paws/hooves, and distinct silhouettes guide the references. Hidden surfaces remain authored interpretations.
+
+| Required sheet | Current selected native revision | Score | Access |
+| --- | --- | ---: | --- |
+| Deer · Turnaround | `atlas-deer-turnaround-r1` | 9.6 | [PNG](../selected/atlas-deer-turnaround.png) · [review](../reviews/critic-atlas-deer-turnaround-r1.json) |
+| Rabbit · Turnaround | `atlas-rabbit-turnaround-r1` | 9.7 | [PNG](../selected/atlas-rabbit-turnaround.png) · [review](../reviews/critic-atlas-rabbit-turnaround-r1.json) |
+| Squirrel · Turnaround | `atlas-squirrel-turnaround-r1` | 9.6 | [PNG](../selected/atlas-squirrel-turnaround.png) · [review](../reviews/critic-atlas-squirrel-turnaround-r1.json) |
+| Fox · Turnaround | `atlas-fox-turnaround-r1` | 9.7 | [PNG](../selected/atlas-fox-turnaround.png) · [review](../reviews/critic-atlas-fox-turnaround-r1.json) |
+| Boar · Turnaround | `atlas-boar-turnaround-r1` | 9.6 | [PNG](../selected/atlas-boar-turnaround.png) · [review](../reviews/critic-atlas-boar-turnaround-r1.json) |
+| Bear · Turnaround | `atlas-bear-turnaround-r1` | 9.6 | [PNG](../selected/atlas-bear-turnaround.png) · [review](../reviews/critic-atlas-bear-turnaround-r1.json) |
+| Lynx · Turnaround | `atlas-lynx-turnaround-r1` | 9.5 | [PNG](../selected/atlas-lynx-turnaround.png) · [review](../reviews/critic-atlas-lynx-turnaround-r1.json) |
+| Moose · Turnaround | `atlas-moose-turnaround-r1` | 9.6 | [PNG](../selected/atlas-moose-turnaround.png) · [review](../reviews/critic-atlas-moose-turnaround-r1.json) |
+| Wolverine · Turnaround | `atlas-wolverine-turnaround-r1` | 9.6 | [PNG](../selected/atlas-wolverine-turnaround.png) · [review](../reviews/critic-atlas-wolverine-turnaround-r1.json) |
+| Dire Wolf · Turnaround | `atlas-dire-wolf-turnaround-r1` | 9.6 | [PNG](../selected/atlas-dire-wolf-turnaround.png) · [review](../reviews/critic-atlas-dire-wolf-turnaround-r1.json) |
+| Saber Wolf · Turnaround | `atlas-saber-wolf-turnaround-r1` | 9.6 | [PNG](../selected/atlas-saber-wolf-turnaround.png) · [review](../reviews/critic-atlas-saber-wolf-turnaround-r1.json) |
+| Giant Boar · Turnaround | `atlas-giant-boar-turnaround-r1` | 9.5 | [PNG](../selected/atlas-giant-boar-turnaround.png) · [review](../reviews/critic-atlas-giant-boar-turnaround-r1.json) |
+| Ice Lynx · Turnaround | `atlas-ice-lynx-turnaround-r1` | 9.5 | [PNG](../selected/atlas-ice-lynx-turnaround.png) · [review](../reviews/critic-atlas-ice-lynx-turnaround-r1.json) |
+| Elite Moose · Turnaround | `atlas-elite-moose-turnaround-r1` | 9.5 | [PNG](../selected/atlas-elite-moose-turnaround.png) · [review](../reviews/critic-atlas-elite-moose-turnaround-r1.json) |
+
+## Deer · Turnaround
+
+`atlas-deer-turnaround-r1` · independent static score **9.6/10** · [Exact review](../reviews/critic-atlas-deer-turnaround-r1.json) · [Retained original](../attempts/atlas-deer-turnaround-r1.png)
+
+![Deer · Turnaround](../selected/atlas-deer-turnaround.png)
+
+
+## Rabbit · Turnaround
+
+`atlas-rabbit-turnaround-r1` · independent static score **9.7/10** · [Exact review](../reviews/critic-atlas-rabbit-turnaround-r1.json) · [Retained original](../attempts/atlas-rabbit-turnaround-r1.png)
+
+![Rabbit · Turnaround](../selected/atlas-rabbit-turnaround.png)
+
+
+## Squirrel · Turnaround
+
+`atlas-squirrel-turnaround-r1` · independent static score **9.6/10** · [Exact review](../reviews/critic-atlas-squirrel-turnaround-r1.json) · [Retained original](../attempts/atlas-squirrel-turnaround-r1.png)
+
+![Squirrel · Turnaround](../selected/atlas-squirrel-turnaround.png)
+
+
+## Fox · Turnaround
+
+`atlas-fox-turnaround-r1` · independent static score **9.7/10** · [Exact review](../reviews/critic-atlas-fox-turnaround-r1.json) · [Retained original](../attempts/atlas-fox-turnaround-r1.png)
+
+![Fox · Turnaround](../selected/atlas-fox-turnaround.png)
+
+
+## Boar · Turnaround
+
+`atlas-boar-turnaround-r1` · independent static score **9.6/10** · [Exact review](../reviews/critic-atlas-boar-turnaround-r1.json) · [Retained original](../attempts/atlas-boar-turnaround-r1.png)
+
+![Boar · Turnaround](../selected/atlas-boar-turnaround.png)
+
+
+## Bear · Turnaround
+
+`atlas-bear-turnaround-r1` · independent static score **9.6/10** · [Exact review](../reviews/critic-atlas-bear-turnaround-r1.json) · [Retained original](../attempts/atlas-bear-turnaround-r1.png)
+
+![Bear · Turnaround](../selected/atlas-bear-turnaround.png)
+
+
+## Lynx · Turnaround
+
+`atlas-lynx-turnaround-r1` · independent static score **9.5/10** · [Exact review](../reviews/critic-atlas-lynx-turnaround-r1.json) · [Retained original](../attempts/atlas-lynx-turnaround-r1.png)
+
+![Lynx · Turnaround](../selected/atlas-lynx-turnaround.png)
+
+
+## Moose · Turnaround
+
+`atlas-moose-turnaround-r1` · independent static score **9.6/10** · [Exact review](../reviews/critic-atlas-moose-turnaround-r1.json) · [Retained original](../attempts/atlas-moose-turnaround-r1.png)
+
+![Moose · Turnaround](../selected/atlas-moose-turnaround.png)
+
+
+## Wolverine · Turnaround
+
+`atlas-wolverine-turnaround-r1` · independent static score **9.6/10** · [Exact review](../reviews/critic-atlas-wolverine-turnaround-r1.json) · [Retained original](../attempts/atlas-wolverine-turnaround-r1.png)
+
+![Wolverine · Turnaround](../selected/atlas-wolverine-turnaround.png)
+
+
+## Dire Wolf · Turnaround
+
+`atlas-dire-wolf-turnaround-r1` · independent static score **9.6/10** · [Exact review](../reviews/critic-atlas-dire-wolf-turnaround-r1.json) · [Retained original](../attempts/atlas-dire-wolf-turnaround-r1.png)
+
+![Dire Wolf · Turnaround](../selected/atlas-dire-wolf-turnaround.png)
+
+
+## Saber Wolf · Turnaround
+
+`atlas-saber-wolf-turnaround-r1` · independent static score **9.6/10** · [Exact review](../reviews/critic-atlas-saber-wolf-turnaround-r1.json) · [Retained original](../attempts/atlas-saber-wolf-turnaround-r1.png)
+
+![Saber Wolf · Turnaround](../selected/atlas-saber-wolf-turnaround.png)
+
+
+## Giant Boar · Turnaround
+
+`atlas-giant-boar-turnaround-r1` · independent static score **9.5/10** · [Exact review](../reviews/critic-atlas-giant-boar-turnaround-r1.json) · [Retained original](../attempts/atlas-giant-boar-turnaround-r1.png)
+
+![Giant Boar · Turnaround](../selected/atlas-giant-boar-turnaround.png)
+
+
+## Ice Lynx · Turnaround
+
+`atlas-ice-lynx-turnaround-r1` · independent static score **9.5/10** · [Exact review](../reviews/critic-atlas-ice-lynx-turnaround-r1.json) · [Retained original](../attempts/atlas-ice-lynx-turnaround-r1.png)
+
+![Ice Lynx · Turnaround](../selected/atlas-ice-lynx-turnaround.png)
+
+
+## Elite Moose · Turnaround
+
+`atlas-elite-moose-turnaround-r1` · independent static score **9.5/10** · [Exact review](../reviews/critic-atlas-elite-moose-turnaround-r1.json) · [Retained original](../attempts/atlas-elite-moose-turnaround-r1.png)
+
+![Elite Moose · Turnaround](../selected/atlas-elite-moose-turnaround.png)
+
+
+## Acceptance boundary
+
+Every displayed selection has an independent score strictly above 9.0, all mandatory visual checks passed, and an exact PNG hash binding. Approval covers the shown static image only. Source-hidden geometry and surfaces are interpretations; native model, rig, animation, gameplay, and device testing are outside this archive’s approval.

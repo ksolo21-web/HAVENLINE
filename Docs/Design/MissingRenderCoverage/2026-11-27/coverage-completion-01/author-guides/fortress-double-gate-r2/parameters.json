@@ -1,0 +1,82 @@
+{
+  "guide_id": "fortress-double-gate-r2",
+  "origin": "AUTHOR_CREATED_MATHEMATICAL_GUIDE",
+  "source_evidence": false,
+  "existing_bitmaps_read_or_modified": [],
+  "units": "Abstract authoring units, not game dimensions",
+  "wall_front_plane": "y = 0",
+  "ground_plane": "z = 0",
+  "outward_half_space": "y < 0",
+  "closed_top_profile": "z = 2 + sqrt(1 - x*x), -1 <= x <= 1",
+  "hinges": {
+    "left": [
+      -1.0,
+      0.0
+    ],
+    "right": [
+      1.0,
+      0.0
+    ]
+  },
+  "leaf_count": 2,
+  "leaf_parameter": "u in [0,1] measured from hinge toward free edge",
+  "closed_left": "(-1 + u, 0, z)",
+  "closed_right": "(1 - u, 0, z)",
+  "top_height_in_leaf_coordinates": "2 + sqrt(2*u - u*u)",
+  "open_left": "(-1, -u, z)",
+  "open_right": "(1, -u, z)",
+  "open_rotation_degrees_about_hinges": {
+    "left": -90.0,
+    "right": 90.0
+  },
+  "camera_positions": {
+    "front": [
+      6.0,
+      -8.0,
+      5.0
+    ],
+    "rear": [
+      -6.0,
+      8.0,
+      5.0
+    ]
+  },
+  "camera_target": [
+    0.0,
+    0.0,
+    1.45
+  ],
+  "projection": "orthographic",
+  "camera_interpretation": "Opposite horizontal positions at the same positive z; not a negated below-ground camera.",
+  "panels": [
+    "CLOSED / FRONT OBLIQUE",
+    "OPEN / FRONT OBLIQUE",
+    "OPEN / REAR OBLIQUE"
+  ],
+  "fixed_frame": {
+    "arch_center_z": 2.0,
+    "inner_radius": 1.04,
+    "outer_radius": 1.25,
+    "y_front": 0.0,
+    "y_back": 0.22,
+    "pillar_top_z": 2.0
+  },
+  "diagram_conventions": {
+    "left_color": "#257d91",
+    "right_color": "#c5842d",
+    "frame_color": "#a8b0b8",
+    "leaf_frame_radius": 0.025,
+    "interior_bar_radius": 0.014,
+    "interior_bar_u": [
+      0.2,
+      0.4,
+      0.6,
+      0.8
+    ],
+    "crossbar_z": [
+      0.65,
+      1.4
+    ]
+  },
+  "drawing_scope": "Exact shape and outward rotation guide only. Distinct colors, bar counts, tube thickness and gray frame construction are authoring conventions, not recovered source facts or final game art."
+}

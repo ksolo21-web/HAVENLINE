@@ -1,0 +1,129 @@
+{
+  "schema_version": 2,
+  "reviewer": "/root/missing_world_audit",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-27T06:48:33.959784+00:00",
+  "review_id": "world-fortress-walls-r1-independent-world",
+  "status": "REPAIR REQUIRED — NOT APPROVED",
+  "score_method": "Minimum mandatory visual-area score; no averaging away a failed requirement.",
+  "score": 8.5,
+  "actual_full_png_inspected": true,
+  "reviewed_image": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-fortress-walls-r1.png",
+    "sha256": "bfdb7c6d9ef57fba579cfc528098575f193899ace8aefd6c53af475eab91e8e6",
+    "bytes": 2087309,
+    "native_original": {
+      "path": "/workspace/scratch/9c51da47f878/generated_images/exec-24ffd92c-c4fd-40a8-9c0c-afc47494dba1.png",
+      "sha256": "bfdb7c6d9ef57fba579cfc528098575f193899ace8aefd6c53af475eab91e8e6",
+      "bytes": 2087309
+    },
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "actual_format": "PNG"
+  },
+  "invocation": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/invocations/world-fortress-walls-r1.json",
+    "sha256": "7ab9d780d6fc5ae0fa1fd2dddcd55e0f2ccf70f39c08fcf5fa3addc8b4eb3325",
+    "bytes": 7658
+  },
+  "prompt": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-exact-invoked-prompts/world-fortress-walls-r1.txt",
+    "sha256": "06fb0acfeefdbea992e09921143def1ee317236bd45c6182c0a464437da58394",
+    "bytes": 4106
+  },
+  "requirements_at_generation": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-input-snapshots/requirements--a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374.json",
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+    "bytes": 157378
+  },
+  "current_requirements_at_review": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/requirements.json",
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+    "bytes": 157378
+  },
+  "catalog_at_review": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/world-render-catalog.json",
+    "sha256": "cbc641ec53f5f496ffa059dee5f21ba0ee89e9f47b04511b32d8bf4bc7f84f8a",
+    "bytes": 348141
+  },
+  "actual_native_crops_inspected": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-fortress-walls-r1-b-front.png",
+      "sha256": "f399e4fb9562c03c6ec71b7de1a14b5fc366d8b4085ea3275f6c9c7d58799188",
+      "bytes": 215028
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-fortress-walls-r1-c-rear.png",
+      "sha256": "54c0b6c1e3beef8557708df4a51a0930f545d9ac3257c643bb4147831337f863",
+      "bytes": 222086
+    }
+  ],
+  "crop_provenance": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-fortress-walls-r1-crop-provenance.json",
+      "sha256": "1e982b8d2e0d37d5a4cffe9c48a737c49149e6b13a9496b6a4a1261c2e9dfdb2",
+      "bytes": 1349
+    }
+  ],
+  "source_images_or_native_excerpts_inspected": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/source-records/original-boards/Havenline: Frostbound World Atlas.png",
+      "sha256": "5a9f9592d2e8a32b3ae0c4117c2d851496d49023e2768c491dc1b211b7865edf",
+      "bytes": 2759727
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-source-fortress-walls-native.png",
+      "sha256": "8a85ee31178d006b8a45de02ef9de7448c631dc83fcac77096501acceafa99d2",
+      "bytes": 43249
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-source-fortress-walls-native-provenance.json",
+      "sha256": "bfde29b30cf684aaaa073dbea33cc13b4a84d75b019c9ce598cae29d21c98f31",
+      "bytes": 625
+    }
+  ],
+  "areas": [
+    {
+      "id": "wall_examples_a_and_c",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Example A is the light block-and-pier wall; C is the dark armored wall with warm upper metal caps, left flame and opposite cap ornament. These forms and supported rear interpretations remain distinct."
+    },
+    {
+      "id": "middle_wall_source_identity",
+      "score": 8.5,
+      "status": "FAIL",
+      "finding": "The atlas WALLS middle example is a continuous reinforced block wall between piers with a small top flame. Both generated B panels instead depict an arched timber gate with a ring handle and gate leaf hardware, mixing in another source column."
+    },
+    {
+      "id": "material_finish_layout_and_concept_boundary",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "The six panels are clean and complete with useful stone/metal/timber detail. Future-concept and unseen-surface labels are explicit; no numerical upgrade or gameplay claim is added."
+    }
+  ],
+  "all_mandatory_visual_checks_passed": false,
+  "mandatory_defects_remaining": [
+    {
+      "id": "FW01",
+      "mandatory": true,
+      "panels": [
+        "ATLAS EXAMPLE B / FRONT-LEFT",
+        "ATLAS EXAMPLE B / REAR-RIGHT"
+      ],
+      "finding": "Middle WALLS example has been replaced by a gate rather than the atlas continuous reinforced wall; the source small pier-top flame is also missing."
+    }
+  ],
+  "minimum_repairs": [
+    "Replace only B with the actual middle WALLS form: solid reinforced block infill between light stone piers, source top profile and small flame on the appropriate pier. Remove the gate arch, leaf, handle and gate hardware. Show the same wall in the opposing view with restrained rear supports. Preserve A and C."
+  ],
+  "notes": [],
+  "cross_sheet_bindings": [],
+  "native_mesh_rig_animation_runtime_approval": false,
+  "pending_separate_evidence": [
+    "Additive GitHub archive and complete-content remote readback",
+    "Other family coverage; this report reviews only the exact PNG identified above"
+  ]
+}

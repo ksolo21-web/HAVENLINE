@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/missing_world_audit",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-27T07:29:10.428902+00:00",
+  "status": "PASS — AUTHOR-CREATED GEOMETRY GUIDE ONLY",
+  "score": 10,
+  "all_mandatory_checks_passed": true,
+  "score_method": "Minimum of mandatory area scores; all three areas score 10.",
+  "reviewed_png": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/author-guides/fortress-double-gate-r2/fortress-double-gate-r2.png",
+    "sha256": "fc335211cddd619a2a37dc0d1d6f472098f9d83e3554f062caf2aa41e3ac955b",
+    "bytes": 357987,
+    "dimensions": [
+      2880,
+      1200
+    ]
+  },
+  "actual_full_png_inspected": true,
+  "actual_native_crops_inspected": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/author-guide-fortress-double-gate-r2-open-front.png",
+      "sha256": "4d3d928e30e4c29a180eca7b2a94e36d643b66954db9397e5a6b652f8cb10f4a",
+      "bytes": 84449
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/author-guide-fortress-double-gate-r2-open-rear.png",
+      "sha256": "b6c35fd105696eba817705779dac64f13a31c1439844486768f3a01c878aa166",
+      "bytes": 84481
+    }
+  ],
+  "crop_provenance": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/author-guide-fortress-double-gate-r2-crop-provenance.json",
+    "sha256": "51abdaf92317b7e5409656fa3fde61e6633c86fbfff39d57329d3a3b805cc30b",
+    "bytes": 1045
+  },
+  "authored_guide_bindings": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/author-guides/fortress-double-gate-r2/fortress-double-gate-r2.png",
+      "sha256": "fc335211cddd619a2a37dc0d1d6f472098f9d83e3554f062caf2aa41e3ac955b",
+      "bytes": 357987
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/author-guides/fortress-double-gate-r2/fortress-double-gate-r2.svg",
+      "sha256": "f7e199d9d0c9298ee477ea8857e33203912c8308cf7eb07a937c2da486ae1f4f",
+      "bytes": 1197272
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/author-guides/fortress-double-gate-r2/guide.py",
+      "sha256": "93558ba5f7acf99dbc8c967a2efa238e3d797fae67a04ce7528e84b9c96345a5",
+      "bytes": 15833
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/author-guides/fortress-double-gate-r2/parameters.json",
+      "sha256": "e1c77668ab68e4591346a67862faf2e3e81f27433995b7cb54bf939bf4ae020a",
+      "bytes": 1976
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/author-guides/fortress-double-gate-r2/geometry-checks.json",
+      "sha256": "4174c7f1f14c657ab42dac0f9fcee54de16a8fa40ffdacd77767b64cd38cdfdf",
+      "bytes": 814
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/author-guides/fortress-double-gate-r2/provenance.json",
+      "sha256": "c6db563a1760a18628e0157354f328a1219cce1b52aa42a2bf9b83a2f72d6674",
+      "bytes": 3814
+    }
+  ],
+  "independent_calculation": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/author-guide-fortress-double-gate-r2-independent-math.json",
+    "sha256": "a4caa127911b5da11f606294f698033fff34a8b7e5e9c95411a9a5e56c240aa5",
+    "bytes": 1769
+  },
+  "independent_check_code": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/check_gate_guide_independent.py",
+    "sha256": "e4eccce60bfc570b2b03347125792ee79743ea09c1df9575b76df5e52c856d1d",
+    "bytes": 3650
+  },
+  "areas": [
+    {
+      "id": "two_rigid_half_arch_leaves",
+      "status": "PASS",
+      "score": 10,
+      "finding": "The closed center seam is continuous; each leaf rises from hinge height 2 to free-edge height 3. The same unchanged leaf geometry rotates -90/+90 degrees, retaining height and width."
+    },
+    {
+      "id": "opposing_camera_and_fixed_open_state",
+      "status": "PASS",
+      "score": 10,
+      "finding": "Independent calculations with 101 points per leaf confirm both open leaves lie toward y<0. The front free bases project nearer/down and the rear free bases recede/up. Both actual native views show the same frame and two leaves with correct natural rear occlusion."
+    },
+    {
+      "id": "legibility_and_evidence_boundary",
+      "status": "PASS",
+      "score": 10,
+      "finding": "The actual PNG has clear three-state comparison, leaf ownership colors and a readable source boundary. It is explicitly author-created; abstract units, colors, bars and frame are diagram conventions, not recovered Havenline source or final art."
+    }
+  ],
+  "mandatory_defects_remaining": [],
+  "approved_use": "Geometric perspective and unchanged half-arch shape input for the next image-generation repair, alongside the accepted CLOSED r2 art as the architecture/material authority.",
+  "recovered_source_evidence": false,
+  "final_game_art_approval": false,
+  "native_runtime_approval": false,
+  "notes": [
+    "This guide does not replace or approve world-fortress-gates-open-r3, whose GO02 remains open until the new actual generated PNG passes independent review.",
+    "The checker extracts only pure coordinate functions through AST; it does not rerun builder rendering or overwrite authored files.",
+    "An initial check-output serialization attempt failed on a NumPy boolean before any evidence files were written; the corrected reproducible checker casts booleans and passed."
+  ]
+}

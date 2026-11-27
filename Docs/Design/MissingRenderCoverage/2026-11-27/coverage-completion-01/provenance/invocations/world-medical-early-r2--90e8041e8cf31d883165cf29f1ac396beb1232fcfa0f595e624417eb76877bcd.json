@@ -1,0 +1,73 @@
+{
+  "id": "world-medical-early-r2",
+  "deliverable_id": "world-medical-early",
+  "family_id": "medical_facilities",
+  "tool": "image_gen__imagegen",
+  "arguments": {
+    "prompt": "Edit only the BASIC MEDICAL HUT in the middle column of image1, using exact source crop image2. The original green-roof hut has BOTH a hanging green banner with a white cross AND a separate LARGE RAISED WHITE CROSS centered on the green roof slope. Image1 omitted that roof cross. Add the simple chunky white equal-arm cross on the same green roof slope and at the same source-visible position as image2; it lies flat against the roof surface and follows its slope. Keep the hanging banner unchanged. The front-left and rear-right views remain the same physical hut, so the roof cross stays on its fixed roof face and is only visible to the extent that camera exposes that face; do not move it between faces or invent a second roof cross. Preserve the clinic-tent left column and reinforced-medical-hut right column completely. Keep all other geometry, chimney, source-specific colors, panels, labels, style, full margins and footer unchanged.",
+    "referenced_image_paths": [
+      "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-medical-early-r1.png",
+      "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-source-medical-basic-native.png"
+    ],
+    "transparent_background": false
+  },
+  "status": "GENERATED_AWAITING_REVIEW",
+  "reason": "Restore an independently identified source-visible feature while preserving approved construction and source identities.",
+  "prompt_file": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/prompts/world-medical-early-r2.txt",
+    "bytes": 944,
+    "sha256": "919c8352c450a48fe12f2d3d9404486bdf160e909c969e0891a74568d58a435a",
+    "git_blob_sha": "d3f4ef3639ef6304fcf8174d1fe86ecb127710cf"
+  },
+  "exact_actual_prompt_file": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-exact-invoked-prompts/world-medical-early-r2.txt",
+    "bytes": 943,
+    "sha256": "8bffb6396f8ea519328b6ed80d71a56fd21cdaee6262c0b6c5c6e00b29c4c318",
+    "git_blob_sha": "5002e05b76d9a1f8a808ba69373b18017d8eb12b"
+  },
+  "ordered_reference_inputs": [
+    {
+      "order": 1,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-medical-early-r1.png",
+      "bytes": 2141472,
+      "sha256": "b076dbfb933f401c0cfdeaadac6789b3b496b2297e4c3729e9340dc246fc458c",
+      "git_blob_sha": "c89dfc999ea2e4d81dcb8067682b8d90f026f5f6",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "actual_format": "PNG"
+    },
+    {
+      "order": 2,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-source-medical-basic-native.png",
+      "bytes": 72354,
+      "sha256": "ebb2604a82713e8ea37acc15f54f48466ac4c5a29f406adddeb5cd209f3199ac",
+      "git_blob_sha": "b6ba33a3d12cb5c233cde3b3c091031f99f7b67c",
+      "dimensions": [
+        265,
+        287
+      ],
+      "actual_format": "PNG"
+    }
+  ],
+  "requirements_at_generation": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/requirements.json",
+    "bytes": 157378,
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+    "git_blob_sha": "35cdd6921cdc9b88e6e890f538ecdc907d607a43"
+  },
+  "requirements_snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-input-snapshots/requirements--a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374.json",
+  "output": {
+    "native_returned_locator": "/workspace/scratch/9c51da47f878/generated_images/exec-ff708f2f-6d81-4c8b-9605-859e270fef86.png",
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-medical-early-r2.png",
+    "bytes": 2101641,
+    "sha256": "2cd0c01ab3c13932f237eb7ed7caaaae93d190056de8e79264e3b89f433363a7",
+    "git_blob_sha": "bd46f0a0a0cf71350326b32cae38c37b1c2859e0",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "actual_format": "PNG"
+  }
+}

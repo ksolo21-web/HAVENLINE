@@ -1,0 +1,444 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-27",
+  "agent": "/root/missing_world_audit",
+  "baseline": {
+    "repository": "ksolo21-web/HAVENLINE",
+    "branch": "art/conveyors-2026-11-26",
+    "commit": "d70fbfac21a852f99cc46b06b1944faf11ec7901",
+    "tree_sha": "18c5641935b9cfaa7c1c82022bdbcbd5ad55ab77",
+    "leaf_count": 4955,
+    "tree_path": "havenline-missing-renders-2026-11-27/source-records/baseline-tree.json"
+  },
+  "audit_scope": "Existing source requirements versus dedicated selected render coverage for equipment, resources, camp structures and logistics. This does not define every future Havenline object.",
+  "current_AGENTS_read": "havenline-missing-renders-2026-11-27/source-records/current-AGENTS.md",
+  "counts": {
+    "prior_frozen_slot_gaps": 1,
+    "additional_source_named_gaps": 7,
+    "total_candidate_assets": 8
+  },
+  "gaps": [
+    {
+      "id": "defense_platform",
+      "name": "Modular mounted defense platform",
+      "priority": 0,
+      "source_requirements": [
+        {
+          "repository_path": "Docs/Design/RenderArchive/2026-11-23/selected-status.json",
+          "commit": "d70fbfac21a852f99cc46b06b1944faf11ec7901",
+          "url": "https://github.com/ksolo21-web/HAVENLINE/blob/d70fbfac21a852f99cc46b06b1944faf11ec7901/Docs/Design/RenderArchive/2026-11-23/selected-status.json",
+          "evidence": "BLOCKED_GENERATION; no selected_path; this slot remains in scope."
+        },
+        {
+          "repository_path": "Docs/Production/T05/FROZEN_SCOPE.md",
+          "commit": "d70fbfac21a852f99cc46b06b1944faf11ec7901",
+          "url": "https://github.com/ksolo21-web/HAVENLINE/blob/d70fbfac21a852f99cc46b06b1944faf11ec7901/Docs/Production/T05/FROZEN_SCOPE.md",
+          "evidence": "T05-R06 timber-and-metal platform, weapon socket, supply/repair props."
+        },
+        {
+          "repository_path": "HavenlineGodot/assets/stations_v2/catalog.json",
+          "commit": "d70fbfac21a852f99cc46b06b1944faf11ec7901",
+          "url": "https://github.com/ksolo21-web/HAVENLINE/blob/d70fbfac21a852f99cc46b06b1944faf11ec7901/HavenlineGodot/assets/stations_v2/catalog.json",
+          "evidence": "Footprint 3.25 x 3.05; repair[1.7,0,0], supply[0,0.8,-1.65], weapon[0,1.62,0]."
+        }
+      ],
+      "best_existing_render": {
+        "path": null,
+        "approval_status": "NO_OUTPUT; BLOCKED_GENERATION in prior art contract",
+        "related_approved_anchor": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/ballista_tower.png",
+        "related_anchor_score": 9.4
+      },
+      "actual_gap": "Only unresolved slot in the prior69-slot contract. The modular platform and service interfaces have no selected concept PNG.",
+      "proposed_render_sheet": {
+        "coverage": "front, rear, left, right, front/rear three-quarter; detail or use-state evidence appropriate to the item",
+        "minimum": "At least one clear dedicated sheet per asset; add separate states/details when a dense sheet makes geometry unreadable."
+      },
+      "inspected_image_inputs": [
+        "havenline-missing-renders-2026-11-27/audit/world/inputs/ballista_tower.png",
+        "havenline-missing-renders-2026-11-27/audit/world/inputs/guard_tower.png",
+        "havenline-enemy-expansion/reviews/evidence/primary-b/B-048-gameplay.png",
+        "havenline-structures-2026-11-25/renders/fence-oblique-r2.png"
+      ],
+      "boundaries": [
+        "Do not duplicate the already-approved ballista_tower or guard_tower under a new name.",
+        "Show the platform with empty mount plus static mounted example/service details; do not infer ammunition or firing mechanics."
+      ]
+    },
+    {
+      "id": "cookhouse",
+      "name": "Camp cookhouse",
+      "priority": 1,
+      "source_requirements": [
+        {
+          "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/source-equipment-coverage.json",
+          "commit": "d70fbfac21a852f99cc46b06b1944faf11ec7901",
+          "url": "https://github.com/ksolo21-web/HAVENLINE/blob/d70fbfac21a852f99cc46b06b1944faf11ec7901/Docs/Design/ResourceTurnarounds/2026-11-23-expansion/source-equipment-coverage.json",
+          "evidence": "equipment_chains cookfire-cookhouse; board-18609"
+        },
+        {
+          "repository_path": "Docs/Design/ConveyorReferences/2026-11-26/connected-logistics-01/design/routing-catalogue.json",
+          "commit": "d70fbfac21a852f99cc46b06b1944faf11ec7901",
+          "url": "https://github.com/ksolo21-web/HAVENLINE/blob/d70fbfac21a852f99cc46b06b1944faf11ec7901/Docs/Design/ConveyorReferences/2026-11-26/connected-logistics-01/design/routing-catalogue.json",
+          "evidence": "Manual/future disposition exists for cookhouse; outputs and recipe bindings undefined."
+        }
+      ],
+      "best_existing_render": {
+        "path": null,
+        "approval_status": "SOURCE_DEPICTED; no dedicated selected render located",
+        "source_board_ids": [
+          "board-18609"
+        ],
+        "source_board_pixels_locally_recovered": false
+      },
+      "actual_gap": "Named source equipment family absent from the51 equipment selections and all named PNG/JPG/WebP paths in fresh4955-leaf baseline.",
+      "proposed_render_sheet": {
+        "coverage": "front, rear, left, right, front/rear three-quarter; detail or use-state evidence appropriate to the item",
+        "minimum": "At least one clear dedicated sheet per asset; add separate states/details when a dense sheet makes geometry unreadable."
+      },
+      "inspected_image_inputs": [
+        "havenline-missing-renders-2026-11-27/audit/world/inputs/guard_tower.png",
+        "havenline-structures-2026-11-25/renders/fence-oblique-r2.png"
+      ],
+      "boundaries": [
+        "Original board18600/18607/18609 pixels were not available to this auditor; prior audited source descriptions/hashes establish the noun, not full design.",
+        "Use source board if root recovers it. Otherwise label new design an interpreted extension of established Havenline materials.",
+        "No invented crop catalogue, output recipe, resource consumption, rates or active conveyor endpoint."
+      ]
+    },
+    {
+      "id": "greenhouse",
+      "name": "Camp greenhouse",
+      "priority": 1,
+      "source_requirements": [
+        {
+          "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/source-equipment-coverage.json",
+          "commit": "d70fbfac21a852f99cc46b06b1944faf11ec7901",
+          "url": "https://github.com/ksolo21-web/HAVENLINE/blob/d70fbfac21a852f99cc46b06b1944faf11ec7901/Docs/Design/ResourceTurnarounds/2026-11-23-expansion/source-equipment-coverage.json",
+          "evidence": "equipment_chains greenhouse; board-18609"
+        },
+        {
+          "repository_path": "Docs/Design/ConveyorReferences/2026-11-26/connected-logistics-01/design/routing-catalogue.json",
+          "commit": "d70fbfac21a852f99cc46b06b1944faf11ec7901",
+          "url": "https://github.com/ksolo21-web/HAVENLINE/blob/d70fbfac21a852f99cc46b06b1944faf11ec7901/Docs/Design/ConveyorReferences/2026-11-26/connected-logistics-01/design/routing-catalogue.json",
+          "evidence": "Manual/future disposition exists for greenhouse; outputs and recipe bindings undefined."
+        }
+      ],
+      "best_existing_render": {
+        "path": null,
+        "approval_status": "SOURCE_DEPICTED; no dedicated selected render located",
+        "source_board_ids": [
+          "board-18609"
+        ],
+        "source_board_pixels_locally_recovered": false
+      },
+      "actual_gap": "Named source equipment family absent from the51 equipment selections and all named PNG/JPG/WebP paths in fresh4955-leaf baseline.",
+      "proposed_render_sheet": {
+        "coverage": "front, rear, left, right, front/rear three-quarter; detail or use-state evidence appropriate to the item",
+        "minimum": "At least one clear dedicated sheet per asset; add separate states/details when a dense sheet makes geometry unreadable."
+      },
+      "inspected_image_inputs": [
+        "havenline-missing-renders-2026-11-27/audit/world/inputs/guard_tower.png",
+        "havenline-structures-2026-11-25/renders/fence-oblique-r2.png"
+      ],
+      "boundaries": [
+        "Original board18600/18607/18609 pixels were not available to this auditor; prior audited source descriptions/hashes establish the noun, not full design.",
+        "Use source board if root recovers it. Otherwise label new design an interpreted extension of established Havenline materials.",
+        "No invented crop catalogue, output recipe, resource consumption, rates or active conveyor endpoint."
+      ]
+    },
+    {
+      "id": "workshop",
+      "name": "Camp workshop",
+      "priority": 1,
+      "source_requirements": [
+        {
+          "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/source-equipment-coverage.json",
+          "commit": "d70fbfac21a852f99cc46b06b1944faf11ec7901",
+          "url": "https://github.com/ksolo21-web/HAVENLINE/blob/d70fbfac21a852f99cc46b06b1944faf11ec7901/Docs/Design/ResourceTurnarounds/2026-11-23-expansion/source-equipment-coverage.json",
+          "evidence": "equipment_chains workshop; board-18600, board-18607"
+        },
+        {
+          "repository_path": "Docs/Design/ConveyorReferences/2026-11-26/connected-logistics-01/design/routing-catalogue.json",
+          "commit": "d70fbfac21a852f99cc46b06b1944faf11ec7901",
+          "url": "https://github.com/ksolo21-web/HAVENLINE/blob/d70fbfac21a852f99cc46b06b1944faf11ec7901/Docs/Design/ConveyorReferences/2026-11-26/connected-logistics-01/design/routing-catalogue.json",
+          "evidence": "Manual/future disposition exists for workshop; outputs and recipe bindings undefined."
+        }
+      ],
+      "best_existing_render": {
+        "path": null,
+        "approval_status": "SOURCE_DEPICTED; no dedicated selected render located",
+        "source_board_ids": [
+          "board-18600",
+          "board-18607"
+        ],
+        "source_board_pixels_locally_recovered": false
+      },
+      "actual_gap": "Named source equipment family absent from the51 equipment selections and all named PNG/JPG/WebP paths in fresh4955-leaf baseline.",
+      "proposed_render_sheet": {
+        "coverage": "front, rear, left, right, front/rear three-quarter; detail or use-state evidence appropriate to the item",
+        "minimum": "At least one clear dedicated sheet per asset; add separate states/details when a dense sheet makes geometry unreadable."
+      },
+      "inspected_image_inputs": [
+        "havenline-missing-renders-2026-11-27/audit/world/inputs/guard_tower.png",
+        "havenline-structures-2026-11-25/renders/fence-oblique-r2.png"
+      ],
+      "boundaries": [
+        "Original board18600/18607/18609 pixels were not available to this auditor; prior audited source descriptions/hashes establish the noun, not full design.",
+        "Use source board if root recovers it. Otherwise label new design an interpreted extension of established Havenline materials.",
+        "No invented crop catalogue, output recipe, resource consumption, rates or active conveyor endpoint."
+      ]
+    },
+    {
+      "id": "wheat_harvester",
+      "name": "Mechanized wheat harvester",
+      "priority": 1,
+      "source_requirements": [
+        {
+          "repository_path": "Docs/Design/ReferenceVideoLock/REFERENCE_VIDEO_LOCK.md",
+          "commit": "d70fbfac21a852f99cc46b06b1944faf11ec7901",
+          "url": "https://github.com/ksolo21-web/HAVENLINE/blob/d70fbfac21a852f99cc46b06b1944faf11ec7901/Docs/Design/ReferenceVideoLock/REFERENCE_VIDEO_LOCK.md",
+          "evidence": "ReferenceA wheat/mechanized harvest/blue-orange processing/bread-like output."
+        },
+        {
+          "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/A-wheat-sequence.png",
+          "commit": "d70fbfac21a852f99cc46b06b1944faf11ec7901",
+          "url": "https://github.com/ksolo21-web/HAVENLINE/blob/d70fbfac21a852f99cc46b06b1944faf11ec7901/Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/A-wheat-sequence.png",
+          "evidence": "Frames37.0\u201343.0s; row of silver curved rotary heads on blue field collector frame."
+        }
+      ],
+      "best_existing_render": {
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/A-wheat-sequence.png",
+        "approval_status": "SOURCE_EVIDENCE_ONLY; no dedicated selected harvester sheet"
+      },
+      "actual_gap": "Harvester exists in source pixels and logistics disposition, but has no dedicated standalone reviewed asset sheet.",
+      "proposed_render_sheet": {
+        "coverage": "front, rear, left, right, front/rear three-quarter; detail or use-state evidence appropriate to the item",
+        "minimum": "At least one clear dedicated sheet per asset; add separate states/details when a dense sheet makes geometry unreadable."
+      },
+      "inspected_image_inputs": [
+        "havenline-missing-renders-2026-11-27/audit/world/inputs/A-wheat-sequence.png"
+      ],
+      "boundaries": [
+        "Field-mounted blue rail/collection frame with multiple silver curved rotary heads; source is not a tractor.",
+        "Show idle, harvest-contact and collected wheat as static references only; no exact animation, rate or capacity claim."
+      ]
+    },
+    {
+      "id": "wheat_processor",
+      "name": "Wheat food processor",
+      "priority": 1,
+      "source_requirements": [
+        {
+          "repository_path": "Docs/Design/ReferenceVideoLock/REFERENCE_VIDEO_LOCK.md",
+          "commit": "d70fbfac21a852f99cc46b06b1944faf11ec7901",
+          "url": "https://github.com/ksolo21-web/HAVENLINE/blob/d70fbfac21a852f99cc46b06b1944faf11ec7901/Docs/Design/ReferenceVideoLock/REFERENCE_VIDEO_LOCK.md",
+          "evidence": "ReferenceA wheat processing to bread-like cooked-food output; exact recipe unshown."
+        },
+        {
+          "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/A-wheat-sequence.png",
+          "commit": "d70fbfac21a852f99cc46b06b1944faf11ec7901",
+          "url": "https://github.com/ksolo21-web/HAVENLINE/blob/d70fbfac21a852f99cc46b06b1944faf11ec7901/Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/A-wheat-sequence.png",
+          "evidence": "Small rounded blue housing, orange top features, side wheat feed and front output tray."
+        }
+      ],
+      "best_existing_render": {
+        "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/A-wheat-sequence.png",
+        "approval_status": "SOURCE_EVIDENCE_ONLY; no dedicated selected wheat processor sheet"
+      },
+      "actual_gap": "Food assembler/conveyor interfaces do not substitute for this distinct referenceA processor identity.",
+      "proposed_render_sheet": {
+        "coverage": "front, rear, left, right, front/rear three-quarter; detail or use-state evidence appropriate to the item",
+        "minimum": "At least one clear dedicated sheet per asset; add separate states/details when a dense sheet makes geometry unreadable."
+      },
+      "inspected_image_inputs": [
+        "havenline-missing-renders-2026-11-27/audit/world/inputs/A-wheat-sequence.png"
+      ],
+      "boundaries": [
+        "No flour intermediate, mill recipe or baking recipe inferred.",
+        "Show wheat inlet and bread-like output shape continuity; exact reverse design is interpreted."
+      ]
+    },
+    {
+      "id": "herbs",
+      "name": "Herbs",
+      "priority": 2,
+      "source_requirements": [
+        {
+          "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/source-equipment-coverage.json",
+          "commit": "d70fbfac21a852f99cc46b06b1944faf11ec7901",
+          "url": "https://github.com/ksolo21-web/HAVENLINE/blob/d70fbfac21a852f99cc46b06b1944faf11ec7901/Docs/Design/ResourceTurnarounds/2026-11-23-expansion/source-equipment-coverage.json",
+          "evidence": "world-atlas source evidence explicitly names HERBS."
+        }
+      ],
+      "best_existing_render": {
+        "path": null,
+        "approval_status": "SOURCE_NAMED; no dedicated selected resource sheet",
+        "source_board_pixels_locally_recovered": false
+      },
+      "actual_gap": "Not among the existing33 bounded resource IDs and no named render in fresh archive; this is an additional atlas noun, not a failure of33/33 existing coverage.",
+      "proposed_render_sheet": {
+        "coverage": "front, rear, left, right, front/rear three-quarter; detail or use-state evidence appropriate to the item",
+        "minimum": "At least one clear dedicated sheet per asset; add separate states/details when a dense sheet makes geometry unreadable."
+      },
+      "inspected_image_inputs": [
+        "havenline-structures-2026-11-25/renders/fence-oblique-r2.png"
+      ],
+      "boundaries": [
+        "Atlas pixels were previously audited but were not locally available to this auditor.",
+        "Provide stylized resource appearance, gathered bundle/cluster and storage stack proposal; do not invent pickup effects, medicinal benefits, element powers, recipes or drop tables."
+      ]
+    },
+    {
+      "id": "crystal",
+      "name": "Crystal",
+      "priority": 2,
+      "source_requirements": [
+        {
+          "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/source-equipment-coverage.json",
+          "commit": "d70fbfac21a852f99cc46b06b1944faf11ec7901",
+          "url": "https://github.com/ksolo21-web/HAVENLINE/blob/d70fbfac21a852f99cc46b06b1944faf11ec7901/Docs/Design/ResourceTurnarounds/2026-11-23-expansion/source-equipment-coverage.json",
+          "evidence": "world-atlas source evidence explicitly names CRYSTAL."
+        }
+      ],
+      "best_existing_render": {
+        "path": null,
+        "approval_status": "SOURCE_NAMED; no dedicated selected resource sheet",
+        "source_board_pixels_locally_recovered": false
+      },
+      "actual_gap": "Not among the existing33 bounded resource IDs and no named render in fresh archive; this is an additional atlas noun, not a failure of33/33 existing coverage.",
+      "proposed_render_sheet": {
+        "coverage": "front, rear, left, right, front/rear three-quarter; detail or use-state evidence appropriate to the item",
+        "minimum": "At least one clear dedicated sheet per asset; add separate states/details when a dense sheet makes geometry unreadable."
+      },
+      "inspected_image_inputs": [
+        "havenline-structures-2026-11-25/renders/fence-oblique-r2.png"
+      ],
+      "boundaries": [
+        "Atlas pixels were previously audited but were not locally available to this auditor.",
+        "Provide stylized resource appearance, gathered bundle/cluster and storage stack proposal; do not invent pickup effects, medicinal benefits, element powers, recipes or drop tables."
+      ]
+    }
+  ],
+  "already_covered": {
+    "equipment_selected": 51,
+    "hearth_tiers_included": 10,
+    "existing_resource_concepts": 33,
+    "existing_resource_and_plot_sheets": 62,
+    "structures": "fence, gates and customer counter selected9 sheets; cardinal/oblique/details states complete",
+    "storage_house": "tiers and organization already selected; do not repeat",
+    "conveyors": "7 selected static art sheets plus exact routing SVG/catalogue already accepted",
+    "enemies": "Armored Ram Sled belongs to separate already-approved enemy roster; not missing world equipment"
+  },
+  "inspected_inputs": [
+    {
+      "path": "havenline-missing-renders-2026-11-27/audit/world/inputs/ballista_tower.png",
+      "sha256": "5c4562ba169b7d89d1880a3a6d2dfc94ae4752381e7f410cab63b437af89cbf2",
+      "bytes": 1994549,
+      "observed": "Eight-view timber/stone defensive tower with blue metal rim, bronze fasteners and snowcaps. Distinct already-approved ballista design."
+    },
+    {
+      "path": "havenline-missing-renders-2026-11-27/audit/world/inputs/guard_tower.png",
+      "sha256": "d2268b9dec0684842c8a1f4a2f2188dce628a812bf14ef82875d90ac6bcda4c1",
+      "bytes": 1943585,
+      "observed": "Eight-view timber lookout tower, blue roof, pale stone feet and lanterns."
+    },
+    {
+      "path": "havenline-missing-renders-2026-11-27/audit/world/inputs/A-wheat-sequence.png",
+      "sha256": "018715e320c7d40fe462b21c046bd70507712851a63ed83245b2bf96ee0c1b0f",
+      "bytes": 2983604,
+      "observed": "Thirteen frames show field harvester installation, blue collector belt, wheat processor installation and bread-like output/counter delivery."
+    },
+    {
+      "path": "havenline-enemy-expansion/reviews/evidence/primary-b/B-048-gameplay.png",
+      "sha256": "609741bddc62b6e307740dee8bf5ac6bc86f167df9b322b377313421d042b7d4",
+      "bytes": 2464875,
+      "observed": "SourceB48s shows square timber X-braced mounted crossbow platforms on pale stone plinths beside camp fence."
+    },
+    {
+      "path": "havenline-structures-2026-11-25/renders/fence-oblique-r2.png",
+      "sha256": "5cc7bb7ddf05ca053828b2c9202992a5fc4b104ca39f433454d56251d7e9641c",
+      "bytes": 1777860,
+      "observed": "Approved four oblique views; warm carved timber, cream rope lashings, snowcap treatment."
+    }
+  ],
+  "unbounded_or_unestablished": [
+    {
+      "id": "complete_handheld_combat_weapon_roster",
+      "status": "UNDEFINED_IN_SOURCE",
+      "source": {
+        "repository_path": "Docs/Design/RenderArchive/2026-11-23/selected-status.json",
+        "commit": "d70fbfac21a852f99cc46b06b1944faf11ec7901",
+        "url": "https://github.com/ksolo21-web/HAVENLINE/blob/d70fbfac21a852f99cc46b06b1944faf11ec7901/Docs/Design/RenderArchive/2026-11-23/selected-status.json",
+        "evidence": ""
+      },
+      "action": "Do not invent a complete weapon catalogue. Existing approved enemy gear can be studied as bounded derived references if parent selects it."
+    },
+    {
+      "id": "all_future_biomes_environment_tiers",
+      "status": "NO_COMPLETE_FROZEN_ENUMERATION",
+      "action": "No manufactured asset counts; preserve existing environment evidence and flag source gap."
+    }
+  ],
+  "shared_boundaries": [
+    "Static reference art only; native mesh, rig, animation and runtime behavior remain untested.",
+    "Keep current approved selected images and original/rejected history unchanged.",
+    "Source-hidden geometry is an interpretation; do not present exact mechanics or recipes as proven."
+  ],
+  "verification": {
+    "fresh_baseline_leaf_count_checked": 4955,
+    "candidate_name_scan": {
+      "defense_platform": 0,
+      "cookhouse": 0,
+      "greenhouse": 0,
+      "workshop": 0,
+      "wheat_harvester": 0,
+      "wheat_processor": 0,
+      "herbs": 0,
+      "crystal": 0
+    },
+    "selected_equipment_manifest_crosschecked": true,
+    "original_source_boards_recovered": false,
+    "scope_status": "ACTIONABLE_AUDIT; generation and independent visual approval owned by root/critic"
+  },
+  "source_bindings": [
+    {
+      "repository_path": "Docs/Design/RenderArchive/2026-11-23/selected-status.json",
+      "blob_sha": "6c7be79a4d4c5d16abff3dfbd2514a1bcde73691",
+      "bytes": 40001
+    },
+    {
+      "repository_path": "Docs/Design/RenderArchive/2026-11-23/image-index.json",
+      "blob_sha": "d08bb7cc9301f0298580d3db51e59aa66de794c6",
+      "bytes": 191963
+    },
+    {
+      "repository_path": "HavenlineGodot/data/asset-manifest.json",
+      "blob_sha": "17322caf00f63ee268784b4d988aa452162a5bc1",
+      "bytes": 2130
+    },
+    {
+      "repository_path": "Docs/Production/T05/FROZEN_SCOPE.md",
+      "blob_sha": "f4bba4e4f7fd0f1949d1eb193965d755c0fd0e66",
+      "bytes": 5189
+    },
+    {
+      "repository_path": "HavenlineGodot/assets/stations_v2/catalog.json",
+      "blob_sha": "ae27aa074e4ad9e5fa912259685741a55fc35c55",
+      "bytes": 18959
+    },
+    {
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/source-equipment-coverage.json",
+      "blob_sha": "c35ef70315d9059213843f12452fa8ac22fb6c36",
+      "bytes": 30888
+    }
+  ],
+  "weapon_audit_followup": {
+    "source": "havenline-missing-renders-2026-11-27/audit/cast/cast-coverage-matrix.json",
+    "findings": "All20enemy concepts already have approved turnaround/details, including depicted gear. ShieldRaider LEFTshield/RIGHTshort hammer, HarpoonHunter RIGHTsimpleharpoon/LEFThip tethercoil, PowderSapper closed cylindrical backpack and sealed fictional canister RIGHT are already covered on identity sheets. Detached equipment studies are optional, not evidence of new missing archetypes or complete handheld catalogue."
+  },
+  "navigation_sources_read": [
+    "BUILD_GAME.md",
+    "REPOSITORY_INDEX.md"
+  ],
+  "navigation_boundary": "Current Level1replacement is alfred/level-1-replacement; preservedHavenlineGodot station catalog is historical reference identity only. Static art generation does not modify or approve active runtime."
+}

@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "review_id": "atlas-raider-pose-r1-independent",
+  "reviewer": "/root/missing_cast_critic",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-27T06:22:59.842701+00:00",
+  "status": "REPAIR REQUIRED \u2014 STATIC BODY REFERENCE ONLY",
+  "scope": "STATIC BODY REFERENCE ONLY",
+  "score_method": "Minimum mandatory visual-area score, not an average; every mandatory static visual check must pass strictly above 9.0.",
+  "reviewed_image": {
+    "native_returned_locator": "/workspace/scratch/9c51da47f878/generated_images/exec-1b98c94d-0074-45f4-87d7-6ac61582950b.png",
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-raider-pose-r1.png",
+    "bytes": 1790761,
+    "sha256": "fd8a8ba48ce28fb1d3ad55e2b0c29d681c3f2ee225c585ca717e3f40cc45ac18",
+    "git_blob_sha": "1d2ca3dff9392f7a9077e661c204af0aab60f204",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "actual_format": "PNG"
+  },
+  "requirements_at_generation": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/requirements.json",
+    "bytes": 157378,
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+    "git_blob_sha": "35cdd6921cdc9b88e6e890f538ecdc907d607a43"
+  },
+  "requirements_snapshot": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-input-snapshots/requirements--a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374.json",
+    "bytes": 157378,
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374"
+  },
+  "invocation": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/invocations/atlas-raider-pose-r1.json",
+    "bytes": 6015,
+    "sha256": "253e25297b50ad546f4f558338d30a36dbe38349068407f7700b45068128e144"
+  },
+  "exact_actual_prompt": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-exact-invoked-prompts/atlas-raider-pose-r1.txt",
+    "bytes": 2574,
+    "sha256": "5080b020158251f69803849835f3abf9d75c9574554131540a04b20fd2ce74c2"
+  },
+  "source_images_inspected": [
+    {
+      "order": 1,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png",
+      "bytes": 213976,
+      "sha256": "b342480ec487df11c9519bd756069deb56fa14ea7b5525cec2a12df66fdc16fa",
+      "git_blob_sha": "1af9b55e0fd3bc87617804d3d550490c8ebb39ee",
+      "dimensions": [
+        458,
+        280
+      ],
+      "actual_format": "PNG"
+    },
+    {
+      "order": 2,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/customer-male-01-pose-r2.png",
+      "bytes": 1715021,
+      "sha256": "1528d9d54fc8d3e80fb0654a1f897e634a3a4f44e3c7ae50d9218e887d493d88",
+      "git_blob_sha": "62f10921b82c9cb5e5a3ccfc5945039b7eeb0098",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "actual_format": "PNG"
+    }
+  ],
+  "actual_full_native_png_inspected": true,
+  "crop_provenance": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/atlas-raider-pose-r1-crop-provenance.json",
+    "bytes": 3381,
+    "sha256": "35f874c55af4d25ab168656c13d046292521434c696c6387c210fe6329714c6c"
+  },
+  "actual_native_crops_inspected": [
+    "front-viewer-left-hand",
+    "front-viewer-right-hand",
+    "rear-viewer-left-hand",
+    "rear-viewer-right-hand",
+    "left-profile-hand",
+    "right-profile-hand",
+    "front-armor-belts",
+    "rear-armor-belts"
+  ],
+  "native_mesh_rig_animation_runtime_approval": false,
+  "pending_separate_evidence": [
+    "Dedicated matching hands/gear sheet and cross-sheet comparison; this report evaluates only the body candidate.",
+    "Full GitHub byte/blob readback and independent archive gate"
+  ],
+  "preservation": "All previous source identities, original accepted images, rejected iterations and exact prompts remain preserved.",
+  "additional_source_images_inspected": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-raider.png",
+      "bytes": 16614,
+      "sha256": "3ed057c410714ef1ec6ca17a42664ac494881b291f767b498da9c402f4f4b5cf"
+    }
+  ],
+  "source_detail_comparison": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/atlas-raider-source-lower-body-comparison.json",
+    "bytes": 1105,
+    "sha256": "1704d8e73f823687ba27f96559c143e7ccb1ddf6c923a20522e880319eea662e"
+  },
+  "areas": [
+    {
+      "id": "source_head_and_upper_costume",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "The original Atlas Raider is retained as a dark-bearded compact bandit with small-spiked metal cap, gray collar, gray-blue sleeves, crossing brown straps and belt pouches."
+    },
+    {
+      "id": "source_visible_lower_costume",
+      "score": 8.8,
+      "status": "FAIL",
+      "finding": "The source cell visibly includes lighter gray patches on the front knee/lower-leg areas. The candidate has uninterrupted brown trousers and brown boots, losing that visible source feature. Source resolution does not establish an exact material, so the repair should restore modest gray patches without inventing ornate armor.",
+      "evidence": [
+        "atlas-raider-source-lower-body.png",
+        "atlas-raider-pose-r1-front-lower-body.png"
+      ]
+    },
+    {
+      "id": "four_cardinal_views_and_framing",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "FRONT, LEFT, REAR and RIGHT are distinct complete views with readable labels and uncropped head, fingers and soles."
+    },
+    {
+      "id": "five_digit_anatomy",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "All four front/rear hands resolve four separated fingers and one opposed thumb. Native hand closeups show no extra, fused or missing digit."
+    },
+    {
+      "id": "front_palm_rear_dorsal",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Front gloves show palm padding; rear gloves show lengthwise dorsal seams and no duplicated palm oval."
+    },
+    {
+      "id": "neutral_wrists_and_profile_projection",
+      "score": 9.6,
+      "status": "PASS",
+      "finding": "Arms remain horizontal and both side views show an end-on hand silhouette consistent with the same neutral wrist position, rather than a changed upright or bent wrist."
+    },
+    {
+      "id": "belts_and_attachment",
+      "score": 9.6,
+      "status": "PASS",
+      "finding": "Crossing torso straps, hip pouches, cuff attachments and the belt remain physically intelligible in all four views. The unseen source reverse is a coherent authored interpretation."
+    },
+    {
+      "id": "static_lower_limb_anatomy",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Two complete legs and grounded boot soles remain intact in all four views; the defect is omitted costume detail rather than missing anatomy."
+    }
+  ],
+  "mandatory_defects_remaining": [
+    {
+      "id": "AR-D01",
+      "severity": "mandatory_source_fidelity",
+      "description": "Restore the original Atlas gray front knee/lower-leg patches consistently across the cardinal views; keep the otherwise successful head, upper costume, hands and T-pose.",
+      "evidence": [
+        "reviews/evidence/atlas-raider-source-lower-body.png",
+        "reviews/evidence/atlas-raider-pose-r1-front-lower-body.png"
+      ],
+      "retest": "Inspect repaired full native image and front/profile/rear lower-leg crops, then recheck five digits and wrist surfaces after the edit."
+    }
+  ],
+  "source_interpretation_limit": "The Atlas supplies one small front oblique appearance. Exact hidden reverse seams/material construction are authored reference interpretation, not recovered native model truth.",
+  "score": 8.8,
+  "all_mandatory_visual_checks_passed": false
+}

@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "review_id": "atlas-giant-boar-turnaround-r1-independent",
+  "reviewer": "/root/missing_cast_critic",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-27T07:07:55.566833+00:00",
+  "status": "PASS \u2014 STATIC ANIMAL REFERENCE ONLY",
+  "scope": "STATIC ANIMAL REFERENCE ONLY",
+  "score_method": "Minimum mandatory visual-area score, not an average; every mandatory static visual check must pass strictly above 9.0.",
+  "reviewed_image": {
+    "native_returned_locator": "/workspace/scratch/9c51da47f878/generated_images/exec-80891fd4-0a83-44d3-b442-04f827907fc1.png",
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-giant-boar-turnaround-r1.png",
+    "bytes": 2167834,
+    "sha256": "a1569f4153deceda5fc38c91c17a5d5400b490e529fca6b4e30cc381cbe59835",
+    "git_blob_sha": "d9e4b743c50428885227242721aa1d372946ef34",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "actual_format": "PNG"
+  },
+  "requirements_at_generation": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/requirements.json",
+    "bytes": 157378,
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+    "git_blob_sha": "35cdd6921cdc9b88e6e890f538ecdc907d607a43"
+  },
+  "requirements_snapshot": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-input-snapshots/requirements--a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374.json",
+    "bytes": 157378,
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374"
+  },
+  "invocation": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/invocations/atlas-giant-boar-turnaround-r1.json",
+    "bytes": 4856,
+    "sha256": "2869f0fe056b23eb28d8da19559db448903f123f8842b2901ce4f0a948ae1a87"
+  },
+  "exact_actual_prompt": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-exact-invoked-prompts/atlas-giant-boar-turnaround-r1.txt",
+    "bytes": 2071,
+    "sha256": "2550a3f774f947fde363bdd0ba178814d55f1b0e02c48ffc1d9245e15750a9a7"
+  },
+  "source_images_inspected": [
+    {
+      "order": 1,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/strong-hostile-labels.png",
+      "bytes": 131388,
+      "sha256": "3adcb46eb654a797d48b759e22006a891204d84da02ceb0fd7f70862d1b00ae2",
+      "git_blob_sha": "ecf29a90d5c979b8c5080edd4146a81d35f8fb79",
+      "dimensions": [
+        286,
+        280
+      ],
+      "actual_format": "PNG"
+    }
+  ],
+  "actual_full_native_png_inspected": true,
+  "crop_provenance": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/atlas-giant-boar-turnaround-r1-crop-provenance.json",
+    "bytes": 3740,
+    "sha256": "28407cc3af07d90001e46656bf3876650640ac29067c17a08dde6d899d96090e"
+  },
+  "actual_native_crops_inspected": [
+    "front",
+    "left",
+    "rear",
+    "right",
+    "front-three-quarter",
+    "rear-three-quarter",
+    "front-near-left-hoof",
+    "front-near-right-hoof",
+    "right-near-forehoof"
+  ],
+  "native_mesh_rig_animation_runtime_approval": false,
+  "pending_separate_evidence": [
+    "Full GitHub byte/blob readback and independent archive gate"
+  ],
+  "preservation": "All previous source identities, original accepted images, rejected iterations and exact prompts remain preserved.",
+  "areas": [
+    {
+      "id": "exact_atlas_identity",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "The source-specific Giant Boar keeps the massive dark-brown body, tall swept-back shoulder mane, ridged broad snout and oversized pale side tusks, distinct from the ordinary Boar and older red Tusk Boar."
+    },
+    {
+      "id": "six_complete_meaningful_views",
+      "score": 9.8,
+      "status": "PASS",
+      "finding": "All six required cardinal/oblique views are distinct, labeled and fully framed. The front and rear obliques resolve limb, tusk, mane and tail attachments."
+    },
+    {
+      "id": "four_limbs_cloven_hooves_and_grounding",
+      "score": 9.5,
+      "status": "PASS",
+      "finding": "Four thick legs terminate in broad split hoof masses. The two main hoof halves and central clefts remain readable in the front, side and closeup evidence; smaller lateral rounded forms read as stylized dewclaws rather than additional broad central toes. All feet are grounded.",
+      "evidence": [
+        "front-near-left-hoof",
+        "front-near-right-hoof",
+        "right-near-forehoof",
+        "front",
+        "left",
+        "right",
+        "rear",
+        "front-three-quarter",
+        "rear-three-quarter"
+      ]
+    },
+    {
+      "id": "two_tusks_head_and_snarl",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "One large curved tusk emerges from each side of the mouth, with no extra horn. Ridged snout, two ears, smaller mouth teeth and a controlled snarl remain coherent across views."
+    },
+    {
+      "id": "single_tail_attachment",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "One narrow tufted tail originates at the rump and is resolved in both profiles, rear and rear oblique. No extra tail or detached tuft is present."
+    },
+    {
+      "id": "mane_body_and_fur_pattern",
+      "score": 9.6,
+      "status": "PASS",
+      "finding": "Tall swept mane follows the shoulders and back; darker lower legs and major warm-brown fur masses remain stable through the rotation."
+    },
+    {
+      "id": "style_and_presentation",
+      "score": 9.8,
+      "status": "PASS",
+      "finding": "Polished sculpted fur, powerful rounded masses, legible labels, complete margins and soft ground shadows meet the source-guided static-reference standard."
+    }
+  ],
+  "mandatory_defects_remaining": [],
+  "additional_source_images_inspected": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-strong_hostile-giant-boar.png",
+      "bytes": 22665,
+      "sha256": "c6ff9a6eff86c010ed4476525bd0c48b08a9728138f05a68e9f3233087ea173e"
+    }
+  ],
+  "source_interpretation_limit": "The small original Atlas source fixes visible identity. Hidden reverse anatomy and fine surface construction are authored static-reference interpretation. This approval establishes no native mesh, rig, animation, use state or gameplay behavior.",
+  "minor_polish_limit": "Hoof side/dewclaw shapes are chunky and stylized; a future native model should explicitly resolve principal hoof and dewclaw topology. This sheet establishes the paired split-hoof appearance, not a zoologically measured mesh. Fine mane tips vary slightly between illustrated views.",
+  "score": 9.5,
+  "all_mandatory_visual_checks_passed": true
+}

@@ -1,0 +1,42 @@
+{
+  "id": "atlas-flamethrower-hands-gear-r1",
+  "deliverable_id": "atlas-flamethrower-hands-gear",
+  "family_id": "atlas-flamethrower",
+  "tool": "image_gen__imagegen",
+  "arguments": {
+    "prompt": "Create the HANDS AND GEAR reference for the SAME HAVENLINE ATLAS FLAMETHROWER shown in image1 (approved neutral body sheet) and image2 (original source raider crop). Preserve the exact glove, bracer, armor material and source-specific equipment identity. Brown-armored helmeted bearded raider carrying a stout nozzle/tank-style weapon, flame shown in Atlas. Bearded adult male with small pointed steel helmet, layered tawny-brown leather armor, metal buckles, gray bracers, brown boots. Equipment: source-like bulky short dark nozzle housing with bronze bands and compact opaque tank/backpack connection, fantasy aesthetic only. Do not show flames or a discharge, fluids, cutaways or construction internals. Preserve an ordinary dark beard, not a gas mask or sci-fi robot.\n\nSix large well-separated panels in a3-column by2-row landscape sheet, pale warm gray, premium sculpted Havenline finish. LEFT two columns are four large hand/wrist closeups with fingers pointing UP: top-left LEFT PALM (thumb on VIEWER LEFT), top-middle RIGHT PALM (thumb on VIEWER RIGHT), bottom-left LEFT BACK (thumb on VIEWER RIGHT), bottom-middle RIGHT BACK (thumb on VIEWER LEFT). Exactly FOUR fingers PLUS ONE short opposed thumb, FIVE total each. All20digits readable, natural finger-length hierarchy, clean gaps, distinct palm padding versus dorsal finger seams, matching armor/winter cuff from the approved body, no civilian cream cuff unless actually in this character. Same hand design and correct chirality, no palm texture on dorsal views.\n\nRIGHT column shows the detached source-visible equipment set from two opposite three-quarter sides, upper label GEAR FRONT, lower GEAR REAR. Complete uncropped props, consistent shape/materials and believable grasp surfaces. Any worn quiver/backpack can be included with the held prop when it belongs to the source role. These are exterior aesthetic fantasy game props at rest: opaque closed surfaces, no cutaway, no ammunition internals, dimensions, recipes, diagrams, assembly steps, firing or flames. Do not invent a second weapon if the source only shows one. Keep weapon silhouette exact to this role and sufficiently large to model from.\n\nHeader HAVENLINE | ATLAS FLAMETHROWER | HANDS + GEAR. Clean legible panel labels, generous margins, no stats or lore. Hidden backs of equipment are restrained authored interpretation.",
+    "referenced_image_paths": [
+      "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-flamethrower-pose-r1.png",
+      "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png"
+    ],
+    "transparent_background": false
+  },
+  "status": "PREPARED",
+  "reason": "Root-authorized dependent hand/gear preparation using the latest independently passed exact pose PNG; no generation invoked by this helper.",
+  "prepared_from_catalog": {
+    "path": "atlas-raider-render-catalog.json",
+    "sha256": "bda9464321592a61d2b2245a7d7287d037b1d1a760c268b14ac79a387d2638f8",
+    "entry_id": "atlas-flamethrower-hands-gear"
+  },
+  "dependency_reference_template": [
+    "APPROVED_RENDER:atlas-flamethrower-pose",
+    "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png"
+  ],
+  "resolved_approved_dependencies": [
+    {
+      "revision": 1,
+      "deliverable_id": "atlas-flamethrower-pose",
+      "render_id": "atlas-flamethrower-pose-r1",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-flamethrower-pose-r1.png",
+      "bytes": 1811944,
+      "sha256": "5da09dd6c85f9e27ac475fbf5f6987c96f07d5ef20e27c8dd129f0e4924cef45",
+      "git_blob_sha": "fe74aa13dd3739542708bdc7b3aff117c26613e6",
+      "review_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/critic-atlas-flamethrower-pose-r1.json",
+      "review_sha256": "fb6047e0174dc0b8d840eb58ff69bc3c064594b62a9d4e379a129bf339f62db4",
+      "review_status": "PASS — STATIC BODY REFERENCE ONLY",
+      "review_score": 9.6,
+      "reviewer": "/root/missing_cast_critic",
+      "all_mandatory_checks_passed": true
+    }
+  ]
+}

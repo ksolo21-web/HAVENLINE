@@ -1,0 +1,113 @@
+{
+  "id": "atlas-bombardier-hands-gear-r1",
+  "deliverable_id": "atlas-bombardier-hands-gear",
+  "family_id": "atlas-bombardier",
+  "tool": "image_gen__imagegen",
+  "arguments": {
+    "prompt": "Create the HANDS AND GEAR reference for the SAME HAVENLINE ATLAS BOMBARDIER shown in image1 (approved neutral body sheet) and image2 (original source raider crop). Preserve the exact glove, bracer, armor material and source-specific equipment identity. Brown/gray armored bearded bandit with cap, handheld round orange canister and a tall handled implement. Bearded adult male wearing a warm tan brimmed cap, gray-blue winter sleeves, brown leather armor and bands, thick layered waist belts and boots. Equipment: small opaque ORANGE ROUND CANISTER with short top fitting plus the source's long handled implement with a rounded spoon/oval head. Keep their visible exterior silhouette; do not invent contents, fuse recipes, mechanisms or operation diagrams.\n\nSix large well-separated panels in a3-column by2-row landscape sheet, pale warm gray, premium sculpted Havenline finish. LEFT two columns are four large hand/wrist closeups with fingers pointing UP: top-left LEFT PALM (thumb on VIEWER LEFT), top-middle RIGHT PALM (thumb on VIEWER RIGHT), bottom-left LEFT BACK (thumb on VIEWER RIGHT), bottom-middle RIGHT BACK (thumb on VIEWER LEFT). Exactly FOUR fingers PLUS ONE short opposed thumb, FIVE total each. All20digits readable, natural finger-length hierarchy, clean gaps, distinct palm padding versus dorsal finger seams, matching armor/winter cuff from the approved body, no civilian cream cuff unless actually in this character. Same hand design and correct chirality, no palm texture on dorsal views.\n\nRIGHT column shows the detached source-visible equipment set from two opposite three-quarter sides, upper label GEAR FRONT, lower GEAR REAR. Complete uncropped props, consistent shape/materials and believable grasp surfaces. Any worn quiver/backpack can be included with the held prop when it belongs to the source role. These are exterior aesthetic fantasy game props at rest: opaque closed surfaces, no cutaway, no ammunition internals, dimensions, recipes, diagrams, assembly steps, firing or flames. Do not invent a second weapon if the source only shows one. Keep weapon silhouette exact to this role and sufficiently large to model from.\n\nHeader HAVENLINE | ATLAS BOMBARDIER | HANDS + GEAR. Clean legible panel labels, generous margins, no stats or lore. Hidden backs of equipment are restrained authored interpretation. EXACT ACCEPTED GLOVE CONSTRUCTION: fine parallel stitched rows continuing along the finger backs, a short transverse wrist boundary, ONE normal studded brown cuff and gray-blue sleeve; no extra raised dorsal strap. Preserve these specific body details in both BACK hand panels; do not substitute generic padded palms, additional straps or new armor. The final reference is an exact native crop of that accepted body glove back; use it as the construction authority. Preserve all five separated digits and correct left/right anatomy.",
+    "referenced_image_paths": [
+      "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-bombardier-pose-r2.png",
+      "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png",
+      "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/atlas-bombardier-pose-r2-rear-viewer-left-hand.png"
+    ],
+    "transparent_background": false
+  },
+  "status": "GENERATED_AWAITING_REVIEW",
+  "reason": "Root-authorized dependent hand/gear preparation using the latest independently passed exact pose PNG; no generation invoked by this helper.",
+  "prepared_from_catalog": {
+    "path": "atlas-raider-render-catalog.json",
+    "sha256": "bda9464321592a61d2b2245a7d7287d037b1d1a760c268b14ac79a387d2638f8",
+    "entry_id": "atlas-bombardier-hands-gear"
+  },
+  "dependency_reference_template": [
+    "APPROVED_RENDER:atlas-bombardier-pose",
+    "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png"
+  ],
+  "resolved_approved_dependencies": [
+    {
+      "revision": 2,
+      "deliverable_id": "atlas-bombardier-pose",
+      "render_id": "atlas-bombardier-pose-r2",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-bombardier-pose-r2.png",
+      "bytes": 1811893,
+      "sha256": "d061fa5c36469192433a039e4dc978fcbdd66cd0de5e169dd1b7c4dd26daffcc",
+      "git_blob_sha": "ae464eb8910101d686d20e171fbd56729bd998e8",
+      "review_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/critic-atlas-bombardier-pose-r2.json",
+      "review_sha256": "6e52c0f0381b3b284ca53bb15ad929e258f9a71db0faa27e3386e31069c2a6e1",
+      "review_status": "PASS \u2014 STATIC BODY REFERENCE ONLY",
+      "review_score": 9.6,
+      "reviewer": "/root/missing_cast_critic",
+      "all_mandatory_checks_passed": true
+    }
+  ],
+  "root_refinement": "Exact accepted glove construction and native rear-left crop bound before first invocation; original preparation retained.",
+  "prompt_file": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/prompts/atlas-bombardier-hands-gear-r1.txt",
+    "bytes": 2871,
+    "sha256": "bdcdb887bd4e7873c133d97b9c7e2306955bdd57660a4fc58663cd5cbddfb4b3",
+    "git_blob_sha": "64f4ab18b3784b91a2cc14a7f606d9feb4b34940"
+  },
+  "exact_actual_prompt_file": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-exact-invoked-prompts/atlas-bombardier-hands-gear-r1.txt",
+    "bytes": 2870,
+    "sha256": "f15046b24a2d127afdc41b967c39cdc2e5414faa193dd2fe4602b410fb17fdde",
+    "git_blob_sha": "7c15fddd1fcb97420c3c22a5458bf2044bba4db6"
+  },
+  "ordered_reference_inputs": [
+    {
+      "order": 1,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-bombardier-pose-r2.png",
+      "bytes": 1811893,
+      "sha256": "d061fa5c36469192433a039e4dc978fcbdd66cd0de5e169dd1b7c4dd26daffcc",
+      "git_blob_sha": "ae464eb8910101d686d20e171fbd56729bd998e8",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "actual_format": "PNG"
+    },
+    {
+      "order": 2,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png",
+      "bytes": 213976,
+      "sha256": "b342480ec487df11c9519bd756069deb56fa14ea7b5525cec2a12df66fdc16fa",
+      "git_blob_sha": "1af9b55e0fd3bc87617804d3d550490c8ebb39ee",
+      "dimensions": [
+        458,
+        280
+      ],
+      "actual_format": "PNG"
+    },
+    {
+      "order": 3,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/atlas-bombardier-pose-r2-rear-viewer-left-hand.png",
+      "bytes": 20632,
+      "sha256": "abe7267c363f1497be91a1753700897665efede3ecaea6539dffa5908e2f7a43",
+      "git_blob_sha": "19a42b16dce2a9479eaf8d3a8e24b6f58582522a",
+      "dimensions": [
+        130,
+        105
+      ],
+      "actual_format": "PNG"
+    }
+  ],
+  "requirements_at_generation": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/requirements.json",
+    "bytes": 157378,
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+    "git_blob_sha": "35cdd6921cdc9b88e6e890f538ecdc907d607a43"
+  },
+  "requirements_snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-input-snapshots/requirements--a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374.json",
+  "output": {
+    "native_returned_locator": "/workspace/scratch/9c51da47f878/generated_images/exec-72037c1a-7ada-4b37-8dbb-566c0b823895.png",
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-bombardier-hands-gear-r1.png",
+    "bytes": 1950829,
+    "sha256": "07c48f1249a6ea3390223f61485197aaf55e37534fdf58f704666b333d6fe60f",
+    "git_blob_sha": "af21d03e804638030a033466f3da8793bd83f1a4",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "actual_format": "PNG"
+  }
+}

@@ -1,0 +1,48 @@
+# Havenline missing world renders — source audit
+
+Baseline: `d70fbfac21a852f99cc46b06b1944faf11ec7901` / `art/conveyors-2026-11-26`; fresh tree4955leaves.
+
+**One prior frozen slot is actually unfinished: `defense_platform`. Seven additional source-named assets lack dedicated selected sheets.** Existing51 equipment selections,10 included furnace tiers and33 existing resource concepts remain covered.
+
+| Asset | Evidence | Existing best evidence | Actual gap / proposed new coverage |
+|---|---|---|---|
+| Modular mounted defense platform | BLOCKED_GENERATION; no selected_path; this slot remains in scope.; T05-R06 timber-and-metal platform, weapon socket, supply/repair props.; Footprint 3.25 x 3.05; repair[1.7,0,0], supply[0,0.8,-1.65], weapon[0,1.62,0]. | NO_OUTPUT; BLOCKED_GENERATION in prior art contract | Only unresolved slot in the prior69-slot contract. The modular platform and service interfaces have no selected concept PNG. |
+| Camp cookhouse | equipment_chains cookfire-cookhouse; board-18609; Manual/future disposition exists for cookhouse; outputs and recipe bindings undefined. | SOURCE_DEPICTED; no dedicated selected render located | Named source equipment family absent from the51 equipment selections and all named PNG/JPG/WebP paths in fresh4955-leaf baseline. |
+| Camp greenhouse | equipment_chains greenhouse; board-18609; Manual/future disposition exists for greenhouse; outputs and recipe bindings undefined. | SOURCE_DEPICTED; no dedicated selected render located | Named source equipment family absent from the51 equipment selections and all named PNG/JPG/WebP paths in fresh4955-leaf baseline. |
+| Camp workshop | equipment_chains workshop; board-18600, board-18607; Manual/future disposition exists for workshop; outputs and recipe bindings undefined. | SOURCE_DEPICTED; no dedicated selected render located | Named source equipment family absent from the51 equipment selections and all named PNG/JPG/WebP paths in fresh4955-leaf baseline. |
+| Mechanized wheat harvester | ReferenceA wheat/mechanized harvest/blue-orange processing/bread-like output.; Frames37.0–43.0s; row of silver curved rotary heads on blue field collector frame. | SOURCE_EVIDENCE_ONLY; no dedicated selected harvester sheet | Harvester exists in source pixels and logistics disposition, but has no dedicated standalone reviewed asset sheet. |
+| Wheat food processor | ReferenceA wheat processing to bread-like cooked-food output; exact recipe unshown.; Small rounded blue housing, orange top features, side wheat feed and front output tray. | SOURCE_EVIDENCE_ONLY; no dedicated selected wheat processor sheet | Food assembler/conveyor interfaces do not substitute for this distinct referenceA processor identity. |
+| Herbs | world-atlas source evidence explicitly names HERBS. | SOURCE_NAMED; no dedicated selected resource sheet | Not among the existing33 bounded resource IDs and no named render in fresh archive; this is an additional atlas noun, not a failure of33/33 existing coverage. |
+| Crystal | world-atlas source evidence explicitly names CRYSTAL. | SOURCE_NAMED; no dedicated selected resource sheet | Not among the existing33 bounded resource IDs and no named render in fresh archive; this is an additional atlas noun, not a failure of33/33 existing coverage. |
+
+## Build boundaries
+
+- Use `world-gap-matrix.json` for exact paths, hashes and source URLs.
+- The prior defense platform generation produced no PNG; all other51 equipment sheets passed. Do not relabel the existing ballista or guard tower as the missing modular platform.
+- The wheat source is a stationary field harvesting assembly and separate blue processor. A tractor or a flour mill would invent unsupported identities.
+- Cookhouse, greenhouse and workshop are established source nouns. Their source boards were not recovered locally during this audit; use them if recovered, or label a coherent Havenline interpretation. Keep their undefined recipes/output types unclaimed.
+- Herbs and crystal are additional atlas nouns beyond the prior33 bounded resources. Existing33coverage is not incorrect.
+- The full handheld combat weapon roster and future environment/tier list remain undefined. No finite all-game completeness claim is justified.
+
+## Inspected image references
+
+- `havenline-missing-renders-2026-11-27/audit/world/inputs/ballista_tower.png` — Eight-view timber/stone defensive tower with blue metal rim, bronze fasteners and snowcaps. Distinct already-approved ballista design.
+- `havenline-missing-renders-2026-11-27/audit/world/inputs/guard_tower.png` — Eight-view timber lookout tower, blue roof, pale stone feet and lanterns.
+- `havenline-missing-renders-2026-11-27/audit/world/inputs/A-wheat-sequence.png` — Thirteen frames show field harvester installation, blue collector belt, wheat processor installation and bread-like output/counter delivery.
+- `havenline-enemy-expansion/reviews/evidence/primary-b/B-048-gameplay.png` — SourceB48s shows square timber X-braced mounted crossbow platforms on pale stone plinths beside camp fence.
+- `havenline-structures-2026-11-25/renders/fence-oblique-r2.png` — Approved four oblique views; warm carved timber, cream rope lashings, snowcap treatment.
+
+## Already covered
+
+{
+  "equipment_selected": 51,
+  "hearth_tiers_included": 10,
+  "existing_resource_concepts": 33,
+  "existing_resource_and_plot_sheets": 62,
+  "structures": "fence, gates and customer counter selected9 sheets; cardinal/oblique/details states complete",
+  "storage_house": "tiers and organization already selected; do not repeat",
+  "conveyors": "7 selected static art sheets plus exact routing SVG/catalogue already accepted",
+  "enemies": "Armored Ram Sled belongs to separate already-approved enemy roster; not missing world equipment"
+}
+
+Static art coverage only. No mesh, rig, animation or runtime approval follows from these sheets.

@@ -1,0 +1,110 @@
+{
+  "guide_id": "six-post-bridge-r1",
+  "origin": "AUTHOR_CREATED_MATHEMATICAL_GUIDE",
+  "source_evidence": false,
+  "existing_bitmaps_read_or_modified": [],
+  "units": "Abstract authoring units, not game dimensions",
+  "ground_plane": "z=0",
+  "deck": {
+    "x_min": -1.12,
+    "x_max": 1.12,
+    "y_min": -2.2,
+    "y_max": 2.2,
+    "bottom_z": 0.15,
+    "top_z": 0.25,
+    "plank_count": 11,
+    "plank_gap": 0.012
+  },
+  "post_count": 6,
+  "cap_count": 6,
+  "post_positions": [
+    {
+      "id": "A1",
+      "x": -1.0,
+      "y": -2.0
+    },
+    {
+      "id": "A2",
+      "x": -1.0,
+      "y": 0.0
+    },
+    {
+      "id": "A3",
+      "x": -1.0,
+      "y": 2.0
+    },
+    {
+      "id": "B1",
+      "x": 1.0,
+      "y": -2.0
+    },
+    {
+      "id": "B2",
+      "x": 1.0,
+      "y": 0.0
+    },
+    {
+      "id": "B3",
+      "x": 1.0,
+      "y": 2.0
+    }
+  ],
+  "post_bottom_z": 0.25,
+  "post_top_z": 1.3,
+  "post_body_width": 0.16,
+  "cap_width": 0.24,
+  "cap_bottom_z": 1.22,
+  "rope_segments": [
+    {
+      "from": "A1",
+      "to": "A2"
+    },
+    {
+      "from": "A2",
+      "to": "A3"
+    },
+    {
+      "from": "B1",
+      "to": "B2"
+    },
+    {
+      "from": "B2",
+      "to": "B3"
+    }
+  ],
+  "rope_endpoint_z": 1.06,
+  "rope_midpoint_sag": 0.075,
+  "rope_radius": 0.022,
+  "camera_positions": {
+    "front": [
+      6.0,
+      -8.0,
+      3.0
+    ],
+    "rear": [
+      -6.0,
+      8.0,
+      3.0
+    ]
+  },
+  "camera_target": [
+    0.0,
+    0.0,
+    0.65
+  ],
+  "projection": "orthographic",
+  "camera_interpretation": "Exactly opposing horizontal positions at the same positive z; both views show the identical object.",
+  "panels": [
+    "FRONT OBLIQUE",
+    "REAR OBLIQUE"
+  ],
+  "diagram_conventions": {
+    "deck_color": "#b9c3cc",
+    "wood_color": "#98734f",
+    "blue_cap_color": "#2d7097",
+    "rope_color": "#c09a66",
+    "A_label_color": "#25668d",
+    "B_label_color": "#9a5b32"
+  },
+  "drawing_scope": "Control only post/cap count, physical positions and camera opposition for the lower-middle rear bridge panel. Exactly three posts per rail and two rails. Original approved/source bridge art remains the authority for all style and construction; this guide is not final art, source evidence or game dimensions."
+}

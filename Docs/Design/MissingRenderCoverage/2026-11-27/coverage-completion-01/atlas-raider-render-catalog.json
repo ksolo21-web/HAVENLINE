@@ -1,0 +1,596 @@
+{
+  "schema_version": 1,
+  "status": "ROOT_REVIEWED_SOURCE_BOUND",
+  "entries": [
+    {
+      "id": "atlas-raider-pose",
+      "family_id": "atlas-raider",
+      "category": "atlas_raider",
+      "source_subject": {
+        "source_subject_id": "atlas-raider",
+        "source_label": "RAIDER",
+        "source_group": "raider",
+        "visible_identity": "Brown/gray winter bandit with dark beard, small dark metal helmet, long held weapon and brown belts/boots.",
+        "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-raider.png",
+        "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+      },
+      "required_views": [
+        "front",
+        "left",
+        "rear",
+        "right"
+      ],
+      "arguments": {
+        "prompt": "Create the neutral modeling-pose reference for the exact HAVENLINE ATLAS RAIDER appearance in image1. It is the figure labelled RAIDER in the original ten-raider source crop. Image2 is a pose/projection guide ONLY: do not copy its bald face, blue coat, fur cuffs or civilian identity. Preserve the named source raider's colors, helmet, beard, silhouette, armor, belts and boots. Source identity: Brown/gray winter bandit with dark beard, small dark metal helmet, long held weapon and brown belts/boots. Ordinary adult male bandit, dark beard and mustache, dark round metal cap with tiny top spike, gray wool/fur collar, muted gray-blue undersleeves and brown leather chest straps, belt pouches, brown trousers and boots. Equipment: one source-like long wooden-stock fantasy carbine with dark barrel, simple opaque external silhouette.\n\nFour large complete full-body views in a2by2 grid: FRONT upper left, LEFT upper right, REAR lower left, RIGHT lower right. One neutral T-pose, arms horizontal at shoulder level, straight elbows, neutral wrists, feet apart on the floor. All handheld weapons and shields are temporarily off-sheet to expose hands; the companion hands/gear sheet will show them. Retain fixed worn quivers, straps and pack fittings where named. Reverse costume surfaces are coherent authored interpretations of the small source image, not a redesign.\n\nUse brown full-finger winter/leather gloves appropriate to his armor. Exactly four fingers plus one short opposed thumb on each hand, five digits total, clear gaps. FRONT palms face camera; REAR shows dorsal surfaces and finger-back seams without palm pads. In FRONT and REAR the MIDDLE FINGER continues HORIZONTALLY OUTWARD from each forearm, thumb above, other fingers fanned around that horizontal axis. Do not paste upright stop-gesture hands onto horizontal arms. In true LEFT/RIGHT profiles, the camera looks ALONG the arm and sees narrow edge/end-on gloves with naturally foreshortened fingertips, not a turned palm, dangling fingers or bent wrist. Same pose in all four views. Armor bracers end at the wrist without swallowing glove digits.\n\nPolished sculpted3D Havenline stylization, compact sturdy chibi proportions consistent with the source, warm leather, grouped fur, softened metal edges, crisp expressive stern face, controlled clean wear. Pale warm-gray background, soft studio lighting, consistent scale and uncropped helmet/horns/boots/fingertips. Header HAVENLINE | ATLAS RAIDER | RIG POSE. Four simple view labels; no extra character, props, scene, combat, game stats or numbered levels.",
+        "referenced_image_paths": [
+          "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png",
+          "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/customer-male-01-pose-r2.png"
+        ],
+        "transparent_background": false
+      }
+    },
+    {
+      "id": "atlas-raider-hands-gear",
+      "family_id": "atlas-raider",
+      "category": "atlas_raider",
+      "depends_on_approved": [
+        "atlas-raider-pose"
+      ],
+      "source_subject": {
+        "source_subject_id": "atlas-raider",
+        "source_label": "RAIDER",
+        "source_group": "raider",
+        "visible_identity": "Brown/gray winter bandit with dark beard, small dark metal helmet, long held weapon and brown belts/boots.",
+        "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-raider.png",
+        "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+      },
+      "required_views": [
+        "left palm",
+        "right palm",
+        "left back",
+        "right back",
+        "gear front three-quarter",
+        "gear rear three-quarter"
+      ],
+      "arguments": {
+        "prompt": "Create the HANDS AND GEAR reference for the SAME HAVENLINE ATLAS RAIDER shown in image1 (approved neutral body sheet) and image2 (original source raider crop). Preserve the exact glove, bracer, armor material and source-specific equipment identity. Brown/gray winter bandit with dark beard, small dark metal helmet, long held weapon and brown belts/boots. Ordinary adult male bandit, dark beard and mustache, dark round metal cap with tiny top spike, gray wool/fur collar, muted gray-blue undersleeves and brown leather chest straps, belt pouches, brown trousers and boots. Equipment: one source-like long wooden-stock fantasy carbine with dark barrel, simple opaque external silhouette.\n\nSix large well-separated panels in a3-column by2-row landscape sheet, pale warm gray, premium sculpted Havenline finish. LEFT two columns are four large hand/wrist closeups with fingers pointing UP: top-left LEFT PALM (thumb on VIEWER LEFT), top-middle RIGHT PALM (thumb on VIEWER RIGHT), bottom-left LEFT BACK (thumb on VIEWER RIGHT), bottom-middle RIGHT BACK (thumb on VIEWER LEFT). Exactly FOUR fingers PLUS ONE short opposed thumb, FIVE total each. All20digits readable, natural finger-length hierarchy, clean gaps, distinct palm padding versus dorsal finger seams, matching armor/winter cuff from the approved body, no civilian cream cuff unless actually in this character. Same hand design and correct chirality, no palm texture on dorsal views.\n\nRIGHT column shows the detached source-visible equipment set from two opposite three-quarter sides, upper label GEAR FRONT, lower GEAR REAR. Complete uncropped props, consistent shape/materials and believable grasp surfaces. Any worn quiver/backpack can be included with the held prop when it belongs to the source role. These are exterior aesthetic fantasy game props at rest: opaque closed surfaces, no cutaway, no ammunition internals, dimensions, recipes, diagrams, assembly steps, firing or flames. Do not invent a second weapon if the source only shows one. Keep weapon silhouette exact to this role and sufficiently large to model from.\n\nHeader HAVENLINE | ATLAS RAIDER | HANDS + GEAR. Clean legible panel labels, generous margins, no stats or lore. Hidden backs of equipment are restrained authored interpretation.",
+        "referenced_image_paths": [
+          "APPROVED_RENDER:atlas-raider-pose",
+          "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png"
+        ],
+        "transparent_background": false
+      }
+    },
+    {
+      "id": "atlas-spear-raider-pose",
+      "family_id": "atlas-spear-raider",
+      "category": "atlas_raider",
+      "source_subject": {
+        "source_subject_id": "atlas-spear-raider",
+        "source_label": "SPEAR RAIDER",
+        "source_group": "raider",
+        "visible_identity": "Brown armored bearded bandit with dark helmet and long upright spear.",
+        "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-spear-raider.png",
+        "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+      },
+      "required_views": [
+        "front",
+        "left",
+        "rear",
+        "right"
+      ],
+      "arguments": {
+        "prompt": "Create the neutral modeling-pose reference for the exact HAVENLINE ATLAS SPEAR RAIDER appearance in image1. It is the figure labelled SPEAR RAIDER in the original ten-raider source crop. Image2 is a pose/projection guide ONLY: do not copy its bald face, blue coat, fur cuffs or civilian identity. Preserve the named source raider's colors, helmet, beard, silhouette, armor, belts and boots. Source identity: Brown armored bearded bandit with dark helmet and long upright spear. Bearded adult male, dark pointed steel cap, warm brown layered leather chest armor with round central metal medallion, brown belts, bracers, knee guards and boots. Equipment: tall wooden spear with a single leaf-shaped bronze/iron tip. No harpoon hook or firearm.\n\nFour large complete full-body views in a2by2 grid: FRONT upper left, LEFT upper right, REAR lower left, RIGHT lower right. One neutral T-pose, arms horizontal at shoulder level, straight elbows, neutral wrists, feet apart on the floor. All handheld weapons and shields are temporarily off-sheet to expose hands; the companion hands/gear sheet will show them. Retain fixed worn quivers, straps and pack fittings where named. Reverse costume surfaces are coherent authored interpretations of the small source image, not a redesign.\n\nUse brown full-finger winter/leather gloves appropriate to his armor. Exactly four fingers plus one short opposed thumb on each hand, five digits total, clear gaps. FRONT palms face camera; REAR shows dorsal surfaces and finger-back seams without palm pads. In FRONT and REAR the MIDDLE FINGER continues HORIZONTALLY OUTWARD from each forearm, thumb above, other fingers fanned around that horizontal axis. Do not paste upright stop-gesture hands onto horizontal arms. In true LEFT/RIGHT profiles, the camera looks ALONG the arm and sees narrow edge/end-on gloves with naturally foreshortened fingertips, not a turned palm, dangling fingers or bent wrist. Same pose in all four views. Armor bracers end at the wrist without swallowing glove digits.\n\nPolished sculpted3D Havenline stylization, compact sturdy chibi proportions consistent with the source, warm leather, grouped fur, softened metal edges, crisp expressive stern face, controlled clean wear. Pale warm-gray background, soft studio lighting, consistent scale and uncropped helmet/horns/boots/fingertips. Header HAVENLINE | ATLAS SPEAR RAIDER | RIG POSE. Four simple view labels; no extra character, props, scene, combat, game stats or numbered levels.",
+        "referenced_image_paths": [
+          "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png",
+          "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/customer-male-01-pose-r2.png"
+        ],
+        "transparent_background": false
+      }
+    },
+    {
+      "id": "atlas-spear-raider-hands-gear",
+      "family_id": "atlas-spear-raider",
+      "category": "atlas_raider",
+      "depends_on_approved": [
+        "atlas-spear-raider-pose"
+      ],
+      "source_subject": {
+        "source_subject_id": "atlas-spear-raider",
+        "source_label": "SPEAR RAIDER",
+        "source_group": "raider",
+        "visible_identity": "Brown armored bearded bandit with dark helmet and long upright spear.",
+        "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-spear-raider.png",
+        "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+      },
+      "required_views": [
+        "left palm",
+        "right palm",
+        "left back",
+        "right back",
+        "gear front three-quarter",
+        "gear rear three-quarter"
+      ],
+      "arguments": {
+        "prompt": "Create the HANDS AND GEAR reference for the SAME HAVENLINE ATLAS SPEAR RAIDER shown in image1 (approved neutral body sheet) and image2 (original source raider crop). Preserve the exact glove, bracer, armor material and source-specific equipment identity. Brown armored bearded bandit with dark helmet and long upright spear. Bearded adult male, dark pointed steel cap, warm brown layered leather chest armor with round central metal medallion, brown belts, bracers, knee guards and boots. Equipment: tall wooden spear with a single leaf-shaped bronze/iron tip. No harpoon hook or firearm.\n\nSix large well-separated panels in a3-column by2-row landscape sheet, pale warm gray, premium sculpted Havenline finish. LEFT two columns are four large hand/wrist closeups with fingers pointing UP: top-left LEFT PALM (thumb on VIEWER LEFT), top-middle RIGHT PALM (thumb on VIEWER RIGHT), bottom-left LEFT BACK (thumb on VIEWER RIGHT), bottom-middle RIGHT BACK (thumb on VIEWER LEFT). Exactly FOUR fingers PLUS ONE short opposed thumb, FIVE total each. All20digits readable, natural finger-length hierarchy, clean gaps, distinct palm padding versus dorsal finger seams, matching armor/winter cuff from the approved body, no civilian cream cuff unless actually in this character. Same hand design and correct chirality, no palm texture on dorsal views.\n\nRIGHT column shows the detached source-visible equipment set from two opposite three-quarter sides, upper label GEAR FRONT, lower GEAR REAR. Complete uncropped props, consistent shape/materials and believable grasp surfaces. Any worn quiver/backpack can be included with the held prop when it belongs to the source role. These are exterior aesthetic fantasy game props at rest: opaque closed surfaces, no cutaway, no ammunition internals, dimensions, recipes, diagrams, assembly steps, firing or flames. Do not invent a second weapon if the source only shows one. Keep weapon silhouette exact to this role and sufficiently large to model from.\n\nHeader HAVENLINE | ATLAS SPEAR RAIDER | HANDS + GEAR. Clean legible panel labels, generous margins, no stats or lore. Hidden backs of equipment are restrained authored interpretation.",
+        "referenced_image_paths": [
+          "APPROVED_RENDER:atlas-spear-raider-pose",
+          "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png"
+        ],
+        "transparent_background": false
+      }
+    },
+    {
+      "id": "atlas-axe-raider-pose",
+      "family_id": "atlas-axe-raider",
+      "category": "atlas_raider",
+      "source_subject": {
+        "source_subject_id": "atlas-axe-raider",
+        "source_label": "AXE RAIDER",
+        "source_group": "raider",
+        "visible_identity": "Brown/gray bearded bandit with metal helmet and visible axe head/short weapon equipment.",
+        "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-axe-raider.png",
+        "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+      },
+      "required_views": [
+        "front",
+        "left",
+        "rear",
+        "right"
+      ],
+      "arguments": {
+        "prompt": "Create the neutral modeling-pose reference for the exact HAVENLINE ATLAS AXE RAIDER appearance in image1. It is the figure labelled AXE RAIDER in the original ten-raider source crop. Image2 is a pose/projection guide ONLY: do not copy its bald face, blue coat, fur cuffs or civilian identity. Preserve the named source raider's colors, helmet, beard, silhouette, armor, belts and boots. Source identity: Brown/gray bearded bandit with metal helmet and visible axe head/short weapon equipment. Bearded adult male in dark steel helmet, gray padded winter sleeves and brown leather vest/belts, sturdy brown trousers/boots. Equipment: broad squared silver-gray axe head on a substantial short warm wood haft, following the visible axe equipment in the named source. Its axe defines the role; no invented magic blade.\n\nFour large complete full-body views in a2by2 grid: FRONT upper left, LEFT upper right, REAR lower left, RIGHT lower right. One neutral T-pose, arms horizontal at shoulder level, straight elbows, neutral wrists, feet apart on the floor. All handheld weapons and shields are temporarily off-sheet to expose hands; the companion hands/gear sheet will show them. Retain fixed worn quivers, straps and pack fittings where named. Reverse costume surfaces are coherent authored interpretations of the small source image, not a redesign.\n\nUse brown full-finger winter/leather gloves appropriate to his armor. Exactly four fingers plus one short opposed thumb on each hand, five digits total, clear gaps. FRONT palms face camera; REAR shows dorsal surfaces and finger-back seams without palm pads. In FRONT and REAR the MIDDLE FINGER continues HORIZONTALLY OUTWARD from each forearm, thumb above, other fingers fanned around that horizontal axis. Do not paste upright stop-gesture hands onto horizontal arms. In true LEFT/RIGHT profiles, the camera looks ALONG the arm and sees narrow edge/end-on gloves with naturally foreshortened fingertips, not a turned palm, dangling fingers or bent wrist. Same pose in all four views. Armor bracers end at the wrist without swallowing glove digits.\n\nPolished sculpted3D Havenline stylization, compact sturdy chibi proportions consistent with the source, warm leather, grouped fur, softened metal edges, crisp expressive stern face, controlled clean wear. Pale warm-gray background, soft studio lighting, consistent scale and uncropped helmet/horns/boots/fingertips. Header HAVENLINE | ATLAS AXE RAIDER | RIG POSE. Four simple view labels; no extra character, props, scene, combat, game stats or numbered levels.",
+        "referenced_image_paths": [
+          "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png",
+          "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/customer-male-01-pose-r2.png"
+        ],
+        "transparent_background": false
+      }
+    },
+    {
+      "id": "atlas-axe-raider-hands-gear",
+      "family_id": "atlas-axe-raider",
+      "category": "atlas_raider",
+      "depends_on_approved": [
+        "atlas-axe-raider-pose"
+      ],
+      "source_subject": {
+        "source_subject_id": "atlas-axe-raider",
+        "source_label": "AXE RAIDER",
+        "source_group": "raider",
+        "visible_identity": "Brown/gray bearded bandit with metal helmet and visible axe head/short weapon equipment.",
+        "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-axe-raider.png",
+        "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+      },
+      "required_views": [
+        "left palm",
+        "right palm",
+        "left back",
+        "right back",
+        "gear front three-quarter",
+        "gear rear three-quarter"
+      ],
+      "arguments": {
+        "prompt": "Create the HANDS AND GEAR reference for the SAME HAVENLINE ATLAS AXE RAIDER shown in image1 (approved neutral body sheet) and image2 (original source raider crop). Preserve the exact glove, bracer, armor material and source-specific equipment identity. Brown/gray bearded bandit with metal helmet and visible axe head/short weapon equipment. Bearded adult male in dark steel helmet, gray padded winter sleeves and brown leather vest/belts, sturdy brown trousers/boots. Equipment: broad squared silver-gray axe head on a substantial short warm wood haft, following the visible axe equipment in the named source. Its axe defines the role; no invented magic blade.\n\nSix large well-separated panels in a3-column by2-row landscape sheet, pale warm gray, premium sculpted Havenline finish. LEFT two columns are four large hand/wrist closeups with fingers pointing UP: top-left LEFT PALM (thumb on VIEWER LEFT), top-middle RIGHT PALM (thumb on VIEWER RIGHT), bottom-left LEFT BACK (thumb on VIEWER RIGHT), bottom-middle RIGHT BACK (thumb on VIEWER LEFT). Exactly FOUR fingers PLUS ONE short opposed thumb, FIVE total each. All20digits readable, natural finger-length hierarchy, clean gaps, distinct palm padding versus dorsal finger seams, matching armor/winter cuff from the approved body, no civilian cream cuff unless actually in this character. Same hand design and correct chirality, no palm texture on dorsal views.\n\nRIGHT column shows the detached source-visible equipment set from two opposite three-quarter sides, upper label GEAR FRONT, lower GEAR REAR. Complete uncropped props, consistent shape/materials and believable grasp surfaces. Any worn quiver/backpack can be included with the held prop when it belongs to the source role. These are exterior aesthetic fantasy game props at rest: opaque closed surfaces, no cutaway, no ammunition internals, dimensions, recipes, diagrams, assembly steps, firing or flames. Do not invent a second weapon if the source only shows one. Keep weapon silhouette exact to this role and sufficiently large to model from.\n\nHeader HAVENLINE | ATLAS AXE RAIDER | HANDS + GEAR. Clean legible panel labels, generous margins, no stats or lore. Hidden backs of equipment are restrained authored interpretation.",
+        "referenced_image_paths": [
+          "APPROVED_RENDER:atlas-axe-raider-pose",
+          "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png"
+        ],
+        "transparent_background": false
+      }
+    },
+    {
+      "id": "atlas-shield-raider-pose",
+      "family_id": "atlas-shield-raider",
+      "category": "atlas_raider",
+      "source_subject": {
+        "source_subject_id": "atlas-shield-raider",
+        "source_label": "SHIELD RAIDER",
+        "source_group": "raider",
+        "visible_identity": "Brown-armored bearded bandit with small metal cap and round metal-rimmed radial wooden shield.",
+        "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-shield-raider.png",
+        "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+      },
+      "required_views": [
+        "front",
+        "left",
+        "rear",
+        "right"
+      ],
+      "arguments": {
+        "prompt": "Create the neutral modeling-pose reference for the exact HAVENLINE ATLAS SHIELD RAIDER appearance in image1. It is the figure labelled SHIELD RAIDER in the original ten-raider source crop. Image2 is a pose/projection guide ONLY: do not copy its bald face, blue coat, fur cuffs or civilian identity. Preserve the named source raider's colors, helmet, beard, silhouette, armor, belts and boots. Source identity: Brown-armored bearded bandit with small metal cap and round metal-rimmed radial wooden shield. Thick dark beard, small warm metal/leather cap, broad tan-brown leather armor with straps and pouches, brown winter bracers/boots. Equipment: ROUND RADIAL WOODEN SHIELD with metal rim and circular central boss, exactly the source silhouette. Keep that shield separate from hands on the pose page so fingers are visible.\n\nFour large complete full-body views in a2by2 grid: FRONT upper left, LEFT upper right, REAR lower left, RIGHT lower right. One neutral T-pose, arms horizontal at shoulder level, straight elbows, neutral wrists, feet apart on the floor. All handheld weapons and shields are temporarily off-sheet to expose hands; the companion hands/gear sheet will show them. Retain fixed worn quivers, straps and pack fittings where named. Reverse costume surfaces are coherent authored interpretations of the small source image, not a redesign.\n\nUse brown full-finger winter/leather gloves appropriate to his armor. Exactly four fingers plus one short opposed thumb on each hand, five digits total, clear gaps. FRONT palms face camera; REAR shows dorsal surfaces and finger-back seams without palm pads. In FRONT and REAR the MIDDLE FINGER continues HORIZONTALLY OUTWARD from each forearm, thumb above, other fingers fanned around that horizontal axis. Do not paste upright stop-gesture hands onto horizontal arms. In true LEFT/RIGHT profiles, the camera looks ALONG the arm and sees narrow edge/end-on gloves with naturally foreshortened fingertips, not a turned palm, dangling fingers or bent wrist. Same pose in all four views. Armor bracers end at the wrist without swallowing glove digits.\n\nPolished sculpted3D Havenline stylization, compact sturdy chibi proportions consistent with the source, warm leather, grouped fur, softened metal edges, crisp expressive stern face, controlled clean wear. Pale warm-gray background, soft studio lighting, consistent scale and uncropped helmet/horns/boots/fingertips. Header HAVENLINE | ATLAS SHIELD RAIDER | RIG POSE. Four simple view labels; no extra character, props, scene, combat, game stats or numbered levels.",
+        "referenced_image_paths": [
+          "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png",
+          "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/customer-male-01-pose-r2.png"
+        ],
+        "transparent_background": false
+      }
+    },
+    {
+      "id": "atlas-shield-raider-hands-gear",
+      "family_id": "atlas-shield-raider",
+      "category": "atlas_raider",
+      "depends_on_approved": [
+        "atlas-shield-raider-pose"
+      ],
+      "source_subject": {
+        "source_subject_id": "atlas-shield-raider",
+        "source_label": "SHIELD RAIDER",
+        "source_group": "raider",
+        "visible_identity": "Brown-armored bearded bandit with small metal cap and round metal-rimmed radial wooden shield.",
+        "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-shield-raider.png",
+        "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+      },
+      "required_views": [
+        "left palm",
+        "right palm",
+        "left back",
+        "right back",
+        "gear front three-quarter",
+        "gear rear three-quarter"
+      ],
+      "arguments": {
+        "prompt": "Create the HANDS AND GEAR reference for the SAME HAVENLINE ATLAS SHIELD RAIDER shown in image1 (approved neutral body sheet) and image2 (original source raider crop). Preserve the exact glove, bracer, armor material and source-specific equipment identity. Brown-armored bearded bandit with small metal cap and round metal-rimmed radial wooden shield. Thick dark beard, small warm metal/leather cap, broad tan-brown leather armor with straps and pouches, brown winter bracers/boots. Equipment: ROUND RADIAL WOODEN SHIELD with metal rim and circular central boss, exactly the source silhouette. Keep that shield separate from hands on the pose page so fingers are visible.\n\nSix large well-separated panels in a3-column by2-row landscape sheet, pale warm gray, premium sculpted Havenline finish. LEFT two columns are four large hand/wrist closeups with fingers pointing UP: top-left LEFT PALM (thumb on VIEWER LEFT), top-middle RIGHT PALM (thumb on VIEWER RIGHT), bottom-left LEFT BACK (thumb on VIEWER RIGHT), bottom-middle RIGHT BACK (thumb on VIEWER LEFT). Exactly FOUR fingers PLUS ONE short opposed thumb, FIVE total each. All20digits readable, natural finger-length hierarchy, clean gaps, distinct palm padding versus dorsal finger seams, matching armor/winter cuff from the approved body, no civilian cream cuff unless actually in this character. Same hand design and correct chirality, no palm texture on dorsal views.\n\nRIGHT column shows the detached source-visible equipment set from two opposite three-quarter sides, upper label GEAR FRONT, lower GEAR REAR. Complete uncropped props, consistent shape/materials and believable grasp surfaces. Any worn quiver/backpack can be included with the held prop when it belongs to the source role. These are exterior aesthetic fantasy game props at rest: opaque closed surfaces, no cutaway, no ammunition internals, dimensions, recipes, diagrams, assembly steps, firing or flames. Do not invent a second weapon if the source only shows one. Keep weapon silhouette exact to this role and sufficiently large to model from.\n\nHeader HAVENLINE | ATLAS SHIELD RAIDER | HANDS + GEAR. Clean legible panel labels, generous margins, no stats or lore. Hidden backs of equipment are restrained authored interpretation.",
+        "referenced_image_paths": [
+          "APPROVED_RENDER:atlas-shield-raider-pose",
+          "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png"
+        ],
+        "transparent_background": false
+      }
+    },
+    {
+      "id": "atlas-bandit-archer-pose",
+      "family_id": "atlas-bandit-archer",
+      "category": "atlas_raider",
+      "source_subject": {
+        "source_subject_id": "atlas-bandit-archer",
+        "source_label": "BANDIT ARCHER",
+        "source_group": "raider",
+        "visible_identity": "Brown/gray bearded helmeted bandit holding a wooden bow/ranged-archer silhouette.",
+        "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-bandit-archer.png",
+        "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+      },
+      "required_views": [
+        "front",
+        "left",
+        "rear",
+        "right"
+      ],
+      "arguments": {
+        "prompt": "Create the neutral modeling-pose reference for the exact HAVENLINE ATLAS BANDIT ARCHER appearance in image1. It is the figure labelled BANDIT ARCHER in the original ten-raider source crop. Image2 is a pose/projection guide ONLY: do not copy its bald face, blue coat, fur cuffs or civilian identity. Preserve the named source raider's colors, helmet, beard, silhouette, armor, belts and boots. Source identity: Brown/gray bearded helmeted bandit holding a wooden bow/ranged-archer silhouette. Bearded adult male with dark metal helmet, muted gray sleeves and brown leather padded armor, tan belts and brown boots. Fixed back quiver with visible arrow tails as source. Equipment: slender warm wood curved bow with one simple taut string; source-like arrows without technical measurement.\n\nFour large complete full-body views in a2by2 grid: FRONT upper left, LEFT upper right, REAR lower left, RIGHT lower right. One neutral T-pose, arms horizontal at shoulder level, straight elbows, neutral wrists, feet apart on the floor. All handheld weapons and shields are temporarily off-sheet to expose hands; the companion hands/gear sheet will show them. Retain fixed worn quivers, straps and pack fittings where named. Reverse costume surfaces are coherent authored interpretations of the small source image, not a redesign.\n\nUse brown full-finger winter/leather gloves appropriate to his armor. Exactly four fingers plus one short opposed thumb on each hand, five digits total, clear gaps. FRONT palms face camera; REAR shows dorsal surfaces and finger-back seams without palm pads. In FRONT and REAR the MIDDLE FINGER continues HORIZONTALLY OUTWARD from each forearm, thumb above, other fingers fanned around that horizontal axis. Do not paste upright stop-gesture hands onto horizontal arms. In true LEFT/RIGHT profiles, the camera looks ALONG the arm and sees narrow edge/end-on gloves with naturally foreshortened fingertips, not a turned palm, dangling fingers or bent wrist. Same pose in all four views. Armor bracers end at the wrist without swallowing glove digits.\n\nPolished sculpted3D Havenline stylization, compact sturdy chibi proportions consistent with the source, warm leather, grouped fur, softened metal edges, crisp expressive stern face, controlled clean wear. Pale warm-gray background, soft studio lighting, consistent scale and uncropped helmet/horns/boots/fingertips. Header HAVENLINE | ATLAS BANDIT ARCHER | RIG POSE. Four simple view labels; no extra character, props, scene, combat, game stats or numbered levels.",
+        "referenced_image_paths": [
+          "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png",
+          "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/customer-male-01-pose-r2.png"
+        ],
+        "transparent_background": false
+      }
+    },
+    {
+      "id": "atlas-bandit-archer-hands-gear",
+      "family_id": "atlas-bandit-archer",
+      "category": "atlas_raider",
+      "depends_on_approved": [
+        "atlas-bandit-archer-pose"
+      ],
+      "source_subject": {
+        "source_subject_id": "atlas-bandit-archer",
+        "source_label": "BANDIT ARCHER",
+        "source_group": "raider",
+        "visible_identity": "Brown/gray bearded helmeted bandit holding a wooden bow/ranged-archer silhouette.",
+        "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-bandit-archer.png",
+        "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+      },
+      "required_views": [
+        "left palm",
+        "right palm",
+        "left back",
+        "right back",
+        "gear front three-quarter",
+        "gear rear three-quarter"
+      ],
+      "arguments": {
+        "prompt": "Create the HANDS AND GEAR reference for the SAME HAVENLINE ATLAS BANDIT ARCHER shown in image1 (approved neutral body sheet) and image2 (original source raider crop). Preserve the exact glove, bracer, armor material and source-specific equipment identity. Brown/gray bearded helmeted bandit holding a wooden bow/ranged-archer silhouette. Bearded adult male with dark metal helmet, muted gray sleeves and brown leather padded armor, tan belts and brown boots. Fixed back quiver with visible arrow tails as source. Equipment: slender warm wood curved bow with one simple taut string; source-like arrows without technical measurement.\n\nSix large well-separated panels in a3-column by2-row landscape sheet, pale warm gray, premium sculpted Havenline finish. LEFT two columns are four large hand/wrist closeups with fingers pointing UP: top-left LEFT PALM (thumb on VIEWER LEFT), top-middle RIGHT PALM (thumb on VIEWER RIGHT), bottom-left LEFT BACK (thumb on VIEWER RIGHT), bottom-middle RIGHT BACK (thumb on VIEWER LEFT). Exactly FOUR fingers PLUS ONE short opposed thumb, FIVE total each. All20digits readable, natural finger-length hierarchy, clean gaps, distinct palm padding versus dorsal finger seams, matching armor/winter cuff from the approved body, no civilian cream cuff unless actually in this character. Same hand design and correct chirality, no palm texture on dorsal views.\n\nRIGHT column shows the detached source-visible equipment set from two opposite three-quarter sides, upper label GEAR FRONT, lower GEAR REAR. Complete uncropped props, consistent shape/materials and believable grasp surfaces. Any worn quiver/backpack can be included with the held prop when it belongs to the source role. These are exterior aesthetic fantasy game props at rest: opaque closed surfaces, no cutaway, no ammunition internals, dimensions, recipes, diagrams, assembly steps, firing or flames. Do not invent a second weapon if the source only shows one. Keep weapon silhouette exact to this role and sufficiently large to model from.\n\nHeader HAVENLINE | ATLAS BANDIT ARCHER | HANDS + GEAR. Clean legible panel labels, generous margins, no stats or lore. Hidden backs of equipment are restrained authored interpretation.",
+        "referenced_image_paths": [
+          "APPROVED_RENDER:atlas-bandit-archer-pose",
+          "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png"
+        ],
+        "transparent_background": false
+      }
+    },
+    {
+      "id": "atlas-raider-brute-pose",
+      "family_id": "atlas-raider-brute",
+      "category": "atlas_raider",
+      "source_subject": {
+        "source_subject_id": "atlas-raider-brute",
+        "source_label": "RAIDER BRUTE",
+        "source_group": "raider",
+        "visible_identity": "Broad heavy bearded brown-armored bandit with bulky shoulders and long carried weapon.",
+        "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-raider-brute.png",
+        "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+      },
+      "required_views": [
+        "front",
+        "left",
+        "rear",
+        "right"
+      ],
+      "arguments": {
+        "prompt": "Create the neutral modeling-pose reference for the exact HAVENLINE ATLAS RAIDER BRUTE appearance in image1. It is the figure labelled RAIDER BRUTE in the original ten-raider source crop. Image2 is a pose/projection guide ONLY: do not copy its bald face, blue coat, fur cuffs or civilian identity. Preserve the named source raider's colors, helmet, beard, silhouette, armor, belts and boots. Source identity: Broad heavy bearded brown-armored bandit with bulky shoulders and long carried weapon. Exceptionally broad stocky adult male with thick reddish-brown beard, heavy leather shoulder pads, brimmed bronze-brown cap, fur collar, bulky brown layered armor, crossed belts, large brown boots. Larger shoulders and hands than ordinary raider, still clear chibi Havenline proportions. Equipment: source-like long heavy wooden-stock fantasy gun/crossbow-like ranged prop with a single dark forward barrel, no invented mechanics.\n\nFour large complete full-body views in a2by2 grid: FRONT upper left, LEFT upper right, REAR lower left, RIGHT lower right. One neutral T-pose, arms horizontal at shoulder level, straight elbows, neutral wrists, feet apart on the floor. All handheld weapons and shields are temporarily off-sheet to expose hands; the companion hands/gear sheet will show them. Retain fixed worn quivers, straps and pack fittings where named. Reverse costume surfaces are coherent authored interpretations of the small source image, not a redesign.\n\nUse brown full-finger winter/leather gloves appropriate to his armor. Exactly four fingers plus one short opposed thumb on each hand, five digits total, clear gaps. FRONT palms face camera; REAR shows dorsal surfaces and finger-back seams without palm pads. In FRONT and REAR the MIDDLE FINGER continues HORIZONTALLY OUTWARD from each forearm, thumb above, other fingers fanned around that horizontal axis. Do not paste upright stop-gesture hands onto horizontal arms. In true LEFT/RIGHT profiles, the camera looks ALONG the arm and sees narrow edge/end-on gloves with naturally foreshortened fingertips, not a turned palm, dangling fingers or bent wrist. Same pose in all four views. Armor bracers end at the wrist without swallowing glove digits.\n\nPolished sculpted3D Havenline stylization, compact sturdy chibi proportions consistent with the source, warm leather, grouped fur, softened metal edges, crisp expressive stern face, controlled clean wear. Pale warm-gray background, soft studio lighting, consistent scale and uncropped helmet/horns/boots/fingertips. Header HAVENLINE | ATLAS RAIDER BRUTE | RIG POSE. Four simple view labels; no extra character, props, scene, combat, game stats or numbered levels.",
+        "referenced_image_paths": [
+          "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png",
+          "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/customer-male-01-pose-r2.png"
+        ],
+        "transparent_background": false
+      }
+    },
+    {
+      "id": "atlas-raider-brute-hands-gear",
+      "family_id": "atlas-raider-brute",
+      "category": "atlas_raider",
+      "depends_on_approved": [
+        "atlas-raider-brute-pose"
+      ],
+      "source_subject": {
+        "source_subject_id": "atlas-raider-brute",
+        "source_label": "RAIDER BRUTE",
+        "source_group": "raider",
+        "visible_identity": "Broad heavy bearded brown-armored bandit with bulky shoulders and long carried weapon.",
+        "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-raider-brute.png",
+        "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+      },
+      "required_views": [
+        "left palm",
+        "right palm",
+        "left back",
+        "right back",
+        "gear front three-quarter",
+        "gear rear three-quarter"
+      ],
+      "arguments": {
+        "prompt": "Create the HANDS AND GEAR reference for the SAME HAVENLINE ATLAS RAIDER BRUTE shown in image1 (approved neutral body sheet) and image2 (original source raider crop). Preserve the exact glove, bracer, armor material and source-specific equipment identity. Broad heavy bearded brown-armored bandit with bulky shoulders and long carried weapon. Exceptionally broad stocky adult male with thick reddish-brown beard, heavy leather shoulder pads, brimmed bronze-brown cap, fur collar, bulky brown layered armor, crossed belts, large brown boots. Larger shoulders and hands than ordinary raider, still clear chibi Havenline proportions. Equipment: source-like long heavy wooden-stock fantasy gun/crossbow-like ranged prop with a single dark forward barrel, no invented mechanics.\n\nSix large well-separated panels in a3-column by2-row landscape sheet, pale warm gray, premium sculpted Havenline finish. LEFT two columns are four large hand/wrist closeups with fingers pointing UP: top-left LEFT PALM (thumb on VIEWER LEFT), top-middle RIGHT PALM (thumb on VIEWER RIGHT), bottom-left LEFT BACK (thumb on VIEWER RIGHT), bottom-middle RIGHT BACK (thumb on VIEWER LEFT). Exactly FOUR fingers PLUS ONE short opposed thumb, FIVE total each. All20digits readable, natural finger-length hierarchy, clean gaps, distinct palm padding versus dorsal finger seams, matching armor/winter cuff from the approved body, no civilian cream cuff unless actually in this character. Same hand design and correct chirality, no palm texture on dorsal views.\n\nRIGHT column shows the detached source-visible equipment set from two opposite three-quarter sides, upper label GEAR FRONT, lower GEAR REAR. Complete uncropped props, consistent shape/materials and believable grasp surfaces. Any worn quiver/backpack can be included with the held prop when it belongs to the source role. These are exterior aesthetic fantasy game props at rest: opaque closed surfaces, no cutaway, no ammunition internals, dimensions, recipes, diagrams, assembly steps, firing or flames. Do not invent a second weapon if the source only shows one. Keep weapon silhouette exact to this role and sufficiently large to model from.\n\nHeader HAVENLINE | ATLAS RAIDER BRUTE | HANDS + GEAR. Clean legible panel labels, generous margins, no stats or lore. Hidden backs of equipment are restrained authored interpretation.",
+        "referenced_image_paths": [
+          "APPROVED_RENDER:atlas-raider-brute-pose",
+          "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png"
+        ],
+        "transparent_background": false
+      }
+    },
+    {
+      "id": "atlas-flamethrower-pose",
+      "family_id": "atlas-flamethrower",
+      "category": "atlas_raider",
+      "source_subject": {
+        "source_subject_id": "atlas-flamethrower",
+        "source_label": "FLAMETHROWER",
+        "source_group": "raider",
+        "visible_identity": "Brown-armored helmeted bearded raider carrying a stout nozzle/tank-style weapon, flame shown in Atlas.",
+        "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-flamethrower.png",
+        "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+      },
+      "required_views": [
+        "front",
+        "left",
+        "rear",
+        "right"
+      ],
+      "arguments": {
+        "prompt": "Create the neutral modeling-pose reference for the exact HAVENLINE ATLAS FLAMETHROWER appearance in image1. It is the figure labelled FLAMETHROWER in the original ten-raider source crop. Image2 is a pose/projection guide ONLY: do not copy its bald face, blue coat, fur cuffs or civilian identity. Preserve the named source raider's colors, helmet, beard, silhouette, armor, belts and boots. Source identity: Brown-armored helmeted bearded raider carrying a stout nozzle/tank-style weapon, flame shown in Atlas. Bearded adult male with small pointed steel helmet, layered tawny-brown leather armor, metal buckles, gray bracers, brown boots. Equipment: source-like bulky short dark nozzle housing with bronze bands and compact opaque tank/backpack connection, fantasy aesthetic only. Do not show flames or a discharge, fluids, cutaways or construction internals. Preserve an ordinary dark beard, not a gas mask or sci-fi robot.\n\nFour large complete full-body views in a2by2 grid: FRONT upper left, LEFT upper right, REAR lower left, RIGHT lower right. One neutral T-pose, arms horizontal at shoulder level, straight elbows, neutral wrists, feet apart on the floor. All handheld weapons and shields are temporarily off-sheet to expose hands; the companion hands/gear sheet will show them. Retain fixed worn quivers, straps and pack fittings where named. Reverse costume surfaces are coherent authored interpretations of the small source image, not a redesign.\n\nUse brown full-finger winter/leather gloves appropriate to his armor. Exactly four fingers plus one short opposed thumb on each hand, five digits total, clear gaps. FRONT palms face camera; REAR shows dorsal surfaces and finger-back seams without palm pads. In FRONT and REAR the MIDDLE FINGER continues HORIZONTALLY OUTWARD from each forearm, thumb above, other fingers fanned around that horizontal axis. Do not paste upright stop-gesture hands onto horizontal arms. In true LEFT/RIGHT profiles, the camera looks ALONG the arm and sees narrow edge/end-on gloves with naturally foreshortened fingertips, not a turned palm, dangling fingers or bent wrist. Same pose in all four views. Armor bracers end at the wrist without swallowing glove digits.\n\nPolished sculpted3D Havenline stylization, compact sturdy chibi proportions consistent with the source, warm leather, grouped fur, softened metal edges, crisp expressive stern face, controlled clean wear. Pale warm-gray background, soft studio lighting, consistent scale and uncropped helmet/horns/boots/fingertips. Header HAVENLINE | ATLAS FLAMETHROWER | RIG POSE. Four simple view labels; no extra character, props, scene, combat, game stats or numbered levels.",
+        "referenced_image_paths": [
+          "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png",
+          "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/customer-male-01-pose-r2.png"
+        ],
+        "transparent_background": false
+      }
+    },
+    {
+      "id": "atlas-flamethrower-hands-gear",
+      "family_id": "atlas-flamethrower",
+      "category": "atlas_raider",
+      "depends_on_approved": [
+        "atlas-flamethrower-pose"
+      ],
+      "source_subject": {
+        "source_subject_id": "atlas-flamethrower",
+        "source_label": "FLAMETHROWER",
+        "source_group": "raider",
+        "visible_identity": "Brown-armored helmeted bearded raider carrying a stout nozzle/tank-style weapon, flame shown in Atlas.",
+        "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-flamethrower.png",
+        "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+      },
+      "required_views": [
+        "left palm",
+        "right palm",
+        "left back",
+        "right back",
+        "gear front three-quarter",
+        "gear rear three-quarter"
+      ],
+      "arguments": {
+        "prompt": "Create the HANDS AND GEAR reference for the SAME HAVENLINE ATLAS FLAMETHROWER shown in image1 (approved neutral body sheet) and image2 (original source raider crop). Preserve the exact glove, bracer, armor material and source-specific equipment identity. Brown-armored helmeted bearded raider carrying a stout nozzle/tank-style weapon, flame shown in Atlas. Bearded adult male with small pointed steel helmet, layered tawny-brown leather armor, metal buckles, gray bracers, brown boots. Equipment: source-like bulky short dark nozzle housing with bronze bands and compact opaque tank/backpack connection, fantasy aesthetic only. Do not show flames or a discharge, fluids, cutaways or construction internals. Preserve an ordinary dark beard, not a gas mask or sci-fi robot.\n\nSix large well-separated panels in a3-column by2-row landscape sheet, pale warm gray, premium sculpted Havenline finish. LEFT two columns are four large hand/wrist closeups with fingers pointing UP: top-left LEFT PALM (thumb on VIEWER LEFT), top-middle RIGHT PALM (thumb on VIEWER RIGHT), bottom-left LEFT BACK (thumb on VIEWER RIGHT), bottom-middle RIGHT BACK (thumb on VIEWER LEFT). Exactly FOUR fingers PLUS ONE short opposed thumb, FIVE total each. All20digits readable, natural finger-length hierarchy, clean gaps, distinct palm padding versus dorsal finger seams, matching armor/winter cuff from the approved body, no civilian cream cuff unless actually in this character. Same hand design and correct chirality, no palm texture on dorsal views.\n\nRIGHT column shows the detached source-visible equipment set from two opposite three-quarter sides, upper label GEAR FRONT, lower GEAR REAR. Complete uncropped props, consistent shape/materials and believable grasp surfaces. Any worn quiver/backpack can be included with the held prop when it belongs to the source role. These are exterior aesthetic fantasy game props at rest: opaque closed surfaces, no cutaway, no ammunition internals, dimensions, recipes, diagrams, assembly steps, firing or flames. Do not invent a second weapon if the source only shows one. Keep weapon silhouette exact to this role and sufficiently large to model from.\n\nHeader HAVENLINE | ATLAS FLAMETHROWER | HANDS + GEAR. Clean legible panel labels, generous margins, no stats or lore. Hidden backs of equipment are restrained authored interpretation.",
+        "referenced_image_paths": [
+          "APPROVED_RENDER:atlas-flamethrower-pose",
+          "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png"
+        ],
+        "transparent_background": false
+      }
+    },
+    {
+      "id": "atlas-raider-sniper-pose",
+      "family_id": "atlas-raider-sniper",
+      "category": "atlas_raider",
+      "source_subject": {
+        "source_subject_id": "atlas-raider-sniper",
+        "source_label": "RAIDER SNIPER",
+        "source_group": "raider",
+        "visible_identity": "Brown/gray helmeted bearded ranged bandit with distinct long precision-weapon silhouette.",
+        "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-raider-sniper.png",
+        "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+      },
+      "required_views": [
+        "front",
+        "left",
+        "rear",
+        "right"
+      ],
+      "arguments": {
+        "prompt": "Create the neutral modeling-pose reference for the exact HAVENLINE ATLAS RAIDER SNIPER appearance in image1. It is the figure labelled RAIDER SNIPER in the original ten-raider source crop. Image2 is a pose/projection guide ONLY: do not copy its bald face, blue coat, fur cuffs or civilian identity. Preserve the named source raider's colors, helmet, beard, silhouette, armor, belts and boots. Source identity: Brown/gray helmeted bearded ranged bandit with distinct long precision-weapon silhouette. Bearded adult male with rounded steel cap over dark head/neck wrap, warm brown armored coat, broad dark belts, padded bracers and brown boots. Equipment: source-specific long precision ranged prop with wood/metal silhouette and small external sight, opaque decorative game asset, no inner firing details.\n\nFour large complete full-body views in a2by2 grid: FRONT upper left, LEFT upper right, REAR lower left, RIGHT lower right. One neutral T-pose, arms horizontal at shoulder level, straight elbows, neutral wrists, feet apart on the floor. All handheld weapons and shields are temporarily off-sheet to expose hands; the companion hands/gear sheet will show them. Retain fixed worn quivers, straps and pack fittings where named. Reverse costume surfaces are coherent authored interpretations of the small source image, not a redesign.\n\nUse brown full-finger winter/leather gloves appropriate to his armor. Exactly four fingers plus one short opposed thumb on each hand, five digits total, clear gaps. FRONT palms face camera; REAR shows dorsal surfaces and finger-back seams without palm pads. In FRONT and REAR the MIDDLE FINGER continues HORIZONTALLY OUTWARD from each forearm, thumb above, other fingers fanned around that horizontal axis. Do not paste upright stop-gesture hands onto horizontal arms. In true LEFT/RIGHT profiles, the camera looks ALONG the arm and sees narrow edge/end-on gloves with naturally foreshortened fingertips, not a turned palm, dangling fingers or bent wrist. Same pose in all four views. Armor bracers end at the wrist without swallowing glove digits.\n\nPolished sculpted3D Havenline stylization, compact sturdy chibi proportions consistent with the source, warm leather, grouped fur, softened metal edges, crisp expressive stern face, controlled clean wear. Pale warm-gray background, soft studio lighting, consistent scale and uncropped helmet/horns/boots/fingertips. Header HAVENLINE | ATLAS RAIDER SNIPER | RIG POSE. Four simple view labels; no extra character, props, scene, combat, game stats or numbered levels.",
+        "referenced_image_paths": [
+          "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png",
+          "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/customer-male-01-pose-r2.png"
+        ],
+        "transparent_background": false
+      }
+    },
+    {
+      "id": "atlas-raider-sniper-hands-gear",
+      "family_id": "atlas-raider-sniper",
+      "category": "atlas_raider",
+      "depends_on_approved": [
+        "atlas-raider-sniper-pose"
+      ],
+      "source_subject": {
+        "source_subject_id": "atlas-raider-sniper",
+        "source_label": "RAIDER SNIPER",
+        "source_group": "raider",
+        "visible_identity": "Brown/gray helmeted bearded ranged bandit with distinct long precision-weapon silhouette.",
+        "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-raider-sniper.png",
+        "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+      },
+      "required_views": [
+        "left palm",
+        "right palm",
+        "left back",
+        "right back",
+        "gear front three-quarter",
+        "gear rear three-quarter"
+      ],
+      "arguments": {
+        "prompt": "Create the HANDS AND GEAR reference for the SAME HAVENLINE ATLAS RAIDER SNIPER shown in image1 (approved neutral body sheet) and image2 (original source raider crop). Preserve the exact glove, bracer, armor material and source-specific equipment identity. Brown/gray helmeted bearded ranged bandit with distinct long precision-weapon silhouette. Bearded adult male with rounded steel cap over dark head/neck wrap, warm brown armored coat, broad dark belts, padded bracers and brown boots. Equipment: source-specific long precision ranged prop with wood/metal silhouette and small external sight, opaque decorative game asset, no inner firing details.\n\nSix large well-separated panels in a3-column by2-row landscape sheet, pale warm gray, premium sculpted Havenline finish. LEFT two columns are four large hand/wrist closeups with fingers pointing UP: top-left LEFT PALM (thumb on VIEWER LEFT), top-middle RIGHT PALM (thumb on VIEWER RIGHT), bottom-left LEFT BACK (thumb on VIEWER RIGHT), bottom-middle RIGHT BACK (thumb on VIEWER LEFT). Exactly FOUR fingers PLUS ONE short opposed thumb, FIVE total each. All20digits readable, natural finger-length hierarchy, clean gaps, distinct palm padding versus dorsal finger seams, matching armor/winter cuff from the approved body, no civilian cream cuff unless actually in this character. Same hand design and correct chirality, no palm texture on dorsal views.\n\nRIGHT column shows the detached source-visible equipment set from two opposite three-quarter sides, upper label GEAR FRONT, lower GEAR REAR. Complete uncropped props, consistent shape/materials and believable grasp surfaces. Any worn quiver/backpack can be included with the held prop when it belongs to the source role. These are exterior aesthetic fantasy game props at rest: opaque closed surfaces, no cutaway, no ammunition internals, dimensions, recipes, diagrams, assembly steps, firing or flames. Do not invent a second weapon if the source only shows one. Keep weapon silhouette exact to this role and sufficiently large to model from.\n\nHeader HAVENLINE | ATLAS RAIDER SNIPER | HANDS + GEAR. Clean legible panel labels, generous margins, no stats or lore. Hidden backs of equipment are restrained authored interpretation.",
+        "referenced_image_paths": [
+          "APPROVED_RENDER:atlas-raider-sniper-pose",
+          "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png"
+        ],
+        "transparent_background": false
+      }
+    },
+    {
+      "id": "atlas-bombardier-pose",
+      "family_id": "atlas-bombardier",
+      "category": "atlas_raider",
+      "source_subject": {
+        "source_subject_id": "atlas-bombardier",
+        "source_label": "BOMBARDIER",
+        "source_group": "raider",
+        "visible_identity": "Brown/gray armored bearded bandit with cap, handheld round orange canister and a tall handled implement.",
+        "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-bombardier.png",
+        "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+      },
+      "required_views": [
+        "front",
+        "left",
+        "rear",
+        "right"
+      ],
+      "arguments": {
+        "prompt": "Create the neutral modeling-pose reference for the exact HAVENLINE ATLAS BOMBARDIER appearance in image1. It is the figure labelled BOMBARDIER in the original ten-raider source crop. Image2 is a pose/projection guide ONLY: do not copy its bald face, blue coat, fur cuffs or civilian identity. Preserve the named source raider's colors, helmet, beard, silhouette, armor, belts and boots. Source identity: Brown/gray armored bearded bandit with cap, handheld round orange canister and a tall handled implement. Bearded adult male wearing a warm tan brimmed cap, gray-blue winter sleeves, brown leather armor and bands, thick layered waist belts and boots. Equipment: small opaque ORANGE ROUND CANISTER with short top fitting plus the source's long handled implement with a rounded spoon/oval head. Keep their visible exterior silhouette; do not invent contents, fuse recipes, mechanisms or operation diagrams.\n\nFour large complete full-body views in a2by2 grid: FRONT upper left, LEFT upper right, REAR lower left, RIGHT lower right. One neutral T-pose, arms horizontal at shoulder level, straight elbows, neutral wrists, feet apart on the floor. All handheld weapons and shields are temporarily off-sheet to expose hands; the companion hands/gear sheet will show them. Retain fixed worn quivers, straps and pack fittings where named. Reverse costume surfaces are coherent authored interpretations of the small source image, not a redesign.\n\nUse brown full-finger winter/leather gloves appropriate to his armor. Exactly four fingers plus one short opposed thumb on each hand, five digits total, clear gaps. FRONT palms face camera; REAR shows dorsal surfaces and finger-back seams without palm pads. In FRONT and REAR the MIDDLE FINGER continues HORIZONTALLY OUTWARD from each forearm, thumb above, other fingers fanned around that horizontal axis. Do not paste upright stop-gesture hands onto horizontal arms. In true LEFT/RIGHT profiles, the camera looks ALONG the arm and sees narrow edge/end-on gloves with naturally foreshortened fingertips, not a turned palm, dangling fingers or bent wrist. Same pose in all four views. Armor bracers end at the wrist without swallowing glove digits.\n\nPolished sculpted3D Havenline stylization, compact sturdy chibi proportions consistent with the source, warm leather, grouped fur, softened metal edges, crisp expressive stern face, controlled clean wear. Pale warm-gray background, soft studio lighting, consistent scale and uncropped helmet/horns/boots/fingertips. Header HAVENLINE | ATLAS BOMBARDIER | RIG POSE. Four simple view labels; no extra character, props, scene, combat, game stats or numbered levels.",
+        "referenced_image_paths": [
+          "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png",
+          "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/customer-male-01-pose-r2.png"
+        ],
+        "transparent_background": false
+      }
+    },
+    {
+      "id": "atlas-bombardier-hands-gear",
+      "family_id": "atlas-bombardier",
+      "category": "atlas_raider",
+      "depends_on_approved": [
+        "atlas-bombardier-pose"
+      ],
+      "source_subject": {
+        "source_subject_id": "atlas-bombardier",
+        "source_label": "BOMBARDIER",
+        "source_group": "raider",
+        "visible_identity": "Brown/gray armored bearded bandit with cap, handheld round orange canister and a tall handled implement.",
+        "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-bombardier.png",
+        "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+      },
+      "required_views": [
+        "left palm",
+        "right palm",
+        "left back",
+        "right back",
+        "gear front three-quarter",
+        "gear rear three-quarter"
+      ],
+      "arguments": {
+        "prompt": "Create the HANDS AND GEAR reference for the SAME HAVENLINE ATLAS BOMBARDIER shown in image1 (approved neutral body sheet) and image2 (original source raider crop). Preserve the exact glove, bracer, armor material and source-specific equipment identity. Brown/gray armored bearded bandit with cap, handheld round orange canister and a tall handled implement. Bearded adult male wearing a warm tan brimmed cap, gray-blue winter sleeves, brown leather armor and bands, thick layered waist belts and boots. Equipment: small opaque ORANGE ROUND CANISTER with short top fitting plus the source's long handled implement with a rounded spoon/oval head. Keep their visible exterior silhouette; do not invent contents, fuse recipes, mechanisms or operation diagrams.\n\nSix large well-separated panels in a3-column by2-row landscape sheet, pale warm gray, premium sculpted Havenline finish. LEFT two columns are four large hand/wrist closeups with fingers pointing UP: top-left LEFT PALM (thumb on VIEWER LEFT), top-middle RIGHT PALM (thumb on VIEWER RIGHT), bottom-left LEFT BACK (thumb on VIEWER RIGHT), bottom-middle RIGHT BACK (thumb on VIEWER LEFT). Exactly FOUR fingers PLUS ONE short opposed thumb, FIVE total each. All20digits readable, natural finger-length hierarchy, clean gaps, distinct palm padding versus dorsal finger seams, matching armor/winter cuff from the approved body, no civilian cream cuff unless actually in this character. Same hand design and correct chirality, no palm texture on dorsal views.\n\nRIGHT column shows the detached source-visible equipment set from two opposite three-quarter sides, upper label GEAR FRONT, lower GEAR REAR. Complete uncropped props, consistent shape/materials and believable grasp surfaces. Any worn quiver/backpack can be included with the held prop when it belongs to the source role. These are exterior aesthetic fantasy game props at rest: opaque closed surfaces, no cutaway, no ammunition internals, dimensions, recipes, diagrams, assembly steps, firing or flames. Do not invent a second weapon if the source only shows one. Keep weapon silhouette exact to this role and sufficiently large to model from.\n\nHeader HAVENLINE | ATLAS BOMBARDIER | HANDS + GEAR. Clean legible panel labels, generous margins, no stats or lore. Hidden backs of equipment are restrained authored interpretation.",
+        "referenced_image_paths": [
+          "APPROVED_RENDER:atlas-bombardier-pose",
+          "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png"
+        ],
+        "transparent_background": false
+      }
+    },
+    {
+      "id": "atlas-raider-boss-pose",
+      "family_id": "atlas-raider-boss",
+      "category": "atlas_raider",
+      "source_subject": {
+        "source_subject_id": "atlas-raider-boss",
+        "source_label": "RAIDER BOSS",
+        "source_group": "raider",
+        "visible_identity": "Large bearded dark-armored bandit with two-horn helmet, broad shoulder plates and heavy club/mace-like weapon.",
+        "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-raider-boss.png",
+        "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+      },
+      "required_views": [
+        "front",
+        "left",
+        "rear",
+        "right"
+      ],
+      "arguments": {
+        "prompt": "Create the neutral modeling-pose reference for the exact HAVENLINE ATLAS RAIDER BOSS appearance in image1. It is the figure labelled RAIDER BOSS in the original ten-raider source crop. Image2 is a pose/projection guide ONLY: do not copy its bald face, blue coat, fur cuffs or civilian identity. Preserve the named source raider's colors, helmet, beard, silhouette, armor, belts and boots. Source identity: Large bearded dark-armored bandit with two-horn helmet, broad shoulder plates and heavy club/mace-like weapon. Large heavy adult male with a long black beard, two-horned dark steel helmet, thick layered dark shoulder plates with warm metal edging, dark leather armor, heavy brown belt and substantial boots. Two symmetric helmet horns, fixed shape across all angles. Equipment: heavy faceted warm-metal-and-dark-steel club/mace matching the source's visible blunt-headed weapon. No extra horns, winged armor or magical glow.\n\nFour large complete full-body views in a2by2 grid: FRONT upper left, LEFT upper right, REAR lower left, RIGHT lower right. One neutral T-pose, arms horizontal at shoulder level, straight elbows, neutral wrists, feet apart on the floor. All handheld weapons and shields are temporarily off-sheet to expose hands; the companion hands/gear sheet will show them. Retain fixed worn quivers, straps and pack fittings where named. Reverse costume surfaces are coherent authored interpretations of the small source image, not a redesign.\n\nUse brown full-finger winter/leather gloves appropriate to his armor. Exactly four fingers plus one short opposed thumb on each hand, five digits total, clear gaps. FRONT palms face camera; REAR shows dorsal surfaces and finger-back seams without palm pads. In FRONT and REAR the MIDDLE FINGER continues HORIZONTALLY OUTWARD from each forearm, thumb above, other fingers fanned around that horizontal axis. Do not paste upright stop-gesture hands onto horizontal arms. In true LEFT/RIGHT profiles, the camera looks ALONG the arm and sees narrow edge/end-on gloves with naturally foreshortened fingertips, not a turned palm, dangling fingers or bent wrist. Same pose in all four views. Armor bracers end at the wrist without swallowing glove digits.\n\nPolished sculpted3D Havenline stylization, compact sturdy chibi proportions consistent with the source, warm leather, grouped fur, softened metal edges, crisp expressive stern face, controlled clean wear. Pale warm-gray background, soft studio lighting, consistent scale and uncropped helmet/horns/boots/fingertips. Header HAVENLINE | ATLAS RAIDER BOSS | RIG POSE. Four simple view labels; no extra character, props, scene, combat, game stats or numbered levels.",
+        "referenced_image_paths": [
+          "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png",
+          "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/customer-male-01-pose-r2.png"
+        ],
+        "transparent_background": false
+      }
+    },
+    {
+      "id": "atlas-raider-boss-hands-gear",
+      "family_id": "atlas-raider-boss",
+      "category": "atlas_raider",
+      "depends_on_approved": [
+        "atlas-raider-boss-pose"
+      ],
+      "source_subject": {
+        "source_subject_id": "atlas-raider-boss",
+        "source_label": "RAIDER BOSS",
+        "source_group": "raider",
+        "visible_identity": "Large bearded dark-armored bandit with two-horn helmet, broad shoulder plates and heavy club/mace-like weapon.",
+        "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-raider-boss.png",
+        "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+      },
+      "required_views": [
+        "left palm",
+        "right palm",
+        "left back",
+        "right back",
+        "gear front three-quarter",
+        "gear rear three-quarter"
+      ],
+      "arguments": {
+        "prompt": "Create the HANDS AND GEAR reference for the SAME HAVENLINE ATLAS RAIDER BOSS shown in image1 (approved neutral body sheet) and image2 (original source raider crop). Preserve the exact glove, bracer, armor material and source-specific equipment identity. Large bearded dark-armored bandit with two-horn helmet, broad shoulder plates and heavy club/mace-like weapon. Large heavy adult male with a long black beard, two-horned dark steel helmet, thick layered dark shoulder plates with warm metal edging, dark leather armor, heavy brown belt and substantial boots. Two symmetric helmet horns, fixed shape across all angles. Equipment: heavy faceted warm-metal-and-dark-steel club/mace matching the source's visible blunt-headed weapon. No extra horns, winged armor or magical glow.\n\nSix large well-separated panels in a3-column by2-row landscape sheet, pale warm gray, premium sculpted Havenline finish. LEFT two columns are four large hand/wrist closeups with fingers pointing UP: top-left LEFT PALM (thumb on VIEWER LEFT), top-middle RIGHT PALM (thumb on VIEWER RIGHT), bottom-left LEFT BACK (thumb on VIEWER RIGHT), bottom-middle RIGHT BACK (thumb on VIEWER LEFT). Exactly FOUR fingers PLUS ONE short opposed thumb, FIVE total each. All20digits readable, natural finger-length hierarchy, clean gaps, distinct palm padding versus dorsal finger seams, matching armor/winter cuff from the approved body, no civilian cream cuff unless actually in this character. Same hand design and correct chirality, no palm texture on dorsal views.\n\nRIGHT column shows the detached source-visible equipment set from two opposite three-quarter sides, upper label GEAR FRONT, lower GEAR REAR. Complete uncropped props, consistent shape/materials and believable grasp surfaces. Any worn quiver/backpack can be included with the held prop when it belongs to the source role. These are exterior aesthetic fantasy game props at rest: opaque closed surfaces, no cutaway, no ammunition internals, dimensions, recipes, diagrams, assembly steps, firing or flames. Do not invent a second weapon if the source only shows one. Keep weapon silhouette exact to this role and sufficiently large to model from.\n\nHeader HAVENLINE | ATLAS RAIDER BOSS | HANDS + GEAR. Clean legible panel labels, generous margins, no stats or lore. Hidden backs of equipment are restrained authored interpretation.",
+        "referenced_image_paths": [
+          "APPROVED_RENDER:atlas-raider-boss-pose",
+          "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png"
+        ],
+        "transparent_background": false
+      }
+    }
+  ]
+}

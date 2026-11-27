@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "review_id": "atlas-bombardier-hands-gear-r2-independent",
+  "reviewer": "/root/missing_cast_critic",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-27T07:26:05.627260+00:00",
+  "status": "PASS \u2014 STATIC HANDS AND EQUIPMENT REFERENCE ONLY",
+  "scope": "STATIC HANDS AND EQUIPMENT REFERENCE ONLY",
+  "score_method": "Minimum mandatory visual-area score, not an average; every mandatory static visual check must pass strictly above 9.0.",
+  "reviewed_image": {
+    "native_returned_locator": "/workspace/scratch/9c51da47f878/generated_images/exec-5f2d3e34-816e-48ef-8a7e-6f5e66b0a004.png",
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-bombardier-hands-gear-r2.png",
+    "bytes": 1924944,
+    "sha256": "cf0de18bf4c9dc2b86262e633c9111751b2b2d72ebcd4be07ec1736ac1e08b7c",
+    "git_blob_sha": "e9730a1a8192b43a9f3ec215b93edbe5f143e651",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "actual_format": "PNG"
+  },
+  "requirements_at_generation": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/requirements.json",
+    "bytes": 157378,
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+    "git_blob_sha": "35cdd6921cdc9b88e6e890f538ecdc907d607a43"
+  },
+  "requirements_snapshot": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-input-snapshots/requirements--a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374.json",
+    "bytes": 157378,
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374"
+  },
+  "invocation": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/invocations/atlas-bombardier-hands-gear-r2.json",
+    "bytes": 3814,
+    "sha256": "4f297ad6b3422bb610e723d6bc8a96d0bee6d2a36184e5d91e4d707f49f5ea88"
+  },
+  "exact_actual_prompt": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-exact-invoked-prompts/atlas-bombardier-hands-gear-r2.txt",
+    "bytes": 1107,
+    "sha256": "3535db156dcd49006e4b36b152087910d5cff13879aaff0a1679d398740fd39e"
+  },
+  "source_images_inspected": [
+    {
+      "order": 1,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-bombardier-hands-gear-r1.png",
+      "bytes": 1950829,
+      "sha256": "07c48f1249a6ea3390223f61485197aaf55e37534fdf58f704666b333d6fe60f",
+      "git_blob_sha": "af21d03e804638030a033466f3da8793bd83f1a4",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "actual_format": "PNG"
+    }
+  ],
+  "actual_full_native_png_inspected": true,
+  "crop_provenance": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/atlas-bombardier-hands-gear-r2-crop-provenance.json",
+    "bytes": 2556,
+    "sha256": "47e4ce9ff6244e33f9f2b1a4d8ff68492fe50aea532dd9fc92c22ca3fd25fe92"
+  },
+  "actual_native_crops_inspected": [
+    "left-palm",
+    "right-palm",
+    "left-back",
+    "right-back",
+    "gear-front",
+    "gear-rear"
+  ],
+  "native_mesh_rig_animation_runtime_approval": false,
+  "pending_separate_evidence": [
+    "Full GitHub byte/blob readback and independent archive gate"
+  ],
+  "preservation": "All previous source identities, original accepted images, rejected iterations and exact prompts remain preserved.",
+  "retests_review": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/critic-atlas-bombardier-hands-gear-r1.json",
+    "bytes": 8988,
+    "sha256": "ea68278fd7435f34c7c7bb60579f49df4fd2a899bba40cd63482d852b3440bf1"
+  },
+  "areas": [
+    {
+      "id": "twenty_visible_digits",
+      "score": 9.8,
+      "status": "PASS",
+      "finding": "All four native hand panels preserve four separated fingers and one opposed thumb, complete fingertips and readable length hierarchy."
+    },
+    {
+      "id": "anatomical_chirality_and_labels",
+      "score": 9.8,
+      "status": "PASS",
+      "finding": "LEFT PALM thumb viewer-left; RIGHT PALM viewer-right; LEFT BACK viewer-right; RIGHT BACK viewer-left. All four labels remain correct."
+    },
+    {
+      "id": "palms_vs_backs",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Palm/thumb-root padding remains distinct from the accepted dorsal construction; no palm/back swap appears."
+    },
+    {
+      "id": "exact_body_glove_bracer_and_material_match",
+      "score": 9.6,
+      "status": "PASS",
+      "finding": "Both back views retain parallel double stitch rows, one normal studded brown cuff and the gray-blue sleeve, without an added dorsal strap."
+    },
+    {
+      "id": "source_equipment_and_repair_resolution",
+      "score": 9.6,
+      "status": "PASS",
+      "finding": "The lower gear pair is visibly rotated: the same closed oval-head implement leans left and the same capped orange canister is on its right. Opposite exterior head/handle and canister surfaces are shown without adding contents or assigning function.",
+      "evidence": [
+        "gear-front",
+        "gear-rear"
+      ]
+    },
+    {
+      "id": "opposing_equipment_view_evidence",
+      "score": 9.6,
+      "status": "PASS",
+      "finding": "The two gear panels now show distinct opposing three-quarter exterior views with complete props, coherent major shape and preserved materials."
+    },
+    {
+      "id": "framing_labels_and_surface_readability",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Four hand views and complete gear are well separated, labeled and uncropped under consistent studio lighting."
+    }
+  ],
+  "mandatory_defects_remaining": [],
+  "resolved_defects": [
+    {
+      "id": "BOMG-D01",
+      "previous_image_sha256": "07c48f1249a6ea3390223f61485197aaf55e37534fdf58f704666b333d6fe60f",
+      "resolution": "The lower gear pair is visibly rotated: the same closed oval-head implement leans left and the same capped orange canister is on its right. Opposite exterior head/handle and canister surfaces are shown without adding contents or assigning function."
+    }
+  ],
+  "accepted_body_comparison": {
+    "body_png": {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-bombardier-pose-r2.png",
+      "bytes": 1811893,
+      "sha256": "d061fa5c36469192433a039e4dc978fcbdd66cd0de5e169dd1b7c4dd26daffcc"
+    },
+    "body_review": {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/critic-atlas-bombardier-pose-r2.json",
+      "bytes": 7398,
+      "sha256": "6e52c0f0381b3b284ca53bb15ad929e258f9a71db0faa27e3386e31069c2a6e1"
+    },
+    "comparison_mode": "Direct critic comparison against exact accepted body and its native hand/accessory crops; repair invocation uses the prior detail sheet as its first input."
+  },
+  "additional_source_images_inspected": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-bombardier.png",
+      "bytes": 22695,
+      "sha256": "742bfd6a704064bfe0d50e5dfced7fd68d57e39a4853b303531a9f70853d517c"
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/atlas-bombardier-pose-r2-rear-viewer-left-hand.png",
+      "bytes": 20632,
+      "sha256": "abe7267c363f1497be91a1753700897665efede3ecaea6539dffa5908e2f7a43"
+    }
+  ],
+  "paired_body_and_gear_acceptance": {
+    "body_image_sha256": "d061fa5c36469192433a039e4dc978fcbdd66cd0de5e169dd1b7c4dd26daffcc",
+    "body_score": 9.6,
+    "body_compared_directly_by_critic": true,
+    "static_family_visual_coverage": "PASS: four cardinal body views plus four large hand surfaces and opposing source-equipment exteriors",
+    "remaining_native_production_scope": "Native mesh, rigging, animation, actual equip/use states and runtime remain separate untested deliverables."
+  },
+  "source_interpretation_limit": "The Atlas and exact accepted body govern visible identity. Hidden equipment faces and fine attachment surfaces are restrained authored static-reference interpretation. No native model, rig, animation or functional mechanism is established.",
+  "minor_polish_limit": "Small wear marks, stitch endpoints and reverse-surface details remain illustrative. Major glove construction, equipment silhouette and worn configuration remain consistent.",
+  "score": 9.6,
+  "all_mandatory_visual_checks_passed": true
+}

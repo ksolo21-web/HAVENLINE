@@ -1,0 +1,144 @@
+{
+  "schema_version": 2,
+  "reviewer": "/root/missing_world_audit",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-27T07:32:38.555905+00:00",
+  "review_id": "world-bridges-r5-independent-world",
+  "status": "REPAIR REQUIRED — NOT APPROVED",
+  "score_method": "Minimum mandatory visual-area score; no averaging away a failed requirement.",
+  "score": 8.8,
+  "actual_full_png_inspected": true,
+  "reviewed_image": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-bridges-r5.png",
+    "sha256": "afdc2ac18b6cc50cb1c4c3fec4ac207be9c1c617bf48e8ad6e4c800e8703c57c",
+    "bytes": 2170908,
+    "native_original": {
+      "path": "/workspace/scratch/9c51da47f878/generated_images/exec-7aeb963a-7dbb-43ca-870e-b805c90e6e9b.png",
+      "sha256": "afdc2ac18b6cc50cb1c4c3fec4ac207be9c1c617bf48e8ad6e4c800e8703c57c",
+      "bytes": 2170908
+    },
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "actual_format": "PNG"
+  },
+  "invocation": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/invocations/world-bridges-r5.json",
+    "sha256": "32b6519e7d238a476009ae0f9b04899d8747d8099f62148ec5ac18d3589034e1",
+    "bytes": 4156
+  },
+  "prompt": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-exact-invoked-prompts/world-bridges-r5.txt",
+    "sha256": "314e10fdf364399226189dbbe62a7c10f2334829863d16865453dfcf9affcda0",
+    "bytes": 944
+  },
+  "requirements_at_generation": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-input-snapshots/requirements--a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374.json",
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+    "bytes": 157378
+  },
+  "current_requirements_at_review": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/requirements.json",
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+    "bytes": 157378
+  },
+  "catalog_at_review": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/world-render-catalog.json",
+    "sha256": "cbc641ec53f5f496ffa059dee5f21ba0ee89e9f47b04511b32d8bf4bc7f84f8a",
+    "bytes": 348141
+  },
+  "actual_native_crops_inspected": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-bridges-r5-reinforced-reverse.png",
+      "sha256": "8398dfbcdeb6a8f122ed928acd026ceca1fa3b38d333e8bda3fc7e48e75cf28a",
+      "bytes": 248398
+    }
+  ],
+  "crop_provenance": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-bridges-r5-crop-provenance.json",
+      "sha256": "42aaef6fbada2647a2b0654919215502e018aeaf1586b114fde85ece6eb07dcb",
+      "bytes": 982
+    }
+  ],
+  "source_images_or_native_excerpts_inspected": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/source-records/original-boards/18607.png",
+      "sha256": "d71d77c6e200b7ef8d225e573474ad99c2d466954d05c29eabd142f4901bbc0c",
+      "bytes": 342580
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/source-records/original-boards/18609.png",
+      "sha256": "68d2fb572cc5370a9746c7130f661438197ce36ac495a3b4ffeeaa4528d81ce7",
+      "bytes": 421303
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-source-bridge-rope-native.png",
+      "sha256": "8b07a9140d9961c4dfabed050495ef78c7db9347971d931acd79816bc46a8e02",
+      "bytes": 56269
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-source-bridge-reinforced-native.png",
+      "sha256": "3f6b12f8e471dc2f8bc9fcad57c9655cbf2d365f0aeebe176f32b7f6a063684d",
+      "bytes": 89726
+    }
+  ],
+  "areas": [
+    {
+      "id": "source_families_and_opposing_coverage",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Both bridge families and meaningful reverse cameras remain intact, with complete support details. BR01 stays closed."
+    },
+    {
+      "id": "fixed_six_reinforced_posts",
+      "score": 8.8,
+      "status": "FAIL",
+      "finding": "The missing small far-rail middle cap near (676,710) is restored, but another capped post reappears near (807,693). The reverse therefore again has seven distinct capped posts, while the front and exact repair prompt require six. BR02 remains."
+    },
+    {
+      "id": "other_panels_and_materials",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "The other five panels retain their legible timber, rope, blue-metal and snow treatment. No new mandatory source-family or framing issue is found."
+    }
+  ],
+  "all_mandatory_visual_checks_passed": false,
+  "mandatory_defects_remaining": [
+    {
+      "id": "BR02",
+      "mandatory": true,
+      "panels": [
+        "REINFORCED BRIDGE / REAR-RIGHT"
+      ],
+      "finding": "Seven capped posts are visible: approximate full-image cap centers x560,625,676,727,807,900,980. The extra cap near x807 was reintroduced despite the explicit instruction to keep that position empty."
+    }
+  ],
+  "minimum_repairs": [
+    "Remove only the reintroduced small far-rail post centered near full-image (807,693), preserving the correct small cap near (676,710) and the other five posts. Keep the fixed six, all ropes/rail continuations, reverse camera and other five panels. A narrowly isolated erroneous-post reference or an authored six-post geometry guide may help prevent the model from deleting/restoring both small caps together."
+  ],
+  "notes": [
+    "The requested single-post restoration succeeded but also reintroduced the previously rejected extra. This report retains the same BR02 issue rather than inventing a new requirement."
+  ],
+  "cross_sheet_bindings": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-bridges-r4.png",
+      "sha256": "94601eac2a8463aa2e645ac975bb2019338acaebf988a7919cf8c7d9d119f156",
+      "bytes": 2164646
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/critic-world-bridges-r4.json",
+      "sha256": "4ee9e508a972ba82435318f8ffa88d8ab2b0d434c9d003bf79023e450ce5e1c1",
+      "bytes": 6996
+    }
+  ],
+  "native_mesh_rig_animation_runtime_approval": false,
+  "pending_separate_evidence": [
+    "Additive GitHub archive and complete-content remote readback",
+    "Other family coverage; this report reviews only the exact PNG identified above"
+  ],
+  "closed_defects": [
+    "BR01"
+  ]
+}

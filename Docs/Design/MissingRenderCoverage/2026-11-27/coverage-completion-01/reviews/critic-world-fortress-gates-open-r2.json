@@ -1,0 +1,166 @@
+{
+  "schema_version": 2,
+  "reviewer": "/root/missing_world_audit",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-27T07:10:53.465885+00:00",
+  "review_id": "world-fortress-gates-open-r2-independent-world",
+  "status": "REPAIR REQUIRED — NOT APPROVED",
+  "score_method": "Minimum mandatory visual-area score; no averaging away a failed requirement.",
+  "score": 8.4,
+  "actual_full_png_inspected": true,
+  "reviewed_image": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-fortress-gates-open-r2.png",
+    "sha256": "0aca738a7922d5f2d9e43da908eb3d2cf2f77857f5554014816e9b51ad8b899f",
+    "bytes": 2063980,
+    "native_original": {
+      "path": "/workspace/scratch/9c51da47f878/generated_images/exec-a4b95c58-fc6a-4f0e-af4f-b27041ee1168.png",
+      "sha256": "0aca738a7922d5f2d9e43da908eb3d2cf2f77857f5554014816e9b51ad8b899f",
+      "bytes": 2063980
+    },
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "actual_format": "PNG"
+  },
+  "invocation": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/invocations/world-fortress-gates-open-r2.json",
+    "sha256": "665fcb292ac895976387263985a05b67f7c4ec010c0ddfc473542f5360a72e36",
+    "bytes": 4741
+  },
+  "prompt": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-exact-invoked-prompts/world-fortress-gates-open-r2.txt",
+    "sha256": "c856c71c9c09b63546e975c1328b45056a2684ae633ba7214fa46076e513518b",
+    "bytes": 1475
+  },
+  "requirements_at_generation": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-input-snapshots/requirements--a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374.json",
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+    "bytes": 157378
+  },
+  "current_requirements_at_review": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/requirements.json",
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+    "bytes": 157378
+  },
+  "catalog_at_review": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/world-render-catalog.json",
+    "sha256": "cbc641ec53f5f496ffa059dee5f21ba0ee89e9f47b04511b32d8bf4bc7f84f8a",
+    "bytes": 348141
+  },
+  "actual_native_crops_inspected": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-fortress-gates-open-r2-a-front.png",
+      "sha256": "f39d017a6c9078c5ab72be0a99f7e62246679b8925cd65180f9189f8097aafb0",
+      "bytes": 151985
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-fortress-gates-open-r2-b-rear.png",
+      "sha256": "57d9bfd934d1fb4e81a988e39df09f0a957698847bc51579a6bde6c7ee42c183",
+      "bytes": 222843
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-fortress-gates-open-r2-c-rear.png",
+      "sha256": "a67eee1ca1a70c473fad0c111800cc73b8cdac336069538e8cccfd8fa9aeae5c",
+      "bytes": 225756
+    }
+  ],
+  "crop_provenance": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-fortress-gates-open-r2-crop-provenance.json",
+      "sha256": "e7dae95e942e1b18f85b6d8acfda84ab199692222f46b9c8dcdc9b88a2f0b50e",
+      "bytes": 1732
+    }
+  ],
+  "source_images_or_native_excerpts_inspected": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/source-records/original-boards/Havenline: Frostbound World Atlas.png",
+      "sha256": "5a9f9592d2e8a32b3ae0c4117c2d851496d49023e2768c491dc1b211b7865edf",
+      "bytes": 2759727
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-source-fortress-gates-native.png",
+      "sha256": "f610c247bbac0abaf0eba024ebbfe0b792d44f3ae73d19611ab53c382516fd97",
+      "bytes": 43095
+    }
+  ],
+  "areas": [
+    {
+      "id": "accepted_closed_identity_and_surrounds",
+      "score": 9.8,
+      "status": "PASS",
+      "finding": "The repair still binds the exact accepted closed r2 geometry authority. All three stone/metal surrounds, wall extensions, source flame/blue accents, labels and complete panel framing remain intact."
+    },
+    {
+      "id": "exact_two_leaf_count",
+      "score": 8.4,
+      "status": "FAIL",
+      "finding": "All three native rear panels still contain three separate grille leaves: left, middle/behind-right, and foreground-right. This directly repeats GO01 and contradicts the exact two-leaf closed anchor and repair prompt."
+    },
+    {
+      "id": "one_fixed_open_state",
+      "score": 8.5,
+      "status": "FAIL",
+      "finding": "The front profiles are more asymmetric and half-arch-like than r1, but the reverse panels still add a leaf extending toward the rear camera beside another behind it. They do not depict the same two leaves at one fixed ninety-degree outward swing. GO02 is therefore only partially addressed and not closed."
+    },
+    {
+      "id": "finish_and_static_concept_scope",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Material finish and six-view presentation remain clear. No animation, internal mechanism or runtime approval is implied."
+    }
+  ],
+  "all_mandatory_visual_checks_passed": false,
+  "mandatory_defects_remaining": [
+    {
+      "id": "GO01",
+      "mandatory": true,
+      "panels": [
+        "ALL THREE OPEN REAR-RIGHT PANELS"
+      ],
+      "finding": "The extra third grille leaf remains in every reverse panel."
+    },
+    {
+      "id": "GO02",
+      "mandatory": true,
+      "panels": [
+        "ALL THREE OPEN REAR-RIGHT PANELS"
+      ],
+      "finding": "Reverse views do not preserve the same two-leaf outward swing established by the front view; duplicated opposing leaves remain."
+    }
+  ],
+  "minimum_repairs": [
+    "Regenerate the OPEN study from the exact accepted CLOSED r2 image as the sole geometry image input, omitting the erroneous open-sheet image that carries duplicate leaves.",
+    "Preserve exactly two original half-arch grille leaves per gate, attached only at the outer jambs. Set one fixed outward open angle and orbit the camera for rear views; no leaf may be duplicated or swing toward a second camera. Preserve the original bar profiles and all stonework."
+  ],
+  "notes": [
+    "Complete consolidated r2 review: no new masonry/source-family defect was found. GO01 persists; GO02 front-profile improvement is recorded without granting an untested full opening-state approval."
+  ],
+  "cross_sheet_bindings": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-fortress-gates-closed-r2.png",
+      "sha256": "0a9130835ab8119b5802d4084246fd6abb2f9d79d8e7def28aea6d54c9aac37d",
+      "bytes": 2045904
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/critic-world-fortress-gates-closed-r2.json",
+      "sha256": "20bcce5d731f1fda686502b46c96a342923ddbb7193b8e8e257f37886834a1f0",
+      "bytes": 7397
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-fortress-gates-open-r1.png",
+      "sha256": "234c3279f4cde2544a61b233b27a3c0f8160f85535dd19f6db8cb391c5f3c0d8",
+      "bytes": 2072554
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/critic-world-fortress-gates-open-r1.json",
+      "sha256": "ec718795e4ffc021a6efa7eb846f2bdc2e5bcc244ec087bf8b67b304621a337f",
+      "bytes": 7919
+    }
+  ],
+  "native_mesh_rig_animation_runtime_approval": false,
+  "pending_separate_evidence": [
+    "Additive GitHub archive and complete-content remote readback",
+    "Other family coverage; this report reviews only the exact PNG identified above"
+  ]
+}

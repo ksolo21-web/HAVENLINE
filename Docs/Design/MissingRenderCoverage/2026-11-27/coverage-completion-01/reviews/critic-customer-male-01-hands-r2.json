@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "review_id": "customer-male-01-hands-r2-independent",
+  "reviewer": "/root/missing_cast_critic",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-27T05:43:52.048048+00:00",
+  "status": "PASS \u2014 STATIC REFERENCE ONLY",
+  "score_method": "Minimum mandatory visual-area score; every mandatory static visual check passed strictly above 9.0.",
+  "reviewed_image": {
+    "native_returned_locator": "/workspace/scratch/9c51da47f878/generated_images/exec-9de9128d-0205-47c8-95a7-45e1dedf2b74.png",
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/customer-male-01-hands-r2.png",
+    "bytes": 1944165,
+    "sha256": "ff561117252acb4096b832c03ae39c60f4e1d8e29247daecdee2bdbef6e795b9",
+    "git_blob_sha": "8b151d48bd6f79ac8309eddea6811a768fe29826",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "actual_format": "PNG"
+  },
+  "requirements_at_generation": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/requirements.json",
+    "bytes": 11299,
+    "sha256": "5f796ad94e89062c2d88e80a64516e73c144704bb6f56020cd9f444e1790f381",
+    "git_blob_sha": "84361de3b0c6d2003dfafff48030ecc5ef6b78f2"
+  },
+  "requirements_snapshot": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-input-snapshots/requirements--5f796ad94e89062c2d88e80a64516e73c144704bb6f56020cd9f444e1790f381.json",
+    "bytes": 11299,
+    "sha256": "5f796ad94e89062c2d88e80a64516e73c144704bb6f56020cd9f444e1790f381"
+  },
+  "invocation": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/invocations/customer-male-01-hands-r2.json",
+    "bytes": 3871,
+    "sha256": "0808c857a65a3ec6d3e3881b53d8626c097aad48be38a2bd9719d2cf163ccf89"
+  },
+  "exact_actual_prompt": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-exact-invoked-prompts/customer-male-01-hands-r2.txt",
+    "bytes": 1174,
+    "sha256": "779e908b673bc86fa732808afe4a2ebc2a3c1cb89a56d692f9396abba823b96d"
+  },
+  "source_images_inspected": [
+    {
+      "order": 1,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/customer-male-01-hands-r1.png",
+      "bytes": 1904537,
+      "sha256": "c7bfcfdfdd2c56b3a0fe6cdd36b154c2abd34815f33b902b1b3aac101fc30a13",
+      "git_blob_sha": "af70a15c611231530567e827b05d16343a151254",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "actual_format": "PNG"
+    }
+  ],
+  "actual_full_native_png_inspected": true,
+  "crop_provenance": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/customer-male-01-hands-r2-crop-provenance.json",
+    "bytes": 1914,
+    "sha256": "6fb51cd375996df7e994ddb8c2b4a30e209ee3b735bd44467b7bf3702ae48eb3"
+  },
+  "actual_native_crops_inspected": [
+    "left-palm-label-and-glove",
+    "right-palm-label-and-glove",
+    "left-back-label-and-glove",
+    "right-back-label-and-glove"
+  ],
+  "supersedes_for_selection_only": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/critic-customer-male-01-hands-r1.json",
+    "bytes": 7545,
+    "sha256": "99e38bc00240f9a90e2573c90f6fa9e742062d83609f6b644b9f8c5a977ec3dc"
+  },
+  "all_mandatory_visual_checks_passed": true,
+  "mandatory_defects_remaining": [],
+  "native_mesh_rig_animation_runtime_approval": false,
+  "pending_separate_evidence": [
+    "Full GitHub byte/blob readback and independent archive gate"
+  ],
+  "preservation": "Original r1 PNG, prompt and failed report are retained. Previous approved relaxed eight-view character remains a complementary identity reference.",
+  "cross_sheet_inspected": [
+    "renders/customer-male-01-pose-r2.png",
+    "renders/customer-male-01-hands-r2.png"
+  ],
+  "score": 9.7,
+  "areas": [
+    {
+      "id": "source_sleeves_cuffs_and_materials",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Warm brown full-finger gloves, cream shearling and blue quilted sleeves remain consistent with the body sheet and approved outfit."
+    },
+    {
+      "id": "four_fingers_plus_opposed_thumb",
+      "score": 9.8,
+      "status": "PASS",
+      "finding": "All four views each show exactly four fingers plus an opposed thumb; 20 visible digits total, with obvious background gaps and natural length hierarchy."
+    },
+    {
+      "id": "palm_and_dorsal_differentiation",
+      "score": 9.8,
+      "status": "PASS",
+      "finding": "The two palms have padded oval centers; the two backs have neat lengthwise finger seams without palm patches."
+    },
+    {
+      "id": "chirality_and_labels",
+      "score": 9.8,
+      "status": "PASS",
+      "finding": "Correct fingers-up mapping: LEFT PALM thumb viewer-left; RIGHT PALM viewer-right; LEFT BACK viewer-right; RIGHT BACK viewer-left. All four labels and images now agree."
+    },
+    {
+      "id": "layout_and_native_readability",
+      "score": 9.8,
+      "status": "PASS",
+      "finding": "Four large complete glove and wrist studies, clean studio background, readable title/labels, uncut digit tips and cuff-to-sleeve construction."
+    },
+    {
+      "id": "cross_sheet_glove_design",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "The repaired four-cardinal body sheet uses matching five-digit brown gloves and distinguishes front palm from rear dorsal surfaces."
+    }
+  ],
+  "closed_prior_defects": [
+    {
+      "id": "CM01-H01",
+      "status": "CLOSED",
+      "evidence": [
+        "left-palm-label-and-glove",
+        "right-palm-label-and-glove",
+        "left-back-label-and-glove",
+        "right-back-label-and-glove"
+      ],
+      "finding": "All four anatomical left/right assignments corrected; the rejected r1 prompt and r1 pixels remain preserved."
+    }
+  ],
+  "minor_polish_limit": "Small differences in illustrated glove fullness and seam curvature remain between independent views; anatomical count, label mapping and construction design are clear. Native topology and articulation are outside this static-image scope."
+}

@@ -1,0 +1,73 @@
+{
+  "id": "world-cabins-r2",
+  "deliverable_id": "world-cabins",
+  "family_id": "cabins",
+  "tool": "image_gen__imagegen",
+  "arguments": {
+    "prompt": "Correct ONLY the UPGRADED CABIN bottom row in image1 using exact original source image2. Keep the WOODEN HUT top row and all sheet styling unchanged. The source upgraded cabin has EXACTLY ONE square open-top stone chimney, at the left end of the main roof ridge as seen in the source front-left view. Preserve that source chimney. Remove the extra tall capped stone chimney that image1 invented on the right side of the front-left view. In the rear-right view, depict the SAME ONE remaining open-top chimney in its physically rotated location, never keeping the deleted chimney as though it were the only one. Match the source's main blue gable and smaller front doorway gable, warm timber, blue shutters, stone base and entry lantern. Every view must show the same geometry and one chimney only. Preserve full framing, labels, source-concept footer and clean polished sculpted materials. No second chimney, capped chimney, added wing or new roof design.",
+    "referenced_image_paths": [
+      "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-cabins-r1.png",
+      "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-source-upgraded-cabin-native.png"
+    ],
+    "transparent_background": false
+  },
+  "status": "GENERATED_AWAITING_REVIEW",
+  "reason": "Focused repair of independently identified source or cross-view continuity defect; retain previous original.",
+  "prompt_file": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/prompts/world-cabins-r2.txt",
+    "bytes": 955,
+    "sha256": "fc1b5af094b2d0af58b21447e319057b702cbba08c2bfdcada342ca98365a504",
+    "git_blob_sha": "2cfc4b5bcacb6b46728e16eb0c14cd302d9ae154"
+  },
+  "exact_actual_prompt_file": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-exact-invoked-prompts/world-cabins-r2.txt",
+    "bytes": 954,
+    "sha256": "22d034b7cd0fd7435c042002350193818f39a204215f928947c4564851e6222d",
+    "git_blob_sha": "4d9f60bf22cf02629642535ae1c18a0a6e39e063"
+  },
+  "ordered_reference_inputs": [
+    {
+      "order": 1,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-cabins-r1.png",
+      "bytes": 2111592,
+      "sha256": "fb24e44d6a0634b83499715129d458bceef7e0bf55e7e51a4cce2f4a2a9e8855",
+      "git_blob_sha": "22557c20eec21b39c3ffac79d9df2a526cab1ea5",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "actual_format": "PNG"
+    },
+    {
+      "order": 2,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-source-upgraded-cabin-native.png",
+      "bytes": 61279,
+      "sha256": "bc2006a8784f90e658bfbbbb19e4e274536bba5a330fdf37f7e9cb679e446bf9",
+      "git_blob_sha": "e494583f7da78f0f50d93741547fc3c2b98721ca",
+      "dimensions": [
+        184,
+        187
+      ],
+      "actual_format": "PNG"
+    }
+  ],
+  "requirements_at_generation": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/requirements.json",
+    "bytes": 157378,
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+    "git_blob_sha": "35cdd6921cdc9b88e6e890f538ecdc907d607a43"
+  },
+  "requirements_snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-input-snapshots/requirements--a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374.json",
+  "output": {
+    "native_returned_locator": "/workspace/scratch/9c51da47f878/generated_images/exec-9c4f6b56-6802-4684-81f4-16030a5ba112.png",
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-cabins-r2.png",
+    "bytes": 2086877,
+    "sha256": "43cfa470d01b82bd31b8445a8241f3d832fc8a26ac501f33ac2843fad896c37b",
+    "git_blob_sha": "2a2b67b593e5e5cece66be3eb656c9d66795d06e",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "actual_format": "PNG"
+  }
+}

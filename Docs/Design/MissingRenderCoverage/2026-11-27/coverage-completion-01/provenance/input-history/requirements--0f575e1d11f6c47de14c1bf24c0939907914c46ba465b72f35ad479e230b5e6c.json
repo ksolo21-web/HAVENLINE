@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "task": "Havenline missing static render coverage",
+  "date": "2026-11-27",
+  "user_request": "whatever renders we missing for Havenline, let get them now.",
+  "baseline": {
+    "repository": "ksolo21-web/HAVENLINE",
+    "branch": "art/conveyors-2026-11-26",
+    "commit": "d70fbfac21a852f99cc46b06b1944faf11ec7901",
+    "tree": "18c5641935b9cfaa7c1c82022bdbcbd5ad55ab77",
+    "leaves": 4955
+  },
+  "scope": "Add source-supported missing static concept/reference images. Preserve existing identities, accepted images, and all original attempts. This does not implement gameplay, native meshes, rigging or animation.",
+  "audit_status": "IN_PROGRESS. Further source-confirmed missing families may be added before their generation; existing mandatory requirements will not be removed.",
+  "milestones": [
+    {
+      "id": "M1",
+      "name": "Audit actual saved coverage and source identities",
+      "status": "IN_PROGRESS"
+    },
+    {
+      "id": "M2",
+      "name": "Generate every source-confirmed missing static sheet",
+      "status": "IN_PROGRESS"
+    },
+    {
+      "id": "M3",
+      "name": "Independent pixel review; repair and retest",
+      "status": "PENDING"
+    },
+    {
+      "id": "M4",
+      "name": "Additive GitHub archive and independent full readback",
+      "status": "PENDING"
+    }
+  ],
+  "global_checks": [
+    {
+      "id": "R01",
+      "requirement": "Each new family binds to an exact source requirement, source pixels or an explicitly marked authored extension; no invented canon."
+    },
+    {
+      "id": "R02",
+      "requirement": "Approved Havenline sculpted winter style, coherent materials, legible silhouettes, clean studio reference layouts."
+    },
+    {
+      "id": "R03",
+      "requirement": "Multiple meaningful angles and relevant closeups/use states for the gap; accurate direction labels and internally consistent geometry."
+    },
+    {
+      "id": "R04",
+      "requirement": "Every humanoid supplement has exactly five separated digits per hand including an opposed thumb, no fused mittens; clear spread palms/dorsal views and stable identity."
+    },
+    {
+      "id": "R05",
+      "requirement": "Separate critic inspects actual native PNGs and closes all mandatory defects; every mandatory score strictly above9.0; target10."
+    },
+    {
+      "id": "R06",
+      "requirement": "Native original PNGs, rejected revisions, no-image failure records, exact invoked prompts, ordered source inputs and requirements snapshots preserved byte-for-byte."
+    },
+    {
+      "id": "R07",
+      "requirement": "Publish additively on dedicated art/missing-renders-2026-11-27 from verified baseline, no production/runtime edits, no changes to main or active gameplay branches."
+    },
+    {
+      "id": "R08",
+      "requirement": "Exact expected-path and blob/body readback plus independent archive critic; immutable final GitHub links; no false whole-game completion claim."
+    }
+  ],
+  "families": [
+    {
+      "id": "defense_platform",
+      "gap": "Explicit BLOCKED_GENERATION slot in inherited69-sheet expansion; no selected image",
+      "sources": [
+        "Docs/Design/RenderArchive/2026-11-23/selected-status.json",
+        "Docs/Production/T05/FROZEN_SCOPE.md T05-R06",
+        "HavenlineGodot/assets/stations_v2/catalog.json",
+        "primary locked reference B at48seconds"
+      ],
+      "required_sheets": [
+        "defense-platform-turnaround",
+        "defense-platform-details"
+      ],
+      "mandatory_visuals": [
+        "Warm timber and metal modular platform, pale stone plinth, X braces, distinct top weapon socket",
+        "Front,rear,left,right,overhead and three-quarter views",
+        "Supply and repair props and accessible service approach",
+        "Unoccupied mount plus nontechnical installed-use reference consistent with approved ballista"
+      ],
+      "authored_interpretations": "Reverse faces, exact attachment appearance and service-prop arrangement are authored from visible form and source requirement. No firing or ammunition recipe claimed.",
+      "status": "GENERATING"
+    }
+  ],
+  "remaining_audit_topics": [
+    "six NPC/survivor spread-hand reference supplements",
+    "cookhouse/greenhouse/workshop source boards",
+    "wheat harvester and processor source video",
+    "herbs/crystal source atlas",
+    "standalone weapon roster source limitations"
+  ],
+  "exclusions": [
+    "No duplicate replacement of already covered33resource IDs, C1–C4 turns,20enemy subjects,7companion species, fence/gate/counter/storage/conveyor approved sets.",
+    "Undefined handheld weapon upgrade roster and unresolved YT13 tiny crowd identity must remain explicitly unresolved unless source evidence is recovered.",
+    "Native rig,animation,runtime,4K/device and production signoffs are not established by static generated PNGs."
+  ]
+}
+

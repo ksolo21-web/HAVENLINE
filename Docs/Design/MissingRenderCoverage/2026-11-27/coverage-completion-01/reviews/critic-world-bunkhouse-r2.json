@@ -1,0 +1,128 @@
+{
+  "schema_version": 2,
+  "reviewer": "/root/missing_world_audit",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-27T06:28:45.679828+00:00",
+  "review_id": "world-bunkhouse-r2-independent-world",
+  "status": "PASS — STATIC REFERENCE ONLY",
+  "score_method": "Minimum mandatory visual-area score; no averaging away a failed requirement.",
+  "score": 9.7,
+  "actual_full_png_inspected": true,
+  "reviewed_image": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-bunkhouse-r2.png",
+    "sha256": "8aff0d484270cda2fa4185362e0336ad2469c713b436eca0ed7f5a70c2e06466",
+    "bytes": 2085062,
+    "native_original": {
+      "path": "/workspace/scratch/9c51da47f878/generated_images/exec-bee8b3d1-081a-4640-b8b5-1532578990f9.png",
+      "sha256": "8aff0d484270cda2fa4185362e0336ad2469c713b436eca0ed7f5a70c2e06466",
+      "bytes": 2085062
+    },
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "actual_format": "PNG"
+  },
+  "invocation": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/invocations/world-bunkhouse-r2.json",
+    "sha256": "5d50dc4be9e190e2275f54052d5765161c6c59fd4cb9ee69a38c0a0ae3ddd61a",
+    "bytes": 4393
+  },
+  "prompt": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-exact-invoked-prompts/world-bunkhouse-r2.txt",
+    "sha256": "ad3078568aa02bad4e84d648770cba4c49695810d04dc13a7cfdfd1a0516bc15",
+    "bytes": 1169
+  },
+  "requirements_at_generation": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-input-snapshots/requirements--a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374.json",
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+    "bytes": 157378
+  },
+  "current_requirements_at_review": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/requirements.json",
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+    "bytes": 157378
+  },
+  "catalog_at_review": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/world-render-catalog.json",
+    "sha256": "cbc641ec53f5f496ffa059dee5f21ba0ee89e9f47b04511b32d8bf4bc7f84f8a",
+    "bytes": 348141
+  },
+  "actual_native_crops_inspected": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-bunkhouse-r2-annex-front.png",
+      "sha256": "f39429db226c83135cfcc767e2f83e7ead1525a2e857416f4cb24b935d385fa2",
+      "bytes": 102846
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-bunkhouse-r2-annex-cutaway.png",
+      "sha256": "1ee6407d4239763c954c6e589b5ef1245ce6a796dfc54da9b0c5c27e2f11d047",
+      "bytes": 52456
+    }
+  ],
+  "crop_provenance": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-bunkhouse-r2-crop-provenance.json",
+      "sha256": "a4a2aa6ec4449e2960ce9b0551287a57b2072bd5b7e0ee6c45d288a07ceaa014",
+      "bytes": 1218
+    }
+  ],
+  "source_images_or_native_excerpts_inspected": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/source-records/original-boards/18609.png",
+      "sha256": "68d2fb572cc5370a9746c7130f661438197ce36ac495a3b4ffeeaa4528d81ce7",
+      "bytes": 421303
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-source-bunkhouse-native.png",
+      "sha256": "a53fc4086bbe2a663e8be19241248ab120385b48d09c89bcb6f664747cce7efb",
+      "bytes": 65445
+    }
+  ],
+  "areas": [
+    {
+      "id": "BH01_annex_entrance_retest",
+      "score": 9.8,
+      "status": "PASS",
+      "finding": "The smaller right gabled annex now has a full source-compatible timber door and threshold instead of the source-inaccurate window. Native exterior and cutaway crops both preserve that restored entry."
+    },
+    {
+      "id": "building_and_opposing_reference",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Broad main residence, main entrance, smaller annex, extended roof and both stack locations remain coherent in the exterior pair. Source roof material and mass are preserved; the cutaway retains a clear shared sleeping aisle."
+    },
+    {
+      "id": "details_layout_and_scope",
+      "score": 9.8,
+      "status": "PASS",
+      "finding": "Useful native roof/wall detail, complete exteriors and interpreted interior remain present. Labels/footer remain readable. No capacity or clinical/gameplay claim is introduced."
+    }
+  ],
+  "all_mandatory_visual_checks_passed": true,
+  "mandatory_defects_remaining": [],
+  "minimum_repairs": [],
+  "notes": [
+    "The open interior is an authored cutaway, with foreground facade/context removed for visibility; no native mesh or bed-capacity approval."
+  ],
+  "cross_sheet_bindings": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-bunkhouse-r1.png",
+      "sha256": "f4b8c2aa1001655717b6fa1c613af2c880aa4f27458ceffd0716a03a9e19b418",
+      "bytes": 2143552
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/critic-world-bunkhouse-r1.json",
+      "sha256": "04e38a50b3c22628183fdca4505dec69efc3c2640930a0e819a33b1e468ed21f",
+      "bytes": 6644
+    }
+  ],
+  "native_mesh_rig_animation_runtime_approval": false,
+  "pending_separate_evidence": [
+    "Additive GitHub archive and complete-content remote readback",
+    "Other family coverage; this report reviews only the exact PNG identified above"
+  ],
+  "closed_defects": [
+    "BH01"
+  ]
+}

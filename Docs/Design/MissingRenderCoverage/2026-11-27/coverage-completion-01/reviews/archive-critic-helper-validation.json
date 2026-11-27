@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/missing_world_audit",
+  "recorded_at_utc": "2026-11-27T08:03:15.658571+00:00",
+  "status": "PASS_SINGLE_CACHED_RESPONSE_HELPER_VALIDATION_ONLY",
+  "script": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/archive-critic-readback.py",
+    "sha256": "62f02bec7536ef49670f7e9759d1b70a3519c86ea04cbd94a0ea948a19a97c1f",
+    "bytes": 10055
+  },
+  "manifest_row_keys": [
+    "bytes",
+    "git_blob_sha",
+    "path",
+    "sha256"
+  ],
+  "manifest_schema_checked": {
+    "frozen": true,
+    "files": [
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/attempts/atlas-raider-brute-hands-gear-r1.png",
+        "bytes": 2101879,
+        "sha256": "b8efd7305de2c1b2253e239857dba227e849fe360d1350173eb89b2f22d4fce0",
+        "git_blob_sha": "0515bc6b6a96e61f61c44664e58653834040d094"
+      }
+    ]
+  },
+  "manifest_fixture_only": true,
+  "cached_response_bound_by_batch_sha256": "4c1c13c2fb8bc56913a2ddb18e8b2b62d6fb829faa2634586fa433e089f36dc8",
+  "result": {
+    "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/attempts/atlas-raider-brute-hands-gear-r1.png",
+    "aliases": [
+      "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/attempts/atlas-raider-brute-hands-gear-r1.png"
+    ],
+    "immutable_commit_url": "https://raw.githubusercontent.com/ksolo21-web/HAVENLINE/UNPUBLISHED_LOCAL_HELPER_FIXTURE/Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/attempts/atlas-raider-brute-hands-gear-r1.png",
+    "expected_git_blob_sha": "0515bc6b6a96e61f61c44664e58653834040d094",
+    "expected_sha256": "b8efd7305de2c1b2253e239857dba227e849fe360d1350173eb89b2f22d4fce0",
+    "expected_bytes": 2101879,
+    "body_evidence_source": "REVERIFIED_COMPLETE_CACHED_INDEPENDENT_CRITIC_API_RESPONSE",
+    "fresh_request_made_by_this_critic": false,
+    "url": "https://api.github.com/repos/ksolo21-web/HAVENLINE/git/blobs/0515bc6b6a96e61f61c44664e58653834040d094",
+    "response_url": "https://api.github.com/repos/ksolo21-web/HAVENLINE/git/blobs/0515bc6b6a96e61f61c44664e58653834040d094",
+    "http_status": 200,
+    "prefetch_receipt": {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/archive-blob-prefetch/receipts/0515bc6b6a96e61f61c44664e58653834040d094.json",
+      "bytes": 2585,
+      "sha256": "66aff1fa5e4d7f6faffdd8b21b34ca75ee7deac6d205c29ea330101ea54685ff",
+      "git_blob_sha": "c71f65222e0fb7f1cec5b863d3e1afb3008d642a"
+    },
+    "prefetch_origin": "Complete immutable Git blob API response fetched during this independent critic run",
+    "prefetch_retrieved_at_utc": "2026-11-27T07:57:42.203273+00:00",
+    "prefetch_verified_at_utc": "2026-11-27T07:57:42.223502+00:00",
+    "complete_api_response": {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/archive-blob-prefetch/api-responses/0515bc6b6a96e61f61c44664e58653834040d094.json",
+      "bytes": 2896216,
+      "sha256": "588dfc1be24193a761a0528d746cb725b19c2b230e220f49ee9890a49b2ce75a",
+      "git_blob_sha": "8857c6ef1e57c78c5e0ab4daf613e7e5786ad790"
+    },
+    "complete_api_response_redecoded_here": true,
+    "decoded_cache_file_equal_api_body": true,
+    "observed_bytes": 2101879,
+    "observed_sha256": "b8efd7305de2c1b2253e239857dba227e849fe360d1350173eb89b2f22d4fce0",
+    "observed_git_blob_sha": "0515bc6b6a96e61f61c44664e58653834040d094",
+    "whole_body_read": true,
+    "all_local_alias_bytes_equal_remote": true,
+    "pass": true
+  },
+  "network_requests_made": 0,
+  "final_content_commit_verified": false,
+  "scope": "One actual complete already-fetched API response was decoded and compared to its frozen-format staged alias using the exact final helper function. This is a preparation check only; complete remote verification still must run after the final tree/commit is published."
+}

@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/missing_world_audit",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-27T06:02:16.580863+00:00",
+  "scope": "Bounded source coverage and prompt/catalogue review only; no image approved from prompts",
+  "catalogue": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/world-render-catalog.json",
+    "sha256": "cbc641ec53f5f496ffa059dee5f21ba0ee89e9f47b04511b32d8bf4bc7f84f8a",
+    "bytes": 348141
+  },
+  "matrix_snapshot": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/world/world-gap-matrix.json",
+    "snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/drafts/catalog-inputs/world-gap-matrix--fc3af48727d5ca88eaa274ee8541096da916c4ec11309cf3f3ce2c4344631489.json",
+    "sha256": "fc3af48727d5ca88eaa274ee8541096da916c4ec11309cf3f3ce2c4344631489",
+    "schema_version": 2
+  },
+  "status": "PASS_CATALOGUE_ONLY",
+  "score": 9.8,
+  "all_mandatory_catalogue_checks_passed": true,
+  "image_approval": false,
+  "runtime_approval": false,
+  "observed_counts": {
+    "sheets": 33,
+    "families": 29,
+    "unique_source_forms": 64,
+    "panels": 162
+  },
+  "checks": {
+    "all64_nondefense_census_forms_exactly_covered": true,
+    "missing_forms": [],
+    "unexpected_forms": [],
+    "input_file_hash_or_length_issues": [],
+    "fortress_gate_open_depends_on_approved_closed_identity": true,
+    "all_original_board_pixels_previously_inspected": true
+  },
+  "findings": [
+    "Cookhouse/workshop early and mid forms retained as different silhouettes, not recolors.",
+    "All6medical forms are split3early plus3atlas; all5biomes split2+2+1.",
+    "Source-specific roof/canvas/metal/glass colors override shared style anchor; defense geometry is explicitly not a template.",
+    "Wheat harvester remains field-mounted; wheat processor does not invent flour or exact recipes.",
+    "Atlas material/shape descriptions are supported at broad source-pixel level; hidden structure is explicitly interpreted.",
+    "Current3-tierstorehouse and basefence/gates remain approved; new atlas alternatives do not replace them.",
+    "Basic90degreepalisadecorner is an additional existing-identity connection view.",
+    "Future-source forms remain static concepts, with no mechanics/costs/capacity/device or playable-world claims."
+  ],
+  "mandatory_defects_remaining": [],
+  "render_watchpoints": [
+    "Actual opposingviews must rotate the sameobject; shutters, chimneys, annexes, roof detail and snow cannot swap sides.",
+    "The8-paneltile and6-panelfamily sheets must remain readable at native resolution; split/revise if panels become too small.",
+    "Closedsheetapproval must be fixed before openfortressgate prompt is constructed; verify samegateidentity and supported hinges.",
+    "Generated atlas towers must preserve eachcolumn androw identity; no substitution by generic recolored tower."
+  ],
+  "next_gate": "Independent direct nativePNG and closeup inspection of each generated sheet; the catalogue pass is not a visual pass."
+}

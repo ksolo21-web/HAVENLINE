@@ -1,0 +1,99 @@
+{
+  "id": "atlas-raider-hands-gear-r1",
+  "deliverable_id": "atlas-raider-hands-gear",
+  "family_id": "atlas-raider",
+  "tool": "image_gen__imagegen",
+  "arguments": {
+    "prompt": "Create the HANDS AND GEAR reference for the SAME HAVENLINE ATLAS RAIDER shown in image1 (approved neutral body sheet) and image2 (original source raider crop). Preserve the exact glove, bracer, armor material and source-specific equipment identity. Brown/gray winter bandit with dark beard, small dark metal helmet, long held weapon and brown belts/boots. Ordinary adult male bandit, dark beard and mustache, dark round metal cap with tiny top spike, gray wool/fur collar, muted gray-blue undersleeves and brown leather chest straps, belt pouches, brown trousers and boots. Equipment: one source-like long wooden-stock fantasy carbine with dark barrel, simple opaque external silhouette.\n\nSix large well-separated panels in a3-column by2-row landscape sheet, pale warm gray, premium sculpted Havenline finish. LEFT two columns are four large hand/wrist closeups with fingers pointing UP: top-left LEFT PALM (thumb on VIEWER LEFT), top-middle RIGHT PALM (thumb on VIEWER RIGHT), bottom-left LEFT BACK (thumb on VIEWER RIGHT), bottom-middle RIGHT BACK (thumb on VIEWER LEFT). Exactly FOUR fingers PLUS ONE short opposed thumb, FIVE total each. All20digits readable, natural finger-length hierarchy, clean gaps, distinct palm padding versus dorsal finger seams, matching armor/winter cuff from the approved body, no civilian cream cuff unless actually in this character. Same hand design and correct chirality, no palm texture on dorsal views.\n\nRIGHT column shows the detached source-visible equipment set from two opposite three-quarter sides, upper label GEAR FRONT, lower GEAR REAR. Complete uncropped props, consistent shape/materials and believable grasp surfaces. Any worn quiver/backpack can be included with the held prop when it belongs to the source role. These are exterior aesthetic fantasy game props at rest: opaque closed surfaces, no cutaway, no ammunition internals, dimensions, recipes, diagrams, assembly steps, firing or flames. Do not invent a second weapon if the source only shows one. Keep weapon silhouette exact to this role and sufficiently large to model from.\n\nHeader HAVENLINE | ATLAS RAIDER | HANDS + GEAR. Clean legible panel labels, generous margins, no stats or lore. Hidden backs of equipment are restrained authored interpretation.",
+    "referenced_image_paths": [
+      "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-raider-pose-r2.png",
+      "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png"
+    ],
+    "transparent_background": false
+  },
+  "status": "GENERATED_AWAITING_REVIEW",
+  "reason": "Root-authorized dependent hand/gear preparation using the latest independently passed exact pose PNG; no generation invoked by this helper.",
+  "prepared_from_catalog": {
+    "path": "atlas-raider-render-catalog.json",
+    "sha256": "bda9464321592a61d2b2245a7d7287d037b1d1a760c268b14ac79a387d2638f8",
+    "entry_id": "atlas-raider-hands-gear"
+  },
+  "dependency_reference_template": [
+    "APPROVED_RENDER:atlas-raider-pose",
+    "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png"
+  ],
+  "resolved_approved_dependencies": [
+    {
+      "revision": 2,
+      "deliverable_id": "atlas-raider-pose",
+      "render_id": "atlas-raider-pose-r2",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-raider-pose-r2.png",
+      "bytes": 1791459,
+      "sha256": "5b5b788cd683b9f4c051d0421a58cb4631ec03d54e30ca6d1dcca38eaffbb60d",
+      "git_blob_sha": "ef477c1be39b00e04fc3be0121aa910185c92822",
+      "review_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/critic-atlas-raider-pose-r2.json",
+      "review_sha256": "6445171f368aad671d9801aef51fcfddd5b1c642aa45e8ba7864f4a98ca9657e",
+      "review_status": "PASS \u2014 STATIC BODY REFERENCE ONLY",
+      "review_score": 9.6,
+      "reviewer": "/root/missing_cast_critic",
+      "all_mandatory_checks_passed": true
+    }
+  ],
+  "prompt_file": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/prompts/atlas-raider-hands-gear-r1.txt",
+    "bytes": 2265,
+    "sha256": "c2f0da9a0a24a6a0ed614521f036fb1b950055ce7ccefd6430183fcd8a313805",
+    "git_blob_sha": "facdb6e8782e713527d70c6035a7564a3dd8420b"
+  },
+  "exact_actual_prompt_file": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-exact-invoked-prompts/atlas-raider-hands-gear-r1.txt",
+    "bytes": 2264,
+    "sha256": "17ce2a14ea22612563f98a4c515e465d45d05b450efd79e06359d26eb3f721ac",
+    "git_blob_sha": "e53d1a2588809a1e820078c1e33749b8bf8145e7"
+  },
+  "ordered_reference_inputs": [
+    {
+      "order": 1,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-raider-pose-r2.png",
+      "bytes": 1791459,
+      "sha256": "5b5b788cd683b9f4c051d0421a58cb4631ec03d54e30ca6d1dcca38eaffbb60d",
+      "git_blob_sha": "ef477c1be39b00e04fc3be0121aa910185c92822",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "actual_format": "PNG"
+    },
+    {
+      "order": 2,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-labels.png",
+      "bytes": 213976,
+      "sha256": "b342480ec487df11c9519bd756069deb56fa14ea7b5525cec2a12df66fdc16fa",
+      "git_blob_sha": "1af9b55e0fd3bc87617804d3d550490c8ebb39ee",
+      "dimensions": [
+        458,
+        280
+      ],
+      "actual_format": "PNG"
+    }
+  ],
+  "requirements_at_generation": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/requirements.json",
+    "bytes": 157378,
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+    "git_blob_sha": "35cdd6921cdc9b88e6e890f538ecdc907d607a43"
+  },
+  "requirements_snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-input-snapshots/requirements--a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374.json",
+  "output": {
+    "native_returned_locator": "/workspace/scratch/9c51da47f878/generated_images/exec-55e016aa-672f-4bd6-8e7e-26dcffaa484c.png",
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/atlas-raider-hands-gear-r1.png",
+    "bytes": 1976962,
+    "sha256": "70e633530f13776bce59290615dd7da2d330216944ce1d2a00e8b0621647ba75",
+    "git_blob_sha": "f49ea4bd7b20139e5a1b04c96b4b3d45edfe00a0",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "actual_format": "PNG"
+  }
+}

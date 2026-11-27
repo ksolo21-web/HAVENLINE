@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/missing_world_audit",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-27T07:40:39.275241+00:00",
+  "status": "PASS — AUTHOR-CREATED HALF-LEAF SHAPE GUIDE ONLY",
+  "score": 10,
+  "all_mandatory_checks_passed": true,
+  "actual_full_png_inspected": true,
+  "reviewed_png": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/author-guides/fortress-half-leaf-elevation-r1/fortress-half-leaf-elevation-r1.png",
+    "sha256": "d851061e1e421020b0b8cde8a8735e3cf6dc09ec2eb8749d264d5555b98a34c0",
+    "bytes": 158175,
+    "dimensions": [
+      2720,
+      1280
+    ]
+  },
+  "guide_files": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/author-guides/fortress-half-leaf-elevation-r1/guide.py",
+      "sha256": "82b401e3a2585e66b25c0aefdb3780bb181b57f95cc4f36042b3c55eac40692f",
+      "bytes": 5197
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/author-guides/fortress-half-leaf-elevation-r1/parameters.json",
+      "sha256": "9180fbdd87fba2e7c55cbfe511fd91f88c0920ab98864faf1f959c7bac3b660a",
+      "bytes": 582
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/author-guides/fortress-half-leaf-elevation-r1/geometry-checks.json",
+      "sha256": "176c7fb22681c7a943c393b421a7f8ab710cf09aad5f13ed28ba0c18c04f3683",
+      "bytes": 363
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/author-guides/fortress-half-leaf-elevation-r1/provenance.json",
+      "sha256": "51e217672e73c5652391c4acd2578747ae41a79dc54a815de4173cf5a183b77d",
+      "bytes": 1746
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/author-guides/fortress-half-leaf-elevation-r1/fortress-half-leaf-elevation-r1.svg",
+      "sha256": "8d91cff9cdcea8d586664bf353961a3850e8f44e7ebd69beb1282e0feecbb7ec",
+      "bytes": 119050
+    }
+  ],
+  "actual_native_crops_inspected": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/author-guide-fortress-half-leaf-elevation-r1-left-leaf.png",
+      "sha256": "3f2fd7f6bf8cb2baeb92f3389de41577049418e4c9a940bb7a2f550d8a828bf1",
+      "bytes": 15343
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/author-guide-fortress-half-leaf-elevation-r1-right-leaf.png",
+      "sha256": "6288eeffbdd1243d83b526dd5947d46931716810b2a7e971d3e79ce0763ee00c",
+      "bytes": 15926
+    }
+  ],
+  "crop_provenance": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/author-guide-fortress-half-leaf-elevation-r1-crop-provenance.json",
+    "sha256": "d892e45ef339b58f81e285ebd388a7a998c0bd00be8ccfad23c6a7c8449f1f84",
+    "bytes": 1079
+  },
+  "independent_calculation": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/author-guide-fortress-half-leaf-elevation-r1-independent-math.json",
+    "sha256": "72c73ceb77b21eb15329caac31f0e4ba0694349b78d96dd864997bb4ed21551d",
+    "bytes": 1257
+  },
+  "areas": [
+    {
+      "id": "continuous_closed_arch_and_unchanged_halves",
+      "status": "PASS",
+      "score": 10,
+      "finding": "The two closed curves meet at a unique tall center; isolated left/right curves are translations of those same respective halves. Each hinge remains lower than its free edge, with no independent inner crest."
+    },
+    {
+      "id": "profile_and_bar_geometry",
+      "status": "PASS",
+      "score": 10,
+      "finding": "Fifteen independent checks over 401 top points for each of four drawn leaf instances verify the hinge-relative monotone formula, unique tall free edge, closed-world semicircle identity and all interior bar heights."
+    },
+    {
+      "id": "visual_clarity_and_scope",
+      "status": "PASS",
+      "score": 10,
+      "finding": "Actual full and native leaf images clearly distinguish the low hinges and tall free edges. The footer limits diagram colors, dimensions and bar count to conventions and directs preservation of accepted art and swing."
+    }
+  ],
+  "mandatory_defects_remaining": [],
+  "approved_use": "Shape-only image-generation reference alongside actual r4 open art, retaining its successful outward swing, source material and architecture.",
+  "recovered_source_evidence": false,
+  "final_game_art_approval": false,
+  "native_runtime_approval": false,
+  "notes": [
+    "This guide does not approve any generated open gate; GO02 remains pending the actual repaired PNG.",
+    "Native closeups intentionally isolate leaf geometry and may trim surrounding annotations; the full inspected PNG includes all annotations and footer."
+  ]
+}

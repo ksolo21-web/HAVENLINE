@@ -1,0 +1,142 @@
+{
+  "schema_version": 2,
+  "reviewer": "/root/missing_world_audit",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-27T06:28:45.667414+00:00",
+  "review_id": "world-cabins-r2-independent-world",
+  "status": "REPAIR REQUIRED — NOT APPROVED",
+  "score_method": "Minimum mandatory visual-area score; no averaging away a failed requirement.",
+  "score": 8.8,
+  "actual_full_png_inspected": true,
+  "reviewed_image": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-cabins-r2.png",
+    "sha256": "43cfa470d01b82bd31b8445a8241f3d832fc8a26ac501f33ac2843fad896c37b",
+    "bytes": 2086877,
+    "native_original": {
+      "path": "/workspace/scratch/9c51da47f878/generated_images/exec-9c4f6b56-6802-4684-81f4-16030a5ba112.png",
+      "sha256": "43cfa470d01b82bd31b8445a8241f3d832fc8a26ac501f33ac2843fad896c37b",
+      "bytes": 2086877
+    },
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "actual_format": "PNG"
+  },
+  "invocation": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/invocations/world-cabins-r2.json",
+    "sha256": "4a20e8a21361acc9d2c74173d9dab522700e1ee763a5500bfe33a743118a328f",
+    "bytes": 4162
+  },
+  "prompt": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-exact-invoked-prompts/world-cabins-r2.txt",
+    "sha256": "22d034b7cd0fd7435c042002350193818f39a204215f928947c4564851e6222d",
+    "bytes": 954
+  },
+  "requirements_at_generation": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-input-snapshots/requirements--a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374.json",
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+    "bytes": 157378
+  },
+  "current_requirements_at_review": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/requirements.json",
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+    "bytes": 157378
+  },
+  "catalog_at_review": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/world-render-catalog.json",
+    "sha256": "cbc641ec53f5f496ffa059dee5f21ba0ee89e9f47b04511b32d8bf4bc7f84f8a",
+    "bytes": 348141
+  },
+  "actual_native_crops_inspected": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-cabins-r2-upgraded-front.png",
+      "sha256": "cbc8bd9df73f329e2d990a30157729c1d897fda266577f13f0158a58db4f53e1",
+      "bytes": 349325
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-cabins-r2-upgraded-rear.png",
+      "sha256": "d496bd6f3502d5ffef59ec38f346d99d722a1eb27a8698535eb4bc8c61897a1a",
+      "bytes": 351770
+    }
+  ],
+  "crop_provenance": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-cabins-r2-crop-provenance.json",
+      "sha256": "09cb4714ff3bcee2eb4b71f93418eb8cdc1acd2d78e01d6df65f1a8e9ca56df3",
+      "bytes": 1211
+    }
+  ],
+  "source_images_or_native_excerpts_inspected": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/source-records/original-boards/18609.png",
+      "sha256": "68d2fb572cc5370a9746c7130f661438197ce36ac495a3b4ffeeaa4528d81ce7",
+      "bytes": 421303
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/world-source-upgraded-cabin-native.png",
+      "sha256": "bc2006a8784f90e658bfbbbb19e4e274536bba5a330fdf37f7e9cb679e446bf9",
+      "bytes": 61279
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/source-records/original-boards/18607.png",
+      "sha256": "d71d77c6e200b7ef8d225e573474ad99c2d466954d05c29eabd142f4901bbc0c",
+      "bytes": 342580
+    }
+  ],
+  "areas": [
+    {
+      "id": "RC01_chimney_count_retest",
+      "score": 9.8,
+      "status": "PASS",
+      "finding": "The upgraded cabin now has exactly one source-style masonry chimney. The extra rear flue is removed; basic wooden-hut row is visually preserved."
+    },
+    {
+      "id": "single_chimney_world_position",
+      "score": 8.8,
+      "status": "FAIL",
+      "finding": "In the upgraded front view the chimney is at the near end of the main ridge. In the purported opposing rear view it remains at the near end. A real opposing camera rotation must put that same source chimney at the far ridge end; r2 relocates it between ends."
+    },
+    {
+      "id": "source_roof_entry_and_finish",
+      "score": 9.7,
+      "status": "PASS",
+      "finding": "Source-shaped main gable and subordinate entry gable, warm windows, door, blue roof and pale foundation remain clean and complete. Labels and interpretation footer are intact."
+    }
+  ],
+  "all_mandatory_visual_checks_passed": false,
+  "mandatory_defects_remaining": [
+    {
+      "id": "RC02",
+      "mandatory": true,
+      "panels": [
+        "UPGRADED CABIN / REAR-RIGHT"
+      ],
+      "finding": "Single chimney occupies the near ridge end in both supposedly opposing views."
+    }
+  ],
+  "minimum_repairs": [
+    "Preserve the front upgraded view and both wooden-hut views. Move the single upgraded chimney to the FAR end of the main ridge in REAR-RIGHT, preserving its height/materials and the same world-space location established by the front. Do not add a second chimney."
+  ],
+  "notes": [],
+  "cross_sheet_bindings": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-cabins-r1.png",
+      "sha256": "fb24e44d6a0634b83499715129d458bceef7e0bf55e7e51a4cce2f4a2a9e8855",
+      "bytes": 2111592
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/critic-world-cabins-r1.json",
+      "sha256": "66dd6c80856b6b496bfe32a2d894ca43c1335525844f0822ea5c43a24125ee60",
+      "bytes": 6598
+    }
+  ],
+  "native_mesh_rig_animation_runtime_approval": false,
+  "pending_separate_evidence": [
+    "Additive GitHub archive and complete-content remote readback",
+    "Other family coverage; this report reviews only the exact PNG identified above"
+  ],
+  "closed_defects": [
+    "RC01"
+  ]
+}

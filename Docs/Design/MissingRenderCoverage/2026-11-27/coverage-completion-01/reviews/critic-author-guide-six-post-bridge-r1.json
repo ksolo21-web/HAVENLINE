@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/missing_world_audit",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-27T07:42:19.494358+00:00",
+  "status": "PASS — AUTHOR-CREATED SIX-POST GEOMETRY GUIDE ONLY",
+  "score": 10,
+  "all_mandatory_checks_passed": true,
+  "actual_full_png_inspected": true,
+  "reviewed_png": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/author-guides/six-post-bridge-r1/six-post-bridge-r1.png",
+    "sha256": "04b899469f7475f240c4a1a3109aba4e9659729cd1be56b777768b071eda7fe7",
+    "bytes": 266264,
+    "dimensions": [
+      2560,
+      1280
+    ]
+  },
+  "guide_files": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/author-guides/six-post-bridge-r1/guide.py",
+      "sha256": "261c34eaabf737bf52c4b385a5a4222838858e184aff7cf05042a4ff5a0b9916",
+      "bytes": 13488
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/author-guides/six-post-bridge-r1/parameters.json",
+      "sha256": "b4defecb13b4505bfe521255ad21b65c62d1b38886d3f8a0a1a10d275c68fa52",
+      "bytes": 2245
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/author-guides/six-post-bridge-r1/geometry-checks.json",
+      "sha256": "f4152b7b85e3a205d4ae08292d277d67063227aaabdfedbc8b4445bf61017fea",
+      "bytes": 921
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/author-guides/six-post-bridge-r1/provenance.json",
+      "sha256": "b8b2f0fa4b9a2f74404d3378b42591f65dd98de4f97e89d48b7a5c726fa013f9",
+      "bytes": 7652
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/author-guides/six-post-bridge-r1/six-post-bridge-r1.svg",
+      "sha256": "e69306ab6cb7be0ca8285bbfb9b19bab90955cda9f18338698129495710d7cbb",
+      "bytes": 635317
+    }
+  ],
+  "actual_native_crops_inspected": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/author-guide-six-post-bridge-r1-front.png",
+      "sha256": "47ab426f4714ee039c2884702883d4def3ce173a77e73b41761c993c160bd720",
+      "bytes": 69266
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/author-guide-six-post-bridge-r1-rear.png",
+      "sha256": "0598780050dcca2c0d6e1a6fc61e48a2d41baa52e56841b9791b890f17869d61",
+      "bytes": 70148
+    }
+  ],
+  "crop_provenance": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/author-guide-six-post-bridge-r1-crop-provenance.json",
+    "sha256": "d3877108ab0030ce70a630492b9f2f952ea9254530d8a8d8308af1950496ccf3",
+    "bytes": 1014
+  },
+  "independent_calculation": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/evidence/author-guide-six-post-bridge-r1-independent-math.json",
+    "sha256": "39affb09b55ba66e6b669b3542fdc801f00be85197659181cb2574263b331200",
+    "bytes": 2629
+  },
+  "areas": [
+    {
+      "id": "exact_two_rails_three_posts",
+      "status": "PASS",
+      "score": 10,
+      "finding": "Actual emitted mesh has six blue caps and six timber posts at x=−1/+1 and y=−2/0/+2. All bases meet the deck and caps finish at one height; two rope segments connect each rail."
+    },
+    {
+      "id": "same_object_opposing_cameras",
+      "status": "PASS",
+      "score": 10,
+      "finding": "Seventeen independent mesh/projection checks confirm fixed geometry, opposing above-ground cameras, distinct projected cap centers and evenly spaced projected rail midpoints. Actual native views show all six labels with the physical order reversed appropriately."
+    },
+    {
+      "id": "readability_and_limited_scope",
+      "status": "PASS",
+      "score": 10,
+      "finding": "The complete guide is readable and explicitly author-created. Abstract dimensions, labels and colors are diagram conventions; source art remains the authority for style and construction."
+    }
+  ],
+  "mandatory_defects_remaining": [],
+  "approved_use": "Count, position and camera guide for the existing reinforced-bridge reverse panel only. Preserve source-art style, the front anchor, support details and other sheet panels.",
+  "recovered_source_evidence": false,
+  "final_game_art_approval": false,
+  "native_runtime_approval": false,
+  "notes": [
+    "The bridge is symmetric, so opposing silhouettes can resemble each other; the physical A/B labels establish the correct orbit.",
+    "This does not approve world-bridges-r5 or close BR02. The next actual generated PNG must pass its own full/native review."
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "id": "world-biomes-canyon-cliffs-r3",
+  "deliverable_id": "world-biomes-canyon-cliffs",
+  "family_id": "biome_vignettes",
+  "tool": "image_gen__imagegen",
+  "arguments": {
+    "prompt": "Edit ONLY the TOP-RIGHT ICE CANYON / REAR-RIGHT panel of this sheet. Preserve both FRONT-LEFT panels and BOTH corrected SNOW CLIFFS panels exactly. The top-right canyon currently has FOUR pines on its right bank plus one left-bank pine. The fixed front-defined canyon has THREE on that right bank after the camera orbit, plus ONE left-bank pine, FOUR TOTAL. Keep the single LEFT-bank pine untouched. Correct only the right-bank trees, retaining exactly these three positions along the bank: a MEDIUM pine at the FAR END with trunk base near full-image (1228,145); the TALLEST pine on the MIDDLE ledge with trunk base near (1415,300); and the SMALLEST pine at the NEAR END with trunk base near (1325,380). Remove the extra fourth right-bank tree rooted around (1380,205) entirely, restoring snow there. Resize the retained far-end tree from tiny to medium and the retained near-end tree from large to the distinctive smallest sapling. This is the correct longitudinal reversal of the top-left original: original near medium becomes reverse far medium, original middle tall stays middle, original far small becomes reverse NEAR SMALL. Do not leave a duplicate small tree at the far end. Preserve rocks, snow ledges, blue canyon channel, camera and all other content. Exactly three right-bank pines plus the unchanged one left-bank pine, no fifth tree.",
+    "referenced_image_paths": [
+      "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-biomes-canyon-cliffs-r2.png"
+    ],
+    "transparent_background": false
+  },
+  "status": "GENERATED_AWAITING_REVIEW",
+  "reason": "BC02 restore three right-bank pines with correct near/middle/far identities, one left-bank pine.",
+  "prompt_file": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/prompts/world-biomes-canyon-cliffs-r3.txt",
+    "bytes": 1350,
+    "sha256": "786e50cdc6b81b87056a681bc83b405d831415efdeabfd3046985092cd51dad1",
+    "git_blob_sha": "b2d02918b9de65e792eedd942f002bddb408e969"
+  },
+  "exact_actual_prompt_file": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-exact-invoked-prompts/world-biomes-canyon-cliffs-r3.txt",
+    "bytes": 1349,
+    "sha256": "66b696d73e150ad9781cb632bcbf188c753f818ca84535b70a56eeddb9ef92a9",
+    "git_blob_sha": "eaf8ffba5811f9a3c92f8d2f016e0fedcf52940a"
+  },
+  "ordered_reference_inputs": [
+    {
+      "order": 1,
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-biomes-canyon-cliffs-r2.png",
+      "bytes": 2112233,
+      "sha256": "e944973de9a61219599a89fc70fb7449692c88e62c09b95b3ff9072cd85c2302",
+      "git_blob_sha": "088b00746f2342dd8773af0c7405798fc30f5834",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "actual_format": "PNG"
+    }
+  ],
+  "requirements_at_generation": {
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/requirements.json",
+    "bytes": 157378,
+    "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+    "git_blob_sha": "35cdd6921cdc9b88e6e890f538ecdc907d607a43"
+  },
+  "requirements_snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-input-snapshots/requirements--a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374.json",
+  "output": {
+    "native_returned_locator": "/workspace/scratch/9c51da47f878/generated_images/exec-48c12ade-ab5f-4658-a5ee-9331f70f1318.png",
+    "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-biomes-canyon-cliffs-r3.png",
+    "bytes": 2071875,
+    "sha256": "58ea92b6defc5dc65b2d79d03a15d9fa6f877a9f608c6c952a8d41ad233f5bfa",
+    "git_blob_sha": "4b99a734568f0b9b74ca0da83088b888b195b3d7",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "actual_format": "PNG"
+  }
+}

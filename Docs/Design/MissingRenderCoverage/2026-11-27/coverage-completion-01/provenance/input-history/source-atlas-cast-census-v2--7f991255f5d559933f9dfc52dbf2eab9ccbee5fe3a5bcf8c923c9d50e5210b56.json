@@ -1,0 +1,806 @@
+{
+  "schema_version": 2,
+  "reviewer": "/root/missing_cast_critic",
+  "independent": true,
+  "created_at_utc": "2026-11-27T05:36:28.373806+00:00",
+  "status": "ATLAS_CENSUS_COMPLETE_24_MISSING_2_APPEARANCE_COVERED",
+  "supersedes_completeness_claim": "The v1 audit accounted for37established subjects but did not inspect the original Atlas. Its assertion that no additional cast identity was established is no longer a complete source-coverage result. Prior asset approvals and all v1 evidence remain preserved.",
+  "v1_checkpoint": "cast-coverage-matrix-v1-prior-roster-checkpoint.json",
+  "source": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/source-records/original-boards/Havenline: Frostbound World Atlas.png",
+    "sha256": "5a9f9592d2e8a32b3ae0c4117c2d851496d49023e2768c491dc1b211b7865edf",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "actual_full_atlas_inspected": true,
+    "native_label_group_crops_inspected": [
+      "wildlife-labels",
+      "strong-hostile-labels",
+      "raider-labels"
+    ],
+    "actual_all_twenty_approved_enemy_fronts_compared": true,
+    "comparison_provenance": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/approved-enemy-front-crop-provenance.json"
+  },
+  "counts": {
+    "atlas_subjects": 26,
+    "wildlife": 10,
+    "stronger_hostiles": 6,
+    "raider_roles": 10,
+    "confirmed_missing_source_specific_appearances": 24,
+    "visual_near_match_alias_candidates": 0,
+    "closed_alias_decisions": 0,
+    "appearance_level_coverage_mappings": 2
+  },
+  "subjects": [
+    {
+      "source_subject_id": "atlas-deer",
+      "source_label": "DEER",
+      "source_group": "wildlife",
+      "source_box": [
+        435,
+        632,
+        505,
+        744
+      ],
+      "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-wildlife-deer.png",
+      "source_crop_sha256": "602423482f7af2728a67edcf495ce6c5f259879e2c91ce6d2643f5426d045059",
+      "visible_identity": "Small slender warm-brown deer, pale belly/throat, relatively modest branching tan antlers.",
+      "coverage_status": "CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE",
+      "compared_approved_images": [
+        {
+          "asset_id": "tundra-stag-turnaround-r1",
+          "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/animal-builds/renders/tundra-stag-turnaround-r1.png",
+          "sha256": "e1d4cde67ec69290e3227786a4f177d5a12fb02c585983420709caf62e3a235a",
+          "actual_front_pixels_inspected": true,
+          "evidence_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/tundra-stag-turnaround-r1-front-evidence.png"
+        },
+        {
+          "asset_id": "giant-elk-turnaround-r1",
+          "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/animal-builds/renders/giant-elk-turnaround-r1.png",
+          "sha256": "ba0b176330e5495fd45f2b8d26bf71c58812bb77bb910d44ea27dd879892a0e0",
+          "actual_front_pixels_inspected": true,
+          "evidence_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/giant-elk-turnaround-r1-front-evidence.png"
+        }
+      ],
+      "comparison_finding": "Tundra Stag is pale gray/white with dark antlers. Giant Elk is much heavier, long-maned and broad-antlered. Neither supplies the Atlas brown deer treatment.",
+      "new_identity_or_variant": true,
+      "required_next_action": "Generate additive source-bound live subject/role reference; preserve all earlier alternate concepts and their approvals",
+      "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+    },
+    {
+      "source_subject_id": "atlas-rabbit",
+      "source_label": "RABBIT",
+      "source_group": "wildlife",
+      "source_box": [
+        505,
+        632,
+        575,
+        744
+      ],
+      "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-wildlife-rabbit.png",
+      "source_crop_sha256": "399f0d47ba257adc1f76953687f1dad65dbb577ae03d3704f6a6ef7a69691b35",
+      "visible_identity": "Small upright brown-gray rabbit with long ears, pale belly and muzzle, compact haunches.",
+      "coverage_status": "CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE",
+      "compared_approved_images": [],
+      "comparison_finding": "No live rabbit in the selected cast/enemy sets. Rabbit meat reference does not provide live anatomy.",
+      "new_identity_or_variant": true,
+      "required_next_action": "Generate additive source-bound live subject/role reference; preserve all earlier alternate concepts and their approvals",
+      "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+    },
+    {
+      "source_subject_id": "atlas-squirrel",
+      "source_label": "SQUIRREL",
+      "source_group": "wildlife",
+      "source_box": [
+        575,
+        632,
+        645,
+        744
+      ],
+      "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-wildlife-squirrel.png",
+      "source_crop_sha256": "ab173bab4b8299846bf348249cbda6780e50e3a57ae2906292f4de94092e780d",
+      "visible_identity": "Small warm-brown squirrel with pale front, large upright curling bushy tail and small paws.",
+      "coverage_status": "CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE",
+      "compared_approved_images": [],
+      "comparison_finding": "No live squirrel in selected cast/enemy sets. Squirrel meat reference is not live anatomy.",
+      "new_identity_or_variant": true,
+      "required_next_action": "Generate additive source-bound live subject/role reference; preserve all earlier alternate concepts and their approvals",
+      "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+    },
+    {
+      "source_subject_id": "atlas-fox",
+      "source_label": "FOX",
+      "source_group": "wildlife",
+      "source_box": [
+        645,
+        632,
+        715,
+        744
+      ],
+      "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-wildlife-fox.png",
+      "source_crop_sha256": "6d3235cf7fb3dccfecdeb465507e4a489200b7861dd9ab9d02ea7750b777b1af",
+      "visible_identity": "Small unarmored orange fox with white cheeks/chest and tail tip.",
+      "coverage_status": "CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE",
+      "compared_approved_images": [
+        {
+          "asset_id": "hostile-wolf-turnaround-r1",
+          "path": "/workspace/scratch/9c51da47f878/havenline-invaders/renders/hostile-wolf-turnaround-r1.png",
+          "sha256": "651772c7dc82f57632e093c92902d62d1391089e65fdb26886e363ac98737115",
+          "actual_front_pixels_inspected": true,
+          "evidence_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/hostile-wolf-turnaround-r1-front-evidence.png"
+        }
+      ],
+      "comparison_finding": "The orange companion fox is equipped with harness/bedroll/side bags and cannot establish the unobstructed wild fox anatomy; no selected wild-fox sheet found.",
+      "new_identity_or_variant": true,
+      "required_next_action": "Generate additive source-bound live subject/role reference; preserve all earlier alternate concepts and their approvals",
+      "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+    },
+    {
+      "source_subject_id": "atlas-boar",
+      "source_label": "BOAR",
+      "source_group": "wildlife",
+      "source_box": [
+        715,
+        632,
+        785,
+        744
+      ],
+      "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-wildlife-boar.png",
+      "source_crop_sha256": "547d7145158636abbb5c964e1232860aa102ad8e4ebe73cfe37622856687a0a9",
+      "visible_identity": "Compact charcoal/dark-brown bristled boar with pale muzzle and small ivory tusks.",
+      "coverage_status": "CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE",
+      "compared_approved_images": [
+        {
+          "asset_id": "tusk-boar-turnaround-r1",
+          "path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/renders/tusk-boar-turnaround-r1.png",
+          "sha256": "30efe732150ecf070dcbfb776f3e4030afdb5167fa2560541980d7c01a5bd374",
+          "actual_front_pixels_inspected": true,
+          "evidence_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/tusk-boar-turnaround-r1-front-evidence.png"
+        }
+      ],
+      "comparison_finding": "Selected Tusk Boar has russet/orange shaggy coat, large mane, longer pale cheek beard and much larger curved tusks. It is a distinct authored concept.",
+      "new_identity_or_variant": true,
+      "required_next_action": "Generate additive source-bound live subject/role reference; preserve all earlier alternate concepts and their approvals",
+      "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+    },
+    {
+      "source_subject_id": "atlas-wolf",
+      "source_label": "WOLF",
+      "source_group": "wildlife",
+      "source_box": [
+        435,
+        746,
+        505,
+        878
+      ],
+      "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-wildlife-wolf.png",
+      "source_crop_sha256": "489587d81b065c3943dc90c2535c56527afa0e9aaacdad3734567e5fc258d1d5",
+      "visible_identity": "Ordinary gray-white unarmored wolf; long legs, lean canine body, pale muzzle/chest/legs and bushy tail.",
+      "coverage_status": "COVERED_VISIBLE_APPEARANCE_BY_EXISTING_ACCEPTED_ART",
+      "compared_approved_images": [
+        {
+          "asset_id": "hostile-wolf-turnaround-r1",
+          "path": "/workspace/scratch/9c51da47f878/havenline-invaders/renders/hostile-wolf-turnaround-r1.png",
+          "sha256": "651772c7dc82f57632e093c92902d62d1391089e65fdb26886e363ac98737115",
+          "actual_front_pixels_inspected": true,
+          "evidence_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/hostile-wolf-turnaround-r1-front-evidence.png"
+        }
+      ],
+      "comparison_finding": "Selected Hostile Wolf matches this visible gray-white unarmored ordinary-wolf treatment and has full turn/detail coverage. Original generation was not bound to this Atlas. Reuse is appearance-level coverage only; no canon identity alias or rewritten source provenance.",
+      "new_identity_or_variant": false,
+      "required_next_action": "Retain linked existing accepted art as appearance-level reference. No duplicate new render required unless a concrete body difference is later established.",
+      "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations.",
+      "source_canon_alias_created": false,
+      "decision_basis": "Root instructed appearance-level coverage after actual source/candidate pixel comparison; original asset names/provenance and approvals remain unchanged."
+    },
+    {
+      "source_subject_id": "atlas-bear",
+      "source_label": "BEAR",
+      "source_group": "wildlife",
+      "source_box": [
+        505,
+        746,
+        575,
+        878
+      ],
+      "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-wildlife-bear.png",
+      "source_crop_sha256": "5892d2bf1100987f5d3feeee5108b91421a155baf91113e0dd3dc18941aabf9c",
+      "visible_identity": "Unarmored brown bear with broad shoulders, round ears, dark nose and visible claws.",
+      "coverage_status": "CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE",
+      "compared_approved_images": [
+        {
+          "asset_id": "polar-bear-turnaround-r1",
+          "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/renders/polar-bear-turnaround-r1.png",
+          "sha256": "98a4f246b7992e360721ca1a8d092489f382e3ca276f99e8f91234760d74e754",
+          "actual_front_pixels_inspected": true,
+          "evidence_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/polar-bear-turnaround-r1-front-evidence.png"
+        }
+      ],
+      "comparison_finding": "Existing brown companion is heavily harnessed/equipped, and Polar Bear is white. No selected unarmored brown-bear turnaround found.",
+      "new_identity_or_variant": true,
+      "required_next_action": "Generate additive source-bound live subject/role reference; preserve all earlier alternate concepts and their approvals",
+      "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+    },
+    {
+      "source_subject_id": "atlas-lynx",
+      "source_label": "LYNX",
+      "source_group": "wildlife",
+      "source_box": [
+        575,
+        746,
+        645,
+        878
+      ],
+      "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-wildlife-lynx.png",
+      "source_crop_sha256": "de7dfeeffa48c6d1eadb1260ae21f8fd71b2eccb37d41a8180848e60de4fdf37",
+      "visible_identity": "Compact golden spotted lynx, pointed tufted ears, cheek ruff and short tail.",
+      "coverage_status": "CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE",
+      "compared_approved_images": [
+        {
+          "asset_id": "frost-stalker-turnaround-r1",
+          "path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/renders/frost-stalker-turnaround-r1.png",
+          "sha256": "f6453910e87076b31dd20a02ffa54d9e16d7f8203c09f77a1ab8c64f2b9615de",
+          "actual_front_pixels_inspected": true,
+          "evidence_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/frost-stalker-turnaround-r1-front-evidence.png"
+        }
+      ],
+      "comparison_finding": "Frost Stalker is pale with round ears and a long heavy ringed tail: a snow-leopard-like concept, not the Atlas short-tail lynx.",
+      "new_identity_or_variant": true,
+      "required_next_action": "Generate additive source-bound live subject/role reference; preserve all earlier alternate concepts and their approvals",
+      "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+    },
+    {
+      "source_subject_id": "atlas-moose",
+      "source_label": "MOOSE",
+      "source_group": "wildlife",
+      "source_box": [
+        645,
+        746,
+        715,
+        878
+      ],
+      "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-wildlife-moose.png",
+      "source_crop_sha256": "d3ed1693d31e862ddc4ade9538832e7e4afd62f2ad97e030382578687033de4b",
+      "visible_identity": "Brown moose with broad palmate antlers, long drooping broad muzzle and small neck bell.",
+      "coverage_status": "CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE",
+      "compared_approved_images": [
+        {
+          "asset_id": "giant-elk-turnaround-r1",
+          "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/animal-builds/renders/giant-elk-turnaround-r1.png",
+          "sha256": "ba0b176330e5495fd45f2b8d26bf71c58812bb77bb910d44ea27dd879892a0e0",
+          "actual_front_pixels_inspected": true,
+          "evidence_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/giant-elk-turnaround-r1-front-evidence.png"
+        }
+      ],
+      "comparison_finding": "Giant Elk has branching pointed antlers and shorter deer-like muzzle. Its accepted model interpretation does not match this palmate moose.",
+      "new_identity_or_variant": true,
+      "required_next_action": "Generate additive source-bound live subject/role reference; preserve all earlier alternate concepts and their approvals",
+      "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+    },
+    {
+      "source_subject_id": "atlas-wolverine",
+      "source_label": "WOLVERINE",
+      "source_group": "wildlife",
+      "source_box": [
+        715,
+        746,
+        785,
+        878
+      ],
+      "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-wildlife-wolverine.png",
+      "source_crop_sha256": "41914bb3fd9a0b3ea16b8616767740ce03ff9b684c252c34c95701dc4d3ada95",
+      "visible_identity": "Low sturdy brown wolverine with broad light facial markings, rounded ears and shaggy tail.",
+      "coverage_status": "CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE",
+      "compared_approved_images": [],
+      "comparison_finding": "No live wolverine in selected cast/enemy sets; meat resource art does not close it.",
+      "new_identity_or_variant": true,
+      "required_next_action": "Generate additive source-bound live subject/role reference; preserve all earlier alternate concepts and their approvals",
+      "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+    },
+    {
+      "source_subject_id": "atlas-dire-wolf",
+      "source_label": "DIRE WOLF",
+      "source_group": "strong_hostile",
+      "source_box": [
+        785,
+        632,
+        880,
+        744
+      ],
+      "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-strong_hostile-dire-wolf.png",
+      "source_crop_sha256": "2b713cc62a02801c478326dd467a99de0d52707572efdc7df8cad79c119f2eed",
+      "visible_identity": "Large dark slate/charcoal wolf with lowered heavy body, exaggerated shoulders/mane and snarling broad head.",
+      "coverage_status": "CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE",
+      "compared_approved_images": [
+        {
+          "asset_id": "hostile-wolf-turnaround-r1",
+          "path": "/workspace/scratch/9c51da47f878/havenline-invaders/renders/hostile-wolf-turnaround-r1.png",
+          "sha256": "651772c7dc82f57632e093c92902d62d1391089e65fdb26886e363ac98737115",
+          "actual_front_pixels_inspected": true,
+          "evidence_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/hostile-wolf-turnaround-r1-front-evidence.png"
+        }
+      ],
+      "comparison_finding": "The ordinary tall gray-white Hostile Wolf does not supply this separately labeled bulky dark stronger tier.",
+      "new_identity_or_variant": true,
+      "required_next_action": "Generate additive source-bound live subject/role reference; preserve all earlier alternate concepts and their approvals",
+      "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+    },
+    {
+      "source_subject_id": "atlas-snow-bear",
+      "source_label": "SNOW BEAR",
+      "source_group": "strong_hostile",
+      "source_box": [
+        880,
+        632,
+        975,
+        744
+      ],
+      "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-strong_hostile-snow-bear.png",
+      "source_crop_sha256": "7044af4aec24ae703c1d48781d588350ba316d7466ab8e092cf28d4816998259",
+      "visible_identity": "Large white unarmored bear, muscular hunched shoulders, pale face and open snarl, no crystal armor/spines.",
+      "coverage_status": "COVERED_VISIBLE_APPEARANCE_BY_EXISTING_ACCEPTED_ART",
+      "compared_approved_images": [
+        {
+          "asset_id": "polar-bear-turnaround-r1",
+          "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/renders/polar-bear-turnaround-r1.png",
+          "sha256": "98a4f246b7992e360721ca1a8d092489f382e3ca276f99e8f91234760d74e754",
+          "actual_front_pixels_inspected": true,
+          "evidence_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/polar-bear-turnaround-r1-front-evidence.png"
+        },
+        {
+          "asset_id": "spined-frostbeast-turnaround-r1",
+          "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/renders/spined-frostbeast-turnaround-r1.png",
+          "sha256": "653a78923a0ae858c18ca3edecf560ea4a97bb1a74cd5b17ae26e5dfb9752239",
+          "actual_front_pixels_inspected": true,
+          "evidence_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/spined-frostbeast-turnaround-r1-front-evidence.png"
+        }
+      ],
+      "comparison_finding": "The approved Polar Bear matches the visible white unarmored heavy bear treatment; Spined Frostbeast adds absent dorsal plates. Use the existing Polar Bear as appearance-level coverage only; no canon alias is created.",
+      "new_identity_or_variant": false,
+      "required_next_action": "Retain linked existing accepted art as appearance-level reference. No duplicate new render required unless a concrete body difference is later established.",
+      "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations.",
+      "source_canon_alias_created": false,
+      "decision_basis": "Root instructed appearance-level coverage after actual source/candidate pixel comparison; original asset names/provenance and approvals remain unchanged."
+    },
+    {
+      "source_subject_id": "atlas-saber-wolf",
+      "source_label": "SABER WOLF",
+      "source_group": "strong_hostile",
+      "source_box": [
+        975,
+        632,
+        1070,
+        744
+      ],
+      "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-strong_hostile-saber-wolf.png",
+      "source_crop_sha256": "020fe318f6536fb6255c31ac79cd650dbd1bee12a084174cdb6159dccbacadb7",
+      "visible_identity": "Golden/tan large predatory quadruped with a snarling broad muzzle and prominent saber-like upper fangs; retain exact Atlas name.",
+      "coverage_status": "CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE",
+      "compared_approved_images": [],
+      "comparison_finding": "No approved subject has this golden saber-fanged appearance. Do not silently rename to a real-world species.",
+      "new_identity_or_variant": true,
+      "required_next_action": "Generate additive source-bound live subject/role reference; preserve all earlier alternate concepts and their approvals",
+      "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+    },
+    {
+      "source_subject_id": "atlas-giant-boar",
+      "source_label": "GIANT BOAR",
+      "source_group": "strong_hostile",
+      "source_box": [
+        785,
+        746,
+        880,
+        878
+      ],
+      "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-strong_hostile-giant-boar.png",
+      "source_crop_sha256": "c6ff9a6eff86c010ed4476525bd0c48b08a9728138f05a68e9f3233087ea173e",
+      "visible_identity": "Large heavy dark-brown boar with exaggerated shoulder mane, broad snarling muzzle and prominent tusks.",
+      "coverage_status": "CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE",
+      "compared_approved_images": [
+        {
+          "asset_id": "tusk-boar-turnaround-r1",
+          "path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/renders/tusk-boar-turnaround-r1.png",
+          "sha256": "30efe732150ecf070dcbfb776f3e4030afdb5167fa2560541980d7c01a5bd374",
+          "actual_front_pixels_inspected": true,
+          "evidence_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/tusk-boar-turnaround-r1-front-evidence.png"
+        }
+      ],
+      "comparison_finding": "Selected russet Tusk Boar is a separate authored silhouette. It does not establish the Atlas heavy stronger-tier face/mane/tusk arrangement.",
+      "new_identity_or_variant": true,
+      "required_next_action": "Generate additive source-bound live subject/role reference; preserve all earlier alternate concepts and their approvals",
+      "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+    },
+    {
+      "source_subject_id": "atlas-ice-lynx",
+      "source_label": "ICE LYNX",
+      "source_group": "strong_hostile",
+      "source_box": [
+        880,
+        746,
+        975,
+        878
+      ],
+      "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-strong_hostile-ice-lynx.png",
+      "source_crop_sha256": "45a59c5b51708967fdb64a069581cacd4b3cb97c2355408b1985f00667aa5b35",
+      "visible_identity": "Stocky pale gray spotted feline with pointed tufted ears, short tail and broad snarling face.",
+      "coverage_status": "CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE",
+      "compared_approved_images": [
+        {
+          "asset_id": "frost-stalker-turnaround-r1",
+          "path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/renders/frost-stalker-turnaround-r1.png",
+          "sha256": "f6453910e87076b31dd20a02ffa54d9e16d7f8203c09f77a1ab8c64f2b9615de",
+          "actual_front_pixels_inspected": true,
+          "evidence_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/frost-stalker-turnaround-r1-front-evidence.png"
+        }
+      ],
+      "comparison_finding": "The long-tailed round-ear Frost Stalker cannot substitute for this source-specific lynx stronger tier.",
+      "new_identity_or_variant": true,
+      "required_next_action": "Generate additive source-bound live subject/role reference; preserve all earlier alternate concepts and their approvals",
+      "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+    },
+    {
+      "source_subject_id": "atlas-elite-moose",
+      "source_label": "ELITE MOOSE",
+      "source_group": "strong_hostile",
+      "source_box": [
+        975,
+        746,
+        1070,
+        878
+      ],
+      "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-strong_hostile-elite-moose.png",
+      "source_crop_sha256": "ac2d897c2f5346018a4ce225ace51b08f00472a244baadfc9831f1e1570e8516",
+      "visible_identity": "Massive brown moose with broad palmate antlers, thick dark neck/shoulders and angry broad muzzle.",
+      "coverage_status": "CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE",
+      "compared_approved_images": [
+        {
+          "asset_id": "giant-elk-turnaround-r1",
+          "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/animal-builds/renders/giant-elk-turnaround-r1.png",
+          "sha256": "ba0b176330e5495fd45f2b8d26bf71c58812bb77bb910d44ea27dd879892a0e0",
+          "actual_front_pixels_inspected": true,
+          "evidence_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/giant-elk-turnaround-r1-front-evidence.png"
+        },
+        {
+          "asset_id": "musk-ox-rampager-turnaround-r1",
+          "path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/animal-builds/renders/musk-ox-rampager-turnaround-r1.png",
+          "sha256": "bf5191691a1274aecdf34ef228de8a273d64f6f225fbda28e1f4052345c304eb",
+          "actual_front_pixels_inspected": true,
+          "evidence_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/musk-ox-rampager-turnaround-r1-front-evidence.png"
+        }
+      ],
+      "comparison_finding": "Giant Elk has branching antlers; Musk Ox has swept horns. Neither matches the broad-palmate-antler elite moose.",
+      "new_identity_or_variant": true,
+      "required_next_action": "Generate additive source-bound live subject/role reference; preserve all earlier alternate concepts and their approvals",
+      "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+    },
+    {
+      "source_subject_id": "atlas-raider",
+      "source_label": "RAIDER",
+      "source_group": "raider",
+      "source_box": [
+        1070,
+        632,
+        1162,
+        744
+      ],
+      "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-raider.png",
+      "source_crop_sha256": "3ed057c410714ef1ec6ca17a42664ac494881b291f767b498da9c402f4f4b5cf",
+      "visible_identity": "Brown/gray winter bandit with dark beard, small dark metal helmet, long held weapon and brown belts/boots.",
+      "coverage_status": "CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE",
+      "compared_approved_images": [
+        {
+          "asset_id": "raider-turnaround-r2",
+          "path": "/workspace/scratch/9c51da47f878/havenline-invaders/renders/raider-turnaround-r2.png",
+          "sha256": "bf8ffb985d964e2046d8d5a86041fef69801ee6a82e16bbb1f9a973049651c2c",
+          "actual_front_pixels_inspected": true,
+          "evidence_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-turnaround-r2-front-evidence.png"
+        },
+        {
+          "asset_id": "rival-rifleman-turnaround-r2",
+          "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/renders/rival-rifleman-turnaround-r2.png",
+          "sha256": "764c806cba10cf0c018c55a5949429ac7c6a7a88bcc276d8da59c934588c2591",
+          "actual_front_pixels_inspected": true,
+          "evidence_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/rival-rifleman-turnaround-r2-front-evidence.png"
+        }
+      ],
+      "comparison_finding": "Prior Raider is red hooded and weapon-free in turn; Rival Rifleman is red/cream cap-and-coat. Both differ from Atlas brown armored bandit.",
+      "new_identity_or_variant": true,
+      "required_next_action": "Generate additive source-bound live subject/role reference; preserve all earlier alternate concepts and their approvals",
+      "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+    },
+    {
+      "source_subject_id": "atlas-spear-raider",
+      "source_label": "SPEAR RAIDER",
+      "source_group": "raider",
+      "source_box": [
+        1162,
+        632,
+        1253,
+        744
+      ],
+      "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-spear-raider.png",
+      "source_crop_sha256": "b9803dc7b04fd354bc53ee7a0d9eb6a80a4c9e633ae4a69cacbe3516cd2545de",
+      "visible_identity": "Brown armored bearded bandit with dark helmet and long upright spear.",
+      "coverage_status": "CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE",
+      "compared_approved_images": [
+        {
+          "asset_id": "harpoon-hunter-turnaround-r1",
+          "path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/renders/harpoon-hunter-turnaround-r1.png",
+          "sha256": "1e25e1b578a0631f5de0d4c44dfc180415991f72bc577d7e7f5fbd7e83428fc3",
+          "actual_front_pixels_inspected": true,
+          "evidence_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/harpoon-hunter-turnaround-r1-front-evidence.png"
+        }
+      ],
+      "comparison_finding": "Harpoon Hunter is a lean woman in burgundy long coat and leather flight cap with tether coil, a different identity/equipment treatment.",
+      "new_identity_or_variant": true,
+      "required_next_action": "Generate additive source-bound live subject/role reference; preserve all earlier alternate concepts and their approvals",
+      "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+    },
+    {
+      "source_subject_id": "atlas-axe-raider",
+      "source_label": "AXE RAIDER",
+      "source_group": "raider",
+      "source_box": [
+        1253,
+        632,
+        1345,
+        744
+      ],
+      "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-axe-raider.png",
+      "source_crop_sha256": "ba374de7b0f008918290818dc75462ea95a8fa4381882b93ada0b7a9240d3c94",
+      "visible_identity": "Brown/gray bearded bandit with metal helmet and visible axe head/short weapon equipment.",
+      "coverage_status": "CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE",
+      "compared_approved_images": [
+        {
+          "asset_id": "raider-turnaround-r2",
+          "path": "/workspace/scratch/9c51da47f878/havenline-invaders/renders/raider-turnaround-r2.png",
+          "sha256": "bf8ffb985d964e2046d8d5a86041fef69801ee6a82e16bbb1f9a973049651c2c",
+          "actual_front_pixels_inspected": true,
+          "evidence_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/raider-turnaround-r2-front-evidence.png"
+        },
+        {
+          "asset_id": "rival-rifleman-turnaround-r2",
+          "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/renders/rival-rifleman-turnaround-r2.png",
+          "sha256": "764c806cba10cf0c018c55a5949429ac7c6a7a88bcc276d8da59c934588c2591",
+          "actual_front_pixels_inspected": true,
+          "evidence_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/rival-rifleman-turnaround-r2-front-evidence.png"
+        }
+      ],
+      "comparison_finding": "No selected Atlas brown axe-role identity; red raider/rifle infantry do not establish it. Tiny source weapon pose must remain interpreted, not exact mechanism proof.",
+      "new_identity_or_variant": true,
+      "required_next_action": "Generate additive source-bound live subject/role reference; preserve all earlier alternate concepts and their approvals",
+      "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+    },
+    {
+      "source_subject_id": "atlas-shield-raider",
+      "source_label": "SHIELD RAIDER",
+      "source_group": "raider",
+      "source_box": [
+        1345,
+        632,
+        1436,
+        744
+      ],
+      "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-shield-raider.png",
+      "source_crop_sha256": "872396f3ac77f6f03c8831a1bcd93e24f5b202d51043de867c4d86bcd6a456b8",
+      "visible_identity": "Brown-armored bearded bandit with small metal cap and round metal-rimmed radial wooden shield.",
+      "coverage_status": "CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE",
+      "compared_approved_images": [
+        {
+          "asset_id": "shield-raider-turnaround-r1",
+          "path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/renders/shield-raider-turnaround-r1.png",
+          "sha256": "578177b4b6de9093c5df3b5655998b42a4aef17d1666c734b35fab64694eebd9",
+          "actual_front_pixels_inspected": true,
+          "evidence_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/shield-raider-turnaround-r1-front-evidence.png"
+        }
+      ],
+      "comparison_finding": "Existing Shield Raider is clean-shaven in red coat with tall rounded-rectangle shield and short hammer. The Atlas round-shield appearance remains missing.",
+      "new_identity_or_variant": true,
+      "required_next_action": "Generate additive source-bound live subject/role reference; preserve all earlier alternate concepts and their approvals",
+      "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+    },
+    {
+      "source_subject_id": "atlas-bandit-archer",
+      "source_label": "BANDIT ARCHER",
+      "source_group": "raider",
+      "source_box": [
+        1436,
+        632,
+        1528,
+        744
+      ],
+      "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-bandit-archer.png",
+      "source_crop_sha256": "48fe157590a6b095be0df8fbd140488b940203d639e4377f4152f74206a45eb3",
+      "visible_identity": "Brown/gray bearded helmeted bandit holding a wooden bow/ranged-archer silhouette.",
+      "coverage_status": "CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE",
+      "compared_approved_images": [
+        {
+          "asset_id": "rival-rifleman-turnaround-r2",
+          "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/renders/rival-rifleman-turnaround-r2.png",
+          "sha256": "764c806cba10cf0c018c55a5949429ac7c6a7a88bcc276d8da59c934588c2591",
+          "actual_front_pixels_inspected": true,
+          "evidence_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/rival-rifleman-turnaround-r2-front-evidence.png"
+        },
+        {
+          "asset_id": "harpoon-hunter-turnaround-r1",
+          "path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/renders/harpoon-hunter-turnaround-r1.png",
+          "sha256": "1e25e1b578a0631f5de0d4c44dfc180415991f72bc577d7e7f5fbd7e83428fc3",
+          "actual_front_pixels_inspected": true,
+          "evidence_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/harpoon-hunter-turnaround-r1-front-evidence.png"
+        }
+      ],
+      "comparison_finding": "Neither rifle infantry nor harpoon hunter supplies this bow-role Atlas silhouette.",
+      "new_identity_or_variant": true,
+      "required_next_action": "Generate additive source-bound live subject/role reference; preserve all earlier alternate concepts and their approvals",
+      "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+    },
+    {
+      "source_subject_id": "atlas-raider-brute",
+      "source_label": "RAIDER BRUTE",
+      "source_group": "raider",
+      "source_box": [
+        1070,
+        746,
+        1162,
+        878
+      ],
+      "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-raider-brute.png",
+      "source_crop_sha256": "218beda9fabcd5c56ac811a0aadb67627a1a84708a2a8947a3689a80046308e4",
+      "visible_identity": "Broad heavy bearded brown-armored bandit with bulky shoulders and long carried weapon.",
+      "coverage_status": "CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE",
+      "compared_approved_images": [
+        {
+          "asset_id": "rival-leader-turnaround-r1",
+          "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/renders/rival-leader-turnaround-r1.png",
+          "sha256": "450910b6c22e478c0c7bcb9027c645fe1d08335e4c16d70e90ebab79c46fcade",
+          "actual_front_pixels_inspected": true,
+          "evidence_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/rival-leader-turnaround-r1-front-evidence.png"
+        },
+        {
+          "asset_id": "ice-brute-turnaround-r5",
+          "path": "/workspace/scratch/9c51da47f878/havenline-invaders/renders/ice-brute-turnaround-r5.png",
+          "sha256": "b0f7488b196d459ad58b5bb3822ef9047e6f40d77329f0689b9f64d021b409fb",
+          "actual_front_pixels_inspected": true,
+          "evidence_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/ice-brute-turnaround-r5-front-evidence.png"
+        }
+      ],
+      "comparison_finding": "Rival Leader is white-bearded in red hood; Ice Brute is nonhuman white-furred. Neither is the Atlas bulky brown human brute.",
+      "new_identity_or_variant": true,
+      "required_next_action": "Generate additive source-bound live subject/role reference; preserve all earlier alternate concepts and their approvals",
+      "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+    },
+    {
+      "source_subject_id": "atlas-flamethrower",
+      "source_label": "FLAMETHROWER",
+      "source_group": "raider",
+      "source_box": [
+        1162,
+        746,
+        1253,
+        878
+      ],
+      "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-flamethrower.png",
+      "source_crop_sha256": "91beee413d7135c7ed7953cb5a0ed07c00a18ba9811400a8da92de519a110954",
+      "visible_identity": "Brown-armored helmeted bearded raider carrying a stout nozzle/tank-style weapon, flame shown in Atlas.",
+      "coverage_status": "CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE",
+      "compared_approved_images": [
+        {
+          "asset_id": "powder-sapper-turnaround-r1",
+          "path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/renders/powder-sapper-turnaround-r1.png",
+          "sha256": "b2891960f3792ad3443f157819503d010391ebf892d445e08fb2bee57115ddee",
+          "actual_front_pixels_inspected": true,
+          "evidence_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/powder-sapper-turnaround-r1-front-evidence.png"
+        }
+      ],
+      "comparison_finding": "Powder Sapper is a goggled orange-coated carrier with sealed canister; different role/body/equipment. New work should be fictional visual reference, no fuel/mechanism instructions.",
+      "new_identity_or_variant": true,
+      "required_next_action": "Generate additive source-bound live subject/role reference; preserve all earlier alternate concepts and their approvals",
+      "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+    },
+    {
+      "source_subject_id": "atlas-raider-sniper",
+      "source_label": "RAIDER SNIPER",
+      "source_group": "raider",
+      "source_box": [
+        1253,
+        746,
+        1345,
+        878
+      ],
+      "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-raider-sniper.png",
+      "source_crop_sha256": "9be2a2056458683b8782a8b63f60bc1f2abba06159798158a77635bd3816d62b",
+      "visible_identity": "Brown/gray helmeted bearded ranged bandit with distinct long precision-weapon silhouette.",
+      "coverage_status": "CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE",
+      "compared_approved_images": [
+        {
+          "asset_id": "rival-rifleman-turnaround-r2",
+          "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/renders/rival-rifleman-turnaround-r2.png",
+          "sha256": "764c806cba10cf0c018c55a5949429ac7c6a7a88bcc276d8da59c934588c2591",
+          "actual_front_pixels_inspected": true,
+          "evidence_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/rival-rifleman-turnaround-r2-front-evidence.png"
+        }
+      ],
+      "comparison_finding": "Prior red-coated rifle infantry does not establish the Atlas brown specialist appearance.",
+      "new_identity_or_variant": true,
+      "required_next_action": "Generate additive source-bound live subject/role reference; preserve all earlier alternate concepts and their approvals",
+      "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+    },
+    {
+      "source_subject_id": "atlas-bombardier",
+      "source_label": "BOMBARDIER",
+      "source_group": "raider",
+      "source_box": [
+        1345,
+        746,
+        1436,
+        878
+      ],
+      "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-bombardier.png",
+      "source_crop_sha256": "742bfd6a704064bfe0d50e5dfced7fd68d57e39a4853b303531a9f70853d517c",
+      "visible_identity": "Brown/gray armored bearded bandit with cap, handheld round orange canister and a tall handled implement.",
+      "coverage_status": "CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE",
+      "compared_approved_images": [
+        {
+          "asset_id": "powder-sapper-turnaround-r1",
+          "path": "/workspace/scratch/9c51da47f878/havenline-enemy-roster-02/renders/powder-sapper-turnaround-r1.png",
+          "sha256": "b2891960f3792ad3443f157819503d010391ebf892d445e08fb2bee57115ddee",
+          "actual_front_pixels_inspected": true,
+          "evidence_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/powder-sapper-turnaround-r1-front-evidence.png"
+        }
+      ],
+      "comparison_finding": "Goggled orange-coated Powder Sapper with cylindrical backpack/closed bucket is visually distinct. Preserve uncertainty of tiny source implement; no construction details.",
+      "new_identity_or_variant": true,
+      "required_next_action": "Generate additive source-bound live subject/role reference; preserve all earlier alternate concepts and their approvals",
+      "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+    },
+    {
+      "source_subject_id": "atlas-raider-boss",
+      "source_label": "RAIDER BOSS",
+      "source_group": "raider",
+      "source_box": [
+        1436,
+        746,
+        1528,
+        878
+      ],
+      "source_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/atlas-raider-raider-boss.png",
+      "source_crop_sha256": "ecf5c2a4d8918d4efb789e937c37c316d5a3216f7b05d98f183f1b1b80d82ed0",
+      "visible_identity": "Large bearded dark-armored bandit with two-horn helmet, broad shoulder plates and heavy club/mace-like weapon.",
+      "coverage_status": "CONFIRMED_MISSING_SOURCE_SPECIFIC_STATIC_REFERENCE",
+      "compared_approved_images": [
+        {
+          "asset_id": "rival-leader-turnaround-r1",
+          "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/renders/rival-leader-turnaround-r1.png",
+          "sha256": "450910b6c22e478c0c7bcb9027c645fe1d08335e4c16d70e90ebab79c46fcade",
+          "actual_front_pixels_inspected": true,
+          "evidence_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/rival-leader-turnaround-r1-front-evidence.png"
+        },
+        {
+          "asset_id": "hooded-siege-boss-turnaround-r1",
+          "path": "/workspace/scratch/9c51da47f878/havenline-enemy-expansion/renders/hooded-siege-boss-turnaround-r1.png",
+          "sha256": "e2cc1d7b2ae66c0efe15d756853bb1a81a2f2b1f1331919fc82d7ac714c10c41",
+          "actual_front_pixels_inspected": true,
+          "evidence_crop": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/audit/cast/atlas-evidence/hooded-siege-boss-turnaround-r1-front-evidence.png"
+        }
+      ],
+      "comparison_finding": "Red white-bearded leader and skull-masked red hooded boss are distinct designs; neither supplies dark armor/horned helmet identity.",
+      "new_identity_or_variant": true,
+      "required_next_action": "Generate additive source-bound live subject/role reference; preserve all earlier alternate concepts and their approvals",
+      "scope_limit": "Atlas supplies a small single pose, not reverse anatomy or exact mechanisms. New reverse/details are authored interpretations."
+    }
+  ],
+  "preservation": [
+    "All20earlier enemy subject approvals remain unchanged; they were approved within their original source/authored concept scope.",
+    "All7companion designs remain unchanged. Their equipped poses are not complete unobstructed wild-animal anatomy references.",
+    "The10animal-species resource images are meat cuts, not live animal turnarounds.",
+    "Do not claim source-exact reverse anatomy or weapon operation from these tiny single-pose Atlas icons.",
+    "No runtime canon, native model, rig, animation or whole-game coverage approval."
+  ],
+  "next_action": "Execute24source-specific missing appearance sets; retain2appearance-level existing-art mappings without canon aliases. Continue6NPCspread-hand supplements and separately auditedworldgaps.",
+  "planned_delivery_scope": {
+    "atlas_humanoids": "10subjects;2sheets each:4cardinal neutral spread-finger bodyviews, and4largegloveviews plus detachedvisiblegear details. Source identity preserved; reversegeometry authored.",
+    "atlas_animals": "14missinganimals;1six-panelsheet each:front,rear,left,right andtwo relevant3/4/useposes. OrdinarygrayWolf andwhiteSnowBear retainexistingacceptedappearance references.",
+    "six_existing_npcs": "Each2supplementalsheets:4neutralcardinalbodyviews and4handcloseups; preserveold8relaxedturns."
+  }
+}

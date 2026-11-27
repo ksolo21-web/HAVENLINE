@@ -1,0 +1,909 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/missing_cast_critic",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-27T07:40:31.613092+00:00",
+  "status": "DRAFT_ONLY_PREFLIGHT_NOT_A_FINAL_ARCHIVE_APPROVAL",
+  "scope": "Independent structural, byte-custody, input-order, reference-link and exclusion audit of the named mutable draft snapshots. Pending visual work is not relabeled as an archive failure or approval.",
+  "final_archive_gate": {
+    "status": "NOT_RUN_FINAL_SELECTION_AND_PACKAGE_NOT_FROZEN",
+    "score": 0,
+    "publication_approved": false
+  },
+  "snapshot_directory": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/archive-preflight/20261127T074027Z",
+  "inputs": [
+    {
+      "source_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-public-files-draft.json",
+      "snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/archive-preflight/20261127T074027Z/inputs/archive-public-files-draft.json",
+      "bytes": 880166,
+      "sha256": "e2042d1bb6f9e596e73759b19402cec3bd5a3753f18c8c72d759fcc491f56746",
+      "git_blob_sha": "fe860ec8c7ff6a471a6592b0f8a4a709b761b0c2"
+    },
+    {
+      "source_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-draft-source-bindings.json",
+      "snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/archive-preflight/20261127T074027Z/inputs/archive-draft-source-bindings.json",
+      "bytes": 1003880,
+      "sha256": "267752b8b193e299cb36775f4611a563a5b5337f32602ad4044cd63b8de768ae",
+      "git_blob_sha": "0452e9af8542043bf28d8324ed3675f21ecb862f"
+    },
+    {
+      "source_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-generation-snapshot.json",
+      "snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/archive-preflight/20261127T074027Z/inputs/archive-generation-snapshot.json",
+      "bytes": 806467,
+      "sha256": "7e0352ad4c0eca93fb8a7bbb9909b0d6d58994ce9f64eafdf9b5307373a76ca2",
+      "git_blob_sha": "0a260f024121caba048741f8dbd4492dc730db2f"
+    },
+    {
+      "source_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-package-config.json",
+      "snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/archive-preflight/20261127T074027Z/inputs/archive-package-config.json",
+      "bytes": 4526,
+      "sha256": "93764afa86f4e85a128d5fec63bcc0f0bb2844890ef889f9cdebe5586e620c2c",
+      "git_blob_sha": "e1f9917b2f5bce5832e9c5f7b2929d6a1fa82943"
+    },
+    {
+      "source_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-baseline-tree.json",
+      "snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/archive-preflight/20261127T074027Z/inputs/archive-baseline-tree.json",
+      "bytes": 2720063,
+      "sha256": "bc3db9e4d6ce12e69db3f110710e771b0ef55fbf0a939197982b1bbc47955e86",
+      "git_blob_sha": "202f603d423098ebe56085bc06eb62baefcd0758"
+    },
+    {
+      "source_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/requirements.json",
+      "snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/archive-preflight/20261127T074027Z/inputs/requirements.json",
+      "bytes": 157378,
+      "sha256": "a389d3e273419e97ae14c9b755edf24648db0a87748d17c1c7747efb64c97374",
+      "git_blob_sha": "35cdd6921cdc9b88e6e890f538ecdc907d607a43"
+    },
+    {
+      "source_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/selection-working.json",
+      "snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/archive-preflight/20261127T074027Z/inputs/selection-working.json",
+      "bytes": 63167,
+      "sha256": "34a16a6174f70f592972239b497221f0d66626f45e374878f5b0631c023de42e",
+      "git_blob_sha": "447850646267e705302ddbff9efd8da62fe4273a"
+    },
+    {
+      "source_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/gallery-drafts/gallery-manifest.json",
+      "snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/archive-preflight/20261127T074027Z/inputs/gallery-drafts/gallery-manifest.json",
+      "bytes": 60004,
+      "sha256": "bad37fea31203f83648ce00dba9779e293162c538b3aebc471467ea077895cbb",
+      "git_blob_sha": "784eac18a7e28f7d4c3fcbc919228022fb22cd91"
+    },
+    {
+      "source_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-finalize.py",
+      "snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/archive-preflight/20261127T074027Z/inputs/archive-finalize.py",
+      "bytes": 13784,
+      "sha256": "2fb68052ed925c8a7054e6593f949942f106032c1f149297fa4f56867c1c3c81",
+      "git_blob_sha": "33d86fc4364e3c48ecb6764cc9302cb496e72cc0"
+    },
+    {
+      "source_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-register.py",
+      "snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/archive-preflight/20261127T074027Z/inputs/archive-register.py",
+      "bytes": 21269,
+      "sha256": "04d561df651999c9ed6e77694fba5cb28866f85d68103a23f3a1a788d7419ff9",
+      "git_blob_sha": "759491ee3de91c3f802bb77d7a5ca836c8c32f89"
+    },
+    {
+      "source_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-tools.py",
+      "snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/archive-preflight/20261127T074027Z/inputs/archive-tools.py",
+      "bytes": 8192,
+      "sha256": "c9d0112f33c3cf05d529c25ec17658b2b7d57b4da7de6006b80b2608883ec3d3",
+      "git_blob_sha": "a648d7f03ee90735046a36b3b8e0987ab667e752"
+    },
+    {
+      "source_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-draft-public-files.py",
+      "snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/archive-preflight/20261127T074027Z/inputs/archive-draft-public-files.py",
+      "bytes": 15832,
+      "sha256": "5d15af6a839bf817749e41a961658b63c8f28d783efc60bc007e812944d459c7",
+      "git_blob_sha": "647b2d8985052ebe140228154b7ef384a8720c39"
+    },
+    {
+      "source_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-build-galleries.py",
+      "snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/archive-preflight/20261127T074027Z/inputs/archive-build-galleries.py",
+      "bytes": 25891,
+      "sha256": "e18944f81cdd4d1a158f37c5a8978014356f0aaf3efbcd5a42d987fddbe7e187",
+      "git_blob_sha": "e3ffab9366052ce8fc292b69babfb260465e5a24"
+    },
+    {
+      "source_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/gallery-drafts/README.md",
+      "snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/archive-preflight/20261127T074027Z/inputs/gallery-drafts/README.md",
+      "bytes": 3646,
+      "sha256": "a6636fe3496b71b5542ba034d539fafe7fb3c2852231036292f3a07fee67e19f",
+      "git_blob_sha": "19ff1e2a8126a705756437ee8cf397508a4ed8a2"
+    },
+    {
+      "source_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/gallery-drafts/galleries/world.md",
+      "snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/archive-preflight/20261127T074027Z/inputs/gallery-drafts/galleries/world.md",
+      "bytes": 17982,
+      "sha256": "5e1d7aa71dd5e21d33557989217ab34385640076a4671d6128675344633b0fed",
+      "git_blob_sha": "bb610fa4167ff8600dcf812f23aa2365f4a3ac74"
+    },
+    {
+      "source_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/gallery-drafts/galleries/npcs.md",
+      "snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/archive-preflight/20261127T074027Z/inputs/gallery-drafts/galleries/npcs.md",
+      "bytes": 6974,
+      "sha256": "a5267c5aae0b996d892da1b94f009a5c5a77621f47e94638abdcf7a9b8ee0b76",
+      "git_blob_sha": "58eb62850ce85ff254de7c3e223bc9f56a23964d"
+    },
+    {
+      "source_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/gallery-drafts/galleries/animals.md",
+      "snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/archive-preflight/20261127T074027Z/inputs/gallery-drafts/galleries/animals.md",
+      "bytes": 7594,
+      "sha256": "b8c81268cc9f243c802067c701098f71234a7f50554cecda48aa5146b1ebd3cf",
+      "git_blob_sha": "ff945f8f693a92db4dd746c72f6347f1b0272a79"
+    },
+    {
+      "source_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/gallery-drafts/galleries/raiders.md",
+      "snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/archive-preflight/20261127T074027Z/inputs/gallery-drafts/galleries/raiders.md",
+      "bytes": 11071,
+      "sha256": "7b990b563852223c281c36151c5fc5703a42197762ec9e4f890ccbb4d9160d38",
+      "git_blob_sha": "06545c0b2e4bb90b53843fbf3f5b76f32e05f931"
+    },
+    {
+      "source_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/gallery-drafts/indexes/originals.md",
+      "snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/archive-preflight/20261127T074027Z/inputs/gallery-drafts/indexes/originals.md",
+      "bytes": 28613,
+      "sha256": "aec3feeaa1a90b0a551ab9ecb50b927d6d3e4dc0388664113d464921688b4bf2",
+      "git_blob_sha": "f6da1cfbf6fb4e997cf413ba76383e8c1d23bbda"
+    },
+    {
+      "source_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/gallery-drafts/indexes/invocations.md",
+      "snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/archive-preflight/20261127T074027Z/inputs/gallery-drafts/indexes/invocations.md",
+      "bytes": 64342,
+      "sha256": "dae15e8898b28d685886de0b77c7a9119a713cd853024ca75c0760b8a9e922e1",
+      "git_blob_sha": "0e22a94bfc17c87278201b71d34e60a1cf294a78"
+    },
+    {
+      "source_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/gallery-drafts/indexes/sources.md",
+      "snapshot_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/archive-preflight/20261127T074027Z/inputs/gallery-drafts/indexes/sources.md",
+      "bytes": 19734,
+      "sha256": "9d10dfb810a5beb43635efdf2308aaa0310ede251d7053a23e0a65ef108ca60d",
+      "git_blob_sha": "c897d195518352a3500172a896a1acad0a3e736b"
+    }
+  ],
+  "baseline_reconstruction": {
+    "root": "18c5641935b9cfaa7c1c82022bdbcbd5ad55ab77",
+    "expected_root": "18c5641935b9cfaa7c1c82022bdbcbd5ad55ab77",
+    "leaf_count": 4955,
+    "png_paths": 1169,
+    "subtree_mismatches": [],
+    "truncated": false,
+    "operational_workflow_paths": []
+  },
+  "required_coverage": {
+    "families": 60,
+    "sheets": 81,
+    "unique_required_sheet_ids": 81
+  },
+  "draft_snapshot_counts": {
+    "native_originals": 133,
+    "ordered_image_inputs_checked": 250,
+    "no_image_attempts": 1,
+    "prepared_histories": 48,
+    "gallery_selected": 78,
+    "working_selected": 79,
+    "proposed_public_files": 1160,
+    "already_staged_paths": 672
+  },
+  "native_original_invocation_prompt_requirements_checks": [
+    {
+      "id": "atlas-axe-raider-hands-gear-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-axe-raider-hands-gear-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-axe-raider-pose-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-bandit-archer-hands-gear-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-bandit-archer-pose-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-bear-turnaround-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-boar-turnaround-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-bombardier-hands-gear-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-bombardier-hands-gear-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-bombardier-pose-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-bombardier-pose-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-deer-turnaround-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-dire-wolf-turnaround-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-elite-moose-turnaround-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-flamethrower-hands-gear-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-flamethrower-hands-gear-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-flamethrower-pose-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-fox-turnaround-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-giant-boar-turnaround-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-ice-lynx-turnaround-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-lynx-turnaround-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-moose-turnaround-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-rabbit-turnaround-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-raider-boss-hands-gear-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-raider-boss-hands-gear-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-raider-boss-pose-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-raider-brute-hands-gear-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-raider-brute-pose-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-raider-brute-pose-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-raider-hands-gear-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-raider-hands-gear-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-raider-pose-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-raider-pose-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-raider-sniper-hands-gear-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-raider-sniper-hands-gear-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-raider-sniper-pose-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-raider-sniper-pose-r3",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-saber-wolf-turnaround-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-shield-raider-hands-gear-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-shield-raider-hands-gear-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-shield-raider-pose-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-spear-raider-hands-gear-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-spear-raider-hands-gear-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-spear-raider-pose-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-squirrel-turnaround-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "atlas-wolverine-turnaround-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "customer-female-01-hands-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "customer-female-01-pose-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "customer-female-02-hands-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "customer-female-02-pose-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "customer-female-02-pose-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "customer-male-01-hands-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "customer-male-01-hands-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "customer-male-01-pose-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "customer-male-01-pose-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "customer-male-02-hands-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "customer-male-02-hands-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "customer-male-02-pose-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "defense-platform-details-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "defense-platform-turnaround-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "defense-platform-turnaround-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "survivor-female-01-hands-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "survivor-female-01-pose-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "survivor-male-01-hands-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "survivor-male-01-pose-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-archer-towers-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-atlas-storage-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-atlas-storage-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-biomes-canyon-cliffs-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-biomes-canyon-cliffs-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-biomes-canyon-cliffs-r3",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-biomes-forest-lake-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-biomes-mines-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-bridges-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-bridges-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-bridges-r3",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-bridges-r4",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-bridges-r5",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-bunkhouse-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-bunkhouse-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-cabins-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-cabins-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-cabins-r3",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-camp-tiles-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-cannon-towers-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-cannon-towers-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-cold-storage-shed-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-cookhouse-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-crystal-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-dog-kennels-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-dog-kennels-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-dog-kennels-r3",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-fish-hut-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-fish-hut-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-fortress-gates-closed-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-fortress-gates-closed-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-fortress-gates-open-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-fortress-gates-open-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-fortress-gates-open-r3",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-fortress-gates-open-r4",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-fortress-walls-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-fortress-walls-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-fortress-watchtowers-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-fortress-watchtowers-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-greenhouse-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-herbs-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-improved-gatehouse-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-late-furnaces-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-medical-atlas-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-medical-early-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-medical-early-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-medical-early-r3",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-reinforced-palisades-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-reinforced-palisades-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-spike-barricade-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-spike-barricade-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-spike-barricade-r3",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-stockpile-shelter-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-stockpile-shelter-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-stockpile-shelter-r3",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-stockpile-shelter-r4",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-survivor-tents-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-wheat-harvester-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-wheat-harvester-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-wheat-harvester-r3",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-wheat-processor-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-worker-huts-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-worker-huts-r2",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-worker-huts-r3",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-worker-huts-r4",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-worker-huts-r5",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-workshop-r1",
+      "status": "PASS",
+      "errors": []
+    },
+    {
+      "id": "world-workshop-r2",
+      "status": "PASS",
+      "errors": []
+    }
+  ],
+  "no_image_attempt_checks": [
+    {
+      "id": "atlas-raider-sniper-pose-r2",
+      "status": "PASS",
+      "errors": []
+    }
+  ],
+  "invalid_prepared_history_ids": [],
+  "baseline_source_bindings_checked": 106,
+  "baseline_source_binding_errors": [],
+  "mutable_draft_source_byte_drift": [],
+  "excluded_path_media_or_collision_findings": [],
+  "credential_scan": {
+    "text_files_checked": 881,
+    "findings": [],
+    "secret_values_printed": false
+  },
+  "gallery_links_checked": 1486,
+  "broken_gallery_links": [],
+  "gallery_link_evidence": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/archive-preflight/20261127T074027Z/gallery-link-evidence-v2.json",
+  "unbound_native_cache_at_this_unfrozen_snapshot": [],
+  "missing_explicit_cast_aggregate_documents": [],
+  "actionable_findings": [],
+  "final_gate_requirements": [
+    "Freeze one exact81-sheet selection covering every required identity in the60 families, after all mandatory visual checks pass strictly above9.",
+    "Refresh all generation/source bindings, galleries, public files and native-cache custody to the same settled tool-outcome boundary.",
+    "Retain all native attempts, rejected reviews, exact prompts/input order and zero-image failure records with resolvable archived hashes.",
+    "Include the final cast acceptance and integrity aggregate records explicitly.",
+    "Independently review the exact assembled candidate tree preserving all4955 baseline leaves and all1169 prior PNG paths.",
+    "After authorized publication, verify the full remote tree and every added blob body before delivery approval."
+  ],
+  "builder_separation": "missing_archive builds the package; this critic does not modify builder artifacts or publish GitHub objects/refs.",
+  "pending_final_assembly_gallery_links": [
+    {
+      "page": "README.md",
+      "target": "provenance/hash-resolver.json",
+      "resolved": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/provenance/hash-resolver.json",
+      "pass": false,
+      "planned_finalizer_target": true
+    },
+    {
+      "page": "indexes/sources.md",
+      "target": "../provenance/hash-resolver.json",
+      "resolved": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/provenance/hash-resolver.json",
+      "pass": false,
+      "planned_finalizer_target": true
+    }
+  ],
+  "clarification": "The hash-resolver target is explicitly authored by the reviewed archive-finalize.py after root freeze. Its two draft links remain PENDING FINAL ASSEMBLY, not broken-link defects; actual materialization must pass the final package gate.",
+  "clarified_at_utc": "2026-11-27T07:41:53.876942+00:00",
+  "audit_script": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/archive_preflight_audit.py",
+    "bytes": 18437,
+    "sha256": "229c0e3d26ebb63cc552395ba48d3f617cba8b12f4fa9090ccb1f46fd433618a"
+  }
+}

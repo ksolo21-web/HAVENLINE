@@ -1,0 +1,47 @@
+{
+  "id": "world-fortress-gates-open-r1",
+  "deliverable_id": "world-fortress-gates-open",
+  "family_id": "fortress_gates",
+  "tool": "image_gen__imagegen",
+  "arguments": {
+    "prompt": "Create a premium HAVENLINE sculpted 3D game-asset reference sheet. Match the supplied Havenline style reference: confident chunky silhouettes, broad clean bevels, subtly carved warm timber, convincing blue or dark steel, bronze fasteners where the source shows them, pale stone and selective clean snow on exposed ledges. Keep source-specific roof, canvas, glass and metal colors. Use refined animated-feature/PBR-like rendering, soft studio illumination, crisp useful detail, and quiet contact shadows. Use a pale warm-gray studio background, generous gutters and complete uncropped objects. Avoid photoreal grime, painterly noise, glossy toy-plastic flattening, extra characters, decorative piles, fake UI, promotional badges, and crowded copied-board graphics. This is deliberate production reference art with clear geometry and a small clean sans-serif heading.\n\nREFERENCES IN ACTUAL ORDER\nReference 1: Havenline: Frostbound World Atlas.png — Original user world atlas; only the explicitly identified family/column/row is identity authority.\nReference 2: defense-platform-turnaround-r2.png — Reviewed Havenline material and rendering style ONLY: broad sculpted bevels, warm timber, blue steel, restrained snow, pale studio background. Do not copy the defense platform geometry.\n\nSUBJECT: FUTURE CONCEPT | FORTRESS GATES | OPEN STUDIES.\nCreate the OPEN-STATE companion to the exact approved closed fortress-gate sheet that must be supplied as reference 3. Preserve all three source A/B/C gate identities, including piers, lintels, panel counts, materials, hardware and snow. Open only the existing panels in a visibly coherent supported arrangement, with a clear passage and no wall/leaf collision. Do not change a hinged leaf into a sliding grille or invent a new lifting machine; use the opening arrangement established by the approved closed design. Show each gate open from front-left and rear-right three-quarter views. These open states are explicitly interpreted static visual studies, not implemented mechanisms.\n\nSOURCE ANCHORS\n- Havenline: Frostbound World Atlas.png: Gate example1; upgrade examples (some of many), Gate column, row1\n- Havenline: Frostbound World Atlas.png: Gate example2; upgrade examples (some of many), Gate column, row2\n- Havenline: Frostbound World Atlas.png: Gate example3; upgrade examples (some of many), Gate column, row3\n\nSHEET\nSmall heading: HAVENLINE | FUTURE CONCEPT | FORTRESS GATES | OPEN STUDIES. Requested landscape canvas 1536 × 1024, with detail large enough to judge. Six large panels in a 3-column by 2-row landscape sheet. Each column is one source form: front-left above its matching rear-right view. Use the source form order given below.\nRequired panels:\n- ATLAS EXAMPLE A / OPEN FRONT-LEFT: Opposing geometry and identity reference\n- ATLAS EXAMPLE A / OPEN REAR-RIGHT: Opposing geometry and identity reference\n- ATLAS EXAMPLE B / OPEN FRONT-LEFT: Opposing geometry and identity reference\n- ATLAS EXAMPLE B / OPEN REAR-RIGHT: Opposing geometry and identity reference\n- ATLAS EXAMPLE C / OPEN FRONT-LEFT: Opposing geometry and identity reference\n- ATLAS EXAMPLE C / OPEN REAR-RIGHT: Opposing geometry and identity reference\n\nThe two opposing three-quarter views of a form must show ONE fixed design from front-left and rear-right; rotate the camera around it, do not mirror the image. Keep doors, windows, chimneys, pipe runs, roof pitch, support posts, snow patches, planks, handles, annexes and material assignments in the same physical positions. Preserve the distinct source silhouettes; do not make variants by recoloring one duplicated model. The source boards mostly show one side, so rear faces and any opened interiors are restrained concept interpretations. Add the short footer SOURCE-BASED CONCEPT · UNSEEN SURFACES INTERPRETED. Do not print invented levels, costs, capacities, rates, recipes, unlocks, dimensions or gameplay claims. Source-visible props remain aesthetic context; no new production chain, crop list, animal drop, weapon mechanism or runtime behavior is established.\nThis sheet is an atlas future visual concept. Label example forms A/B/C by their source row, never as invented numerical upgrade tiers. It does not replace an existing approved asset or claim a playable region.\n\nMANDATORY DEPENDENCY: Reference 3 must be the exact independently approved closed-state fortress-gate sheet from this batch. Keep all three gate designs identical to that reference while opening their actual gate panels coherently. Do not invoke this draft without that third reference. If the closed design does not establish a visually coherent opening arrangement, repair/review that ambiguity before generating the open-state sheet.",
+    "referenced_image_paths": [
+      "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/source-records/original-boards/Havenline: Frostbound World Atlas.png",
+      "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/defense-platform-turnaround-r2.png",
+      "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-fortress-gates-closed-r2.png"
+    ],
+    "transparent_background": false
+  },
+  "status": "PREPARED",
+  "reason": "Root-authorized deferred gate-open preparation using the exact independently passed closed-state sheet in declared reference position 3; no generation invoked by this helper.",
+  "prepared_from_catalog": {
+    "path": "world-render-catalog.json",
+    "sha256": "cbc641ec53f5f496ffa059dee5f21ba0ee89e9f47b04511b32d8bf4bc7f84f8a",
+    "entry_id": "world-fortress-gates-open",
+    "argument_source": "deferred_argument_template"
+  },
+  "required_additional_reference_template": {
+    "order": 3,
+    "approved_sheet_id": "world-fortress-gates-closed",
+    "local_path": null,
+    "sha256": null,
+    "instruction": "Bind the exact independently approved closed-state native PNG before creating the real invocation."
+  },
+  "resolved_approved_dependencies": [
+    {
+      "order": 3,
+      "deliverable_id": "world-fortress-gates-closed",
+      "render_id": "world-fortress-gates-closed-r2",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/renders/world-fortress-gates-closed-r2.png",
+      "bytes": 2045904,
+      "sha256": "0a9130835ab8119b5802d4084246fd6abb2f9d79d8e7def28aea6d54c9aac37d",
+      "git_blob_sha": "a1b8b3dc61596c5c6d4b372b887f4b07f46a26ff",
+      "review_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/reviews/critic-world-fortress-gates-closed-r2.json",
+      "review_sha256": "20bcce5d731f1fda686502b46c96a342923ddbb7193b8e8e257f37886834a1f0",
+      "review_status": "PASS — STATIC REFERENCE ONLY",
+      "review_score": 9.7,
+      "reviewer": "/root/missing_world_audit",
+      "all_mandatory_checks_passed": true
+    }
+  ]
+}
