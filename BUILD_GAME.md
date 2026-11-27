@@ -1,5 +1,9 @@
 # Build and continue Havenline
 
+## App icon refresh
+
+[Named hearth icon and Android export artwork](Docs/Design/AppIcon/2026-11-27/README.md) provides the new HAVENLINE icon, actual-size/mask review and exact integration settings. This isolated artwork package does not change the actively maintained gameplay branch or any historical build evidence.
+
 ## Vehicle economy and world fleet continuation
 
 [Fuel, fabrication and nine later-world vehicles](Docs/Production/VEHICLE_ECONOMY.md) continues the published snow truck/garage package with the user's subsequent low-fuel and processed-material instructions. Its read-only source audit pins the newer Build14 gameplay head `ea6e4896cc6692ee84b56f89e127feaa606eb370`; older source observations below remain dated records. This follow-up supplies designs, generated concept sheets, exact standalone fuel rules and material-graph evidence. It does not merge or certify the actively maintained gameplay branch.

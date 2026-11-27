@@ -1,0 +1,1414 @@
+{
+  "schema_version": 1,
+  "package": "Docs/Design/AppIcon/2026-11-27",
+  "status": "FROZEN_FOR_FINAL_INDEPENDENT_PACKAGE_REVIEW",
+  "builder": "/root",
+  "mechanical_export_and_manifest_builder": "/root/icon_source_audit",
+  "independent_reviewer": "/root/icon_critic",
+  "request": [
+    "we need a better app icon",
+    "the name of the game too"
+  ],
+  "game_name": "HAVENLINE",
+  "game_renamed": false,
+  "scope": "Named raster icon, Android artwork and exact integration instructions; no live integration, install, store or gameplay approval",
+  "freeze_exclusions": [
+    "Docs/Design/AppIcon/2026-11-27/ARTIFACT_MANIFEST.json",
+    "Docs/Design/AppIcon/2026-11-27/CHECKPOINT.json",
+    "Docs/Design/AppIcon/2026-11-27/PUBLICATION.json",
+    "Docs/Design/AppIcon/2026-11-27/evidence/independent/FINAL_REVIEW.json",
+    "Docs/Design/AppIcon/2026-11-27/evidence/independent/FINAL_REVIEW.md"
+  ],
+  "exclusion_reason": "Avoid circular self/review/publication identities; final review binds this manifest and checkpoint/publication remain phase receipts",
+  "selected_assets": [
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/assets/havenline-icon-1024.png",
+      "bytes": 1104450,
+      "sha256": "868bb4a6e85e1599c64dcd17a7bb195f8e1dd13cb68b6513f461aaf3e04bfba4",
+      "git_blob_sha": "6fdfb9b43cebfc927128f4a65618dddf8f4ef576",
+      "selected": true,
+      "role": "Named opaque square master/project icon",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "mode": "RGB",
+      "source": "sources/named-r3.png",
+      "visual_review": "evidence/independent/named-r3-export-retest.json"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/assets/havenline-icon-512.png",
+      "bytes": 273642,
+      "sha256": "e3f0973486041c44e86a07bdd88e548222d624e6559ab5abf2046972d616a657",
+      "git_blob_sha": "e84d49407fa17b0c37142e68c925a11020f05f93",
+      "selected": true,
+      "role": "Named high-resolution distribution image",
+      "dimensions": [
+        512,
+        512
+      ],
+      "mode": "RGB",
+      "source": "sources/named-r3.png",
+      "visual_review": "evidence/independent/named-r3-export-retest.json"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/assets/havenline-adaptive-foreground-432.png",
+      "bytes": 67574,
+      "sha256": "937edd75a4f4f70e77c7d4526f15533e42d5b9db3db2ddc61d76c87f93d444eb",
+      "git_blob_sha": "6ee0b6b17817546dcfe7b537e4c015c863957465",
+      "selected": true,
+      "role": "Transparent Android adaptive foreground with HAVENLINE",
+      "dimensions": [
+        432,
+        432
+      ],
+      "mode": "RGBA",
+      "source": "sources/named-foreground-r3.png",
+      "visual_review": "evidence/independent/adaptive-r3-independent-review.json"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/assets/havenline-adaptive-background-432.png",
+      "bytes": 1547,
+      "sha256": "9a8096ce9f01662fabce53318d0ae608df0696c66186846edb22bf05b00acb46",
+      "git_blob_sha": "834992dae2a39f4696c009751ec944eb4d0153cf",
+      "selected": true,
+      "role": "Opaque #06163d Android adaptive background",
+      "dimensions": [
+        432,
+        432
+      ],
+      "mode": "RGB",
+      "source": null,
+      "visual_review": "evidence/independent/adaptive-r3-independent-review.json"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/assets/havenline-monochrome-432.png",
+      "bytes": 41664,
+      "sha256": "f9a3128cb4633639e9ca3d35f382a72f3a5d4c7856cb5808bc8d27eac9753f3f",
+      "git_blob_sha": "9a072d45f2cc2fc5b74fcd2b65baa6be566e6f4d",
+      "selected": true,
+      "role": "Selected optional Android themed-icon alpha layer",
+      "dimensions": [
+        432,
+        432
+      ],
+      "mode": "RGBA",
+      "source": "sources/monochrome-r1.png",
+      "visual_review": "evidence/independent/monochrome-r1-independent-review.json"
+    }
+  ],
+  "selected_asset_count": 5,
+  "attempt_dispositions": [
+    {
+      "path": "sources/hearth-r1.png",
+      "disposition": "SUPERSEDED_BY_NAMED_R3",
+      "reason": "Earlier textless composition precedes request to include HAVENLINE"
+    },
+    {
+      "path": "sources/adaptive-textless-r1.png",
+      "disposition": "SUPERSEDED_BY_NAMED_FOREGROUND_R3",
+      "reason": "Earlier textless layer precedes named export"
+    },
+    {
+      "path": "sources/named-r2.png",
+      "disposition": "REJECTED_AND_PRESERVED",
+      "reason": "Outer H/E clipped under circle mask",
+      "review": "evidence/independent/named-r2-rejected.json",
+      "replacement": "sources/named-r3.png"
+    },
+    {
+      "path": "sources/named-foreground-r2.png",
+      "disposition": "SUPERSEDED_UNSELECTED_ATTEMPT",
+      "replacement": "sources/named-foreground-r3.png"
+    },
+    {
+      "path": "sources/named-r3.png",
+      "disposition": "SELECTED_COLOR_SOURCE"
+    },
+    {
+      "path": "sources/named-foreground-r3.png",
+      "disposition": "SELECTED_ADAPTIVE_SOURCE"
+    },
+    {
+      "path": "sources/monochrome-r1.png",
+      "disposition": "SELECTED_OPTIONAL_MONOCHROME_SOURCE"
+    },
+    {
+      "path": "sources/previous-field-icon.png",
+      "disposition": "PRESERVED_OLD_ICON_COMPARISON"
+    },
+    {
+      "path": "sources/furnace-style-reference.png",
+      "disposition": "PRESERVED_STYLE_REFERENCE"
+    }
+  ],
+  "selection_consistency": {
+    "README_lists_all_five_selected_assets": true,
+    "integration_binds_selected_monochrome": true,
+    "monochrome_raw_review_approves_export": true,
+    "all_current_package_json_parses": true,
+    "historical_pending_notes": "Builder observations and earlier phase reports retain original pending wording; selected_assets and final review carry forward disposition without rewriting raw evidence"
+  },
+  "evidence_boundary": {
+    "color32px": "Hearth recognition only; no full-name readability promise",
+    "color48px": "Title very small",
+    "normal64_96px": "Full name inspected",
+    "adaptive_viewport": "432px/108dp layer; central288px/72dp viewport",
+    "monochrome_alpha": "All alpha>=2 within130px; four alpha=1 pixels beyond132px retained and documented",
+    "physical_device_test": false,
+    "gameplay_build_or_install": false
+  },
+  "file_count": 208,
+  "total_bytes": 17206382,
+  "files": [
+    {
+      "path": "BUILD_GAME.md",
+      "bytes": 8798,
+      "sha256": "d5b54f418e40d2376097457ecf78d1c605421465c0a11eddfda438e85121f8fd",
+      "git_blob_sha": "ccbac02cdcfa2c628b3e52c871baafa5a7d1df40"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/.gitattributes",
+      "bytes": 33,
+      "sha256": "7905ccb8ce09737a8e59604754f30513e29879e69285d6f849b1215bdc9fbce8",
+      "git_blob_sha": "a6d322e2421786609eb5624709d7f9a20ebaede5"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/ACCEPTANCE.md",
+      "bytes": 2653,
+      "sha256": "11b92cd461c7b08e35df839c3cd7ecfce814d5f6a64b411a163a7b94ba7d57aa",
+      "git_blob_sha": "aa836c9e33256843cb4af77d8bab967e928112d2"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/PROMPT_FOREGROUND_R1.txt",
+      "bytes": 1222,
+      "sha256": "6c467a2d0a2a47d4256522585692c8d8091c7ea4beef4a45a609f8e1d26bb9c8",
+      "git_blob_sha": "c1ec6279d716e69dd30ce522e4bce5fec85765a6"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/PROMPT_FOREGROUND_R3.txt",
+      "bytes": 919,
+      "sha256": "c87afdd4f51456858410fe8a59bd6356eab67b300a5f62a6c3552fcb6600856e",
+      "git_blob_sha": "7854fc67b4e41cfd8ca98c9d63e26e287529cfe7"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/PROMPT_MONOCHROME_R1.txt",
+      "bytes": 1332,
+      "sha256": "1dc3ec4626e6eebc5650727c55f0fab61675c783684ccfaf129157ea4cd85af1",
+      "git_blob_sha": "f4dcc7c80cf33a779bb2ed08b1da6e1b9f229f9e"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/PROMPT_NAMED_FOREGROUND_R2.txt",
+      "bytes": 1468,
+      "sha256": "c83075509718ecec9815a5e955fcf3233e078e8ccc10df06e58a7272181822b7",
+      "git_blob_sha": "61ad176f3eda0e6da4f4ff2e64c54fa85068fae7"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/PROMPT_NAMED_R2.txt",
+      "bytes": 1999,
+      "sha256": "6dd495ae80fb1dca523719f6584d3ca4f83dcd4ea3927fec108e372222b1f2a9",
+      "git_blob_sha": "65aae77ae895d053f49c9b93d0e10f7a40841328"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/PROMPT_NAMED_R3.txt",
+      "bytes": 1473,
+      "sha256": "43bf1008ae364eea70dc64dbb20dd289a5f8caa4116bc13ce3f47476e7db8151",
+      "git_blob_sha": "fd2a61c06d0702206f4a83d2acc574fa9b1f4e6e"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/PROMPT_R1.txt",
+      "bytes": 2584,
+      "sha256": "0326a4b963b153e0961ac20a6d87d3cd444756f8d70b35b35b719e27470373bc",
+      "git_blob_sha": "3d2f6904c20e0d7978dd9055a5a4fd28b01fcd1a"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/README.md",
+      "bytes": 2605,
+      "sha256": "f9aa652c95056688eb7abe3dd522555a6157a0d7ad3296cd90a513ca094c3ca8",
+      "git_blob_sha": "6e793f3524db3cc396046d53c8dcb896db3ede54"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/SOURCE_AUDIT.json",
+      "bytes": 2819,
+      "sha256": "d7f99e0710cb699025eb223307089fc7fd25f9bed52d1db820ceecc651efa7de",
+      "git_blob_sha": "da5c8cc64c040db80f88d4de0f9c00a210f7a929"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/assets/havenline-adaptive-background-432.png",
+      "bytes": 1547,
+      "sha256": "9a8096ce9f01662fabce53318d0ae608df0696c66186846edb22bf05b00acb46",
+      "git_blob_sha": "834992dae2a39f4696c009751ec944eb4d0153cf"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/assets/havenline-adaptive-foreground-432.png",
+      "bytes": 67574,
+      "sha256": "937edd75a4f4f70e77c7d4526f15533e42d5b9db3db2ddc61d76c87f93d444eb",
+      "git_blob_sha": "6ee0b6b17817546dcfe7b537e4c015c863957465"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/assets/havenline-icon-1024.png",
+      "bytes": 1104450,
+      "sha256": "868bb4a6e85e1599c64dcd17a7bb195f8e1dd13cb68b6513f461aaf3e04bfba4",
+      "git_blob_sha": "6fdfb9b43cebfc927128f4a65618dddf8f4ef576"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/assets/havenline-icon-512.png",
+      "bytes": 273642,
+      "sha256": "e3f0973486041c44e86a07bdd88e548222d624e6559ab5abf2046972d616a657",
+      "git_blob_sha": "e84d49407fa17b0c37142e68c925a11020f05f93"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/assets/havenline-monochrome-432.png",
+      "bytes": 41664,
+      "sha256": "f9a3128cb4633639e9ca3d35f382a72f3a5d4c7856cb5808bc8d27eac9753f3f",
+      "git_blob_sha": "9a072d45f2cc2fc5b74fcd2b65baa6be566e6f4d"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/adaptive-r3/BUILDER_OBSERVATIONS.md",
+      "bytes": 1603,
+      "sha256": "6db4065df25746056b81e58e5b849be0bc6da8a86a922d66bd17a763c161fbbc",
+      "git_blob_sha": "7b8e2b68d01d1ee9c1191991ae1a238f24ad2a34"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/adaptive-r3/adaptive-export-metrics.json",
+      "bytes": 10060,
+      "sha256": "fafc057268bf79cbeea8d6b1738ec1326d9153f08842c00e2a4b0ca9b49c049f",
+      "git_blob_sha": "bf3b993db939e172af3c7349c2b985c719508e18"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/adaptive-r3/commands.txt",
+      "bytes": 11056,
+      "sha256": "80c9bb280efca55c6d1cd3b0de5d36735a48a7d5bbd7bd5ca18559a51f2eeb39",
+      "git_blob_sha": "73ffd10b98caaaab3576cf15f3864e05d7fc434d"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/adaptive-r3/composite-432.png",
+      "bytes": 54596,
+      "sha256": "ca47af1373948f65518b9e8891912205e038535858a15041df1b7453bb97a42a",
+      "git_blob_sha": "593b361d8c40cd6b5a4e995ae67543c7a1b50112"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/adaptive-r3/native-launcher-dark.png",
+      "bytes": 98362,
+      "sha256": "9be76627bb56be88fb0bd33eb1bdef8e6cb3a55029d2f6fe3ae939d0e9cab6d2",
+      "git_blob_sha": "bb3893fa8539b6adb2f1b715073523e167f4fb6c"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/adaptive-r3/native-launcher-light.png",
+      "bytes": 101000,
+      "sha256": "702f74df14a12440f86beba250f20ea5813a839f4164b0e817b46069fda15b6f",
+      "git_blob_sha": "6cde444ab1cf374cc30e7bfa602ea393d0f8df4b"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/adaptive-r3/previews/circle-288-mask.png",
+      "bytes": 982,
+      "sha256": "32f6cec7ada5615b4641eef9aab761a92bf1a95e0e6dd077a2ad61090a11e2ec",
+      "git_blob_sha": "5efca27634164b1bf3c1bcad1342dfb9ad50bc47"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/adaptive-r3/previews/foreground-uniform-353.png",
+      "bytes": 74316,
+      "sha256": "1a2891570b4b0e026f015da856909fb7ed060137c74c12d4f304ae7627fb909c",
+      "git_blob_sha": "b2f6e0a1dd16c07d80a56232b9a8fe9b38a1a7fa"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/adaptive-r3/previews/squircle-288-mask.png",
+      "bytes": 704,
+      "sha256": "be86bb87cfc2dd577e1cc134cc8e21295529208460a7250840b13f114b0f07d7",
+      "git_blob_sha": "c2cdbfb4ebe94ee2a4ce30c48ec2d69c31a958fd"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/adaptive-r3/previews/viewport-circle-288.png",
+      "bytes": 61707,
+      "sha256": "e6efe4ba066f2cf4b6ad54d87059c0e7566a3607deb8d20dd7b454cb25f99c0e",
+      "git_blob_sha": "31e4f974f7f21997a8e96afb3f356e9facd3782a"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/adaptive-r3/previews/viewport-circle-32.png",
+      "bytes": 2544,
+      "sha256": "413bf6704dae197a5e6c6fc572c52d5daf58b1178f3b19f38b9ceef37091e44e",
+      "git_blob_sha": "ed4ca6a51cdab0b0cefa7e4b6d4729d5ff024f46"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/adaptive-r3/previews/viewport-circle-48.png",
+      "bytes": 4513,
+      "sha256": "9fe22ac8eafe65826f3ed718aa899c29d6370968502dfcd51bf80f870fd54bc7",
+      "git_blob_sha": "02e7174e1f3cbe7613b1fe6fb25b95b024aed045"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/adaptive-r3/previews/viewport-circle-64.png",
+      "bytes": 6860,
+      "sha256": "194f113eac717c0ac922060b97891e0b97818ccad073f8b8b15d23083c847b15",
+      "git_blob_sha": "302f915289ae0605200653b9e52fa43bb246df9a"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/adaptive-r3/previews/viewport-circle-96.png",
+      "bytes": 12591,
+      "sha256": "1e73f850ec4876444cdecede062e1d3575b69e31ccc4fac636e19f9020ff9de3",
+      "git_blob_sha": "8b73899dded8e151bbc0e44daf1912031701689a"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/adaptive-r3/previews/viewport-squircle-288.png",
+      "bytes": 61168,
+      "sha256": "ebb25360111c453fa083fcd1c1986ef658813f2a2f891d5ce3bfce722bfa5d0f",
+      "git_blob_sha": "8d46d6f671d47ea26de1d16fb206cf16b88a4b03"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/adaptive-r3/previews/viewport-squircle-32.png",
+      "bytes": 2403,
+      "sha256": "66b5272019b2692a45ce807dbae0edf8aedcdf10e44e5569e12d43e828421d61",
+      "git_blob_sha": "d6b54dc8b1ef3def73b42eacec710c5098aeeca0"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/adaptive-r3/previews/viewport-squircle-48.png",
+      "bytes": 4288,
+      "sha256": "1dab9bf97cab3c1c0a0f46c72e22a7b310a1c093ae05d22338f598b128b80d74",
+      "git_blob_sha": "8c545c2461e5da57b839484ca9ac4682a4ccf306"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/adaptive-r3/previews/viewport-squircle-64.png",
+      "bytes": 6368,
+      "sha256": "af5ccfb1acf0352a4c57759f57270e74d1fbe5937dd2bbc3ba7dd805198a4ef3",
+      "git_blob_sha": "147751f466a6744822135249a8465f6af9f8e621"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/adaptive-r3/previews/viewport-squircle-96.png",
+      "bytes": 11883,
+      "sha256": "12e79db46d694ddcae171a00a1c412c5fda98d445afd3641da01a0aa6451c692",
+      "git_blob_sha": "bcbbe6cb2d8456b58f6024f1f147b77340b4e8b6"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/adaptive-r3/safe-circle-explanation.png",
+      "bytes": 176762,
+      "sha256": "b34220a0f1178fbac240adfcbd22a677d30c7e6104925c7d3bcf7826a2e9ece9",
+      "git_blob_sha": "a0c974dd28a3db87a36e48bbd2dd988b804dfa4f"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/adaptive-r3/safe-circle-overlay-432.png",
+      "bytes": 78026,
+      "sha256": "0bb8262d9b3a6e5be0dc69a02f56a87eb45772d9068382ee682a091066913d0c",
+      "git_blob_sha": "91d4b824e157ea184c5be7148ca535f3821a76dd"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/adaptive-r3/viewport-72dp-288px.png",
+      "bytes": 53235,
+      "sha256": "e850706737ee0b1852c34367f06deef3bb7d214da1a3a9132da3003e5f7667d1",
+      "git_blob_sha": "9215c8385329df92c1f378ea6c08d1aef849b3aa"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/build_adaptive_previews.py",
+      "bytes": 7538,
+      "sha256": "b18b2b4ca0839594bb67135bfb957fe47a434941de0ea8b0bab0905ef9faff25",
+      "git_blob_sha": "17d7c5f383a34c4b1aa5b631052e60efe3897f10"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/build_monochrome_previews.py",
+      "bytes": 7550,
+      "sha256": "188d9aec6a4e12f088e595789e887e8e406c7fd749e115b9e7bcdbcca86caa9a",
+      "git_blob_sha": "fe3c638d5bd265c65b311ec6a35f3dcccf33f9f4"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/build_monochrome_themed_previews.py",
+      "bytes": 3156,
+      "sha256": "8cea5228d7b87e6c0de443b00539ad5ba966c345c51df6a6f4ecf7bb1e980a56",
+      "git_blob_sha": "43a787086d9cd4a0f7eb0d24e47f39000a08075b"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/independent/adaptive-r3-independent-review.json",
+      "bytes": 3253,
+      "sha256": "1e8cd0e48c3cb3767a14f69706b2bec8534770da83208557e50ee51a089f98a2",
+      "git_blob_sha": "42c4b50b7a22988a02ed421727f23fa3505646ae"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/independent/monochrome-r1-composite-512.png",
+      "bytes": 128381,
+      "sha256": "7b8c41675370e5ff64e95fdcc744b751b6e52f51976b381f086c75ba34c5d3e1",
+      "git_blob_sha": "ec4a119f5cf7ea349419ca0aa6da8d8920b022b5"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/independent/monochrome-r1-independent-review.json",
+      "bytes": 8573,
+      "sha256": "c727f173dc09407fd9e27d9173b4f81e1485442daaedbb20112d80c9096ea6c5",
+      "git_blob_sha": "284e6be6e2ec85f98ad0b4f28b35cc4ff22a19ae"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/independent/named-r2-rejected.json",
+      "bytes": 8122,
+      "sha256": "755692a3a1ab2f6456dbc29a236d801c6852fab46dae036379badd18d21c82c3",
+      "git_blob_sha": "6d41c621999190cb90d4d377b45899a7b08c98be"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/independent/named-r3-color-retest.json",
+      "bytes": 7948,
+      "sha256": "180722aa8fab06d300556182b668933cac134769772e606b2981ab368688735f",
+      "git_blob_sha": "e948f252eaeacc4d621c2ab8059ae460407ce3c7"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/independent/named-r3-export-retest.json",
+      "bytes": 1194,
+      "sha256": "d3b2daf60a10982480f825922dee08523b4fa76c881b17142386b855d880ff71",
+      "git_blob_sha": "f18cc662ab0c02556d5e456b939b4696670a78e0"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/BUILDER_OBSERVATIONS.md",
+      "bytes": 1665,
+      "sha256": "5b47bb0dec6223ce83414bd72fd4b2ea0d988446191dc7fbc0e4aa357f7f926a",
+      "git_blob_sha": "7450acdb0f7b6ad51b96de25a70d23e4e18fd9b2"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/adaptive-export-metrics.json",
+      "bytes": 12312,
+      "sha256": "95fb505896892d04f1eaf03431f5edb9b63dd07286c83df346cc5e4f776d0fe4",
+      "git_blob_sha": "57c6be4fe08db18ba16bf2155214d0625fd9dfd8"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/commands.txt",
+      "bytes": 11595,
+      "sha256": "12926c629cc8016f42f30703209fac3ac534b8faff0b2bc2716624b77af6f918",
+      "git_blob_sha": "2d6b419d5f06b5290a44ba2f4490f069d87d7295"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/composite-432.png",
+      "bytes": 39346,
+      "sha256": "fefb9c0645c63e9552f8fc58eeba6df750daa2296fbb0b018089985e32b2d387",
+      "git_blob_sha": "53f24e5a8fff460408eca66a407f5836d9e70f83"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/native-launcher-dark.png",
+      "bytes": 91739,
+      "sha256": "adc34acf1205c46f25bb5d841a8a30030ebf6f21679575b8b68f89d48cffc88d",
+      "git_blob_sha": "3a1fd03e6459cd67e71e5a97632eeefe73237de8"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/native-launcher-light.png",
+      "bytes": 94688,
+      "sha256": "87ac2bde338e97fb73a8c174cc4dff70b6083ac656420f4f307a3cab9b20e335",
+      "git_blob_sha": "09b1969e4fc9c3b458bfc25ddd38deded4a533ff"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/native-themed-dark.png",
+      "bytes": 112605,
+      "sha256": "2e5e379d16a3f454b0e5090d7f145aaf2d74f655f07ec8dc2c062f66078ede78",
+      "git_blob_sha": "6494fb8403b86e3a649225fb60a22f1d050e0871"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/native-themed-warm.png",
+      "bytes": 115438,
+      "sha256": "d6a30348e31340c9f8381dbcf80888da5b26ba818fde52513c4f0790b201dee2",
+      "git_blob_sha": "cd97b3eb680cce2f6a79f6b27ddbfdc33f9512ec"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/circle-288-mask.png",
+      "bytes": 982,
+      "sha256": "698ab44bca452a46e3689237ece5af83746c8a3ca1176f9313bdef5e7db5cc13",
+      "git_blob_sha": "17a878d5f10e5ef2f71b4d653d6565e37a4d46db"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/foreground-uniform-257.png",
+      "bytes": 44137,
+      "sha256": "dd0b822f1d17fa1054091e121f5bb1b4b05f43e7ac1eea32abe7ec52b9115d3d",
+      "git_blob_sha": "3b1729e182e158e03a9428c0497f7a134d9b520f"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/foreground-uniform-258.png",
+      "bytes": 44444,
+      "sha256": "a692815b7c424675f85a62746c140be9118cce922db1fec3a6e9cd7f921ed7e0",
+      "git_blob_sha": "a417a144bb0cd7d23a0e58bc8756d19cea0d15aa"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/squircle-288-mask.png",
+      "bytes": 704,
+      "sha256": "9208d189caae1101572c2b248bd88fa79ca8d7cd92feee6a427bf326aa92c10a",
+      "git_blob_sha": "70d548a33033fe5787b1c008e05ca876a606d777"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/themed-alpha-432.png",
+      "bytes": 13709,
+      "sha256": "60101188c70b12ab5b29802e3f40ab10aae1a6d186cc815d3cb6e234049d581c",
+      "git_blob_sha": "fac79ae29b762bb68188c8fcdc0bdb843cb2ce27"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/themed-dark-circle-288.png",
+      "bytes": 55989,
+      "sha256": "7201adef33f334f9a0f4c5dd6faf9ef420bb48a0e4bfb6464d9139472c53b63f",
+      "git_blob_sha": "6ad0d7d0509cc06d268c36e7509ce5052a34d573"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/themed-dark-circle-32.png",
+      "bytes": 5277,
+      "sha256": "28a702d19fadbfc1ffafba69ec390d20ab6bf4a7dd506768ed6dd3f747c24b38",
+      "git_blob_sha": "7152d0e38d1d8f7b33cebc496d0e536e2fa6fe64"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/themed-dark-circle-48.png",
+      "bytes": 9523,
+      "sha256": "efa194b9b71d672b969126096270514a9e9484a94b321899d4bc616855ebaa7c",
+      "git_blob_sha": "20fbe1def6ab45d6b67a09aced9ed3a2cbe396d2"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/themed-dark-circle-64.png",
+      "bytes": 14559,
+      "sha256": "7f4a4b5e477bf3d72580241fe408ddebd769fde40e1536628e7ff1affbdb946a",
+      "git_blob_sha": "71814e4fdd8a9f9d8f3a89a3c0d5d1a951cdb2ff"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/themed-dark-circle-96.png",
+      "bytes": 27814,
+      "sha256": "f5e703579e59de0dec0d922cb56e0a98e43e09b94a1adfc52ac9c8d56ffa0c42",
+      "git_blob_sha": "f191d77c685063f352029588f931890ce179be8c"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/themed-dark-layer-432.png",
+      "bytes": 14485,
+      "sha256": "088fb744dcf9df3804dd0ba979bf803ea04dad80cc14654a951f0f21d340c087",
+      "git_blob_sha": "d78b33a94cc4a3a1d34b8f15e2ebbe2f17778b26"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/themed-dark-squircle-288.png",
+      "bytes": 55546,
+      "sha256": "dedd502c46b56cd1267f6ad5741f11339938d036c3df634c63111f44f9fb131d",
+      "git_blob_sha": "a20c3a6dd1a07051f55de4e27b59403719f0e0c4"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/themed-dark-squircle-32.png",
+      "bytes": 4974,
+      "sha256": "ade8e579540e952d8fcc5db79a7775c05601686d7b7a4989e95ba076e3d9f6e4",
+      "git_blob_sha": "289371cc7cc01dd535a637207b381fc232e83ad6"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/themed-dark-squircle-48.png",
+      "bytes": 8948,
+      "sha256": "894085f2c4370bd957f9ff4c02e6fa7c5c79ddfcd138cdc5c22d7d5336814945",
+      "git_blob_sha": "c5d4c13b8b6e05e73601ccae27589b30da05d6f3"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/themed-dark-squircle-64.png",
+      "bytes": 13802,
+      "sha256": "6aaa0fcb5861ee9c1aa09307d17d8a1f47d7b99a59b53780d9520a7e22a22243",
+      "git_blob_sha": "f5b285e1ca28aaaa6f6d32558c1abae4acfe62bb"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/themed-dark-squircle-96.png",
+      "bytes": 26288,
+      "sha256": "5975abec2923cc6d7cd3ccef5a398f75491829bb101fe02c89a16dbd78852d7c",
+      "git_blob_sha": "b2e8b919884c286080c3b6c055627ad984eb1705"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/themed-dark-viewport-288.png",
+      "bytes": 52469,
+      "sha256": "c24a9d5618f5c011ff50ac795c42ad8a488133a92f4cf39a3802992af63bf943",
+      "git_blob_sha": "c26fa964ec2e5da106a6d72101f99274f5075ad8"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/themed-warm-circle-288.png",
+      "bytes": 54609,
+      "sha256": "9a80baf92d35a8c42836e3a30ef4ef22e5bfcf2d94cc32ec22e04dc30b43086f",
+      "git_blob_sha": "a889dedacb9286ddc4b19926433d98e5fe95e2c5"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/themed-warm-circle-32.png",
+      "bytes": 5184,
+      "sha256": "e957ee0925a7cdf402cf01b75f5582918b5c6f4e3aa7f3bb222ac5e697ed859a",
+      "git_blob_sha": "eab3fd03f17141ebff69d473156485ea6af7885d"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/themed-warm-circle-48.png",
+      "bytes": 9539,
+      "sha256": "70db3e7310225fb76442ac3ba406d76816048da6b8fafab5abd5ffe82d84eea1",
+      "git_blob_sha": "aa7f7007969fb4b742ed3d3c6cf13c6fd93e9a5f"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/themed-warm-circle-64.png",
+      "bytes": 14502,
+      "sha256": "b0a2a245341a8db25a58f543018f42feee6257629af0293eed776c523282bf31",
+      "git_blob_sha": "10ac57958592ccc22c0206f84226a21d036c40e5"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/themed-warm-circle-96.png",
+      "bytes": 27877,
+      "sha256": "a1a3f7cd0feeaee4cdca357b5b48379b9580e5e01e18395fd3e0f43c765941c9",
+      "git_blob_sha": "7b5d15b7ab5e687335bf1f0568070ea6ef3a3fa4"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/themed-warm-layer-432.png",
+      "bytes": 14485,
+      "sha256": "aa5ebe994592aaca6b4f8af4bdab12357278410241105149de1631114bae5579",
+      "git_blob_sha": "3bc691493f3a8e6fc3610de11e36242a51a7981e"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/themed-warm-squircle-288.png",
+      "bytes": 54110,
+      "sha256": "cf4566d70b62ff7d78745b2dba1ba9f211148322a425f878bff203f2f2b6d776",
+      "git_blob_sha": "657f4014c201edd507dd0f41e19bc9a85c803478"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/themed-warm-squircle-32.png",
+      "bytes": 4925,
+      "sha256": "bd4f6a9b0b3bd20e32c05c38227baffd2592d94ad7299a841ae3acff5a885551",
+      "git_blob_sha": "475c93dd20a46db2f13b9b71dff7422bdd16b617"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/themed-warm-squircle-48.png",
+      "bytes": 8884,
+      "sha256": "f56ce085f7401450644d538fdc5216741cc160ea5eb900900aa62117c9f1242a",
+      "git_blob_sha": "a6f52b2c3d51c19c6e349ce5c079330085df334d"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/themed-warm-squircle-64.png",
+      "bytes": 13732,
+      "sha256": "646bae3cb64c3c627699eb2bed23b3f1c3da6d2a1ae810ae8c441a105e121821",
+      "git_blob_sha": "f5f55cabbe744c77b56104894cb94189b1f6cbd2"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/themed-warm-squircle-96.png",
+      "bytes": 26386,
+      "sha256": "00c9fce697d61cd6db0b56ac33d0224861fcb3390e2e250398bdec759ab1177c",
+      "git_blob_sha": "abd2f0440d1487ae52732da1088fd9bdc030e9b7"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/themed-warm-viewport-288.png",
+      "bytes": 51032,
+      "sha256": "1002d66ff4321bb1c172da22e028045d3db2d429a2d1e3880232ccb30273669f",
+      "git_blob_sha": "888dcf54e1c653424c2eed9e7cf52298c3d643be"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/viewport-circle-288.png",
+      "bytes": 42031,
+      "sha256": "ab8b8f49a3d065b2cc157a5e88110a4a15b52205037448d2ba5485b448d780c5",
+      "git_blob_sha": "dd501772845ec068ebd5f3ad56edfe58adf5b788"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/viewport-circle-32.png",
+      "bytes": 2572,
+      "sha256": "7ea1b54e0e14cc4324db57182ba20d538ceeceae5152411eb22360cecd8afa34",
+      "git_blob_sha": "b3644b49c00e7dfe2a1a3821afb2a5ece227b523"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/viewport-circle-48.png",
+      "bytes": 4378,
+      "sha256": "ca6aa631bdb0959a5515c2932e8dddff6ef4cc613c5e34b847135b2bc586857a",
+      "git_blob_sha": "be94b548c7c78856a4268391d7a9725ba4dd376e"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/viewport-circle-64.png",
+      "bytes": 6574,
+      "sha256": "807293b961828270ad58673dd2509714b75249c273f51ae118952f5c5732caf3",
+      "git_blob_sha": "a0b78ee9183e9c1b02343b104606bef1de4f054c"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/viewport-circle-96.png",
+      "bytes": 11298,
+      "sha256": "7a7e08b694eeb3688fd94c0ca7de51ed87e63c447355c908dad8809da856643d",
+      "git_blob_sha": "c89960f2f7151bd94b846cc2bd506d5626ca23fb"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/viewport-squircle-288.png",
+      "bytes": 41525,
+      "sha256": "0e16cff1a7c72340590120bec00fe2698ac7035fe23f0561673c4a5e5e025b43",
+      "git_blob_sha": "133a4b3a4ce1f60be1dc964e257afdac7467e8e9"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/viewport-squircle-32.png",
+      "bytes": 2461,
+      "sha256": "ada98116260210bd202516a2f076bf1cdc7aa064c5f208ec10f03d2ba97a35e7",
+      "git_blob_sha": "b487dbb0e9fe13f5f6cb28f2a34e21e05c63f9e4"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/viewport-squircle-48.png",
+      "bytes": 4161,
+      "sha256": "182d83c2bf7e7eb7d2496852d2c46e21c1e39ff7c87d17979cf77b414c76bdf3",
+      "git_blob_sha": "68754f4ceee2233b8d2c52127cd07e90bede0160"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/viewport-squircle-64.png",
+      "bytes": 6101,
+      "sha256": "b5e3c5f43e726e286c07cc000d6a479808d8a471f1347ed235863aa2692c2eb4",
+      "git_blob_sha": "1b706d3f731121a15b125206c23fa70c6c86a4ae"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/previews/viewport-squircle-96.png",
+      "bytes": 10709,
+      "sha256": "1a06fec2d551ca3625238e9c4ca2a62e3a10484ae74a37153e89e9ea8a010ecc",
+      "git_blob_sha": "6c08afa0e2443917acf818635f5bba85003ff11d"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/safe-circle-explanation.png",
+      "bytes": 138816,
+      "sha256": "ac245ae333eec854d724ef296b00753a4bb165d081f476c628a1e392a8802039",
+      "git_blob_sha": "a5a04aeb95ccf459619ba8c345da44586cda1cfd"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/safe-circle-overlay-432.png",
+      "bytes": 59301,
+      "sha256": "34a83b4caef86cec8ab565d9654b19411f89436ed6b6063f396eda340a01652d",
+      "git_blob_sha": "eba186ae56b2453b6d6ae154be8bb78c311d548a"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/themed-commands.txt",
+      "bytes": 13703,
+      "sha256": "f8c7cb92871e2762722934d5698b497393d5cdfe102f2d477cf60d50544bdd33",
+      "git_blob_sha": "701c65881103052f58f0d2871d372de6f9361e8c"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/themed-dark-composite-432.png",
+      "bytes": 56126,
+      "sha256": "6758561b74589403383e06b9b7f106bac46e8c07691259aceb32359623eadd50",
+      "git_blob_sha": "b0470629aa7e22ebdfa66834c4219f021788e395"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/themed-preview-metrics.json",
+      "bytes": 6121,
+      "sha256": "cfd35a4a02b20600b2f4fce38bd4389a9d48b39296b87f3de4dcb52c158b2378",
+      "git_blob_sha": "119425ecb1816e91e9515743873db02dfbef9785"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/themed-warm-composite-432.png",
+      "bytes": 54713,
+      "sha256": "a08f4edcf3c020926a40bee3f802655077030aa151cf4c5a64cfdcb1e9d3f23b",
+      "git_blob_sha": "98506bc1be56a9dedbb60f464a0f1c4e5f80575b"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/monochrome-r1/viewport-72dp-288px.png",
+      "bytes": 37505,
+      "sha256": "ed00ad658605657cb59457691f8c9d8e9aa4a53e9758f07ca227408831683cde",
+      "git_blob_sha": "522afa26e27cc8b861a632daf03a728709cd919b"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/BUILDER_OBSERVATIONS.md",
+      "bytes": 1906,
+      "sha256": "f53b98d229ac6294ec4a07a12ad343e0b856951ae2492089181f97dc61990917",
+      "git_blob_sha": "4e28f05c30ff1f6dffa1aa1eca34848e0a7ed850"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/commands.txt",
+      "bytes": 25083,
+      "sha256": "7d32c78cea02978d71155cb8ea5f3e5b3f2cb7973a8e3256cdf25ed4c974320e",
+      "git_blob_sha": "0a8144f6b107428ee0480f877b0d20dbd8ed0ec9"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/make_previews.py",
+      "bytes": 5043,
+      "sha256": "3f7e4727a633ca8706fe80e19ab7436bca128225181e68b47f455f7df3ab544f",
+      "git_blob_sha": "56d4a3aaa2fe50e4fc250b160d861c9f1b82579d"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/named-r2-mask-detail.png",
+      "bytes": 175460,
+      "sha256": "f726ea59b0b0cc37a351b3204936f784aa420499fb132e3a4272cf524b09eeeb",
+      "git_blob_sha": "c69d902105edc509a02d612978bcd00c8cd0a42c"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/native-sizes-dark.png",
+      "bytes": 165782,
+      "sha256": "bf8a0ccbf8db10004e1fd367a9156b146ef64c8905429dc817069ee9b98a7c37",
+      "git_blob_sha": "0c736f9960746eb925135d6f8ded718e4fa3b523"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/native-sizes-light.png",
+      "bytes": 165846,
+      "sha256": "da3b76ccff9db7b5a2973716753b567f35f427a1f4e907792edeaaa84e251421",
+      "git_blob_sha": "9925da195cff4eccb1f9a9b29121d09ae8178887"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/preview-identity.json",
+      "bytes": 8590,
+      "sha256": "b2405c16b9e19b8c877137466aef0ce5de5257bcaf5b5ae049a85a92a125774c",
+      "git_blob_sha": "98750075cd8c5d6f87992e3060f56d212ec6936b"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/mask-circle-256.png",
+      "bytes": 884,
+      "sha256": "e28a656430650ce8d536a83c500b0f221a9d70675abdeae383d69fbd3e0ca9f0",
+      "git_blob_sha": "8da1f19b505832371641677f4c94252f156abdad"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/mask-circle-32.png",
+      "bytes": 362,
+      "sha256": "3811a2371071a3d00316ab16a5ca9987df61984d7dd9bd3595d334f99d25ba5f",
+      "git_blob_sha": "6e6f3d9ac067def191c6765c1f81be8a992b56cf"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/mask-circle-48.png",
+      "bytes": 392,
+      "sha256": "832cdd40274a6ec9d5ebc90c1f6a47cf59c539fb72e00ee90a228c84e34cd605",
+      "git_blob_sha": "4581c9a885cb8b6a53202f54346b5562ebf39fad"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/mask-circle-64.png",
+      "bytes": 421,
+      "sha256": "e3961306082b2b5124399b57af02327e061120841f7993ace0a0eed0d87f4e64",
+      "git_blob_sha": "432f1505b12d911f22509d8bd55502a09918d8bf"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/mask-circle-96.png",
+      "bytes": 491,
+      "sha256": "c8d444761137d5fad966d08728b56fbcc443d9f44e93fa1eb195521d16f4bf5b",
+      "git_blob_sha": "428c9c2582e0dac5ee4682c842e218d83396248e"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/mask-squircle-256.png",
+      "bytes": 644,
+      "sha256": "45f4360c49ad0dea19b4304e36b2abe89b1d68402c5230e2b9f620f1c999ee38",
+      "git_blob_sha": "b1ddeee9e2ab4baa1cea65cf6d2a6fa6d35365cb"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/mask-squircle-32.png",
+      "bytes": 336,
+      "sha256": "86ec71cca7dd1eca27d7ffca9b3e61c25710bc936c3e4f9221ec95197a55ec30",
+      "git_blob_sha": "e5298f32d0522fd2c0133e30d8832e7c1523e7e1"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/mask-squircle-48.png",
+      "bytes": 351,
+      "sha256": "f6a1256a3f21814617cf0d066b00b61290856b994c2b607f4494cb1cef600c56",
+      "git_blob_sha": "5aad981cf5f1b93cf989451d97d5ece5b520e5b4"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/mask-squircle-64.png",
+      "bytes": 384,
+      "sha256": "7944439086333ce9a8bad2fde8666cf9b4986f18e4a392e8c6302ed7ec0f9582",
+      "git_blob_sha": "6c6866ee98857487bb7763b29d099f24c4419840"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/mask-squircle-96.png",
+      "bytes": 425,
+      "sha256": "2ae3b663577a0fa936cb7b1bcdda7300ac3af65a5d1f1ef900c0659822b45ea4",
+      "git_blob_sha": "bc4c867f3910538abaccee1aad39f3be39f2b277"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/named-r2-circle-256.png",
+      "bytes": 92117,
+      "sha256": "56808c5c48acffd557f60e30ed65bff6f8a9edb9d0ceb98ee155de6e36a9185f",
+      "git_blob_sha": "5f89069bcd0350ba23553b377317deb6f995b9a6"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/named-r2-circle-32.png",
+      "bytes": 2939,
+      "sha256": "02f70e24295e98f48e54ad4962447128e86db1cacdb2973750d264d787a4cd26",
+      "git_blob_sha": "33d8b3f534377ebcc20a5d77c772ba639d2acfd0"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/named-r2-circle-48.png",
+      "bytes": 5522,
+      "sha256": "c369438b5afcccbd6fe94e2e9c973666745f037e5ad9be69d675062443846dc4",
+      "git_blob_sha": "a9524bf67a04a848370f9b4f7fda0b7946cd7b6d"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/named-r2-circle-64.png",
+      "bytes": 8870,
+      "sha256": "5fbeb17de4888876c63457e80836ed80c13fa75a7ede7b59f9a05ec4f2e4b738",
+      "git_blob_sha": "0d114704d9427b44416be5afe17181b04ae84dec"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/named-r2-circle-96.png",
+      "bytes": 17489,
+      "sha256": "d630e1597c5671d7a9ba7378e03965f140905080136c6367caff1d56400e771b",
+      "git_blob_sha": "896f20e839636bb8828d41968cd23dc228ac6686"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/named-r2-square-256.png",
+      "bytes": 81294,
+      "sha256": "5d1a72b071e87a61390d9c8d6b2941fbdb72572870f202101d8f4d54d8370706",
+      "git_blob_sha": "7726135244b145c2e3585be7bcef3d65ffddecd1"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/named-r2-square-32.png",
+      "bytes": 2647,
+      "sha256": "788033172813bb5acd634a9a37a0b90143c9c0fc7f4c6033080224dda3e9ad85",
+      "git_blob_sha": "c895feb1ec121edb9d393b86bf43e5c219c8dfe1"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/named-r2-square-48.png",
+      "bytes": 4958,
+      "sha256": "c276e14eb6692415923658036728f2d999bd9ea3d3b3223968ff757b547fc05e",
+      "git_blob_sha": "d1db358b353e6aed7932a55192fdcdc5268ea469"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/named-r2-square-64.png",
+      "bytes": 7912,
+      "sha256": "78804fa40919f91ad42de74f82308c57ca6826454da86daa3e4034409e002471",
+      "git_blob_sha": "4ebf78619d9d826fa43b502fb2c1573630484bc9"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/named-r2-square-96.png",
+      "bytes": 15565,
+      "sha256": "a089ba05dd553f3fc409b176aef0f1373c26ce585929a6377aa8c1c0d281d381",
+      "git_blob_sha": "717b956dafc0e68df279ac801714fcb79218890d"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/named-r2-squircle-256.png",
+      "bytes": 91898,
+      "sha256": "8635526b16c4252993d95a9552b6ce94aa4d23f81cff7c2a6601e5152591c3d3",
+      "git_blob_sha": "0e1855b4ce5dbaa69570a72da8938b82b2f1afea"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/named-r2-squircle-32.png",
+      "bytes": 2920,
+      "sha256": "2a7bfc5320c116e6e9aad11d653cbfe6ffff56e7b106784a174a3a2c964f2988",
+      "git_blob_sha": "0d29aca83dbdd1c886f67076b1648682143b3f95"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/named-r2-squircle-48.png",
+      "bytes": 5489,
+      "sha256": "f6042f0cc149cd53af443ed8a8d452b762b5ca476b8dc08f5f7e89a4a1b4e517",
+      "git_blob_sha": "91fdcd7a54a8034185942fcc68a2da894c9ac396"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/named-r2-squircle-64.png",
+      "bytes": 8825,
+      "sha256": "e8c547686090a1f0b72cebd276a5309a82e0e199e7371e25a403c770a3dbc9f5",
+      "git_blob_sha": "9e392f2e45b8fe91b7556b802a8531a2e9a42312"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/named-r2-squircle-96.png",
+      "bytes": 17435,
+      "sha256": "ff3ebfdfd9f5144fb884895a6086254648938da2b6b42c4c49dfd43d493b6f0f",
+      "git_blob_sha": "80a27d60013aac835ea8709188f720ab83b628c8"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/previous-circle-256.png",
+      "bytes": 90557,
+      "sha256": "ae527fd5b9df5a20e6f7f1aa307a1410e5c4e9c4df951df810416e750a67519f",
+      "git_blob_sha": "3223c5a141ea62c36414641911c4a1b2dae2cd5c"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/previous-circle-32.png",
+      "bytes": 2586,
+      "sha256": "85f5ad63329428b4077666ed69b2d95a2877cd62971fd40c612acbae2a32b624",
+      "git_blob_sha": "8208063a58e622ede88caac0b55ffcd63ec2adac"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/previous-circle-48.png",
+      "bytes": 4769,
+      "sha256": "7a96bdf31b8e1caacfd2d554dea1a62c972f23c292ce526cb669e4e20e935f15",
+      "git_blob_sha": "a0be80b26f89abb5eddd9e36eb569d3adf5d539f"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/previous-circle-64.png",
+      "bytes": 7597,
+      "sha256": "39a1850d045138c830025633ea5091214f5289c463cd90010b740014785fd1f8",
+      "git_blob_sha": "e25d46e13311a6e035ba09d65160cfa2c8058ce2"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/previous-circle-96.png",
+      "bytes": 15126,
+      "sha256": "8b0289bbe7b1312d165a556a26603a49d37deffbb6545be30b29aed01b72f5ab",
+      "git_blob_sha": "d55f8abb3a4bb3a5f12bf1e8d722d153461e21ed"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/previous-square-256.png",
+      "bytes": 80379,
+      "sha256": "efb293f8115230af3787d604596fbc89980511b18ed443b20627b1ebc8a588d2",
+      "git_blob_sha": "fbf361bebbb8a5ad005db1812b9cf07962c27dfd"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/previous-square-32.png",
+      "bytes": 2296,
+      "sha256": "1a262a967a4b817d3bd7161597c6629985330555e11fcb39da785e06ac98f7d3",
+      "git_blob_sha": "6468f1c63f7cf4b9aeb984450893fbd659e91594"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/previous-square-48.png",
+      "bytes": 4198,
+      "sha256": "853b1671a27434ec7aef6f9917ebc3be106e48fc0addca0858a783b1e254ff84",
+      "git_blob_sha": "a33f56f52dbc764476dbf02e73d3a0ba8b2c3969"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/previous-square-64.png",
+      "bytes": 6687,
+      "sha256": "6de38c96972386d44741755083372891ea12ef451210edf0d69ef17098f7ef25",
+      "git_blob_sha": "a9b3367b5940a4765cd7ff3e6b4ed47b9f649602"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/previous-square-96.png",
+      "bytes": 13314,
+      "sha256": "442097ebc09fa94dd3b61026f74edad161d42160e2c503b36394c9397a930c18",
+      "git_blob_sha": "4299209682650e60fa7fa68733f72e83568e6ce4"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/previous-squircle-256.png",
+      "bytes": 90416,
+      "sha256": "365acbcb3acd6f2404008a43b8bbb4d968b315355a830b6722cc79741b65468a",
+      "git_blob_sha": "a644d8b8e741d6e22e7184e86640134013e17e09"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/previous-squircle-32.png",
+      "bytes": 2583,
+      "sha256": "5b5aa82f96fb6703579fae2b232fa0a009dd89ca082864819c5f4738ae2b3b58",
+      "git_blob_sha": "53b13dd08145c4e64bca65743a77872c01242928"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/previous-squircle-48.png",
+      "bytes": 4743,
+      "sha256": "45e102c02455926787494b29416269a352b01d14a08ebfbb062e7d3393664632",
+      "git_blob_sha": "74ef7d29a87a3cd7fdf4f8da08f8b0fa53ae74c3"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/previous-squircle-64.png",
+      "bytes": 7577,
+      "sha256": "cb8ff46cdd1365badff945ec74e3f5ba7755152601e34a3917c0a385ae96f12e",
+      "git_blob_sha": "2016f1ba97e257156c5dd6c94aec476bc80d6d14"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r2/previews/previous-squircle-96.png",
+      "bytes": 15049,
+      "sha256": "522d008d6745d2569625f0d114e214e44c380ad19ca4bd988a2d45d523919a2e",
+      "git_blob_sha": "c0c2b2a9f0cddaafe4357e22cbe868300265e584"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/BUILDER_OBSERVATIONS.md",
+      "bytes": 1457,
+      "sha256": "ac05e4894e4fba10e096f03221f848a98ee0867a043a6dd2465b95bb14489259",
+      "git_blob_sha": "5f1a66e0621aff6809ba822e68ee64a34efc4476"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/commands.txt",
+      "bytes": 25083,
+      "sha256": "92f4cf45d7661ef2a60fd4e36c76914c11f0b2beff4d6d58cf819160f92329e9",
+      "git_blob_sha": "4e7e14fb5e58996c357c425e8314927f9426aa6c"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/export-derivation.json",
+      "bytes": 1991,
+      "sha256": "eba8816faf2fa718235afc613a9f377823829e083b379b5bb98e515a027b74ed",
+      "git_blob_sha": "d94b13e698dc7fe7c86fd41ccb36d8476dc20de0"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/make_previews.py",
+      "bytes": 5043,
+      "sha256": "d27f263cca876bfb7b848616d93eb03a9203dcfdcbc68b1f41cf3e3aeef8ab7f",
+      "git_blob_sha": "e0066ac223177cb7ac135cd60aa6a40687d96612"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/named-r3-mask-detail.png",
+      "bytes": 165123,
+      "sha256": "6cc376edaebf674e57a2e34eea4ab7aea6a27cb141cd1b2d56f0b13bd4b7018a",
+      "git_blob_sha": "215971ed790fbf1cf8d923d7863b6f77c8a28395"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/native-sizes-dark.png",
+      "bytes": 160138,
+      "sha256": "83e9d1dedc192daa885fa03e66bb6ce2e6412fad43055fe179ef39c010076568",
+      "git_blob_sha": "f5f849eb3d0fd1bb6f50694b090c08289ba1c819"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/native-sizes-light.png",
+      "bytes": 160228,
+      "sha256": "20a9b0de0568f0a500ffd324ecdae76304a24c834316118831b919ef4cdc56a2",
+      "git_blob_sha": "cd09cb5e7aea244396fc6255322abf24e23afd2b"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/preview-identity.json",
+      "bytes": 8590,
+      "sha256": "9f2257c143a8b892a5c16af0fcb0d09ea2bf08b72f6abf4cf4d7a0033419cb52",
+      "git_blob_sha": "36564636e8bed81aac54cc2bc3e53f3f7916866a"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/mask-circle-256.png",
+      "bytes": 884,
+      "sha256": "674a770ac7affbcea62e18c47ae730b381ff514b93a8cdcb1a6e99f2dd01939a",
+      "git_blob_sha": "652f5f1fca333762effe108826df2aa7e7bcc75a"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/mask-circle-32.png",
+      "bytes": 362,
+      "sha256": "3a063dbc09b3827f7bac7483bd7ac782335d04ec6fb5280b98eea336e2ddc230",
+      "git_blob_sha": "5a2fc3a576624ed2605f91e6ed48f54ea72bee0d"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/mask-circle-48.png",
+      "bytes": 392,
+      "sha256": "c3626131040e6926fe5c6ddc13fb8582e6a4b60b0a136816f8243a16223325dd",
+      "git_blob_sha": "6a118cbb645f06a4f7aae39e619f377b2a24dfa9"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/mask-circle-64.png",
+      "bytes": 421,
+      "sha256": "11c17e6b76760d47f1bbe812404da24bdde2e6d366dabecc5430b75260eb0f88",
+      "git_blob_sha": "2f1d8e36d5255c90cc7aa3fd3e8ca4d253d9c84b"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/mask-circle-96.png",
+      "bytes": 491,
+      "sha256": "49ca829c07ef385368c23b0b873459701630ef82f39d63c98e8f1aed766dea2e",
+      "git_blob_sha": "e296167cae7ea860bb91e79b76aee4e55a5a796d"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/mask-squircle-256.png",
+      "bytes": 644,
+      "sha256": "cec34ebd8a45cf3bee7362e75e34fdfc27d6ef9c5302a9356b75eccf6c7f41bf",
+      "git_blob_sha": "f01245dd795493733d54a4f32c51d8aaabb9827a"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/mask-squircle-32.png",
+      "bytes": 336,
+      "sha256": "6edacb4bacd5fe28fa36be318bf15b49504cb5aaaebef867d6a97f99eae02cda",
+      "git_blob_sha": "bbcf2127b824532bc404ee771eceb3960fae70e2"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/mask-squircle-48.png",
+      "bytes": 351,
+      "sha256": "2be2ad31ed182b912ad6bace0b8eaa638f05a8172f95d028e46532e5a5f388c6",
+      "git_blob_sha": "7f899aab4cf6fa26ca39bddc9391023571863c02"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/mask-squircle-64.png",
+      "bytes": 384,
+      "sha256": "a12c7d27c1c719ccb40e79bc2ee93f780e85b388f8c9ba0bdd6ac19f3c9c5da3",
+      "git_blob_sha": "91690edfc84f682e9b99c2e5e1f61a7c9f11057d"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/mask-squircle-96.png",
+      "bytes": 425,
+      "sha256": "8947b970f30267d263e994440a1ea1240fc4906ce8fa7c1b24a4b4c885492f80",
+      "git_blob_sha": "07874ea1db2829bcc014beef54ff48bb28023184"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/named-r3-circle-256.png",
+      "bytes": 84828,
+      "sha256": "325cebcb70024a8ccb7a2c45fb0698cda200e4f30ba0b2d3c6e11cdf1ec4d787",
+      "git_blob_sha": "e42160a769936d390b269cc613c660c794baa743"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/named-r3-circle-32.png",
+      "bytes": 2662,
+      "sha256": "8e54575d2f1dbd7031003fe3cdd4574703a4e2bcc47e49b6d81bf5ed308a3d60",
+      "git_blob_sha": "274a053e9e8d702016e29fc6415276b2399e3030"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/named-r3-circle-48.png",
+      "bytes": 5146,
+      "sha256": "f5b0155bb82184d02e2e57e700682c7c5e09db27e824b69a7ce6a6c0c1fb3020",
+      "git_blob_sha": "296757d24e5d4924e90a34513667a6fb52a847e7"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/named-r3-circle-64.png",
+      "bytes": 8104,
+      "sha256": "b2b090c6a78aa0e3f9767de9365174e0c2ff6597c0374ce5b880da3d464af325",
+      "git_blob_sha": "2a6fdd5fd3de7a5b3c7b79ad7f1a202edc3fb7a8"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/named-r3-circle-96.png",
+      "bytes": 16005,
+      "sha256": "c749beb59ec3d6a3fc9a7f0f0dbd054068c7451be9ad42ad3982758bac3b9e1c",
+      "git_blob_sha": "1d4904278086338bfb15d8f98881fa21257c4e95"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/named-r3-square-256.png",
+      "bytes": 74957,
+      "sha256": "da943f1687028e000318c23da7bf69e3123b98e980f7fa5cc2d7e37dd1692ecf",
+      "git_blob_sha": "f40bcd134e9b3da91da208f908b6aa2872ab9177"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/named-r3-square-32.png",
+      "bytes": 2413,
+      "sha256": "e024de78d4a840f5dc8382c099b72fe70836e0f4e90bd5aeb6609c6220d1b31e",
+      "git_blob_sha": "9e87c0f1c7035d6523c44099357121cda167dfe3"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/named-r3-square-48.png",
+      "bytes": 4642,
+      "sha256": "28a9cdf863b774d0c71e500c57bfd9a0ff23e6663ce3edb531214b6e9d3d01ed",
+      "git_blob_sha": "2576df16df1fbaddad32ca7761530e29efe6648b"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/named-r3-square-64.png",
+      "bytes": 7262,
+      "sha256": "51773645e1b1734c15f363476459f7b9d112f599b04a90e8d2794b75636da873",
+      "git_blob_sha": "c14f2024693f011c3dfe6e3abf607b0a3db2af8a"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/named-r3-square-96.png",
+      "bytes": 14234,
+      "sha256": "ca9134ddb71b4017db03c9315a7c5b65e0abf84d884386fe048b348f36431c30",
+      "git_blob_sha": "df97e987d33f0703b75e6ea215b6353e050586dd"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/named-r3-squircle-256.png",
+      "bytes": 84647,
+      "sha256": "e84aa33f6551570b210f73fc491a180bb80f49b6c06387e89bb4eec00b0d5ff9",
+      "git_blob_sha": "959ae71b29813a16fc81b0f6a3bfbf0481107692"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/named-r3-squircle-32.png",
+      "bytes": 2661,
+      "sha256": "c7caf5ece3afde50dfa7990c2326dcc17c88f69221d1305a82eb5cf3e73483e5",
+      "git_blob_sha": "4fe4d45da45baf392aee80d6aa04b884d70bc43d"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/named-r3-squircle-48.png",
+      "bytes": 5125,
+      "sha256": "5c7a2e3e342e9168a46ab76395d850d7766e168791adf3472e5547354a2c682e",
+      "git_blob_sha": "dfd62f265aebc14a9e26bedfc252c536ee9a843a"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/named-r3-squircle-64.png",
+      "bytes": 8080,
+      "sha256": "673be3b96024bc1801cdf09c5ccf7677327e68ca3b0a2f12a09f561712ebfa95",
+      "git_blob_sha": "75e10226300523179edce935421c8765fd61cd8b"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/named-r3-squircle-96.png",
+      "bytes": 15935,
+      "sha256": "848e32a41fea06fb26979119d7cac0b0d29187acba620ae363856b758cd4eff6",
+      "git_blob_sha": "3352a9d1288a11ce8324aab0b7543e8d9bb510f4"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/previous-circle-256.png",
+      "bytes": 90557,
+      "sha256": "8842ae100e267b102dafbae0006502bceef077b0ee54c725f3ae11cfde99f456",
+      "git_blob_sha": "f61071b4cc4b8d77b94c81b653c21a6a37d57fa4"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/previous-circle-32.png",
+      "bytes": 2586,
+      "sha256": "6b475563a0a16173ed05f45cf574ca4c44a6170a425c3db4980e5314cae32c17",
+      "git_blob_sha": "0ac34c03668053f3c50a342a636b74319cf778c2"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/previous-circle-48.png",
+      "bytes": 4769,
+      "sha256": "a8fd55d682c1a631cbee6b3e106c353912115d7a8005e2f85d9b6b7c38182ea2",
+      "git_blob_sha": "bf8ac20201e5183d06bb0a5bffef85cbccd22d81"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/previous-circle-64.png",
+      "bytes": 7597,
+      "sha256": "6f9f076db02321cf142a8ba25b0146182a86b6c5c9fa6af8bc14c79b57633930",
+      "git_blob_sha": "8a95c7b1ea86dcf68ed0960df65a61ce5d5af47e"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/previous-circle-96.png",
+      "bytes": 15126,
+      "sha256": "676bb944a7053caabcfa456c106fd1e2b220330855bdcd9f531a6435fc87f834",
+      "git_blob_sha": "17012a8b1431f800127a518f14a3b511c2930a4e"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/previous-square-256.png",
+      "bytes": 80379,
+      "sha256": "e85327b1ceb117189d4314a1c150001ee05fadde9dca39d30a7d619e3c2696cf",
+      "git_blob_sha": "46c90b3ad15b2a086d61c39b582bd7497abc221c"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/previous-square-32.png",
+      "bytes": 2296,
+      "sha256": "a8b6d6cde1350bb5c5b8ae3cb5447af7a1a1bd1be828ea1c637a2dc33beb2bfc",
+      "git_blob_sha": "392dda60b22fad6e45b510d7bf3d3858ef501c59"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/previous-square-48.png",
+      "bytes": 4198,
+      "sha256": "f94ac15bef23a92fb2188fd851fbc9ded1cd80e9ea7d4b1eb49f504524d6e551",
+      "git_blob_sha": "f58e4c883380d67727f79f9a21de45d877aa0384"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/previous-square-64.png",
+      "bytes": 6687,
+      "sha256": "9282b15eeb266ef9f6fc4bc1c934832fce7e766a2dfdd27927844f2120e401e6",
+      "git_blob_sha": "6a8dd1c2f348cc8bb434b03946ca77174060b64f"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/previous-square-96.png",
+      "bytes": 13314,
+      "sha256": "01d825bf1234e3ea378f5690c77f2732979fd408751e2cb291999e934946e3dc",
+      "git_blob_sha": "0d9cf9ddea54f47cd8dc6a9334a8672d1724a695"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/previous-squircle-256.png",
+      "bytes": 90416,
+      "sha256": "8aa5d4bde33c0ba4c0c56ef732f14a0ff39acfb5db61d2c8e1055756c9de0758",
+      "git_blob_sha": "b22e65d79fe64c6bdbbd9d6422612cae1dd20539"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/previous-squircle-32.png",
+      "bytes": 2583,
+      "sha256": "d6117d7ce5744d80a761dd5ca46306547b79b23ab0defefaef607b7ffe1c7d4f",
+      "git_blob_sha": "8a45f4250a79c8271de1614abf4f9003987b8969"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/previous-squircle-48.png",
+      "bytes": 4743,
+      "sha256": "96a7819ac60af890894e01dfbbde1d6e8c0354140a648d3ceea9f1fd2886d212",
+      "git_blob_sha": "b96b19652905de536748f06ac472a230e86509af"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/previous-squircle-64.png",
+      "bytes": 7577,
+      "sha256": "108ebcd200d4636b57de86646b9e3cf31cf8a8216095e931c38c50722d2d79dc",
+      "git_blob_sha": "f3aa7dab4688fba58b3022f76ed4c73f98b4ce9c"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/evidence/r3/previews/previous-squircle-96.png",
+      "bytes": 15049,
+      "sha256": "bfdc88891b919a6968da23d6bbca04907a4b27fac4a472f8347cf1aa1fd0427f",
+      "git_blob_sha": "4f702b181d3f7c1f4dfcdbe60419f50b83c9efa8"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/integration/README.md",
+      "bytes": 2810,
+      "sha256": "49c64c4a16970ea9b5f064d22a133eb6b4201fbc81ab590850d6978e19b15c00",
+      "git_blob_sha": "9feb9b07a67d07b8c4a39cefabfe1d2b4d582c27"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/sources/adaptive-textless-r1.png",
+      "bytes": 693703,
+      "sha256": "701c8e78151d28a75d5f0e9dc734bb26daf81993fe1abef7464c2d014874ef3c",
+      "git_blob_sha": "fca852f8f0be7479c87f6414a20d90406abfc52e"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/sources/furnace-style-reference.png",
+      "bytes": 1727109,
+      "sha256": "e5b7f1f87fd668b435619c1c260e3bcdebfa0d21ad2978c08445205669addca5",
+      "git_blob_sha": "6021a356712b04d1d2885b008ee95ddfa26db2a8"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/sources/hearth-r1.png",
+      "bytes": 2185204,
+      "sha256": "34d423cd3d6634fdc8f8e72f0f34600a49b5afc09aa57e2cfe89f979a040fdc4",
+      "git_blob_sha": "4a4d54239158ed2c2461581e4a0141a41b9bf64a"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/sources/monochrome-r1.png",
+      "bytes": 573688,
+      "sha256": "53747d0ae44c6db9d012749fb9da7941343c8028a8a2634e7b12de931a4c18b3",
+      "git_blob_sha": "eb24e5f76453e8567ea48758bc01f2c12aedd8d0"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/sources/named-foreground-r2.png",
+      "bytes": 695881,
+      "sha256": "1a4b2cc765d69e87fe9b71776b23bcc29602c13896b69b44be75c3c8c1a0c79a",
+      "git_blob_sha": "e03960d2c4de1ba0b4739719f7b06b84cae22bcb"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/sources/named-foreground-r3.png",
+      "bytes": 634175,
+      "sha256": "edacc77b2a66253e93035c70926e219f3a1e165379b77c1d2d3a74264ab697a8",
+      "git_blob_sha": "87016d5333b003a38645170a072894ecf591bc3c"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/sources/named-r2.png",
+      "bytes": 1958134,
+      "sha256": "40578897ada379dbb6137915e98c414570b6fe482b72ec2b3c7f03c24a58c9ed",
+      "git_blob_sha": "f8cd9b760d48ded6f4105cee6a4a6bf7c6acb959"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/sources/named-r3.png",
+      "bytes": 1850004,
+      "sha256": "35155e4623e2073afdff5e67a8afce6a11c9172369e1319b6bba12071c919946",
+      "git_blob_sha": "6fc95e0be8de449acddfe99fd4e953e2ba3a4078"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/sources/previous-field-icon.png",
+      "bytes": 211239,
+      "sha256": "d7319a6182b720000f6b6a7e5a61ef8fda028535eb899c0df574c7382e5bb9e7",
+      "git_blob_sha": "262121a3f337f795aa05c29c166f3ba1ff88ba86"
+    },
+    {
+      "path": "REPOSITORY_INDEX.md",
+      "bytes": 7435,
+      "sha256": "c945edff1511e786fd9abf8217acbf8f19227daedb46a497fd6af090ea884a75",
+      "git_blob_sha": "74c20f9b40339db44ea5aff11e693fdf811629e9"
+    }
+  ],
+  "file_inventory_sha256": "b0f95dde54b8ff99e1a688c20143c388536c8a707fae55fce01856ad3e899733"
+}

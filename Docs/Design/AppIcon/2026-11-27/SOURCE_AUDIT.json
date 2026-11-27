@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-11-27",
+  "repository": "ksolo21-web/HAVENLINE",
+  "auditor": "/root/icon_source_audit",
+  "read_scope": "App icon assets, project binding and captured Android export preset; no gameplay replay or build approval",
+  "audited_gameplay": {
+    "branch": "trial/world-one-expansion-2026-11-26",
+    "commit": "429cb7ea56d98f7d023d7d6eeb18c89feb711fbc",
+    "commit_subject": "Record the Build 16 truck access playtest",
+    "recorded_build": 16,
+    "project_path": "HavenlineLevel1/project.godot",
+    "project_blob": "93d049d9d842a97e1ce1b2f8d5ef54c8878979fd",
+    "project_binding": "res://assets/field/field_icon.png"
+  },
+  "previous_icon": {
+    "repository_path": "HavenlineLevel1/assets/field/field_icon.png",
+    "local_preserved_copy": {
+      "path": "Docs/Design/AppIcon/2026-11-27/sources/previous-field-icon.png",
+      "bytes": 211239,
+      "sha256": "d7319a6182b720000f6b6a7e5a61ef8fda028535eb899c0df574c7382e5bb9e7",
+      "git_blob_sha": "262121a3f337f795aa05c29c166f3ba1ff88ba86"
+    },
+    "dimensions": [
+      432,
+      432
+    ],
+    "mode": "RGB"
+  },
+  "audited_android_preset": {
+    "repository_path": "Docs/QA/Truck-Access-2026-11-27/Source/export_presets.cfg",
+    "git_blob_sha": "9aed861e542402d15ba1128bf7d9a43a9278bfcb",
+    "version_code": 16,
+    "version_name": "0.3.15-truck-access-playtest",
+    "fields": {
+      "launcher_icons/main_192x192": "res://assets/field/field_icon.png",
+      "launcher_icons/adaptive_foreground_432x432": "res://assets/field/field_icon.png",
+      "launcher_icons/adaptive_monochrome_432x432": "res://export-artwork/field-icon-mono.png"
+    },
+    "explicit_background_present": false,
+    "historical_record_modified": false
+  },
+  "current_project_export_preset_tracked_at_audited_commit": false,
+  "later_live_ref_observation": {
+    "commit": "fad3af0a45e94262737077ae513827b5042adb41",
+    "source": "Primary agent live-ref observation communicated during this task",
+    "contents_read_by_this_audit": false,
+    "same_icon_or_binding_at_later_head_claimed": false,
+    "integration_requirement": "Resolve actual head and reconcile current files before applying artwork"
+  },
+  "preserved_main": {
+    "observed_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+    "unchanged_at_audit_observation": true,
+    "writes_by_this_icon_task": false
+  },
+  "isolated_delivery": {
+    "branch": "feature/app-icon-refresh-2026-11-27",
+    "base_commit": "69bd3eb921ce18838795b3ce21b232ec6e3b54b6",
+    "live_gameplay_integration_performed": false,
+    "historical_qa_presets_modified": false
+  },
+  "primary_platform_sources": [
+    "https://docs.godotengine.org/en/4.7/tutorials/export/exporting_for_android.html",
+    "https://developer.android.com/develop/ui/compose/system/icon_design_adaptive"
+  ]
+}

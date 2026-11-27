@@ -1,0 +1,917 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/icon_critic",
+  "independent": true,
+  "review_date": "2026-11-27",
+  "disposition": "APPROVED_FOR_ISOLATED_APP_ICON_ARTWORK_PACKAGE_PUBLICATION_A9_PENDING",
+  "approved_for_isolated_artifact_publication": true,
+  "all_prepublication_mandatory_checks_pass": true,
+  "all_delivery_requirements_complete": false,
+  "overall_task_complete": false,
+  "scope": "Authored raster app-icon artwork and export/integration instructions, with representative launcher-size/mask evidence. This is not actualgameplay, native3D, APK, installedlauncher, physicaldevice, store or shippingapproval.",
+  "candidate_binding": {
+    "base_commit": "69bd3eb921ce18838795b3ce21b232ec6e3b54b6",
+    "artifact_manifest_path": "Docs/Design/AppIcon/2026-11-27/ARTIFACT_MANIFEST.json",
+    "artifact_manifest_sha256": "7d8f3e4686d2265b0114e4e87fe3161f6daa160a7aa14f203905c767f5e8b07f",
+    "artifact_manifest_git_blob": "ca0d985297d712ae131e7f588152fae6a0b243fa",
+    "frozen_file_count": 208,
+    "selected_asset_count": 5,
+    "future_publication_commit": "Not yetcreated at this review; mustbind identical manifest/content bypublicationreceipt"
+  },
+  "policy_binding": {
+    "policy_id": "havenline-reference-acceptance-2026-11-27",
+    "path": "Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json",
+    "sha256": "c34c0cbe5b6d473be40ee5f0f0e08aab8f6ff42f97cfe2e7c93b2694e4dbaf43",
+    "stronger_reference_rules_preserved": true,
+    "exact10_gameplay_visual_gate_approval_claimed": false,
+    "reason": "New authored branding raster package is being published as its own assetwork; existing finalnative/reference/shippinggates require separate applicable evidence and remain unapproved."
+  },
+  "acceptance": [
+    {
+      "id": "A1",
+      "status": "PASS",
+      "finding": "Exact HAVENLINE wordmark in selected color, adaptive and monochrome artwork; no game rename claimed."
+    },
+    {
+      "id": "A2",
+      "status": "PASS",
+      "finding": "Actual source, selected exports and native-size views show a recognizable warm hearth with rounded blue stone, sculpted snow and stronger flame contrast than the previous muted icon."
+    },
+    {
+      "id": "A3",
+      "status": "PASS",
+      "finding": "Selected1024/512 PNGs are opaque RGB squares without baked rounded corners."
+    },
+    {
+      "id": "A4",
+      "status": "PASS_WITH_EXPLICIT_SIZE_SCOPE",
+      "finding": "Whole title readable at actual96/64px.48px title is very small.32px hearth recognition reviewed; full nine-letter readability at32is not claimed."
+    },
+    {
+      "id": "A5",
+      "status": "PASS",
+      "finding": "R2 circle-clipping defect repaired in R3. Full title/flame survive representative circles/squircles. Every colorforeground nonzeroalpha within132radius; monochromecriticalart alpha>=2 within132radius; four alpha1pixels beyond are retained and noncritical in inspectedthemeviews."
+    },
+    {
+      "id": "A6",
+      "status": "PASS",
+      "finding": "Five selected full-PNG exports have correct modes/sizes and source-bound identities. Separate transparent432 foreground, opaque uniform#06163d432 background, and selected432monochrome mask supplied; exact futureGodotexportmapping reviewed."
+    },
+    {
+      "id": "A7",
+      "status": "PASS_FOR_ARTIFACT_PUBLICATION_SCOPE",
+      "finding": "Genuinely separate reviewer inspected actual pixels, kept R2 rejection, retested R3 and independently verified frozen bytes. All scored applicable authored-artifact dimensions strictlyabove9.0; no stronger native/reference gates claimed or lowered."
+    },
+    {
+      "id": "A8",
+      "status": "PASS",
+      "finding": "Only new Docs/Design/AppIcon package and two navigator insertions. No activegameplay file, historicalQA preset, signing/version/packageidentifier, policy, workflow, installedbuild ordevice state modified."
+    },
+    {
+      "id": "A9",
+      "status": "PENDING_REMOTE_PUBLICATION_READBACK",
+      "finding": "Local169PNGs are full decoded images, notLFS pointers. Root must verify exact remote branch/tree/file identities afterpublication; no remotecompletion claim in this prepublicationreview."
+    }
+  ],
+  "scores_no_average": {
+    "exact_name": 10.0,
+    "authored_hearth_brand_identity": 9.9,
+    "color_raster_finish": 9.8,
+    "color_normal_size_title_readability": 9.8,
+    "color_mask_preservation": 10.0,
+    "color_adaptive_safe_geometry": 10.0,
+    "mono_theme_render_quality": 9.8,
+    "mono_normal_size_title_readability": 9.7,
+    "source_export_identity": 10.0,
+    "integration_mapping_and_status_accuracy": 10.0,
+    "preservation": 10.0,
+    "documentation": 9.9
+  },
+  "mandatory_artifact_defects": [],
+  "closed_defects": [
+    {
+      "id": "ICON-R2-01",
+      "original_report": "evidence/independent/named-r2-rejected.json",
+      "repair_source": "sources/named-r3.png",
+      "retest": "evidence/independent/named-r3-color-retest.json",
+      "result": "Complete firstH and finalE survive circlemask at256,96and64px; rejectedR2 is preserved."
+    }
+  ],
+  "raw_review_bindings": [
+    {
+      "path": "evidence/independent/named-r2-rejected.json",
+      "sha256": "755692a3a1ab2f6456dbc29a236d801c6852fab46dae036379badd18d21c82c3",
+      "bytes": 8122
+    },
+    {
+      "path": "evidence/independent/named-r3-color-retest.json",
+      "sha256": "180722aa8fab06d300556182b668933cac134769772e606b2981ab368688735f",
+      "bytes": 7948
+    },
+    {
+      "path": "evidence/independent/named-r3-export-retest.json",
+      "sha256": "d3b2daf60a10982480f825922dee08523b4fa76c881b17142386b855d880ff71",
+      "bytes": 1194
+    },
+    {
+      "path": "evidence/independent/adaptive-r3-independent-review.json",
+      "sha256": "1e8cd0e48c3cb3767a14f69706b2bec8534770da83208557e50ee51a089f98a2",
+      "bytes": 3253
+    },
+    {
+      "path": "evidence/independent/monochrome-r1-independent-review.json",
+      "sha256": "c727f173dc09407fd9e27d9173b4f81e1485442daaedbb20112d80c9096ea6c5",
+      "bytes": 8573
+    }
+  ],
+  "selected_assets": [
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/assets/havenline-icon-1024.png",
+      "bytes": 1104450,
+      "sha256": "868bb4a6e85e1599c64dcd17a7bb195f8e1dd13cb68b6513f461aaf3e04bfba4",
+      "git_blob_sha": "6fdfb9b43cebfc927128f4a65618dddf8f4ef576",
+      "selected": true,
+      "role": "Named opaque square master/project icon",
+      "dimensions": [
+        1024,
+        1024
+      ],
+      "mode": "RGB",
+      "source": "sources/named-r3.png",
+      "visual_review": "evidence/independent/named-r3-export-retest.json"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/assets/havenline-icon-512.png",
+      "bytes": 273642,
+      "sha256": "e3f0973486041c44e86a07bdd88e548222d624e6559ab5abf2046972d616a657",
+      "git_blob_sha": "e84d49407fa17b0c37142e68c925a11020f05f93",
+      "selected": true,
+      "role": "Named high-resolution distribution image",
+      "dimensions": [
+        512,
+        512
+      ],
+      "mode": "RGB",
+      "source": "sources/named-r3.png",
+      "visual_review": "evidence/independent/named-r3-export-retest.json"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/assets/havenline-adaptive-foreground-432.png",
+      "bytes": 67574,
+      "sha256": "937edd75a4f4f70e77c7d4526f15533e42d5b9db3db2ddc61d76c87f93d444eb",
+      "git_blob_sha": "6ee0b6b17817546dcfe7b537e4c015c863957465",
+      "selected": true,
+      "role": "Transparent Android adaptive foreground with HAVENLINE",
+      "dimensions": [
+        432,
+        432
+      ],
+      "mode": "RGBA",
+      "source": "sources/named-foreground-r3.png",
+      "visual_review": "evidence/independent/adaptive-r3-independent-review.json"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/assets/havenline-adaptive-background-432.png",
+      "bytes": 1547,
+      "sha256": "9a8096ce9f01662fabce53318d0ae608df0696c66186846edb22bf05b00acb46",
+      "git_blob_sha": "834992dae2a39f4696c009751ec944eb4d0153cf",
+      "selected": true,
+      "role": "Opaque #06163d Android adaptive background",
+      "dimensions": [
+        432,
+        432
+      ],
+      "mode": "RGB",
+      "source": null,
+      "visual_review": "evidence/independent/adaptive-r3-independent-review.json"
+    },
+    {
+      "path": "Docs/Design/AppIcon/2026-11-27/assets/havenline-monochrome-432.png",
+      "bytes": 41664,
+      "sha256": "f9a3128cb4633639e9ca3d35f382a72f3a5d4c7856cb5808bc8d27eac9753f3f",
+      "git_blob_sha": "9a072d45f2cc2fc5b74fcd2b65baa6be566e6f4d",
+      "selected": true,
+      "role": "Selected optional Android themed-icon alpha layer",
+      "dimensions": [
+        432,
+        432
+      ],
+      "mode": "RGBA",
+      "source": "sources/monochrome-r1.png",
+      "visual_review": "evidence/independent/monochrome-r1-independent-review.json"
+    }
+  ],
+  "frozen_package_checks": {
+    "reviewer": "/root/icon_critic",
+    "manifest_sha256": "7d8f3e4686d2265b0114e4e87fe3161f6daa160a7aa14f203905c767f5e8b07f",
+    "manifest_git_blob": "ca0d985297d712ae131e7f588152fae6a0b243fa",
+    "frozen_files_verified": 208,
+    "full_pngs_verified": 169,
+    "jsons_parsed": 12,
+    "raw_reviews_match_original_scratch": [
+      "named-r3-export-retest.json",
+      "monochrome-r1-independent-review.json",
+      "named-r3-color-retest.json",
+      "named-r2-rejected.json",
+      "adaptive-r3-independent-review.json"
+    ],
+    "unexpected_unfrozen_files": [],
+    "selected_assets": [
+      {
+        "path": "Docs/Design/AppIcon/2026-11-27/assets/havenline-icon-1024.png",
+        "bytes": 1104450,
+        "sha256": "868bb4a6e85e1599c64dcd17a7bb195f8e1dd13cb68b6513f461aaf3e04bfba4",
+        "git_blob_sha": "6fdfb9b43cebfc927128f4a65618dddf8f4ef576",
+        "selected": true,
+        "role": "Named opaque square master/project icon",
+        "dimensions": [
+          1024,
+          1024
+        ],
+        "mode": "RGB",
+        "source": "sources/named-r3.png",
+        "visual_review": "evidence/independent/named-r3-export-retest.json"
+      },
+      {
+        "path": "Docs/Design/AppIcon/2026-11-27/assets/havenline-icon-512.png",
+        "bytes": 273642,
+        "sha256": "e3f0973486041c44e86a07bdd88e548222d624e6559ab5abf2046972d616a657",
+        "git_blob_sha": "e84d49407fa17b0c37142e68c925a11020f05f93",
+        "selected": true,
+        "role": "Named high-resolution distribution image",
+        "dimensions": [
+          512,
+          512
+        ],
+        "mode": "RGB",
+        "source": "sources/named-r3.png",
+        "visual_review": "evidence/independent/named-r3-export-retest.json"
+      },
+      {
+        "path": "Docs/Design/AppIcon/2026-11-27/assets/havenline-adaptive-foreground-432.png",
+        "bytes": 67574,
+        "sha256": "937edd75a4f4f70e77c7d4526f15533e42d5b9db3db2ddc61d76c87f93d444eb",
+        "git_blob_sha": "6ee0b6b17817546dcfe7b537e4c015c863957465",
+        "selected": true,
+        "role": "Transparent Android adaptive foreground with HAVENLINE",
+        "dimensions": [
+          432,
+          432
+        ],
+        "mode": "RGBA",
+        "source": "sources/named-foreground-r3.png",
+        "visual_review": "evidence/independent/adaptive-r3-independent-review.json"
+      },
+      {
+        "path": "Docs/Design/AppIcon/2026-11-27/assets/havenline-adaptive-background-432.png",
+        "bytes": 1547,
+        "sha256": "9a8096ce9f01662fabce53318d0ae608df0696c66186846edb22bf05b00acb46",
+        "git_blob_sha": "834992dae2a39f4696c009751ec944eb4d0153cf",
+        "selected": true,
+        "role": "Opaque #06163d Android adaptive background",
+        "dimensions": [
+          432,
+          432
+        ],
+        "mode": "RGB",
+        "source": null,
+        "visual_review": "evidence/independent/adaptive-r3-independent-review.json"
+      },
+      {
+        "path": "Docs/Design/AppIcon/2026-11-27/assets/havenline-monochrome-432.png",
+        "bytes": 41664,
+        "sha256": "f9a3128cb4633639e9ca3d35f382a72f3a5d4c7856cb5808bc8d27eac9753f3f",
+        "git_blob_sha": "9a072d45f2cc2fc5b74fcd2b65baa6be566e6f4d",
+        "selected": true,
+        "role": "Selected optional Android themed-icon alpha layer",
+        "dimensions": [
+          432,
+          432
+        ],
+        "mode": "RGBA",
+        "source": "sources/monochrome-r1.png",
+        "visual_review": "evidence/independent/monochrome-r1-independent-review.json"
+      }
+    ],
+    "source_bindings_verified": true,
+    "tracked_changes": [
+      "BUILD_GAME.md",
+      "REPOSITORY_INDEX.md"
+    ],
+    "base_commit": "69bd3eb921ce18838795b3ce21b232ec6e3b54b6",
+    "active_gameplay_paths_changed": false,
+    "operational_github_absent": true,
+    "local_links_verified": 74,
+    "links": [
+      {
+        "from": "BUILD_GAME.md",
+        "target": "Docs/Design/AppIcon/2026-11-27/README.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "BUILD_GAME.md",
+        "target": "Docs/Production/VEHICLE_ECONOMY.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "BUILD_GAME.md",
+        "target": "Docs/Production/REFERENCE_ACCEPTANCE_STANDARD.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "BUILD_GAME.md",
+        "target": "Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json",
+        "found": "filesystem"
+      },
+      {
+        "from": "BUILD_GAME.md",
+        "target": "Docs/Production/Completeness/2026-11-27/LATEST_SOURCE_DELTA.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "BUILD_GAME.md",
+        "target": "Docs/Production/TASK_PLAN_REFRESH_2026-11-27.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "BUILD_GAME.md",
+        "target": "Docs/Production/ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "BUILD_GAME.md",
+        "target": "Docs/Production/ReferenceRefresh/2026-11-27/RENDER_CATALOGUE.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "BUILD_GAME.md",
+        "target": "Docs/Production/ReferenceRefresh/2026-11-27/LATEST_BUILD_EVIDENCE.json",
+        "found": "filesystem"
+      },
+      {
+        "from": "BUILD_GAME.md",
+        "target": "Docs/Production/COMPLETENESS_STANDARD.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "BUILD_GAME.md",
+        "target": "Docs/Production/WHOLE_GAME_COMPLETENESS.json",
+        "found": "filesystem"
+      },
+      {
+        "from": "BUILD_GAME.md",
+        "target": "Docs/Production/Completeness/2026-11-27/TASK_COMPLETENESS_T01_T80.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "BUILD_GAME.md",
+        "target": "Docs/Production/GAMEPLAY_DEPTH_STANDARD.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "BUILD_GAME.md",
+        "target": "Docs/Production/GameplayDepth/2026-11-27/TASK_GAMEPLAY_DEPTH_T01_T80.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "BUILD_GAME.md",
+        "target": "Docs/Production/GameplayDepth/2026-11-27/README.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "BUILD_GAME.md",
+        "target": "Docs/Production/GameplayDepth/2026-11-27/CURRENT_BRANCH_NOTE.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "BUILD_GAME.md",
+        "target": "Docs/Production/CURRENT_GAMEPLAY_SOURCE.json",
+        "found": "filesystem"
+      },
+      {
+        "from": "BUILD_GAME.md",
+        "target": "Docs/Production/HAVENLINE_BUILD_PLAN_V2.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "BUILD_GAME.md",
+        "target": "REPOSITORY_INDEX.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "BUILD_GAME.md",
+        "target": "HavenlineLevel1/README.md",
+        "found": "HEAD git object (sparse checkout)"
+      },
+      {
+        "from": "BUILD_GAME.md",
+        "target": "HavenlineLevel1/previews/integrated_opening.tscn",
+        "found": "HEAD git object (sparse checkout)"
+      },
+      {
+        "from": "BUILD_GAME.md",
+        "target": "HavenlineLevel1/README.md",
+        "found": "HEAD git object (sparse checkout)"
+      },
+      {
+        "from": "BUILD_GAME.md",
+        "target": "HavenlineLevel1/docs/ONE_CAMP_DESIGN.md",
+        "found": "HEAD git object (sparse checkout)"
+      },
+      {
+        "from": "BUILD_GAME.md",
+        "target": "Docs/RepositoryArchive/SOURCE_SNAPSHOT.json",
+        "found": "HEAD git object (sparse checkout)"
+      },
+      {
+        "from": "BUILD_GAME.md",
+        "target": "Docs/RepositoryArchive/MEDIA_CUSTODY.json",
+        "found": "HEAD git object (sparse checkout)"
+      },
+      {
+        "from": "Docs/Design/AppIcon/2026-11-27/README.md",
+        "target": "assets/havenline-icon-1024.png",
+        "found": "filesystem"
+      },
+      {
+        "from": "Docs/Design/AppIcon/2026-11-27/README.md",
+        "target": "assets/havenline-icon-1024.png",
+        "found": "filesystem"
+      },
+      {
+        "from": "Docs/Design/AppIcon/2026-11-27/README.md",
+        "target": "assets/havenline-icon-512.png",
+        "found": "filesystem"
+      },
+      {
+        "from": "Docs/Design/AppIcon/2026-11-27/README.md",
+        "target": "assets/havenline-adaptive-foreground-432.png",
+        "found": "filesystem"
+      },
+      {
+        "from": "Docs/Design/AppIcon/2026-11-27/README.md",
+        "target": "assets/havenline-adaptive-background-432.png",
+        "found": "filesystem"
+      },
+      {
+        "from": "Docs/Design/AppIcon/2026-11-27/README.md",
+        "target": "assets/havenline-monochrome-432.png",
+        "found": "filesystem"
+      },
+      {
+        "from": "Docs/Design/AppIcon/2026-11-27/README.md",
+        "target": "evidence/r3/named-r3-mask-detail.png",
+        "found": "filesystem"
+      },
+      {
+        "from": "Docs/Design/AppIcon/2026-11-27/README.md",
+        "target": "evidence/r3/native-sizes-dark.png",
+        "found": "filesystem"
+      },
+      {
+        "from": "Docs/Design/AppIcon/2026-11-27/README.md",
+        "target": "ACCEPTANCE.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "Docs/Design/AppIcon/2026-11-27/README.md",
+        "target": "integration/README.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "Docs/Design/AppIcon/2026-11-27/README.md",
+        "target": "ARTIFACT_MANIFEST.json",
+        "found": "filesystem"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Design/AppIcon/2026-11-27/README.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/VEHICLE_ECONOMY.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/REFERENCE_ACCEPTANCE_STANDARD.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json",
+        "found": "filesystem"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/Completeness/2026-11-27/LATEST_SOURCE_DELTA.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/TASK_PLAN_REFRESH_2026-11-27.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/ReferenceRefresh/2026-11-27/RENDER_CATALOGUE.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/ReferenceRefresh/2026-11-27/LATEST_BUILD_EVIDENCE.json",
+        "found": "filesystem"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/COMPLETENESS_STANDARD.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/WHOLE_GAME_COMPLETENESS.json",
+        "found": "filesystem"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/Completeness/2026-11-27/TASK_COMPLETENESS_T01_T80.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/Completeness/2026-11-27/PROGRESSION_ECONOMY_GAPS.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/Completeness/2026-11-27/ACTORS_COMBAT_GAPS.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/GAMEPLAY_DEPTH_STANDARD.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/GAMEPLAY_DEPTH_CONTRACT.json",
+        "found": "filesystem"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/GameplayDepth/2026-11-27/TASK_GAMEPLAY_DEPTH_T01_T80.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/GameplayDepth/2026-11-27/README.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/GameplayDepth/2026-11-27/CURRENT_BRANCH_NOTE.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/CURRENT_GAMEPLAY_SOURCE.json",
+        "found": "filesystem"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "HavenlineLevel1/README.md",
+        "found": "HEAD git object (sparse checkout)"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "HavenlineLevel1/docs/ONE_CAMP_DESIGN.md",
+        "found": "HEAD git object (sparse checkout)"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/HAVENLINE_BUILD_PLAN_V2.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/RepositoryArchive/Plans/TASK_CUSTODY_T01_T80.md",
+        "found": "HEAD git object (sparse checkout)"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/WORKSTREAM_REGISTRY.json",
+        "found": "filesystem"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/DEPENDENCY_GRAPH.json",
+        "found": "filesystem"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/PATH_OWNERSHIP.json",
+        "found": "filesystem"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/APPROVAL_INVALIDATIONS.json",
+        "found": "filesystem"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/REFERENCE_STYLE_LOCK.json",
+        "found": "filesystem"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Design/ReferenceVideoLock/REFERENCE_VIDEO_LOCK.md",
+        "found": "filesystem"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Design/ReferenceVideoLock/reference-video-sources.json",
+        "found": "filesystem"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/RepositoryArchive/Plans/REFERENCE_CUSTODY.md",
+        "found": "HEAD git object (sparse checkout)"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/RepositoryArchive/Plans/README.md",
+        "found": "HEAD git object (sparse checkout)"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Opening-Recovery/README.md",
+        "found": "HEAD git object (sparse checkout)"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Design/ResourceTurnarounds/",
+        "found": "HEAD git object (sparse checkout)"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Design/RenderArchive/",
+        "found": "HEAD git object (sparse checkout)"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Design/InvaderTurnarounds/",
+        "found": "HEAD git object (sparse checkout)"
+      },
+      {
+        "from": "REPOSITORY_INDEX.md",
+        "target": "Docs/Design/CharacterTurnarounds/",
+        "found": "HEAD git object (sparse checkout)"
+      }
+    ],
+    "deferred_exact_final_review_links": [
+      "Docs/Design/AppIcon/2026-11-27/evidence/independent/FINAL_REVIEW.json"
+    ],
+    "all_prepublication_checks_pass": true,
+    "remote_publication_check": "PENDING_ROOT_PUBLICATION_AND_READBACK"
+  },
+  "visual_evidence_actually_inspected": [
+    "sources/previous-field-icon.png",
+    "sources/furnace-style-reference.png",
+    "sources/hearth-r1.png",
+    "sources/adaptive-textless-r1.png",
+    "sources/named-r2.png",
+    "evidence/r2/named-r2-mask-detail.png",
+    "evidence/r2/native-sizes-dark.png",
+    "evidence/r2/native-sizes-light.png",
+    "sources/named-r3.png",
+    "assets/havenline-icon-1024.png",
+    "assets/havenline-icon-512.png",
+    "evidence/r3/named-r3-mask-detail.png",
+    "evidence/r3/native-sizes-dark.png",
+    "evidence/r3/native-sizes-light.png",
+    "sources/named-foreground-r3.png",
+    "evidence/adaptive-r3/composite-432.png",
+    "evidence/adaptive-r3/native-launcher-dark.png",
+    "evidence/adaptive-r3/native-launcher-light.png",
+    "evidence/adaptive-r3/safe-circle-explanation.png",
+    "sources/monochrome-r1.png",
+    "evidence/monochrome-r1/native-themed-dark.png",
+    "evidence/monochrome-r1/native-themed-warm.png",
+    "evidence/monochrome-r1/safe-circle-explanation.png"
+  ],
+  "early_raw_notes_preserved_inline": {
+    "baseline-review.json": {
+      "reviewer": "/root/icon_critic",
+      "scope": "Independent raster app-icon artwork and source-bound integration package; not native gameplay, installed APK, or device validation.",
+      "baseline_inputs": {
+        "previous_icon": {
+          "path": "/workspace/scratch/e15437dc7c94/HAVENLINE-current-gameplay/HavenlineLevel1/assets/field/field_icon.png",
+          "sha256": "d7319a6182b720000f6b6a7e5a61ef8fda028535eb899c0df574c7382e5bb9e7",
+          "bytes": 211239,
+          "width": 432,
+          "height": 432,
+          "mode": "RGB"
+        },
+        "hearth_reference": {
+          "path": "/workspace/scratch/e0eb4eeed6da/icon-furnace-reference.png",
+          "sha256": "e5b7f1f87fd668b435619c1c260e3bcdebfa0d21ad2978c08445205669addca5",
+          "bytes": 1727109,
+          "width": 1672,
+          "height": 941,
+          "mode": "RGB"
+        },
+        "acceptance_standard": {
+          "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-vehicle-economy/Docs/Production/REFERENCE_ACCEPTANCE_STANDARD.md",
+          "sha256": "02c426888427ec966acfd5f5f0d86273cc45ede2ab6d9abf9e861684cec0f3c2",
+          "bytes": 11360
+        },
+        "style_lock": {
+          "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-vehicle-economy/Docs/Production/REFERENCE_STYLE_LOCK_STANDARD.md",
+          "sha256": "1547058317c78254e013b0ce5eeec6fe9efffddbf512b372d798f504d171888f",
+          "bytes": 5587
+        }
+      },
+      "baseline_visual_findings": [
+        "Recognizable squat conical stone hearth with arched fire mouth.",
+        "Current 432px icon is opaque RGB with gray background and weak ember contrast.",
+        "Selected furnace reference has rounded polished stone, strong orange flame, dark navy presentation."
+      ],
+      "required_candidate_checks": [
+        "Exact file identity and square opaque source",
+        "No baked rounded corner mask or small text",
+        "Warm hearth/cool setting visual identity",
+        "Actual 1024/512 and native 64/48/32px inspection",
+        "Circle and squircle mask inspection",
+        "Adaptive icon critical-content safe-zone review where applicable",
+        "Original art/policy/history preservation",
+        "Exact export bindings and honest installed/build status"
+      ],
+      "status": "AWAITING_CANDIDATE",
+      "approval": false
+    },
+    "scope-update-and-early-attempts.json": {
+      "reviewer": "/root/icon_critic",
+      "scope": "Independent raster app-icon artwork and source-bound integration package; not native gameplay, installed APK, or device validation.",
+      "baseline_inputs": {
+        "previous_icon": {
+          "path": "/workspace/scratch/e15437dc7c94/HAVENLINE-current-gameplay/HavenlineLevel1/assets/field/field_icon.png",
+          "sha256": "d7319a6182b720000f6b6a7e5a61ef8fda028535eb899c0df574c7382e5bb9e7",
+          "bytes": 211239,
+          "width": 432,
+          "height": 432,
+          "mode": "RGB"
+        },
+        "hearth_reference": {
+          "path": "/workspace/scratch/e0eb4eeed6da/icon-furnace-reference.png",
+          "sha256": "e5b7f1f87fd668b435619c1c260e3bcdebfa0d21ad2978c08445205669addca5",
+          "bytes": 1727109,
+          "width": 1672,
+          "height": 941,
+          "mode": "RGB"
+        },
+        "acceptance_standard": {
+          "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-vehicle-economy/Docs/Production/REFERENCE_ACCEPTANCE_STANDARD.md",
+          "sha256": "02c426888427ec966acfd5f5f0d86273cc45ede2ab6d9abf9e861684cec0f3c2",
+          "bytes": 11360
+        },
+        "style_lock": {
+          "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-vehicle-economy/Docs/Production/REFERENCE_STYLE_LOCK_STANDARD.md",
+          "sha256": "1547058317c78254e013b0ce5eeec6fe9efffddbf512b372d798f504d171888f",
+          "bytes": 5587
+        }
+      },
+      "baseline_visual_findings": [
+        "Recognizable squat conical stone hearth with arched fire mouth.",
+        "Current 432px icon is opaque RGB with gray background and weak ember contrast.",
+        "Selected furnace reference has rounded polished stone, strong orange flame, dark navy presentation."
+      ],
+      "required_candidate_checks": [
+        "Exact file identity and square opaque source",
+        "No baked rounded corner mask or small text",
+        "Warm hearth/cool setting visual identity",
+        "Actual 1024/512 and native 64/48/32px inspection",
+        "Circle and squircle mask inspection",
+        "Adaptive icon critical-content safe-zone review where applicable",
+        "Original art/policy/history preservation",
+        "Exact export bindings and honest installed/build status"
+      ],
+      "status": "AWAITING_CANDIDATE",
+      "approval": false,
+      "scope_update": {
+        "user_steering": "the name of the game too",
+        "parent_interpretation": "Include exact HAVENLINE wordmark in artwork; semantic ambiguity about renaming has been communicated to parent.",
+        "superseded_check": "No small text",
+        "replacement_check": "Exact HAVENLINE at source; wordmark not clipped by masks; normal-size readability checked honestly; 32px hearth recognition separated from full nine-letter reading."
+      },
+      "observed_early_attempts": [
+        {
+          "path": "/workspace/scratch/e0eb4eeed6da/generated_images/exec-e4adfe8f-2655-4305-9458-70914edeeb25.png",
+          "sha256": "34d423cd3d6634fdc8f8e72f0f34600a49b5afc09aa57e2cfe89f979a040fdc4",
+          "size": [
+            1254,
+            1254
+          ],
+          "mode": "RGB",
+          "status": "SUPERSEDED_BEFORE_FINAL_REVIEW_BY_NAME_STEERING",
+          "visual_findings": [
+            "Much stronger warm flame focal point than previous icon",
+            "Blue stone and sculpted snow retain polished winter-hearth identity",
+            "No wordmark in this attempt"
+          ],
+          "final_approval": false
+        },
+        {
+          "path": "/workspace/scratch/e0eb4eeed6da/generated_images/exec-5f46b7c0-0702-4cf6-b328-5efa0ce89f8d.png",
+          "sha256": "701c8e78151d28a75d5f0e9dc734bb26daf81993fe1abef7464c2d014874ef3c",
+          "size": [
+            1254,
+            1254
+          ],
+          "mode": "RGBA",
+          "status": "SUPERSEDED_BEFORE_FINAL_REVIEW_BY_NAME_STEERING",
+          "visual_findings": [
+            "Much stronger warm flame focal point than previous icon",
+            "Blue stone and sculpted snow retain polished winter-hearth identity",
+            "No wordmark in this attempt"
+          ],
+          "final_approval": false
+        }
+      ]
+    },
+    "foreground-mono-source-observations.json": {
+      "reviewer": "/root/icon_critic",
+      "sources": [
+        {
+          "name": "named-foreground-r3",
+          "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-app-icon/Docs/Design/AppIcon/2026-11-27/sources/named-foreground-r3.png",
+          "sha256": "edacc77b2a66253e93035c70926e219f3a1e165379b77c1d2d3a74264ab697a8",
+          "size": [
+            1254,
+            1254
+          ],
+          "mode": "RGBA",
+          "alpha_extrema": [
+            0,
+            255
+          ],
+          "alpha_radii": {
+            "1": 702.0416654301937,
+            "8": 448.10099308080095,
+            "128": 445.82788158660514,
+            "250": 444.4732837865511
+          },
+          "alpha_bbox": [
+            130,
+            97,
+            1226,
+            1119
+          ],
+          "no_final_approval": true
+        },
+        {
+          "name": "monochrome-r1",
+          "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-app-icon/Docs/Design/AppIcon/2026-11-27/sources/monochrome-r1.png",
+          "sha256": "53747d0ae44c6db9d012749fb9da7941343c8028a8a2634e7b12de931a4c18b3",
+          "size": [
+            1254,
+            1254
+          ],
+          "mode": "RGBA",
+          "alpha_extrema": [
+            0,
+            255
+          ],
+          "alpha_radii": {
+            "1": 790.0205693524695,
+            "8": 630.3955107708176,
+            "128": 629.6145646345866,
+            "250": 628.8342388897094
+          },
+          "alpha_bbox": [
+            0,
+            17,
+            1254,
+            1254
+          ],
+          "no_final_approval": true
+        }
+      ],
+      "visual_note": "Both raw transparent images inspected; actual navy composites reveal clean color and mono edges. Raw black transparent viewer noise is not itself a defect. Await final safe-circle432 exports and native-size masks."
+    }
+  },
+  "limitations": [
+    "No physical Androiddevice, actual launcher installation orAPKbuild tested.",
+    "Exact activegameplay contents audited at429cb7e; laterlivehead observation is ref-only and mustbereconciled beforeintegration.",
+    "Fullname readability at32px notclaimed.",
+    "Four retained monoalpha1pixels lie beyond132safe radius; substantiveandvisuallycriticalart remainsinside.",
+    "A9remoteidentity verification mustcomplete afterpublication.",
+    "No userapproval ofa newlyrenamed game claimed; text is existingHAVENLINE."
+  ],
+  "next_action": "Root maypublish the exact frozenpackage on isolatedfeaturebranch, verify remote fullPNGblobs/ref/tree/text, and recordpublicationreceipt. Changes toreviewedinputs reopen affectedreview."
+}

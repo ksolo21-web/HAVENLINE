@@ -1,5 +1,9 @@
 # HAVENLINE repository navigation
 
+## App icon refresh
+
+[Named hearth icon](Docs/Design/AppIcon/2026-11-27/README.md) includes the selected color master, adaptive layers, monochrome version, rejected/repaired layouts, independent review and integration settings for the active game's next build.
+
 ## Vehicle economy and world fleet continuation
 
 [Fuel, fabrication and nine later-world vehicles](Docs/Production/VEHICLE_ECONOMY.md) is the forward extension to the snow truck/garage package. It includes current source bindings, the iron/coal/oil production graph, expensive processed-material profiles, a bounded fuel component, the nine later-world vehicle proposals and their generated render gallery. Older source observations and approvals below remain historical; this isolated package does not replace the active gameplay branch.
