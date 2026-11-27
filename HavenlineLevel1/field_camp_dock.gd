@@ -282,10 +282,14 @@ func refresh()->void:
 		"Build":
 			title.text="Build"
 			description=""
+			for id: String in [P.GARAGE,P.TRUCK]:
+				if book.offer_open(id):
+					list.append(_entry(P.TITLES[id]+"  ·  "+P.price_text(book.remaining(id)),id))
+			if not list.is_empty():description="Stand by the vehicle plot to pay from your pack or storehouse."
 			for id:String in book.costs:
 				if not book.offer_open(id):continue
 				if id in P.STORAGE and id!=P.next_storage(book):continue
-				if id in P.LINES:continue
+				if id in P.LINES or id in [P.GARAGE,P.TRUCK]:continue
 				list.append(_entry(P.TITLES[id]+"  ·  "+P.price_text(book.remaining(id)),id))
 				if list.size()>=3:break
 			if world.camp_active and not journal.survivor_paid and list.size()<3:
@@ -326,6 +330,8 @@ func refresh()->void:
 		var row:=Button.new()
 		row.text=str(item[0])+"   ›"
 		row.alignment=HORIZONTAL_ALIGNMENT_LEFT
+		row.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+		row.clip_text=true
 		row.custom_minimum_size=Vector2(0,57)
 		row.accessibility_name=item[0]
 		row.mouse_filter=Control.MOUSE_FILTER_IGNORE

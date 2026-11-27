@@ -200,7 +200,7 @@ func run()->void:
 	var mode:="manual"
 	for arg in args:
 		if arg.begins_with("--personal-goods="):mode=arg.trim_prefix("--personal-goods=")
-	check("normal paid scene restored",field.field_ready and not field.persist_blocked and bank.snapshot().version==12)
+	check("normal paid scene restored",field.field_ready and not field.persist_blocked and bank.snapshot().version==13)
 	match mode:
 		"manual":park(anchor);await manual()
 		"cold":await cold()

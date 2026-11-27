@@ -38,7 +38,7 @@ func _initialize() -> void:
 		gather(resumed,kind,due)
 		assert(resumed.payment(Progress.GARAGE,kind,false,due))
 	var reopened := read(resumed.snapshot())
-	check("converted contract finalizes once and cold-reopens paid",reopened != null and reopened.snapshot().version==12 and reopened.complete(Progress.GARAGE) and reopened.offer_open(Progress.TRUCK) and reopened.paid.snow_garage=={"wood":9,"stone":9,"planks":12,"blocks":5})
+	check("converted contract finalizes once and cold-reopens paid",reopened != null and reopened.snapshot().version==13 and reopened.complete(Progress.GARAGE) and reopened.offer_open(Progress.TRUCK) and reopened.paid.snow_garage=={"wood":9,"stone":9,"planks":12,"blocks":5})
 	var forged := resumed.snapshot()
 	forged.paid.snow_garage.planks += 1
 	check("processed credits cannot be fabricated on an existing receipt",read(forged)==null)

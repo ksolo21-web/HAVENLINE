@@ -66,7 +66,7 @@ func check_everything() -> void:
 	var home: Vector3 = counter.to_global(Vector3(3.1,0,3.5))
 	park(home)
 	counter.arrival_clock = 200.
-	check("old paid workshop profile opens in the new schema",not field.persist_blocked and ledger.complete("quarry_drill") and ledger.snapshot().version==12)
+	check("old paid workshop profile opens in the new schema",not field.persist_blocked and ledger.complete("quarry_drill") and ledger.snapshot().version==13)
 	# These are legitimate raw credits matched against each synthesized historic sale and prepared input.
 	for n in 12: ledger.collect("market-meat-%s" % n,"meat")
 	for n in ledger.survivor_cost+3: ledger.collect("market-wood-%s" % n,"wood")

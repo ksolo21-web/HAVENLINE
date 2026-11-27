@@ -142,7 +142,7 @@ func run() -> void:
 		var unchanged:=ledger.snapshot()
 		check("missing new balance rejected atomically",not ledger.restore(damaged) and ledger.snapshot()==unchanged)
 	else:
-		check("normal scene restored paid original order",ledger.complete("storage_stone") and ledger.snapshot().version==12)
+		check("normal scene restored paid original order",ledger.complete("storage_stone") and ledger.snapshot().version==13)
 		for kind: String in SAMPLES:
 			check(kind+" typed balances reopen",ledger.carried[kind]==1 and ledger.stored[kind]==SAMPLES[kind]-1 and ledger.collected["mine-qa-"+kind+"0"]==kind and ledger.storage_open(kind))
 			check(kind+" repeated token rejected",not world.carry.pickup("mine-qa-"+kind+"0",kind,Vector3.ZERO))

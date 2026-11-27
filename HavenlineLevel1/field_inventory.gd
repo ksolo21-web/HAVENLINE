@@ -17,6 +17,7 @@ const KINDS := ["wood", "stone", "meat", "coal", "slate", "metal"]
 const EMPTY := {"wood":0, "stone":0, "meat":0, "coal":0, "slate":0, "metal":0}
 const TITLES := {"wood":"Wood", "stone":"Stone", "meat":"Meat", "coal":"Coal", "slate":"Slate", "metal":"Metal ore"}
 const TRUCK_AUTOMATION_INCREMENT := {"wood":6, "stone":4, "metal":2}
+const LEGACY_TRUCK_BILL := {"wood":44,"stone":34,"metal":24,"coal":12}
 const LEGACY_GARAGE_BILL := {"planks":24,"blocks":20}
 const GARAGE_CREDIT_INPUT := {"planks":"wood","blocks":"stone"}
 
@@ -126,11 +127,17 @@ func vehicle_repurchase() -> bool:
 	const OFFER := "snow_truck"
 	var vehicle := vehicle_state()
 	if not complete(OFFER) or vehicle.wreck == "" or not vehicle.salvage.is_empty(): return false
-	for kind: String in costs[OFFER]:
-		if int(carried[kind]) < int(costs[OFFER][kind]): return false
-	for kind: String in costs[OFFER]:
-		var amount := int(costs[OFFER][kind])
-		carried[kind] -= amount
+	var quote := {OFFER:configured_costs[OFFER].duplicate()}
+	_apply_truck_quote(quote,settlement.truck_quote)
+	var bill: Dictionary = quote[OFFER]
+	for kind: String in bill:
+		var warehouse := int(stored[kind]) if storage_open(kind) else 0
+		if int(carried[kind]) + warehouse < int(bill[kind]): return false
+	for kind: String in bill:
+		var amount := int(bill[kind])
+		var from_pack := mini(int(carried[kind]),amount)
+		carried[kind] -= from_pack
+		stored[kind] -= amount-from_pack
 		_add_vehicle_cargo(vehicle.spent, kind, amount)
 	vehicle.purchases += 1
 	vehicle.wreck = ""
@@ -244,7 +251,7 @@ func complete(id: String) -> bool:
 func snapshot() -> Dictionary:
 	var state := {"version": 1, "collected": collected.duplicate(), "carried": carried.duplicate(), "stored": stored.duplicate(), "paid": paid.duplicate(true)}
 	if staged:
-		state.version = 12
+		state.version = 13
 		state.legacy_level2 = legacy_level2
 		state.legacy_prices = legacy_prices.duplicate()
 		state.build_order = build_order.duplicate()
@@ -292,12 +299,42 @@ static func _restore_garage_contract(receipts: Dictionary, prices: Dictionary, v
 		if old_bill: incoming[input] = 0
 	return true
 
+static func _restore_truck_contract(receipts: Dictionary, prices: Dictionary, quote: String, order: Array, version: int, pack: Dictionary, balances: Dictionary) -> bool:
+	var id := Progress.TRUCK
+	var receipt: Variant = receipts.get(id)
+	if not receipt is Dictionary: return false
+	if receipt.size() != LEGACY_TRUCK_BILL.size() or not receipt.has_all(LEGACY_TRUCK_BILL.keys()): return true
+	if version < 11: return false
+	var legacy := {id:LEGACY_TRUCK_BILL.duplicate()}
+	_apply_truck_quote(legacy,quote)
+	var old_bill: Dictionary = legacy[id]
+	for kind: String in old_bill:
+		if not _natural(receipt[kind]) or int(receipt[kind]) > int(old_bill[kind]): return false
+	if id in order:
+		prices[id] = old_bill
+		return true
+	if version >= 13: return false
+	var paid_any: bool = receipt.values().any(func(n): return int(n) > 0)
+	if paid_any and Progress.GARAGE not in order: return false
+	if old_bill.keys().all(func(kind): return int(receipt[kind]) == int(old_bill[kind])): return false
+	# Refund a pending historical contract so the new raw-material price can
+	# be accepted at the actual plot. Historical completed trucks keep their bill.
+	var due: Dictionary = prices[id]
+	for kind: String in old_bill:
+		var count := int(receipt[kind])
+		pack[kind] = int(pack[kind]) + count
+		balances[kind] -= count
+	receipts[id] = {}
+	for kind: String in due:
+		receipts[id][kind] = 0
+	return true
+
 func restore(data: Variant) -> bool:
 	if not data is Dictionary: return false
 	var old: bool = data.get("version") == 1
 	if not _natural(data.get("version")): return false
 	var version:=int(data.version)
-	var current:bool = version in [6,7,8,9,10,11,12]
+	var current:bool = version in [6,7,8,9,10,11,12,13]
 	var has_settlement: bool = current or data.get("version") == 4 or data.get("version") == 5
 	if old:
 		if data.size() != 5: return false
@@ -306,6 +343,7 @@ func restore(data: Variant) -> bool:
 	for key in ["collected", "carried", "stored", "paid"]:
 		if not data.get(key) is Dictionary:
 			return false
+	var pack: Dictionary = data.carried.duplicate()
 	var incoming: Dictionary = data.paid.duplicate(true)
 	var order: Array = []
 	var old_axes := false
@@ -386,6 +424,7 @@ func restore(data: Variant) -> bool:
 				contracts.append(id)
 				restored_costs[id] = former[id]
 		if not _restore_garage_contract(incoming,restored_costs,version): return false
+		if not _restore_truck_contract(incoming,restored_costs,truck_quote,order,version,pack,balances): return false
 		if has_settlement and data.get("settlement") is Dictionary and _natural(data.settlement.get("survivor_wood")) and data.settlement.survivor_wood > 0:
 			if not current or Progress.SURVIVOR in data.legacy_prices: contracts.append(Progress.SURVIVOR)
 		# A contract can only name a real, already-funded plot once.
@@ -507,7 +546,7 @@ func restore(data: Variant) -> bool:
 			settlement.work_seconds[kind] = float(settlement.work_seconds[kind])
 	collected = data.collected.duplicate()
 	for kind in KINDS:
-		carried[kind] = int(data.carried.get(kind,0))
+		carried[kind] = int(pack.get(kind,0))
 		stored[kind] = int(data.stored.get(kind,0))
 	for id in costs:
 		paid[id] = {}

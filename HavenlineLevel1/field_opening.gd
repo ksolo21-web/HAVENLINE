@@ -972,7 +972,9 @@ func _can_fund_vehicle_offer(id: String) -> bool:
 	if id==Progress.GARAGE and not snow_truck.can_build():return false
 	var bill := inventory.remaining(id)
 	for kind: String in bill:
-		if int(bill[kind])>0 and int(inventory.carried.get(kind,0))>0:return true
+		if int(bill[kind]) <= 0: continue
+		if int(inventory.carried.get(kind,0)) > 0: return true
+		if inventory.storage_open(kind) and int(inventory.stored[kind]) > 0: return true
 	return false
 
 func clear_installed_floor(aisles) -> void:
