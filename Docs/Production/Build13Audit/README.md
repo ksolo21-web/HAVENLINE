@@ -11,7 +11,7 @@
 
 ## World 1 launch and later updates
 
-World 1, Frozen Home Camp, is the initial release focus. Worlds 2–10 follow as connected updates. Design World 1 as a continuous sandbox and test a 50-level local progression target. The camp keeps operating after its last milestone. The final count, global numbering and older Level 1–100 launch contract need reconciliation before production sign-off. [World 1 progression and adaptive sandbox](World-Progression.md)
+World 1, Frozen Home Camp, is the initial release focus. Worlds 2–10 follow as connected updates. Design World 1 as a continuous sandbox and test a 50-level local progression target. The camp keeps operating after its last milestone. The final count, global numbering and older Level 1–100 launch contract need reconciliation before production sign-off. [World 1 progression and adaptive sandbox](World-Progression.md) · [Snow truck and garage](World-Progression.md#world-1-snow-truck-and-garage)
 
 ## Owner decisions to carry forward
 
