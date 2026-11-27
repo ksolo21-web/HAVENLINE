@@ -1,5 +1,5 @@
 extends Node3D
-## Three rigged people reconstructed from the owner's eight-view winter turnarounds.
+## The forester wears the survivor rig; customer models use their own turnarounds.
 const PORTRAITS := {
 	"survivor_male_01": preload("res://assets/settlement_people/survivor_male_01.glb"),
 	"customer_female_01": preload("res://assets/settlement_people/customer_female_01.glb"),
@@ -24,6 +24,7 @@ var bundle: Node3D
 var bones := {}
 var mode := ""
 var identity := ""
+var forester_gait: RefCounted
 
 func configure(id: String) -> void:
 	if not PORTRAITS.has(id) or skeleton: return
@@ -50,6 +51,8 @@ func configure(id: String) -> void:
 	for i in skeleton.get_bone_count():
 		bones[String(skeleton.get_bone_name(i))] = i
 	if id == "survivor_male_01":
+		forester_gait=preload("res://forester_gait.gd").new()
+		forester_gait.bind(skeleton)
 		tool = (load(AXE) as PackedScene).instantiate()
 		add_child(tool)
 		tool.hide()
@@ -77,6 +80,7 @@ func pose(action: String, phase: float) -> void:
 	var angle := fposmod(phase,1.0)*TAU
 	if mode == "chop":
 		_pose_chop(phase)
+		if forester_gait: forester_gait.update(phase,false)
 		return
 	if mode == "receive":
 		var reach := sin(clampf(phase,0.,1.)*PI)
@@ -109,6 +113,35 @@ func pose(action: String, phase: float) -> void:
 		else:
 			_bend("UpperArm."+side,.34*step,-.03*sign_x,-.015*sign_x)
 			_bend("Forearm."+side,-.13-.17*maxf(-step,0.))
+
+	if forester_gait:
+		forester_gait.update(phase,moving)
+		if mode == "carry":
+			_hold_bundle()
+
+# Keep the two gloved palms on opposite lower log ends as the torso rises
+# and falls. Grip positions are in the character's space, like the bundle.
+func _hold_bundle() -> void:
+	for side in ["L","R"]:
+		var sign_x := 1.0 if side=="L" else -1.0
+		var arm: int = bones["UpperArm."+side]
+		var forearm: int = bones["Forearm."+side]
+		var hand: int = bones["Palm."+side]
+		var shoulder := skeleton.get_bone_global_pose(arm).origin
+		var upper := skeleton.get_bone_rest(forearm).origin
+		var lower := skeleton.get_bone_rest(hand).origin
+		var palm := Vector3(sign_x*.206,.650,.231)-skeleton.position
+		var reach := palm-shoulder
+		var distance := clampf(reach.length(),.001,upper.length()+lower.length()-.001)
+		var axis := reach.normalized()
+		var along := (upper.length_squared()-lower.length_squared()+distance*distance)/(2.*distance)
+		var bend := Vector3(sign_x*.65,-.65,-.55).slide(axis).normalized()
+		var elbow := shoulder+axis*along+bend*sqrt(maxf(0.,upper.length_squared()-along*along))
+		var arm_basis := Basis(Quaternion(upper.normalized(),(elbow-shoulder).normalized()))
+		var fore_basis := Basis(Quaternion(lower.normalized(),(palm-elbow).normalized()))
+		skeleton.set_bone_global_pose(arm,Transform3D(arm_basis,shoulder))
+		skeleton.set_bone_global_pose(forearm,Transform3D(fore_basis,elbow))
+		skeleton.set_bone_global_pose(hand,Transform3D(fore_basis,palm))
 
 func _pose_chop(p: float) -> void:
 	skeleton.position = Vector3.ZERO

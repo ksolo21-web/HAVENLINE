@@ -1,11 +1,15 @@
 extends RefCounted
 
-const MAX_SPEED := 2.80
+const PREVIEW_TOP_SPEED := 2.80
+const MAX_SPEED := 7.00
 const DEAD_ZONE := 0.035
-const ACCELERATION := 8.0
-const BRAKING := 11.0
 const MOVING_TURN := 5.9
 const PIVOT_TURN := 10.8
+
+var top_speed := PREVIEW_TOP_SPEED
+var acceleration := 8.0
+var braking := 11.0
+var redirect_rate := 4.45
 
 # Track a sparse grid on both soles from the bound game mesh. The samples move
 # with their original skin weights, so a heel strike can roll through to the toe.
@@ -57,6 +61,13 @@ var bridge_origin := Transform3D.IDENTITY
 var bridge_toe := Transform3D.IDENTITY
 var initial_hold := 0.0
 var previous_request := false
+
+
+func use_field_run() -> void:
+	top_speed = MAX_SPEED
+	acceleration = 31.0
+	braking = 63.0
+	redirect_rate = 8.1
 
 
 func _boot_world(side: int) -> Transform3D:
@@ -118,7 +129,7 @@ func _brief_targets() -> void:
 	var endpoint := body.global_transform
 	var speed := body.velocity.slide(Vector3.UP).length()
 	var travel := (
-		speed * speed / (2.0 * BRAKING) if special == "brake" else minf(.11, speed * beat_duration)
+		speed * speed / (2.0 * braking) if special == "brake" else minf(.11, speed * beat_duration)
 	)
 	var facing := Vector3(sin(final_heading), 0, cos(final_heading))
 	endpoint.basis = Basis(Vector3.UP, final_heading)
@@ -128,7 +139,7 @@ func _brief_targets() -> void:
 		endpoint.origin = body.global_position
 		for tick in ceili(60 * (beat_duration + .155 * .45)):
 			forecast = move_toward(
-				forecast, travel_speed, (ACCELERATION if travel_speed > forecast else BRAKING) / 60.
+				forecast, travel_speed, (acceleration if travel_speed > forecast else braking) / 60.
 			)
 			endpoint.origin += facing * forecast / 60.
 	if special == "pivot":
@@ -139,7 +150,7 @@ func _brief_targets() -> void:
 		var predicted_speed := speed
 		endpoint.origin = body.global_position
 		for tick in ceili(60 * (beat_duration + .175 * .45)):
-			var turn_speed := 4.45
+			var turn_speed := redirect_rate
 			yaw = rotate_toward(yaw, final_heading, turn_speed / 60.)
 			var direction := Vector3(sin(yaw), 0, cos(yaw))
 			var desired := (
@@ -148,7 +159,7 @@ func _brief_targets() -> void:
 			predicted_speed = move_toward(
 				predicted_speed,
 				desired,
-				(ACCELERATION if desired > predicted_speed else BRAKING) / 60.
+				(acceleration if desired > predicted_speed else braking) / 60.
 			)
 			endpoint.origin += direction * predicted_speed / 60.
 		endpoint.basis = Basis(Vector3.UP, yaw)
@@ -172,6 +183,16 @@ func _place_boot(side: int, target: Transform3D, toe: Transform3D) -> void:
 	_adjust_leg(leg_chains[side], target.origin - current.origin, 0.0, target.basis * toe.origin)
 	var boot := skeleton.get_bone_global_pose(leg_chains[side][2])
 	boot.basis = skeleton.global_basis.inverse() * target.basis
+	if top_speed == MAX_SPEED:
+		# A planted winter boot can roll onto the heel or toe. Preserve the
+		# FieldRun ankle envelope as the hips pass over it during a fast turn.
+		var shin := skeleton.get_bone_global_pose(leg_chains[side][1])
+		var relative := shin.basis.inverse() * boot.basis
+		var angles := relative.orthonormalized().get_euler(EULER_ORDER_ZYX)
+		angles.x = clampf(angles.x, deg_to_rad(-124.), deg_to_rad(-38.))
+		angles.y = clampf(angles.y, deg_to_rad(-8.), deg_to_rad(8.))
+		angles.z = clampf(angles.z, deg_to_rad(-10.), deg_to_rad(10.))
+		boot.basis = shin.basis * Basis.from_euler(angles, EULER_ORDER_ZYX).scaled_local(relative.get_scale())
 	skeleton.set_bone_global_pose(leg_chains[side][2], boot)
 	skeleton.set_bone_global_pose(leg_chains[side][3], boot * toe)
 
@@ -495,6 +516,15 @@ func _settle_support() -> void:
 	if protected_step:
 		var heights := _heights()
 		var ground: float = contact_world.actor.global_position.y
+		var floor_gap := ground - minf(heights.x, heights.y)
+		if top_speed == MAX_SPEED and floor_gap > .001:
+			# At the exchange of support the ankle can reach its cuff limit
+			# before the whole outsole clears the snow. Raise the hips with
+			# both legs together, preserving the constrained boot rotations.
+			var pelvis := skeleton.get_bone_global_pose(pelvis_index)
+			pelvis.origin += skeleton.global_basis.inverse() * Vector3.UP * floor_gap
+			skeleton.set_bone_global_pose(pelvis_index, pelvis)
+			heights += Vector2.ONE * floor_gap
 		for side in 2:
 			if heights[side] > ground + .025:
 				lifted[side] = true
@@ -510,7 +540,7 @@ func step(world: Node3D, input: Vector2, dt: float) -> float:
 	if not skeleton:
 		_bind_soles(world)
 	var next_heading := body.rotation.y
-	var requested := remap(clampf(input.length(), DEAD_ZONE, 1.0), DEAD_ZONE, 1.0, 0.0, MAX_SPEED)
+	var requested := remap(clampf(input.length(), DEAD_ZONE, 1.0), DEAD_ZONE, 1.0, 0.0, top_speed)
 	var forward := Vector3(sin(body.rotation.y), 0.0, cos(body.rotation.y))
 	var speed := previous_speed
 	travel_speed = requested
@@ -542,12 +572,15 @@ func step(world: Node3D, input: Vector2, dt: float) -> float:
 		if special == "turn" and absf(angle_difference(final_heading, heading)) > .8:
 			final_heading = heading
 		if speed >= .08 and forward.dot(wish) < .91:
-			if not redirecting and special == "" and skeleton:
+			# The fast field run steers through its stride. The short, planted
+			# redirection belongs to the slower walk/run locomotion set.
+			if not redirecting and special == "" and skeleton and top_speed != MAX_SPEED:
 				_prepare_steps("turn", heading)
 			redirecting = true
-		var turn_speed := lerpf(PIVOT_TURN, MOVING_TURN, clampf(speed / MAX_SPEED, 0.0, 1.0))
-		if special == "turn":
-			turn_speed = 4.45
+		var turn_speed := lerpf(PIVOT_TURN, MOVING_TURN, clampf(speed / top_speed, 0.0, 1.0))
+		var running_turn := redirecting and top_speed == MAX_SPEED
+		if special == "turn" or running_turn:
+			turn_speed = redirect_rate
 		if special == "pivot":
 			turn_speed = 6.2
 		if initial_hold > 0.0:
@@ -560,14 +593,14 @@ func step(world: Node3D, input: Vector2, dt: float) -> float:
 		if redirecting and forward.dot(wish) > .995:
 			redirecting = false
 		var turn_floor := 0.88 * smoothstep(1.15, 2.0, speed)
-		if special == "turn":
+		if special == "turn" or running_turn:
 			turn_floor = .38
 		requested *= lerpf(turn_floor, 1.0, smoothstep(-0.45, 0.85, forward.dot(wish)))
 	if input.length() <= DEAD_ZONE and previous_request and previous_speed > .30 and skeleton:
 		_prepare_steps("brake", body.rotation.y)
 	previous_request = input.length() > DEAD_ZONE
 	previous_command_speed = travel_speed
-	speed = move_toward(speed, requested, (ACCELERATION if requested > speed else BRAKING) * dt)
+	speed = move_toward(speed, requested, (acceleration if requested > speed else braking) * dt)
 	if requested <= .001:
 		redirecting = false
 	floor_pending = absf(previous_speed - speed) > .005

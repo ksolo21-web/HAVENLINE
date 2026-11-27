@@ -82,7 +82,8 @@ func move_actor(input: Vector2, dt: float) -> float:
 
 func _ready() -> void:
 	super()
-	character_kit.locomotion.run_only = true
+	character_kit.locomotion.use_field_run()
+	gait_motor.use_field_run()
 	lifecycle.world = self
 	encounters.setup(self)
 	inventory.configure(Progress.offers())
@@ -137,7 +138,9 @@ func _ready() -> void:
 	rocks.append(resource_rock)
 	_configure_stem(resource_tree)
 	trees.append(resource_tree)
-	for pos in [Vector2(-5.0,9.3),Vector2(-8.6,8.5),Vector2(-8.4,12),Vector2(-5.4,13.5),Vector2(-11.3,6.3),Vector2(-10.8,10.4),Vector2(-8.9,15),Vector2(-12.5,13.1)]:
+	# Leave a full work stance between the pines and preserve the saved harvest ID.
+	_add_pine(Vector2(-6.47,9.12),0,"pine@-5000,9300")
+	for pos in [Vector2(-8.6,8.5),Vector2(-8.4,12),Vector2(-5.4,13.5),Vector2(-11.3,6.3),Vector2(-10.8,10.4),Vector2(-8.9,15),Vector2(-12.5,13.1)]:
 		_add_pine(pos)
 	add_child(defense_tower)
 	defense_tower.setup(self)
@@ -147,8 +150,9 @@ func _ready() -> void:
 	elif not lifecycle.restore(inventory.world_state):
 		persist_blocked = true
 		persist_error = "Saved world state could not be restored."
-	# A saved position on the apron begins a new visit only after stepping out.
-	if not inventory.world_state.is_empty() and depot.at_apron(actor.position): depot.visit = "done"
+	# Resume loading at the doorway, while requiring a fresh approach to buy.
+	if not inventory.world_state.is_empty() and depot.at_apron(actor.position) and (depot.house.tier == 0 or depot.on_upgrade_side(actor.position)):
+		depot.visit = "done"
 	settlement_loop = preload("res://field_settlement_loop.gd").new()
 	add_child(settlement_loop)
 	settlement_loop.install(self)
@@ -193,7 +197,11 @@ func _add_pine(at: Vector2, variant := 0, source_id := "") -> ResourceTreeScript
 	tree.name = "HarvestPine"
 	tree.position = Vector3(at.x,0,at.y)
 	add_child(tree,true)
-	tree.build(CONIFERS[variant],true)
+	if source_id == "survivor-work-pine":
+		tree.build(preload("res://assets/reference_forest/forester_work_pine.glb"),true)
+		tree.fall_reach = 3.56
+	else:
+		tree.build(CONIFERS[variant],true)
 	_configure_stem(tree)
 	var parts := tree._pivot.find_children("*","MeshInstance3D",true,false)
 	for part: MeshInstance3D in parts:
@@ -732,10 +740,11 @@ func _step_receivers() -> void:
 		var close := actor.position.distance_squared_to(anchor.global_position) <= PAD_RADIUS * PAD_RADIUS
 		if not close:
 			exit_required.erase(id)
+			carry.stop_visit(id)
 			continue
 		if exit_required.has(id): continue
 		if inventory.offer_open(id):
-			carry.contribute(id)
+			carry.visit(id)
 
 func _refresh_field() -> void:
 	depot.refresh(camp_active)
@@ -767,7 +776,7 @@ func _refresh_hud_field(danger: bool) -> void:
 			if actor.position.distance_squared_to(anchor.global_position) > 1.6: continue
 			if inventory.offer_open(id) and (camp_active or id == HEARTH_OFFER):
 				hint = "%s  ·  %s" % [Progress.TITLES[id], Progress.price_text(inventory.remaining(id))]
-		if depot.apron.visible and depot.at_apron(actor.position): hint = depot.hint()
+		if depot.apron.visible and (depot.at_apron(actor.position) or depot.at_loading_area(actor.position)): hint = depot.hint()
 	if settlement_loop and not persist_blocked and reset_time <= 0:
 		hint = settlement_loop.hint(hint,false)
 	opening_hud.set_threat(danger and not persist_blocked and reset_time <= 0)

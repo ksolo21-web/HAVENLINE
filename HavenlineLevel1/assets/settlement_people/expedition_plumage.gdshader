@@ -1,0 +1,28 @@
+shader_type spatial;
+render_mode cull_disabled, diffuse_burley, specular_schlick_ggx;
+
+// The owner's atlas contains many small UV islands. Preserve the kerchief and
+// feather bands when the entire expedition owl occupies a few dozen pixels.
+uniform sampler2D feather_color : source_color, filter_linear_mipmap_anisotropic, repeat_enable;
+uniform sampler2D packed_surface : hint_default_white, filter_linear_mipmap, repeat_enable;
+uniform sampler2D feather_normals : hint_normal, filter_linear_mipmap, repeat_enable;
+uniform float coverage : hint_range(0.0,1.0) = 1.0;
+uniform bool folded = false;
+
+void fragment() {
+	if (coverage < 1.0) {
+		float dither = fract(52.9829189 * fract(dot(FRAGCOORD.xy, vec2(0.06711056, 0.00583715))));
+		if ((folded ? 1.0-dither : dither) >= coverage) discard;
+	}
+	vec3 color = texture(feather_color, UV, -1.10).rgb;
+	vec3 surface = texture(packed_surface, UV).rgb;
+	ALBEDO = color;
+	ROUGHNESS = max(0.20, surface.g);
+	METALLIC = surface.b;
+	NORMAL_MAP = texture(feather_normals, UV).rgb;
+	float footprint = length(fwidth(UV) * vec2(textureSize(feather_color, 0)));
+	NORMAL_MAP_DEPTH = mix(0.87, 0.54, smoothstep(6.0, 36.0, footprint));
+	// Soft ambient reflection from the snow around the post and flight path.
+	// It follows the actual painted albedo; direct lighting and shadows remain.
+	EMISSION = color * vec3(0.14, 0.16, 0.18);
+}

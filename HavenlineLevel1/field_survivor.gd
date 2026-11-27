@@ -3,7 +3,9 @@ extends Node3D
 const Human = preload("res://field_human.gd")
 const RESCUE := Vector3(-5.10,0,9.90)
 const PINE := Vector2(-3.60,9.10)
-const STANCE := Vector3(-2.69,0,9.37)
+# A three-quarter flank keeps both gloves and the contact side of the trunk visible.
+const STANCE := Vector3(-4.54,0,9.04)
+const PINE_APPROACH := Vector3(-3.17,0,10.24)
 const READY := Vector3(-2.7,0,1.72)
 const SPEED := 1.80
 const SUPPLIES := ["wood","stone","meat"]
@@ -71,7 +73,7 @@ func _begin_inbound(carrying: bool) -> void:
 
 func _begin_outbound() -> void:
 	var portal: Vector3 = world.gates[0].position
-	route.assign([Vector3(-2.65,0,2.14),Vector3(0,0,portal.z-1.45),Vector3(0,0,portal.z+1.50),STANCE])
+	route.assign([Vector3(-2.65,0,2.14),Vector3(0,0,portal.z-1.45),Vector3(0,0,portal.z+1.50),PINE_APPROACH,STANCE])
 	phase = "to_tree"
 
 func _supply_apron(kind: String) -> Vector3:
@@ -158,7 +160,7 @@ func _walk(destination: Vector3, dt: float, carrying := false) -> bool:
 		actor.rotation.y = lerp_angle(actor.rotation.y,atan2(delta.x,delta.z),clampf(dt*11,0,1))
 		if walking:
 			actor.global_position = before.move_toward(destination,SPEED*dt)
-			step_cycle = fposmod(step_cycle+before.distance_to(actor.global_position)/1.32,1)
+			step_cycle = fposmod(step_cycle+before.distance_to(actor.global_position)/preload("res://forester_gait.gd").STRIDE,1)
 	actor.pose("carry" if carrying else ("walk" if walking else "idle"),step_cycle)
 	return actor.global_position.distance_squared_to(destination) <= .0001
 

@@ -84,6 +84,7 @@ func ledger_edges() -> void:
 func finish() -> void:
 	if is_instance_valid(game) and game.get("sound"):
 		game.set_physics_process(false)
+		game.carry.set_physics_process(false)
 		await Session.drain_field_audio(self, game)
 		game.queue_free()
 		for i in 8:
@@ -292,7 +293,7 @@ func machines_and_owl() -> void:
 	var batch := ["wood","stone"]
 	for kind: String in batch:
 		var before: int=ledger.carried[kind]
-		check("remote "+kind+" cannot grant an input receipt",not game.settlement_loop.works.finish(kind))
+		check("remote "+kind+" cannot grant an input receipt",not game.settlement_loop.works.receive(kind,kind,1))
 		place(game.processors.APRONS[kind])
 		check(kind+" loading apron is accessible inside the paid camp",game.field_env.is_inside_camp(game.actor.global_position) and game.processors.at_station(game.actor.global_position)==kind)
 		check(kind+" raw input transferred to its own hopper",await wait_for(func():return ledger.settlement.hoppers[kind]==1,90))

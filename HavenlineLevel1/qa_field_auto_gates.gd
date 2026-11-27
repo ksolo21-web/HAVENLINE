@@ -30,17 +30,21 @@ func clear_gate() -> void:
 	for j in 108: game.step_technical_gates(DT)
 	await physics_frame
 
-func cross(gate,stage:int,side:float) -> void:
+func cross(gate,stage:int,side:float,at_speed:bool) -> void:
 	await clear_gate()
 	var title: String="%s stage %d from %s"%[gate.gate_id,stage,("outside" if side>0 else "inside")]
+	title += " at full run" if at_speed else " from rest"
 	check(is_zero_approx(gate.angle),title+" starts latched")
 	var normal:Vector3=gate.global_basis.z
-	var start:Vector3=gate.global_position+normal*side*2.36
+	var distance := 3.10 if at_speed else 2.36
+	var start:Vector3=gate.global_position+normal*side*distance
 	var heading := -side*normal
 	var right:Vector3=game.camera.global_basis.x
 	var input:=Vector2(heading.dot(right),heading.dot(right.cross(Vector3.UP))).normalized()
 	move_to(start)
 	game.actor.rotation.y=atan2(heading.x,heading.z)
+	if at_speed:
+		game.actor.velocity=heading*game.gait_motor.top_speed
 	var ticks:=0
 	var touched_leaf:=false
 	while ticks<240:
@@ -50,16 +54,17 @@ func cross(gate,stage:int,side:float) -> void:
 		game.move_actor(input,DT)
 		game.step_technical_gates(DT)
 		for i in game.actor.get_slide_collision_count():
-			if gate._leaf_bodies.has(game.actor.get_slide_collision(i).get_collider()):
+			var obstacle = game.actor.get_slide_collision(i).get_collider()
+			if obstacle is AnimatableBody3D and gate._leaf_bodies.has(obstacle):
 				touched_leaf=true
 		ticks+=1
 		if gate.to_local(game.actor.global_position).z*side < -1.85: break
-	check(ticks<240,title+" walks straight through")
+	check(ticks<240,title+" passes straight through")
 	check(not touched_leaf,title+" maintains capsule clearance")
 	check(not game.gate_button.visible,title+" has no gate button")
 	check(is_equal_approx(gate.angle,PI*.5),title+" is fully open")
 	check(is_equal_approx(gate.swing_direction,side),title+" opens away")
-	crossings.append({"gate":gate.gate_id,"stage":stage,"from":"outside" if side>0 else "inside","physics_ticks":ticks,"leaf_contact":touched_leaf})
+	crossings.append({"gate":gate.gate_id,"stage":stage,"from":"outside" if side>0 else "inside","approach":"full run" if at_speed else "from rest","open_degrees":rad_to_deg(gate.angle),"safety_hold":gate.holding_for_occupancy,"physics_ticks":ticks,"leaf_contact":touched_leaf})
 
 func safety(gate) -> void:
 	await clear_gate()
@@ -102,6 +107,12 @@ func run() -> void:
 	root.add_child(game)
 	for i in 8: await physics_frame
 	game.set_physics_process(false)
+	# The gate-only loop suspends combat and AI. A randomly frozen wolf in
+	# the aperture would deflect a runner into the fence for the entire test.
+	# The occupied sweep is exercised independently below.
+	for wolf in game.enemies.duplicate():
+		game.encounters._remove(wolf)
+	await physics_frame
 	check(not game.gates[0].active and not game.gates[1].active,"unpaid gates stay inactive")
 	pay("center_hearth")
 	game._apply_hearth(true,false)
@@ -111,7 +122,9 @@ func run() -> void:
 			for id in ["storage_wood","storage_stone","storage_meat","expansion_2"]: pay(id)
 		check(game.field_env.perimeter_stage==stage,"earned perimeter "+str(stage))
 		for gate in game.gates:
-			for side:float in [-1.,1.]: await cross(gate,stage,side)
+			for side:float in [-1.,1.]:
+				await cross(gate,stage,side,false)
+				await cross(gate,stage,side,true)
 	await safety(game.gates[0])
 	print("AUTO_GATES ",JSON.stringify({"assertions":assertions,"crossings":crossings,"failures":failures,"pass":failures.is_empty()}))
 	await preload("res://tests/lifecycle_test_profile.gd").drain_field_audio(self,game)

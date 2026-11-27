@@ -88,10 +88,10 @@ func run() -> void:
 		var id := "storage_"+kind
 		game.actor.position=Vector3.ZERO
 		game._step_receivers()
-		var before_store: Dictionary=game.inventory.stored.duplicate()
 		approach(id,220,Vector3(.55,0,0))
 		check(id+" purchased without chaining next tier",game.inventory.complete(id) and game.depot.bins[kind].visible and game.depot.visit=="done")
 		check(id+" keeps only the authored apron visible",game.depot.apron.get_children().all(func(part):return not part.visible))
+		if id == "storage_meat": game.inventory.collect("later-wolf-meat", "meat")
 		var order: Array = game.inventory.build_order.duplicate()
 		var paid_stock: Dictionary = game.inventory.stored.duplicate()
 		approach(id,160,Vector3(-.55,0,0))
@@ -99,11 +99,12 @@ func run() -> void:
 		game.actor.position=Vector3.ZERO
 		game._step_receivers()
 		approach(id,420,Vector3(-.55,0,0))
-		check(id+" left-side re-entry deposits through the shared apron",game.inventory.stored[kind]>before_store[kind] and game.depot.visit=="load")
+		check(id+" left-side re-entry deposits through the shared apron",game.inventory.stored[kind]>paid_stock[kind] and game.depot.visit=="load")
 	game.inventory.collect("probe-retired-corners","wood")
 	var receipts_before: Dictionary=game.inventory.paid.duplicate(true)
 	var stored_before: Dictionary=game.inventory.stored.duplicate()
-	for empty_corner in [Vector3(-3.6,0,-3.5),Vector3(5.5,0,-3.5),Vector3(-3.6,0,3.2)]:
+	# The northwest corner now contains the real, enterable storehouse.
+	for empty_corner in [Vector3(5.5,0,-3.5),Vector3(-3.6,0,3.2)]:
 		game.actor.position=empty_corner
 		for step in 60:
 			game._step_receivers()

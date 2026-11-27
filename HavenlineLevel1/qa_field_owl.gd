@@ -32,8 +32,23 @@ class Host extends Node3D:
 	func owl_contact(wolf: Node3D, at: Vector3) -> bool:
 		if not owl.permits_contact(wolf,at): return false
 		max_claw_error=maxf(max_claw_error,at.distance_to(owl.claw_tip(owl.planted_claw)))
-		var p:=owl._intersection(wolf,at+Vector3.UP*.03,at-Vector3.UP*.03)
-		max_surface_error=maxf(max_surface_error,p.distance_to(at))
+		# Check distance to the drawable triangle itself. A vertical ray through
+		# overlapping coat layers can select another surface above the contact.
+		var skin: MeshInstance3D=wolf.contact_mesh()
+		var point:=skin.to_local(at)
+		var faces: PackedVector3Array=wolf.hit_surface.get_faces()
+		var distance:=INF
+		for i in range(0,faces.size(),3):
+			var a: Vector3=faces[i]
+			var b: Vector3=faces[i+1]
+			var c: Vector3=faces[i+2]
+			var normal: Vector3=(b-a).cross(c-a).normalized()
+			if normal.length_squared()<.5: continue
+			var on_plane:=point-normal*(point-a).dot(normal)
+			var bary:=Geometry3D.get_triangle_barycentric_coords(on_plane,a,b,c)
+			if bary.x>=-.00001 and bary.y>=-.00001 and bary.z>=-.00001:
+				distance=minf(distance,at.distance_to(skin.to_global(on_plane)))
+		max_surface_error=maxf(max_surface_error,distance)
 		if not wolf.receive_hit(1,at): return false
 		strikes.append([tick,at.x,at.y,at.z,wolf.hp])
 		return true
@@ -62,17 +77,33 @@ var max_joint_step := 0.0
 func sensors_match_imported_art() -> bool:
 	var owl=host.owl
 	var mesh: ArrayMesh = owl.plumage.mesh
-	var vertices: PackedVector3Array = mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX]
+	var arrays:=mesh.surface_get_arrays(0)
+	var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
 	var shapes := mesh.surface_get_blend_shape_arrays(0)
 	if owl.claw_binds.size()!=6 or shapes.size()!=3: return false
 	for i in 6:
 		var index := vertices.find(owl.claw_binds[i])
 		if index<0: return false
+		for joint in 4:
+			var offset:=4*index+joint
+			if arrays[Mesh.ARRAY_WEIGHTS][offset]>.001 and arrays[Mesh.ARRAY_BONES][offset]!=0: return false
 		for k in 3:
 			var rendered: Vector3 = shapes[k][Mesh.ARRAY_VERTEX][index]
 			var expected: Vector3 = vertices[index]+[owl.claw_tucks,owl.claw_reaches,owl.claw_grips][k][i]
 			if rendered.distance_to(expected)>.00002: return false
 	return true
+func has_wing_influences() -> bool:
+	var mesh: ArrayMesh = host.owl.plumage.mesh
+	var arrays := mesh.surface_get_arrays(0)
+	var joints: PackedInt32Array = arrays[Mesh.ARRAY_BONES]
+	var weights: PackedFloat32Array = arrays[Mesh.ARRAY_WEIGHTS]
+	var counts := {}
+	for i in joints.size():
+		if weights[i]>.35: counts[joints[i]]=int(counts.get(joints[i],0))+1
+	for bone in host.owl.shoulders+host.owl.elbows+host.owl.wrists:
+		if int(counts.get(bone,0))<16: return false
+	return true
+
 func _initialize() -> void:
 	call_deferred("run")
 func step(count: int) -> void:
@@ -81,16 +112,16 @@ func step(count: int) -> void:
 		if is_instance_valid(moving_target):
 			moving_target.position.z=2.5+.42*sin(float(host.tick)/44.)
 		var rotations: Array[Quaternion] = []
-		for joint in host.owl.shoulders+host.owl.elbows+host.owl.wrists: rotations.append(joint.quaternion)
+		for joint in host.owl.shoulders+host.owl.elbows+host.owl.wrists: rotations.append(host.owl.skeleton.get_bone_pose_rotation(joint))
 		host.owl.advance(1./60.)
 		var index := 0
 		for joint in host.owl.shoulders+host.owl.elbows+host.owl.wrists:
-			max_joint_step=maxf(max_joint_step,rotations[index].angle_to(joint.quaternion))
+			max_joint_step=maxf(max_joint_step,rotations[index].angle_to(host.owl.skeleton.get_bone_pose_rotation(joint)))
 			index+=1
 		states[host.owl.state]=true
 		var owl=host.owl
 		if owl.state=="bank":
-			asymmetric_bank=maxf(asymmetric_bank,absf(owl.shoulders[0].rotation.z+owl.shoulders[1].rotation.z))
+			asymmetric_bank=maxf(asymmetric_bank,absf(owl.skeleton.get_bone_pose_rotation(owl.shoulders[0]).get_euler().z+owl.skeleton.get_bone_pose_rotation(owl.shoulders[1]).get_euler().z))
 		if owl.state=="dive": reach=maxf(reach,owl.talon_weights.y)
 		if owl.state=="strike":
 			strike_ticks+=1
@@ -102,7 +133,7 @@ func step(count: int) -> void:
 			if host.owl.state in ["bank","follow"]: flying_tuck=maxf(flying_tuck,tuck)
 			if host.owl.state=="dive": striking_tuck=minf(striking_tuck,tuck)
 		if host.owl.state in ["follow","bank"]:
-			var roll: float=host.owl.shoulders[1].rotation.z
+			var roll: float=host.owl.skeleton.get_bone_pose_rotation(host.owl.shoulders[1]).get_euler().z
 			wing_min=minf(wing_min,roll)
 			wing_max=maxf(wing_max,roll)
 func run() -> void:
@@ -121,7 +152,9 @@ func run() -> void:
 	host.inventory.settlement.survivor_paid=true
 	step(25)
 	checks["paid purchase perches once on south gate"]=host.owl.visible and host.owl.state=="perched" and host.owl.global_position.distance_to(Vector3(-1.35,1.718,4))<.005
-	checks["both wrists and primaries are independent mesh assemblies"]=host.owl.wrists[0]!=host.owl.wrists[1] and host.owl.wrists[0].get_child(0) is MeshInstance3D and host.owl.wrists[1].get_child(0) is MeshInstance3D
+	checks["both owned Meshy poses are present and only the folded Pathfinder is drawn on the post"]=host.owl.folded.name=="FrostwingPathfinder" and host.owl.plumage.name=="SkyboundSentinel" and host.owl.folded.visible and not host.owl.plumage.visible
+	checks["six wing bones deform original Sentinel feather vertices"]=has_wing_influences()
+
 	checks["remote callback blocked outside contact"]=not host.owl_contact(wolf,wolf.position)
 	host.actor.position=Vector3(7.2,0,2.5)
 	moving_target=wolf

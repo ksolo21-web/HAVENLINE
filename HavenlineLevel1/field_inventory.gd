@@ -52,27 +52,30 @@ func collect(source_token: String, kind: String) -> bool:
 	carried[kind] += 1
 	return true
 
-func deposit(kind: String) -> bool:
-	if kind not in KINDS or carried[kind] == 0 or not storage_open(kind):
+func deposit(kind: String, amount := 1) -> bool:
+	if kind not in KINDS or amount <= 0 or carried[kind] < amount or not storage_open(kind):
 		return false
-	carried[kind] -= 1
-	stored[kind] += 1
+	carried[kind] -= amount
+	stored[kind] += amount
 	return true
 
-func payment(id: String, kind: String, from_storage: bool) -> bool:
-	if not offer_open(id) or not costs[id].has(kind) or paid[id][kind] >= costs[id][kind]:
+func payment(id: String, kind: String, from_storage: bool, amount := 1) -> bool:
+	if amount <= 0 or not offer_open(id) or not costs[id].has(kind) or amount > costs[id][kind] - paid[id][kind]:
 		return false
 	if from_storage and not storage_open(kind): return false
 	var stock := stored if from_storage else carried
-	if stock[kind] == 0:
+	if stock[kind] < amount:
 		return false
-	stock[kind] -= 1
-	paid[id][kind] += 1
+	stock[kind] -= amount
+	paid[id][kind] += amount
 	if staged and complete(id): build_order.append(id)
 	return true
 
 func storage_open(kind: String) -> bool:
 	if kind not in KINDS: return false
+	# The starter shell already has a dedicated FOOD shelf. Historical saves
+	# can own the old meat plot independently, so retain that entitlement too.
+	if kind == "meat": return not staged or complete("storage_wood") or complete("storage_meat")
 	return not staged or complete("storage_stone" if kind in MINERALS else "storage_" + kind)
 
 func offer_open(id: String) -> bool:

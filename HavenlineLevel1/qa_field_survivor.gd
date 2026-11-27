@@ -48,7 +48,9 @@ func run() -> void:
 	for i in game.inventory.survivor_cost:
 		check(game.inventory.collect("worker-rescue-payment-%d" % i,"wood"),"seed physical payment")
 	game.carry.sync(true)
-	for i in (30 * game.inventory.survivor_cost): game.settlement_loop.works.advance(1./60.)
+	for i in 90:
+		game.settlement_loop.works.advance(1./60.)
+		game.carry.advance(1./60.)
 	check(game.inventory.settlement.survivor_paid and game.inventory.settlement.survivor_wood==game.inventory.survivor_cost,"all wood physically spent on rescue plot")
 	game.actor.position=worker.RESCUE
 	worker.advance(1./60.)

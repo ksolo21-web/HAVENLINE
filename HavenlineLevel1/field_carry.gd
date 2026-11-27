@@ -54,7 +54,22 @@ var pieces := {}
 var flights: Array[Dictionary] = []
 var cooldown := 0.0
 var measured := {}
-var station_material := ""
+# A visit plans logical receipts separately from its bounded visual flights.
+# The reference first lands at 0.234–0.301 s; its last landing is at 0.835–0.903 s.
+const RELEASE_WINDOW := .59
+const PLOT_RELEASE := .36
+const HOPPER_FLIGHT := .15
+const HOPPER_SPACING := 2.0 / 60.0
+const MAX_BATCH_PIECES := 64
+var clock := 0.0
+var visit_target := ""
+var visit_started := 0.0
+var scheduled: Array[Dictionary] = []
+var next_piece := 0
+var worksite_demand: Callable
+var worksite_land: Callable
+var _landing_at_worksite := {}
+var worksite_goal: Callable
 var tier_height := {"wood":.13, "stone":.11, "meat":.145, "coal":.15, "slate":.12, "metal":.16}
 
 func setup(ledger: Inventory, character: Node3D, item_factory: Callable) -> void:
@@ -240,7 +255,7 @@ func _outstanding(kind: String, endpoint: String, outgoing: bool) -> int:
 	var key := "from" if outgoing else "to"
 	for flight in flights:
 		if flight.kind == kind and flight[key] == endpoint:
-			n += 1
+			n += int(flight.units)
 	return n
 
 func _available(kind: String, where: String) -> int:
@@ -292,6 +307,7 @@ func _place(position_id: String, kind: String, n: int) -> Vector3:
 		return rack.to_global(_pack_position(kind, _hand_slot(kind,n)))
 	if position_id == STOCK:
 		return _floor_position(kind, maxi(0,n))
+	if position_id.begins_with("work:"): return worksite_goal.call(position_id.trim_prefix("work:"))
 	return (receivers[position_id] as Node3D).global_position + Vector3.UP * .10
 
 func sync(_animate := false) -> void:
@@ -302,7 +318,7 @@ func sync(_animate := false) -> void:
 	var counts := {}
 	for kind: String in Inventory.KINDS:
 		counts[kind] = _available(kind, HAND) + _outstanding(kind, HAND, false)
-		if station_material == kind: counts[kind] = maxi(0,counts[kind]-1)
+
 		if counts[kind] > 0 and not measured.has(kind):
 			var unit := _piece(kind)
 			if unit:
@@ -326,7 +342,7 @@ func sync(_animate := false) -> void:
 					var parent: Node3D = rack if location == HAND else storage_anchors[kind]
 					parent.add_child(first)
 					pool.append(first)
-			if location == HAND and station_material == kind: n = maxi(0,n-1)
+			
 			n = _visible_units(kind, n, location)
 			if location == HAND:
 				seated[kind] = n
@@ -389,7 +405,7 @@ func contribute(id: String) -> bool:
 				return _send(kind, origin, id, 0)
 	return false
 
-func _send(kind: String, source: String, dest: String, dest_index: int) -> bool:
+func _send(kind: String, source: String, dest: String, dest_index: int, amount := 1) -> bool:
 	var unit := _piece(kind)
 	if not unit:
 		return false
@@ -408,18 +424,20 @@ func _send(kind: String, source: String, dest: String, dest_index: int) -> bool:
 	var start_scale := storage_unit_scale * StockLayout.width(kind, source_index) / float(WIDTH[kind]) if source == STOCK else 1.0
 	var end_scale := storage_unit_scale * StockLayout.width(kind, dest_index) / float(WIDTH[kind]) if dest == STOCK else 1.0
 	cooldown = INTERVAL if dest == STOCK else PAYMENT_INTERVAL
-	_start(unit, kind, source, dest, start, dest_index, SEND_TIME, start_scale, end_scale, start_yaw)
+	var duration := HOPPER_FLIGHT if dest in ["work:wood", "work:stone", "work:meat"] else SEND_TIME
+	_start(unit, kind, source, dest, start, dest_index, duration, start_scale, end_scale, start_yaw,amount)
 	return true
 
-func _start(unit: Node3D, kind: String, source: String, dest: String, start: Vector3, index: int, duration: float, scale_start: float, scale_end: float, start_yaw: float) -> void:
+func _start(unit: Node3D, kind: String, source: String, dest: String, start: Vector3, index: int, duration: float, scale_start: float, scale_end: float, start_yaw: float, amount := 1) -> void:
 	add_child(unit)
 	unit.global_position = start
 	unit.global_rotation.y = start_yaw
 	unit.scale = Vector3.ONE * scale_start
-	flights.append({"mesh":unit, "kind":kind, "from":source, "to":dest, "start":start, "index":index, "t":0.0, "duration":duration, "scale_start":scale_start, "scale_end":scale_end, "start_yaw":start_yaw})
+	flights.append({"units":amount,"mesh":unit, "kind":kind, "from":source, "to":dest, "start":start, "index":index, "t":0.0, "duration":duration, "scale_start":scale_start, "scale_end":scale_end, "start_yaw":start_yaw})
 	sync(true)
 
 func cancel_transfers() -> void:
+	stop_visit(visit_target)
 	for flight in flights:
 		(flight.mesh as Node3D).queue_free()
 	flights.clear()
@@ -430,6 +448,7 @@ func _physics_process(delta: float) -> void:
 	advance(delta)
 
 func advance(delta: float) -> void:
+	clock += delta
 	# The rack follows the actor without touching its nodes. Only a projection
 	# that changes a lane's visible count needs to reposition/show its pool.
 	if frame and frame.visible:
@@ -465,12 +484,18 @@ func _land(flight: Dictionary) -> void:
 	var kind: String = flight.kind
 	var dest: String = flight.to
 	flights.erase(flight)
-	var accepted := true
-	if dest == STOCK:
-		accepted = inventory.deposit(kind)
-	elif dest != HAND:
-		accepted = inventory.payment(dest, kind, flight.from == STOCK)
 	(flight.mesh as Node3D).queue_free()
+	var accepted := true
+	if dest.begins_with("work:"):
+		sync(true)
+		_landing_at_worksite = flight
+		worksite_land.call(dest.trim_prefix("work:"),kind,int(flight.units))
+		_landing_at_worksite = {}
+		return
+	if dest == STOCK:
+		accepted = inventory.deposit(kind,flight.units)
+	elif dest != HAND:
+		accepted = inventory.payment(dest, kind, flight.from == STOCK,flight.units)
 	sync(true)
 	if accepted:
 		inventory_changed.emit()
@@ -484,11 +509,91 @@ func available_to_station(kind: String) -> int:
 func available_on_shelf(kind: String) -> int:
 	return _available(kind, STOCK)
 
-func show_station_transfer(kind: String) -> Vector3:
-	var origin := rack.global_position
-	if not kind.is_empty():
-		origin = _place(HAND,kind,maxi(0,_available(kind,HAND)-1))
-	if kind != station_material:
-		station_material = kind
-		sync(true)
-	return origin
+
+func stop_visit(dest: String) -> void:
+	if dest != visit_target: return
+	scheduled.clear()
+	next_piece = 0
+	visit_target = ""
+
+func cancel_worksite(site: String) -> void:
+	var dest := "work:"+site
+	stop_visit(dest)
+	var changed := false
+	for flight in flights.duplicate():
+		if flight.to != dest: continue
+		flights.erase(flight)
+		flight.mesh.queue_free()
+		changed = true
+	if changed: sync(true)
+
+func take_worksite_receipt(site: String, kind: String, amount: int) -> bool:
+	if _landing_at_worksite.is_empty() or _landing_at_worksite.to != "work:"+site or _landing_at_worksite.kind != kind or _landing_at_worksite.units != amount: return false
+	_landing_at_worksite = {}
+	return true
+
+func incoming(site: String, kind: String) -> int:
+	return _outstanding(kind,"work:"+site,false)
+
+func visit(dest: String) -> void:
+	if visit_target != dest:
+		stop_visit(visit_target)
+		visit_target = dest
+	if next_piece >= scheduled.size():
+		_plan_visit(dest)
+	var window := RELEASE_WINDOW if dest == STOCK else PLOT_RELEASE
+	var interval := minf(.10, window / maxi(1,scheduled.size()-1))
+	if dest in ["work:wood", "work:stone", "work:meat"]: interval = HOPPER_SPACING
+	while next_piece < scheduled.size() and clock-visit_started+.00001 >= next_piece*interval:
+		var row := scheduled[next_piece]
+		next_piece += 1
+		var qty := mini(int(row.units), _available(row.kind,row.source))
+		if dest.begins_with("work:"):
+			qty = mini(qty,int(worksite_demand.call(dest.trim_prefix("work:"),row.kind)) - _outstanding(row.kind,dest,false))
+		elif dest != STOCK:
+			qty = mini(qty,int(inventory.remaining(dest).get(row.kind,0))-_outstanding(row.kind,dest,false)) if inventory.offer_open(dest) else 0
+		if qty <= 0: continue
+		var index := int(inventory.stored[row.kind])+_outstanding(row.kind,STOCK,false) if dest == STOCK else 0
+		_send(row.kind,row.source,dest,index,qty)
+
+func _plan_visit(dest: String) -> void:
+	scheduled.clear()
+	next_piece = 0
+	visit_started = clock
+	var rows: Array[Dictionary] = []
+	var total := 0
+	var work := dest.begins_with("work:")
+	if not work and dest != STOCK and not inventory.offer_open(dest): return
+	var needs := inventory.remaining(dest) if not work and dest!=STOCK else {}
+	for kind: String in Inventory.KINDS:
+		var available := _available(kind,HAND)
+		var due := available
+		if work:
+			due = maxi(0,int(worksite_demand.call(dest.trim_prefix("work:"),kind))-_outstanding(kind,dest,false))
+		elif dest == STOCK:
+			if not storage_anchors.has(kind) or not inventory.storage_open(kind): continue
+		else:
+			due = maxi(0,int(needs.get(kind,0))-_outstanding(kind,dest,false))
+		var from_hand := mini(available,due)
+		if from_hand > 0: rows.append({"kind":kind,"source":HAND,"units":from_hand})
+		total += from_hand
+		if work or dest == STOCK or not storage_anchors.has(kind) or not inventory.storage_open(kind): continue
+		var from_shelf := mini(due-from_hand,_available(kind,STOCK))
+		if from_shelf > 0: rows.append({"kind":kind,"source":STOCK,"units":from_shelf})
+		total += from_shelf
+	if total == 0: return
+	# The normal 52-piece reference stress load still shows one real mesh
+	# per bundle. Legacy stockpiles can contain up to a million receipts.
+	# Reserve a remainder slot for each material/source pair in those loads.
+	var group := 1
+	if total > MAX_BATCH_PIECES:
+		group = ceili(float(total) / (MAX_BATCH_PIECES - rows.size() + 1))
+	# Round-robin families so meat, stone and timber start on the same visit.
+	var remaining := total
+	while remaining > 0:
+		for row in rows:
+			var amount := mini(row.units,group)
+			if amount == 0: continue
+			scheduled.append({"kind":row.kind,"source":row.source,"units":amount})
+			row.units -= amount
+			remaining -= amount

@@ -1,6 +1,7 @@
 extends Node3D
 ## The expedition owl follows the survivor purchase and only damages a wolf under its talons.
-const OwlArt := preload("res://assets/settlement_people/expedition_owl_strike.glb")
+const OwlArt := preload("res://assets/settlement_people/expedition_owl_authored.glb")
+const PlumageShader := preload("res://assets/settlement_people/expedition_plumage.gdshader")
 const SENSE := 7.4
 const RELOAD := 2.7
 const WINDUP := .24
@@ -9,9 +10,14 @@ const CHEST := Vector3(0,.34,-.03)
 var world: Node3D
 var art: Node3D
 var plumage: MeshInstance3D
-var shoulders: Array[Node3D] = []
-var elbows: Array[Node3D] = []
-var wrists: Array[Node3D] = []
+var folded: MeshInstance3D
+var skeleton: Skeleton3D
+var shoulders := PackedInt32Array()
+var elbows := PackedInt32Array()
+var wrists := PackedInt32Array()
+var flight_fade: ShaderMaterial
+var perch_fade: ShaderMaterial
+var previous_flight := -1.0
 var claw_binds := PackedVector3Array()
 var claw_tucks := PackedVector3Array()
 var claw_reaches := PackedVector3Array()
@@ -41,19 +47,42 @@ func setup(host: Node3D) -> void:
 	name = "ExpeditionOwlCompanion"
 	art = OwlArt.instantiate()
 	add_child(art)
-	plumage = art.find_child("EightViewOwl",true,false)
+	plumage = art.find_child("SkyboundSentinel",true,false)
+	folded = art.find_child("FrostwingPathfinder",true,false)
+	skeleton = plumage.get_node(plumage.skeleton)
+	flight_fade = _plumage_material(plumage,false)
+	perch_fade = _plumage_material(folded,true)
 	for suffix in ["L","R"]:
-		shoulders.append(art.find_child("Shoulder"+suffix,true,false))
-		elbows.append(art.find_child("Elbow"+suffix,true,false))
-		wrists.append(art.find_child("Wrist"+suffix,true,false))
+		shoulders.append(skeleton.find_bone("Shoulder"+suffix))
+		elbows.append(skeleton.find_bone("Elbow"+suffix))
+		wrists.append(skeleton.find_bone("Wrist"+suffix))
 	for foot in ["Left","Right"]:
 		for toe in range(3):
-			var sensor: Node3D = plumage.find_child("Claw%s%d" % [foot,toe],false,false)
+			var sensor: Node3D = art.find_child("Claw%s%d" % [foot,toe],true,false)
 			claw_binds.append(sensor.position)
 			claw_tucks.append(sensor.get_child(0).position)
 			claw_reaches.append(sensor.get_child(1).position)
 			claw_grips.append(sensor.get_child(2).position)
 	hide()
+
+func _plumage_material(mesh: MeshInstance3D, is_folded: bool) -> ShaderMaterial:
+	var imported: StandardMaterial3D = mesh.get_active_material(0)
+	var mat := ShaderMaterial.new()
+	mat.shader = PlumageShader
+	mat.set_shader_parameter("feather_color",imported.albedo_texture)
+	mat.set_shader_parameter("packed_surface",imported.roughness_texture)
+	mat.set_shader_parameter("feather_normals",imported.normal_texture)
+	mat.set_shader_parameter("folded",is_folded)
+	mesh.set_surface_override_material(0,mat)
+	return mat
+
+func _blend_art(flight: float) -> void:
+	if is_equal_approx(flight,previous_flight): return
+	previous_flight=flight
+	plumage.visible = flight > 0.0
+	folded.visible = flight < 1.0
+	flight_fade.set_shader_parameter("coverage",flight)
+	perch_fade.set_shader_parameter("coverage",1.-flight)
 
 func claw_tip(index: int) -> Vector3:
 	var p := claw_binds[index] + claw_tucks[index] * talon_weights.x
@@ -149,7 +178,12 @@ func advance(delta: float) -> void:
 			if global_position.distance_to(perch) < .025: _switch("perched")
 		if state == "perched":
 			global_position=perch
-			_turn(world.actor.global_position-perch,dt*.22)
+			# A perched owl watches the live approach beyond its gate. It can
+			# acknowledge a passing worker without turning its back to the field.
+			var gate: Node3D = world.gates[0]
+			var outward := (gate.global_position-world.global_position).slide(Vector3.UP).normalized()
+			var worker := (world.actor.global_position-perch).slide(Vector3.UP).normalized() as Vector3
+			_turn(outward + worker*.36,dt*.29)
 	else:
 		if state in ["perched","land"]: _switch("takeoff")
 		match state:
@@ -292,6 +326,7 @@ func _pose(dt: float, travel: float = 0.) -> void:
 			beat = lerpf(-.88,beat,kick)
 			feet = Vector3(kick,0,1.-kick)
 	spread = move_toward(spread,extended,dt*4.5)
+	_blend_art(smoothstep(.03,.55,spread))
 	talon_weights = feet
 	for i in 3: plumage.set_blend_shape_value(i,feet[i])
 	var blend := 1.-exp((-24. if state=="strike" else -15.)*dt)
@@ -300,15 +335,15 @@ func _pose(dt: float, travel: float = 0.) -> void:
 	art.position = CHEST-art.basis*CHEST
 	for i in 2:
 		var side := -1. if i==0 else 1.
-		shoulders[i].scale = Vector3.ONE*lerpf(.025,1.,smoothstep(.02,.55,spread))
 		_wing_joint(shoulders[i],side*lerpf(1.27,fold,spread),side*lerpf(-.54,beat+side*asymmetric,spread),dt)
 		_wing_joint(elbows[i],side*lerpf(.80,.32*fold,spread),side*lerpf(-.42,elbow,spread),dt)
 		_wing_joint(wrists[i],side*lerpf(.23,.22*fold-.09,spread),side*lerpf(.12,wrist,spread),dt)
 
-func _wing_joint(joint: Node3D, sweep: float, flap: float, dt: float) -> void:
+func _wing_joint(joint: int, sweep: float, flap: float, dt: float) -> void:
 	var goal := Quaternion.from_euler(Vector3(0,sweep,flap))
-	var angle := joint.quaternion.angle_to(goal)
+	var current := skeleton.get_bone_pose_rotation(joint)
+	var angle := current.angle_to(goal)
 	if angle <= .001:
-		joint.quaternion = goal
+		skeleton.set_bone_pose_rotation(joint,goal)
 	else:
-		joint.quaternion = joint.quaternion.slerp(goal,minf(1.,13.5*dt/angle)).normalized()
+		skeleton.set_bone_pose_rotation(joint,current.slerp(goal,minf(1.,13.5*dt/angle)).normalized())

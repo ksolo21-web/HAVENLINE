@@ -3,18 +3,16 @@ extends Node3D
 ## Only the handoff requires the carrier's presence. Machines own the unit once it lands.
 const FloorOffer = preload("res://field_offer_floor.gd")
 const PLOT_AT := Vector3(-5.5,0,10.9)
-const PLOT_SECONDS := .42
-const LOAD_SECONDS := .32
 var world
 var plot
-var flight: Node3D
 var active := ""
-var elapsed := 0.0
-var origin := Vector3.ZERO
 var last_paid := -1
 
 func setup(host) -> void:
 	world = host
+	world.carry.worksite_demand = demand
+	world.carry.worksite_land = receive
+	world.carry.worksite_goal = _goal
 	plot = FloorOffer.new()
 	add_child(plot)
 	plot.install_custom(world.field_env,"survivor_plot",PLOT_AT,"Rescue survivor",["wood"])
@@ -39,62 +37,46 @@ func _site() -> String:
 func _raw(site: String) -> String:
 	return "wood" if site == "survivor_plot" else site
 
-func _goal() -> Vector3:
-	if active == "survivor_plot": return plot.global_position + Vector3.UP*.12
-	if active == "meat": return world.lakeshore.cooker_input.global_position
-	return world.processors.input_position(active)
-
-func _duration() -> float:
-	return PLOT_SECONDS if active == "survivor_plot" else LOAD_SECONDS
+func _goal(site: String) -> Vector3:
+	if site == "survivor_plot": return plot.global_position + Vector3.UP*.12
+	if site == "meat": return world.lakeshore.cooker_input.global_position
+	return world.processors.input_position(site)
 
 func cancel() -> void:
-	if active.is_empty(): return
-	world.carry.show_station_transfer("")
-	if is_instance_valid(flight):
-		flight.visible = false
-		flight.queue_free()
-	flight = null
+	if not active.is_empty(): world.carry.cancel_worksite(active)
 	active = ""
-	elapsed = 0.0
 
-func _can_load(site: String) -> bool:
-	if site.is_empty() or not world.settlement_loop.can_transact(): return false
-	if site != "survivor_plot" and not world.settlement_loop.available_to_feeder(site): return false
-	return world.carry.available_to_station(_raw(site)) > 0
+func demand(site: String, kind: String) -> int:
+	if kind != _raw(site) or not world.settlement_loop.can_transact() or site != _site(): return 0
+	var journal: Dictionary = world.inventory.settlement
+	if site == "survivor_plot": return world.inventory.survivor_cost - int(journal.survivor_wood)
+	return world.settlement_loop.Rules.HOPPER_CAPACITY - int(journal.hoppers[kind])
 
-func advance(dt: float) -> void:
+func advance(_dt: float) -> void:
 	refresh()
 	var site := _site()
 	if active != site: cancel()
-	if not _can_load(site):
+	if site.is_empty() or not world.settlement_loop.can_transact(): return
+	var kind := _raw(site)
+	if demand(site,kind) <= 0 or (world.carry.available_to_station(kind) == 0 and world.carry.incoming(site,kind) == 0):
 		cancel()
 		return
-	var kind := _raw(site)
-	if active.is_empty():
-		active = site
-		origin = world.carry.show_station_transfer(kind)
-		flight = world.FieldArt.make(kind)
-		add_child(flight)
-	elapsed += dt
-	var fraction := clampf(elapsed / _duration(),0,1)
-	flight.global_position = origin.lerp(_goal(),fraction) + Vector3.UP*.40*sin(fraction*PI)
-	if elapsed >= _duration(): finish(site)
+	active = site
+	world.carry.visit("work:"+site)
 
-func finish(site: String) -> bool:
-	if active.is_empty() or active != site or site != _site() or elapsed < _duration() or not _can_load(site):
-		return false
-	var raw := _raw(site)
-	var target := _goal()
-	cancel()
+func receive(site: String, kind: String, amount: int) -> bool:
+	if active != site or amount <= 0 or amount > demand(site,kind) or world.inventory.carried[kind] < amount: return false
+	if not world.carry.take_worksite_receipt(site,kind,amount): return false
 	var journal: Dictionary = world.inventory.settlement
-	world.inventory.carried[raw] -= 1
-	var cue := "spend_"+raw
+	world.inventory.carried[kind] -= amount
+	var cue := "spend_"+kind
 	if site == "survivor_plot":
-		journal.survivor_wood += 1
+		journal.survivor_wood += amount
 		journal.survivor_paid = journal.survivor_wood == world.inventory.survivor_cost
 		cue = "purchase" if journal.survivor_paid else cue
 	else:
-		journal.hoppers[raw] += 1
+		journal.hoppers[kind] += amount
+	var target := _goal(site)
 	var saved: bool = world.settlement_loop.commit_receipt(cue,target)
 	if saved and site == "survivor_plot" and journal.survivor_paid:
 		world._event("owl_equip",target)

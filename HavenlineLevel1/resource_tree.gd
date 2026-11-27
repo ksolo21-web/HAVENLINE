@@ -28,6 +28,7 @@ var cooldown := 0.0
 var falling_clock := 0.0
 var settle_clock := 0.0
 var fall_direction := FALL_DIR
+var fall_reach := 2.4
 var fall_away := false
 var blocked := false
 var regrows := false
@@ -94,7 +95,7 @@ func sweep_clear(feet: Vector3, capsule_radius: float) -> bool:
 	var across := offset.dot(Vector3(-fall_direction.z, 0, fall_direction.x))
 	# Entire measured footprint: freezes proactively before any step. No push.
 	var heel := .18 if fall_away else 1.0
-	return along < -(heel + capsule_radius) or along > 2.4 + capsule_radius or absf(across) > 1.25 + capsule_radius
+	return along < -(heel + capsule_radius) or along > fall_reach + capsule_radius or absf(across) > 1.25 + capsule_radius
 
 func advance(dt: float, feet: Vector3, capsule_radius: float) -> void:
 	var step := clampf(dt, 0.0, .04)

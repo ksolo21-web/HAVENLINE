@@ -79,7 +79,8 @@ func advance(dt: float) -> void:
 		world._event("level_complete",world.actor.global_position)
 	sync_if_needed()
 	if not works.active.is_empty():
-		progress = works.elapsed / works._duration()
+		for flight in world.carry.flights:
+			if flight.to == "work:"+works.active: progress = maxf(progress,flight.t)
 	world.opening_hud.settlement_status(world.inventory.settlement,progress)
 
 func sync_if_needed() -> void:
@@ -237,6 +238,7 @@ func hint(previous: String, danger: bool) -> String:
 	if ready(): return "Level 1 playtest complete."
 	if works.plot.visible and world.actor.position.distance_to(works.PLOT_AT) < 2.0:
 		return "Rescue survivor  ·  %d wood left" % Progress.units(world.inventory.survivor_cost - int(journal.survivor_wood))
+	if world.depot.apron.visible and (world.depot.at_apron(world.actor.position) or world.depot.at_loading_area(world.actor.position)): return previous
 	if works.active in Rules.KINDS:
 		return {"wood":"Loading saw…","stone":"Loading drill…","meat":"Loading cooker…"}[works.active]
 	if not world.inventory.complete(Progress.SECOND):
