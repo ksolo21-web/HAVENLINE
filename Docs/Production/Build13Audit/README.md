@@ -9,6 +9,10 @@
 - [Build 13 dynamic gameplay audit](Havenline-Build-13-Dynamic-Gameplay-Audit.md) records source findings, gameplay gaps, the first tests that would prove fixes, and open design choices.
 - [Whole task-plan audit](Havenline-Whole-Task-Plan-Audit.md) contains the task-by-task findings for all 70 defined tasks and the ten undefined entries. World levels 71–80 belong to T50. Both submissions are preserved verbatim, including earlier wording. Use the owner decisions below to resolve conflicts between them.
 
+## Connected worlds
+
+The campaign allocates Levels 1–100 across ten connected worlds, each with its own supply role, survival pressures, and two-way travel. The world plan maps local resources, what each world builds, and the crossing unlocked at each ten-level milestone. [World and resource progression](World-Progression.md)
+
 ## Owner decisions to carry forward
 
 ### Player routes and acceptance
