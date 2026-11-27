@@ -1,0 +1,55 @@
+{
+  "source": "fbbbca916baa2d73e0f30b66a075ad7076e61dac",
+  "sha256": "1f12cdc8b654ee07a6438317c0c8aa0152d714838a88afc25cff4a86f9d65735",
+  "cases": [
+    {
+      "previous": "build6",
+      "preceding_apk": "5e893c6f163d83d4a782eed0e5503a4587a9cf99a7936120533c5688eef5aa48",
+      "save_sha256": "e528909214282bdf5d8e6fd223f50af69a40bfb2c45b8b0efdb87f4d6e2f04b2",
+      "runs": [
+        {
+          "checks": {
+            "all 6 paid camp structures survived": true,
+            "all three machine receipts start unpaid": true,
+            "cooker paid at edge with carried inventory": true,
+            "existing prepared meal and cash retained": true,
+            "only purchased machine revealed": true,
+            "partial in-process goods retained": true,
+            "unpaid equipment absent": true,
+            "valid profile": true
+          },
+          "passed": true,
+          "phase": "upgrade"
+        },
+        {
+          "checks": {
+            "new machine ownership survives cold reload": true,
+            "new run initialized": true,
+            "single receipt for the charge": true,
+            "valid profile": true
+          },
+          "passed": true,
+          "phase": "reload"
+        }
+      ]
+    },
+    {
+      "previous": "build7",
+      "preceding_apk": "d256e6cd8093ab4099f805b0e6f226bf3fad4a6c27eb6233f29f962cf8abc640",
+      "save_sha256": "4df669370491e1ea24b1f58c92d5916ca0f66a323f4750c0443e7b3e2285347e",
+      "runs": [
+        {
+          "checks": {
+            "new machine ownership survives cold reload": true,
+            "new run initialized": true,
+            "single receipt for the charge": true,
+            "valid profile": true
+          },
+          "passed": true,
+          "phase": "reload"
+        }
+      ]
+    }
+  ],
+  "device": "Linux Godot running unchanged signed assets, disposable profiles"
+}

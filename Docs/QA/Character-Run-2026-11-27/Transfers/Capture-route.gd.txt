@@ -1,0 +1,63 @@
+extends "res://tests/qa_storage_stream.gd"
+
+var frame := 0
+var render_path := OS.get_environment("CAPTURE_DIR")
+var marks := []
+func stamp(id: String) -> void:
+	marks.append({"action":id,"seconds":snappedf(frame/60.,.01),"at":str(field.actor.position),"camp":field.camp_active,"inside":field.field_env.is_inside_camp(field.actor.position),"orbit":field.character_kit.active})
+
+func sample() -> void:
+	await physics_frame
+	if not render_path.is_empty() and frame%3==0:
+		RenderingServer.force_draw(false,1./20.)
+		root.get_texture().get_image().save_jpg(render_path.path_join("f%04d.jpg"%(frame/3)),.90)
+	frame+=1
+
+func go(label: String, point: Vector2) -> void:
+	var arrived:=false
+	for count in 170:
+		arrived=move_to([point.x,point.y],.24)
+		await sample()
+		if arrived:break
+	verify(label,arrived)
+	stamp(label)
+	steer(Vector2.ZERO)
+	for i in 12:await sample()
+
+func run() -> void:
+	field=Scene.instantiate()
+	root.add_child(field)
+	current_scene=field
+	camera=field.camera
+	origin=Vector2(root.size.x*.28, root.size.y*.7)
+	for i in 5:await sample()
+	verify("Isolated writable world",field.field_ready and not field.persist_blocked)
+	supply("wood",20)
+	field.carry.sync(true)
+	stamp("opening snow before purchase")
+	for i in 12:await sample()
+	await go("fund hearth from the southern lip",Vector2(.05,3.40))
+	for i in 120:
+		await sample()
+		if field.camp_active:break
+	verify("camp built from the player's landed wood",field.camp_active)
+	stamp("furnace revealed")
+	for i in 35:await sample()
+	await go("south exit",Vector2(0,6.5))
+	await go("south entry",Vector2(0,2.25))
+	await go("cross clear courtyard",Vector2(2.10,1.55))
+	await go("approach east gate",Vector2(3.6,0))
+	await go("east exit",Vector2(7.6,0))
+	await go("east entry",Vector2(3.3,0))
+	for event:Dictionary in marks:
+		if event.action in ["east exit","south exit"]:
+			verify(event.action+" reaches snow with orbit",not event.inside and event.orbit)
+		elif event.action in ["east entry","south entry"]:
+			verify(event.action+" reaches safety with orbit holstered",event.inside and not event.orbit)
+	print("GATE_FILM ",JSON.stringify({"checks":checks,"timeline":marks,"render_sample_hz":20,"physics_hz":60}))
+	field.set_physics_process(false)
+	field.carry.set_physics_process(false)
+	await Session.drain_field_audio(self,field)
+	field.queue_free()
+	for i in 4:await process_frame
+	quit(int(checks.values().has(false)))

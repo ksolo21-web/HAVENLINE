@@ -1,0 +1,40 @@
+{
+  "controls": "Normal field scene. ScreenTouch + Drag. 120Hz physics, traveling against fixed world. Rendering captured separately through gameplay camera.",
+  "candidate_sha": "c13f1edad2329ac6b029a7fa7224bf05a6845c19640bb843fb635606d86c6701",
+  "base_scene": "res://field_opening.tscn",
+  "steady_frames": [
+    84,
+    269
+  ],
+  "at_least_one_boot_mm_by_percentile": {
+    "0": -0.4,
+    "10": 0.7,
+    "25": 1.1,
+    "50": 5.7,
+    "75": 23.0,
+    "90": 32.8,
+    "100": 34.3
+  },
+  "both_boots_above_percent_by_threshold_cm": {
+    "0.6": 48.92,
+    "1": 43.01,
+    "2.5": 22.58,
+    "5": 0.0,
+    "7.5": 0.0
+  },
+  "complete_windows_ms_over_1cm": [
+    116.7,
+    116.7,
+    108.3,
+    116.7,
+    108.3
+  ],
+  "complete_windows_ms_at_or_under_1cm": [
+    158.3,
+    158.3,
+    158.3,
+    158.3,
+    158.3
+  ],
+  "notes": "Contact means the lower material surface of either boot. Ground is actual mesh top at Y=0, collision box top Y=0, shader has no height displacement. >1 cm is a measurement convention, not a reference-derived threshold. Each foot separately tracked. A and B recordings do not expose a ground calibration in centimetres."
+}

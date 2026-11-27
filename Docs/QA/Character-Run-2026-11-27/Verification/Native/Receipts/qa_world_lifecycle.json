@@ -1,0 +1,86 @@
+{
+  "stamp": {
+    "commit": "fbbbca916baa2d73e0f30b66a075ad7076e61dac",
+    "manifest": {
+      "sha256": "eab41c7d5fd25403f3a86914fe794cbf4fa00e45d69d687509c5eeb0487d4d84",
+      "checked_files": 516
+    },
+    "runner": "b6c273375d779611f26c0fdb0b6313d0be56c8b8d6ee43ef3e71e6b149bd137f"
+  },
+  "passed": true,
+  "runs": [
+    {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "log": "qa_world_lifecycle-1.log",
+      "log_sha256": "70031a7792e6d5b1993c0a2e6bc7323fa170c96610d179d4815c3b611bebae8c",
+      "summary": [
+        {
+          "audible_boss_tower_cue_starts": {
+            "boss_arrival": 1,
+            "boss_defeat": 1,
+            "tower_fire": 1,
+            "tower_hit": 1
+          },
+          "bosses": 97,
+          "checks": {
+            "500_waves_camp_and_four_borders_have_room_and_clearance": true,
+            "all_four_semantic_cues_started_on_actions": true,
+            "boss_cannot_cross_third_perimeter": true,
+            "boss_left_real_paw_imprints": true,
+            "boss_model_health_hit_surface_and_real_paws": true,
+            "corpse_retained_for_fall": true,
+            "dead_actor_removed_from_orbit_and_pack": true,
+            "dead_player_resumes_existing_recovery": true,
+            "dedicated_boss_and_tower_cues_loaded": true,
+            "each_formed_wave_rolls_its_own_boss": true,
+            "exact_stone_timer_returns_actual_mesh": true,
+            "forced_boss_wave": true,
+            "forced_regular_wave": true,
+            "full_cap_retries_without_boss_roll": true,
+            "initial_wolves_have_track_registration": true,
+            "invalid_saved_position_and_health_recover": true,
+            "invalid_state_rejected_atomically": true,
+            "json_lifecycle_resume": true,
+            "legacy_v1_hp_0_migrates_once": true,
+            "legacy_v1_hp_1_migrates_once": true,
+            "legacy_v1_hp_2_migrates_once": true,
+            "legacy_v1_hp_3_migrates_once": true,
+            "legacy_v1_hp_4_migrates_once": true,
+            "old_ground_loot_retired": true,
+            "older_snapshot_no_position_keeps_start_state": true,
+            "one_source_three_fresh_drops": true,
+            "paid_tower_launches_authored_bolt_before_damage": true,
+            "partial_source_survives_stream": true,
+            "perimeter_expansion_synchronously_retires_encroaching_wolf": true,
+            "pine_regrown_no_duplicate_loot": true,
+            "regrown_round_new_loot": true,
+            "restored_actor_avoids_paid_closed_gate": true,
+            "restored_fall_returns_home_alive": true,
+            "returning_source_stays_unmineable_until_due": true,
+            "sanctuary_cancels_windup_and_bite": true,
+            "stone_hit_0": true,
+            "stone_hit_1": true,
+            "third_hit_visual_depletion": true,
+            "timer_while_unloaded": true,
+            "tower_defeats_actual_alpha_and_credits_typed_meat_once": true,
+            "tower_events_mark_launch_and_hit": true,
+            "travel_while_pine_falling_resolves_once": true,
+            "unpaid_tower_never_deals_damage": true,
+            "version2_reopen_hp_0_and_fall": true,
+            "version2_reopen_hp_1_and_fall": true,
+            "version2_reopen_hp_2_and_fall": true,
+            "version2_reopen_hp_3_and_fall": true,
+            "version2_reopen_hp_4_and_fall": true,
+            "wood_timer_held_until_due": true
+          },
+          "failed": [],
+          "paw_marks_after": 6,
+          "paw_marks_before": 0,
+          "waves": 500
+        }
+      ]
+    }
+  ]
+}
