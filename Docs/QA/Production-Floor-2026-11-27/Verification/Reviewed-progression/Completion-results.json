@@ -1,0 +1,5672 @@
+{
+  "source": "e29cd536977083179943f01207b483ee58eb8220",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "actual_processes": 16,
+  "private_profile": true,
+  "clean_legacy_opening_slot": true,
+  "passed": true,
+  "rows": [
+    {
+      "phase": "ledger-edges",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "ledger-edges.log",
+      "checks": {
+        "fractional level cannot be accepted": true,
+        "ineligible level rejected on old hearth save": true,
+        "ineligible processed_stone rejected on old hearth save": true,
+        "ineligible processed_wood rejected on old hearth save": true,
+        "ineligible served rejected on old hearth save": true,
+        "ineligible worker_carry_token rejected on old hearth save": true,
+        "ineligible worker_deliveries rejected on old hearth save": true,
+        "paid hearth alone cannot release the survivor": true,
+        "paid survivor at first hearth survives without a storage purchase": true,
+        "survivor receipt cannot precede first hearth": true,
+        "uncommitted working receipt cannot alter previous checkpoint": true
+      },
+      "observed": {},
+      "log_sha256": "527af88dd49293fe6cbfbbd2abdc09e12ca9dd2d68e6a2a0c6e5133878998e58"
+    },
+    {
+      "phase": "legacy",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "legacy.log",
+      "checks": {
+        "prior build committed genuine version-3 save through its own writer": true,
+        "prior eight purchases represented exactly once": true,
+        "prior independent stocks preserved": true,
+        "prior purchase earned-center_hearth-wood-0": true,
+        "prior purchase earned-center_hearth-wood-1": true,
+        "prior purchase earned-center_hearth-wood-2": true,
+        "prior purchase earned-expansion_1-stone-0": true,
+        "prior purchase earned-expansion_1-wood-0": true,
+        "prior purchase earned-expansion_1-wood-1": true,
+        "prior purchase earned-expansion_1-wood-2": true,
+        "prior purchase earned-expansion_2-stone-0": true,
+        "prior purchase earned-expansion_2-stone-1": true,
+        "prior purchase earned-expansion_2-wood-0": true,
+        "prior purchase earned-expansion_2-wood-1": true,
+        "prior purchase earned-expansion_2-wood-2": true,
+        "prior purchase earned-orbit_upgrade-meat-0": true,
+        "prior purchase earned-orbit_upgrade-stone-0": true,
+        "prior purchase earned-orbit_upgrade-stone-1": true,
+        "prior purchase earned-storage_meat-meat-0": true,
+        "prior purchase earned-storage_meat-wood-0": true,
+        "prior purchase earned-storage_meat-wood-1": true,
+        "prior purchase earned-storage_stone-stone-0": true,
+        "prior purchase earned-storage_stone-wood-0": true,
+        "prior purchase earned-storage_stone-wood-1": true,
+        "prior purchase earned-storage_wood-wood-0": true,
+        "prior purchase earned-storage_wood-wood-1": true,
+        "prior purchase earned-watchtower-stone-0": true,
+        "prior purchase earned-watchtower-stone-1": true,
+        "prior purchase earned-watchtower-wood-0": true,
+        "prior purchase earned-watchtower-wood-1": true,
+        "prior purchase earned-watchtower-wood-2": true
+      },
+      "observed": {
+        "schema": 3
+      },
+      "log_sha256": "937dd9190c3cfaa55977ccace853d9e587e6e0f2138d5721dc1724f4ffe09b90",
+      "durable_payload": {
+        "build_order": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "carried": {
+          "coal": 0,
+          "meat": 2,
+          "metal": 0,
+          "slate": 0,
+          "stone": 5,
+          "wood": 11
+        },
+        "collected": {
+          "carried-legacy-meat": "meat",
+          "earned-center_hearth-wood-0": "wood",
+          "earned-center_hearth-wood-1": "wood",
+          "earned-center_hearth-wood-2": "wood",
+          "earned-expansion_1-stone-0": "stone",
+          "earned-expansion_1-wood-0": "wood",
+          "earned-expansion_1-wood-1": "wood",
+          "earned-expansion_1-wood-2": "wood",
+          "earned-expansion_2-stone-0": "stone",
+          "earned-expansion_2-stone-1": "stone",
+          "earned-expansion_2-wood-0": "wood",
+          "earned-expansion_2-wood-1": "wood",
+          "earned-expansion_2-wood-2": "wood",
+          "earned-orbit_upgrade-meat-0": "meat",
+          "earned-orbit_upgrade-stone-0": "stone",
+          "earned-orbit_upgrade-stone-1": "stone",
+          "earned-storage_meat-meat-0": "meat",
+          "earned-storage_meat-wood-0": "wood",
+          "earned-storage_meat-wood-1": "wood",
+          "earned-storage_stone-stone-0": "stone",
+          "earned-storage_stone-wood-0": "wood",
+          "earned-storage_stone-wood-1": "wood",
+          "earned-storage_wood-wood-0": "wood",
+          "earned-storage_wood-wood-1": "wood",
+          "earned-watchtower-stone-0": "stone",
+          "earned-watchtower-stone-1": "stone",
+          "earned-watchtower-wood-0": "wood",
+          "earned-watchtower-wood-1": "wood",
+          "earned-watchtower-wood-2": "wood",
+          "legacy-spare-stone-0": "stone",
+          "legacy-spare-stone-1": "stone",
+          "legacy-spare-stone-2": "stone",
+          "legacy-spare-stone-3": "stone",
+          "legacy-spare-stone-4": "stone",
+          "legacy-spare-wood-0": "wood",
+          "legacy-spare-wood-1": "wood",
+          "legacy-spare-wood-10": "wood",
+          "legacy-spare-wood-2": "wood",
+          "legacy-spare-wood-3": "wood",
+          "legacy-spare-wood-4": "wood",
+          "legacy-spare-wood-5": "wood",
+          "legacy-spare-wood-6": "wood",
+          "legacy-spare-wood-7": "wood",
+          "legacy-spare-wood-8": "wood",
+          "legacy-spare-wood-9": "wood",
+          "second-carried-legacy-meat": "meat",
+          "stored-legacy-meat": "meat"
+        },
+        "legacy_axes": false,
+        "paid": {
+          "center_hearth": {
+            "wood": 3
+          },
+          "expansion_1": {
+            "stone": 1,
+            "wood": 3
+          },
+          "expansion_2": {
+            "stone": 2,
+            "wood": 3
+          },
+          "orbit_upgrade": {
+            "meat": 1,
+            "stone": 2
+          },
+          "storage_meat": {
+            "meat": 1,
+            "wood": 2
+          },
+          "storage_stone": {
+            "stone": 1,
+            "wood": 2
+          },
+          "storage_wood": {
+            "wood": 2
+          },
+          "watchtower": {
+            "stone": 2,
+            "wood": 3
+          }
+        },
+        "stored": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 0
+        },
+        "version": 3,
+        "world": {}
+      },
+      "durable_payload_sha256": "579d36d4530b9b96dc2f23a7c4ffd4ecd68202ea30c30ac4e6f4779d90907f02"
+    },
+    {
+      "phase": "layout",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "layout.log",
+      "checks": {
+        "counter service connects to the same 0.96 m clear aisle": true,
+        "counter service is inside the safe camp": true,
+        "east gate connects to the same 0.96 m clear aisle": true,
+        "east gate is inside the safe camp": true,
+        "gate-east automatically opens from the exterior": true,
+        "gate-east traverses inward": true,
+        "gate-east traverses outward": true,
+        "gate-south automatically opens from the exterior": true,
+        "gate-south traverses inward": true,
+        "gate-south traverses outward": true,
+        "kitchen feed connects to the same 0.96 m clear aisle": true,
+        "kitchen feed is inside the safe camp": true,
+        "leaving the saw restores its full roof and rear wall at 1x zoom": true,
+        "leaving the saw restores its full roof and rear wall at 2x zoom": true,
+        "rear cutaway keeps the physical storehouse closed at 1x zoom": true,
+        "rear cutaway keeps the physical storehouse closed at 2x zoom": true,
+        "roast pickup connects to the same 0.96 m clear aisle": true,
+        "roast pickup is inside the safe camp": true,
+        "roof and back wall yield when the actual camera crosses them at 1x zoom": true,
+        "roof and back wall yield when the actual camera crosses them at 2x zoom": true,
+        "saw feed connects to the same 0.96 m clear aisle": true,
+        "saw feed is inside the safe camp": true,
+        "separately paid camp_cookerstone": true,
+        "separately paid camp_cookerwood": true,
+        "separately paid quarry_drillstone": true,
+        "separately paid quarry_drillwood": true,
+        "separately paid saw_benchstone": true,
+        "separately paid saw_benchwood": true,
+        "shipping main scene loaded from disposable profile": true,
+        "south gate connects to the same 0.96 m clear aisle": true,
+        "south gate is inside the safe camp": true,
+        "stone feed connects to the same 0.96 m clear aisle": true,
+        "stone feed is inside the safe camp": true,
+        "storehouse connects to the same 0.96 m clear aisle": true,
+        "storehouse is inside the safe camp": true,
+        "the customer queue stays on the opposite side of the north fence": true,
+        "the retired shore sites have no loading actions": true,
+        "west saw operator stays visible through the warehouse sightline at 1x zoom": true,
+        "west saw operator stays visible through the warehouse sightline at 2x zoom": true
+      },
+      "observed": {
+        "aisle_probe_diameter_m": 0.959999978542328,
+        "counter service_sampling_error_m": 0.063,
+        "east gate_sampling_error_m": 0.117,
+        "gate-east traverses inward": {
+          "contacts": [],
+          "crossed_depth_m": 1.77000141143799,
+          "ending_xz": [
+            8.22999858856201,
+            0.0
+          ],
+          "finished_inside": true,
+          "minimum_depth_m": 1.56,
+          "open_and_wall_clear": true,
+          "started_inside": false,
+          "target_xz": [
+            8.19999980926514,
+            0.0
+          ]
+        },
+        "gate-east traverses outward": {
+          "contacts": [],
+          "crossed_depth_m": 1.80000019073486,
+          "ending_xz": [
+            11.8000001907349,
+            0.0
+          ],
+          "finished_inside": false,
+          "minimum_depth_m": 1.56,
+          "open_and_wall_clear": true,
+          "started_inside": true,
+          "target_xz": [
+            11.8000001907349,
+            0.0
+          ]
+        },
+        "gate-south traverses inward": {
+          "contacts": [],
+          "crossed_depth_m": 1.77000188827515,
+          "ending_xz": [
+            0.0,
+            3.62999820709229
+          ],
+          "finished_inside": true,
+          "minimum_depth_m": 1.56,
+          "open_and_wall_clear": true,
+          "started_inside": false,
+          "target_xz": [
+            0.0,
+            3.60000014305115
+          ]
+        },
+        "gate-south traverses outward": {
+          "contacts": [],
+          "crossed_depth_m": 1.79999971389771,
+          "ending_xz": [
+            0.0,
+            7.19999980926514
+          ],
+          "finished_inside": false,
+          "minimum_depth_m": 1.56,
+          "open_and_wall_clear": true,
+          "started_inside": true,
+          "target_xz": [
+            0.0,
+            7.19999980926514
+          ]
+        },
+        "grid_pitch_m": 0.26,
+        "kitchen feed_sampling_error_m": 0.2,
+        "reachable_samples": 2889,
+        "roast pickup_sampling_error_m": 0.206,
+        "saw feed_sampling_error_m": 0.045,
+        "south gate_sampling_error_m": 0.134,
+        "stone feed_sampling_error_m": 0.153,
+        "storehouse_sampling_error_m": 0.073
+      },
+      "log_sha256": "9c66fa4c8364e2c59527db91ce3fbefb68d6d497cefadf2ee95639f5d8f3002c",
+      "durable_payload": {
+        "build_order": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade",
+          "camp_cooker",
+          "saw_bench",
+          "quarry_drill"
+        ],
+        "carried": {
+          "coal": 0,
+          "meat": 2,
+          "metal": 0,
+          "slate": 0,
+          "stone": 5,
+          "wood": 11
+        },
+        "collected": {
+          "carried-legacy-meat": "meat",
+          "earned-center_hearth-wood-0": "wood",
+          "earned-center_hearth-wood-1": "wood",
+          "earned-center_hearth-wood-2": "wood",
+          "earned-expansion_1-stone-0": "stone",
+          "earned-expansion_1-wood-0": "wood",
+          "earned-expansion_1-wood-1": "wood",
+          "earned-expansion_1-wood-2": "wood",
+          "earned-expansion_2-stone-0": "stone",
+          "earned-expansion_2-stone-1": "stone",
+          "earned-expansion_2-wood-0": "wood",
+          "earned-expansion_2-wood-1": "wood",
+          "earned-expansion_2-wood-2": "wood",
+          "earned-orbit_upgrade-meat-0": "meat",
+          "earned-orbit_upgrade-stone-0": "stone",
+          "earned-orbit_upgrade-stone-1": "stone",
+          "earned-storage_meat-meat-0": "meat",
+          "earned-storage_meat-wood-0": "wood",
+          "earned-storage_meat-wood-1": "wood",
+          "earned-storage_stone-stone-0": "stone",
+          "earned-storage_stone-wood-0": "wood",
+          "earned-storage_stone-wood-1": "wood",
+          "earned-storage_wood-wood-0": "wood",
+          "earned-storage_wood-wood-1": "wood",
+          "earned-watchtower-stone-0": "stone",
+          "earned-watchtower-stone-1": "stone",
+          "earned-watchtower-wood-0": "wood",
+          "earned-watchtower-wood-1": "wood",
+          "earned-watchtower-wood-2": "wood",
+          "legacy-spare-stone-0": "stone",
+          "legacy-spare-stone-1": "stone",
+          "legacy-spare-stone-2": "stone",
+          "legacy-spare-stone-3": "stone",
+          "legacy-spare-stone-4": "stone",
+          "legacy-spare-wood-0": "wood",
+          "legacy-spare-wood-1": "wood",
+          "legacy-spare-wood-10": "wood",
+          "legacy-spare-wood-2": "wood",
+          "legacy-spare-wood-3": "wood",
+          "legacy-spare-wood-4": "wood",
+          "legacy-spare-wood-5": "wood",
+          "legacy-spare-wood-6": "wood",
+          "legacy-spare-wood-7": "wood",
+          "legacy-spare-wood-8": "wood",
+          "legacy-spare-wood-9": "wood",
+          "second-carried-legacy-meat": "meat",
+          "setup-camp_cooker-stone-0": "stone",
+          "setup-camp_cooker-stone-1": "stone",
+          "setup-camp_cooker-stone-2": "stone",
+          "setup-camp_cooker-stone-3": "stone",
+          "setup-camp_cooker-stone-4": "stone",
+          "setup-camp_cooker-stone-5": "stone",
+          "setup-camp_cooker-stone-6": "stone",
+          "setup-camp_cooker-stone-7": "stone",
+          "setup-camp_cooker-wood-0": "wood",
+          "setup-camp_cooker-wood-1": "wood",
+          "setup-camp_cooker-wood-10": "wood",
+          "setup-camp_cooker-wood-11": "wood",
+          "setup-camp_cooker-wood-2": "wood",
+          "setup-camp_cooker-wood-3": "wood",
+          "setup-camp_cooker-wood-4": "wood",
+          "setup-camp_cooker-wood-5": "wood",
+          "setup-camp_cooker-wood-6": "wood",
+          "setup-camp_cooker-wood-7": "wood",
+          "setup-camp_cooker-wood-8": "wood",
+          "setup-camp_cooker-wood-9": "wood",
+          "setup-quarry_drill-stone-0": "stone",
+          "setup-quarry_drill-stone-1": "stone",
+          "setup-quarry_drill-stone-10": "stone",
+          "setup-quarry_drill-stone-11": "stone",
+          "setup-quarry_drill-stone-2": "stone",
+          "setup-quarry_drill-stone-3": "stone",
+          "setup-quarry_drill-stone-4": "stone",
+          "setup-quarry_drill-stone-5": "stone",
+          "setup-quarry_drill-stone-6": "stone",
+          "setup-quarry_drill-stone-7": "stone",
+          "setup-quarry_drill-stone-8": "stone",
+          "setup-quarry_drill-stone-9": "stone",
+          "setup-quarry_drill-wood-0": "wood",
+          "setup-quarry_drill-wood-1": "wood",
+          "setup-quarry_drill-wood-2": "wood",
+          "setup-quarry_drill-wood-3": "wood",
+          "setup-quarry_drill-wood-4": "wood",
+          "setup-quarry_drill-wood-5": "wood",
+          "setup-quarry_drill-wood-6": "wood",
+          "setup-quarry_drill-wood-7": "wood",
+          "setup-quarry_drill-wood-8": "wood",
+          "setup-quarry_drill-wood-9": "wood",
+          "setup-saw_bench-stone-0": "stone",
+          "setup-saw_bench-stone-1": "stone",
+          "setup-saw_bench-stone-2": "stone",
+          "setup-saw_bench-stone-3": "stone",
+          "setup-saw_bench-stone-4": "stone",
+          "setup-saw_bench-stone-5": "stone",
+          "setup-saw_bench-wood-0": "wood",
+          "setup-saw_bench-wood-1": "wood",
+          "setup-saw_bench-wood-10": "wood",
+          "setup-saw_bench-wood-11": "wood",
+          "setup-saw_bench-wood-12": "wood",
+          "setup-saw_bench-wood-13": "wood",
+          "setup-saw_bench-wood-2": "wood",
+          "setup-saw_bench-wood-3": "wood",
+          "setup-saw_bench-wood-4": "wood",
+          "setup-saw_bench-wood-5": "wood",
+          "setup-saw_bench-wood-6": "wood",
+          "setup-saw_bench-wood-7": "wood",
+          "setup-saw_bench-wood-8": "wood",
+          "setup-saw_bench-wood-9": "wood",
+          "stored-legacy-meat": "meat"
+        },
+        "legacy_axes": false,
+        "legacy_level2": false,
+        "legacy_prices": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "paid": {
+          "camp_cooker": {
+            "stone": 8,
+            "wood": 12
+          },
+          "center_hearth": {
+            "wood": 3
+          },
+          "expansion_1": {
+            "stone": 1,
+            "wood": 3
+          },
+          "expansion_2": {
+            "stone": 2,
+            "wood": 3
+          },
+          "meal_conveyor": {
+            "stone": 0,
+            "wood": 0
+          },
+          "orbit_upgrade": {
+            "meat": 1,
+            "stone": 2
+          },
+          "quarry_drill": {
+            "stone": 12,
+            "wood": 10
+          },
+          "saw_bench": {
+            "stone": 6,
+            "wood": 14
+          },
+          "storage_meat": {
+            "meat": 1,
+            "wood": 2
+          },
+          "storage_stone": {
+            "stone": 1,
+            "wood": 2
+          },
+          "storage_wood": {
+            "wood": 2
+          },
+          "supply_conveyors": {
+            "stone": 0,
+            "wood": 0
+          },
+          "watchtower": {
+            "stone": 2,
+            "wood": 3
+          }
+        },
+        "settlement": {
+          "cooked": 0,
+          "counter_stock": 0,
+          "dispatch_cursor": 0,
+          "held_meal": 0,
+          "hoppers": {
+            "meat": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "level": 1,
+          "line_load": {
+            "blocks": 0,
+            "meal": 0,
+            "meal_to_store": 0,
+            "meat": 0,
+            "planks": 0,
+            "stone": 0,
+            "stored_meal": 0,
+            "wood": 0
+          },
+          "line_progress": {
+            "blocks": 0.0,
+            "meal": 0.0,
+            "meal_to_store": 0.0,
+            "meat": 0.0,
+            "planks": 0.0,
+            "stone": 0.0,
+            "stored_meal": 0.0,
+            "wood": 0.0
+          },
+          "owl_hits": 0,
+          "processed_stone": 0,
+          "processed_wood": 0,
+          "product_store": {
+            "blocks": 0,
+            "meal": 0,
+            "planks": 0
+          },
+          "rescued": false,
+          "served": 0,
+          "survivor_paid": false,
+          "survivor_wood": 0,
+          "work_seconds": {
+            "meat": 0.0,
+            "stone": 0.0,
+            "wood": 0.0
+          },
+          "worker_carry_token": "",
+          "worker_deliveries": 0,
+          "worker_load": {
+            "coal": 0,
+            "meat": 0,
+            "metal": 0,
+            "slate": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "worker_meal": 0,
+          "worker_receipts": [],
+          "worker_supply": ""
+        },
+        "stored": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 0
+        },
+        "version": 9,
+        "world": {
+          "cooling": {},
+          "drops": [],
+          "layout": {},
+          "pack": {
+            "live": [
+              [
+                1,
+                false,
+                3,
+                15.3725395202637,
+                -2.02381730079651,
+                15.3725395202637,
+                -2.02381730079651
+              ],
+              [
+                2,
+                false,
+                3,
+                13.4378089904785,
+                6.30985355377197,
+                13.4378089904785,
+                6.30985355377197
+              ],
+              [
+                3,
+                false,
+                3,
+                17.6595802307129,
+                3.57125568389893,
+                17.6595802307129,
+                3.57125568389893
+              ]
+            ],
+            "remaining": 24.0,
+            "rng": "-5710695551840508925",
+            "serial": 3,
+            "wave": 1
+          },
+          "partial": {},
+          "player": {
+            "camp_heal_elapsed": 0.0,
+            "fall_left": 0.0,
+            "hp": 30,
+            "protection_left": 0.0,
+            "x": 0.0,
+            "yaw": 0.0,
+            "z": 6.0
+          },
+          "previous_kitchen_site": false,
+          "serial": 0,
+          "version": 2
+        }
+      },
+      "durable_payload_sha256": "9c5e58a635e87f5feb6b756563e74fe1ffa53df23ee1466182d8a3adb5ee1ebb"
+    },
+    {
+      "phase": "plot-partial",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "plot-partial.log",
+      "checks": {
+        "all original receipts and both raw stocks survived migration": true,
+        "eight purchases alone cannot enter the next level": true,
+        "first wood arrives as a separate survivor-plot receipt": true,
+        "legacy v3 started in Level 1": true,
+        "no remote or duplicate worker grants before a physical pickup": true,
+        "partial payment consumes one wood and keeps the survivor waiting": true,
+        "remote cook and remote sale rejected": true,
+        "rescue cannot be claimed remotely": true,
+        "shipping main scene loaded from disposable profile": true,
+        "unpaid plot cannot recruit even alongside the survivor": true
+      },
+      "observed": {},
+      "log_sha256": "38ad377a3a19de38a4ea909d9cf155dc1abc01957eb51abbae776ac00e1e7a4a",
+      "durable_payload": {
+        "build_order": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade",
+          "camp_cooker",
+          "saw_bench",
+          "quarry_drill"
+        ],
+        "carried": {
+          "coal": 0,
+          "meat": 2,
+          "metal": 0,
+          "slate": 0,
+          "stone": 5,
+          "wood": 10
+        },
+        "collected": {
+          "carried-legacy-meat": "meat",
+          "earned-center_hearth-wood-0": "wood",
+          "earned-center_hearth-wood-1": "wood",
+          "earned-center_hearth-wood-2": "wood",
+          "earned-expansion_1-stone-0": "stone",
+          "earned-expansion_1-wood-0": "wood",
+          "earned-expansion_1-wood-1": "wood",
+          "earned-expansion_1-wood-2": "wood",
+          "earned-expansion_2-stone-0": "stone",
+          "earned-expansion_2-stone-1": "stone",
+          "earned-expansion_2-wood-0": "wood",
+          "earned-expansion_2-wood-1": "wood",
+          "earned-expansion_2-wood-2": "wood",
+          "earned-orbit_upgrade-meat-0": "meat",
+          "earned-orbit_upgrade-stone-0": "stone",
+          "earned-orbit_upgrade-stone-1": "stone",
+          "earned-storage_meat-meat-0": "meat",
+          "earned-storage_meat-wood-0": "wood",
+          "earned-storage_meat-wood-1": "wood",
+          "earned-storage_stone-stone-0": "stone",
+          "earned-storage_stone-wood-0": "wood",
+          "earned-storage_stone-wood-1": "wood",
+          "earned-storage_wood-wood-0": "wood",
+          "earned-storage_wood-wood-1": "wood",
+          "earned-watchtower-stone-0": "stone",
+          "earned-watchtower-stone-1": "stone",
+          "earned-watchtower-wood-0": "wood",
+          "earned-watchtower-wood-1": "wood",
+          "earned-watchtower-wood-2": "wood",
+          "legacy-spare-stone-0": "stone",
+          "legacy-spare-stone-1": "stone",
+          "legacy-spare-stone-2": "stone",
+          "legacy-spare-stone-3": "stone",
+          "legacy-spare-stone-4": "stone",
+          "legacy-spare-wood-0": "wood",
+          "legacy-spare-wood-1": "wood",
+          "legacy-spare-wood-10": "wood",
+          "legacy-spare-wood-2": "wood",
+          "legacy-spare-wood-3": "wood",
+          "legacy-spare-wood-4": "wood",
+          "legacy-spare-wood-5": "wood",
+          "legacy-spare-wood-6": "wood",
+          "legacy-spare-wood-7": "wood",
+          "legacy-spare-wood-8": "wood",
+          "legacy-spare-wood-9": "wood",
+          "second-carried-legacy-meat": "meat",
+          "setup-camp_cooker-stone-0": "stone",
+          "setup-camp_cooker-stone-1": "stone",
+          "setup-camp_cooker-stone-2": "stone",
+          "setup-camp_cooker-stone-3": "stone",
+          "setup-camp_cooker-stone-4": "stone",
+          "setup-camp_cooker-stone-5": "stone",
+          "setup-camp_cooker-stone-6": "stone",
+          "setup-camp_cooker-stone-7": "stone",
+          "setup-camp_cooker-wood-0": "wood",
+          "setup-camp_cooker-wood-1": "wood",
+          "setup-camp_cooker-wood-10": "wood",
+          "setup-camp_cooker-wood-11": "wood",
+          "setup-camp_cooker-wood-2": "wood",
+          "setup-camp_cooker-wood-3": "wood",
+          "setup-camp_cooker-wood-4": "wood",
+          "setup-camp_cooker-wood-5": "wood",
+          "setup-camp_cooker-wood-6": "wood",
+          "setup-camp_cooker-wood-7": "wood",
+          "setup-camp_cooker-wood-8": "wood",
+          "setup-camp_cooker-wood-9": "wood",
+          "setup-quarry_drill-stone-0": "stone",
+          "setup-quarry_drill-stone-1": "stone",
+          "setup-quarry_drill-stone-10": "stone",
+          "setup-quarry_drill-stone-11": "stone",
+          "setup-quarry_drill-stone-2": "stone",
+          "setup-quarry_drill-stone-3": "stone",
+          "setup-quarry_drill-stone-4": "stone",
+          "setup-quarry_drill-stone-5": "stone",
+          "setup-quarry_drill-stone-6": "stone",
+          "setup-quarry_drill-stone-7": "stone",
+          "setup-quarry_drill-stone-8": "stone",
+          "setup-quarry_drill-stone-9": "stone",
+          "setup-quarry_drill-wood-0": "wood",
+          "setup-quarry_drill-wood-1": "wood",
+          "setup-quarry_drill-wood-2": "wood",
+          "setup-quarry_drill-wood-3": "wood",
+          "setup-quarry_drill-wood-4": "wood",
+          "setup-quarry_drill-wood-5": "wood",
+          "setup-quarry_drill-wood-6": "wood",
+          "setup-quarry_drill-wood-7": "wood",
+          "setup-quarry_drill-wood-8": "wood",
+          "setup-quarry_drill-wood-9": "wood",
+          "setup-saw_bench-stone-0": "stone",
+          "setup-saw_bench-stone-1": "stone",
+          "setup-saw_bench-stone-2": "stone",
+          "setup-saw_bench-stone-3": "stone",
+          "setup-saw_bench-stone-4": "stone",
+          "setup-saw_bench-stone-5": "stone",
+          "setup-saw_bench-wood-0": "wood",
+          "setup-saw_bench-wood-1": "wood",
+          "setup-saw_bench-wood-10": "wood",
+          "setup-saw_bench-wood-11": "wood",
+          "setup-saw_bench-wood-12": "wood",
+          "setup-saw_bench-wood-13": "wood",
+          "setup-saw_bench-wood-2": "wood",
+          "setup-saw_bench-wood-3": "wood",
+          "setup-saw_bench-wood-4": "wood",
+          "setup-saw_bench-wood-5": "wood",
+          "setup-saw_bench-wood-6": "wood",
+          "setup-saw_bench-wood-7": "wood",
+          "setup-saw_bench-wood-8": "wood",
+          "setup-saw_bench-wood-9": "wood",
+          "stored-legacy-meat": "meat"
+        },
+        "legacy_axes": false,
+        "legacy_level2": false,
+        "legacy_prices": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "paid": {
+          "camp_cooker": {
+            "stone": 8,
+            "wood": 12
+          },
+          "center_hearth": {
+            "wood": 3
+          },
+          "expansion_1": {
+            "stone": 1,
+            "wood": 3
+          },
+          "expansion_2": {
+            "stone": 2,
+            "wood": 3
+          },
+          "meal_conveyor": {
+            "stone": 0,
+            "wood": 0
+          },
+          "orbit_upgrade": {
+            "meat": 1,
+            "stone": 2
+          },
+          "quarry_drill": {
+            "stone": 12,
+            "wood": 10
+          },
+          "saw_bench": {
+            "stone": 6,
+            "wood": 14
+          },
+          "storage_meat": {
+            "meat": 1,
+            "wood": 2
+          },
+          "storage_stone": {
+            "stone": 1,
+            "wood": 2
+          },
+          "storage_wood": {
+            "wood": 2
+          },
+          "supply_conveyors": {
+            "stone": 0,
+            "wood": 0
+          },
+          "watchtower": {
+            "stone": 2,
+            "wood": 3
+          }
+        },
+        "settlement": {
+          "cooked": 0,
+          "counter_stock": 0,
+          "dispatch_cursor": 0,
+          "held_meal": 0,
+          "hoppers": {
+            "meat": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "level": 1,
+          "line_load": {
+            "blocks": 0,
+            "meal": 0,
+            "meal_to_store": 0,
+            "meat": 0,
+            "planks": 0,
+            "stone": 0,
+            "stored_meal": 0,
+            "wood": 0
+          },
+          "line_progress": {
+            "blocks": 0.0,
+            "meal": 0.0,
+            "meal_to_store": 0.0,
+            "meat": 0.0,
+            "planks": 0.0,
+            "stone": 0.0,
+            "stored_meal": 0.0,
+            "wood": 0.0
+          },
+          "owl_hits": 0,
+          "processed_stone": 0,
+          "processed_wood": 0,
+          "product_store": {
+            "blocks": 0,
+            "meal": 0,
+            "planks": 0
+          },
+          "rescued": false,
+          "served": 0,
+          "survivor_paid": false,
+          "survivor_wood": 1,
+          "work_seconds": {
+            "meat": 0.0,
+            "stone": 0.0,
+            "wood": 0.0
+          },
+          "worker_carry_token": "",
+          "worker_deliveries": 0,
+          "worker_load": {
+            "coal": 0,
+            "meat": 0,
+            "metal": 0,
+            "slate": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "worker_meal": 0,
+          "worker_receipts": [],
+          "worker_supply": ""
+        },
+        "stored": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 0
+        },
+        "version": 9,
+        "world": {
+          "cooling": {},
+          "drops": [],
+          "layout": {},
+          "pack": {
+            "live": [
+              [
+                1,
+                false,
+                3,
+                15.3725395202637,
+                -2.02381730079651,
+                15.3725395202637,
+                -2.02381730079651
+              ],
+              [
+                2,
+                false,
+                3,
+                13.4378089904785,
+                6.30985355377197,
+                13.4378089904785,
+                6.30985355377197
+              ],
+              [
+                3,
+                false,
+                3,
+                17.6595802307129,
+                3.57125568389893,
+                17.6595802307129,
+                3.57125568389893
+              ]
+            ],
+            "remaining": 23.7166666666667,
+            "rng": "-5710695551840508925",
+            "serial": 3,
+            "wave": 1
+          },
+          "partial": {
+            "starter-stone": 1
+          },
+          "player": {
+            "camp_heal_elapsed": 0.0,
+            "fall_left": 0.0,
+            "hp": 30,
+            "protection_left": 0.0,
+            "x": -5.5,
+            "yaw": 0.0,
+            "z": 10.8999996185303
+          },
+          "previous_kitchen_site": false,
+          "serial": 0,
+          "version": 2
+        }
+      },
+      "durable_payload_sha256": "f7a931479a8f0f7c653177688f3bd6f0f58dccfde52c6ff7483eec4b21e4ab69"
+    },
+    {
+      "phase": "claim",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "claim.log",
+      "checks": {
+        "a cooked meal needs a matching consumed raw meat": true,
+        "duplicate worker pickup rejected": true,
+        "invalid cooked rejected atomically": true,
+        "invalid level rejected atomically": true,
+        "invalid served rejected atomically": true,
+        "invalid worker_deliveries rejected atomically": true,
+        "partial survivor payment resumed before the second wood": true,
+        "pending worker pickup left the ground and has no bank credit": true,
+        "purchase consumed exactly the displayed raw amount": true,
+        "remaining wood completes the single survivor purchase": true,
+        "rescue is idempotent": true,
+        "rescue performed by reaching the survivor": true,
+        "same build accepts the valid snapshot": true,
+        "shipping main scene loaded from disposable profile": true,
+        "unearned level 2 rejected atomically": true,
+        "worker claimed a real pine drop": true
+      },
+      "observed": {
+        "claimed_token": "wood-4"
+      },
+      "log_sha256": "503c5eb12d9a750b0c653ab4a817a622f009e2419d8ebd7197cc2da2a77d5b7f",
+      "durable_payload": {
+        "build_order": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade",
+          "camp_cooker",
+          "saw_bench",
+          "quarry_drill"
+        ],
+        "carried": {
+          "coal": 0,
+          "meat": 2,
+          "metal": 0,
+          "slate": 0,
+          "stone": 5,
+          "wood": 3
+        },
+        "collected": {
+          "carried-legacy-meat": "meat",
+          "earned-center_hearth-wood-0": "wood",
+          "earned-center_hearth-wood-1": "wood",
+          "earned-center_hearth-wood-2": "wood",
+          "earned-expansion_1-stone-0": "stone",
+          "earned-expansion_1-wood-0": "wood",
+          "earned-expansion_1-wood-1": "wood",
+          "earned-expansion_1-wood-2": "wood",
+          "earned-expansion_2-stone-0": "stone",
+          "earned-expansion_2-stone-1": "stone",
+          "earned-expansion_2-wood-0": "wood",
+          "earned-expansion_2-wood-1": "wood",
+          "earned-expansion_2-wood-2": "wood",
+          "earned-orbit_upgrade-meat-0": "meat",
+          "earned-orbit_upgrade-stone-0": "stone",
+          "earned-orbit_upgrade-stone-1": "stone",
+          "earned-storage_meat-meat-0": "meat",
+          "earned-storage_meat-wood-0": "wood",
+          "earned-storage_meat-wood-1": "wood",
+          "earned-storage_stone-stone-0": "stone",
+          "earned-storage_stone-wood-0": "wood",
+          "earned-storage_stone-wood-1": "wood",
+          "earned-storage_wood-wood-0": "wood",
+          "earned-storage_wood-wood-1": "wood",
+          "earned-watchtower-stone-0": "stone",
+          "earned-watchtower-stone-1": "stone",
+          "earned-watchtower-wood-0": "wood",
+          "earned-watchtower-wood-1": "wood",
+          "earned-watchtower-wood-2": "wood",
+          "legacy-spare-stone-0": "stone",
+          "legacy-spare-stone-1": "stone",
+          "legacy-spare-stone-2": "stone",
+          "legacy-spare-stone-3": "stone",
+          "legacy-spare-stone-4": "stone",
+          "legacy-spare-wood-0": "wood",
+          "legacy-spare-wood-1": "wood",
+          "legacy-spare-wood-10": "wood",
+          "legacy-spare-wood-2": "wood",
+          "legacy-spare-wood-3": "wood",
+          "legacy-spare-wood-4": "wood",
+          "legacy-spare-wood-5": "wood",
+          "legacy-spare-wood-6": "wood",
+          "legacy-spare-wood-7": "wood",
+          "legacy-spare-wood-8": "wood",
+          "legacy-spare-wood-9": "wood",
+          "second-carried-legacy-meat": "meat",
+          "setup-camp_cooker-stone-0": "stone",
+          "setup-camp_cooker-stone-1": "stone",
+          "setup-camp_cooker-stone-2": "stone",
+          "setup-camp_cooker-stone-3": "stone",
+          "setup-camp_cooker-stone-4": "stone",
+          "setup-camp_cooker-stone-5": "stone",
+          "setup-camp_cooker-stone-6": "stone",
+          "setup-camp_cooker-stone-7": "stone",
+          "setup-camp_cooker-wood-0": "wood",
+          "setup-camp_cooker-wood-1": "wood",
+          "setup-camp_cooker-wood-10": "wood",
+          "setup-camp_cooker-wood-11": "wood",
+          "setup-camp_cooker-wood-2": "wood",
+          "setup-camp_cooker-wood-3": "wood",
+          "setup-camp_cooker-wood-4": "wood",
+          "setup-camp_cooker-wood-5": "wood",
+          "setup-camp_cooker-wood-6": "wood",
+          "setup-camp_cooker-wood-7": "wood",
+          "setup-camp_cooker-wood-8": "wood",
+          "setup-camp_cooker-wood-9": "wood",
+          "setup-quarry_drill-stone-0": "stone",
+          "setup-quarry_drill-stone-1": "stone",
+          "setup-quarry_drill-stone-10": "stone",
+          "setup-quarry_drill-stone-11": "stone",
+          "setup-quarry_drill-stone-2": "stone",
+          "setup-quarry_drill-stone-3": "stone",
+          "setup-quarry_drill-stone-4": "stone",
+          "setup-quarry_drill-stone-5": "stone",
+          "setup-quarry_drill-stone-6": "stone",
+          "setup-quarry_drill-stone-7": "stone",
+          "setup-quarry_drill-stone-8": "stone",
+          "setup-quarry_drill-stone-9": "stone",
+          "setup-quarry_drill-wood-0": "wood",
+          "setup-quarry_drill-wood-1": "wood",
+          "setup-quarry_drill-wood-2": "wood",
+          "setup-quarry_drill-wood-3": "wood",
+          "setup-quarry_drill-wood-4": "wood",
+          "setup-quarry_drill-wood-5": "wood",
+          "setup-quarry_drill-wood-6": "wood",
+          "setup-quarry_drill-wood-7": "wood",
+          "setup-quarry_drill-wood-8": "wood",
+          "setup-quarry_drill-wood-9": "wood",
+          "setup-saw_bench-stone-0": "stone",
+          "setup-saw_bench-stone-1": "stone",
+          "setup-saw_bench-stone-2": "stone",
+          "setup-saw_bench-stone-3": "stone",
+          "setup-saw_bench-stone-4": "stone",
+          "setup-saw_bench-stone-5": "stone",
+          "setup-saw_bench-wood-0": "wood",
+          "setup-saw_bench-wood-1": "wood",
+          "setup-saw_bench-wood-10": "wood",
+          "setup-saw_bench-wood-11": "wood",
+          "setup-saw_bench-wood-12": "wood",
+          "setup-saw_bench-wood-13": "wood",
+          "setup-saw_bench-wood-2": "wood",
+          "setup-saw_bench-wood-3": "wood",
+          "setup-saw_bench-wood-4": "wood",
+          "setup-saw_bench-wood-5": "wood",
+          "setup-saw_bench-wood-6": "wood",
+          "setup-saw_bench-wood-7": "wood",
+          "setup-saw_bench-wood-8": "wood",
+          "setup-saw_bench-wood-9": "wood",
+          "stored-legacy-meat": "meat",
+          "wood-3": "wood",
+          "wood-5": "wood"
+        },
+        "legacy_axes": false,
+        "legacy_level2": false,
+        "legacy_prices": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "paid": {
+          "camp_cooker": {
+            "stone": 8,
+            "wood": 12
+          },
+          "center_hearth": {
+            "wood": 3
+          },
+          "expansion_1": {
+            "stone": 1,
+            "wood": 3
+          },
+          "expansion_2": {
+            "stone": 2,
+            "wood": 3
+          },
+          "meal_conveyor": {
+            "stone": 0,
+            "wood": 0
+          },
+          "orbit_upgrade": {
+            "meat": 1,
+            "stone": 2
+          },
+          "quarry_drill": {
+            "stone": 12,
+            "wood": 10
+          },
+          "saw_bench": {
+            "stone": 6,
+            "wood": 14
+          },
+          "storage_meat": {
+            "meat": 1,
+            "wood": 2
+          },
+          "storage_stone": {
+            "stone": 1,
+            "wood": 2
+          },
+          "storage_wood": {
+            "wood": 2
+          },
+          "supply_conveyors": {
+            "stone": 0,
+            "wood": 0
+          },
+          "watchtower": {
+            "stone": 2,
+            "wood": 3
+          }
+        },
+        "settlement": {
+          "cooked": 0,
+          "counter_stock": 0,
+          "dispatch_cursor": 0,
+          "held_meal": 0,
+          "hoppers": {
+            "meat": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "level": 1,
+          "line_load": {
+            "blocks": 0,
+            "meal": 0,
+            "meal_to_store": 0,
+            "meat": 0,
+            "planks": 0,
+            "stone": 0,
+            "stored_meal": 0,
+            "wood": 0
+          },
+          "line_progress": {
+            "blocks": 0.0,
+            "meal": 0.0,
+            "meal_to_store": 0.0,
+            "meat": 0.0,
+            "planks": 0.0,
+            "stone": 0.0,
+            "stored_meal": 0.0,
+            "wood": 0.0
+          },
+          "owl_hits": 0,
+          "processed_stone": 0,
+          "processed_wood": 0,
+          "product_store": {
+            "blocks": 0,
+            "meal": 0,
+            "planks": 0
+          },
+          "rescued": true,
+          "served": 0,
+          "survivor_paid": true,
+          "survivor_wood": 8,
+          "work_seconds": {
+            "meat": 0.0,
+            "stone": 0.0,
+            "wood": 0.0
+          },
+          "worker_carry_token": "wood-4",
+          "worker_deliveries": 0,
+          "worker_load": {
+            "coal": 0,
+            "meat": 0,
+            "metal": 0,
+            "slate": 0,
+            "stone": 0,
+            "wood": 2
+          },
+          "worker_meal": 0,
+          "worker_receipts": [],
+          "worker_supply": ""
+        },
+        "stored": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 0
+        },
+        "version": 9,
+        "world": {
+          "cooling": {
+            "survivor-work-pine": 4.6
+          },
+          "drops": [
+            [
+              "meat-1",
+              "meat",
+              15.7353610992432,
+              -1.73667752742767,
+              97.95
+            ],
+            [
+              "meat-2",
+              "meat",
+              14.8863859176636,
+              -2.45175909996033,
+              97.95
+            ]
+          ],
+          "layout": {},
+          "pack": {
+            "live": [
+              [
+                2,
+                false,
+                2,
+                13.4559001922607,
+                6.32323169708252,
+                13.4378089904785,
+                6.30985355377197
+              ],
+              [
+                3,
+                false,
+                3,
+                17.6372032165527,
+                3.57361173629761,
+                17.6595802307129,
+                3.57125568389893
+              ]
+            ],
+            "remaining": 17.4000000000004,
+            "rng": "-5710695551840508925",
+            "serial": 3,
+            "wave": 1
+          },
+          "partial": {
+            "starter-stone": 2
+          },
+          "player": {
+            "camp_heal_elapsed": 0.0,
+            "fall_left": 0.0,
+            "hp": 30,
+            "protection_left": 0.0,
+            "x": 1.72000002861023,
+            "yaw": 0.0,
+            "z": 1.79999995231628
+          },
+          "previous_kitchen_site": false,
+          "serial": 5,
+          "version": 2
+        }
+      },
+      "durable_payload_sha256": "98137ca6bea133dc69ad60131107d18fe918d40547826071f52eb7ea6f8f9e95"
+    },
+    {
+      "phase": "delivery-interrupted",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "delivery-interrupted.log",
+      "checks": {
+        "bank credit and receipt rolled back together": true,
+        "failed shelf receipt left the durable bytes intact": true,
+        "fixture acquires a live save lock": true,
+        "interrupted shelf credit paused new grants": true,
+        "shipping main scene loaded from disposable profile": true,
+        "worker returned with the same single pending token": true
+      },
+      "observed": {
+        "retained_token": "wood-4"
+      },
+      "log_sha256": "e90a1883ea78e34f00d84b3e715f48194b13be767184c701739b092981da13dd",
+      "durable_payload": {
+        "build_order": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade",
+          "camp_cooker",
+          "saw_bench",
+          "quarry_drill"
+        ],
+        "carried": {
+          "coal": 0,
+          "meat": 2,
+          "metal": 0,
+          "slate": 0,
+          "stone": 5,
+          "wood": 3
+        },
+        "collected": {
+          "carried-legacy-meat": "meat",
+          "earned-center_hearth-wood-0": "wood",
+          "earned-center_hearth-wood-1": "wood",
+          "earned-center_hearth-wood-2": "wood",
+          "earned-expansion_1-stone-0": "stone",
+          "earned-expansion_1-wood-0": "wood",
+          "earned-expansion_1-wood-1": "wood",
+          "earned-expansion_1-wood-2": "wood",
+          "earned-expansion_2-stone-0": "stone",
+          "earned-expansion_2-stone-1": "stone",
+          "earned-expansion_2-wood-0": "wood",
+          "earned-expansion_2-wood-1": "wood",
+          "earned-expansion_2-wood-2": "wood",
+          "earned-orbit_upgrade-meat-0": "meat",
+          "earned-orbit_upgrade-stone-0": "stone",
+          "earned-orbit_upgrade-stone-1": "stone",
+          "earned-storage_meat-meat-0": "meat",
+          "earned-storage_meat-wood-0": "wood",
+          "earned-storage_meat-wood-1": "wood",
+          "earned-storage_stone-stone-0": "stone",
+          "earned-storage_stone-wood-0": "wood",
+          "earned-storage_stone-wood-1": "wood",
+          "earned-storage_wood-wood-0": "wood",
+          "earned-storage_wood-wood-1": "wood",
+          "earned-watchtower-stone-0": "stone",
+          "earned-watchtower-stone-1": "stone",
+          "earned-watchtower-wood-0": "wood",
+          "earned-watchtower-wood-1": "wood",
+          "earned-watchtower-wood-2": "wood",
+          "legacy-spare-stone-0": "stone",
+          "legacy-spare-stone-1": "stone",
+          "legacy-spare-stone-2": "stone",
+          "legacy-spare-stone-3": "stone",
+          "legacy-spare-stone-4": "stone",
+          "legacy-spare-wood-0": "wood",
+          "legacy-spare-wood-1": "wood",
+          "legacy-spare-wood-10": "wood",
+          "legacy-spare-wood-2": "wood",
+          "legacy-spare-wood-3": "wood",
+          "legacy-spare-wood-4": "wood",
+          "legacy-spare-wood-5": "wood",
+          "legacy-spare-wood-6": "wood",
+          "legacy-spare-wood-7": "wood",
+          "legacy-spare-wood-8": "wood",
+          "legacy-spare-wood-9": "wood",
+          "second-carried-legacy-meat": "meat",
+          "setup-camp_cooker-stone-0": "stone",
+          "setup-camp_cooker-stone-1": "stone",
+          "setup-camp_cooker-stone-2": "stone",
+          "setup-camp_cooker-stone-3": "stone",
+          "setup-camp_cooker-stone-4": "stone",
+          "setup-camp_cooker-stone-5": "stone",
+          "setup-camp_cooker-stone-6": "stone",
+          "setup-camp_cooker-stone-7": "stone",
+          "setup-camp_cooker-wood-0": "wood",
+          "setup-camp_cooker-wood-1": "wood",
+          "setup-camp_cooker-wood-10": "wood",
+          "setup-camp_cooker-wood-11": "wood",
+          "setup-camp_cooker-wood-2": "wood",
+          "setup-camp_cooker-wood-3": "wood",
+          "setup-camp_cooker-wood-4": "wood",
+          "setup-camp_cooker-wood-5": "wood",
+          "setup-camp_cooker-wood-6": "wood",
+          "setup-camp_cooker-wood-7": "wood",
+          "setup-camp_cooker-wood-8": "wood",
+          "setup-camp_cooker-wood-9": "wood",
+          "setup-quarry_drill-stone-0": "stone",
+          "setup-quarry_drill-stone-1": "stone",
+          "setup-quarry_drill-stone-10": "stone",
+          "setup-quarry_drill-stone-11": "stone",
+          "setup-quarry_drill-stone-2": "stone",
+          "setup-quarry_drill-stone-3": "stone",
+          "setup-quarry_drill-stone-4": "stone",
+          "setup-quarry_drill-stone-5": "stone",
+          "setup-quarry_drill-stone-6": "stone",
+          "setup-quarry_drill-stone-7": "stone",
+          "setup-quarry_drill-stone-8": "stone",
+          "setup-quarry_drill-stone-9": "stone",
+          "setup-quarry_drill-wood-0": "wood",
+          "setup-quarry_drill-wood-1": "wood",
+          "setup-quarry_drill-wood-2": "wood",
+          "setup-quarry_drill-wood-3": "wood",
+          "setup-quarry_drill-wood-4": "wood",
+          "setup-quarry_drill-wood-5": "wood",
+          "setup-quarry_drill-wood-6": "wood",
+          "setup-quarry_drill-wood-7": "wood",
+          "setup-quarry_drill-wood-8": "wood",
+          "setup-quarry_drill-wood-9": "wood",
+          "setup-saw_bench-stone-0": "stone",
+          "setup-saw_bench-stone-1": "stone",
+          "setup-saw_bench-stone-2": "stone",
+          "setup-saw_bench-stone-3": "stone",
+          "setup-saw_bench-stone-4": "stone",
+          "setup-saw_bench-stone-5": "stone",
+          "setup-saw_bench-wood-0": "wood",
+          "setup-saw_bench-wood-1": "wood",
+          "setup-saw_bench-wood-10": "wood",
+          "setup-saw_bench-wood-11": "wood",
+          "setup-saw_bench-wood-12": "wood",
+          "setup-saw_bench-wood-13": "wood",
+          "setup-saw_bench-wood-2": "wood",
+          "setup-saw_bench-wood-3": "wood",
+          "setup-saw_bench-wood-4": "wood",
+          "setup-saw_bench-wood-5": "wood",
+          "setup-saw_bench-wood-6": "wood",
+          "setup-saw_bench-wood-7": "wood",
+          "setup-saw_bench-wood-8": "wood",
+          "setup-saw_bench-wood-9": "wood",
+          "stored-legacy-meat": "meat",
+          "wood-3": "wood",
+          "wood-5": "wood"
+        },
+        "legacy_axes": false,
+        "legacy_level2": false,
+        "legacy_prices": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "paid": {
+          "camp_cooker": {
+            "stone": 8,
+            "wood": 12
+          },
+          "center_hearth": {
+            "wood": 3
+          },
+          "expansion_1": {
+            "stone": 1,
+            "wood": 3
+          },
+          "expansion_2": {
+            "stone": 2,
+            "wood": 3
+          },
+          "meal_conveyor": {
+            "stone": 0,
+            "wood": 0
+          },
+          "orbit_upgrade": {
+            "meat": 1,
+            "stone": 2
+          },
+          "quarry_drill": {
+            "stone": 12,
+            "wood": 10
+          },
+          "saw_bench": {
+            "stone": 6,
+            "wood": 14
+          },
+          "storage_meat": {
+            "meat": 1,
+            "wood": 2
+          },
+          "storage_stone": {
+            "stone": 1,
+            "wood": 2
+          },
+          "storage_wood": {
+            "wood": 2
+          },
+          "supply_conveyors": {
+            "stone": 0,
+            "wood": 0
+          },
+          "watchtower": {
+            "stone": 2,
+            "wood": 3
+          }
+        },
+        "settlement": {
+          "cooked": 0,
+          "counter_stock": 0,
+          "dispatch_cursor": 0,
+          "held_meal": 0,
+          "hoppers": {
+            "meat": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "level": 1,
+          "line_load": {
+            "blocks": 0,
+            "meal": 0,
+            "meal_to_store": 0,
+            "meat": 0,
+            "planks": 0,
+            "stone": 0,
+            "stored_meal": 0,
+            "wood": 0
+          },
+          "line_progress": {
+            "blocks": 0.0,
+            "meal": 0.0,
+            "meal_to_store": 0.0,
+            "meat": 0.0,
+            "planks": 0.0,
+            "stone": 0.0,
+            "stored_meal": 0.0,
+            "wood": 0.0
+          },
+          "owl_hits": 0,
+          "processed_stone": 0,
+          "processed_wood": 0,
+          "product_store": {
+            "blocks": 0,
+            "meal": 0,
+            "planks": 0
+          },
+          "rescued": true,
+          "served": 0,
+          "survivor_paid": true,
+          "survivor_wood": 8,
+          "work_seconds": {
+            "meat": 0.0,
+            "stone": 0.0,
+            "wood": 0.0
+          },
+          "worker_carry_token": "wood-4",
+          "worker_deliveries": 0,
+          "worker_load": {
+            "coal": 0,
+            "meat": 0,
+            "metal": 0,
+            "slate": 0,
+            "stone": 0,
+            "wood": 2
+          },
+          "worker_meal": 0,
+          "worker_receipts": [],
+          "worker_supply": ""
+        },
+        "stored": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 0
+        },
+        "version": 9,
+        "world": {
+          "cooling": {
+            "survivor-work-pine": 4.6
+          },
+          "drops": [
+            [
+              "meat-1",
+              "meat",
+              15.7353610992432,
+              -1.73667752742767,
+              97.95
+            ],
+            [
+              "meat-2",
+              "meat",
+              14.8863859176636,
+              -2.45175909996033,
+              97.95
+            ]
+          ],
+          "layout": {},
+          "pack": {
+            "live": [
+              [
+                2,
+                false,
+                2,
+                13.4559001922607,
+                6.32323169708252,
+                13.4378089904785,
+                6.30985355377197
+              ],
+              [
+                3,
+                false,
+                3,
+                17.6372032165527,
+                3.57361173629761,
+                17.6595802307129,
+                3.57125568389893
+              ]
+            ],
+            "remaining": 17.4000000000004,
+            "rng": "-5710695551840508925",
+            "serial": 3,
+            "wave": 1
+          },
+          "partial": {
+            "starter-stone": 2
+          },
+          "player": {
+            "camp_heal_elapsed": 0.0,
+            "fall_left": 0.0,
+            "hp": 30,
+            "protection_left": 0.0,
+            "x": 1.72000002861023,
+            "yaw": 0.0,
+            "z": 1.79999995231628
+          },
+          "previous_kitchen_site": false,
+          "serial": 5,
+          "version": 2
+        }
+      },
+      "durable_payload_sha256": "98137ca6bea133dc69ad60131107d18fe918d40547826071f52eb7ea6f8f9e95"
+    },
+    {
+      "phase": "load-cooker",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "load-cooker.log",
+      "checks": {
+        "all remaining raw meat can be reserved without cooking it": true,
+        "cancelled flights restored the two carried portions": true,
+        "cook advances after the player leaves": true,
+        "cooker accepts one raw portion through its loading apron": true,
+        "finished token cannot pay a second time": true,
+        "first raw portion can reserve a transfer": true,
+        "fresh process restored the in-progress wood delivery": true,
+        "loading a real hopper debits exactly one carried raw meat": true,
+        "one wood delivery credited exactly once, including any immediately reserved for a machine": true,
+        "partially finished cook is saved before shutdown": true,
+        "reserved outgoing raw portions cannot enter the hopper": true,
+        "shipping main scene loaded from disposable profile": true,
+        "visible HUD displays the unattended production cycle": true,
+        "worker delivers at the real storage shelf": true
+      },
+      "observed": {},
+      "log_sha256": "7985c37eda506c85d9d18a65274b9da299c0a725379f167889fb591aba3b9db0",
+      "durable_payload": {
+        "build_order": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade",
+          "camp_cooker",
+          "saw_bench",
+          "quarry_drill"
+        ],
+        "carried": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 5,
+          "wood": 3
+        },
+        "collected": {
+          "carried-legacy-meat": "meat",
+          "earned-center_hearth-wood-0": "wood",
+          "earned-center_hearth-wood-1": "wood",
+          "earned-center_hearth-wood-2": "wood",
+          "earned-expansion_1-stone-0": "stone",
+          "earned-expansion_1-wood-0": "wood",
+          "earned-expansion_1-wood-1": "wood",
+          "earned-expansion_1-wood-2": "wood",
+          "earned-expansion_2-stone-0": "stone",
+          "earned-expansion_2-stone-1": "stone",
+          "earned-expansion_2-wood-0": "wood",
+          "earned-expansion_2-wood-1": "wood",
+          "earned-expansion_2-wood-2": "wood",
+          "earned-orbit_upgrade-meat-0": "meat",
+          "earned-orbit_upgrade-stone-0": "stone",
+          "earned-orbit_upgrade-stone-1": "stone",
+          "earned-storage_meat-meat-0": "meat",
+          "earned-storage_meat-wood-0": "wood",
+          "earned-storage_meat-wood-1": "wood",
+          "earned-storage_stone-stone-0": "stone",
+          "earned-storage_stone-wood-0": "wood",
+          "earned-storage_stone-wood-1": "wood",
+          "earned-storage_wood-wood-0": "wood",
+          "earned-storage_wood-wood-1": "wood",
+          "earned-watchtower-stone-0": "stone",
+          "earned-watchtower-stone-1": "stone",
+          "earned-watchtower-wood-0": "wood",
+          "earned-watchtower-wood-1": "wood",
+          "earned-watchtower-wood-2": "wood",
+          "legacy-spare-stone-0": "stone",
+          "legacy-spare-stone-1": "stone",
+          "legacy-spare-stone-2": "stone",
+          "legacy-spare-stone-3": "stone",
+          "legacy-spare-stone-4": "stone",
+          "legacy-spare-wood-0": "wood",
+          "legacy-spare-wood-1": "wood",
+          "legacy-spare-wood-10": "wood",
+          "legacy-spare-wood-2": "wood",
+          "legacy-spare-wood-3": "wood",
+          "legacy-spare-wood-4": "wood",
+          "legacy-spare-wood-5": "wood",
+          "legacy-spare-wood-6": "wood",
+          "legacy-spare-wood-7": "wood",
+          "legacy-spare-wood-8": "wood",
+          "legacy-spare-wood-9": "wood",
+          "second-carried-legacy-meat": "meat",
+          "setup-camp_cooker-stone-0": "stone",
+          "setup-camp_cooker-stone-1": "stone",
+          "setup-camp_cooker-stone-2": "stone",
+          "setup-camp_cooker-stone-3": "stone",
+          "setup-camp_cooker-stone-4": "stone",
+          "setup-camp_cooker-stone-5": "stone",
+          "setup-camp_cooker-stone-6": "stone",
+          "setup-camp_cooker-stone-7": "stone",
+          "setup-camp_cooker-wood-0": "wood",
+          "setup-camp_cooker-wood-1": "wood",
+          "setup-camp_cooker-wood-10": "wood",
+          "setup-camp_cooker-wood-11": "wood",
+          "setup-camp_cooker-wood-2": "wood",
+          "setup-camp_cooker-wood-3": "wood",
+          "setup-camp_cooker-wood-4": "wood",
+          "setup-camp_cooker-wood-5": "wood",
+          "setup-camp_cooker-wood-6": "wood",
+          "setup-camp_cooker-wood-7": "wood",
+          "setup-camp_cooker-wood-8": "wood",
+          "setup-camp_cooker-wood-9": "wood",
+          "setup-quarry_drill-stone-0": "stone",
+          "setup-quarry_drill-stone-1": "stone",
+          "setup-quarry_drill-stone-10": "stone",
+          "setup-quarry_drill-stone-11": "stone",
+          "setup-quarry_drill-stone-2": "stone",
+          "setup-quarry_drill-stone-3": "stone",
+          "setup-quarry_drill-stone-4": "stone",
+          "setup-quarry_drill-stone-5": "stone",
+          "setup-quarry_drill-stone-6": "stone",
+          "setup-quarry_drill-stone-7": "stone",
+          "setup-quarry_drill-stone-8": "stone",
+          "setup-quarry_drill-stone-9": "stone",
+          "setup-quarry_drill-wood-0": "wood",
+          "setup-quarry_drill-wood-1": "wood",
+          "setup-quarry_drill-wood-2": "wood",
+          "setup-quarry_drill-wood-3": "wood",
+          "setup-quarry_drill-wood-4": "wood",
+          "setup-quarry_drill-wood-5": "wood",
+          "setup-quarry_drill-wood-6": "wood",
+          "setup-quarry_drill-wood-7": "wood",
+          "setup-quarry_drill-wood-8": "wood",
+          "setup-quarry_drill-wood-9": "wood",
+          "setup-saw_bench-stone-0": "stone",
+          "setup-saw_bench-stone-1": "stone",
+          "setup-saw_bench-stone-2": "stone",
+          "setup-saw_bench-stone-3": "stone",
+          "setup-saw_bench-stone-4": "stone",
+          "setup-saw_bench-stone-5": "stone",
+          "setup-saw_bench-wood-0": "wood",
+          "setup-saw_bench-wood-1": "wood",
+          "setup-saw_bench-wood-10": "wood",
+          "setup-saw_bench-wood-11": "wood",
+          "setup-saw_bench-wood-12": "wood",
+          "setup-saw_bench-wood-13": "wood",
+          "setup-saw_bench-wood-2": "wood",
+          "setup-saw_bench-wood-3": "wood",
+          "setup-saw_bench-wood-4": "wood",
+          "setup-saw_bench-wood-5": "wood",
+          "setup-saw_bench-wood-6": "wood",
+          "setup-saw_bench-wood-7": "wood",
+          "setup-saw_bench-wood-8": "wood",
+          "setup-saw_bench-wood-9": "wood",
+          "stored-legacy-meat": "meat",
+          "wood-3": "wood",
+          "wood-4": "wood",
+          "wood-5": "wood"
+        },
+        "legacy_axes": false,
+        "legacy_level2": false,
+        "legacy_prices": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "paid": {
+          "camp_cooker": {
+            "stone": 8,
+            "wood": 12
+          },
+          "center_hearth": {
+            "wood": 3
+          },
+          "expansion_1": {
+            "stone": 1,
+            "wood": 3
+          },
+          "expansion_2": {
+            "stone": 2,
+            "wood": 3
+          },
+          "meal_conveyor": {
+            "stone": 0,
+            "wood": 0
+          },
+          "orbit_upgrade": {
+            "meat": 1,
+            "stone": 2
+          },
+          "quarry_drill": {
+            "stone": 12,
+            "wood": 10
+          },
+          "saw_bench": {
+            "stone": 6,
+            "wood": 14
+          },
+          "storage_meat": {
+            "meat": 1,
+            "wood": 2
+          },
+          "storage_stone": {
+            "stone": 1,
+            "wood": 2
+          },
+          "storage_wood": {
+            "wood": 2
+          },
+          "supply_conveyors": {
+            "stone": 0,
+            "wood": 0
+          },
+          "watchtower": {
+            "stone": 2,
+            "wood": 3
+          }
+        },
+        "settlement": {
+          "cooked": 0,
+          "counter_stock": 0,
+          "dispatch_cursor": 0,
+          "held_meal": 0,
+          "hoppers": {
+            "meat": 1,
+            "stone": 0,
+            "wood": 0
+          },
+          "level": 1,
+          "line_load": {
+            "blocks": 0,
+            "meal": 0,
+            "meal_to_store": 0,
+            "meat": 0,
+            "planks": 0,
+            "stone": 0,
+            "stored_meal": 0,
+            "wood": 0
+          },
+          "line_progress": {
+            "blocks": 0.0,
+            "meal": 0.0,
+            "meal_to_store": 0.0,
+            "meat": 0.0,
+            "planks": 0.0,
+            "stone": 0.0,
+            "stored_meal": 0.0,
+            "wood": 0.0
+          },
+          "owl_hits": 0,
+          "processed_stone": 0,
+          "processed_wood": 0,
+          "product_store": {
+            "blocks": 0,
+            "meal": 0,
+            "planks": 0
+          },
+          "rescued": true,
+          "served": 0,
+          "survivor_paid": true,
+          "survivor_wood": 8,
+          "work_seconds": {
+            "meat": 0.516666666666667,
+            "stone": 0.0,
+            "wood": 0.0
+          },
+          "worker_carry_token": "",
+          "worker_deliveries": 1,
+          "worker_load": {
+            "coal": 0,
+            "meat": 0,
+            "metal": 0,
+            "slate": 0,
+            "stone": 0,
+            "wood": 2
+          },
+          "worker_meal": 0,
+          "worker_receipts": [
+            "wood-4"
+          ],
+          "worker_supply": ""
+        },
+        "stored": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 1
+        },
+        "version": 9,
+        "world": {
+          "cooling": {},
+          "drops": [
+            [
+              "meat-1",
+              "meat",
+              15.7353610992432,
+              -1.73667752742767,
+              90.6333333333333
+            ],
+            [
+              "meat-2",
+              "meat",
+              14.8863859176636,
+              -2.45175909996033,
+              90.6333333333333
+            ],
+            [
+              "meat-6",
+              "meat",
+              14.2753047943115,
+              6.96690797805786,
+              95.55
+            ],
+            [
+              "meat-7",
+              "meat",
+              13.4263296127319,
+              6.25182628631592,
+              95.55
+            ]
+          ],
+          "layout": {},
+          "pack": {
+            "live": [
+              [
+                3,
+                false,
+                1,
+                17.6372032165527,
+                3.57361173629761,
+                17.6595802307129,
+                3.57125568389893
+              ]
+            ],
+            "remaining": 10.0833333333335,
+            "rng": "-5710695551840508925",
+            "serial": 3,
+            "wave": 1
+          },
+          "partial": {
+            "starter-stone": 2.0
+          },
+          "player": {
+            "camp_heal_elapsed": 0.0,
+            "fall_left": 0.0,
+            "hp": 30,
+            "protection_left": 0.0,
+            "x": 1.72000002861023,
+            "yaw": 0.0,
+            "z": 1.79999995231628
+          },
+          "previous_kitchen_site": false,
+          "serial": 7,
+          "version": 2
+        }
+      },
+      "durable_payload_sha256": "92aedbb1e9f7bad4610e875a876ca434b7d1e700ef0dd732926cbaa5de0728af"
+    },
+    {
+      "phase": "cook-interrupted",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "cook-interrupted.log",
+      "checks": {
+        "failed output left the previous envelope intact": true,
+        "fixture acquires a live save lock": true,
+        "interrupted output commit returns its input to the hopper": true,
+        "queued meat and its running clock survived a fresh launch": true,
+        "shipping main scene loaded from disposable profile": true,
+        "unattended cooker reaches a durable transaction": true
+      },
+      "observed": {},
+      "log_sha256": "41432803e1adf3c73e354cc4c45c6344d153aa04487d975c70b27e2075e95804",
+      "durable_payload": {
+        "build_order": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade",
+          "camp_cooker",
+          "saw_bench",
+          "quarry_drill"
+        ],
+        "carried": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 5,
+          "wood": 3
+        },
+        "collected": {
+          "carried-legacy-meat": "meat",
+          "earned-center_hearth-wood-0": "wood",
+          "earned-center_hearth-wood-1": "wood",
+          "earned-center_hearth-wood-2": "wood",
+          "earned-expansion_1-stone-0": "stone",
+          "earned-expansion_1-wood-0": "wood",
+          "earned-expansion_1-wood-1": "wood",
+          "earned-expansion_1-wood-2": "wood",
+          "earned-expansion_2-stone-0": "stone",
+          "earned-expansion_2-stone-1": "stone",
+          "earned-expansion_2-wood-0": "wood",
+          "earned-expansion_2-wood-1": "wood",
+          "earned-expansion_2-wood-2": "wood",
+          "earned-orbit_upgrade-meat-0": "meat",
+          "earned-orbit_upgrade-stone-0": "stone",
+          "earned-orbit_upgrade-stone-1": "stone",
+          "earned-storage_meat-meat-0": "meat",
+          "earned-storage_meat-wood-0": "wood",
+          "earned-storage_meat-wood-1": "wood",
+          "earned-storage_stone-stone-0": "stone",
+          "earned-storage_stone-wood-0": "wood",
+          "earned-storage_stone-wood-1": "wood",
+          "earned-storage_wood-wood-0": "wood",
+          "earned-storage_wood-wood-1": "wood",
+          "earned-watchtower-stone-0": "stone",
+          "earned-watchtower-stone-1": "stone",
+          "earned-watchtower-wood-0": "wood",
+          "earned-watchtower-wood-1": "wood",
+          "earned-watchtower-wood-2": "wood",
+          "legacy-spare-stone-0": "stone",
+          "legacy-spare-stone-1": "stone",
+          "legacy-spare-stone-2": "stone",
+          "legacy-spare-stone-3": "stone",
+          "legacy-spare-stone-4": "stone",
+          "legacy-spare-wood-0": "wood",
+          "legacy-spare-wood-1": "wood",
+          "legacy-spare-wood-10": "wood",
+          "legacy-spare-wood-2": "wood",
+          "legacy-spare-wood-3": "wood",
+          "legacy-spare-wood-4": "wood",
+          "legacy-spare-wood-5": "wood",
+          "legacy-spare-wood-6": "wood",
+          "legacy-spare-wood-7": "wood",
+          "legacy-spare-wood-8": "wood",
+          "legacy-spare-wood-9": "wood",
+          "second-carried-legacy-meat": "meat",
+          "setup-camp_cooker-stone-0": "stone",
+          "setup-camp_cooker-stone-1": "stone",
+          "setup-camp_cooker-stone-2": "stone",
+          "setup-camp_cooker-stone-3": "stone",
+          "setup-camp_cooker-stone-4": "stone",
+          "setup-camp_cooker-stone-5": "stone",
+          "setup-camp_cooker-stone-6": "stone",
+          "setup-camp_cooker-stone-7": "stone",
+          "setup-camp_cooker-wood-0": "wood",
+          "setup-camp_cooker-wood-1": "wood",
+          "setup-camp_cooker-wood-10": "wood",
+          "setup-camp_cooker-wood-11": "wood",
+          "setup-camp_cooker-wood-2": "wood",
+          "setup-camp_cooker-wood-3": "wood",
+          "setup-camp_cooker-wood-4": "wood",
+          "setup-camp_cooker-wood-5": "wood",
+          "setup-camp_cooker-wood-6": "wood",
+          "setup-camp_cooker-wood-7": "wood",
+          "setup-camp_cooker-wood-8": "wood",
+          "setup-camp_cooker-wood-9": "wood",
+          "setup-quarry_drill-stone-0": "stone",
+          "setup-quarry_drill-stone-1": "stone",
+          "setup-quarry_drill-stone-10": "stone",
+          "setup-quarry_drill-stone-11": "stone",
+          "setup-quarry_drill-stone-2": "stone",
+          "setup-quarry_drill-stone-3": "stone",
+          "setup-quarry_drill-stone-4": "stone",
+          "setup-quarry_drill-stone-5": "stone",
+          "setup-quarry_drill-stone-6": "stone",
+          "setup-quarry_drill-stone-7": "stone",
+          "setup-quarry_drill-stone-8": "stone",
+          "setup-quarry_drill-stone-9": "stone",
+          "setup-quarry_drill-wood-0": "wood",
+          "setup-quarry_drill-wood-1": "wood",
+          "setup-quarry_drill-wood-2": "wood",
+          "setup-quarry_drill-wood-3": "wood",
+          "setup-quarry_drill-wood-4": "wood",
+          "setup-quarry_drill-wood-5": "wood",
+          "setup-quarry_drill-wood-6": "wood",
+          "setup-quarry_drill-wood-7": "wood",
+          "setup-quarry_drill-wood-8": "wood",
+          "setup-quarry_drill-wood-9": "wood",
+          "setup-saw_bench-stone-0": "stone",
+          "setup-saw_bench-stone-1": "stone",
+          "setup-saw_bench-stone-2": "stone",
+          "setup-saw_bench-stone-3": "stone",
+          "setup-saw_bench-stone-4": "stone",
+          "setup-saw_bench-stone-5": "stone",
+          "setup-saw_bench-wood-0": "wood",
+          "setup-saw_bench-wood-1": "wood",
+          "setup-saw_bench-wood-10": "wood",
+          "setup-saw_bench-wood-11": "wood",
+          "setup-saw_bench-wood-12": "wood",
+          "setup-saw_bench-wood-13": "wood",
+          "setup-saw_bench-wood-2": "wood",
+          "setup-saw_bench-wood-3": "wood",
+          "setup-saw_bench-wood-4": "wood",
+          "setup-saw_bench-wood-5": "wood",
+          "setup-saw_bench-wood-6": "wood",
+          "setup-saw_bench-wood-7": "wood",
+          "setup-saw_bench-wood-8": "wood",
+          "setup-saw_bench-wood-9": "wood",
+          "stored-legacy-meat": "meat",
+          "wood-3": "wood",
+          "wood-4": "wood",
+          "wood-5": "wood"
+        },
+        "legacy_axes": false,
+        "legacy_level2": false,
+        "legacy_prices": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "paid": {
+          "camp_cooker": {
+            "stone": 8,
+            "wood": 12
+          },
+          "center_hearth": {
+            "wood": 3
+          },
+          "expansion_1": {
+            "stone": 1,
+            "wood": 3
+          },
+          "expansion_2": {
+            "stone": 2,
+            "wood": 3
+          },
+          "meal_conveyor": {
+            "stone": 0,
+            "wood": 0
+          },
+          "orbit_upgrade": {
+            "meat": 1,
+            "stone": 2
+          },
+          "quarry_drill": {
+            "stone": 12,
+            "wood": 10
+          },
+          "saw_bench": {
+            "stone": 6,
+            "wood": 14
+          },
+          "storage_meat": {
+            "meat": 1,
+            "wood": 2
+          },
+          "storage_stone": {
+            "stone": 1,
+            "wood": 2
+          },
+          "storage_wood": {
+            "wood": 2
+          },
+          "supply_conveyors": {
+            "stone": 0,
+            "wood": 0
+          },
+          "watchtower": {
+            "stone": 2,
+            "wood": 3
+          }
+        },
+        "settlement": {
+          "cooked": 0,
+          "counter_stock": 0,
+          "dispatch_cursor": 0,
+          "held_meal": 0,
+          "hoppers": {
+            "meat": 1,
+            "stone": 0,
+            "wood": 0
+          },
+          "level": 1,
+          "line_load": {
+            "blocks": 0,
+            "meal": 0,
+            "meal_to_store": 0,
+            "meat": 0,
+            "planks": 0,
+            "stone": 0,
+            "stored_meal": 0,
+            "wood": 0
+          },
+          "line_progress": {
+            "blocks": 0.0,
+            "meal": 0.0,
+            "meal_to_store": 0.0,
+            "meat": 0.0,
+            "planks": 0.0,
+            "stone": 0.0,
+            "stored_meal": 0.0,
+            "wood": 0.0
+          },
+          "owl_hits": 0,
+          "processed_stone": 0,
+          "processed_wood": 0,
+          "product_store": {
+            "blocks": 0,
+            "meal": 0,
+            "planks": 0
+          },
+          "rescued": true,
+          "served": 0,
+          "survivor_paid": true,
+          "survivor_wood": 8,
+          "work_seconds": {
+            "meat": 0.516666666666667,
+            "stone": 0.0,
+            "wood": 0.0
+          },
+          "worker_carry_token": "",
+          "worker_deliveries": 1,
+          "worker_load": {
+            "coal": 0,
+            "meat": 0,
+            "metal": 0,
+            "slate": 0,
+            "stone": 0,
+            "wood": 2
+          },
+          "worker_meal": 0,
+          "worker_receipts": [
+            "wood-4"
+          ],
+          "worker_supply": ""
+        },
+        "stored": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 1
+        },
+        "version": 9,
+        "world": {
+          "cooling": {},
+          "drops": [
+            [
+              "meat-1",
+              "meat",
+              15.7353610992432,
+              -1.73667752742767,
+              90.6333333333333
+            ],
+            [
+              "meat-2",
+              "meat",
+              14.8863859176636,
+              -2.45175909996033,
+              90.6333333333333
+            ],
+            [
+              "meat-6",
+              "meat",
+              14.2753047943115,
+              6.96690797805786,
+              95.55
+            ],
+            [
+              "meat-7",
+              "meat",
+              13.4263296127319,
+              6.25182628631592,
+              95.55
+            ]
+          ],
+          "layout": {},
+          "pack": {
+            "live": [
+              [
+                3,
+                false,
+                1,
+                17.6372032165527,
+                3.57361173629761,
+                17.6595802307129,
+                3.57125568389893
+              ]
+            ],
+            "remaining": 10.0833333333335,
+            "rng": "-5710695551840508925",
+            "serial": 3,
+            "wave": 1
+          },
+          "partial": {
+            "starter-stone": 2.0
+          },
+          "player": {
+            "camp_heal_elapsed": 0.0,
+            "fall_left": 0.0,
+            "hp": 30,
+            "protection_left": 0.0,
+            "x": 1.72000002861023,
+            "yaw": 0.0,
+            "z": 1.79999995231628
+          },
+          "previous_kitchen_site": false,
+          "serial": 7,
+          "version": 2
+        }
+      },
+      "durable_payload_sha256": "92aedbb1e9f7bad4610e875a876ca434b7d1e700ef0dd732926cbaa5de0728af"
+    },
+    {
+      "phase": "cook",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "cook.log",
+      "checks": {
+        "counter cannot sell remotely buffered food": true,
+        "empty input and proximity to the counter produce no reward": true,
+        "queued meat and its running clock survived a fresh launch": true,
+        "shipping main scene loaded from disposable profile": true,
+        "stocked or carried raw meat never auto-debits at a distance": true,
+        "unattended cooker reaches a durable transaction": true,
+        "unattended meat finishes once and becomes physical outfeed stock": true
+      },
+      "observed": {
+        "raw_in_pack": 1,
+        "raw_in_storage": 1,
+        "raw_on_courier": ""
+      },
+      "log_sha256": "31a40359c21b3f378e38b084550fdf2cced6daba5143788323adc7d686765d6d",
+      "durable_payload": {
+        "build_order": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade",
+          "camp_cooker",
+          "saw_bench",
+          "quarry_drill"
+        ],
+        "carried": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 5,
+          "wood": 3
+        },
+        "collected": {
+          "carried-legacy-meat": "meat",
+          "earned-center_hearth-wood-0": "wood",
+          "earned-center_hearth-wood-1": "wood",
+          "earned-center_hearth-wood-2": "wood",
+          "earned-expansion_1-stone-0": "stone",
+          "earned-expansion_1-wood-0": "wood",
+          "earned-expansion_1-wood-1": "wood",
+          "earned-expansion_1-wood-2": "wood",
+          "earned-expansion_2-stone-0": "stone",
+          "earned-expansion_2-stone-1": "stone",
+          "earned-expansion_2-wood-0": "wood",
+          "earned-expansion_2-wood-1": "wood",
+          "earned-expansion_2-wood-2": "wood",
+          "earned-orbit_upgrade-meat-0": "meat",
+          "earned-orbit_upgrade-stone-0": "stone",
+          "earned-orbit_upgrade-stone-1": "stone",
+          "earned-storage_meat-meat-0": "meat",
+          "earned-storage_meat-wood-0": "wood",
+          "earned-storage_meat-wood-1": "wood",
+          "earned-storage_stone-stone-0": "stone",
+          "earned-storage_stone-wood-0": "wood",
+          "earned-storage_stone-wood-1": "wood",
+          "earned-storage_wood-wood-0": "wood",
+          "earned-storage_wood-wood-1": "wood",
+          "earned-watchtower-stone-0": "stone",
+          "earned-watchtower-stone-1": "stone",
+          "earned-watchtower-wood-0": "wood",
+          "earned-watchtower-wood-1": "wood",
+          "earned-watchtower-wood-2": "wood",
+          "legacy-spare-stone-0": "stone",
+          "legacy-spare-stone-1": "stone",
+          "legacy-spare-stone-2": "stone",
+          "legacy-spare-stone-3": "stone",
+          "legacy-spare-stone-4": "stone",
+          "legacy-spare-wood-0": "wood",
+          "legacy-spare-wood-1": "wood",
+          "legacy-spare-wood-10": "wood",
+          "legacy-spare-wood-2": "wood",
+          "legacy-spare-wood-3": "wood",
+          "legacy-spare-wood-4": "wood",
+          "legacy-spare-wood-5": "wood",
+          "legacy-spare-wood-6": "wood",
+          "legacy-spare-wood-7": "wood",
+          "legacy-spare-wood-8": "wood",
+          "legacy-spare-wood-9": "wood",
+          "second-carried-legacy-meat": "meat",
+          "setup-camp_cooker-stone-0": "stone",
+          "setup-camp_cooker-stone-1": "stone",
+          "setup-camp_cooker-stone-2": "stone",
+          "setup-camp_cooker-stone-3": "stone",
+          "setup-camp_cooker-stone-4": "stone",
+          "setup-camp_cooker-stone-5": "stone",
+          "setup-camp_cooker-stone-6": "stone",
+          "setup-camp_cooker-stone-7": "stone",
+          "setup-camp_cooker-wood-0": "wood",
+          "setup-camp_cooker-wood-1": "wood",
+          "setup-camp_cooker-wood-10": "wood",
+          "setup-camp_cooker-wood-11": "wood",
+          "setup-camp_cooker-wood-2": "wood",
+          "setup-camp_cooker-wood-3": "wood",
+          "setup-camp_cooker-wood-4": "wood",
+          "setup-camp_cooker-wood-5": "wood",
+          "setup-camp_cooker-wood-6": "wood",
+          "setup-camp_cooker-wood-7": "wood",
+          "setup-camp_cooker-wood-8": "wood",
+          "setup-camp_cooker-wood-9": "wood",
+          "setup-quarry_drill-stone-0": "stone",
+          "setup-quarry_drill-stone-1": "stone",
+          "setup-quarry_drill-stone-10": "stone",
+          "setup-quarry_drill-stone-11": "stone",
+          "setup-quarry_drill-stone-2": "stone",
+          "setup-quarry_drill-stone-3": "stone",
+          "setup-quarry_drill-stone-4": "stone",
+          "setup-quarry_drill-stone-5": "stone",
+          "setup-quarry_drill-stone-6": "stone",
+          "setup-quarry_drill-stone-7": "stone",
+          "setup-quarry_drill-stone-8": "stone",
+          "setup-quarry_drill-stone-9": "stone",
+          "setup-quarry_drill-wood-0": "wood",
+          "setup-quarry_drill-wood-1": "wood",
+          "setup-quarry_drill-wood-2": "wood",
+          "setup-quarry_drill-wood-3": "wood",
+          "setup-quarry_drill-wood-4": "wood",
+          "setup-quarry_drill-wood-5": "wood",
+          "setup-quarry_drill-wood-6": "wood",
+          "setup-quarry_drill-wood-7": "wood",
+          "setup-quarry_drill-wood-8": "wood",
+          "setup-quarry_drill-wood-9": "wood",
+          "setup-saw_bench-stone-0": "stone",
+          "setup-saw_bench-stone-1": "stone",
+          "setup-saw_bench-stone-2": "stone",
+          "setup-saw_bench-stone-3": "stone",
+          "setup-saw_bench-stone-4": "stone",
+          "setup-saw_bench-stone-5": "stone",
+          "setup-saw_bench-wood-0": "wood",
+          "setup-saw_bench-wood-1": "wood",
+          "setup-saw_bench-wood-10": "wood",
+          "setup-saw_bench-wood-11": "wood",
+          "setup-saw_bench-wood-12": "wood",
+          "setup-saw_bench-wood-13": "wood",
+          "setup-saw_bench-wood-2": "wood",
+          "setup-saw_bench-wood-3": "wood",
+          "setup-saw_bench-wood-4": "wood",
+          "setup-saw_bench-wood-5": "wood",
+          "setup-saw_bench-wood-6": "wood",
+          "setup-saw_bench-wood-7": "wood",
+          "setup-saw_bench-wood-8": "wood",
+          "setup-saw_bench-wood-9": "wood",
+          "stored-legacy-meat": "meat",
+          "wood-3": "wood",
+          "wood-4": "wood",
+          "wood-5": "wood"
+        },
+        "legacy_axes": false,
+        "legacy_level2": false,
+        "legacy_prices": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "paid": {
+          "camp_cooker": {
+            "stone": 8,
+            "wood": 12
+          },
+          "center_hearth": {
+            "wood": 3
+          },
+          "expansion_1": {
+            "stone": 1,
+            "wood": 3
+          },
+          "expansion_2": {
+            "stone": 2,
+            "wood": 3
+          },
+          "meal_conveyor": {
+            "stone": 0,
+            "wood": 0
+          },
+          "orbit_upgrade": {
+            "meat": 1,
+            "stone": 2
+          },
+          "quarry_drill": {
+            "stone": 12,
+            "wood": 10
+          },
+          "saw_bench": {
+            "stone": 6,
+            "wood": 14
+          },
+          "storage_meat": {
+            "meat": 1,
+            "wood": 2
+          },
+          "storage_stone": {
+            "stone": 1,
+            "wood": 2
+          },
+          "storage_wood": {
+            "wood": 2
+          },
+          "supply_conveyors": {
+            "stone": 0,
+            "wood": 0
+          },
+          "watchtower": {
+            "stone": 2,
+            "wood": 3
+          }
+        },
+        "settlement": {
+          "cooked": 1,
+          "counter_stock": 0,
+          "dispatch_cursor": 0,
+          "held_meal": 0,
+          "hoppers": {
+            "meat": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "level": 1,
+          "line_load": {
+            "blocks": 0,
+            "meal": 0,
+            "meal_to_store": 0,
+            "meat": 0,
+            "planks": 0,
+            "stone": 0,
+            "stored_meal": 0,
+            "wood": 0
+          },
+          "line_progress": {
+            "blocks": 0.0,
+            "meal": 0.0,
+            "meal_to_store": 0.0,
+            "meat": 0.0,
+            "planks": 0.0,
+            "stone": 0.0,
+            "stored_meal": 0.0,
+            "wood": 0.0
+          },
+          "owl_hits": 0,
+          "processed_stone": 0,
+          "processed_wood": 0,
+          "product_store": {
+            "blocks": 0,
+            "meal": 0,
+            "planks": 0
+          },
+          "rescued": true,
+          "served": 0,
+          "survivor_paid": true,
+          "survivor_wood": 8,
+          "work_seconds": {
+            "meat": 0.0,
+            "stone": 0.0,
+            "wood": 0.0
+          },
+          "worker_carry_token": "",
+          "worker_deliveries": 1,
+          "worker_load": {
+            "coal": 0,
+            "meat": 0,
+            "metal": 0,
+            "slate": 0,
+            "stone": 0,
+            "wood": 2
+          },
+          "worker_meal": 0,
+          "worker_receipts": [
+            "wood-4"
+          ],
+          "worker_supply": ""
+        },
+        "stored": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 1
+        },
+        "version": 9,
+        "world": {
+          "cooling": {},
+          "drops": [
+            [
+              "meat-1",
+              "meat",
+              15.7353610992432,
+              -1.73667752742767,
+              89.3999999999999
+            ],
+            [
+              "meat-2",
+              "meat",
+              14.8863859176636,
+              -2.45175909996033,
+              89.3999999999999
+            ],
+            [
+              "meat-6",
+              "meat",
+              14.2753047943115,
+              6.96690797805786,
+              94.3166666666667
+            ],
+            [
+              "meat-7",
+              "meat",
+              13.4263296127319,
+              6.25182628631592,
+              94.3166666666667
+            ],
+            [
+              "meat-8",
+              "meat",
+              18.0043277740479,
+              3.88283634185791,
+              100.0
+            ],
+            [
+              "meat-9",
+              "meat",
+              17.1553535461426,
+              3.16775465011597,
+              100.0
+            ]
+          ],
+          "layout": {},
+          "pack": {
+            "live": [],
+            "remaining": 8.83333333333344,
+            "rng": "-5710695551840508925",
+            "serial": 3,
+            "wave": 1
+          },
+          "partial": {
+            "starter-stone": 2.0
+          },
+          "player": {
+            "camp_heal_elapsed": 0.0,
+            "fall_left": 0.0,
+            "hp": 30,
+            "protection_left": 0.0,
+            "x": 2.79999995231628,
+            "yaw": 0.0,
+            "z": -7.46000003814697
+          },
+          "previous_kitchen_site": false,
+          "serial": 9,
+          "version": 2
+        }
+      },
+      "durable_payload_sha256": "abfd75cc12fbf1eb8c6e6632db3255a1a7a17bc36c465c8a8354bcf52329412e"
+    },
+    {
+      "phase": "pickup-roast",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "pickup-roast.log",
+      "checks": {
+        "collecting at the distinct output apron equips one cooked meal": true,
+        "output survived restart without teleporting to the player": true,
+        "pickup produces no payment or second input debit": true,
+        "shipping main scene loaded from disposable profile": true
+      },
+      "observed": {},
+      "log_sha256": "51f102938d8af3fa19e962857565922c58903492ac02994340c820264d279989",
+      "durable_payload": {
+        "build_order": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade",
+          "camp_cooker",
+          "saw_bench",
+          "quarry_drill"
+        ],
+        "carried": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 5,
+          "wood": 3
+        },
+        "collected": {
+          "carried-legacy-meat": "meat",
+          "earned-center_hearth-wood-0": "wood",
+          "earned-center_hearth-wood-1": "wood",
+          "earned-center_hearth-wood-2": "wood",
+          "earned-expansion_1-stone-0": "stone",
+          "earned-expansion_1-wood-0": "wood",
+          "earned-expansion_1-wood-1": "wood",
+          "earned-expansion_1-wood-2": "wood",
+          "earned-expansion_2-stone-0": "stone",
+          "earned-expansion_2-stone-1": "stone",
+          "earned-expansion_2-wood-0": "wood",
+          "earned-expansion_2-wood-1": "wood",
+          "earned-expansion_2-wood-2": "wood",
+          "earned-orbit_upgrade-meat-0": "meat",
+          "earned-orbit_upgrade-stone-0": "stone",
+          "earned-orbit_upgrade-stone-1": "stone",
+          "earned-storage_meat-meat-0": "meat",
+          "earned-storage_meat-wood-0": "wood",
+          "earned-storage_meat-wood-1": "wood",
+          "earned-storage_stone-stone-0": "stone",
+          "earned-storage_stone-wood-0": "wood",
+          "earned-storage_stone-wood-1": "wood",
+          "earned-storage_wood-wood-0": "wood",
+          "earned-storage_wood-wood-1": "wood",
+          "earned-watchtower-stone-0": "stone",
+          "earned-watchtower-stone-1": "stone",
+          "earned-watchtower-wood-0": "wood",
+          "earned-watchtower-wood-1": "wood",
+          "earned-watchtower-wood-2": "wood",
+          "legacy-spare-stone-0": "stone",
+          "legacy-spare-stone-1": "stone",
+          "legacy-spare-stone-2": "stone",
+          "legacy-spare-stone-3": "stone",
+          "legacy-spare-stone-4": "stone",
+          "legacy-spare-wood-0": "wood",
+          "legacy-spare-wood-1": "wood",
+          "legacy-spare-wood-10": "wood",
+          "legacy-spare-wood-2": "wood",
+          "legacy-spare-wood-3": "wood",
+          "legacy-spare-wood-4": "wood",
+          "legacy-spare-wood-5": "wood",
+          "legacy-spare-wood-6": "wood",
+          "legacy-spare-wood-7": "wood",
+          "legacy-spare-wood-8": "wood",
+          "legacy-spare-wood-9": "wood",
+          "second-carried-legacy-meat": "meat",
+          "setup-camp_cooker-stone-0": "stone",
+          "setup-camp_cooker-stone-1": "stone",
+          "setup-camp_cooker-stone-2": "stone",
+          "setup-camp_cooker-stone-3": "stone",
+          "setup-camp_cooker-stone-4": "stone",
+          "setup-camp_cooker-stone-5": "stone",
+          "setup-camp_cooker-stone-6": "stone",
+          "setup-camp_cooker-stone-7": "stone",
+          "setup-camp_cooker-wood-0": "wood",
+          "setup-camp_cooker-wood-1": "wood",
+          "setup-camp_cooker-wood-10": "wood",
+          "setup-camp_cooker-wood-11": "wood",
+          "setup-camp_cooker-wood-2": "wood",
+          "setup-camp_cooker-wood-3": "wood",
+          "setup-camp_cooker-wood-4": "wood",
+          "setup-camp_cooker-wood-5": "wood",
+          "setup-camp_cooker-wood-6": "wood",
+          "setup-camp_cooker-wood-7": "wood",
+          "setup-camp_cooker-wood-8": "wood",
+          "setup-camp_cooker-wood-9": "wood",
+          "setup-quarry_drill-stone-0": "stone",
+          "setup-quarry_drill-stone-1": "stone",
+          "setup-quarry_drill-stone-10": "stone",
+          "setup-quarry_drill-stone-11": "stone",
+          "setup-quarry_drill-stone-2": "stone",
+          "setup-quarry_drill-stone-3": "stone",
+          "setup-quarry_drill-stone-4": "stone",
+          "setup-quarry_drill-stone-5": "stone",
+          "setup-quarry_drill-stone-6": "stone",
+          "setup-quarry_drill-stone-7": "stone",
+          "setup-quarry_drill-stone-8": "stone",
+          "setup-quarry_drill-stone-9": "stone",
+          "setup-quarry_drill-wood-0": "wood",
+          "setup-quarry_drill-wood-1": "wood",
+          "setup-quarry_drill-wood-2": "wood",
+          "setup-quarry_drill-wood-3": "wood",
+          "setup-quarry_drill-wood-4": "wood",
+          "setup-quarry_drill-wood-5": "wood",
+          "setup-quarry_drill-wood-6": "wood",
+          "setup-quarry_drill-wood-7": "wood",
+          "setup-quarry_drill-wood-8": "wood",
+          "setup-quarry_drill-wood-9": "wood",
+          "setup-saw_bench-stone-0": "stone",
+          "setup-saw_bench-stone-1": "stone",
+          "setup-saw_bench-stone-2": "stone",
+          "setup-saw_bench-stone-3": "stone",
+          "setup-saw_bench-stone-4": "stone",
+          "setup-saw_bench-stone-5": "stone",
+          "setup-saw_bench-wood-0": "wood",
+          "setup-saw_bench-wood-1": "wood",
+          "setup-saw_bench-wood-10": "wood",
+          "setup-saw_bench-wood-11": "wood",
+          "setup-saw_bench-wood-12": "wood",
+          "setup-saw_bench-wood-13": "wood",
+          "setup-saw_bench-wood-2": "wood",
+          "setup-saw_bench-wood-3": "wood",
+          "setup-saw_bench-wood-4": "wood",
+          "setup-saw_bench-wood-5": "wood",
+          "setup-saw_bench-wood-6": "wood",
+          "setup-saw_bench-wood-7": "wood",
+          "setup-saw_bench-wood-8": "wood",
+          "setup-saw_bench-wood-9": "wood",
+          "stored-legacy-meat": "meat",
+          "wood-3": "wood",
+          "wood-4": "wood",
+          "wood-5": "wood"
+        },
+        "legacy_axes": false,
+        "legacy_level2": false,
+        "legacy_prices": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "paid": {
+          "camp_cooker": {
+            "stone": 8,
+            "wood": 12
+          },
+          "center_hearth": {
+            "wood": 3
+          },
+          "expansion_1": {
+            "stone": 1,
+            "wood": 3
+          },
+          "expansion_2": {
+            "stone": 2,
+            "wood": 3
+          },
+          "meal_conveyor": {
+            "stone": 0,
+            "wood": 0
+          },
+          "orbit_upgrade": {
+            "meat": 1,
+            "stone": 2
+          },
+          "quarry_drill": {
+            "stone": 12,
+            "wood": 10
+          },
+          "saw_bench": {
+            "stone": 6,
+            "wood": 14
+          },
+          "storage_meat": {
+            "meat": 1,
+            "wood": 2
+          },
+          "storage_stone": {
+            "stone": 1,
+            "wood": 2
+          },
+          "storage_wood": {
+            "wood": 2
+          },
+          "supply_conveyors": {
+            "stone": 0,
+            "wood": 0
+          },
+          "watchtower": {
+            "stone": 2,
+            "wood": 3
+          }
+        },
+        "settlement": {
+          "cooked": 1,
+          "counter_stock": 0,
+          "dispatch_cursor": 0,
+          "held_meal": 1,
+          "hoppers": {
+            "meat": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "level": 1,
+          "line_load": {
+            "blocks": 0,
+            "meal": 0,
+            "meal_to_store": 0,
+            "meat": 0,
+            "planks": 0,
+            "stone": 0,
+            "stored_meal": 0,
+            "wood": 0
+          },
+          "line_progress": {
+            "blocks": 0.0,
+            "meal": 0.0,
+            "meal_to_store": 0.0,
+            "meat": 0.0,
+            "planks": 0.0,
+            "stone": 0.0,
+            "stored_meal": 0.0,
+            "wood": 0.0
+          },
+          "owl_hits": 0,
+          "processed_stone": 0,
+          "processed_wood": 0,
+          "product_store": {
+            "blocks": 0,
+            "meal": 0,
+            "planks": 0
+          },
+          "rescued": true,
+          "served": 0,
+          "survivor_paid": true,
+          "survivor_wood": 8,
+          "work_seconds": {
+            "meat": 0.0,
+            "stone": 0.0,
+            "wood": 0.0
+          },
+          "worker_carry_token": "",
+          "worker_deliveries": 1,
+          "worker_load": {
+            "coal": 0,
+            "meat": 0,
+            "metal": 0,
+            "slate": 0,
+            "stone": 0,
+            "wood": 2
+          },
+          "worker_meal": 0,
+          "worker_receipts": [
+            "wood-4"
+          ],
+          "worker_supply": ""
+        },
+        "stored": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 1
+        },
+        "version": 9,
+        "world": {
+          "cooling": {},
+          "drops": [
+            [
+              "meat-1",
+              "meat",
+              15.7353610992432,
+              -1.73667752742767,
+              89.3833333333332
+            ],
+            [
+              "meat-2",
+              "meat",
+              14.8863859176636,
+              -2.45175909996033,
+              89.3833333333332
+            ],
+            [
+              "meat-6",
+              "meat",
+              14.2753047943115,
+              6.96690797805786,
+              94.3
+            ],
+            [
+              "meat-7",
+              "meat",
+              13.4263296127319,
+              6.25182628631592,
+              94.3
+            ],
+            [
+              "meat-8",
+              "meat",
+              18.0043277740479,
+              3.88283634185791,
+              99.6833333333333
+            ],
+            [
+              "meat-9",
+              "meat",
+              17.1553535461426,
+              3.16775465011597,
+              99.6833333333333
+            ]
+          ],
+          "layout": {},
+          "pack": {
+            "live": [],
+            "remaining": 8.81666666666677,
+            "rng": "-5710695551840508925",
+            "serial": 3,
+            "wave": 1
+          },
+          "partial": {
+            "starter-stone": 2.0
+          },
+          "player": {
+            "camp_heal_elapsed": 0.0,
+            "fall_left": 0.0,
+            "hp": 30,
+            "protection_left": 0.0,
+            "x": 1.49000000953674,
+            "yaw": 0.0,
+            "z": -5.03999996185303
+          },
+          "previous_kitchen_site": false,
+          "serial": 9,
+          "version": 2
+        }
+      },
+      "durable_payload_sha256": "f31fc4e1ac16d76958b08e472c41e7bcef49a3f0e447393f026f71eda30e369f"
+    },
+    {
+      "phase": "interrupted",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "interrupted.log",
+      "checks": {
+        "actual first customer reached the outside marker": true,
+        "failed checkout left hot meal and currency unchanged": true,
+        "failed checkout left the durable envelope byte-identical": true,
+        "failed customer payment paused new grants": true,
+        "fixture acquires a live save lock": true,
+        "ready-to-serve meal persisted independently of the raw stock": true,
+        "service cannot claim a future customer": true,
+        "shipping main scene loaded from disposable profile": true,
+        "waiting customer cannot be served from the wrong side": true
+      },
+      "observed": {
+        "served": 0
+      },
+      "log_sha256": "6d2dfa802a431236e1c63d85d727d9f2b1deac26ff8ea8a3ce3111cdf56e3f3a",
+      "durable_payload": {
+        "build_order": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade",
+          "camp_cooker",
+          "saw_bench",
+          "quarry_drill"
+        ],
+        "carried": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 5,
+          "wood": 3
+        },
+        "collected": {
+          "carried-legacy-meat": "meat",
+          "earned-center_hearth-wood-0": "wood",
+          "earned-center_hearth-wood-1": "wood",
+          "earned-center_hearth-wood-2": "wood",
+          "earned-expansion_1-stone-0": "stone",
+          "earned-expansion_1-wood-0": "wood",
+          "earned-expansion_1-wood-1": "wood",
+          "earned-expansion_1-wood-2": "wood",
+          "earned-expansion_2-stone-0": "stone",
+          "earned-expansion_2-stone-1": "stone",
+          "earned-expansion_2-wood-0": "wood",
+          "earned-expansion_2-wood-1": "wood",
+          "earned-expansion_2-wood-2": "wood",
+          "earned-orbit_upgrade-meat-0": "meat",
+          "earned-orbit_upgrade-stone-0": "stone",
+          "earned-orbit_upgrade-stone-1": "stone",
+          "earned-storage_meat-meat-0": "meat",
+          "earned-storage_meat-wood-0": "wood",
+          "earned-storage_meat-wood-1": "wood",
+          "earned-storage_stone-stone-0": "stone",
+          "earned-storage_stone-wood-0": "wood",
+          "earned-storage_stone-wood-1": "wood",
+          "earned-storage_wood-wood-0": "wood",
+          "earned-storage_wood-wood-1": "wood",
+          "earned-watchtower-stone-0": "stone",
+          "earned-watchtower-stone-1": "stone",
+          "earned-watchtower-wood-0": "wood",
+          "earned-watchtower-wood-1": "wood",
+          "earned-watchtower-wood-2": "wood",
+          "legacy-spare-stone-0": "stone",
+          "legacy-spare-stone-1": "stone",
+          "legacy-spare-stone-2": "stone",
+          "legacy-spare-stone-3": "stone",
+          "legacy-spare-stone-4": "stone",
+          "legacy-spare-wood-0": "wood",
+          "legacy-spare-wood-1": "wood",
+          "legacy-spare-wood-10": "wood",
+          "legacy-spare-wood-2": "wood",
+          "legacy-spare-wood-3": "wood",
+          "legacy-spare-wood-4": "wood",
+          "legacy-spare-wood-5": "wood",
+          "legacy-spare-wood-6": "wood",
+          "legacy-spare-wood-7": "wood",
+          "legacy-spare-wood-8": "wood",
+          "legacy-spare-wood-9": "wood",
+          "second-carried-legacy-meat": "meat",
+          "setup-camp_cooker-stone-0": "stone",
+          "setup-camp_cooker-stone-1": "stone",
+          "setup-camp_cooker-stone-2": "stone",
+          "setup-camp_cooker-stone-3": "stone",
+          "setup-camp_cooker-stone-4": "stone",
+          "setup-camp_cooker-stone-5": "stone",
+          "setup-camp_cooker-stone-6": "stone",
+          "setup-camp_cooker-stone-7": "stone",
+          "setup-camp_cooker-wood-0": "wood",
+          "setup-camp_cooker-wood-1": "wood",
+          "setup-camp_cooker-wood-10": "wood",
+          "setup-camp_cooker-wood-11": "wood",
+          "setup-camp_cooker-wood-2": "wood",
+          "setup-camp_cooker-wood-3": "wood",
+          "setup-camp_cooker-wood-4": "wood",
+          "setup-camp_cooker-wood-5": "wood",
+          "setup-camp_cooker-wood-6": "wood",
+          "setup-camp_cooker-wood-7": "wood",
+          "setup-camp_cooker-wood-8": "wood",
+          "setup-camp_cooker-wood-9": "wood",
+          "setup-quarry_drill-stone-0": "stone",
+          "setup-quarry_drill-stone-1": "stone",
+          "setup-quarry_drill-stone-10": "stone",
+          "setup-quarry_drill-stone-11": "stone",
+          "setup-quarry_drill-stone-2": "stone",
+          "setup-quarry_drill-stone-3": "stone",
+          "setup-quarry_drill-stone-4": "stone",
+          "setup-quarry_drill-stone-5": "stone",
+          "setup-quarry_drill-stone-6": "stone",
+          "setup-quarry_drill-stone-7": "stone",
+          "setup-quarry_drill-stone-8": "stone",
+          "setup-quarry_drill-stone-9": "stone",
+          "setup-quarry_drill-wood-0": "wood",
+          "setup-quarry_drill-wood-1": "wood",
+          "setup-quarry_drill-wood-2": "wood",
+          "setup-quarry_drill-wood-3": "wood",
+          "setup-quarry_drill-wood-4": "wood",
+          "setup-quarry_drill-wood-5": "wood",
+          "setup-quarry_drill-wood-6": "wood",
+          "setup-quarry_drill-wood-7": "wood",
+          "setup-quarry_drill-wood-8": "wood",
+          "setup-quarry_drill-wood-9": "wood",
+          "setup-saw_bench-stone-0": "stone",
+          "setup-saw_bench-stone-1": "stone",
+          "setup-saw_bench-stone-2": "stone",
+          "setup-saw_bench-stone-3": "stone",
+          "setup-saw_bench-stone-4": "stone",
+          "setup-saw_bench-stone-5": "stone",
+          "setup-saw_bench-wood-0": "wood",
+          "setup-saw_bench-wood-1": "wood",
+          "setup-saw_bench-wood-10": "wood",
+          "setup-saw_bench-wood-11": "wood",
+          "setup-saw_bench-wood-12": "wood",
+          "setup-saw_bench-wood-13": "wood",
+          "setup-saw_bench-wood-2": "wood",
+          "setup-saw_bench-wood-3": "wood",
+          "setup-saw_bench-wood-4": "wood",
+          "setup-saw_bench-wood-5": "wood",
+          "setup-saw_bench-wood-6": "wood",
+          "setup-saw_bench-wood-7": "wood",
+          "setup-saw_bench-wood-8": "wood",
+          "setup-saw_bench-wood-9": "wood",
+          "stored-legacy-meat": "meat",
+          "wood-3": "wood",
+          "wood-4": "wood",
+          "wood-5": "wood"
+        },
+        "legacy_axes": false,
+        "legacy_level2": false,
+        "legacy_prices": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "paid": {
+          "camp_cooker": {
+            "stone": 8,
+            "wood": 12
+          },
+          "center_hearth": {
+            "wood": 3
+          },
+          "expansion_1": {
+            "stone": 1,
+            "wood": 3
+          },
+          "expansion_2": {
+            "stone": 2,
+            "wood": 3
+          },
+          "meal_conveyor": {
+            "stone": 0,
+            "wood": 0
+          },
+          "orbit_upgrade": {
+            "meat": 1,
+            "stone": 2
+          },
+          "quarry_drill": {
+            "stone": 12,
+            "wood": 10
+          },
+          "saw_bench": {
+            "stone": 6,
+            "wood": 14
+          },
+          "storage_meat": {
+            "meat": 1,
+            "wood": 2
+          },
+          "storage_stone": {
+            "stone": 1,
+            "wood": 2
+          },
+          "storage_wood": {
+            "wood": 2
+          },
+          "supply_conveyors": {
+            "stone": 0,
+            "wood": 0
+          },
+          "watchtower": {
+            "stone": 2,
+            "wood": 3
+          }
+        },
+        "settlement": {
+          "cooked": 1,
+          "counter_stock": 0,
+          "dispatch_cursor": 0,
+          "held_meal": 1,
+          "hoppers": {
+            "meat": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "level": 1,
+          "line_load": {
+            "blocks": 0,
+            "meal": 0,
+            "meal_to_store": 0,
+            "meat": 0,
+            "planks": 0,
+            "stone": 0,
+            "stored_meal": 0,
+            "wood": 0
+          },
+          "line_progress": {
+            "blocks": 0.0,
+            "meal": 0.0,
+            "meal_to_store": 0.0,
+            "meat": 0.0,
+            "planks": 0.0,
+            "stone": 0.0,
+            "stored_meal": 0.0,
+            "wood": 0.0
+          },
+          "owl_hits": 0,
+          "processed_stone": 0,
+          "processed_wood": 0,
+          "product_store": {
+            "blocks": 0,
+            "meal": 0,
+            "planks": 0
+          },
+          "rescued": true,
+          "served": 0,
+          "survivor_paid": true,
+          "survivor_wood": 8,
+          "work_seconds": {
+            "meat": 0.0,
+            "stone": 0.0,
+            "wood": 0.0
+          },
+          "worker_carry_token": "",
+          "worker_deliveries": 1,
+          "worker_load": {
+            "coal": 0,
+            "meat": 0,
+            "metal": 0,
+            "slate": 0,
+            "stone": 0,
+            "wood": 2
+          },
+          "worker_meal": 0,
+          "worker_receipts": [
+            "wood-4"
+          ],
+          "worker_supply": ""
+        },
+        "stored": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 1
+        },
+        "version": 9,
+        "world": {
+          "cooling": {},
+          "drops": [
+            [
+              "meat-1",
+              "meat",
+              15.7353610992432,
+              -1.73667752742767,
+              89.3833333333332
+            ],
+            [
+              "meat-2",
+              "meat",
+              14.8863859176636,
+              -2.45175909996033,
+              89.3833333333332
+            ],
+            [
+              "meat-6",
+              "meat",
+              14.2753047943115,
+              6.96690797805786,
+              94.3
+            ],
+            [
+              "meat-7",
+              "meat",
+              13.4263296127319,
+              6.25182628631592,
+              94.3
+            ],
+            [
+              "meat-8",
+              "meat",
+              18.0043277740479,
+              3.88283634185791,
+              99.6833333333333
+            ],
+            [
+              "meat-9",
+              "meat",
+              17.1553535461426,
+              3.16775465011597,
+              99.6833333333333
+            ]
+          ],
+          "layout": {},
+          "pack": {
+            "live": [],
+            "remaining": 8.81666666666677,
+            "rng": "-5710695551840508925",
+            "serial": 3,
+            "wave": 1
+          },
+          "partial": {
+            "starter-stone": 2.0
+          },
+          "player": {
+            "camp_heal_elapsed": 0.0,
+            "fall_left": 0.0,
+            "hp": 30,
+            "protection_left": 0.0,
+            "x": 1.49000000953674,
+            "yaw": 0.0,
+            "z": -5.03999996185303
+          },
+          "previous_kitchen_site": false,
+          "serial": 9,
+          "version": 2
+        }
+      },
+      "durable_payload_sha256": "f31fc4e1ac16d76958b08e472c41e7bcef49a3f0e447393f026f71eda30e369f"
+    },
+    {
+      "phase": "serve",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "serve.log",
+      "checks": {
+        "actual first customer reached the outside marker": true,
+        "exactly one customer paid for one actual meal": true,
+        "finishing the sale waits for the player's Continue action": true,
+        "no second reward without another meal": true,
+        "ready-to-serve meal persisted independently of the raw stock": true,
+        "receipt and currency survive repeated counter ticks": true,
+        "same customer cannot pay twice": true,
+        "service cannot claim a future customer": true,
+        "shipping main scene loaded from disposable profile": true,
+        "waiting customer cannot be served from the wrong side": true
+      },
+      "observed": {
+        "served": 1
+      },
+      "log_sha256": "7ceb7a99879b62463f5f7c5efc80bc7b2a7801c0fb0a131b7f87ad55563322c9",
+      "durable_payload": {
+        "build_order": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade",
+          "camp_cooker",
+          "saw_bench",
+          "quarry_drill"
+        ],
+        "carried": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 5,
+          "wood": 3
+        },
+        "collected": {
+          "carried-legacy-meat": "meat",
+          "earned-center_hearth-wood-0": "wood",
+          "earned-center_hearth-wood-1": "wood",
+          "earned-center_hearth-wood-2": "wood",
+          "earned-expansion_1-stone-0": "stone",
+          "earned-expansion_1-wood-0": "wood",
+          "earned-expansion_1-wood-1": "wood",
+          "earned-expansion_1-wood-2": "wood",
+          "earned-expansion_2-stone-0": "stone",
+          "earned-expansion_2-stone-1": "stone",
+          "earned-expansion_2-wood-0": "wood",
+          "earned-expansion_2-wood-1": "wood",
+          "earned-expansion_2-wood-2": "wood",
+          "earned-orbit_upgrade-meat-0": "meat",
+          "earned-orbit_upgrade-stone-0": "stone",
+          "earned-orbit_upgrade-stone-1": "stone",
+          "earned-storage_meat-meat-0": "meat",
+          "earned-storage_meat-wood-0": "wood",
+          "earned-storage_meat-wood-1": "wood",
+          "earned-storage_stone-stone-0": "stone",
+          "earned-storage_stone-wood-0": "wood",
+          "earned-storage_stone-wood-1": "wood",
+          "earned-storage_wood-wood-0": "wood",
+          "earned-storage_wood-wood-1": "wood",
+          "earned-watchtower-stone-0": "stone",
+          "earned-watchtower-stone-1": "stone",
+          "earned-watchtower-wood-0": "wood",
+          "earned-watchtower-wood-1": "wood",
+          "earned-watchtower-wood-2": "wood",
+          "legacy-spare-stone-0": "stone",
+          "legacy-spare-stone-1": "stone",
+          "legacy-spare-stone-2": "stone",
+          "legacy-spare-stone-3": "stone",
+          "legacy-spare-stone-4": "stone",
+          "legacy-spare-wood-0": "wood",
+          "legacy-spare-wood-1": "wood",
+          "legacy-spare-wood-10": "wood",
+          "legacy-spare-wood-2": "wood",
+          "legacy-spare-wood-3": "wood",
+          "legacy-spare-wood-4": "wood",
+          "legacy-spare-wood-5": "wood",
+          "legacy-spare-wood-6": "wood",
+          "legacy-spare-wood-7": "wood",
+          "legacy-spare-wood-8": "wood",
+          "legacy-spare-wood-9": "wood",
+          "second-carried-legacy-meat": "meat",
+          "setup-camp_cooker-stone-0": "stone",
+          "setup-camp_cooker-stone-1": "stone",
+          "setup-camp_cooker-stone-2": "stone",
+          "setup-camp_cooker-stone-3": "stone",
+          "setup-camp_cooker-stone-4": "stone",
+          "setup-camp_cooker-stone-5": "stone",
+          "setup-camp_cooker-stone-6": "stone",
+          "setup-camp_cooker-stone-7": "stone",
+          "setup-camp_cooker-wood-0": "wood",
+          "setup-camp_cooker-wood-1": "wood",
+          "setup-camp_cooker-wood-10": "wood",
+          "setup-camp_cooker-wood-11": "wood",
+          "setup-camp_cooker-wood-2": "wood",
+          "setup-camp_cooker-wood-3": "wood",
+          "setup-camp_cooker-wood-4": "wood",
+          "setup-camp_cooker-wood-5": "wood",
+          "setup-camp_cooker-wood-6": "wood",
+          "setup-camp_cooker-wood-7": "wood",
+          "setup-camp_cooker-wood-8": "wood",
+          "setup-camp_cooker-wood-9": "wood",
+          "setup-quarry_drill-stone-0": "stone",
+          "setup-quarry_drill-stone-1": "stone",
+          "setup-quarry_drill-stone-10": "stone",
+          "setup-quarry_drill-stone-11": "stone",
+          "setup-quarry_drill-stone-2": "stone",
+          "setup-quarry_drill-stone-3": "stone",
+          "setup-quarry_drill-stone-4": "stone",
+          "setup-quarry_drill-stone-5": "stone",
+          "setup-quarry_drill-stone-6": "stone",
+          "setup-quarry_drill-stone-7": "stone",
+          "setup-quarry_drill-stone-8": "stone",
+          "setup-quarry_drill-stone-9": "stone",
+          "setup-quarry_drill-wood-0": "wood",
+          "setup-quarry_drill-wood-1": "wood",
+          "setup-quarry_drill-wood-2": "wood",
+          "setup-quarry_drill-wood-3": "wood",
+          "setup-quarry_drill-wood-4": "wood",
+          "setup-quarry_drill-wood-5": "wood",
+          "setup-quarry_drill-wood-6": "wood",
+          "setup-quarry_drill-wood-7": "wood",
+          "setup-quarry_drill-wood-8": "wood",
+          "setup-quarry_drill-wood-9": "wood",
+          "setup-saw_bench-stone-0": "stone",
+          "setup-saw_bench-stone-1": "stone",
+          "setup-saw_bench-stone-2": "stone",
+          "setup-saw_bench-stone-3": "stone",
+          "setup-saw_bench-stone-4": "stone",
+          "setup-saw_bench-stone-5": "stone",
+          "setup-saw_bench-wood-0": "wood",
+          "setup-saw_bench-wood-1": "wood",
+          "setup-saw_bench-wood-10": "wood",
+          "setup-saw_bench-wood-11": "wood",
+          "setup-saw_bench-wood-12": "wood",
+          "setup-saw_bench-wood-13": "wood",
+          "setup-saw_bench-wood-2": "wood",
+          "setup-saw_bench-wood-3": "wood",
+          "setup-saw_bench-wood-4": "wood",
+          "setup-saw_bench-wood-5": "wood",
+          "setup-saw_bench-wood-6": "wood",
+          "setup-saw_bench-wood-7": "wood",
+          "setup-saw_bench-wood-8": "wood",
+          "setup-saw_bench-wood-9": "wood",
+          "stored-legacy-meat": "meat",
+          "wood-3": "wood",
+          "wood-4": "wood",
+          "wood-5": "wood"
+        },
+        "legacy_axes": false,
+        "legacy_level2": false,
+        "legacy_prices": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "paid": {
+          "camp_cooker": {
+            "stone": 8,
+            "wood": 12
+          },
+          "center_hearth": {
+            "wood": 3
+          },
+          "expansion_1": {
+            "stone": 1,
+            "wood": 3
+          },
+          "expansion_2": {
+            "stone": 2,
+            "wood": 3
+          },
+          "meal_conveyor": {
+            "stone": 0,
+            "wood": 0
+          },
+          "orbit_upgrade": {
+            "meat": 1,
+            "stone": 2
+          },
+          "quarry_drill": {
+            "stone": 12,
+            "wood": 10
+          },
+          "saw_bench": {
+            "stone": 6,
+            "wood": 14
+          },
+          "storage_meat": {
+            "meat": 1,
+            "wood": 2
+          },
+          "storage_stone": {
+            "stone": 1,
+            "wood": 2
+          },
+          "storage_wood": {
+            "wood": 2
+          },
+          "supply_conveyors": {
+            "stone": 0,
+            "wood": 0
+          },
+          "watchtower": {
+            "stone": 2,
+            "wood": 3
+          }
+        },
+        "settlement": {
+          "cooked": 1,
+          "counter_stock": 0,
+          "dispatch_cursor": 0,
+          "held_meal": 0,
+          "hoppers": {
+            "meat": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "level": 1,
+          "line_load": {
+            "blocks": 0,
+            "meal": 0,
+            "meal_to_store": 0,
+            "meat": 0,
+            "planks": 0,
+            "stone": 0,
+            "stored_meal": 0,
+            "wood": 0
+          },
+          "line_progress": {
+            "blocks": 0.0,
+            "meal": 0.0,
+            "meal_to_store": 0.0,
+            "meat": 0.0,
+            "planks": 0.0,
+            "stone": 0.0,
+            "stored_meal": 0.0,
+            "wood": 0.0
+          },
+          "owl_hits": 0,
+          "processed_stone": 0,
+          "processed_wood": 0,
+          "product_store": {
+            "blocks": 0,
+            "meal": 0,
+            "planks": 0
+          },
+          "rescued": true,
+          "served": 1,
+          "survivor_paid": true,
+          "survivor_wood": 8,
+          "work_seconds": {
+            "meat": 0.0,
+            "stone": 0.0,
+            "wood": 0.0
+          },
+          "worker_carry_token": "",
+          "worker_deliveries": 1,
+          "worker_load": {
+            "coal": 0,
+            "meat": 0,
+            "metal": 0,
+            "slate": 0,
+            "stone": 0,
+            "wood": 2
+          },
+          "worker_meal": 0,
+          "worker_receipts": [
+            "wood-4"
+          ],
+          "worker_supply": ""
+        },
+        "stored": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 1
+        },
+        "version": 9,
+        "world": {
+          "cooling": {},
+          "drops": [
+            [
+              "meat-1",
+              "meat",
+              15.7353610992432,
+              -1.73667752742767,
+              89.3833333333332
+            ],
+            [
+              "meat-2",
+              "meat",
+              14.8863859176636,
+              -2.45175909996033,
+              89.3833333333332
+            ],
+            [
+              "meat-6",
+              "meat",
+              14.2753047943115,
+              6.96690797805786,
+              94.3
+            ],
+            [
+              "meat-7",
+              "meat",
+              13.4263296127319,
+              6.25182628631592,
+              94.3
+            ],
+            [
+              "meat-8",
+              "meat",
+              18.0043277740479,
+              3.88283634185791,
+              99.6833333333333
+            ],
+            [
+              "meat-9",
+              "meat",
+              17.1553535461426,
+              3.16775465011597,
+              99.6833333333333
+            ]
+          ],
+          "layout": {},
+          "pack": {
+            "live": [],
+            "remaining": 8.81666666666677,
+            "rng": "-5710695551840508925",
+            "serial": 3,
+            "wave": 1
+          },
+          "partial": {
+            "starter-stone": 2.0
+          },
+          "player": {
+            "camp_heal_elapsed": 0.0,
+            "fall_left": 0.0,
+            "hp": 30,
+            "protection_left": 0.0,
+            "x": 2.79999995231628,
+            "yaw": 0.0,
+            "z": -7.46000003814697
+          },
+          "previous_kitchen_site": false,
+          "serial": 9,
+          "version": 2
+        }
+      },
+      "durable_payload_sha256": "0fb0c246fa5bd62902a4253a6d0482db74fd98724b73561bd6e11fb1194c96d4"
+    },
+    {
+      "phase": "machines-and-owl",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "machines-and-owl.log",
+      "checks": {
+        "a sale alone leaves the new production objectives open": true,
+        "both machines finish while the player is away": true,
+        "each completion consumes its own hopper input and saves its own product": true,
+        "empty hoppers cannot make a second batch": true,
+        "live hovering companion earns an actual contact receipt": true,
+        "owl hit saved with both production outputs": true,
+        "physical wolf spawned for owl contact": true,
+        "remote owl callback cannot manufacture a hit": true,
+        "remote stone cannot grant an input receipt": true,
+        "remote wood cannot grant an input receipt": true,
+        "shipping main scene loaded from disposable profile": true,
+        "stocked saw and stone mill operate concurrently": true,
+        "stone loading apron is accessible inside the paid camp": true,
+        "stone loading withdraws once from the player's pack": true,
+        "stone raw input transferred to its own hopper": true,
+        "wood loading apron is accessible inside the paid camp": true,
+        "wood loading withdraws once from the player's pack": true,
+        "wood raw input transferred to its own hopper": true
+      },
+      "observed": {
+        "last_owl_contact": {
+          "event": "owl_hit",
+          "t": 9.817,
+          "x": 65.3,
+          "z": 16.62
+        },
+        "owl_hits_after": 1,
+        "owl_hits_before": 0
+      },
+      "log_sha256": "967aee3f2b95d375c0d8f506690cbb22edfea5ba2ccfbf93f94794088bae525c",
+      "durable_payload": {
+        "build_order": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade",
+          "camp_cooker",
+          "saw_bench",
+          "quarry_drill"
+        ],
+        "carried": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 4,
+          "wood": 4
+        },
+        "collected": {
+          "carried-legacy-meat": "meat",
+          "earned-center_hearth-wood-0": "wood",
+          "earned-center_hearth-wood-1": "wood",
+          "earned-center_hearth-wood-2": "wood",
+          "earned-expansion_1-stone-0": "stone",
+          "earned-expansion_1-wood-0": "wood",
+          "earned-expansion_1-wood-1": "wood",
+          "earned-expansion_1-wood-2": "wood",
+          "earned-expansion_2-stone-0": "stone",
+          "earned-expansion_2-stone-1": "stone",
+          "earned-expansion_2-wood-0": "wood",
+          "earned-expansion_2-wood-1": "wood",
+          "earned-expansion_2-wood-2": "wood",
+          "earned-orbit_upgrade-meat-0": "meat",
+          "earned-orbit_upgrade-stone-0": "stone",
+          "earned-orbit_upgrade-stone-1": "stone",
+          "earned-storage_meat-meat-0": "meat",
+          "earned-storage_meat-wood-0": "wood",
+          "earned-storage_meat-wood-1": "wood",
+          "earned-storage_stone-stone-0": "stone",
+          "earned-storage_stone-wood-0": "wood",
+          "earned-storage_stone-wood-1": "wood",
+          "earned-storage_wood-wood-0": "wood",
+          "earned-storage_wood-wood-1": "wood",
+          "earned-watchtower-stone-0": "stone",
+          "earned-watchtower-stone-1": "stone",
+          "earned-watchtower-wood-0": "wood",
+          "earned-watchtower-wood-1": "wood",
+          "earned-watchtower-wood-2": "wood",
+          "legacy-spare-stone-0": "stone",
+          "legacy-spare-stone-1": "stone",
+          "legacy-spare-stone-2": "stone",
+          "legacy-spare-stone-3": "stone",
+          "legacy-spare-stone-4": "stone",
+          "legacy-spare-wood-0": "wood",
+          "legacy-spare-wood-1": "wood",
+          "legacy-spare-wood-10": "wood",
+          "legacy-spare-wood-2": "wood",
+          "legacy-spare-wood-3": "wood",
+          "legacy-spare-wood-4": "wood",
+          "legacy-spare-wood-5": "wood",
+          "legacy-spare-wood-6": "wood",
+          "legacy-spare-wood-7": "wood",
+          "legacy-spare-wood-8": "wood",
+          "legacy-spare-wood-9": "wood",
+          "second-carried-legacy-meat": "meat",
+          "setup-camp_cooker-stone-0": "stone",
+          "setup-camp_cooker-stone-1": "stone",
+          "setup-camp_cooker-stone-2": "stone",
+          "setup-camp_cooker-stone-3": "stone",
+          "setup-camp_cooker-stone-4": "stone",
+          "setup-camp_cooker-stone-5": "stone",
+          "setup-camp_cooker-stone-6": "stone",
+          "setup-camp_cooker-stone-7": "stone",
+          "setup-camp_cooker-wood-0": "wood",
+          "setup-camp_cooker-wood-1": "wood",
+          "setup-camp_cooker-wood-10": "wood",
+          "setup-camp_cooker-wood-11": "wood",
+          "setup-camp_cooker-wood-2": "wood",
+          "setup-camp_cooker-wood-3": "wood",
+          "setup-camp_cooker-wood-4": "wood",
+          "setup-camp_cooker-wood-5": "wood",
+          "setup-camp_cooker-wood-6": "wood",
+          "setup-camp_cooker-wood-7": "wood",
+          "setup-camp_cooker-wood-8": "wood",
+          "setup-camp_cooker-wood-9": "wood",
+          "setup-quarry_drill-stone-0": "stone",
+          "setup-quarry_drill-stone-1": "stone",
+          "setup-quarry_drill-stone-10": "stone",
+          "setup-quarry_drill-stone-11": "stone",
+          "setup-quarry_drill-stone-2": "stone",
+          "setup-quarry_drill-stone-3": "stone",
+          "setup-quarry_drill-stone-4": "stone",
+          "setup-quarry_drill-stone-5": "stone",
+          "setup-quarry_drill-stone-6": "stone",
+          "setup-quarry_drill-stone-7": "stone",
+          "setup-quarry_drill-stone-8": "stone",
+          "setup-quarry_drill-stone-9": "stone",
+          "setup-quarry_drill-wood-0": "wood",
+          "setup-quarry_drill-wood-1": "wood",
+          "setup-quarry_drill-wood-2": "wood",
+          "setup-quarry_drill-wood-3": "wood",
+          "setup-quarry_drill-wood-4": "wood",
+          "setup-quarry_drill-wood-5": "wood",
+          "setup-quarry_drill-wood-6": "wood",
+          "setup-quarry_drill-wood-7": "wood",
+          "setup-quarry_drill-wood-8": "wood",
+          "setup-quarry_drill-wood-9": "wood",
+          "setup-saw_bench-stone-0": "stone",
+          "setup-saw_bench-stone-1": "stone",
+          "setup-saw_bench-stone-2": "stone",
+          "setup-saw_bench-stone-3": "stone",
+          "setup-saw_bench-stone-4": "stone",
+          "setup-saw_bench-stone-5": "stone",
+          "setup-saw_bench-wood-0": "wood",
+          "setup-saw_bench-wood-1": "wood",
+          "setup-saw_bench-wood-10": "wood",
+          "setup-saw_bench-wood-11": "wood",
+          "setup-saw_bench-wood-12": "wood",
+          "setup-saw_bench-wood-13": "wood",
+          "setup-saw_bench-wood-2": "wood",
+          "setup-saw_bench-wood-3": "wood",
+          "setup-saw_bench-wood-4": "wood",
+          "setup-saw_bench-wood-5": "wood",
+          "setup-saw_bench-wood-6": "wood",
+          "setup-saw_bench-wood-7": "wood",
+          "setup-saw_bench-wood-8": "wood",
+          "setup-saw_bench-wood-9": "wood",
+          "stored-legacy-meat": "meat",
+          "wood-13": "wood",
+          "wood-15": "wood",
+          "wood-3": "wood",
+          "wood-4": "wood",
+          "wood-5": "wood"
+        },
+        "legacy_axes": false,
+        "legacy_level2": false,
+        "legacy_prices": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "paid": {
+          "camp_cooker": {
+            "stone": 8,
+            "wood": 12
+          },
+          "center_hearth": {
+            "wood": 3
+          },
+          "expansion_1": {
+            "stone": 1,
+            "wood": 3
+          },
+          "expansion_2": {
+            "stone": 2,
+            "wood": 3
+          },
+          "meal_conveyor": {
+            "stone": 0,
+            "wood": 0
+          },
+          "orbit_upgrade": {
+            "meat": 1,
+            "stone": 2
+          },
+          "quarry_drill": {
+            "stone": 12,
+            "wood": 10
+          },
+          "saw_bench": {
+            "stone": 6,
+            "wood": 14
+          },
+          "storage_meat": {
+            "meat": 1,
+            "wood": 2
+          },
+          "storage_stone": {
+            "stone": 1,
+            "wood": 2
+          },
+          "storage_wood": {
+            "wood": 2
+          },
+          "supply_conveyors": {
+            "stone": 0,
+            "wood": 0
+          },
+          "watchtower": {
+            "stone": 2,
+            "wood": 3
+          }
+        },
+        "settlement": {
+          "cooked": 1,
+          "counter_stock": 0,
+          "dispatch_cursor": 0,
+          "held_meal": 0,
+          "hoppers": {
+            "meat": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "level": 1,
+          "line_load": {
+            "blocks": 0,
+            "meal": 0,
+            "meal_to_store": 0,
+            "meat": 0,
+            "planks": 0,
+            "stone": 0,
+            "stored_meal": 0,
+            "wood": 0
+          },
+          "line_progress": {
+            "blocks": 0.0,
+            "meal": 0.0,
+            "meal_to_store": 0.0,
+            "meat": 0.0,
+            "planks": 0.0,
+            "stone": 0.0,
+            "stored_meal": 0.0,
+            "wood": 0.0
+          },
+          "owl_hits": 1,
+          "processed_stone": 1,
+          "processed_wood": 1,
+          "product_store": {
+            "blocks": 0,
+            "meal": 0,
+            "planks": 0
+          },
+          "rescued": true,
+          "served": 1,
+          "survivor_paid": true,
+          "survivor_wood": 8,
+          "work_seconds": {
+            "meat": 0.0,
+            "stone": 0.0,
+            "wood": 0.0
+          },
+          "worker_carry_token": "",
+          "worker_deliveries": 1,
+          "worker_load": {
+            "coal": 0,
+            "meat": 0,
+            "metal": 0,
+            "slate": 0,
+            "stone": 0,
+            "wood": 2
+          },
+          "worker_meal": 0,
+          "worker_receipts": [
+            "wood-4"
+          ],
+          "worker_supply": ""
+        },
+        "stored": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 1
+        },
+        "version": 9,
+        "world": {
+          "cooling": {
+            "world1/1/0/wood/29": 2.15000000000001,
+            "world1/1/0/wood/30": 2.11666666666668
+          },
+          "drops": [
+            [
+              "meat-1",
+              "meat",
+              15.7353610992432,
+              -1.73667752742767,
+              79.5666666666665
+            ],
+            [
+              "meat-2",
+              "meat",
+              14.8863859176636,
+              -2.45175909996033,
+              79.5666666666665
+            ],
+            [
+              "meat-6",
+              "meat",
+              14.2753047943115,
+              6.96690797805786,
+              84.483333333333
+            ],
+            [
+              "meat-7",
+              "meat",
+              13.4263296127319,
+              6.25182628631592,
+              84.483333333333
+            ],
+            [
+              "meat-8",
+              "meat",
+              18.0043277740479,
+              3.88283634185791,
+              89.8666666666665
+            ],
+            [
+              "meat-9",
+              "meat",
+              17.1553535461426,
+              3.16775465011597,
+              89.8666666666665
+            ],
+            [
+              "wood-10",
+              "wood",
+              57.4319763183594,
+              14.2820663452148,
+              97.1
+            ],
+            [
+              "wood-11",
+              "wood",
+              56.4724464416504,
+              14.1872081756592,
+              97.1
+            ],
+            [
+              "wood-12",
+              "wood",
+              57.1490859985352,
+              13.5002908706665,
+              97.1
+            ],
+            [
+              "wood-14",
+              "wood",
+              53.7059555053711,
+              12.6182336807251,
+              97.1333333333333
+            ],
+            [
+              "meat-16",
+              "meat",
+              67.9030838012695,
+              15.6037359237671,
+              99.7833333333333
+            ],
+            [
+              "meat-17",
+              "meat",
+              67.0541076660156,
+              14.8886547088623,
+              99.7833333333333
+            ],
+            [
+              "meat-18",
+              "meat",
+              65.8043212890625,
+              16.9003620147705,
+              100.0
+            ],
+            [
+              "meat-19",
+              "meat",
+              64.9553451538086,
+              16.1852798461914,
+              100.0
+            ]
+          ],
+          "layout": {},
+          "pack": {
+            "live": [
+              [
+                6,
+                false,
+                3,
+                67.1330871582031,
+                12.0957946777344,
+                66.8302764892578,
+                6.14182662963867
+              ]
+            ],
+            "remaining": 22.3666666666668,
+            "rng": "1230587358926716432",
+            "serial": 6,
+            "wave": 2
+          },
+          "partial": {
+            "starter-stone": 2.0
+          },
+          "player": {
+            "camp_heal_elapsed": 0.0,
+            "fall_left": 0.0,
+            "hp": 30,
+            "protection_left": 0.0,
+            "x": 67.4045639038086,
+            "yaw": 0.0,
+            "z": 17.4387435913086
+          },
+          "previous_kitchen_site": false,
+          "serial": 19,
+          "version": 2
+        }
+      },
+      "durable_payload_sha256": "17ffc8e0135cb8936a419ee65e81d0565ba6fce3fa3d54b726fac9a945b14c73"
+    },
+    {
+      "phase": "handoff-interrupted",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "handoff-interrupted.log",
+      "checks": {
+        "earned handoff button visible and enabled": true,
+        "failed level write preserves the Level 1 completion and cash": true,
+        "first-reward receipt survived in a new process": true,
+        "fixture acquires a live save lock": true,
+        "shipping main scene loaded from disposable profile": true
+      },
+      "observed": {},
+      "log_sha256": "1c16e95c91b2470b63b75ac443b6e34d2117b72677fd6a6eacc650cb9ccde2b5",
+      "durable_payload": {
+        "build_order": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade",
+          "camp_cooker",
+          "saw_bench",
+          "quarry_drill"
+        ],
+        "carried": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 4,
+          "wood": 4
+        },
+        "collected": {
+          "carried-legacy-meat": "meat",
+          "earned-center_hearth-wood-0": "wood",
+          "earned-center_hearth-wood-1": "wood",
+          "earned-center_hearth-wood-2": "wood",
+          "earned-expansion_1-stone-0": "stone",
+          "earned-expansion_1-wood-0": "wood",
+          "earned-expansion_1-wood-1": "wood",
+          "earned-expansion_1-wood-2": "wood",
+          "earned-expansion_2-stone-0": "stone",
+          "earned-expansion_2-stone-1": "stone",
+          "earned-expansion_2-wood-0": "wood",
+          "earned-expansion_2-wood-1": "wood",
+          "earned-expansion_2-wood-2": "wood",
+          "earned-orbit_upgrade-meat-0": "meat",
+          "earned-orbit_upgrade-stone-0": "stone",
+          "earned-orbit_upgrade-stone-1": "stone",
+          "earned-storage_meat-meat-0": "meat",
+          "earned-storage_meat-wood-0": "wood",
+          "earned-storage_meat-wood-1": "wood",
+          "earned-storage_stone-stone-0": "stone",
+          "earned-storage_stone-wood-0": "wood",
+          "earned-storage_stone-wood-1": "wood",
+          "earned-storage_wood-wood-0": "wood",
+          "earned-storage_wood-wood-1": "wood",
+          "earned-watchtower-stone-0": "stone",
+          "earned-watchtower-stone-1": "stone",
+          "earned-watchtower-wood-0": "wood",
+          "earned-watchtower-wood-1": "wood",
+          "earned-watchtower-wood-2": "wood",
+          "legacy-spare-stone-0": "stone",
+          "legacy-spare-stone-1": "stone",
+          "legacy-spare-stone-2": "stone",
+          "legacy-spare-stone-3": "stone",
+          "legacy-spare-stone-4": "stone",
+          "legacy-spare-wood-0": "wood",
+          "legacy-spare-wood-1": "wood",
+          "legacy-spare-wood-10": "wood",
+          "legacy-spare-wood-2": "wood",
+          "legacy-spare-wood-3": "wood",
+          "legacy-spare-wood-4": "wood",
+          "legacy-spare-wood-5": "wood",
+          "legacy-spare-wood-6": "wood",
+          "legacy-spare-wood-7": "wood",
+          "legacy-spare-wood-8": "wood",
+          "legacy-spare-wood-9": "wood",
+          "second-carried-legacy-meat": "meat",
+          "setup-camp_cooker-stone-0": "stone",
+          "setup-camp_cooker-stone-1": "stone",
+          "setup-camp_cooker-stone-2": "stone",
+          "setup-camp_cooker-stone-3": "stone",
+          "setup-camp_cooker-stone-4": "stone",
+          "setup-camp_cooker-stone-5": "stone",
+          "setup-camp_cooker-stone-6": "stone",
+          "setup-camp_cooker-stone-7": "stone",
+          "setup-camp_cooker-wood-0": "wood",
+          "setup-camp_cooker-wood-1": "wood",
+          "setup-camp_cooker-wood-10": "wood",
+          "setup-camp_cooker-wood-11": "wood",
+          "setup-camp_cooker-wood-2": "wood",
+          "setup-camp_cooker-wood-3": "wood",
+          "setup-camp_cooker-wood-4": "wood",
+          "setup-camp_cooker-wood-5": "wood",
+          "setup-camp_cooker-wood-6": "wood",
+          "setup-camp_cooker-wood-7": "wood",
+          "setup-camp_cooker-wood-8": "wood",
+          "setup-camp_cooker-wood-9": "wood",
+          "setup-quarry_drill-stone-0": "stone",
+          "setup-quarry_drill-stone-1": "stone",
+          "setup-quarry_drill-stone-10": "stone",
+          "setup-quarry_drill-stone-11": "stone",
+          "setup-quarry_drill-stone-2": "stone",
+          "setup-quarry_drill-stone-3": "stone",
+          "setup-quarry_drill-stone-4": "stone",
+          "setup-quarry_drill-stone-5": "stone",
+          "setup-quarry_drill-stone-6": "stone",
+          "setup-quarry_drill-stone-7": "stone",
+          "setup-quarry_drill-stone-8": "stone",
+          "setup-quarry_drill-stone-9": "stone",
+          "setup-quarry_drill-wood-0": "wood",
+          "setup-quarry_drill-wood-1": "wood",
+          "setup-quarry_drill-wood-2": "wood",
+          "setup-quarry_drill-wood-3": "wood",
+          "setup-quarry_drill-wood-4": "wood",
+          "setup-quarry_drill-wood-5": "wood",
+          "setup-quarry_drill-wood-6": "wood",
+          "setup-quarry_drill-wood-7": "wood",
+          "setup-quarry_drill-wood-8": "wood",
+          "setup-quarry_drill-wood-9": "wood",
+          "setup-saw_bench-stone-0": "stone",
+          "setup-saw_bench-stone-1": "stone",
+          "setup-saw_bench-stone-2": "stone",
+          "setup-saw_bench-stone-3": "stone",
+          "setup-saw_bench-stone-4": "stone",
+          "setup-saw_bench-stone-5": "stone",
+          "setup-saw_bench-wood-0": "wood",
+          "setup-saw_bench-wood-1": "wood",
+          "setup-saw_bench-wood-10": "wood",
+          "setup-saw_bench-wood-11": "wood",
+          "setup-saw_bench-wood-12": "wood",
+          "setup-saw_bench-wood-13": "wood",
+          "setup-saw_bench-wood-2": "wood",
+          "setup-saw_bench-wood-3": "wood",
+          "setup-saw_bench-wood-4": "wood",
+          "setup-saw_bench-wood-5": "wood",
+          "setup-saw_bench-wood-6": "wood",
+          "setup-saw_bench-wood-7": "wood",
+          "setup-saw_bench-wood-8": "wood",
+          "setup-saw_bench-wood-9": "wood",
+          "stored-legacy-meat": "meat",
+          "wood-13": "wood",
+          "wood-15": "wood",
+          "wood-3": "wood",
+          "wood-4": "wood",
+          "wood-5": "wood"
+        },
+        "legacy_axes": false,
+        "legacy_level2": false,
+        "legacy_prices": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "paid": {
+          "camp_cooker": {
+            "stone": 8,
+            "wood": 12
+          },
+          "center_hearth": {
+            "wood": 3
+          },
+          "expansion_1": {
+            "stone": 1,
+            "wood": 3
+          },
+          "expansion_2": {
+            "stone": 2,
+            "wood": 3
+          },
+          "meal_conveyor": {
+            "stone": 0,
+            "wood": 0
+          },
+          "orbit_upgrade": {
+            "meat": 1,
+            "stone": 2
+          },
+          "quarry_drill": {
+            "stone": 12,
+            "wood": 10
+          },
+          "saw_bench": {
+            "stone": 6,
+            "wood": 14
+          },
+          "storage_meat": {
+            "meat": 1,
+            "wood": 2
+          },
+          "storage_stone": {
+            "stone": 1,
+            "wood": 2
+          },
+          "storage_wood": {
+            "wood": 2
+          },
+          "supply_conveyors": {
+            "stone": 0,
+            "wood": 0
+          },
+          "watchtower": {
+            "stone": 2,
+            "wood": 3
+          }
+        },
+        "settlement": {
+          "cooked": 1,
+          "counter_stock": 0,
+          "dispatch_cursor": 0,
+          "held_meal": 0,
+          "hoppers": {
+            "meat": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "level": 1,
+          "line_load": {
+            "blocks": 0,
+            "meal": 0,
+            "meal_to_store": 0,
+            "meat": 0,
+            "planks": 0,
+            "stone": 0,
+            "stored_meal": 0,
+            "wood": 0
+          },
+          "line_progress": {
+            "blocks": 0.0,
+            "meal": 0.0,
+            "meal_to_store": 0.0,
+            "meat": 0.0,
+            "planks": 0.0,
+            "stone": 0.0,
+            "stored_meal": 0.0,
+            "wood": 0.0
+          },
+          "owl_hits": 1,
+          "processed_stone": 1,
+          "processed_wood": 1,
+          "product_store": {
+            "blocks": 0,
+            "meal": 0,
+            "planks": 0
+          },
+          "rescued": true,
+          "served": 1,
+          "survivor_paid": true,
+          "survivor_wood": 8,
+          "work_seconds": {
+            "meat": 0.0,
+            "stone": 0.0,
+            "wood": 0.0
+          },
+          "worker_carry_token": "",
+          "worker_deliveries": 1,
+          "worker_load": {
+            "coal": 0,
+            "meat": 0,
+            "metal": 0,
+            "slate": 0,
+            "stone": 0,
+            "wood": 2
+          },
+          "worker_meal": 0,
+          "worker_receipts": [
+            "wood-4"
+          ],
+          "worker_supply": ""
+        },
+        "stored": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 1
+        },
+        "version": 9,
+        "world": {
+          "cooling": {
+            "world1/1/0/wood/29": 2.15000000000001,
+            "world1/1/0/wood/30": 2.11666666666668
+          },
+          "drops": [
+            [
+              "meat-1",
+              "meat",
+              15.7353610992432,
+              -1.73667752742767,
+              79.5666666666665
+            ],
+            [
+              "meat-2",
+              "meat",
+              14.8863859176636,
+              -2.45175909996033,
+              79.5666666666665
+            ],
+            [
+              "meat-6",
+              "meat",
+              14.2753047943115,
+              6.96690797805786,
+              84.483333333333
+            ],
+            [
+              "meat-7",
+              "meat",
+              13.4263296127319,
+              6.25182628631592,
+              84.483333333333
+            ],
+            [
+              "meat-8",
+              "meat",
+              18.0043277740479,
+              3.88283634185791,
+              89.8666666666665
+            ],
+            [
+              "meat-9",
+              "meat",
+              17.1553535461426,
+              3.16775465011597,
+              89.8666666666665
+            ],
+            [
+              "wood-10",
+              "wood",
+              57.4319763183594,
+              14.2820663452148,
+              97.1
+            ],
+            [
+              "wood-11",
+              "wood",
+              56.4724464416504,
+              14.1872081756592,
+              97.1
+            ],
+            [
+              "wood-12",
+              "wood",
+              57.1490859985352,
+              13.5002908706665,
+              97.1
+            ],
+            [
+              "wood-14",
+              "wood",
+              53.7059555053711,
+              12.6182336807251,
+              97.1333333333333
+            ],
+            [
+              "meat-16",
+              "meat",
+              67.9030838012695,
+              15.6037359237671,
+              99.7833333333333
+            ],
+            [
+              "meat-17",
+              "meat",
+              67.0541076660156,
+              14.8886547088623,
+              99.7833333333333
+            ],
+            [
+              "meat-18",
+              "meat",
+              65.8043212890625,
+              16.9003620147705,
+              100.0
+            ],
+            [
+              "meat-19",
+              "meat",
+              64.9553451538086,
+              16.1852798461914,
+              100.0
+            ]
+          ],
+          "layout": {},
+          "pack": {
+            "live": [
+              [
+                6,
+                false,
+                3,
+                67.1330871582031,
+                12.0957946777344,
+                66.8302764892578,
+                6.14182662963867
+              ]
+            ],
+            "remaining": 22.3666666666668,
+            "rng": "1230587358926716432",
+            "serial": 6,
+            "wave": 2
+          },
+          "partial": {
+            "starter-stone": 2.0
+          },
+          "player": {
+            "camp_heal_elapsed": 0.0,
+            "fall_left": 0.0,
+            "hp": 30,
+            "protection_left": 0.0,
+            "x": 67.4045639038086,
+            "yaw": 0.0,
+            "z": 17.4387435913086
+          },
+          "previous_kitchen_site": false,
+          "serial": 19,
+          "version": 2
+        }
+      },
+      "durable_payload_sha256": "17ffc8e0135cb8936a419ee65e81d0565ba6fce3fa3d54b726fac9a945b14c73"
+    },
+    {
+      "phase": "handoff",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "handoff.log",
+      "checks": {
+        "continuation requires camp purchase camp_cooker": true,
+        "continuation requires camp purchase center_hearth": true,
+        "continuation requires camp purchase expansion_1": true,
+        "continuation requires camp purchase expansion_2": true,
+        "continuation requires camp purchase orbit_upgrade": true,
+        "continuation requires camp purchase quarry_drill": true,
+        "continuation requires camp purchase saw_bench": true,
+        "continuation requires camp purchase storage_meat": true,
+        "continuation requires camp purchase storage_stone": true,
+        "continuation requires camp purchase storage_wood": true,
+        "continuation requires camp purchase watchtower": true,
+        "continuation requires owl_hits": true,
+        "continuation requires processed_stone": true,
+        "continuation requires processed_wood": true,
+        "continuation requires rescued": true,
+        "continuation requires served": true,
+        "continuation requires worker_deliveries": true,
+        "earned handoff button visible and enabled": true,
+        "first-reward receipt survived in a new process": true,
+        "handoff cannot be applied twice": true,
+        "shipping main scene loaded from disposable profile": true,
+        "touching the displayed Continue button commits Level 2 once": true
+      },
+      "observed": {},
+      "log_sha256": "7dfe5a94527208d37b3a8a85f595644d458d42da7c174ba3d5525765ea0e726b",
+      "durable_payload": {
+        "build_order": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade",
+          "camp_cooker",
+          "saw_bench",
+          "quarry_drill"
+        ],
+        "carried": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 4,
+          "wood": 4
+        },
+        "collected": {
+          "carried-legacy-meat": "meat",
+          "earned-center_hearth-wood-0": "wood",
+          "earned-center_hearth-wood-1": "wood",
+          "earned-center_hearth-wood-2": "wood",
+          "earned-expansion_1-stone-0": "stone",
+          "earned-expansion_1-wood-0": "wood",
+          "earned-expansion_1-wood-1": "wood",
+          "earned-expansion_1-wood-2": "wood",
+          "earned-expansion_2-stone-0": "stone",
+          "earned-expansion_2-stone-1": "stone",
+          "earned-expansion_2-wood-0": "wood",
+          "earned-expansion_2-wood-1": "wood",
+          "earned-expansion_2-wood-2": "wood",
+          "earned-orbit_upgrade-meat-0": "meat",
+          "earned-orbit_upgrade-stone-0": "stone",
+          "earned-orbit_upgrade-stone-1": "stone",
+          "earned-storage_meat-meat-0": "meat",
+          "earned-storage_meat-wood-0": "wood",
+          "earned-storage_meat-wood-1": "wood",
+          "earned-storage_stone-stone-0": "stone",
+          "earned-storage_stone-wood-0": "wood",
+          "earned-storage_stone-wood-1": "wood",
+          "earned-storage_wood-wood-0": "wood",
+          "earned-storage_wood-wood-1": "wood",
+          "earned-watchtower-stone-0": "stone",
+          "earned-watchtower-stone-1": "stone",
+          "earned-watchtower-wood-0": "wood",
+          "earned-watchtower-wood-1": "wood",
+          "earned-watchtower-wood-2": "wood",
+          "legacy-spare-stone-0": "stone",
+          "legacy-spare-stone-1": "stone",
+          "legacy-spare-stone-2": "stone",
+          "legacy-spare-stone-3": "stone",
+          "legacy-spare-stone-4": "stone",
+          "legacy-spare-wood-0": "wood",
+          "legacy-spare-wood-1": "wood",
+          "legacy-spare-wood-10": "wood",
+          "legacy-spare-wood-2": "wood",
+          "legacy-spare-wood-3": "wood",
+          "legacy-spare-wood-4": "wood",
+          "legacy-spare-wood-5": "wood",
+          "legacy-spare-wood-6": "wood",
+          "legacy-spare-wood-7": "wood",
+          "legacy-spare-wood-8": "wood",
+          "legacy-spare-wood-9": "wood",
+          "second-carried-legacy-meat": "meat",
+          "setup-camp_cooker-stone-0": "stone",
+          "setup-camp_cooker-stone-1": "stone",
+          "setup-camp_cooker-stone-2": "stone",
+          "setup-camp_cooker-stone-3": "stone",
+          "setup-camp_cooker-stone-4": "stone",
+          "setup-camp_cooker-stone-5": "stone",
+          "setup-camp_cooker-stone-6": "stone",
+          "setup-camp_cooker-stone-7": "stone",
+          "setup-camp_cooker-wood-0": "wood",
+          "setup-camp_cooker-wood-1": "wood",
+          "setup-camp_cooker-wood-10": "wood",
+          "setup-camp_cooker-wood-11": "wood",
+          "setup-camp_cooker-wood-2": "wood",
+          "setup-camp_cooker-wood-3": "wood",
+          "setup-camp_cooker-wood-4": "wood",
+          "setup-camp_cooker-wood-5": "wood",
+          "setup-camp_cooker-wood-6": "wood",
+          "setup-camp_cooker-wood-7": "wood",
+          "setup-camp_cooker-wood-8": "wood",
+          "setup-camp_cooker-wood-9": "wood",
+          "setup-quarry_drill-stone-0": "stone",
+          "setup-quarry_drill-stone-1": "stone",
+          "setup-quarry_drill-stone-10": "stone",
+          "setup-quarry_drill-stone-11": "stone",
+          "setup-quarry_drill-stone-2": "stone",
+          "setup-quarry_drill-stone-3": "stone",
+          "setup-quarry_drill-stone-4": "stone",
+          "setup-quarry_drill-stone-5": "stone",
+          "setup-quarry_drill-stone-6": "stone",
+          "setup-quarry_drill-stone-7": "stone",
+          "setup-quarry_drill-stone-8": "stone",
+          "setup-quarry_drill-stone-9": "stone",
+          "setup-quarry_drill-wood-0": "wood",
+          "setup-quarry_drill-wood-1": "wood",
+          "setup-quarry_drill-wood-2": "wood",
+          "setup-quarry_drill-wood-3": "wood",
+          "setup-quarry_drill-wood-4": "wood",
+          "setup-quarry_drill-wood-5": "wood",
+          "setup-quarry_drill-wood-6": "wood",
+          "setup-quarry_drill-wood-7": "wood",
+          "setup-quarry_drill-wood-8": "wood",
+          "setup-quarry_drill-wood-9": "wood",
+          "setup-saw_bench-stone-0": "stone",
+          "setup-saw_bench-stone-1": "stone",
+          "setup-saw_bench-stone-2": "stone",
+          "setup-saw_bench-stone-3": "stone",
+          "setup-saw_bench-stone-4": "stone",
+          "setup-saw_bench-stone-5": "stone",
+          "setup-saw_bench-wood-0": "wood",
+          "setup-saw_bench-wood-1": "wood",
+          "setup-saw_bench-wood-10": "wood",
+          "setup-saw_bench-wood-11": "wood",
+          "setup-saw_bench-wood-12": "wood",
+          "setup-saw_bench-wood-13": "wood",
+          "setup-saw_bench-wood-2": "wood",
+          "setup-saw_bench-wood-3": "wood",
+          "setup-saw_bench-wood-4": "wood",
+          "setup-saw_bench-wood-5": "wood",
+          "setup-saw_bench-wood-6": "wood",
+          "setup-saw_bench-wood-7": "wood",
+          "setup-saw_bench-wood-8": "wood",
+          "setup-saw_bench-wood-9": "wood",
+          "stored-legacy-meat": "meat",
+          "wood-13": "wood",
+          "wood-15": "wood",
+          "wood-3": "wood",
+          "wood-4": "wood",
+          "wood-5": "wood"
+        },
+        "legacy_axes": false,
+        "legacy_level2": false,
+        "legacy_prices": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "paid": {
+          "camp_cooker": {
+            "stone": 8,
+            "wood": 12
+          },
+          "center_hearth": {
+            "wood": 3
+          },
+          "expansion_1": {
+            "stone": 1,
+            "wood": 3
+          },
+          "expansion_2": {
+            "stone": 2,
+            "wood": 3
+          },
+          "meal_conveyor": {
+            "stone": 0,
+            "wood": 0
+          },
+          "orbit_upgrade": {
+            "meat": 1,
+            "stone": 2
+          },
+          "quarry_drill": {
+            "stone": 12,
+            "wood": 10
+          },
+          "saw_bench": {
+            "stone": 6,
+            "wood": 14
+          },
+          "storage_meat": {
+            "meat": 1,
+            "wood": 2
+          },
+          "storage_stone": {
+            "stone": 1,
+            "wood": 2
+          },
+          "storage_wood": {
+            "wood": 2
+          },
+          "supply_conveyors": {
+            "stone": 0,
+            "wood": 0
+          },
+          "watchtower": {
+            "stone": 2,
+            "wood": 3
+          }
+        },
+        "settlement": {
+          "cooked": 1,
+          "counter_stock": 0,
+          "dispatch_cursor": 0,
+          "held_meal": 0,
+          "hoppers": {
+            "meat": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "level": 2,
+          "line_load": {
+            "blocks": 0,
+            "meal": 0,
+            "meal_to_store": 0,
+            "meat": 0,
+            "planks": 0,
+            "stone": 0,
+            "stored_meal": 0,
+            "wood": 0
+          },
+          "line_progress": {
+            "blocks": 0.0,
+            "meal": 0.0,
+            "meal_to_store": 0.0,
+            "meat": 0.0,
+            "planks": 0.0,
+            "stone": 0.0,
+            "stored_meal": 0.0,
+            "wood": 0.0
+          },
+          "owl_hits": 1,
+          "processed_stone": 1,
+          "processed_wood": 1,
+          "product_store": {
+            "blocks": 0,
+            "meal": 0,
+            "planks": 0
+          },
+          "rescued": true,
+          "served": 1,
+          "survivor_paid": true,
+          "survivor_wood": 8,
+          "work_seconds": {
+            "meat": 0.0,
+            "stone": 0.0,
+            "wood": 0.0
+          },
+          "worker_carry_token": "",
+          "worker_deliveries": 1,
+          "worker_load": {
+            "coal": 0,
+            "meat": 0,
+            "metal": 0,
+            "slate": 0,
+            "stone": 0,
+            "wood": 2
+          },
+          "worker_meal": 0,
+          "worker_receipts": [
+            "wood-4"
+          ],
+          "worker_supply": ""
+        },
+        "stored": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 1
+        },
+        "version": 9,
+        "world": {
+          "cooling": {
+            "world1/1/0/wood/29": 2.15000000000001,
+            "world1/1/0/wood/30": 2.11666666666668
+          },
+          "drops": [
+            [
+              "meat-1",
+              "meat",
+              15.7353610992432,
+              -1.73667752742767,
+              79.5666666666665
+            ],
+            [
+              "meat-2",
+              "meat",
+              14.8863859176636,
+              -2.45175909996033,
+              79.5666666666665
+            ],
+            [
+              "meat-6",
+              "meat",
+              14.2753047943115,
+              6.96690797805786,
+              84.483333333333
+            ],
+            [
+              "meat-7",
+              "meat",
+              13.4263296127319,
+              6.25182628631592,
+              84.483333333333
+            ],
+            [
+              "meat-8",
+              "meat",
+              18.0043277740479,
+              3.88283634185791,
+              89.8666666666665
+            ],
+            [
+              "meat-9",
+              "meat",
+              17.1553535461426,
+              3.16775465011597,
+              89.8666666666665
+            ],
+            [
+              "wood-10",
+              "wood",
+              57.4319763183594,
+              14.2820663452148,
+              97.1
+            ],
+            [
+              "wood-11",
+              "wood",
+              56.4724464416504,
+              14.1872081756592,
+              97.1
+            ],
+            [
+              "wood-12",
+              "wood",
+              57.1490859985352,
+              13.5002908706665,
+              97.1
+            ],
+            [
+              "wood-14",
+              "wood",
+              53.7059555053711,
+              12.6182336807251,
+              97.1333333333333
+            ],
+            [
+              "meat-16",
+              "meat",
+              67.9030838012695,
+              15.6037359237671,
+              99.7
+            ],
+            [
+              "meat-17",
+              "meat",
+              67.0541076660156,
+              14.8886547088623,
+              99.7
+            ],
+            [
+              "meat-18",
+              "meat",
+              65.8043212890625,
+              16.9003620147705,
+              99.7
+            ],
+            [
+              "meat-19",
+              "meat",
+              64.9553451538086,
+              16.1852798461914,
+              99.7
+            ]
+          ],
+          "layout": {},
+          "pack": {
+            "live": [
+              [
+                6,
+                false,
+                3,
+                67.1330871582031,
+                12.0957946777344,
+                66.8302764892578,
+                6.14182662963867
+              ]
+            ],
+            "remaining": 22.3666666666668,
+            "rng": "1230587358926716432",
+            "serial": 6,
+            "wave": 2
+          },
+          "partial": {
+            "starter-stone": 2.0
+          },
+          "player": {
+            "camp_heal_elapsed": 0.0,
+            "fall_left": 0.0,
+            "hp": 30,
+            "protection_left": 0.0,
+            "x": 67.4045639038086,
+            "yaw": 0.0,
+            "z": 17.4387435913086
+          },
+          "previous_kitchen_site": false,
+          "serial": 19,
+          "version": 2
+        }
+      },
+      "durable_payload_sha256": "5465e0ff5dfaf1c359cbfcc1545d7e7ef89d1dfd08df7edc94a3c0f487988035"
+    },
+    {
+      "phase": "second-launch",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "second-launch.log",
+      "checks": {
+        "Level 2 arrives in the normal visible gameplay chapter": true,
+        "already-claimed completion avoided a second transition": true,
+        "both finished-material counters match persistent balances": true,
+        "both processed balances and companion contact persisted": true,
+        "cash label reflects the one confirmed wallet payment": true,
+        "cold launch restored Level 2": true,
+        "eight prior purchases and the banked delivery survived": true,
+        "served receipt unchanged on cold launch": true,
+        "shipping main scene loaded from disposable profile": true,
+        "the resumed field shows all Level 1 plots finished and camp open": true,
+        "visible health reading matches the live player": true
+      },
+      "observed": {
+        "visible_labels": [
+          "HAVENLINE",
+          "Camp  \u00b7  Level 2",
+          "30 / 30",
+          "40",
+          "40",
+          "10",
+          "CAMP OBJECTIVE",
+          "Level 2 preview \u00b7 All Level 1 plots complete. The camp is open.",
+          "1",
+          "1",
+          "1",
+          "+3",
+          "Camp",
+          "Storage",
+          "Survivors"
+        ]
+      },
+      "log_sha256": "5e0de84c6209b4ae8e6bc34aba98d32b15aacc6272e331819b1dee546741928e",
+      "durable_payload": {
+        "build_order": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade",
+          "camp_cooker",
+          "saw_bench",
+          "quarry_drill"
+        ],
+        "carried": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 4,
+          "wood": 4
+        },
+        "collected": {
+          "carried-legacy-meat": "meat",
+          "earned-center_hearth-wood-0": "wood",
+          "earned-center_hearth-wood-1": "wood",
+          "earned-center_hearth-wood-2": "wood",
+          "earned-expansion_1-stone-0": "stone",
+          "earned-expansion_1-wood-0": "wood",
+          "earned-expansion_1-wood-1": "wood",
+          "earned-expansion_1-wood-2": "wood",
+          "earned-expansion_2-stone-0": "stone",
+          "earned-expansion_2-stone-1": "stone",
+          "earned-expansion_2-wood-0": "wood",
+          "earned-expansion_2-wood-1": "wood",
+          "earned-expansion_2-wood-2": "wood",
+          "earned-orbit_upgrade-meat-0": "meat",
+          "earned-orbit_upgrade-stone-0": "stone",
+          "earned-orbit_upgrade-stone-1": "stone",
+          "earned-storage_meat-meat-0": "meat",
+          "earned-storage_meat-wood-0": "wood",
+          "earned-storage_meat-wood-1": "wood",
+          "earned-storage_stone-stone-0": "stone",
+          "earned-storage_stone-wood-0": "wood",
+          "earned-storage_stone-wood-1": "wood",
+          "earned-storage_wood-wood-0": "wood",
+          "earned-storage_wood-wood-1": "wood",
+          "earned-watchtower-stone-0": "stone",
+          "earned-watchtower-stone-1": "stone",
+          "earned-watchtower-wood-0": "wood",
+          "earned-watchtower-wood-1": "wood",
+          "earned-watchtower-wood-2": "wood",
+          "legacy-spare-stone-0": "stone",
+          "legacy-spare-stone-1": "stone",
+          "legacy-spare-stone-2": "stone",
+          "legacy-spare-stone-3": "stone",
+          "legacy-spare-stone-4": "stone",
+          "legacy-spare-wood-0": "wood",
+          "legacy-spare-wood-1": "wood",
+          "legacy-spare-wood-10": "wood",
+          "legacy-spare-wood-2": "wood",
+          "legacy-spare-wood-3": "wood",
+          "legacy-spare-wood-4": "wood",
+          "legacy-spare-wood-5": "wood",
+          "legacy-spare-wood-6": "wood",
+          "legacy-spare-wood-7": "wood",
+          "legacy-spare-wood-8": "wood",
+          "legacy-spare-wood-9": "wood",
+          "second-carried-legacy-meat": "meat",
+          "setup-camp_cooker-stone-0": "stone",
+          "setup-camp_cooker-stone-1": "stone",
+          "setup-camp_cooker-stone-2": "stone",
+          "setup-camp_cooker-stone-3": "stone",
+          "setup-camp_cooker-stone-4": "stone",
+          "setup-camp_cooker-stone-5": "stone",
+          "setup-camp_cooker-stone-6": "stone",
+          "setup-camp_cooker-stone-7": "stone",
+          "setup-camp_cooker-wood-0": "wood",
+          "setup-camp_cooker-wood-1": "wood",
+          "setup-camp_cooker-wood-10": "wood",
+          "setup-camp_cooker-wood-11": "wood",
+          "setup-camp_cooker-wood-2": "wood",
+          "setup-camp_cooker-wood-3": "wood",
+          "setup-camp_cooker-wood-4": "wood",
+          "setup-camp_cooker-wood-5": "wood",
+          "setup-camp_cooker-wood-6": "wood",
+          "setup-camp_cooker-wood-7": "wood",
+          "setup-camp_cooker-wood-8": "wood",
+          "setup-camp_cooker-wood-9": "wood",
+          "setup-quarry_drill-stone-0": "stone",
+          "setup-quarry_drill-stone-1": "stone",
+          "setup-quarry_drill-stone-10": "stone",
+          "setup-quarry_drill-stone-11": "stone",
+          "setup-quarry_drill-stone-2": "stone",
+          "setup-quarry_drill-stone-3": "stone",
+          "setup-quarry_drill-stone-4": "stone",
+          "setup-quarry_drill-stone-5": "stone",
+          "setup-quarry_drill-stone-6": "stone",
+          "setup-quarry_drill-stone-7": "stone",
+          "setup-quarry_drill-stone-8": "stone",
+          "setup-quarry_drill-stone-9": "stone",
+          "setup-quarry_drill-wood-0": "wood",
+          "setup-quarry_drill-wood-1": "wood",
+          "setup-quarry_drill-wood-2": "wood",
+          "setup-quarry_drill-wood-3": "wood",
+          "setup-quarry_drill-wood-4": "wood",
+          "setup-quarry_drill-wood-5": "wood",
+          "setup-quarry_drill-wood-6": "wood",
+          "setup-quarry_drill-wood-7": "wood",
+          "setup-quarry_drill-wood-8": "wood",
+          "setup-quarry_drill-wood-9": "wood",
+          "setup-saw_bench-stone-0": "stone",
+          "setup-saw_bench-stone-1": "stone",
+          "setup-saw_bench-stone-2": "stone",
+          "setup-saw_bench-stone-3": "stone",
+          "setup-saw_bench-stone-4": "stone",
+          "setup-saw_bench-stone-5": "stone",
+          "setup-saw_bench-wood-0": "wood",
+          "setup-saw_bench-wood-1": "wood",
+          "setup-saw_bench-wood-10": "wood",
+          "setup-saw_bench-wood-11": "wood",
+          "setup-saw_bench-wood-12": "wood",
+          "setup-saw_bench-wood-13": "wood",
+          "setup-saw_bench-wood-2": "wood",
+          "setup-saw_bench-wood-3": "wood",
+          "setup-saw_bench-wood-4": "wood",
+          "setup-saw_bench-wood-5": "wood",
+          "setup-saw_bench-wood-6": "wood",
+          "setup-saw_bench-wood-7": "wood",
+          "setup-saw_bench-wood-8": "wood",
+          "setup-saw_bench-wood-9": "wood",
+          "stored-legacy-meat": "meat",
+          "wood-13": "wood",
+          "wood-15": "wood",
+          "wood-3": "wood",
+          "wood-4": "wood",
+          "wood-5": "wood"
+        },
+        "legacy_axes": false,
+        "legacy_level2": false,
+        "legacy_prices": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "paid": {
+          "camp_cooker": {
+            "stone": 8,
+            "wood": 12
+          },
+          "center_hearth": {
+            "wood": 3
+          },
+          "expansion_1": {
+            "stone": 1,
+            "wood": 3
+          },
+          "expansion_2": {
+            "stone": 2,
+            "wood": 3
+          },
+          "meal_conveyor": {
+            "stone": 0,
+            "wood": 0
+          },
+          "orbit_upgrade": {
+            "meat": 1,
+            "stone": 2
+          },
+          "quarry_drill": {
+            "stone": 12,
+            "wood": 10
+          },
+          "saw_bench": {
+            "stone": 6,
+            "wood": 14
+          },
+          "storage_meat": {
+            "meat": 1,
+            "wood": 2
+          },
+          "storage_stone": {
+            "stone": 1,
+            "wood": 2
+          },
+          "storage_wood": {
+            "wood": 2
+          },
+          "supply_conveyors": {
+            "stone": 0,
+            "wood": 0
+          },
+          "watchtower": {
+            "stone": 2,
+            "wood": 3
+          }
+        },
+        "settlement": {
+          "cooked": 1,
+          "counter_stock": 0,
+          "dispatch_cursor": 0,
+          "held_meal": 0,
+          "hoppers": {
+            "meat": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "level": 2,
+          "line_load": {
+            "blocks": 0,
+            "meal": 0,
+            "meal_to_store": 0,
+            "meat": 0,
+            "planks": 0,
+            "stone": 0,
+            "stored_meal": 0,
+            "wood": 0
+          },
+          "line_progress": {
+            "blocks": 0.0,
+            "meal": 0.0,
+            "meal_to_store": 0.0,
+            "meat": 0.0,
+            "planks": 0.0,
+            "stone": 0.0,
+            "stored_meal": 0.0,
+            "wood": 0.0
+          },
+          "owl_hits": 1,
+          "processed_stone": 1,
+          "processed_wood": 1,
+          "product_store": {
+            "blocks": 0,
+            "meal": 0,
+            "planks": 0
+          },
+          "rescued": true,
+          "served": 1,
+          "survivor_paid": true,
+          "survivor_wood": 8,
+          "work_seconds": {
+            "meat": 0.0,
+            "stone": 0.0,
+            "wood": 0.0
+          },
+          "worker_carry_token": "",
+          "worker_deliveries": 1,
+          "worker_load": {
+            "coal": 0,
+            "meat": 0,
+            "metal": 0,
+            "slate": 0,
+            "stone": 0,
+            "wood": 2
+          },
+          "worker_meal": 0,
+          "worker_receipts": [
+            "wood-4"
+          ],
+          "worker_supply": ""
+        },
+        "stored": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 1
+        },
+        "version": 9,
+        "world": {
+          "cooling": {
+            "world1/1/0/wood/29": 2.15000000000001,
+            "world1/1/0/wood/30": 2.11666666666668
+          },
+          "drops": [
+            [
+              "meat-1",
+              "meat",
+              15.7353610992432,
+              -1.73667752742767,
+              79.5666666666665
+            ],
+            [
+              "meat-2",
+              "meat",
+              14.8863859176636,
+              -2.45175909996033,
+              79.5666666666665
+            ],
+            [
+              "meat-6",
+              "meat",
+              14.2753047943115,
+              6.96690797805786,
+              84.483333333333
+            ],
+            [
+              "meat-7",
+              "meat",
+              13.4263296127319,
+              6.25182628631592,
+              84.483333333333
+            ],
+            [
+              "meat-8",
+              "meat",
+              18.0043277740479,
+              3.88283634185791,
+              89.8666666666665
+            ],
+            [
+              "meat-9",
+              "meat",
+              17.1553535461426,
+              3.16775465011597,
+              89.8666666666665
+            ],
+            [
+              "wood-10",
+              "wood",
+              57.4319763183594,
+              14.2820663452148,
+              97.1
+            ],
+            [
+              "wood-11",
+              "wood",
+              56.4724464416504,
+              14.1872081756592,
+              97.1
+            ],
+            [
+              "wood-12",
+              "wood",
+              57.1490859985352,
+              13.5002908706665,
+              97.1
+            ],
+            [
+              "wood-14",
+              "wood",
+              53.7059555053711,
+              12.6182336807251,
+              97.1333333333333
+            ],
+            [
+              "meat-16",
+              "meat",
+              67.9030838012695,
+              15.6037359237671,
+              99.7
+            ],
+            [
+              "meat-17",
+              "meat",
+              67.0541076660156,
+              14.8886547088623,
+              99.7
+            ],
+            [
+              "meat-18",
+              "meat",
+              65.8043212890625,
+              16.9003620147705,
+              99.7
+            ],
+            [
+              "meat-19",
+              "meat",
+              64.9553451538086,
+              16.1852798461914,
+              99.7
+            ]
+          ],
+          "layout": {},
+          "pack": {
+            "live": [
+              [
+                6,
+                false,
+                3,
+                67.1330871582031,
+                12.0957946777344,
+                66.8302764892578,
+                6.14182662963867
+              ]
+            ],
+            "remaining": 22.3666666666668,
+            "rng": "1230587358926716432",
+            "serial": 6,
+            "wave": 2
+          },
+          "partial": {
+            "starter-stone": 2.0
+          },
+          "player": {
+            "camp_heal_elapsed": 0.0,
+            "fall_left": 0.0,
+            "hp": 30,
+            "protection_left": 0.0,
+            "x": 67.4045639038086,
+            "yaw": 0.0,
+            "z": 17.4387435913086
+          },
+          "previous_kitchen_site": false,
+          "serial": 19,
+          "version": 2
+        }
+      },
+      "durable_payload_sha256": "5465e0ff5dfaf1c359cbfcc1545d7e7ef89d1dfd08df7edc94a3c0f487988035"
+    }
+  ],
+  "legacy_source_before_and_after": {
+    "sha256": "93dc21bab330386e23534f51c288dafc0e7fcfecc445f84c65a6b644f8f677d8",
+    "checked_files": 237,
+    "commit": "37540b6d1d6e0657dd6776db136a46534e6a66d5"
+  },
+  "verified_source_before_and_after": {
+    "sha256": "d6049feedc1703781fe0fdc57352d3e8f96bcb3a0cc8bf23ca900106c2092ec8",
+    "checked_files": 650
+  }
+}

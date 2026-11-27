@@ -1,0 +1,199 @@
+{
+  "commit": "6f35a670bac57a0002aa44b9abedbb257848fd30",
+  "apk_sha256": "6b136689072518064c3539657ace89a930257205c502825ad5fa3bb2fa4d0e75",
+  "pack_members_compared": 747,
+  "scene": "res://field_opening.tscn",
+  "witness_sha256": "7b1a0fa81ab9f7dc44687cab67f39e1c7b50512c77b6104ca6bb7968ad81cd22",
+  "render_log": {
+    "at": [
+      -6.0,
+      3.0
+    ],
+    "checks": {
+      "bank reopens after 300 physical ticks": true,
+      "contact-1 grants no stone": true,
+      "contact-2 grants no stone": true,
+      "four pieces cut from the original bank separate": true,
+      "no second grant or retained collision during cooldown": true,
+      "one physical break creates three unique stone pickups": true,
+      "three strikes from the original northern approach": true,
+      "visible boulder and walking collision clear together": true,
+      "walking over the actual drops banks each stone once": true
+    },
+    "display_size": "(600, 900)",
+    "events": {
+      "deplete_stone": 1,
+      "drop_stone": 1,
+      "impact_stone": 3,
+      "pickup_partial": 1,
+      "regrow_stone": 1
+    },
+    "frozen_reference": "25b4ec6/Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/02-stone.png",
+    "inventory": {
+      "coal": 0,
+      "meat": 0,
+      "metal": 0,
+      "slate": 0,
+      "stone": 3,
+      "wood": 0
+    },
+    "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+    "source_at_release": {
+      "bounds": "[P: (-0.743313, -0.218842, -0.833129), S: (1.539274, 0.889203, 1.61265)]",
+      "collision_layer": 0,
+      "cut_chunks": 4,
+      "source_visible": false,
+      "spawned_ids": [
+        "stone-1",
+        "stone-2",
+        "stone-3"
+      ]
+    },
+    "source_id": "starter-stone",
+    "ticks": {
+      "break": 209,
+      "contact-1": 94,
+      "contact-2": 155,
+      "return": 509
+    },
+    "working_position": [
+      -6.03232336044312,
+      0.210831329226494
+    ]
+  },
+  "camera": "Normal and 2\u00d7 pinch at identical game ticks. Desktop Godot, GLES compatibility, exact verified assets from the signed APK.",
+  "paired_images": {
+    "contact-1-1x.jpg": {
+      "sha256": "0cee54f7001daff74febd3b7d750bcefcf58d37ed502bc5ab3e19b7f75e22a7d",
+      "native_source_sha256": "6061e0fc37d866daab9184920b46be66540b7d603f17a5d205c5401e4b9c5d0f",
+      "mean_abs_RGB_difference": [
+        1.6701796296296296,
+        1.8635018518518518,
+        1.8009203703703704
+      ]
+    },
+    "contact-1-2x.jpg": {
+      "sha256": "9ce522438f95ce1f60e93fe2613d327fc31ce392cca024f3fcfc362535210c0d",
+      "native_source_sha256": "9ce522438f95ce1f60e93fe2613d327fc31ce392cca024f3fcfc362535210c0d",
+      "mean_abs_RGB_difference": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "contact-2-1x.jpg": {
+      "sha256": "1b3ac29aac32ab4e3ccf6a7ab5f68c01e0898d89f78a52cd55af76d1d1b6bde0",
+      "native_source_sha256": "073ed855d6530cf6e6b47e42cc35bcdf5fb62b3076e05a60799688e22fd96f53",
+      "mean_abs_RGB_difference": [
+        1.4576296296296296,
+        1.63445,
+        1.5769444444444445
+      ]
+    },
+    "contact-2-2x.jpg": {
+      "sha256": "af17802c8e170b96f79864fd95a7a50a6b949fb862463f3606de1e4111ddd129",
+      "native_source_sha256": "08c01d8bd250ee01e6cbfe0c23cea711940a72935f42b45517fb40543662f4c9",
+      "mean_abs_RGB_difference": [
+        0.21172407407407406,
+        0.20624074074074075,
+        0.20017222222222222
+      ]
+    },
+    "release-1x.jpg": {
+      "sha256": "09f68d09f5f1f0bdd62ee1101d9d6682e73d2b09eee8d7ee570ee15579e25683",
+      "native_source_sha256": "98896dee53b9ed486f54979f72fa053dd5405927e842cbe6e5081a55c3cdee7d",
+      "mean_abs_RGB_difference": [
+        0.5191425925925925,
+        0.5442092592592592,
+        0.5440111111111111
+      ]
+    },
+    "release-2x.jpg": {
+      "sha256": "b610de7570f316521e4e0a738db8c98da10fc50f1ae6b0485b5f47bbbd6362bd",
+      "native_source_sha256": "b47236e2238b5cd58b59359b7b843c156dfe82ca76b6fd9ed4b05b5826830172",
+      "mean_abs_RGB_difference": [
+        0.8735092592592593,
+        1.0809351851851852,
+        1.1454111111111112
+      ]
+    },
+    "fracture-1x.jpg": {
+      "sha256": "9083c80b3df3a9a933c9e06acd8efad28f5043fc0f23ee28b247f12821abed56",
+      "native_source_sha256": "b35d44e155cf51de7cc5be97b783635e2c4a80b89e2da8dfd0c9bd977e9c3818",
+      "mean_abs_RGB_difference": [
+        0.5262648148148148,
+        0.5494777777777777,
+        0.5582759259259259
+      ]
+    },
+    "fracture-2x.jpg": {
+      "sha256": "eb0cf03b98ebfdf017d8ec1938a7d215e22976e5439dc6b128a5f2219efa3f68",
+      "native_source_sha256": "5da166299881693ffedc34f726dc95895ae9b06228fd1993493a975d2867fd27",
+      "mean_abs_RGB_difference": [
+        0.9266944444444445,
+        1.1026111111111112,
+        1.2249685185185186
+      ]
+    },
+    "spent-1x.jpg": {
+      "sha256": "1109b8cbf116fd960ab8b711e65e83e16d52b4d0eebd05ee23eb824c25372387",
+      "native_source_sha256": "fc528d30b6df0d4826bce0409aa3ea62b5cf09c41814223143e196c070940b31",
+      "mean_abs_RGB_difference": [
+        0.5698962962962963,
+        0.5981759259259259,
+        0.6058518518518519
+      ]
+    },
+    "spent-2x.jpg": {
+      "sha256": "0033e7f441e27ed4689275a9216a904b8503c28826a50c6602a1e5a9da1fb538",
+      "native_source_sha256": "612ef84d33f3262f78298a63425464fe069066a44402cfc34d1c7703f0dda639",
+      "mean_abs_RGB_difference": [
+        1.1034833333333334,
+        1.304551851851852,
+        1.417974074074074
+      ]
+    },
+    "collected-1x.jpg": {
+      "sha256": "e6effadb2b76b49e9c9fc0116f37d2331632172dc68e999268e51a97a5226abc",
+      "native_source_sha256": "f6b4e6ec4090bc36fed10969d1fee4f6071b6e63bdb371a25cdc79739d76c6b1",
+      "mean_abs_RGB_difference": [
+        0.3159777777777778,
+        0.3065907407407407,
+        0.3024851851851852
+      ]
+    },
+    "collected-2x.jpg": {
+      "sha256": "4ee25b24ec4ff9a3a29b3f8dcd2328dbf4822682360c911841d11776fad2d8b2",
+      "native_source_sha256": "bb8355532a9da8aa10c0421a3f14f7e43eb4ba5007a7a4158e664e70334724a5",
+      "mean_abs_RGB_difference": [
+        0.5678222222222222,
+        0.5793907407407407,
+        0.588524074074074
+      ]
+    },
+    "return-1x.jpg": {
+      "sha256": "99d29d2ea390965f5a291420084751717714ab32e5691bf6bea2e81c0cb399d6",
+      "native_source_sha256": "92aa04657091650b9abcf64c62fa23903c07389c1bae3c751bb05435ac64f348",
+      "mean_abs_RGB_difference": [
+        0.0918574074074074,
+        0.1091074074074074,
+        0.11562037037037037
+      ]
+    },
+    "return-2x.jpg": {
+      "sha256": "fd69f9888c125139feb4763090d9aeb3da913986bf259296a17537ca9ef3ddb4",
+      "native_source_sha256": "2cf2913b7cd33ae62ddd7749bba4f701cb0250d8eef760ab20944229556539b1",
+      "mean_abs_RGB_difference": [
+        0.0767537037037037,
+        0.10407777777777778,
+        0.11423333333333334
+      ]
+    }
+  },
+  "desktop_renderer_warnings": [
+    "WARNING: Could not set V-Sync mode, as changing V-Sync mode is not supported by the graphics driver.",
+    "WARNING: Image format ETC2_RG11 not supported by hardware, converting to RGBA8.",
+    "WARNING: Image format ETC2_RGB8 not supported by hardware, converting to RGBA8."
+  ],
+  "game_errors": []
+}

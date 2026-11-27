@@ -1,0 +1,9 @@
+# Survivor first-delivery replay
+
+The first run of the signed Level 1 source completed the rescue and then reported two failed checks while waiting for the worker to collect his first pine bundle. The original log recorded the failed assertions and an empty token. It omitted the storage error status at the time. The build host briefly ran out of scratch disk during this interval. [First run](First-claim.log)
+
+I reconstructed that exact earned checkpoint and verified its payload digest before launching the game. Two separate runs each reached the tree, landed three chops, dropped real wood and claimed `wood-4` on the same simulation tick, 340. A third isolated run held the game's ordinary persistence lock during the third chop. Field progress paused at tick 316, and the resulting claim report matched the first report exactly. The comparison establishes that a blocked save can produce the observed failure. The original log cannot distinguish individual causes of a blocked save. [State transitions and the three outcomes](Incident.json)
+
+The unmodified release progression driver subsequently passed all 219 checks across 16 processes in one disposable profile. Four interrupted transactions retained the preceding verified save bytes. The final cold launch displayed Level 2, full health and the existing stocks. The source hash before and after gameplay matched the released manifest. [Full report and per-phase log hashes](Unmodified-completion/Completion-results.json) · [First claim](Unmodified-completion/claim.log) · [Second launch](Unmodified-completion/second-launch.log)
+
+A separate earlier attempt to replay the whole chain recorded a wolf's torso as the only contact while the tester was already outside the east gate. Its endpoint missed the test's 4 cm tolerance by 1.9 mm. The original result remains available for comparing the aisle geometry check. [Gate observation](First-aisle-rerun.log)

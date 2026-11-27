@@ -1,0 +1,34 @@
+{
+  "stamp": {
+    "commit": "6f35a670bac57a0002aa44b9abedbb257848fd30",
+    "manifest": {
+      "sha256": "99b8e817c118da78c8a1bdc9ec2c9e1a0bf93eb8013ae1886ce3f28b259f93da",
+      "checked_files": 650
+    },
+    "runner": "a885aeb81d3e7b4ab6b00c9b551ec76de3676a7e19fbc6b79c8d5fb974ad58dc"
+  },
+  "passed": true,
+  "runs": [
+    {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "log": "qa_field_touch_resume-1.log",
+      "log_sha256": "7a1d084df24d8604870efc4dac966d7bf728cc3f031f2931531a8685e634a57a",
+      "summary": [
+        {
+          "checks": {
+            "HUD holds its finger": true,
+            "background releases drag without Android up event": true,
+            "drag present before background": true,
+            "fold releases both contacts": true,
+            "interrupted HUD accepts future touches": true,
+            "same Android finger ID can steer after resume": true,
+            "two fingers pinch before folding": true
+          },
+          "suite": "touch_resume"
+        }
+      ]
+    }
+  ]
+}

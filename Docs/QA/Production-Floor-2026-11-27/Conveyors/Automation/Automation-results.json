@@ -1,0 +1,233 @@
+{
+  "engine": "Godot 4.7.2.stable.official.ed1daf0bf",
+  "scene": "res://field_opening.tscn",
+  "game_commit_at_run": "6ab14c0339d6dd701805cca8afdcefb420a76152",
+  "baseline_commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+  "baseline_sha256_android": "243a53238f9bc90374fe405069d7ce066468ada71e52bcdf33644c05a4e248cc",
+  "source_sha256": {
+    "field_conveyors.gd": "54955ceb0be86e852053c7f8b52c007f3796b8e888bf95dbffc59051e7281829",
+    "field_logistics.gd": "4270bc2781b1bc72eedb37045fea0cec4901151bb78a21abe6982b62d04d3454",
+    "field_settlement_loop.gd": "af393da8bfbb353e1996b36c77ddbe5844cc21958aed8a8c2581227902681993",
+    "field_worksites.gd": "ab8bc928dadee77fb8f6ec62e7e4080f005e97da1b6b680694eeffcebadf0aa6",
+    "field_survivor.gd": "d80947fc678123906cbebfda1f1e63116f0d9565fccfc95905ca0b12daa3419b",
+    "tests/qa_unattended_lines.gd": "a1a5a36499f255466efd24fe2a7b02ff4e0cf17aaecdd4c9727bc54568731931",
+    "tests/qa_connected_camp_lines.gd": "4e22bb46dbb15c90ce5b936183d5241ed283dfdba60bd7eacc25292130549c98",
+    "tests/qa_paid_conveyors.gd": "203a21c2e64caefb19551253bfafcda56d9e80d7594950876f60df43e584b51a",
+    "tests/qa_worker_jobs.gd": "2c72372b948805696803807c529e8364aafaf1f5326639387d0ea1cb9d6dbadf",
+    "tests/qa_workshop_floor_access.gd": "40d9ea03ba66c1814f0256e950f2cef759f946c07d781dfcfd438c5fe785c75b",
+    "field_progression.gd": "395f8ef3129b107357bfad280aee07f7beec4c1de6a77c8fdabc3ef6d59f3a62"
+  },
+  "fixture_sha256": {
+    "Serial-food-fresh-purchase.json": "d9f86e9211865bc05b586ce1905fb4c761c3c76f644a4224fe668a09948c631e",
+    "Build8-paid-workshops.json": "34de7ce67bf34d36745b3af94aec535454cece46ec8ab63aaa43df7d39e7e733",
+    "Build8-cooker-only.json": "9da8bd99fd35f91c6513ddcbb00d8c5c0051c9ad8ec99ecd1c99ca3ad9350944",
+    "Build9-raw-in-flight.json": "a880de58c98ebb1fa74fce344af0b8fafe38e06ae3c833d102fa635367a2fcfe"
+  },
+  "scenarios": {
+    "stock": {
+      "checks": 10,
+      "passed": true,
+      "engine_log_sha256": "837fe5dd2efe6b7863aad011f04aa8b8052c316ece642a446d0d12063c425ae9",
+      "final": {
+        "blocks": 0,
+        "cash": 0,
+        "cooked": 7,
+        "counter_stock": 2,
+        "hoppers": {
+          "meat": 0,
+          "stone": 0,
+          "wood": 0
+        },
+        "in_transit": {
+          "blocks": 0,
+          "meal": 0,
+          "meal_to_store": 0,
+          "meat": 0,
+          "planks": 0,
+          "stone": 0,
+          "stored_meal": 0,
+          "wood": 0
+        },
+        "planks": 0,
+        "product_store": {
+          "blocks": 0,
+          "meal": 5,
+          "planks": 0
+        },
+        "progress": {
+          "blocks": 0.0,
+          "meal": 0.0,
+          "meal_to_store": 0.0,
+          "meat": 0.0,
+          "planks": 0.0,
+          "stone": 0.0,
+          "stored_meal": 0.0,
+          "wood": 0.0
+        },
+        "rack": 0,
+        "stored": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 3,
+          "wood": 3
+        }
+      },
+      "final_signed_source_log_sha256": "837fe5dd2efe6b7863aad011f04aa8b8052c316ece642a446d0d12063c425ae9"
+    },
+    "cold": {
+      "checks": 9,
+      "passed": true,
+      "engine_log_sha256": "0f0dc6760cfbdc69b3ecd6f3635e4bc4eed1e009afb9c7b68a5b6e814b9d19ee",
+      "final": {
+        "blocks": 0,
+        "cash": 7,
+        "cooked": 7,
+        "counter_stock": 0,
+        "hoppers": {
+          "meat": 0,
+          "stone": 0,
+          "wood": 0
+        },
+        "in_transit": {
+          "blocks": 0,
+          "meal": 0,
+          "meal_to_store": 0,
+          "meat": 0,
+          "planks": 0,
+          "stone": 0,
+          "stored_meal": 0,
+          "wood": 0
+        },
+        "planks": 0,
+        "product_store": {
+          "blocks": 0,
+          "meal": 0,
+          "planks": 0
+        },
+        "progress": {
+          "blocks": 0.0,
+          "meal": 0.0,
+          "meal_to_store": 0.0,
+          "meat": 0.0,
+          "planks": 0.0,
+          "stone": 0.0,
+          "stored_meal": 0.0,
+          "wood": 0.0
+        },
+        "rack": 0,
+        "stored": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 3,
+          "wood": 3
+        }
+      },
+      "final_signed_source_log_sha256": "0f0dc6760cfbdc69b3ecd6f3635e4bc4eed1e009afb9c7b68a5b6e814b9d19ee"
+    },
+    "supply": {
+      "checks": 13,
+      "passed": true,
+      "engine_log_sha256": "79fe930ed8aaf182ac12697d9b98b52bd96f67526f49ec9f757fc73f2c634a8f",
+      "final": {
+        "blocks": 3,
+        "cash": 0,
+        "cooked": 7,
+        "counter_stock": 0,
+        "hoppers": {
+          "meat": 0,
+          "stone": 0,
+          "wood": 0
+        },
+        "in_transit": {
+          "blocks": 0,
+          "meal": 0,
+          "meal_to_store": 0,
+          "meat": 0,
+          "planks": 0,
+          "stone": 0,
+          "stored_meal": 0,
+          "wood": 0
+        },
+        "planks": 3,
+        "product_store": {
+          "blocks": 3,
+          "meal": 6,
+          "planks": 3
+        },
+        "progress": {
+          "blocks": 0.0,
+          "meal": 0.0,
+          "meal_to_store": 0.0,
+          "meat": 0.0,
+          "planks": 0.0,
+          "stone": 0.0,
+          "stored_meal": 0.0,
+          "wood": 0.0
+        },
+        "rack": 1,
+        "stored": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 0
+        }
+      },
+      "final_signed_source_log_sha256": "79fe930ed8aaf182ac12697d9b98b52bd96f67526f49ec9f757fc73f2c634a8f"
+    }
+  },
+  "disconnected_restart": {
+    "relocate": {
+      "disconnected lane is visible to HUD and unavailable for dispatch": true,
+      "found a legal warehouse placement that obstructs its input port": true,
+      "input is genuinely travelling before its port is disconnected": true,
+      "normally placed storehouse can disconnect a paid line": true,
+      "source save opens": true,
+      "stranded load pauses without spending again": true
+    },
+    "reconnect": {
+      "closed app and fresh launch did not debit again or bank movement": true,
+      "original rail reconnects without resetting ownership": true,
+      "paused bundle reaches its proper paid machine": true,
+      "physical disconnection survives restart": true,
+      "relocated house can be restored": true,
+      "source save opens": true
+    }
+  },
+  "baseline_log_sha256": "508c7b4f6527f89a5e0b71b00cc62a7ef2a46edd31d02ed8205d0dcfbe88b570",
+  "counter_observer_sha256": "0662a6794b359a6c1124a6d7b1fa4ea22a9a9aa71eb35ac50d5bfea298e9f2d8",
+  "baseline_observer_sha256": "2bf9a6e684fe70125ec9b7b809c2aa2c932e816617ff174fe39463b9a4ec07dc",
+  "final_source_binding": {
+    "commit": "6f35a670bac57a0002aa44b9abedbb257848fd30",
+    "final_manifest_sha256": "99b8e817c118da78c8a1bdc9ec2c9e1a0bf93eb8013ae1886ce3f28b259f93da",
+    "focused_run_commit": "6ab14c0339d6dd701805cca8afdcefb420a76152",
+    "independent_replay_commit": "77bfef9f58f133824f0326a6b747c5a0ae9c4879",
+    "changes_since_focused_run_through_independent_replay": [
+      "HavenlineLevel1/assets/mining_fracture/working_face.gdshader",
+      "HavenlineLevel1/mining_break.gd",
+      "HavenlineLevel1/tests/qa_surface_conveyor_layout.gd"
+    ],
+    "changes_since_independent_replay": [
+      "HavenlineLevel1/tests/qa_level1_completion.gd",
+      "HavenlineLevel1/tests/qa_staffed_ballista.gd.uid"
+    ],
+    "identical_automation_inputs": true,
+    "tower_polish_from_prior_selection": [
+      "HavenlineLevel1/field_defense_tower.gd"
+    ],
+    "prior_selection": "4e79add742b2643de7c873f02a0f5896137f91d4"
+  },
+  "final_release": {
+    "commit": "6f35a670bac57a0002aa44b9abedbb257848fd30",
+    "apk_sha256": "6b136689072518064c3539657ace89a930257205c502825ad5fa3bb2fa4d0e75",
+    "native_receipt": "../../Verification/Native/Receipts/qa_unattended_lines.json",
+    "native_receipt_sha256": "9cce32c53a56502cfc5de0ed0e4474c6df5b74b624aa4d4e4338342996508bbc",
+    "identical_scene_final_states": true,
+    "assertions": 32
+  }
+}

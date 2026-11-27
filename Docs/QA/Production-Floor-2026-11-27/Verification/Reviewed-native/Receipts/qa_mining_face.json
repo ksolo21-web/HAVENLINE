@@ -1,0 +1,79 @@
+{
+  "stamp": {
+    "commit": "e29cd536977083179943f01207b483ee58eb8220",
+    "manifest": {
+      "sha256": "d6049feedc1703781fe0fdc57352d3e8f96bcb3a0cc8bf23ca900106c2092ec8",
+      "checked_files": 650
+    },
+    "runner": "a885aeb81d3e7b4ab6b00c9b551ec76de3676a7e19fbc6b79c8d5fb974ad58dc"
+  },
+  "passed": true,
+  "runs": [
+    {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "log": "qa_mining_face-1.log",
+      "log_sha256": "8ed21fada2ed88b609e2fb4e2fce62c276b5138be7549dc56170a578bd12d5f5",
+      "summary": [
+        {
+          "at": [
+            -6.0,
+            3.0
+          ],
+          "checks": {
+            "bank reopens after 300 physical ticks": true,
+            "contact-1 grants no stone": true,
+            "contact-2 grants no stone": true,
+            "four pieces cut from the original bank separate": true,
+            "no second grant or retained collision during cooldown": true,
+            "one physical break creates three unique stone pickups": true,
+            "three strikes from the original northern approach": true,
+            "visible boulder and walking collision clear together": true,
+            "walking over the actual drops banks each stone once": true
+          },
+          "display_size": "(64, 64)",
+          "events": {
+            "deplete_stone": 1,
+            "drop_stone": 1,
+            "impact_stone": 3,
+            "pickup_partial": 1,
+            "regrow_stone": 1
+          },
+          "frozen_reference": "25b4ec6/Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/02-stone.png",
+          "inventory": {
+            "coal": 0,
+            "meat": 0,
+            "metal": 0,
+            "slate": 0,
+            "stone": 3,
+            "wood": 0
+          },
+          "renderer": "",
+          "source_at_release": {
+            "bounds": "[P: (-0.743313, -0.218842, -0.833129), S: (1.539274, 0.889203, 1.61265)]",
+            "collision_layer": 0,
+            "cut_chunks": 4,
+            "source_visible": false,
+            "spawned_ids": [
+              "stone-1",
+              "stone-2",
+              "stone-3"
+            ]
+          },
+          "source_id": "starter-stone",
+          "ticks": {
+            "break": 209,
+            "contact-1": 94,
+            "contact-2": 155,
+            "return": 509
+          },
+          "working_position": [
+            -6.03232383728027,
+            0.210830718278885
+          ]
+        }
+      ]
+    }
+  ]
+}

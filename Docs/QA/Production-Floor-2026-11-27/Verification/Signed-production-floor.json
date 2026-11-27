@@ -1,0 +1,213 @@
+{
+  "scene": "res://field_opening.tscn",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "probe_sha256": "2b425919a7938f86cf865051b3a02d257b99b94b64eb93038ef81af01a1611cf",
+  "fixture": "Serial-food-fresh-purchase.json",
+  "fixture_sha256": "d9f86e9211865bc05b586ce1905fb4c761c3c76f644a4224fe668a09948c631e",
+  "runs": [
+    {
+      "checks": {
+        "all six portions cooked and every conveyor cleared": true,
+        "carrier remained parked for the connected supply and service": true,
+        "empty counter stocks itself and excess meals reach the shelf": true,
+        "isolated normal paid field loaded": true,
+        "journal checkpoint succeeds": true,
+        "normal field tower launches the displayed quarrel and hits a hostile": true,
+        "paid deck has a rigged operator, stock and loaded quarrel": true,
+        "six raw portions and one cooked portion start in a paid food-only camp": true,
+        "stock moves on all three serial legs": true,
+        "unconnected materials remain on their original shelves": true
+      },
+      "final": {
+        "at_cooker": 0,
+        "cooked": 7,
+        "counter": 2,
+        "line_load": {
+          "blocks": 0,
+          "meal": 0,
+          "meal_to_store": 0,
+          "meat": 0,
+          "planks": 0,
+          "stone": 0,
+          "stored_meal": 0,
+          "wood": 0
+        },
+        "outfeed": 0,
+        "raw_meat": 0,
+        "served": 0,
+        "shelf": 5,
+        "stone": 3,
+        "wood": 3
+      },
+      "hearth": {},
+      "initial": {
+        "at_cooker": 0,
+        "cooked": 1,
+        "counter": 0,
+        "line_load": {
+          "blocks": 0,
+          "meal": 0,
+          "meal_to_store": 1,
+          "meat": 0,
+          "planks": 0,
+          "stone": 0,
+          "stored_meal": 0,
+          "wood": 0
+        },
+        "outfeed": 0,
+        "raw_meat": 6,
+        "served": 0,
+        "shelf": 0,
+        "stone": 3,
+        "wood": 3
+      },
+      "lanes": [
+        "meal_to_store",
+        "meat",
+        "stored_meal"
+      ],
+      "paid_orders": [
+        0
+      ],
+      "phase": "stock",
+      "resulting_journal_sha256": "28a0ec743e6a1d1b70f91b7213894c95d5a78df41fa8484520445eb096dbd0db"
+    },
+    {
+      "checks": {
+        "all seven servings left the ledger exactly once": true,
+        "carrier remained parked for the connected supply and service": true,
+        "cold launch restores two servings and five stored roasts": true,
+        "isolated normal paid field loaded": true,
+        "journal checkpoint succeeds": true,
+        "seven normal customers paid once each": true,
+        "unconnected materials remain on their original shelves": true
+      },
+      "final": {
+        "at_cooker": 0,
+        "cooked": 7,
+        "counter": 0,
+        "line_load": {
+          "blocks": 0,
+          "meal": 0,
+          "meal_to_store": 0,
+          "meat": 0,
+          "planks": 0,
+          "stone": 0,
+          "stored_meal": 0,
+          "wood": 0
+        },
+        "outfeed": 0,
+        "raw_meat": 0,
+        "served": 7,
+        "shelf": 0,
+        "stone": 3,
+        "wood": 3
+      },
+      "hearth": {},
+      "initial": {
+        "at_cooker": 0,
+        "cooked": 7,
+        "counter": 2,
+        "line_load": {
+          "blocks": 0,
+          "meal": 0,
+          "meal_to_store": 0,
+          "meat": 0,
+          "planks": 0,
+          "stone": 0,
+          "stored_meal": 0,
+          "wood": 0
+        },
+        "outfeed": 0,
+        "raw_meat": 0,
+        "served": 0,
+        "shelf": 5,
+        "stone": 3,
+        "wood": 3
+      },
+      "lanes": [
+        "stored_meal"
+      ],
+      "paid_orders": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "phase": "serve",
+      "resulting_journal_sha256": "73a5642025dee91228f96100d8a7f055dd8723828905486d8963d330d5a7e7f2"
+    },
+    {
+      "checks": {
+        "carrier remained parked for the connected supply and service": true,
+        "hearth heals field damage at the normal camp spot, pulses and updates HUD": true,
+        "isolated normal paid field loaded": true,
+        "journal checkpoint succeeds": true,
+        "paid hearth loads coal, firebox, vent and moving exhaust": true,
+        "second cold launch restored all seven sales": true,
+        "unconnected materials remain on their original shelves": true
+      },
+      "final": {
+        "at_cooker": 0,
+        "cooked": 7,
+        "counter": 0,
+        "line_load": {
+          "blocks": 0,
+          "meal": 0,
+          "meal_to_store": 0,
+          "meat": 0,
+          "planks": 0,
+          "stone": 0,
+          "stored_meal": 0,
+          "wood": 0
+        },
+        "outfeed": 0,
+        "raw_meat": 0,
+        "served": 7,
+        "shelf": 0,
+        "stone": 3,
+        "wood": 3
+      },
+      "hearth": {
+        "field_hp": 23,
+        "healed_hp": 30,
+        "peak_heat_pulse": 0.956666666666667
+      },
+      "initial": {
+        "at_cooker": 0,
+        "cooked": 7,
+        "counter": 0,
+        "line_load": {
+          "blocks": 0,
+          "meal": 0,
+          "meal_to_store": 0,
+          "meat": 0,
+          "planks": 0,
+          "stone": 0,
+          "stored_meal": 0,
+          "wood": 0
+        },
+        "outfeed": 0,
+        "raw_meat": 0,
+        "served": 7,
+        "shelf": 0,
+        "stone": 3,
+        "wood": 3
+      },
+      "lanes": [],
+      "paid_orders": [],
+      "phase": "reopen",
+      "resulting_journal_sha256": "ba831cd4fe3c8e8e3dd95c0f65525537295c9d1e4dc6a6abdd4ee31220a985d0"
+    }
+  ],
+  "platform": "Desktop Godot playing a byte-identical copy of the signed Android APK resources.",
+  "apk": "Havenline-Production-Floor-Android-arm64.apk",
+  "apk_sha256": "6b136689072518064c3539657ace89a930257205c502825ad5fa3bb2fa4d0e75",
+  "verified_resource_entries": 747,
+  "source": "6f35a670bac57a0002aa44b9abedbb257848fd30",
+  "certificate_sha256": "b605f0903414da28ac8b22001a1ba62ea3b2d2a61a0321f46e60a04eacaac938"
+}

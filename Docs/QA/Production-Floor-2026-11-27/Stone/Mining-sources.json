@@ -1,0 +1,45 @@
+{
+  "game_compare_baseline": "989edd9283148e9f712387fb937ea36038cbd9d2",
+  "baseline_branch_tip": "9617201b63318b6f9292a140cbe7eb79560a4b39",
+  "scene": "res://field_opening.tscn",
+  "builder": "stone_harvest",
+  "reviewer": "reference_check",
+  "visual_inputs": {
+    "assets/mining_fracture/coal.glb": "17d05041b92ec78f9d7b79371e8f37364379cf6870e47208f82888339574efe8",
+    "assets/mining_fracture/coal.glb.import": "836eebd4b936fdfb261831d6dcc1661b10bf8aac10f5f377b87632a1032c4366",
+    "assets/mining_fracture/metal.glb": "af5cfd6fafee93bff46c901f238ffbafc95ee5a3aca4f951a3b35c98c8117486",
+    "assets/mining_fracture/metal.glb.import": "86ea3d6d813300bb1b45c3eca3cbcbc85e1fefa2fdbb28b820fa67648a9882eb",
+    "assets/mining_fracture/slate.glb": "503df534cf97792d678233588a62a84f08bdd0292d172cc9b7cbdd556aa7640a",
+    "assets/mining_fracture/slate.glb.import": "9bb9d17cbb26fd52b571cf710318920d2183157f122124ae54ffd9cd351e0ddc",
+    "assets/mining_fracture/stone.glb": "f115973bf162083e7c2365c519ae9caf6ada79606c89ed5dbd0c7fe197c7fe26",
+    "assets/mining_fracture/stone.glb.import": "9a4fa452ed545f1fe3448d6d6cd2239d9dbffd0e88a704d707fde12f0ca694fd",
+    "assets/mining_fracture/working_face.gdshader": "dcc2fdd22683650567ef84b9765c005e00eb7840f8c0e89d105b2f1f0c020acf",
+    "assets/mining_fracture/working_face.gdshader.uid": "d5bf574555a267f21cb04aa2d01d7a65a0a8e7bcd58b117d42a27e22050ce951",
+    "mining_break.gd": "7cbbb3568a092c1068f851ba216425a1087df19f5022a759818ee947f544381f",
+    "qa_mining_return.gd": "47b040d610860ca6eb259f23718bbe9a9f21f492848b10afab0abbb1f150681c",
+    "resource_rock.gd": "8ef0358041c13ce225f60827ffe5bf8568577075bd751bfe182dceee4bb40b97",
+    "tests/qa_mining_face.gd": "d0279401d28cad012ffa7cc5010970135e4a34654b45abed505073c10410c216"
+  },
+  "field_tool_and_site_methods_sha256": "2a73b2cfa54333e544dad8757a16841b9d566f520f9c81312cc5c248151ed287",
+  "stone_reference": {
+    "revision": "25b4ec6dd407c1c2530a3781527df64eabb63b99",
+    "file": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/02-stone.png",
+    "sha256": "5360d9d44ed505f48c788b870e322105edce48c726525252d0e884549800016e",
+    "view": "front, oblique and side silhouettes"
+  },
+  "harvest_stock_reference": {
+    "source": "Owner recording B",
+    "seconds": 28,
+    "observation": "Visible accrued stock in gameplay view. No owner-referenced shot specifies the timing or shape of a rock breaking."
+  },
+  "fragment_authoring": "Planar fractures cut out of the shipping rock, slate, coal and ore surfaces. Third-hit breakup timing and the southwest quarry position are authored for Havenline. Five seconds comes from the owner.",
+  "review_candidate": "6f35a670bac57a0002aa44b9abedbb257848fd30",
+  "field_opening_sha256": "b02efa590559c067f6ca93072a91d9f7fd1796589925f71fb686ed6e889a1f7c",
+  "prior_candidate_same_gameplay": "77bfef9f58f133824f0326a6b747c5a0ae9c4879",
+  "camera_capture_commit": "4e79add742b2643de7c873f02a0f5896137f91d4",
+  "mining_code_identical_at_both_commits": true,
+  "units_per_pickup_bundle": {
+    "value": 10,
+    "code": "res://field_progression.gd UNITS_PER_BUNDLE"
+  }
+}

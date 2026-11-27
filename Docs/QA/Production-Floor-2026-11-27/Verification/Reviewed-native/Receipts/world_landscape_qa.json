@@ -1,0 +1,129 @@
+{
+  "stamp": {
+    "commit": "e29cd536977083179943f01207b483ee58eb8220",
+    "manifest": {
+      "sha256": "d6049feedc1703781fe0fdc57352d3e8f96bcb3a0cc8bf23ca900106c2092ec8",
+      "checked_files": 650
+    },
+    "runner": "a885aeb81d3e7b4ab6b00c9b551ec76de3676a7e19fbc6b79c8d5fb974ad58dc"
+  },
+  "passed": true,
+  "runs": [
+    {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "log": "world_landscape_qa-1.log",
+      "log_sha256": "70506641520c644cd6c591d67bafb949b23e898339b71bfb163b1907abc34fad",
+      "summary": [
+        {
+          "census": {
+            "distinct_ids": 34794,
+            "max_sources": 57,
+            "min_sources": 14,
+            "populated_chunks": 1024,
+            "resources": {
+              "coal": 91,
+              "metal": 114,
+              "slate": 127,
+              "stone": 2577,
+              "wood": 31885
+            },
+            "stone": 2577,
+            "wood": 31885
+          },
+          "checks": {
+            "Actual walk on solid snow": true,
+            "All 1,024 chunks contain usable resources": true,
+            "All original source IDs, variants, transforms and ordering match the shipped map": true,
+            "All source keys are unique": true,
+            "Ground collider is 1,024 metres square": true,
+            "Live joystick travels beyond the previous snow boundary": true,
+            "Loaded snow cell (-16, -16)": true,
+            "Loaded snow cell (-16, 15)": true,
+            "Loaded snow cell (15, -16)": true,
+            "Loaded snow cell (15, 15)": true,
+            "Loaded snow cell (2, -3)": true,
+            "Mineral banks preserve the start, expedition and clearance": true,
+            "Mineral banks recur in distant districts": true,
+            "Mineral district placement is deterministic": true,
+            "Normal entry creates the streamed world": true,
+            "One square kilometre contains both quarry and timber": true,
+            "Only sources in the authored exterior inlet are displaced": true,
+            "Resource becomes harvestable after its timer stone": true,
+            "Resource becomes harvestable after its timer wood": true,
+            "Revisited cell has identical resource IDs": true,
+            "Revisiting cannot restore stone early": true,
+            "Revisiting cannot restore wood early": true,
+            "Snow ridge normals face the sky": true,
+            "Streamed stone uses actual harvest object": true,
+            "Streamed wood uses actual harvest object": true,
+            "Unloading preserves stone cooldown": true,
+            "Unloading preserves wood cooldown": true,
+            "World keeps at most nine cells resident": true,
+            "coal promotes once with physical contact geometry": true,
+            "coal proxy uses the live bank scale, transform, bounds and surfaces": true,
+            "coal restores the ordinary material while the same bank is still live": true,
+            "coal retains its authored surfaces during the close approach": true,
+            "coal returns to proxy on release": true,
+            "coal shows the distant source proxy": true,
+            "metal promotes once with physical contact geometry": true,
+            "metal proxy uses the live bank scale, transform, bounds and surfaces": true,
+            "metal restores the ordinary material while the same bank is still live": true,
+            "metal retains its authored surfaces during the close approach": true,
+            "metal returns to proxy on release": true,
+            "metal shows the distant source proxy": true,
+            "slate promotes once with physical contact geometry": true,
+            "slate proxy uses the live bank scale, transform, bounds and surfaces": true,
+            "slate restores the ordinary material while the same bank is still live": true,
+            "slate retains its authored surfaces during the close approach": true,
+            "slate returns to proxy on release": true,
+            "slate shows the distant source proxy": true
+          },
+          "max_resident_chunks": 9,
+          "nearest_minerals": {
+            "coal": {
+              "distance": 130.058227539062,
+              "id": "world1/3/1/coal/0",
+              "x": 116.14395904541,
+              "z": 58.5297012329102
+            },
+            "metal": {
+              "distance": 136.273956298828,
+              "id": "world1/-4/2/metal/0",
+              "x": -110.280158996582,
+              "z": 80.0554656982422
+            },
+            "slate": {
+              "distance": 141.823150634766,
+              "id": "world1/-5/-2/slate/0",
+              "x": -136.590103149414,
+              "z": -38.1699981689453
+            }
+          },
+          "reserved_shoreline_ids": [
+            "world1/-2/0/stone/0",
+            "world1/-2/0/stone/3",
+            "world1/-2/0/wood/6",
+            "world1/-2/0/wood/7",
+            "world1/-2/0/wood/15",
+            "world1/-2/0/wood/21",
+            "world1/-2/0/wood/29",
+            "world1/-2/0/wood/45",
+            "world1/-1/0/wood/1",
+            "world1/-1/0/wood/8",
+            "world1/-1/0/wood/9",
+            "world1/-1/0/wood/25",
+            "world1/-1/0/wood/33",
+            "world1/-1/0/wood/40",
+            "world1/-1/0/wood/41",
+            "world1/-1/0/wood/56",
+            "world1/-2/1/wood/7",
+            "world1/-1/1/wood/0"
+          ],
+          "touch_travel_end_x": 43.0532264709473
+        }
+      ]
+    }
+  ]
+}

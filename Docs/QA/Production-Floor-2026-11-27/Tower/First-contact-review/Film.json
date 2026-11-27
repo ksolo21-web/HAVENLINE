@@ -1,0 +1,39 @@
+{
+  "scene": "res://field_opening.tscn",
+  "kind": "Native Godot field scene, loaded real earned paid camp into a guarded temporary profile",
+  "camera": "player-follow orthographic, existing field camera, ordinary 1x and pinch 2x",
+  "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+  "fixture": "Build8-cooker-only, followed by an initial test placement of player and a live wolf. Enemy, attack, path and damage use regular field callers.",
+  "movie": "3.6 s at 1x, fixed 60 physics updates per simulated second, sampled every fourth tick. Silent video export.",
+  "movie_sha256": "04d3ce140d1a867351d39df3fa6edec1839bffe3209f0eb87821126292a50325",
+  "streams": [
+    {
+      "codec_name": "h264",
+      "width": 640,
+      "height": 960,
+      "avg_frame_rate": "15/1",
+      "duration": "3.600000",
+      "nb_frames": "54"
+    }
+  ],
+  "visible_meshes": [
+    "Footings",
+    "Cabin",
+    "EmplacementDeck",
+    "Turntable",
+    "BowStock",
+    "LoadedQuarrel",
+    "ForesterClothingAndFace"
+  ],
+  "launch_ticks": [
+    40,
+    140
+  ],
+  "first_target_damage_ticks": [
+    56,
+    152
+  ],
+  "starting_target_health": 3,
+  "ending_target_health": 1,
+  "qa": "Zero-time launch measurement is recorded in ../Weapon-and-crew-checks.json. The first positive flight tick in Scene.json occurs after the bolt has already moved."
+}

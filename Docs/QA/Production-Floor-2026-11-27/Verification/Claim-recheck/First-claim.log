@@ -1,0 +1,15 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+SETTLEMENT_QA {"checks":{"duplicate worker pickup rejected":true,"partial survivor payment resumed before the second wood":true,"pending worker pickup left the ground and has no bank credit":false,"purchase consumed exactly the displayed raw amount":true,"remaining wood completes the single survivor purchase":true,"rescue is idempotent":true,"rescue performed by reaching the survivor":true,"shipping main scene loaded from disposable profile":true,"worker claimed a real pine drop":false},"failures":["worker claimed a real pine drop","pending worker pickup left the ground and has no bank credit"],"observed":{"claimed_token":""},"phase":"claim"}
+ERROR: worker claimed a real pine drop
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/qa_level1_completion.gd:23)
+       [1] claim (res://tests/qa_level1_completion.gd:157)
+       [2] wait_for (res://tests/qa_level1_completion.gd:107)
+ERROR: pending worker pickup left the ground and has no bank credit
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/qa_level1_completion.gd:23)
+       [1] claim (res://tests/qa_level1_completion.gd:160)
+       [2] wait_for (res://tests/qa_level1_completion.gd:107)

@@ -1,0 +1,284 @@
+{
+  "commit": "6f35a670bac57a0002aa44b9abedbb257848fd30",
+  "scene": "res://field_opening.tscn",
+  "source_profile": "Exact failed run plot-partial checkpoint, payload reserialized and SHA-verified prior to replay",
+  "initial_payload_sha256": "1da0fc1f10f22b8d61636fcd5164f4ec111108231b67e0c7494a3958e8b51812",
+  "original_error_reported": "The original run reported two failed worker-claim checks. It did not record the filesystem result or worker pose. The host exhausted scratch disk during this build.",
+  "interpretation": "A blocked save produced exactly the original claim record. Two repeat runs of the same checkpoint on healthy writable storage gave the same physical chops and same token at the same tick. The original filesystem error code was not recorded.",
+  "runs": [
+    {
+      "case": "replay-1.log",
+      "raw_sha256": "b474f7b8e719b14c7eab64f2ef2e48213efe293c0ce585ae8cc73a42a6fd01c7",
+      "worker_transitions": [
+        {
+          "tick": 38,
+          "action": "work_ready",
+          "tree": "rooted",
+          "contacts": 0,
+          "save_error": ""
+        },
+        {
+          "tick": 39,
+          "action": "chopping",
+          "tree": "rooted",
+          "contacts": 0,
+          "save_error": ""
+        },
+        {
+          "tick": 133,
+          "action": "work_ready",
+          "tree": "rooted",
+          "contacts": 1,
+          "save_error": ""
+        },
+        {
+          "tick": 134,
+          "action": "chopping",
+          "tree": "rooted",
+          "contacts": 1,
+          "save_error": ""
+        },
+        {
+          "tick": 180,
+          "action": "chopping",
+          "tree": "rooted",
+          "contacts": 2,
+          "save_error": ""
+        },
+        {
+          "tick": 228,
+          "action": "work_ready",
+          "tree": "rooted",
+          "contacts": 2,
+          "save_error": ""
+        },
+        {
+          "tick": 229,
+          "action": "chopping",
+          "tree": "rooted",
+          "contacts": 2,
+          "save_error": ""
+        },
+        {
+          "tick": 264,
+          "action": "chopping",
+          "tree": "falling",
+          "contacts": 3,
+          "save_error": ""
+        },
+        {
+          "tick": 316,
+          "action": "chopping",
+          "tree": "credited",
+          "contacts": 3,
+          "save_error": ""
+        },
+        {
+          "tick": 323,
+          "action": "falling",
+          "tree": "credited",
+          "contacts": 3,
+          "save_error": ""
+        },
+        {
+          "tick": 324,
+          "action": "pickup",
+          "tree": "credited",
+          "contacts": 3,
+          "save_error": ""
+        },
+        {
+          "tick": 340,
+          "action": "carrying",
+          "tree": "credited",
+          "contacts": 3,
+          "save_error": ""
+        }
+      ],
+      "checks": 16,
+      "failures": [],
+      "matches_initial_failure_record": false,
+      "claimed": "wood-4"
+    },
+    {
+      "case": "replay-2.log",
+      "raw_sha256": "b474f7b8e719b14c7eab64f2ef2e48213efe293c0ce585ae8cc73a42a6fd01c7",
+      "worker_transitions": [
+        {
+          "tick": 38,
+          "action": "work_ready",
+          "tree": "rooted",
+          "contacts": 0,
+          "save_error": ""
+        },
+        {
+          "tick": 39,
+          "action": "chopping",
+          "tree": "rooted",
+          "contacts": 0,
+          "save_error": ""
+        },
+        {
+          "tick": 133,
+          "action": "work_ready",
+          "tree": "rooted",
+          "contacts": 1,
+          "save_error": ""
+        },
+        {
+          "tick": 134,
+          "action": "chopping",
+          "tree": "rooted",
+          "contacts": 1,
+          "save_error": ""
+        },
+        {
+          "tick": 180,
+          "action": "chopping",
+          "tree": "rooted",
+          "contacts": 2,
+          "save_error": ""
+        },
+        {
+          "tick": 228,
+          "action": "work_ready",
+          "tree": "rooted",
+          "contacts": 2,
+          "save_error": ""
+        },
+        {
+          "tick": 229,
+          "action": "chopping",
+          "tree": "rooted",
+          "contacts": 2,
+          "save_error": ""
+        },
+        {
+          "tick": 264,
+          "action": "chopping",
+          "tree": "falling",
+          "contacts": 3,
+          "save_error": ""
+        },
+        {
+          "tick": 316,
+          "action": "chopping",
+          "tree": "credited",
+          "contacts": 3,
+          "save_error": ""
+        },
+        {
+          "tick": 323,
+          "action": "falling",
+          "tree": "credited",
+          "contacts": 3,
+          "save_error": ""
+        },
+        {
+          "tick": 324,
+          "action": "pickup",
+          "tree": "credited",
+          "contacts": 3,
+          "save_error": ""
+        },
+        {
+          "tick": 340,
+          "action": "carrying",
+          "tree": "credited",
+          "contacts": 3,
+          "save_error": ""
+        }
+      ],
+      "checks": 16,
+      "failures": [],
+      "matches_initial_failure_record": false,
+      "claimed": "wood-4"
+    },
+    {
+      "case": "replay-rejected.log",
+      "raw_sha256": "d8b517885c8333f18ea2bbc17d6936e73db98bebed7c9d743646055770dd684f",
+      "worker_transitions": [
+        {
+          "tick": 38,
+          "action": "work_ready",
+          "tree": "rooted",
+          "contacts": 0,
+          "save_error": ""
+        },
+        {
+          "tick": 39,
+          "action": "chopping",
+          "tree": "rooted",
+          "contacts": 0,
+          "save_error": ""
+        },
+        {
+          "tick": 133,
+          "action": "work_ready",
+          "tree": "rooted",
+          "contacts": 1,
+          "save_error": ""
+        },
+        {
+          "tick": 134,
+          "action": "chopping",
+          "tree": "rooted",
+          "contacts": 1,
+          "save_error": ""
+        },
+        {
+          "tick": 180,
+          "action": "chopping",
+          "tree": "rooted",
+          "contacts": 2,
+          "save_error": ""
+        },
+        {
+          "tick": 228,
+          "action": "work_ready",
+          "tree": "rooted",
+          "contacts": 2,
+          "save_error": ""
+        },
+        {
+          "tick": 229,
+          "action": "chopping",
+          "tree": "rooted",
+          "contacts": 2,
+          "save_error": ""
+        },
+        {
+          "tick": 264,
+          "action": "chopping",
+          "tree": "falling",
+          "contacts": 3,
+          "save_error": ""
+        },
+        {
+          "tick": 316,
+          "action": "chopping",
+          "tree": "credited",
+          "contacts": 3,
+          "save_error": "Field progress paused. Save error 44."
+        }
+      ],
+      "checks": 9,
+      "failures": [
+        "worker claimed a real pine drop",
+        "pending worker pickup left the ground and has no bank credit"
+      ],
+      "matches_initial_failure_record": true,
+      "claimed": ""
+    }
+  ],
+  "routine_single_profile_rerun": {
+    "source": "6f35a670bac57a0002aa44b9abedbb257848fd30",
+    "identical_setup": true,
+    "phases": 16,
+    "total_checks": 219,
+    "private_profile": true,
+    "sha256": "bb9451144eba84984a26cc095f82ddb7d8541cc296590243a0794c7c3f680934",
+    "receipt": "Unmodified-completion/Completion-results.json",
+    "four_interrupted_transactions_kept_durable_receipts": true
+  }
+}

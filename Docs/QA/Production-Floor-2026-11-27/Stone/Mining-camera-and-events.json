@@ -1,0 +1,152 @@
+{
+  "source_record_sha256": "77726789ea3e27d7e96503e2c02e7e24709d6fdd1bda596705b902f036565456",
+  "scene": "res://field_opening.tscn",
+  "camera": "Production gameplay camera, first 1x then an additional 2x pinch on the same physics frame.",
+  "renderer": "Godot v4.7.2.stable.official.ed1daf0bf, Compatibility renderer on Mesa llvmpipe.",
+  "profiles": "Separate disposable test folders; fresh same spawn and same synthetic thumbstick path.",
+  "simulation_hz": 60,
+  "clip": {
+    "sha256": "684926c5f14c3542f95292a3cc2972a6bc27aef9f32733e80f7af51154b3ba36",
+    "file": "Mining-from-the-working-edge.mp4",
+    "silent": true,
+    "probe": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "width": 600,
+          "height": 900,
+          "avg_frame_rate": "12/1",
+          "nb_frames": "102"
+        }
+      ],
+      "format": {
+        "duration": "8.500000"
+      }
+    }
+  },
+  "captures": {
+    "Build11/contact-1-1x.jpg": "c578a748af69113e61bfded76cf858426db7c1826992b67e7bbfa74768eb9e87",
+    "Build11/contact-1-2x.jpg": "654cca681f333935f4bde0a7597b12e156e3063d813380d8e5cccf6e8fab0214",
+    "Build11/stalled-1x.jpg": "02b924c25221e6152a95a88cf956f1c756aca2c06f1ba9e2ebd714a29100d4b4",
+    "Build11/stalled-2x.jpg": "007a5e8f6815307f43abf249a42ac31a4981c262c2a4d1c5dcf80b873eb819b1",
+    "Build11/working-face-1x.jpg": "22bfbf6b32781775d89fdfcc0fb5183b44ee72c9ae9c30c205109da0227faf91",
+    "Build11/working-face-2x.jpg": "6815d65af4d57bcba05a03a28def7e1278ddb8fafdb7d67acb46ae39c20b8dda",
+    "Candidate/collected-1x.jpg": "f6b4e6ec4090bc36fed10969d1fee4f6071b6e63bdb371a25cdc79739d76c6b1",
+    "Candidate/collected-2x.jpg": "bb8355532a9da8aa10c0421a3f14f7e43eb4ba5007a7a4158e664e70334724a5",
+    "Candidate/contact-1-1x.jpg": "6061e0fc37d866daab9184920b46be66540b7d603f17a5d205c5401e4b9c5d0f",
+    "Candidate/contact-1-2x.jpg": "9ce522438f95ce1f60e93fe2613d327fc31ce392cca024f3fcfc362535210c0d",
+    "Candidate/contact-2-1x.jpg": "073ed855d6530cf6e6b47e42cc35bcdf5fb62b3076e05a60799688e22fd96f53",
+    "Candidate/contact-2-2x.jpg": "08c01d8bd250ee01e6cbfe0c23cea711940a72935f42b45517fb40543662f4c9",
+    "Candidate/fracture-1x.jpg": "b35d44e155cf51de7cc5be97b783635e2c4a80b89e2da8dfd0c9bd977e9c3818",
+    "Candidate/fracture-2x.jpg": "5da166299881693ffedc34f726dc95895ae9b06228fd1993493a975d2867fd27",
+    "Candidate/release-1x.jpg": "98896dee53b9ed486f54979f72fa053dd5405927e842cbe6e5081a55c3cdee7d",
+    "Candidate/release-2x.jpg": "b47236e2238b5cd58b59359b7b843c156dfe82ca76b6fd9ed4b05b5826830172",
+    "Candidate/return-1x.jpg": "92aa04657091650b9abcf64c62fa23903c07389c1bae3c751bb05435ac64f348",
+    "Candidate/return-2x.jpg": "2cf2913b7cd33ae62ddd7749bba4f701cb0250d8eef760ab20944229556539b1",
+    "Candidate/spent-1x.jpg": "fc528d30b6df0d4826bce0409aa3ea62b5cf09c41814223143e196c070940b31",
+    "Candidate/spent-2x.jpg": "612ef84d33f3262f78298a63425464fe069066a44402cfc34d1c7703f0dda639",
+    "Candidate/working-face-1x.jpg": "66a7b1582e76674c122f2aed44cd6edda564ebd9812e3c8cf826814d92fe4c27",
+    "Candidate/working-face-2x.jpg": "7dbbdc349a3c7dd9df7456d105c03c3cf39c730c3f9566d65734fc276e18a14c"
+  },
+  "build11": {
+    "at": [
+      -6.0,
+      3.0
+    ],
+    "checks": {
+      "contact-1 grants no stone": true,
+      "one physical break creates three unique stone pickups": false,
+      "three strikes from the original northern approach": false
+    },
+    "display_size": "(600, 900)",
+    "events": {
+      "impact_stone": 1
+    },
+    "frozen_reference": "25b4ec6/Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/02-stone.png",
+    "inventory": {
+      "coal": 0,
+      "meat": 0,
+      "metal": 0,
+      "slate": 0,
+      "stone": 0,
+      "wood": 5
+    },
+    "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+    "source_at_release": {},
+    "source_id": "starter-stone",
+    "ticks": {
+      "contact-1": 94
+    },
+    "working_position": [
+      -6.03232336044312,
+      0.210831329226494
+    ]
+  },
+  "candidate": {
+    "at": [
+      -6.0,
+      3.0
+    ],
+    "checks": {
+      "bank reopens after 300 physical ticks": true,
+      "contact-1 grants no stone": true,
+      "contact-2 grants no stone": true,
+      "four pieces cut from the original bank separate": true,
+      "no second grant or retained collision during cooldown": true,
+      "one physical break creates three unique stone pickups": true,
+      "three strikes from the original northern approach": true,
+      "visible boulder and walking collision clear together": true,
+      "walking over the actual drops banks each stone once": true
+    },
+    "display_size": "(600, 900)",
+    "events": {
+      "deplete_stone": 1,
+      "drop_stone": 1,
+      "impact_stone": 3,
+      "pickup_partial": 1,
+      "regrow_stone": 1
+    },
+    "frozen_reference": "25b4ec6/Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/02-stone.png",
+    "inventory": {
+      "coal": 0,
+      "meat": 0,
+      "metal": 0,
+      "slate": 0,
+      "stone": 3,
+      "wood": 0
+    },
+    "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+    "source_at_release": {
+      "bounds": "[P: (-0.743313, -0.218842, -0.833129), S: (1.539274, 0.889203, 1.61265)]",
+      "collision_layer": 0,
+      "cut_chunks": 4,
+      "source_visible": false,
+      "spawned_ids": [
+        "stone-1",
+        "stone-2",
+        "stone-3"
+      ]
+    },
+    "source_id": "starter-stone",
+    "ticks": {
+      "break": 209,
+      "contact-1": 94,
+      "contact-2": 155,
+      "return": 509
+    },
+    "working_position": [
+      -6.03232336044312,
+      0.210831329226494
+    ]
+  },
+  "native_capture_commit": "4e79add742b2643de7c873f02a0f5896137f91d4",
+  "reviewed_game_commit": "6f35a670bac57a0002aa44b9abedbb257848fd30",
+  "collected_stone_display": {
+    "before": 0,
+    "after": 30,
+    "physical_bundles": 3,
+    "units_per_bundle": 10
+  }
+}
