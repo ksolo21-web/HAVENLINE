@@ -39,14 +39,23 @@ var camp_state := -1
 var palette := {}
 var canopy_materials := {}
 var pine_shapes: Array[Vector2] = []
+var pine_scenes: Array[PackedScene] = []
 var resource_sightline := preload("res://field_resource_sightline.gd").new()
 var seasonal_pines: Array[Node3D] = []
-# Trees on the future storage ground merge with the permanent north/west woodline.
-const SEASONAL_POCKETS := [
+var grove_source_aliases: Dictionary[Vector2i,String] = {}
+# These coordinates name the sources in existing saves. Their planting sites
+# sit farther back so the founding plot has a clear snow approach.
+const SEASONAL_SOURCE_ANCHORS := [
 	Vector2(-4.8,-3.7), Vector2(-3.0,-3.55), Vector2(-1.25,-3.68), Vector2(.65,-3.55), Vector2(2.55,-3.68),
 	Vector2(-4.75,-1.94), Vector2(-3.18,-1.77), Vector2(-1.36,-2.11), Vector2(.40,-2.04), Vector2(2.05,-2.14),
 	Vector2(-4.5,-.19), Vector2(-2.9,-.27), Vector2(-1.1,-.53), Vector2(.80,-.73),
 	Vector2(-4.29,1.49), Vector2(-2.55,1.19),
+]
+const SEASONAL_POCKETS := [
+	Vector2(-4.8,-3.7), Vector2(-3.0,-3.55), Vector2(-1.25,-3.68), Vector2(-4.5,-9.5), Vector2(-.25,-9.0),
+	Vector2(-4.75,-1.94), Vector2(-3.18,-1.77), Vector2(-10.95,-11.9), Vector2(-13.8,-3.6), Vector2(-12.0,0.0),
+	Vector2(-11.75,1.75), Vector2(3.0,-9.25), Vector2(3.25,-4.0), Vector2(-.5,-11.25),
+	Vector2(-15.4,-2.55), Vector2(-7.2,-11.53),
 ]
 # Five west-grove pines border the quarry work area. Their roots previously
 # landed on the stone or in front of its pick contact from the fixed camera.
@@ -58,7 +67,7 @@ const QUARRY_EDGE := [
 # south trail and the route along the east gate divide the foreground banks
 # so players and survivors can reach the individual trunks.
 const FOREST_BANKS := [
-	Vector2(-15.7,16.1), Vector2(-14.0,16.38), Vector2(-12.05,15.96),
+	Vector2(-15.7,16.1), Vector2(-14.0,16.38), Vector2(-13.8,18.55),
 	Vector2(-10.35,16.78), Vector2(-8.45,17.19), Vector2(-7.08,17.38),
 	Vector2(-12.5,17.4), Vector2(-10.8,18.25), Vector2(-9.2,18.8), Vector2(-7.5,19.05),
 	Vector2(-5.8,18.95), Vector2(-11.65,19.86), Vector2(-9.95,20.06), Vector2(-8.24,20.2),
@@ -69,6 +78,21 @@ const FOREST_BANKS := [
 	Vector2(10.05,15.23), Vector2(11.7,15.04), Vector2(6.8,19.3), Vector2(7.8,17.73),
 	Vector2(9.42,16.8), Vector2(11.15,17.15), Vector2(12.65,16.37),
 	Vector2(-2.55,-9.48), Vector2(-.96,-9.95), Vector2(.65,-10.0),
+]
+# Shorter pines fill gaps between the bank rows. Keep enough root spacing
+# for chop stances even where the branches overlap overhead.
+const FOREST_UNDERSTORY := [
+	Vector2(7.75,12.06), Vector2(9.96,12.03), Vector2(11.76,11.10),
+	Vector2(-5.64,-4.92), Vector2(-4.08,-5.13),
+	Vector2(1.11,-5.01), Vector2(2.41,-5.23),
+	Vector2(9.49,9.69), Vector2(10.52,8.79),
+	Vector2(3.58,13.89), Vector2(5.57,11.84),
+]
+const BANK_PINE_PROPORTIONS := Vector3(1.13,.81,1.13)
+const BANK_CONIFERS := [
+	preload("res://assets/reference_forest/bank_pine_1.glb"),
+	preload("res://assets/reference_forest/bank_pine_2.glb"),
+	preload("res://assets/reference_forest/bank_pine_3.glb"),
 ]
 var snow := ShaderMaterial.new()
 var reveal_tween: Tween
@@ -483,16 +507,25 @@ func clear_hearth_footprint(at: Vector3) -> Vector3:
 	return Vector3(center.x + outward.x*radius,at.y,center.z + outward.y*radius)
 
 func canopy_ink(material: Material) -> Material:
-	if not material is StandardMaterial3D or material.resource_name.to_lower() not in ["crown","lip"]:
+	if not material is StandardMaterial3D or material.has_meta(&"snow_pine_tinted") or material.resource_name.to_lower() not in ["crown","lip"]:
 		return material
 	if not canopy_materials.has(material):
 		var shaded := material.duplicate() as StandardMaterial3D
+		var skirt := material.resource_name.to_lower() == "lip"
+		var bank := material.resource_path.begins_with("res://assets/reference_forest/bank_pine_")
+		if bank:
+			# Wide pale snow faces sit above the shaded slate-blue branches.
+			shaded.albedo_color *= Color(.53,.60,.73) if skirt else Color(.85,.90,.92)
+			shaded.emission = Color("679acf")
+			shaded.emission_energy_multiplier = .24 if skirt else .43
+		else:
+			shaded.albedo_color *= Color(.44,.51,.66) if skirt else Color(.62,.63,.72)
+			shaded.emission = Color("4973b0") if skirt else Color("4c79bc")
+			shaded.emission_energy_multiplier = .32 if skirt else .60
 		shaded.emission_enabled = true
-		shaded.emission = Color("637aa5")
-		shaded.emission_energy_multiplier = .40
-		# Uniform local skylight also reaches atlas-dark blue branch undersides.
 		shaded.emission_texture = null
 		shaded.emission_operator = BaseMaterial3D.EMISSION_OP_ADD
+		shaded.set_meta(&"snow_pine_tinted",true)
 		canopy_materials[material] = shaded
 	return canopy_materials[material]
 
@@ -537,22 +570,43 @@ func install_woods() -> void:
 	# Smaller companion crowns break up evenly spaced silhouettes. The actual
 	# harvest and enemy anchors are set by the world before this deferred pass.
 	tint_canopy(world.get_node("ExteriorExactT01Visuals"))
-	if camp_state == 0 and world.has_method("_add_pine"):
-		for i in SEASONAL_POCKETS.size():
-			var stem: Node3D = world._add_pine(SEASONAL_POCKETS[i])
-			stem.scale = Vector3.ONE*(1.05 + .20*fposmod(i*.618,1))
-			stem.rotation.y = i*2.39996
+	var relocated: Array[Transform3D] = []
+	for i in SEASONAL_POCKETS.size():
+		var old_root: Vector2 = SEASONAL_SOURCE_ANCHORS[i]
+		var root: Vector2 = SEASONAL_POCKETS[i]
+		var source_id := "pine@%d,%d" % [roundi(old_root.x*1000),roundi(old_root.y*1000)]
+		var height_scale := 1.05 + .20*fposmod(i*.618,1)
+		var yaw := i*2.39996
+		if root != old_root:
+			# Off-site trees belong to the permanent batch and keep their save IDs.
+			var key := Vector2i(roundi(root.x*1000),roundi(root.y*1000))
+			grove_source_aliases[key] = source_id
+			var mesh_scale: float = world.ResourceTreeScript.TREE_SCALE * height_scale
+			var basis := Basis(Vector3.UP,yaw).scaled(BANK_PINE_PROPORTIONS*mesh_scale)
+			relocated.append(Transform3D(basis,Vector3(root.x,0.0,root.y)))
+		elif camp_state == 0 and world.has_method("_add_pine"):
+			var stem: Node3D = world._add_pine(root,0,source_id)
+			stem.scale = Vector3.ONE*height_scale
+			stem.rotation.y = yaw
 			seasonal_pines.append(stem)
 	var blocked: Array[Vector2] = []
 	if "trees" in world:
 		for tree: Node3D in world.trees:
 			tint_canopy(tree)
-			blocked.append(Vector2(tree.position.x,tree.position.z))
+			if tree not in seasonal_pines:
+				blocked.append(Vector2(tree.position.x,tree.position.z))
+	# Retain the original exclusions when seeding the surrounding permanent groves.
+	if not seasonal_pines.is_empty(): blocked.append_array(SEASONAL_SOURCE_ANCHORS)
 	var permanent_roots := blocked.duplicate()
 	if "enemies" in world:
 		for enemy: Node3D in world.enemies:
 			blocked.append(Vector2(enemy.position.x,enemy.position.z))
-	var transforms := [[],[],[]]
+	pine_scenes.assign(world.CONIFERS)
+	pine_scenes.append_array(BANK_CONIFERS)
+	var variant_count: int = world.CONIFERS.size()
+	var transforms := []
+	for variant in pine_scenes.size():
+		transforms.append([])
 	var occupied: Array[Vector2] = []
 	var initial := positions.size()
 	var quarry_tree := 0
@@ -562,11 +616,14 @@ func install_woods() -> void:
 		if absf(candidate.x)>7.5 or candidate.y < -7.: positions.append(candidate)
 	var existing_count := positions.size()
 	positions.append_array(FOREST_BANKS)
+	var understory_start := positions.size()
+	positions.append_array(FOREST_UNDERSTORY)
 	for i in positions.size():
 		var at: Vector2 = positions[i]
 		# New roots keep their source IDs across reloads and moving enemy spawns.
 		var reserved_roots := blocked if i < existing_count else permanent_roots
-		if reserved_roots.any(func(p:Vector2): return p.distance_squared_to(at) < 3.2) or occupied.any(func(p:Vector2): return p.distance_squared_to(at) < 1.25):
+		var root_clearance_squared := 1.44 if i >= understory_start else 3.2
+		if reserved_roots.any(func(p:Vector2): return p.distance_squared_to(at) < root_clearance_squared) or occupied.any(func(p:Vector2): return p.distance_squared_to(at) < 1.25):
 			continue
 		occupied.append(at)
 		# Keep the accepted grove count and mesh variants. The clearing applies
@@ -575,13 +632,20 @@ func install_woods() -> void:
 			at = QUARRY_EDGE[quarry_tree]
 			quarry_tree += 1
 		var scale_factor := (.72+.19*fposmod(i*.618,1)) if i<initial else (.48+.19*fposmod(i*.414,1))
-		if i >= existing_count:
+		if i >= understory_start:
+			scale_factor = .63 + .10*fposmod(i*.618,1)
+		elif i >= existing_count:
 			scale_factor = .75 + .15*fposmod(i*.618,1)
-		var basis := Basis(Vector3.UP,i*2.39996).scaled(Vector3.ONE*scale_factor)
-		transforms[i%3].append(Transform3D(basis,Vector3(at.x,0,at.y)))
-	for variant in 3:
-		var tree: Node3D = world.CONIFERS[variant].instantiate()
-		pine_shapes.append(preload("res://resource_tree.gd").native_shape(world.CONIFERS[variant],tree))
+		var faces_clearing := i >= existing_count or at.y < -3.8
+		var proportions := BANK_PINE_PROPORTIONS if faces_clearing else Vector3.ONE
+		var basis := Basis(Vector3.UP,i*2.39996).scaled(proportions*scale_factor)
+		var variant := i % variant_count + (variant_count if faces_clearing else 0)
+		transforms[variant].append(Transform3D(basis,Vector3(at.x,0,at.y)))
+	transforms[variant_count].append_array(relocated)
+	for variant in pine_scenes.size():
+		var scene := pine_scenes[variant]
+		var tree := scene.instantiate() as Node3D
+		pine_shapes.append(preload("res://resource_tree.gd").native_shape(scene,tree))
 		var parts: Array[MeshInstance3D] = []
 		world.meshes(tree,parts)
 		for part in parts:

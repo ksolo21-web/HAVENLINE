@@ -31,8 +31,9 @@ func install(host: Node3D) -> void:
 			var at: Transform3D = batch.global_transform * placements_cpu[i]
 			records.append({"source":batch,"index":i,"variant":variant,"transform":at,"live":null})
 	for row in records:
-		var p:Vector3=row.transform.origin
-		row["id"]="grove@%d,%d" % [roundi(p.x*1000),roundi(p.z*1000)]
+		var p: Vector3 = row.transform.origin
+		var key := Vector2i(roundi(p.x*1000),roundi(p.z*1000))
+		row["id"] = world.field_env.grove_source_aliases.get(key,"grove@%d,%d" % [key.x,key.y])
 		row["proxy_visible"]=true
 	refresh_camp(false)
 	advance(0.25)
@@ -68,7 +69,8 @@ func refresh_camp(_animate: bool) -> void:
 
 func _open_pine(row: Dictionary) -> void:
 	var at: Transform3D = row.transform
-	var tree = world.add_resource_source(row.id,"wood",Vector2(at.origin.x,at.origin.z),row.variant)
+	var scene: PackedScene = world.field_env.pine_scenes[row.variant]
+	var tree = world.add_resource_source(row.id,"wood",Vector2(at.origin.x,at.origin.z),row.variant,scene)
 	tree.global_transform = Transform3D(at.basis.scaled(Vector3.ONE/tree.TREE_SCALE),at.origin)
 	world.field_env.tint_canopy(tree)
 	row.live = tree

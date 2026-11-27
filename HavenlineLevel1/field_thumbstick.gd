@@ -44,7 +44,8 @@ func _process(_delta: float) -> void:
 
 func _draw() -> void:
 	var strength:=.68 if resting else 1.
-	draw_circle(Vector2.ZERO,50.,Color(.29,.34,.43,.30*strength),true,-1,true)
+	draw_circle(Vector2.ZERO,50.,Color(.29,.34,.43,.40*strength),true,-1,true)
+	draw_arc(Vector2.ZERO,50.,0.,TAU,48,Color(.12,.16,.22,.44*strength),2.25,true)
 	draw_arc(Vector2.ZERO,48.,0.,TAU,48,Color(.99,.96,.93,.68*strength),1.75,true)
 	for i in 4:
 		var dir:=Vector2.UP.rotated(i*PI*.5)

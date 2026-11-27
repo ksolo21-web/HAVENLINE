@@ -27,7 +27,9 @@ func _cutaway(source: StandardMaterial3D) -> ShaderMaterial:
 		paint.set_shader_parameter("relief_depth", source.normal_scale)
 		paint.set_shader_parameter("emission", source.emission)
 		paint.set_shader_parameter("emission_energy", source.emission_energy_multiplier if source.emission_enabled else 0.0)
-		paint.set_shader_parameter("canopy",source.resource_name.to_lower() in ["crown","lip"])
+		var surface_name := source.resource_name.to_lower()
+		paint.set_shader_parameter("canopy",surface_name in ["crown","lip"])
+		paint.set_shader_parameter("pine_bark",surface_name == "trunk")
 		_apply_worker(paint)
 		materials[source] = paint
 	return materials[source]

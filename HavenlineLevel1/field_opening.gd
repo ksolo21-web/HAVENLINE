@@ -270,7 +270,7 @@ func _exit_tree() -> void:
 func load_opening_profile(_args: PackedStringArray) -> void:
 	pass
 
-func _add_pine(at: Vector2, variant := 0, source_id := "") -> ResourceTreeScript:
+func _add_pine(at: Vector2, variant := 0, source_id := "", scene: PackedScene = null) -> ResourceTreeScript:
 	var tree := ResourceTreeScript.new()
 	tree.name = "HarvestPine"
 	tree.position = Vector3(at.x,0,at.y)
@@ -279,7 +279,7 @@ func _add_pine(at: Vector2, variant := 0, source_id := "") -> ResourceTreeScript
 		tree.build(preload("res://assets/reference_forest/forester_work_pine.glb"),true)
 		tree.fall_reach = 3.56
 	else:
-		tree.build(CONIFERS[variant],true)
+		tree.build(scene if scene else CONIFERS[variant],true)
 	_configure_stem(tree)
 	var parts := tree._pivot.find_children("*","MeshInstance3D",true,false)
 	for part: MeshInstance3D in parts:
@@ -331,10 +331,10 @@ func make_mineral_model(kind: String) -> Node3D:
 	part.position.y = -part.mesh.get_aabb().position.y
 	return mount
 
-func add_resource_source(id: String, kind: String, at: Vector2, variant := 0) -> Node3D:
+func add_resource_source(id: String, kind: String, at: Vector2, variant := 0, pine_scene: PackedScene = null) -> Node3D:
 	if is_instance_valid(lifecycle.loaded.get(id)): return lifecycle.loaded[id]
 	if kind=="wood":
-		return _add_pine(at,clampi(variant,0,CONIFERS.size()-1),id)
+		return _add_pine(at,clampi(variant,0,CONIFERS.size()-1),id,pine_scene)
 	if kind not in MiningResources.KINDS or id.is_empty(): return null
 	var rock := ResourceRockScript.new()
 	rock.name="Harvest" + kind.capitalize()
