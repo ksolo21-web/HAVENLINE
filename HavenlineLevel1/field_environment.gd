@@ -54,6 +54,22 @@ const QUARRY_EDGE := [
 	Vector2(-10.97,.76), Vector2(-9.45,6.79), Vector2(-10.55,-.68),
 	Vector2(-12.93,1.01), Vector2(-10.08,1.91)
 ]
+# Staggered crowns frame the founding clearing and the western grove. The
+# south trail and the route along the east gate divide the foreground banks
+# so players and survivors can reach the individual trunks.
+const FOREST_BANKS := [
+	Vector2(-15.7,16.1), Vector2(-14.0,16.38), Vector2(-12.05,15.96),
+	Vector2(-10.35,16.78), Vector2(-8.45,17.19), Vector2(-7.08,17.38),
+	Vector2(-12.5,17.4), Vector2(-10.8,18.25), Vector2(-9.2,18.8), Vector2(-7.5,19.05),
+	Vector2(-5.8,18.95), Vector2(-11.65,19.86), Vector2(-9.95,20.06), Vector2(-8.24,20.2),
+	Vector2(-6.43,20.27), Vector2(-4.72,19.98),
+	Vector2(2.85,16.55), Vector2(4.13,15.15), Vector2(5.64,13.95), Vector2(7.28,13.27),
+	Vector2(8.95,12.6), Vector2(10.45,13.33), Vector2(12.12,12.88),
+	Vector2(4.40,17.8), Vector2(5.43,16.45), Vector2(6.95,15.55), Vector2(8.55,14.62),
+	Vector2(10.05,15.23), Vector2(11.7,15.04), Vector2(6.8,19.3), Vector2(7.8,17.73),
+	Vector2(9.42,16.8), Vector2(11.15,17.15), Vector2(12.65,16.37),
+	Vector2(-2.55,-9.48), Vector2(-.96,-9.95), Vector2(.65,-10.0),
+]
 var snow := ShaderMaterial.new()
 var reveal_tween: Tween
 var gate_art: Array[MeshInstance3D] = []
@@ -532,6 +548,7 @@ func install_woods() -> void:
 		for tree: Node3D in world.trees:
 			tint_canopy(tree)
 			blocked.append(Vector2(tree.position.x,tree.position.z))
+	var permanent_roots := blocked.duplicate()
 	if "enemies" in world:
 		for enemy: Node3D in world.enemies:
 			blocked.append(Vector2(enemy.position.x,enemy.position.z))
@@ -543,9 +560,13 @@ func install_woods() -> void:
 		var offset := Vector2(1.35,0).rotated(2.39996*i)
 		var candidate: Vector2 = positions[i]+offset
 		if absf(candidate.x)>7.5 or candidate.y < -7.: positions.append(candidate)
+	var existing_count := positions.size()
+	positions.append_array(FOREST_BANKS)
 	for i in positions.size():
 		var at: Vector2 = positions[i]
-		if blocked.any(func(p:Vector2): return p.distance_squared_to(at) < 3.2) or occupied.any(func(p:Vector2): return p.distance_squared_to(at) < 1.25):
+		# New roots keep their source IDs across reloads and moving enemy spawns.
+		var reserved_roots := blocked if i < existing_count else permanent_roots
+		if reserved_roots.any(func(p:Vector2): return p.distance_squared_to(at) < 3.2) or occupied.any(func(p:Vector2): return p.distance_squared_to(at) < 1.25):
 			continue
 		occupied.append(at)
 		# Keep the accepted grove count and mesh variants. The clearing applies
@@ -554,6 +575,8 @@ func install_woods() -> void:
 			at = QUARRY_EDGE[quarry_tree]
 			quarry_tree += 1
 		var scale_factor := (.72+.19*fposmod(i*.618,1)) if i<initial else (.48+.19*fposmod(i*.414,1))
+		if i >= existing_count:
+			scale_factor = .75 + .15*fposmod(i*.618,1)
 		var basis := Basis(Vector3.UP,i*2.39996).scaled(Vector3.ONE*scale_factor)
 		transforms[i%3].append(Transform3D(basis,Vector3(at.x,0,at.y)))
 	for variant in 3:
