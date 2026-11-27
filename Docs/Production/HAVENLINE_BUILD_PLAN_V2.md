@@ -138,7 +138,7 @@ Only the integration owner may integrate production candidates into the integrat
 | T51 | Connected underground region / approximately Levels 81–90 | LOCKED |
 | T52 | Connected alien region / approximately Levels 91–100 | LOCKED |
 | T53 | Transportation and inter-region continuity | LOCKED |
-| T54 | Day/night, weather, audio and final game feedback | LOCKED |
+| T54 | Day/night, weather, [music, SFX and event coverage](#t54--music-sound-effects-and-event-coverage) | LOCKED (full-world); audio coverage required for Level 1 acceptance |
 | T55 | Accessibility and control customization | LOCKED |
 | T56 | Performance/Quality/Balanced/Battery player modes | LOCKED |
 | T57 | Basic shareable milestone system | LOCKED |
@@ -157,6 +157,28 @@ Only the integration owner may integrate production candidates into the integrat
 | T70 | Final production release handoff | LOCKED |
 
 Detailed dependencies and critic applicability are machine-authoritative in `DEPENDENCY_GRAPH.json` and `CRITIC_MATRIX.json`. Mandatory forward scope overlays for resource/tool/actor/animation behavior are machine-authoritative in `TASK_SCOPE_OVERRIDES.json` and the three contract registries. T01–T10 accepted records remain authoritative; T10 closure is recorded in `Docs/Production/T10/verified-completion.json`.
+
+## T54 — Music, sound effects and event coverage
+
+**T54 owns audio direction, music, ambience, sound effects (SFX), the cue register, mix and listening approval.** Every gameplay or UI task owns emitting accurate events and demonstrating coverage for the player-facing states it introduces. Apply this requirement to the active Level 1 playtest now; do not wait for full-world T54. This is a Level 1 acceptance requirement, not activation or approval of full-world T54 or a change to the production dependency graph. Later tasks extend the same register as their features enter scope.
+
+### Required Level 1 coverage
+
+| Event family | Gameplay owner(s) | Required audio coverage |
+|---|---|---|
+| App, menus and controls | T07, T55 | Boot/title, pause/resume, menu open/back, select/confirm/cancel, unavailable actions, settings and accessibility previews. |
+| Snow, camp and movement | T01–T04, T06, T54 | Wind and visible water where applicable; camp versus snow footsteps and landings tied to contact; furnace ignition and proximity ambience; gate approach/open/close/latch, with clear camp-to-field transitions. |
+| Harvest, carry and storage | T08, T09 | Equip/swing/contact/miss as applicable; tree fall and regrowth; distinct material families for wood, quarry stone and relevant ores; pickup, full bag, rejected pickup, first and last item of a transfer, and storage-full feedback. Batch rapid transfers rather than spamming one cue per unit. |
+| Purchases, construction and placement | T10, T11 | Unaffordable/blocked action, partial contribution, committed purchase, construction start/reveal/upgrade, and preview/blocked/confirm/cancel for paid equipment placement. No success cue on a preview, failure or replay. |
+| Machines and delivery | T05, plus the task owning a given route or upgrade | Start/run/stop, missing input, output ready/full, material transfer and stalls. Cover cooker, saw and drill separately; cover conveyor movement, blocked/full states and restart when the feature is in the candidate. |
+| Customers, survivors and companions | T15, T17, T23, and the applicable companion task | Arrival/queue/service as applicable; order, physical meal handoff and committed payment each distinct; rescue, work, delivery and relevant species actions. Applies to the actual Level 1 slice without unlocking future features or introducing fish to Level 1. |
+| Threats, combat, recovery and progression | T12, T13, T21, T22, T54 | Threat warning distinct from attack, actual hit, player hurt/low health, defeat/recovery, healing start/end, victory, milestone and level transition. Playback follows actual state, not animation or previews alone. |
+
+**Music and ambience:** establish a recognizable Havenline theme with field/exploration, camp/warmth and active-threat states; define boot/menu, milestone/victory and defeat/recovery handling where used. Specify entry, exit, priority and transitions, including when not to restart a track. Layer wind, hearth and local mechanical or environmental ambience independently. Cover day/night, weather, new regions and other later states under T54 as they are introduced; do not require every event to change the music.
+
+**Cue register:** for every player-facing event and variant, record its source task, real trigger/phase, SFX and music/ambience response (or deliberate reuse/silence with a reason), output controls, timing, priority, concurrency, visual equivalent when important, asset source/usage rights, and test evidence. Include start/stop, success/denial, cancellation, repeat, interruption and restore where applicable. Intentional batching or shared cues are allowed only when the outcome remains clear in play. A row with no disposition or proof is open; an existing cue name alone does not pass it.
+
+**Acceptance on the exact signed Level 1 candidate:** run a continuous route with sound and muted; include rapid 50+ item transfers, simultaneous machines, threat and purchase cues under load, and interrupted/reloaded events. Verify no missing or double success sounds, no clipping or audible loop seams, and that combat warnings and payment confirmations are not masked. Verify persisted music, SFX and ambience controls and pause/resume, audio interruption, and output changes. Require independent listening on real Android phone speakers (Fold7 cover and inner modes) and headphones, with critical events readable on mute. Keep the signed build identity, event times, captured playback, reviewer verdict and open gaps together. Desktop and mixer receipts support integration but cannot substitute for listening. Apply the Level 1 critic floor of 9.5/10 to applicable audio criteria; do not average away a failed critical cue.
 
 ## Wave checkpoint after T10 approval
 
