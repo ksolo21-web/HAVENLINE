@@ -3,7 +3,6 @@ extends Node3D
 ## here mark the top of the rollers, exactly where normalized cargo rests.
 const Planner = preload("res://field_conveyor_planner.gd")
 const Aisles=preload("res://field_conveyor_aisles.gd")
-const ServiceCrossing = preload("res://field_conveyor_service_crossing.gd")
 const Crossings = preload("res://field_conveyor_crossings.gd")
 const Geometry = preload("res://field_conveyor_geometry.gd")
 const ORDER := ["meal_to_store","stored_meal","meal","meat","wood","planks","stone","blocks"]
@@ -18,9 +17,7 @@ var routes:Dictionary={}
 var route_signature:String=""
 var crossings
 var aisles
-var crossing_diagnostics:Dictionary={}
 var lifts:Dictionary={}
-var service_lifts:Array=[]
 var stop_arm:Node3D
 var red_lamp:Node3D
 var green_lamp:Node3D
@@ -125,9 +122,14 @@ func _boxes() -> Array[Rect2]:
 		result.append(layout.footprint(id,layout.center(id)).grow(Planner.PAD))
 		# The whole front loading aisle stays accessible. Machine outfeed
 		# and the staff pickup each use their designated side socket.
-		if id=="storage_wood":
+		if id in ["storage_wood","camp_cooker"]:
 			for aisle:Rect2 in layout.service_areas(id,layout.center(id)):
 				result.append(aisle.grow(.21))
+				if id=="camp_cooker":
+					# Reserve the throat from the public square to the cooker's
+					# front so an installed return cannot enclose the work face.
+					var entry:=Vector2(aisle.get_center().x+.22,aisle.end.y)
+					result.append(Rect2(entry-Vector2(.58,.03),Vector2(1.16,2.55)))
 	var court:Rect2=layout.bounds()
 	var gap:float=world.gates[0].HALF_SPAN+.20
 	result.append(Rect2(-gap,court.end.y-2.65,2*gap,2.65).grow(.23))
@@ -149,7 +151,15 @@ func _plan(live_lanes:Array,ordering:Array,boxes:Array[Rect2],court:Rect2) -> Ar
 			var pair:=_terminals(lane,deck)
 			start=pair[0]
 			end=pair[1]
-			var axis:=Planner.route(Planner.xz(start[-1]),Planner.xz(end[-1]),court,boxes,occupied,deck,trial[1])
+			var lane_court:=court
+			if lane in ["meal_to_store","stored_meal","meal"]:
+				# Finished food moves along the back of the work row.
+				# Bound each trunk by its two service-side sockets.
+				var edge:=maxf(start[-1].z,end[-1].z)+.05
+				lane_court.end=Vector2(court.end.x,minf(court.end.y,edge))
+			var leave:=Planner.xz(start[-1]-start[-2]).normalized()
+			var arrive:=Planner.xz(end[-1]-end[-2]).normalized()
+			var axis:=Planner.route(Planner.xz(start[-1]),Planner.xz(end[-1]),lane_court,boxes,occupied,deck,trial[1],leave,arrive)
 			if axis.is_empty():continue
 			end.reverse()
 			path=check.fit(lane,Planner.shaped(start,axis,end,deck))
@@ -179,7 +189,6 @@ func rebuild(live_lanes:Array) -> Dictionary:
 		child.queue_free()
 	routes={}
 	lifts.clear()
-	service_lifts.clear()
 	crossings=null
 	aisles=null
 	stop_arm=null
@@ -212,21 +221,6 @@ func rebuild(live_lanes:Array) -> Dictionary:
 				crossings=candidate[1]
 			if routes.size()==live_lanes.size():break
 		if routes.size()==live_lanes.size():break
-	var crossing=ServiceCrossing.new()
-	if "stone" in routes or "wood" in routes:
-		crossing.configure(world,routes)
-		for lane:String in routes:
-			routes[lane]=crossing.recess(lane,routes[lane])
-	crossing_diagnostics=crossing.disconnected
-	for hatch:Array in crossing.hatches:
-		var top:Vector3=hatch[1]
-		var dir:Vector3=hatch[2]
-		art.component("LiftMouth",top,dir)
-		art.component("LiftFrame",Vector3(top.x,.005,top.z)+dir*.13,dir,Vector3(1.,top.y/.38,1.))
-		art.component("ServiceGrate",Vector3(top.x,.005,top.z),dir,Vector3(1.10,1.,1.12))
-		var plate:Node3D=art.movable("LiftTray",top,dir)
-		service_lifts.append([hatch[0],plate,top,hatch[3]])
-	crossing.draw_walkway(art)
 	aisles=Aisles.new()
 	aisles.install(world,routes)
 	art.survey(routes)
@@ -249,8 +243,8 @@ func rebuild(live_lanes:Array) -> Dictionary:
 					art.dock(mouth,Vector3.RIGHT,false)
 				else:
 					var prepared:=mouth.is_equal_approx(storage_port("meal",true)) or mouth.is_equal_approx(storage_port("meal",false))
-					# The service recess or indoor shuttle can run toward the
-					# interior. The fitted bezel always faces its exterior wall.
+					# The fitted bezel faces the exterior even when the
+					# warehouse shuttle runs toward the interior.
 					outward=Vector3.FORWARD if prepared else Vector3.LEFT
 					var frame:MeshInstance3D=world.depot.house.connection_frame(prepared,inbound)
 					art.add_child(frame)
@@ -302,13 +296,6 @@ func set_buffer_full(full:bool) -> void:
 # The plate rises under the actual visible load. The indexed utility cassette
 # serves either timber or mineral branches, one reservation at a time.
 func present_lifts(goods:Dictionary) -> void:
-	for cassette:Array in service_lifts:
-		var cargo:Node3D=goods.get(cassette[0])
-		var top:Vector3=cassette[2]
-		var shift:=0.
-		if cargo and cargo.visible and Planner.xz(cargo.global_position).distance_to(Planner.xz(top))<.013:
-			shift=clampf(cargo.global_position.y,cassette[3],top.y)-top.y
-		cassette[1].position.y=shift
 	for key:String in lifts:
 		var item:Array=lifts[key]
 		var base:Vector3=item[1]

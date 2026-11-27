@@ -222,3 +222,22 @@ func waypoint(from:Vector3,to:Vector3) -> Vector3:
 		paths[key]=next
 	var q:Vector2=paths[key]
 	return Vector3(q.x,to.y,q.y)
+
+# A saved position can be under a newly installed line after a layout update.
+# Leave clear ground untouched; use the public grid for an obstructed arrival.
+func resume_position(at: Vector3, radius: float) -> Vector3:
+	var feet := Walk.flat(at)
+	if not ready or not boundary.has_point(feet):
+		return at
+	var cell := _free_cell(feet, true)
+	if _body_clear(feet, radius) and disc_clear(feet, radius):
+		# Gate thresholds sit outside the public interior grid. A clear approach
+		# stays exactly where it was. Inside, also rule out fenced-off pockets.
+		if not boundary.grow(-radius-.08).has_point(feet):
+			return at
+		if public_cells.has(cell) and _step_clear(feet, _at(cell)):
+			return at
+	if not public_cells.has(cell):
+		return world.lifecycle.safe_start()
+	var point := _at(cell)
+	return Vector3(point.x, at.y, point.y)

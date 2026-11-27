@@ -198,45 +198,32 @@ func test_stored_meal() -> void:
 	var b=game.inventory
 	var j:Dictionary=b.settlement
 	var belt=game.settlement_loop.conveyors
+	# Start a genuine porter trip before installing the kitchen connection.
+	worker.actor.global_position=worker._shelf_apron()
+	worker._load_hopper_stock("meat")
+	check(j.worker_supply=="meat" and worker.phase=="supply_out","pre-upgrade porter holds the storehouse goods")
 	for kind:String in b.remaining(game.Progress.FOOD_LINE):
 		for i in int(b.remaining(game.Progress.FOOD_LINE)[kind]):
 			b.collect("worker-food-line-%s-%d"%[kind,i],kind)
 			b.payment(game.Progress.FOOD_LINE,kind,false)
 	game._finish_purchase(game.Progress.FOOD_LINE)
-	# Allow the paid belt to build stock before the first waiting customer.
-	# The worker reaches the loading door when this genuine finished meal lands.
-	game.counter.set_active(false,0)
-	game.inventory.stored.meat-=2
-	j.hoppers.meat+=2
-	for i in 1600:
-		game.settlement_loop.advance_unattended(1./60.)
-		belt.advance(1./60.)
-		if j.product_store.meal==2 or game.persist_blocked: break
-	check(j.cooked==2 and j.product_store.meal==2 and worker.RAW_RULES.waiting_meals(j)==0,"two cooked meals landed in the separate prepared-food bay")
-	game.counter.set_active(true,0)
-	check(not worker._can_fetch_meal(),"stock stays on its shelf while there are no customer orders")
-	for i in 400:
-		game.counter.advance(1./60.)
-		if game.counter.queue.size()==1: break
-	belt.advance(1./60.)
-	check(j.line_load.stored_meal==1 and j.product_store.meal==1 and not worker._can_fetch_meal(),"first guest already covered by a real belt reservation cannot draw another meal")
-	for i in 800:
-		game.counter.advance(1./60.)
-		if game.counter.queue.size()==2: break
-	worker.actor.position=game.depot.apron.global_position
-	worker.phase="waiting_storage"
+	game.counter.set_active(true,int(j.served))
+	game.counter.arrival_clock=180.
 	worker.advance(1./60.)
-	check(worker.phase=="meal_collect" and not worker.route.is_empty() and game.depot.at_loading_area(worker.route.back()),"open second customer order sends the worker to the movable storage door")
-	for i in 60*4:
-		worker.advance(1./60.)
-		if j.worker_meal==1 or not game.depot.at_loading_area(worker.actor.global_position): break
-	check(game.depot.at_loading_area(worker.actor.global_position) and j.product_store.meal==0 and j.worker_meal==1 and belt.unclaimed_orders()==0,"worker physically claims exactly the second guest's meal")
-	var served_by_worker := false
+	check(j.worker_supply.is_empty() or worker.phase=="supply_return","new connection recalls the existing porter supply to its own shelf")
+	var manual_cooker_trip:=false
+	for i in 2600:
+		tick(1./60.)
+		manual_cooker_trip=manual_cooker_trip or worker.phase=="meal_collect" or j.worker_supply=="meat" and worker.phase in ["supply_out","supply_unload"]
+		if j.counter_stock==2 or game.persist_blocked:break
+	check(not manual_cooker_trip and j.worker_supply.is_empty() and j.worker_meal==0,"rescued worker ceded paid cooking and unloading to automation")
+	check(j.counter_stock==2 and j.cooked==2 and j.served==0 and game.counter.queue.is_empty(),"existing two portions move through kitchen into the empty service buffer")
+	check(not worker._can_fetch_meal(),"paid food line keeps its warehouse dispatch separate from the forester")
+	game.counter.arrival_clock=0.
 	for i in 2400:
 		tick(1./60.)
-		served_by_worker = served_by_worker or game.counter.worker_serving
-		if j.served>=2 and j.worker_meal==0: break
-	check(served_by_worker and j.served==2 and j.worker_meal==0 and j.counter_stock==0,"belt and worker fulfilled two physical customer orders exactly once")
+		if j.served>=2:break
+	check(j.served==2 and j.worker_meal==0 and j.counter_stock==0,"two genuine customers paid once after unattended stock arrived")
 	var copy=game.Inventory.new()
 	check(not game.persist_blocked and copy.configure(b.configured_costs) and copy.restore(b.snapshot()),"stored-meal service conserved all paid resources")
 

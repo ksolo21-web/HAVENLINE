@@ -15,7 +15,10 @@ static func allowed(lane:String,purchases:Array)->bool:
 	var meal:=P.FOOD_LINE in purchases
 	var supply:=P.SUPPLY_LINE in purchases
 	if lane=="meal":return meal and supply
-	if lane=="stored_meal" or lane=="meal_to_store":return meal
+	if lane=="stored_meal":return meal
+	# Either connection owned by the cooker provides its raw inlet and
+	# discharges finished roasts into the prepared-food bay.
+	if lane=="meat" or lane=="meal_to_store":return (meal or supply) and P.MACHINES.meat in purchases
 	var input:String=INPUT_FOR.get(lane,lane)
 	return supply and input in RAW and P.MACHINES[input] in purchases
 

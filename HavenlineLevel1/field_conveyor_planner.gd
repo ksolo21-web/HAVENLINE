@@ -29,7 +29,7 @@ static func against_belts(a:Vector2,b:Vector2,segments:Array,deck:float) -> floa
 			penalty+=.92
 	return penalty
 
-static func route(a:Vector2,b:Vector2,court:Rect2,boxes:Array[Rect2],segments:Array,deck:float,avoid:float=1.) -> PackedVector2Array:
+static func route(a:Vector2,b:Vector2,court:Rect2,boxes:Array[Rect2],segments:Array,deck:float,avoid:float=1.,leave:Vector2=Vector2.ZERO,arrive:Vector2=Vector2.ZERO) -> PackedVector2Array:
 	var xs:Array[float]=[a.x,b.x,court.position.x+.01,court.end.x-.01]
 	var ys:Array[float]=[a.y,b.y,court.position.y+.01,court.end.y-.01]
 	for box:Rect2 in boxes:
@@ -79,6 +79,11 @@ static func route(a:Vector2,b:Vector2,court:Rect2,boxes:Array[Rect2],segments:Ar
 			break
 		for next:int in graph.get_point_connections(current):
 			var q:=graph.get_point_position(next)
+			# A dock releases onto its belt, and receives from the belt.
+			# An immediate reversal would build two decks across the same lip.
+			var step:=q-p
+			if current==first and step.dot(leave)<-.00001:continue
+			if next==last and step.dot(arrive)>.00001:continue
 			var dir:=0 if absf(p.y-q.y)<.001 else 1
 			var next_key:=next*3+dir
 			var distance:float=costs[key]+p.distance_to(q)+avoid*against_belts(p,q,segments,deck)

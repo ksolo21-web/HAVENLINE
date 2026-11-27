@@ -45,23 +45,15 @@ func test_pressure()->void:
  var before:Dictionary=book.snapshot()
  check("full house and outlets stay a valid conserved checkpoint",book.restore(JSON.parse_string(JSON.stringify(before))))
  j=book.settlement
- check("no order leaves prepared goods at their source",field.counter.queue.is_empty() and not b._launch("stored_meal") and not b._launch("meal"))
- field.counter._walk_queue(.2)
- if field.counter.queue.is_empty():field.counter._walk_queue(2.)
- check("first real arriving shopper can draw from a full prepared bay",b.unclaimed_orders()>0 and b._launch("stored_meal"))
+ check("idle customer queue allows one stored meal into the empty service buffer",field.counter.queue.is_empty() and b._launch("stored_meal"))
  check("two sources cannot own the same fresh/stored merge",not b._launch("meal") and j.line_load.stored_meal==1)
- j.line_progress.stored_meal=1.
- check("reserved portion lands at the real guarded buffer",b._arrive("stored_meal") and j.counter_stock==1)
- check("freed prepared capacity accepts exactly one surplus",b._launch("meal_to_store") and not b._launch("meal_to_store"))
+ check("surplus can enter the newly freed shelf while the dispatch throat is occupied",b._launch("meal_to_store") and not b._launch("meal_to_store"))
  check("work restarts after a cooked rack slot is freed",field.settlement_loop._running("meat"))
- # A second genuine order reaches the clerk before the first roast has
- # cleared the shared outlet. It must wait for roast-sized clearance.
- for tick in 360:
-  field.counter._walk_queue(1./60.)
-  if b.unclaimed_orders()>0:break
- check("second fresh order waits behind surplus leaving the same cooker throat",b.unclaimed_orders()>0 and not b._launch("meal") and j.line_load.meal_to_store==1)
+ j.line_progress.stored_meal=1.
+ check("reserved portion lands at the real guarded buffer before any payment",b._arrive("stored_meal") and j.counter_stock==1 and field.counter.queue.is_empty())
+ check("fresh serving waits for clearance behind surplus leaving the cooker",not b._launch("meal") and j.line_load.meal_to_store==1)
  j.line_progress.meal_to_store=(b.COOKER_HEADWAY+.1)/b.lengths.meal_to_store
- check("cleared cooker can release the next roast to a different branch",b._launch("meal") and j.line_load.meal_to_store==1 and j.line_load.meal==1)
+ check("cleared cooker can fill the second slot without an order",b._launch("meal") and j.line_load.meal_to_store==1 and j.line_load.meal==1 and j.counter_stock==1)
  var forged:Dictionary=book.snapshot().duplicate(true)
  forged.settlement.line_load.meal=1
  forged.settlement.line_load.stored_meal=1
@@ -71,28 +63,37 @@ func test_pressure()->void:
  check("forged warehouse capacity rejected",not book.restore(forged))
  mark(0,"backpressure and selective demand")
 
-func find_break()->Vector2:
+func find_break()->Dictionary:
  var layout=field.camp_layout
- var floor:Rect2=layout.bounds()
+ var bounds:Rect2=layout.bounds()
+ var installed=field.settlement_loop.conveyors.network
  var home:Vector2=layout.center("storage_wood")
- for x in range(0,3):
-  var left:=snappedf(floor.position.x+1.97+x*.25,.25)
-  for z in range(1,ceilf(floor.size.y)*2):
-   var at:=Vector2(left,snappedf(floor.position.y+z*.5,.25))
-   if not layout.reason("storage_wood",at).is_empty():continue
-   var stub:=at+Vector2(-2.10,-.67)
-   if not floor.grow(-.245).has_point(stub) and not at.is_equal_approx(home):return at
- return Vector2.INF
+ var limit:=bounds.grow(-.245)
+ # Which exterior side is available depends on the approved station layout.
+ # Find a legal move whose actual live warehouse port cannot fit along a wall.
+ for raw:String in ["wood","meat"]:
+  var stub:Vector3=installed._warehouse(raw,false,installed.DECK[raw])[-1]
+  var offset:=Vector2(stub.x,stub.z)-home
+  var x_edge:float=bounds.position.x if offset.x<0. else bounds.end.x
+  var inward:=1. if offset.x<0. else -1.
+  for ix in range(14):
+   var x:=snappedf(x_edge+inward*(1.50+ix*.125),.25)
+   for iz in range(1,ceili(bounds.size.y*2)):
+    var at:=Vector2(x,snappedf(bounds.position.y+iz*.5,.25))
+    if limit.has_point(at+offset) or at.is_equal_approx(home):continue
+    if layout.reason("storage_wood",at).is_empty():return {"raw":raw,"at":at}
+ return {}
 
 func live_break()->void:
  var b=field.settlement_loop.conveyors
  var j:Dictionary=field.inventory.settlement
  var home:Vector2=field.camp_layout.center("storage_wood")
- var bad:=find_break()
- check("found legal relocation obstructing a utility rail",bad.is_finite())
- if not bad.is_finite():return
- check("input is genuinely travelling before its port is disconnected",await until(func():return j.line_load.wood>0 and j.line_progress.wood>.02 or j.line_load.stone>0 and j.line_progress.stone>.02))
- var raw:="wood" if j.line_load.wood>0 else "stone"
+ var invalid_route:=find_break()
+ check("found a legal warehouse placement that obstructs its input port",not invalid_route.is_empty())
+ if invalid_route.is_empty():return
+ var raw:String=invalid_route.raw
+ var bad:Vector2=invalid_route.at
+ check("input is genuinely travelling before its port is disconnected",await until(func():return j.line_load[raw]>0 and j.line_progress[raw]>.02))
  var previous:float=j.line_progress[raw]
  var shelf:int=field.inventory.stored[raw]
  check("normally placed storehouse can disconnect a paid line",field.camp_layout.relocate("storage_wood",bad))
@@ -111,6 +112,8 @@ func reconnect_after_restart()->void:
  var j:Dictionary=field.inventory.settlement
  var saved:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(profile_path.path_join("route-hold-qa.json")))
  var raw:String=saved.raw
+ var result_key: String="cooked" if raw=="meat" else "processed_"+raw
+ var completed_before:=int(j[result_key])
  var home:=Vector2(saved.home[0],saved.home[1])
  b.refresh_paths()
  check("physical disconnection survives restart",b.paths[raw].is_empty() and not b.blocked_lane.is_empty())
@@ -119,7 +122,7 @@ func reconnect_after_restart()->void:
  check("relocated house can be restored",field.camp_layout.relocate("storage_wood",home))
  b.refresh_paths()
  check("original rail reconnects without resetting ownership",b.paths[raw].size()>1 and j.line_load[raw]==1)
- check("paused bundle reaches its proper paid machine",await until(func():return j["processed_"+raw]>0,1600))
+ check("paused bundle reaches its proper paid machine",await until(func():return j[result_key]>completed_before,1600))
  mark(0,"reconnected")
 
 func run()->void:
@@ -140,7 +143,7 @@ func run()->void:
  elif mode=="reconnect":await reconnect_after_restart()
  elif mode=="legacy":
   check("v8 partly delivered direct roast preserved under serial installation",j.line_load.stored_meal==1 and is_equal_approx(j.line_progress.stored_meal,.42) and j.line_load.meal==0 and j.product_store.meal==0)
-  check("only the paid serial path is installed",b.line_live("stored_meal") and not b.line_live("meal") and not b.line_live("meat"))
+  check("migrated serial purchase includes automatic meat supply without workshop or express service",b.line_live("stored_meal") and b.line_live("meat") and not b.line_live("wood") and not b.line_live("meal"))
   check("migrated roast reaches staffed counter and pays exactly once",await until(func():return j.served==1,1700))
   await ticks(160)
   check("idle outbound legacy reservation cannot repeat",j.served==1 and j.cooked==1 and j.counter_stock==0 and j.line_load==L.TRANSIT)

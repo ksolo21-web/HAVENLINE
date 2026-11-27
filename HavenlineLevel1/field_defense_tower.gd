@@ -60,6 +60,7 @@ func advance(dt: float, paid: bool) -> void:
 			art.set_build_progress(raising)
 	presented=true
 	if not active or not art: return
+	art.animate(dt)
 	art.update_sightline(world.actor.global_position,world.camera)
 	if raising<1.0:
 		raising=minf(1.0,raising+dt*1.6)
@@ -69,12 +70,12 @@ func advance(dt: float, paid: bool) -> void:
 	var target := nearest()
 	if is_instance_valid(target):
 		var aim: Vector3=target.position+Vector3.UP*.72*target.size_factor()
-		art.aim_at_world(aim)
-		if reload<=0.0:
+		var aligned: bool = art.aim_at_world(aim,dt)
+		if aligned and reload<=0.0:
 			var model: Node3D = art.projectile()
 			if model:
 				world.add_child(model)
-				model.global_position=art.muzzle_global_position()
+				model.global_transform=art.bolt.global_transform
 				art.fire(aim)
 				flights.append({"mesh":model,"target":weakref(target),"at":aim,"life":2.0})
 				world._event("tower_fire",model.global_position)
@@ -93,5 +94,21 @@ func advance(dt: float, paid: bool) -> void:
 		if not arrived and f.life>0: continue
 		model.queue_free()
 		flights.remove_at(i)
-		if arrived and alive and world.encounters.outside(target_node.position,target_node.sanctuary_margin()) and target_node.receive_hit(1):
+		if arrived and alive and world.encounters.outside(target_node.position,target_node.sanctuary_margin()) and target_node.receive_hit(1,global_position):
+			var spark: Sprite3D = art.impact()
+			world.add_child(spark)
+			spark.global_position = _visible_contact(target_node,f.at)
+			art.play_impact(spark)
 			world._event("tower_hit",f.at)
+
+# The damage point is inside the torso. Keep its screen position, but draw
+# the contact on the camera-facing fur so the wolf cannot hide the burst.
+func _visible_contact(target: Node3D, at: Vector3) -> Vector3:
+	var fur: MeshInstance3D = target.surface
+	var toward_camera: Vector3 = world.camera.global_basis.z.normalized()
+	var front: Vector3 = at + toward_camera * 3.0 * target.size_factor()
+	if fur:
+		var contact = fur.get_aabb().intersects_segment(fur.to_local(front),fur.to_local(at))
+		if contact != null:
+			return fur.to_global(contact) + toward_camera * .08
+	return at + toward_camera * .84 * target.size_factor()

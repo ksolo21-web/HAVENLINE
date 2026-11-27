@@ -181,7 +181,7 @@ func _next_supply() -> String:
 	if not world.inventory.complete(world.Progress.SECOND): return ""
 	for offset in SUPPLIES.size():
 		var kind: String = SUPPLIES[(dispatch_count+offset)%SUPPLIES.size()]
-		if world.settlement_loop.available_to_feeder(kind) and _available_surplus(kind)>0 and _supply_apron(kind).is_finite(): return kind
+		if not world.settlement_loop.conveyors.line_live(kind) and world.settlement_loop.available_to_feeder(kind) and _available_surplus(kind)>0 and _supply_apron(kind).is_finite(): return kind
 	return ""
 
 func _begin_supply_run(kind: String) -> void:
@@ -230,6 +230,13 @@ func _load_hopper_stock(kind: String) -> void:
 func _advance_supply(dt: float) -> void:
 	var journal: Dictionary = world.inventory.settlement
 	var kind: String = journal.worker_supply
+	# A connection may be bought while the porter is already on the way,
+	# or after this load was saved. Return that owned cargo to its own bay.
+	if phase in ["supply_out","supply_unload"] and world.settlement_loop.conveyors.line_live(kind):
+		supply_model.hide()
+		_sync_pack()
+		route.assign([_shelf_apron()])
+		phase = "supply_return"
 	match phase:
 		"supply_out":
 			var apron := _supply_apron(kind)
@@ -513,14 +520,14 @@ func _nearest_new_bundle() -> String:
 
 func _can_fetch_meal() -> bool:
 	var journal: Dictionary = world.inventory.settlement
-	if not world.counter or not world.counter.active or journal.worker_meal > 0: return false
+	if not world.counter or not world.counter.active or journal.worker_meal > 0 or world.settlement_loop.conveyors.line_live("stored_meal"): return false
 	if world.settlement_loop.conveyors.unclaimed_orders()==0: return false
 	if not _counter_apron().is_finite(): return false
 	return _meal_pickup_apron().is_finite()
 
 func _meal_pickup_apron() -> Vector3:
 	var journal: Dictionary = world.inventory.settlement
-	if world.inventory.is_machine_owned("meat") and RAW_RULES.waiting_meals(journal)>0:
+	if not world.settlement_loop.conveyors.line_live("meal_to_store") and world.inventory.is_machine_owned("meat") and RAW_RULES.waiting_meals(journal)>0:
 		var cooked := _cooked_apron()
 		if cooked.is_finite(): return cooked
 	if int(journal.get("product_store",{}).get("meal",0))>0: return _shelf_apron()

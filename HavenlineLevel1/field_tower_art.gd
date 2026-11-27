@@ -1,62 +1,117 @@
 extends Node3D
-const FRAME = preload("res://assets/field_world/eastern_watchtower.glb")
-const LAUNCHER = preload("res://assets/field_world/tower_launcher.glb")
-const BOLT = preload("res://assets/field_world/tower_bolt.glb")
-var frame:Node3D
-var swivel:=Node3D.new()
-var bow:Node3D
-var recoil:Tween
-var raised:=1.0
+
+const EMPLACEMENT = preload("res://assets/field_world/camp_ballista.glb")
+const Defender = preload("res://field_ballista_crew.gd")
+const UPPER_BOUNDS := AABB(Vector3(-1.02,.95,-1.02),Vector3(2.04,2.30,2.04))
+const TRAVERSE_RATE := 4.8
+const ELEVATION_RATE := 2.8
+var frame: Node3D
+var swivel: Node3D
+var bow: MeshInstance3D
+var bolt: MeshInstance3D
+var crew: Node3D
+var raised := 0.0
 var sightline_material := ShaderMaterial.new()
 var upper_parts: Array[MeshInstance3D] = []
 var cutaway_active := false
-const UPPER_BOUNDS := AABB(Vector3(-.92,1.37,-.92),Vector3(1.84,1.93,1.98))
+var stages: Array[Node3D] = []
+var bow_rest := Vector3.ZERO
+var cycle_age := 2.0
+var clock := 0.0
 
 func _ready() -> void:
-	frame=FRAME.instantiate()
+	frame = EMPLACEMENT.instantiate()
 	add_child(frame)
-	for part_name in ["Gallery","Eaves","SlateRoof"]:
-		upper_parts.append(frame.find_child(part_name,true,false) as MeshInstance3D)
-	var paint := upper_parts.back().get_active_material(0) as StandardMaterial3D
+	for part_name in ["Footings","Cabin","EmplacementDeck"]:
+		stages.append(frame.find_child(part_name,true,false) as Node3D)
+	swivel = frame.find_child("Turntable",true,false)
+	bow = swivel.find_child("BowStock",true,false)
+	bolt = bow.find_child("LoadedQuarrel",true,false)
+	bow_rest = bow.position
+	swivel.rotation.y = PI*.5
+	for part in [stages[1],stages[2]]:
+		upper_parts.append(part as MeshInstance3D)
+	var paint := bow.get_active_material(0).duplicate() as StandardMaterial3D
+	paint.emission_enabled = true
+	paint.emission = Color.WHITE
+	paint.emission_texture = paint.albedo_texture
+	paint.emission_energy_multiplier = .18
+	for part in frame.find_children("*","MeshInstance3D",true,false):
+		part.set_surface_override_material(0,paint)
 	sightline_material.shader = preload("res://assets/field_world/tower_sightline.gdshader")
 	sightline_material.set_shader_parameter("atlas",paint.albedo_texture)
 	sightline_material.set_shader_parameter("roughness",paint.roughness)
-	sightline_material.set_shader_parameter("emission_tint",paint.emission)
-	swivel.name="DeckSwivel"
-	swivel.position=Vector3(0,2.10,0)
-	add_child(swivel)
-	bow=LAUNCHER.instantiate()
-	swivel.add_child(bow)
+	sightline_material.set_shader_parameter("emission_tint",Color(.18,.18,.18))
 	set_build_progress(raised)
 
-func set_build_progress(value:float) -> void:
-	raised=clampf(value,0.,1.)
+func set_build_progress(value: float) -> void:
+	raised = clampf(value,0.,1.)
 	if not frame:return
-	var stages:=["Footings","Trestle","Gallery","Eaves","SlateRoof"]
 	for i in stages.size():
-		var part:=frame.find_child(stages[i],true,false) as Node3D
-		if part:
-			var t:=clampf(raised*stages.size()-i,0.,1.)
-			part.visible=t>.001
-			part.position.y=lerpf(-.28,0.,smoothstep(0.,1.,t))
-	swivel.visible=raised>.88
+		var t := clampf(raised*4.-i,0.,1.)
+		stages[i].visible = t>.001
+		stages[i].position.y = lerpf(-.15,0.,smoothstep(0.,1.,t))
+	swivel.visible = raised>.75
+	if swivel.visible and not crew:
+		crew = Defender.new()
+		crew.name = "BallistaOperator"
+		crew.position = Vector3(-.34,.015,-.43)
+		crew.rotation.y = .38
+		swivel.add_child(crew)
+	if crew:
+		crew.visible = raised>.84
+		crew.operate(bow,0.,0.,0.)
 
-func aim_at_world(at:Vector3) -> void:
-	if not swivel.is_inside_tree() or at.distance_squared_to(swivel.global_position)<.01:return
-	swivel.look_at(at,Vector3.UP,true)
+func aim_at_world(at: Vector3, delta: float = 10.) -> bool:
+	var local := to_local(at)-swivel.position
+	var desired_yaw := atan2(local.x,local.z)
+	var turn := angle_difference(swivel.rotation.y,desired_yaw)
+	swivel.rotation.y += clampf(turn,-TRAVERSE_RATE*delta,TRAVERSE_RATE*delta)
+	var local_target := swivel.to_local(at)-bow_rest
+	var desired_pitch := clampf(-atan2(local_target.y-.10,Vector2(local_target.x,local_target.z).length()),-.48,.56)
+	bow.rotation.x = move_toward(bow.rotation.x,desired_pitch,ELEVATION_RATE*delta)
+	return absf(angle_difference(swivel.rotation.y,desired_yaw)) < .06 and absf(bow.rotation.x-desired_pitch)<.07
+
+func animate(dt: float) -> void:
+	clock += dt
+	cycle_age += dt
+	var kick := 1.-smoothstep(0.,.20,cycle_age)
+	var draw := sin(PI*clampf((cycle_age-.16)/.91,0.,1.))
+	bow.position = bow_rest+Vector3(0.,0.,-.11*kick)
+	bolt.visible = cycle_age>=.87
+	if crew and crew.visible:
+		crew.operate(bow,draw,kick,sin(2.3*clock))
 
 func muzzle_global_position() -> Vector3:
-	return bow.to_global(Vector3(0,.04,.65))
+	return bolt.global_position
 
 func projectile() -> Node3D:
-	return BOLT.instantiate() as Node3D
+	var shot := MeshInstance3D.new()
+	shot.name = "BallistaQuarrel"
+	shot.mesh = bolt.mesh
+	shot.set_surface_override_material(0,bolt.get_active_material(0))
+	shot.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	return shot
 
-func fire(at:Vector3) -> void:
-	aim_at_world(at)
-	if recoil:recoil.kill()
-	bow.position.z=-.105
-	recoil=create_tween()
-	recoil.tween_property(bow,"position:z",0.0,.21).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+func impact() -> Sprite3D:
+	var spark := Sprite3D.new()
+	spark.name = "BallistaImpact"
+	spark.texture = preload("res://assets/field_world/ballista_impact.png")
+	spark.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	spark.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	spark.pixel_size = .010
+	spark.hframes = 6
+	spark.render_priority = 2
+	return spark
+
+func play_impact(spark: Sprite3D) -> void:
+	var fade := spark.create_tween()
+	fade.tween_method(func(frame: float): spark.frame=mini(5,floori(frame)),0.,6.,.21)
+	fade.tween_callback(spark.queue_free)
+
+func fire(_target: Vector3) -> void:
+	cycle_age = 0.
+	animate(0.)
 
 # The fixed orthographic camera projects along parallel rays at both pinch
 # settings. Leave the original material in place when those rays miss the tower.

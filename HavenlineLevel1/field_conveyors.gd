@@ -84,7 +84,12 @@ func refresh_paths()->void:
 	var live:Array[String]=[]
 	for lane:String in LANES:
 		if line_live(lane):live.append(lane)
+	var previous_aisles = network.aisles
 	var physical:Dictionary=network.rebuild(live)
+	if world.field_ready and network.aisles and previous_aisles != network.aisles:
+		# The last payment can install a bench or rail under the person paying.
+		# Check only on an actual rebuild; retain the live joystick gesture.
+		world.clear_installed_floor(network.aisles)
 	blocked_lane=""
 	for lane:String in LANES:
 		var route:PackedVector3Array=physical.get(lane,PackedVector3Array()).duplicate()
@@ -134,10 +139,13 @@ func _demand(j:Dictionary)->int:
 func unclaimed_orders()->int:
 	return _demand(world.inventory.settlement)
 
+func _buffer_needs_meal(j:Dictionary)->bool:
+	return world.counter.active and j.counter_stock < Rules.COUNTER_RACK_CAPACITY and not Logistics.merge_busy(j)
+
 func _launch(lane:String)->bool:
 	var book=world.inventory
 	var j:Dictionary=book.settlement
-	if j.line_load[lane]!=0:return false
+	if not line_live(lane) or lengths.get(lane,0.)<=0. or j.line_load[lane]!=0:return false
 	if lane=="meal" or lane=="meal_to_store":
 		# The two destinations share the cooker's physical discharge throat.
 		var other:="meal_to_store" if lane=="meal" else "meal"
@@ -151,9 +159,11 @@ func _launch(lane:String)->bool:
 		if Logistics.rack(j,Logistics.INPUT_FOR[lane])<1 or not Logistics.receiving_space(j,lane):return false
 	elif lane=="meal_to_store":
 		if Rules.waiting_meals(j)<1 or not Logistics.receiving_space(j,"meal"):return false
-		if line_live("meal") and _demand(j)>0 and not Logistics.merge_busy(j) and j.counter_stock<Rules.COUNTER_RACK_CAPACITY:return false
+		# A full buffer, an occupied merge or a disconnected express path
+		# diverts the next roast to storage. Orders decide the sale only.
+		if lengths.get("meal",0.)>0. and _buffer_needs_meal(j):return false
 	else:
-		if _demand(j)<1 or Logistics.merge_busy(j) or j.counter_stock>=Rules.COUNTER_RACK_CAPACITY:return false
+		if not _buffer_needs_meal(j):return false
 		if lane=="stored_meal":
 			if j.product_store.meal<1:return false
 			j.product_store.meal-=1

@@ -137,10 +137,10 @@ func run():
 	tower.show();tower.set_build_progress(1.)
 	tower.aim_at_world(Vector3(13,0,6))
 	var bolt=tower.projectile();game.add_child(bolt)
-	record("separate modeled bolt and world launch anchor",bolt.find_children("*","MeshInstance3D",true,false).size()>0 and tower.muzzle_global_position().y>1.85)
+	record("separate modeled bolt and world launch anchor",bolt is MeshInstance3D and bolt.mesh==tower.bolt.mesh and tower.muzzle_global_position().y>1.85)
 	bolt.queue_free()
-	tower.set_build_progress(.35);record("frame builds before roof",not tower.frame.find_child("SlateRoof",true,false).visible)
-	tower.set_build_progress(1.);record("completed roof visible",tower.frame.find_child("SlateRoof",true,false).visible)
+	tower.set_build_progress(.35);record("footings build before armed deck",not tower.frame.find_child("EmplacementDeck",true,false).visible and not tower.swivel.visible)
+	tower.set_build_progress(1.);record("completed deck exposes the bow and its operator",tower.frame.find_child("EmplacementDeck",true,false).visible and tower.bow.is_visible_in_tree() and tower.crew.is_visible_in_tree())
 	# The usual return from the stone drill crosses the projected roof.
 	var stone_route := Vector3(6.168,0,-4.102)
 	var muzzle: Transform3D = tower.swivel.global_transform
@@ -152,7 +152,7 @@ func run():
 		var framed: bool = tower.cutaway_active and tower.upper_parts.all(func(part): return part.visible and part.material_override==tower.sightline_material)
 		tower.update_sightline(Vector3(4.9,0,.2),game.camera)
 		var restored: bool = not tower.cutaway_active and tower.upper_parts.all(func(part): return part.visible and part.material_override==null)
-		record("tower reveals player on stone route and restores original roof at %dx" % zoom,framed and restored and muzzle.is_equal_approx(tower.swivel.global_transform))
+		record("tower reveals player on stone route and restores original cabin and deck materials at %dx" % zoom,framed and restored and muzzle.is_equal_approx(tower.swivel.global_transform))
 	game.camera.position=tower.global_position+Vector3(7,11,11);game.set_zoom_ratio(2.)
 	await process_frame;plate("Eastern-watchtower-gameplay-2x")
 	if DisplayServer.get_name()!="headless":

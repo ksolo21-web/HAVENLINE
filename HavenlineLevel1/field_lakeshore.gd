@@ -5,9 +5,9 @@ const Workshops = preload("res://field_processors.gd")
 var world
 const River=preload("res://assets/lakeshore/river_geometry.gd")
 const Cooker=preload("res://assets/paid_workshops/cooker_processor.glb")
-const COOKER_AT := Vector3(-.10,0,-7.22)
-const APRON := Vector3(-1.04,0,-6.06)
-const OUTPUT_APRON := Vector3(.84,0,-6.06)
+const COOKER_AT := Vector3(.55,0,-6.20)
+const APRON := Vector3(-.39,0,-5.04)
+const OUTPUT_APRON := Vector3(1.49,0,-5.04)
 const ACCESS_RADIUS := .77
 const LAKE_XZ:=Vector2(-33.8,16.)
 const BODY := Rect2(-1.41,-.67,2.82,1.34)

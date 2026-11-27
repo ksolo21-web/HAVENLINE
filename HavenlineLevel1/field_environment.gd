@@ -28,7 +28,7 @@ var payment_costs: Node3D
 const CounterLayout = preload("res://field_counter.gd")
 # The last purchase opens a work aisle along the north wall. The gates and
 # the main lanes to the storehouse, hearth and eastern defense stay in place.
-const COURTS := [Vector4(-5,-4,5,4),Vector4(-5.5,-5.5,7.5,5),Vector4(-5.5,-9,10,5.4)]
+const COURTS := [Vector4(-5,-4,5,4),Vector4(-5.5,-5.5,7.5,5),Vector4(-10,-9,10,5.4)]
 var counter_center_x := CounterLayout.CENTER_X
 var perimeter_stage := -1
 var wall_revision := 0
@@ -58,6 +58,7 @@ var reveal_tween: Tween
 var gate_art: Array[MeshInstance3D] = []
 var hearth_footprint: CollisionShape3D
 var hearth_shell: Node3D
+var hearth_fire := preload("res://field_hearth_fire.gd").new()
 var coal_glow: OmniLight3D
 var hearth_stones: Array[MeshInstance3D] = []
 var ignition := ShaderMaterial.new()
@@ -410,16 +411,17 @@ func install_hearth() -> void:
 	var fire := OmniLight3D.new()
 	coal_glow = fire
 	fire.name = "CoalGlow"
-	fire.light_color = Color("ffa457")
-	fire.light_energy = .62
-	fire.omni_range = 3.15 * HEARTH_SCALE
-	fire.position = Vector3(0,.60,.8) * HEARTH_SCALE
+	fire.light_color = Color("ff9d4b")
+	fire.light_energy = .84
+	fire.omni_range = 3.0 * HEARTH_SCALE
+	fire.position = Vector3(.03,.68,.72) * HEARTH_SCALE
 	base.add_child(fire)
 	ignition.shader = preload("res://assets/field_camp/hearth_ignition.gdshader")
 	for m: MeshInstance3D in shell.find_children("*","MeshInstance3D",true,false):
 		m.layers = 2
 		hearth_stones.append(m)
-	fire.light_cull_mask = 1
+	fire.light_cull_mask = 3
+	hearth_fire.install(shell,fire)
 	for body in base.get_children():
 		if body is StaticBody3D:
 			var shape: CollisionShape3D = body.get_child(0)
@@ -676,6 +678,7 @@ func set_upgrade_payment(remaining: Dictionary) -> void:
 func set_built(built: bool, animate := true) -> void:
 	if camp_state == int(built): return
 	camp_state = int(built)
+	hearth_fire.set_fired(built)
 	set_perimeter(maxi(1,perimeter_stage) if built else 0,animate)
 	if built:
 		for tree in seasonal_pines:
@@ -698,9 +701,6 @@ func set_built(built: bool, animate := true) -> void:
 		ignition.set_shader_parameter("heat",0.)
 		reveal_tween.tween_method(func(t:float): ignition.set_shader_parameter("heat",t),0.,1.,.06).set_delay(.035)
 		reveal_tween.tween_method(func(t:float): ignition.set_shader_parameter("heat",t),1.,0.,.33).set_delay(.18)
-		coal_glow.light_energy = 0.
-		reveal_tween.tween_property(coal_glow,"light_energy",1.0,.12).set_delay(.08)
-		reveal_tween.tween_property(coal_glow,"light_energy",.62,.25).set_delay(.20)
 		reveal_tween.tween_method(func(t:float): snow.set_shader_parameter("reveal",t),0.,1.,.34).set_delay(.075)
 		palisades.position.y = -1.55
 		reveal_tween.tween_property(palisades,"position:y",0.,.23).set_delay(.23).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
@@ -716,4 +716,3 @@ func set_built(built: bool, animate := true) -> void:
 func _clear_ignition() -> void:
 	for mesh in hearth_stones:
 		mesh.material_overlay = null
-	coal_glow.light_energy = .62

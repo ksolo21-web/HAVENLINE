@@ -385,7 +385,22 @@ func check_saw_sightline() -> void:
 		game.set_zoom_ratio(zoom)
 		place(game.processors.APRONS.wood)
 		for frame in 3: await physics_frame
-		check("west saw stays visible at %dx zoom" % zoom,not house.parts.Roof.visible and is_equal_approx(house.parts.BackWall.scale.y,.39))
+		var visible := true
+		var toward_camera: Vector3 = game.camera.global_basis.z.normalized()
+		var roof_meshes: Array[Node] = house.parts.Roof.find_children("*", "MeshInstance3D", true, false)
+		if house.parts.Roof is MeshInstance3D: roof_meshes.append(house.parts.Roof)
+		for part in roof_meshes:
+			if not part.is_visible_in_tree() or not part.mesh: continue
+			for height: float in [.45, .90, 1.40]:
+				var body_point: Vector3 = game.actor.global_position + Vector3.UP * height
+				if part.get_aabb().intersects_segment(part.to_local(body_point), part.to_local(body_point + toward_camera * 16.)) != null:
+					visible = false
+		check("west saw operator stays visible through the warehouse sightline at %dx zoom" % zoom, not roof_meshes.is_empty() and visible)
+		# Check cutaway itself from the working side where the pitched roof
+		# really crosses the actor, independently of the default saw location.
+		place(house.to_global(Vector3(.07, 0, -2.43)))
+		for frame in 3: await physics_frame
+		check("roof and back wall yield when the actual camera crosses them at %dx zoom" % zoom,not house.parts.Roof.visible and is_equal_approx(house.parts.BackWall.scale.y,.39))
 		check("rear cutaway keeps the physical storehouse closed at %dx zoom" % zoom,not house.doors_open and house.collision.collision_layer==1 and not house.is_interior_visible())
 		place(Vector3(1.72,0,1.8))
 		for frame in 3: await physics_frame
@@ -465,16 +480,28 @@ func inspect_service_aisles() -> void:
 		var exit:Vector3=gate.global_position-inward*1.8
 		var entry:Vector3=gate.global_position+inward*1.8
 		place(exit)
-		for tick in 90: game.step_technical_gates(1./60.)
-		await physics_frame
+		# The hinge collider belongs to the physics server. Allow each automatic
+		# hinge update to reach that server before testing capsule movement.
+		for tick in 90:
+			game.step_technical_gates(1./60.)
+			await physics_frame
+			if is_equal_approx(gate.angle,PI/2): break
 		check(gate.gate_id+" automatically opens from the exterior",is_equal_approx(gate.angle,PI/2) and not game.gate_button.visible)
 		for endpoint:Vector3 in [entry,exit]:
-			var previous:Vector3=game.actor.global_position
-			game.actor.move_and_collide(endpoint-previous)
-			game.previous_dry_position=previous
-			game.constrain_private_snow_travel()
-			var crossed:bool=game.actor.global_position.distance_to(endpoint)<.04
-			check(gate.gate_id+(" traverses inward" if endpoint==entry else " traverses outward"),crossed)
+			var label:String=gate.gate_id+(" traverses inward" if endpoint==entry else " traverses outward")
+			var contacts:Dictionary={}
+			for tick in 100:
+				var previous:Vector3=game.actor.global_position
+				if previous.distance_to(endpoint)<.035:break
+				game.step_technical_gates(1./60.)
+				var hit:KinematicCollision3D=game.actor.move_and_collide((endpoint-previous).limit_length(.085))
+				if hit:contacts[str(hit.get_collider().get_path())]=true
+				game.previous_dry_position=previous
+				game.constrain_private_snow_travel()
+				await physics_frame
+			var feet:Vector3=game.actor.global_position
+			observed[label]={"ending_xz":[feet.x,feet.z],"target_xz":[endpoint.x,endpoint.z],"contacts":contacts.keys()}
+			check(label,feet.distance_to(endpoint)<.04)
 
 func run() -> void:
 	var args=OS.get_cmdline_user_args()

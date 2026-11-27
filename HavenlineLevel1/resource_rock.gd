@@ -13,6 +13,7 @@ var last_sequence := 0
 var cooldown := 0.0
 var _mesh: MeshInstance3D
 
+var fracture := preload("res://mining_break.gd").new()
 var bank_body: StaticBody3D
 
 func attach_bank_body() -> void:
@@ -33,14 +34,17 @@ func set_size(factor: float) -> void:
 
 func restore_strikes(count: int) -> void:
 	strikes = count
-	set_size(1.0 - 0.18 * count)
+	if bank_body:
+		fracture.show_contacts(_mesh,count)
 
 func set_available(available: bool) -> void:
 	phase = "seated" if available else "mined"
 	strikes = 0 if available else 3
 	_mesh.visible = available
 	set_bank_active(available)
+	if bank_body: fracture.show_contacts(_mesh,0)
 	if available:
+		fracture.clear()
 		cooldown = 0.0
 		set_size(1.0)
 
@@ -84,14 +88,17 @@ func strike(source: String, sequence: int, feet: Vector3, facing: Vector3, surfa
 		return false
 	cooldown = CONTACT_COOLDOWN
 	strikes += 1
-	if _mesh:
-		set_size(1.0 - 0.18 * strikes)
+	if bank_body:
+		fracture.show_contacts(_mesh,strikes)
 	if strikes >= 3:
 		phase = "mined"
+		if bank_body and has_meta("resource_kind"):
+			fracture.separate(_mesh,get_meta("resource_kind"))
 		if _mesh:
 			_mesh.hide()
 		set_bank_active(false)
 	return true
 
 func advance(dt: float) -> void:
+	fracture.advance(dt)
 	cooldown = maxf(cooldown - clampf(dt, 0.0, 0.04), 0.0)

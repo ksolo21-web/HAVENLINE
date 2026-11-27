@@ -1,7 +1,7 @@
 extends Node3D
 ## Workshop state is presentation only. The settlement ledger owns all goods.
-const CENTERS = {"wood":Vector3(-3.43,0,-7.35),"stone":Vector3(7.55,0,-7.00)}
-const APRONS = {"wood":Vector3(-2.98,0,-5.88),"stone":Vector3(7.80,0,-5.27)}
+const CENTERS = {"wood":Vector3(-7.55,0,-6.85),"stone":Vector3(-7.0,0,-1.55)}
+const APRONS = {"wood":Vector3(-7.1,0,-5.38),"stone":Vector3(-6.75,0,.18)}
 const ACCESS_RADIUS := .81
 const MACHINES = {
 	"wood":preload("res://assets/paid_workshops/saw_station.glb"),

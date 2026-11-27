@@ -147,6 +147,7 @@ func _ready() -> void:
 	last_good = inventory.snapshot()
 	lifecycle.register("starter-wood","wood",resource_tree)
 	lifecycle.register("starter-stone","stone",resource_rock)
+	field_env.perimeter_changed.connect(_site_starter_quarry)
 	rocks.append(resource_rock)
 	_configure_stem(resource_tree)
 	trees.append(resource_tree)
@@ -172,12 +173,22 @@ func _ready() -> void:
 	settlement_loop.install(self)
 	camp_layout = preload("res://field_camp_layout.gd").new()
 	camp_layout.install(self)
-	if not camp_layout.restore(inventory.world_state.get("layout", {})):
+	if not camp_layout.restore(inventory.world_state.get("layout", {}), inventory.world_state.get("previous_kitchen_site")):
 		persist_blocked = true
 		persist_error = "Saved camp layout could not be restored."
-	elif inventory.world_state.has("layout") and not inventory.world_state.layout.is_empty():
+	elif not inventory.world_state.is_empty():
+		# A previous release can have saved the player in the snow where a paid
+		# workshop or conveyor now stands, even with no custom building moves.
 		lifecycle._restore_actor(inventory.world_state.get("player"),int(inventory.world_state.version))
-		_clear_paid_machine_site()
+		if camp_active:
+			settlement_loop.conveyors.refresh_paths()
+			var aisles = settlement_loop.conveyors.network.aisles
+			if aisles:
+				actor.global_position = aisles.resume_position(actor.global_position, float(layout.actor_radius))
+			else:
+				_clear_paid_machine_site()
+			camera.global_position = actor.global_position + camera_follow_offset
+			tracks.reset_actor(actor)
 	previous_dry_position = actor.position
 	field_ready = true
 	var home_compass := preload("res://field_navigation.gd").new()
@@ -340,16 +351,21 @@ func _input(event: InputEvent) -> void:
 		return
 	super(event)
 
+func _site_starter_quarry() -> void:
+	# A paid camp protects its new work floor. Retain the same mine, damage
+	# and regrowth clock at the open working face outside the southern gate.
+	if field_env.perimeter_stage > 0:
+		resource_rock.position = Vector3(-2.3,0.,11.75)
+
 func selected_tool() -> String:
-	# Prefer the pick when the orbit passes a bank in a mixed grove. Inner
-	# targets also participate through the usual nearest-target selection.
+	# Select against the bank face. Using its centre drops the pick on the
+	# outer edge of real strikes, especially when a pine is also in reach.
 	for rock in rocks:
 		if not reachable(rock): continue
-		var offset: Vector3 = rock.global_position - actor.global_position
-		var side := offset.dot(Orbit.CAMERA_RIGHT) / Orbit.RADIUS_SIDE
-		var depth := offset.dot(Orbit.CAMERA_NEAR) / Orbit.RADIUS_DEPTH
-		var relative := Vector2(side,depth).length() / float(character_kit.reach_scale)
-		if relative >= .64 and relative <= 1.24:
+		var part: MeshInstance3D = surfaces[rock][0]
+		var bounds: AABB = part.global_transform * part.mesh.get_aabb()
+		var nearest: Vector3 = actor.global_position.clamp(bounds.position,bounds.end)
+		if field_env.travel_clear(actor.global_position,nearest):
 			return "pickaxe"
 	return super()
 
@@ -667,7 +683,7 @@ func _physics_process(dt: float) -> void:
 	_refresh_hud_field(danger)
 
 func is_camp_healing() -> bool:
-	return player_hp > 0 and player_hp < MAX_HP and reset_time <= 0.0 and not persist_blocked and not closing and field_env.is_inside_camp(actor.global_position)
+	return player_hp > 0 and player_hp < MAX_HP and reset_time <= 0.0 and not persist_blocked and not closing and field_env.hearth_fire.fired and field_env.is_inside_camp(actor.global_position)
 
 func _advance_camp_heal(dt: float) -> void:
 	if not is_camp_healing():
@@ -686,7 +702,8 @@ func _advance_camp_heal(dt: float) -> void:
 		opening_hud.set_health(player_hp,MAX_HP)
 		return
 	opening_hud.set_health(player_hp,MAX_HP)
-	_combat_number(actor.position+Vector3.UP*2.16,"+%d HP" % award,Color("#83f4b1"))
+	field_env.hearth_fire.restore_warmth()
+	_combat_number(actor.position+Vector3.UP*2.16,"Hearth  +%d HP" % award,Color("#baf48b"))
 	_record_field_event("camp_heal",actor.position)
 
 func _step_foot_audio(inside: bool) -> void:
@@ -858,6 +875,20 @@ func _step_receivers() -> void:
 	depot.step(at,selected if selected == depot_target else "")
 	if not selected.is_empty() and selected != depot_target:
 		carry.visit(selected)
+
+func clear_installed_floor(aisles) -> void:
+	var feet := actor.global_position
+	var clear: Vector3 = aisles.resume_position(feet, float(layout.actor_radius))
+	if not clear.is_equal_approx(feet):
+		actor.global_position = clear
+		previous_dry_position = clear
+		tracks.reset_actor(actor)
+	if survivor and survivor.actor and survivor.actor.is_visible_in_tree():
+		var companion: Node3D = survivor.actor
+		var stand: Vector3 = aisles.resume_position(companion.global_position, float(layout.actor_radius))
+		if not companion.global_position.is_equal_approx(stand):
+			companion.global_position = stand
+			tracks.reset_actor(companion)
 
 func _clear_paid_machine_site() -> void:
 	if not processors or not lakeshore: return

@@ -162,7 +162,7 @@ func _update_belt_mix() -> void:
 	world.sound.set_conveyor_proximity(gain)
 
 func available_to_feeder(kind: String) -> bool:
-	return can_transact() and kind in Rules.KINDS and world.inventory.is_machine_owned(kind) and int(world.inventory.settlement.hoppers[kind])+int(world.inventory.settlement.line_load[kind])+world.carry.incoming(kind,kind) < Rules.HOPPER_CAPACITY
+	return _simulation_active() and kind in Rules.KINDS and world.inventory.is_machine_owned(kind) and int(world.inventory.settlement.hoppers[kind])+int(world.inventory.settlement.line_load[kind])+world.carry.incoming(kind,kind) < Rules.HOPPER_CAPACITY
 
 func _running(kind: String) -> bool:
 	var journal: Dictionary = world.inventory.settlement
@@ -226,7 +226,10 @@ func cook() -> bool:
 
 func _meal_pickup(at:Vector3)->Vector3:
 	var j:Dictionary=world.inventory.settlement
-	if Rules.waiting_meals(j)>0 and world.lakeshore.at_output(at):
+	# A paid outfeed owns every new serving until it reaches its destination.
+	# Personal and worker-held servings from older saves can still be sold.
+	if world.inventory.complete(Progress.FOOD_LINE):return Vector3.INF
+	if not conveyors.line_live("meal_to_store") and Rules.waiting_meals(j)>0 and world.lakeshore.at_output(at):
 		return world.lakeshore.cooker_output.global_position
 	if j.product_store.meal>0 and conveyors.unclaimed_orders()>0 and world.depot.at_loading_area(at):
 		j.product_store.meal-=1
@@ -330,25 +333,37 @@ func hint(previous: String, danger: bool) -> String:
 	elif journal.worker_meal > 0 or world.counter.worker_serving:
 		hint_ = "Survivor serving the north counter."
 		target = world.counter.service_point.global_position
-	elif Rules.waiting_meals(journal) > 0:
+	elif conveyors.line_live("stored_meal") and (hot or conveyors.unclaimed_orders()>0 or journal.counter_stock>0 or Rules.waiting_meals(journal)>0):
+		hint_ = "Cooker feeds the counter automatically." if world.carry.available_on_shelf("meat")>0 or hot or journal.counter_stock>0 or journal.line_load.values().has(1) or journal.product_store.meal>0 else "Bring meat to the storehouse to supply the cooker."
+		if world.inventory.carried.meat>0:target=world.depot.apron.global_position
+	elif conveyors.line_live("meal_to_store") and journal.product_store.meal>0 and conveyors.unclaimed_orders()>0:
+		hint_ = "Collect a roast at the storehouse for the north counter."
+		target = world.depot.apron.global_position
+	elif not conveyors.line_live("meal_to_store") and Rules.waiting_meals(journal) > 0:
 		hint_ = "Collect a roast from the cooker outfeed."
 		target = world.lakeshore.output_apron_position()
 	elif hot:
-		hint_ = "Cooking  ·  The roast will wait at the outfeed."
+		hint_ = "Cooking  ·  Sending roast to storage." if conveyors.line_live("meal_to_store") else "Cooking  ·  The roast will wait at the outfeed."
 	elif not journal.rescued:
 		hint_ = "Rescue survivor · %d wood at the southwest plot" % Progress.units(world.inventory.survivor_cost-int(journal.survivor_wood)) if not journal.survivor_paid else "Approach the survivor by the south grove."
 		target = works.PLOT_AT if not journal.survivor_paid else world.survivor.RESCUE
 	elif journal.served == 0:
-		hint_ = "Take meat to the camp cooker inlet." if world.inventory.carried.meat > 0 else "Hunt for meat to load the camp cooker."
-		if world.inventory.carried.meat > 0: target = world.lakeshore.apron_position()
+		if conveyors.line_live("meat"):
+			hint_ = "Deliver meat to the storehouse for the cooker."
+			if world.inventory.carried.meat>0:target=world.depot.apron.global_position
+		else:
+			hint_ = "Take meat to the camp cooker inlet." if world.inventory.carried.meat > 0 else "Hunt for meat to load the camp cooker."
+			if world.inventory.carried.meat > 0: target = world.lakeshore.apron_position()
 	elif not world.inventory.complete(Progress.TOWER) or not world.inventory.complete(Progress.AXES):
 		return previous
 	elif journal.processed_wood == 0:
-		hint_ = "Take wood to the saw inside the north fence."
-		if world.inventory.carried.wood > 0: target = world.processors.APRONS.wood
+		var automatic:bool = conveyors.line_live("wood")
+		hint_ = "Deliver wood to the storehouse for the saw." if automatic else "Take wood to the saw inside the north fence."
+		if world.inventory.carried.wood > 0: target = world.depot.apron.global_position if automatic else world.processors.APRONS.wood
 	elif journal.processed_stone == 0:
-		hint_ = "Take stone to the drill inside the north fence."
-		if world.inventory.carried.stone > 0: target = world.processors.APRONS.stone
+		var automatic:bool = conveyors.line_live("stone")
+		hint_ = "Deliver stone to the storehouse for the drill." if automatic else "Take stone to the drill inside the north fence."
+		if world.inventory.carried.stone > 0: target = world.depot.apron.global_position if automatic else world.processors.APRONS.stone
 	elif journal.owl_hits == 0:
 		hint_ = "Meet a wolf outside camp with your owl."
 	elif journal.worker_deliveries == 0:

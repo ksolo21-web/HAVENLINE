@@ -113,7 +113,6 @@ func survey(paths:Dictionary) -> void:
 		for i in range(1,path.size()):
 			var a:=path[i-1]
 			var b:=path[i]
-			if a.y<0. or b.y<0.:continue
 			var length:=a.distance_to(b)
 			var steps:=maxi(1,ceili(length/.16))
 			for j in steps:
@@ -181,7 +180,7 @@ func track(path:PackedVector3Array) -> void:
 	var skip_to:=-1
 	for i in range(1,path.size()):
 		if i<=skip_to:continue
-		var corner_end:int=fitted.place_corner(path,i-1,_pier_width) if path[i-1].y>=0 and path[i].y>=0 else i-1
+		var corner_end:int=fitted.place_corner(path,i-1,_pier_width)
 		if corner_end>=i:
 			skip_to=corner_end
 			continue
@@ -190,11 +189,6 @@ func track(path:PackedVector3Array) -> void:
 		var delta:=b-a
 		if delta.length_squared()<.00001:continue
 		if Vector2(delta.x,delta.z).length()<.003:continue
-		if a.y<-.12 and b.y<-.12:
-			var underground:=direction(delta).x
-			_section(a,b,underground,underground)
-			_hardware(a,b,false)
-			continue
 		var side:=direction(delta).x
 		var prev:=side
 		var next:=side

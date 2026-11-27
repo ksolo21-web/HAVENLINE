@@ -122,7 +122,7 @@ func run() -> void:
 	check("legacy_profile_can_heal",world.player_hp==18)
 	world.player_hp=world.MAX_HP-1
 	world._advance_camp_heal(2.5)
-	check("last_actual_hp_only",world.player_hp==world.MAX_HP and world.camp_heal_elapsed==0. and world.get_children().any(func(node):return node is Label3D and node.text=="+1 HP"))
+	check("last_actual_hp_only",world.player_hp==world.MAX_HP and world.camp_heal_elapsed==0. and world.get_children().any(func(node):return node is Label3D and node.text=="Hearth  +1 HP"))
 	var event_count:int=world.events.size()
 	world._advance_camp_heal(10.)
 	check("full_hp_has_no_award_or_repeat",world.events.size()==event_count)

@@ -79,7 +79,8 @@ func snapshot() -> Dictionary:
 		ground.append([id,d.kind,at.x,at.z,maxf(0.0,DROP_LIFETIME_SECONDS-float(d.age))])
 	var player := {"x":world.actor.position.x,"z":world.actor.position.z,"yaw":world.actor.rotation.y,
 		"hp":world.player_hp,"camp_heal_elapsed":world.camp_heal_elapsed,"protection_left":world.player_invulnerability,"fall_left":world.reset_time}
-	return {"version":VERSION,"layout":world.camp_layout.snapshot() if world.camp_layout else {}, "player":player,"cooling":cooling.duplicate(),"partial":partial.duplicate(),"drops":ground,"serial":world.drop_id,"pack":world.encounters.snapshot()}
+	return {"version":VERSION,"previous_kitchen_site":world.camp_layout != null and world.camp_layout.previous_kitchen_site,
+		"layout":world.camp_layout.snapshot() if world.camp_layout else {}, "player":player,"cooling":cooling.duplicate(),"partial":partial.duplicate(),"drops":ground,"serial":world.drop_id,"pack":world.encounters.snapshot()}
 
 static func _number(v: Variant) -> bool:
 	return (v is float or v is int) and is_finite(float(v))

@@ -28,20 +28,28 @@ func common_floor() -> Vector3:
 func verify_handoffs() -> void:
 	var desk = field.settlement_loop.works
 	var point := common_floor()
-	check("real cook and saw have a shared standing area with physical body clearance",point.is_finite())
-	if not point.is_finite(): return
-	park(point)
-	observations["standing_point"]=[point.x,point.z]
+	var shared_edge:=point.is_finite()
+	observations["overlapping_aprons"]=shared_edge
 	for kind:String in ["wood","meat"]:
 		var book=field.inventory
+		var connected:bool=field.settlement_loop.conveyors.line_live(kind)
+		var at:Vector3=point if shared_edge else field.survivor._supply_apron(kind)
+		check(kind+" reachable from the public service aisle",at.is_finite())
+		if not at.is_finite():continue
+		park(at)
 		check(kind+" pickup is owned",book.collect("qa-one-off-workshop-item-"+kind,kind))
 		field.carry.sync(true)
 		var before: int = book.settlement.hoppers[kind]
 		var remaining: int = book.carried[kind]
-		check(kind+" chooses its own inlet at the overlapping floor",desk._site()==kind)
-		var arrived := await until(func(): return book.carried[kind]==remaining-1 and book.settlement.hoppers[kind]==before+1,80)
-		check(kind+" physically arrives in its own paid inlet",arrived)
-		observations[kind]={"selected_before_handoff":kind,"hopper_before":before,"hopper_after":book.settlement.hoppers[kind],"carried_after":book.carried[kind]}
+		if connected:
+			check(kind+" paid machinery does not request a manual handoff",desk._site()!=kind and desk.demand(kind,kind)==0)
+			await ticks(45)
+			check(kind+" preserves a passing player's personal stack",book.carried[kind]==remaining and desk.active!=kind)
+		else:
+			check(kind+" unconnected inlet accepts the matching nearby bundle",desk._site()==kind)
+			var arrived := await until(func(): return book.carried[kind]==remaining-1 and book.settlement.hoppers[kind]==before+1,80)
+			check(kind+" physically arrives in its unconnected paid inlet",arrived)
+		observations[kind]={"standing_point":[at.x,at.z],"connected":connected,"hopper_before":before,"hopper_after":book.settlement.hoppers[kind],"carried_after":book.carried[kind]}
 
 func verify_walks() -> void:
 	field.set_physics_process(false)

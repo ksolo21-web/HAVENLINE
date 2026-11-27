@@ -39,7 +39,7 @@ func _site() -> String:
 	var best_distance := INF
 	var floor_point := Vector2(here.x,here.z)
 	for kind: String in world.settlement_loop.Rules.KINDS:
-		if not world.inventory.is_machine_owned(kind): continue
+		if not world.inventory.is_machine_owned(kind) or world.settlement_loop.conveyors.line_live(kind): continue
 		var wall: Rect2 = world.lakeshore._footprint(0.) if kind == "meat" else world.processors._rect(kind,0.)
 		var distance: float = world.Reach.distance_to_rect(floor_point,wall)
 		if wall.has_point(floor_point) or distance > world.Reach.NEAR: continue

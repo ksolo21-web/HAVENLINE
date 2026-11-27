@@ -26,7 +26,7 @@ const TITLES := {
 }
 const POSITIONS := {"expansion_1":Vector2(2.6,-1.5), "expansion_2":Vector2(2.6,-1.5),
 	"watchtower":Vector2(8.1,-2.4), "orbit_upgrade":Vector2(7.6,2.9),
-	"camp_cooker":Vector2(-.10,-6.24), "saw_bench":Vector2(-3.43,-6.17), "quarry_drill":Vector2(7.55,-5.68),
+	"camp_cooker":Vector2(.55,-5.22), "saw_bench":Vector2(-8.55,-5.05), "quarry_drill":Vector2(-7.15,.70),
 	"meal_conveyor":Vector2(3.65,-5.30), "supply_conveyors":Vector2(.25,-3.85)}
 
 # Receipts, carry meshes and machine inputs are physical bundles. Each bundle

@@ -11,6 +11,11 @@ const HEIGHT := {"center_hearth":1.70,"storage_wood":3.20,"camp_cooker":1.85,
 	"saw_bench":1.65,"quarry_drill":2.55,"watchtower":3.25,"north_counter":1.44}
 const CLEARANCE := .33
 const COUNTER := "north_counter"
+# Build 11 reserved a different floor for the cooker. Keep its site only for
+# older custom camps where the new kitchen would cover an existing purchase.
+const BUILD11_KITCHEN := Vector2(-.10,-7.22)
+const BUILD11_KITCHEN_PLOT := Vector2(-.10,-6.24)
+var previous_kitchen_site := false
 var world
 var active := false
 var chosen := ""
@@ -262,7 +267,14 @@ func snapshot() -> Dictionary:
 		result[id] = [p.x,p.y]
 	return result
 
-func restore(data:Variant) -> bool:
+func _valid_custom_sites(data: Dictionary, proposed: Dictionary) -> bool:
+	for id: String in data:
+		if not reason(id, proposed[id], proposed, false).is_empty():
+			return false
+	return true
+
+func restore(data:Variant, saved_kitchen_site:Variant = null) -> bool:
+	if saved_kitchen_site != null and not saved_kitchen_site is bool: return false
 	if not data is Dictionary or data.size()>NAMES.size(): return false
 	var proposed := original.duplicate()
 	for id in data:
@@ -272,8 +284,26 @@ func restore(data:Variant) -> bool:
 		for n in raw:
 			if not (n is int or n is float) or not is_finite(float(n)): return false
 		proposed[id] = Vector2(raw[0],raw[1])
-	for id:String in data:
-		if not reason(id,proposed[id],proposed,false).is_empty(): return false
+	var kitchen: String = Rules.MACHINES.meat
+	var kitchen_plot: Node3D = world.offer_floors[kitchen]
+	# A normal incoming journal has no directive. An explicit true records a
+	# required legacy default, even when that workshop hasn't been bought yet.
+	if saved_kitchen_site == true or not _valid_custom_sites(data, proposed):
+		if saved_kitchen_site == false or data.has(kitchen) and saved_kitchen_site != true:
+			return false
+		var old_plot := kitchen_plot.global_position
+		var prev := original[kitchen] as Vector2
+		kitchen_plot.global_position = Vector3(BUILD11_KITCHEN_PLOT.x, old_plot.y, BUILD11_KITCHEN_PLOT.y)
+		original[kitchen] = BUILD11_KITCHEN
+		if not data.has(kitchen): proposed[kitchen] = BUILD11_KITCHEN
+		access_cache.clear()
+		if not _valid_custom_sites(data, proposed):
+			kitchen_plot.global_position = old_plot
+			original[kitchen] = prev
+			access_cache.clear()
+			return false
+		previous_kitchen_site = true
+		if not data.has(kitchen): world.lakeshore.move_cooker(on_ground(BUILD11_KITCHEN))
 	for id:String in NAMES:
 		if not center(id).is_equal_approx(proposed[id]): _apply(id,proposed[id])
 	_invalidate_routes()

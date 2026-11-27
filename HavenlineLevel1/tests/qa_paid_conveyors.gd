@@ -171,7 +171,7 @@ func run()->void:
    for point:Vector3 in path:within=within and field.camp_layout.bounds().has_point(Vector2(point.x,point.z))
    check(lane+" route remains inside the paid walls",within)
   # Allow physical travel across the expanded court and back after relocation.
-  var delivered:bool=await until(func():return j.product_store.planks==3 and j.product_store.blocks==3 and j.cooked==4,5400)
+  var delivered:bool=await until(func():return j.product_store.planks==3 and j.product_store.blocks==3 and j.cooked==7 and j.product_store.meal==6,5400)
   check("all six outputs return to typed stock after moving without a duplicate",delivered and j.processed_wood==3 and j.processed_stone==3 and j.served==0)
   captured.append({"old_saw":[center.x,center.y],"new_saw":[dest.x,dest.y],"active_fraction":before,"state":snapshot_values()})
  elif phase=="film":
@@ -203,7 +203,7 @@ func run()->void:
   await ticks(100)
   check("unpaid belts never move stock",j.hoppers=={"wood":0,"stone":0,"meat":0} and j.served==0 and j.cooked==1 and book.stored.wood==3)
   await buy(P.FOOD_LINE)
-  check("food line does not activate raw line",not book.complete(P.SUPPLY_LINE) and j.hoppers.wood==0 and book.stored.meat==6)
+  check("meal service includes its own raw supply and leaves other workshops manual",not book.complete(P.SUPPLY_LINE) and belts.line_live("meat") and not belts.line_live("wood") and not belts.line_live("stone") and book.stored.wood==3 and book.stored.stone==3)
   check("base food purchase installs serial storage and request links",not belts.line_live("meal") and belts.line_live("meal_to_store") and belts.line_live("stored_meal"))
   check("real roast reaches paying non-player customer",await until(func():return j.served==1,2500))
   check("food sale is a real paid counter exchange",field.events.any(func(e):return e.event=="meal_served") and j.held_meal==0 and j.worker_meal==0)

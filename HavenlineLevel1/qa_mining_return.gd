@@ -71,9 +71,11 @@ func examine(row:Dictionary, streamed:bool) -> void:
 	var at:Vector3=row.position
 	var prefix:=id+" "
 	approach(at)
+	var old_drops:=nearby_drops(kind,at)
 	var hit_one:int=await strike_until(id,kind,at,1)
 	checks[prefix+"first pick contact"]=hit_one==1
 	if hit_one!=1: return
+	checks[prefix+"first contact leaves the yield in the bank"]=nearby_drops(kind,at)==old_drops and working_face(id)._mesh.is_visible_in_tree()
 	var stock:Dictionary=world.inventory.stored.duplicate()
 	move_to(at+FAR if streamed else at+SIDE*4.25)
 	for i in 18: await physics_frame
@@ -85,10 +87,13 @@ func examine(row:Dictionary, streamed:bool) -> void:
 	var face=working_face(id)
 	checks[prefix+"one strike restored on real face"]=face!=null and face.strikes==1
 	approach(at)
-	var remaining:int=await strike_until(id,kind,at,3)
+	var next:int=await strike_until(id,kind,at,2)
+	checks[prefix+"second contact leaves the yield in the bank"]=next==1 and nearby_drops(kind,at)==old_drops and working_face(id)._mesh.is_visible_in_tree()
+	var remaining:int=next+await strike_until(id,kind,at,3)
 	checks[prefix+"two remaining pick contacts"]=remaining==2
 	if remaining!=2: return
 	var drops:=nearby_drops(kind,at)
+	checks[prefix+"final contact releases four sections and clears intact source"]=working_face(id).fracture.shards.size()==4 and not working_face(id)._mesh.visible
 	var once:=observe_events("deplete_"+kind,at)==1
 	var duration:=float(world.lifecycle.cooling.get(id,-1.))
 	checks[prefix+"one typed three-unit yield"]=drops.size()==3 and once
