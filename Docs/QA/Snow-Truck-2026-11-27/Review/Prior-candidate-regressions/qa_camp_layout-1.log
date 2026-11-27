@@ -1,0 +1,42 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+ERROR: Meat handed off at relocated cooker produces a real meal
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] verify (res://tests/qa_storage_stream.gd:11)
+       [1] live (res://tests/qa_camp_layout.gd:140)
+ERROR: Node not found: "AlfredNorthCounter" (relative to "/root/HavenlineFieldOpening/@Node3D@334/@Node3D@369").
+   at: get_node (scene/main/node.cpp:1975)
+   GDScript backtrace (most recent call first):
+       [0] _prepare_ghost (res://field_camp_layout.gd:477)
+       [1] select (res://field_camp_layout.gd:464)
+       [2] handle_input (res://field_camp_layout.gd:573)
+       [3] _input (res://field_opening.gd:380)
+       [4] click (res://tests/qa_camp_layout.gd:35)
+       [5] select_building (res://tests/qa_camp_layout.gd:59)
+       [6] live (res://tests/qa_camp_layout.gd:168)
+       [7] place_at (res://tests/qa_camp_layout.gd:74)
+       [8] click (res://tests/qa_camp_layout.gd:36)
+SCRIPT ERROR: Cannot call method 'find_children' on a null value.
+          at: _prepare_ghost (res://field_camp_layout.gd:479)
+          GDScript backtrace (most recent call first):
+              [0] _prepare_ghost (res://field_camp_layout.gd:479)
+              [1] select (res://field_camp_layout.gd:464)
+              [2] handle_input (res://field_camp_layout.gd:573)
+              [3] _input (res://field_opening.gd:380)
+              [4] click (res://tests/qa_camp_layout.gd:35)
+              [5] select_building (res://tests/qa_camp_layout.gd:59)
+              [6] live (res://tests/qa_camp_layout.gd:168)
+              [7] place_at (res://tests/qa_camp_layout.gd:74)
+              [8] click (res://tests/qa_camp_layout.gd:36)
+ERROR: Warehouse owns the relocated cooker's entire delivered lot
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] verify (res://tests/qa_storage_stream.gd:11)
+       [1] live (res://tests/qa_camp_layout.gd:196)
+ERROR: A customer pays for the real roast across the relocated fence
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] verify (res://tests/qa_storage_stream.gd:11)
+       [1] live (res://tests/qa_camp_layout.gd:207)
+CAMP_LAYOUT {"checks":{"A customer pays for the real roast across the relocated fence":false,"Cooker paid normally with the exact 120 wood and 80 stone":true,"Entering the moved warehouse collects its actual roasts at the stocked shelf":true,"Exit returns player's gameplay camera and controls":true,"Gameplay pinch still works after moving":true,"Invalid destination leaves all equipment untouched":true,"Malformed layout restore rejected without partial mutation":true,"Meat handed off at relocated cooker produces a real meal":false,"Model, guard, hopper, outfeed and both worker aprons move as a unit":true,"Mouse opens identical layout controls":true,"Moving the counter preserves each paid note":true,"Moving up to the relocated house stocks its real FOOD shelf":true,"Overlap rejected before it can persist":true,"Relocated furnace light, art and solid footing stay together":true,"Service point and queue meet across the relocated north fence bay":true,"Spawn, defense side and gate are protected":true,"Storehouse at new position accepts side loading":true,"Touch opens layout and liberates joystick":true,"Tower's paid physical footings stay on the moved defense side":true,"Unowned cooker cannot be placed":true,"Warehouse owns the relocated cooker's entire delivered lot":false,"Worker detours around the moved furnace without crossing its body":true,"camp_cooker committed by confirmation":true,"camp_cooker picked by tapping its actual artwork":true,"camp_cooker previews its physical destination":true,"center_hearth committed by confirmation":true,"center_hearth picked by tapping its actual artwork":true,"center_hearth previews its physical destination":true,"north_counter committed by confirmation":true,"north_counter inputs, outputs and guard follow":true,"north_counter picked by tapping its actual artwork":true,"north_counter previews its physical destination":true,"quarry_drill committed by confirmation":true,"quarry_drill inputs, outputs and guard follow":true,"quarry_drill picked by tapping its actual artwork":true,"quarry_drill previews its physical destination":true,"saw_bench committed by confirmation":true,"saw_bench inputs, outputs and guard follow":true,"saw_bench picked by tapping its actual artwork":true,"saw_bench previews its physical destination":true,"storage_wood committed by confirmation":true,"storage_wood inputs, outputs and guard follow":true,"storage_wood picked by tapping its actual artwork":true,"storage_wood previews its physical destination":true,"watchtower committed by confirmation":true,"watchtower picked by tapping its actual artwork":true,"watchtower previews its physical destination":true},"placements":[{"camp_cooker":[4.75,2.75],"center_hearth":[-2.75,-2.5],"north_counter":[4.0,-9.0],"quarry_drill":[7.75,-6.25],"saw_bench":[-3.5,2.5],"storage_wood":[4.5,-2.5],"watchtower":[8.0,3.5]}]}

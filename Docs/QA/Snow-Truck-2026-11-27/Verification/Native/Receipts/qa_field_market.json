@@ -1,0 +1,49 @@
+{
+  "stamp": {
+    "commit": "b92588e389f429776a11e7d0349d2096311000ca",
+    "manifest": {
+      "sha256": "4f037101578f475dea4bfb0f22c717861a3fcf05bf1c6c1f155e951d850df45c",
+      "checked_files": 754
+    },
+    "runner": "74f0f0c758ff42dcfbd61bd1c0fb3f7664a89dafd732365a09bc89248b12b23f"
+  },
+  "passed": true,
+  "runs": [
+    {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "log": "qa_field_market-1.log",
+      "log_sha256": "b53de1598e153dfcf50d537bf586d6925f93c62fed91930a76a8522030de3bd1",
+      "summary": [
+        {
+          "checks": {
+            "a concurrent second pickup cannot claim the same money": true,
+            "customer self-serves a two-item order without anyone at counter": true,
+            "debits, cash and mixed stock pass exact save validation": true,
+            "first displayed developed order asks for two meals": true,
+            "held goods do not make a customer pay": true,
+            "meal and plank share one physical sale": true,
+            "mixed basket self-serves and leaves the remainder of bulk stock": true,
+            "next developed order requests a mixed basket": true,
+            "old paid workshop profile opens in the new market schema": true,
+            "one visit drops three meals and collects the old cash": true,
+            "owned worker banks its payment once": true,
+            "owned worker drops requested stock and picks up all posted cash": true,
+            "owned worker loads the whole requested stock from the warehouse": true,
+            "paid fixture and new typed accounting agree": true,
+            "partial basket remains unpaid while ready customer waits": true,
+            "reopening preserves the quoted whole basket": true
+          },
+          "money": 3,
+          "paid_goods": {
+            "blocks": 0,
+            "meal": 11,
+            "planks": 1
+          },
+          "served": 10
+        }
+      ]
+    }
+  ]
+}

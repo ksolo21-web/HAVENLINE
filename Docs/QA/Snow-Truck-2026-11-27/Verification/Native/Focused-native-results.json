@@ -1,0 +1,1036 @@
+{
+  "source": "b92588e389f429776a11e7d0349d2096311000ca",
+  "scene": "res://field_opening.tscn",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "suites": 11,
+  "native_runs": 12,
+  "tests": {
+    "qa_snow_truck": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_snow_truck-1.log",
+        "log_sha256": "8dca6fcc9d5a116d0cde7f70c1d07bda76a023872df4d5ddaa5fda8b27e3ccbc",
+        "summary": [
+          {
+            "checks": {
+              "a fresh camp boots": true,
+              "affordable replacement at the garage": true,
+              "can drive the replacement truck": true,
+              "driven blades break a real metal bank": true,
+              "durable owned truck starts at full health": true,
+              "garage and truck begin locked": true,
+              "garage replaces a fence section and keeps both walk gates": true,
+              "ground pickup goes into truck, not player pack": true,
+              "interior wreck retains salvage": true,
+              "lethal contact applies after damage cooldown": true,
+              "mined metal goes to truck exactly once": true,
+              "mounted using player input": true,
+              "moving truck leaves paired treads outside camp": true,
+              "normal thumbstick drives out through garage": true,
+              "outside loss survives cold reload": true,
+              "outside wreck loses cargo without salvage": true,
+              "outside wreck position survives cold reload": true,
+              "park transfers the entire cargo once": true,
+              "pay separate garage offer": true,
+              "pay separate truck offer": true,
+              "recover interior cargo exactly once": true,
+              "replacement is completely outside camp": true,
+              "replacement takes cargo before wreck": true,
+              "restored player controls and backpack": true,
+              "reverse returns into garage and parks": true,
+              "save remains usable after all truck operations": true,
+              "setup: center_hearth": true,
+              "setup: expansion_1": true,
+              "setup: expansion_2": true,
+              "setup: storage_meat": true,
+              "setup: storage_stone": true,
+              "setup: storage_wood": true,
+              "truck stays locked until garage is built": true,
+              "whole new truck is parked in the bay": true
+            }
+          }
+        ]
+      }
+    ],
+    "qa_camp_raid": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_camp_raid-1.log",
+        "log_sha256": "52ef04334356b844da5a26ed598b32ac1b7edc03adb59e15ad775adde5543ab3",
+        "summary": [
+          {
+            "a defender near camp prevents a due raid from starting": true,
+            "a hostile already provoked by the survivor may retaliate": true,
+            "a lost attack ends and allows a repair period": true,
+            "a real raid wolf enters through the breach without the player nearby": true,
+            "a repeat wave warns about an actual east fence section": true,
+            "actual game inventory can restore the conserved repair journal": true,
+            "authored bite eventually breaks the warned fence": true,
+            "breached fence opens both physical and analytical collision": true,
+            "destroyed cooker cannot accept manual or automated input": true,
+            "destroyed furnace extinguishes the healing fire": true,
+            "destroyed mills stop operating and open their hulls": true,
+            "exposed camp receives its full warning": true,
+            "failed raid grants 60 minutes between attack end and earliest start": true,
+            "furnace is attacked inside camp after entry": true,
+            "hearth lights and gate collides once repaired": true,
+            "intact fence rejects travel across its collision before the raid": true,
+            "isolated survivor is a legal target with both defenders far away": true,
+            "launch only after all five minutes": true,
+            "live enemies and breached gate survive world snapshot": true,
+            "native proximity rescues the bought survivor": true,
+            "native world snapshot restores the warning without spawning": true,
+            "no automatic hit on a distant player": true,
+            "no early camp attackers": true,
+            "no hit during warning": true,
+            "no launch a hundredth of a second early": true,
+            "ordinary jaw contact reduces the isolated survivor's actual HP": true,
+            "paid damageable site exists for cooker": true,
+            "paid damageable site exists for drill": true,
+            "paid damageable site exists for saw": true,
+            "paid damageable site exists for tower": true,
+            "paid gate eventually breaches and opens its collision": true,
+            "paid repair of cooker": true,
+            "paid repair of drill": true,
+            "paid repair of fence-east-south": true,
+            "paid repair of furnace": true,
+            "paid repair of gate-east": true,
+            "paid repair of saw": true,
+            "paid repair of tower": true,
+            "raid damage can destroy cooker": true,
+            "raid damage can destroy drill": true,
+            "raid damage can destroy saw": true,
+            "raid damage can destroy tower": true,
+            "raid wolf jaws physically attack the warned gate": true,
+            "rebuilding restores each paid machine": true,
+            "rebuilt fence closes both physical and analytical collision": true,
+            "repair accounting includes every used unit": true,
+            "repeat raiders walk through the new physical fence opening": true,
+            "repelled raid starts independent cooldown": true,
+            "resident player protects the nearby unprovoking survivor": true,
+            "the raid spawns real wolves at its warned camp": true,
+            "the real paid camp shows a 5:00 warning while player is far away": true,
+            "unbuilt camp doesn't advance first cooldown": true,
+            "warning survives JSON round trip": true
+          }
+        ]
+      }
+    ],
+    "qa_truck_quotes": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_truck_quotes-1.log",
+        "log_sha256": "e995a6f214eddd46defdca6e3c2345bf70e92a182006db57ed46ba1c4696ffe4",
+        "summary": [
+          {
+            "advanced quote accepts tender beyond the default bill": true,
+            "advanced tender and five-unit remainder restore": true,
+            "an already automated camp receives the advanced quote": true,
+            "complete replacement payment spends the exact quoted goods": true,
+            "completed purchase conserves the advanced receipt": true,
+            "earlier v11 saves with the same installed lines keep the price they were shown": true,
+            "existing quote and partial payment restore": true,
+            "garage exposes the standard quote": true,
+            "later automation leaves the exposed quote and tender intact": true,
+            "later construction cannot forge an earlier automated quote": true,
+            "pre-quote funded save retains the original bill": true,
+            "replacement and original bill round-trip together": true,
+            "replacement honors the same quote instead of charging the default": true,
+            "standard quote accepts its first payment": true,
+            "unfunded quote survives reload at first exposure": true,
+            "wreck is an eligible replacement": true
+          }
+        ]
+      }
+    ],
+    "qa_companion_replacement": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_companion_replacement-1.log",
+        "log_sha256": "8d88d6b8dcd83f898b67c093952801680869f3bf3c7c04b4f92698ae4356cb5b",
+        "summary": [
+          {
+            "checks": [
+              "paid helper physically rescued",
+              "earned owl-first replacement receipt 0",
+              "earned owl-first replacement receipt 1",
+              "earned owl-first replacement receipt 2",
+              "earned owl-first replacement receipt 3",
+              "earned owl-first replacement receipt 4",
+              "earned owl-first replacement receipt 5",
+              "the two original selections are live",
+              "routine hostile is not pre-provoked by a wildlife hunter",
+              "actual enemy contact subtracts live survivor health",
+              "visible survivor axe contact created retaliation",
+              "fatal enemy contact ends the survivor assignment",
+              "a delayed contact cannot kill a worker twice",
+              "defeated survivor has completed the visible fall",
+              "low and reachable owl can suffer lethal contact",
+              "original paid history is preserved when the roost reopens",
+              "both casualties persist without cloned balances",
+              "earned survivor-return replacement receipt 0",
+              "earned survivor-return replacement receipt 1",
+              "earned survivor-return replacement receipt 2",
+              "earned survivor-return replacement receipt 3",
+              "earned survivor-return replacement receipt 4",
+              "earned survivor-return replacement receipt 5",
+              "earned survivor-return replacement receipt 6",
+              "earned survivor-return replacement receipt 7",
+              "earned owl-return replacement receipt 0",
+              "earned owl-return replacement receipt 1",
+              "earned owl-return replacement receipt 2",
+              "earned owl-return replacement receipt 3",
+              "earned owl-return replacement receipt 4",
+              "earned owl-return replacement receipt 5",
+              "the separate paid survivor replacement returns at full health",
+              "the separate paid owl replacement returns at full health",
+              "committed replacement costs and active actors restore"
+            ],
+            "errors": [],
+            "owl_hp": 12,
+            "owl_replacements": 1,
+            "survivor_hp": 18,
+            "survivor_replacements": 1
+          }
+        ]
+      }
+    ],
+    "qa_survivor_hunt": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_survivor_hunt-1.log",
+        "log_sha256": "b297ea29dbe41068009cfbd8c28b63da7f16b97fbd365947cca1cced71ed7fa7",
+        "summary": [
+          {
+            "beats": [
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "to_tree",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 2,
+                "tick": 0,
+                "worker": "(-5.1, 0.0, 9.9)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "work_ready",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 2,
+                "tick": 84,
+                "worker": "(-4.545622, 0.0, 9.048634)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "chopping",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 2,
+                "tick": 85,
+                "worker": "(-4.545622, 0.0, 9.048634)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "work_ready",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 2,
+                "tick": 179,
+                "worker": "(-4.545622, 0.0, 9.048634)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "chopping",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 2,
+                "tick": 180,
+                "worker": "(-4.545622, 0.0, 9.048634)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "work_ready",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 2,
+                "tick": 274,
+                "worker": "(-4.545622, 0.0, 9.048634)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "chopping",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 2,
+                "tick": 275,
+                "worker": "(-4.545622, 0.0, 9.048634)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "falling",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 2,
+                "tick": 369,
+                "worker": "(-4.545622, 0.0, 9.048634)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "pickup",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 2,
+                "tick": 370,
+                "worker": "(-4.545622, 0.0, 9.048634)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "carrying",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 2,
+                "tick": 386,
+                "worker": "(-4.217173, 0.0, 9.295733)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "unload",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 2,
+                "tick": 862,
+                "worker": "(-3.048895, 0.0, -1.171036)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "bin_delivery",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 2,
+                "tick": 879,
+                "worker": "(-3.048895, 0.0, -1.171036)"
+              },
+              {
+                "aboard": 1,
+                "hp": 3,
+                "phase": "supply_out",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 897,
+                "worker": "(-3.048895, 0.0, -1.171036)"
+              },
+              {
+                "aboard": 1,
+                "hp": 3,
+                "phase": "supply_unload",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 1071,
+                "worker": "(-0.392184, 0.0, -5.030793)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "supply_back",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 1091,
+                "worker": "(-0.392184, 0.0, -5.030793)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "meal_collect",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 1282,
+                "worker": "(-3.040224, 0.0, -1.183985)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "meal_serve",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 1460,
+                "worker": "(1.487754, 0.0, -5.037356)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "supply_pickup",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 1566,
+                "worker": "(2.797002, 0.0, -7.447407)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "meal_serve",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 1785,
+                "worker": "(-3.048753, 0.0, -1.180508)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "supply_pickup",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 2022,
+                "worker": "(2.79891, 0.0, -7.455411)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "supply_out",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 2271,
+                "worker": "(-3.04223, 0.0, -1.18318)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "supply_unload",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 2444,
+                "worker": "(-7.094911, 0.0, -5.372914)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "supply_back",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 2484,
+                "worker": "(-7.094911, 0.0, -5.372914)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "hunt_approach",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 2696,
+                "worker": "(-3.061438, 0.0, -1.184668)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "hunt_strike",
+                "stag": "(6.0891, 0.0, 14.44124)",
+                "stored": 0,
+                "tick": 3176,
+                "worker": "(5.404397, 0.0, 13.7111)"
+              },
+              {
+                "aboard": 0,
+                "hp": 0,
+                "phase": "hunt_pickup",
+                "stag": "(5.148711, 0.0, 14.2655)",
+                "stored": 0,
+                "tick": 3393,
+                "worker": "(5.404397, 0.0, 13.7111)"
+              },
+              {
+                "aboard": 3,
+                "hp": 0,
+                "phase": "bulk_return",
+                "stag": "(5.148711, 0.0, 14.2655)",
+                "stored": 0,
+                "tick": 3443,
+                "worker": "(5.152696, 0.0, 14.25686)"
+              },
+              {
+                "aboard": 3,
+                "hp": 0,
+                "phase": "bin_delivery",
+                "stag": "(5.148711, 0.0, 14.2655)",
+                "stored": 0,
+                "tick": 4009,
+                "worker": "(-3.048892, 0.0, -1.171016)"
+              },
+              {
+                "aboard": 2,
+                "hp": 0,
+                "phase": "supply_out",
+                "stag": "(5.148711, 0.0, 14.2655)",
+                "stored": 0,
+                "tick": 4030,
+                "worker": "(-3.048892, 0.0, -1.171016)"
+              }
+            ],
+            "camera": {},
+            "checks": [
+              "paid helper physically rescued",
+              "paid survivor proactively routes to prey",
+              "native carried axe sweep hits after proactive pursuit",
+              "defeated stag produces one three-bundle meat reward",
+              "real pickup packs on separate meat shelf, all three go home",
+              "same native worker returns and stocks exactly three meat",
+              "worker hunt credited no material to the distant player",
+              "actual moving stag sampled four rig hooves and left cloven prints",
+              "actual post-hunt save migration and conservation accept",
+              "cold state records the prey cooldown",
+              "native wildlife cooldown returned the same single prey alive"
+            ],
+            "errors": [],
+            "first_hit": 3205,
+            "hoof_count": 4,
+            "hoof_max": 0.119230061769485,
+            "hoof_min": -0.0282738506793976,
+            "hoof_peak": 16,
+            "kill": 3393,
+            "landing": 4030,
+            "meat_peak": 3,
+            "proactive": 2696,
+            "transport": 3443,
+            "warehouse_count": 3
+          }
+        ]
+      }
+    ],
+    "qa_field_market": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_field_market-1.log",
+        "log_sha256": "b53de1598e153dfcf50d537bf586d6925f93c62fed91930a76a8522030de3bd1",
+        "summary": [
+          {
+            "checks": {
+              "a concurrent second pickup cannot claim the same money": true,
+              "customer self-serves a two-item order without anyone at counter": true,
+              "debits, cash and mixed stock pass exact save validation": true,
+              "first displayed developed order asks for two meals": true,
+              "held goods do not make a customer pay": true,
+              "meal and plank share one physical sale": true,
+              "mixed basket self-serves and leaves the remainder of bulk stock": true,
+              "next developed order requests a mixed basket": true,
+              "old paid workshop profile opens in the new market schema": true,
+              "one visit drops three meals and collects the old cash": true,
+              "owned worker banks its payment once": true,
+              "owned worker drops requested stock and picks up all posted cash": true,
+              "owned worker loads the whole requested stock from the warehouse": true,
+              "paid fixture and new typed accounting agree": true,
+              "partial basket remains unpaid while ready customer waits": true,
+              "reopening preserves the quoted whole basket": true
+            },
+            "money": 3,
+            "paid_goods": {
+              "blocks": 0,
+              "meal": 11,
+              "planks": 1
+            },
+            "served": 10
+          }
+        ]
+      }
+    ],
+    "qa_surface_conveyor_layout": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_surface_conveyor_layout-1.log",
+        "log_sha256": "600f8391eec17501898539e8b4c95d70b24ffcaba7d1bddc8ebbcc93a48a0fbe",
+        "summary": [
+          {
+            "checks": {
+              "all eight lines restored at original positions": true,
+              "both bought networks expose all eight compatible routes": true,
+              "both food lines end at the separate self-service pickup": true,
+              "default dock lips have continuous forward travel without folding back": true,
+              "default exterior cargo decks are all above the working floor": true,
+              "moved saw receives its material at its own new socket": true,
+              "open aisle from public courtyard to east gate": true,
+              "open aisle from south gate across public courtyard": true,
+              "owned saw can move with a valid service footprint": true,
+              "reachable public floor at cooker_output": true,
+              "reachable public floor at counter": true,
+              "reachable public floor at meat": true,
+              "reachable public floor at stone": true,
+              "reachable public floor at store": true,
+              "reachable public floor at wood": true,
+              "relocated dock lips have continuous forward travel without folding back": true,
+              "relocated exterior cargo decks are all above the working floor": true,
+              "saw and quarry share the storehouse utility wing": true,
+              "saw can return to its original footprint": true,
+              "two people fit through the front kitchen approach": true
+            },
+            "readings": {
+              "default": {
+                "blocks": {
+                  "length": 5.72783627361059,
+                  "minimum_heading_dot": 0.980782032012939,
+                  "minimum_roller_height": 0.225000008940697
+                },
+                "meal": {
+                  "length": 4.13227079808712,
+                  "minimum_heading_dot": 0.980784058570862,
+                  "minimum_roller_height": 0.543999969959259
+                },
+                "meal_to_store": {
+                  "length": 10.5951639935374,
+                  "minimum_heading_dot": 0.980784058570862,
+                  "minimum_roller_height": 0.543999969959259
+                },
+                "meat": {
+                  "length": 4.5413918113336,
+                  "minimum_heading_dot": 0.980764269828796,
+                  "minimum_roller_height": 0.310000002384186
+                },
+                "planks": {
+                  "length": 6.43163175135851,
+                  "minimum_heading_dot": 0.980784058570862,
+                  "minimum_roller_height": 0.215000003576279
+                },
+                "stone": {
+                  "length": 7.55868605524302,
+                  "minimum_heading_dot": 0.980782330036163,
+                  "minimum_roller_height": 0.284999996423721
+                },
+                "stored_meal": {
+                  "length": 10.6777625642717,
+                  "minimum_heading_dot": 0.980782389640808,
+                  "minimum_roller_height": 0.850000023841858
+                },
+                "wood": {
+                  "length": 4.93367729708552,
+                  "minimum_heading_dot": 0.980782389640808,
+                  "minimum_roller_height": 0.409999996423721
+                }
+              },
+              "relocated": {
+                "blocks": {
+                  "length": 5.72783627361059,
+                  "minimum_heading_dot": 0.980782032012939,
+                  "minimum_roller_height": 0.225000008940697
+                },
+                "meal": {
+                  "length": 4.13227079808712,
+                  "minimum_heading_dot": 0.980784058570862,
+                  "minimum_roller_height": 0.543999969959259
+                },
+                "meal_to_store": {
+                  "length": 10.5951639935374,
+                  "minimum_heading_dot": 0.980784058570862,
+                  "minimum_roller_height": 0.543999969959259
+                },
+                "meat": {
+                  "length": 4.5413918113336,
+                  "minimum_heading_dot": 0.980764269828796,
+                  "minimum_roller_height": 0.310000002384186
+                },
+                "planks": {
+                  "length": 7.03163152188063,
+                  "minimum_heading_dot": 0.980783224105835,
+                  "minimum_roller_height": 0.215000003576279
+                },
+                "stone": {
+                  "length": 7.55868605524302,
+                  "minimum_heading_dot": 0.980782330036163,
+                  "minimum_roller_height": 0.284999996423721
+                },
+                "stored_meal": {
+                  "length": 10.6777625642717,
+                  "minimum_heading_dot": 0.980782389640808,
+                  "minimum_roller_height": 0.850000023841858
+                },
+                "wood": {
+                  "length": 5.40107104182243,
+                  "minimum_heading_dot": 0.980782389640808,
+                  "minimum_roller_height": 0.409999996423721
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "qa_wolf_gate_passage": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_wolf_gate_passage-1.log",
+        "log_sha256": "bece06a4188eff37d3246096338bcd49053e8dffc257fbe758fc77c1d8f2b424",
+        "summary": [
+          {
+            "checks": {
+              "hunter starts legally outside sanctuary": true,
+              "normal encounter restore accepts the live pack": true,
+              "open gateway stays traversable at run speed": true,
+              "open-field torso regains normal collision": true,
+              "runner and wolf respect solid fence and safe camp": true,
+              "runner passes the parked live torso into the field": true,
+              "same live hunter can pursue and damage the runner": true
+            },
+            "metrics": {
+              "hp_after_first_bite": 26,
+              "hp_lost_to_this_wolf": 4,
+              "max_hp": 30,
+              "maximum_step_m": 0.104167096316814,
+              "maximum_still_ticks": 0,
+              "nearest_m": 1.31899392604828,
+              "solid_crossings": 0,
+              "ticks_to_5_2m": 83,
+              "wolf_bites": 1,
+              "wolves": 2
+            }
+          }
+        ]
+      }
+    ],
+    "qa_field_minerals": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_field_minerals-1.log",
+        "log_sha256": "03bdb3ba87042a86ca14ff6f4d3b1b99bacc8f4c97f9d398646568a8073436b3",
+        "summary": [
+          {
+            "coal alone cannot pay for ordinary construction": true,
+            "coal bank flight 0": true,
+            "coal bank flight 1": true,
+            "coal dispatches unique earned pickup 0": true,
+            "coal dispatches unique earned pickup 1": true,
+            "coal dispatches unique earned pickup 2": true,
+            "coal distinct populated bin": true,
+            "coal landing meets its own bay": true,
+            "coal separate backpack lane": true,
+            "existing native receipts and zero minerals": true,
+            "metal alone cannot pay for ordinary construction": true,
+            "metal bank flight 0": true,
+            "metal bank flight 1": true,
+            "metal bank flight 2": true,
+            "metal bank flight 3": true,
+            "metal dispatches unique earned pickup 0": true,
+            "metal dispatches unique earned pickup 1": true,
+            "metal dispatches unique earned pickup 2": true,
+            "metal dispatches unique earned pickup 3": true,
+            "metal dispatches unique earned pickup 4": true,
+            "metal distinct populated bin": true,
+            "metal landing meets its own bay": true,
+            "metal separate backpack lane": true,
+            "missing new balance rejected atomically": true,
+            "normal scene save loaded": true,
+            "ordinary reinforced payment 0": true,
+            "ordinary reinforced payment 1": true,
+            "ordinary reinforced payment 10": true,
+            "ordinary reinforced payment 11": true,
+            "ordinary reinforced payment 12": true,
+            "ordinary reinforced payment 13": true,
+            "ordinary reinforced payment 2": true,
+            "ordinary reinforced payment 3": true,
+            "ordinary reinforced payment 4": true,
+            "ordinary reinforced payment 5": true,
+            "ordinary reinforced payment 6": true,
+            "ordinary reinforced payment 7": true,
+            "ordinary reinforced payment 8": true,
+            "ordinary reinforced payment 9": true,
+            "pickup preserves all existing receipts": true,
+            "slate alone cannot pay for ordinary construction": true,
+            "slate bank flight 0": true,
+            "slate bank flight 1": true,
+            "slate bank flight 2": true,
+            "slate dispatches unique earned pickup 0": true,
+            "slate dispatches unique earned pickup 1": true,
+            "slate dispatches unique earned pickup 2": true,
+            "slate dispatches unique earned pickup 3": true,
+            "slate distinct populated bin": true,
+            "slate landing meets its own bay": true,
+            "slate separate backpack lane": true,
+            "starter alone cannot bank ore": true,
+            "visible six-material HUD and exact mineral counts": true
+          },
+          {
+            "counts": {
+              "carried": {
+                "coal": 1,
+                "meat": 0,
+                "metal": 1,
+                "slate": 1,
+                "stone": 0,
+                "wood": 0
+              },
+              "stored": {
+                "coal": 2,
+                "meat": 0,
+                "metal": 4,
+                "slate": 3,
+                "stone": 0,
+                "wood": 0
+              }
+            },
+            "receipts": {
+              "camp_cooker": {
+                "stone": 0,
+                "wood": 0
+              },
+              "center_hearth": {
+                "wood": 3
+              },
+              "expansion_1": {
+                "stone": 1,
+                "wood": 3
+              },
+              "expansion_2": {
+                "stone": 0,
+                "wood": 0
+              },
+              "meal_conveyor": {
+                "stone": 0,
+                "wood": 0
+              },
+              "orbit_upgrade": {
+                "meat": 0,
+                "stone": 0
+              },
+              "quarry_drill": {
+                "stone": 0,
+                "wood": 0
+              },
+              "saw_bench": {
+                "stone": 0,
+                "wood": 0
+              },
+              "snow_garage": {
+                "blocks": 0,
+                "planks": 0
+              },
+              "snow_truck": {
+                "coal": 0,
+                "metal": 0,
+                "stone": 0,
+                "wood": 0
+              },
+              "storage_meat": {
+                "meat": 0,
+                "wood": 0
+              },
+              "storage_stone": {
+                "stone": 6,
+                "wood": 8
+              },
+              "storage_wood": {
+                "wood": 2
+              },
+              "supply_conveyors": {
+                "stone": 0,
+                "wood": 0
+              },
+              "watchtower": {
+                "stone": 0,
+                "wood": 0
+              }
+            },
+            "schema": 11
+          },
+          {
+            "coal repeated token rejected": true,
+            "coal typed balances reopen": true,
+            "metal repeated token rejected": true,
+            "metal typed balances reopen": true,
+            "normal scene restored paid original order": true,
+            "normal scene save loaded": true,
+            "slate repeated token rejected": true,
+            "slate typed balances reopen": true
+          },
+          {
+            "--mineral-migrate": true,
+            "--mineral-reopen": true
+          }
+        ]
+      }
+    ],
+    "qa_field_touch_resume": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_field_touch_resume-1.log",
+        "log_sha256": "7a1d084df24d8604870efc4dac966d7bf728cc3f031f2931531a8685e634a57a",
+        "summary": [
+          {
+            "checks": {
+              "HUD holds its finger": true,
+              "background releases drag without Android up event": true,
+              "drag present before background": true,
+              "fold releases both contacts": true,
+              "interrupted HUD accepts future touches": true,
+              "same Android finger ID can steer after resume": true,
+              "two fingers pinch before folding": true
+            },
+            "suite": "touch_resume"
+          }
+        ]
+      }
+    ],
+    "qa_camp_layout": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_camp_layout-1.log",
+        "log_sha256": "e0d68c8aa8885e8b3e68770c637f61ea182fd36eb335baec0c8bdbbbca3cb16b",
+        "summary": [
+          {
+            "checks": {
+              "A customer pays for the real roast across the relocated fence": true,
+              "Cooker paid normally with the exact 120 wood and 80 stone": true,
+              "Entering the moved warehouse collects its actual roasts at the stocked shelf": true,
+              "Exit returns player's gameplay camera and controls": true,
+              "Gameplay pinch still works after moving": true,
+              "Invalid destination leaves all equipment untouched": true,
+              "Malformed layout restore rejected without partial mutation": true,
+              "Meat handed off at relocated cooker produces a real meal": true,
+              "Model, guard, hopper, outfeed and both worker aprons move as a unit": true,
+              "Mouse opens identical layout controls": true,
+              "Moving the counter preserves each paid note": true,
+              "Moving up to the relocated house stocks its real FOOD shelf": true,
+              "Overlap rejected before it can persist": true,
+              "Relocated furnace light, art and solid footing stay together": true,
+              "Service point and queue meet across the relocated north fence bay": true,
+              "Spawn, defense side and gate are protected": true,
+              "Storehouse at new position accepts side loading": true,
+              "Touch opens layout and liberates joystick": true,
+              "Tower's paid physical footings stay on the moved defense side": true,
+              "Unowned cooker cannot be placed": true,
+              "Warehouse owns the relocated cooker's entire delivered lot": true,
+              "Worker detours around the moved furnace without crossing its body": true,
+              "camp_cooker committed by confirmation": true,
+              "camp_cooker picked by tapping its actual artwork": true,
+              "camp_cooker previews its physical destination": true,
+              "center_hearth committed by confirmation": true,
+              "center_hearth picked by tapping its actual artwork": true,
+              "center_hearth previews its physical destination": true,
+              "north_counter committed by confirmation": true,
+              "north_counter inputs, outputs and guard follow": true,
+              "north_counter picked by tapping its actual artwork": true,
+              "north_counter previews its physical destination": true,
+              "quarry_drill committed by confirmation": true,
+              "quarry_drill inputs, outputs and guard follow": true,
+              "quarry_drill picked by tapping its actual artwork": true,
+              "quarry_drill previews its physical destination": true,
+              "saw_bench committed by confirmation": true,
+              "saw_bench inputs, outputs and guard follow": true,
+              "saw_bench picked by tapping its actual artwork": true,
+              "saw_bench previews its physical destination": true,
+              "storage_wood committed by confirmation": true,
+              "storage_wood inputs, outputs and guard follow": true,
+              "storage_wood picked by tapping its actual artwork": true,
+              "storage_wood previews its physical destination": true,
+              "watchtower committed by confirmation": true,
+              "watchtower picked by tapping its actual artwork": true,
+              "watchtower previews its physical destination": true
+            },
+            "placements": [
+              {
+                "camp_cooker": [
+                  4.75,
+                  2.75
+                ],
+                "center_hearth": [
+                  -2.75,
+                  -2.5
+                ],
+                "north_counter": [
+                  4.0,
+                  -9.0
+                ],
+                "quarry_drill": [
+                  7.75,
+                  -6.25
+                ],
+                "saw_bench": [
+                  -3.5,
+                  2.5
+                ],
+                "storage_wood": [
+                  4.5,
+                  -2.5
+                ],
+                "watchtower": [
+                  8.0,
+                  3.5
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_camp_layout-2.log",
+        "log_sha256": "d0cfa9639e8fbcbcbdfcbb0be7e333b25046b4bd13499866843eee781ac871cf",
+        "summary": [
+          {
+            "checks": {
+              "Cold process recovers moved furnace and defending tower": true,
+              "Cold process recovers relocated cooker, counter and storehouse": true,
+              "Cold process recovers saw and drill collision": true,
+              "Reloaded receipts and cooked meal survive relocation": true
+            },
+            "placements": [
+              {
+                "camp_cooker": [
+                  4.75,
+                  2.75
+                ],
+                "center_hearth": [
+                  -2.75,
+                  -2.5
+                ],
+                "north_counter": [
+                  4.0,
+                  -9.0
+                ],
+                "quarry_drill": [
+                  7.75,
+                  -6.25
+                ],
+                "saw_bench": [
+                  -3.5,
+                  2.5
+                ],
+                "storage_wood": [
+                  4.5,
+                  -2.5
+                ],
+                "watchtower": [
+                  8.0,
+                  3.5
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "passed": true,
+  "verified_source_before_and_after": {
+    "sha256": "4f037101578f475dea4bfb0f22c717861a3fcf05bf1c6c1f155e951d850df45c",
+    "checked_files": 754
+  }
+}
