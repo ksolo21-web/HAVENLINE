@@ -471,6 +471,7 @@ func handle_input(event:InputEvent) -> bool:
 			if active: close()
 			else: open()
 			return true
+	if not active and world.opening_hud.camp_dock:return false
 	if not (event is InputEventScreenTouch or event is InputEventMouseButton or event is InputEventScreenDrag or event is InputEventMouseMotion): return active
 	if event.device==InputEvent.DEVICE_ID_EMULATION: return active
 	if event is InputEventMouseButton and event.button_index!=MOUSE_BUTTON_LEFT: return active

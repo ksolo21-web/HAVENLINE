@@ -2,6 +2,7 @@ extends Control
 ## Track the game's existing movable touch origin. Pointer events keep going to the world.
 var world
 var offset := Vector2.ZERO
+var resting:=true
 
 
 func install(host) -> void:
@@ -12,11 +13,27 @@ func install(host) -> void:
 
 
 func _process(_delta: float) -> void:
-	if not is_instance_valid(world):
+	if not is_instance_valid(world) or not world.get("field_ready"):
 		return
-	if world.touch_id < 0 or world.trial_camera.pinching:
+	if world.trial_camera.pinching:
 		hide()
 		return
+	var hud=get_parent()
+	if not hud.has_method("_safe_rect") or not world.field_ready or (world.camp_layout and world.camp_layout.active):
+		hide()
+		return
+	if world.touch_id<0:
+		if hud.camp_dock and not hud.camp_dock.tab.is_empty():
+			hide()
+			return
+		var area:Rect2=hud._safe_rect()
+		position=Vector2(area.position.x+65.,area.end.y-135.)
+		resting=true
+		offset=Vector2.ZERO
+		queue_redraw()
+		show()
+		return
+	resting=false
 	var offset_now: Vector2 = (world.touch_now - world.touch_origin).limit_length(82.) * .52
 	if not visible or offset.distance_squared_to(offset_now) > .04:
 		offset = offset_now
@@ -26,8 +43,12 @@ func _process(_delta: float) -> void:
 
 
 func _draw() -> void:
-	draw_circle(Vector2.ZERO, 50., Color("#152a3c55"), true, -1, true)
-	draw_arc(Vector2.ZERO, 48., 0., TAU, 48, Color("#fcf1cda6"), 2., true)
-	draw_circle(offset + Vector2(0, 2), 21., Color("#0e253775"), true, -1, true)
-	draw_circle(offset, 20., Color("#fff4dcb0"), true, -1, true)
-	draw_arc(offset, 19., 0., TAU, 32, Color("#ffffedb3"), 1., true)
+	var strength:=.68 if resting else 1.
+	draw_circle(Vector2.ZERO,50.,Color(.29,.34,.43,.30*strength),true,-1,true)
+	draw_arc(Vector2.ZERO,48.,0.,TAU,48,Color(.99,.96,.93,.68*strength),1.75,true)
+	for i in 4:
+		var dir:=Vector2.UP.rotated(i*PI*.5)
+		var side:=dir.orthogonal()
+		draw_colored_polygon(PackedVector2Array([dir*43.,dir*35.+side*5.,dir*35.-side*5.]),Color(1.,.98,.94,.80*strength))
+	draw_circle(offset+Vector2(0,1),21.,Color(.12,.16,.22,.20),true,-1,true)
+	draw_circle(offset,20.,Color(1.,.98,.94,.86*strength),true,-1,true)

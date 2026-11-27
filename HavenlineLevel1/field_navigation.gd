@@ -62,10 +62,8 @@ func _draw() -> void:
 
 func reflow() -> void:
 	var safe: Rect2 = hud._safe_rect()
-	# Home and the current purchase are different destinations. Keep the compass
-	# above the live ticket even when a long objective wraps on the cover screen.
-	var ticket_y: float = hud.objective.position.y if is_instance_valid(hud.objective) else safe.end.y-90.
-	position = Vector2(roundf(safe.position.x),roundf(ticket_y-size.y-8.))
+	var ticket_bottom:float=hud.objective.position.y+hud.objective.size.y
+	position=Vector2(roundf(safe.position.x),roundf(ticket_bottom+8.))
 
 func _process(_dt: float) -> void:
 	refresh()
@@ -75,6 +73,40 @@ func refresh() -> void:
 		hide()
 		return
 	var feet: Vector3 = world.actor.global_position
+	var selected:Vector3=hud.camp_dock.tracked_point()
+	if selected.is_finite():
+		if feet.distance_to(selected)<1.65:
+			hud.camp_dock.tracking=""
+		else:
+			var aim_at:=selected
+			var distance:=feet.distance_to(selected)
+			var from_inside:bool=world.field_env.is_inside_camp(feet)
+			var to_inside:bool=world.camp_active and world.camp_layout.bounds().has_point(Vector2(selected.x,selected.z))
+			if to_inside and not from_inside and route.update(world,Vector2(feet.x,feet.z)):
+				aim_at=Vector3(route.direction_target.x,feet.y,route.direction_target.y)
+				distance=route.distance
+			elif from_inside and not to_inside:
+				var shortest:=INF
+				for gate in world.gates:
+					if not gate.active:continue
+					var gate_at:Vector3=gate.global_position
+					var via:=feet.distance_to(gate_at)+gate_at.distance_to(selected)
+					if via<shortest:
+						shortest=via
+						aim_at=gate_at
+						distance=via
+			elif from_inside and to_inside:
+				aim_at=world.camp_layout.next_waypoint(feet,selected)
+			var bearing:Vector2=world.camera.unproject_position(aim_at)-world.camera.unproject_position(feet)
+			needle.rotation=bearing.angle()
+			var caption:String=hud.camp_dock.tracking_name
+			label.text="%s  %d m"%[caption,roundi(distance)]
+			size.x=maxf(194.,label.get_theme_font("font").get_string_size(label.text,HORIZONTAL_ALIGNMENT_LEFT,-1,TYPE_SIZE).x+LABEL_LEFT+LABEL_RIGHT)
+			label.size.x=size.x-LABEL_LEFT-LABEL_RIGHT
+			label.accessibility_name=label.text
+			reflow()
+			show()
+			return
 	if world.field_env.is_inside_camp(feet):
 		hide()
 		return

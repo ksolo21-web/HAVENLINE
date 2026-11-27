@@ -328,6 +328,9 @@ func _configure_stem(tree: ResourceTreeScript) -> void:
 	tree._marks.clear()
 
 func _input(event: InputEvent) -> void:
+	if field_ready and opening_hud.camp_dock.handle(event):
+		get_viewport().set_input_as_handled()
+		return
 	if field_ready and camp_layout.handle_input(event):
 		get_viewport().set_input_as_handled()
 		return

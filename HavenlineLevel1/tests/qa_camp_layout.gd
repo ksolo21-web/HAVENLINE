@@ -35,6 +35,18 @@ func click(at:Vector2) -> void:
 		root.push_input(e,true)
 	await physics_frame
 
+func open_layout(mouse:=false) -> void:
+	var dock=field.opening_hud.camp_dock
+	var menu_at:Vector2=dock.tabs.Camp.get_global_rect().get_center()
+	if mouse:await click(menu_at)
+	else:await tap(menu_at)
+	for command in dock.commands:
+		if command[1]!="move":continue
+		var move_at:Vector2=command[0].get_global_rect().get_center()
+		if mouse:await click(move_at)
+		else:await tap(move_at)
+		return
+
 func photograph(label:String) -> void:
 	if shot_dir.is_empty(): return
 	await process_frame
@@ -94,7 +106,7 @@ func live() -> void:
 	recording=not film_dir.is_empty()
 	if recording: physics_frame.connect(film)
 	await hold(35)
-	await tap(layout.overlay.launcher.get_global_rect().get_center())
+	await open_layout()
 	verify("Touch opens layout and liberates joystick",layout.active and field.touch_id<0)
 	await hold(32)
 	await select_building(COOKER)
@@ -147,7 +159,7 @@ func live() -> void:
 	# Machine checkout does not turn these into free permanent unlocks. Seed their own recipes separately.
 	for id in ["saw_bench","quarry_drill","watchtower","orbit_upgrade"]:open_site(id)
 	for i in 55:await physics_frame
-	await click(layout.overlay.launcher.get_global_rect().get_center())
+	await open_layout(true)
 	verify("Mouse opens identical layout controls",layout.active)
 	for row in [["saw_bench",Vector2(-3.5,2.5)],["quarry_drill",Vector2(7.75,-6.25)],["north_counter",Vector2(4.,-9.)],["storage_wood",Vector2(4.50,-2.50)]]:
 		var id:String=row[0]
@@ -199,7 +211,7 @@ func upgrade() -> void:
 	for i in 60: await physics_frame
 	field.actor.global_position=Vector3(1.72,0,1.8)
 	var old_mark:Vector3=field.depot.upgrade_mark.global_position
-	await tap(layout.overlay.launcher.get_global_rect().get_center())
+	await open_layout()
 	await select_building("storage_wood")
 	await place_at("storage_wood",Vector2(-3.50,-3.0))
 	await tap(layout.overlay.done.get_global_rect().get_center())

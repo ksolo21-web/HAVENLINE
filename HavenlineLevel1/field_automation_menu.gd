@@ -33,6 +33,9 @@ func install(host)->void:
 
 func _process(_dt:float)->void:
 	if not world.field_ready:return
+	if world.opening_hud.camp_dock:
+		hide()
+		return
 	var book=world.inventory
 	var relevant:bool=(book.offer_open(P.FOOD_LINE) or book.offer_open(P.SUPPLY_LINE))
 	visible=relevant and world.camp_active and world.field_env.is_inside_camp(world.actor.global_position) and not world.persist_blocked and world.reset_time<=0.

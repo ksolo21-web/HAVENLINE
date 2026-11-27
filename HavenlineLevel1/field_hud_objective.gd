@@ -65,6 +65,7 @@ func set_message(message: String, artwork: Dictionary) -> void:
 	fallback = parts.size() < 2
 	for index in range(1, parts.size()):
 		var word := parts[index].strip_edges()
+		if heading=="Rescue survivor":word=word.trim_suffix(" at the southwest plot")
 		var entry := remaining.search(word)
 		if not entry:
 			fallback = true

@@ -74,7 +74,7 @@ func _process(_dt:float) -> void:
 	if layout.active and not available:
 		layout.close()
 		return
-	if launcher.visible != (available and not layout.active): sync()
+	if launcher.visible:launcher.hide()
 	if layout.active: queue_redraw()
 
 func sync() -> void:
@@ -82,7 +82,7 @@ func sync() -> void:
 	var active:bool=layout.active
 	var host=layout.world
 	var safe:Rect2=host.opening_hud._safe_rect()
-	launcher.visible=host.camp_active and not host.persist_blocked and host.reset_time<=0 and not active
+	launcher.hide()
 	launcher.size=Vector2(93,50)
 	var continued:bool = host.opening_hud.level_continue and host.opening_hud.level_continue.visible
 	launcher.position=Vector2(safe.end.x-launcher.size.x,safe.end.y-(225. if continued else 131.))

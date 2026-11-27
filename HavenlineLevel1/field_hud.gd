@@ -21,51 +21,47 @@ const HEALTH:=Color("#69db96")
 
 const ObjectiveTicket = preload("res://field_hud_objective.gd")
 const MovementStick = preload("res://field_thumbstick.gd")
-const PAPER := Color("#fbf4df")
-const INK := Color("#193851")
+const PAPER := Color("#fbf1e8")
+const INK := Color("#142236")
 const OCHRE := Color("#a15d22")
 
 class DisplayMark extends Control:
+	const GEAR=preload("res://assets/field_ui/modern/gear.png")
 	func _draw() -> void:
-		var ink := Color("#f9e9bd")
-		for y: float in [5.,11.,17.]:
-			draw_line(Vector2(0,y),Vector2(19,y),ink,1.6,true)
-		for knob: Vector2 in [Vector2(6,5),Vector2(14,11),Vector2(8,17)]:
-			draw_circle(knob,2.7,Color("#213849"),true,-1,true)
-			draw_circle(knob,1.8,ink,true,-1,true)
+		draw_texture_rect(GEAR,Rect2(Vector2.ZERO,size),false)
 
 class Supply extends Control:
 	var art: TextureRect
 	var amount: Label
-	var rail := StyleBoxFlat.new()
 	func install(icon: TextureRect, label: Label) -> void:
 		mouse_filter = Control.MOUSE_FILTER_IGNORE
 		art = icon
 		amount = label
 		add_child(art)
 		add_child(amount)
-		rail.bg_color = Color("#173751ec")
-		rail.border_color = Color("#a7cbd1")
-		rail.border_width_bottom = 2
-		rail.set_corner_radius_all(12)
-		rail.shadow_color = Color("#122c4055")
-		rail.shadow_size = 2
-		rail.shadow_offset = Vector2(0,1)
 		resized.connect(arrange)
 		measure()
 	func measure() -> void:
-		custom_minimum_size = Vector2(ceilf(amount.get_minimum_size().x)+73,53)
+		custom_minimum_size = Vector2(ceilf(amount.get_minimum_size().x)+69,55)
 		arrange()
 	func arrange() -> void:
-		art.position = Vector2(0,0)
-		art.size = Vector2(52,51)
-		amount.position = Vector2(59,3)
-		amount.size = Vector2(maxf(1.,size.x-69),44)
+		art.position = Vector2(5,3)
+		art.size = Vector2(41,47)
+		amount.position = Vector2(54,3)
+		amount.size = Vector2(maxf(1.,size.x-58),44)
 		queue_redraw()
 	func _draw() -> void:
-		draw_style_box(rail,Rect2(18,9,maxf(1.,size.x-18),32))
+		if get_index()>0:draw_line(Vector2(0,12),Vector2(0,size.y-12),Color("#d0c5c2"),1.1,true)
 
 var portrait:=TextureRect.new()
+var camp_dock=preload("res://field_camp_dock.gd").new()
+var chapter_detail:=Label.new()
+var objective_caption:=Label.new()
+var accent:=ColorRect.new()
+var rail_backs:Array[Panel]=[]
+var overflow:=Label.new()
+var counts_area:=Rect2()
+var group_rule:=ColorRect.new()
 var objective:=Panel.new()
 var ticket := ObjectiveTicket.new()
 var thumbstick := MovementStick.new()
@@ -166,7 +162,7 @@ func _material_row(kinds:Array, finished:=false) -> HBoxContainer:
 		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		var amount := Label.new()
-		_type(amount,25,WHITE)
+		_type(amount,25,INK)
 		amount.text = "0"
 		amount.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		amount.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -185,8 +181,8 @@ func _ready() -> void:
 	super()
 	stock.hide()
 	plate.name="SurvivorStatus"
-	var hero_plate := _skin(Color("#183d57fc"),Color("#bfdae1"),15)
-	hero_plate.border_width_bottom=3
+	var hero_plate := _skin(PAPER,Color("#bfbec1"),13)
+	hero_plate.border_width_bottom=1
 	plate.add_theme_stylebox_override("panel",hero_plate)
 	thumbstick.install(get_parent().get_parent())
 	add_child(thumbstick)
@@ -199,9 +195,12 @@ func _ready() -> void:
 	enamel.shader=FRAME
 	portrait.material=enamel
 	add_child(portrait)
-	chapter=_label(25,WHITE)
-	chapter.text="Level 1  ·  Snow camp"
-	health_text=_label(17,Color("#effbdf"))
+	chapter=_label(29,INK)
+	chapter.text="HAVENLINE"
+	_type(chapter_detail,17,Color("#5a5a65"))
+	chapter_detail.text="Camp  ·  Level 1"
+	add_child(chapter_detail)
+	health_text=_label(15,INK)
 	threat_text=_label(16,Color("#ffbd9f"))
 	threat_text.text="Wolves nearby"
 	threat_chip.mouse_filter=Control.MOUSE_FILTER_IGNORE
@@ -231,11 +230,17 @@ func _ready() -> void:
 	mineral_row.hide()
 	objective.name="ObjectiveStrip"
 	objective.mouse_filter=Control.MOUSE_FILTER_IGNORE
-	var strip:=_skin(PAPER,Color("#b59a6b"),16)
-	strip.border_width_bottom=3
+	var strip:=_skin(PAPER,Color("#cbbdbe"),13)
+	strip.border_width_bottom=1
 	objective.add_theme_stylebox_override("panel",strip)
 	add_child(objective)
 	objective.add_child(ticket)
+	_type(objective_caption,17,Color("#59505a"))
+	objective_caption.text="CAMP OBJECTIVE"
+	objective.add_child(objective_caption)
+	accent.mouse_filter=Control.MOUSE_FILTER_IGNORE
+	accent.color=Color("#ff6907")
+	objective.add_child(accent)
 	_type(prompt,24,INK)
 	move_child(prompt,-1)
 	payment_track.name="PurchaseProgress"
@@ -255,6 +260,23 @@ func _ready() -> void:
 	stock_row=_material_row(GOODS.keys(),true)
 	stock_row.name="FinishedGoods"
 	stock_row.hide()
+	for group:HBoxContainer in [row,mineral_row,stock_row]:
+		var rail:=Panel.new()
+		rail.mouse_filter=Control.MOUSE_FILTER_IGNORE
+		rail.add_theme_stylebox_override("panel",_skin(PAPER,Color("#c5bdbe"),11))
+		add_child(rail)
+		move_child(rail,group.get_index())
+		rail_backs.append(rail)
+	_type(overflow,22,INK)
+	overflow.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
+	overflow.vertical_alignment=VERTICAL_ALIGNMENT_CENTER
+	overflow.hide()
+	add_child(overflow)
+	group_rule.mouse_filter=Control.MOUSE_FILTER_IGNORE
+	group_rule.color=Color("#d0c5c2")
+	add_child(group_rule)
+	add_child(camp_dock)
+	camp_dock.configure(get_parent().get_parent(),self)
 	level_continue=_button()
 	level_continue.name="ContinueToLevel2"
 	level_continue.text="Preview Level 2  ›"
@@ -297,10 +319,12 @@ func _finish_damage_notice() -> void:
 	threat_chip.visible=nearby_threat
 
 func set_threat(nearby:bool) -> void:
+	var changed:=nearby_threat!=nearby
 	nearby_threat=nearby
 	if threat_text:
 		threat_text.visible=nearby and not damage_text.visible
 		threat_chip.visible=threat_text.visible
+	if changed:reflow()
 
 func field_status(counts:Dictionary,message:String) -> void:
 	var changed:=false
@@ -353,9 +377,9 @@ func settlement_status(journal:Dictionary,activity:float) -> void:
 		return
 	shown_balances=totals
 	shown_level=int(journal.level)
-	var heading:="Level 2  ·  Preview" if shown_level==2 else "Level 1  ·  Snow camp"
+	var heading:="Camp  ·  Level 2" if shown_level==2 else "Camp  ·  Level 1"
 	var quantity:={"cash":totals.x,"planks":totals.y,"blocks":totals.z,"meals":totals.w}
-	chapter.text=heading
+	chapter_detail.text=heading
 	stock_row.visible=totals!=Vector4i.ZERO
 	for kind: String in quantity:
 		var amount: int=quantity[kind]
@@ -390,9 +414,16 @@ func position_quality_button(button:Button,ultra:bool) -> void:
 		quality=button
 		display_mark.mouse_filter=Control.MOUSE_FILTER_IGNORE
 		quality.add_child(display_mark)
-		display_mark.size=Vector2(22,22)
-		display_mark.position=Vector2(34,32)
-		_action(quality,Color("#234258ee"),Color("#e2d5b1"),WHITE)
+		display_mark.size=Vector2(32,32)
+		display_mark.position=Vector2(32,20)
+		_action(quality,PAPER,Color("#c5bdbe"),INK)
+		for state:String in ["normal","pressed","hover","hover_pressed"]:
+			var gear_skin:=_skin(PAPER,Color("#c5bdbe"),13)
+			gear_skin.expand_margin_left=-18.
+			gear_skin.expand_margin_right=-18.
+			gear_skin.expand_margin_top=-10.
+			gear_skin.expand_margin_bottom=-30.
+			quality.add_theme_stylebox_override(state,gear_skin)
 		_type(quality_help,18,WHITE)
 		quality_help.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
 		quality_help.add_theme_stylebox_override("normal",_skin(NAVY,ICE,8))
@@ -414,10 +445,10 @@ func position_quality_button(button:Button,ultra:bool) -> void:
 	was_ultra=ultra
 	quality_initialized=true
 	var safe:=_safe_rect()
-	quality.size=Vector2(88,84)
-	quality.position=safe.end-quality.size
+	quality.size=Vector2(96,96)
+	quality.position=Vector2(safe.end.x-quality.size.x,safe.position.y)
 	quality_help.size=Vector2(74,28)
-	quality_help.position=Vector2(7,-18)
+	quality_help.position=Vector2(-12,64)
 
 func reflow() -> void:
 	if not is_instance_valid(row) or not is_instance_valid(level_continue):
@@ -427,19 +458,21 @@ func reflow() -> void:
 	var top:=safe.position
 	var right:=safe.end.x
 	var width:=safe.size.x
-	portrait.position=top+Vector2(0,-2)
-	portrait.size=Vector2(79,79)
-	plate.position=top+Vector2(35,7)
-	chapter.position=top+Vector2(84,6)
+	var hero_width:=220.
+	plate.position=top
+	plate.size=Vector2(hero_width,78.)
+	portrait.position=top+Vector2(5,5)
+	portrait.size=Vector2(67,67)
+	chapter.position=top+Vector2(78,1)
 	chapter.size=chapter.get_minimum_size()
-	var hero_width := maxf(205.,ceilf(chapter.size.x)+97.)
-	plate.size=Vector2(hero_width-35.,56)
-	health_text.position=top+Vector2(hero_width-58,36)
+	chapter_detail.position=top+Vector2(79,32)
+	chapter_detail.size=chapter_detail.get_minimum_size()
+	health_text.position=top+Vector2(hero_width-62.,51.)
 	health_text.size=health_text.get_minimum_size()
 	for bar in [health_trail,health_bar]:
-		bar.position=top+Vector2(83,44)
-		bar.size=Vector2(hero_width-148,9)
-	threat_text.position=top+Vector2(86,66)
+		bar.position=top+Vector2(79,62)
+		bar.size=Vector2(hero_width-148,7)
+	threat_text.position=top+Vector2(16,83)
 	threat_chip.position=threat_text.position-Vector2(7,1)
 	threat_chip.size=threat_text.get_minimum_size()+Vector2(14,2)
 	threat_text.add_theme_color_override("font_color",Color("#ffddb0"))
@@ -448,16 +481,51 @@ func reflow() -> void:
 	damage_text.position=health_text.position+Vector2(0,23)
 	damage_text.add_theme_color_override("font_outline_color",Color("#542b28"))
 	damage_text.add_theme_constant_override("outline_size",4)
-	var resource_width:=maxf(120.,width-hero_width-10.)
-	_anchor_right(row,right,top.y+2,resource_width)
-	var resource_end := row.position.y+row.size.y*row.scale.y
-	if mineral_row.visible:
-		_anchor_right(mineral_row,right,resource_end,resource_width)
-		resource_end=mineral_row.position.y+mineral_row.size.y*mineral_row.scale.y
-	if stock_row.visible:
-		_anchor_right(stock_row,right,resource_end,resource_width)
-		resource_end=stock_row.position.y+stock_row.size.y*stock_row.scale.y
-	operation.position=Vector2(right-87.,resource_end+2.)
+	var resource_width:=maxf(120.,width-hero_width-106.)
+	var rail_right:=right-99.
+	var groups:Array[HBoxContainer]=[row,stock_row,mineral_row]
+	var full_width:=0.
+	var extras:=0
+	for group in groups:
+		if group.visible:
+			full_width+=group.get_combined_minimum_size().x
+			if group!=row:
+				for cell in group.get_children():
+					if cell.visible:extras+=1
+	var compressed:=extras>0 and full_width*.82>resource_width
+	var panel_width:=minf(full_width,resource_width)
+	var chip_width:=53. if compressed else 0.
+	if compressed:panel_width=minf(resource_width,row.get_combined_minimum_size().x+chip_width)
+	if width>1100.:rail_right=minf(rail_right,safe.get_center().x+panel_width*.5)
+	var x:=rail_right-panel_width
+	var start_x:=x
+	var factor:=minf(1.,(panel_width-chip_width)/maxf(1.,row.get_combined_minimum_size().x if compressed else full_width))
+	var rail_height:=55.*factor
+	for group in groups:
+		group.modulate.a=0. if compressed and group!=row else 1.
+		if not group.visible:continue
+		if group.modulate.a==0.:
+			group.position=Vector2(start_x,top.y)
+			group.scale=Vector2.ONE*minf(1.,panel_width/maxf(1.,group.get_combined_minimum_size().x))
+			continue
+		group.size=group.get_combined_minimum_size()
+		group.scale=Vector2.ONE*factor
+		group.position=Vector2(x,top.y)
+		x+=group.size.x*factor
+	counts_area=Rect2(start_x,top.y,panel_width,rail_height)
+	for i in rail_backs.size():rail_backs[i].visible=i==0
+	rail_backs[0].position=counts_area.position
+	rail_backs[0].size=counts_area.size
+	overflow.visible=compressed
+	overflow.text="+%d"%extras
+	overflow.accessibility_name="Show all carried resources and workshop goods"
+	overflow.position=Vector2(rail_right-chip_width,top.y)
+	overflow.size=Vector2(chip_width,rail_height)
+	group_rule.visible=stock_row.visible or mineral_row.visible
+	group_rule.position=Vector2(start_x+row.size.x*factor,top.y+12.*factor)
+	group_rule.size=Vector2(1.,31.*factor)
+	var resource_end:=top.y+rail_height
+	operation.position=Vector2(rail_right-87.,resource_end+2.)
 	operation.size=Vector2(87.,5.)
 	var available:=minf(width-100.,500.)
 	var card_width:=clampf(ticket.natural_width(),190.,available)
@@ -468,19 +536,29 @@ func reflow() -> void:
 		prompt.size.y=prompt.get_minimum_size().y
 		card_height=maxf(48.,prompt.size.y+20.)
 	if payment_track.visible:card_height+=6.
-	objective.size=Vector2(card_width,card_height)
-	objective.position=Vector2(top.x,safe.end.y-card_height-12.)
-	ticket.position=Vector2.ZERO
-	ticket.size=Vector2(card_width,card_height-(6. if payment_track.visible else 0.))
+	var notice_offset:=31. if nearby_threat or damage_text.visible else 0.
+	var objective_y:=top.y+89.+notice_offset
+	var base_height:=card_height
+	card_height+=27.
+	objective_y=maxf(objective_y,resource_end+6.)
+	objective.size=Vector2(card_width+10.,card_height)
+	objective.position=Vector2(top.x,objective_y)
+	objective_caption.position=Vector2(18,5)
+	objective_caption.size=Vector2(card_width-28,23)
+	accent.position=Vector2(5,9)
+	accent.size=Vector2(4,card_height-18.)
+	ticket.position=Vector2(7,25)
+	ticket.size=Vector2(card_width,base_height-(6. if payment_track.visible else 0.))
 	ticket.queue_redraw()
-	prompt.position=objective.position+Vector2(15.,7.)
-	payment_track.position=objective.position+Vector2(12.,card_height-8.)
+	prompt.position=objective.position+Vector2(19.,30.)
+	payment_track.position=objective.position+Vector2(15.,card_height-8.)
 	payment_track.size=Vector2(card_width-24.,4.)
-	gate.position=Vector2(top.x,top.y+88.)
+	gate.position=Vector2(top.x,objective.position.y+objective.size.y+56.)
 	gate.size=Vector2(200,54)
 	tree.position=gate.position+Vector2(0,60)
 	tree.size=gate.size
 	level_continue.size=Vector2(187,82)
-	level_continue.position=safe.end-Vector2(187,164)
+	level_continue.position=safe.end-Vector2(187,167)
 	if is_instance_valid(quality):
-		quality.position=safe.end-quality.size
+		quality.position=Vector2(safe.end.x-quality.size.x,top.y)
+	if is_instance_valid(camp_dock):camp_dock.reflow()

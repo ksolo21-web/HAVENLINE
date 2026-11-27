@@ -30,15 +30,19 @@ func until(fn:Callable,limit:=1500) ->bool:
 
 func buy(id:String) -> void:
  var book=field.inventory
- var menu=field.settlement_loop.conveyors.menu
  if id in P.LINES:
   await ticks(4)
-  var launcher:Vector2=menu.launcher.get_global_rect().get_center()
+  var dock=field.opening_hud.camp_dock
+  var launcher:Vector2=dock.build.get_global_rect().get_center()
   touch(7,launcher,true)
   touch(7,launcher,false)
   await ticks(3)
   if not outdir.is_empty() and id==P.FOOD_LINE:await shot("Choose-automation")
-  var choice:Vector2=menu.choices[id].get_global_rect().get_center()
+  var choice:=Vector2.INF
+  for command in dock.commands:
+   if command[1]==id:choice=command[0].get_global_rect().get_center()
+  check(id+" is a visible build action",choice.is_finite())
+  if not choice.is_finite():return
   touch(7,choice,true)
   touch(7,choice,false)
  check(id+" physically available",book.offer_open(id) and field.offer_floors[id].visible)
