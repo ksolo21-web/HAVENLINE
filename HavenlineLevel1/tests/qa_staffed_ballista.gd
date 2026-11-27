@@ -26,6 +26,10 @@ func run() -> void:
 	checks["Purchased footings rise before the crew takes its station"] = art.visible and not art.swivel.is_visible_in_tree()
 	for i in 42:tower.advance(DT,true)
 	checks["Purchased camp exposes an occupied open deck"] = tower.active and art.crew.is_visible_in_tree() and art.bow.is_visible_in_tree() and art.bolt.is_visible_in_tree() and art.crew.rig.get_bone_count()>=16
+	var guard_meshes: Array[Node] = art.crew.find_children("*","MeshInstance3D",true,false)
+	checks["See-through pass is attached to the operator's skinned surfaces"] = not guard_meshes.is_empty() and guard_meshes.all(func(part): return part.material_overlay is ShaderMaterial and part.material_overlay.shader==art.GUARD_SIGHTLINE)
+	var platform_meshes: Array[Node] = art.frame.find_children("*","MeshInstance3D",true,false)
+	checks["Tower and launcher surfaces have no highlight pass or emission"] = platform_meshes.filter(func(part): return part not in guard_meshes).all(func(part): return part.material_overlay==null and not part.get_active_material(0).emission_enabled)
 	var bow_box:AABB = art.bow.get_aabb()
 	checks["Bow has a two-limb silhouette wider than the operator"] = bow_box.size.x>1.70 and bow_box.size.z>1.15
 	for i in 50:art.aim_at_world(at+Vector3.UP*.72,DT)

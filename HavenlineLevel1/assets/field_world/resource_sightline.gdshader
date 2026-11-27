@@ -16,13 +16,23 @@ uniform float relief_depth = 1.0;
 uniform bool has_relief;
 uniform bool vertex_paint;
 uniform bool ultra_filter;
-uniform bool worker_window;
+uniform bool canopy;
 uniform bool worker_in_view;
 uniform vec3 worker_origin;
 varying vec3 world_position;
 
 void vertex() {
 	world_position = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+}
+
+bool covers_boot_support(vec3 feet, vec3 eye, float speckle) {
+	vec3 offset = world_position - feet;
+	float depth = dot(offset, eye);
+	if (offset.y < 0.24 || depth <= 0.0 || depth > 4.4) {
+		return false;
+	}
+	vec3 projected = offset - eye * depth;
+	return speckle >= smoothstep(0.25, 0.49, dot(projected, projected));
 }
 
 void fragment() {
@@ -33,8 +43,10 @@ void fragment() {
 	float footprint = dot(projected, projected);
 	float speckle = fract(dot(floor(FRAGCOORD.xy), vec2(0.7548777, 0.5698403)));
 	float window = smoothstep(0.20, 0.54, footprint);
-	bool cover_worker = worker_window && worker_in_view && dot(eye, field_player_eye) > 0.999 && depth > 0.06 && depth < 3.8 && speckle >= window;
-	if (cover_worker || covers_field_player(world_position, FRAGCOORD.xy, eye)) {
+	bool main_view = dot(eye, field_player_eye) > 0.999;
+	bool cover_worker = canopy && worker_in_view && main_view && (covers_boot_support(worker_origin, eye, speckle) || (depth > 0.06 && depth < 3.8 && speckle >= window));
+	bool cover_boots = canopy && main_view && covers_boot_support(field_player_feet, eye, speckle);
+	if (cover_boots || cover_worker || covers_field_player(world_position, FRAGCOORD.xy, eye)) {
 		discard;
 	}
 	vec3 albedo = ultra_filter ? texture(paint_ultra, UV).rgb : texture(paint, UV).rgb;

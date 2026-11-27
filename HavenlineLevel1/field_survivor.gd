@@ -60,7 +60,6 @@ var unload_packets: Array[Dictionary] = []
 var next_packet := 0
 var dispatch_count := 0
 var outdoor_route = preload("res://field_home_route.gd").new()
-const WORK_RADIUS := 24.0
 const PICKUP_REACH := 1.22
 # In a busy camp the worker checks back after a bounded field circuit.
 # A rich stand can fill one complete 500-unit stack first.
@@ -955,7 +954,16 @@ func _start_field_job() -> void:
 		phase="waiting_storage"
 
 func _in_work_area(point: Vector3) -> bool:
-	return not world.field_env.is_inside_camp(point) and point.distance_squared_to(Vector3.ZERO) <= WORK_RADIUS*WORK_RADIUS
+	return not world.field_env.is_inside_camp(point)
+
+func resource_observer() -> Vector3:
+	return actor.global_position if can_defend() else Vector3.INF
+
+func active_worksite() -> Node3D:
+	if not can_defend(): return null
+	if phase in ["to_tree","work_ready","chopping","falling","pickup"] and is_instance_valid(tree): return tree
+	if phase in ["mining_approach","mining"] and is_instance_valid(assigned_bank): return assigned_bank
+	return null
 
 func _clear_outdoor_leg(a: Vector2,b: Vector2) -> bool:
 	if not _travel_clear(Vector3(a.x,0,a.y),Vector3(b.x,0,b.y),FOOT_RADIUS+.015): return false
@@ -1046,7 +1054,7 @@ func _swept_contact(site: Node3D, before: PackedVector3Array, after: PackedVecto
 		if _travel_clear(actor.global_position,hit,.035): return {"position":hit,"direction":after[i]-before[i]}
 	return {}
 
-func _choose_tree(origin: Vector3) -> bool:
+func _choose_tree(origin: Vector3, look_beyond_live := true) -> bool:
 	if worker_space("wood")==0: return false
 	var selected: Node3D
 	var best := INF
@@ -1054,7 +1062,6 @@ func _choose_tree(origin: Vector3) -> bool:
 	for pine in world.trees:
 		if not _source_available(pine,"rooted"): continue
 		var id: String = pine.get_meta("field_source_id","")
-		if not (id in ["survivor-work-pine","starter-wood"] or id.begins_with("pine@")): continue
 		var score := origin.distance_squared_to(pine.global_position)
 		if first and id=="survivor-work-pine": score-=220.0
 		elif id==previous_tree: score+=65.0
@@ -1078,7 +1085,8 @@ func _choose_tree(origin: Vector3) -> bool:
 		selected=pine
 		best=score
 		timber_approach=proposed
-	if not is_instance_valid(selected): return false
+	if not is_instance_valid(selected):
+		return look_beyond_live and world.forest.offer_worker_trees(origin) and _choose_tree(origin,false)
 	if tree!=selected: failed_swings=0
 	tree=selected
 	return true

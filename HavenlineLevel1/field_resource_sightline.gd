@@ -27,7 +27,7 @@ func _cutaway(source: StandardMaterial3D) -> ShaderMaterial:
 		paint.set_shader_parameter("relief_depth", source.normal_scale)
 		paint.set_shader_parameter("emission", source.emission)
 		paint.set_shader_parameter("emission_energy", source.emission_energy_multiplier if source.emission_enabled else 0.0)
-		paint.set_shader_parameter("worker_window",source.resource_name.to_lower() in ["crown","lip"])
+		paint.set_shader_parameter("canopy",source.resource_name.to_lower() in ["crown","lip"])
 		_apply_worker(paint)
 		materials[source] = paint
 	return materials[source]
@@ -59,12 +59,13 @@ func update(world: Node3D) -> void:
 	if eye != last_eye:
 		RenderingServer.global_shader_parameter_set("field_player_eye", eye)
 		last_eye = eye
-	var working := Vector3.INF
+	var visible_worker := Vector3.INF
 	var worker: Node3D = world.survivor
-	if is_instance_valid(worker) and worker.phase in ["chopping","mining"] and worker.can_defend():
-		working=worker.actor.global_position
-	if working!=worker_feet:
-		worker_feet=working
+	if is_instance_valid(worker) and worker.can_defend():
+		var at: Vector3 = worker.actor.global_position
+		if world.camera.is_position_in_frustum(at + Vector3.UP * .9): visible_worker = at
+	if visible_worker!=worker_feet:
+		worker_feet=visible_worker
 		for paint: ShaderMaterial in materials.values(): _apply_worker(paint)
 
 	if world.graphics.ultra != last_ultra:

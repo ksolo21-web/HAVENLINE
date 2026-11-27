@@ -8,6 +8,8 @@ During implementation, the reviewer compares a short rendered playthrough to tho
 
 Before marking a change as matching, retain the paired evidence and the independent verdict on the exact candidate. Each applicable visual or motion criterion must reach the owner's 9.5/10 threshold. Carry an open mismatch forward with its reference, affected behavior and owner. A player's report reopens the affected check. Preserve their save and keep work on the active trial branch.
 
+Main characters and survivors share a 9.9/10 minimum for independent character art, rigging, and animation reviews. Apply any stronger gate in the registered task packet.
+
 The original recordings and their identities are indexed in [the reference source manifest](../Docs/Design/ReferenceVideoLock/reference-video-sources.json). The [opening and upgrade clips](../Docs/Design/ReferenceVideoLock/2026-11-26-field-loop/Locked-sequences) show individual spend events.
 
 For the Level 1 worker and pet, use the selected [male survivor turnaround](https://github.com/ksolo21-web/HAVENLINE/blob/01664a73ddf5087f17f7e159fa0b6b4ed71367b5/Docs/Design/RenderArchive/2026-11-23/selected/characters-survivors-npcs/survivor_male_01.png) and [owl turnaround](https://github.com/ksolo21-web/HAVENLINE/blob/01664a73ddf5087f17f7e159fa0b6b4ed71367b5/Docs/Design/RenderArchive/2026-11-23/selected/animal-companions/pet_owl_01.png). Compare the face, silhouette, clothing or plumage, equipment, and visible details at gameplay scale.

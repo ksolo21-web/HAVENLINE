@@ -17,6 +17,7 @@ var chunks: Dictionary = {}
 var templates: Array = []
 var district := FastNoiseLite.new()
 var center_chunk := Vector2i(99999, 99999)
+var retained_worker_chunks: Array[Vector2i] = []
 var limit: int
 var next_scan := 0.0
 
@@ -135,26 +136,37 @@ func chunk_for(pos: Vector3) -> Vector2i:
 func _update_neighborhood() -> void:
 	var here: Vector3 = host.actor.global_position
 	var center := chunk_for(here)
-	if center != center_chunk:
+	var worker: Vector3 = host.survivor.resource_observer() if is_instance_valid(host.survivor) else Vector3.INF
+	var worksite: Node3D = host.survivor.active_worksite() if is_instance_valid(host.survivor) else null
+	var worker_chunks: Array[Vector2i] = []
+	if worker.is_finite() and worker.length_squared() > OPENING_RADIUS * OPENING_RADIUS:
+		worker_chunks.append(chunk_for(worker))
+	if worksite and worksite.global_position.length_squared() > OPENING_RADIUS * OPENING_RADIUS:
+		var key := chunk_for(worksite.global_position)
+		if not worker_chunks.has(key): worker_chunks.append(key)
+	if center != center_chunk or worker_chunks != retained_worker_chunks:
 		center_chunk = center
+		retained_worker_chunks = worker_chunks
 		for key: Vector2i in chunks.keys():
-			if absi(key.x-center.x) > 1 or absi(key.y-center.y) > 1:
+			if not worker_chunks.has(key) and (absi(key.x-center.x)>1 or absi(key.y-center.y)>1):
 				_unload_chunk(key)
 		for z in range(maxi(-limit, center.y-1), mini(limit, center.y+2)):
 			for x in range(maxi(-limit, center.x-1), mini(limit, center.x+2)):
 				var key := Vector2i(x, z)
 				if not chunks.has(key):
 					_load_chunk(key)
+		for key in worker_chunks:
+			if not chunks.has(key): _load_chunk(key)
 	for chunk: Dictionary in chunks.values():
 		for row: Dictionary in chunk.sources:
-			var distance := here.distance_squared_to(row.position)
+			var distance := minf(here.distance_squared_to(row.position),worker.distance_squared_to(row.position))
 			if distance <= INTERACT_DISTANCE * INTERACT_DISTANCE and not is_instance_valid(row.live):
 				row.live = host.add_resource_source(row.id, row.kind, Vector2(row.position.x, row.position.z), mini(2, row.variant))
 				if is_instance_valid(row.live):
 					row.live.rotation.y = row.yaw
 					row.live.scale = Vector3.ONE * float(row.scale)
 					if row.kind == "wood": host.field_env.tint_canopy(row.live)
-			elif distance > RELEASE_DISTANCE * RELEASE_DISTANCE and is_instance_valid(row.live):
+			elif distance > RELEASE_DISTANCE * RELEASE_DISTANCE and is_instance_valid(row.live) and row.live != worksite:
 				host.unload_resource_source(row.id)
 				row.live = null
 			var show_proxy: bool = not is_instance_valid(row.live) and host.is_source_available(row.id)

@@ -8,8 +8,10 @@ const LIVE_RADIUS := 5.0
 var world: Node3D
 var records: Array[Dictionary] = []
 var last_scan := Vector3.INF
+var last_worker_scan := Vector3.INF
 var elapsed := 0.0
 var last_availability := -1
+var worker_probe_offset := 0
 
 func install(host: Node3D) -> void:
 	world = host
@@ -64,26 +66,49 @@ func refresh_camp(_animate: bool) -> void:
 		_show_pine(row,not occupied)
 	last_scan = Vector3.INF
 
+func _open_pine(row: Dictionary) -> void:
+	var at: Transform3D = row.transform
+	var tree = world.add_resource_source(row.id,"wood",Vector2(at.origin.x,at.origin.z),row.variant)
+	tree.global_transform = Transform3D(at.basis.scaled(Vector3.ONE/tree.TREE_SCALE),at.origin)
+	world.field_env.tint_canopy(tree)
+	row.live = tree
+	_show_pine(row,false)
+
+func offer_worker_trees(origin: Vector3) -> bool:
+	# When the live set has no reachable job, offer the nearest standing
+	# batched pines. Only the selected worksite stays live at a distance.
+	var candidates: Array[Dictionary] = []
+	for row in records:
+		if row.get("occupied",false) or is_instance_valid(row.live) or not world.is_source_available(row.id): continue
+		candidates.append(row)
+	if candidates.is_empty(): return false
+	candidates.sort_custom(func(a,b): return origin.distance_squared_to(a.transform.origin)<origin.distance_squared_to(b.transform.origin))
+	var count := mini(4,candidates.size())
+	for i in count: _open_pine(candidates[posmod(worker_probe_offset+i,candidates.size())])
+	worker_probe_offset = posmod(worker_probe_offset+count,candidates.size())
+	last_scan = Vector3.INF
+	return true
+
 func advance(dt: float) -> void:
 	if not world: return
 	elapsed += dt
 	if elapsed < .16: return
 	elapsed = 0.0
 	var here: Vector3 = world.actor.global_position
-	if here.distance_squared_to(last_scan)<.04 and last_availability==world.lifecycle.availability_revision: return
+	var worker: Vector3 = world.survivor.resource_observer() if is_instance_valid(world.survivor) else Vector3.INF
+	var worksite: Node3D = world.survivor.active_worksite() if is_instance_valid(world.survivor) else null
+	var worker_unchanged := worker == last_worker_scan or worker.distance_squared_to(last_worker_scan)<.04
+	if here.distance_squared_to(last_scan)<.04 and worker_unchanged and last_availability==world.lifecycle.availability_revision: return
 	last_availability=world.lifecycle.availability_revision
 	last_scan = here
+	last_worker_scan = worker
 	for row in records:
 		if row.get("occupied",false): continue
 		var at: Transform3D = row.transform
-		var distance := at.origin.distance_squared_to(here)
+		var distance := minf(at.origin.distance_squared_to(here),at.origin.distance_squared_to(worker))
 		if distance < LIVE_RADIUS * LIVE_RADIUS and not is_instance_valid(row.live):
-			var tree = world.add_resource_source(row.id,"wood",Vector2(at.origin.x,at.origin.z),row.variant)
-			tree.global_transform = Transform3D(at.basis.scaled(Vector3.ONE/tree.TREE_SCALE),at.origin)
-			world.field_env.tint_canopy(tree)
-			row.live = tree
-			_show_pine(row,false)
-		elif distance > 40.0 and is_instance_valid(row.live):
+			_open_pine(row)
+		elif distance > 40.0 and is_instance_valid(row.live) and row.live != worksite:
 			world.unload_resource_source(row.id)
 			row.live = null
 		var show_proxy:bool=not is_instance_valid(row.live) and world.is_source_available(row.id)

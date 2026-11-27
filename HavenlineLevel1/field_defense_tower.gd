@@ -29,6 +29,7 @@ func setup(host: Node3D) -> void:
 	add_child(guard)
 	if ResourceLoader.exists("res://field_tower_art.gd"):
 		art=load("res://field_tower_art.gd").new()
+		art.viewer=world.camera
 		add_child(art)
 		art.hide()
 

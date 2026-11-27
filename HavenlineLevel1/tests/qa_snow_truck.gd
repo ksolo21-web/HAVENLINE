@@ -51,6 +51,32 @@ func _key() -> void:
 	root.push_input(event,true)
 	await physics_frame
 
+func _blade_checks() -> void:
+	var center: float = truck.BLADE_DEPTH
+	var pine_at: Vector3 = truck.body.to_global(Vector3(0.,0.,center-.86))
+	var bank_at: Vector3 = truck.body.to_global(Vector3(0.,0.,center-1.01))
+	var wolf_at: Vector3 = truck.body.to_global(Vector3(0.,0.,center-.92))
+	var side_at: Vector3 = truck.body.to_global(Vector3(.99,0.,center-.68))
+	var miss_at: Vector3 = truck.body.to_global(Vector3(0.,0.,center-1.06))
+	var pine := field.add_resource_source("truck-center-pine","wood",Vector2(pine_at.x,pine_at.z)) as Node3D
+	var bank := field.add_resource_source("truck-center-bank","stone",Vector2(bank_at.x,bank_at.z)) as Node3D
+	var side := field.add_resource_source("truck-side-pine","wood",Vector2(side_at.x,side_at.z)) as Node3D
+	var miss := field.add_resource_source("truck-miss-pine","wood",Vector2(miss_at.x,miss_at.z)) as Node3D
+	var wolf = field.encounters._add(wolf_at,false,998,wolf_at)
+	var hp: int = wolf.hp
+	truck.attack_delay = 0.
+	truck._sweep_blades()
+	_assert("central leading edge chops a rooted pine",pine.strikes==1)
+	_assert("central leading edge mines a bank",bank.strikes==1)
+	_assert("central leading edge damages a wolf once",wolf.hp==hp-2)
+	_assert("side blade still chops and a target beyond reach stays untouched",side.strikes==1 and miss.strikes==0)
+	truck._sweep_blades()
+	_assert("blade cooldown prevents a duplicate hit",pine.strikes==1 and wolf.hp==hp-2)
+	for id in ["truck-center-pine","truck-center-bank","truck-side-pine","truck-miss-pine"]:
+		field.unload_resource_source(id)
+	field.encounters._remove(wolf)
+	truck.attack_delay = 0.
+
 func run() -> void:
 	field = load("res://field_opening.tscn").instantiate()
 	root.add_child(field)
@@ -83,6 +109,7 @@ func run() -> void:
 		for mark in chunk.marks:
 			if mark.tire and not field.field_env.is_inside_camp(mark.p):tire_prints+=1
 	_assert("moving truck leaves paired treads outside camp",tire_prints>=4)
+	_blade_checks()
 	var drop_id := "truck-native-wood-1"
 	field._place_drop(drop_id,"wood",truck.body.position,truck.body.position,0.,0.)
 	for count in 23:await physics_frame

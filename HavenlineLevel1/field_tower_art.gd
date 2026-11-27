@@ -2,6 +2,8 @@ extends Node3D
 
 const EMPLACEMENT = preload("res://assets/field_world/camp_ballista.glb")
 const Defender = preload("res://field_ballista_crew.gd")
+const GUARD_SIGHTLINE = preload("res://assets/field_world/guard_sightline.gdshader")
+const GuardSightline = preload("res://field_guard_sightline.gd")
 const TRAVERSE_RATE := 4.8
 const ELEVATION_RATE := 2.8
 var frame: Node3D
@@ -9,9 +11,11 @@ var swivel: Node3D
 var bow: MeshInstance3D
 var bolt: MeshInstance3D
 var crew: Node3D
+var viewer: Camera3D
 var raised := 0.0
 var stages: Array[Node3D] = []
 var occluders: Array[MeshInstance3D] = []
+var guard_occluders: Array[MeshInstance3D] = []
 var faces: Array[TriangleMesh] = []
 var player_marker := Label3D.new()
 var bow_rest := Vector3.ZERO
@@ -32,13 +36,8 @@ func _ready() -> void:
 	bow.position = bow_rest
 	stages[2].scale = Vector3(1.18,1.,1.18)
 	swivel.rotation.y = PI*.5
-	var paint := bow.get_active_material(0).duplicate() as StandardMaterial3D
-	paint.emission_enabled = true
-	paint.emission = Color.WHITE
-	paint.emission_texture = paint.albedo_texture
-	paint.emission_energy_multiplier = .18
-	for part in frame.find_children("*","MeshInstance3D",true,false):
-		part.set_surface_override_material(0,paint)
+	for part: MeshInstance3D in frame.find_children("*","MeshInstance3D",true,false):
+		guard_occluders.append(part)
 	for part: MeshInstance3D in [stages[0],stages[1],stages[2],swivel,bow]:
 		occluders.append(part)
 		faces.append(part.mesh.generate_triangle_mesh())
@@ -69,6 +68,11 @@ func set_build_progress(value: float) -> void:
 		crew.position = Vector3(0.,.016,-.85)
 		crew.scale = Vector3.ONE*.90
 		swivel.add_child(crew)
+		var sightline := ShaderMaterial.new()
+		sightline.shader = GUARD_SIGHTLINE
+		var pass_controller := GuardSightline.new()
+		add_child(pass_controller)
+		pass_controller.setup(viewer,crew,self,guard_occluders,sightline)
 	if crew:
 		crew.visible = raised>.84
 		crew.operate(bow,0.,0.,0.)

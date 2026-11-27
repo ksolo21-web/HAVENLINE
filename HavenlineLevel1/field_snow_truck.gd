@@ -15,7 +15,9 @@ const BACK := 1.48
 const BODY_FRONT := 1.67
 const HALF_WIDTH := 1.18
 const WRECK_REACH := 2.15
-const BLADES := [Vector3(-.55,.21,-1.78),Vector3(.55,.21,-1.78)]
+const BLADE_HALF_SPAN := .55
+const BLADE_HEIGHT := .21
+const BLADE_DEPTH := -1.78
 const BLADE_RADIUS := .59
 const MAX_SPEED := 8.2
 const REVERSE_SPEED := 4.2
@@ -430,19 +432,23 @@ func _touches_camp() -> bool:
 			if world.field_env.is_inside_camp(body.to_global(Vector3(x,0,z))):return true
 	return false
 
+func _blade_origin(target: Vector3) -> Vector3:
+	# Fill the cutting line between the two mounted disks. The contact
+	# envelope keeps the same radius outside each blade pivot.
+	var lateral := clampf(body.to_local(target).x,-BLADE_HALF_SPAN,BLADE_HALF_SPAN)
+	return body.to_global(Vector3(lateral,BLADE_HEIGHT,BLADE_DEPTH))
+
 func _hunt_with_blades() -> bool:
 	if not world.survivor or not "wildlife" in world.survivor:return false
-	var prey = world.survivor.wildlife
+	var prey: Node3D = world.survivor.wildlife
 	if not is_instance_valid(prey) or not prey.has_method("intersect_blade"):return false
-	for offset in BLADES:
-		var center: Vector3 = body.to_global(offset)
-		var width := body.global_basis.x * BLADE_RADIUS
-		var contact: Vector3 = prey.intersect_blade(center-width,center+width)
-		if contact.is_finite() and world.field_env.travel_clear(center,contact,.06):
-			if prey.receive_hunting_contact(contact,center,2):
-				world._event("player_attack",contact)
-				return true
-	return false
+	var origin := _blade_origin(prey.global_position)
+	var direction := (prey.global_position-origin).slide(Vector3.UP).normalized()
+	if direction.is_zero_approx(): direction = -body.global_basis.z
+	var contact: Vector3 = prey.intersect_blade(origin,origin+direction*BLADE_RADIUS)
+	if not contact.is_finite() or not prey.receive_hunting_contact(contact,origin,2): return false
+	world._event("player_attack",contact)
+	return true
 
 func _sweep_blades() -> void:
 	if attack_delay>0. or world.persist_blocked:return
@@ -455,14 +461,11 @@ func _sweep_blades() -> void:
 			radius = .39*node.size_factor()
 		elif node is ResourceRock:
 			radius = .48
-		for offset in BLADES:
-			var center:Vector3 = body.to_global(offset)
-			var point := Vector3(node.position.x,center.y,node.position.z)
-			if center.distance_to(point)>BLADE_RADIUS+radius:continue
-			if not world.field_env.travel_clear(center,point,.08):continue
-			if world.truck_contact(node,center,point):
-				contacted = true
-				break
+		var center := _blade_origin(node.global_position)
+		var point := Vector3(node.global_position.x,center.y,node.global_position.z)
+		if center.distance_squared_to(point)>pow(BLADE_RADIUS+radius,2.):continue
+		if not world.field_env.travel_clear(center,point,.08):continue
+		if world.truck_contact(node,center,point): contacted = true
 	if contacted:
 		attack_delay = .28
 
