@@ -1,0 +1,90 @@
+{
+  "candidate": "8a8768438b3e9215a44f34e71a06cc54a55890f6",
+  "runtime_gait_sha256": "92170c8c5e9af3be14743b0f516073c5d0c8935be4fb820340817f3f3b721f7f",
+  "hero_sha256": "8ede1dc7d8e021d5e23dad45959a3eebe91ff3d871893fa4d683ac73d90cca09",
+  "runtime_pose_transfer": {
+    "original_freeze": "a7bf8c4c7a048472ad00494f54de20699fa444f3",
+    "final_freeze": "8a8768438b3e9215a44f34e71a06cc54a55890f6",
+    "same_545_game_frames": 545,
+    "same_50_bones_each": 50,
+    "maximum_abs_differences": {
+      "all_bone_matrices": 0.0,
+      "skeleton_global": 0.0,
+      "camera_global": 0.0
+    }
+  },
+  "dense_camera_witness": {
+    "triangle_count": 25264,
+    "rate_hz": 120,
+    "poses": 545,
+    "actual_game_and_three_other_game_headings": true,
+    "maximum_exposed_intersection_segment_mm": 0.674,
+    "maximum_from_the_real_camera_mm": 0.674,
+    "regions": "Longest remaining trace is on the joined brown boot upper. Actual previously exposed calf/boot intersections at turn tick 330 and brake tick 450 are gone. No exterior material appears cut through."
+  },
+  "strong_regressions_removed": {
+    "turn_tick330_was_mm": 16.887,
+    "turn_tick330_now_mm": 0.119,
+    "brake_tick450_was_mm": 18.109,
+    "brake_tick450_now_mm": 0
+  },
+  "additional_eight_phase_floor_review": {
+    "native_hz": 120,
+    "release_lanes": 8,
+    "sampled_poses": 592,
+    "low_boot_vertices": 442,
+    "method": "Actual game joystick released at eight offsets separated by eight native physics ticks. 74 post-release gameplay poses in each lane. Independently skinned complete real low-boot surfaces with those 50 imported bone transforms.",
+    "per_release": {
+      "0": {
+        "min_L": -1.220954711317014e-06,
+        "min_R": 0.000499313479205505,
+        "min_supported": -1.220954711317014e-06,
+        "deepest_tick": 40
+      },
+      "1": {
+        "min_L": 5.596079461639253e-05,
+        "min_R": 0.0004992193263808454,
+        "min_supported": 5.596079461639253e-05,
+        "deepest_tick": 39
+      },
+      "2": {
+        "min_L": 0.0004993004188463461,
+        "min_R": -9.378585816280449e-07,
+        "min_supported": -9.378585816280449e-07,
+        "deepest_tick": 40
+      },
+      "3": {
+        "min_L": -0.0022058431157665065,
+        "min_R": -0.001096541932573134,
+        "min_supported": -0.0022058431157665065,
+        "deepest_tick": 17
+      },
+      "4": {
+        "min_L": -0.00262245175835048,
+        "min_R": -0.0019244283739448254,
+        "min_supported": -0.00262245175835048,
+        "deepest_tick": 8
+      },
+      "5": {
+        "min_L": 5.53837060061554e-05,
+        "min_R": 0.00049944174028124,
+        "min_supported": 5.53837060061554e-05,
+        "deepest_tick": 39
+      },
+      "6": {
+        "min_L": 0.0004993020451355193,
+        "min_R": 3.3066157642497e-05,
+        "min_supported": 3.3066157642497e-05,
+        "deepest_tick": 39
+      },
+      "7": {
+        "min_L": 0.0004992806087864755,
+        "min_R": 3.325581245931455e-05,
+        "min_supported": 3.325581245931455e-05,
+        "deepest_tick": 39
+      }
+    },
+    "lowest_m": -0.00262245175835048
+  },
+  "verification_scope": "This alternate release matrix exercises the support correction independently of the principal route that happened to give identical world poses before and after the final whole-body floor translation."
+}

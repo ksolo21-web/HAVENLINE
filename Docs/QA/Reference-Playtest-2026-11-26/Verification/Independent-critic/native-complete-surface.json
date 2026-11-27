@@ -1,0 +1,56 @@
+{
+  "ticks": 545,
+  "hz": 120,
+  "triangle_count": 25264,
+  "rest_crossings": 1783,
+  "states": {
+    "idle": {
+      "max_pairs": 3,
+      "source_tick": 493,
+      "ticks": 108,
+      "regions": {
+        "bottom.L/bottom.L": 1,
+        "middle.L/middle.L": 2
+      }
+    },
+    "run": {
+      "max_pairs": 28,
+      "source_tick": 305,
+      "ticks": 212,
+      "regions": {
+        "middle.L/middle.L": 6,
+        "upper.R/upper.R": 7,
+        "upper.L/upper.R": 2,
+        "bottom.L/bottom.L": 6,
+        "upper.L/upper.L": 6,
+        "middle.R/middle.R": 1
+      }
+    },
+    "steady": {
+      "max_pairs": 30,
+      "source_tick": 152,
+      "ticks": 186,
+      "regions": {
+        "middle.L/middle.L": 6,
+        "upper.R/upper.R": 7,
+        "bottom.L/bottom.L": 9,
+        "upper.L/upper.L": 3,
+        "upper.L/upper.R": 3,
+        "middle.R/middle.R": 2
+      }
+    },
+    "brake": {
+      "max_pairs": 23,
+      "source_tick": 442,
+      "ticks": 39,
+      "regions": {
+        "middle.L/middle.L": 6,
+        "upper.R/upper.R": 7,
+        "upper.L/upper.R": 1,
+        "upper.L/upper.L": 6,
+        "middle.R/middle.R": 2,
+        "bottom.L/bottom.L": 1
+      }
+    }
+  }
+}

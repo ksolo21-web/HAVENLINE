@@ -1,0 +1,100 @@
+{
+  "stamp": {
+    "commit": "8a8768438b3e9215a44f34e71a06cc54a55890f6",
+    "manifest": {
+      "sha256": "5affce04639372d69fbf9721b3886daa3edfb47561e0dccfe2bba6b147534e4a",
+      "checked_files": 436
+    },
+    "runner": "cd758a74bd87962cd776cd6348a5ca5f8d0231499788e03c2b78e9c4074796e8"
+  },
+  "passed": true,
+  "runs": [
+    {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "log": "qa_field_owl-1.log",
+      "log_sha256": "c8944bdad3a1b416c1ec6ba42ddf990cd164dc6058693cdb57894cc118954195",
+      "summary": [
+        {
+          "braking_pitch": -0.27705043554306,
+          "checks": {
+            "asymmetric banking visibly rolls both wing pairs": true,
+            "both owned Meshy poses are present and only the folded Pathfinder is drawn on the post": true,
+            "both talons reach before first damage and rake during a planted brake": true,
+            "contact recovery and cooldown enforced": true,
+            "each of three attack telegraphs fired once": true,
+            "first rendered claw touches wolf triangle at hit and stays planted": true,
+            "flight talons retract and extend before impact": true,
+            "live boss uses standard damage and health feedback": true,
+            "one defeat and exactly three physical contacts on moving wolf": true,
+            "paid purchase perches once on south gate": true,
+            "recall immediately cancels boss dive into safe camp": true,
+            "remote callback blocked outside contact": true,
+            "returns to the same physical post": true,
+            "setup is idempotent": true,
+            "six feather joints fold and flare without a one-frame angular snap": true,
+            "six sensors match the actual imported claw vertices in all three poses": true,
+            "six wing bones deform original Sentinel feather vertices": true,
+            "spent contact authorization cleared": true,
+            "telegraphed takeoff before first damage": true,
+            "unpaid owl hidden and harmless": true,
+            "wing flap changes through the flight cycle": true
+          },
+          "grasp": 0.984351992607117,
+          "max_hit_error_m": 1.19209289550781e-07,
+          "max_joint_step_rad_at_60hz": 0.225001946091652,
+          "max_mesh_error_m": 9.83024960987677e-07,
+          "max_plant_error_m": 9.5367431640625e-07,
+          "reach": 1.0,
+          "states": [
+            "locked",
+            "perched",
+            "takeoff",
+            "follow",
+            "bank",
+            "windup",
+            "dive",
+            "strike",
+            "recover",
+            "land"
+          ],
+          "strikes": [
+            [
+              239,
+              8.92569923400879,
+              1.22127795219421,
+              2.37802386283875,
+              2
+            ],
+            [
+              460,
+              8.68739032745361,
+              1.30911588668823,
+              2.30108308792114,
+              1
+            ],
+            [
+              678,
+              8.27104663848877,
+              1.54340243339539,
+              2.88912343978882,
+              0
+            ],
+            [
+              1199,
+              9.56595325469971,
+              1.85780346393585,
+              2.33358263969421,
+              7
+            ]
+          ],
+          "wing_range_rad": [
+            -0.831378817558289,
+            0.939615070819855
+          ]
+        }
+      ]
+    }
+  ]
+}

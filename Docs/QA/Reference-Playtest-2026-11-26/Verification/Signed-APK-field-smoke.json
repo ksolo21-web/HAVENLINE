@@ -1,0 +1,57 @@
+{
+  "checks": {
+    "attacker_has_weighted_jaw_rig": true,
+    "both_authored_owl_donors_are_in_runtime": true,
+    "compiled_android_scripts": true,
+    "damage_applies_to_player_and_hud": true,
+    "first_camp_plot_costs_200_wood": true,
+    "genuine_enemy_encounter": true,
+    "hud_shows_current_hp": true,
+    "loaded_in_disposable_profile": true,
+    "new_effects_and_three_scores_loaded": true,
+    "orbit_strikes_without_attack_input": true,
+    "owl_shipped_with_talon_shapes_and_six_contact_points": true,
+    "release_returns_to_idle": true,
+    "rescued_worker_has_painted_sculpt": true,
+    "short_touch_drag_runs": true,
+    "signed_pack_entry_scene": true,
+    "thirty_hp_on_fresh_spawn": true,
+    "wearable_supports_in_signed_scene": true,
+    "wolf_starts_real_attack": true,
+    "worn_meshes_have_shadow_casting_off": true
+  },
+  "evidence": {
+    "combat_events": {
+      "enemy_attack": 1,
+      "player_attack": 1,
+      "player_hurt": 1,
+      "wolf_brace": 1
+    },
+    "first_contact_tick": 5,
+    "lowest_hp": 28,
+    "short_drag_distance_m": 5.34254455566406,
+    "short_drag_gait": "run",
+    "start_hp": 30,
+    "steady_touch_speed_m_per_second": 7.00000429153442,
+    "survivor_surface_triangles": 29888,
+    "survivor_texture_width": 2048
+  },
+  "failures": [],
+  "passed": true,
+  "apk_sha256": "d8e4e325c15ccffe9c0b7350d9d4448c5a188164d60a305e265d9594cf0ce037",
+  "apk_bytes": 184217319,
+  "packed_files": 600,
+  "identical_files_verified": 600,
+  "temporary_pack_bytes": 156268029,
+  "scripts": {
+    "orbit_opening.gdc": "179497b3692e49ff294d3d3b173e4f2cf0d34b7242b7686de93b7e41090c2a1d",
+    "weapon_orbit.gdc": "e647bec01592861c168e770e4a21253b14f8aa7d327a0e63f1ccc9a405c05b41",
+    "field_enemy.gdc": "2d4be75bcd7c2ac10e1f6bd9ad00b7312583898dc9568cb48f4de3cf27769cd3",
+    "field_opening.gdc": "b7fc233b7f15d5d11ed9e09130ad7305c5e16d4910463f1528c17358f2d9e96f",
+    "project.binary": "f9da523e2f184accf42ff3537bfa0558afd218242818fcf08b2c36fba99eb257"
+  },
+  "engine": "Godot 4.7.2 Linux x86_64 headless",
+  "signature_verification": "Android apksigner successful",
+  "operating_system_runtime": "Linux desktop, not Android or a Fold7",
+  "input": "synthetic screen-touch press, short drag, release, and steering toward a naturally spawned enemy. No damage was directly invoked."
+}

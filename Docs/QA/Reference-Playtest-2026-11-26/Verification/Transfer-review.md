@@ -1,0 +1,18 @@
+# Level 1 transfer checks
+Builder: production_layout. Independent source measurement and visual review: production_capture. Candidate gameplay scene: res://field_opening.tscn. Godot 4.7.2 native isolated Linux profiles, 60 fixed simulation steps/s; this suite does not measure physical phone performance.
+
+| Actual interaction (physical bundles) | Prior | Candidate | Independently measured reference |
+| --- | ---: | ---: | --- |
+| Storehouse, 52 mixed | 8.783 s | 0.883 s | First detached wood at 21.527367. First arrival 21.761289–21.828178. Stream clear by 22.362833–22.429922 (0.835–0.903 s). Reference pack count unreadable. |
+| Cooker, two meat bundles | — | 0.183 s | Two fish, 0.208 s from last held frame 374 to both settled at frame 379 (24 fps). Both airborne at f377. Candidate is 25 ms faster, less than one recorded source frame. |
+| Cooker, saw, drill, three bundles each | 1.000 s each | 0.217 s each | The separate two-fish 24 fps source is measured above; three is the Havenline test count. |
+| Survivor sponsorship, eight bundles | 3.467 s | 0.650 s | Adapts staged plot stream. A 12.5–13.1 s, structure 13.2; B first purchase 5.7–6.1 s, structure 6.2. |
+| Watchtower, 22 mixed bundles from shelves | 2.033 s | 0.650 s | A and B plot timing as above. |
+
+The old starter entrance selected the reinforce purchase and the house interior could never deposit meat. The prerelease control kept 20 carried at both points, even with the warehouse paid. The candidate opens the fitted FOOD bay when the starter house is bought. Walk through the actual center doorway or into the building to unload, stop for 0.16 s on the gold arrow at the right edge to deliberately upgrade. Sprinting across it cannot start a purchase. A joystick route deposited 20 meat and 10 wood; the four stone bundles remained on the character until the next tier. The FOOD shelf and its displayed 200-unit balance were verified from the live game scene. A second process reopened the same independently written checksum-protected save with unchanged quantities and crossed directly to the right edge to finance a partial upgrade. Genuine touch approach and release filled each real machine from its work aisle. One physical bundle represents ten units; no cost or recipe changed.
+
+The 52-bundle case launches 52 physical transfers with up to 25 simultaneously airborne. First arrival at tick 17/60=0.2833 s. Multiple resource families start on the same visit; typed flight and donor reservations prevent overspending. Oversized legacy loads use bounded grouped packets; a 273-bundle test stored 205 slate and 68 metal in 55 grouped transfers. Four input sites retain ownership only on an accepted landing. Leaving an active machine/purchase handoff stops its unlanded onsite handoffs, as before. Settlement interruption, partial payments, original purchases, migration and cold restarts passed all 16 existing process phases (208 checks). Archived signed APK evidence was produced separately by the parent, and a final device-performance rating requires device capture.
+
+See the [reference timeline](Reference-timeline.md), [two-meat cooker check](Two-meat-cooker.json), and [transfer telemetry](Transfer-telemetry.json) for source timing and measured delivery counts.
+
+Final-sprint touch rerun covered mixed carry entering via the default door, deliberate side upgrade, and approach/braking at each appliance. Crossing the heading-sensitive edge while moving did not spend anything. Leaving after two launches settled exactly one timber and one stone, then re-entry completed the remaining seven timber and five stone bundles once. Native checks are in fast/{route,cold,depart,aprons}.log.
