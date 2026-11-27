@@ -149,11 +149,40 @@ func _fixed_clearance() -> Array[Rect2]:
 		Rect2(r.end.x-2.65,-gap,2.65,gap*2.),
 		Rect2(1.72-.47,1.8-.47,.94,.94)
 	]
+	if world.inventory.complete(Rules.GARAGE):
+		list.append(world.snow_truck.garage_footprint(world.field_env.COURTS[2].w))
 	for id:String in world.offer_floors:
-		if world.inventory.complete(id): continue
+		if id in [Rules.GARAGE,Rules.TRUCK] or world.inventory.complete(id): continue
 		var plot:Node3D = world.offer_floors[id]
 		list.append(_plot_rect(plot,xz(plot.global_position)))
 	return list
+
+func place_vehicle_offers() -> void:
+	if not (world.inventory.offer_open(Rules.GARAGE) or world.inventory.offer_open(Rules.TRUCK)):return
+	var floor := bounds().grow(-.35)
+	var occupied := _fixed_clearance()
+	for building_id: String in NAMES:
+		var at := center(building_id)
+		occupied.append(footprint(building_id,at))
+		occupied.append_array(service_areas(building_id,at))
+	for id in [Rules.GARAGE,Rules.TRUCK]:
+		if not world.inventory.offer_open(id): continue
+		var mark: Node3D = world.offer_floors[id]
+		var preferred: Vector2 = Rules.POSITIONS[id]
+		var best := Vector2.INF
+		var nearest := INF
+		for x in range(-9,10):
+			for z in range(-8,9):
+				var offset := Vector2(x,z)*.55
+				var distance := offset.length_squared()
+				if distance >= nearest: continue
+				var at := preferred+offset
+				var plot := _plot_rect(mark,at).grow(.08)
+				if not floor.encloses(plot) or occupied.any(func(rect:Rect2):return rect.intersects(plot)): continue
+				best = at
+				nearest = distance
+		if best.is_finite():
+			mark.global_position = Vector3(best.x,mark.global_position.y,best.y)
 
 func _snap(id:String, raw:Vector2) -> Vector2:
 	if id!=COUNTER: return raw.snapped(Vector2(.25,.25))
@@ -218,6 +247,7 @@ func _can_reach_working_sides(moving:String, at:Vector2, proposed:Dictionary) ->
 	grid.update()
 	var goals:Array[Vector2]=[Vector2(0.,floor.end.y-.55),Vector2(floor.end.x-.55,0.)]
 	for offer:String in world.offer_floors:
+		if offer in [Rules.GARAGE,Rules.TRUCK]: continue
 		var pad:Vector2=xz(world.offer_floors[offer].global_position)
 		if world.inventory.offer_open(offer) and floor.has_point(pad): goals.append(pad)
 	for other:String in NAMES:
@@ -444,7 +474,7 @@ func _prepare_ghost() -> void:
 		ghost.remove_child(child)
 		child.queue_free()
 	var original_node := building(chosen)
-	var source:Node3D = original_node.get_node("AlfredNorthCounter") if chosen==COUNTER else original_node
+	var source:Node3D = world.counter.model if chosen==COUNTER else original_node
 	var base := Transform3D(Basis.IDENTITY,on_ground(center(chosen))).affine_inverse()
 	for piece:MeshInstance3D in source.find_children("*","MeshInstance3D",true,false):
 		if not piece.mesh or not piece.is_visible_in_tree(): continue

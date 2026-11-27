@@ -144,7 +144,7 @@ func run()->void:
  elif mode=="legacy":
   check("v8 partly delivered direct roast preserved under serial installation",j.line_load.stored_meal==1 and is_equal_approx(j.line_progress.stored_meal,.42) and j.line_load.meal==0 and j.product_store.meal==0)
   check("migrated serial purchase includes automatic meat supply without workshop or express service",b.line_live("stored_meal") and b.line_live("meat") and not b.line_live("wood") and not b.line_live("meal"))
-  check("migrated roast reaches staffed counter and pays exactly once",await until(func():return j.served==1,1700))
+  check("migrated roast reaches the self-service counter and pays once",await until(func():return j.served==1,1700))
   await ticks(160)
   check("idle outbound legacy reservation cannot repeat",j.served==1 and j.cooked==1 and j.counter_stock==0 and j.line_load==L.TRANSIT)
   mark(0,"settled legacy food delivery")
@@ -177,7 +177,7 @@ func run()->void:
    await physics_frame
   check("long planks stay aligned on the exterior rollers",track_alignments.size()>8 and track_alignments.min()>.88)
   check("finished timber and dressed stone arrive into different storage bays",j.product_store.planks==3 and j.product_store.blocks==3 and L.rack(j,"wood")==0 and L.rack(j,"stone")==0)
-  check("cooker, fresh/stored dispatch and staff preserve one roast per sale",j.cooked-initial_cooked==6 and j.served-initial_paid==6 and j.cooked==j.served and L.rack(j,"meat")==0 and j.product_store.meal==0)
+  check("cooker, fresh/stored dispatch and self-service preserve one roast per early sale",j.cooked-initial_cooked==6 and j.served-initial_paid==6 and j.cooked==j.served and L.rack(j,"meat")==0 and j.product_store.meal==0)
   check("no duplicate work remains in transit",j.line_load==L.TRANSIT)
   check("committed final receipts round trip",field.inventory.restore(JSON.parse_string(JSON.stringify(field.inventory.snapshot()))))
  print("CONNECTED_QA ",JSON.stringify({"mode":mode,"checks":results,"transitions":samples}))

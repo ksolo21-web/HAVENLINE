@@ -9,25 +9,30 @@ const MACHINES := {"wood":"saw_bench", "stone":"quarry_drill", "meat":"camp_cook
 const FOOD_LINE := "meal_conveyor"
 const SUPPLY_LINE := "supply_conveyors"
 const LINES := [FOOD_LINE,SUPPLY_LINE]
+const GARAGE := "snow_garage"
+const TRUCK := "snow_truck"
 const STORAGE := ["storage_wood", "storage_stone", "storage_meat"]
 const PREREQUISITES := {
 	"center_hearth": [], "expansion_1": ["center_hearth"],
 	"storage_wood": ["expansion_1"], "storage_stone": ["expansion_1"], "storage_meat": ["expansion_1"],
 	"expansion_2": STORAGE, "watchtower": ["expansion_2"], "orbit_upgrade": ["expansion_2"],
 	"camp_cooker": ["expansion_2"], "saw_bench": ["camp_cooker"], "quarry_drill": ["saw_bench"],
-	"meal_conveyor": ["camp_cooker"], "supply_conveyors": ["camp_cooker","storage_meat"]
+	"meal_conveyor": ["camp_cooker"], "supply_conveyors": ["camp_cooker","storage_meat"],
+	"snow_garage": ["expansion_2","storage_meat"], "snow_truck": ["snow_garage"]
 }
 const TITLES := {
 	"center_hearth":"Build hearth", "expansion_1":"Expand camp", "expansion_2":"Expand east",
 	"storage_wood":"Build storehouse", "storage_stone":"Reinforce storehouse", "storage_meat":"Advance storehouse",
 	"watchtower":"Build watchtower", "orbit_upgrade":"Equip extra axes",
 	"camp_cooker":"Build cooker", "saw_bench":"Build saw bench", "quarry_drill":"Build quarry drill",
-	"meal_conveyor":"Automate meal service", "supply_conveyors":"Connect storehouse supply"
+	"meal_conveyor":"Automate meal service", "supply_conveyors":"Connect storehouse supply",
+	"snow_garage":"Build snow garage", "snow_truck":"Buy snow truck"
 }
 const POSITIONS := {"expansion_1":Vector2(2.6,-1.5), "expansion_2":Vector2(2.6,-1.5),
 	"watchtower":Vector2(8.1,-2.4), "orbit_upgrade":Vector2(7.6,2.9),
 	"camp_cooker":Vector2(.55,-5.22), "saw_bench":Vector2(-8.55,-5.05), "quarry_drill":Vector2(-7.15,.70),
-	"meal_conveyor":Vector2(3.65,-5.30), "supply_conveyors":Vector2(.25,-3.85)}
+	"meal_conveyor":Vector2(3.65,-5.30), "supply_conveyors":Vector2(.25,-3.85),
+	"snow_garage":Vector2(4.2,4.0), "snow_truck":Vector2(3.0,2.8)}
 
 # Receipts, carry meshes and machine inputs are physical bundles. Each bundle
 # contains ten raw units; a tree/bank awards three bundles, a wolf two.
@@ -41,7 +46,9 @@ const OFFERS := {
 	"expansion_2":{"wood":15,"stone":10},
 	"camp_cooker":{"wood":12,"stone":8}, "saw_bench":{"wood":14,"stone":6}, "quarry_drill":{"wood":10,"stone":12},
 	"watchtower":{"wood":12,"stone":10}, "orbit_upgrade":{"stone":6,"meat":4},
-	"meal_conveyor":{"wood":10,"stone":6}, "supply_conveyors":{"wood":16,"stone":12}
+	"meal_conveyor":{"wood":10,"stone":6}, "supply_conveyors":{"wood":16,"stone":12},
+	"snow_garage":{"planks":24,"blocks":20},
+	"snow_truck":{"wood":44,"stone":34,"metal":24,"coal":12}
 }
 
 static func units(bundles: int) -> int:
@@ -64,8 +71,11 @@ static func stage(ledger) -> int:
 
 static func price_text(remaining: Dictionary) -> String:
 	var words := PackedStringArray()
-	for kind in ["wood","stone","meat"]:
-		if int(remaining.get(kind,0)) > 0: words.append("%d %s" % [units(remaining[kind]), kind])
+	for kind in ["wood","stone","meat","coal","slate","metal","planks","blocks"]:
+		var quantity := int(remaining.get(kind,0))
+		if quantity<=0:continue
+		var displayed:int = quantity if kind in ["planks","blocks"] else units(quantity)
+		words.append("%d %s" % [displayed, kind])
 	return " · ".join(words)
 
 

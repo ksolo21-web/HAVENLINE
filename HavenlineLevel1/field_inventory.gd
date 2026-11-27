@@ -2,6 +2,8 @@ extends RefCounted
 
 const Progress = preload("res://field_progression.gd")
 const Settlement = preload("res://field_settlement.gd")
+const Crew = preload("res://field_crew.gd")
+const Raid = preload("res://field_raid_director.gd")
 var settlement := Settlement.EMPTY.duplicate(true)
 var staged := false
 var build_order: Array = []
@@ -14,6 +16,7 @@ const MINERALS := ["coal", "slate", "metal"]
 const KINDS := ["wood", "stone", "meat", "coal", "slate", "metal"]
 const EMPTY := {"wood":0, "stone":0, "meat":0, "coal":0, "slate":0, "metal":0}
 const TITLES := {"wood":"Wood", "stone":"Stone", "meat":"Meat", "coal":"Coal", "slate":"Slate", "metal":"Metal ore"}
+const TRUCK_AUTOMATION_INCREMENT := {"wood":6, "stone":4, "metal":2}
 
 var configured_costs := {}
 var costs := {}
@@ -33,7 +36,7 @@ func configure(offers: Dictionary) -> bool:
 		if not id is String or id.is_empty() or not offers[id] is Dictionary or offers[id].is_empty():
 			return false
 		for kind in offers[id]:
-			if kind not in KINDS or not _natural(offers[id][kind]) or offers[id][kind] == 0:
+			if (kind not in KINDS and kind not in Settlement.HAND_PRODUCTS) or not _natural(offers[id][kind]) or offers[id][kind] == 0:
 				return false
 	staged = offers.has(Progress.FIRST)
 	if staged and (offers.size() != Progress.PREREQUISITES.size() or not Progress.PREREQUISITES.keys().all(func(id): return offers.has(id))): return false
@@ -68,9 +71,103 @@ func house_goods() -> Dictionary:
 	return goods
 
 func till_balance() -> int:
-	return int(settlement.served)-int(settlement.pocket_cash)-int(settlement.house_cash)
+	return int(settlement.market.counter_cash)
+
+func vehicle_state() -> Dictionary:
+	return settlement.vehicle
+
+func vehicle_collect(token: String, kind: String) -> bool:
+	var vehicle := vehicle_state()
+	if vehicle.hp <= 0 or token.is_empty() or collected.has(token) or kind not in KINDS: return false
+	collected[token] = kind
+	_add_vehicle_cargo(vehicle.cargo, kind, 1)
+	return true
+
+func vehicle_load_from_player(kind: String, amount: int) -> bool:
+	var vehicle := vehicle_state()
+	if vehicle.hp <= 0 or kind not in Settlement.CARGO_KINDS or amount <= 0: return false
+	if (int(carried[kind]) if kind in KINDS else int(hand_goods()[kind])) < amount: return false
+	_move_vehicle_goods(kind, -amount, false)
+	_add_vehicle_cargo(vehicle.cargo, kind, amount)
+	return true
+
+func vehicle_bank() -> bool:
+	var vehicle := vehicle_state()
+	if vehicle.hp <= 0 or vehicle.cargo.is_empty() or not complete("storage_meat"): return false
+	for kind: String in vehicle.cargo:
+		if kind in KINDS and not storage_open(kind): return false
+	for kind: String in vehicle.cargo:
+		_move_vehicle_goods(kind, int(vehicle.cargo[kind]), true)
+	vehicle.cargo.clear()
+	return true
+
+func vehicle_wreck(is_inside: bool) -> bool:
+	var vehicle := vehicle_state()
+	if vehicle.purchases <= 0 or vehicle.wreck != "": return false
+	var target: Dictionary = vehicle.salvage if is_inside else vehicle.lost
+	for kind: String in vehicle.cargo:
+		_add_vehicle_cargo(target, kind, int(vehicle.cargo[kind]))
+	vehicle.cargo.clear()
+	vehicle.hp = 0
+	vehicle.wreck = "inside" if is_inside else "outside"
+	return true
+
+func vehicle_recover_salvage() -> bool:
+	var vehicle := vehicle_state()
+	if vehicle.salvage.is_empty(): return false
+	for kind: String in vehicle.salvage:
+		_move_vehicle_goods(kind, int(vehicle.salvage[kind]), false)
+	vehicle.salvage.clear()
+	return true
+
+func vehicle_repurchase() -> bool:
+	const OFFER := "snow_truck"
+	var vehicle := vehicle_state()
+	if not complete(OFFER) or vehicle.wreck == "" or not vehicle.salvage.is_empty(): return false
+	for kind: String in costs[OFFER]:
+		if int(carried[kind]) < int(costs[OFFER][kind]): return false
+	for kind: String in costs[OFFER]:
+		var amount := int(costs[OFFER][kind])
+		carried[kind] -= amount
+		_add_vehicle_cargo(vehicle.spent, kind, amount)
+	vehicle.purchases += 1
+	vehicle.wreck = ""
+	return true
+
+func vehicle_pay_repair(bill: Dictionary) -> bool:
+	var vehicle := vehicle_state()
+	if vehicle.hp <= 0 or bill.is_empty(): return false
+	for kind in bill:
+		if kind not in KINDS or not _natural(bill[kind]) or int(bill[kind]) <= 0 or int(carried[kind]) < int(bill[kind]): return false
+	for kind: String in bill:
+		var amount := int(bill[kind])
+		carried[kind] -= amount
+		_add_vehicle_cargo(vehicle.spent, kind, amount)
+	return true
+
+func _add_vehicle_cargo(cargo: Dictionary, kind: String, amount: int) -> void:
+	cargo[kind] = int(cargo.get(kind, 0)) + amount
+
+func _move_vehicle_goods(kind: String, amount: int, warehouse: bool) -> void:
+	if kind in KINDS:
+		var stock := stored if warehouse else carried
+		stock[kind] += amount
+	elif kind == "money":
+		settlement["house_cash" if warehouse else "pocket_cash"] += amount
+	elif warehouse:
+		settlement.product_store[kind] += amount
+	elif kind == "meal":
+		settlement.held_meal += amount
+	else:
+		settlement.hand_products[kind] += amount
 
 func payment(id: String, kind: String, from_storage: bool, amount := 1) -> bool:
+	if kind in Settlement.HAND_PRODUCTS:
+		if from_storage and not complete("storage_wood"): return false
+		var goods: Dictionary = settlement.product_store if from_storage else settlement.hand_products
+		if not _pay_from(goods,id,kind,amount): return false
+		settlement.market.construction_products[kind] += amount
+		return true
 	if from_storage and not storage_open(kind): return false
 	return _pay_from(stored if from_storage else carried,id,kind,amount)
 
@@ -81,12 +178,30 @@ func worker_payment(id: String, kind: String, amount: int) -> bool:
 func _pay_from(stock: Dictionary, id: String, kind: String, amount: int) -> bool:
 	if amount <= 0 or not offer_open(id) or not costs[id].has(kind) or amount > costs[id][kind] - paid[id][kind]:
 		return false
-	if stock[kind] < amount:
+	if not stock.has(kind) or stock[kind] < amount:
 		return false
 	stock[kind] -= amount
 	paid[id][kind] += amount
-	if staged and complete(id): build_order.append(id)
+	if staged and complete(id):
+		build_order.append(id)
+		if id == Progress.GARAGE:
+			settlement.truck_quote = _truck_quote_at_garage(build_order)
+			_apply_truck_quote(costs,settlement.truck_quote)
 	return true
+
+static func _truck_quote_at_garage(order: Array) -> String:
+	var garage_index := order.find(Progress.GARAGE)
+	if garage_index < 0: return ""
+	for line: String in Progress.LINES:
+		var index := order.find(line)
+		if index < 0 or index >= garage_index: return Settlement.TRUCK_QUOTE_STANDARD
+	return Settlement.TRUCK_QUOTE_AUTOMATED
+
+static func _apply_truck_quote(offers: Dictionary, quote: String) -> void:
+	if quote != Settlement.TRUCK_QUOTE_AUTOMATED: return
+	var bill: Dictionary = offers[Progress.TRUCK]
+	for kind: String in TRUCK_AUTOMATION_INCREMENT:
+		if bill.has(kind): bill[kind] += TRUCK_AUTOMATION_INCREMENT[kind]
 
 func storage_open(kind: String) -> bool:
 	if kind not in KINDS: return false
@@ -125,7 +240,7 @@ func complete(id: String) -> bool:
 func snapshot() -> Dictionary:
 	var state := {"version": 1, "collected": collected.duplicate(), "carried": carried.duplicate(), "stored": stored.duplicate(), "paid": paid.duplicate(true)}
 	if staged:
-		state.version = 10
+		state.version = 11
 		state.legacy_level2 = legacy_level2
 		state.legacy_prices = legacy_prices.duplicate()
 		state.build_order = build_order.duplicate()
@@ -144,11 +259,11 @@ func restore(data: Variant) -> bool:
 	var old: bool = data.get("version") == 1
 	if not _natural(data.get("version")): return false
 	var version:=int(data.version)
-	var current:bool = version in [6,7,8,9,10]
+	var current:bool = version in [6,7,8,9,10,11]
 	var has_settlement: bool = current or data.get("version") == 4 or data.get("version") == 5
 	if old:
 		if data.size() != 5: return false
-	elif not staged or (data.get("version") != 2 and data.get("version") != 3 and not has_settlement) or data.size() != (11 if version in [7,8,9,10] else (10 if current else (9 if has_settlement else 8))):
+	elif not staged or (data.get("version") != 2 and data.get("version") != 3 and not has_settlement) or data.size() != (11 if version in [7,8,9,10,11] else (10 if current else (9 if has_settlement else 8))):
 		return false
 	for key in ["collected", "carried", "stored", "paid"]:
 		if not data.get(key) is Dictionary:
@@ -180,6 +295,11 @@ func restore(data: Variant) -> bool:
 			if incoming.has(id): return false
 			incoming[id]={}
 			for kind: String in costs[id]: incoming[id][kind]=0
+	if staged and not old and version < 11:
+		for id: String in ["snow_garage", "snow_truck"]:
+			if costs.has(id) and not incoming.has(id):
+				incoming[id] = {}
+				for kind: String in costs[id]: incoming[id][kind] = 0
 	if incoming.size() != costs.size():
 		return false
 	# Older field saves contain exactly three balances. Expand both tables
@@ -207,8 +327,17 @@ func restore(data: Variant) -> bool:
 			balances[kind] -= int(stock[kind])
 	var restored_costs := configured_costs.duplicate(true)
 	var contracts: Array = []
+	var truck_quote := ""
 	if current and not data.get("legacy_prices") is Array: return false
 	if staged:
+		var chronology := _truck_quote_at_garage(order)
+		var default_quote := Settlement.TRUCK_QUOTE_STANDARD if not chronology.is_empty() else ""
+		var prior: Variant = data.get("settlement",{})
+		if not prior is Dictionary: return false
+		var submitted_quote: Variant = prior.get("truck_quote",default_quote)
+		if submitted_quote != default_quote and submitted_quote != chronology: return false
+		truck_quote = submitted_quote
+		_apply_truck_quote(restored_costs,truck_quote)
 		var former := Progress.old_offers()
 		for id in restored_costs:
 			var submitted: Variant = incoming.get(id)
@@ -222,6 +351,7 @@ func restore(data: Variant) -> bool:
 			if not current or Progress.SURVIVOR in data.legacy_prices: contracts.append(Progress.SURVIVOR)
 		# A contract can only name a real, already-funded plot once.
 		if current and (data.legacy_prices.size() != contracts.size() or not contracts.all(func(id): return id in data.legacy_prices)): return false
+	var product_bills := Settlement.HAND_PRODUCTS.duplicate()
 	for id in restored_costs:
 		var subtotal: Variant = incoming.get(id)
 		if not subtotal is Dictionary or subtotal.size() != restored_costs[id].size():
@@ -229,7 +359,8 @@ func restore(data: Variant) -> bool:
 		for kind in restored_costs[id]:
 			if not _natural(subtotal.get(kind)) or subtotal[kind] > restored_costs[id][kind]:
 				return false
-			balances[kind] -= int(subtotal[kind])
+			if kind in product_bills: product_bills[kind] += int(subtotal[kind])
+			else: balances[kind] -= int(subtotal[kind])
 	var next_settlement: Variant = data.get("settlement") if has_settlement else Settlement.EMPTY
 	if data.version == 4:
 		next_settlement = Settlement.from_legacy(next_settlement)
@@ -241,23 +372,35 @@ func restore(data: Variant) -> bool:
 		next_settlement = Settlement.Logistics.from_previous(next_settlement,order)
 	if has_settlement and data.version < 10:
 		next_settlement = Settlement.from_pre_register(next_settlement,order)
+	if version < 11:
+		next_settlement = Settlement.from_pre_market(next_settlement) if has_settlement else Settlement.EMPTY
+	if staged and next_settlement is Dictionary:
+		next_settlement = next_settlement.duplicate()
+		next_settlement.truck_quote = truck_quote
 	var old_preview := false
-	if version in [7,8,9,10]:
+	if version in [7,8,9,10,11]:
 		if not data.get("legacy_level2") is bool: return false
 		old_preview = data.legacy_level2
 	elif has_settlement and next_settlement is Dictionary:
 		old_preview = next_settlement.get("level") == 2
 	var survivor_due := Progress.OLD_SURVIVOR_BUNDLES if Progress.SURVIVOR in contracts else Progress.SURVIVOR_BUNDLES
 	if not Settlement.valid(next_settlement,order,data.collected,survivor_due): return false
+	for product: String in product_bills:
+		if product_bills[product] != int(next_settlement.market.construction_products[product]): return false
 	if old_preview and next_settlement.level != 2: return false
 	if next_settlement.level == 2 and not old_preview and not Settlement.ready_to_continue(next_settlement,order): return false
 	for kind: String in Settlement.KINDS:
 		balances[kind] -= int(next_settlement.hoppers[kind]) + int(next_settlement.line_load[kind])
 	for kind: String in KINDS:
-		balances[kind] -= int(next_settlement.worker_load[kind])
+		balances[kind] -= int(next_settlement.worker_load[kind]) + Settlement.vehicle_total(next_settlement,kind)
 	if next_settlement.worker_supply != "": balances[next_settlement.worker_supply] -= 1
-	balances.meat -= int(next_settlement.cooked) + int(next_settlement.owl_meat)
-	balances.wood -= int(next_settlement.survivor_wood) + int(next_settlement.processed_wood)
+	var raid_spend: Variant = Raid.repair_spend(data.get("world", {}))
+	if not raid_spend is Dictionary: return false
+	for kind in raid_spend:
+		if kind not in KINDS or not _natural(raid_spend[kind]): return false
+		balances[kind] -= int(raid_spend[kind])
+	balances.meat -= int(next_settlement.cooked) + int(next_settlement.owl_meat) + int(next_settlement.owl_replacements)*Crew.OWL_MEAT + int(next_settlement.owl_replacement_meat)
+	balances.wood -= int(next_settlement.survivor_wood) + int(next_settlement.processed_wood) + int(next_settlement.survivor_replacements)*survivor_due + int(next_settlement.survivor_replacement_wood)
 	balances.stone -= int(next_settlement.processed_stone)
 	if balances.values().any(func(n): return n != 0):
 		return false
@@ -305,6 +448,7 @@ func restore(data: Variant) -> bool:
 			settlement.hand_products[product]=int(settlement.hand_products[product])
 		for kind in settlement.withdrawn:
 			settlement.withdrawn[kind]=int(settlement.withdrawn[kind])
+		Settlement.Market.normalize(settlement.market)
 		for lane: String in Settlement.LINE_EMPTY:
 			settlement.line_load[lane] = int(settlement.line_load[lane])
 			settlement.line_progress[lane] = float(settlement.line_progress[lane])

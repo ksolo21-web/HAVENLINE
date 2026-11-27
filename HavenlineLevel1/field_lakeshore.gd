@@ -69,7 +69,7 @@ func setup(host:Node3D) -> void:
 	refresh_ownership(false)
 
 func refresh_ownership(animate := true) -> void:
-	var owned: bool = world.inventory.is_machine_owned("meat")
+	var owned: bool = world.inventory.is_machine_owned("meat") and not world.encounters.is_machine_down("meat")
 	if owned and not available and animate: Workshops.reveal(cooker)
 	available = owned
 	cooker.visible = owned

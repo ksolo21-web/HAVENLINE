@@ -5,6 +5,7 @@ const Rules=preload("res://field_settlement.gd")
 const Logistics=preload("res://field_logistics.gd")
 const Art=preload("res://field_art.gd")
 const Models=preload("res://field_production_transfer.gd")
+const Market=preload("res://field_market.gd")
 const Cash=preload("res://assets/customer_counter/banded_notes.glb")
 # The rear-right rack in camp_storehouse.glb has a horizontal shelf at .745 m.
 const CASH_BAY:=Vector3(1.15,.746,-.77)
@@ -60,15 +61,16 @@ func present_cash()->void:
 	for index in shelf_notes.size():
 		shelf_notes[index].visible=index<amount
 
-func _pack_point()->Vector3:
-	return world.actor.to_global(Vector3(.02,1.10,-.22))
+func _pack_point(actor: Node3D = null)->Vector3:
+	var owner: Node3D = actor if is_instance_valid(actor) else world.actor
+	return owner.to_global(Vector3(.02,1.10,-.22))
 
 func _shelf(kind:String)->Vector3:
 	if kind=="money":return cash_bay.global_position+Vector3.UP*.055
 	if kind in Logistics.STORE:return world.settlement_loop.conveyors.shelf_position(kind)
 	return world.depot.bins[kind].global_position
 
-func _draw(kind:String,amount:int,local_point:Vector3,to_pack:bool)->void:
+func _draw(kind:String,amount:int,local_point:Vector3,to_pack:bool,actor:Node3D=null)->void:
 	var count:=mini(mini(amount,MAX_PER_STREAM),MAX_FLYING-flights.size())
 	for i in count:
 		var mesh:Node3D
@@ -77,10 +79,13 @@ func _draw(kind:String,amount:int,local_point:Vector3,to_pack:bool)->void:
 		else:mesh=Art.make(kind,.46)
 		add_child(mesh)
 		mesh.hide()
-		var launch:Vector3=local_point if to_pack else _pack_point()
+		var launch:Vector3=local_point if to_pack else _pack_point(actor)
 		var delay:=RELEASE_SECONDS*i/maxi(1,count-1)
-		flights.append({"mesh":mesh,"from":launch,"dock":local_point,"to_pack":to_pack,"t":-delay})
+		flights.append({"mesh":mesh,"from":launch,"dock":local_point,"to_pack":to_pack,"actor":actor,"t":-delay})
 	set_process(not flights.is_empty())
+
+func draw_worker_transfer(kind: String, amount: int, destination: Vector3, to_pack: bool) -> void:
+	_draw(kind,amount,destination,to_pack,world.survivor.actor)
 
 func _process(dt:float)->void:
 	for i in range(flights.size()-1,-1,-1):
@@ -90,7 +95,7 @@ func _process(dt:float)->void:
 		var unit:Node3D=f.mesh
 		unit.show()
 		var u:=clampf(float(f.t)/FLY_SECONDS,0.,1.)
-		var target:Vector3=_pack_point() if f.to_pack else f.dock
+		var target:Vector3=_pack_point(f.actor) if f.to_pack else f.dock
 		var start:Vector3=f.from
 		unit.global_position=start.lerp(target,smoothstep(0.,1.,u))+Vector3.UP*.95*u*(1.-u)
 		unit.rotation.y=.35+.7*u
@@ -257,22 +262,33 @@ func withdraw(kind:String)->bool:
 	_draw(kind,taken,_shelf(kind),true)
 	return true
 
-func _counter()->void:
-	var c=world.counter
-	var j:Dictionary=world.inventory.settlement
-	var meals:int=j.held_meal
-	# An order already in the player's hand has a dedicated hand-to-guest animation.
-	if c.sale_order!=0 and not c.belt_serving and not c.worker_serving and not c.sale_committed: meals=maxi(0,meals-1)
-	# The customer's newly paid note travels to the till; older notes are free
-	# to collect on this same approach while the dinner moves the other way.
-	var cash:int=world.inventory.till_balance()-c.cash_in_exchange()
-	if meals==0 and cash<=0:return
-	j.held_meal-=meals
-	j.counter_stock+=meals
-	j.pocket_cash+=maxi(0,cash)
-	if not world.settlement_loop.commit_receipt("counter_pickup" if cash>0 else "counter_dropoff",c.payment_rest.global_position,"meal_served" if cash>0 else "deposit_meat"):return
-	if cash>0:_draw("money",cash,c.payment_rest.global_position,true)
-	if meals>0:_draw("meal",meals,c.delivery_position(),false)
+func visit_counter(worker: bool, at: Vector3) -> bool:
+	if not world.settlement_loop.can_transact(): return false
+	var counter = world.counter
+	if not counter.at_service(at): return false
+	var journal: Dictionary = world.inventory.settlement
+	var delivered := {}
+	for kind: String in Market.PRODUCTS:
+		if not world.settlement_loop.counter_accepts(kind): continue
+		var amount := Market.worker_stock(journal,kind) if worker else int(world.inventory.hand_goods()[kind])
+		if amount == 0: continue
+		if worker: Market.add_to_worker(journal,kind,-amount)
+		else: _change_hand(kind,-amount)
+		Market.add_to_counter(journal,kind,amount)
+		delivered[kind] = amount
+	var cash := maxi(0,world.inventory.till_balance() - counter.cash_in_exchange())
+	if delivered.is_empty() and cash == 0: return false
+	journal.market.counter_cash -= cash
+	if worker: journal.market.worker_cash += cash
+	else: journal.pocket_cash += cash
+	var cue := "counter_pickup" if cash > 0 else "counter_dropoff"
+	var audio := "meal_served" if cash > 0 else "deposit_meat"
+	if not world.settlement_loop.commit_receipt(cue,counter.payment_rest.global_position,audio): return false
+	var carrier: Node3D = world.survivor.actor if worker else world.actor
+	if cash > 0: _draw("money",cash,counter.payment_rest.global_position,true,carrier)
+	for kind: String in delivered:
+		_draw(kind,int(delivered[kind]),counter.stock_position(kind),false,carrier)
+	return true
 
 func at_station()->bool:
 	var at:Vector3=world.actor.global_position
@@ -292,5 +308,5 @@ func visit(dt:float)->void:
 		sampled_bay=""
 		responded=false
 		still_seconds=0.
-	if world.counter.at_service(at):_counter()
+	if world.counter.at_service(at):visit_counter(false,at)
 	elif _machine_at(at).is_empty() and at_loading_area() and world.depot.target_at(at)==world.carry.STOCK:_deposit()

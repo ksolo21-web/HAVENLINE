@@ -10,7 +10,7 @@ var anchor:=Vector3(1.15,0.,.90)
 var observed:=false
 
 func inspect_state(label:String)->void:
-	visits.append({"step":label,"t":snappedf(field.simulation_time,.001),"pack":bank.hand_goods(),"house":bank.house_goods(),"cash_in_register":bank.till_balance(),"raw_pack":bank.carried.duplicate(),"counter_meals":j.counter_stock,"cooked":j.cooked,"served":j.served,"saw":j.processed_wood,"drill":j.processed_stone})
+	visits.append({"step":label,"t":snappedf(field.simulation_time,.001),"pack":bank.hand_goods(),"house":bank.house_goods(),"cash_on_counter":bank.till_balance(),"raw_pack":bank.carried.duplicate(),"counter_meals":j.counter_stock,"cooked":j.cooked,"served":j.served,"saw":j.processed_wood,"drill":j.processed_stone})
 
 func station_floor(kind:String)->Vector3:
 	var r:Rect2=field.lakeshore._footprint(0.) if kind=="meat" else field.processors._rect(kind,0.)
@@ -83,7 +83,7 @@ func manual()->void:
 	check("counter takes a whole prepared stack before buyers arrive",j.counter_stock==2 and j.held_meal==0 and j.served==0 and field.counter.queue.is_empty())
 	park(anchor)
 	field.counter.arrival_clock=0.
-	check("cashier serves two actual queued buyers",await until(func():return j.served==2,2000))
+	check("two actual queued buyers collect their meals",await until(func():return j.served==2,2000))
 	check("sold meals create two uncollected notes",bank.till_balance()==2 and bank.hand_goods().money==0)
 	await ticks(70)
 	await supply_personally("meat",2,"second-")
@@ -161,6 +161,9 @@ func bulk()->void:
 	bank.carried.meat-=pantry+past_sales
 	j.cooked+=pantry+past_sales
 	j.served+=past_sales
+	j.market.sold.meal+=past_sales
+	j.market.earned+=past_sales
+	j.market.counter_cash+=past_sales
 	j.product_store.meal+=pantry
 	field._inventory_changed()
 	field.counter.arrival_clock=200.
@@ -175,7 +178,7 @@ func bulk()->void:
 	await ticks(2)
 	check("one visit exchanges 1207 meals for 1021 already paid notes",j.counter_stock==pantry and j.held_meal==0 and j.served==past_sales and j.pocket_cash==past_sales and bank.till_balance()==0)
 	check("large shipments use bounded freight meshes",loop.exchange.flights.size()<=loop.exchange.MAX_FLYING)
-	check("empty register cannot pay twice",bank.till_balance()==0)
+	check("empty cash pile cannot pay twice",bank.till_balance()==0)
 	inspect_state("bulk receipt")
 	park(anchor)
 	await ticks(3)
@@ -197,7 +200,7 @@ func run()->void:
 	var mode:="manual"
 	for arg in args:
 		if arg.begins_with("--personal-goods="):mode=arg.trim_prefix("--personal-goods=")
-	check("normal paid scene restored",field.field_ready and not field.persist_blocked and bank.snapshot().version==10)
+	check("normal paid scene restored",field.field_ready and not field.persist_blocked and bank.snapshot().version==11)
 	match mode:
 		"manual":park(anchor);await manual()
 		"cold":await cold()

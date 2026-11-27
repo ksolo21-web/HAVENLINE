@@ -16,6 +16,7 @@ var clear_time := 0.
 var approach_side := 0.
 var gate_id := ""
 var active := false
+var breached := false
 var target_open := false
 var angle := 0.0
 var holding_for_occupancy := false
@@ -67,10 +68,25 @@ func set_earned(earned: bool) -> void:
 	_update_hinges()
 	visible = earned
 	for body in _leaf_bodies:
-		body.collision_layer = 1 if earned else 0
+		body.collision_layer = 1 if earned and not breached else 0
+		body.visible = not breached
+
+func set_breached(value: bool) -> void:
+	if breached == value:
+		return
+	breached = value
+	target_open = value
+	holding_for_occupancy = false
+	approach_side = 0.
+	# Repaired leaves start open so a repair cannot close on actors in the gap.
+	angle = PI * .5
+	_update_hinges()
+	for body in _leaf_bodies:
+		body.collision_layer = 1 if active and not breached else 0
+		body.visible = not breached
 
 func interaction_in_range(feet: Vector3) -> bool:
-	return active and global_position.distance_to(feet) <= INTERACTION_RANGE
+	return active and not breached and global_position.distance_to(feet) <= INTERACTION_RANGE
 
 func request_toggle(feet: Vector3) -> bool:
 	if not interaction_in_range(feet):
@@ -88,7 +104,7 @@ func sweep_clear(feet: Vector3, capsule_radius: float) -> bool:
 func advance(dt: float, feet: Vector3, capsule_radius: float) -> void:
 	var wanted := PI * 0.5 if target_open else 0.0
 	holding_for_occupancy = false
-	if not active or is_equal_approx(angle, wanted):
+	if not active or breached or is_equal_approx(angle, wanted):
 		return
 	if not sweep_clear(feet, capsule_radius):
 		holding_for_occupancy = true
@@ -104,7 +120,7 @@ func _near_aperture(at:Vector3) -> bool:
 func passage_heading(feet: Vector3, wish: Vector3) -> Vector3:
 	var at := to_local(feet)
 	var local := global_basis.inverse()*wish
-	if not active or absf(local.z)<.50 or absf(at.z)>APPROACH_DEPTH+.15:
+	if not active or breached or absf(local.z)<.50 or absf(at.z)>APPROACH_DEPTH+.15:
 		approach_side = 0.
 		return wish
 	if approach_side != 0. and (local.z*approach_side >= 0. or at.z*approach_side < -LEAF_LENGTH-.55):
@@ -144,7 +160,7 @@ func _safe_step(at:Vector3,radius:float,next_angle:float) -> bool:
 	return true
 
 func advance_automatic(dt:float,player:Vector3,radius:float,helper:Vector3,bystanders:Array[Vector4],pet := Vector3.INF) -> void:
-	if not active: return
+	if not active or breached: return
 	var local_player := to_local(player)
 	var local_helper := to_local(helper) if helper.is_finite() else Vector3.INF
 	var player_near := _near_aperture(local_player)

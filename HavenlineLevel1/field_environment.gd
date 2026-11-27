@@ -33,6 +33,7 @@ var counter_center_x := CounterLayout.CENTER_X
 var perimeter_stage := -1
 var wall_revision := 0
 var palisades: MultiMeshInstance3D
+var garage_wall_half: StaticBody3D
 var perimeter_tween: Tween
 var camp_state := -1
 var palette := {}
@@ -139,6 +140,14 @@ func install_walls() -> void:
 	instances.mesh = panel_mesh
 	palisades.multimesh = instances
 	world.camp_built.add_child(palisades)
+	garage_wall_half = StaticBody3D.new()
+	garage_wall_half.name = "SnowGarageSouthFenceEnd"
+	garage_wall_half.collision_layer = 0
+	world.camp_built.add_child(garage_wall_half)
+	garage_wall_half.add_child(Node3D.new())
+	var garage_wall_shape := CollisionShape3D.new()
+	garage_wall_shape.shape = BoxShape3D.new()
+	garage_wall_half.add_child(garage_wall_shape)
 	for i in world.layout.walls_xz.size():
 		world.camp_colliders[i].get_child(0).hide()
 	for gate in world.gates:
@@ -188,12 +197,15 @@ func travel_clear(from: Vector3, to: Vector3, radius := 0.) -> bool:
 	var a := Vector2(from.x, from.z)
 	var b := Vector2(to.x, to.z)
 	radius = maxf(0., radius)
-	for row: Array in world.layout.walls_xz:
+	for i in world.layout.walls_xz.size():
+		if world.encounters.has_method("wall_breached") and world.encounters.wall_breached(i):continue
+		var row: Array = world.layout.walls_xz[i]
 		var center := Vector2(row[0],row[1])
 		var half := Vector2(float(row[2]),float(row[3]))*.5
 		if _intersects_box(a,b, center-half-Vector2.ONE*radius, center+half+Vector2.ONE*radius):
 			return false
 	for gate in world.gates:
+		if gate.get("breached") == true: continue
 		var local_a: Vector3 = gate.to_local(from)
 		var local_b: Vector3 = gate.to_local(to)
 		var u := Vector2(local_a.x,local_a.z)
@@ -209,7 +221,7 @@ func travel_clear(from: Vector3, to: Vector3, radius := 0.) -> bool:
 			else:
 				var closest := Geometry2D.get_closest_points_between_segments(u,v,hinge,tip)
 				if closest[0].distance_squared_to(closest[1]) <= limit*limit: return false
-	return true
+	return not (world.snow_truck.initialized and world.snow_truck.intersects_closed_door(from,to,radius))
 
 # Supporting planes bound a convex, walkable pocket on the runner's side
 # of the nearby timber. The orbit takes one snapshot per pose, not a physics
@@ -220,11 +232,14 @@ func orbit_planes(feet: Vector3, reach: float) -> PackedVector3Array:
 	var rect: Vector4 = COURTS[perimeter_stage-1]
 	if feet.x < rect.x-reach or feet.x>rect.z+reach or feet.z<rect.y-reach or feet.z>rect.w+reach: return planes
 	var p := Vector2(feet.x,feet.z)
-	for row: Array in world.layout.walls_xz:
+	for i in world.layout.walls_xz.size():
+		if world.encounters.has_method("wall_breached") and world.encounters.wall_breached(i):continue
+		var row: Array = world.layout.walls_xz[i]
 		var center := Vector2(row[0],row[1])
 		var half := Vector2(row[2],row[3])*.5
 		_add_orbit_plane(planes,p,p.clamp(center-half,center+half),0.,reach)
 	for gate in world.gates:
+		if gate.get("breached") == true: continue
 		var local:Vector3=gate.to_local(feet)
 		if absf(local.x)>reach+gate.HALF_SPAN or absf(local.z)>reach+gate.LEAF_LENGTH: continue
 		for side:float in [-1.,1.]:
@@ -233,6 +248,11 @@ func orbit_planes(feet: Vector3, reach: float) -> PackedVector3Array:
 			var point:=Geometry2D.get_closest_point_to_segment(Vector2(local.x,local.z),hinge,tip)
 			var nearest:Vector3=gate.to_global(Vector3(point.x,0,point.y))
 			_add_orbit_plane(planes,p,Vector2(nearest.x,nearest.z),gate.LEAF_DEPTH*.5,reach)
+	if world.snow_truck.initialized and world.snow_truck.garage.visible and world.snow_truck.door.collision_layer != 0:
+		var garage: Node3D = world.snow_truck.garage
+		var local := garage.to_local(feet)
+		var edge := garage.to_global(Vector3(clampf(local.x,-1.44,1.44),0,0))
+		_add_orbit_plane(planes,p,Vector2(edge.x,edge.z),.10,reach)
 	return planes
 
 func _add_orbit_plane(planes: PackedVector3Array,p:Vector2,point:Vector2,thickness:float,reach:float) -> void:
@@ -322,6 +342,12 @@ func set_perimeter(stage: int, animate: bool, refresh_wall := false) -> void:
 		[r.z,(r.y-gap)*.5,.30,-gap-r.y],[r.z,(gap+r.w)*.5,.30,r.w-gap],
 		[(r.x+r.z)*.5,r.y,r.z-r.x,.30],[r.x,(r.y+r.w)*.5,.30,r.w-r.y]
 	]
+	garage_wall_half.collision_layer = 0
+	if stage == 3 and world.inventory.complete("snow_garage"):
+		var left: float = world.snow_truck.GARAGE_X-world.snow_truck.HALF_DOOR
+		var right: float = world.snow_truck.GARAGE_X+world.snow_truck.HALF_DOOR
+		rows[1] = [(gap+left)*.5,r.w,left-gap,.30]
+		rows.append([(right+r.z)*.5,r.w,r.z-right,.30])
 	world.layout.camp_rect_xz = [r.x,r.y,r.z,r.w]
 	world.layout.walls_xz = rows
 	world.layout.gates[0].center_xz = [0.,r.w]
@@ -329,7 +355,7 @@ func set_perimeter(stage: int, animate: bool, refresh_wall := false) -> void:
 	var transforms: Array[Transform3D] = []
 	for i in rows.size():
 		var row: Array = rows[i]
-		var body: StaticBody3D = world.camp_colliders[i]
+		var body: StaticBody3D = world.camp_colliders[i] if i<6 else garage_wall_half
 		body.position = Vector3(row[0],.475,row[1])
 		body.collision_layer = 1 if stage > 0 else 0
 		var collider: CollisionShape3D = body.get_child(1)
@@ -574,7 +600,16 @@ func cost_row(parent:Node3D, kinds:Array, z:float) -> Node3D:
 		var center := (i - (kinds.size()-1)*.5)*.88
 		var icon := Sprite3D.new()
 		icon.axis = Vector3.AXIS_Y
-		icon.texture = preload("res://field_hud.gd").MATERIAL_ICONS[kind]
+		if kind in ["planks","blocks"]:
+			const Atlas = preload("res://assets/field_ui/camp_goods.png")
+			var glyph := AtlasTexture.new()
+			glyph.atlas = Atlas
+			var side := Atlas.get_width()/4.
+			var index := 9 if kind=="planks" else 10
+			glyph.region = Rect2((index%4)*side, floori(index/4.)*side,side,side)
+			icon.texture = glyph
+		else:
+			icon.texture = preload("res://field_hud.gd").MATERIAL_ICONS[kind]
 		icon.pixel_size = .0046
 		icon.position.x = center-.17
 		icon.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
@@ -587,7 +622,7 @@ func cost_row(parent:Node3D, kinds:Array, z:float) -> Node3D:
 func show_costs(row:Node3D, due:Dictionary) -> void:
 	for kind in due:
 		var number := row.get_node_or_null(NodePath(kind)) as Label3D
-		if number: number.text = str(Progress.units(due[kind]))
+		if number: number.text = str(int(due[kind]) if kind in ["planks","blocks"] else Progress.units(due[kind]))
 
 func install_payment(anchor:Node3D, upgrade:bool) -> void:
 	var data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(DONOR+"build_inlay.json"))

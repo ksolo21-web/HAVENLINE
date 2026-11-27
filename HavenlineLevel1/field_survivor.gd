@@ -1,6 +1,8 @@
 extends Node3D
 
 const Human = preload("res://field_human.gd")
+const Crew = preload("res://field_crew.gd")
+const Wildlife = preload("res://field_wildlife.gd")
 const RESCUE := Vector3(-5.10,0,9.90)
 const PINE := Vector2(-3.60,9.10)
 # A three-quarter flank keeps both gloves and the contact side of the trunk visible.
@@ -39,7 +41,7 @@ var bank_swing := 0.0
 var bank_hit := false
 var failed_swings := 0
 const CAMP_DUTIES := ["serve","assist","feed","field"]
-const FIELD_DUTIES := ["forage","mining","wood"]
+const FIELD_DUTIES := ["forage","hunt","mining","wood"]
 var camp_cursor := 0
 var priority_order_available := true
 var field_cursor := 0
@@ -60,6 +62,19 @@ const PICKUP_REACH := 1.22
 const FIELD_SHIFT_SECONDS := 54.
 const WORK_WAIT_BUNDLES := 12
 var shift_seconds := 0.0
+var wildlife: Node3D
+var hunt_contacted := false
+var hunt_elapsed := 0.0
+var hunt_retry := 0.0
+var hunt_goal := Vector3.INF
+var hunt_replans := 0
+var defender: Node3D
+var retaliation := {}
+var defend_elapsed := 0.0
+var defend_landed := false
+var hit_flare := 0.0
+var fallen_elapsed := .7
+var health_label: Label3D
 # Clear both open leaves before turning laterally on either side of the gate.
 const GATE_LANDING := 2.55
 const RAW_RULES = preload("res://field_settlement.gd")
@@ -79,6 +94,18 @@ func setup(host: Node3D) -> void:
 	actor.configure("survivor_male_01")
 	actor.add_to_group("snow_track_survivors")
 	add_child(actor)
+	health_label = Label3D.new()
+	health_label.name = "SurvivorHealth"
+	health_label.position.y = 1.9
+	health_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	health_label.font_size = 29
+	health_label.pixel_size = .007
+	health_label.modulate = Color("#ffd49a")
+	health_label.hide()
+	actor.add_child(health_label)
+	wildlife = Wildlife.new()
+	add_child(wildlife)
+	wildlife.setup(world)
 	pack = preload("res://field_carry.gd").new()
 	add_child(pack)
 	# B at 8 s: the top of the carried food stands roughly 2.3 worker heights.
@@ -92,7 +119,10 @@ func setup(host: Node3D) -> void:
 	camp_cursor = posmod(int(journal.served)+int(journal.processed_wood)+int(journal.processed_stone),CAMP_DUTIES.size())
 	field_cursor = posmod(int(journal.worker_deliveries),FIELD_DUTIES.size())
 	tree = world.add_resource_source("survivor-work-pine","wood",PINE,1)
-	if world.inventory.settlement.worker_meal > 0:
+	if journal.rescued and not Crew.survivor_alive(journal):
+		phase = "fallen"
+		actor.hide()
+	elif _has_finished_goods():
 		restored_service = "cooker_output"
 		actor.position = _cooked_apron()
 		_go_to_counter()
@@ -137,6 +167,11 @@ func _sync_pack() -> void:
 	if journal.worker_carry_token != "": display.wood += 1
 	if journal.worker_supply != "": display[journal.worker_supply] += 1
 	pack_view.carried = display
+	var market: Dictionary = journal.get("market",{})
+	var products: Dictionary = market.get("worker_products",{})
+	pack_view.settlement.hand_products = {"planks":int(products.get("planks",0)),"blocks":int(products.get("blocks",0))}
+	pack_view.settlement.held_meal = int(journal.worker_meal)
+	pack_view.settlement.pocket_cash = int(market.get("worker_cash",0))
 	pack.sync()
 	actor.bundle.hide()
 
@@ -203,7 +238,7 @@ func _begin_supply_run(kind: String) -> void:
 
 func _needs_customer_meat() -> bool:
 	var belts=world.settlement_loop.conveyors
-	if belts.unclaimed_orders()==0 or belts.line_live("meat"):
+	if world.settlement_loop.worker_market_needs("meal")==0 or belts.line_live("meat"):
 		return false
 	var journal:Dictionary=world.inventory.settlement
 	if journal.hoppers.meat>0 or RAW_RULES.waiting_meals(journal)>0:
@@ -215,6 +250,12 @@ func _needs_customer_meat() -> bool:
 	)
 
 func _leave_shelf() -> void:
+	if _has_finished_goods():
+		world.settlement_loop.worker_bank_unrequested_goods()
+		_sync_pack()
+	if _worker_cash()>0:
+		world.settlement_loop.worker_bank_cash()
+		_sync_pack()
 	# Reserve one early service opportunity per field shift. A visible customer
 	# can be served from stored meat before the porter sets out on a long haul.
 	# Ordinary rotation still supplies the saw, quarry and construction plots.
@@ -233,6 +274,9 @@ func _leave_shelf() -> void:
 		camp_cursor = (camp_cursor+1)%CAMP_DUTIES.size()
 		match duty:
 			"serve":
+				if _can_deliver_counter():
+					_go_to_counter()
+					return
 				if _can_fetch_meal():
 					_to_cooker()
 					return
@@ -340,8 +384,25 @@ func _travel_clear(start: Vector3, end: Vector3, radius: float) -> bool:
 
 func _has_cargo() -> bool:
 	var journal: Dictionary = world.inventory.settlement
-	if journal.worker_meal > 0 or journal.worker_supply != "" or journal.worker_carry_token != "": return true
+	if _has_finished_goods() or _worker_cash()>0 or journal.worker_supply != "" or journal.worker_carry_token != "": return true
 	return journal.worker_load.values().any(func(amount): return amount > 0)
+
+func _has_finished_goods() -> bool:
+	var journal: Dictionary = world.inventory.settlement
+	return journal.worker_meal>0 or journal.get("market",{}).get("worker_products",{}).values().any(func(amount):return amount>0)
+
+func _can_deliver_counter() -> bool:
+	if not world.counter.active or not _counter_apron().is_finite(): return false
+	if world.inventory.till_balance() > world.counter.cash_in_exchange(): return true
+	var journal: Dictionary = world.inventory.settlement
+	if int(journal.worker_meal)>0 and world.settlement_loop.counter_accepts("meal"): return true
+	var products: Dictionary = journal.market.worker_products
+	for kind: String in products:
+		if int(products[kind])>0 and world.settlement_loop.counter_accepts(kind): return true
+	return false
+
+func _worker_cash() -> int:
+	return int(world.inventory.settlement.get("market",{}).get("worker_cash",0))
 
 func _walk(destination: Vector3, dt: float, carrying := false) -> bool:
 	var before := actor.global_position
@@ -397,14 +458,192 @@ func _walk_route(dt: float, carrying: bool) -> bool:
 
 func advance(dt: float) -> void:
 	if not actor or world.persist_blocked or world.reset_time>0: return
+	var hunter := actor.global_position if phase in ["hunt_approach","hunt_strike"] else Vector3.INF
+	wildlife.advance(dt,hunter)
+	var journal: Dictionary = world.inventory.settlement
+	if journal.rescued and not Crew.survivor_alive(journal):
+		_advance_fallen(dt)
+		return
+	if phase == "fallen":
+		_return_replacement()
+	hit_flare = maxf(0.0,hit_flare-dt)
+	health_label.visible = hit_flare>0.0
 	actor.forester_gait.pivot_frame = false
-	_advance_tasks(dt)
+	if not _defend(dt): _advance_tasks(dt)
 	if actor.mode=="travel" and not actor.forester_gait.pivot_frame:
 		actor.forester_gait.settle_contact(dt,actor)
 	else:
 		actor.forester_gait.previous_points.clear()
 		actor.forester_gait.marker.fill(-1)
 		actor.forester_gait.correction.fill(Vector3.ZERO)
+
+func can_defend() -> bool:
+	return is_instance_valid(actor) and actor.is_visible_in_tree() and Crew.survivor_alive(world.inventory.settlement)
+
+func provoked(attacker: Node3D) -> bool:
+	return is_instance_valid(attacker) and float(retaliation.get(attacker.get_instance_id(),-1.0))>world.simulation_time
+
+func apply_enemy_contact(attacker: Node3D, damage: int) -> bool:
+	if damage<=0 or not can_defend() or not world.settlement_loop.can_transact(): return false
+	if not is_instance_valid(attacker) or attacker not in world.enemies: return false
+	var at := actor.global_position
+	if at.distance_squared_to(attacker.global_position)>4.84 or not _travel_clear(attacker.global_position,at,.08):
+		return false
+	var journal: Dictionary = world.inventory.settlement
+	var loss := mini(damage,int(journal.get("survivor_hp",Crew.SURVIVOR_HP)))
+	journal.survivor_hp = int(journal.get("survivor_hp",Crew.SURVIVOR_HP))-loss
+	if not world.settlement_loop.commit_receipt("survivor_hit",at,"hit"): return false
+	health_label.text = "%d / %d" % [journal.survivor_hp,Crew.SURVIVOR_HP]
+	hit_flare = 2.4
+	world._combat_number(at+Vector3.UP*1.45,"−%d" % loss,Color("#ffc196"),actor)
+	if journal.survivor_hp == 0:
+		phase = "fallen"
+		fallen_elapsed = 0.0
+		defender = null
+		if is_instance_valid(transfer_mesh): transfer_mesh.queue_free()
+		if is_instance_valid(supply_model): supply_model.queue_free()
+		for flight: Dictionary in delivery_stream:
+			if is_instance_valid(flight.get("mesh")): flight.mesh.queue_free()
+		delivery_stream.clear()
+		pack.rack.hide()
+		world._event("survivor_fallen",at,"defeat")
+		return true
+	if defender != attacker:
+		defender = attacker
+		defend_elapsed = -.15
+		defend_landed = false
+	return true
+
+func _advance_fallen(dt: float) -> void:
+	fallen_elapsed += dt
+	if fallen_elapsed<.55:
+		actor.pose("idle",step_cycle)
+		actor.rotation.z = 1.41*smoothstep(0.0,.45,fallen_elapsed)
+	else:
+		actor.hide()
+
+func _return_replacement() -> void:
+	actor.global_position = READY
+	actor.rotation = Vector3(0,-.5,0)
+	actor.show()
+	pack.rack.show()
+	retaliation.clear()
+	_sync_pack()
+	var journal: Dictionary = world.inventory.settlement
+	if _has_finished_goods():
+		_go_to_counter()
+	elif not journal.worker_supply.is_empty():
+		_begin_supply_run(journal.worker_supply)
+	elif not journal.worker_carry_token.is_empty():
+		phase = "carrying"
+		route.assign([_shelf_apron()])
+	elif journal.worker_load.values().any(func(amount): return amount > 0):
+		_begin_bin_delivery()
+	else:
+		_return_to_shelf()
+
+func _defend(dt: float) -> bool:
+	if not is_instance_valid(defender): return false
+	if not defender.can_receive_swirl() or defender.global_position.distance_squared_to(actor.global_position)>3.85:
+		defender = null
+		return false
+	if not _travel_clear(actor.global_position,defender.global_position,.045):
+		defender = null
+		return false
+	travel_speed = 0.0
+	actor.bundle.hide()
+	var axis := actor.global_position.direction_to(defender.global_position)
+	actor.rotation.y = rotate_toward(actor.rotation.y,atan2(axis.x,axis.z),dt*9.0)
+	var previous: PackedVector3Array = actor.blade_points()
+	defend_elapsed += dt
+	actor.pose("chop",maxf(0.0,defend_elapsed)/Human.CHOP_SECONDS)
+	if not defend_landed and defend_elapsed>=.48 and defend_elapsed<=.94:
+		var next: PackedVector3Array = actor.blade_points()
+		for i in previous.size():
+			if not defender.contact_segment(previous[i],next[i]): continue
+			if not _travel_clear(actor.global_position,next[i],.055): continue
+			defend_landed = defender.receive_hit(1,next[i])
+			if defend_landed:
+				retaliation[defender.get_instance_id()] = world.simulation_time+8.0
+				world._event("survivor_defends",next[i],"impact_wood")
+				break
+	if defend_elapsed>=Human.CHOP_SECONDS:
+		defend_elapsed = 0.0
+		defend_landed = false
+	return true
+
+func _begin_hunt(origin: Vector3) -> bool:
+	if not wildlife.is_huntable() or worker_space("meat")<=0 or not world.inventory.storage_open("meat"):
+		return false
+	if not _in_work_area(wildlife.global_position): return false
+	hunt_goal = wildlife.approach_from(origin)
+	var approach := _outdoor_path(origin,hunt_goal)
+	if approach.is_empty(): return false
+	route.append_array(approach)
+	hunt_replans = 0
+	hunt_retry = 0.0
+	phase = "hunt_approach"
+	return true
+
+func _advance_hunt(dt: float) -> void:
+	if shift_seconds>=FIELD_SHIFT_SECONDS:
+		_go_home_bulk()
+		return
+	if phase == "hunt_pickup":
+		hunt_elapsed += dt
+		_walk(wildlife.global_position,dt)
+		_sweep_drops()
+		if hunt_elapsed>=.82:
+			_begin_inbound(true)
+			phase = "bulk_return"
+		return
+	if not wildlife.is_huntable():
+		_go_home_bulk()
+		return
+	if phase == "hunt_approach":
+		hunt_retry = maxf(0.0,hunt_retry-dt)
+		if hunt_goal.distance_to(wildlife.global_position)>1.12 and hunt_retry==0.0 and _in_work_area(actor.global_position):
+			hunt_retry = .38
+			hunt_goal = wildlife.approach_from(actor.global_position)
+			route = _outdoor_path(actor.global_position,hunt_goal)
+			hunt_replans += 1
+			if route.is_empty() or hunt_replans>8:
+				_go_home_bulk()
+				return
+		if _walk_route(dt,false):
+			hunt_contacted = false
+			hunt_elapsed = 0.0
+			phase = "hunt_strike"
+		return
+	var axis := actor.global_position.direction_to(wildlife.global_position)
+	actor.rotation.y = rotate_toward(actor.rotation.y,atan2(axis.x,axis.z),dt*8.0)
+	var previous: PackedVector3Array = actor.blade_points()
+	hunt_elapsed += dt
+	actor.pose("chop",hunt_elapsed/Human.CHOP_SECONDS)
+	if not hunt_contacted and hunt_elapsed>=.48 and hunt_elapsed<=.94:
+		var next: PackedVector3Array = actor.blade_points()
+		for i in previous.size():
+			var contact: Vector3 = wildlife.intersect_blade(previous[i],next[i])
+			if not contact.is_finite(): continue
+			if not wildlife.receive_hunting_contact(contact,actor.global_position): continue
+			hunt_contacted = true
+			world._record_field_event("survivor_hunt_hit",contact)
+			if wildlife.hp<=0:
+				hunt_elapsed = 0.0
+				phase = "hunt_pickup"
+			break
+	if phase=="hunt_pickup" or hunt_elapsed<Human.CHOP_SECONDS: return
+	if not hunt_contacted:
+		hunt_goal = wildlife.approach_from(actor.global_position)
+		route = _outdoor_path(actor.global_position,hunt_goal)
+		hunt_replans += 1
+		if route.is_empty() or hunt_replans>8:
+			_go_home_bulk()
+		else:
+			phase = "hunt_approach"
+	else:
+		hunt_contacted = false
+		hunt_elapsed = 0.0
 
 func _advance_tasks(dt: float) -> void:
 	if not restored_service.is_empty():
@@ -414,7 +653,7 @@ func _advance_tasks(dt: float) -> void:
 			if floor_point.is_finite(): actor.global_position = floor_point
 		restored_service = ""
 	var journal: Dictionary = world.inventory.settlement
-	if phase in ["to_tree","work_ready","chopping","falling","pickup","foraging","mining_approach","mining"]:
+	if phase in ["to_tree","work_ready","chopping","falling","pickup","foraging","mining_approach","mining","hunt_approach","hunt_strike","hunt_pickup"]:
 		shift_seconds+=dt
 	if phase in ["carrying","bulk_return","supply_pickup","supply_return","supply_back","bin_delivery"] and world.inventory.storage_open("wood"):
 		var door := _shelf_apron()
@@ -448,13 +687,20 @@ func _advance_tasks(dt: float) -> void:
 			if _walk_route(dt,false):
 				if world.settlement_loop.collect_worker_meal(): _go_to_counter()
 				else: _return_to_shelf()
+				_sync_pack()
 		"meal_serve":
+			if not _can_deliver_counter():
+				_return_to_shelf()
+				return
 			route.assign([_counter_apron()])
 			if _walk_route(dt,false):
 				actor.rotation.y = PI
 				actor.pose("receive",.48 if world.counter.sale_order != 0 else .22)
-				if journal.worker_meal == 0 and not world.counter.worker_serving:
-					_return_to_shelf()
+				world.settlement_loop.worker_stock_counter()
+				_sync_pack()
+				_return_to_shelf()
+		"hunt_approach","hunt_strike","hunt_pickup":
+			_advance_hunt(dt)
 		"foraging","mining_approach","mining","bulk_return","bin_delivery":
 			_work_field(dt)
 		"assist_plot":
@@ -573,19 +819,14 @@ func _nearest_new_bundle() -> String:
 	return selected
 
 func _can_fetch_meal() -> bool:
-	var journal: Dictionary = world.inventory.settlement
-	if not world.counter or not world.counter.active or journal.worker_meal > 0 or world.settlement_loop.conveyors.line_live("stored_meal"): return false
-	if world.settlement_loop.conveyors.unclaimed_orders()==0: return false
-	if not _counter_apron().is_finite(): return false
-	return _meal_pickup_apron().is_finite()
+	if not world.counter or not world.counter.active or _has_finished_goods(): return false
+	return _counter_apron().is_finite() and _meal_pickup_apron().is_finite()
 
 func _meal_pickup_apron() -> Vector3:
-	var journal: Dictionary = world.inventory.settlement
-	if not world.settlement_loop.conveyors.line_live("meal_to_store") and world.inventory.is_machine_owned("meat") and RAW_RULES.waiting_meals(journal)>0:
-		var cooked := _cooked_apron()
-		if cooked.is_finite(): return cooked
-	if int(journal.get("product_store",{}).get("meal",0))>0: return _shelf_apron()
-	return Vector3.INF
+	var source: Vector3 = world.settlement_loop.market_worker_product_source()
+	if not source.is_finite(): return source
+	if source.is_equal_approx(world.depot.apron.global_position): return _shelf_apron()
+	return _cooked_apron()
 
 func _to_cooker() -> void:
 	route.assign([_meal_pickup_apron()])
@@ -625,6 +866,8 @@ func _start_field_job() -> void:
 				forage_token = target
 				route.append_array(_outdoor_path(staging,world.drops[target].at))
 				phase = "foraging"
+			"hunt":
+				if not _begin_hunt(staging): continue
 			"mining":
 				if not is_instance_valid(assigned_bank): continue
 				route.append_array(bank_approach)
@@ -891,6 +1134,7 @@ func _prepare_assistance(use_shelf := true) -> bool:
 	for id: String in candidates:
 		if not book.offer_open(id): continue
 		if id in world.Progress.LINES: continue # Conveyors are player-selected enhancements.
+		if id in ["snow_garage","snow_truck"]: continue # Vehicle purchase is an explicit player project.
 		var pad: Node3D = world.carry.receivers.get(id)
 		if not pad or not pad.is_visible_in_tree(): continue
 		var loaded := false

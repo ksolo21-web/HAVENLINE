@@ -76,6 +76,9 @@ func _initialize() -> void:
 	journal.held_meal = 1
 	check("one roast on rack and one held",Rules.waiting_meals(journal)==1 and candidate.restore(book.snapshot()))
 	journal.served += 1
+	journal.market.sold.meal += 1
+	journal.market.earned += 1
+	journal.market.counter_cash += 1
 	journal.held_meal = 0
 	check("sale removes exactly the held roast",Rules.waiting_meals(journal)==1 and candidate.restore(book.snapshot()))
 	var old: Dictionary = book.snapshot()

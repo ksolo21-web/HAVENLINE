@@ -1,6 +1,9 @@
 extends RefCounted
 const Wolf = preload("res://field_enemy.gd")
 const PackRoute = preload("res://field_pack_route.gd")
+const RaidWave = preload("res://field_raid_wave.gd")
+const RaidClock = preload("res://field_raid_director.gd")
+var raids := RaidWave.new()
 var routes := {}
 const LIVE_CAP := 4
 const WAVE_SECONDS := 24.0
@@ -20,13 +23,31 @@ var repath := 0.0
 
 func setup(host: Node3D) -> void:
 	world = host
+	raids.setup(host, self)
 	world.field_env.perimeter_changed.connect(_reconcile_perimeter)
 	rng.randomize()
 
 func _reconcile_perimeter() -> void:
+	raids.reconcile_perimeter()
 	for wolf in world.enemies.duplicate():
-		if not outside(wolf.position, wolf.sanctuary_margin()):
+		if not wolf.raid_member and not outside(wolf.position, wolf.sanctuary_margin()):
 			_remove(wolf)
+
+func allows_inside_contact(wolf: Node3D, at: Vector3) -> bool:
+	return raids.allows_inside_contact(wolf, at)
+
+func is_structure_down(id: String) -> bool:
+	return raids.clock.is_down(id)
+
+func wall_breached(index: int) -> bool:
+	return index in [2, 3] and raids.clock.is_down(raids.Sites.FENCE_IDS[index])
+
+func is_machine_down(kind: String) -> bool:
+	match kind:
+		"meat": return is_structure_down("cooker")
+		"wood": return is_structure_down("saw")
+		"stone": return is_structure_down("drill")
+	return false
 
 func _point_inside(p: Vector3) -> bool:
 	if world.field_env.has_method("is_inside_camp"):
@@ -111,16 +132,17 @@ func anchor_for(pos: Vector3) -> Vector3:
 	var offset := Vector3(-8.8 if pos.x+8.8>limit else 8.8,0,-1.8 if pos.z>0 else 1.8)
 	return Vector3(clampf(pos.x+offset.x,-limit,limit),0,clampf(pos.z+offset.z,-limit,limit))
 
-func _add(p: Vector3, boss: bool, id: int, home: Vector3) -> Wolf:
+func _add(p: Vector3, boss: bool, id: int, home: Vector3, member := false) -> Wolf:
 	var wolf := Wolf.new()
 	wolf.name = ("AlphaWolf" if boss else "RidgeWolf")+str(id)
 	wolf.is_boss=boss
+	wolf.raid_member=member
 	wolf.spawn_id=id
 	wolf.position=p
 	world.add_child(wolf)
 	wolf.configure(world.actor)
 	wolf.home=home
-	wolf.player_hit.connect(world._player_hit.bind(wolf))
+	wolf.player_hit.connect(_enemy_contact.bind(wolf))
 	wolf.defeated.connect(world._wolf_defeated.bind(wolf))
 	wolf.damaged.connect(world._wolf_damage_feedback.bind(wolf))
 	world.enemies.append(wolf)
@@ -131,9 +153,13 @@ func _add(p: Vector3, boss: bool, id: int, home: Vector3) -> Wolf:
 
 func launch(announce := true) -> bool:
 	var points: Array = []
+	var ambient_count := 0
 	for wolf in world.enemies: points.append(wolf.position)
+	for wolf in world.enemies:
+		if not wolf.raid_member:
+			ambient_count+=1
 	var player: Vector3 = world.actor.position
-	var plans := _plan(anchor_for(player),player,points,LIVE_CAP-points.size())
+	var plans := _plan(anchor_for(player),player,points,LIVE_CAP-ambient_count)
 	if plans.is_empty(): return false
 	wave+=1
 	for i in plans.size():
@@ -169,37 +195,85 @@ func _gate_flank(wolf: Wolf, runner: Vector3) -> Vector3:
 
 func advance(dt: float) -> bool:
 	var pos: Vector3 = world.actor.position
-	var danger := false
+	var danger := raids.advance(dt)
 	var hero_safe := _point_inside(pos)
 	repath -= dt
 	var scan := repath<=0
 	if scan: repath=.25
 	for wolf in world.enemies.duplicate():
+		if wolf.raid_member:
+			continue
 		if wolf.hp<=0:
 			wolf.advance(dt)
 			if not wolf.visible: _remove(wolf)
 			continue
-		if not outside(wolf.position,wolf.sanctuary_margin()) or (scan and wolf.position.distance_squared_to(pos)>RETIRE_RANGE*RETIRE_RANGE):
+		var retire: bool = scan and wolf.position.distance_squared_to(pos) > RETIRE_RANGE * RETIRE_RANGE
+		if retire and _worker_exposed(wolf):
+			retire = wolf.position.distance_squared_to(world.survivor.actor.global_position) > RETIRE_RANGE * RETIRE_RANGE
+		if not outside(wolf.position,wolf.sanctuary_margin()) or retire:
 			_remove(wolf)
 			continue
 		var prev: String=wolf.state
-		wolf.advance(dt,can_walk.bind(wolf),not hero_safe,_steer,_gate_flank(wolf,pos))
-		if prev != wolf.state:
-			if wolf.state=="stalk" and prev in ["guard","return"]: world._event("approach",wolf.position)
-			elif wolf.state=="windup": world._event("wolf_brace",wolf.position)
-			elif wolf.state=="lunge": world._event("enemy_attack",wolf.position)
+		var allowed := _ambient_target(wolf, not hero_safe)
+		var gate_axis := _gate_flank(wolf,pos) if wolf.aim_role == "player" else Vector3.ZERO
+		wolf.advance(dt,can_walk.bind(wolf),allowed,_steer,gate_axis)
+		_observe_transition(wolf, prev)
 		danger = danger or wolf.state in ["stalk","windup","lunge","recover","stagger"]
 	remaining=maxf(0.0,remaining-dt)
-	if remaining<=0.0 and world.enemies.size()<LIVE_CAP:
+	if remaining<=0.0:
 		if launch(): world._checkpoint_lifecycle()
 		else: remaining=1.0
 	return danger
 
+func _observe_transition(wolf: Wolf, prev: String) -> void:
+	if prev == wolf.state: return
+	if wolf.state=="stalk" and prev in ["guard","return"]: world._event("approach",wolf.position)
+	elif wolf.state=="windup": world._event("wolf_brace",wolf.position)
+	elif wolf.state=="lunge": world._event("enemy_attack",wolf.position)
+
+func _worker_exposed(wolf: Wolf) -> bool:
+	return raids.permits_worker_target(wolf) and not _point_inside(world.survivor.actor.global_position)
+
+func _ambient_target(wolf: Wolf, player_outside: bool) -> bool:
+	if wolf.state not in ["windup", "lunge"]:
+		if player_outside and wolf.global_position.distance_squared_to(world.actor.global_position) < Wolf.NOTICE_RADIUS * Wolf.NOTICE_RADIUS:
+			wolf.retarget(world.actor, "player")
+		else:
+			var owl = world.owl
+			var worker = world.survivor
+			if is_instance_valid(owl) and owl.has_method("can_be_targeted") and owl.can_be_targeted() and not _point_inside(owl.global_position) and wolf.global_position.distance_squared_to(owl.global_position) < 9. * 9.:
+				wolf.retarget(owl, "owl")
+			elif _worker_exposed(wolf):
+				wolf.retarget(worker.actor, "survivor")
+			else:
+				wolf.retarget(world.actor, "player")
+	match wolf.aim_role:
+		"owl": return is_instance_valid(world.owl) and world.owl.can_be_targeted() and not _point_inside(world.owl.global_position)
+		"survivor": return _worker_exposed(wolf)
+	return player_outside
+
+func _enemy_contact(amount: int, wolf: Wolf) -> void:
+	if wolf.raid_member:
+		raids.contact(amount,wolf)
+		return
+	match wolf.aim_role:
+		"owl":
+			if is_instance_valid(world.owl) and world.owl.can_be_targeted() and not _point_inside(world.owl.global_position) and world.field_env.travel_clear(wolf.global_position,world.owl.global_position,.02):
+				world.owl.apply_enemy_contact(wolf,amount)
+		"survivor":
+			if _worker_exposed(wolf) and world.field_env.travel_clear(wolf.global_position,world.survivor.actor.global_position,.02):
+				world.survivor.apply_enemy_contact(wolf,amount)
+		_:
+			world._player_hit(amount,wolf)
+
 func snapshot() -> Dictionary:
 	var list := []
+	var active_raid := []
 	for wolf in world.enemies:
-		if wolf.hp>0: list.append([wolf.spawn_id,wolf.is_boss,wolf.hp,wolf.position.x,wolf.position.z,wolf.home.x,wolf.home.z])
-	return {"remaining":remaining,"wave":wave,"serial":serial,"rng":str(rng.state),"live":list}
+		if wolf.hp<=0: continue
+		var row := [wolf.spawn_id,wolf.is_boss,wolf.hp,wolf.position.x,wolf.position.z,wolf.home.x,wolf.home.z]
+		(active_raid if wolf.raid_member else list).append(row)
+	return {"remaining":remaining,"wave":wave,"serial":serial,"rng":str(rng.state),"live":list,"raid":raids.clock.snapshot(),"raid_live":active_raid}
 
 func restore(p: Dictionary) -> bool:
 	if not p.get("live") is Array or p.live.size()>LIVE_CAP or not p.get("rng") is String or not p.rng.is_valid_int(): return false
@@ -207,20 +281,33 @@ func restore(p: Dictionary) -> bool:
 		var v: Variant = p.get(key)
 		if (not v is int and not v is float) or not is_finite(float(v)) or v<0: return false
 	if p.remaining>86400 or p.serial!=int(p.serial) or p.wave!=int(p.wave): return false
+	var active_raid: Variant = p.get("raid_live", [])
+	if not active_raid is Array or active_raid.size() > RaidWave.WAVE_LIMIT: return false
+	var verified := RaidClock.new()
+	if not verified.restore(p.get("raid")) or (not active_raid.is_empty() and verified.phase != "attack"): return false
+	if verified.phase != "quiet" and world.field_env.perimeter_stage < 3: return false
 	var ids := {}
-	for row in p.live:
+	for row in p.live + active_raid:
 		if not row is Array or row.size()!=7 or not row[1] is bool: return false
 		for i in [0,2,3,4,5,6]:
 			if (not row[i] is float and not row[i] is int) or not is_finite(float(row[i])): return false
 		if row[0]!=int(row[0]) or row[0]<1 or row[0]>p.serial or ids.has(int(row[0])) or row[2]!=int(row[2]) or row[2]<1 or row[2]>(Wolf.BOSS_HEALTH if row[1] else Wolf.MAX_HEALTH): return false
 		ids[int(row[0])]=true
 	for wolf in world.enemies.duplicate(): _remove(wolf)
+	raids.clock.restore(p.get("raid"))
+	raids.sync_paid_layout = not raids.clock.condition.is_empty() and not world.camp_layout
 	for row in p.live:
 		var point := Vector3(row[3],0,row[4])
 		if not outside(point,1.975 if row[1] else 1.25): continue
 		var wolf = _add(point,row[1],int(row[0]),Vector3(row[5],0,row[6]))
 		wolf.hp=int(row[2])
 		wolf._refresh_health()
+	for row in active_raid:
+		var at := Vector3(row[3],0,row[4])
+		var wolf := _add(at,row[1],int(row[0]),Vector3(row[5],0,row[6]),true)
+		wolf.hp=int(row[2])
+		wolf._refresh_health()
+	raids.reconcile_perimeter()
 	if not world.enemies.is_empty(): world.enemy=world.enemies.front()
 	remaining=p.remaining
 	wave=int(p.wave)

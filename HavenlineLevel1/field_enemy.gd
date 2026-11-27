@@ -10,6 +10,8 @@ const BITE_DAMAGE := 2
 const BOSS_BITE_DAMAGE := 4
 var is_boss := false
 var spawn_id := 0
+var raid_member := false
+var aim_role := "player"
 
 func size_factor() -> float:
 	return 1.58 if is_boss else 1.0
@@ -171,6 +173,18 @@ func configure(player: Node3D) -> void:
 	configured = true
 	_setup_visual()
 
+func retarget(next: Node3D, role: String) -> void:
+	if target == next and aim_role == role:
+		return
+	if yielding_gate and is_instance_valid(target) and target is CharacterBody3D and is_instance_valid(body):
+		target.remove_collision_exception_with(body)
+	yielding_gate = false
+	flank_sign = 0.
+	pursuing = false
+	route_destination = Vector2.INF
+	target = next
+	aim_role = role
+
 func contact_mesh() -> MeshInstance3D:
 	return surface
 
@@ -255,6 +269,14 @@ func _watch_ground(dt: float, sweep: Callable, steer: Callable) -> void:
 	timer=2.15
 	state="patrol"
 
+func _target_point() -> Vector3:
+	var host := get_parent()
+	if aim_role == "player" and is_instance_valid(host) and "snow_truck" in host:
+		var truck = host.snow_truck
+		if is_instance_valid(truck) and truck.mounted:
+			return truck.nearest_hull_point(global_position)
+	return target.global_position
+
 func advance(delta: float, sweep_allowed: Callable = Callable(), player_exposed := true, steer: Callable = Callable(), gate_axis := Vector3.ZERO) -> void:
 	if not configured or not active or not is_instance_valid(target): return
 	var dt := clampf(delta,0.0,.08)
@@ -272,7 +294,7 @@ func advance(delta: float, sweep_allowed: Callable = Callable(), player_exposed 
 		state="return"
 		timer=0.0
 	var reach_bonus := .54 if is_boss else 0.0
-	var space := global_position - target.global_position
+	var space := global_position - _target_point()
 	space.y = 0.0
 	# An open gate leaves no lateral escape for the runner. Let the hunter
 	# give that one character shoulder room; fence and gate collisions still
@@ -297,7 +319,7 @@ func advance(delta: float, sweep_allowed: Callable = Callable(), player_exposed 
 		var separation: Vector3 = global_position-other.global_position
 		separation.y = 0.0
 		var gap := separation.length()
-		var neighbor_gap: float = sanctuary_margin()+other.sanctuary_margin()
+		var neighbor_gap: float = .405*(size_factor()+other.size_factor()) if raid_member else sanctuary_margin()+other.sanctuary_margin()
 		if gap > .01 and gap < neighbor_gap:
 			_move(separation/gap,minf((neighbor_gap-gap)*.5,dt*2.2),sweep_allowed)
 	# A wolf closing straight down the camera's sightline circles to a shoulder.
@@ -306,7 +328,8 @@ func advance(delta: float, sweep_allowed: Callable = Callable(), player_exposed 
 	# Start giving way while the runner is still on the other side of the
 	# threshold. A committed lunge holds its authored approach and contact.
 	var step_to_shoulder := in_passage and state != "lunge"
-	var field_flank := sight and state in ["guard", "stalk", "stagger"] and space.length() < 2.50
+	var flank_actor := not raid_member or aim_role in ["player", "owl", "survivor"]
+	var field_flank := flank_actor and sight and state in ["guard", "stalk", "stagger"] and space.length() < 2.50
 	if step_to_shoulder or field_flank:
 		var right := gate_axis if in_passage else sight.global_basis.x
 		right.y = 0.0
@@ -320,7 +343,8 @@ func advance(delta: float, sweep_allowed: Callable = Callable(), player_exposed 
 			_move(right*flank_sign,minf(pace*dt,shoulder-lateral*flank_sign),sweep_allowed)
 	elif space.length() > 3.0:
 		flank_sign = 0.0
-	var offset := target.global_position - global_position
+	var target_point := _target_point()
+	var offset := target_point - global_position
 	offset.y = 0.0
 	var distance := offset.length()
 	var toward := offset.normalized()
@@ -344,7 +368,7 @@ func advance(delta: float, sweep_allowed: Callable = Callable(), player_exposed 
 			var elapsed := duration - timer
 			_attack_pose("Bite", elapsed / duration)
 			_move(attack_direction, minf(4.6*dt,maxf(0.0,distance-CONTACT_DISTANCE-reach_bonus)),sweep_allowed)
-			var remaining := target.global_position-global_position
+			var remaining := _target_point() - global_position
 			remaining.y = 0.0
 			var contact_at := duration * JAW_CONTACT / BITE_DURATION
 			var crosses_contact := elapsed >= contact_at and elapsed - dt < contact_at
@@ -356,7 +380,8 @@ func advance(delta: float, sweep_allowed: Callable = Callable(), player_exposed 
 				timer = _recovery_duration()
 				_attack_pose("Recover", 0.0)
 		_:
-			pursuing = player_exposed and distance <= (GIVE_UP_RADIUS if pursuing else NOTICE_RADIUS) and target.global_position.distance_to(home) <= LEASH
+			var local_pursuit := distance <= (GIVE_UP_RADIUS if pursuing else NOTICE_RADIUS) and target.global_position.distance_to(home) <= LEASH
+			pursuing = player_exposed and (raid_member or local_pursuit)
 			if pursuing:
 				if distance <= STRIKE_START+reach_bonus+.025:
 					state = "windup"
@@ -365,7 +390,7 @@ func advance(delta: float, sweep_allowed: Callable = Callable(), player_exposed 
 					_attack_pose("Brace", 0.0)
 				else:
 					state = "stalk"
-					var intercept := target.global_position
+					var intercept := target_point
 					if target is CharacterBody3D and distance>3.2:
 						var velocity := (target as CharacterBody3D).velocity.slide(Vector3.UP)
 						intercept += velocity.limit_length(6.)*minf(.38,(distance-3.2)*.08)

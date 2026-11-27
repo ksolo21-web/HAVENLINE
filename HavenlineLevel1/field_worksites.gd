@@ -27,21 +27,26 @@ func setup(host) -> void:
 
 func refresh() -> void:
 	var journal: Dictionary = world.inventory.settlement
-	plot.visible = world.camp_active and not journal.survivor_paid
-	owl_plot.visible = world.camp_active and not Crew.owns_owl(journal)
-	var owl_paid:=Crew.OWL_MEAT-Crew.owl_due(journal)
+	var survivor_due := Crew.survivor_due(journal,world.inventory.survivor_cost)
+	var owl_due := Crew.owl_due(journal)
+	plot.visible = world.camp_active and survivor_due > 0
+	owl_plot.visible = world.camp_active and owl_due > 0
+	plot.title.text = "Hire survivor again" if journal.rescued else "Rescue survivor"
+	owl_plot.title.text = "Befriend another owl" if Crew.ever_owned_owl(journal) and owl_due > 0 else "Befriend owl"
+	var owl_paid:=Crew.OWL_MEAT-owl_due
 	if last_owl_paid!=owl_paid:
 		last_owl_paid=owl_paid
 		world.field_env.show_costs(owl_plot.price,{"meat":Crew.OWL_MEAT-owl_paid})
 		owl_plot.set_fill(float(owl_paid)/Crew.OWL_MEAT)
-	if last_paid != int(journal.survivor_wood):
-		last_paid = int(journal.survivor_wood)
-		world.field_env.show_costs(plot.price,{"wood":world.inventory.survivor_cost-last_paid})
-		plot.set_fill(float(last_paid) / world.inventory.survivor_cost)
+	var bill := Crew.survivor_bill(journal,world.inventory.survivor_cost)
+	if last_paid != survivor_due:
+		last_paid = survivor_due
+		world.field_env.show_costs(plot.price,{"wood":survivor_due})
+		plot.set_fill(1.0-float(survivor_due)/bill)
 
 func _site() -> String:
 	var here: Vector3 = world.actor.global_position
-	if world.camp_active and not world.inventory.settlement.survivor_paid and world.Reach.plot_distance(plot,here) <= world.Reach.NEAR:
+	if plot.visible and world.Reach.plot_distance(plot,here) <= world.Reach.NEAR:
 		return "survivor_plot"
 	if owl_plot.visible and world.Reach.plot_distance(owl_plot,here)<=world.Reach.NEAR:
 		return Crew.OWL_PLOT
@@ -53,7 +58,7 @@ func _site() -> String:
 	var best_distance := INF
 	var floor_point := Vector2(here.x,here.z)
 	for kind: String in world.settlement_loop.Rules.KINDS:
-		if not world.inventory.is_machine_owned(kind): continue
+		if not world.inventory.is_machine_owned(kind) or world.encounters.is_machine_down(kind): continue
 		var wall: Rect2 = world.lakeshore._footprint(0.) if kind == "meat" else world.processors._rect(kind,0.)
 		var distance: float = world.Reach.distance_to_rect(floor_point,wall)
 		if wall.has_point(floor_point) or distance > world.Reach.NEAR: continue
@@ -98,8 +103,9 @@ func cancel() -> void:
 func demand(site: String, kind: String) -> int:
 	if kind != _raw(site) or not world.settlement_loop.can_transact() or site != _site(): return 0
 	var journal: Dictionary = world.inventory.settlement
-	if site == "survivor_plot": return world.inventory.survivor_cost - int(journal.survivor_wood)
+	if site == "survivor_plot": return Crew.survivor_due(journal,world.inventory.survivor_cost)
 	if site == Crew.OWL_PLOT:return Crew.owl_due(journal)
+	if world.encounters.is_machine_down(kind): return 0
 	return world.settlement_loop.Rules.HOPPER_CAPACITY - int(journal.hoppers[kind]) - int(journal.line_load[kind])
 
 func advance(_dt: float) -> void:
@@ -124,11 +130,10 @@ func receive(site: String, kind: String, amount: int) -> bool:
 	world.inventory.carried[kind] -= amount
 	var cue := "spend_"+kind
 	if site == "survivor_plot":
-		journal.survivor_wood += amount
-		journal.survivor_paid = journal.survivor_wood == world.inventory.survivor_cost
-		cue = "purchase" if journal.survivor_paid else cue
+		Crew.fund_survivor(journal,amount,world.inventory.survivor_cost)
+		if Crew.survivor_due(journal,world.inventory.survivor_cost)==0: cue="purchase"
 	elif site == Crew.OWL_PLOT:
-		journal.owl_meat+=amount
+		Crew.fund_owl(journal,amount)
 		cue="purchase" if Crew.owns_owl(journal) else cue
 	else:
 		journal.hoppers[kind] += amount

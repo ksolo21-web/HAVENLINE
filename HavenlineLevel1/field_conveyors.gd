@@ -1,5 +1,6 @@
 extends Node3D
 ## The same routed centerline drives the real load and its rail hardware.
+const Market=preload("res://field_market.gd")
 const Rules=preload("res://field_settlement.gd")
 const Logistics=preload("res://field_logistics.gd")
 const Progress=preload("res://field_progression.gd")
@@ -25,7 +26,6 @@ var counter_was_open:=false
 var blocked_lane:String=""
 var network
 var menu=preload("res://field_automation_menu.gd").new()
-var counter_rack:Array[Node3D]=[]
 signal route_changed(lane:String, world_points:PackedVector3Array)
 
 func setup(host,settlement)->void:
@@ -43,11 +43,6 @@ func setup(host,settlement)->void:
 		add_child(item)
 		item.hide()
 		goods[lane]=item
-	for i in Rules.COUNTER_RACK_CAPACITY:
-		var portion:Node3D=Dish.instantiate()
-		add_child(portion)
-		portion.hide()
-		counter_rack.append(portion)
 	for product:String in SHELVES:
 		var bay:=Node3D.new()
 		bay.name=product.capitalize()+"Storage"
@@ -132,8 +127,12 @@ func _place_cargo(lane:String,unit:Node3D,t:float)->void:
 func _demand(j:Dictionary)->int:
 	var orders:=0
 	for guest in world.counter.queue:
-		if int(guest.order)>int(j.served):orders+=1
-	var promised:int=j.counter_stock+j.line_load.meal+j.line_load.stored_meal+j.held_meal+j.worker_meal
+		if int(guest.order)<=int(j.served):continue
+		if int(guest.order)==int(j.market.order.get("id",0)):
+			orders+=int(j.market.order.goods.get("meal",0))
+		else:
+			orders+=1
+	var promised:int=j.counter_stock+j.line_load.meal+j.line_load.stored_meal
 	return maxi(0,orders-promised)
 
 func unclaimed_orders()->int:
@@ -177,11 +176,11 @@ func _arrive(lane:String)->bool:
 	var j:Dictionary=world.inventory.settlement
 	if j.line_load[lane]!=1 or j.line_progress[lane]<1.:return false
 	if lane in Logistics.RAW:
-		if j.hoppers[lane]>=Rules.HOPPER_CAPACITY:return false
+		if world.encounters.is_machine_down(lane) or j.hoppers[lane]>=Rules.HOPPER_CAPACITY:return false
 		j.hoppers[lane]+=1
 	elif lane=="meal" or lane=="stored_meal":
 		if j.counter_stock>=Rules.COUNTER_RACK_CAPACITY:return false
-		j.counter_stock+=1
+		Market.add_to_counter(j,"meal",1)
 	else:
 		var product: String="meal" if lane=="meal_to_store" else lane
 		if j.product_store[product]>=Logistics.SPACE[product]:return false
@@ -216,12 +215,6 @@ func present()->void:
 		if unit.visible:_place_cargo(lane,unit,float(j.line_progress[lane]))
 	network.present_lifts(goods)
 	network.set_buffer_full(j.counter_stock>=Rules.COUNTER_RACK_CAPACITY)
-	var stock:int=j.counter_stock
-	if world.counter.belt_serving and not world.counter.sale_committed:stock-=1
-	for i in counter_rack.size():
-		var item:=counter_rack[i]
-		item.visible=i<stock and world.counter.active
-		if item.visible:item.global_position=buffer_position(i)
 	for product:String in SHELVES:
 		var bay:Node3D=shelf_items[product]
 		bay.visible=world.depot.house.is_interior_visible()

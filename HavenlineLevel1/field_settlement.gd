@@ -1,6 +1,7 @@
 extends RefCounted
 ## Receipts produced by Level 1's survivor, kitchen and trading counter.
 
+const Market=preload("res://field_market.gd")
 const Crew=preload("res://field_crew.gd")
 const Logistics=preload("res://field_logistics.gd")
 const LEGACY := {"survivor_paid":false, "survivor_wood":0, "processed_wood":0, "processed_stone":0, "owl_hits":0, "rescued":false, "worker_carry_token":"", "worker_deliveries":0, "worker_receipts":[], "cooked":0, "served":0, "level":1}
@@ -8,6 +9,7 @@ const KINDS := ["wood", "stone", "meat"]
 const WORKER_LOAD := {"wood":0,"stone":0,"meat":0,"coal":0,"slate":0,"metal":0}
 # Balances use ten-unit physical bundles, exactly as the player's HUD does.
 const WORKER_LIMIT := 500 / preload("res://field_progression.gd").UNITS_PER_BUNDLE
+const WORKER_PRODUCT_LIMIT := 500
 const HOPPER_CAPACITY := 4
 const ROAST_RACK_CAPACITY := 4
 const COUNTER_RACK_CAPACITY := 2
@@ -15,7 +17,14 @@ const LINE_EMPTY := Logistics.TRANSIT
 const LINE_CLOCK := Logistics.CLOCK
 const CYCLE_SECONDS := {"wood":1.45, "stone":1.45, "meat":1.65}
 const HAND_PRODUCTS := {"planks":0,"blocks":0}
+const CARGO_KINDS := ["wood","stone","meat","coal","slate","metal","planks","blocks","meal","money"]
+const VEHICLE := {"hp":0,"park":[],"wreck":"","cargo":{},"salvage":{},"lost":{},"spent":{},"purchases":0}
+const TRUCK_QUOTE_STANDARD := "standard"
+const TRUCK_QUOTE_AUTOMATED := "automated"
 const EMPTY := {
+	"vehicle":VEHICLE, "truck_quote":"", "market":Market.EMPTY, "stag_health":3,
+	"survivor_hp":18,"owl_hp":12,"survivor_replacement_wood":0,"survivor_replacements":0,
+	"owl_replacement_meat":0,"owl_replacements":0,
 	"owl_meat":0, "owl_legacy":false, "hand_products":HAND_PRODUCTS, "pocket_cash":0, "house_cash":0, "withdrawn":{},
 	"survivor_paid":false, "survivor_wood":0, "processed_wood":0, "processed_stone":0,
 	"owl_hits":0, "rescued":false, "worker_carry_token":"", "worker_deliveries":0,
@@ -37,7 +46,7 @@ static func from_legacy(previous: Variant) -> Variant:
 	var updated: Dictionary = EMPTY.duplicate(true)
 	updated.merge(previous.duplicate(true), true)
 	updated.held_meal = in_hand
-	for key in ["line_load","line_progress","counter_stock","product_store","dispatch_cursor","hand_products","pocket_cash","house_cash","withdrawn","owl_meat","owl_legacy"]: updated.erase(key)
+	for key in ["line_load","line_progress","counter_stock","product_store","dispatch_cursor","hand_products","pocket_cash","house_cash","withdrawn","owl_meat","owl_legacy","vehicle","truck_quote","market","stag_health","survivor_hp","owl_hp","survivor_replacement_wood","survivor_replacements","owl_replacement_meat","owl_replacements"]: updated.erase(key)
 	return updated
 
 static func from_pre_worker(previous: Variant) -> Variant:
@@ -86,6 +95,44 @@ static func from_pre_register(previous:Variant,paid_order:Array) -> Variant:
 	next.withdrawn = {}
 	return next
 
+# Version 10 had neither vehicle and casualty state nor a typed customer ledger.
+static func from_pre_market(previous: Variant) -> Variant:
+	if not previous is Dictionary: return null
+	var next: Dictionary = previous.duplicate(true)
+	for key: String in ["vehicle","market","stag_health","survivor_hp","owl_hp","survivor_replacement_wood","survivor_replacements","owl_replacement_meat","owl_replacements"]:
+		if next.has(key): return null
+		match key:
+			"vehicle": next.vehicle = VEHICLE.duplicate(true)
+			"market":
+				var legacy: Variant = Market.from_single_meal(previous)
+				if not legacy is Dictionary: return null
+				next.market = legacy
+			_: next[key] = EMPTY[key]
+	return next
+
+static func vehicle_total(state: Dictionary, kind: String) -> int:
+	var vehicle: Dictionary = state.get("vehicle", {})
+	var total := 0
+	for bucket: String in ["cargo","salvage","lost","spent"]:
+		total += int(vehicle.get(bucket, {}).get(kind, 0))
+	return total
+
+static func _vehicle_valid(vehicle: Variant) -> bool:
+	if not vehicle is Dictionary or not vehicle.has_all(VEHICLE.keys()) or vehicle.size() != VEHICLE.size(): return false
+	if not _count(vehicle.hp) or not _count(vehicle.purchases) or vehicle.wreck not in ["","inside","outside"]: return false
+	if not vehicle.park is Array or vehicle.park.size() not in [0,3]: return false
+	for coordinate in vehicle.park:
+		if not (coordinate is int or coordinate is float) or not is_finite(float(coordinate)): return false
+	for bucket: String in ["cargo","salvage","lost","spent"]:
+		if not vehicle[bucket] is Dictionary: return false
+		for kind in vehicle[bucket]:
+			if kind not in CARGO_KINDS or not _count(vehicle[bucket][kind]): return false
+	if vehicle.purchases == 0:
+		return vehicle.hp == 0 and vehicle.wreck == "" and vehicle.park.is_empty() and ["cargo","salvage","lost","spent"].all(func(bucket): return vehicle[bucket].is_empty())
+	if vehicle.wreck != "":
+		return vehicle.hp == 0 and vehicle.cargo.is_empty()
+	return vehicle.hp > 0
+
 static func _count(value: Variant) -> bool:
 	return (value is int or value is float) and is_finite(float(value)) and value == int(value) and value >= 0
 
@@ -98,8 +145,17 @@ static func is_wood_drop(token: String) -> bool:
 	return token.begins_with("wood-") and suffix.is_valid_int() and suffix.to_int() > 0 and suffix == str(suffix.to_int())
 
 static func valid(state: Variant, paid_order: Array, credits: Dictionary, survivor_cost: int) -> bool:
-	if not state is Dictionary or state.size() != EMPTY.size():
+	if not state is Dictionary or state.size() != EMPTY.size() or not state.has_all(EMPTY.keys()):
 		return false
+	if state.truck_quote not in ["",TRUCK_QUOTE_STANDARD,TRUCK_QUOTE_AUTOMATED]: return false
+	if (state.truck_quote != "") != ("snow_garage" in paid_order): return false
+	if not _vehicle_valid(state.vehicle) or (state.vehicle.purchases > 0 and "snow_truck" not in paid_order): return false
+	for key: String in ["survivor_hp","owl_hp","survivor_replacement_wood","survivor_replacements","owl_replacement_meat","owl_replacements"]:
+		if not _count(state[key]): return false
+	if not _count(state.stag_health) or state.stag_health > 3: return false
+	if state.survivor_hp > 18 or state.owl_hp > 12 or state.survivor_replacement_wood >= survivor_cost or state.owl_replacement_meat >= Crew.OWL_MEAT: return false
+	if state.survivor_replacement_wood > 0 and state.survivor_hp > 0: return false
+	if state.owl_replacement_meat > 0 and state.owl_hp > 0: return false
 	if not state.get("survivor_paid") is bool or not state.get("rescued") is bool or not state.get("worker_carry_token") is String:
 		return false
 	for key in ["worker_deliveries", "cooked", "served", "level", "survivor_wood", "processed_wood", "processed_stone", "owl_hits", "held_meal", "worker_meal"]:
@@ -118,13 +174,15 @@ static func valid(state: Variant, paid_order: Array, credits: Dictionary, surviv
 	if not state.get("hand_products") is Dictionary or state.hand_products.size()!=HAND_PRODUCTS.size() or not state.hand_products.has_all(HAND_PRODUCTS.keys()): return false
 	for amount in state.hand_products.values():
 		if not _count(amount): return false
-	if not _count(state.get("pocket_cash")) or not _count(state.get("house_cash")) or state.pocket_cash>state.served or state.house_cash>state.served-state.pocket_cash: return false
+	if not _count(state.get("pocket_cash")) or not _count(state.get("house_cash")): return false
+	if not Market.valid(state,int(state.pocket_cash)+int(state.house_cash)+vehicle_total(state,"money"),WORKER_PRODUCT_LIMIT): return false
+	if (state.market.counter_products.values().any(func(n): return n > 0) or not state.market.order.is_empty()) and "expansion_2" not in paid_order: return false
 	if not state.get("withdrawn") is Dictionary: return false
 	for kind in state.withdrawn:
 		if not (kind in WORKER_LOAD or kind in Logistics.STORE or kind=="money") or not _count(state.withdrawn[kind]): return false
 	if not Logistics.valid(state,paid_order): return false
 	if state.counter_stock>0 and not "expansion_2" in paid_order:return false
-	if (state.level != 1 and state.level != 2) or state.worker_meal > 1 or waiting_meals(state) < 0 or waiting_meals(state) > ROAST_RACK_CAPACITY:
+	if (state.level != 1 and state.level != 2) or state.worker_meal > WORKER_PRODUCT_LIMIT or waiting_meals(state) < 0 or waiting_meals(state) > ROAST_RACK_CAPACITY:
 		return false
 	if not state.get("worker_load") is Dictionary or state.worker_load.size() != WORKER_LOAD.size() or not state.worker_load.has_all(WORKER_LOAD.keys()): return false
 	for kind: String in WORKER_LOAD:
@@ -149,7 +207,7 @@ static func valid(state: Variant, paid_order: Array, credits: Dictionary, surviv
 	if state.survivor_wood > survivor_cost or state.survivor_paid != (state.survivor_wood == survivor_cost): return false
 	if state.survivor_wood > 0 and "center_hearth" not in paid_order: return false
 	if state.rescued and not state.survivor_paid: return false
-	if state.owl_hits > 0 and not Crew.owns_owl(state): return false
+	if state.owl_hits > 0 and not Crew.ever_owned_owl(state): return false
 	if (state.processed_wood > 0 or state.processed_stone > 0) and "expansion_2" not in paid_order: return false
 	if state.cooked > 0 and "expansion_2" not in paid_order: return false
 	if not state.get("worker_receipts") is Array or state.worker_receipts.size() != state.worker_deliveries:

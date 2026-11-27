@@ -59,7 +59,7 @@ func still(key: String) -> void:
 	if not recording or output.is_empty() or scenes.has(key): return
 	scenes[key] = true
 	var game_camera: Camera3D = game.camera
-	observations[key] = {"player_position":str(game.actor.position),"worker_position":str(worker.actor.position),"worker_rotation_y":worker.actor.rotation.y,"zoom":game.get_zoom_ratio(),"viewport":str(root.size),"player_at_counter":game.counter.at_service(game.actor.position),"worker_serving":game.counter.worker_serving,"served":game.inventory.settlement.served}
+	observations[key] = {"player_position":str(game.actor.position),"worker_position":str(worker.actor.position),"worker_rotation_y":worker.actor.rotation.y,"zoom":game.get_zoom_ratio(),"viewport":str(root.size),"player_at_counter":game.counter.at_service(game.actor.position),"worker_stocking":game.counter.at_service(worker.actor.position),"served":game.inventory.settlement.served}
 	if key.begins_with("500-of-each"):
 		var top_y := INF
 		for group: Array in worker.pack.pieces.values():
@@ -239,16 +239,25 @@ func test_relocation() -> void:
 			at=Vector2(4.50,-2.50)
 		elif worker.phase=="supply_out" and journal.worker_supply=="meat":
 			id="camp_cooker"
-			at=Vector2(4.75,2.75)
-		elif worker.phase=="meal_serve" and not game.counter.worker_serving:
+			if not moved.has(id):
+				var cooker_center: Vector2 = game.camp_layout.center(id)
+				at=Vector2.INF
+				for x in range(-9,10):
+					for z in range(-10,8):
+						var candidate := Vector2(x*.75,z*.75)
+						if candidate.distance_to(cooker_center)>1.5 and game.camp_layout.reason(id,candidate).is_empty():
+							at=candidate
+							break
+					if at.is_finite(): break
+		elif worker.phase=="meal_serve":
 			id="north_counter"
 			at=Vector2(4.,-9.)
 		if id!="" and not moved.has(id):
 			var layout=game.camp_layout
 			var old:Vector2=layout.center(id)
-			moved[id]=layout.relocate(id,at)
+			moved[id]=at.is_finite() and layout.relocate(id,at)
 			if not moved[id]:
-				print("Relocation ",id,": ",layout.reason(id,at)," at ",at)
+				print("Relocation ",id,": ",layout.reason(id,at) if at.is_finite() else "No legal alternate site"," at ",at)
 			observations[id]={"old":str(old),"new":str(layout.center(id)),"worker":str(worker.actor.position)}
 			check(moved[id] and layout.center(id).distance_to(old)>1.,"paid "+id+" moved during the worker's actual route")
 		if journal.served>0 or game.persist_blocked: break
@@ -276,7 +285,7 @@ func simulate(stop: String) -> void:
 		if recording and worker.phase in ["supply_out","meal_collect","meal_serve"]:
 			await film()
 		if worker.phase=="supply_out" and not journal.worker_supply.is_empty(): await still("01-deliver-"+journal.worker_supply)
-		if journal.worker_meal==1 and not game.counter.worker_serving:
+		if journal.worker_meal>0 and worker.phase=="meal_serve":
 			await still("02-worker-meal")
 			if stop == "interrupt":
 				check(journal.served==0,"before counter payment no cash granted")
@@ -284,7 +293,8 @@ func simulate(stop: String) -> void:
 				if not output.is_empty():
 					DirAccess.copy_absolute(game.field_save.directory.path_join(Save.PRIMARY),output.path_join("Earned-worker-meal.save.json"))
 				break
-		if game.counter.worker_serving: await still("03-worker-counter")
+		if game.counter.at_service(worker.actor.position) and journal.counter_stock>0:
+			await still("03-worker-counter")
 		if journal.served > 0:
 			await still("04-paid-order")
 			if stop == "service" and not game.counter.leaving.is_empty(): break
@@ -292,9 +302,9 @@ func simulate(stop: String) -> void:
 	check(game.actor.position.is_equal_approx(parked),"player stayed clear during survivor work")
 	check(not game.persist_blocked,"worker jobs maintained valid save")
 	if stop == "interrupt":
-		check(journal.worker_meal==1,"survivor independently collected the cooked order")
+		check(journal.worker_meal>0,"survivor independently collected cooked stock")
 	elif stop=="service":
-		check(journal.served==1 and journal.worker_meal==0 and not game.counter.leaving.is_empty(),"resumed helper served one physical guest and collected cash once")
+		check(journal.served==1 and journal.worker_meal==0 and not game.counter.leaving.is_empty(),"resumed helper stocked the counter and one physical guest paid")
 	else:
 		check(journal.worker_deliveries>=1,"standing tree harvested and physically delivered")
 		check(journal.processed_wood>0 and journal.processed_stone>0,"worker supplied independently purchased saw and drill")
@@ -336,7 +346,7 @@ func run() -> void:
 		test_stored_meal()
 	else:
 		if mode=="service":
-			check(game.inventory.settlement.worker_meal==1 and worker.phase=="meal_serve","cold load retains cooked order in worker hands")
+			check(game.inventory.settlement.worker_meal>0 and worker.phase=="meal_serve","cold load retains cooked stock in worker hands")
 			if recording: await watch_counter()
 		await simulate(mode)
 	if checks.size() < 4: errors.append("scenario did not exercise the required transactions")

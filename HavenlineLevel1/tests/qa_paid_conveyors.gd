@@ -192,11 +192,11 @@ func run()->void:
    if i==248:park(Vector3(2.6,0.,-5.55))
    if i==21:await shot("Normal-gameplay-moving-stock")
    if i==188:await shot("Normal-gameplay-production")
-   if field.counter.belt_serving and first_food<0:
+   if field.counter.sale_order!=0 and first_food<0:
     first_food=i
-   if field.counter.belt_serving and is_instance_valid(field.counter.cash) and field.counter.cash.visible and first_cash<0:
+   if field.counter.sale_order!=0 and is_instance_valid(field.counter.cash) and field.counter.cash.visible and first_cash<0:
     first_cash=i
-   if i>=265 and field.counter.belt_serving and is_instance_valid(field.counter.cash) and field.counter.cash.visible and not results.has("pinch cash"):
+   if i>=265 and field.counter.sale_order!=0 and is_instance_valid(field.counter.cash) and field.counter.cash.visible and not results.has("pinch cash"):
     await shot("Pinch-customer-payment")
     results["pinch cash"]=true
    if i>=265 and j.line_load.meal==1 and j.line_progress.meal>.28 and not results.has("pinch delivery"):

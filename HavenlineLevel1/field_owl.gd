@@ -49,6 +49,7 @@ var recovery := Vector3.ZERO
 var post_index := 0
 var contact_point := Vector3.INF
 var contact_target: Node3D
+var fallen_left := 0.0
 
 func setup(host: Node3D) -> void:
 	if art: return
@@ -228,10 +229,37 @@ func _start_intercept(wolf: Node3D) -> void:
 	approach = -approach_axis*1.68 + flank*.62 + Vector3.UP*(2.35*target.size_factor())
 	_switch("bank")
 
+func can_be_targeted() -> bool:
+	return world != null and visible and Crew.owns_owl(world.inventory.settlement) and global_position.y <= 1.60
+
+func apply_enemy_contact(attacker: Node3D, damage: int) -> bool:
+	if damage<=0 or not can_be_targeted() or not world.settlement_loop.can_transact(): return false
+	if not is_instance_valid(attacker) or attacker not in world.enemies: return false
+	var floor_point := Vector3(global_position.x,0.0,global_position.z)
+	if floor_point.distance_squared_to(attacker.global_position)>3.24 or not world.field_env.travel_clear(attacker.global_position,floor_point,.04):
+		return false
+	var journal: Dictionary = world.inventory.settlement
+	var loss := mini(damage,int(journal.get("owl_hp",Crew.OWL_HP)))
+	journal.owl_hp = int(journal.get("owl_hp",Crew.OWL_HP))-loss
+	if not world.settlement_loop.commit_receipt("owl_hit_received",global_position,"hit"): return false
+	world._combat_number(global_position+Vector3.UP*.63,"−%d" % loss,Color("#ffc196"),self)
+	if journal.owl_hp == 0:
+		fallen_left = .48
+		gate_request = null
+		target = null
+		state = "fallen"
+		world._event("owl_fallen",global_position,"defeat")
+	return true
+
 func advance(delta: float) -> void:
 	if not world or not world.field_ready: return
 	var dt := clampf(delta,0.,.1)
 	if not Crew.owns_owl(world.inventory.settlement):
+		if fallen_left>0.0:
+			fallen_left = maxf(0.0,fallen_left-dt)
+			global_position.y = move_toward(global_position.y,.055,dt*3.6)
+			art.rotation.z = -1.20*(1.0-fallen_left/.48)
+			return
 		if visible: hide()
 		state = "locked"
 		target = null
@@ -266,6 +294,7 @@ func advance(delta: float) -> void:
 	if inside and old_post != post_index and state == "perched": _switch("land")
 	if state == "locked":
 		show()
+		art.rotation.z = 0.0
 		_switch("perched" if inside else "follow")
 		global_position = _perch() if inside else _lane()
 		rotation.y = .35

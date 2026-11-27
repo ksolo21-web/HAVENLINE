@@ -48,6 +48,7 @@ var drops: Dictionary = {}
 var drop_id := 0
 var camp_heal_elapsed := 0.0
 var player_hp := MAX_HP
+var snow_truck := preload("res://field_snow_truck.gd").new()
 var player_invulnerability := 0.0
 var reset_time := 0.0
 var lifecycle := preload("res://field_lifecycle.gd").new()
@@ -91,6 +92,9 @@ func player_character() -> int:
 func move_actor(input: Vector2, dt: float) -> float:
 	# The drag supplies a heading. Any deliberate displacement requests a run.
 	if camp_layout and camp_layout.active: input = Vector2.ZERO
+	if snow_truck.mounted:
+		snow_truck.drive(input,dt)
+		return 0.0
 	runner_requested_motion = input.length_squared() > RUN_STICK_DEAD_ZONE * RUN_STICK_DEAD_ZONE
 	var heading := input.normalized() if runner_requested_motion else Vector2.ZERO
 	if field_env and field_env.perimeter_stage > 0:
@@ -211,6 +215,11 @@ func _ready() -> void:
 			tracks.reset_actor(actor)
 	previous_dry_position = actor.position
 	field_ready = true
+	add_child(snow_truck)
+	snow_truck.install(self)
+	field_env.perimeter_changed.connect(camp_layout.place_vehicle_offers)
+	camp_layout.layout_changed.connect(camp_layout.place_vehicle_offers)
+	camp_layout.place_vehicle_offers()
 	player_wardrobe.setup(self)
 	opening_hud.set_character_portrait(player_wardrobe.number)
 	var home_compass := preload("res://field_navigation.gd").new()
@@ -239,6 +248,7 @@ func _release_field_gestures() -> void:
 	# A fold, task switch or system overlay can interrupt a drag without a release.
 	clear_touch()
 	settlement_loop.finger = -1
+	snow_truck.held_buttons.clear()
 
 func _close_field() -> void:
 	if closing: return
@@ -361,6 +371,9 @@ func _configure_stem(tree: ResourceTreeScript) -> void:
 	tree._marks.clear()
 
 func _input(event: InputEvent) -> void:
+	if field_ready and snow_truck.handle_input(event):
+		get_viewport().set_input_as_handled()
+		return
 	if field_ready and opening_hud.camp_dock.handle(event):
 		get_viewport().set_input_as_handled()
 		return
@@ -428,6 +441,31 @@ func accept_contact(body: Node3D) -> bool:
 		_event("player_attack",body.global_position)
 		_event("hit",body.global_position)
 	return true
+
+func truck_contact(body:Node3D, origin:Vector3, hit:Vector3) -> bool:
+	if not snow_truck.mounted or persist_blocked:return false
+	if body in trees:
+		tree_input_sequence = maxi(tree_input_sequence,int(body.last_sequence))+1
+		if not body.strike(ResourceTreeScript.TREE_ID,tree_input_sequence,origin,Vector3.ZERO,body.position-origin,hit,true):return false
+		lifecycle.record_strike(body)
+		_event("impact_wood",hit)
+		return true
+	if body in rocks:
+		rock_input_sequence = maxi(rock_input_sequence,int(body.last_sequence))+1
+		if not body.strike(ResourceRockScript.ROCK_ID,rock_input_sequence,origin,Vector3.ZERO,true):return false
+		var kind: String = body.get_meta("resource_kind")
+		lifecycle.record_strike(body)
+		_event("impact_"+kind,hit)
+		if body.phase=="mined":
+			_event("deplete_"+kind,body.position)
+			_make_drops(kind,body.position,3)
+			lifecycle.deplete(body)
+			_checkpoint_lifecycle()
+		return true
+	if body is FieldEnemy and body in enemies and body.receive_hit(2,body.position-origin):
+		_event("player_attack",hit)
+		return true
+	return false
 
 func step_tree(dt: float) -> void:
 	tree_button.hide()
@@ -512,9 +550,15 @@ func _step_drops(dt: float) -> void:
 			drop.at = Vector3(drop.from.x,0.,drop.from.z)
 			next = drop.at
 		if unit.position != next: unit.position = next
-		if t == 1.0 and reset_time <= 0.0 and actor.position.distance_squared_to(unit.position) <= PICKUP_RADIUS * PICKUP_RADIUS and field_env.travel_clear(actor.position,unit.position,.06):
+		if t<1.0 or reset_time>0.:continue
+		var distance := snow_truck.pickup_distance_squared(unit.position) if snow_truck.mounted else actor.position.distance_squared_to(unit.position)
+		var pickup_limit := 1.05 if snow_truck.mounted else PICKUP_RADIUS
+		if distance<=pickup_limit*pickup_limit and field_env.travel_clear(actor.position,unit.position,.06):
 			nearby.append({"token":token,"kind":drop.kind,"at":unit.position,"yaw":unit.global_rotation.y})
 	if nearby.is_empty(): return
+	if snow_truck.mounted:
+		snow_truck.collect_drops(nearby)
+		return
 	var claimed := carry.pickup_nearby(nearby)
 	if claimed.is_empty(): return
 	# The snapshot omits collected tokens. Keep the ground nodes until a
@@ -576,7 +620,12 @@ func _wolf_damage_feedback(amount: int, wolf: FieldEnemy) -> void:
 	_combat_number(wolf.global_position+Vector3.UP*(2.04*wolf.size_factor()),"−%d" % amount,Color("#ffebaf"),wolf)
 
 func _player_hit(amount: int, attacker: Node3D = null) -> void:
-	if amount <= 0 or player_invulnerability > 0.0 or reset_time > 0 or persist_blocked or field_env.is_inside_camp(actor.position): return
+	if amount <= 0 or player_invulnerability > 0.0 or reset_time > 0 or persist_blocked: return
+	if field_env.is_inside_camp(actor.position):
+		if not is_instance_valid(attacker) or not encounters.has_method("allows_inside_contact") or not encounters.allows_inside_contact(attacker,actor.global_position):return
+	if snow_truck.mounted:
+		snow_truck.receive_damage(amount)
+		return
 	var loss := mini(player_hp, amount)
 	player_hp -= loss
 	camp_heal_elapsed = 0.0
@@ -660,7 +709,7 @@ func _physics_process(dt: float) -> void:
 			player_hp = MAX_HP
 			player_invulnerability = 2.0
 			for wolf in enemies:
-				if wolf.hp > 0:
+				if wolf.hp > 0 and wolf.get("raid_member") != true:
 					var hp_before: int = wolf.hp
 					wolf.reset_encounter()
 					wolf.hp=hp_before
@@ -693,6 +742,7 @@ func _physics_process(dt: float) -> void:
 	_step_foot_audio(inside)
 	player_invulnerability = maxf(0.0,player_invulnerability-dt)
 	flash.color.a = maxf(0.0,flash.color.a-dt*.6)
+	snow_truck.step(dt)
 	var danger := encounters.advance(dt)
 	if reset_time > 0.0: return
 	defense_tower.advance(dt,inventory.complete("watchtower"))
@@ -737,6 +787,7 @@ func _advance_camp_heal(dt: float) -> void:
 	_record_field_event("camp_heal",actor.position)
 
 func _step_foot_audio(inside: bool) -> void:
+	if snow_truck.mounted:return
 	# Cropped mobile views make a late step especially noticeable. Trigger
 	# each surface cue at the physical tread, including the final braking step.
 	if actor.velocity.slide(Vector3.UP).length() < .025 and gait_motor.special not in ["brake","pivot"]:
@@ -789,7 +840,11 @@ func _persist_world() -> void:
 
 func _inventory_changed() -> void:
 	if field_ready and not persist_blocked:
-		_clear_paid_machine_site()
+		if not snow_truck.mounted: _clear_paid_machine_site()
+		if snow_truck.initialized and snow_truck.owned():
+			var truck_state := snow_truck.state()
+			if not truck_state.is_empty() and truck_state.purchases==0: snow_truck.set_purchased()
+			snow_truck.record_position()
 		inventory.world_state = lifecycle.snapshot()
 	if persist_requested and not persist_blocked:
 		var result := field_save.commit(inventory)
@@ -817,6 +872,9 @@ func _finish_purchase(id: String) -> void:
 			field_env.set_perimeter(Progress.stage(inventory),true)
 			if not orbit_permitted_at(actor.global_position): character_kit.rest()
 			if tracks: tracks.refresh_surface()
+		elif id==Progress.GARAGE:
+			field_env.set_perimeter(Progress.stage(inventory),false,true)
+			snow_truck.restore_scene()
 		elif id.begins_with("storage_"):
 			depot.pause_purchase(actor.position,anchor)
 		elif id == UPGRADE_OFFER:
@@ -853,7 +911,8 @@ func _apply_hearth(built: bool, animate: bool) -> void:
 	camp_built.visible = built
 	if built and animate:
 		actor.global_position = field_env.clear_hearth_footprint(actor.global_position)
-	field_env.set_built(built,animate)
+	var burned: bool = encounters.has_method("is_structure_down") and encounters.is_structure_down("furnace")
+	field_env.set_built(built and not burned,animate)
 	field_env.set_perimeter(Progress.stage(inventory) if built else 0,animate)
 	if tracks: tracks.refresh_surface()
 	if built and not orbit_permitted_at(actor.global_position): character_kit.rest()
@@ -873,10 +932,10 @@ func constrain_private_snow_travel() -> void:
 			actor.global_position = counter.constrain_actor(previous_dry_position,actor.global_position,float(layout.actor_radius))
 
 func orbit_permitted_at(world_position: Vector3) -> bool:
-	return not field_env.is_inside_camp(world_position)
+	return not snow_truck.mounted and not field_env.is_inside_camp(world_position)
 
 func _step_receivers() -> void:
-	if reveal_countdown >= 0. or (camp_layout and camp_layout.active): return
+	if snow_truck.mounted or reveal_countdown >= 0. or (camp_layout and camp_layout.active): return
 	var at := actor.global_position
 	var depot_target: String = depot.target_at(at) if camp_active and field_env.is_inside_camp(at) else ""
 	var selected := depot_target
@@ -892,6 +951,7 @@ func _step_receivers() -> void:
 			exit_required.erase(id)
 			continue
 		if exit_required.has(id) or not inventory.offer_open(id): continue
+		if id in [Progress.GARAGE,Progress.TRUCK] and not _can_fund_vehicle_offer(id): continue
 		if camp_active and not field_env.is_inside_camp(at): continue
 		if distance < best:
 			best = distance
@@ -905,8 +965,37 @@ func _step_receivers() -> void:
 	if selected != carry.visit_target and not carry.visit_target.begins_with("work:"):
 		carry.stop_visit(carry.visit_target)
 	depot.step(at,selected if selected == depot_target else "")
+	if selected==Progress.GARAGE:
+		if not runner_requested_motion: _pay_garage_products()
+		return
 	if not selected.is_empty() and selected != depot_target:
 		carry.visit(selected)
+
+func _can_fund_vehicle_offer(id: String) -> bool:
+	var bill := inventory.remaining(id)
+	var owned:Dictionary = inventory.hand_goods() if id==Progress.GARAGE else inventory.carried
+	if id==Progress.GARAGE and not snow_truck.can_build():return false
+	for kind: String in bill:
+		if int(bill[kind])>0 and int(owned.get(kind,0))>0:return true
+	return false
+
+func _pay_garage_products() -> void:
+	if not snow_truck.can_build(): return
+	var due := inventory.remaining(Progress.GARAGE)
+	var paid: Dictionary = {}
+	var goods := inventory.hand_goods()
+	for kind in ["planks","blocks"]:
+		var amount := mini(int(due.get(kind,0)),int(goods[kind]))
+		if amount>0 and inventory.payment(Progress.GARAGE,kind,false,amount):
+			paid[kind] = amount
+	if paid.is_empty():return
+	_inventory_changed()
+	if persist_blocked:return
+	var at: Vector3 = offer_floors[Progress.GARAGE].global_position
+	for kind in paid:
+		settlement_loop.exchange._draw(kind,paid[kind],at,false)
+		_event("garage_payment",at,"spend_wood" if kind=="planks" else "spend_stone")
+	if inventory.complete(Progress.GARAGE): _finish_purchase(Progress.GARAGE)
 
 func clear_installed_floor(aisles) -> void:
 	var feet := actor.global_position
@@ -982,6 +1071,7 @@ func _refresh_hud_field(danger: bool) -> void:
 
 func build_hint(id: String) -> String:
 	var title: String = Progress.TITLES[id]
+	if id==Progress.GARAGE and not snow_truck.can_build():return "Clear the garage site in Camp Layout."
 	var price := Progress.price_text(inventory.remaining(id))
 	var target: Node3D = carry.receivers[id]
 	var range_m := actor.global_position.distance_to(target.global_position)

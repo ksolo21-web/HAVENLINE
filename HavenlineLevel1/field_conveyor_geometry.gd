@@ -7,8 +7,8 @@ const Fittings = preload("res://field_conveyor_fittings.gd")
 const KIT = preload("res://assets/conveyors/connected_transport_kit.glb")
 const HALF := .210
 const PROFILE := [Vector2(-.034,.014),Vector2(-.024,.025),Vector2(.018,.025),
-	Vector2(.032,.010),Vector2(.032,-.116),Vector2(.020,-.135),
-	Vector2(-.020,-.135),Vector2(-.034,-.119)]
+	Vector2(.032,.010),Vector2(.032,-.147),Vector2(.020,-.166),
+	Vector2(-.020,-.166),Vector2(-.034,-.150)]
 var kit:Dictionary={}
 var fitted=Fittings.new()
 var instances:Dictionary={}
@@ -29,9 +29,9 @@ func setup() -> void:
 	for piece:MeshInstance3D in prototype.find_children("*","MeshInstance3D",true,false):
 		kit[String(piece.name)]=piece.mesh
 	prototype.free()
-	guard_mat.albedo_color=Color("#ee8b23")
-	guard_mat.metallic=.16
-	guard_mat.roughness=.31
+	guard_mat.albedo_color=Color("#fa851f")
+	guard_mat.metallic=.10
+	guard_mat.roughness=.43
 	guard_mat.cull_mode=BaseMaterial3D.CULL_BACK
 	frame_mat.albedo_color=Color("#303942")
 	frame_mat.metallic=.38
@@ -156,7 +156,7 @@ func _hardware(a:Vector3,b:Vector3,long_run:bool) -> void:
 			var place:=p+tangent*shift*minf(1.,length)
 			var wide:=_pier_width(place,tangent)
 			if wide>0.:
-				component("Trestle",Vector3(place.x,.006,place.z),tangent,Vector3(wide,leg_scale,1))
+				component("Trestle",Vector3(place.x,.006,place.z),tangent,Vector3(wide,leg_scale,1.36))
 				break
 		component("Coupler",p,tangent)
 		if length>.84:
@@ -247,7 +247,7 @@ func finish() -> void:
 			var at:=a.lerp(b,t)
 			var wide:=_pier_width(at,tangent)
 			if wide==0.:continue
-			component("Trestle",Vector3(at.x,.006,at.z),tangent,Vector3(wide,maxf(.17,at.y-.13)/.267,1))
+			component("Trestle",Vector3(at.x,.006,at.z),tangent,Vector3(wide,maxf(.17,at.y-.13)/.267,1.36))
 	fitted.finish()
 	if sections:
 		for pair in [[orange,guard_mat,"AmberSideguards"],[under,frame_mat,"RollerCradles"]]:

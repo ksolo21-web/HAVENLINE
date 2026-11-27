@@ -107,7 +107,7 @@ func _show_cuttings(progress:float) -> void:
 func refresh_ownership(animate := true) -> void:
 	available = false
 	for kind: String in machines:
-		var owned: bool = world.inventory.is_machine_owned(kind)
+		var owned: bool = world.inventory.is_machine_owned(kind) and not world.encounters.is_machine_down(kind)
 		var machine: Node3D = machines[kind]
 		var previously_built: bool = guards[kind].collision_layer != 0
 		machine.visible = owned

@@ -38,7 +38,7 @@ func run():
 	record("warm expansion clears old tracks immediately",t.total==0)
 	t.configure(func(_p:Vector3):return true)
 	for i in 1150:
-		t._emit_mark(Vector3(i*.12,0,0),0,i%3==0,false,1.)
+		t._emit_mark(Vector3(i*.12,0,0),0,"wolf" if i%3==0 else "human",false,1.)
 	record("bounded batching",t.total<=Tracks.MAX_MARKS and t.chunks.size()<20)
 	t._physics_process(Tracks.LIFE+.5)
 	record("prints fade and chunks retire",t.total==0 and t.chunks.is_empty())
@@ -60,7 +60,7 @@ func run():
 	var sides:={}
 	for chunk in tracker.chunks.values():
 		for m in chunk.marks:
-			if not m.wolf:hp+=1;sides[m.right]=true
+			if not m.wolf and not m.hoof:hp+=1;sides[m.right]=true
 	results.human_marks=hp;results.sole_sides=sides.size()
 	results.sole_bones=tracker.living[h].feet.size()
 	record("integrated hero rig produces both planted boot tracks",hp>=3 and sides.size()==2 and results.sole_bones==2)
@@ -103,7 +103,7 @@ func run():
 		for chunk in tracker.chunks.values():
 			for m in chunk.marks:
 				var dist:float=m.p.distance_to(clear-Vector3(2.,0,0))
-				if not m.wolf and dist<best:
+				if not m.wolf and not m.hoof and dist<best:
 					best=dist;mark=m
 		var fresh_age:float=tracker.clock-mark.time
 		results.fade_fresh_age=fresh_age

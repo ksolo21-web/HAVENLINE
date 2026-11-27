@@ -22,11 +22,18 @@ static func allowed(lane:String,purchases:Array)->bool:
 	var input:String=INPUT_FOR.get(lane,lane)
 	return supply and input in RAW and P.MACHINES[input] in purchases
 
+static func _vehicle_output(j: Dictionary, kind: String) -> int:
+	var vehicle: Dictionary = j.get("vehicle", {})
+	var total := 0
+	for bucket: String in ["cargo","salvage","lost","spent"]:
+		total += int(vehicle.get(bucket, {}).get(kind, 0))
+	return total
+
 static func rack(j:Dictionary,raw:String)->int:
 	if raw=="meat":
-		return int(j.cooked)-int(j.served)-int(j.held_meal)-int(j.worker_meal)-int(j.counter_stock)-int(j.product_store.meal)-int(j.line_load.meal)-int(j.line_load.stored_meal)-int(j.line_load.meal_to_store)
+		return int(j.cooked)-int(j.get("market", {}).get("sold", {}).get("meal", j.served))-int(j.held_meal)-int(j.worker_meal)-int(j.counter_stock)-int(j.product_store.meal)-int(j.line_load.meal)-int(j.line_load.stored_meal)-int(j.line_load.meal_to_store)-_vehicle_output(j,"meal")
 	var kind:String=PRODUCT[raw]
-	return int(j["processed_"+raw])-int(j.product_store[kind])-int(j.line_load[kind])-int(j.get("hand_products",{}).get(kind,0))
+	return int(j["processed_"+raw])-int(j.product_store[kind])-int(j.line_load[kind])-int(j.get("hand_products",{}).get(kind,0))-_vehicle_output(j,kind)-int(j.get("market", {}).get("sold", {}).get(kind,0))-int(j.get("market", {}).get("construction_products", {}).get(kind,0))-int(j.get("market", {}).get("counter_products", {}).get(kind,0))-int(j.get("market", {}).get("worker_products", {}).get(kind,0))
 
 static func receiving_space(j:Dictionary,product:String)->bool:
 	var lane: String="meal_to_store" if product=="meal" else product

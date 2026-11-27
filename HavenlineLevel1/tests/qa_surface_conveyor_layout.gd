@@ -93,9 +93,9 @@ func run() -> void:
 	var middle:=Vector3(3.,0,2.4)
 	check("open aisle from south gate across public courtyard",network.pedestrian_clear(south,middle,.65))
 	check("open aisle from public courtyard to east gate",network.pedestrian_clear(middle,east,.65))
-	var clerk:Vector3=world.counter.service_point.global_position
+	var player_approach:Vector3=world.counter.service_point.global_position
 	var pickup:Vector3=network.counter_buffer_position(0)
-	check("both food lines end at the separate staffed pickup",network.routes.meal[-1].is_equal_approx(pickup) and network.routes.stored_meal[-1].is_equal_approx(pickup) and pickup.distance_to(clerk)>.6)
+	check("both food lines end at the separate self-service pickup",network.routes.meal[-1].is_equal_approx(pickup) and network.routes.stored_meal[-1].is_equal_approx(pickup) and pickup.distance_to(player_approach)>.6)
 	var mills=world.processors
 	check("saw and quarry share the storehouse utility wing",mills.machines.wood.global_position.distance_to(world.depot.house.global_position)<6.5 and mills.machines.stone.global_position.distance_to(world.depot.house.global_position)<6.5)
 	var layout=world.camp_layout

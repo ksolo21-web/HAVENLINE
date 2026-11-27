@@ -12,7 +12,7 @@ func run()->void:
   check("load failed counter sale as unpaid",journal.served==1 and journal.counter_stock>=1 and not field.persist_blocked)
   check("original queued second meal sold once and last orders clear",await until(func():return journal.served==7,3500) and journal.cooked==7 and journal.counter_stock==0)
  else:
-  check("entered real pending FIFO exchange",await until(func():return counter.belt_serving and counter.sale_order==2 and counter.sale_elapsed+1./60.>=counter.FOOD_TO_BOARD and not counter.sale_committed,3500))
+  check("entered real pending public FIFO exchange",await until(func():return counter.sale_order==2 and counter.sale_elapsed+1./60.>=counter.FOOD_TO_BOARD and not counter.sale_committed,3500))
   var bytes:=FileAccess.get_file_as_bytes(profile_path.path_join(Store.PRIMARY))
   var sale_before:int=journal.served
   lock_save()

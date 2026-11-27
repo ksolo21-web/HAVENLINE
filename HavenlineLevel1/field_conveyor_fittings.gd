@@ -1,5 +1,5 @@
 extends Node3D
-## Actual D01 image-to-3D furnished modules, with unchanged texture UVs.
+## D01 image-to-3D modules, fitted with their original UV atlases.
 ## Each type shares a MultiMesh per original textured surface. INSTANCE_CUSTOM
 ## supplies measured deck and port dimensions instead of stretching the feet.
 const BASE := "res://assets/conveyors/Meshy/"
@@ -46,6 +46,10 @@ static func _bake(node:Node,outer:Transform3D,combined:ArrayMesh,entry:Dictionar
 	if node is Node3D:pose*=node.transform
 	if node is MeshInstance3D and node.mesh:
 		var geometry:Mesh=node.mesh
+		var name:=String(node.name).to_lower()
+		var support:=name.begins_with("foot")
+		# The short D01 turn needs only its two entry and two exit legs.
+		if family=="corner" and name.begins_with("foot_1_"):return
 		for i in geometry.get_surface_count():
 			var tool:=SurfaceTool.new()
 			tool.begin(Mesh.PRIMITIVE_TRIANGLES)
@@ -59,7 +63,12 @@ static func _bake(node:Node,outer:Transform3D,combined:ArrayMesh,entry:Dictionar
 				mat.set_shader_parameter("tint",original.albedo_color)
 				mat.set_shader_parameter("metalness",original.metallic)
 				mat.set_shader_parameter("roughness",original.roughness)
-			mat.set_shader_parameter("foot_piece",String(node.name).to_lower().begins_with("foot"))
+			mat.set_shader_parameter("foot_piece",support)
+			mat.set_shader_parameter("end_supports",support and family=="straight")
+			mat.set_shader_parameter("rail_shell",name.contains("guard") or name.begins_with("deck"))
+			if support and family=="corner":
+				var bounds:=surface.get_aabb().get_center()
+				mat.set_shader_parameter("support_center",Vector2(bounds.x,bounds.z))
 			if entry.has("deck_profile"):
 				mat.set_shader_parameter("transition",Vector2(entry.deck_profile[1][0],entry.deck_profile[2][0]))
 			mat.set_shader_parameter("source_run",float(entry.end[2]))

@@ -8,7 +8,8 @@ const LIFE := 17.0
 const CELL := 12.0
 const PER_CELL := 96
 const MAX_MARKS := 720
-const NAMES := {"human": ["Foot.L","Foot.R"], "wolf": ["FrontLPaw","RearRPaw","FrontRPaw","RearLPaw"]}
+const FOUR_FEET := ["FrontLPaw","RearRPaw","FrontRPaw","RearLPaw"]
+const NAMES := {"human": ["Foot.L","Foot.R"], "wolf": FOUR_FEET, "stag": FOUR_FEET}
 var clock := 0.0
 var living := {}
 var chunks := {}
@@ -107,7 +108,7 @@ func _physics_process(delta: float) -> void:
 func _sample_feet(actor: Node3D,data: Dictionary) -> void:
 	var skel: Skeleton3D=data.skeleton
 	var size:float=data.size
-	var wolf:bool=data.species=="wolf"
+	var quadruped: bool = data.species != "human"
 	var forward:=actor.global_basis.z.slide(Vector3.UP).normalized()
 	var contacts := PackedVector3Array()
 	if data.sole_sample.is_valid() and clock <= data.moving_until:
@@ -126,16 +127,16 @@ func _sample_feet(actor: Node3D,data: Dictionary) -> void:
 		elif foot.lifted and lift < threshold:
 			foot.lifted=false
 			if contacts.is_empty():
-				p+=forward*(.08 if not wolf else .045)*size
+				p+=forward*(.045 if quadruped else .08)*size
 			p.y=actor.global_position.y
 			if clock<=data.moving_until and (not (foot.last as Vector3).is_finite() or p.distance_to(foot.last)>.07*size):
-				_emit_mark(p,atan2(forward.x,forward.z),wolf,i in ([2,1] if wolf else [1]),size)
+				_emit_mark(p,atan2(forward.x,forward.z),data.species,i in ([2,1] if quadruped else [1]),size)
 				foot.last=p
 
 func _sample_stride(actor:Node3D,data:Dictionary,start:Vector3,travel:Vector3,distance:float) -> void:
-	var wolf:bool=data.species=="wolf"
+	var quadruped: bool = data.species != "human"
 	var size:float=data.size
-	var span:float=(.245 if wolf else .56)*size
+	var span:float=(.245 if quadruped else .56)*size
 	var remaining:=distance
 	var forward:=travel/distance
 	var right:=Vector3(forward.z,0,-forward.x)
@@ -143,17 +144,28 @@ func _sample_stride(actor:Node3D,data:Dictionary,start:Vector3,travel:Vector3,di
 		var advance:float=span-data.distance
 		remaining-=advance
 		var center:=start+forward*(distance-remaining)
-		var foot:int=data.step%(4 if wolf else 2)
-		var left:=foot in [0,3] if wolf else foot==0
-		center+=right*(-1 if left else 1)*(.19 if wolf else .11)*size
-		if wolf: center+=forward*(.36 if foot in [0,2] else -.36)*size
-		_emit_mark(center,atan2(forward.x,forward.z),wolf,not left,size)
+		var foot:int=data.step%(4 if quadruped else 2)
+		var left:=foot in [0,3] if quadruped else foot==0
+		center+=right*(-1 if left else 1)*(.19 if quadruped else .11)*size
+		if quadruped: center+=forward*(.36 if foot in [0,2] else -.36)*size
+		_emit_mark(center,atan2(forward.x,forward.z),data.species,not left,size)
 		data.step+=1
 		data.distance=0.0
 	data.distance+=remaining
 
-func _emit_mark(position_:Vector3,heading:float,wolf:bool,right:bool,size:float) -> void:
-	var extent:=Vector2(.245,.29) if wolf else Vector2(.225,.365)
+func stamp_truck_tracks(axle:Vector3,basis:Basis) -> void:
+	var heading := atan2(basis.z.x,basis.z.z)
+	var rear := axle+basis.z*.85
+	for side:float in [-1.,1.]:
+		var tire := rear+basis.x*.88*side
+		_emit_mark(tire,heading,"truck",side>0.,1.)
+
+func _emit_mark(position_:Vector3,heading:float,species:String,right:bool,size:float) -> void:
+	var extent := Vector2(.225,.365)
+	match species:
+		"wolf": extent = Vector2(.245,.29)
+		"stag": extent = Vector2(.182,.245)
+		"truck": extent = Vector2(.29,.64)
 	extent*=size
 	# Avoid bleeding limbs over the edge of a thawed floor or an ice boundary.
 	if not _snow(position_,extent,heading): return
@@ -179,7 +191,7 @@ func _emit_mark(position_:Vector3,heading:float,wolf:bool,right:bool,size:float)
 		marks.pop_front()
 		total-=1
 		_refresh(chunk)
-	var stamp={"p":position_,"yaw":heading,"extent":extent,"wolf":wolf,"right":right,"time":clock}
+	var stamp={"p":position_,"yaw":heading,"extent":extent,"wolf":species=="wolf","hoof":species=="stag","tire":species=="truck","right":right,"time":clock}
 	marks.append(stamp)
 	total+=1
 	_write(chunk,stamp,marks.size()-1)
@@ -200,7 +212,7 @@ func _write(chunk:Dictionary,mark:Dictionary,index:int) -> void:
 
 func _update_opacity(chunk:Dictionary,index:int,mark:Dictionary) -> void:
 	var opacity:=1.0-smoothstep(LIFE*.5,LIFE,clock-float(mark.time))
-	chunk.node.multimesh.set_instance_custom_data(index,Color(0.0,float(mark.wolf),float(mark.right),opacity))
+	chunk.node.multimesh.set_instance_custom_data(index,Color(float(mark.hoof or mark.tire),float(mark.wolf or mark.tire),float(mark.right),opacity))
 
 func _refresh(chunk:Dictionary) -> void:
 	for i in chunk.marks.size(): _write(chunk,chunk.marks[i],i)

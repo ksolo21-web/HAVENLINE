@@ -44,6 +44,7 @@ func nearest() -> Node3D:
 	return best
 
 func advance(dt: float, paid: bool) -> void:
+	paid = paid and not world.encounters.is_structure_down("tower")
 	if active!=paid:
 		active=paid
 		guard.collision_layer = 1 if paid else 0
