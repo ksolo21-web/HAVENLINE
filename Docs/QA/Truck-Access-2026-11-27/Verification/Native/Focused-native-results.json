@@ -1,0 +1,654 @@
+{
+  "source": "92fa91760a45eea306d7bda4da4b705b51b6f103",
+  "scene": "res://field_opening.tscn",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "suites": 9,
+  "native_runs": 10,
+  "tests": {
+    "qa_truck_quotes": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_truck_quotes-1.log",
+        "log_sha256": "56500f34882e488b6249ab25a7f8bac43389b45d663b924895475b2a01c0a27a",
+        "summary": [
+          {
+            "advanced quote accepts tender beyond the default bill": true,
+            "advanced tender and five-unit remainder restore": true,
+            "an already automated camp receives the advanced quote": true,
+            "complete replacement payment spends the exact quoted goods": true,
+            "completed legacy vehicle keeps its exact receipt and state": true,
+            "completed purchase conserves the advanced receipt": true,
+            "earlier v11 saves with the same installed lines keep the price they were shown": true,
+            "existing quote and partial payment restore": true,
+            "garage exposes the standard quote": true,
+            "later automation leaves the exposed quote and tender intact": true,
+            "later construction cannot forge an earlier automated quote": true,
+            "legacy automated price matches the old build": true,
+            "legacy tender outside the old quote is rejected": true,
+            "legacy truck can be replaced using the storehouse and playtest quote": true,
+            "legacy truck can be wrecked": true,
+            "legacy truck replacement finalizes on reload": true,
+            "old pending truck refunds every material once and opens the new raw quote": true,
+            "pre-quote funded save retains the original bill": true,
+            "reopening a migrated save does not refund a second time": true,
+            "replacement and original bill round-trip together": true,
+            "replacement honors the same quote instead of charging the default": true,
+            "standard quote accepts its first payment": true,
+            "unfunded quote survives reload at first exposure": true,
+            "wreck is an eligible replacement": true
+          }
+        ]
+      }
+    ],
+    "qa_build15_economy_migration": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_build15_economy_migration-1.log",
+        "log_sha256": "4ed12cbe4e7b8e220eea74960b77956e0ce4d6538ff7c3b86aa0bd26f5ebb81d",
+        "summary": [
+          {
+            "all prior finished-goods accounts remain intact": true,
+            "converted contract finalizes once and cold-reopens paid": true,
+            "current saves reject a new mixed order": true,
+            "fully paid Build14 garage keeps original processed receipt and truck eligibility": true,
+            "legacy products still have actual construction receipt lines": true,
+            "migration retires the single unsold quote and keeps financial history": true,
+            "new garage accepts ordinary wood and stone before any machines": true,
+            "next customer takes only a meal and pays only its price": true,
+            "obsolete Build14 mixed quote cannot collect payment": true,
+            "partly funded processed quote credits matching whole raw bundles": true,
+            "processed credits cannot be fabricated on an existing receipt": true,
+            "raw payment opens the truck and reopens at exact balances": true,
+            "unfunded old garage gets the new raw quote": true,
+            "unpaid fractions keep near-complete legacy contract open": true
+          }
+        ]
+      }
+    ],
+    "qa_field_progression": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_field_progression-1.log",
+        "log_sha256": "f182bb8158fa387de778bbfd1b6e9627ca957e0af7de4ef2ae8ecf689e4d9990",
+        "summary": [
+          {
+            "Built storage_meat": true,
+            "Built storage_stone": true,
+            "Built storage_wood": true,
+            "East expansion unlocks after all 3 tiers": true,
+            "Existing field save reopens through modern migration": true,
+            "First expansion opens only starter house": true,
+            "Hearth opens only expansion": true,
+            "Historical missing tiers funded in order": true,
+            "Historical out-of-order purchase and partial retained": true,
+            "Insufficient funds storage_meat": true,
+            "Insufficient funds storage_stone": true,
+            "Insufficient funds storage_wood": true,
+            "Migrate funded old axes and exact balances": true,
+            "Migrated equipment purchase order round-trips": true,
+            "Migration cannot spend unavailable stock": true,
+            "No duplicate debit storage_meat": true,
+            "No duplicate debit storage_stone": true,
+            "No duplicate debit storage_wood": true,
+            "No historical double charge": true,
+            "No premature storage purchase": true,
+            "Original field save written through old schema": true,
+            "Partial payment storage_meat": true,
+            "Partial payment storage_stone": true,
+            "Partial payment storage_wood": true,
+            "Post-migration stage commits atomically": true,
+            "Reject reordered unrelated completion": true,
+            "Reload retains grandfathered equipment, stock and new stage": true,
+            "Resume partial storage_meat": true,
+            "Resume partial storage_stone": true,
+            "Resume partial storage_wood": true,
+            "Retains tier and downstream goals": true,
+            "Visual tier independent from earned bays": true,
+            "json round-trip of funded price locks 0": true,
+            "json round-trip of funded price locks 1": true,
+            "json round-trip of funded price locks 2": true,
+            "old partial finishes without windfall; next expansion charges new price": true,
+            "old partially paid hearth still owes two packets": true,
+            "reject later cash field on claimed v5 receipt 0": true,
+            "reject later cash field on claimed v5 receipt 1": true,
+            "reject later cash field on claimed v5 receipt 2": true,
+            "reject unauthorized or doubled price lock center_hearth 0": true,
+            "reject unauthorized or doubled price lock center_hearth 1": true,
+            "reject unauthorized or doubled price lock center_hearth 2": true,
+            "reject unauthorized or doubled price lock storage_stone 0": true,
+            "reject unauthorized or doubled price lock storage_stone 1": true,
+            "reject unauthorized or doubled price lock storage_stone 2": true,
+            "reject unauthorized or doubled price lock unknown 0": true,
+            "reject unauthorized or doubled price lock unknown 1": true,
+            "reject unauthorized or doubled price lock unknown 2": true,
+            "unstarted old install sees the same 200 timber as fresh": true,
+            "v5 partial expansion and earned camp migrate, survivor 0": true,
+            "v5 partial expansion and earned camp migrate, survivor 1": true,
+            "v5 partial expansion and earned camp migrate, survivor 2": true,
+            "v5 survivor contract and payment state retained, receipt 0": true,
+            "v5 survivor contract and payment state retained, receipt 1": true,
+            "v5 survivor contract and payment state retained, receipt 2": true
+          }
+        ]
+      }
+    ],
+    "qa_snow_truck": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_snow_truck-1.log",
+        "log_sha256": "8dca6fcc9d5a116d0cde7f70c1d07bda76a023872df4d5ddaa5fda8b27e3ccbc",
+        "summary": [
+          {
+            "checks": {
+              "a fresh camp boots": true,
+              "affordable replacement at the garage": true,
+              "can drive the replacement truck": true,
+              "driven blades break a real metal bank": true,
+              "durable owned truck starts at full health": true,
+              "garage and truck begin locked": true,
+              "garage replaces a fence section and keeps both walk gates": true,
+              "ground pickup goes into truck, not player pack": true,
+              "interior wreck retains salvage": true,
+              "lethal contact applies after damage cooldown": true,
+              "mined metal goes to truck exactly once": true,
+              "mounted using player input": true,
+              "moving truck leaves paired treads outside camp": true,
+              "normal thumbstick drives out through garage": true,
+              "outside loss survives cold reload": true,
+              "outside wreck loses cargo without salvage": true,
+              "outside wreck position survives cold reload": true,
+              "park transfers the entire cargo once": true,
+              "pay separate garage offer": true,
+              "pay separate truck offer": true,
+              "recover interior cargo exactly once": true,
+              "replacement is completely outside camp": true,
+              "replacement takes cargo before wreck": true,
+              "restored player controls and backpack": true,
+              "reverse returns into garage and parks": true,
+              "save remains usable after all truck operations": true,
+              "setup: center_hearth": true,
+              "setup: expansion_1": true,
+              "setup: expansion_2": true,
+              "setup: storage_meat": true,
+              "setup: storage_stone": true,
+              "setup: storage_wood": true,
+              "truck stays locked until garage is built": true,
+              "whole new truck is parked in the bay": true
+            }
+          }
+        ]
+      }
+    ],
+    "qa_camp_layout": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_camp_layout-1.log",
+        "log_sha256": "e0d68c8aa8885e8b3e68770c637f61ea182fd36eb335baec0c8bdbbbca3cb16b",
+        "summary": [
+          {
+            "checks": {
+              "A customer pays for the real roast across the relocated fence": true,
+              "Cooker paid normally with the exact 120 wood and 80 stone": true,
+              "Entering the moved warehouse collects its actual roasts at the stocked shelf": true,
+              "Exit returns player's gameplay camera and controls": true,
+              "Gameplay pinch still works after moving": true,
+              "Invalid destination leaves all equipment untouched": true,
+              "Malformed layout restore rejected without partial mutation": true,
+              "Meat handed off at relocated cooker produces a real meal": true,
+              "Model, guard, hopper, outfeed and both worker aprons move as a unit": true,
+              "Mouse opens identical layout controls": true,
+              "Moving the counter preserves each paid note": true,
+              "Moving up to the relocated house stocks its real FOOD shelf": true,
+              "Overlap rejected before it can persist": true,
+              "Relocated furnace light, art and solid footing stay together": true,
+              "Service point and queue meet across the relocated north fence bay": true,
+              "Spawn, defense side and gate are protected": true,
+              "Storehouse at new position accepts side loading": true,
+              "Touch opens layout and liberates joystick": true,
+              "Tower's paid physical footings stay on the moved defense side": true,
+              "Unowned cooker cannot be placed": true,
+              "Warehouse owns the relocated cooker's entire delivered lot": true,
+              "Worker detours around the moved furnace without crossing its body": true,
+              "camp_cooker committed by confirmation": true,
+              "camp_cooker picked by tapping its actual artwork": true,
+              "camp_cooker previews its physical destination": true,
+              "center_hearth committed by confirmation": true,
+              "center_hearth picked by tapping its actual artwork": true,
+              "center_hearth previews its physical destination": true,
+              "north_counter committed by confirmation": true,
+              "north_counter inputs, outputs and guard follow": true,
+              "north_counter picked by tapping its actual artwork": true,
+              "north_counter previews its physical destination": true,
+              "quarry_drill committed by confirmation": true,
+              "quarry_drill inputs, outputs and guard follow": true,
+              "quarry_drill picked by tapping its actual artwork": true,
+              "quarry_drill previews its physical destination": true,
+              "saw_bench committed by confirmation": true,
+              "saw_bench inputs, outputs and guard follow": true,
+              "saw_bench picked by tapping its actual artwork": true,
+              "saw_bench previews its physical destination": true,
+              "storage_wood committed by confirmation": true,
+              "storage_wood inputs, outputs and guard follow": true,
+              "storage_wood picked by tapping its actual artwork": true,
+              "storage_wood previews its physical destination": true,
+              "watchtower committed by confirmation": true,
+              "watchtower picked by tapping its actual artwork": true,
+              "watchtower previews its physical destination": true
+            },
+            "placements": [
+              {
+                "camp_cooker": [
+                  4.75,
+                  2.75
+                ],
+                "center_hearth": [
+                  -2.75,
+                  -2.5
+                ],
+                "north_counter": [
+                  4.0,
+                  -9.0
+                ],
+                "quarry_drill": [
+                  7.75,
+                  -6.25
+                ],
+                "saw_bench": [
+                  -3.5,
+                  2.5
+                ],
+                "storage_wood": [
+                  4.5,
+                  -2.5
+                ],
+                "watchtower": [
+                  8.0,
+                  3.5
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_camp_layout-2.log",
+        "log_sha256": "d0cfa9639e8fbcbcbdfcbb0be7e333b25046b4bd13499866843eee781ac871cf",
+        "summary": [
+          {
+            "checks": {
+              "Cold process recovers moved furnace and defending tower": true,
+              "Cold process recovers relocated cooker, counter and storehouse": true,
+              "Cold process recovers saw and drill collision": true,
+              "Reloaded receipts and cooked meal survive relocation": true
+            },
+            "placements": [
+              {
+                "camp_cooker": [
+                  4.75,
+                  2.75
+                ],
+                "center_hearth": [
+                  -2.75,
+                  -2.5
+                ],
+                "north_counter": [
+                  4.0,
+                  -9.0
+                ],
+                "quarry_drill": [
+                  7.75,
+                  -6.25
+                ],
+                "saw_bench": [
+                  -3.5,
+                  2.5
+                ],
+                "storage_wood": [
+                  4.5,
+                  -2.5
+                ],
+                "watchtower": [
+                  8.0,
+                  3.5
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "qa_field_market": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_field_market-1.log",
+        "log_sha256": "a09f559318f2d7a4376fc9efe635b18a08af2491924f7c92463ca149d4c18920",
+        "summary": [
+          {
+            "checks": {
+              "a concurrent second pickup cannot claim the same money": true,
+              "cash and legacy stock pass exact save validation": true,
+              "counter leaves the player's planks in the pack": true,
+              "customer buys one meal and leaves the rest of the stock": true,
+              "customer self-serves a two-item order without anyone at counter": true,
+              "first displayed developed order asks for two meals": true,
+              "held goods do not make a customer pay": true,
+              "next developed order requests only a meal": true,
+              "old paid workshop profile opens in the new schema": true,
+              "one visit stocks both meals and collects the old cash": true,
+              "owned worker banks its payment once": true,
+              "owned worker drops both meals and picks up all posted cash": true,
+              "owned worker loads both meals and leaves warehouse planks": true,
+              "paid fixture and new typed accounting agree": true,
+              "physical sale contains only the meal": true,
+              "reopening preserves the quoted whole basket": true,
+              "stored planks cannot substitute for a meal": true
+            },
+            "money": 1,
+            "paid_goods": {
+              "blocks": 0,
+              "meal": 11,
+              "planks": 0
+            },
+            "served": 10
+          }
+        ]
+      }
+    ],
+    "qa_workshop_handoff": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_workshop_handoff-1.log",
+        "log_sha256": "4dccad5938a6de3f65ef22bf96d0113db6ea1d7eebd1f940a511441df83d4b8a",
+        "summary": [
+          {
+            "checks": {
+              "existing workshop save loads": true,
+              "meat can opt out of walk-up handoff": true,
+              "meat can revisit the station sheet": true,
+              "meat cannot operate remotely": true,
+              "meat collects through the real touch command": true,
+              "meat completed goods wait on the output tray": true,
+              "meat is a paid workshop": true,
+              "meat is reachable through Camp then Workshops": true,
+              "meat loads through the real touch command": true,
+              "meat manually loaded input produces a finished item": true,
+              "meat opens its station again": true,
+              "meat reaches the apron and waits for the chosen action": true,
+              "normal save succeeds": true,
+              "stone can opt out of walk-up handoff": true,
+              "stone can revisit the station sheet": true,
+              "stone cannot operate remotely": true,
+              "stone collects through the real touch command": true,
+              "stone completed goods wait on the output tray": true,
+              "stone is a paid workshop": true,
+              "stone is reachable through Camp then Workshops": true,
+              "stone loads through the real touch command": true,
+              "stone manually loaded input produces a finished item": true,
+              "stone opens its station again": true,
+              "stone reaches the apron and waits for the chosen action": true,
+              "wood can opt out of walk-up handoff": true,
+              "wood can revisit the station sheet": true,
+              "wood cannot operate remotely": true,
+              "wood collects through the real touch command": true,
+              "wood completed goods wait on the output tray": true,
+              "wood is a paid workshop": true,
+              "wood is reachable through Camp then Workshops": true,
+              "wood loads through the real touch command": true,
+              "wood manually loaded input produces a finished item": true,
+              "wood opens its station again": true,
+              "wood reaches the apron and waits for the chosen action": true
+            }
+          }
+        ]
+      }
+    ],
+    "qa_field_camp_controls": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_field_camp_controls-1.log",
+        "log_sha256": "ed42e07efe19f1fa5c13cbd82faa83034cd715bd2efba760b1f5e616b121fa6c",
+        "summary": [
+          {
+            "Build": {
+              "safe": true,
+              "usable_height": 48.0,
+              "usable_width": 80.8
+            },
+            "Camp": {
+              "safe": true,
+              "usable_height": 48.0,
+              "usable_width": 73.0
+            },
+            "Storage": {
+              "safe": true,
+              "usable_height": 48.0,
+              "usable_width": 85.8
+            },
+            "Survivors": {
+              "safe": true,
+              "usable_height": 48.0,
+              "usable_width": 97.3
+            },
+            "TrialGraphicsQuality": {
+              "safe": true,
+              "usable_height": 48.0,
+              "usable_width": 48.0
+            },
+            "ViewResourceBalances": {
+              "safe": true,
+              "usable_height": 48.0,
+              "usable_width": 127.0
+            }
+          },
+          {
+            "48-unit cover target Build": true,
+            "48-unit cover target Camp": true,
+            "48-unit cover target Storage": true,
+            "48-unit cover target Survivors": true,
+            "48-unit cover target TrialGraphicsQuality": true,
+            "48-unit cover target ViewResourceBalances": true,
+            "hud visible": true,
+            "move opens native equipment placement": true,
+            "narrow cover shows additional stocks": true,
+            "no HP loss or walking during UI taps": true,
+            "overflow opens all exact mineral amounts": true,
+            "quality touch toggles": true,
+            "touch executes Build": true,
+            "touch executes Camp": true,
+            "touch executes Storage": true,
+            "touch executes Survivors": true,
+            "touch opens Build": true,
+            "touch opens Camp": true,
+            "touch opens Storage": true,
+            "touch opens Survivors": true
+          }
+        ]
+      }
+    ],
+    "qa_field_minerals": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_field_minerals-1.log",
+        "log_sha256": "678ef0300ea0116de4450aca7e4e4d88289665527f257ab81954209e0430cd63",
+        "summary": [
+          {
+            "coal alone cannot pay for ordinary construction": true,
+            "coal bank flight 0": true,
+            "coal bank flight 1": true,
+            "coal dispatches unique earned pickup 0": true,
+            "coal dispatches unique earned pickup 1": true,
+            "coal dispatches unique earned pickup 2": true,
+            "coal distinct populated bin": true,
+            "coal landing meets its own bay": true,
+            "coal separate backpack lane": true,
+            "existing native receipts and zero minerals": true,
+            "metal alone cannot pay for ordinary construction": true,
+            "metal bank flight 0": true,
+            "metal bank flight 1": true,
+            "metal bank flight 2": true,
+            "metal bank flight 3": true,
+            "metal dispatches unique earned pickup 0": true,
+            "metal dispatches unique earned pickup 1": true,
+            "metal dispatches unique earned pickup 2": true,
+            "metal dispatches unique earned pickup 3": true,
+            "metal dispatches unique earned pickup 4": true,
+            "metal distinct populated bin": true,
+            "metal landing meets its own bay": true,
+            "metal separate backpack lane": true,
+            "missing new balance rejected atomically": true,
+            "normal scene save loaded": true,
+            "ordinary reinforced payment 0": true,
+            "ordinary reinforced payment 1": true,
+            "ordinary reinforced payment 10": true,
+            "ordinary reinforced payment 11": true,
+            "ordinary reinforced payment 12": true,
+            "ordinary reinforced payment 13": true,
+            "ordinary reinforced payment 2": true,
+            "ordinary reinforced payment 3": true,
+            "ordinary reinforced payment 4": true,
+            "ordinary reinforced payment 5": true,
+            "ordinary reinforced payment 6": true,
+            "ordinary reinforced payment 7": true,
+            "ordinary reinforced payment 8": true,
+            "ordinary reinforced payment 9": true,
+            "pickup preserves all existing receipts": true,
+            "slate alone cannot pay for ordinary construction": true,
+            "slate bank flight 0": true,
+            "slate bank flight 1": true,
+            "slate bank flight 2": true,
+            "slate dispatches unique earned pickup 0": true,
+            "slate dispatches unique earned pickup 1": true,
+            "slate dispatches unique earned pickup 2": true,
+            "slate dispatches unique earned pickup 3": true,
+            "slate distinct populated bin": true,
+            "slate landing meets its own bay": true,
+            "slate separate backpack lane": true,
+            "starter alone cannot bank ore": true,
+            "visible six-material HUD and exact mineral counts": true
+          },
+          {
+            "counts": {
+              "carried": {
+                "coal": 1,
+                "meat": 0,
+                "metal": 1,
+                "slate": 1,
+                "stone": 0,
+                "wood": 0
+              },
+              "stored": {
+                "coal": 2,
+                "meat": 0,
+                "metal": 4,
+                "slate": 3,
+                "stone": 0,
+                "wood": 0
+              }
+            },
+            "receipts": {
+              "camp_cooker": {
+                "stone": 0,
+                "wood": 0
+              },
+              "center_hearth": {
+                "wood": 3
+              },
+              "expansion_1": {
+                "stone": 1,
+                "wood": 3
+              },
+              "expansion_2": {
+                "stone": 0,
+                "wood": 0
+              },
+              "meal_conveyor": {
+                "stone": 0,
+                "wood": 0
+              },
+              "orbit_upgrade": {
+                "meat": 0,
+                "stone": 0
+              },
+              "quarry_drill": {
+                "stone": 0,
+                "wood": 0
+              },
+              "saw_bench": {
+                "stone": 0,
+                "wood": 0
+              },
+              "snow_garage": {
+                "stone": 0,
+                "wood": 0
+              },
+              "snow_truck": {
+                "stone": 0,
+                "wood": 0
+              },
+              "storage_meat": {
+                "meat": 0,
+                "wood": 0
+              },
+              "storage_stone": {
+                "stone": 6,
+                "wood": 8
+              },
+              "storage_wood": {
+                "wood": 2
+              },
+              "supply_conveyors": {
+                "stone": 0,
+                "wood": 0
+              },
+              "watchtower": {
+                "stone": 0,
+                "wood": 0
+              }
+            },
+            "schema": 13
+          },
+          {
+            "coal repeated token rejected": true,
+            "coal typed balances reopen": true,
+            "metal repeated token rejected": true,
+            "metal typed balances reopen": true,
+            "normal scene restored paid original order": true,
+            "normal scene save loaded": true,
+            "slate repeated token rejected": true,
+            "slate typed balances reopen": true
+          },
+          {
+            "--mineral-migrate": true,
+            "--mineral-reopen": true
+          }
+        ]
+      }
+    ]
+  },
+  "passed": true,
+  "verified_source_before_and_after": {
+    "sha256": "de40f23920a1138e704e2afaf7ab058b087d59d03461e5f318f61adba02b9020",
+    "checked_files": 756
+  }
+}
