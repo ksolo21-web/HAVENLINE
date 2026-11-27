@@ -1,18 +1,31 @@
 extends SceneTree
 const Shore=preload("res://field_lakeshore.gd")
+class Fixture:
+	extends Node3D
+	var inventory = preload("res://field_inventory.gd").new()
+	func _init():
+		inventory.configure(preload("res://field_progression.gd").offers())
+		inventory.settlement.processed_wood = 7
+		inventory.settlement.processed_stone = 2
+	func purchase(id: String):
+		for kind: String in inventory.costs[id]:
+			var price: int = inventory.costs[id][kind]
+			for i in price: inventory.collect(id + kind + str(i), kind)
+			assert(inventory.payment(id,kind,false,price))
 var checks:={}
 func _initialize():run.call_deferred()
 func valid(label:String,value:bool)->void:
 	checks[label]=value
 func run()->void:
-	var stage:=Node3D.new()
+	var stage:=Fixture.new()
 	root.add_child(stage)
 	var bank:=Shore.new()
 	stage.add_child(bank)
 	bank.setup(stage)
 	await physics_frame
 	valid("future kitchen is absent from the starter camp",not bank.cooker.is_visible_in_tree() and not bank.at_cooker(bank.APRON) and bank.guard.collision_layer==0)
-	bank.set_available(true)
+	for id: String in ["center_hearth","expansion_1","storage_wood","storage_stone","storage_meat","expansion_2","camp_cooker"]: stage.purchase(id)
+	bank.refresh_ownership(false)
 	valid("opening the service bay enables the cooker and its guard",bank.cooker.is_visible_in_tree() and bank.guard.collision_layer==1)
 	valid("natural waterline matches both endpoints",bank.shore.size()==108 and bank.get_node("SolidWaterline").get_child(0).shape.get_faces().size()==108*6)
 	var origin:=Vector3(bank.LAKE_XZ.x,0,bank.LAKE_XZ.y)
@@ -23,7 +36,7 @@ func run()->void:
 	var route_start:=bank.APRON+Vector3.BACK*1.5
 	valid("dry final approach",bank.constrain_motion(route_start,bank.APRON,.31).distance_to(bank.APRON)<.03)
 	valid("requires working apron",bank.at_cooker(bank.APRON) and not bank.at_cooker(bank.COOKER_AT) and not bank.at_cooker(Vector3.ZERO))
-	valid("pickup and input aprons are distinct",bank.at_output(bank.OUTPUT_APRON) and not bank.at_cooker(bank.OUTPUT_APRON) and not bank.at_output(bank.APRON))
+	valid("both accessible flanks support collection and supply",bank.at_output(bank.OUTPUT_APRON) and bank.at_cooker(bank.OUTPUT_APRON) and bank.at_output(bank.APRON))
 	valid("lake and station reserved",bank.reserves(origin) and bank.reserves(bank.APRON) and not bank.reserves(Vector3(-6,0,3)))
 	valid("distinct real work sockets",bank.cooker_input.global_position.distance_to(bank.cooker_output.global_position)>1.75)
 	var shaft_before:Basis=bank.saw.basis

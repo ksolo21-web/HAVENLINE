@@ -5,19 +5,23 @@ const FIRST := "expansion_1"
 const SECOND := "expansion_2"
 const TOWER := "watchtower"
 const AXES := "orbit_upgrade"
+const MACHINES := {"wood":"saw_bench", "stone":"quarry_drill", "meat":"camp_cooker"}
 const STORAGE := ["storage_wood", "storage_stone", "storage_meat"]
 const PREREQUISITES := {
 	"center_hearth": [], "expansion_1": ["center_hearth"],
 	"storage_wood": ["expansion_1"], "storage_stone": ["expansion_1"], "storage_meat": ["expansion_1"],
-	"expansion_2": STORAGE, "watchtower": ["expansion_2"], "orbit_upgrade": ["expansion_2"]
+	"expansion_2": STORAGE, "watchtower": ["expansion_2"], "orbit_upgrade": ["expansion_2"],
+	"camp_cooker": ["expansion_2"], "saw_bench": ["camp_cooker"], "quarry_drill": ["saw_bench"]
 }
 const TITLES := {
 	"center_hearth":"Build hearth", "expansion_1":"Expand camp", "expansion_2":"Expand east",
 	"storage_wood":"Build storehouse", "storage_stone":"Reinforce storehouse", "storage_meat":"Advance storehouse",
-	"watchtower":"Build watchtower", "orbit_upgrade":"Equip extra axes"
+	"watchtower":"Build watchtower", "orbit_upgrade":"Equip extra axes",
+	"camp_cooker":"Build cooker", "saw_bench":"Build saw bench", "quarry_drill":"Build quarry drill"
 }
 const POSITIONS := {"expansion_1":Vector2(2.6,-1.5), "expansion_2":Vector2(2.6,-1.5),
-	"watchtower":Vector2(8.1,-2.4), "orbit_upgrade":Vector2(7.6,2.9)}
+	"watchtower":Vector2(8.1,-2.4), "orbit_upgrade":Vector2(7.6,2.9),
+	"camp_cooker":Vector2(-.10,-6.24), "saw_bench":Vector2(-3.43,-6.17), "quarry_drill":Vector2(7.55,-5.68)}
 
 # Receipts, carry meshes and machine inputs are physical bundles. Each bundle
 # contains ten raw units; a tree/bank awards three bundles, a wolf two.
@@ -28,7 +32,9 @@ const OLD_SURVIVOR_BUNDLES := 2
 const OFFERS := {
 	"center_hearth":{"wood":20}, "expansion_1":{"wood":12,"stone":6},
 	"storage_wood":{"wood":10}, "storage_stone":{"wood":8,"stone":6}, "storage_meat":{"wood":7,"meat":5},
-	"expansion_2":{"wood":15,"stone":10}, "watchtower":{"wood":12,"stone":10}, "orbit_upgrade":{"stone":6,"meat":4}
+	"expansion_2":{"wood":15,"stone":10},
+	"camp_cooker":{"wood":12,"stone":8}, "saw_bench":{"wood":14,"stone":6}, "quarry_drill":{"wood":10,"stone":12},
+	"watchtower":{"wood":12,"stone":10}, "orbit_upgrade":{"stone":6,"meat":4}
 }
 
 static func units(bundles: int) -> int:

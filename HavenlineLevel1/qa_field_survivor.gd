@@ -121,7 +121,7 @@ func run() -> void:
 	var remaining:=0
 	for token in original:
 		if game.drops.has(token): remaining+=1
-	check(remaining==2,"other two bundles remain ordinary pickups")
+	check(remaining+int(game.inventory.settlement.worker_load.wood)==2,"neighboring bundles are either in the segregated pack or still available")
 	check(not game.receive_worker_wood(),"no second claim after unload")
 	print(JSON.stringify({"errors":errors,"states":samples,"token":physical_token,"remaining":remaining}))
 	if not out.is_empty():

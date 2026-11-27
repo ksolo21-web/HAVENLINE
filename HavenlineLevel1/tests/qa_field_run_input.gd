@@ -27,7 +27,7 @@ func measure(label: String, displacement: float) -> void:
 	if displacement <= 3.:
 		checks[label] = speed < .01 and gait.current == "idle"
 	else:
-		checks[label] = absf(speed - 7.00) < .02 and gait.current == "run" and is_equal_approx(gait.gait_weight, 1.)
+		checks[label] = absf(speed - 6.25) < .02 and gait.current == "run" and is_equal_approx(gait.gait_weight, 1.)
 
 func local_joint(skeleton: Skeleton3D, joint: String) -> Vector3:
 	var bone := skeleton.find_bone(joint)
@@ -41,6 +41,11 @@ func inspect_stride() -> void:
 	var max_clearance := 0.0
 	var min_surface := INF
 	var flight_ticks := 0
+	var flight_apex := 0.0
+	var supported_ticks := 0
+	var print_count := 0
+	var highest_print_contact := 0.0
+	var sample_started: float = world.tracks.clock
 	var foot_spreads: Array[float] = []
 	var previous_depths := Vector2.ZERO
 	var longest_still := 0
@@ -63,8 +68,23 @@ func inspect_stride() -> void:
 				lifted_left = minf(lifted_left, height)
 			if not prev.is_empty() and height < .008 and prev[i].y - world.actor.global_position.y < .008:
 				slips.append((feet[i] - prev[i]).slide(Vector3.UP).length() * 60.)
+		# Check only newly stamped player treads, while their skinned vertices
+		# are still in this same physics pose. NPCs use paw impressions here.
+		for chunk in world.tracks.chunks.values():
+			for mark in chunk.marks:
+				if mark.wolf or mark.time <= sample_started:
+					continue
+				var near_height := INF
+				for point in feet:
+					if (point - Vector3(mark.p)).slide(Vector3.UP).length() < .14:
+						near_height = minf(near_height, point.y - world.actor.position.y)
+				highest_print_contact = maxf(highest_print_contact,near_height)
+				print_count += 1
+		sample_started = world.tracks.clock
 		min_surface = minf(min_surface,lowest)
 		if lowest > .012: flight_ticks += 1
+		if lowest < .008: supported_ticks += 1
+		flight_apex = maxf(flight_apex,lowest)
 		max_clearance = maxf(max_clearance, lifted_left)
 		prev = feet
 		var foot_z := local_joint(skeleton,"Foot.L").z
@@ -90,7 +110,7 @@ func inspect_stride() -> void:
 	var median := INF if slips.is_empty() else slips[slips.size()/2]
 	movement = {"world_speed":world.actor.velocity.length(),"steps_per_minute":gait.stride_hz*120,
 		"boot_front_back_m":max_foot-min_foot,"swing_sole_clearance_m":max_clearance,
-		"minimum_sole_y_m":min_surface,"airborne_ticks":flight_ticks,"stance_median_slip_m_s":median,
+		"actual_print_count":print_count,"highest_print_contact_m":highest_print_contact,"simultaneous_flight_apex_m":flight_apex,"supported_ticks":supported_ticks,"minimum_sole_y_m":min_surface,"airborne_ticks":flight_ticks,"stance_median_slip_m_s":median,
 		"hand_front_back_m":forward-rear,"min_elbow_flex_deg":min_elbow_flex,"forward_trunk_lean_deg":lean_sum/90.}
 	var widest: float = foot_spreads.max()
 	var split_ticks := 0
@@ -103,7 +123,9 @@ func inspect_stride() -> void:
 	checks["boots keep moving through the airborne exchange"] = movement.longest_broad_split_s < .12 and longest_still <= 1
 	checks["run has visible stride, recovery and flight"] = max_foot-min_foot>.70 and max_clearance>.075 and flight_ticks>=3
 	checks["hands pump as body leans into run"] = min_elbow_flex>55. and forward-rear>.34 and lean_sum/90.>10.
-	checks["faster travel keeps the supported sole planted"] = min_surface>-.0025 and median<.15 and gait.stride_hz*120.>188. and gait.stride_hz*120.<229.
+	checks["each snow impression begins under a contacting boot"] = print_count >= 4 and highest_print_contact < .006
+	checks["run loads the snow through both steps"] = supported_ticks >= 42 and flight_apex < .055 and flight_ticks <= 43
+	checks["travel keeps the supported sole planted"] = min_surface>-.0025 and median<.15 and gait.stride_hz*120.>188. and gait.stride_hz*120.<229.
 
 func steer(displacement: Vector2) -> void:
 	var drag := InputEventScreenDrag.new()

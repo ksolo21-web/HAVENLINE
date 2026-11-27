@@ -41,11 +41,11 @@ func _discover_survivor(node: Node) -> void:
 func configure(snow_query: Callable) -> void:
 	mask = snow_query
 
-func register_actor(actor: Node3D, species: String = "human", size: float = 1.0) -> void:
+func register_actor(actor: Node3D, species: String = "human", size: float = 1.0, sole_sample := Callable()) -> void:
 	if not is_instance_valid(actor) or not NAMES.has(species): return
 	if living.has(actor): return
 	if not actor.is_inside_tree() or not actor.is_node_ready():
-		var deferred_registration:=register_actor.bind(actor,species,size)
+		var deferred_registration:=register_actor.bind(actor,species,size,sole_sample)
 		if not actor.ready.is_connected(deferred_registration):
 			actor.ready.connect(deferred_registration,CONNECT_ONE_SHOT)
 		return
@@ -64,7 +64,7 @@ func register_actor(actor: Node3D, species: String = "human", size: float = 1.0)
 				break
 			var rest := skeleton.to_global(skeleton.get_bone_global_rest(id).origin)
 			feet.append({"bone":id,"height":rest.y-actor.global_position.y,"lifted":false,"last":Vector3.INF})
-	living[actor]={"species":species,"size":maxf(.1,size),"skeleton":skeleton,"feet":feet,"previous":actor.global_position,"distance":0.0,"step":0,"moving_until":0.0}
+	living[actor]={"species":species,"size":maxf(.1,size),"skeleton":skeleton,"feet":feet,"sole_sample":sole_sample,"previous":actor.global_position,"distance":0.0,"step":0,"moving_until":0.0}
 	var cleanup:=unregister_actor.bind(actor)
 	if not actor.tree_exiting.is_connected(cleanup):
 		actor.tree_exiting.connect(cleanup,CONNECT_ONE_SHOT)
@@ -109,15 +109,24 @@ func _sample_feet(actor: Node3D,data: Dictionary) -> void:
 	var size:float=data.size
 	var wolf:bool=data.species=="wolf"
 	var forward:=actor.global_basis.z.slide(Vector3.UP).normalized()
+	var contacts := PackedVector3Array()
+	if data.sole_sample.is_valid() and clock <= data.moving_until:
+		contacts = data.sole_sample.call()
 	for i in data.feet.size():
 		var foot: Dictionary=data.feet[i]
 		var p:=skel.to_global(skel.get_bone_global_pose(foot.bone).origin)
 		var lift:float=p.y-actor.global_position.y-foot.height
+		var threshold := .025 * size
+		if contacts.size() == data.feet.size():
+			p = contacts[i]
+			lift = p.y - actor.global_position.y
+			threshold = .005 * size
 		if lift>.052*size:
 			foot.lifted=true
-		elif foot.lifted and lift<.025*size:
+		elif foot.lifted and lift < threshold:
 			foot.lifted=false
-			p+=forward*(.08 if not wolf else .045)*size
+			if contacts.is_empty():
+				p+=forward*(.08 if not wolf else .045)*size
 			p.y=actor.global_position.y
 			if clock<=data.moving_until and (not (foot.last as Vector3).is_finite() or p.distance_to(foot.last)>.07*size):
 				_emit_mark(p,atan2(forward.x,forward.z),wolf,i in ([2,1] if wolf else [1]),size)

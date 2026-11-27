@@ -6,6 +6,7 @@ var settlement := Settlement.EMPTY.duplicate(true)
 var staged := false
 var build_order: Array = []
 var legacy_axes := false
+var legacy_level2 := false
 var world_state := {}
 
 const ORIGINAL_KINDS := ["wood", "stone", "meat"]
@@ -60,10 +61,17 @@ func deposit(kind: String, amount := 1) -> bool:
 	return true
 
 func payment(id: String, kind: String, from_storage: bool, amount := 1) -> bool:
+	if from_storage and not storage_open(kind): return false
+	return _pay_from(stored if from_storage else carried,id,kind,amount)
+
+func worker_payment(id: String, kind: String, amount: int) -> bool:
+	# Only finish a contract already started by the player.
+	if not paid.has(id) or not paid[id].values().any(func(n): return n > 0): return false
+	return _pay_from(settlement.worker_load,id,kind,amount)
+
+func _pay_from(stock: Dictionary, id: String, kind: String, amount: int) -> bool:
 	if amount <= 0 or not offer_open(id) or not costs[id].has(kind) or amount > costs[id][kind] - paid[id][kind]:
 		return false
-	if from_storage and not storage_open(kind): return false
-	var stock := stored if from_storage else carried
 	if stock[kind] < amount:
 		return false
 	stock[kind] -= amount
@@ -77,6 +85,9 @@ func storage_open(kind: String) -> bool:
 	# can own the old meat plot independently, so retain that entitlement too.
 	if kind == "meat": return not staged or complete("storage_wood") or complete("storage_meat")
 	return not staged or complete("storage_stone" if kind in MINERALS else "storage_" + kind)
+
+func is_machine_owned(kind: String) -> bool:
+	return Progress.MACHINES.has(kind) and complete(Progress.MACHINES[kind])
 
 func offer_open(id: String) -> bool:
 	if not costs.has(id) or complete(id): return false
@@ -105,7 +116,8 @@ func complete(id: String) -> bool:
 func snapshot() -> Dictionary:
 	var state := {"version": 1, "collected": collected.duplicate(), "carried": carried.duplicate(), "stored": stored.duplicate(), "paid": paid.duplicate(true)}
 	if staged:
-		state.version = 6
+		state.version = 7
+		state.legacy_level2 = legacy_level2
 		state.legacy_prices = legacy_prices.duplicate()
 		state.build_order = build_order.duplicate()
 		state.legacy_axes = legacy_axes
@@ -121,11 +133,11 @@ static func _natural(value: Variant) -> bool:
 func restore(data: Variant) -> bool:
 	if not data is Dictionary: return false
 	var old: bool = data.get("version") == 1
-	var current: bool = data.get("version") == 6
+	var current: bool = data.get("version") == 6 or data.get("version") == 7
 	var has_settlement: bool = current or data.get("version") == 4 or data.get("version") == 5
 	if old:
 		if data.size() != 5: return false
-	elif not staged or (data.get("version") != 2 and data.get("version") != 3 and not has_settlement) or data.size() != (10 if current else (9 if has_settlement else 8)):
+	elif not staged or (data.get("version") != 2 and data.get("version") != 3 and not has_settlement) or data.size() != (11 if data.get("version") == 7 else (10 if current else (9 if has_settlement else 8))):
 		return false
 	for key in ["collected", "carried", "stored", "paid"]:
 		if not data.get(key) is Dictionary:
@@ -143,6 +155,15 @@ func restore(data: Variant) -> bool:
 		if not data.get("build_order") is Array or not data.get("world") is Dictionary or not data.get("legacy_axes") is bool: return false
 		order=data.build_order.duplicate()
 		old_axes=data.legacy_axes
+	# In v1–6 expansion exposed equipment for free. Preserve the stock, goods
+	# in flight through a hopper, and delivery history, but mint no purchase.
+	if staged and not old and int(data.version) < 7:
+		for id in Progress.MACHINES.values():
+			if incoming.has(id):
+				return false
+			incoming[id] = {}
+			for kind in costs[id]:
+				incoming[id][kind] = 0
 	if data.collected.size() > MAX_COUNT or incoming.size() != costs.size():
 		return false
 	# Older field saves contain exactly three balances. Expand both tables
@@ -172,6 +193,7 @@ func restore(data: Variant) -> bool:
 			if not submitted is Dictionary or not submitted.values().all(_natural): return false
 			var started: bool = submitted.values().any(func(n): return n > 0)
 			if started and (not current or id in data.legacy_prices):
+				if not former.has(id): return false
 				contracts.append(id)
 				restored_costs[id] = former[id]
 		if has_settlement and data.get("settlement") is Dictionary and _natural(data.settlement.get("survivor_wood")) and data.settlement.survivor_wood > 0:
@@ -189,10 +211,22 @@ func restore(data: Variant) -> bool:
 	var next_settlement: Variant = data.get("settlement") if has_settlement else Settlement.EMPTY
 	if data.version == 4:
 		next_settlement = Settlement.from_legacy(next_settlement)
+	if has_settlement and data.version < 7:
+		next_settlement = Settlement.from_pre_worker(next_settlement)
+	var old_preview := false
+	if data.version == 7:
+		if not data.get("legacy_level2") is bool: return false
+		old_preview = data.legacy_level2
+	elif has_settlement and next_settlement is Dictionary:
+		old_preview = next_settlement.get("level") == 2
 	var survivor_due := Progress.OLD_SURVIVOR_BUNDLES if Progress.SURVIVOR in contracts else Progress.SURVIVOR_BUNDLES
 	if not Settlement.valid(next_settlement,order,data.collected,survivor_due): return false
+	if old_preview and next_settlement.level != 2: return false
+	if next_settlement.level == 2 and not old_preview and not Settlement.ready_to_continue(next_settlement,order): return false
 	for kind: String in Settlement.KINDS:
 		balances[kind] -= int(next_settlement.hoppers[kind])
+	for kind: String in KINDS:
+		balances[kind] -= int(next_settlement.worker_load[kind])
 	if next_settlement.worker_supply != "": balances[next_settlement.worker_supply] -= 1
 	balances.meat -= int(next_settlement.cooked)
 	balances.wood -= int(next_settlement.survivor_wood) + int(next_settlement.processed_wood)
@@ -228,12 +262,15 @@ func restore(data: Variant) -> bool:
 		legacy_prices=contracts
 		build_order=order
 		legacy_axes=old_axes
+		legacy_level2=old_preview
 		world_state={} if old else data.world.duplicate(true)
 		settlement = next_settlement.duplicate(true)
 		# JSON numbers are floats. Put validated receipts back in their native
 		# integer types so in-memory transactions and reopened snapshots agree.
 		for key in Settlement.EMPTY:
 			if Settlement.EMPTY[key] is int: settlement[key] = int(settlement[key])
+		for kind: String in KINDS:
+			settlement.worker_load[kind] = int(settlement.worker_load[kind])
 		for kind: String in Settlement.KINDS:
 			settlement.hoppers[kind] = int(settlement.hoppers[kind])
 			settlement.work_seconds[kind] = float(settlement.work_seconds[kind])

@@ -27,7 +27,7 @@ func reserve(kind: String) -> int:
 	return int(game.inventory.remaining("watchtower").get(kind,0))+int(game.inventory.remaining("orbit_upgrade").get(kind,0))
 
 func pickup() -> void:
-	for id in ["center_hearth","expansion_1","storage_wood","storage_stone","storage_meat","expansion_2"]: fund(id)
+	for id in ["center_hearth","expansion_1","storage_wood","storage_stone","storage_meat","expansion_2","camp_cooker","saw_bench","quarry_drill"]: fund(id)
 	game._apply_hearth(true,false)
 	for i in game.inventory.survivor_cost: game.inventory.collect("supply-rescue-%d"%i,"wood")
 	game.inventory.carried.wood -= game.inventory.survivor_cost

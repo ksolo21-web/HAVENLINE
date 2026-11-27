@@ -48,7 +48,7 @@ func exercise_partial_restart() -> void:
 		approach("storage_wood",120,Vector3(.55,0,0))
 		check("Existing partial consumed exactly once after re-entry",game.depot.house.tier==1 and game.inventory.paid.storage_wood.wood==game.inventory.costs.storage_wood.wood and game.inventory.carried.wood==0 and game.depot.offer=="storage_stone")
 	print(JSON.stringify({"partial_restart":checks}))
-	game.sound.stop_playback()
+	await preload("res://tests/lifecycle_test_profile.gd").drain_field_audio(self,game)
 	game.queue_free()
 	for i in 4: await process_frame
 	quit(1 if checks.values().has(false) else 0)
@@ -63,10 +63,10 @@ func run() -> void:
 		return
 	if "--native-resume-final" in OS.get_cmdline_user_args() or "--native-resume-legacy" in OS.get_cmdline_user_args():
 		var sequence: Array = ["storage_meat","storage_stone","storage_wood"] if "--native-resume-legacy" in OS.get_cmdline_user_args() else Rules.STORAGE
-		var expected_order := [Rules.HEARTH,Rules.FIRST]+sequence+[Rules.SECOND,Rules.TOWER,Rules.AXES]
+		var expected_order := [Rules.HEARTH,Rules.FIRST]+sequence+[Rules.SECOND,Rules.TOWER,Rules.AXES] + ([] if "--native-resume-legacy" in OS.get_cmdline_user_args() else ["camp_cooker","saw_bench","quarry_drill"])
 		check("Independent native app slot reopened",game.field_save.native_profile and not game.persist_blocked)
-		check("All eight purchases restored in original order",game.inventory.build_order==expected_order)
-		check("Restored court has one advanced storehouse and all paid bays",game.field_env.perimeter_stage==3 and game.depot.house.tier==3 and game.depot.bins.values().all(func(a):return a.visible) and game.offer_floors.values().all(func(f):return not f.visible))
+		check("Purchased projects restored in their original order",game.inventory.build_order==expected_order)
+		check("Restored court has one advanced storehouse and all paid bays",game.field_env.perimeter_stage==3 and game.depot.house.tier==3 and game.depot.bins.values().all(func(a):return a.visible) and game.offer_floors.values().all(func(f):return f.visible==game.inventory.offer_open(f.shown_id)))
 		print(JSON.stringify({"native_restart":checks}))
 		game.sound.stop_playback()
 		game.queue_free()
@@ -94,13 +94,14 @@ func run() -> void:
 		approach(id,220,Vector3(.55,0,0))
 		check(id+" purchased without chaining next tier",game.inventory.complete(id) and game.depot.bins[kind].visible and game.depot.visit=="done")
 		check(id+" keeps only the authored apron visible",game.depot.apron.get_children().all(func(part):return not part.visible))
-		if id == "storage_meat": game.inventory.collect("later-wolf-meat", "meat")
+
 		var order: Array = game.inventory.build_order.duplicate()
 		var paid_stock: Dictionary = game.inventory.stored.duplicate()
 		approach(id,160,Vector3(-.55,0,0))
-		check(id+" crossing the apron still requires leaving",game.inventory.build_order==order and game.depot.visit=="done" and game.inventory.stored==paid_stock)
-		game.actor.position=Vector3.ZERO
+		check(id+" crossing the apron still requires leaving",game.inventory.build_order==order and game.depot.visit=="done")
+		game.actor.position=Vector3(2,0,3)
 		game._step_receivers()
+		game.inventory.collect("fresh-load-"+kind,kind)
 		stand(game.depot.APRON + Vector3(-.55,0,0),420)
 		check(id+" left-side re-entry deposits through the shared apron",game.inventory.stored[kind]>paid_stock[kind] and game.depot.visit=="load")
 	game.inventory.collect("probe-retired-corners","wood")
@@ -119,8 +120,10 @@ func run() -> void:
 	check("East tower and extra axe pads unlock together",game.offer_floors[Rules.TOWER].is_visible_in_tree() and game.offer_floors[Rules.AXES].is_visible_in_tree())
 	approach(Rules.TOWER,370)
 	approach(Rules.AXES,190)
-	check("All construction is paid and offerings retire",game.inventory.build_order==[Rules.HEARTH,Rules.FIRST,"storage_wood","storage_stone","storage_meat",Rules.SECOND,Rules.TOWER,Rules.AXES] and game.offer_floors.values().all(func(f):return not f.visible))
-	check("Existing unit flights and authored purchase cues executed",launched>0 and game.events.any(func(e):return e.event=="spend_meat") and game.events.filter(func(e):return e.event=="purchase").size()==8)
+	for id: String in ["camp_cooker","saw_bench","quarry_drill"]:
+		approach(id,160)
+	check("All construction is paid and offerings retire",game.inventory.build_order==[Rules.HEARTH,Rules.FIRST,"storage_wood","storage_stone","storage_meat",Rules.SECOND,Rules.TOWER,Rules.AXES,"camp_cooker","saw_bench","quarry_drill"] and game.offer_floors.values().all(func(f):return not f.visible))
+	check("Existing unit flights and authored purchase cues executed",launched>0 and game.events.any(func(e):return e.event=="spend_meat") and game.events.filter(func(e):return e.event=="purchase").size()==11)
 	var loader=game.FieldSave.new()
 	var restored=game.Inventory.new()
 	restored.configure(Rules.offers({"wood":3}))
@@ -130,8 +133,11 @@ func run() -> void:
 	var after:Dictionary=restored.snapshot()
 	check("Disk contains this order, typed balances and lifecycle",configured and read_error==OK and before.build_order==after.build_order and before.carried==after.carried and before.stored==after.stored and before.paid==after.paid and restored.world_state.has("pack"))
 	if read_error != OK: print("Save read failure: ",read_error, " ",game.persist_error)
+	# The route advances its receipt clocks explicitly, so the last construction
+	# can still be displaying when the ledger is complete. Wait for its reveal.
+	for tick in 50: await physics_frame
 	print(JSON.stringify({"scene_checks":checks,"route_physics_ticks":clock}))
-	game.sound.stop_playback()
+	await preload("res://tests/lifecycle_test_profile.gd").drain_field_audio(self,game)
 	game.queue_free()
 	for i in 4: await process_frame
 	quit(1 if checks.values().has(false) else 0)

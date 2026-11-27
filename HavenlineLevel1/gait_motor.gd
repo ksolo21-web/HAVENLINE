@@ -1,7 +1,7 @@
 extends RefCounted
 
 const PREVIEW_TOP_SPEED := 2.80
-const MAX_SPEED := 7.00
+const MAX_SPEED := 6.25
 const DEAD_ZONE := 0.035
 const MOVING_TURN := 5.9
 const PIVOT_TURN := 10.8
@@ -68,8 +68,8 @@ var previous_request := false
 
 func use_field_run() -> void:
 	top_speed = MAX_SPEED
-	acceleration = 31.0
-	braking = 63.0
+	acceleration = 23.0
+	braking = 44.0
 	redirect_rate = 8.1
 
 
@@ -426,6 +426,29 @@ func _contacts() -> PackedVector3Array:
 			point += (transforms[binding] * Vector3(sample[0])) * float(sample[1][binding])
 		result.append(point)
 	return result
+
+
+# Return the centre of each boot's supporting patch. The tread first lands
+# on a heel and rolls forward. Snow impressions stay under that actual patch.
+func snow_contact_points() -> PackedVector3Array:
+	var points := _contacts()
+	if points.is_empty():
+		return PackedVector3Array()
+	var lows := Vector2(INF, INF)
+	for i in points.size():
+		var side := int(Vector3(samples[i][0]).x < 0)
+		lows[side] = minf(lows[side], points[i].y)
+	var centers := PackedVector3Array([Vector3.ZERO, Vector3.ZERO])
+	var counts := Vector2i.ZERO
+	for i in points.size():
+		var side := int(Vector3(samples[i][0]).x < 0)
+		if points[i].y <= lows[side] + .004:
+			centers[side] += points[i]
+			counts[side] += 1
+	for side in 2:
+		centers[side] /= maxi(1, counts[side])
+		centers[side].y = lows[side]
+	return centers
 
 
 # Solve the original hip–knee–ankle chain in its authored bend plane.

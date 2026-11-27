@@ -42,7 +42,9 @@ func staged_ledger() -> Inventory:
 
 func old_profile(directory:String) -> void:
 	var ledger:=Inventory.new()
-	ledger.configure(Rules.old_offers())
+	var historic: Dictionary=Rules.offers({})
+	historic.merge(Rules.old_offers(),true)
+	ledger.configure(historic)
 	for id: String in [Rules.HEARTH,Rules.FIRST,"storage_wood"]:
 		for kind: String in ledger.costs[id]:
 			for i in int(ledger.costs[id][kind]):
@@ -54,6 +56,8 @@ func old_profile(directory:String) -> void:
 	ledger.collect("carried-old-stone","stone")
 	var state:=ledger.snapshot()
 	state.version=2
+	state.erase("legacy_level2")
+	for id: String in Rules.MACHINES.values(): state.paid.erase(id)
 	state.erase("legacy_prices")
 	state.erase("settlement")
 	for kind in Inventory.MINERALS:
@@ -120,6 +124,9 @@ func run() -> void:
 		for kind: String in SAMPLES:
 			for i in int(SAMPLES[kind])-1:
 				check(kind+" bank flight "+str(i),world.carry.deposit_storage(kind))
+				if world.carry.flights.is_empty():
+					quit(1)
+					return
 				var flight: Dictionary=world.carry.flights[0]
 				world.carry.advance(.4)
 				var pool: Array=world.carry.pieces["storage/"+kind]
@@ -133,7 +140,7 @@ func run() -> void:
 		var unchanged:=ledger.snapshot()
 		check("missing new balance rejected atomically",not ledger.restore(damaged) and ledger.snapshot()==unchanged)
 	else:
-		check("normal scene restored paid original order",ledger.complete("storage_stone") and ledger.snapshot().version==6)
+		check("normal scene restored paid original order",ledger.complete("storage_stone") and ledger.snapshot().version==7)
 		for kind: String in SAMPLES:
 			check(kind+" typed balances reopen",ledger.carried[kind]==1 and ledger.stored[kind]==SAMPLES[kind]-1 and ledger.collected["mine-qa-"+kind+"0"]==kind and ledger.storage_open(kind))
 			check(kind+" repeated token rejected",not world.carry.pickup("mine-qa-"+kind+"0",kind,Vector3.ZERO))

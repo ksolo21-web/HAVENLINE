@@ -14,7 +14,7 @@ const FieldSave = preload("res://field_save.gd")
 const HEARTH_OFFER := "center_hearth"
 const UPGRADE_OFFER := "orbit_upgrade"
 const PICKUP_RADIUS := 1.38
-const PAD_RADIUS := 1.0
+const Reach = preload("res://field_reach.gd")
 const RUN_STICK_DEAD_ZONE := 0.11
 const MAX_HP := 10 * FieldEnemy.MAX_HEALTH
 const RECOIL_SECONDS := .38
@@ -54,9 +54,7 @@ var encounters := preload("res://field_encounters.gd").new()
 var defense_tower := preload("res://field_defense_tower.gd").new()
 var rocks: Array[Node3D] = []
 var events: Array[Dictionary] = []
-var last_half_stride := -1
-var last_support_step := 0
-var procedural_step_last := false
+var boot_raised_for_audio: Array[bool] = [false,false]
 var first_physics := true
 var field_ready := false
 var original_auto_quit := true
@@ -109,7 +107,7 @@ func _ready() -> void:
 	tracks = preload("res://field_snow_tracks.gd").new()
 	add_child(tracks)
 	tracks.configure(func(pos:Vector3): return not field_env.is_inside_camp(pos))
-	tracks.register_actor(actor,"human")
+	tracks.register_actor(actor,"human",1.0,gait_motor.snow_contact_points)
 	add_child(carry)
 	carry.setup(inventory, actor, FieldArt.make)
 	add_child(depot)
@@ -154,6 +152,8 @@ func _ready() -> void:
 	elif not lifecycle.restore(inventory.world_state):
 		persist_blocked = true
 		persist_error = "Saved world state could not be restored."
+	# Restore the paid footprint before classifying a saved position on its edge.
+	depot.refresh(camp_active)
 	# Resume loading at the doorway, while requiring a fresh approach to buy.
 	if not inventory.world_state.is_empty() and ((depot.house.tier == 0 and depot.at_apron(actor.position)) or depot.on_upgrade_side(actor.position)):
 		depot.pause_purchase(actor.position)
@@ -647,20 +647,19 @@ func _advance_camp_heal(dt: float) -> void:
 	_record_field_event("camp_heal",actor.position)
 
 func _step_foot_audio(inside: bool) -> void:
-	var gait = character_kit.locomotion
-	var procedural: bool = gait_motor.procedural_steps_active
-	var serial: int = gait_motor.support_step_serial
-	var landed := serial != last_support_step
-	var authored_half := floori(2.0 * fposmod(float(gait.tree.get("parameters/walk/current_position")) / gait.walk_length, 1.0))
-	# A procedural boot can touch down on the same tick that the gait takes over.
-	# Re-seed its phase here so one physical step triggers one surface sound.
-	if not procedural and not procedural_step_last and last_half_stride >= 0:
-		landed = landed or (gait.stride_hz > .05 and authored_half != last_half_stride)
-	last_support_step = serial
-	last_half_stride = authored_half
-	procedural_step_last = procedural
-	if landed:
-		_event("step_camp" if inside else "step_snow",actor.position)
+	# Cropped mobile views make a late step especially noticeable. Trigger
+	# each surface cue at the physical tread, including the final braking step.
+	if actor.velocity.slide(Vector3.UP).length() < .025 and gait_motor.special not in ["brake","pivot"]:
+		boot_raised_for_audio.fill(false)
+		return
+	var soles: PackedVector3Array = gait_motor.snow_contact_points()
+	for side in soles.size():
+		var clearance := soles[side].y - actor.global_position.y
+		if clearance > .045:
+			boot_raised_for_audio[side] = true
+		elif boot_raised_for_audio[side] and clearance <= .006:
+			boot_raised_for_audio[side] = false
+			_event("step_camp" if inside else "step_snow",soles[side])
 
 # Only the player and worn stock suppress the moving ground silhouette.
 # These surfaces still receive light and shadows from their surroundings.
@@ -700,6 +699,7 @@ func _persist_world() -> void:
 
 func _inventory_changed() -> void:
 	if field_ready and not persist_blocked:
+		_clear_paid_machine_site()
 		inventory.world_state = lifecycle.snapshot()
 	if persist_requested and not persist_blocked:
 		var result := field_save.commit(inventory)
@@ -718,7 +718,7 @@ func _finish_purchase(id: String) -> void:
 	var anchor: Node3D = carry.receivers[id]
 	_event("purchase",anchor.global_position)
 	if id == HEARTH_OFFER:
-		reveal_countdown = .30
+		reveal_countdown = .10
 		_event("build",anchor.global_position)
 		_event("rise",anchor.global_position)
 	else:
@@ -728,7 +728,7 @@ func _finish_purchase(id: String) -> void:
 			if not orbit_permitted_at(actor.global_position): character_kit.rest()
 			if tracks: tracks.refresh_surface()
 		elif id.begins_with("storage_"):
-			depot.pause_purchase(actor.position)
+			depot.pause_purchase(actor.position,anchor)
 		elif id == UPGRADE_OFFER:
 			character_kit.set_upgraded(true)
 			_upgrade_sparks()
@@ -761,6 +761,8 @@ func _apply_hearth(built: bool, animate: bool) -> void:
 	for body in camp_colliders:
 		body.collision_layer = 1 if built else 0
 	camp_built.visible = built
+	if built and animate:
+		actor.global_position = field_env.clear_hearth_footprint(actor.global_position)
 	field_env.set_built(built,animate)
 	field_env.set_perimeter(Progress.stage(inventory) if built else 0,animate)
 	if tracks: tracks.refresh_surface()
@@ -779,20 +781,58 @@ func orbit_permitted_at(world_position: Vector3) -> bool:
 
 func _step_receivers() -> void:
 	if reveal_countdown >= 0.: return
-	depot.step(actor.position)
-	for id in inventory.costs:
-		if id in Progress.STORAGE: continue
+	var at := actor.global_position
+	var depot_target: String = depot.target_at(at) if camp_active and field_env.is_inside_camp(at) else ""
+	var selected := depot_target
+	var best := INF
+	if not selected.is_empty():
+		best = Reach.plot_distance(depot.upgrade_mark,at) if depot.on_upgrade_side(at) else depot.loading_distance(at)
+	for id: String in inventory.costs:
+		if id in Progress.STORAGE or (not exit_required.has(id) and not inventory.offer_open(id)): continue
 		var anchor: Node3D = carry.receivers[id]
-		var close := actor.position.distance_squared_to(anchor.global_position) <= PAD_RADIUS * PAD_RADIUS
-		if not close:
+		var distance := Reach.plot_distance(anchor,at)
+		if distance > Reach.NEAR:
 			exit_required.erase(id)
-			carry.stop_visit(id)
 			continue
-		if exit_required.has(id): continue
-		if inventory.offer_open(id):
-			carry.visit(id)
+		if exit_required.has(id) or not inventory.offer_open(id): continue
+		if camp_active and not field_env.is_inside_camp(at): continue
+		if distance < best:
+			best = distance
+			selected = id
+	if settlement_loop and settlement_loop.works:
+		var machines = settlement_loop.works
+		var working_distance: float = machines.handoff_distance(at) if not selected.is_empty() else INF
+		machines.nearer_plot = not selected.is_empty() and best <= working_distance
+		if working_distance < best:
+			selected = ""
+	if selected != carry.visit_target and not carry.visit_target.begins_with("work:"):
+		carry.stop_visit(carry.visit_target)
+	depot.step(at,selected if selected == depot_target else "")
+	if not selected.is_empty() and selected != depot_target:
+		carry.visit(selected)
+
+func _clear_paid_machine_site() -> void:
+	if not processors or not lakeshore: return
+	var radius := float(layout.actor_radius) + .035
+	var at := actor.global_position
+	var point := Vector2(at.x,at.z)
+	for kind: String in Progress.MACHINES:
+		if not inventory.is_machine_owned(kind): continue
+		var rect: Rect2 = lakeshore._footprint(radius) if kind == "meat" else processors._rect(kind,radius)
+		if not rect.has_point(point): continue
+		# The north side backs up to the fence. The two ends and the front
+		# aisle have continuous free floor on every paid expansion.
+		var exits := [Vector2(rect.position.x-.01,point.y),Vector2(rect.end.x+.01,point.y),Vector2(point.x,rect.end.y+.01)]
+		var closest: Vector2=exits[2]
+		for edge: Vector2 in exits:
+			if point.distance_squared_to(edge)<point.distance_squared_to(closest):closest=edge
+		actor.global_position = Vector3(closest.x,at.y,closest.y)
+		previous_dry_position = actor.global_position
+		return
 
 func _refresh_field() -> void:
+	if processors: processors.refresh_ownership()
+	if lakeshore: lakeshore.refresh_ownership()
 	next_project = Progress.next_build(inventory)
 	depot.refresh(camp_active)
 	field_env.set_payment(inventory.remaining(HEARTH_OFFER))
@@ -813,11 +853,11 @@ func _refresh_hud_field(danger: bool) -> void:
 		if not next_project.is_empty():
 			hint = build_hint(next_project)
 		else:
-			hint = "All eight camp purchases complete."
+			hint = "All camp purchases complete."
 		for id in inventory.costs:
 			if id in Progress.STORAGE or not inventory.offer_open(id): continue
 			var anchor: Node3D = carry.receivers[id]
-			if anchor.is_visible_in_tree() and actor.position.distance_squared_to(anchor.global_position) <= 1.6:
+			if anchor.is_visible_in_tree() and Reach.plot_distance(anchor,actor.position) <= Reach.NEAR:
 				hint = build_hint(id)
 		if depot.apron.visible and (depot.at_apron(actor.position) or depot.at_loading_area(actor.position) or (depot.upgrade_mark.visible and depot.on_upgrade_side(actor.position))): hint = depot.hint()
 	if settlement_loop and not persist_blocked and reset_time <= 0:

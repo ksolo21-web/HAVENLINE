@@ -1,6 +1,6 @@
 extends "res://tests/qa_storage_stream.gd"
 
-const BUILD_ORDER = ["center_hearth","expansion_1","storage_wood","storage_stone","storage_meat","expansion_2","watchtower","orbit_upgrade"]
+const BUILD_ORDER = ["center_hearth","expansion_1","storage_wood","storage_stone","storage_meat","expansion_2","watchtower","orbit_upgrade","camp_cooker","saw_bench","quarry_drill"]
 var visits := []
 
 func point_for(id: String) -> Vector3:
@@ -21,7 +21,9 @@ func touch_plot(point: Vector3, tolerance := .42) -> bool:
 func purchase(id: String, should_finish := true) -> void:
  var inv=field.inventory
  var before:Dictionary=inv.paid[id].duplicate()
- var reached:=await touch_plot(point_for(id))
+ var target := point_for(id)
+ if id in field.Progress.MACHINES.values(): target.z += 1.42
+ var reached:=await touch_plot(target)
  for i in 100: await physics_frame
  var pos:Vector3=field.actor.global_position
  visits.append({"id":id,"funded":inv.paid[id].duplicate(),"position":[pos.x,pos.z],"before":before,"next":field.next_project,"prompt":field.opening_hud.prompt.text})
@@ -67,30 +69,36 @@ func finish_build() -> void:
  var inv=field.inventory
  verify("Restored partial is the next visible plot",field.next_project=="storage_stone" and field.depot.offer=="storage_stone" and inv.paid.storage_stone=={"wood":5,"stone":2})
  verify_marker("storage_stone")
- for row in [["wood",37],["stone",30],["meat",6]]: supply(row[0],row[1])
+ for row in [["wood",73],["stone",56],["meat",6]]: supply(row[0],row[1])
  # Accounts created by the previous process intentionally have overlapping
  # fixture sequence IDs; use distinct per-process ID ranges before supplying.
  field.carry.sync()
  for i in 44: await physics_frame
  verify("Cold resume on a plot cannot spend until a new visit",inv.paid.storage_stone=={"wood":5,"stone":2})
- await touch_plot(field.depot.UPGRADE_AT+Vector3(0,0,1.55))
+ await touch_plot(field.depot.UPGRADE_AT+Vector3(0,0,2.55))
  await purchase("storage_stone")
  verify_marker("storage_meat")
  verify("Standing on reinforced plot cannot cascade into advanced tier",inv.paid.storage_meat=={"wood":0,"meat":0})
- await touch_plot(field.depot.UPGRADE_AT+Vector3(0,0,1.55))
+ await touch_plot(field.depot.UPGRADE_AT+Vector3(0,0,2.55))
  await purchase("storage_meat")
  verify("Completed advanced house retires its upgrade floor",not field.depot.upgrade_mark.is_visible_in_tree() and inv.stored.meat>=0)
  await touch_plot(Vector3(-1.86,0,-1.18))
  for id in BUILD_ORDER.slice(5):
+  if id == "camp_cooker":
+   await touch_plot(Vector3(4.6,0,-4.6))
+   await touch_plot(Vector3(.65,0,-5.45))
+  elif id == "quarry_drill":
+   await touch_plot(Vector3(-2.2,0,-5.05))
+   await touch_plot(Vector3(4.5,0,-5.1))
   verify_marker(id)
   await purchase(id)
- verify("All eight offers retire with no duplicate purchases",inv.build_order==BUILD_ORDER and field.next_project.is_empty() and field.offer_floors.values().all(func(node):return not node.is_visible_in_tree()))
+ verify("All eleven offers retire with no duplicate purchases",inv.build_order==BUILD_ORDER and field.next_project.is_empty() and field.offer_floors.values().all(func(node):return not node.is_visible_in_tree()))
  verify("Late game directs an unpaid player to the remaining survivor objective",field.opening_hud.prompt.text.contains("80 wood") and field.settlement_loop.works.plot.is_visible_in_tree())
  field._persist_world()
 
 func final_cold() -> void:
  var inv=field.inventory
- verify("Completed world reopens with the same eight receipts",inv.build_order==BUILD_ORDER and field.next_project.is_empty() and field.depot.house.tier==3)
+ verify("Completed world reopens with the same eleven receipts",inv.build_order==BUILD_ORDER and field.next_project.is_empty() and field.depot.house.tier==3)
  verify("Late restored profile keeps real unfinished objectives visible",not field.depot.upgrade_mark.visible and field.settlement_loop.works.plot.is_visible_in_tree() and field.opening_hud.prompt.text.contains("80 wood"))
  verify("No new plot until a genuine recipe exists",not field.ready_to_enter_level_2() if field.has_method("ready_to_enter_level_2") else not field.settlement_loop.ready())
 

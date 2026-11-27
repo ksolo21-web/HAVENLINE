@@ -1,5 +1,7 @@
 extends RefCounted
 const Wolf = preload("res://field_enemy.gd")
+const PackRoute = preload("res://field_pack_route.gd")
+var routes := {}
 const LIVE_CAP := 4
 const WAVE_SECONDS := 24.0
 const BOSS_CHANCE := .18
@@ -32,13 +34,35 @@ func _point_inside(p: Vector3) -> bool:
 	var rect: Array = world.layout.camp_rect_xz
 	return world.camp_active and p.x >= rect[0] and p.x <= rect[2] and p.z >= rect[1] and p.z <= rect[3]
 
+func _terrain(radius: float) -> PackRoute:
+	if not routes.has(radius): routes[radius]=PackRoute.new()
+	var terrain: PackRoute = routes[radius]
+	terrain.configure(world,radius)
+	return terrain
+
+func _steer(wolf: Wolf, goal: Vector3) -> Vector3:
+	var terrain := _terrain(wolf.sanctuary_margin())
+	var feet := Vector2(wolf.position.x,wolf.position.z)
+	var destination := Vector2(goal.x,goal.z)
+	var moved_goal := wolf.route_destination.distance_squared_to(destination)>.60*.60
+	if wolf.route_stage != terrain.stage or wolf.route_destination==Vector2.INF or (moved_goal and wolf.route_clock<=0):
+		wolf.waypoints = terrain.route(feet,destination)
+		wolf.route_destination = destination
+		wolf.route_clock = .22
+		wolf.route_stage = terrain.stage
+	while wolf.waypoints.size()>1 and feet.distance_squared_to(wolf.waypoints[0]) < .19*.19:
+		wolf.waypoints.remove_at(0)
+	if wolf.waypoints.is_empty(): return Vector3.ZERO
+	var waypoint := wolf.waypoints[0]
+	if wolf.waypoints.size()==1 and terrain.is_clear_ground(destination) and terrain.clear_segment(feet,destination):
+		waypoint = destination
+	var d := waypoint-feet
+	return Vector3(d.x,0.,d.y)
+
 func outside(p: Vector3, radius: float) -> bool:
 	var limit := float(world.layout.snow_extent_half)-radius
 	if absf(p.x)>limit or absf(p.z)>limit: return false
-	for dx: float in [-radius,0.0,radius]:
-		for dz: float in [-radius,0.0,radius]:
-			if _point_inside(p+Vector3(dx,0,dz)): return false
-	return true
+	return _terrain(radius).is_clear_ground(Vector2(p.x,p.z))
 
 func sweep(from: Vector3,to: Vector3,radius: float) -> bool:
 	var count := maxi(1,ceili(from.distance_to(to)/.4))
@@ -146,7 +170,7 @@ func advance(dt: float) -> bool:
 			_remove(wolf)
 			continue
 		var prev: String=wolf.state
-		wolf.advance(dt,can_walk.bind(wolf),not hero_safe)
+		wolf.advance(dt,can_walk.bind(wolf),not hero_safe,_steer)
 		if prev != wolf.state:
 			if wolf.state=="stalk" and prev in ["guard","return"]: world._event("approach",wolf.position)
 			elif wolf.state=="windup": world._event("wolf_brace",wolf.position)

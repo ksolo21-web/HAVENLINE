@@ -1,21 +1,22 @@
 extends Node3D
 ## Authored river cross-sections form the closed inlet; movement uses the same wet outline.
+const Reach = preload("res://field_reach.gd")
+const Workshops = preload("res://field_processors.gd")
+var world
 const River=preload("res://assets/lakeshore/river_geometry.gd")
-const Cooker=preload("res://assets/lakeshore/cooker_camp_line.glb")
+const Cooker=preload("res://assets/paid_workshops/cooker_processor.glb")
 const COOKER_AT := Vector3(-.10,0,-7.22)
-const APRON := Vector3(1.20,0,-5.67)
-const OUTPUT_APRON := Vector3(-1.05,0,-5.67)
+const APRON := Vector3(-1.04,0,-6.06)
+const OUTPUT_APRON := Vector3(.84,0,-6.06)
 const ACCESS_RADIUS := .77
 const LAKE_XZ:=Vector2(-33.8,16.)
-const STATION_YAW := PI
-const STATION_SCALE := .94
-# At yaw PI the +X outfeed is on the west of the working cooker.
-const BODY := Rect2(-1.75 * STATION_SCALE,-.95 * STATION_SCALE,3.05 * STATION_SCALE,1.90 * STATION_SCALE)
+const BODY := Rect2(-1.41,-.67,2.82,1.34)
 const SECTIONS:=108
 var cooker_input:Marker3D
 var cooker_output:Marker3D
 var cooker:Node3D
 var saw:Node3D
+var fire:=OmniLight3D.new()
 var smoke:GPUParticles3D
 var shore:=PackedVector2Array()
 var bounds:=Rect2()
@@ -39,17 +40,16 @@ func _init() -> void:
 		bounds=Rect2(point,Vector2.ZERO) if i==0 else bounds.expand(point)
 
 func setup(host:Node3D) -> void:
+	world=host
 	name="WestInletAndCampKitchen"
 	_build_inlet()
 	cooker=Cooker.instantiate()
 	cooker.name="CampCooker"
 	add_child(cooker)
 	cooker.position=COOKER_AT+Vector3.UP*.024
-	cooker.rotation.y=STATION_YAW
-	cooker.scale=Vector3.ONE*STATION_SCALE
 	saw=cooker.find_child("SawAxle",true,false)
-	cooker_input=_socket("RawInput",Vector3(-1.10,1.06,-.02))
-	cooker_output=_socket("CookedOutput",Vector3(1.40,1.045,.15))
+	cooker_input=_socket("RawInput",Vector3(-.94,.49,.06))
+	cooker_output=_socket("CookedOutput",Vector3(.98,.52,.03))
 	guard.name = "CookerBody"
 	add_child(guard)
 	guard.position = COOKER_AT
@@ -59,18 +59,22 @@ func setup(host:Node3D) -> void:
 	collision.shape = box
 	collision.position = Vector3(BODY.get_center().x,box.size.y*.5,BODY.get_center().y)
 	guard.add_child(collision)
+	fire.name="WorkingHearth"
+	cooker.add_child(fire)
+	fire.position=Vector3(.02,.79,.54)
+	fire.light_color=Color(1.,.47,.12)
+	fire.omni_range=1.65
+	fire.light_energy=0.
 	_build_smoke()
-	var camp = host.get("field_env")
-	if camp:
-		camp.perimeter_changed.connect(func(): set_available(camp.perimeter_stage == 3))
-	set_available(camp != null and camp.perimeter_stage == 3)
+	refresh_ownership(false)
 
-func set_available(enabled:bool) -> void:
-	available = enabled
-	cooker.visible = enabled
-	guard.collision_layer = 1 if enabled else 0
-	if not enabled:
-		update_activity(false)
+func refresh_ownership(animate := true) -> void:
+	var owned: bool = world.inventory.is_machine_owned("meat")
+	if owned and not available and animate: Workshops.reveal(cooker)
+	available = owned
+	cooker.visible = owned
+	guard.collision_layer = 1 if owned else 0
+	if not owned: update_activity(false)
 
 func _socket(label:String,at:Vector3) -> Marker3D:
 	var marker:=Marker3D.new()
@@ -83,7 +87,7 @@ func _build_smoke() -> void:
 	smoke=GPUParticles3D.new()
 	smoke.name="StackExhaust"
 	cooker.add_child(smoke)
-	smoke.position=Vector3(.18,2.45,.05)
+	smoke.position=Vector3(0,1.67,-.14)
 	smoke.amount=10
 	smoke.lifetime=1.48
 	smoke.local_coords=true
@@ -115,21 +119,25 @@ func _build_smoke() -> void:
 func update_activity(is_cooking:bool) -> void:
 	working=available and is_cooking
 	if smoke:smoke.emitting=working
+	if not working:fire.light_energy=0.
 
 func tick(dt:float) -> void:
 	elapsed=fmod(elapsed+dt,400.)
 	water_material.set_shader_parameter("sim_time",elapsed)
-	if working and saw:saw.rotate_z(dt*3.8)
+	if working and saw:
+		saw.rotate_z(dt*3.8)
+		fire.light_energy=.60+.13*sin(elapsed*12.)+.07*sin(elapsed*31.)
 
 func at_cooker(at:Vector3) -> bool:
-	return _at_apron(at,APRON)
+	var p := Vector2(at.x, at.z)
+	var footprint := _footprint(0.)
+	var camp = world.get("field_env")
+	return available and (not camp or camp.is_inside_camp(at)) and not footprint.has_point(p) and Reach.distance_to_rect(p,footprint) <= Reach.NEAR
 
 func at_output(at:Vector3) -> bool:
-	return _at_apron(at,OUTPUT_APRON)
-
-func _at_apron(at:Vector3,apron:Vector3) -> bool:
-	var p := Vector2(at.x,at.z)
-	return available and not _footprint(0.).has_point(p) and p.distance_squared_to(Vector2(apron.x,apron.z)) <= ACCESS_RADIUS * ACCESS_RADIUS
+	# A player next to either side can hand off raw goods and pick up a
+	# completed order. The visual goods still travel to their own trays.
+	return at_cooker(at)
 
 func _footprint(radius:float) -> Rect2:
 	return Rect2(Vector2(COOKER_AT.x,COOKER_AT.z)+BODY.position,BODY.size).grow(radius)

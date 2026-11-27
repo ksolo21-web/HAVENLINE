@@ -55,7 +55,7 @@ func _initialize() -> void:
 	# The original v2 schema let all 3 corners be purchased after expansion 1.
 	# Reproduce a mixed historical ledger with meat owned and stone part-funded.
 	var history := Inventory.new()
-	history.configure(Rules.old_offers())
+	history.configure(_former_recipes())
 	fund(history,Rules.HEARTH)
 	fund(history,Rules.FIRST)
 	history.staged = false
@@ -66,12 +66,12 @@ func _initialize() -> void:
 	history.collect("old-meat","meat")
 	history.deposit("meat")
 	history.staged = true
-	var original := history.snapshot()
+	var original := historical_snapshot(history)
 	original.version=3
 	original.erase("legacy_prices")
 	original.erase("settlement")
 	var migrated := ledger()
-	check("Historical out-of-order purchase and partial retained",migrated.restore(original) and migrated.paid==original.paid and migrated.build_order==original.build_order and migrated.remaining("storage_wood")==Rules.OFFERS.storage_wood)
+	check("Historical out-of-order purchase and partial retained",migrated.restore(original) and original_receipts_equal(migrated.paid,original.paid) and migrated.build_order==original.build_order and migrated.remaining("storage_wood")==Rules.OFFERS.storage_wood)
 	check("Visual tier independent from earned bays",Rules.house_tier(migrated)==3 and migrated.storage_open("meat") and not migrated.storage_open("wood") and not migrated.storage_open("stone"))
 	check("Historical missing tiers funded in order",Rules.next_storage(migrated)=="storage_wood" and fund(migrated,"storage_wood") and migrated.remaining("storage_stone").wood==1 and fund(migrated,"storage_stone"))
 	check("No historical double charge",migrated.stored.meat==1 and migrated.complete("storage_meat") and not migrated.offer_open("storage_meat") and migrated.offer_open(Rules.SECOND))
@@ -114,12 +114,28 @@ func tampered_order_rejected(book:Inventory) -> bool:
 	var before:=book.snapshot()
 	return not book.restore(corrupt) and before==book.snapshot()
 
+func _former_recipes() -> Dictionary:
+	var offers := Rules.offers()
+	offers.merge(Rules.old_offers(), true)
+	return offers
+
+func historical_snapshot(book: Inventory) -> Dictionary:
+	var state := book.snapshot()
+	state.erase("legacy_level2")
+	for id in Rules.MACHINES.values(): state.paid.erase(id)
+	state.settlement.erase("worker_load")
+	state.settlement.erase("worker_meal")
+	return state
+
+func original_receipts_equal(new_paid: Dictionary, old_paid: Dictionary) -> bool:
+	return old_paid.keys().all(func(id): return new_paid.get(id) == old_paid[id]) and Rules.MACHINES.values().all(func(id): return new_paid[id].values().all(func(count): return count == 0))
+
 func test_price_contracts() -> void:
 	# This is the shape and the 3/2 timber price schedule actually saved by
 	# the Fold checkpoint. Keep fractional projects as receipts, not grants.
 	for survivor_paid in [0,1,2]:
 		var old := Inventory.new()
-		old.configure(Rules.old_offers())
+		old.configure(_former_recipes())
 		fund(old,Rules.HEARTH)
 		old.collect("old-expansion","wood")
 		old.payment(Rules.FIRST,"wood",false)
@@ -128,14 +144,14 @@ func test_price_contracts() -> void:
 			old.carried.wood -= 1
 		old.settlement.survivor_wood = survivor_paid
 		old.settlement.survivor_paid = survivor_paid == 2
-		var original := old.snapshot()
+		var original := historical_snapshot(old)
 		original.version = 5
 		original.erase("legacy_prices")
 		var upgraded := ledger()
 		check("v5 partial expansion and earned camp migrate, survivor %s"%survivor_paid,
 			upgraded.restore(JSON.parse_string(JSON.stringify(original))) and upgraded.complete(Rules.HEARTH)
 			and upgraded.remaining(Rules.FIRST)=={"wood":2,"stone":1} and upgraded.remaining("storage_wood")==Rules.OFFERS.storage_wood
-			and upgraded.paid==old.paid and upgraded.carried==old.carried and upgraded.collected==old.collected)
+			and original_receipts_equal(upgraded.paid,original.paid) and upgraded.carried==old.carried and upgraded.collected==old.collected)
 		check("v5 survivor contract and payment state retained, receipt %s"%survivor_paid,
 			upgraded.survivor_cost==(Rules.SURVIVOR_BUNDLES if survivor_paid==0 else Rules.OLD_SURVIVOR_BUNDLES)
 			and upgraded.settlement.survivor_wood==survivor_paid and upgraded.settlement.survivor_paid==(survivor_paid==2))
@@ -147,10 +163,10 @@ func test_price_contracts() -> void:
 			forged.legacy_prices.append(invalid)
 			check("reject unauthorized or doubled price lock %s %s"%[invalid,survivor_paid],not reopened.restore(forged) and reopened.snapshot()==valid)
 	var old := Inventory.new()
-	old.configure(Rules.old_offers())
+	old.configure(_former_recipes())
 	old.collect("first-installment","wood")
 	old.payment(Rules.HEARTH,"wood",false)
-	var partial := old.snapshot()
+	var partial := historical_snapshot(old)
 	partial.version = 3
 	partial.erase("legacy_prices")
 	partial.erase("settlement")
@@ -159,8 +175,8 @@ func test_price_contracts() -> void:
 	check("old partial finishes without windfall; next expansion charges new price",fund(upgraded,Rules.HEARTH) and upgraded.collected.size()==3 and upgraded.remaining(Rules.FIRST)==Rules.OFFERS[Rules.FIRST])
 	var clean := ledger()
 	var old_blank := Inventory.new()
-	old_blank.configure(Rules.old_offers())
-	var no_receipts := old_blank.snapshot()
+	old_blank.configure(_former_recipes())
+	var no_receipts := historical_snapshot(old_blank)
 	no_receipts.version = 3
 	no_receipts.erase("legacy_prices")
 	no_receipts.erase("settlement")

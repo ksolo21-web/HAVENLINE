@@ -19,6 +19,7 @@ const BLADE := [
 	Vector3(-.420109,.593878,-.041551), Vector3(-.480632,.673395,-.036623)]
 static var frames: Array = []
 var skeleton: Skeleton3D
+var mining_tool: Node3D
 var tool: Node3D
 var bundle: Node3D
 var bones := {}
@@ -56,6 +57,9 @@ func configure(id: String) -> void:
 		tool = (load(AXE) as PackedScene).instantiate()
 		add_child(tool)
 		tool.hide()
+		mining_tool = preload("res://assets/tools/pickaxe-meshy.glb").instantiate()
+		add_child(mining_tool)
+		mining_tool.hide()
 		bundle = preload("res://field_art.gd").make("wood",.46)
 		add_child(bundle)
 		bundle.position = Vector3(0,.58,.235)
@@ -76,10 +80,12 @@ func pose(action: String, phase: float) -> void:
 		skeleton.reset_bone_poses()
 		mode = action
 		if tool: tool.visible = mode == "chop"
+		if mining_tool: mining_tool.visible = mode == "mine"
 		if bundle: bundle.visible = mode == "carry"
 	var angle := fposmod(phase,1.0)*TAU
-	if mode == "chop":
+	if mode in ["chop","mine"]:
 		_pose_chop(phase)
+		if mode == "mine": mining_tool.transform = tool.transform
 		if forester_gait: forester_gait.update(phase,false)
 		return
 	if mode == "receive":

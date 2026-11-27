@@ -3,7 +3,7 @@ extends SceneTree
 const Ledger = preload("res://field_inventory.gd")
 const Progress = preload("res://field_progression.gd")
 const Rules = preload("res://field_settlement.gd")
-const PURCHASE_ORDER = ["center_hearth","expansion_1","storage_wood","storage_stone","storage_meat","expansion_2"]
+const PURCHASE_ORDER = ["center_hearth","expansion_1","storage_wood","storage_stone","storage_meat","expansion_2","camp_cooker","saw_bench","quarry_drill"]
 var checks := {}
 var failures: Array[String] = []
 
@@ -81,14 +81,23 @@ func _initialize() -> void:
 	var old: Dictionary = book.snapshot()
 	old.version = 4
 	old.erase("legacy_prices")
+	old.erase("legacy_level2")
 	var old_prices := Progress.old_offers()
-	for id: String in PURCHASE_ORDER:
+	# The station purchases did not exist in v4. Return those debits to the
+	# earned stock before recreating its actual eight-offer ledger.
+	for id: String in Progress.MACHINES.values():
+		for kind: String in old.paid[id]:
+			old.carried[kind] += old.paid[id][kind]
+		old.paid.erase(id)
+		old.build_order.erase(id)
+	for id: String in old.build_order:
 		for kind: String in old.paid[id]:
 			old.carried[kind] += old.paid[id][kind] - old_prices[id][kind]
 		old.paid[id] = old_prices[id].duplicate()
 	old.carried.wood += old.settlement.survivor_wood - Progress.OLD_SURVIVOR_BUNDLES
 	old.settlement.survivor_wood = Progress.OLD_SURVIVOR_BUNDLES
-	for key in ["worker_supply","held_meal","hoppers","work_seconds"]: old.settlement.erase(key)
+	for key in old.settlement.keys():
+		if not Rules.LEGACY.has(key): old.settlement.erase(key)
 	check("an old unserved receipt migrates onto its previous carrier",candidate.restore(JSON.parse_string(JSON.stringify(old))) and candidate.settlement.held_meal==1 and Rules.waiting_meals(candidate.settlement)==0)
 	old.settlement.served = 0
 	check("a forged old save cannot manufacture an extra carried meal",not candidate.restore(old))

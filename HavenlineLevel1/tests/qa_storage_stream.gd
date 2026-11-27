@@ -97,7 +97,7 @@ func transactions() -> void:
  field.set_physics_process(false)
  field.carry.set_physics_process(false)
  var inv=field.inventory
- for id in ["center_hearth","expansion_1","storage_wood","storage_stone","storage_meat","expansion_2"]: open_site(id)
+ for id in ["center_hearth","expansion_1","storage_wood","storage_stone","storage_meat","expansion_2","camp_cooker","saw_bench","quarry_drill"]: open_site(id)
  for pair in [["wood",17],["stone",17],["meat",18]]: supply(pair[0],pair[1])
  field.carry.sync()
  field.actor.position=Vector3(0,0,4)
@@ -175,7 +175,7 @@ func leave_upgrade() -> void:
  measurements["interrupted_upgrade"]={"launched":incoming,"partial_paid":partial,"paid":inv.paid.storage_stone.duplicate(),"next":field.depot.offer}
 
 func machine_approaches() -> void:
- for id in ["center_hearth","expansion_1","storage_wood","storage_stone","storage_meat","expansion_2"]: open_site(id)
+ for id in ["center_hearth","expansion_1","storage_wood","storage_stone","storage_meat","expansion_2","camp_cooker","saw_bench","quarry_drill"]: open_site(id)
  for kind:String in ["wood","meat","stone"]:
   var at:Vector3 = field.lakeshore.APRON if kind=="meat" else field.processors.APRONS[kind]
   # Start on the actual work aisle. All subsequent positions come from the

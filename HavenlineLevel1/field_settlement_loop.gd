@@ -128,11 +128,11 @@ func deliver_worker_wood() -> bool:
 	return commit_receipt("worker_delivery",world.depot.bins.wood.global_position)
 
 func available_to_feeder(kind: String) -> bool:
-	return can_transact() and kind in Rules.KINDS and world.inventory.complete(Progress.SECOND) and int(world.inventory.settlement.hoppers[kind]) < Rules.HOPPER_CAPACITY
+	return can_transact() and kind in Rules.KINDS and world.inventory.is_machine_owned(kind) and int(world.inventory.settlement.hoppers[kind]) + world.carry.incoming(kind,kind) < Rules.HOPPER_CAPACITY
 
 func _running(kind: String) -> bool:
 	var journal: Dictionary = world.inventory.settlement
-	if not _simulation_active() or not world.inventory.complete(Progress.SECOND) or journal.hoppers[kind] <= 0: return false
+	if not _simulation_active() or not world.inventory.is_machine_owned(kind) or journal.hoppers[kind] <= 0: return false
 	return kind != "meat" or Rules.waiting_meals(journal) < Rules.ROAST_RACK_CAPACITY
 
 func advance_unattended(dt: float) -> void:
@@ -191,7 +191,7 @@ func cook() -> bool:
 
 func collect_meal() -> bool:
 	var journal: Dictionary = world.inventory.settlement
-	if not can_transact() or not world.inventory.complete(Progress.SECOND) or not world.lakeshore.at_output(world.actor.global_position): return false
+	if not can_transact() or not world.inventory.is_machine_owned("meat") or not world.lakeshore.at_output(world.actor.global_position): return false
 	if journal.held_meal != 0 or Rules.waiting_meals(journal) <= 0 or world.counter.sale_order != 0: return false
 	journal.held_meal = 1
 	var at: Vector3 = world.lakeshore.cooker_output.global_position
@@ -199,13 +199,27 @@ func collect_meal() -> bool:
 	world.counter.collect_meal(at)
 	return true
 
-func serve(order: int) -> bool:
-	if not can_transact() or not world.counter.at_service(world.actor.global_position) or not world.counter.awaiting_payment(order): return false
+func collect_worker_meal() -> bool:
 	var journal: Dictionary = world.inventory.settlement
-	if not world.inventory.complete(Progress.SECOND) or journal.served + 1 != order or journal.held_meal != 1: return false
-	journal.held_meal = 0
+	if not can_transact() or not journal.rescued or not world.inventory.is_machine_owned("meat"): return false
+	if journal.worker_meal > 0 or Rules.waiting_meals(journal) <= 0 or not world.lakeshore.at_output(world.survivor.actor.global_position): return false
+	journal.worker_meal = 1
+	var at: Vector3 = world.lakeshore.cooker_output.global_position
+	if not commit_receipt("pickup_partial",at): return false
+	world.counter.collect_worker_meal(at)
+	return true
+
+func serve(order: int) -> bool:
+	if not can_transact() or not world.counter.awaiting_payment(order): return false
+	var worker: bool = world.counter.worker_serving
+	var at: Vector3 = world.survivor.actor.global_position if worker else world.actor.global_position
+	if not world.counter.at_service(at): return false
+	var journal: Dictionary = world.inventory.settlement
+	if not world.inventory.complete(Progress.SECOND) or journal.served + 1 != order or int(journal.worker_meal if worker else journal.held_meal) != 1: return false
+	if worker: journal.worker_meal = 0
+	else: journal.held_meal = 0
 	journal.served += 1
-	return commit_receipt("meal_served",world.actor.global_position)
+	return commit_receipt("meal_served",at)
 
 func enter_next_level() -> bool:
 	if not can_transact() or not ready() or world.inventory.settlement.level != 1: return false
@@ -233,7 +247,7 @@ func handle_input(event: InputEvent) -> bool:
 
 func hint(previous: String, danger: bool) -> String:
 	var journal: Dictionary = world.inventory.settlement
-	if journal.level == 2:
+	if journal.level == 2 and world.next_project.is_empty():
 		return "Level 2 preview · All Level 1 plots complete. The camp is open."
 	if ready(): return "Level 1 complete · Continue to Level 2."
 	if works.plot.visible and world.actor.position.distance_to(works.PLOT_AT) < 2.0:
@@ -248,6 +262,9 @@ func hint(previous: String, danger: bool) -> String:
 	var target := Vector3.INF
 	if journal.held_meal > 0:
 		hint_ = "Deliver the meal inside the north counter."
+		target = world.counter.service_point.global_position
+	elif journal.worker_meal > 0 or world.counter.worker_serving:
+		hint_ = "Survivor serving the north counter."
 		target = world.counter.service_point.global_position
 	elif Rules.waiting_meals(journal) > 0:
 		hint_ = "Collect a roast from the cooker outfeed."

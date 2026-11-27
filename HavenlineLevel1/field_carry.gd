@@ -34,6 +34,8 @@ const TOP_MARGIN := .08
 const HAND := "carry"
 const STOCK := "storage"
 
+var visual_top := PACK_TOP
+var fit_to_viewport := true
 var inventory: Inventory
 var actor: Node3D
 var factory: Callable
@@ -201,7 +203,9 @@ func _fit_shelves(counts: Dictionary) -> void:
 
 
 func _headroom_bucket() -> int:
-	var room := PACK_TOP - PACK_BASE
+	var room := visual_top - PACK_BASE
+	if not fit_to_viewport:
+		return maxi(1, floori(room * 100.0))
 	var camera := get_viewport().get_camera_3d()
 	if camera:
 		var base := rack.global_position + Vector3.UP * PACK_BASE

@@ -121,6 +121,8 @@ func _restore_actor(state: Variant, version: int = VERSION) -> void:
 					if world.field_env.perimeter_stage == 3 and absf(pos.x-world.field_env.CounterLayout.CENTER_X) < world.field_env.CounterLayout.HALF_BAY+clear:
 						clear += .9
 					pos.z = minf(pos.z,bounds[1]-clear)
+	if world.camp_active:
+		pos = world.field_env.clear_hearth_footprint(pos)
 	world.actor.position=pos
 	world.actor.velocity=Vector3.ZERO
 	if _number(state.get("yaw")): world.actor.rotation.y=wrapf(float(state.yaw),-PI,PI)

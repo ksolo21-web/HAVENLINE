@@ -9,14 +9,14 @@ const FINISHED = {"wood": PLANKS, "stone": BLOCK, "meat": DISH}
 
 # Visible mouths of the saw blade, drill bit, and cooker chamber.
 const TOOL = {
-	"wood": Vector3(.08, 1.09, .44),
-	"stone": Vector3(0, .24, .19),
-	"meat": Vector3(-.39, 1.06, .15),
+	"wood": Vector3(.20, 1.13, -.20),
+	"stone": Vector3(-.72,.19,.35),
+	"meat": Vector3(-.30,.70,.34),
 }
 const EXIT = {
-	"wood": Vector3(-.18, 1.07, .52),
-	"stone": Vector3(-.14, .28, .17),
-	"meat": Vector3(.50, 1.075, .15),
+	"wood": Vector3(-.12,.84,.36),
+	"stone": Vector3(-.73,.18,.46),
+	"meat": Vector3(.34,.70,.33),
 }
 
 var world
@@ -27,6 +27,8 @@ var outlets := {}
 var rollers: Array[Node] = []
 var saw_log: Node3D
 var meal_rack := Node3D.new()
+var raw_tray := Node3D.new()
+var shown_raw := -1
 var shown_meals := -1
 
 
@@ -35,6 +37,9 @@ func setup(host) -> void:
 	name = "LocalMaterialTransfers"
 	var cooker: Node3D = world.lakeshore.cooker
 	rollers = cooker.find_children("WorkRoller*", "MeshInstance3D", true, false)
+	raw_tray.name = "RawStock"
+	cooker.add_child(raw_tray)
+	raw_tray.position = world.lakeshore.cooker_input.position
 	meal_rack.name = "CookedStock"
 	cooker.add_child(meal_rack)
 	meal_rack.position = world.lakeshore.cooker_output.position
@@ -49,7 +54,7 @@ func setup(host) -> void:
 			machine = tray.get_parent()
 			if kind == "wood":
 				saw_log = machine.find_child("TimberWorkpiece", true, false)
-				saw_log.hide()
+				saw_log.show()
 			inlets[kind] = machine.to_local(world.processors.input_position(kind))
 			outlets[kind] = tray.position
 		raw_goods[kind] = _mount(machine, Art.make(kind), "MovingInput")
@@ -66,6 +71,17 @@ func _mount(machine: Node3D, art: Node3D, label: String) -> Node3D:
 func _meal_slot(index: int) -> Vector3:
 	return Vector3(0, floori(index / 2.0) * .265, (-.145 if index % 2 == 0 else .145))
 
+
+func set_raw_stock(amount: int) -> void:
+	if amount == shown_raw: return
+	shown_raw = amount
+	while raw_tray.get_child_count() < amount:
+		var i := raw_tray.get_child_count()
+		var cut := Art.make("meat",.47)
+		raw_tray.add_child(cut)
+		cut.position = Vector3(0.,floori(i/2.)*.105,(i%2-.5)*.26)
+		cut.rotation.y = .11 if i%2 else -.11
+	for i in raw_tray.get_child_count(): raw_tray.get_child(i).visible = i < amount
 
 func set_meal_stock(amount: int) -> void:
 	var total := clampi(amount, 0, 4)
@@ -98,10 +114,14 @@ func show_cycle(kind: String, fraction: float) -> void:
 	product.visible = fraction >= .59 and fraction <= 1.0
 	if kind == "wood":
 		raw.visible = fraction >= 0.0 and fraction < .23
-		saw_log.visible = fraction >= .23 and fraction < .68
-		if saw_log.visible:
-			var feed := smoothstep(.23, .68, fraction)
-			saw_log.position = Vector3(.16, 0, 0).lerp(Vector3(-.15, -.018, .43), feed)
+		# The actual golden-faced timber remains in its clamp between jobs.
+		var feed := smoothstep(.23, .68, fraction) * (1.-smoothstep(.74,1.0,fraction))
+		saw_log.position = Vector3.ZERO.lerp(Vector3(-.18,0,.18),feed)
+	elif kind == "meat":
+		# One cut leaves the queue for the current cooking cycle. The remaining
+		# paid cuts stay visibly stacked in the separate raw bin.
+		var waiting: int = world.inventory.settlement.hoppers.meat
+		set_raw_stock(maxi(0, waiting - (1 if fraction >= 0. else 0)))
 	if fraction < 0.0:
 		return
 	if kind == "meat":
@@ -117,7 +137,7 @@ func show_cycle(kind: String, fraction: float) -> void:
 		# top of the actual stock, then yield to its durable representation.
 		var t := smoothstep(.59, 1.0, fraction)
 		if kind == "wood":
-			var lip := Vector3(-.58, 1.05, .73)
+			var lip := Vector3(-.37,.84,.78)
 			source = source.lerp(lip, minf(t * 2.0, 1.0))
 			product.position = source.lerp(target, maxf(t * 2.0 - 1.0, 0.0))
 		else:

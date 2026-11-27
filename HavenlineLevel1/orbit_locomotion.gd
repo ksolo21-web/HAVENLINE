@@ -4,9 +4,9 @@ const LOOP_LIBRARY := &"orbit_gait"
 const WALK_SPEED := 1.12
 # Median backward outsole velocity of the authored Run at its native clip rate.
 const RUN_SPEED := 2.84
-# FieldRun compresses the grounded portion of each half stride. Advancing its
-# phase by this measured nominal speed keeps the support boot on the snow.
-const FIELD_STRIDE_SPEED := 5.44
+# Backward speed of the planted outsole in the authored field clip. The
+# controller supplies actual travel after collisions to keep its footfalls in phase.
+const FIELD_STRIDE_SPEED := 4.63
 const BLEND_START := 1.12
 const BLEND_END := 2.35
 var player: AnimationPlayer

@@ -3,6 +3,9 @@ extends RefCounted
 
 const LEGACY := {"survivor_paid":false, "survivor_wood":0, "processed_wood":0, "processed_stone":0, "owl_hits":0, "rescued":false, "worker_carry_token":"", "worker_deliveries":0, "worker_receipts":[], "cooked":0, "served":0, "level":1}
 const KINDS := ["wood", "stone", "meat"]
+const WORKER_LOAD := {"wood":0,"stone":0,"meat":0,"coal":0,"slate":0,"metal":0}
+# Balances use ten-unit physical bundles, exactly as the player's HUD does.
+const WORKER_LIMIT := 500 / preload("res://field_progression.gd").UNITS_PER_BUNDLE
 const HOPPER_CAPACITY := 4
 const ROAST_RACK_CAPACITY := 4
 const CYCLE_SECONDS := {"wood":1.45, "stone":1.45, "meat":1.65}
@@ -12,6 +15,7 @@ const EMPTY := {
 	"worker_receipts":[], "cooked":0, "served":0, "level":1,
 	"hoppers":{"wood":0, "stone":0, "meat":0},
 	"work_seconds":{"wood":0.0, "stone":0.0, "meat":0.0}, "held_meal":0, "worker_supply":"",
+	"worker_load":WORKER_LOAD,"worker_meal":0,
 }
 const MAX_UNITS := 1000000
 
@@ -28,11 +32,18 @@ static func from_legacy(previous: Variant) -> Variant:
 	updated.held_meal = in_hand
 	return updated
 
+static func from_pre_worker(previous: Variant) -> Variant:
+	if not previous is Dictionary: return null
+	var next: Dictionary = previous.duplicate(true)
+	if not next.has("worker_load"): next.worker_load = WORKER_LOAD.duplicate()
+	if not next.has("worker_meal"): next.worker_meal = 0
+	return next
+
 static func _count(value: Variant) -> bool:
 	return (value is int or value is float) and is_finite(float(value)) and value == int(value) and value >= 0 and value <= MAX_UNITS
 
 static func waiting_meals(state: Dictionary) -> int:
-	return int(state.cooked) - int(state.served) - int(state.held_meal)
+	return int(state.cooked) - int(state.served) - int(state.held_meal) - int(state.get("worker_meal",0))
 
 
 static func is_wood_drop(token: String) -> bool:
@@ -44,12 +55,19 @@ static func valid(state: Variant, paid_order: Array, credits: Dictionary, surviv
 		return false
 	if not state.get("survivor_paid") is bool or not state.get("rescued") is bool or not state.get("worker_carry_token") is String:
 		return false
-	for key in ["worker_deliveries", "cooked", "served", "level", "survivor_wood", "processed_wood", "processed_stone", "owl_hits", "held_meal"]:
+	for key in ["worker_deliveries", "cooked", "served", "level", "survivor_wood", "processed_wood", "processed_stone", "owl_hits", "held_meal", "worker_meal"]:
 		var value: Variant = state.get(key)
 		if not _count(value):
 			return false
-	if (state.level != 1 and state.level != 2) or state.held_meal > 1 or waiting_meals(state) < 0 or waiting_meals(state) > ROAST_RACK_CAPACITY:
+	if (state.level != 1 and state.level != 2) or (state.held_meal > 1 or state.worker_meal > 1) or waiting_meals(state) < 0 or waiting_meals(state) > ROAST_RACK_CAPACITY:
 		return false
+	if not state.get("worker_load") is Dictionary or state.worker_load.size() != WORKER_LOAD.size() or not state.worker_load.has_all(WORKER_LOAD.keys()): return false
+	for kind: String in WORKER_LOAD:
+		var bundles: Variant = state.worker_load[kind]
+		var single := (1 if state.worker_carry_token != "" and kind == "wood" else 0) + (1 if state.get("worker_supply") == kind else 0)
+		if not _count(bundles) or bundles+single > WORKER_LIMIT: return false
+		if bundles > 0 and not state.rescued: return false
+	if state.worker_meal > 0 and not state.rescued: return false
 	for column in ["hoppers","work_seconds"]:
 		if not state.get(column) is Dictionary or state[column].size() != KINDS.size() or not state[column].has_all(KINDS):
 			return false
@@ -79,7 +97,12 @@ static func valid(state: Variant, paid_order: Array, credits: Dictionary, surviv
 	for id in state.worker_receipts:
 		if not id is String or not is_wood_drop(id) or unique.has(id) or credits.get(id) != "wood": return false
 		unique[id] = true
-	return state.level == 1 or ready_to_continue(state,paid_order)
+	return state.level == 1 or _original_receipts(state,paid_order)
 
 static func ready_to_continue(state: Dictionary, paid_order: Array) -> bool:
-	return state.rescued and state.worker_deliveries > 0 and state.served > 0 and state.processed_wood > 0 and state.processed_stone > 0 and state.owl_hits > 0 and paid_order.size() == 8
+	return _original_receipts(state,paid_order) and ["camp_cooker","saw_bench","quarry_drill"].all(func(id): return id in paid_order)
+
+# Previous trials could already have reached Level 2 with the original eight
+# purchases. Preserve that earned level when those saves reopen.
+static func _original_receipts(state: Dictionary, paid_order: Array) -> bool:
+	return state.rescued and state.worker_deliveries > 0 and state.served > 0 and state.processed_wood > 0 and state.processed_stone > 0 and state.owl_hits > 0 and ["center_hearth","expansion_1","storage_wood","storage_stone","storage_meat","expansion_2","watchtower","orbit_upgrade"].all(func(id): return id in paid_order)

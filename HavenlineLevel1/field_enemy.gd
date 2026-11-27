@@ -21,9 +21,10 @@ func max_hp() -> int:
 	return BOSS_HEALTH if is_boss else MAX_HEALTH
 
 const WALK_SPEED := 1.35
-const CHASE_SPEED := 2.65
+const CHASE_SPEED := 3.65
 const NOTICE_RADIUS := 14.0
-const LEASH := 20.0
+const LEASH := 29.0
+const GIVE_UP_RADIUS := 19.0
 const STRIKE_START := 2.14
 const BITE_RANGE := 1.52
 const STALK_STOP := 1.66
@@ -54,9 +55,17 @@ var visual: Node3D
 var surface: MeshInstance3D
 var animator: AnimationPlayer
 var home: Vector3
+var patrol_wait := 0.
+var patrol_leg := 0
+var patrol_goal := Vector3.ZERO
 var attack_direction := Vector3.FORWARD
 var bite_landed := false
 var flank_sign := 0.0
+var pursuing := false
+var route_clock := 0.
+var route_destination := Vector2.INF
+var route_stage := -1
+var waypoints := PackedVector2Array()
 var configured := false
 var active := true
 static var _surface_cache: Dictionary = {}
@@ -157,6 +166,7 @@ func _attack_pose(clip: String, elapsed_fraction: float) -> void:
 func configure(player: Node3D) -> void:
 	target = player
 	home = global_position
+	patrol_wait = 1.6 + .34 * (spawn_id % 5)
 	configured = true
 	_setup_visual()
 
@@ -209,12 +219,45 @@ func _pursue(toward: Vector3, step: float, sweep: Callable) -> void:
 	if _move(toward,step,sweep): return
 	# A blocked wolf skirts its packmate or sanctuary rather than running in place.
 	var side := 1.0 if spawn_id % 2 == 0 else -1.0
-	for angle: float in [.76,-.76,1.48,-1.48]:
+	for angle: float in [.76,-.76,1.48,-1.48,1.80,-1.80]:
 		if _move(toward.rotated(Vector3.UP,angle*side),step,sweep): return
 
-func advance(delta: float, sweep_allowed: Callable = Callable(), player_exposed := true) -> void:
+func _walk_to(goal: Vector3, dt: float, sweep: Callable, steer: Callable) -> void:
+	var way: Vector3 = steer.call(self,goal) if steer.is_valid() else goal-global_position
+	if way.length_squared()>.0001:
+		_face(way,dt)
+		_pursue(way.normalized(),minf(way.length(),dt*WALK_SPEED),sweep)
+	_play("Walk")
+
+func _watch_ground(dt: float, sweep: Callable, steer: Callable) -> void:
+	# Rejoin the local pack territory after a chase. A short alternating patrol
+	# keeps unengaged animals moving, with a pause to listen between legs.
+	if state=="patrol":
+		if timer<=0 or global_position.distance_squared_to(patrol_goal)<.12*.12:
+			state="return"
+		else:
+			_walk_to(patrol_goal,dt,sweep,steer)
+			return
+	if global_position.distance_squared_to(home)>.04*.04:
+		state="return"
+		_walk_to(home,dt,sweep,steer)
+		return
+	if state!="guard":
+		patrol_wait=1.55+.28*((spawn_id+patrol_leg)%5)
+	state="guard"
+	_play("Idle")
+	patrol_wait-=dt
+	if patrol_wait>0: return
+	patrol_leg+=1
+	var heading := fmod(spawn_id*2.39996 + patrol_leg*2.12,TAU)
+	patrol_goal = home + Vector3(cos(heading),0,sin(heading))*(1.45+.23*(spawn_id%4))
+	timer=2.15
+	state="patrol"
+
+func advance(delta: float, sweep_allowed: Callable = Callable(), player_exposed := true, steer: Callable = Callable()) -> void:
 	if not configured or not active or not is_instance_valid(target): return
 	var dt := clampf(delta,0.0,.08)
+	route_clock -= dt
 	hurt_timer = maxf(0.0, hurt_timer - dt)
 	if hurt_timer <= 0.0 and surface and surface.material_overlay: surface.material_overlay = null
 	timer = maxf(0.0, timer - dt)
@@ -223,6 +266,7 @@ func advance(delta: float, sweep_allowed: Callable = Callable(), player_exposed 
 		if timer <= 0.0: hide()
 		return
 	# Give the player a visible shoulder and preserve space for the pack as it closes.
+	if not player_exposed: pursuing = false
 	if not player_exposed and state in ["windup","lunge","stalk"]:
 		state="return"
 		timer=0.0
@@ -244,7 +288,7 @@ func advance(delta: float, sweep_allowed: Callable = Callable(), player_exposed 
 	# A wolf closing straight down the camera's sightline circles to a shoulder.
 	# Keep that side through the telegraph so the bite has a readable silhouette.
 	var sight := get_viewport().get_camera_3d()
-	if sight and state in ["guard", "stalk", "windup", "stagger"] and space.length() < 2.50:
+	if sight and state in ["guard", "stalk", "stagger"] and space.length() < 2.50:
 		var right := sight.global_basis.x
 		right.y = 0.0
 		right = right.normalized()
@@ -291,10 +335,8 @@ func advance(delta: float, sweep_allowed: Callable = Callable(), player_exposed 
 				timer = _recovery_duration()
 				_attack_pose("Recover", 0.0)
 		_:
-			var to_home := home-global_position
-			to_home.y = 0.0
-			if player_exposed and distance <= NOTICE_RADIUS and target.global_position.distance_to(home) <= LEASH+.55:
-				_face(toward,dt)
+			pursuing = player_exposed and distance <= (GIVE_UP_RADIUS if pursuing else NOTICE_RADIUS) and target.global_position.distance_to(home) <= LEASH
+			if pursuing:
 				if distance <= STRIKE_START+reach_bonus+.025:
 					state = "windup"
 					timer = _brace_duration()
@@ -302,16 +344,17 @@ func advance(delta: float, sweep_allowed: Callable = Callable(), player_exposed 
 					_attack_pose("Brace", 0.0)
 				else:
 					state = "stalk"
-					_pursue(toward, minf(CHASE_SPEED*dt,distance-STRIKE_START-reach_bonus),sweep_allowed)
+					var intercept := target.global_position
+					if target is CharacterBody3D and distance>3.2:
+						var velocity := (target as CharacterBody3D).velocity.slide(Vector3.UP)
+						intercept += velocity.limit_length(6.)*minf(.38,(distance-3.2)*.08)
+					var course: Vector3 = steer.call(self,intercept) if steer.is_valid() else intercept-global_position
+					if course.length_squared()>.002:
+						_face(course,dt)
+						_pursue(course.normalized(),minf(course.length(),CHASE_SPEED*dt),sweep_allowed)
 					_play("Walk")
-			elif to_home.length() > .04:
-				state = "return"
-				_face(to_home,dt)
-				_move(to_home.normalized(),minf(to_home.length(),dt*WALK_SPEED),sweep_allowed)
-				_play("Walk")
 			else:
-				state = "guard"
-				_play("Idle")
+				_watch_ground(dt,sweep_allowed,steer)
 
 func reset_encounter() -> void:
 	hp = max_hp()
@@ -321,6 +364,11 @@ func reset_encounter() -> void:
 	timer = 0.0
 	hurt_timer = 0.0
 	flank_sign = 0.0
+	pursuing = false
+	patrol_wait = 1.6 + .34 * (spawn_id % 5)
+	patrol_leg = 0
+	route_stage = -1
+	waypoints.clear()
 	active = true
 	if body: body.collision_layer = 1
 	if configured: global_position = home

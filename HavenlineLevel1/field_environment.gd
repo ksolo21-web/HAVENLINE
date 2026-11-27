@@ -52,6 +52,12 @@ const QUARRY_EDGE := [
 ]
 var snow := ShaderMaterial.new()
 var reveal_tween: Tween
+var gate_art: Array[MeshInstance3D] = []
+var hearth_footprint: CollisionShape3D
+var hearth_shell: Node3D
+var coal_glow: OmniLight3D
+var hearth_stones: Array[MeshInstance3D] = []
+var ignition := ShaderMaterial.new()
 
 func _process(_delta: float) -> void:
 	if world and world.camera and world.actor:
@@ -138,24 +144,29 @@ func install_walls() -> void:
 				if child is MeshInstance3D: child.hide()
 			var vis := donor_mesh(DOOR)
 			leaf.add_child(vis)
+			gate_art.append(vis)
 			vis.position.y = -gate.LEAF_HEIGHT*.5
 			vis.scale.x = (2.*gate.HALF_SPAN-gate.LEAF_LENGTH-.01)/1.124
 			var sign_x := -1 if i == 0 else 1
 			var hinge := donor_mesh(HINGE)
 			leaf.add_child(hinge)
+			gate_art.append(hinge)
 			hinge.position = Vector3(sign_x*.505,-gate.LEAF_HEIGHT*.5,0.)
 			var keeper := donor_mesh(KEEPER)
 			leaf.add_child(keeper)
+			gate_art.append(keeper)
 			keeper.position = Vector3(-sign_x*.537,-gate.LEAF_HEIGHT*.5,0.)
 			if i == 0:
 				var bolt := donor_mesh(BOLT)
 				leaf.add_child(bolt)
+				gate_art.append(bolt)
 				bolt.position = Vector3(gate.LEAF_LENGTH*.5,-gate.LEAF_HEIGHT*.5,0.)
 				gate.hinge_moved.connect(func(angle: float):
 					bolt.position.x = gate.LEAF_LENGTH*.5-.34*clampf(angle/.18,0.,1.))
 
 			var post := donor_mesh(POST)
 			gate.add_child(post)
+			gate_art.append(post)
 			post.position = Vector3(sign_x*(gate.HALF_SPAN+.15),-.045,0)
 			post.scale = Vector3.ONE
 	set_perimeter(0,false)
@@ -251,24 +262,38 @@ func install_hearth() -> void:
 		if not child is StaticBody3D: child.hide()
 	const HEARTH_SCALE := 0.76
 	var shell: Node3D = world.model(HEARTH,base,2.25 * HEARTH_SCALE)
+	hearth_shell = shell
 	shell.name = "RecoveredStoneFurnace"
 	var fire := OmniLight3D.new()
+	coal_glow = fire
 	fire.name = "CoalGlow"
 	fire.light_color = Color("ffa457")
 	fire.light_energy = .62
 	fire.omni_range = 3.15 * HEARTH_SCALE
 	fire.position = Vector3(0,.60,.8) * HEARTH_SCALE
 	base.add_child(fire)
+	ignition.shader = preload("res://assets/field_camp/hearth_ignition.gdshader")
 	for m: MeshInstance3D in shell.find_children("*","MeshInstance3D",true,false):
 		m.layers = 2
+		hearth_stones.append(m)
 	fire.light_cull_mask = 1
 	for body in base.get_children():
 		if body is StaticBody3D:
 			var shape: CollisionShape3D = body.get_child(0)
 			var cylinder := shape.shape as CylinderShape3D
+			hearth_footprint = shape
 			cylinder.radius = 1.14 * HEARTH_SCALE
 			cylinder.height = 1.35 * HEARTH_SCALE
 			shape.position.y = cylinder.height * .5
+
+## A reveal or a legacy save can place a stationary capsule inside the new furnace.
+func clear_hearth_footprint(at: Vector3) -> Vector3:
+	var center := hearth_footprint.global_position
+	var offset := Vector2(at.x-center.x,at.z-center.z)
+	var radius := (hearth_footprint.shape as CylinderShape3D).radius + float(world.layout.actor_radius) + .025
+	if offset.length_squared() >= radius*radius: return at
+	var outward := offset.normalized() if not offset.is_zero_approx() else Vector2.DOWN
+	return Vector3(center.x + outward.x*radius,at.y,center.z + outward.y*radius)
 
 func canopy_ink(material: Material) -> Material:
 	if not material is StandardMaterial3D or material.resource_name.to_lower() not in ["crown","lip"]:
@@ -517,7 +542,33 @@ func set_built(built: bool, animate := true) -> void:
 	upgrade_anchor.hide()
 	if reveal_tween: reveal_tween.kill()
 	if built and animate:
-		reveal_tween = create_tween().set_parallel(true)
-		reveal_tween.tween_method(func(t:float): snow.set_shader_parameter("reveal",t),0.,1.,.3)
+		# B 6.20–6.60 s: stone first, amber ignition, thaw from the hearth,
+		# then the perimeter appears. Only authored visuals follow this tween.
+		var final_height := hearth_shell.scale.y
+		reveal_tween = create_tween().set_parallel(true).set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
+		hearth_shell.scale.y = final_height*.78
+		reveal_tween.tween_property(hearth_shell,"scale:y",final_height,.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		for mesh in hearth_stones:
+			mesh.material_overlay = ignition
+		ignition.set_shader_parameter("heat",0.)
+		reveal_tween.tween_method(func(t:float): ignition.set_shader_parameter("heat",t),0.,1.,.06).set_delay(.035)
+		reveal_tween.tween_method(func(t:float): ignition.set_shader_parameter("heat",t),1.,0.,.33).set_delay(.18)
+		coal_glow.light_energy = 0.
+		reveal_tween.tween_property(coal_glow,"light_energy",1.0,.12).set_delay(.08)
+		reveal_tween.tween_property(coal_glow,"light_energy",.62,.25).set_delay(.20)
+		reveal_tween.tween_method(func(t:float): snow.set_shader_parameter("reveal",t),0.,1.,.34).set_delay(.075)
+		palisades.position.y = -1.55
+		reveal_tween.tween_property(palisades,"position:y",0.,.23).set_delay(.23).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		for mesh in gate_art:
+			var y := mesh.position.y
+			mesh.position.y = y-1.55
+			reveal_tween.tween_property(mesh,"position:y",y,.23).set_delay(.23).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		reveal_tween.chain().tween_callback(_clear_ignition)
 	else:
+		_clear_ignition()
 		snow.set_shader_parameter("reveal",1. if built else 0.)
+
+func _clear_ignition() -> void:
+	for mesh in hearth_stones:
+		mesh.material_overlay = null
+	coal_glow.light_energy = .62

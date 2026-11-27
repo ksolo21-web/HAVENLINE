@@ -40,8 +40,12 @@ func install_custom(environment, id:String, at:Vector3, caption:String, kinds:Ar
 func _install_glyph(id: String) -> void:
 	icon = Sprite3D.new()
 	icon.texture = preload("res://assets/field_camp/orbit_upgrade.svg") if id == Progress.AXES else preload("res://assets/field_camp/hearth_mark.svg")
+	if Progress.MACHINES.values().has(id):
+		var glyphs := {"camp_cooker":preload("res://assets/paid_workshops/cooker_processor_mark.png"), "saw_bench":preload("res://assets/paid_workshops/saw_station_mark.png"), "quarry_drill":preload("res://assets/paid_workshops/quarry_drill_station_mark.png")}
+		icon.texture = glyphs[id]
 	icon.axis = Vector3.AXIS_Y
 	icon.pixel_size = .0038 if id == Progress.AXES else .0044
+	if id in Progress.MACHINES.values(): icon.pixel_size = .009
 	icon.position = Vector3(0,.012,-.19)
 	icon.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(icon)

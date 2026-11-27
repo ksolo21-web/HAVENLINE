@@ -6,6 +6,7 @@ const PLOT_AT := Vector3(-5.5,0,10.9)
 var world
 var plot
 var active := ""
+var nearer_plot := false
 var last_paid := -1
 
 func setup(host) -> void:
@@ -28,11 +29,20 @@ func refresh() -> void:
 
 func _site() -> String:
 	var here: Vector3 = world.actor.global_position
-	if world.camp_active and not world.inventory.settlement.survivor_paid and here.distance_squared_to(PLOT_AT) <= .94*.94:
+	if world.camp_active and not world.inventory.settlement.survivor_paid and world.Reach.plot_distance(plot,here) <= world.Reach.NEAR:
 		return "survivor_plot"
-	if not world.inventory.complete(world.Progress.SECOND): return ""
+	if not world.inventory.complete(world.Progress.SECOND) or not world.field_env.is_inside_camp(here): return ""
 	if world.lakeshore.at_cooker(here): return "meat"
 	return world.processors.at_station(here)
+
+func handoff_distance(at: Vector3) -> float:
+	var site := _site()
+	if site.is_empty(): return INF
+	var kind := _raw(site)
+	if demand(site,kind) <= 0 or (world.carry.available_to_station(kind) == 0 and world.carry.incoming(site,kind) == 0): return INF
+	if site == "survivor_plot": return world.Reach.plot_distance(plot,at)
+	var rect: Rect2 = world.lakeshore._footprint(0.) if site == "meat" else world.processors._rect(site,0.)
+	return world.Reach.distance_to_rect(Vector2(at.x,at.z),rect)
 
 func _raw(site: String) -> String:
 	return "wood" if site == "survivor_plot" else site
@@ -54,6 +64,9 @@ func demand(site: String, kind: String) -> int:
 
 func advance(_dt: float) -> void:
 	refresh()
+	if nearer_plot:
+		cancel()
+		return
 	var site := _site()
 	if active != site: cancel()
 	if site.is_empty() or not world.settlement_loop.can_transact(): return

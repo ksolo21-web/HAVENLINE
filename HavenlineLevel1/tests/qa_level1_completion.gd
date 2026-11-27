@@ -5,6 +5,7 @@ const Rules = preload("res://field_progression.gd")
 const Store = preload("res://field_save.gd")
 const Session = preload("res://tests/lifecycle_test_profile.gd")
 const ORDER := ["center_hearth", "expansion_1", "storage_wood", "storage_stone", "storage_meat", "expansion_2", "watchtower", "orbit_upgrade"]
+const EQUIPMENT := ["camp_cooker","saw_bench","quarry_drill"]
 var checks := {}
 var failures: Array[String] = []
 var observed := {}
@@ -131,7 +132,7 @@ func reject_corrupt_progress() -> void:
 func plot_partial() -> void:
 	var ledger=game.inventory
 	check("legacy v3 started in Level 1",ledger.settlement.level==1 and not ledger.settlement.rescued and ledger.settlement.worker_deliveries==0 and ledger.settlement.served==0)
-	check("all original receipts and both raw stocks survived migration",ledger.build_order==ORDER and ledger.stored.meat==1 and ledger.carried.meat==2)
+	check("all original receipts and both raw stocks survived migration",ledger.build_order==ORDER + EQUIPMENT and ledger.stored.meat==1 and ledger.carried.meat==2)
 	check("eight purchases alone cannot enter the next level",not game.enter_next_level())
 	place(Vector3(1.72,0,1.8))
 	check("rescue cannot be claimed remotely",not game.rescue_survivor())
@@ -167,11 +168,13 @@ func unprocessed_meat_outside_pack(ledger) -> int:
 	return int(ledger.stored.meat) + int(ledger.settlement.worker_supply == "meat")
 
 func load_cooker() -> void:
+	purchase_equipment_fixture()
 	var ledger=game.inventory
 	var token: String=ledger.settlement.worker_carry_token
+	var before_wood: int = int(ledger.stored.wood) + int(ledger.settlement.worker_supply=="wood")
 	check("fresh process restored the in-progress wood delivery",not token.is_empty() and not game.drops.has(token) and not ledger.collected.has(token))
 	check("worker delivers at the real storage shelf",await wait_for(func():return ledger.settlement.worker_deliveries==1,4000))
-	check("only one stored wood and receipt",ledger.stored.wood==1 and ledger.collected.get(token)=="wood" and ledger.settlement.worker_carry_token=="")
+	check("one wood delivery credited exactly once, including any immediately reserved for a machine",int(ledger.stored.wood)+int(ledger.settlement.worker_supply=="wood")==before_wood+1 and ledger.collected.get(token)=="wood" and ledger.settlement.worker_receipts.count(token)==1 and ledger.settlement.worker_carry_token=="")
 	check("finished token cannot pay a second time",not game.claim_worker_wood(token) and not game.receive_worker_wood())
 	park_worker_for_player_supply_test()
 	place(game.lakeshore.APRON)
@@ -337,7 +340,7 @@ func handoff(interrupted: bool) -> void:
 			var missing: Dictionary = ledger.settlement.duplicate(true)
 			missing[key] = false if key == "rescued" else 0
 			check("continuation requires " + key, not gates.ready_to_continue(missing,ledger.build_order))
-		for id: String in ORDER:
+		for id: String in ORDER + EQUIPMENT:
 			var shorter: Array = ledger.build_order.duplicate()
 			shorter.erase(id)
 			check("continuation requires camp purchase " + id, not gates.ready_to_continue(ledger.settlement,shorter))
@@ -359,7 +362,7 @@ func handoff(interrupted: bool) -> void:
 func second_launch() -> void:
 	var ledger=game.inventory
 	check("cold launch restored Level 2",ledger.settlement.level==2 and not game.persist_blocked)
-	check("eight prior purchases and the banked delivery survived",ledger.build_order==ORDER and ledger.stored.wood>=1)
+	check("eight prior purchases and the banked delivery survived",ledger.build_order==ORDER + EQUIPMENT and ledger.settlement.worker_receipts.size()>=1)
 	check("served receipt unchanged on cold launch",ledger.settlement.served==1 and ledger.settlement.cooked==1)
 	check("both processed balances and companion contact persisted",ledger.settlement.processed_wood==1 and ledger.settlement.processed_stone==1 and ledger.settlement.owl_hits>0 and ledger.settlement.survivor_paid)
 	check("already-claimed completion avoided a second transition",not game.opening_hud.level_continue.is_visible_in_tree() and not game.enter_next_level())
@@ -369,8 +372,8 @@ func second_launch() -> void:
 	var hud = game.opening_hud
 	check("Level 2 arrives in the normal visible gameplay chapter",hud.chapter.is_visible_in_tree() and hud.chapter.text=="Level 2  ·  Preview")
 	check("the resumed field shows all Level 1 plots finished and camp open",labels.has("Level 2 preview · All Level 1 plots complete. The camp is open."))
-	check("cash label reflects the one confirmed wallet payment",hud.purse.is_visible_in_tree() and hud.purse.text.strip_edges()=="Cash  1")
-	check("both finished-material counters match persistent balances",hud.workshop_stock.is_visible_in_tree() and hud.workshop_stock.text.contains("Planks 1") and hud.workshop_stock.text.contains("Blocks 1"))
+	check("cash label reflects the one confirmed wallet payment",hud.outputs.cash.is_visible_in_tree() and hud.outputs.cash.text=="1" and hud.display_goods.cash.art.texture!=null)
+	check("both finished-material counters match persistent balances",hud.outputs.planks.is_visible_in_tree() and hud.outputs.planks.text=="1" and hud.outputs.blocks.is_visible_in_tree() and hud.outputs.blocks.text=="1" and hud.display_goods.planks.art.texture.region!=hud.display_goods.blocks.art.texture.region)
 	check("visible health reading matches the live player",hud.health_bar.is_visible_in_tree() and int(hud.health_bar.value)==game.player_hp and int(hud.health_bar.max_value)==game.MAX_HP)
 	observed["visible_labels"]=labels
 
@@ -389,7 +392,19 @@ func check_saw_sightline() -> void:
 		check("leaving the saw restores its full roof and rear wall at %dx zoom" % zoom,house.parts.Roof.visible and is_equal_approx(house.parts.BackWall.scale.y,1.0))
 	game.set_zoom_ratio(1)
 
+func purchase_equipment_fixture() -> void:
+	var book = game.inventory
+	for id: String in EQUIPMENT:
+		if book.complete(id): continue
+		var due: Dictionary = book.remaining(id)
+		for kind: String in due:
+			for i in int(due[kind]): book.collect("setup-%s-%s-%d" % [id,kind,i],kind)
+			check("separately paid " + id + kind,book.payment(id,kind,false,int(due[kind])))
+		game._finish_purchase(id)
+	game._persist_world()
+
 func inspect_service_aisles() -> void:
+	purchase_equipment_fixture()
 	game.set_physics_process(false)
 	await check_saw_sightline()
 	var court: Vector4 = game.field_env.COURTS.back()

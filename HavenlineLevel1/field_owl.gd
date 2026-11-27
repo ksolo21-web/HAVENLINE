@@ -2,7 +2,11 @@ extends Node3D
 ## The expedition owl follows the survivor purchase and only damages a wolf under its talons.
 const OwlArt := preload("res://assets/settlement_people/expedition_owl_authored.glb")
 const PlumageShader := preload("res://assets/settlement_people/expedition_plumage.gdshader")
-const SENSE := 7.4
+# Match the wolf notice range. The owl can intercept before the player's axe
+# consumes a three-health wolf, even when the player is running toward the pack.
+const SENSE := 14.0
+const GATE_GUARD := 1.85
+const POST_SWITCH_MARGIN := 1.25
 const RELOAD := 2.7
 const WINDUP := .24
 const RAKE := .18
@@ -38,6 +42,7 @@ var age := 0.0
 var cooldown := 0.0
 var approach := Vector3.ZERO
 var recovery := Vector3.ZERO
+var post_index := 0
 var contact_point := Vector3.INF
 var contact_target: Node3D
 
@@ -95,7 +100,7 @@ func _tips() -> PackedVector3Array:
 	return tips
 
 func _perch() -> Vector3:
-	var gate: Node3D = world.gates[0]
+	var gate: Node3D = world.gates[post_index]
 	return gate.to_global(Vector3(-float(gate.HALF_SPAN)-.15,1.718,0))
 
 func _switch(next: String) -> void:
@@ -105,14 +110,26 @@ func _switch(next: String) -> void:
 func _eligible(wolf: Node3D) -> bool:
 	return is_instance_valid(wolf) and not wolf.is_queued_for_deletion() and wolf.can_receive_swirl() and world.encounters.outside(wolf.global_position,wolf.sanctuary_margin())
 
-func _nearest() -> Node3D:
+func _pick_post(player: Vector3) -> float:
+	var nearest_distance := player.distance_to(world.gates[post_index].global_position)
+	for i in world.gates.size():
+		var distance := player.distance_to(world.gates[i].global_position)
+		if distance + POST_SWITCH_MARGIN < nearest_distance:
+			post_index = i
+			nearest_distance = distance
+	return nearest_distance
+
+func _nearest(reach: float = SENSE) -> Node3D:
 	var chosen: Node3D
-	var distance := SENSE*SENSE
+	var best := INF
 	for wolf in world.enemies:
 		if not _eligible(wolf): continue
-		var d := world.actor.global_position.distance_squared_to(wolf.global_position) as float
-		if d < distance:
-			distance = d
+		var player_range: float = world.actor.global_position.distance_to(wolf.global_position)
+		if player_range > reach: continue
+		# Weight the threat to the owner first, then actual flight distance.
+		var score := player_range + .30 * global_position.distance_to(wolf.global_position)
+		if score < best:
+			best = score
 			chosen = wolf
 	return chosen
 
@@ -150,6 +167,15 @@ func _recover() -> void:
 	target = null
 	_switch("recover")
 
+func _start_intercept(wolf: Node3D) -> void:
+	target = wolf
+	approach_axis = (target.global_position-global_position).slide(Vector3.UP).normalized()
+	if approach_axis.length_squared()<.1: approach_axis=Vector3.FORWARD
+	bank_side = 1.0 if global_basis.x.dot(approach_axis)>=0 else -1.0
+	var flank := approach_axis.cross(Vector3.UP) * bank_side
+	approach = -approach_axis*1.68 + flank*.62 + Vector3.UP*(2.35*target.size_factor())
+	_switch("bank")
+
 func advance(delta: float) -> void:
 	if not world or not world.field_ready: return
 	var dt := clampf(delta,0.,.1)
@@ -158,7 +184,16 @@ func advance(delta: float) -> void:
 		state = "locked"
 		target = null
 		return
-	var inside: bool = world.field_env.is_inside_camp(world.actor.global_position) or world.player_hp <= 0
+	var player: Vector3 = world.actor.global_position
+	var inside: bool = world.field_env.is_inside_camp(player)
+	var old_post := post_index
+	var at_gate := _pick_post(player) <= GATE_GUARD
+	var watch_target: Node3D = _nearest(SENSE*.68) if inside and at_gate and world.player_hp>0 else null
+	# A paid owl guards the exterior of the gate the player is actually using.
+	# Retreating into the interior, or falling, still cancels a committed dive.
+	var finishing_strike := state == "strike" and at_gate
+	var resting: bool = world.player_hp <= 0 or (inside and not watch_target and not finishing_strike)
+	if inside and old_post != post_index and state == "perched": _switch("land")
 	if state == "locked":
 		show()
 		_switch("perched" if inside else "follow")
@@ -167,7 +202,7 @@ func advance(delta: float) -> void:
 	age += dt
 	elapsed += dt
 	cooldown = maxf(0,cooldown-dt)
-	if inside:
+	if resting:
 		target = null
 		var perch := _perch()
 		if state != "perched" and state != "land": _switch("land")
@@ -180,7 +215,7 @@ func advance(delta: float) -> void:
 			global_position=perch
 			# A perched owl watches the live approach beyond its gate. It can
 			# acknowledge a passing worker without turning its back to the field.
-			var gate: Node3D = world.gates[0]
+			var gate: Node3D = world.gates[post_index]
 			var outward := (gate.global_position-world.global_position).slide(Vector3.UP).normalized()
 			var worker := (world.actor.global_position-perch).slide(Vector3.UP).normalized() as Vector3
 			_turn(outward + worker*.36,dt*.29)
@@ -189,24 +224,22 @@ func advance(delta: float) -> void:
 		match state:
 			"takeoff":
 				_fly(_perch()+Vector3(-.22,1.03,.34),4.4,dt)
-				if age>=.30: _switch("follow")
+				if age>=.30:
+					var seen := watch_target if watch_target else _nearest()
+					if seen and cooldown <= 0: _start_intercept(seen)
+					else: _switch("follow")
 			"follow":
-				_fly(_lane(),6.5,dt)
+				var lane := _lane()
+				_fly(lane, clampf(6.5 + .90*global_position.distance_to(lane),7.2,15.5),dt)
 				if cooldown <= 0:
-					target = _nearest()
-					if target:
-						approach_axis = (target.global_position-global_position).slide(Vector3.UP).normalized()
-						if approach_axis.length_squared()<.1: approach_axis=Vector3.FORWARD
-						bank_side = 1.0 if global_basis.x.dot(approach_axis)>=0 else -1.0
-						var flank := approach_axis.cross(Vector3.UP) * bank_side
-						approach = -approach_axis*1.68 + flank*.62 + Vector3.UP*(2.35*target.size_factor())
-						_switch("bank")
+					var seen := watch_target if watch_target else _nearest()
+					if seen: _start_intercept(seen)
 			"bank","windup","dive":
-				if not _eligible(target) or target.global_position.distance_to(world.actor.global_position)>SENSE+1.8:
+				if not is_instance_valid(target) or not _eligible(target) or target.global_position.distance_to(world.actor.global_position)>SENSE+1.8:
 					_recover()
 				elif state == "bank":
 					var staging: Vector3 = target.global_position+approach
-					_fly(staging,7.6,dt)
+					_fly(staging,clampf(8.2 + global_position.distance_to(staging)*.8,8.4,16.0),dt)
 					if global_position.distance_to(staging)<.12 and age>.20: _switch("windup")
 				elif state == "windup":
 					var crest: Vector3 = target.global_position+approach+Vector3.UP*.24*sin(.5*PI*age/WINDUP)
