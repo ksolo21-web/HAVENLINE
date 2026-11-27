@@ -2,7 +2,7 @@
   "schema_version": 1,
   "task": "Tighten Havenline reference acceptance and current production checks",
   "base_commit": "7180d1315af56228e7629735c2bd50bda3c43596",
-  "status": "PUBLISHING",
+  "status": "COMPLETE",
   "milestones": [
     {
       "id": "M1",
@@ -22,7 +22,7 @@
     {
       "id": "M4",
       "name": "Publish with main compare-and-swap and readback",
-      "status": "IN_PROGRESS"
+      "status": "COMPLETE"
     }
   ],
   "constraints": [
@@ -47,7 +47,7 @@
     "independent critic >9.0 with no mandatory defects",
     "remote published readback verified"
   ],
-  "next_action": "Publish reviewed content to main with expected7180d1315af56228e7629735c2bd50bda3c43596, verify exact remote tree and branch preservation, then persist publication receipt.",
+  "next_action": "No remaining action for this policy publication. Future game candidates must incorporate and run the current tools against actual reference, render, playback, performance and task evidence before approval.",
   "verified_results": {
     "regression_tests_passed": 207,
     "regression_groups_passed": 18,
@@ -63,5 +63,12 @@
     "independent_packaging_checks_passed": 7,
     "final_content_sha256": "8f529b23b682c8256b36750786a88065ed859ae9b76206a40899f8fc52027fca",
     "final_content_files": 63
+  },
+  "publication": {
+    "content_commit": "43d300a8872a421f4306e4b254d05d646c266ab3",
+    "tree_sha": "f34045ddb88116ca224c81d2f0af3e50f5188187",
+    "readback_verified": true,
+    "other_branches_unchanged": 96,
+    "reviewed_content_sha256": "8f529b23b682c8256b36750786a88065ed859ae9b76206a40899f8fc52027fca"
   }
 }
