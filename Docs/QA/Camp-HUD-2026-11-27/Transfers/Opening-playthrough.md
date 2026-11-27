@@ -15,7 +15,7 @@ Recorded from commit `989edd9283148e9f712387fb937ea36038cbd9d2`, scene `res://fi
 
 The track is a stereo recording of the real game mix. Left and right channel RMS measured -23.2 and -23.2 dBFS. The field and camp music, ambient stems and individual effect timestamps are recorded alongside the threshold checks. [Audio measurements in Gate.json](Gate.json)
 
-The first transfer and the paid camp reveal were 0.483 s apart. In the owner’s recording A, bills leave the pack at 12.6–12.9 s and the new machine starts appearing at 13.2 s. The ads use a different prop and camera, so this comparison measures the sequence and timing. [Five purchase frames](Opening-purchase-transfer.jpg) · [Timed reference observations](../../camp10/References/Reference-review.md)
+The first transfer and the paid camp reveal were 0.483 s apart. In the owner’s recording A, bills leave the pack at 12.6–12.9 s and the new machine starts appearing at 13.2 s. The ads use a different prop and camera, so this comparison measures the sequence and timing. [Five purchase frames](Opening-purchase-transfer.jpg) · [Timed reference observations](../../Connected-Camp-2026-11-27/References/Reference-review.md)
 
 The old and new HUD can be compared at matching timestamps in both paid and unpaid camp states. [Matched Build 10 and Build 11 gameplay frames](Build10-and-11-HUD.jpg) · [Build 10 terminal save reloaded in Build 11](../Verification/Build10-earned-opening-loaded.json)
 
