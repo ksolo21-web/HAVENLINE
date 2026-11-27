@@ -25,6 +25,9 @@ class FuturePrepPacketTests(unittest.TestCase):
   for task,tokens in cases.items():
    text=forward_prep_packet.render(task)
    self.assertIn('PREPARATION ONLY',text)
+   self.assertIn('reference-sensitive dimensions >= 9.9',text)
+   self.assertIn('exactly 10.0',text)
+   self.assertNotIn('strictly >9.0',text)
    for token in tokens:self.assertIn(token,text,(task,token))
  def test_t11_uses_real_packet_not_future_prep_packet(self):
   with self.assertRaises(ValueError):forward_prep_packet.render('T11')

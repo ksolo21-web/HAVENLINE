@@ -86,14 +86,14 @@ Only the integration owner may integrate production candidates into the integrat
 - **G10 Security/economy — required for purchases, economy, LiveOps, cloud and competitive-value systems.**
 - **G11 Accessibility/adaptive UI — required for player-facing controls/UI where relevant.**
 - **G12 Critic coverage — every required critic has current complete evidence.**
-- **G13 Score: each applicable mandatory dimension must score at least 9.5/10 unrounded; no averaging and no unresolved mandatory defect. Stricter named requirements still apply.**
+- **G13 Score: final reference-sensitive dimensions >=9.9 unrounded; all existing exact-10 visual requirements remain stronger; other mandatory specialist dimensions >=9.5. A reference-sensitive 9.5 result is interim only. Every mandatory check passes, evidence is complete and independent, and no known unapproved deviation remains. No averaging or rounding.**
 - **G14 Integration — the merged integration candidate, not merely the isolated branch, passes affected regression.**
 
 ### Current critic score enforcement
 
-This rule applies game-wide to new reviews, changed candidates and reapprovals, not just Level 1. The [critic matrix](CRITIC_MATRIX.json) records the inclusive floor. An individual 9.499 does not pass; an individual 9.5 passes the numeric floor only. Keep independence, exact-source evidence, all other gates, owner sign-off where required, and stricter exact-10 shipping-art and reference requirements. Historical approval receipts are preserved as recorded, and an active invalidation is not cleared by this change.
+Use the [current forward acceptance standard](REFERENCE_ACCEPTANCE_STANDARD.md) and [machine-readable policy](REFERENCE_ACCEPTANCE_POLICY.json). These apply game-wide to new reviews, changed candidates and reapprovals. Every reference-sensitive dimension must reach at least 9.9; existing whole-frame, shipping and style requirements still require exact 10 in their mandatory visual dimensions. Other mandatory specialist dimensions remain at least 9.5 unless a named requirement is stronger. A 9.5 reference-sensitive result records progress only and cannot close a task or authorize integration.
 
-Some legacy validators and workflows still check the old numeric floor, including `validate_migration.py`. Their green result is not sufficient for a candidate to pass G13 or advance. Until those checks are migrated and boundary-tested, the integration owner must verify the raw required scores on the exact candidate against the current rubric before approval; missing scores fail closed. No task is unlocked and no automation is deployed by this policy update.
+The forward critic harness, specialist runner, closure and visual/style checks use the current policy. Reviews carry its ID and SHA-256, exact candidate identity and complete evidence. Historical receipts preserve their recorded scores and cannot approve new work; active invalidations remain effective. Run `python3 tools/havenline/production/validate_migration.py --forward-policy-only` to check policy consistency. A score-only or historical validator pass cannot substitute for the complete current approval path. Active development branches must incorporate these gates before claiming compliance; archived workflows remain inactive.
 
 [T01–T11 production reconciliation against Codex Build 9](T01_T11_PRODUCTION_RECONCILIATION_2026-11-27.md)
 

@@ -15,12 +15,8 @@ SCALAR_STRATEGIES = {"SCALAR_TUNING", "CONFIGURATION_TUNING", "CONSTANT_ADJUSTME
 CAUSAL_STRATEGIES = {"ALGORITHM", "ARCHITECTURE", "CONTRACT", "PRODUCT_LOGIC", "TOOLING", "GOVERNANCE"} | SCALAR_STRATEGIES
 NON_PRODUCT_STRATEGIES = {"EVIDENCE_ONLY", "TEST_ONLY", "DIAGNOSTIC_ONLY"}
 ARCHITECTURAL_ESCALATIONS = {"PLACEMENT_ALGORITHM", "EVIDENCE_ARCHITECTURE", "CONTRACT_REDIRECT", "STATE_MACHINE", "DATA_MODEL"}
-EXPECTED_THRESHOLD_REGISTRY_HASHES = {
-    # Hash only the immutable quality-policy projections. CRITIC_MATRIX.json and
-    # task-gates.json also carry legitimate mutable task/lifecycle metadata.
-    "critic_matrix_sha256": "4458f680dffc8212f0c8e53343d0cf61249a85a338d56cd2a4e218ddbe075f37",
-    "task_gates_sha256": "368e64886f7ead3fe371e52e5de439ff0890faa1868c4ce688aa315f025950f0",
-}
+# task-gates retains its historical closeout policy; it is not a forward gate.
+HISTORICAL_TASK_GATES_POLICY_SHA256 = "368e64886f7ead3fe371e52e5de439ff0890faa1868c4ce688aa315f025950f0"
 LOCKED_REPAIR_INTELLIGENCE = {
     "C0-T10-c7a18d0-comprehensive-anti-loop": {
         "path": "Docs/Production/T10/C0_REPAIR_INTELLIGENCE_LOCK.json",
@@ -217,6 +213,8 @@ def canonical_threshold_snapshot(root: Path = ROOT) -> dict:
     gates_path = root / "Docs/Production/task-gates.json"
     matrix = json.loads(matrix_path.read_text())
     gates = json.loads(gates_path.read_text())
+    reference_policy_path = root / "Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json"
+    reference_policy = json.loads(reference_policy_path.read_text())
     matrix_policy = _dict(matrix.get("forward_acceptance"))
     gates_policy = _dict(gates.get("forward_acceptance"))
     return {
@@ -228,16 +226,29 @@ def canonical_threshold_snapshot(root: Path = ROOT) -> dict:
         "task_gates_file_sha256": _digest(gates_path),
         "critic_matrix": matrix_policy,
         "task_gates": gates_policy,
+        "reference_acceptance_policy": reference_policy,
+        "reference_acceptance_policy_sha256": _stable_digest(reference_policy),
         "hash_scope": "forward_acceptance_policy_only",
     }
 
 
 def _threshold_snapshot_valid(snapshot: dict) -> bool:
+    from reference_acceptance import policy_errors
     matrix = _dict(snapshot.get("critic_matrix"))
     gates = _dict(snapshot.get("task_gates"))
+    reference = _dict(snapshot.get("reference_acceptance_policy"))
+    try:
+        current = canonical_threshold_snapshot()
+    except (OSError, ValueError, TypeError):
+        return False
+    final = reference.get("final_acceptance", {})
     return (
-        matrix.get("dimension_operator") == ">"
-        and matrix.get("threshold") == 9.0
+        not policy_errors(reference)
+        and matrix == current["critic_matrix"]
+        and matrix.get("dimension_operator") == ">="
+        and matrix.get("threshold") == final.get("minimum_dimension_score")
+        and matrix.get("reference_sensitive_dimension_threshold") == final.get("reference_minimum_dimension_score")
+        and matrix.get("stricter_exact_visual_score") == 10.0
         and matrix.get("unrounded") is True
         and matrix.get("target") == 10.0
         and matrix.get("no_average_waiver") is True
@@ -248,8 +259,9 @@ def _threshold_snapshot_valid(snapshot: dict) -> bool:
         and gates.get("target") == 10
         and gates.get("all_applicable_gates_must_pass") is True
         and gates.get("no_unresolved_mandatory_defects") is True
-        and snapshot.get("critic_matrix_sha256") == EXPECTED_THRESHOLD_REGISTRY_HASHES["critic_matrix_sha256"]
-        and snapshot.get("task_gates_sha256") == EXPECTED_THRESHOLD_REGISTRY_HASHES["task_gates_sha256"]
+        and snapshot.get("critic_matrix_sha256") == _stable_digest(matrix)
+        and snapshot.get("task_gates_sha256") == _stable_digest(gates) == HISTORICAL_TASK_GATES_POLICY_SHA256
+        and snapshot.get("reference_acceptance_policy_sha256") == _stable_digest(reference) == current["reference_acceptance_policy_sha256"]
     )
 
 

@@ -11,7 +11,7 @@ PREPARE FAR AHEAD -> GRADUATE ONLY WHEN SAFE -> CHECKPOINT -> CHEAP SENTINELS
 -> FRESH INTEGRATED CLOSEOUT -> ADVANCE
 ```
 
-Every applicable mandatory critic dimension remains strictly greater than 9.0 unrounded; target 10/10; no averaging; zero unresolved mandatory defects. **Reference-style material fidelity is stricter:** when the global style lock applies, C1 `reference_fidelity` and `visual_language` must equal 10.0 exactly.
+Every forward review follows [REFERENCE_ACCEPTANCE_STANDARD.md](REFERENCE_ACCEPTANCE_STANDARD.md): reference-sensitive final dimensions >=9.9; existing whole-frame/shipping visual dimensions exactly 10.0; other mandatory specialist dimensions >=9.5. A reference-sensitive 9.5 checkpoint cannot grant approval. Require complete independent evidence, no rounding or averaging, every mandatory check passed, and zero known unapproved deviations. The global style lock and all other stronger gates remain in force.
 
 ## Sixteen mandatory systems
 

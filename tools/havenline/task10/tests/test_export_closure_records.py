@@ -39,7 +39,7 @@ class ExportTests(unittest.TestCase):
   record=dict(scores={'frame_time':9.375},confidence='medium',coverage_complete=True,defects=[],input_manifest_hash='b'*64,provider='actual reviewer',model='actual model',request_or_run_id='actual request')
   raw=(b'original record',b'original raw',record)
   out=m.canonical('C6',raw,'a'*40,dict(id=1),dict(id=2,digest='sha256:'+'c'*64),'d'*64,'e'*40)
-  self.assertEqual(record['scores'],out['scores']);self.assertEqual('medium',out['confidence']);self.assertFalse(out['score_reuse'])
+  self.assertEqual(record['scores'],out['scores']);self.assertEqual('medium',out['confidence']);self.assertFalse(out['score_reuse']);self.assertFalse(out['approval_allowed']);self.assertEqual('historical',out['review_scope'])
   for change in [dict(scores={'frame_time':9}),dict(defects=['defect']),dict(confidence='low'),dict(coverage_complete=False)]:
    with self.assertRaises(AssertionError):m.canonical('C6',(raw[0],raw[1],dict(record,**change)),'a'*40,dict(id=1),dict(id=2,digest='sha256:'+'c'*64),'d'*64,'e'*40)
  def test_bundle_is_deterministic_and_preserves_bytes(self):

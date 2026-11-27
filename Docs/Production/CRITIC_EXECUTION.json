@@ -19,87 +19,225 @@
     "independence_requirement": "Run in a separate CI review job from the builder/integration job. Persona changes or builder self-review do not qualify."
   },
   "evidence_manifest_schema": {
-    "required_top_level": ["task_id", "critic_id", "candidate_commit", "groups"],
-    "group_required": ["id", "items"],
-    "item_required": ["path", "kind", "category", "sha256", "description"],
-    "allowed_item_kinds": ["image", "motion_frame", "json", "text"]
+    "required_top_level": [
+      "task_id",
+      "critic_id",
+      "candidate_commit",
+      "groups",
+      "reference_sensitive_dimensions"
+    ],
+    "group_required": [
+      "id",
+      "items"
+    ],
+    "item_required": [
+      "path",
+      "kind",
+      "category",
+      "sha256",
+      "description"
+    ],
+    "allowed_item_kinds": [
+      "image",
+      "motion_frame",
+      "json",
+      "text"
+    ],
+    "scope": "Static specialist-runner inputs; external visual/motion and scored performance inputs use the current external review contract."
   },
   "critics": {
     "C1": {
       "execution_type": "independent_visual_model",
-      "runner": "existing task-scoped C1 reviewer",
+      "runner": "tools/havenline/production/critic_harness.py validate-raw --critic C1",
       "status": "OPERATIONAL",
-      "dimensions": ["reference_fidelity", "visual_language", "cross_view_consistency"],
+      "dimensions": [
+        "reference_fidelity",
+        "visual_language",
+        "cross_view_consistency"
+      ],
       "reference_style_lock": {
         "policy": "Docs/Production/REFERENCE_STYLE_LOCK.json",
-        "exact_score_dimensions": ["reference_fidelity", "visual_language"],
+        "exact_score_dimensions": [
+          "reference_fidelity",
+          "visual_language"
+        ],
         "exact_required_score": 10.0,
         "historical_dimension_schema_unchanged": true
-      }
+      },
+      "historical_runner": "existing task-scoped C1 reviewer",
+      "current_review_contract": "Docs/Production/EXTERNAL_INDEPENDENT_REVIEW_TRANSPORT.md",
+      "execution_note": "Validates evidence retained by an actual separate agent/model review; this command does not perform or invent the visual review."
     },
     "C2": {
       "execution_type": "independent_visual_model",
-      "runner": "existing task-scoped C2 reviewer",
+      "runner": "tools/havenline/production/critic_harness.py validate-raw --critic C2",
       "status": "OPERATIONAL",
-      "dimensions": ["geometry_contact", "clipping_seams", "intentional_gap_integrity", "cross_view_integrity"]
+      "dimensions": [
+        "geometry_contact",
+        "clipping_seams",
+        "intentional_gap_integrity",
+        "cross_view_integrity"
+      ],
+      "historical_runner": "existing task-scoped C2 reviewer",
+      "current_review_contract": "Docs/Production/EXTERNAL_INDEPENDENT_REVIEW_TRANSPORT.md",
+      "execution_note": "Validates evidence retained by an actual separate agent/model review; this command does not perform or invent the visual review."
     },
     "C3": {
       "execution_type": "independent_specialist_model",
       "runner": "tools/havenline/production/specialist_critic_runner.py",
       "status": "OPERATIONAL",
-      "dimensions": ["havenline_identity", "simple_context_controls", "physical_core_loop", "complexity_discipline", "world_response_readability"],
-      "required_categories": ["gameplay_state", "control_state", "loop_evidence"]
+      "dimensions": [
+        "havenline_identity",
+        "simple_context_controls",
+        "physical_core_loop",
+        "complexity_discipline",
+        "world_response_readability"
+      ],
+      "required_categories": [
+        "gameplay_state",
+        "control_state",
+        "loop_evidence"
+      ]
     },
     "C4": {
       "execution_type": "independent_specialist_model",
       "runner": "tools/havenline/production/specialist_critic_runner.py",
       "status": "OPERATIONAL",
-      "dimensions": ["interactable_clarity", "danger_clarity", "collection_feedback", "resource_destination", "world_change_clarity", "next_action_clarity"],
-      "required_categories": ["gameplay_state", "feedback_state"]
+      "dimensions": [
+        "interactable_clarity",
+        "danger_clarity",
+        "collection_feedback",
+        "resource_destination",
+        "world_change_clarity",
+        "next_action_clarity"
+      ],
+      "required_categories": [
+        "gameplay_state",
+        "feedback_state"
+      ]
     },
     "C5": {
       "execution_type": "independent_motion_model",
       "runner": "tools/havenline/production/specialist_critic_runner.py",
       "capture_runner": "tools/havenline/production/motion_capture.py",
-      "status": "OPERATIONAL",
-      "dimensions": ["full_cycle", "foot_contact", "lower_body_mechanics", "upper_body_mechanics", "weight_transfer", "transitions", "clipping", "secondary_motion_contact"],
-      "required_categories": ["motion_cycle", "motion_transition", "contact_detail"]
+      "status": "OPERATIONAL_INTERIM_STATIC_SCREENING_ONLY",
+      "dimensions": [
+        "full_cycle",
+        "foot_contact",
+        "lower_body_mechanics",
+        "upper_body_mechanics",
+        "weight_transfer",
+        "transitions",
+        "clipping",
+        "secondary_motion_contact"
+      ],
+      "required_categories": [
+        "motion_cycle",
+        "motion_transition",
+        "contact_detail"
+      ],
+      "evidence_mode": "contact_sheets_and_text",
+      "automated_final_approval": false,
+      "final_review_requirement": "A separate source-bound independent review must actually inspect the full motion cycles and transitions through playback. This contact-sheet runner cannot grant final C5 approval.",
+      "current_review_contract": "Docs/Production/EXTERNAL_INDEPENDENT_REVIEW_TRANSPORT.md"
     },
     "C6": {
       "execution_type": "quantitative_specialist_gate",
-      "runner": "tools/havenline/production/critic_harness.py performance",
+      "runner": "tools/havenline/production/critic_harness.py ingest-performance-review",
       "status": "OPERATIONAL",
-      "dimensions": ["frame_time", "draw_calls", "geometry", "texture_memory", "shader_cost", "physics", "animation", "population", "thermal_risk"]
+      "dimensions": [
+        "frame_time",
+        "draw_calls",
+        "geometry",
+        "texture_memory",
+        "shader_cost",
+        "physics",
+        "animation",
+        "population",
+        "thermal_risk"
+      ],
+      "historical_runner": "tools/havenline/production/critic_harness.py performance",
+      "measurement_gate": "tools/havenline/production/critic_harness.py performance",
+      "current_review_contract": "Docs/Production/EXTERNAL_INDEPENDENT_REVIEW_TRANSPORT.md",
+      "execution_note": "Current final evidence combines unchanged independent scores and exact hash-bound measurements. The measurement gate alone cannot approve the critic."
     },
     "C7": {
       "execution_type": "independent_specialist_model_plus_deterministic_gate",
       "runner": "tools/havenline/production/specialist_critic_runner.py",
       "deterministic_runner": "tools/havenline/production/domain_safeguard_gate.py progression",
       "status": "OPERATIONAL",
-      "dimensions": ["difficulty_growth", "challenge_variety", "spike_control", "pacing", "upgrade_meaning", "director_bounds"],
-      "required_categories": ["progression_simulation", "difficulty_curve", "upgrade_curve"]
+      "dimensions": [
+        "difficulty_growth",
+        "challenge_variety",
+        "spike_control",
+        "pacing",
+        "upgrade_meaning",
+        "director_bounds"
+      ],
+      "required_categories": [
+        "progression_simulation",
+        "difficulty_curve",
+        "upgrade_curve"
+      ]
     },
     "C8": {
       "execution_type": "independent_specialist_model_plus_deterministic_gate",
       "runner": "tools/havenline/production/specialist_critic_runner.py",
       "deterministic_runner": "tools/havenline/production/domain_safeguard_gate.py economy",
       "status": "OPERATIONAL",
-      "dimensions": ["f2p_viability", "sources_sinks", "inflation_control", "vip_fairness", "purchase_value", "paywall_risk", "overall_fairness"],
-      "required_categories": ["economy_simulation", "f2p_path", "monetization_contract"]
+      "dimensions": [
+        "f2p_viability",
+        "sources_sinks",
+        "inflation_control",
+        "vip_fairness",
+        "purchase_value",
+        "paywall_risk",
+        "overall_fairness"
+      ],
+      "required_categories": [
+        "economy_simulation",
+        "f2p_path",
+        "monetization_contract"
+      ]
     },
     "C9": {
       "execution_type": "deterministic_adversarial_harness",
       "runner": "tools/havenline/production/security_exploit_harness.py",
       "status": "OPERATIONAL",
-      "dimensions": ["save_modification", "clock_manipulation", "replay", "duplicate_grants", "fake_purchase", "fake_premium_balance", "vip_manipulation", "event_fraud", "rollback", "leaderboard_fabrication"]
+      "dimensions": [
+        "save_modification",
+        "clock_manipulation",
+        "replay",
+        "duplicate_grants",
+        "fake_purchase",
+        "fake_premium_balance",
+        "vip_manipulation",
+        "event_fraud",
+        "rollback",
+        "leaderboard_fabrication"
+      ],
+      "current_review_contract": "Docs/Production/EXTERNAL_INDEPENDENT_REVIEW_TRANSPORT.md"
     },
     "C10": {
       "execution_type": "independent_specialist_model_plus_deterministic_gate",
       "runner": "tools/havenline/production/specialist_critic_runner.py",
       "deterministic_runner": "tools/havenline/production/domain_safeguard_gate.py liveops",
       "status": "OPERATIONAL",
-      "dimensions": ["requirement_feasibility", "event_collision", "reward_integrity", "f2p_feasibility", "duplicate_reward_control", "pricing_sales_integrity", "timing_integrity", "asset_localization_readiness"],
-      "required_categories": ["event_schedule", "reward_table", "f2p_event_simulation"]
+      "dimensions": [
+        "requirement_feasibility",
+        "event_collision",
+        "reward_integrity",
+        "f2p_feasibility",
+        "duplicate_reward_control",
+        "pricing_sales_integrity",
+        "timing_integrity",
+        "asset_localization_readiness"
+      ],
+      "required_categories": [
+        "event_schedule",
+        "reward_table",
+        "f2p_event_simulation"
+      ]
     },
     "C11": {
       "execution_type": "independent_specialist_model_plus_deterministic_gate",
@@ -107,8 +245,47 @@
       "deterministic_runner": "tools/havenline/production/domain_safeguard_gate.py accessibility",
       "device_runner": "tools/havenline/production/device_matrix.py",
       "status": "OPERATIONAL",
-      "dimensions": ["touch_targets", "ui_scale", "text_readability", "color_differentiation", "reduced_motion", "subtitles", "joystick_layout", "controller_state", "adaptive_layout"],
-      "required_categories": ["adaptive_ui", "accessibility_metrics", "device_matrix"]
+      "dimensions": [
+        "touch_targets",
+        "ui_scale",
+        "text_readability",
+        "color_differentiation",
+        "reduced_motion",
+        "subtitles",
+        "joystick_layout",
+        "controller_state",
+        "adaptive_layout"
+      ],
+      "required_categories": [
+        "adaptive_ui",
+        "accessibility_metrics",
+        "device_matrix"
+      ]
     }
+  },
+  "score_rule_scope": "Historical immutable receipt interpretation only; all new reviews use forward_acceptance and the current reference policy.",
+  "forward_acceptance": {
+    "dimension_operator": ">=",
+    "threshold": 9.5,
+    "scope": "All new candidate reviews and reapprovals; preserve historical receipts and stricter gates",
+    "legacy_validator_pass_is_sufficient": false,
+    "unrounded": true,
+    "target": 10.0,
+    "no_average_waiver": true,
+    "no_unresolved_mandatory_defect": true,
+    "reference_sensitive_dimension_threshold": 9.9,
+    "reference_sensitive_dimension_operator": ">=",
+    "reference_sensitive_critic_ids": [
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "C5",
+      "C11"
+    ],
+    "stricter_exact_visual_score": 10.0,
+    "strongest_applicable_requirement_controls": true,
+    "policy": "Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json",
+    "reference_sensitive_9_5_is_interim_only": true
   }
 }

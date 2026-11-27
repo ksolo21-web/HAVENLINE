@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Classify strict visual reviews without turning one outlier into a repair loop."""
+"""Historical T03 quorum diagnostic; this tool cannot approve current work.
+
+The old classifications remain inspectable for custody. New reviews must use
+reference_acceptance and the complete current final closure/visual gates.
+"""
 from __future__ import annotations
 
 import argparse
@@ -193,8 +197,13 @@ def evaluate(
     return {
         "task": "T03",
         "source": source,
-        "status": status,
-        "passed": status in {"PASS", "PASS_BY_QUORUM"},
+        "status": "HISTORICAL_DIAGNOSTIC_ONLY",
+        "historical_status": status,
+        "historical_quorum_passed": status in {"PASS", "PASS_BY_QUORUM"},
+        "passed": False,
+        "approval_allowed": False,
+        "validation_kind": "HISTORICAL_QUORUM_DIAGNOSTIC",
+        "current_policy": "Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json",
         "strict_rule": ">9.0 unrounded; no score averaging",
         "judgments_expected": len(expected),
         "judgments_present": len(reviews),

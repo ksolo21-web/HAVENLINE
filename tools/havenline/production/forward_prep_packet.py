@@ -4,6 +4,7 @@ import argparse,json,subprocess
 from pathlib import Path
 from parallel_preparation_planner import classify
 from external_readiness import evaluate as external_readiness
+from reference_acceptance import final_rule
 ROOT=Path(__file__).resolve().parents[3];DOCS=ROOT/'Docs'/'Production'
 def load(n): return json.loads((DOCS/n).read_text())
 def source_sha():
@@ -47,7 +48,8 @@ def render(task):
       '- When dependencies are APPROVED and the canonical workstream exists: python3 tools/havenline/production/task_graduation_gate.py '+task+' --target ASSIGNED',
       '- Authoritative runtime build still requires the full V3.2 BUILDING_ISOLATED graduation package.','',
       '## Quality rule',
-      '- Every applicable mandatory critic dimension remains strictly >9.0 unrounded; target 10/10; no averaging; zero unresolved mandatory defects.',
+      '- '+final_rule(),
+      '- Use REFERENCE_ACCEPTANCE_POLICY.json: final reference-sensitive dimensions >=9.9; preserve exact-10 visual requirements; other mandatory specialist dimensions >=9.5. A reference-sensitive 9.5 is interim only. No rounding/averaging or missing evidence; zero unresolved mandatory defects. Freeze each critic input manifest reference_sensitive_dimensions before review.',
       '- Preparation removes uncertainty and builds proof machinery early; it never waives final gameplay, visual, performance, security, device or physical certification requirements.',''
     ]
     return '\n'.join(lines)

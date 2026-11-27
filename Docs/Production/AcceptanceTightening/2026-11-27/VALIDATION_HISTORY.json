@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "scope": "Retained validation findings for this policy/tooling change; no game grade.",
+  "events": [
+    {
+      "stage": "initial_independent_review",
+      "result": "FIX_REQUIRED",
+      "evidence": "INITIAL_INDEPENDENT_FINDINGS.md",
+      "disposition": "Preserve the initial findings; final independent review records repair/retest results."
+    },
+    {
+      "stage": "initial_T12_consistency_test_setup",
+      "result": "22 setup errors",
+      "cause": "The old unit fixture computed a full historical bundle containing .github/workflows/havenline-task12-prep.yml; main intentionally has no active historical workflows.",
+      "repair": "Make the cross-record consistency fixture explicitly synthetic for bundle identity. Keep actual bundle/custody validation separate and do not claim the missing historical workflow deployed or validated.",
+      "retest": "22 consistency cases passed after fixture isolation. Current critic-policy cases were tested separately."
+    },
+    {
+      "stage": "initial_scope_validation",
+      "result": "14 of 15 checks passed",
+      "cause": "The authorized new external-review documentation used a different filename than the initial scope allowlist.",
+      "repair": "Read and verify the actual in-scope contract, then register its exact filename without broadening the allowed runtime/archive/workflow boundaries.",
+      "retest": "15 of 15 scope checks passed."
+    },
+    {
+      "stage": "final_independent_review_before_publication",
+      "result": "Additional repair/retest required",
+      "findings": [
+        "Require canonical C9 attack-matrix assertions in the consumer even when a substituted matrix uses the same attack IDs.",
+        "Reject an explicitly non-PASS original or wrapper disposition even when scores and a passed flag conflict with it.",
+        "Make current execution metadata identify forward acceptance and the usable current evidence transports."
+      ],
+      "disposition": "Supersede the first freeze, retain these findings, and regenerate only after affected tests and the combined suite pass."
+    },
+    {
+      "stage": "combined_retest_after_strict_disposition_repair",
+      "result": "205 tests run; two positive T12 consistency fixtures failed",
+      "evidence": [
+        "PRE_FINAL_RETEST_RESULTS.json",
+        "PRE_FINAL_RETEST_OUTPUT.txt"
+      ],
+      "cause": "The aggregate T12 consistency wrapper uses CRITIC_REVIEWS_COMPLETE, while the strengthened current final-critic contract requires explicit PASS and boolean passed=true on critic rows.",
+      "repair": "Retain exact wrapper lifecycle validation separately from policy-binding validation; require each current critic row to supply its own explicit final disposition. Add negative wrapper/per-row interchangeability checks.",
+      "targeted_retest": "17 critic-record and22 final-consistency tests passed. Combined rerun follows.",
+      "combined_retest": "206/206 tests passed across18/18groups; no failures, errors or skipped tests."
+    },
+    {
+      "stage": "independent_final_multiview_boundary_check",
+      "result": "FIX_REQUIRED",
+      "finding": "C1/C2 external evidence counted camera labels but accepted identical candidate capture bytes relabeled as multiple views. Independent critic reproduced a false C2 multi-view pass with coherent input/session hashes.",
+      "repair_scope": "Require distinct candidate capture bytes for the declared multi-view coverage; retain actual independent view inspection requirement.",
+      "retest": "Targeted legitimate C1/C2 positive and coherent duplicate-byte negative passed for both critics; combined207/207tests across18/18groups passed with0fail/error/skip."
+    },
+    {
+      "stage": "publication_preflight",
+      "result": "Generated cache artifacts removed before any remote mutation",
+      "finding": "The syntax-compilation check generated three .pyc cache files inside the new evidence package; the initial package allowlist and freeze included them.",
+      "repair": "Remove only those generated caches; make scope and freeze reject Python cache artifacts; bind publication paths to the exact freeze plus named verification receipts.",
+      "scope": "Packaging only. Production policy, tools, tests and completed independent207/207regression plus28/28probes are unchanged."
+    }
+  ]
+}

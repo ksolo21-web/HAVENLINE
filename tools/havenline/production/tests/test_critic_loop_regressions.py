@@ -65,17 +65,19 @@ class CriticLoopRegressionTests(unittest.TestCase):
         dissent = review_row("visual-integrity", score=8.0, defects=["visible fixture defect"])
         self.write_base(integrity=dissent)
         report = evaluate(self.root, SOURCE, GROUPS, None)
-        self.assertEqual(report["status"], "ADJUDICATION_REQUIRED")
+        self.assertEqual(report["historical_status"], "ADJUDICATION_REQUIRED")
         self.assertFalse(report["passed"])
 
-    def test_two_clean_votes_out_of_three_pass_without_score_averaging(self):
+    def test_historical_quorum_never_grants_current_approval(self):
         dissent = review_row("visual-integrity", score=8.0, defects=["isolated fixture dissent"])
         self.write_base(integrity=dissent)
         adjudication = self.root / "adjudication.json"
         adjudication.write_text(json.dumps(review_row("independent-adjudicator")))
         report = evaluate(self.root, SOURCE, GROUPS, adjudication)
-        self.assertEqual(report["status"], "PASS_BY_QUORUM")
-        self.assertTrue(report["passed"])
+        self.assertEqual(report["historical_status"], "PASS_BY_QUORUM")
+        self.assertFalse(report["passed"])
+        self.assertFalse(report["approval_allowed"])
+        self.assertEqual(report["status"],"HISTORICAL_DIAGNOSTIC_ONLY")
         self.assertEqual(report["quorums"], [{
             "group": "gate",
             "original_pass_role": "reference-fidelity",
@@ -91,14 +93,14 @@ class CriticLoopRegressionTests(unittest.TestCase):
         integrity = review_row("visual-integrity", score=8.0, defects=["confirmed fixture defect"])
         self.write_base(reference=reference, integrity=integrity)
         report = evaluate(self.root, SOURCE, GROUPS, None)
-        self.assertEqual(report["status"], "FAIL")
+        self.assertEqual(report["historical_status"], "FAIL")
         self.assertFalse(report["passed"])
 
     def test_incomplete_reviewer_is_retry_not_a_negative_vote(self):
         incomplete = review_row("visual-integrity", observations=[])
         self.write_base(integrity=incomplete)
         report = evaluate(self.root, SOURCE, GROUPS, None)
-        self.assertEqual(report["status"], "RETRY_REQUIRED")
+        self.assertEqual(report["historical_status"], "RETRY_REQUIRED")
         self.assertEqual(report["dissent_judgments"], [])
 
     def test_t03_closeout_uses_current_governance_with_frozen_candidate_evidence(self):

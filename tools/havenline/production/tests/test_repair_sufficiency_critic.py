@@ -550,6 +550,7 @@ class RepairSufficiencyCriticTests(unittest.TestCase):
             gates["test_non_threshold_metadata"] = {"task_id": "T11", "status": "ASSIGNED"}
             (prod / "CRITIC_MATRIX.json").write_text(json.dumps(matrix, indent=2) + "\n")
             (prod / "task-gates.json").write_text(json.dumps(gates, indent=2) + "\n")
+            (prod / "REFERENCE_ACCEPTANCE_POLICY.json").write_bytes((ROOT / "Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json").read_bytes())
             changed = canonical_threshold_snapshot(root)
         self.assertEqual(baseline["critic_matrix_sha256"], changed["critic_matrix_sha256"])
         self.assertEqual(baseline["task_gates_sha256"], changed["task_gates_sha256"])
@@ -557,6 +558,16 @@ class RepairSufficiencyCriticTests(unittest.TestCase):
         self.assertEqual("forward_acceptance_policy_only", changed["hash_scope"])
         report = review(c0(), accepted_plan(), threshold_snapshot=changed)
         self.assertTrue(report["passed"], report)
+
+    def test_repair_cannot_lower_reference_floor_or_weaken_exact_visual_gate(self):
+        for field,value in (("reference_minimum_dimension_score",9.5),("exact_score",9.9)):
+            snapshot=canonical_threshold_snapshot()
+            snapshot["reference_acceptance_policy"]["final_acceptance"][field]=value
+            snapshot["reference_acceptance_policy_sha256"]=_stable_digest(snapshot["reference_acceptance_policy"])
+            report=review(c0(),accepted_plan(),threshold_snapshot=snapshot)
+            with self.subTest(field=field):
+                self.assertFalse(report["passed"])
+                self.assertIn("CANONICAL_THRESHOLD_POLICY_WEAKENED",report["rejections"])
 
     def test_full_family_closure_requires_complete_collected_evidence(self):
         plan = accepted_plan()

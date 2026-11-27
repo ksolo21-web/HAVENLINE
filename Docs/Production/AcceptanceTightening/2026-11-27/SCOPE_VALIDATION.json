@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "base_commit": "7180d1315af56228e7629735c2bd50bda3c43596",
+  "validation_kind": "POLICY_TOOLING_SCOPE_AND_PRESERVATION_ONLY",
+  "game_approval_allowed": false,
+  "passed": true,
+  "checks_passed": 15,
+  "checks_required": 15,
+  "changed_or_new_files": 70,
+  "checks": [
+    {
+      "name": "changes_confined_to_approved_policy_and_tooling",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no_deleted_or_renamed_existing_files",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no_runtime_asset_render_or_archive_mutations",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "historical_workflows_remain_inactive",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "frozen_reference_refresh_bytes_preserved",
+      "passed": true,
+      "detail": {
+        "files": 20
+      }
+    },
+    {
+      "name": "lifecycle_ownership_and_invalidation_bytes_preserved",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "all_70_task_definitions_dependencies_and_statuses_preserved",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "historical_critic_task_mapping_and_receipts_preserved",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "current_policy_and_graph_matrix_projections_match",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "eleven_historical_receipts_hash_verified_and_nonapproving",
+      "passed": true,
+      "detail": {
+        "unique_receipts": 11,
+        "task_candidate_bindings": 14
+      }
+    },
+    {
+      "name": "stronger_gate_preserved_REFERENCE_STYLE_LOCK.json",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "stronger_gate_preserved_REFERENCE_FIDELITY_STANDARD.json",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "stronger_gate_preserved_SHIPPING_VISUAL_APPROVAL_POLICY.json",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static_c5_capability_cannot_claim_final_playback",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "whitespace_diff_clean",
+      "passed": true,
+      "detail": null
+    }
+  ]
+}

@@ -4,6 +4,7 @@ import datetime, pathlib, sys
 from lib import DOCS, ROOT, load_json, expand_alias, sha256_file
 from forward_execution import resolve_task
 from critic_profile import resolve_critic
+from reference_acceptance import final_rule,required_final_critics
 from architecture_v3 import task_readiness
 from architecture_v31 import task_readiness as task_readiness_v31
 from architecture_v32 import readiness as task_readiness_v32
@@ -25,7 +26,7 @@ def main():
     task=graph["tasks"][task_id];ws=next((w for w in registry["workstreams"] if w["task_id"]==task_id),None)
     owned=expand_alias(ws.get("owned_paths",[]),ownership) if ws else [];protected=expand_alias(ws.get("protected_paths",[]),ownership) if ws else []
     branch=ws.get("branch") if ws else None;base=ws.get("base_commit") if ws else None;owner=ws.get("owner") if ws else None;workstream=ws.get("workstream_id") if ws else None
-    required=list(critics["task_applicability"].get(task_id,[]))
+    required=required_final_critics(task_id,list(dict.fromkeys(critics["task_applicability"].get(task_id,[])+task.get("critics",[]))))
     policy=resources.get("task_policy",{})
     contract_applicable=task_id in policy.get("applicable_tasks",[])
     conditional_c5=task_id in policy.get("conditional_motion_critic_tasks",[])
@@ -58,7 +59,10 @@ Required APPROVED upstream tasks: {', '.join(task['dependencies']) or 'none'}
         if row.get('deterministic_runner'):text+=f"  - deterministic supplement: `{row['deterministic_runner']}`\n"
         if row.get('capture_runner'):text+=f"  - required capture harness: `{row['capture_runner']}`\n"
         if row.get('device_runner'):text+=f"  - device/layout harness: `{row['device_runner']}`\n"
+        if row.get('current_review_contract'):text+=f"  - current evidence contract: `{row['current_review_contract']}`\n"
+        if row.get('execution_note'):text+=f"  - execution scope: {row['execution_note']}\n"
         if row.get('required_categories'):text+=f"  - evidence categories: {', '.join(row['required_categories'])}\n"
+        if row.get('automated_final_approval') is False:text+=f"  - final approval unavailable through this runner: {row.get('final_review_requirement','separate complete independent evidence required')}\n"
     if contract_applicable:
         text+="\n## Resource / tool / actor / animation contract\n"
         text+="- REQUIRED by `Docs/Production/RESOURCE_TOOL_ACTOR_STANDARD.md`.\n"
@@ -168,17 +172,21 @@ Required APPROVED upstream tasks: {', '.join(task['dependencies']) or 'none'}
             text+="- After a deterministic/source-bound gate PASS, stage a content-addressed proof record with `gate_result_recorder.py proposal`; CI cannot promote it. Only the integration owner may apply a verified proposal into `GATE_RESULT_INDEX.json`.\n"
             text+="- C0 automatically stages unverified failure-learning proposals. They remain advisory/non-authoritative until a verified post-repair proof plus explicit integration-owner disposition promotes one into `FAILURE_INTELLIGENCE.json`.\n"
             text+="- Parallel preparation of later tasks is encouraged only inside GREEN/YELLOW boundaries; it never grants integration or approval.\n"
+    text+="\n\n## Current score policy\n"+final_rule()+"\n"
     text+="""
 
 ## Score rule
-Every applicable mandatory reviewed dimension must be strictly >9.0 unrounded.
-Target 10/10. No averaging and no unresolved mandatory defects.
+Use Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json and REFERENCE_ACCEPTANCE_STANDARD.md.
+Final reference-sensitive dimensions >=9.9 unrounded; preserve all stronger exact-10 visual gates.
+Other mandatory specialist dimensions >=9.5. A reference-sensitive 9.5 is interim only.
+No averaging, rounding, missing evidence or unresolved mandatory defects. Freeze the input manifest\'s
+reference_sensitive_dimensions per critic before review; the reviewer cannot omit them.
 
 ## Critic independence
 C1/C2 and every specialist critic marked independent-model-required must run in a separate review job/runtime. A builder prompt, persona swap, or self-review never qualifies. If the zero-cost independent runtime is unavailable, construction/testing may continue but approval remains BLOCKED.
 
 ## Evidence
-Exact-source hashes, changed-file manifest, deterministic engine views, performance records, applicable save/device matrices, raw critic inputs/outputs, deterministic supplements, known failures and final dispositions are mandatory before APPROVED. Use `specialist_evidence_manifest.py` for C3/C4/C5/C7/C8/C10/C11; C9 uses `security_exploit_harness.py`. Approval provenance must satisfy the V3.1 retention policy, and T10+ closeout must retain its exact terminal `factory-observation.json` and pass `factory_closeout_gate.py`.
+Exact-source hashes, changed-file manifest, deterministic engine views, performance records, applicable save/device matrices, raw critic inputs/outputs, deterministic supplements, known failures and final dispositions are mandatory before APPROVED. Use `specialist_evidence_manifest.py` for static C3/C4/C7/C8/C10/C11 inputs and interim C5 screening. Final C1/C2/C5 and scored C6 evidence follow `EXTERNAL_INDEPENDENT_REVIEW_TRANSPORT.md`; C9 uses the actual `security_exploit_harness.py` attack transport. Approval provenance must satisfy the V3.1 retention policy, and T10+ closeout must retain its exact terminal `factory-observation.json` and pass `factory_closeout_gate.py`.
 
 ## Scope
 Use the authoritative task-specific frozen scope when present. This generated packet does not expand runtime scope.

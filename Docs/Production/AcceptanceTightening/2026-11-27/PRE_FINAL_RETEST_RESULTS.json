@@ -1,0 +1,200 @@
+{
+  "schema_version": 1,
+  "validation_kind": "FOCUSED_POLICY_AND_TOOLING_REGRESSION_ONLY",
+  "passed": false,
+  "groups_passed": 16,
+  "groups_required": 18,
+  "tests_run": 205,
+  "failures": 2,
+  "errors": 0,
+  "skipped": 0,
+  "game_approval_allowed": false,
+  "groups": [
+    {
+      "name": "production/test_reference_acceptance.py",
+      "tests_run": 18,
+      "expected_nonzero_tests": 18,
+      "passed": true,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 0.019
+    },
+    {
+      "name": "production/test_specialist_safeguards.py",
+      "tests_run": 16,
+      "expected_nonzero_tests": 16,
+      "passed": true,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 1.541
+    },
+    {
+      "name": "production/test_specialist_critic_runner.py",
+      "tests_run": 9,
+      "expected_nonzero_tests": 9,
+      "passed": true,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 0.006
+    },
+    {
+      "name": "production/test_forward_review_evidence.py",
+      "tests_run": 13,
+      "expected_nonzero_tests": 13,
+      "passed": true,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 4.007
+    },
+    {
+      "name": "production/test_performance_review_transport.py",
+      "tests_run": 4,
+      "expected_nonzero_tests": 4,
+      "passed": true,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 0.024
+    },
+    {
+      "name": "production/test_workstream_status_authority.py",
+      "tests_run": 5,
+      "expected_nonzero_tests": 5,
+      "passed": true,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 0.004
+    },
+    {
+      "name": "production/test_reference_style_lock.py",
+      "tests_run": 15,
+      "expected_nonzero_tests": 15,
+      "passed": true,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 0.43
+    },
+    {
+      "name": "production/test_shipping_visual_gate.py",
+      "tests_run": 21,
+      "expected_nonzero_tests": 21,
+      "passed": true,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 12.036
+    },
+    {
+      "name": "production/test_forward_acceptance_policy.py",
+      "tests_run": 8,
+      "expected_nonzero_tests": 8,
+      "passed": true,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 0.007
+    },
+    {
+      "name": "production/test_repair_sufficiency_critic.py",
+      "tests_run": 33,
+      "expected_nonzero_tests": 33,
+      "passed": true,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 0.095
+    },
+    {
+      "name": "production/test_future_prep_packets.py",
+      "tests_run": 4,
+      "expected_nonzero_tests": 4,
+      "passed": true,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 0.016
+    },
+    {
+      "name": "production/test_t05_completion.py",
+      "tests_run": 5,
+      "expected_nonzero_tests": 5,
+      "passed": true,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 0.0
+    },
+    {
+      "name": "task12/test_critic_review_records.py",
+      "tests_run": 16,
+      "expected_nonzero_tests": 16,
+      "passed": false,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 0.024
+    },
+    {
+      "name": "task12/test_final_candidate_gate.py",
+      "tests_run": 22,
+      "expected_nonzero_tests": 22,
+      "passed": false,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 0.066
+    },
+    {
+      "name": "task10/test_aggregate_critics.py",
+      "tests_run": 7,
+      "expected_nonzero_tests": 7,
+      "passed": true,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 0.001
+    },
+    {
+      "name": "preserved_historical_raw_and_aggregate_semantics",
+      "tests_run": 4,
+      "expected_nonzero_tests": 4,
+      "passed": true,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 0.003
+    },
+    {
+      "name": "legacy_quorum_is_nonapproving",
+      "tests_run": 4,
+      "expected_nonzero_tests": 4,
+      "passed": true,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 0.001
+    },
+    {
+      "name": "historical_export_cannot_authorize_current_approval",
+      "tests_run": 1,
+      "expected_nonzero_tests": 1,
+      "passed": true,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 0.0
+    }
+  ],
+  "scope_notes": [
+    "Synthetic fixtures test gate behavior; they are not real critic/game approvals.",
+    "Media cases use generated local fixture bytes and actual decoding.",
+    "T12 cross-record tests isolate bundle identity with an explicit synthetic fixture; the consolidated historical workflow-dependent bundle is not claimed operational.",
+    "Legacy architecture/workflow-wide suites are outside this scoped run; no archived workflow is activated."
+  ]
+}

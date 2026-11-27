@@ -146,7 +146,7 @@ def verify_export_lineage(candidate, integration_head, export_commit):
 def canonical(cid, original, candidate, run, artifact, index_hash, export_commit):
     record_bytes, raw_bytes, record = original
     links = dict(original_record_path=f'{EXPORT}/{cid}-original-record.json', original_record_sha256=hashlib.sha256(record_bytes).hexdigest(), original_raw_output_path=f'{EXPORT}/{cid}-original-raw-output.json', original_raw_output_sha256=hashlib.sha256(raw_bytes).hexdigest(), original_input_manifest_sha256=record['input_manifest_hash'])
-    result = dict(task_id='T10', critic_id=cid, candidate_commit=candidate, workflow_run_id=run['id'], artifact_id=artifact['id'], artifact_sha256=artifact['digest'].removeprefix('sha256:'), complete_evidence_index_sha256=index_hash, input_manifest_sha256=index_hash, status='PASS', passed=True, coverage_complete=record['coverage_complete'], defects=record['defects'], scores=record['scores'], confidence=record['confidence'], score_reuse=False, minimum_dimension_score=min(record['scores'].values()), review_export_commit=export_commit, acceptance_rule=RAW_ACCEPTANCE_RULE, **{k:record[k] for k in ('provider','model','request_or_run_id')}, **links)
+    result = dict(review_scope='historical', approval_allowed=False, validation_kind='HISTORICAL_TRANSPORT_ONLY', task_id='T10', critic_id=cid, candidate_commit=candidate, workflow_run_id=run['id'], artifact_id=artifact['id'], artifact_sha256=artifact['digest'].removeprefix('sha256:'), complete_evidence_index_sha256=index_hash, input_manifest_sha256=index_hash, status='PASS', passed=True, coverage_complete=record['coverage_complete'], defects=record['defects'], scores=record['scores'], confidence=record['confidence'], score_reuse=False, minimum_dimension_score=min(record['scores'].values()), review_export_commit=export_commit, acceptance_rule=RAW_ACCEPTANCE_RULE, **{k:record[k] for k in ('provider','model','request_or_run_id')}, **links)
     errors=validate_raw_critic_record(result,cid,'T10',candidate,run['id'],artifact['id'],result['artifact_sha256'],index_hash,record['scores'],export_commit)
     assert not errors, errors
     return result
@@ -199,7 +199,7 @@ def export(args):
         assert not target.exists() or target.read_bytes()==contents, 'conflicting existing export '+name
     for name,contents in files.items():
         target=out/name;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(contents)
-    return dict(passed=True,candidate_commit=candidate,files=len(files),task_approved=False)
+    return dict(passed=True,candidate_commit=candidate,files=len(files),task_approved=False,approval_allowed=False,validation_kind='HISTORICAL_TRANSPORT_ONLY')
 
 
 def main():

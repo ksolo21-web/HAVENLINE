@@ -1,5 +1,9 @@
 # HAVENLINE consolidation entrypoint
 
+## Current acceptance instruction
+
+For new reviews, changed candidates and reapprovals, read `Docs/Production/REFERENCE_ACCEPTANCE_STANDARD.md` and use `REFERENCE_ACCEPTANCE_POLICY.json`. Reference-sensitive final dimensions must be >=9.9 unrounded; preserve all existing exact-10 visual requirements. A reference-sensitive 9.5 result is an interim checkpoint and cannot approve a task. Run the current forward gates on the exact candidate; preserve historical receipts, rejected evidence and active invalidations. This instruction authorizes no gameplay ownership change or archived-workflow activation.
+
 Kaleb authorized consolidation without disrupting active work and required preservation of the build plan, all task-plan material, references and renders.
 
 ## Source and work ownership

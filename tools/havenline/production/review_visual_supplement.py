@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Retry incomplete visual output and adjudicate split evidence groups only."""
+"""Historical T03 review diagnostic; never a current approval producer."""
 from __future__ import annotations
 
 import base64
@@ -17,6 +17,9 @@ from PIL import Image
 
 from evaluate_visual_quorum import ROLES, classify, load_reviews
 
+
+if os.environ.get("HAVENLINE_HISTORICAL_DIAGNOSTIC") != "1":
+    raise SystemExit("Historical-only T03 diagnostic. Use the current critic harness/closure for new reviews; explicit historical replay can never authorize approval.")
 
 SOURCE = os.environ["EXPECTED_SOURCE"]
 REVIEWS = Path(os.environ.get("REVIEWS_ROOT", "original-reviews"))
@@ -239,6 +242,9 @@ finally:
     "completed_low_scores_retried": False,
     "incomplete_outputs_retried_once": True,
     "adjudication_scores_hidden": True,
-    "strict_threshold": ">9.0 unrounded",
+    "historical_strict_threshold": ">9.0 unrounded",
+    "validation_kind": "HISTORICAL_DIAGNOSTIC_ONLY",
+    "approval_allowed": False,
+    "current_policy": "Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json",
     "score_averaging": False,
 }, indent=2) + "\n")

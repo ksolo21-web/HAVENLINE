@@ -2,10 +2,12 @@
 from __future__ import annotations
 import argparse, base64, hashlib, io, json, math, os, pathlib, subprocess, time, urllib.request
 from typing import Any
-from lib import ROOT, DOCS, load_json, ensure_score_strictly_above_nine
+from lib import ROOT, DOCS, load_json
+from reference_acceptance import acceptance_binding, declared_reference_dimensions, final_rule, load_json_strict, record_errors, strict_json_loads
 from critic_profile import resolve_critic
+from critic_harness import SPECIALIST_CRITICS, source_manifest
 
-SUPPORTED={"C3","C4","C5","C7","C8","C10","C11"}
+SUPPORTED=SPECIALIST_CRITICS
 HAVENLINE_CONTRACT="""Havenline's permanent gameplay language is MOVE -> AUTO-INTERACT -> GATHER -> VISIBLY CARRY -> DELIVER -> TRANSFORM -> RESCUE -> BUILD/UPGRADE -> EXPLORE -> DEFEND. Preserve one primary movement joystick, automatic collection/gather/attack/contextual unload/rescue, and minimal deliberate-choice controls. Do not drift into button-heavy RPG combat, 4X warfare, complicated manual inventory, energy walls, mandatory payment, hidden spend-based difficulty, fake discounts, or mandatory multiplayer. Difficulty/depth/scale may grow while control complexity stays simple. Level 100 is the launch cap. F2P completion must remain realistic."""
 
 def digest(path:pathlib.Path)->str:
@@ -15,20 +17,12 @@ def digest(path:pathlib.Path)->str:
     return h.hexdigest()
 
 def load_manifest(path:pathlib.Path,cid:str,candidate:str)->dict:
-    d=json.loads(path.read_text());errors=[]
-    if d.get('critic_id')!=cid:errors.append('critic mismatch')
-    if d.get('candidate_commit')!=candidate:errors.append('candidate mismatch')
-    if not d.get('groups'):errors.append('groups missing')
-    execution=load_json(DOCS/'CRITIC_EXECUTION.json');categories=set()
-    for group in d.get('groups',[]):
-        if not group.get('id') or not group.get('items'):errors.append('invalid group')
-        for item in group.get('items',[]):
-            p=ROOT/item.get('path','');categories.add(item.get('category'))
-            if not p.is_file():errors.append('missing '+item.get('path',''))
-            elif digest(p)!=item.get('sha256'):errors.append('hash mismatch '+item.get('path',''))
+    d=load_json_strict(path)
+    if not isinstance(d,dict):raise SystemExit('input manifest must be an object')
+    execution=load_json(DOCS/'CRITIC_EXECUTION.json')
     spec,_=resolve_critic(d.get('task_id'),cid,execution,load_json(DOCS/'CRITIC_MATRIX.json'))
-    missing=set(spec.get('required_categories',[]))-categories
-    if missing:errors.append('missing required categories: '+','.join(sorted(missing)))
+    d,_,errors=source_manifest({'input_manifest_path':str(path.relative_to(ROOT)),
+        'input_manifest_hash':digest(path),'task_id':d.get('task_id')},cid,candidate,spec)
     if errors:raise SystemExit('\n'.join(errors))
     return d
 
@@ -37,8 +31,7 @@ def evidence_text(group:dict)->str:
     for item in group['items']:
         p=ROOT/item['path'];kind=item['kind'];desc=item['description']
         if kind=='json':
-            try:text=json.dumps(json.loads(p.read_text()),sort_keys=True,indent=2)
-            except Exception:text=p.read_text(errors='replace')
+            text=json.dumps(load_json_strict(p),sort_keys=True,indent=2)
             chunks.append(f"[{item['category']}] {desc}\n{text[:14000]}")
         elif kind=='text':chunks.append(f"[{item['category']}] {desc}\n{p.read_text(errors='replace')[:14000]}")
     return '\n\n'.join(chunks)
@@ -71,10 +64,24 @@ def request_local(board,text,prompt,schema,out:pathlib.Path,label:str):
     request_bytes=json.dumps(body).encode()
     (out/(label+'-request.json')).write_bytes(request_bytes)
     req=urllib.request.Request('http://127.0.0.1:8080/v1/chat/completions',data=request_bytes,headers={'Content-Type':'application/json'},method='POST')
-    with urllib.request.urlopen(req,timeout=1200) as resp:raw=json.load(resp)
+    with urllib.request.urlopen(req,timeout=1200) as resp:raw=strict_json_loads(resp.read())
     (out/(label+'-raw.json')).write_text(json.dumps(raw,indent=2));choice=raw['choices'][0]
     if choice.get('finish_reason')!='stop':raise RuntimeError('incomplete reviewer response')
-    parsed=json.loads(choice['message']['content']);(out/(label+'-raw.txt')).write_text(choice['message']['content']);return parsed
+    (out/(label+'-raw.txt')).write_text(choice['message']['content'])
+    return strict_json_loads(choice['message']['content'])
+
+
+def review_phase(critic_id):
+    # Contact sheets cannot establish motion cycles, timing or transitions.
+    return 'interim' if critic_id=='C5' else 'final'
+
+
+def evaluate_group(review,dimensions,cid,reference_dimensions):
+    projected=dict(review) if isinstance(review,dict) else {}
+    # Frozen task input, never a field the reviewer is asked to waive or invent.
+    projected['reference_sensitive_dimensions']=list(reference_dimensions)
+    return record_errors(projected,dimensions,cid,phase=review_phase(cid),require_binding=False,
+                         reference_dimensions=reference_dimensions)
 
 def response_schema(task_id, dimensions):
     score_props={k:{'type':'number','minimum':0,'maximum':10} for k in dimensions}
@@ -83,30 +90,8 @@ def response_schema(task_id, dimensions):
         schema['properties']['observations'].update(minItems=2, maxItems=2)
         for field in ('observations', 'defects'):
             schema['properties'][field]['items']['maxLength'] = 160
-        passing_scores={key:{'type':'number','exclusiveMinimum':9.0,'maximum':10} for key in dimensions}
-        schema['oneOf']=[
-            {
-                'properties':{
-                    'defects':{'type':'array','items':{'type':'string','maxLength':160},'maxItems':0},
-                    'scores':{'type':'object','properties':passing_scores,'required':dimensions,'additionalProperties':False},
-                },
-                'required':['defects','scores'],
-            },
-            {
-                'properties':{
-                    'defects':{'type':'array','items':{'type':'string','maxLength':160},'minItems':1,'maxItems':5},
-                },
-                'required':['defects'],
-            },
-        ]
-        # The pinned llama.cpp converter handles oneOf before sibling properties.
-        # Make each alternative a complete response schema so grammar generation
-        # cannot discard observations, coverage, confidence or score dimensions.
-        for branch in schema['oneOf']:
-            properties=json.loads(json.dumps(schema['properties']))
-            properties.update(branch['properties'])
-            branch.update(type='object', properties=properties,
-                          required=list(schema['required']), additionalProperties=False)
+        # Reviewers may report low scores or incomplete evidence without inventing
+        # a defect. Acceptance is evaluated after the unmodified response.
     return schema
 
 
@@ -120,11 +105,6 @@ def response_bounds_errors(task_id, review):
             errors.append(field + ' count violates T10 response contract')
         elif any(not isinstance(value, str) or len(value) > 160 for value in values):
             errors.append(field + ' string violates T10 response contract')
-    scores=review.get('scores')
-    defects=review.get('defects')
-    if isinstance(scores,dict) and isinstance(defects,list) and not defects:
-        if any(not isinstance(value,(int,float)) or isinstance(value,bool) or value<=9.0 for value in scores.values()):
-            errors.append('T10 score at or below 9.0 requires a concrete actionable defect')
     return errors
 
 def main():
@@ -137,6 +117,9 @@ def main():
     manifest_path=(ROOT/a.manifest).resolve();manifest=load_manifest(manifest_path,cid,candidate)
     matrix=load_json(DOCS/'CRITIC_MATRIX.json');execution=load_json(DOCS/'CRITIC_EXECUTION.json')
     spec,checks=resolve_critic(manifest.get('task_id'),cid,execution,matrix);dimensions=spec['dimensions']
+    manifest_hash=digest(manifest_path)
+    reference_dimensions=declared_reference_dimensions(manifest,cid,dimensions)
+    phase=review_phase(cid);review_binding=acceptance_binding(phase);review_rule=final_rule()
     out=(ROOT/a.out).resolve();out.mkdir(parents=True,exist_ok=True)
     cache=pathlib.Path(os.path.expanduser(os.environ.get('HAVENLINE_SPECIALIST_CACHE',execution['local_independent_runtime']['cache_path'])))
     m=json.loads((cache/'manifest.json').read_text());runtime=execution['local_independent_runtime']
@@ -160,28 +143,52 @@ def main():
             time.sleep(2)
         else:raise RuntimeError('local reviewer runtime not ready')
         schema=response_schema(manifest.get('task_id'), dimensions)
-        base=f"""You are the independent {matrix['critics'][cid]['name']} for Havenline. You are reviewing exact candidate {candidate}. {HAVENLINE_CONTRACT}\nYour mandatory review checks are: {json.dumps(checks)}. Review only the supplied evidence and task scope; do not invent absent defects or silently excuse visible ones. Every mandatory dimension is scored 0-10. The forward PASS threshold is strictly ABOVE 9.0 unrounded, not >=9.0, and no average can hide a weak dimension. If any score is <=9.0, cite a concrete actionable defect in defects. If no actionable defect exists, defects MUST be [] exactly. Return JSON only. Do not claim physical-device 4K/60 unless the evidence explicitly contains physical certification."""
+        base=f"""You are the independent {matrix['critics'][cid]['name']} for Havenline. You are reviewing exact candidate {candidate}. {HAVENLINE_CONTRACT}\nYour mandatory review checks are: {json.dumps(checks)}. Review only the supplied evidence and task scope; do not invent absent defects or silently excuse visible ones. Every mandatory dimension is scored 0-10. The current forward acceptance rule is: {review_rule}. Score honestly using the full 0-10 range; never raise a score to fit the pass threshold. A low score or missing evidence is a valid failing or blocked outcome even when no visible defect can be identified. Describe evidence gaps in observations, set coverage_complete=false when evidence is incomplete, and list only actual supported defects. Empty defects does not imply a passing score. Return JSON only. Do not claim physical-device 4K/60 unless the evidence explicitly contains physical certification."""
         for group in manifest['groups']:
-            board=evidence_board(group,out);text=evidence_text(group);review=request_local(board,text,base+f"\nEvidence group: {group['id']}. Judge the complete group and every mandatory dimension.",schema,out,group['id'])
-            scores=review.get('scores',{});errors=ensure_score_strictly_above_nine(scores)
+            board=evidence_board(group,out);text=evidence_text(group);review=request_local(board,text,base+f"\nFrozen input manifest SHA256: {manifest_hash}. Matched-reference dimensions: {reference_dimensions}. Review phase: {phase}. Evidence group: {group['id']}. Judge the complete group and every mandatory dimension.",schema,out,group['id'])
+            scores=review.get('scores',{});errors=evaluate_group(review,dimensions,cid,reference_dimensions)
             errors += response_bounds_errors(manifest.get('task_id'), review)
-            if set(scores)!=set(dimensions):errors.append('dimension coverage mismatch')
+            if not isinstance(scores,dict) or set(scores)!=set(dimensions):errors.append('dimension coverage mismatch')
             if review.get('defects'):errors.append('unresolved defects')
             if review.get('coverage_complete') is not True:errors.append('coverage incomplete')
             if review.get('confidence') not in ('medium','high'):errors.append('confidence insufficient')
-            rows.append({'group':group['id'],'review':review,'passed':not errors,'errors':errors,'lowest_score':min(scores.values()) if scores else None})
+            request_path=out/(group['id']+'-request.json');response_path=out/(group['id']+'-raw.txt')
+            rows.append({'group':group['id'],'review':review,'passed':not errors,'errors':errors,
+                'request_path':str(request_path.relative_to(ROOT)),'request_sha256':digest(request_path),
+                'response_path':str(response_path.relative_to(ROOT)),'response_sha256':digest(response_path),
+                'lowest_score':min(scores.values()) if isinstance(scores,dict) and scores and all(type(v) in (int,float) and math.isfinite(v) for v in scores.values()) else None})
     except Exception as exc:fatal=type(exc).__name__+': '+str(exc)
     finally:
         proc.terminate()
         try:proc.wait(timeout=10)
         except Exception:proc.kill()
         log.close()
-    dim_scores={d:min((r['review']['scores'][d] for r in rows if d in r.get('review',{}).get('scores',{})),default=0) for d in dimensions}
+    dim_scores={d:min((r['review']['scores'][d] for r in rows if isinstance(r.get('review',{}).get('scores'),dict) and type(r['review']['scores'].get(d)) in (int,float) and math.isfinite(r['review']['scores'][d])),default=0) for d in dimensions}
     defects=[f"{r['group']}: {d}" for r in rows for d in r.get('review',{}).get('defects',[])]
     confidence_order={'low':0,'medium':1,'high':2};confidence=min((r.get('review',{}).get('confidence','low') for r in rows),key=lambda x:confidence_order.get(x,0),default='low')
-    raw={'critic_id':cid,'candidate':candidate,'groups':rows,'fatal_error':fatal};raw_path=out/'raw-output.json';raw_path.write_text(json.dumps(raw,indent=2)+'\n')
-    passed=fatal is None and len(rows)==len(manifest['groups']) and all(r['passed'] for r in rows)
-    record={'critic_id':cid,'provider':m['publisher'],'model':m['base_model'],'model_revision_expected':runtime['model_revision'],'model_revision_actual':m['revision'],'runtime_release':m.get('runtime_release'),'request_or_run_id':os.environ.get('GITHUB_RUN_ID','local')+'/'+os.environ.get('GITHUB_JOB','specialist'),'candidate_hash':candidate,'input_manifest_hash':digest(manifest_path),'raw_output_path':str(raw_path.relative_to(ROOT)),'raw_output_hash':digest(raw_path),'scores':dim_scores,'defects':defects,'coverage_complete':fatal is None and len(rows)==len(manifest['groups']) and all(r.get('review',{}).get('coverage_complete') is True for r in rows),'confidence':confidence,'independent_runtime':True,'groups':rows,'fatal_error':fatal,'passed':passed}
+    try:
+        if acceptance_binding(phase)!=review_binding:
+            fatal='reference acceptance policy changed during review; rerun on one policy binding'
+        if digest(manifest_path)!=manifest_hash:
+            fatal='input manifest changed during review; rerun with one immutable evidence manifest'
+    except ValueError as exc:
+        fatal='reference acceptance policy became unavailable: '+str(exc)
+    checkpoint_passed=fatal is None and len(rows)==len(manifest['groups']) and all(r['passed'] for r in rows)
+    passed=checkpoint_passed and phase=='final'
+    record={'critic_id':cid,'provider':m['publisher'],'model':m['base_model'],'model_revision_expected':runtime['model_revision'],'model_revision_actual':m['revision'],'runtime_release':m.get('runtime_release'),'request_or_run_id':os.environ.get('GITHUB_RUN_ID','local')+'/'+os.environ.get('GITHUB_JOB','specialist'),'candidate_hash':candidate,'input_manifest_path':str(manifest_path.relative_to(ROOT)),'input_manifest_hash':manifest_hash,'scores':dim_scores,'defects':defects,'coverage_complete':fatal is None and len(rows)==len(manifest['groups']) and all(r.get('review',{}).get('coverage_complete') is True for r in rows),'confidence':confidence,'independent_runtime':True,'groups':rows,'fatal_error':fatal,'passed':passed}
     record['task_id']=manifest.get('task_id')
+    record['reference_acceptance']=review_binding
+    record['reference_sensitive_dimensions']=reference_dimensions
+    record['acceptance_rule']=review_rule
+    record['status']='PASS' if passed else 'BLOCKED' if fatal or not record['coverage_complete'] else 'FAIL'
+    if phase=='interim':
+        record['status']='INTERIM_REVIEW_ONLY';record['approval_allowed']=False
+        record['interim_checkpoint_passed']=checkpoint_passed
+        record['temporal_evidence_blocker']='This runner inspects contact sheets and text only; no independent full-cycle playback was performed.'
+    raw={**record,'format':'havenline-specialist-report-v2'}
+    raw_path=out/'raw-output.json';raw_path.write_text(json.dumps(raw,indent=2,allow_nan=False)+'\n')
+    record['raw_output_path']=str(raw_path.relative_to(ROOT));record['raw_output_hash']=digest(raw_path)
+    # This is critic evidence, not permission to integrate or ship.
+    record['approval_authority_granted']=False
     (out/'critic-record.json').write_text(json.dumps(record,indent=2)+'\n');print(json.dumps(record,indent=2));raise SystemExit(0 if passed else 1)
 if __name__=='__main__':main()

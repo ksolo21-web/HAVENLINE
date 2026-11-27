@@ -1,0 +1,198 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/plan_critic",
+  "reviewer_role": "Separate read-only independent critic; no implementation edits",
+  "reviewed_at_utc": "2026-11-27T11:06:29+00:00",
+  "verdict": "PASS",
+  "review_scope": "Havenline reference-acceptance policy and forward tooling only",
+  "base_commit": "7180d1315af56228e7629735c2bd50bda3c43596",
+  "final_content_sha256": "8f529b23b682c8256b36750786a88065ed859ae9b76206a40899f8fc52027fca",
+  "final_content_file_count": 63,
+  "scores": {
+    "requirements_fidelity_and_preservation": 10.0,
+    "numeric_and_phase_enforcement": 10.0,
+    "source_and_evidence_integrity": 9.9,
+    "producer_consumer_coherence": 9.9,
+    "coverage_and_negative_case_enforcement": 9.9,
+    "verification_and_failure_history": 10.0,
+    "authority_and_scope_honesty": 10.0
+  },
+  "minimum_score": 9.9,
+  "aggregation_rule": "Minimum; no averaging; every mandatory check must pass",
+  "mandatory_checks": [
+    {
+      "name": "Final candidate identity",
+      "passed": true,
+      "evidence_summary": "Corrected 63-file freeze verified before and after the final packaging checks."
+    },
+    {
+      "name": "Reference threshold and interim boundary",
+      "passed": true,
+      "evidence_summary": "Every declared relevant final dimension requires at least 9.9 without rounding; 9.5 reference evidence is interim only."
+    },
+    {
+      "name": "Existing stronger visual requirements",
+      "passed": true,
+      "evidence_summary": "The mandatory dimensions of C1/C2/C3/C4/C5/C11 retain exact 10; ordinary other specialist dimensions retain 9.5 unless a stronger rule applies."
+    },
+    {
+      "name": "Mandatory checks and missing evidence",
+      "passed": true,
+      "evidence_summary": "No averaging, outvoting, score normalization, missing evidence or known unresolved required defects can authorize final approval."
+    },
+    {
+      "name": "Frozen requirements and review identity",
+      "passed": true,
+      "evidence_summary": "Policy identity, candidate, task, declared reference dimensions, complete evidence index and original independent reviewer records are bound and checked."
+    },
+    {
+      "name": "Strict original dispositions",
+      "passed": true,
+      "evidence_summary": "Explicit non-PASS, interim, historical, false/nonboolean pass flags, duplicate JSON keys and invalid/nonfinite score values block current final approval."
+    },
+    {
+      "name": "C1/C2 visual evidence",
+      "passed": true,
+      "evidence_summary": "Valid distinct-view fixtures pass; coherent relabeling of identical image bytes as multiple views fails for both lanes."
+    },
+    {
+      "name": "C5 motion evidence",
+      "passed": true,
+      "evidence_summary": "Static specialist is explicitly interim-only. Final external model review requires actual decoded media, full cycle/transition ranges and required coverage."
+    },
+    {
+      "name": "C6 performance producer and consumer",
+      "passed": true,
+      "evidence_summary": "Original independent scores are preserved; exact measured supplement and valid finite metrics are required. Score-only terminal transport is blocked."
+    },
+    {
+      "name": "C9 deterministic producer and consumer",
+      "passed": true,
+      "evidence_summary": "Task/index are bound before execution; the consumer checks the current canonical attack matrix, assertions, protocol and actual harness record."
+    },
+    {
+      "name": "Forward closure and authority",
+      "passed": true,
+      "evidence_summary": "Current signoff, effective dependencies, invalidations and required critic union are enforced; generic status edits and historical exports cannot manufacture approval."
+    },
+    {
+      "name": "Current/discovered project roots",
+      "passed": true,
+      "evidence_summary": "Active scope, project identity and actual dependencies are bound. Level1 is covered; unused preserved Godot content does not independently decide a scoped current signoff."
+    },
+    {
+      "name": "Artifact bytes and source provenance",
+      "passed": true,
+      "evidence_summary": "Required raw reports, inputs and media are read and validated; frozen integration media use the selected Git bytes rather than substituted workspace files."
+    },
+    {
+      "name": "Historical preservation",
+      "passed": true,
+      "evidence_summary": "70 task definitions/dependencies/statuses, 20 files inside the dated reference-refresh package, protected registries and 11 original receipt files/14 bindings are preserved."
+    },
+    {
+      "name": "T12 lifecycle semantics",
+      "passed": true,
+      "evidence_summary": "The pre-disposition aggregate wrapper is separately validated and remains non-approving; individual final critic rows require explicit PASS and boolean passed=true."
+    },
+    {
+      "name": "Packaging and deployment limits",
+      "passed": true,
+      "evidence_summary": "Both scope and freeze helpers reject Python cache artifacts. No game/runtime/assets/archive/workflow changes or current game approval are included."
+    }
+  ],
+  "open_mandatory_findings": [],
+  "verification": {
+    "full_regression": {
+      "tests_run": 207,
+      "groups_passed": 18,
+      "groups_required": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "independently_rerun": true,
+      "freeze_at_run": "5c1fbd3c446d95b397a730952358e5c52730f2ace588da1ce96ae9a460ac2042"
+    },
+    "independent_adversarial_and_positive_probes": {
+      "passed": 28,
+      "required": 28,
+      "freeze_at_run": "5c1fbd3c446d95b397a730952358e5c52730f2ace588da1ce96ae9a460ac2042"
+    },
+    "final_scope_preservation": {
+      "passed": 15,
+      "required": 15,
+      "independently_rerun": true
+    },
+    "final_packaging_checks": {
+      "passed": 7,
+      "required": 7,
+      "includes_four_negative_cache_injections": true,
+      "freeze_before_and_after_matches": true
+    },
+    "forward_policy_consistency": "Independently passed before packaging-only correction; production policy and validator code unchanged by that correction"
+  },
+  "packaging_lineage": {
+    "previous_content_sha256": "5c1fbd3c446d95b397a730952358e5c52730f2ace588da1ce96ae9a460ac2042",
+    "previous_content_file_count": 66,
+    "final_content_sha256": "8f529b23b682c8256b36750786a88065ed859ae9b76206a40899f8fc52027fca",
+    "final_content_file_count": 63,
+    "declared_delta": "Remove three generated package cache files; add rejection in freeze_snapshot.py and validate_scope.py; retain publication-preflight event in VALIDATION_HISTORY.json",
+    "independent_delta_review": "Final helper source inspection, final digest before/after, four cache-injection negative checks and 15 preservation checks",
+    "full_old_manifest_retained": false,
+    "production_and_test_content_unchanged": "Builder declaration; scope and final source review consistent with the declared packaging-only correction. Earlier test/probe receipt identities were preserved, not rewritten."
+  },
+  "current_game_score": null,
+  "game_approval_allowed": false,
+  "task_or_build_approval_allowed": false,
+  "publication_status": "PENDING_AT_REVIEW",
+  "limitations": [
+    "No current game, APK, aesthetic fidelity, animation, audio listening, device or real performance certification is provided.",
+    "Source/media validation cannot mechanically prove truthful independent observation or aesthetic similarity; actual required independent review remains mandatory.",
+    "Tests use synthetic fixtures and actual decoding of fixture media; they are not genuine game approval records.",
+    "T12 cross-record tests use an explicitly synthetic bundle identity because historical consolidated workflows are inactive; no full workflow environment is certified.",
+    "Live external reviewer services, all legacy architecture/workflow suites, remote publication and active-branch adoption were not certified by this critic.",
+    "The 207-test suite and 28 probes predate only the final packaging correction; their original freeze identity is retained."
+  ],
+  "evidence": [
+    {
+      "path": "/workspace/scratch/e15437dc7c94/acceptance-critic-final-package/FREEZE.json",
+      "bytes": 12336,
+      "sha256": "2069b676c1b48eb080c95f476905e026406e44ae865dc0f99b8ee19e38b2de76"
+    },
+    {
+      "path": "/workspace/scratch/e15437dc7c94/acceptance-critic-final-package/PACKAGING_CHECKS.json",
+      "bytes": 1602,
+      "sha256": "b2f220042ec58b0858f995c7f7ed8cfd41c2a54259438f95d27ebfbcb3241060"
+    },
+    {
+      "path": "/workspace/scratch/e15437dc7c94/acceptance-critic-final-package/SCOPE_VALIDATION.json",
+      "bytes": 2216,
+      "sha256": "2b81724c0c3a64da8d402f91daefd7be79c6306db22b2ba549f249b5e59f1986"
+    },
+    {
+      "path": "/workspace/scratch/e15437dc7c94/acceptance-critic-final-suite/TEST_RESULTS.json",
+      "bytes": 5121,
+      "sha256": "adc5d9525bb69f8745c97f3ddc38371245be18f8632e1ed267377794f89a4271"
+    },
+    {
+      "path": "/workspace/scratch/e15437dc7c94/acceptance-critic-final-suite/TEST_OUTPUT.txt",
+      "bytes": 37960,
+      "sha256": "d9aa81ea1da225c4e07c7289b6bb606bd02e7855232876810a04b06c77429e03"
+    },
+    {
+      "path": "/workspace/scratch/e15437dc7c94/acceptance-critic-final-probes.py",
+      "bytes": 7607,
+      "sha256": "7d557b7042847429fd13aebdc8c83cdab1aa9d3ffa70ccee75df28363d743809"
+    },
+    {
+      "path": "/workspace/scratch/e15437dc7c94/acceptance-critic-final-probes.json",
+      "bytes": 10226,
+      "sha256": "355a9969d073f01453a50479e6cc5f850a89896ebb97428c8e309d020b9cebe8"
+    },
+    {
+      "path": "/workspace/scratch/e15437dc7c94/acceptance-critic-initial-findings.md",
+      "bytes": 3685,
+      "sha256": "ca3b2f3633bdc99549413c7bb34133600ede2173f2ec71fc9e8065a21ad1a2f9"
+    }
+  ]
+}

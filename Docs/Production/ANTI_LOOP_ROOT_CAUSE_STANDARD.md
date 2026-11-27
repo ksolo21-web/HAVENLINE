@@ -104,32 +104,11 @@ candidate early, but it can never approve a task or replace the full critics.
 
 ## Isolated dissent adjudication
 
-Do not average scores. A completed score at or below the threshold normally
-remains a failure. The only exception is a formally isolated dissent within
-one evidence group:
+Use the current [reference acceptance policy](REFERENCE_ACCEPTANCE_STANDARD.md), including every stronger exact-10 visual requirement. Do not average scores or promote a low result through a quorum while a mandatory defect remains unresolved. A completed score below its applicable threshold remains a failing result.
 
-- exactly one of the two primary judgments for that evidence group is below
-  the threshold;
-- the paired role for the same evidence group is strictly above 9.0 in every
-  mandatory dimension with no defect and medium/high confidence;
-- source binding, coverage, mechanical gates and evidence integrity all pass;
-- full-resolution manual inspection does not corroborate the alleged defect.
+A disputed finding may enter `ADJUDICATION_REQUIRED` only after exact-source, complete full-resolution evidence is available. Preserve the original review unchanged. A fresh independent reviewer examines the disputed evidence and complete affected requirement set without being instructed to raise the score. The adjudication records whether the original finding was a demonstrable assessment error, with the supporting evidence and reason. An evidence-based correction does not authorize arbitrary rescoring of unchanged work.
 
-An eligible dissent becomes `ADJUDICATION_REQUIRED`, not an automatic task
-failure. Preserve the original low verdict unchanged, then run one focused
-fresh adjudicator against the exact disputed source-bound pixels and the same
-scoring rubric. Use a separately recorded seed and do not disclose the earlier
-scores. If the adjudicator is strictly above 9.0 in every dimension with no
-defect and medium/high confidence, that group passes by a documented
-two-of-three quorum. If the adjudicator corroborates any mandatory defect or
-scores at or below 9.0, the candidate fails and requires a production repair.
-Several split groups may be adjudicated independently in one focused run; every
-split group must earn its own two-of-three quorum.
-
-Missing, truncated, malformed, low-confidence or source-mismatched responses
-are tooling failures, not votes. Retry only the incomplete judgment. Two
-completed critics failing the same evidence group, any hard mechanical failure,
-or any missing required view can never be outvoted.
+Final acceptance still requires every current mandatory dimension to meet its actual threshold, all required views and states, complete source binding, and zero unresolved mandatory defects. A corroborated defect returns to repair. Missing, truncated, malformed, low-confidence or source-mismatched responses block approval until the required evidence/review exists. No vote can override missing evidence, a hard mechanical failure or Kaleb's explicit rejection. Repairs receive fresh affected evidence and independent retesting.
 
 The required loop is:
 

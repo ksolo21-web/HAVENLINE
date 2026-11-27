@@ -18,11 +18,14 @@
       3840,
       2160
     ],
-    "capture_fps": 60
+    "capture_fps": 60,
+    "candidate_commit": "0000000000000000000000000000000000000000",
+    "stills": [],
+    "motion_videos": []
   },
   "user_visual_approval": false,
   "approved_at": null,
-  "note": "Final approval requires zero primitive findings, whole-frame side-by-side reference fidelity, zero failed visible asset classes, and explicit user approval. A user rejection cannot be overridden by critic scores.",
+  "note": "INCOMPLETE TEMPLATE; never an approval. Freeze a fresh policy binding and exact candidate; provide actual hashed still/video/reference-frame bytes, every applicable canonical critic dimension, complete independent review and authentic explicit owner approval. All existing stronger exact10 gates remain mandatory.",
   "reference_fidelity": {
     "standard": "Docs/Production/REFERENCE_FIDELITY_STANDARD.json",
     "whole_frame_reviewed": false,
@@ -31,8 +34,58 @@
     "matched_visible_classes": [],
     "failed_visible_classes": [],
     "upstream_owner_failures": [],
-    "notes": ""
+    "notes": "",
+    "candidate_commit": "0000000000000000000000000000000000000000",
+    "reference_pixels_reviewed": false,
+    "coverage_complete": false,
+    "primary_reference_ids": [
+      "A",
+      "B"
+    ],
+    "reference_frames": [
+      {
+        "reference_id": "A",
+        "video_sha256": "62f7cfe644de3826cfdd6d91bc23c0ab8d9e4fde3e175c90f762e604547bb0ca",
+        "path": "",
+        "sha256": "",
+        "sampled_timestamp_seconds": null
+      },
+      {
+        "reference_id": "B",
+        "video_sha256": "4c9051cbea6df0efa3e7288b13b6d17da46e857274869b0b43d2f96ff6cc79d2",
+        "path": "",
+        "sha256": "",
+        "sampled_timestamp_seconds": null
+      }
+    ],
+    "critic_scores": {},
+    "independent_review": {
+      "independent_runtime": false,
+      "candidate_commit": "0000000000000000000000000000000000000000",
+      "provider": "",
+      "model": "",
+      "request_or_run_id": "",
+      "raw_output_path": "",
+      "raw_output_sha256": ""
+    }
   },
   "user_visual_rejection": false,
-  "user_feedback": ""
+  "user_feedback": "",
+  "reference_acceptance": {
+    "policy_id": "havenline-reference-acceptance-2026-11-27",
+    "policy_sha256": "GENERATE_FROM_reference_acceptance.acceptance_binding_AT_REVIEW_FREEZE",
+    "phase": "final",
+    "scores_unrounded": true,
+    "score_averaging_used": false
+  },
+  "shipping_scope": {
+    "candidate_commit": "0000000000000000000000000000000000000000",
+    "project_root": "HavenlineLevel1/",
+    "project_file_sha256": "",
+    "dependency_roots": [],
+    "build_evidence": {
+      "path": "",
+      "sha256": ""
+    }
+  }
 }

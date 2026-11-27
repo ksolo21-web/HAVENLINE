@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import argparse, hashlib, json, pathlib, re, subprocess
+import argparse, hashlib, json, math, pathlib, re, subprocess
 from datetime import datetime,timezone
-from lib import ROOT, DOCS, load_json, ensure_score_strictly_above_nine, sha256_file
+from lib import ROOT, DOCS, ensure_score_strictly_above_nine, sha256_file
 from evidence_retention import validate_manifest as validate_retention_manifest
 from task_state_snapshot import validate as validate_task_state
 from critic_profile import resolve_critic
 from reference_style_lock import style_lock_required, validate_manifest as validate_reference_style_lock
+from reference_acceptance import binding_errors, declared_reference_dimensions, final_rule, load_json_strict as load_json, nonapproving_scope_errors, record_errors, required_final_critics, strict_json_loads
+from shipping_visual_gate import active_invalidation, effective_approval, validate_signoff
 
 ALL_GATES=[f"G{i}" for i in range(1,15)]
 RESOURCE_REGISTRY=DOCS/"RESOURCE_ACTION_REGISTRY.json"
@@ -60,7 +62,114 @@ def valid_reviewer_confidence(value):
         return value in {"high","medium"}
     return isinstance(value,(int,float)) and not isinstance(value,bool) and 0<value<=1
 
-def validate_raw_critic_record(raw,cid,task,candidate,workflow_run_id,artifact_id,artifact_sha,evidence_hash,scores,review_export_commit):
+def minimum_score(scores):
+    values=list(scores.values()) if isinstance(scores,dict) else scores
+    if not isinstance(values,list) or not values:return None
+    if any(type(value) not in (int,float) or not 0<=value<=10 for value in values):return None
+    return min(values)
+
+def validate_original_review_transport(raw):
+    """Current final exports must retain actual request and reviewer response bytes."""
+    errors=nonapproving_scope_errors(raw);transport=raw.get('review_transport',{})
+    if not isinstance(transport,dict):return ['original reviewer transport is missing']
+    kind=transport.get('kind');cid=raw.get('critic_id')
+    pointer_kinds={'external_independent_review_v1':{'C1','C2','C5'},
+        'deterministic_security_harness_v1':{'C9'},'scored_performance_review_v1':{'C6'}}
+    if kind in pointer_kinds:
+        if cid not in pointer_kinds[kind]:return ['original review transport cannot waive this critic execution lane']
+        from critic_harness import validate_raw
+        rel=transport.get('critic_record_path');digest=transport.get('critic_record_sha256')
+        if not isinstance(rel,str) or not rel or not isinstance(digest,str) or not re.fullmatch(r'[0-9a-f]{64}',digest):
+            return ['external independent critic record path/hash missing']
+        path=ROOT/rel
+        if path.is_symlink() or not path.resolve().is_relative_to(ROOT.resolve()) or not path.is_file() or sha256_file(path)!=digest:
+            return ['external independent critic record bytes missing or mismatched']
+        check=validate_raw(path,raw.get('critic_id'),raw.get('candidate_commit'))
+        errors += ['external independent review: '+message for message in check.get('errors',[])]
+        if check.get('passed') is not True:errors.append('external independent review did not pass')
+        record=check.get('record',{})
+        for key in ('scores','defects','coverage_complete','confidence','reference_acceptance','reference_sensitive_dimensions','provider','model','request_or_run_id'):
+            if record.get(key)!=raw.get(key):errors.append('external normalized raw mismatch: '+key)
+        if record.get('task_id')!=raw.get('task_id'):errors.append('external independent task identity mismatch')
+        if record.get('complete_evidence_index_sha256')!=raw.get('complete_evidence_index_sha256'):
+            errors.append('external independent review is not bound to this complete evidence index')
+        return errors
+    if kind!='automated_request_response_v1':
+        return ['unsupported original review transport; legacy formats are historical-only']
+    if cid in ('C6','C9'):
+        return ['C6/C9 require their current validated measured-performance or deterministic-attack transport; score-only request/response cannot approve']
+    if raw.get('critic_id')=='C5':
+        errors.append('static request/response transport cannot approve C5; independent temporal playback transport is required')
+    documents={}
+    for label in ('request','response'):
+        rel=transport.get(label+'_path');digest=transport.get(label+'_sha256')
+        if not isinstance(rel,str) or not rel or not isinstance(digest,str) or not re.fullmatch(r'[0-9a-f]{64}',digest):
+            errors.append('original reviewer '+label+' path/hash missing');continue
+        path=ROOT/rel
+        if path.is_symlink() or not path.resolve().is_relative_to(ROOT.resolve()) or not path.is_file():
+            errors.append('original reviewer '+label+' file missing or unsafe');continue
+        body=path.read_bytes()
+        if hashlib.sha256(body).hexdigest()!=digest:errors.append('original reviewer '+label+' hash mismatch');continue
+        try:documents[label]=strict_json_loads(body)
+        except ValueError as exc:errors.append('original reviewer '+label+' invalid JSON: '+str(exc))
+    request=documents.get('request')
+    if isinstance(request,dict):
+        text=json.dumps(request,sort_keys=True)
+        for field in ('candidate_commit','input_manifest_sha256'):
+            value=raw.get(field)
+            if not isinstance(value,str) or not value or value not in text:errors.append('original reviewer request lacks exact '+field)
+    else:errors.append('original reviewer request must be a JSON object')
+    response=documents.get('response')
+    try:
+        if isinstance(response,dict) and 'choices' in response:
+            response=strict_json_loads(response['choices'][0]['message']['content'])
+    except (ValueError,KeyError,IndexError,TypeError) as exc:
+        errors.append('original model response cannot be decoded: '+str(exc));response=None
+    if not isinstance(response,dict):errors.append('original reviewer response must be a JSON object')
+    else:
+        projected=dict(response)
+        projected['reference_sensitive_dimensions']=raw.get('reference_sensitive_dimensions',[])
+        errors += ['original reviewer response: '+error for error in record_errors(projected,
+            list(raw.get('scores',{})),raw.get('critic_id'),require_binding=False,
+            reference_dimensions=raw.get('reference_sensitive_dimensions',[]))]
+        for field in ('scores','coverage_complete','defects','confidence'):
+            if response.get(field)!=raw.get(field):errors.append('normalized raw '+field+' differs from original reviewer response')
+    return errors
+
+
+def forward_dependency_errors(task,base,graph):
+    errors=[]
+    for dep in graph.get('tasks',{}).get(task,{}).get('dependencies',[]):
+        try:
+            check=effective_approval(dep,base)
+            if check.get('effective_approved') is not True or check.get('passed') is not True:
+                errors.append('dependency not effectively approved: '+dep)
+                errors += [dep+': '+str(message) for message in check.get('errors',[])]
+        except (OSError,ValueError,KeyError,TypeError,subprocess.SubprocessError) as exc:
+            errors.append('dependency approval could not be validated: '+dep+': '+str(exc))
+    return errors
+
+
+def forward_visual_errors(task,candidate,style_required,required):
+    errors=[]
+    try:
+        if active_invalidation(task):errors.append('active approval invalidation blocks current final approval')
+        if style_required or set(required)&{'C1','C2','C3','C4','C5','C11'}:
+            signoff=validate_signoff(task,candidate)
+            errors += nonapproving_scope_errors(signoff)
+            if signoff.get('passed') is not True:errors.append('mandatory current candidate visual signoff did not pass')
+            errors += ['visual signoff: '+str(message) for message in signoff.get('errors',[])]
+    except (OSError,ValueError,KeyError,TypeError,subprocess.SubprocessError) as exc:
+        errors.append('current visual approval could not be validated: '+str(exc))
+    return errors
+
+
+def validate_raw_critic_record(raw,cid,task,candidate,workflow_run_id,artifact_id,artifact_sha,evidence_hash,scores,review_export_commit,*,forward=False,expected_dimensions=None,reference_dimensions=None):
+    """Validate receipt consistency; legacy mode alone never grants approval.
+
+    The live closeout entrypoint always supplies forward=True. Historical
+    migration callers separately bind exact immutable receipt bytes.
+    """
     errors=[]
     if raw.get("task_id")!=task or raw.get("critic_id")!=cid or raw.get("candidate_commit")!=candidate:errors.append("identity mismatch")
     if raw.get("workflow_run_id")!=workflow_run_id or raw.get("artifact_id")!=artifact_id:errors.append("run/artifact mismatch")
@@ -68,29 +177,37 @@ def validate_raw_critic_record(raw,cid,task,candidate,workflow_run_id,artifact_i
     if raw.get("complete_evidence_index_sha256")!=evidence_hash or raw.get("input_manifest_sha256")!=evidence_hash:errors.append("input manifest mismatch")
     if raw.get("status")!="PASS" or raw.get("passed") is not True or raw.get("coverage_complete") is not True or raw.get("defects"):errors.append("disposition incomplete")
     if raw.get("scores")!=scores:errors.append("aggregate score mismatch")
-    errors += ensure_score_strictly_above_nine(raw.get("scores",{}))
+    errors += record_errors(raw,expected_dimensions or [],cid,reference_dimensions=reference_dimensions) if forward else ensure_score_strictly_above_nine(raw.get("scores",{}))
+    if forward:errors += validate_original_review_transport(raw)
     confidence=raw.get("confidence")
     if not valid_reviewer_confidence(confidence):errors.append("confidence invalid")
     if raw.get("score_reuse") is not False:errors.append("score reuse must be false")
     raw_scores=raw.get("scores",{})
-    if not raw_scores or raw.get("minimum_dimension_score")!=min(raw_scores.values()):errors.append("minimum score mismatch")
+    if not raw_scores or raw.get("minimum_dimension_score")!=minimum_score(raw_scores):errors.append("minimum score mismatch")
     if not re.fullmatch(r"[0-9a-f]{40}",str(review_export_commit or "")) or raw.get("review_export_commit")!=review_export_commit:errors.append("review export provenance mismatch")
-    if raw.get("acceptance_rule")!=RAW_ACCEPTANCE_RULE:errors.append("acceptance rule mismatch")
+    if raw.get("acceptance_rule")!=(final_rule() if forward else RAW_ACCEPTANCE_RULE):errors.append("acceptance rule mismatch")
     if not all(raw.get(k) for k in ("provider","model","request_or_run_id")):errors.append("provider provenance incomplete")
     return errors
 
-def validate_critic_aggregate(aggregate,required,candidate,workflow_run_id,artifact_id,artifact_sha,evidence_hash,retained_review,critics):
+def validate_critic_aggregate(aggregate,required,candidate,workflow_run_id,artifact_id,artifact_sha,evidence_hash,retained_review,critics,*,forward=False,task=None,execution=None,matrix=None,source_manifest=None):
+    """Consistency validation; forward closeout additionally enforces current policy."""
     errors=[]
+    if forward:errors += binding_errors(aggregate)
     if aggregate.get("status")!="PASS" or aggregate.get("disposition")!="APPROVED" or aggregate.get("coverage_complete") is not True or aggregate.get("unresolved_mandatory_defects"):errors.append("disposition incomplete")
     if (aggregate.get("candidate_commit"),aggregate.get("workflow_run_id"),aggregate.get("artifact_id"),aggregate.get("artifact_sha256"),aggregate.get("complete_evidence_index_sha256"))!=(candidate,workflow_run_id,artifact_id,artifact_sha,evidence_hash):errors.append("source identity mismatch")
     scores=[score for cid in required for score in aggregate.get("critics",{}).get(cid,{}).get("scores",{}).values()]
-    if not scores or aggregate.get("minimum_mandatory_dimension_score")!=min(scores):errors.append("minimum score mismatch")
+    if not scores or aggregate.get("minimum_mandatory_dimension_score")!=minimum_score(scores):errors.append("minimum score mismatch")
     ar=aggregate.get("retained_review_evidence",{})
     if (ar.get("workflow_run_id"),ar.get("artifact_id"),ar.get("artifact_sha256"),ar.get("expires_at"))!=(retained_review.get("run_id"),retained_review.get("artifact_id"),str(retained_review.get("digest","")).removeprefix("sha256:"),retained_review.get("expires_at")):errors.append("retained evidence mismatch")
     for cid in required:
         row=aggregate.get("critics",{}).get(cid,{});expected=critics.get(cid,{})
         expected_scores=expected.get("scores",{})
-        if row.get("status")!="PASS" or row.get("coverage_complete") is not True or row.get("defects") or row.get("scores")!=expected_scores or not expected_scores or row.get("minimum_dimension_score")!=min(expected_scores.values()) or row.get("raw_record_path")!=expected.get("raw_record_path") or row.get("raw_record_sha256")!=expected.get("raw_record_sha256"):errors.append("critic row mismatch "+cid)
+        if forward:
+            spec,_=resolve_critic(task,cid,execution,matrix)
+            try:reference_dimensions=declared_reference_dimensions(source_manifest,cid,spec.get('dimensions',[]))
+            except ValueError as exc:errors.append(str(exc));reference_dimensions=[]
+            errors += [cid+": "+x for x in record_errors(row,spec.get("dimensions",[]),cid,reference_dimensions=reference_dimensions)]
+        if row.get("status")!="PASS" or row.get("coverage_complete") is not True or row.get("defects") or row.get("scores")!=expected_scores or not expected_scores or row.get("minimum_dimension_score")!=minimum_score(expected_scores) or row.get("raw_record_path")!=expected.get("raw_record_path") or row.get("raw_record_sha256")!=expected.get("raw_record_sha256"):errors.append("critic row mismatch "+cid)
     return errors
 
 def validate_defect_ledger(ledger,candidate,aggregate,required):
@@ -98,7 +215,7 @@ def validate_defect_ledger(ledger,candidate,aggregate,required):
     if ledger.get("candidate_commit")!=candidate or ledger.get("integrated_commit")!=candidate:errors.append("source identity mismatch")
     if ledger.get("unresolved_mandatory_count")!=0 or ledger.get("unresolved_tooling_count")!=0 or ledger.get("critic_approval_pending") is not False:errors.append("unresolved state mismatch")
     if not ledger.get("defects") or any(row.get("status")!="VERIFIED_CLOSED" for row in ledger.get("defects",[])):errors.append("non-closed defect")
-    minima={cid:min(aggregate.get("critics",{}).get(cid,{}).get("scores",{}).values()) for cid in required if aggregate.get("critics",{}).get(cid,{}).get("scores")}
+    minima={cid:minimum_score(aggregate.get("critics",{}).get(cid,{}).get("scores",{})) for cid in required if aggregate.get("critics",{}).get(cid,{}).get("scores")}
     if ledger.get("critic_scores")!=minima:errors.append("critic minima mismatch")
     return errors
 
@@ -106,13 +223,18 @@ def main():
     ap=argparse.ArgumentParser();ap.add_argument("manifest");a=ap.parse_args()
     p=pathlib.Path(a.manifest)
     if not p.is_absolute():p=ROOT/p
-    d=json.loads(p.read_text());errors=[]
+    try:d=load_json(p)
+    except (OSError,ValueError) as exc:
+        print(json.dumps({'passed':False,'approval_allowed':False,'errors':['invalid current closure JSON: '+str(exc)]}));raise SystemExit(1)
+    errors=[]
     task=d.get("task_id");candidate=d.get("candidate_commit");base=d.get("base_commit")
+    # This entrypoint always evaluates a new forward approval. Historical
+    # receipt integrity is a separate non-approving migration operation.
+    errors += binding_errors(d)
     graph=load_json(DOCS/"DEPENDENCY_GRAPH.json");critcfg=load_json(DOCS/"CRITIC_MATRIX.json");execfg=load_json(DOCS/"CRITIC_EXECUTION.json")
     resources=load_json(RESOURCE_REGISTRY);actors=load_json(ACTOR_MATRIX);animations=load_json(ANIMATION_MATRIX);gm_policy=load_json(GAME_MASTER_POLICY)
     if task not in graph["tasks"]:errors.append("unknown task")
-    for dep in graph["tasks"].get(task,{}).get("dependencies",[]):
-        if graph["tasks"][dep]["status"]!="APPROVED":errors.append("dependency not approved: "+dep)
+    errors += forward_dependency_errors(task,base,graph)
     if not candidate or len(candidate)!=40:errors.append("invalid candidate commit")
     if not base or len(base)!=40:errors.append("invalid base commit")
     approval_path=DOCS/"Evidence"/str(task)/"APPROVAL_EVIDENCE_MANIFEST.json"
@@ -142,8 +264,8 @@ def main():
     provenance=next((row for row in provenance_rows if row.get("record_type")=="exact_source_provenance" and row.get("task_id")==task and row.get("candidate")==candidate and row.get("result")=="PASS"),None)
     if not provenance or provenance.get("reuse_eligible") is not False:
         errors.append("missing non-reusable exact-source provenance record")
-    if task=="T09":
-        errors += t09_historical_lifecycle_errors(p.read_bytes())
+    # Exact historical T09 byte checks belong only to the non-approving audit
+    # helper, never to a new T09 candidate evaluated under current policy.
     review_record=load_json(DOCS/str(task)/"independent-critic-review.json")
     approved_at=review_record.get("approved_at")
     try:
@@ -243,7 +365,7 @@ def main():
             if not fp.exists() or sha256_file(fp)!=proof_hash:
                 errors.append("resource/actor validator proof hash mismatch")
             else:
-                proof=json.loads(fp.read_text())
+                proof=load_json(fp)
                 if proof.get("passed") is not True or proof.get("task_id")!=task:
                     errors.append("resource/actor validator proof failed/stale")
                 proof_candidate=proof.get("candidate_commit")
@@ -274,7 +396,7 @@ def main():
             if not fp.exists() or sha256_file(fp)!=proof_hash:
                 errors.append("Game Master validator proof hash mismatch")
             else:
-                proof=json.loads(fp.read_text())
+                proof=load_json(fp)
                 if proof.get("passed") is not True or proof.get("task_id")!=task:
                     errors.append("Game Master validator proof failed/stale")
                 proof_candidate=proof.get("candidate_commit")
@@ -286,22 +408,28 @@ def main():
     required=list(critcfg["task_applicability"].get(task,[]))
     if contract_c5_required and "C5" not in required:required.append("C5")
     style_required=style_lock_required(d)
-    if style_required and "C1" not in required:required.append("C1")
+    try:
+        required=required_final_critics(task,required,style_required=style_required)
+    except ValueError as exc:
+        errors.append("forward critic contract: "+str(exc))
     critics=d.get("critics",{})
     style_check=validate_reference_style_lock(d,critics)
     errors += ["reference style lock: "+x for x in style_check.get("errors",[])]
+    errors += ['reference style lock: '+x for x in nonapproving_scope_errors(style_check)]
+    if style_check.get('passed') is not True:errors.append('current reference style validation did not pass')
+    errors += forward_visual_errors(task,candidate,style_required,required)
     aggregate=review_record
     if aggregate.get("status")!="PASS" or aggregate.get("disposition")!="APPROVED" or aggregate.get("coverage_complete") is not True or aggregate.get("unresolved_mandatory_defects"):
         errors.append("independent critic aggregate disposition incomplete")
     if (aggregate.get("candidate_commit"),aggregate.get("workflow_run_id"),aggregate.get("artifact_id"),aggregate.get("artifact_sha256"),aggregate.get("complete_evidence_index_sha256"))!=(candidate,d.get("workflow_run_id"),d.get("artifact_id"),d.get("artifact_sha256"),evidence.get("provenance_hash")):
         errors.append("independent critic aggregate source identity mismatch")
     aggregate_scores=[score for cid in required for score in aggregate.get("critics",{}).get(cid,{}).get("scores",{}).values()]
-    if not aggregate_scores or aggregate.get("minimum_mandatory_dimension_score")!=min(aggregate_scores):
+    if not aggregate_scores or aggregate.get("minimum_mandatory_dimension_score")!=minimum_score(aggregate_scores):
         errors.append("independent critic aggregate minimum score mismatch")
     aggregate_retained=aggregate.get("retained_review_evidence",{})
     if (aggregate_retained.get("workflow_run_id"),aggregate_retained.get("artifact_id"),aggregate_retained.get("artifact_sha256"),aggregate_retained.get("expires_at"))!=(retained_review.get("run_id"),retained_review.get("artifact_id"),str(retained_review.get("digest","")).removeprefix("sha256:"),retained_review.get("expires_at")):
         errors.append("independent critic aggregate retained evidence mismatch")
-    errors += ["critic aggregate: "+x for x in validate_critic_aggregate(aggregate,required,candidate,d.get("workflow_run_id"),d.get("artifact_id"),d.get("artifact_sha256"),evidence.get("provenance_hash"),retained_review,critics)]
+    errors += ["critic aggregate: "+x for x in validate_critic_aggregate(aggregate,required,candidate,d.get("workflow_run_id"),d.get("artifact_id"),d.get("artifact_sha256"),evidence.get("provenance_hash"),retained_review,critics,forward=True,task=task,execution=execfg,matrix=critcfg,source_manifest=durable_index)]
     ledger=load_json(DOCS/str(task)/"defect-ledger.json")
     errors += ["defect ledger: "+x for x in validate_defect_ledger(ledger,candidate,aggregate,required)]
     if ledger.get("candidate_commit")!=candidate or ledger.get("integrated_commit")!=candidate:
@@ -310,7 +438,7 @@ def main():
         errors.append("defect ledger unresolved state mismatch")
     if not ledger.get("defects") or any(row.get("status")!="VERIFIED_CLOSED" for row in ledger.get("defects",[])):
         errors.append("defect ledger contains non-closed defect")
-    expected_critic_minima={cid:min(aggregate.get("critics",{}).get(cid,{}).get("scores",{}).values()) for cid in required if aggregate.get("critics",{}).get(cid,{}).get("scores")}
+    expected_critic_minima={cid:minimum_score(aggregate.get("critics",{}).get(cid,{}).get("scores",{})) for cid in required if aggregate.get("critics",{}).get(cid,{}).get("scores")}
     if ledger.get("critic_scores")!=expected_critic_minima:
         errors.append("defect ledger critic minima mismatch")
     for cid in required:
@@ -319,7 +447,10 @@ def main():
         if row.get("status")!="PASS":errors.append("critic not PASS "+cid)
         if row.get("candidate_commit")!=candidate:errors.append("critic candidate mismatch "+cid)
         if task=="T10" and cid=="C7" and row.get("task_id")!=task:errors.append("C7 task identity mismatch")
-        errors += [f"{cid}: {x}" for x in ensure_score_strictly_above_nine(row.get("scores",{}))]
+        spec,_=resolve_critic(task,cid,execfg,critcfg)
+        try:reference_dimensions=declared_reference_dimensions(durable_index,cid,spec.get('dimensions',[]))
+        except ValueError as exc:errors.append(str(exc));reference_dimensions=[]
+        errors += [f"{cid}: {x}" for x in record_errors(row,spec.get("dimensions",[]),cid,reference_dimensions=reference_dimensions)]
         if row.get("defects"):errors.append("critic defects "+cid)
         if row.get("coverage_complete") is not True:errors.append("critic incomplete "+cid)
         if critcfg["critics"][cid].get("independent_model_required") and row.get("independent_runtime") is not True:errors.append("independent runtime not proven "+cid)
@@ -345,9 +476,9 @@ def main():
                 errors.append("raw critic record hash mismatch "+cid)
             else:
                 raw=load_json(raw_path)
-                errors += [f"{cid}: {x}" for x in validate_raw_critic_record(raw,cid,task,candidate,d.get("workflow_run_id"),d.get("artifact_id"),d.get("artifact_sha256"),evidence.get("provenance_hash"),row.get("scores",{}),d.get("critic_review_export_commit"))]
+                errors += [f"{cid}: {x}" for x in validate_raw_critic_record(raw,cid,task,candidate,d.get("workflow_run_id"),d.get("artifact_id"),d.get("artifact_sha256"),evidence.get("provenance_hash"),row.get("scores",{}),d.get("critic_review_export_commit"),forward=True,expected_dimensions=spec.get("dimensions",[]),reference_dimensions=reference_dimensions)]
                 aggregate_row=aggregate.get("critics",{}).get(cid,{})
-                if aggregate_row.get("status")!="PASS" or aggregate_row.get("coverage_complete") is not True or aggregate_row.get("scores")!=row.get("scores") or aggregate_row.get("minimum_dimension_score")!=min(row.get("scores",{}).values()) or aggregate_row.get("raw_record_path")!=raw_rel or aggregate_row.get("raw_record_sha256")!=raw_hash or aggregate_row.get("defects"):
+                if aggregate_row.get("status")!="PASS" or aggregate_row.get("coverage_complete") is not True or aggregate_row.get("scores")!=row.get("scores") or aggregate_row.get("minimum_dimension_score")!=minimum_score(row.get("scores",{})) or aggregate_row.get("raw_record_path")!=raw_rel or aggregate_row.get("raw_record_sha256")!=raw_hash or aggregate_row.get("defects"):
                     errors.append("independent critic aggregate mismatch "+cid)
                 if raw.get("task_id")!=task or raw.get("critic_id")!=cid or raw.get("candidate_commit")!=candidate:
                     errors.append("raw critic identity mismatch "+cid)
@@ -367,7 +498,7 @@ def main():
                 if raw.get("score_reuse") is not False:
                     errors.append("raw critic score reuse must be false "+cid)
                 raw_scores=raw.get("scores",{})
-                if not raw_scores or raw.get("minimum_dimension_score")!=min(raw_scores.values()):
+                if not raw_scores or raw.get("minimum_dimension_score")!=minimum_score(raw_scores):
                     errors.append("raw critic minimum score mismatch "+cid)
                 if not isinstance(raw.get("review_export_commit"),str) or len(raw.get("review_export_commit"))!=40:
                     errors.append("raw critic review export provenance incomplete "+cid)

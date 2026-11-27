@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Transport-normalize original critic records; never create or adjust scores."""
+"""Diagnostic normalization of original T10 records; never grant current approval."""
 import argparse
 import hashlib
 import json
@@ -63,6 +63,6 @@ def main():
   verify_performance_binding(inputs/'performance.json',json.loads((inputs/'C6-manifest.json').read_text()),a.candidate)
   supplement=c6(inputs/'performance.json',a.candidate)
  except Exception as exc: supplement={'critic_id':'C6','passed':False,'errors':[str(exc)]}
- report={'task_id':'T10','candidate_commit':a.candidate,'required_critics':['C1','C2','C3','C4','C6','C7'],'results':results,'quantitative_c6':supplement,'passed':all(x.get('passed') is True for x in results) and supplement.get('passed') is True,'threshold_operator':'>','threshold':9.0,'unrounded':True,'task_approved':False}
+ report={'task_id':'T10','candidate_commit':a.candidate,'required_critics':['C1','C2','C3','C4','C6','C7'],'results':results,'quantitative_c6':supplement,'passed':all(x.get('passed') is True for x in results) and supplement.get('passed') is True,'historical_threshold_operator':'>','historical_threshold':9.0,'unrounded':True,'task_approved':False,'approval_allowed':False,'validation_kind':'DIAGNOSTIC_AGGREGATE_ONLY','current_policy':'Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json'}
  (out/'critic-aggregate.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps({'passed':report['passed'],'failures':[x for x in results if not x.get('passed')]}));raise SystemExit(0 if report['passed'] else 1)
 if __name__=='__main__':main()

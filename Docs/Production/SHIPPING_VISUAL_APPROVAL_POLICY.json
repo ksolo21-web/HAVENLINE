@@ -4,12 +4,16 @@
   "effective_date": "2026-09-22",
   "rule": "No task may be effectively APPROVED or enter INTEGRATION_READY with primitive/placeholder shipping art OR a whole-frame reference-fidelity mismatch. Final review judges the complete rendered scene, including visible upstream dependencies.",
   "shipping_roots": [
-    "HavenlineGodot/"
+    "HavenlineGodot/",
+    "HavenlineLevel1/"
   ],
   "excluded_patterns": [
     "HavenlineGodot/tests/**",
     "HavenlineGodot/tools/**",
-    "HavenlineGodot/**/*.uid"
+    "HavenlineGodot/**/*.uid",
+    "HavenlineLevel1/tests/**",
+    "HavenlineLevel1/tools/**",
+    "HavenlineLevel1/**/*.uid"
   ],
   "forbidden_render_types": [
     "BoxMesh",
@@ -96,5 +100,32 @@
     "every_mandatory_dimension_must_equal_10": true,
     "score_averaging_allowed": false,
     "user_visual_rejection_blocks_approval": true
-  }
+  },
+  "candidate_root_discovery": {
+    "enabled": true,
+    "manifest_field": "shipping_roots",
+    "project_markers": [
+      "project.godot"
+    ],
+    "excluded_prefixes": [
+      "Docs/RepositoryArchive/",
+      "tools/",
+      "Docs/Opening-Recovery/qa/buy-pad-reference-v1/"
+    ]
+  },
+  "forward_acceptance_policy": "Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json",
+  "active_project_roots": [
+    "HavenlineLevel1/"
+  ],
+  "shipping_scope_required_fields": [
+    "candidate_commit",
+    "project_root",
+    "project_file_sha256",
+    "dependency_roots",
+    "build_evidence"
+  ],
+  "preserved_project_roots": [
+    "HavenlineGodot/"
+  ],
+  "shipping_scope_rule": "Select the source-bound active build project and every actual shipped dependency. Preserved inactive project trees do not automatically ship; new active roots require explicit canonical policy registration and source-bound build evidence."
 }

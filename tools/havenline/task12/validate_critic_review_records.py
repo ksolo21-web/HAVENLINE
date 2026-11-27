@@ -2,7 +2,7 @@
 """Validate T12 critic-review record template or future resolved reviews.
 
 Template mode freezes the exact T12-specific mandatory dimensions and critic
-provenance rules. --require-resolved enforces strict >9.0 on every mandatory
+provenance rules. --require-resolved enforces the current forward policy on every mandatory
 dimension, evidence on every dimension, zero unresolved defects, exact candidate
 identity, and genuine independent-review flags for C2/C3/C4/C7. C6 remains the
 quantitative specialist gate rather than a fake independent-model review.
@@ -11,11 +11,15 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import pathlib
 import re
+import sys
 from typing import Any
 
 ROOT = pathlib.Path(__file__).resolve().parents[3]
+sys.path.insert(0,str(ROOT/'tools/havenline/production'))
+from reference_acceptance import binding_errors,record_errors,declared_reference_dimensions,load_json_strict
 DEFAULT_PATH = ROOT / "Docs" / "Production" / "T12" / "CRITIC_REVIEW_RECORD_TEMPLATE.json"
 SHA40 = re.compile(r"^[0-9a-f]{40}$")
 
@@ -88,8 +92,16 @@ def validate_record(data: dict[str, Any], *, require_resolved: bool = False) -> 
     if not isinstance(acceptance, dict):
         errors.append("acceptance must be an object")
         acceptance = {}
-    if acceptance.get("operator") != ">" or acceptance.get("threshold") != 9.0 or acceptance.get("unrounded") is not True:
-        errors.append("critic acceptance rule must remain strictly >9.0 unrounded")
+    if require_resolved:
+        # This aggregate's CRITIC_REVIEWS_COMPLETE label is checked exactly
+        # above. It is a non-approving consistency wrapper, not a critic PASS.
+        # Preserve all other disposition/rounding guards; individual current
+        # critic rows below must carry their own explicit PASS/passed fields.
+        errors += binding_errors({key:value for key,value in data.items() if key!='status'})
+        if acceptance.get("operator") != ">=" or acceptance.get("threshold") != 9.5 or acceptance.get("reference_sensitive_threshold") != 9.9 or acceptance.get("exact_visual_threshold") != 10.0 or acceptance.get("unrounded") is not True:
+            errors.append("resolved critic acceptance must use current >=9.5 / reference>=9.9 / visual exact10 policy")
+    elif acceptance.get("operator") != ">" or acceptance.get("threshold") != 9.0 or acceptance.get("unrounded") is not True:
+        errors.append("historical preparation template threshold changed; templates never authorize approval")
     if acceptance.get("target") != 10.0 or acceptance.get("no_average_waiver") is not True:
         errors.append("critic target/no-average-waiver rule drifted")
     if acceptance.get("zero_unresolved_mandatory_defects") is not True:
@@ -153,13 +165,11 @@ def validate_record(data: dict[str, Any], *, require_resolved: bool = False) -> 
                 unresolved = []
 
             if require_resolved:
-                if not isinstance(score, (int, float)) or isinstance(score, bool):
-                    errors.append(f"{critic}.{dim_id} score must be numeric")
+                if not isinstance(score, (int, float)) or isinstance(score, bool) or not math.isfinite(score) or not 0<=score<=10:
+                    errors.append(f"{critic}.{dim_id} score must be finite numeric in 0..10")
                 else:
                     numeric = float(score)
                     scores.append(numeric)
-                    if numeric <= 9.0:
-                        errors.append(f"{critic}.{dim_id} score {numeric} is not strictly >9.0")
                 if not evidence_refs or any(not nonempty(ref) for ref in evidence_refs):
                     errors.append(f"{critic}.{dim_id} requires non-empty evidence refs")
                 if unresolved:
@@ -176,6 +186,12 @@ def validate_record(data: dict[str, Any], *, require_resolved: bool = False) -> 
             errors.append(f"{critic} dimension IDs must be exactly {sorted(expected_ids)}")
 
         if require_resolved:
+            try:
+                reference_dimensions=declared_reference_dimensions(data,critic,expected_ids)
+            except ValueError as exc:
+                errors.append(f"{critic} reference declaration: {exc}");reference_dimensions=[]
+            projected=dict(row,scores={d['id']:d.get('score') for d in dimensions if isinstance(d,dict) and isinstance(d.get('id'),str)})
+            errors += [f"{critic}.{error}" for error in record_errors(projected,sorted(expected_ids),critic,reference_dimensions=reference_dimensions)]
             if required_independence and row.get("independent") is not True:
                 errors.append(f"{critic} requires genuine independent-review flag")
             if not nonempty(row.get("reviewer_runtime_id")):
@@ -195,6 +211,8 @@ def validate_record(data: dict[str, Any], *, require_resolved: bool = False) -> 
 
     return {
         "passed": not errors,
+        "approval_allowed": False,
+        "validation_kind": "CRITIC_RECORD_CONSISTENCY_ONLY" if require_resolved else "HISTORICAL_PREPARATION_TEMPLATE_ONLY",
         "mode": "resolved" if require_resolved else "template",
         "critic_count": len(critics),
         "mandatory_dimension_count": total_dimensions,
@@ -210,7 +228,7 @@ def main() -> None:
     parser.add_argument("--input", default=str(DEFAULT_PATH.relative_to(ROOT)))
     parser.add_argument("--require-resolved", action="store_true")
     args = parser.parse_args()
-    data = json.loads((ROOT / args.input).read_text())
+    data = load_json_strict(ROOT / args.input)
     result = validate_record(data, require_resolved=args.require_resolved)
     print(json.dumps(result, indent=2))
     if not result["passed"]:

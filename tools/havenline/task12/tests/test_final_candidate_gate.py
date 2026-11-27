@@ -6,6 +6,7 @@ import importlib.util
 import json
 import pathlib
 import unittest
+from unittest.mock import patch
 
 ROOT = pathlib.Path(__file__).resolve().parents[4]
 TOOL_PATH = ROOT / "tools/havenline/task12/final_candidate_gate.py"
@@ -32,16 +33,34 @@ class T12FinalCandidateGateTests(unittest.TestCase):
     bindings_digest = "4" * 64
     binding_digest = "3" * 64
 
+    def setUp(self):
+        # These are synthetic cross-record consistency tests. The consolidated
+        # repository intentionally has no active historical .github workflows;
+        # bundle filesystem/custody validation is a separate gate.
+        binding=patch.object(gate.validator_bundle,"bundle_digest",return_value="sha256:"+"6"*64)
+        binding.start()
+        self.addCleanup(binding.stop)
+
     def critic_records(self):
         data = copy.deepcopy(CRITIC_TEMPLATE)
         data["status"] = "CRITIC_REVIEWS_COMPLETE"
+        from reference_acceptance import acceptance_binding
+        data["reference_acceptance"] = acceptance_binding()
+        data["reference_sensitive_dimensions"] = {"C7": ["visible_cadence_quality"]}
+        data["acceptance"].update(operator=">=", threshold=9.5, reference_sensitive_threshold=9.9, exact_visual_threshold=10.0)
         data["candidate_source"] = self.candidate_sha
         for critic, row in data["critics"].items():
+            row["status"] = "PASS"
+            row["passed"] = True
+            row["reference_acceptance"] = acceptance_binding()
+            row["coverage_complete"] = True
+            row["defects"] = []
+            row["reference_sensitive_dimensions"] = data["reference_sensitive_dimensions"].get(critic, [])
             row["independent"] = critic != "C6"
             row["reviewer_runtime_id"] = f"review-runtime-{critic.lower()}"
             row["review_evidence_ref"] = f"artifact://{critic.lower()}-review.json"
             for index, dimension in enumerate(row["dimensions"]):
-                dimension["score"] = 9.40 + index * 0.01
+                dimension["score"] = 10.0 if critic in {"C2","C3","C4"} else 9.9
                 dimension["evidence_refs"] = [f"artifact://{critic.lower()}-{dimension['id']}.json"]
                 dimension["unresolved_defects"] = []
         return data

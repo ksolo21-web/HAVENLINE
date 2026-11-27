@@ -20,6 +20,8 @@ import sys
 from typing import Any
 
 ROOT = pathlib.Path(__file__).resolve().parents[3]
+sys.path.insert(0,str(ROOT/"tools/havenline/production"))
+from reference_acceptance import load_json_strict
 TASK = ROOT / "tools" / "havenline" / "task12"
 DOCS = ROOT / "Docs" / "Production" / "T12"
 SHA40 = re.compile(r"^[0-9a-f]{40}$")
@@ -373,6 +375,8 @@ def validate_consistency(
     return {
         "passed": not errors,
         "candidate_source": candidate_sha,
+        "approval_allowed": False,
+        "validation_kind": "PRE_DISPOSITION_CONSISTENCY_ONLY",
         "candidate_packet_passed": candidate_result["passed"],
         "critic_records_passed": critic_result["passed"],
         "engine_parity_passed": parity_result["passed"],
@@ -424,7 +428,7 @@ def main() -> None:
         if not path.is_file():
             raise SystemExit(f"required {label} file missing: {path}")
 
-    candidate_data = json.loads(paths["candidate"].read_text())
+    candidate_data = load_json_strict(paths["candidate"])
     binding_bytes = paths["binding"].read_bytes()
     binding_data = json.loads(binding_bytes.decode("utf-8"))
 
@@ -436,8 +440,8 @@ def main() -> None:
 
     try:
         shipping_binding_result = binding_index_validator.validate_shipping(
-            json.loads(paths["bindings_shipping"].read_text()),
-            json.loads(paths["binding_catalog"].read_text()),
+            load_json_strict(paths["bindings_shipping"]),
+            load_json_strict(paths["binding_catalog"]),
         )
     except Exception as exc:
         shipping_binding_result = {"passed": False, "errors": [f"shipping binding validation failed: {exc}"]}
@@ -472,11 +476,11 @@ def main() -> None:
 
     result = validate_consistency(
         candidate_data,
-        json.loads(paths["critics"].read_text()),
-        json.loads(paths["parity"].read_text()),
-        json.loads(paths["evidence_index"].read_text()),
+        load_json_strict(paths["critics"]),
+        load_json_strict(paths["parity"]),
+        load_json_strict(paths["evidence_index"]),
         binding_data,
-        json.loads(paths["bindings_shipping"].read_text()),
+        load_json_strict(paths["bindings_shipping"]),
         progression_validation_result=progression_result,
         shipping_binding_validation_result=shipping_binding_result,
         binding_verification_result=binding_result,
@@ -488,8 +492,8 @@ def main() -> None:
         milestones_sha256=sha256_bytes(paths["milestones"].read_bytes()),
         bindings_sha256=sha256_bytes(paths["bindings_shipping"].read_bytes()),
         binding_resolution_sha256=sha256_bytes(binding_bytes),
-        vectors=json.loads(paths["vectors"].read_text()),
-        parity_schema=json.loads(paths["parity_schema"].read_text()),
+        vectors=load_json_strict(paths["vectors"]),
+        parity_schema=load_json_strict(paths["parity_schema"]),
     )
     print(json.dumps(result, indent=2))
     if not result["passed"]:

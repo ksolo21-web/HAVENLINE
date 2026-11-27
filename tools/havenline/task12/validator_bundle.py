@@ -24,6 +24,7 @@ def bundle_files(root: pathlib.Path = ROOT) -> tuple[str, ...]:
     files = set(support)
     files.add(CHECKLIST_RELATIVE)
     files.add(CANONICAL_CANDIDATE_GUARD)
+    files.update({"tools/havenline/production/reference_acceptance.py", "tools/havenline/production/lib.py", "Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json"})
     return tuple(sorted(files))
 
 

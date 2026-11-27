@@ -25,13 +25,23 @@ class T12CriticReviewRecordTests(unittest.TestCase):
     def resolved(self):
         data = copy.deepcopy(self.template)
         data["status"] = "CRITIC_REVIEWS_COMPLETE"
+        from reference_acceptance import acceptance_binding
+        data["reference_acceptance"] = acceptance_binding()
+        data["reference_sensitive_dimensions"] = {"C7": ["visible_cadence_quality"]}
+        data["acceptance"].update(operator=">=", threshold=9.5, reference_sensitive_threshold=9.9, exact_visual_threshold=10.0)
         data["candidate_source"] = "a" * 40
         for critic, row in data["critics"].items():
+            row["status"] = "PASS"
+            row["passed"] = True
+            row["reference_acceptance"] = acceptance_binding()
+            row["coverage_complete"] = True
+            row["defects"] = []
+            row["reference_sensitive_dimensions"] = data["reference_sensitive_dimensions"].get(critic, [])
             row["independent"] = critic != "C6"
             row["reviewer_runtime_id"] = f"review-runtime-{critic.lower()}"
             row["review_evidence_ref"] = f"artifact://{critic.lower()}-review.json"
             for index, dimension in enumerate(row["dimensions"]):
-                dimension["score"] = 9.40 + (index * 0.01)
+                dimension["score"] = 10.0 if critic in {"C2","C3","C4"} else 9.9
                 dimension["evidence_refs"] = [f"artifact://{critic.lower()}-{dimension['id']}.json"]
                 dimension["unresolved_defects"] = []
         return data
@@ -47,13 +57,41 @@ class T12CriticReviewRecordTests(unittest.TestCase):
         result = validator.validate_record(self.resolved(), require_resolved=True)
         self.assertTrue(result["passed"], result["errors"])
         self.assertGreater(result["global_minimum_mandatory_dimension_score"], 9.0)
+        self.assertIs(False,result["approval_allowed"])
+
+    def test_old_resolved_floor_cannot_approve_new_reference_work(self):
+        data=self.resolved()
+        data["critics"]["C2"]["dimensions"][0]["score"]=9.5
+        self.assertFalse(validator.validate_record(data,require_resolved=True)["passed"])
+
+    def test_resolved_wrapper_and_critic_dispositions_are_not_interchangeable(self):
+        for location,status in (("wrapper","PASS"),("wrapper","PENDING"),("C2","PENDING"),("C6","fail")):
+            data=self.resolved()
+            if location=='wrapper':data['status']=status
+            else:data['critics'][location]['status']=status
+            with self.subTest(location=location,status=status):
+                self.assertFalse(validator.validate_record(data,require_resolved=True)['passed'])
+
+    def test_declared_reference_dimension_cannot_fall_to_ordinary_floor(self):
+        data=self.resolved()
+        target=next(d for d in data["critics"]["C7"]["dimensions"] if d["id"]=="visible_cadence_quality")
+        target["score"]=9.89
+        self.assertFalse(validator.validate_record(data,require_resolved=True)["passed"])
+
+    def test_missing_current_binding_or_nonfinite_scores_fail(self):
+        for mutation in ("binding","nan","high"):
+            data=self.resolved()
+            if mutation=="binding":data.pop("reference_acceptance")
+            else:data["critics"]["C6"]["dimensions"][0]["score"]=float('nan') if mutation=="nan" else 10.01
+            with self.subTest(mutation=mutation):
+                self.assertFalse(validator.validate_record(data,require_resolved=True)["passed"])
 
     def test_exactly_nine_dimension_fails(self):
         data = self.resolved()
         data["critics"]["C7"]["dimensions"][0]["score"] = 9.0
         result = validator.validate_record(data, require_resolved=True)
         self.assertFalse(result["passed"])
-        self.assertTrue(any("C7.meaningful_every_level" in error and ">9.0" in error for error in result["errors"]))
+        self.assertTrue(any("C7.meaningful_every_level" in error and "below 9.5" in error for error in result["errors"]))
 
     def test_dimension_cannot_be_omitted(self):
         data = self.resolved()

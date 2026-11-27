@@ -3,14 +3,29 @@
   "authoritative_plan": "Docs/Production/HAVENLINE_BUILD_PLAN_V2.md",
   "integration_branch": "codex/havenline-sequential-task-01",
   "acceptance_rule": {
-    "mandatory_dimension_operator": ">",
-    "mandatory_dimension_threshold": 9,
+    "mandatory_dimension_operator": ">=",
+    "mandatory_dimension_threshold": 9.5,
     "unrounded": true,
     "target": 10,
     "legacy_approved_tasks_grandfathered": [
       "T01",
       "T02"
-    ]
+    ],
+    "reference_sensitive_dimension_threshold": 9.9,
+    "reference_sensitive_dimension_operator": ">=",
+    "reference_sensitive_critic_ids": [
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "C5",
+      "C11"
+    ],
+    "stricter_exact_visual_score": 10.0,
+    "strongest_applicable_requirement_controls": true,
+    "policy": "Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json",
+    "no_average_waiver": true,
+    "reference_sensitive_9_5_is_interim_only": true
   },
   "states": [
     "LOCKED",

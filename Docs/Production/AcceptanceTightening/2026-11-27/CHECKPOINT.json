@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "task": "Tighten Havenline reference acceptance and current production checks",
+  "base_commit": "7180d1315af56228e7629735c2bd50bda3c43596",
+  "status": "PUBLISHING",
+  "milestones": [
+    {
+      "id": "M1",
+      "name": "Audit acceptance rules and approval paths",
+      "status": "COMPLETE"
+    },
+    {
+      "id": "M2",
+      "name": "Implement policy and forward enforcement",
+      "status": "COMPLETE"
+    },
+    {
+      "id": "M3",
+      "name": "Regression tests and independent critic repair/retest",
+      "status": "COMPLETE"
+    },
+    {
+      "id": "M4",
+      "name": "Publish with main compare-and-swap and readback",
+      "status": "IN_PROGRESS"
+    }
+  ],
+  "constraints": [
+    "No runtime/art/render mutations",
+    "No original receipt or frozen research-package rewrites",
+    "No archived workflow activation",
+    "No task identity/dependency/status/ownership changes",
+    "No false game approval",
+    "No lowering existing exact10 requirements"
+  ],
+  "acceptance_checks": [
+    "single documented forward policy",
+    "9.5 interim only for reference-sensitive work",
+    "9.9 reference floor and stronger exact10 rules",
+    "ordinary nonreference9.5 retained",
+    "missing/invalid/surplus/rounded/averaged score rejection",
+    "complete independent source-bound evidence",
+    "legacy historical receipt byte preservation",
+    "current and discovered project root coverage",
+    "current policy binding and stale binding rejection",
+    "negative regression suite passes",
+    "independent critic >9.0 with no mandatory defects",
+    "remote published readback verified"
+  ],
+  "next_action": "Publish reviewed content to main with expected7180d1315af56228e7629735c2bd50bda3c43596, verify exact remote tree and branch preservation, then persist publication receipt.",
+  "verified_results": {
+    "regression_tests_passed": 207,
+    "regression_groups_passed": 18,
+    "regression_groups_required": 18,
+    "preservation_checks_passed": 15,
+    "preservation_checks_required": 15,
+    "changed_python_files_compiled": 38,
+    "forward_policy_consistency": "PASS",
+    "game_approval_allowed": false,
+    "independent_critic_minimum_score": 9.9,
+    "independent_mandatory_checks_passed": 16,
+    "independent_adversarial_probes_passed": 28,
+    "independent_packaging_checks_passed": 7,
+    "final_content_sha256": "8f529b23b682c8256b36750786a88065ed859ae9b76206a40899f8fc52027fca",
+    "final_content_files": 63
+  }
+}

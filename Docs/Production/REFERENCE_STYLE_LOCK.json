@@ -55,7 +55,9 @@
       "HavenlineGodot/shaders/",
       "HavenlineGodot/materials/",
       "HavenlineGodot/textures/",
-      "HavenlineGodot/scenes/"
+      "HavenlineGodot/scenes/",
+      "HavenlineGodot/",
+      "HavenlineLevel1/"
     ],
     "visual_extensions": [
       ".gdshader",
@@ -93,7 +95,19 @@
       "set_shader_parameter",
       "texture_filter",
       "material_override"
-    ]
+    ],
+    "candidate_root_discovery": {
+      "enabled": true,
+      "manifest_field": "shipping_roots",
+      "project_markers": [
+        "project.godot"
+      ],
+      "excluded_prefixes": [
+        "Docs/RepositoryArchive/",
+        "tools/",
+        "Docs/Opening-Recovery/qa/buy-pad-reference-v1/"
+      ]
+    }
   },
   "evidence": {
     "actual_reference_pixels_required": true,
@@ -144,5 +158,6 @@
     },
     "historical_preservation_is_task_waiver": false,
     "historical_preservation_rule": "Only the listed immutable already-accepted candidate SHA is preserved from governance-only retroactive invalidation. Any different/reopened source is fully subject to the style lock; T70 still audits every shipped material."
-  }
+  },
+  "forward_acceptance_policy": "Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json"
 }

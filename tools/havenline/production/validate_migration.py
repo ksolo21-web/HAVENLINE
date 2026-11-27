@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import argparse, hashlib, json, pathlib, re, subprocess, sys
+import argparse, hashlib, json, math, pathlib, re, subprocess, sys
 from datetime import datetime,timezone
 from lib import ROOT, DOCS, load_json, git, any_match, ensure_score_strictly_above_nine
 from workstream import registry_errors
@@ -46,12 +46,42 @@ T05_SCORE_DIMENSIONS={
 }
 
 def _strict_score_errors(label,scores):
+    """Validate recorded historical scores; never grant a new forward approval."""
     errors=[]
     if not isinstance(scores,dict) or not scores:
         return [f"{label} scores missing"]
     for dimension,value in scores.items():
-        if isinstance(value,bool) or not isinstance(value,(int,float)) or value<=9.0:
-            errors.append(f"{label} score must be strictly above 9.0: {dimension}={value}")
+        if isinstance(value,bool) or not isinstance(value,(int,float)) or not math.isfinite(value) or not 9.0<value<=10.0:
+            errors.append(f"{label} historical score must be finite, strictly above 9.0 and at most 10.0: {dimension}={value}")
+    return errors
+
+def forward_acceptance_errors(graph,critics,policy,execution=None):
+    """Check current policy projections without regrading immutable receipts."""
+    from reference_acceptance import policy_errors
+    errors=policy_errors(policy)
+    if errors:return errors
+    final=policy["final_acceptance"]
+    projections=[
+        ("dependency graph",graph.get("acceptance_rule",{}),"mandatory_dimension_operator","mandatory_dimension_threshold"),
+        ("critic matrix",critics.get("forward_acceptance",{}),"dimension_operator","threshold"),
+    ]
+    if execution is not None:
+        projections.append(("critic execution",execution.get("forward_acceptance",{}),"dimension_operator","threshold"))
+    for label,projection,operator_key,threshold_key in projections:
+        if not isinstance(projection,dict):
+            errors.append(label+" forward acceptance missing");continue
+        required={operator_key:">=",threshold_key:final["minimum_dimension_score"],
+                  "reference_sensitive_dimension_operator":">=",
+                  "reference_sensitive_dimension_threshold":final["reference_minimum_dimension_score"],
+                  "stricter_exact_visual_score":final["exact_score"],
+                  "policy":"Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json"}
+        for key,value in required.items():
+            if type(projection.get(key)) is bool or projection.get(key)!=value:
+                errors.append(label+" forward policy mismatch: "+key)
+        for key in ("unrounded","no_average_waiver","strongest_applicable_requirement_controls","reference_sensitive_9_5_is_interim_only"):
+            if projection.get(key) is not True:errors.append(label+" must require "+key)
+        if projection.get("reference_sensitive_critic_ids")!=final["reference_sensitive_critic_ids"]:
+            errors.append(label+" reference critic coverage mismatch")
     return errors
 
 def t10_activation_errors(graph,registry,ownership,task_gates,checklist):
@@ -392,7 +422,13 @@ def git_blob_sha(path:pathlib.Path)->str:
     return hashlib.sha1(b"blob "+str(len(data)).encode()+b"\0"+data).hexdigest()
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument("--base");a=ap.parse_args()
+    ap=argparse.ArgumentParser();ap.add_argument("--base");ap.add_argument("--forward-policy-only",action="store_true");a=ap.parse_args()
+    if a.forward_policy_only:
+        try:
+            errors=forward_acceptance_errors(load_json(DOCS/"DEPENDENCY_GRAPH.json"),load_json(DOCS/"CRITIC_MATRIX.json"),load_json(DOCS/"REFERENCE_ACCEPTANCE_POLICY.json"),load_json(DOCS/"CRITIC_EXECUTION.json"))
+        except (OSError,ValueError,TypeError) as exc:errors=["forward policy unavailable: "+str(exc)]
+        print(json.dumps({"passed":not errors,"validation_kind":"FORWARD_POLICY_CONSISTENCY_ONLY","game_approval_allowed":False,"errors":errors},indent=2))
+        raise SystemExit(0 if not errors else 2)
     errors=[]
     required=[
       "HAVENLINE_BUILD_PLAN_V2.md","ANTI_LOOP_ROOT_CAUSE_STANDARD.md","SEQUENTIAL_REPAIR_PLAN.md","DEPENDENCY_GRAPH.json",
@@ -464,9 +500,7 @@ def main():
                             errors.append("T10+ must remain LOCKED until T09 is approved and each later task is separately prepared")
             elif any(graph["tasks"][t]["status"]!="LOCKED" for t in ids[5:]):
                 errors.append("T06+ must remain LOCKED until T05 is approved and T06 is separately prepared")
-    acc=graph["acceptance_rule"]
-    if acc.get("mandatory_dimension_operator")!=">" or acc.get("mandatory_dimension_threshold")!=9.0 or acc.get("unrounded") is not True:
-        errors.append("forward strict >9.0 rule missing")
+    errors += forward_acceptance_errors(graph,load_json(DOCS/"CRITIC_MATRIX.json"),load_json(DOCS/"REFERENCE_ACCEPTANCE_POLICY.json"),load_json(DOCS/"CRITIC_EXECUTION.json"))
     if ensure_score_strictly_above_nine({"must_fail":9.0})==[]:errors.append("strict score helper incorrectly accepts 9.0")
     errors += registry_errors()
     critics=load_json(DOCS/"CRITIC_MATRIX.json")

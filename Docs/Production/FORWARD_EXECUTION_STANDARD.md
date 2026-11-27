@@ -118,4 +118,4 @@ Every generated T10+ task packet must include the resolved execution profile: ar
 
 ## Acceptance
 
-The existing Havenline acceptance rule is unchanged: every applicable mandatory critic dimension must be strictly greater than 9.0 unrounded, target 10/10, with no unresolved mandatory defect and no averaging waiver.
+The current acceptance rule is [REFERENCE_ACCEPTANCE_STANDARD.md](REFERENCE_ACCEPTANCE_STANDARD.md): reference-sensitive final dimensions are at least 9.9, all existing exact-10 visual requirements remain stronger, and other mandatory specialist dimensions are at least 9.5. A reference-sensitive 9.5 result is an interim checkpoint only. Require unrounded per-dimension scores, complete independent source-bound evidence, every mandatory check passed, and zero known unapproved deviations; no averaging or rounding waiver.

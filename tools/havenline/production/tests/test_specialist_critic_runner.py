@@ -3,38 +3,22 @@ import pathlib
 import sys
 import unittest
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
-from specialist_critic_runner import response_schema, response_bounds_errors
+from specialist_critic_runner import evaluate_group, review_phase, response_schema, response_bounds_errors
 
 class ResponseBoundsTests(unittest.TestCase):
-    def test_each_grammar_alternative_is_a_complete_response(self):
+    def test_t10_schema_preserves_all_fields_without_forcing_pass_scores(self):
         schema=response_schema('T10',['one','two'])
-        for i, branch in enumerate(schema['oneOf']):
-            # The pinned converter visits each alternative independently, so
-            # sibling root constraints cannot supply any of these fields.
-            required={'observations','defects','coverage_complete','confidence','scores'}
-            self.assertEqual(required,set(branch['required']))
-            self.assertEqual(required,set(branch['properties']))
-            self.assertEqual('object',branch['type'])
-            self.assertEqual(2,branch['properties']['observations']['minItems'])
-            self.assertEqual(2,branch['properties']['observations']['maxItems'])
-            self.assertEqual(['low','medium','high'],branch['properties']['confidence']['enum'])
-            self.assertEqual('boolean',branch['properties']['coverage_complete']['type'])
-            self.assertEqual(['one','two'],branch['properties']['scores']['required'])
-            if i==0:self.assertEqual(9.0,branch['properties']['scores']['properties']['one']['exclusiveMinimum'])
-            self.assertFalse(branch['additionalProperties'])
-
-    def test_t10_schema_preserves_scores_and_enforces_bounds(self):
-        schema=response_schema('T10',['one','two'])
+        required={'observations','defects','coverage_complete','confidence','scores'}
+        self.assertEqual(required,set(schema['required']))
+        self.assertEqual(required,set(schema['properties']))
+        self.assertNotIn('oneOf',schema)
         self.assertEqual(schema['properties']['scores']['required'],['one','two'])
+        self.assertEqual(schema['properties']['scores']['properties']['one'],{'type':'number','minimum':0,'maximum':10})
         self.assertEqual(schema['properties']['observations'],{'type':'array','items':{'type':'string','maxLength':160},'minItems':2,'maxItems':2})
         self.assertEqual(schema['properties']['defects']['maxItems'],5)
         self.assertEqual(schema['properties']['defects']['items']['maxLength'],160)
-        self.assertEqual(2,len(schema['oneOf']))
-        passing=schema['oneOf'][0]
-        self.assertEqual(0,passing['properties']['defects']['maxItems'])
-        self.assertEqual(9.0,passing['properties']['scores']['properties']['one']['exclusiveMinimum'])
-        self.assertEqual(1,schema['oneOf'][1]['properties']['defects']['minItems'])
         self.assertFalse(schema['additionalProperties'])
+
     def test_other_tasks_unchanged(self):
         for task in ['T09','T11',None]:
             schema=response_schema(task,['a'])
@@ -49,16 +33,28 @@ class ResponseBoundsTests(unittest.TestCase):
             broken=copy.deepcopy(valid);broken[field]=values
             self.assertTrue(response_bounds_errors('T10',broken),(field,values))
         self.assertTrue(response_bounds_errors('T10',{}))
-    def test_t10_low_score_requires_actionable_defect(self):
-        base={'observations':['a','b'],'scores':{'one':9.1},'defects':[]}
-        self.assertEqual([],response_bounds_errors('T10',base))
-        for score in (0,9.0):
-            broken=copy.deepcopy(base);broken['scores']['one']=score
-            self.assertIn('T10 score at or below 9.0 requires a concrete actionable defect',response_bounds_errors('T10',broken))
-            broken['defects']=['specific causal defect']
-            self.assertEqual([],response_bounds_errors('T10',broken))
-        with_defect=copy.deepcopy(base);with_defect['defects']=['specific causal defect']
-        self.assertEqual([],response_bounds_errors('T10',with_defect))
+    def test_t10_low_score_can_honestly_report_missing_evidence_without_invented_defect(self):
+        from reference_acceptance import record_errors
+        for score in (0,9.0,9.5,9.99):
+            review={'observations':['Only one view supplied.','Motion cycle missing.'],
+                    'scores':{'one':score},'defects':[], 'coverage_complete':False}
+            self.assertEqual([],response_bounds_errors('T10',review))
+            self.assertTrue(record_errors(review,['one'],'C3',require_binding=False))
+
+    def test_runner_uses_frozen_reference_dimensions_even_when_reviewer_omits_them(self):
+        review={'scores':{'pacing':9.5},'coverage_complete':True,'defects':[]}
+        self.assertEqual([],evaluate_group(review,['pacing'],'C7',[]))
+        self.assertTrue(evaluate_group(review,['pacing'],'C7',['pacing']))
+        self.assertNotIn('reference_sensitive_dimensions',review)
+
+    def test_static_motion_runner_is_explicitly_interim(self):
+        self.assertEqual('interim',review_phase('C5'))
+        self.assertEqual('final',review_phase('C3'))
+        from reference_acceptance import acceptance_binding,record_errors
+        record={'scores':{'full_cycle':10},'coverage_complete':True,'defects':[],
+                'reference_acceptance':acceptance_binding(review_phase('C5')),'approval_allowed':False,
+                'status':'INTERIM_REVIEW_ONLY'}
+        self.assertTrue(record_errors(record,['full_cycle'],'C5'))
 
 class RequestRetentionTests(unittest.TestCase):
     def run_request(self, text, image=False):

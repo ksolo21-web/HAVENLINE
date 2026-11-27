@@ -58,7 +58,7 @@ Mark every applicable gate REQUIRED or N/A with rationale.
 - G10 SECURITY/ECONOMY
 - G11 ACCESSIBILITY/ADAPTIVE-UI
 - G12 CRITIC-COVERAGE
-- G13 SCORE (>9.0 unrounded in every mandatory dimension; target 10/10)
+- G13 SCORE (current REFERENCE_ACCEPTANCE_POLICY: reference-sensitive final dimensions >=9.9, existing visual exact-10 gates preserved, other mandatory specialist dimensions >=9.5; unrounded, no averaging, complete independent evidence; a reference-sensitive 9.5 result is interim only)
 - G14 INTEGRATION
 
 ## Resource / tool / actor / animation contract
@@ -167,3 +167,12 @@ runtime. Builder self-review is recorded separately and cannot satisfy them.
 - Unresolved mandatory defects:
 - Reconcile/rebase status against current integration head:
 - Integration-owner disposition:
+
+## Current reference acceptance packet
+
+- Freeze the controlling primary video moments, selected GitHub render commit/path/hash and explicit owner-approved adaptations for each requirement.
+- Name every mandatory view, use state, dimension and additional reference-sensitive dimension before review. Apply the union of graph/matrix/resource/action/style critic requirements; include C5 for the tasks and actions named in `REFERENCE_ACCEPTANCE_POLICY.json`.
+- Bind the exact candidate and current policy with `reference_acceptance.acceptance_binding()`; retain each independent raw review and evidence hash.
+- Record named deviations, responsible repair owner and retest evidence. Unobserved reference details stay labeled as authored decisions.
+- Use the actual in-game camera and meaningful multi-angle details, full cycles/transitions for motion, playback/listening for temporal/audio claims, and required device evidence.
+- A static render/archive score, partial clip, stale review, average or interim score cannot close this task. Final approval follows `REFERENCE_ACCEPTANCE_STANDARD.md` and preserves all stronger exact-10 requirements.

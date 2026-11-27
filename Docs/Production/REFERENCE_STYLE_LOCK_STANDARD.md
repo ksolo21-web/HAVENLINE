@@ -32,7 +32,7 @@ For any candidate that creates or changes a gameplay visual material:
 - Technical optimization must preserve the reference appearance; performance pressure is solved by implementation efficiency, not by lowering style fidelity.
 - Placeholder/default/debug material is an automatic failure.
 
-The general critic rule remains strictly greater than 9.0 for other mandatory dimensions. This lock only **strengthens** reference-style acceptance; it lowers nothing elsewhere.
+The current [forward acceptance standard](REFERENCE_ACCEPTANCE_STANDARD.md) requires at least 9.9 in every applicable reference-sensitive dimension; 9.5 is only an interim checkpoint for that work. The existing broader whole-frame/shipping rules require exact 10 for all mandatory visual dimensions and remain in force. Other mandatory specialist dimensions retain at least 9.5 unless a named requirement is stronger. No requirement is lowered.
 
 ## Drift prevention
 
@@ -40,7 +40,7 @@ The deterministic validator `tools/havenline/production/reference_style_lock.py`
 
 If an existing off-style material becomes visible while reviewing a candidate, it is a mandatory defect. If that material is outside the current workstream's ownership, create a bounded change request rather than silently ignoring it or editing a foreign-owned path.
 
-Governance adoption alone does not invalidate the immutable already-accepted source SHAs enumerated in `REFERENCE_STYLE_LOCK.json`. This is exact-source invalidation discipline, **not a task waiver or shipping exception**: preservation applies only when task + candidate SHA exactly match that historical list. Any reopened task, replacement candidate, new material-affecting SHA, or changed visual source is fully subject to the 10/10 lock. T70 must run a full shipped-material census so even historically preserved material cannot ship if it drifts from the locked reference style.
+Governance adoption alone does not invalidate the immutable already-accepted source SHAs enumerated in `REFERENCE_STYLE_LOCK.json`. This is exact-source invalidation discipline, **not a task waiver or shipping exception**: historical verification requires the exact task, candidate SHA, receipt path and pinned receipt bytes under `REFERENCE_ACCEPTANCE_POLICY.json`; its result never grants a new approval. Any reopened task, replacement candidate, new material-affecting SHA, or changed visual source is fully subject to the 10/10 lock. T70 must run a full shipped-material census so even historically preserved material cannot ship if it drifts from the locked reference style.
 
 ## Evidence contract
 

@@ -6,6 +6,17 @@ from change_impact import calculate as calculate_impact
 
 ACTIVE_STATES = {"PREPARED","ASSIGNED","BUILDING_ISOLATED","BUILT_PENDING_DEPENDENCY","INTEGRATION_READY","INTEGRATING","UNDER_REVIEW","FIX_REQUIRED","BLOCKED"}
 ALLOWED_STATES = {"LOCKED","PREPARED","ASSIGNED","BUILDING_ISOLATED","BUILT_PENDING_DEPENDENCY","INTEGRATION_READY","INTEGRATING","UNDER_REVIEW","FIX_REQUIRED","APPROVED","BLOCKED"}
+# These states remain readable in authentic historical lifecycle records, but
+# the generic metadata utilities cannot confer integration or approval authority.
+APPROVAL_BEARING_STATES = frozenset({"APPROVED", "INTEGRATION_READY", "INTEGRATING"})
+
+
+def _reject_approval_bearing_metadata_status(status):
+    if status in APPROVAL_BEARING_STATES:
+        fail("generic claim/set-status cannot set " + status +
+             "; integration and approval require current exact-candidate gates "
+             "and integration-owner evidence, not a metadata status change")
+
 
 def authorized_change_request_targets(record: dict, task_id: str) -> set[str]:
     """Return exact paths from either supported integration authorization schema."""
@@ -203,6 +214,7 @@ def deps_approved(task_id,graph):
     return [d for d in graph["tasks"][task_id]["dependencies"] if graph["tasks"][d]["status"]!="APPROVED"]
 
 def claim(task_id,owner,branch,base,owned_alias,status):
+    _reject_approval_bearing_metadata_status(status)
     registry=load_json(DOCS/"WORKSTREAM_REGISTRY.json");graph=load_json(DOCS/"DEPENDENCY_GRAPH.json")
     if task_id not in graph["tasks"]:fail("unknown task "+task_id)
     if status not in ("PREPARED","ASSIGNED"):fail("claim status must be PREPARED or ASSIGNED")
@@ -223,6 +235,7 @@ def claim(task_id,owner,branch,base,owned_alias,status):
 
 def set_status(task_id,status):
     if status not in ALLOWED_STATES:fail("invalid status")
+    _reject_approval_bearing_metadata_status(status)
     registry=load_json(DOCS/"WORKSTREAM_REGISTRY.json")
     ws=next((w for w in registry["workstreams"] if w["task_id"]==task_id),None)
     if not ws:fail("unregistered task")
