@@ -81,7 +81,9 @@ func create_opening_hud() -> OpeningHUD:
 	return preload("res://field_hud.gd").new()
 
 func set_player_character(number: int) -> bool:
-	return field_ready and player_wardrobe.choose(number)
+	if not field_ready or not player_wardrobe.choose(number):return false
+	opening_hud.set_character_portrait(player_wardrobe.number)
+	return true
 
 func player_character() -> int:
 	return player_wardrobe.number
@@ -98,6 +100,12 @@ func move_actor(input: Vector2, dt: float) -> float:
 		for gate in gates:
 			wish = gate.passage_heading(actor.global_position,wish)
 		heading = Vector2(wish.dot(right),wish.dot(near))
+	# The stockroom is only two strides across. Give its doorway and aisle
+	# short, controllable steps; the full-speed field run resumes on exit.
+	if depot and depot.house and depot.house.tier>0:
+		var local:Vector3=depot.house.to_local(actor.global_position)
+		if absf(local.x)<.90 and local.z>=-.42 and local.z<=2.55:
+			heading*=lerpf(.18,.28,input.length())
 	var carried_units := 0
 	for count: int in inventory.carried.values():
 		carried_units += count
@@ -130,7 +138,7 @@ func _ready() -> void:
 	tracks.configure(func(pos:Vector3): return not field_env.is_inside_camp(pos))
 	tracks.register_actor(actor,"human",1.0,player_wardrobe.boot_contacts)
 	add_child(carry)
-	carry.setup(inventory, actor, FieldArt.make)
+	carry.setup(inventory, actor, FieldArt.make, opening_hud.objective, opening_hud.quality)
 	carry.travel_clear = Callable(field_env,"travel_clear")
 	add_child(depot)
 	depot.install(self)
@@ -204,6 +212,7 @@ func _ready() -> void:
 	previous_dry_position = actor.position
 	field_ready = true
 	player_wardrobe.setup(self)
+	opening_hud.set_character_portrait(player_wardrobe.number)
 	var home_compass := preload("res://field_navigation.gd").new()
 	opening_hud.add_child(home_compass)
 	home_compass.install(self,opening_hud)

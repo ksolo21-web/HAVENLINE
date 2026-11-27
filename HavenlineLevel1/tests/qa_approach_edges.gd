@@ -18,16 +18,27 @@ func approach(key: String, start: Vector3, goal: Vector3, kind: String, dest: St
 	field.carry.sync(true)
 	var launch_at := Vector3.INF
 	var launch_speed := 0.
+	var paid_while_moving := false
 	for i in 150:
 		var arrived := move_to([goal.x,goal.z],.105)
 		await physics_frame
 		if not launch_at.is_finite() and field.carry.flights.any(func(f): return f.to == dest):
 			launch_at = field.actor.global_position
 			launch_speed = field.actor.velocity.slide(Vector3.UP).length()
+		if dest == "storage_stone" and field.runner_requested_motion:
+			paid_while_moving = paid_while_moving or launch_at.is_finite() or int(inv.paid[dest][kind]) != paid_before
 		if arrived: break
-	await stop_and_wait(1.1)
+	steer(Vector2.ZERO)
+	for tick in 66:
+		await physics_frame
+		if not launch_at.is_finite() and field.carry.flights.any(func(f): return f.to == dest):
+			launch_at = field.actor.global_position
+			launch_speed = field.actor.velocity.slide(Vector3.UP).length()
 	var delta: int = inv.stored[kind]-stored_before if dest == "storage" else int(inv.paid[dest][kind])-paid_before
-	verify(key+" starts in motion",launch_at.is_finite() and launch_speed > .4)
+	if dest == "storage_stone":
+		verify(key+" purchases only after stopping",not paid_while_moving and launch_at.is_finite() and launch_speed < .3)
+	else:
+		verify(key+" starts in motion",launch_at.is_finite() and launch_speed > .4)
 	verify(key+" commits the available load",delta >= 3 and delta <= 3 + starting_load)
 	evidence[key]={"first_takeoff":str(launch_at),"speed":launch_speed,"deposited":delta,"target":dest,"end":str(field.actor.global_position)}
 

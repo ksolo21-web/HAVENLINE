@@ -13,6 +13,7 @@ var directory := ""
 var revision := ""
 var committed_state := {}
 var _verified_file_sha := ""
+var _verified_payload_revision := ""
 var _receipt_history := {}
 var _encoded_receipts := ""
 
@@ -23,6 +24,7 @@ func configure(args: PackedStringArray) -> bool:
 	directory = ""
 	revision = ""
 	_verified_file_sha = ""
+	_verified_payload_revision = ""
 	committed_state = {}
 	_receipt_history = {}
 	_encoded_receipts = ""
@@ -82,6 +84,7 @@ func _read(inventory: Inventory, path: String, verified_revision := "") -> Dicti
 
 func load_into(inventory: Inventory) -> Error:
 	_verified_file_sha = ""
+	_verified_payload_revision = ""
 	if not _safe():
 		return ERR_UNAUTHORIZED
 	var path := directory.path_join(PRIMARY)
@@ -159,7 +162,7 @@ func _write_locked(inventory: Inventory) -> Error:
 		# Compare the complete on-disk file with the last byte-verified stage.
 		# A changed primary always takes the checksum and stale-writer path.
 		if not _verified_file_sha.is_empty() and FileAccess.get_sha256(path) == _verified_file_sha:
-			previous_revision = revision
+			previous_revision = _verified_payload_revision
 		else:
 			var current := _read(inventory,path,revision)
 			if current.is_empty():
@@ -202,6 +205,7 @@ func _write_locked(inventory: Inventory) -> Error:
 		DirAccess.remove_absolute(stage)
 		return error
 	_verified_file_sha = stage_sha
+	_verified_payload_revision = digest
 	committed_state = snapshot
 	revision = digest
 	return OK

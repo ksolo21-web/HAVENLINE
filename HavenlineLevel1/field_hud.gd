@@ -2,6 +2,12 @@ extends "res://orbit_hud.gd"
 
 const Ledger = preload("res://field_inventory.gd")
 const FACE = preload("res://assets/field_ui/camp_portrait.png")
+const PORTRAITS = {
+	1: FACE,
+	2: preload("res://assets/field_ui/camp_portrait_c2.png"),
+	3: preload("res://assets/field_ui/camp_portrait_c3.png"),
+	4: preload("res://assets/field_ui/camp_portrait_c4.png"),
+}
 const FRAME = preload("res://assets/field_ui/portrait_medallion.gdshader")
 const TYPE = preload("res://assets/field_ui/type/BarlowSemiCondensed-SemiBold.ttf")
 const MATERIAL_ICONS := {
@@ -99,6 +105,9 @@ var shown_level:=-1
 var quality:Button
 var display_mark:=DisplayMark.new()
 
+func set_character_portrait(number:int)->void:
+	portrait.texture=PORTRAITS.get(number,FACE)
+
 func _skin(fill:Color,outline:Color,radius:int,shadow:=true) -> StyleBoxFlat:
 	var skin:=StyleBoxFlat.new()
 	skin.bg_color=fill
@@ -187,7 +196,7 @@ func _ready() -> void:
 	thumbstick.install(get_parent().get_parent())
 	add_child(thumbstick)
 	move_child(thumbstick,0)
-	portrait.name="Character1Portrait"
+	portrait.name="CharacterPortrait"
 	portrait.texture=FACE
 	portrait.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
 	portrait.mouse_filter=Control.MOUSE_FILTER_IGNORE

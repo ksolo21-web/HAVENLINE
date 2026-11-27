@@ -22,12 +22,12 @@ func station_floor(kind:String)->Vector3:
 		if loop.exchange._machine_at(point)==kind and net.pedestrian_clear(point,point,field.layout.actor_radius):return point
 	return Vector3.INF
 
-func supply_personally(kind:String,amount:int)->void:
+func supply_personally(kind:String,amount:int,lot:="")->void:
 	var spot:=station_floor(kind)
 	check(kind+" has a physical intake-and-output approach",spot.is_finite())
 	if not spot.is_finite():return
 	for i in amount:
-		bank.collect("level13-personal-"+kind+"-"+str(i),kind)
+		bank.collect("level13-personal-"+lot+kind+"-"+str(i),kind)
 	field.carry.sync(true)
 	park(spot)
 	var previous:int=int(j.cooked if kind=="meat" else j["processed_"+kind])
@@ -35,6 +35,10 @@ func supply_personally(kind:String,amount:int)->void:
 	park(anchor)
 	check(kind+" cycles complete without the carrier",await until(func():return int(j.cooked if kind=="meat" else j["processed_"+kind])>=previous+amount,1200))
 	inspect_state("processed "+kind)
+
+func at_bay(kind:String)->void:
+	park(loop.exchange.pickup_position(kind))
+	await ticks(26)
 
 func cash_on_shelf()->int:
 	var visible_notes:=0
@@ -45,11 +49,13 @@ func cash_on_shelf()->int:
 func manual()->void:
 	check("all three purchased machines start without belts",not bank.complete(P.FOOD_LINE) and not bank.complete(P.SUPPLY_LINE) and Group.all(func(k):return bank.is_machine_owned(k)))
 	field.counter.arrival_clock=200.
-	for kind:String in Group:await supply_personally(kind,3)
+	for kind:String in Group:await supply_personally(kind,1 if kind=="meat" else 3)
 	for kind:String in Group:
 		var ready:=Cargo.rack(j,kind)
 		var before:int=int(bank.hand_goods()[Cargo.PRODUCT[kind]])
-		check(kind+" has a physical batch ready",ready>=2)
+		# The carrier may already have picked up the fixture's one cooked roast
+		# while loading the first raw meat. The new roast is still on the output.
+		check(kind+" has a physical batch ready",ready>=1 and before+ready>=2)
 		var spot:=station_floor(kind)
 		if not spot.is_finite():continue
 		park(spot)
@@ -62,11 +68,14 @@ func manual()->void:
 	check("remote shelf withdrawal rejects",not loop.withdraw_goods("meal"))
 	park(field.depot.apron.global_position)
 	await ticks(5)
-	check("mixed goods unload together into individual storehouse bays",bank.house_goods().planks==3 and bank.house_goods().blocks==3 and bank.house_goods().meal==4 and bank.hand_goods()=={"planks":0,"blocks":0,"meal":0,"money":0})
-	check("apron retrieves two specific meals",loop.withdraw_goods("meal",2))
-	check("actual stored stone can be retrieved",loop.withdraw_goods("stone",1))
+	check("mixed goods unload together into individual storehouse bays",bank.house_goods().planks==3 and bank.house_goods().blocks==3 and bank.house_goods().meal==2 and bank.hand_goods()=={"planks":0,"blocks":0,"meal":0,"money":0})
+	var stored_stone:int=bank.stored.stone
+	await at_bay("meal")
+	check("standing at the interior food bay picks up its two prepared servings",j.held_meal==2 and j.product_store.meal==0)
+	await at_bay("stone")
+	check("standing by actual stored stone retrieves the whole available lot",stored_stone>0 and bank.carried.stone==stored_stone and bank.stored.stone==0)
 	await ticks(34)
-	check("house leaves intentionally withdrawn goods on the visitor",bank.hand_goods().meal==2 and bank.carried.stone==1 and bank.house_goods().meal==2)
+	check("house leaves intentionally withdrawn goods on the visitor",bank.hand_goods().meal==2 and bank.carried.stone==stored_stone and bank.house_goods().meal==0)
 	park(anchor)
 	await ticks(3)
 	park(field.counter.service_point.global_position)
@@ -77,9 +86,15 @@ func manual()->void:
 	check("cashier serves two actual queued buyers",await until(func():return j.served==2,2000))
 	check("sold meals create two uncollected notes",bank.till_balance()==2 and bank.hand_goods().money==0)
 	await ticks(70)
+	await supply_personally("meat",2,"second-")
+	park(station_floor("meat"))
+	await ticks(4)
+	park(anchor)
+	await ticks(4)
 	park(field.depot.apron.global_position)
-	await ticks(3)
-	check("remaining two meals available from food bay",loop.withdraw_goods("meal"))
+	await ticks(4)
+	await at_bay("meal")
+	check("second genuine pair of cooked meals collected from its shelf",j.held_meal==2)
 	park(anchor)
 	await ticks(2)
 	park(field.counter.service_point.global_position)
@@ -91,7 +106,8 @@ func manual()->void:
 	park(field.depot.apron.global_position)
 	await ticks(4)
 	check("two deposited notes appear on the physical warehouse shelf",j.pocket_cash==0 and j.house_cash==2 and cash_on_shelf()==2)
-	check("stored cash can be retrieved",loop.withdraw_goods("money") and j.pocket_cash==2 and j.house_cash==0)
+	await at_bay("money")
+	check("standing by the notes takes the stored cash",j.pocket_cash==2 and j.house_cash==0)
 	await ticks(30)
 	check("empty money shelf clears after withdrawal",cash_on_shelf()==0)
 	field._checkpoint_lifecycle()
@@ -151,7 +167,8 @@ func bulk()->void:
 	check("quantity fixture passed the production object validator",not field.persist_blocked)
 	park(field.depot.apron.global_position)
 	await ticks(3)
-	check("withdraws all 1207 physical servings in one visit",loop.withdraw_goods("meal") and j.held_meal==pantry)
+	await at_bay("meal")
+	check("withdraws all 1207 physical servings in one visit",j.held_meal==pantry and j.product_store.meal==0)
 	park(anchor)
 	await ticks(2)
 	park(field.counter.service_point.global_position)

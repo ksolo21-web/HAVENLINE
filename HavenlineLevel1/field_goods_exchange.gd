@@ -12,6 +12,22 @@ const MAX_SHELF_NOTES=8
 var cash_bay:=Node3D.new()
 var shelf_notes:Array[Node3D]=[]
 var last_shelf_count:=-1
+# These are the aisle-side edges of the actual woodwork. The lower and
+# upper trays share three rack faces, each approachable from either end.
+const BAY_EDGE={
+	"wood":Vector2(-.68,.50),"planks":Vector2(-.68,.13),
+	"stone":Vector2(-.72,-.09),"blocks":Vector2(-.71,-.31),
+	"slate":Vector2(-.44,-.31),"meat":Vector2(-.15,-.31),"meal":Vector2(.14,-.31),
+	"metal":Vector2(.42,-.31),"money":Vector2(.72,-.27),"coal":Vector2(.70,.32)
+}
+const SAME_FACE={"wood":"planks","planks":"wood","stone":"blocks","blocks":"stone","meat":"meal","meal":"meat"}
+const STOP_SECONDS:=.17
+var sampled_bay:=""
+var still_seconds:=0.
+var responded:=false
+var touch_bay:=""
+var touch_pointer:=-3
+var touch_start:=Vector2.ZERO
 const GOODS=["planks","blocks","meal","money"]
 const RAW_FOR={"planks":"wood","blocks":"stone","meal":"meat"}
 const FLY_SECONDS=.29
@@ -93,6 +109,93 @@ func _change_hand(kind:String,delta:int)->void:
 func at_loading_area()->bool:
 	return world.camp_active and world.field_env.is_inside_camp(world.actor.global_position) and world.depot.at_loading_area(world.actor.global_position)
 
+func pickup_position(kind:String)->Vector3:
+	if not BAY_EDGE.has(kind):return Vector3.INF
+	var p:Vector2=BAY_EDGE[kind]
+	return world.depot.house.to_global(Vector3(p.x,0.,p.y))
+
+func bay_at(at:Vector3)->String:
+	if not world.field_env.is_inside_camp(at) or not world.depot.house.on_walkable_aisle(at,float(world.layout.actor_radius)):return ""
+	var local:Vector3=world.depot.house.to_local(at)
+	var feet:=Vector2(local.x,local.z)
+	var best:=.39*.39
+	var selected:=""
+	for kind:String in BAY_EDGE:
+		var distance:float=feet.distance_squared_to(BAY_EDGE[kind])
+		if distance<best:
+			selected=kind
+			best=distance
+	return selected
+
+func _shelf_amount(kind:String)->int:
+	if kind in world.inventory.KINDS:
+		return world.carry.available_on_shelf(kind) if world.inventory.storage_open(kind) else 0
+	return int(world.inventory.house_goods().get(kind,0))
+
+func _close_to_stock(kind:String)->bool:
+	var feet:Vector3=world.actor.global_position
+	return at_loading_area() and world.depot.house.on_walkable_aisle(feet,float(world.layout.actor_radius)) and feet.distance_to(pickup_position(kind))<.72
+
+func _walk_pickup(dt:float)->void:
+	var kind:=bay_at(world.actor.global_position)
+	if kind!=sampled_bay or world.runner_requested_motion or world.actor.velocity.length_squared()>.09:
+		sampled_bay=kind
+		still_seconds=0.
+		responded=false
+		return
+	if kind.is_empty() or responded:return
+	still_seconds+=dt
+	if still_seconds<STOP_SECONDS:return
+	responded=true
+	if world.inventory.settlement.withdrawn.has(kind):return
+	# If one tray on a shared face is empty, the occupant can naturally
+	# collect the stocked tray from the same stop.
+	if _shelf_amount(kind)==0:kind=SAME_FACE.get(kind,"")
+	if not kind.is_empty() and not world.inventory.settlement.withdrawn.has(kind):withdraw(kind)
+
+func _projected_stock(at:Vector2)->String:
+	if not world.depot.house.is_interior_visible():return ""
+	var best:=22.*22.
+	var selected:=""
+	for kind:String in BAY_EDGE:
+		if not _close_to_stock(kind):continue
+		var anchor:=_shelf(kind)+Vector3.UP*.06
+		var screen:Vector2=world.camera.unproject_position(anchor)
+		var distance:=screen.distance_squared_to(at)
+		if distance<best:
+			best=distance
+			selected=kind
+	# Empty trays retain their space, including after a repeated tap.
+	return selected if not selected.is_empty() and _shelf_amount(selected)>0 else ""
+
+func observe_stock_pointer(event:InputEvent)->void:
+	if event.device==InputEvent.DEVICE_ID_EMULATION:return
+	var pointer:=-2
+	if event is InputEventScreenTouch:pointer=event.index
+	elif event is InputEventMouseButton and event.button_index==MOUSE_BUTTON_LEFT:pointer=-1
+	else:
+		if event is InputEventScreenDrag and event.index==touch_pointer and event.position.distance_to(touch_start)>12.:touch_bay=""
+		if event is InputEventMouseMotion and touch_pointer==-1 and event.position.distance_to(touch_start)>12.:touch_bay=""
+		return
+	if event.pressed:
+		if touch_pointer!=-3 or (event is InputEventScreenTouch and not world.trial_camera.fingers.is_empty()):
+			touch_bay=""
+			return
+		touch_bay=_projected_stock(event.position)
+		if not touch_bay.is_empty():
+			touch_pointer=pointer
+			touch_start=event.position
+		return
+	if pointer!=touch_pointer:return
+	touch_pointer=-3
+	var kind:=touch_bay
+	touch_bay=""
+	if kind.is_empty() or event.canceled or event.position.distance_to(touch_start)>12. or not _close_to_stock(kind):return
+	# The camera/joystick gets the same release event, including on a
+	# touchscreen where that first finger also started locomotion.
+	responded=true
+	withdraw(kind)
+
 func _machine_at(at:Vector3)->String:
 	if not world.field_env.is_inside_camp(at):return ""
 	var p:=Vector2(at.x,at.z)
@@ -135,17 +238,11 @@ func _deposit()->void:
 	if not world.settlement_loop.commit_receipt("goods_stored",world.depot.apron.global_position,"deposit_wood"):return
 	for kind:String in staged:_draw(kind,staged[kind],_shelf(kind),false)
 
-func withdraw(kind:String,amount:int)->bool:
-	if not world.settlement_loop.can_transact() or not at_loading_area() or amount<0:return false
+func withdraw(kind:String)->bool:
+	if not world.settlement_loop.can_transact() or not BAY_EDGE.has(kind) or not _close_to_stock(kind):return false
 	var book=world.inventory
 	var j:Dictionary=book.settlement
-	var from_house:int=0
-	if kind in book.KINDS:
-		if not book.storage_open(kind):return false
-		from_house=world.carry.available_on_shelf(kind)
-	elif kind in GOODS:from_house=int(book.house_goods()[kind])
-	else:return false
-	var taken:=from_house if amount==0 else mini(from_house,amount)
+	var taken:=_shelf_amount(kind)
 	if taken<=0:return false
 	if kind in book.KINDS:
 		book.stored[kind]-=taken
@@ -182,7 +279,7 @@ func at_station()->bool:
 	var raw:=_machine_at(at)
 	return not raw.is_empty() and _pickup_machine(raw)
 
-func visit()->void:
+func visit(dt:float)->void:
 	var j:Dictionary=world.inventory.settlement
 	world.carry.storage_protected=j.withdrawn
 	var at:Vector3=world.actor.global_position
@@ -190,5 +287,10 @@ func visit()->void:
 		j.withdrawn.clear()
 		world._inventory_changed()
 		if world.persist_blocked:return
+	if world.depot.house.on_walkable_aisle(at,float(world.layout.actor_radius)):_walk_pickup(dt)
+	else:
+		sampled_bay=""
+		responded=false
+		still_seconds=0.
 	if world.counter.at_service(at):_counter()
 	elif _machine_at(at).is_empty() and at_loading_area() and world.depot.target_at(at)==world.carry.STOCK:_deposit()

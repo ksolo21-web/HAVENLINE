@@ -86,7 +86,7 @@ func advance(dt: float) -> void:
 	if _simulation_active(): conveyors.advance(dt)
 	_update_belt_mix()
 	works.advance(dt)
-	if can_transact(): exchange.visit()
+	if can_transact(): exchange.visit(dt)
 	var progress := _present_production(dt)
 	world.counter.set_active(world.inventory.complete(Progress.SECOND),int(world.inventory.settlement.served))
 	if world.inventory.complete(Progress.FOOD_LINE) or world.inventory.settlement.counter_stock>0:
@@ -246,8 +246,8 @@ func _meal_pickup(at:Vector3)->Vector3:
 		return conveyors.shelf_position("meal")
 	return Vector3.INF
 
-func withdraw_goods(kind:String,amount:=0)->bool:
-	return exchange.withdraw(kind,amount)
+func withdraw_goods(kind:String)->bool:
+	return exchange.withdraw(kind)
 
 func collect_meal() -> bool:
 	if not can_transact() or not world.lakeshore.at_output(world.actor.global_position):return false
@@ -287,6 +287,7 @@ func enter_next_level() -> bool:
 
 func handle_input(event: InputEvent) -> bool:
 	if conveyors and conveyors.menu.handle(event):return true
+	if can_transact():exchange.observe_stock_pointer(event)
 	var button: Button = world.opening_hud.level_continue
 	if event is InputEventScreenDrag and finger != -1 and event.index == finger: return true
 	if event is InputEventScreenTouch and finger != -1 and event.index == finger:

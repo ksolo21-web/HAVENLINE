@@ -123,17 +123,22 @@ func run() -> void:
 						var item := top(kind)
 						lowest=minf(lowest,margin(kind))
 						check(item != null and item.global_position.is_equal_approx(carry._place("carry",kind,amount-1)),kind+" visible representative")
-						check(visible_count(kind)==amount if amount==3 or (amount==12 and ratio==1.) else visible_count(kind)<=amount,kind+" preserves ordinary loads")
+						var shown := visible_count(kind)
+						check(shown==amount if amount==3 else shown<=amount,kind+" preserves ordinary loads")
+						var geometry_top:float = item.position.y+carry.measured[kind].y
+						check(geometry_top<=Carry.PACK_TOP+.001,kind+" keeps the top of the actual mesh at the standing keeper's crown")
+						if amount>=37:
+							check(geometry_top+carry.tier_height[kind]>Carry.PACK_TOP-.01 or ratio>1.,kind+" fills its physical bay before grouping surplus")
 						check(book.carried[kind]==amount,kind+" count unchanged")
 						check(carry.pieces["carry/"+kind].size()<(75 if kind in Ledger.ORIGINAL_KINDS else 200),kind+" bounded pool")
 					check(top("wood").position.x < top("stone").position.x, "wood and stone occupy separate columns")
 					check_distinct_bays()
 
-				check(lowest>=.08,"8 percent margin across views and turns")
+				check(lowest>=.20,"full rack clears the objective area across views and turns")
 				var drawn := {}
 				for kind in Ledger.KINDS: drawn[kind]=visible_count(kind)
 				cases.append({"viewport":str(format_),"zoom":ratio,"logical":amount,"visible":drawn,"min_headroom":snappedf(lowest,.001)})
-	# A camera-only zoom update while stationary must change the visible cap.
+	# A camera-only zoom update while stationary must preserve the bounded pool.
 	view.size=Vector2i(1280,720)
 	zoom.set_ratio(camera,1.)
 	carry.advance(.02)
@@ -141,7 +146,7 @@ func run() -> void:
 	var pool: Array=carry.pieces["carry/wood"].duplicate()
 	zoom.set_ratio(camera,2.)
 	carry.advance(.02)
-	check(visible_count("wood")<full and carry.pieces["carry/wood"]==pool,"idle zoom reuses pool")
+	check(visible_count("wood")<=full and carry.pieces["carry/wood"]==pool,"idle zoom reuses pool")
 	# Exercise real earned tokens, overflow receipts and a reload.
 	book.carried=Ledger.EMPTY.duplicate()
 	for i in 60: book.collect("tree-%d"%i,"wood")

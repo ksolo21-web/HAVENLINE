@@ -28,14 +28,21 @@ const INTERVAL := 0.16
 const PAYMENT_INTERVAL := 4.0 / 60.0
 const PICKUP_TIME := 0.29
 const SEND_TIME := 0.28
-# The full reference pack reaches at most 5.6 standing hero heights (1.75 m).
-const PACK_TOP := 9.8
-const TOP_MARGIN := .08
+# A full player rack ends at the keeper's crown. Further bundles keep their
+# exact ledger quantities and use the last modeled packet in their own bay.
+const PACK_TOP := 1.86
+const TOP_MARGIN := .20
+# Rack-space footprint of the shelves plus the rotated resource packets.
+const RACK_CENTER_Z := -.795
+const RACK_HALF_WIDTH := .71
+const RACK_HALF_DEPTH := .355
 const HAND := "carry"
 const STOCK := "storage"
 
 var visual_top := PACK_TOP
 var fit_to_viewport := true
+var objective_card: Control
+var top_status: Control
 var inventory: Inventory
 var actor: Node3D
 var factory: Callable
@@ -82,7 +89,9 @@ var worksite_goal: Callable
 var travel_clear: Callable
 var tier_height := {"wood":.13, "stone":.11, "meat":.145, "coal":.15, "slate":.12, "metal":.16}
 
-func setup(ledger: Inventory, character: Node3D, item_factory: Callable) -> void:
+func setup(ledger: Inventory, character: Node3D, item_factory: Callable, objective: Control = null, status: Control = null) -> void:
+	objective_card = objective
+	top_status = status
 	inventory = ledger
 	actor = character
 	factory = item_factory
@@ -219,15 +228,27 @@ func _headroom_bucket() -> int:
 	var camera := get_viewport().get_camera_3d()
 	if camera:
 		var base := rack.global_position + Vector3.UP * PACK_BASE
-		var y := camera.unproject_position(base).y
+		var projected_base := camera.unproject_position(base)
+		var y := projected_base.y
 		var pixels_per_metre := y - camera.unproject_position(base + Vector3.UP).y
 		if pixels_per_metre > .001:
 			var view_up := camera.global_basis.y
-			var slope := Vector2(view_up.x, view_up.z).length() / maxf(.001, view_up.y)
-			# The farthest occupied shelf corner stays within 1.4 m of the
-			# character in plan, including both packet edges during a turn.
+			var rack_up := rack.global_basis.transposed()*view_up
+			# Footprint of the two shelves and all rotated packets in rack space.
+			# Only the corner projecting upwards can reduce HUD clearance.
+			var edge := rack_up.z * RACK_CENTER_Z + absf(rack_up.x) * RACK_HALF_WIDTH + absf(rack_up.z) * RACK_HALF_DEPTH
 			var safe_y := get_viewport().get_visible_rect().size.y * TOP_MARGIN
-			room = minf(room, (y - safe_y) / pixels_per_metre - 1.4 * slope)
+			if objective_card and top_status and objective_card.is_visible_in_tree():
+				var ticket := objective_card.get_global_transform_with_canvas() * Rect2(Vector2.ZERO, objective_card.size)
+				var right := rack.global_basis.transposed() * camera.global_basis.x
+				var pixels_per_horizontal_metre := pixels_per_metre / view_up.y
+				var center_x := projected_base.x + right.z * RACK_CENTER_Z * pixels_per_horizontal_metre
+				var span_x := (absf(right.x) * RACK_HALF_WIDTH + absf(right.z) * RACK_HALF_DEPTH) * pixels_per_horizontal_metre
+				# Outside the objective, only the upper resource rail needs clearance.
+				if center_x - span_x > ticket.end.x or center_x + span_x < ticket.position.x:
+					var status_rect := top_status.get_global_transform_with_canvas() * Rect2(Vector2.ZERO, top_status.size)
+					safe_y = minf(safe_y, status_rect.end.y)
+			room = minf(room,(y-safe_y)/pixels_per_metre-edge/maxf(.001,view_up.y))
 	return maxi(1, floori(room * 100.0))
 
 func _layout_pack(counts: Dictionary) -> void:

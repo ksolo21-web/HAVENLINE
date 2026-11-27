@@ -1,14 +1,12 @@
 extends RefCounted
-## The chosen character wears its original skin. All four characters follow the
-## same field controller, while each visible skeleton keeps its own bind lengths.
+## Preserve the active player and inventory while changing its visible compact skin.
+# Register each compact player's verified runtime skin here after comparison
+# with the owner's current model sheet. Character 1 is the built-in controller.
 const CHARACTERS := {
-	2: "res://assets/characters/Character2.glb",
-	3: "res://assets/characters/Character3.glb",
-	4: "res://assets/characters/Character4.glb"
+	2: "res://assets/characters/Character2Compact.glb",
+	3: "res://assets/characters/Character3Compact.glb",
+	4: "res://assets/characters/Character4Compact.glb",
 }
-const CENTER := {"Hips":"Pelvis","Spine":"Spine","Spine1":"Spine","Spine2":"Chest","Neck":"Neck","Head":"Head"}
-const LIMBS := {"Shoulder":"Clavicle","Arm":"UpperArm","ForeArm":"Forearm","Hand":"Hand","UpLeg":"Thigh","Leg":"Shin","Foot":"Foot","ToeBase":"Toe"}
-const DIGITS := {"Thumb":"Thumb","Index":"Index","Middle":"Middle","Ring":"Ring","Pinky":"Little"}
 var world
 var source: Skeleton3D
 var originals: Array[Node] = []
@@ -17,21 +15,22 @@ var target: Skeleton3D
 var number := 1
 var settings_path := ""
 var mapping: Array = []
-var fingers: Array = []
-var elbows: Array[int] = []
-var glove_chains: Array = []
-var pelvis_source := -1
 var feet: Array = []
+var arms: Array = []
 var tread = preload("res://field_tread_samples.gd").new()
 var last_actor := Vector3.INF
+var previous_tread := PackedVector3Array()
+var bind_offset:=Vector3.ZERO
+var hip_settle:=0.
+var hip_shift:=Vector3.ZERO
+var pack_rest:=Vector3.ZERO
 var grounded_ids: Array[int] = [-1,-1]
 var grounded_points: Array[Vector3] = [Vector3.ZERO,Vector3.ZERO]
-var plant_shift: Array[Vector3] = [Vector3.ZERO,Vector3.ZERO]
 
 func setup(host: Node3D) -> void:
 	world = host
+	pack_rest=world.carry.rack.position
 	source = world.hero_model.find_children("*","Skeleton3D",true,false)[0]
-	pelvis_source = source.find_bone("Pelvis")
 	originals = world.hero_model.find_children("*","MeshInstance3D",true,false)
 	settings_path = "user://field-player.cfg" if world.field_save.native_profile else world.field_save.directory.path_join("field-player.cfg")
 	var prefs := ConfigFile.new()
@@ -40,9 +39,12 @@ func setup(host: Node3D) -> void:
 
 func choose(id: int, persist := true) -> bool:
 	if id == number: return true
-	if id < 1 or id > 4: return false
+	if id!=1 and not CHARACTERS.has(id):return false
 	var next: Node3D
 	var rig: Skeleton3D
+	var next_mapping: Array = []
+	var next_feet: Array = []
+	var next_tread = preload("res://field_tread_samples.gd").new()
 	if id != 1:
 		var body := load(CHARACTERS[id]) as PackedScene
 		if not body: return false
@@ -52,6 +54,31 @@ func choose(id: int, persist := true) -> bool:
 			next.queue_free()
 			return false
 		rig = skeletons[0]
+		# The runtime body uses the same anatomical names and bind axes as the
+		# compact input rig. Every deform bone must have a real controller source.
+		for joint in rig.get_bone_count():
+			var original := source.find_bone(rig.get_bone_name(joint))
+			if original < 0:
+				next.queue_free()
+				return false
+			next_mapping.append([original,joint,source.get_bone_rest(original),rig.get_bone_rest(joint)])
+		for side: String in [".L",".R"]:
+			var leg := [rig.find_bone("Thigh"+side),rig.find_bone("Shin"+side),rig.find_bone("Foot"+side)]
+			if -1 in leg:
+				next.queue_free()
+				return false
+			next_feet.append(leg)
+		var pieces := next.find_children("*","MeshInstance3D",true,false)
+		var floor_y := INF
+		for mesh: MeshInstance3D in pieces:
+			if mesh.skin and mesh.mesh:
+				floor_y=minf(floor_y,mesh.get_aabb().position.y)
+		for mesh: MeshInstance3D in pieces:
+			if mesh.skin and mesh.mesh and mesh.get_aabb().position.y<=floor_y+.01:
+				next_tread.bind(mesh,rig)
+		if next_tread.soles.is_empty():
+			next.queue_free()
+			return false
 	if persist:
 		var prefs := ConfigFile.new()
 		prefs.set_value("player","character",id)
@@ -65,57 +92,25 @@ func choose(id: int, persist := true) -> bool:
 	number = id
 	visual = next
 	target = rig
-	mapping.clear()
-	fingers.clear()
-	elbows.clear()
-	glove_chains.clear()
-	feet.clear()
-	tread = preload("res://field_tread_samples.gd").new()
+	mapping = next_mapping
+	feet = next_feet
+	arms.clear()
+	if rig:
+		for side: String in [".L",".R"]:
+			arms.append([rig.find_bone("UpperArm"+side),rig.find_bone("Forearm"+side),rig.find_bone("Hand"+side)])
+	tread = next_tread
 	grounded_ids.assign([-1,-1])
-	plant_shift.assign([Vector3.ZERO,Vector3.ZERO])
 	last_actor = Vector3.INF
+	previous_tread.clear()
+	world.carry.rack.position=pack_rest
 	if not visual: return true
+	bind_offset=visual.position
+	hip_settle=0.
+	hip_shift=Vector3.ZERO
 	visual.name = "PlayerCharacter"+str(id)
 	world._disable_worn_shadow(visual)
-	for bone in target.get_bone_count():
-		var from := _source_id(String(target.get_bone_name(bone)).trim_prefix("mixamorig"))
-		if from >= 0:
-			mapping.append([from,bone,source.get_bone_global_rest(from).basis.inverse(),target.get_bone_global_rest(bone)])
-	for side in ["Left","Right"]:
-		elbows.append(target.find_bone("mixamorig"+side+"Arm"))
-		feet.append([target.find_bone("mixamorig"+side+"UpLeg"),target.find_bone("mixamorig"+side+"Leg"),target.find_bone("mixamorig"+side+"Foot")])
-		var hand_id := target.find_bone("mixamorig"+side+"Hand")
-		glove_chains.append([elbows.back(),target.find_bone("mixamorig"+side+"ForeArm"),hand_id])
-		var palm := target.get_bone_global_rest(hand_id)
-		var index_knuckle := target.get_bone_global_rest(target.find_bone("mixamorig"+side+"HandIndex1")).origin
-		var little_knuckle := target.get_bone_global_rest(target.find_bone("mixamorig"+side+"HandPinky1")).origin
-		var down := (index_knuckle-palm.origin).cross(little_knuckle-palm.origin).normalized()
-		if down.y>0.:down=-down
-		for digit: String in DIGITS:
-			for segment in range(1,4):
-				var id_bone:=target.find_bone("mixamorig"+side+"Hand"+digit+str(segment))
-				var bone_transform:=target.get_bone_global_rest(id_bone)
-				var adjacent:=target.get_bone_parent(id_bone) if segment==3 else target.find_bone("mixamorig"+side+"Hand"+digit+str(segment+1))
-				var along:=bone_transform.origin.direction_to(target.get_bone_global_rest(adjacent).origin)
-				if segment==3:along=-along
-				var curl_axis:=bone_transform.basis.inverse()*along.cross(down).normalized()
-				var angle:=deg_to_rad(32. if segment<3 else 20.)
-				if digit=="Thumb":angle*=.36
-				fingers.append([id_bone,curl_axis.normalized(),angle])
-	tread.bind(visual.find_children("*","MeshInstance3D",true,false)[0],target)
 	update_pose(0.)
 	return true
-
-func _source_id(label: String) -> int:
-	if CENTER.has(label): return source.find_bone(CENTER[label])
-	var side := ".L" if label.begins_with("Left") else ".R"
-	var limb := label.trim_prefix("Left").trim_prefix("Right")
-	if LIMBS.has(limb): return source.find_bone(LIMBS[limb]+side)
-	for digit: String in DIGITS:
-		if limb.begins_with("Hand"+digit):
-			var segment := mini(int(limb.right(1)),2) if digit=="Thumb" else int(limb.right(1))
-			return source.find_bone(DIGITS[digit]+str(segment)+side)
-	return -1
 
 func _place_ankle(side: int, shift: Vector3) -> void:
 	var ids: Array = feet[side]
@@ -126,7 +121,9 @@ func _place_ankle(side: int, shift: Vector3) -> void:
 	var direction := hip.origin.direction_to(to)
 	var upper := hip.origin.distance_to(knee.origin)
 	var lower := knee.origin.distance_to(boot.origin)
-	var length := clampf(hip.origin.distance_to(to),absf(upper-lower)+.0005,upper+lower-.0005)
+	var shortest := sqrt(upper*upper+lower*lower+2.*upper*lower*cos(deg_to_rad(120.)))
+	var longest := sqrt(upper*upper+lower*lower+2.*upper*lower*cos(deg_to_rad(7.)))
+	var length := clampf(hip.origin.distance_to(to),shortest,longest)
 	var along := (upper*upper-lower*lower+length*length)/(2.*length)
 	var pole := (knee.origin-hip.origin).slide(direction)
 	# A nearly straight leg must retain the same forward bend branch.
@@ -144,105 +141,108 @@ func _place_ankle(side: int, shift: Vector3) -> void:
 
 func update_pose(dt: float) -> void:
 	if not target: return
-	var scale_ratio := source.global_basis.get_scale().y/target.global_basis.get_scale().y
 	for pair: Array in mapping:
-		var current := source.get_bone_global_pose(pair[0])
-		var rest: Transform3D = pair[3]
-		var local := target.get_bone_global_pose(pair[1])
-		local.basis=(current.basis*pair[2]).orthonormalized()*rest.basis
-		if pair[0] == pelvis_source:
-			local.origin=rest.origin+(current.origin-source.get_bone_global_rest(pair[0]).origin)*scale_ratio
-		target.set_bone_global_pose(pair[1],local)
-	# Keep the palms outside the cup and leather pouches on the belted
-	# outfits. The source and target keep their individual shoulder widths.
-	if number in [2,3,4]:
-		for side in 2:
-			var arm:=target.get_bone_global_pose(elbows[side])
-			var spread:=deg_to_rad(11. if number==3 else 10.)
-			var forward:Vector3=(target.global_basis.inverse()*world.actor.global_basis.z).normalized()
-			var sign_x:=1. if arm.origin.x>0. else -1.
-			arm.basis=Basis(forward,sign_x*spread)*arm.basis
-			target.set_bone_global_pose(elbows[side],arm)
-	for chain: Array in glove_chains:
-		preload("res://field_glove_clearance.gd").solve(target,world.actor,chain,number)
-	# Rest the selected gloves in a loose curl. Increase it slightly when
-	# running; all phalanges retain the initial rig's own local bend axes.
-	var squeeze := lerpf(.43,1.,smoothstep(.30,3.3,world.actor.velocity.length()))
-	for finger: Array in fingers:
-		var joint: int=finger[0]
-		var rotation:=target.get_bone_pose_rotation(joint)
-		target.set_bone_pose_rotation(joint,rotation*Quaternion(finger[1],finger[2]*squeeze))
+		var original: int = pair[0]
+		var joint: int = pair[1]
+		var from: Transform3D = pair[2]
+		var to: Transform3D = pair[3]
+		# The actor-specific rest locations remain fitted to the knees, gloves,
+		# head and boot fasteners on the selected source mesh.
+		var motion := from.basis.get_rotation_quaternion().inverse()*source.get_bone_pose_rotation(original)
+		target.set_bone_pose_rotation(joint,(to.basis.get_rotation_quaternion()*motion).normalized())
+		target.set_bone_pose_position(joint,to.origin+source.get_bone_pose_position(original)-from.origin)
+		target.set_bone_pose_scale(joint,source.get_bone_pose_scale(original))
 	if not world.gait_motor.skeleton or tread.soles.is_empty(): return
+	for chain: Array in arms:
+		if -1 not in chain:
+			var forward_wrist := .414 if number==3 else (.405 if number==2 and chain==arms[1] else 0.)
+			preload("res://field_glove_clearance.gd").solve(target,world.actor,chain,.79,forward_wrist)
+	visual.position=bind_offset
 	var boots: Vector2 = world.gait_motor._heights()
 	var points: PackedVector3Array = tread.points()
 	var low: Array[int] = tread.lowest(points)
 	if low[0]<0 or low[1]<0:return
-	var body: Node3D = world.actor
-	var actor_at: Vector3 = body.global_position
+	var actor_at: Vector3 = world.actor.global_position
 	if actor_at.distance_squared_to(last_actor)>1.:
 		grounded_ids.assign([-1,-1])
-		plant_shift.assign([Vector3.ZERO,Vector3.ZERO])
+		previous_tread.clear()
+		hip_settle=0.
+		hip_shift=Vector3.ZERO
 	last_actor=actor_at
-	var goals: Array[Vector3] = []
-	var heights := Vector2.ZERO
+	# Preserve this fitted body's authored hip-to-ankle arc through flight.
+	# Settling its lowest tread to the same flight height as the driver keeps
+	# the true soles on the snow without folding the free knee to match C1.
+	var offset := minf(boots.x,boots.y)-minf(points[low[0]].y,points[low[1]].y)
+	visual.global_position.y+=offset
+	var goals:=PackedVector3Array([Vector3.ZERO,Vector3.ZERO])
+	var settle:=0.
+	# The fourth character's longer boot starts rolling onto its own
+	# forefoot sooner. Keep the planted patch at the ball during push-off.
+	var roll_margin:=.0026 if number==4 else .009
 	for side in 2:
-		var src_ids: Array = world.gait_motor.leg_chains[side]
-		var dst_ids: Array = feet[side]
-		var hip := target.to_global(target.get_bone_global_pose(dst_ids[0]).origin)
-		var knee := target.to_global(target.get_bone_global_pose(dst_ids[1]).origin)
-		var ankle := target.to_global(target.get_bone_global_pose(dst_ids[2]).origin)
-		var ref := source.to_global(source.get_bone_global_pose(src_ids[2]).origin)
-		var ref_rest := source.to_global(source.get_bone_global_rest(src_ids[2]).origin)
-		var own_rest := target.to_global(target.get_bone_global_rest(dst_ids[2]).origin)
-		var goal := own_rest+(ref-ref_rest)
-		goal.y=ankle.y + boots[side]-points[low[side]].y
-		var prediction := (goal-ankle).slide(Vector3.UP)
-		var marker := grounded_ids[side]
-		if boots[side]-actor_at.y > .024:
+		var threshold:=.012 if grounded_ids[side]>=0 else .006
+		if boots[side]-actor_at.y>threshold:
 			grounded_ids[side]=-1
-			plant_shift[side]=plant_shift[side].move_toward(Vector3.ZERO,dt*1.4)
-		else:
-			if marker<0 or points[marker].y-points[low[side]].y>.012:
-				marker=low[side]
-				grounded_ids[side]=marker
-				grounded_points[side]=points[marker]+prediction+plant_shift[side]
-			plant_shift[side]=(grounded_points[side]-points[marker]-prediction).slide(Vector3.UP).limit_length(.20)
-		goal+=plant_shift[side]
-		goals.append(goal)
-		# Match the compact driver's knee flex using this body's actual femur
-		# and tibia. The supporting leg governs pelvis height for this step.
-		var upper := hip.distance_to(knee)
-		var lower := knee.distance_to(ankle)
-		var ref_hip := source.get_bone_global_pose(src_ids[0]).origin
-		var ref_knee := source.get_bone_global_pose(src_ids[1]).origin
-		var ref_boot := source.get_bone_global_pose(src_ids[2]).origin
-		var flex := clampf((ref_knee-ref_hip).angle_to(ref_boot-ref_knee),deg_to_rad(13.),deg_to_rad(120.))
-		var d2 := upper*upper+lower*lower+2.*upper*lower*cos(flex)
-		var horizontal := (goal-hip).slide(Vector3.UP).length_squared()
-		heights[side]=goal.y+sqrt(maxf(.001,d2-horizontal))-hip.y
-	var left_weight := smoothstep(-.024,.024,boots.y-boots.x)
-	var lift := lerpf(heights.y,heights.x,left_weight)
+			continue
+		var marker := grounded_ids[side]
+		if marker<0 or points[marker].y-points[low[side]].y>roll_margin:
+			var continuing := marker>=0 and previous_tread.size()==points.size()
+			marker=low[side]
+			grounded_ids[side]=marker
+			# When pressure rolls heel to ball, pick up the new material patch
+			# at its last rendered world position, including its previous IK.
+			grounded_points[side]=previous_tread[marker] if continuing else points[marker]+Vector3.UP*offset
+		var shift := (grounded_points[side]-points[marker]).slide(Vector3.UP)
+		shift.y=boots[side]-points[low[side]].y-offset
+		var leg:Array=feet[side]
+		var hip:=target.to_global(target.get_bone_global_pose(leg[0]).origin)
+		var knee:=target.to_global(target.get_bone_global_pose(leg[1]).origin)
+		var ankle:=target.to_global(target.get_bone_global_pose(leg[2]).origin)
+		goals[side]=ankle+shift
+		var reach:=(hip.distance_to(knee)+knee.distance_to(ankle))*.995
+		var lane:=(goals[side]-hip).slide(Vector3.UP).length_squared()
+		# Reach the planted toe by settling the hips during late stance. A
+		# straight, maxed-out leg otherwise lifts its leather off the snow.
+		settle=minf(settle,goals[side].y+sqrt(maxf(.001,reach*reach-lane))-hip.y)
+	# Weight shifts toward the planted boot. Ease the pelvis through start
+	# and release instead of dropping the free toe or snapping the body up.
+	hip_settle=move_toward(hip_settle,maxf(settle,-.050),dt*1.35)
+	visual.global_position.y+=hip_settle
+	hip_shift=hip_shift.move_toward(Vector3.ZERO,dt*1.55)
 	for side in 2:
-		var ids: Array=feet[side]
-		var hip := target.to_global(target.get_bone_global_pose(ids[0]).origin)
-		var knee := target.to_global(target.get_bone_global_pose(ids[1]).origin)
-		var ankle := target.to_global(target.get_bone_global_pose(ids[2]).origin)
-		var reach := hip.distance_to(knee)+knee.distance_to(ankle)
-		var horizontal := (goals[side]-hip).slide(Vector3.UP).length_squared()
-		lift=minf(lift,goals[side].y+sqrt(maxf(.001,reach*reach*.988-horizontal))-hip.y)
-	visual.global_position.y+=lift
+		if grounded_ids[side]<0:continue
+		var leg:Array=feet[side]
+		var hip:=target.to_global(target.get_bone_global_pose(leg[0]).origin)
+		var knee:=target.to_global(target.get_bone_global_pose(leg[1]).origin)
+		var ankle:=target.to_global(target.get_bone_global_pose(leg[2]).origin)
+		var reach:=(hip.distance_to(knee)+knee.distance_to(ankle))*.995
+		var span:=goals[side]-hip-hip_shift
+		var horizontal:=span.slide(Vector3.UP)
+		var excess:=horizontal.length()-sqrt(maxf(.001,reach*reach-span.y*span.y))
+		if excess>0.:
+			hip_shift+=horizontal.normalized()*excess
+	hip_shift=hip_shift.limit_length(.23)
+	visual.global_position+=hip_shift
+	world.carry.rack.position=pack_rest+world.actor.global_basis.inverse()*(hip_shift+Vector3.UP*hip_settle)
 	for side in 2:
-		var ankle := target.to_global(target.get_bone_global_pose(feet[side][2]).origin)
+		if grounded_ids[side]<0:continue
+		var ankle:=target.to_global(target.get_bone_global_pose(feet[side][2]).origin)
 		_place_ankle(side,goals[side]-ankle)
-	# The outer leather near the sole can share a shin influence. Recheck
-	# the actual material patch after IK and keep it planted through toe-off.
+	# Changing legs rotates a few blended tread vertices. Correct their last
+	# millimetres on support without touching the freely swinging boot.
 	points=tread.points()
 	low=tread.lowest(points)
 	for side in 2:
-		var marker := grounded_ids[side]
-		var error := (grounded_points[side]-points[marker]).slide(Vector3.UP) if marker>=0 else Vector3.ZERO
-		error.y=boots[side]-points[low[side]].y
-		_place_ankle(side,error)
+		var marker:=grounded_ids[side]
+		if marker<0:
+			var under:=actor_at.y+.0009-points[low[side]].y
+			if under>.0002:_place_ankle(side,Vector3.UP*under)
+			continue
+		var correction:=(grounded_points[side]-points[marker]).slide(Vector3.UP)
+		correction.y=boots[side]-points[low[side]].y
+		if correction.length_squared()>.0000001:
+			_place_ankle(side,correction)
+	previous_tread=tread.points()
 
 func boot_contacts() -> PackedVector3Array:
 	return tread.contacts() if target else world.gait_motor.snow_contact_points()

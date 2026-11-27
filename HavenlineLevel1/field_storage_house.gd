@@ -223,6 +223,16 @@ func _apply() -> void:
 		parts.CutDoorRight.position.x=slide*.57
 		last_slide=open_amount
 
+# Reachable floor between the original side counters, rear bench and
+# doorway piers. The player must enter through the open front threshold.
+func on_walkable_aisle(at:Vector3,radius:float)->bool:
+	if tier==0:return false
+	var p:=to_local(at)
+	if absf(p.y)>.55 or p.z<-.67+radius-.008 or p.z>1.50:return false
+	var side_limit:=1.095-radius
+	if p.z>.98-radius:side_limit=.825-radius
+	return absf(p.x)<=side_limit+.008
+
 func is_interior_visible() -> bool:
 	return tier>0 and inside_view
 

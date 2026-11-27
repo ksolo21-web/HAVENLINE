@@ -80,6 +80,8 @@ func on_upgrade_side(at: Vector3) -> bool:
 
 func target_at(at: Vector3) -> String:
 	if not apron.visible: return ""
+	# The door is for unloading. The interior shelves are for collecting.
+	if house.on_walkable_aisle(at,float(world.layout.actor_radius)) and house.to_local(at).z<.82:return ""
 	# The approach to the loading door crosses the edge of the upgrade print.
 	# A runner can unload in motion. Stopping beside that separate pad buys it.
 	var resting: bool = not world.runner_requested_motion and Vector2(world.actor.velocity.x,world.actor.velocity.z).length_squared() < .09

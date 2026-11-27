@@ -446,7 +446,20 @@ func inspect_service_aisles() -> void:
 	var capsule:CapsuleShape3D=game.actor.find_children("*","CollisionShape3D",false,false)[0].shape.duplicate()
 	capsule.radius=maxf(.48,capsule.radius)
 	query.shape=capsule
-	query.exclude=[game.actor.get_rid()]
+	# This test measures fixed camp geometry. The settled world can leave a
+	# live hunter parked across a gate while the world simulation is paused.
+	var hunters: Array[PhysicsBody3D] = []
+	var excluded: Array[RID] = [game.actor.get_rid()]
+	var hunter_paths := PackedStringArray()
+	for wolf in game.enemies:
+		var body: PhysicsBody3D = wolf.body
+		if is_instance_valid(body):
+			hunters.append(body)
+			hunter_paths.append(str(body.get_path()))
+			excluded.append(body.get_rid())
+			game.actor.add_collision_exception_with(body)
+	query.exclude = excluded
+	observed["hunters_excluded_from_static_geometry"] = hunter_paths
 	query.collision_mask=game.actor.collision_mask
 	var grid:Dictionary={}
 	var step:=.26
@@ -515,11 +528,14 @@ func inspect_service_aisles() -> void:
 			var outward_or_inward:Vector3=inward if enters else -inward
 			var depth:float=(feet-gate.global_position).dot(outward_or_inward)
 			# The full capsule must clear even a leaf swung toward this side.
-			# A wolf beyond the jamb can halt the actor after a complete exit.
 			var required:float=gate.LEAF_LENGTH+gate.LEAF_DEPTH*.5+radius
 			var inside:bool=game.field_env.is_inside_camp(feet)
 			observed[label]={"ending_xz":[feet.x,feet.z],"target_xz":[endpoint.x,endpoint.z],"contacts":contacts.keys(),"minimum_depth_m":required,"crossed_depth_m":depth,"started_inside":start_inside,"finished_inside":inside,"open_and_wall_clear":through_gate}
 			check(label,start_inside!=enters and inside==enters and depth>=required and through_gate)
+	# Restore the shipping character collision rules after both traversals.
+	for body in hunters:
+		game.actor.remove_collision_exception_with(body)
+	check("probe restores hunter collisions", game.actor.get_collision_exceptions().filter(func(body): return body in hunters).is_empty())
 
 func run() -> void:
 	var args=OS.get_cmdline_user_args()

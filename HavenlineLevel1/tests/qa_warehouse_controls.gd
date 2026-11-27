@@ -1,16 +1,12 @@
-extends SceneTree
+extends "res://tests/field_route.gd"
 ## Replay a real prior paid camp, including its seven already-earned banked notes.
 const Profile=preload("res://tests/lifecycle_test_profile.gd")
 const Save=preload("res://field_save.gd")
 const Guard=preload("res://opening_save.gd")
 const SELF="res://tests/qa_warehouse_controls.gd"
 const FIXTURE="res://tests/fixtures/storehouse-cash-build11.json"
-var field
 var dock
 var checks:Dictionary={}
-func _initialize()->void:
-	call_deferred("run")
-
 func check(label:String,value:bool)->void:
 	checks[label]=value
 	if not value:push_error(label)
@@ -38,6 +34,13 @@ func photo(label:String)->void:
 	RenderingServer.force_draw(false,0.)
 	root.get_texture().get_image().save_jpg(directory.path_join(label+".jpg"),.9)
 
+func walk_to(target:Vector3)->bool:
+	for frame in 300:
+		if move_to([target.x,target.z],.055):return true
+		await physics_frame
+	steer(Vector2.ZERO)
+	return false
+
 func run()->void:
 	if not "--warehouse-ui" in OS.get_cmdline_user_args():
 		var directory:=Profile.make_directory()
@@ -57,35 +60,38 @@ func run()->void:
 	dock=field.opening_hud.camp_dock
 	var book=field.inventory
 	check("old earned cash remains in the storehouse",book.house_goods().money==7 and book.hand_goods().money==0)
-	# Start this focused touchscreen transaction on the public warehouse apron.
+	camera=field.camera
+	origin=root.get_visible_rect().size*Vector2(.29,.70)
 	field.actor.global_position=field.depot.apron.global_position
-	for i in 4:await physics_frame
-	for raw:String in book.KINDS:
-		check("withdrawal amount matches available shelf for "+raw,dock._stock_amount(raw)==(field.carry.available_on_shelf(raw) if book.storage_open(raw) else 0))
+	for i in 6:await physics_frame
 	await tap(dock.tabs.Storage.get_global_rect().get_center())
-	check("withdrawal is available on the loading apron",await pick("stock_open"))
-	for i in 10:
-		if dock.stock_kind=="money" or not await pick("stock_next"):break
-	photo("Cash-withdrawal")
-	check("cash page",dock.stock_kind=="money" and dock.title.text=="Cash")
-	check("choose exact amount",await pick("stock_number") and dock.quantity_dialog.visible)
-	photo("Exact-quantity")
-	dock.quantity_input.text="3"
-	dock.quantity_input.text_submitted.emit("3")
-	for i in 5:await physics_frame
-	check("confirm three cash",book.hand_goods().money==3 and book.house_goods().money==4)
-	check("take every remaining note in one press",await pick("stock_all"))
-	for i in 24:await physics_frame
-	check("same visit keeps the whole withdrawal in pack",book.hand_goods().money==7 and book.house_goods().money==0)
+	check("storage tab shows cash and other inventory",dock.tab=="Storage" and "$7" in dock.subtitle.text and "wood" in dock.subtitle.text)
+	check("stock detail has navigation and no withdrawal commands",dock.commands.any(func(row):return row[1]=="depot") and not dock.commands.any(func(row):return str(row[1]).begins_with("stock_")))
+	await tap(dock.close.get_global_rect().get_center())
+	var house=field.depot.house
+	var exchange=field.settlement_loop.exchange
+	check("walk through the warehouse door",await walk_to(house.to_global(Vector3(0,0,1.2))))
+	check("walk into the warehouse aisle",await walk_to(house.to_global(Vector3(0,0,.20))))
+	check("no transaction popup on entry",dock.tab.is_empty() and not dock.sheet.visible)
+	photo("Enter-storehouse")
+	check("player reaches the actual cash shelf",await walk_to(exchange.pickup_position("money")))
+	for i in 85:await physics_frame
+	check("seven notes collected in one stop",book.hand_goods().money==7 and book.house_goods().money==0)
+	check("screen remains available for gameplay",dock.tab.is_empty() and not dock.sheet.visible)
 	check("real carried cash on HUD",field.opening_hud.outputs.cash.text=="7")
 	var pack=field.carry.finished_goods
 	check("bounded authored note stack on rack",pack.visible and pack.pools.get("money",[]).size() in [1,2,3,4])
-	check("raw-material ranks independent",field.carry.planned_counts.values().all(func(n):return n==0))
+	check("ordinary shelf receipt remains protected during the visit",int(book.settlement.withdrawn.get("money",0))==7)
 	dock.dismiss()
-	photo("Cash-on-foot")
+	photo("Shelf-cash-in-pack")
 	await tap(dock.tabs.Camp.get_global_rect().get_center())
 	check("character customization reachable",await pick("character_open"))
-	check("character three selector",await pick("character_3") and field.player_character()==3)
+	for n in [2,3,4]:
+		check("character %d selector"%n,await pick("character_"+str(n)) and field.player_character()==n)
+		check("portrait matches selected character %d"%n,field.opening_hud.portrait.texture==field.opening_hud.PORTRAITS[n])
+		if n!=4:
+			await tap(dock.tabs.Camp.get_global_rect().get_center())
+			await pick("character_open")
 	await tap(dock.tabs.Camp.get_global_rect().get_center())
 	await pick("character_open")
 	check("original model can be reselected",await pick("character_1") and field.player_character()==1)

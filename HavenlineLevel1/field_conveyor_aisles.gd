@@ -227,6 +227,9 @@ func waypoint(from:Vector3,to:Vector3) -> Vector3:
 # Leave clear ground untouched; use the public grid for an obstructed arrival.
 func resume_position(at: Vector3, radius: float) -> Vector3:
 	var feet := Walk.flat(at)
+	# The navigation grid routes couriers around buildings. A player saved
+	# on the actual aisle inside the storehouse can safely remain there.
+	if world.depot.house.on_walkable_aisle(at,radius) and disc_clear(feet,radius):return at
 	if not ready or not boundary.has_point(feet):
 		return at
 	var cell := _free_cell(feet, true)

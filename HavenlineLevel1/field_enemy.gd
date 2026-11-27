@@ -61,6 +61,7 @@ var patrol_goal := Vector3.ZERO
 var attack_direction := Vector3.FORWARD
 var bite_landed := false
 var flank_sign := 0.0
+var yielding_gate := false
 var pursuing := false
 var route_clock := 0.
 var route_destination := Vector2.INF
@@ -254,7 +255,7 @@ func _watch_ground(dt: float, sweep: Callable, steer: Callable) -> void:
 	timer=2.15
 	state="patrol"
 
-func advance(delta: float, sweep_allowed: Callable = Callable(), player_exposed := true, steer: Callable = Callable()) -> void:
+func advance(delta: float, sweep_allowed: Callable = Callable(), player_exposed := true, steer: Callable = Callable(), gate_axis := Vector3.ZERO) -> void:
 	if not configured or not active or not is_instance_valid(target): return
 	var dt := clampf(delta,0.0,.08)
 	route_clock -= dt
@@ -273,6 +274,20 @@ func advance(delta: float, sweep_allowed: Callable = Callable(), player_exposed 
 	var reach_bonus := .54 if is_boss else 0.0
 	var space := global_position - target.global_position
 	space.y = 0.0
+	# An open gate leaves no lateral escape for the runner. Let the hunter
+	# give that one character shoulder room; fence and gate collisions still
+	# use their own bodies, and the jaw and tool contact use their real reach.
+	var in_passage := not gate_axis.is_zero_approx()
+	if target is CharacterBody3D and body:
+		if in_passage and not yielding_gate:
+			target.add_collision_exception_with(body)
+			yielding_gate = true
+			flank_sign = 0.0
+		elif yielding_gate and not in_passage and space.length() > .84 * size_factor() + .43:
+			# Wait until the long torso and runner have separated before restoring solidity.
+			target.remove_collision_exception_with(body)
+			yielding_gate = false
+			flank_sign = 0.0
 	var clearance := (CONTACT_DISTANCE if state == "lunge" else STALK_STOP) + reach_bonus
 	if space.length() < clearance:
 		var away := space.normalized() if space.length_squared() > .0025 else -global_basis.z
@@ -288,15 +303,21 @@ func advance(delta: float, sweep_allowed: Callable = Callable(), player_exposed 
 	# A wolf closing straight down the camera's sightline circles to a shoulder.
 	# Keep that side through the telegraph so the bite has a readable silhouette.
 	var sight := get_viewport().get_camera_3d()
-	if sight and state in ["guard", "stalk", "stagger"] and space.length() < 2.50:
-		var right := sight.global_basis.x
+	# Start giving way while the runner is still on the other side of the
+	# threshold. A committed lunge holds its authored approach and contact.
+	var step_to_shoulder := in_passage and state != "lunge"
+	var field_flank := sight and state in ["guard", "stalk", "stagger"] and space.length() < 2.50
+	if step_to_shoulder or field_flank:
+		var right := gate_axis if in_passage else sight.global_basis.x
 		right.y = 0.0
 		right = right.normalized()
 		var lateral := space.dot(right)
 		if absf(flank_sign) < .1:
 			flank_sign = signf(lateral) if absf(lateral) > .06 else (1.0 if get_index()%2==0 else -1.0)
-		if lateral*flank_sign < .85:
-			_move(right*flank_sign,minf(2.2*dt,.85-lateral*flank_sign),sweep_allowed)
+		var shoulder := 1.25 if in_passage else .85
+		var pace := CHASE_SPEED if in_passage else 2.2
+		if lateral*flank_sign < shoulder:
+			_move(right*flank_sign,minf(pace*dt,shoulder-lateral*flank_sign),sweep_allowed)
 	elif space.length() > 3.0:
 		flank_sign = 0.0
 	var offset := target.global_position - global_position
@@ -357,6 +378,9 @@ func advance(delta: float, sweep_allowed: Callable = Callable(), player_exposed 
 				_watch_ground(dt,sweep_allowed,steer)
 
 func reset_encounter() -> void:
+	if yielding_gate and is_instance_valid(target) and is_instance_valid(body):
+		target.remove_collision_exception_with(body)
+	yielding_gate = false
 	hp = max_hp()
 	_refresh_health()
 	state = "guard"

@@ -154,6 +154,19 @@ func _remove(wolf: Wolf) -> void:
 	wolf.queue_free()
 	world.enemy=world.enemies.front() if not world.enemies.is_empty() else null
 
+func _gate_flank(wolf: Wolf, runner: Vector3) -> Vector3:
+	if wolf.global_position.distance_squared_to(runner) > 16.0:
+		return Vector3.ZERO
+	for gate in world.gates:
+		if not gate.active or gate.angle < PI * .25:
+			continue
+		var player_at: Vector3 = gate.to_local(runner)
+		var wolf_at: Vector3 = gate.to_local(wolf.global_position)
+		if absf(player_at.x) <= gate.HALF_SPAN + world.layout.actor_radius and absf(player_at.z) <= gate.APPROACH_DEPTH:
+			if absf(wolf_at.x) <= gate.HALF_SPAN + wolf.sanctuary_margin() and absf(wolf_at.z) <= gate.APPROACH_DEPTH + wolf.sanctuary_margin():
+				return gate.global_basis.x.normalized()
+	return Vector3.ZERO
+
 func advance(dt: float) -> bool:
 	var pos: Vector3 = world.actor.position
 	var danger := false
@@ -170,7 +183,7 @@ func advance(dt: float) -> bool:
 			_remove(wolf)
 			continue
 		var prev: String=wolf.state
-		wolf.advance(dt,can_walk.bind(wolf),not hero_safe,_steer)
+		wolf.advance(dt,can_walk.bind(wolf),not hero_safe,_steer,_gate_flank(wolf,pos))
 		if prev != wolf.state:
 			if wolf.state=="stalk" and prev in ["guard","return"]: world._event("approach",wolf.position)
 			elif wolf.state=="windup": world._event("wolf_brace",wolf.position)

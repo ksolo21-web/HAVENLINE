@@ -194,7 +194,11 @@ func live() -> void:
 	var j:Dictionary=field.inventory.settlement
 	var waiting_roasts:=int(j.product_store.meal)
 	verify("Warehouse owns the relocated cooker's entire delivered lot",waiting_roasts>0 and waiting_roasts==int(j.cooked)-int(j.served) and j.held_meal==0)
-	verify("Near the moved warehouse the carrier can withdraw its actual roasts",field.settlement_loop.withdraw_goods("meal") and j.held_meal==waiting_roasts and j.product_store.meal==0)
+	await walk_to(field.depot.house.to_global(Vector3(0,0,1.21)))
+	await walk_to(field.depot.house.to_global(Vector3(0,0,.18)))
+	await walk_to(field.settlement_loop.exchange.pickup_position("meal"))
+	for i in 40:await physics_frame
+	verify("Entering the moved warehouse collects its actual roasts at the stocked shelf",j.held_meal==waiting_roasts and j.product_store.meal==0)
 	var counter_tip:Vector3=field.counter.service_point.global_position
 	field.actor.global_position=counter_tip+Vector3(0,0,2.)
 	var served_before:=int(field.inventory.settlement.served)

@@ -596,9 +596,9 @@ func _settle_support() -> void:
 			var hip_level:=1.-smoothstep(.10,.52,absf(line.dot(forward)))
 			var close := clampf(angle-deg_to_rad(25.+4.*hip_level),0.,deg_to_rad(22.))*field_arm_weight
 			arm.basis=Basis(forward,-sign_x*close)*arm.basis
-			skeleton.set_bone_global_pose(upper_arms[side],arm)
+			preload("res://field_glove_clearance.gd").set_joint_rotation(skeleton,upper_arms[side],arm.basis)
 	for chain: Array in glove_chains:
-		preload("res://field_glove_clearance.gd").solve(skeleton,contact_world.actor,chain,1)
+		preload("res://field_glove_clearance.gd").solve(skeleton,contact_world.actor,chain)
 	if special.is_empty() and not bridge and not floor_pending:
 		return
 	# IK repositions and rotates the legs. Preserve the sampled local scales:
