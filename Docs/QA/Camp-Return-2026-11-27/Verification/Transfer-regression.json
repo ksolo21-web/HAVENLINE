@@ -1,0 +1,194 @@
+{
+  "scene": "res://field_opening.tscn",
+  "tested_game": "23abc86821c47cec4508dd1c08c6ae24d2e9b59c",
+  "shipping_game": "3ce0414d667d18533a110fa0f3770bb8647dacb3",
+  "method": "Isolated native Godot transfer and physical doorway scenarios. Subsequent change only adjusts compass text width. Signed final migration tests independently cover mixed balances and cold reopen.",
+  "phases": {
+    "route": {
+      "checks": {
+        "FOOD shelf shows authored meat and balance": true,
+        "Starter center and interior unload only FOOD and TIMBER": true,
+        "Touch joystick enters the actual starter building": true
+      },
+      "measures": {
+        "touch_entrance": {
+          "carried": {
+            "coal": 0,
+            "meat": 0,
+            "metal": 0,
+            "slate": 0,
+            "stone": 4,
+            "wood": 0
+          },
+          "ending": "(-3.066143, 0.0, -3.253359)",
+          "house_tier": 1,
+          "stored": {
+            "coal": 0,
+            "meat": 20,
+            "metal": 0,
+            "slate": 0,
+            "stone": 0,
+            "wood": 10
+          },
+          "visit": "load"
+        }
+      }
+    },
+    "cold": {
+      "checks": {
+        "Can walk to the center of the apron from inside": true,
+        "Cold reload keeps starter tier and typed receipts": true,
+        "Door center stays on the unloaded house": true,
+        "Remaining at the depot cannot duplicate a receipt": true,
+        "The separate upgrade plot is reachable from the loading door": true
+      },
+      "measures": {
+        "side_approach": {
+          "approach": "(-2.09599, 0.0, 0.837836)",
+          "remaining": {
+            "stone": 2,
+            "wood": 0
+          },
+          "stock": {
+            "coal": 0,
+            "meat": 20,
+            "metal": 0,
+            "slate": 0,
+            "stone": 0,
+            "wood": 2
+          }
+        }
+      }
+    },
+    "transactions": {
+      "checks": {
+        "52 mixed commits the exact target": true,
+        "Every bundle in the gameplay-sized stack has an individual flight": true,
+        "Large legacy load conserves each type within the visual budget": true,
+        "Large typed load follows the locked end time": true,
+        "Purchase consumed the right shelf totals": true,
+        "Simultaneous large stream preserves each resource": true,
+        "Site cannot invent a meat receipt": true,
+        "Site cannot invent a stone receipt": true,
+        "Site cannot invent a wood receipt": true,
+        "Survivor payment persisted exactly once": true,
+        "hopper-meat commits the exact target": true,
+        "hopper-meat streams a short overlapping load": true,
+        "hopper-stone commits the exact target": true,
+        "hopper-stone streams a short overlapping load": true,
+        "hopper-wood commits the exact target": true,
+        "hopper-wood streams a short overlapping load": true,
+        "meat fills its own hopper without consuming stored stock": true,
+        "plot commits the exact target": true,
+        "plot finishes in the measured plot window": true,
+        "stone fills its own hopper without consuming stored stock": true,
+        "survivor commits the exact target": true,
+        "survivor finishes in the measured plot window": true,
+        "wood fills its own hopper without consuming stored stock": true
+      },
+      "measures": {
+        "273 legacy bundles": {
+          "stored_metal": 68,
+          "stored_slate": 205,
+          "visual_packets": 55
+        },
+        "52 mixed": {
+          "end": 53,
+          "first": 17,
+          "launch": 0,
+          "launched_packets": 52,
+          "max_simultaneous": 25,
+          "seconds": 0.883333333333333
+        },
+        "hopper-meat": {
+          "end": 13,
+          "first": 9,
+          "launch": 0,
+          "launched_packets": 3,
+          "max_simultaneous": 3,
+          "seconds": 0.216666666666667
+        },
+        "hopper-stone": {
+          "end": 13,
+          "first": 9,
+          "launch": 0,
+          "launched_packets": 3,
+          "max_simultaneous": 3,
+          "seconds": 0.216666666666667
+        },
+        "hopper-wood": {
+          "end": 13,
+          "first": 9,
+          "launch": 0,
+          "launched_packets": 3,
+          "max_simultaneous": 3,
+          "seconds": 0.216666666666667
+        },
+        "plot": {
+          "end": 39,
+          "first": 17,
+          "launch": 0,
+          "launched_packets": 22,
+          "max_simultaneous": 17,
+          "seconds": 0.65
+        },
+        "survivor": {
+          "end": 39,
+          "first": 17,
+          "launch": 0,
+          "launched_packets": 8,
+          "max_simultaneous": 6,
+          "seconds": 0.65
+        }
+      }
+    },
+    "depart": {
+      "checks": {
+        "Leaving a deliberately started upgrade lands only released packets": true,
+        "Reentry pays the remaining balance exactly once": true,
+        "Traversing the marked side while moving cannot buy": true
+      },
+      "measures": {
+        "interrupted_upgrade": {
+          "launched": {
+            "stone": 1,
+            "wood": 1
+          },
+          "next": "storage_meat",
+          "paid": {
+            "stone": 6,
+            "wood": 8
+          },
+          "partial_paid": {
+            "stone": 1,
+            "wood": 1
+          }
+        }
+      }
+    },
+    "aprons": {
+      "checks": {
+        "Touch approach and release stays on meat machine": true,
+        "Touch approach and release stays on stone machine": true,
+        "Touch approach and release stays on wood machine": true
+      },
+      "measures": {
+        "meat_touch": {
+          "resting": "(0.950482, 0.0, -5.335787)",
+          "stored_in_hopper": 3,
+          "target": "(1.2, 0.0, -5.67)"
+        },
+        "stone_touch": {
+          "resting": "(7.80076, 0.0, -5.299411)",
+          "stored_in_hopper": 3,
+          "target": "(7.8, 0.0, -5.7)"
+        },
+        "wood_touch": {
+          "resting": "(-3.243257, 0.0, -5.164983)",
+          "stored_in_hopper": 3,
+          "target": "(-3.2, 0.0, -5.72)"
+        }
+      }
+    }
+  }
+}

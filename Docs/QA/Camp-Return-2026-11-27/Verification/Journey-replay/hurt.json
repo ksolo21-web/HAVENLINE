@@ -1,0 +1,65 @@
+[
+  {
+    "action": "walk",
+    "label": "Leave depot via southern aisle",
+    "p": [
+      -2.63,
+      2.25
+    ],
+    "tol": 0.19
+  },
+  {
+    "action": "walk",
+    "label": "Cross south of the central furnace",
+    "p": [
+      2.58,
+      2.65
+    ],
+    "tol": 0.22
+  },
+  {
+    "action": "rest",
+    "label": "Start with a healed actor",
+    "seconds": 12
+  },
+  {
+    "action": "walk",
+    "label": "Cross the inner court",
+    "p": [
+      5.8,
+      0
+    ],
+    "tol": 0.22
+  },
+  {
+    "action": "walk",
+    "label": "Pass through the east gate",
+    "p": [
+      9.4,
+      0
+    ],
+    "tol": 0.26
+  },
+  {
+    "action": "wait_bite",
+    "label": "Wait for a real attacking wolf",
+    "p": [
+      15.4,
+      0.4
+    ],
+    "timeout": 85
+  },
+  {
+    "action": "follow_compass",
+    "label": "Follow the home bearing while hurt",
+    "timeout": 80,
+    "clip": true
+  },
+  {
+    "action": "rest",
+    "label": "Recover to full health in camp",
+    "seconds": 20,
+    "timeout": 30,
+    "clip": true
+  }
+]

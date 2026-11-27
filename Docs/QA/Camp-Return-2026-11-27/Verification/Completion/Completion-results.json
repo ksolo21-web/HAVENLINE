@@ -1,0 +1,4045 @@
+{
+  "source": "670c17de470f9d9b2037911390b3f8fb1fd29e7f",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "actual_processes": 16,
+  "private_profile": true,
+  "clean_legacy_opening_slot": true,
+  "passed": true,
+  "rows": [
+    {
+      "phase": "ledger-edges",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "ledger-edges.log",
+      "checks": {
+        "fractional level cannot be accepted": true,
+        "ineligible level rejected on old hearth save": true,
+        "ineligible processed_stone rejected on old hearth save": true,
+        "ineligible processed_wood rejected on old hearth save": true,
+        "ineligible served rejected on old hearth save": true,
+        "ineligible worker_carry_token rejected on old hearth save": true,
+        "ineligible worker_deliveries rejected on old hearth save": true,
+        "paid hearth alone cannot release the survivor": true,
+        "paid survivor at first hearth survives without a storage purchase": true,
+        "survivor receipt cannot precede first hearth": true,
+        "uncommitted working receipt cannot alter previous checkpoint": true
+      },
+      "observed": {},
+      "log_sha256": "527af88dd49293fe6cbfbbd2abdc09e12ca9dd2d68e6a2a0c6e5133878998e58"
+    },
+    {
+      "phase": "legacy",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "legacy.log",
+      "checks": {
+        "prior build committed genuine version-3 save through its own writer": true,
+        "prior eight purchases represented exactly once": true,
+        "prior independent stocks preserved": true,
+        "prior purchase earned-center_hearth-wood-0": true,
+        "prior purchase earned-center_hearth-wood-1": true,
+        "prior purchase earned-center_hearth-wood-2": true,
+        "prior purchase earned-expansion_1-stone-0": true,
+        "prior purchase earned-expansion_1-wood-0": true,
+        "prior purchase earned-expansion_1-wood-1": true,
+        "prior purchase earned-expansion_1-wood-2": true,
+        "prior purchase earned-expansion_2-stone-0": true,
+        "prior purchase earned-expansion_2-stone-1": true,
+        "prior purchase earned-expansion_2-wood-0": true,
+        "prior purchase earned-expansion_2-wood-1": true,
+        "prior purchase earned-expansion_2-wood-2": true,
+        "prior purchase earned-orbit_upgrade-meat-0": true,
+        "prior purchase earned-orbit_upgrade-stone-0": true,
+        "prior purchase earned-orbit_upgrade-stone-1": true,
+        "prior purchase earned-storage_meat-meat-0": true,
+        "prior purchase earned-storage_meat-wood-0": true,
+        "prior purchase earned-storage_meat-wood-1": true,
+        "prior purchase earned-storage_stone-stone-0": true,
+        "prior purchase earned-storage_stone-wood-0": true,
+        "prior purchase earned-storage_stone-wood-1": true,
+        "prior purchase earned-storage_wood-wood-0": true,
+        "prior purchase earned-storage_wood-wood-1": true,
+        "prior purchase earned-watchtower-stone-0": true,
+        "prior purchase earned-watchtower-stone-1": true,
+        "prior purchase earned-watchtower-wood-0": true,
+        "prior purchase earned-watchtower-wood-1": true,
+        "prior purchase earned-watchtower-wood-2": true
+      },
+      "observed": {
+        "schema": 3
+      },
+      "log_sha256": "937dd9190c3cfaa55977ccace853d9e587e6e0f2138d5721dc1724f4ffe09b90",
+      "durable_payload": {
+        "build_order": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "carried": {
+          "coal": 0,
+          "meat": 2,
+          "metal": 0,
+          "slate": 0,
+          "stone": 5,
+          "wood": 11
+        },
+        "collected": {
+          "carried-legacy-meat": "meat",
+          "earned-center_hearth-wood-0": "wood",
+          "earned-center_hearth-wood-1": "wood",
+          "earned-center_hearth-wood-2": "wood",
+          "earned-expansion_1-stone-0": "stone",
+          "earned-expansion_1-wood-0": "wood",
+          "earned-expansion_1-wood-1": "wood",
+          "earned-expansion_1-wood-2": "wood",
+          "earned-expansion_2-stone-0": "stone",
+          "earned-expansion_2-stone-1": "stone",
+          "earned-expansion_2-wood-0": "wood",
+          "earned-expansion_2-wood-1": "wood",
+          "earned-expansion_2-wood-2": "wood",
+          "earned-orbit_upgrade-meat-0": "meat",
+          "earned-orbit_upgrade-stone-0": "stone",
+          "earned-orbit_upgrade-stone-1": "stone",
+          "earned-storage_meat-meat-0": "meat",
+          "earned-storage_meat-wood-0": "wood",
+          "earned-storage_meat-wood-1": "wood",
+          "earned-storage_stone-stone-0": "stone",
+          "earned-storage_stone-wood-0": "wood",
+          "earned-storage_stone-wood-1": "wood",
+          "earned-storage_wood-wood-0": "wood",
+          "earned-storage_wood-wood-1": "wood",
+          "earned-watchtower-stone-0": "stone",
+          "earned-watchtower-stone-1": "stone",
+          "earned-watchtower-wood-0": "wood",
+          "earned-watchtower-wood-1": "wood",
+          "earned-watchtower-wood-2": "wood",
+          "legacy-spare-stone-0": "stone",
+          "legacy-spare-stone-1": "stone",
+          "legacy-spare-stone-2": "stone",
+          "legacy-spare-stone-3": "stone",
+          "legacy-spare-stone-4": "stone",
+          "legacy-spare-wood-0": "wood",
+          "legacy-spare-wood-1": "wood",
+          "legacy-spare-wood-10": "wood",
+          "legacy-spare-wood-2": "wood",
+          "legacy-spare-wood-3": "wood",
+          "legacy-spare-wood-4": "wood",
+          "legacy-spare-wood-5": "wood",
+          "legacy-spare-wood-6": "wood",
+          "legacy-spare-wood-7": "wood",
+          "legacy-spare-wood-8": "wood",
+          "legacy-spare-wood-9": "wood",
+          "second-carried-legacy-meat": "meat",
+          "stored-legacy-meat": "meat"
+        },
+        "legacy_axes": false,
+        "paid": {
+          "center_hearth": {
+            "wood": 3
+          },
+          "expansion_1": {
+            "stone": 1,
+            "wood": 3
+          },
+          "expansion_2": {
+            "stone": 2,
+            "wood": 3
+          },
+          "orbit_upgrade": {
+            "meat": 1,
+            "stone": 2
+          },
+          "storage_meat": {
+            "meat": 1,
+            "wood": 2
+          },
+          "storage_stone": {
+            "stone": 1,
+            "wood": 2
+          },
+          "storage_wood": {
+            "wood": 2
+          },
+          "watchtower": {
+            "stone": 2,
+            "wood": 3
+          }
+        },
+        "stored": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 0
+        },
+        "version": 3,
+        "world": {}
+      },
+      "durable_payload_sha256": "579d36d4530b9b96dc2f23a7c4ffd4ecd68202ea30c30ac4e6f4779d90907f02"
+    },
+    {
+      "phase": "layout",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "layout.log",
+      "checks": {
+        "counter service connects to the same 0.96 m clear aisle": true,
+        "counter service is inside the safe camp": true,
+        "east gate connects to the same 0.96 m clear aisle": true,
+        "east gate is inside the safe camp": true,
+        "gate-east automatically opens from the exterior": true,
+        "gate-east traverses inward": true,
+        "gate-east traverses outward": true,
+        "gate-south automatically opens from the exterior": true,
+        "gate-south traverses inward": true,
+        "gate-south traverses outward": true,
+        "kitchen feed connects to the same 0.96 m clear aisle": true,
+        "kitchen feed is inside the safe camp": true,
+        "leaving the saw restores its full roof and rear wall at 1x zoom": true,
+        "leaving the saw restores its full roof and rear wall at 2x zoom": true,
+        "rear cutaway keeps the physical storehouse closed at 1x zoom": true,
+        "rear cutaway keeps the physical storehouse closed at 2x zoom": true,
+        "roast pickup connects to the same 0.96 m clear aisle": true,
+        "roast pickup is inside the safe camp": true,
+        "saw feed connects to the same 0.96 m clear aisle": true,
+        "saw feed is inside the safe camp": true,
+        "shipping main scene loaded from disposable profile": true,
+        "south gate connects to the same 0.96 m clear aisle": true,
+        "south gate is inside the safe camp": true,
+        "stone feed connects to the same 0.96 m clear aisle": true,
+        "stone feed is inside the safe camp": true,
+        "storehouse connects to the same 0.96 m clear aisle": true,
+        "storehouse is inside the safe camp": true,
+        "the customer queue stays on the opposite side of the north fence": true,
+        "the retired shore sites have no loading actions": true,
+        "west saw stays visible at 1x zoom": true,
+        "west saw stays visible at 2x zoom": true
+      },
+      "observed": {
+        "aisle_probe_diameter_m": 0.959999978542328,
+        "counter service_sampling_error_m": 0.028,
+        "east gate_sampling_error_m": 0.156,
+        "grid_pitch_m": 0.26,
+        "kitchen feed_sampling_error_m": 0.078,
+        "reachable_samples": 2079,
+        "roast pickup_sampling_error_m": 0.058,
+        "saw feed_sampling_error_m": 0.108,
+        "south gate_sampling_error_m": 0.072,
+        "stone feed_sampling_error_m": 0.089,
+        "storehouse_sampling_error_m": 0.112
+      },
+      "log_sha256": "eb6addfb4f21f209338dabd374900ed995dadb3f118b47c78bb9931c535b0c1d",
+      "durable_payload": {
+        "build_order": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "carried": {
+          "coal": 0,
+          "meat": 2,
+          "metal": 0,
+          "slate": 0,
+          "stone": 5,
+          "wood": 11
+        },
+        "collected": {
+          "carried-legacy-meat": "meat",
+          "earned-center_hearth-wood-0": "wood",
+          "earned-center_hearth-wood-1": "wood",
+          "earned-center_hearth-wood-2": "wood",
+          "earned-expansion_1-stone-0": "stone",
+          "earned-expansion_1-wood-0": "wood",
+          "earned-expansion_1-wood-1": "wood",
+          "earned-expansion_1-wood-2": "wood",
+          "earned-expansion_2-stone-0": "stone",
+          "earned-expansion_2-stone-1": "stone",
+          "earned-expansion_2-wood-0": "wood",
+          "earned-expansion_2-wood-1": "wood",
+          "earned-expansion_2-wood-2": "wood",
+          "earned-orbit_upgrade-meat-0": "meat",
+          "earned-orbit_upgrade-stone-0": "stone",
+          "earned-orbit_upgrade-stone-1": "stone",
+          "earned-storage_meat-meat-0": "meat",
+          "earned-storage_meat-wood-0": "wood",
+          "earned-storage_meat-wood-1": "wood",
+          "earned-storage_stone-stone-0": "stone",
+          "earned-storage_stone-wood-0": "wood",
+          "earned-storage_stone-wood-1": "wood",
+          "earned-storage_wood-wood-0": "wood",
+          "earned-storage_wood-wood-1": "wood",
+          "earned-watchtower-stone-0": "stone",
+          "earned-watchtower-stone-1": "stone",
+          "earned-watchtower-wood-0": "wood",
+          "earned-watchtower-wood-1": "wood",
+          "earned-watchtower-wood-2": "wood",
+          "legacy-spare-stone-0": "stone",
+          "legacy-spare-stone-1": "stone",
+          "legacy-spare-stone-2": "stone",
+          "legacy-spare-stone-3": "stone",
+          "legacy-spare-stone-4": "stone",
+          "legacy-spare-wood-0": "wood",
+          "legacy-spare-wood-1": "wood",
+          "legacy-spare-wood-10": "wood",
+          "legacy-spare-wood-2": "wood",
+          "legacy-spare-wood-3": "wood",
+          "legacy-spare-wood-4": "wood",
+          "legacy-spare-wood-5": "wood",
+          "legacy-spare-wood-6": "wood",
+          "legacy-spare-wood-7": "wood",
+          "legacy-spare-wood-8": "wood",
+          "legacy-spare-wood-9": "wood",
+          "second-carried-legacy-meat": "meat",
+          "stored-legacy-meat": "meat"
+        },
+        "legacy_axes": false,
+        "paid": {
+          "center_hearth": {
+            "wood": 3
+          },
+          "expansion_1": {
+            "stone": 1,
+            "wood": 3
+          },
+          "expansion_2": {
+            "stone": 2,
+            "wood": 3
+          },
+          "orbit_upgrade": {
+            "meat": 1,
+            "stone": 2
+          },
+          "storage_meat": {
+            "meat": 1,
+            "wood": 2
+          },
+          "storage_stone": {
+            "stone": 1,
+            "wood": 2
+          },
+          "storage_wood": {
+            "wood": 2
+          },
+          "watchtower": {
+            "stone": 2,
+            "wood": 3
+          }
+        },
+        "stored": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 0
+        },
+        "version": 3,
+        "world": {}
+      },
+      "durable_payload_sha256": "579d36d4530b9b96dc2f23a7c4ffd4ecd68202ea30c30ac4e6f4779d90907f02"
+    },
+    {
+      "phase": "plot-partial",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "plot-partial.log",
+      "checks": {
+        "all original receipts and both raw stocks survived migration": true,
+        "eight purchases alone cannot enter the next level": true,
+        "first wood arrives as a separate survivor-plot receipt": true,
+        "legacy v3 started in Level 1": true,
+        "no remote or duplicate worker grants before a physical pickup": true,
+        "partial payment consumes one wood and keeps the survivor waiting": true,
+        "remote cook and remote sale rejected": true,
+        "rescue cannot be claimed remotely": true,
+        "shipping main scene loaded from disposable profile": true,
+        "unpaid plot cannot recruit even alongside the survivor": true
+      },
+      "observed": {},
+      "log_sha256": "38ad377a3a19de38a4ea909d9cf155dc1abc01957eb51abbae776ac00e1e7a4a",
+      "durable_payload": {
+        "build_order": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "carried": {
+          "coal": 0,
+          "meat": 2,
+          "metal": 0,
+          "slate": 0,
+          "stone": 5,
+          "wood": 10
+        },
+        "collected": {
+          "carried-legacy-meat": "meat",
+          "earned-center_hearth-wood-0": "wood",
+          "earned-center_hearth-wood-1": "wood",
+          "earned-center_hearth-wood-2": "wood",
+          "earned-expansion_1-stone-0": "stone",
+          "earned-expansion_1-wood-0": "wood",
+          "earned-expansion_1-wood-1": "wood",
+          "earned-expansion_1-wood-2": "wood",
+          "earned-expansion_2-stone-0": "stone",
+          "earned-expansion_2-stone-1": "stone",
+          "earned-expansion_2-wood-0": "wood",
+          "earned-expansion_2-wood-1": "wood",
+          "earned-expansion_2-wood-2": "wood",
+          "earned-orbit_upgrade-meat-0": "meat",
+          "earned-orbit_upgrade-stone-0": "stone",
+          "earned-orbit_upgrade-stone-1": "stone",
+          "earned-storage_meat-meat-0": "meat",
+          "earned-storage_meat-wood-0": "wood",
+          "earned-storage_meat-wood-1": "wood",
+          "earned-storage_stone-stone-0": "stone",
+          "earned-storage_stone-wood-0": "wood",
+          "earned-storage_stone-wood-1": "wood",
+          "earned-storage_wood-wood-0": "wood",
+          "earned-storage_wood-wood-1": "wood",
+          "earned-watchtower-stone-0": "stone",
+          "earned-watchtower-stone-1": "stone",
+          "earned-watchtower-wood-0": "wood",
+          "earned-watchtower-wood-1": "wood",
+          "earned-watchtower-wood-2": "wood",
+          "legacy-spare-stone-0": "stone",
+          "legacy-spare-stone-1": "stone",
+          "legacy-spare-stone-2": "stone",
+          "legacy-spare-stone-3": "stone",
+          "legacy-spare-stone-4": "stone",
+          "legacy-spare-wood-0": "wood",
+          "legacy-spare-wood-1": "wood",
+          "legacy-spare-wood-10": "wood",
+          "legacy-spare-wood-2": "wood",
+          "legacy-spare-wood-3": "wood",
+          "legacy-spare-wood-4": "wood",
+          "legacy-spare-wood-5": "wood",
+          "legacy-spare-wood-6": "wood",
+          "legacy-spare-wood-7": "wood",
+          "legacy-spare-wood-8": "wood",
+          "legacy-spare-wood-9": "wood",
+          "second-carried-legacy-meat": "meat",
+          "stored-legacy-meat": "meat"
+        },
+        "legacy_axes": false,
+        "legacy_prices": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "paid": {
+          "center_hearth": {
+            "wood": 3
+          },
+          "expansion_1": {
+            "stone": 1,
+            "wood": 3
+          },
+          "expansion_2": {
+            "stone": 2,
+            "wood": 3
+          },
+          "orbit_upgrade": {
+            "meat": 1,
+            "stone": 2
+          },
+          "storage_meat": {
+            "meat": 1,
+            "wood": 2
+          },
+          "storage_stone": {
+            "stone": 1,
+            "wood": 2
+          },
+          "storage_wood": {
+            "wood": 2
+          },
+          "watchtower": {
+            "stone": 2,
+            "wood": 3
+          }
+        },
+        "settlement": {
+          "cooked": 0,
+          "held_meal": 0,
+          "hoppers": {
+            "meat": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "level": 1,
+          "owl_hits": 0,
+          "processed_stone": 0,
+          "processed_wood": 0,
+          "rescued": false,
+          "served": 0,
+          "survivor_paid": false,
+          "survivor_wood": 1,
+          "work_seconds": {
+            "meat": 0.0,
+            "stone": 0.0,
+            "wood": 0.0
+          },
+          "worker_carry_token": "",
+          "worker_deliveries": 0,
+          "worker_receipts": [],
+          "worker_supply": ""
+        },
+        "stored": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 0
+        },
+        "version": 6,
+        "world": {
+          "cooling": {},
+          "drops": [],
+          "pack": {
+            "live": [
+              [
+                1,
+                false,
+                3,
+                13.6869010925293,
+                -1.58195304870605,
+                13.6869010925293,
+                -1.58195304870605
+              ],
+              [
+                2,
+                false,
+                3,
+                17.4845275878906,
+                4.88583612442017,
+                17.4845275878906,
+                4.88583612442017
+              ],
+              [
+                3,
+                false,
+                3,
+                12.9287004470825,
+                4.30853843688965,
+                12.9287004470825,
+                4.30853843688965
+              ],
+              [
+                4,
+                false,
+                3,
+                19.1772499084473,
+                1.0422146320343,
+                19.1772499084473,
+                1.0422146320343
+              ]
+            ],
+            "remaining": 23.7166666666667,
+            "rng": "-8493352329232489015",
+            "serial": 4,
+            "wave": 1
+          },
+          "partial": {
+            "pine@-5000,9300": 1,
+            "pine@-5400,13500": 1,
+            "survivor-work-pine": 1
+          },
+          "player": {
+            "camp_heal_elapsed": 0.0,
+            "fall_left": 0.0,
+            "hp": 30,
+            "protection_left": 0.0,
+            "x": -5.5,
+            "yaw": 0.0,
+            "z": 10.8999996185303
+          },
+          "serial": 0,
+          "version": 2
+        }
+      },
+      "durable_payload_sha256": "0e04aab468577f0c2f756c6c5cfe1dde73006f3527d362cbe882b0f83f83fdb0"
+    },
+    {
+      "phase": "claim",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "claim.log",
+      "checks": {
+        "a cooked meal needs a matching consumed raw meat": true,
+        "duplicate worker pickup rejected": true,
+        "invalid cooked rejected atomically": true,
+        "invalid level rejected atomically": true,
+        "invalid served rejected atomically": true,
+        "invalid worker_deliveries rejected atomically": true,
+        "partial survivor payment resumed before the second wood": true,
+        "pending worker pickup left the ground and has no bank credit": true,
+        "purchase consumed exactly the displayed raw amount": true,
+        "remaining wood completes the single survivor purchase": true,
+        "rescue is idempotent": true,
+        "rescue performed by reaching the survivor": true,
+        "same build accepts the valid snapshot": true,
+        "shipping main scene loaded from disposable profile": true,
+        "unearned level 2 rejected atomically": true,
+        "worker claimed a real pine drop": true
+      },
+      "observed": {
+        "claimed_token": "wood-2"
+      },
+      "log_sha256": "4698e562730280e7be07cf3f55bf5df69d733f20ce7fe0945e96c2246ec01061",
+      "durable_payload": {
+        "build_order": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "carried": {
+          "coal": 0,
+          "meat": 2,
+          "metal": 0,
+          "slate": 0,
+          "stone": 5,
+          "wood": 3
+        },
+        "collected": {
+          "carried-legacy-meat": "meat",
+          "earned-center_hearth-wood-0": "wood",
+          "earned-center_hearth-wood-1": "wood",
+          "earned-center_hearth-wood-2": "wood",
+          "earned-expansion_1-stone-0": "stone",
+          "earned-expansion_1-wood-0": "wood",
+          "earned-expansion_1-wood-1": "wood",
+          "earned-expansion_1-wood-2": "wood",
+          "earned-expansion_2-stone-0": "stone",
+          "earned-expansion_2-stone-1": "stone",
+          "earned-expansion_2-wood-0": "wood",
+          "earned-expansion_2-wood-1": "wood",
+          "earned-expansion_2-wood-2": "wood",
+          "earned-orbit_upgrade-meat-0": "meat",
+          "earned-orbit_upgrade-stone-0": "stone",
+          "earned-orbit_upgrade-stone-1": "stone",
+          "earned-storage_meat-meat-0": "meat",
+          "earned-storage_meat-wood-0": "wood",
+          "earned-storage_meat-wood-1": "wood",
+          "earned-storage_stone-stone-0": "stone",
+          "earned-storage_stone-wood-0": "wood",
+          "earned-storage_stone-wood-1": "wood",
+          "earned-storage_wood-wood-0": "wood",
+          "earned-storage_wood-wood-1": "wood",
+          "earned-watchtower-stone-0": "stone",
+          "earned-watchtower-stone-1": "stone",
+          "earned-watchtower-wood-0": "wood",
+          "earned-watchtower-wood-1": "wood",
+          "earned-watchtower-wood-2": "wood",
+          "legacy-spare-stone-0": "stone",
+          "legacy-spare-stone-1": "stone",
+          "legacy-spare-stone-2": "stone",
+          "legacy-spare-stone-3": "stone",
+          "legacy-spare-stone-4": "stone",
+          "legacy-spare-wood-0": "wood",
+          "legacy-spare-wood-1": "wood",
+          "legacy-spare-wood-10": "wood",
+          "legacy-spare-wood-2": "wood",
+          "legacy-spare-wood-3": "wood",
+          "legacy-spare-wood-4": "wood",
+          "legacy-spare-wood-5": "wood",
+          "legacy-spare-wood-6": "wood",
+          "legacy-spare-wood-7": "wood",
+          "legacy-spare-wood-8": "wood",
+          "legacy-spare-wood-9": "wood",
+          "second-carried-legacy-meat": "meat",
+          "stored-legacy-meat": "meat"
+        },
+        "legacy_axes": false,
+        "legacy_prices": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "paid": {
+          "center_hearth": {
+            "wood": 3
+          },
+          "expansion_1": {
+            "stone": 1,
+            "wood": 3
+          },
+          "expansion_2": {
+            "stone": 2,
+            "wood": 3
+          },
+          "orbit_upgrade": {
+            "meat": 1,
+            "stone": 2
+          },
+          "storage_meat": {
+            "meat": 1,
+            "wood": 2
+          },
+          "storage_stone": {
+            "stone": 1,
+            "wood": 2
+          },
+          "storage_wood": {
+            "wood": 2
+          },
+          "watchtower": {
+            "stone": 2,
+            "wood": 3
+          }
+        },
+        "settlement": {
+          "cooked": 0,
+          "held_meal": 0,
+          "hoppers": {
+            "meat": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "level": 1,
+          "owl_hits": 0,
+          "processed_stone": 0,
+          "processed_wood": 0,
+          "rescued": true,
+          "served": 0,
+          "survivor_paid": true,
+          "survivor_wood": 8,
+          "work_seconds": {
+            "meat": 0.0,
+            "stone": 0.0,
+            "wood": 0.0
+          },
+          "worker_carry_token": "wood-2",
+          "worker_deliveries": 0,
+          "worker_receipts": [],
+          "worker_supply": ""
+        },
+        "stored": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 0
+        },
+        "version": 6,
+        "world": {
+          "cooling": {
+            "survivor-work-pine": 4.6
+          },
+          "drops": [
+            [
+              "wood-1",
+              "wood",
+              -3.23287558555603,
+              9.40922451019287,
+              99.5833333333333
+            ],
+            [
+              "wood-3",
+              "wood",
+              -3.51576566696167,
+              8.62744903564453,
+              99.5833333333333
+            ]
+          ],
+          "pack": {
+            "live": [
+              [
+                1,
+                false,
+                1,
+                13.6869010925293,
+                -1.58195304870605,
+                13.6869010925293,
+                -1.58195304870605
+              ],
+              [
+                2,
+                false,
+                3,
+                17.4845275878906,
+                4.88583612442017,
+                17.4845275878906,
+                4.88583612442017
+              ],
+              [
+                3,
+                false,
+                3,
+                12.9287004470825,
+                4.30853843688965,
+                12.9287004470825,
+                4.30853843688965
+              ],
+              [
+                4,
+                false,
+                3,
+                19.1772499084473,
+                1.0422146320343,
+                19.1772499084473,
+                1.0422146320343
+              ]
+            ],
+            "remaining": 20.6166666666669,
+            "rng": "-8493352329232489015",
+            "serial": 4,
+            "wave": 1
+          },
+          "partial": {
+            "pine@-5000,9300": 2,
+            "pine@-5400,13500": 2
+          },
+          "player": {
+            "camp_heal_elapsed": 0.0,
+            "fall_left": 0.0,
+            "hp": 30,
+            "protection_left": 0.0,
+            "x": 1.72000002861023,
+            "yaw": 0.0,
+            "z": 1.79999995231628
+          },
+          "serial": 3,
+          "version": 2
+        }
+      },
+      "durable_payload_sha256": "270fa5e6397b66f8699f2e4f6f96daf44852848c5c6432a2e9a2a962d0cee8a2"
+    },
+    {
+      "phase": "delivery-interrupted",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "delivery-interrupted.log",
+      "checks": {
+        "bank credit and receipt rolled back together": true,
+        "failed shelf receipt left the durable bytes intact": true,
+        "fixture acquires a live save lock": true,
+        "interrupted shelf credit paused new grants": true,
+        "shipping main scene loaded from disposable profile": true,
+        "worker returned with the same single pending token": true
+      },
+      "observed": {
+        "retained_token": "wood-2"
+      },
+      "log_sha256": "a1e89713e5f84437db273621998f2207e849cb00d8cce3dd061884d2f412df0d",
+      "durable_payload": {
+        "build_order": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "carried": {
+          "coal": 0,
+          "meat": 2,
+          "metal": 0,
+          "slate": 0,
+          "stone": 5,
+          "wood": 3
+        },
+        "collected": {
+          "carried-legacy-meat": "meat",
+          "earned-center_hearth-wood-0": "wood",
+          "earned-center_hearth-wood-1": "wood",
+          "earned-center_hearth-wood-2": "wood",
+          "earned-expansion_1-stone-0": "stone",
+          "earned-expansion_1-wood-0": "wood",
+          "earned-expansion_1-wood-1": "wood",
+          "earned-expansion_1-wood-2": "wood",
+          "earned-expansion_2-stone-0": "stone",
+          "earned-expansion_2-stone-1": "stone",
+          "earned-expansion_2-wood-0": "wood",
+          "earned-expansion_2-wood-1": "wood",
+          "earned-expansion_2-wood-2": "wood",
+          "earned-orbit_upgrade-meat-0": "meat",
+          "earned-orbit_upgrade-stone-0": "stone",
+          "earned-orbit_upgrade-stone-1": "stone",
+          "earned-storage_meat-meat-0": "meat",
+          "earned-storage_meat-wood-0": "wood",
+          "earned-storage_meat-wood-1": "wood",
+          "earned-storage_stone-stone-0": "stone",
+          "earned-storage_stone-wood-0": "wood",
+          "earned-storage_stone-wood-1": "wood",
+          "earned-storage_wood-wood-0": "wood",
+          "earned-storage_wood-wood-1": "wood",
+          "earned-watchtower-stone-0": "stone",
+          "earned-watchtower-stone-1": "stone",
+          "earned-watchtower-wood-0": "wood",
+          "earned-watchtower-wood-1": "wood",
+          "earned-watchtower-wood-2": "wood",
+          "legacy-spare-stone-0": "stone",
+          "legacy-spare-stone-1": "stone",
+          "legacy-spare-stone-2": "stone",
+          "legacy-spare-stone-3": "stone",
+          "legacy-spare-stone-4": "stone",
+          "legacy-spare-wood-0": "wood",
+          "legacy-spare-wood-1": "wood",
+          "legacy-spare-wood-10": "wood",
+          "legacy-spare-wood-2": "wood",
+          "legacy-spare-wood-3": "wood",
+          "legacy-spare-wood-4": "wood",
+          "legacy-spare-wood-5": "wood",
+          "legacy-spare-wood-6": "wood",
+          "legacy-spare-wood-7": "wood",
+          "legacy-spare-wood-8": "wood",
+          "legacy-spare-wood-9": "wood",
+          "second-carried-legacy-meat": "meat",
+          "stored-legacy-meat": "meat"
+        },
+        "legacy_axes": false,
+        "legacy_prices": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "paid": {
+          "center_hearth": {
+            "wood": 3
+          },
+          "expansion_1": {
+            "stone": 1,
+            "wood": 3
+          },
+          "expansion_2": {
+            "stone": 2,
+            "wood": 3
+          },
+          "orbit_upgrade": {
+            "meat": 1,
+            "stone": 2
+          },
+          "storage_meat": {
+            "meat": 1,
+            "wood": 2
+          },
+          "storage_stone": {
+            "stone": 1,
+            "wood": 2
+          },
+          "storage_wood": {
+            "wood": 2
+          },
+          "watchtower": {
+            "stone": 2,
+            "wood": 3
+          }
+        },
+        "settlement": {
+          "cooked": 0,
+          "held_meal": 0,
+          "hoppers": {
+            "meat": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "level": 1,
+          "owl_hits": 0,
+          "processed_stone": 0,
+          "processed_wood": 0,
+          "rescued": true,
+          "served": 0,
+          "survivor_paid": true,
+          "survivor_wood": 8,
+          "work_seconds": {
+            "meat": 0.0,
+            "stone": 0.0,
+            "wood": 0.0
+          },
+          "worker_carry_token": "wood-2",
+          "worker_deliveries": 0,
+          "worker_receipts": [],
+          "worker_supply": ""
+        },
+        "stored": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 0
+        },
+        "version": 6,
+        "world": {
+          "cooling": {
+            "survivor-work-pine": 4.6
+          },
+          "drops": [
+            [
+              "wood-1",
+              "wood",
+              -3.23287558555603,
+              9.40922451019287,
+              99.5833333333333
+            ],
+            [
+              "wood-3",
+              "wood",
+              -3.51576566696167,
+              8.62744903564453,
+              99.5833333333333
+            ]
+          ],
+          "pack": {
+            "live": [
+              [
+                1,
+                false,
+                1,
+                13.6869010925293,
+                -1.58195304870605,
+                13.6869010925293,
+                -1.58195304870605
+              ],
+              [
+                2,
+                false,
+                3,
+                17.4845275878906,
+                4.88583612442017,
+                17.4845275878906,
+                4.88583612442017
+              ],
+              [
+                3,
+                false,
+                3,
+                12.9287004470825,
+                4.30853843688965,
+                12.9287004470825,
+                4.30853843688965
+              ],
+              [
+                4,
+                false,
+                3,
+                19.1772499084473,
+                1.0422146320343,
+                19.1772499084473,
+                1.0422146320343
+              ]
+            ],
+            "remaining": 20.6166666666669,
+            "rng": "-8493352329232489015",
+            "serial": 4,
+            "wave": 1
+          },
+          "partial": {
+            "pine@-5000,9300": 2,
+            "pine@-5400,13500": 2
+          },
+          "player": {
+            "camp_heal_elapsed": 0.0,
+            "fall_left": 0.0,
+            "hp": 30,
+            "protection_left": 0.0,
+            "x": 1.72000002861023,
+            "yaw": 0.0,
+            "z": 1.79999995231628
+          },
+          "serial": 3,
+          "version": 2
+        }
+      },
+      "durable_payload_sha256": "270fa5e6397b66f8699f2e4f6f96daf44852848c5c6432a2e9a2a962d0cee8a2"
+    },
+    {
+      "phase": "load-cooker",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "load-cooker.log",
+      "checks": {
+        "all remaining raw meat can be reserved without cooking it": true,
+        "cancelled flights restored the two carried portions": true,
+        "cook advances after the player leaves": true,
+        "cooker accepts one raw portion through its loading apron": true,
+        "finished token cannot pay a second time": true,
+        "first raw portion can reserve a transfer": true,
+        "fresh process restored the in-progress wood delivery": true,
+        "loading a real hopper debits exactly one carried raw meat": true,
+        "only one stored wood and receipt": true,
+        "partially finished cook is saved before shutdown": true,
+        "reserved outgoing raw portions cannot enter the hopper": true,
+        "shipping main scene loaded from disposable profile": true,
+        "visible HUD displays the unattended production cycle": true,
+        "worker delivers at the real storage shelf": true
+      },
+      "observed": {},
+      "log_sha256": "04a4dc763b679b8de64b9092306ccf38b76ab68941524ee44f463ec9903da529",
+      "durable_payload": {
+        "build_order": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "carried": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 5,
+          "wood": 3
+        },
+        "collected": {
+          "carried-legacy-meat": "meat",
+          "earned-center_hearth-wood-0": "wood",
+          "earned-center_hearth-wood-1": "wood",
+          "earned-center_hearth-wood-2": "wood",
+          "earned-expansion_1-stone-0": "stone",
+          "earned-expansion_1-wood-0": "wood",
+          "earned-expansion_1-wood-1": "wood",
+          "earned-expansion_1-wood-2": "wood",
+          "earned-expansion_2-stone-0": "stone",
+          "earned-expansion_2-stone-1": "stone",
+          "earned-expansion_2-wood-0": "wood",
+          "earned-expansion_2-wood-1": "wood",
+          "earned-expansion_2-wood-2": "wood",
+          "earned-orbit_upgrade-meat-0": "meat",
+          "earned-orbit_upgrade-stone-0": "stone",
+          "earned-orbit_upgrade-stone-1": "stone",
+          "earned-storage_meat-meat-0": "meat",
+          "earned-storage_meat-wood-0": "wood",
+          "earned-storage_meat-wood-1": "wood",
+          "earned-storage_stone-stone-0": "stone",
+          "earned-storage_stone-wood-0": "wood",
+          "earned-storage_stone-wood-1": "wood",
+          "earned-storage_wood-wood-0": "wood",
+          "earned-storage_wood-wood-1": "wood",
+          "earned-watchtower-stone-0": "stone",
+          "earned-watchtower-stone-1": "stone",
+          "earned-watchtower-wood-0": "wood",
+          "earned-watchtower-wood-1": "wood",
+          "earned-watchtower-wood-2": "wood",
+          "legacy-spare-stone-0": "stone",
+          "legacy-spare-stone-1": "stone",
+          "legacy-spare-stone-2": "stone",
+          "legacy-spare-stone-3": "stone",
+          "legacy-spare-stone-4": "stone",
+          "legacy-spare-wood-0": "wood",
+          "legacy-spare-wood-1": "wood",
+          "legacy-spare-wood-10": "wood",
+          "legacy-spare-wood-2": "wood",
+          "legacy-spare-wood-3": "wood",
+          "legacy-spare-wood-4": "wood",
+          "legacy-spare-wood-5": "wood",
+          "legacy-spare-wood-6": "wood",
+          "legacy-spare-wood-7": "wood",
+          "legacy-spare-wood-8": "wood",
+          "legacy-spare-wood-9": "wood",
+          "second-carried-legacy-meat": "meat",
+          "stored-legacy-meat": "meat",
+          "wood-2": "wood"
+        },
+        "legacy_axes": false,
+        "legacy_prices": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "paid": {
+          "center_hearth": {
+            "wood": 3
+          },
+          "expansion_1": {
+            "stone": 1,
+            "wood": 3
+          },
+          "expansion_2": {
+            "stone": 2,
+            "wood": 3
+          },
+          "orbit_upgrade": {
+            "meat": 1,
+            "stone": 2
+          },
+          "storage_meat": {
+            "meat": 1,
+            "wood": 2
+          },
+          "storage_stone": {
+            "stone": 1,
+            "wood": 2
+          },
+          "storage_wood": {
+            "wood": 2
+          },
+          "watchtower": {
+            "stone": 2,
+            "wood": 3
+          }
+        },
+        "settlement": {
+          "cooked": 0,
+          "held_meal": 0,
+          "hoppers": {
+            "meat": 1,
+            "stone": 0,
+            "wood": 0
+          },
+          "level": 1,
+          "owl_hits": 0,
+          "processed_stone": 0,
+          "processed_wood": 0,
+          "rescued": true,
+          "served": 0,
+          "survivor_paid": true,
+          "survivor_wood": 8,
+          "work_seconds": {
+            "meat": 0.516666666666667,
+            "stone": 0.0,
+            "wood": 0.0
+          },
+          "worker_carry_token": "",
+          "worker_deliveries": 1,
+          "worker_receipts": [
+            "wood-2"
+          ],
+          "worker_supply": "meat"
+        },
+        "stored": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 1
+        },
+        "version": 6,
+        "world": {
+          "cooling": {},
+          "drops": [
+            [
+              "wood-1",
+              "wood",
+              -3.23287558555603,
+              9.40922451019287,
+              90.3999999999999
+            ],
+            [
+              "wood-3",
+              "wood",
+              -3.51576566696167,
+              8.62744903564453,
+              90.3999999999999
+            ],
+            [
+              "meat-4",
+              "meat",
+              14.0540256500244,
+              -1.27272856235504,
+              91.65
+            ],
+            [
+              "meat-5",
+              "meat",
+              13.2050504684448,
+              -1.9878101348877,
+              91.65
+            ],
+            [
+              "meat-6",
+              "meat",
+              13.2958250045776,
+              4.61776304244995,
+              96.85
+            ],
+            [
+              "meat-7",
+              "meat",
+              12.446849822998,
+              3.90268135070801,
+              96.85
+            ]
+          ],
+          "pack": {
+            "live": [
+              [
+                2,
+                false,
+                3,
+                17.4845275878906,
+                4.88583612442017,
+                17.4845275878906,
+                4.88583612442017
+              ],
+              [
+                4,
+                false,
+                2,
+                19.1772499084473,
+                1.0422146320343,
+                19.1772499084473,
+                1.0422146320343
+              ]
+            ],
+            "remaining": 11.4333333333336,
+            "rng": "-8493352329232489015",
+            "serial": 4,
+            "wave": 1
+          },
+          "partial": {
+            "pine@-5000,9300": 2.0,
+            "pine@-5400,13500": 2.0
+          },
+          "player": {
+            "camp_heal_elapsed": 0.0,
+            "fall_left": 0.0,
+            "hp": 30,
+            "protection_left": 0.0,
+            "x": 1.72000002861023,
+            "yaw": 0.0,
+            "z": 1.79999995231628
+          },
+          "serial": 7,
+          "version": 2
+        }
+      },
+      "durable_payload_sha256": "eb6e3756b1611733218b6817f154273b8d04be3a86fcac6eb2c0a8e4b1a27223"
+    },
+    {
+      "phase": "cook-interrupted",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "cook-interrupted.log",
+      "checks": {
+        "failed output left the previous envelope intact": true,
+        "fixture acquires a live save lock": true,
+        "interrupted output commit returns its input to the hopper": true,
+        "queued meat and its running clock survived a fresh launch": true,
+        "shipping main scene loaded from disposable profile": true,
+        "unattended cooker reaches a durable transaction": true
+      },
+      "observed": {},
+      "log_sha256": "41432803e1adf3c73e354cc4c45c6344d153aa04487d975c70b27e2075e95804",
+      "durable_payload": {
+        "build_order": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "carried": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 5,
+          "wood": 3
+        },
+        "collected": {
+          "carried-legacy-meat": "meat",
+          "earned-center_hearth-wood-0": "wood",
+          "earned-center_hearth-wood-1": "wood",
+          "earned-center_hearth-wood-2": "wood",
+          "earned-expansion_1-stone-0": "stone",
+          "earned-expansion_1-wood-0": "wood",
+          "earned-expansion_1-wood-1": "wood",
+          "earned-expansion_1-wood-2": "wood",
+          "earned-expansion_2-stone-0": "stone",
+          "earned-expansion_2-stone-1": "stone",
+          "earned-expansion_2-wood-0": "wood",
+          "earned-expansion_2-wood-1": "wood",
+          "earned-expansion_2-wood-2": "wood",
+          "earned-orbit_upgrade-meat-0": "meat",
+          "earned-orbit_upgrade-stone-0": "stone",
+          "earned-orbit_upgrade-stone-1": "stone",
+          "earned-storage_meat-meat-0": "meat",
+          "earned-storage_meat-wood-0": "wood",
+          "earned-storage_meat-wood-1": "wood",
+          "earned-storage_stone-stone-0": "stone",
+          "earned-storage_stone-wood-0": "wood",
+          "earned-storage_stone-wood-1": "wood",
+          "earned-storage_wood-wood-0": "wood",
+          "earned-storage_wood-wood-1": "wood",
+          "earned-watchtower-stone-0": "stone",
+          "earned-watchtower-stone-1": "stone",
+          "earned-watchtower-wood-0": "wood",
+          "earned-watchtower-wood-1": "wood",
+          "earned-watchtower-wood-2": "wood",
+          "legacy-spare-stone-0": "stone",
+          "legacy-spare-stone-1": "stone",
+          "legacy-spare-stone-2": "stone",
+          "legacy-spare-stone-3": "stone",
+          "legacy-spare-stone-4": "stone",
+          "legacy-spare-wood-0": "wood",
+          "legacy-spare-wood-1": "wood",
+          "legacy-spare-wood-10": "wood",
+          "legacy-spare-wood-2": "wood",
+          "legacy-spare-wood-3": "wood",
+          "legacy-spare-wood-4": "wood",
+          "legacy-spare-wood-5": "wood",
+          "legacy-spare-wood-6": "wood",
+          "legacy-spare-wood-7": "wood",
+          "legacy-spare-wood-8": "wood",
+          "legacy-spare-wood-9": "wood",
+          "second-carried-legacy-meat": "meat",
+          "stored-legacy-meat": "meat",
+          "wood-2": "wood"
+        },
+        "legacy_axes": false,
+        "legacy_prices": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "paid": {
+          "center_hearth": {
+            "wood": 3
+          },
+          "expansion_1": {
+            "stone": 1,
+            "wood": 3
+          },
+          "expansion_2": {
+            "stone": 2,
+            "wood": 3
+          },
+          "orbit_upgrade": {
+            "meat": 1,
+            "stone": 2
+          },
+          "storage_meat": {
+            "meat": 1,
+            "wood": 2
+          },
+          "storage_stone": {
+            "stone": 1,
+            "wood": 2
+          },
+          "storage_wood": {
+            "wood": 2
+          },
+          "watchtower": {
+            "stone": 2,
+            "wood": 3
+          }
+        },
+        "settlement": {
+          "cooked": 0,
+          "held_meal": 0,
+          "hoppers": {
+            "meat": 1,
+            "stone": 0,
+            "wood": 0
+          },
+          "level": 1,
+          "owl_hits": 0,
+          "processed_stone": 0,
+          "processed_wood": 0,
+          "rescued": true,
+          "served": 0,
+          "survivor_paid": true,
+          "survivor_wood": 8,
+          "work_seconds": {
+            "meat": 0.516666666666667,
+            "stone": 0.0,
+            "wood": 0.0
+          },
+          "worker_carry_token": "",
+          "worker_deliveries": 1,
+          "worker_receipts": [
+            "wood-2"
+          ],
+          "worker_supply": "meat"
+        },
+        "stored": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 1
+        },
+        "version": 6,
+        "world": {
+          "cooling": {},
+          "drops": [
+            [
+              "wood-1",
+              "wood",
+              -3.23287558555603,
+              9.40922451019287,
+              90.3999999999999
+            ],
+            [
+              "wood-3",
+              "wood",
+              -3.51576566696167,
+              8.62744903564453,
+              90.3999999999999
+            ],
+            [
+              "meat-4",
+              "meat",
+              14.0540256500244,
+              -1.27272856235504,
+              91.65
+            ],
+            [
+              "meat-5",
+              "meat",
+              13.2050504684448,
+              -1.9878101348877,
+              91.65
+            ],
+            [
+              "meat-6",
+              "meat",
+              13.2958250045776,
+              4.61776304244995,
+              96.85
+            ],
+            [
+              "meat-7",
+              "meat",
+              12.446849822998,
+              3.90268135070801,
+              96.85
+            ]
+          ],
+          "pack": {
+            "live": [
+              [
+                2,
+                false,
+                3,
+                17.4845275878906,
+                4.88583612442017,
+                17.4845275878906,
+                4.88583612442017
+              ],
+              [
+                4,
+                false,
+                2,
+                19.1772499084473,
+                1.0422146320343,
+                19.1772499084473,
+                1.0422146320343
+              ]
+            ],
+            "remaining": 11.4333333333336,
+            "rng": "-8493352329232489015",
+            "serial": 4,
+            "wave": 1
+          },
+          "partial": {
+            "pine@-5000,9300": 2.0,
+            "pine@-5400,13500": 2.0
+          },
+          "player": {
+            "camp_heal_elapsed": 0.0,
+            "fall_left": 0.0,
+            "hp": 30,
+            "protection_left": 0.0,
+            "x": 1.72000002861023,
+            "yaw": 0.0,
+            "z": 1.79999995231628
+          },
+          "serial": 7,
+          "version": 2
+        }
+      },
+      "durable_payload_sha256": "eb6e3756b1611733218b6817f154273b8d04be3a86fcac6eb2c0a8e4b1a27223"
+    },
+    {
+      "phase": "cook",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "cook.log",
+      "checks": {
+        "counter cannot sell remotely buffered food": true,
+        "empty input and proximity to the counter produce no reward": true,
+        "queued meat and its running clock survived a fresh launch": true,
+        "shipping main scene loaded from disposable profile": true,
+        "stocked or carried raw meat never auto-debits at a distance": true,
+        "unattended cooker reaches a durable transaction": true,
+        "unattended meat finishes once and becomes physical outfeed stock": true
+      },
+      "observed": {
+        "raw_in_pack": 1,
+        "raw_in_storage": 0,
+        "raw_on_courier": "meat"
+      },
+      "log_sha256": "fd7e7cd24a70f7ed4ad455cae81f24cecea1cbcd46f8ad7e4a801e70e60721f6",
+      "durable_payload": {
+        "build_order": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "carried": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 5,
+          "wood": 3
+        },
+        "collected": {
+          "carried-legacy-meat": "meat",
+          "earned-center_hearth-wood-0": "wood",
+          "earned-center_hearth-wood-1": "wood",
+          "earned-center_hearth-wood-2": "wood",
+          "earned-expansion_1-stone-0": "stone",
+          "earned-expansion_1-wood-0": "wood",
+          "earned-expansion_1-wood-1": "wood",
+          "earned-expansion_1-wood-2": "wood",
+          "earned-expansion_2-stone-0": "stone",
+          "earned-expansion_2-stone-1": "stone",
+          "earned-expansion_2-wood-0": "wood",
+          "earned-expansion_2-wood-1": "wood",
+          "earned-expansion_2-wood-2": "wood",
+          "earned-orbit_upgrade-meat-0": "meat",
+          "earned-orbit_upgrade-stone-0": "stone",
+          "earned-orbit_upgrade-stone-1": "stone",
+          "earned-storage_meat-meat-0": "meat",
+          "earned-storage_meat-wood-0": "wood",
+          "earned-storage_meat-wood-1": "wood",
+          "earned-storage_stone-stone-0": "stone",
+          "earned-storage_stone-wood-0": "wood",
+          "earned-storage_stone-wood-1": "wood",
+          "earned-storage_wood-wood-0": "wood",
+          "earned-storage_wood-wood-1": "wood",
+          "earned-watchtower-stone-0": "stone",
+          "earned-watchtower-stone-1": "stone",
+          "earned-watchtower-wood-0": "wood",
+          "earned-watchtower-wood-1": "wood",
+          "earned-watchtower-wood-2": "wood",
+          "legacy-spare-stone-0": "stone",
+          "legacy-spare-stone-1": "stone",
+          "legacy-spare-stone-2": "stone",
+          "legacy-spare-stone-3": "stone",
+          "legacy-spare-stone-4": "stone",
+          "legacy-spare-wood-0": "wood",
+          "legacy-spare-wood-1": "wood",
+          "legacy-spare-wood-10": "wood",
+          "legacy-spare-wood-2": "wood",
+          "legacy-spare-wood-3": "wood",
+          "legacy-spare-wood-4": "wood",
+          "legacy-spare-wood-5": "wood",
+          "legacy-spare-wood-6": "wood",
+          "legacy-spare-wood-7": "wood",
+          "legacy-spare-wood-8": "wood",
+          "legacy-spare-wood-9": "wood",
+          "second-carried-legacy-meat": "meat",
+          "stored-legacy-meat": "meat",
+          "wood-2": "wood"
+        },
+        "legacy_axes": false,
+        "legacy_prices": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "paid": {
+          "center_hearth": {
+            "wood": 3
+          },
+          "expansion_1": {
+            "stone": 1,
+            "wood": 3
+          },
+          "expansion_2": {
+            "stone": 2,
+            "wood": 3
+          },
+          "orbit_upgrade": {
+            "meat": 1,
+            "stone": 2
+          },
+          "storage_meat": {
+            "meat": 1,
+            "wood": 2
+          },
+          "storage_stone": {
+            "stone": 1,
+            "wood": 2
+          },
+          "storage_wood": {
+            "wood": 2
+          },
+          "watchtower": {
+            "stone": 2,
+            "wood": 3
+          }
+        },
+        "settlement": {
+          "cooked": 1,
+          "held_meal": 0,
+          "hoppers": {
+            "meat": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "level": 1,
+          "owl_hits": 0,
+          "processed_stone": 0,
+          "processed_wood": 0,
+          "rescued": true,
+          "served": 0,
+          "survivor_paid": true,
+          "survivor_wood": 8,
+          "work_seconds": {
+            "meat": 0.0,
+            "stone": 0.0,
+            "wood": 0.0
+          },
+          "worker_carry_token": "",
+          "worker_deliveries": 1,
+          "worker_receipts": [
+            "wood-2"
+          ],
+          "worker_supply": "meat"
+        },
+        "stored": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 1
+        },
+        "version": 6,
+        "world": {
+          "cooling": {},
+          "drops": [
+            [
+              "wood-1",
+              "wood",
+              -3.23287558555603,
+              9.40922451019287,
+              87.4499999999998
+            ],
+            [
+              "wood-3",
+              "wood",
+              -3.51576566696167,
+              8.62744903564453,
+              87.4499999999998
+            ],
+            [
+              "meat-4",
+              "meat",
+              14.0540256500244,
+              -1.27272856235504,
+              88.6999999999999
+            ],
+            [
+              "meat-5",
+              "meat",
+              13.2050504684448,
+              -1.9878101348877,
+              88.6999999999999
+            ],
+            [
+              "meat-6",
+              "meat",
+              13.2958250045776,
+              4.61776304244995,
+              93.9
+            ],
+            [
+              "meat-7",
+              "meat",
+              12.446849822998,
+              3.90268135070801,
+              93.9
+            ],
+            [
+              "meat-8",
+              "meat",
+              19.5443744659424,
+              1.35143911838531,
+              100.0
+            ],
+            [
+              "meat-9",
+              "meat",
+              18.6954002380371,
+              0.636357545852661,
+              100.0
+            ]
+          ],
+          "pack": {
+            "live": [
+              [
+                2,
+                false,
+                3,
+                17.4845275878906,
+                4.88583612442017,
+                17.4845275878906,
+                4.88583612442017
+              ]
+            ],
+            "remaining": 8.46666666666679,
+            "rng": "-8493352329232489015",
+            "serial": 4,
+            "wave": 1
+          },
+          "partial": {
+            "pine@-5000,9300": 2.0,
+            "pine@-5400,13500": 2.0
+          },
+          "player": {
+            "camp_heal_elapsed": 0.0,
+            "fall_left": 0.0,
+            "hp": 30,
+            "protection_left": 0.0,
+            "x": 2.79999995231628,
+            "yaw": 0.0,
+            "z": -7.46000003814697
+          },
+          "serial": 9,
+          "version": 2
+        }
+      },
+      "durable_payload_sha256": "f760475b79527729324db4020e7a41f7556daa22a8bd23420c314b3cf5c0299d"
+    },
+    {
+      "phase": "pickup-roast",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "pickup-roast.log",
+      "checks": {
+        "collecting at the distinct output apron equips one cooked meal": true,
+        "output survived restart without teleporting to the player": true,
+        "pickup produces no payment or second input debit": true,
+        "shipping main scene loaded from disposable profile": true
+      },
+      "observed": {},
+      "log_sha256": "51f102938d8af3fa19e962857565922c58903492ac02994340c820264d279989",
+      "durable_payload": {
+        "build_order": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "carried": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 5,
+          "wood": 3
+        },
+        "collected": {
+          "carried-legacy-meat": "meat",
+          "earned-center_hearth-wood-0": "wood",
+          "earned-center_hearth-wood-1": "wood",
+          "earned-center_hearth-wood-2": "wood",
+          "earned-expansion_1-stone-0": "stone",
+          "earned-expansion_1-wood-0": "wood",
+          "earned-expansion_1-wood-1": "wood",
+          "earned-expansion_1-wood-2": "wood",
+          "earned-expansion_2-stone-0": "stone",
+          "earned-expansion_2-stone-1": "stone",
+          "earned-expansion_2-wood-0": "wood",
+          "earned-expansion_2-wood-1": "wood",
+          "earned-expansion_2-wood-2": "wood",
+          "earned-orbit_upgrade-meat-0": "meat",
+          "earned-orbit_upgrade-stone-0": "stone",
+          "earned-orbit_upgrade-stone-1": "stone",
+          "earned-storage_meat-meat-0": "meat",
+          "earned-storage_meat-wood-0": "wood",
+          "earned-storage_meat-wood-1": "wood",
+          "earned-storage_stone-stone-0": "stone",
+          "earned-storage_stone-wood-0": "wood",
+          "earned-storage_stone-wood-1": "wood",
+          "earned-storage_wood-wood-0": "wood",
+          "earned-storage_wood-wood-1": "wood",
+          "earned-watchtower-stone-0": "stone",
+          "earned-watchtower-stone-1": "stone",
+          "earned-watchtower-wood-0": "wood",
+          "earned-watchtower-wood-1": "wood",
+          "earned-watchtower-wood-2": "wood",
+          "legacy-spare-stone-0": "stone",
+          "legacy-spare-stone-1": "stone",
+          "legacy-spare-stone-2": "stone",
+          "legacy-spare-stone-3": "stone",
+          "legacy-spare-stone-4": "stone",
+          "legacy-spare-wood-0": "wood",
+          "legacy-spare-wood-1": "wood",
+          "legacy-spare-wood-10": "wood",
+          "legacy-spare-wood-2": "wood",
+          "legacy-spare-wood-3": "wood",
+          "legacy-spare-wood-4": "wood",
+          "legacy-spare-wood-5": "wood",
+          "legacy-spare-wood-6": "wood",
+          "legacy-spare-wood-7": "wood",
+          "legacy-spare-wood-8": "wood",
+          "legacy-spare-wood-9": "wood",
+          "second-carried-legacy-meat": "meat",
+          "stored-legacy-meat": "meat",
+          "wood-2": "wood"
+        },
+        "legacy_axes": false,
+        "legacy_prices": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "paid": {
+          "center_hearth": {
+            "wood": 3
+          },
+          "expansion_1": {
+            "stone": 1,
+            "wood": 3
+          },
+          "expansion_2": {
+            "stone": 2,
+            "wood": 3
+          },
+          "orbit_upgrade": {
+            "meat": 1,
+            "stone": 2
+          },
+          "storage_meat": {
+            "meat": 1,
+            "wood": 2
+          },
+          "storage_stone": {
+            "stone": 1,
+            "wood": 2
+          },
+          "storage_wood": {
+            "wood": 2
+          },
+          "watchtower": {
+            "stone": 2,
+            "wood": 3
+          }
+        },
+        "settlement": {
+          "cooked": 1,
+          "held_meal": 1,
+          "hoppers": {
+            "meat": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "level": 1,
+          "owl_hits": 0,
+          "processed_stone": 0,
+          "processed_wood": 0,
+          "rescued": true,
+          "served": 0,
+          "survivor_paid": true,
+          "survivor_wood": 8,
+          "work_seconds": {
+            "meat": 0.0,
+            "stone": 0.0,
+            "wood": 0.0
+          },
+          "worker_carry_token": "",
+          "worker_deliveries": 1,
+          "worker_receipts": [
+            "wood-2"
+          ],
+          "worker_supply": "meat"
+        },
+        "stored": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 1
+        },
+        "version": 6,
+        "world": {
+          "cooling": {},
+          "drops": [
+            [
+              "wood-1",
+              "wood",
+              -3.23287558555603,
+              9.40922451019287,
+              87.4333333333331
+            ],
+            [
+              "wood-3",
+              "wood",
+              -3.51576566696167,
+              8.62744903564453,
+              87.4333333333331
+            ],
+            [
+              "meat-4",
+              "meat",
+              14.0540256500244,
+              -1.27272856235504,
+              88.6833333333332
+            ],
+            [
+              "meat-5",
+              "meat",
+              13.2050504684448,
+              -1.9878101348877,
+              88.6833333333332
+            ],
+            [
+              "meat-6",
+              "meat",
+              13.2958250045776,
+              4.61776304244995,
+              93.8833333333333
+            ],
+            [
+              "meat-7",
+              "meat",
+              12.446849822998,
+              3.90268135070801,
+              93.8833333333333
+            ],
+            [
+              "meat-8",
+              "meat",
+              19.5443744659424,
+              1.35143911838531,
+              99.6833333333333
+            ],
+            [
+              "meat-9",
+              "meat",
+              18.6954002380371,
+              0.636357545852661,
+              99.6833333333333
+            ]
+          ],
+          "pack": {
+            "live": [
+              [
+                2,
+                false,
+                3,
+                17.4845275878906,
+                4.88583612442017,
+                17.4845275878906,
+                4.88583612442017
+              ]
+            ],
+            "remaining": 8.45000000000012,
+            "rng": "-8493352329232489015",
+            "serial": 4,
+            "wave": 1
+          },
+          "partial": {
+            "pine@-5000,9300": 2.0,
+            "pine@-5400,13500": 2.0
+          },
+          "player": {
+            "camp_heal_elapsed": 0.0,
+            "fall_left": 0.0,
+            "hp": 30,
+            "protection_left": 0.0,
+            "x": -1.04999995231628,
+            "yaw": 0.0,
+            "z": -5.67000007629395
+          },
+          "serial": 9,
+          "version": 2
+        }
+      },
+      "durable_payload_sha256": "e8a1581ae1306ea9f1e541fe2914db3b39d72f4f22bf3fa1bd94cff97979afbc"
+    },
+    {
+      "phase": "interrupted",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "interrupted.log",
+      "checks": {
+        "actual first customer reached the outside marker": true,
+        "failed checkout left hot meal and currency unchanged": true,
+        "failed checkout left the durable envelope byte-identical": true,
+        "failed customer payment paused new grants": true,
+        "fixture acquires a live save lock": true,
+        "ready-to-serve meal persisted independently of the raw stock": true,
+        "service cannot claim a future customer": true,
+        "shipping main scene loaded from disposable profile": true,
+        "waiting customer cannot be served from the wrong side": true
+      },
+      "observed": {
+        "served": 0
+      },
+      "log_sha256": "6d2dfa802a431236e1c63d85d727d9f2b1deac26ff8ea8a3ce3111cdf56e3f3a",
+      "durable_payload": {
+        "build_order": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "carried": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 5,
+          "wood": 3
+        },
+        "collected": {
+          "carried-legacy-meat": "meat",
+          "earned-center_hearth-wood-0": "wood",
+          "earned-center_hearth-wood-1": "wood",
+          "earned-center_hearth-wood-2": "wood",
+          "earned-expansion_1-stone-0": "stone",
+          "earned-expansion_1-wood-0": "wood",
+          "earned-expansion_1-wood-1": "wood",
+          "earned-expansion_1-wood-2": "wood",
+          "earned-expansion_2-stone-0": "stone",
+          "earned-expansion_2-stone-1": "stone",
+          "earned-expansion_2-wood-0": "wood",
+          "earned-expansion_2-wood-1": "wood",
+          "earned-expansion_2-wood-2": "wood",
+          "earned-orbit_upgrade-meat-0": "meat",
+          "earned-orbit_upgrade-stone-0": "stone",
+          "earned-orbit_upgrade-stone-1": "stone",
+          "earned-storage_meat-meat-0": "meat",
+          "earned-storage_meat-wood-0": "wood",
+          "earned-storage_meat-wood-1": "wood",
+          "earned-storage_stone-stone-0": "stone",
+          "earned-storage_stone-wood-0": "wood",
+          "earned-storage_stone-wood-1": "wood",
+          "earned-storage_wood-wood-0": "wood",
+          "earned-storage_wood-wood-1": "wood",
+          "earned-watchtower-stone-0": "stone",
+          "earned-watchtower-stone-1": "stone",
+          "earned-watchtower-wood-0": "wood",
+          "earned-watchtower-wood-1": "wood",
+          "earned-watchtower-wood-2": "wood",
+          "legacy-spare-stone-0": "stone",
+          "legacy-spare-stone-1": "stone",
+          "legacy-spare-stone-2": "stone",
+          "legacy-spare-stone-3": "stone",
+          "legacy-spare-stone-4": "stone",
+          "legacy-spare-wood-0": "wood",
+          "legacy-spare-wood-1": "wood",
+          "legacy-spare-wood-10": "wood",
+          "legacy-spare-wood-2": "wood",
+          "legacy-spare-wood-3": "wood",
+          "legacy-spare-wood-4": "wood",
+          "legacy-spare-wood-5": "wood",
+          "legacy-spare-wood-6": "wood",
+          "legacy-spare-wood-7": "wood",
+          "legacy-spare-wood-8": "wood",
+          "legacy-spare-wood-9": "wood",
+          "second-carried-legacy-meat": "meat",
+          "stored-legacy-meat": "meat",
+          "wood-2": "wood"
+        },
+        "legacy_axes": false,
+        "legacy_prices": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "paid": {
+          "center_hearth": {
+            "wood": 3
+          },
+          "expansion_1": {
+            "stone": 1,
+            "wood": 3
+          },
+          "expansion_2": {
+            "stone": 2,
+            "wood": 3
+          },
+          "orbit_upgrade": {
+            "meat": 1,
+            "stone": 2
+          },
+          "storage_meat": {
+            "meat": 1,
+            "wood": 2
+          },
+          "storage_stone": {
+            "stone": 1,
+            "wood": 2
+          },
+          "storage_wood": {
+            "wood": 2
+          },
+          "watchtower": {
+            "stone": 2,
+            "wood": 3
+          }
+        },
+        "settlement": {
+          "cooked": 1,
+          "held_meal": 1,
+          "hoppers": {
+            "meat": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "level": 1,
+          "owl_hits": 0,
+          "processed_stone": 0,
+          "processed_wood": 0,
+          "rescued": true,
+          "served": 0,
+          "survivor_paid": true,
+          "survivor_wood": 8,
+          "work_seconds": {
+            "meat": 0.0,
+            "stone": 0.0,
+            "wood": 0.0
+          },
+          "worker_carry_token": "",
+          "worker_deliveries": 1,
+          "worker_receipts": [
+            "wood-2"
+          ],
+          "worker_supply": "meat"
+        },
+        "stored": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 1
+        },
+        "version": 6,
+        "world": {
+          "cooling": {},
+          "drops": [
+            [
+              "wood-1",
+              "wood",
+              -3.23287558555603,
+              9.40922451019287,
+              87.4333333333331
+            ],
+            [
+              "wood-3",
+              "wood",
+              -3.51576566696167,
+              8.62744903564453,
+              87.4333333333331
+            ],
+            [
+              "meat-4",
+              "meat",
+              14.0540256500244,
+              -1.27272856235504,
+              88.6833333333332
+            ],
+            [
+              "meat-5",
+              "meat",
+              13.2050504684448,
+              -1.9878101348877,
+              88.6833333333332
+            ],
+            [
+              "meat-6",
+              "meat",
+              13.2958250045776,
+              4.61776304244995,
+              93.8833333333333
+            ],
+            [
+              "meat-7",
+              "meat",
+              12.446849822998,
+              3.90268135070801,
+              93.8833333333333
+            ],
+            [
+              "meat-8",
+              "meat",
+              19.5443744659424,
+              1.35143911838531,
+              99.6833333333333
+            ],
+            [
+              "meat-9",
+              "meat",
+              18.6954002380371,
+              0.636357545852661,
+              99.6833333333333
+            ]
+          ],
+          "pack": {
+            "live": [
+              [
+                2,
+                false,
+                3,
+                17.4845275878906,
+                4.88583612442017,
+                17.4845275878906,
+                4.88583612442017
+              ]
+            ],
+            "remaining": 8.45000000000012,
+            "rng": "-8493352329232489015",
+            "serial": 4,
+            "wave": 1
+          },
+          "partial": {
+            "pine@-5000,9300": 2.0,
+            "pine@-5400,13500": 2.0
+          },
+          "player": {
+            "camp_heal_elapsed": 0.0,
+            "fall_left": 0.0,
+            "hp": 30,
+            "protection_left": 0.0,
+            "x": -1.04999995231628,
+            "yaw": 0.0,
+            "z": -5.67000007629395
+          },
+          "serial": 9,
+          "version": 2
+        }
+      },
+      "durable_payload_sha256": "e8a1581ae1306ea9f1e541fe2914db3b39d72f4f22bf3fa1bd94cff97979afbc"
+    },
+    {
+      "phase": "serve",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "serve.log",
+      "checks": {
+        "actual first customer reached the outside marker": true,
+        "exactly one customer paid for one actual meal": true,
+        "finishing the sale waits for the player's Continue action": true,
+        "no second reward without another meal": true,
+        "ready-to-serve meal persisted independently of the raw stock": true,
+        "receipt and currency survive repeated counter ticks": true,
+        "same customer cannot pay twice": true,
+        "service cannot claim a future customer": true,
+        "shipping main scene loaded from disposable profile": true,
+        "waiting customer cannot be served from the wrong side": true
+      },
+      "observed": {
+        "served": 1
+      },
+      "log_sha256": "7ceb7a99879b62463f5f7c5efc80bc7b2a7801c0fb0a131b7f87ad55563322c9",
+      "durable_payload": {
+        "build_order": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "carried": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 5,
+          "wood": 3
+        },
+        "collected": {
+          "carried-legacy-meat": "meat",
+          "earned-center_hearth-wood-0": "wood",
+          "earned-center_hearth-wood-1": "wood",
+          "earned-center_hearth-wood-2": "wood",
+          "earned-expansion_1-stone-0": "stone",
+          "earned-expansion_1-wood-0": "wood",
+          "earned-expansion_1-wood-1": "wood",
+          "earned-expansion_1-wood-2": "wood",
+          "earned-expansion_2-stone-0": "stone",
+          "earned-expansion_2-stone-1": "stone",
+          "earned-expansion_2-wood-0": "wood",
+          "earned-expansion_2-wood-1": "wood",
+          "earned-expansion_2-wood-2": "wood",
+          "earned-orbit_upgrade-meat-0": "meat",
+          "earned-orbit_upgrade-stone-0": "stone",
+          "earned-orbit_upgrade-stone-1": "stone",
+          "earned-storage_meat-meat-0": "meat",
+          "earned-storage_meat-wood-0": "wood",
+          "earned-storage_meat-wood-1": "wood",
+          "earned-storage_stone-stone-0": "stone",
+          "earned-storage_stone-wood-0": "wood",
+          "earned-storage_stone-wood-1": "wood",
+          "earned-storage_wood-wood-0": "wood",
+          "earned-storage_wood-wood-1": "wood",
+          "earned-watchtower-stone-0": "stone",
+          "earned-watchtower-stone-1": "stone",
+          "earned-watchtower-wood-0": "wood",
+          "earned-watchtower-wood-1": "wood",
+          "earned-watchtower-wood-2": "wood",
+          "legacy-spare-stone-0": "stone",
+          "legacy-spare-stone-1": "stone",
+          "legacy-spare-stone-2": "stone",
+          "legacy-spare-stone-3": "stone",
+          "legacy-spare-stone-4": "stone",
+          "legacy-spare-wood-0": "wood",
+          "legacy-spare-wood-1": "wood",
+          "legacy-spare-wood-10": "wood",
+          "legacy-spare-wood-2": "wood",
+          "legacy-spare-wood-3": "wood",
+          "legacy-spare-wood-4": "wood",
+          "legacy-spare-wood-5": "wood",
+          "legacy-spare-wood-6": "wood",
+          "legacy-spare-wood-7": "wood",
+          "legacy-spare-wood-8": "wood",
+          "legacy-spare-wood-9": "wood",
+          "second-carried-legacy-meat": "meat",
+          "stored-legacy-meat": "meat",
+          "wood-2": "wood"
+        },
+        "legacy_axes": false,
+        "legacy_prices": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "paid": {
+          "center_hearth": {
+            "wood": 3
+          },
+          "expansion_1": {
+            "stone": 1,
+            "wood": 3
+          },
+          "expansion_2": {
+            "stone": 2,
+            "wood": 3
+          },
+          "orbit_upgrade": {
+            "meat": 1,
+            "stone": 2
+          },
+          "storage_meat": {
+            "meat": 1,
+            "wood": 2
+          },
+          "storage_stone": {
+            "stone": 1,
+            "wood": 2
+          },
+          "storage_wood": {
+            "wood": 2
+          },
+          "watchtower": {
+            "stone": 2,
+            "wood": 3
+          }
+        },
+        "settlement": {
+          "cooked": 1,
+          "held_meal": 0,
+          "hoppers": {
+            "meat": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "level": 1,
+          "owl_hits": 0,
+          "processed_stone": 0,
+          "processed_wood": 0,
+          "rescued": true,
+          "served": 1,
+          "survivor_paid": true,
+          "survivor_wood": 8,
+          "work_seconds": {
+            "meat": 0.0,
+            "stone": 0.0,
+            "wood": 0.0
+          },
+          "worker_carry_token": "",
+          "worker_deliveries": 1,
+          "worker_receipts": [
+            "wood-2"
+          ],
+          "worker_supply": "meat"
+        },
+        "stored": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 1
+        },
+        "version": 6,
+        "world": {
+          "cooling": {},
+          "drops": [
+            [
+              "wood-1",
+              "wood",
+              -3.23287558555603,
+              9.40922451019287,
+              87.4333333333331
+            ],
+            [
+              "wood-3",
+              "wood",
+              -3.51576566696167,
+              8.62744903564453,
+              87.4333333333331
+            ],
+            [
+              "meat-4",
+              "meat",
+              14.0540256500244,
+              -1.27272856235504,
+              88.6833333333332
+            ],
+            [
+              "meat-5",
+              "meat",
+              13.2050504684448,
+              -1.9878101348877,
+              88.6833333333332
+            ],
+            [
+              "meat-6",
+              "meat",
+              13.2958250045776,
+              4.61776304244995,
+              93.8833333333333
+            ],
+            [
+              "meat-7",
+              "meat",
+              12.446849822998,
+              3.90268135070801,
+              93.8833333333333
+            ],
+            [
+              "meat-8",
+              "meat",
+              19.5443744659424,
+              1.35143911838531,
+              99.6833333333333
+            ],
+            [
+              "meat-9",
+              "meat",
+              18.6954002380371,
+              0.636357545852661,
+              99.6833333333333
+            ]
+          ],
+          "pack": {
+            "live": [
+              [
+                2,
+                false,
+                3,
+                17.4845275878906,
+                4.88583612442017,
+                17.4845275878906,
+                4.88583612442017
+              ]
+            ],
+            "remaining": 8.45000000000012,
+            "rng": "-8493352329232489015",
+            "serial": 4,
+            "wave": 1
+          },
+          "partial": {
+            "pine@-5000,9300": 2.0,
+            "pine@-5400,13500": 2.0
+          },
+          "player": {
+            "camp_heal_elapsed": 0.0,
+            "fall_left": 0.0,
+            "hp": 30,
+            "protection_left": 0.0,
+            "x": 2.79999995231628,
+            "yaw": 0.0,
+            "z": -7.46000003814697
+          },
+          "serial": 9,
+          "version": 2
+        }
+      },
+      "durable_payload_sha256": "376bc40c6c4652bf8e37ed79c80ab89d824ec858f02d29ef62d84714c91dc5ca"
+    },
+    {
+      "phase": "machines-and-owl",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "machines-and-owl.log",
+      "checks": {
+        "a sale alone leaves the new production objectives open": true,
+        "both machines finish while the player is away": true,
+        "each completion consumes its own hopper input and saves its own product": true,
+        "empty hoppers cannot make a second batch": true,
+        "live hovering companion earns an actual contact receipt": true,
+        "owl hit saved with both production outputs": true,
+        "physical wolf spawned for owl contact": true,
+        "remote owl callback cannot manufacture a hit": true,
+        "remote stone cannot grant an input receipt": true,
+        "remote wood cannot grant an input receipt": true,
+        "shipping main scene loaded from disposable profile": true,
+        "stocked saw and stone mill operate concurrently": true,
+        "stone loading apron is accessible inside the paid camp": true,
+        "stone loading withdraws once from the player's pack": true,
+        "stone raw input transferred to its own hopper": true,
+        "wood loading apron is accessible inside the paid camp": true,
+        "wood loading withdraws once from the player's pack": true,
+        "wood raw input transferred to its own hopper": true
+      },
+      "observed": {
+        "last_owl_contact": {
+          "event": "owl_hit",
+          "t": 14.283,
+          "x": 57.51,
+          "z": 13.94
+        },
+        "owl_hits_after": 1,
+        "owl_hits_before": 0
+      },
+      "log_sha256": "ec073760e5b70ebc98c3c6a401a8d17d65787c6ad0b6fc2bbd1f6b2da64c0818",
+      "durable_payload": {
+        "build_order": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "carried": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 4,
+          "wood": 4
+        },
+        "collected": {
+          "carried-legacy-meat": "meat",
+          "earned-center_hearth-wood-0": "wood",
+          "earned-center_hearth-wood-1": "wood",
+          "earned-center_hearth-wood-2": "wood",
+          "earned-expansion_1-stone-0": "stone",
+          "earned-expansion_1-wood-0": "wood",
+          "earned-expansion_1-wood-1": "wood",
+          "earned-expansion_1-wood-2": "wood",
+          "earned-expansion_2-stone-0": "stone",
+          "earned-expansion_2-stone-1": "stone",
+          "earned-expansion_2-wood-0": "wood",
+          "earned-expansion_2-wood-1": "wood",
+          "earned-expansion_2-wood-2": "wood",
+          "earned-orbit_upgrade-meat-0": "meat",
+          "earned-orbit_upgrade-stone-0": "stone",
+          "earned-orbit_upgrade-stone-1": "stone",
+          "earned-storage_meat-meat-0": "meat",
+          "earned-storage_meat-wood-0": "wood",
+          "earned-storage_meat-wood-1": "wood",
+          "earned-storage_stone-stone-0": "stone",
+          "earned-storage_stone-wood-0": "wood",
+          "earned-storage_stone-wood-1": "wood",
+          "earned-storage_wood-wood-0": "wood",
+          "earned-storage_wood-wood-1": "wood",
+          "earned-watchtower-stone-0": "stone",
+          "earned-watchtower-stone-1": "stone",
+          "earned-watchtower-wood-0": "wood",
+          "earned-watchtower-wood-1": "wood",
+          "earned-watchtower-wood-2": "wood",
+          "legacy-spare-stone-0": "stone",
+          "legacy-spare-stone-1": "stone",
+          "legacy-spare-stone-2": "stone",
+          "legacy-spare-stone-3": "stone",
+          "legacy-spare-stone-4": "stone",
+          "legacy-spare-wood-0": "wood",
+          "legacy-spare-wood-1": "wood",
+          "legacy-spare-wood-10": "wood",
+          "legacy-spare-wood-2": "wood",
+          "legacy-spare-wood-3": "wood",
+          "legacy-spare-wood-4": "wood",
+          "legacy-spare-wood-5": "wood",
+          "legacy-spare-wood-6": "wood",
+          "legacy-spare-wood-7": "wood",
+          "legacy-spare-wood-8": "wood",
+          "legacy-spare-wood-9": "wood",
+          "second-carried-legacy-meat": "meat",
+          "stored-legacy-meat": "meat",
+          "wood-13": "wood",
+          "wood-15": "wood",
+          "wood-2": "wood"
+        },
+        "legacy_axes": false,
+        "legacy_prices": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "paid": {
+          "center_hearth": {
+            "wood": 3
+          },
+          "expansion_1": {
+            "stone": 1,
+            "wood": 3
+          },
+          "expansion_2": {
+            "stone": 2,
+            "wood": 3
+          },
+          "orbit_upgrade": {
+            "meat": 1,
+            "stone": 2
+          },
+          "storage_meat": {
+            "meat": 1,
+            "wood": 2
+          },
+          "storage_stone": {
+            "stone": 1,
+            "wood": 2
+          },
+          "storage_wood": {
+            "wood": 2
+          },
+          "watchtower": {
+            "stone": 2,
+            "wood": 3
+          }
+        },
+        "settlement": {
+          "cooked": 1,
+          "held_meal": 0,
+          "hoppers": {
+            "meat": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "level": 1,
+          "owl_hits": 1,
+          "processed_stone": 1,
+          "processed_wood": 1,
+          "rescued": true,
+          "served": 1,
+          "survivor_paid": true,
+          "survivor_wood": 8,
+          "work_seconds": {
+            "meat": 0.0,
+            "stone": 0.0,
+            "wood": 0.0
+          },
+          "worker_carry_token": "",
+          "worker_deliveries": 1,
+          "worker_receipts": [
+            "wood-2"
+          ],
+          "worker_supply": "meat"
+        },
+        "stored": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 1
+        },
+        "version": 6,
+        "world": {
+          "cooling": {},
+          "drops": [
+            [
+              "wood-1",
+              "wood",
+              -3.23287558555603,
+              9.40922451019287,
+              73.1500000000002
+            ],
+            [
+              "wood-3",
+              "wood",
+              -3.51576566696167,
+              8.62744903564453,
+              73.1500000000002
+            ],
+            [
+              "meat-4",
+              "meat",
+              14.0540256500244,
+              -1.27272856235504,
+              74.4000000000002
+            ],
+            [
+              "meat-5",
+              "meat",
+              13.2050504684448,
+              -1.9878101348877,
+              74.4000000000002
+            ],
+            [
+              "meat-6",
+              "meat",
+              13.2958250045776,
+              4.61776304244995,
+              79.5999999999998
+            ],
+            [
+              "meat-7",
+              "meat",
+              12.446849822998,
+              3.90268135070801,
+              79.5999999999998
+            ],
+            [
+              "meat-8",
+              "meat",
+              19.5443744659424,
+              1.35143911838531,
+              85.3999999999997
+            ],
+            [
+              "meat-9",
+              "meat",
+              18.6954002380371,
+              0.636357545852661,
+              85.3999999999997
+            ],
+            [
+              "wood-10",
+              "wood",
+              57.4319763183594,
+              14.2820663452148,
+              92.6333333333334
+            ],
+            [
+              "wood-11",
+              "wood",
+              56.4724464416504,
+              14.1872081756592,
+              92.6333333333334
+            ],
+            [
+              "wood-12",
+              "wood",
+              57.1490859985352,
+              13.5002908706665,
+              92.6333333333334
+            ],
+            [
+              "wood-14",
+              "wood",
+              53.7059555053711,
+              12.6182336807251,
+              92.6666666666667
+            ],
+            [
+              "meat-16",
+              "meat",
+              57.4267463684082,
+              11.7143468856812,
+              96.35
+            ],
+            [
+              "meat-17",
+              "meat",
+              56.5777740478516,
+              10.9992656707764,
+              96.35
+            ],
+            [
+              "meat-18",
+              "meat",
+              56.4362869262695,
+              10.4528799057007,
+              97.1
+            ],
+            [
+              "meat-19",
+              "meat",
+              55.5873146057129,
+              9.7377986907959,
+              97.1
+            ]
+          ],
+          "pack": {
+            "live": [
+              [
+                5,
+                true,
+                3,
+                57.5445785522461,
+                13.8304510116577,
+                64.8535308837891,
+                12.0138235092163
+              ],
+              [
+                7,
+                false,
+                1,
+                55.9789047241211,
+                10.359504699707,
+                64.6877059936523,
+                7.93385887145996
+              ]
+            ],
+            "remaining": 18.1833333333337,
+            "rng": "-2512083049678440970",
+            "serial": 8,
+            "wave": 2
+          },
+          "partial": {
+            "pine@-5000,9300": 2.0,
+            "pine@-5400,13500": 2.0,
+            "world1/1/0/wood/29": 2,
+            "world1/1/0/wood/30": 2,
+            "world1/1/0/wood/37": 2,
+            "world1/1/0/wood/38": 2,
+            "world1/1/0/wood/46": 2
+          },
+          "player": {
+            "camp_heal_elapsed": 0.0,
+            "fall_left": 0.0,
+            "hp": 30,
+            "protection_left": 0.0,
+            "x": 57.5445785522461,
+            "yaw": 0.0,
+            "z": 17.8587875366211
+          },
+          "serial": 19,
+          "version": 2
+        }
+      },
+      "durable_payload_sha256": "8b66cdba55770e210e7d67162ffb8433a6804fe8e6782030263130679779300e"
+    },
+    {
+      "phase": "handoff-interrupted",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "handoff-interrupted.log",
+      "checks": {
+        "earned handoff button visible and enabled": true,
+        "failed level write preserves the Level 1 completion and cash": true,
+        "first-reward receipt survived in a new process": true,
+        "fixture acquires a live save lock": true,
+        "shipping main scene loaded from disposable profile": true
+      },
+      "observed": {},
+      "log_sha256": "1c16e95c91b2470b63b75ac443b6e34d2117b72677fd6a6eacc650cb9ccde2b5",
+      "durable_payload": {
+        "build_order": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "carried": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 4,
+          "wood": 4
+        },
+        "collected": {
+          "carried-legacy-meat": "meat",
+          "earned-center_hearth-wood-0": "wood",
+          "earned-center_hearth-wood-1": "wood",
+          "earned-center_hearth-wood-2": "wood",
+          "earned-expansion_1-stone-0": "stone",
+          "earned-expansion_1-wood-0": "wood",
+          "earned-expansion_1-wood-1": "wood",
+          "earned-expansion_1-wood-2": "wood",
+          "earned-expansion_2-stone-0": "stone",
+          "earned-expansion_2-stone-1": "stone",
+          "earned-expansion_2-wood-0": "wood",
+          "earned-expansion_2-wood-1": "wood",
+          "earned-expansion_2-wood-2": "wood",
+          "earned-orbit_upgrade-meat-0": "meat",
+          "earned-orbit_upgrade-stone-0": "stone",
+          "earned-orbit_upgrade-stone-1": "stone",
+          "earned-storage_meat-meat-0": "meat",
+          "earned-storage_meat-wood-0": "wood",
+          "earned-storage_meat-wood-1": "wood",
+          "earned-storage_stone-stone-0": "stone",
+          "earned-storage_stone-wood-0": "wood",
+          "earned-storage_stone-wood-1": "wood",
+          "earned-storage_wood-wood-0": "wood",
+          "earned-storage_wood-wood-1": "wood",
+          "earned-watchtower-stone-0": "stone",
+          "earned-watchtower-stone-1": "stone",
+          "earned-watchtower-wood-0": "wood",
+          "earned-watchtower-wood-1": "wood",
+          "earned-watchtower-wood-2": "wood",
+          "legacy-spare-stone-0": "stone",
+          "legacy-spare-stone-1": "stone",
+          "legacy-spare-stone-2": "stone",
+          "legacy-spare-stone-3": "stone",
+          "legacy-spare-stone-4": "stone",
+          "legacy-spare-wood-0": "wood",
+          "legacy-spare-wood-1": "wood",
+          "legacy-spare-wood-10": "wood",
+          "legacy-spare-wood-2": "wood",
+          "legacy-spare-wood-3": "wood",
+          "legacy-spare-wood-4": "wood",
+          "legacy-spare-wood-5": "wood",
+          "legacy-spare-wood-6": "wood",
+          "legacy-spare-wood-7": "wood",
+          "legacy-spare-wood-8": "wood",
+          "legacy-spare-wood-9": "wood",
+          "second-carried-legacy-meat": "meat",
+          "stored-legacy-meat": "meat",
+          "wood-13": "wood",
+          "wood-15": "wood",
+          "wood-2": "wood"
+        },
+        "legacy_axes": false,
+        "legacy_prices": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "paid": {
+          "center_hearth": {
+            "wood": 3
+          },
+          "expansion_1": {
+            "stone": 1,
+            "wood": 3
+          },
+          "expansion_2": {
+            "stone": 2,
+            "wood": 3
+          },
+          "orbit_upgrade": {
+            "meat": 1,
+            "stone": 2
+          },
+          "storage_meat": {
+            "meat": 1,
+            "wood": 2
+          },
+          "storage_stone": {
+            "stone": 1,
+            "wood": 2
+          },
+          "storage_wood": {
+            "wood": 2
+          },
+          "watchtower": {
+            "stone": 2,
+            "wood": 3
+          }
+        },
+        "settlement": {
+          "cooked": 1,
+          "held_meal": 0,
+          "hoppers": {
+            "meat": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "level": 1,
+          "owl_hits": 1,
+          "processed_stone": 1,
+          "processed_wood": 1,
+          "rescued": true,
+          "served": 1,
+          "survivor_paid": true,
+          "survivor_wood": 8,
+          "work_seconds": {
+            "meat": 0.0,
+            "stone": 0.0,
+            "wood": 0.0
+          },
+          "worker_carry_token": "",
+          "worker_deliveries": 1,
+          "worker_receipts": [
+            "wood-2"
+          ],
+          "worker_supply": "meat"
+        },
+        "stored": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 1
+        },
+        "version": 6,
+        "world": {
+          "cooling": {},
+          "drops": [
+            [
+              "wood-1",
+              "wood",
+              -3.23287558555603,
+              9.40922451019287,
+              73.1500000000002
+            ],
+            [
+              "wood-3",
+              "wood",
+              -3.51576566696167,
+              8.62744903564453,
+              73.1500000000002
+            ],
+            [
+              "meat-4",
+              "meat",
+              14.0540256500244,
+              -1.27272856235504,
+              74.4000000000002
+            ],
+            [
+              "meat-5",
+              "meat",
+              13.2050504684448,
+              -1.9878101348877,
+              74.4000000000002
+            ],
+            [
+              "meat-6",
+              "meat",
+              13.2958250045776,
+              4.61776304244995,
+              79.5999999999998
+            ],
+            [
+              "meat-7",
+              "meat",
+              12.446849822998,
+              3.90268135070801,
+              79.5999999999998
+            ],
+            [
+              "meat-8",
+              "meat",
+              19.5443744659424,
+              1.35143911838531,
+              85.3999999999997
+            ],
+            [
+              "meat-9",
+              "meat",
+              18.6954002380371,
+              0.636357545852661,
+              85.3999999999997
+            ],
+            [
+              "wood-10",
+              "wood",
+              57.4319763183594,
+              14.2820663452148,
+              92.6333333333334
+            ],
+            [
+              "wood-11",
+              "wood",
+              56.4724464416504,
+              14.1872081756592,
+              92.6333333333334
+            ],
+            [
+              "wood-12",
+              "wood",
+              57.1490859985352,
+              13.5002908706665,
+              92.6333333333334
+            ],
+            [
+              "wood-14",
+              "wood",
+              53.7059555053711,
+              12.6182336807251,
+              92.6666666666667
+            ],
+            [
+              "meat-16",
+              "meat",
+              57.4267463684082,
+              11.7143468856812,
+              96.35
+            ],
+            [
+              "meat-17",
+              "meat",
+              56.5777740478516,
+              10.9992656707764,
+              96.35
+            ],
+            [
+              "meat-18",
+              "meat",
+              56.4362869262695,
+              10.4528799057007,
+              97.1
+            ],
+            [
+              "meat-19",
+              "meat",
+              55.5873146057129,
+              9.7377986907959,
+              97.1
+            ]
+          ],
+          "pack": {
+            "live": [
+              [
+                5,
+                true,
+                3,
+                57.5445785522461,
+                13.8304510116577,
+                64.8535308837891,
+                12.0138235092163
+              ],
+              [
+                7,
+                false,
+                1,
+                55.9789047241211,
+                10.359504699707,
+                64.6877059936523,
+                7.93385887145996
+              ]
+            ],
+            "remaining": 18.1833333333337,
+            "rng": "-2512083049678440970",
+            "serial": 8,
+            "wave": 2
+          },
+          "partial": {
+            "pine@-5000,9300": 2.0,
+            "pine@-5400,13500": 2.0,
+            "world1/1/0/wood/29": 2,
+            "world1/1/0/wood/30": 2,
+            "world1/1/0/wood/37": 2,
+            "world1/1/0/wood/38": 2,
+            "world1/1/0/wood/46": 2
+          },
+          "player": {
+            "camp_heal_elapsed": 0.0,
+            "fall_left": 0.0,
+            "hp": 30,
+            "protection_left": 0.0,
+            "x": 57.5445785522461,
+            "yaw": 0.0,
+            "z": 17.8587875366211
+          },
+          "serial": 19,
+          "version": 2
+        }
+      },
+      "durable_payload_sha256": "8b66cdba55770e210e7d67162ffb8433a6804fe8e6782030263130679779300e"
+    },
+    {
+      "phase": "handoff",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "handoff.log",
+      "checks": {
+        "continuation requires camp purchase center_hearth": true,
+        "continuation requires camp purchase expansion_1": true,
+        "continuation requires camp purchase expansion_2": true,
+        "continuation requires camp purchase orbit_upgrade": true,
+        "continuation requires camp purchase storage_meat": true,
+        "continuation requires camp purchase storage_stone": true,
+        "continuation requires camp purchase storage_wood": true,
+        "continuation requires camp purchase watchtower": true,
+        "continuation requires owl_hits": true,
+        "continuation requires processed_stone": true,
+        "continuation requires processed_wood": true,
+        "continuation requires rescued": true,
+        "continuation requires served": true,
+        "continuation requires worker_deliveries": true,
+        "earned handoff button visible and enabled": true,
+        "first-reward receipt survived in a new process": true,
+        "handoff cannot be applied twice": true,
+        "shipping main scene loaded from disposable profile": true,
+        "touching the displayed Continue button commits Level 2 once": true
+      },
+      "observed": {},
+      "log_sha256": "dda3e6e2baf3de8dd97f12d10ac7eb174b61fd76dd88c2886c31b3bd084f30b0",
+      "durable_payload": {
+        "build_order": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "carried": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 4,
+          "wood": 4
+        },
+        "collected": {
+          "carried-legacy-meat": "meat",
+          "earned-center_hearth-wood-0": "wood",
+          "earned-center_hearth-wood-1": "wood",
+          "earned-center_hearth-wood-2": "wood",
+          "earned-expansion_1-stone-0": "stone",
+          "earned-expansion_1-wood-0": "wood",
+          "earned-expansion_1-wood-1": "wood",
+          "earned-expansion_1-wood-2": "wood",
+          "earned-expansion_2-stone-0": "stone",
+          "earned-expansion_2-stone-1": "stone",
+          "earned-expansion_2-wood-0": "wood",
+          "earned-expansion_2-wood-1": "wood",
+          "earned-expansion_2-wood-2": "wood",
+          "earned-orbit_upgrade-meat-0": "meat",
+          "earned-orbit_upgrade-stone-0": "stone",
+          "earned-orbit_upgrade-stone-1": "stone",
+          "earned-storage_meat-meat-0": "meat",
+          "earned-storage_meat-wood-0": "wood",
+          "earned-storage_meat-wood-1": "wood",
+          "earned-storage_stone-stone-0": "stone",
+          "earned-storage_stone-wood-0": "wood",
+          "earned-storage_stone-wood-1": "wood",
+          "earned-storage_wood-wood-0": "wood",
+          "earned-storage_wood-wood-1": "wood",
+          "earned-watchtower-stone-0": "stone",
+          "earned-watchtower-stone-1": "stone",
+          "earned-watchtower-wood-0": "wood",
+          "earned-watchtower-wood-1": "wood",
+          "earned-watchtower-wood-2": "wood",
+          "legacy-spare-stone-0": "stone",
+          "legacy-spare-stone-1": "stone",
+          "legacy-spare-stone-2": "stone",
+          "legacy-spare-stone-3": "stone",
+          "legacy-spare-stone-4": "stone",
+          "legacy-spare-wood-0": "wood",
+          "legacy-spare-wood-1": "wood",
+          "legacy-spare-wood-10": "wood",
+          "legacy-spare-wood-2": "wood",
+          "legacy-spare-wood-3": "wood",
+          "legacy-spare-wood-4": "wood",
+          "legacy-spare-wood-5": "wood",
+          "legacy-spare-wood-6": "wood",
+          "legacy-spare-wood-7": "wood",
+          "legacy-spare-wood-8": "wood",
+          "legacy-spare-wood-9": "wood",
+          "second-carried-legacy-meat": "meat",
+          "stored-legacy-meat": "meat",
+          "wood-13": "wood",
+          "wood-15": "wood",
+          "wood-2": "wood"
+        },
+        "legacy_axes": false,
+        "legacy_prices": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "paid": {
+          "center_hearth": {
+            "wood": 3
+          },
+          "expansion_1": {
+            "stone": 1,
+            "wood": 3
+          },
+          "expansion_2": {
+            "stone": 2,
+            "wood": 3
+          },
+          "orbit_upgrade": {
+            "meat": 1,
+            "stone": 2
+          },
+          "storage_meat": {
+            "meat": 1,
+            "wood": 2
+          },
+          "storage_stone": {
+            "stone": 1,
+            "wood": 2
+          },
+          "storage_wood": {
+            "wood": 2
+          },
+          "watchtower": {
+            "stone": 2,
+            "wood": 3
+          }
+        },
+        "settlement": {
+          "cooked": 1,
+          "held_meal": 0,
+          "hoppers": {
+            "meat": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "level": 2,
+          "owl_hits": 1,
+          "processed_stone": 1,
+          "processed_wood": 1,
+          "rescued": true,
+          "served": 1,
+          "survivor_paid": true,
+          "survivor_wood": 8,
+          "work_seconds": {
+            "meat": 0.0,
+            "stone": 0.0,
+            "wood": 0.0
+          },
+          "worker_carry_token": "",
+          "worker_deliveries": 1,
+          "worker_receipts": [
+            "wood-2"
+          ],
+          "worker_supply": "meat"
+        },
+        "stored": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 1
+        },
+        "version": 6,
+        "world": {
+          "cooling": {},
+          "drops": [
+            [
+              "wood-1",
+              "wood",
+              -3.23287558555603,
+              9.40922451019287,
+              73.1500000000002
+            ],
+            [
+              "wood-3",
+              "wood",
+              -3.51576566696167,
+              8.62744903564453,
+              73.1500000000002
+            ],
+            [
+              "meat-4",
+              "meat",
+              14.0540256500244,
+              -1.27272856235504,
+              74.4000000000002
+            ],
+            [
+              "meat-5",
+              "meat",
+              13.2050504684448,
+              -1.9878101348877,
+              74.4000000000002
+            ],
+            [
+              "meat-6",
+              "meat",
+              13.2958250045776,
+              4.61776304244995,
+              79.5999999999998
+            ],
+            [
+              "meat-7",
+              "meat",
+              12.446849822998,
+              3.90268135070801,
+              79.5999999999998
+            ],
+            [
+              "meat-8",
+              "meat",
+              19.5443744659424,
+              1.35143911838531,
+              85.3999999999997
+            ],
+            [
+              "meat-9",
+              "meat",
+              18.6954002380371,
+              0.636357545852661,
+              85.3999999999997
+            ],
+            [
+              "wood-10",
+              "wood",
+              57.4319763183594,
+              14.2820663452148,
+              92.6333333333334
+            ],
+            [
+              "wood-11",
+              "wood",
+              56.4724464416504,
+              14.1872081756592,
+              92.6333333333334
+            ],
+            [
+              "wood-12",
+              "wood",
+              57.1490859985352,
+              13.5002908706665,
+              92.6333333333334
+            ],
+            [
+              "wood-14",
+              "wood",
+              53.7059555053711,
+              12.6182336807251,
+              92.6666666666667
+            ],
+            [
+              "meat-16",
+              "meat",
+              57.4267463684082,
+              11.7143468856812,
+              96.35
+            ],
+            [
+              "meat-17",
+              "meat",
+              56.5777740478516,
+              10.9992656707764,
+              96.35
+            ],
+            [
+              "meat-18",
+              "meat",
+              56.4362869262695,
+              10.4528799057007,
+              97.1
+            ],
+            [
+              "meat-19",
+              "meat",
+              55.5873146057129,
+              9.7377986907959,
+              97.1
+            ]
+          ],
+          "pack": {
+            "live": [
+              [
+                5,
+                true,
+                3,
+                57.5445785522461,
+                13.8304510116577,
+                64.8535308837891,
+                12.0138235092163
+              ],
+              [
+                7,
+                false,
+                1,
+                55.9789047241211,
+                10.359504699707,
+                64.6877059936523,
+                7.93385887145996
+              ]
+            ],
+            "remaining": 18.1833333333337,
+            "rng": "-2512083049678440970",
+            "serial": 8,
+            "wave": 2
+          },
+          "partial": {
+            "pine@-5000,9300": 2.0,
+            "pine@-5400,13500": 2.0,
+            "world1/1/0/wood/29": 2.0,
+            "world1/1/0/wood/30": 2.0,
+            "world1/1/0/wood/37": 2.0,
+            "world1/1/0/wood/38": 2.0,
+            "world1/1/0/wood/46": 2.0
+          },
+          "player": {
+            "camp_heal_elapsed": 0.0,
+            "fall_left": 0.0,
+            "hp": 30,
+            "protection_left": 0.0,
+            "x": 57.5445785522461,
+            "yaw": 0.0,
+            "z": 17.8587875366211
+          },
+          "serial": 19,
+          "version": 2
+        }
+      },
+      "durable_payload_sha256": "b1488ba23ccceb43c450758ae5c712c935e023765b9da6086aeb84154828f0b4"
+    },
+    {
+      "phase": "second-launch",
+      "exit_code": 0,
+      "warnings_and_errors": [],
+      "log": "second-launch.log",
+      "checks": {
+        "Level 2 arrives in the normal visible gameplay chapter": true,
+        "already-claimed completion avoided a second transition": true,
+        "both finished-material counters match persistent balances": true,
+        "both processed balances and companion contact persisted": true,
+        "cash label reflects the one confirmed wallet payment": true,
+        "cold launch restored Level 2": true,
+        "eight prior purchases and the banked delivery survived": true,
+        "served receipt unchanged on cold launch": true,
+        "shipping main scene loaded from disposable profile": true,
+        "the resumed field shows all Level 1 plots finished and camp open": true,
+        "visible health reading matches the live player": true
+      },
+      "observed": {
+        "visible_labels": [
+          "Level 2  \u00b7  Preview",
+          "HP  30 / 30",
+          "40",
+          "40",
+          "10",
+          "Level 2 preview \u00b7 All Level 1 plots complete. The camp is open.",
+          "Cash  1",
+          "Planks 1  \u00b7  Blocks 1"
+        ]
+      },
+      "log_sha256": "d3bd92aae1db5312de3143cb62e5216779eb6474c5ad36bbd2723eb5d76a555d",
+      "durable_payload": {
+        "build_order": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "carried": {
+          "coal": 0,
+          "meat": 1,
+          "metal": 0,
+          "slate": 0,
+          "stone": 4,
+          "wood": 4
+        },
+        "collected": {
+          "carried-legacy-meat": "meat",
+          "earned-center_hearth-wood-0": "wood",
+          "earned-center_hearth-wood-1": "wood",
+          "earned-center_hearth-wood-2": "wood",
+          "earned-expansion_1-stone-0": "stone",
+          "earned-expansion_1-wood-0": "wood",
+          "earned-expansion_1-wood-1": "wood",
+          "earned-expansion_1-wood-2": "wood",
+          "earned-expansion_2-stone-0": "stone",
+          "earned-expansion_2-stone-1": "stone",
+          "earned-expansion_2-wood-0": "wood",
+          "earned-expansion_2-wood-1": "wood",
+          "earned-expansion_2-wood-2": "wood",
+          "earned-orbit_upgrade-meat-0": "meat",
+          "earned-orbit_upgrade-stone-0": "stone",
+          "earned-orbit_upgrade-stone-1": "stone",
+          "earned-storage_meat-meat-0": "meat",
+          "earned-storage_meat-wood-0": "wood",
+          "earned-storage_meat-wood-1": "wood",
+          "earned-storage_stone-stone-0": "stone",
+          "earned-storage_stone-wood-0": "wood",
+          "earned-storage_stone-wood-1": "wood",
+          "earned-storage_wood-wood-0": "wood",
+          "earned-storage_wood-wood-1": "wood",
+          "earned-watchtower-stone-0": "stone",
+          "earned-watchtower-stone-1": "stone",
+          "earned-watchtower-wood-0": "wood",
+          "earned-watchtower-wood-1": "wood",
+          "earned-watchtower-wood-2": "wood",
+          "legacy-spare-stone-0": "stone",
+          "legacy-spare-stone-1": "stone",
+          "legacy-spare-stone-2": "stone",
+          "legacy-spare-stone-3": "stone",
+          "legacy-spare-stone-4": "stone",
+          "legacy-spare-wood-0": "wood",
+          "legacy-spare-wood-1": "wood",
+          "legacy-spare-wood-10": "wood",
+          "legacy-spare-wood-2": "wood",
+          "legacy-spare-wood-3": "wood",
+          "legacy-spare-wood-4": "wood",
+          "legacy-spare-wood-5": "wood",
+          "legacy-spare-wood-6": "wood",
+          "legacy-spare-wood-7": "wood",
+          "legacy-spare-wood-8": "wood",
+          "legacy-spare-wood-9": "wood",
+          "second-carried-legacy-meat": "meat",
+          "stored-legacy-meat": "meat",
+          "wood-13": "wood",
+          "wood-15": "wood",
+          "wood-2": "wood"
+        },
+        "legacy_axes": false,
+        "legacy_prices": [
+          "center_hearth",
+          "expansion_1",
+          "storage_wood",
+          "storage_stone",
+          "storage_meat",
+          "expansion_2",
+          "watchtower",
+          "orbit_upgrade"
+        ],
+        "paid": {
+          "center_hearth": {
+            "wood": 3
+          },
+          "expansion_1": {
+            "stone": 1,
+            "wood": 3
+          },
+          "expansion_2": {
+            "stone": 2,
+            "wood": 3
+          },
+          "orbit_upgrade": {
+            "meat": 1,
+            "stone": 2
+          },
+          "storage_meat": {
+            "meat": 1,
+            "wood": 2
+          },
+          "storage_stone": {
+            "stone": 1,
+            "wood": 2
+          },
+          "storage_wood": {
+            "wood": 2
+          },
+          "watchtower": {
+            "stone": 2,
+            "wood": 3
+          }
+        },
+        "settlement": {
+          "cooked": 1,
+          "held_meal": 0,
+          "hoppers": {
+            "meat": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "level": 2,
+          "owl_hits": 1,
+          "processed_stone": 1,
+          "processed_wood": 1,
+          "rescued": true,
+          "served": 1,
+          "survivor_paid": true,
+          "survivor_wood": 8,
+          "work_seconds": {
+            "meat": 0.0,
+            "stone": 0.0,
+            "wood": 0.0
+          },
+          "worker_carry_token": "",
+          "worker_deliveries": 1,
+          "worker_receipts": [
+            "wood-2"
+          ],
+          "worker_supply": "meat"
+        },
+        "stored": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 1
+        },
+        "version": 6,
+        "world": {
+          "cooling": {},
+          "drops": [
+            [
+              "wood-1",
+              "wood",
+              -3.23287558555603,
+              9.40922451019287,
+              73.1500000000002
+            ],
+            [
+              "wood-3",
+              "wood",
+              -3.51576566696167,
+              8.62744903564453,
+              73.1500000000002
+            ],
+            [
+              "meat-4",
+              "meat",
+              14.0540256500244,
+              -1.27272856235504,
+              74.4000000000002
+            ],
+            [
+              "meat-5",
+              "meat",
+              13.2050504684448,
+              -1.9878101348877,
+              74.4000000000002
+            ],
+            [
+              "meat-6",
+              "meat",
+              13.2958250045776,
+              4.61776304244995,
+              79.5999999999998
+            ],
+            [
+              "meat-7",
+              "meat",
+              12.446849822998,
+              3.90268135070801,
+              79.5999999999998
+            ],
+            [
+              "meat-8",
+              "meat",
+              19.5443744659424,
+              1.35143911838531,
+              85.3999999999997
+            ],
+            [
+              "meat-9",
+              "meat",
+              18.6954002380371,
+              0.636357545852661,
+              85.3999999999997
+            ],
+            [
+              "wood-10",
+              "wood",
+              57.4319763183594,
+              14.2820663452148,
+              92.6333333333334
+            ],
+            [
+              "wood-11",
+              "wood",
+              56.4724464416504,
+              14.1872081756592,
+              92.6333333333334
+            ],
+            [
+              "wood-12",
+              "wood",
+              57.1490859985352,
+              13.5002908706665,
+              92.6333333333334
+            ],
+            [
+              "wood-14",
+              "wood",
+              53.7059555053711,
+              12.6182336807251,
+              92.6666666666667
+            ],
+            [
+              "meat-16",
+              "meat",
+              57.4267463684082,
+              11.7143468856812,
+              96.35
+            ],
+            [
+              "meat-17",
+              "meat",
+              56.5777740478516,
+              10.9992656707764,
+              96.35
+            ],
+            [
+              "meat-18",
+              "meat",
+              56.4362869262695,
+              10.4528799057007,
+              97.1
+            ],
+            [
+              "meat-19",
+              "meat",
+              55.5873146057129,
+              9.7377986907959,
+              97.1
+            ]
+          ],
+          "pack": {
+            "live": [
+              [
+                5,
+                true,
+                3,
+                57.5445785522461,
+                13.8304510116577,
+                64.8535308837891,
+                12.0138235092163
+              ],
+              [
+                7,
+                false,
+                1,
+                55.9789047241211,
+                10.359504699707,
+                64.6877059936523,
+                7.93385887145996
+              ]
+            ],
+            "remaining": 18.1833333333337,
+            "rng": "-2512083049678440970",
+            "serial": 8,
+            "wave": 2
+          },
+          "partial": {
+            "pine@-5000,9300": 2.0,
+            "pine@-5400,13500": 2.0,
+            "world1/1/0/wood/29": 2.0,
+            "world1/1/0/wood/30": 2.0,
+            "world1/1/0/wood/37": 2.0,
+            "world1/1/0/wood/38": 2.0,
+            "world1/1/0/wood/46": 2.0
+          },
+          "player": {
+            "camp_heal_elapsed": 0.0,
+            "fall_left": 0.0,
+            "hp": 30,
+            "protection_left": 0.0,
+            "x": 57.5445785522461,
+            "yaw": 0.0,
+            "z": 17.8587875366211
+          },
+          "serial": 19,
+          "version": 2
+        }
+      },
+      "durable_payload_sha256": "b1488ba23ccceb43c450758ae5c712c935e023765b9da6086aeb84154828f0b4"
+    }
+  ],
+  "legacy_source_before_and_after": {
+    "sha256": "93dc21bab330386e23534f51c288dafc0e7fcfecc445f84c65a6b644f8f677d8",
+    "checked_files": 237,
+    "commit": "37540b6d1d6e0657dd6776db136a46534e6a66d5"
+  },
+  "verified_source_before_and_after": {
+    "sha256": "1b44d65e2c2468e81dd114c3d4e3991e60f06718b9576a3265527ac62362a771",
+    "checked_files": 460
+  }
+}

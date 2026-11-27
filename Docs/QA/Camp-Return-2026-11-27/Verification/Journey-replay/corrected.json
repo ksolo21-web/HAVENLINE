@@ -1,0 +1,239 @@
+[
+  {
+    "action": "farm",
+    "label": "Fell the starter pine; collect first 90 timber",
+    "kind": "wood",
+    "count": 9,
+    "timeout": 180
+  },
+  {
+    "action": "pay_part",
+    "label": "Stage 90 timber at hearth",
+    "id": "center_hearth",
+    "timeout": 30,
+    "count": 9
+  },
+  {
+    "action": "farm",
+    "label": "Collect final 110 timber",
+    "kind": "wood",
+    "count": 11,
+    "timeout": 180
+  },
+  {
+    "action": "buy",
+    "label": "Build the 200-timber camp",
+    "id": "center_hearth",
+    "timeout": 30
+  },
+  {
+    "action": "hold",
+    "label": "Watch paid camp reveal",
+    "s": 2.0
+  },
+  {
+    "action": "walk",
+    "label": "First court south gate outward",
+    "p": [
+      0,
+      7.2
+    ],
+    "tol": 0.22,
+    "shot": "South gate outward",
+    "length": 1.6,
+    "timeout": 45
+  },
+  {
+    "action": "walk",
+    "label": "Walk to the western timberline",
+    "p": [
+      -4.7,
+      8.6
+    ],
+    "tol": 0.22,
+    "timeout": 45
+  },
+  {
+    "action": "farm",
+    "label": "Harvest the western timberline for supplies",
+    "kind": "wood",
+    "count": 42,
+    "choose_nearest": true,
+    "timeout": 420,
+    "region": [
+      -15.0,
+      7.0,
+      -2.0,
+      17.0
+    ],
+    "shot": "Working the timberline",
+    "offset": 4.0,
+    "length": 1.6
+  },
+  {
+    "action": "walk",
+    "label": "Return to western approach",
+    "p": [
+      -4.7,
+      8.6
+    ],
+    "tol": 0.25,
+    "timeout": 45
+  },
+  {
+    "action": "walk",
+    "label": "Skirt the western wall toward the quarry",
+    "p": [
+      -6.5,
+      7.2
+    ],
+    "tol": 0.22,
+    "timeout": 45
+  },
+  {
+    "action": "farm",
+    "label": "Return to the restored stone source",
+    "kind": "stone",
+    "count": 16,
+    "choose_nearest": false,
+    "timeout": 420,
+    "region": [
+      -7.4,
+      1.8,
+      -5.0,
+      4.6
+    ],
+    "shot": "Returning quarry",
+    "offset": 1.2,
+    "length": 2.1
+  },
+  {
+    "action": "walk",
+    "label": "Skirt the western wall on the return leg",
+    "p": [
+      -6.7,
+      6.9
+    ],
+    "tol": 0.22,
+    "timeout": 45
+  },
+  {
+    "action": "walk",
+    "label": "Approach the opened south gate from the snow",
+    "p": [
+      0.0,
+      7.1
+    ],
+    "tol": 0.22,
+    "timeout": 45
+  },
+  {
+    "action": "walk",
+    "label": "First court south gate inward",
+    "p": [
+      0.0,
+      2.6
+    ],
+    "tol": 0.22,
+    "shot": "South gate inward",
+    "length": 1.8,
+    "timeout": 45
+  },
+  {
+    "action": "walk",
+    "label": "Pass to the east of the furnace",
+    "p": [
+      2.6,
+      1.75
+    ],
+    "tol": 0.22,
+    "timeout": 45
+  },
+  {
+    "action": "buy",
+    "label": "Earn the first fence expansion",
+    "id": "expansion_1",
+    "timeout": 30,
+    "shot": "Earn the first fence expansion",
+    "length": 2.7
+  },
+  {
+    "action": "hold",
+    "label": "The first expansion opens the house project",
+    "s": 1.1,
+    "shot": "First expansion",
+    "length": 1.1,
+    "plate": "06-expansion-one"
+  },
+  {
+    "action": "walk",
+    "label": "Approach the northwestern storage yard",
+    "p": [
+      1.8,
+      -2.15
+    ],
+    "tol": 0.16,
+    "timeout": 45
+  },
+  {
+    "action": "walk",
+    "label": "Cross the clear north court",
+    "p": [
+      -1.6,
+      -1.25
+    ],
+    "tol": 0.16,
+    "timeout": 45
+  },
+  {
+    "action": "walk",
+    "label": "Pause outside the house apron",
+    "p": [
+      -3.05,
+      0.25
+    ],
+    "tol": 0.16,
+    "timeout": 45
+  },
+  {
+    "action": "buy",
+    "id": "storage_wood",
+    "label": "Enter starter build pad",
+    "timeout": 20,
+    "clip": true
+  },
+  {
+    "action": "walk",
+    "p": [
+      -3.47,
+      0.75
+    ],
+    "tol": 0.22,
+    "label": "Exit the completed starter receiver",
+    "timeout": 20
+  },
+  {
+    "action": "walk",
+    "p": [
+      -3.7,
+      1.57
+    ],
+    "tol": 0.18,
+    "label": "Read the stand-alone storehouse upgrade",
+    "timeout": 20
+  },
+  {
+    "action": "upgrade",
+    "id": "storage_stone",
+    "legacy_side": false,
+    "label": "Hold at the reinforced project",
+    "timeout": 26,
+    "clip": true
+  },
+  {
+    "action": "hold",
+    "s": 9,
+    "label": "Rest in the reinforced camp after crossing the woods",
+    "clip": true
+  }
+]

@@ -1,0 +1,57 @@
+[
+  {
+    "action": "walk",
+    "label": "Pass the southern face of the furnace",
+    "p": [
+      -1.56,
+      1.72
+    ],
+    "tol": 0.22
+  },
+  {
+    "action": "walk",
+    "label": "South gate until outside",
+    "p": [
+      0,
+      7.3
+    ],
+    "tol": 0.18
+  },
+  {
+    "action": "walk",
+    "label": "Sustained sprint across the southern snow",
+    "p": [
+      13.7,
+      7.6
+    ],
+    "tol": 0.3,
+    "clip": true,
+    "view": "sprint",
+    "film_s": 1.35
+  },
+  {
+    "action": "walk",
+    "label": "Turn from the southern snowfield to the eastern ridge",
+    "p": [
+      14,
+      -100
+    ],
+    "tol": 0.45,
+    "timeout": 100,
+    "clip": false
+  },
+  {
+    "action": "hold",
+    "s": 0.52,
+    "label": "Read the return bearing from 100 metres",
+    "clip": true,
+    "view": "east"
+  },
+  {
+    "action": "follow_compass",
+    "label": "Follow only the projected home arrow through a gate",
+    "timeout": 100,
+    "clip": false,
+    "view": "home"
+  }
+]
