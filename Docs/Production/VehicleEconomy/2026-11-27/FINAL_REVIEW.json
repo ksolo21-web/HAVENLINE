@@ -1,0 +1,2746 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "review_time_utc": "2026-11-27T18:16:28.416894+00:00",
+  "independence": "Separate reviewer agent. Production source/render/design repairs were returned to their owners. Critic wrote only raw review/evidence and these excluded final receipts.",
+  "disposition": "APPROVED_FOR_ISOLATED_DESIGN_CONCEPT_AND_STANDALONE_COMPONENT_PUBLICATION_ONLY",
+  "candidate": {
+    "base_commit": "201dcbe4fad5037a33bd619b59285a1ef91599d8",
+    "branch": "feature/vehicle-economy-world-fleet-2026-11-27",
+    "pre_freeze_staged_tree": "774288c87ba1693da50440bd11105594c78393bb",
+    "freeze_path": "Docs/Production/VehicleEconomy/2026-11-27/CANDIDATE_FREEZE.json",
+    "freeze_sha256": "1732f0b4d19fac7c3cc274478b3d248620d698a3735d438206a8a821a84f14ba",
+    "frozen_paths": 205
+  },
+  "publication_allowed_for_this_bounded_packet": true,
+  "publication_performed_by_critic": false,
+  "publication_ref_verification": "Pending root publication receipt; this review does not claim a branch push occurred.",
+  "mandatory_declared_package_checks_pass": true,
+  "unresolved_mandatory_packet_defects": [],
+  "scope_scores": {
+    "identity_and_preservation": 10.0,
+    "documentation_and_honest_requirement_scope": 9.9,
+    "standalone_native_fuel_component": 9.8,
+    "material_graph_secondary_independent_review": 10.0,
+    "static_concept_scores": {
+      "2": 9.8,
+      "3": 9.7,
+      "4": 9.8,
+      "5": 9.6,
+      "6": 9.6,
+      "7": 9.8,
+      "8": 9.8,
+      "9": 9.7,
+      "10": 9.6
+    }
+  },
+  "scoring_boundary": "No averaging. Every mandatory check in each declared bounded scope passes, with scores strictly above9.0. Static proposals are not final reference-sensitive assets; existing>=9.9 and exact-10 native/reference/integration gates remain active and unapproved.",
+  "requirements": [
+    {
+      "id": "VE01",
+      "requirement": "Low powered-use fuel consumption",
+      "declared_package_evidence_status": "PASS_NATIVE_ACCOUNTING_PROTOTYPE",
+      "reviewed_evidence": "Exact active duration grants, low authored rates, depletion, fractional stock, pause and JSON replay verified.",
+      "pending_actual_integration": "Actual vehicle motion/tool use and real active-clock/once-only-grant coupling; measured fuel balance.",
+      "declared_package_evidence_passed": true,
+      "actual_integrated_completion_approved": false
+    },
+    {
+      "id": "VE02",
+      "requirement": "Iron ore to bars to sheet metal",
+      "declared_package_evidence_status": "PASS_AUTHORED_GRAPH_AND_QUANTITY_PROOF",
+      "reviewed_evidence": "Distinct saved ore ID metal, iron_bars and sheet_metal; recipes, prerequisites, complete batch expansion and legacy denomination decisions reviewed.",
+      "pending_actual_integration": "Real producers, work contacts, input/output escrow and whole-world catalogue migration.",
+      "declared_package_evidence_passed": true,
+      "actual_integrated_completion_approved": false
+    },
+    {
+      "id": "VE03",
+      "requirement": "Mineable useful coal",
+      "declared_package_evidence_status": "PASS_SOURCE_AND_AUTHORED_USE",
+      "reviewed_evidence": "Pinned current source registers coal mining; proposed smelting/refining consume coal separately from fuel.",
+      "pending_actual_integration": "Integrated new coal-consuming producer cycles and attainable source renewal/route evidence.",
+      "declared_package_evidence_passed": true,
+      "actual_integrated_completion_approved": false
+    },
+    {
+      "id": "VE04",
+      "requirement": "Outside oil source and fuel refining",
+      "declared_package_evidence_status": "PASS_AUTHORED_CHAIN_AND_FACTUAL_SUPPORT",
+      "reviewed_evidence": "Manual reachable outside well/pump and camp refinery chain; no engine-fuel bootstrap dependency. Three primary EIA pages independently checked. Game batch remains explicitly authored.",
+      "pending_actual_integration": "Actual site/deposit, input custody, extraction/refining, source replenishment and walkable return.",
+      "declared_package_evidence_passed": true,
+      "actual_integrated_completion_approved": false
+    },
+    {
+      "id": "VE05",
+      "requirement": "Substantial varied processed-resource truck bill",
+      "declared_package_evidence_status": "PASS_AUTHORED_PROFILE_AND_ARITHMETIC",
+      "reviewed_evidence": "Eight-input new-truck fixture, garage bill, reusable shared components and full quantity graph reviewed; paid initial tank allocated separately from construction spend.",
+      "pending_actual_integration": "Actual source/producer/route quote admission, partial contribution escrow and measured affordability/fun.",
+      "declared_package_evidence_passed": true,
+      "actual_integrated_completion_approved": false
+    },
+    {
+      "id": "VE06",
+      "requirement": "Recoverable empty tank",
+      "declared_package_evidence_status": "PASS_NATIVE_DEPLETION_AND_DESIGNED_RECOVERY",
+      "reviewed_evidence": "Zero-fuel grant denial leaves custody intact and advances the denied window; refill cannot replay old movement. Manual chain and paid recovery are specified.",
+      "pending_actual_integration": "Real driver exit, safe stopping, manual fuel delivery, blocked-route recovery and persistent stranded-vehicle threats.",
+      "declared_package_evidence_passed": true,
+      "actual_integrated_completion_approved": false
+    },
+    {
+      "id": "VE07",
+      "requirement": "One fuel custody history",
+      "declared_package_evidence_status": "PASS_NATIVE_LEDGER_WITH_TRUSTED_ADAPTER",
+      "reviewed_evidence": "Accounts, ordinary cargo, tank, burn, spending, loss and fractional estates conserve exactly. Duplicate requests, restore, garage deposit, death and replacement recovery exercised.",
+      "pending_actual_integration": "Authoritative whole-world inventory/action/save integration and one-time physical application of a grant.",
+      "declared_package_evidence_passed": true,
+      "actual_integrated_completion_approved": false
+    },
+    {
+      "id": "VE08",
+      "requirement": "Useful vehicles for Worlds2\u201310",
+      "declared_package_evidence_status": "PASS_NINE_AUTHORED_DESIGNS",
+      "reviewed_evidence": "Nine existing world themes each have a terrain-appropriate vehicle, work role, recurring uses, material profile, station/route and recovery constraints.",
+      "pending_actual_integration": "Native world assets/routes/controls, actual later-world work and World10 serial-custody/paid replacement implementation and exact bill.",
+      "declared_package_evidence_passed": true,
+      "actual_integrated_completion_approved": false
+    },
+    {
+      "id": "VE09",
+      "requirement": "Later-world vehicle renders",
+      "declared_package_evidence_status": "PASS_NINE_STATIC_CONCEPT_SETS",
+      "reviewed_evidence": "Nine selected six-view sheets,54 actual inspected panels, meaningful close-ups and targeted repair retests; exact image/review bindings verified.",
+      "pending_actual_integration": "Native editable meshes, true rotating3D, full action cycles, gameplay-camera matching and measured clearances.",
+      "declared_package_evidence_passed": true,
+      "actual_integrated_completion_approved": false
+    },
+    {
+      "id": "VE10",
+      "requirement": "Original truck and garage contract",
+      "declared_package_evidence_status": "PASS_PRESERVED_DESIGN_AND_COMPONENT_REGRESSION",
+      "reviewed_evidence": "Unlimited mixed ordinary cargo, HP and outside loss, garage-first camp purchase, atomic fence replacement, all-or-hold warehouse deposit and two pedestrian exits retained.107 legacy checks pass.",
+      "pending_actual_integration": "Actual camp geometry, door/route contact, warehouse lifecycle, deliberate eligible in-camp defense and all required runtime states.",
+      "declared_package_evidence_passed": true,
+      "actual_integrated_completion_approved": false
+    },
+    {
+      "id": "VE11",
+      "requirement": "Ownership, history, accepted quotes and old saves",
+      "declared_package_evidence_status": "PASS_PACKET_PRESERVATION_AND_COMPONENT_COMPATIBILITY",
+      "reviewed_evidence": "Historical dated packets/rejects retained; isolated branch; narrow fuel supersession; original component snapshot and accepted full-bill quotes replay without free fuel or retroactive price.",
+      "pending_actual_integration": "Actual Build14 whole-world saves, partial contributions, in-flight recipes and all custody migration; publication ref still belongs to root.",
+      "declared_package_evidence_passed": true,
+      "actual_integrated_completion_approved": false
+    },
+    {
+      "id": "VE12",
+      "requirement": "Honest remaining gameplay gaps",
+      "declared_package_evidence_status": "PASS_DOCUMENTED_DEPENDENCIES_AND_LIMITS",
+      "reviewed_evidence": "Build14 partial truck source acknowledged; coupled inventory/payment/formatting seams, producer/controls/targeting/recovery/save/motion/audio/device/balance gates explicitly retained.",
+      "pending_actual_integration": "The listed implementation gates remain outstanding; no whole-game completion or shipping approval is assigned.",
+      "declared_package_evidence_passed": true,
+      "actual_integrated_completion_approved": false
+    }
+  ],
+  "observed_verification": {
+    "frozen_files_hash_size_git_blob_and_staged_tree_matches": {
+      "passed": 205,
+      "required": 205
+    },
+    "native_builder_legacy_rerun": {
+      "passed": 107,
+      "failed": 0,
+      "stderr_bytes": 0
+    },
+    "native_builder_fuel_rerun": {
+      "passed": 80,
+      "failed": 0,
+      "stderr_bytes": 0
+    },
+    "independent_native_adversarial": {
+      "passed": 32,
+      "failed": 0,
+      "stderr_bytes": 0,
+      "python_integer_oracle_cases_included_in_one_assertion": 100
+    },
+    "material_graph_builder_checks": {
+      "passed": 84,
+      "scope": "Bound saved checker evidence; actual independent material review is a separate agent"
+    },
+    "secondary_independent_economy": {
+      "reviewer": "/root/vehicle_gameplay",
+      "data_checks_passed": 19,
+      "negative_mutation_checks_passed": 11,
+      "input_and_evidence_bindings_verified": true
+    },
+    "concept_art": {
+      "selected_sets": 9,
+      "selected_panels_actually_inspected": 54,
+      "all_art_manifest_entries_verified": 78,
+      "attempts_preserved": 14
+    },
+    "source_audit": {
+      "source_identity_matches": 11,
+      "exact_excerpt_matches": 66,
+      "actual_game_build_execution_by_this_review": false
+    },
+    "links": {
+      "frozen_markdown_local_references": 118,
+      "physically_present": 102,
+      "sparse_checkout_targets_resolved_in_candidate_and_base_git_trees": 16,
+      "broken_repository_targets": 0
+    },
+    "existing_change_scope": {
+      "modified_existing_files": 7,
+      "native_extension_files": 4,
+      "reviewed_forward_navigation_files": 3,
+      "dated_snowtruck_packet_changes": 0,
+      "active_gameplay_path_changes": 0,
+      "canonical_task_id_changes": 0
+    }
+  },
+  "repaired_findings": [
+    {
+      "id": "FUEL-R1-01",
+      "finding": "Delimiter-concatenated vehicle/usage identity collided for valid IDs.",
+      "repair": "Canonical tuple encoding; exact independent reproduction now passes, with additional builder JSON/escape/replay tests."
+    },
+    {
+      "id": "ECONOMY_PROFILE_KIND_BYPASS",
+      "finding": "Secondary reviewer found that a misclassified profile could bypass funded initial tank validation.",
+      "repair": "Author added profile-kind/binding gates; independent mutation now rejects, final source bindings verified."
+    },
+    {
+      "id": "WV02-R1-01",
+      "finding": "Timber Forwarder right-view crate moved to the cab end.",
+      "repair": "SelectedR2 restores the rear crate/log arrangement."
+    },
+    {
+      "id": "WV03-R1-01_AND_WV03-R2-01",
+      "finding": "Canyon work layout changed, followed by a duplicate stowed breaker after first repair.",
+      "repair": "SelectedR3 retains studio cab/hopper and exactly one deployed breaker. Front-right cab/four feet are explicit authored choices."
+    },
+    {
+      "id": "WV08-R1-01",
+      "finding": "Working grapple jaw floated above rubble instead of gripping it.",
+      "repair": "SelectedR2 closes the jaw onto supported rubble. Partly open travel pose explicitly remains illustrative."
+    },
+    {
+      "id": "WV09-R1-01",
+      "finding": "Enclosed-bin wording contradicted visible open hopper.",
+      "repair": "Forward authored design explicitly selects the open hopper; image and score were not changed to force approval."
+    },
+    {
+      "id": "WV10-R1-01_AND_WV10-R1-02",
+      "finding": "Working chassis lost an axle and changed clamp/support identity.",
+      "repair": "SelectedR2 restores three near-side wheels, silver clamp and consistent near-side support."
+    }
+  ],
+  "selected_art": [
+    {
+      "world": 2,
+      "vehicle": "Timber Forwarder",
+      "candidate_path": "Docs/Design/WorldVehicles/2026-11-27/renders/w02-timber-forwarder-r2.png",
+      "candidate_sha256": "45e270240db4db35256945b6951b7fe6ec1626884018b706f861b10724b447b3",
+      "review_path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w02-timber-forwarder-r2-review.json",
+      "review_sha256": "abb7cce23584a4b7c24790e70b5ea3e1d0fd121a39ede910a20f2acdc0f75fec",
+      "concept_quality_score": 9.8,
+      "panels_actually_inspected": [
+        "front",
+        "right",
+        "rear",
+        "left",
+        "three-quarter",
+        "at-work"
+      ],
+      "mandatory_concept_checks_pass": true
+    },
+    {
+      "world": 3,
+      "vehicle": "Canyon Breaker",
+      "candidate_path": "Docs/Design/WorldVehicles/2026-11-27/renders/w03-canyon-breaker-r3.png",
+      "candidate_sha256": "e650c11e6ea9119bd60a1506f3197cddcd745dc3c4cf13a813d4e64271046511",
+      "review_path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w03-canyon-breaker-r3-review.json",
+      "review_sha256": "8289bfce2cc4de590b9bbf812d5d63362adfb2c7b1de807f3ec52176eba199c7",
+      "concept_quality_score": 9.7,
+      "panels_actually_inspected": [
+        "front",
+        "right",
+        "rear",
+        "left",
+        "three-quarter",
+        "at-work"
+      ],
+      "mandatory_concept_checks_pass": true
+    },
+    {
+      "world": 4,
+      "vehicle": "Reef Salvager",
+      "candidate_path": "Docs/Design/WorldVehicles/2026-11-27/renders/w04-reef-salvager-r1.png",
+      "candidate_sha256": "5e04c55d481dbdb7df8bf78bfdd263102e2060a3d7a46e974053bad5dead9c99",
+      "review_path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w04-reef-salvager-r1-review.json",
+      "review_sha256": "2d0a2c75b36924405d9b791abbc5a8adecd8ff1908aa798ec632b1e5f4868f9a",
+      "concept_quality_score": 9.8,
+      "panels_actually_inspected": [
+        "front",
+        "right",
+        "rear",
+        "left",
+        "three-quarter",
+        "at-work"
+      ],
+      "mandatory_concept_checks_pass": true
+    },
+    {
+      "world": 5,
+      "vehicle": "Skybridge Carrier",
+      "candidate_path": "Docs/Design/WorldVehicles/2026-11-27/renders/w05-skybridge-carrier-r1.png",
+      "candidate_sha256": "b8c0ce5c0011768f7c6b9963e0d6492930ae62c43e16dc74e32bf20e10e78fb7",
+      "review_path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w05-skybridge-carrier-r1-review.json",
+      "review_sha256": "2b18877d6e0f3281b9a657d9756d73fad3b2e8f776d5d8af1c5781bd6fb369db",
+      "concept_quality_score": 9.6,
+      "panels_actually_inspected": [
+        "front",
+        "right",
+        "rear",
+        "left",
+        "three-quarter",
+        "at-work"
+      ],
+      "mandatory_concept_checks_pass": true
+    },
+    {
+      "world": 6,
+      "vehicle": "Forge Hauler",
+      "candidate_path": "Docs/Design/WorldVehicles/2026-11-27/renders/w06-forge-hauler-r1.png",
+      "candidate_sha256": "ab516b2f4b17f98a036715dd70340efbfe59cc3ddb1539b11109ff0726bce033",
+      "review_path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w06-forge-hauler-r1-review.json",
+      "review_sha256": "77fd1387a1aaaaa1a59385a0dfb551e0b109f03b7e5350711dc457a1563d8951",
+      "concept_quality_score": 9.6,
+      "panels_actually_inspected": [
+        "front",
+        "right",
+        "rear",
+        "left",
+        "three-quarter",
+        "at-work"
+      ],
+      "mandatory_concept_checks_pass": true
+    },
+    {
+      "world": 7,
+      "vehicle": "Marsh Skiff",
+      "candidate_path": "Docs/Design/WorldVehicles/2026-11-27/renders/w07-marsh-skiff-r1.png",
+      "candidate_sha256": "0889ae8cde9e8fb905662e1c36e70d918f1009311849f401dca31800e104d491",
+      "review_path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w07-marsh-skiff-r1-review.json",
+      "review_sha256": "76b4c3a07495bc3ce26a2c32bb38fb800fce949452b8e6d91a366991973cb6d4",
+      "concept_quality_score": 9.8,
+      "panels_actually_inspected": [
+        "front",
+        "right",
+        "rear",
+        "left",
+        "three-quarter",
+        "at-work"
+      ],
+      "mandatory_concept_checks_pass": true
+    },
+    {
+      "world": 8,
+      "vehicle": "Ruin Reclaimer",
+      "candidate_path": "Docs/Design/WorldVehicles/2026-11-27/renders/w08-ruin-reclaimer-r2.png",
+      "candidate_sha256": "5622fe4f35462300373700997482c9fb624919f284ff7e236de5a2d427f4f0b6",
+      "review_path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w08-ruin-reclaimer-r2-review.json",
+      "review_sha256": "69c2ef253fd18310b34b259710f411923f2c66d4363c6f84fc7e2a72d01c856f",
+      "concept_quality_score": 9.8,
+      "panels_actually_inspected": [
+        "front",
+        "right",
+        "rear",
+        "left",
+        "three-quarter",
+        "at-work"
+      ],
+      "mandatory_concept_checks_pass": true
+    },
+    {
+      "world": 9,
+      "vehicle": "Mine Mole",
+      "candidate_path": "Docs/Design/WorldVehicles/2026-11-27/renders/w09-mine-mole-r1.png",
+      "candidate_sha256": "c5e07906eabbfefd87051013259337f288099b9e4e719be9d58f198a1c354497",
+      "review_path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w09-mine-mole-r1-adaptation-review.json",
+      "review_sha256": "8b0d283fe465f8442d5a9931c25cd5f209b6e65af350cf95656a9f68503df070",
+      "concept_quality_score": 9.7,
+      "panels_actually_inspected": [
+        "front",
+        "right",
+        "rear",
+        "left",
+        "three-quarter",
+        "at-work"
+      ],
+      "mandatory_concept_checks_pass": true
+    },
+    {
+      "world": 10,
+      "vehicle": "Relay Rover",
+      "candidate_path": "Docs/Design/WorldVehicles/2026-11-27/renders/w10-relay-rover-r2.png",
+      "candidate_sha256": "227c277f7cd2b28d1ef5acd473324d2ff1063f370d30ae7465de92d58d4c78ac",
+      "review_path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w10-relay-rover-r2-review.json",
+      "review_sha256": "c7cbdda198556a224475cbbd325c6f4487d283d08b337bbda8e1d5953c31bf40",
+      "concept_quality_score": 9.6,
+      "panels_actually_inspected": [
+        "front",
+        "right",
+        "rear",
+        "left",
+        "three-quarter",
+        "at-work"
+      ],
+      "mandatory_concept_checks_pass": true
+    }
+  ],
+  "material_and_fuel_decisions_checked": [
+    "metal stays the saved ore key; no duplicate iron_ore grant or silent raw-bundle rescaling.",
+    "The producer chain is authored attainable in World1 before a new truck quote; no first-truck dependency on travel to World3.",
+    "New full tanks are paid allocations from the bill. Existing vehicles and older accepted quotes get no free newly invented fuel and no retroactive bill.",
+    "Ordinary cargo unloads all-or-hold; operational tank stays aboard. Outside destruction loses both current cargo and remaining tank fuel.",
+    "Fractional inside fuel estates stay separate from ordinary salvage, so paid replacement is possible before recovering fuel into its tank.",
+    "World10 portable objective serials require one active instance, paid same-objective replacement and one-install tombstones; no protected-cargo loss exception or free replacement is claimed. Exact replacement costs/lifecycle remain pending."
+  ],
+  "explicit_pending_integration_gates": [
+    "Actual Build14 catalogue, generic typed inventory, price formatting and atomic full-world migration, including partial contributions and in-flight production.",
+    "Outside oil/ore/coal sources, replenishment, real producer construction and input/output escrow, source contacts and manually reachable recovery routes.",
+    "Authoritative active clock and physical once-only grant application to driving/tools; controls, safe stop, driver exit, contact eligibility and deliberate hostile defense inside camp.",
+    "Native meshes, full tool/action/turning cycles, normal gameplay-camera references, garage/door/route/rail/water/heat/installation clearances and stability.",
+    "Whole-world garage, warehouse, furnace and vehicle destruction/rebuild, exact cargo/driver recovery, blocked/resumed actions and durable save transactions.",
+    "World10 portable serialized module loss, paid replacement bill/feasibility, worksite repair, interrupted lift and one-install lifecycle tests.",
+    "Measured economy/fuel balance, audio listening and physical target-device performance.",
+    "All stronger final reference, exact-10 visual/motion, integration and shipping gates."
+  ],
+  "native_scene_integration_approved": false,
+  "whole_game_complete": false,
+  "whole_game_score": null,
+  "reference_sensitive_production_approved": false,
+  "shipping_approved": false,
+  "historical_boundary": "Old freezes and approvals bind their original commits. Authorized current native/navigation extensions are newly reviewed; old source bytes remain in history, and dated original packets/rejected evidence are unchanged. Existing historical raw stdout formatting remains byte-exact rather than rewritten.",
+  "review_bindings": {
+    "Docs/Design/WorldVehicles/2026-11-27/reviews/FINAL_CONCEPT_REVIEW.json": "65b568c348e494a62e7d7dddef682a00c84369d1e7eb1bfab65f9be4ebbb20ad",
+    "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/NATIVE_R2_REVIEW.json": "8a223803c5cea6f8d4e4f05a823b8322e52339a99964340001ed8e3a1c4c3ba0",
+    "Docs/Production/VehicleEconomy/2026-11-27/evidence/secondary-economy-review/SECONDARY_ECONOMY_REVIEW.json": "26f83fb081f054d1b3bbb703b436aaaf3ab05226e182f084fe01a92a7dc31880",
+    "Docs/Production/VehicleEconomy/2026-11-27/ACCEPTANCE.md": "e4939818f00b3678818978297fa1ce2e92071ac51df18a74b307919326a563be",
+    "Docs/Production/VehicleEconomy/2026-11-27/RESOURCE_CHAINS.json": "75400530bc38b937a697d0a88091c0c60373b8b94913a3c818083af7e68cf555",
+    "Docs/Production/VehicleEconomy/2026-11-27/WORLD_VEHICLES.json": "7a4441c1a4149d89ab61a15cfcd88c16e64c2e74133df5940138f3b5e6cfc7f7",
+    "Docs/Production/VehicleEconomy/2026-11-27/SOURCE_AUDIT.json": "87b6db3319cf87b8ae15fc205392644c3940cafe8487a6e79346aebc7462a168",
+    "Docs/Production/VehicleEconomy/2026-11-27/FACTUAL_SOURCES.md": "1bf62bf7242a240fe07ee3e436927bbf034e223044c2730e6f32aee2435032b2"
+  },
+  "raw_final_identity_verification": {
+    "freeze_sha256": "1732f0b4d19fac7c3cc274478b3d248620d698a3735d438206a8a821a84f14ba",
+    "frozen_count": 205,
+    "unique_paths": 205,
+    "failures": [],
+    "checks": [
+      {
+        "path": "AGENTS.md",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "BUILD_GAME.md",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/SnowTruckGarage/2026-11-27/selected/snow-truck-360.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/SnowTruckGarage/2026-11-27/selected/snow-truck-garage-360.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/.gitattributes",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/ARTIFACT_MANIFEST.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/PROMPTS.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/README.md",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/REPAIR_PROMPTS_R2.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/REPAIR_PROMPTS_R3.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/renders/w02-timber-forwarder-r1.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/renders/w02-timber-forwarder-r2.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/renders/w03-canyon-breaker-r1.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/renders/w03-canyon-breaker-r2.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/renders/w03-canyon-breaker-r3.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/renders/w04-reef-salvager-r1.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/renders/w05-skybridge-carrier-r1.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/renders/w06-forge-hauler-r1.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/renders/w07-marsh-skiff-r1.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/renders/w08-ruin-reclaimer-r1.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/renders/w08-ruin-reclaimer-r2.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/renders/w09-mine-mole-r1.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/renders/w10-relay-rover-r1.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/renders/w10-relay-rover-r2.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/FINAL_CONCEPT_REVIEW.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/FINAL_CONCEPT_REVIEW.md",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/PROMPTS_R1_REVIEWED.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w02-timber-forwarder-r1-left.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w02-timber-forwarder-r1-right.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w02-timber-forwarder-r1-work.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w02-timber-forwarder-r2-right.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w03-canyon-breaker-r1-front.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w03-canyon-breaker-r1-threequarter.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w03-canyon-breaker-r1-work.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w03-canyon-breaker-r2-work.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w03-canyon-breaker-r3-work.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w04-reef-salvager-r1-rear.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w04-reef-salvager-r1-work.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w05-skybridge-carrier-r1-front-bogie.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w05-skybridge-carrier-r1-side-bogie.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w05-skybridge-carrier-r1-threequarter.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w05-skybridge-carrier-r1-work.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w06-forge-hauler-r1-cover.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w06-forge-hauler-r1-work.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w07-marsh-skiff-r1-stern.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w07-marsh-skiff-r1-work.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w08-ruin-reclaimer-r1-work.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w08-ruin-reclaimer-r2-work.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w09-mine-mole-r1-work.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w10-relay-rover-r1-side.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w10-relay-rover-r1-threequarter.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w10-relay-rover-r1-work.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w10-relay-rover-r2-work.png",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w02-timber-forwarder-r1-review.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w02-timber-forwarder-r1-review.md",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w02-timber-forwarder-r2-review.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w02-timber-forwarder-r2-review.md",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w03-canyon-breaker-r1-review.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w03-canyon-breaker-r1-review.md",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w03-canyon-breaker-r2-review.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w03-canyon-breaker-r2-review.md",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w03-canyon-breaker-r3-review.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w03-canyon-breaker-r3-review.md",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w04-reef-salvager-r1-review.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w04-reef-salvager-r1-review.md",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w05-skybridge-carrier-r1-review.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w05-skybridge-carrier-r1-review.md",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w06-forge-hauler-r1-review.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w06-forge-hauler-r1-review.md",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w07-marsh-skiff-r1-review.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w07-marsh-skiff-r1-review.md",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w08-ruin-reclaimer-r1-review.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w08-ruin-reclaimer-r1-review.md",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w08-ruin-reclaimer-r2-review.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w08-ruin-reclaimer-r2-review.md",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w09-mine-mole-r1-adaptation-review.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w09-mine-mole-r1-adaptation-review.md",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w09-mine-mole-r1-review.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w09-mine-mole-r1-review.md",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w10-relay-rover-r1-review.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w10-relay-rover-r1-review.md",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w10-relay-rover-r2-review.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/w10-relay-rover-r2-review.md",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/SNOW_TRUCK_GARAGE.md",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/SnowTruckGarage/2026-11-27/REQUIREMENTS.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VEHICLE_ECONOMY.md",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/ACCEPTANCE.md",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/ECONOMY_DESIGN.md",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/FACTUAL_SOURCES.md",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/RESOURCE_CHAINS.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/SOURCE_AUDIT.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/SOURCE_AUDIT.md",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/SUPERSESSION.md",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/WORLD_VEHICLES.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/economy_checks.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/NATIVE_R1_REJECTION.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/NATIVE_R1_REJECTION.md",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/NATIVE_R2_REVIEW.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/NATIVE_R2_REVIEW.md",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/critic-harness-diagnostic.stderr",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/critic-harness-diagnostic.stdout",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/factual-source-check.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/independent-fuel-r1-final.stderr",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/independent-fuel-r1-final.stdout",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/independent-fuel-r1-run.stderr",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/independent-fuel-r1-run.stdout",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/independent-fuel-r1.stderr",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/independent-fuel-r1.stdout",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/independent-fuel-result-r1.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/independent-fuel-result.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/independent_fuel_cases-r2-result.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/independent_fuel_cases-r2.stderr",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/independent_fuel_cases-r2.stdout",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/independent_fuel_cases.gd",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/initial-source-identity.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/legacy-regression-rerun-r1.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/multiply-small-oracle.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/native-results-rerun-r1.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/repaired-source-identity.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/run_all-r1.stderr",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/run_all-r1.stdout",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/run_all-r2-result.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/run_all-r2.stderr",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/run_all-r2.stdout",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/run_fuel_v2-r1.stderr",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/run_fuel_v2-r1.stdout",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/run_fuel_v2-r2-result.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/run_fuel_v2-r2.stderr",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/run_fuel_v2-r2.stdout",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/independent-review/source-audit-binding-check.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/secondary-economy-review/SECONDARY_ECONOMY_REVIEW-r2.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/secondary-economy-review/SECONDARY_ECONOMY_REVIEW.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/secondary-economy-review/independent_economy_probe.py",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/secondary-economy-review/secondary-economy-review-r1.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/secondary-economy-review/secondary-economy-review-r2.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/secondary-economy-review/secondary-economy-review-r3.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/evidence/secondary-economy-review/secondary-economy-review-r4.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/verify_economy.py",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "REPOSITORY_INDEX.md",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/README.md",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/independent-retest-r2/RETEST.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/independent-retest-r2/independent_fuel_cases-r2-result.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/independent-retest-r2/independent_fuel_cases-r2.stderr",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/independent-retest-r2/independent_fuel_cases-r2.stdout",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/independent-retest-r2/independent_fuel_cases.gd",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/independent-retest-r2/multiply-small-oracle.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/independent-retest-r2/repaired-source-identity.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/independent-retest-r2/reviewed-source-manifest.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/independent-retest-r2/run_all-r2-result.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/independent-retest-r2/run_all-r2.stderr",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/independent-retest-r2/run_all-r2.stdout",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/independent-retest-r2/run_fuel_v2-r2-result.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/independent-retest-r2/run_fuel_v2-r2.stderr",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/independent-retest-r2/run_fuel_v2-r2.stdout",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/legacy-regression-stderr.txt",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/legacy-regression-stdout.txt",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/legacy-regression.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/legacy-v1-provenance.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/legacy-v1-snapshot.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/native-results-stderr.txt",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/native-results-stdout.txt",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/native-results.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-fixture-r1-stderr.txt",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-fixture-r1-stdout.txt",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-fixture-r1.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-parse-r1-stderr.txt",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-parse-r1-stdout.txt",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-parse-r1.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-usage-identity-r1/REJECTION.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-usage-identity-r1/critic-original/independent-fuel-r1-final.stderr",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-usage-identity-r1/critic-original/independent-fuel-r1-final.stdout",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-usage-identity-r1/critic-original/independent-fuel-r1-run.stderr",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-usage-identity-r1/critic-original/independent-fuel-r1-run.stdout",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-usage-identity-r1/critic-original/independent-fuel-r1.stderr",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-usage-identity-r1/critic-original/independent-fuel-r1.stdout",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-usage-identity-r1/critic-original/independent-fuel-result-r1.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-usage-identity-r1/critic-original/independent_fuel_cases.gd",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-usage-identity-r1/critic-original/legacy-regression-rerun-r1.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-usage-identity-r1/critic-original/multiply-small-oracle.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-usage-identity-r1/critic-original/native-results-rerun-r1.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-usage-identity-r1/critic-original/run_all-r1.stderr",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-usage-identity-r1/critic-original/run_all-r1.stdout",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-usage-identity-r1/critic-original/run_fuel_v2-r1.stderr",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-usage-identity-r1/critic-original/run_fuel_v2-r1.stdout",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-usage-identity-r1/evidence/fuel-v2/legacy-regression-stderr.txt",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-usage-identity-r1/evidence/fuel-v2/legacy-regression-stdout.txt",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-usage-identity-r1/evidence/fuel-v2/legacy-regression.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-usage-identity-r1/evidence/fuel-v2/native-results-stderr.txt",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-usage-identity-r1/evidence/fuel-v2/native-results-stdout.txt",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-usage-identity-r1/evidence/fuel-v2/native-results.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-usage-identity-r1/evidence/fuel-v2/source-manifest.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-usage-identity-r1/exact_count.gd",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-usage-identity-r1/fuel_rules.gd",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-usage-identity-r1/tests/run_fuel_v2.gd",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-usage-identity-r1/vehicle_rules.gd",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/source-manifest.json",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/exact_count.gd",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/fuel_rules.gd",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/project.godot",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/tests/capture_legacy_fixture.gd",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/tests/run_all.gd",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/tests/run_fuel_v2.gd",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/tests/world_fixture.gd",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      },
+      {
+        "path": "tools/havenline/vehicle_rules/vehicle_rules.gd",
+        "sha256_matches": true,
+        "bytes_match": true,
+        "git_blob_matches": true,
+        "candidate_tree_matches": true
+      }
+    ]
+  },
+  "raw_final_binding_and_link_verification": {
+    "freeze_sha256": "1732f0b4d19fac7c3cc274478b3d248620d698a3735d438206a8a821a84f14ba",
+    "checks": {
+      "art_manifest_files": 78,
+      "selected_sheets": 9,
+      "selected_panels": 54,
+      "preserved_render_attempts": 14,
+      "secondary_economy_data_passed": 19,
+      "secondary_economy_negative_passed": 11,
+      "native_review_input_identities": 16,
+      "native_review_evidence_files": 14,
+      "all_frozen_markdown_local_links": 118,
+      "broken_links": 0,
+      "changed_staged_paths": 199,
+      "unfrozen_unexcluded_staged_paths": [],
+      "acceptance_rows": [
+        "VE01",
+        "VE02",
+        "VE03",
+        "VE04",
+        "VE05",
+        "VE06",
+        "VE07",
+        "VE08",
+        "VE09",
+        "VE10",
+        "VE11",
+        "VE12"
+      ],
+      "local_targets_absent_from_checkout": 16,
+      "sparse_targets_resolved_in_candidate_and_base": 16
+    },
+    "issues": [],
+    "all_frozen_links": [
+      {
+        "source": "BUILD_GAME.md",
+        "target": "Docs/Production/VEHICLE_ECONOMY.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "BUILD_GAME.md",
+        "target": "Docs/Production/REFERENCE_ACCEPTANCE_STANDARD.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "BUILD_GAME.md",
+        "target": "Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "BUILD_GAME.md",
+        "target": "Docs/Production/Completeness/2026-11-27/LATEST_SOURCE_DELTA.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "BUILD_GAME.md",
+        "target": "Docs/Production/TASK_PLAN_REFRESH_2026-11-27.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "BUILD_GAME.md",
+        "target": "Docs/Production/ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "BUILD_GAME.md",
+        "target": "Docs/Production/ReferenceRefresh/2026-11-27/RENDER_CATALOGUE.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "BUILD_GAME.md",
+        "target": "Docs/Production/ReferenceRefresh/2026-11-27/LATEST_BUILD_EVIDENCE.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "BUILD_GAME.md",
+        "target": "Docs/Production/COMPLETENESS_STANDARD.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "BUILD_GAME.md",
+        "target": "Docs/Production/WHOLE_GAME_COMPLETENESS.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "BUILD_GAME.md",
+        "target": "Docs/Production/Completeness/2026-11-27/TASK_COMPLETENESS_T01_T80.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "BUILD_GAME.md",
+        "target": "Docs/Production/GAMEPLAY_DEPTH_STANDARD.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "BUILD_GAME.md",
+        "target": "Docs/Production/GameplayDepth/2026-11-27/TASK_GAMEPLAY_DEPTH_T01_T80.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "BUILD_GAME.md",
+        "target": "Docs/Production/GameplayDepth/2026-11-27/README.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "BUILD_GAME.md",
+        "target": "Docs/Production/GameplayDepth/2026-11-27/CURRENT_BRANCH_NOTE.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "BUILD_GAME.md",
+        "target": "Docs/Production/CURRENT_GAMEPLAY_SOURCE.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "BUILD_GAME.md",
+        "target": "Docs/Production/HAVENLINE_BUILD_PLAN_V2.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "BUILD_GAME.md",
+        "target": "REPOSITORY_INDEX.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "BUILD_GAME.md",
+        "target": "HavenlineLevel1/README.md",
+        "exists": false,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "BUILD_GAME.md",
+        "target": "HavenlineLevel1/previews/integrated_opening.tscn",
+        "exists": false,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "BUILD_GAME.md",
+        "target": "HavenlineLevel1/README.md",
+        "exists": false,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "BUILD_GAME.md",
+        "target": "HavenlineLevel1/docs/ONE_CAMP_DESIGN.md",
+        "exists": false,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "BUILD_GAME.md",
+        "target": "Docs/RepositoryArchive/SOURCE_SNAPSHOT.json",
+        "exists": false,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "BUILD_GAME.md",
+        "target": "Docs/RepositoryArchive/MEDIA_CUSTODY.json",
+        "exists": false,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Design/WorldVehicles/2026-11-27/README.md",
+        "target": "../../../Production/VehicleEconomy/2026-11-27/ECONOMY_DESIGN.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Design/WorldVehicles/2026-11-27/README.md",
+        "target": "../../SnowTruckGarage/2026-11-27/selected/snow-truck-360.png",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Design/WorldVehicles/2026-11-27/README.md",
+        "target": "../../SnowTruckGarage/2026-11-27/selected/snow-truck-garage-360.png",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Design/WorldVehicles/2026-11-27/README.md",
+        "target": "renders/w02-timber-forwarder-r2.png",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Design/WorldVehicles/2026-11-27/README.md",
+        "target": "renders/w03-canyon-breaker-r3.png",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Design/WorldVehicles/2026-11-27/README.md",
+        "target": "renders/w04-reef-salvager-r1.png",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Design/WorldVehicles/2026-11-27/README.md",
+        "target": "renders/w05-skybridge-carrier-r1.png",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Design/WorldVehicles/2026-11-27/README.md",
+        "target": "renders/w06-forge-hauler-r1.png",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Design/WorldVehicles/2026-11-27/README.md",
+        "target": "renders/w07-marsh-skiff-r1.png",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Design/WorldVehicles/2026-11-27/README.md",
+        "target": "renders/w08-ruin-reclaimer-r2.png",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Design/WorldVehicles/2026-11-27/README.md",
+        "target": "renders/w09-mine-mole-r1.png",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Design/WorldVehicles/2026-11-27/README.md",
+        "target": "renders/w10-relay-rover-r2.png",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Design/WorldVehicles/2026-11-27/README.md",
+        "target": "renders/w02-timber-forwarder-r2.png",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Design/WorldVehicles/2026-11-27/README.md",
+        "target": "renders/w03-canyon-breaker-r3.png",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Design/WorldVehicles/2026-11-27/README.md",
+        "target": "renders/w04-reef-salvager-r1.png",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Design/WorldVehicles/2026-11-27/README.md",
+        "target": "renders/w05-skybridge-carrier-r1.png",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Design/WorldVehicles/2026-11-27/README.md",
+        "target": "renders/w06-forge-hauler-r1.png",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Design/WorldVehicles/2026-11-27/README.md",
+        "target": "renders/w07-marsh-skiff-r1.png",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Design/WorldVehicles/2026-11-27/README.md",
+        "target": "renders/w08-ruin-reclaimer-r2.png",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Design/WorldVehicles/2026-11-27/README.md",
+        "target": "renders/w09-mine-mole-r1.png",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Design/WorldVehicles/2026-11-27/README.md",
+        "target": "renders/w10-relay-rover-r2.png",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Design/WorldVehicles/2026-11-27/README.md",
+        "target": "reviews/FINAL_CONCEPT_REVIEW.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Design/WorldVehicles/2026-11-27/README.md",
+        "target": "PROMPTS.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Design/WorldVehicles/2026-11-27/README.md",
+        "target": "REPAIR_PROMPTS_R2.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Design/WorldVehicles/2026-11-27/README.md",
+        "target": "REPAIR_PROMPTS_R3.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Design/WorldVehicles/2026-11-27/README.md",
+        "target": "ARTIFACT_MANIFEST.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Production/SNOW_TRUCK_GARAGE.md",
+        "target": "VEHICLE_ECONOMY.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Production/SNOW_TRUCK_GARAGE.md",
+        "target": "SnowTruckGarage/2026-11-27/README.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Production/SNOW_TRUCK_GARAGE.md",
+        "target": "SnowTruckGarage/2026-11-27/REQUIREMENTS.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Production/SNOW_TRUCK_GARAGE.md",
+        "target": "SnowTruckGarage/2026-11-27/ACCEPTANCE.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Production/SNOW_TRUCK_GARAGE.md",
+        "target": "SnowTruckGarage/2026-11-27/TASK_OVERLAY.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Production/SNOW_TRUCK_GARAGE.md",
+        "target": "SnowTruckGarage/2026-11-27/INTEGRATION_MAP.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Production/SNOW_TRUCK_GARAGE.md",
+        "target": "SnowTruckGarage/2026-11-27/SOURCE_BINDINGS.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Production/SNOW_TRUCK_GARAGE.md",
+        "target": "SnowTruckGarage/2026-11-27/evidence/source_recovery.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Production/SNOW_TRUCK_GARAGE.md",
+        "target": "SnowTruckGarage/2026-11-27/CHECKPOINT.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Production/SNOW_TRUCK_GARAGE.md",
+        "target": "SnowTruckGarage/2026-11-27/OWNER_ACCEPTANCE.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Production/SNOW_TRUCK_GARAGE.md",
+        "target": "VEHICLE_ECONOMY.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Production/SNOW_TRUCK_GARAGE.md",
+        "target": "SnowTruckGarage/2026-11-27/INTEGRATION_MAP.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Production/VEHICLE_ECONOMY.md",
+        "target": "VehicleEconomy/2026-11-27/ECONOMY_DESIGN.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Production/VEHICLE_ECONOMY.md",
+        "target": "VehicleEconomy/2026-11-27/RESOURCE_CHAINS.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Production/VEHICLE_ECONOMY.md",
+        "target": "VehicleEconomy/2026-11-27/WORLD_VEHICLES.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Production/VEHICLE_ECONOMY.md",
+        "target": "../Design/WorldVehicles/2026-11-27/README.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Production/VEHICLE_ECONOMY.md",
+        "target": "SNOW_TRUCK_GARAGE.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Production/VEHICLE_ECONOMY.md",
+        "target": "VehicleEconomy/2026-11-27/ACCEPTANCE.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Production/VEHICLE_ECONOMY.md",
+        "target": "VehicleEconomy/2026-11-27/SUPERSESSION.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Production/VEHICLE_ECONOMY.md",
+        "target": "VehicleEconomy/2026-11-27/SOURCE_AUDIT.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Production/VEHICLE_ECONOMY.md",
+        "target": "VehicleEconomy/2026-11-27/FACTUAL_SOURCES.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Production/VEHICLE_ECONOMY.md",
+        "target": "VehicleEconomy/2026-11-27/CHECKPOINT.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Production/VEHICLE_ECONOMY.md",
+        "target": "../../tools/havenline/vehicle_rules/README.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Production/VehicleEconomy/2026-11-27/ECONOMY_DESIGN.md",
+        "target": "RESOURCE_CHAINS.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Production/VehicleEconomy/2026-11-27/ECONOMY_DESIGN.md",
+        "target": "WORLD_VEHICLES.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Production/VehicleEconomy/2026-11-27/ECONOMY_DESIGN.md",
+        "target": "SOURCE_AUDIT.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Production/VehicleEconomy/2026-11-27/ECONOMY_DESIGN.md",
+        "target": "SOURCE_AUDIT.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Production/VehicleEconomy/2026-11-27/ECONOMY_DESIGN.md",
+        "target": "SOURCE_AUDIT.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Production/VehicleEconomy/2026-11-27/ECONOMY_DESIGN.md",
+        "target": "SOURCE_AUDIT.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Production/VehicleEconomy/2026-11-27/ECONOMY_DESIGN.md",
+        "target": "evidence/economy_checks.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "Docs/Production/VehicleEconomy/2026-11-27/SOURCE_AUDIT.md",
+        "target": "SOURCE_AUDIT.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/VEHICLE_ECONOMY.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/REFERENCE_ACCEPTANCE_STANDARD.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/Completeness/2026-11-27/LATEST_SOURCE_DELTA.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/TASK_PLAN_REFRESH_2026-11-27.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/ReferenceRefresh/2026-11-27/RENDER_CATALOGUE.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/ReferenceRefresh/2026-11-27/LATEST_BUILD_EVIDENCE.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/COMPLETENESS_STANDARD.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/WHOLE_GAME_COMPLETENESS.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/Completeness/2026-11-27/TASK_COMPLETENESS_T01_T80.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/Completeness/2026-11-27/PROGRESSION_ECONOMY_GAPS.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/Completeness/2026-11-27/ACTORS_COMBAT_GAPS.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/GAMEPLAY_DEPTH_STANDARD.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/GAMEPLAY_DEPTH_CONTRACT.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/GameplayDepth/2026-11-27/TASK_GAMEPLAY_DEPTH_T01_T80.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/GameplayDepth/2026-11-27/README.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/GameplayDepth/2026-11-27/CURRENT_BRANCH_NOTE.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/CURRENT_GAMEPLAY_SOURCE.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "HavenlineLevel1/README.md",
+        "exists": false,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "HavenlineLevel1/docs/ONE_CAMP_DESIGN.md",
+        "exists": false,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/HAVENLINE_BUILD_PLAN_V2.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/RepositoryArchive/Plans/TASK_CUSTODY_T01_T80.md",
+        "exists": false,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/WORKSTREAM_REGISTRY.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/DEPENDENCY_GRAPH.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/PATH_OWNERSHIP.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/APPROVAL_INVALIDATIONS.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Production/REFERENCE_STYLE_LOCK.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Design/ReferenceVideoLock/REFERENCE_VIDEO_LOCK.md",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Design/ReferenceVideoLock/reference-video-sources.json",
+        "exists": true,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/RepositoryArchive/Plans/REFERENCE_CUSTODY.md",
+        "exists": false,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/RepositoryArchive/Plans/README.md",
+        "exists": false,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Opening-Recovery/README.md",
+        "exists": false,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Design/ResourceTurnarounds/",
+        "exists": false,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Design/RenderArchive/",
+        "exists": false,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Design/InvaderTurnarounds/",
+        "exists": false,
+        "exists_in_reviewed_repository": true
+      },
+      {
+        "source": "REPOSITORY_INDEX.md",
+        "target": "Docs/Design/CharacterTurnarounds/",
+        "exists": false,
+        "exists_in_reviewed_repository": true
+      }
+    ],
+    "initial_checkout_only_scan_issues": [
+      "markdown_link:BUILD_GAME.md->HavenlineLevel1/README.md",
+      "markdown_link:BUILD_GAME.md->HavenlineLevel1/previews/integrated_opening.tscn",
+      "markdown_link:BUILD_GAME.md->HavenlineLevel1/README.md",
+      "markdown_link:BUILD_GAME.md->HavenlineLevel1/docs/ONE_CAMP_DESIGN.md",
+      "markdown_link:BUILD_GAME.md->Docs/RepositoryArchive/SOURCE_SNAPSHOT.json",
+      "markdown_link:BUILD_GAME.md->Docs/RepositoryArchive/MEDIA_CUSTODY.json",
+      "markdown_link:REPOSITORY_INDEX.md->HavenlineLevel1/README.md",
+      "markdown_link:REPOSITORY_INDEX.md->HavenlineLevel1/docs/ONE_CAMP_DESIGN.md",
+      "markdown_link:REPOSITORY_INDEX.md->Docs/RepositoryArchive/Plans/TASK_CUSTODY_T01_T80.md",
+      "markdown_link:REPOSITORY_INDEX.md->Docs/RepositoryArchive/Plans/REFERENCE_CUSTODY.md",
+      "markdown_link:REPOSITORY_INDEX.md->Docs/RepositoryArchive/Plans/README.md",
+      "markdown_link:REPOSITORY_INDEX.md->Docs/Opening-Recovery/README.md",
+      "markdown_link:REPOSITORY_INDEX.md->Docs/Design/ResourceTurnarounds/",
+      "markdown_link:REPOSITORY_INDEX.md->Docs/Design/RenderArchive/",
+      "markdown_link:REPOSITORY_INDEX.md->Docs/Design/InvaderTurnarounds/",
+      "markdown_link:REPOSITORY_INDEX.md->Docs/Design/CharacterTurnarounds/"
+    ],
+    "sparse_checkout_resolution": {
+      "scope": "Resolve apparent missing checkout targets against exact candidate and published base Git trees",
+      "links": [
+        {
+          "source": "BUILD_GAME.md",
+          "target": "HavenlineLevel1/README.md",
+          "candidate_git_object_type": "blob",
+          "published_base_git_object_type": "blob"
+        },
+        {
+          "source": "BUILD_GAME.md",
+          "target": "HavenlineLevel1/previews/integrated_opening.tscn",
+          "candidate_git_object_type": "blob",
+          "published_base_git_object_type": "blob"
+        },
+        {
+          "source": "BUILD_GAME.md",
+          "target": "HavenlineLevel1/README.md",
+          "candidate_git_object_type": "blob",
+          "published_base_git_object_type": "blob"
+        },
+        {
+          "source": "BUILD_GAME.md",
+          "target": "HavenlineLevel1/docs/ONE_CAMP_DESIGN.md",
+          "candidate_git_object_type": "blob",
+          "published_base_git_object_type": "blob"
+        },
+        {
+          "source": "BUILD_GAME.md",
+          "target": "Docs/RepositoryArchive/SOURCE_SNAPSHOT.json",
+          "candidate_git_object_type": "blob",
+          "published_base_git_object_type": "blob"
+        },
+        {
+          "source": "BUILD_GAME.md",
+          "target": "Docs/RepositoryArchive/MEDIA_CUSTODY.json",
+          "candidate_git_object_type": "blob",
+          "published_base_git_object_type": "blob"
+        },
+        {
+          "source": "REPOSITORY_INDEX.md",
+          "target": "HavenlineLevel1/README.md",
+          "candidate_git_object_type": "blob",
+          "published_base_git_object_type": "blob"
+        },
+        {
+          "source": "REPOSITORY_INDEX.md",
+          "target": "HavenlineLevel1/docs/ONE_CAMP_DESIGN.md",
+          "candidate_git_object_type": "blob",
+          "published_base_git_object_type": "blob"
+        },
+        {
+          "source": "REPOSITORY_INDEX.md",
+          "target": "Docs/RepositoryArchive/Plans/TASK_CUSTODY_T01_T80.md",
+          "candidate_git_object_type": "blob",
+          "published_base_git_object_type": "blob"
+        },
+        {
+          "source": "REPOSITORY_INDEX.md",
+          "target": "Docs/RepositoryArchive/Plans/REFERENCE_CUSTODY.md",
+          "candidate_git_object_type": "blob",
+          "published_base_git_object_type": "blob"
+        },
+        {
+          "source": "REPOSITORY_INDEX.md",
+          "target": "Docs/RepositoryArchive/Plans/README.md",
+          "candidate_git_object_type": "blob",
+          "published_base_git_object_type": "blob"
+        },
+        {
+          "source": "REPOSITORY_INDEX.md",
+          "target": "Docs/Opening-Recovery/README.md",
+          "candidate_git_object_type": "blob",
+          "published_base_git_object_type": "blob"
+        },
+        {
+          "source": "REPOSITORY_INDEX.md",
+          "target": "Docs/Design/ResourceTurnarounds",
+          "candidate_git_object_type": "tree",
+          "published_base_git_object_type": "tree"
+        },
+        {
+          "source": "REPOSITORY_INDEX.md",
+          "target": "Docs/Design/RenderArchive",
+          "candidate_git_object_type": "tree",
+          "published_base_git_object_type": "tree"
+        },
+        {
+          "source": "REPOSITORY_INDEX.md",
+          "target": "Docs/Design/InvaderTurnarounds",
+          "candidate_git_object_type": "tree",
+          "published_base_git_object_type": "tree"
+        },
+        {
+          "source": "REPOSITORY_INDEX.md",
+          "target": "Docs/Design/CharacterTurnarounds",
+          "candidate_git_object_type": "tree",
+          "published_base_git_object_type": "tree"
+        }
+      ]
+    }
+  }
+}

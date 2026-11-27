@@ -1,0 +1,24 @@
+{
+  "tool": "built-in image_gen",
+  "reason": "Independent critic identified World2 cargo placement and World3 working chassis continuity errors; retain original PROMPTS.json and R1 images unchanged.",
+  "authored_adaptation": {
+    "world3_cab": "front-right as generated, accepted authored layout",
+    "world3_stabilizers": "four, one front and one rear per side"
+  },
+  "edits": [
+    {
+      "world": 2,
+      "revision": 2,
+      "file": "w02-timber-forwarder",
+      "target": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-vehicle-economy/Docs/Design/WorldVehicles/2026-11-27/renders/w02-timber-forwarder-r1.png",
+      "prompt": "Use case: precise-object-edit. Edit this existing HAVENLINE Timber Forwarder six-panel sheet. Keep the full page design, title, all typography, all six vehicle views, their camera positions, cabin, wheel count, orange crane, grapple and all backgrounds IDENTICAL. Make ONE local correction only in the top-middle panel labelled RIGHT: move the gray stone crate from the end adjacent to the cabin to the far REAR end of the load bunk, at the LEFT end of that panel. Place the three log lengths between that rear crate and the crane/cabin, toward the RIGHT. This corrects front/back load continuity with the unchanged LEFT and THREE-QUARTER panels, where the stone crate is already at the back. Preserve the other five panels completely. Do not add crates or logs, do not change the crane, do not redesign or mirror the vehicle. Deliver the entire corrected six-panel sheet at original proportions."
+    },
+    {
+      "world": 3,
+      "revision": 2,
+      "file": "w03-canyon-breaker",
+      "target": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-vehicle-economy/Docs/Design/WorldVehicles/2026-11-27/renders/w03-canyon-breaker-r1.png",
+      "prompt": "Use case: precise-object-edit. Correct ONLY the bottom-right AT WORK panel of this existing six-panel HAVENLINE Canyon Breaker concept sheet. Preserve all typography, page layout, colors, the five studio vehicle panels, and the basic canyon setting. The machine in AT WORK currently has its rear hopper moved ahead of its cabin: fix that structural error. Use exactly the SAME chassis/cab/hopper orientation and front-left oblique camera as the unchanged bottom-middle THREE-QUARTER view: the cab with sloping cyan windshield and orange front bumper occupies the LEFT/front end, and the dark navy ore hopper sits behind it at the RIGHT/rear end. Keep the two cream air filters and crane pivot in the same relative locations. Do not rotate the cab separately or mirror parts. In the repaired working view, unfold the SINGLE orange breaker arm forward, toward the LEFT, from its existing pivot so the steel chisel contacts an ore boulder just ahead of the front bumper at the LEFT edge of the panel. Hopper remains at RIGHT/rear throughout. Entire vehicle stays on firm sandstone, both tracks grounded. Deploy the two orange feet on the near track side to ground, one near front and one near rear; the far-side pair may be naturally occluded, four total stabilizer locations matching the studio orange mounts. Show a few small chips at chisel contact, no explosion. Working scene must visibly be the SAME vehicle as THREE-QUARTER, with only the arm and stabilizers articulated. Deliver complete sheet."
+    }
+  ]
+}

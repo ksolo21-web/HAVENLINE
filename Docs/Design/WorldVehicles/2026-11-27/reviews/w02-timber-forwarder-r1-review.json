@@ -1,0 +1,63 @@
+{
+  "reviewer": "/root/independent_critic",
+  "review_time_utc": "2026-11-27T17:44:06.566423+00:00",
+  "scope": "Independently inspected authored static six-view vehicle concept proposal only",
+  "method": "Actual full-sheet image viewing; meaningful detail crops as enumerated. No generated score or claimed pixel-similarity measurement.",
+  "source_contract": "Docs/Design/WorldVehicles/2026-11-27/PROMPTS.json",
+  "source_contract_sha256": "09412bb85ea9c2a5753362372002df5dce776b069edfd0454a667feb3cc1e20d",
+  "panels_inspected": [
+    "front",
+    "right",
+    "rear",
+    "left",
+    "three-quarter",
+    "at-work"
+  ],
+  "production_3d_motion_physics_runtime_approved": false,
+  "stronger_reference_gate": "Not a final reference-sensitive asset/integration approval. Existing >=9.9 and exact-10 production requirements remain active.",
+  "untested": [
+    "Native editable mesh and full 360 geometry",
+    "In-game scale/camera/collision and route clearance",
+    "Full tool motion cycles and load/contact transitions",
+    "Driving, fuel use, resource custody, combat, audio and device performance"
+  ],
+  "world": 2,
+  "candidate_path": "Docs/Design/WorldVehicles/2026-11-27/renders/w02-timber-forwarder-r1.png",
+  "candidate_sha256": "8993095a7f7c058784822fa5b93808216c9b163273435054e970b50734d71ef4",
+  "dimensions_px": [
+    1536,
+    1024
+  ],
+  "concept_quality_score": 9.1,
+  "disposition": "REPAIR_REQUESTED",
+  "mandatory_concept_checks_pass": false,
+  "observations": [
+    "All six named views are present, legible and uncropped. The two side profiles show three tires, matching the specified three-axle/six-wheel design.",
+    "One rounded blue cabin, one orange articulated crane, rear open log bunk, mixed load, grapple with guarded upper saw cassette, and grounded forest/lakeshore working state are visible.",
+    "At work the grapple holds a log above the bunk; this is an illustration of the intended action, not proof of grasp/contact animation."
+  ],
+  "defects": [
+    {
+      "id": "WV02-R1-01",
+      "severity": "minor_visual_continuity",
+      "status": "repair_requested",
+      "location": "RIGHT versus LEFT/THREE-QUARTER/AT WORK",
+      "finding": "The stone crate moves from immediately behind the cab in RIGHT to the far rear in LEFT, THREE-QUARTER and AT WORK. The cardinals therefore do not share the same representative travel load arrangement.",
+      "repair": "In RIGHT only, place the stone crate at the far rear/left and the logs between crate and cab, preserving chassis, crane and all other panels."
+    }
+  ],
+  "detail_evidence": [
+    {
+      "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w02-timber-forwarder-r1-right.png",
+      "sha256": "a84fc18b4e6400cdd8d57192ec8fb67af83d6639b699959a853ba173d6a41cca"
+    },
+    {
+      "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w02-timber-forwarder-r1-left.png",
+      "sha256": "16bdf415b38e617b69282583a308a4b2b8ba754e95a801b2a2dcd5d2c53a2eb5"
+    },
+    {
+      "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w02-timber-forwarder-r1-work.png",
+      "sha256": "8b44a66f0b368df7bae06062f8ea4905a12dab804a39a24c2ccf55b64134b8b3"
+    }
+  ]
+}

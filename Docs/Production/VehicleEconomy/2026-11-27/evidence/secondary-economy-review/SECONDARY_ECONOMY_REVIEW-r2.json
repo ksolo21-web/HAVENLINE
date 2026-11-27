@@ -1,0 +1,60 @@
+{
+  "reviewer": "/root/vehicle_gameplay",
+  "reviewed_builder": "/root/recover_plan",
+  "independence": "Separate agent. Reviewer did not author or repair RESOURCE_CHAINS, WORLD_VEHICLES or verify_economy; repairs were returned to their owner.",
+  "scope": "Material recipe/catalogue/producer dependency and exact batch arithmetic; validator negative cases. No gameplay, balance, art, motion, sound or device approval.",
+  "input_sha256": {
+    "RESOURCE_CHAINS.json": "8e0e675ea658b85c30a40271f21e40c6e1db6459f606c5f434496d0965cb7fd9",
+    "WORLD_VEHICLES.json": "4563c998f6567e40670711ae413eb1e68942f58cd63fd572eb2f7ad6540a2da0",
+    "verify_economy.py": "1980d02bd6ef4f2719b5d6c6480ecfc03d194974768d363a50eeb909ade9355a"
+  },
+  "score": 10,
+  "mandatory_current_data_checks": {
+    "passed": 19,
+    "required": 19
+  },
+  "mandatory_invalid_data_rejections": {
+    "passed": 11,
+    "required": 11
+  },
+  "unresolved_scoped_defects": [],
+  "repaired_finding": "Misclassified world vehicle profile skipped funded initial tank validation. Builder added kind/binding gates; same mutation now rejects.",
+  "evidence": [
+    "secondary-economy-review-r1.json",
+    "secondary-economy-review-r2.json",
+    "independent_economy_probe.py"
+  ],
+  "independent_raw_subtotal": {
+    "wood": "216",
+    "stone": "206",
+    "metal": "472",
+    "coal": "290",
+    "crude_oil": "60"
+  },
+  "raw_subtotal_units": "Legacy ledger bundles for wood/stone/metal/coal, distinct abstract crude liquid units. Never sum these as mass or multiply saved counts by10.",
+  "runtime_read_only_findings": [
+    {
+      "commit": "ea6e4896cc6692ee84b56f89e127feaa606eb370",
+      "path": "HavenlineLevel1/field_inventory.gd",
+      "finding": "configure/payment/vehicle_repurchase/vehicle_pay_repair/_move_vehicle_goods still assume old raw or small product dictionaries. New processed costs and cargo require a coupled generic typed-custody/restore adaptation."
+    },
+    {
+      "commit": "ea6e4896cc6692ee84b56f89e127feaa606eb370",
+      "path": "HavenlineLevel1/field_progression.gd",
+      "finding": "price_text iterates eight fixed IDs and uses int plus raw display*10. New bars/sheets/fuel/component lines would be omitted; use catalogue denominations and exact decimal formatting."
+    },
+    {
+      "commit": "ea6e4896cc6692ee84b56f89e127feaa606eb370",
+      "path": "HavenlineLevel1/field_inventory.gd",
+      "finding": "vehicle_repurchase blocks on nonempty ordinary salvage. Do not apply that condition to separate fractional fuel estates: recovery into a live tank otherwise creates a replacement deadlock."
+    }
+  ],
+  "open_integration_requirements": [
+    "Actual renewable source quantities and routes",
+    "Producer physics/contact and full-world input escrow",
+    "Old partial contributions and catalogue/price migration",
+    "Finite World10 workpiece classification and portable-save preservation",
+    "No-fuel exit and reachable refinery recovery",
+    "Actual source-bound gameplay/balance/device evidence"
+  ]
+}

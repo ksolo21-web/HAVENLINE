@@ -1,0 +1,573 @@
+{
+  "schema_version": 1,
+  "captured_utc": "2026-11-27T17:43:53.299250+00:00",
+  "scope": "Read-only source/code/doc inspection, plus a separate authored recipe graph. No live game, 3D, media, audio or physical-device retest.",
+  "refs": {
+    "isolated_worktree_base": "201dcbe4fad5037a33bd619b59285a1ef91599d8",
+    "gameplay_branch": "trial/world-one-expansion-2026-11-26",
+    "gameplay_observed_head": "ea6e4896cc6692ee84b56f89e127feaa606eb370",
+    "planning_branch": "planning/build-13-audit",
+    "planning_observed_head": "5862b89c1663cacc0cbb84bfaba438d1459cfdb6"
+  },
+  "sources": [
+    {
+      "id": "live_raw_inventory",
+      "source_kind": "pinned_git_blob",
+      "commit": "ea6e4896cc6692ee84b56f89e127feaa606eb370",
+      "path": "HavenlineLevel1/field_inventory.gd",
+      "git_blob": "dd7ef843fe95d4c065baedfe8fc494e1b9a1ea15",
+      "sha256": "87a8465e3a166cb30c79ce1609039d9a41819df20360d8e6ebd9bd863bfee306",
+      "bytes": 20298,
+      "inspected_excerpts": [
+        {
+          "line": 16,
+          "text": "const KINDS := [\"wood\", \"stone\", \"meat\", \"coal\", \"slate\", \"metal\"]"
+        },
+        {
+          "line": 18,
+          "text": "const TITLES := {\"wood\":\"Wood\", \"stone\":\"Stone\", \"meat\":\"Meat\", \"coal\":\"Coal\", \"slate\":\"Slate\", \"metal\":\"Metal ore\"}"
+        },
+        {
+          "line": 94,
+          "text": "func vehicle_bank() -> bool:"
+        },
+        {
+          "line": 104,
+          "text": "func vehicle_wreck(is_inside: bool) -> bool:"
+        },
+        {
+          "line": 192,
+          "text": "static func _truck_quote_at_garage(order: Array) -> String:"
+        },
+        {
+          "line": 123,
+          "text": "func vehicle_repurchase() -> bool:"
+        },
+        {
+          "line": 126,
+          "text": "\tif not complete(OFFER) or vehicle.wreck == \"\" or not vehicle.salvage.is_empty(): return false"
+        },
+        {
+          "line": 137,
+          "text": "func vehicle_pay_repair(bill: Dictionary) -> bool:"
+        },
+        {
+          "line": 151,
+          "text": "func _move_vehicle_goods(kind: String, amount: int, warehouse: bool) -> void:"
+        }
+      ]
+    },
+    {
+      "id": "live_progression",
+      "source_kind": "pinned_git_blob",
+      "commit": "ea6e4896cc6692ee84b56f89e127feaa606eb370",
+      "path": "HavenlineLevel1/field_progression.gd",
+      "git_blob": "3a63ef755a1a137c3d7d4f23c7e67247aefea7cb",
+      "sha256": "f1f831a2b2efbdcb819d43513922ab05cbc08c902256808c42c69b9176d2005e",
+      "bytes": 4569,
+      "inspected_excerpts": [
+        {
+          "line": 39,
+          "text": "const UNITS_PER_BUNDLE := 10"
+        },
+        {
+          "line": 55,
+          "text": "\treturn bundles * UNITS_PER_BUNDLE"
+        },
+        {
+          "line": 50,
+          "text": "\t\"snow_garage\":{\"planks\":24,\"blocks\":20},"
+        },
+        {
+          "line": 51,
+          "text": "\t\"snow_truck\":{\"wood\":44,\"stone\":34,\"metal\":24,\"coal\":12}"
+        },
+        {
+          "line": 47,
+          "text": "\t\"camp_cooker\":{\"wood\":12,\"stone\":8}, \"saw_bench\":{\"wood\":14,\"stone\":6}, \"quarry_drill\":{\"wood\":10,\"stone\":12},"
+        },
+        {
+          "line": 72,
+          "text": "static func price_text(remaining: Dictionary) -> String:"
+        },
+        {
+          "line": 74,
+          "text": "\tfor kind in [\"wood\",\"stone\",\"meat\",\"coal\",\"slate\",\"metal\",\"planks\",\"blocks\"]:"
+        },
+        {
+          "line": 75,
+          "text": "\t\tvar quantity := int(remaining.get(kind,0))"
+        },
+        {
+          "line": 77,
+          "text": "\t\tvar displayed:int = quantity if kind in [\"planks\",\"blocks\"] else units(quantity)"
+        }
+      ]
+    },
+    {
+      "id": "live_typed_cargo",
+      "source_kind": "pinned_git_blob",
+      "commit": "ea6e4896cc6692ee84b56f89e127feaa606eb370",
+      "path": "HavenlineLevel1/field_settlement.gd",
+      "git_blob": "534ff141743ac4be402f2498423fc11eebb648e9",
+      "sha256": "0b56266a95e175131e84ce1927a1caee13b9613b7348ba07bad6582c5ff8b992",
+      "bytes": 14562,
+      "inspected_excerpts": [
+        {
+          "line": 20,
+          "text": "const CARGO_KINDS := [\"wood\",\"stone\",\"meat\",\"coal\",\"slate\",\"metal\",\"planks\",\"blocks\",\"meal\",\"money\"]"
+        },
+        {
+          "line": 21,
+          "text": "const VEHICLE := {\"hp\":0,\"park\":[],\"wreck\":\"\",\"cargo\":{},\"salvage\":{},\"lost\":{},\"spent\":{},\"purchases\":0}"
+        },
+        {
+          "line": 19,
+          "text": "const HAND_PRODUCTS := {\"planks\":0,\"blocks\":0}"
+        },
+        {
+          "line": 98,
+          "text": "# Version 10 had neither vehicle and casualty state nor a typed customer ledger."
+        }
+      ]
+    },
+    {
+      "id": "live_resource_nodes",
+      "source_kind": "pinned_git_blob",
+      "commit": "ea6e4896cc6692ee84b56f89e127feaa606eb370",
+      "path": "HavenlineLevel1/mining_resources.gd",
+      "git_blob": "4fdb2db0c1ebb04f1304cb4ca473b417989fd0e7",
+      "sha256": "f854eb0f6b78b00a54c52e7d56be1d176a375ccd419b898f3bbcfcd35b6cbee2",
+      "bytes": 462,
+      "inspected_excerpts": [
+        {
+          "line": 3,
+          "text": "const KINDS := [\"stone\", \"metal\", \"coal\", \"slate\"]"
+        },
+        {
+          "line": 4,
+          "text": "const REGROW_SECONDS := 5.0"
+        },
+        {
+          "line": 2,
+          "text": "## Natural deposits in the playable World One field. Steel is a processed ingot."
+        }
+      ]
+    },
+    {
+      "id": "live_workshop_ratio",
+      "source_kind": "pinned_git_blob",
+      "commit": "ea6e4896cc6692ee84b56f89e127feaa606eb370",
+      "path": "HavenlineLevel1/field_settlement_loop.gd",
+      "git_blob": "cd759ee38bb6ba8e06dc2194c86ac3689e3b8ef7",
+      "sha256": "312c70bdf2f0a1307463f8bfb78a63c635778782c5800261f6a12af166d6c83e",
+      "bytes": 23902,
+      "inspected_excerpts": [
+        {
+          "line": 202,
+          "text": "func _finish_cycle(kind: String) -> bool:"
+        },
+        {
+          "line": 206,
+          "text": "\tjournal.hoppers[kind] -= 1"
+        },
+        {
+          "line": 210,
+          "text": "\tjournal[\"processed_\"+kind] += 1"
+        }
+      ]
+    },
+    {
+      "id": "live_vehicle_controls",
+      "source_kind": "pinned_git_blob",
+      "commit": "ea6e4896cc6692ee84b56f89e127feaa606eb370",
+      "path": "HavenlineLevel1/field_snow_truck.gd",
+      "git_blob": "32909d288444e8a9733658773761651688c72b28",
+      "sha256": "c91375025ee29cfcc93ba37fdef1727ac00eecadb80a7c83cf5c5452f57518f7",
+      "bytes": 23547,
+      "inspected_excerpts": [
+        {
+          "line": 376,
+          "text": "func drive(input:Vector2,dt:float) -> void:"
+        },
+        {
+          "line": 421,
+          "text": "\tif requested and not _touches_camp():"
+        },
+        {
+          "line": 323,
+          "text": "func _hull_inside(test: Callable) -> bool:"
+        },
+        {
+          "line": 331,
+          "text": "\treturn _hull_inside(func(point:Vector3):"
+        },
+        {
+          "line": 476,
+          "text": "\t\tvar inside: bool = _hull_inside(func(point:Vector3): return world.field_env.is_inside_camp(point))"
+        },
+        {
+          "line": 541,
+          "text": "\t\tif world.inventory.vehicle_bank() and _commit():"
+        }
+      ]
+    },
+    {
+      "id": "build14_claims",
+      "source_kind": "pinned_git_blob",
+      "commit": "ea6e4896cc6692ee84b56f89e127feaa606eb370",
+      "path": "Docs/QA/Snow-Truck-2026-11-27/README.md",
+      "git_blob": "b2fcd010e065de188560c95235b3d04ad28c974a",
+      "sha256": "659e12891bdd3c9366a694d6a5288387aefc956885db97b8e9f2ccc28313b5fd",
+      "bytes": 3495,
+      "inspected_excerpts": [
+        {
+          "line": 1,
+          "text": "# Havenline Build 14 \u00b7 Snow truck playtest"
+        },
+        {
+          "line": 19,
+          "text": "This test still has limited destruction coverage. The garage, storehouse, counter, and some fence sections are outside that coverage. Progression-dependent plot pricing in this build applies to the truck. The gameplay evidence uses Godot on desktop at narrow and nearly square screen sizes. A physical Galaxy Z Fold 7 run remains open."
+        },
+        {
+          "line": 19,
+          "text": "This test still has limited destruction coverage. The garage, storehouse, counter, and some fence sections are outside that coverage. Progression-dependent plot pricing in this build applies to the truck. The gameplay evidence uses Godot on desktop at narrow and nearly square screen sizes. A physical Galaxy Z Fold 7 run remains open."
+        },
+        {
+          "line": 23,
+          "text": "The independent gameplay review scored the truck 9.6/10, garage 9.5/10, and vehicle controls and status 9.6/10. The camera-facing garage timber remains dark under some lighting. [Independent review](Review/Independent-review.md)"
+        },
+        {
+          "line": 25,
+          "text": "The package uses the same Android application ID and signing certificate as Build 13. The exact packaged game replayed all 34 truck assertions. Three prior camp layouts were exercised through Build 13, the updated package, and a cold restart. All eleven focused native suites passed across twelve runs, including moving the cooker and counter, handoff to the moved cooker, and reloading those purchases. [Package verification](Verification/Android.json) \u00b7 [Returning saves](Verification/Signed-returning-camps.json) \u00b7 [Native suites](Verification/Native/Focused-native-results.json)"
+        }
+      ]
+    },
+    {
+      "id": "world_progression",
+      "source_kind": "pinned_git_blob",
+      "commit": "5862b89c1663cacc0cbb84bfaba438d1459cfdb6",
+      "path": "Docs/Production/Build13Audit/World-Progression.md",
+      "git_blob": "50f385143944833d9108da781c0058ed5ee9908a",
+      "sha256": "da9fb8290506cd0913dcd914e6f52f3c647dcad60089ac92f31057af618dca5e",
+      "bytes": 14295,
+      "inspected_excerpts": [
+        {
+          "line": 5,
+          "text": "## World 1 \u00b7 Proposed progression"
+        },
+        {
+          "line": 17,
+          "text": "## World 1 snow truck and garage"
+        },
+        {
+          "line": 52,
+          "text": "## Worlds and future updates"
+        },
+        {
+          "line": 60,
+          "text": "| **3 \u00b7 Desert Canyons** \u00b7 T45 | **21\u201330** | Canyon slate and metal ore, a steel workshop supplied by ore and coal, sheltered work gear and reinforced freight landings. Slate and planks build shade and weatherproof work lanes. | Exposed crossings and telegraphed dust gusts. Use shade, switchbacks and fixed bridges. Open the **underwater expedition dock at 30**. |"
+        },
+        {
+          "line": 61,
+          "text": "| **4 \u00b7 Underwater Refuges** \u00b7 T46 | **31\u201340** | Fish, cooked-fish supply, and marked metal and fuel salvage. Build reach and lifting gear, restore pumps and reopen dry loading halls using planks, blocks and steel. | Currents and blocked underwater approaches change which routes are usable. Protected tunnels, dry platforms and fixed transport give people, pets and freight practical access. Open the **highland lift at 40**. |"
+        },
+        {
+          "line": 67,
+          "text": "| **10 \u00b7 Alien Frontier** \u00b7 T52 | **91\u2013100** | Finite relay components, restored relay stations and the final network connection. Supply the frontier with food, planks, blocks and steel from the existing network. | Volatile relay states and hostile disruption require staged repairs and secure return points. **Level 100 completes the network and celebrates the campaign finish.** Exploration, trade and production continue afterward. |"
+        },
+        {
+          "line": 19,
+          "text": "**Owner requirements.** The player builds a garage first. Its door replaces a fence section, opening a wide route between the camp and the field. After the garage is usable, a separate plot inside camp offers the snow truck for a substantial amount of obtainable World 1 resources. The player drives it. Its low horizontal blades damage eligible enemies, cut trees, and break stone and other mineable rock nodes. The truck has its own HP and can hold an unlimited amount of every resource type. Parking it inside the garage automatically transfers cargo to the storage house. If the truck is destroyed outside the camp, all cargo still held by the truck is lost. If the truck is destroyed inside camp, the remaining cargo stays recoverable from the wreck and can be hauled to the warehouse."
+        },
+        {
+          "line": 23,
+          "text": "- The closed garage door blocks enemies and follows camp-gate repair rules. The truck blades switch off inside camp."
+        },
+        {
+          "line": 36,
+          "text": "| Buy and leave camp | The garage is paid and complete before the truck offer is usable. Entry and exit work from different approaches. The garage door stays solid when closed, ordinary gates stay usable, and the blades are inactive inside. |"
+        },
+        {
+          "line": 25,
+          "text": "- Parking starts the warehouse transfer. If the warehouse is full or unavailable, cargo it cannot receive stays aboard. Use a separate cargo ledger and update both the truck and warehouse together. Transfers and destruction outcomes settle once across save and reload."
+        },
+        {
+          "line": 38,
+          "text": "| Return fully loaded | Haul a large mixed load, park, and unload into a usable warehouse. Repeat with a full destination, entry from another route, an interrupted unload and a reload. Every received unit settles once. |"
+        },
+        {
+          "line": 49,
+          "text": "- Keep the full five-minute raid warning and the separate cadence proposal. Test different threats and attack patterns as the camp grows. Check that ordinary play provides a viable path to recovery."
+        },
+        {
+          "line": 30,
+          "text": "- Apply the equipment repurchase rule at Level 1. Truck-specific driver recovery and fuel use are open. A wreck has to release the driver and leave a playable recovery route."
+        },
+        {
+          "line": 61,
+          "text": "| **4 \u00b7 Underwater Refuges** \u00b7 T46 | **31\u201340** | Fish, cooked-fish supply, and marked metal and fuel salvage. Build reach and lifting gear, restore pumps and reopen dry loading halls using planks, blocks and steel. | Currents and blocked underwater approaches change which routes are usable. Protected tunnels, dry platforms and fixed transport give people, pets and freight practical access. Open the **highland lift at 40**. |"
+        }
+      ]
+    },
+    {
+      "id": "published_truck_contract",
+      "source_kind": "pinned_git_blob",
+      "commit": "201dcbe4fad5037a33bd619b59285a1ef91599d8",
+      "path": "Docs/Production/SnowTruckGarage/2026-11-27/README.md",
+      "git_blob": "c8c8aaf38880368ca624dca669da22ba707f49fb",
+      "sha256": "664abef9d7c50683dd8bc7df230d90b4a03ab6bf5e81b679deb40a6a661624e6",
+      "bytes": 22613,
+      "inspected_excerpts": [
+        {
+          "line": 26,
+          "text": "| Selected closure rules in this package | Full-footprint docking, safe camp travel with deliberate hostile-defense exceptions, blades stopped for docking/service/unload, whole-cargo-or-hold transfer, exact typed custody, serialized unload/destruction, inside-camp wreck salvage, separate player recovery, generation-bound replacement, maintained two pedestrian openings, no new fuel requirement. These are authored decisions, not claims extracted from footage. |"
+        },
+        {
+          "line": 101,
+          "text": "No fuel meter, fuel consumption, refuelling wait, energy limit or premium replacement shortcut is introduced. If a later fuel proposal is made, its resource use, HUD, recovery and balance must be explicitly reviewed; the current request does not settle it."
+        },
+        {
+          "line": 25,
+          "text": "| Explicit user requirements | Player driving; low horizontal blades for enemies, trees and mineable rocks; substantial relevant resource cost; completed garage before truck offer; truck purchase plot inside camp; garage door in fence line; all-resource unlimited cargo; HP; loss of remaining cargo when destroyed outside camp; garage-to-storage transfer; 360-degree truck and garage concepts. |"
+        },
+        {
+          "line": 33,
+          "text": "The truck offer remains unavailable until the correct garage generation is paid, complete, physically usable and linked to an existing storage house. Its separate in-camp plot uses a substantial bill selected from registered relevant materials. Existing `metal` means metal ore in the observed game; it must not be silently renamed to steel. `steel` may be used only after the catalogue contains a usable, obtainable steel producer and all its inputs. The words engine, wheel, blade and panel describe model parts; this package creates no inventory item called \u201cparts,\u201d \u201cengine,\u201d \u201ctires\u201d or similar."
+        },
+        {
+          "line": 47,
+          "text": "Two distinct usable bidirectional pedestrian openings remain available. The garage cannot silently count as a replacement for both or block them when its door is closed, a truck is parked or a queue forms. Workers, pets, customer approaches and driver exit points need real unobstructed paths. The garage connects to the inner camp circulation through its authored access; door and wall placement must match every selected view."
+        },
+        {
+          "line": 1,
+          "text": "# Snow truck and fence-line garage \u2014 practical feature specification"
+        },
+        {
+          "line": 15,
+          "text": "The garage is a substantial camp project. Its field-facing door occupies a chosen fence segment. The garage and parking bay sit inside the camp; the truck can leave and return through that broad opening while people retain their ordinary camp routes. Once the paid garage is complete and usable, a distinct purchase plot inside camp offers the truck with an exact, stable resource bill."
+        },
+        {
+          "line": 25,
+          "text": "| Explicit user requirements | Player driving; low horizontal blades for enemies, trees and mineable rocks; substantial relevant resource cost; completed garage before truck offer; truck purchase plot inside camp; garage door in fence line; all-resource unlimited cargo; HP; loss of remaining cargo when destroyed outside camp; garage-to-storage transfer; 360-degree truck and garage concepts. |"
+        },
+        {
+          "line": 26,
+          "text": "| Selected closure rules in this package | Full-footprint docking, safe camp travel with deliberate hostile-defense exceptions, blades stopped for docking/service/unload, whole-cargo-or-hold transfer, exact typed custody, serialized unload/destruction, inside-camp wreck salvage, separate player recovery, generation-bound replacement, maintained two pedestrian openings, no new fuel requirement. These are authored decisions, not claims extracted from footage. |"
+        },
+        {
+          "line": 59,
+          "text": "The blades remain horizontal near the underside. They stop for docking, servicing and unloading, and safe ordinary camp travel defaults to stopped blades. A deliberate eligible-hostile defense action may operate inside camp when actual clearance and target rules permit; entering camp is not a blanket loss of the truck's attack capability. Incidental contact never damages friendly actors or owned structures. Wherever the blades operate, their contact volume must match the visible blade assembly and full motion. Do not reuse an unrelated orbiting axe placeholder as the truck attack. The terrain, intact fence, closed gate or rock geometry blocks contact where appropriate."
+        },
+        {
+          "line": 15,
+          "text": "The garage is a substantial camp project. Its field-facing door occupies a chosen fence segment. The garage and parking bay sit inside the camp; the truck can leave and return through that broad opening while people retain their ordinary camp routes. Once the paid garage is complete and usable, a distinct purchase plot inside camp offers the truck with an exact, stable resource bill."
+        },
+        {
+          "line": 25,
+          "text": "| Explicit user requirements | Player driving; low horizontal blades for enemies, trees and mineable rocks; substantial relevant resource cost; completed garage before truck offer; truck purchase plot inside camp; garage door in fence line; all-resource unlimited cargo; HP; loss of remaining cargo when destroyed outside camp; garage-to-storage transfer; 360-degree truck and garage concepts. |"
+        },
+        {
+          "line": 59,
+          "text": "The blades remain horizontal near the underside. They stop for docking, servicing and unloading, and safe ordinary camp travel defaults to stopped blades. A deliberate eligible-hostile defense action may operate inside camp when actual clearance and target rules permit; entering camp is not a blanket loss of the truck's attack capability. Incidental contact never damages friendly actors or owned structures. Wherever the blades operate, their contact volume must match the visible blade assembly and full motion. Do not reuse an unrelated orbiting axe placeholder as the truck attack. The terrain, intact fence, closed gate or rock geometry blocks contact where appropriate."
+        }
+      ]
+    },
+    {
+      "id": "resource_registry",
+      "source_kind": "read_only_concurrent_worktree_bytes",
+      "absolute_path": "/workspace/scratch/e15437dc7c94/HAVENLINE-gameplay-rules/Docs/Production/RESOURCE_ACTION_REGISTRY.json",
+      "worktree_head_at_capture": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "sha256": "8e9feba3a92972b10ac7dc8589e43bd0f988c2981ffe0fcace2edb1100e3bd9d",
+      "bytes": 4578,
+      "content_is_commit_bound": false,
+      "selected_records": [
+        {
+          "top_level_keys": [
+            "schema_version",
+            "authority",
+            "rule",
+            "task_policy",
+            "placeholder_tokens",
+            "resources",
+            "future_resource_rule"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "u3_economy",
+      "source_kind": "read_only_concurrent_worktree_bytes",
+      "absolute_path": "/workspace/scratch/e15437dc7c94/HAVENLINE-gameplay-rules/Docs/Production/GameplayRules/2026-11-27/PROGRESSION_ECONOMY_GAPS.json",
+      "worktree_head_at_capture": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "sha256": "ea7fb8fc295d151883f4bc78db581d6ab7674a25ca7ec4f006ecfee0dabdabad",
+      "bytes": 247570,
+      "content_is_commit_bound": false,
+      "selected_records": [
+        {
+          "id": "metal",
+          "aliases": [
+            "metal_ore"
+          ],
+          "disposition": "SELECT_ORE_ID",
+          "source": "Registered ore mining.",
+          "primary_use": "Ore input to steel production.",
+          "visible_payoff": "A mechanical/tool/defense upgrade consumes the steel output.",
+          "surplus": "Show the workshop/project destination before first new ore source; preserve previously owned ore."
+        },
+        {
+          "id": "coal",
+          "disposition": "SELECT_DISTINCT_RAW",
+          "source": "Registered coal mining.",
+          "primary_use": "Consumed with ore in the authored steel recipe.",
+          "visible_payoff": "A complete smelting cycle and useful steel output.",
+          "surplus": "Forecast against steel demand; never require coal to revive or keep the basic hearth alive."
+        },
+        {
+          "id": "steel",
+          "disposition": "SELECT_NEW_PRODUCT_WHEN_CHAIN_INTRODUCED",
+          "source": "Authored metal ore + coal conversion; exact quantities measured.",
+          "primary_use": "Machine mounts, tool/weapon tiers, reinforced defenses, transport frames, appropriate repair bills and eligible processed customer baskets once its real chain/handling is authored.",
+          "visible_payoff": "Different working equipment and new protected routes, not just a higher stock number.",
+          "surplus": "Named projects, disclosed repair bills and eligible locked baskets drive demand; later upgrades must be earned again after equipment destruction."
+        },
+        {
+          "id": "fuel",
+          "disposition": "SELECT_DISTINCT_SALVAGE_WHEN_SOURCE_AVAILABLE",
+          "source": "Registered salvage caches and authored attainable resupply jobs.",
+          "primary_use": "Inputs for selected powered work or transport jobs; basic manual work and recovery remain available.",
+          "visible_payoff": "Useful motorized operation, with fuel visibly loaded and consumed.",
+          "surplus": "No permanent idle drain; no fuel-gated last recovery route; guarantee a free source before a required use."
+        },
+        {
+          "id": "relay_component",
+          "disposition": "FINITE_FINAL_REGION_PROJECT_OBJECT",
+          "source": "A named authored alien work source; required new action/asset evidence.",
+          "primary_use": "Complete the final relay connection under T52.",
+          "visible_payoff": "The relay and final network change visibly.",
+          "surplus": "Finite uniquely owned project components; stop issuing them once the associated objective is complete; no endless new currency."
+        }
+      ]
+    }
+  ],
+  "facts": [
+    {
+      "id": "S01",
+      "finding": "Newest observed gameplay is Build14 and already contains a driveable truck, input routing, physical movement/contact code, docking, outside loss, inside salvage and fixed garage-time quote selection. These paths were inspected, not executed in this source audit.",
+      "sources": [
+        "live_raw_inventory",
+        "live_vehicle_controls",
+        "build14_claims"
+      ]
+    },
+    {
+      "id": "S02",
+      "finding": "Live raw IDs remain wood, stone, meat, coal, slate, metal; metal display is Metal ore. No live iron_bars, sheet_metal, crude_oil or fuel balance exists in the fixed10-item truck cargo catalogue.",
+      "sources": [
+        "live_raw_inventory",
+        "live_typed_cargo"
+      ]
+    },
+    {
+      "id": "S03",
+      "finding": "One existing raw ledger count is a ten-unit physical bundle. One saw/quarry cycle consumes one bundle and produces one product count. Decimal migration must preserve that denomination.",
+      "sources": [
+        "live_progression",
+        "live_workshop_ratio"
+      ]
+    },
+    {
+      "id": "S04",
+      "finding": "Coal is a mined raw resource. Fuel was a distinct authored salvage resource; steel was an authored future processed output. No new metal/refinery chain is proven live by these sources.",
+      "sources": [
+        "live_resource_nodes",
+        "resource_registry",
+        "u3_economy"
+      ]
+    },
+    {
+      "id": "S05",
+      "finding": "T44\u2013T52 themes map to Forest/Lakeshore, Desert/Canyons, Underwater, Sky, Volcanic, Swamp, Ruins, Underground and Alien Frontier. Dry habitat routes, fixed bridges/lifts, no people on conveyors and finite relay project identity constrain new vehicles.",
+      "sources": [
+        "world_progression",
+        "u3_economy"
+      ]
+    },
+    {
+      "id": "S06",
+      "finding": "Build14 QA reports scoped9.5\u20139.6 review scores and outstanding physical Galaxy Z Fold7 evidence and destruction coverage. This audit did not replay its APK, videos, audio or assertions and grants no new approval.",
+      "sources": [
+        "build14_claims"
+      ]
+    },
+    {
+      "id": "S07",
+      "finding": "Build14 configure/payment/repurchase/repair/transfer/restore dispatch uses fixed raw and product dictionaries. vehicle_repurchase rejects nonempty ordinary salvage; price_text iterates eight IDs, casts to int and applies10x except planks/blocks. Integrating new processed/fuel costs requires coupled typed custody and denomination-aware exact display. Keep fractional fuel estate separate from ordinary-salvage repurchase gating to avoid requiring a live tank before permitting its replacement.",
+      "sources": [
+        "live_raw_inventory",
+        "live_typed_cargo",
+        "live_progression"
+      ]
+    }
+  ],
+  "conflicts": [
+    {
+      "id": "C01",
+      "conflict": "Audit and Build14 stop blades when touching camp; prior published selected feature permits deliberate eligible-hostile defense with safe default travel.",
+      "disposition": "Keep defense as selected integration requirement. Stop tools for docking/refuel/service, prohibit incidental friendly/owned-structure damage. Existing source gap stays explicit.",
+      "sources": [
+        "world_progression",
+        "live_vehicle_controls",
+        "published_truck_contract"
+      ]
+    },
+    {
+      "id": "C02",
+      "conflict": "Concurrent progression prose permits partial unload/full-store waiting; published feature requires automatic entire load transfer to all-resource unbounded warehouse, otherwise whole-load HOLD.",
+      "disposition": "Retain all-or-hold automatic transfer and any-resource unlimited cargo. Fixed live cargo IDs and world receiver binding need migration/integration.",
+      "sources": [
+        "world_progression",
+        "published_truck_contract",
+        "live_typed_cargo"
+      ]
+    },
+    {
+      "id": "C03",
+      "conflict": "Prior package introduced no fuel and concurrent audit leaves fuel open.",
+      "disposition": "Latest owner expansion explicitly selects low fuel consumption; this new version adds a funded tank and free-of-fuel bootstrap, without editing old frozen package or old payment obligations.",
+      "sources": [
+        "world_progression",
+        "published_truck_contract"
+      ]
+    },
+    {
+      "id": "C04",
+      "conflict": "Older authored steel route directly consumes ore+coal; owner now requests iron ore to bars to sheet.",
+      "disposition": "Add bars and sheet chain; keep steel as purposeful advanced bar+coal branch. Preserve original recipe versions for in-flight/owned state.",
+      "sources": [
+        "u3_economy"
+      ]
+    },
+    {
+      "id": "C05",
+      "conflict": "World progression local50/500-level proposal and older100-outcome contract are not yet reconciled.",
+      "disposition": "Use authentic region/task identity and capability-gated vehicles; commit no new level cap or numerical unlock. T71\u2013T80 remain undefined.",
+      "sources": [
+        "world_progression"
+      ]
+    },
+    {
+      "id": "C06",
+      "conflict": "Finite relay_component is identified as a project object but the source does not establish portable versus structural classification.",
+      "disposition": "Forward authored selection: portable serialized relay component matching the deck-carried/installation concept. Outside cargo loss applies. The associated restored worksite may create a paid next-generation replacement for the same proven-lost uninstalled objective serial, using attainable ordinary shared materials. One-active-instance and permanent one-install guards prohibit farming/duplicate installation and preserve installed progress. Exact replacement bill remains pending. Existing save classification/custody must be inspected and explicitly migrated, never silently reclassified.",
+      "sources": [
+        "u3_economy"
+      ],
+      "superseded_design_disposition": "Fixed worksite crane handling is an authored option pending owner adapter classification. Do not silently reinterpret existing inventory; preserve serialized custody and one-install proof, with attainable ordinary-material recovery/repair.",
+      "decision_authority": "Root-selected forward authored adaptation, 2026-11-27; not a claim that pinned source already establishes portability."
+    }
+  ],
+  "approval": "Unchanged original reviews stay scoped. New design and native fuel component require their own independent reviews; runtime catalogue/producers/world integration remain open.",
+  "additional_inspection_utc": "2026-11-27T17:49:47.930769+00:00",
+  "forward_design_revision_utc": "2026-11-27T17:55:51.515664+00:00"
+}

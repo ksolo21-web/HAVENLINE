@@ -1,0 +1,98 @@
+{
+  "scope": "NATIVE_FUEL_V2_COMPONENT_ONLY",
+  "base_commit": "201dcbe4fad5037a33bd619b59285a1ef91599d8",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "files": [
+    {
+      "path": "tools/havenline/vehicle_rules/vehicle_rules.gd",
+      "sha256": "3e835b3c9d72f062a6ba5da7b8877df8bac3454e6656a4e9684e331c26a1fd86",
+      "bytes": 29504
+    },
+    {
+      "path": "tools/havenline/vehicle_rules/fuel_rules.gd",
+      "sha256": "0c8a7c66b794b6e142a6d1b31644c880e08876909c2fc9b2844ce2d24a7d9ba6",
+      "bytes": 10817
+    },
+    {
+      "path": "tools/havenline/vehicle_rules/exact_count.gd",
+      "sha256": "0bdef6100fe1722ca937cc18d3a968483cf5e08dc45cf6bed08ca233993f1b93",
+      "bytes": 3110
+    },
+    {
+      "path": "tools/havenline/vehicle_rules/project.godot",
+      "sha256": "6309d974e7115df4ec9e8df420fedd2c7433e4d165fc55eb9a9f170de4f993ba",
+      "bytes": 197
+    },
+    {
+      "path": "tools/havenline/vehicle_rules/README.md",
+      "sha256": "3d9f305f5adce70d592a1ffe211feee80a8b16a132bed62f666e27fab4f32f2d",
+      "bytes": 20963
+    },
+    {
+      "path": "tools/havenline/vehicle_rules/tests/world_fixture.gd",
+      "sha256": "31da83c19a8a1f65a118b6e13085d0d3574e7d64dbf44fa6227b6af659b8261e",
+      "bytes": 4046
+    },
+    {
+      "path": "tools/havenline/vehicle_rules/tests/run_all.gd",
+      "sha256": "fa6212d5406111fe15d094382edc674bd53f32bd635b87e3b2aac659d993781f",
+      "bytes": 17793
+    },
+    {
+      "path": "tools/havenline/vehicle_rules/tests/run_fuel_v2.gd",
+      "sha256": "7c06ea61d887c79a952140e7935b9885886de57e596ae0343daf338765a6936f",
+      "bytes": 20871
+    }
+  ],
+  "results": [
+    {
+      "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/legacy-regression.json",
+      "sha256": "2adc13dc36cbb9bb73631c58da69b99da7ed43b1aa626f472492246339ed3a85"
+    },
+    {
+      "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/native-results.json",
+      "sha256": "e256e1707c1d586b0960f956a2808ee78320155ca25d05af29aac16c7cd51dcc"
+    },
+    {
+      "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/legacy-v1-snapshot.json",
+      "sha256": "356cb5be3053902e56b2b743c96c87f1078941ee1f80e24b02f1887c48804780"
+    },
+    {
+      "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/legacy-v1-provenance.json",
+      "sha256": "d02fd4d5dfb1bd1f03e036e0d1618520dad90f04b35a0461c16bf2732e2f8e69"
+    },
+    {
+      "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/legacy-regression-stdout.txt",
+      "sha256": "9972ffe6e63a26c2907a60a43cc0f463ad26840e7aa79a31073cf1c99a857c53"
+    },
+    {
+      "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/legacy-regression-stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/native-results-stdout.txt",
+      "sha256": "a8a115911eafe61f652cb9c10751b42c0483f3af82f0dd380fc229ebd4be6f14"
+    },
+    {
+      "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/native-results-stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "legacy_checks_passed": 107,
+  "fuel_checks_passed": 80,
+  "game_integration": false,
+  "balance_measured": false,
+  "independent_review": "PASS_SCOPED_R2_AFTER_USAGE_ID_REPAIR",
+  "rejected_candidate": {
+    "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/rejected-usage-identity-r1/REJECTION.json",
+    "sha256": "0e3e91e983b9e360fdcfa8771f9bb438761e11d6efc057315e0ce4e3bdecaa83",
+    "old_fuel_sha256": "1ae979d393b6109f93c4a8026e235efa6e171b2ae1084a8b342e19c1a4849ec3",
+    "repair": "Unambiguous canonical (vehicle_id, normalized integer generation, usage_id) tuple. Original70 fuel checks plus10 identity/save/replay checks pass."
+  },
+  "independent_review_evidence": {
+    "path": "tools/havenline/vehicle_rules/evidence/fuel-v2/independent-retest-r2/RETEST.json",
+    "sha256": "f82603f34105fcafce4568e947db4e1795441d1c489c7ec89ee6b497f2a345e2",
+    "reviewed_source_manifest_sha256": "8f1b8c1ac195b69508f90129ef9677d1be95d42fa9cd1b1e45f78dbd4028eff5",
+    "production_files_unchanged_since_review": true
+  }
+}

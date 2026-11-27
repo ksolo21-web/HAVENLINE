@@ -1,0 +1,55 @@
+{
+  "reviewer": "/root/independent_critic",
+  "review_time_utc": "2026-11-27T17:52:37.278424+00:00",
+  "scope": "Independently inspected authored static six-view vehicle concept proposal only",
+  "method": "Actual full-sheet image viewing; meaningful detail crops as enumerated. No generated score or claimed pixel-similarity measurement.",
+  "source_contract": "Docs/Design/WorldVehicles/2026-11-27/PROMPTS.json",
+  "source_contract_sha256": "09412bb85ea9c2a5753362372002df5dce776b069edfd0454a667feb3cc1e20d",
+  "panels_inspected": [
+    "front",
+    "right",
+    "rear",
+    "left",
+    "three-quarter",
+    "at-work"
+  ],
+  "production_3d_motion_physics_runtime_approved": false,
+  "stronger_reference_gate": "Not a final reference-sensitive asset/integration approval. Existing >=9.9 and exact-10 production requirements remain active.",
+  "untested": [
+    "Native editable mesh and full 360 geometry",
+    "In-game scale/camera/collision and route clearance",
+    "Full tool motion cycles and load/contact transitions",
+    "Driving, fuel use, resource custody, combat, audio and device performance"
+  ],
+  "dimensions_px": [
+    1536,
+    1024
+  ],
+  "mandatory_concept_checks_pass": false,
+  "world": 9,
+  "candidate_path": "Docs/Design/WorldVehicles/2026-11-27/renders/w09-mine-mole-r1.png",
+  "candidate_sha256": "c5e07906eabbfefd87051013259337f288099b9e4e719be9d58f198a1c354497",
+  "concept_quality_score": 9.7,
+  "disposition": "REVIEWED_PENDING_DOCUMENTED_DESIGN_ADAPTATION",
+  "observations": [
+    "All six panels inspected. Four small flanged rail wheels, rear low cabin, forward cylindrical tooth drum on a horizontal axle, central hopper and lamps are coherent.",
+    "Working drum touches a marked mine face; both rails lie on supported ground in a timber-braced tunnel with generous visible roof space. This is illustrative clearance, not measured native evidence.",
+    "Front and rear are distinct: tool and work lamps face front, while the rear shows a service hatch and red lamps."
+  ],
+  "defects": [
+    {
+      "id": "WV09-R1-01",
+      "severity": "authored_description_consistency",
+      "status": "explicit_disposition_needed",
+      "location": "Both profiles and AT WORK versus PROMPTS/WORLD_VEHICLES",
+      "finding": "The hopper is visibly open with representative ore in both side profiles and the use view. The authored description calls it enclosed, with ore visible only obliquely.",
+      "repair": "Document the open-top concept adaptation consistently, or provide a visible cover if enclosure is retained as a required design feature. No user-mandated enclosure is known."
+    }
+  ],
+  "detail_evidence": [
+    {
+      "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w09-mine-mole-r1-work.png",
+      "sha256": "ef81c3b99506a1a179bf1a9cb9403440b4ac1b75999fb0882ee53f8f687924e4"
+    }
+  ]
+}

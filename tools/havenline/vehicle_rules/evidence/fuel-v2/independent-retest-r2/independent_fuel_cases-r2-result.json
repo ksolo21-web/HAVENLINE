@@ -1,0 +1,326 @@
+{
+  "checks": [
+    {
+      "name": "empty fuel records a denied window",
+      "observed": {
+        "burned_subunits": "0",
+        "cursor": "17",
+        "depleted": true,
+        "ok": true,
+        "operation": "grant_powered_use",
+        "powered_ms": 0,
+        "powered_use_allowed": false,
+        "request_id": "deny",
+        "requested_active_ms": 17,
+        "sequence": "4",
+        "tank_subunits": "0"
+      },
+      "passed": true
+    },
+    {
+      "name": "refill cannot power an already denied window",
+      "observed": {
+        "ok": false,
+        "reason": "replayed_or_overlapping_power_window"
+      },
+      "passed": true
+    },
+    {
+      "name": "new window after refill receives only affordable power",
+      "observed": {
+        "burned_subunits": "51",
+        "cursor": "34",
+        "depleted": false,
+        "ok": true,
+        "operation": "grant_powered_use",
+        "powered_ms": 17,
+        "powered_use_allowed": true,
+        "request_id": "current",
+        "requested_active_ms": 17,
+        "sequence": "6",
+        "tank_subunits": "119949"
+      },
+      "passed": true
+    },
+    {
+      "name": "zero active duration cannot create a successful powered grant",
+      "observed": {
+        "ok": false,
+        "reason": "empty_active_window"
+      },
+      "passed": true
+    },
+    {
+      "name": "paused zero-duration report cannot burn or grant",
+      "observed": {
+        "burned_subunits": "0",
+        "cursor": "34",
+        "depleted": false,
+        "ok": true,
+        "operation": "grant_powered_use",
+        "powered_ms": 0,
+        "powered_use_allowed": false,
+        "request_id": "pause",
+        "requested_active_ms": 0,
+        "sequence": "7",
+        "tank_subunits": "119949"
+      },
+      "passed": true
+    },
+    {
+      "name": "paused report cannot advance the active clock",
+      "observed": {
+        "ok": false,
+        "reason": "offline_catchup_forbidden"
+      },
+      "passed": true
+    },
+    {
+      "name": "unreported dormant gap grants and burns only new active duration",
+      "observed": {
+        "burned_subunits": "1",
+        "cursor": "1000000000000000000000000000001",
+        "depleted": false,
+        "ok": true,
+        "operation": "grant_powered_use",
+        "powered_ms": 1,
+        "powered_use_allowed": true,
+        "request_id": "idle-gap",
+        "requested_active_ms": 1,
+        "sequence": "8",
+        "tank_subunits": "119948"
+      },
+      "passed": true
+    },
+    {
+      "name": "clock edge cases conserve all resource custody",
+      "observed": null,
+      "passed": true
+    },
+    {
+      "name": "failed precommit revalidation rolls back grant burn and cursor",
+      "observed": {
+        "ok": false,
+        "reason": "world_changed_before_commit"
+      },
+      "passed": true
+    },
+    {
+      "name": "same failed request can retry against a fresh valid observation",
+      "observed": {
+        "burned_subunits": "3",
+        "cursor": "1",
+        "depleted": false,
+        "ok": true,
+        "operation": "grant_powered_use",
+        "powered_ms": 1,
+        "powered_use_allowed": true,
+        "request_id": "race",
+        "requested_active_ms": 1,
+        "sequence": "4",
+        "tank_subunits": "7199997"
+      },
+      "passed": true
+    },
+    {
+      "name": "wrong authority cannot issue a power grant",
+      "observed": {
+        "ok": false,
+        "reason": "invalid_world_observation"
+      },
+      "passed": true
+    },
+    {
+      "name": "changed usage payload under an existing request is rejected",
+      "observed": {
+        "ok": false,
+        "reason": "request_payload_changed"
+      },
+      "passed": true
+    },
+    {
+      "name": "same durable grant replay changes no fuel or cursor",
+      "observed": {
+        "burned_subunits": "3",
+        "cursor": "1",
+        "depleted": false,
+        "ok": true,
+        "operation": "grant_powered_use",
+        "powered_ms": 1,
+        "powered_use_allowed": true,
+        "request_id": "race",
+        "requested_active_ms": 1,
+        "sequence": "4",
+        "tank_subunits": "7199997"
+      },
+      "passed": true
+    },
+    {
+      "name": "same-named replacement authority cannot take over existing ledger",
+      "observed": null,
+      "passed": true
+    },
+    {
+      "name": "exact current authorized grant history restores",
+      "observed": null,
+      "passed": true
+    },
+    {
+      "name": "modified power mode cannot restore under unchanged receipt/digest",
+      "observed": null,
+      "passed": true
+    },
+    {
+      "name": "save authority refusal blocks a stale otherwise-consistent grant history",
+      "observed": null,
+      "passed": true
+    },
+    {
+      "name": "authority failures preserve prior valid conservation",
+      "observed": null,
+      "passed": true
+    },
+    {
+      "name": "fuel above the tank allocation remains actual material spending",
+      "observed": {
+        "consumed": {
+          "fuel": "13",
+          "steel": "200",
+          "wood": "100"
+        },
+        "debited_bill": {
+          "fuel": "73",
+          "steel": "200",
+          "wood": "100"
+        },
+        "generation": 1,
+        "initial_tank_fuel_units": "60",
+        "ok": true,
+        "operation": "purchase",
+        "request_id": "buy-extra",
+        "sequence": "3",
+        "tank_subunits": "7200000",
+        "tier": 1,
+        "vehicle_id": "truck"
+      },
+      "passed": true
+    },
+    {
+      "name": "mixed tank allocation and fuel spending survive JSON replay",
+      "observed": null,
+      "passed": true
+    },
+    {
+      "name": "invalid purchase clock rolls back quote use and every bill debit",
+      "observed": {
+        "ok": false,
+        "reason": "invalid_purchase_fuel_clock"
+      },
+      "passed": true
+    },
+    {
+      "name": "failed purchase can retry once at current authoritative clock",
+      "observed": null,
+      "passed": true
+    },
+    {
+      "name": "different frame partitions produce the same exact fuel and cursor",
+      "observed": null,
+      "passed": true
+    },
+    {
+      "name": "active clock increments across a 320-digit carry exactly",
+      "observed": {
+        "burned_subunits": "3",
+        "cursor": "100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+        "depleted": false,
+        "ok": true,
+        "operation": "grant_powered_use",
+        "powered_ms": 1,
+        "powered_use_allowed": true,
+        "request_id": "huge-tick",
+        "requested_active_ms": 1,
+        "sequence": "4",
+        "tank_subunits": "7199997"
+      },
+      "passed": true
+    },
+    {
+      "name": "large exact active clock survives JSON save replay",
+      "observed": null,
+      "passed": true
+    },
+    {
+      "name": "ordinary estate claim leaves separate exact fractional estate intact",
+      "observed": null,
+      "passed": true
+    },
+    {
+      "name": "empty replacement tank recovers every surviving fraction exactly",
+      "observed": {
+        "moved_subunits": "119997",
+        "ok": true,
+        "operation": "recover_tank_fuel",
+        "remaining_estate_subunits": "0",
+        "request_id": "recover",
+        "sequence": "11",
+        "tank_subunits": "119997"
+      },
+      "passed": true
+    },
+    {
+      "name": "new request against emptied fractional estate cannot duplicate stock",
+      "observed": {
+        "moved_subunits": "0",
+        "ok": true,
+        "operation": "recover_tank_fuel",
+        "remaining_estate_subunits": "0",
+        "request_id": "fresh-empty-recovery",
+        "sequence": "12",
+        "tank_subunits": "119997"
+      },
+      "passed": true
+    },
+    {
+      "name": "recovered fraction later destroyed outside is lost once and still conserved",
+      "observed": null,
+      "passed": true
+    },
+    {
+      "name": "valid independent vehicle and usage IDs cannot collide through string concatenation",
+      "observed": {
+        "burned_subunits": "2",
+        "cursor": "2",
+        "depleted": false,
+        "ok": true,
+        "operation": "grant_powered_use",
+        "powered_ms": 1,
+        "powered_use_allowed": true,
+        "request_id": "use-b",
+        "requested_active_ms": 1,
+        "sequence": "7",
+        "tank_subunits": "7199998"
+      },
+      "passed": true
+    },
+    {
+      "name": "cross-vehicle identity exercise preserves custody",
+      "observed": null,
+      "passed": true
+    },
+    {
+      "name": "new arbitrary-precision multiplication matches independent Python integer oracle",
+      "observed": {
+        "failed": [],
+        "passed": 100,
+        "total": 100
+      },
+      "passed": true
+    }
+  ],
+  "consumer_exact_once_application_tested": false,
+  "failed": 0,
+  "game_integration": false,
+  "passed": 32,
+  "scope": "INDEPENDENT_FUEL_COMPONENT_ONLY"
+}

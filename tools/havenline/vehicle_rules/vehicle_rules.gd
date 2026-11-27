@@ -4,6 +4,7 @@ extends RefCounted
 ## source contact and complete-world atomic persistence remain adapter obligations.
 
 const Count = preload("res://exact_count.gd")
+const Fuel = preload("res://fuel_rules.gd")
 const SCHEMA := "havenline.vehicle.rules.v1"
 const METHODS := ["vehicle_authority_id", "capture_vehicle_bootstrap", "validate_vehicle_bootstrap", "capture_vehicle_observation", "validate_vehicle_observation", "authorize_vehicle_restore"]
 
@@ -61,6 +62,18 @@ func apply_contact_damage(vehicle_id: String, generation: int, contact_id: Strin
 
 func claim_inside_salvage(cache_id: String, account_id: String, generation: int, request_id: String) -> Dictionary:
 	return _dispatch("claim", {"cache_id": cache_id, "account_id": account_id, "generation": generation}, request_id)
+
+func activate_fuel_policy(request_id: String) -> Dictionary:
+	return _dispatch("activate_fuel",{},request_id)
+
+func refuel(vehicle_id: String, generation: int, source_kind: String, source_id: String, source_generation: int, units: String, request_id: String) -> Dictionary:
+	return _dispatch("refuel",{"vehicle_id":vehicle_id,"generation":generation,"source_kind":source_kind,"source_id":source_id,"source_generation":source_generation,"units":units},request_id)
+
+func grant_powered_use(vehicle_id: String, generation: int, usage_id: String, request_id: String) -> Dictionary:
+	return _dispatch("power_use",{"vehicle_id":vehicle_id,"generation":generation,"usage_id":usage_id},request_id)
+
+func recover_tank_fuel(vehicle_id: String, generation: int, cache_id: String, request_id: String) -> Dictionary:
+	return _dispatch("recover_fuel",{"vehicle_id":vehicle_id,"generation":generation,"cache_id":cache_id},request_id)
 
 func state() -> Dictionary:
 	return _state.duplicate(true)
@@ -163,18 +176,25 @@ func _reduce(s: Dictionary, operation: String, p: Dictionary, f: Dictionary) -> 
 		"dock": return _dock(s, p, f)
 		"damage": return _damage(s, p, f)
 		"claim": return _claim(s, p, f)
+		"activate_fuel": return Fuel.activate(s,p,f)
+		"refuel": return Fuel.refuel(s,p,f)
+		"power_use": return Fuel.use(s,p,f)
+		"recover_fuel": return Fuel.recover(s,p,f)
 	return _fail("unknown_operation")
 
 func _quote(s: Dictionary, p: Dictionary, f: Dictionary) -> Dictionary:
 	if not _keys(p, ["quote_id"]) or not _id(p.quote_id) or not _keys(f, ["quote", "garage", "acquisition_proof_id"]):
 		return _fail("invalid_quote_shape")
 	var q: Variant = f.quote
-	if not q is Dictionary or not _keys(q, ["id", "vehicle_id", "next_generation", "garage_id", "garage_generation", "camp_id", "payer_id", "payer_generation", "bill", "max_hp", "catalogue_version"]):
+	var quote_keys := ["id", "vehicle_id", "next_generation", "garage_id", "garage_generation", "camp_id", "payer_id", "payer_generation", "bill", "max_hp", "catalogue_version"]
+	if q is Dictionary and q.has("initial_tank_fuel_units"): quote_keys.append("initial_tank_fuel_units")
+	if not q is Dictionary or not _keys(q,quote_keys):
 		return _fail("invalid_quote")
 	if q.id != p.quote_id or not _id(q.vehicle_id) or not _id(q.camp_id) or not _id(q.garage_id) or not _id(q.catalogue_version) or not _id(f.acquisition_proof_id) or not _positive_integer(q.next_generation) or not _positive_integer(q.garage_generation) or not _positive_integer(q.max_hp):
 		return _fail("invalid_quote_fields")
 	if not _items_valid(q.bill, s.resources, true) or not _account(s, q.payer_id, q.payer_generation):
 		return _fail("invalid_bill_or_payer")
+	if not Fuel.quote_allocation_valid(s,q): return _fail("invalid_funded_initial_tank")
 	if not _garage_valid(f.garage, q.garage_id, q.camp_id) or f.garage.generation != q.garage_generation:
 		return _fail("garage_not_ready")
 	if s.quotes.has(q.id):
@@ -198,7 +218,9 @@ func _quote(s: Dictionary, p: Dictionary, f: Dictionary) -> Dictionary:
 	return {"ok": true, "operation": "admit_quote", "quote_id": q.id, "bill": q.bill.duplicate(true)}
 
 func _purchase(s: Dictionary, p: Dictionary, f: Dictionary) -> Dictionary:
-	if not _keys(p, ["quote_id"]) or not s.quotes.has(p.quote_id) or not _keys(f, ["garage", "acquisition_proof_id"]):
+	var fact_keys := ["garage", "acquisition_proof_id"]
+	if Fuel.enabled(s): fact_keys.append("fuel_clock")
+	if not _keys(p, ["quote_id"]) or not s.quotes.has(p.quote_id) or not _keys(f,fact_keys):
 		return _fail("unknown_quote_or_invalid_purchase")
 	var q: Dictionary = s.quotes[p.quote_id]
 	if q.used or not _id(f.acquisition_proof_id):
@@ -215,7 +237,18 @@ func _purchase(s: Dictionary, p: Dictionary, f: Dictionary) -> Dictionary:
 	_move(s.accounts[q.payer_id].items, s.spent, q.bill)
 	q.used = true
 	s.vehicles[q.vehicle_id] = {"id": q.vehicle_id, "generation": q.next_generation, "garage_id": q.garage_id, "camp_id": q.camp_id, "alive": true, "hp": q.max_hp, "max_hp": q.max_hp, "tier": 1, "cargo": {}, "last_destruction": ""}
-	return {"ok": true, "operation": "purchase", "vehicle_id": q.vehicle_id, "generation": q.next_generation, "tier": 1, "consumed": q.bill.duplicate(true)}
+	var funded_tank: Dictionary = Fuel.purchase(s,q,f)
+	if not funded_tank.ok: return funded_tank
+	var result := {"ok": true, "operation": "purchase", "vehicle_id": q.vehicle_id, "generation": q.next_generation, "tier": 1, "consumed": q.bill.duplicate(true)}
+	if funded_tank.enabled:
+		result["initial_tank_fuel_units"] = funded_tank.initial_tank_fuel_units
+		result["tank_subunits"] = funded_tank.tank_subunits
+		result["debited_bill"] = q.bill.duplicate(true)
+		if funded_tank.initial_tank_fuel_units != "0":
+			var spent_fuel := Count.subtract(result.consumed.fuel,funded_tank.initial_tank_fuel_units)
+			if spent_fuel == "0": result.consumed.erase("fuel")
+			else: result.consumed.fuel = spent_fuel
+	return result
 
 func _rebind_quote(s: Dictionary, p: Dictionary, f: Dictionary) -> Dictionary:
 	if not _keys(p, ["quote_id"]) or not s.quotes.has(p.quote_id) or not _keys(f, ["garage", "replacement_receipt_id", "acquisition_proof_id"]):
@@ -325,7 +358,9 @@ func _damage(s: Dictionary, p: Dictionary, f: Dictionary) -> Dictionary:
 	v.alive = false
 	v.last_destruction = destination
 	s.tombstones[p.vehicle_id + ":" + str(p.generation)] = {"contact_id": p.contact_id, "disposition": destination, "cargo": cargo}
-	return {"ok": true, "operation": "damage", "hp": 0, "destroyed": true, "outside_camp": outside, "disposition": destination, "cargo": cargo}
+	var result := {"ok": true, "operation": "damage", "hp": 0, "destroyed": true, "outside_camp": outside, "disposition": destination, "cargo": cargo}
+	result.merge(Fuel.destroy(s,v,outside,destination))
+	return result
 
 func _claim(s: Dictionary, p: Dictionary, f: Dictionary) -> Dictionary:
 	if not _keys(p, ["cache_id", "account_id", "generation"]) or not _keys(f, ["contact_id", "cache_reachable", "recipient_available"]):
@@ -364,7 +399,7 @@ func _conserved(s: Dictionary) -> bool:
 	for items in s.salvage.values(): _add_items(held, items)
 	_add_items(held, s.lost)
 	_add_items(held, s.spent)
-	return Count.canonical(held) == Count.canonical(s.introduced)
+	return Fuel.conserved(s,held)
 
 func _garage_valid(g: Variant, garage_id: Variant, camp_id: Variant) -> bool:
 	return g is Dictionary and _keys(g, ["id", "generation", "camp_id", "ready", "plot_inside_camp", "construction_receipt_id", "storage_id"]) and g.id == garage_id and g.camp_id == camp_id and _positive_integer(g.generation) and _true(g.ready) and _true(g.plot_inside_camp) and _id(g.construction_receipt_id) and _id(g.storage_id)

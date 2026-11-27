@@ -1,0 +1,406 @@
+{
+  "scope": "Independent catalogue/batch/validator review; no scene/navigation/balance/media approval",
+  "input_sha256": {
+    "RESOURCE_CHAINS.json": "0228df62fb25ebda2366390e424ff7409f24fe82003723c16df7580525ce8512",
+    "WORLD_VEHICLES.json": "4563c998f6567e40670711ae413eb1e68942f58cd63fd572eb2f7ad6540a2da0",
+    "verify_economy.py": "8618d9a4522cee72addb01c219228ea7583fa6202a830868f742afb516bb6ba6"
+  },
+  "current_data_checks": [
+    {
+      "name": "author_baseline_runs",
+      "passed": true,
+      "evidence": {
+        "checks": 82
+      }
+    },
+    {
+      "name": "ordered_bootstrap_actual_consumption",
+      "passed": true,
+      "evidence": [
+        {
+          "producer": "camp_cooker",
+          "raw_spent_to_date": {
+            "wood": 12,
+            "stone": 8
+          },
+          "retained_surplus": {}
+        },
+        {
+          "producer": "saw_bench",
+          "raw_spent_to_date": {
+            "wood": 26,
+            "stone": 14
+          },
+          "retained_surplus": {}
+        },
+        {
+          "producer": "quarry_drill",
+          "raw_spent_to_date": {
+            "wood": 36,
+            "stone": 26
+          },
+          "retained_surplus": {}
+        },
+        {
+          "producer": "coal_smelter",
+          "raw_spent_to_date": {
+            "wood": 56,
+            "stone": 62
+          },
+          "retained_surplus": {}
+        },
+        {
+          "producer": "hand_metal_bench",
+          "raw_spent_to_date": {
+            "wood": 72,
+            "stone": 74,
+            "metal": 12,
+            "coal": 6
+          },
+          "retained_surplus": {}
+        },
+        {
+          "producer": "steel_forge",
+          "raw_spent_to_date": {
+            "wood": 72,
+            "stone": 98,
+            "metal": 36,
+            "coal": 18
+          },
+          "retained_surplus": {}
+        },
+        {
+          "producer": "assembly_bench",
+          "raw_spent_to_date": {
+            "wood": 92,
+            "stone": 114,
+            "metal": 80,
+            "coal": 40
+          },
+          "retained_surplus": {}
+        },
+        {
+          "producer": "manual_oil_pump",
+          "raw_spent_to_date": {
+            "wood": 108,
+            "stone": 126,
+            "metal": 100,
+            "coal": 50
+          },
+          "retained_surplus": {}
+        },
+        {
+          "producer": "coal_refinery",
+          "raw_spent_to_date": {
+            "wood": 108,
+            "stone": 158,
+            "metal": 152,
+            "coal": 76
+          },
+          "retained_surplus": {}
+        }
+      ]
+    },
+    {
+      "name": "independent_sequential_total_matches_report",
+      "passed": true,
+      "evidence": {
+        "actual": {
+          "wood": 216,
+          "stone": 206,
+          "metal": 472,
+          "coal": 290,
+          "crude_oil": 60
+        },
+        "expected": {
+          "coal": 290,
+          "crude_oil": 60,
+          "metal": 472,
+          "stone": 206,
+          "wood": 216
+        },
+        "surplus": {},
+        "batches": {
+          "saw_planks": 180,
+          "dress_blocks": 168,
+          "smelt_iron": 236,
+          "form_sheet": 75,
+          "machine_parts": 55,
+          "refine_steel": 48,
+          "assemble_drive": 1,
+          "assemble_mobility": 4,
+          "refine_fuel": 6
+        }
+      }
+    },
+    {
+      "name": "sequential_profile_garage_v2",
+      "passed": true,
+      "evidence": {
+        "wood": 64,
+        "stone": 48,
+        "metal": 64,
+        "coal": 44
+      }
+    },
+    {
+      "name": "sequential_profile_snow_truck_v2",
+      "passed": true,
+      "evidence": {
+        "metal": 256,
+        "coal": 170,
+        "wood": 44,
+        "crude_oil": 60
+      }
+    },
+    {
+      "name": "sequential_profile_timber_forwarder_v1",
+      "passed": true,
+      "evidence": {
+        "metal": 272,
+        "coal": 186,
+        "wood": 68,
+        "crude_oil": 60
+      }
+    },
+    {
+      "name": "sequential_profile_canyon_breaker_v1",
+      "passed": true,
+      "evidence": {
+        "metal": 320,
+        "coal": 222,
+        "wood": 28,
+        "crude_oil": 60
+      }
+    },
+    {
+      "name": "sequential_profile_reef_salvager_v1",
+      "passed": true,
+      "evidence": {
+        "metal": 340,
+        "coal": 228,
+        "wood": 40,
+        "crude_oil": 60
+      }
+    },
+    {
+      "name": "sequential_profile_skybridge_carrier_v1",
+      "passed": true,
+      "evidence": {
+        "metal": 316,
+        "coal": 224,
+        "wood": 48,
+        "crude_oil": 60
+      }
+    },
+    {
+      "name": "sequential_profile_forge_hauler_v1",
+      "passed": true,
+      "evidence": {
+        "metal": 424,
+        "coal": 298,
+        "wood": 36,
+        "crude_oil": 60
+      }
+    },
+    {
+      "name": "sequential_profile_marsh_skiff_v1",
+      "passed": true,
+      "evidence": {
+        "metal": 236,
+        "coal": 156,
+        "wood": 68,
+        "crude_oil": 60
+      }
+    },
+    {
+      "name": "sequential_profile_ruin_reclaimer_v1",
+      "passed": true,
+      "evidence": {
+        "metal": 320,
+        "coal": 218,
+        "wood": 40,
+        "crude_oil": 60
+      }
+    },
+    {
+      "name": "sequential_profile_mine_mole_v1",
+      "passed": true,
+      "evidence": {
+        "metal": 368,
+        "coal": 258,
+        "wood": 32,
+        "crude_oil": 60
+      }
+    },
+    {
+      "name": "sequential_profile_relay_rover_v1",
+      "passed": true,
+      "evidence": {
+        "metal": 392,
+        "coal": 274,
+        "wood": 52,
+        "crude_oil": 60
+      }
+    },
+    {
+      "name": "bundle_display_is_not_mass_or_ledger_multiplication",
+      "passed": true,
+      "evidence": "216 wood ledger bundles display2160 raw units; no2160 ledger debit; processed count remains1 per existing recipe."
+    },
+    {
+      "name": "source_unlock_order_excludes_oil_without_pump",
+      "passed": true,
+      "evidence": "Current source contract keeps crude locked to reachable outside manual pump."
+    },
+    {
+      "name": "current_world_task_binding",
+      "passed": true,
+      "evidence": [
+        [
+          2,
+          "T44"
+        ],
+        [
+          3,
+          "T45"
+        ],
+        [
+          4,
+          "T46"
+        ],
+        [
+          5,
+          "T47"
+        ],
+        [
+          6,
+          "T48"
+        ],
+        [
+          7,
+          "T49"
+        ],
+        [
+          8,
+          "T50"
+        ],
+        [
+          9,
+          "T51"
+        ],
+        [
+          10,
+          "T52"
+        ]
+      ]
+    },
+    {
+      "name": "current_finite_project_not_currency",
+      "passed": true,
+      "evidence": "Relay workpiece remains distinct project custody; structural classification remains explicitly proposed."
+    },
+    {
+      "name": "integer_expansion_above_2_to_64",
+      "passed": true,
+      "evidence": {
+        "raw": {
+          "coal": 9223372036854775939,
+          "crude_oil": 60,
+          "metal": 18446744073709551794,
+          "wood": 44
+        }
+      }
+    }
+  ],
+  "current_data_passed": true,
+  "mutation_results": [
+    {
+      "name": "duplicate_recipe_id",
+      "should_reject": true,
+      "rejected": true,
+      "exit_code": 1,
+      "diagnostic": "Traceback (most recent call last):\n  File \"/tmp/havenline-economy-probe-bfwz1lf8/verify_economy.py\", line 29, in <module>\n    check(\"unique_recipe_ids\", len({r[\"id\"] for r in economy[\"recipes\"]}) == len(economy[\"recipes\"]), [r[\"id\"] for r in economy[\"recipes\"]])\n  File \"/tmp/havenline-economy-probe-bfwz1lf8/verify_economy.py\", line 18, in check\n    raise ValueError(identifier + \": \" + str(evidence))\nValueError: unique_recipe_ids: ['saw_planks', 'dress_blocks', 'smelt_iron', 'smelt_iron', 'machine_parts', 'refine_steel', 'assemble_drive', 'assemble_mobility', 'refine_fuel']\n"
+    },
+    {
+      "name": "duplicate_producer_id",
+      "should_reject": true,
+      "rejected": true,
+      "exit_code": 1,
+      "diagnostic": "Traceback (most recent call last):\n  File \"/tmp/havenline-economy-probe-_be26_um/verify_economy.py\", line 30, in <module>\n    check(\"unique_producer_ids\", len({p[\"id\"] for p in economy[\"producers_in_bootstrap_order\"]}) == len(economy[\"producers_in_bootstrap_order\"]), [p[\"id\"] for p in economy[\"producers_in_bootstrap_order\"]])\n  File \"/tmp/havenline-economy-probe-_be26_um/verify_economy.py\", line 18, in check\n    raise ValueError(identifier + \": \" + str(evidence))\nValueError: unique_producer_ids: ['camp_cooker', 'saw_bench', 'quarry_drill', 'coal_smelter', 'hand_metal_bench', 'steel_forge', 'assembly_bench', 'manual_oil_pump', 'coal_refinery', 'coal_refinery']\n"
+    },
+    {
+      "name": "fuel_required_refinery_recipe",
+      "should_reject": true,
+      "rejected": true,
+      "exit_code": 1,
+      "diagnostic": "Traceback (most recent call last):\n  File \"/tmp/havenline-economy-probe-rx0w36jo/verify_economy.py\", line 33, in <module>\n    check(\"recipe_fuel_free_\" + recipe[\"id\"], recipe[\"vehicle_fuel_required\"] is False, recipe[\"vehicle_fuel_required\"])\n  File \"/tmp/havenline-economy-probe-rx0w36jo/verify_economy.py\", line 18, in check\n    raise ValueError(identifier + \": \" + str(evidence))\nValueError: recipe_fuel_free_refine_fuel: True\n"
+    },
+    {
+      "name": "oil_pump_inside_camp",
+      "should_reject": true,
+      "rejected": true,
+      "exit_code": 1,
+      "diagnostic": "Traceback (most recent call last):\n  File \"/tmp/havenline-economy-probe-9o5jpxv6/verify_economy.py\", line 111, in <module>\n    check(\"pump_outside_camp\", pump[\"site\"] == \"outside_camp_reachable_manual_oil_site\", pump[\"site\"])\n  File \"/tmp/havenline-economy-probe-9o5jpxv6/verify_economy.py\", line 18, in check\n    raise ValueError(identifier + \": \" + str(evidence))\nValueError: pump_outside_camp: inside_camp\n"
+    },
+    {
+      "name": "duplicate_vehicle_id",
+      "should_reject": true,
+      "rejected": true,
+      "exit_code": 1,
+      "diagnostic": "Traceback (most recent call last):\n  File \"/tmp/havenline-economy-probe-rj9yvzz3/verify_economy.py\", line 133, in <module>\n    check(\"unique_world_vehicle_ids\", len({v[\"vehicle_id\"] for v in worlds[\"vehicles\"]}) == len(worlds[\"vehicles\"]), [v[\"vehicle_id\"] for v in worlds[\"vehicles\"]])\n  File \"/tmp/havenline-economy-probe-rj9yvzz3/verify_economy.py\", line 18, in check\n    raise ValueError(identifier + \": \" + str(evidence))\nValueError: unique_world_vehicle_ids: ['timber_forwarder', 'timber_forwarder', 'reef_salvager', 'skybridge_carrier', 'forge_hauler', 'marsh_skiff', 'ruin_reclaimer', 'mine_mole', 'relay_rover']\n"
+    },
+    {
+      "name": "wrong_authentic_world_task",
+      "should_reject": true,
+      "rejected": true,
+      "exit_code": 1,
+      "diagnostic": "Traceback (most recent call last):\n  File \"/tmp/havenline-economy-probe-b6onkb7r/verify_economy.py\", line 134, in <module>\n    check(\"authentic_world_task_binding\", all(v[\"authentic_task\"] == \"T\" + str(v[\"world\"] + 42) for v in worlds[\"vehicles\"]), {str(v[\"world\"]): v[\"authentic_task\"] for v in worlds[\"vehicles\"]})\n  File \"/tmp/havenline-economy-probe-b6onkb7r/verify_economy.py\", line 18, in check\n    raise ValueError(identifier + \": \" + str(evidence))\nValueError: authentic_world_task_binding: {'2': 'T44', '3': 'T45', '4': 'T46', '5': 'T47', '6': 'T48', '7': 'T49', '8': 'T50', '9': 'T51', '10': 'T44'}\n"
+    },
+    {
+      "name": "vehicle_profile_misclassified_no_tank",
+      "should_reject": true,
+      "rejected": false,
+      "exit_code": 0,
+      "diagnostic": "{\n  \"passed\": true,\n  \"checks_passed\": 81,\n  \"truck_raw\": {\n    \"coal\": \"170\",\n    \"crude_oil\": \"60\",\n    \"metal\": \"256\",\n    \"wood\": \"44\"\n  },\n  \"garage_raw\": {\n    \"coal\": \"44\",\n    \"metal\": \"64\",\n    \"stone\": \"48\",\n    \"wood\": \"64\"\n  },\n  \"full_subtotal_raw\": {\n    \"coal\": \"290\",\n    \"crude_oil\": \"60\",\n    \"metal\": \"472\",\n    \"stone\": \"206\",\n    \"wood\": \"216\"\n  }\n}\n"
+    },
+    {
+      "name": "zero_output",
+      "should_reject": true,
+      "rejected": true,
+      "exit_code": 1,
+      "diagnostic": "Traceback (most recent call last):\n  File \"/tmp/havenline-economy-probe-i4g9624c/verify_economy.py\", line 38, in <module>\n    quantity(amount)\n  File \"/tmp/havenline-economy-probe-i4g9624c/verify_economy.py\", line 23, in quantity\n    raise ValueError(\"positive canonical decimal count required\")\nValueError: positive canonical decimal count required\n"
+    },
+    {
+      "name": "negative_input",
+      "should_reject": true,
+      "rejected": true,
+      "exit_code": 1,
+      "diagnostic": "Traceback (most recent call last):\n  File \"/tmp/havenline-economy-probe-lnsq88pe/verify_economy.py\", line 38, in <module>\n    quantity(amount)\n  File \"/tmp/havenline-economy-probe-lnsq88pe/verify_economy.py\", line 23, in quantity\n    raise ValueError(\"positive canonical decimal count required\")\nValueError: positive canonical decimal count required\n"
+    },
+    {
+      "name": "unfunded_initial_tank",
+      "should_reject": true,
+      "rejected": true,
+      "exit_code": 1,
+      "diagnostic": "Traceback (most recent call last):\n  File \"/tmp/havenline-economy-probe-_1qtnxmb/verify_economy.py\", line 122, in <module>\n    check(\"funded_tank_\" + identifier,\n  File \"/tmp/havenline-economy-probe-_1qtnxmb/verify_economy.py\", line 18, in check\n    raise ValueError(identifier + \": \" + str(evidence))\nValueError: funded_tank_snow_truck_v2: {'bill_fuel': '60', 'tank_units': '61'}\n"
+    },
+    {
+      "name": "producer_self_output_cycle",
+      "should_reject": true,
+      "rejected": true,
+      "exit_code": 1,
+      "diagnostic": "Traceback (most recent call last):\n  File \"/tmp/havenline-economy-probe-25rq01v0/verify_economy.py\", line 100, in <module>\n    result = expand(producer[\"construction_bill\"], built, raw)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/havenline-economy-probe-25rq01v0/verify_economy.py\", line 77, in expand\n    raise ValueError(\"producer unavailable: \" + recipe[\"producer\"])\nValueError: producer unavailable: coal_smelter\n"
+    }
+  ],
+  "mutation_rejections_passed": 10,
+  "mutation_rejections_required": 11,
+  "unrejected_invalid_cases": [
+    "vehicle_profile_misclassified_no_tank"
+  ],
+  "notes": [
+    "Current material graph is constructively reachable under its stated renewable/manual-source assumptions. Actual world route/source quantities remain integration gates.",
+    "Legacy partially paid plot escrow is explicitly outside native full-bill component; migration prose is a requirement, not implementation proof.",
+    "Finite World10 structural workpiece classification remains authored option with a portable-save preservation fallback, not an observed source fact."
+  ]
+}

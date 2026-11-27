@@ -1,0 +1,61 @@
+{
+  "reviewer": "/root/independent_critic",
+  "review_time_utc": "2026-11-27T18:03:59.729469+00:00",
+  "scope": "Independently inspected authored static six-view vehicle concept proposal only",
+  "method": "Actual full-sheet image viewing; meaningful detail crops as enumerated. No generated score or claimed pixel-similarity measurement.",
+  "source_contract": "Docs/Design/WorldVehicles/2026-11-27/PROMPTS.json",
+  "source_contract_sha256": "09412bb85ea9c2a5753362372002df5dce776b069edfd0454a667feb3cc1e20d",
+  "panels_inspected": [
+    "front",
+    "right",
+    "rear",
+    "left",
+    "three-quarter",
+    "at-work"
+  ],
+  "production_3d_motion_physics_runtime_approved": false,
+  "stronger_reference_gate": "Not a final reference-sensitive asset/integration approval. Existing >=9.9 and exact-10 production requirements remain active.",
+  "untested": [
+    "Native editable mesh and full 360 geometry",
+    "In-game scale/camera/collision and route clearance",
+    "Full tool motion cycles and load/contact transitions",
+    "Driving, fuel use, resource custody, combat, audio and device performance"
+  ],
+  "dimensions_px": [
+    1536,
+    1024
+  ],
+  "mandatory_concept_checks_pass": true,
+  "world": 3,
+  "candidate_path": "Docs/Design/WorldVehicles/2026-11-27/renders/w03-canyon-breaker-r3.png",
+  "candidate_sha256": "e650c11e6ea9119bd60a1506f3197cddcd745dc3c4cf13a813d4e64271046511",
+  "concept_quality_score": 9.7,
+  "disposition": "ACCEPTABLE_AUTHORED_CONCEPT_PROPOSAL",
+  "observations": [
+    "All six panels freshly inspected; the changed AT WORK panel also inspected at close range.",
+    "Exactly one hydraulic breaker head is present in AT WORK, at the end of the continuous deployed orange boom touching the boulder. The duplicate stowed chisel beside the cab is gone.",
+    "Cab/front bumper/rear hopper and two continuous tracks retain the studio layout. Two near-side fore/aft stabilizers are deployed consistently with the explicitly authored four-foot design; far-side feet are occluded.",
+    "The front-right cabin is the documented authored selection. Stable ledge contact, small rock chips and ore cargo remain visible."
+  ],
+  "defects": [],
+  "resolved_previous_findings": [
+    "WV03-R2-01",
+    "WV03-R1-01",
+    "WV03-R1-02",
+    "WV03-R1-03"
+  ],
+  "detail_evidence": [
+    {
+      "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w03-canyon-breaker-r3-work.png",
+      "sha256": "58924fd31941a0c6ab58940ba9840b0174dd612ef84942f62a2aa43c2125d7ae"
+    }
+  ],
+  "authored_adaptation_source": {
+    "path": "Docs/Production/VehicleEconomy/2026-11-27/WORLD_VEHICLES.json",
+    "sha256": "7a4441c1a4149d89ab61a15cfcd88c16e64c2e74133df5940138f3b5e6cfc7f7"
+  },
+  "repair_contract": {
+    "path": "Docs/Design/WorldVehicles/2026-11-27/REPAIR_PROMPTS_R3.json",
+    "sha256": "2875a9ea9a84b0694f038ebaa0f0f3c5b1c0a10636a864688617ec3cd54d3a21"
+  }
+}

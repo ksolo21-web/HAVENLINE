@@ -56,6 +56,20 @@ static func subtract(a: String, b: String) -> String:
 		result = result.substr(1)
 	return result
 
+static func multiply_small(a: String, factor: int) -> String:
+	assert(valid(a) and factor >= 0 and factor <= 120000)
+	if factor == 0 or a == "0": return "0"
+	var result := ""
+	var carry := 0
+	for i in range(a.length() - 1, -1, -1):
+		var digit := (a.unicode_at(i) - 48) * factor + carry
+		result = str(digit % 10) + result
+		carry = digit / 10
+	while carry > 0:
+		result = str(carry % 10) + result
+		carry /= 10
+	return result
+
 static func canonical(value: Variant) -> String:
 	# JSON parses metadata numbers as floats. Canonicalize exactly representable
 	# integral metadata identically; inventory quantities remain strings forever.

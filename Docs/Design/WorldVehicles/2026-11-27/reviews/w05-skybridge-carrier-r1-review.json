@@ -1,0 +1,59 @@
+{
+  "reviewer": "/root/independent_critic",
+  "review_time_utc": "2026-11-27T17:44:06.566423+00:00",
+  "scope": "Independently inspected authored static six-view vehicle concept proposal only",
+  "method": "Actual full-sheet image viewing; meaningful detail crops as enumerated. No generated score or claimed pixel-similarity measurement.",
+  "source_contract": "Docs/Design/WorldVehicles/2026-11-27/PROMPTS.json",
+  "source_contract_sha256": "09412bb85ea9c2a5753362372002df5dce776b069edfd0454a667feb3cc1e20d",
+  "panels_inspected": [
+    "front",
+    "right",
+    "rear",
+    "left",
+    "three-quarter",
+    "at-work"
+  ],
+  "production_3d_motion_physics_runtime_approved": false,
+  "stronger_reference_gate": "Not a final reference-sensitive asset/integration approval. Existing >=9.9 and exact-10 production requirements remain active.",
+  "untested": [
+    "Native editable mesh and full 360 geometry",
+    "In-game scale/camera/collision and route clearance",
+    "Full tool motion cycles and load/contact transitions",
+    "Driving, fuel use, resource custody, combat, audio and device performance"
+  ],
+  "world": 5,
+  "candidate_path": "Docs/Design/WorldVehicles/2026-11-27/renders/w05-skybridge-carrier-r1.png",
+  "candidate_sha256": "b8c0ce5c0011768f7c6b9963e0d6492930ae62c43e16dc74e32bf20e10e78fb7",
+  "dimensions_px": [
+    1536,
+    1024
+  ],
+  "concept_quality_score": 9.6,
+  "disposition": "ACCEPTABLE_AUTHORED_CONCEPT_PROPOSAL",
+  "mandatory_concept_checks_pass": true,
+  "observations": [
+    "All six named views are present, legible and uncropped. Front cabin, rear platform, crane position, rail-bound bogies and opposite front/rear lamp language maintain vehicle identity.",
+    "FRONT, REAR and both profiles show short rail samples. Orange wraparound bogies and low dark rollers visibly communicate captive guidance. Full physical under-flange retention and clearance remain unproved by these illustrations.",
+    "AT WORK is supported by an existing complete bridge. The crane holds a strapped load from a hook and sling over a freight platform; there are no wings, rotors, balloons or free flight.",
+    "Representative cargo blocks shift presentation in the rear view; this is a concept-load limitation, not a demonstrated cargo capacity or locked load-placement blueprint."
+  ],
+  "defects": [],
+  "detail_evidence": [
+    {
+      "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w05-skybridge-carrier-r1-front-bogie.png",
+      "sha256": "ae2344219854253f98cd49b2aeda5fe172b73c1b2b42e8a4f030ce802db93bb3"
+    },
+    {
+      "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w05-skybridge-carrier-r1-side-bogie.png",
+      "sha256": "0d4488fdb2ec51d759f7a3df978cbaa09833e4dfec4fc945fb6613c6c0bf038b"
+    },
+    {
+      "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w05-skybridge-carrier-r1-threequarter.png",
+      "sha256": "1f348144200d808497e7493f84a808642249ca99c44f3754f1bb3a205af430ef"
+    },
+    {
+      "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w05-skybridge-carrier-r1-work.png",
+      "sha256": "67c3648f49c470907ef974b492d08f91392771172ab65d65126399f9b07d6f31"
+    }
+  ]
+}

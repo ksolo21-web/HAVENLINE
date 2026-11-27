@@ -1,0 +1,55 @@
+{
+  "reviewer": "/root/independent_critic",
+  "date_utc": "2026-11-27T17:50:36.165367+00:00",
+  "disposition": "REJECTED_PENDING_USAGE_ID_COLLISION_REPAIR",
+  "scope": "Standalone native fuel v2 custody, arithmetic and grants; no game integration claim",
+  "candidate_source_identity": "initial-source-identity.json",
+  "builder_regression_rerun": {
+    "legacy": {
+      "passed": 107,
+      "failed": 0,
+      "stderr_bytes": 0
+    },
+    "fuel": {
+      "passed": 70,
+      "failed": 0,
+      "stderr_bytes": 0
+    }
+  },
+  "independent_result": {
+    "passed": 31,
+    "failed": 1,
+    "oracle_multiplication_cases": 100
+  },
+  "defect": {
+    "id": "FUEL-R1-01",
+    "source": "fuel_rules.gd: use",
+    "severity": "valid_identifier_functional_defect",
+    "finding": "usage_key = vehicle_instance + slash + usage_id is not injective over the accepted identifier domain. A valid new grant for a second live vehicle is rejected as an already used grant.",
+    "repro": [
+      {
+        "vehicle_id": "a",
+        "generation": 1,
+        "usage_id": "x:1/u",
+        "result": "accepted"
+      },
+      {
+        "vehicle_id": "a:1/x",
+        "generation": 1,
+        "usage_id": "u",
+        "result": "rejected_or_overlapping_power_window"
+      }
+    ],
+    "colliding_key": "a:1/x:1/u",
+    "requested_fix": "Encode a tuple unambiguously or nest usage IDs under the exact vehicle instance. Add regression for delimiter-containing valid identifiers and verify v1 restore remains unchanged."
+  },
+  "evidence": {
+    "initial-source-identity.json": "cf0dac6453ed2973218cb4d14d2a635093d6c6bec391a013c4f4374add70805a",
+    "independent_fuel_cases.gd": "047d2cda54bf1537d058eaa4107b09b8cafb64d6e7ecf44b55d46a202e841c25",
+    "independent-fuel-result-r1.json": "4fce3b0d62bff6985a2456fbd4761110dd74c80da8c01a767fc15881740120e3",
+    "independent-fuel-r1-final.stdout": "c09d3af7befdcdd8784712f36d9e3aefc219809d7b00974e72e9d12f41bddf04",
+    "independent-fuel-r1-final.stderr": "673a499281bb20566ef04b5945da270bbf853406a52b54ae552a979ade76a6a1",
+    "multiply-small-oracle.json": "602dc435faa84bd81690d06b5290ddbca02a8702369236417913a357226be6ee"
+  },
+  "approval_allowed": false
+}

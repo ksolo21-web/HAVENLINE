@@ -15,8 +15,9 @@ func _initialize() -> void:
 	funding_owner_recovery()
 	restore_rules()
 	adapter_guards()
+	if passed + failed != 107: check(false,"all107 expected legacy checks executed")
 	var result := {"scope": "STANDALONE_NATIVE_VEHICLE_RULES_ONLY", "passed": passed, "failed": failed, "checks": checks, "game_integration": false, "physics_motion_audio_device_approved": false}
-	var report := FileAccess.open("res://evidence/native-results.json", FileAccess.WRITE)
+	var report := FileAccess.open("res://evidence/fuel-v2/legacy-regression.json", FileAccess.WRITE)
 	report.store_string(JSON.stringify(result, "\t") + "\n")
 	print(JSON.stringify(result))
 	quit(0 if failed == 0 else 1)

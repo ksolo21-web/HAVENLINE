@@ -1,0 +1,151 @@
+{
+	"events": [
+		{
+			"facts": {
+				"acquisition_proof_id": "fixture-attainable-path",
+				"garage": {
+					"camp_id": "home",
+					"construction_receipt_id": "completed-construction-1",
+					"generation": 1,
+					"id": "garage",
+					"plot_inside_camp": true,
+					"ready": true,
+					"storage_id": "warehouse"
+				},
+				"quote": {
+					"bill": {
+						"steel": "200",
+						"wood": "100"
+					},
+					"camp_id": "home",
+					"catalogue_version": "fixture-only",
+					"garage_generation": 1,
+					"garage_id": "garage",
+					"id": "q1",
+					"max_hp": 100,
+					"next_generation": 1,
+					"payer_generation": 1,
+					"payer_id": "player",
+					"vehicle_id": "truck"
+				}
+			},
+			"operation": "admit_quote",
+			"parameters": {
+				"quote_id": "q1"
+			},
+			"receipt": {
+				"bill": {
+					"steel": "200",
+					"wood": "100"
+				},
+				"ok": true,
+				"operation": "admit_quote",
+				"quote_id": "q1",
+				"request_id": "legacy-quote",
+				"sequence": "1"
+			},
+			"request_id": "legacy-quote"
+		},
+		{
+			"facts": {
+				"acquisition_proof_id": "fixture-current-path",
+				"garage": {
+					"camp_id": "home",
+					"construction_receipt_id": "completed-construction-1",
+					"generation": 1,
+					"id": "garage",
+					"plot_inside_camp": true,
+					"ready": true,
+					"storage_id": "warehouse"
+				}
+			},
+			"operation": "purchase",
+			"parameters": {
+				"quote_id": "q1"
+			},
+			"receipt": {
+				"consumed": {
+					"steel": "200",
+					"wood": "100"
+				},
+				"generation": 1,
+				"ok": true,
+				"operation": "purchase",
+				"request_id": "legacy-purchase",
+				"sequence": "2",
+				"tier": 1,
+				"vehicle_id": "truck"
+			},
+			"request_id": "legacy-purchase"
+		},
+		{
+			"facts": {
+				"contact_id": "fixture-source-contact",
+				"source_available": true,
+				"source_reachable": true
+			},
+			"operation": "load",
+			"parameters": {
+				"generation": 1,
+				"items": {
+					"fuel": "5",
+					"wood": "10"
+				},
+				"source_generation": 1,
+				"source_id": "player",
+				"vehicle_id": "truck"
+			},
+			"receipt": {
+				"moved": {
+					"fuel": "5",
+					"wood": "10"
+				},
+				"ok": true,
+				"operation": "load",
+				"request_id": "legacy-load",
+				"sequence": "3"
+			},
+			"request_id": "legacy-load"
+		}
+	],
+	"genesis": {
+		"accounts": {
+			"other-store": {
+				"generation": 1,
+				"items": {},
+				"kind": "storage"
+			},
+			"player": {
+				"generation": 1,
+				"items": {
+					"cooked_fish": "9007199254740993",
+					"fuel": "200",
+					"money": "18446744073709551617",
+					"new_mineral": "99999999999999999999999999999999999999999999999999",
+					"steel": "1000",
+					"wood": "1000"
+				},
+				"kind": "actor"
+			},
+			"warehouse": {
+				"generation": 1,
+				"items": {
+					"money": "4",
+					"wood": "5"
+				},
+				"kind": "storage"
+			}
+		},
+		"authority_id": "fixture-world",
+		"resources": [
+			"wood",
+			"steel",
+			"cooked_fish",
+			"money",
+			"new_mineral",
+			"fuel"
+		]
+	},
+	"schema": "havenline.vehicle.rules.v1",
+	"state_digest": "6d203af52849771f605266ec2f57261f33b1ee16dcabf334add09d44b84efa77"
+}

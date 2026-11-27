@@ -1,0 +1,63 @@
+{
+  "reviewer": "/root/independent_critic",
+  "review_time_utc": "2026-11-27T17:55:56.995734+00:00",
+  "scope": "Independently inspected authored static six-view vehicle concept proposal only",
+  "method": "Actual full-sheet image viewing; meaningful detail crops as enumerated. No generated score or claimed pixel-similarity measurement.",
+  "source_contract": "Docs/Design/WorldVehicles/2026-11-27/PROMPTS.json",
+  "source_contract_sha256": "09412bb85ea9c2a5753362372002df5dce776b069edfd0454a667feb3cc1e20d",
+  "panels_inspected": [
+    "front",
+    "right",
+    "rear",
+    "left",
+    "three-quarter",
+    "at-work"
+  ],
+  "production_3d_motion_physics_runtime_approved": false,
+  "stronger_reference_gate": "Not a final reference-sensitive asset/integration approval. Existing >=9.9 and exact-10 production requirements remain active.",
+  "untested": [
+    "Native editable mesh and full 360 geometry",
+    "In-game scale/camera/collision and route clearance",
+    "Full tool motion cycles and load/contact transitions",
+    "Driving, fuel use, resource custody, combat, audio and device performance"
+  ],
+  "dimensions_px": [
+    1536,
+    1024
+  ],
+  "mandatory_concept_checks_pass": false,
+  "world": 10,
+  "candidate_path": "Docs/Design/WorldVehicles/2026-11-27/renders/w10-relay-rover-r1.png",
+  "candidate_sha256": "a997bb72f4939700be2708f422064e46d25fefa03986e8ebd2742afc87ce7498",
+  "concept_quality_score": 8.8,
+  "disposition": "REPAIR_REQUIRED",
+  "observations": [
+    "All six panels inspected. Studio views show three axles and six wheels, a white/blue front cabin, one orange crane, rear bed, one relay module plus ordinary supply crate, roof dish and distinct rear lamps.",
+    "AT WORK shows one held relay module over a socket and no second module left on deck; the ordinary supply crate stays aboard. The scene is firm alien terrain with no free levitation or laser effect."
+  ],
+  "defects": [
+    {
+      "id": "WV10-R1-01",
+      "severity": "mandatory_cross_view_chassis_identity",
+      "status": "failed",
+      "location": "AT WORK versus studio profiles and THREE-QUARTER",
+      "finding": "The working truck has a shortened two-axle/four-wheel chassis; only two near-side wheels fit under it. All studio views specify three axles/six wheels.",
+      "repair": "Base the work-panel chassis and full-length bed on THREE-QUARTER, retaining all three grounded axles while deploying the crane."
+    },
+    {
+      "id": "WV10-R1-02",
+      "severity": "tool_and_support_continuity",
+      "status": "unresolved",
+      "location": "AT WORK versus studio travel views",
+      "finding": "Working clamp uses orange outer jaws/black pads instead of the depicted silver two-prong head. Two working outriggers appear along the near side, while travel views depict one side mount and authored text says two total.",
+      "repair": "Use the same silver two-prong head rotated onto the module. Keep consistent one-per-side stabilizer mounts; a far-side leg may be partly occluded. Record any deliberate new support design explicitly."
+    }
+  ],
+  "resolved_previous_findings": [],
+  "detail_evidence": [
+    {
+      "path": "Docs/Design/WorldVehicles/2026-11-27/reviews/evidence/w10-relay-rover-r1-work.png",
+      "sha256": "4eae952af704da63429438d77809d2b9b291a861b7ea28efbffc35067027733b"
+    }
+  ]
+}

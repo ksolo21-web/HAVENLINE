@@ -1,0 +1,93 @@
+{
+  "reviewer": "/root/vehicle_gameplay",
+  "reviewed_builder": "/root/recover_plan",
+  "independence": "Separate agent. Reviewer did not author or repair RESOURCE_CHAINS, WORLD_VEHICLES or verify_economy; repairs were returned to their owner.",
+  "scope": "Material recipe/catalogue/producer dependency and exact batch arithmetic; validator negative cases. No gameplay, balance, art, motion, sound or device approval.",
+  "input_sha256": {
+    "RESOURCE_CHAINS.json": "75400530bc38b937a697d0a88091c0c60373b8b94913a3c818083af7e68cf555",
+    "WORLD_VEHICLES.json": "7a4441c1a4149d89ab61a15cfcd88c16e64c2e74133df5940138f3b5e6cfc7f7",
+    "verify_economy.py": "1980d02bd6ef4f2719b5d6c6480ecfc03d194974768d363a50eeb909ade9355a"
+  },
+  "score": 10,
+  "mandatory_current_data_checks": {
+    "passed": 19,
+    "required": 19
+  },
+  "mandatory_invalid_data_rejections": {
+    "passed": 11,
+    "required": 11
+  },
+  "unresolved_scoped_defects": [],
+  "repaired_finding": "Misclassified world vehicle profile skipped funded initial tank validation. Builder added kind/binding gates; same mutation now rejects.",
+  "evidence": [
+    "secondary-economy-review-r1.json",
+    "secondary-economy-review-r2.json",
+    "secondary-economy-review-r3.json",
+    "secondary-economy-review-r4.json",
+    "independent_economy_probe.py",
+    "SECONDARY_ECONOMY_REVIEW-r2.json"
+  ],
+  "independent_raw_subtotal": {
+    "wood": "216",
+    "stone": "206",
+    "metal": "472",
+    "coal": "290",
+    "crude_oil": "60"
+  },
+  "raw_subtotal_units": "Legacy ledger bundles for wood/stone/metal/coal, distinct abstract crude liquid units. Never sum these as mass or multiply saved counts by10.",
+  "runtime_read_only_findings": [
+    {
+      "commit": "ea6e4896cc6692ee84b56f89e127feaa606eb370",
+      "path": "HavenlineLevel1/field_inventory.gd",
+      "finding": "configure/payment/vehicle_repurchase/vehicle_pay_repair/_move_vehicle_goods still assume old raw or small product dictionaries. New processed costs and cargo require a coupled generic typed-custody/restore adaptation."
+    },
+    {
+      "commit": "ea6e4896cc6692ee84b56f89e127feaa606eb370",
+      "path": "HavenlineLevel1/field_progression.gd",
+      "finding": "price_text iterates eight fixed IDs and uses int plus raw display*10. New bars/sheets/fuel/component lines would be omitted; use catalogue denominations and exact decimal formatting."
+    },
+    {
+      "commit": "ea6e4896cc6692ee84b56f89e127feaa606eb370",
+      "path": "HavenlineLevel1/field_inventory.gd",
+      "finding": "vehicle_repurchase blocks on nonempty ordinary salvage. Do not apply that condition to separate fractional fuel estates: recovery into a live tank otherwise creates a replacement deadlock."
+    }
+  ],
+  "open_integration_requirements": [
+    "Actual renewable source quantities and routes",
+    "Producer physics/contact and full-world input escrow",
+    "Old partial contributions and catalogue/price migration",
+    "Portable World10 serial custody and attainable paid same-objective replacement, with one-active/one-install proofs",
+    "No-fuel exit and reachable refinery recovery",
+    "Actual source-bound gameplay/balance/device evidence"
+  ],
+  "evidence_sha256": {
+    "secondary-economy-review-r1.json": "fd6685cfbe0026c520b854de7712a5688d46f6e3d8248edf1d0686c56ecf6413",
+    "secondary-economy-review-r2.json": "ff189e102565955d79e5ae562a5360c2a6fa1d546817845df5eef12b41e19f54",
+    "secondary-economy-review-r3.json": "0c01adf137ecd3f26321f22ece296706e92d0cc425236fbfe54eff012d49c2d9",
+    "secondary-economy-review-r4.json": "921d205994b28368041bf1918e47b4cc0b05a347899024ced14bda697dcf58b6",
+    "independent_economy_probe.py": "f13d0baace30200c036caf8fba1b313a184cbeccc2bea2344a16cf35d0d1df86",
+    "SECONDARY_ECONOMY_REVIEW-r2.json": "485cb9debecdfa0ceb7f3cd4ecc1ae90097298a7f6c26eeaf190c4f80d68392b"
+  },
+  "final_revalidation": {
+    "metadata_only_r3": "19/19 independent data checks plus11/11 mutation rejection, binding RESOURCE75400530 and former WORLD4563c998. Preserved separately.",
+    "final_r4": "19/19 independent data checks plus11/11 mutation rejection, binding final resource/world/checker hashes above. Production materials, amounts, recipe DAG and checker unchanged from r2; World10 forward custody contract reviewed independently."
+  },
+  "world10_forward_contract_review": {
+    "scope": "Read-only coherence review of authored forward contract. No serialized-custody implementation or replacement-price approval.",
+    "decision": "Portable serialized module; earlier fixed-site proposal superseded.",
+    "checked_requirements": [
+      "Outside truck destruction loses the portable module with ordinary cargo; no protected return or free replacement.",
+      "Stable objective_serial and instance_generation preserve identity through counted custody plus atomic serial overlay.",
+      "Only proven-lost, uninstalled objective can reserve one paid replacement; no second active instance or quote.",
+      "Replacement advances instance generation of the same objective, never mints another objective or resets completed progress.",
+      "Single-install tombstone and interrupted-lift owner prevent duplicate installed/cargo copies or repeat rewards.",
+      "Restored worksite, actual input bill and manual route must remain attainable without the missing module/truck.",
+      "Existing saves keep their actual identity and custody through explicit migration; forward choice is not claimed as a source fact."
+    ],
+    "unimplemented_gates": [
+      "Exact replacement bill and feasibility/balance proof",
+      "Authoritative serial custody, loss, reservation, crafting and install lifecycle",
+      "Save/replay and interrupted physical transfer tests in the actual world"
+    ]
+  }
+}

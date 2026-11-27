@@ -1,5 +1,9 @@
 # HAVENLINE repository navigation
 
+## Vehicle economy and world fleet continuation
+
+[Fuel, fabrication and nine later-world vehicles](Docs/Production/VEHICLE_ECONOMY.md) is the forward extension to the snow truck/garage package. It includes current source bindings, the iron/coal/oil production graph, expensive processed-material profiles, a bounded fuel component, the nine later-world vehicle proposals and their generated render gallery. Older source observations and approvals below remain historical; this isolated package does not replace the active gameplay branch.
+
 ## Current final acceptance
 
 [Reference acceptance standard](Docs/Production/REFERENCE_ACCEPTANCE_STANDARD.md) · [Machine-readable policy](Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json). Final reference-sensitive dimensions require at least **9.9** individually; the existing mandatory visual **exact-10** rules remain stronger. **9.5 is an interim checkpoint for reference-sensitive work.** Complete independent evidence, every mandatory check and zero known unapproved deviations are required. Historical receipts and the dated reference-audit snapshot retain their original meaning.

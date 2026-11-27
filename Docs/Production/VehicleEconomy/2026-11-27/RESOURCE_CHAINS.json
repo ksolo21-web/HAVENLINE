@@ -1,0 +1,698 @@
+{
+  "schema_version": 1,
+  "id": "VEHICLE_ECONOMY_2026_11_27",
+  "status": "authored_design_and_cost_fixture_not_runtime_or_balance_approval",
+  "authority": {
+    "owner_expansion": "Low fuel use; expensive diverse processed vehicle materials; iron ore to bars to sheet metal; mine coal; extract crude oil and refine fuel; extraction outside camp; useful vehicles for existing Worlds 2\u201310. This is normalized from the root task relay, not a verbatim owner quote.",
+    "preserved_owner_rules": "Prior snow-truck garage/fence, unlimited any-resource cargo, outside loss, garage automatic whole-load deposit and HP rules remain binding.",
+    "quantities": "Selected engineering fixtures only. No amount, duration or world unlock is playtest balanced."
+  },
+  "unit_contract": {
+    "counts": "Canonical nonnegative decimal strings. One count preserves one existing ledger unit; never infer physical stack count.",
+    "legacy_raw": [
+      "wood",
+      "stone",
+      "meat",
+      "coal",
+      "slate",
+      "metal"
+    ],
+    "legacy_raw_display_units_per_ledger_count": "10",
+    "existing_products": "Planks, blocks and meals preserve one legacy product count. Existing saw/quarry use one raw bundle for one product.",
+    "new_items": "Bars, sheets and components use one authored item count; crude oil/fuel use abstract liquid units, not asserted litres.",
+    "migration": "Copy exact legacy integer ledger values to strings only under a whole-world versioned migration; retain raw display scale10. No silent multiplication, division or rounding.",
+    "raw_cost_table_unit": "Legacy bundle counts for wood, stone, metal and coal; authored liquid-unit counts for crude_oil. Do not add unlike physical units as mass."
+  },
+  "resources": [
+    {
+      "id": "wood",
+      "display_name": "Wood",
+      "kind": "raw",
+      "registration_status": "live_build14",
+      "uses": [
+        "planks",
+        "bootstrap producers",
+        "furnace recovery"
+      ]
+    },
+    {
+      "id": "stone",
+      "display_name": "Stone",
+      "kind": "raw",
+      "registration_status": "live_build14",
+      "uses": [
+        "blocks",
+        "bootstrap producers",
+        "recovery construction"
+      ]
+    },
+    {
+      "id": "metal",
+      "display_name": "Iron ore",
+      "kind": "raw",
+      "registration_status": "live_build14_id_new_display_requires_catalog_migration",
+      "uses": [
+        "iron_bars",
+        "retained legacy raw bills"
+      ]
+    },
+    {
+      "id": "coal",
+      "display_name": "Coal",
+      "kind": "raw",
+      "registration_status": "live_build14",
+      "uses": [
+        "iron smelting",
+        "steel refining",
+        "oil refining"
+      ]
+    },
+    {
+      "id": "slate",
+      "display_name": "Slate",
+      "kind": "raw",
+      "registration_status": "live_build14",
+      "uses": [
+        "weatherproof roofs",
+        "protected work surfaces"
+      ]
+    },
+    {
+      "id": "planks",
+      "display_name": "Planks",
+      "kind": "processed",
+      "registration_status": "live_build14",
+      "uses": [
+        "garage structure",
+        "cargo floor",
+        "traction assembly",
+        "producer frames"
+      ]
+    },
+    {
+      "id": "blocks",
+      "display_name": "Stone blocks",
+      "kind": "processed",
+      "registration_status": "live_build14",
+      "uses": [
+        "garage foundations",
+        "smelter/refinery bases",
+        "safe route structures"
+      ]
+    },
+    {
+      "id": "iron_bars",
+      "display_name": "Iron bars",
+      "kind": "processed",
+      "registration_status": "new_authored_requires_registration",
+      "uses": [
+        "sheet metal",
+        "parts",
+        "steel",
+        "axles and producer frames"
+      ]
+    },
+    {
+      "id": "sheet_metal",
+      "display_name": "Sheet metal",
+      "kind": "processed",
+      "registration_status": "new_authored_requires_registration",
+      "uses": [
+        "vehicle body panels",
+        "garage door",
+        "refinery casing"
+      ]
+    },
+    {
+      "id": "steel",
+      "display_name": "Steel",
+      "kind": "processed",
+      "registration_status": "previously_authored_not_live_build14",
+      "uses": [
+        "blades and reinforced chassis",
+        "drive assemblies",
+        "traction assemblies"
+      ]
+    },
+    {
+      "id": "mechanical_parts",
+      "display_name": "Mechanical parts",
+      "kind": "component",
+      "registration_status": "new_authored_requires_registration",
+      "uses": [
+        "drive assemblies",
+        "traction assemblies",
+        "garage shutter",
+        "oil pump/refinery"
+      ]
+    },
+    {
+      "id": "drive_assembly",
+      "display_name": "Drive assembly",
+      "kind": "component",
+      "registration_status": "new_authored_requires_registration",
+      "uses": [
+        "vehicle drive systems",
+        "powered lift/hauler rebuilds"
+      ]
+    },
+    {
+      "id": "traction_kit",
+      "display_name": "Mobility assembly",
+      "kind": "component",
+      "registration_status": "new_authored_requires_registration",
+      "uses": [
+        "wheel or track modules",
+        "captive rail bogies",
+        "marine propulsion fittings"
+      ]
+    },
+    {
+      "id": "crude_oil",
+      "display_name": "Crude oil",
+      "kind": "raw",
+      "registration_status": "new_authored_requires_registration",
+      "uses": [
+        "fuel refining"
+      ]
+    },
+    {
+      "id": "fuel",
+      "display_name": "Fuel",
+      "kind": "processed",
+      "registration_status": "existing_design_salvage_id_new_refining_route",
+      "uses": [
+        "funded vehicle tank",
+        "ordinary refuelling",
+        "eligible future powered-work jobs"
+      ]
+    }
+  ],
+  "recipes": [
+    {
+      "id": "saw_planks",
+      "producer": "saw_bench",
+      "inputs": {
+        "wood": "1"
+      },
+      "output": {
+        "planks": "1"
+      },
+      "status": "live_build14_one_bundle_to_one_product",
+      "vehicle_fuel_required": false
+    },
+    {
+      "id": "dress_blocks",
+      "producer": "quarry_drill",
+      "inputs": {
+        "stone": "1"
+      },
+      "output": {
+        "blocks": "1"
+      },
+      "status": "live_build14_one_bundle_to_one_product",
+      "vehicle_fuel_required": false
+    },
+    {
+      "id": "smelt_iron",
+      "producer": "coal_smelter",
+      "inputs": {
+        "metal": "2",
+        "coal": "1"
+      },
+      "output": {
+        "iron_bars": "2"
+      },
+      "status": "authored_numeric_fixture",
+      "vehicle_fuel_required": false
+    },
+    {
+      "id": "form_sheet",
+      "producer": "hand_metal_bench",
+      "inputs": {
+        "iron_bars": "2"
+      },
+      "output": {
+        "sheet_metal": "2"
+      },
+      "status": "authored_numeric_fixture",
+      "vehicle_fuel_required": false
+    },
+    {
+      "id": "machine_parts",
+      "producer": "hand_metal_bench",
+      "inputs": {
+        "iron_bars": "2"
+      },
+      "output": {
+        "mechanical_parts": "2"
+      },
+      "status": "authored_numeric_fixture",
+      "vehicle_fuel_required": false
+    },
+    {
+      "id": "refine_steel",
+      "producer": "steel_forge",
+      "inputs": {
+        "iron_bars": "2",
+        "coal": "1"
+      },
+      "output": {
+        "steel": "1"
+      },
+      "status": "authored_numeric_fixture",
+      "vehicle_fuel_required": false
+    },
+    {
+      "id": "assemble_drive",
+      "producer": "assembly_bench",
+      "inputs": {
+        "steel": "4",
+        "mechanical_parts": "6",
+        "sheet_metal": "2"
+      },
+      "output": {
+        "drive_assembly": "1"
+      },
+      "status": "authored_numeric_fixture",
+      "vehicle_fuel_required": false
+    },
+    {
+      "id": "assemble_mobility",
+      "producer": "assembly_bench",
+      "inputs": {
+        "steel": "2",
+        "mechanical_parts": "4",
+        "planks": "2"
+      },
+      "output": {
+        "traction_kit": "1"
+      },
+      "status": "authored_numeric_fixture",
+      "vehicle_fuel_required": false
+    },
+    {
+      "id": "refine_fuel",
+      "producer": "coal_refinery",
+      "inputs": {
+        "crude_oil": "10",
+        "coal": "1"
+      },
+      "output": {
+        "fuel": "10"
+      },
+      "status": "authored_numeric_fixture",
+      "vehicle_fuel_required": false
+    }
+  ],
+  "producers_in_bootstrap_order": [
+    {
+      "id": "camp_cooker",
+      "construction_bill": {
+        "wood": "12",
+        "stone": "8"
+      },
+      "requires_producers": [],
+      "unlocks_resource_sources": [],
+      "site": "inside_expanded_camp",
+      "construction_vehicle_fuel_required": false,
+      "operation_vehicle_fuel_required": false,
+      "quantity_status": "live_build14_preserved_prerequisite"
+    },
+    {
+      "id": "saw_bench",
+      "construction_bill": {
+        "wood": "14",
+        "stone": "6"
+      },
+      "requires_producers": [
+        "camp_cooker"
+      ],
+      "unlocks_resource_sources": [],
+      "site": "inside_expanded_camp",
+      "construction_vehicle_fuel_required": false,
+      "operation_vehicle_fuel_required": false,
+      "quantity_status": "live_build14_preserved_cost"
+    },
+    {
+      "id": "quarry_drill",
+      "construction_bill": {
+        "wood": "10",
+        "stone": "12"
+      },
+      "requires_producers": [
+        "saw_bench"
+      ],
+      "unlocks_resource_sources": [],
+      "site": "inside_expanded_camp",
+      "construction_vehicle_fuel_required": false,
+      "operation_vehicle_fuel_required": false,
+      "quantity_status": "live_build14_preserved_cost"
+    },
+    {
+      "id": "coal_smelter",
+      "construction_bill": {
+        "planks": "20",
+        "blocks": "24",
+        "stone": "12"
+      },
+      "requires_producers": [
+        "saw_bench",
+        "quarry_drill"
+      ],
+      "unlocks_resource_sources": [],
+      "site": "inside_expanded_camp",
+      "construction_vehicle_fuel_required": false,
+      "operation_vehicle_fuel_required": false,
+      "quantity_status": "authored_numeric_fixture"
+    },
+    {
+      "id": "hand_metal_bench",
+      "construction_bill": {
+        "planks": "16",
+        "blocks": "12",
+        "iron_bars": "12"
+      },
+      "requires_producers": [
+        "coal_smelter"
+      ],
+      "unlocks_resource_sources": [],
+      "site": "inside_expanded_camp",
+      "construction_vehicle_fuel_required": false,
+      "operation_vehicle_fuel_required": false,
+      "quantity_status": "authored_numeric_fixture"
+    },
+    {
+      "id": "steel_forge",
+      "construction_bill": {
+        "blocks": "24",
+        "iron_bars": "16",
+        "sheet_metal": "8"
+      },
+      "requires_producers": [
+        "hand_metal_bench"
+      ],
+      "unlocks_resource_sources": [],
+      "site": "inside_expanded_camp",
+      "construction_vehicle_fuel_required": false,
+      "operation_vehicle_fuel_required": false,
+      "quantity_status": "authored_numeric_fixture"
+    },
+    {
+      "id": "assembly_bench",
+      "construction_bill": {
+        "planks": "20",
+        "blocks": "16",
+        "iron_bars": "20",
+        "sheet_metal": "12",
+        "mechanical_parts": "12"
+      },
+      "requires_producers": [
+        "steel_forge"
+      ],
+      "unlocks_resource_sources": [],
+      "site": "inside_expanded_camp",
+      "construction_vehicle_fuel_required": false,
+      "operation_vehicle_fuel_required": false,
+      "quantity_status": "authored_numeric_fixture"
+    },
+    {
+      "id": "manual_oil_pump",
+      "construction_bill": {
+        "planks": "16",
+        "blocks": "12",
+        "iron_bars": "12",
+        "mechanical_parts": "8"
+      },
+      "requires_producers": [
+        "hand_metal_bench"
+      ],
+      "unlocks_resource_sources": [
+        "crude_oil"
+      ],
+      "site": "outside_camp_reachable_manual_oil_site",
+      "construction_vehicle_fuel_required": false,
+      "operation_vehicle_fuel_required": false,
+      "quantity_status": "authored_numeric_fixture"
+    },
+    {
+      "id": "coal_refinery",
+      "construction_bill": {
+        "blocks": "32",
+        "sheet_metal": "24",
+        "iron_bars": "16",
+        "mechanical_parts": "12"
+      },
+      "requires_producers": [
+        "manual_oil_pump",
+        "hand_metal_bench"
+      ],
+      "unlocks_resource_sources": [],
+      "site": "inside_expanded_camp",
+      "construction_vehicle_fuel_required": false,
+      "operation_vehicle_fuel_required": false,
+      "quantity_status": "authored_numeric_fixture"
+    }
+  ],
+  "build_profiles": [
+    {
+      "id": "garage_v2",
+      "kind": "garage",
+      "bill": {
+        "planks": "64",
+        "blocks": "48",
+        "sheet_metal": "24",
+        "steel": "12",
+        "mechanical_parts": "16"
+      },
+      "status": "new_quotes_only_unbalanced_fixture"
+    },
+    {
+      "id": "snow_truck_v2",
+      "kind": "vehicle",
+      "bill": {
+        "sheet_metal": "80",
+        "iron_bars": "40",
+        "steel": "24",
+        "mechanical_parts": "40",
+        "drive_assembly": "1",
+        "traction_kit": "4",
+        "planks": "36",
+        "fuel": "60"
+      },
+      "initial_tank_fuel_units": "60",
+      "status": "new_quotes_only_unbalanced_fixture"
+    },
+    {
+      "id": "timber_forwarder_v1",
+      "kind": "vehicle",
+      "bill": {
+        "sheet_metal": "72",
+        "iron_bars": "36",
+        "steel": "28",
+        "mechanical_parts": "44",
+        "drive_assembly": "1",
+        "traction_kit": "6",
+        "planks": "56",
+        "fuel": "60"
+      },
+      "initial_tank_fuel_units": "60",
+      "status": "new_quotes_only_unbalanced_fixture"
+    },
+    {
+      "id": "canyon_breaker_v1",
+      "kind": "vehicle",
+      "bill": {
+        "sheet_metal": "88",
+        "iron_bars": "48",
+        "steel": "48",
+        "mechanical_parts": "56",
+        "drive_assembly": "1",
+        "traction_kit": "2",
+        "planks": "24",
+        "fuel": "60"
+      },
+      "initial_tank_fuel_units": "60",
+      "status": "new_quotes_only_unbalanced_fixture"
+    },
+    {
+      "id": "reef_salvager_v1",
+      "kind": "vehicle",
+      "bill": {
+        "sheet_metal": "112",
+        "iron_bars": "44",
+        "steel": "40",
+        "mechanical_parts": "56",
+        "drive_assembly": "1",
+        "traction_kit": "4",
+        "planks": "32",
+        "fuel": "60"
+      },
+      "initial_tank_fuel_units": "60",
+      "status": "new_quotes_only_unbalanced_fixture"
+    },
+    {
+      "id": "skybridge_carrier_v1",
+      "kind": "vehicle",
+      "bill": {
+        "sheet_metal": "80",
+        "iron_bars": "40",
+        "steel": "48",
+        "mechanical_parts": "52",
+        "drive_assembly": "1",
+        "traction_kit": "4",
+        "planks": "40",
+        "fuel": "60"
+      },
+      "initial_tank_fuel_units": "60",
+      "status": "new_quotes_only_unbalanced_fixture"
+    },
+    {
+      "id": "forge_hauler_v1",
+      "kind": "vehicle",
+      "bill": {
+        "sheet_metal": "120",
+        "iron_bars": "56",
+        "steel": "64",
+        "mechanical_parts": "56",
+        "drive_assembly": "1",
+        "traction_kit": "6",
+        "planks": "24",
+        "fuel": "60"
+      },
+      "initial_tank_fuel_units": "60",
+      "status": "new_quotes_only_unbalanced_fixture"
+    },
+    {
+      "id": "marsh_skiff_v1",
+      "kind": "vehicle",
+      "bill": {
+        "sheet_metal": "88",
+        "iron_bars": "28",
+        "steel": "24",
+        "mechanical_parts": "40",
+        "drive_assembly": "1",
+        "traction_kit": "2",
+        "planks": "64",
+        "fuel": "60"
+      },
+      "initial_tank_fuel_units": "60",
+      "status": "new_quotes_only_unbalanced_fixture"
+    },
+    {
+      "id": "ruin_reclaimer_v1",
+      "kind": "vehicle",
+      "bill": {
+        "sheet_metal": "88",
+        "iron_bars": "48",
+        "steel": "40",
+        "mechanical_parts": "56",
+        "drive_assembly": "1",
+        "traction_kit": "4",
+        "planks": "32",
+        "fuel": "60"
+      },
+      "initial_tank_fuel_units": "60",
+      "status": "new_quotes_only_unbalanced_fixture"
+    },
+    {
+      "id": "mine_mole_v1",
+      "kind": "vehicle",
+      "bill": {
+        "sheet_metal": "88",
+        "iron_bars": "56",
+        "steel": "56",
+        "mechanical_parts": "64",
+        "drive_assembly": "1",
+        "traction_kit": "4",
+        "planks": "24",
+        "fuel": "60"
+      },
+      "initial_tank_fuel_units": "60",
+      "status": "new_quotes_only_unbalanced_fixture"
+    },
+    {
+      "id": "relay_rover_v1",
+      "kind": "vehicle",
+      "bill": {
+        "sheet_metal": "104",
+        "iron_bars": "48",
+        "steel": "56",
+        "mechanical_parts": "64",
+        "drive_assembly": "1",
+        "traction_kit": "6",
+        "planks": "40",
+        "fuel": "60"
+      },
+      "initial_tank_fuel_units": "60",
+      "status": "new_quotes_only_unbalanced_fixture"
+    }
+  ],
+  "bootstrap": {
+    "initial_manually_reachable_raw": [
+      "wood",
+      "stone",
+      "metal",
+      "coal",
+      "slate"
+    ],
+    "assumed_existing_capabilities": [
+      "permanent baseline axe and pickaxe",
+      "established expanded camp and safe player return",
+      "ordinary construction funding and manual handoff"
+    ],
+    "existing_progression_excluded_from_subtotal": [
+      "hearth",
+      "camp expansions",
+      "storage upgrades",
+      "unlisted prior infrastructure and route restoration"
+    ],
+    "crude_source": "Manual pump at reachable outside-camp crude deposit. No engine fuel required for extraction, construction or return. Registered deposits and replenishement schedules remain integration gates.",
+    "renewal": "At least one attainable replenishable source for each mandatory fuel-chain leaf; resource depletion, blocked route and lost equipment cannot remove the last recovery path.",
+    "no_recursion": "No machine needs its own output or vehicle fuel to build its first working instance. The proof checks the declared graph, not physical world reachability.",
+    "subtotal_ownership": "The proof totals all nine listed producer entries once, plus a new garage and truck. The actual quote excludes already-owned producers; never charge them again. Current camp progression, tools and route costs are outside this subtotal.",
+    "world1_capability_change": "Authored selection: the new World1 truck profile requires access to the listed iron/steel/assembly/oil chain within attainable World1 play before quote admission. Do not require travel to World3 or a vehicle to acquire these inputs. Later desert/volcanic regions deepen ore/steel production and route uses; their theme is preserved without making first steel a mandatory later-world gate."
+  },
+  "fuel_contract": {
+    "resource_id": "fuel",
+    "subunits_per_fuel_unit": "120000",
+    "tank_capacity_subunits": "7200000",
+    "funded_new_purchase_fuel_units": "60",
+    "drive_subunits_per_active_millisecond": "2",
+    "tool_subunits_per_active_millisecond": "1",
+    "combined_subunits_per_active_millisecond": "3",
+    "max_authenticated_grant_milliseconds": "1000",
+    "usage": "Pay authenticated active propulsion/tool use before the corresponding simulation slice. No idle, docked, service, menu, paused, background or closed-app drain; no distance/range promise.",
+    "refuel": "Explicit whole-unit source-to-tank transfer while stationary, engine off and tools stopped; source ownership and capacity revalidated. Tank balance is separate from unlimited cargo.",
+    "docking": "All ordinary cargo, including cargo fuel, deposits atomically; operating tank stays with vehicle. Full hull and working-tool clearance, stationary and stopped tools required.",
+    "outside_wreck": "Remaining ordinary cargo and tank fuel lost exactly once; fractional tank loss has its own exact ledger.",
+    "inside_wreck": "Ordinary typed salvage and separate fractional tank estate retained; fuel estate can return only to a live eligible tank, without rounding or duplicate recovery.",
+    "dry_tank": "Engine/tool stop safely; no destruction, HP loss or deletion. Driver can exit, manually make/bring fuel, and return; persistent vehicle/cargo remain exposed under ordinary combat rules. No free recovery teleport.",
+    "inside_estate_repurchase": "Keep fractional tank estates separate from ordinary vehicle.salvage. Paid replacement must be possible while a fractional estate remains; only afterward claim it into the live replacement tank. Never combine the estate with Build14 vehicle_repurchase salvage-empty precondition, which would deadlock no-live-tank recovery. Preserve estate owner, wreck generation and one-claim receipt."
+  },
+  "purchase_policy": {
+    "new_quote": "Admit only after actual producer, material source, route, garage and current progression proofs establish the entire unpaid obligation attainable; freeze catalogue, unit schema, complete bill, starter fuel, target/generation and contribution escrow.",
+    "funding": "In the new purchase receipt debit the full frozen bill; transfer exactly initial_tank_fuel_units from the bill fuel line to tank, record every other paid input as construction spend. No double-spend or hidden free tank.",
+    "old_quotes": "Keep accepted and partially contributed legacy bills and target history unchanged; finish them with the same unpaid obligation. An old quote lacking funded starter fuel creates an empty tank.",
+    "old_vehicles": "Preserve paid vehicle ownership, HP, cargo, upgrades, quote terms, generations and existing debt; add empty tank explicitly. No retroactive construction fee or free fuel.",
+    "replacement": "Destroying/rebuilding uses typed generation change and eligible paid replacement. No automatic resurrection or quote reroll. Replacement affordability is revalidated through manual recovery chains.",
+    "dynamic_costs": "Progression/target-tier curve may select future amounts before admission; owned wealth and paid history do not raise the price. This fixture supplies a bill shape, not the final curve."
+  },
+  "migration": {
+    "metal_id": "Retain metal as stable saved ore ID. Display Iron ore only through explicit catalogue/recipe version migration and corresponding art/tooltip update. Do not create a second iron_ore balance or auto-convert ore to bars.",
+    "steel": "Retain existing steel if any. This authored iron-bars+coal refining branch supersedes the earlier design-only direct ore+coal steel shortcut for new recipe versions; complete existing in-flight recipe receipts under their original version.",
+    "fuel": "Existing registered fuel salvage becomes the same usable fuel resource only after semantic/provenance reconciliation; crude_oil remains distinct raw stock. Never equate coal with fuel.",
+    "all_custody": "Migrate player, workers, truck, warehouse, machine input/output, belts, escrow, sales, loose drops, salvage, tank estates, lost/spent histories and quotes in one atomic world save. Preserve stable transaction/tombstone identities.",
+    "failure": "Stage and validate before activation; unsupported/malformed state fails with old save intact. Rollback/retry is idempotent.",
+    "runtime_status": "No game migration, producer or outside-oil source is implemented by these files.",
+    "live_adapter_seams": "Build14 configure/payment/vehicle_repurchase/vehicle_pay_repair/_move_vehicle_goods and restore use fixed raw/planks/blocks/meal/money schemas and native ints. Catalogue additions alone are insufficient: replace coupled payment, ownership, display, cargo/warehouse and restore dispatch with exact typed custody. field_progression.price_text omits new IDs and scales all non-plank/block kinds by10; use catalogue-specific denominations and exact decimal formatting."
+  },
+  "preserved_boundaries": {
+    "camp": "Keep original fence collision until one atomic completed garage-door replacement; retain two usable bidirectional pedestrian openings and initial camp scale.",
+    "combat": "Safe camp travel uses stopped tools. Deliberate eligible hostile defense remains a selected integration requirement; no incidental friendly/owned-structure damage. Dock/service/unload always stops tools.",
+    "cargo": "Any registered resource, arbitrary exact logical count. All-resource unbounded warehouse receipt or whole-load HOLD/retry; no mandatory extra conveyor and no finite vehicle weight/slot cap.",
+    "u3": "Self-service counter; eligible living unlocked-worker bulk work/cash/jobs and hunting; camp vulnerability; useful attacking pets; paid actor/equipment recovery; furnace-blackout manual recovery; named-camp raid scope and300-second active warning; paused background simulation.",
+    "progression": "Capability-gated quotes only; no arbitrary level. Preserve T01\u2013T70 and leave missing T71\u2013T80 undefined."
+  },
+  "verification_claim": "verify_economy.py checks catalogue identifiers, positive recipes, acyclic dependencies, funded tanks, multi-use components and material bootstrap. It does not prove navigation, mining contact, fuel balance, device behavior, animation, economy fun or runtime integration."
+}

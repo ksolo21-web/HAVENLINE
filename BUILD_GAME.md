@@ -1,5 +1,9 @@
 # Build and continue Havenline
 
+## Vehicle economy and world fleet continuation
+
+[Fuel, fabrication and nine later-world vehicles](Docs/Production/VEHICLE_ECONOMY.md) continues the published snow truck/garage package with the user's subsequent low-fuel and processed-material instructions. Its read-only source audit pins the newer Build14 gameplay head `ea6e4896cc6692ee84b56f89e127feaa606eb370`; older source observations below remain dated records. This follow-up supplies designs, generated concept sheets, exact standalone fuel rules and material-graph evidence. It does not merge or certify the actively maintained gameplay branch.
+
 ## Current final acceptance
 
 [Reference acceptance standard](Docs/Production/REFERENCE_ACCEPTANCE_STANDARD.md) · [Machine-readable policy](Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json). Final reference-sensitive dimensions require at least **9.9** individually; the existing mandatory visual **exact-10** rules remain stronger. **9.5 is an interim checkpoint for reference-sensitive work.** Complete independent evidence, every mandatory check and zero known unapproved deviations are required. Historical receipts and the dated reference-audit snapshot retain their original meaning.

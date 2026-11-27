@@ -1,0 +1,1084 @@
+{
+  "schema_version": 1,
+  "scope": "Authored identifier, dependency, batch arithmetic and funded-tank checks only; not navigation, producer/runtime, balance, media or device approval.",
+  "input_sha256": {
+    "RESOURCE_CHAINS.json": "75400530bc38b937a697d0a88091c0c60373b8b94913a3c818083af7e68cf555",
+    "WORLD_VEHICLES.json": "7a4441c1a4149d89ab61a15cfcd88c16e64c2e74133df5940138f3b5e6cfc7f7",
+    "verify_economy.py": "1980d02bd6ef4f2719b5d6c6480ecfc03d194974768d363a50eeb909ade9355a"
+  },
+  "passed": true,
+  "checks_passed": 84,
+  "checks_required": 84,
+  "checks": [
+    {
+      "id": "unique_catalogue",
+      "passed": true,
+      "evidence": [
+        "blocks",
+        "coal",
+        "crude_oil",
+        "drive_assembly",
+        "fuel",
+        "iron_bars",
+        "mechanical_parts",
+        "metal",
+        "planks",
+        "sheet_metal",
+        "slate",
+        "steel",
+        "stone",
+        "traction_kit",
+        "wood"
+      ]
+    },
+    {
+      "id": "unique_recipe_ids",
+      "passed": true,
+      "evidence": [
+        "saw_planks",
+        "dress_blocks",
+        "smelt_iron",
+        "form_sheet",
+        "machine_parts",
+        "refine_steel",
+        "assemble_drive",
+        "assemble_mobility",
+        "refine_fuel"
+      ]
+    },
+    {
+      "id": "unique_producer_ids",
+      "passed": true,
+      "evidence": [
+        "camp_cooker",
+        "saw_bench",
+        "quarry_drill",
+        "coal_smelter",
+        "hand_metal_bench",
+        "steel_forge",
+        "assembly_bench",
+        "manual_oil_pump",
+        "coal_refinery"
+      ]
+    },
+    {
+      "id": "recipe_fuel_free_saw_planks",
+      "passed": true,
+      "evidence": false
+    },
+    {
+      "id": "one_output_saw_planks",
+      "passed": true,
+      "evidence": {
+        "planks": "1"
+      }
+    },
+    {
+      "id": "unique_output_planks",
+      "passed": true,
+      "evidence": "saw_planks"
+    },
+    {
+      "id": "recipe_fuel_free_dress_blocks",
+      "passed": true,
+      "evidence": false
+    },
+    {
+      "id": "one_output_dress_blocks",
+      "passed": true,
+      "evidence": {
+        "blocks": "1"
+      }
+    },
+    {
+      "id": "unique_output_blocks",
+      "passed": true,
+      "evidence": "dress_blocks"
+    },
+    {
+      "id": "recipe_fuel_free_smelt_iron",
+      "passed": true,
+      "evidence": false
+    },
+    {
+      "id": "one_output_smelt_iron",
+      "passed": true,
+      "evidence": {
+        "iron_bars": "2"
+      }
+    },
+    {
+      "id": "unique_output_iron_bars",
+      "passed": true,
+      "evidence": "smelt_iron"
+    },
+    {
+      "id": "recipe_fuel_free_form_sheet",
+      "passed": true,
+      "evidence": false
+    },
+    {
+      "id": "one_output_form_sheet",
+      "passed": true,
+      "evidence": {
+        "sheet_metal": "2"
+      }
+    },
+    {
+      "id": "unique_output_sheet_metal",
+      "passed": true,
+      "evidence": "form_sheet"
+    },
+    {
+      "id": "recipe_fuel_free_machine_parts",
+      "passed": true,
+      "evidence": false
+    },
+    {
+      "id": "one_output_machine_parts",
+      "passed": true,
+      "evidence": {
+        "mechanical_parts": "2"
+      }
+    },
+    {
+      "id": "unique_output_mechanical_parts",
+      "passed": true,
+      "evidence": "machine_parts"
+    },
+    {
+      "id": "recipe_fuel_free_refine_steel",
+      "passed": true,
+      "evidence": false
+    },
+    {
+      "id": "one_output_refine_steel",
+      "passed": true,
+      "evidence": {
+        "steel": "1"
+      }
+    },
+    {
+      "id": "unique_output_steel",
+      "passed": true,
+      "evidence": "refine_steel"
+    },
+    {
+      "id": "recipe_fuel_free_assemble_drive",
+      "passed": true,
+      "evidence": false
+    },
+    {
+      "id": "one_output_assemble_drive",
+      "passed": true,
+      "evidence": {
+        "drive_assembly": "1"
+      }
+    },
+    {
+      "id": "unique_output_drive_assembly",
+      "passed": true,
+      "evidence": "assemble_drive"
+    },
+    {
+      "id": "recipe_fuel_free_assemble_mobility",
+      "passed": true,
+      "evidence": false
+    },
+    {
+      "id": "one_output_assemble_mobility",
+      "passed": true,
+      "evidence": {
+        "traction_kit": "1"
+      }
+    },
+    {
+      "id": "unique_output_traction_kit",
+      "passed": true,
+      "evidence": "assemble_mobility"
+    },
+    {
+      "id": "recipe_fuel_free_refine_fuel",
+      "passed": true,
+      "evidence": false
+    },
+    {
+      "id": "one_output_refine_fuel",
+      "passed": true,
+      "evidence": {
+        "fuel": "10"
+      }
+    },
+    {
+      "id": "unique_output_fuel",
+      "passed": true,
+      "evidence": "refine_fuel"
+    },
+    {
+      "id": "acyclic_recipes",
+      "passed": true,
+      "evidence": {
+        "wood": 0,
+        "stone": 0,
+        "metal": 0,
+        "coal": 0,
+        "slate": 0,
+        "planks": 1,
+        "blocks": 1,
+        "iron_bars": 1,
+        "sheet_metal": 2,
+        "steel": 2,
+        "mechanical_parts": 2,
+        "drive_assembly": 3,
+        "traction_kit": 3,
+        "crude_oil": 0,
+        "fuel": 1
+      }
+    },
+    {
+      "id": "producer_dependency_camp_cooker",
+      "passed": true,
+      "evidence": []
+    },
+    {
+      "id": "fuel_free_bootstrap_camp_cooker",
+      "passed": true,
+      "evidence": {
+        "raw_inputs": {
+          "stone": "8",
+          "wood": "12"
+        },
+        "recipe_batches": {},
+        "remaining_batch_outputs": {}
+      }
+    },
+    {
+      "id": "producer_dependency_saw_bench",
+      "passed": true,
+      "evidence": [
+        "camp_cooker"
+      ]
+    },
+    {
+      "id": "fuel_free_bootstrap_saw_bench",
+      "passed": true,
+      "evidence": {
+        "raw_inputs": {
+          "stone": "6",
+          "wood": "14"
+        },
+        "recipe_batches": {},
+        "remaining_batch_outputs": {}
+      }
+    },
+    {
+      "id": "producer_dependency_quarry_drill",
+      "passed": true,
+      "evidence": [
+        "camp_cooker",
+        "saw_bench"
+      ]
+    },
+    {
+      "id": "fuel_free_bootstrap_quarry_drill",
+      "passed": true,
+      "evidence": {
+        "raw_inputs": {
+          "stone": "12",
+          "wood": "10"
+        },
+        "recipe_batches": {},
+        "remaining_batch_outputs": {}
+      }
+    },
+    {
+      "id": "producer_dependency_coal_smelter",
+      "passed": true,
+      "evidence": [
+        "camp_cooker",
+        "quarry_drill",
+        "saw_bench"
+      ]
+    },
+    {
+      "id": "fuel_free_bootstrap_coal_smelter",
+      "passed": true,
+      "evidence": {
+        "raw_inputs": {
+          "stone": "36",
+          "wood": "20"
+        },
+        "recipe_batches": {
+          "dress_blocks": "24",
+          "saw_planks": "20"
+        },
+        "remaining_batch_outputs": {}
+      }
+    },
+    {
+      "id": "producer_dependency_hand_metal_bench",
+      "passed": true,
+      "evidence": [
+        "camp_cooker",
+        "coal_smelter",
+        "quarry_drill",
+        "saw_bench"
+      ]
+    },
+    {
+      "id": "fuel_free_bootstrap_hand_metal_bench",
+      "passed": true,
+      "evidence": {
+        "raw_inputs": {
+          "coal": "6",
+          "metal": "12",
+          "stone": "12",
+          "wood": "16"
+        },
+        "recipe_batches": {
+          "dress_blocks": "12",
+          "smelt_iron": "6",
+          "saw_planks": "16"
+        },
+        "remaining_batch_outputs": {}
+      }
+    },
+    {
+      "id": "producer_dependency_steel_forge",
+      "passed": true,
+      "evidence": [
+        "camp_cooker",
+        "coal_smelter",
+        "hand_metal_bench",
+        "quarry_drill",
+        "saw_bench"
+      ]
+    },
+    {
+      "id": "fuel_free_bootstrap_steel_forge",
+      "passed": true,
+      "evidence": {
+        "raw_inputs": {
+          "coal": "12",
+          "metal": "24",
+          "stone": "24"
+        },
+        "recipe_batches": {
+          "form_sheet": "4",
+          "dress_blocks": "24",
+          "smelt_iron": "12"
+        },
+        "remaining_batch_outputs": {}
+      }
+    },
+    {
+      "id": "producer_dependency_assembly_bench",
+      "passed": true,
+      "evidence": [
+        "camp_cooker",
+        "coal_smelter",
+        "hand_metal_bench",
+        "quarry_drill",
+        "saw_bench",
+        "steel_forge"
+      ]
+    },
+    {
+      "id": "fuel_free_bootstrap_assembly_bench",
+      "passed": true,
+      "evidence": {
+        "raw_inputs": {
+          "coal": "22",
+          "metal": "44",
+          "stone": "16",
+          "wood": "20"
+        },
+        "recipe_batches": {
+          "machine_parts": "6",
+          "form_sheet": "6",
+          "dress_blocks": "16",
+          "smelt_iron": "22",
+          "saw_planks": "20"
+        },
+        "remaining_batch_outputs": {}
+      }
+    },
+    {
+      "id": "producer_dependency_manual_oil_pump",
+      "passed": true,
+      "evidence": [
+        "assembly_bench",
+        "camp_cooker",
+        "coal_smelter",
+        "hand_metal_bench",
+        "quarry_drill",
+        "saw_bench",
+        "steel_forge"
+      ]
+    },
+    {
+      "id": "fuel_free_bootstrap_manual_oil_pump",
+      "passed": true,
+      "evidence": {
+        "raw_inputs": {
+          "coal": "10",
+          "metal": "20",
+          "stone": "12",
+          "wood": "16"
+        },
+        "recipe_batches": {
+          "machine_parts": "4",
+          "dress_blocks": "12",
+          "smelt_iron": "10",
+          "saw_planks": "16"
+        },
+        "remaining_batch_outputs": {}
+      }
+    },
+    {
+      "id": "producer_dependency_coal_refinery",
+      "passed": true,
+      "evidence": [
+        "assembly_bench",
+        "camp_cooker",
+        "coal_smelter",
+        "hand_metal_bench",
+        "manual_oil_pump",
+        "quarry_drill",
+        "saw_bench",
+        "steel_forge"
+      ]
+    },
+    {
+      "id": "fuel_free_bootstrap_coal_refinery",
+      "passed": true,
+      "evidence": {
+        "raw_inputs": {
+          "coal": "26",
+          "metal": "52",
+          "stone": "32"
+        },
+        "recipe_batches": {
+          "machine_parts": "6",
+          "form_sheet": "12",
+          "dress_blocks": "32",
+          "smelt_iron": "26"
+        },
+        "remaining_batch_outputs": {}
+      }
+    },
+    {
+      "id": "all_recipe_producers_available",
+      "passed": true,
+      "evidence": [
+        "assembly_bench",
+        "camp_cooker",
+        "coal_refinery",
+        "coal_smelter",
+        "hand_metal_bench",
+        "manual_oil_pump",
+        "quarry_drill",
+        "saw_bench",
+        "steel_forge"
+      ]
+    },
+    {
+      "id": "crude_pump_unlock",
+      "passed": true,
+      "evidence": [
+        "coal",
+        "crude_oil",
+        "metal",
+        "slate",
+        "stone",
+        "wood"
+      ]
+    },
+    {
+      "id": "pump_outside_camp",
+      "passed": true,
+      "evidence": "outside_camp_reachable_manual_oil_site"
+    },
+    {
+      "id": "pump_authorizes_crude",
+      "passed": true,
+      "evidence": [
+        "crude_oil"
+      ]
+    },
+    {
+      "id": "refinery_explicit_coal_and_crude",
+      "passed": true,
+      "evidence": {
+        "crude_oil": "10",
+        "coal": "1"
+      }
+    },
+    {
+      "id": "unique_profiles",
+      "passed": true,
+      "evidence": [
+        "canyon_breaker_v1",
+        "forge_hauler_v1",
+        "garage_v2",
+        "marsh_skiff_v1",
+        "mine_mole_v1",
+        "reef_salvager_v1",
+        "relay_rover_v1",
+        "ruin_reclaimer_v1",
+        "skybridge_carrier_v1",
+        "snow_truck_v2",
+        "timber_forwarder_v1"
+      ]
+    },
+    {
+      "id": "known_profile_kinds",
+      "passed": true,
+      "evidence": {
+        "garage_v2": "garage",
+        "snow_truck_v2": "vehicle",
+        "timber_forwarder_v1": "vehicle",
+        "canyon_breaker_v1": "vehicle",
+        "reef_salvager_v1": "vehicle",
+        "skybridge_carrier_v1": "vehicle",
+        "forge_hauler_v1": "vehicle",
+        "marsh_skiff_v1": "vehicle",
+        "ruin_reclaimer_v1": "vehicle",
+        "mine_mole_v1": "vehicle",
+        "relay_rover_v1": "vehicle"
+      }
+    },
+    {
+      "id": "snow_truck_is_vehicle",
+      "passed": true,
+      "evidence": "vehicle"
+    },
+    {
+      "id": "funded_tank_snow_truck_v2",
+      "passed": true,
+      "evidence": {
+        "bill_fuel": "60",
+        "tank_units": "60"
+      }
+    },
+    {
+      "id": "funded_tank_timber_forwarder_v1",
+      "passed": true,
+      "evidence": {
+        "bill_fuel": "60",
+        "tank_units": "60"
+      }
+    },
+    {
+      "id": "funded_tank_canyon_breaker_v1",
+      "passed": true,
+      "evidence": {
+        "bill_fuel": "60",
+        "tank_units": "60"
+      }
+    },
+    {
+      "id": "funded_tank_reef_salvager_v1",
+      "passed": true,
+      "evidence": {
+        "bill_fuel": "60",
+        "tank_units": "60"
+      }
+    },
+    {
+      "id": "funded_tank_skybridge_carrier_v1",
+      "passed": true,
+      "evidence": {
+        "bill_fuel": "60",
+        "tank_units": "60"
+      }
+    },
+    {
+      "id": "funded_tank_forge_hauler_v1",
+      "passed": true,
+      "evidence": {
+        "bill_fuel": "60",
+        "tank_units": "60"
+      }
+    },
+    {
+      "id": "funded_tank_marsh_skiff_v1",
+      "passed": true,
+      "evidence": {
+        "bill_fuel": "60",
+        "tank_units": "60"
+      }
+    },
+    {
+      "id": "funded_tank_ruin_reclaimer_v1",
+      "passed": true,
+      "evidence": {
+        "bill_fuel": "60",
+        "tank_units": "60"
+      }
+    },
+    {
+      "id": "funded_tank_mine_mole_v1",
+      "passed": true,
+      "evidence": {
+        "bill_fuel": "60",
+        "tank_units": "60"
+      }
+    },
+    {
+      "id": "funded_tank_relay_rover_v1",
+      "passed": true,
+      "evidence": {
+        "bill_fuel": "60",
+        "tank_units": "60"
+      }
+    },
+    {
+      "id": "eight_truck_inputs",
+      "passed": true,
+      "evidence": {
+        "sheet_metal": "80",
+        "iron_bars": "40",
+        "steel": "24",
+        "mechanical_parts": "40",
+        "drive_assembly": "1",
+        "traction_kit": "4",
+        "planks": "36",
+        "fuel": "60"
+      }
+    },
+    {
+      "id": "multiple_real_uses_mechanical_parts",
+      "passed": true,
+      "evidence": [
+        "build:canyon_breaker_v1",
+        "build:forge_hauler_v1",
+        "build:garage_v2",
+        "build:marsh_skiff_v1",
+        "build:mine_mole_v1",
+        "build:reef_salvager_v1",
+        "build:relay_rover_v1",
+        "build:ruin_reclaimer_v1",
+        "build:skybridge_carrier_v1",
+        "build:snow_truck_v2",
+        "build:timber_forwarder_v1",
+        "producer:assembly_bench",
+        "producer:coal_refinery",
+        "producer:manual_oil_pump",
+        "recipe:assemble_drive",
+        "recipe:assemble_mobility"
+      ]
+    },
+    {
+      "id": "multiple_real_uses_drive_assembly",
+      "passed": true,
+      "evidence": [
+        "build:canyon_breaker_v1",
+        "build:forge_hauler_v1",
+        "build:marsh_skiff_v1",
+        "build:mine_mole_v1",
+        "build:reef_salvager_v1",
+        "build:relay_rover_v1",
+        "build:ruin_reclaimer_v1",
+        "build:skybridge_carrier_v1",
+        "build:snow_truck_v2",
+        "build:timber_forwarder_v1"
+      ]
+    },
+    {
+      "id": "multiple_real_uses_traction_kit",
+      "passed": true,
+      "evidence": [
+        "build:canyon_breaker_v1",
+        "build:forge_hauler_v1",
+        "build:marsh_skiff_v1",
+        "build:mine_mole_v1",
+        "build:reef_salvager_v1",
+        "build:relay_rover_v1",
+        "build:ruin_reclaimer_v1",
+        "build:skybridge_carrier_v1",
+        "build:snow_truck_v2",
+        "build:timber_forwarder_v1"
+      ]
+    },
+    {
+      "id": "no_speculative_feedstock",
+      "passed": true,
+      "evidence": [
+        "blocks",
+        "coal",
+        "crude_oil",
+        "drive_assembly",
+        "fuel",
+        "iron_bars",
+        "mechanical_parts",
+        "metal",
+        "planks",
+        "sheet_metal",
+        "slate",
+        "steel",
+        "stone",
+        "traction_kit",
+        "wood"
+      ]
+    },
+    {
+      "id": "worlds_2_to_10",
+      "passed": true,
+      "evidence": [
+        "Timber Forwarder",
+        "Canyon Breaker",
+        "Reef Salvager",
+        "Skybridge Carrier",
+        "Forge Hauler",
+        "Marsh Skiff",
+        "Ruin Reclaimer",
+        "Mine Mole",
+        "Relay Rover"
+      ]
+    },
+    {
+      "id": "unique_world_vehicle_ids",
+      "passed": true,
+      "evidence": [
+        "timber_forwarder",
+        "canyon_breaker",
+        "reef_salvager",
+        "skybridge_carrier",
+        "forge_hauler",
+        "marsh_skiff",
+        "ruin_reclaimer",
+        "mine_mole",
+        "relay_rover"
+      ]
+    },
+    {
+      "id": "authentic_world_task_binding",
+      "passed": true,
+      "evidence": {
+        "2": "T44",
+        "3": "T45",
+        "4": "T46",
+        "5": "T47",
+        "6": "T48",
+        "7": "T49",
+        "8": "T50",
+        "9": "T51",
+        "10": "T52"
+      }
+    },
+    {
+      "id": "world_profile_bindings",
+      "passed": true,
+      "evidence": [
+        "timber_forwarder_v1",
+        "canyon_breaker_v1",
+        "reef_salvager_v1",
+        "skybridge_carrier_v1",
+        "forge_hauler_v1",
+        "marsh_skiff_v1",
+        "ruin_reclaimer_v1",
+        "mine_mole_v1",
+        "relay_rover_v1"
+      ]
+    },
+    {
+      "id": "recurring_jobs",
+      "passed": true,
+      "evidence": "Each of nine vehicles has at least two recurring jobs."
+    },
+    {
+      "id": "finite_parts_not_payment",
+      "passed": true,
+      "evidence": "No vehicle or garage bill contains relay_component."
+    },
+    {
+      "id": "retained_metal_id",
+      "passed": true,
+      "evidence": "Display migration never creates a duplicate ore balance."
+    },
+    {
+      "id": "tank_denominations",
+      "passed": true,
+      "evidence": "7200000"
+    },
+    {
+      "id": "reject_circular_recipe",
+      "passed": true,
+      "evidence": "iron_bars -> sheet_metal -> iron_bars rejected"
+    },
+    {
+      "id": "reject_missing_first_smelter",
+      "passed": true,
+      "evidence": {
+        "iron_bars": "2"
+      }
+    },
+    {
+      "id": "reject_missing_oil_source",
+      "passed": true,
+      "evidence": {
+        "fuel": "10"
+      }
+    },
+    {
+      "id": "reject_unknown_item",
+      "passed": true,
+      "evidence": {
+        "unregistered_part": "1"
+      }
+    }
+  ],
+  "profile_expansions": {
+    "garage_v2": {
+      "raw_inputs": {
+        "coal": "44",
+        "metal": "64",
+        "stone": "48",
+        "wood": "64"
+      },
+      "recipe_batches": {
+        "machine_parts": "8",
+        "form_sheet": "12",
+        "refine_steel": "12",
+        "dress_blocks": "48",
+        "smelt_iron": "32",
+        "saw_planks": "64"
+      },
+      "remaining_batch_outputs": {}
+    },
+    "snow_truck_v2": {
+      "raw_inputs": {
+        "coal": "170",
+        "crude_oil": "60",
+        "metal": "256",
+        "wood": "44"
+      },
+      "recipe_batches": {
+        "assemble_drive": "1",
+        "assemble_mobility": "4",
+        "machine_parts": "31",
+        "form_sheet": "41",
+        "refine_steel": "36",
+        "refine_fuel": "6",
+        "smelt_iron": "128",
+        "saw_planks": "44"
+      },
+      "remaining_batch_outputs": {}
+    },
+    "timber_forwarder_v1": {
+      "raw_inputs": {
+        "coal": "186",
+        "crude_oil": "60",
+        "metal": "272",
+        "wood": "68"
+      },
+      "recipe_batches": {
+        "assemble_drive": "1",
+        "assemble_mobility": "6",
+        "machine_parts": "37",
+        "form_sheet": "37",
+        "refine_steel": "44",
+        "refine_fuel": "6",
+        "smelt_iron": "136",
+        "saw_planks": "68"
+      },
+      "remaining_batch_outputs": {}
+    },
+    "canyon_breaker_v1": {
+      "raw_inputs": {
+        "coal": "222",
+        "crude_oil": "60",
+        "metal": "320",
+        "wood": "28"
+      },
+      "recipe_batches": {
+        "assemble_drive": "1",
+        "assemble_mobility": "2",
+        "machine_parts": "35",
+        "form_sheet": "45",
+        "refine_steel": "56",
+        "refine_fuel": "6",
+        "smelt_iron": "160",
+        "saw_planks": "28"
+      },
+      "remaining_batch_outputs": {}
+    },
+    "reef_salvager_v1": {
+      "raw_inputs": {
+        "coal": "228",
+        "crude_oil": "60",
+        "metal": "340",
+        "wood": "40"
+      },
+      "recipe_batches": {
+        "assemble_drive": "1",
+        "assemble_mobility": "4",
+        "machine_parts": "39",
+        "form_sheet": "57",
+        "refine_steel": "52",
+        "refine_fuel": "6",
+        "smelt_iron": "170",
+        "saw_planks": "40"
+      },
+      "remaining_batch_outputs": {}
+    },
+    "skybridge_carrier_v1": {
+      "raw_inputs": {
+        "coal": "224",
+        "crude_oil": "60",
+        "metal": "316",
+        "wood": "48"
+      },
+      "recipe_batches": {
+        "assemble_drive": "1",
+        "assemble_mobility": "4",
+        "machine_parts": "37",
+        "form_sheet": "41",
+        "refine_steel": "60",
+        "refine_fuel": "6",
+        "smelt_iron": "158",
+        "saw_planks": "48"
+      },
+      "remaining_batch_outputs": {}
+    },
+    "forge_hauler_v1": {
+      "raw_inputs": {
+        "coal": "298",
+        "crude_oil": "60",
+        "metal": "424",
+        "wood": "36"
+      },
+      "recipe_batches": {
+        "assemble_drive": "1",
+        "assemble_mobility": "6",
+        "machine_parts": "43",
+        "form_sheet": "61",
+        "refine_steel": "80",
+        "refine_fuel": "6",
+        "smelt_iron": "212",
+        "saw_planks": "36"
+      },
+      "remaining_batch_outputs": {}
+    },
+    "marsh_skiff_v1": {
+      "raw_inputs": {
+        "coal": "156",
+        "crude_oil": "60",
+        "metal": "236",
+        "wood": "68"
+      },
+      "recipe_batches": {
+        "assemble_drive": "1",
+        "assemble_mobility": "2",
+        "machine_parts": "27",
+        "form_sheet": "45",
+        "refine_steel": "32",
+        "refine_fuel": "6",
+        "smelt_iron": "118",
+        "saw_planks": "68"
+      },
+      "remaining_batch_outputs": {}
+    },
+    "ruin_reclaimer_v1": {
+      "raw_inputs": {
+        "coal": "218",
+        "crude_oil": "60",
+        "metal": "320",
+        "wood": "40"
+      },
+      "recipe_batches": {
+        "assemble_drive": "1",
+        "assemble_mobility": "4",
+        "machine_parts": "39",
+        "form_sheet": "45",
+        "refine_steel": "52",
+        "refine_fuel": "6",
+        "smelt_iron": "160",
+        "saw_planks": "40"
+      },
+      "remaining_batch_outputs": {}
+    },
+    "mine_mole_v1": {
+      "raw_inputs": {
+        "coal": "258",
+        "crude_oil": "60",
+        "metal": "368",
+        "wood": "32"
+      },
+      "recipe_batches": {
+        "assemble_drive": "1",
+        "assemble_mobility": "4",
+        "machine_parts": "43",
+        "form_sheet": "45",
+        "refine_steel": "68",
+        "refine_fuel": "6",
+        "smelt_iron": "184",
+        "saw_planks": "32"
+      },
+      "remaining_batch_outputs": {}
+    },
+    "relay_rover_v1": {
+      "raw_inputs": {
+        "coal": "274",
+        "crude_oil": "60",
+        "metal": "392",
+        "wood": "52"
+      },
+      "recipe_batches": {
+        "assemble_drive": "1",
+        "assemble_mobility": "6",
+        "machine_parts": "47",
+        "form_sheet": "53",
+        "refine_steel": "72",
+        "refine_fuel": "6",
+        "smelt_iron": "196",
+        "saw_planks": "52"
+      },
+      "remaining_batch_outputs": {}
+    }
+  },
+  "producer_infrastructure_expansion": {
+    "raw_inputs": {
+      "coal": "76",
+      "metal": "152",
+      "stone": "158",
+      "wood": "108"
+    },
+    "recipe_batches": {
+      "machine_parts": "16",
+      "form_sheet": "22",
+      "dress_blocks": "120",
+      "smelt_iron": "76",
+      "saw_planks": "72"
+    },
+    "remaining_batch_outputs": {}
+  },
+  "new_producers_plus_garage_plus_truck_expansion": {
+    "raw_inputs": {
+      "coal": "290",
+      "crude_oil": "60",
+      "metal": "472",
+      "stone": "206",
+      "wood": "216"
+    },
+    "recipe_batches": {
+      "assemble_drive": "1",
+      "assemble_mobility": "4",
+      "machine_parts": "55",
+      "form_sheet": "75",
+      "refine_steel": "48",
+      "dress_blocks": "168",
+      "refine_fuel": "6",
+      "smelt_iron": "236",
+      "saw_planks": "180"
+    },
+    "remaining_batch_outputs": {}
+  },
+  "subtotal_exclusions": [
+    "hearth",
+    "camp expansions",
+    "storage upgrades",
+    "unlisted prior infrastructure and route restoration"
+  ]
+}

@@ -10,12 +10,19 @@ and the user's latest request take precedence over conflicting older preservatio
 and sanctuary text in the baseline repository. Exterior truck cargo destruction is
 a narrow exception to ordinary equipment salvage. Other objects retain their own rules.
 
+**Current continuation:** the user's later instruction explicitly supersedes the
+earlier no-fuel decision. `fuel_rules.gd` now provides the bounded exact fuel layer
+described below. Prior frozen source and review receipts remain historical; this
+changed component requires a new independent review. This says nothing about the
+absence of vehicle work in the separately owned live game branch.
+
 ## Implemented behavior
 
 - Freeze an adapter-supplied attainable resource bill against a completed garage,
   its in-camp purchase plot, payer, next vehicle generation and catalogue version.
   Pay that exact bill from real participating account custody once. No default
-  price, level unlock, fuel meter, upgrade curve or premium currency is introduced.
+  price, level unlock, upgrade curve or premium currency is introduced. Fuel rates
+  and tank size are explicit prototype calibration, not measured final balance.
 - Reserve one pending purchase or live truck per garage bay. Paid replacement has a
   new generation, level 1, empty cargo, and the old destruction tombstone.
 - Preserve a frozen quote's bill while rebinding it to an actually rebuilt garage.
@@ -147,6 +154,125 @@ Load `vehicle_rules.gd` within this standalone project's resource root.
 | `snapshot()` / `restore(saved, adapter)` | Export or replay the component's complete durable successful history. |
 | `audit()` | Check exact resource conservation; explicitly reports no game integration. |
 
+## Fuel v2: low consumption, exact accounting
+
+The selected prototype uses a **60-unit operational tank**. Unlimited `fuel` cargo
+remains ordinary whole-unit inventory. The tank is a distinct owner inside this
+same conserved ledger; it does not impose a cargo capacity or automatically burn
+fuel stored in a backpack, warehouse, or truck bed.
+
+| Prototype calibration | Exact representation |
+|---|---|
+| One fuel unit | 120,000 subunits |
+| Tank capacity | 7,200,000 subunits / 60 units |
+| Driving | 2 subunits per active millisecond; 1 unit per 60 seconds |
+| Blades operating | 1 subunit per active millisecond; 1 unit per 120 seconds |
+| Driving and blades together | 3 subunits per active millisecond |
+| Parked, idle, paused, menus/background | No consumption |
+
+These starting rates target modest use. They do not establish final trip duration,
+fuel affordability, vehicle balance, or how the actual world reports active use.
+At these constants a full tank would fund 60 minutes of driving alone, 120 minutes
+of blades alone, or 40 minutes of continuous combined use. Actual play needs testing.
+
+Every subsecond remainder persists as an exact decimal subunit balance. No floating
+timer, fractional debt reset, integer-unit rounding loss or independent fuel wallet
+is used. Fuel conservation converts ordinary whole units to subunits exactly:
+
+`introduced fuel × 120000 = ordinary custody/spending/loss × 120000 + tanks + burning + tank loss + fractional estates`
+
+The conversion uses arbitrary-length decimal multiplication. Only the deliberately
+bounded tank and at-most-1,000ms work slice are converted to native integers.
+
+### Paid initial fuel and legacy saves
+
+A new authored quote may declare `initial_tank_fuel_units: "60"`. Its ordinary
+`bill.fuel` must contain at least those 60 paid units. Purchase debits the entire
+actual bill once, then assigns the named 60 units to the tank and only the remainder
+to construction spending. Its receipt separates `debited_bill` from `consumed`
+materials. The funded portion cannot be counted as both burnt construction fuel
+and tank stock. A future catalog must bind this field for the newly specified truck
+offer, along with its expensive varied attainable processed-material bill.
+
+Old accepted quotes retain their original terms. Old quotes without that field
+receive an empty tank and no retrospective fuel charge. The explicit trusted
+`activate_fuel_policy` migration creates empty tank records for existing vehicles;
+it does not mint starter fuel or erase their carried goods. The actual game must
+provide the attainable first refill and let the player exit at zero fuel. Manual
+oil extraction and a coal-fired refinery without a truck-fuel prerequisite belong
+to the world economy; this component neither implements nor simulates those producers.
+
+`evidence/fuel-v2/legacy-v1-snapshot.json` was genuinely captured from the unchanged
+201dcbe predecessor before editing this source. Its provenance records the original
+module and snapshot hashes. The fuel test replays that old snapshot before applying
+the new migration and verifies its unchanged cargo and exact later fuel history.
+
+### Fuel API and world-adapter facts
+
+All these commands use the same already-bound adapter and its revision recheck.
+
+| Method | Required behavior |
+|---|---|
+| `activate_fuel_policy(request_id)` | Accept one trusted migration receipt, prototype policy ID, active-play timeline ID and decimal active tick; existing tanks start empty. |
+| `refuel(vehicle_id, generation, source_kind, source_id, source_generation, units, request_id)` | Move requested whole `fuel` units from available `account` or that truck's `truck` cargo while stationary, engine off and blades stopped. |
+| `grant_powered_use(vehicle_id, generation, usage_id, request_id)` | Admit a bounded current active-input slice and return only its affordable powered milliseconds. |
+| `recover_tank_fuel(vehicle_id, generation, cache_id, request_id)` | Move reachable fractional estate fuel directly into available tank space; retain any remainder in that same estate. |
+
+Refueling and fractional recovery require adapter facts `contact_id`,
+`source_available`, `speed: 0`, `blade_speed: 0`, and `engine_running: false`.
+Refuel uses complete whole units and rejects a requested amount that exceeds tank
+space; it does not discard the fraction above capacity. It can refill from a valid
+player, warehouse or own-cargo source. A source generation must still match.
+
+Fuel-enabled purchase additionally requires `fuel_clock: {timeline_id, active_tick}`.
+The adapter verifies this is the authoritative current clock, never a price/UI input.
+The clock cannot precede migration or already-recorded vehicle windows.
+
+Powered use requires facts `{timeline_id, from_tick, elapsed_ms, active_play,
+driving, blades}`. The active slice must be an integer from 1 through 1,000ms.
+`from_tick` is a canonical decimal string and cannot overlap a previously consumed
+range. Gaps may represent dormant/idle time; they confer no powered permission and
+are not retroactively charged. A paused observation has zero elapsed time and no
+driving/blade input. Offline catch-up burn is rejected.
+
+Usage identities are canonical tuples of vehicle ID, normalized generation and
+usage ID. Colons, slashes and JSON escapes inside IDs cannot alias a different
+vehicle's grant, including after JSON save/restore. Reusing an already-consumed
+tuple with a new request ID rejects; replaying its original request returns only
+the existing receipt. The rejected delimiter-concatenation candidate and its
+independent finding are preserved under `evidence/fuel-v2/rejected-usage-identity-r1/`.
+
+**The grant precedes powered movement and harvesting.** The world may apply only
+the returned `powered_ms`, and must apply each exact grant ID/receipt once as part
+of its durable action transaction. A duplicate receipt is the same already-issued
+grant, not permission to move or harvest again. Driving and blade results must obey
+the same granted duration. When fuel runs short, the response can grant a smaller
+slice; at zero fuel it durably denies powered use with `powered_use_allowed: false`
+and `powered_ms: 0`. Its `ok: true` means the denial was processed and journaled,
+not that driving was approved. This preserves the time frontier so refilling cannot
+retroactively turn an already-denied old window into free activity.
+
+The standalone fixture cannot establish honest active time, collision travel,
+actual blade work, motion once per grant, refinery output or a real paid receipt.
+The live adapter must bind these facts to its current vehicle/input/save APIs.
+
+### Garage return, depletion and destruction
+
+Docking unloads all ordinary cargo, including its fuel, to the warehouse. It leaves
+the operational tank alone. There is no automatic refill, automatic tank unload,
+idle consumption or invisible siphon from the unlimited cargo map.
+
+Outside-camp destruction moves remaining tank subunits to permanent loss along
+with all ordinary carried cargo. Inside-camp destruction retains the exact tank
+remainder as a persistent fractional fuel estate alongside ordinary salvage. A
+real service interaction can recover that estate into a live truck tank, bounded
+by its available space; the remainder persists without rounding. Neither a paid
+replacement nor replaying death/refill/dock can clone any fuel.
+
+No-fuel behavior must allow driver exit, continued on-foot play and an attainable
+refill/recovery route. Those controls and routes remain actual-game acceptance
+requirements, not claims established by this native ledger.
+
 Successful operations receive an immutable receipt and ordered sequence. Failed
 operations do not consume the request ID, so a receiver HOLD may retry when the
 same operation becomes valid. Successful receipt replay does not emit another
@@ -189,6 +315,15 @@ From the repository root:
 godot --headless --path tools/havenline/vehicle_rules --script tests/run_all.gd
 ```
 
-The runner writes `evidence/native-results.json` and exits nonzero on a failed check.
-`evidence/source-manifest.json` binds the source/test bytes for the recorded run.
-Independent review and actual scene approval are separate evidence.
+The original 107-check runner now writes `evidence/fuel-v2/legacy-regression.json`;
+the predecessor's `evidence/native-results.json` and source manifest are preserved
+as historical receipts. Run the new fuel suite with:
+
+```sh
+godot --headless --path tools/havenline/vehicle_rules --script tests/run_fuel_v2.gd
+```
+
+New source hashes, engine identity, logs and both results belong in
+`evidence/fuel-v2/`. Parse/assertion errors and incomplete coverage are failures even
+if the engine happens to return exit code zero. Independent review and actual scene
+approval remain separate evidence.
