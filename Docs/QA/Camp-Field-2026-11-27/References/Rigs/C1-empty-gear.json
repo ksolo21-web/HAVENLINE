@@ -1,0 +1,582 @@
+{
+ "method": "Original native surface triangles, posed by actual 120Hz bone and bind matrices from the field scene. Welded adjacency and rest intersections are removed. An exposed physical cross is exterior-visible to one of six studio views or the field elevation. Cross length is not penetration depth. The three longest bounded candidates by overlapping AABB size per anatomical family per tick were ray-traced. Other contacts require render review.",
+ "visible_to": [
+  "front",
+  "back",
+  "left",
+  "right",
+  "front three quarter",
+  "rear three quarter",
+  "gameplay"
+ ],
+ "ticks_scanned": 36,
+ "base_pairs": 1783,
+ "whole_triangles": 25333,
+ "modes": {
+  "launch": {
+   "scanned_ticks": 4,
+   "pairs": {
+    "boot L/torso": 2,
+    "glove R/sleeve R": 4,
+    "boot R/torso": 8
+   },
+   "samples": [
+    {
+     "tick": 55,
+     "new_whole_mesh_pairs": 632
+    },
+    {
+     "tick": 60,
+     "new_whole_mesh_pairs": 314
+    },
+    {
+     "tick": 63,
+     "new_whole_mesh_pairs": 181
+    },
+    {
+     "tick": 65,
+     "new_whole_mesh_pairs": 191
+    }
+   ],
+   "max": {
+    "boot L/torso": {
+     "tick": 55,
+     "line_mm": 3.48,
+     "triangles": [
+      19712,
+      19721
+     ],
+     "views": [
+      0,
+      3,
+      5
+     ],
+     "world_mid_actor_m": [
+      0.08461523056030273,
+      0.2123892456293106,
+      -0.12894409894943237
+     ]
+    },
+    "glove R/sleeve R": {
+     "tick": 60,
+     "line_mm": 13.27,
+     "triangles": [
+      9749,
+      14868
+     ],
+     "views": [
+      3,
+      5
+     ],
+     "world_mid_actor_m": [
+      -0.5003027319908142,
+      0.7804727554321289,
+      -0.20964565873146057
+     ]
+    },
+    "boot R/torso": {
+     "tick": 60,
+     "line_mm": 20.49,
+     "triangles": [
+      16985,
+      16986
+     ],
+     "views": [
+      6
+     ],
+     "world_mid_actor_m": [
+      -0.27656906843185425,
+      0.3254314661026001,
+      0.08778967708349228
+     ]
+    }
+   }
+  },
+  "cruise": {
+   "scanned_ticks": 18,
+   "pairs": {
+    "sleeve R/torso": 12,
+    "sleeve L/torso": 13,
+    "glove R/sleeve R": 22,
+    "boot R/torso": 37,
+    "boot L/torso": 33,
+    "glove L/sleeve L": 14,
+    "head/sleeve L": 2
+   },
+   "samples": [
+    {
+     "tick": 139,
+     "new_whole_mesh_pairs": 303
+    },
+    {
+     "tick": 140,
+     "new_whole_mesh_pairs": 340
+    },
+    {
+     "tick": 142,
+     "new_whole_mesh_pairs": 376
+    },
+    {
+     "tick": 144,
+     "new_whole_mesh_pairs": 575
+    },
+    {
+     "tick": 154,
+     "new_whole_mesh_pairs": 1000
+    },
+    {
+     "tick": 160,
+     "new_whole_mesh_pairs": 489
+    },
+    {
+     "tick": 161,
+     "new_whole_mesh_pairs": 488
+    },
+    {
+     "tick": 162,
+     "new_whole_mesh_pairs": 551
+    },
+    {
+     "tick": 164,
+     "new_whole_mesh_pairs": 616
+    },
+    {
+     "tick": 167,
+     "new_whole_mesh_pairs": 764
+    },
+    {
+     "tick": 168,
+     "new_whole_mesh_pairs": 787
+    },
+    {
+     "tick": 170,
+     "new_whole_mesh_pairs": 764
+    },
+    {
+     "tick": 188,
+     "new_whole_mesh_pairs": 420
+    },
+    {
+     "tick": 189,
+     "new_whole_mesh_pairs": 546
+    },
+    {
+     "tick": 190,
+     "new_whole_mesh_pairs": 381
+    },
+    {
+     "tick": 191,
+     "new_whole_mesh_pairs": 385
+    },
+    {
+     "tick": 193,
+     "new_whole_mesh_pairs": 341
+    },
+    {
+     "tick": 197,
+     "new_whole_mesh_pairs": 516
+    }
+   ],
+   "max": {
+    "sleeve R/torso": {
+     "tick": 170,
+     "line_mm": 24.09,
+     "triangles": [
+      2718,
+      21182
+     ],
+     "views": [
+      1
+     ],
+     "world_mid_actor_m": [
+      -0.27508753538131714,
+      0.6697360277175903,
+      -0.12348197400569916
+     ]
+    },
+    "sleeve L/torso": {
+     "tick": 188,
+     "line_mm": 16.23,
+     "triangles": [
+      4787,
+      6939
+     ],
+     "views": [
+      4
+     ],
+     "world_mid_actor_m": [
+      0.250148206949234,
+      0.852347195148468,
+      -0.08099350333213806
+     ]
+    },
+    "glove R/sleeve R": {
+     "tick": 167,
+     "line_mm": 13.89,
+     "triangles": [
+      7627,
+      9639
+     ],
+     "views": [
+      3
+     ],
+     "world_mid_actor_m": [
+      -0.4946237802505493,
+      0.7362504005432129,
+      -0.046842820942401886
+     ]
+    },
+    "boot R/torso": {
+     "tick": 160,
+     "line_mm": 21.19,
+     "triangles": [
+      16985,
+      16986
+     ],
+     "views": [
+      6
+     ],
+     "world_mid_actor_m": [
+      -0.2775370478630066,
+      0.32293814420700073,
+      0.0820566862821579
+     ]
+    },
+    "boot L/torso": {
+     "tick": 154,
+     "line_mm": 12.22,
+     "triangles": [
+      12850,
+      12857
+     ],
+     "views": [
+      3,
+      6
+     ],
+     "world_mid_actor_m": [
+      0.18742339313030243,
+      0.0998559445142746,
+      0.09903540462255478
+     ]
+    },
+    "glove L/sleeve L": {
+     "tick": 188,
+     "line_mm": 12.99,
+     "triangles": [
+      10820,
+      24276
+     ],
+     "views": [
+      2,
+      4
+     ],
+     "world_mid_actor_m": [
+      0.5149871110916138,
+      0.775421142578125,
+      -0.20295462012290955
+     ]
+    },
+    "head/sleeve L": {
+     "tick": 167,
+     "line_mm": 1.54,
+     "triangles": [
+      13636,
+      17812
+     ],
+     "views": [
+      2
+     ],
+     "world_mid_actor_m": [
+      0.33515387773513794,
+      1.0001132488250732,
+      0.06438419222831726
+     ]
+    }
+   }
+  },
+  "turn": {
+   "scanned_ticks": 8,
+   "pairs": {
+    "sleeve R/torso": 6,
+    "glove L/sleeve L": 3,
+    "glove R/sleeve R": 12,
+    "sleeve L/torso": 4,
+    "boot L/torso": 8,
+    "boot R/torso": 15,
+    "head/sleeve L": 4
+   },
+   "samples": [
+    {
+     "tick": 285,
+     "new_whole_mesh_pairs": 828
+    },
+    {
+     "tick": 289,
+     "new_whole_mesh_pairs": 427
+    },
+    {
+     "tick": 290,
+     "new_whole_mesh_pairs": 412
+    },
+    {
+     "tick": 316,
+     "new_whole_mesh_pairs": 317
+    },
+    {
+     "tick": 318,
+     "new_whole_mesh_pairs": 367
+    },
+    {
+     "tick": 321,
+     "new_whole_mesh_pairs": 245
+    },
+    {
+     "tick": 322,
+     "new_whole_mesh_pairs": 300
+    },
+    {
+     "tick": 437,
+     "new_whole_mesh_pairs": 657
+    }
+   ],
+   "max": {
+    "sleeve R/torso": {
+     "tick": 290,
+     "line_mm": 16.31,
+     "triangles": [
+      2751,
+      16891
+     ],
+     "views": [
+      4
+     ],
+     "world_mid_actor_m": [
+      -0.3204682469367981,
+      0.7840180397033691,
+      0.09284520149230957
+     ]
+    },
+    "glove L/sleeve L": {
+     "tick": 285,
+     "line_mm": 16.03,
+     "triangles": [
+      6764,
+      10814
+     ],
+     "views": [
+      2,
+      4
+     ],
+     "world_mid_actor_m": [
+      0.5040891170501709,
+      0.769187331199646,
+      -0.16301172971725464
+     ]
+    },
+    "glove R/sleeve R": {
+     "tick": 289,
+     "line_mm": 25.16,
+     "triangles": [
+      7627,
+      9641
+     ],
+     "views": [
+      0,
+      6
+     ],
+     "world_mid_actor_m": [
+      -0.4400215446949005,
+      0.9445304870605469,
+      0.29456669092178345
+     ]
+    },
+    "sleeve L/torso": {
+     "tick": 285,
+     "line_mm": 19.14,
+     "triangles": [
+      10152,
+      23883
+     ],
+     "views": [
+      5
+     ],
+     "world_mid_actor_m": [
+      0.23148781061172485,
+      0.8000869750976562,
+      -0.11817367374897003
+     ]
+    },
+    "boot L/torso": {
+     "tick": 285,
+     "line_mm": 14.35,
+     "triangles": [
+      12850,
+      12860
+     ],
+     "views": [
+      3,
+      6
+     ],
+     "world_mid_actor_m": [
+      0.1657206416130066,
+      0.181224524974823,
+      0.0650881826877594
+     ]
+    },
+    "boot R/torso": {
+     "tick": 316,
+     "line_mm": 16.82,
+     "triangles": [
+      16985,
+      16986
+     ],
+     "views": [
+      6
+     ],
+     "world_mid_actor_m": [
+      -0.2750791013240814,
+      0.3331837058067322,
+      0.09820390492677689
+     ]
+    },
+    "head/sleeve L": {
+     "tick": 318,
+     "line_mm": 1.83,
+     "triangles": [
+      13636,
+      17811
+     ],
+     "views": [
+      2
+     ],
+     "world_mid_actor_m": [
+      0.3310728669166565,
+      1.0437500476837158,
+      0.0827505886554718
+     ]
+    }
+   }
+  },
+  "brake": {
+   "scanned_ticks": 6,
+   "pairs": {
+    "boot L/torso": 3,
+    "boot R/torso": 8,
+    "sleeve R/torso": 4,
+    "sleeve L/torso": 3,
+    "glove L/sleeve L": 7
+   },
+   "samples": [
+    {
+     "tick": 442,
+     "new_whole_mesh_pairs": 670
+    },
+    {
+     "tick": 447,
+     "new_whole_mesh_pairs": 1019
+    },
+    {
+     "tick": 448,
+     "new_whole_mesh_pairs": 1111
+    },
+    {
+     "tick": 449,
+     "new_whole_mesh_pairs": 1115
+    },
+    {
+     "tick": 451,
+     "new_whole_mesh_pairs": 1187
+    },
+    {
+     "tick": 454,
+     "new_whole_mesh_pairs": 1047
+    }
+   ],
+   "max": {
+    "boot L/torso": {
+     "tick": 442,
+     "line_mm": 21.34,
+     "triangles": [
+      447,
+      12234
+     ],
+     "views": [
+      1,
+      2
+     ],
+     "world_mid_actor_m": [
+      0.25566744804382324,
+      0.4626811146736145,
+      -0.19153790175914764
+     ]
+    },
+    "boot R/torso": {
+     "tick": 442,
+     "line_mm": 11.48,
+     "triangles": [
+      15558,
+      23935
+     ],
+     "views": [
+      0,
+      3
+     ],
+     "world_mid_actor_m": [
+      -0.2697015404701233,
+      0.16775329411029816,
+      -0.28070539236068726
+     ]
+    },
+    "sleeve R/torso": {
+     "tick": 442,
+     "line_mm": 11.07,
+     "triangles": [
+      2721,
+      16814
+     ],
+     "views": [
+      5
+     ],
+     "world_mid_actor_m": [
+      -0.34041470289230347,
+      0.6770049333572388,
+      -0.0008391058072447777
+     ]
+    },
+    "sleeve L/torso": {
+     "tick": 442,
+     "line_mm": 16.32,
+     "triangles": [
+      4787,
+      6939
+     ],
+     "views": [
+      4
+     ],
+     "world_mid_actor_m": [
+      0.2465473860502243,
+      0.7478440999984741,
+      -0.16715383529663086
+     ]
+    },
+    "glove L/sleeve L": {
+     "tick": 454,
+     "line_mm": 16.16,
+     "triangles": [
+      18343,
+      21983
+     ],
+     "views": [
+      4
+     ],
+     "world_mid_actor_m": [
+      0.3804970979690552,
+      0.5293563604354858,
+      -0.19191783666610718
+     ]
+    }
+   }
+  }
+ },
+ "time": 6.235535621643066
+}

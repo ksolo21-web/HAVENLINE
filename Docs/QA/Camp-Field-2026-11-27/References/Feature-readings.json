@@ -1,0 +1,117 @@
+{
+  "pickup": {
+    "name": "Field pickup and retention",
+    "score": 9.5,
+    "finding": "The keeper collected 72 scattered meat and stone bundles with typed balances, across a saved and reopened camp. A second crowded fixture kept all 128 uncollected receipts.",
+    "inputs": [
+      "../Field/Field-pickups.mp4",
+      "../Field/After/pile-carried-2x.jpg",
+      "../Field/Grouping-fence-transfer-and-save-checks.json"
+    ]
+  },
+  "storehouse": {
+    "name": "Warehouse approach and transfer",
+    "score": 9.5,
+    "finding": "An ordinary load sent each parcel. At 52,000 displayed units, 12 visible packets landed in four durable groups at 0.28, 0.48, 0.68 and 0.88 seconds. The starter loading apron accepts deliveries while its upgrade requires a deliberate stop on the adjacent pad.",
+    "inputs": [
+      "../Field/Storehouse-deposit.mp4",
+      "../Field/After/store-sending-2x.jpg",
+      "../Field/On-foot-upgrade-and-loading.json"
+    ]
+  },
+  "economy": {
+    "name": "Cooked meals, receipts and stored money",
+    "score": 9.5,
+    "finding": "Three cooked meals went to the counter and four previously earned notes entered the pack during a single 0.82-second approach. Seven deposited notes occupied and then cleared the warehouse cash shelf. Connected machines process and discharge unattended.",
+    "inputs": [
+      "../Economy/Counter-normal.mp4",
+      "../Economy/Counter-pinch.mp4",
+      "../Economy/Cash-shelf-detail.png",
+      "../Economy/Cash-shelf.json",
+      "../Economy/Economy-results.json"
+    ]
+  },
+  "worker": {
+    "name": "Worker carrying and service",
+    "score": 9.5,
+    "finding": "One paid worker approached the loading door carrying distinct stacks of 120 wood and 120 stone. Both filed into the shelf in 0.85 seconds. The relocated cooker and customer station stayed serviceable in the actual AI job sequence.",
+    "inputs": [
+      "../Crew/Worker-returns.mp4",
+      "../Crew/Loaded-return-2x.jpg",
+      "../Crew/Earned-return-photos.json"
+    ]
+  },
+  "owl": {
+    "name": "Paid owl field and gate defense",
+    "score": 9.5,
+    "finding": "The owner’s owl left the gate perch, visibly struck a real exterior enemy while the keeper was safe, then engaged a boss near the injured keeper. The paid and returning camp states passed separate checks.",
+    "inputs": [
+      "../Crew/Owl-gate-patrol.mp4",
+      "../Crew/Gate-contact-1x.jpg",
+      "../Crew/Field-contact-2x.jpg"
+    ]
+  },
+  "counter": {
+    "name": "Solid fence counter",
+    "score": 9.5,
+    "finding": "All 60 original approaches, heights, side and saved-placement cases held the wall. The inside helper and outdoor customer remain on the intended sides in both normal and pinch views.",
+    "inputs": [
+      "../Camp/Final/Counter-inside-1x.jpg",
+      "../Camp/Final/Counter-outside-2x.jpg",
+      "../Camp/Final/Counter-restored-2x.jpg",
+      "../Camp/Gameplay-regressions.json"
+    ]
+  },
+  "tower": {
+    "name": "Tower, operator and approach",
+    "score": 9.5,
+    "finding": "At both camera scales the gunner stands behind the bow on a timber tread. Two gloves engage their controls in 397 consecutive poses and 18 elevation extrema. The cabin stays opaque when the keeper passes behind. A released bolt reduces the exterior wolf’s HP from three to two.",
+    "inputs": [
+      "../Camp/Gunner-clearance.json",
+      "../Camp/Gunner-rig-turnaround.jpg",
+      "../Camp/Final/Approach-2x.jpg",
+      "../Camp/Paid-ballista-1x-and-2x.mp4",
+      "../Camp/Final/Behind-2x.jpg",
+      "../Camp/Final/Field-Hit.jpg",
+      "../Camp/Final/Native.json"
+    ]
+  },
+  "warehouse_retrieval": {
+    "name": "In-world withdrawal from storage shelves",
+    "score": 9.9,
+    "finding": "The game camera stays live at normal and 1.7× zoom as the keeper walks to the cash shelf. Seven earned notes fly into the pack, leave the door with the keeper, and redeposit on a later return. The same shelf approach worked for all ten raw materials, finished goods and cash types.",
+    "inputs": [
+      "Walk-up-withdrawal.json",
+      "../Economy/Shelf-walk-results.json",
+      "../Economy/Walk-to-cash-normal.mp4",
+      "../Economy/Shelf-full-normal.jpg",
+      "../Economy/Shelf-empty-normal.jpg",
+      "../Economy/Walk-to-cash-pinch.mp4",
+      "../Economy/Shelf-full-pinch.jpg",
+      "../Economy/Shelf-empty-pinch.jpg",
+      "../Verification/Signed-shelf-walk.json"
+    ],
+    "newer_candidate": "2654f5019b7212968d28600cb071bf1c231c9030"
+  },
+  "extreme_load_visibility": {
+    "name": "Large mixed pack at normal and pinch zoom",
+    "score": 9.9,
+    "finding": "The 52,000-unit mixed load stays near the keeper’s shoulders. The keeper, door and objective remain visible at 1× and 2×. A small six-material pack remains clear of the upper controls with the threat notice active.",
+    "inputs": [
+      "../Field/Pack/After-settled/store-starting-1x.jpg",
+      "../Field/Pack/After-settled/store-starting-2x.jpg",
+      "../Field/Pack/Before-settled/store-starting-1x.jpg",
+      "../Field/Pack/Before-settled/store-starting-2x.jpg",
+      "Owner-B-deposit.jpg",
+      "../Field/Pack/Raw-backpack-comparison.jpg",
+      "../Field/Pack/Migrated/migration-square.jpg",
+      "../Field/Pack/Migrated-mineral-backpack.json"
+    ],
+    "newer_candidate": "2654f5019b7212968d28600cb071bf1c231c9030",
+    "status": "Reviewed the settled game camera and the square responsive layout.",
+    "runtime_sha256": {
+      "field_carry.gd": "7b8212c85af49d69391710081f89a0d1e6b8bc9f744a7d41bf65e0f1d49c146e",
+      "field_opening.gd": "fbf55a0fb457db36b0b04725192c2fb7c05a062ce7d2f8c42aa58a6408a58686"
+    }
+  }
+}

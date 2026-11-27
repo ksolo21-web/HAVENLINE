@@ -1,0 +1,103 @@
+{
+  "cause": "The left-hand objective gutter was being applied across the full viewport. The migrated character was at x=602/720 outside it. Only two coal, three slate and two metal models appeared while the ledger held three, four and five.",
+  "candidate_sha256": {
+    "field_carry.gd": "7b8212c85af49d69391710081f89a0d1e6b8bc9f744a7d41bf65e0f1d49c146e",
+    "field_opening.gd": "fbf55a0fb457db36b0b04725192c2fb7c05a062ce7d2f8c42aa58a6408a58686"
+  },
+  "migrated_ledger_bundles": {
+    "wood": 1,
+    "stone": 1,
+    "meat": 0,
+    "coal": 3,
+    "slate": 4,
+    "metal": 5
+  },
+  "pre_fix_visible": {
+    "wood": 1,
+    "stone": 1,
+    "meat": 0,
+    "coal": 2,
+    "slate": 3,
+    "metal": 2
+  },
+  "post_fix_visible": {
+    "wood": 1,
+    "stone": 1,
+    "meat": 0,
+    "coal": 3,
+    "slate": 4,
+    "metal": 5
+  },
+  "fully_in_stock_after_reopen": {
+    "coal": 2,
+    "slate": 3,
+    "metal": 4
+  },
+  "remaining_on_hero_after_reopen": {
+    "coal": 1,
+    "slate": 1,
+    "metal": 1
+  },
+  "checks": {
+    "qa_field_minerals": {
+      "migrate": true,
+      "cold_reopen": true
+    },
+    "qa_field_pack_bounds": {
+      "exit_code": 0
+    },
+    "qa_field_stock_limits": {
+      "exit_code": 0
+    },
+    "qa_field_mineral_art": {
+      "exit_code": 0
+    },
+    "qa_mining_return": {
+      "exit_code": 0
+    }
+  },
+  "rendered_six_kind_witness": [
+    {
+      "held": {
+        "coal": 3,
+        "meat": 2,
+        "metal": 5,
+        "slate": 4,
+        "stone": 1,
+        "wood": 1
+      },
+      "screen_actor": "(602.1249, 247.6961)",
+      "stage": "migration-square",
+      "visible": {
+        "coal": 3,
+        "meat": 2,
+        "metal": 5,
+        "slate": 4,
+        "stone": 1,
+        "wood": 1
+      }
+    },
+    {
+      "held": {
+        "coal": 3,
+        "meat": 2,
+        "metal": 5,
+        "slate": 4,
+        "stone": 1,
+        "wood": 1
+      },
+      "screen_actor": "(360.0, 359.9999)",
+      "stage": "centered-pinch",
+      "visible": {
+        "coal": 3,
+        "meat": 2,
+        "metal": 3,
+        "slate": 4,
+        "stone": 1,
+        "wood": 1
+      }
+    }
+  ],
+  "rendered_six_kind_witness_context": "Real 720\u00d7720 app viewport loading a guarded v2 ledger, with two earned meat bundles added to the five-family migration test. Normal right of the HUD and centered pinch. All 16 physical packets appear at normal; under HUD projection in this nearer square-camera view 3 representative metal packets carry the count of 5 and all six types are still distinct.",
+  "candidate": "2654f5019b7212968d28600cb071bf1c231c9030"
+}

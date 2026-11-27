@@ -1,0 +1,74 @@
+{
+  "field_scene": "res://field_opening.tscn",
+  "sample_rate_hz": 120,
+  "animations": "Procedural traverse, aim, recoil and winding. Fixed stance.",
+  "coordinate_basis": "Actual skinned vertices in the rotating carriage frame.",
+  "tests": {
+    "continuous": {
+      "frames": 397,
+      "yaw_degrees": [
+        180.0,
+        540.0
+      ],
+      "pitch_degrees_range": [
+        -1.51,
+        15.38
+      ],
+      "maximum_glove_centre_error_m": 0.0613366216421127,
+      "per_part_max_intersecting_body_triangles": {
+        "RightWindlass": {
+          "Palm.R": 57
+        },
+        "RightWindlassHandle": {
+          "Palm.R": 52
+        },
+        "LeftBreechControl": {
+          "Palm.L": 37
+        },
+        "LeftBreechControlHandle": {
+          "Palm.L": 23
+        }
+      },
+      "unintended_intersections": 0,
+      "maximum_adjacent_skin_vertex_displacement_m": 0.02875154347521485,
+      "actual_skin_touches_both_control_pins_frames": 397
+    },
+    "elevationextrema": {
+      "frames": 18,
+      "yaw_degrees": [
+        0.0,
+        240.0
+      ],
+      "pitch_degrees_range": [
+        -19.22,
+        32.09
+      ],
+      "maximum_glove_centre_error_m": 0.0601557344198227,
+      "per_part_max_intersecting_body_triangles": {
+        "RightWindlass": {
+          "Palm.R": 57
+        },
+        "RightWindlassHandle": {
+          "Palm.R": 44
+        },
+        "LeftBreechControl": {
+          "Palm.L": 36
+        },
+        "LeftBreechControlHandle": {
+          "Palm.L": 22
+        }
+      },
+      "unintended_intersections": 0,
+      "actual_skin_touches_both_control_pins_frames": 18
+    }
+  },
+  "sources": {
+    "assets/field_world/camp_ballista.glb": "69fa17b31a51bf7536a617c31c9610f4a5fc7c1cf10f9fa62c074e040a9e1244",
+    "assets/settlement_people/survivor_male_01.glb": "8768255badde45f66114c5fefbada73771873558ce117b8360bf4cea96acc88c",
+    "field_ballista_crew.gd": "7d7430c3dc3c567a86659132adaca61e60416e34acba7af8cea10490d5d114cf",
+    "field_tower_art.gd": "b7aea446eacbbc4d3b320be8fbb2c61568c5ecb330b15438c1f22bdf8c56c7b0",
+    "field_defense_tower.gd": "875804816d462093ab92e63671389142ad9a1095f0b13f453a3ee7ef4c905b8d",
+    "assets/field_world/tower_sightline.gdshader": "4c7fe5df62e5544567c6412cb093401e7233b8ec632de4c168a569cf4a5da09a"
+  },
+  "candidate_commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a"
+}

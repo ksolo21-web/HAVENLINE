@@ -1,0 +1,646 @@
+{
+  "test": "tests/qa_level1_completion.gd",
+  "fixture_sha256": "17169a11874c95e2fe105b5bc406fbb17a1ef136b528b981511ae67e78ba86d3",
+  "method": "Twice opened an independently prepared historical v3 save in the native game and purchased all equipment. Probed the static aisles and actual swinging gate geometry with the shipping capsule while world simulation was paused. Added then removed probe-only exceptions for the live hunter bodies. Separate production collision and movement exercises kept live enemy interactions enabled.",
+  "previous": {
+    "log_sha256": "6c03b59eccc35c28566d3a2e6460c4c54c8deae21da4a531049c5eff3b7d90e6",
+    "checks": 39,
+    "failures": [
+      "gate-east traverses outward"
+    ],
+    "aisle_probe_diameter_m": 0.959999978542328,
+    "reachable_samples": 2886,
+    "excluded_for_static_geometry": [],
+    "crossings": {
+      "gate-east traverses inward": {
+        "contacts": [
+          "/root/HavenlineFieldOpening/RidgeWolf4/WolfTorso"
+        ],
+        "crossed_depth_m": 1.7791748046875,
+        "ending_xz": [
+          8.2208251953125,
+          5.58056933996909e-10
+        ],
+        "finished_inside": true,
+        "minimum_depth_m": 1.56,
+        "open_and_wall_clear": true,
+        "started_inside": false,
+        "target_xz": [
+          8.19999980926514,
+          0.0
+        ]
+      },
+      "gate-east traverses outward": {
+        "contacts": [
+          "/root/HavenlineFieldOpening/RidgeWolf4/WolfTorso"
+        ],
+        "crossed_depth_m": 1.36651515960693,
+        "ending_xz": [
+          11.3665151596069,
+          6.75893091495183e-11
+        ],
+        "finished_inside": false,
+        "minimum_depth_m": 1.56,
+        "open_and_wall_clear": true,
+        "started_inside": true,
+        "target_xz": [
+          11.8000001907349,
+          0.0
+        ]
+      },
+      "gate-south traverses inward": {
+        "contacts": [],
+        "crossed_depth_m": 1.77000188827515,
+        "ending_xz": [
+          0.0,
+          3.62999820709229
+        ],
+        "finished_inside": true,
+        "minimum_depth_m": 1.56,
+        "open_and_wall_clear": true,
+        "started_inside": false,
+        "target_xz": [
+          0.0,
+          3.60000014305115
+        ]
+      },
+      "gate-south traverses outward": {
+        "contacts": [],
+        "crossed_depth_m": 1.79999971389771,
+        "ending_xz": [
+          0.0,
+          7.19999980926514
+        ],
+        "finished_inside": false,
+        "minimum_depth_m": 1.56,
+        "open_and_wall_clear": true,
+        "started_inside": true,
+        "target_xz": [
+          0.0,
+          7.19999980926514
+        ]
+      }
+    }
+  },
+  "repeats": [
+    {
+      "log_sha256": "ffdb426299f28c7c457af238f942f7fa4179acb968575e7f385f020026965886",
+      "checks": 40,
+      "failures": [],
+      "aisle_probe_diameter_m": 0.959999978542328,
+      "reachable_samples": 2886,
+      "excluded_for_static_geometry": [
+        "/root/HavenlineFieldOpening/RidgeWolf1/WolfTorso",
+        "/root/HavenlineFieldOpening/RidgeWolf2/WolfTorso"
+      ],
+      "crossings": {
+        "gate-east traverses inward": {
+          "contacts": [],
+          "crossed_depth_m": 1.77000141143799,
+          "ending_xz": [
+            8.22999858856201,
+            0.0
+          ],
+          "finished_inside": true,
+          "minimum_depth_m": 1.56,
+          "open_and_wall_clear": true,
+          "started_inside": false,
+          "target_xz": [
+            8.19999980926514,
+            0.0
+          ]
+        },
+        "gate-east traverses outward": {
+          "contacts": [],
+          "crossed_depth_m": 1.80000019073486,
+          "ending_xz": [
+            11.8000001907349,
+            0.0
+          ],
+          "finished_inside": false,
+          "minimum_depth_m": 1.56,
+          "open_and_wall_clear": true,
+          "started_inside": true,
+          "target_xz": [
+            11.8000001907349,
+            0.0
+          ]
+        },
+        "gate-south traverses inward": {
+          "contacts": [],
+          "crossed_depth_m": 1.77000188827515,
+          "ending_xz": [
+            0.0,
+            3.62999820709229
+          ],
+          "finished_inside": true,
+          "minimum_depth_m": 1.56,
+          "open_and_wall_clear": true,
+          "started_inside": false,
+          "target_xz": [
+            0.0,
+            3.60000014305115
+          ]
+        },
+        "gate-south traverses outward": {
+          "contacts": [],
+          "crossed_depth_m": 1.79999971389771,
+          "ending_xz": [
+            0.0,
+            7.19999980926514
+          ],
+          "finished_inside": false,
+          "minimum_depth_m": 1.56,
+          "open_and_wall_clear": true,
+          "started_inside": true,
+          "target_xz": [
+            0.0,
+            7.19999980926514
+          ]
+        }
+      }
+    },
+    {
+      "log_sha256": "d1ab4f5bca21ec4fc3e0db898455595a60899a6937b03588bf461e8b30291083",
+      "checks": 40,
+      "failures": [],
+      "aisle_probe_diameter_m": 0.959999978542328,
+      "reachable_samples": 2886,
+      "excluded_for_static_geometry": [
+        "/root/HavenlineFieldOpening/RidgeWolf1/WolfTorso",
+        "/root/HavenlineFieldOpening/RidgeWolf2/WolfTorso",
+        "/root/HavenlineFieldOpening/RidgeWolf3/WolfTorso"
+      ],
+      "crossings": {
+        "gate-east traverses inward": {
+          "contacts": [],
+          "crossed_depth_m": 1.77000141143799,
+          "ending_xz": [
+            8.22999858856201,
+            0.0
+          ],
+          "finished_inside": true,
+          "minimum_depth_m": 1.56,
+          "open_and_wall_clear": true,
+          "started_inside": false,
+          "target_xz": [
+            8.19999980926514,
+            0.0
+          ]
+        },
+        "gate-east traverses outward": {
+          "contacts": [],
+          "crossed_depth_m": 1.80000019073486,
+          "ending_xz": [
+            11.8000001907349,
+            0.0
+          ],
+          "finished_inside": false,
+          "minimum_depth_m": 1.56,
+          "open_and_wall_clear": true,
+          "started_inside": true,
+          "target_xz": [
+            11.8000001907349,
+            0.0
+          ]
+        },
+        "gate-south traverses inward": {
+          "contacts": [],
+          "crossed_depth_m": 1.77000188827515,
+          "ending_xz": [
+            0.0,
+            3.62999820709229
+          ],
+          "finished_inside": true,
+          "minimum_depth_m": 1.56,
+          "open_and_wall_clear": true,
+          "started_inside": false,
+          "target_xz": [
+            0.0,
+            3.60000014305115
+          ]
+        },
+        "gate-south traverses outward": {
+          "contacts": [],
+          "crossed_depth_m": 1.79999971389771,
+          "ending_xz": [
+            0.0,
+            7.19999980926514
+          ],
+          "finished_inside": false,
+          "minimum_depth_m": 1.56,
+          "open_and_wall_clear": true,
+          "started_inside": true,
+          "target_xz": [
+            0.0,
+            7.19999980926514
+          ]
+        }
+      }
+    }
+  ],
+  "independent": {
+    "qa_wolf_attack": {
+      "log_sha256": "e13ac77323d26b1d0a185b98ffe5f470e9fb30f3d70223e7fca0debece2ecefb",
+      "passed": true,
+      "assertions": 32,
+      "records": [
+        {
+          "checks": {
+            "alpha_20hz_every_phase_plays": true,
+            "alpha_20hz_jaw_parented_to_head": true,
+            "alpha_20hz_jaw_weights_on_original_textured_fur": true,
+            "alpha_20hz_one_damage_at_closed_jaw": true,
+            "alpha_20hz_opens_and_settles": true,
+            "alpha_20hz_sanctuary_cancels": true,
+            "alpha_20hz_side_step_misses": true,
+            "alpha_20hz_springs_through_hips_shoulder_and_four_limb_chains": true,
+            "alpha_60hz_every_phase_plays": true,
+            "alpha_60hz_jaw_parented_to_head": true,
+            "alpha_60hz_jaw_weights_on_original_textured_fur": true,
+            "alpha_60hz_one_damage_at_closed_jaw": true,
+            "alpha_60hz_opens_and_settles": true,
+            "alpha_60hz_sanctuary_cancels": true,
+            "alpha_60hz_side_step_misses": true,
+            "alpha_60hz_springs_through_hips_shoulder_and_four_limb_chains": true,
+            "ridge_20hz_every_phase_plays": true,
+            "ridge_20hz_jaw_parented_to_head": true,
+            "ridge_20hz_jaw_weights_on_original_textured_fur": true,
+            "ridge_20hz_one_damage_at_closed_jaw": true,
+            "ridge_20hz_opens_and_settles": true,
+            "ridge_20hz_sanctuary_cancels": true,
+            "ridge_20hz_side_step_misses": true,
+            "ridge_20hz_springs_through_hips_shoulder_and_four_limb_chains": true,
+            "ridge_60hz_every_phase_plays": true,
+            "ridge_60hz_jaw_parented_to_head": true,
+            "ridge_60hz_jaw_weights_on_original_textured_fur": true,
+            "ridge_60hz_one_damage_at_closed_jaw": true,
+            "ridge_60hz_opens_and_settles": true,
+            "ridge_60hz_sanctuary_cancels": true,
+            "ridge_60hz_side_step_misses": true,
+            "ridge_60hz_springs_through_hips_shoulder_and_four_limb_chains": true
+          },
+          "observed": {
+            "alpha_20hz": {
+              "contact": [
+                {
+                  "clip": "Bite",
+                  "damage": 4,
+                  "elapsed": 0.25,
+                  "jaw": 2.26388348931706,
+                  "state": "lunge"
+                }
+              ],
+              "min_limb_rotation_degrees": 14.997519351197,
+              "open_degrees": 47.9090129706934,
+              "root_travel_m": 0.200443029403687
+            },
+            "alpha_60hz": {
+              "contact": [
+                {
+                  "clip": "Bite",
+                  "damage": 4,
+                  "elapsed": 0.216666666666667,
+                  "jaw": 5.98345616813497,
+                  "state": "lunge"
+                }
+              ],
+              "min_limb_rotation_degrees": 14.997519351197,
+              "open_degrees": 47.9090129706934,
+              "root_travel_m": 0.211196064949036
+            },
+            "ridge_20hz": {
+              "contact": [
+                {
+                  "clip": "Bite",
+                  "damage": 2,
+                  "elapsed": 0.2,
+                  "jaw": 2.33301503555794,
+                  "state": "lunge"
+                }
+              ],
+              "min_limb_rotation_degrees": 14.1371562799437,
+              "open_degrees": 47.7352734487758,
+              "root_travel_m": 0.198568642139435
+            },
+            "ridge_60hz": {
+              "contact": [
+                {
+                  "clip": "Bite",
+                  "damage": 2,
+                  "elapsed": 0.183333333333333,
+                  "jaw": 4.87244863311741,
+                  "state": "lunge"
+                }
+              ],
+              "min_limb_rotation_degrees": 15.647915577175,
+              "open_degrees": 47.9999910904379,
+              "root_travel_m": 0.212999999523163
+            }
+          },
+          "passed": true
+        }
+      ]
+    },
+    "qa_ground_sweep": {
+      "log_sha256": "d5d5540548aabf2394293366b678287199c4a69542151f85dafa918d93606546",
+      "passed": true,
+      "assertions": 10,
+      "records": [
+        {
+          "checks": {
+            "all new loose receipts remain eligible before next step": true,
+            "all unique drops credited once, no stale ground copies": true,
+            "dense flight is bounded by material count": true,
+            "earned three-tool camp resumed": true,
+            "one grouped save signs the near and edge pickup receipts": true,
+            "visual arrival performs no second pickup save": true
+          },
+          "stage": "earn"
+        },
+        {
+          "checks": {
+            "a concurrent write retains the pending ground pickup": true,
+            "all unique drops credited once, no stale ground copies": true,
+            "earned three-tool camp resumed": true,
+            "the newer journal remains authoritative": true
+          },
+          "stage": "reopen"
+        }
+      ]
+    },
+    "qa_field_auto_gates": {
+      "log_sha256": "0d15dca2726438b68e4ad95e5b50123a716e0ce49ebf44a35fd4ca51fe05613e",
+      "passed": true,
+      "assertions": 255,
+      "records": [
+        {
+          "assertions": 255,
+          "crossings": [
+            {
+              "approach": "from rest",
+              "from": "inside",
+              "gate": "gate-south",
+              "leaf_contact": false,
+              "open_degrees": 90.0,
+              "physics_ticks": 49,
+              "safety_hold": false,
+              "stage": 1
+            },
+            {
+              "approach": "full run",
+              "from": "inside",
+              "gate": "gate-south",
+              "leaf_contact": false,
+              "open_degrees": 90.0,
+              "physics_ticks": 47,
+              "safety_hold": false,
+              "stage": 1
+            },
+            {
+              "approach": "from rest",
+              "from": "outside",
+              "gate": "gate-south",
+              "leaf_contact": false,
+              "open_degrees": 90.0,
+              "physics_ticks": 49,
+              "safety_hold": false,
+              "stage": 1
+            },
+            {
+              "approach": "full run",
+              "from": "outside",
+              "gate": "gate-south",
+              "leaf_contact": false,
+              "open_degrees": 90.0,
+              "physics_ticks": 48,
+              "safety_hold": false,
+              "stage": 1
+            },
+            {
+              "approach": "from rest",
+              "from": "inside",
+              "gate": "gate-east",
+              "leaf_contact": false,
+              "open_degrees": 90.0,
+              "physics_ticks": 49,
+              "safety_hold": false,
+              "stage": 1
+            },
+            {
+              "approach": "full run",
+              "from": "inside",
+              "gate": "gate-east",
+              "leaf_contact": false,
+              "open_degrees": 90.0,
+              "physics_ticks": 48,
+              "safety_hold": false,
+              "stage": 1
+            },
+            {
+              "approach": "from rest",
+              "from": "outside",
+              "gate": "gate-east",
+              "leaf_contact": false,
+              "open_degrees": 90.0,
+              "physics_ticks": 49,
+              "safety_hold": false,
+              "stage": 1
+            },
+            {
+              "approach": "full run",
+              "from": "outside",
+              "gate": "gate-east",
+              "leaf_contact": false,
+              "open_degrees": 90.0,
+              "physics_ticks": 48,
+              "safety_hold": false,
+              "stage": 1
+            },
+            {
+              "approach": "from rest",
+              "from": "inside",
+              "gate": "gate-south",
+              "leaf_contact": false,
+              "open_degrees": 90.0,
+              "physics_ticks": 49,
+              "safety_hold": false,
+              "stage": 2
+            },
+            {
+              "approach": "full run",
+              "from": "inside",
+              "gate": "gate-south",
+              "leaf_contact": false,
+              "open_degrees": 90.0,
+              "physics_ticks": 48,
+              "safety_hold": false,
+              "stage": 2
+            },
+            {
+              "approach": "from rest",
+              "from": "outside",
+              "gate": "gate-south",
+              "leaf_contact": false,
+              "open_degrees": 90.0,
+              "physics_ticks": 49,
+              "safety_hold": false,
+              "stage": 2
+            },
+            {
+              "approach": "full run",
+              "from": "outside",
+              "gate": "gate-south",
+              "leaf_contact": false,
+              "open_degrees": 90.0,
+              "physics_ticks": 48,
+              "safety_hold": false,
+              "stage": 2
+            },
+            {
+              "approach": "from rest",
+              "from": "inside",
+              "gate": "gate-east",
+              "leaf_contact": false,
+              "open_degrees": 90.0,
+              "physics_ticks": 49,
+              "safety_hold": false,
+              "stage": 2
+            },
+            {
+              "approach": "full run",
+              "from": "inside",
+              "gate": "gate-east",
+              "leaf_contact": false,
+              "open_degrees": 90.0,
+              "physics_ticks": 48,
+              "safety_hold": false,
+              "stage": 2
+            },
+            {
+              "approach": "from rest",
+              "from": "outside",
+              "gate": "gate-east",
+              "leaf_contact": false,
+              "open_degrees": 90.0,
+              "physics_ticks": 49,
+              "safety_hold": false,
+              "stage": 2
+            },
+            {
+              "approach": "full run",
+              "from": "outside",
+              "gate": "gate-east",
+              "leaf_contact": false,
+              "open_degrees": 90.0,
+              "physics_ticks": 48,
+              "safety_hold": false,
+              "stage": 2
+            },
+            {
+              "approach": "from rest",
+              "from": "inside",
+              "gate": "gate-south",
+              "leaf_contact": false,
+              "open_degrees": 90.0,
+              "physics_ticks": 49,
+              "safety_hold": false,
+              "stage": 3
+            },
+            {
+              "approach": "full run",
+              "from": "inside",
+              "gate": "gate-south",
+              "leaf_contact": false,
+              "open_degrees": 90.0,
+              "physics_ticks": 48,
+              "safety_hold": false,
+              "stage": 3
+            },
+            {
+              "approach": "from rest",
+              "from": "outside",
+              "gate": "gate-south",
+              "leaf_contact": false,
+              "open_degrees": 90.0,
+              "physics_ticks": 49,
+              "safety_hold": false,
+              "stage": 3
+            },
+            {
+              "approach": "full run",
+              "from": "outside",
+              "gate": "gate-south",
+              "leaf_contact": false,
+              "open_degrees": 90.0,
+              "physics_ticks": 48,
+              "safety_hold": false,
+              "stage": 3
+            },
+            {
+              "approach": "from rest",
+              "from": "inside",
+              "gate": "gate-east",
+              "leaf_contact": false,
+              "open_degrees": 90.0,
+              "physics_ticks": 49,
+              "safety_hold": false,
+              "stage": 3
+            },
+            {
+              "approach": "full run",
+              "from": "inside",
+              "gate": "gate-east",
+              "leaf_contact": false,
+              "open_degrees": 90.0,
+              "physics_ticks": 48,
+              "safety_hold": false,
+              "stage": 3
+            },
+            {
+              "approach": "from rest",
+              "from": "outside",
+              "gate": "gate-east",
+              "leaf_contact": false,
+              "open_degrees": 90.0,
+              "physics_ticks": 49,
+              "safety_hold": false,
+              "stage": 3
+            },
+            {
+              "approach": "full run",
+              "from": "outside",
+              "gate": "gate-east",
+              "leaf_contact": false,
+              "open_degrees": 90.0,
+              "physics_ticks": 48,
+              "safety_hold": false,
+              "stage": 3
+            }
+          ],
+          "failures": [],
+          "pass": true
+        }
+      ]
+    },
+    "qa_material_fence": {
+      "log_sha256": "48ccd5e3862069facdb75d6a6d31f116745b4514264eeaf578f030b120e5ecc2",
+      "passed": true,
+      "assertions": 6,
+      "records": [
+        {
+          "checks": {
+            "closed timber blocks loose pickup before credit": true,
+            "cross-wall purchase cannot reserve stock": true,
+            "new wall in a shipment path cancels its debit": true,
+            "same-side payment can retry": true,
+            "same-side payment launches": true,
+            "single receipt lands": true
+          },
+          "passed": true
+        }
+      ]
+    }
+  },
+  "candidate_source": "2654f5019b7212968d28600cb071bf1c231c9030"
+}

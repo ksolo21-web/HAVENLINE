@@ -1,0 +1,142 @@
+{
+  "stamp": {
+    "commit": "2654f5019b7212968d28600cb071bf1c231c9030",
+    "manifest": {
+      "sha256": "60e52a14064a92980f71146b4a8c5924563608c5415d95e481ecea64270caeb1",
+      "checked_files": 707
+    },
+    "runner": "5e420b7a21e8066f23d7eb548da8200a2ef0428d8db77d622bbcb85498b0a9eb"
+  },
+  "passed": true,
+  "runs": [
+    {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "log": "qa_conveyor_cash_retry-1.log",
+      "log_sha256": "bddb49e5474c787d956d702cd3b2d1ac48b6099ef9d0d034a475adc5ec64a67e",
+      "summary": [
+        {
+          "checks": {
+            "acquire competing lock": true,
+            "entered real pending FIFO exchange": true,
+            "rejected sale cannot add cash or debit the durable counter item": true
+          },
+          "phase": "sale_lock",
+          "receipts": [
+            {
+              "blocks": 1,
+              "cash": 1,
+              "cooked": 3,
+              "counter_stock": 1,
+              "hoppers": {
+                "meat": 0,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 1,
+                "meal": 1,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 1
+              },
+              "planks": 1,
+              "product_store": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 1
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.188758200542199,
+                "meal_to_store": 0.0,
+                "meat": 0.901650398144673,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.783468814234229
+              },
+              "rack": 0,
+              "stored": {
+                "coal": 0,
+                "meat": 3,
+                "metal": 0,
+                "slate": 0,
+                "stone": 2,
+                "wood": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "log": "qa_conveyor_cash_retry-2.log",
+      "log_sha256": "96f475b00b4f5f2f6dc91b358e9bb3ee2bce1b83dfe4c8d974c98aaea1553051",
+      "summary": [
+        {
+          "checks": {
+            "load failed counter sale as unpaid": true,
+            "original queued second meal sold once and last orders clear": true
+          },
+          "phase": "sale_retry",
+          "receipts": [
+            {
+              "blocks": 3,
+              "cash": 7,
+              "cooked": 7,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 0,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 0,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "planks": 3,
+              "product_store": {
+                "blocks": 3,
+                "meal": 0,
+                "planks": 3
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.0,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "stored": {
+                "coal": 0,
+                "meat": 0,
+                "metal": 0,
+                "slate": 0,
+                "stone": 0,
+                "wood": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

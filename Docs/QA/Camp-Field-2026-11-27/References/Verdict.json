@@ -1,0 +1,265 @@
+{
+  "source": "2654f5019b7212968d28600cb071bf1c231c9030",
+  "apk_sha256": "af81181c81bc623310b00680ea4467615c6f9ffd4c21c1197bc75aff3b71bd75",
+  "signed_asset_inventory": 789,
+  "generated_utc": "2026-11-27T12:30:00+00:00",
+  "scores": {
+    "pickup": 9.5,
+    "storehouse": 9.5,
+    "economy": 9.5,
+    "worker": 9.5,
+    "owl": 9.5,
+    "counter": 9.5,
+    "tower": 9.5,
+    "warehouse_retrieval": 9.9,
+    "extreme_load_visibility": 9.9
+  },
+  "locomotion": {
+    "C1": {
+      "joints": 64,
+      "embedded_clips": [
+        "FieldRun",
+        "Idle",
+        "Run",
+        "Walk"
+      ],
+      "part_stage_rows": 1106,
+      "score": 9.9,
+      "pass": true
+    },
+    "C2": {
+      "joints": 64,
+      "embedded_clips": [],
+      "part_stage_rows": 870,
+      "score": 9.9,
+      "pass": true
+    },
+    "C3": {
+      "joints": 64,
+      "embedded_clips": [],
+      "part_stage_rows": 870,
+      "score": 9.9,
+      "pass": true
+    },
+    "C4": {
+      "joints": 64,
+      "embedded_clips": [],
+      "part_stage_rows": 870,
+      "score": 9.9,
+      "pass": true
+    },
+    "Forester": {
+      "joints": 18,
+      "embedded_clips": [],
+      "part_stage_rows": 360,
+      "score": 9.9,
+      "pass": true
+    }
+  },
+  "minimum_movement": 9.9,
+  "movement_receipt_source": "2654f5019b7212968d28600cb071bf1c231c9030",
+  "minimum_feature_review": 9.5,
+  "review_class": "Scoped playtest checkpoint. Latest main requires independent per-dimension reapproval, 9.9 reference-sensitive and exact 10 for designated final visual critics. A tested feature score does not close a shipping task.",
+  "forward_policy_commit": "9d10c45a8bd46aeb6ab1b4009e87538c4796ef1c",
+  "all_reviewed_scopes_pass": true,
+  "scope": "Level 1 camp, work, pickup, service, pet, tower, counter and movement on recorded gameplay camera",
+  "renderer": "Godot 4.7.2 desktop gameplay renderer, 1\u00d7 and available pinch settings, disposable field profiles; Galaxy Z Fold 7 hardware unmeasured. Motion control poses sampled at 120 Hz, independent of display frame rate.",
+  "source_evidence": "Sources.json",
+  "source_files": {
+    "field_opening.gd": {
+      "git_blob": "4549f13a0aff0c35a38960c9cae819ad96329be2",
+      "sha256": "fbf55a0fb457db36b0b04725192c2fb7c05a062ce7d2f8c42aa58a6408a58686",
+      "local_critic_game_matches_signed_source": true
+    },
+    "field_player_wardrobe.gd": {
+      "git_blob": "a2d6e86607eb6cdde8a7683a4c773f92bae8ad73",
+      "sha256": "81331b7afd0105bee24efca27a059f026816e40b898a6aa16bcdc6e68187933a",
+      "local_critic_game_matches_signed_source": true
+    },
+    "gait_motor.gd": {
+      "git_blob": "897fd8ad5e26ff2575a8cf58f2a60f9d90eb0676",
+      "sha256": "60afa5b663929b4bdce9af4b19be24d92d722c0ad0f83af4f758d3d839bf3232",
+      "local_critic_game_matches_signed_source": true
+    },
+    "forester_gait.gd": {
+      "git_blob": "81a4ced02d11d4f7f06199555edf6c505870a654",
+      "sha256": "61f16fb5be0a75351dcaca4cadbfe040e30847345a1fddad140310bfade331e3",
+      "local_critic_game_matches_signed_source": true
+    },
+    "field_tread_samples.gd": {
+      "git_blob": "f9ba58325453fb96c717654b3b1c182629f6ab3e",
+      "sha256": "6d56d3b8781c727bbe1a2aa8c6930424418c7abcc0c24f24a123ee352b0ee889",
+      "local_critic_game_matches_signed_source": true
+    },
+    "field_glove_clearance.gd": {
+      "git_blob": "35d579f205668087fd6475562522694a7331769d",
+      "sha256": "3b2c1ec61689dc172900c72d19dc28491e7643e3d7cb88fdf03ab044a7b69041",
+      "local_critic_game_matches_signed_source": true
+    },
+    "field_survivor.gd": {
+      "git_blob": "a7c2c73007acc1c015958b80fdb4de79847c07f2",
+      "sha256": "c2c7d9b368ee59d2dfbb691daa6bce2a1b750494da16b346d4cb01d1bcb8696f",
+      "local_critic_game_matches_signed_source": true
+    },
+    "field_human.gd": {
+      "git_blob": "82707780ccf21dbac190d9108f327822bcf72412",
+      "sha256": "8ffd6da3eecb73b903c48685f85605950c2e85081e70ef140972c9ec25e25071",
+      "local_critic_game_matches_signed_source": true
+    },
+    "field_depot.gd": {
+      "git_blob": "9e5abb8d25debb481f2820e72419f7d66565cc7d",
+      "sha256": "f7ea8c1f5edc3b31d7be4f515e7d65564b12fba41a4a7f0b10c6adfe1b253cdb",
+      "local_critic_game_matches_signed_source": true
+    },
+    "field_goods_exchange.gd": {
+      "git_blob": "e403f92e56d1105c4cd917e7e67dbfaa7f02897e",
+      "sha256": "de9c8c225604445ab2f6852b0045e9775abd0c8f95174650a63bc4e583da5409",
+      "local_critic_game_matches_signed_source": true
+    },
+    "field_goods_pack.gd": {
+      "git_blob": "4d89ee02173a6e796728e58beae20b751d20a4ce",
+      "sha256": "4e477f221db507956829d5c4ff063b6c7a948b42aa9d6672d9305c142973e499",
+      "local_critic_game_matches_signed_source": true
+    },
+    "field_counter.gd": {
+      "git_blob": "82aa9ca89fe414d864446b86f20f1bd007d69fed",
+      "sha256": "c09eb734ad2716c3d0d2203bbc921fabc49a4a96a98b9e2eee89036b9e0720cd",
+      "local_critic_game_matches_signed_source": true
+    },
+    "field_camp_layout.gd": {
+      "git_blob": "c8a412644f35df6601998039bc62b9d2f2a955db",
+      "sha256": "99c7655c49506c708033ba888101aa2f45ff61634355d97a215bc8f6c66de44e",
+      "local_critic_game_matches_signed_source": true
+    },
+    "field_ballista_crew.gd": {
+      "git_blob": "0222658d544b0235d51a6165da2e5aa48275b245",
+      "sha256": "7d7430c3dc3c567a86659132adaca61e60416e34acba7af8cea10490d5d114cf",
+      "local_critic_game_matches_signed_source": true
+    },
+    "field_defense_tower.gd": {
+      "git_blob": "73017948d70038ae4813485702b0b37dca75b680",
+      "sha256": "875804816d462093ab92e63671389142ad9a1095f0b13f453a3ee7ef4c905b8d",
+      "local_critic_game_matches_signed_source": true
+    },
+    "field_tower_art.gd": {
+      "git_blob": "ff007f7e39437639d1b6da3444bc0a435b798bdd",
+      "sha256": "b7aea446eacbbc4d3b320be8fbb2c61568c5ecb330b15438c1f22bdf8c56c7b0",
+      "local_critic_game_matches_signed_source": true
+    },
+    "assets/field_world/tower_sightline.gdshader": {
+      "git_blob": "2efe3a5876ab9093acc5ddb9cdbcc0182acd5674",
+      "sha256": "4c7fe5df62e5544567c6412cb093401e7233b8ec632de4c168a569cf4a5da09a",
+      "local_critic_game_matches_signed_source": true
+    },
+    "field_carry.gd": {
+      "git_blob": "f7a7f49b375010df6464d2f1b903c8423c9ffa73",
+      "sha256": "7b8212c85af49d69391710081f89a0d1e6b8bc9f744a7d41bf65e0f1d49c146e",
+      "local_critic_game_matches_signed_source": true
+    },
+    "field_storage_house.gd": {
+      "git_blob": "ac00ac544a9f349986bae2bd9f8bdc9b4a26ae7b",
+      "sha256": "82c05042fbfe54763c0bb6f897f4a3407e39701db705fe71df2d816a473b4185",
+      "local_critic_game_matches_signed_source": true
+    },
+    "field_settlement_loop.gd": {
+      "git_blob": "f542e36146b1fcfe2b0a8a1b12f58c931cec670a",
+      "sha256": "d72e8085687f24da6a118b0256ed36d9edf5fe7a000cc158e523c4ec6d01b91b",
+      "local_critic_game_matches_signed_source": true
+    },
+    "assets/characters/Character1Fresh.glb": {
+      "git_blob": "4d2970cae20140c230e0b3d61312b5a942adef83",
+      "sha256": "639be377fe8d492370ff1e636ede6003f72b412addcdd769776f20c485b3b5e4",
+      "local_critic_game_matches_signed_source": true
+    },
+    "assets/characters/Character2.glb": {
+      "present_in_signed_source": false,
+      "local_critic_game_matches_signed_source": true
+    },
+    "assets/characters/Character3.glb": {
+      "present_in_signed_source": false,
+      "local_critic_game_matches_signed_source": true
+    },
+    "assets/characters/Character4.glb": {
+      "present_in_signed_source": false,
+      "local_critic_game_matches_signed_source": true
+    },
+    "assets/characters/Character2Compact.glb": {
+      "git_blob": "0814eae6eebd0af1f6a28282dbe092d1939644dc",
+      "sha256": "6db93b6848b0b55090347e4679086e76efc36056ff164a5b0fe5d653b2b7d640",
+      "local_critic_game_matches_signed_source": true
+    },
+    "assets/characters/Character3Compact.glb": {
+      "git_blob": "9e8391042b167ac7d12b8f1784d3f3a6cf3eb211",
+      "sha256": "07334aec518f0edec55eb8b87bdc7564cd7cb59f0376a3bd6259d2e195c3ed82",
+      "local_critic_game_matches_signed_source": true
+    },
+    "assets/characters/Character4Compact.glb": {
+      "git_blob": "a1f609208e5318fba650b905f8ea1c7908d9f575",
+      "sha256": "a6d1e9ce727d60513211606e8208c5ebdc4b4793e383ccdade1464e9d681ea2f",
+      "local_critic_game_matches_signed_source": true
+    },
+    "assets/settlement_people/survivor_male_01.glb": {
+      "git_blob": "32b4329ef7d37f03a91410b22f9d281fe3e40f55",
+      "sha256": "8768255badde45f66114c5fefbada73771873558ce117b8360bf4cea96acc88c",
+      "local_critic_game_matches_signed_source": true
+    },
+    "assets/field_world/camp_ballista.glb": {
+      "git_blob": "ba51b59e6aa6698269eb5a10e670fac2c09ea96c",
+      "sha256": "69fa17b31a51bf7536a617c31c9610f4a5fc7c1cf10f9fa62c074e040a9e1244",
+      "local_critic_game_matches_signed_source": true
+    }
+  },
+  "feature_evidence_sha256": {
+    "../Field/Field-pickups.mp4": "bcecc3009addfa78026bd6f72c001cdf8d57f495a732936ea0cef2cc3ebbf44f",
+    "../Field/After/pile-carried-2x.jpg": "9291497fe4d921d7090009bbc06e4a24b520aa2a4af4b369b5b3c2da54073999",
+    "../Field/Grouping-fence-transfer-and-save-checks.json": "20dbcbd36b0430d923bb2e166978f48715fbcb04b740059393ab9d33935ac3c2",
+    "../Field/Storehouse-deposit.mp4": "4931943b2d2fe7aec1efc120610ba7895f9eb51083187baab722b2a900a18f46",
+    "../Field/After/store-sending-2x.jpg": "c72be5d3953ea27e073afa75e818886742e048f71b63da972ffd041b9c4b18bc",
+    "../Field/On-foot-upgrade-and-loading.json": "bf867403171c64604396729e3c311e4b47b4380c158fd779552108b118776fe3",
+    "../Economy/Counter-normal.mp4": "b045e53292a18a0912095f5a0bf27bc8b32c88820b98bef903149f6afe7dba88",
+    "../Economy/Counter-pinch.mp4": "12278a64c1b485de7c27cebd1d58cb8869f6479329b3802d00ccd1da0ce38a97",
+    "../Economy/Cash-shelf-detail.png": "3d2fe7ac3b478aa01b8a3a04a207febfcc80f0d20386a65e3a15c1b2e44d7138",
+    "../Economy/Cash-shelf.json": "43f278d8d705612dfb5b33533ecf6686770df9deb58ad72cf9053d63e8c9d2fa",
+    "../Economy/Economy-results.json": "06afdfdd0f4d1c7132b15ed4aba4c2ca99b2668a092346a50b5812326af8ab78",
+    "../Crew/Worker-returns.mp4": "e8da608580defb14cd4721a49c76bcaa414d99a73c8cc891887a93e03b41d45a",
+    "../Crew/Loaded-return-2x.jpg": "6e8503c660de96ba781ce13dc466666087c3f9724a05ba2720f78aaa8ead54a9",
+    "../Crew/Earned-return-photos.json": "1daa96b2d75603a0d114a43ba92ad62c5c7efa7c7b3b42ecfe921aaebfa19b2d",
+    "../Crew/Owl-gate-patrol.mp4": "f026a64e37ae1560f23a37d1e061366156283be68f9ae2dd318cd07b7d68a3a3",
+    "../Crew/Gate-contact-1x.jpg": "308274cea7f1d11959700e91062aecd9544188f4e57079a124f9d05fb6a7f714",
+    "../Crew/Field-contact-2x.jpg": "2e02a557684f462e04e3d12fd9a4124b2d32836d4d107455260ec0e1f2861026",
+    "../Camp/Final/Counter-inside-1x.jpg": "89feb4d8bdbaa5265d24106e90be0c878936e600f17a71b25958ecf671f9be1d",
+    "../Camp/Final/Counter-outside-2x.jpg": "351e43ab2f08e81e4d5bbcc97c211f55fe8be307df250bdccaa5a9c8f74a1406",
+    "../Camp/Final/Counter-restored-2x.jpg": "61681ccaf5043875ba8fcc8c4ec1eb4cf572c9a5750b18f84b1fb19ebc5bb0b6",
+    "../Camp/Gameplay-regressions.json": "1cd358e1338cffb306ff3ec390f38e7265525b1ac75587db71fba0c97b381a97",
+    "../Camp/Gunner-clearance.json": "51a868840995dc0ce7328a34d1d852e1a7406be27ada48e4b172f41acffacc30",
+    "../Camp/Gunner-rig-turnaround.jpg": "3fb34c5f5df84f24827e15543b6388819f1953d757403b44cbb63efad5a83daa",
+    "../Camp/Final/Approach-2x.jpg": "4d12e9e7cc3c3519b69ee50dd082ef4b23aebb07bad58354c41ef0ddb5fa404c",
+    "../Camp/Paid-ballista-1x-and-2x.mp4": "6b913829579b3fd10452fffaf7bdb6cd97d84168ed726f86d0e50c50d0986c47",
+    "../Camp/Final/Behind-2x.jpg": "6e4dadddecec391e9caf50205785b244e271ccc2bff23d91f3ba8d2211c54a55",
+    "../Camp/Final/Field-Hit.jpg": "02ffc5b69cf30d8e06b37c7f0373d70b6919383a71a39daa50e44437e7b41794",
+    "../Camp/Final/Native.json": "5a99153933aa96fa7d520b66470a0f1996249a4b4093cee3422134ba62fe23d1",
+    "Walk-up-withdrawal.json": "b3267d036447f7a12cd16da1b5a644f1876fdb421d92703c47b5454c64cd9345",
+    "../Economy/Shelf-walk-results.json": "66febad31291683a52751d66f893d1f67728f1c1bffd16a81829b42beedc9ecf",
+    "../Economy/Walk-to-cash-normal.mp4": "338449d6467e0befe6350431822ff5837833dcf38cbef4fb251f14202b897e22",
+    "../Economy/Shelf-full-normal.jpg": "0661c8ef77dfae57967ebf46c1771d1d42eb419e9e665fad1e42cd72e4ffcf93",
+    "../Economy/Shelf-empty-normal.jpg": "443937713882da01e792ea56579fe58f709fe8d0d50d16d701cf3c32859a487b",
+    "../Economy/Walk-to-cash-pinch.mp4": "25cd807631c405afcff1c050729d2adb97e19345b32ba39095b09fbcb0a50e29",
+    "../Economy/Shelf-full-pinch.jpg": "a582338ce7531236f6a9797516ce8bbde8d8a495130d557b9b5cd5497eace071",
+    "../Economy/Shelf-empty-pinch.jpg": "40477a3c462777f9a7e905a27550496a5ee1540c34cfb4258e97577967995751",
+    "../Verification/Signed-shelf-walk.json": "83090bdb9faf3f33c64974d8dcdee4e8ebc8b1476e2aa8813816e51fe2b440b0",
+    "../Field/Pack/After-settled/store-starting-1x.jpg": "2a39c57f39e729d7b6707f57e15d990b22150c26c70f69171247f2a721ce0e94",
+    "../Field/Pack/After-settled/store-starting-2x.jpg": "30ed396a333be1339b3aff3ec72b474fdd5341c9727bebbf046ddd0c91e1fbf1",
+    "../Field/Pack/Before-settled/store-starting-1x.jpg": "134fbd13914fbcc3dbeb4239b90f222d379e01e6efd228b9703f8f19c3ab1d84",
+    "../Field/Pack/Before-settled/store-starting-2x.jpg": "a0c43b99cb52a76fcec6258475629655faa691d41620c7797a4413e5cb127910",
+    "Owner-B-deposit.jpg": "ea80a62c5242ae0d627c8445d127e67718d52ea0fd4b482fc0995ee7c7110302",
+    "../Field/Pack/Raw-backpack-comparison.jpg": "b03e45c99433a7fc2a62d1a2e6b9509742a3071aeb3ba2cce4995b3613fe2c74",
+    "../Field/Pack/Migrated/migration-square.jpg": "6c32849a36dd6c87b91946ddc840941ebea0cd038b76b9b2d8c03a1d7b9bab09",
+    "../Field/Pack/Migrated-mineral-backpack.json": "9723bdba8d48aa3e286570267efe1603701adbdd0868b1ea9a51589edbd45881"
+  },
+  "feature_candidate_overrides": {
+    "warehouse_retrieval": "2654f5019b7212968d28600cb071bf1c231c9030",
+    "extreme_load_visibility": "2654f5019b7212968d28600cb071bf1c231c9030"
+  },
+  "location_notes": "Evidence is included relative to this directory and the parent trial evidence directory. Source footage is identified by artifact SHA-256 and committed repository paths.",
+  "original_build12": "../../camp12/References/Independent-review.md"
+}

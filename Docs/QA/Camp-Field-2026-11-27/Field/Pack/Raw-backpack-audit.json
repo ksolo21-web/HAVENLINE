@@ -1,0 +1,288 @@
+{
+  "scene": "res://field_opening.tscn",
+  "candidate": "2654f5019b7212968d28600cb071bf1c231c9030",
+  "comparison_snapshot": "a7b27d44657e1f8b3fb69eb8df82a9d02e663617",
+  "before_photos_capture": "a7b27d44657e1f8b3fb69eb8df82a9d02e663617",
+  "ordinary_controls": "native touch and pinch in an isolated store camera profile, 480\u00d7720, Mesa llvmpipe compatibility, Godot 4.7.2",
+  "after_runtime_files": {
+    "field_carry.gd": "7b8212c85af49d69391710081f89a0d1e6b8bc9f744a7d41bf65e0f1d49c146e",
+    "qa_field_pack_bounds.gd": "02cec9dd7529a0f6ae29f65cb5b019c0a401631c15d10298ddf3bd1efc43ae4c",
+    "gait_motor.gd": "60afa5b663929b4bdce9af4b19be24d92d722c0ad0f83af4f758d3d839bf3232",
+    "field_inventory.gd": "e29ceacd0006b8697731911ac69bee6c75e49dccebf012ec2fd1465f507af773",
+    "field_depot.gd": "f7ea8c1f5edc3b31d7be4f515e7d65564b12fba41a4a7f0b10c6adfe1b253cdb",
+    "field_opening.gd": "fbf55a0fb457db36b0b04725192c2fb7c05a062ce7d2f8c42aa58a6408a58686"
+  },
+  "visual_ledger_units_per_bundle": 10,
+  "old_pack_tops_at_1x_and_2x": [
+    {
+      "highest_m_above_feet": 5.88034820556641,
+      "top_fraction": 0.118411933051215,
+      "visible": {
+        "coal": 0,
+        "meat": 24,
+        "metal": 0,
+        "slate": 0,
+        "stone": 24,
+        "wood": 34
+      }
+    },
+    {
+      "highest_m_above_feet": 2.35968470573425,
+      "top_fraction": 0.144123193952772,
+      "visible": {
+        "coal": 0,
+        "meat": 12,
+        "metal": 0,
+        "slate": 0,
+        "stone": 7,
+        "wood": 8
+      }
+    }
+  ],
+  "new_pack_tops_at_1x_and_2x": [
+    {
+      "highest_m_above_feet": 1.84864795207977,
+      "top_fraction": 0.347036870320638,
+      "visible": {
+        "coal": 0,
+        "meat": 8,
+        "metal": 0,
+        "slate": 0,
+        "stone": 4,
+        "wood": 6
+      }
+    },
+    {
+      "highest_m_above_feet": 1.37932395935059,
+      "top_fraction": 0.254398324754503,
+      "visible": {
+        "coal": 0,
+        "meat": 4,
+        "metal": 0,
+        "slate": 0,
+        "stone": 2,
+        "wood": 2
+      }
+    }
+  ],
+  "same_touch_run": {
+    "steps": 43,
+    "held_input_steps": 32,
+    "released_input_steps": 11,
+    "distance_m": 2.30906629562378,
+    "max_delta_m": {
+      "actor": 0.0,
+      "left_boot": 0.0,
+      "right_boot": 0.0
+    },
+    "before_bundles": {
+      "coal": 0,
+      "meat": 1733,
+      "metal": 0,
+      "slate": 0,
+      "stone": 1733,
+      "wood": 1734
+    },
+    "after_bundles": {
+      "coal": 0,
+      "meat": 1733,
+      "metal": 0,
+      "slate": 0,
+      "stone": 1733,
+      "wood": 1734
+    }
+  },
+  "deposit": {
+    "all_checks": {
+      "all 5200 carried bundles reached storage and operating workshops": true,
+      "all building receipts and legacy rescue, production, meal and pet restore": true,
+      "cold reopened checksummed credit and raw balances": true,
+      "journal and all material balances remain usable": true,
+      "three orbiting tools were equipped": true
+    },
+    "storage_pre": {
+      "coal": 0,
+      "meat": 5,
+      "metal": 0,
+      "slate": 0,
+      "stone": 2,
+      "wood": 2
+    },
+    "storage_post": {
+      "coal": 0,
+      "meat": 1738,
+      "metal": 0,
+      "slate": 0,
+      "stone": 1735,
+      "wood": 1736
+    },
+    "back_after": {
+      "coal": 0,
+      "meat": 0,
+      "metal": 0,
+      "slate": 0,
+      "stone": 0,
+      "wood": 0
+    }
+  },
+  "stock_reference": [
+    {
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/25b4ec6dd407c1c2530a3781527df64eabb63b99/Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/01-wood.png"
+    },
+    {
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/25b4ec6dd407c1c2530a3781527df64eabb63b99/Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/02-stone.png"
+    },
+    {
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/25b4ec6dd407c1c2530a3781527df64eabb63b99/Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/07-meat.png"
+    }
+  ],
+  "acquisition_reference": {
+    "source": "Owner recording B, 28.00 seconds. Acquired material reads in gameplay; radius and pile overflow are authored. Picking up ordinary nearby material must still respect camp timber and the moving gates."
+  },
+  "test": {
+    "max_bundles_per_material": 1000000,
+    "mixed_subsets": 63,
+    "minimum_joint_insertion_mm": 4.028,
+    "failures": []
+  },
+  "review": {
+    "builder": "tower",
+    "independent": "reference_check",
+    "grade": 9.9,
+    "target": 9.5,
+    "scope": "52,000-unit back-rack readability at 1\u00d7 and 2\u00d7. All three materials remain distinct with face, feet, camp doors and objective visible. Owner recording B anchors ordinary physical carry. High load compression is a Havenline presentation choice."
+  },
+  "evidence_sha256": {
+    "After-settled/Scene-projection.log": "2ddf6b72aec6b377b072ccd2985e5c42dd4551c787986f284b5e2aedd1e44c95",
+    "After-settled/Settled-camera.log": "3774d5f1eabdc49dab605c55dfcc5ad8db5085c749f81566745008841a67e512",
+    "After-settled/store-starting-1x.jpg": "2a39c57f39e729d7b6707f57e15d990b22150c26c70f69171247f2a721ce0e94",
+    "After-settled/store-starting-2x.jpg": "30ed396a333be1339b3aff3ec72b474fdd5341c9727bebbf046ddd0c91e1fbf1",
+    "Before-settled/Scene-projection.log": "0dcb8088719a123798336a58be0600e779e709d01362aabb7ea70a6740b7a131",
+    "Before-settled/Settled-camera.log": "d7619732b4eb28c30bb3f7f8a5ec30a15f5892735da812df90e9527180c23673",
+    "Before-settled/store-starting-1x.jpg": "134fbd13914fbcc3dbeb4239b90f222d379e01e6efd228b9703f8f19c3ab1d84",
+    "Before-settled/store-starting-2x.jpg": "a0c43b99cb52a76fcec6258475629655faa691d41620c7797a4413e5cb127910",
+    "Boot-and-rack-probe.gd": "629a4bb298432852b94f92e28691d06ba3973261eb008d7c8c92d1894498dd1a",
+    "Field-route.log": "2bbddfefa9a1b4bb753663634de763c998e36fcabe6aff0fd757878b028cd2f6",
+    "Migrated/Minerals-camera.log": "750548c3d4a835dc64a7af8dcbed3770bbeb5ff22c822e7939c06b3fe6d2fb81",
+    "Migrated/centered-pinch.jpg": "007898ac84d52ebc4dae9246da4c94198a9c1d39fb73d2fba2527dee0e3f2e48",
+    "Migrated/migration-square.jpg": "6c32849a36dd6c87b91946ddc840941ebea0cd038b76b9b2d8c03a1d7b9bab09",
+    "Raw-backpack-comparison.jpg": "b03e45c99433a7fc2a62d1a2e6b9509742a3071aeb3ba2cce4995b3613fe2c74",
+    "qa_field_minerals.log": "cf02a9ef7e59f9a06c676084e81bc3a409d0ccde7a1b39382afeded15927a39a",
+    "qa_field_pack_bounds.log": "bd096300a55b13f17f4fd2d456891eb64ca081a9f1337d2a9b6134b72f65ed8a",
+    "store-sending-1x.jpg": "87349ed060ae7b9eb2b6255f095b99c44139e3a4384a6fc63654f61d5c3cb729",
+    "store-sending-2x.jpg": "18fa85f0e781588648d48be3f208e0658513de502525aa51bcea43f7ef53bc4b",
+    "store-starting-1x.jpg": "6ce32bb860c020db9d6f27e85610ffeccde917823d42aa38ed1152e05b64a3d9",
+    "store-starting-2x.jpg": "d3f9aa0553dfd8d46707c0c1e8faa66c8d98218508092628f83bab8fea122076",
+    "store-stocked-1x.jpg": "40c1da462ca1093bae5a2e908fb731c3a0caacaee58ab5ad249a984d30b6dc5c",
+    "store-stocked-2x.jpg": "e3d5d45d5ccc4fe571e7ea4672b962c9ad29ce9f7d21ba2dc31ae39652146bcd"
+  },
+  "initial_graded_commit": "a55b7ed1981fd521b8b951a95d514f9df223c8ca",
+  "baseline_photographs_previous_field_report": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+  "new_art_and_code_under_review": {
+    "field_carry.gd": "7b8212c85af49d69391710081f89a0d1e6b8bc9f744a7d41bf65e0f1d49c146e",
+    "field_opening.gd": "fbf55a0fb457db36b0b04725192c2fb7c05a062ce7d2f8c42aa58a6408a58686"
+  },
+  "after_mineral_correction": {
+    "witness": "Matching field_carry.gd and field_opening.gd hash values above. Native quantitative A/B repeated and both boots plus every at-rest measurement matched the initial graded commit. Independent 9.9/10 visual verdict reissued on settled 1x/2x photos on these exact files.",
+    "notes": "Headless source projection and desktop rendering are separate witnesses. The desktop 480\u00d7720 screenshots show six timber, four stone and eight meat packets at both zooms. All three HUD quantities are unchanged."
+  },
+  "pictured_view": {
+    "Before-settled": [
+      {
+        "carried": {
+          "coal": 0,
+          "meat": 1733,
+          "metal": 0,
+          "slate": 0,
+          "stone": 1733,
+          "wood": 1734
+        },
+        "height_m": 7.67610597610474,
+        "image": "/tmp/hl13pack/metric-before/store-starting-1x.jpg",
+        "logical_view": "(720.0, 1080.0)",
+        "top_fraction": 0.169399642944336,
+        "visible": {
+          "coal": 0,
+          "meat": 24,
+          "metal": 0,
+          "slate": 0,
+          "stone": 24,
+          "wood": 48
+        },
+        "zoom": 1.0
+      },
+      {
+        "carried": {
+          "coal": 0,
+          "meat": 1733,
+          "metal": 0,
+          "slate": 0,
+          "stone": 1733,
+          "wood": 1734
+        },
+        "height_m": 4.06529855728149,
+        "image": "/tmp/hl13pack/metric-before/store-starting-2x.jpg",
+        "logical_view": "(720.0, 1080.0)",
+        "top_fraction": 0.121858780472367,
+        "visible": {
+          "coal": 0,
+          "meat": 24,
+          "metal": 0,
+          "slate": 0,
+          "stone": 15,
+          "wood": 22
+        },
+        "zoom": 2.0
+      }
+    ],
+    "After-settled": [
+      {
+        "carried": {
+          "coal": 0,
+          "meat": 1733,
+          "metal": 0,
+          "slate": 0,
+          "stone": 1733,
+          "wood": 1734
+        },
+        "height_m": 1.84864795207977,
+        "image": "/tmp/hl13pack/metric-final/store-starting-1x.jpg",
+        "logical_view": "(720.0, 1080.0)",
+        "top_fraction": 0.398024551956742,
+        "visible": {
+          "coal": 0,
+          "meat": 8,
+          "metal": 0,
+          "slate": 0,
+          "stone": 4,
+          "wood": 6
+        },
+        "zoom": 1.0
+      },
+      {
+        "carried": {
+          "coal": 0,
+          "meat": 1733,
+          "metal": 0,
+          "slate": 0,
+          "stone": 1733,
+          "wood": 1734
+        },
+        "height_m": 1.84864795207977,
+        "image": "/tmp/hl13pack/metric-final/store-starting-2x.jpg",
+        "logical_view": "(720.0, 1080.0)",
+        "top_fraction": 0.296049103913484,
+        "visible": {
+          "coal": 0,
+          "meat": 8,
+          "metal": 0,
+          "slate": 0,
+          "stone": 4,
+          "wood": 6
+        },
+        "zoom": 2.0
+      }
+    ]
+  },
+  "parent_release_source": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a"
+}

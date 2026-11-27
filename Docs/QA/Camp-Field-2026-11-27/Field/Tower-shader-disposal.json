@@ -1,0 +1,48 @@
+{
+  "fixture": "qa_world_lifecycle.gd",
+  "unchanged_fixture": "500 real encounter formations, typed drops, regrowth and 50 assertions",
+  "experiments": {
+    "base": {
+      "checks": 50,
+      "failures": [],
+      "renderer_errors": 1
+    },
+    "art_old": {
+      "checks": 50,
+      "failures": [],
+      "renderer_errors": 1
+    },
+    "tower_no_crew": {
+      "checks": 50,
+      "failures": [],
+      "renderer_errors": 1
+    },
+    "tower_no_sightline": {
+      "checks": 50,
+      "failures": [],
+      "renderer_errors": 0
+    },
+    "tower_no_impact": {
+      "checks": 50,
+      "failures": [],
+      "renderer_errors": 1
+    },
+    "exit_tree": {
+      "checks": 50,
+      "failures": [],
+      "renderer_errors": 0
+    },
+    "known_shader": {
+      "checks": 50,
+      "failures": [],
+      "renderer_errors": 1
+    },
+    "lateclear": {
+      "checks": 50,
+      "failures": [],
+      "renderer_errors": 1
+    }
+  },
+  "result": "The skinned Character1_Meshy surface was still using the tower-owned occlusion material at scene teardown. Clear that particular overlay while the tower still owns it.",
+  "current_source_errors": 0
+}

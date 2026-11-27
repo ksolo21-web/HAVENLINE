@@ -1,0 +1,111 @@
+{
+  "stamp": {
+    "commit": "2654f5019b7212968d28600cb071bf1c231c9030",
+    "manifest": {
+      "sha256": "60e52a14064a92980f71146b4a8c5924563608c5415d95e481ecea64270caeb1",
+      "checked_files": 707
+    },
+    "runner": "5e420b7a21e8066f23d7eb548da8200a2ef0428d8db77d622bbcb85498b0a9eb"
+  },
+  "passed": true,
+  "runs": [
+    {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "log": "qa_storage_stream-1.log",
+      "log_sha256": "668a3920fa35ba6cdb23b19108a3c90b39c1fbfafe52574ed8ac8b5419a9e506",
+      "summary": [
+        {
+          "checks": {
+            "52 mixed commits the exact target": true,
+            "Each bulk wave is independently durable inside the reference window": true,
+            "Every bundle in the gameplay-sized stack has an individual flight": true,
+            "Large legacy load conserves each type within the visual budget": true,
+            "Large typed load follows the locked end time": true,
+            "Purchase consumed the right shelf totals": true,
+            "Simultaneous large stream preserves each resource": true,
+            "Site cannot invent a meat receipt": true,
+            "Site cannot invent a stone receipt": true,
+            "Site cannot invent a wood receipt": true,
+            "Survivor payment persisted exactly once": true,
+            "hopper-meat commits the exact target": true,
+            "hopper-meat streams a short overlapping load": true,
+            "hopper-stone commits the exact target": true,
+            "hopper-stone streams a short overlapping load": true,
+            "hopper-wood commits the exact target": true,
+            "hopper-wood streams a short overlapping load": true,
+            "meat fills its own hopper without consuming stored stock": true,
+            "plot commits the exact target": true,
+            "plot finishes in the measured plot window": true,
+            "stone fills its own hopper without consuming stored stock": true,
+            "survivor commits the exact target": true,
+            "survivor finishes in the measured plot window": true,
+            "wood fills its own hopper without consuming stored stock": true
+          },
+          "measures": {
+            "273 legacy bundles": {
+              "durable_landing_frames": [
+                17,
+                29,
+                41,
+                53
+              ],
+              "stored_metal": 68,
+              "stored_slate": 205,
+              "visual_packets": 12
+            },
+            "52 mixed": {
+              "end": 53,
+              "first": 17,
+              "launch": 0,
+              "launched_packets": 52,
+              "max_simultaneous": 25,
+              "seconds": 0.883333333333333
+            },
+            "hopper-meat": {
+              "end": 13,
+              "first": 9,
+              "launch": 0,
+              "launched_packets": 3,
+              "max_simultaneous": 3,
+              "seconds": 0.216666666666667
+            },
+            "hopper-stone": {
+              "end": 13,
+              "first": 9,
+              "launch": 0,
+              "launched_packets": 3,
+              "max_simultaneous": 3,
+              "seconds": 0.216666666666667
+            },
+            "hopper-wood": {
+              "end": 13,
+              "first": 9,
+              "launch": 0,
+              "launched_packets": 3,
+              "max_simultaneous": 3,
+              "seconds": 0.216666666666667
+            },
+            "plot": {
+              "end": 39,
+              "first": 17,
+              "launch": 0,
+              "launched_packets": 22,
+              "max_simultaneous": 17,
+              "seconds": 0.65
+            },
+            "survivor": {
+              "end": 39,
+              "first": 17,
+              "launch": 0,
+              "launched_packets": 8,
+              "max_simultaneous": 6,
+              "seconds": 0.65
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

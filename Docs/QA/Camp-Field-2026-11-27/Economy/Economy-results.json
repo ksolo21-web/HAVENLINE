@@ -1,0 +1,566 @@
+{
+  "scene": "res://field_opening.tscn",
+  "engine": "Godot 4.7.2 stable",
+  "source_parent": "6435e5d",
+  "builder": "automation",
+  "independent_reviewer": "reference_check",
+  "recorded_utc": "2026-11-27T11:31:10.949862+00:00",
+  "modes": {
+    "manual": {
+      "passed": true,
+      "checks": {
+        "actual stored stone can be retrieved": true,
+        "all three purchased machines start without belts": true,
+        "apron retrieves two specific meals": true,
+        "cash retrieval is durable near the warehouse": true,
+        "cashier serves two actual queued buyers": true,
+        "conservation and serialization hold": true,
+        "counter takes a whole prepared stack before buyers arrive": true,
+        "empty money shelf clears after withdrawal": true,
+        "house leaves intentionally withdrawn goods on the visitor": true,
+        "meat cycles complete without the carrier": true,
+        "meat entire output lot transferred once": true,
+        "meat hand-fed through normal proximity": true,
+        "meat has a physical batch ready": true,
+        "meat has a physical intake-and-output approach": true,
+        "mixed goods unload together into individual storehouse bays": true,
+        "normal paid scene restored": true,
+        "one approach collects both notes while dropping both meals": true,
+        "remaining two meals available from food bay": true,
+        "remote shelf withdrawal rejects": true,
+        "sold meals create two uncollected notes": true,
+        "stone cycles complete without the carrier": true,
+        "stone entire output lot transferred once": true,
+        "stone hand-fed through normal proximity": true,
+        "stone has a physical batch ready": true,
+        "stone has a physical intake-and-output approach": true,
+        "stored cash can be retrieved": true,
+        "two deposited notes appear on the physical warehouse shelf": true,
+        "unlimited-quantity ledger rejects fabricated finishes": true,
+        "wood cycles complete without the carrier": true,
+        "wood entire output lot transferred once": true,
+        "wood hand-fed through normal proximity": true,
+        "wood has a physical batch ready": true,
+        "wood has a physical intake-and-output approach": true
+      },
+      "visits": [
+        {
+          "cash_in_register": 0,
+          "cooked": 1,
+          "counter_meals": 0,
+          "drill": 0,
+          "house": {
+            "blocks": 0,
+            "meal": 0,
+            "money": 0,
+            "planks": 0
+          },
+          "pack": {
+            "blocks": 0,
+            "meal": 0,
+            "money": 0,
+            "planks": 0
+          },
+          "raw_pack": {
+            "coal": 0,
+            "meat": 0,
+            "metal": 0,
+            "slate": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "saw": 3,
+          "served": 0,
+          "step": "processed wood",
+          "t": 4.55
+        },
+        {
+          "cash_in_register": 0,
+          "cooked": 1,
+          "counter_meals": 0,
+          "drill": 3,
+          "house": {
+            "blocks": 0,
+            "meal": 0,
+            "money": 0,
+            "planks": 0
+          },
+          "pack": {
+            "blocks": 0,
+            "meal": 0,
+            "money": 0,
+            "planks": 0
+          },
+          "raw_pack": {
+            "coal": 0,
+            "meat": 0,
+            "metal": 0,
+            "slate": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "saw": 3,
+          "served": 0,
+          "step": "processed stone",
+          "t": 9.1
+        },
+        {
+          "cash_in_register": 0,
+          "cooked": 4,
+          "counter_meals": 0,
+          "drill": 3,
+          "house": {
+            "blocks": 0,
+            "meal": 0,
+            "money": 0,
+            "planks": 0
+          },
+          "pack": {
+            "blocks": 0,
+            "meal": 1,
+            "money": 0,
+            "planks": 0
+          },
+          "raw_pack": {
+            "coal": 0,
+            "meat": 0,
+            "metal": 0,
+            "slate": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "saw": 3,
+          "served": 0,
+          "step": "processed meat",
+          "t": 14.25
+        },
+        {
+          "cash_in_register": 0,
+          "cooked": 4,
+          "counter_meals": 0,
+          "drill": 3,
+          "house": {
+            "blocks": 0,
+            "meal": 0,
+            "money": 0,
+            "planks": 0
+          },
+          "pack": {
+            "blocks": 3,
+            "meal": 4,
+            "money": 0,
+            "planks": 3
+          },
+          "raw_pack": {
+            "coal": 0,
+            "meat": 0,
+            "metal": 0,
+            "slate": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "saw": 3,
+          "served": 0,
+          "step": "finished goods on back",
+          "t": 14.6
+        },
+        {
+          "cash_in_register": 0,
+          "cooked": 4,
+          "counter_meals": 2,
+          "drill": 3,
+          "house": {
+            "blocks": 3,
+            "meal": 0,
+            "money": 0,
+            "planks": 3
+          },
+          "pack": {
+            "blocks": 0,
+            "meal": 0,
+            "money": 2,
+            "planks": 0
+          },
+          "raw_pack": {
+            "coal": 0,
+            "meat": 0,
+            "metal": 0,
+            "slate": 0,
+            "stone": 1,
+            "wood": 0
+          },
+          "saw": 3,
+          "served": 2,
+          "step": "simultaneous meat and money",
+          "t": 23.25
+        }
+      ],
+      "log_sha256": "436973c526c5b87f64fa1c2710f72a7bd57743f16b0ad31957d28e6c18de96ff"
+    },
+    "cold": {
+      "passed": true,
+      "checks": {
+        "cold restore of an empty bay shows zero notes and keeps owner withdrawal": true,
+        "cold restore preserves withdrawn notes, products, and settled sales": true,
+        "conservation and serialization hold": true,
+        "normal paid scene restored": true,
+        "returning visibly deposits exactly two loose notes": true
+      },
+      "visits": [
+        {
+          "cash_in_register": 0,
+          "cooked": 4,
+          "counter_meals": 2,
+          "drill": 3,
+          "house": {
+            "blocks": 3,
+            "meal": 0,
+            "money": 2,
+            "planks": 3
+          },
+          "pack": {
+            "blocks": 0,
+            "meal": 0,
+            "money": 0,
+            "planks": 0
+          },
+          "raw_pack": {
+            "coal": 0,
+            "meat": 0,
+            "metal": 0,
+            "slate": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "saw": 3,
+          "served": 2,
+          "step": "unloaded cash after reload",
+          "t": 1.133
+        }
+      ],
+      "log_sha256": "15e27f8a8ebdfdd67627bdd5fc24244386088960fbb3fb1e6db4c57f131175de"
+    },
+    "connected": {
+      "passed": true,
+      "checks": {
+        "conservation and serialization hold": true,
+        "no reconnect or sale was necessary": true,
+        "normal paid scene restored": true,
+        "old paid lines retain seven historical owned earnings": true,
+        "old sales render seven distinct owned notes at paid warehouse after restore": true,
+        "paid inlet still accepts personal raw and nearby output": true,
+        "saw returns the unattended lot on real rollers": true,
+        "wood cycles complete without the carrier": true,
+        "wood hand-fed through normal proximity": true,
+        "wood has a physical intake-and-output approach": true
+      },
+      "visits": [
+        {
+          "cash_in_register": 0,
+          "cooked": 7,
+          "counter_meals": 0,
+          "drill": 3,
+          "house": {
+            "blocks": 1,
+            "meal": 0,
+            "money": 7,
+            "planks": 1
+          },
+          "pack": {
+            "blocks": 0,
+            "meal": 0,
+            "money": 0,
+            "planks": 2
+          },
+          "raw_pack": {
+            "coal": 0,
+            "meat": 0,
+            "metal": 0,
+            "slate": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "saw": 6,
+          "served": 7,
+          "step": "processed wood",
+          "t": 4.617
+        },
+        {
+          "cash_in_register": 0,
+          "cooked": 7,
+          "counter_meals": 0,
+          "drill": 3,
+          "house": {
+            "blocks": 3,
+            "meal": 0,
+            "money": 7,
+            "planks": 4
+          },
+          "pack": {
+            "blocks": 0,
+            "meal": 0,
+            "money": 0,
+            "planks": 6
+          },
+          "raw_pack": {
+            "coal": 0,
+            "meat": 0,
+            "metal": 0,
+            "slate": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "saw": 10,
+          "served": 7,
+          "step": "manual plus automated",
+          "t": 19.817
+        }
+      ],
+      "log_sha256": "70d5c9b071cc82854e5ff34aa1e15b83f40153f5f752f5819bdb725eb03c32e5"
+    },
+    "bulk": {
+      "passed": true,
+      "checks": {
+        "conservation and serialization hold": true,
+        "empty register cannot pay twice": true,
+        "large shipments use bounded freight meshes": true,
+        "normal paid scene restored": true,
+        "one visit exchanges 1207 meals for 1021 already paid notes": true,
+        "quantity fixture passed the production object validator": true,
+        "warehouse receives all 1021 notes and renders bounded shelf stock": true,
+        "withdraws all 1207 physical servings in one visit": true
+      },
+      "visits": [
+        {
+          "cash_in_register": 0,
+          "cooked": 2229,
+          "counter_meals": 1207,
+          "drill": 0,
+          "house": {
+            "blocks": 0,
+            "meal": 0,
+            "money": 0,
+            "planks": 0
+          },
+          "pack": {
+            "blocks": 0,
+            "meal": 0,
+            "money": 1021,
+            "planks": 0
+          },
+          "raw_pack": {
+            "coal": 0,
+            "meat": 0,
+            "metal": 0,
+            "slate": 0,
+            "stone": 0,
+            "wood": 0
+          },
+          "saw": 0,
+          "served": 1021,
+          "step": "bulk receipt",
+          "t": 0.1
+        }
+      ],
+      "log_sha256": "de461380ff55ca9436a8aa02684e5d8ff1370d34b32e6f633063685a81aa0ab7"
+    }
+  },
+  "legacy_regressions": {
+    "qa_connected_camp_lines-1": {
+      "checks": {
+        "all eight docked typed routes exist": true,
+        "committed final receipts round trip": true,
+        "cooker, fresh/stored dispatch and staff preserve one roast per sale": true,
+        "finished timber and dressed stone arrive into different storage bays": true,
+        "genuine v8 airborne inventory remains owned": true,
+        "long planks stay aligned on the exterior rollers": true,
+        "no cash, fuel, furnace, raw-ore or decorative stations receive generic outputs": true,
+        "no duplicate work remains in transit": true,
+        "source save opens": true
+      },
+      "passed": true,
+      "log_sha256": "c4de46ef87125388ebca6ac74b2ad1646eaff8f2db27a35a65485262a00afcd7"
+    },
+    "qa_connected_camp_lines-2": {
+      "checks": {
+        "cleared cooker can fill the second slot without an order": true,
+        "forged overlapping food sources rejected": true,
+        "fresh serving waits for clearance behind surplus leaving the cooker": true,
+        "full house and outlets stay a valid conserved checkpoint": true,
+        "full prepared inventory holds compatible cooker output": true,
+        "idle customer queue allows one stored meal into the empty service buffer": true,
+        "reserved portion lands at the real guarded buffer before any payment": true,
+        "source save opens": true,
+        "stone backed up outfeed prevents a new work cycle": true,
+        "stone full typed store holds the original product at source": true,
+        "stone stored location and outlet remain separate": true,
+        "surplus can enter the newly freed shelf while the dispatch throat is occupied": true,
+        "two sources cannot own the same fresh/stored merge": true,
+        "warehouse cannot hold more blocks than all completed drilling receipts": true,
+        "wood backed up outfeed prevents a new work cycle": true,
+        "wood full typed store holds the original product at source": true,
+        "wood stored location and outlet remain separate": true,
+        "work restarts after a cooked rack slot is freed": true
+      },
+      "passed": true,
+      "log_sha256": "0e9cf7b4c80ceeff6378b05a1b2e08b4111ff5401afb616230800adc660278eb"
+    },
+    "qa_connected_camp_lines-3": {
+      "checks": {
+        "disconnected lane is visible to HUD and unavailable for dispatch": true,
+        "found a legal warehouse placement that obstructs its input port": true,
+        "input is genuinely travelling before its port is disconnected": true,
+        "normally placed storehouse can disconnect a paid line": true,
+        "source save opens": true,
+        "stranded load pauses without spending again": true
+      },
+      "passed": true,
+      "log_sha256": "b5765f8dfaad90ebeeaddd12f94af469b8c38e1b7bd529b735d1e47b56f721c6"
+    },
+    "qa_connected_camp_lines-4": {
+      "checks": {
+        "closed app and fresh launch did not debit again or bank movement": true,
+        "original rail reconnects without resetting ownership": true,
+        "paused bundle reaches its proper paid machine": true,
+        "physical disconnection survives restart": true,
+        "relocated house can be restored": true,
+        "source save opens": true
+      },
+      "passed": true,
+      "log_sha256": "557ace9f975c80963a18915e9e125c35533e9aa01161b5e6aeead21672a99446"
+    },
+    "qa_connected_camp_lines-5": {
+      "checks": {
+        "idle outbound legacy reservation cannot repeat": true,
+        "migrated roast reaches staffed counter and pays exactly once": true,
+        "migrated serial purchase includes automatic meat supply without workshop or express service": true,
+        "source save opens": true,
+        "v8 partly delivered direct roast preserved under serial installation": true
+      },
+      "passed": true,
+      "log_sha256": "3f463af98cd9abeede393804eb7489d33b582be7bf8659129401db36d77446f1"
+    },
+    "qa_workshop_floor_access-1": {
+      "checks": {
+        "cooker to counter clears the installed machinery and rails": true,
+        "cooker to counter reaches the real service spot on foot": true,
+        "counter to store clears the installed machinery and rails": true,
+        "counter to store reaches the real service spot on foot": true,
+        "paid warehouse exposes an accessible material apron": true,
+        "saw to drill clears the installed machinery and rails": true,
+        "saw to drill reaches the real service spot on foot": true,
+        "store to cooker clears the installed machinery and rails": true,
+        "store to cooker reaches the real service spot on foot": true,
+        "store to saw clears the installed machinery and rails": true,
+        "store to saw reaches the real service spot on foot": true
+      },
+      "passed": true,
+      "log_sha256": "f4b4e6dc10440f8965be8bc656b938a4573b361f60c861358d988d5b314ef8e0"
+    },
+    "qa_workshop_floor_access-2": {
+      "checks": {
+        "meat actual personal stock landed in the nearby hopper": true,
+        "meat paid intake accepts personal stock on approach": true,
+        "meat pickup is owned": true,
+        "meat reachable from the public service aisle": true,
+        "meat remote player retains the matching raw material": true,
+        "wood actual personal stock landed in the nearby hopper": true,
+        "wood paid intake accepts personal stock on approach": true,
+        "wood pickup is owned": true,
+        "wood reachable from the public service aisle": true,
+        "wood remote player retains the matching raw material": true
+      },
+      "passed": true,
+      "log_sha256": "5b47a4799686d26b3206fca92b3a666ed73fcc4e346c9640d8a435dc7b677606"
+    },
+    "qa_workshop_floor_access-3": {
+      "checks": {
+        "meat actual personal stock landed in the nearby hopper": true,
+        "meat paid intake accepts personal stock on approach": true,
+        "meat pickup is owned": true,
+        "meat reachable from the public service aisle": true,
+        "meat remote player retains the matching raw material": true,
+        "wood actual personal stock landed in the nearby hopper": true,
+        "wood paid intake accepts personal stock on approach": true,
+        "wood pickup is owned": true,
+        "wood reachable from the public service aisle": true,
+        "wood remote player retains the matching raw material": true
+      },
+      "passed": true,
+      "log_sha256": "9f6bed8f8449246da3f21a99c00300ff02485ee6762a5271a5438c2e93c98d72"
+    }
+  },
+  "proof_files": {
+    "Counter-normal.mp4": "b045e53292a18a0912095f5a0bf27bc8b32c88820b98bef903149f6afe7dba88",
+    "Counter-normal.json": "d933fd3b35d97feb3f9ead02991cee6f7597f061bd111f8c33a2ecad949c5ff6",
+    "Counter-pinch.mp4": "12278a64c1b485de7c27cebd1d58cb8869f6479329b3802d00ccd1da0ce38a97",
+    "Counter-pinch.json": "064c932c831e4b89700c8dadf1f233de00011b8bb9765fe7e483a54a2d025810",
+    "Cash-shelf-stocked.png": "3e83352f1e7b5fa4652ad9d115b1b9c3245f1af3cb3f50687e4bd8e431b920f1",
+    "Cash-shelf-empty.png": "bbc8285961e8809390a6c02d7c9436ea295cd59ee2fc42306ab7b8b9c44e3a5c",
+    "Cash-shelf.json": "43f278d8d705612dfb5b33533ecf6686770df9deb58ad72cf9053d63e8c9d2fa",
+    "Cash-shelf-detail.png": "3d2fe7ac3b478aa01b8a3a04a207febfcc80f0d20386a65e3a15c1b2e44d7138",
+    "record_cash_shelf.gd": "214d058c876727d45f2e39cc0583eba3cc5be6e8ddcd62d3363b46522cb1f96e",
+    "record_exchange.gd": "9e10ade50ff8b990ccd1ce4c711eb7313d979b8fa0b9ccb02896380dacc4da29",
+    "Earned-exchange-checkpoint.json": "5f420a00364a6af90b765aecc370144cdc8e5058371b6437251f8c07ccd39bf3"
+  },
+  "fixtures": {
+    "Build8-paid-workshops.json": "34de7ce67bf34d36745b3af94aec535454cece46ec8ab63aaa43df7d39e7e733",
+    "Build9-settled.json": "72ce11028dede2ba810b6fa84d2673d9049917bf40c01b530ff7797659ae59fb",
+    "Build11-kitchen.json": "b73c2df0dfe0b0aac858eae119e5ecec5dad9d228b54f858b997d98859d787c0",
+    "Build8-cooker-only.json": "9da8bd99fd35f91c6513ddcbb00d8c5c0051c9ad8ec99ecd1c99ca3ad9350944",
+    "HUD-paid-profile.json": "a880de58c98ebb1fa74fce344af0b8fafe38e06ae3c833d102fa635367a2fcfe"
+  },
+  "source_file_hashes": {
+    "field_goods_exchange.gd": "09b2b6f07bb2f3bc820024f8d98d347dfa738d0160ad5f9f1b27a6d2f8d069ae",
+    "field_settlement_loop.gd": "3cc62800d9533de2a43b22da38af8a29e53bc848a80ec86738aa5b937722058e",
+    "field_worksites.gd": "2e71383ad3741770e83afefd534b9df5237a1341366d5c1e0750c525ead2b803",
+    "field_inventory.gd": "e29ceacd0006b8697731911ac69bee6c75e49dccebf012ec2fd1465f507af773",
+    "field_settlement.gd": "29081375e0f121b3b366c0c7bcbafdd971fc237de8f6f482cabcd1129838f27e",
+    "field_logistics.gd": "8a7bfc9a2de3e4aa6f1a08442559ce79b65581e1407734a5e0d9f7087fa3cdc0",
+    "field_conveyors.gd": "3989ed1ba59bf563f66cd4a5dcd8c1158b980d7e2522f5979982d295d4e6e852",
+    "field_counter.gd": "c09eb734ad2716c3d0d2203bbc921fabc49a4a96a98b9e2eee89036b9e0720cd",
+    "qa_field_minerals.gd": "5a909e2ecd1877dc54e9ddf6cc12f6876807285ff4132381a81ca8169b85b0cd",
+    "qa_field_progression.gd": "6d760bf7889de1ad406484bc4cf626e8e8348e1ff723e84f556ac436627009bd",
+    "tests/qa_camp_layout.gd": "755e0d335ae82ee869c95dc476b748f371d8cf962f7aa479b1d8a40aa22558b9",
+    "tests/qa_personal_goods.gd": "af7d03c518247ba3ae6136e4f3f5d07fa5672314968426a6f9b65f1229cc55e5",
+    "tests/qa_connected_camp_lines.gd": "944da454b257a0b081aa75bc72cde5677fa368554bdc2370692d2c96dd29c740",
+    "tests/qa_workshop_floor_access.gd": "f97d046e587e82fee85228e496691972f5843d4842134edb1884ef43450ae138"
+  },
+  "verified_candidate": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+  "critic": {
+    "reviewer": "reference_check",
+    "rating": 9.5,
+    "candidate": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+    "paired_exchange_views": [
+      1.0,
+      1.7
+    ],
+    "cash_shelf_observed": [
+      7,
+      0
+    ]
+  },
+  "capture_provenance": {
+    "normal": "Recorded from the live source matching e4e4371 before the no-behavior-change rename of the house eligibility method.",
+    "pinch": "Recorded after that method rename.",
+    "shelf": "Recorded after the starter-house walk-through selection adjustment.",
+    "equivalence": "The scale, location, field meshes, transfer timing, transaction totals and shelf presentation are identical in these camera runs."
+  },
+  "clip_measurements": {
+    "Counter-normal": {
+      "fps": 20,
+      "frames": 52,
+      "first_cargo_tick": 50,
+      "last_cargo_tick": 99,
+      "max_visible": 4
+    },
+    "Counter-pinch": {
+      "fps": 20,
+      "frames": 52,
+      "first_cargo_tick": 50,
+      "last_cargo_tick": 99,
+      "max_visible": 4
+    }
+  },
+  "frozen_native": {}
+}

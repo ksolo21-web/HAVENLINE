@@ -1,0 +1,339 @@
+{
+  "changed_files": {
+    "field_enemy.gd": "66ef417e4a594ebbd7e0a8dca8b577c482305a3aba49e158d94176fdf50a44f0",
+    "field_encounters.gd": "e5ee56b58e66b3178f8cc032b378193f7c7e773508b6033a5df34b6b68ffe240",
+    "tests/qa_wolf_gate_passage.gd": "c9d024f5834e42b21bc4fddb92ef3c7414debd889b4e6a2f3ffb88173eca8971",
+    "tests/qa_gate_corner_controls.gd": "7ffcc999cf9f76db964cd6563aa23aef80e559dea87fbf697e8198fa1c7f3983"
+  },
+  "prior": {
+    "commit": "a55b7ed1981fd521b8b951a95d514f9df223c8ca",
+    "source_log_sha256": "f6918398b83a561168f7ce9b490bcf0b8bdda84f6958716acdfd576549fc95dc",
+    "cases": 168,
+    "stalled_route": {
+      "advance": 3.27,
+      "crossed": false,
+      "end": "(-0.452725, 0.0, 0.823005)",
+      "from": -1,
+      "gate": "gate-east",
+      "held": 0,
+      "lateral_at_plane": -0.31,
+      "peak_step": 0.104,
+      "reset_seen": false,
+      "seam_step": 0.104,
+      "sign": -1,
+      "solid_crossings": 0,
+      "stage": 3,
+      "stationary_obstacles": [
+        "WolfTorso"
+      ],
+      "still": 84,
+      "style": "outer-tip",
+      "ticks": 132
+    }
+  },
+  "after": {
+    "source_log_sha256": "bbfca66459828bc4d64cc58c54ad358d00a1605d728bca1685872fde9fb1dc03",
+    "cases": 168,
+    "failed": 0,
+    "physical_fence_crossings": 0,
+    "reset_crossings": 0,
+    "maximum_seam_step_m": 0.104,
+    "same_route": {
+      "advance": 4.19,
+      "crossed": true,
+      "end": "(-0.477855, 0.0, 1.736922)",
+      "from": -1,
+      "gate": "gate-east",
+      "held": 0,
+      "lateral_at_plane": -0.31,
+      "peak_step": 0.104,
+      "reset_seen": false,
+      "seam_step": 0.104,
+      "sign": -1,
+      "solid_crossings": 0,
+      "stage": 3,
+      "stationary_obstacles": [],
+      "still": 0,
+      "style": "outer-tip",
+      "ticks": 49
+    }
+  },
+  "parked_alpha": [
+    {
+      "source_log_sha256": "a91c2b573ea1b200888b6de0676b02487a02879a7a213b7c7327f84c7ad1e987",
+      "checks": {
+        "hunter starts legally outside sanctuary": true,
+        "normal encounter restore accepts the live pack": true,
+        "open gateway stays traversable at run speed": true,
+        "open-field torso regains normal collision": true,
+        "runner and wolf respect solid fence and safe camp": true,
+        "runner passes the parked live torso into the field": true,
+        "same live hunter can pursue and damage the runner": true
+      },
+      "metrics": {
+        "hp_after_first_bite": 26,
+        "hp_lost_to_this_wolf": 4,
+        "max_hp": 30,
+        "maximum_step_m": 0.104167096316814,
+        "maximum_still_ticks": 0,
+        "nearest_m": 1.31899392604828,
+        "solid_crossings": 0,
+        "ticks_to_5_2m": 83,
+        "wolf_bites": 1,
+        "wolves": 1
+      }
+    },
+    {
+      "source_log_sha256": "a9542da53ec19f701d6824886602d3a163210f12c247ad1e470988d98b667c71",
+      "checks": {
+        "hunter starts legally outside sanctuary": true,
+        "normal encounter restore accepts the live pack": true,
+        "open gateway stays traversable at run speed": true,
+        "open-field torso regains normal collision": true,
+        "runner and wolf respect solid fence and safe camp": true,
+        "runner passes the parked live torso into the field": true,
+        "same live hunter can pursue and damage the runner": true
+      },
+      "metrics": {
+        "hp_after_first_bite": 26,
+        "hp_lost_to_this_wolf": 4,
+        "max_hp": 30,
+        "maximum_step_m": 0.104167096316814,
+        "maximum_still_ticks": 0,
+        "nearest_m": 1.3189948797226,
+        "solid_crossings": 0,
+        "ticks_to_5_2m": 83,
+        "wolf_bites": 1,
+        "wolves": 2
+      }
+    },
+    {
+      "source_log_sha256": "a9542da53ec19f701d6824886602d3a163210f12c247ad1e470988d98b667c71",
+      "checks": {
+        "hunter starts legally outside sanctuary": true,
+        "normal encounter restore accepts the live pack": true,
+        "open gateway stays traversable at run speed": true,
+        "open-field torso regains normal collision": true,
+        "runner and wolf respect solid fence and safe camp": true,
+        "runner passes the parked live torso into the field": true,
+        "same live hunter can pursue and damage the runner": true
+      },
+      "metrics": {
+        "hp_after_first_bite": 26,
+        "hp_lost_to_this_wolf": 4,
+        "max_hp": 30,
+        "maximum_step_m": 0.104167096316814,
+        "maximum_still_ticks": 0,
+        "nearest_m": 1.3189948797226,
+        "solid_crossings": 0,
+        "ticks_to_5_2m": 83,
+        "wolf_bites": 1,
+        "wolves": 2
+      }
+    }
+  ],
+  "independent": {
+    "qa_wolf_attack": {
+      "log_sha256": "e13ac77323d26b1d0a185b98ffe5f470e9fb30f3d70223e7fca0debece2ecefb",
+      "records": [
+        {
+          "checks": {
+            "alpha_20hz_every_phase_plays": true,
+            "alpha_20hz_jaw_parented_to_head": true,
+            "alpha_20hz_jaw_weights_on_original_textured_fur": true,
+            "alpha_20hz_one_damage_at_closed_jaw": true,
+            "alpha_20hz_opens_and_settles": true,
+            "alpha_20hz_sanctuary_cancels": true,
+            "alpha_20hz_side_step_misses": true,
+            "alpha_20hz_springs_through_hips_shoulder_and_four_limb_chains": true,
+            "alpha_60hz_every_phase_plays": true,
+            "alpha_60hz_jaw_parented_to_head": true,
+            "alpha_60hz_jaw_weights_on_original_textured_fur": true,
+            "alpha_60hz_one_damage_at_closed_jaw": true,
+            "alpha_60hz_opens_and_settles": true,
+            "alpha_60hz_sanctuary_cancels": true,
+            "alpha_60hz_side_step_misses": true,
+            "alpha_60hz_springs_through_hips_shoulder_and_four_limb_chains": true,
+            "ridge_20hz_every_phase_plays": true,
+            "ridge_20hz_jaw_parented_to_head": true,
+            "ridge_20hz_jaw_weights_on_original_textured_fur": true,
+            "ridge_20hz_one_damage_at_closed_jaw": true,
+            "ridge_20hz_opens_and_settles": true,
+            "ridge_20hz_sanctuary_cancels": true,
+            "ridge_20hz_side_step_misses": true,
+            "ridge_20hz_springs_through_hips_shoulder_and_four_limb_chains": true,
+            "ridge_60hz_every_phase_plays": true,
+            "ridge_60hz_jaw_parented_to_head": true,
+            "ridge_60hz_jaw_weights_on_original_textured_fur": true,
+            "ridge_60hz_one_damage_at_closed_jaw": true,
+            "ridge_60hz_opens_and_settles": true,
+            "ridge_60hz_sanctuary_cancels": true,
+            "ridge_60hz_side_step_misses": true,
+            "ridge_60hz_springs_through_hips_shoulder_and_four_limb_chains": true
+          },
+          "observed": {
+            "alpha_20hz": {
+              "contact": [
+                {
+                  "clip": "Bite",
+                  "damage": 4,
+                  "elapsed": 0.25,
+                  "jaw": 2.26388348931706,
+                  "state": "lunge"
+                }
+              ],
+              "min_limb_rotation_degrees": 14.997519351197,
+              "open_degrees": 47.9090129706934,
+              "root_travel_m": 0.200443029403687
+            },
+            "alpha_60hz": {
+              "contact": [
+                {
+                  "clip": "Bite",
+                  "damage": 4,
+                  "elapsed": 0.216666666666667,
+                  "jaw": 5.98345616813497,
+                  "state": "lunge"
+                }
+              ],
+              "min_limb_rotation_degrees": 14.997519351197,
+              "open_degrees": 47.9090129706934,
+              "root_travel_m": 0.211196064949036
+            },
+            "ridge_20hz": {
+              "contact": [
+                {
+                  "clip": "Bite",
+                  "damage": 2,
+                  "elapsed": 0.2,
+                  "jaw": 2.33301503555794,
+                  "state": "lunge"
+                }
+              ],
+              "min_limb_rotation_degrees": 14.1371562799437,
+              "open_degrees": 47.7352734487758,
+              "root_travel_m": 0.198568642139435
+            },
+            "ridge_60hz": {
+              "contact": [
+                {
+                  "clip": "Bite",
+                  "damage": 2,
+                  "elapsed": 0.183333333333333,
+                  "jaw": 4.87244863311741,
+                  "state": "lunge"
+                }
+              ],
+              "min_limb_rotation_degrees": 15.647915577175,
+              "open_degrees": 47.9999910904379,
+              "root_travel_m": 0.212999999523163
+            }
+          },
+          "passed": true
+        }
+      ]
+    },
+    "qa_world_lifecycle": {
+      "log_sha256": "ec575bcbd6d801488a7845f3327e41cb76ded6ea90415b43af7f50cd34179892",
+      "records": [
+        {
+          "audible_boss_tower_cue_starts": {
+            "boss_arrival": 1,
+            "boss_defeat": 1,
+            "tower_fire": 1,
+            "tower_hit": 1
+          },
+          "bosses": 97,
+          "checks": {
+            "500_waves_camp_and_four_borders_have_room_and_clearance": true,
+            "all_four_semantic_cues_started_on_actions": true,
+            "boss_cannot_cross_third_perimeter": true,
+            "boss_left_real_paw_imprints": true,
+            "boss_model_health_hit_surface_and_real_paws": true,
+            "corpse_retained_for_fall": true,
+            "dead_actor_removed_from_orbit_and_pack": true,
+            "dead_player_resumes_existing_recovery": true,
+            "dedicated_boss_and_tower_cues_loaded": true,
+            "each_formed_wave_rolls_its_own_boss": true,
+            "exact_stone_timer_returns_actual_mesh": true,
+            "forced_boss_wave": true,
+            "forced_regular_wave": true,
+            "full_cap_retries_without_boss_roll": true,
+            "initial_wolves_have_track_registration": true,
+            "invalid_saved_position_and_health_recover": true,
+            "invalid_state_rejected_atomically": true,
+            "json_lifecycle_resume": true,
+            "legacy_v1_hp_0_migrates_once": true,
+            "legacy_v1_hp_1_migrates_once": true,
+            "legacy_v1_hp_2_migrates_once": true,
+            "legacy_v1_hp_3_migrates_once": true,
+            "legacy_v1_hp_4_migrates_once": true,
+            "old_ground_loot_retired": true,
+            "older_snapshot_no_position_keeps_start_state": true,
+            "one_source_three_fresh_drops": true,
+            "paid_tower_launches_authored_bolt_before_damage": true,
+            "partial_source_survives_stream": true,
+            "perimeter_expansion_synchronously_retires_encroaching_wolf": true,
+            "pine_regrown_no_duplicate_loot": true,
+            "regrown_round_new_loot": true,
+            "restored_actor_avoids_paid_closed_gate": true,
+            "restored_fall_returns_home_alive": true,
+            "returning_source_stays_unmineable_until_due": true,
+            "sanctuary_cancels_windup_and_bite": true,
+            "stone_hit_0": true,
+            "stone_hit_1": true,
+            "the_first_authored_bolt_deals_one_point_on_arrival": true,
+            "third_hit_visual_depletion": true,
+            "timer_while_unloaded": true,
+            "tower_defeats_actual_alpha_and_credits_typed_meat_once": true,
+            "tower_events_mark_launch_and_hit": true,
+            "travel_while_pine_falling_resolves_once": true,
+            "unpaid_tower_never_deals_damage": true,
+            "version2_reopen_hp_0_and_fall": true,
+            "version2_reopen_hp_1_and_fall": true,
+            "version2_reopen_hp_2_and_fall": true,
+            "version2_reopen_hp_3_and_fall": true,
+            "version2_reopen_hp_4_and_fall": true,
+            "wood_timer_held_until_due": true
+          },
+          "failed": [],
+          "paw_marks_after": 6,
+          "paw_marks_before": 0,
+          "waves": 500
+        }
+      ]
+    }
+  },
+  "native_gameplay_capture": {
+    "frames": 83,
+    "rate": 30,
+    "source": "paired disposable setup with live alpha, fixed 1\u00d7 gameplay camera; three diagnostic repeats use a valid restored encounter roster",
+    "tests": {
+      "checks": {
+        "hunter starts legally outside sanctuary": true,
+        "open gateway stays traversable at run speed": true,
+        "open-field torso regains normal collision": true,
+        "runner and wolf respect solid fence and safe camp": true,
+        "runner passes the parked live torso into the field": true,
+        "same live hunter can pursue and damage the runner": true
+      },
+      "metrics": {
+        "hp_after_first_bite": 26,
+        "hp_lost_to_this_wolf": 4,
+        "max_hp": 30,
+        "maximum_step_m": 0.104167096316814,
+        "maximum_still_ticks": 0,
+        "nearest_m": 1.31899380683899,
+        "solid_crossings": 0,
+        "ticks_to_5_2m": 83,
+        "wolf_bites": 1,
+        "wolves": 3
+      }
+    },
+    "files": {
+      "East-gate-live-wolf.mp4": "cda1dbb353e89181a736c40693a526c21ec5b091317077818c2ec55d7dbccc7d",
+      "East-gate-live-wolf.jpg": "2a145ca021900ef0d4969e4eef3b32ea69ed24e9f6ab659cd8e0d34024e42507"
+    }
+  },
+  "candidate_source": "2654f5019b7212968d28600cb071bf1c231c9030"
+}

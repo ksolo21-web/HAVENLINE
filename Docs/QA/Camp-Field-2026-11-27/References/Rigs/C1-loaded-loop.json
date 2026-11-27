@@ -1,0 +1,666 @@
+{
+ "native_hz": 120,
+ "mode": "In-place playing clip + game-controller world travel; camera fixed elevation following the actual character. Repeated cycle duration measured from field driver phase wraps.",
+ "body_height_world_m": 1.75,
+ "crossing_ticks": [
+  148,
+  198,
+  248
+ ],
+ "actual_complete_cycle_s": [
+  0.417,
+  0.417
+ ],
+ "ordinary_straight_projected_body_heights_per_second": [
+  4.673,
+  4.673,
+  4.673
+ ],
+ "ordinary_straight_world_speed_mps": [
+  6.25,
+  6.25,
+  6.25
+ ],
+ "parts": {
+  "Root": {
+   "seam_velocity_change_mps2": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "steadiest_window_p98_mps2": 0.001,
+   "maximum_ordinary_mps2": 0.0,
+   "max_global_acceleration_mps2": 0.087
+  },
+  "Pelvis": {
+   "seam_velocity_change_mps2": [
+    84.131,
+    87.956,
+    50.046
+   ],
+   "steadiest_window_p98_mps2": 216.806,
+   "maximum_ordinary_mps2": 259.125,
+   "max_global_acceleration_mps2": 2498.979
+  },
+  "Spine": {
+   "seam_velocity_change_mps2": [
+    84.565,
+    88.406,
+    50.157
+   ],
+   "steadiest_window_p98_mps2": 216.688,
+   "maximum_ordinary_mps2": 258.964,
+   "max_global_acceleration_mps2": 2498.979
+  },
+  "Chest": {
+   "seam_velocity_change_mps2": [
+    85.296,
+    89.113,
+    50.534
+   ],
+   "steadiest_window_p98_mps2": 217.352,
+   "maximum_ordinary_mps2": 259.668,
+   "max_global_acceleration_mps2": 2498.744
+  },
+  "Neck": {
+   "seam_velocity_change_mps2": [
+    85.864,
+    89.449,
+    50.37
+   ],
+   "steadiest_window_p98_mps2": 218.728,
+   "maximum_ordinary_mps2": 261.171,
+   "max_global_acceleration_mps2": 2498.534
+  },
+  "Head": {
+   "seam_velocity_change_mps2": [
+    86.326,
+    89.766,
+    50.492
+   ],
+   "steadiest_window_p98_mps2": 219.374,
+   "maximum_ordinary_mps2": 261.893,
+   "max_global_acceleration_mps2": 2498.462
+  },
+  "Clavicle.L": {
+   "seam_velocity_change_mps2": [
+    85.77,
+    89.394,
+    50.392
+   ],
+   "steadiest_window_p98_mps2": 218.496,
+   "maximum_ordinary_mps2": 260.918,
+   "max_global_acceleration_mps2": 2498.567
+  },
+  "UpperArm.L": {
+   "seam_velocity_change_mps2": [
+    78.838,
+    77.442,
+    31.869
+   ],
+   "steadiest_window_p98_mps2": 215.238,
+   "maximum_ordinary_mps2": 255.817,
+   "max_global_acceleration_mps2": 2498.605
+  },
+  "Forearm.L": {
+   "seam_velocity_change_mps2": [
+    72.355,
+    71.405,
+    29.546
+   ],
+   "steadiest_window_p98_mps2": 222.378,
+   "maximum_ordinary_mps2": 263.365,
+   "max_global_acceleration_mps2": 2499.369
+  },
+  "Hand.L": {
+   "seam_velocity_change_mps2": [
+    33.558,
+    29.098,
+    18.314
+   ],
+   "steadiest_window_p98_mps2": 249.349,
+   "maximum_ordinary_mps2": 285.362,
+   "max_global_acceleration_mps2": 3324.908
+  },
+  "Index1.L": {
+   "seam_velocity_change_mps2": [
+    107.598,
+    69.14,
+    100.858
+   ],
+   "steadiest_window_p98_mps2": 424.541,
+   "maximum_ordinary_mps2": 526.689,
+   "max_global_acceleration_mps2": 3418.009
+  },
+  "Index2.L": {
+   "seam_velocity_change_mps2": [
+    144.834,
+    98.317,
+    142.474
+   ],
+   "steadiest_window_p98_mps2": 576.471,
+   "maximum_ordinary_mps2": 661.047,
+   "max_global_acceleration_mps2": 3509.791
+  },
+  "Index3.L": {
+   "seam_velocity_change_mps2": [
+    173.577,
+    121.267,
+    174.546
+   ],
+   "steadiest_window_p98_mps2": 690.502,
+   "maximum_ordinary_mps2": 763.764,
+   "max_global_acceleration_mps2": 3578.107
+  },
+  "Middle1.L": {
+   "seam_velocity_change_mps2": [
+    101.035,
+    50.597,
+    92.828
+   ],
+   "steadiest_window_p98_mps2": 398.721,
+   "maximum_ordinary_mps2": 459.876,
+   "max_global_acceleration_mps2": 3503.265
+  },
+  "Middle2.L": {
+   "seam_velocity_change_mps2": [
+    142.76,
+    83.956,
+    139.719
+   ],
+   "steadiest_window_p98_mps2": 577.436,
+   "maximum_ordinary_mps2": 609.332,
+   "max_global_acceleration_mps2": 3606.78
+  },
+  "Middle3.L": {
+   "seam_velocity_change_mps2": [
+    174.881,
+    109.877,
+    175.569
+   ],
+   "steadiest_window_p98_mps2": 712.489,
+   "maximum_ordinary_mps2": 723.448,
+   "max_global_acceleration_mps2": 3684.075
+  },
+  "Ring1.L": {
+   "seam_velocity_change_mps2": [
+    95.288,
+    34.83,
+    89.305
+   ],
+   "steadiest_window_p98_mps2": 391.135,
+   "maximum_ordinary_mps2": 409.586,
+   "max_global_acceleration_mps2": 3583.584
+  },
+  "Ring2.L": {
+   "seam_velocity_change_mps2": [
+    133.667,
+    66.062,
+    131.579
+   ],
+   "steadiest_window_p98_mps2": 541.343,
+   "maximum_ordinary_mps2": 562.356,
+   "max_global_acceleration_mps2": 3678.144
+  },
+  "Ring3.L": {
+   "seam_velocity_change_mps2": [
+    163.125,
+    89.973,
+    164.05
+   ],
+   "steadiest_window_p98_mps2": 650.361,
+   "maximum_ordinary_mps2": 686.495,
+   "max_global_acceleration_mps2": 3748.631
+  },
+  "Little1.L": {
+   "seam_velocity_change_mps2": [
+    90.538,
+    23.504,
+    89.418
+   ],
+   "steadiest_window_p98_mps2": 361.437,
+   "maximum_ordinary_mps2": 402.311,
+   "max_global_acceleration_mps2": 3654.512
+  },
+  "Little2.L": {
+   "seam_velocity_change_mps2": [
+    120.769,
+    47.669,
+    121.15
+   ],
+   "steadiest_window_p98_mps2": 471.676,
+   "maximum_ordinary_mps2": 519.991,
+   "max_global_acceleration_mps2": 3727.515
+  },
+  "Little3.L": {
+   "seam_velocity_change_mps2": [
+    143.917,
+    66.267,
+    145.87
+   ],
+   "steadiest_window_p98_mps2": 563.166,
+   "maximum_ordinary_mps2": 616.998,
+   "max_global_acceleration_mps2": 3781.591
+  },
+  "Thumb1.L": {
+   "seam_velocity_change_mps2": [
+    59.607,
+    41.105,
+    49.221
+   ],
+   "steadiest_window_p98_mps2": 258.621,
+   "maximum_ordinary_mps2": 324.221,
+   "max_global_acceleration_mps2": 3301.646
+  },
+  "Thumb2.L": {
+   "seam_velocity_change_mps2": [
+    94.082,
+    79.591,
+    95.491
+   ],
+   "steadiest_window_p98_mps2": 408.625,
+   "maximum_ordinary_mps2": 501.178,
+   "max_global_acceleration_mps2": 3250.274
+  },
+  "Clavicle.R": {
+   "seam_velocity_change_mps2": [
+    85.77,
+    89.394,
+    50.392
+   ],
+   "steadiest_window_p98_mps2": 218.496,
+   "maximum_ordinary_mps2": 260.918,
+   "max_global_acceleration_mps2": 2498.567
+  },
+  "UpperArm.R": {
+   "seam_velocity_change_mps2": [
+    96.15,
+    104.049,
+    70.074
+   ],
+   "steadiest_window_p98_mps2": 221.78,
+   "maximum_ordinary_mps2": 269.631,
+   "max_global_acceleration_mps2": 2498.607
+  },
+  "Forearm.R": {
+   "seam_velocity_change_mps2": [
+    111.259,
+    117.051,
+    84.928
+   ],
+   "steadiest_window_p98_mps2": 219.339,
+   "maximum_ordinary_mps2": 263.136,
+   "max_global_acceleration_mps2": 2499.677
+  },
+  "Hand.R": {
+   "seam_velocity_change_mps2": [
+    48.823,
+    73.451,
+    86.056
+   ],
+   "steadiest_window_p98_mps2": 232.867,
+   "maximum_ordinary_mps2": 298.007,
+   "max_global_acceleration_mps2": 2956.294
+  },
+  "Index1.R": {
+   "seam_velocity_change_mps2": [
+    50.153,
+    77.613,
+    86.063
+   ],
+   "steadiest_window_p98_mps2": 378.462,
+   "maximum_ordinary_mps2": 456.054,
+   "max_global_acceleration_mps2": 3010.365
+  },
+  "Index2.R": {
+   "seam_velocity_change_mps2": [
+    47.515,
+    79.667,
+    86.825
+   ],
+   "steadiest_window_p98_mps2": 512.529,
+   "maximum_ordinary_mps2": 618.346,
+   "max_global_acceleration_mps2": 3097.156
+  },
+  "Index3.R": {
+   "seam_velocity_change_mps2": [
+    45.759,
+    81.426,
+    87.633
+   ],
+   "steadiest_window_p98_mps2": 635.911,
+   "maximum_ordinary_mps2": 742.607,
+   "max_global_acceleration_mps2": 3184.202
+  },
+  "Middle1.R": {
+   "seam_velocity_change_mps2": [
+    44.934,
+    77.678,
+    85.521
+   ],
+   "steadiest_window_p98_mps2": 344.295,
+   "maximum_ordinary_mps2": 453.265,
+   "max_global_acceleration_mps2": 2887.093
+  },
+  "Middle2.R": {
+   "seam_velocity_change_mps2": [
+    41.911,
+    80.088,
+    86.182
+   ],
+   "steadiest_window_p98_mps2": 522.202,
+   "maximum_ordinary_mps2": 629.056,
+   "max_global_acceleration_mps2": 2956.329
+  },
+  "Middle3.R": {
+   "seam_velocity_change_mps2": [
+    39.944,
+    82.167,
+    86.96
+   ],
+   "steadiest_window_p98_mps2": 658.602,
+   "maximum_ordinary_mps2": 766.664,
+   "max_global_acceleration_mps2": 3035.744
+  },
+  "Ring1.R": {
+   "seam_velocity_change_mps2": [
+    40.281,
+    77.755,
+    85.136
+   ],
+   "steadiest_window_p98_mps2": 361.884,
+   "maximum_ordinary_mps2": 458.841,
+   "max_global_acceleration_mps2": 2797.225
+  },
+  "Ring2.R": {
+   "seam_velocity_change_mps2": [
+    37.391,
+    79.993,
+    85.584
+   ],
+   "steadiest_window_p98_mps2": 511.895,
+   "maximum_ordinary_mps2": 608.638,
+   "max_global_acceleration_mps2": 2837.556
+  },
+  "Ring3.R": {
+   "seam_velocity_change_mps2": [
+    35.493,
+    81.892,
+    86.162
+   ],
+   "steadiest_window_p98_mps2": 630.142,
+   "maximum_ordinary_mps2": 733.793,
+   "max_global_acceleration_mps2": 2893.035
+  },
+  "Little1.R": {
+   "seam_velocity_change_mps2": [
+    36.361,
+    77.832,
+    84.887
+   ],
+   "steadiest_window_p98_mps2": 406.915,
+   "maximum_ordinary_mps2": 465.426,
+   "max_global_acceleration_mps2": 2737.972
+  },
+  "Little2.R": {
+   "seam_velocity_change_mps2": [
+    33.973,
+    79.56,
+    85.141
+   ],
+   "steadiest_window_p98_mps2": 516.943,
+   "maximum_ordinary_mps2": 571.435,
+   "max_global_acceleration_mps2": 2755.351
+  },
+  "Little3.R": {
+   "seam_velocity_change_mps2": [
+    32.355,
+    80.98,
+    85.494
+   ],
+   "steadiest_window_p98_mps2": 604.42,
+   "maximum_ordinary_mps2": 667.467,
+   "max_global_acceleration_mps2": 2786.709
+  },
+  "Thumb1.R": {
+   "seam_velocity_change_mps2": [
+    49.762,
+    73.439,
+    86.896
+   ],
+   "steadiest_window_p98_mps2": 250.469,
+   "maximum_ordinary_mps2": 320.638,
+   "max_global_acceleration_mps2": 3103.214
+  },
+  "Thumb2.R": {
+   "seam_velocity_change_mps2": [
+    53.024,
+    73.658,
+    88.389
+   ],
+   "steadiest_window_p98_mps2": 371.222,
+   "maximum_ordinary_mps2": 429.598,
+   "max_global_acceleration_mps2": 3347.671
+  },
+  "Thigh.L": {
+   "seam_velocity_change_mps2": [
+    132.461,
+    188.0,
+    205.141
+   ],
+   "steadiest_window_p98_mps2": 271.514,
+   "maximum_ordinary_mps2": 402.743,
+   "max_global_acceleration_mps2": 2498.978
+  },
+  "Shin.L": {
+   "seam_velocity_change_mps2": [
+    116.701,
+    211.448,
+    280.481
+   ],
+   "steadiest_window_p98_mps2": 364.086,
+   "maximum_ordinary_mps2": 434.981,
+   "max_global_acceleration_mps2": 900.042
+  },
+  "Foot.L": {
+   "seam_velocity_change_mps2": [
+    59.16,
+    91.717,
+    88.766
+   ],
+   "steadiest_window_p98_mps2": 603.647,
+   "maximum_ordinary_mps2": 818.732,
+   "max_global_acceleration_mps2": 1790.8
+  },
+  "Toe.L": {
+   "seam_velocity_change_mps2": [
+    77.239,
+    124.15,
+    122.912
+   ],
+   "steadiest_window_p98_mps2": 608.081,
+   "maximum_ordinary_mps2": 825.064,
+   "max_global_acceleration_mps2": 1846.519
+  },
+  "Thigh.R": {
+   "seam_velocity_change_mps2": [
+    88.084,
+    95.067,
+    62.568
+   ],
+   "steadiest_window_p98_mps2": 232.277,
+   "maximum_ordinary_mps2": 420.957,
+   "max_global_acceleration_mps2": 2498.978
+  },
+  "Shin.R": {
+   "seam_velocity_change_mps2": [
+    82.852,
+    79.826,
+    99.392
+   ],
+   "steadiest_window_p98_mps2": 370.93,
+   "maximum_ordinary_mps2": 468.046,
+   "max_global_acceleration_mps2": 2497.153
+  },
+  "Foot.R": {
+   "seam_velocity_change_mps2": [
+    67.925,
+    89.751,
+    137.111
+   ],
+   "steadiest_window_p98_mps2": 482.475,
+   "maximum_ordinary_mps2": 817.685,
+   "max_global_acceleration_mps2": 2494.731
+  },
+  "Toe.R": {
+   "seam_velocity_change_mps2": [
+    65.933,
+    89.366,
+    139.823
+   ],
+   "steadiest_window_p98_mps2": 482.724,
+   "maximum_ordinary_mps2": 818.966,
+   "max_global_acceleration_mps2": 2487.769
+  },
+  "BootFitPelvis.L": {
+   "seam_velocity_change_mps2": [
+    86.683,
+    145.806,
+    187.52
+   ],
+   "steadiest_window_p98_mps2": 462.233,
+   "maximum_ordinary_mps2": 581.812,
+   "max_global_acceleration_mps2": 3561.066
+  },
+  "BootFitThigh.L": {
+   "seam_velocity_change_mps2": [
+    105.737,
+    206.482,
+    292.485
+   ],
+   "steadiest_window_p98_mps2": 586.586,
+   "maximum_ordinary_mps2": 639.831,
+   "max_global_acceleration_mps2": 3455.144
+  },
+  "BootFitShin.L": {
+   "seam_velocity_change_mps2": [
+    340.085,
+    330.812,
+    294.575
+   ],
+   "steadiest_window_p98_mps2": 701.655,
+   "maximum_ordinary_mps2": 831.231,
+   "max_global_acceleration_mps2": 1866.036
+  },
+  "BootFitPelvis.R": {
+   "seam_velocity_change_mps2": [
+    93.566,
+    89.576,
+    108.234
+   ],
+   "steadiest_window_p98_mps2": 461.126,
+   "maximum_ordinary_mps2": 575.315,
+   "max_global_acceleration_mps2": 2509.791
+  },
+  "BootFitThigh.R": {
+   "seam_velocity_change_mps2": [
+    99.055,
+    97.357,
+    114.291
+   ],
+   "steadiest_window_p98_mps2": 574.695,
+   "maximum_ordinary_mps2": 672.902,
+   "max_global_acceleration_mps2": 2508.648
+  },
+  "BootFitShin.R": {
+   "seam_velocity_change_mps2": [
+    68.981,
+    85.919,
+    132.283
+   ],
+   "steadiest_window_p98_mps2": 637.321,
+   "maximum_ordinary_mps2": 843.026,
+   "max_global_acceleration_mps2": 2499.008
+  },
+  "BootUpperFastener.L": {
+   "seam_velocity_change_mps2": [
+    129.449,
+    144.2,
+    150.145
+   ],
+   "steadiest_window_p98_mps2": 509.416,
+   "maximum_ordinary_mps2": 758.921,
+   "max_global_acceleration_mps2": 1205.755
+  },
+  "BootUpperFastener.R": {
+   "seam_velocity_change_mps2": [
+    72.63,
+    92.448,
+    138.518
+   ],
+   "steadiest_window_p98_mps2": 409.904,
+   "maximum_ordinary_mps2": 764.4,
+   "max_global_acceleration_mps2": 2494.23
+  },
+  "BootLowerFastener.R": {
+   "seam_velocity_change_mps2": [
+    66.517,
+    89.215,
+    139.062
+   ],
+   "steadiest_window_p98_mps2": 466.454,
+   "maximum_ordinary_mps2": 808.896,
+   "max_global_acceleration_mps2": 2492.249
+  },
+  "BootLowerFastener.L": {
+   "seam_velocity_change_mps2": [
+    79.201,
+    121.333,
+    130.82
+   ],
+   "steadiest_window_p98_mps2": 573.791,
+   "maximum_ordinary_mps2": 801.033,
+   "max_global_acceleration_mps2": 1632.647
+  },
+  "BootFleece.L": {
+   "seam_velocity_change_mps2": [
+    146.161,
+    226.559,
+    255.598
+   ],
+   "steadiest_window_p98_mps2": 452.403,
+   "maximum_ordinary_mps2": 642.622,
+   "max_global_acceleration_mps2": 763.035
+  },
+  "BootTrouserHem.L": {
+   "seam_velocity_change_mps2": [
+    146.161,
+    226.559,
+    255.598
+   ],
+   "steadiest_window_p98_mps2": 452.403,
+   "maximum_ordinary_mps2": 642.622,
+   "max_global_acceleration_mps2": 763.035
+  },
+  "BootFleece.R": {
+   "seam_velocity_change_mps2": [
+    80.358,
+    106.13,
+    126.684
+   ],
+   "steadiest_window_p98_mps2": 418.874,
+   "maximum_ordinary_mps2": 645.245,
+   "max_global_acceleration_mps2": 2493.265
+  },
+  "BootTrouserHem.R": {
+   "seam_velocity_change_mps2": [
+    80.358,
+    106.13,
+    126.684
+   ],
+   "steadiest_window_p98_mps2": 418.874,
+   "maximum_ordinary_mps2": 645.245,
+   "max_global_acceleration_mps2": 2493.265
+  }
+ }
+}

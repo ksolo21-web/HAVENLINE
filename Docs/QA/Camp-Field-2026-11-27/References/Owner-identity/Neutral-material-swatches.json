@@ -1,0 +1,995 @@
+{
+  "method": "9\u00d79 median pixels in anatomically corresponding cheek, forehead, mitten and blue sleeve regions of subject-normalized 380\u00d7448 sRGB portraits. Original owner guide and generated mesh have different facial geometry; sample points are matched by anatomic landmark. CIE L* from linear sRGB D65. Flat is a separate unlit read of the embedded base texture in the frozen Godot skin. Neutral PBR uses white lamps, linear tonemap and the original normal and roughness slots. The published field-camera photos are original, with no color changes.",
+  "roles": {
+    "C2": {
+      "cheek": {
+        "guide": {
+          "median_srgb_255": [
+            181,
+            85,
+            28
+          ],
+          "L_star": 47.5,
+          "normalized_face_roi_380x448": [
+            224,
+            114,
+            233,
+            123
+          ],
+          "original_bbox": [
+            20,
+            59,
+            486,
+            672
+          ]
+        },
+        "studio": {
+          "median_srgb_255": [
+            239,
+            165,
+            82
+          ],
+          "L_star": 73.5,
+          "normalized_face_roi_380x448": [
+            220,
+            115,
+            229,
+            124
+          ],
+          "original_bbox": [
+            30,
+            16,
+            370,
+            425
+          ]
+        },
+        "neutral": {
+          "median_srgb_255": [
+            193,
+            108,
+            47
+          ],
+          "L_star": 54.3,
+          "normalized_face_roi_380x448": [
+            220,
+            115,
+            229,
+            124
+          ],
+          "original_bbox": [
+            30,
+            16,
+            370,
+            425
+          ]
+        },
+        "flat": {
+          "median_srgb_255": [
+            237,
+            134,
+            60
+          ],
+          "L_star": 66.0,
+          "normalized_face_roi_380x448": [
+            220,
+            115,
+            229,
+            124
+          ],
+          "original_bbox": [
+            30,
+            16,
+            370,
+            425
+          ]
+        }
+      },
+      "forehead": {
+        "guide": {
+          "median_srgb_255": [
+            229,
+            126,
+            63
+          ],
+          "L_star": 63.3,
+          "normalized_face_roi_380x448": [
+            198,
+            57,
+            207,
+            66
+          ],
+          "original_bbox": [
+            20,
+            59,
+            486,
+            672
+          ]
+        },
+        "studio": {
+          "median_srgb_255": [
+            255,
+            204,
+            106
+          ],
+          "L_star": 84.7,
+          "normalized_face_roi_380x448": [
+            199,
+            51,
+            208,
+            60
+          ],
+          "original_bbox": [
+            30,
+            16,
+            370,
+            425
+          ]
+        },
+        "neutral": {
+          "median_srgb_255": [
+            221,
+            125,
+            58
+          ],
+          "L_star": 62.0,
+          "normalized_face_roi_380x448": [
+            199,
+            51,
+            208,
+            60
+          ],
+          "original_bbox": [
+            30,
+            16,
+            370,
+            425
+          ]
+        },
+        "flat": {
+          "median_srgb_255": [
+            236,
+            134,
+            59
+          ],
+          "L_star": 65.9,
+          "normalized_face_roi_380x448": [
+            199,
+            51,
+            208,
+            60
+          ],
+          "original_bbox": [
+            30,
+            16,
+            370,
+            425
+          ]
+        }
+      },
+      "mitten": {
+        "guide": {
+          "median_srgb_255": [
+            159,
+            84,
+            45
+          ],
+          "L_star": 44.1,
+          "normalized_face_roi_380x448": [
+            355,
+            173,
+            364,
+            182
+          ],
+          "original_bbox": [
+            20,
+            59,
+            486,
+            672
+          ]
+        },
+        "studio": {
+          "median_srgb_255": [
+            197,
+            112,
+            41
+          ],
+          "L_star": 55.7,
+          "normalized_face_roi_380x448": [
+            354,
+            178,
+            363,
+            187
+          ],
+          "original_bbox": [
+            30,
+            16,
+            370,
+            425
+          ]
+        },
+        "neutral": {
+          "median_srgb_255": [
+            119,
+            62,
+            19
+          ],
+          "L_star": 32.7,
+          "normalized_face_roi_380x448": [
+            354,
+            178,
+            363,
+            187
+          ],
+          "original_bbox": [
+            30,
+            16,
+            370,
+            425
+          ]
+        },
+        "flat": {
+          "median_srgb_255": [
+            128,
+            63,
+            4
+          ],
+          "L_star": 34.3,
+          "normalized_face_roi_380x448": [
+            354,
+            178,
+            363,
+            187
+          ],
+          "original_bbox": [
+            30,
+            16,
+            370,
+            425
+          ]
+        }
+      },
+      "coat": {
+        "guide": {
+          "median_srgb_255": [
+            26,
+            84,
+            156
+          ],
+          "L_star": 35.9,
+          "normalized_face_roi_380x448": [
+            64,
+            178,
+            73,
+            187
+          ],
+          "original_bbox": [
+            20,
+            59,
+            486,
+            672
+          ]
+        },
+        "studio": {
+          "median_srgb_255": [
+            73,
+            138,
+            210
+          ],
+          "L_star": 56.3,
+          "normalized_face_roi_380x448": [
+            64,
+            178,
+            73,
+            187
+          ],
+          "original_bbox": [
+            30,
+            16,
+            370,
+            425
+          ]
+        },
+        "neutral": {
+          "median_srgb_255": [
+            31,
+            76,
+            136
+          ],
+          "L_star": 32.3,
+          "normalized_face_roi_380x448": [
+            64,
+            178,
+            73,
+            187
+          ],
+          "original_bbox": [
+            30,
+            16,
+            370,
+            425
+          ]
+        },
+        "flat": {
+          "median_srgb_255": [
+            4,
+            75,
+            143
+          ],
+          "L_star": 31.9,
+          "normalized_face_roi_380x448": [
+            64,
+            178,
+            73,
+            187
+          ],
+          "original_bbox": [
+            30,
+            16,
+            370,
+            425
+          ]
+        }
+      }
+    },
+    "C3": {
+      "cheek": {
+        "guide": {
+          "median_srgb_255": [
+            203,
+            105,
+            54
+          ],
+          "L_star": 55.1,
+          "normalized_face_roi_380x448": [
+            216,
+            113,
+            225,
+            122
+          ],
+          "original_bbox": [
+            8,
+            61,
+            464,
+            672
+          ]
+        },
+        "studio": {
+          "median_srgb_255": [
+            228,
+            137,
+            66
+          ],
+          "L_star": 65.6,
+          "normalized_face_roi_380x448": [
+            215,
+            124,
+            224,
+            133
+          ],
+          "original_bbox": [
+            32,
+            15,
+            368,
+            426
+          ]
+        },
+        "neutral": {
+          "median_srgb_255": [
+            170,
+            88,
+            42
+          ],
+          "L_star": 46.6,
+          "normalized_face_roi_380x448": [
+            215,
+            124,
+            224,
+            133
+          ],
+          "original_bbox": [
+            32,
+            16,
+            368,
+            426
+          ]
+        },
+        "flat": {
+          "median_srgb_255": [
+            198,
+            104,
+            50
+          ],
+          "L_star": 54.2,
+          "normalized_face_roi_380x448": [
+            215,
+            124,
+            224,
+            133
+          ],
+          "original_bbox": [
+            32,
+            15,
+            368,
+            426
+          ]
+        }
+      },
+      "forehead": {
+        "guide": {
+          "median_srgb_255": [
+            210,
+            118,
+            70
+          ],
+          "L_star": 59.1,
+          "normalized_face_roi_380x448": [
+            188,
+            57,
+            197,
+            66
+          ],
+          "original_bbox": [
+            8,
+            61,
+            464,
+            672
+          ]
+        },
+        "studio": {
+          "median_srgb_255": [
+            254,
+            178,
+            103
+          ],
+          "L_star": 78.4,
+          "normalized_face_roi_380x448": [
+            188,
+            58,
+            197,
+            67
+          ],
+          "original_bbox": [
+            32,
+            15,
+            368,
+            426
+          ]
+        },
+        "neutral": {
+          "median_srgb_255": [
+            183,
+            103,
+            56
+          ],
+          "L_star": 51.9,
+          "normalized_face_roi_380x448": [
+            188,
+            58,
+            197,
+            67
+          ],
+          "original_bbox": [
+            32,
+            16,
+            368,
+            426
+          ]
+        },
+        "flat": {
+          "median_srgb_255": [
+            193,
+            106,
+            51
+          ],
+          "L_star": 53.9,
+          "normalized_face_roi_380x448": [
+            188,
+            58,
+            197,
+            67
+          ],
+          "original_bbox": [
+            32,
+            15,
+            368,
+            426
+          ]
+        }
+      },
+      "mitten": {
+        "guide": {
+          "median_srgb_255": [
+            132,
+            80,
+            57
+          ],
+          "L_star": 39.5,
+          "normalized_face_roi_380x448": [
+            354,
+            181,
+            363,
+            190
+          ],
+          "original_bbox": [
+            8,
+            61,
+            464,
+            672
+          ]
+        },
+        "studio": {
+          "median_srgb_255": [
+            139,
+            64,
+            16
+          ],
+          "L_star": 36.4,
+          "normalized_face_roi_380x448": [
+            354,
+            191,
+            363,
+            200
+          ],
+          "original_bbox": [
+            32,
+            15,
+            368,
+            426
+          ]
+        },
+        "neutral": {
+          "median_srgb_255": [
+            81,
+            37,
+            4
+          ],
+          "L_star": 20.4,
+          "normalized_face_roi_380x448": [
+            354,
+            191,
+            363,
+            200
+          ],
+          "original_bbox": [
+            32,
+            16,
+            368,
+            426
+          ]
+        },
+        "flat": {
+          "median_srgb_255": [
+            92,
+            43,
+            3
+          ],
+          "L_star": 23.7,
+          "normalized_face_roi_380x448": [
+            354,
+            191,
+            363,
+            200
+          ],
+          "original_bbox": [
+            32,
+            15,
+            368,
+            426
+          ]
+        }
+      },
+      "coat": {
+        "guide": {
+          "median_srgb_255": [
+            65,
+            102,
+            164
+          ],
+          "L_star": 43.2,
+          "normalized_face_roi_380x448": [
+            62,
+            180,
+            71,
+            189
+          ],
+          "original_bbox": [
+            8,
+            61,
+            464,
+            672
+          ]
+        },
+        "studio": {
+          "median_srgb_255": [
+            28,
+            107,
+            188
+          ],
+          "L_star": 44.8,
+          "normalized_face_roi_380x448": [
+            64,
+            193,
+            73,
+            202
+          ],
+          "original_bbox": [
+            32,
+            15,
+            368,
+            426
+          ]
+        },
+        "neutral": {
+          "median_srgb_255": [
+            9,
+            65,
+            123
+          ],
+          "L_star": 27.5,
+          "normalized_face_roi_380x448": [
+            64,
+            193,
+            73,
+            202
+          ],
+          "original_bbox": [
+            32,
+            16,
+            368,
+            426
+          ]
+        },
+        "flat": {
+          "median_srgb_255": [
+            4,
+            73,
+            140
+          ],
+          "L_star": 31.1,
+          "normalized_face_roi_380x448": [
+            64,
+            193,
+            73,
+            202
+          ],
+          "original_bbox": [
+            32,
+            15,
+            368,
+            426
+          ]
+        }
+      }
+    },
+    "C4": {
+      "cheek": {
+        "guide": {
+          "median_srgb_255": [
+            214,
+            104,
+            51
+          ],
+          "L_star": 56.5,
+          "normalized_face_roi_380x448": [
+            212,
+            120,
+            221,
+            129
+          ],
+          "original_bbox": [
+            9,
+            41,
+            481,
+            674
+          ]
+        },
+        "studio": {
+          "median_srgb_255": [
+            239,
+            147,
+            78
+          ],
+          "L_star": 69.3,
+          "normalized_face_roi_380x448": [
+            214,
+            129,
+            223,
+            138
+          ],
+          "original_bbox": [
+            37,
+            16,
+            362,
+            426
+          ]
+        },
+        "neutral": {
+          "median_srgb_255": [
+            190,
+            97,
+            49
+          ],
+          "L_star": 51.5,
+          "normalized_face_roi_380x448": [
+            214,
+            129,
+            223,
+            138
+          ],
+          "original_bbox": [
+            38,
+            16,
+            362,
+            426
+          ]
+        },
+        "flat": {
+          "median_srgb_255": [
+            224,
+            116,
+            59
+          ],
+          "L_star": 60.5,
+          "normalized_face_roi_380x448": [
+            214,
+            129,
+            223,
+            138
+          ],
+          "original_bbox": [
+            38,
+            16,
+            362,
+            426
+          ]
+        }
+      },
+      "forehead": {
+        "guide": {
+          "median_srgb_255": [
+            223,
+            126,
+            71
+          ],
+          "L_star": 62.6,
+          "normalized_face_roi_380x448": [
+            186,
+            68,
+            195,
+            77
+          ],
+          "original_bbox": [
+            9,
+            41,
+            481,
+            674
+          ]
+        },
+        "studio": {
+          "median_srgb_255": [
+            255,
+            196,
+            118
+          ],
+          "L_star": 82.9,
+          "normalized_face_roi_380x448": [
+            186,
+            72,
+            195,
+            81
+          ],
+          "original_bbox": [
+            37,
+            16,
+            362,
+            426
+          ]
+        },
+        "neutral": {
+          "median_srgb_255": [
+            204,
+            117,
+            64
+          ],
+          "L_star": 58.0,
+          "normalized_face_roi_380x448": [
+            186,
+            72,
+            195,
+            81
+          ],
+          "original_bbox": [
+            38,
+            16,
+            362,
+            426
+          ]
+        },
+        "flat": {
+          "median_srgb_255": [
+            216,
+            120,
+            60
+          ],
+          "L_star": 60.2,
+          "normalized_face_roi_380x448": [
+            186,
+            72,
+            195,
+            81
+          ],
+          "original_bbox": [
+            38,
+            16,
+            362,
+            426
+          ]
+        }
+      },
+      "mitten": {
+        "guide": {
+          "median_srgb_255": [
+            135,
+            75,
+            46
+          ],
+          "L_star": 38.5,
+          "normalized_face_roi_380x448": [
+            354,
+            183,
+            363,
+            192
+          ],
+          "original_bbox": [
+            9,
+            41,
+            481,
+            674
+          ]
+        },
+        "studio": {
+          "median_srgb_255": [
+            145,
+            66,
+            16
+          ],
+          "L_star": 37.8,
+          "normalized_face_roi_380x448": [
+            354,
+            189,
+            363,
+            198
+          ],
+          "original_bbox": [
+            37,
+            16,
+            362,
+            426
+          ]
+        },
+        "neutral": {
+          "median_srgb_255": [
+            85,
+            39,
+            6
+          ],
+          "L_star": 21.6,
+          "normalized_face_roi_380x448": [
+            354,
+            189,
+            363,
+            198
+          ],
+          "original_bbox": [
+            38,
+            16,
+            362,
+            426
+          ]
+        },
+        "flat": {
+          "median_srgb_255": [
+            94,
+            43,
+            3
+          ],
+          "L_star": 24.0,
+          "normalized_face_roi_380x448": [
+            354,
+            189,
+            363,
+            198
+          ],
+          "original_bbox": [
+            38,
+            16,
+            362,
+            426
+          ]
+        }
+      },
+      "coat": {
+        "guide": {
+          "median_srgb_255": [
+            44,
+            96,
+            170
+          ],
+          "L_star": 40.9,
+          "normalized_face_roi_380x448": [
+            64,
+            180,
+            73,
+            189
+          ],
+          "original_bbox": [
+            9,
+            41,
+            481,
+            674
+          ]
+        },
+        "studio": {
+          "median_srgb_255": [
+            58,
+            130,
+            210
+          ],
+          "L_star": 53.5,
+          "normalized_face_roi_380x448": [
+            64,
+            187,
+            73,
+            196
+          ],
+          "original_bbox": [
+            37,
+            16,
+            362,
+            426
+          ]
+        },
+        "neutral": {
+          "median_srgb_255": [
+            23,
+            73,
+            137
+          ],
+          "L_star": 31.2,
+          "normalized_face_roi_380x448": [
+            64,
+            187,
+            73,
+            196
+          ],
+          "original_bbox": [
+            38,
+            16,
+            362,
+            426
+          ]
+        },
+        "flat": {
+          "median_srgb_255": [
+            3,
+            75,
+            147
+          ],
+          "L_star": 32.2,
+          "normalized_face_roi_380x448": [
+            64,
+            187,
+            73,
+            196
+          ],
+          "original_bbox": [
+            38,
+            16,
+            362,
+            426
+          ]
+        }
+      }
+    }
+  }
+}

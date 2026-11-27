@@ -1,0 +1,192 @@
+{
+  "scene": "res://field_opening.tscn",
+  "flight_and_timers": "Normal orbit and actual pickups on 60 Hz physics, including five-second reload during mine cooldown and streamed pine.",
+  "mining": {
+    "passed": 97,
+    "checks_total": 97,
+    "failed": [],
+    "evidence": {
+      "starter-stone": {
+        "at": "(-6.0, 0.0, 3.0)",
+        "available_at_tick": 300,
+        "first_yield_ids": [
+          "stone-1",
+          "stone-2",
+          "stone-3"
+        ],
+        "initial_seconds": 5.0,
+        "kind": "stone",
+        "natural_contacts": [
+          1,
+          2
+        ],
+        "restored_before_available": true,
+        "return_mesh_visible": true,
+        "saved_remaining": 3.46666666666667,
+        "second_yield_ids": [
+          "stone-29",
+          "stone-30",
+          "stone-31"
+        ],
+        "streamed_away": false
+      },
+      "world1/-7/-7/stone/1": {
+        "at": "(-201.0791, 0.0, -218.6376)",
+        "available_at_tick": 300,
+        "first_yield_ids": [
+          "stone-32",
+          "stone-33",
+          "stone-34"
+        ],
+        "initial_seconds": 5.0,
+        "kind": "stone",
+        "natural_contacts": [
+          1,
+          2
+        ],
+        "restored_before_available": true,
+        "return_mesh_visible": true,
+        "saved_remaining": 3.46666666666667,
+        "second_yield_ids": [
+          "stone-35",
+          "stone-36",
+          "stone-37"
+        ],
+        "streamed_away": true
+      },
+      "world1/4/-1/metal/0": {
+        "at": "(141.3579, 0.0, -5.61496)",
+        "available_at_tick": 300,
+        "first_yield_ids": [
+          "metal-38",
+          "metal-39",
+          "metal-40"
+        ],
+        "initial_seconds": 5.0,
+        "kind": "metal",
+        "natural_contacts": [
+          1,
+          2
+        ],
+        "restored_before_available": true,
+        "return_mesh_visible": true,
+        "saved_remaining": 3.46666666666667,
+        "second_yield_ids": [
+          "metal-44",
+          "metal-45",
+          "metal-46"
+        ],
+        "streamed_away": true
+      },
+      "world1/6/0/slate/0": {
+        "at": "(202.0679, 0.0, 13.44948)",
+        "available_at_tick": 300,
+        "first_yield_ids": [
+          "slate-59",
+          "slate-60",
+          "slate-61"
+        ],
+        "initial_seconds": 5.0,
+        "kind": "slate",
+        "natural_contacts": [
+          1,
+          2
+        ],
+        "restored_before_available": true,
+        "return_mesh_visible": true,
+        "saved_remaining": 3.46666666666667,
+        "second_yield_ids": [
+          "slate-62",
+          "slate-63",
+          "slate-64"
+        ],
+        "streamed_away": true
+      },
+      "world1/7/-1/coal/0": {
+        "at": "(234.6527, 0.0, -7.720181)",
+        "available_at_tick": 300,
+        "first_yield_ids": [
+          "coal-50",
+          "coal-51",
+          "coal-52"
+        ],
+        "initial_seconds": 5.0,
+        "kind": "coal",
+        "natural_contacts": [
+          1,
+          2
+        ],
+        "restored_before_available": true,
+        "return_mesh_visible": true,
+        "saved_remaining": 3.46666666666667,
+        "second_yield_ids": [
+          "coal-56",
+          "coal-57",
+          "coal-58"
+        ],
+        "streamed_away": true
+      }
+    }
+  },
+  "tree": {
+    "passed": 16,
+    "checks_total": 16,
+    "failed": [],
+    "evidence": {
+      "starter-wood": {
+        "chips": true,
+        "collected": 0,
+        "contact_events": 3,
+        "depletion_to_available_ticks": 300,
+        "fall_frame_seconds": 0.72,
+        "fell": true,
+        "game_seconds": 5.0,
+        "loose": 3,
+        "matches_blade_position_and_travel": true,
+        "return_visible": true,
+        "stored": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 0
+        },
+        "sway": true,
+        "wall_seconds": 1.296458,
+        "yield_ids": [
+          "wood-1",
+          "wood-2",
+          "wood-3"
+        ]
+      },
+      "world1/3/-4/wood/1": {
+        "chips": true,
+        "collected": 2,
+        "contact_events": 3,
+        "depletion_to_available_ticks": 300,
+        "fall_frame_seconds": 0.72,
+        "fell": true,
+        "game_seconds": 5.0,
+        "loose": 1,
+        "matches_blade_position_and_travel": true,
+        "return_visible": true,
+        "stored": {
+          "coal": 2,
+          "meat": 3,
+          "metal": 6,
+          "slate": 5,
+          "stone": 4,
+          "wood": 7
+        },
+        "sway": true,
+        "wall_seconds": 0.745761,
+        "yield_ids": [
+          "wood-8",
+          "wood-9",
+          "wood-10"
+        ]
+      }
+    }
+  }
+}
