@@ -39,8 +39,16 @@ func buy(id:String) -> void:
   await ticks(3)
   if not outdir.is_empty() and id==P.FOOD_LINE:await shot("Choose-automation")
   var choice:=Vector2.INF
-  for command in dock.commands:
-   if command[1]==id:choice=command[0].get_global_rect().get_center()
+  for page_index in 12:
+   var more:=Vector2.INF
+   for command in dock.commands:
+    if command[1]==id:choice=command[0].get_global_rect().get_center()
+    elif command[1]=="list_next":more=command[0].get_global_rect().get_center()
+   if choice.is_finite() or not more.is_finite():break
+   touch(7,more,true)
+   touch(7,more,false)
+   await ticks(3)
+   if dock.list_page==0:break
   check(id+" is a visible build action",choice.is_finite())
   if not choice.is_finite():return
   touch(7,choice,true)

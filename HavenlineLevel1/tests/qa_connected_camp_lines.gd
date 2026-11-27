@@ -59,8 +59,8 @@ func test_pressure()->void:
  forged.settlement.line_load.stored_meal=1
  check("forged overlapping food sources rejected",not book.restore(forged))
  forged=book.snapshot().duplicate(true)
- forged.settlement.product_store.blocks+=1
- check("forged warehouse capacity rejected",not book.restore(forged))
+ forged.settlement.product_store.blocks=forged.settlement.processed_stone+1
+ check("warehouse cannot hold more blocks than all completed drilling receipts",not book.restore(forged))
  mark(0,"backpressure and selective demand")
 
 func find_break()->Dictionary:

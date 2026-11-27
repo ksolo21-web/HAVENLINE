@@ -11,6 +11,7 @@ var world
 var works
 var transfers
 var conveyors
+var exchange
 var belt_audio_initialized := false
 var belt_was_blocked := false
 var cooking: float:
@@ -47,6 +48,9 @@ func install(host: Node3D) -> void:
 	conveyors=preload("res://field_conveyors.gd").new()
 	add_child(conveyors)
 	conveyors.setup(world,self)
+	exchange=preload("res://field_goods_exchange.gd").new()
+	add_child(exchange)
+	exchange.setup(world)
 	world.counter.set_active(world.inventory.complete(Progress.SECOND), int(world.inventory.settlement.served))
 	sync()
 	announced_finish = ready()
@@ -76,15 +80,20 @@ func advance(dt: float) -> void:
 	# Existing jobs advance even when nobody is on an apron. A new handoff enters
 	# the hopper after this step, so a late delivery cannot earn a head start.
 	_advance_production(dt)
+	# A carrier at the station can take a finished lot before the unattended
+	# outfeed reserves it; both draw from the same available output.
+	if can_transact(): exchange.at_station()
 	if _simulation_active(): conveyors.advance(dt)
 	_update_belt_mix()
 	works.advance(dt)
-	if can_transact(): collect_meal()
+	if can_transact(): exchange.visit()
 	var progress := _present_production(dt)
 	world.counter.set_active(world.inventory.complete(Progress.SECOND),int(world.inventory.settlement.served))
-	if world.inventory.complete(Progress.FOOD_LINE):
+	if world.inventory.complete(Progress.FOOD_LINE) or world.inventory.settlement.counter_stock>0:
 		world.counter.staff_food_line(Callable(conveyors,"buffer_position"))
-	if can_transact(): world.counter.advance(dt)
+	if can_transact():
+		world.counter.advance(dt)
+		world.counter.show_register(world.inventory.till_balance())
 	if ready() and not announced_finish:
 		announced_finish = true
 		world._event("level_complete",world.actor.global_position)
@@ -203,6 +212,7 @@ func _finish_cycle(kind: String) -> bool:
 	return commit_receipt("process_done",world.processors.output_position(kind), "plank_out" if kind == "wood" else "block_out")
 
 func _present_production(dt: float) -> float:
+	exchange.present_cash()
 	transfers.set_meal_stock(Rules.waiting_meals(world.inventory.settlement))
 	var progress := 0.0
 	for kind: String in Rules.KINDS:
@@ -236,15 +246,12 @@ func _meal_pickup(at:Vector3)->Vector3:
 		return conveyors.shelf_position("meal")
 	return Vector3.INF
 
+func withdraw_goods(kind:String,amount:=0)->bool:
+	return exchange.withdraw(kind,amount)
+
 func collect_meal() -> bool:
-	var journal: Dictionary = world.inventory.settlement
-	if not can_transact() or not world.inventory.is_machine_owned("meat") or journal.held_meal>0 or world.counter.sale_order!=0:return false
-	var at:=_meal_pickup(world.actor.global_position)
-	if not at.is_finite():return false
-	journal.held_meal=1
-	if not commit_receipt("pickup_partial",at):return false
-	world.counter.collect_meal(at)
-	return true
+	if not can_transact() or not world.lakeshore.at_output(world.actor.global_position):return false
+	return exchange.at_station()
 
 func collect_worker_meal() -> bool:
 	var journal:Dictionary=world.inventory.settlement
@@ -260,16 +267,16 @@ func serve(order: int) -> bool:
 	if not can_transact() or not world.counter.awaiting_payment(order): return false
 	var journal: Dictionary = world.inventory.settlement
 	if world.counter.belt_serving:
-		if not world.inventory.complete(Progress.FOOD_LINE) or journal.counter_stock < 1 or journal.served+1!=order: return false
+		if journal.counter_stock < 1 or journal.served+1!=order: return false
 		journal.counter_stock-=1
 		journal.served+=1
 		return commit_receipt("meal_served",world.counter.payment_rest.global_position)
 	var worker: bool = world.counter.worker_serving
 	var at: Vector3 = world.survivor.actor.global_position if worker else world.actor.global_position
 	if not world.counter.at_service(at): return false
-	if not world.inventory.complete(Progress.SECOND) or journal.served + 1 != order or int(journal.worker_meal if worker else journal.held_meal) != 1: return false
+	if not world.inventory.complete(Progress.SECOND) or journal.served + 1 != order or int(journal.worker_meal if worker else journal.held_meal) < 1: return false
 	if worker: journal.worker_meal = 0
-	else: journal.held_meal = 0
+	else: journal.held_meal -= 1
 	journal.served += 1
 	return commit_receipt("meal_served",at)
 
@@ -317,6 +324,8 @@ func hint(previous: String, danger: bool) -> String:
 	if journal.level == 2 and world.next_project.is_empty():
 		return "Level 2 preview · All Level 1 plots complete. The camp is open."
 	if ready(): return "Level 1 complete · Continue to Level 2."
+	if works.owl_plot.visible and world.Reach.plot_distance(works.owl_plot,world.actor.position) <= world.Reach.NEAR:
+		return "Owl roost · %d meat left" % Progress.units(works.Crew.owl_due(journal))
 	if works.plot.visible and world.actor.position.distance_to(works.PLOT_AT) < 2.0:
 		return "Rescue survivor  ·  %d wood left" % Progress.units(world.inventory.survivor_cost - int(journal.survivor_wood))
 	if world.depot.apron.visible and (world.depot.at_apron(world.actor.position) or world.depot.at_loading_area(world.actor.position) or (world.depot.upgrade_mark.visible and world.depot.on_upgrade_side(world.actor.position))): return previous
@@ -364,6 +373,9 @@ func hint(previous: String, danger: bool) -> String:
 		var automatic:bool = conveyors.line_live("stone")
 		hint_ = "Deliver stone to the storehouse for the drill." if automatic else "Take stone to the drill inside the north fence."
 		if world.inventory.carried.stone > 0: target = world.depot.apron.global_position if automatic else world.processors.APRONS.stone
+	elif not works.Crew.owns_owl(journal):
+		hint_ = "Befriend the owl · %d meat at the roost" % Progress.units(works.Crew.owl_due(journal))
+		target = works.owl_plot.global_position
 	elif journal.owl_hits == 0:
 		hint_ = "Meet a wolf outside camp with your owl."
 	elif journal.worker_deliveries == 0:

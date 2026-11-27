@@ -1,6 +1,7 @@
 extends RefCounted
 ## Receipts produced by Level 1's survivor, kitchen and trading counter.
 
+const Crew=preload("res://field_crew.gd")
 const Logistics=preload("res://field_logistics.gd")
 const LEGACY := {"survivor_paid":false, "survivor_wood":0, "processed_wood":0, "processed_stone":0, "owl_hits":0, "rescued":false, "worker_carry_token":"", "worker_deliveries":0, "worker_receipts":[], "cooked":0, "served":0, "level":1}
 const KINDS := ["wood", "stone", "meat"]
@@ -13,7 +14,9 @@ const COUNTER_RACK_CAPACITY := 2
 const LINE_EMPTY := Logistics.TRANSIT
 const LINE_CLOCK := Logistics.CLOCK
 const CYCLE_SECONDS := {"wood":1.45, "stone":1.45, "meat":1.65}
+const HAND_PRODUCTS := {"planks":0,"blocks":0}
 const EMPTY := {
+	"owl_meat":0, "owl_legacy":false, "hand_products":HAND_PRODUCTS, "pocket_cash":0, "house_cash":0, "withdrawn":{},
 	"survivor_paid":false, "survivor_wood":0, "processed_wood":0, "processed_stone":0,
 	"owl_hits":0, "rescued":false, "worker_carry_token":"", "worker_deliveries":0,
 	"worker_receipts":[], "cooked":0, "served":0, "level":1,
@@ -34,7 +37,7 @@ static func from_legacy(previous: Variant) -> Variant:
 	var updated: Dictionary = EMPTY.duplicate(true)
 	updated.merge(previous.duplicate(true), true)
 	updated.held_meal = in_hand
-	for key in ["line_load","line_progress","counter_stock","product_store","dispatch_cursor"]: updated.erase(key)
+	for key in ["line_load","line_progress","counter_stock","product_store","dispatch_cursor","hand_products","pocket_cash","house_cash","withdrawn","owl_meat","owl_legacy"]: updated.erase(key)
 	return updated
 
 static func from_pre_worker(previous: Variant) -> Variant:
@@ -52,6 +55,35 @@ static func from_pre_conveyors(previous: Variant) -> Variant:
 	next.line_load={"wood":0,"stone":0,"meat":0,"meal":0}
 	next.line_progress={"wood":0.,"stone":0.,"meat":0.,"meal":0.}
 	next.counter_stock=0
+	return next
+
+# Prior sales were recorded directly as owned earnings. Bank each existing
+# receipt once, preserving the existing hand meal and outstanding belt stock.
+static func from_pre_register(previous:Variant,paid_order:Array) -> Variant:
+	if not previous is Dictionary: return null
+	for key in ["hand_products","pocket_cash","house_cash","withdrawn","owl_meat","owl_legacy"]:
+		if previous.has(key): return null
+	# These earlier versions could only fill shelves and the counter via
+	# bought belts. Validate their old physical capacities before widening
+	# them to include the deeper, manually stocked warehouse and counter.
+	if not _count(previous.get("held_meal")) or previous.held_meal>1:return null
+	if not _count(previous.get("counter_stock")) or not previous.get("line_load") is Dictionary:return null
+	for lane in ["meal","stored_meal"]:
+		if not _count(previous.line_load.get(lane)):return null
+	if previous.counter_stock+previous.line_load.meal+previous.line_load.stored_meal>COUNTER_RACK_CAPACITY:return null
+	if previous.counter_stock>0 and Logistics.P.FOOD_LINE not in paid_order:return null
+	if not previous.get("product_store") is Dictionary:return null
+	for product:String in Logistics.STORE:
+		var lane:String="meal_to_store" if product=="meal" else product
+		var stock:Variant=previous.product_store.get(product)
+		if not _count(stock) or not _count(previous.line_load.get(lane)):return null
+		if stock+previous.line_load[lane]>Logistics.SPACE[product]:return null
+		if stock>0 and not Logistics.allowed(lane,paid_order):return null
+	var next:Dictionary = Crew.migrate(previous)
+	next.hand_products = HAND_PRODUCTS.duplicate()
+	next.pocket_cash = 0
+	next.house_cash = next.get("served",0)
+	next.withdrawn = {}
 	return next
 
 static func _count(value: Variant) -> bool:
@@ -74,7 +106,7 @@ static func valid(state: Variant, paid_order: Array, credits: Dictionary, surviv
 		var value: Variant = state.get(key)
 		if not _count(value):
 			return false
-	if not _count(state.get("counter_stock")) or state.counter_stock > COUNTER_RACK_CAPACITY: return false
+	if not _count(state.get("counter_stock")): return false
 	for column in ["line_load","line_progress"]:
 		if not state.get(column) is Dictionary or state[column].size()!=LINE_EMPTY.size() or not state[column].has_all(LINE_EMPTY.keys()): return false
 	for lane:String in LINE_EMPTY:
@@ -82,10 +114,17 @@ static func valid(state: Variant, paid_order: Array, credits: Dictionary, surviv
 		var t:Variant=state.line_progress[lane]
 		if not _count(amount) or amount>1 or not (t is float or t is int) or not is_finite(t) or t<0. or t>1.: return false
 		if amount==0 and t!=0.:return false
+	if not Crew.valid(state,paid_order): return false
+	if not state.get("hand_products") is Dictionary or state.hand_products.size()!=HAND_PRODUCTS.size() or not state.hand_products.has_all(HAND_PRODUCTS.keys()): return false
+	for amount in state.hand_products.values():
+		if not _count(amount): return false
+	if not _count(state.get("pocket_cash")) or not _count(state.get("house_cash")) or state.pocket_cash>state.served or state.house_cash>state.served-state.pocket_cash: return false
+	if not state.get("withdrawn") is Dictionary: return false
+	for kind in state.withdrawn:
+		if not (kind in WORKER_LOAD or kind in Logistics.STORE or kind=="money") or not _count(state.withdrawn[kind]): return false
 	if not Logistics.valid(state,paid_order): return false
-	if state.counter_stock>0 and not "meal_conveyor" in paid_order:return false
-	if state.counter_stock+state.line_load.meal+state.line_load.stored_meal>COUNTER_RACK_CAPACITY:return false
-	if (state.level != 1 and state.level != 2) or (state.held_meal > 1 or state.worker_meal > 1) or waiting_meals(state) < 0 or waiting_meals(state) > ROAST_RACK_CAPACITY:
+	if state.counter_stock>0 and not "expansion_2" in paid_order:return false
+	if (state.level != 1 and state.level != 2) or state.worker_meal > 1 or waiting_meals(state) < 0 or waiting_meals(state) > ROAST_RACK_CAPACITY:
 		return false
 	if not state.get("worker_load") is Dictionary or state.worker_load.size() != WORKER_LOAD.size() or not state.worker_load.has_all(WORKER_LOAD.keys()): return false
 	for kind: String in WORKER_LOAD:
@@ -110,7 +149,7 @@ static func valid(state: Variant, paid_order: Array, credits: Dictionary, surviv
 	if state.survivor_wood > survivor_cost or state.survivor_paid != (state.survivor_wood == survivor_cost): return false
 	if state.survivor_wood > 0 and "center_hearth" not in paid_order: return false
 	if state.rescued and not state.survivor_paid: return false
-	if state.owl_hits > 0 and not state.survivor_paid: return false
+	if state.owl_hits > 0 and not Crew.owns_owl(state): return false
 	if (state.processed_wood > 0 or state.processed_stone > 0) and "expansion_2" not in paid_order: return false
 	if state.cooked > 0 and "expansion_2" not in paid_order: return false
 	if not state.get("worker_receipts") is Array or state.worker_receipts.size() != state.worker_deliveries:

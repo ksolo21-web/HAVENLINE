@@ -10,6 +10,8 @@ const MEAL = preload("res://assets/customer_counter/cooked_game_meat.glb")
 const MONEY = preload("res://assets/customer_counter/banded_notes.glb")
 const CENTER_X := 2.8
 const HALF_BAY := 1.825
+const HALF_DEPTH := .955
+const GUARD_HEIGHT := 2.4
 const CUSTOMER_Z := -1.60
 const CAPACITY := 3
 const SPACING := 1.15
@@ -44,6 +46,7 @@ var worker_transfer := 1.0
 var parked_player_meal: Node3D
 var meal: Node3D
 var cash: Node3D
+var register_pile:Array[Node3D]=[]
 var collect_time := 1.0
 var meal_origin := Vector3.ZERO
 var exchange_origin := Vector3.ZERO
@@ -73,9 +76,9 @@ func setup(host, visitor_factory: Callable, sale_callback: Callable) -> void:
 	_add_marker(payment_rest, "NotesOnBoard", Vector3(1.25,1.085,0))
 	var shape := CollisionShape3D.new()
 	var box := BoxShape3D.new()
-	box.size = Vector3(3.40,.95,1.91)
+	box.size = Vector3(HALF_BAY*2.,GUARD_HEIGHT,HALF_DEPTH*2.)
 	shape.shape = box
-	shape.position.y = .475
+	shape.position.y = GUARD_HEIGHT*.5
 	guard.name = "SolidCounterBody"
 	guard.add_child(shape)
 	guard.collision_layer = 0
@@ -146,6 +149,25 @@ func _clear_presentations() -> void:
 	cash = null
 	sale_order = 0
 	sale_committed = false
+
+# Keep motion corrections and restored feet on their original side of the paid
+# fence bay, including profiles that placed their actor on the tabletop.
+func constrain_actor(from: Vector3, to: Vector3, radius: float) -> Vector3:
+	if not active: return to
+	var start := to_local(from)
+	var finish := to_local(to)
+	var span := HALF_BAY+radius
+	var depth := HALF_DEPTH+radius
+	var in_board := absf(finish.x)<span and absf(finish.z)<depth
+	var crossed := false
+	if start.z*finish.z < 0.:
+		var crossing_x := lerpf(start.x,finish.x,-start.z/(finish.z-start.z))
+		crossed = absf(crossing_x)<span
+	if not in_board and not crossed: return to
+	var side := -1. if start.z < -.001 else 1.
+	finish.z = side * (depth+.006)
+	finish.y = 0.
+	return to_global(finish)
 
 func at_service(at: Vector3) -> bool:
 	if not active:
@@ -333,6 +355,7 @@ func _update_carried(dt: float, ready: bool) -> void:
 	collect_time = minf(1.,collect_time+dt/.32)
 	meal.global_position = _arc(meal_origin,_carried_meal_point(),collect_time,.15)
 	meal.global_rotation.y = world.actor.global_rotation.y + .25
+	meal.hide() # The complete idle stack is presented on the pack.
 
 func _finish_worker_presentation(cancelled: bool) -> void:
 	if belt_serving:
@@ -395,7 +418,8 @@ func _serve(dt: float) -> void:
 		if belt_serving:
 			cash.global_position = payment_rest.global_position
 		else:
-			cash.global_position = _arc(payment_rest.global_position, _server_hand(),(t-.60)/.40,.29)
+			cash.global_position = payment_rest.global_position
+		cash.visible=t<.48
 	if t >= 1.:
 		var receipt := sale_order
 		var buyer: Dictionary = queue.pop_front()
@@ -410,6 +434,23 @@ func _serve(dt: float) -> void:
 		_finish_worker_presentation(false)
 		served.emit(receipt)
 
+func cash_in_exchange()->int:
+	if sale_order==0 or not sale_committed:return 0
+	return 1 if (sale_elapsed-FOOD_TO_BOARD)/EXCHANGE_TIME<.48 else 0
+
+func show_register(balance:int)->void:
+	var visible_count:=clampi(balance-cash_in_exchange(),0,8) if active else 0
+	while register_pile.size()<visible_count:
+		var note:Node3D=MONEY.instantiate()
+		note.scale=Vector3.ONE*.8
+		add_child(note)
+		register_pile.append(note)
+	for i in register_pile.size():
+		var note:=register_pile[i]
+		note.visible=i<visible_count
+		if note.visible:
+			note.position=payment_rest.position+Vector3(-.292*(i%2),.136*floori(i/4.),-.15*(floori(i/2.)%2))
+
 func advance(dt: float) -> void:
 	if not active:
 		return
@@ -421,7 +462,7 @@ func advance(dt: float) -> void:
 		return
 	if attendant: attendant.idle(dt)
 	var ledger: Dictionary = world.inventory.settlement
-	var ready: bool = int(ledger.held_meal) == 1
+	var ready: bool = int(ledger.held_meal) > 0
 	_update_carried(dt,ready)
 	_show_worker_meal(dt)
 	var order := int(ledger.served)+1
@@ -441,6 +482,7 @@ func advance(dt: float) -> void:
 			add_child(meal)
 			meal.global_position=staff_buffer.call(0)
 			attendant.begin()
+	meal.show()
 	sale_order = order
 	sale_elapsed = 0.0
 	exchange_origin = meal.global_position

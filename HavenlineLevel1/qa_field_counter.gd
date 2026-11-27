@@ -44,6 +44,38 @@ func visitor_model(identity: String) -> Node3D:
 func sighted(order: int) -> bool:
 	return not counter.queue.is_empty() and counter.queue[0].order == order and counter.front_ready(order)
 
+func check_paid_counter_barrier() -> void:
+	var probe := CharacterBody3D.new()
+	var shape := CollisionShape3D.new()
+	var capsule := CapsuleShape3D.new()
+	capsule.radius = .31
+	capsule.height = 1.68
+	shape.shape = capsule
+	shape.position.y = capsule.height*.5
+	probe.add_child(shape)
+	host.add_child(probe)
+	await physics_frame
+	var physical := true
+	var constrained := true
+	var restored := true
+	for side:float in [-1.,1.]:
+		for lateral:float in [-1.72,0.,1.72]:
+			for rise:float in [0.,1.10]:
+				var start:Vector3 = counter.to_global(Vector3(lateral,rise,side*2.))
+				var end:Vector3 = counter.to_global(Vector3(lateral,rise,-side*2.))
+				probe.global_position = start
+				var collision := probe.move_and_collide(end-start,true)
+				physical = physical and collision != null and collision.get_collider()==counter.guard
+				var resolved:Vector3 = counter.to_local(counter.constrain_actor(start,end,capsule.radius))
+				constrained = constrained and resolved.z*side>Counter.HALF_DEPTH and is_zero_approx(resolved.y)
+			var embedded:Vector3 = counter.to_global(Vector3(lateral,1.1,side*.3))
+			var clear:Vector3 = counter.to_local(counter.constrain_actor(embedded,embedded,capsule.radius))
+			restored = restored and clear.z*side>Counter.HALF_DEPTH+capsule.radius and is_zero_approx(clear.y)
+	check("player collides with both counter facades up to worktop height",physical)
+	check("post-movement corrections preserve each side of the paid counter",constrained)
+	check("embedded positions recover on ground and on their original side",restored)
+	probe.queue_free()
+
 func _initialize() -> void:
 	call_deferred("run")
 
@@ -54,6 +86,7 @@ func run() -> void:
 	host.field_env.add_child(host.field_env.upgrade_anchor)
 	# This counter-only fixture skips building the hearth and must own its unused fire node.
 	host.field_env.add_child(host.field_env.hearth_fire)
+	host.field_env.hearth_fire.set_physics_process(false)
 	host.add_child(host.actor)
 	host.add_child(counter)
 	host.presentation_guard = counter.awaiting_payment
@@ -63,6 +96,7 @@ func run() -> void:
 	counter.set_active(true,0)
 	var north: float = FieldEnvironment.COURTS[-1].y
 	check("north plane and both stances",is_equal_approx(counter.position.z,north) and counter.service_point.global_position.z > north and counter.customer_point.global_position.z < north)
+	await check_paid_counter_barrier()
 	for i in 4: counter.set_active(true,0)
 	simulate(7.)
 	check("three physical waiting bodies",counter.queue.size()==3 and sighted(1))

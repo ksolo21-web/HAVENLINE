@@ -62,7 +62,7 @@ func setup(host,settlement)->void:
 			item.hide()
 
 func buffer_position(slot:int=0)->Vector3:
-	return network.counter_buffer_position(slot)
+	return network.counter_buffer_position(slot) if world.inventory.complete(Progress.FOOD_LINE) else world.counter.delivery_position(slot)
 
 func line_live(lane:String)->bool:
 	return Logistics.allowed(lane,world.inventory.build_order)
@@ -192,7 +192,9 @@ func _arrive(lane:String)->bool:
 	return loop.commit_receipt("conveyor_delivery",paths[lane][-1],"deposit_"+kind)
 
 func advance(dt:float)->void:
-	if not world.inventory.complete(Progress.SUPPLY_LINE) and not world.inventory.complete(Progress.FOOD_LINE):return
+	if not world.inventory.complete(Progress.SUPPLY_LINE) and not world.inventory.complete(Progress.FOOD_LINE):
+		present() # Show hand-delivered dishes and warehouse products before automation.
+		return
 	refresh_paths()
 	var cursor:int=world.inventory.settlement.dispatch_cursor
 	for i in LANES.size():

@@ -1,6 +1,10 @@
 extends RefCounted
 
 const PATHS := {
+	"money": "res://assets/customer_counter/banded_notes.glb",
+	"meal": "res://assets/customer_counter/cooked_game_meat.glb",
+	"planks": "res://assets/shore_workshops/finished_planks.glb",
+	"blocks": "res://assets/shore_workshops/dressed_block.glb",
 	"wood": "res://assets/field/wood.glb",
 	"stone": "res://assets/field/stone.glb",
 	"meat": "res://assets/field/meat.glb",
@@ -9,8 +13,9 @@ const PATHS := {
 	"metal": "res://assets/field/metal.glb",
 	"slate": "res://assets/field/slate.glb",
 }
-const WIDTHS := {"wood": .53, "stone": .40, "meat": .39, "wolf": 2.4, "coal": .39, "metal": .42, "slate": .47}
+const WIDTHS := {"money": .26, "meal": .36, "planks": .48, "blocks": .39, "wood": .53, "stone": .40, "meat": .39, "wolf": 2.4, "coal": .39, "metal": .42, "slate": .47}
 static var source_bounds := {}
+static var source_scenes := {}
 
 static func _bounds(node: Node, parent_xform: Transform3D, found: Array[AABB]) -> void:
 	var transform := parent_xform
@@ -25,11 +30,15 @@ static func make(kind: String, width: float = 0.0) -> Node3D:
 	if not PATHS.has(kind):
 		push_error("Unknown field asset " + kind)
 		return null
-	var scene := load(String(PATHS[kind])) as PackedScene
-	if not scene:
-		push_error("Cannot load field art for " + kind)
-		return null
-	var model := scene.instantiate() as Node3D
+	# Instances hold the mesh, not the PackedScene: retain the source while a
+	# stream of identical drops is loaded, carried or displayed on its shelf.
+	if not source_scenes.has(kind):
+		var scene := load(String(PATHS[kind])) as PackedScene
+		if not scene:
+			push_error("Cannot load field art for " + kind)
+			return null
+		source_scenes[kind] = scene
+	var model := (source_scenes[kind] as PackedScene).instantiate() as Node3D
 	if not source_bounds.has(kind):
 		var boxes: Array[AABB] = []
 		_bounds(model, Transform3D.IDENTITY, boxes)

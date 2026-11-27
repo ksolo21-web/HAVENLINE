@@ -1,5 +1,6 @@
 extends Node3D
-## The expedition owl follows the survivor purchase and only damages a wolf under its talons.
+## The expedition owl watches the gate and protects its owner beyond camp.
+const Crew = preload("res://field_crew.gd")
 const OwlArt := preload("res://assets/settlement_people/expedition_owl_authored.glb")
 const PlumageShader := preload("res://assets/settlement_people/expedition_plumage.gdshader")
 # Match the wolf notice range. The owl can intercept before the player's axe
@@ -42,6 +43,7 @@ var phase := 0.0
 var spread := 0.0
 var age := 0.0
 var cooldown := 0.0
+var last_owner_hp := -1
 var approach := Vector3.ZERO
 var recovery := Vector3.ZERO
 var post_index := 0
@@ -157,7 +159,7 @@ func _outward(gate: Node3D) -> Vector3:
 	return gate.global_basis.z.slide(Vector3.UP).normalized()
 
 func _post_entry(gate: Node3D) -> Vector3:
-	return gate.to_global(Vector3(-float(gate.HALF_SPAN)-.15,2.40,0)) + _outward(gate)*.85
+	return gate.to_global(Vector3(-float(gate.HALF_SPAN)-.15,2.40,0)) + _outward(gate)*(float(gate.LEAF_LENGTH)+.52)
 
 func _outside_waypoint(goal: Vector3) -> Vector3:
 	var env = world.field_env
@@ -170,9 +172,9 @@ func _outside_waypoint(goal: Vector3) -> Vector3:
 		var here := (global_position-post).slide(Vector3.UP)
 		var there := (goal-post).slide(Vector3.UP)
 		var landing := there.length_squared() < .03
-		if absf(here.dot(out.cross(Vector3.UP))) < .19 and absf(here.dot(out)) < .91 and global_position.y > 1.6:
+		if absf(here.dot(out.cross(Vector3.UP))) < .19 and absf(here.dot(out)) < float(gate.LEAF_LENGTH)+.65 and global_position.y > 1.6:
 			if landing: return goal
-			if here.dot(out)<.70: return entry
+			if here.dot(out)<float(gate.LEAF_LENGTH)+.43: return entry
 		if landing: goal = entry
 	if env.travel_clear(global_position,goal,.12): return goal
 	# A growing camp may enclose a bird already in flight. It can request the
@@ -229,7 +231,7 @@ func _start_intercept(wolf: Node3D) -> void:
 func advance(delta: float) -> void:
 	if not world or not world.field_ready: return
 	var dt := clampf(delta,0.,.1)
-	if not world.inventory.settlement.get("survivor_paid",false):
+	if not Crew.owns_owl(world.inventory.settlement):
 		if visible: hide()
 		state = "locked"
 		target = null
@@ -237,12 +239,29 @@ func advance(delta: float) -> void:
 	gate_request = null
 	var player: Vector3 = world.actor.global_position
 	var inside: bool = world.field_env.is_inside_camp(player)
+	# A newly injured explorer can call the resting bird back into a single
+	# protection pass. Repeated hits cannot remove the physical recovery.
+	var wounded:bool=last_owner_hp>world.player_hp and world.player_hp>0 and not inside
+	if wounded and state in ["follow","recover"]:cooldown=minf(cooldown,.35)
+	last_owner_hp=world.player_hp
 	var old_post := post_index
 	var at_gate := _pick_post(player) <= GATE_GUARD
-	var watch_target: Node3D = _nearest(SENSE*.68) if inside and at_gate and world.player_hp>0 else null
+	var watch_target:Node3D
+	if inside and world.player_hp>0:
+		if at_gate:watch_target=_nearest(SENSE*.68)
+		else:
+			var nearest:=4.0
+			for wolf in world.enemies:
+				if not _eligible(wolf):continue
+				for i in world.gates.size():
+					var distance:float=wolf.global_position.distance_to(world.gates[i].global_position)
+					if distance<nearest:
+						nearest=distance
+						post_index=i
+						watch_target=wolf
 	# A paid owl guards the exterior of the gate the player is actually using.
 	# Retreating into the interior, or falling, still cancels a committed dive.
-	var finishing_strike := state == "strike" and at_gate
+	var finishing_strike := state == "strike"
 	var resting: bool = world.player_hp <= 0 or (inside and not watch_target and not finishing_strike)
 	if inside and old_post != post_index and state == "perched": _switch("land")
 	if state == "locked":
@@ -281,12 +300,15 @@ func advance(delta: float) -> void:
 					else: _switch("follow")
 			"follow":
 				var lane := _lane()
+				if inside and watch_target:
+					var gate:Node3D=world.gates[post_index]
+					lane=_post_entry(gate)+_outward(gate)*.48+gate.global_basis.x*.40*sin(elapsed*1.6)
 				_fly(lane, clampf(6.5 + .90*global_position.distance_to(lane),7.2,15.5),dt)
 				if cooldown <= 0:
 					var seen := watch_target if watch_target else _nearest()
 					if seen: _start_intercept(seen)
 			"bank","windup","dive":
-				if not is_instance_valid(target) or not _eligible(target) or target.global_position.distance_to(world.actor.global_position)>SENSE+1.8:
+				if not is_instance_valid(target) or not _eligible(target) or (target != watch_target and target.global_position.distance_to(world.actor.global_position)>SENSE+1.8):
 					_recover()
 				elif state == "bank":
 					var staging: Vector3 = target.global_position+approach

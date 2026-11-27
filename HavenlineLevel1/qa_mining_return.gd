@@ -134,17 +134,22 @@ func examine(row:Dictionary, streamed:bool) -> void:
 	if streamed: checks[prefix+"cooldown continues across real streaming"]=missing and loaded_back
 	var restored=working_face(id)
 	checks[prefix+"restored full collider"]=restored!=null and restored.phase=="seated" and restored.strikes==0 and restored.bank_body.collision_layer!=0
+	var second_yield := []
 	if tick_back==300:
+		# Walking back into mining range can already collect the first yield.
+		var start_amount:int=world.inventory.carried[kind]
 		approach(at)
 		var second:int=await strike_until(id,kind,at,3)
-		var extra:=nearby_drops(kind,at)
-		checks[prefix+"second fresh three-hit three-unit harvest"]=second==3 and extra.size()==6 and drops.all(func(s): return extra.has(s)) and observe_events("deplete_"+kind,at)==1
-		var start_amount:int=world.inventory.carried[kind]
+		var on_ground:=nearby_drops(kind,at)
+		second_yield=on_ground.filter(func(key):return not drops.has(key))
+		var original_accounted:=drops.all(func(key):return on_ground.has(key) or world.inventory.collected.get(key)==kind)
+		checks[prefix+"second fresh three-hit three-unit harvest"]=second==3 and second_yield.size()==3 and original_accounted and observe_events("deplete_"+kind,at)==1
 		move_to(at)
 		for i in 140: await physics_frame
-		checks[prefix+"both yields enter typed inventory only once"]=world.inventory.carried[kind]==start_amount+6 and extra.all(func(key):return world.inventory.collected.get(key)==kind) and nearby_drops(kind,at).is_empty()
+		var all_yield:=drops+second_yield
+		checks[prefix+"both yields enter typed inventory only once"]=all_yield.size()==6 and world.inventory.carried[kind]==start_amount+6 and all_yield.all(func(key):return world.inventory.collected.get(key)==kind) and nearby_drops(kind,at).is_empty()
 	checks[prefix+"stored balance unchanged"]=world.inventory.stored==stock
-	evidence[id]={"kind":kind,"at":str(at),"natural_contacts":[hit_one,remaining],"first_yield_ids":drops,"initial_seconds":duration,"saved_remaining":prior_tick,"available_at_tick":tick_back,"return_mesh_visible":regrowing,"streamed_away":missing,"restored_before_available":loaded_back}
+	evidence[id]={"kind":kind,"at":str(at),"natural_contacts":[hit_one,remaining],"first_yield_ids":drops,"second_yield_ids":second_yield,"initial_seconds":duration,"saved_remaining":prior_tick,"available_at_tick":tick_back,"return_mesh_visible":regrowing,"streamed_away":missing,"restored_before_available":loaded_back}
 
 func remote_faces() -> Dictionary:
 	var found:={}

@@ -45,6 +45,7 @@ func harvest(id: String, at: Vector3, stream: bool) -> void:
 	var crossed := false
 	var zero_tick := -1
 	var return_tick := -1
+	var yield_ids: Array[String] = []
 	var deplete_us := 0
 	var return_us := 0
 	for tick in 1100:
@@ -66,6 +67,9 @@ func harvest(id: String, at: Vector3, stream: bool) -> void:
 			if zero_tick<0 and tree.phase=="credited":
 				zero_tick=tick
 				deplete_us=Time.get_ticks_usec()
+				for token: String in game.drops:
+					var drop:Dictionary=game.drops[token]
+					if drop.kind=="wood" and drop.at.distance_to(at)<1.75: yield_ids.append(token)
 			if zero_tick>=0 and tree.phase=="credited" and tree._pivot.visible and tree._pivot.basis.y.length()>.25 and tree._pivot.basis.y.length()<.9 and not growing:
 				growing=true
 				still(id.validate_filename()+"-return")
@@ -88,15 +92,17 @@ func harvest(id: String, at: Vector3, stream: bool) -> void:
 		measured=regrown[back_before].t-depleted[drop_before].t
 	var hit_count:=events_at("impact_wood",at).size()-hits_before
 	var loose_wood:=0
-	for d in game.drops.values():
-		if d.kind=="wood" and d.at.distance_to(at)<1.75:loose_wood+=1
+	var carried_wood:=0
+	for token: String in yield_ids:
+		if game.drops.has(token): loose_wood+=1
+		if game.inventory.collected.get(token)=="wood": carried_wood+=1
 	checks[id+" natural damaging contacts"]=hit_count==3 and swayed and chips and crossed and fell
-	checks[id+" one three-unit yield"]=depleted.size()-drop_before==1 and loose_wood==3
+	checks[id+" one three-unit yield"]=depleted.size()-drop_before==1 and yield_ids.size()==3 and yield_ids.all(func(token):return game.drops.has(token)!=(game.inventory.collected.get(token)=="wood"))
 	checks[id+" 5s elapsed"]=return_tick-zero_tick==300 and absf(measured-5.)<.002 and not early
 	checks[id+" return appears before available"]=growing and regrown.size()-back_before==1
 	checks[id+" stored quantities untouched"]=stored==game.inventory.stored
 	if stream: checks[id+" unload did not restart timer"]=streamed
-	evidence[id]={"contact_events":hit_count,"matches_blade_position_and_travel":crossed,"sway":swayed,"chips":chips,"fell":fell,"fall_frame_seconds":fall_sample,"return_visible":growing,"loose":loose_wood,"depletion_to_available_ticks":return_tick-zero_tick,"game_seconds":measured,"wall_seconds":float(return_us-deplete_us)/1e6,"stored":stored}
+	evidence[id]={"contact_events":hit_count,"matches_blade_position_and_travel":crossed,"sway":swayed,"chips":chips,"fell":fell,"fall_frame_seconds":fall_sample,"return_visible":growing,"loose":loose_wood,"collected":carried_wood,"yield_ids":yield_ids,"depletion_to_available_ticks":return_tick-zero_tick,"game_seconds":measured,"wall_seconds":float(return_us-deplete_us)/1e6,"stored":stored}
 
 func stock_fixture() -> void:
 	var ledger = game.inventory

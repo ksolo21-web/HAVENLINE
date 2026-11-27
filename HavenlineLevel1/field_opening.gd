@@ -13,7 +13,7 @@ const FieldSave = preload("res://field_save.gd")
 
 const HEARTH_OFFER := "center_hearth"
 const UPGRADE_OFFER := "orbit_upgrade"
-const PICKUP_RADIUS := 1.38
+const PICKUP_RADIUS := 2.35
 const Reach = preload("res://field_reach.gd")
 const RUN_STICK_DEAD_ZONE := 0.11
 const MAX_HP := 10 * FieldEnemy.MAX_HEALTH
@@ -58,11 +58,13 @@ var events: Array[Dictionary] = []
 var boot_raised_for_audio: Array[bool] = [false,false]
 var first_physics := true
 var field_ready := false
+var runner_requested_motion := false
 var original_auto_quit := true
 var closing := false
 var camp_active := false
 var reveal_countdown := -1.0
 var flash: ColorRect
+var player_wardrobe = preload("res://field_player_wardrobe.gd").new()
 var hero_model: Node3D
 var last_good: Dictionary
 var moving_gates := {}
@@ -78,10 +80,17 @@ var current_music := ""
 func create_opening_hud() -> OpeningHUD:
 	return preload("res://field_hud.gd").new()
 
+func set_player_character(number: int) -> bool:
+	return field_ready and player_wardrobe.choose(number)
+
+func player_character() -> int:
+	return player_wardrobe.number
+
 func move_actor(input: Vector2, dt: float) -> float:
 	# The drag supplies a heading. Any deliberate displacement requests a run.
 	if camp_layout and camp_layout.active: input = Vector2.ZERO
-	var heading := input.normalized() if input.length_squared() > RUN_STICK_DEAD_ZONE * RUN_STICK_DEAD_ZONE else Vector2.ZERO
+	runner_requested_motion = input.length_squared() > RUN_STICK_DEAD_ZONE * RUN_STICK_DEAD_ZONE
+	var heading := input.normalized() if runner_requested_motion else Vector2.ZERO
 	if field_env and field_env.perimeter_stage > 0:
 		var right := camera.global_basis.x
 		var near := right.cross(Vector3.UP)
@@ -89,7 +98,10 @@ func move_actor(input: Vector2, dt: float) -> float:
 		for gate in gates:
 			wish = gate.passage_heading(actor.global_position,wish)
 		heading = Vector2(wish.dot(right),wish.dot(near))
-	return gait_motor.step(self, heading, dt)
+	var carried_units := 0
+	for count: int in inventory.carried.values():
+		carried_units += count
+	return gait_motor.step(self, heading, dt, smoothstep(0., 12., float(carried_units)))
 
 func _ready() -> void:
 	super()
@@ -116,7 +128,7 @@ func _ready() -> void:
 	tracks = preload("res://field_snow_tracks.gd").new()
 	add_child(tracks)
 	tracks.configure(func(pos:Vector3): return not field_env.is_inside_camp(pos))
-	tracks.register_actor(actor,"human",1.0,gait_motor.snow_contact_points)
+	tracks.register_actor(actor,"human",1.0,player_wardrobe.boot_contacts)
 	add_child(carry)
 	carry.setup(inventory, actor, FieldArt.make)
 	carry.travel_clear = Callable(field_env,"travel_clear")
@@ -191,6 +203,7 @@ func _ready() -> void:
 			tracks.reset_actor(actor)
 	previous_dry_position = actor.position
 	field_ready = true
+	player_wardrobe.setup(self)
 	var home_compass := preload("res://field_navigation.gd").new()
 	opening_hud.add_child(home_compass)
 	home_compass.install(self,opening_hud)
@@ -455,7 +468,6 @@ func loose_clearance(kind: String) -> float:
 
 func _place_drop(token: String, kind: String, start: Vector3, end: Vector3, yaw: float, age: float) -> void:
 	if drops.has(token) or inventory.collected.has(token): return
-	if drops.size()>=lifecycle.DROP_CAP: _remove_drop(drops.keys()[0])
 	var radius := loose_clearance(kind)
 	start = field_env.safe_drop_origin(start,radius)
 	end = field_env.clip_travel(start,end,radius)
@@ -473,6 +485,7 @@ func _remove_drop(token: String) -> void:
 	drops.erase(token)
 
 func _step_drops(dt: float) -> void:
+	var nearby: Array[Dictionary] = []
 	for token: String in drops.keys():
 		var drop: Dictionary = drops[token]
 		drop.age += dt
@@ -489,11 +502,17 @@ func _step_drops(dt: float) -> void:
 			drop.from = field_env.safe_drop_origin(unit.position,loose_clearance(drop.kind))
 			drop.at = Vector3(drop.from.x,0.,drop.from.z)
 			next = drop.at
-		unit.position = next
-		if t == 1.0 and reset_time <= 0.0 and actor.position.distance_to(unit.position) <= PICKUP_RADIUS and field_env.travel_clear(actor.position,unit.position,.06):
-			if carry.pickup(token,drop.kind,unit.position,unit.global_rotation.y):
-				unit.queue_free()
-				drops.erase(token)
+		if unit.position != next: unit.position = next
+		if t == 1.0 and reset_time <= 0.0 and actor.position.distance_squared_to(unit.position) <= PICKUP_RADIUS * PICKUP_RADIUS and field_env.travel_clear(actor.position,unit.position,.06):
+			nearby.append({"token":token,"kind":drop.kind,"at":unit.position,"yaw":unit.global_rotation.y})
+	if nearby.is_empty(): return
+	var claimed := carry.pickup_nearby(nearby)
+	if claimed.is_empty(): return
+	# The snapshot omits collected tokens. Keep the ground nodes until a
+	# failed/stale write has had the opportunity to roll the ledger back.
+	carry.inventory_changed.emit()
+	for token: String in claimed:
+		if inventory.collected.has(token): _remove_drop(token)
 
 func _wolf_defeated(at: Vector3, wolf: FieldEnemy) -> void:
 	_event("defeat",at)
@@ -613,6 +632,7 @@ func _physics_process(dt: float) -> void:
 	forest.advance(dt)
 	var last_turn: int = character_kit.turn_id
 	if reset_time > 0:
+		if owl:owl.advance(dt)
 		if not persist_blocked: settlement_loop.advance_unattended(dt)
 		var fall := smoothstep(0.0,.44,1.05-reset_time)
 		hero_model.rotation.z = -recoil_side*1.43*fall
@@ -653,6 +673,7 @@ func _physics_process(dt: float) -> void:
 	var hit_fraction := hurt_time / RECOIL_SECONDS
 	var recoil := smoothstep(0, .15, 1.0-hit_fraction) * smoothstep(0, .88, hit_fraction)
 	gait_motor.apply_hit_pose(hero_model, impact_lean.y*.30*recoil+.18*smoothstep(0,.32,rescue_time), -impact_lean.x*.33*recoil)
+	player_wardrobe.update_pose(dt)
 	sound.set_listener_position(actor.position)
 	if character_kit.active and character_kit.turn_id != last_turn and not first_physics:
 		_event("swing",actor.position)
@@ -712,7 +733,7 @@ func _step_foot_audio(inside: bool) -> void:
 	if actor.velocity.slide(Vector3.UP).length() < .025 and gait_motor.special not in ["brake","pivot"]:
 		boot_raised_for_audio.fill(false)
 		return
-	var soles: PackedVector3Array = gait_motor.snow_contact_points()
+	var soles: PackedVector3Array = player_wardrobe.boot_contacts()
 	for side in soles.size():
 		var clearance := soles[side].y - actor.global_position.y
 		if clearance > .045:
@@ -770,7 +791,7 @@ func _inventory_changed() -> void:
 			carry.cancel_transfers()
 			persist_error = "Field progress paused. Save error %d." % result
 		else:
-			last_good = inventory.snapshot()
+			last_good = field_save.committed_state
 	_refresh_field()
 
 func _finish_purchase(id: String) -> void:
@@ -839,6 +860,8 @@ func constrain_private_snow_travel() -> void:
 			var network = settlement_loop.conveyors.network
 			if network:
 				actor.global_position = network.constrain_motion(previous_dry_position,actor.global_position,float(layout.actor_radius))
+		if counter and counter.active:
+			actor.global_position = counter.constrain_actor(previous_dry_position,actor.global_position,float(layout.actor_radius))
 
 func orbit_permitted_at(world_position: Vector3) -> bool:
 	return not field_env.is_inside_camp(world_position)
@@ -850,7 +873,7 @@ func _step_receivers() -> void:
 	var selected := depot_target
 	var best := INF
 	if not selected.is_empty():
-		best = Reach.plot_distance(depot.upgrade_mark,at) if depot.on_upgrade_side(at) else depot.loading_distance(at)
+		best = Reach.plot_distance(depot.upgrade_mark,at) if selected == depot.offer and depot.on_upgrade_side(at) else depot.loading_distance(at)
 	for id: String in inventory.costs:
 		if id in Progress.LINES and not offer_floors[id].visible:continue
 		if id in Progress.STORAGE or (not exit_required.has(id) and not inventory.offer_open(id)): continue
@@ -979,7 +1002,7 @@ func enter_next_level() -> bool:
 	return settlement_loop.enter_next_level()
 
 func owl_contact(wolf, at: Vector3) -> bool:
-	if not settlement_loop.can_transact() or not inventory.settlement.survivor_paid or not enemies.has(wolf): return false
+	if not settlement_loop.can_transact() or not owl.Crew.owns_owl(inventory.settlement) or not enemies.has(wolf): return false
 	if not is_instance_valid(wolf) or not wolf.can_receive_swirl() or field_env.is_inside_camp(wolf.global_position) or not at.is_finite(): return false
 	if not owl.permits_contact(wolf,at): return false
 	# A fatal hit synchronously persists the loot. Include the owl receipt in that same checkpoint.

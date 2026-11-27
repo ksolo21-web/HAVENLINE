@@ -2,6 +2,8 @@ extends Control
 ## Landscape concept navigation, adapted to the current paid camp. Buttons
 ## guide the player to the actual interaction rather than performing it remotely.
 const P=preload("res://field_progression.gd")
+const Crew = preload("res://field_crew.gd")
+const GOODS_NAMES = {"planks":"Planks","blocks":"Stone blocks","meal":"Cooked meat","money":"Cash"}
 const TYPE=preload("res://assets/field_ui/type/BarlowSemiCondensed-SemiBold.ttf")
 const PAPER=Color("#fbf1e8")
 const INK=Color("#142236")
@@ -33,7 +35,12 @@ var tabs:Dictionary={}
 var commands:Array=[]
 var finger:=-2
 var sheet_key:=""
+var list_page := 0
 var poll_time:=0.
+var stock_kind := ""
+var quantity_dialog := AcceptDialog.new()
+var quantity_input := LineEdit.new()
+var requested_kind := ""
 
 func face(fill:Color,edge:Color,r:=13)->StyleBoxFlat:
 	var skin:=StyleBoxFlat.new()
@@ -152,6 +159,16 @@ func configure(host,owner_hud)->void:
 	close.add_theme_stylebox_override("normal",StyleBoxEmpty.new())
 	close.mouse_filter=Control.MOUSE_FILTER_IGNORE
 	close.pressed.connect(dismiss)
+	add_child(quantity_dialog)
+	quantity_dialog.title="Withdraw stock"
+	quantity_dialog.ok_button_text="Take from storage"
+	quantity_dialog.add_cancel_button("Cancel")
+	quantity_dialog.add_child(quantity_input)
+	quantity_input.placeholder_text="Quantity"
+	quantity_input.accessibility_name="Withdrawal quantity"
+	quantity_input.virtual_keyboard_type=LineEdit.KEYBOARD_TYPE_NUMBER
+	quantity_dialog.register_text_enter(quantity_input)
+	quantity_dialog.confirmed.connect(_withdraw_quantity)
 	sheet.hide()
 	reflow()
 
@@ -165,6 +182,7 @@ func toggle(key:String)->void:
 		dismiss()
 		return
 	active_tab=key
+	list_page=0
 	tab=key
 	sheet_key=""
 	sheet.show()
@@ -191,8 +209,9 @@ func refresh()->void:
 					lines.append("   ·   ".join(counts))
 					counts.clear()
 			if not counts.is_empty():lines.append("   ·   ".join(counts))
-			lines.append("Cash %d   ·   Planks %d   ·   Blocks %d"%[journal.served,journal.processed_wood,journal.processed_stone])
-			lines.append("Cooker rack  ·  %d meals"%book.Settlement.waiting_meals(journal))
+			var hand:Dictionary=book.hand_goods()
+			lines.append("%d planks   ·   %d blocks"%[hand.planks,hand.blocks])
+			lines.append("%d cooked meat   ·   $%d"%[hand.meal,hand.money])
 			description="\n".join(lines)
 			list.append(_entry("Storage details","storage_details"))
 		"Camp":
@@ -200,21 +219,46 @@ func refresh()->void:
 			description="Level %d  •  %d camp purchases"%[journal.level,book.build_order.size()]
 			list.append(_entry("Guide to camp" if world.camp_active else "Find the hearth plot","home"))
 			if world.camp_active:list.append(_entry("Move equipment","move"))
+			list.append(_entry("Choose character","character_open"))
+		"Characters":
+			title.text="Choose character"
+			var current:int=world.player_character()
+			for number in range(1,5):
+				var label:="Character %d"%number
+				if number==current:label+="  ·  Active"
+				list.append(_entry(label,"character_"+str(number)))
 		"Storage":
 			var tier:int=P.house_tier(book)
 			title.text=["Storage house","Starter storehouse","Reinforced storehouse","Advanced storehouse"][clampi(tier,0,3)]
 			if tier:
 				description="%d wood   ·   %d stone   ·   %d meat"%[P.units(book.stored.wood),P.units(book.stored.stone),P.units(book.stored.meat)]
-				var stock:Dictionary=journal.product_store
-				if stock.planks or stock.blocks or stock.meal:
-					description+="\n%d planks   ·   %d blocks   ·   %d meals"%[stock.planks,stock.blocks,stock.meal]
+				var stock:Dictionary=book.house_goods()
+				description+="\n%d planks   ·   %d blocks   ·   %d meals   ·   $%d"%[stock.planks,stock.blocks,stock.meal,stock.money]
 				list.append(_entry("Guide to loading apron","depot"))
+				if world.settlement_loop.exchange.at_loading_area() and not _stock_keys().is_empty():
+					list.append(_entry("Withdraw stock","stock_open"))
 			else:description="A camp expansion opens the first storage purchase."
 			var stage:=P.next_storage(book)
 			if not stage.is_empty() and book.offer_open(stage):list.append(_entry(P.TITLES[stage]+"  ·  "+P.price_text(book.remaining(stage)),stage))
 			if list.is_empty():list.append(_entry("Find next camp purchase","project"))
+		"Withdraw":
+			var keys:=_stock_keys()
+			if not world.settlement_loop.exchange.at_loading_area() or keys.is_empty():
+				tab="Storage"
+				refresh()
+				return
+			if stock_kind not in keys:stock_kind=keys[0]
+			var quantity:=_stock_amount(stock_kind)
+			var label:=_stock_title(stock_kind)
+			title.text=label
+			description=("%d bundles in storage · 10 units per bundle" if stock_kind in book.KINDS else "%d in storage")%quantity
+			list.append(_entry("Take all %d"%quantity,"stock_all"))
+			list.append(_entry("Choose quantity","stock_number"))
+			if keys.size()>1:
+				var next:String=keys[(keys.find(stock_kind)+1)%keys.size()]
+				list.append(_entry("Next · "+_stock_title(next),"stock_next"))
 		"Survivors":
-			title.text="Camp survivor"
+			title.text="Camp crew"
 			if journal.rescued:
 				var duty:=str(world.survivor.phase).replace("_"," ").capitalize()
 				description=duty+"  •  "+str(journal.worker_deliveries)+" deliveries"
@@ -229,6 +273,11 @@ func refresh()->void:
 			else:
 				description="Found the camp to open the rescue plot."
 				list.append(_entry("Find the hearth plot","home"))
+			if world.camp_active:
+				if Crew.owns_owl(journal):
+					description+="\nOwl companion · "+str(journal.owl_hits)+" hits"
+				else:
+					list.append(_entry("Owl roost  ·  %d meat"%P.units(Crew.owl_due(journal)),Crew.OWL_PLOT))
 		"Build":
 			title.text="Build"
 			description=""
@@ -240,12 +289,29 @@ func refresh()->void:
 				if list.size()>=3:break
 			if world.camp_active and not journal.survivor_paid and list.size()<3:
 				list.append(_entry("Rescue survivor  ·  "+str(P.units(maxi(0,int(book.survivor_cost)-int(journal.survivor_wood))))+" wood","rescue"))
+			if world.camp_active and not Crew.owns_owl(journal) and list.size()<3:
+				list.append(_entry("Owl roost  ·  %d meat"%P.units(Crew.owl_due(journal)),Crew.OWL_PLOT))
 			var inside:bool=world.camp_active and world.field_env.is_inside_camp(world.actor.global_position)
 			if inside:
 				for line:String in P.LINES:
 					if book.offer_open(line):list.append(_entry(P.TITLES[line]+"  ·  "+P.price_text(book.remaining(line)),line))
 			if world.camp_active:list.append(_entry("Move equipment","move"))
 			if list.is_empty():description="All available camp purchases are complete."
+	# Page long purchase lists within the visible, safe canvas in both Fold orientations.
+	var safe:Rect2=hud._safe_rect()
+	var target:=touch_height(safe)
+	var description_height:=0. if description.is_empty() else 30.*description.split("\n").size()+7.
+	if description.length()>45 and not description.contains("\n"):description_height+=24.
+	var usable:=safe.size.y-170.-maxf(63.,target)-description_height
+	var slots:=maxi(2,floori(usable/(maxf(57.,target)+5.)))
+	if list.size()>slots:
+		var per_page:=slots-1
+		var pages:=ceili(float(list.size())/per_page)
+		list_page=posmod(list_page,pages)
+		list=list.slice(list_page*per_page,(list_page+1)*per_page)
+		list.append(_entry("More  ·  %d of %d"%[list_page+1,pages],"list_next"))
+	else:
+		list_page=0
 	var state:=str([tab,title.text,description,list])
 	if sheet_key==state:return
 	sheet_key=state
@@ -276,7 +342,59 @@ func refresh()->void:
 		row.pressed.connect(choose.bind(str(item[1])))
 	reflow()
 
+func _stock_title(kind:String)->String:
+	return str(GOODS_NAMES.get(kind,world.inventory.TITLES.get(kind,kind)))
+
+func _stock_amount(kind:String)->int:
+	if kind in world.inventory.KINDS:
+		return world.carry.available_on_shelf(kind) if world.inventory.storage_open(kind) else 0
+	return int(world.inventory.house_goods().get(kind,0))
+
+func _stock_keys()->Array[String]:
+	var available:Array[String]=[]
+	for keys in [world.inventory.KINDS,GOODS_NAMES.keys()]:
+		for kind:String in keys:
+			if _stock_amount(kind)>0:available.append(kind)
+	return available
+
+func _withdraw_quantity()->void:
+	var amount:=quantity_input.text.strip_edges()
+	if amount.is_valid_int() and amount.to_int()>0:
+		world.settlement_loop.withdraw_goods(requested_kind,amount.to_int())
+	refresh()
+
 func choose(id:String)->void:
+	if id=="list_next":
+		list_page+=1
+		refresh()
+		return
+	if id=="character_open":
+		toggle("Characters")
+		active_tab="Camp"
+		return
+	if id.begins_with("character_"):
+		if world.set_player_character(id.trim_prefix("character_").to_int()):
+			dismiss()
+		return
+	if id=="stock_open":
+		toggle("Withdraw")
+		active_tab="Storage"
+		return
+	if id.begins_with("stock_"):
+		var keys:=_stock_keys()
+		if stock_kind not in keys:return
+		match id:
+			"stock_next":stock_kind=keys[(keys.find(stock_kind)+1)%keys.size()]
+			"stock_all":world.settlement_loop.withdraw_goods(stock_kind)
+			"stock_number":
+				requested_kind=stock_kind
+				quantity_dialog.title="Take "+_stock_title(stock_kind)
+				quantity_input.text=str(_stock_amount(stock_kind))
+				quantity_dialog.popup_centered(Vector2i(350,135))
+				quantity_input.grab_focus()
+				quantity_input.select_all()
+		refresh()
+		return
 	dismiss()
 	if id=="storage_details":
 		toggle("Storage")
@@ -289,7 +407,7 @@ func choose(id:String)->void:
 		var automation=world.settlement_loop.conveyors.menu
 		if automation.selected!=id:automation.select(id)
 	tracking=id
-	tracking_name={"home":"Camp","depot":"Storehouse","worker":"Survivor","rescue":"Rescue plot"}.get(id,P.TITLES.get(id,"Camp"))
+	tracking_name={"home":"Camp","depot":"Storehouse","worker":"Survivor","rescue":"Rescue plot",Crew.OWL_PLOT:"Owl roost"}.get(id,P.TITLES.get(id,"Camp"))
 	if not world.camp_active and id=="home":tracking_name="Camp plot"
 	if world.has_method("_refresh_hud_field"):world._refresh_hud_field(false)
 
@@ -301,6 +419,11 @@ func tracked_point()->Vector3:
 		"depot":return world.depot.apron.global_position
 		"worker":return world.survivor.actor.global_position
 		"rescue":return world.settlement_loop.works.plot.global_position
+		Crew.OWL_PLOT:
+			if Crew.owns_owl(world.inventory.settlement):
+				tracking=""
+				return Vector3.INF
+			return world.settlement_loop.works.owl_plot.global_position
 	if not world.inventory.offer_open(tracking):
 		tracking=""
 		return Vector3.INF

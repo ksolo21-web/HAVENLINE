@@ -225,7 +225,7 @@ func pickup_roast() -> void:
 	var ledger=game.inventory
 	check("output survived restart without teleporting to the player",ledger.settlement.held_meal==0 and ledger.settlement.cooked==1 and not is_instance_valid(game.counter.meal))
 	place(game.lakeshore.OUTPUT_APRON)
-	check("collecting at the distinct output apron equips one cooked meal",await wait_for(func():return ledger.settlement.held_meal==1 and is_instance_valid(game.counter.meal),240))
+	check("collecting at the output apron seats the cooked meal in its own pack bay",await wait_for(func():return ledger.settlement.held_meal==1 and game.carry.finished_goods.pools.get("meal",[]).size()>0 and game.carry.finished_goods.visible,240))
 	place(Vector3(1.72,0,1.8))
 	check("pickup produces no payment or second input debit",read_disk().settlement.held_meal==1 and ledger.settlement.served==0 and ledger.carried.meat==1)
 
@@ -307,6 +307,12 @@ func machines_and_owl() -> void:
 	check("each completion consumes its own hopper input and saves its own product",ledger.settlement.hoppers.wood==0 and ledger.settlement.hoppers.stone==0 and read_disk().settlement.processed_wood==1 and read_disk().settlement.processed_stone==1)
 	for tick in 150: await physics_frame
 	check("empty hoppers cannot make a second batch",ledger.settlement.processed_wood==1 and ledger.settlement.processed_stone==1 and ledger.settlement.hoppers.wood==0 and ledger.settlement.hoppers.stone==0)
+	# A fresh survivor contract no longer includes the independent pet.
+	check("worker purchase leaves the owl roost available",not game.owl.Crew.owns_owl(ledger.settlement) and game.settlement_loop.works.owl_plot.visible)
+	for i in game.owl.Crew.OWL_MEAT:ledger.collect("owl-companion-fee-"+str(i),"meat")
+	game.carry.sync(true)
+	place(game.owl.Crew.ROOST_AT)
+	check("roost receives its own tender and unlocks the companion",await wait_for(func():return game.owl.Crew.owns_owl(ledger.settlement),180))
 	# Take the encounter away from the paid tower. Keep the enemies, serials, and
 	# life-cycle settings from the ordinary wave producer.
 	place(Vector3(55,0,12))
@@ -372,8 +378,9 @@ func second_launch() -> void:
 	var hud = game.opening_hud
 	check("Level 2 arrives in the normal visible gameplay chapter",hud.chapter_detail.is_visible_in_tree() and hud.chapter_detail.text=="Camp  ·  Level 2")
 	check("the resumed field shows all Level 1 plots finished and camp open",labels.has("Level 2 preview · All Level 1 plots complete. The camp is open."))
-	check("cash label reflects the one confirmed wallet payment",hud.outputs.cash.is_visible_in_tree() and hud.outputs.cash.text=="1" and hud.display_goods.cash.art.texture!=null)
-	check("both finished-material counters match persistent balances",hud.outputs.planks.is_visible_in_tree() and hud.outputs.planks.text=="1" and hud.outputs.blocks.is_visible_in_tree() and hud.outputs.blocks.text=="1" and hud.display_goods.planks.art.texture.region!=hud.display_goods.blocks.art.texture.region)
+	var hand:Dictionary=ledger.hand_goods()
+	check("the paid order belongs to exactly one cash location and the HUD shows carried cash",ledger.till_balance()+int(hand.money)+int(ledger.house_goods().money)==1 and hud.outputs.cash.text==str(hand.money) and hud.outputs.cash.is_visible_in_tree()==(hand.money>0))
+	check("HUD distinguishes both carried finished goods from lifetime production",hud.outputs.planks.text==str(hand.planks) and hud.outputs.blocks.text==str(hand.blocks) and hud.outputs.planks.is_visible_in_tree()==(hand.planks>0) and hud.outputs.blocks.is_visible_in_tree()==(hand.blocks>0) and hud.display_goods.planks.art.texture.region!=hud.display_goods.blocks.art.texture.region)
 	check("visible health reading matches the live player",hud.health_bar.is_visible_in_tree() and int(hud.health_bar.value)==game.player_hp and int(hud.health_bar.max_value)==game.MAX_HP)
 	observed["visible_labels"]=labels
 

@@ -54,6 +54,7 @@ func configure(id: String) -> void:
 	if id == "survivor_male_01":
 		forester_gait=preload("res://forester_gait.gd").new()
 		forester_gait.bind(skeleton)
+		forester_gait.tread.bind(surface,skeleton)
 		tool = (load(AXE) as PackedScene).instantiate()
 		add_child(tool)
 		tool.hide()
@@ -75,10 +76,11 @@ func travel_pose(phase: float, pace: float, loaded: bool) -> void:
 	if not forester_gait: return
 	pose("travel",phase)
 	var u := phase*TAU
+	# The wrist trails the upper arm as the elbow passes the ribcage.
 	var stride := cos(u)
 	var run := smoothstep(.85,5.8,pace)
 	var power := smoothstep(0.,.8,pace)
-	var forward := lerpf(.05,.16,run)*power
+	var forward := (lerpf(.05,.16,run) + (.075 if loaded else 0.)) * power
 	_bend("Pelvis",forward*.4,-.105*stride*power,.017*sin(u)*power)
 	_bend("Chest",forward,.15*stride*power,-.025*sin(u)*power)
 	_bend("Head",-forward*.57,-.055*stride*power)
@@ -87,7 +89,8 @@ func travel_pose(phase: float, pace: float, loaded: bool) -> void:
 		var sweep := stride*sign_x
 		var arm_swing := lerpf(.32,.72,run)*(.78 if loaded else 1.)
 		_bend("UpperArm."+side,arm_swing*sweep*power,-.035*sign_x,-.06*sign_x)
-		_bend("Forearm."+side,-.21-run*.50+.16*sweep*power)
+		var elbow := cos(u-.27)*sign_x
+		_bend("Forearm."+side,-.21-run*.50+.16*elbow*power)
 	forester_gait.update(phase,pace > .035,pace)
 
 func _bend(bone: String, x: float, y: float = 0, z: float = 0) -> void:

@@ -40,8 +40,10 @@ func run() -> void:
 	var balances: Dictionary = Rules.EMPTY.duplicate(true)
 	balances.merge(
 		{
-			"cooked": 5,
-			"served": 2,
+			"cooked": 13,
+			"served": 10,
+			"pocket_cash": 2,
+			"hand_products": {"planks": 4, "blocks": 3},
 			"held_meal": 1,
 			"worker_meal": 1,
 			"processed_wood": 999,
@@ -102,7 +104,8 @@ func run() -> void:
 		check(entry + " illustrations keep a gap before each quantity", clear_gutter)
 		check(
 			entry + " no blank stock when a worker is serving",
-			hud.outputs.meals.text == "1" and hud.outputs.cash.text == "2" and hud.stock_row.visible
+			hud.outputs.meals.text == "1" and hud.outputs.cash.text == "2"
+			and hud.outputs.planks.text == "4" and hud.outputs.blocks.text == "3" and hud.stock_row.visible
 		)
 		check(
 			entry + " all earned goods have distinct authored icons",

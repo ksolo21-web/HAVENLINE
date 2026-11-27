@@ -4,7 +4,6 @@ const WOOD_REGROW_SECONDS := preload("res://resource_tree.gd").REGROW_SECONDS
 const MiningResources = preload("res://mining_resources.gd")
 const Inventory = preload("res://field_inventory.gd")
 const DROP_LIFETIME_SECONDS := 100.0
-const DROP_CAP := 72
 const VERSION := 2
 const V1_PLAYER_MAX_HP := 4
 var wood_seconds := WOOD_REGROW_SECONDS
@@ -124,6 +123,8 @@ func _restore_actor(state: Variant, version: int = VERSION) -> void:
 					pos.z = minf(pos.z,bounds[1]-clear)
 	if world.camp_active:
 		pos = world.field_env.clear_hearth_footprint(pos)
+	if world.counter and world.counter.active:
+		pos = world.counter.constrain_actor(pos,pos,float(world.layout.actor_radius))
 	world.actor.position=pos
 	world.actor.velocity=Vector3.ZERO
 	if _number(state.get("yaw")): world.actor.rotation.y=wrapf(float(state.yaw),-PI,PI)
@@ -156,7 +157,7 @@ func restore(data: Dictionary) -> bool:
 	if data.is_empty(): return true
 	if (data.get("version") != 1 and data.get("version") != VERSION) or not data.get("cooling") is Dictionary or not data.get("drops") is Array or not data.get("pack") is Dictionary: return false
 	if not _number(data.get("serial")) or data.serial < 0 or data.serial != int(data.serial) or data.serial > 9007199254740991: return false
-	if data.cooling.size() > 8192 or data.drops.size() > DROP_CAP: return false
+	if data.cooling.size() > 8192: return false
 	for key in data.cooling:
 		if not key is String or key.is_empty() or not _number(data.cooling[key]) or data.cooling[key]<0 or data.cooling[key]>86400: return false
 	var unique := {}

@@ -30,6 +30,7 @@ func setup(host: Node3D) -> void:
 	if ResourceLoader.exists("res://field_tower_art.gd"):
 		art=load("res://field_tower_art.gd").new()
 		add_child(art)
+		art.follow_hero(world.hero_model)
 		art.hide()
 
 func nearest() -> Node3D:
@@ -56,6 +57,7 @@ func advance(dt: float, paid: bool) -> void:
 				world.actor.global_position=to_global(p)
 		if art:
 			art.visible=paid
+			if not paid: art.set_hero_outline(false)
 			raising=0.0 if paid and presented else 1.0
 			art.set_build_progress(raising)
 	presented=true

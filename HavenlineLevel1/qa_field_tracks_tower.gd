@@ -149,10 +149,10 @@ func run():
 		game.camera.look_at(stone_route)
 		game.set_zoom_ratio(zoom)
 		tower.update_sightline(stone_route,game.camera)
-		var framed: bool = tower.cutaway_active and tower.upper_parts.all(func(part): return part.visible and part.material_override==tower.sightline_material)
+		var framed: bool = tower.cutaway_active and tower.hero_surfaces.size()>0 and tower.hero_surfaces.all(func(part): return part.material_overlay==tower.sightline_material) and tower.stages.all(func(part): return part.material_override==null)
 		tower.update_sightline(Vector3(4.9,0,.2),game.camera)
-		var restored: bool = not tower.cutaway_active and tower.upper_parts.all(func(part): return part.visible and part.material_override==null)
-		record("tower reveals player on stone route and restores original cabin and deck materials at %dx" % zoom,framed and restored and muzzle.is_equal_approx(tower.swivel.global_transform))
+		var restored: bool = not tower.cutaway_active and tower.hero_surfaces.all(func(part): return part.material_overlay==null) and tower.stages.all(func(part): return part.material_override==null)
+		record("tower stays opaque and only marks the hidden player on the stone route at %dx" % zoom,framed and restored and muzzle.is_equal_approx(tower.swivel.global_transform))
 	game.camera.position=tower.global_position+Vector3(7,11,11);game.set_zoom_ratio(2.)
 	await process_frame;plate("Eastern-watchtower-gameplay-2x")
 	if DisplayServer.get_name()!="headless":

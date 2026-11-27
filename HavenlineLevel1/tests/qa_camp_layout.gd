@@ -189,12 +189,19 @@ func live() -> void:
 	await walk_to(load_start)
 	for i in 100: await physics_frame
 	verify("Moving up to the relocated house stocks its real FOOD shelf",int(field.inventory.stored.meat)>=stock_before+2)
+	# This visit stored both its raw input and the finished roasts carried
+	# from the relocated cooker. Select the latter from the real food shelf.
+	var j:Dictionary=field.inventory.settlement
+	var waiting_roasts:=int(j.product_store.meal)
+	verify("Warehouse owns the relocated cooker's entire delivered lot",waiting_roasts>0 and waiting_roasts==int(j.cooked)-int(j.served) and j.held_meal==0)
+	verify("Near the moved warehouse the carrier can withdraw its actual roasts",field.settlement_loop.withdraw_goods("meal") and j.held_meal==waiting_roasts and j.product_store.meal==0)
 	var counter_tip:Vector3=field.counter.service_point.global_position
 	field.actor.global_position=counter_tip+Vector3(0,0,2.)
 	var served_before:=int(field.inventory.settlement.served)
 	await walk_to(counter_tip)
 	for i in 250: await physics_frame
-	verify("A customer pays for the real roast across the relocated fence",int(field.inventory.settlement.served)>served_before)
+	verify("A customer pays for the real roast across the relocated fence",int(j.served)>served_before and j.held_meal==0 and int(j.counter_stock)+int(j.served)-served_before==waiting_roasts)
+	verify("Moving the counter preserves each paid note",int(j.pocket_cash)+int(j.house_cash)+field.inventory.till_balance()==int(j.served))
 	await photograph("05b-service-at-relocated-north-counter")
 	verify("Spawn, defense side and gate are protected",not layout.reason("center_hearth",Vector2(1.72,1.8)).is_empty() and not layout.reason("watchtower",Vector2(-3,1)).is_empty() and not layout.reason("center_hearth",Vector2(0,4)).is_empty())
 	var durable:Dictionary=layout.snapshot()

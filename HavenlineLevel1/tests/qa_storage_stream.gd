@@ -127,12 +127,21 @@ func transactions() -> void:
  field._step_receivers()
  field.actor.position=field.depot.APRON
  var counts:Dictionary={}
+ var landings := []
+ var durable := true
  for i in 70:
   field._step_receivers()
   for packet in field.carry.flights: counts[packet.mesh.get_instance_id()]=true
+  var previous:int=inv.stored.slate+inv.stored.metal
   field.carry.advance(1./60.)
- verify("Large legacy load conserves each type within the visual budget",inv.stored.slate==205 and inv.stored.metal==68 and inv.carried.slate==0 and inv.carried.metal==0 and counts.size()<=field.carry.MAX_BATCH_PIECES)
- measurements["273 legacy bundles"]={"visual_packets":counts.size(),"stored_slate":inv.stored.slate,"stored_metal":inv.stored.metal}
+  if previous<inv.stored.slate+inv.stored.metal:
+   landings.append(i+1)
+   var cold:=preload("res://field_inventory.gd").new()
+   cold.configure(inv.configured_costs)
+   durable=durable and field.field_save.load_into(cold)==OK and cold.stored==inv.stored and cold.carried==inv.carried
+ verify("Large legacy load conserves each type within the visual budget",inv.stored.slate==205 and inv.stored.metal==68 and inv.carried.slate==0 and inv.carried.metal==0 and counts.size()<=field.carry.LARGE_LOAD_PIECES)
+ verify("Each bulk wave is independently durable inside the reference window",durable and landings.size()==4 and landings[0] in range(15,19) and landings[-1] in range(51,55))
+ measurements["273 legacy bundles"]={"visual_packets":counts.size(),"durable_landing_frames":landings,"stored_slate":inv.stored.slate,"stored_metal":inv.stored.metal}
 
 func leave_upgrade() -> void:
  field.set_physics_process(false)

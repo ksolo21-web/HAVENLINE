@@ -40,8 +40,18 @@ func pickup() -> void:
 	check(journal.worker_supply=="stone" and game.inventory.stored.stone==0,"physical withdrawal debits one stone and persists cargo")
 	check(game.survivor.actor.position.distance_to(game.depot.apron.global_position)<.03,"survivor walked to the loading door")
 	check(game.survivor.supply_model.get_child_count()>0,"worker carries the stone asset")
-	for i in 24: game.survivor.advance(1./60.)
-	check(game.survivor.actor.position.distance_to(game.depot.apron.global_position)>.35 and journal.hoppers.stone==0,"hopper remains empty while survivor crosses camp")
+	# A stationary turn can precede the first stride. Observe the real cross-yard
+	# transit before the carrier reaches the drill loading apron.
+	var crossed := false
+	var before_inlet := true
+	for frame in 180:
+		game.survivor.advance(1./60.)
+		var feet:Vector3=game.survivor.actor.position
+		before_inlet=before_inlet and journal.hoppers.stone==0 and journal.worker_supply=="stone"
+		if feet.distance_to(game.depot.apron.global_position)>=.7 and feet.distance_to(game.processors.apron_position("stone"))>.55:
+			crossed=true
+			break
+	check(crossed and before_inlet and game.survivor.phase=="supply_out","ordinary porter physically crosses the yard with stone and no early hopper credit")
 	game._persist_world()
 
 func delivery(full: bool) -> void:

@@ -1,25 +1,37 @@
 extends Node3D
 ## A fixed emplacement crew member operates in the turning deck's space.
 const DEFENDER = preload("res://assets/settlement_people/survivor_male_01.glb")
+var windlass: Node3D
+var right_handle: Node3D
+var left_handle: Node3D
 var rig: Skeleton3D
 var bones := {}
 
 func _ready() -> void:
+	windlass = get_parent().find_child("RightWindlass",true,false)
+	right_handle = windlass.find_child("RightWindlassHandle",true,false)
+	left_handle = get_parent().find_child("LeftBreechControlHandle",true,false)
 	var body := DEFENDER.instantiate() as Node3D
 	add_child(body)
 	rig = body.find_children("*", "Skeleton3D", true, false)[0]
 	for index in rig.get_bone_count():
 		bones[String(rig.get_bone_name(index))] = index
 
-func operate(bow: Node3D, draw: float, kick: float, breath: float) -> void:
+func grip_position(side: String) -> Vector3:
+	return right_handle.global_position if side == "R" else left_handle.global_position
+
+func operate(_bow: Node3D, draw: float, kick: float, breath: float) -> void:
 	if not rig:
 		return
-	rig.set_bone_pose_rotation(bones.Pelvis, Quaternion.from_euler(Vector3(.06,0.,-.035)))
-	rig.set_bone_pose_rotation(bones.Chest, Quaternion.from_euler(Vector3(.07*breath-.19*kick,.11,-.06)))
-	rig.set_bone_pose_rotation(bones.Head, Quaternion.from_euler(Vector3(-.03-.08*kick,-.20,.035)))
-	# The right glove works the near winding drum; the other holds the stock.
-	_place_palm("R", bow.to_global(Vector3(-.18,.14+.065*draw,-.39+.10*draw)))
-	_place_palm("L", bow.to_global(Vector3(-.095,.16,-.29-.075*kick)))
+	windlass.rotation.x = -1.55 * draw
+	var lean := .075 + .025 * draw - .035 * kick
+	var chest_rest := rig.get_bone_rest(bones.Chest).origin
+	rig.set_bone_pose_position(bones.Chest,Basis(Vector3.RIGHT,lean)*chest_rest)
+	rig.set_bone_pose_rotation(bones.Pelvis,Quaternion.from_euler(Vector3(.018,0.,0.)))
+	rig.set_bone_pose_rotation(bones.Chest,Quaternion.from_euler(Vector3(lean+.013*breath,.018*draw,0.)))
+	rig.set_bone_pose_rotation(bones.Head,Quaternion.from_euler(Vector3(-lean*.65,-.025,0.)))
+	_place_palm("R",grip_position("R"))
+	_place_palm("L",grip_position("L"))
 
 func _place_palm(side: String, grip: Vector3) -> void:
 	var arm: int = bones["UpperArm."+side]

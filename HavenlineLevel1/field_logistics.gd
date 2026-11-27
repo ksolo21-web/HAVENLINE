@@ -26,7 +26,7 @@ static func rack(j:Dictionary,raw:String)->int:
 	if raw=="meat":
 		return int(j.cooked)-int(j.served)-int(j.held_meal)-int(j.worker_meal)-int(j.counter_stock)-int(j.product_store.meal)-int(j.line_load.meal)-int(j.line_load.stored_meal)-int(j.line_load.meal_to_store)
 	var kind:String=PRODUCT[raw]
-	return int(j["processed_"+raw])-int(j.product_store[kind])-int(j.line_load[kind])
+	return int(j["processed_"+raw])-int(j.product_store[kind])-int(j.line_load[kind])-int(j.get("hand_products",{}).get(kind,0))
 
 static func receiving_space(j:Dictionary,product:String)->bool:
 	var lane: String="meal_to_store" if product=="meal" else product
@@ -57,9 +57,10 @@ static func valid(j:Dictionary,purchases:Array)->bool:
 	if not _count(j.get("dispatch_cursor")) or j.dispatch_cursor>=LANES.size():return false
 	for product:String in STORE:
 		var stock:Variant=j.product_store[product]
-		if not _count(stock) or stock>SPACE[product]:return false
-		var lane: String="meal_to_store" if product=="meal" else product
-		if stock+j.line_load[lane]>SPACE[product] or (stock>0 and not allowed(lane,purchases)):return false
+		if not _count(stock):return false
+		# Automatic delivery stops at the front bin's working capacity.
+		# Hand-delivered goods can occupy the deeper warehouse shelves.
+		if stock>0 and not purchases.any(func(id):return id in P.STORAGE):return false
 	for lane:String in TRANSIT:
 		if j.line_load[lane]>0 and not allowed(lane,purchases):return false
 	for raw:String in RAW:

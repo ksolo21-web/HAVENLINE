@@ -12,7 +12,7 @@ var bolt: MeshInstance3D
 var crew: Node3D
 var raised := 0.0
 var sightline_material := ShaderMaterial.new()
-var upper_parts: Array[MeshInstance3D] = []
+var hero_surfaces: Array[MeshInstance3D] = []
 var cutaway_active := false
 var stages: Array[Node3D] = []
 var bow_rest := Vector3.ZERO
@@ -27,10 +27,12 @@ func _ready() -> void:
 	swivel = frame.find_child("Turntable",true,false)
 	bow = swivel.find_child("BowStock",true,false)
 	bolt = bow.find_child("LoadedQuarrel",true,false)
-	bow_rest = bow.position
+	# The rear breech sits in front of the operator. The bearing stays on its
+	# original axle and the projecting deck supports both feet through a turn.
+	bow_rest = bow.position + Vector3(0.,0.,.29)
+	bow.position = bow_rest
+	stages[2].scale = Vector3(1.18,1.,1.18)
 	swivel.rotation.y = PI*.5
-	for part in [stages[1],stages[2]]:
-		upper_parts.append(part as MeshInstance3D)
 	var paint := bow.get_active_material(0).duplicate() as StandardMaterial3D
 	paint.emission_enabled = true
 	paint.emission = Color.WHITE
@@ -39,9 +41,6 @@ func _ready() -> void:
 	for part in frame.find_children("*","MeshInstance3D",true,false):
 		part.set_surface_override_material(0,paint)
 	sightline_material.shader = preload("res://assets/field_world/tower_sightline.gdshader")
-	sightline_material.set_shader_parameter("atlas",paint.albedo_texture)
-	sightline_material.set_shader_parameter("roughness",paint.roughness)
-	sightline_material.set_shader_parameter("emission_tint",Color(.18,.18,.18))
 	set_build_progress(raised)
 
 func set_build_progress(value: float) -> void:
@@ -55,8 +54,8 @@ func set_build_progress(value: float) -> void:
 	if swivel.visible and not crew:
 		crew = Defender.new()
 		crew.name = "BallistaOperator"
-		crew.position = Vector3(-.34,.015,-.43)
-		crew.rotation.y = .38
+		crew.position = Vector3(0.,.016,-.85)
+		crew.scale = Vector3.ONE*.90
 		swivel.add_child(crew)
 	if crew:
 		crew.visible = raised>.84
@@ -77,7 +76,7 @@ func animate(dt: float) -> void:
 	cycle_age += dt
 	var kick := 1.-smoothstep(0.,.20,cycle_age)
 	var draw := sin(PI*clampf((cycle_age-.16)/.91,0.,1.))
-	bow.position = bow_rest+Vector3(0.,0.,-.11*kick)
+	bow.position = bow_rest+Vector3(0.,0.,-.048*kick)
 	bolt.visible = cycle_age>=.87
 	if crew and crew.visible:
 		crew.operate(bow,draw,kick,sin(2.3*clock))
@@ -113,8 +112,13 @@ func fire(_target: Vector3) -> void:
 	cycle_age = 0.
 	animate(0.)
 
-# The fixed orthographic camera projects along parallel rays at both pinch
-# settings. Leave the original material in place when those rays miss the tower.
+func follow_hero(model: Node3D) -> void:
+	for part in model.find_children("*","MeshInstance3D",true,false):
+		if part is MeshInstance3D:
+			hero_surfaces.append(part)
+
+# Preserve the station's painted materials. Only occluded fragments of the
+# player's own skinned mesh receive an outline behind the building.
 func update_sightline(feet:Vector3,camera:Camera3D) -> void:
 	var local_feet := to_local(feet)
 	var obstructed := false
@@ -122,16 +126,22 @@ func update_sightline(feet:Vector3,camera:Camera3D) -> void:
 	if camera and absf(local_feet.x) < 5.5 and absf(local_feet.z) < 5.5:
 		eye = camera.global_basis.z.normalized() if camera.projection==Camera3D.PROJECTION_ORTHOGONAL else camera.global_position.direction_to(feet)*-1.
 		var sight := global_basis.inverse()*eye
-		var bounds := UPPER_BOUNDS.grow(.60)
-		for height:float in [.15,1.15,2.15]:
+		var bounds := UPPER_BOUNDS.grow(.18)
+		for height:float in [.45,1.10,1.64]:
 			var point := local_feet + Vector3.UP*height
 			if bounds.intersects_segment(point,point+sight*8.) != null:
 				obstructed = true
 				break
-	if obstructed != cutaway_active:
-		for part in upper_parts:
-			part.material_override = sightline_material if obstructed else null
-		cutaway_active = obstructed
-	if obstructed:
-		sightline_material.set_shader_parameter("player_feet",feet)
-		sightline_material.set_shader_parameter("toward_camera",eye)
+	set_hero_outline(obstructed)
+
+func set_hero_outline(obstructed: bool) -> void:
+	if obstructed == cutaway_active: return
+	cutaway_active = obstructed
+	for part in hero_surfaces:
+		part.material_overlay = sightline_material if obstructed else null
+
+func _exit_tree() -> void:
+	# The hero can outlive the tower that owns its occlusion material.
+	for part in hero_surfaces:
+		if is_instance_valid(part) and part.material_overlay == sightline_material:
+			part.material_overlay = null

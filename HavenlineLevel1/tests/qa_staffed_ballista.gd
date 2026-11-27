@@ -55,9 +55,40 @@ func run() -> void:
 	checks["A fresh quarrel is seated before the next discharge"] = art.bolt.visible and tower.reload>0.
 	for side in ["R","L"]:
 		var palm:Vector3 = art.crew.rig.to_global(art.crew.rig.get_bone_global_pose(art.crew.bones["Palm."+side]).origin)
-		var rest:Vector3 = art.bow.to_global(Vector3(-.18,.14,-.39) if side=="R" else Vector3(-.095,.16,-.29))
+		var rest:Vector3 = art.crew.grip_position(side)
 		observations["glove_to_grip_"+side+"_m"] = palm.distance_to(rest)
-		checks["Glove "+side+" stays within a gloved palm of the operating grip"] = palm.distance_to(rest)<.12
+		checks["Glove "+side+" stays within a gloved palm of the operating grip"] = palm.distance_to(rest)<.025
+	var tread: MeshInstance3D = art.swivel.find_child("GunnerTread",true,false)
+	var supported := is_instance_valid(tread)
+	var verts: PackedVector3Array = tread.mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX]
+	var bounds := AABB(verts[0],Vector3.ZERO)
+	for pt in verts: bounds=bounds.expand(pt)
+	var clear := true
+	var max_error := 0.
+	for i in 48:
+		var yaw := TAU*i/48.
+		var direction := Vector3(sin(yaw)*5.5,.72+sin(2.*yaw)*1.3,cos(yaw)*5.5)
+		art.aim_at_world(tower.global_position+direction,1.)
+		art.animate(DT)
+		var bow_back := INF
+		for corner in 8:
+			var extent: Vector3 = art.swivel.to_local(art.bow.to_global(bow_box.get_endpoint(corner)))
+			bow_back = minf(bow_back,extent.z)
+		for joint in ["Pelvis","Thigh.L","Thigh.R","Chest"]:
+			var bone: Vector3 = art.crew.rig.get_bone_global_pose(art.crew.bones[joint]).origin
+			var at_bone: Vector3 = art.swivel.to_local(art.crew.rig.to_global(bone))
+			clear = clear and at_bone.z+.10<bow_back
+		for side in ["R","L"]:
+			var bone: Vector3 = art.crew.rig.get_bone_global_pose(art.crew.bones["Foot."+side]).origin
+			var sole: Vector3 = tread.to_local(art.crew.rig.to_global(bone))
+			# The first mesh surface is the solid plank under both boots.
+			supported = supported and Rect2(bounds.position.x,bounds.position.z,bounds.size.x,bounds.size.z).has_point(Vector2(sole.x,sole.z))
+			var palm: Vector3 = art.crew.rig.get_bone_global_pose(art.crew.bones["Palm."+side]).origin
+			max_error=maxf(max_error,art.crew.rig.to_global(palm).distance_to(art.crew.grip_position(side)))
+	checks["Crew hips, chest and thighs stay behind the swept bow"] = clear
+	checks["Both feet stay on the turning tread for a full revolution"] = supported
+	observations["max_glove_to_handle_across_traverse_m"] = max_error
+	checks["Both gloves follow the modeled controls while turning"] = max_error<.025
 	print("STAFFED_BALLISTA ",JSON.stringify({"checks":checks,"observed":observations}))
 	await preload("res://tests/lifecycle_test_profile.gd").drain_field_audio(self,game)
 	game.queue_free()

@@ -36,19 +36,17 @@ func verify_handoffs() -> void:
 		var at:Vector3=point if shared_edge else field.survivor._supply_apron(kind)
 		check(kind+" reachable from the public service aisle",at.is_finite())
 		if not at.is_finite():continue
-		park(at)
+		park(Vector3(1.15,0.,.9))
 		check(kind+" pickup is owned",book.collect("qa-one-off-workshop-item-"+kind,kind))
 		field.carry.sync(true)
 		var before: int = book.settlement.hoppers[kind]
 		var remaining: int = book.carried[kind]
-		if connected:
-			check(kind+" paid machinery does not request a manual handoff",desk._site()!=kind and desk.demand(kind,kind)==0)
-			await ticks(45)
-			check(kind+" preserves a passing player's personal stack",book.carried[kind]==remaining and desk.active!=kind)
-		else:
-			check(kind+" unconnected inlet accepts the matching nearby bundle",desk._site()==kind)
-			var arrived := await until(func(): return book.carried[kind]==remaining-1 and book.settlement.hoppers[kind]==before+1,80)
-			check(kind+" physically arrives in its unconnected paid inlet",arrived)
+		await ticks(30)
+		check(kind+" remote player retains the matching raw material",book.carried[kind]==remaining and field.carry.incoming(kind,kind)==0)
+		park(at)
+		check(kind+" paid intake accepts personal stock on approach",desk._site()==kind and desk.demand(kind,kind)>0)
+		var arrived:bool=await until(func():return book.settlement.hoppers[kind]>before and book.carried[kind]==remaining-1,100)
+		check(kind+" actual personal stock landed in the nearby hopper",arrived)
 		observations[kind]={"standing_point":[at.x,at.z],"connected":connected,"hopper_before":before,"hopper_after":book.settlement.hoppers[kind],"carried_after":book.carried[kind]}
 
 func verify_walks() -> void:

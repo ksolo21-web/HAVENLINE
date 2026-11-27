@@ -11,6 +11,10 @@ var native_profile := false
 var guard := Profile.new()
 var directory := ""
 var revision := ""
+var committed_state := {}
+var _verified_file_sha := ""
+var _receipt_history := {}
+var _encoded_receipts := ""
 
 func requested(args: PackedStringArray) -> bool:
 	return guard.requested(args)
@@ -18,6 +22,10 @@ func requested(args: PackedStringArray) -> bool:
 func configure(args: PackedStringArray) -> bool:
 	directory = ""
 	revision = ""
+	_verified_file_sha = ""
+	committed_state = {}
+	_receipt_history = {}
+	_encoded_receipts = ""
 	native_profile = not guard.requested(args)
 	if native_profile:
 		if not ProjectSettings.get_setting("application/config/use_custom_user_dir",false) or ProjectSettings.get_setting("application/config/custom_user_dir_name","") != APP_DIRECTORY:
@@ -42,7 +50,7 @@ func _safe() -> bool:
 	var dir := DirAccess.open(directory)
 	return dir != null and not dir.is_link(PRIMARY) and not dir.is_link(LOCK)
 
-func _read(inventory: Inventory, path: String) -> Dictionary:
+func _read(inventory: Inventory, path: String, verified_revision := "") -> Dictionary:
 	var f := FileAccess.open(path, FileAccess.READ)
 	if not f:
 		return {}
@@ -63,12 +71,17 @@ func _read(inventory: Inventory, path: String) -> Dictionary:
 	var digest := payload.sha256_text()
 	if envelope.get("sha256") != digest:
 		return {}
+	# Both the existing revision and a just-staged payload already passed
+	# conservation validation. Still read and hash the actual on-disk bytes.
+	if digest == verified_revision:
+		return {"revision":digest}
 	var next := Inventory.new()
 	if parsed.parse(payload) != OK or not next.configure(inventory.configured_costs) or not next.restore(parsed.data):
 		return {}
 	return {"state":next.snapshot(), "revision":digest}
 
 func load_into(inventory: Inventory) -> Error:
+	_verified_file_sha = ""
 	if not _safe():
 		return ERR_UNAUTHORIZED
 	var path := directory.path_join(PRIMARY)
@@ -143,25 +156,33 @@ func _write_locked(inventory: Inventory) -> Error:
 	var path := directory.path_join(PRIMARY)
 	var previous_revision := ""
 	if FileAccess.file_exists(path):
-		var current := _read(inventory,path)
-		if current.is_empty():
-			return ERR_FILE_CORRUPT
-		previous_revision = current.revision
+		# Compare the complete on-disk file with the last byte-verified stage.
+		# A changed primary always takes the checksum and stale-writer path.
+		if not _verified_file_sha.is_empty() and FileAccess.get_sha256(path) == _verified_file_sha:
+			previous_revision = revision
+		else:
+			var current := _read(inventory,path,revision)
+			if current.is_empty():
+				return ERR_FILE_CORRUPT
+			previous_revision = current.revision
 	if previous_revision != revision:
 		return ERR_BUSY
 	var pending := Inventory.new()
 	if not pending.configure(inventory.configured_costs) or not pending.restore(inventory.snapshot()):
 		return ERR_INVALID_DATA
-	var payload := JSON.stringify(pending.snapshot())
+	var snapshot := pending.snapshot()
+	var payload := _encode_snapshot(snapshot)
 	var digest := payload.sha256_text()
 	if revision == digest:
+		committed_state = snapshot
 		return OK
 	# The stage lives inside the owned lock directory. Only the verified stage
 	# replaces PRIMARY, in a single same-filesystem rename.
 	var stage := directory.path_join(LOCK).path_join("inventory.stage")
 	var envelope := JSON.stringify({"format":1,"sha256":digest,"payload":payload})
 	var file: FileAccess
-	if envelope.length() >= COMPRESS_AT:
+	var compressed := envelope.length() >= COMPRESS_AT
+	if compressed:
 		file = FileAccess.open_compressed(stage, FileAccess.WRITE, FileAccess.COMPRESSION_ZSTD)
 	else:
 		file = FileAccess.open(stage, FileAccess.WRITE)
@@ -171,12 +192,40 @@ func _write_locked(inventory: Inventory) -> Error:
 	file.flush()
 	var error := file.get_error()
 	file.close()
-	if error == OK and _read(inventory, stage).get("revision", "") != digest:
-		error = ERR_FILE_CORRUPT
+	var stage_sha := ""
+	if error == OK:
+		stage_sha = _verify_stage(stage,envelope,compressed)
+		if stage_sha.is_empty(): error = ERR_FILE_CORRUPT
 	if error == OK:
 		error = DirAccess.rename_absolute(stage, path)
 	if error != OK:
 		DirAccess.remove_absolute(stage)
 		return error
+	_verified_file_sha = stage_sha
+	committed_state = snapshot
 	revision = digest
 	return OK
+
+func _encode_snapshot(state: Dictionary) -> String:
+	var receipts: Dictionary = state.collected
+	if receipts.size() < 512: return JSON.stringify(state)
+	# Stock moves often while these immutable, usually much larger receipts
+	# stay identical. Preserve the existing sorted JSON and its exact checksum.
+	if _encoded_receipts.is_empty() or _receipt_history != receipts:
+		receipts.make_read_only()
+		_receipt_history = receipts
+		_encoded_receipts = JSON.stringify(receipts)
+	var keys := state.keys()
+	keys.sort()
+	var entries := PackedStringArray()
+	for key: String in keys:
+		var value := _encoded_receipts if key == "collected" else JSON.stringify(state[key])
+		entries.append(JSON.stringify(key)+":"+value)
+	return "{"+",".join(entries)+"}"
+
+func _verify_stage(path: String, envelope: String, compressed: bool) -> String:
+	var reader := FileAccess.open_compressed(path,FileAccess.READ,FileAccess.COMPRESSION_ZSTD) if compressed else FileAccess.open(path,FileAccess.READ)
+	var bytes := envelope.to_utf8_buffer()
+	if not reader or reader.get_length()!=bytes.size() or reader.get_buffer(bytes.size())!=bytes:
+		return ""
+	return FileAccess.get_sha256(path) if compressed else envelope.sha256_text()

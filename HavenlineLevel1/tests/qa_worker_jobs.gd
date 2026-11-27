@@ -262,8 +262,17 @@ func test_relocation() -> void:
 func simulate(stop: String) -> void:
 	var journal: Dictionary = game.inventory.settlement
 	var parked:Vector3=game.actor.position
+	var gathered_ore := false
+	var landed_ore := false
 	for i in 60*260:
+		var shelf_before:int=game.inventory.stored.stone
+		var stock_before:int=journal.worker_load.stone
+		var landing:bool=worker.phase=="bin_delivery"
 		tick(1./60.)
+		if worker.phase in ["bulk_return","carrying"] and journal.worker_load.stone>0 and not game.field_env.is_inside_camp(worker.actor.position):
+			gathered_ore=true
+		if gathered_ore and landing and journal.worker_load.stone<stock_before and game.inventory.stored.stone>shelf_before:
+			landed_ore=true
 		if recording and worker.phase in ["supply_out","meal_collect","meal_serve"]:
 			await film()
 		if worker.phase=="supply_out" and not journal.worker_supply.is_empty(): await still("01-deliver-"+journal.worker_supply)
@@ -279,7 +288,7 @@ func simulate(stop: String) -> void:
 		if journal.served > 0:
 			await still("04-paid-order")
 			if stop == "service" and not game.counter.leaving.is_empty(): break
-		if stop == "jobs" and journal.processed_wood>0 and journal.processed_stone>0 and journal.served>0 and journal.worker_deliveries>0 and phases.any(func(x): return x.phase=="mining") and phases.any(func(x): return x.phase=="bulk_return"): break
+		if stop == "jobs" and journal.processed_wood>0 and journal.processed_stone>0 and journal.served>0 and journal.worker_deliveries>0 and phases.any(func(x): return x.phase=="mining") and landed_ore: break
 	check(game.actor.position.is_equal_approx(parked),"player stayed clear during survivor work")
 	check(not game.persist_blocked,"worker jobs maintained valid save")
 	if stop == "interrupt":
@@ -291,7 +300,7 @@ func simulate(stop: String) -> void:
 		check(journal.processed_wood>0 and journal.processed_stone>0,"worker supplied independently purchased saw and drill")
 		check(journal.cooked>0 and journal.served>0,"worker supplied paid cooker and served the waiting customer")
 		check(phases.any(func(x): return x.phase=="mining"),"worker visibly mined a real bank")
-		check(phases.any(func(x): return x.phase=="bulk_return"),"worker returning with physically collected resource drops")
+		check(gathered_ore and landed_ore,"worker physically hauled mined stone from the field and landed it on the shelf")
 		var final_book=game.Inventory.new()
 		check(final_book.configure(game.inventory.configured_costs) and final_book.restore(game.inventory.snapshot()),"gather, production and customer payments conserved")
 

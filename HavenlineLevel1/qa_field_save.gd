@@ -21,6 +21,42 @@ func write(path: String, content: String) -> void:
 	f.store_string(content)
 	f.close()
 
+func receipt_cache_coverage(path: String, store: Store) -> void:
+	var inv := ledger()
+	var suffix := "x".repeat(96)
+	for i in 3000:
+		inv.collect("typed-%d-%s" % [i,suffix],"wood" if i%2 else "stone")
+	check(store.load_into(inv)==ERR_FILE_NOT_FOUND,"fresh separate bulk journal")
+	check(store.commit(inv)==OK,"long receipt history commits")
+	var name := path.path_join(Store.PRIMARY)
+	var reader := FileAccess.open_compressed(name,FileAccess.READ,FileAccess.COMPRESSION_ZSTD)
+	if not reader:
+		check(false,"large journal uses readable compressed envelope")
+		return
+	var envelope:Dictionary=JSON.parse_string(reader.get_as_text())
+	reader.close()
+	check(envelope.payload==JSON.stringify(inv.snapshot()),"large history keeps original canonical JSON")
+	var before := store.committed_state
+	inv.deposit("wood")
+	check(store.commit(inv)==OK and before.carried.wood==1500 and store.committed_state.carried.wood==1499,"rollback and current black-box snapshots remain independent")
+	var resumed := ledger()
+	check(store.load_into(resumed)==OK and resumed.snapshot()==inv.snapshot(),"compressed stock-only change reopens")
+	check(resumed.collect("fresh-after-resume","meat") and store.commit(resumed)==OK,"resumed receipt map remains writable")
+	var bad := resumed.snapshot()
+	bad.collected["fake-type"]="unknown"
+	check(not inv.restore(bad),"cached history never accepts an unknown material")
+	bad=resumed.snapshot()
+	bad.collected[42]="meat"
+	check(not inv.restore(bad),"non-string identity rejected in bulk history")
+	var raw := FileAccess.get_file_as_bytes(name)
+	var changed := raw.duplicate()
+	changed[0] = 0
+	var tampered := FileAccess.open(name,FileAccess.WRITE)
+	tampered.store_buffer(changed)
+	tampered.close()
+	check(store.commit(resumed)==ERR_FILE_CORRUPT and FileAccess.get_file_as_bytes(name)==changed,"cached hash still detects corrupt replacement without rewriting")
+	DirAccess.remove_absolute(name)
+
 func _initialize() -> void:
 	var incoming := OS.get_cmdline_user_args()
 	if "--verify-restart" in incoming:
@@ -71,6 +107,10 @@ func _initialize() -> void:
 	dir.remove(Store.PRIMARY)
 	write(path.path_join(Store.PRIMARY),"{bad-field-save")
 	check(s.load_into(inv)==ERR_FILE_CORRUPT and inv.snapshot()==expected and s.commit(inv)==ERR_FILE_CORRUPT,"reject corrupt primary, preserve prior memory and saved bytes")
+	dir.remove(Store.PRIMARY)
+	var bulk := Store.new()
+	check(bulk.configure(args),"isolated bulk profile")
+	receipt_cache_coverage(path,bulk)
 	for name in [Store.PRIMARY, "untouched", Profile.SENTINEL]:
 		dir.remove(name)
 	DirAccess.remove_absolute(path)

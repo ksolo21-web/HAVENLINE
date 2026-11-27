@@ -94,7 +94,7 @@ var hit_tween: Tween
 var shown_hp:=-1
 var hp_capacity:=-1
 var nearby_threat:=false
-var shown_balances:=Vector4i(-1,-1,-1,-1)
+var shown_balances: Array[int] = []
 var shown_level:=-1
 var quality:Button
 var display_mark:=DisplayMark.new()
@@ -370,17 +370,17 @@ func field_status(counts:Dictionary,message:String) -> void:
 
 func settlement_status(journal:Dictionary,activity:float) -> void:
 	if not chapter:return
-	var trays:=Ledger.Settlement.waiting_meals(journal)
-	var totals:=Vector4i(journal.served,journal.processed_wood,journal.processed_stone,trays)
+	var totals: Array[int] = [int(journal.pocket_cash), int(journal.hand_products.planks),
+		int(journal.hand_products.blocks), int(journal.held_meal)]
 	operation.value=activity
 	if shown_balances==totals and shown_level==int(journal.level) and operation.visible==(activity>0):
 		return
 	shown_balances=totals
 	shown_level=int(journal.level)
 	var heading:="Camp  ·  Level 2" if shown_level==2 else "Camp  ·  Level 1"
-	var quantity:={"cash":totals.x,"planks":totals.y,"blocks":totals.z,"meals":totals.w}
+	var quantity:={"cash":totals[0],"planks":totals[1],"blocks":totals[2],"meals":totals[3]}
 	chapter_detail.text=heading
-	stock_row.visible=totals!=Vector4i.ZERO
+	stock_row.visible=totals.max()>0
 	for kind: String in quantity:
 		var amount: int=quantity[kind]
 		var cell: Supply=display_goods[kind]

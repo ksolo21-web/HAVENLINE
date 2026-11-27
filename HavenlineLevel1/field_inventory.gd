@@ -59,6 +59,17 @@ func deposit(kind: String, amount := 1) -> bool:
 	stored[kind] += amount
 	return true
 
+func hand_goods() -> Dictionary:
+	return {"planks":int(settlement.hand_products.planks),"blocks":int(settlement.hand_products.blocks),"meal":int(settlement.held_meal),"money":int(settlement.pocket_cash)}
+
+func house_goods() -> Dictionary:
+	var goods:Dictionary=settlement.product_store.duplicate()
+	goods.money=int(settlement.house_cash)
+	return goods
+
+func till_balance() -> int:
+	return int(settlement.served)-int(settlement.pocket_cash)-int(settlement.house_cash)
+
 func payment(id: String, kind: String, from_storage: bool, amount := 1) -> bool:
 	if from_storage and not storage_open(kind): return false
 	return _pay_from(stored if from_storage else carried,id,kind,amount)
@@ -114,7 +125,7 @@ func complete(id: String) -> bool:
 func snapshot() -> Dictionary:
 	var state := {"version": 1, "collected": collected.duplicate(), "carried": carried.duplicate(), "stored": stored.duplicate(), "paid": paid.duplicate(true)}
 	if staged:
-		state.version = 9
+		state.version = 10
 		state.legacy_level2 = legacy_level2
 		state.legacy_prices = legacy_prices.duplicate()
 		state.build_order = build_order.duplicate()
@@ -131,12 +142,13 @@ static func _natural(value: Variant) -> bool:
 func restore(data: Variant) -> bool:
 	if not data is Dictionary: return false
 	var old: bool = data.get("version") == 1
-	var version:Variant=data.get("version")
-	var current:bool = version==6 or version==7 or version==8 or version==9
+	if not _natural(data.get("version")): return false
+	var version:=int(data.version)
+	var current:bool = version in [6,7,8,9,10]
 	var has_settlement: bool = current or data.get("version") == 4 or data.get("version") == 5
 	if old:
 		if data.size() != 5: return false
-	elif not staged or (data.get("version") != 2 and data.get("version") != 3 and not has_settlement) or data.size() != (11 if version==7 or version==8 or version==9 else (10 if current else (9 if has_settlement else 8))):
+	elif not staged or (data.get("version") != 2 and data.get("version") != 3 and not has_settlement) or data.size() != (11 if version in [7,8,9,10] else (10 if current else (9 if has_settlement else 8))):
 		return false
 	for key in ["collected", "carried", "stored", "paid"]:
 		if not data.get(key) is Dictionary:
@@ -176,10 +188,16 @@ func restore(data: Variant) -> bool:
 	if data.version==2 or (old and data.carried.size()==ORIGINAL_KINDS.size()):
 		types=ORIGINAL_KINDS
 	var balances := EMPTY.duplicate()
+	if data.collected.has(""): return false
 	for token in data.collected:
-		if not token is String or token.is_empty() or data.collected[token] not in types:
-			return false
-		balances[data.collected[token]] += 1
+		if not token is String: return false
+	var issued: Array = data.collected.values()
+	var recognized := 0
+	for kind: String in types:
+		var units := issued.count(kind)
+		balances[kind] = units
+		recognized += units
+	if recognized != issued.size(): return false
 	for stock in [data.carried, data.stored]:
 		if stock.size() != types.size():
 			return false
@@ -221,8 +239,10 @@ func restore(data: Variant) -> bool:
 		next_settlement = Settlement.from_pre_conveyors(next_settlement)
 	if has_settlement and data.version < 9:
 		next_settlement = Settlement.Logistics.from_previous(next_settlement,order)
+	if has_settlement and data.version < 10:
+		next_settlement = Settlement.from_pre_register(next_settlement,order)
 	var old_preview := false
-	if version==7 or version==8 or version==9:
+	if version in [7,8,9,10]:
 		if not data.get("legacy_level2") is bool: return false
 		old_preview = data.legacy_level2
 	elif has_settlement and next_settlement is Dictionary:
@@ -236,7 +256,7 @@ func restore(data: Variant) -> bool:
 	for kind: String in KINDS:
 		balances[kind] -= int(next_settlement.worker_load[kind])
 	if next_settlement.worker_supply != "": balances[next_settlement.worker_supply] -= 1
-	balances.meat -= int(next_settlement.cooked)
+	balances.meat -= int(next_settlement.cooked) + int(next_settlement.owl_meat)
 	balances.wood -= int(next_settlement.survivor_wood) + int(next_settlement.processed_wood)
 	balances.stone -= int(next_settlement.processed_stone)
 	if balances.values().any(func(n): return n != 0):
@@ -281,6 +301,10 @@ func restore(data: Variant) -> bool:
 			settlement.worker_load[kind] = int(settlement.worker_load[kind])
 		for product:String in Settlement.Logistics.STORE:
 			settlement.product_store[product]=int(settlement.product_store[product])
+		for product:String in Settlement.HAND_PRODUCTS:
+			settlement.hand_products[product]=int(settlement.hand_products[product])
+		for kind in settlement.withdrawn:
+			settlement.withdrawn[kind]=int(settlement.withdrawn[kind])
 		for lane: String in Settlement.LINE_EMPTY:
 			settlement.line_load[lane] = int(settlement.line_load[lane])
 			settlement.line_progress[lane] = float(settlement.line_progress[lane])

@@ -123,9 +123,12 @@ func historical_snapshot(book: Inventory) -> Dictionary:
 	var state := book.snapshot()
 	state.erase("legacy_level2")
 	for id in Rules.MACHINES.values()+Rules.LINES: state.paid.erase(id)
-	for key in ["line_load","line_progress","counter_stock","product_store","dispatch_cursor"]: state.settlement.erase(key)
-	state.settlement.erase("worker_load")
-	state.settlement.erase("worker_meal")
+	# v5 stored the original field receipts plus these four workshop fields.
+	# Reconstruct its known schema independently of future live journal keys.
+	state.settlement = state.settlement.duplicate()
+	var old_keys := Inventory.Settlement.LEGACY.keys()+["hoppers","work_seconds","held_meal","worker_supply"]
+	for key in state.settlement.keys():
+		if key not in old_keys:state.settlement.erase(key)
 	return state
 
 func original_receipts_equal(new_paid: Dictionary, old_paid: Dictionary) -> bool:
@@ -149,6 +152,9 @@ func test_price_contracts() -> void:
 		original.version = 5
 		original.erase("legacy_prices")
 		var upgraded := ledger()
+		var bad := original.duplicate(true)
+		bad.settlement.house_cash = 1
+		check("reject later cash field on claimed v5 receipt %s"%survivor_paid,not upgraded.restore(bad))
 		check("v5 partial expansion and earned camp migrate, survivor %s"%survivor_paid,
 			upgraded.restore(JSON.parse_string(JSON.stringify(original))) and upgraded.complete(Rules.HEARTH)
 			and upgraded.remaining(Rules.FIRST)=={"wood":2,"stone":1} and upgraded.remaining("storage_wood")==Rules.OFFERS.storage_wood

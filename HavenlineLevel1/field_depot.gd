@@ -80,7 +80,11 @@ func on_upgrade_side(at: Vector3) -> bool:
 
 func target_at(at: Vector3) -> String:
 	if not apron.visible: return ""
-	if on_upgrade_side(at): return offer
+	# The approach to the loading door crosses the edge of the upgrade print.
+	# A runner can unload in motion. Stopping beside that separate pad buys it.
+	var resting: bool = not world.runner_requested_motion and Vector2(world.actor.velocity.x,world.actor.velocity.z).length_squared() < .09
+	if resting and on_upgrade_side(at):
+		return offer
 	if loading_distance(at) <= Reach.NEAR: return world.carry.STOCK if house.tier > 0 else offer
 	return ""
 
@@ -147,7 +151,7 @@ func hint() -> String:
 	if house.tier == 0 or (upgrade_mark.visible and on_upgrade_side(world.actor.position)):
 		if visit == "done": return "Step off the plot to start the next upgrade."
 		if offer.is_empty(): return amounts
-		return "%s · %s" % [Rules.TITLES[offer],Rules.price_text(world.inventory.remaining(offer))] + ("\nApproach the plot to pay" if house.tier > 0 else "")
+		return "%s · %s" % [Rules.TITLES[offer],Rules.price_text(world.inventory.remaining(offer))] + ("\nStop beside the upgrade plot to pay" if house.tier > 0 else "")
 	if house.tier > 0 and not offer.is_empty():
 		return "Unload beside the storehouse · Next: " + Rules.TITLES[offer] + " on the nearby plot" + ("\n"+amounts if not amounts.is_empty() else "")
 	return amounts

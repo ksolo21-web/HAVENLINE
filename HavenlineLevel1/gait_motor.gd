@@ -50,6 +50,12 @@ var pelvis_index := -1
 var spine_index := -1
 var neck_index := -1
 var field_turn_lean := 0.0
+var field_pitch := 0.0
+var upper_arms: Array[int] = []
+var forearms: Array[int] = []
+var glove_chains: Array = []
+var field_arm_weight := 0.0
+var last_travel_speed := 0.0
 var recoil_height_offset := 0.0
 var tilting_for_hit := false
 var neutral_toes: Array[Transform3D] = []
@@ -389,6 +395,9 @@ func _bind_soles(world: Node3D) -> void:
 	if skeleton:
 		contact_world = world
 		for side in [".L", ".R"]:
+			upper_arms.append(skeleton.find_bone("UpperArm"+side))
+			forearms.append(skeleton.find_bone("Forearm"+side))
+			glove_chains.append([upper_arms.back(),forearms.back(),skeleton.find_bone("Hand"+side)])
 			leg_chains.append(
 				[
 					skeleton.find_bone("Thigh" + side),
@@ -561,14 +570,35 @@ func _adjust_leg(chain: Array, delta: Vector3, turn: float, target_toe := Vector
 func _settle_support() -> void:
 	# Bank the torso into a field turn while the boots follow their grounded
 	# track. The neck absorbs part of the roll so the gaze remains level.
-	if absf(field_turn_lean) > .0001:
-		var forward: Vector3 = (skeleton.global_basis.inverse() * contact_world.actor.global_basis.z).normalized()
+	if absf(field_turn_lean) + absf(field_pitch) > .0001:
+		var local_axes: Basis = skeleton.global_basis.inverse() * contact_world.actor.global_basis
+		var forward: Vector3 = local_axes.z.normalized()
+		var right: Vector3 = local_axes.x.normalized()
 		var spine := skeleton.get_bone_global_pose(spine_index)
-		spine.basis = Basis(forward, -field_turn_lean) * spine.basis
+		spine.basis = Basis(forward, -field_turn_lean) * Basis(right, field_pitch) * spine.basis
 		skeleton.set_bone_global_pose(spine_index, spine)
 		var neck := skeleton.get_bone_global_pose(neck_index)
-		neck.basis = Basis(forward, field_turn_lean * .50) * neck.basis
+		neck.basis = Basis(right, -field_pitch * .60) * Basis(forward, field_turn_lean * .50) * neck.basis
 		skeleton.set_bone_global_pose(neck_index, neck)
+	if field_arm_weight > .001:
+		var axes: Basis = skeleton.global_basis.inverse() * contact_world.actor.global_basis
+		var up := axes.y.normalized()
+		var forward := axes.z.normalized()
+		var right := axes.x.normalized()
+		for side in 2:
+			var arm := skeleton.get_bone_global_pose(upper_arms[side])
+			var elbow := skeleton.get_bone_global_pose(forearms[side]).origin
+			var sign_x := 1. if side==0 else -1.
+			var line := arm.origin.direction_to(elbow)
+			var angle := atan2(sign_x*line.dot(right),-line.dot(up))
+			# A thick parka needs some clearance, but the elbows should swing
+			# past the body rather than stay held out to either side.
+			var hip_level:=1.-smoothstep(.10,.52,absf(line.dot(forward)))
+			var close := clampf(angle-deg_to_rad(25.+4.*hip_level),0.,deg_to_rad(22.))*field_arm_weight
+			arm.basis=Basis(forward,-sign_x*close)*arm.basis
+			skeleton.set_bone_global_pose(upper_arms[side],arm)
+	for chain: Array in glove_chains:
+		preload("res://field_glove_clearance.gd").solve(skeleton,contact_world.actor,chain,1)
 	if special.is_empty() and not bridge and not floor_pending:
 		return
 	# IK repositions and rotates the legs. Preserve the sampled local scales:
@@ -614,7 +644,7 @@ func _settle_support() -> void:
 				support_step_serial += 1
 
 
-func step(world: Node3D, input: Vector2, dt: float) -> float:
+func step(world: Node3D, input: Vector2, dt: float, pack_load := 0.0) -> float:
 	var body: CharacterBody3D = world.actor
 	var start := body.global_position
 	var previous_speed := body.velocity.slide(Vector3.UP).length()
@@ -719,4 +749,14 @@ func step(world: Node3D, input: Vector2, dt: float) -> float:
 	world.constrain_private_snow_travel()
 	var traveled := (body.global_position - start).slide(Vector3.UP)
 	# A wall or the edge of the map can shorten a stride. Drive the gait from that result.
-	return traveled.length() / maxf(dt, 0.00001)
+	var actual_speed := traveled.length() / maxf(dt, .00001)
+	if top_speed == MAX_SPEED:
+		# Balance the rack over the boots. The chest accepts acceleration and
+		# releases it at a stop while the head continues looking down the trail.
+		var acceleration_ratio := clampf((actual_speed-last_travel_speed) / (dt*acceleration), -1., 1.)
+		var load_pitch := deg_to_rad(7.0) * pack_load * smoothstep(.10, 3.1, actual_speed)
+		var push_pitch := deg_to_rad(4.0) * acceleration_ratio
+		field_pitch = lerpf(field_pitch, load_pitch + push_pitch, 1.-exp(-11.*dt))
+		field_arm_weight = lerpf(field_arm_weight, smoothstep(.3, 3.2, actual_speed), 1.-exp(-13.*dt))
+	last_travel_speed = actual_speed
+	return actual_speed

@@ -41,17 +41,25 @@ var failed_swings := 0
 const CAMP_DUTIES := ["serve","assist","feed","field"]
 const FIELD_DUTIES := ["forage","mining","wood"]
 var camp_cursor := 0
+var priority_order_available := true
 var field_cursor := 0
 var assisted_plot := ""
 var transfer_mesh: Node3D
 var spend_kind := ""
 var delivery_stream: Array[Dictionary] = []
+var receipt_departure:=Vector3.ZERO
+var launch_window:=.58
 var unload_packets: Array[Dictionary] = []
 var next_packet := 0
 var dispatch_count := 0
 var outdoor_route = preload("res://field_home_route.gd").new()
 const WORK_RADIUS := 24.0
 const PICKUP_REACH := 1.22
+# In a busy camp the worker checks back after a bounded field circuit.
+# A rich stand can fill one complete 500-unit stack first.
+const FIELD_SHIFT_SECONDS := 54.
+const WORK_WAIT_BUNDLES := 12
+var shift_seconds := 0.0
 # Clear both open leaves before turning laterally on either side of the gate.
 const GATE_LANDING := 2.55
 const RAW_RULES = preload("res://field_settlement.gd")
@@ -193,7 +201,31 @@ func _begin_supply_run(kind: String) -> void:
 	route.assign([_supply_apron(kind)])
 	phase = "supply_out"
 
+func _needs_customer_meat() -> bool:
+	var belts=world.settlement_loop.conveyors
+	if belts.unclaimed_orders()==0 or belts.line_live("meat"):
+		return false
+	var journal:Dictionary=world.inventory.settlement
+	if journal.hoppers.meat>0 or RAW_RULES.waiting_meals(journal)>0:
+		return false
+	return (
+		world.settlement_loop.available_to_feeder("meat")
+		and _available_surplus("meat")>0
+		and _supply_apron("meat").is_finite()
+	)
+
 func _leave_shelf() -> void:
+	# Reserve one early service opportunity per field shift. A visible customer
+	# can be served from stored meat before the porter sets out on a long haul.
+	# Ordinary rotation still supplies the saw, quarry and construction plots.
+	if priority_order_available and world.counter and world.counter.active:
+		if _can_fetch_meal():
+			priority_order_available=false
+			_to_cooker()
+			return
+		if _needs_customer_meat():
+			_load_hopper_stock("meat")
+			return
 	# Advance after each opportunity so a busy kitchen, full stockroom or a
 	# stream of customers cannot starve an open contract or field gathering.
 	for offset in CAMP_DUTIES.size():
@@ -332,7 +364,12 @@ func _walk(destination: Vector3, dt: float, carrying := false) -> bool:
 		travel_speed = 0.
 		actor.pose("idle",step_cycle)
 		return before.distance_to(destination) <= .025
-	var turn := angle_difference(actor.rotation.y,atan2(heading.x,heading.z))
+	var desired_yaw := atan2(heading.x,heading.z)
+	var turn := angle_difference(actor.rotation.y,desired_yaw)
+	if actor.forester_gait.turn_towards(actor, desired_yaw, dt, travel_speed < .6):
+		travel_speed = 0.
+		actor.bundle.hide()
+		return false
 	actor.rotation.y += clampf(turn,-8.5*dt,8.5*dt)
 	var loaded := carrying or _has_cargo()
 	var cruise := LADEN_SPEED if loaded else EMPTY_SPEED
@@ -360,6 +397,16 @@ func _walk_route(dt: float, carrying: bool) -> bool:
 
 func advance(dt: float) -> void:
 	if not actor or world.persist_blocked or world.reset_time>0: return
+	actor.forester_gait.pivot_frame = false
+	_advance_tasks(dt)
+	if actor.mode=="travel" and not actor.forester_gait.pivot_frame:
+		actor.forester_gait.settle_contact(dt,actor)
+	else:
+		actor.forester_gait.previous_points.clear()
+		actor.forester_gait.marker.fill(-1)
+		actor.forester_gait.correction.fill(Vector3.ZERO)
+
+func _advance_tasks(dt: float) -> void:
 	if not restored_service.is_empty():
 		var network = _paid_walkways()
 		if network:
@@ -367,6 +414,8 @@ func advance(dt: float) -> void:
 			if floor_point.is_finite(): actor.global_position = floor_point
 		restored_service = ""
 	var journal: Dictionary = world.inventory.settlement
+	if phase in ["to_tree","work_ready","chopping","falling","pickup","foraging","mining_approach","mining"]:
+		shift_seconds+=dt
 	if phase in ["carrying","bulk_return","supply_pickup","supply_return","supply_back","bin_delivery"] and world.inventory.storage_open("wood"):
 		var door := _shelf_apron()
 		if not route.is_empty(): route[-1] = door
@@ -438,15 +487,18 @@ func advance(dt: float) -> void:
 				if pickup_token.is_empty(): phase = "work_ready"
 			if phase == "pickup":
 				_walk(world.drops[pickup_token].at,dt)
-				if can_claim(pickup_token) and not world.inventory.storage_open("wood"):
+				if can_claim(pickup_token):
+					if worker_space("wood")==0:
+						_go_home_bulk()
+						return
+					if world.inventory.storage_open("wood") and journal.worker_carry_token.is_empty():
+						if not world.claim_worker_wood(pickup_token):return
+						_sync_pack()
 					_sweep_drops()
-					pickup_token = ""
-					_go_home_bulk()
-				elif can_claim(pickup_token) and world.claim_worker_wood(pickup_token):
-					pickup_token = ""
-					_sync_pack()
-					_sweep_drops()
-					_begin_inbound(true)
+					pickup_token=""
+					if journal.worker_deliveries==0 and journal.worker_carry_token!="": _begin_inbound(true)
+					else: _go_home_bulk()
+
 		"carrying":
 			if _walk_route(dt,true):
 				phase = "unload"
@@ -455,21 +507,23 @@ func advance(dt: float) -> void:
 			if not at_wood_receiver():
 				phase = "carrying"
 				actor.bundle.hide()
-				pack.rack.show()
+				_sync_pack()
 				route.assign([_shelf_apron()])
 				return
 			waiting += dt
 			var u := clampf(waiting/.28,0,1)
 			var target: Vector3 = world.depot.landing_position("wood",int(world.inventory.stored.wood))
 			if not actor.bundle.visible:
+				receipt_departure=_rack_from("wood")
 				actor.bundle.show()
-				pack.rack.hide()
-			actor.bundle.global_position = _rack_from("wood").lerp(target,u)+Vector3.UP*.28*sin(u*PI)
+				pack_view.carried.wood=maxi(0,int(pack_view.carried.wood)-1)
+				pack.sync(true)
+			actor.bundle.global_position = receipt_departure.lerp(target,u)+Vector3.UP*.28*sin(u*PI)
 			if u >= 1. and world.receive_worker_wood():
 				actor.bundle.hide()
 				pack.rack.show()
 				_sync_pack()
-				if journal.worker_load.values().any(func(n): return n > 0): _begin_bin_delivery()
+				if journal.worker_load.values().any(func(n): return n > 0): _begin_bin_delivery(true)
 				else: _leave_shelf()
 
 func _begin_swing() -> void:
@@ -550,6 +604,8 @@ func _rack_from(kind: String) -> Vector3:
 	return pack._place(pack.HAND,kind,maxi(0,int(pack_view.carried[kind])-1))
 
 func _start_field_job() -> void:
+	priority_order_available=true
+	shift_seconds=0.
 	if world.inventory.settlement.worker_deliveries == 0 and world.inventory.storage_open("wood"):
 		_begin_outbound()
 		return
@@ -674,11 +730,45 @@ func _sweep_drops() -> void:
 		_sync_pack()
 		world.settlement_loop.commit_receipt("worker_pickup",actor.position)
 
-func _go_home_bulk() -> void:
-	_begin_inbound(true)
-	phase = "bulk_return"
+func _continue_field_shift() -> bool:
+	var journal:Dictionary=world.inventory.settlement
+	if journal.worker_deliveries==0 or shift_seconds>=FIELD_SHIFT_SECONDS:return false
+	var packed:=0
+	for kind:String in RAW_RULES.WORKER_LOAD:
+		if worker_space(kind)==0:return false
+		packed+=RAW_RULES.WORKER_LIMIT-worker_space(kind)
+	if packed>=WORK_WAIT_BUNDLES and _can_fetch_meal():return false
+	var loose:=_closest_drop(actor.position)
+	if not loose.is_empty():
+		forage_token=loose
+		route=_outdoor_path(actor.position,world.drops[loose].at)
+		phase="foraging"
+		return true
+	# Alternate productive sites without a return to the storehouse in between.
+	# A second kind goes in its own rack slot.
+	var bank:=_choose_bank(actor.position)
+	var timber=_outdoor_path(actor.position,STANCE)
+	var can_chop:bool=worker_space("wood")>0 and tree.phase=="rooted" and not timber.is_empty()
+	if can_chop and (not bank or int(journal.worker_load.wood)<=int(journal.worker_load[bank.get_meta("resource_kind")])):
+		route=timber
+		phase="to_tree"
+		return true
+	if bank:
+		assigned_bank=bank
+		route=bank_approach.duplicate()
+		phase="mining_approach"
+		return true
+	return false
 
-func _begin_bin_delivery() -> void:
+func _go_home_bulk() -> void:
+	if _continue_field_shift():return
+	_begin_inbound(true)
+	if world.inventory.settlement.worker_carry_token.is_empty():phase="bulk_return"
+
+func _begin_bin_delivery(after_wood_receipt:=false) -> void:
+	# Keep a two-part timber receipt and the rest of its pack inside the same
+	# landing beat as a regular mixed unload.
+	launch_window=.32 if after_wood_receipt else .58
 	var carried: Dictionary = world.inventory.settlement.worker_load
 	for kind: String in carried:
 		if carried[kind] > 0 and not world.inventory.storage_open(kind):
@@ -762,7 +852,7 @@ func _work_field(dt: float) -> void:
 
 func _unload_stream(dt: float) -> void:
 	waiting += dt
-	var interval := minf(.055,.58/maxi(1,unload_packets.size()-1))
+	var interval := minf(.055,launch_window/maxi(1,unload_packets.size()-1))
 	while next_packet < unload_packets.size() and waiting >= next_packet*interval:
 		var packet := unload_packets[next_packet]
 		next_packet += 1

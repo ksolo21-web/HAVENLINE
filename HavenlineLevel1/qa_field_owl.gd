@@ -5,6 +5,7 @@ const Wolf := preload("res://field_enemy.gd")
 
 class Gate extends Node3D:
 	const HALF_SPAN := 1.20
+	const LEAF_LENGTH := 1.18
 
 class Host extends Node3D:
 	var actor := Node3D.new()
@@ -15,7 +16,7 @@ class Host extends Node3D:
 	var enemies := []
 	var player_hp := 4
 	var field_ready := true
-	var inventory := {"settlement":{"survivor_paid":false}}
+	var inventory := {"settlement":{"survivor_paid":false,"owl_meat":0,"owl_legacy":false}}
 	var strikes := []
 	var launches := 0
 	var max_claw_error := 0.0
@@ -149,7 +150,7 @@ func run() -> void:
 	checks["unpaid owl hidden and harmless"]=not host.owl.visible and host.strikes.is_empty()
 	host.owl.setup(host)
 	checks["setup is idempotent"]=host.owl.get_child_count()==1 and host.owl.shoulders.size()==2
-	host.inventory.settlement.survivor_paid=true
+	host.inventory.settlement.owl_meat=Owl.Crew.OWL_MEAT
 	step(25)
 	checks["paid purchase perches once on south gate"]=host.owl.visible and host.owl.state=="perched" and host.owl.global_position.distance_to(Vector3(-1.35,1.718,4))<.005
 	checks["both owned Meshy poses are present and only the folded Pathfinder is drawn on the post"]=host.owl.folded.name=="FrostwingPathfinder" and host.owl.plumage.name=="SkyboundSentinel" and host.owl.folded.visible and not host.owl.plumage.visible
