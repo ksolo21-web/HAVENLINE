@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "REVIEWED_READY_FOR_PUBLICATION",
+  "status": "PUBLISHED_REVIEWED_PACKET_RUNTIME_INTEGRATION_OPEN",
   "base_commit": "201dcbe4fad5037a33bd619b59285a1ef91599d8",
   "isolated_branch": "feature/vehicle-economy-world-fleet-2026-11-27",
   "observed_gameplay_commit": "ea6e4896cc6692ee84b56f89e127feaa606eb370",
@@ -9,7 +9,8 @@
     1,
     2,
     3,
-    4
+    4,
+    5
   ],
   "milestones_required": 5,
   "render_sheets_generated": 9,
@@ -21,9 +22,10 @@
   },
   "independent_review": "12/12 declared package evidence requirements pass;205/205 frozen identities pass; native/economy/static-concept scopes only",
   "next_actions": [
-    "Publish exact reviewed tree to isolated feature branch",
-    "Verify remote tree, selected file bytes and preserved refs",
-    "Integrate resource/payment/HUD/producer/fuel/save adapters with the active gameplay owner; native and device gates remain open"
+    "Reconcile active gameplay owner and exact live head before integration",
+    "Implement generic typed inventory/payment/price/save migration together",
+    "Build reachable iron/coal/oil sources and producer chain; integrate fuel grant before movement/tools",
+    "Create native world vehicles/stations and prove full cycles, contact, routing, cargo/lifecycle, World10 serial recovery, balance and devices"
   ],
   "runtime_integration": "NOT_PERFORMED_IN_THIS_PACKAGE; live Build14 already has partial truck gameplay, but no new fuel/fabrication integration was inspected as implemented",
   "historical_evidence": "Previous truck/garage freezes and reviews retained at their original source; new source requires new review",
@@ -37,5 +39,8 @@
     "source_excerpts": 66,
     "selected_art_panels": 54
   },
-  "final_review": "FINAL_REVIEW.json"
+  "final_review": "FINAL_REVIEW.json",
+  "publication_record": "PUBLICATION.json",
+  "published_content_commit": "25b93eddb822083b489e0e22ef31cf1973aecd15",
+  "published_content_tree": "22fdcbccf9eae03f9d307b4571ddd35d63c7d975"
 }
