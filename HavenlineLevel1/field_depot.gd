@@ -9,11 +9,13 @@ const APRON := Vector3(-3.05,0,-1.18)
 const BIN_SCALE := .38
 const BALANCE_PIXEL_SIZE := .0046
 const UPGRADE_PAUSE := .16
-const UPGRADE_SPOT := Vector3(.62,.026,.06)
+const UPGRADE_AT := Vector3(-2.18,0,.65)
+const UPGRADE_RADIUS := .81
 var house
 var apron: Node3D
-var upgrade_mark: Label3D
+var upgrade_mark: Node3D
 var still_since := -1.0
+var paused_on_upgrade := false
 var shelves := Node3D.new()
 var bins := {}
 var labels := {}
@@ -47,15 +49,12 @@ func install(host) -> void:
 	add_child(apron)
 	apron.install(world.field_env,Rules.STORAGE[0],APRON)
 	apron.name = "StorehouseApron"
-	upgrade_mark = world.field_env.flat_label(self,APRON+UPGRADE_SPOT,.012)
-	upgrade_mark.text = "↑"
-	upgrade_mark.name = "UpgradeArrow"
-	upgrade_mark.modulate = Color("#ffe8a3")
-	upgrade_mark.outline_modulate = Color("#3f301e")
-	upgrade_mark.outline_size = 7
-	upgrade_mark.visible = false
+	upgrade_mark = Offer.new()
+	add_child(upgrade_mark)
+	upgrade_mark.install(world.field_env,"storage_stone",UPGRADE_AT)
+	upgrade_mark.name = "StorehouseUpgradePlot"
 	for id: String in Rules.STORAGE:
-		world.carry.define_receiver(id,apron)
+		world.carry.define_receiver(id,apron if id == Rules.STORAGE[0] else upgrade_mark)
 	world.carry.set_storage_layout(landing_position,BIN_SCALE)
 
 func landing_position(kind: String, index: int) -> Vector3:
@@ -67,10 +66,10 @@ func at_apron(at:Vector3) -> bool:
 func at_loading_area(at:Vector3) -> bool:
 	if not house.visible: return false
 	var local:Vector3 = house.to_local(at)
-	return absf(local.x) <= 1.05 and local.z >= -.73 and local.z <= 2.27 and not on_upgrade_side(at)
+	return absf(local.x) <= 1.05 and local.z >= -.73 and local.z <= 2.27
 
 func on_upgrade_side(at:Vector3) -> bool:
-	return at_apron(at) and at.x >= APRON.x+.34 and at.z >= APRON.z-.50
+	return Vector2(at.x,at.z).distance_squared_to(Vector2(UPGRADE_AT.x,UPGRADE_AT.z)) <= UPGRADE_RADIUS*UPGRADE_RADIUS
 
 func refresh(active: bool) -> void:
 	var ledger = world.inventory
@@ -79,6 +78,12 @@ func refresh(active: bool) -> void:
 	offer = Rules.next_storage(ledger) if active else ""
 	apron.visible = active and ledger.complete(Rules.FIRST)
 	upgrade_mark.visible = house.visible and not offer.is_empty()
+	if upgrade_mark.visible:
+		upgrade_mark.change_project(offer,ledger)
+		upgrade_mark.set_due(ledger,offer,true)
+		# Independent pre-tier saves can own a higher bay while the starter
+		# receipt is still open. Its next missing upgrade uses this pad too.
+		world.carry.define_receiver(offer,upgrade_mark)
 	if apron.visible:
 		apron.set_depot(ledger,offer,tier > 0)
 	for kind: String in bins:
@@ -94,33 +99,29 @@ func _process(_dt:float) -> void:
 func _update_interior() -> void:
 	shelves.visible = house.is_interior_visible()
 
+func pause_purchase(at: Vector3) -> void:
+	visit = "done"
+	paused_on_upgrade = on_upgrade_side(at)
+	still_since = -1.
+
 func step(at: Vector3) -> void:
-	var at_pad := at_apron(at)
-	var indoors := at_loading_area(at)
-	var upgrade_side := on_upgrade_side(at)
-	if not at_pad and not indoors:
+	var at_door := at_apron(at) or at_loading_area(at)
+	var at_upgrade := upgrade_mark.visible and on_upgrade_side(at)
+	if visit == "done":
+		# Standing on a just-paid or restored plot cannot buy the next tier.
+		var still_on_paid_plot := on_upgrade_side(at) if paused_on_upgrade else at_apron(at)
+		if still_on_paid_plot: return
+		visit = ""
+	if not apron.visible or (not at_door and not at_upgrade):
 		world.carry.stop_visit(world.carry.STOCK if visit == "load" else visit)
 		visit = ""
 		still_since = -1.
 		return
-	if not apron.visible: return
-	if visit == "done":
-		# A completed purchase cannot chain into the next one. Walking inside
-		# starts unloading without having to reverse out of the building.
-		if not indoors or at.z >= APRON.z-.50: return
-		visit = "load"
-	if house.tier == 0:
-		visit = offer
-	elif not upgrade_side or offer.is_empty():
-		if visit == offer: world.carry.stop_visit(offer)
+	if not at_upgrade:
+		if visit != "load": world.carry.stop_visit(visit)
 		still_since = -1.
-		visit = "load"
+		visit = "load" if house.tier > 0 else offer
 	elif visit != offer:
-		# Walking through the corner is navigation. Entering the marked edge
-		# and stopping is the deliberate upgrade, even straight from the door.
-		if visit == "load" and _unload_pending():
-			world.carry.visit(world.carry.STOCK)
-			return
 		world.carry.stop_visit(world.carry.STOCK)
 		visit = "upgrade"
 		if world.actor.velocity.slide(Vector3.UP).length_squared() > .40*.40:
@@ -133,11 +134,6 @@ func step(at: Vector3) -> void:
 		world.carry.visit(world.carry.STOCK)
 	elif visit == offer and not offer.is_empty():
 		world.carry.visit(offer)
-
-func _unload_pending() -> bool:
-	for kind: String in world.Inventory.KINDS:
-		if world.inventory.storage_open(kind) and world.inventory.carried[kind] > 0: return true
-	return false
 
 static func shelf_quantity(amount: int) -> String:
 	if amount < 1000:
@@ -153,11 +149,10 @@ func hint() -> String:
 		if world.inventory.storage_open(kind):
 			stock.append("%d %s" % [Rules.units(world.inventory.stored[kind]),world.Inventory.TITLES[kind].to_lower()])
 	var amounts := "Stored · " + " · ".join(stock) if not stock.is_empty() else ""
-	if visit == "done":
-		return "Enter to unload. Step away to start another purchase." + ("\n" + amounts if not amounts.is_empty() else "")
-	if not offer.is_empty() and (at_apron(world.actor.position) or visit != "load" or stock.is_empty()):
-		var price := Rules.price_text(world.inventory.remaining(offer))
-		var offer_text := "%s · %s" % [Rules.TITLES[offer], price]
-		if amounts.is_empty(): return offer_text
-		return ("Stop on ↑ · " + offer_text if on_upgrade_side(world.actor.position) else "Door: store · Stop on ↑ to upgrade") + "\n" + amounts
-	return "Unloading into the marked shelves." + ("\n" + amounts if not amounts.is_empty() else "")
+	if house.tier == 0 or (upgrade_mark.visible and on_upgrade_side(world.actor.position)):
+		if visit == "done": return "Step off the plot to start the next upgrade."
+		if offer.is_empty(): return amounts
+		return "%s · %s" % [Rules.TITLES[offer],Rules.price_text(world.inventory.remaining(offer))] + ("\nStand on this plot to pay" if house.tier > 0 else "")
+	if house.tier > 0 and not offer.is_empty():
+		return "Door: unload · Next: " + Rules.TITLES[offer] + " on the nearby plot" + ("\n"+amounts if not amounts.is_empty() else "")
+	return amounts

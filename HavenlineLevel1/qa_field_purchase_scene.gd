@@ -14,7 +14,10 @@ func check(id: String, value: bool) -> void:
 	if not value: push_error(id)
 
 func approach(id: String, n: int, offset := Vector3.ZERO) -> void:
-	game.actor.global_position = game.carry.receivers[id].global_position + offset
+	stand(game.carry.receivers[id].global_position + offset,n)
+
+func stand(at: Vector3, n: int) -> void:
+	game.actor.global_position = at
 	for i in n:
 		game._step_receivers()
 		if game.carry.flights.size()>0: launched+=1
@@ -98,7 +101,7 @@ func run() -> void:
 		check(id+" crossing the apron still requires leaving",game.inventory.build_order==order and game.depot.visit=="done" and game.inventory.stored==paid_stock)
 		game.actor.position=Vector3.ZERO
 		game._step_receivers()
-		approach(id,420,Vector3(-.55,0,0))
+		stand(game.depot.APRON + Vector3(-.55,0,0),420)
 		check(id+" left-side re-entry deposits through the shared apron",game.inventory.stored[kind]>paid_stock[kind] and game.depot.visit=="load")
 	game.inventory.collect("probe-retired-corners","wood")
 	var receipts_before: Dictionary=game.inventory.paid.duplicate(true)
@@ -110,7 +113,7 @@ func run() -> void:
 			game._step_receivers()
 			game.carry.advance(1./60.)
 	check("Visits to retired corner positions cause no debit or deposit",game.inventory.paid==receipts_before and game.inventory.stored==stored_before and game.carry.flights.is_empty())
-	check("Original corner pads cannot accept payments or stock",game.find_children("*StoragePlot","",true,false).is_empty() and Rules.STORAGE.all(func(id):return game.carry.receivers[id]==game.depot.apron))
+	check("Original corner pads cannot accept payments or stock",game.find_children("*StoragePlot","",true,false).is_empty() and game.carry.receivers.storage_wood==game.depot.apron and game.carry.receivers.storage_stone==game.depot.upgrade_mark and game.carry.receivers.storage_meat==game.depot.upgrade_mark)
 	check("Second expansion is the next build",game.offer_floors[Rules.SECOND].is_visible_in_tree() and not game.offer_floors[Rules.TOWER].is_visible_in_tree())
 	approach(Rules.SECOND,370)
 	check("East tower and extra axe pads unlock together",game.offer_floors[Rules.TOWER].is_visible_in_tree() and game.offer_floors[Rules.AXES].is_visible_in_tree())

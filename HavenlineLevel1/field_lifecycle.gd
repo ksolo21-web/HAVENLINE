@@ -78,7 +78,7 @@ func snapshot() -> Dictionary:
 		var at: Vector3 = d.at
 		ground.append([id,d.kind,at.x,at.z,maxf(0.0,DROP_LIFETIME_SECONDS-float(d.age))])
 	var player := {"x":world.actor.position.x,"z":world.actor.position.z,"yaw":world.actor.rotation.y,
-		"hp":world.player_hp,"protection_left":world.player_invulnerability,"fall_left":world.reset_time}
+		"hp":world.player_hp,"camp_heal_elapsed":world.camp_heal_elapsed,"protection_left":world.player_invulnerability,"fall_left":world.reset_time}
 	return {"version":VERSION,"player":player,"cooling":cooling.duplicate(),"partial":partial.duplicate(),"drops":ground,"serial":world.drop_id,"pack":world.encounters.snapshot()}
 
 static func _number(v: Variant) -> bool:
@@ -104,8 +104,23 @@ func _restore_actor(state: Variant, version: int = VERSION) -> void:
 	var limit:=float(world.layout.snow_extent_half)-float(world.layout.private_travel_inset)-float(world.layout.actor_radius)
 	if _number(state.get("x")) and _number(state.get("z")):
 		var candidate:=Vector3(state.x,0,state.z)
-		if absf(candidate.x)<=limit and absf(candidate.z)<=limit and not _near_closed_boundary(candidate):
-			pos=candidate
+		if absf(candidate.x)<=limit and absf(candidate.z)<=limit:
+			if not _near_closed_boundary(candidate):
+				pos=candidate
+			elif not world.field_env.is_inside_camp(candidate):
+				# Gates load closed. Push an exterior save back onto snow instead
+				# of moving an injured traveller across the fence into sanctuary.
+				var bounds: Array = world.layout.camp_rect_xz
+				var clear := float(world.layout.actor_radius)+.23
+				pos = candidate
+				if pos.x < bounds[0]: pos.x = minf(pos.x,bounds[0]-clear)
+				if pos.x > bounds[2]: pos.x = maxf(pos.x,bounds[2]+clear)
+				if pos.z > bounds[3]: pos.z = maxf(pos.z,bounds[3]+clear)
+				if pos.z < bounds[1]:
+					# The final service counter projects farther than the fence.
+					if world.field_env.perimeter_stage == 3 and absf(pos.x-world.field_env.CounterLayout.CENTER_X) < world.field_env.CounterLayout.HALF_BAY+clear:
+						clear += .9
+					pos.z = minf(pos.z,bounds[1]-clear)
 	world.actor.position=pos
 	world.actor.velocity=Vector3.ZERO
 	if _number(state.get("yaw")): world.actor.rotation.y=wrapf(float(state.yaw),-PI,PI)
@@ -121,6 +136,9 @@ func _restore_actor(state: Variant, version: int = VERSION) -> void:
 		world.reset_time = 1.05
 		if _number(state.get("fall_left")) and state.fall_left > 0:
 			world.reset_time = minf(float(state.fall_left),1.05)
+	world.camp_heal_elapsed = 0.0
+	if world.is_camp_healing() and _number(state.get("camp_heal_elapsed")) and state.camp_heal_elapsed >= 0 and state.camp_heal_elapsed < world.CAMP_HEAL_INTERVAL:
+		world.camp_heal_elapsed = float(state.camp_heal_elapsed)
 	world.camera.position=pos+world.camera_follow_offset
 	if world.tracks: world.tracks.reset_actor(world.actor)
 

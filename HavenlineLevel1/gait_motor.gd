@@ -47,6 +47,9 @@ var gait_tree: AnimationTree
 var desired_touchdown := 0.05
 var sampled_scales: Dictionary = {}
 var pelvis_index := -1
+var spine_index := -1
+var neck_index := -1
+var field_turn_lean := 0.0
 var neutral_toes: Array[Transform3D] = []
 var leg_tracking := 0.0
 var action_elapsed := 0.0
@@ -398,6 +401,8 @@ func _bind_soles(world: Node3D) -> void:
 		]
 		neutral_toes = [_toe_relative(0), _toe_relative(1)]
 		pelvis_index = skeleton.find_bone("Pelvis")
+		spine_index = skeleton.find_bone("Spine")
+		neck_index = skeleton.find_bone("Neck")
 		gait_tree = world.character_kit.locomotion.tree
 		var graph: AnimationNodeBlendTree = gait_tree.tree_root
 		graph.disconnect_node("output", 0)
@@ -488,6 +493,16 @@ func _adjust_leg(chain: Array, delta: Vector3, turn: float, target_toe := Vector
 
 
 func _settle_support() -> void:
+	# Bank the torso into a field turn while the boots follow their grounded
+	# track. The neck absorbs part of the roll so the gaze remains level.
+	if absf(field_turn_lean) > .0001:
+		var forward: Vector3 = (skeleton.global_basis.inverse() * contact_world.actor.global_basis.z).normalized()
+		var spine := skeleton.get_bone_global_pose(spine_index)
+		spine.basis = Basis(forward, -field_turn_lean) * spine.basis
+		skeleton.set_bone_global_pose(spine_index, spine)
+		var neck := skeleton.get_bone_global_pose(neck_index)
+		neck.basis = Basis(forward, field_turn_lean * .50) * neck.basis
+		skeleton.set_bone_global_pose(neck_index, neck)
 	if special.is_empty() and not bridge and not floor_pending:
 		return
 	# IK repositions and rotates the legs. Preserve the sampled local scales:
@@ -593,7 +608,9 @@ func step(world: Node3D, input: Vector2, dt: float) -> float:
 		if redirecting and forward.dot(wish) > .995:
 			redirecting = false
 		var turn_floor := 0.88 * smoothstep(1.15, 2.0, speed)
-		if special == "turn" or running_turn:
+		if running_turn:
+			turn_floor = .60
+		elif special == "turn":
 			turn_floor = .38
 		requested *= lerpf(turn_floor, 1.0, smoothstep(-0.45, 0.85, forward.dot(wish)))
 	if input.length() <= DEAD_ZONE and previous_request and previous_speed > .30 and skeleton:
@@ -626,6 +643,10 @@ func step(world: Node3D, input: Vector2, dt: float) -> float:
 				var err := wrapf(desired_touchdown - (phase + hz * remaining), -.5, .5)
 				scale_rate = clampf(1.0 + err / maxf(.045, hz * remaining), .05, 2.55)
 		gait_tree.set("parameters/transfer_speed/scale", scale_rate)
+	if top_speed == MAX_SPEED:
+		var steer_rate := angle_difference(body.rotation.y, next_heading) / maxf(dt, .00001)
+		var lean_target := deg_to_rad(5.) * clampf(steer_rate / redirect_rate, -1., 1.) * smoothstep(1.4, 5., speed)
+		field_turn_lean = lerpf(field_turn_lean, lean_target, 1. - exp(-15. * dt))
 	body.rotation.y = next_heading
 	body.velocity = forward * speed
 	body.move_and_slide()

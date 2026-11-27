@@ -23,6 +23,7 @@ var upgrade_anchor := Node3D.new()
 var upgrade_label: Label3D
 var upgrade_pending := true
 var payment_ink := {}
+var payment_brackets := {}
 var payment_costs: Node3D
 const CounterLayout = preload("res://field_counter.gd")
 # The last purchase opens a work aisle along the north wall. The gates and
@@ -461,7 +462,8 @@ func install_payment(anchor:Node3D, upgrade:bool) -> void:
 			payment_ink["upgrade" if upgrade else "buy"] = fill
 			mark.material_override = fill
 		else:
-			ink.albedo_color = Color("e9e4cb") if upgrade else ink.albedo_color
+			ink.albedo_color = Color("f8fbff")
+			payment_brackets["upgrade" if upgrade else "buy"] = ink
 			mark.material_override = ink
 		mark.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		anchor.add_child(mark)
@@ -491,7 +493,9 @@ func set_payment(remaining: Dictionary) -> void:
 	show_costs(payment_costs,remaining)
 
 func set_payment_progress(fraction:float, receiver: String = "buy") -> void:
-	if payment_ink.has(receiver): payment_ink[receiver].set_shader_parameter("paid",clampf(fraction,0,1))
+	if payment_ink.has(receiver):
+		payment_ink[receiver].set_shader_parameter("paid",clampf(fraction,0,1))
+		payment_brackets[receiver].albedo_color = Color("5be72e") if fraction > 0. else Color("f8fbff")
 
 func set_upgrade_payment(remaining: Dictionary) -> void:
 	var stone := int(remaining.get("stone",0))

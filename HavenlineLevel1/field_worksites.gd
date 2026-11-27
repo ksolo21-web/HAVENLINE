@@ -24,7 +24,7 @@ func refresh() -> void:
 	if last_paid != int(journal.survivor_wood):
 		last_paid = int(journal.survivor_wood)
 		world.field_env.show_costs(plot.price,{"wood":world.inventory.survivor_cost-last_paid})
-		plot.ink.set_shader_parameter("paid",float(last_paid) / world.inventory.survivor_cost)
+		plot.set_fill(float(last_paid) / world.inventory.survivor_cost)
 
 func _site() -> String:
 	var here: Vector3 = world.actor.global_position

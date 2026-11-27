@@ -234,17 +234,16 @@ func handle_input(event: InputEvent) -> bool:
 func hint(previous: String, danger: bool) -> String:
 	var journal: Dictionary = world.inventory.settlement
 	if journal.level == 2:
-		return "Stay in the snowfield or serve another meal."
-	if ready(): return "Level 1 playtest complete."
+		return "Level 2 preview · All Level 1 plots complete. The camp is open."
+	if ready(): return "Level 1 complete · Continue to Level 2."
 	if works.plot.visible and world.actor.position.distance_to(works.PLOT_AT) < 2.0:
 		return "Rescue survivor  ·  %d wood left" % Progress.units(world.inventory.survivor_cost - int(journal.survivor_wood))
-	if world.depot.apron.visible and (world.depot.at_apron(world.actor.position) or world.depot.at_loading_area(world.actor.position)): return previous
+	if world.depot.apron.visible and (world.depot.at_apron(world.actor.position) or world.depot.at_loading_area(world.actor.position) or (world.depot.upgrade_mark.visible and world.depot.on_upgrade_side(world.actor.position))): return previous
 	if works.active in Rules.KINDS:
 		return {"wood":"Loading saw…","stone":"Loading drill…","meat":"Loading cooker…"}[works.active]
-	if not world.inventory.complete(Progress.SECOND):
-		if world.camp_active and not journal.rescued and world.survivor.at_rescue(world.actor.global_position):
-			return "Approach the survivor."
-		return previous
+	if journal.survivor_paid and not journal.rescued and world.survivor.at_rescue(world.actor.global_position): return "Approach the survivor."
+	if not world.next_project.is_empty(): return previous
+	if not world.inventory.complete(Progress.SECOND): return previous
 	var hint_: String
 	var target := Vector3.INF
 	if journal.held_meal > 0:
@@ -256,7 +255,7 @@ func hint(previous: String, danger: bool) -> String:
 	elif hot:
 		hint_ = "Cooking  ·  The roast will wait at the outfeed."
 	elif not journal.rescued:
-		hint_ = "Take two wood to the survivor southwest of the south gate." if not journal.survivor_paid else "Approach the survivor by the south grove."
+		hint_ = "Rescue survivor · %d wood at the southwest plot" % Progress.units(world.inventory.survivor_cost-int(journal.survivor_wood)) if not journal.survivor_paid else "Approach the survivor by the south grove."
 		target = works.PLOT_AT if not journal.survivor_paid else world.survivor.RESCUE
 	elif journal.served == 0:
 		hint_ = "Take meat to the camp cooker inlet." if world.inventory.carried.meat > 0 else "Hunt for meat to load the camp cooker."

@@ -66,3 +66,13 @@ static func next_storage(ledger) -> String:
 	for id: String in STORAGE:
 		if not ledger.complete(id): return id
 	return ""
+
+
+static func next_build(ledger) -> String:
+	var first := ""
+	for id: String in OFFERS:
+		if not ledger.offer_open(id): continue
+		if first.is_empty(): first = id
+		for paid in ledger.paid[id].values():
+			if paid > 0: return id
+	return first

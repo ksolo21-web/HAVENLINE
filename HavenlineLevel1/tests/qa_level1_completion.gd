@@ -308,12 +308,15 @@ func machines_and_owl() -> void:
 	# life-cycle settings from the ordinary wave producer.
 	place(Vector3(55,0,12))
 	await wait_for(func():return game.owl.global_position.distance_to(game.actor.global_position)<4.,900)
-	if game.enemies.is_empty():
+	# A defeated wolf stays in the scene until its fall animation ends.
+	# Select a live target even if the previous wave is still fading out.
+	if not game.enemies.any(func(wolf): return wolf.active and wolf.hp > 0):
 		game.encounters.rng.seed=8173
 		game.encounters.launch()
-	var foe=game.enemies.front() if not game.enemies.is_empty() else null
-	check("physical wolf spawned for owl contact",foe!=null and foe.hp>0)
-	if not foe: return
+	var spawned: bool = await wait_for(func(): return game.enemies.any(func(wolf): return wolf.active and wolf.hp > 0),1800)
+	check("physical wolf spawned for owl contact",spawned)
+	if not spawned: return
+	var foe = game.enemies.filter(func(wolf): return wolf.active and wolf.hp > 0).front()
 	var start_hits: int=ledger.settlement.owl_hits
 	place(foe.global_position + Vector3(0,0,5.0))
 	check("remote owl callback cannot manufacture a hit",not game.owl_contact(foe,game.actor.global_position+Vector3(35,0,0)))

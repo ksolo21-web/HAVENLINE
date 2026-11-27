@@ -57,16 +57,10 @@ func cold() -> void:
  verify("Can walk to the center of the apron from inside", await walk_to(apron+Vector3(0,0,-.12)))
  var held:Dictionary=ledger.carried.duplicate()
  verify("Door center stays on the unloaded house",field.depot.visit=="load" and held.stone==4)
- var stayed_on_pad:=true
- for i in 90:
-  stayed_on_pad = stayed_on_pad and field.depot.at_apron(field.actor.position)
-  if field.depot.on_upgrade_side(field.actor.position): break
-  move_to([apron.x+.80,apron.z-.08],.04)
-  await physics_frame
- steer(Vector2.ZERO)
- var entered:bool=field.depot.on_upgrade_side(field.actor.position)
+ var plot:Vector3=field.depot.UPGRADE_AT
+ var reached_plot:=await walk_to(plot)
  for i in 60: await physics_frame
- verify("Crossing to the right upgrade edge funds it without leaving",stayed_on_pad and entered and ledger.paid.storage_stone.wood>0 and ledger.paid.storage_stone.stone>0)
+ verify("The separate upgrade plot is reachable from the loading door",reached_plot and field.depot.on_upgrade_side(field.actor.position) and not field.depot.at_apron(field.actor.position) and ledger.paid.storage_stone.wood>0 and ledger.paid.storage_stone.stone>0)
  measurements["side_approach"]={"approach":str(field.actor.position),"remaining":ledger.remaining("storage_stone"),"stock":ledger.stored.duplicate()}
 
 func drive(dest:String, at:Vector3, measure:Callable, expected:int) -> void:
@@ -150,7 +144,7 @@ func leave_upgrade() -> void:
  field.carry.sync()
  field.actor.position=Vector3.ZERO
  field._step_receivers()
- var edge:Vector3=field.depot.APRON+Vector3(.61,0,0)
+ var edge:Vector3=field.depot.UPGRADE_AT
  field.actor.position=edge
  field.actor.velocity=Vector3.RIGHT*6.
  for i in 30:

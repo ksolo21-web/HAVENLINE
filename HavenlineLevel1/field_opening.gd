@@ -18,6 +18,8 @@ const PAD_RADIUS := 1.0
 const RUN_STICK_DEAD_ZONE := 0.11
 const MAX_HP := 10 * FieldEnemy.MAX_HEALTH
 const RECOIL_SECONDS := .38
+const CAMP_HEAL_INTERVAL := 1.0
+const CAMP_HEAL_HP := 3
 const UPGRADE_GLINT = preload("res://assets/field_ui/upgrade_glint.svg")
 var lakeshore
 var processors
@@ -43,6 +45,7 @@ var forest := preload("res://field_forest.gd").new()
 var trunk_cache := {}
 var drops: Dictionary = {}
 var drop_id := 0
+var camp_heal_elapsed := 0.0
 var player_hp := MAX_HP
 var player_invulnerability := 0.0
 var reset_time := 0.0
@@ -70,6 +73,7 @@ var impact_lean := Vector2(1,0)
 var rescue_time := 0.0
 var simulation_time := 0.0
 var last_notice := ""
+var next_project := ""
 var current_music := ""
 
 func create_opening_hud() -> OpeningHUD:
@@ -151,16 +155,20 @@ func _ready() -> void:
 		persist_blocked = true
 		persist_error = "Saved world state could not be restored."
 	# Resume loading at the doorway, while requiring a fresh approach to buy.
-	if not inventory.world_state.is_empty() and depot.at_apron(actor.position) and (depot.house.tier == 0 or depot.on_upgrade_side(actor.position)):
-		depot.visit = "done"
+	if not inventory.world_state.is_empty() and ((depot.house.tier == 0 and depot.at_apron(actor.position)) or depot.on_upgrade_side(actor.position)):
+		depot.pause_purchase(actor.position)
 	settlement_loop = preload("res://field_settlement_loop.gd").new()
 	add_child(settlement_loop)
 	settlement_loop.install(self)
 	previous_dry_position = actor.position
 	field_ready = true
+	var home_compass := preload("res://field_navigation.gd").new()
+	opening_hud.add_child(home_compass)
+	home_compass.install(self,opening_hud)
 	original_auto_quit = get_tree().auto_accept_quit
 	get_tree().auto_accept_quit = false
 	get_window().close_requested.connect(_close_field)
+	get_viewport().size_changed.connect(_release_field_gestures)
 	forest.install.call_deferred(self)
 	character_kit.set_upgraded(inventory.complete(UPGRADE_OFFER))
 	_refresh_field()
@@ -169,8 +177,17 @@ func _ready() -> void:
 	world_landscape.install.call_deferred(self)
 
 func _notification(what: int) -> void:
-	if what == NOTIFICATION_APPLICATION_PAUSED and field_ready and not closing:
+	if not field_ready or closing:
+		return
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT or what == NOTIFICATION_APPLICATION_PAUSED:
+		_release_field_gestures()
+	if what == NOTIFICATION_APPLICATION_PAUSED:
 		_persist_world()
+
+func _release_field_gestures() -> void:
+	# A fold, task switch or system overlay can interrupt a drag without a release.
+	clear_touch()
+	settlement_loop.finger = -1
 
 func _close_field() -> void:
 	if closing: return
@@ -477,6 +494,7 @@ func _player_hit(amount: int, attacker: Node3D = null) -> void:
 	if amount <= 0 or player_invulnerability > 0.0 or reset_time > 0 or persist_blocked or field_env.is_inside_camp(actor.position): return
 	var loss := mini(player_hp, amount)
 	player_hp -= loss
+	camp_heal_elapsed = 0.0
 	impact_lean = Vector2(1,0)
 	if is_instance_valid(attacker):
 		var away := actor.global_position - attacker.global_position
@@ -581,6 +599,8 @@ func _physics_process(dt: float) -> void:
 		_event("swing",actor.position)
 	first_physics = false
 	var inside: bool = field_env.is_inside_camp(actor.global_position)
+	_advance_camp_heal(dt)
+	if persist_blocked: return
 	_step_foot_audio(inside)
 	player_invulnerability = maxf(0.0,player_invulnerability-dt)
 	flash.color.a = maxf(0.0,flash.color.a-dt*.6)
@@ -602,6 +622,29 @@ func _physics_process(dt: float) -> void:
 		current_music = music
 		sound.set_music_state(music)
 	_refresh_hud_field(danger)
+
+func is_camp_healing() -> bool:
+	return player_hp > 0 and player_hp < MAX_HP and reset_time <= 0.0 and not persist_blocked and not closing and field_env.is_inside_camp(actor.global_position)
+
+func _advance_camp_heal(dt: float) -> void:
+	if not is_camp_healing():
+		camp_heal_elapsed = 0.0
+		return
+	camp_heal_elapsed += dt
+	var intervals := floori((camp_heal_elapsed + .0000001) / CAMP_HEAL_INTERVAL)
+	if intervals == 0: return
+	var award := mini(intervals * CAMP_HEAL_HP, MAX_HP - player_hp)
+	player_hp += award
+	camp_heal_elapsed = 0.0 if player_hp == MAX_HP else maxf(0.0,camp_heal_elapsed - intervals * CAMP_HEAL_INTERVAL)
+	_checkpoint_lifecycle()
+	if persist_blocked:
+		player_hp -= award
+		camp_heal_elapsed = 0.0
+		opening_hud.set_health(player_hp,MAX_HP)
+		return
+	opening_hud.set_health(player_hp,MAX_HP)
+	_combat_number(actor.position+Vector3.UP*2.16,"+%d HP" % award,Color("#83f4b1"))
+	_record_field_event("camp_heal",actor.position)
 
 func _step_foot_audio(inside: bool) -> void:
 	var gait = character_kit.locomotion
@@ -630,9 +673,12 @@ func _disable_worn_shadow(part: Node) -> void:
 		_disable_worn_shadow(child)
 
 func _event(id: String, at: Vector3, audio_id := "") -> void:
+	_record_field_event(id,at)
+	sound.emit_event(id if audio_id.is_empty() else audio_id,at)
+
+func _record_field_event(id: String, at: Vector3) -> void:
 	events.append({"event":id,"t":snappedf(simulation_time,.001),"x":snappedf(at.x,.01),"z":snappedf(at.z,.01)})
 	if events.size()>1024: events.pop_front()
-	sound.emit_event(id if audio_id.is_empty() else audio_id,at)
 
 func _landed(kind: String, dest: String) -> void:
 	if persist_blocked: return
@@ -682,7 +728,7 @@ func _finish_purchase(id: String) -> void:
 			if not orbit_permitted_at(actor.global_position): character_kit.rest()
 			if tracks: tracks.refresh_surface()
 		elif id.begins_with("storage_"):
-			depot.visit = "done"
+			depot.pause_purchase(actor.position)
 		elif id == UPGRADE_OFFER:
 			character_kit.set_upgraded(true)
 			_upgrade_sparks()
@@ -747,6 +793,7 @@ func _step_receivers() -> void:
 			carry.visit(id)
 
 func _refresh_field() -> void:
+	next_project = Progress.next_build(inventory)
 	depot.refresh(camp_active)
 	field_env.set_payment(inventory.remaining(HEARTH_OFFER))
 	field_env.upgrade_anchor.hide()
@@ -763,20 +810,16 @@ func _refresh_hud_field(danger: bool) -> void:
 	if persist_blocked: hint = persist_error
 	elif reset_time > 0: hint = "Returning to camp…" if camp_active else "Returning to the hearth plot…"
 	else:
-		if not camp_active: hint = "Fell pines to build the hearth."
-		elif not inventory.complete(Progress.FIRST): hint = "Bring wood and stone to expand camp."
-		elif not inventory.complete(Progress.SECOND):
-			hint = "Fund the east expansion." if depot.offer.is_empty() else Progress.TITLES[depot.offer] + " in the northwest."
-		elif not inventory.complete(Progress.TOWER) or not inventory.complete(UPGRADE_OFFER):
-			hint = "Fund the marked battlefield upgrades."
-		else: hint = "Watchtower built  ·  Extra axes equipped"
+		if not next_project.is_empty():
+			hint = build_hint(next_project)
+		else:
+			hint = "All eight camp purchases complete."
 		for id in inventory.costs:
-			if id in Progress.STORAGE: continue
+			if id in Progress.STORAGE or not inventory.offer_open(id): continue
 			var anchor: Node3D = carry.receivers[id]
-			if actor.position.distance_squared_to(anchor.global_position) > 1.6: continue
-			if inventory.offer_open(id) and (camp_active or id == HEARTH_OFFER):
-				hint = "%s  ·  %s" % [Progress.TITLES[id], Progress.price_text(inventory.remaining(id))]
-		if depot.apron.visible and (depot.at_apron(actor.position) or depot.at_loading_area(actor.position)): hint = depot.hint()
+			if anchor.is_visible_in_tree() and actor.position.distance_squared_to(anchor.global_position) <= 1.6:
+				hint = build_hint(id)
+		if depot.apron.visible and (depot.at_apron(actor.position) or depot.at_loading_area(actor.position) or (depot.upgrade_mark.visible and depot.on_upgrade_side(actor.position))): hint = depot.hint()
 	if settlement_loop and not persist_blocked and reset_time <= 0:
 		hint = settlement_loop.hint(hint,false)
 	opening_hud.set_threat(danger and not persist_blocked and reset_time <= 0)
@@ -784,6 +827,17 @@ func _refresh_hud_field(danger: bool) -> void:
 	if notice == last_notice: return
 	last_notice = notice
 	opening_hud.field_status(inventory.carried,hint)
+
+func build_hint(id: String) -> String:
+	var title: String = Progress.TITLES[id]
+	var price := Progress.price_text(inventory.remaining(id))
+	var target: Node3D = carry.receivers[id]
+	var range_m := actor.global_position.distance_to(target.global_position)
+	if range_m < 1.5: return "%s · %s" % [title,price]
+	var screen := camera.unproject_position(target.global_position) - camera.unproject_position(actor.global_position)
+	var directions := ["→","↘","↓","↙","←","↖","↑","↗"]
+	var direction: String = directions[posmod(roundi(screen.angle()/(PI/4.)),8)]
+	return "%s · %s  %s %d m" % [title,price,direction,roundi(range_m)]
 
 # Scene callbacks conclude a physical transfer and save its receipt before celebrating it.
 func rescue_survivor() -> bool:

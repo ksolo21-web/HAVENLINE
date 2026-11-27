@@ -49,7 +49,7 @@ func run() -> void:
 		var bin: Node3D = world.depot.bins[kind]
 		var first: Vector3 = world.depot.landing_position(kind,0)
 		checks[kind+" physical shelf is inside house"] = camp.is_inside_camp(first) and bin.global_position.distance_to(world.depot.house.global_position)<2.1 and bin.visible
-		checks[kind+" all purchases share one apron"] = world.carry.receivers["storage_"+kind] == world.depot.apron
+		checks[kind+" construction targets the correct physical plot"] = world.carry.receivers["storage_"+kind] == (world.depot.apron if kind=="wood" else world.depot.upgrade_mark)
 		checks[kind+" retired corner is absent"] = world.find_child(kind.capitalize()+"StoragePlot",true,false)==null
 	var storehouse = world.depot.house
 	world.actor.position=Vector3.ZERO
