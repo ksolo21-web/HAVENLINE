@@ -1,0 +1,9 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+SETTLEMENT_QA {"checks":{"Level 2 arrives in the normal visible gameplay chapter":false,"already-claimed completion avoided a second transition":true,"both finished-material counters match persistent balances":true,"both processed balances and companion contact persisted":true,"cash label reflects the one confirmed wallet payment":true,"cold launch restored Level 2":true,"eight prior purchases and the banked delivery survived":true,"served receipt unchanged on cold launch":true,"shipping main scene loaded from disposable profile":true,"the resumed field shows all Level 1 plots finished and camp open":true,"visible health reading matches the live player":true},"failures":["Level 2 arrives in the normal visible gameplay chapter"],"observed":{"visible_labels":["HAVENLINE","Camp  ·  Level 2","30 / 30","40","40","10","CAMP OBJECTIVE","Level 2 preview · All Level 1 plots complete. The camp is open.","1","1","1","+3","Camp","Storage","Survivors"]},"phase":"second-launch"}
+ERROR: Level 2 arrives in the normal visible gameplay chapter
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/qa_level1_completion.gd:23)
+       [1] second_launch (res://tests/qa_level1_completion.gd:373)
+       [2] run (res://tests/qa_level1_completion.gd:522)

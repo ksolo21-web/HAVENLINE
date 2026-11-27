@@ -1,0 +1,319 @@
+{
+  "stamp": {
+    "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+    "manifest": {
+      "sha256": "62ae4aee55005afc394b3a263f91f05aa27578055ea345f2ca8eaa688b5dbce7",
+      "checked_files": 614
+    },
+    "runner": "430557709a66d5b0b7a39e8ca218b79c79364f644472e700075a83f6c7596beb"
+  },
+  "passed": true,
+  "runs": [
+    {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "log": "qa_paid_conveyors-1.log",
+      "log_sha256": "17731c59bd05c4e92220ccb180a42917011e93a175bac94552732db667a1149e",
+      "summary": [
+        {
+          "checks": {
+            "base food purchase installs serial storage and request links": true,
+            "both purchases install all eight typed routes": true,
+            "food line does not activate raw line": true,
+            "food sale is a real paid counter exchange": true,
+            "meal_conveyor is a visible build action": true,
+            "meal_conveyor physically available": true,
+            "meal_conveyor purchased through actual plot": true,
+            "normalized partial paths persisted": true,
+            "opened valid isolated save": true,
+            "real roast reaches paying non-player customer": true,
+            "real v7 unlocked buildings and no gifted lines": true,
+            "side docks dispatch without swinging the pedestrian doors": true,
+            "supply_conveyors is a visible build action": true,
+            "supply_conveyors physically available": true,
+            "supply_conveyors purchased through actual plot": true,
+            "unpaid belts never move stock": true
+          },
+          "phase": "initial",
+          "receipts": [
+            {
+              "blocks": 0,
+              "cash": 1,
+              "cooked": 1,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 0,
+                "stone": 0,
+                "wood": 1
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 0,
+                "stone": 1,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "planks": 0,
+              "product_store": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.758618955563488,
+                "planks": 0.0,
+                "stone": 0.0410885639626075,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "stored": {
+                "coal": 0,
+                "meat": 5,
+                "metal": 0,
+                "slate": 0,
+                "stone": 2,
+                "wood": 2
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "log": "qa_paid_conveyors-2.log",
+      "log_sha256": "3c035bcb6985f34c69628b89b0caccdf6b5eb1c42d405fa48fcaaf778d642bcc",
+      "summary": [
+        {
+          "checks": {
+            "acquire competing lock": true,
+            "cold start restores moving load": true,
+            "opened valid isolated save": true,
+            "previous durable bytes stay intact": true,
+            "rejected landing pauses safely": true
+          },
+          "phase": "interrupt",
+          "receipts": []
+        }
+      ]
+    },
+    {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "log": "qa_paid_conveyors-3.log",
+      "log_sha256": "d664177b11fef89a682ea5f0a5950956120d541a725f39990a0e065a9eb758c5",
+      "summary": [
+        {
+          "checks": {
+            "entire path conserved all goods": true,
+            "failed landing can be retried from saved input": true,
+            "idle empty lines cannot pay twice": true,
+            "one purchased input meal per completed order": true,
+            "opened valid isolated save": true,
+            "wood, stone and meals finish offscreen and earn cash": true
+          },
+          "phase": "finish",
+          "receipts": [
+            {
+              "blocks": 3,
+              "cash": 7,
+              "cooked": 7,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 0,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 0,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "planks": 3,
+              "product_store": {
+                "blocks": 3,
+                "meal": 0,
+                "planks": 3
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.0,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "stored": {
+                "coal": 0,
+                "meat": 0,
+                "metal": 0,
+                "slate": 0,
+                "stone": 0,
+                "wood": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "log": "qa_paid_conveyors-4.log",
+      "log_sha256": "4976dc61bbd43f2096069da5620c90cedf69a51d2ad4625538a605d583840b7f",
+      "summary": [
+        {
+          "checks": {
+            "earned cash and both purchases survive restart": true,
+            "idle storehouse cannot create extra product": true,
+            "opened valid isolated save": true
+          },
+          "phase": "cold",
+          "receipts": []
+        }
+      ]
+    },
+    {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "log": "qa_paid_conveyors-5.log",
+      "log_sha256": "a426953ea7754782f3cf5dd87ade345170a39b2d695aeff341af7619dbebed63",
+      "summary": [
+        {
+          "checks": {
+            "genuine new kitchen has no free saw or drill": true,
+            "new saw connects without rebuying supply": true,
+            "next quarry connects to the existing supply purchase": true,
+            "opened valid isolated save": true,
+            "quarry_drill has a public payment edge beside the live tracks": true,
+            "quarry_drill physically available": true,
+            "quarry_drill purchased through actual plot": true,
+            "saw_bench has a public payment edge beside the live tracks": true,
+            "saw_bench physically available": true,
+            "saw_bench purchased through actual plot": true,
+            "supply_conveyors is a visible build action": true,
+            "supply_conveyors physically available": true,
+            "supply_conveyors purchased through actual plot": true,
+            "unowned outbuildings remain disconnected": true
+          },
+          "phase": "growth",
+          "receipts": [
+            {
+              "pack": {
+                "coal": 0,
+                "meat": 0,
+                "metal": 0,
+                "slate": 0,
+                "stone": 0,
+                "wood": 0
+              },
+              "paid": {
+                "stone": 6,
+                "wood": 14
+              },
+              "paying_floor": [
+                -5.00318384170532,
+                -4.80768775939941
+              ],
+              "station": "saw_bench",
+              "touch_start": [
+                1.14999997615814,
+                0.899999976158142
+              ]
+            },
+            {
+              "pack": {
+                "coal": 0,
+                "meat": 0,
+                "metal": 0,
+                "slate": 0,
+                "stone": 0,
+                "wood": 0
+              },
+              "paid": {
+                "stone": 12,
+                "wood": 10
+              },
+              "paying_floor": [
+                5.83222818374634,
+                -5.15449190139771
+              ],
+              "station": "quarry_drill",
+              "touch_start": [
+                -4.60000038146973,
+                -5.19841575622559
+              ]
+            },
+            {
+              "blocks": 1,
+              "cash": 0,
+              "cooked": 4,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 3,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 1,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 0,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 1
+              },
+              "planks": 2,
+              "product_store": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.0,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.354902922367597
+              },
+              "rack": 4,
+              "stored": {
+                "coal": 0,
+                "meat": 0,
+                "metal": 0,
+                "slate": 0,
+                "stone": 2,
+                "wood": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -370,7 +370,7 @@ func second_launch() -> void:
 	for label:Label in game.opening_hud.find_children("*","Label",true,false):
 		if label.is_visible_in_tree(): labels.append(label.text)
 	var hud = game.opening_hud
-	check("Level 2 arrives in the normal visible gameplay chapter",hud.chapter.is_visible_in_tree() and hud.chapter.text=="Level 2  ·  Preview")
+	check("Level 2 arrives in the normal visible gameplay chapter",hud.chapter_detail.is_visible_in_tree() and hud.chapter_detail.text=="Camp  ·  Level 2")
 	check("the resumed field shows all Level 1 plots finished and camp open",labels.has("Level 2 preview · All Level 1 plots complete. The camp is open."))
 	check("cash label reflects the one confirmed wallet payment",hud.outputs.cash.is_visible_in_tree() and hud.outputs.cash.text=="1" and hud.display_goods.cash.art.texture!=null)
 	check("both finished-material counters match persistent balances",hud.outputs.planks.is_visible_in_tree() and hud.outputs.planks.text=="1" and hud.outputs.blocks.is_visible_in_tree() and hud.outputs.blocks.text=="1" and hud.display_goods.planks.art.texture.region!=hud.display_goods.blocks.art.texture.region)

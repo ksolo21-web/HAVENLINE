@@ -1,0 +1,13 @@
+# Gameplay HUD review
+
+The implementation uses the selected Havenline camp sheet for the in-play controls. The reference shows an ivory balance rail above the play area, a short objective below the portrait, a slim three-part navigation bar and an orange Build button. I compared the source with real images from the normal gameplay camera, including a loaded camp on cover and inside display geometries, pinch zoom, an open storage panel and a live wolf encounter. The direction gallery presents landscape as an exploration. The portrait arrangement and its touch sizing are adaptations for Havenline's phone build. [Selected GitHub image](https://github.com/ksolo21-web/HAVENLINE/blob/9f74603283655313d16ec326558f19e546a8c99c/Docs/Design/UIConcepts/2026-11-26/modern-directions-01/selected/ui-camp-hud.png) · [Source and field comparison](Fold-review.jpg)
+
+**First pass.** The rescue label spread too far across the upper field, money dropped below its balance strip on a roomy layout, and the Camp glyph sat against the left edge. [First rendered comparison](First-review.jpg)
+
+**Revised field view.** The compact rescue objective has distinct cost and bearing information. The currency sits with the other visible resource totals. The Camp glyph has breathing room, and the orange button stays separate from the translucent movement control. Pinching leaves the center and lower ground usable. During the wolf encounter the player's health visibly falls from 30 to 28 while the camp-bearing indicator remains legible and the attack stays automatic. The result preserves gameplay information that the static sheet leaves unspecified. [Combat](Native/Live-encounter.jpg) · [Damage](Native/Actual-damage.jpg) · [Cover](Native/Cover-normal.jpg) · [Inside screen](Native/Inner-normal.jpg)
+
+**Interaction.** Opening Storage shows the real house's stock and a working guide to its approach. Build opens the current purchase or relocation actions. The separate concept sheets for full storage and survivor management contain features beyond these quick in-play panels. Hardware touch targets and live folding need handset review. These captures use desktop Godot and the game's touch event path. [Storage and actions](Native/Gameplay-touch.json) · [Selected concept scope in the preceding build](../../Connected-Camp-2026-11-27/Verification/UI/Selected-concepts.md)
+
+**Grade · 9.5/10 for the reviewed in-play HUD.** All six primary cover hit regions measured at least 48×48 at 360×840 equivalent and stayed in the safe rectangle. The packed release retest exercises the exact shipped controls. [Touch dimensions and verdict](Independent-verdict.json)
+
+The HUD builder was **hud_redesign** and the independent reviewer was the **integration lead**.

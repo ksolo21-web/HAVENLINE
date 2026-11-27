@@ -1,0 +1,197 @@
+{
+  "release_source": "989edd9283148e9f712387fb937ea36038cbd9d2",
+  "apk_sha256": "243a53238f9bc90374fe405069d7ce066468ada71e52bcdf33644c05a4e248cc",
+  "signed_resources": {
+    "apk_sha256": "243a53238f9bc90374fe405069d7ce066468ada71e52bcdf33644c05a4e248cc",
+    "apk_bytes": 215187566,
+    "packed_files": 725,
+    "identical_files_verified": 725,
+    "temporary_pack_bytes": 187236377,
+    "scripts": {
+      "orbit_opening.gdc": "179497b3692e49ff294d3d3b173e4f2cf0d34b7242b7686de93b7e41090c2a1d",
+      "weapon_orbit.gdc": "5bf498e01a03bdd236620a78c7aaab4c2c4dbae28c1185ded05e07decae92e77",
+      "field_enemy.gdc": "c1ca54659467d34e83789a706f9541a9878701bd445e0f18a7d84095e6e46558",
+      "field_opening.gdc": "ca94fc22f3cfa907889c5030cc124c0f4ed7d1fe72a7ca52c07f323807235a31",
+      "project.binary": "f9da523e2f184accf42ff3537bfa0558afd218242818fcf08b2c36fba99eb257"
+    }
+  },
+  "previous_release_source": "84faffd3df42a4061a07f68d1158e8f7aa7f8e65",
+  "previous_fixture_sha256": "440004f172d3e2fca8828f0d97cfc542c8272b3e1e04af6760f41e23b7d25cd2",
+  "source_film_sha256": "84dca10f089b4d6fa2e9a95d4998ab4278f8e9a7463ae04bf8e92dfc83ee7656",
+  "source_probe_sha256": "4216869eb3faae348a13a1ffb57f7c6adfeb1ff0724f57c9d89713c6b31d2481",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "method": "Two separate desktop Godot processes read identical assets extracted from the signed Android export in an empty project directory. Only the first launch receives the original fixture. The second process reopens the newly written disposable save.",
+  "runs": [
+    {
+      "phase": "initial",
+      "initial_save_sha256": "440004f172d3e2fca8828f0d97cfc542c8272b3e1e04af6760f41e23b7d25cd2",
+      "final_save_sha256": "59c0b27d023112d49e7308aa66b8d09fd508523dc5f6e496d6c8c91ff3e4d18e",
+      "log": "Signed-build10-opening-initial.log",
+      "log_sha256": "32cddbc75a54f06030ee0e64836a6f99197dbecacc2b84817c12032bd308fc13",
+      "result": {
+        "carried": {
+          "coal": 0,
+          "meat": 2,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 0
+        },
+        "cash": 0,
+        "checks": {
+          "Both distinct two-leaf gates open to player proximity": true,
+          "Cash and storage remain at their earned zero balances": true,
+          "Earned profile and built first perimeter restored": true,
+          "First expansion retains four wood and three stone bundles": true,
+          "First purchase consumed exactly twenty wood bundles": true,
+          "Normal game save succeeds": true,
+          "Only the uncompleted first expansion currently shows a construction mat": true,
+          "The original 29 unique receipts conserve all six materials": true,
+          "The paid hearth is physically visible": true,
+          "Two meat bundles remain in the pack with no other carried stock": true
+        },
+        "cold": false,
+        "gates": {
+          "gate-east": {
+            "angle_degrees": 90.0,
+            "leaves": 2,
+            "visible": true
+          },
+          "gate-south": {
+            "angle_degrees": 90.0,
+            "leaves": 2,
+            "visible": true
+          }
+        },
+        "ledger_version": 9,
+        "paid": {
+          "expansion": {
+            "stone": 3,
+            "wood": 4
+          },
+          "hearth": {
+            "wood": 20
+          }
+        },
+        "remaining": {
+          "stone": 3,
+          "wood": 8
+        },
+        "source_receipts": 29,
+        "stored": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 0
+        },
+        "typed_balance_delta": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 0
+        },
+        "typed_receipt_totals": {
+          "coal": 0,
+          "meat": 2,
+          "metal": 0,
+          "slate": 0,
+          "stone": 3,
+          "wood": 24
+        },
+        "visible_offers": [
+          "expansion_1"
+        ]
+      }
+    },
+    {
+      "phase": "cold",
+      "initial_save_sha256": "59c0b27d023112d49e7308aa66b8d09fd508523dc5f6e496d6c8c91ff3e4d18e",
+      "final_save_sha256": "59c0b27d023112d49e7308aa66b8d09fd508523dc5f6e496d6c8c91ff3e4d18e",
+      "log": "Signed-build10-opening-cold.log",
+      "log_sha256": "4243a249656b5759a8f72fe863eba97cc1d5c773efb0cfc147cd1845f9a2f628",
+      "result": {
+        "carried": {
+          "coal": 0,
+          "meat": 2,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 0
+        },
+        "cash": 0,
+        "checks": {
+          "Both distinct two-leaf gates open to player proximity": true,
+          "Cash and storage remain at their earned zero balances": true,
+          "Earned profile and built first perimeter restored": true,
+          "First expansion retains four wood and three stone bundles": true,
+          "First purchase consumed exactly twenty wood bundles": true,
+          "Normal game save succeeds": true,
+          "Only the uncompleted first expansion currently shows a construction mat": true,
+          "The original 29 unique receipts conserve all six materials": true,
+          "The paid hearth is physically visible": true,
+          "Two meat bundles remain in the pack with no other carried stock": true
+        },
+        "cold": true,
+        "gates": {
+          "gate-east": {
+            "angle_degrees": 90.0,
+            "leaves": 2,
+            "visible": true
+          },
+          "gate-south": {
+            "angle_degrees": 90.0,
+            "leaves": 2,
+            "visible": true
+          }
+        },
+        "ledger_version": 9,
+        "paid": {
+          "expansion": {
+            "stone": 3,
+            "wood": 4
+          },
+          "hearth": {
+            "wood": 20
+          }
+        },
+        "remaining": {
+          "stone": 3,
+          "wood": 8
+        },
+        "source_receipts": 29,
+        "stored": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 0
+        },
+        "typed_balance_delta": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 0
+        },
+        "typed_receipt_totals": {
+          "coal": 0,
+          "meat": 2,
+          "metal": 0,
+          "slate": 0,
+          "stone": 3,
+          "wood": 24
+        },
+        "visible_offers": [
+          "expansion_1"
+        ]
+      }
+    }
+  ],
+  "passing_assertions": 20
+}

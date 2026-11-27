@@ -1,0 +1,60 @@
+{
+  "stamp": {
+    "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+    "manifest": {
+      "sha256": "62ae4aee55005afc394b3a263f91f05aa27578055ea345f2ca8eaa688b5dbce7",
+      "checked_files": 614
+    },
+    "runner": "430557709a66d5b0b7a39e8ca218b79c79364f644472e700075a83f6c7596beb"
+  },
+  "passed": true,
+  "runs": [
+    {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "log": "qa_camp_healing-1.log",
+      "log_sha256": "0b9deb6da7971215f15f313e712f6910d3cf1338f3b4a4c1c8d5cca489bb59a3",
+      "summary": [
+        {
+          "checks": {
+            "downed_save_waits_for_respawn": true,
+            "existing_respawn_remains_full_hp": true,
+            "expanded_paid_grounds_heal": true,
+            "failed_checkpoint_grants_no_hp_or_feedback": true,
+            "full_hp_has_no_award_or_repeat": true,
+            "gate_0_automatic_visible_recovery": true,
+            "gate_0_normal_input_crosses": true,
+            "gate_0_snow_does_not_heal": true,
+            "gate_0_world_feedback": true,
+            "gate_1_automatic_visible_recovery": true,
+            "gate_1_normal_input_crosses": true,
+            "gate_1_snow_does_not_heal": true,
+            "gate_1_world_feedback": true,
+            "just_outside_closed_gate_restore_stays_on_snow": true,
+            "last_actual_hp_only": true,
+            "leaving_cancels_partial_pulse": true,
+            "legacy_profile_can_heal": true,
+            "paid_profile_restored": true,
+            "partial_second_completes_after_reload": true,
+            "reload_does_not_grant_early_hp": true,
+            "save_keeps_partial_hp_and_elapsed": true,
+            "unbuilt_footprint_does_not_heal": true,
+            "v1_low_hp_loads_without_a_free_pulse": true
+          },
+          "gate_crossings": {
+            "0": [
+              6.49743505561319e-18,
+              3.15194535255432
+            ],
+            "1": [
+              4.15194749832153,
+              2.5463603492426e-07
+            ]
+          },
+          "suite": "camp_healing"
+        }
+      ]
+    }
+  ]
+}

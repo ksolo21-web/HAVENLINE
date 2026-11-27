@@ -1,0 +1,2225 @@
+From 56c8955356122c84676e69e962daf8bfbd24ae3f Mon Sep 17 00:00:00 2001
+From: Havenline UI <havenline-ui@local.invalid>
+Date: Fri, 27 Nov 2026 06:21:03 +0000
+Subject: [PATCH] Port the selected camp HUD to responsive Level 1 gameplay
+
+---
+ .../assets/field_ui/modern/build.png          | Bin 0 -> 31820 bytes
+ .../assets/field_ui/modern/build.png.import   |  40 ++
+ .../assets/field_ui/modern/camp.png           | Bin 0 -> 1410 bytes
+ .../assets/field_ui/modern/camp.png.import    |  40 ++
+ .../assets/field_ui/modern/gear.png           | Bin 0 -> 1462 bytes
+ .../assets/field_ui/modern/gear.png.import    |  40 ++
+ .../assets/field_ui/modern/storage.png        | Bin 0 -> 1488 bytes
+ .../assets/field_ui/modern/storage.png.import |  40 ++
+ .../assets/field_ui/modern/survivors.png      | Bin 0 -> 1707 bytes
+ .../field_ui/modern/survivors.png.import      |  40 ++
+ HavenlineLevel1/field_automation_menu.gd      |   3 +
+ HavenlineLevel1/field_camp_dock.gd            | 419 ++++++++++++++++++
+ HavenlineLevel1/field_camp_dock.gd.uid        |   1 +
+ HavenlineLevel1/field_camp_layout.gd          |   1 +
+ HavenlineLevel1/field_hud.gd                  | 212 ++++++---
+ HavenlineLevel1/field_hud_objective.gd        |   1 +
+ HavenlineLevel1/field_layout_hud.gd           |   4 +-
+ HavenlineLevel1/field_navigation.gd           |  40 +-
+ HavenlineLevel1/field_opening.gd              |   3 +
+ HavenlineLevel1/field_thumbstick.gd           |  35 +-
+ .../tests/fixtures/camp_hud_paid.json         |   1 +
+ HavenlineLevel1/tests/qa_camp_layout.gd       |  18 +-
+ .../tests/qa_field_camp_controls.gd           |  98 ++++
+ .../tests/qa_field_camp_controls.gd.uid       |   1 +
+ HavenlineLevel1/tests/qa_paid_conveyors.gd    |  10 +-
+ 25 files changed, 961 insertions(+), 86 deletions(-)
+ create mode 100644 HavenlineLevel1/assets/field_ui/modern/build.png
+ create mode 100644 HavenlineLevel1/assets/field_ui/modern/build.png.import
+ create mode 100644 HavenlineLevel1/assets/field_ui/modern/camp.png
+ create mode 100644 HavenlineLevel1/assets/field_ui/modern/camp.png.import
+ create mode 100644 HavenlineLevel1/assets/field_ui/modern/gear.png
+ create mode 100644 HavenlineLevel1/assets/field_ui/modern/gear.png.import
+ create mode 100644 HavenlineLevel1/assets/field_ui/modern/storage.png
+ create mode 100644 HavenlineLevel1/assets/field_ui/modern/storage.png.import
+ create mode 100644 HavenlineLevel1/assets/field_ui/modern/survivors.png
+ create mode 100644 HavenlineLevel1/assets/field_ui/modern/survivors.png.import
+ create mode 100644 HavenlineLevel1/field_camp_dock.gd
+ create mode 100644 HavenlineLevel1/field_camp_dock.gd.uid
+ create mode 100644 HavenlineLevel1/tests/fixtures/camp_hud_paid.json
+ create mode 100644 HavenlineLevel1/tests/qa_field_camp_controls.gd
+ create mode 100644 HavenlineLevel1/tests/qa_field_camp_controls.gd.uid
+
+diff --git a/HavenlineLevel1/assets/field_ui/modern/build.png b/HavenlineLevel1/assets/field_ui/modern/build.png
+new file mode 100644
+index 0000000000000000000000000000000000000000..39e7fd959c1c169c632a83e3b17f5d169148b3f0
+GIT binary patch
+literal 31820
+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
+LNkvXXu0mjfxphQP
+
+literal 0
+HcmV?d00001
+
+diff --git a/HavenlineLevel1/assets/field_ui/modern/build.png.import b/HavenlineLevel1/assets/field_ui/modern/build.png.import
+new file mode 100644
+index 000000000..5cca814ed
+--- /dev/null
++++ b/HavenlineLevel1/assets/field_ui/modern/build.png.import
+@@ -0,0 +1,40 @@
++[remap]
++
++importer="texture"
++type="CompressedTexture2D"
++uid="uid://dnptwd160wslx"
++path="res://.godot/imported/build.png-367cc41a2ba3d242269d02e4165c1765.ctex"
++metadata={
++"vram_texture": false
++}
++
++[deps]
++
++source_file="res://assets/field_ui/modern/build.png"
++dest_files=["res://.godot/imported/build.png-367cc41a2ba3d242269d02e4165c1765.ctex"]
++
++[params]
++
++compress/mode=0
++compress/high_quality=false
++compress/lossy_quality=0.7
++compress/uastc_level=0
++compress/rdo_quality_loss=0.0
++compress/hdr_compression=1
++compress/normal_map=0
++compress/channel_pack=0
++mipmaps/generate=false
++mipmaps/limit=-1
++roughness/mode=0
++roughness/src_normal=""
++process/channel_remap/red=0
++process/channel_remap/green=1
++process/channel_remap/blue=2
++process/channel_remap/alpha=3
++process/fix_alpha_border=true
++process/premult_alpha=false
++process/normal_map_invert_y=false
++process/hdr_as_srgb=false
++process/hdr_clamp_exposure=false
++process/size_limit=0
++detect_3d/compress_to=1
+diff --git a/HavenlineLevel1/assets/field_ui/modern/camp.png b/HavenlineLevel1/assets/field_ui/modern/camp.png
+new file mode 100644
+index 0000000000000000000000000000000000000000..91a59f492639e72038d41f02b35f27460c55e9c3
+GIT binary patch
+literal 1410
+zcmV-|1%3L7P)<h;3K|Lk000e1NJLTq001ul001Wl1^@s6pL7wy000F^Nkl<Zc$~G^
+zTa2Am83y2I_Uvg3Os8dlA_6H84k`vk6B0>1pny#iK@g~Ita6M-11bT^Ij9ti3JC;B
+ziYeg`uk=DOpj<$TQDfp&3B<&hUX(Ny8tA#*Oqm%k-t}ki4tsYxv;TfK|G)RY*81M{
+zt@nG^x7NVu;`7vKKgJ1o0Ao|Wt-w+|hga%w)~sWYVn4zC<$VyVJHD;N^Jw5od<`4=
+zb=c^4fDXH;Jh$T(TwZ>kfP0Itw=j%amb*^yFP3K$^Kdsta5FxR_i!ryF00VD4b;f_
+zCSJwou?KVTCXUA<3`ia<l?n81bw>UJJS@PE!hU>OfbW;dJfbGx)C-<a=Xa8@1K5FG
+zSSSg)woYetgNFz4hVXq7qxc_wgjSu7js*Bkc&TIjLHt*grdB%=;7`Y;<$VBqu>?2P
+z?dV8=e@GIwO47;l|82OSPDgcv|0cdJfG0&h=VG^PRzJf~UC!zTf3s{*yM*iGm=M7G
+zgib%G%UPY^SK~ral%_UaCX1hm^7~eNvJQuJfj<W~l=qe->bOLF5C>#JJEcUptq!Mk
+zfxjDPNl{iseF*PL;tt7V2Jk*s;j(_6)&ags(pDL7497?zb~&CF)fv;?bsG}>k$xQa
+z3x2*FKt=@opf=Z^#6R(jY)}id<@0SR;I8k-dB5O)D%!nE=rV@m@DDs*+H5TE4Q=|2
+zm$u)Re3_N?1O6+*-3e`7A1=S|m*lMMSNH>tmFjbz<ilC|NZx+H-yu=nDN&ygO8ipy
+zGwMUwQu-VyZMWk)xOz4KW()pKTr71<MVAG59gp_t^DnH|md{E;hve9}V5T5u1O5~E
+zuC}sNJ1C*cJBR4I7O%<assg@E3b$Kl3S>6mAHZp{<b$Hy!}tyUI8EREa+=yB3RP);
+zOUi~NGXXMF@Yi9P(1id$4*!;-YpQiC!v2J3rC@6a?RJ-O?(Na1tIY)bBK%M`p#7pQ
+z6?gCQ;lsv9@Oylr%UEk9KSo7;=7`*WwfLwV{C)V8?2v=9)T8*d?sWO0lmORs`L-30
+z32o*|-W(|3ZgH6RI)@8>nOxVkildfj_J8EYpqpJ)p5M@&%TJ5;&zDJ5(s`<=*|c`J
+z;44kv)6wrJ*<rh#O)r)5c$?7Y+dam8TuO!cLZ7Crz=}iknGyJVqz>6DbQ!~ml61fA
+z(Pue6Dha(uinngu|EttKb47I;a%dsyb7DW>KP&YIp~|>O+!l#?H(Mf+-&a8GmB?P(
+zqx~;r16x@7G-TJlz%<D_9r!g8!5!KMjHB^$x#H+%t8j|Q-%#<fTW{{ahjk84-tqG7
+zdp-J03;qsVqP>h`a)|z$Z1dgh9DG^$TNP}Tj*sA5J^HQ33#HANB=5T-3is%t{k_1S
+zD|BgSAM56n=Yx9Rd@aYBvQnMr*oN#4m&vtAH+w?VW?`8?Qz*AoR^YI~-;Tw?y}{zR
+z()5>m^cfaOC5kav-mB<u$4MP+rrN7=_1$@7tXBP|g6AL`7+rkce2M1S#li77Uuy0T
+z3XlcZEH(V*9?n<dsSc-|;H&>m7TPTnDowSM@E6&nw#jN&yZD<Ts|RF*+t8F_-1X(p
+z$<m=!oK0$PAZrc*9KIyl|F*2?c*nPDoNXmAOYr9|V{Db<<C9Z@(8R|iz#}*VS2T;W
+zxw7n4vJ98Os<QPJ(e++751%QZ7imYmmtEWgJW-yjN}E<0n*`wf@;;)>Xr0jFa}u4-
+z<(^YI+^3y<-K-_Kuut-%x}R6Ztmro(wA?t&<kpt<1I6!{_UUUxN{dbZ2NeiC+17Nz
+Qf&c&j07*qoM6N<$g42}L{{R30
+
+literal 0
+HcmV?d00001
+
+diff --git a/HavenlineLevel1/assets/field_ui/modern/camp.png.import b/HavenlineLevel1/assets/field_ui/modern/camp.png.import
+new file mode 100644
+index 000000000..168f89036
+--- /dev/null
++++ b/HavenlineLevel1/assets/field_ui/modern/camp.png.import
+@@ -0,0 +1,40 @@
++[remap]
++
++importer="texture"
++type="CompressedTexture2D"
++uid="uid://sikkp15b7ka6"
++path="res://.godot/imported/camp.png-43c0db4f54a59aa59b9f28169bc3bc88.ctex"
++metadata={
++"vram_texture": false
++}
++
++[deps]
++
++source_file="res://assets/field_ui/modern/camp.png"
++dest_files=["res://.godot/imported/camp.png-43c0db4f54a59aa59b9f28169bc3bc88.ctex"]
++
++[params]
++
++compress/mode=0
++compress/high_quality=false
++compress/lossy_quality=0.7
++compress/uastc_level=0
++compress/rdo_quality_loss=0.0
++compress/hdr_compression=1
++compress/normal_map=0
++compress/channel_pack=0
++mipmaps/generate=false
++mipmaps/limit=-1
++roughness/mode=0
++roughness/src_normal=""
++process/channel_remap/red=0
++process/channel_remap/green=1
++process/channel_remap/blue=2
++process/channel_remap/alpha=3
++process/fix_alpha_border=true
++process/premult_alpha=false
++process/normal_map_invert_y=false
++process/hdr_as_srgb=false
++process/hdr_clamp_exposure=false
++process/size_limit=0
++detect_3d/compress_to=1
+diff --git a/HavenlineLevel1/assets/field_ui/modern/gear.png b/HavenlineLevel1/assets/field_ui/modern/gear.png
+new file mode 100644
+index 0000000000000000000000000000000000000000..15575006c64437fc9fcfaedd4c97112db632fbaa
+GIT binary patch
+literal 1462
+zcmV;n1xfmeP)<h;3K|Lk000e1NJLTq001Ze001Wl1^@s6eW(h!000GjNkl<Zc$}@+
+zTd18^5eM+!KKon}PfeS~80w{9XrKluvHIeJl7iZnT9KkCQn9pNK!gfXLD~v}piq4h
+z11c(tHK;{fytRV$^5BD36x)i`z7!;srm1Ptq{;E@y?vOOeCvGKJDg;9;A4Gzt^LjV
+zuURwynY9KxcVBHzxdyl36b2Y$0ZX_KznDk);3WX~SL~ZHb_lPYNBP1$AE&Hjdl)Bh
+z97me5?ei#~7vK;(^Zn&`Sw0sveY@wGU^4)(ozeeRd<(C@1dG`YQtt%I_%hxpe6lYe
+znit@Gco09ss}jV`_$~f`4`YP&{QpP<iR>F;KOVy4_++E|yZ9b{t#gyJ<Xl1WD_ob8
+z426#!#@-x%F+nWlLPx@S1Dz!Y_+S2KIlp@}|GN)s+5ZHt%HNv;cn}{D4nNEZS99!m
+zPP!!l$ni<5w`muIRmZ|oi#c{W$4A(Tzu?V%Ak((^mIQY!6_(QDIGTW0b(R`8fJ!F4
+z_o2>$CvY<Rma;vKH{lz7FpK>T{8`Y%j{L9|QhqYZr(`TFI?`>e20#VOB;S{_ZLM73
+zpX-B}wZ+%q;e21yZPTP_D>xPetqglQM#55)1X|l&3+{vbC2r^gnPx%4iZA5E>pBW4
+zU#e)`mcagtr*s6p3zz5kICYhdTC4^<+&c}(EP!_;xTAu2YfHxoc#xAH!jJGn{Hdqo
+zZMYRT<$sTgt*l&KAS=q>k011b%-Z6AVUO^Mt&Os>+$#Qvj|+-8m)wZ2q`v2E-0q^G
+zVu(F>vi*2k6u-Vvwy3jS1;;i)3Hvtzjv)DW3k$C3NWFZyq8RS(f7}AR3~#_)je?56
+ziqus+i;r#sSS$Y&*50Dqh0;rBgc}mWnY1|Ax%=uX#CBb(i^O9(r*0K(!#DA<^8{G(
+zxX46Dgm0h0A&jw@?K+;uwF`KQs7Q{9Z74sXql1a4OkTwIFAy9Y$hIst>5Z?6!gmp`
+z!SxG*0thQDHQ-u~s^>qVNVrgWDBFtWRyUpX$|u*#LTvQM{>n;@%>fRc$#%uYtW$Hg
+z*#-tJsCAw5_5s%KEpr0gk?qLF6j)OEy<A{zK^GWHy${B{hX|xs&H?bsY)?76peR|?
+zC6K{_s4j@iagi`@CH{H_B0w&~`{n?6V*{uxSTYvIYKzzBE0cUeMDpuIdA?n&vhM<y
+z;%|841%Mlh%rq37y4(X;es>VR5yAVDGUb8hkDtTm1?8;jEVwAFy$|<@e0@H0K=A0{
+zMsG<m$nV85;*3m7b(OG7Ns;GJZ2f6`8h4%txH|>8KdZ~TMK5C=X@9-{;WU6x;>UuR
+z%P)$KmIRre#24^$y!ITxcHpP^-y^zXLOr$cp>UmpeFd|snY|({jfB7SDPfdA>rnnX
+zQE>iS`0nN6xcV;PThqXm6m{K-@AQGpst0#vTb3K@IFjzn`&>@8KcBu-0o#IWE9v6A
+zA>O`OfV*&izMmBS(XVW3q7`A`XKbvJYkXP9v(v0s_23X66b0~x;G5=y*Xb(YmEOdy
+z;_54)Tl1;wk5%2FsjN2WeP8dV^8LMiFw+3ui+|t}K`T|Lwl!RV?ptNx>>z0KeOb5l
+z<vL@p;ZvIdxQ=&-gV4pz>XwB?+5=R9DnA`$Th!E+YlB8dk#bSY1h?UV%>X2PVXvrO
+zwq@S~_?pfy`;%9}Idpa~EDJX{AugOA%)Tumh2CUFoq4Xyqo>8y+23(H-Xku5_Tby%
+zreUj%MBewc%B?TpOS#yO;Cg%pkBM8d`)7fe_lETjd{LLTYr*3Le*&MyS1)vec`q>U
+z!6PDK>oTbI&qwD0$4hesd^p?Fx-zZw9-3GAtW0t~@>I6lb<tV!*u2XB4__W_KXMS0
+Q4*&oF07*qoM6N<$f|cFnH2?qr
+
+literal 0
+HcmV?d00001
+
+diff --git a/HavenlineLevel1/assets/field_ui/modern/gear.png.import b/HavenlineLevel1/assets/field_ui/modern/gear.png.import
+new file mode 100644
+index 000000000..04cd009d4
+--- /dev/null
++++ b/HavenlineLevel1/assets/field_ui/modern/gear.png.import
+@@ -0,0 +1,40 @@
++[remap]
++
++importer="texture"
++type="CompressedTexture2D"
++uid="uid://gfcpl8pswxna"
++path="res://.godot/imported/gear.png-b9e5e8d9e3d91c629a999aeb0c38e4ea.ctex"
++metadata={
++"vram_texture": false
++}
++
++[deps]
++
++source_file="res://assets/field_ui/modern/gear.png"
++dest_files=["res://.godot/imported/gear.png-b9e5e8d9e3d91c629a999aeb0c38e4ea.ctex"]
++
++[params]
++
++compress/mode=0
++compress/high_quality=false
++compress/lossy_quality=0.7
++compress/uastc_level=0
++compress/rdo_quality_loss=0.0
++compress/hdr_compression=1
++compress/normal_map=0
++compress/channel_pack=0
++mipmaps/generate=false
++mipmaps/limit=-1
++roughness/mode=0
++roughness/src_normal=""
++process/channel_remap/red=0
++process/channel_remap/green=1
++process/channel_remap/blue=2
++process/channel_remap/alpha=3
++process/fix_alpha_border=true
++process/premult_alpha=false
++process/normal_map_invert_y=false
++process/hdr_as_srgb=false
++process/hdr_clamp_exposure=false
++process/size_limit=0
++detect_3d/compress_to=1
+diff --git a/HavenlineLevel1/assets/field_ui/modern/storage.png b/HavenlineLevel1/assets/field_ui/modern/storage.png
+new file mode 100644
+index 0000000000000000000000000000000000000000..3bfa0af97e87744b6cd64600499e21f20ca1a4d6
+GIT binary patch
+literal 1488
+zcmV;>1uy!EP)<h;3K|Lk000e1NJLTq001ih001fo1^@s6DgmNp000G-Nkl<Zc$~f2
+zX^h=f83yp*y`7m(_bNg`<MIJD8leeDMG>N{8mlB$1r-w&O|-=bRxn^RN|1<4T!Tt5
+zn!4deA@2A^%N7G_kq}S`5Lprl3atv-X*+X=56?N=KR0(e%f0QB{Bt}1<(%id=Xsa&
+zw)NC!AL}4s98=go%t71391PFG$MHwpfGt=(tifADvg|QJ><m1m=h?lu9N)o%gG@3g
+z*;8;fHewkju@C<d8LY&Z$l?)vTZrFvD9N5$NN&I)>_Mv#ycS<8<hSAl=oG@sF@Yc9
+zE4cMwksZNX@d2zW_bSP~xEY_u^*!Ic37hdkEXI;T8h(vS@ta|hU5<B_36GU+{vSs1
+zs95sL_`@vYtd)gs5UVf3VddE^_$q!VmY+A-Bk_KmiD%;f5{g=Q7(d4s@xUx3dvO%b
+z6`em#BGPJE{QdZ*==z^?A^Reng}0Q!{wrD>#eJf;FNt*r!BTt(r;9O&u9ucMzbCqW
+z!Wo-n*W<(Gcd@QVw{Qo(Q3e<`+TyJ5!qH{EB_b2JN_=5wCHs+bW3Pmm>NGoX8Gd^Z
+zNcO{KyhEI^El$0xJUhQ;u#?K~gW^z=vPGvILZU>gFUJRESKIh^dA6yN-CKUg#EDi&
+zjC|vvV%fl{k_lUw7VE;kN_M*O@<@5{CAeC`%G(bC$+zJ~Tq)sgh4@aZJnvMpljV0m
+z{(^s$zjxuexB`F2M<s<03yX0cZpZg=ycli@x8Zk^cwlcO+bO@J_?QU%V(b>(?84#r
+zl*H9bB@QnXN8xi)<a|b|wZ{s{ze#jBUbH(_7tmWGw#!4fL_*1hh3r@vuq~PBUVIDB
+znFq<WQhnWCh>S|IX_b4Maa<V}R!Io!pjF9MT}+nMHSu|o!q!4?TvF~d-XlT#2j!ia
+zaFXQzn?#!(aq4kN)2B-mxT5E~cDY(jvdxFn`s3?Tx1LcZXh|NQDEIEbcFBMhFBRSG
+zC}bWhM3+gy^IE*x%!N!P+CgWe&kL<S_nO#Vu2)LNdzoZAc(a6_9p&#0vRk_(|F4vq
+z;v(7h+3+OGR<cckvyrXXQLf`eBI_mWwF}89k;|y)?#JQ>cg}Hq<-2-~)R@|o!%Q-m
+z3AacIc^J--9KX7Zy9?W-@OgBe<Lcqn>Loi@tM<bq5;^urov}}desX{@n`req)U<BQ
+zT_~yrJ3@F6G>tc11>8)#gOaVK-IV!D>Oh#Tp4QaHpk%Al4x=YgjW?|kXPcHC)EdpL
+z8+757Pls-W)f}{6?41wl_lpkr*4$AuYNt9_wdQ`^0KZUF%Qk&sq4<|9eoCpjTDn$P
+zg;xwXL0x#SFU%L?QhiN`5j*Yjk6PL6#`%(~Pg~$53(1DPBrlQk-y3A7S7M~D{3;3N
+z&k$>zC}rB8BrDBl(uF$c3aO!QlUBeHveQq;HMpRX-6mDhm7<Xqh2Zlg8~qs<l>5WR
+zk@&1sa_2~qKVIg#9-Htw{I#j6TP4S@lXlRAoOIh#tA3&kc(JT{Ce&S+&BD)<CdN(D
+z`B_s)E|IcwBVL1F)DQYOz}<2#Izg=ZuyjdArE{_szb_LV-RJw!S;(G<?@Gn?URn6^
+za$QqMzFxP?d;$mZ*8Aju_+qJB?~$T;Ss}dz*U3Te<i>aPfY+N~))kW5rL(w74vZuC
+zl~{38Kaz7HTk#OSAe!DHQW%jl*&6AIT`e8JQ*_&zwGKU8eB!6#-K)!j7fZ`?qZI7d
+z&PHS*&E%yb`1eUn9+mJnSr)cmPOlv~2~UVz7KtAB==NoAoX^CAwCUS&hB`}53FC4I
+zoREyuDetT-M0ewt(mR{2mpgQ_O{~Ye<?y#g_rI0KBxU|gx{x~unPgaGE7nTpdzFN+
+q>+ll;lB^gu*^1?|^@A2gPr~Cv=Sfe&$w&AA0000<MNUMnLSTX^F7b;1
+
+literal 0
+HcmV?d00001
+
+diff --git a/HavenlineLevel1/assets/field_ui/modern/storage.png.import b/HavenlineLevel1/assets/field_ui/modern/storage.png.import
+new file mode 100644
+index 000000000..7c0aba991
+--- /dev/null
++++ b/HavenlineLevel1/assets/field_ui/modern/storage.png.import
+@@ -0,0 +1,40 @@
++[remap]
++
++importer="texture"
++type="CompressedTexture2D"
++uid="uid://cui4tk5ceepyt"
++path="res://.godot/imported/storage.png-e74cb92d45cee650c4caf40879cb6e3b.ctex"
++metadata={
++"vram_texture": false
++}
++
++[deps]
++
++source_file="res://assets/field_ui/modern/storage.png"
++dest_files=["res://.godot/imported/storage.png-e74cb92d45cee650c4caf40879cb6e3b.ctex"]
++
++[params]
++
++compress/mode=0
++compress/high_quality=false
++compress/lossy_quality=0.7
++compress/uastc_level=0
++compress/rdo_quality_loss=0.0
++compress/hdr_compression=1
++compress/normal_map=0
++compress/channel_pack=0
++mipmaps/generate=false
++mipmaps/limit=-1
++roughness/mode=0
++roughness/src_normal=""
++process/channel_remap/red=0
++process/channel_remap/green=1
++process/channel_remap/blue=2
++process/channel_remap/alpha=3
++process/fix_alpha_border=true
++process/premult_alpha=false
++process/normal_map_invert_y=false
++process/hdr_as_srgb=false
++process/hdr_clamp_exposure=false
++process/size_limit=0
++detect_3d/compress_to=1
+diff --git a/HavenlineLevel1/assets/field_ui/modern/survivors.png b/HavenlineLevel1/assets/field_ui/modern/survivors.png
+new file mode 100644
+index 0000000000000000000000000000000000000000..b762abd572523902d27bc55b0a6f87212fa0e560
+GIT binary patch
+literal 1707
+zcmV;c22}ZpP)<h;3K|Lk000e1NJLTq001}u001Ni1^@s6+>-hJ000JZNkl<Zc$~eN
+zd5G0j6vsbrn{gJGnNm|zODnTQqXg5kD58~Y0}Wd!5Q<hPZG)f<f|fswAR~xOgYXY4
+z%#4aQM5BG9-Bikka%t32XK~)^k8@7H^X|L9=bP+#;Bw#m?mg$8?>*<9d(NFq`}ipw
+z1Zo7%17-rlfE~ccz-nMmJr~Z`Q@GMaz+=F1k+GkEyMb5hwRpB(f|afXUI!)tTeSV@
+z+C<<L;I?`xkg21K9uIs9^aHyQH_ZSg9q$Kvfo7lqI0N|P|5jq47CZ)+0t~NV?tQ=@
+zU@y>ufD5S+0ht9JsX^w^z-hn<De@|)R)9AkL18Vh4)_{a0vwexe>igXx)JM?g7FfG
+zHM2k;a3av2BJWJ#Bj8(L4e*V&tM;dOEdW;lixHR0sM0OS`C6mjLz)5%MXZ-40ayZx
+z+U$2fun%$7SRk4Qybnx6TzxyRQ`cPvJbEAi9{?@`HmOikv<C?oBN0o6bf^Ply#cas
+zMP1)4nL{?tQ#0@^a;<FDIRzc-L^kjq;PNy8)c}qHZUuG$O~`pNg$mkw5!bpj;O%iB
+ziUC;v+xm>k+8W524YcZ5lg`Uf4iw<dG!WGQ&P2{cw-c6iJQ>8j8h~>G-VNI4D7TuC
+zDQai20kO#E!Ms!5{H)`{@fVR;5L*9Vh12K|?Y%2`<!lUKbin%+5|oA@yWj8TdNReE
+zfH$e!h$EbynV=be5%I1;F%Z=NdUx@zMC5yn?$^FRIXJIm7H9+30}CTEMrofX@tzQ5
+zUUl6TQ=%Hcbx6c&MWP&3Mnel8>m&ScA!ozyu0N9v4%}?wIca!qW7iExHWa0506T!E
+z5#Kf!^WnXuW1E0QDKZuTmjGYt-_5{a<O=Bpo<pvb?^5`eX`fRateFnYs^>##AZkg~
+zRv=f!4ieWWAXfPexu@3bPY5s-I2pM@I)GKc-!<?p03JrNo<9B7p#2skp-4^fYRyF#
+z0M{WdRnUdr1?~lYuSLKC(o|h*I&$VZf%g#LTdFY*G}#`3?A|uyl0Dco7;)FmS{Vjf
+z5B@d4`7!bp#XxD-Kp753!8-$(g9MYY$XVJ4Yz969UPE%tx=^hydN`8NPejgP3*w^d
+zfR|Hv<^Xpf=LV86Zxw{UQ#T?J`^gkpcLB#LZ$A?7egQrJeyFDS{wz2Hc~Y2;g!Y_M
+zuz+O$A;32Mb}kaick6dc%b@(C2C?iDz<i_x3RAWo;Cdu&G~RwB*nNR)%*q&mY8G6A
+zB+*%tbPMg9fFFS?D378O5O*6J0P~=HEl4n@6**_uAg=3aA@Cq#y&Or>-KgVl16KoG
+zo+)<Gk3kB{c?xW=1Gi7Xb?CSUcNp-Fg7c-7Pn3!D{<l>wFCs_6)8qPmC}L5&?7Ov{
+zj}*a^ssS8<`1NFx+|G8sh+Gjx;2A2@vzLG)k@PN<TS{rM@jVK1DM?*vbd&1kODE&+
+zLUPyDxF?lRkr$9avQ@!^!JrZN9(XF?y9GE~`SO(4fMFFM0~b;kQcOP|d@mxe3+;$E
+z`T8)6Y|eNj`>Fsq54ZraK!am8>zU$j1d9$v0#R3>tOpcQ40H&1FH&b-9PlniT++^-
+zfwPKZ4{$m#*8|KTRscC~W;s9Jh@?f!g9Wcdu8~fXO-OUem?hI(*D9EsgY~u{*V9mv
+zfMxpT9slhf;56h)*nx!qux864R^0&n94t7O@^UJyI${-ljAC<oRJU=#_f?c{eyD4o
+z@=dTwv$XG~{I2swWroVKW*kx>>_j#utzN995&TAFv;Y?d>#lX+JlWarRejDffG4?0
+z;gf*9nPh-p1A(U?7keLx<voRuOVud$ZUeH>vx2dWh%xL*GOaM4Y5>PLp|NbEfSk?E
+z!9tUrP!F!w^A{=<16U$?n=$G{f?DiO_3}pNRryxL-|ZRQcE+bf-N-*oJdJe=m}`eu
+zM3|!4-=T8hyN{nYBv`i_i5G2@Ul%6B9-^`aunmclBPoAx^kh%$o?4wU_LLB7{yOrm
+zN94P=tZi`YMXp`-u11ACa&LTyn0&hmwWw&jV(*rJ1OiOSn3alDp2=!yTFlB86?-Gf
+zFGn(#yf({EP5(Tw(yEF1DlE2B)o7>o!$=;6!n0;TeJIEM4uRohnCo{$*1oY81rPN9
+zgQJl^(~G!opHnUb8UyDO3IiJQ<dBzyP5(u~e*gep?xe@NC*A-6002ovPDHLkV1lo+
+B7OMaN
+
+literal 0
+HcmV?d00001
+
+diff --git a/HavenlineLevel1/assets/field_ui/modern/survivors.png.import b/HavenlineLevel1/assets/field_ui/modern/survivors.png.import
+new file mode 100644
+index 000000000..af6f93a01
+--- /dev/null
++++ b/HavenlineLevel1/assets/field_ui/modern/survivors.png.import
+@@ -0,0 +1,40 @@
++[remap]
++
++importer="texture"
++type="CompressedTexture2D"
++uid="uid://dluipb0wlot2s"
++path="res://.godot/imported/survivors.png-7818763d0a6a291aa59360dcb84add7d.ctex"
++metadata={
++"vram_texture": false
++}
++
++[deps]
++
++source_file="res://assets/field_ui/modern/survivors.png"
++dest_files=["res://.godot/imported/survivors.png-7818763d0a6a291aa59360dcb84add7d.ctex"]
++
++[params]
++
++compress/mode=0
++compress/high_quality=false
++compress/lossy_quality=0.7
++compress/uastc_level=0
++compress/rdo_quality_loss=0.0
++compress/hdr_compression=1
++compress/normal_map=0
++compress/channel_pack=0
++mipmaps/generate=false
++mipmaps/limit=-1
++roughness/mode=0
++roughness/src_normal=""
++process/channel_remap/red=0
++process/channel_remap/green=1
++process/channel_remap/blue=2
++process/channel_remap/alpha=3
++process/fix_alpha_border=true
++process/premult_alpha=false
++process/normal_map_invert_y=false
++process/hdr_as_srgb=false
++process/hdr_clamp_exposure=false
++process/size_limit=0
++detect_3d/compress_to=1
+diff --git a/HavenlineLevel1/field_automation_menu.gd b/HavenlineLevel1/field_automation_menu.gd
+index 82baf582d..93961069f 100644
+--- a/HavenlineLevel1/field_automation_menu.gd
++++ b/HavenlineLevel1/field_automation_menu.gd
+@@ -33,6 +33,9 @@ func install(host)->void:
+ 
+ func _process(_dt:float)->void:
+ 	if not world.field_ready:return
++	if world.opening_hud.camp_dock:
++		hide()
++		return
+ 	var book=world.inventory
+ 	var relevant:bool=(book.offer_open(P.FOOD_LINE) or book.offer_open(P.SUPPLY_LINE))
+ 	visible=relevant and world.camp_active and world.field_env.is_inside_camp(world.actor.global_position) and not world.persist_blocked and world.reset_time<=0.
+diff --git a/HavenlineLevel1/field_camp_dock.gd b/HavenlineLevel1/field_camp_dock.gd
+new file mode 100644
+index 000000000..80fdfc3c8
+--- /dev/null
++++ b/HavenlineLevel1/field_camp_dock.gd
+@@ -0,0 +1,419 @@
++extends Control
++## Landscape concept navigation, adapted to the current paid camp. Buttons
++## guide the player to the actual interaction rather than performing it remotely.
++const P=preload("res://field_progression.gd")
++const TYPE=preload("res://assets/field_ui/type/BarlowSemiCondensed-SemiBold.ttf")
++const PAPER=Color("#fbf1e8")
++const INK=Color("#142236")
++const MUTED=Color("#5b656e")
++const ORANGE=Color("#ff6907")
++# Sprites are cropped from the selected 9f7460328 modern camp HUD sheet.
++# Black-on-ivory glyph masks keep the renderer's touch and focus states live.
++const GLYPHS={
++	"Camp":preload("res://assets/field_ui/modern/camp.png"),
++	"Storage":preload("res://assets/field_ui/modern/storage.png"),
++	"Survivors":preload("res://assets/field_ui/modern/survivors.png")}
++const BUILD=preload("res://assets/field_ui/modern/build.png")
++var world
++var hud
++var tab:=""
++var active_tab:="Camp"
++var tracking:=""
++var tracking_name:=""
++var nav:=Panel.new()
++var build:=TextureButton.new()
++var build_art:=TextureRect.new()
++var pack_button:=Button.new()
++var sheet:=Panel.new()
++var title:=Label.new()
++var subtitle:=Label.new()
++var close:=Button.new()
++var actions:=VBoxContainer.new()
++var tabs:Dictionary={}
++var commands:Array=[]
++var finger:=-2
++var sheet_key:=""
++var poll_time:=0.
++
++func face(fill:Color,edge:Color,r:=13)->StyleBoxFlat:
++	var skin:=StyleBoxFlat.new()
++	skin.bg_color=fill
++	skin.border_color=edge
++	skin.set_border_width_all(1)
++	skin.set_corner_radius_all(r)
++	skin.shadow_color=Color("#16253626")
++	skin.shadow_size=3
++	skin.shadow_offset=Vector2(0,2)
++	return skin
++
++func configure(host,owner_hud)->void:
++	world=host
++	hud=owner_hud
++	name="CampNavigation"
++	mouse_filter=Control.MOUSE_FILTER_IGNORE
++	set_anchors_and_offsets_preset(PRESET_FULL_RECT)
++	add_child(nav)
++	nav.mouse_filter=Control.MOUSE_FILTER_IGNORE
++	nav.add_theme_stylebox_override("panel",face(PAPER,Color("#c5bdbe")))
++	for key:String in GLYPHS:
++		var button:=Button.new()
++		button.name=key
++		button.text=""
++		button.icon=null
++		button.expand_icon=true
++		button.add_theme_constant_override("icon_max_width",31)
++		button.add_theme_constant_override("h_separation",8)
++		button.add_theme_font_override("font",TYPE)
++		button.add_theme_font_size_override("font_size",24)
++		button.add_theme_color_override("font_color",INK)
++		button.add_theme_color_override("font_hover_color",INK)
++		button.add_theme_color_override("icon_normal_color",Color.WHITE)
++		button.add_theme_stylebox_override("normal",StyleBoxEmpty.new())
++		button.add_theme_stylebox_override("hover",StyleBoxEmpty.new())
++		button.add_theme_stylebox_override("pressed",StyleBoxEmpty.new())
++		button.accessibility_name=key
++		button.mouse_filter=Control.MOUSE_FILTER_IGNORE
++		nav.add_child(button)
++		button.pressed.connect(toggle.bind(key))
++		tabs[key]=button
++		var group:=HBoxContainer.new()
++		group.name="TabLabel"
++		group.mouse_filter=Control.MOUSE_FILTER_IGNORE
++		group.alignment=BoxContainer.ALIGNMENT_CENTER
++		group.add_theme_constant_override("separation",9)
++		button.add_child(group)
++		var glyph:=TextureRect.new()
++		glyph.texture=GLYPHS[key]
++		glyph.custom_minimum_size=Vector2(30.,32.)
++		glyph.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
++		glyph.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
++		glyph.mouse_filter=Control.MOUSE_FILTER_IGNORE
++		group.add_child(glyph)
++		var caption:=Label.new()
++		caption.text=key
++		caption.add_theme_font_override("font",TYPE)
++		caption.add_theme_font_size_override("font_size",24)
++		caption.add_theme_color_override("font_color",INK)
++		caption.mouse_filter=Control.MOUSE_FILTER_IGNORE
++		group.add_child(caption)
++		if key!="Camp":
++			var divider:=ColorRect.new()
++			divider.name="Divider"
++			divider.color=Color("#c5bcbc")
++			divider.mouse_filter=Control.MOUSE_FILTER_IGNORE
++			button.add_child(divider)
++		var active:=ColorRect.new()
++		active.name="Active"
++		active.color=ORANGE
++		active.mouse_filter=Control.MOUSE_FILTER_IGNORE
++		button.add_child(active)
++	add_child(build)
++	build.name="Build"
++	build_art.texture=BUILD
++	build_art.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
++	build_art.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
++	build_art.mouse_filter=Control.MOUSE_FILTER_IGNORE
++	build.add_child(build_art)
++	build.ignore_texture_size=true
++	build.stretch_mode=TextureButton.STRETCH_KEEP_ASPECT_CENTERED
++	build.mouse_filter=Control.MOUSE_FILTER_IGNORE
++	build.accessibility_name="Build. View available plots and camp equipment."
++	build.pressed.connect(toggle.bind("Build"))
++	add_child(pack_button)
++	pack_button.name="ViewResourceBalances"
++	pack_button.accessibility_name="View carried resources and workshop stock"
++	pack_button.mouse_filter=Control.MOUSE_FILTER_IGNORE
++	for state:String in ["normal","hover","pressed","disabled"]:pack_button.add_theme_stylebox_override(state,StyleBoxEmpty.new())
++	pack_button.pressed.connect(toggle.bind("Pack"))
++	add_child(sheet)
++	sheet.name="CampContext"
++	sheet.mouse_filter=Control.MOUSE_FILTER_IGNORE
++	sheet.add_theme_stylebox_override("panel",face(PAPER,Color("#c7babb")))
++	sheet.add_child(title)
++	title.add_theme_font_override("font",TYPE)
++	title.add_theme_font_size_override("font_size",34)
++	title.add_theme_color_override("font_color",INK)
++	title.mouse_filter=Control.MOUSE_FILTER_IGNORE
++	sheet.add_child(subtitle)
++	subtitle.add_theme_font_override("font",TYPE)
++	subtitle.add_theme_font_size_override("font_size",22)
++	subtitle.add_theme_color_override("font_color",MUTED)
++	subtitle.mouse_filter=Control.MOUSE_FILTER_IGNORE
++	subtitle.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
++	sheet.add_child(actions)
++	actions.mouse_filter=Control.MOUSE_FILTER_IGNORE
++	actions.add_theme_constant_override("separation",5)
++	sheet.add_child(close)
++	close.name="Close"
++	close.text="×"
++	close.accessibility_name="Close details"
++	close.add_theme_font_size_override("font_size",31)
++	close.add_theme_color_override("font_color",INK)
++	close.add_theme_stylebox_override("normal",StyleBoxEmpty.new())
++	close.mouse_filter=Control.MOUSE_FILTER_IGNORE
++	close.pressed.connect(dismiss)
++	sheet.hide()
++	reflow()
++
++func dismiss()->void:
++	tab=""
++	sheet.hide()
++	reflow()
++
++func toggle(key:String)->void:
++	if tab==key:
++		dismiss()
++		return
++	active_tab=key
++	tab=key
++	sheet_key=""
++	sheet.show()
++	refresh()
++	reflow()
++
++func _entry(label:String,id:String)->Array:return [label,id]
++
++func refresh()->void:
++	if tab.is_empty() or not world.field_ready:return
++	var book=world.inventory
++	var journal:Dictionary=book.settlement
++	var description:=""
++	var list:Array=[]
++	match tab:
++		"Pack":
++			title.text="Carried resources"
++			var lines:=PackedStringArray()
++			var counts:=PackedStringArray()
++			for kind:String in book.KINDS:
++				if not kind in book.ORIGINAL_KINDS and int(book.carried[kind])==0:continue
++				counts.append("%d %s"%[P.units(book.carried[kind]),str(book.TITLES[kind]).to_lower()])
++				if counts.size()==3:
++					lines.append("   ·   ".join(counts))
++					counts.clear()
++			if not counts.is_empty():lines.append("   ·   ".join(counts))
++			lines.append("Cash %d   ·   Planks %d   ·   Blocks %d"%[journal.served,journal.processed_wood,journal.processed_stone])
++			lines.append("Cooker rack  ·  %d meals"%book.Settlement.waiting_meals(journal))
++			description="\n".join(lines)
++			list.append(_entry("Storage details","storage_details"))
++		"Camp":
++			title.text="Snow camp" if world.camp_active else "Found your camp"
++			description="Level %d  •  %d camp purchases"%[journal.level,book.build_order.size()]
++			list.append(_entry("Guide to camp" if world.camp_active else "Find the hearth plot","home"))
++			if world.camp_active:list.append(_entry("Move equipment","move"))
++		"Storage":
++			var tier:int=P.house_tier(book)
++			title.text=["Storage house","Starter storehouse","Reinforced storehouse","Advanced storehouse"][clampi(tier,0,3)]
++			if tier:
++				description="%d wood   ·   %d stone   ·   %d meat"%[P.units(book.stored.wood),P.units(book.stored.stone),P.units(book.stored.meat)]
++				var stock:Dictionary=journal.product_store
++				if stock.planks or stock.blocks or stock.meal:
++					description+="\n%d planks   ·   %d blocks   ·   %d meals"%[stock.planks,stock.blocks,stock.meal]
++				list.append(_entry("Guide to loading apron","depot"))
++			else:description="A camp expansion opens the first storage purchase."
++			var stage:=P.next_storage(book)
++			if not stage.is_empty() and book.offer_open(stage):list.append(_entry(P.TITLES[stage]+"  ·  "+P.price_text(book.remaining(stage)),stage))
++			if list.is_empty():list.append(_entry("Find next camp purchase","project"))
++		"Survivors":
++			title.text="Camp survivor"
++			if journal.rescued:
++				var duty:=str(world.survivor.phase).replace("_"," ").capitalize()
++				description=duty+"  •  "+str(journal.worker_deliveries)+" deliveries"
++				list.append(_entry("Find survivor","worker"))
++			elif journal.survivor_paid:
++				description="Rescue is funded. Meet the survivor in the field."
++				list.append(_entry("Find survivor","worker"))
++			elif world.camp_active:
++				var due:=maxi(0,int(book.survivor_cost)-int(journal.survivor_wood))
++				description="Rescue plot  ·  "+str(P.units(due))+" wood left"
++				list.append(_entry("Find the rescue plot","rescue"))
++			else:
++				description="Found the camp to open the rescue plot."
++				list.append(_entry("Find the hearth plot","home"))
++		"Build":
++			title.text="Build"
++			description=""
++			for id:String in book.costs:
++				if not book.offer_open(id):continue
++				if id in P.STORAGE and id!=P.next_storage(book):continue
++				if id in P.LINES:continue
++				list.append(_entry(P.TITLES[id]+"  ·  "+P.price_text(book.remaining(id)),id))
++				if list.size()>=3:break
++			if world.camp_active and not journal.survivor_paid and list.size()<3:
++				list.append(_entry("Rescue survivor  ·  "+str(P.units(maxi(0,int(book.survivor_cost)-int(journal.survivor_wood))))+" wood","rescue"))
++			var inside:bool=world.camp_active and world.field_env.is_inside_camp(world.actor.global_position)
++			if inside:
++				for line:String in P.LINES:
++					if book.offer_open(line):list.append(_entry(P.TITLES[line]+"  ·  "+P.price_text(book.remaining(line)),line))
++			if world.camp_active:list.append(_entry("Move equipment","move"))
++			if list.is_empty():description="All available camp purchases are complete."
++	var state:=str([tab,title.text,description,list])
++	if sheet_key==state:return
++	sheet_key=state
++	subtitle.text=description
++	subtitle.visible=not description.is_empty()
++	for child in actions.get_children():
++		actions.remove_child(child)
++		child.queue_free()
++	commands.clear()
++	for item in list:
++		var row:=Button.new()
++		row.text=str(item[0])+"   ›"
++		row.alignment=HORIZONTAL_ALIGNMENT_LEFT
++		row.custom_minimum_size=Vector2(0,57)
++		row.accessibility_name=item[0]
++		row.mouse_filter=Control.MOUSE_FILTER_IGNORE
++		row.add_theme_font_override("font",TYPE)
++		row.add_theme_font_size_override("font_size",23)
++		row.add_theme_color_override("font_color",INK)
++		row.add_theme_color_override("font_hover_color",INK)
++		var skin:=face(Color("#fffaf5"),Color("#dfd3c9"),8)
++		skin.shadow_size=0
++		skin.content_margin_left=15
++		row.add_theme_stylebox_override("normal",skin)
++		row.add_theme_stylebox_override("hover",skin)
++		actions.add_child(row)
++		commands.append([row,item[1]])
++		row.pressed.connect(choose.bind(str(item[1])))
++	reflow()
++
++func choose(id:String)->void:
++	dismiss()
++	if id=="storage_details":
++		toggle("Storage")
++		return
++	if id=="move":
++		world.camp_layout.open()
++		return
++	if id=="project":id=world.next_project if not str(world.next_project).is_empty() else "home"
++	if id in P.LINES:
++		var automation=world.settlement_loop.conveyors.menu
++		if automation.selected!=id:automation.select(id)
++	tracking=id
++	tracking_name={"home":"Camp","depot":"Storehouse","worker":"Survivor","rescue":"Rescue plot"}.get(id,P.TITLES.get(id,"Camp"))
++	if not world.camp_active and id=="home":tracking_name="Camp plot"
++	if world.has_method("_refresh_hud_field"):world._refresh_hud_field(false)
++
++func tracked_point()->Vector3:
++	match tracking:
++		"":return Vector3.INF
++		"home":
++			return Vector3(1.72,0,1.8) if world.camp_active else world.field_env.buy_anchor.global_position
++		"depot":return world.depot.apron.global_position
++		"worker":return world.survivor.actor.global_position
++		"rescue":return world.settlement_loop.works.plot.global_position
++	if not world.inventory.offer_open(tracking):
++		tracking=""
++		return Vector3.INF
++	var node:Node3D=world.carry.receivers.get(tracking)
++	return node.global_position if is_instance_valid(node) else Vector3.INF
++
++func touch_height(safe:Rect2)->float:
++	return 96. if safe.size.y>safe.size.x*1.65 else 76.
++
++func reflow()->void:
++	if not hud or not is_instance_valid(build) or not nav.is_inside_tree():return
++	var safe:Rect2=hud._safe_rect()
++	pack_button.position=hud.counts_area.position
++	pack_button.size=hud.counts_area.size
++	var maxw:=minf(safe.size.x,970.)
++	var build_w:=clampf(maxw*.235,134.,197.)
++	var nav_w:=minf(630.,maxw-build_w-14.)
++	var h:=68.
++	var target:=touch_height(safe)
++	var x:=safe.get_center().x-(nav_w+build_w+14.)*.5
++	var y:=safe.end.y-h
++	if safe.size.x>1000.:x=safe.end.x-nav_w-build_w-14.
++	nav.position=Vector2(x,y+3.)
++	nav.size=Vector2(nav_w,h-6.)
++	var used:=0.
++	for key:String in tabs:
++		var btn:Button=tabs[key]
++		var w:=nav_w*({"Camp":.285,"Storage":.335,"Survivors":.380}[key] as float)
++		btn.position=Vector2(used,safe.end.y-target-nav.position.y)
++		btn.size=Vector2(w,target)
++		used+=w
++		var group:HBoxContainer=btn.get_node("TabLabel")
++		group.position=Vector2(8.,-btn.position.y)
++		group.size=Vector2(btn.size.x-16,nav.size.y-3)
++		if btn.has_node("Divider"):
++			var divider:ColorRect=btn.get_node("Divider")
++			divider.position=Vector2(0,12.-btn.position.y)
++			divider.size=Vector2(1,nav.size.y-24.)
++		var active:ColorRect=btn.get_node("Active")
++		active.position=Vector2(13.,nav.size.y-5.-btn.position.y)
++		active.size=Vector2(btn.size.x-26.,3.)
++		active.visible=active_tab==key
++	build.position=Vector2(x+nav_w+14.,safe.end.y-target)
++	build.size=Vector2(build_w,target)
++	build_art.position=Vector2(0, y-1.-build.position.y)
++	build_art.size=Vector2(build_w,h+2.)
++	pack_button.size.y=target
++	if not sheet.visible:return
++	var panel_w:=minf(465.,safe.size.x-8.)
++	var head_height:=maxf(63.,target)
++	var desc_height:=0.
++	if subtitle.visible:
++		desc_height=30.*subtitle.text.split("\n").size()+7.
++		if subtitle.text.length()>45 and not subtitle.text.contains("\n"):desc_height+=24.
++	var row_height:=maxf(57.,target)
++	var height:=head_height+desc_height+commands.size()*(row_height+5.)+14.
++	height=minf(height,safe.size.y-156.)
++	var left:=nav.position.x if tab!="Build" else build.position.x+build.size.x-panel_w
++	sheet.position=Vector2(clampf(left,safe.position.x,safe.end.x-panel_w),nav.position.y-height-12.)
++	sheet.size=Vector2(panel_w,height)
++	title.position=Vector2(20,9)
++	close.position=Vector2(panel_w-target,0.)
++	close.size=Vector2(target,target)
++	subtitle.position=Vector2(20,head_height-6.)
++	subtitle.size=Vector2(panel_w-40,desc_height)
++	for entry in commands:entry[0].custom_minimum_size.y=row_height
++	actions.position=Vector2(14,head_height+desc_height)
++	actions.size=Vector2(panel_w-28.,maxf(1.,height-head_height-desc_height-12.))
++
++func _process(dt:float)->void:
++	if not world or not world.get("field_ready"):return
++	var enabled:bool=not world.camp_layout.active and not world.closing and not world.persist_blocked and world.reset_time<=0.
++	visible=enabled
++	if not enabled:
++		finger=-2
++		if not tab.is_empty():dismiss()
++		return
++	poll_time-=dt
++	if poll_time<=0.:
++		poll_time=.20
++		if not tab.is_empty():refresh()
++
++func _notification(what:int)->void:
++	if what in [NOTIFICATION_APPLICATION_FOCUS_OUT,NOTIFICATION_APPLICATION_PAUSED,NOTIFICATION_WM_WINDOW_FOCUS_OUT]:
++		finger=-2
++
++func handle(event:InputEvent)->bool:
++	if not visible or world.camp_layout.active:return false
++	if event is InputEventKey and event.is_pressed() and not event.is_echo() and event.keycode==KEY_ESCAPE and not tab.is_empty():
++		dismiss()
++		return true
++	if not (event is InputEventScreenTouch or event is InputEventScreenDrag or event is InputEventMouseButton):return false
++	if event.device==InputEvent.DEVICE_ID_EMULATION:return false
++	if event is InputEventMouseButton and event.button_index!=MOUSE_BUTTON_LEFT:return false
++	var idx:int=event.index if event is InputEventScreenTouch or event is InputEventScreenDrag else -1
++	if event is InputEventScreenTouch and event.canceled:
++		if idx!=finger:return false
++		finger=-2
++		return true
++	if idx==finger:
++		if not event is InputEventScreenDrag and not event.pressed:finger=-2
++		return true
++	if event is InputEventScreenDrag or not event.pressed or finger!=-2:return false
++	var pt:Vector2=event.position
++	if sheet.visible and sheet.get_global_rect().has_point(pt):
++		finger=idx
++		if close.get_global_rect().has_point(pt):dismiss();return true
++		for pair in commands:
++			if pair[0].get_global_rect().has_point(pt):choose(str(pair[1]));break
++		return true
++	if pack_button.get_global_rect().has_point(pt):finger=idx;toggle("Pack");return true
++	if build.get_global_rect().has_point(pt):finger=idx;toggle("Build");return true
++	for key:String in tabs:
++		if tabs[key].get_global_rect().has_point(pt):finger=idx;toggle(key);return true
++	if not tab.is_empty():dismiss()
++	return false
+diff --git a/HavenlineLevel1/field_camp_dock.gd.uid b/HavenlineLevel1/field_camp_dock.gd.uid
+new file mode 100644
+index 000000000..c72e650ee
+--- /dev/null
++++ b/HavenlineLevel1/field_camp_dock.gd.uid
+@@ -0,0 +1 @@
++uid://b8mnwd1c8mx7b
+diff --git a/HavenlineLevel1/field_camp_layout.gd b/HavenlineLevel1/field_camp_layout.gd
+index 03ed90674..fe875eb2d 100644
+--- a/HavenlineLevel1/field_camp_layout.gd
++++ b/HavenlineLevel1/field_camp_layout.gd
+@@ -471,6 +471,7 @@ func handle_input(event:InputEvent) -> bool:
+ 			if active: close()
+ 			else: open()
+ 			return true
++	if not active and world.opening_hud.camp_dock:return false
+ 	if not (event is InputEventScreenTouch or event is InputEventMouseButton or event is InputEventScreenDrag or event is InputEventMouseMotion): return active
+ 	if event.device==InputEvent.DEVICE_ID_EMULATION: return active
+ 	if event is InputEventMouseButton and event.button_index!=MOUSE_BUTTON_LEFT: return active
+diff --git a/HavenlineLevel1/field_hud.gd b/HavenlineLevel1/field_hud.gd
+index 1d38da7e9..48a395c5e 100644
+--- a/HavenlineLevel1/field_hud.gd
++++ b/HavenlineLevel1/field_hud.gd
+@@ -21,51 +21,47 @@ const HEALTH:=Color("#69db96")
+ 
+ const ObjectiveTicket = preload("res://field_hud_objective.gd")
+ const MovementStick = preload("res://field_thumbstick.gd")
+-const PAPER := Color("#fbf4df")
+-const INK := Color("#193851")
++const PAPER := Color("#fbf1e8")
++const INK := Color("#142236")
+ const OCHRE := Color("#a15d22")
+ 
+ class DisplayMark extends Control:
++	const GEAR=preload("res://assets/field_ui/modern/gear.png")
+ 	func _draw() -> void:
+-		var ink := Color("#f9e9bd")
+-		for y: float in [5.,11.,17.]:
+-			draw_line(Vector2(0,y),Vector2(19,y),ink,1.6,true)
+-		for knob: Vector2 in [Vector2(6,5),Vector2(14,11),Vector2(8,17)]:
+-			draw_circle(knob,2.7,Color("#213849"),true,-1,true)
+-			draw_circle(knob,1.8,ink,true,-1,true)
++		draw_texture_rect(GEAR,Rect2(Vector2.ZERO,size),false)
+ 
+ class Supply extends Control:
+ 	var art: TextureRect
+ 	var amount: Label
+-	var rail := StyleBoxFlat.new()
+ 	func install(icon: TextureRect, label: Label) -> void:
+ 		mouse_filter = Control.MOUSE_FILTER_IGNORE
+ 		art = icon
+ 		amount = label
+ 		add_child(art)
+ 		add_child(amount)
+-		rail.bg_color = Color("#173751ec")
+-		rail.border_color = Color("#a7cbd1")
+-		rail.border_width_bottom = 2
+-		rail.set_corner_radius_all(12)
+-		rail.shadow_color = Color("#122c4055")
+-		rail.shadow_size = 2
+-		rail.shadow_offset = Vector2(0,1)
+ 		resized.connect(arrange)
+ 		measure()
+ 	func measure() -> void:
+-		custom_minimum_size = Vector2(ceilf(amount.get_minimum_size().x)+73,53)
++		custom_minimum_size = Vector2(ceilf(amount.get_minimum_size().x)+69,55)
+ 		arrange()
+ 	func arrange() -> void:
+-		art.position = Vector2(0,0)
+-		art.size = Vector2(52,51)
+-		amount.position = Vector2(59,3)
+-		amount.size = Vector2(maxf(1.,size.x-69),44)
++		art.position = Vector2(5,3)
++		art.size = Vector2(41,47)
++		amount.position = Vector2(54,3)
++		amount.size = Vector2(maxf(1.,size.x-58),44)
+ 		queue_redraw()
+ 	func _draw() -> void:
+-		draw_style_box(rail,Rect2(18,9,maxf(1.,size.x-18),32))
++		if get_index()>0:draw_line(Vector2(0,12),Vector2(0,size.y-12),Color("#d0c5c2"),1.1,true)
+ 
+ var portrait:=TextureRect.new()
++var camp_dock=preload("res://field_camp_dock.gd").new()
++var chapter_detail:=Label.new()
++var objective_caption:=Label.new()
++var accent:=ColorRect.new()
++var rail_backs:Array[Panel]=[]
++var overflow:=Label.new()
++var counts_area:=Rect2()
++var group_rule:=ColorRect.new()
+ var objective:=Panel.new()
+ var ticket := ObjectiveTicket.new()
+ var thumbstick := MovementStick.new()
+@@ -166,7 +162,7 @@ func _material_row(kinds:Array, finished:=false) -> HBoxContainer:
+ 		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+ 		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+ 		var amount := Label.new()
+-		_type(amount,25,WHITE)
++		_type(amount,25,INK)
+ 		amount.text = "0"
+ 		amount.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+ 		amount.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+@@ -185,8 +181,8 @@ func _ready() -> void:
+ 	super()
+ 	stock.hide()
+ 	plate.name="SurvivorStatus"
+-	var hero_plate := _skin(Color("#183d57fc"),Color("#bfdae1"),15)
+-	hero_plate.border_width_bottom=3
++	var hero_plate := _skin(PAPER,Color("#bfbec1"),13)
++	hero_plate.border_width_bottom=1
+ 	plate.add_theme_stylebox_override("panel",hero_plate)
+ 	thumbstick.install(get_parent().get_parent())
+ 	add_child(thumbstick)
+@@ -199,9 +195,12 @@ func _ready() -> void:
+ 	enamel.shader=FRAME
+ 	portrait.material=enamel
+ 	add_child(portrait)
+-	chapter=_label(25,WHITE)
+-	chapter.text="Level 1  ·  Snow camp"
+-	health_text=_label(17,Color("#effbdf"))
++	chapter=_label(29,INK)
++	chapter.text="HAVENLINE"
++	_type(chapter_detail,17,Color("#5a5a65"))
++	chapter_detail.text="Camp  ·  Level 1"
++	add_child(chapter_detail)
++	health_text=_label(15,INK)
+ 	threat_text=_label(16,Color("#ffbd9f"))
+ 	threat_text.text="Wolves nearby"
+ 	threat_chip.mouse_filter=Control.MOUSE_FILTER_IGNORE
+@@ -231,11 +230,17 @@ func _ready() -> void:
+ 	mineral_row.hide()
+ 	objective.name="ObjectiveStrip"
+ 	objective.mouse_filter=Control.MOUSE_FILTER_IGNORE
+-	var strip:=_skin(PAPER,Color("#b59a6b"),16)
+-	strip.border_width_bottom=3
++	var strip:=_skin(PAPER,Color("#cbbdbe"),13)
++	strip.border_width_bottom=1
+ 	objective.add_theme_stylebox_override("panel",strip)
+ 	add_child(objective)
+ 	objective.add_child(ticket)
++	_type(objective_caption,17,Color("#59505a"))
++	objective_caption.text="CAMP OBJECTIVE"
++	objective.add_child(objective_caption)
++	accent.mouse_filter=Control.MOUSE_FILTER_IGNORE
++	accent.color=Color("#ff6907")
++	objective.add_child(accent)
+ 	_type(prompt,24,INK)
+ 	move_child(prompt,-1)
+ 	payment_track.name="PurchaseProgress"
+@@ -255,6 +260,23 @@ func _ready() -> void:
+ 	stock_row=_material_row(GOODS.keys(),true)
+ 	stock_row.name="FinishedGoods"
+ 	stock_row.hide()
++	for group:HBoxContainer in [row,mineral_row,stock_row]:
++		var rail:=Panel.new()
++		rail.mouse_filter=Control.MOUSE_FILTER_IGNORE
++		rail.add_theme_stylebox_override("panel",_skin(PAPER,Color("#c5bdbe"),11))
++		add_child(rail)
++		move_child(rail,group.get_index())
++		rail_backs.append(rail)
++	_type(overflow,22,INK)
++	overflow.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
++	overflow.vertical_alignment=VERTICAL_ALIGNMENT_CENTER
++	overflow.hide()
++	add_child(overflow)
++	group_rule.mouse_filter=Control.MOUSE_FILTER_IGNORE
++	group_rule.color=Color("#d0c5c2")
++	add_child(group_rule)
++	add_child(camp_dock)
++	camp_dock.configure(get_parent().get_parent(),self)
+ 	level_continue=_button()
+ 	level_continue.name="ContinueToLevel2"
+ 	level_continue.text="Preview Level 2  ›"
+@@ -297,10 +319,12 @@ func _finish_damage_notice() -> void:
+ 	threat_chip.visible=nearby_threat
+ 
+ func set_threat(nearby:bool) -> void:
++	var changed:=nearby_threat!=nearby
+ 	nearby_threat=nearby
+ 	if threat_text:
+ 		threat_text.visible=nearby and not damage_text.visible
+ 		threat_chip.visible=threat_text.visible
++	if changed:reflow()
+ 
+ func field_status(counts:Dictionary,message:String) -> void:
+ 	var changed:=false
+@@ -353,9 +377,9 @@ func settlement_status(journal:Dictionary,activity:float) -> void:
+ 		return
+ 	shown_balances=totals
+ 	shown_level=int(journal.level)
+-	var heading:="Level 2  ·  Preview" if shown_level==2 else "Level 1  ·  Snow camp"
++	var heading:="Camp  ·  Level 2" if shown_level==2 else "Camp  ·  Level 1"
+ 	var quantity:={"cash":totals.x,"planks":totals.y,"blocks":totals.z,"meals":totals.w}
+-	chapter.text=heading
++	chapter_detail.text=heading
+ 	stock_row.visible=totals!=Vector4i.ZERO
+ 	for kind: String in quantity:
+ 		var amount: int=quantity[kind]
+@@ -390,9 +414,16 @@ func position_quality_button(button:Button,ultra:bool) -> void:
+ 		quality=button
+ 		display_mark.mouse_filter=Control.MOUSE_FILTER_IGNORE
+ 		quality.add_child(display_mark)
+-		display_mark.size=Vector2(22,22)
+-		display_mark.position=Vector2(34,32)
+-		_action(quality,Color("#234258ee"),Color("#e2d5b1"),WHITE)
++		display_mark.size=Vector2(32,32)
++		display_mark.position=Vector2(32,20)
++		_action(quality,PAPER,Color("#c5bdbe"),INK)
++		for state:String in ["normal","pressed","hover","hover_pressed"]:
++			var gear_skin:=_skin(PAPER,Color("#c5bdbe"),13)
++			gear_skin.expand_margin_left=-18.
++			gear_skin.expand_margin_right=-18.
++			gear_skin.expand_margin_top=-10.
++			gear_skin.expand_margin_bottom=-30.
++			quality.add_theme_stylebox_override(state,gear_skin)
+ 		_type(quality_help,18,WHITE)
+ 		quality_help.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
+ 		quality_help.add_theme_stylebox_override("normal",_skin(NAVY,ICE,8))
+@@ -414,10 +445,10 @@ func position_quality_button(button:Button,ultra:bool) -> void:
+ 	was_ultra=ultra
+ 	quality_initialized=true
+ 	var safe:=_safe_rect()
+-	quality.size=Vector2(88,84)
+-	quality.position=safe.end-quality.size
++	quality.size=Vector2(96,96)
++	quality.position=Vector2(safe.end.x-quality.size.x,safe.position.y)
+ 	quality_help.size=Vector2(74,28)
+-	quality_help.position=Vector2(7,-18)
++	quality_help.position=Vector2(-12,64)
+ 
+ func reflow() -> void:
+ 	if not is_instance_valid(row) or not is_instance_valid(level_continue):
+@@ -427,19 +458,21 @@ func reflow() -> void:
+ 	var top:=safe.position
+ 	var right:=safe.end.x
+ 	var width:=safe.size.x
+-	portrait.position=top+Vector2(0,-2)
+-	portrait.size=Vector2(79,79)
+-	plate.position=top+Vector2(35,7)
+-	chapter.position=top+Vector2(84,6)
++	var hero_width:=220.
++	plate.position=top
++	plate.size=Vector2(hero_width,78.)
++	portrait.position=top+Vector2(5,5)
++	portrait.size=Vector2(67,67)
++	chapter.position=top+Vector2(78,1)
+ 	chapter.size=chapter.get_minimum_size()
+-	var hero_width := maxf(205.,ceilf(chapter.size.x)+97.)
+-	plate.size=Vector2(hero_width-35.,56)
+-	health_text.position=top+Vector2(hero_width-58,36)
++	chapter_detail.position=top+Vector2(79,32)
++	chapter_detail.size=chapter_detail.get_minimum_size()
++	health_text.position=top+Vector2(hero_width-62.,51.)
+ 	health_text.size=health_text.get_minimum_size()
+ 	for bar in [health_trail,health_bar]:
+-		bar.position=top+Vector2(83,44)
+-		bar.size=Vector2(hero_width-148,9)
+-	threat_text.position=top+Vector2(86,66)
++		bar.position=top+Vector2(79,62)
++		bar.size=Vector2(hero_width-148,7)
++	threat_text.position=top+Vector2(16,83)
+ 	threat_chip.position=threat_text.position-Vector2(7,1)
+ 	threat_chip.size=threat_text.get_minimum_size()+Vector2(14,2)
+ 	threat_text.add_theme_color_override("font_color",Color("#ffddb0"))
+@@ -448,16 +481,51 @@ func reflow() -> void:
+ 	damage_text.position=health_text.position+Vector2(0,23)
+ 	damage_text.add_theme_color_override("font_outline_color",Color("#542b28"))
+ 	damage_text.add_theme_constant_override("outline_size",4)
+-	var resource_width:=maxf(120.,width-hero_width-10.)
+-	_anchor_right(row,right,top.y+2,resource_width)
+-	var resource_end := row.position.y+row.size.y*row.scale.y
+-	if mineral_row.visible:
+-		_anchor_right(mineral_row,right,resource_end,resource_width)
+-		resource_end=mineral_row.position.y+mineral_row.size.y*mineral_row.scale.y
+-	if stock_row.visible:
+-		_anchor_right(stock_row,right,resource_end,resource_width)
+-		resource_end=stock_row.position.y+stock_row.size.y*stock_row.scale.y
+-	operation.position=Vector2(right-87.,resource_end+2.)
++	var resource_width:=maxf(120.,width-hero_width-106.)
++	var rail_right:=right-99.
++	var groups:Array[HBoxContainer]=[row,stock_row,mineral_row]
++	var full_width:=0.
++	var extras:=0
++	for group in groups:
++		if group.visible:
++			full_width+=group.get_combined_minimum_size().x
++			if group!=row:
++				for cell in group.get_children():
++					if cell.visible:extras+=1
++	var compressed:=extras>0 and full_width*.82>resource_width
++	var panel_width:=minf(full_width,resource_width)
++	var chip_width:=53. if compressed else 0.
++	if compressed:panel_width=minf(resource_width,row.get_combined_minimum_size().x+chip_width)
++	if width>1100.:rail_right=minf(rail_right,safe.get_center().x+panel_width*.5)
++	var x:=rail_right-panel_width
++	var start_x:=x
++	var factor:=minf(1.,(panel_width-chip_width)/maxf(1.,row.get_combined_minimum_size().x if compressed else full_width))
++	var rail_height:=55.*factor
++	for group in groups:
++		group.modulate.a=0. if compressed and group!=row else 1.
++		if not group.visible:continue
++		if group.modulate.a==0.:
++			group.position=Vector2(start_x,top.y)
++			group.scale=Vector2.ONE*minf(1.,panel_width/maxf(1.,group.get_combined_minimum_size().x))
++			continue
++		group.size=group.get_combined_minimum_size()
++		group.scale=Vector2.ONE*factor
++		group.position=Vector2(x,top.y)
++		x+=group.size.x*factor
++	counts_area=Rect2(start_x,top.y,panel_width,rail_height)
++	for i in rail_backs.size():rail_backs[i].visible=i==0
++	rail_backs[0].position=counts_area.position
++	rail_backs[0].size=counts_area.size
++	overflow.visible=compressed
++	overflow.text="+%d"%extras
++	overflow.accessibility_name="Show all carried resources and workshop goods"
++	overflow.position=Vector2(rail_right-chip_width,top.y)
++	overflow.size=Vector2(chip_width,rail_height)
++	group_rule.visible=stock_row.visible or mineral_row.visible
++	group_rule.position=Vector2(start_x+row.size.x*factor,top.y+12.*factor)
++	group_rule.size=Vector2(1.,31.*factor)
++	var resource_end:=top.y+rail_height
++	operation.position=Vector2(rail_right-87.,resource_end+2.)
+ 	operation.size=Vector2(87.,5.)
+ 	var available:=minf(width-100.,500.)
+ 	var card_width:=clampf(ticket.natural_width(),190.,available)
+@@ -468,19 +536,29 @@ func reflow() -> void:
+ 		prompt.size.y=prompt.get_minimum_size().y
+ 		card_height=maxf(48.,prompt.size.y+20.)
+ 	if payment_track.visible:card_height+=6.
+-	objective.size=Vector2(card_width,card_height)
+-	objective.position=Vector2(top.x,safe.end.y-card_height-12.)
+-	ticket.position=Vector2.ZERO
+-	ticket.size=Vector2(card_width,card_height-(6. if payment_track.visible else 0.))
++	var notice_offset:=31. if nearby_threat or damage_text.visible else 0.
++	var objective_y:=top.y+89.+notice_offset
++	var base_height:=card_height
++	card_height+=27.
++	objective_y=maxf(objective_y,resource_end+6.)
++	objective.size=Vector2(card_width+10.,card_height)
++	objective.position=Vector2(top.x,objective_y)
++	objective_caption.position=Vector2(18,5)
++	objective_caption.size=Vector2(card_width-28,23)
++	accent.position=Vector2(5,9)
++	accent.size=Vector2(4,card_height-18.)
++	ticket.position=Vector2(7,25)
++	ticket.size=Vector2(card_width,base_height-(6. if payment_track.visible else 0.))
+ 	ticket.queue_redraw()
+-	prompt.position=objective.position+Vector2(15.,7.)
+-	payment_track.position=objective.position+Vector2(12.,card_height-8.)
++	prompt.position=objective.position+Vector2(19.,30.)
++	payment_track.position=objective.position+Vector2(15.,card_height-8.)
+ 	payment_track.size=Vector2(card_width-24.,4.)
+-	gate.position=Vector2(top.x,top.y+88.)
++	gate.position=Vector2(top.x,objective.position.y+objective.size.y+56.)
+ 	gate.size=Vector2(200,54)
+ 	tree.position=gate.position+Vector2(0,60)
+ 	tree.size=gate.size
+ 	level_continue.size=Vector2(187,82)
+-	level_continue.position=safe.end-Vector2(187,164)
++	level_continue.position=safe.end-Vector2(187,167)
+ 	if is_instance_valid(quality):
+-		quality.position=safe.end-quality.size
++		quality.position=Vector2(safe.end.x-quality.size.x,top.y)
++	if is_instance_valid(camp_dock):camp_dock.reflow()
+diff --git a/HavenlineLevel1/field_hud_objective.gd b/HavenlineLevel1/field_hud_objective.gd
+index d970bc8d6..0c150328e 100644
+--- a/HavenlineLevel1/field_hud_objective.gd
++++ b/HavenlineLevel1/field_hud_objective.gd
+@@ -65,6 +65,7 @@ func set_message(message: String, artwork: Dictionary) -> void:
+ 	fallback = parts.size() < 2
+ 	for index in range(1, parts.size()):
+ 		var word := parts[index].strip_edges()
++		if heading=="Rescue survivor":word=word.trim_suffix(" at the southwest plot")
+ 		var entry := remaining.search(word)
+ 		if not entry:
+ 			fallback = true
+diff --git a/HavenlineLevel1/field_layout_hud.gd b/HavenlineLevel1/field_layout_hud.gd
+index cd4dfda27..d6eef75b5 100644
+--- a/HavenlineLevel1/field_layout_hud.gd
++++ b/HavenlineLevel1/field_layout_hud.gd
+@@ -74,7 +74,7 @@ func _process(_dt:float) -> void:
+ 	if layout.active and not available:
+ 		layout.close()
+ 		return
+-	if launcher.visible != (available and not layout.active): sync()
++	if launcher.visible:launcher.hide()
+ 	if layout.active: queue_redraw()
+ 
+ func sync() -> void:
+@@ -82,7 +82,7 @@ func sync() -> void:
+ 	var active:bool=layout.active
+ 	var host=layout.world
+ 	var safe:Rect2=host.opening_hud._safe_rect()
+-	launcher.visible=host.camp_active and not host.persist_blocked and host.reset_time<=0 and not active
++	launcher.hide()
+ 	launcher.size=Vector2(93,50)
+ 	var continued:bool = host.opening_hud.level_continue and host.opening_hud.level_continue.visible
+ 	launcher.position=Vector2(safe.end.x-launcher.size.x,safe.end.y-(225. if continued else 131.))
+diff --git a/HavenlineLevel1/field_navigation.gd b/HavenlineLevel1/field_navigation.gd
+index cd4f8966e..417e0e690 100644
+--- a/HavenlineLevel1/field_navigation.gd
++++ b/HavenlineLevel1/field_navigation.gd
+@@ -62,10 +62,8 @@ func _draw() -> void:
+ 
+ func reflow() -> void:
+ 	var safe: Rect2 = hud._safe_rect()
+-	# Home and the current purchase are different destinations. Keep the compass
+-	# above the live ticket even when a long objective wraps on the cover screen.
+-	var ticket_y: float = hud.objective.position.y if is_instance_valid(hud.objective) else safe.end.y-90.
+-	position = Vector2(roundf(safe.position.x),roundf(ticket_y-size.y-8.))
++	var ticket_bottom:float=hud.objective.position.y+hud.objective.size.y
++	position=Vector2(roundf(safe.position.x),roundf(ticket_bottom+8.))
+ 
+ func _process(_dt: float) -> void:
+ 	refresh()
+@@ -75,6 +73,40 @@ func refresh() -> void:
+ 		hide()
+ 		return
+ 	var feet: Vector3 = world.actor.global_position
++	var selected:Vector3=hud.camp_dock.tracked_point()
++	if selected.is_finite():
++		if feet.distance_to(selected)<1.65:
++			hud.camp_dock.tracking=""
++		else:
++			var aim_at:=selected
++			var distance:=feet.distance_to(selected)
++			var from_inside:bool=world.field_env.is_inside_camp(feet)
++			var to_inside:bool=world.camp_active and world.camp_layout.bounds().has_point(Vector2(selected.x,selected.z))
++			if to_inside and not from_inside and route.update(world,Vector2(feet.x,feet.z)):
++				aim_at=Vector3(route.direction_target.x,feet.y,route.direction_target.y)
++				distance=route.distance
++			elif from_inside and not to_inside:
++				var shortest:=INF
++				for gate in world.gates:
++					if not gate.active:continue
++					var gate_at:Vector3=gate.global_position
++					var via:=feet.distance_to(gate_at)+gate_at.distance_to(selected)
++					if via<shortest:
++						shortest=via
++						aim_at=gate_at
++						distance=via
++			elif from_inside and to_inside:
++				aim_at=world.camp_layout.next_waypoint(feet,selected)
++			var bearing:Vector2=world.camera.unproject_position(aim_at)-world.camera.unproject_position(feet)
++			needle.rotation=bearing.angle()
++			var caption:String=hud.camp_dock.tracking_name
++			label.text="%s  %d m"%[caption,roundi(distance)]
++			size.x=maxf(194.,label.get_theme_font("font").get_string_size(label.text,HORIZONTAL_ALIGNMENT_LEFT,-1,TYPE_SIZE).x+LABEL_LEFT+LABEL_RIGHT)
++			label.size.x=size.x-LABEL_LEFT-LABEL_RIGHT
++			label.accessibility_name=label.text
++			reflow()
++			show()
++			return
+ 	if world.field_env.is_inside_camp(feet):
+ 		hide()
+ 		return
+diff --git a/HavenlineLevel1/field_opening.gd b/HavenlineLevel1/field_opening.gd
+index 13b2b6120..045ff5692 100644
+--- a/HavenlineLevel1/field_opening.gd
++++ b/HavenlineLevel1/field_opening.gd
+@@ -328,6 +328,9 @@ func _configure_stem(tree: ResourceTreeScript) -> void:
+ 	tree._marks.clear()
+ 
+ func _input(event: InputEvent) -> void:
++	if field_ready and opening_hud.camp_dock.handle(event):
++		get_viewport().set_input_as_handled()
++		return
+ 	if field_ready and camp_layout.handle_input(event):
+ 		get_viewport().set_input_as_handled()
+ 		return
+diff --git a/HavenlineLevel1/field_thumbstick.gd b/HavenlineLevel1/field_thumbstick.gd
+index 6d50327e4..6ccfac918 100644
+--- a/HavenlineLevel1/field_thumbstick.gd
++++ b/HavenlineLevel1/field_thumbstick.gd
+@@ -2,6 +2,7 @@ extends Control
+ ## Track the game's existing movable touch origin. Pointer events keep going to the world.
+ var world
+ var offset := Vector2.ZERO
++var resting:=true
+ 
+ 
+ func install(host) -> void:
+@@ -12,11 +13,27 @@ func install(host) -> void:
+ 
+ 
+ func _process(_delta: float) -> void:
+-	if not is_instance_valid(world):
++	if not is_instance_valid(world) or not world.get("field_ready"):
+ 		return
+-	if world.touch_id < 0 or world.trial_camera.pinching:
++	if world.trial_camera.pinching:
+ 		hide()
+ 		return
++	var hud=get_parent()
++	if not hud.has_method("_safe_rect") or not world.field_ready or (world.camp_layout and world.camp_layout.active):
++		hide()
++		return
++	if world.touch_id<0:
++		if hud.camp_dock and not hud.camp_dock.tab.is_empty():
++			hide()
++			return
++		var area:Rect2=hud._safe_rect()
++		position=Vector2(area.position.x+65.,area.end.y-135.)
++		resting=true
++		offset=Vector2.ZERO
++		queue_redraw()
++		show()
++		return
++	resting=false
+ 	var offset_now: Vector2 = (world.touch_now - world.touch_origin).limit_length(82.) * .52
+ 	if not visible or offset.distance_squared_to(offset_now) > .04:
+ 		offset = offset_now
+@@ -26,8 +43,12 @@ func _process(_delta: float) -> void:
+ 
+ 
+ func _draw() -> void:
+-	draw_circle(Vector2.ZERO, 50., Color("#152a3c55"), true, -1, true)
+-	draw_arc(Vector2.ZERO, 48., 0., TAU, 48, Color("#fcf1cda6"), 2., true)
+-	draw_circle(offset + Vector2(0, 2), 21., Color("#0e253775"), true, -1, true)
+-	draw_circle(offset, 20., Color("#fff4dcb0"), true, -1, true)
+-	draw_arc(offset, 19., 0., TAU, 32, Color("#ffffedb3"), 1., true)
++	var strength:=.68 if resting else 1.
++	draw_circle(Vector2.ZERO,50.,Color(.29,.34,.43,.30*strength),true,-1,true)
++	draw_arc(Vector2.ZERO,48.,0.,TAU,48,Color(.99,.96,.93,.68*strength),1.75,true)
++	for i in 4:
++		var dir:=Vector2.UP.rotated(i*PI*.5)
++		var side:=dir.orthogonal()
++		draw_colored_polygon(PackedVector2Array([dir*43.,dir*35.+side*5.,dir*35.-side*5.]),Color(1.,.98,.94,.80*strength))
++	draw_circle(offset+Vector2(0,1),21.,Color(.12,.16,.22,.20),true,-1,true)
++	draw_circle(offset,20.,Color(1.,.98,.94,.86*strength),true,-1,true)
+diff --git a/HavenlineLevel1/tests/fixtures/camp_hud_paid.json b/HavenlineLevel1/tests/fixtures/camp_hud_paid.json
+new file mode 100644
+index 000000000..b361eec2a
+--- /dev/null
++++ b/HavenlineLevel1/tests/fixtures/camp_hud_paid.json
+@@ -0,0 +1 @@
++{"format":1,"payload":"{\"build_order\":[\"center_hearth\",\"expansion_1\",\"storage_wood\",\"storage_stone\",\"storage_meat\",\"expansion_2\",\"watchtower\",\"orbit_upgrade\",\"camp_cooker\",\"saw_bench\",\"quarry_drill\",\"meal_conveyor\",\"supply_conveyors\"],\"carried\":{\"coal\":0,\"meat\":0,\"metal\":0,\"slate\":0,\"stone\":0,\"wood\":0},\"collected\":{\"baseline-roast\":\"meat\",\"baseline-stock-meat0\":\"meat\",\"baseline-stock-meat1\":\"meat\",\"baseline-stock-meat2\":\"meat\",\"baseline-stock-meat3\":\"meat\",\"baseline-stock-meat4\":\"meat\",\"baseline-stock-meat5\":\"meat\",\"baseline-stock-stone0\":\"stone\",\"baseline-stock-stone1\":\"stone\",\"baseline-stock-stone2\":\"stone\",\"baseline-stock-wood0\":\"wood\",\"baseline-stock-wood1\":\"wood\",\"baseline-stock-wood2\":\"wood\",\"camp_cookerstone0\":\"stone\",\"camp_cookerstone1\":\"stone\",\"camp_cookerstone2\":\"stone\",\"camp_cookerstone3\":\"stone\",\"camp_cookerstone4\":\"stone\",\"camp_cookerstone5\":\"stone\",\"camp_cookerstone6\":\"stone\",\"camp_cookerstone7\":\"stone\",\"camp_cookerwood0\":\"wood\",\"camp_cookerwood1\":\"wood\",\"camp_cookerwood10\":\"wood\",\"camp_cookerwood11\":\"wood\",\"camp_cookerwood2\":\"wood\",\"camp_cookerwood3\":\"wood\",\"camp_cookerwood4\":\"wood\",\"camp_cookerwood5\":\"wood\",\"camp_cookerwood6\":\"wood\",\"camp_cookerwood7\":\"wood\",\"camp_cookerwood8\":\"wood\",\"camp_cookerwood9\":\"wood\",\"center_hearthwood0\":\"wood\",\"center_hearthwood1\":\"wood\",\"center_hearthwood10\":\"wood\",\"center_hearthwood11\":\"wood\",\"center_hearthwood12\":\"wood\",\"center_hearthwood13\":\"wood\",\"center_hearthwood14\":\"wood\",\"center_hearthwood15\":\"wood\",\"center_hearthwood16\":\"wood\",\"center_hearthwood17\":\"wood\",\"center_hearthwood18\":\"wood\",\"center_hearthwood19\":\"wood\",\"center_hearthwood2\":\"wood\",\"center_hearthwood3\":\"wood\",\"center_hearthwood4\":\"wood\",\"center_hearthwood5\":\"wood\",\"center_hearthwood6\":\"wood\",\"center_hearthwood7\":\"wood\",\"center_hearthwood8\":\"wood\",\"center_hearthwood9\":\"wood\",\"expansion_1stone0\":\"stone\",\"expansion_1stone1\":\"stone\",\"expansion_1stone2\":\"stone\",\"expansion_1stone3\":\"stone\",\"expansion_1stone4\":\"stone\",\"expansion_1stone5\":\"stone\",\"expansion_1wood0\":\"wood\",\"expansion_1wood1\":\"wood\",\"expansion_1wood10\":\"wood\",\"expansion_1wood11\":\"wood\",\"expansion_1wood2\":\"wood\",\"expansion_1wood3\":\"wood\",\"expansion_1wood4\":\"wood\",\"expansion_1wood5\":\"wood\",\"expansion_1wood6\":\"wood\",\"expansion_1wood7\":\"wood\",\"expansion_1wood8\":\"wood\",\"expansion_1wood9\":\"wood\",\"expansion_2stone0\":\"stone\",\"expansion_2stone1\":\"stone\",\"expansion_2stone2\":\"stone\",\"expansion_2stone3\":\"stone\",\"expansion_2stone4\":\"stone\",\"expansion_2stone5\":\"stone\",\"expansion_2stone6\":\"stone\",\"expansion_2stone7\":\"stone\",\"expansion_2stone8\":\"stone\",\"expansion_2stone9\":\"stone\",\"expansion_2wood0\":\"wood\",\"expansion_2wood1\":\"wood\",\"expansion_2wood10\":\"wood\",\"expansion_2wood11\":\"wood\",\"expansion_2wood12\":\"wood\",\"expansion_2wood13\":\"wood\",\"expansion_2wood14\":\"wood\",\"expansion_2wood2\":\"wood\",\"expansion_2wood3\":\"wood\",\"expansion_2wood4\":\"wood\",\"expansion_2wood5\":\"wood\",\"expansion_2wood6\":\"wood\",\"expansion_2wood7\":\"wood\",\"expansion_2wood8\":\"wood\",\"expansion_2wood9\":\"wood\",\"orbit_upgrademeat0\":\"meat\",\"orbit_upgrademeat1\":\"meat\",\"orbit_upgrademeat2\":\"meat\",\"orbit_upgrademeat3\":\"meat\",\"orbit_upgradestone0\":\"stone\",\"orbit_upgradestone1\":\"stone\",\"orbit_upgradestone2\":\"stone\",\"orbit_upgradestone3\":\"stone\",\"orbit_upgradestone4\":\"stone\",\"orbit_upgradestone5\":\"stone\",\"quarry_drillstone0\":\"stone\",\"quarry_drillstone1\":\"stone\",\"quarry_drillstone10\":\"stone\",\"quarry_drillstone11\":\"stone\",\"quarry_drillstone2\":\"stone\",\"quarry_drillstone3\":\"stone\",\"quarry_drillstone4\":\"stone\",\"quarry_drillstone5\":\"stone\",\"quarry_drillstone6\":\"stone\",\"quarry_drillstone7\":\"stone\",\"quarry_drillstone8\":\"stone\",\"quarry_drillstone9\":\"stone\",\"quarry_drillwood0\":\"wood\",\"quarry_drillwood1\":\"wood\",\"quarry_drillwood2\":\"wood\",\"quarry_drillwood3\":\"wood\",\"quarry_drillwood4\":\"wood\",\"quarry_drillwood5\":\"wood\",\"quarry_drillwood6\":\"wood\",\"quarry_drillwood7\":\"wood\",\"quarry_drillwood8\":\"wood\",\"quarry_drillwood9\":\"wood\",\"saw_benchstone0\":\"stone\",\"saw_benchstone1\":\"stone\",\"saw_benchstone2\":\"stone\",\"saw_benchstone3\":\"stone\",\"saw_benchstone4\":\"stone\",\"saw_benchstone5\":\"stone\",\"saw_benchwood0\":\"wood\",\"saw_benchwood1\":\"wood\",\"saw_benchwood10\":\"wood\",\"saw_benchwood11\":\"wood\",\"saw_benchwood12\":\"wood\",\"saw_benchwood13\":\"wood\",\"saw_benchwood2\":\"wood\",\"saw_benchwood3\":\"wood\",\"saw_benchwood4\":\"wood\",\"saw_benchwood5\":\"wood\",\"saw_benchwood6\":\"wood\",\"saw_benchwood7\":\"wood\",\"saw_benchwood8\":\"wood\",\"saw_benchwood9\":\"wood\",\"storage_meatmeat0\":\"meat\",\"storage_meatmeat1\":\"meat\",\"storage_meatmeat2\":\"meat\",\"storage_meatmeat3\":\"meat\",\"storage_meatmeat4\":\"meat\",\"storage_meatwood0\":\"wood\",\"storage_meatwood1\":\"wood\",\"storage_meatwood2\":\"wood\",\"storage_meatwood3\":\"wood\",\"storage_meatwood4\":\"wood\",\"storage_meatwood5\":\"wood\",\"storage_meatwood6\":\"wood\",\"storage_stonestone0\":\"stone\",\"storage_stonestone1\":\"stone\",\"storage_stonestone2\":\"stone\",\"storage_stonestone3\":\"stone\",\"storage_stonestone4\":\"stone\",\"storage_stonestone5\":\"stone\",\"storage_stonewood0\":\"wood\",\"storage_stonewood1\":\"wood\",\"storage_stonewood2\":\"wood\",\"storage_stonewood3\":\"wood\",\"storage_stonewood4\":\"wood\",\"storage_stonewood5\":\"wood\",\"storage_stonewood6\":\"wood\",\"storage_stonewood7\":\"wood\",\"storage_woodwood0\":\"wood\",\"storage_woodwood1\":\"wood\",\"storage_woodwood2\":\"wood\",\"storage_woodwood3\":\"wood\",\"storage_woodwood4\":\"wood\",\"storage_woodwood5\":\"wood\",\"storage_woodwood6\":\"wood\",\"storage_woodwood7\":\"wood\",\"storage_woodwood8\":\"wood\",\"storage_woodwood9\":\"wood\",\"test-tender-meal_conveyorstone0\":\"stone\",\"test-tender-meal_conveyorstone1\":\"stone\",\"test-tender-meal_conveyorstone2\":\"stone\",\"test-tender-meal_conveyorstone3\":\"stone\",\"test-tender-meal_conveyorstone4\":\"stone\",\"test-tender-meal_conveyorstone5\":\"stone\",\"test-tender-meal_conveyorwood0\":\"wood\",\"test-tender-meal_conveyorwood1\":\"wood\",\"test-tender-meal_conveyorwood2\":\"wood\",\"test-tender-meal_conveyorwood3\":\"wood\",\"test-tender-meal_conveyorwood4\":\"wood\",\"test-tender-meal_conveyorwood5\":\"wood\",\"test-tender-meal_conveyorwood6\":\"wood\",\"test-tender-meal_conveyorwood7\":\"wood\",\"test-tender-meal_conveyorwood8\":\"wood\",\"test-tender-meal_conveyorwood9\":\"wood\",\"test-tender-supply_conveyorsstone0\":\"stone\",\"test-tender-supply_conveyorsstone1\":\"stone\",\"test-tender-supply_conveyorsstone10\":\"stone\",\"test-tender-supply_conveyorsstone11\":\"stone\",\"test-tender-supply_conveyorsstone2\":\"stone\",\"test-tender-supply_conveyorsstone3\":\"stone\",\"test-tender-supply_conveyorsstone4\":\"stone\",\"test-tender-supply_conveyorsstone5\":\"stone\",\"test-tender-supply_conveyorsstone6\":\"stone\",\"test-tender-supply_conveyorsstone7\":\"stone\",\"test-tender-supply_conveyorsstone8\":\"stone\",\"test-tender-supply_conveyorsstone9\":\"stone\",\"test-tender-supply_conveyorswood0\":\"wood\",\"test-tender-supply_conveyorswood1\":\"wood\",\"test-tender-supply_conveyorswood10\":\"wood\",\"test-tender-supply_conveyorswood11\":\"wood\",\"test-tender-supply_conveyorswood12\":\"wood\",\"test-tender-supply_conveyorswood13\":\"wood\",\"test-tender-supply_conveyorswood14\":\"wood\",\"test-tender-supply_conveyorswood15\":\"wood\",\"test-tender-supply_conveyorswood2\":\"wood\",\"test-tender-supply_conveyorswood3\":\"wood\",\"test-tender-supply_conveyorswood4\":\"wood\",\"test-tender-supply_conveyorswood5\":\"wood\",\"test-tender-supply_conveyorswood6\":\"wood\",\"test-tender-supply_conveyorswood7\":\"wood\",\"test-tender-supply_conveyorswood8\":\"wood\",\"test-tender-supply_conveyorswood9\":\"wood\",\"watchtowerstone0\":\"stone\",\"watchtowerstone1\":\"stone\",\"watchtowerstone2\":\"stone\",\"watchtowerstone3\":\"stone\",\"watchtowerstone4\":\"stone\",\"watchtowerstone5\":\"stone\",\"watchtowerstone6\":\"stone\",\"watchtowerstone7\":\"stone\",\"watchtowerstone8\":\"stone\",\"watchtowerstone9\":\"stone\",\"watchtowerwood0\":\"wood\",\"watchtowerwood1\":\"wood\",\"watchtowerwood10\":\"wood\",\"watchtowerwood11\":\"wood\",\"watchtowerwood2\":\"wood\",\"watchtowerwood3\":\"wood\",\"watchtowerwood4\":\"wood\",\"watchtowerwood5\":\"wood\",\"watchtowerwood6\":\"wood\",\"watchtowerwood7\":\"wood\",\"watchtowerwood8\":\"wood\",\"watchtowerwood9\":\"wood\"},\"legacy_axes\":false,\"legacy_level2\":false,\"legacy_prices\":[],\"paid\":{\"camp_cooker\":{\"stone\":8,\"wood\":12},\"center_hearth\":{\"wood\":20},\"expansion_1\":{\"stone\":6,\"wood\":12},\"expansion_2\":{\"stone\":10,\"wood\":15},\"meal_conveyor\":{\"stone\":6,\"wood\":10},\"orbit_upgrade\":{\"meat\":4,\"stone\":6},\"quarry_drill\":{\"stone\":12,\"wood\":10},\"saw_bench\":{\"stone\":6,\"wood\":14},\"storage_meat\":{\"meat\":5,\"wood\":7},\"storage_stone\":{\"stone\":6,\"wood\":8},\"storage_wood\":{\"wood\":10},\"supply_conveyors\":{\"stone\":12,\"wood\":16},\"watchtower\":{\"stone\":10,\"wood\":12}},\"settlement\":{\"cooked\":1,\"counter_stock\":0,\"held_meal\":0,\"hoppers\":{\"meat\":0,\"stone\":0,\"wood\":0},\"level\":1,\"line_load\":{\"meal\":0,\"meat\":1,\"stone\":1,\"wood\":1},\"line_progress\":{\"meal\":0.0,\"meat\":0.0481084777357289,\"stone\":0.0269578571382833,\"wood\":0.0412039255102681},\"owl_hits\":0,\"processed_stone\":0,\"processed_wood\":0,\"rescued\":false,\"served\":1,\"survivor_paid\":false,\"survivor_wood\":0,\"work_seconds\":{\"meat\":0.0,\"stone\":0.0,\"wood\":0.0},\"worker_carry_token\":\"\",\"worker_deliveries\":0,\"worker_load\":{\"coal\":0,\"meat\":0,\"metal\":0,\"slate\":0,\"stone\":0,\"wood\":0},\"worker_meal\":0,\"worker_receipts\":[],\"worker_supply\":\"\"},\"stored\":{\"coal\":0,\"meat\":5,\"metal\":0,\"slate\":0,\"stone\":2,\"wood\":2},\"version\":8,\"world\":{\"cooling\":{},\"drops\":[[\"meat-1\",\"meat\",14.1221284866333,0.522068679332733,97.5833333333333],[\"meat-2\",\"meat\",13.2731533050537,-0.193012923002243,97.5833333333333]],\"layout\":{},\"pack\":{\"live\":[[1,false,2,13.1482267379761,5.51020097732544,13.0685606002808,5.49989891052246],[3,false,3,18.1633777618408,-1.45047998428345,18.185754776001,-1.45283627510071],[4,false,3,17.1589069366455,5.79449987411499,17.0998344421387,5.66016674041748]],\"remaining\":17.366666666667,\"rng\":\"-7539135083582650730\",\"serial\":4,\"wave\":1},\"partial\":{},\"player\":{\"camp_heal_elapsed\":0.0,\"fall_left\":0.0,\"hp\":30,\"protection_left\":0.0,\"x\":1.14999997615814,\"yaw\":-0.031893540173769,\"z\":0.899999976158142},\"serial\":2,\"version\":2}}","sha256":"8cc26765e3822605709ac3d808ed2d934294fe816d3ad1991fb86412a8f536a7"}
+\ No newline at end of file
+diff --git a/HavenlineLevel1/tests/qa_camp_layout.gd b/HavenlineLevel1/tests/qa_camp_layout.gd
+index e1646e94e..998ccc6b3 100644
+--- a/HavenlineLevel1/tests/qa_camp_layout.gd
++++ b/HavenlineLevel1/tests/qa_camp_layout.gd
+@@ -35,6 +35,18 @@ func click(at:Vector2) -> void:
+ 		root.push_input(e,true)
+ 	await physics_frame
+ 
++func open_layout(mouse:=false) -> void:
++	var dock=field.opening_hud.camp_dock
++	var menu_at:Vector2=dock.tabs.Camp.get_global_rect().get_center()
++	if mouse:await click(menu_at)
++	else:await tap(menu_at)
++	for command in dock.commands:
++		if command[1]!="move":continue
++		var move_at:Vector2=command[0].get_global_rect().get_center()
++		if mouse:await click(move_at)
++		else:await tap(move_at)
++		return
++
+ func photograph(label:String) -> void:
+ 	if shot_dir.is_empty(): return
+ 	await process_frame
+@@ -94,7 +106,7 @@ func live() -> void:
+ 	recording=not film_dir.is_empty()
+ 	if recording: physics_frame.connect(film)
+ 	await hold(35)
+-	await tap(layout.overlay.launcher.get_global_rect().get_center())
++	await open_layout()
+ 	verify("Touch opens layout and liberates joystick",layout.active and field.touch_id<0)
+ 	await hold(32)
+ 	await select_building(COOKER)
+@@ -147,7 +159,7 @@ func live() -> void:
+ 	# Machine checkout does not turn these into free permanent unlocks. Seed their own recipes separately.
+ 	for id in ["saw_bench","quarry_drill","watchtower","orbit_upgrade"]:open_site(id)
+ 	for i in 55:await physics_frame
+-	await click(layout.overlay.launcher.get_global_rect().get_center())
++	await open_layout(true)
+ 	verify("Mouse opens identical layout controls",layout.active)
+ 	for row in [["saw_bench",Vector2(-3.5,2.5)],["quarry_drill",Vector2(7.75,-6.25)],["north_counter",Vector2(4.,-9.)],["storage_wood",Vector2(4.50,-2.50)]]:
+ 		var id:String=row[0]
+@@ -199,7 +211,7 @@ func upgrade() -> void:
+ 	for i in 60: await physics_frame
+ 	field.actor.global_position=Vector3(1.72,0,1.8)
+ 	var old_mark:Vector3=field.depot.upgrade_mark.global_position
+-	await tap(layout.overlay.launcher.get_global_rect().get_center())
++	await open_layout()
+ 	await select_building("storage_wood")
+ 	await place_at("storage_wood",Vector2(-3.50,-3.0))
+ 	await tap(layout.overlay.done.get_global_rect().get_center())
+diff --git a/HavenlineLevel1/tests/qa_field_camp_controls.gd b/HavenlineLevel1/tests/qa_field_camp_controls.gd
+new file mode 100644
+index 000000000..e3577d0e4
+--- /dev/null
++++ b/HavenlineLevel1/tests/qa_field_camp_controls.gd
+@@ -0,0 +1,98 @@
++extends SceneTree
++const Session=preload("res://tests/lifecycle_test_profile.gd")
++const Guard=preload("res://opening_save.gd")
++const Save=preload("res://field_save.gd")
++const SelfPath="res://tests/qa_field_camp_controls.gd"
++const PaidFixture="res://tests/fixtures/camp_hud_paid.json"
++
++var g
++var results:Dictionary={}
++func _initialize():
++ if "--camp-hud-fixture" in OS.get_cmdline_user_args():
++  if not Guard.new().configure(OS.get_cmdline_user_args()):
++   quit(2)
++   return
++  call_deferred("run")
++  return
++ var directory:=Session.make_directory()
++ if directory.is_empty():
++  quit(2)
++  return
++ var receipt:=FileAccess.get_file_as_bytes(PaidFixture)
++ var file:=FileAccess.open(directory.path_join(Save.PRIMARY),FileAccess.WRITE)
++ if receipt.is_empty() or not file:
++  Session.remove_owned(directory)
++  quit(2)
++  return
++ file.store_buffer(receipt)
++ file.close()
++ var code:=Session.child(SelfPath,directory,"--camp-hud-fixture")
++ Session.remove_owned(directory)
++ quit(code)
++func tap(at:Vector2):
++ for value in [true,false]:
++  var e:=InputEventScreenTouch.new()
++  e.index=3;e.pressed=value;e.position=at
++  root.push_input(e,true)
++  await physics_frame
++func require(key:String,ok:bool):
++ results[key]=ok
++ if not ok:push_error(key)
++func run():
++ g=load("res://field_opening.tscn").instantiate()
++ root.add_child(g);current_scene=g
++ for i in 4:await physics_frame
++ var d=g.opening_hud.camp_dock
++ var h=g.opening_hud
++ require("hud visible",d.visible and d.build.is_visible_in_tree())
++ for tab in ["Camp","Storage","Survivors","Build"]:
++  var btn:Control=d.build if tab=="Build" else d.tabs[tab]
++  await tap(btn.get_global_rect().get_center())
++  require("touch opens "+tab,d.tab==tab and d.sheet.visible and d.commands.size()>0)
++  if d.commands.size():
++   var id=d.commands[0][1]
++   await tap(d.commands[0][0].get_global_rect().get_center())
++   require("touch executes "+tab,d.tab=="" and (d.tracked_point().is_finite() or (g.camp_layout.active and id=="move") or (id=="home" and g.field_env.is_inside_camp(g.actor.position))))
++   if g.camp_layout.active:g.camp_layout.close()
++  else:d.dismiss()
++ await tap(d.tabs.Camp.get_global_rect().get_center())
++ for p in d.commands:
++  if p[1]=="move":
++   await tap(p[0].get_global_rect().get_center())
++   require("move opens native equipment placement",g.camp_layout.active)
++   if g.camp_layout.active:g.camp_layout.close()
++   break
++ root.content_scale_size=Vector2i(720,720)
++ root.content_scale_aspect=Window.CONTENT_SCALE_ASPECT_EXPAND
++ root.content_scale_mode=Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
++ root.size=Vector2i(360,840)
++ for i in 4:await process_frame
++ h.reflow()
++ var safe:Rect2=h._safe_rect()
++ var dp_per_unit:=360./root.get_visible_rect().size.x
++ var hit_rects:Dictionary={}
++ var buttons:Array=[d.build,d.pack_button,h.quality]
++ buttons.append_array(d.tabs.values())
++ for button in buttons:
++  var rect:Rect2=button.get_global_rect()
++  hit_rects[button.name]={"usable_width":snappedf(rect.size.x*dp_per_unit,.1),"usable_height":snappedf(rect.size.y*dp_per_unit,.1),"safe":safe.encloses(rect)}
++  require("48-unit cover target "+str(button.name),minf(rect.size.x,rect.size.y)*dp_per_unit>=47.99 and safe.encloses(rect))
++ print("TARGETS ",JSON.stringify(hit_rects))
++ for kind:String in ["coal","slate","metal"]:g.inventory.collect("hud-cover-"+kind,kind)
++ h.field_status(g.inventory.carried,g.build_hint(g.Progress.AXES))
++ h.reflow()
++ require("narrow cover shows additional stocks",h.overflow.visible)
++ await tap(d.pack_button.get_global_rect().get_center())
++ require("overflow opens all exact mineral amounts",d.tab=="Pack" and d.subtitle.text.contains("10 coal") and d.subtitle.text.contains("10 slate") and d.subtitle.text.contains("10 metal ore"))
++ await tap(d.close.get_global_rect().get_center())
++ var kept:int=g.player_hp
++ var at:Vector3=g.actor.global_position
++ var q=g.graphics.ultra
++ await tap(h.quality.get_global_rect().get_center())
++ require("quality touch toggles",q!=g.graphics.ultra)
++ require("no HP loss or walking during UI taps",g.player_hp==kept and g.actor.global_position.distance_to(at)<.12)
++ print("RESULT ",JSON.stringify(results))
++ await preload("res://tests/lifecycle_test_profile.gd").drain_field_audio(self,g)
++ g.queue_free()
++ for i in 5:await process_frame
++ quit(1 if false in results.values() else 0)
+diff --git a/HavenlineLevel1/tests/qa_field_camp_controls.gd.uid b/HavenlineLevel1/tests/qa_field_camp_controls.gd.uid
+new file mode 100644
+index 000000000..3e5a22e10
+--- /dev/null
++++ b/HavenlineLevel1/tests/qa_field_camp_controls.gd.uid
+@@ -0,0 +1 @@
++uid://ckerq2nkkis5q
+diff --git a/HavenlineLevel1/tests/qa_paid_conveyors.gd b/HavenlineLevel1/tests/qa_paid_conveyors.gd
+index ef3cd5f29..720b51afb 100644
+--- a/HavenlineLevel1/tests/qa_paid_conveyors.gd
++++ b/HavenlineLevel1/tests/qa_paid_conveyors.gd
+@@ -30,15 +30,19 @@ func until(fn:Callable,limit:=1500) ->bool:
+ 
+ func buy(id:String) -> void:
+  var book=field.inventory
+- var menu=field.settlement_loop.conveyors.menu
+  if id in P.LINES:
+   await ticks(4)
+-  var launcher:Vector2=menu.launcher.get_global_rect().get_center()
++  var dock=field.opening_hud.camp_dock
++  var launcher:Vector2=dock.build.get_global_rect().get_center()
+   touch(7,launcher,true)
+   touch(7,launcher,false)
+   await ticks(3)
+   if not outdir.is_empty() and id==P.FOOD_LINE:await shot("Choose-automation")
+-  var choice:Vector2=menu.choices[id].get_global_rect().get_center()
++  var choice:=Vector2.INF
++  for command in dock.commands:
++   if command[1]==id:choice=command[0].get_global_rect().get_center()
++  check(id+" is a visible build action",choice.is_finite())
++  if not choice.is_finite():return
+   touch(7,choice,true)
+   touch(7,choice,false)
+  check(id+" physically available",book.offer_open(id) and field.offer_floors[id].visible)
+-- 
+2.56.1
+

@@ -1,0 +1,331 @@
+{
+  "stamp": {
+    "commit": "989edd9283148e9f712387fb937ea36038cbd9d2",
+    "manifest": {
+      "sha256": "62ae4aee55005afc394b3a263f91f05aa27578055ea345f2ca8eaa688b5dbce7",
+      "checked_files": 614
+    },
+    "runner": "430557709a66d5b0b7a39e8ca218b79c79364f644472e700075a83f6c7596beb"
+  },
+  "passed": true,
+  "runs": [
+    {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "log": "qa_build_offer_route-1.log",
+      "log_sha256": "698b4b9ed10767935fb9768698616371a4cd14180ff7f0f8a7a3bccf157c23af",
+      "summary": [
+        {
+          "checks": {
+            "House loading leaves its upgrade balances available": true,
+            "New profile offers only the hearth": true,
+            "Partial payment correctly combines stored timber with carried stone": true,
+            "Starter has one priced upgrade and a separate place to stock": true,
+            "Touch reaches center_hearth": true,
+            "Touch reaches expansion_1": true,
+            "Touch reaches storage_stone": true,
+            "Touch reaches storage_wood": true,
+            "center_hearth completed exactly once": true,
+            "center_hearth visibly offers the actual target": true,
+            "expansion_1 completed exactly once": true,
+            "expansion_1 has a centered painted building or equipment glyph": true,
+            "expansion_1 offers the correct recipe": true,
+            "expansion_1 visibly offers the actual target": true,
+            "storage_stone has a centered painted building or equipment glyph": true,
+            "storage_stone is separate from the actual loading door": true,
+            "storage_stone offers the correct recipe": true,
+            "storage_stone partial receipt lands without a free unlock": true,
+            "storage_stone visibly offers the actual target": true,
+            "storage_wood completed exactly once": true,
+            "storage_wood has a centered painted building or equipment glyph": true,
+            "storage_wood offers the correct recipe": true,
+            "storage_wood visibly offers the actual target": true
+          },
+          "visits": [
+            {
+              "before": {
+                "wood": 0
+              },
+              "funded": {
+                "wood": 20
+              },
+              "id": "center_hearth",
+              "next": "expansion_1",
+              "position": [
+                -0.000746844918467104,
+                2.39541363716125
+              ],
+              "prompt": "Expand camp \u00b7 120 wood \u00b7 60 stone  \u2192 5 m"
+            },
+            {
+              "before": {
+                "stone": 0,
+                "wood": 0
+              },
+              "funded": {
+                "stone": 6,
+                "wood": 12
+              },
+              "id": "expansion_1",
+              "next": "storage_wood",
+              "position": [
+                2.60696363449097,
+                -1.51029253005981
+              ],
+              "prompt": "Build storehouse \u00b7 100 wood  \u2190 6 m"
+            },
+            {
+              "before": {
+                "wood": 0
+              },
+              "funded": {
+                "wood": 10
+              },
+              "id": "storage_wood",
+              "next": "storage_stone",
+              "position": [
+                -3.1196494102478,
+                -1.16725599765778
+              ],
+              "prompt": "Unload beside the storehouse \u00b7 Next: Reinforce storehouse on the nearby plot\nStored \u00b7 50 wood \u00b7 30 meat"
+            },
+            {
+              "before": {
+                "stone": 0,
+                "wood": 0
+              },
+              "funded": {
+                "stone": 2,
+                "wood": 5
+              },
+              "id": "storage_stone",
+              "next": "storage_stone",
+              "position": [
+                -2.1608715057373,
+                0.684008777141571
+              ],
+              "prompt": "Reinforce storehouse \u00b7 30 wood \u00b7 40 stone\nApproach the plot to pay"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "log": "qa_build_offer_route-2.log",
+      "log_sha256": "de4c905a99f71dad2831e60f58242db362cb1720e1a643f10a6be19e0524f713",
+      "summary": [
+        {
+          "checks": {
+            "All eleven offers retire with no duplicate purchases": true,
+            "Cold resume on a plot cannot spend until a new visit": true,
+            "Completed advanced house retires its upgrade floor": true,
+            "Late game directs an unpaid player to the remaining survivor objective": true,
+            "Restored partial is the next visible plot": true,
+            "Standing on reinforced plot cannot cascade into advanced tier": true,
+            "Touch reaches camp_cooker": true,
+            "Touch reaches expansion_2": true,
+            "Touch reaches orbit_upgrade": true,
+            "Touch reaches quarry_drill": true,
+            "Touch reaches saw_bench": true,
+            "Touch reaches storage_meat": true,
+            "Touch reaches storage_stone": true,
+            "Touch reaches watchtower": true,
+            "camp_cooker completed exactly once": true,
+            "camp_cooker has a centered painted building or equipment glyph": true,
+            "camp_cooker offers the correct recipe": true,
+            "camp_cooker visibly offers the actual target": true,
+            "expansion_2 completed exactly once": true,
+            "expansion_2 has a centered painted building or equipment glyph": true,
+            "expansion_2 offers the correct recipe": true,
+            "expansion_2 visibly offers the actual target": true,
+            "orbit_upgrade completed exactly once": true,
+            "orbit_upgrade has a centered painted building or equipment glyph": true,
+            "orbit_upgrade offers the correct recipe": true,
+            "orbit_upgrade visibly offers the actual target": true,
+            "quarry_drill completed exactly once": true,
+            "quarry_drill has a centered painted building or equipment glyph": true,
+            "quarry_drill offers the correct recipe": true,
+            "quarry_drill visibly offers the actual target": true,
+            "saw_bench completed exactly once": true,
+            "saw_bench has a centered painted building or equipment glyph": true,
+            "saw_bench offers the correct recipe": true,
+            "saw_bench visibly offers the actual target": true,
+            "storage_meat completed exactly once": true,
+            "storage_meat has a centered painted building or equipment glyph": true,
+            "storage_meat is separate from the actual loading door": true,
+            "storage_meat offers the correct recipe": true,
+            "storage_meat visibly offers the actual target": true,
+            "storage_stone completed exactly once": true,
+            "storage_stone has a centered painted building or equipment glyph": true,
+            "storage_stone is separate from the actual loading door": true,
+            "storage_stone offers the correct recipe": true,
+            "storage_stone visibly offers the actual target": true,
+            "watchtower completed exactly once": true,
+            "watchtower has a centered painted building or equipment glyph": true,
+            "watchtower offers the correct recipe": true,
+            "watchtower visibly offers the actual target": true
+          },
+          "visits": [
+            {
+              "before": {
+                "stone": 2,
+                "wood": 5
+              },
+              "funded": {
+                "stone": 6,
+                "wood": 8
+              },
+              "id": "storage_stone",
+              "next": "storage_meat",
+              "position": [
+                -2.1758337020874,
+                0.62717878818512
+              ],
+              "prompt": "Step off the plot to start the next upgrade."
+            },
+            {
+              "before": {
+                "meat": 0,
+                "wood": 0
+              },
+              "funded": {
+                "meat": 5,
+                "wood": 7
+              },
+              "id": "storage_meat",
+              "next": "expansion_2",
+              "position": [
+                -2.17126202583313,
+                0.601209938526154
+              ],
+              "prompt": "Stored \u00b7 630 wood \u00b7 520 stone \u00b7 40 meat \u00b7 0 coal \u00b7 0 slate \u00b7 0 metal ore"
+            },
+            {
+              "before": {
+                "stone": 0,
+                "wood": 0
+              },
+              "funded": {
+                "stone": 10,
+                "wood": 15
+              },
+              "id": "expansion_2",
+              "next": "camp_cooker",
+              "position": [
+                2.57603168487549,
+                -1.49884712696075
+              ],
+              "prompt": "Build cooker \u00b7 120 wood \u00b7 80 stone  \u2191 5 m"
+            },
+            {
+              "before": {
+                "stone": 0,
+                "wood": 0
+              },
+              "funded": {
+                "stone": 10,
+                "wood": 12
+              },
+              "id": "watchtower",
+              "next": "camp_cooker",
+              "position": [
+                6.75000047683716,
+                -2.40647673606873
+              ],
+              "prompt": "Build cooker \u00b7 120 wood \u00b7 80 stone  \u2196 8 m"
+            },
+            {
+              "before": {
+                "meat": 0,
+                "stone": 0
+              },
+              "funded": {
+                "meat": 4,
+                "stone": 6
+              },
+              "id": "orbit_upgrade",
+              "next": "camp_cooker",
+              "position": [
+                7.61261415481567,
+                2.96648693084717
+              ],
+              "prompt": "Build cooker \u00b7 120 wood \u00b7 80 stone  \u2191 12 m"
+            },
+            {
+              "before": {
+                "stone": 2,
+                "wood": 3
+              },
+              "funded": {
+                "stone": 8,
+                "wood": 12
+              },
+              "id": "camp_cooker",
+              "next": "saw_bench",
+              "position": [
+                0.00199470575898886,
+                -4.91946697235107
+              ],
+              "prompt": "Build saw bench \u00b7 140 wood \u00b7 60 stone  \u2196 4 m"
+            },
+            {
+              "before": {
+                "stone": 0,
+                "wood": 0
+              },
+              "funded": {
+                "stone": 6,
+                "wood": 14
+              },
+              "id": "saw_bench",
+              "next": "quarry_drill",
+              "position": [
+                -3.51087164878845,
+                -4.93093919754028
+              ],
+              "prompt": "Stored \u00b7 100 wood \u00b7 120 stone \u00b7 0 meat \u00b7 0 coal \u00b7 0 slate \u00b7 0 metal ore"
+            },
+            {
+              "before": {
+                "stone": 0,
+                "wood": 0
+              },
+              "funded": {
+                "stone": 12,
+                "wood": 10
+              },
+              "id": "quarry_drill",
+              "next": "",
+              "position": [
+                7.62070369720459,
+                -4.24049186706543
+              ],
+              "prompt": "Rescue survivor \u00b7 80 wood at the southwest plot  \u2190 20 m"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "log": "qa_build_offer_route-3.log",
+      "log_sha256": "3be1006b05bcacf6c8f929b5635b9a78870410866625114c0188d8112d1a2914",
+      "summary": [
+        {
+          "checks": {
+            "Completed world reopens with the same eleven receipts": true,
+            "Late restored profile keeps real unfinished objectives visible": true,
+            "No new plot until a genuine recipe exists": true
+          },
+          "visits": []
+        }
+      ]
+    }
+  ]
+}
