@@ -1,0 +1,136 @@
+{
+  "scope": "Documentation validation only; not game tests or visual acceptance",
+  "base_main_sha": "bbc9c57b24d21765c8c65985d4bafd858dcaf652",
+  "art_pin": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+  "checks_passed": 18,
+  "checks_total": 18,
+  "protected_base_paths": 4141,
+  "checks": [
+    {
+      "check": "80 unique requested IDs",
+      "passed": true,
+      "details": 80
+    },
+    {
+      "check": "70 authentic names and dependencies unchanged",
+      "passed": true,
+      "details": "Compared to preserved DEPENDENCY_GRAPH.json"
+    },
+    {
+      "check": "10 missing-source rows not invented",
+      "passed": true,
+      "details": "T71-T80"
+    },
+    {
+      "check": "every task has proof and next action",
+      "passed": true,
+      "details": "80 rows"
+    },
+    {
+      "check": "all archive/scenario references resolve",
+      "passed": true,
+      "details": {
+        "archives": 14,
+        "scenarios": 18
+      }
+    },
+    {
+      "check": "runtime scores remain unassessed",
+      "passed": true,
+      "details": "No game-wide pass invented"
+    },
+    {
+      "check": "mandatory motion critics included",
+      "passed": true,
+      "details": "C5 union"
+    },
+    {
+      "check": "unestablished region art remains explicit",
+      "passed": true,
+      "details": "No fabricated complete regional render sets"
+    },
+    {
+      "check": "score rules preserve stronger gates",
+      "passed": true,
+      "details": "9.5 / 9.9 / exact10 remain distinct"
+    },
+    {
+      "check": "all pinned render manifests/images exist with exact Git blobs",
+      "passed": true,
+      "details": {
+        "manifests": 14,
+        "selected_records": 293,
+        "bad_paths": []
+      }
+    },
+    {
+      "check": "task-specific exact-image bindings match register",
+      "passed": true,
+      "details": 115
+    },
+    {
+      "check": "recorded inspection scope is honest",
+      "passed": true,
+      "details": "19 contact sheets, no full playback/listening claim"
+    },
+    {
+      "check": "original task table definitions/statuses retained",
+      "passed": true,
+      "details": "Only research-link column added"
+    },
+    {
+      "check": "existing T54 coverage unchanged",
+      "passed": true,
+      "details": "Exact text comparison"
+    },
+    {
+      "check": "no operational workflows in base",
+      "passed": true,
+      "details": "Consolidation workflow boundary retained"
+    },
+    {
+      "check": "only authorized documentation paths changed",
+      "passed": true,
+      "details": [
+        "BUILD_GAME.md",
+        "Docs/Production/HAVENLINE_BUILD_PLAN_V2.md",
+        "README.md",
+        "REPOSITORY_INDEX.md",
+        "Docs/Production/ReferenceRefresh/2026-11-27/ACCEPTANCE_CONTRACT.json",
+        "Docs/Production/ReferenceRefresh/2026-11-27/CHECKPOINT.json",
+        "Docs/Production/ReferenceRefresh/2026-11-27/FREEZE.json",
+        "Docs/Production/ReferenceRefresh/2026-11-27/INDEPENDENT_RENDER_CUSTODY_CHECKS.json",
+        "Docs/Production/ReferenceRefresh/2026-11-27/INDEPENDENT_REVIEW.md",
+        "Docs/Production/ReferenceRefresh/2026-11-27/INDEPENDENT_STRUCTURAL_CHECKS.json",
+        "Docs/Production/ReferenceRefresh/2026-11-27/LATEST_BUILD_EVIDENCE.json",
+        "Docs/Production/ReferenceRefresh/2026-11-27/MATCH_ACCEPTANCE.json",
+        "Docs/Production/ReferenceRefresh/2026-11-27/RAW_REFERENCE_AUDIT.md",
+        "Docs/Production/ReferenceRefresh/2026-11-27/RAW_RENDER_AUDIT.md",
+        "Docs/Production/ReferenceRefresh/2026-11-27/README.md",
+        "Docs/Production/ReferenceRefresh/2026-11-27/REFERENCE_EVIDENCE.json",
+        "Docs/Production/ReferenceRefresh/2026-11-27/REFERENCE_RESEARCH.md",
+        "Docs/Production/ReferenceRefresh/2026-11-27/RENDER_CATALOGUE.md",
+        "Docs/Production/ReferenceRefresh/2026-11-27/RENDER_SOURCE_REGISTER.json",
+        "Docs/Production/ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.json",
+        "Docs/Production/ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md",
+        "Docs/Production/ReferenceRefresh/2026-11-27/VALIDATION.json",
+        "Docs/Production/ReferenceRefresh/2026-11-27/validate_refresh.py",
+        "Docs/Production/TASK_PLAN_REFRESH_2026-11-27.md"
+      ]
+    },
+    {
+      "check": "all protected tracked files remain byte-identical",
+      "passed": true,
+      "details": "Runtime, workflows, assets, dependency/status registries and historical archive untouched"
+    },
+    {
+      "check": "relative Markdown links and available anchors resolve",
+      "passed": true,
+      "details": {
+        "relative_links": 467,
+        "anchors": 389,
+        "errors": []
+      }
+    }
+  ]
+}

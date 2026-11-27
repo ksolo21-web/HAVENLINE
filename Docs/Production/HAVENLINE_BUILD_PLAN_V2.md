@@ -2,7 +2,15 @@
 
 **Authoritative production plan.** This plan supersedes `Docs/Production/Archive/SEQUENTIAL_REPAIR_PLAN.pre-v2.2026-09-11.md` for forward production governance. The archived plan remains byte-identical to the pre-migration source and is retained for audit/recovery.
 
-## Migration checkpoint
+## Current research and render requirements — 2026-11-27
+
+Read the [current T01–T80 reference/render refresh](TASK_PLAN_REFRESH_2026-11-27.md) before new task implementation or review. Its [task-by-task crosswalk](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md) attaches current source observations, pinned GitHub renders, task-specific proof and next actions to all 80 requested IDs. T01–T70 retain their original definitions/dependencies; T71–T80 remain `SOURCE_NOT_FOUND` and are not invented work.
+
+The newest observed Codex evidence is Build 11, game source `989edd9283148e9f712387fb937ea36038cbd9d2`; [exact receipt and limits](ReferenceRefresh/2026-11-27/LATEST_BUILD_EVIDENCE.json). Continue from the newer Codex foundation with current ownership and source identity. The migration checkpoint/table below is historical, not today's lifecycle: T01–T11 have historical completion records, while current candidates and seven preserved visual holds require scoped reconciliation. No old approval automatically passes new assets.
+
+Use the selected GitHub renders as exact design inputs, with image/model/scene hashes and actual in-game comparisons. The ordinary critic floor remains ≥9.5; **the requested 9.9 match is attained only when every applicable reference-comparison dimension reaches ≥9.9**, all mandatory evidence passes, and stronger exact-10 C1 style/reference requirements remain satisfied. [Match rules and enforcement gaps](TASK_PLAN_REFRESH_2026-11-27.md#what-99-matching-means) prevent archive/static-art scores or stale validator passes from becoming runtime approvals.
+
+## Migration checkpoint (historical snapshot)
 
 - Integration branch remains `codex/havenline-sequential-task-01`; T03 is grandfathered to finish there because its runtime work was already integrated before this migration.
 - T01 and T02 remain APPROVED at their recorded accepted sources. Their approvals are not revoked by the stricter forward score rule.
@@ -91,80 +99,84 @@ Some legacy validators and workflows still check the old numeric floor, includin
 
 ## Production sequence
 
-| ID | Production task | State at migration |
-|---|---|---|
-| T01 | Reference snow-covered trees and forest framing | APPROVED |
-| T02 | Terrain, snow, warm work-floor and lakeshore | APPROVED |
-| T03 | Fences, gates and navigable work lanes | APPROVED |
-| T04 | Reference camera and automatic screen composition | APPROVED |
-| T05 | Production station and prop kit | APPROVED |
-| T06 | Character 1 complete movement/interactions | APPROVED |
-| T07 | Havenline Simple Control & Context Director | APPROVED |
-| T08 | Visible inventory, physical carrying and transfers | APPROVED |
-| T09 | Harvesting and automatic acquisition | APPROVED |
-| T10 | World Transformation Framework | APPROVED |
-| T11 | Camp construction and visual upgrade system | PREPARED |
-| T12 | Level 1–100 progression architecture | LOCKED |
-| T13 | Progressive Difficulty & spend-blind Challenge Director | LOCKED |
-| T14 | Save-state/versioning foundation | LOCKED |
-| T15 | Customer/NPC models, crowds and routing | LOCKED |
-| T16 | Fishing and initial food processing | LOCKED |
-| T17 | Customer service, physical payment and reinvestment | LOCKED |
-| T18 | Mechanized fishing, conveyors and helpers | LOCKED |
-| T19 | Wheat/additional food production | LOCKED |
-| T20 | Road and vehicle customer service | LOCKED |
-| T21 | Visible hostiles, hunting and weapon progression | LOCKED |
-| T22 | Working defensive structures | LOCKED |
-| T23 | Survivor rescue and basic survivor identity | LOCKED |
-| T24 | Guardian dog | LOCKED |
-| T25 | Gray wolf | LOCKED |
-| T26 | Fox | LOCKED |
-| T27 | Owl | LOCKED |
-| T28 | Male lion | LOCKED |
-| T29 | White tiger | LOCKED |
-| T30 | Brown bear | LOCKED |
-| T31 | Integrated companion jobs and population safety | LOCKED |
-| T32 | Complete frozen-region Level 1–10 production progression | LOCKED |
-| T33 | Core economy & F2P progression model | LOCKED |
-| T34 | Server-authoritative premium economy | LOCKED |
-| T35 | Store, billing and entitlement system | LOCKED |
-| T36 | Permanent VIP system | LOCKED |
-| T37 | LiveOps Director | LOCKED |
-| T38 | Automatic Event Composer & Validator | LOCKED |
-| T39 | The First Thaw launch event | LOCKED |
-| T40 | Weekly/seasonal/holiday/sales rotations | LOCKED |
-| T41 | Anti-cheat and economic-security foundation | LOCKED |
-| T42 | Privacy-respecting telemetry, difficulty analytics and crash diagnostics | LOCKED |
-| T43 | Identity, cloud continuity and recovery | LOCKED |
-| T44 | Connected forest region / approximately Levels 11–20 | LOCKED |
-| T45 | Connected desert region / approximately Levels 21–30 | LOCKED |
-| T46 | Connected underwater region / approximately Levels 31–40 | LOCKED |
-| T47 | Connected sky region / approximately Levels 41–50 | LOCKED |
-| T48 | Connected volcanic region / approximately Levels 51–60 | LOCKED |
-| T49 | Connected swamp region / approximately Levels 61–70 | LOCKED |
-| T50 | Connected ruins region / approximately Levels 71–80 | LOCKED |
-| T51 | Connected underground region / approximately Levels 81–90 | LOCKED |
-| T52 | Connected alien region / approximately Levels 91–100 | LOCKED |
-| T53 | Transportation and inter-region continuity | LOCKED |
-| T54 | Day/night, weather, [music, SFX and event coverage](#t54--music-sound-effects-and-event-coverage) | LOCKED (full-world); audio coverage required for Level 1 acceptance |
-| T55 | Accessibility and control customization | LOCKED |
-| T56 | Performance/Quality/Balanced/Battery player modes | LOCKED |
-| T57 | Basic shareable milestone system | LOCKED |
-| T58 | Phone/tablet/foldable functional acceptance | LOCKED |
-| T59 | Character 2 final rigging and motion review | LOCKED |
-| T60 | Character 3 final rigging and motion review | LOCKED |
-| T61 | Character 4 final rigging and motion review | LOCKED |
-| T62 | Complete Level 1–100 progression acceptance | LOCKED |
-| T63 | $0 lifelong-F2P player completion test | LOCKED |
-| T64 | Purchase-value/fairness test | LOCKED |
-| T65 | Full LiveOps launch rehearsal | LOCKED |
-| T66 | Security/exploit attack review | LOCKED |
-| T67 | Full-game reference/regression acceptance | LOCKED |
-| T68 | Sustained native 4K/60 phone evidence | LOCKED |
-| T69 | Sustained native 4K/60 tablet/foldable evidence | LOCKED |
-| T70 | Final production release handoff | LOCKED |
+| ID | Production task | State at migration (historical) | Current research / render requirements |
+|---|---|---|---|
+| T01 | Reference snow-covered trees and forest framing | APPROVED | [T01 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t01) |
+| T02 | Terrain, snow, warm work-floor and lakeshore | APPROVED | [T02 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t02) |
+| T03 | Fences, gates and navigable work lanes | APPROVED | [T03 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t03) |
+| T04 | Reference camera and automatic screen composition | APPROVED | [T04 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t04) |
+| T05 | Production station and prop kit | APPROVED | [T05 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t05) |
+| T06 | Character 1 complete movement/interactions | APPROVED | [T06 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t06) |
+| T07 | Havenline Simple Control & Context Director | APPROVED | [T07 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t07) |
+| T08 | Visible inventory, physical carrying and transfers | APPROVED | [T08 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t08) |
+| T09 | Harvesting and automatic acquisition | APPROVED | [T09 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t09) |
+| T10 | World Transformation Framework | APPROVED | [T10 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t10) |
+| T11 | Camp construction and visual upgrade system | PREPARED | [T11 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t11) |
+| T12 | Level 1–100 progression architecture | LOCKED | [T12 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t12) |
+| T13 | Progressive Difficulty & spend-blind Challenge Director | LOCKED | [T13 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t13) |
+| T14 | Save-state/versioning foundation | LOCKED | [T14 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t14) |
+| T15 | Customer/NPC models, crowds and routing | LOCKED | [T15 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t15) |
+| T16 | Fishing and initial food processing | LOCKED | [T16 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t16) |
+| T17 | Customer service, physical payment and reinvestment | LOCKED | [T17 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t17) |
+| T18 | Mechanized fishing, conveyors and helpers | LOCKED | [T18 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t18) |
+| T19 | Wheat/additional food production | LOCKED | [T19 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t19) |
+| T20 | Road and vehicle customer service | LOCKED | [T20 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t20) |
+| T21 | Visible hostiles, hunting and weapon progression | LOCKED | [T21 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t21) |
+| T22 | Working defensive structures | LOCKED | [T22 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t22) |
+| T23 | Survivor rescue and basic survivor identity | LOCKED | [T23 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t23) |
+| T24 | Guardian dog | LOCKED | [T24 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t24) |
+| T25 | Gray wolf | LOCKED | [T25 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t25) |
+| T26 | Fox | LOCKED | [T26 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t26) |
+| T27 | Owl | LOCKED | [T27 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t27) |
+| T28 | Male lion | LOCKED | [T28 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t28) |
+| T29 | White tiger | LOCKED | [T29 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t29) |
+| T30 | Brown bear | LOCKED | [T30 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t30) |
+| T31 | Integrated companion jobs and population safety | LOCKED | [T31 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t31) |
+| T32 | Complete frozen-region Level 1–10 production progression | LOCKED | [T32 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t32) |
+| T33 | Core economy & F2P progression model | LOCKED | [T33 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t33) |
+| T34 | Server-authoritative premium economy | LOCKED | [T34 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t34) |
+| T35 | Store, billing and entitlement system | LOCKED | [T35 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t35) |
+| T36 | Permanent VIP system | LOCKED | [T36 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t36) |
+| T37 | LiveOps Director | LOCKED | [T37 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t37) |
+| T38 | Automatic Event Composer & Validator | LOCKED | [T38 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t38) |
+| T39 | The First Thaw launch event | LOCKED | [T39 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t39) |
+| T40 | Weekly/seasonal/holiday/sales rotations | LOCKED | [T40 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t40) |
+| T41 | Anti-cheat and economic-security foundation | LOCKED | [T41 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t41) |
+| T42 | Privacy-respecting telemetry, difficulty analytics and crash diagnostics | LOCKED | [T42 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t42) |
+| T43 | Identity, cloud continuity and recovery | LOCKED | [T43 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t43) |
+| T44 | Connected forest region / approximately Levels 11–20 | LOCKED | [T44 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t44) |
+| T45 | Connected desert region / approximately Levels 21–30 | LOCKED | [T45 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t45) |
+| T46 | Connected underwater region / approximately Levels 31–40 | LOCKED | [T46 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t46) |
+| T47 | Connected sky region / approximately Levels 41–50 | LOCKED | [T47 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t47) |
+| T48 | Connected volcanic region / approximately Levels 51–60 | LOCKED | [T48 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t48) |
+| T49 | Connected swamp region / approximately Levels 61–70 | LOCKED | [T49 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t49) |
+| T50 | Connected ruins region / approximately Levels 71–80 | LOCKED | [T50 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t50) |
+| T51 | Connected underground region / approximately Levels 81–90 | LOCKED | [T51 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t51) |
+| T52 | Connected alien region / approximately Levels 91–100 | LOCKED | [T52 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t52) |
+| T53 | Transportation and inter-region continuity | LOCKED | [T53 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t53) |
+| T54 | Day/night, weather, [music, SFX and event coverage](#t54--music-sound-effects-and-event-coverage) | LOCKED (full-world); audio coverage required for Level 1 acceptance | [T54 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t54) |
+| T55 | Accessibility and control customization | LOCKED | [T55 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t55) |
+| T56 | Performance/Quality/Balanced/Battery player modes | LOCKED | [T56 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t56) |
+| T57 | Basic shareable milestone system | LOCKED | [T57 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t57) |
+| T58 | Phone/tablet/foldable functional acceptance | LOCKED | [T58 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t58) |
+| T59 | Character 2 final rigging and motion review | LOCKED | [T59 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t59) |
+| T60 | Character 3 final rigging and motion review | LOCKED | [T60 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t60) |
+| T61 | Character 4 final rigging and motion review | LOCKED | [T61 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t61) |
+| T62 | Complete Level 1–100 progression acceptance | LOCKED | [T62 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t62) |
+| T63 | $0 lifelong-F2P player completion test | LOCKED | [T63 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t63) |
+| T64 | Purchase-value/fairness test | LOCKED | [T64 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t64) |
+| T65 | Full LiveOps launch rehearsal | LOCKED | [T65 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t65) |
+| T66 | Security/exploit attack review | LOCKED | [T66 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t66) |
+| T67 | Full-game reference/regression acceptance | LOCKED | [T67 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t67) |
+| T68 | Sustained native 4K/60 phone evidence | LOCKED | [T68 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t68) |
+| T69 | Sustained native 4K/60 tablet/foldable evidence | LOCKED | [T69 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t69) |
+| T70 | Final production release handoff | LOCKED | [T70 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t70) |
 
 Detailed dependencies and critic applicability are machine-authoritative in `DEPENDENCY_GRAPH.json` and `CRITIC_MATRIX.json`. Mandatory forward scope overlays for resource/tool/actor/animation behavior are machine-authoritative in `TASK_SCOPE_OVERRIDES.json` and the three contract registries. T01–T10 accepted records remain authoritative; T10 closure is recorded in `Docs/Production/T10/verified-completion.json`.
+
+## T71–T80 — requested IDs without recovered source definitions
+
+All ten rows remain explicit source gaps in the [current crosswalk](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t71) and the preserved [custody index](../RepositoryArchive/Plans/TASK_CUSTODY_T01_T80.md). They have no invented names, dependencies, assets or runtime assignments.
 
 ## T54 — Music, sound effects and event coverage
 

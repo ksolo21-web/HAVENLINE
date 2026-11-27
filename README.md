@@ -1,5 +1,9 @@
 # HAVENLINE
 
+## Current plan and latest evidence
+
+Use the [2026-11-27 task-plan refresh](Docs/Production/TASK_PLAN_REFRESH_2026-11-27.md), [all T01–T80 requirements](Docs/Production/ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md), and [pinned GitHub render catalogue](Docs/Production/ReferenceRefresh/2026-11-27/RENDER_CATALOGUE.md) before new work. The newest verified receipt found is **Codex Build 11**, source `989edd9283148e9f712387fb937ea36038cbd9d2`, scene `res://field_opening.tscn`; [exact package and review scope](Docs/Production/ReferenceRefresh/2026-11-27/LATEST_BUILD_EVIDENCE.json). Main and the older active-source instructions below remain preserved snapshots/branches; this documentation does not merge or reset current gameplay. Follow the newer Codex foundation with its actual owner/source binding. Historical task states are not current candidate approvals.
+
 ## Start building here
 
 The current production focus is the isolated Level 1 replacement. This consolidated repository snapshot preserves the game source, build instructions, task records, references and renders together.

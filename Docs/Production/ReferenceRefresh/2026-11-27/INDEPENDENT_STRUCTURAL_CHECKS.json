@@ -1,0 +1,118 @@
+{
+  "reviewer": "/root/plan_critic",
+  "candidate_digest": "e484418d20c4e29d85dd9c2a883ec4aba6d4742ea053bb978caaa2f965b461ea",
+  "scope": "Documentation and reference-custody validation only",
+  "passed": 17,
+  "total": 17,
+  "checks": [
+    {
+      "check": "Frozen files exactly match reviewed manifest",
+      "passed": true,
+      "details": {
+        "files": 18,
+        "mismatches": []
+      }
+    },
+    {
+      "check": "Aggregate digest independently reconstructed",
+      "passed": true,
+      "details": "json_compact"
+    },
+    {
+      "check": "Complete unique task order",
+      "passed": true,
+      "details": 80
+    },
+    {
+      "check": "Authentic 70 names and dependencies preserved",
+      "passed": true,
+      "details": 70
+    },
+    {
+      "check": "Missing-source IDs have no invented definitions",
+      "passed": true,
+      "details": 10
+    },
+    {
+      "check": "Current score never invented",
+      "passed": true,
+      "details": 80
+    },
+    {
+      "check": "Whole-game and frozen-region inherited reference coverage",
+      "passed": true,
+      "details": {
+        "scenarios": 18,
+        "tasks": [
+          "T32",
+          "T62",
+          "T67",
+          "T70"
+        ]
+      }
+    },
+    {
+      "check": "Required critic union not reduced",
+      "passed": true,
+      "details": 70
+    },
+    {
+      "check": "Mandatory later C5 motion scope",
+      "passed": true,
+      "details": 5
+    },
+    {
+      "check": "Pinned image and manifest paths match exact Git blobs",
+      "passed": true,
+      "details": {
+        "images": 293,
+        "manifests": 14
+      }
+    },
+    {
+      "check": "Supplementary source roles preserved",
+      "passed": true,
+      "details": [
+        "ice-brute-anatomy-reference-r1",
+        "ice-brute-recovery-reference-r1",
+        "polar-bear-swipe-isolated-r4",
+        "horned-snow-beast-anatomy-r2"
+      ]
+    },
+    {
+      "check": "Task render bindings retain exact identities",
+      "passed": true,
+      "details": 115
+    },
+    {
+      "check": "Tracked changes limited to authorized plan/navigation",
+      "passed": true,
+      "details": [
+        "BUILD_GAME.md",
+        "Docs/Production/HAVENLINE_BUILD_PLAN_V2.md",
+        "README.md",
+        "REPOSITORY_INDEX.md"
+      ]
+    },
+    {
+      "check": "Existing full T54 contract unchanged",
+      "passed": true,
+      "details": "exact string match"
+    },
+    {
+      "check": "Historical production table preserved",
+      "passed": true,
+      "details": "names/statuses identical"
+    },
+    {
+      "check": "Build11 package identity matches source receipt",
+      "passed": true,
+      "details": "Documentation SHA distinct from game SHA"
+    },
+    {
+      "check": "9.5/9.9/exact10 and unverified game score retained",
+      "passed": true,
+      "details": "No averaging or missing evidence waiver"
+    }
+  ]
+}
