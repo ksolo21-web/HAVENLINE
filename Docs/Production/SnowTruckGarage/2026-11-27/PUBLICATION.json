@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "status": "BLOCKED_AUTOMATIC_APPROVAL_REVIEW",
+  "status": "PUBLISHED_AND_REMOTE_CONTENT_VERIFIED",
   "feature_branch": "feature/snow-truck-garage-2026-11-27",
   "destination_repository": "ksolo21-web/HAVENLINE",
   "destination_url": "https://github.com/ksolo21-web/HAVENLINE.git",
@@ -11,8 +11,8 @@
   "prepared_commit_files": 81,
   "content_review": "FINAL_REVIEW.json",
   "content_review_sha256": "5592058403d6d501ac31e8142d81ba6e08759f3a5eb465a6543ec479e2b740c1",
-  "remote_branch_created": false,
-  "remote_readback_complete": false,
+  "remote_branch_created": true,
+  "remote_readback_complete": true,
   "pull_request_created": false,
   "runtime_integrated": false,
   "attempts": [
@@ -25,6 +25,16 @@
       "attempt": 2,
       "result": "REJECTED_AFTER_DESTINATION_AND_PRIOR_AUTHORIZATION_CHECKS",
       "reason": "Although the repository is public and the connected account has push access, automatic review requires direct user-authored authorization in the current trusted transcript to publish this new package externally."
+    },
+    {
+      "attempt": 3,
+      "result": "CLI_AUTHENTICATION_UNAVAILABLE_AFTER_DIRECT_AUTHORIZATION",
+      "reason": "Shell git push could not read a GitHub username; gh auth status confirmed no shell login."
+    },
+    {
+      "attempt": 4,
+      "result": "PUBLISHED_THROUGH_AUTHENTICATED_CONNECTOR",
+      "reason": "After direct user authorization, all 76 unique blobs matched their expected SHAs, the 82-path tree matched the local tree, and the isolated branch and selected renders were read back."
     }
   ],
   "checks_after_first_rejection": {
@@ -38,13 +48,46 @@
   },
   "next_action": {
     "owner": "Alfred (/root)",
-    "requires": "Direct user instruction authorizing this exact public-repository package publication",
-    "action": "After authorization, recheck live refs, push this isolated branch normally, read back commit and complete render blobs, then create a draft PR if still appropriate."
+    "action": "Resume from the published feature branch and its exact frozen package. Coordinate the canonical inventory/world-save adapter and actual vehicle/garage integration with the current Codex field owner; preserve all untested runtime gates."
   },
   "boundaries": [
-    "No alternate upload tool was used to bypass rejection.",
-    "No changes were made to main, the active field branch, or workflows.",
-    "This record reports a publication blocker, not a defect in the reviewed standalone component.",
-    "Actual-game integration gates remain in the acceptance checklist."
-  ]
+    "Direct user authorization resolved the former approval blocker before publication.",
+    "Only the new isolated feature branch was created. Main and the active field branch retain their observed SHAs.",
+    "The reviewed product files are unchanged. This follow-up commit updates publication metadata only.",
+    "Actual-game integration, animation, audio, balance and device gates remain open. No production approval or deployment is claimed."
+  ],
+  "publication_method": "Authenticated GitHub connector Git Data API",
+  "authorization": {
+    "user_instruction": "push it",
+    "date": "2026-11-27",
+    "scope": "Publish the reviewed snow truck and garage package to ksolo21-web/HAVENLINE on its isolated feature branch."
+  },
+  "published_content_commit": "15807038ac7c9107f2b010b56fc1559d51469cef",
+  "published_content_tree": "f735e8b8989f049287caaff90b02565b2851588b",
+  "local_to_remote_identity": {
+    "prepared_local_head": "20b165f9f46a4c98f45837ea794079054b882d57",
+    "tree_matches_exactly": true,
+    "reason_commit_ids_differ": "Git Data API creates remote commit metadata; all 82 prepared file paths and their Git blobs are identical."
+  },
+  "verification": {
+    "unique_blobs_uploaded_and_sha_matched": 76,
+    "file_paths_in_exact_tree": 82,
+    "frozen_product_files_rechecked": 62,
+    "reviewed_native_inputs_unchanged": 6,
+    "selected_render_readbacks": [
+      {
+        "path": "Docs/Design/SnowTruckGarage/2026-11-27/selected/snow-truck-360.png",
+        "sha": "fa4795cc9a8802c4233dd54268d45641f6194573",
+        "bytes": 2023766,
+        "html_url": "https://github.com/ksolo21-web/HAVENLINE/blob/15807038ac7c9107f2b010b56fc1559d51469cef/Docs/Design/SnowTruckGarage/2026-11-27/selected/snow-truck-360.png"
+      },
+      {
+        "path": "Docs/Design/SnowTruckGarage/2026-11-27/selected/snow-truck-garage-360.png",
+        "sha": "e8859665ed0b2a8b4cc3cd609d8c28aabd0c8ddc",
+        "bytes": 2030787,
+        "html_url": "https://github.com/ksolo21-web/HAVENLINE/blob/15807038ac7c9107f2b010b56fc1559d51469cef/Docs/Design/SnowTruckGarage/2026-11-27/selected/snow-truck-garage-360.png"
+      }
+    ],
+    "refs_observed_after_content_publication": "15807038ac7c9107f2b010b56fc1559d51469cef\trefs/heads/feature/snow-truck-garage-2026-11-27\na4e643aeb563b6f9cfda8b840c0651d13326eec8\trefs/heads/main\n2f46e72e300a719f34ca9b0e9b718282a5a88ddd\trefs/heads/trial/world-one-expansion-2026-11-26\n"
+  }
 }
