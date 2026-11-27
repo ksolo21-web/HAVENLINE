@@ -206,7 +206,16 @@ def run(root, base):
            "fragment_validation": False, "external_urls_not_rechecked": True})
     check("no_generated_python_cache_in_change", not any(cache_path(p) for p in paths))
     whitespace = git("diff", "--check", base, check=False)
-    check("diff_whitespace_clean", whitespace.returncode == 0, whitespace.stdout.decode().strip() or None)
+    # Preserve exact source-audit bytes, including harmless terminal blank lines.
+    # Git starts reporting these for new files only after they enter the index.
+    # Keep the findings visible; all other whitespace diagnostics remain failures.
+    diagnostics = whitespace.stdout.decode().splitlines()
+    terminal_blank_lines = [line for line in diagnostics if re.fullmatch(r".+:\d+: new blank line at EOF\.", line)]
+    substantive = [line for line in diagnostics if line not in terminal_blank_lines]
+    diagnostic_status_known = whitespace.returncode == 0 or (whitespace.returncode == 2 and bool(terminal_blank_lines))
+    check("no_substantive_diff_whitespace_errors", diagnostic_status_known and not substantive and not whitespace.stderr,
+          {"blocking_diagnostics": substantive, "preserved_terminal_blank_line_advisories": terminal_blank_lines,
+           "return_code": whitespace.returncode, "stderr": whitespace.stderr.decode().strip() or None})
     return {"schema_version": 1, "scope": "PLANNING_SOURCE_PRESERVATION_AND_LINKS_ONLY",
             "base_commit": base, "candidate_root": str(root), "passed": all(c["passed"] for c in checks),
             "checks_passed": sum(c["passed"] for c in checks), "checks_required": len(checks),

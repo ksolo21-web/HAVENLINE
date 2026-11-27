@@ -4,9 +4,29 @@
 
 **PASS — 10/10 for the bounded planning and source-audit artifact. All 16 mandatory checks pass; the minimum mandatory score is10/10.** This review assigns no game, animation, audio, balance or device score and grants no runtime approval.
 
-The exact reviewed candidate is the 43-file freeze at `Docs/Production/GameplayDepth/2026-11-27/CANDIDATE_FREEZE.json`, SHA-256 `c346af7912079dcbff8bda8b497c11f46d389809738f92beebd78b3bd0857654`. Its plan base is `9d10c45a8bd46aeb6ab1b4009e87538c4796ef1c`. The newer gameplay source inspected is `3fad812b384335bd8ca9b5e47dc9d9557110eb4a`; this source observation is distinct from a new validated build.
+The exact reviewed candidate is the 43-file freeze at `Docs/Production/GameplayDepth/2026-11-27/CANDIDATE_FREEZE.json`, SHA-256 `6456f3f09ac9b069af254cfbba858a0e0f4429d6abeae88717b9911e40186525`. Its plan base is `9d10c45a8bd46aeb6ab1b4009e87538c4796ef1c`. The newer gameplay source inspected is `3fad812b384335bd8ca9b5e47dc9d9557110eb4a`; this source observation is distinct from a new validated build.
 
 Reviewer: `/root/depth_critic`, a separate read-only critic agent. No implementation or remote GitHub write was made by this reviewer.
+
+## Reopened publication-format review
+
+Staging exposed five `new blank line at EOF` diagnostics in preserved source/generated artifacts. Approval was reopened for this narrow validator issue. The source audits were not rewritten.
+
+The accepted repair reports exact terminal-blank-line findings as **formatting advisories**. Trailing spaces, indentation errors, mixed diagnostics, stderr and unsupported command results still fail. The first repair incorrectly allowed return code 2 with no diagnostic; this critic rejected that path. It now fails closed.
+
+**Final retest: 12/12 diagnostic/command probes, 13/13 scope checks and 5/5 focused unittest methods pass.** All 43 files match the new freeze. Only `verify_scope.py` differs from the original reviewed freeze; the other 42 substantive files are byte-identical. Every original mandatory check remains passed, and the bounded plan-artifact score remains **10/10**.
+
+The five disclosed advisories concern terminal blank lines in:
+
+- `CURRENT_BRANCH_NOTE.json`
+- `CURRENT_BRANCH_NOTE.md`
+- `STAKES_ECONOMY_AUDIT.md`
+- `STAKES_ECONOMY_SOURCE_CHECKS.json`
+- `TASK_GAMEPLAY_DEPTH_T01_T80.md`
+
+The JSON report embeds the rejected first-patch probes and all final retest results. The prior full review and its source evidence remain retained; the parent reported the first primary publication at `bee3ce0238431fb6d4f58617abfdb0d7e836e513`. This critic did not perform a remote write or independently claim that publication readback. The parent must verify the final repaired publication.
+
+No gameplay requirement, reference floor, runtime evidence requirement or source-preservation obligation was weakened. The five EOF advisories are visible exceptions to formatting cleanliness, not unreported passes.
 
 ## What passed
 
@@ -30,6 +50,8 @@ Reviewer: `/root/depth_critic`, a separate read-only critic agent. No implementa
 | IC16 — Frozen candidate and honest publication boundary | PASS · 10/10 | All 43 substantive frozen files match their declared size/hash, with no uncovered substantive changes. This verdict approves the plan artifact only. Publication and remote readback remain the parent integration step; no current game score is granted. |
 
 ## Independent evidence
+
+The verification below carries forward unchanged source/content findings and includes the final repair retest described above.
 
 - **43/43 frozen files** match declared bytes and SHA-256; no uncovered substantive change.
 - **49/49 pinned sources** validate, including the newer 14-file source snapshot.

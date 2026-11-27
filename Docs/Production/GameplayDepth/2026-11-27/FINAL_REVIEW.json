@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "review_id": "havenline-gameplay-depth-independent-final-2026-11-27",
+  "review_id": "havenline-gameplay-depth-independent-final-r2-2026-11-27",
   "reviewer": "/root/depth_critic",
   "independent_agent": true,
   "read_only_review": true,
@@ -23,7 +23,7 @@
   "base_commit": "9d10c45a8bd46aeb6ab1b4009e87538c4796ef1c",
   "latest_observed_gameplay_source": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
   "freeze_manifest": "Docs/Production/GameplayDepth/2026-11-27/CANDIDATE_FREEZE.json",
-  "freeze_manifest_sha256": "c346af7912079dcbff8bda8b497c11f46d389809738f92beebd78b3bd0857654",
+  "freeze_manifest_sha256": "6456f3f09ac9b069af254cfbba858a0e0f4429d6abeae88717b9911e40186525",
   "frozen_substantive_files": 43,
   "mandatory_checks": [
     {
@@ -143,7 +143,7 @@
       "name": "Executable planning checks and retained repair evidence",
       "status": "PASS",
       "score": 10.0,
-      "evidence_and_reason": "All six original omission/substitution defects now reject. The final five unittest methods pass; source completeness and false runtime/currency claims fail closed.49/49 exact sources and both generated crosswalk forms validate. Seven actual task-packet outputs were captured without modifying canonical packets. The original rejection is retained.",
+      "evidence_and_reason": "All six original omission/substitution defects now reject. The final five unittest methods pass; source completeness and false runtime/currency claims fail closed.49/49 exact sources and both generated crosswalk forms validate. Seven actual task-packet outputs were captured without modifying canonical packets. The original rejection is retained. The reopened formatting review adds 12 successful command/diagnostic probes, preserves five explicit EOF advisories and rejects an unexplained nonzero result.",
       "evidence": "VALIDATION.json independent_final_raw_checks; Review/independent-review-r1.json; Review/independent-negative-probes-r1.json; Review/independent-negative-probes-r2.json; Review/independent-task-packet-checks.json"
     },
     {
@@ -151,22 +151,22 @@
       "name": "Frozen candidate and honest publication boundary",
       "status": "PASS",
       "score": 10.0,
-      "evidence_and_reason": "All 43 substantive frozen files match their declared size/hash, with no uncovered substantive changes. This verdict approves the plan artifact only. Publication and remote readback remain the parent integration step; no current game score is granted.",
+      "evidence_and_reason": "All 43 substantive files match the new 6456f3 freeze. Exactly one file, verify_scope.py, changed from the original reviewed freeze; the remaining 42 substantive files are byte-identical. Current publication/readback remains the parent integration step, with no runtime approval.",
       "evidence": "CANDIDATE_FREEZE.json; VALIDATION.json; CHECKPOINT.json"
     }
   ],
   "independent_verification": {
     "freeze": {
-      "freeze_sha256": "c346af7912079dcbff8bda8b497c11f46d389809738f92beebd78b3bd0857654",
-      "expected_freeze_sha256": "c346af7912079dcbff8bda8b497c11f46d389809738f92beebd78b3bd0857654",
+      "new_freeze_sha256": "6456f3f09ac9b069af254cfbba858a0e0f4429d6abeae88717b9911e40186525",
+      "expected_new_freeze_sha256": "6456f3f09ac9b069af254cfbba858a0e0f4429d6abeae88717b9911e40186525",
+      "prior_staged_freeze_sha256": "c346af7912079dcbff8bda8b497c11f46d389809738f92beebd78b3bd0857654",
+      "expected_prior_freeze_sha256": "c346af7912079dcbff8bda8b497c11f46d389809738f92beebd78b3bd0857654",
       "files_checked": 43,
       "mismatches": [],
-      "frozen_path_count": 43,
-      "uncovered_changes": [],
-      "preserved_source_files": 57,
-      "preservation_drift": [],
-      "seventy_tasks_unchanged": true,
-      "runtime_approval_allowed": false,
+      "substantive_file_deltas_from_prior_freeze": [
+        "Docs/Production/GameplayDepth/2026-11-27/verify_scope.py"
+      ],
+      "other_substantive_files_unchanged": 42,
       "passed": true
     },
     "planning_helper": {
@@ -190,7 +190,7 @@
       "passed": true,
       "checks_passed": 13,
       "checks_required": 13,
-      "changed_or_new_files": 48,
+      "changed_or_new_files": 50,
       "checks": [
         {
           "name": "only_explicitly_allowed_changes",
@@ -253,7 +253,7 @@
           "name": "changed_and_new_json_parse_strictly",
           "passed": true,
           "detail": {
-            "files": 25,
+            "files": 26,
             "errors": []
           }
         },
@@ -261,7 +261,7 @@
           "name": "new_markdown_relative_link_targets_resolve",
           "passed": true,
           "detail": {
-            "markdown_files": 19,
+            "markdown_files": 20,
             "relative_targets_checked": 42,
             "errors": [],
             "unresolved_references": [],
@@ -276,9 +276,20 @@
           "detail": null
         },
         {
-          "name": "diff_whitespace_clean",
+          "name": "no_substantive_diff_whitespace_errors",
           "passed": true,
-          "detail": null
+          "detail": {
+            "blocking_diagnostics": [],
+            "preserved_terminal_blank_line_advisories": [
+              "Docs/Production/GameplayDepth/2026-11-27/CURRENT_BRANCH_NOTE.json:961: new blank line at EOF.",
+              "Docs/Production/GameplayDepth/2026-11-27/CURRENT_BRANCH_NOTE.md:93: new blank line at EOF.",
+              "Docs/Production/GameplayDepth/2026-11-27/STAKES_ECONOMY_AUDIT.md:308: new blank line at EOF.",
+              "Docs/Production/GameplayDepth/2026-11-27/STAKES_ECONOMY_SOURCE_CHECKS.json:121: new blank line at EOF.",
+              "Docs/Production/GameplayDepth/2026-11-27/TASK_GAMEPLAY_DEPTH_T01_T80.md:1696: new blank line at EOF."
+            ],
+            "return_code": 2,
+            "stderr": null
+          }
         }
       ]
     },
@@ -287,7 +298,8 @@
       "exit_code": 0,
       "tests_passed": 5,
       "tests_required": 5,
-      "raw_output_sha256": "3de7584ced17735bdc92c59ded794e260d1c451929bf7ba7c72d7f561bb07f23"
+      "raw_output_sha256": "b97c24e8c7006883e64af7420e207981a06265ee5f68762ac100ff9bd0166455",
+      "rerun_after_scope_validator_repair": true
     },
     "actual_task_packet_outputs": {
       "captured_without_candidate_writes": true,
@@ -330,6 +342,12 @@
       "finding": "Gameplay branch advanced during the audit, superseding historical cash/carry/drop/hearth descriptions.",
       "evidence": "Docs/Production/GameplayDepth/2026-11-27/CURRENT_BRANCH_NOTE.json",
       "final_disposition": "NEW_SOURCE_INDEPENDENTLY_CHECKED; current note and prominent precedence retained; original Build 11 audit remains unchanged."
+    },
+    {
+      "finding": "First formatting-advisory patch accepted return code2 with no diagnostics.",
+      "original_evidence": "Supplemental review embeds whitespace-probes-r2.json verbatim as structured evidence.",
+      "repair_evidence": "Supplemental review embeds whitespace-probes-r3.json; all12 probes pass.",
+      "final_disposition": "FIXED_AND_RETESTED; nonzero empty results reject, benign EOF findings remain visible."
     }
   ],
   "remaining_game_work_not_approved_here": [
@@ -339,5 +357,367 @@
     "Inspect full real animations, transitions, audio and representative device/population behavior under the existing 9.9 / exact-10 rules."
   ],
   "publication_boundary": "No remote write was performed by this critic. Parent may integrate the accepted planning artifact using existing authorization and expected-main protection, then independently verify GitHub readback. This verdict does not activate or approve gameplay tasks.",
-  "blocking_findings": []
+  "blocking_findings": [],
+  "prior_full_review": {
+    "review_id": "havenline-gameplay-depth-independent-final-2026-11-27",
+    "freeze_manifest_sha256": "c346af7912079dcbff8bda8b497c11f46d389809738f92beebd78b3bd0857654",
+    "report_sha256": "d95763f4908e81524a04a8b286e2fe30677bd432d41ef7012ccc8575abc25a3c",
+    "reported_primary_publication": "bee3ce0238431fb6d4f58617abfdb0d7e836e513",
+    "publication_verified_by_this_critic": false,
+    "retention": "Original review and raw checks retained; original source bytes unchanged except the explicitly reviewed scope-validator repair."
+  },
+  "supplemental_review": {
+    "trigger": "After staging the new files, git diff --check additionally reported five terminal blank lines in exact preserved source/generated artifacts. The former whitespace-clean rule rejected the package despite unchanged reviewed source bytes.",
+    "accepted_disposition": "Exact terminal-blank-line diagnostics are retained as visible formatting advisories. Other diagnostics, trailing spaces, indentation errors, stderr and unsupported command results remain blocking. This is a formatting disposition for preserved plan artifacts, not a change to gameplay/reference acceptance.",
+    "only_substantive_file_changed": "Docs/Production/GameplayDepth/2026-11-27/verify_scope.py",
+    "other_substantive_files_byte_identical": 42,
+    "disclosed_eof_advisories": [
+      "Docs/Production/GameplayDepth/2026-11-27/CURRENT_BRANCH_NOTE.json:961: new blank line at EOF.",
+      "Docs/Production/GameplayDepth/2026-11-27/CURRENT_BRANCH_NOTE.md:93: new blank line at EOF.",
+      "Docs/Production/GameplayDepth/2026-11-27/STAKES_ECONOMY_AUDIT.md:308: new blank line at EOF.",
+      "Docs/Production/GameplayDepth/2026-11-27/STAKES_ECONOMY_SOURCE_CHECKS.json:121: new blank line at EOF.",
+      "Docs/Production/GameplayDepth/2026-11-27/TASK_GAMEPLAY_DEPTH_T01_T80.md:1696: new blank line at EOF."
+    ],
+    "actual_whitespace_command_return_code": 2,
+    "first_patch_rejection": "The first patch accepted return code2 with no diagnostic; this critic rejected that empty-result path.",
+    "first_patch_negative_evidence": {
+      "validator_sha256": "789b31731a98dbf77fd917d2940d7783792265511119dd1b58390a785490c0f4",
+      "results": [
+        {
+          "probe": "clean",
+          "expected_pass": true,
+          "actual_pass": true,
+          "correct": true,
+          "detail": {
+            "blocking_diagnostics": [],
+            "preserved_terminal_blank_line_advisories": [],
+            "stderr": null
+          }
+        },
+        {
+          "probe": "eof_only",
+          "expected_pass": true,
+          "actual_pass": true,
+          "correct": true,
+          "detail": {
+            "blocking_diagnostics": [],
+            "preserved_terminal_blank_line_advisories": [
+              "note.md:10: new blank line at EOF."
+            ],
+            "stderr": null
+          }
+        },
+        {
+          "probe": "two_eof_only",
+          "expected_pass": true,
+          "actual_pass": true,
+          "correct": true,
+          "detail": {
+            "blocking_diagnostics": [],
+            "preserved_terminal_blank_line_advisories": [
+              "note.md:10: new blank line at EOF.",
+              "other.json:12: new blank line at EOF."
+            ],
+            "stderr": null
+          }
+        },
+        {
+          "probe": "trailing_spaces",
+          "expected_pass": false,
+          "actual_pass": false,
+          "correct": true,
+          "detail": {
+            "blocking_diagnostics": [
+              "code.py:4: trailing whitespace.",
+              "+line  "
+            ],
+            "preserved_terminal_blank_line_advisories": [],
+            "stderr": null
+          }
+        },
+        {
+          "probe": "mixed_eof_and_trailing",
+          "expected_pass": false,
+          "actual_pass": false,
+          "correct": true,
+          "detail": {
+            "blocking_diagnostics": [
+              "code.py:4: trailing whitespace.",
+              "+line  "
+            ],
+            "preserved_terminal_blank_line_advisories": [
+              "note.md:10: new blank line at EOF."
+            ],
+            "stderr": null
+          }
+        },
+        {
+          "probe": "space_before_tab",
+          "expected_pass": false,
+          "actual_pass": false,
+          "correct": true,
+          "detail": {
+            "blocking_diagnostics": [
+              "code.py:4: space before tab in indent.",
+              "+ \tline"
+            ],
+            "preserved_terminal_blank_line_advisories": [],
+            "stderr": null
+          }
+        },
+        {
+          "probe": "stderr_despite_eof",
+          "expected_pass": false,
+          "actual_pass": false,
+          "correct": true,
+          "detail": {
+            "blocking_diagnostics": [],
+            "preserved_terminal_blank_line_advisories": [
+              "note.md:10: new blank line at EOF."
+            ],
+            "stderr": "fatal: failed to read source"
+          }
+        },
+        {
+          "probe": "unexpected_exit_one",
+          "expected_pass": false,
+          "actual_pass": false,
+          "correct": true,
+          "detail": {
+            "blocking_diagnostics": [],
+            "preserved_terminal_blank_line_advisories": [],
+            "stderr": null
+          }
+        },
+        {
+          "probe": "unexpected_exit_128",
+          "expected_pass": false,
+          "actual_pass": false,
+          "correct": true,
+          "detail": {
+            "blocking_diagnostics": [],
+            "preserved_terminal_blank_line_advisories": [],
+            "stderr": null
+          }
+        },
+        {
+          "probe": "exit_two_without_diagnostic",
+          "expected_pass": false,
+          "actual_pass": true,
+          "correct": false,
+          "detail": {
+            "blocking_diagnostics": [],
+            "preserved_terminal_blank_line_advisories": [],
+            "stderr": null
+          }
+        },
+        {
+          "probe": "nonexact_eof_message",
+          "expected_pass": false,
+          "actual_pass": false,
+          "correct": true,
+          "detail": {
+            "blocking_diagnostics": [
+              "note.md:10: new blank line at EOF. extra"
+            ],
+            "preserved_terminal_blank_line_advisories": [],
+            "stderr": null
+          }
+        },
+        {
+          "probe": "eof_with_wrong_exit",
+          "expected_pass": false,
+          "actual_pass": false,
+          "correct": true,
+          "detail": {
+            "blocking_diagnostics": [],
+            "preserved_terminal_blank_line_advisories": [
+              "note.md:10: new blank line at EOF."
+            ],
+            "stderr": null
+          }
+        }
+      ],
+      "all_correct": false,
+      "candidate_files_modified": false
+    },
+    "final_retest_evidence": {
+      "validator_sha256": "bc293ce9e496b5c334a331f0dd2adf901bccbeb0ee4a93906b39e6102aed16fe",
+      "results": [
+        {
+          "probe": "clean",
+          "expected_pass": true,
+          "actual_pass": true,
+          "correct": true,
+          "detail": {
+            "blocking_diagnostics": [],
+            "preserved_terminal_blank_line_advisories": [],
+            "return_code": 0,
+            "stderr": null
+          }
+        },
+        {
+          "probe": "eof_only",
+          "expected_pass": true,
+          "actual_pass": true,
+          "correct": true,
+          "detail": {
+            "blocking_diagnostics": [],
+            "preserved_terminal_blank_line_advisories": [
+              "note.md:10: new blank line at EOF."
+            ],
+            "return_code": 2,
+            "stderr": null
+          }
+        },
+        {
+          "probe": "two_eof_only",
+          "expected_pass": true,
+          "actual_pass": true,
+          "correct": true,
+          "detail": {
+            "blocking_diagnostics": [],
+            "preserved_terminal_blank_line_advisories": [
+              "note.md:10: new blank line at EOF.",
+              "other.json:12: new blank line at EOF."
+            ],
+            "return_code": 2,
+            "stderr": null
+          }
+        },
+        {
+          "probe": "trailing_spaces",
+          "expected_pass": false,
+          "actual_pass": false,
+          "correct": true,
+          "detail": {
+            "blocking_diagnostics": [
+              "code.py:4: trailing whitespace.",
+              "+line  "
+            ],
+            "preserved_terminal_blank_line_advisories": [],
+            "return_code": 2,
+            "stderr": null
+          }
+        },
+        {
+          "probe": "mixed_eof_and_trailing",
+          "expected_pass": false,
+          "actual_pass": false,
+          "correct": true,
+          "detail": {
+            "blocking_diagnostics": [
+              "code.py:4: trailing whitespace.",
+              "+line  "
+            ],
+            "preserved_terminal_blank_line_advisories": [
+              "note.md:10: new blank line at EOF."
+            ],
+            "return_code": 2,
+            "stderr": null
+          }
+        },
+        {
+          "probe": "space_before_tab",
+          "expected_pass": false,
+          "actual_pass": false,
+          "correct": true,
+          "detail": {
+            "blocking_diagnostics": [
+              "code.py:4: space before tab in indent.",
+              "+ \tline"
+            ],
+            "preserved_terminal_blank_line_advisories": [],
+            "return_code": 2,
+            "stderr": null
+          }
+        },
+        {
+          "probe": "stderr_despite_eof",
+          "expected_pass": false,
+          "actual_pass": false,
+          "correct": true,
+          "detail": {
+            "blocking_diagnostics": [],
+            "preserved_terminal_blank_line_advisories": [
+              "note.md:10: new blank line at EOF."
+            ],
+            "return_code": 2,
+            "stderr": "fatal: failed to read source"
+          }
+        },
+        {
+          "probe": "unexpected_exit_one",
+          "expected_pass": false,
+          "actual_pass": false,
+          "correct": true,
+          "detail": {
+            "blocking_diagnostics": [],
+            "preserved_terminal_blank_line_advisories": [],
+            "return_code": 1,
+            "stderr": null
+          }
+        },
+        {
+          "probe": "unexpected_exit_128",
+          "expected_pass": false,
+          "actual_pass": false,
+          "correct": true,
+          "detail": {
+            "blocking_diagnostics": [],
+            "preserved_terminal_blank_line_advisories": [],
+            "return_code": 128,
+            "stderr": null
+          }
+        },
+        {
+          "probe": "exit_two_without_diagnostic",
+          "expected_pass": false,
+          "actual_pass": false,
+          "correct": true,
+          "detail": {
+            "blocking_diagnostics": [],
+            "preserved_terminal_blank_line_advisories": [],
+            "return_code": 2,
+            "stderr": null
+          }
+        },
+        {
+          "probe": "nonexact_eof_message",
+          "expected_pass": false,
+          "actual_pass": false,
+          "correct": true,
+          "detail": {
+            "blocking_diagnostics": [
+              "note.md:10: new blank line at EOF. extra"
+            ],
+            "preserved_terminal_blank_line_advisories": [],
+            "return_code": 2,
+            "stderr": null
+          }
+        },
+        {
+          "probe": "eof_with_wrong_exit",
+          "expected_pass": false,
+          "actual_pass": false,
+          "correct": true,
+          "detail": {
+            "blocking_diagnostics": [],
+            "preserved_terminal_blank_line_advisories": [
+              "note.md:10: new blank line at EOF."
+            ],
+            "return_code": 1,
+            "stderr": null
+          }
+        }
+      ],
+      "all_correct": true,
+      "candidate_files_modified": false
+    },
+    "final_probes_passed": 12,
+    "final_probes_required": 12,
+    "final_required_behavior": "A clean zero exit may pass; a code2 result may pass only when at least one exact EOF advisory exists and there are no other diagnostics or stderr.",
+    "source_audits_rewritten": false,
+    "runtime_or_reference_requirements_relaxed": false
+  }
 }

@@ -1,0 +1,844 @@
+{
+  "schema_version": 1,
+  "status": "CONTENT_PUBLICATION_VERIFIED",
+  "scope": "Whole-game gameplay-depth planning/source audit only; no game implementation or runtime approval",
+  "base_commit": "9d10c45a8bd46aeb6ab1b4009e87538c4796ef1c",
+  "content_commit": "bee3ce0238431fb6d4f58617abfdb0d7e836e513",
+  "content_tree": "62ab6e7fb47d79fcfcc9e86f25534a7ad0375208",
+  "freeze_sha256": "c346af7912079dcbff8bda8b497c11f46d389809738f92beebd78b3bd0857654",
+  "independent_plan_review": {
+    "reviewer": "/root/depth_critic",
+    "score": 10,
+    "mandatory_checks_passed": 16,
+    "mandatory_checks_required": 16,
+    "report": "FINAL_REVIEW.json"
+  },
+  "runtime_tested": false,
+  "runtime_approval_allowed": false,
+  "game_score": null,
+  "content_readback": {
+    "content_commit": "bee3ce0238431fb6d4f58617abfdb0d7e836e513",
+    "expected_tree": "62ab6e7fb47d79fcfcc9e86f25534a7ad0375208",
+    "main_verified": true,
+    "tree_verified": true,
+    "parent_verified": true,
+    "file_readbacks": [
+      {
+        "path": "Docs/Production/GAMEPLAY_DEPTH_STANDARD.md",
+        "exact_utf8_content_match": true
+      },
+      {
+        "path": "Docs/Production/GAMEPLAY_DEPTH_CONTRACT.json",
+        "exact_utf8_content_match": true
+      },
+      {
+        "path": "Docs/Production/GameplayDepth/2026-11-27/CURRENT_BRANCH_NOTE.json",
+        "exact_utf8_content_match": true
+      },
+      {
+        "path": "Docs/Production/GameplayDepth/2026-11-27/FINAL_REVIEW.json",
+        "exact_utf8_content_match": true
+      },
+      {
+        "path": "tools/havenline/production/task_packet.py",
+        "exact_utf8_content_match": true
+      }
+    ],
+    "non_main_branches_unchanged": true,
+    "branch_count": 97
+  },
+  "transport_correction": {
+    "incorrect_unreferenced_tree": "bb30212f03ce9845260e5c4f4be589ddecbb6db7",
+    "corrected_tree": "62ab6e7fb47d79fcfcc9e86f25534a7ad0375208",
+    "path": "tools/havenline/production/task_packet.py",
+    "preserved_mode": "100755",
+    "ref_updated_before_correction": false
+  },
+  "ref_update": {
+    "branch": "main",
+    "expected_sha": "9d10c45a8bd46aeb6ab1b4009e87538c4796ef1c",
+    "force": false
+  },
+  "prepublication_branches": [
+    {
+      "name": "agent/havenline-v7-unity-review",
+      "sha": "dd36c73ce9042b85581bf5667ae8323c2f4e5a3b"
+    },
+    {
+      "name": "alfred/character-1-final",
+      "sha": "48c6c53a0dfda117ef12c68b32cfe2b3732d5239"
+    },
+    {
+      "name": "alfred/level-1-replacement",
+      "sha": "b35a9a65afa6b651116899603a48229928b30fc2"
+    },
+    {
+      "name": "alfred/meshy-auth-check-20261119",
+      "sha": "0d31225ff6fe4983e5b628758460a4981988f410"
+    },
+    {
+      "name": "archive/legacy-main-2026-08-02",
+      "sha": "0c3625b745d1729121ec13e3e0a267eb3a91e68b"
+    },
+    {
+      "name": "archive/source-snapshot-2026-11-24",
+      "sha": "ca529eb82488af7892e8a33fedd371034a143fac"
+    },
+    {
+      "name": "art/character-1-2026-11-26",
+      "sha": "74817145ed7be6e8b9aef7eab1369d1e70112a64"
+    },
+    {
+      "name": "art/conveyors-2026-11-26",
+      "sha": "d70fbfac21a852f99cc46b06b1944faf11ec7901"
+    },
+    {
+      "name": "art/enemy-invaders-2026-11-24",
+      "sha": "01664a73ddf5087f17f7e159fa0b6b4ed71367b5"
+    },
+    {
+      "name": "art/missing-renders-2026-11-27",
+      "sha": "a868ae89cdf2f120b478aa0a48fff35e09cc465c"
+    },
+    {
+      "name": "art/resource-turnarounds-2026-11-23",
+      "sha": "25b4ec6dd407c1c2530a3781527df64eabb63b99"
+    },
+    {
+      "name": "art/storage-house-2026-11-26",
+      "sha": "30f4f037baf54b24652360c8b6880771e29cc19a"
+    },
+    {
+      "name": "art/structures-2026-11-25",
+      "sha": "26bb649e0a8090c9c9af7e91e62f384fc86372d8"
+    },
+    {
+      "name": "art/ui-concepts-2026-11-26",
+      "sha": "e3c787a4ecfffa7ae2013227d2db553f2e2829ef"
+    },
+    {
+      "name": "astra-webgl-review/2026-09-06",
+      "sha": "804cf34e977a51d3a864fb4096a4d30d4f1061f8"
+    },
+    {
+      "name": "checkpoint/opening-recovery-2026-11-23",
+      "sha": "469cc1b065f4a94b8cd17f9dc69d414acb3d33e5"
+    },
+    {
+      "name": "codex/havenline-environment-calibration",
+      "sha": "9b482335394389afeea214028b159b7d11259e84"
+    },
+    {
+      "name": "codex/havenline-environment-review",
+      "sha": "e3b191aa4237f566b0a26788495d9e6fd482d403"
+    },
+    {
+      "name": "codex/havenline-godot-android",
+      "sha": "4cc278f13462ad1678c3dbed9153e8badce59686"
+    },
+    {
+      "name": "codex/havenline-native-completion-20260907",
+      "sha": "ddceb29fe068fc4d4189f9e805cf152e38f01fb1"
+    },
+    {
+      "name": "codex/havenline-sequential-task-01",
+      "sha": "f74a84a2a288ab3d3935fba7a6cb9b975c2df239"
+    },
+    {
+      "name": "codex/havenline-visual-critic",
+      "sha": "2254fa959bb3640c0d18a0638d9dddda86903b5b"
+    },
+    {
+      "name": "codex/t03-reviewer-backup-075c9e",
+      "sha": "075c9e937d607b0ba28a64ee345e0084e1124091"
+    },
+    {
+      "name": "codex/t03-reviewer-semantics-repair",
+      "sha": "075c9e937d607b0ba28a64ee345e0084e1124091"
+    },
+    {
+      "name": "consolidation/havenline-2026-11-24",
+      "sha": "b80c61f13ba31bb0940792dd47976a8e2878dbf5"
+    },
+    {
+      "name": "docs/whiteout-reference-framing-20261119",
+      "sha": "40b9ba6569f9be800c507fbf8de19ea21459322c"
+    },
+    {
+      "name": "havenline/QA-integration",
+      "sha": "c4207a462eedb1ac9186bb769196e7a50f469189"
+    },
+    {
+      "name": "havenline/T03-reference-art-20260926",
+      "sha": "3dc97c85538bb68cb26d5ab18e4d8b1f77db7e7d"
+    },
+    {
+      "name": "havenline/T04-camera",
+      "sha": "7c3f6e1c43871a424a78ed7590e3c0b153ef9d62"
+    },
+    {
+      "name": "havenline/T05-props",
+      "sha": "9b57652b8c14598c9c318014327b881ed38c1ff4"
+    },
+    {
+      "name": "havenline/T05-r01-checkpoint-revert",
+      "sha": "427148011ca2e8ad3cb6fef357e99a93b69bbe26"
+    },
+    {
+      "name": "havenline/T05-r01-full77-staging-20260927",
+      "sha": "427148011ca2e8ad3cb6fef357e99a93b69bbe26"
+    },
+    {
+      "name": "havenline/T05-r01-v4-exact-ci",
+      "sha": "1c89e00723086bb4dac0f4d91237ff85c81e6b53"
+    },
+    {
+      "name": "havenline/T05-r01-v4-review-20260927",
+      "sha": "c062ddd27d9250dfe31346650b2cdca2ab0b7c04"
+    },
+    {
+      "name": "havenline/T05-r10-final-review-20260927",
+      "sha": "37792165ec99aae60ac33db535f4a10e8704a810"
+    },
+    {
+      "name": "havenline/T05-r10b-materializer-event-20260927",
+      "sha": "a1a8f2edaf00211505dc243bda70a896795e1006"
+    },
+    {
+      "name": "havenline/T05-r10c-source-check-20260927",
+      "sha": "3c740a803407b1cbe7b6a837a03969696a560eef"
+    },
+    {
+      "name": "havenline/T05-r18-owner-20261013",
+      "sha": "08ec81f4668e5285d09172d790554b2f0ae009a5"
+    },
+    {
+      "name": "havenline/T05-r18-visual-corrections-20261025",
+      "sha": "5abfc29f1c3c51bef99247641cf1131581899942"
+    },
+    {
+      "name": "havenline/T05-visual-repair-20260926",
+      "sha": "b8408d7d72e0df7227aa2048df3b86a51c1f0752"
+    },
+    {
+      "name": "havenline/T06-character1",
+      "sha": "47f86fae25b099abb5c7096c37ca7495453b2b8f"
+    },
+    {
+      "name": "havenline/T07-context-director",
+      "sha": "0a30dc0859541626eb6aa9a9bb749abc93dcb355"
+    },
+    {
+      "name": "havenline/T08-visible-inventory",
+      "sha": "c6675ddd1a226cc0a2f12bd87ed3d968ed0c6a74"
+    },
+    {
+      "name": "havenline/T09-harvesting",
+      "sha": "5415d85838ecf4bea8b3c71662072670e61797a0"
+    },
+    {
+      "name": "havenline/T10-world-transformation",
+      "sha": "eba0107def258824549fb10d81785290d0c81d97"
+    },
+    {
+      "name": "havenline/T11-camp-construction",
+      "sha": "6d53da9d61af743a1d334d0b7bbfed14ef3a569f"
+    },
+    {
+      "name": "havenline/T12-progression-architecture",
+      "sha": "1083d82269e82c5aac678bb5c5c77312dde94099"
+    },
+    {
+      "name": "havenline/T13-challenge-director",
+      "sha": "b9cb0913e226010eff4f3f63a0fb2382a5f289b7"
+    },
+    {
+      "name": "havenline/global-asset-pipeline-integration-20261026",
+      "sha": "b9edca94c02e39bc5f47a848de16063924b50356"
+    },
+    {
+      "name": "havenline/global-asset-pipeline-v1-20261026",
+      "sha": "814b712a791cc3d7d6df165640a76db54a286caa"
+    },
+    {
+      "name": "havenline/governance-all-t13-t70-ready",
+      "sha": "426d7973fb64af0ef33208bdb50fd859de58fb0a"
+    },
+    {
+      "name": "havenline/governance-c0-terminal-evidence",
+      "sha": "874a4e5c247f8921b4ccefb3b851e07006c2941c"
+    },
+    {
+      "name": "havenline/governance-c0r-workstream-authorization",
+      "sha": "93076907fa765e9ec987e021d2d46f6c8d29a6f1"
+    },
+    {
+      "name": "havenline/governance-current-pr-base",
+      "sha": "296b317b7ad2cc0d4c8facb12d4165195d3df7a0"
+    },
+    {
+      "name": "havenline/governance-image-reconstruction-probe",
+      "sha": "4c7e3063d453058d662b1f08fab9f75ea7d7e0aa"
+    },
+    {
+      "name": "havenline/governance-permanent-native-material-critic-20261028",
+      "sha": "3bc08f23b1b959553cf91c1de664b086e0c5b11e"
+    },
+    {
+      "name": "havenline/governance-reference-style-lock-20260922",
+      "sha": "dc8194aecbe91baa2cb8e4f49c8d94ec33baf36f"
+    },
+    {
+      "name": "havenline/governance-reference-style-scope-repair-20260922",
+      "sha": "57eefed4e5ad92444351e338c287ea4ceaaeb3f9"
+    },
+    {
+      "name": "havenline/governance-t09-strict-review",
+      "sha": "d5e517e82428884d8c048fec8cc1eb4c20c37ee5"
+    },
+    {
+      "name": "havenline/governance-t10-prep",
+      "sha": "7e95338e339fb331a5d6b094874c15d5a7e96e16"
+    },
+    {
+      "name": "havenline/governance-t11-prep",
+      "sha": "113a08953070aeca0caac80e1411587870388746"
+    },
+    {
+      "name": "havenline/governance-t12-activation",
+      "sha": "60bda9ab74d17bd222f3f34c179d1b9ff6a3e8a9"
+    },
+    {
+      "name": "havenline/governance-t12-activation-20261028",
+      "sha": "1dd02161ea8d90fb5873bc6e5acd228b138490a1"
+    },
+    {
+      "name": "havenline/governance-t12-assignment",
+      "sha": "1083d82269e82c5aac678bb5c5c77312dde94099"
+    },
+    {
+      "name": "havenline/governance-t12-integration-ready",
+      "sha": "f82594d0c79184707361267b9be6d570c6983e5a"
+    },
+    {
+      "name": "havenline/governance-t12-preactivation-buildout",
+      "sha": "e6940bb23f008356bdc28aa3a2b539902b42f9d0"
+    },
+    {
+      "name": "havenline/governance-t12-prep",
+      "sha": "fd0aa1d62c03c8ac7f344638d80ee94be1f68697"
+    },
+    {
+      "name": "havenline/governance-t12-scope-prep",
+      "sha": "6ef52690b1a34d6bfda7920b0fcf6ea236248a9c"
+    },
+    {
+      "name": "havenline/governance-t12-v32-handoff",
+      "sha": "4fc6bfdbc114634469f50ca2d6e50e07c6e8c666"
+    },
+    {
+      "name": "havenline/governance-t13-build-pending",
+      "sha": "ba12b739d1ff6198fdff5bb4470f58f4bb4438de"
+    },
+    {
+      "name": "havenline/governance-t13-c2-evidence-repair",
+      "sha": "af202dbf1680d63c7644a12edb059089ba945e12"
+    },
+    {
+      "name": "havenline/governance-t13-preactivation-sync",
+      "sha": "1d7d6108f4b036b9be280fe99dc24943ac155fd0"
+    },
+    {
+      "name": "havenline/governance-t13-t20-prep",
+      "sha": "4c5b2b7e3589bae53f4341aa9ad3e7ad4e532856"
+    },
+    {
+      "name": "havenline/governance-t21-t32-prep",
+      "sha": "75a13cb77a6e2b9dac99abd16c6ccc00caf04010"
+    },
+    {
+      "name": "havenline/governance-t33-t43-prep",
+      "sha": "8f685d5ca39996dd481507ac7e176f3cefa8e104"
+    },
+    {
+      "name": "havenline/governance-t44-t52-prep",
+      "sha": "5d3ebeb39a062398519acf71bfda3b1d6f02e338"
+    },
+    {
+      "name": "havenline/governance-t53-t61-prep",
+      "sha": "3a9c8e06334ead075ac85c0e602b402a1cb343b2"
+    },
+    {
+      "name": "havenline/governance-t62-t70-prep",
+      "sha": "8921ec3c7f78f26181ad5a69187e6b81075a8ebf"
+    },
+    {
+      "name": "havenline/governance-trusted-lineage-test",
+      "sha": "bc84d28f7df725c428d6ecf4087f786aefd88edb"
+    },
+    {
+      "name": "havenline/governance-v32-forward-control-plane",
+      "sha": "179b068da08942741a9db500e5bfcb81a515da2b"
+    },
+    {
+      "name": "havenline/governance-v32-intelligence-closeout",
+      "sha": "30d396a6432818e9c660203fa17807f9bbbf157d"
+    },
+    {
+      "name": "havenline/governance-v32-workflow-registration-fix",
+      "sha": "c69eff223a930d18c9db0a1147668bc349d2a4af"
+    },
+    {
+      "name": "havenline/permanent-native-material-critic-20261027",
+      "sha": "121f49080399c8ef9960f2a6800c08cdc0b3e945"
+    },
+    {
+      "name": "havenline/reference-whiteout-ad-pack-20260922",
+      "sha": "bfc21183ba307ad3bf3d913242d4b66f13a8313b"
+    },
+    {
+      "name": "havenline/t13-t14-handoff-hardening",
+      "sha": "956b3b160499ea8907c8b3bd54c583e21a49849d"
+    },
+    {
+      "name": "havenline/t13-t14-handoff-hardening-final",
+      "sha": "4d50285d5faf967d3b9f1f1ed64960397a938665"
+    },
+    {
+      "name": "havenline/t13-t14-handoff-hardening-final2",
+      "sha": "4d50285d5faf967d3b9f1f1ed64960397a938665"
+    },
+    {
+      "name": "havenline/t13-t14-handoff-hardening-lint",
+      "sha": "4d50285d5faf967d3b9f1f1ed64960397a938665"
+    },
+    {
+      "name": "havenline/t13-t14-handoff-hardening-validation",
+      "sha": "4d50285d5faf967d3b9f1f1ed64960397a938665"
+    },
+    {
+      "name": "havenline/t13-t70-activation-frontier",
+      "sha": "00a9e6661db3ef1d3380923faeb159b887350500"
+    },
+    {
+      "name": "havenline/t13-t70-metadata-hardening",
+      "sha": "7b486acd3306895dbe8de35cb2e2d69ad34ee073"
+    },
+    {
+      "name": "havenline/t13-t70-provenance-hardening",
+      "sha": "a4cf2a133ce7e67a5da5a830e0a693aa118230aa"
+    },
+    {
+      "name": "havenline/v32-control-plane-lineage-repair",
+      "sha": "f631503c76ad68289b03506e766492ca7f3542b2"
+    },
+    {
+      "name": "main",
+      "sha": "9d10c45a8bd46aeb6ab1b4009e87538c4796ef1c"
+    },
+    {
+      "name": "repair/native-timeout-contract-20260926",
+      "sha": "bcae2ca043f702224ac224df2073c6d3c6b87e35"
+    },
+    {
+      "name": "trial/reference-field-loop-2026-11-26",
+      "sha": "89af0037aa6e3e2182d1c89cd3c060ba22b940ca"
+    },
+    {
+      "name": "trial/world-one-expansion-2026-11-26",
+      "sha": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a"
+    }
+  ],
+  "verified_after_content_branches": [
+    {
+      "name": "agent/havenline-v7-unity-review",
+      "sha": "dd36c73ce9042b85581bf5667ae8323c2f4e5a3b"
+    },
+    {
+      "name": "alfred/character-1-final",
+      "sha": "48c6c53a0dfda117ef12c68b32cfe2b3732d5239"
+    },
+    {
+      "name": "alfred/level-1-replacement",
+      "sha": "b35a9a65afa6b651116899603a48229928b30fc2"
+    },
+    {
+      "name": "alfred/meshy-auth-check-20261119",
+      "sha": "0d31225ff6fe4983e5b628758460a4981988f410"
+    },
+    {
+      "name": "archive/legacy-main-2026-08-02",
+      "sha": "0c3625b745d1729121ec13e3e0a267eb3a91e68b"
+    },
+    {
+      "name": "archive/source-snapshot-2026-11-24",
+      "sha": "ca529eb82488af7892e8a33fedd371034a143fac"
+    },
+    {
+      "name": "art/character-1-2026-11-26",
+      "sha": "74817145ed7be6e8b9aef7eab1369d1e70112a64"
+    },
+    {
+      "name": "art/conveyors-2026-11-26",
+      "sha": "d70fbfac21a852f99cc46b06b1944faf11ec7901"
+    },
+    {
+      "name": "art/enemy-invaders-2026-11-24",
+      "sha": "01664a73ddf5087f17f7e159fa0b6b4ed71367b5"
+    },
+    {
+      "name": "art/missing-renders-2026-11-27",
+      "sha": "a868ae89cdf2f120b478aa0a48fff35e09cc465c"
+    },
+    {
+      "name": "art/resource-turnarounds-2026-11-23",
+      "sha": "25b4ec6dd407c1c2530a3781527df64eabb63b99"
+    },
+    {
+      "name": "art/storage-house-2026-11-26",
+      "sha": "30f4f037baf54b24652360c8b6880771e29cc19a"
+    },
+    {
+      "name": "art/structures-2026-11-25",
+      "sha": "26bb649e0a8090c9c9af7e91e62f384fc86372d8"
+    },
+    {
+      "name": "art/ui-concepts-2026-11-26",
+      "sha": "e3c787a4ecfffa7ae2013227d2db553f2e2829ef"
+    },
+    {
+      "name": "astra-webgl-review/2026-09-06",
+      "sha": "804cf34e977a51d3a864fb4096a4d30d4f1061f8"
+    },
+    {
+      "name": "checkpoint/opening-recovery-2026-11-23",
+      "sha": "469cc1b065f4a94b8cd17f9dc69d414acb3d33e5"
+    },
+    {
+      "name": "codex/havenline-environment-calibration",
+      "sha": "9b482335394389afeea214028b159b7d11259e84"
+    },
+    {
+      "name": "codex/havenline-environment-review",
+      "sha": "e3b191aa4237f566b0a26788495d9e6fd482d403"
+    },
+    {
+      "name": "codex/havenline-godot-android",
+      "sha": "4cc278f13462ad1678c3dbed9153e8badce59686"
+    },
+    {
+      "name": "codex/havenline-native-completion-20260907",
+      "sha": "ddceb29fe068fc4d4189f9e805cf152e38f01fb1"
+    },
+    {
+      "name": "codex/havenline-sequential-task-01",
+      "sha": "f74a84a2a288ab3d3935fba7a6cb9b975c2df239"
+    },
+    {
+      "name": "codex/havenline-visual-critic",
+      "sha": "2254fa959bb3640c0d18a0638d9dddda86903b5b"
+    },
+    {
+      "name": "codex/t03-reviewer-backup-075c9e",
+      "sha": "075c9e937d607b0ba28a64ee345e0084e1124091"
+    },
+    {
+      "name": "codex/t03-reviewer-semantics-repair",
+      "sha": "075c9e937d607b0ba28a64ee345e0084e1124091"
+    },
+    {
+      "name": "consolidation/havenline-2026-11-24",
+      "sha": "b80c61f13ba31bb0940792dd47976a8e2878dbf5"
+    },
+    {
+      "name": "docs/whiteout-reference-framing-20261119",
+      "sha": "40b9ba6569f9be800c507fbf8de19ea21459322c"
+    },
+    {
+      "name": "havenline/QA-integration",
+      "sha": "c4207a462eedb1ac9186bb769196e7a50f469189"
+    },
+    {
+      "name": "havenline/T03-reference-art-20260926",
+      "sha": "3dc97c85538bb68cb26d5ab18e4d8b1f77db7e7d"
+    },
+    {
+      "name": "havenline/T04-camera",
+      "sha": "7c3f6e1c43871a424a78ed7590e3c0b153ef9d62"
+    },
+    {
+      "name": "havenline/T05-props",
+      "sha": "9b57652b8c14598c9c318014327b881ed38c1ff4"
+    },
+    {
+      "name": "havenline/T05-r01-checkpoint-revert",
+      "sha": "427148011ca2e8ad3cb6fef357e99a93b69bbe26"
+    },
+    {
+      "name": "havenline/T05-r01-full77-staging-20260927",
+      "sha": "427148011ca2e8ad3cb6fef357e99a93b69bbe26"
+    },
+    {
+      "name": "havenline/T05-r01-v4-exact-ci",
+      "sha": "1c89e00723086bb4dac0f4d91237ff85c81e6b53"
+    },
+    {
+      "name": "havenline/T05-r01-v4-review-20260927",
+      "sha": "c062ddd27d9250dfe31346650b2cdca2ab0b7c04"
+    },
+    {
+      "name": "havenline/T05-r10-final-review-20260927",
+      "sha": "37792165ec99aae60ac33db535f4a10e8704a810"
+    },
+    {
+      "name": "havenline/T05-r10b-materializer-event-20260927",
+      "sha": "a1a8f2edaf00211505dc243bda70a896795e1006"
+    },
+    {
+      "name": "havenline/T05-r10c-source-check-20260927",
+      "sha": "3c740a803407b1cbe7b6a837a03969696a560eef"
+    },
+    {
+      "name": "havenline/T05-r18-owner-20261013",
+      "sha": "08ec81f4668e5285d09172d790554b2f0ae009a5"
+    },
+    {
+      "name": "havenline/T05-r18-visual-corrections-20261025",
+      "sha": "5abfc29f1c3c51bef99247641cf1131581899942"
+    },
+    {
+      "name": "havenline/T05-visual-repair-20260926",
+      "sha": "b8408d7d72e0df7227aa2048df3b86a51c1f0752"
+    },
+    {
+      "name": "havenline/T06-character1",
+      "sha": "47f86fae25b099abb5c7096c37ca7495453b2b8f"
+    },
+    {
+      "name": "havenline/T07-context-director",
+      "sha": "0a30dc0859541626eb6aa9a9bb749abc93dcb355"
+    },
+    {
+      "name": "havenline/T08-visible-inventory",
+      "sha": "c6675ddd1a226cc0a2f12bd87ed3d968ed0c6a74"
+    },
+    {
+      "name": "havenline/T09-harvesting",
+      "sha": "5415d85838ecf4bea8b3c71662072670e61797a0"
+    },
+    {
+      "name": "havenline/T10-world-transformation",
+      "sha": "eba0107def258824549fb10d81785290d0c81d97"
+    },
+    {
+      "name": "havenline/T11-camp-construction",
+      "sha": "6d53da9d61af743a1d334d0b7bbfed14ef3a569f"
+    },
+    {
+      "name": "havenline/T12-progression-architecture",
+      "sha": "1083d82269e82c5aac678bb5c5c77312dde94099"
+    },
+    {
+      "name": "havenline/T13-challenge-director",
+      "sha": "b9cb0913e226010eff4f3f63a0fb2382a5f289b7"
+    },
+    {
+      "name": "havenline/global-asset-pipeline-integration-20261026",
+      "sha": "b9edca94c02e39bc5f47a848de16063924b50356"
+    },
+    {
+      "name": "havenline/global-asset-pipeline-v1-20261026",
+      "sha": "814b712a791cc3d7d6df165640a76db54a286caa"
+    },
+    {
+      "name": "havenline/governance-all-t13-t70-ready",
+      "sha": "426d7973fb64af0ef33208bdb50fd859de58fb0a"
+    },
+    {
+      "name": "havenline/governance-c0-terminal-evidence",
+      "sha": "874a4e5c247f8921b4ccefb3b851e07006c2941c"
+    },
+    {
+      "name": "havenline/governance-c0r-workstream-authorization",
+      "sha": "93076907fa765e9ec987e021d2d46f6c8d29a6f1"
+    },
+    {
+      "name": "havenline/governance-current-pr-base",
+      "sha": "296b317b7ad2cc0d4c8facb12d4165195d3df7a0"
+    },
+    {
+      "name": "havenline/governance-image-reconstruction-probe",
+      "sha": "4c7e3063d453058d662b1f08fab9f75ea7d7e0aa"
+    },
+    {
+      "name": "havenline/governance-permanent-native-material-critic-20261028",
+      "sha": "3bc08f23b1b959553cf91c1de664b086e0c5b11e"
+    },
+    {
+      "name": "havenline/governance-reference-style-lock-20260922",
+      "sha": "dc8194aecbe91baa2cb8e4f49c8d94ec33baf36f"
+    },
+    {
+      "name": "havenline/governance-reference-style-scope-repair-20260922",
+      "sha": "57eefed4e5ad92444351e338c287ea4ceaaeb3f9"
+    },
+    {
+      "name": "havenline/governance-t09-strict-review",
+      "sha": "d5e517e82428884d8c048fec8cc1eb4c20c37ee5"
+    },
+    {
+      "name": "havenline/governance-t10-prep",
+      "sha": "7e95338e339fb331a5d6b094874c15d5a7e96e16"
+    },
+    {
+      "name": "havenline/governance-t11-prep",
+      "sha": "113a08953070aeca0caac80e1411587870388746"
+    },
+    {
+      "name": "havenline/governance-t12-activation",
+      "sha": "60bda9ab74d17bd222f3f34c179d1b9ff6a3e8a9"
+    },
+    {
+      "name": "havenline/governance-t12-activation-20261028",
+      "sha": "1dd02161ea8d90fb5873bc6e5acd228b138490a1"
+    },
+    {
+      "name": "havenline/governance-t12-assignment",
+      "sha": "1083d82269e82c5aac678bb5c5c77312dde94099"
+    },
+    {
+      "name": "havenline/governance-t12-integration-ready",
+      "sha": "f82594d0c79184707361267b9be6d570c6983e5a"
+    },
+    {
+      "name": "havenline/governance-t12-preactivation-buildout",
+      "sha": "e6940bb23f008356bdc28aa3a2b539902b42f9d0"
+    },
+    {
+      "name": "havenline/governance-t12-prep",
+      "sha": "fd0aa1d62c03c8ac7f344638d80ee94be1f68697"
+    },
+    {
+      "name": "havenline/governance-t12-scope-prep",
+      "sha": "6ef52690b1a34d6bfda7920b0fcf6ea236248a9c"
+    },
+    {
+      "name": "havenline/governance-t12-v32-handoff",
+      "sha": "4fc6bfdbc114634469f50ca2d6e50e07c6e8c666"
+    },
+    {
+      "name": "havenline/governance-t13-build-pending",
+      "sha": "ba12b739d1ff6198fdff5bb4470f58f4bb4438de"
+    },
+    {
+      "name": "havenline/governance-t13-c2-evidence-repair",
+      "sha": "af202dbf1680d63c7644a12edb059089ba945e12"
+    },
+    {
+      "name": "havenline/governance-t13-preactivation-sync",
+      "sha": "1d7d6108f4b036b9be280fe99dc24943ac155fd0"
+    },
+    {
+      "name": "havenline/governance-t13-t20-prep",
+      "sha": "4c5b2b7e3589bae53f4341aa9ad3e7ad4e532856"
+    },
+    {
+      "name": "havenline/governance-t21-t32-prep",
+      "sha": "75a13cb77a6e2b9dac99abd16c6ccc00caf04010"
+    },
+    {
+      "name": "havenline/governance-t33-t43-prep",
+      "sha": "8f685d5ca39996dd481507ac7e176f3cefa8e104"
+    },
+    {
+      "name": "havenline/governance-t44-t52-prep",
+      "sha": "5d3ebeb39a062398519acf71bfda3b1d6f02e338"
+    },
+    {
+      "name": "havenline/governance-t53-t61-prep",
+      "sha": "3a9c8e06334ead075ac85c0e602b402a1cb343b2"
+    },
+    {
+      "name": "havenline/governance-t62-t70-prep",
+      "sha": "8921ec3c7f78f26181ad5a69187e6b81075a8ebf"
+    },
+    {
+      "name": "havenline/governance-trusted-lineage-test",
+      "sha": "bc84d28f7df725c428d6ecf4087f786aefd88edb"
+    },
+    {
+      "name": "havenline/governance-v32-forward-control-plane",
+      "sha": "179b068da08942741a9db500e5bfcb81a515da2b"
+    },
+    {
+      "name": "havenline/governance-v32-intelligence-closeout",
+      "sha": "30d396a6432818e9c660203fa17807f9bbbf157d"
+    },
+    {
+      "name": "havenline/governance-v32-workflow-registration-fix",
+      "sha": "c69eff223a930d18c9db0a1147668bc349d2a4af"
+    },
+    {
+      "name": "havenline/permanent-native-material-critic-20261027",
+      "sha": "121f49080399c8ef9960f2a6800c08cdc0b3e945"
+    },
+    {
+      "name": "havenline/reference-whiteout-ad-pack-20260922",
+      "sha": "bfc21183ba307ad3bf3d913242d4b66f13a8313b"
+    },
+    {
+      "name": "havenline/t13-t14-handoff-hardening",
+      "sha": "956b3b160499ea8907c8b3bd54c583e21a49849d"
+    },
+    {
+      "name": "havenline/t13-t14-handoff-hardening-final",
+      "sha": "4d50285d5faf967d3b9f1f1ed64960397a938665"
+    },
+    {
+      "name": "havenline/t13-t14-handoff-hardening-final2",
+      "sha": "4d50285d5faf967d3b9f1f1ed64960397a938665"
+    },
+    {
+      "name": "havenline/t13-t14-handoff-hardening-lint",
+      "sha": "4d50285d5faf967d3b9f1f1ed64960397a938665"
+    },
+    {
+      "name": "havenline/t13-t14-handoff-hardening-validation",
+      "sha": "4d50285d5faf967d3b9f1f1ed64960397a938665"
+    },
+    {
+      "name": "havenline/t13-t70-activation-frontier",
+      "sha": "00a9e6661db3ef1d3380923faeb159b887350500"
+    },
+    {
+      "name": "havenline/t13-t70-metadata-hardening",
+      "sha": "7b486acd3306895dbe8de35cb2e2d69ad34ee073"
+    },
+    {
+      "name": "havenline/t13-t70-provenance-hardening",
+      "sha": "a4cf2a133ce7e67a5da5a830e0a693aa118230aa"
+    },
+    {
+      "name": "havenline/v32-control-plane-lineage-repair",
+      "sha": "f631503c76ad68289b03506e766492ca7f3542b2"
+    },
+    {
+      "name": "main",
+      "sha": "bee3ce0238431fb6d4f58617abfdb0d7e836e513"
+    },
+    {
+      "name": "repair/native-timeout-contract-20260926",
+      "sha": "bcae2ca043f702224ac224df2073c6d3c6b87e35"
+    },
+    {
+      "name": "trial/reference-field-loop-2026-11-26",
+      "sha": "89af0037aa6e3e2182d1c89cd3c060ba22b940ca"
+    },
+    {
+      "name": "trial/world-one-expansion-2026-11-26",
+      "sha": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a"
+    }
+  ],
+  "receipt_boundary": "This receipt records the verified content publication. Its own later commit is read back separately by the integration agent; no self-referential commit hash is invented.",
+  "remaining_game_work": "Authored loss policy, capacity/recipe/currency decisions, actual full animation/audio/device evidence and normal-player AI/economy playtests remain with existing owners."
+}

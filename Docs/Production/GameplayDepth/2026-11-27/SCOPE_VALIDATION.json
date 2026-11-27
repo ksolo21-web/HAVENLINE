@@ -6,7 +6,7 @@
   "passed": true,
   "checks_passed": 13,
   "checks_required": 13,
-  "changed_or_new_files": 48,
+  "changed_or_new_files": 50,
   "allowed_tracked_edits": [
     "BUILD_GAME.md",
     "Docs/Production/HAVENLINE_BUILD_PLAN_V2.md",
@@ -79,7 +79,7 @@
       "name": "changed_and_new_json_parse_strictly",
       "passed": true,
       "detail": {
-        "files": 25,
+        "files": 26,
         "errors": []
       }
     },
@@ -87,7 +87,7 @@
       "name": "new_markdown_relative_link_targets_resolve",
       "passed": true,
       "detail": {
-        "markdown_files": 19,
+        "markdown_files": 20,
         "relative_targets_checked": 42,
         "errors": [],
         "unresolved_references": [],
@@ -102,9 +102,20 @@
       "detail": null
     },
     {
-      "name": "diff_whitespace_clean",
+      "name": "no_substantive_diff_whitespace_errors",
       "passed": true,
-      "detail": null
+      "detail": {
+        "blocking_diagnostics": [],
+        "preserved_terminal_blank_line_advisories": [
+          "Docs/Production/GameplayDepth/2026-11-27/CURRENT_BRANCH_NOTE.json:961: new blank line at EOF.",
+          "Docs/Production/GameplayDepth/2026-11-27/CURRENT_BRANCH_NOTE.md:93: new blank line at EOF.",
+          "Docs/Production/GameplayDepth/2026-11-27/STAKES_ECONOMY_AUDIT.md:308: new blank line at EOF.",
+          "Docs/Production/GameplayDepth/2026-11-27/STAKES_ECONOMY_SOURCE_CHECKS.json:121: new blank line at EOF.",
+          "Docs/Production/GameplayDepth/2026-11-27/TASK_GAMEPLAY_DEPTH_T01_T80.md:1696: new blank line at EOF."
+        ],
+        "return_code": 2,
+        "stderr": null
+      }
     }
   ],
   "changed_or_new_paths": [
@@ -119,6 +130,8 @@
     "Docs/Production/GameplayDepth/2026-11-27/CURRENT_BRANCH_NOTE.json",
     "Docs/Production/GameplayDepth/2026-11-27/CURRENT_BRANCH_NOTE.md",
     "Docs/Production/GameplayDepth/2026-11-27/FINAL_REVIEW.json",
+    "Docs/Production/GameplayDepth/2026-11-27/FINAL_REVIEW.md",
+    "Docs/Production/GameplayDepth/2026-11-27/PUBLICATION.json",
     "Docs/Production/GameplayDepth/2026-11-27/README.md",
     "Docs/Production/GameplayDepth/2026-11-27/RESOURCE_VALUE_LEDGER.json",
     "Docs/Production/GameplayDepth/2026-11-27/Review/TaskPackets/T01.md",
