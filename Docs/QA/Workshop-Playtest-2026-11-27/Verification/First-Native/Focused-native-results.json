@@ -1,0 +1,1357 @@
+{
+  "source": "dbbf88b09ec17fc95dedf677feb887f337a96d5e",
+  "scene": "res://field_opening.tscn",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "suites": 10,
+  "native_runs": 11,
+  "tests": {
+    "qa_build15_economy_migration": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_build15_economy_migration-1.log",
+        "log_sha256": "4ed12cbe4e7b8e220eea74960b77956e0ce4d6538ff7c3b86aa0bd26f5ebb81d",
+        "summary": [
+          {
+            "all prior finished-goods accounts remain intact": true,
+            "converted contract finalizes once and cold-reopens paid": true,
+            "current saves reject a new mixed order": true,
+            "fully paid Build14 garage keeps original processed receipt and truck eligibility": true,
+            "legacy products still have actual construction receipt lines": true,
+            "migration retires the single unsold quote and keeps financial history": true,
+            "new garage accepts ordinary wood and stone before any machines": true,
+            "next customer takes only a meal and pays only its price": true,
+            "obsolete Build14 mixed quote cannot collect payment": true,
+            "partly funded processed quote credits matching whole raw bundles": true,
+            "processed credits cannot be fabricated on an existing receipt": true,
+            "raw payment opens the truck and reopens at exact balances": true,
+            "unfunded old garage gets the new raw quote": true,
+            "unpaid fractions keep near-complete legacy contract open": true
+          }
+        ]
+      }
+    ],
+    "qa_field_progression": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_field_progression-1.log",
+        "log_sha256": "f182bb8158fa387de778bbfd1b6e9627ca957e0af7de4ef2ae8ecf689e4d9990",
+        "summary": [
+          {
+            "Built storage_meat": true,
+            "Built storage_stone": true,
+            "Built storage_wood": true,
+            "East expansion unlocks after all 3 tiers": true,
+            "Existing field save reopens through modern migration": true,
+            "First expansion opens only starter house": true,
+            "Hearth opens only expansion": true,
+            "Historical missing tiers funded in order": true,
+            "Historical out-of-order purchase and partial retained": true,
+            "Insufficient funds storage_meat": true,
+            "Insufficient funds storage_stone": true,
+            "Insufficient funds storage_wood": true,
+            "Migrate funded old axes and exact balances": true,
+            "Migrated equipment purchase order round-trips": true,
+            "Migration cannot spend unavailable stock": true,
+            "No duplicate debit storage_meat": true,
+            "No duplicate debit storage_stone": true,
+            "No duplicate debit storage_wood": true,
+            "No historical double charge": true,
+            "No premature storage purchase": true,
+            "Original field save written through old schema": true,
+            "Partial payment storage_meat": true,
+            "Partial payment storage_stone": true,
+            "Partial payment storage_wood": true,
+            "Post-migration stage commits atomically": true,
+            "Reject reordered unrelated completion": true,
+            "Reload retains grandfathered equipment, stock and new stage": true,
+            "Resume partial storage_meat": true,
+            "Resume partial storage_stone": true,
+            "Resume partial storage_wood": true,
+            "Retains tier and downstream goals": true,
+            "Visual tier independent from earned bays": true,
+            "json round-trip of funded price locks 0": true,
+            "json round-trip of funded price locks 1": true,
+            "json round-trip of funded price locks 2": true,
+            "old partial finishes without windfall; next expansion charges new price": true,
+            "old partially paid hearth still owes two packets": true,
+            "reject later cash field on claimed v5 receipt 0": true,
+            "reject later cash field on claimed v5 receipt 1": true,
+            "reject later cash field on claimed v5 receipt 2": true,
+            "reject unauthorized or doubled price lock center_hearth 0": true,
+            "reject unauthorized or doubled price lock center_hearth 1": true,
+            "reject unauthorized or doubled price lock center_hearth 2": true,
+            "reject unauthorized or doubled price lock storage_stone 0": true,
+            "reject unauthorized or doubled price lock storage_stone 1": true,
+            "reject unauthorized or doubled price lock storage_stone 2": true,
+            "reject unauthorized or doubled price lock unknown 0": true,
+            "reject unauthorized or doubled price lock unknown 1": true,
+            "reject unauthorized or doubled price lock unknown 2": true,
+            "unstarted old install sees the same 200 timber as fresh": true,
+            "v5 partial expansion and earned camp migrate, survivor 0": true,
+            "v5 partial expansion and earned camp migrate, survivor 1": true,
+            "v5 partial expansion and earned camp migrate, survivor 2": true,
+            "v5 survivor contract and payment state retained, receipt 0": true,
+            "v5 survivor contract and payment state retained, receipt 1": true,
+            "v5 survivor contract and payment state retained, receipt 2": true
+          }
+        ]
+      }
+    ],
+    "qa_workshop_handoff": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_workshop_handoff-1.log",
+        "log_sha256": "4dccad5938a6de3f65ef22bf96d0113db6ea1d7eebd1f940a511441df83d4b8a",
+        "summary": [
+          {
+            "checks": {
+              "existing workshop save loads": true,
+              "meat can opt out of walk-up handoff": true,
+              "meat can revisit the station sheet": true,
+              "meat cannot operate remotely": true,
+              "meat collects through the real touch command": true,
+              "meat completed goods wait on the output tray": true,
+              "meat is a paid workshop": true,
+              "meat is reachable through Camp then Workshops": true,
+              "meat loads through the real touch command": true,
+              "meat manually loaded input produces a finished item": true,
+              "meat opens its station again": true,
+              "meat reaches the apron and waits for the chosen action": true,
+              "normal save succeeds": true,
+              "stone can opt out of walk-up handoff": true,
+              "stone can revisit the station sheet": true,
+              "stone cannot operate remotely": true,
+              "stone collects through the real touch command": true,
+              "stone completed goods wait on the output tray": true,
+              "stone is a paid workshop": true,
+              "stone is reachable through Camp then Workshops": true,
+              "stone loads through the real touch command": true,
+              "stone manually loaded input produces a finished item": true,
+              "stone opens its station again": true,
+              "stone reaches the apron and waits for the chosen action": true,
+              "wood can opt out of walk-up handoff": true,
+              "wood can revisit the station sheet": true,
+              "wood cannot operate remotely": true,
+              "wood collects through the real touch command": true,
+              "wood completed goods wait on the output tray": true,
+              "wood is a paid workshop": true,
+              "wood is reachable through Camp then Workshops": true,
+              "wood loads through the real touch command": true,
+              "wood manually loaded input produces a finished item": true,
+              "wood opens its station again": true,
+              "wood reaches the apron and waits for the chosen action": true
+            }
+          }
+        ]
+      }
+    ],
+    "qa_field_market": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_field_market-1.log",
+        "log_sha256": "a09f559318f2d7a4376fc9efe635b18a08af2491924f7c92463ca149d4c18920",
+        "summary": [
+          {
+            "checks": {
+              "a concurrent second pickup cannot claim the same money": true,
+              "cash and legacy stock pass exact save validation": true,
+              "counter leaves the player's planks in the pack": true,
+              "customer buys one meal and leaves the rest of the stock": true,
+              "customer self-serves a two-item order without anyone at counter": true,
+              "first displayed developed order asks for two meals": true,
+              "held goods do not make a customer pay": true,
+              "next developed order requests only a meal": true,
+              "old paid workshop profile opens in the new schema": true,
+              "one visit stocks both meals and collects the old cash": true,
+              "owned worker banks its payment once": true,
+              "owned worker drops both meals and picks up all posted cash": true,
+              "owned worker loads both meals and leaves warehouse planks": true,
+              "paid fixture and new typed accounting agree": true,
+              "physical sale contains only the meal": true,
+              "reopening preserves the quoted whole basket": true,
+              "stored planks cannot substitute for a meal": true
+            },
+            "money": 1,
+            "paid_goods": {
+              "blocks": 0,
+              "meal": 11,
+              "planks": 0
+            },
+            "served": 10
+          }
+        ]
+      }
+    ],
+    "qa_snow_truck": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_snow_truck-1.log",
+        "log_sha256": "8dca6fcc9d5a116d0cde7f70c1d07bda76a023872df4d5ddaa5fda8b27e3ccbc",
+        "summary": [
+          {
+            "checks": {
+              "a fresh camp boots": true,
+              "affordable replacement at the garage": true,
+              "can drive the replacement truck": true,
+              "driven blades break a real metal bank": true,
+              "durable owned truck starts at full health": true,
+              "garage and truck begin locked": true,
+              "garage replaces a fence section and keeps both walk gates": true,
+              "ground pickup goes into truck, not player pack": true,
+              "interior wreck retains salvage": true,
+              "lethal contact applies after damage cooldown": true,
+              "mined metal goes to truck exactly once": true,
+              "mounted using player input": true,
+              "moving truck leaves paired treads outside camp": true,
+              "normal thumbstick drives out through garage": true,
+              "outside loss survives cold reload": true,
+              "outside wreck loses cargo without salvage": true,
+              "outside wreck position survives cold reload": true,
+              "park transfers the entire cargo once": true,
+              "pay separate garage offer": true,
+              "pay separate truck offer": true,
+              "recover interior cargo exactly once": true,
+              "replacement is completely outside camp": true,
+              "replacement takes cargo before wreck": true,
+              "restored player controls and backpack": true,
+              "reverse returns into garage and parks": true,
+              "save remains usable after all truck operations": true,
+              "setup: center_hearth": true,
+              "setup: expansion_1": true,
+              "setup: expansion_2": true,
+              "setup: storage_meat": true,
+              "setup: storage_stone": true,
+              "setup: storage_wood": true,
+              "truck stays locked until garage is built": true,
+              "whole new truck is parked in the bay": true
+            }
+          }
+        ]
+      }
+    ],
+    "qa_staffed_ballista": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_staffed_ballista-1.log",
+        "log_sha256": "ac6145dd9f1bcbfb7d4263d8b0a7590198a4dc2c7faac5ad14322aedda77e003",
+        "summary": [
+          {
+            "checks": {
+              "A fresh quarrel is seated before the next discharge": true,
+              "Asset that leaves the stock is the displayed textured quarrel": true,
+              "Bolt travels toward the live target before damage": true,
+              "Both feet stay on the turning tread for a full revolution": true,
+              "Both gloves follow the modeled controls while turning": true,
+              "Bow has a two-limb silhouette wider than the operator": true,
+              "Crew hips, chest and thighs stay behind the swept bow": true,
+              "Crew works the stock while the next bolt loads": true,
+              "Glove L stays within a gloved palm of the operating grip": true,
+              "Glove R stays within a gloved palm of the operating grip": true,
+              "No visible station, operator or fire before payment": true,
+              "Purchased camp exposes an occupied open deck": true,
+              "Purchased footings rise before the crew takes its station": true,
+              "Real hit, contact flash and no duplicate damage": true,
+              "Release originates at loaded bolt before the first travel tick": true
+            },
+            "observed": {
+              "glove_to_grip_L_m": 5.8400388525115e-07,
+              "glove_to_grip_R_m": 5.33120157797384e-07,
+              "max_glove_to_handle_across_traverse_m": 1.09257121039263e-06,
+              "muzzle_error_m": 0.0,
+              "winding_hand_travel_m": 0.12370877712965
+            }
+          }
+        ]
+      }
+    ],
+    "qa_field_tracks_tower": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_field_tracks_tower-1.log",
+        "log_sha256": "c35efc5eee780518035eef194351186303dbfa89c37c23276ed1a9b0e614a509",
+        "summary": [
+          {
+            "checks": {
+              "boss paws larger": true,
+              "bounded batching": true,
+              "completed deck exposes the bow and its operator": true,
+              "dead actors cease planting": true,
+              "footings build before armed deck": true,
+              "four ordinary and four boss paws plant": true,
+              "freed actor unregistered": true,
+              "integrated hero rig produces both planted boot tracks": true,
+              "moving prop and stationary survivor leave no tracks": true,
+              "new survivor automatically discovered": true,
+              "prints fade and chunks retire": true,
+              "separate modeled bolt and world launch anchor": true,
+              "solid tower marks actual player occlusion on the stone route at 1x": true,
+              "solid tower marks actual player occlusion on the stone route at 2x": true,
+              "standing still creates no impressions": true,
+              "teleport and non-snow omitted": true,
+              "unrigged survivor leaves alternating soles": true,
+              "warm expansion clears old tracks immediately": true
+            },
+            "human_marks": 11,
+            "pass": true,
+            "paw_bones_with_landings": {
+              "boss": 4,
+              "wolf": 4
+            },
+            "paw_widths": [
+              "0.245",
+              "0.387"
+            ],
+            "sole_bones": 2,
+            "sole_sides": 2
+          }
+        ]
+      }
+    ],
+    "qa_worker_harvest": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_worker_harvest-1.log",
+        "log_sha256": "f00bd5467cdff3081166e2c3f2f7fd9a2be1ee0d9339fb1635f4c25bc5c511db",
+        "summary": [
+          {
+            "cameras": [],
+            "checks": [
+              "paid helper physically rescued",
+              "real axe edge contacts on at least two different trees",
+              "real pick head contacts repeat across at least two stone-bank cycles",
+              "autonomous worker delivered recurring timber and stone to the warehouse",
+              "parked player supplied neither tool contact nor wallet receipts",
+              "worker stays live and transfers are valid",
+              "a cold ledger conserves the repeated work"
+            ],
+            "failures": [],
+            "first_chop": 218,
+            "first_mine": 2743,
+            "last_frame": 6262,
+            "stone_contacts": {
+              "starter-stone": 6
+            },
+            "stone_deposits": 4,
+            "trace": [
+              {
+                "load": {
+                  "coal": 0,
+                  "meat": 0,
+                  "metal": 0,
+                  "slate": 0,
+                  "stone": 0,
+                  "wood": 0
+                },
+                "phase": "to_tree",
+                "site": "survivor-work-pine",
+                "tick": 0,
+                "worker": "(-5.1, 0.0, 9.9)"
+              },
+              {
+                "load": {
+                  "coal": 0,
+                  "meat": 0,
+                  "metal": 0,
+                  "slate": 0,
+                  "stone": 0,
+                  "wood": 2
+                },
+                "phase": "bin_delivery",
+                "site": "",
+                "tick": 976,
+                "worker": "(-3.048895, 0.0, -1.171038)"
+              },
+              {
+                "load": {
+                  "coal": 0,
+                  "meat": 0,
+                  "metal": 0,
+                  "slate": 0,
+                  "stone": 0,
+                  "wood": 0
+                },
+                "phase": "mining_approach",
+                "site": "starter-stone",
+                "tick": 2309,
+                "worker": "(-3.061438, 0.0, -1.184668)"
+              },
+              {
+                "load": {
+                  "coal": 0,
+                  "meat": 0,
+                  "metal": 0,
+                  "slate": 0,
+                  "stone": 3,
+                  "wood": 0
+                },
+                "phase": "to_tree",
+                "site": "pine@-5400,13500",
+                "tick": 2996,
+                "worker": "(-2.215766, 0.0, 11.27745)"
+              },
+              {
+                "load": {
+                  "coal": 0,
+                  "meat": 0,
+                  "metal": 0,
+                  "slate": 0,
+                  "stone": 3,
+                  "wood": 3
+                },
+                "phase": "bulk_return",
+                "site": "",
+                "tick": 3394,
+                "worker": "(-5.309122, 0.0, 13.02817)"
+              },
+              {
+                "load": {
+                  "coal": 0,
+                  "meat": 0,
+                  "metal": 0,
+                  "slate": 0,
+                  "stone": 3,
+                  "wood": 3
+                },
+                "phase": "bin_delivery",
+                "site": "",
+                "tick": 3911,
+                "worker": "(-3.048891, 0.0, -1.171011)"
+              },
+              {
+                "load": {
+                  "coal": 0,
+                  "meat": 0,
+                  "metal": 0,
+                  "slate": 0,
+                  "stone": 0,
+                  "wood": 0
+                },
+                "phase": "to_tree",
+                "site": "starter-wood",
+                "tick": 4640,
+                "worker": "(-3.060435, 0.0, -1.175335)"
+              },
+              {
+                "load": {
+                  "coal": 0,
+                  "meat": 0,
+                  "metal": 0,
+                  "slate": 0,
+                  "stone": 0,
+                  "wood": 3
+                },
+                "phase": "mining_approach",
+                "site": "starter-stone",
+                "tick": 5375,
+                "worker": "(-2.29645, 0.0, 7.310096)"
+              },
+              {
+                "load": {
+                  "coal": 0,
+                  "meat": 0,
+                  "metal": 0,
+                  "slate": 0,
+                  "stone": 3,
+                  "wood": 3
+                },
+                "phase": "bulk_return",
+                "site": "",
+                "tick": 5783,
+                "worker": "(-2.216495, 0.0, 11.27153)"
+              },
+              {
+                "load": {
+                  "coal": 0,
+                  "meat": 0,
+                  "metal": 0,
+                  "slate": 0,
+                  "stone": 3,
+                  "wood": 3
+                },
+                "phase": "bin_delivery",
+                "site": "",
+                "tick": 6244,
+                "worker": "(-3.048892, 0.0, -1.17102)"
+              }
+            ],
+            "viewport": "(64, 64)",
+            "wood_contacts": {
+              "pine@-5400,13500": 3,
+              "starter-wood": 3,
+              "survivor-work-pine": 3
+            },
+            "wood_deposits": 6,
+            "work_motion": {
+              "Chop": [
+                {
+                  "aim": "(0.0, 1.1, 0.709263)",
+                  "grip_error_m": 1.06790503195953e-06,
+                  "lowest_sole_m": 7.45058059692383e-09,
+                  "phase": 0.032258064516129,
+                  "tip": "(0.32347, 1.095742, 0.612293)",
+                  "tip_error_m": 0.337719649076462,
+                  "tool_position": "(-4.118605, 0.657825, 9.152815)"
+                },
+                {
+                  "aim": "(0.0, 1.1, 0.709263)",
+                  "grip_error_m": 1.06790503195953e-06,
+                  "lowest_sole_m": -2.23517417907715e-08,
+                  "phase": 0.161290322580645,
+                  "tip": "(0.488575, 1.243434, 0.427852)",
+                  "tip_error_m": 0.581782639026642,
+                  "tool_position": "(-4.091784, 0.78617, 9.099722)"
+                },
+                {
+                  "aim": "(0.0, 1.1, 0.709263)",
+                  "grip_error_m": 9.55535142566077e-07,
+                  "lowest_sole_m": -3.72529029846191e-08,
+                  "phase": 0.268817204301075,
+                  "tip": "(0.565743, 1.281207, 0.490277)",
+                  "tip_error_m": 0.633131802082062,
+                  "tool_position": "(-4.103581, 0.897252, 9.046528)"
+                },
+                {
+                  "aim": "(0.0, 1.1, 0.709263)",
+                  "grip_error_m": 5.96046447753906e-08,
+                  "lowest_sole_m": 0.0,
+                  "phase": 0.354838709677419,
+                  "tip": "(0.585898, 1.270232, 0.546231)",
+                  "tip_error_m": 0.631534516811371,
+                  "tool_position": "(-4.107697, 0.941605, 9.029088)"
+                },
+                {
+                  "aim": "(0.0, 1.1, 0.709263)",
+                  "grip_error_m": 4.91512480493839e-07,
+                  "lowest_sole_m": -7.45058059692383e-09,
+                  "phase": 0.46236559139785,
+                  "tip": "(0.338411, 1.175507, 0.713663)",
+                  "tip_error_m": 0.346761077642441,
+                  "tool_position": "(-4.096477, 0.787366, 9.099641)"
+                },
+                {
+                  "aim": "(0.0, 1.1, 0.709263)",
+                  "grip_error_m": 1.06624031559477e-06,
+                  "lowest_sole_m": -2.23517417907715e-08,
+                  "phase": 0.559139784946237,
+                  "tip": "(0.150426, 1.120924, 0.679029)",
+                  "tip_error_m": 0.154855072498322,
+                  "tool_position": "(-4.103323, 0.611241, 9.15733)"
+                },
+                {
+                  "aim": "(0.0, 1.1, 0.709263)",
+                  "grip_error_m": 1.06624031559477e-06,
+                  "lowest_sole_m": -5.21540641784668e-08,
+                  "phase": 0.623655913978496,
+                  "tip": "(0.079535, 1.11724, 0.609603)",
+                  "tip_error_m": 0.128667220473289,
+                  "tool_position": "(-4.116516, 0.539824, 9.164928)"
+                },
+                {
+                  "aim": "(0.0, 1.1, 0.709263)",
+                  "grip_error_m": 9.5413986400672e-07,
+                  "lowest_sole_m": -2.23517417907715e-08,
+                  "phase": 0.709677419354839,
+                  "tip": "(0.113661, 1.098799, 0.552378)",
+                  "tip_error_m": 0.193734303116798,
+                  "tool_position": "(-4.120549, 0.512613, 9.200198)"
+                },
+                {
+                  "aim": "(0.0, 1.1, 0.709263)",
+                  "grip_error_m": 9.5367431640625e-07,
+                  "lowest_sole_m": -2.23517417907715e-08,
+                  "phase": 0.795698924731183,
+                  "tip": "(0.252863, 1.041959, 0.57813)",
+                  "tip_error_m": 0.290696114301682,
+                  "tool_position": "(-4.09244, 0.555236, 9.227945)"
+                },
+                {
+                  "aim": "(0.0, 1.1, 0.709263)",
+                  "grip_error_m": 1.06790503195953e-06,
+                  "lowest_sole_m": 0.0,
+                  "phase": 0.89247311827957,
+                  "tip": "(0.374543, 1.005685, 0.599671)",
+                  "tip_error_m": 0.401482880115509,
+                  "tool_position": "(-4.097992, 0.63236, 9.190299)"
+                },
+                {
+                  "aim": "(0.0, 1.1, 0.709263)",
+                  "grip_error_m": 1.06790503195953e-06,
+                  "lowest_sole_m": 7.45058059692383e-09,
+                  "phase": 0.989247311827957,
+                  "tip": "(0.295556, 1.054692, 0.648919)",
+                  "tip_error_m": 0.305037349462509,
+                  "tool_position": "(-4.123089, 0.638582, 9.161966)"
+                }
+              ],
+              "Mine": [
+                {
+                  "aim": "(0.0, 0.59, 0.455089)",
+                  "grip_error_m": 5.44233171240194e-06,
+                  "lowest_sole_m": 7.45058059692383e-09,
+                  "phase": 0.032258064516129,
+                  "tip": "(0.213164, 0.802024, 0.800607)",
+                  "tip_error_m": 0.45800706744194,
+                  "tool_position": "(-1.848109, 0.743435, 11.05942)"
+                },
+                {
+                  "aim": "(0.0, 0.59, 0.455089)",
+                  "grip_error_m": 6.29443093203008e-06,
+                  "lowest_sole_m": -2.23517417907715e-08,
+                  "phase": 0.161290322580645,
+                  "tip": "(0.418817, 1.096592, 0.638128)",
+                  "tip_error_m": 0.682304441928864,
+                  "tool_position": "(-1.781471, 0.921504, 11.05867)"
+                },
+                {
+                  "aim": "(0.0, 0.59, 0.455089)",
+                  "grip_error_m": 6.82856989442371e-06,
+                  "lowest_sole_m": -3.72529029846191e-08,
+                  "phase": 0.268817204301075,
+                  "tip": "(0.437807, 1.2135, 0.652328)",
+                  "tip_error_m": 0.786970734596252,
+                  "tool_position": "(-1.767878, 1.043471, 11.07776)"
+                },
+                {
+                  "aim": "(0.0, 0.59, 0.455089)",
+                  "grip_error_m": 6.82856989442371e-06,
+                  "lowest_sole_m": 0.0,
+                  "phase": 0.354838709677419,
+                  "tip": "(0.433107, 1.26071, 0.639504)",
+                  "tip_error_m": 0.819411337375641,
+                  "tool_position": "(-1.75881, 1.08996, 11.06328)"
+                },
+                {
+                  "aim": "(0.0, 0.59, 0.455089)",
+                  "grip_error_m": 3.93255186281749e-06,
+                  "lowest_sole_m": -7.45058059692383e-09,
+                  "phase": 0.46236559139785,
+                  "tip": "(0.276144, 1.207632, 0.528034)",
+                  "tip_error_m": 0.68047308921814,
+                  "tool_position": "(-1.769102, 0.961984, 10.91167)"
+                },
+                {
+                  "aim": "(0.0, 0.59, 0.455089)",
+                  "grip_error_m": 4.31958915214636e-06,
+                  "lowest_sole_m": -2.23517417907715e-08,
+                  "phase": 0.559139784946237,
+                  "tip": "(0.087933, 0.828409, 0.49947)",
+                  "tip_error_m": 0.257954597473145,
+                  "tool_position": "(-1.78975, 0.743931, 10.74246)"
+                },
+                {
+                  "aim": "(0.0, 0.59, 0.455089)",
+                  "grip_error_m": 7.70469250710448e-06,
+                  "lowest_sole_m": -5.21540641784668e-08,
+                  "phase": 0.623655913978496,
+                  "tip": "(-0.013589, 0.556421, 0.444104)",
+                  "tip_error_m": 0.0378534756600857,
+                  "tool_position": "(-1.800197, 0.61882, 10.65099)"
+                },
+                {
+                  "aim": "(0.0, 0.59, 0.455089)",
+                  "grip_error_m": 6.71419275022345e-06,
+                  "lowest_sole_m": -2.23517417907715e-08,
+                  "phase": 0.709677419354839,
+                  "tip": "(-0.050715, 0.422951, 0.423756)",
+                  "tip_error_m": 0.177366688847542,
+                  "tool_position": "(-1.803892, 0.596776, 10.64813)"
+                },
+                {
+                  "aim": "(0.0, 0.59, 0.455089)",
+                  "grip_error_m": 4.31958915214636e-06,
+                  "lowest_sole_m": -2.23517417907715e-08,
+                  "phase": 0.795698924731183,
+                  "tip": "(0.013452, 0.505387, 0.564555)",
+                  "tip_error_m": 0.139006733894348,
+                  "tool_position": "(-1.829458, 0.616641, 10.77998)"
+                },
+                {
+                  "aim": "(0.0, 0.59, 0.455089)",
+                  "grip_error_m": 3.88117314287229e-06,
+                  "lowest_sole_m": 0.0,
+                  "phase": 0.89247311827957,
+                  "tip": "(0.134645, 0.681495, 0.763754)",
+                  "tip_error_m": 0.348957240581512,
+                  "tool_position": "(-1.851499, 0.695177, 10.99386)"
+                },
+                {
+                  "aim": "(0.0, 0.59, 0.455089)",
+                  "grip_error_m": 5.62340665055672e-06,
+                  "lowest_sole_m": 7.45058059692383e-09,
+                  "phase": 0.989247311827957,
+                  "tip": "(0.159382, 0.724174, 0.819205)",
+                  "tip_error_m": 0.419501066207886,
+                  "tool_position": "(-1.861563, 0.708868, 11.05349)"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "qa_survivor_hunt": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_survivor_hunt-1.log",
+        "log_sha256": "9afa14bfb0485c617726e8a1e8db9d63387df3a05f4f6de5e5255f6907b47b51",
+        "summary": [
+          {
+            "beats": [
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "to_tree",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 2,
+                "tick": 0,
+                "worker": "(-5.1, 0.0, 9.9)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "work_ready",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 2,
+                "tick": 164,
+                "worker": "(-4.330666, 0.0, 9.049653)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "chopping",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 2,
+                "tick": 165,
+                "worker": "(-4.330666, 0.0, 9.049653)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "falling",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 2,
+                "tick": 447,
+                "worker": "(-4.330666, 0.0, 9.049653)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "pickup",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 2,
+                "tick": 458,
+                "worker": "(-4.330666, 0.0, 9.049653)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "carrying",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 2,
+                "tick": 482,
+                "worker": "(-4.297333, 0.0, 9.113473)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "unload",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 2,
+                "tick": 959,
+                "worker": "(-3.048895, 0.0, -1.171038)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "bin_delivery",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 2,
+                "tick": 976,
+                "worker": "(-3.048895, 0.0, -1.171038)"
+              },
+              {
+                "aboard": 1,
+                "hp": 3,
+                "phase": "supply_out",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 994,
+                "worker": "(-3.048895, 0.0, -1.171038)"
+              },
+              {
+                "aboard": 1,
+                "hp": 3,
+                "phase": "supply_unload",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 1184,
+                "worker": "(-0.392184, 0.0, -5.030793)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "supply_back",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 1204,
+                "worker": "(-0.392184, 0.0, -5.030793)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "meal_collect",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 1395,
+                "worker": "(-3.040224, 0.0, -1.183985)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "meal_serve",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 1573,
+                "worker": "(1.487754, 0.0, -5.037356)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "supply_pickup",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 1695,
+                "worker": "(2.797002, 0.0, -7.447407)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "supply_out",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 1914,
+                "worker": "(-3.048753, 0.0, -1.180508)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "supply_unload",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 2087,
+                "worker": "(-7.09496, 0.0, -5.372983)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "supply_back",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 2097,
+                "worker": "(-7.09496, 0.0, -5.372983)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "mining_approach",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 2309,
+                "worker": "(-3.061438, 0.0, -1.184668)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "mining",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 2690,
+                "worker": "(-1.703465, 0.0, 10.76441)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "foraging",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 2972,
+                "worker": "(-1.703465, 0.0, 10.76441)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "to_tree",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 2996,
+                "worker": "(-2.215766, 0.0, 11.27745)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "work_ready",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 3074,
+                "worker": "(-4.803102, 0.0, 13.08337)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "chopping",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 3075,
+                "worker": "(-4.803102, 0.0, 13.08337)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "falling",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 3357,
+                "worker": "(-4.803102, 0.0, 13.08337)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "pickup",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 3370,
+                "worker": "(-4.803102, 0.0, 13.08337)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "bulk_return",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 3394,
+                "worker": "(-5.309122, 0.0, 13.02817)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "bin_delivery",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 3911,
+                "worker": "(-3.048891, 0.0, -1.171011)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "meal_serve",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 3942,
+                "worker": "(-3.048891, 0.0, -1.171011)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "supply_pickup",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 4147,
+                "worker": "(2.798887, 0.0, -7.455313)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "supply_out",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 4396,
+                "worker": "(-3.04223, 0.0, -1.18318)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "supply_unload",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 4492,
+                "worker": "(-6.745424, 0.0, 0.178931)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "supply_back",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 4502,
+                "worker": "(-6.745424, 0.0, 0.178931)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "to_tree",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 4640,
+                "worker": "(-3.060435, 0.0, -1.175335)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "work_ready",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 5056,
+                "worker": "(-1.989384, 0.0, 7.245019)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "chopping",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 5057,
+                "worker": "(-1.989384, 0.0, 7.245019)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "falling",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 5339,
+                "worker": "(-1.989384, 0.0, 7.245019)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "pickup",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 5351,
+                "worker": "(-1.989384, 0.0, 7.245019)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "mining_approach",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 5375,
+                "worker": "(-2.29645, 0.0, 7.310096)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "mining",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 5477,
+                "worker": "(-2.299082, 0.0, 10.60128)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "foraging",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 5759,
+                "worker": "(-2.299082, 0.0, 10.60128)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "bulk_return",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 5783,
+                "worker": "(-2.216495, 0.0, 11.27153)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "bin_delivery",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 6244,
+                "worker": "(-3.048892, 0.0, -1.17102)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "supply_out",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 6275,
+                "worker": "(-3.048892, 0.0, -1.17102)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "supply_unload",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 6470,
+                "worker": "(-7.094931, 0.0, -5.372942)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "supply_back",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 6480,
+                "worker": "(-7.094931, 0.0, -5.372942)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "hunt_approach",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 6692,
+                "worker": "(-3.061438, 0.0, -1.184668)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "hunt_strike",
+                "stag": "(6.0891, 0.0, 14.44124)",
+                "stored": 0,
+                "tick": 7156,
+                "worker": "(5.404397, 0.0, 13.7111)"
+              },
+              {
+                "aboard": 0,
+                "hp": 0,
+                "phase": "hunt_pickup",
+                "stag": "(5.148711, 0.0, 14.2655)",
+                "stored": 0,
+                "tick": 7373,
+                "worker": "(5.404397, 0.0, 13.7111)"
+              },
+              {
+                "aboard": 3,
+                "hp": 0,
+                "phase": "bulk_return",
+                "stag": "(5.148711, 0.0, 14.2655)",
+                "stored": 0,
+                "tick": 7423,
+                "worker": "(5.152696, 0.0, 14.25686)"
+              },
+              {
+                "aboard": 3,
+                "hp": 0,
+                "phase": "bin_delivery",
+                "stag": "(5.148711, 0.0, 14.2655)",
+                "stored": 0,
+                "tick": 7973,
+                "worker": "(-3.048892, 0.0, -1.171016)"
+              },
+              {
+                "aboard": 2,
+                "hp": 0,
+                "phase": "supply_out",
+                "stag": "(5.148711, 0.0, 14.2655)",
+                "stored": 0,
+                "tick": 7994,
+                "worker": "(-3.048892, 0.0, -1.171016)"
+              }
+            ],
+            "camera": {},
+            "checks": [
+              "paid helper physically rescued",
+              "paid survivor proactively routes to prey",
+              "native carried axe sweep hits after proactive pursuit",
+              "defeated stag produces one three-bundle meat reward",
+              "real pickup packs on separate meat shelf, all three go home",
+              "same native worker returns and stocks exactly three meat",
+              "worker hunt credited no material to the distant player",
+              "actual moving stag sampled four rig hooves and left cloven prints",
+              "actual post-hunt save migration and conservation accept",
+              "cold state records the prey cooldown",
+              "native wildlife cooldown returned the same single prey alive"
+            ],
+            "errors": [],
+            "first_hit": 7185,
+            "hoof_count": 4,
+            "hoof_max": 0.119230061769485,
+            "hoof_min": -0.0282738506793976,
+            "hoof_peak": 16,
+            "kill": 7373,
+            "landing": 7994,
+            "meat_peak": 3,
+            "proactive": 6692,
+            "transport": 7423,
+            "warehouse_count": 3
+          }
+        ]
+      }
+    ],
+    "qa_camp_layout": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_camp_layout-1.log",
+        "log_sha256": "e0d68c8aa8885e8b3e68770c637f61ea182fd36eb335baec0c8bdbbbca3cb16b",
+        "summary": [
+          {
+            "checks": {
+              "A customer pays for the real roast across the relocated fence": true,
+              "Cooker paid normally with the exact 120 wood and 80 stone": true,
+              "Entering the moved warehouse collects its actual roasts at the stocked shelf": true,
+              "Exit returns player's gameplay camera and controls": true,
+              "Gameplay pinch still works after moving": true,
+              "Invalid destination leaves all equipment untouched": true,
+              "Malformed layout restore rejected without partial mutation": true,
+              "Meat handed off at relocated cooker produces a real meal": true,
+              "Model, guard, hopper, outfeed and both worker aprons move as a unit": true,
+              "Mouse opens identical layout controls": true,
+              "Moving the counter preserves each paid note": true,
+              "Moving up to the relocated house stocks its real FOOD shelf": true,
+              "Overlap rejected before it can persist": true,
+              "Relocated furnace light, art and solid footing stay together": true,
+              "Service point and queue meet across the relocated north fence bay": true,
+              "Spawn, defense side and gate are protected": true,
+              "Storehouse at new position accepts side loading": true,
+              "Touch opens layout and liberates joystick": true,
+              "Tower's paid physical footings stay on the moved defense side": true,
+              "Unowned cooker cannot be placed": true,
+              "Warehouse owns the relocated cooker's entire delivered lot": true,
+              "Worker detours around the moved furnace without crossing its body": true,
+              "camp_cooker committed by confirmation": true,
+              "camp_cooker picked by tapping its actual artwork": true,
+              "camp_cooker previews its physical destination": true,
+              "center_hearth committed by confirmation": true,
+              "center_hearth picked by tapping its actual artwork": true,
+              "center_hearth previews its physical destination": true,
+              "north_counter committed by confirmation": true,
+              "north_counter inputs, outputs and guard follow": true,
+              "north_counter picked by tapping its actual artwork": true,
+              "north_counter previews its physical destination": true,
+              "quarry_drill committed by confirmation": true,
+              "quarry_drill inputs, outputs and guard follow": true,
+              "quarry_drill picked by tapping its actual artwork": true,
+              "quarry_drill previews its physical destination": true,
+              "saw_bench committed by confirmation": true,
+              "saw_bench inputs, outputs and guard follow": true,
+              "saw_bench picked by tapping its actual artwork": true,
+              "saw_bench previews its physical destination": true,
+              "storage_wood committed by confirmation": true,
+              "storage_wood inputs, outputs and guard follow": true,
+              "storage_wood picked by tapping its actual artwork": true,
+              "storage_wood previews its physical destination": true,
+              "watchtower committed by confirmation": true,
+              "watchtower picked by tapping its actual artwork": true,
+              "watchtower previews its physical destination": true
+            },
+            "placements": [
+              {
+                "camp_cooker": [
+                  4.75,
+                  2.75
+                ],
+                "center_hearth": [
+                  -2.75,
+                  -2.5
+                ],
+                "north_counter": [
+                  4.0,
+                  -9.0
+                ],
+                "quarry_drill": [
+                  7.75,
+                  -6.25
+                ],
+                "saw_bench": [
+                  -3.5,
+                  2.5
+                ],
+                "storage_wood": [
+                  4.5,
+                  -2.5
+                ],
+                "watchtower": [
+                  8.0,
+                  3.5
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_camp_layout-2.log",
+        "log_sha256": "d0cfa9639e8fbcbcbdfcbb0be7e333b25046b4bd13499866843eee781ac871cf",
+        "summary": [
+          {
+            "checks": {
+              "Cold process recovers moved furnace and defending tower": true,
+              "Cold process recovers relocated cooker, counter and storehouse": true,
+              "Cold process recovers saw and drill collision": true,
+              "Reloaded receipts and cooked meal survive relocation": true
+            },
+            "placements": [
+              {
+                "camp_cooker": [
+                  4.75,
+                  2.75
+                ],
+                "center_hearth": [
+                  -2.75,
+                  -2.5
+                ],
+                "north_counter": [
+                  4.0,
+                  -9.0
+                ],
+                "quarry_drill": [
+                  7.75,
+                  -6.25
+                ],
+                "saw_bench": [
+                  -3.5,
+                  2.5
+                ],
+                "storage_wood": [
+                  4.5,
+                  -2.5
+                ],
+                "watchtower": [
+                  8.0,
+                  3.5
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "passed": true,
+  "verified_source_before_and_after": {
+    "sha256": "09cfe6aaa2ef9c967683ad7c3c733a75dbd8ac1c0f8157709ffc9ae2b6dfbca4",
+    "checked_files": 756
+  }
+}

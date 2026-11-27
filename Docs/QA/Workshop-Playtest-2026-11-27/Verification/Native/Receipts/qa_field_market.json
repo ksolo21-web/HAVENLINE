@@ -1,0 +1,50 @@
+{
+  "stamp": {
+    "commit": "4de1b9edb0230c8c33b8d872ded47ef914a0f87f",
+    "manifest": {
+      "sha256": "842cbed64df2ad7f0ed4ddf717ae1928e8f25f9ce9a3d9d22930a1a7550c2af8",
+      "checked_files": 756
+    },
+    "runner": "1f1a38cc31074364e606c2c33a4e6a2b1c07d9d07c663d19d70d5d02245b3bc7"
+  },
+  "passed": true,
+  "runs": [
+    {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "log": "qa_field_market-1.log",
+      "log_sha256": "a09f559318f2d7a4376fc9efe635b18a08af2491924f7c92463ca149d4c18920",
+      "summary": [
+        {
+          "checks": {
+            "a concurrent second pickup cannot claim the same money": true,
+            "cash and legacy stock pass exact save validation": true,
+            "counter leaves the player's planks in the pack": true,
+            "customer buys one meal and leaves the rest of the stock": true,
+            "customer self-serves a two-item order without anyone at counter": true,
+            "first displayed developed order asks for two meals": true,
+            "held goods do not make a customer pay": true,
+            "next developed order requests only a meal": true,
+            "old paid workshop profile opens in the new schema": true,
+            "one visit stocks both meals and collects the old cash": true,
+            "owned worker banks its payment once": true,
+            "owned worker drops both meals and picks up all posted cash": true,
+            "owned worker loads both meals and leaves warehouse planks": true,
+            "paid fixture and new typed accounting agree": true,
+            "physical sale contains only the meal": true,
+            "reopening preserves the quoted whole basket": true,
+            "stored planks cannot substitute for a meal": true
+          },
+          "money": 1,
+          "paid_goods": {
+            "blocks": 0,
+            "meal": 11,
+            "planks": 0
+          },
+          "served": 10
+        }
+      ]
+    }
+  ]
+}

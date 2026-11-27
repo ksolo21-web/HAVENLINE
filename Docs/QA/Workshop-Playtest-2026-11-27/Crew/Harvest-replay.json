@@ -1,0 +1,798 @@
+{
+  "engine": "Godot 4.7.2",
+  "headless": {
+    "cameras": [],
+    "checks": [
+      "paid helper physically rescued",
+      "hired survivor holds the same approved Meshy meshes as the player",
+      "real axe edge contacts on at least two different trees",
+      "real pick head contacts repeat across at least two stone-bank cycles",
+      "autonomous worker delivered recurring timber and stone to the warehouse",
+      "parked player supplied neither tool contact nor wallet receipts",
+      "worker stays live and transfers are valid",
+      "a cold ledger conserves the repeated work"
+    ],
+    "failures": [],
+    "first_chop": 216,
+    "first_mine": 2720,
+    "last_frame": 6322,
+    "stone_contacts": {
+      "starter-stone": 6
+    },
+    "stone_deposits": 4,
+    "tools": {
+      "axe": "res://assets/tools/axe-field-grip.glb",
+      "pickaxe": "res://assets/tools/pickaxe-meshy.glb"
+    },
+    "trace": [
+      {
+        "load": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 0
+        },
+        "phase": "to_tree",
+        "site": "survivor-work-pine",
+        "tick": 0,
+        "worker": "(-5.1, 0.0, 9.9)"
+      },
+      {
+        "load": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 2
+        },
+        "phase": "bin_delivery",
+        "site": "",
+        "tick": 974,
+        "worker": "(-3.048895, 0.0, -1.171038)"
+      },
+      {
+        "load": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 0
+        },
+        "phase": "mining_approach",
+        "site": "starter-stone",
+        "tick": 2291,
+        "worker": "(-3.061438, 0.0, -1.184668)"
+      },
+      {
+        "load": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 3,
+          "wood": 0
+        },
+        "phase": "to_tree",
+        "site": "pine@-5400,13500",
+        "tick": 2995,
+        "worker": "(-2.215682, 0.0, 11.27735)"
+      },
+      {
+        "load": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 3,
+          "wood": 3
+        },
+        "phase": "bulk_return",
+        "site": "",
+        "tick": 3391,
+        "worker": "(-5.306448, 0.0, 13.02852)"
+      },
+      {
+        "load": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 3,
+          "wood": 3
+        },
+        "phase": "bin_delivery",
+        "site": "",
+        "tick": 3924,
+        "worker": "(-3.048891, 0.0, -1.171008)"
+      },
+      {
+        "load": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 0
+        },
+        "phase": "to_tree",
+        "site": "starter-wood",
+        "tick": 4653,
+        "worker": "(-3.060435, 0.0, -1.175335)"
+      },
+      {
+        "load": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 3
+        },
+        "phase": "mining_approach",
+        "site": "starter-stone",
+        "tick": 5403,
+        "worker": "(-2.29645, 0.0, 7.310096)"
+      },
+      {
+        "load": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 3,
+          "wood": 3
+        },
+        "phase": "bulk_return",
+        "site": "",
+        "tick": 5811,
+        "worker": "(-2.215887, 0.0, 11.2761)"
+      },
+      {
+        "load": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 3,
+          "wood": 3
+        },
+        "phase": "bin_delivery",
+        "site": "",
+        "tick": 6304,
+        "worker": "(-3.048893, 0.0, -1.171025)"
+      }
+    ],
+    "viewport": "(64, 64)",
+    "wood_contacts": {
+      "pine@-5400,13500": 3,
+      "starter-wood": 3,
+      "survivor-work-pine": 3
+    },
+    "wood_deposits": 6,
+    "work_motion": {
+      "Chop": [
+        {
+          "aim": "(0.098018, 0.83, 0.695545)",
+          "grip_error_m": 9.5367431640625e-07,
+          "lowest_sole_m": 7.45058059692383e-09,
+          "phase": 0.032258064516129,
+          "tip": "(0.250514, 0.784664, 0.875836)",
+          "tip_error_m": 0.240448877215385,
+          "tool_position": "(-3.80439, 0.687973, 9.065568)"
+        },
+        {
+          "aim": "(0.098018, 0.83, 0.695545)",
+          "grip_error_m": 2.45756240246919e-07,
+          "lowest_sole_m": -2.23517417907715e-08,
+          "phase": 0.161290322580645,
+          "tip": "(0.318904, 0.756295, 0.898952)",
+          "tip_error_m": 0.309189140796661,
+          "tool_position": "(-3.773185, 0.719423, 9.023998)"
+        },
+        {
+          "aim": "(0.098018, 0.83, 0.695545)",
+          "grip_error_m": 4.80548010273196e-07,
+          "lowest_sole_m": -3.72529029846191e-08,
+          "phase": 0.268817204301075,
+          "tip": "(0.367447, 0.79533, 0.881366)",
+          "tip_error_m": 0.329125761985779,
+          "tool_position": "(-3.780514, 0.77256, 8.976289)"
+        },
+        {
+          "aim": "(0.098018, 0.83, 0.695545)",
+          "grip_error_m": 1.06624031559477e-06,
+          "lowest_sole_m": 0.0,
+          "phase": 0.354838709677419,
+          "tip": "(0.38999, 0.801478, 0.876222)",
+          "tip_error_m": 0.344537109136581,
+          "tool_position": "(-3.780436, 0.787687, 8.956347)"
+        },
+        {
+          "aim": "(0.098018, 0.83, 0.695545)",
+          "grip_error_m": 9.5367431640625e-07,
+          "lowest_sole_m": -3.72529029846191e-08,
+          "phase": 0.46236559139785,
+          "tip": "(0.345966, 0.796972, 0.850315)",
+          "tip_error_m": 0.294149041175842,
+          "tool_position": "(-3.805404, 0.741684, 9.013048)"
+        },
+        {
+          "aim": "(0.098018, 0.83, 0.695545)",
+          "grip_error_m": 5.96046447753906e-08,
+          "lowest_sole_m": 7.45058059692383e-09,
+          "phase": 0.559139784946237,
+          "tip": "(0.253991, 0.848406, 0.754975)",
+          "tip_error_m": 0.167924538254738,
+          "tool_position": "(-3.91283, 0.74658, 9.067904)"
+        },
+        {
+          "aim": "(0.098018, 0.83, 0.695545)",
+          "grip_error_m": 4.76837158203125e-07,
+          "lowest_sole_m": -3.72529029846191e-08,
+          "phase": 0.623655913978496,
+          "tip": "(0.249404, 0.837392, 0.745709)",
+          "tip_error_m": 0.159652546048164,
+          "tool_position": "(-3.920461, 0.706683, 9.045148)"
+        },
+        {
+          "aim": "(0.098018, 0.83, 0.695545)",
+          "grip_error_m": 1.06624031559477e-06,
+          "lowest_sole_m": 0.0,
+          "phase": 0.709677419354839,
+          "tip": "(0.124841, 0.859423, 0.746265)",
+          "tip_error_m": 0.0644814297556877,
+          "tool_position": "(-3.942916, 0.697319, 9.092308)"
+        },
+        {
+          "aim": "(0.098018, 0.83, 0.695545)",
+          "grip_error_m": 9.5367431640625e-07,
+          "lowest_sole_m": -1.49011611938477e-08,
+          "phase": 0.795698924731183,
+          "tip": "(0.221882, 0.822564, 0.788762)",
+          "tip_error_m": 0.155200973153114,
+          "tool_position": "(-3.889563, 0.689482, 9.045696)"
+        },
+        {
+          "aim": "(0.098018, 0.83, 0.695545)",
+          "grip_error_m": 0.0,
+          "lowest_sole_m": -2.23517417907715e-08,
+          "phase": 0.89247311827957,
+          "tip": "(0.24613, 0.775693, 0.843181)",
+          "tip_error_m": 0.21606220304966,
+          "tool_position": "(-3.833127, 0.678403, 9.080225)"
+        },
+        {
+          "aim": "(0.098018, 0.83, 0.695545)",
+          "grip_error_m": 4.76837158203125e-07,
+          "lowest_sole_m": 2.23517417907715e-08,
+          "phase": 0.989247311827957,
+          "tip": "(0.23461, 0.798818, 0.865006)",
+          "tip_error_m": 0.219880133867264,
+          "tool_position": "(-3.815501, 0.689002, 9.075066)"
+        }
+      ],
+      "Mine": [
+        {
+          "aim": "(0.267721, 0.59, 0.733424)",
+          "grip_error_m": 6.48568675387651e-06,
+          "lowest_sole_m": 7.45058059692383e-09,
+          "phase": 0.032258064516129,
+          "tip": "(0.200527, 0.856296, 0.80313)",
+          "tip_error_m": 0.283350110054016,
+          "tool_position": "(-1.847125, 0.74643, 10.76792)"
+        },
+        {
+          "aim": "(0.267721, 0.59, 0.733424)",
+          "grip_error_m": 7.05755246599438e-06,
+          "lowest_sole_m": -2.23517417907715e-08,
+          "phase": 0.161290322580645,
+          "tip": "(0.209237, 0.926792, 0.8389)",
+          "tip_error_m": 0.357735097408295,
+          "tool_position": "(-1.860308, 0.832727, 10.79834)"
+        },
+        {
+          "aim": "(0.267721, 0.59, 0.733424)",
+          "grip_error_m": 7.40274344934733e-06,
+          "lowest_sole_m": -3.72529029846191e-08,
+          "phase": 0.268817204301075,
+          "tip": "(0.209423, 0.982185, 0.858392)",
+          "tip_error_m": 0.415721386671066,
+          "tool_position": "(-1.86466, 0.901275, 10.814)"
+        },
+        {
+          "aim": "(0.267721, 0.59, 0.733424)",
+          "grip_error_m": 7.05755246599438e-06,
+          "lowest_sole_m": 0.0,
+          "phase": 0.354838709677419,
+          "tip": "(0.215024, 0.989215, 0.859823)",
+          "tip_error_m": 0.422049462795258,
+          "tool_position": "(-1.857532, 0.922764, 10.81955)"
+        },
+        {
+          "aim": "(0.267721, 0.59, 0.733424)",
+          "grip_error_m": 7.48269803807489e-06,
+          "lowest_sole_m": -3.72529029846191e-08,
+          "phase": 0.46236559139785,
+          "tip": "(0.285616, 0.789477, 0.806265)",
+          "tip_error_m": 0.213112711906433,
+          "tool_position": "(-1.839634, 0.81816, 10.80447)"
+        },
+        {
+          "aim": "(0.267721, 0.59, 0.733424)",
+          "grip_error_m": 5.13603936269647e-06,
+          "lowest_sole_m": 7.45058059692383e-09,
+          "phase": 0.559139784946237,
+          "tip": "(0.31611, 0.658563, 0.693065)",
+          "tip_error_m": 0.0931186079978943,
+          "tool_position": "(-1.748236, 0.70138, 10.7525)"
+        },
+        {
+          "aim": "(0.267721, 0.59, 0.733424)",
+          "grip_error_m": 4.04829188482836e-06,
+          "lowest_sole_m": -3.72529029846191e-08,
+          "phase": 0.623655913978496,
+          "tip": "(0.276943, 0.611366, 0.633822)",
+          "tip_error_m": 0.102283038198948,
+          "tool_position": "(-1.727938, 0.652313, 10.68423)"
+        },
+        {
+          "aim": "(0.267721, 0.59, 0.733424)",
+          "grip_error_m": 3.81702466256684e-06,
+          "lowest_sole_m": 0.0,
+          "phase": 0.709677419354839,
+          "tip": "(0.260478, 0.599941, 0.621051)",
+          "tip_error_m": 0.11304147541523,
+          "tool_position": "(-1.720174, 0.635952, 10.66591)"
+        },
+        {
+          "aim": "(0.267721, 0.59, 0.733424)",
+          "grip_error_m": 4.51305959359161e-06,
+          "lowest_sole_m": -1.49011611938477e-08,
+          "phase": 0.795698924731183,
+          "tip": "(0.230909, 0.682967, 0.702418)",
+          "tip_error_m": 0.104686997830868,
+          "tool_position": "(-1.761729, 0.679161, 10.70929)"
+        },
+        {
+          "aim": "(0.267721, 0.59, 0.733424)",
+          "grip_error_m": 6.03657053943607e-06,
+          "lowest_sole_m": -2.23517417907715e-08,
+          "phase": 0.89247311827957,
+          "tip": "(0.16878, 0.786226, 0.787304)",
+          "tip_error_m": 0.226266726851463,
+          "tool_position": "(-1.838671, 0.725765, 10.73231)"
+        },
+        {
+          "aim": "(0.267721, 0.59, 0.733424)",
+          "grip_error_m": 6.48568675387651e-06,
+          "lowest_sole_m": 2.23517417907715e-08,
+          "phase": 0.989247311827957,
+          "tip": "(0.196738, 0.839622, 0.798404)",
+          "tip_error_m": 0.267529398202896,
+          "tool_position": "(-1.846395, 0.731274, 10.76133)"
+        }
+      ]
+    }
+  },
+  "native": {
+    "cameras": [
+      "Chop-phase-01",
+      "Chop-phase-02",
+      "Chop-phase-03",
+      "Chop-phase-04",
+      "Chop-phase-05",
+      "Chop-contact",
+      "Chop-phase-06",
+      "Chop-phase-07",
+      "Chop-phase-08",
+      "Chop-phase-09",
+      "Chop-phase-10",
+      "Chop-phase-11",
+      "Mine-phase-01",
+      "Mine-phase-02",
+      "Mine-phase-03",
+      "Mine-phase-04",
+      "Mine-contact",
+      "Mine-phase-05",
+      "Mine-phase-06",
+      "Mine-phase-07",
+      "Mine-phase-08",
+      "Mine-phase-09",
+      "Mine-phase-10",
+      "Mine-phase-11",
+      "Stone-stock"
+    ],
+    "checks": [
+      "paid helper physically rescued",
+      "hired survivor holds the same approved Meshy meshes as the player",
+      "real axe edge contacts on at least two different trees",
+      "real pick head contacts repeat across at least two stone-bank cycles",
+      "autonomous worker delivered recurring timber and stone to the warehouse",
+      "parked player supplied neither tool contact nor wallet receipts",
+      "worker stays live and transfers are valid",
+      "a cold ledger conserves the repeated work"
+    ],
+    "failures": [],
+    "first_chop": 216,
+    "first_mine": 2720,
+    "last_frame": 6274,
+    "stone_contacts": {
+      "starter-stone": 6
+    },
+    "stone_deposits": 4,
+    "tools": {
+      "axe": "res://assets/tools/axe-field-grip.glb",
+      "pickaxe": "res://assets/tools/pickaxe-meshy.glb"
+    },
+    "trace": [
+      {
+        "load": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 0
+        },
+        "phase": "to_tree",
+        "site": "survivor-work-pine",
+        "tick": 0,
+        "worker": "(-5.1, 0.0, 9.9)"
+      },
+      {
+        "load": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 2
+        },
+        "phase": "bin_delivery",
+        "site": "",
+        "tick": 974,
+        "worker": "(-3.048895, 0.0, -1.171038)"
+      },
+      {
+        "load": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 0
+        },
+        "phase": "mining_approach",
+        "site": "starter-stone",
+        "tick": 2307,
+        "worker": "(-3.061438, 0.0, -1.184668)"
+      },
+      {
+        "load": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 3,
+          "wood": 0
+        },
+        "phase": "to_tree",
+        "site": "pine@-5400,13500",
+        "tick": 2995,
+        "worker": "(-2.215682, 0.0, 11.27735)"
+      },
+      {
+        "load": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 3,
+          "wood": 3
+        },
+        "phase": "bulk_return",
+        "site": "",
+        "tick": 3391,
+        "worker": "(-5.306448, 0.0, 13.02852)"
+      },
+      {
+        "load": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 3,
+          "wood": 3
+        },
+        "phase": "bin_delivery",
+        "site": "",
+        "tick": 3908,
+        "worker": "(-3.048891, 0.0, -1.171008)"
+      },
+      {
+        "load": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 0
+        },
+        "phase": "to_tree",
+        "site": "starter-wood",
+        "tick": 4637,
+        "worker": "(-3.060435, 0.0, -1.175335)"
+      },
+      {
+        "load": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 3
+        },
+        "phase": "mining_approach",
+        "site": "starter-stone",
+        "tick": 5371,
+        "worker": "(-2.29645, 0.0, 7.310096)"
+      },
+      {
+        "load": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 3,
+          "wood": 3
+        },
+        "phase": "bulk_return",
+        "site": "",
+        "tick": 5779,
+        "worker": "(-2.215887, 0.0, 11.2761)"
+      },
+      {
+        "load": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 3,
+          "wood": 3
+        },
+        "phase": "bin_delivery",
+        "site": "",
+        "tick": 6256,
+        "worker": "(-3.048893, 0.0, -1.171025)"
+      }
+    ],
+    "viewport": "(576, 832)",
+    "wood_contacts": {
+      "pine@-5400,13500": 3,
+      "starter-wood": 3,
+      "survivor-work-pine": 3
+    },
+    "wood_deposits": 6,
+    "work_motion": {
+      "Chop": [
+        {
+          "aim": "(0.098018, 0.83, 0.695545)",
+          "grip_error_m": 9.5367431640625e-07,
+          "lowest_sole_m": 7.45058059692383e-09,
+          "phase": 0.032258064516129,
+          "tip": "(0.250514, 0.784664, 0.875836)",
+          "tip_error_m": 0.240448877215385,
+          "tool_position": "(-3.80439, 0.687973, 9.065568)"
+        },
+        {
+          "aim": "(0.098018, 0.83, 0.695545)",
+          "grip_error_m": 2.45756240246919e-07,
+          "lowest_sole_m": -2.23517417907715e-08,
+          "phase": 0.161290322580645,
+          "tip": "(0.318904, 0.756295, 0.898952)",
+          "tip_error_m": 0.309189140796661,
+          "tool_position": "(-3.773185, 0.719423, 9.023998)"
+        },
+        {
+          "aim": "(0.098018, 0.83, 0.695545)",
+          "grip_error_m": 4.80548010273196e-07,
+          "lowest_sole_m": -3.72529029846191e-08,
+          "phase": 0.268817204301075,
+          "tip": "(0.367447, 0.79533, 0.881366)",
+          "tip_error_m": 0.329125761985779,
+          "tool_position": "(-3.780514, 0.77256, 8.976289)"
+        },
+        {
+          "aim": "(0.098018, 0.83, 0.695545)",
+          "grip_error_m": 1.06624031559477e-06,
+          "lowest_sole_m": 0.0,
+          "phase": 0.354838709677419,
+          "tip": "(0.38999, 0.801478, 0.876222)",
+          "tip_error_m": 0.344537109136581,
+          "tool_position": "(-3.780436, 0.787687, 8.956347)"
+        },
+        {
+          "aim": "(0.098018, 0.83, 0.695545)",
+          "grip_error_m": 9.5367431640625e-07,
+          "lowest_sole_m": -3.72529029846191e-08,
+          "phase": 0.46236559139785,
+          "tip": "(0.345966, 0.796972, 0.850315)",
+          "tip_error_m": 0.294149041175842,
+          "tool_position": "(-3.805404, 0.741684, 9.013048)"
+        },
+        {
+          "aim": "(0.098018, 0.83, 0.695545)",
+          "grip_error_m": 5.96046447753906e-08,
+          "lowest_sole_m": 7.45058059692383e-09,
+          "phase": 0.559139784946237,
+          "tip": "(0.253991, 0.848406, 0.754975)",
+          "tip_error_m": 0.167924538254738,
+          "tool_position": "(-3.91283, 0.74658, 9.067904)"
+        },
+        {
+          "aim": "(0.098018, 0.83, 0.695545)",
+          "grip_error_m": 4.76837158203125e-07,
+          "lowest_sole_m": -3.72529029846191e-08,
+          "phase": 0.623655913978496,
+          "tip": "(0.249404, 0.837392, 0.745709)",
+          "tip_error_m": 0.159652546048164,
+          "tool_position": "(-3.920461, 0.706683, 9.045148)"
+        },
+        {
+          "aim": "(0.098018, 0.83, 0.695545)",
+          "grip_error_m": 1.06624031559477e-06,
+          "lowest_sole_m": 0.0,
+          "phase": 0.709677419354839,
+          "tip": "(0.124841, 0.859423, 0.746265)",
+          "tip_error_m": 0.0644814297556877,
+          "tool_position": "(-3.942916, 0.697319, 9.092308)"
+        },
+        {
+          "aim": "(0.098018, 0.83, 0.695545)",
+          "grip_error_m": 9.5367431640625e-07,
+          "lowest_sole_m": -1.49011611938477e-08,
+          "phase": 0.795698924731183,
+          "tip": "(0.221882, 0.822564, 0.788762)",
+          "tip_error_m": 0.155200973153114,
+          "tool_position": "(-3.889563, 0.689482, 9.045696)"
+        },
+        {
+          "aim": "(0.098018, 0.83, 0.695545)",
+          "grip_error_m": 0.0,
+          "lowest_sole_m": -2.23517417907715e-08,
+          "phase": 0.89247311827957,
+          "tip": "(0.24613, 0.775693, 0.843181)",
+          "tip_error_m": 0.21606220304966,
+          "tool_position": "(-3.833127, 0.678403, 9.080225)"
+        },
+        {
+          "aim": "(0.098018, 0.83, 0.695545)",
+          "grip_error_m": 4.76837158203125e-07,
+          "lowest_sole_m": 2.23517417907715e-08,
+          "phase": 0.989247311827957,
+          "tip": "(0.23461, 0.798818, 0.865006)",
+          "tip_error_m": 0.219880133867264,
+          "tool_position": "(-3.815501, 0.689002, 9.075066)"
+        }
+      ],
+      "Mine": [
+        {
+          "aim": "(0.267721, 0.59, 0.733424)",
+          "grip_error_m": 6.48568675387651e-06,
+          "lowest_sole_m": 7.45058059692383e-09,
+          "phase": 0.032258064516129,
+          "tip": "(0.200527, 0.856296, 0.80313)",
+          "tip_error_m": 0.283350110054016,
+          "tool_position": "(-1.847125, 0.74643, 10.76792)"
+        },
+        {
+          "aim": "(0.267721, 0.59, 0.733424)",
+          "grip_error_m": 7.05755246599438e-06,
+          "lowest_sole_m": -2.23517417907715e-08,
+          "phase": 0.161290322580645,
+          "tip": "(0.209237, 0.926792, 0.8389)",
+          "tip_error_m": 0.357735097408295,
+          "tool_position": "(-1.860308, 0.832727, 10.79834)"
+        },
+        {
+          "aim": "(0.267721, 0.59, 0.733424)",
+          "grip_error_m": 7.40274344934733e-06,
+          "lowest_sole_m": -3.72529029846191e-08,
+          "phase": 0.268817204301075,
+          "tip": "(0.209423, 0.982185, 0.858392)",
+          "tip_error_m": 0.415721386671066,
+          "tool_position": "(-1.86466, 0.901275, 10.814)"
+        },
+        {
+          "aim": "(0.267721, 0.59, 0.733424)",
+          "grip_error_m": 7.05755246599438e-06,
+          "lowest_sole_m": 0.0,
+          "phase": 0.354838709677419,
+          "tip": "(0.215024, 0.989215, 0.859823)",
+          "tip_error_m": 0.422049462795258,
+          "tool_position": "(-1.857532, 0.922764, 10.81955)"
+        },
+        {
+          "aim": "(0.267721, 0.59, 0.733424)",
+          "grip_error_m": 7.48269803807489e-06,
+          "lowest_sole_m": -3.72529029846191e-08,
+          "phase": 0.46236559139785,
+          "tip": "(0.285616, 0.789477, 0.806265)",
+          "tip_error_m": 0.213112711906433,
+          "tool_position": "(-1.839634, 0.81816, 10.80447)"
+        },
+        {
+          "aim": "(0.267721, 0.59, 0.733424)",
+          "grip_error_m": 5.13603936269647e-06,
+          "lowest_sole_m": 7.45058059692383e-09,
+          "phase": 0.559139784946237,
+          "tip": "(0.31611, 0.658563, 0.693065)",
+          "tip_error_m": 0.0931186079978943,
+          "tool_position": "(-1.748236, 0.70138, 10.7525)"
+        },
+        {
+          "aim": "(0.267721, 0.59, 0.733424)",
+          "grip_error_m": 4.04829188482836e-06,
+          "lowest_sole_m": -3.72529029846191e-08,
+          "phase": 0.623655913978496,
+          "tip": "(0.276943, 0.611366, 0.633822)",
+          "tip_error_m": 0.102283038198948,
+          "tool_position": "(-1.727938, 0.652313, 10.68423)"
+        },
+        {
+          "aim": "(0.267721, 0.59, 0.733424)",
+          "grip_error_m": 3.81702466256684e-06,
+          "lowest_sole_m": 0.0,
+          "phase": 0.709677419354839,
+          "tip": "(0.260478, 0.599941, 0.621051)",
+          "tip_error_m": 0.11304147541523,
+          "tool_position": "(-1.720174, 0.635952, 10.66591)"
+        },
+        {
+          "aim": "(0.267721, 0.59, 0.733424)",
+          "grip_error_m": 4.51305959359161e-06,
+          "lowest_sole_m": -1.49011611938477e-08,
+          "phase": 0.795698924731183,
+          "tip": "(0.230909, 0.682967, 0.702418)",
+          "tip_error_m": 0.104686997830868,
+          "tool_position": "(-1.761729, 0.679161, 10.70929)"
+        },
+        {
+          "aim": "(0.267721, 0.59, 0.733424)",
+          "grip_error_m": 6.03657053943607e-06,
+          "lowest_sole_m": -2.23517417907715e-08,
+          "phase": 0.89247311827957,
+          "tip": "(0.16878, 0.786226, 0.787304)",
+          "tip_error_m": 0.226266726851463,
+          "tool_position": "(-1.838671, 0.725765, 10.73231)"
+        },
+        {
+          "aim": "(0.267721, 0.59, 0.733424)",
+          "grip_error_m": 6.48568675387651e-06,
+          "lowest_sole_m": 2.23517417907715e-08,
+          "phase": 0.989247311827957,
+          "tip": "(0.196738, 0.839622, 0.798404)",
+          "tip_error_m": 0.267529398202896,
+          "tool_position": "(-1.846395, 0.731274, 10.76133)"
+        }
+      ]
+    }
+  },
+  "capture": {
+    "renderer": "Mesa llvmpipe",
+    "viewport": [
+      576,
+      832
+    ],
+    "frames_per_game_second": 60,
+    "gameplay_views": [
+      1,
+      2
+    ],
+    "fixture": "The test purchases and rescues the survivor, parks the player in camp, and advances the actual saved field. It centers the production camera on the worker for evidence without moving the player."
+  }
+}

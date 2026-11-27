@@ -1,0 +1,6506 @@
+{
+  "source": "4de1b9edb0230c8c33b8d872ded47ef914a0f87f",
+  "scene": "res://field_opening.tscn",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "suites": 16,
+  "native_runs": 21,
+  "tests": {
+    "qa_build15_economy_migration": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_build15_economy_migration-1.log",
+        "log_sha256": "4ed12cbe4e7b8e220eea74960b77956e0ce4d6538ff7c3b86aa0bd26f5ebb81d",
+        "summary": [
+          {
+            "all prior finished-goods accounts remain intact": true,
+            "converted contract finalizes once and cold-reopens paid": true,
+            "current saves reject a new mixed order": true,
+            "fully paid Build14 garage keeps original processed receipt and truck eligibility": true,
+            "legacy products still have actual construction receipt lines": true,
+            "migration retires the single unsold quote and keeps financial history": true,
+            "new garage accepts ordinary wood and stone before any machines": true,
+            "next customer takes only a meal and pays only its price": true,
+            "obsolete Build14 mixed quote cannot collect payment": true,
+            "partly funded processed quote credits matching whole raw bundles": true,
+            "processed credits cannot be fabricated on an existing receipt": true,
+            "raw payment opens the truck and reopens at exact balances": true,
+            "unfunded old garage gets the new raw quote": true,
+            "unpaid fractions keep near-complete legacy contract open": true
+          }
+        ]
+      }
+    ],
+    "qa_field_progression": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_field_progression-1.log",
+        "log_sha256": "f182bb8158fa387de778bbfd1b6e9627ca957e0af7de4ef2ae8ecf689e4d9990",
+        "summary": [
+          {
+            "Built storage_meat": true,
+            "Built storage_stone": true,
+            "Built storage_wood": true,
+            "East expansion unlocks after all 3 tiers": true,
+            "Existing field save reopens through modern migration": true,
+            "First expansion opens only starter house": true,
+            "Hearth opens only expansion": true,
+            "Historical missing tiers funded in order": true,
+            "Historical out-of-order purchase and partial retained": true,
+            "Insufficient funds storage_meat": true,
+            "Insufficient funds storage_stone": true,
+            "Insufficient funds storage_wood": true,
+            "Migrate funded old axes and exact balances": true,
+            "Migrated equipment purchase order round-trips": true,
+            "Migration cannot spend unavailable stock": true,
+            "No duplicate debit storage_meat": true,
+            "No duplicate debit storage_stone": true,
+            "No duplicate debit storage_wood": true,
+            "No historical double charge": true,
+            "No premature storage purchase": true,
+            "Original field save written through old schema": true,
+            "Partial payment storage_meat": true,
+            "Partial payment storage_stone": true,
+            "Partial payment storage_wood": true,
+            "Post-migration stage commits atomically": true,
+            "Reject reordered unrelated completion": true,
+            "Reload retains grandfathered equipment, stock and new stage": true,
+            "Resume partial storage_meat": true,
+            "Resume partial storage_stone": true,
+            "Resume partial storage_wood": true,
+            "Retains tier and downstream goals": true,
+            "Visual tier independent from earned bays": true,
+            "json round-trip of funded price locks 0": true,
+            "json round-trip of funded price locks 1": true,
+            "json round-trip of funded price locks 2": true,
+            "old partial finishes without windfall; next expansion charges new price": true,
+            "old partially paid hearth still owes two packets": true,
+            "reject later cash field on claimed v5 receipt 0": true,
+            "reject later cash field on claimed v5 receipt 1": true,
+            "reject later cash field on claimed v5 receipt 2": true,
+            "reject unauthorized or doubled price lock center_hearth 0": true,
+            "reject unauthorized or doubled price lock center_hearth 1": true,
+            "reject unauthorized or doubled price lock center_hearth 2": true,
+            "reject unauthorized or doubled price lock storage_stone 0": true,
+            "reject unauthorized or doubled price lock storage_stone 1": true,
+            "reject unauthorized or doubled price lock storage_stone 2": true,
+            "reject unauthorized or doubled price lock unknown 0": true,
+            "reject unauthorized or doubled price lock unknown 1": true,
+            "reject unauthorized or doubled price lock unknown 2": true,
+            "unstarted old install sees the same 200 timber as fresh": true,
+            "v5 partial expansion and earned camp migrate, survivor 0": true,
+            "v5 partial expansion and earned camp migrate, survivor 1": true,
+            "v5 partial expansion and earned camp migrate, survivor 2": true,
+            "v5 survivor contract and payment state retained, receipt 0": true,
+            "v5 survivor contract and payment state retained, receipt 1": true,
+            "v5 survivor contract and payment state retained, receipt 2": true
+          }
+        ]
+      }
+    ],
+    "qa_workshop_handoff": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_workshop_handoff-1.log",
+        "log_sha256": "4dccad5938a6de3f65ef22bf96d0113db6ea1d7eebd1f940a511441df83d4b8a",
+        "summary": [
+          {
+            "checks": {
+              "existing workshop save loads": true,
+              "meat can opt out of walk-up handoff": true,
+              "meat can revisit the station sheet": true,
+              "meat cannot operate remotely": true,
+              "meat collects through the real touch command": true,
+              "meat completed goods wait on the output tray": true,
+              "meat is a paid workshop": true,
+              "meat is reachable through Camp then Workshops": true,
+              "meat loads through the real touch command": true,
+              "meat manually loaded input produces a finished item": true,
+              "meat opens its station again": true,
+              "meat reaches the apron and waits for the chosen action": true,
+              "normal save succeeds": true,
+              "stone can opt out of walk-up handoff": true,
+              "stone can revisit the station sheet": true,
+              "stone cannot operate remotely": true,
+              "stone collects through the real touch command": true,
+              "stone completed goods wait on the output tray": true,
+              "stone is a paid workshop": true,
+              "stone is reachable through Camp then Workshops": true,
+              "stone loads through the real touch command": true,
+              "stone manually loaded input produces a finished item": true,
+              "stone opens its station again": true,
+              "stone reaches the apron and waits for the chosen action": true,
+              "wood can opt out of walk-up handoff": true,
+              "wood can revisit the station sheet": true,
+              "wood cannot operate remotely": true,
+              "wood collects through the real touch command": true,
+              "wood completed goods wait on the output tray": true,
+              "wood is a paid workshop": true,
+              "wood is reachable through Camp then Workshops": true,
+              "wood loads through the real touch command": true,
+              "wood manually loaded input produces a finished item": true,
+              "wood opens its station again": true,
+              "wood reaches the apron and waits for the chosen action": true
+            }
+          }
+        ]
+      }
+    ],
+    "qa_field_market": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_field_market-1.log",
+        "log_sha256": "a09f559318f2d7a4376fc9efe635b18a08af2491924f7c92463ca149d4c18920",
+        "summary": [
+          {
+            "checks": {
+              "a concurrent second pickup cannot claim the same money": true,
+              "cash and legacy stock pass exact save validation": true,
+              "counter leaves the player's planks in the pack": true,
+              "customer buys one meal and leaves the rest of the stock": true,
+              "customer self-serves a two-item order without anyone at counter": true,
+              "first displayed developed order asks for two meals": true,
+              "held goods do not make a customer pay": true,
+              "next developed order requests only a meal": true,
+              "old paid workshop profile opens in the new schema": true,
+              "one visit stocks both meals and collects the old cash": true,
+              "owned worker banks its payment once": true,
+              "owned worker drops both meals and picks up all posted cash": true,
+              "owned worker loads both meals and leaves warehouse planks": true,
+              "paid fixture and new typed accounting agree": true,
+              "physical sale contains only the meal": true,
+              "reopening preserves the quoted whole basket": true,
+              "stored planks cannot substitute for a meal": true
+            },
+            "money": 1,
+            "paid_goods": {
+              "blocks": 0,
+              "meal": 11,
+              "planks": 0
+            },
+            "served": 10
+          }
+        ]
+      }
+    ],
+    "qa_snow_truck": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_snow_truck-1.log",
+        "log_sha256": "8dca6fcc9d5a116d0cde7f70c1d07bda76a023872df4d5ddaa5fda8b27e3ccbc",
+        "summary": [
+          {
+            "checks": {
+              "a fresh camp boots": true,
+              "affordable replacement at the garage": true,
+              "can drive the replacement truck": true,
+              "driven blades break a real metal bank": true,
+              "durable owned truck starts at full health": true,
+              "garage and truck begin locked": true,
+              "garage replaces a fence section and keeps both walk gates": true,
+              "ground pickup goes into truck, not player pack": true,
+              "interior wreck retains salvage": true,
+              "lethal contact applies after damage cooldown": true,
+              "mined metal goes to truck exactly once": true,
+              "mounted using player input": true,
+              "moving truck leaves paired treads outside camp": true,
+              "normal thumbstick drives out through garage": true,
+              "outside loss survives cold reload": true,
+              "outside wreck loses cargo without salvage": true,
+              "outside wreck position survives cold reload": true,
+              "park transfers the entire cargo once": true,
+              "pay separate garage offer": true,
+              "pay separate truck offer": true,
+              "recover interior cargo exactly once": true,
+              "replacement is completely outside camp": true,
+              "replacement takes cargo before wreck": true,
+              "restored player controls and backpack": true,
+              "reverse returns into garage and parks": true,
+              "save remains usable after all truck operations": true,
+              "setup: center_hearth": true,
+              "setup: expansion_1": true,
+              "setup: expansion_2": true,
+              "setup: storage_meat": true,
+              "setup: storage_stone": true,
+              "setup: storage_wood": true,
+              "truck stays locked until garage is built": true,
+              "whole new truck is parked in the bay": true
+            }
+          }
+        ]
+      }
+    ],
+    "qa_staffed_ballista": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_staffed_ballista-1.log",
+        "log_sha256": "ac6145dd9f1bcbfb7d4263d8b0a7590198a4dc2c7faac5ad14322aedda77e003",
+        "summary": [
+          {
+            "checks": {
+              "A fresh quarrel is seated before the next discharge": true,
+              "Asset that leaves the stock is the displayed textured quarrel": true,
+              "Bolt travels toward the live target before damage": true,
+              "Both feet stay on the turning tread for a full revolution": true,
+              "Both gloves follow the modeled controls while turning": true,
+              "Bow has a two-limb silhouette wider than the operator": true,
+              "Crew hips, chest and thighs stay behind the swept bow": true,
+              "Crew works the stock while the next bolt loads": true,
+              "Glove L stays within a gloved palm of the operating grip": true,
+              "Glove R stays within a gloved palm of the operating grip": true,
+              "No visible station, operator or fire before payment": true,
+              "Purchased camp exposes an occupied open deck": true,
+              "Purchased footings rise before the crew takes its station": true,
+              "Real hit, contact flash and no duplicate damage": true,
+              "Release originates at loaded bolt before the first travel tick": true
+            },
+            "observed": {
+              "glove_to_grip_L_m": 5.8400388525115e-07,
+              "glove_to_grip_R_m": 5.33120157797384e-07,
+              "max_glove_to_handle_across_traverse_m": 1.09257121039263e-06,
+              "muzzle_error_m": 0.0,
+              "winding_hand_travel_m": 0.12370877712965
+            }
+          }
+        ]
+      }
+    ],
+    "qa_field_tracks_tower": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_field_tracks_tower-1.log",
+        "log_sha256": "c35efc5eee780518035eef194351186303dbfa89c37c23276ed1a9b0e614a509",
+        "summary": [
+          {
+            "checks": {
+              "boss paws larger": true,
+              "bounded batching": true,
+              "completed deck exposes the bow and its operator": true,
+              "dead actors cease planting": true,
+              "footings build before armed deck": true,
+              "four ordinary and four boss paws plant": true,
+              "freed actor unregistered": true,
+              "integrated hero rig produces both planted boot tracks": true,
+              "moving prop and stationary survivor leave no tracks": true,
+              "new survivor automatically discovered": true,
+              "prints fade and chunks retire": true,
+              "separate modeled bolt and world launch anchor": true,
+              "solid tower marks actual player occlusion on the stone route at 1x": true,
+              "solid tower marks actual player occlusion on the stone route at 2x": true,
+              "standing still creates no impressions": true,
+              "teleport and non-snow omitted": true,
+              "unrigged survivor leaves alternating soles": true,
+              "warm expansion clears old tracks immediately": true
+            },
+            "human_marks": 11,
+            "pass": true,
+            "paw_bones_with_landings": {
+              "boss": 4,
+              "wolf": 4
+            },
+            "paw_widths": [
+              "0.245",
+              "0.387"
+            ],
+            "sole_bones": 2,
+            "sole_sides": 2
+          }
+        ]
+      }
+    ],
+    "qa_worker_harvest": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_worker_harvest-1.log",
+        "log_sha256": "1a21d9d53d87a5c9d5c3e6dcdf1bcf9d656a53cedba5bfa38724532db9018861",
+        "summary": [
+          {
+            "cameras": [],
+            "checks": [
+              "paid helper physically rescued",
+              "hired survivor holds the same approved Meshy meshes as the player",
+              "real axe edge contacts on at least two different trees",
+              "real pick head contacts repeat across at least two stone-bank cycles",
+              "autonomous worker delivered recurring timber and stone to the warehouse",
+              "parked player supplied neither tool contact nor wallet receipts",
+              "worker stays live and transfers are valid",
+              "a cold ledger conserves the repeated work"
+            ],
+            "failures": [],
+            "first_chop": 216,
+            "first_mine": 2720,
+            "last_frame": 6274,
+            "stone_contacts": {
+              "starter-stone": 6
+            },
+            "stone_deposits": 4,
+            "tools": {
+              "axe": "res://assets/tools/axe-field-grip.glb",
+              "pickaxe": "res://assets/tools/pickaxe-meshy.glb"
+            },
+            "trace": [
+              {
+                "load": {
+                  "coal": 0,
+                  "meat": 0,
+                  "metal": 0,
+                  "slate": 0,
+                  "stone": 0,
+                  "wood": 0
+                },
+                "phase": "to_tree",
+                "site": "survivor-work-pine",
+                "tick": 0,
+                "worker": "(-5.1, 0.0, 9.9)"
+              },
+              {
+                "load": {
+                  "coal": 0,
+                  "meat": 0,
+                  "metal": 0,
+                  "slate": 0,
+                  "stone": 0,
+                  "wood": 2
+                },
+                "phase": "bin_delivery",
+                "site": "",
+                "tick": 974,
+                "worker": "(-3.048895, 0.0, -1.171038)"
+              },
+              {
+                "load": {
+                  "coal": 0,
+                  "meat": 0,
+                  "metal": 0,
+                  "slate": 0,
+                  "stone": 0,
+                  "wood": 0
+                },
+                "phase": "mining_approach",
+                "site": "starter-stone",
+                "tick": 2307,
+                "worker": "(-3.061438, 0.0, -1.184668)"
+              },
+              {
+                "load": {
+                  "coal": 0,
+                  "meat": 0,
+                  "metal": 0,
+                  "slate": 0,
+                  "stone": 3,
+                  "wood": 0
+                },
+                "phase": "to_tree",
+                "site": "pine@-5400,13500",
+                "tick": 2995,
+                "worker": "(-2.215682, 0.0, 11.27735)"
+              },
+              {
+                "load": {
+                  "coal": 0,
+                  "meat": 0,
+                  "metal": 0,
+                  "slate": 0,
+                  "stone": 3,
+                  "wood": 3
+                },
+                "phase": "bulk_return",
+                "site": "",
+                "tick": 3391,
+                "worker": "(-5.306448, 0.0, 13.02852)"
+              },
+              {
+                "load": {
+                  "coal": 0,
+                  "meat": 0,
+                  "metal": 0,
+                  "slate": 0,
+                  "stone": 3,
+                  "wood": 3
+                },
+                "phase": "bin_delivery",
+                "site": "",
+                "tick": 3908,
+                "worker": "(-3.048891, 0.0, -1.171008)"
+              },
+              {
+                "load": {
+                  "coal": 0,
+                  "meat": 0,
+                  "metal": 0,
+                  "slate": 0,
+                  "stone": 0,
+                  "wood": 0
+                },
+                "phase": "to_tree",
+                "site": "starter-wood",
+                "tick": 4637,
+                "worker": "(-3.060435, 0.0, -1.175335)"
+              },
+              {
+                "load": {
+                  "coal": 0,
+                  "meat": 0,
+                  "metal": 0,
+                  "slate": 0,
+                  "stone": 0,
+                  "wood": 3
+                },
+                "phase": "mining_approach",
+                "site": "starter-stone",
+                "tick": 5371,
+                "worker": "(-2.29645, 0.0, 7.310096)"
+              },
+              {
+                "load": {
+                  "coal": 0,
+                  "meat": 0,
+                  "metal": 0,
+                  "slate": 0,
+                  "stone": 3,
+                  "wood": 3
+                },
+                "phase": "bulk_return",
+                "site": "",
+                "tick": 5779,
+                "worker": "(-2.215887, 0.0, 11.2761)"
+              },
+              {
+                "load": {
+                  "coal": 0,
+                  "meat": 0,
+                  "metal": 0,
+                  "slate": 0,
+                  "stone": 3,
+                  "wood": 3
+                },
+                "phase": "bin_delivery",
+                "site": "",
+                "tick": 6256,
+                "worker": "(-3.048893, 0.0, -1.171025)"
+              }
+            ],
+            "viewport": "(64, 64)",
+            "wood_contacts": {
+              "pine@-5400,13500": 3,
+              "starter-wood": 3,
+              "survivor-work-pine": 3
+            },
+            "wood_deposits": 6,
+            "work_motion": {
+              "Chop": [
+                {
+                  "aim": "(0.098018, 0.83, 0.695545)",
+                  "grip_error_m": 9.5367431640625e-07,
+                  "lowest_sole_m": 7.45058059692383e-09,
+                  "phase": 0.032258064516129,
+                  "tip": "(0.250514, 0.784664, 0.875836)",
+                  "tip_error_m": 0.240448877215385,
+                  "tool_position": "(-3.80439, 0.687973, 9.065568)"
+                },
+                {
+                  "aim": "(0.098018, 0.83, 0.695545)",
+                  "grip_error_m": 2.45756240246919e-07,
+                  "lowest_sole_m": -2.23517417907715e-08,
+                  "phase": 0.161290322580645,
+                  "tip": "(0.318904, 0.756295, 0.898952)",
+                  "tip_error_m": 0.309189140796661,
+                  "tool_position": "(-3.773185, 0.719423, 9.023998)"
+                },
+                {
+                  "aim": "(0.098018, 0.83, 0.695545)",
+                  "grip_error_m": 4.80548010273196e-07,
+                  "lowest_sole_m": -3.72529029846191e-08,
+                  "phase": 0.268817204301075,
+                  "tip": "(0.367447, 0.79533, 0.881366)",
+                  "tip_error_m": 0.329125761985779,
+                  "tool_position": "(-3.780514, 0.77256, 8.976289)"
+                },
+                {
+                  "aim": "(0.098018, 0.83, 0.695545)",
+                  "grip_error_m": 1.06624031559477e-06,
+                  "lowest_sole_m": 0.0,
+                  "phase": 0.354838709677419,
+                  "tip": "(0.38999, 0.801478, 0.876222)",
+                  "tip_error_m": 0.344537109136581,
+                  "tool_position": "(-3.780436, 0.787687, 8.956347)"
+                },
+                {
+                  "aim": "(0.098018, 0.83, 0.695545)",
+                  "grip_error_m": 9.5367431640625e-07,
+                  "lowest_sole_m": -3.72529029846191e-08,
+                  "phase": 0.46236559139785,
+                  "tip": "(0.345966, 0.796972, 0.850315)",
+                  "tip_error_m": 0.294149041175842,
+                  "tool_position": "(-3.805404, 0.741684, 9.013048)"
+                },
+                {
+                  "aim": "(0.098018, 0.83, 0.695545)",
+                  "grip_error_m": 5.96046447753906e-08,
+                  "lowest_sole_m": 7.45058059692383e-09,
+                  "phase": 0.559139784946237,
+                  "tip": "(0.253991, 0.848406, 0.754975)",
+                  "tip_error_m": 0.167924538254738,
+                  "tool_position": "(-3.91283, 0.74658, 9.067904)"
+                },
+                {
+                  "aim": "(0.098018, 0.83, 0.695545)",
+                  "grip_error_m": 4.76837158203125e-07,
+                  "lowest_sole_m": -3.72529029846191e-08,
+                  "phase": 0.623655913978496,
+                  "tip": "(0.249404, 0.837392, 0.745709)",
+                  "tip_error_m": 0.159652546048164,
+                  "tool_position": "(-3.920461, 0.706683, 9.045148)"
+                },
+                {
+                  "aim": "(0.098018, 0.83, 0.695545)",
+                  "grip_error_m": 1.06624031559477e-06,
+                  "lowest_sole_m": 0.0,
+                  "phase": 0.709677419354839,
+                  "tip": "(0.124841, 0.859423, 0.746265)",
+                  "tip_error_m": 0.0644814297556877,
+                  "tool_position": "(-3.942916, 0.697319, 9.092308)"
+                },
+                {
+                  "aim": "(0.098018, 0.83, 0.695545)",
+                  "grip_error_m": 9.5367431640625e-07,
+                  "lowest_sole_m": -1.49011611938477e-08,
+                  "phase": 0.795698924731183,
+                  "tip": "(0.221882, 0.822564, 0.788762)",
+                  "tip_error_m": 0.155200973153114,
+                  "tool_position": "(-3.889563, 0.689482, 9.045696)"
+                },
+                {
+                  "aim": "(0.098018, 0.83, 0.695545)",
+                  "grip_error_m": 0.0,
+                  "lowest_sole_m": -2.23517417907715e-08,
+                  "phase": 0.89247311827957,
+                  "tip": "(0.24613, 0.775693, 0.843181)",
+                  "tip_error_m": 0.21606220304966,
+                  "tool_position": "(-3.833127, 0.678403, 9.080225)"
+                },
+                {
+                  "aim": "(0.098018, 0.83, 0.695545)",
+                  "grip_error_m": 4.76837158203125e-07,
+                  "lowest_sole_m": 2.23517417907715e-08,
+                  "phase": 0.989247311827957,
+                  "tip": "(0.23461, 0.798818, 0.865006)",
+                  "tip_error_m": 0.219880133867264,
+                  "tool_position": "(-3.815501, 0.689002, 9.075066)"
+                }
+              ],
+              "Mine": [
+                {
+                  "aim": "(0.267721, 0.59, 0.733424)",
+                  "grip_error_m": 6.48568675387651e-06,
+                  "lowest_sole_m": 7.45058059692383e-09,
+                  "phase": 0.032258064516129,
+                  "tip": "(0.200527, 0.856296, 0.80313)",
+                  "tip_error_m": 0.283350110054016,
+                  "tool_position": "(-1.847125, 0.74643, 10.76792)"
+                },
+                {
+                  "aim": "(0.267721, 0.59, 0.733424)",
+                  "grip_error_m": 7.05755246599438e-06,
+                  "lowest_sole_m": -2.23517417907715e-08,
+                  "phase": 0.161290322580645,
+                  "tip": "(0.209237, 0.926792, 0.8389)",
+                  "tip_error_m": 0.357735097408295,
+                  "tool_position": "(-1.860308, 0.832727, 10.79834)"
+                },
+                {
+                  "aim": "(0.267721, 0.59, 0.733424)",
+                  "grip_error_m": 7.40274344934733e-06,
+                  "lowest_sole_m": -3.72529029846191e-08,
+                  "phase": 0.268817204301075,
+                  "tip": "(0.209423, 0.982185, 0.858392)",
+                  "tip_error_m": 0.415721386671066,
+                  "tool_position": "(-1.86466, 0.901275, 10.814)"
+                },
+                {
+                  "aim": "(0.267721, 0.59, 0.733424)",
+                  "grip_error_m": 7.05755246599438e-06,
+                  "lowest_sole_m": 0.0,
+                  "phase": 0.354838709677419,
+                  "tip": "(0.215024, 0.989215, 0.859823)",
+                  "tip_error_m": 0.422049462795258,
+                  "tool_position": "(-1.857532, 0.922764, 10.81955)"
+                },
+                {
+                  "aim": "(0.267721, 0.59, 0.733424)",
+                  "grip_error_m": 7.48269803807489e-06,
+                  "lowest_sole_m": -3.72529029846191e-08,
+                  "phase": 0.46236559139785,
+                  "tip": "(0.285616, 0.789477, 0.806265)",
+                  "tip_error_m": 0.213112711906433,
+                  "tool_position": "(-1.839634, 0.81816, 10.80447)"
+                },
+                {
+                  "aim": "(0.267721, 0.59, 0.733424)",
+                  "grip_error_m": 5.13603936269647e-06,
+                  "lowest_sole_m": 7.45058059692383e-09,
+                  "phase": 0.559139784946237,
+                  "tip": "(0.31611, 0.658563, 0.693065)",
+                  "tip_error_m": 0.0931186079978943,
+                  "tool_position": "(-1.748236, 0.70138, 10.7525)"
+                },
+                {
+                  "aim": "(0.267721, 0.59, 0.733424)",
+                  "grip_error_m": 4.04829188482836e-06,
+                  "lowest_sole_m": -3.72529029846191e-08,
+                  "phase": 0.623655913978496,
+                  "tip": "(0.276943, 0.611366, 0.633822)",
+                  "tip_error_m": 0.102283038198948,
+                  "tool_position": "(-1.727938, 0.652313, 10.68423)"
+                },
+                {
+                  "aim": "(0.267721, 0.59, 0.733424)",
+                  "grip_error_m": 3.81702466256684e-06,
+                  "lowest_sole_m": 0.0,
+                  "phase": 0.709677419354839,
+                  "tip": "(0.260478, 0.599941, 0.621051)",
+                  "tip_error_m": 0.11304147541523,
+                  "tool_position": "(-1.720174, 0.635952, 10.66591)"
+                },
+                {
+                  "aim": "(0.267721, 0.59, 0.733424)",
+                  "grip_error_m": 4.51305959359161e-06,
+                  "lowest_sole_m": -1.49011611938477e-08,
+                  "phase": 0.795698924731183,
+                  "tip": "(0.230909, 0.682967, 0.702418)",
+                  "tip_error_m": 0.104686997830868,
+                  "tool_position": "(-1.761729, 0.679161, 10.70929)"
+                },
+                {
+                  "aim": "(0.267721, 0.59, 0.733424)",
+                  "grip_error_m": 6.03657053943607e-06,
+                  "lowest_sole_m": -2.23517417907715e-08,
+                  "phase": 0.89247311827957,
+                  "tip": "(0.16878, 0.786226, 0.787304)",
+                  "tip_error_m": 0.226266726851463,
+                  "tool_position": "(-1.838671, 0.725765, 10.73231)"
+                },
+                {
+                  "aim": "(0.267721, 0.59, 0.733424)",
+                  "grip_error_m": 6.48568675387651e-06,
+                  "lowest_sole_m": 2.23517417907715e-08,
+                  "phase": 0.989247311827957,
+                  "tip": "(0.196738, 0.839622, 0.798404)",
+                  "tip_error_m": 0.267529398202896,
+                  "tool_position": "(-1.846395, 0.731274, 10.76133)"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "qa_survivor_hunt": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_survivor_hunt-1.log",
+        "log_sha256": "cb5e9334c78cd4d7dafaa43e30db8c58797dd67944148ae4002e61a74adce08e",
+        "summary": [
+          {
+            "beats": [
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "to_tree",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 2,
+                "tick": 0,
+                "worker": "(-5.1, 0.0, 9.9)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "work_ready",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 2,
+                "tick": 164,
+                "worker": "(-4.330666, 0.0, 9.049653)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "chopping",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 2,
+                "tick": 165,
+                "worker": "(-4.330666, 0.0, 9.049653)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "falling",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 2,
+                "tick": 447,
+                "worker": "(-4.330666, 0.0, 9.049653)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "pickup",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 2,
+                "tick": 456,
+                "worker": "(-4.330666, 0.0, 9.049653)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "carrying",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 2,
+                "tick": 480,
+                "worker": "(-4.297333, 0.0, 9.113473)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "unload",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 2,
+                "tick": 957,
+                "worker": "(-3.048895, 0.0, -1.171038)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "bin_delivery",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 2,
+                "tick": 974,
+                "worker": "(-3.048895, 0.0, -1.171038)"
+              },
+              {
+                "aboard": 1,
+                "hp": 3,
+                "phase": "supply_out",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 992,
+                "worker": "(-3.048895, 0.0, -1.171038)"
+              },
+              {
+                "aboard": 1,
+                "hp": 3,
+                "phase": "supply_unload",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 1182,
+                "worker": "(-0.392184, 0.0, -5.030793)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "supply_back",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 1202,
+                "worker": "(-0.392184, 0.0, -5.030793)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "meal_collect",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 1393,
+                "worker": "(-3.040224, 0.0, -1.183985)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "meal_serve",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 1571,
+                "worker": "(1.487754, 0.0, -5.037356)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "supply_pickup",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 1693,
+                "worker": "(2.797002, 0.0, -7.447407)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "supply_out",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 1912,
+                "worker": "(-3.048753, 0.0, -1.180508)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "supply_unload",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 2085,
+                "worker": "(-7.09496, 0.0, -5.372983)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "supply_back",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 2095,
+                "worker": "(-7.09496, 0.0, -5.372983)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "mining_approach",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 2307,
+                "worker": "(-3.061438, 0.0, -1.184668)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "mining",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 2684,
+                "worker": "(-1.575224, 0.0, 10.55253)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "foraging",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 2966,
+                "worker": "(-1.575224, 0.0, 10.55253)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "to_tree",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 2995,
+                "worker": "(-2.215682, 0.0, 11.27735)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "work_ready",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 3073,
+                "worker": "(-4.806847, 0.0, 13.08598)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "chopping",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 3074,
+                "worker": "(-4.806847, 0.0, 13.08598)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "falling",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 3356,
+                "worker": "(-4.806847, 0.0, 13.08598)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "pickup",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 3367,
+                "worker": "(-4.806847, 0.0, 13.08598)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "bulk_return",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 3391,
+                "worker": "(-5.306448, 0.0, 13.02852)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "bin_delivery",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 3908,
+                "worker": "(-3.048891, 0.0, -1.171008)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "meal_serve",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 3939,
+                "worker": "(-3.048891, 0.0, -1.171008)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "supply_pickup",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 4144,
+                "worker": "(2.798887, 0.0, -7.455313)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "supply_out",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 4393,
+                "worker": "(-3.04223, 0.0, -1.18318)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "supply_unload",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 4489,
+                "worker": "(-6.745424, 0.0, 0.178931)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "supply_back",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 4499,
+                "worker": "(-6.745424, 0.0, 0.178931)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "to_tree",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 4637,
+                "worker": "(-3.060435, 0.0, -1.175335)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "work_ready",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 5053,
+                "worker": "(-1.989384, 0.0, 7.245019)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "chopping",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 5054,
+                "worker": "(-1.989384, 0.0, 7.245019)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "falling",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 5336,
+                "worker": "(-1.989384, 0.0, 7.245019)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "pickup",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 5347,
+                "worker": "(-1.989384, 0.0, 7.245019)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "mining_approach",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 5371,
+                "worker": "(-2.29645, 0.0, 7.310096)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "mining",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 5468,
+                "worker": "(-2.298885, 0.0, 10.35552)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "foraging",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 5750,
+                "worker": "(-2.298885, 0.0, 10.35552)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "bulk_return",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 5779,
+                "worker": "(-2.215887, 0.0, 11.2761)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "bin_delivery",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 6256,
+                "worker": "(-3.048893, 0.0, -1.171025)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "supply_out",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 6287,
+                "worker": "(-3.048893, 0.0, -1.171025)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "supply_unload",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 6482,
+                "worker": "(-7.094931, 0.0, -5.372942)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "supply_back",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 6492,
+                "worker": "(-7.094931, 0.0, -5.372942)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "hunt_approach",
+                "stag": "(4.55, 0.0, 12.8)",
+                "stored": 0,
+                "tick": 6704,
+                "worker": "(-3.061438, 0.0, -1.184668)"
+              },
+              {
+                "aboard": 0,
+                "hp": 3,
+                "phase": "hunt_strike",
+                "stag": "(6.0891, 0.0, 14.44124)",
+                "stored": 0,
+                "tick": 7168,
+                "worker": "(5.404397, 0.0, 13.7111)"
+              },
+              {
+                "aboard": 0,
+                "hp": 0,
+                "phase": "hunt_pickup",
+                "stag": "(5.417394, 0.0, 14.31571)",
+                "stored": 0,
+                "tick": 7394,
+                "worker": "(5.404397, 0.0, 13.7111)"
+              },
+              {
+                "aboard": 3,
+                "hp": 0,
+                "phase": "bulk_return",
+                "stag": "(5.417394, 0.0, 14.31571)",
+                "stored": 0,
+                "tick": 7444,
+                "worker": "(5.417225, 0.0, 14.30786)"
+              },
+              {
+                "aboard": 3,
+                "hp": 0,
+                "phase": "bin_delivery",
+                "stag": "(5.417394, 0.0, 14.31571)",
+                "stored": 0,
+                "tick": 7998,
+                "worker": "(-3.048898, 0.0, -1.171055)"
+              },
+              {
+                "aboard": 2,
+                "hp": 0,
+                "phase": "supply_out",
+                "stag": "(5.417394, 0.0, 14.31571)",
+                "stored": 0,
+                "tick": 8019,
+                "worker": "(-3.048898, 0.0, -1.171055)"
+              }
+            ],
+            "camera": {},
+            "checks": [
+              "paid helper physically rescued",
+              "paid survivor proactively routes to prey",
+              "native carried axe sweep hits after proactive pursuit",
+              "defeated stag produces one three-bundle meat reward",
+              "real pickup packs on separate meat shelf, all three go home",
+              "same native worker returns and stocks exactly three meat",
+              "worker hunt credited no material to the distant player",
+              "actual moving stag sampled four rig hooves and left cloven prints",
+              "actual post-hunt save migration and conservation accept",
+              "cold state records the prey cooldown",
+              "native wildlife cooldown returned the same single prey alive"
+            ],
+            "errors": [],
+            "first_hit": 7210,
+            "hoof_count": 4,
+            "hoof_max": 0.119230061769485,
+            "hoof_min": -0.0282738506793976,
+            "hoof_peak": 13,
+            "kill": 7394,
+            "landing": 8019,
+            "meat_peak": 3,
+            "proactive": 6704,
+            "transport": 7444,
+            "warehouse_count": 3
+          }
+        ]
+      }
+    ],
+    "qa_companion_replacement": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_companion_replacement-1.log",
+        "log_sha256": "8d88d6b8dcd83f898b67c093952801680869f3bf3c7c04b4f92698ae4356cb5b",
+        "summary": [
+          {
+            "checks": [
+              "paid helper physically rescued",
+              "earned owl-first replacement receipt 0",
+              "earned owl-first replacement receipt 1",
+              "earned owl-first replacement receipt 2",
+              "earned owl-first replacement receipt 3",
+              "earned owl-first replacement receipt 4",
+              "earned owl-first replacement receipt 5",
+              "the two original selections are live",
+              "routine hostile is not pre-provoked by a wildlife hunter",
+              "actual enemy contact subtracts live survivor health",
+              "visible survivor axe contact created retaliation",
+              "fatal enemy contact ends the survivor assignment",
+              "a delayed contact cannot kill a worker twice",
+              "defeated survivor has completed the visible fall",
+              "low and reachable owl can suffer lethal contact",
+              "original paid history is preserved when the roost reopens",
+              "both casualties persist without cloned balances",
+              "earned survivor-return replacement receipt 0",
+              "earned survivor-return replacement receipt 1",
+              "earned survivor-return replacement receipt 2",
+              "earned survivor-return replacement receipt 3",
+              "earned survivor-return replacement receipt 4",
+              "earned survivor-return replacement receipt 5",
+              "earned survivor-return replacement receipt 6",
+              "earned survivor-return replacement receipt 7",
+              "earned owl-return replacement receipt 0",
+              "earned owl-return replacement receipt 1",
+              "earned owl-return replacement receipt 2",
+              "earned owl-return replacement receipt 3",
+              "earned owl-return replacement receipt 4",
+              "earned owl-return replacement receipt 5",
+              "the separate paid survivor replacement returns at full health",
+              "the separate paid owl replacement returns at full health",
+              "committed replacement costs and active actors restore"
+            ],
+            "errors": [],
+            "owl_hp": 12,
+            "owl_replacements": 1,
+            "survivor_hp": 18,
+            "survivor_replacements": 1
+          }
+        ]
+      }
+    ],
+    "qa_camp_layout": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_camp_layout-1.log",
+        "log_sha256": "e0d68c8aa8885e8b3e68770c637f61ea182fd36eb335baec0c8bdbbbca3cb16b",
+        "summary": [
+          {
+            "checks": {
+              "A customer pays for the real roast across the relocated fence": true,
+              "Cooker paid normally with the exact 120 wood and 80 stone": true,
+              "Entering the moved warehouse collects its actual roasts at the stocked shelf": true,
+              "Exit returns player's gameplay camera and controls": true,
+              "Gameplay pinch still works after moving": true,
+              "Invalid destination leaves all equipment untouched": true,
+              "Malformed layout restore rejected without partial mutation": true,
+              "Meat handed off at relocated cooker produces a real meal": true,
+              "Model, guard, hopper, outfeed and both worker aprons move as a unit": true,
+              "Mouse opens identical layout controls": true,
+              "Moving the counter preserves each paid note": true,
+              "Moving up to the relocated house stocks its real FOOD shelf": true,
+              "Overlap rejected before it can persist": true,
+              "Relocated furnace light, art and solid footing stay together": true,
+              "Service point and queue meet across the relocated north fence bay": true,
+              "Spawn, defense side and gate are protected": true,
+              "Storehouse at new position accepts side loading": true,
+              "Touch opens layout and liberates joystick": true,
+              "Tower's paid physical footings stay on the moved defense side": true,
+              "Unowned cooker cannot be placed": true,
+              "Warehouse owns the relocated cooker's entire delivered lot": true,
+              "Worker detours around the moved furnace without crossing its body": true,
+              "camp_cooker committed by confirmation": true,
+              "camp_cooker picked by tapping its actual artwork": true,
+              "camp_cooker previews its physical destination": true,
+              "center_hearth committed by confirmation": true,
+              "center_hearth picked by tapping its actual artwork": true,
+              "center_hearth previews its physical destination": true,
+              "north_counter committed by confirmation": true,
+              "north_counter inputs, outputs and guard follow": true,
+              "north_counter picked by tapping its actual artwork": true,
+              "north_counter previews its physical destination": true,
+              "quarry_drill committed by confirmation": true,
+              "quarry_drill inputs, outputs and guard follow": true,
+              "quarry_drill picked by tapping its actual artwork": true,
+              "quarry_drill previews its physical destination": true,
+              "saw_bench committed by confirmation": true,
+              "saw_bench inputs, outputs and guard follow": true,
+              "saw_bench picked by tapping its actual artwork": true,
+              "saw_bench previews its physical destination": true,
+              "storage_wood committed by confirmation": true,
+              "storage_wood inputs, outputs and guard follow": true,
+              "storage_wood picked by tapping its actual artwork": true,
+              "storage_wood previews its physical destination": true,
+              "watchtower committed by confirmation": true,
+              "watchtower picked by tapping its actual artwork": true,
+              "watchtower previews its physical destination": true
+            },
+            "placements": [
+              {
+                "camp_cooker": [
+                  4.75,
+                  2.75
+                ],
+                "center_hearth": [
+                  -2.75,
+                  -2.5
+                ],
+                "north_counter": [
+                  4.0,
+                  -9.0
+                ],
+                "quarry_drill": [
+                  7.75,
+                  -6.25
+                ],
+                "saw_bench": [
+                  -3.5,
+                  2.5
+                ],
+                "storage_wood": [
+                  4.5,
+                  -2.5
+                ],
+                "watchtower": [
+                  8.0,
+                  3.5
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_camp_layout-2.log",
+        "log_sha256": "d0cfa9639e8fbcbcbdfcbb0be7e333b25046b4bd13499866843eee781ac871cf",
+        "summary": [
+          {
+            "checks": {
+              "Cold process recovers moved furnace and defending tower": true,
+              "Cold process recovers relocated cooker, counter and storehouse": true,
+              "Cold process recovers saw and drill collision": true,
+              "Reloaded receipts and cooked meal survive relocation": true
+            },
+            "placements": [
+              {
+                "camp_cooker": [
+                  4.75,
+                  2.75
+                ],
+                "center_hearth": [
+                  -2.75,
+                  -2.5
+                ],
+                "north_counter": [
+                  4.0,
+                  -9.0
+                ],
+                "quarry_drill": [
+                  7.75,
+                  -6.25
+                ],
+                "saw_bench": [
+                  -3.5,
+                  2.5
+                ],
+                "storage_wood": [
+                  4.5,
+                  -2.5
+                ],
+                "watchtower": [
+                  8.0,
+                  3.5
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "qa_camp_healing": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_camp_healing-1.log",
+        "log_sha256": "0b9deb6da7971215f15f313e712f6910d3cf1338f3b4a4c1c8d5cca489bb59a3",
+        "summary": [
+          {
+            "checks": {
+              "downed_save_waits_for_respawn": true,
+              "existing_respawn_remains_full_hp": true,
+              "expanded_paid_grounds_heal": true,
+              "failed_checkpoint_grants_no_hp_or_feedback": true,
+              "full_hp_has_no_award_or_repeat": true,
+              "gate_0_automatic_visible_recovery": true,
+              "gate_0_normal_input_crosses": true,
+              "gate_0_snow_does_not_heal": true,
+              "gate_0_world_feedback": true,
+              "gate_1_automatic_visible_recovery": true,
+              "gate_1_normal_input_crosses": true,
+              "gate_1_snow_does_not_heal": true,
+              "gate_1_world_feedback": true,
+              "just_outside_closed_gate_restore_stays_on_snow": true,
+              "last_actual_hp_only": true,
+              "leaving_cancels_partial_pulse": true,
+              "legacy_profile_can_heal": true,
+              "paid_profile_restored": true,
+              "partial_second_completes_after_reload": true,
+              "reload_does_not_grant_early_hp": true,
+              "save_keeps_partial_hp_and_elapsed": true,
+              "unbuilt_footprint_does_not_heal": true,
+              "v1_low_hp_loads_without_a_free_pulse": true
+            },
+            "gate_crossings": {
+              "0": [
+                6.49743505561319e-18,
+                3.15194535255432
+              ],
+              "1": [
+                4.15194749832153,
+                2.5463603492426e-07
+              ]
+            },
+            "suite": "camp_healing"
+          }
+        ]
+      }
+    ],
+    "qa_field_hearth": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_field_hearth-1.log",
+        "log_sha256": "58f6221a58296db47fa0782b694e366f1cea7a36a49c29022ad367ec33000050",
+        "summary": [
+          {
+            "checks": {
+              "A successful saved heal brightens the furnace and updates HP": true,
+              "Crossing the gate starts camp-wide hearth recovery": true,
+              "Fire breathes steadily at full health": true,
+              "Furnace recovery leaves balances intact": true,
+              "Live ArchedFirebox fitted to the paid furnace": true,
+              "Live ChimneyDraft fitted to the paid furnace": true,
+              "Live CoalsUnderFlue fitted to the paid furnace": true,
+              "Live FlueFlame fitted to the paid furnace": true,
+              "Outdoor hits persist while the furnace burns inside": true,
+              "Paid furnace keeps its fire after the brief purchase effect": true,
+              "Unpaid furnace produces no fire, light or recovery": true
+            },
+            "maximum_light": 0.887084245681763,
+            "minimum_light": 0.758187711238861,
+            "outdoor_hp": 23,
+            "recovery_flash": 0.956666666666667,
+            "return_hp": 26
+          }
+        ]
+      }
+    ],
+    "qa_camp_raid": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_camp_raid-1.log",
+        "log_sha256": "d7ddb065bf1e74b7a41849194875124813a487b85c914a2dd4fe4304d3e29576",
+        "summary": [
+          {
+            "a defender near camp prevents a due raid from starting": true,
+            "a hostile already provoked by the survivor may retaliate": true,
+            "a lost attack ends and allows a repair period": true,
+            "a real raid wolf enters through the breach without the player nearby": true,
+            "a repeat wave warns about an actual east fence section": true,
+            "actual game inventory can restore the conserved repair journal": true,
+            "authored bite eventually breaks the warned fence": true,
+            "breached fence opens both physical and analytical collision": true,
+            "destroyed cooker cannot accept manual or automated input": true,
+            "destroyed furnace extinguishes the healing fire": true,
+            "destroyed mills stop operating and open their hulls": true,
+            "exposed camp receives its full warning": true,
+            "failed raid grants 60 minutes between attack end and earliest start": true,
+            "furnace is attacked inside camp after entry": true,
+            "hearth lights and gate collides once repaired": true,
+            "intact fence rejects travel across its collision before the raid": true,
+            "isolated survivor is a legal target with both defenders far away": true,
+            "launch only after all five minutes": true,
+            "live enemies and breached gate survive world snapshot": true,
+            "native proximity rescues the bought survivor": true,
+            "native world snapshot restores the warning without spawning": true,
+            "no automatic hit on a distant player": true,
+            "no early camp attackers": true,
+            "no hit during warning": true,
+            "no launch a hundredth of a second early": true,
+            "ordinary jaw contact reduces the isolated survivor's actual HP": true,
+            "paid damageable site exists for cooker": true,
+            "paid damageable site exists for drill": true,
+            "paid damageable site exists for saw": true,
+            "paid damageable site exists for tower": true,
+            "paid gate eventually breaches and opens its collision": true,
+            "paid repair of cooker": true,
+            "paid repair of drill": true,
+            "paid repair of fence-east-south": true,
+            "paid repair of furnace": true,
+            "paid repair of gate-east": true,
+            "paid repair of saw": true,
+            "paid repair of tower": true,
+            "raid damage can destroy cooker": true,
+            "raid damage can destroy drill": true,
+            "raid damage can destroy saw": true,
+            "raid damage can destroy tower": true,
+            "raid wolf jaws physically attack the warned gate": true,
+            "rebuilding restores each paid machine": true,
+            "rebuilt fence closes both physical and analytical collision": true,
+            "repair accounting includes every used unit": true,
+            "repeat raiders walk through the new physical fence opening": true,
+            "repelled raid starts independent cooldown": true,
+            "resident player protects the nearby unprovoking survivor": true,
+            "the raid spawns real wolves at its warned camp": true,
+            "the real paid camp shows a 5:00 warning while player is far away": true,
+            "unbuilt camp doesn't advance first cooldown": true,
+            "warning survives JSON round trip": true
+          }
+        ]
+      }
+    ],
+    "qa_unattended_lines": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_unattended_lines-1.log",
+        "log_sha256": "837fe5dd2efe6b7863aad011f04aa8b8052c316ece642a446d0d12063c425ae9",
+        "summary": [
+          {
+            "checks": {
+              "all persisted inventory invariants hold": true,
+              "empty public counter fills both slots without an order or staff handoff": true,
+              "full counter holds stock without selling or dispatching twice": true,
+              "meal-only install automatically feeds and empties the cooker": true,
+              "no helper or player handled the connected loads": true,
+              "no survivor or player carries production freight": true,
+              "normal paid scene opened in isolated save": true,
+              "player remained at the original position": true,
+              "unattended serial line accounts for six raw portions and the original roast": true,
+              "unconnected timber and stone remain untouched": true
+            },
+            "final": {
+              "blocks": 0,
+              "cash": 0,
+              "cooked": 7,
+              "counter_stock": 2,
+              "hoppers": {
+                "meat": 0,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 0,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "planks": 0,
+              "product_store": {
+                "blocks": 0,
+                "meal": 5,
+                "planks": 0
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.0,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "stored": {
+                "coal": 0,
+                "meat": 0,
+                "metal": 0,
+                "slate": 0,
+                "stone": 3,
+                "wood": 3
+              }
+            },
+            "initial": {
+              "blocks": 0,
+              "cash": 0,
+              "cooked": 1,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 0,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 0,
+                "meal_to_store": 1,
+                "meat": 0,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "planks": 0,
+              "product_store": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.036205489902429,
+                "meat": 0.0,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "stored": {
+                "coal": 0,
+                "meat": 6,
+                "metal": 0,
+                "slate": 0,
+                "stone": 3,
+                "wood": 3
+              }
+            },
+            "mode": "stock",
+            "player_xz": [
+              1.14999997615814,
+              0.899999976158142
+            ]
+          }
+        ]
+      },
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_unattended_lines-2.log",
+        "log_sha256": "0f0dc6760cfbdc69b3ecd6f3635e4bc4eed1e009afb9c7b68a5b6e814b9d19ee",
+        "summary": [
+          {
+            "checks": {
+              "all persisted inventory invariants hold": true,
+              "cold launch restored the full buffer and separate shelf": true,
+              "no helper or player handled the connected loads": true,
+              "no survivor or player carries production freight": true,
+              "normal paid scene opened in isolated save": true,
+              "player remained at the original position": true,
+              "real cashier payment event occurred": true,
+              "served inventory balanced after the restart": true,
+              "seven real customers collected and paid once": true
+            },
+            "final": {
+              "blocks": 0,
+              "cash": 7,
+              "cooked": 7,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 0,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 0,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "planks": 0,
+              "product_store": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.0,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "stored": {
+                "coal": 0,
+                "meat": 0,
+                "metal": 0,
+                "slate": 0,
+                "stone": 3,
+                "wood": 3
+              }
+            },
+            "initial": {
+              "blocks": 0,
+              "cash": 0,
+              "cooked": 7,
+              "counter_stock": 2,
+              "hoppers": {
+                "meat": 0,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 0,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "planks": 0,
+              "product_store": {
+                "blocks": 0,
+                "meal": 5,
+                "planks": 0
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.0,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "stored": {
+                "coal": 0,
+                "meat": 0,
+                "metal": 0,
+                "slate": 0,
+                "stone": 3,
+                "wood": 3
+              }
+            },
+            "mode": "cold",
+            "player_xz": [
+              1.14999997615814,
+              0.899999976158142
+            ]
+          }
+        ]
+      },
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_unattended_lines-3.log",
+        "log_sha256": "79fe930ed8aaf182ac12697d9b98b52bd96f67526f49ec9f757fc73f2c634a8f",
+        "summary": [
+          {
+            "checks": {
+              "all persisted inventory invariants hold": true,
+              "idle camp supplied, processed and stored all three types": true,
+              "no counter line creates an unpaid sale": true,
+              "no helper or player handled the connected loads": true,
+              "no survivor or player carries production freight": true,
+              "normal paid scene opened in isolated save": true,
+              "only paid workshop supply installed": true,
+              "player remained at the original position": true,
+              "supply returns every purchased machine output": true,
+              "supply_conveyors is a visible build action": true,
+              "supply_conveyors physically available": true,
+              "supply_conveyors purchased through actual plot": true,
+              "the full cold shelf leaves a surplus serving at the cooker": true
+            },
+            "final": {
+              "blocks": 3,
+              "cash": 0,
+              "cooked": 7,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 0,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 0,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "planks": 3,
+              "product_store": {
+                "blocks": 3,
+                "meal": 6,
+                "planks": 3
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.0,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 1,
+              "stored": {
+                "coal": 0,
+                "meat": 0,
+                "metal": 0,
+                "slate": 0,
+                "stone": 0,
+                "wood": 0
+              }
+            },
+            "initial": {
+              "blocks": 0,
+              "cash": 0,
+              "cooked": 1,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 0,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 0,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "planks": 0,
+              "product_store": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.0,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 1,
+              "stored": {
+                "coal": 0,
+                "meat": 6,
+                "metal": 0,
+                "slate": 0,
+                "stone": 3,
+                "wood": 3
+              }
+            },
+            "mode": "supply",
+            "player_xz": [
+              1.14999997615814,
+              0.899999976158142
+            ]
+          }
+        ]
+      }
+    ],
+    "qa_workshop_floor_access": [
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_workshop_floor_access-1.log",
+        "log_sha256": "901cc2555ffb5144ee5088886f1c6cb4e1e5a481bebb503b33e863d17d415b8a",
+        "summary": [
+          {
+            "checks": {
+              "cooker to counter clears the installed machinery and rails": true,
+              "cooker to counter reaches the real service spot on foot": true,
+              "counter to store clears the installed machinery and rails": true,
+              "counter to store reaches the real service spot on foot": true,
+              "paid warehouse exposes an accessible material apron": true,
+              "saw to drill clears the installed machinery and rails": true,
+              "saw to drill reaches the real service spot on foot": true,
+              "store to cooker clears the installed machinery and rails": true,
+              "store to cooker reaches the real service spot on foot": true,
+              "store to saw clears the installed machinery and rails": true,
+              "store to saw reaches the real service spot on foot": true
+            },
+            "mode": "walk",
+            "observations": {
+              "cooker to counter": {
+                "arrived": true,
+                "blocked_steps": 0,
+                "goal": "(3.93, 0.0, -7.53)",
+                "travel_metres": 5.93054029648192,
+                "travel_seconds": 2.93333333333333,
+                "walk_xz": [
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ],
+                  [
+                    -0.407,
+                    -5.007
+                  ],
+                  [
+                    -0.403,
+                    -5.007
+                  ],
+                  [
+                    -0.397,
+                    -5.007
+                  ],
+                  [
+                    -0.389,
+                    -5.008
+                  ],
+                  [
+                    -0.379,
+                    -5.008
+                  ],
+                  [
+                    -0.367,
+                    -5.009
+                  ],
+                  [
+                    -0.353,
+                    -5.01
+                  ],
+                  [
+                    -0.337,
+                    -5.011
+                  ],
+                  [
+                    -0.319,
+                    -5.012
+                  ],
+                  [
+                    -0.299,
+                    -5.013
+                  ],
+                  [
+                    -0.277,
+                    -5.014
+                  ],
+                  [
+                    -0.253,
+                    -5.015
+                  ],
+                  [
+                    -0.227,
+                    -5.017
+                  ],
+                  [
+                    -0.199,
+                    -5.018
+                  ],
+                  [
+                    -0.169,
+                    -5.02
+                  ],
+                  [
+                    -0.137,
+                    -5.021
+                  ],
+                  [
+                    -0.103,
+                    -5.023
+                  ],
+                  [
+                    -0.067,
+                    -5.025
+                  ],
+                  [
+                    -0.029,
+                    -5.027
+                  ],
+                  [
+                    0.011,
+                    -5.029
+                  ],
+                  [
+                    0.053,
+                    -5.032
+                  ],
+                  [
+                    0.096,
+                    -5.034
+                  ],
+                  [
+                    0.142,
+                    -5.036
+                  ],
+                  [
+                    0.189,
+                    -5.039
+                  ],
+                  [
+                    0.236,
+                    -5.041
+                  ],
+                  [
+                    0.282,
+                    -5.044
+                  ],
+                  [
+                    0.329,
+                    -5.047
+                  ],
+                  [
+                    0.375,
+                    -5.049
+                  ],
+                  [
+                    0.422,
+                    -5.052
+                  ],
+                  [
+                    0.469,
+                    -5.054
+                  ],
+                  [
+                    0.515,
+                    -5.057
+                  ],
+                  [
+                    0.562,
+                    -5.059
+                  ],
+                  [
+                    0.608,
+                    -5.062
+                  ],
+                  [
+                    0.655,
+                    -5.064
+                  ],
+                  [
+                    0.702,
+                    -5.067
+                  ],
+                  [
+                    0.748,
+                    -5.069
+                  ],
+                  [
+                    0.795,
+                    -5.072
+                  ],
+                  [
+                    0.841,
+                    -5.074
+                  ],
+                  [
+                    0.888,
+                    -5.077
+                  ],
+                  [
+                    0.935,
+                    -5.079
+                  ],
+                  [
+                    0.981,
+                    -5.082
+                  ],
+                  [
+                    1.028,
+                    -5.084
+                  ],
+                  [
+                    1.074,
+                    -5.087
+                  ],
+                  [
+                    1.121,
+                    -5.089
+                  ],
+                  [
+                    1.168,
+                    -5.092
+                  ],
+                  [
+                    1.214,
+                    -5.094
+                  ],
+                  [
+                    1.261,
+                    -5.097
+                  ],
+                  [
+                    1.307,
+                    -5.099
+                  ],
+                  [
+                    1.354,
+                    -5.102
+                  ],
+                  [
+                    1.401,
+                    -5.104
+                  ],
+                  [
+                    1.447,
+                    -5.107
+                  ],
+                  [
+                    1.494,
+                    -5.109
+                  ],
+                  [
+                    1.54,
+                    -5.112
+                  ],
+                  [
+                    1.587,
+                    -5.114
+                  ],
+                  [
+                    1.634,
+                    -5.117
+                  ],
+                  [
+                    1.68,
+                    -5.119
+                  ],
+                  [
+                    1.727,
+                    -5.122
+                  ],
+                  [
+                    1.773,
+                    -5.124
+                  ],
+                  [
+                    1.818,
+                    -5.138
+                  ],
+                  [
+                    1.862,
+                    -5.152
+                  ],
+                  [
+                    1.907,
+                    -5.166
+                  ],
+                  [
+                    1.952,
+                    -5.18
+                  ],
+                  [
+                    1.996,
+                    -5.194
+                  ],
+                  [
+                    2.041,
+                    -5.208
+                  ],
+                  [
+                    2.085,
+                    -5.222
+                  ],
+                  [
+                    2.13,
+                    -5.236
+                  ],
+                  [
+                    2.174,
+                    -5.249
+                  ],
+                  [
+                    2.219,
+                    -5.263
+                  ],
+                  [
+                    2.263,
+                    -5.277
+                  ],
+                  [
+                    2.308,
+                    -5.291
+                  ],
+                  [
+                    2.352,
+                    -5.305
+                  ],
+                  [
+                    2.396,
+                    -5.322
+                  ],
+                  [
+                    2.44,
+                    -5.338
+                  ],
+                  [
+                    2.483,
+                    -5.355
+                  ],
+                  [
+                    2.527,
+                    -5.371
+                  ],
+                  [
+                    2.571,
+                    -5.388
+                  ],
+                  [
+                    2.614,
+                    -5.404
+                  ],
+                  [
+                    2.658,
+                    -5.421
+                  ],
+                  [
+                    2.702,
+                    -5.437
+                  ],
+                  [
+                    2.745,
+                    -5.454
+                  ],
+                  [
+                    2.789,
+                    -5.47
+                  ],
+                  [
+                    2.832,
+                    -5.487
+                  ],
+                  [
+                    2.876,
+                    -5.504
+                  ],
+                  [
+                    2.92,
+                    -5.52
+                  ],
+                  [
+                    2.963,
+                    -5.537
+                  ],
+                  [
+                    3.007,
+                    -5.553
+                  ],
+                  [
+                    3.051,
+                    -5.57
+                  ],
+                  [
+                    3.094,
+                    -5.586
+                  ],
+                  [
+                    3.138,
+                    -5.603
+                  ],
+                  [
+                    3.182,
+                    -5.619
+                  ],
+                  [
+                    3.225,
+                    -5.636
+                  ],
+                  [
+                    3.269,
+                    -5.652
+                  ],
+                  [
+                    3.312,
+                    -5.669
+                  ],
+                  [
+                    3.356,
+                    -5.686
+                  ],
+                  [
+                    3.4,
+                    -5.702
+                  ],
+                  [
+                    3.441,
+                    -5.724
+                  ],
+                  [
+                    3.482,
+                    -5.747
+                  ],
+                  [
+                    3.523,
+                    -5.769
+                  ],
+                  [
+                    3.564,
+                    -5.791
+                  ],
+                  [
+                    3.605,
+                    -5.813
+                  ],
+                  [
+                    3.631,
+                    -5.851
+                  ],
+                  [
+                    3.659,
+                    -5.889
+                  ],
+                  [
+                    3.686,
+                    -5.927
+                  ],
+                  [
+                    3.713,
+                    -5.965
+                  ],
+                  [
+                    3.739,
+                    -6.002
+                  ],
+                  [
+                    3.764,
+                    -6.037
+                  ],
+                  [
+                    3.787,
+                    -6.07
+                  ],
+                  [
+                    3.809,
+                    -6.1
+                  ],
+                  [
+                    3.829,
+                    -6.128
+                  ],
+                  [
+                    3.837,
+                    -6.164
+                  ],
+                  [
+                    3.846,
+                    -6.201
+                  ],
+                  [
+                    3.853,
+                    -6.241
+                  ],
+                  [
+                    3.86,
+                    -6.283
+                  ],
+                  [
+                    3.868,
+                    -6.327
+                  ],
+                  [
+                    3.875,
+                    -6.371
+                  ],
+                  [
+                    3.88,
+                    -6.418
+                  ],
+                  [
+                    3.882,
+                    -6.464
+                  ],
+                  [
+                    3.891,
+                    -6.507
+                  ],
+                  [
+                    3.893,
+                    -6.553
+                  ],
+                  [
+                    3.895,
+                    -6.6
+                  ],
+                  [
+                    3.896,
+                    -6.646
+                  ],
+                  [
+                    3.898,
+                    -6.693
+                  ],
+                  [
+                    3.9,
+                    -6.74
+                  ],
+                  [
+                    3.902,
+                    -6.786
+                  ],
+                  [
+                    3.903,
+                    -6.833
+                  ],
+                  [
+                    3.905,
+                    -6.88
+                  ],
+                  [
+                    3.907,
+                    -6.926
+                  ],
+                  [
+                    3.909,
+                    -6.973
+                  ],
+                  [
+                    3.911,
+                    -7.019
+                  ],
+                  [
+                    3.912,
+                    -7.066
+                  ],
+                  [
+                    3.914,
+                    -7.113
+                  ],
+                  [
+                    3.916,
+                    -7.159
+                  ],
+                  [
+                    3.918,
+                    -7.205
+                  ],
+                  [
+                    3.919,
+                    -7.247
+                  ],
+                  [
+                    3.921,
+                    -7.287
+                  ],
+                  [
+                    3.922,
+                    -7.324
+                  ],
+                  [
+                    3.923,
+                    -7.358
+                  ],
+                  [
+                    3.925,
+                    -7.39
+                  ],
+                  [
+                    3.926,
+                    -7.419
+                  ],
+                  [
+                    3.927,
+                    -7.445
+                  ],
+                  [
+                    3.928,
+                    -7.468
+                  ],
+                  [
+                    3.928,
+                    -7.488
+                  ],
+                  [
+                    3.929,
+                    -7.506
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ]
+                ]
+              },
+              "counter to store": {
+                "arrived": true,
+                "blocked_steps": 0,
+                "goal": "(-3.07, 0.0, -1.23)",
+                "travel_metres": 9.92932196473703,
+                "travel_seconds": 4.6,
+                "walk_xz": [
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.52
+                  ],
+                  [
+                    3.93,
+                    -7.518
+                  ],
+                  [
+                    3.93,
+                    -7.514
+                  ],
+                  [
+                    3.93,
+                    -7.508
+                  ],
+                  [
+                    3.93,
+                    -7.5
+                  ],
+                  [
+                    3.93,
+                    -7.49
+                  ],
+                  [
+                    3.93,
+                    -7.478
+                  ],
+                  [
+                    3.93,
+                    -7.464
+                  ],
+                  [
+                    3.93,
+                    -7.448
+                  ],
+                  [
+                    3.93,
+                    -7.43
+                  ],
+                  [
+                    3.93,
+                    -7.41
+                  ],
+                  [
+                    3.93,
+                    -7.388
+                  ],
+                  [
+                    3.93,
+                    -7.364
+                  ],
+                  [
+                    3.93,
+                    -7.338
+                  ],
+                  [
+                    3.93,
+                    -7.31
+                  ],
+                  [
+                    3.93,
+                    -7.28
+                  ],
+                  [
+                    3.93,
+                    -7.248
+                  ],
+                  [
+                    3.93,
+                    -7.214
+                  ],
+                  [
+                    3.93,
+                    -7.178
+                  ],
+                  [
+                    3.93,
+                    -7.14
+                  ],
+                  [
+                    3.93,
+                    -7.1
+                  ],
+                  [
+                    3.93,
+                    -7.058
+                  ],
+                  [
+                    3.93,
+                    -7.014
+                  ],
+                  [
+                    3.93,
+                    -6.968
+                  ],
+                  [
+                    3.93,
+                    -6.922
+                  ],
+                  [
+                    3.93,
+                    -6.875
+                  ],
+                  [
+                    3.93,
+                    -6.828
+                  ],
+                  [
+                    3.93,
+                    -6.782
+                  ],
+                  [
+                    3.93,
+                    -6.735
+                  ],
+                  [
+                    3.93,
+                    -6.688
+                  ],
+                  [
+                    3.93,
+                    -6.642
+                  ],
+                  [
+                    3.93,
+                    -6.595
+                  ],
+                  [
+                    3.921,
+                    -6.549
+                  ],
+                  [
+                    3.913,
+                    -6.503
+                  ],
+                  [
+                    3.904,
+                    -6.458
+                  ],
+                  [
+                    3.895,
+                    -6.412
+                  ],
+                  [
+                    3.887,
+                    -6.366
+                  ],
+                  [
+                    3.878,
+                    -6.32
+                  ],
+                  [
+                    3.862,
+                    -6.276
+                  ],
+                  [
+                    3.846,
+                    -6.233
+                  ],
+                  [
+                    3.839,
+                    -6.187
+                  ],
+                  [
+                    3.817,
+                    -6.146
+                  ],
+                  [
+                    3.795,
+                    -6.104
+                  ],
+                  [
+                    3.773,
+                    -6.063
+                  ],
+                  [
+                    3.751,
+                    -6.022
+                  ],
+                  [
+                    3.729,
+                    -5.981
+                  ],
+                  [
+                    3.707,
+                    -5.94
+                  ],
+                  [
+                    3.685,
+                    -5.898
+                  ],
+                  [
+                    3.649,
+                    -5.869
+                  ],
+                  [
+                    3.613,
+                    -5.84
+                  ],
+                  [
+                    3.577,
+                    -5.811
+                  ],
+                  [
+                    3.54,
+                    -5.781
+                  ],
+                  [
+                    3.504,
+                    -5.752
+                  ],
+                  [
+                    3.468,
+                    -5.722
+                  ],
+                  [
+                    3.431,
+                    -5.693
+                  ],
+                  [
+                    3.395,
+                    -5.664
+                  ],
+                  [
+                    3.359,
+                    -5.634
+                  ],
+                  [
+                    3.323,
+                    -5.605
+                  ],
+                  [
+                    3.286,
+                    -5.576
+                  ],
+                  [
+                    3.25,
+                    -5.546
+                  ],
+                  [
+                    3.214,
+                    -5.517
+                  ],
+                  [
+                    3.178,
+                    -5.488
+                  ],
+                  [
+                    3.141,
+                    -5.458
+                  ],
+                  [
+                    3.105,
+                    -5.429
+                  ],
+                  [
+                    3.069,
+                    -5.399
+                  ],
+                  [
+                    3.033,
+                    -5.37
+                  ],
+                  [
+                    2.996,
+                    -5.341
+                  ],
+                  [
+                    2.96,
+                    -5.311
+                  ],
+                  [
+                    2.924,
+                    -5.282
+                  ],
+                  [
+                    2.887,
+                    -5.253
+                  ],
+                  [
+                    2.851,
+                    -5.223
+                  ],
+                  [
+                    2.815,
+                    -5.194
+                  ],
+                  [
+                    2.779,
+                    -5.165
+                  ],
+                  [
+                    2.742,
+                    -5.135
+                  ],
+                  [
+                    2.706,
+                    -5.106
+                  ],
+                  [
+                    2.67,
+                    -5.076
+                  ],
+                  [
+                    2.634,
+                    -5.047
+                  ],
+                  [
+                    2.597,
+                    -5.018
+                  ],
+                  [
+                    2.561,
+                    -4.988
+                  ],
+                  [
+                    2.525,
+                    -4.959
+                  ],
+                  [
+                    2.488,
+                    -4.93
+                  ],
+                  [
+                    2.452,
+                    -4.901
+                  ],
+                  [
+                    2.415,
+                    -4.872
+                  ],
+                  [
+                    2.379,
+                    -4.843
+                  ],
+                  [
+                    2.342,
+                    -4.814
+                  ],
+                  [
+                    2.305,
+                    -4.785
+                  ],
+                  [
+                    2.269,
+                    -4.756
+                  ],
+                  [
+                    2.232,
+                    -4.727
+                  ],
+                  [
+                    2.196,
+                    -4.698
+                  ],
+                  [
+                    2.159,
+                    -4.669
+                  ],
+                  [
+                    2.123,
+                    -4.64
+                  ],
+                  [
+                    2.086,
+                    -4.611
+                  ],
+                  [
+                    2.05,
+                    -4.581
+                  ],
+                  [
+                    2.013,
+                    -4.552
+                  ],
+                  [
+                    1.977,
+                    -4.523
+                  ],
+                  [
+                    1.941,
+                    -4.494
+                  ],
+                  [
+                    1.904,
+                    -4.464
+                  ],
+                  [
+                    1.868,
+                    -4.435
+                  ],
+                  [
+                    1.832,
+                    -4.406
+                  ],
+                  [
+                    1.796,
+                    -4.376
+                  ],
+                  [
+                    1.759,
+                    -4.347
+                  ],
+                  [
+                    1.723,
+                    -4.318
+                  ],
+                  [
+                    1.686,
+                    -4.289
+                  ],
+                  [
+                    1.65,
+                    -4.26
+                  ],
+                  [
+                    1.613,
+                    -4.231
+                  ],
+                  [
+                    1.577,
+                    -4.202
+                  ],
+                  [
+                    1.54,
+                    -4.173
+                  ],
+                  [
+                    1.504,
+                    -4.143
+                  ],
+                  [
+                    1.467,
+                    -4.114
+                  ],
+                  [
+                    1.431,
+                    -4.085
+                  ],
+                  [
+                    1.395,
+                    -4.056
+                  ],
+                  [
+                    1.359,
+                    -4.026
+                  ],
+                  [
+                    1.322,
+                    -3.997
+                  ],
+                  [
+                    1.286,
+                    -3.967
+                  ],
+                  [
+                    1.25,
+                    -3.938
+                  ],
+                  [
+                    1.214,
+                    -3.909
+                  ],
+                  [
+                    1.177,
+                    -3.879
+                  ],
+                  [
+                    1.141,
+                    -3.85
+                  ],
+                  [
+                    1.105,
+                    -3.82
+                  ],
+                  [
+                    1.069,
+                    -3.791
+                  ],
+                  [
+                    1.033,
+                    -3.761
+                  ],
+                  [
+                    0.996,
+                    -3.732
+                  ],
+                  [
+                    0.96,
+                    -3.702
+                  ],
+                  [
+                    0.924,
+                    -3.673
+                  ],
+                  [
+                    0.888,
+                    -3.644
+                  ],
+                  [
+                    0.852,
+                    -3.614
+                  ],
+                  [
+                    0.815,
+                    -3.585
+                  ],
+                  [
+                    0.779,
+                    -3.555
+                  ],
+                  [
+                    0.743,
+                    -3.526
+                  ],
+                  [
+                    0.707,
+                    -3.496
+                  ],
+                  [
+                    0.671,
+                    -3.467
+                  ],
+                  [
+                    0.634,
+                    -3.437
+                  ],
+                  [
+                    0.598,
+                    -3.408
+                  ],
+                  [
+                    0.562,
+                    -3.378
+                  ],
+                  [
+                    0.526,
+                    -3.349
+                  ],
+                  [
+                    0.49,
+                    -3.32
+                  ],
+                  [
+                    0.453,
+                    -3.29
+                  ],
+                  [
+                    0.417,
+                    -3.261
+                  ],
+                  [
+                    0.381,
+                    -3.231
+                  ],
+                  [
+                    0.345,
+                    -3.202
+                  ],
+                  [
+                    0.309,
+                    -3.172
+                  ],
+                  [
+                    0.273,
+                    -3.143
+                  ],
+                  [
+                    0.236,
+                    -3.113
+                  ],
+                  [
+                    0.2,
+                    -3.084
+                  ],
+                  [
+                    0.164,
+                    -3.054
+                  ],
+                  [
+                    0.128,
+                    -3.025
+                  ],
+                  [
+                    0.092,
+                    -2.996
+                  ],
+                  [
+                    0.055,
+                    -2.966
+                  ],
+                  [
+                    0.019,
+                    -2.937
+                  ],
+                  [
+                    -0.017,
+                    -2.907
+                  ],
+                  [
+                    -0.053,
+                    -2.878
+                  ],
+                  [
+                    -0.089,
+                    -2.848
+                  ],
+                  [
+                    -0.126,
+                    -2.819
+                  ],
+                  [
+                    -0.162,
+                    -2.789
+                  ],
+                  [
+                    -0.198,
+                    -2.76
+                  ],
+                  [
+                    -0.234,
+                    -2.73
+                  ],
+                  [
+                    -0.27,
+                    -2.701
+                  ],
+                  [
+                    -0.307,
+                    -2.672
+                  ],
+                  [
+                    -0.343,
+                    -2.642
+                  ],
+                  [
+                    -0.379,
+                    -2.613
+                  ],
+                  [
+                    -0.415,
+                    -2.583
+                  ],
+                  [
+                    -0.451,
+                    -2.554
+                  ],
+                  [
+                    -0.488,
+                    -2.524
+                  ],
+                  [
+                    -0.524,
+                    -2.495
+                  ],
+                  [
+                    -0.56,
+                    -2.465
+                  ],
+                  [
+                    -0.596,
+                    -2.436
+                  ],
+                  [
+                    -0.632,
+                    -2.406
+                  ],
+                  [
+                    -0.671,
+                    -2.38
+                  ],
+                  [
+                    -0.709,
+                    -2.354
+                  ],
+                  [
+                    -0.748,
+                    -2.327
+                  ],
+                  [
+                    -0.786,
+                    -2.301
+                  ],
+                  [
+                    -0.825,
+                    -2.274
+                  ],
+                  [
+                    -0.863,
+                    -2.248
+                  ],
+                  [
+                    -0.902,
+                    -2.222
+                  ],
+                  [
+                    -0.94,
+                    -2.195
+                  ],
+                  [
+                    -0.979,
+                    -2.169
+                  ],
+                  [
+                    -1.017,
+                    -2.142
+                  ],
+                  [
+                    -1.056,
+                    -2.116
+                  ],
+                  [
+                    -1.094,
+                    -2.089
+                  ],
+                  [
+                    -1.133,
+                    -2.063
+                  ],
+                  [
+                    -1.171,
+                    -2.037
+                  ],
+                  [
+                    -1.209,
+                    -2.01
+                  ],
+                  [
+                    -1.248,
+                    -1.984
+                  ],
+                  [
+                    -1.284,
+                    -1.959
+                  ],
+                  [
+                    -1.326,
+                    -1.942
+                  ],
+                  [
+                    -1.369,
+                    -1.924
+                  ],
+                  [
+                    -1.413,
+                    -1.907
+                  ],
+                  [
+                    -1.456,
+                    -1.889
+                  ],
+                  [
+                    -1.499,
+                    -1.871
+                  ],
+                  [
+                    -1.542,
+                    -1.854
+                  ],
+                  [
+                    -1.585,
+                    -1.836
+                  ],
+                  [
+                    -1.629,
+                    -1.818
+                  ],
+                  [
+                    -1.672,
+                    -1.801
+                  ],
+                  [
+                    -1.715,
+                    -1.783
+                  ],
+                  [
+                    -1.758,
+                    -1.765
+                  ],
+                  [
+                    -1.801,
+                    -1.748
+                  ],
+                  [
+                    -1.845,
+                    -1.73
+                  ],
+                  [
+                    -1.888,
+                    -1.713
+                  ],
+                  [
+                    -1.931,
+                    -1.695
+                  ],
+                  [
+                    -1.974,
+                    -1.677
+                  ],
+                  [
+                    -2.017,
+                    -1.66
+                  ],
+                  [
+                    -2.061,
+                    -1.642
+                  ],
+                  [
+                    -2.104,
+                    -1.624
+                  ],
+                  [
+                    -2.147,
+                    -1.607
+                  ],
+                  [
+                    -2.19,
+                    -1.589
+                  ],
+                  [
+                    -2.233,
+                    -1.571
+                  ],
+                  [
+                    -2.277,
+                    -1.554
+                  ],
+                  [
+                    -2.32,
+                    -1.536
+                  ],
+                  [
+                    -2.363,
+                    -1.519
+                  ],
+                  [
+                    -2.406,
+                    -1.501
+                  ],
+                  [
+                    -2.449,
+                    -1.483
+                  ],
+                  [
+                    -2.493,
+                    -1.466
+                  ],
+                  [
+                    -2.536,
+                    -1.448
+                  ],
+                  [
+                    -2.579,
+                    -1.43
+                  ],
+                  [
+                    -2.622,
+                    -1.413
+                  ],
+                  [
+                    -2.665,
+                    -1.395
+                  ],
+                  [
+                    -2.709,
+                    -1.377
+                  ],
+                  [
+                    -2.752,
+                    -1.36
+                  ],
+                  [
+                    -2.792,
+                    -1.343
+                  ],
+                  [
+                    -2.83,
+                    -1.328
+                  ],
+                  [
+                    -2.866,
+                    -1.313
+                  ],
+                  [
+                    -2.899,
+                    -1.3
+                  ],
+                  [
+                    -2.929,
+                    -1.288
+                  ],
+                  [
+                    -2.956,
+                    -1.276
+                  ],
+                  [
+                    -2.982,
+                    -1.266
+                  ],
+                  [
+                    -3.004,
+                    -1.257
+                  ],
+                  [
+                    -3.024,
+                    -1.249
+                  ],
+                  [
+                    -3.041,
+                    -1.242
+                  ],
+                  [
+                    -3.056,
+                    -1.236
+                  ]
+                ]
+              },
+              "saw to drill": {
+                "arrived": true,
+                "blocked_steps": 0,
+                "goal": "(-6.849999, 0.0, 0.17)",
+                "travel_metres": 7.38108503469266,
+                "travel_seconds": 3.7,
+                "walk_xz": [
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ],
+                  [
+                    -8.533,
+                    -5.425
+                  ],
+                  [
+                    -8.534,
+                    -5.421
+                  ],
+                  [
+                    -8.537,
+                    -5.416
+                  ],
+                  [
+                    -8.541,
+                    -5.409
+                  ],
+                  [
+                    -8.545,
+                    -5.4
+                  ],
+                  [
+                    -8.55,
+                    -5.389
+                  ],
+                  [
+                    -8.557,
+                    -5.376
+                  ],
+                  [
+                    -8.564,
+                    -5.362
+                  ],
+                  [
+                    -8.572,
+                    -5.346
+                  ],
+                  [
+                    -8.581,
+                    -5.328
+                  ],
+                  [
+                    -8.591,
+                    -5.309
+                  ],
+                  [
+                    -8.601,
+                    -5.287
+                  ],
+                  [
+                    -8.613,
+                    -5.264
+                  ],
+                  [
+                    -8.626,
+                    -5.239
+                  ],
+                  [
+                    -8.639,
+                    -5.212
+                  ],
+                  [
+                    -8.653,
+                    -5.183
+                  ],
+                  [
+                    -8.669,
+                    -5.153
+                  ],
+                  [
+                    -8.685,
+                    -5.121
+                  ],
+                  [
+                    -8.702,
+                    -5.087
+                  ],
+                  [
+                    -8.72,
+                    -5.051
+                  ],
+                  [
+                    -8.738,
+                    -5.013
+                  ],
+                  [
+                    -8.758,
+                    -4.974
+                  ],
+                  [
+                    -8.779,
+                    -4.933
+                  ],
+                  [
+                    -8.799,
+                    -4.891
+                  ],
+                  [
+                    -8.82,
+                    -4.849
+                  ],
+                  [
+                    -8.841,
+                    -4.808
+                  ],
+                  [
+                    -8.862,
+                    -4.766
+                  ],
+                  [
+                    -8.883,
+                    -4.724
+                  ],
+                  [
+                    -8.904,
+                    -4.682
+                  ],
+                  [
+                    -8.925,
+                    -4.641
+                  ],
+                  [
+                    -8.946,
+                    -4.599
+                  ],
+                  [
+                    -8.966,
+                    -4.557
+                  ],
+                  [
+                    -8.987,
+                    -4.515
+                  ],
+                  [
+                    -9.008,
+                    -4.474
+                  ],
+                  [
+                    -9.029,
+                    -4.432
+                  ],
+                  [
+                    -9.05,
+                    -4.39
+                  ],
+                  [
+                    -9.071,
+                    -4.348
+                  ],
+                  [
+                    -9.092,
+                    -4.307
+                  ],
+                  [
+                    -9.112,
+                    -4.265
+                  ],
+                  [
+                    -9.133,
+                    -4.223
+                  ],
+                  [
+                    -9.15,
+                    -4.18
+                  ],
+                  [
+                    -9.167,
+                    -4.136
+                  ],
+                  [
+                    -9.184,
+                    -4.093
+                  ],
+                  [
+                    -9.197,
+                    -4.048
+                  ],
+                  [
+                    -9.211,
+                    -4.003
+                  ],
+                  [
+                    -9.224,
+                    -3.959
+                  ],
+                  [
+                    -9.237,
+                    -3.914
+                  ],
+                  [
+                    -9.251,
+                    -3.869
+                  ],
+                  [
+                    -9.25,
+                    -3.822
+                  ],
+                  [
+                    -9.25,
+                    -3.776
+                  ],
+                  [
+                    -9.25,
+                    -3.729
+                  ],
+                  [
+                    -9.249,
+                    -3.682
+                  ],
+                  [
+                    -9.249,
+                    -3.636
+                  ],
+                  [
+                    -9.249,
+                    -3.589
+                  ],
+                  [
+                    -9.249,
+                    -3.542
+                  ],
+                  [
+                    -9.248,
+                    -3.496
+                  ],
+                  [
+                    -9.248,
+                    -3.449
+                  ],
+                  [
+                    -9.248,
+                    -3.402
+                  ],
+                  [
+                    -9.247,
+                    -3.356
+                  ],
+                  [
+                    -9.247,
+                    -3.309
+                  ],
+                  [
+                    -9.247,
+                    -3.262
+                  ],
+                  [
+                    -9.246,
+                    -3.216
+                  ],
+                  [
+                    -9.246,
+                    -3.169
+                  ],
+                  [
+                    -9.246,
+                    -3.122
+                  ],
+                  [
+                    -9.246,
+                    -3.076
+                  ],
+                  [
+                    -9.245,
+                    -3.029
+                  ],
+                  [
+                    -9.245,
+                    -2.982
+                  ],
+                  [
+                    -9.245,
+                    -2.936
+                  ],
+                  [
+                    -9.244,
+                    -2.889
+                  ],
+                  [
+                    -9.244,
+                    -2.842
+                  ],
+                  [
+                    -9.244,
+                    -2.796
+                  ],
+                  [
+                    -9.243,
+                    -2.749
+                  ],
+                  [
+                    -9.243,
+                    -2.702
+                  ],
+                  [
+                    -9.243,
+                    -2.656
+                  ],
+                  [
+                    -9.243,
+                    -2.609
+                  ],
+                  [
+                    -9.242,
+                    -2.562
+                  ],
+                  [
+                    -9.242,
+                    -2.516
+                  ],
+                  [
+                    -9.242,
+                    -2.469
+                  ],
+                  [
+                    -9.241,
+                    -2.422
+                  ],
+                  [
+                    -9.241,
+                    -2.376
+                  ],
+                  [
+                    -9.241,
+                    -2.329
+                  ],
+                  [
+                    -9.24,
+                    -2.282
+                  ],
+                  [
+                    -9.24,
+                    -2.236
+                  ],
+                  [
+                    -9.24,
+                    -2.189
+                  ],
+                  [
+                    -9.239,
+                    -2.142
+                  ],
+                  [
+                    -9.239,
+                    -2.096
+                  ],
+                  [
+                    -9.239,
+                    -2.049
+                  ],
+                  [
+                    -9.239,
+                    -2.002
+                  ],
+                  [
+                    -9.238,
+                    -1.956
+                  ],
+                  [
+                    -9.238,
+                    -1.909
+                  ],
+                  [
+                    -9.238,
+                    -1.862
+                  ],
+                  [
+                    -9.237,
+                    -1.816
+                  ],
+                  [
+                    -9.237,
+                    -1.769
+                  ],
+                  [
+                    -9.237,
+                    -1.722
+                  ],
+                  [
+                    -9.236,
+                    -1.676
+                  ],
+                  [
+                    -9.236,
+                    -1.629
+                  ],
+                  [
+                    -9.236,
+                    -1.582
+                  ],
+                  [
+                    -9.236,
+                    -1.536
+                  ],
+                  [
+                    -9.235,
+                    -1.489
+                  ],
+                  [
+                    -9.235,
+                    -1.442
+                  ],
+                  [
+                    -9.235,
+                    -1.396
+                  ],
+                  [
+                    -9.234,
+                    -1.349
+                  ],
+                  [
+                    -9.234,
+                    -1.302
+                  ],
+                  [
+                    -9.234,
+                    -1.256
+                  ],
+                  [
+                    -9.233,
+                    -1.209
+                  ],
+                  [
+                    -9.233,
+                    -1.162
+                  ],
+                  [
+                    -9.233,
+                    -1.116
+                  ],
+                  [
+                    -9.216,
+                    -1.072
+                  ],
+                  [
+                    -9.199,
+                    -1.029
+                  ],
+                  [
+                    -9.182,
+                    -0.986
+                  ],
+                  [
+                    -9.165,
+                    -0.942
+                  ],
+                  [
+                    -9.148,
+                    -0.899
+                  ],
+                  [
+                    -9.131,
+                    -0.855
+                  ],
+                  [
+                    -9.101,
+                    -0.819
+                  ],
+                  [
+                    -9.071,
+                    -0.784
+                  ],
+                  [
+                    -9.041,
+                    -0.748
+                  ],
+                  [
+                    -9.011,
+                    -0.712
+                  ],
+                  [
+                    -8.981,
+                    -0.676
+                  ],
+                  [
+                    -8.951,
+                    -0.64
+                  ],
+                  [
+                    -8.922,
+                    -0.605
+                  ],
+                  [
+                    -8.892,
+                    -0.569
+                  ],
+                  [
+                    -8.862,
+                    -0.533
+                  ],
+                  [
+                    -8.832,
+                    -0.497
+                  ],
+                  [
+                    -8.802,
+                    -0.462
+                  ],
+                  [
+                    -8.772,
+                    -0.426
+                  ],
+                  [
+                    -8.742,
+                    -0.39
+                  ],
+                  [
+                    -8.712,
+                    -0.354
+                  ],
+                  [
+                    -8.682,
+                    -0.318
+                  ],
+                  [
+                    -8.652,
+                    -0.283
+                  ],
+                  [
+                    -8.622,
+                    -0.247
+                  ],
+                  [
+                    -8.593,
+                    -0.213
+                  ],
+                  [
+                    -8.566,
+                    -0.18
+                  ],
+                  [
+                    -8.526,
+                    -0.162
+                  ],
+                  [
+                    -8.484,
+                    -0.143
+                  ],
+                  [
+                    -8.442,
+                    -0.123
+                  ],
+                  [
+                    -8.396,
+                    -0.115
+                  ],
+                  [
+                    -8.35,
+                    -0.106
+                  ],
+                  [
+                    -8.304,
+                    -0.098
+                  ],
+                  [
+                    -8.258,
+                    -0.089
+                  ],
+                  [
+                    -8.213,
+                    -0.081
+                  ],
+                  [
+                    -8.167,
+                    -0.072
+                  ],
+                  [
+                    -8.121,
+                    -0.064
+                  ],
+                  [
+                    -8.075,
+                    -0.055
+                  ],
+                  [
+                    -8.029,
+                    -0.047
+                  ],
+                  [
+                    -7.983,
+                    -0.039
+                  ],
+                  [
+                    -7.937,
+                    -0.03
+                  ],
+                  [
+                    -7.891,
+                    -0.022
+                  ],
+                  [
+                    -7.845,
+                    -0.013
+                  ],
+                  [
+                    -7.799,
+                    -0.005
+                  ],
+                  [
+                    -7.754,
+                    0.004
+                  ],
+                  [
+                    -7.708,
+                    0.012
+                  ],
+                  [
+                    -7.662,
+                    0.021
+                  ],
+                  [
+                    -7.616,
+                    0.029
+                  ],
+                  [
+                    -7.57,
+                    0.037
+                  ],
+                  [
+                    -7.524,
+                    0.046
+                  ],
+                  [
+                    -7.478,
+                    0.054
+                  ],
+                  [
+                    -7.432,
+                    0.063
+                  ],
+                  [
+                    -7.386,
+                    0.071
+                  ],
+                  [
+                    -7.341,
+                    0.08
+                  ],
+                  [
+                    -7.295,
+                    0.088
+                  ],
+                  [
+                    -7.249,
+                    0.097
+                  ],
+                  [
+                    -7.203,
+                    0.105
+                  ],
+                  [
+                    -7.159,
+                    0.113
+                  ],
+                  [
+                    -7.118,
+                    0.121
+                  ],
+                  [
+                    -7.079,
+                    0.128
+                  ],
+                  [
+                    -7.044,
+                    0.134
+                  ],
+                  [
+                    -7.011,
+                    0.14
+                  ],
+                  [
+                    -6.98,
+                    0.146
+                  ],
+                  [
+                    -6.953,
+                    0.151
+                  ],
+                  [
+                    -6.928,
+                    0.156
+                  ],
+                  [
+                    -6.906,
+                    0.16
+                  ],
+                  [
+                    -6.887,
+                    0.163
+                  ],
+                  [
+                    -6.87,
+                    0.166
+                  ],
+                  [
+                    -6.856,
+                    0.169
+                  ]
+                ]
+              },
+              "store to cooker": {
+                "arrived": true,
+                "blocked_steps": 0,
+                "goal": "(-0.41, 0.0, -5.009999)",
+                "travel_metres": 5.46853669732809,
+                "travel_seconds": 2.75,
+                "walk_xz": [
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.07,
+                    -1.23
+                  ],
+                  [
+                    -3.068,
+                    -1.231
+                  ],
+                  [
+                    -3.064,
+                    -1.232
+                  ],
+                  [
+                    -3.059,
+                    -1.234
+                  ],
+                  [
+                    -3.051,
+                    -1.237
+                  ],
+                  [
+                    -3.042,
+                    -1.241
+                  ],
+                  [
+                    -3.031,
+                    -1.246
+                  ],
+                  [
+                    -3.018,
+                    -1.251
+                  ],
+                  [
+                    -3.003,
+                    -1.257
+                  ],
+                  [
+                    -2.986,
+                    -1.263
+                  ],
+                  [
+                    -2.968,
+                    -1.271
+                  ],
+                  [
+                    -2.947,
+                    -1.279
+                  ],
+                  [
+                    -2.925,
+                    -1.288
+                  ],
+                  [
+                    -2.901,
+                    -1.298
+                  ],
+                  [
+                    -2.875,
+                    -1.308
+                  ],
+                  [
+                    -2.847,
+                    -1.319
+                  ],
+                  [
+                    -2.817,
+                    -1.331
+                  ],
+                  [
+                    -2.786,
+                    -1.344
+                  ],
+                  [
+                    -2.752,
+                    -1.357
+                  ],
+                  [
+                    -2.717,
+                    -1.371
+                  ],
+                  [
+                    -2.68,
+                    -1.386
+                  ],
+                  [
+                    -2.641,
+                    -1.402
+                  ],
+                  [
+                    -2.6,
+                    -1.418
+                  ],
+                  [
+                    -2.557,
+                    -1.435
+                  ],
+                  [
+                    -2.514,
+                    -1.452
+                  ],
+                  [
+                    -2.471,
+                    -1.47
+                  ],
+                  [
+                    -2.427,
+                    -1.487
+                  ],
+                  [
+                    -2.384,
+                    -1.504
+                  ],
+                  [
+                    -2.341,
+                    -1.522
+                  ],
+                  [
+                    -2.298,
+                    -1.539
+                  ],
+                  [
+                    -2.254,
+                    -1.556
+                  ],
+                  [
+                    -2.211,
+                    -1.574
+                  ],
+                  [
+                    -2.168,
+                    -1.591
+                  ],
+                  [
+                    -2.124,
+                    -1.608
+                  ],
+                  [
+                    -2.081,
+                    -1.626
+                  ],
+                  [
+                    -2.038,
+                    -1.643
+                  ],
+                  [
+                    -1.994,
+                    -1.66
+                  ],
+                  [
+                    -1.951,
+                    -1.678
+                  ],
+                  [
+                    -1.908,
+                    -1.695
+                  ],
+                  [
+                    -1.864,
+                    -1.712
+                  ],
+                  [
+                    -1.821,
+                    -1.73
+                  ],
+                  [
+                    -1.778,
+                    -1.747
+                  ],
+                  [
+                    -1.734,
+                    -1.764
+                  ],
+                  [
+                    -1.691,
+                    -1.782
+                  ],
+                  [
+                    -1.648,
+                    -1.799
+                  ],
+                  [
+                    -1.604,
+                    -1.816
+                  ],
+                  [
+                    -1.561,
+                    -1.834
+                  ],
+                  [
+                    -1.518,
+                    -1.851
+                  ],
+                  [
+                    -1.474,
+                    -1.868
+                  ],
+                  [
+                    -1.431,
+                    -1.886
+                  ],
+                  [
+                    -1.39,
+                    -1.908
+                  ],
+                  [
+                    -1.349,
+                    -1.93
+                  ],
+                  [
+                    -1.308,
+                    -1.952
+                  ],
+                  [
+                    -1.267,
+                    -1.974
+                  ],
+                  [
+                    -1.226,
+                    -1.996
+                  ],
+                  [
+                    -1.185,
+                    -2.019
+                  ],
+                  [
+                    -1.151,
+                    -2.051
+                  ],
+                  [
+                    -1.118,
+                    -2.084
+                  ],
+                  [
+                    -1.085,
+                    -2.117
+                  ],
+                  [
+                    -1.051,
+                    -2.149
+                  ],
+                  [
+                    -1.018,
+                    -2.182
+                  ],
+                  [
+                    -0.985,
+                    -2.215
+                  ],
+                  [
+                    -0.951,
+                    -2.247
+                  ],
+                  [
+                    -0.918,
+                    -2.28
+                  ],
+                  [
+                    -0.887,
+                    -2.315
+                  ],
+                  [
+                    -0.856,
+                    -2.35
+                  ],
+                  [
+                    -0.825,
+                    -2.385
+                  ],
+                  [
+                    -0.794,
+                    -2.42
+                  ],
+                  [
+                    -0.763,
+                    -2.455
+                  ],
+                  [
+                    -0.733,
+                    -2.49
+                  ],
+                  [
+                    -0.702,
+                    -2.525
+                  ],
+                  [
+                    -0.671,
+                    -2.56
+                  ],
+                  [
+                    -0.64,
+                    -2.595
+                  ],
+                  [
+                    -0.609,
+                    -2.63
+                  ],
+                  [
+                    -0.578,
+                    -2.665
+                  ],
+                  [
+                    -0.547,
+                    -2.7
+                  ],
+                  [
+                    -0.516,
+                    -2.735
+                  ],
+                  [
+                    -0.485,
+                    -2.77
+                  ],
+                  [
+                    -0.454,
+                    -2.805
+                  ],
+                  [
+                    -0.424,
+                    -2.839
+                  ],
+                  [
+                    -0.393,
+                    -2.874
+                  ],
+                  [
+                    -0.362,
+                    -2.909
+                  ],
+                  [
+                    -0.331,
+                    -2.944
+                  ],
+                  [
+                    -0.3,
+                    -2.979
+                  ],
+                  [
+                    -0.269,
+                    -3.014
+                  ],
+                  [
+                    -0.238,
+                    -3.049
+                  ],
+                  [
+                    -0.223,
+                    -3.093
+                  ],
+                  [
+                    -0.207,
+                    -3.137
+                  ],
+                  [
+                    -0.194,
+                    -3.182
+                  ],
+                  [
+                    -0.181,
+                    -3.227
+                  ],
+                  [
+                    -0.168,
+                    -3.272
+                  ],
+                  [
+                    -0.155,
+                    -3.316
+                  ],
+                  [
+                    -0.142,
+                    -3.361
+                  ],
+                  [
+                    -0.142,
+                    -3.408
+                  ],
+                  [
+                    -0.134,
+                    -3.454
+                  ],
+                  [
+                    -0.126,
+                    -3.5
+                  ],
+                  [
+                    -0.119,
+                    -3.546
+                  ],
+                  [
+                    -0.119,
+                    -3.593
+                  ],
+                  [
+                    -0.12,
+                    -3.639
+                  ],
+                  [
+                    -0.12,
+                    -3.686
+                  ],
+                  [
+                    -0.12,
+                    -3.733
+                  ],
+                  [
+                    -0.121,
+                    -3.779
+                  ],
+                  [
+                    -0.121,
+                    -3.826
+                  ],
+                  [
+                    -0.122,
+                    -3.873
+                  ],
+                  [
+                    -0.122,
+                    -3.919
+                  ],
+                  [
+                    -0.123,
+                    -3.966
+                  ],
+                  [
+                    -0.123,
+                    -4.013
+                  ],
+                  [
+                    -0.124,
+                    -4.059
+                  ],
+                  [
+                    -0.124,
+                    -4.106
+                  ],
+                  [
+                    -0.124,
+                    -4.153
+                  ],
+                  [
+                    -0.125,
+                    -4.199
+                  ],
+                  [
+                    -0.135,
+                    -4.245
+                  ],
+                  [
+                    -0.145,
+                    -4.291
+                  ],
+                  [
+                    -0.161,
+                    -4.334
+                  ],
+                  [
+                    -0.177,
+                    -4.378
+                  ],
+                  [
+                    -0.193,
+                    -4.422
+                  ],
+                  [
+                    -0.209,
+                    -4.466
+                  ],
+                  [
+                    -0.225,
+                    -4.509
+                  ],
+                  [
+                    -0.242,
+                    -4.553
+                  ],
+                  [
+                    -0.258,
+                    -4.597
+                  ],
+                  [
+                    -0.274,
+                    -4.641
+                  ],
+                  [
+                    -0.29,
+                    -4.685
+                  ],
+                  [
+                    -0.305,
+                    -4.726
+                  ],
+                  [
+                    -0.319,
+                    -4.764
+                  ],
+                  [
+                    -0.333,
+                    -4.8
+                  ],
+                  [
+                    -0.345,
+                    -4.834
+                  ],
+                  [
+                    -0.356,
+                    -4.864
+                  ],
+                  [
+                    -0.367,
+                    -4.893
+                  ],
+                  [
+                    -0.376,
+                    -4.918
+                  ],
+                  [
+                    -0.385,
+                    -4.941
+                  ],
+                  [
+                    -0.392,
+                    -4.961
+                  ],
+                  [
+                    -0.399,
+                    -4.979
+                  ],
+                  [
+                    -0.404,
+                    -4.994
+                  ],
+                  [
+                    -0.409,
+                    -5.007
+                  ]
+                ]
+              },
+              "store to saw": {
+                "arrived": true,
+                "blocked_steps": 0,
+                "goal": "(-8.53, 0.0, -5.429999)",
+                "travel_metres": 11.8398222513497,
+                "travel_seconds": 4.4,
+                "walk_xz": [
+                  [
+                    -3.07,
+                    -1.224
+                  ],
+                  [
+                    -3.085,
+                    -1.211
+                  ],
+                  [
+                    -3.102,
+                    -1.196
+                  ],
+                  [
+                    -3.12,
+                    -1.181
+                  ],
+                  [
+                    -3.14,
+                    -1.164
+                  ],
+                  [
+                    -3.161,
+                    -1.145
+                  ],
+                  [
+                    -3.183,
+                    -1.126
+                  ],
+                  [
+                    -3.208,
+                    -1.105
+                  ],
+                  [
+                    -3.233,
+                    -1.083
+                  ],
+                  [
+                    -3.261,
+                    -1.059
+                  ],
+                  [
+                    -3.289,
+                    -1.034
+                  ],
+                  [
+                    -3.32,
+                    -1.008
+                  ],
+                  [
+                    -3.351,
+                    -0.981
+                  ],
+                  [
+                    -3.385,
+                    -0.952
+                  ],
+                  [
+                    -3.42,
+                    -0.922
+                  ],
+                  [
+                    -3.455,
+                    -0.891
+                  ],
+                  [
+                    -3.49,
+                    -0.861
+                  ],
+                  [
+                    -3.526,
+                    -0.83
+                  ],
+                  [
+                    -3.561,
+                    -0.8
+                  ],
+                  [
+                    -3.596,
+                    -0.769
+                  ],
+                  [
+                    -3.632,
+                    -0.739
+                  ],
+                  [
+                    -3.667,
+                    -0.708
+                  ],
+                  [
+                    -3.702,
+                    -0.678
+                  ],
+                  [
+                    -3.739,
+                    -0.649
+                  ],
+                  [
+                    -3.775,
+                    -0.62
+                  ],
+                  [
+                    -3.812,
+                    -0.591
+                  ],
+                  [
+                    -3.849,
+                    -0.562
+                  ],
+                  [
+                    -3.885,
+                    -0.533
+                  ],
+                  [
+                    -3.922,
+                    -0.504
+                  ],
+                  [
+                    -3.959,
+                    -0.476
+                  ],
+                  [
+                    -3.995,
+                    -0.447
+                  ],
+                  [
+                    -4.032,
+                    -0.418
+                  ],
+                  [
+                    -4.069,
+                    -0.389
+                  ],
+                  [
+                    -4.105,
+                    -0.36
+                  ],
+                  [
+                    -4.142,
+                    -0.331
+                  ],
+                  [
+                    -4.179,
+                    -0.302
+                  ],
+                  [
+                    -4.215,
+                    -0.273
+                  ],
+                  [
+                    -4.252,
+                    -0.244
+                  ],
+                  [
+                    -4.288,
+                    -0.215
+                  ],
+                  [
+                    -4.325,
+                    -0.187
+                  ],
+                  [
+                    -4.362,
+                    -0.158
+                  ],
+                  [
+                    -4.398,
+                    -0.129
+                  ],
+                  [
+                    -4.435,
+                    -0.1
+                  ],
+                  [
+                    -4.472,
+                    -0.071
+                  ],
+                  [
+                    -4.508,
+                    -0.042
+                  ],
+                  [
+                    -4.545,
+                    -0.013
+                  ],
+                  [
+                    -4.582,
+                    0.016
+                  ],
+                  [
+                    -4.618,
+                    0.045
+                  ],
+                  [
+                    -4.655,
+                    0.073
+                  ],
+                  [
+                    -4.692,
+                    0.102
+                  ],
+                  [
+                    -4.728,
+                    0.131
+                  ],
+                  [
+                    -4.765,
+                    0.16
+                  ],
+                  [
+                    -4.802,
+                    0.189
+                  ],
+                  [
+                    -4.838,
+                    0.218
+                  ],
+                  [
+                    -4.875,
+                    0.247
+                  ],
+                  [
+                    -4.911,
+                    0.276
+                  ],
+                  [
+                    -4.948,
+                    0.305
+                  ],
+                  [
+                    -4.985,
+                    0.334
+                  ],
+                  [
+                    -5.021,
+                    0.362
+                  ],
+                  [
+                    -5.063,
+                    0.384
+                  ],
+                  [
+                    -5.104,
+                    0.406
+                  ],
+                  [
+                    -5.145,
+                    0.428
+                  ],
+                  [
+                    -5.184,
+                    0.449
+                  ],
+                  [
+                    -5.229,
+                    0.456
+                  ],
+                  [
+                    -5.275,
+                    0.464
+                  ],
+                  [
+                    -5.321,
+                    0.47
+                  ],
+                  [
+                    -5.368,
+                    0.476
+                  ],
+                  [
+                    -5.414,
+                    0.481
+                  ],
+                  [
+                    -5.46,
+                    0.486
+                  ],
+                  [
+                    -5.507,
+                    0.491
+                  ],
+                  [
+                    -5.553,
+                    0.496
+                  ],
+                  [
+                    -5.6,
+                    0.501
+                  ],
+                  [
+                    -5.646,
+                    0.506
+                  ],
+                  [
+                    -5.692,
+                    0.511
+                  ],
+                  [
+                    -5.739,
+                    0.509
+                  ],
+                  [
+                    -5.786,
+                    0.506
+                  ],
+                  [
+                    -5.832,
+                    0.504
+                  ],
+                  [
+                    -5.879,
+                    0.502
+                  ],
+                  [
+                    -5.925,
+                    0.499
+                  ],
+                  [
+                    -5.972,
+                    0.497
+                  ],
+                  [
+                    -6.019,
+                    0.495
+                  ],
+                  [
+                    -6.065,
+                    0.494
+                  ],
+                  [
+                    -6.112,
+                    0.492
+                  ],
+                  [
+                    -6.157,
+                    0.481
+                  ],
+                  [
+                    -6.203,
+                    0.471
+                  ],
+                  [
+                    -6.249,
+                    0.461
+                  ],
+                  [
+                    -6.294,
+                    0.45
+                  ],
+                  [
+                    -6.339,
+                    0.44
+                  ],
+                  [
+                    -6.385,
+                    0.429
+                  ],
+                  [
+                    -6.43,
+                    0.418
+                  ],
+                  [
+                    -6.476,
+                    0.407
+                  ],
+                  [
+                    -6.521,
+                    0.397
+                  ],
+                  [
+                    -6.566,
+                    0.386
+                  ],
+                  [
+                    -6.612,
+                    0.375
+                  ],
+                  [
+                    -6.657,
+                    0.365
+                  ],
+                  [
+                    -6.703,
+                    0.354
+                  ],
+                  [
+                    -6.748,
+                    0.343
+                  ],
+                  [
+                    -6.794,
+                    0.333
+                  ],
+                  [
+                    -6.839,
+                    0.322
+                  ],
+                  [
+                    -6.884,
+                    0.311
+                  ],
+                  [
+                    -6.93,
+                    0.3
+                  ],
+                  [
+                    -6.975,
+                    0.29
+                  ],
+                  [
+                    -7.021,
+                    0.279
+                  ],
+                  [
+                    -7.066,
+                    0.268
+                  ],
+                  [
+                    -7.112,
+                    0.258
+                  ],
+                  [
+                    -7.157,
+                    0.247
+                  ],
+                  [
+                    -7.202,
+                    0.236
+                  ],
+                  [
+                    -7.248,
+                    0.225
+                  ],
+                  [
+                    -7.293,
+                    0.215
+                  ],
+                  [
+                    -7.339,
+                    0.204
+                  ],
+                  [
+                    -7.384,
+                    0.193
+                  ],
+                  [
+                    -7.429,
+                    0.183
+                  ],
+                  [
+                    -7.475,
+                    0.172
+                  ],
+                  [
+                    -7.52,
+                    0.161
+                  ],
+                  [
+                    -7.565,
+                    0.147
+                  ],
+                  [
+                    -7.609,
+                    0.133
+                  ],
+                  [
+                    -7.654,
+                    0.119
+                  ],
+                  [
+                    -7.698,
+                    0.104
+                  ],
+                  [
+                    -7.743,
+                    0.09
+                  ],
+                  [
+                    -7.787,
+                    0.076
+                  ],
+                  [
+                    -7.832,
+                    0.062
+                  ],
+                  [
+                    -7.876,
+                    0.048
+                  ],
+                  [
+                    -7.92,
+                    0.034
+                  ],
+                  [
+                    -7.965,
+                    0.019
+                  ],
+                  [
+                    -8.009,
+                    0.005
+                  ],
+                  [
+                    -8.054,
+                    -0.009
+                  ],
+                  [
+                    -8.098,
+                    -0.023
+                  ],
+                  [
+                    -8.143,
+                    -0.037
+                  ],
+                  [
+                    -8.187,
+                    -0.051
+                  ],
+                  [
+                    -8.232,
+                    -0.066
+                  ],
+                  [
+                    -8.276,
+                    -0.08
+                  ],
+                  [
+                    -8.321,
+                    -0.094
+                  ],
+                  [
+                    -8.365,
+                    -0.108
+                  ],
+                  [
+                    -8.41,
+                    -0.122
+                  ],
+                  [
+                    -8.454,
+                    -0.137
+                  ],
+                  [
+                    -8.497,
+                    -0.15
+                  ],
+                  [
+                    -8.538,
+                    -0.163
+                  ],
+                  [
+                    -8.576,
+                    -0.176
+                  ],
+                  [
+                    -8.612,
+                    -0.187
+                  ],
+                  [
+                    -8.637,
+                    -0.217
+                  ],
+                  [
+                    -8.664,
+                    -0.248
+                  ],
+                  [
+                    -8.691,
+                    -0.282
+                  ],
+                  [
+                    -8.72,
+                    -0.316
+                  ],
+                  [
+                    -8.75,
+                    -0.352
+                  ],
+                  [
+                    -8.78,
+                    -0.388
+                  ],
+                  [
+                    -8.81,
+                    -0.423
+                  ],
+                  [
+                    -8.84,
+                    -0.459
+                  ],
+                  [
+                    -8.87,
+                    -0.495
+                  ],
+                  [
+                    -8.897,
+                    -0.533
+                  ],
+                  [
+                    -8.923,
+                    -0.572
+                  ],
+                  [
+                    -8.949,
+                    -0.611
+                  ],
+                  [
+                    -8.975,
+                    -0.649
+                  ],
+                  [
+                    -9.002,
+                    -0.688
+                  ],
+                  [
+                    -9.028,
+                    -0.726
+                  ],
+                  [
+                    -9.054,
+                    -0.765
+                  ],
+                  [
+                    -9.08,
+                    -0.804
+                  ],
+                  [
+                    -9.106,
+                    -0.842
+                  ],
+                  [
+                    -9.127,
+                    -0.884
+                  ],
+                  [
+                    -9.148,
+                    -0.926
+                  ],
+                  [
+                    -9.169,
+                    -0.968
+                  ],
+                  [
+                    -9.19,
+                    -1.009
+                  ],
+                  [
+                    -9.211,
+                    -1.051
+                  ],
+                  [
+                    -9.231,
+                    -1.091
+                  ],
+                  [
+                    -9.233,
+                    -1.137
+                  ],
+                  [
+                    -9.235,
+                    -1.184
+                  ],
+                  [
+                    -9.237,
+                    -1.23
+                  ],
+                  [
+                    -9.239,
+                    -1.277
+                  ],
+                  [
+                    -9.242,
+                    -1.323
+                  ],
+                  [
+                    -9.244,
+                    -1.37
+                  ],
+                  [
+                    -9.246,
+                    -1.417
+                  ],
+                  [
+                    -9.248,
+                    -1.463
+                  ],
+                  [
+                    -9.25,
+                    -1.51
+                  ],
+                  [
+                    -9.253,
+                    -1.557
+                  ],
+                  [
+                    -9.255,
+                    -1.603
+                  ],
+                  [
+                    -9.254,
+                    -1.65
+                  ],
+                  [
+                    -9.254,
+                    -1.696
+                  ],
+                  [
+                    -9.254,
+                    -1.743
+                  ],
+                  [
+                    -9.253,
+                    -1.79
+                  ],
+                  [
+                    -9.253,
+                    -1.836
+                  ],
+                  [
+                    -9.252,
+                    -1.883
+                  ],
+                  [
+                    -9.252,
+                    -1.93
+                  ],
+                  [
+                    -9.252,
+                    -1.976
+                  ],
+                  [
+                    -9.251,
+                    -2.023
+                  ],
+                  [
+                    -9.251,
+                    -2.07
+                  ],
+                  [
+                    -9.25,
+                    -2.116
+                  ],
+                  [
+                    -9.25,
+                    -2.163
+                  ],
+                  [
+                    -9.25,
+                    -2.21
+                  ],
+                  [
+                    -9.249,
+                    -2.256
+                  ],
+                  [
+                    -9.249,
+                    -2.303
+                  ],
+                  [
+                    -9.248,
+                    -2.35
+                  ],
+                  [
+                    -9.248,
+                    -2.396
+                  ],
+                  [
+                    -9.248,
+                    -2.443
+                  ],
+                  [
+                    -9.247,
+                    -2.49
+                  ],
+                  [
+                    -9.247,
+                    -2.536
+                  ],
+                  [
+                    -9.246,
+                    -2.583
+                  ],
+                  [
+                    -9.246,
+                    -2.63
+                  ],
+                  [
+                    -9.246,
+                    -2.676
+                  ],
+                  [
+                    -9.245,
+                    -2.723
+                  ],
+                  [
+                    -9.245,
+                    -2.77
+                  ],
+                  [
+                    -9.244,
+                    -2.816
+                  ],
+                  [
+                    -9.244,
+                    -2.863
+                  ],
+                  [
+                    -9.243,
+                    -2.91
+                  ],
+                  [
+                    -9.243,
+                    -2.956
+                  ],
+                  [
+                    -9.243,
+                    -3.003
+                  ],
+                  [
+                    -9.242,
+                    -3.05
+                  ],
+                  [
+                    -9.242,
+                    -3.096
+                  ],
+                  [
+                    -9.241,
+                    -3.143
+                  ],
+                  [
+                    -9.241,
+                    -3.19
+                  ],
+                  [
+                    -9.241,
+                    -3.236
+                  ],
+                  [
+                    -9.24,
+                    -3.283
+                  ],
+                  [
+                    -9.24,
+                    -3.33
+                  ],
+                  [
+                    -9.239,
+                    -3.376
+                  ],
+                  [
+                    -9.239,
+                    -3.423
+                  ],
+                  [
+                    -9.239,
+                    -3.47
+                  ],
+                  [
+                    -9.238,
+                    -3.516
+                  ],
+                  [
+                    -9.238,
+                    -3.563
+                  ],
+                  [
+                    -9.237,
+                    -3.61
+                  ],
+                  [
+                    -9.237,
+                    -3.656
+                  ],
+                  [
+                    -9.237,
+                    -3.703
+                  ],
+                  [
+                    -9.236,
+                    -3.75
+                  ],
+                  [
+                    -9.236,
+                    -3.796
+                  ],
+                  [
+                    -9.235,
+                    -3.843
+                  ],
+                  [
+                    -9.235,
+                    -3.89
+                  ],
+                  [
+                    -9.235,
+                    -3.936
+                  ],
+                  [
+                    -9.224,
+                    -3.982
+                  ],
+                  [
+                    -9.214,
+                    -4.028
+                  ],
+                  [
+                    -9.204,
+                    -4.073
+                  ],
+                  [
+                    -9.184,
+                    -4.115
+                  ],
+                  [
+                    -9.163,
+                    -4.157
+                  ],
+                  [
+                    -9.142,
+                    -4.198
+                  ],
+                  [
+                    -9.121,
+                    -4.24
+                  ],
+                  [
+                    -9.1,
+                    -4.282
+                  ],
+                  [
+                    -9.08,
+                    -4.324
+                  ],
+                  [
+                    -9.059,
+                    -4.366
+                  ],
+                  [
+                    -9.038,
+                    -4.407
+                  ],
+                  [
+                    -9.017,
+                    -4.449
+                  ],
+                  [
+                    -8.997,
+                    -4.491
+                  ],
+                  [
+                    -8.976,
+                    -4.533
+                  ],
+                  [
+                    -8.955,
+                    -4.575
+                  ],
+                  [
+                    -8.934,
+                    -4.616
+                  ],
+                  [
+                    -8.914,
+                    -4.658
+                  ],
+                  [
+                    -8.893,
+                    -4.7
+                  ],
+                  [
+                    -8.872,
+                    -4.742
+                  ],
+                  [
+                    -8.851,
+                    -4.784
+                  ],
+                  [
+                    -8.831,
+                    -4.825
+                  ],
+                  [
+                    -8.81,
+                    -4.867
+                  ],
+                  [
+                    -8.789,
+                    -4.909
+                  ],
+                  [
+                    -8.768,
+                    -4.951
+                  ],
+                  [
+                    -8.747,
+                    -4.992
+                  ],
+                  [
+                    -8.727,
+                    -5.034
+                  ],
+                  [
+                    -8.706,
+                    -5.076
+                  ],
+                  [
+                    -8.685,
+                    -5.118
+                  ],
+                  [
+                    -8.666,
+                    -5.157
+                  ],
+                  [
+                    -8.647,
+                    -5.194
+                  ],
+                  [
+                    -8.63,
+                    -5.229
+                  ],
+                  [
+                    -8.614,
+                    -5.261
+                  ],
+                  [
+                    -8.6,
+                    -5.29
+                  ],
+                  [
+                    -8.586,
+                    -5.317
+                  ],
+                  [
+                    -8.574,
+                    -5.341
+                  ],
+                  [
+                    -8.563,
+                    -5.363
+                  ],
+                  [
+                    -8.553,
+                    -5.383
+                  ],
+                  [
+                    -8.545,
+                    -5.4
+                  ],
+                  [
+                    -8.538,
+                    -5.415
+                  ],
+                  [
+                    -8.532,
+                    -5.427
+                  ]
+                ]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_workshop_floor_access-2.log",
+        "log_sha256": "5b47a4799686d26b3206fca92b3a666ed73fcc4e346c9640d8a435dc7b677606",
+        "summary": [
+          {
+            "checks": {
+              "meat actual personal stock landed in the nearby hopper": true,
+              "meat paid intake accepts personal stock on approach": true,
+              "meat pickup is owned": true,
+              "meat reachable from the public service aisle": true,
+              "meat remote player retains the matching raw material": true,
+              "wood actual personal stock landed in the nearby hopper": true,
+              "wood paid intake accepts personal stock on approach": true,
+              "wood pickup is owned": true,
+              "wood reachable from the public service aisle": true,
+              "wood remote player retains the matching raw material": true
+            },
+            "mode": "handoff",
+            "observations": {
+              "meat": {
+                "carried_after": 0,
+                "connected": true,
+                "hopper_after": 1,
+                "hopper_before": 0,
+                "standing_point": [
+                  -0.409999847412109,
+                  -5.00999927520752
+                ]
+              },
+              "overlapping_aprons": false,
+              "wood": {
+                "carried_after": 0,
+                "connected": true,
+                "hopper_after": 1,
+                "hopper_before": 0,
+                "standing_point": [
+                  -8.52999973297119,
+                  -5.42999935150146
+                ]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "exit_code": 0,
+        "errors": [],
+        "warnings": [],
+        "log": "qa_workshop_floor_access-3.log",
+        "log_sha256": "9f6bed8f8449246da3f21a99c00300ff02485ee6762a5271a5438c2e93c98d72",
+        "summary": [
+          {
+            "checks": {
+              "meat actual personal stock landed in the nearby hopper": true,
+              "meat paid intake accepts personal stock on approach": true,
+              "meat pickup is owned": true,
+              "meat reachable from the public service aisle": true,
+              "meat remote player retains the matching raw material": true,
+              "wood actual personal stock landed in the nearby hopper": true,
+              "wood paid intake accepts personal stock on approach": true,
+              "wood pickup is owned": true,
+              "wood reachable from the public service aisle": true,
+              "wood remote player retains the matching raw material": true
+            },
+            "mode": "handoff",
+            "observations": {
+              "meat": {
+                "carried_after": 0,
+                "connected": false,
+                "hopper_after": 1,
+                "hopper_before": 0,
+                "standing_point": [
+                  -0.389999985694885,
+                  -5.03999996185303
+                ]
+              },
+              "overlapping_aprons": false,
+              "wood": {
+                "carried_after": 0,
+                "connected": false,
+                "hopper_after": 1,
+                "hopper_before": 0,
+                "standing_point": [
+                  -7.09999942779541,
+                  -5.37999963760376
+                ]
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "passed": true,
+  "verified_source_before_and_after": {
+    "sha256": "842cbed64df2ad7f0ed4ddf717ae1928e8f25f9ce9a3d9d22930a1a7550c2af8",
+    "checked_files": 756
+  }
+}

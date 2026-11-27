@@ -1,0 +1,38 @@
+{
+  "stamp": {
+    "commit": "4de1b9edb0230c8c33b8d872ded47ef914a0f87f",
+    "manifest": {
+      "sha256": "842cbed64df2ad7f0ed4ddf717ae1928e8f25f9ce9a3d9d22930a1a7550c2af8",
+      "checked_files": 756
+    },
+    "runner": "1f1a38cc31074364e606c2c33a4e6a2b1c07d9d07c663d19d70d5d02245b3bc7"
+  },
+  "passed": true,
+  "runs": [
+    {
+      "exit_code": 0,
+      "errors": [],
+      "warnings": [],
+      "log": "qa_build15_economy_migration-1.log",
+      "log_sha256": "4ed12cbe4e7b8e220eea74960b77956e0ce4d6538ff7c3b86aa0bd26f5ebb81d",
+      "summary": [
+        {
+          "all prior finished-goods accounts remain intact": true,
+          "converted contract finalizes once and cold-reopens paid": true,
+          "current saves reject a new mixed order": true,
+          "fully paid Build14 garage keeps original processed receipt and truck eligibility": true,
+          "legacy products still have actual construction receipt lines": true,
+          "migration retires the single unsold quote and keeps financial history": true,
+          "new garage accepts ordinary wood and stone before any machines": true,
+          "next customer takes only a meal and pays only its price": true,
+          "obsolete Build14 mixed quote cannot collect payment": true,
+          "partly funded processed quote credits matching whole raw bundles": true,
+          "processed credits cannot be fabricated on an existing receipt": true,
+          "raw payment opens the truck and reopens at exact balances": true,
+          "unfunded old garage gets the new raw quote": true,
+          "unpaid fractions keep near-complete legacy contract open": true
+        }
+      ]
+    }
+  ]
+}

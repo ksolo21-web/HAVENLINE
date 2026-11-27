@@ -1,0 +1,288 @@
+{
+  "actual_resolution": [
+    460,
+    760
+  ],
+  "batch_timing": {
+    "all_new_outputs_ready_tick": 599,
+    "collect_completed_tick": 607,
+    "first_hopper_arrival_tick": 335,
+    "last_pack_unit_left_tick": 339,
+    "new_units": 3,
+    "old_outlet_units": 0,
+    "request_tick": 328
+  },
+  "checks": {
+    "actual Collect output touch moves all completed goods exactly once": true,
+    "actual Guide to input sets a real reachable target": true,
+    "actual Load from pack press sets selected machine": true,
+    "all three real raw units landed and made three output units": true,
+    "archive leaves room to observe three new production receipts": true,
+    "conserved raw fixture stock seeded": true,
+    "manual handoff waits for explicit player load": true,
+    "manual setting preserves finished quantity for player": true,
+    "nearby on foot can operate the paid machine": true,
+    "no duplicate output after collection and save still writable": true,
+    "ordinary phone touches opened Camp and selected the workshop": true,
+    "paid workshop fixture opens": true,
+    "real touch toggled this station to explicit handoff": true,
+    "remote menu guides instead of loading or collecting": true,
+    "touch opens collect control with actual supply": true,
+    "touch path arrives at (-2.3, 0.0, 3.8)": true,
+    "touch path arrives at (-2.9, 0.0, -1.5)": true,
+    "touch path arrives at (-6.8, 0.0, -3.0)": true,
+    "touch path arrives at (-7.099999, 0.0, -5.38)": true,
+    "touch path arrives at (0.0, 0.0, 4.1)": true,
+    "touch returns to workshop details": true
+  },
+  "machine": "wood",
+  "native_renderer": "",
+  "on_screen_button_presses": 13,
+  "states": [
+    {
+      "automatic": true,
+      "current_actor": [
+        0.0,
+        0.0,
+        6.0
+      ],
+      "cycles": {
+        "ready": 0,
+        "seconds": 0.0
+      },
+      "held": {
+        "blocks": 0,
+        "meal": 0,
+        "money": 0,
+        "planks": 0
+      },
+      "hoppers": {
+        "meat": 0,
+        "stone": 0,
+        "wood": 0
+      },
+      "label": "01-remote-workshop",
+      "manual_target": "",
+      "menu": "Workshop",
+      "orders": {
+        "goods": {
+          "meal": 1
+        },
+        "id": 1,
+        "price": 1
+      },
+      "raw": {
+        "coal": 0,
+        "meat": 0,
+        "metal": 0,
+        "slate": 0,
+        "stone": 0,
+        "wood": 0
+      },
+      "real_game_camera": true,
+      "rows": {
+        "machine_input:wood": {
+          "rect": "[P: (30.0, 779.0), S: (437.0, 96.0)]",
+          "text": "Guide to input   \u203a"
+        },
+        "machine_mode:wood": {
+          "rect": "[P: (30.0, 678.0), S: (437.0, 96.0)]",
+          "text": "Switch to manual handoff   \u203a"
+        },
+        "machine_output:wood": {
+          "rect": "[P: (30.0, 880.0), S: (437.0, 96.0)]",
+          "text": "Guide to output   \u203a"
+        },
+        "workshops": {
+          "rect": "[P: (30.0, 981.0), S: (437.0, 96.0)]",
+          "text": "All workshops   \u203a"
+        }
+      },
+      "tick": 24,
+      "tracking": "",
+      "viewport": "[P: (0.0, 0.0), S: (720.0, 1189.0)]"
+    },
+    {
+      "automatic": false,
+      "current_actor": [
+        -7.06682300567627,
+        0.0,
+        -5.69905757904053
+      ],
+      "cycles": {
+        "ready": 0,
+        "seconds": 0.0
+      },
+      "held": {
+        "blocks": 0,
+        "meal": 0,
+        "money": 0,
+        "planks": 0
+      },
+      "hoppers": {
+        "meat": 0,
+        "stone": 0,
+        "wood": 0
+      },
+      "label": "02-ready-to-load",
+      "manual_target": "",
+      "menu": "Workshop",
+      "orders": {
+        "goods": {
+          "meal": 1
+        },
+        "id": 1,
+        "price": 1
+      },
+      "raw": {
+        "coal": 0,
+        "meat": 0,
+        "metal": 0,
+        "slate": 0,
+        "stone": 0,
+        "wood": 3
+      },
+      "real_game_camera": true,
+      "rows": {
+        "machine_load:wood": {
+          "rect": "[P: (30.0, 779.0), S: (437.0, 96.0)]",
+          "text": "Load from pack   \u203a"
+        },
+        "machine_mode:wood": {
+          "rect": "[P: (30.0, 678.0), S: (437.0, 96.0)]",
+          "text": "Switch to walk-up handoff   \u203a"
+        },
+        "machine_output:wood": {
+          "rect": "[P: (30.0, 880.0), S: (437.0, 96.0)]",
+          "text": "Guide to output   \u203a"
+        },
+        "workshops": {
+          "rect": "[P: (30.0, 981.0), S: (437.0, 96.0)]",
+          "text": "All workshops   \u203a"
+        }
+      },
+      "tick": 326,
+      "tracking": "",
+      "viewport": "[P: (0.0, 0.0), S: (720.0, 1189.0)]"
+    },
+    {
+      "automatic": false,
+      "current_actor": [
+        -7.06682300567627,
+        0.0,
+        -5.65499973297119
+      ],
+      "cycles": {
+        "ready": 3,
+        "seconds": 0.0
+      },
+      "held": {
+        "blocks": 0,
+        "meal": 0,
+        "money": 0,
+        "planks": 0
+      },
+      "hoppers": {
+        "meat": 0,
+        "stone": 0,
+        "wood": 0
+      },
+      "label": "03-ready-to-collect",
+      "manual_target": "wood",
+      "menu": "Workshop",
+      "orders": {
+        "goods": {
+          "meal": 1
+        },
+        "id": 1,
+        "price": 1
+      },
+      "raw": {
+        "coal": 0,
+        "meat": 0,
+        "metal": 0,
+        "slate": 0,
+        "stone": 0,
+        "wood": 0
+      },
+      "real_game_camera": true,
+      "rows": {
+        "machine_input:wood": {
+          "rect": "[P: (30.0, 779.0), S: (437.0, 96.0)]",
+          "text": "Guide to input   \u203a"
+        },
+        "machine_mode:wood": {
+          "rect": "[P: (30.0, 678.0), S: (437.0, 96.0)]",
+          "text": "Switch to walk-up handoff   \u203a"
+        },
+        "machine_take:wood": {
+          "rect": "[P: (30.0, 880.0), S: (437.0, 96.0)]",
+          "text": "Collect output  \u00b7  3   \u203a"
+        },
+        "workshops": {
+          "rect": "[P: (30.0, 981.0), S: (437.0, 96.0)]",
+          "text": "All workshops   \u203a"
+        }
+      },
+      "tick": 605,
+      "tracking": "",
+      "viewport": "[P: (0.0, 0.0), S: (720.0, 1189.0)]"
+    },
+    {
+      "automatic": false,
+      "current_actor": [
+        -7.06682300567627,
+        0.0,
+        -5.65499973297119
+      ],
+      "cycles": {
+        "ready": 0,
+        "seconds": 0.0
+      },
+      "held": {
+        "blocks": 0,
+        "meal": 0,
+        "money": 0,
+        "planks": 3
+      },
+      "hoppers": {
+        "meat": 0,
+        "stone": 0,
+        "wood": 0
+      },
+      "label": "04-products-in-pack",
+      "manual_target": "wood",
+      "menu": "",
+      "orders": {
+        "goods": {
+          "meal": 1
+        },
+        "id": 1,
+        "price": 1
+      },
+      "raw": {
+        "coal": 0,
+        "meat": 0,
+        "metal": 0,
+        "slate": 0,
+        "stone": 0,
+        "wood": 0
+      },
+      "real_game_camera": true,
+      "rows": {},
+      "tick": 657,
+      "tracking": "",
+      "viewport": "[P: (0.0, 0.0), S: (720.0, 1189.0)]"
+    }
+  ],
+  "touch_navigation_physics_ticks": 265,
+  "fixture_sha256": "34de7ce67bf34d36745b3af94aec535454cece46ec8ab63aaa43df7d39e7e733",
+  "source_sha256": [
+    "683947801ea51456c2148d0540474b1da8777023465df5e8c7344944f13590aa  field_progression.gd",
+    "a9fb032bbc6ef03894e09a8962d85d44b63935157abd1f92aa19daa293b78613  field_opening.gd",
+    "231ddc495ace93bead7ff2a3425f3ece4f3045b901d8200bf7520884633e8b62  field_inventory.gd",
+    "ff1bd8504329317483e8d761a6c869afc999a34ed419f55344ffefc0789b7a24  field_worksites.gd",
+    "0f09b6a7f1e2cf02ef0efa7d40a74d91fd97a14229fe0d44c1cf16e1f264e7e2  field_settlement_loop.gd",
+    "7a8cb20ead870d072c922089d9f11d82dd645330549f6dcaa6a9c83cad7c8168  field_survivor.gd"
+  ]
+}
