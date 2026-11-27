@@ -16,15 +16,18 @@ Each authored level needs a payoff such as a route, recipe, tool, worker capabil
 
 ## World 1 snow truck and garage
 
-**Owner requirements.** The player builds a garage first. Its door replaces a fence section, opening a wide route between the camp and the field. After the garage is usable, a separate plot inside camp offers the snow truck for a substantial amount of obtainable World 1 resources. The player drives it. Its low horizontal blades damage eligible enemies, cut trees, and break stone and other mineable rock nodes. The truck has its own HP and can hold an unlimited amount of every resource type. Parking it inside the garage automatically transfers cargo to the storage house. If the truck is destroyed outside the camp, all cargo still held by the truck is lost.
+**Owner requirements.** The player builds a garage first. Its door replaces a fence section, opening a wide route between the camp and the field. After the garage is usable, a separate plot inside camp offers the snow truck for a substantial amount of obtainable World 1 resources. The player drives it. Its low horizontal blades damage eligible enemies, cut trees, and break stone and other mineable rock nodes. The truck has its own HP and can hold an unlimited amount of every resource type. Parking it inside the garage automatically transfers cargo to the storage house. If the truck is destroyed outside the camp, all cargo still held by the truck is lost. If the truck is destroyed inside camp, the remaining cargo stays recoverable from the wreck and can be hauled to the warehouse.
 
-### Design recommendations for playtest
+### Approved operating rules
 
-- Make the garage and truck a late World 1 project. Start costing the garage with planks and stone blocks, and the truck with metal and parts the player can obtain in World 1. Check both bills against the live resource and unlock rules. Price and exact unlock are tuning decisions.
-- Give the garage opening the camp's normal closed-door collision and repair rules. Leave room for the truck to turn and workers to pass. Give the player readable enter, exit, reverse and brake inputs, plus a compact HP bar and cargo count in the gameplay HUD. Use the existing camp boundary to stop the blades inside camp and resume their use on a driven trip outside.
-- Apply one valid harvesting result per depleted source. Truck harvesting follows each resource's normal yield and regrowth rules. Cargo credited from a harvest or eligible enemy drop goes into the truck. Use the same collision boundaries that keep attacks from passing through intact obstructions.
-- Offer a repair interaction in the garage for a surviving truck, using parts and materials scaled to damage. Apply the equipment repurchase rule to a destroyed truck at Level 1. Decide truck-specific driver recovery, cargo disposition if the truck is destroyed inside the camp, and whether it needs fuel. A destroyed truck must release the driver and leave a playable route to recovery.
-- Use a separate cargo ledger with a visible, bounded unloading animation. Commit the warehouse credit and truck cargo removal together. If the warehouse is full or offline, the cargo the warehouse cannot receive stays in the truck and the HUD shows the pending amount. Cargo loss outside and completed unloading must each settle once across save and reload.
+- The closed garage door blocks enemies and follows camp-gate repair rules. The truck blades switch off inside camp.
+- Show truck HP and cargo on the gameplay HUD. The garage offers paid repairs for a surviving truck. Use planks and stone blocks as the garage's starting cost materials and World 1 metal and parts as the truck's starting cost materials. Set exact quantities and the unlock during tuning.
+- Parking starts the warehouse transfer. If the warehouse is full or unavailable, cargo it cannot receive stays aboard. Use a separate cargo ledger and update both the truck and warehouse together. Transfers and destruction outcomes settle once across save and reload.
+
+### Playtest decisions
+
+- Leave space for the truck and workers to pass. Test readable enter, exit, reverse and brake inputs. Follow each resource's normal yield and regrowth, with one award per depleted source and no hits through intact obstructions.
+- Apply the equipment repurchase rule at Level 1. Truck-specific driver recovery and fuel use are open. A wreck has to release the driver and leave a playable recovery route.
 
 ### First tests
 
@@ -34,6 +37,7 @@ Each authored level needs a payoff such as a route, recipe, tool, worker capabil
 | Drive in the field | Use the actual mobile controls through trees, quarry, minerals and enemy encounters. Hits land on valid contact. HP and cargo are readable at normal and pinch zoom. |
 | Return fully loaded | Haul a large mixed load, park, and unload into a usable warehouse. Repeat with a full destination, entry from another route, an interrupted unload and a reload. Every received unit settles once. |
 | Wreck outside camp | Destroy a loaded truck outside, then reload on either side of the destruction event. Cargo still on the truck is lost once. Previously banked stock and the player's separate inventory are accounted for. Restore player control and verify that replacement is attainable using World 1 resources. |
+| Wreck inside camp | Destroy a loaded truck inside camp, recover the remaining cargo from the wreck, and deliver it to the warehouse. Interrupted recovery and reload preserve each unit exactly once. Check destruction on both sides of the camp boundary. |
 
 The existing plan provides interfaces for T03 gates, T07 controls, T08 stock, T09 harvesting, T10–T11 purchases and construction, T14 persistence, and T21–T22 combat and defenses. The new vehicle belongs in the T32 World 1 design. T53 should account for it if it can travel between worlds later. This is recorded for planning and review.
 
