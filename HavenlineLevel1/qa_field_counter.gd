@@ -17,7 +17,7 @@ class TestHost extends Node3D:
 		var j: Dictionary = inventory.settlement
 		if id != int(j.served) + 1: return {}
 		if j.market.order.is_empty():
-			j.market.order = Market.new_order(id,true,true,true,id>2)
+			j.market.order = Market.new_order(id,2 if id>2 and id%3==0 else 1)
 		return j.market.order
 
 	func sale(order: int) -> bool:
@@ -140,11 +140,11 @@ func run() -> void:
 	simulate(4.)
 	check("complete multi-unit order debits both goods",host.calls==[1,2,3] and journal.counter_stock==0)
 	simulate(5.)
-	check("developed buyer asks for meal and planks",journal.market.order.goods=={"meal":1,"planks":1})
+	check("developed buyer asks only for a meal",journal.market.order.goods=={"meal":1})
 	journal.counter_stock = 1
 	journal.market.counter_products.planks = 1
 	simulate(4.)
-	check("mixed basket pays its whole price once without a clerk",host.calls==[1,2,3,4] and journal.market.counter_cash==7 and journal.market.sold=={"meal":5,"planks":1,"blocks":0})
+	check("meal sale leaves the legacy planks untouched",host.calls==[1,2,3,4] and journal.market.counter_cash==5 and journal.market.sold=={"meal":5,"planks":0,"blocks":0} and journal.market.counter_products.planks==1)
 	check("different product piles are visibly separate",counter.stock_position("meal").distance_to(counter.stock_position("planks"))>.50 and counter.stock_position("blocks").distance_to(counter.payment_rest.global_position)>.65)
 	host.queue_free()
 	for i in 3: await process_frame

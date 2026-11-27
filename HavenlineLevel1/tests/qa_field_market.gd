@@ -66,21 +66,23 @@ func check_everything() -> void:
 	var home: Vector3 = counter.to_global(Vector3(3.1,0,3.5))
 	park(home)
 	counter.arrival_clock = 200.
-	check("old paid workshop profile opens in the new market schema",not field.persist_blocked and ledger.complete("quarry_drill") and ledger.snapshot().version==11)
+	check("old paid workshop profile opens in the new schema",not field.persist_blocked and ledger.complete("quarry_drill") and ledger.snapshot().version==12)
 	# These are legitimate raw credits matched against each synthesized historic sale and prepared input.
 	for n in 12: ledger.collect("market-meat-%s" % n,"meat")
 	for n in ledger.survivor_cost+3: ledger.collect("market-wood-%s" % n,"wood")
 	ledger.carried.meat -= 12
 	ledger.carried.wood -= ledger.survivor_cost+3
 	journal.cooked += 12
-	journal.held_meal += 3
-	journal.product_store.meal += 1
+	journal.held_meal += 2
+	journal.product_store.meal += 2
 	journal.served = 8
 	journal.market.sold.meal = 8
 	journal.market.earned = 8
 	journal.market.counter_cash = 8
 	journal.processed_wood += 3
-	journal.product_store.planks += 3
+	journal.product_store.planks += 1
+	journal.hand_products.planks += 1
+	journal.market.counter_products.planks += 1
 	journal.survivor_paid = true
 	journal.survivor_wood = ledger.survivor_cost
 	journal.rescued = true
@@ -95,7 +97,8 @@ func check_everything() -> void:
 	park(counter.service_point.global_position)
 	await physics_frame
 	await physics_frame
-	check("one visit drops three meals and collects the old cash",journal.held_meal==0 and journal.counter_stock==3 and journal.pocket_cash==8 and ledger.till_balance()==0)
+	check("one visit stocks both meals and collects the old cash",journal.held_meal==0 and journal.counter_stock==2 and journal.pocket_cash==8 and ledger.till_balance()==0)
+	check("counter leaves the player's planks in the pack",journal.hand_products.planks==1 and journal.market.counter_products.planks==1 and not loop.counter_accepts("planks"))
 	park(home)
 	check("customer self-serves a two-item order without anyone at counter",await wait_until(func():return journal.served==9,780))
 	await photo("01-first-unstaffed-order")
@@ -104,27 +107,27 @@ func check_everything() -> void:
 		await wait_until(func():return counter.cash_in_exchange()==0,50)
 		await photo("02-counter-cash")
 		field.set_zoom_ratio(1.)
-	check("next developed order requests a mixed basket",await wait_until(func():return journal.market.order.get("goods",{})=={"meal":1,"planks":1},540))
-	check("partial basket remains unpaid while ready customer waits",journal.counter_stock==1 and journal.market.counter_cash==2)
+	check("next developed order requests only a meal",await wait_until(func():return journal.market.order.get("goods",{})=={"meal":1},540))
+	check("stored planks cannot substitute for a meal",journal.counter_stock==0 and journal.market.counter_cash==2)
 	var readback = field.Inventory.new()
 	readback.configure(ledger.configured_costs)
 	check("reopening preserves the quoted whole basket",field.field_save.load_into(readback)==OK and readback.settlement.market.order==journal.market.order)
-	# Take the old payment and the full available stock via the real survivor's station APIs.
+	# Take the old payment and the full available meal stock via the survivor's station APIs.
 	field.survivor.actor.global_position = field.depot.apron.global_position
 	var worked: bool = loop.collect_worker_meal()
-	check("owned worker loads the whole requested stock from the warehouse",worked and journal.market.worker_products.planks==3)
+	check("owned worker loads both meals and leaves warehouse planks",worked and journal.worker_meal==2 and journal.product_store.planks==1 and journal.market.worker_products.planks==0)
 	field.survivor.actor.global_position = counter.service_point.global_position
 	worked = loop.worker_stock_counter()
-	check("owned worker drops requested stock and picks up all posted cash",worked and journal.market.worker_products.planks==0 and journal.market.counter_products.planks==3 and journal.market.worker_cash==2 and ledger.till_balance()==0)
+	check("owned worker drops both meals and picks up all posted cash",worked and journal.worker_meal==0 and journal.counter_stock==2 and journal.market.worker_cash==2 and ledger.till_balance()==0)
 	check("a concurrent second pickup cannot claim the same money",not loop.exchange.visit_counter(false,counter.service_point.global_position))
 	field.survivor.actor.global_position = field.depot.apron.global_position
 	worked = loop.worker_bank_cash()
 	check("owned worker banks its payment once",worked and journal.market.worker_cash==0 and journal.house_cash==2)
 	field.survivor.actor.global_position = home + Vector3(1,0,0)
-	check("mixed basket self-serves and leaves the remainder of bulk stock",await wait_until(func():return journal.served==10,780) and ledger.till_balance()==3 and journal.market.sold.planks==1 and journal.market.counter_products.planks==2)
+	check("customer buys one meal and leaves the rest of the stock",await wait_until(func():return journal.served==10,780) and ledger.till_balance()==1 and journal.market.sold.planks==0 and journal.counter_stock==1 and journal.market.counter_products.planks==1)
 	if not captures.is_empty():
 		field.set_zoom_ratio(2.)
 		for tick in 9: await physics_frame
-		await photo("03-mixed-order")
-	check("meal and plank share one physical sale",counter.sale_goods.size()==2)
-	check("debits, cash and mixed stock pass exact save validation",not field.persist_blocked and readback.restore(ledger.snapshot()))
+		await photo("03-meal-only-order")
+	check("physical sale contains only the meal",counter.sale_goods.size()==1 and counter.sale_goods[0].kind=="meal")
+	check("cash and legacy stock pass exact save validation",not field.persist_blocked and readback.restore(ledger.snapshot()))

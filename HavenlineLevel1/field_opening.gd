@@ -965,37 +965,15 @@ func _step_receivers() -> void:
 	if selected != carry.visit_target and not carry.visit_target.begins_with("work:"):
 		carry.stop_visit(carry.visit_target)
 	depot.step(at,selected if selected == depot_target else "")
-	if selected==Progress.GARAGE:
-		if not runner_requested_motion: _pay_garage_products()
-		return
 	if not selected.is_empty() and selected != depot_target:
 		carry.visit(selected)
 
 func _can_fund_vehicle_offer(id: String) -> bool:
-	var bill := inventory.remaining(id)
-	var owned:Dictionary = inventory.hand_goods() if id==Progress.GARAGE else inventory.carried
 	if id==Progress.GARAGE and not snow_truck.can_build():return false
+	var bill := inventory.remaining(id)
 	for kind: String in bill:
-		if int(bill[kind])>0 and int(owned.get(kind,0))>0:return true
+		if int(bill[kind])>0 and int(inventory.carried.get(kind,0))>0:return true
 	return false
-
-func _pay_garage_products() -> void:
-	if not snow_truck.can_build(): return
-	var due := inventory.remaining(Progress.GARAGE)
-	var paid: Dictionary = {}
-	var goods := inventory.hand_goods()
-	for kind in ["planks","blocks"]:
-		var amount := mini(int(due.get(kind,0)),int(goods[kind]))
-		if amount>0 and inventory.payment(Progress.GARAGE,kind,false,amount):
-			paid[kind] = amount
-	if paid.is_empty():return
-	_inventory_changed()
-	if persist_blocked:return
-	var at: Vector3 = offer_floors[Progress.GARAGE].global_position
-	for kind in paid:
-		settlement_loop.exchange._draw(kind,paid[kind],at,false)
-		_event("garage_payment",at,"spend_wood" if kind=="planks" else "spend_stone")
-	if inventory.complete(Progress.GARAGE): _finish_purchase(Progress.GARAGE)
 
 func clear_installed_floor(aisles) -> void:
 	var feet := actor.global_position

@@ -245,84 +245,63 @@ func prepare_order(id: int) -> Dictionary:
 	var journal: Dictionary = world.inventory.settlement
 	if id != int(journal.served) + 1: return {}
 	var existing: Dictionary = journal.market.order
-	if not existing.is_empty() and _order_attainable(journal,existing): return existing
+	if Market.is_meal_order(existing) and _meals_attainable(int(existing.goods.meal)): return existing
 	var orders_growing: bool = int(journal.served) >= 8 or int(journal.level) > 1 and int(journal.served) >= 2
 	var meals_needed := 2 if orders_growing and id % 3 == 0 else 1
-	var order := Market.new_order(id, _product_attainable("meat",meals_needed), _product_attainable("wood"), _product_attainable("stone"), orders_growing)
-	if order.is_empty() and _product_attainable("meat"): order = Market.new_order(id,true,false,false,false)
+	if meals_needed == 2 and not _meals_attainable(2): meals_needed = 1
+	var order := Market.new_order(id,meals_needed) if _meals_attainable(meals_needed) else {}
 	if order == existing: return order
 	journal.market.order = order
 	# The active order is saved before its request appears above the guest.
 	world._inventory_changed()
 	return {} if world.persist_blocked else order
 
-const GOODS_INPUTS := {"meal":"meat", "planks":"wood", "blocks":"stone"}
-
 func _producer_usable(raw: String) -> bool:
 	if not world.inventory.is_machine_owned(raw) or world.encounters.is_machine_down(raw): return false
 	return raw != "meat" or not world.encounters.is_structure_down("furnace")
 
-func _product_attainable(raw: String, amount := 1) -> bool:
-	if _producer_usable(raw): return true
+func _meals_attainable(amount := 1) -> bool:
+	if _producer_usable("meat"): return true
 	var journal: Dictionary = world.inventory.settlement
-	var kind: String = Rules.Logistics.PRODUCT[raw]
-	var stock: int = Market.available(journal,kind) + int(world.inventory.hand_goods()[kind])
-	if journal.survivor_hp > 0: stock += Market.worker_stock(journal,kind)
-	if world.inventory.complete("storage_wood"): stock += int(journal.product_store[kind])
-	if raw == "meat" and world.inventory.is_machine_owned(raw) and not world.encounters.is_machine_down(raw):
+	var stock: int = int(journal.counter_stock) + int(journal.held_meal)
+	if journal.survivor_hp > 0: stock += int(journal.worker_meal)
+	if world.inventory.complete("storage_wood"): stock += int(journal.product_store.meal)
+	if world.inventory.is_machine_owned("meat") and not world.encounters.is_machine_down("meat"):
 		stock += Rules.waiting_meals(journal)
 	return stock >= amount
 
-func _order_attainable(journal: Dictionary, order: Dictionary) -> bool:
-	for kind in order.goods:
-		if Market.available(journal,kind) >= int(order.goods[kind]): continue
-		if not _product_attainable(GOODS_INPUTS[kind],int(order.goods[kind])): return false
-	return true
-
 func counter_accepts(kind: String) -> bool:
-	var journal: Dictionary = world.inventory.settlement
-	if kind == "meal": return _product_attainable("meat") or int(journal.held_meal) + int(journal.worker_meal) > 0
-	return journal.market.order.get("goods", {}).has(kind)
+	return kind == "meal" and _meals_attainable()
 
 func worker_market_needs(kind: String) -> int:
+	if kind != "meal": return 0
 	var journal: Dictionary = world.inventory.settlement
-	var wanted := int(journal.market.order.get("goods", {}).get(kind, 0))
-	var en_route := int(journal.line_load.meal) + int(journal.line_load.stored_meal) if kind == "meal" else 0
-	return maxi(0, wanted - Market.available(journal, kind) - Market.worker_stock(journal, kind) - en_route)
+	var wanted := int(journal.market.order.get("goods", {}).get("meal", 0))
+	var en_route := int(journal.line_load.meal) + int(journal.line_load.stored_meal)
+	return maxi(0, wanted - int(journal.counter_stock) - int(journal.worker_meal) - en_route)
 
 func market_worker_product_source() -> Vector3:
 	var journal: Dictionary = world.inventory.settlement
-	if not world.counter.active or journal.market.order.is_empty(): return Vector3.INF
-	for kind: String in Market.PRODUCTS:
-		if worker_market_needs(kind) > 0 and int(journal.product_store[kind]) > 0:
-			if kind != "meal" or not conveyors.line_live("stored_meal"):
-				return world.depot.apron.global_position
-	if worker_market_needs("meal") > 0 and not conveyors.line_live("meal_to_store") and not conveyors.line_live("meal") and Rules.waiting_meals(journal) > 0:
+	if not world.counter.active or worker_market_needs("meal") <= 0: return Vector3.INF
+	if int(journal.product_store.meal) > 0 and not conveyors.line_live("stored_meal"):
+		return world.depot.apron.global_position
+	if not conveyors.line_live("meal_to_store") and not conveyors.line_live("meal") and Rules.waiting_meals(journal) > 0:
 		return world.lakeshore.cooker_output.global_position
 	return Vector3.INF
 
 func collect_worker_meal() -> bool:
-	if not _worker_can_trade(): return false
+	if not _worker_can_trade() or worker_market_needs("meal") <= 0: return false
 	var journal: Dictionary = world.inventory.settlement
 	var at: Vector3 = world.survivor.actor.global_position
-	var at_warehouse: bool = world.depot.at_loading_area(at)
+	var from_store: bool = world.depot.at_loading_area(at) and not conveyors.line_live("stored_meal")
 	var at_cooker: bool = world.lakeshore.at_output(at) and not conveyors.line_live("meal_to_store") and not conveyors.line_live("meal")
-	if not at_warehouse and not at_cooker: return false
-	var loaded := 0
-	for kind: String in Market.PRODUCTS:
-		if worker_market_needs(kind) <= 0: continue
-		var supply := 0
-		var from_store: bool = at_warehouse and (kind != "meal" or not conveyors.line_live("stored_meal"))
-		if from_store:
-			supply = int(journal.product_store[kind])
-		elif kind == "meal" and at_cooker:
-			supply = Rules.waiting_meals(journal)
-		var moved := mini(supply, Rules.WORKER_PRODUCT_LIMIT - Market.worker_stock(journal,kind))
-		if moved <= 0: continue
-		if from_store: journal.product_store[kind] -= moved
-		Market.add_to_worker(journal,kind,moved)
-		loaded += moved
-	return loaded > 0 and commit_receipt("pickup_partial",at)
+	if not from_store and not at_cooker: return false
+	var supply: int = int(journal.product_store.meal) if from_store else Rules.waiting_meals(journal)
+	var moved := mini(supply,Rules.WORKER_PRODUCT_LIMIT - int(journal.worker_meal))
+	if moved <= 0: return false
+	if from_store: journal.product_store.meal -= moved
+	journal.worker_meal += moved
+	return commit_receipt("pickup_partial",at)
 
 func worker_stock_counter() -> bool:
 	if not _worker_can_trade(): return false

@@ -17,6 +17,8 @@ const KINDS := ["wood", "stone", "meat", "coal", "slate", "metal"]
 const EMPTY := {"wood":0, "stone":0, "meat":0, "coal":0, "slate":0, "metal":0}
 const TITLES := {"wood":"Wood", "stone":"Stone", "meat":"Meat", "coal":"Coal", "slate":"Slate", "metal":"Metal ore"}
 const TRUCK_AUTOMATION_INCREMENT := {"wood":6, "stone":4, "metal":2}
+const LEGACY_GARAGE_BILL := {"planks":24,"blocks":20}
+const GARAGE_CREDIT_INPUT := {"planks":"wood","blocks":"stone"}
 
 var configured_costs := {}
 var costs := {}
@@ -226,7 +228,9 @@ func offer_open(id: String) -> bool:
 func remaining(id: String) -> Dictionary:
 	var result := {}
 	for kind in costs.get(id, {}):
-		result[kind] = int(costs[id][kind]) - int(paid[id][kind])
+		var due := int(costs[id][kind]) - int(paid[id][kind])
+		if id == Progress.GARAGE and kind in LEGACY_GARAGE_BILL and due == 0: continue
+		result[kind] = due
 	return result
 
 func complete(id: String) -> bool:
@@ -240,7 +244,7 @@ func complete(id: String) -> bool:
 func snapshot() -> Dictionary:
 	var state := {"version": 1, "collected": collected.duplicate(), "carried": carried.duplicate(), "stored": stored.duplicate(), "paid": paid.duplicate(true)}
 	if staged:
-		state.version = 11
+		state.version = 12
 		state.legacy_level2 = legacy_level2
 		state.legacy_prices = legacy_prices.duplicate()
 		state.build_order = build_order.duplicate()
@@ -254,16 +258,50 @@ static func _natural(value: Variant) -> bool:
 		return false
 	return value >= 0 and is_finite(float(value)) and value == int(value)
 
+static func _restore_garage_contract(receipts: Dictionary, prices: Dictionary, version: int) -> bool:
+	var incoming: Variant = receipts.get(Progress.GARAGE)
+	if not incoming is Dictionary: return false
+	var raw: Dictionary = prices[Progress.GARAGE]
+	if not raw.has_all(GARAGE_CREDIT_INPUT.values()): return true
+	var old_bill: bool = incoming.size() == 2 and incoming.has_all(LEGACY_GARAGE_BILL.keys())
+	var mixed_bill: bool = incoming.size() == 4 and incoming.has_all(LEGACY_GARAGE_BILL.keys()) and incoming.has_all(raw.keys())
+	if not old_bill and not mixed_bill: return true
+	if mixed_bill and version < 12: return false
+	var processed := 0
+	for kind: String in LEGACY_GARAGE_BILL:
+		if not _natural(incoming[kind]) or int(incoming[kind]) > int(LEGACY_GARAGE_BILL[kind]): return false
+		processed += int(incoming[kind])
+	if processed == 0:
+		if mixed_bill: return false
+		receipts[Progress.GARAGE] = {"wood":0,"stone":0}
+		return true
+	if version < 11: return false
+	if processed == LEGACY_GARAGE_BILL.planks + LEGACY_GARAGE_BILL.blocks:
+		if mixed_bill: return false
+		prices[Progress.GARAGE] = LEGACY_GARAGE_BILL.duplicate()
+		return true
+	# Keep processed materials as their own receipts. Only finished proportional
+	# raw bundles reduce the replacement bill so a partial old plot stays open.
+	for kind: String in LEGACY_GARAGE_BILL:
+		var input: String = GARAGE_CREDIT_INPUT[kind]
+		var units := int(incoming[kind])
+		@warning_ignore("integer_division")
+		var credit: int = int(raw[input]) * units / int(LEGACY_GARAGE_BILL[kind])
+		raw[input] -= credit
+		raw[kind] = units
+		if old_bill: incoming[input] = 0
+	return true
+
 func restore(data: Variant) -> bool:
 	if not data is Dictionary: return false
 	var old: bool = data.get("version") == 1
 	if not _natural(data.get("version")): return false
 	var version:=int(data.version)
-	var current:bool = version in [6,7,8,9,10,11]
+	var current:bool = version in [6,7,8,9,10,11,12]
 	var has_settlement: bool = current or data.get("version") == 4 or data.get("version") == 5
 	if old:
 		if data.size() != 5: return false
-	elif not staged or (data.get("version") != 2 and data.get("version") != 3 and not has_settlement) or data.size() != (11 if version in [7,8,9,10,11] else (10 if current else (9 if has_settlement else 8))):
+	elif not staged or (version != 2 and version != 3 and not has_settlement) or data.size() != (11 if current and version >= 7 else (10 if current else (9 if has_settlement else 8))):
 		return false
 	for key in ["collected", "carried", "stored", "paid"]:
 		if not data.get(key) is Dictionary:
@@ -347,6 +385,7 @@ func restore(data: Variant) -> bool:
 				if not former.has(id): return false
 				contracts.append(id)
 				restored_costs[id] = former[id]
+		if not _restore_garage_contract(incoming,restored_costs,version): return false
 		if has_settlement and data.get("settlement") is Dictionary and _natural(data.settlement.get("survivor_wood")) and data.settlement.survivor_wood > 0:
 			if not current or Progress.SURVIVOR in data.legacy_prices: contracts.append(Progress.SURVIVOR)
 		# A contract can only name a real, already-funded plot once.
@@ -378,13 +417,18 @@ func restore(data: Variant) -> bool:
 		next_settlement = next_settlement.duplicate()
 		next_settlement.truck_quote = truck_quote
 	var old_preview := false
-	if version in [7,8,9,10,11]:
+	if current and version >= 7:
 		if not data.get("legacy_level2") is bool: return false
 		old_preview = data.legacy_level2
 	elif has_settlement and next_settlement is Dictionary:
 		old_preview = next_settlement.get("level") == 2
 	var survivor_due := Progress.OLD_SURVIVOR_BUNDLES if Progress.SURVIVOR in contracts else Progress.SURVIVOR_BUNDLES
 	if not Settlement.valid(next_settlement,order,data.collected,survivor_due): return false
+	var active_order: Dictionary = next_settlement.market.order
+	if not active_order.is_empty() and not Settlement.Market.is_meal_order(active_order):
+		if version >= 12: return false
+		next_settlement.market = next_settlement.market.duplicate()
+		next_settlement.market.order = {}
 	for product: String in product_bills:
 		if product_bills[product] != int(next_settlement.market.construction_products[product]): return false
 	if old_preview and next_settlement.level != 2: return false
@@ -449,6 +493,12 @@ func restore(data: Variant) -> bool:
 		for kind in settlement.withdrawn:
 			settlement.withdrawn[kind]=int(settlement.withdrawn[kind])
 		Settlement.Market.normalize(settlement.market)
+		var vehicle: Dictionary = settlement.vehicle
+		vehicle.hp = int(vehicle.hp)
+		vehicle.purchases = int(vehicle.purchases)
+		for bucket: String in ["cargo","salvage","lost","spent"]:
+			for kind: String in vehicle[bucket]:
+				vehicle[bucket][kind] = int(vehicle[bucket][kind])
 		for lane: String in Settlement.LINE_EMPTY:
 			settlement.line_load[lane] = int(settlement.line_load[lane])
 			settlement.line_progress[lane] = float(settlement.line_progress[lane])
@@ -460,6 +510,7 @@ func restore(data: Variant) -> bool:
 		carried[kind] = int(data.carried.get(kind,0))
 		stored[kind] = int(data.stored.get(kind,0))
 	for id in costs:
+		paid[id] = {}
 		for kind in costs[id]:
 			paid[id][kind] = int(incoming[id][kind])
 	return true

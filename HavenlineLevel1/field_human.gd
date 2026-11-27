@@ -6,18 +6,9 @@ const PORTRAITS := {
 	"customer_male_01": preload("res://assets/settlement_people/customer_male_01.glb")
 }
 const CHOP_SECONDS := 1.55
-const CHOP := "res://assets/settlement_people/companion_chop.json"
-const AXE := "res://assets/settlement_people/companion_axe.gltf"
-const BLADE := [
-	Vector3(-.542888,.661107,.016430), Vector3(-.282066,.811018,-.057112),
-	Vector3(-.302299,.580118,.054076), Vector3(-.486028,.866623,-.013793),
-	Vector3(-.393316,.690784,-.046114), Vector3(-.381785,.800244,.047098),
-	Vector3(-.441884,.587788,.038862), Vector3(-.289399,.599597,-.061213),
-	Vector3(-.327512,.692122,.057010), Vector3(-.527771,.769359,.016504),
-	Vector3(-.447922,.708181,.038400), Vector3(-.281433,.812496,.055848),
-	Vector3(-.434852,.786312,-.038283), Vector3(-.515572,.573551,-.022671),
-	Vector3(-.420109,.593878,-.041551), Vector3(-.480632,.673395,-.036623)]
-static var frames: Array = []
+const ApprovedTools := preload("res://weapon_orbit.gd")
+const WorkSwing := preload("res://forester_work_swing.gd")
+const ToolContacts := preload("res://orbit_head_contacts.gd")
 var skeleton: Skeleton3D
 var mining_tool: Node3D
 var tool: Node3D
@@ -26,6 +17,7 @@ var bones := {}
 var mode := ""
 var identity := ""
 var forester_gait: RefCounted
+var work_strike_point := Vector3.INF
 
 func configure(id: String) -> void:
 	if not PORTRAITS.has(id) or skeleton: return
@@ -55,21 +47,16 @@ func configure(id: String) -> void:
 		forester_gait=preload("res://forester_gait.gd").new()
 		forester_gait.bind(skeleton)
 		forester_gait.tread.bind(surface,skeleton)
-		tool = (load(AXE) as PackedScene).instantiate()
+		tool = ApprovedTools.AXE.instantiate()
 		add_child(tool)
 		tool.hide()
-		mining_tool = preload("res://assets/tools/pickaxe-meshy.glb").instantiate()
+		mining_tool = ApprovedTools.PICK.instantiate()
 		add_child(mining_tool)
 		mining_tool.hide()
 		bundle = preload("res://field_art.gd").make("wood",.46)
 		add_child(bundle)
 		bundle.position = Vector3(0,.58,.235)
 		bundle.hide()
-		if frames.is_empty():
-			for row in JSON.parse_string(FileAccess.get_file_as_string(CHOP)):
-				var sample := PackedVector3Array()
-				for xyz in row: sample.append(Vector3(xyz[0],xyz[1],xyz[2]))
-				frames.append(sample)
 	pose("idle",0)
 
 func travel_pose(phase: float, pace: float, loaded: bool) -> void:
@@ -106,9 +93,9 @@ func pose(action: String, phase: float) -> void:
 		if bundle: bundle.visible = mode == "carry"
 	var angle := fposmod(phase,1.0)*TAU
 	if mode in ["chop","mine"]:
-		_pose_chop(phase)
-		if mode == "mine": mining_tool.transform = tool.transform
-		if forester_gait: forester_gait.update(phase,false)
+		if not forester_gait: return
+		var target := to_local(work_strike_point) if work_strike_point.is_finite() else Vector3(0,.96,.64)
+		WorkSwing.drive(self,mining_tool if mode=="mine" else tool,phase,mode=="mine",target)
 		return
 	if mode == "receive":
 		var reach := sin(clampf(phase,0.,1.)*PI)
@@ -172,37 +159,10 @@ func _hold_bundle() -> void:
 		skeleton.set_bone_global_pose(forearm,Transform3D(fore_basis,elbow))
 		skeleton.set_bone_global_pose(hand,Transform3D(fore_basis,palm))
 
-func _pose_chop(p: float) -> void:
-	skeleton.position = Vector3.ZERO
-	var t := clampf(p,0,1)*float(frames.size()-1)
-	var index := floori(t)
-	var a: PackedVector3Array = frames[index]
-	var b: PackedVector3Array = frames[mini(index+1,frames.size()-1)]
-	var sample := PackedVector3Array()
-	for i in a.size(): sample.append(a[i].lerp(b[i],t-index))
-	var line: Vector3 = sample[0]-sample[3]
-	var middle: Vector3 = (sample[0]+sample[3])*.5
-	var twist := -atan2(line.z,line.x)
-	var lean := clampf((middle.z-.04)*.8,-.18,.21)
-	_bend("Pelvis",lean*.25,twist*.35)
-	_bend("Chest",lean*.55,twist*.58)
-	_bend("Head",-lean*.42,-twist*.64)
-	for side in ["L","R"]:
-		var start := 0 if side=="L" else 3
-		var prefix: Array[String] = ["UpperArm."+side,"Forearm."+side,"Palm."+side]
-		for k in 2:
-			var id: int = bones[prefix[k]]
-			var rest_axis := skeleton.get_bone_rest(bones[prefix[k+1]]).origin.normalized()
-			var current_axis := (sample[start+k+1]-sample[start+k]).normalized()
-			skeleton.set_bone_global_pose(id,Transform3D(Basis(Quaternion(rest_axis,current_axis)),sample[start+k]))
-		var hand: int = bones[prefix[2]]
-		var fore_basis := skeleton.get_bone_global_pose(bones[prefix[1]]).basis
-		skeleton.set_bone_global_pose(hand,Transform3D(fore_basis,sample[start+2]))
-	var tool_basis := Basis(sample[6],sample[7],sample[8])
-	tool.transform = Transform3D(tool_basis.orthonormalized().scaled(Vector3.ONE*tool_basis.get_scale().y),sample[9])
-
 func blade_points() -> PackedVector3Array:
 	var result := PackedVector3Array()
-	if tool:
-		for vertex in BLADE: result.append(tool.global_transform*vertex)
+	if mode=="mine" and mining_tool:
+		for vertex: Vector3 in ToolContacts.PICKAXE: result.append(mining_tool.global_transform*vertex)
+	elif mode=="chop" and tool:
+		for vertex: Vector3 in ToolContacts.AXE: result.append(tool.global_transform*vertex)
 	return result

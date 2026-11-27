@@ -15,12 +15,14 @@ const GLYPHS={
 	"Storage":preload("res://assets/field_ui/modern/storage.png"),
 	"Survivors":preload("res://assets/field_ui/modern/survivors.png")}
 const BUILD=preload("res://assets/field_ui/modern/build.png")
+const WORKSHOPS := {"meat":["Cooker","raw meat","cooked meat"],"wood":["Saw bench","wood","planks"],"stone":["Quarry drill","stone","stone blocks"]}
 var world
 var hud
 var tab:=""
 var active_tab:="Camp"
 var tracking:=""
 var tracking_name:=""
+var workshop_kind := ""
 var nav:=Panel.new()
 var build:=TextureButton.new()
 var build_art:=TextureRect.new()
@@ -204,8 +206,38 @@ func refresh()->void:
 			description="Level %d  •  %d camp purchases"%[journal.level,book.build_order.size()]
 			list.append(_entry("Guide to camp" if world.camp_active else "Find the hearth plot","home"))
 			if world.camp_active:list.append(_entry("Move equipment","move"))
+			if book.complete(P.SECOND):
+				list.append(_entry("Workshops","workshops"))
+				for id in [P.GARAGE,P.TRUCK]:
+					if book.offer_open(id):list.append(_entry(P.TITLES[id]+"  ·  "+P.price_text(book.remaining(id)),id))
 			if not world.player_wardrobe.CHARACTERS.is_empty():
 				list.append(_entry("Choose character","character_open"))
+		"Workshops":
+			title.text="Workshops"
+			for raw:String in WORKSHOPS:
+				if book.is_machine_owned(raw):list.append(_entry(WORKSHOPS[raw][0],"workshop:"+raw))
+				elif book.offer_open(P.MACHINES[raw]):
+					var id:String=P.MACHINES[raw]
+					list.append(_entry(P.TITLES[id]+"  ·  "+P.price_text(book.remaining(id)),id))
+		"Workshop":
+			var names:Array=WORKSHOPS[workshop_kind]
+			title.text=names[0]
+			if world.encounters.is_machine_down(workshop_kind):
+				description="Damaged. Rebuild before operating."
+			else:
+				description="Load %s at the input. Collect %s at the output."%[names[1],names[2]]
+				var operator=world.settlement_loop.works
+				var here:bool=operator.can_operate(workshop_kind)
+				var mode := "Switch to manual handoff" if operator.automatic_handoff(workshop_kind) else "Switch to walk-up handoff"
+				list.append(_entry(mode,"machine_mode:"+workshop_kind))
+				var ready:int=world.settlement_loop.Rules.Logistics.rack(journal,workshop_kind)
+				if here and world.carry.available_to_station(workshop_kind)>0 and world.settlement_loop.available_to_feeder(workshop_kind):
+					list.append(_entry("Load from pack","machine_load:"+workshop_kind))
+				else:list.append(_entry("Guide to input","machine_input:"+workshop_kind))
+				if here and ready>0:
+					list.append(_entry("Collect output  ·  %d"%ready,"machine_take:"+workshop_kind))
+				else:list.append(_entry("Guide to output","machine_output:"+workshop_kind))
+			list.append(_entry("All workshops","workshops"))
 		"Characters":
 			title.text="Choose character"
 			var current:int=world.player_character()
@@ -316,6 +348,26 @@ func choose(id:String)->void:
 		list_page+=1
 		refresh()
 		return
+	if id=="workshops":
+		if tab!="Workshops":toggle("Workshops")
+		active_tab="Camp"
+		return
+	if id.begins_with("workshop:"):
+		workshop_kind=id.get_slice(":",1)
+		toggle("Workshop")
+		active_tab="Camp"
+		return
+	if id.begins_with("machine_mode:"):
+		world.settlement_loop.works.toggle_handoff(id.get_slice(":",1))
+		refresh()
+		return
+	if id.begins_with("machine_load:") or id.begins_with("machine_take:"):
+		var raw:=id.get_slice(":",1)
+		if id.begins_with("machine_load:"):
+			if world.settlement_loop.works.request_machine(raw):dismiss()
+		elif world.settlement_loop.exchange.collect_station(raw):
+			dismiss()
+		return
 	if id=="character_open":
 		toggle("Characters")
 		active_tab="Camp"
@@ -337,10 +389,19 @@ func choose(id:String)->void:
 		if automation.selected!=id:automation.select(id)
 	tracking=id
 	tracking_name={"home":"Camp","depot":"Storehouse","worker":"Survivor","rescue":"Rescue plot",Crew.OWL_PLOT:"Owl roost"}.get(id,P.TITLES.get(id,"Camp"))
+	if id.begins_with("machine_"):
+		var raw:=id.get_slice(":",1)
+		tracking_name=WORKSHOPS[raw][0]+(" input" if id.begins_with("machine_input:") else " output")
 	if not world.camp_active and id=="home":tracking_name="Camp plot"
 	if world.has_method("_refresh_hud_field"):world._refresh_hud_field(false)
 
 func tracked_point()->Vector3:
+	if tracking.begins_with("machine_"):
+		var raw:=tracking.get_slice(":",1)
+		if not world.inventory.is_machine_owned(raw):return Vector3.INF
+		if raw=="meat":
+			return world.lakeshore.apron_position() if tracking.begins_with("machine_input:") else world.lakeshore.output_apron_position()
+		return world.processors.apron_position(raw)
 	match tracking:
 		"":return Vector3.INF
 		"home":

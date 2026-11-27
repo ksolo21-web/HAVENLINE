@@ -47,7 +47,7 @@ const OFFERS := {
 	"camp_cooker":{"wood":12,"stone":8}, "saw_bench":{"wood":14,"stone":6}, "quarry_drill":{"wood":10,"stone":12},
 	"watchtower":{"wood":12,"stone":10}, "orbit_upgrade":{"stone":6,"meat":4},
 	"meal_conveyor":{"wood":10,"stone":6}, "supply_conveyors":{"wood":16,"stone":12},
-	"snow_garage":{"planks":24,"blocks":20},
+	"snow_garage":{"wood":18,"stone":12},
 	"snow_truck":{"wood":44,"stone":34,"metal":24,"coal":12}
 }
 

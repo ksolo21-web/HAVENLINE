@@ -30,7 +30,6 @@ func setup(host: Node3D) -> void:
 	if ResourceLoader.exists("res://field_tower_art.gd"):
 		art=load("res://field_tower_art.gd").new()
 		add_child(art)
-		art.follow_hero(world.hero_model)
 		art.hide()
 
 func nearest() -> Node3D:
@@ -58,13 +57,16 @@ func advance(dt: float, paid: bool) -> void:
 				world.actor.global_position=to_global(p)
 		if art:
 			art.visible=paid
-			if not paid: art.set_hero_outline(false)
+			if not paid: art.player_marker.hide()
 			raising=0.0 if paid and presented else 1.0
 			art.set_build_progress(raising)
 	presented=true
 	if not active or not art: return
 	art.animate(dt)
-	art.update_sightline(world.actor.global_position,world.camera)
+	if world.hero_model.is_visible_in_tree() and not (world.camp_layout and world.camp_layout.active):
+		art.update_sightline(world.actor.global_position,world.camera,float(world.layout.actor_height))
+	else:
+		art.player_marker.hide()
 	if raising<1.0:
 		raising=minf(1.0,raising+dt*1.6)
 		art.set_build_progress(raising)

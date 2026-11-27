@@ -141,18 +141,22 @@ func run():
 	bolt.queue_free()
 	tower.set_build_progress(.35);record("footings build before armed deck",not tower.frame.find_child("EmplacementDeck",true,false).visible and not tower.swivel.visible)
 	tower.set_build_progress(1.);record("completed deck exposes the bow and its operator",tower.frame.find_child("EmplacementDeck",true,false).visible and tower.bow.is_visible_in_tree() and tower.crew.is_visible_in_tree())
-	# The usual return from the stone drill crosses the projected roof.
+	# The usual return from the stone drill crosses the platform's silhouette.
 	var stone_route := Vector3(6.168,0,-4.102)
+	var west_shoulder := Vector3(6.62,0,-3.88)
 	var muzzle: Transform3D = tower.swivel.global_transform
+	var hero_surfaces: Array[Node] = game.hero_model.find_children("*", "MeshInstance3D", true, false)
+	var opaque: bool = tower.occluders.all(func(part: MeshInstance3D):
+		return part.get_active_material(0).transparency == BaseMaterial3D.TRANSPARENCY_DISABLED and part.material_overlay == null)
 	for zoom in [1.,2.]:
 		game.camera.position=stone_route+Vector3(7,11,11)
 		game.camera.look_at(stone_route)
 		game.set_zoom_ratio(zoom)
-		tower.update_sightline(stone_route,game.camera)
-		var framed: bool = tower.cutaway_active and tower.hero_surfaces.size()>0 and tower.hero_surfaces.all(func(part): return part.material_overlay==tower.sightline_material) and tower.stages.all(func(part): return part.material_override==null)
+		tower.update_sightline(west_shoulder,game.camera)
+		var framed: bool = tower.player_marker.visible and tower.player_marker.global_position.y > 1.8
 		tower.update_sightline(Vector3(4.9,0,.2),game.camera)
-		var restored: bool = not tower.cutaway_active and tower.hero_surfaces.all(func(part): return part.material_overlay==null) and tower.stages.all(func(part): return part.material_override==null)
-		record("tower stays opaque and only marks the hidden player on the stone route at %dx" % zoom,framed and restored and muzzle.is_equal_approx(tower.swivel.global_transform))
+		var restored: bool = not tower.player_marker.visible and hero_surfaces.all(func(part): return part.material_overlay == null)
+		record("solid tower marks actual player occlusion on the stone route at %dx" % zoom,opaque and framed and restored and muzzle.is_equal_approx(tower.swivel.global_transform))
 	game.camera.position=tower.global_position+Vector3(7,11,11);game.set_zoom_ratio(2.)
 	await process_frame;plate("Eastern-watchtower-gameplay-2x")
 	if DisplayServer.get_name()!="headless":

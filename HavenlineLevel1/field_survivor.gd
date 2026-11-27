@@ -6,7 +6,7 @@ const Wildlife = preload("res://field_wildlife.gd")
 const RESCUE := Vector3(-5.10,0,9.90)
 const PINE := Vector2(-3.60,9.10)
 # A three-quarter flank keeps both gloves and the contact side of the trunk visible.
-const STANCE := Vector3(-4.54,0,9.04)
+const STANCE := Vector3(-4.34,0,9.04)
 const PINE_APPROACH := Vector3(-3.17,0,10.24)
 const READY := Vector3(-2.7,0,1.72)
 # Workers have their own travel pace in world metres per second.
@@ -35,13 +35,18 @@ var supply_model: Node3D
 var pack: Node3D
 var pack_view = preload("res://field_inventory.gd").new()
 var assigned_bank: Node3D
+var timber_approach: Array[Vector3] = []
 var forage_token := ""
 var bank_approach: Array[Vector3] = []
 var bank_swing := 0.0
 var bank_hit := false
 var failed_swings := 0
+var previous_tree := ""
+var previous_bank := ""
+var work_clock := 0.0
+var deferred_sources := {}
 const CAMP_DUTIES := ["serve","assist","feed","field"]
-const FIELD_DUTIES := ["forage","hunt","mining","wood"]
+const FIELD_DUTIES := ["mining","wood","forage","hunt"]
 var camp_cursor := 0
 var priority_order_available := true
 var field_cursor := 0
@@ -59,7 +64,7 @@ const WORK_RADIUS := 24.0
 const PICKUP_REACH := 1.22
 # In a busy camp the worker checks back after a bounded field circuit.
 # A rich stand can fill one complete 500-unit stack first.
-const FIELD_SHIFT_SECONDS := 54.
+const FIELD_SHIFT_SECONDS := 38.
 const WORK_WAIT_BUNDLES := 12
 var shift_seconds := 0.0
 var wildlife: Node3D
@@ -144,7 +149,7 @@ func at_rescue(at: Vector3) -> bool:
 	return phase == "waiting_rescue" and world.inventory.settlement.get("survivor_paid",false) and at.distance_to(actor.global_position) <= 1.46
 
 func can_claim(token: String) -> bool:
-	if phase != "pickup" or token != pickup_token or not world.drops.has(token): return false
+	if phase != "pickup" or token != pickup_token or not world.drops.has(token) or not is_instance_valid(tree): return false
 	var item: Dictionary = world.drops[token]
 	return item.kind == "wood" and item.at.distance_to(actor.global_position) <= .24 and item.from.distance_to(tree.global_position+Vector3.UP*.29) < .04 and item.age >= .41
 
@@ -175,10 +180,18 @@ func _sync_pack() -> void:
 	pack.sync()
 	actor.bundle.hide()
 
-func _begin_outbound() -> void:
+func _begin_outbound() -> bool:
 	var portal: Vector3 = world.gates[0].position
-	route.assign([Vector3(-2.65,0,2.14),Vector3(0,0,portal.z-GATE_LANDING),Vector3(0,0,portal.z+GATE_LANDING),PINE_APPROACH,STANCE])
-	phase = "to_tree"
+	var staging := Vector3(portal.x,0,portal.z+GATE_LANDING)
+	var outside := _in_work_area(actor.global_position)
+	var start := actor.global_position if outside else staging
+	if not _choose_tree(start): return false
+	route.clear()
+	if not outside:
+		route.assign([Vector3(-2.65,0,2.14),Vector3(portal.x,0,portal.z-GATE_LANDING),staging])
+	route.append_array(timber_approach)
+	phase="to_tree"
+	return true
 
 func _paid_walkways():
 	if not world or not world.settlement_loop or not world.settlement_loop.conveyors or not world.camp_layout:
@@ -265,6 +278,7 @@ func _leave_shelf() -> void:
 			_to_cooker()
 			return
 		if _needs_customer_meat():
+			priority_order_available=false
 			_load_hopper_stock("meat")
 			return
 	# Advance after each opportunity so a busy kitchen, full stockroom or a
@@ -458,6 +472,7 @@ func _walk_route(dt: float, carrying: bool) -> bool:
 
 func advance(dt: float) -> void:
 	if not actor or world.persist_blocked or world.reset_time>0: return
+	work_clock+=dt
 	var hunter := actor.global_position if phase in ["hunt_approach","hunt_strike"] else Vector3.INF
 	wildlife.advance(dt,hunter)
 	var journal: Dictionary = world.inventory.settlement
@@ -546,20 +561,23 @@ func _defend(dt: float) -> bool:
 	if not is_instance_valid(defender): return false
 	if not defender.can_receive_swirl() or defender.global_position.distance_squared_to(actor.global_position)>3.85:
 		defender = null
+		actor.work_strike_point=Vector3.INF
 		return false
 	if not _travel_clear(actor.global_position,defender.global_position,.045):
 		defender = null
+		actor.work_strike_point=Vector3.INF
 		return false
 	travel_speed = 0.0
 	actor.bundle.hide()
 	var axis := actor.global_position.direction_to(defender.global_position)
 	actor.rotation.y = rotate_toward(actor.rotation.y,atan2(axis.x,axis.z),dt*9.0)
+	actor.work_strike_point=_defense_face()
 	var previous: PackedVector3Array = actor.blade_points()
 	defend_elapsed += dt
 	actor.pose("chop",maxf(0.0,defend_elapsed)/Human.CHOP_SECONDS)
-	if not defend_landed and defend_elapsed>=.48 and defend_elapsed<=.94:
+	if not defend_landed and defend_elapsed>=.48 and defend_elapsed<=1.14:
 		var next: PackedVector3Array = actor.blade_points()
-		for i in previous.size():
+		for i in mini(previous.size(),next.size()):
 			if not defender.contact_segment(previous[i],next[i]): continue
 			if not _travel_clear(actor.global_position,next[i],.055): continue
 			defend_landed = defender.receive_hit(1,next[i])
@@ -571,6 +589,21 @@ func _defend(dt: float) -> bool:
 		defend_elapsed = 0.0
 		defend_landed = false
 	return true
+
+func _defense_face() -> Vector3:
+	var surface: MeshInstance3D=defender.surface
+	var skin: TriangleMesh=defender.hit_surface
+	if not surface or not skin: return Vector3.INF
+	var feet := actor.global_position
+	var body := defender.global_position
+	var axis := feet.direction_to(body).slide(Vector3.UP).normalized()
+	for base: float in [.84,.70,.96,.59]:
+		var height := base*float(defender.size_factor())
+		var start := Vector3(feet.x,height,feet.z)
+		var end := Vector3(body.x,height,body.z)+axis*.42
+		var hit := skin.intersect_segment(surface.to_local(start),surface.to_local(end))
+		if not hit.is_empty(): return surface.to_global(hit.position)+axis*.058
+	return Vector3.INF
 
 func _begin_hunt(origin: Vector3) -> bool:
 	if not wildlife.is_huntable() or worker_space("meat")<=0 or not world.inventory.storage_open("meat"):
@@ -601,6 +634,7 @@ func _advance_hunt(dt: float) -> void:
 		_go_home_bulk()
 		return
 	if phase == "hunt_approach":
+		actor.work_strike_point=Vector3.INF
 		hunt_retry = maxf(0.0,hunt_retry-dt)
 		if hunt_goal.distance_to(wildlife.global_position)>1.12 and hunt_retry==0.0 and _in_work_area(actor.global_position):
 			hunt_retry = .38
@@ -617,12 +651,15 @@ func _advance_hunt(dt: float) -> void:
 		return
 	var axis := actor.global_position.direction_to(wildlife.global_position)
 	actor.rotation.y = rotate_toward(actor.rotation.y,atan2(axis.x,axis.z),dt*8.0)
+	var hunt_level := Vector3.UP*.87
+	var near: Vector3=wildlife.intersect_blade(actor.global_position+hunt_level,wildlife.global_position+hunt_level)
+	actor.work_strike_point=near+axis*.07 if near.is_finite() else Vector3.INF
 	var previous: PackedVector3Array = actor.blade_points()
 	hunt_elapsed += dt
 	actor.pose("chop",hunt_elapsed/Human.CHOP_SECONDS)
-	if not hunt_contacted and hunt_elapsed>=.48 and hunt_elapsed<=.94:
+	if not hunt_contacted and hunt_elapsed>=.48 and hunt_elapsed<=1.14:
 		var next: PackedVector3Array = actor.blade_points()
-		for i in previous.size():
+		for i in mini(previous.size(),next.size()):
 			var contact: Vector3 = wildlife.intersect_blade(previous[i],next[i])
 			if not contact.is_finite(): continue
 			if not wildlife.receive_hunting_contact(contact,actor.global_position): continue
@@ -655,6 +692,9 @@ func _advance_tasks(dt: float) -> void:
 	var journal: Dictionary = world.inventory.settlement
 	if phase in ["to_tree","work_ready","chopping","falling","pickup","foraging","mining_approach","mining","hunt_approach","hunt_strike","hunt_pickup"]:
 		shift_seconds+=dt
+		if shift_seconds>=FIELD_SHIFT_SECONDS and phase in ["to_tree","work_ready","pickup","foraging","mining_approach"]:
+			_go_home_bulk()
+			return
 	if phase in ["carrying","bulk_return","supply_pickup","supply_return","supply_back","bin_delivery"] and world.inventory.storage_open("wood"):
 		var door := _shelf_apron()
 		if not route.is_empty(): route[-1] = door
@@ -664,14 +704,15 @@ func _advance_tasks(dt: float) -> void:
 			step_cycle=fposmod(step_cycle+dt*.45,1)
 			actor.pose("idle",step_cycle)
 			if at_rescue(world.actor.global_position) and world.rescue_survivor():
-				route.assign([STANCE])
-				phase="to_tree"
+				_begin_outbound()
+				if phase=="waiting_rescue": phase="waiting_storage"
 		"first_walk":
 			if _walk_route(dt,false): phase = "waiting_storage"
 		"waiting_storage":
+			waiting=maxf(0.0,waiting-dt)
 			step_cycle = fposmod(step_cycle+dt*.45,1)
 			actor.pose("idle",step_cycle)
-			if journal.rescued:
+			if journal.rescued and waiting<=0.0:
 				if _can_fetch_meal():
 					_to_cooker()
 				elif not world.inventory.storage_open("wood"):
@@ -710,34 +751,45 @@ func _advance_tasks(dt: float) -> void:
 		"supply_out","supply_unload","supply_return","supply_back":
 			_advance_supply(dt)
 		"to_tree":
-			if _walk_route(dt,false):
-				actor.rotation.y = atan2(PINE.x-STANCE.x,PINE.y-STANCE.z)
+			if not _working_tree():
+				_go_home_bulk()
+			elif _walk_route(dt,false):
 				phase = "work_ready"
 		"work_ready":
 			actor.pose("idle",step_cycle)
-			if tree.phase == "rooted" and tree.cooldown <= 0.:
+			if not _working_tree():
+				_go_home_bulk()
+			elif tree.cooldown <= 0.:
 				drop_floor = world.drop_id
 				_begin_swing()
 		"chopping":
 			_step_swing(dt)
 		"falling":
 			actor.pose("idle",step_cycle)
-			if tree.phase == "credited":
+			waiting+=dt
+			if not is_instance_valid(tree) or waiting>2.4:
+				if is_instance_valid(tree): _defer_source(tree)
+				_go_home_bulk()
+			elif tree.phase == "credited":
 				pickup_token = _nearest_new_bundle()
-				phase = "pickup" if not pickup_token.is_empty() else "work_ready"
+				if pickup_token.is_empty(): _go_home_bulk()
+				else: phase = "pickup"
 			elif tree.phase == "rooted":
-				phase = "work_ready"
+				_go_home_bulk()
 		"pickup":
+			if not is_instance_valid(tree):
+				_go_home_bulk()
+				return
 			if not world.drops.has(pickup_token):
 				pickup_token = _nearest_new_bundle()
-				if pickup_token.is_empty(): phase = "work_ready"
+				if pickup_token.is_empty(): _go_home_bulk()
 			if phase == "pickup":
 				_walk(world.drops[pickup_token].at,dt)
 				if can_claim(pickup_token):
 					if worker_space("wood")==0:
 						_go_home_bulk()
 						return
-					if world.inventory.storage_open("wood") and journal.worker_carry_token.is_empty():
+					if world.inventory.storage_open("wood") and journal.worker_carry_token.is_empty() and journal.worker_deliveries==0:
 						if not world.claim_worker_wood(pickup_token):return
 						_sync_pack()
 					_sweep_drops()
@@ -773,37 +825,59 @@ func _advance_tasks(dt: float) -> void:
 				else: _leave_shelf()
 
 func _begin_swing() -> void:
-	actor.rotation.y = atan2(PINE.x-STANCE.x,PINE.y-STANCE.z)
+	var aim := _work_face(tree,actor.global_position,false)
+	if not aim.is_finite():
+		_defer_source(tree)
+		_go_home_bulk()
+		return
+	_face_site(tree)
+	actor.rotation.y-=.14
+	actor.work_strike_point=aim
 	swing_time = 0.
 	swing_landed = false
 	actor.pose("chop",0)
 	phase = "chopping"
 
 func _step_swing(dt: float) -> void:
+	if not is_instance_valid(tree) or not world.surfaces.has(tree):
+		_go_home_bulk()
+		return
 	if tree.phase != "rooted" and not swing_landed:
+		waiting=0.0
 		phase = "falling"
+		return
+	if tree.phase=="rooted" and not actor.work_strike_point.is_finite():
+		_begin_swing()
 		return
 	var before: PackedVector3Array = actor.blade_points()
 	swing_time += dt
 	actor.pose("chop",swing_time/Human.CHOP_SECONDS)
-	if not swing_landed and swing_time>=.48 and swing_time<=.94:
-		var geometry: MeshInstance3D = world.surfaces[tree][0]
-		var trunk: TriangleMesh = world.surfaces[tree][1]
+	if not swing_landed and swing_time>=.53 and swing_time<=1.14:
 		var after: PackedVector3Array = actor.blade_points()
-		for i in before.size():
-			var cross_section := trunk.intersect_segment(geometry.to_local(before[i]),geometry.to_local(after[i]))
-			if cross_section.is_empty(): continue
-			var hit := geometry.to_global(cross_section.position)
-			world.tree_input_sequence += 1
-			swing_landed = tree.strike(tree.TREE_ID,world.tree_input_sequence,actor.global_position,actor.global_basis.z,after[i]-before[i],hit)
+		var contact := _swept_contact(tree,before,after)
+		if not contact.is_empty():
+			var hit: Vector3 = contact.position
+			world.tree_input_sequence=maxi(world.tree_input_sequence,tree.last_sequence)+1
+			swing_landed = tree.strike(tree.TREE_ID,world.tree_input_sequence,actor.global_position,actor.global_basis.z,contact.direction,hit,true)
 			if swing_landed:
-				contacts += 1
-				contact_position = hit
+				contacts+=1
+				contact_position=hit
 				world.lifecycle.record_strike(tree)
 				world._event("impact_wood",hit)
-				break
+				world._record_field_event("survivor_chop_contact",hit)
 	if swing_time >= Human.CHOP_SECONDS:
-		phase = "work_ready" if tree.phase == "rooted" else "falling"
+		actor.work_strike_point=Vector3.INF
+		failed_swings=0 if swing_landed else failed_swings+1
+		if failed_swings>=2:
+			_defer_source(tree)
+			_go_home_bulk()
+			return
+		if tree.phase=="rooted":
+			_begin_swing()
+		else:
+			previous_tree=String(tree.get_meta("field_source_id"))
+			waiting=0.0
+			phase="falling"
 
 func _nearest_new_bundle() -> String:
 	var selected := ""
@@ -847,16 +921,16 @@ func _rack_from(kind: String) -> Vector3:
 func _start_field_job() -> void:
 	priority_order_available=true
 	shift_seconds=0.
-	if world.inventory.settlement.worker_deliveries == 0 and world.inventory.storage_open("wood"):
-		_begin_outbound()
-		return
+	if world.inventory.settlement.worker_deliveries == 0 and world.inventory.storage_open("wood") and _begin_outbound(): return
 	# Dispatch through the south gate. Restrict the worker's range to its camp
 	# work area so the actor and assignments survive player-centred streaming.
 	var portal: Vector3 = world.gates[0].position
-	var staging := Vector3(portal.x,0,portal.z+GATE_LANDING)
+	var outside := _in_work_area(actor.global_position)
+	var staging := actor.global_position if outside else Vector3(portal.x,0,portal.z+GATE_LANDING)
 	var target := _closest_drop(staging)
 	assigned_bank = _choose_bank(staging)
-	route.assign([Vector3(-2.65,0,2.14),Vector3(0,0,portal.z-GATE_LANDING),staging])
+	route.clear()
+	if not outside: route.assign([Vector3(-2.65,0,2.14),Vector3(portal.x,0,portal.z-GATE_LANDING),staging])
 	for offset in FIELD_DUTIES.size():
 		var duty: String = FIELD_DUTIES[field_cursor]
 		field_cursor = (field_cursor+1)%FIELD_DUTIES.size()
@@ -873,8 +947,12 @@ func _start_field_job() -> void:
 				route.append_array(bank_approach)
 				phase = "mining_approach"
 			"wood":
-				_begin_outbound()
+				if not _begin_outbound(): continue
 		return
+	if outside: _begin_inbound(_has_cargo())
+	else:
+		waiting=.65
+		phase="waiting_storage"
 
 func _in_work_area(point: Vector3) -> bool:
 	return not world.field_env.is_inside_camp(point) and point.distance_squared_to(Vector3.ZERO) <= WORK_RADIUS*WORK_RADIUS
@@ -910,11 +988,13 @@ func _outdoor_path(from: Vector3, to: Vector3) -> Array[Vector3]:
 	path.append(to)
 	return path
 
-func _closest_drop(origin: Vector3) -> String:
+func _closest_drop(origin: Vector3, material := "", source := Vector3.INF) -> String:
 	var selected := ""
 	var best := INF
 	for token: String in world.drops:
 		var item: Dictionary = world.drops[token]
+		if not material.is_empty() and item.kind!=material: continue
+		if source.is_finite() and source.distance_squared_to(item.from)>1.0: continue
 		if not _in_work_area(item.at): continue
 		if worker_space(item.kind) <= 0 or item.age < .30: continue
 		var score := origin.distance_squared_to(item.at)
@@ -924,28 +1004,111 @@ func _closest_drop(origin: Vector3) -> String:
 			selected = token
 	return selected
 
+func _working_tree() -> bool:
+	return is_instance_valid(tree) and world.surfaces.has(tree) and tree.phase=="rooted"
+
+func _defer_source(site: Node3D) -> void:
+	deferred_sources[String(site.get_meta("field_source_id"))]=work_clock+8.0
+
+func _source_available(site: Node3D, expected_phase: String) -> bool:
+	if not is_instance_valid(site) or site.phase!=expected_phase or not _in_work_area(site.global_position): return false
+	return world.surfaces.has(site) and float(deferred_sources.get(site.get_meta("field_source_id"),0.0))<=work_clock
+
+func _face_site(site: Node3D) -> void:
+	var toward: Vector3 = site.global_position-actor.global_position
+	actor.rotation.y=atan2(toward.x,toward.z)
+
+func _work_face(site: Node3D, feet: Vector3, mining: bool) -> Vector3:
+	if not is_instance_valid(site) or not world.surfaces.has(site): return Vector3.INF
+	var geometry: MeshInstance3D=world.surfaces[site][0]
+	var surfaces: TriangleMesh=world.surfaces[site][1]
+	var toward := feet.direction_to(site.global_position).slide(Vector3.UP).normalized()
+	var levels := [.59,.49,.40,.30,.77] if mining else [.83,.75,.67,.96,.58]
+	for height: float in levels:
+		var start := Vector3(feet.x,height,feet.z)
+		var end := Vector3(site.global_position.x,height,site.global_position.z)+toward*.20
+		var result := surfaces.intersect_segment(geometry.to_local(start),geometry.to_local(end))
+		if result.is_empty(): continue
+		var face := geometry.to_global(result.position)
+		var depth := feet.distance_to(Vector3(face.x,feet.y,face.z))
+		if depth<.25 or depth>(.79 if mining else .87): continue
+		if not _travel_clear(feet,face,.035): continue
+		return face+toward*(.13 if mining else .052)
+	return Vector3.INF
+
+func _swept_contact(site: Node3D, before: PackedVector3Array, after: PackedVector3Array) -> Dictionary:
+	var surface: MeshInstance3D=world.surfaces[site][0]
+	var faces: TriangleMesh=world.surfaces[site][1]
+	for i in mini(before.size(),after.size()):
+		var impact := faces.intersect_segment(surface.to_local(before[i]),surface.to_local(after[i]))
+		if impact.is_empty(): continue
+		var hit := surface.to_global(impact.position)
+		if _travel_clear(actor.global_position,hit,.035): return {"position":hit,"direction":after[i]-before[i]}
+	return {}
+
+func _choose_tree(origin: Vector3) -> bool:
+	if worker_space("wood")==0: return false
+	var selected: Node3D
+	var best := INF
+	var first: bool = world.inventory.settlement.worker_deliveries==0
+	for pine in world.trees:
+		if not _source_available(pine,"rooted"): continue
+		var id: String = pine.get_meta("field_source_id","")
+		if not (id in ["survivor-work-pine","starter-wood"] or id.begins_with("pine@")): continue
+		var score := origin.distance_squared_to(pine.global_position)
+		if first and id=="survivor-work-pine": score-=220.0
+		elif id==previous_tree: score+=65.0
+		if score>=best: continue
+		var proposed: Array[Vector3]=[]
+		var outward: Vector3=pine.global_position.direction_to(origin)
+		if id=="survivor-work-pine" and _work_face(pine,STANCE,false).is_finite():
+			proposed=_outdoor_path(origin,STANCE)
+			if first and not proposed.is_empty() and _clear_outdoor_leg(Vector2(PINE_APPROACH.x,PINE_APPROACH.z),Vector2(STANCE.x,STANCE.z)):
+				var visible_path := _outdoor_path(origin,PINE_APPROACH)
+				if not visible_path.is_empty():
+					proposed=visible_path
+					proposed.append(STANCE)
+		if proposed.is_empty():
+			for octant:int in [0,1,-1,2,-2,3,-3,4]:
+				var stance: Vector3=pine.global_position+outward.rotated(Vector3.UP,octant*PI/4.0)*.72
+				if not _in_work_area(stance) or not _work_face(pine,stance,false).is_finite(): continue
+				proposed=_outdoor_path(origin,stance)
+				if not proposed.is_empty(): break
+		if proposed.is_empty(): continue
+		selected=pine
+		best=score
+		timber_approach=proposed
+	if not is_instance_valid(selected): return false
+	if tree!=selected: failed_swings=0
+	tree=selected
+	return true
+
 func _choose_bank(origin: Vector3) -> Node3D:
 	var best := INF
 	var selected: Node3D
 	for bank in world.rocks:
-		if not is_instance_valid(bank) or bank.phase != "seated" or not _in_work_area(bank.position): continue
+		if not _source_available(bank,"seated"): continue
 		var kind: String = bank.get_meta("resource_kind")
 		if worker_space(kind) <= 0: continue
+		var score := origin.distance_squared_to(bank.position)+mini(100,int(world.inventory.stored[kind]))*5.
+		if kind!="stone": score+=80.0
+		if bank.get_meta("field_source_id")==previous_bank: score+=32.0
+		if score>=best: continue
 		var from_bank: Vector3 = bank.position.direction_to(origin)
 		var viable: Array[Vector3] = []
-		for octant in [0,1,-1,2,-2,3,-3,4]:
-			var stance: Vector3 = bank.position+from_bank.rotated(Vector3.UP,octant*PI/4)*1.14
-			if not _in_work_area(stance): continue
-			outdoor_route.update(world,Vector2(origin.x,origin.z))
-			if outdoor_route.fence.grow(-outdoor_route.CLEARANCE+.39).has_point(Vector2(stance.x,stance.z)): continue
-			viable = _outdoor_path(origin,stance)
+		for radius: float in [1.39,1.33,1.26,1.14,.97]:
+			for octant: int in [0,1,-1,2,-2,3,-3,4]:
+				var stance: Vector3 = bank.position+from_bank.rotated(Vector3.UP,octant*PI/4)*radius
+				if not _in_work_area(stance) or not _work_face(bank,stance,true).is_finite(): continue
+				outdoor_route.update(world,Vector2(origin.x,origin.z))
+				if outdoor_route.fence.grow(-outdoor_route.CLEARANCE+.39).has_point(Vector2(stance.x,stance.z)): continue
+				viable = _outdoor_path(origin,stance)
+				if not viable.is_empty(): break
 			if not viable.is_empty(): break
 		if viable.is_empty(): continue
-		var score := origin.distance_squared_to(bank.position)+mini(100,int(world.inventory.stored[kind]))*5.
-		if score < best:
-			best = score
-			selected = bank
-			bank_approach = viable
+		best=score
+		selected=bank
+		bank_approach=viable
 	return selected
 
 func worker_space(kind: String) -> int:
@@ -981,6 +1144,7 @@ func _continue_field_shift() -> bool:
 		if worker_space(kind)==0:return false
 		packed+=RAW_RULES.WORKER_LIMIT-worker_space(kind)
 	if packed>=WORK_WAIT_BUNDLES and _can_fetch_meal():return false
+	if journal.worker_load.wood>0 and journal.worker_load.stone>0 and packed>=5: return false
 	var loose:=_closest_drop(actor.position)
 	if not loose.is_empty():
 		forage_token=loose
@@ -990,10 +1154,9 @@ func _continue_field_shift() -> bool:
 	# Alternate productive sites without a return to the storehouse in between.
 	# A second kind goes in its own rack slot.
 	var bank:=_choose_bank(actor.position)
-	var timber=_outdoor_path(actor.position,STANCE)
-	var can_chop:bool=worker_space("wood")>0 and tree.phase=="rooted" and not timber.is_empty()
+	var can_chop:=_choose_tree(actor.position)
 	if can_chop and (not bank or int(journal.worker_load.wood)<=int(journal.worker_load[bank.get_meta("resource_kind")])):
-		route=timber
+		route=timber_approach.duplicate()
 		phase="to_tree"
 		return true
 	if bank:
@@ -1004,9 +1167,11 @@ func _continue_field_shift() -> bool:
 	return false
 
 func _go_home_bulk() -> void:
+	actor.work_strike_point=Vector3.INF
 	if _continue_field_shift():return
-	_begin_inbound(true)
-	if world.inventory.settlement.worker_carry_token.is_empty():phase="bulk_return"
+	var carrying:=_has_cargo()
+	_begin_inbound(carrying)
+	if carrying and world.inventory.settlement.worker_carry_token.is_empty():phase="bulk_return"
 
 func _begin_bin_delivery(after_wood_receipt:=false) -> void:
 	# Keep a two-part timber receipt and the rest of its pack inside the same
@@ -1050,48 +1215,77 @@ func _work_field(dt: float) -> void:
 					route = _outdoor_path(actor.position,world.drops[other].at)
 				else: _go_home_bulk()
 		"mining_approach":
-			if not is_instance_valid(assigned_bank) or assigned_bank.phase != "seated":
+			if not _source_available(assigned_bank,"seated"):
 				_go_home_bulk()
 			elif _walk_route(dt,false):
-				actor.rotation.y = atan2(assigned_bank.position.x-actor.position.x,assigned_bank.position.z-actor.position.z)
-				bank_swing = 0.0
-				bank_hit = false
-				failed_swings = 0
-				phase = "mining"
+				failed_swings=0
+				_begin_mining()
 		"mining":
-			if not is_instance_valid(assigned_bank):
-				_go_home_bulk()
-				return
-			bank_swing += dt
-			actor.pose("mine",bank_swing/Human.CHOP_SECONDS)
-			if not bank_hit and bank_swing >= .80 and assigned_bank.phase == "seated":
-				world.rock_input_sequence += 1
-				bank_hit = assigned_bank.strike(assigned_bank.ROCK_ID,world.rock_input_sequence,actor.position,actor.global_basis.z)
-				if bank_hit:
-					var kind: String = assigned_bank.get_meta("resource_kind")
-					world.lifecycle.record_strike(assigned_bank)
-					world._event("impact_"+kind,assigned_bank.position)
-					if assigned_bank.phase == "mined":
-						world._event("deplete_"+kind,assigned_bank.position)
-						world._make_drops(kind,assigned_bank.position,3)
-						world.lifecycle.deplete(assigned_bank)
-						world._checkpoint_lifecycle()
-			if bank_swing >= Human.CHOP_SECONDS:
-				failed_swings = 0 if bank_hit else failed_swings+1
-				if failed_swings >= 2:
-					_go_home_bulk()
-				elif assigned_bank.phase != "seated":
-					forage_token = _closest_drop(actor.position)
-					phase = "foraging"
-				else:
-					bank_swing = 0.0
-					bank_hit = false
+			_step_mining(dt)
 		"bulk_return":
 			_sweep_drops()
 			if _walk_route(dt,true): _begin_bin_delivery()
 		"bin_delivery":
 			if not _walk_route(dt,false): return
 			_unload_stream(dt)
+
+func _begin_mining() -> void:
+	var aim:=_work_face(assigned_bank,actor.global_position,true)
+	if not aim.is_finite():
+		_defer_source(assigned_bank)
+		_go_home_bulk()
+		return
+	_face_site(assigned_bank)
+	# A slight working flank lets the full pick travel beside his head while
+	# both boots stay planted and the cutting point still reaches the bank.
+	actor.rotation.y-=.35
+	actor.work_strike_point=aim
+	bank_swing=0.0
+	bank_hit=false
+	actor.pose("mine",0)
+	phase="mining"
+
+func _step_mining(dt: float) -> void:
+	if not is_instance_valid(assigned_bank) or not world.surfaces.has(assigned_bank):
+		_go_home_bulk()
+		return
+	if assigned_bank.phase=="seated" and not actor.work_strike_point.is_finite():
+		_begin_mining()
+		return
+	var before: PackedVector3Array=actor.blade_points()
+	bank_swing+=dt
+	actor.pose("mine",bank_swing/Human.CHOP_SECONDS)
+	if not bank_hit and bank_swing>=.53 and bank_swing<=1.14 and assigned_bank.phase=="seated":
+		var contact:=_swept_contact(assigned_bank,before,actor.blade_points())
+		if not contact.is_empty():
+			world.rock_input_sequence=maxi(world.rock_input_sequence,assigned_bank.last_sequence)+1
+			bank_hit=assigned_bank.strike(assigned_bank.ROCK_ID,world.rock_input_sequence,actor.global_position,actor.global_basis.z,true)
+			if bank_hit:
+				var kind: String=assigned_bank.get_meta("resource_kind")
+				world.lifecycle.record_strike(assigned_bank)
+				world._event("impact_"+kind,contact.position)
+				world._record_field_event("survivor_mine_contact",contact.position)
+				if assigned_bank.phase=="mined":
+					previous_bank=String(assigned_bank.get_meta("field_source_id"))
+					world._event("deplete_"+kind,assigned_bank.global_position)
+					world._make_drops(kind,assigned_bank.global_position,3)
+					world.lifecycle.deplete(assigned_bank)
+					world._checkpoint_lifecycle()
+	if bank_swing<Human.CHOP_SECONDS: return
+	actor.work_strike_point=Vector3.INF
+	if assigned_bank.phase!="seated":
+		var kind:String=assigned_bank.get_meta("resource_kind")
+		forage_token=_closest_drop(actor.global_position,kind,assigned_bank.global_position)
+		if forage_token.is_empty(): _go_home_bulk()
+		else:
+			route=_outdoor_path(actor.global_position,world.drops[forage_token].at)
+			phase="foraging"
+		return
+	failed_swings=0 if bank_hit else failed_swings+1
+	if failed_swings>=2:
+		_defer_source(assigned_bank)
+		_go_home_bulk()
+	else: _begin_mining()
 
 func _unload_stream(dt: float) -> void:
 	waiting += dt

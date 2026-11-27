@@ -10,6 +10,8 @@ var owl_plot
 var last_owl_paid := -1
 var active := ""
 var nearer_plot := false
+var manual_machine := ""
+var manual_handoff := {}
 var last_paid := -1
 
 func setup(host) -> void:
@@ -44,6 +46,31 @@ func refresh() -> void:
 		world.field_env.show_costs(plot.price,{"wood":survivor_due})
 		plot.set_fill(1.0-float(survivor_due)/bill)
 
+func machine_distance(kind: String, here: Vector3) -> float:
+	if kind not in world.settlement_loop.Rules.KINDS or not world.inventory.is_machine_owned(kind):return INF
+	if world.encounters.is_machine_down(kind) or not world.field_env.is_inside_camp(here):return INF
+	var floor_point := Vector2(here.x,here.z)
+	var wall:Rect2 = world.lakeshore._footprint(0.) if kind=="meat" else world.processors._rect(kind,0.)
+	return INF if wall.has_point(floor_point) else world.Reach.distance_to_rect(floor_point,wall)
+
+func can_operate(kind: String) -> bool:
+	return not world.snow_truck.mounted and world.settlement_loop.can_transact() and machine_distance(kind,world.actor.global_position)<=world.Reach.NEAR
+
+func automatic_handoff(kind: String) -> bool:
+	return not manual_handoff.has(kind)
+
+func toggle_handoff(kind: String) -> void:
+	if not world.inventory.is_machine_owned(kind):return
+	if not manual_handoff.erase(kind):
+		manual_handoff[kind]=true
+		if active==kind:cancel()
+	if manual_machine==kind:manual_machine=""
+
+func request_machine(kind: String) -> bool:
+	if not can_operate(kind) or world.carry.available_to_station(kind)<=0 or not world.settlement_loop.available_to_feeder(kind):return false
+	manual_machine=kind
+	return true
+
 func _site() -> String:
 	var here: Vector3 = world.actor.global_position
 	if plot.visible and world.Reach.plot_distance(plot,here) <= world.Reach.NEAR:
@@ -51,17 +78,17 @@ func _site() -> String:
 	if owl_plot.visible and world.Reach.plot_distance(owl_plot,here)<=world.Reach.NEAR:
 		return Crew.OWL_PLOT
 	if not world.inventory.complete(world.Progress.SECOND) or not world.field_env.is_inside_camp(here): return ""
+	if not manual_machine.is_empty() and machine_distance(manual_machine,here)<=world.Reach.NEAR:
+		if world.carry.available_to_station(manual_machine)>0 or world.carry.incoming(manual_machine,manual_machine)>0:return manual_machine
 	# Adjacent worktables may both be in reach. Finish an in-flight handoff
 	# first, then prefer a compatible open inlet before comparing wall distance.
 	var best := ""
 	var best_rank := 4
 	var best_distance := INF
-	var floor_point := Vector2(here.x,here.z)
 	for kind: String in world.settlement_loop.Rules.KINDS:
-		if not world.inventory.is_machine_owned(kind) or world.encounters.is_machine_down(kind): continue
-		var wall: Rect2 = world.lakeshore._footprint(0.) if kind == "meat" else world.processors._rect(kind,0.)
-		var distance: float = world.Reach.distance_to_rect(floor_point,wall)
-		if wall.has_point(floor_point) or distance > world.Reach.NEAR: continue
+		if not automatic_handoff(kind):continue
+		var distance := machine_distance(kind,here)
+		if distance > world.Reach.NEAR: continue
 		var rank := 3
 		if world.carry.incoming(kind,kind) > 0:
 			rank = 0
@@ -110,6 +137,7 @@ func demand(site: String, kind: String) -> int:
 
 func advance(_dt: float) -> void:
 	refresh()
+	if not manual_machine.is_empty() and not can_operate(manual_machine):manual_machine=""
 	if nearer_plot:
 		cancel()
 		return

@@ -2,7 +2,6 @@ extends Node3D
 
 const EMPLACEMENT = preload("res://assets/field_world/camp_ballista.glb")
 const Defender = preload("res://field_ballista_crew.gd")
-const UPPER_BOUNDS := AABB(Vector3(-1.02,.95,-1.02),Vector3(2.04,2.30,2.04))
 const TRAVERSE_RATE := 4.8
 const ELEVATION_RATE := 2.8
 var frame: Node3D
@@ -11,10 +10,10 @@ var bow: MeshInstance3D
 var bolt: MeshInstance3D
 var crew: Node3D
 var raised := 0.0
-var sightline_material := ShaderMaterial.new()
-var hero_surfaces: Array[MeshInstance3D] = []
-var cutaway_active := false
 var stages: Array[Node3D] = []
+var occluders: Array[MeshInstance3D] = []
+var faces: Array[TriangleMesh] = []
+var player_marker := Label3D.new()
 var bow_rest := Vector3.ZERO
 var cycle_age := 2.0
 var clock := 0.0
@@ -40,7 +39,20 @@ func _ready() -> void:
 	paint.emission_energy_multiplier = .18
 	for part in frame.find_children("*","MeshInstance3D",true,false):
 		part.set_surface_override_material(0,paint)
-	sightline_material.shader = preload("res://assets/field_world/tower_sightline.gdshader")
+	for part: MeshInstance3D in [stages[0],stages[1],stages[2],swivel,bow]:
+		occluders.append(part)
+		faces.append(part.mesh.generate_triangle_mesh())
+	player_marker.name = "PlayerBehindTower"
+	player_marker.text = "▼"
+	player_marker.font_size = 24
+	player_marker.outline_size = 5
+	player_marker.modulate = Color("#79e5ef")
+	player_marker.outline_modulate = Color("#123b51")
+	player_marker.pixel_size = .0085
+	player_marker.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	player_marker.no_depth_test = true
+	player_marker.hide()
+	add_child(player_marker)
 	set_build_progress(raised)
 
 func set_build_progress(value: float) -> void:
@@ -112,36 +124,34 @@ func fire(_target: Vector3) -> void:
 	cycle_age = 0.
 	animate(0.)
 
-func follow_hero(model: Node3D) -> void:
-	for part in model.find_children("*","MeshInstance3D",true,false):
-		if part is MeshInstance3D:
-			hero_surfaces.append(part)
-
-# Preserve the station's painted materials. Only occluded fragments of the
-# player's own skinned mesh receive an outline behind the building.
-func update_sightline(feet:Vector3,camera:Camera3D) -> void:
+func update_sightline(feet: Vector3, camera: Camera3D, height := 1.75) -> void:
 	var local_feet := to_local(feet)
-	var obstructed := false
-	var eye := Vector3.ZERO
-	if camera and absf(local_feet.x) < 5.5 and absf(local_feet.z) < 5.5:
-		eye = camera.global_basis.z.normalized() if camera.projection==Camera3D.PROJECTION_ORTHOGONAL else camera.global_position.direction_to(feet)*-1.
-		var sight := global_basis.inverse()*eye
-		var bounds := UPPER_BOUNDS.grow(.18)
-		for height:float in [.45,1.10,1.64]:
-			var point := local_feet + Vector3.UP*height
-			if bounds.intersects_segment(point,point+sight*8.) != null:
-				obstructed = true
-				break
-	set_hero_outline(obstructed)
+	if not camera or absf(local_feet.x) > 4.0 or absf(local_feet.z) > 4.0:
+		player_marker.hide()
+		return
+	# Test the drawn tower, so gaps between supports and the clear side of
+	# the platform never trigger a cue just because their bounding boxes overlap.
+	for body_fraction: float in [.50, .28, .74]:
+		var body_point := feet + Vector3.UP * height * body_fraction
+		var eye := body_point + camera.global_basis.z * 8.
+		if camera.projection != Camera3D.PROJECTION_ORTHOGONAL:
+			eye = body_point.move_toward(camera.global_position, 8.)
+		if _tower_blocks(body_point, eye):
+			player_marker.global_position = feet + Vector3.UP * (height + .21)
+			player_marker.show()
+			return
+	player_marker.hide()
 
-func set_hero_outline(obstructed: bool) -> void:
-	if obstructed == cutaway_active: return
-	cutaway_active = obstructed
-	for part in hero_surfaces:
-		part.material_overlay = sightline_material if obstructed else null
-
-func _exit_tree() -> void:
-	# The hero can outlive the tower that owns its occlusion material.
-	for part in hero_surfaces:
-		if is_instance_valid(part) and part.material_overlay == sightline_material:
-			part.material_overlay = null
+func _tower_blocks(point: Vector3, eye: Vector3) -> bool:
+	for i in occluders.size():
+		var part := occluders[i]
+		if not part.is_visible_in_tree(): continue
+		var from := part.to_local(point)
+		var to := part.to_local(eye)
+		if part.get_aabb().intersects_segment(from, to) != null and not faces[i].intersect_segment(from, to).is_empty():
+			return true
+	if is_instance_valid(crew) and crew.is_visible_in_tree():
+		var base := crew.global_position
+		var nearest := Geometry3D.get_closest_points_between_segments(point, eye, base + Vector3.UP * .42, base + Vector3.UP * 1.20)
+		return nearest[0].distance_squared_to(nearest[1]) < .23 * .23
+	return false

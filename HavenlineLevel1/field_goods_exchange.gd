@@ -290,10 +290,13 @@ func visit_counter(worker: bool, at: Vector3) -> bool:
 		_draw(kind,int(delivered[kind]),counter.stock_position(kind),false,carrier)
 	return true
 
+func collect_station(raw:String)->bool:
+	return world.settlement_loop.works.can_operate(raw) and _pickup_machine(raw)
+
 func at_station()->bool:
 	var at:Vector3=world.actor.global_position
 	var raw:=_machine_at(at)
-	return not raw.is_empty() and _pickup_machine(raw)
+	return not raw.is_empty() and world.settlement_loop.works.automatic_handoff(raw) and collect_station(raw)
 
 func visit(dt:float)->void:
 	var j:Dictionary=world.inventory.settlement

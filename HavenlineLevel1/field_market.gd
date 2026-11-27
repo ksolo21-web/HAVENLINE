@@ -76,14 +76,12 @@ static func price(goods: Dictionary) -> int:
 		sum += int(goods[kind]) * int(PRICES[kind])
 	return sum
 
-static func new_order(id: int, can_cook: bool, can_saw: bool, can_drill: bool, developed: bool) -> Dictionary:
-	var goods := {}
-	if can_cook:
-		goods.meal = 2 if developed and id % 3 == 0 else 1
-	if developed and can_saw and (id % 3 == 1 or not can_cook): goods.planks = 1
-	if developed and can_drill and (id % 3 == 2 or not can_cook and goods.is_empty()): goods.blocks = 1
-	if goods.is_empty(): return {}
-	return {"id": id, "goods": goods, "price": price(goods)}
+static func is_meal_order(order: Dictionary) -> bool:
+	var goods: Variant = order.get("goods")
+	return goods is Dictionary and goods.size() == 1 and goods.has("meal")
+
+static func new_order(id: int, portions: int) -> Dictionary:
+	return {"id": id, "goods": {"meal": portions}, "price": portions * PRICES.meal}
 
 static func available(journal: Dictionary, kind: String) -> int:
 	return int(journal.counter_stock) if kind == "meal" else int(journal.market.counter_products[kind])
@@ -106,7 +104,7 @@ static func can_fill(journal: Dictionary, order: Dictionary) -> bool:
 static func sell(journal: Dictionary, id: int) -> bool:
 	var market: Dictionary = journal.market
 	var order: Dictionary = market.order
-	if not valid_order(order, id) or id != int(journal.served) + 1 or not can_fill(journal, order): return false
+	if not valid_order(order, id) or not is_meal_order(order) or id != int(journal.served) + 1 or not can_fill(journal, order): return false
 	for kind in order.goods:
 		var quantity := int(order.goods[kind])
 		add_to_counter(journal, kind, -quantity)
