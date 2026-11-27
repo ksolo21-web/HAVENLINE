@@ -1,16 +1,17 @@
 {
   "schema_version": 1,
-  "status": "APPROVED_ARTWORK_PACKAGE_REMOTE_PUBLICATION_PENDING",
+  "status": "PUBLISHED_REVIEWED_APP_ICON_PACKAGE",
   "milestones_complete": [
     1,
     2,
-    3
+    3,
+    4
   ],
   "milestones": {
-    "1": "Current source and brand audit complete at429cb7e",
+    "1": "Current source and brand audit complete at 429cb7e",
     "2": "Named master, adaptive color and optional monochrome artwork/export complete",
     "3": "Independent visual review, R2 rejection, R3 repair and launcher-mask retest complete",
-    "4": "Final package critic and verified isolated-branch publication pending"
+    "4": "Approved package published on isolated branch; remote ref, tree and all 212 changed file bytes verified"
   },
   "manifest": {
     "path": "Docs/Design/AppIcon/2026-11-27/ARTIFACT_MANIFEST.json",
@@ -19,21 +20,20 @@
     "git_blob_sha": "ca0d985297d712ae131e7f588152fae6a0b243fa"
   },
   "selected_asset_count": 5,
-  "final_package_review": "PASSED_2026-11-27",
-  "publication": "PENDING",
+  "final_package_review": "PASSED",
+  "publication": "PUBLISHED_AND_REMOTE_CONTENT_VERIFIED",
   "active_trial_integration": "NOT_PERFORMED",
   "physical_device_install": "NOT_PERFORMED",
   "current_owner": "/root",
   "independent_critic": "/root/icon_critic",
-  "next_action": "Publish the approved isolated tree; verify remote content and branch ref, then record the publication receipt.",
+  "next_action": "Active gameplay owner integrates the selected icon files and export fields in the next build, then verifies actual launcher/device behavior. That build step is not claimed by this artwork delivery.",
   "preserve": [
     "All source artwork",
     "Rejected R2 and retest evidence",
     "Raw independent reports",
     "Concurrent gameplay branch and historical QA presets"
   ],
-  "acceptance_remaining": [
-    "A9 remote tree/ref and full-PNG content identity verification"
-  ],
-  "final_review_sha256": "455743957a7edd9e9d7eb3d8ba9d171d5bdf24c32a28020a9eb792242e2f8183"
+  "acceptance_remaining": [],
+  "final_review_sha256": "455743957a7edd9e9d7eb3d8ba9d171d5bdf24c32a28020a9eb792242e2f8183",
+  "content_commit": "b35c5a9f6a8428ba0372eb6ee114925be3e313b7"
 }
