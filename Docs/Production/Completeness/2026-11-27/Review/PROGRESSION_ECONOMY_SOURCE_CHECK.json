@@ -1,0 +1,318 @@
+{
+  "scope": "Static source, inventory and authored-design consistency only; not runtime gameplay, reference scoring or approval.",
+  "source_commit": "fd2e12c8734f49cda7eb3bbf97887406bd03a704",
+  "checked_at_utc": "2026-11-27T12:36:49.270362+00:00",
+  "check_count": 26,
+  "passed_count": 26,
+  "all_checks_passed": true,
+  "runtime_tested": false,
+  "runtime_approved": false,
+  "independent_review": "Separate critic identified four draft findings; all fixed, plus root recovery/local transition/optional-pet follow-up. Static retest passed. Critic rereview requested; no runtime approval.",
+  "artifacts": [
+    {
+      "path": "/workspace/scratch/e15437dc7c94/gameplay-gap-drafts/PROGRESSION_ECONOMY_GAPS.md",
+      "sha256": "407d36d3e3fa961c7c8b8475610dd3464c902086aff2f40254ca5a380d68b04b",
+      "bytes": 71877
+    },
+    {
+      "path": "/workspace/scratch/e15437dc7c94/gameplay-gap-drafts/PROGRESSION_ECONOMY_GAPS.json",
+      "sha256": "aec741ffcdb809e9bd1f699aebe74149a48c16ec6b584d7bd7b018c4a702a4a1",
+      "bytes": 191641
+    }
+  ],
+  "checks": [
+    {
+      "check": "Levels 1–100 appear exactly once",
+      "passed": true,
+      "details": 100
+    },
+    {
+      "check": "Every level has a nonempty authored goal and outcome",
+      "passed": true,
+      "details": 100
+    },
+    {
+      "check": "Existing progression IDs are preserved",
+      "passed": true,
+      "details": 100
+    },
+    {
+      "check": "Ten milestone cadence retained",
+      "passed": true,
+      "details": 10
+    },
+    {
+      "check": "Visible improvement gap at most three levels",
+      "passed": true,
+      "details": [
+        3,
+        6,
+        9,
+        10,
+        13,
+        16,
+        19,
+        20,
+        23,
+        26,
+        29,
+        30,
+        33,
+        36,
+        39,
+        40,
+        43,
+        46,
+        49,
+        50,
+        53,
+        56,
+        59,
+        60,
+        63,
+        66,
+        69,
+        70,
+        73,
+        76,
+        79,
+        80,
+        83,
+        86,
+        89,
+        90,
+        93,
+        96,
+        99,
+        100
+      ]
+    },
+    {
+      "check": "Authentic task census T01–T70",
+      "passed": true,
+      "details": 70
+    },
+    {
+      "check": "Undefined requested tasks retained",
+      "passed": true,
+      "details": [
+        "T71",
+        "T72",
+        "T73",
+        "T74",
+        "T75",
+        "T76",
+        "T77",
+        "T78",
+        "T79",
+        "T80"
+      ]
+    },
+    {
+      "check": "All action owners and consumers are authentic task IDs",
+      "passed": true,
+      "details": []
+    },
+    {
+      "check": "Nineteen action dependencies are defined and acyclic",
+      "passed": true,
+      "details": 19
+    },
+    {
+      "check": "Ten bands cover full level sequence",
+      "passed": true,
+      "details": 10
+    },
+    {
+      "check": "Twenty-two distinct resource/value dispositions",
+      "passed": true,
+      "details": 22
+    },
+    {
+      "check": "Each resource has primary use, visible benefit and surplus disposition",
+      "passed": true,
+      "details": 22
+    },
+    {
+      "check": "Seven selected free pet availability levels",
+      "passed": true,
+      "details": {
+        "guardian_dog": 4,
+        "owl": 5,
+        "gray_wolf": 9,
+        "fox": 12,
+        "brown_bear": 17,
+        "male_lion": 22,
+        "white_tiger": 27
+      }
+    },
+    {
+      "check": "Exact six selected hostile families",
+      "passed": true,
+      "details": [
+        "hooded-siege-boss",
+        "hooded-swarmer",
+        "hostile-wolf",
+        "ice-brute",
+        "raider",
+        "rival-rifleman"
+      ]
+    },
+    {
+      "check": "Latest hunting disposition without boar launch scope",
+      "passed": true,
+      "details": [
+        {
+          "id": "hostile_wolf",
+          "source_reference": "Existing hostile-wolf raw meat drop in current 3fad source; distinct hostile identity from the permanently owned gray-wolf companion",
+          "status": "CURRENT_SOURCE_RETAINED_FOR_LAUNCH",
+          "resource_family": "meat",
+          "runtime_approval": false
+        },
+        {
+          "id": "tundra_stag",
+          "source_reference": "Tundra Stag expanded render subject; not Giant Elk boss",
+          "status": "SELECTED_AUTHORED_LAUNCH_PREY",
+          "resource_family": "meat",
+          "runtime_approval": false
+        }
+      ]
+    },
+    {
+      "check": "Selected Gems identity and value-preserving migration",
+      "passed": true,
+      "details": true
+    },
+    {
+      "check": "Hide does not charge restoration after damage",
+      "passed": true,
+      "details": true
+    },
+    {
+      "check": "All sixteen pinned source hashes verified",
+      "passed": true,
+      "details": [
+        {
+          "path": "Docs/Production/T12/LEVEL_1_100_MATRIX.json",
+          "sha256": "60a35569de5c2fe4de2f15e83207d8efa002749c3afe830650cc93623fbae64b",
+          "matches": true
+        },
+        {
+          "path": "Docs/Production/T12/AUTHORING_BLUEPRINT.json",
+          "sha256": "21985948e8aa33ee3c8b2e8d96ab0b093b98abf291090c4e3f21c690005bb629",
+          "matches": true
+        },
+        {
+          "path": "Docs/Production/T12/BINDING_SLOT_CATALOG.json",
+          "sha256": "fc4322287e07125d311b09a88a2f30899a962909920b42eea2885ec6a6ad85f6",
+          "matches": true
+        },
+        {
+          "path": "Docs/Production/T12/BINDING_RESOLUTION.json",
+          "sha256": "469f96f2e68566d25361ef26096655f3c398c62a54ed4b890b832002bc185e2d",
+          "matches": true
+        },
+        {
+          "path": "Docs/Production/GAMEPLAY_DEPTH_CONTRACT.json",
+          "sha256": "199f1d0af2c8c7726f0025c842afe140ec76ae272b7235b309cc97f6464128c0",
+          "matches": true
+        },
+        {
+          "path": "Docs/Production/DEPENDENCY_GRAPH.json",
+          "sha256": "ec288e511af2ad220234fe7fcd50d6bfabbe275edd1ddc8d4b11bbdb7af82459",
+          "matches": true
+        },
+        {
+          "path": "Docs/Production/ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.json",
+          "sha256": "def7ae413b9c4b96d857fe19eb142bf9afb684e2a891bd7c36795393ebfc3516",
+          "matches": true
+        },
+        {
+          "path": "Docs/Production/HAVENLINE_BUILD_PLAN_V2.md",
+          "sha256": "1e8a527e1089cfec878575f08471b2ec7b37cca33ba3af91f6b946477bf8e56a",
+          "matches": true
+        },
+        {
+          "path": "Docs/Production/GAMEPLAY_DEPTH_STANDARD.md",
+          "sha256": "31d383807d6c14653edb46e1bd3122f76af42575c4c79fe2eb2447be166c4105",
+          "matches": true
+        },
+        {
+          "path": "Docs/Production/GameplayDepth/2026-11-27/CURRENT_BRANCH_NOTE.json",
+          "sha256": "918fc057b11607cf9eca719404c487369680b214f602547256b0316ad3c0f4ad",
+          "matches": true
+        },
+        {
+          "path": "Docs/Production/GameplayDepth/2026-11-27/RESOURCE_VALUE_LEDGER.json",
+          "sha256": "b5edec82cd6cfbe61e99bca58d3d9603ce2d34f6cda1b29737e3a01f1bac6f10",
+          "matches": true
+        },
+        {
+          "path": "Docs/Production/T12/LEVEL_CADENCE_BLUEPRINT.md",
+          "sha256": "5acb33351d8d85366a8be97e680cd196b1e914e9e5602fa9d0703e7f2fa5f242",
+          "matches": true
+        },
+        {
+          "path": "Docs/Production/POST_LAUNCH_ROADMAP.md",
+          "sha256": "68682b0a5127310a39d81b0066d126d88904eefc150755c1d1fe64cdcee4b77f",
+          "matches": true
+        },
+        {
+          "path": "Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json",
+          "sha256": "c34c0cbe5b6d473be40ee5f0f0e08aab8f6ff42f97cfe2e7c93b2694e4dbaf43",
+          "matches": true
+        },
+        {
+          "path": "Docs/Production/ReferenceRefresh/2026-11-27/RENDER_SOURCE_REGISTER.json",
+          "sha256": "942575fd6bdcfd1aece355f78b91494c7ca6f8eb27cc14fba49db7d3ef5c57ff",
+          "matches": true
+        },
+        {
+          "path": "Docs/Design/InvaderTurnarounds/2026-11-24/evidence/enemy-roster-source-notes.md",
+          "sha256": "47b55d561151179adccf921cec8c7f2b8e118386eb1df90a0b64fe9e2bd97558",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "check": "No runtime or remote approval asserted",
+      "passed": true,
+      "details": true
+    },
+    {
+      "check": "Recovery uses last restored safe camp",
+      "passed": true,
+      "details": "Independent critic finding fixed in draft; no runtime proof claimed."
+    },
+    {
+      "check": "Worker scheduling owned by T23; T07 integration consumer",
+      "passed": true,
+      "details": "Independent critic finding fixed in draft; no runtime proof claimed."
+    },
+    {
+      "check": "Underwater launch requires dry protected routes",
+      "passed": true,
+      "details": "Independent critic finding fixed in draft; no runtime proof claimed."
+    },
+    {
+      "check": "Levels95/98 have specific physical outcomes",
+      "passed": true,
+      "details": "Independent critic finding fixed in draft; no runtime proof claimed."
+    },
+    {
+      "check": "Initial arrival fallback and full-health controls/camera resume",
+      "passed": true,
+      "details": "Latest root selection and critic follow-up verified in structured draft."
+    },
+    {
+      "check": "Region local ownership precedes T53 integration",
+      "passed": true,
+      "details": "Latest root selection and critic follow-up verified in structured draft."
+    },
+    {
+      "check": "No required deployed pet or blocked pet-availability route",
+      "passed": true,
+      "details": "Latest root selection and critic follow-up verified in structured draft."
+    }
+  ]
+}

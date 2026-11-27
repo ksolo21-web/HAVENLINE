@@ -1,0 +1,48 @@
+{
+  "reviewer": "/root/depth_critic",
+  "recorded_at_utc": "2026-11-27T12:45:30.540053+00:00",
+  "scope": "Pre-freeze planning source/structure and projection tests; no game test",
+  "candidate_tools_sha256": {
+    "tools/havenline/production/completeness.py": "eaa5082c95f277e3bd87e12a24bed22cf7ee66b2b4b3902bb826a149fae5f37b",
+    "tools/havenline/production/device_matrix.py": "0622844ec24dc2733e1d3d035ed6a5dece950f7792e2321cc14355ff2eeca4ca",
+    "tools/havenline/production/tests/test_completeness.py": "7b46034394e259f2c636a1ed053262afae449e9d7d3691785a59127597e2e1a7"
+  },
+  "runs": [
+    {
+      "command": [
+        "python",
+        "-B",
+        "tools/havenline/production/completeness.py",
+        "check"
+      ],
+      "returncode": 0,
+      "stdout": "{\n  \"passed\": true,\n  \"scope\": \"Bounded plan/source/task-projection validation only\",\n  \"runtime_approval_allowed\": false,\n  \"runtime_tested\": false,\n  \"game_score\": null,\n  \"requirements\": 24,\n  \"selected_decisions\": 12,\n  \"defined_tasks\": 70,\n  \"undefined_tasks\": 10,\n  \"authored_level_outcomes\": 100,\n  \"pet_species\": 7,\n  \"transaction_boundaries\": 10,\n  \"sources_verified\": 86,\n  \"sources_required\": 86,\n  \"errors\": []\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python",
+        "-B",
+        "-m",
+        "unittest",
+        "tools.havenline.production.tests.test_completeness",
+        "-v"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "test_exact_complete_plan_and_preserved_task_mapping (tools.havenline.production.tests.test_completeness.CompletenessIntegrity.test_exact_complete_plan_and_preserved_task_mapping) ... ok\ntest_missing_or_false_completion_rejected (tools.havenline.production.tests.test_completeness.CompletenessIntegrity.test_missing_or_false_completion_rejected) ... ok\ntest_source_omission_rejected (tools.havenline.production.tests.test_completeness.CompletenessIntegrity.test_source_omission_rejected) ... ok\ntest_task_projection_routes_actual_gaps_without_task_invention (tools.havenline.production.tests.test_completeness.CompletenessIntegrity.test_task_projection_routes_actual_gaps_without_task_invention) ... ok\ntest_actual_six_states_and_native_tablet_rounding (tools.havenline.production.tests.test_completeness.LayoutFixtureIntegrity.test_actual_six_states_and_native_tablet_rounding) ... ok\ntest_old_duplicate_aspect_and_omission_fail (tools.havenline.production.tests.test_completeness.LayoutFixtureIntegrity.test_old_duplicate_aspect_and_omission_fail) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 1.371s\n\nOK\n"
+    },
+    {
+      "command": [
+        "python",
+        "-B",
+        "tools/havenline/production/gameplay_depth.py",
+        "check"
+      ],
+      "returncode": 0,
+      "stdout": "{\n  \"passed\": true,\n  \"scope\": \"Planning source identity, inventory coverage and task projection only\",\n  \"runtime_approval_allowed\": false,\n  \"game_score\": null,\n  \"runtime_tested\": false,\n  \"sources_verified\": 49,\n  \"sources_required\": 49,\n  \"latest_source_snapshot\": \"3fad812b384335bd8ca9b5e47dc9d9557110eb4a\",\n  \"latest_source_runtime_tested\": false,\n  \"defined_tasks\": 70,\n  \"undefined_requested_tasks\": 10,\n  \"requirements\": 18,\n  \"resource_render_concepts\": 33,\n  \"companion_species\": 7,\n  \"errors\": []\n}\n",
+      "stderr": ""
+    }
+  ],
+  "runtime_approval_allowed": false
+}

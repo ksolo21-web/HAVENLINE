@@ -1,0 +1,4657 @@
+{
+  "schema_version": 1,
+  "verification_round": "R2",
+  "prior_round_preserved": {
+    "path": "/workspace/scratch/e15437dc7c94/gameplay-gap-drafts/PacketVerification/R1/R1_ARCHIVE_MANIFEST.json",
+    "exists": true,
+    "bytes": 4223,
+    "sha256": "2440869b2a0b067ae5b38fd5ac3e808e922de09f50a3253c7d0a7f87a8212462"
+  },
+  "source_lineage": {
+    "audited_baseline_head": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+    "observed_head": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+    "reported_gameplay_source_commit": "2654f5019b7212968d28600cb071bf1c231c9030"
+  },
+  "latest_source_note_binding": {
+    "path": "Docs/Production/Completeness/2026-11-27/LATEST_SOURCE_DELTA.json",
+    "exists": true,
+    "bytes": 69145,
+    "sha256": "2b85baada01d1a193e9aecc65b9e2a787aa9dfd508dd31d4115fac59122b6b98"
+  },
+  "source_bindings_binding": {
+    "path": "Docs/Production/Completeness/2026-11-27/SOURCE_BINDINGS.json",
+    "exists": true,
+    "bytes": 74461,
+    "sha256": "39ae035cc6c48a81268686e6854091225cd3031d10b876848a42fa44ac778645"
+  },
+  "actual_completeness_source_check": {
+    "passed": true,
+    "scope": "Bounded plan/source/task-projection validation only",
+    "runtime_approval_allowed": false,
+    "runtime_tested": false,
+    "game_score": null,
+    "requirements": 24,
+    "selected_decisions": 12,
+    "defined_tasks": 70,
+    "undefined_tasks": 10,
+    "authored_level_outcomes": 100,
+    "pet_species": 7,
+    "transaction_boundaries": 10,
+    "preserved_deep_audit_source": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+    "latest_evidence_cutoff": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+    "reported_build13_game_source": "2654f5019b7212968d28600cb071bf1c231c9030",
+    "sources_verified": 152,
+    "sources_required": 152,
+    "errors": []
+  },
+  "scope": "Actual task_packet.main execution and bounded packet-contract verification; no runtime game, motion, visual, device, activation or release approval.",
+  "candidate_path": "/workspace/scratch/e15437dc7c94/HAVENLINE-completeness",
+  "candidate_head": "fd2e12c8734f49cda7eb3bbf97887406bd03a704",
+  "started_at_utc": "2026-11-27T13:00:42.927458+00:00",
+  "completed_at_utc": "2026-11-27T13:00:47.106979+00:00",
+  "runtime_tested": false,
+  "runtime_approval_allowed": false,
+  "canonical_packets_modified": false,
+  "requested_tasks": [
+    "T01",
+    "T23",
+    "T26",
+    "T27",
+    "T33",
+    "T43",
+    "T44",
+    "T58",
+    "T70"
+  ],
+  "positive_main_calls": 9,
+  "positive_calls_succeeded": 9,
+  "captured_packet_write_calls": 9,
+  "negative_main_calls": 2,
+  "negative_calls_rejected": 2,
+  "negative_packet_write_calls": 0,
+  "check_count": 103,
+  "passed_count": 103,
+  "failed_count": 0,
+  "all_checks_passed": true,
+  "generator_and_validator_bindings": [
+    {
+      "path": "tools/havenline/production/task_packet.py",
+      "exists": true,
+      "bytes": 19750,
+      "sha256": "a7c1f8e931a8ba22e3bbee28d87dbb410439a60291d86c27f61cde2a096857bf"
+    },
+    {
+      "path": "tools/havenline/production/completeness.py",
+      "exists": true,
+      "bytes": 23307,
+      "sha256": "f709f5f736b5486bde431b75b36f0ce25e69427ba026417613796ba52d5352f9"
+    },
+    {
+      "path": "tools/havenline/production/resource_actor_contract.py",
+      "exists": true,
+      "bytes": 20366,
+      "sha256": "7a637cdfd2f31231de355a79c207fb01da9909a06f7984c4ccc0445e2454a434"
+    }
+  ],
+  "verification_script": {
+    "path": "/workspace/scratch/e15437dc7c94/gameplay-gap-drafts/PacketVerification/R2/verify_task_packets.py",
+    "exists": true,
+    "bytes": 24323,
+    "sha256": "afcebed6fc7374c22980171a601e3c16de00533fb1f4637078f971ec440d9524"
+  },
+  "canonical_packets_before": [
+    {
+      "path": "Docs/Production/Evidence/T01/TASK_PACKET.md",
+      "exists": false
+    },
+    {
+      "path": "Docs/Production/Evidence/T03/TASK_PACKET.md",
+      "exists": true,
+      "bytes": 2692,
+      "sha256": "b08ce01480d52f323cf22eb03527b2529ebedf5876a7ff0c2e6ac8adf781d440"
+    },
+    {
+      "path": "Docs/Production/Evidence/T06/TASK_PACKET.md",
+      "exists": true,
+      "bytes": 4853,
+      "sha256": "5886578681edd45986fdfd09b5fe2d82ab0e241c9bdfc0ee47285553873a90af"
+    },
+    {
+      "path": "Docs/Production/Evidence/T07/TASK_PACKET.md",
+      "exists": true,
+      "bytes": 5306,
+      "sha256": "c037518affe164dc9e015068869ccc8b38c5f68ba1c0da94d6bc0abf7c810ece"
+    },
+    {
+      "path": "Docs/Production/Evidence/T08/TASK_PACKET.md",
+      "exists": true,
+      "bytes": 5097,
+      "sha256": "6dea55c2457906ff9a83900ef835cee167cfc0288442ec9a99f1618ebf2afc7d"
+    },
+    {
+      "path": "Docs/Production/Evidence/T09/TASK_PACKET.md",
+      "exists": true,
+      "bytes": 5546,
+      "sha256": "c563783c659e16a22d83cc855d84e20b4c5e54ad4041bceb34cd1e34400b2654"
+    },
+    {
+      "path": "Docs/Production/Evidence/T23/TASK_PACKET.md",
+      "exists": false
+    },
+    {
+      "path": "Docs/Production/Evidence/T26/TASK_PACKET.md",
+      "exists": false
+    },
+    {
+      "path": "Docs/Production/Evidence/T27/TASK_PACKET.md",
+      "exists": false
+    },
+    {
+      "path": "Docs/Production/Evidence/T33/TASK_PACKET.md",
+      "exists": false
+    },
+    {
+      "path": "Docs/Production/Evidence/T43/TASK_PACKET.md",
+      "exists": false
+    },
+    {
+      "path": "Docs/Production/Evidence/T44/TASK_PACKET.md",
+      "exists": false
+    },
+    {
+      "path": "Docs/Production/Evidence/T58/TASK_PACKET.md",
+      "exists": false
+    },
+    {
+      "path": "Docs/Production/Evidence/T70/TASK_PACKET.md",
+      "exists": false
+    },
+    {
+      "path": "Docs/Production/T04/TASK_PACKET.md",
+      "exists": true,
+      "bytes": 3291,
+      "sha256": "37d378c066d1f2df1aac8c7c95c862d04c0ee84b5348a3d2770f5f067c6d8d55"
+    },
+    {
+      "path": "Docs/Production/T05/TASK_PACKET.md",
+      "exists": true,
+      "bytes": 3768,
+      "sha256": "f226463d69a887675af8e567bcb1b40b629758a69aec16a00d6ed6b18c5fd2ba"
+    },
+    {
+      "path": "Docs/Production/T06/TASK_PACKET.md",
+      "exists": true,
+      "bytes": 4069,
+      "sha256": "bb6b46a4f67bc1b97145fe3072d65e9438d37ae97439b868ba291048bba05418"
+    },
+    {
+      "path": "Docs/Production/T07/TASK_PACKET.md",
+      "exists": true,
+      "bytes": 4136,
+      "sha256": "e943e79ad9fd8b451e9b3c5ff184fec2746aa5c6743470197b0d21078734c357"
+    },
+    {
+      "path": "Docs/Production/T08/TASK_PACKET.md",
+      "exists": true,
+      "bytes": 5167,
+      "sha256": "d799f917eba4d97e9cee1f2ea60a165a18b39bae65aff8b5ac5f4a452b79b63c"
+    },
+    {
+      "path": "Docs/Production/T09/TASK_PACKET.md",
+      "exists": true,
+      "bytes": 5987,
+      "sha256": "ac94d068ee2fedaae23cde642ed71afd9cc20e6dc3ba0a038cd7f8faee984dc3"
+    },
+    {
+      "path": "Docs/Production/T10/TASK_PACKET.md",
+      "exists": true,
+      "bytes": 10163,
+      "sha256": "975ebb3873b4d2cdf74d7a8ef82ea23ed7eba41fc9c077ec1bba47c50fce1628"
+    },
+    {
+      "path": "Docs/Production/T11/TASK_PACKET.md",
+      "exists": true,
+      "bytes": 1330,
+      "sha256": "c00ccb3324d37ae4ffeb2ad2cb88f7e29f0419e790953ba561ddf10b1cb0040e"
+    },
+    {
+      "path": "Docs/Production/T12/TASK_PACKET.md",
+      "exists": true,
+      "bytes": 14152,
+      "sha256": "811892e8edee76011fa0a012c178dbd215a6cad157858027e15b567c51c666e0"
+    },
+    {
+      "path": "Docs/Production/T13/TASK_PACKET.md",
+      "exists": true,
+      "bytes": 4815,
+      "sha256": "77ff024571ad2221d30a521f230b5299cacea4cab3000187349c39c7902b8373"
+    }
+  ],
+  "canonical_packets_after": [
+    {
+      "path": "Docs/Production/Evidence/T01/TASK_PACKET.md",
+      "exists": false
+    },
+    {
+      "path": "Docs/Production/Evidence/T03/TASK_PACKET.md",
+      "exists": true,
+      "bytes": 2692,
+      "sha256": "b08ce01480d52f323cf22eb03527b2529ebedf5876a7ff0c2e6ac8adf781d440"
+    },
+    {
+      "path": "Docs/Production/Evidence/T06/TASK_PACKET.md",
+      "exists": true,
+      "bytes": 4853,
+      "sha256": "5886578681edd45986fdfd09b5fe2d82ab0e241c9bdfc0ee47285553873a90af"
+    },
+    {
+      "path": "Docs/Production/Evidence/T07/TASK_PACKET.md",
+      "exists": true,
+      "bytes": 5306,
+      "sha256": "c037518affe164dc9e015068869ccc8b38c5f68ba1c0da94d6bc0abf7c810ece"
+    },
+    {
+      "path": "Docs/Production/Evidence/T08/TASK_PACKET.md",
+      "exists": true,
+      "bytes": 5097,
+      "sha256": "6dea55c2457906ff9a83900ef835cee167cfc0288442ec9a99f1618ebf2afc7d"
+    },
+    {
+      "path": "Docs/Production/Evidence/T09/TASK_PACKET.md",
+      "exists": true,
+      "bytes": 5546,
+      "sha256": "c563783c659e16a22d83cc855d84e20b4c5e54ad4041bceb34cd1e34400b2654"
+    },
+    {
+      "path": "Docs/Production/Evidence/T23/TASK_PACKET.md",
+      "exists": false
+    },
+    {
+      "path": "Docs/Production/Evidence/T26/TASK_PACKET.md",
+      "exists": false
+    },
+    {
+      "path": "Docs/Production/Evidence/T27/TASK_PACKET.md",
+      "exists": false
+    },
+    {
+      "path": "Docs/Production/Evidence/T33/TASK_PACKET.md",
+      "exists": false
+    },
+    {
+      "path": "Docs/Production/Evidence/T43/TASK_PACKET.md",
+      "exists": false
+    },
+    {
+      "path": "Docs/Production/Evidence/T44/TASK_PACKET.md",
+      "exists": false
+    },
+    {
+      "path": "Docs/Production/Evidence/T58/TASK_PACKET.md",
+      "exists": false
+    },
+    {
+      "path": "Docs/Production/Evidence/T70/TASK_PACKET.md",
+      "exists": false
+    },
+    {
+      "path": "Docs/Production/T04/TASK_PACKET.md",
+      "exists": true,
+      "bytes": 3291,
+      "sha256": "37d378c066d1f2df1aac8c7c95c862d04c0ee84b5348a3d2770f5f067c6d8d55"
+    },
+    {
+      "path": "Docs/Production/T05/TASK_PACKET.md",
+      "exists": true,
+      "bytes": 3768,
+      "sha256": "f226463d69a887675af8e567bcb1b40b629758a69aec16a00d6ed6b18c5fd2ba"
+    },
+    {
+      "path": "Docs/Production/T06/TASK_PACKET.md",
+      "exists": true,
+      "bytes": 4069,
+      "sha256": "bb6b46a4f67bc1b97145fe3072d65e9438d37ae97439b868ba291048bba05418"
+    },
+    {
+      "path": "Docs/Production/T07/TASK_PACKET.md",
+      "exists": true,
+      "bytes": 4136,
+      "sha256": "e943e79ad9fd8b451e9b3c5ff184fec2746aa5c6743470197b0d21078734c357"
+    },
+    {
+      "path": "Docs/Production/T08/TASK_PACKET.md",
+      "exists": true,
+      "bytes": 5167,
+      "sha256": "d799f917eba4d97e9cee1f2ea60a165a18b39bae65aff8b5ac5f4a452b79b63c"
+    },
+    {
+      "path": "Docs/Production/T09/TASK_PACKET.md",
+      "exists": true,
+      "bytes": 5987,
+      "sha256": "ac94d068ee2fedaae23cde642ed71afd9cc20e6dc3ba0a038cd7f8faee984dc3"
+    },
+    {
+      "path": "Docs/Production/T10/TASK_PACKET.md",
+      "exists": true,
+      "bytes": 10163,
+      "sha256": "975ebb3873b4d2cdf74d7a8ef82ea23ed7eba41fc9c077ec1bba47c50fce1628"
+    },
+    {
+      "path": "Docs/Production/T11/TASK_PACKET.md",
+      "exists": true,
+      "bytes": 1330,
+      "sha256": "c00ccb3324d37ae4ffeb2ad2cb88f7e29f0419e790953ba561ddf10b1cb0040e"
+    },
+    {
+      "path": "Docs/Production/T12/TASK_PACKET.md",
+      "exists": true,
+      "bytes": 14152,
+      "sha256": "811892e8edee76011fa0a012c178dbd215a6cad157858027e15b567c51c666e0"
+    },
+    {
+      "path": "Docs/Production/T13/TASK_PACKET.md",
+      "exists": true,
+      "bytes": 4815,
+      "sha256": "77ff024571ad2221d30a521f230b5299cacea4cab3000187349c39c7902b8373"
+    }
+  ],
+  "guarded_sources_before": [
+    {
+      "path": "Docs/Production/ACTOR_CAPABILITY_MATRIX.json",
+      "exists": true,
+      "bytes": 4704,
+      "sha256": "f319469be543267c6a21988d6b23f915550bd01c7d8513516b7410915680b1bf"
+    },
+    {
+      "path": "Docs/Production/ANIMATION_ACTION_MATRIX.json",
+      "exists": true,
+      "bytes": 6639,
+      "sha256": "57df079f213a88e58b87e01aa7b520ca2fe4d98a41368307fdbba433a57d46e5"
+    },
+    {
+      "path": "Docs/Production/CRITIC_EXECUTION.json",
+      "exists": true,
+      "bytes": 10093,
+      "sha256": "1c97f8bd42cac7b445f69d2cbd378a90011357ee293ec82488caeff7f3048717"
+    },
+    {
+      "path": "Docs/Production/CRITIC_MATRIX.json",
+      "exists": true,
+      "bytes": 13119,
+      "sha256": "62468d79e4350df45997fadd86a5d29f8fe75b5acb7607d5bfe24b7c86dc0d2d"
+    },
+    {
+      "path": "Docs/Production/CURRENT_GAMEPLAY_SOURCE.json",
+      "exists": true,
+      "bytes": 1988,
+      "sha256": "7ea51243c3a91855ab505812ad945e8b6654b9bfef48d6f107109e65b5136213"
+    },
+    {
+      "path": "Docs/Production/Completeness/2026-11-27/ACTORS_COMBAT_GAPS.json",
+      "exists": true,
+      "bytes": 87046,
+      "sha256": "7a231b1b53fcb1541bb26eea301d0dc007f93b4254a7453b8cea98b42ee707fb"
+    },
+    {
+      "path": "Docs/Production/Completeness/2026-11-27/LATEST_SOURCE_DELTA.json",
+      "exists": true,
+      "bytes": 69145,
+      "sha256": "2b85baada01d1a193e9aecc65b9e2a787aa9dfd508dd31d4115fac59122b6b98"
+    },
+    {
+      "path": "Docs/Production/Completeness/2026-11-27/PROGRESSION_ECONOMY_GAPS.json",
+      "exists": true,
+      "bytes": 191722,
+      "sha256": "606741b00a1caa6aa8639748105a8b7ac4f2a9a592b262a5114f8efe2bef23d4"
+    },
+    {
+      "path": "Docs/Production/Completeness/2026-11-27/SOURCE_BINDINGS.json",
+      "exists": true,
+      "bytes": 74461,
+      "sha256": "39ae035cc6c48a81268686e6854091225cd3031d10b876848a42fa44ac778645"
+    },
+    {
+      "path": "Docs/Production/Completeness/2026-11-27/TRANSACTIONS_AND_RECOVERY.json",
+      "exists": true,
+      "bytes": 8105,
+      "sha256": "030c0b7f7dd317ae59529b6f624f742c53e5f77c6fcc012768f575a88fcfc04e"
+    },
+    {
+      "path": "Docs/Production/DEPENDENCY_GRAPH.json",
+      "exists": true,
+      "bytes": 25651,
+      "sha256": "ec288e511af2ad220234fe7fcd50d6bfabbe275edd1ddc8d4b11bbdb7af82459"
+    },
+    {
+      "path": "Docs/Production/GAMEPLAY_DEPTH_CONTRACT.json",
+      "exists": true,
+      "bytes": 27901,
+      "sha256": "199f1d0af2c8c7726f0025c842afe140ec76ae272b7235b309cc97f6464128c0"
+    },
+    {
+      "path": "Docs/Production/PATH_OWNERSHIP.json",
+      "exists": true,
+      "bytes": 15269,
+      "sha256": "bc55662e329a6f871f66d98ec66dc392d65843aa7ed3cfaa468e747aff1fe4d3"
+    },
+    {
+      "path": "Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json",
+      "exists": true,
+      "bytes": 12510,
+      "sha256": "c34c0cbe5b6d473be40ee5f0f0e08aab8f6ff42f97cfe2e7c93b2694e4dbaf43"
+    },
+    {
+      "path": "Docs/Production/RESOURCE_ACTION_REGISTRY.json",
+      "exists": true,
+      "bytes": 4578,
+      "sha256": "8e9feba3a92972b10ac7dc8589e43bd0f988c2981ffe0fcace2edb1100e3bd9d"
+    },
+    {
+      "path": "Docs/Production/WHOLE_GAME_COMPLETENESS.json",
+      "exists": true,
+      "bytes": 60244,
+      "sha256": "b66ee9db0aa34c664b491425fcb67637a745a9080b19cdb0989eb2e19c6abef1"
+    },
+    {
+      "path": "Docs/Production/WORKSTREAM_REGISTRY.json",
+      "exists": true,
+      "bytes": 23193,
+      "sha256": "786f0a03a6a1b95cc0a5603d5fa7a8d1bc7979f18ee4a4a3ee6fe494af73633c"
+    },
+    {
+      "path": "Docs/Production/task-gates.json",
+      "exists": true,
+      "bytes": 13080,
+      "sha256": "9c682ac992d878a84976970554edda3634db6052593a385d03632940904a1378"
+    },
+    {
+      "path": "tools/havenline/production/architecture_v3.py",
+      "exists": true,
+      "bytes": 2990,
+      "sha256": "053240749376afe6dd749c5ba082b4447e412bc8ef23eb5d87f95ca1ba9cf360"
+    },
+    {
+      "path": "tools/havenline/production/architecture_v31.py",
+      "exists": true,
+      "bytes": 3608,
+      "sha256": "763b6fb37fe7c3f03fe3c578bcca823be0074c2f02e6234a5bb73197c7d45783"
+    },
+    {
+      "path": "tools/havenline/production/architecture_v32.py",
+      "exists": true,
+      "bytes": 7920,
+      "sha256": "632fc198e44330c8486ed8e7347846389610cb2ada1a056e685ae42c3169492e"
+    },
+    {
+      "path": "tools/havenline/production/authority_consistency.py",
+      "exists": true,
+      "bytes": 1192,
+      "sha256": "6c03e65f6f0906dbd1d548108d82d27720989d734c3d24f627936a94ef9e3f25"
+    },
+    {
+      "path": "tools/havenline/production/blocker_family_gate.py",
+      "exists": true,
+      "bytes": 2030,
+      "sha256": "1c1c081eda27a2d0b8475cba25be13870b4335ce985748338f00211a1ae763f6"
+    },
+    {
+      "path": "tools/havenline/production/branch_budget.py",
+      "exists": true,
+      "bytes": 6781,
+      "sha256": "7880ccdbb37a557e8164a36fccdf63960e831ebaca58b87d1d5afb93ce7932db"
+    },
+    {
+      "path": "tools/havenline/production/builder_repair_gate.py",
+      "exists": true,
+      "bytes": 25667,
+      "sha256": "2ea7da4e0ebed2ebd88d76ad9d08395af5cd05f9f50322fcf4db4627a374fe5f"
+    },
+    {
+      "path": "tools/havenline/production/c0_root_cause_advisor.py",
+      "exists": true,
+      "bytes": 43141,
+      "sha256": "f375814f19399b11e1228f1e2af90ad2f3aa80a955009e57649b0df4f62a25f2"
+    },
+    {
+      "path": "tools/havenline/production/change_impact.py",
+      "exists": true,
+      "bytes": 2113,
+      "sha256": "7ce6ffba8377ed0139cebf9cccefdf378c42493e8789632f5bebc6ba09af95ca"
+    },
+    {
+      "path": "tools/havenline/production/ci_toolchain_lock.py",
+      "exists": true,
+      "bytes": 4512,
+      "sha256": "7611f67d5f312f8c4b7d5048312a7bf7d6edb1e257db4f174a27d724de31a408"
+    },
+    {
+      "path": "tools/havenline/production/closure_validator.py",
+      "exists": true,
+      "bytes": 39430,
+      "sha256": "467a68c72a563cf46dd8d46a0e95039749c4f503b647671906248c862f85a9fd"
+    },
+    {
+      "path": "tools/havenline/production/collect_artifact_diagnostics.py",
+      "exists": true,
+      "bytes": 5178,
+      "sha256": "ad701a1a6c005ff45b6052c68886677dd9c513ad25fabb979a7b6cca2fa8993b"
+    },
+    {
+      "path": "tools/havenline/production/collect_failure_job_logs.py",
+      "exists": true,
+      "bytes": 5191,
+      "sha256": "dfa88a88b4a2e16d71e25270bb32b92762e103a773b3734c8cfb8c26ff133728"
+    },
+    {
+      "path": "tools/havenline/production/completeness.py",
+      "exists": true,
+      "bytes": 23307,
+      "sha256": "f709f5f736b5486bde431b75b36f0ce25e69427ba026417613796ba52d5352f9"
+    },
+    {
+      "path": "tools/havenline/production/contract_compatibility.py",
+      "exists": true,
+      "bytes": 6501,
+      "sha256": "cf1443ca8f7012ff755a4ab5bd92ab502149631848ffd68d3e0af200470eb1aa"
+    },
+    {
+      "path": "tools/havenline/production/control_plane_lineage.py",
+      "exists": true,
+      "bytes": 5938,
+      "sha256": "84f8869311540c34817e4edaa60761132465d4ff1feb0c76b1c6dcd1712e3162"
+    },
+    {
+      "path": "tools/havenline/production/critic_harness.py",
+      "exists": true,
+      "bytes": 27994,
+      "sha256": "7bbaaebb89be1e3b61d133f4c160a5250b757ed8d25f73b4c58cc5802d1e0468"
+    },
+    {
+      "path": "tools/havenline/production/critic_invalidation.py",
+      "exists": true,
+      "bytes": 2412,
+      "sha256": "ca35c26a57d53d18c464fe14d5d5cf1ee0560f93667d1938c6faba18da65bf17"
+    },
+    {
+      "path": "tools/havenline/production/critic_package_preflight.py",
+      "exists": true,
+      "bytes": 4001,
+      "sha256": "6880106220bf0ee535e87833e185017ffd435349357631534f3506bf8483b783"
+    },
+    {
+      "path": "tools/havenline/production/critic_profile.py",
+      "exists": true,
+      "bytes": 1545,
+      "sha256": "bed041890052430a418f77acb494ab8c6b60fd8a6022844e3034d9d9a329cf64"
+    },
+    {
+      "path": "tools/havenline/production/critical_path_scheduler.py",
+      "exists": true,
+      "bytes": 7669,
+      "sha256": "5cda99587113dba0bd9d646aeea66b681ad0453bb8a486df4e3e46ebab078058"
+    },
+    {
+      "path": "tools/havenline/production/device_matrix.py",
+      "exists": true,
+      "bytes": 3469,
+      "sha256": "0622844ec24dc2733e1d3d035ed6a5dece950f7792e2321cc14355ff2eeca4ca"
+    },
+    {
+      "path": "tools/havenline/production/domain_safeguard_gate.py",
+      "exists": true,
+      "bytes": 5371,
+      "sha256": "8436f8a2ee69a7585a54cc0c5c23b2a65474e6f79e104c787591e75e7ea09ee8"
+    },
+    {
+      "path": "tools/havenline/production/evaluate_visual_quorum.py",
+      "exists": true,
+      "bytes": 10394,
+      "sha256": "93ef99c4c0b632558ba9e1b1c68069fd7a32d50c91871723ab1911077d17fd7d"
+    },
+    {
+      "path": "tools/havenline/production/evidence_capture.py",
+      "exists": true,
+      "bytes": 2281,
+      "sha256": "a05a0e9c8ca74a7e1402522a324251bb37e961d84fac82ec91135132272fc476"
+    },
+    {
+      "path": "tools/havenline/production/evidence_packager.py",
+      "exists": true,
+      "bytes": 2052,
+      "sha256": "6e237a5ced8aefec2027c800d3ed256d2b9b5bfdd3cd6fdbcdb5e87d4e5d474f"
+    },
+    {
+      "path": "tools/havenline/production/evidence_retention.py",
+      "exists": true,
+      "bytes": 7843,
+      "sha256": "ab1a174d036f5cd96a9c5b9dfa4b7268c34c220677662ecc69042231a8c6cea5"
+    },
+    {
+      "path": "tools/havenline/production/execution_checkpoint.py",
+      "exists": true,
+      "bytes": 6864,
+      "sha256": "b1dc740b02ef88de66eba7566b0822ff5fdf05cc863a2aa5ff2794904106469e"
+    },
+    {
+      "path": "tools/havenline/production/external_readiness.py",
+      "exists": true,
+      "bytes": 2458,
+      "sha256": "e3d139575c2c81d92100b197a2ea48a04caa48e7f6d389ecd2cbf65d7c4484fd"
+    },
+    {
+      "path": "tools/havenline/production/factory_closeout_gate.py",
+      "exists": true,
+      "bytes": 4570,
+      "sha256": "242273b83504a2fa78bae2cf9805625f8825c2054a522dbe703edbcff94e070d"
+    },
+    {
+      "path": "tools/havenline/production/factory_observer.py",
+      "exists": true,
+      "bytes": 12025,
+      "sha256": "d0b1a2c23757dc851132e9ff19aae050be5c0d489d0ea617e2dacfd672d5eb82"
+    },
+    {
+      "path": "tools/havenline/production/factory_observer_contract.py",
+      "exists": true,
+      "bytes": 3363,
+      "sha256": "d030b49e2ff80a1fa73068f8bf21eb3bd0e41e833c25c45a7718d968a0f41d87"
+    },
+    {
+      "path": "tools/havenline/production/failure_intelligence.py",
+      "exists": true,
+      "bytes": 4476,
+      "sha256": "3583739e65c31b33a957a95b7ef5c2c2fc77b3429c10c5a511055f9213008ce7"
+    },
+    {
+      "path": "tools/havenline/production/failure_learning.py",
+      "exists": true,
+      "bytes": 8565,
+      "sha256": "e02583d0fd5800564f0a74b18565b584b917b2d693bfceec759249ed65810292"
+    },
+    {
+      "path": "tools/havenline/production/flake_intelligence.py",
+      "exists": true,
+      "bytes": 4583,
+      "sha256": "c3bf93e714f3dd2b4d05b0e62031f08fad90d5b57d0ce0e559a8952096a202fa"
+    },
+    {
+      "path": "tools/havenline/production/forward_execution.py",
+      "exists": true,
+      "bytes": 14434,
+      "sha256": "065871fd02cc85fabb104ef3a14a9689181616add8ffa85625d65310973aae06"
+    },
+    {
+      "path": "tools/havenline/production/forward_prep_contract.py",
+      "exists": true,
+      "bytes": 3203,
+      "sha256": "c805ab390dc16ea680a1cc24c6ca6f977fbfd12cc01d0588951006557d407b00"
+    },
+    {
+      "path": "tools/havenline/production/forward_prep_packet.py",
+      "exists": true,
+      "bytes": 4124,
+      "sha256": "34829fb1b8bbce4d4f288ae2bfa84c3f512ccaa77d333e3eacac5b04cd43f9ec"
+    },
+    {
+      "path": "tools/havenline/production/forward_task_control.py",
+      "exists": true,
+      "bytes": 7694,
+      "sha256": "3c73bddc834ce5b0d6eef8162b6821bd4fed66eeda48f64af8b5d094693aeea5"
+    },
+    {
+      "path": "tools/havenline/production/game_master_contract.py",
+      "exists": true,
+      "bytes": 5932,
+      "sha256": "8a99b0a64496ca140d5f7173e14248b76e0e6f2a9153a71a0dc73ca951abe953"
+    },
+    {
+      "path": "tools/havenline/production/gameplay_depth.py",
+      "exists": true,
+      "bytes": 18274,
+      "sha256": "96b3778403de93a3280f75345a72ab3a777a691462072b44419176ac98bb6ff0"
+    },
+    {
+      "path": "tools/havenline/production/gate_fingerprint.py",
+      "exists": true,
+      "bytes": 10810,
+      "sha256": "ec922377f782104504c765c1b1cd4d64c4a14deff8e5353b07b5889e8499d10b"
+    },
+    {
+      "path": "tools/havenline/production/gate_result_recorder.py",
+      "exists": true,
+      "bytes": 7396,
+      "sha256": "85bc4de4fe40fd69295038ad5ddd3a6e94c021c5e5a7f1c7107aad48de1dce42"
+    },
+    {
+      "path": "tools/havenline/production/lib.py",
+      "exists": true,
+      "bytes": 2819,
+      "sha256": "e0dfecd44efffab8daf6616f14ca524be74b05cccd248634be15f6eb223fc755"
+    },
+    {
+      "path": "tools/havenline/production/motion_capture.py",
+      "exists": true,
+      "bytes": 2288,
+      "sha256": "03eaeae348bd0e538f5331eb725b49dcfcbb9c08784971986c888a5acf179336"
+    },
+    {
+      "path": "tools/havenline/production/mutation_canary.py",
+      "exists": true,
+      "bytes": 3464,
+      "sha256": "b813ead1402d8af34efe0d15336731321b681c6f91cdb80458d0789849695d5b"
+    },
+    {
+      "path": "tools/havenline/production/opening_loop_canary.py",
+      "exists": true,
+      "bytes": 2163,
+      "sha256": "14fb98c328ea4fcf693edc6275dc17c007e117aa7976abc7084230b3b795dd2b"
+    },
+    {
+      "path": "tools/havenline/production/parallel_preparation_planner.py",
+      "exists": true,
+      "bytes": 3572,
+      "sha256": "f9faca6b2a6af714ff75a65db6c2ef4b51b06852649a92d8c1ed7d7871dae27b"
+    },
+    {
+      "path": "tools/havenline/production/performance_ledger.py",
+      "exists": true,
+      "bytes": 1833,
+      "sha256": "db8b76ffec275d1951ead9ca4ede0c94aa9cbdd5e07a80133388a4e56577cda2"
+    },
+    {
+      "path": "tools/havenline/production/pipeline_telemetry.py",
+      "exists": true,
+      "bytes": 3559,
+      "sha256": "7eaaf84e02f3d3fd8a7d4fe40aaa81c5829aa1fdbf31a290d2be7a9dec549b35"
+    },
+    {
+      "path": "tools/havenline/production/preactivation_candidate.py",
+      "exists": true,
+      "bytes": 7016,
+      "sha256": "a31f1bd7f278959bf797ec71680b59b4ee74228ceb1685497e934a2f134aaa57"
+    },
+    {
+      "path": "tools/havenline/production/preactivation_feasibility.py",
+      "exists": true,
+      "bytes": 6482,
+      "sha256": "b6bb828e6bf96416a159859a4db293e86bebfe4be0891d587e66941909e3d220"
+    },
+    {
+      "path": "tools/havenline/production/prepare_specialist_runtime.py",
+      "exists": true,
+      "bytes": 10544,
+      "sha256": "be0e79f990956385466f2944465e3c9f01c2c6965c5899d8393ed14282627580"
+    },
+    {
+      "path": "tools/havenline/production/proof_invalidation.py",
+      "exists": true,
+      "bytes": 6648,
+      "sha256": "f70a10d76324c6341eb3e0c5954b1376207fd48e904ab7b0341490fd52fa0897"
+    },
+    {
+      "path": "tools/havenline/production/reference_acceptance.py",
+      "exists": true,
+      "bytes": 20861,
+      "sha256": "49d59d8d571d487be0cbe97c94ae9905575124af0d4ee7c018f1fc0f89a669e7"
+    },
+    {
+      "path": "tools/havenline/production/reference_style_lock.py",
+      "exists": true,
+      "bytes": 14514,
+      "sha256": "71a45a8ad88455dffa133f12d6eb80201fc178a3b0fb7f99e1c1e227aacc05ed"
+    },
+    {
+      "path": "tools/havenline/production/regression_runner.py",
+      "exists": true,
+      "bytes": 2552,
+      "sha256": "35c98d0f065d2ce99af33fc0f95853faf14e03c66de120f4ea879fd0d44dd482"
+    },
+    {
+      "path": "tools/havenline/production/repair_sufficiency_critic.py",
+      "exists": true,
+      "bytes": 43956,
+      "sha256": "884ba92b8809d1df28d484adab97c5fb29458b920f8400c7bd40ebd3b96737af"
+    },
+    {
+      "path": "tools/havenline/production/repair_t03_river_gate_readability_v2.py",
+      "exists": true,
+      "bytes": 5983,
+      "sha256": "342ce61527c857e185b0dd7f27133bfedb77f7f68ef3c100c65231d2044ea605"
+    },
+    {
+      "path": "tools/havenline/production/resource_actor_contract.py",
+      "exists": true,
+      "bytes": 20366,
+      "sha256": "7a637cdfd2f31231de355a79c207fb01da9909a06f7984c4ccc0445e2454a434"
+    },
+    {
+      "path": "tools/havenline/production/review_t03_iteration7_visual_group.py",
+      "exists": true,
+      "bytes": 12894,
+      "sha256": "5e0e9010b15c1c156b6b785ffbe437977e16d9ed4ec1735b25873191369ed134"
+    },
+    {
+      "path": "tools/havenline/production/review_t03_iteration8c_final.py",
+      "exists": true,
+      "bytes": 13737,
+      "sha256": "aa67970260b6e665ebb8f3ebd85b519ff11e2146c0ad9b2eb1df5ce1ba20485f"
+    },
+    {
+      "path": "tools/havenline/production/review_t03_iteration9_final.py",
+      "exists": true,
+      "bytes": 15228,
+      "sha256": "0b6e8624baf9be1c14359dac22b942e9878849970bd962498fda8df736e86b93"
+    },
+    {
+      "path": "tools/havenline/production/review_t03_performance_local.py",
+      "exists": true,
+      "bytes": 7476,
+      "sha256": "9ef1ba1c19790347d8895258e39afd43984784898365920ef365e17ad37b8a92"
+    },
+    {
+      "path": "tools/havenline/production/review_t03_repair_c6.py",
+      "exists": true,
+      "bytes": 8680,
+      "sha256": "1653f28a5f17db2783b7814ed72013c1f9ed53a518ce7b4f4d3a04795be1658f"
+    },
+    {
+      "path": "tools/havenline/production/review_t03_repair_c6_retry.py",
+      "exists": true,
+      "bytes": 7806,
+      "sha256": "c49901ccc14b8e4d91576cc266caed929fc5045dc930b5eb164eb7d745a52183"
+    },
+    {
+      "path": "tools/havenline/production/review_t03_repair_visual.py",
+      "exists": true,
+      "bytes": 15280,
+      "sha256": "54d2f4c844ca6c3c09058099777e9fe3cd38d243a52eaa5034b5781e79302f62"
+    },
+    {
+      "path": "tools/havenline/production/review_t03_repair_visual_shard_wrapper.py",
+      "exists": true,
+      "bytes": 1194,
+      "sha256": "8cf9639b75dcc9d75b0d97479b4a688d403a35d3753322f6447d141ba2d41c3f"
+    },
+    {
+      "path": "tools/havenline/production/review_task03_strict_v2_wrapper.py",
+      "exists": true,
+      "bytes": 8208,
+      "sha256": "efa322d1fbc3f5eaed4c420f15308be08133f73564fe5ac2cc146e3308ae2bc9"
+    },
+    {
+      "path": "tools/havenline/production/review_visual_supplement.py",
+      "exists": true,
+      "bytes": 10249,
+      "sha256": "6030a16da2e30bb2104ff7e2531ece90973929106ef263e217ebd3f0fe411648"
+    },
+    {
+      "path": "tools/havenline/production/rolling_canary.py",
+      "exists": true,
+      "bytes": 1543,
+      "sha256": "f12f7f33ba20bc7dd87b1dc2b13bbf820a576383191a7fa1e8199720ad651a2c"
+    },
+    {
+      "path": "tools/havenline/production/runtime_dependency_learning.py",
+      "exists": true,
+      "bytes": 4325,
+      "sha256": "5e45941d3191790f3280650b9117e2c00670f8ae774923572175a05e725b4c5e"
+    },
+    {
+      "path": "tools/havenline/production/save_state_matrix.py",
+      "exists": true,
+      "bytes": 1591,
+      "sha256": "4721f3f973b66e6051736f29a5e8520370e385f114b308ce140e462363017508"
+    },
+    {
+      "path": "tools/havenline/production/security_exploit_harness.py",
+      "exists": true,
+      "bytes": 6444,
+      "sha256": "991beebe952602eb67c2a62251aa481732b6e98f76df79522b48f4ec7e944e2c"
+    },
+    {
+      "path": "tools/havenline/production/shipping_visual_gate.py",
+      "exists": true,
+      "bytes": 36026,
+      "sha256": "ff6bc4c51483296a1e1a7468410169b78aef6a25519f42204da4113d73784249"
+    },
+    {
+      "path": "tools/havenline/production/specialist_critic_runner.py",
+      "exists": true,
+      "bytes": 16017,
+      "sha256": "dba9905b8eaac47450afc5919d613831b1825503d6894bc5ed89019c9de9587c"
+    },
+    {
+      "path": "tools/havenline/production/specialist_evidence_manifest.py",
+      "exists": true,
+      "bytes": 4391,
+      "sha256": "2c39a6a771d3e8dc238f7bf95ee8f91c73b94ac3f54c69d8d269bf7dcac5e0a7"
+    },
+    {
+      "path": "tools/havenline/production/specialist_runtime_smoke.py",
+      "exists": true,
+      "bytes": 3296,
+      "sha256": "30a02c8fad077381f69dce4dbe1e76b6996f48fb2156649934861a5505258f16"
+    },
+    {
+      "path": "tools/havenline/production/synthetic_merge_forecast.py",
+      "exists": true,
+      "bytes": 4434,
+      "sha256": "39e1dff10014fee93d98e1e4d45edcb4633ab4d7f488c7048bd018ad93faa629"
+    },
+    {
+      "path": "tools/havenline/production/task_graduation_gate.py",
+      "exists": true,
+      "bytes": 4999,
+      "sha256": "730121aa9caf7c1cc1c50b646d6ef6f6b3683423f25eeceea7769035771d6ba4"
+    },
+    {
+      "path": "tools/havenline/production/task_packet.py",
+      "exists": true,
+      "bytes": 19750,
+      "sha256": "a7c1f8e931a8ba22e3bbee28d87dbb410439a60291d86c27f61cde2a096857bf"
+    },
+    {
+      "path": "tools/havenline/production/task_state_snapshot.py",
+      "exists": true,
+      "bytes": 3429,
+      "sha256": "e10d573b58c0631c2299c95b137fbbe51fcd745d8baf5454aa8a6a06f49ded17"
+    },
+    {
+      "path": "tools/havenline/production/test_visual_quorum.py",
+      "exists": true,
+      "bytes": 5721,
+      "sha256": "e1d67914fc58c66d5ca1680be109ad905fbb765d79db1bef3cbab23e419659c8"
+    },
+    {
+      "path": "tools/havenline/production/tests/security_mock_adapter.py",
+      "exists": true,
+      "bytes": 1104,
+      "sha256": "88e19aab6dcd3ce24da362041804495e2a96f148b3d7dc8580e9da20b489f99a"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_agent_execution_loop_guard.py",
+      "exists": true,
+      "bytes": 1937,
+      "sha256": "d538a82176c29233b1d08459ad455e336d7346173d65472b46b9ba912aae846d"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_architecture_release_lock.py",
+      "exists": true,
+      "bytes": 10713,
+      "sha256": "98e8495380667b67452b0010b177edc018c8ef9d0459427b3e140d0694636d0b"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_architecture_v3.py",
+      "exists": true,
+      "bytes": 6633,
+      "sha256": "98e5c6c0c508bfd1c5f6edb98fb3835201b74e52d1fceba6f8434321cb5089d6"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_architecture_v31.py",
+      "exists": true,
+      "bytes": 15843,
+      "sha256": "9511f8abb4251ebfdc36df86b3035f432b1c382508d07eae416ae33189606f9b"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_architecture_v32.py",
+      "exists": true,
+      "bytes": 19239,
+      "sha256": "211defd2ca2e26b5c08f2d4bd3704b236ed62ed67d89814e079c9ddae64e8124"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_bounded_visual_owner_route.py",
+      "exists": true,
+      "bytes": 5583,
+      "sha256": "7e98c19bb04761db2497171773ecec1666086ab435ab33c3a8c30e83c9a850f0"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_c0_builder.py",
+      "exists": true,
+      "bytes": 49752,
+      "sha256": "011db6f1db48be8318149f1522aa8ac4a5d58b748c317c89d243b2f889334fbb"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_c0_governance.py",
+      "exists": true,
+      "bytes": 2027,
+      "sha256": "aeb4f5d5ef004408eb40c73430601e69ea3ed3ae0b8c8cd8c637f4d8b561e24c"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_candidate_reconcile.py",
+      "exists": true,
+      "bytes": 3038,
+      "sha256": "e4eaf13e3dcbdf74bd94bc2891c86bc50f705448bb0ab54bee15a6df50722589"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_closure_resource_actor.py",
+      "exists": true,
+      "bytes": 8037,
+      "sha256": "6f2846a1b806ac5bd2605ae8cbe8981a5bee9d0136680c762df7bc08c92df935"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_completeness.py",
+      "exists": true,
+      "bytes": 6578,
+      "sha256": "073121dbe261ea0234ab733f64497f34fe94c94dce05d62ec045de222d01867f"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_critic_loop_regressions.py",
+      "exists": true,
+      "bytes": 8347,
+      "sha256": "ef1113a11e6bd2ffe8d85ce8b3c30b99fb3ad5df12b75a32fae904db1df8b046"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_critic_profile.py",
+      "exists": true,
+      "bytes": 1490,
+      "sha256": "bd01ac44eb04a169511381c91a2a7b9a76a930d7296ecc628723c1a99f8509e0"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_critic_runtime_cache.py",
+      "exists": true,
+      "bytes": 4392,
+      "sha256": "159cf26b0f52beedff4b479d7fae5ad1586c77dd9ac81b38302842beeb5c9c71"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_factory_closeout_gate.py",
+      "exists": true,
+      "bytes": 2795,
+      "sha256": "2e5bd1407d571c62aedbce063c817039869b05bc8c56d5c336328d4c3f9e5c80"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_factory_observation_consumers.py",
+      "exists": true,
+      "bytes": 3648,
+      "sha256": "5eccb37242d252a78470372b1f9ab605d3d56b7d009658ea033c8b43162d766e"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_factory_observer.py",
+      "exists": true,
+      "bytes": 6814,
+      "sha256": "521e2bc9877f8a2c466dd47c07911ff16a5655481313bd7bcc7fb3c891303cf4"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_failure_intelligence_packet.py",
+      "exists": true,
+      "bytes": 1679,
+      "sha256": "32b52c356937c104cac0596484bc2d742ffdc6ed8c5fbe4093a4515955e98d55"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_failure_job_log_collection.py",
+      "exists": true,
+      "bytes": 7060,
+      "sha256": "16f65d31910cd0b535d25f62cf540884475f9cbbc80c11471a05f163399d04b4"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_forward_acceptance_policy.py",
+      "exists": true,
+      "bytes": 4173,
+      "sha256": "df285c096ac256ffafbd8f29d42850c11bd66a82514e7df9d12c7421f65bccfd"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_forward_execution.py",
+      "exists": true,
+      "bytes": 4910,
+      "sha256": "a48beed2194b9540d77cf26cf41eed9577a760cb2711cc455a8d06f4e1bb6048"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_forward_review_evidence.py",
+      "exists": true,
+      "bytes": 20565,
+      "sha256": "a0f526560ba7547611664d8e07a9b2fda2fc8ef9bb943613041dfb3eed119126"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_future_prep_packets.py",
+      "exists": true,
+      "bytes": 1699,
+      "sha256": "da3259873eb05b9aebf52ff70389160193b0d1141bb12fe1cbaafe6f2bbc1f8c"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_gameplay_depth.py",
+      "exists": true,
+      "bytes": 3968,
+      "sha256": "38cf006e4b0c8daf216b7282c3e0b33cfc2c9a2797401de7989f881ee3ccd15a"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_governance.py",
+      "exists": true,
+      "bytes": 22183,
+      "sha256": "38c973d99cc767dffa2e3271792f9c3ca5c04bd9b42cb9ab170fe0b43ad6f1bf"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_governance_scope_routing.py",
+      "exists": true,
+      "bytes": 4215,
+      "sha256": "f639ec0a425a77ef48038b2dfd10941fd67f216816d83e861dd63c1c3e1e7477"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_integration_scope.py",
+      "exists": true,
+      "bytes": 4209,
+      "sha256": "f946d035793e5e847f5f8b90a484144d2a74fd93c065f6861f1e2eba0606c358"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_migration_scope.py",
+      "exists": true,
+      "bytes": 2745,
+      "sha256": "61427e844ae62ec07563309032e27aefdf5391761718a7f5898f2eaa76f30b2d"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_opening_loop_canary.py",
+      "exists": true,
+      "bytes": 685,
+      "sha256": "d3b10982ca952f1a6dd17a2736cf17aff4e35f0774d99404edb1017104abf4d4"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_performance_review_transport.py",
+      "exists": true,
+      "bytes": 7375,
+      "sha256": "7978b805452b66686bfc768665c020a35691a1e5285c1d1b694b74917fa2fc60"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_preactivation_candidate.py",
+      "exists": true,
+      "bytes": 2704,
+      "sha256": "c9f8c9d665b1a959907c7bd5fce1dbf99d5ca7822c22b9a11b3d7f9f7acb1bcc"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_production_governance_v32_consumer.py",
+      "exists": true,
+      "bytes": 1567,
+      "sha256": "877a87836f362014ba79205ab81227433508d85534c282a69e337c2dc452301b"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_proof_invalidation_diff.py",
+      "exists": true,
+      "bytes": 1947,
+      "sha256": "f60350d64ca6dd2adc5afdd40724e1783f2edfa14747aa1b0c2d16131c4ffa89"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_python_repair_bindings.py",
+      "exists": true,
+      "bytes": 31349,
+      "sha256": "76ee224d9ed9d3a5b354803aaee366ef01072b4a18966364eb7398349f717f8a"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_reference_acceptance.py",
+      "exists": true,
+      "bytes": 13080,
+      "sha256": "264ed5cbf16c41cf3787c42a9a4e42be51c611a91162dd37bc79f3530bc9643a"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_reference_style_lock.py",
+      "exists": true,
+      "bytes": 8700,
+      "sha256": "deea909f1a929f848a97c95d512f742db00c7cdc9fd224b47bc62ca18f642784"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_repair_cycle.py",
+      "exists": true,
+      "bytes": 3051,
+      "sha256": "fd6f47110cb70fe6c45b9a6200a70b05b6f74ab1014303e92c7921d003d8cf08"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_repair_sufficiency_critic.py",
+      "exists": true,
+      "bytes": 35399,
+      "sha256": "86e78b7f678812dd7ebf145fd930524cbbd997af0f45a8d4ea91ea27f34cfd00"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_resource_actor_contract.py",
+      "exists": true,
+      "bytes": 24133,
+      "sha256": "9198ad00426cb0a63a1b43a8854ba1ee5ffa682162d46d454e894fad863a626a"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_shipping_visual_gate.py",
+      "exists": true,
+      "bytes": 19211,
+      "sha256": "511fa60261f7269cfaf14826d7a6d6e8d0f04c1144f0bc8ebd32fac377621bca"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_specialist_critic_runner.py",
+      "exists": true,
+      "bytes": 7005,
+      "sha256": "cecfcad8909e73751e07937f758d5d93d3aaf5b2ee33d15cc6d8332eedf2e9ae"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_specialist_safeguards.py",
+      "exists": true,
+      "bytes": 15940,
+      "sha256": "281c6edd987ff6b9d28d274ff8fb46af8bada0b9dd97d2f53f041364c27cbbaa"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_t03_reference_materializer.py",
+      "exists": true,
+      "bytes": 2953,
+      "sha256": "609cf0a51bda5727be321aabdd4993ef834b10cf659f52e85c0ab7f4e3f18f23"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_t05_completion.py",
+      "exists": true,
+      "bytes": 3547,
+      "sha256": "d69a4e937c609817c98027e9572f7dc0b7920b5fe4c328f33c3dfffe24da15b5"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_t05_materializer_raw_bytes.py",
+      "exists": true,
+      "bytes": 5735,
+      "sha256": "8a358053d3ea52281fe0221eaa963f0564e91ea2a30b57e8311bb9cce5f5a6cb"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_t10_activation_validation.py",
+      "exists": true,
+      "bytes": 11662,
+      "sha256": "153fe3b657e329737ca29a0bb8ea15b634e6e1dabe8ad3e406e72e0a079c40ee"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_v32_forward_prep_harness.py",
+      "exists": true,
+      "bytes": 3957,
+      "sha256": "0b82e2252328172c79bc11958bb5670c33d9492fbb6f03945a4d32e7418e40ab"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_workstream_status_authority.py",
+      "exists": true,
+      "bytes": 5326,
+      "sha256": "fa9e3afb4043b55dbd32bdde42369bc7a076210ae15cae7573db0ee6d2778d07"
+    },
+    {
+      "path": "tools/havenline/production/timeout_stage_plan.py",
+      "exists": true,
+      "bytes": 2369,
+      "sha256": "7fc70eeb1baf17118719975028d5c65215d5d6c7afee3280cbb18451ff377aba"
+    },
+    {
+      "path": "tools/havenline/production/v32_assignment_claim.py",
+      "exists": true,
+      "bytes": 9750,
+      "sha256": "4682875f52919cc1ff09340bab0c3f69cf021e8ba35c2929eaf83700ce4087da"
+    },
+    {
+      "path": "tools/havenline/production/v32_forward_prep_harness.py",
+      "exists": true,
+      "bytes": 11764,
+      "sha256": "3ff455decf7328704c41f8c3d411e651506c104c111201d2544f52bf5166bc66"
+    },
+    {
+      "path": "tools/havenline/production/validate_architecture_release_lock.py",
+      "exists": true,
+      "bytes": 8684,
+      "sha256": "310747f9aa5a299ae3f6a64282134eae3c8a721dbc089717974d9516fae834f6"
+    },
+    {
+      "path": "tools/havenline/production/validate_architecture_v32_t09.py",
+      "exists": true,
+      "bytes": 2441,
+      "sha256": "d31c01f8ea89d0c8fa475e15889e065584fbf9d68b3679250fe67a033934619f"
+    },
+    {
+      "path": "tools/havenline/production/validate_architecture_v32_t10.py",
+      "exists": true,
+      "bytes": 45100,
+      "sha256": "cc3d1ab8a3b267603928794c24fbf8d20a5045261ff63ddd0d19579da5a14543"
+    },
+    {
+      "path": "tools/havenline/production/validate_critic_readiness.py",
+      "exists": true,
+      "bytes": 4727,
+      "sha256": "61af6c14a2c66b534e4fe55fe60509e4af6bcd153c3bd5b6bdbd069dc44ee04c"
+    },
+    {
+      "path": "tools/havenline/production/validate_integration_scope.py",
+      "exists": true,
+      "bytes": 4540,
+      "sha256": "763af6035aa0250ae5a041fba6de2b3e6e07c76e8cd3e0998cae34963af31af3"
+    },
+    {
+      "path": "tools/havenline/production/validate_migration.py",
+      "exists": true,
+      "bytes": 57383,
+      "sha256": "0026c28d418dab71c7a69d7e35b3d0603e3bc2e489cfc2061a74b2ddc21caf68"
+    },
+    {
+      "path": "tools/havenline/production/validate_migration_scope.py",
+      "exists": true,
+      "bytes": 4307,
+      "sha256": "c8a8670eef60f3a9b2c35debf462751d4b502246c2e142bfd381f8e2364fc838"
+    },
+    {
+      "path": "tools/havenline/production/validate_repair_cycle.py",
+      "exists": true,
+      "bytes": 6378,
+      "sha256": "e4418d8bcf9a9178e8419cf07c504a895d09a1e573ba17dd64dca6f7411a220d"
+    },
+    {
+      "path": "tools/havenline/production/verify_python_repair_bindings.py",
+      "exists": true,
+      "bytes": 17488,
+      "sha256": "80c6d58393f49f1eb8792b86dd1addc797a0a5077346947ecc573208f2b6e8a1"
+    },
+    {
+      "path": "tools/havenline/production/workstream.py",
+      "exists": true,
+      "bytes": 16222,
+      "sha256": "9ff5b8a2044bc0cc88a0a24cb440db3b6ec3ce66bdc1345299d88c6792a4ad01"
+    }
+  ],
+  "guarded_sources_after": [
+    {
+      "path": "Docs/Production/ACTOR_CAPABILITY_MATRIX.json",
+      "exists": true,
+      "bytes": 4704,
+      "sha256": "f319469be543267c6a21988d6b23f915550bd01c7d8513516b7410915680b1bf"
+    },
+    {
+      "path": "Docs/Production/ANIMATION_ACTION_MATRIX.json",
+      "exists": true,
+      "bytes": 6639,
+      "sha256": "57df079f213a88e58b87e01aa7b520ca2fe4d98a41368307fdbba433a57d46e5"
+    },
+    {
+      "path": "Docs/Production/CRITIC_EXECUTION.json",
+      "exists": true,
+      "bytes": 10093,
+      "sha256": "1c97f8bd42cac7b445f69d2cbd378a90011357ee293ec82488caeff7f3048717"
+    },
+    {
+      "path": "Docs/Production/CRITIC_MATRIX.json",
+      "exists": true,
+      "bytes": 13119,
+      "sha256": "62468d79e4350df45997fadd86a5d29f8fe75b5acb7607d5bfe24b7c86dc0d2d"
+    },
+    {
+      "path": "Docs/Production/CURRENT_GAMEPLAY_SOURCE.json",
+      "exists": true,
+      "bytes": 1988,
+      "sha256": "7ea51243c3a91855ab505812ad945e8b6654b9bfef48d6f107109e65b5136213"
+    },
+    {
+      "path": "Docs/Production/Completeness/2026-11-27/ACTORS_COMBAT_GAPS.json",
+      "exists": true,
+      "bytes": 87046,
+      "sha256": "7a231b1b53fcb1541bb26eea301d0dc007f93b4254a7453b8cea98b42ee707fb"
+    },
+    {
+      "path": "Docs/Production/Completeness/2026-11-27/LATEST_SOURCE_DELTA.json",
+      "exists": true,
+      "bytes": 69145,
+      "sha256": "2b85baada01d1a193e9aecc65b9e2a787aa9dfd508dd31d4115fac59122b6b98"
+    },
+    {
+      "path": "Docs/Production/Completeness/2026-11-27/PROGRESSION_ECONOMY_GAPS.json",
+      "exists": true,
+      "bytes": 191722,
+      "sha256": "606741b00a1caa6aa8639748105a8b7ac4f2a9a592b262a5114f8efe2bef23d4"
+    },
+    {
+      "path": "Docs/Production/Completeness/2026-11-27/SOURCE_BINDINGS.json",
+      "exists": true,
+      "bytes": 74461,
+      "sha256": "39ae035cc6c48a81268686e6854091225cd3031d10b876848a42fa44ac778645"
+    },
+    {
+      "path": "Docs/Production/Completeness/2026-11-27/TRANSACTIONS_AND_RECOVERY.json",
+      "exists": true,
+      "bytes": 8105,
+      "sha256": "030c0b7f7dd317ae59529b6f624f742c53e5f77c6fcc012768f575a88fcfc04e"
+    },
+    {
+      "path": "Docs/Production/DEPENDENCY_GRAPH.json",
+      "exists": true,
+      "bytes": 25651,
+      "sha256": "ec288e511af2ad220234fe7fcd50d6bfabbe275edd1ddc8d4b11bbdb7af82459"
+    },
+    {
+      "path": "Docs/Production/GAMEPLAY_DEPTH_CONTRACT.json",
+      "exists": true,
+      "bytes": 27901,
+      "sha256": "199f1d0af2c8c7726f0025c842afe140ec76ae272b7235b309cc97f6464128c0"
+    },
+    {
+      "path": "Docs/Production/PATH_OWNERSHIP.json",
+      "exists": true,
+      "bytes": 15269,
+      "sha256": "bc55662e329a6f871f66d98ec66dc392d65843aa7ed3cfaa468e747aff1fe4d3"
+    },
+    {
+      "path": "Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json",
+      "exists": true,
+      "bytes": 12510,
+      "sha256": "c34c0cbe5b6d473be40ee5f0f0e08aab8f6ff42f97cfe2e7c93b2694e4dbaf43"
+    },
+    {
+      "path": "Docs/Production/RESOURCE_ACTION_REGISTRY.json",
+      "exists": true,
+      "bytes": 4578,
+      "sha256": "8e9feba3a92972b10ac7dc8589e43bd0f988c2981ffe0fcace2edb1100e3bd9d"
+    },
+    {
+      "path": "Docs/Production/WHOLE_GAME_COMPLETENESS.json",
+      "exists": true,
+      "bytes": 60244,
+      "sha256": "b66ee9db0aa34c664b491425fcb67637a745a9080b19cdb0989eb2e19c6abef1"
+    },
+    {
+      "path": "Docs/Production/WORKSTREAM_REGISTRY.json",
+      "exists": true,
+      "bytes": 23193,
+      "sha256": "786f0a03a6a1b95cc0a5603d5fa7a8d1bc7979f18ee4a4a3ee6fe494af73633c"
+    },
+    {
+      "path": "Docs/Production/task-gates.json",
+      "exists": true,
+      "bytes": 13080,
+      "sha256": "9c682ac992d878a84976970554edda3634db6052593a385d03632940904a1378"
+    },
+    {
+      "path": "tools/havenline/production/architecture_v3.py",
+      "exists": true,
+      "bytes": 2990,
+      "sha256": "053240749376afe6dd749c5ba082b4447e412bc8ef23eb5d87f95ca1ba9cf360"
+    },
+    {
+      "path": "tools/havenline/production/architecture_v31.py",
+      "exists": true,
+      "bytes": 3608,
+      "sha256": "763b6fb37fe7c3f03fe3c578bcca823be0074c2f02e6234a5bb73197c7d45783"
+    },
+    {
+      "path": "tools/havenline/production/architecture_v32.py",
+      "exists": true,
+      "bytes": 7920,
+      "sha256": "632fc198e44330c8486ed8e7347846389610cb2ada1a056e685ae42c3169492e"
+    },
+    {
+      "path": "tools/havenline/production/authority_consistency.py",
+      "exists": true,
+      "bytes": 1192,
+      "sha256": "6c03e65f6f0906dbd1d548108d82d27720989d734c3d24f627936a94ef9e3f25"
+    },
+    {
+      "path": "tools/havenline/production/blocker_family_gate.py",
+      "exists": true,
+      "bytes": 2030,
+      "sha256": "1c1c081eda27a2d0b8475cba25be13870b4335ce985748338f00211a1ae763f6"
+    },
+    {
+      "path": "tools/havenline/production/branch_budget.py",
+      "exists": true,
+      "bytes": 6781,
+      "sha256": "7880ccdbb37a557e8164a36fccdf63960e831ebaca58b87d1d5afb93ce7932db"
+    },
+    {
+      "path": "tools/havenline/production/builder_repair_gate.py",
+      "exists": true,
+      "bytes": 25667,
+      "sha256": "2ea7da4e0ebed2ebd88d76ad9d08395af5cd05f9f50322fcf4db4627a374fe5f"
+    },
+    {
+      "path": "tools/havenline/production/c0_root_cause_advisor.py",
+      "exists": true,
+      "bytes": 43141,
+      "sha256": "f375814f19399b11e1228f1e2af90ad2f3aa80a955009e57649b0df4f62a25f2"
+    },
+    {
+      "path": "tools/havenline/production/change_impact.py",
+      "exists": true,
+      "bytes": 2113,
+      "sha256": "7ce6ffba8377ed0139cebf9cccefdf378c42493e8789632f5bebc6ba09af95ca"
+    },
+    {
+      "path": "tools/havenline/production/ci_toolchain_lock.py",
+      "exists": true,
+      "bytes": 4512,
+      "sha256": "7611f67d5f312f8c4b7d5048312a7bf7d6edb1e257db4f174a27d724de31a408"
+    },
+    {
+      "path": "tools/havenline/production/closure_validator.py",
+      "exists": true,
+      "bytes": 39430,
+      "sha256": "467a68c72a563cf46dd8d46a0e95039749c4f503b647671906248c862f85a9fd"
+    },
+    {
+      "path": "tools/havenline/production/collect_artifact_diagnostics.py",
+      "exists": true,
+      "bytes": 5178,
+      "sha256": "ad701a1a6c005ff45b6052c68886677dd9c513ad25fabb979a7b6cca2fa8993b"
+    },
+    {
+      "path": "tools/havenline/production/collect_failure_job_logs.py",
+      "exists": true,
+      "bytes": 5191,
+      "sha256": "dfa88a88b4a2e16d71e25270bb32b92762e103a773b3734c8cfb8c26ff133728"
+    },
+    {
+      "path": "tools/havenline/production/completeness.py",
+      "exists": true,
+      "bytes": 23307,
+      "sha256": "f709f5f736b5486bde431b75b36f0ce25e69427ba026417613796ba52d5352f9"
+    },
+    {
+      "path": "tools/havenline/production/contract_compatibility.py",
+      "exists": true,
+      "bytes": 6501,
+      "sha256": "cf1443ca8f7012ff755a4ab5bd92ab502149631848ffd68d3e0af200470eb1aa"
+    },
+    {
+      "path": "tools/havenline/production/control_plane_lineage.py",
+      "exists": true,
+      "bytes": 5938,
+      "sha256": "84f8869311540c34817e4edaa60761132465d4ff1feb0c76b1c6dcd1712e3162"
+    },
+    {
+      "path": "tools/havenline/production/critic_harness.py",
+      "exists": true,
+      "bytes": 27994,
+      "sha256": "7bbaaebb89be1e3b61d133f4c160a5250b757ed8d25f73b4c58cc5802d1e0468"
+    },
+    {
+      "path": "tools/havenline/production/critic_invalidation.py",
+      "exists": true,
+      "bytes": 2412,
+      "sha256": "ca35c26a57d53d18c464fe14d5d5cf1ee0560f93667d1938c6faba18da65bf17"
+    },
+    {
+      "path": "tools/havenline/production/critic_package_preflight.py",
+      "exists": true,
+      "bytes": 4001,
+      "sha256": "6880106220bf0ee535e87833e185017ffd435349357631534f3506bf8483b783"
+    },
+    {
+      "path": "tools/havenline/production/critic_profile.py",
+      "exists": true,
+      "bytes": 1545,
+      "sha256": "bed041890052430a418f77acb494ab8c6b60fd8a6022844e3034d9d9a329cf64"
+    },
+    {
+      "path": "tools/havenline/production/critical_path_scheduler.py",
+      "exists": true,
+      "bytes": 7669,
+      "sha256": "5cda99587113dba0bd9d646aeea66b681ad0453bb8a486df4e3e46ebab078058"
+    },
+    {
+      "path": "tools/havenline/production/device_matrix.py",
+      "exists": true,
+      "bytes": 3469,
+      "sha256": "0622844ec24dc2733e1d3d035ed6a5dece950f7792e2321cc14355ff2eeca4ca"
+    },
+    {
+      "path": "tools/havenline/production/domain_safeguard_gate.py",
+      "exists": true,
+      "bytes": 5371,
+      "sha256": "8436f8a2ee69a7585a54cc0c5c23b2a65474e6f79e104c787591e75e7ea09ee8"
+    },
+    {
+      "path": "tools/havenline/production/evaluate_visual_quorum.py",
+      "exists": true,
+      "bytes": 10394,
+      "sha256": "93ef99c4c0b632558ba9e1b1c68069fd7a32d50c91871723ab1911077d17fd7d"
+    },
+    {
+      "path": "tools/havenline/production/evidence_capture.py",
+      "exists": true,
+      "bytes": 2281,
+      "sha256": "a05a0e9c8ca74a7e1402522a324251bb37e961d84fac82ec91135132272fc476"
+    },
+    {
+      "path": "tools/havenline/production/evidence_packager.py",
+      "exists": true,
+      "bytes": 2052,
+      "sha256": "6e237a5ced8aefec2027c800d3ed256d2b9b5bfdd3cd6fdbcdb5e87d4e5d474f"
+    },
+    {
+      "path": "tools/havenline/production/evidence_retention.py",
+      "exists": true,
+      "bytes": 7843,
+      "sha256": "ab1a174d036f5cd96a9c5b9dfa4b7268c34c220677662ecc69042231a8c6cea5"
+    },
+    {
+      "path": "tools/havenline/production/execution_checkpoint.py",
+      "exists": true,
+      "bytes": 6864,
+      "sha256": "b1dc740b02ef88de66eba7566b0822ff5fdf05cc863a2aa5ff2794904106469e"
+    },
+    {
+      "path": "tools/havenline/production/external_readiness.py",
+      "exists": true,
+      "bytes": 2458,
+      "sha256": "e3d139575c2c81d92100b197a2ea48a04caa48e7f6d389ecd2cbf65d7c4484fd"
+    },
+    {
+      "path": "tools/havenline/production/factory_closeout_gate.py",
+      "exists": true,
+      "bytes": 4570,
+      "sha256": "242273b83504a2fa78bae2cf9805625f8825c2054a522dbe703edbcff94e070d"
+    },
+    {
+      "path": "tools/havenline/production/factory_observer.py",
+      "exists": true,
+      "bytes": 12025,
+      "sha256": "d0b1a2c23757dc851132e9ff19aae050be5c0d489d0ea617e2dacfd672d5eb82"
+    },
+    {
+      "path": "tools/havenline/production/factory_observer_contract.py",
+      "exists": true,
+      "bytes": 3363,
+      "sha256": "d030b49e2ff80a1fa73068f8bf21eb3bd0e41e833c25c45a7718d968a0f41d87"
+    },
+    {
+      "path": "tools/havenline/production/failure_intelligence.py",
+      "exists": true,
+      "bytes": 4476,
+      "sha256": "3583739e65c31b33a957a95b7ef5c2c2fc77b3429c10c5a511055f9213008ce7"
+    },
+    {
+      "path": "tools/havenline/production/failure_learning.py",
+      "exists": true,
+      "bytes": 8565,
+      "sha256": "e02583d0fd5800564f0a74b18565b584b917b2d693bfceec759249ed65810292"
+    },
+    {
+      "path": "tools/havenline/production/flake_intelligence.py",
+      "exists": true,
+      "bytes": 4583,
+      "sha256": "c3bf93e714f3dd2b4d05b0e62031f08fad90d5b57d0ce0e559a8952096a202fa"
+    },
+    {
+      "path": "tools/havenline/production/forward_execution.py",
+      "exists": true,
+      "bytes": 14434,
+      "sha256": "065871fd02cc85fabb104ef3a14a9689181616add8ffa85625d65310973aae06"
+    },
+    {
+      "path": "tools/havenline/production/forward_prep_contract.py",
+      "exists": true,
+      "bytes": 3203,
+      "sha256": "c805ab390dc16ea680a1cc24c6ca6f977fbfd12cc01d0588951006557d407b00"
+    },
+    {
+      "path": "tools/havenline/production/forward_prep_packet.py",
+      "exists": true,
+      "bytes": 4124,
+      "sha256": "34829fb1b8bbce4d4f288ae2bfa84c3f512ccaa77d333e3eacac5b04cd43f9ec"
+    },
+    {
+      "path": "tools/havenline/production/forward_task_control.py",
+      "exists": true,
+      "bytes": 7694,
+      "sha256": "3c73bddc834ce5b0d6eef8162b6821bd4fed66eeda48f64af8b5d094693aeea5"
+    },
+    {
+      "path": "tools/havenline/production/game_master_contract.py",
+      "exists": true,
+      "bytes": 5932,
+      "sha256": "8a99b0a64496ca140d5f7173e14248b76e0e6f2a9153a71a0dc73ca951abe953"
+    },
+    {
+      "path": "tools/havenline/production/gameplay_depth.py",
+      "exists": true,
+      "bytes": 18274,
+      "sha256": "96b3778403de93a3280f75345a72ab3a777a691462072b44419176ac98bb6ff0"
+    },
+    {
+      "path": "tools/havenline/production/gate_fingerprint.py",
+      "exists": true,
+      "bytes": 10810,
+      "sha256": "ec922377f782104504c765c1b1cd4d64c4a14deff8e5353b07b5889e8499d10b"
+    },
+    {
+      "path": "tools/havenline/production/gate_result_recorder.py",
+      "exists": true,
+      "bytes": 7396,
+      "sha256": "85bc4de4fe40fd69295038ad5ddd3a6e94c021c5e5a7f1c7107aad48de1dce42"
+    },
+    {
+      "path": "tools/havenline/production/lib.py",
+      "exists": true,
+      "bytes": 2819,
+      "sha256": "e0dfecd44efffab8daf6616f14ca524be74b05cccd248634be15f6eb223fc755"
+    },
+    {
+      "path": "tools/havenline/production/motion_capture.py",
+      "exists": true,
+      "bytes": 2288,
+      "sha256": "03eaeae348bd0e538f5331eb725b49dcfcbb9c08784971986c888a5acf179336"
+    },
+    {
+      "path": "tools/havenline/production/mutation_canary.py",
+      "exists": true,
+      "bytes": 3464,
+      "sha256": "b813ead1402d8af34efe0d15336731321b681c6f91cdb80458d0789849695d5b"
+    },
+    {
+      "path": "tools/havenline/production/opening_loop_canary.py",
+      "exists": true,
+      "bytes": 2163,
+      "sha256": "14fb98c328ea4fcf693edc6275dc17c007e117aa7976abc7084230b3b795dd2b"
+    },
+    {
+      "path": "tools/havenline/production/parallel_preparation_planner.py",
+      "exists": true,
+      "bytes": 3572,
+      "sha256": "f9faca6b2a6af714ff75a65db6c2ef4b51b06852649a92d8c1ed7d7871dae27b"
+    },
+    {
+      "path": "tools/havenline/production/performance_ledger.py",
+      "exists": true,
+      "bytes": 1833,
+      "sha256": "db8b76ffec275d1951ead9ca4ede0c94aa9cbdd5e07a80133388a4e56577cda2"
+    },
+    {
+      "path": "tools/havenline/production/pipeline_telemetry.py",
+      "exists": true,
+      "bytes": 3559,
+      "sha256": "7eaaf84e02f3d3fd8a7d4fe40aaa81c5829aa1fdbf31a290d2be7a9dec549b35"
+    },
+    {
+      "path": "tools/havenline/production/preactivation_candidate.py",
+      "exists": true,
+      "bytes": 7016,
+      "sha256": "a31f1bd7f278959bf797ec71680b59b4ee74228ceb1685497e934a2f134aaa57"
+    },
+    {
+      "path": "tools/havenline/production/preactivation_feasibility.py",
+      "exists": true,
+      "bytes": 6482,
+      "sha256": "b6bb828e6bf96416a159859a4db293e86bebfe4be0891d587e66941909e3d220"
+    },
+    {
+      "path": "tools/havenline/production/prepare_specialist_runtime.py",
+      "exists": true,
+      "bytes": 10544,
+      "sha256": "be0e79f990956385466f2944465e3c9f01c2c6965c5899d8393ed14282627580"
+    },
+    {
+      "path": "tools/havenline/production/proof_invalidation.py",
+      "exists": true,
+      "bytes": 6648,
+      "sha256": "f70a10d76324c6341eb3e0c5954b1376207fd48e904ab7b0341490fd52fa0897"
+    },
+    {
+      "path": "tools/havenline/production/reference_acceptance.py",
+      "exists": true,
+      "bytes": 20861,
+      "sha256": "49d59d8d571d487be0cbe97c94ae9905575124af0d4ee7c018f1fc0f89a669e7"
+    },
+    {
+      "path": "tools/havenline/production/reference_style_lock.py",
+      "exists": true,
+      "bytes": 14514,
+      "sha256": "71a45a8ad88455dffa133f12d6eb80201fc178a3b0fb7f99e1c1e227aacc05ed"
+    },
+    {
+      "path": "tools/havenline/production/regression_runner.py",
+      "exists": true,
+      "bytes": 2552,
+      "sha256": "35c98d0f065d2ce99af33fc0f95853faf14e03c66de120f4ea879fd0d44dd482"
+    },
+    {
+      "path": "tools/havenline/production/repair_sufficiency_critic.py",
+      "exists": true,
+      "bytes": 43956,
+      "sha256": "884ba92b8809d1df28d484adab97c5fb29458b920f8400c7bd40ebd3b96737af"
+    },
+    {
+      "path": "tools/havenline/production/repair_t03_river_gate_readability_v2.py",
+      "exists": true,
+      "bytes": 5983,
+      "sha256": "342ce61527c857e185b0dd7f27133bfedb77f7f68ef3c100c65231d2044ea605"
+    },
+    {
+      "path": "tools/havenline/production/resource_actor_contract.py",
+      "exists": true,
+      "bytes": 20366,
+      "sha256": "7a637cdfd2f31231de355a79c207fb01da9909a06f7984c4ccc0445e2454a434"
+    },
+    {
+      "path": "tools/havenline/production/review_t03_iteration7_visual_group.py",
+      "exists": true,
+      "bytes": 12894,
+      "sha256": "5e0e9010b15c1c156b6b785ffbe437977e16d9ed4ec1735b25873191369ed134"
+    },
+    {
+      "path": "tools/havenline/production/review_t03_iteration8c_final.py",
+      "exists": true,
+      "bytes": 13737,
+      "sha256": "aa67970260b6e665ebb8f3ebd85b519ff11e2146c0ad9b2eb1df5ce1ba20485f"
+    },
+    {
+      "path": "tools/havenline/production/review_t03_iteration9_final.py",
+      "exists": true,
+      "bytes": 15228,
+      "sha256": "0b6e8624baf9be1c14359dac22b942e9878849970bd962498fda8df736e86b93"
+    },
+    {
+      "path": "tools/havenline/production/review_t03_performance_local.py",
+      "exists": true,
+      "bytes": 7476,
+      "sha256": "9ef1ba1c19790347d8895258e39afd43984784898365920ef365e17ad37b8a92"
+    },
+    {
+      "path": "tools/havenline/production/review_t03_repair_c6.py",
+      "exists": true,
+      "bytes": 8680,
+      "sha256": "1653f28a5f17db2783b7814ed72013c1f9ed53a518ce7b4f4d3a04795be1658f"
+    },
+    {
+      "path": "tools/havenline/production/review_t03_repair_c6_retry.py",
+      "exists": true,
+      "bytes": 7806,
+      "sha256": "c49901ccc14b8e4d91576cc266caed929fc5045dc930b5eb164eb7d745a52183"
+    },
+    {
+      "path": "tools/havenline/production/review_t03_repair_visual.py",
+      "exists": true,
+      "bytes": 15280,
+      "sha256": "54d2f4c844ca6c3c09058099777e9fe3cd38d243a52eaa5034b5781e79302f62"
+    },
+    {
+      "path": "tools/havenline/production/review_t03_repair_visual_shard_wrapper.py",
+      "exists": true,
+      "bytes": 1194,
+      "sha256": "8cf9639b75dcc9d75b0d97479b4a688d403a35d3753322f6447d141ba2d41c3f"
+    },
+    {
+      "path": "tools/havenline/production/review_task03_strict_v2_wrapper.py",
+      "exists": true,
+      "bytes": 8208,
+      "sha256": "efa322d1fbc3f5eaed4c420f15308be08133f73564fe5ac2cc146e3308ae2bc9"
+    },
+    {
+      "path": "tools/havenline/production/review_visual_supplement.py",
+      "exists": true,
+      "bytes": 10249,
+      "sha256": "6030a16da2e30bb2104ff7e2531ece90973929106ef263e217ebd3f0fe411648"
+    },
+    {
+      "path": "tools/havenline/production/rolling_canary.py",
+      "exists": true,
+      "bytes": 1543,
+      "sha256": "f12f7f33ba20bc7dd87b1dc2b13bbf820a576383191a7fa1e8199720ad651a2c"
+    },
+    {
+      "path": "tools/havenline/production/runtime_dependency_learning.py",
+      "exists": true,
+      "bytes": 4325,
+      "sha256": "5e45941d3191790f3280650b9117e2c00670f8ae774923572175a05e725b4c5e"
+    },
+    {
+      "path": "tools/havenline/production/save_state_matrix.py",
+      "exists": true,
+      "bytes": 1591,
+      "sha256": "4721f3f973b66e6051736f29a5e8520370e385f114b308ce140e462363017508"
+    },
+    {
+      "path": "tools/havenline/production/security_exploit_harness.py",
+      "exists": true,
+      "bytes": 6444,
+      "sha256": "991beebe952602eb67c2a62251aa481732b6e98f76df79522b48f4ec7e944e2c"
+    },
+    {
+      "path": "tools/havenline/production/shipping_visual_gate.py",
+      "exists": true,
+      "bytes": 36026,
+      "sha256": "ff6bc4c51483296a1e1a7468410169b78aef6a25519f42204da4113d73784249"
+    },
+    {
+      "path": "tools/havenline/production/specialist_critic_runner.py",
+      "exists": true,
+      "bytes": 16017,
+      "sha256": "dba9905b8eaac47450afc5919d613831b1825503d6894bc5ed89019c9de9587c"
+    },
+    {
+      "path": "tools/havenline/production/specialist_evidence_manifest.py",
+      "exists": true,
+      "bytes": 4391,
+      "sha256": "2c39a6a771d3e8dc238f7bf95ee8f91c73b94ac3f54c69d8d269bf7dcac5e0a7"
+    },
+    {
+      "path": "tools/havenline/production/specialist_runtime_smoke.py",
+      "exists": true,
+      "bytes": 3296,
+      "sha256": "30a02c8fad077381f69dce4dbe1e76b6996f48fb2156649934861a5505258f16"
+    },
+    {
+      "path": "tools/havenline/production/synthetic_merge_forecast.py",
+      "exists": true,
+      "bytes": 4434,
+      "sha256": "39e1dff10014fee93d98e1e4d45edcb4633ab4d7f488c7048bd018ad93faa629"
+    },
+    {
+      "path": "tools/havenline/production/task_graduation_gate.py",
+      "exists": true,
+      "bytes": 4999,
+      "sha256": "730121aa9caf7c1cc1c50b646d6ef6f6b3683423f25eeceea7769035771d6ba4"
+    },
+    {
+      "path": "tools/havenline/production/task_packet.py",
+      "exists": true,
+      "bytes": 19750,
+      "sha256": "a7c1f8e931a8ba22e3bbee28d87dbb410439a60291d86c27f61cde2a096857bf"
+    },
+    {
+      "path": "tools/havenline/production/task_state_snapshot.py",
+      "exists": true,
+      "bytes": 3429,
+      "sha256": "e10d573b58c0631c2299c95b137fbbe51fcd745d8baf5454aa8a6a06f49ded17"
+    },
+    {
+      "path": "tools/havenline/production/test_visual_quorum.py",
+      "exists": true,
+      "bytes": 5721,
+      "sha256": "e1d67914fc58c66d5ca1680be109ad905fbb765d79db1bef3cbab23e419659c8"
+    },
+    {
+      "path": "tools/havenline/production/tests/security_mock_adapter.py",
+      "exists": true,
+      "bytes": 1104,
+      "sha256": "88e19aab6dcd3ce24da362041804495e2a96f148b3d7dc8580e9da20b489f99a"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_agent_execution_loop_guard.py",
+      "exists": true,
+      "bytes": 1937,
+      "sha256": "d538a82176c29233b1d08459ad455e336d7346173d65472b46b9ba912aae846d"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_architecture_release_lock.py",
+      "exists": true,
+      "bytes": 10713,
+      "sha256": "98e8495380667b67452b0010b177edc018c8ef9d0459427b3e140d0694636d0b"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_architecture_v3.py",
+      "exists": true,
+      "bytes": 6633,
+      "sha256": "98e5c6c0c508bfd1c5f6edb98fb3835201b74e52d1fceba6f8434321cb5089d6"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_architecture_v31.py",
+      "exists": true,
+      "bytes": 15843,
+      "sha256": "9511f8abb4251ebfdc36df86b3035f432b1c382508d07eae416ae33189606f9b"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_architecture_v32.py",
+      "exists": true,
+      "bytes": 19239,
+      "sha256": "211defd2ca2e26b5c08f2d4bd3704b236ed62ed67d89814e079c9ddae64e8124"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_bounded_visual_owner_route.py",
+      "exists": true,
+      "bytes": 5583,
+      "sha256": "7e98c19bb04761db2497171773ecec1666086ab435ab33c3a8c30e83c9a850f0"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_c0_builder.py",
+      "exists": true,
+      "bytes": 49752,
+      "sha256": "011db6f1db48be8318149f1522aa8ac4a5d58b748c317c89d243b2f889334fbb"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_c0_governance.py",
+      "exists": true,
+      "bytes": 2027,
+      "sha256": "aeb4f5d5ef004408eb40c73430601e69ea3ed3ae0b8c8cd8c637f4d8b561e24c"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_candidate_reconcile.py",
+      "exists": true,
+      "bytes": 3038,
+      "sha256": "e4eaf13e3dcbdf74bd94bc2891c86bc50f705448bb0ab54bee15a6df50722589"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_closure_resource_actor.py",
+      "exists": true,
+      "bytes": 8037,
+      "sha256": "6f2846a1b806ac5bd2605ae8cbe8981a5bee9d0136680c762df7bc08c92df935"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_completeness.py",
+      "exists": true,
+      "bytes": 6578,
+      "sha256": "073121dbe261ea0234ab733f64497f34fe94c94dce05d62ec045de222d01867f"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_critic_loop_regressions.py",
+      "exists": true,
+      "bytes": 8347,
+      "sha256": "ef1113a11e6bd2ffe8d85ce8b3c30b99fb3ad5df12b75a32fae904db1df8b046"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_critic_profile.py",
+      "exists": true,
+      "bytes": 1490,
+      "sha256": "bd01ac44eb04a169511381c91a2a7b9a76a930d7296ecc628723c1a99f8509e0"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_critic_runtime_cache.py",
+      "exists": true,
+      "bytes": 4392,
+      "sha256": "159cf26b0f52beedff4b479d7fae5ad1586c77dd9ac81b38302842beeb5c9c71"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_factory_closeout_gate.py",
+      "exists": true,
+      "bytes": 2795,
+      "sha256": "2e5bd1407d571c62aedbce063c817039869b05bc8c56d5c336328d4c3f9e5c80"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_factory_observation_consumers.py",
+      "exists": true,
+      "bytes": 3648,
+      "sha256": "5eccb37242d252a78470372b1f9ab605d3d56b7d009658ea033c8b43162d766e"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_factory_observer.py",
+      "exists": true,
+      "bytes": 6814,
+      "sha256": "521e2bc9877f8a2c466dd47c07911ff16a5655481313bd7bcc7fb3c891303cf4"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_failure_intelligence_packet.py",
+      "exists": true,
+      "bytes": 1679,
+      "sha256": "32b52c356937c104cac0596484bc2d742ffdc6ed8c5fbe4093a4515955e98d55"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_failure_job_log_collection.py",
+      "exists": true,
+      "bytes": 7060,
+      "sha256": "16f65d31910cd0b535d25f62cf540884475f9cbbc80c11471a05f163399d04b4"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_forward_acceptance_policy.py",
+      "exists": true,
+      "bytes": 4173,
+      "sha256": "df285c096ac256ffafbd8f29d42850c11bd66a82514e7df9d12c7421f65bccfd"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_forward_execution.py",
+      "exists": true,
+      "bytes": 4910,
+      "sha256": "a48beed2194b9540d77cf26cf41eed9577a760cb2711cc455a8d06f4e1bb6048"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_forward_review_evidence.py",
+      "exists": true,
+      "bytes": 20565,
+      "sha256": "a0f526560ba7547611664d8e07a9b2fda2fc8ef9bb943613041dfb3eed119126"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_future_prep_packets.py",
+      "exists": true,
+      "bytes": 1699,
+      "sha256": "da3259873eb05b9aebf52ff70389160193b0d1141bb12fe1cbaafe6f2bbc1f8c"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_gameplay_depth.py",
+      "exists": true,
+      "bytes": 3968,
+      "sha256": "38cf006e4b0c8daf216b7282c3e0b33cfc2c9a2797401de7989f881ee3ccd15a"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_governance.py",
+      "exists": true,
+      "bytes": 22183,
+      "sha256": "38c973d99cc767dffa2e3271792f9c3ca5c04bd9b42cb9ab170fe0b43ad6f1bf"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_governance_scope_routing.py",
+      "exists": true,
+      "bytes": 4215,
+      "sha256": "f639ec0a425a77ef48038b2dfd10941fd67f216816d83e861dd63c1c3e1e7477"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_integration_scope.py",
+      "exists": true,
+      "bytes": 4209,
+      "sha256": "f946d035793e5e847f5f8b90a484144d2a74fd93c065f6861f1e2eba0606c358"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_migration_scope.py",
+      "exists": true,
+      "bytes": 2745,
+      "sha256": "61427e844ae62ec07563309032e27aefdf5391761718a7f5898f2eaa76f30b2d"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_opening_loop_canary.py",
+      "exists": true,
+      "bytes": 685,
+      "sha256": "d3b10982ca952f1a6dd17a2736cf17aff4e35f0774d99404edb1017104abf4d4"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_performance_review_transport.py",
+      "exists": true,
+      "bytes": 7375,
+      "sha256": "7978b805452b66686bfc768665c020a35691a1e5285c1d1b694b74917fa2fc60"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_preactivation_candidate.py",
+      "exists": true,
+      "bytes": 2704,
+      "sha256": "c9f8c9d665b1a959907c7bd5fce1dbf99d5ca7822c22b9a11b3d7f9f7acb1bcc"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_production_governance_v32_consumer.py",
+      "exists": true,
+      "bytes": 1567,
+      "sha256": "877a87836f362014ba79205ab81227433508d85534c282a69e337c2dc452301b"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_proof_invalidation_diff.py",
+      "exists": true,
+      "bytes": 1947,
+      "sha256": "f60350d64ca6dd2adc5afdd40724e1783f2edfa14747aa1b0c2d16131c4ffa89"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_python_repair_bindings.py",
+      "exists": true,
+      "bytes": 31349,
+      "sha256": "76ee224d9ed9d3a5b354803aaee366ef01072b4a18966364eb7398349f717f8a"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_reference_acceptance.py",
+      "exists": true,
+      "bytes": 13080,
+      "sha256": "264ed5cbf16c41cf3787c42a9a4e42be51c611a91162dd37bc79f3530bc9643a"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_reference_style_lock.py",
+      "exists": true,
+      "bytes": 8700,
+      "sha256": "deea909f1a929f848a97c95d512f742db00c7cdc9fd224b47bc62ca18f642784"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_repair_cycle.py",
+      "exists": true,
+      "bytes": 3051,
+      "sha256": "fd6f47110cb70fe6c45b9a6200a70b05b6f74ab1014303e92c7921d003d8cf08"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_repair_sufficiency_critic.py",
+      "exists": true,
+      "bytes": 35399,
+      "sha256": "86e78b7f678812dd7ebf145fd930524cbbd997af0f45a8d4ea91ea27f34cfd00"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_resource_actor_contract.py",
+      "exists": true,
+      "bytes": 24133,
+      "sha256": "9198ad00426cb0a63a1b43a8854ba1ee5ffa682162d46d454e894fad863a626a"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_shipping_visual_gate.py",
+      "exists": true,
+      "bytes": 19211,
+      "sha256": "511fa60261f7269cfaf14826d7a6d6e8d0f04c1144f0bc8ebd32fac377621bca"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_specialist_critic_runner.py",
+      "exists": true,
+      "bytes": 7005,
+      "sha256": "cecfcad8909e73751e07937f758d5d93d3aaf5b2ee33d15cc6d8332eedf2e9ae"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_specialist_safeguards.py",
+      "exists": true,
+      "bytes": 15940,
+      "sha256": "281c6edd987ff6b9d28d274ff8fb46af8bada0b9dd97d2f53f041364c27cbbaa"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_t03_reference_materializer.py",
+      "exists": true,
+      "bytes": 2953,
+      "sha256": "609cf0a51bda5727be321aabdd4993ef834b10cf659f52e85c0ab7f4e3f18f23"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_t05_completion.py",
+      "exists": true,
+      "bytes": 3547,
+      "sha256": "d69a4e937c609817c98027e9572f7dc0b7920b5fe4c328f33c3dfffe24da15b5"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_t05_materializer_raw_bytes.py",
+      "exists": true,
+      "bytes": 5735,
+      "sha256": "8a358053d3ea52281fe0221eaa963f0564e91ea2a30b57e8311bb9cce5f5a6cb"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_t10_activation_validation.py",
+      "exists": true,
+      "bytes": 11662,
+      "sha256": "153fe3b657e329737ca29a0bb8ea15b634e6e1dabe8ad3e406e72e0a079c40ee"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_v32_forward_prep_harness.py",
+      "exists": true,
+      "bytes": 3957,
+      "sha256": "0b82e2252328172c79bc11958bb5670c33d9492fbb6f03945a4d32e7418e40ab"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_workstream_status_authority.py",
+      "exists": true,
+      "bytes": 5326,
+      "sha256": "fa9e3afb4043b55dbd32bdde42369bc7a076210ae15cae7573db0ee6d2778d07"
+    },
+    {
+      "path": "tools/havenline/production/timeout_stage_plan.py",
+      "exists": true,
+      "bytes": 2369,
+      "sha256": "7fc70eeb1baf17118719975028d5c65215d5d6c7afee3280cbb18451ff377aba"
+    },
+    {
+      "path": "tools/havenline/production/v32_assignment_claim.py",
+      "exists": true,
+      "bytes": 9750,
+      "sha256": "4682875f52919cc1ff09340bab0c3f69cf021e8ba35c2929eaf83700ce4087da"
+    },
+    {
+      "path": "tools/havenline/production/v32_forward_prep_harness.py",
+      "exists": true,
+      "bytes": 11764,
+      "sha256": "3ff455decf7328704c41f8c3d411e651506c104c111201d2544f52bf5166bc66"
+    },
+    {
+      "path": "tools/havenline/production/validate_architecture_release_lock.py",
+      "exists": true,
+      "bytes": 8684,
+      "sha256": "310747f9aa5a299ae3f6a64282134eae3c8a721dbc089717974d9516fae834f6"
+    },
+    {
+      "path": "tools/havenline/production/validate_architecture_v32_t09.py",
+      "exists": true,
+      "bytes": 2441,
+      "sha256": "d31c01f8ea89d0c8fa475e15889e065584fbf9d68b3679250fe67a033934619f"
+    },
+    {
+      "path": "tools/havenline/production/validate_architecture_v32_t10.py",
+      "exists": true,
+      "bytes": 45100,
+      "sha256": "cc3d1ab8a3b267603928794c24fbf8d20a5045261ff63ddd0d19579da5a14543"
+    },
+    {
+      "path": "tools/havenline/production/validate_critic_readiness.py",
+      "exists": true,
+      "bytes": 4727,
+      "sha256": "61af6c14a2c66b534e4fe55fe60509e4af6bcd153c3bd5b6bdbd069dc44ee04c"
+    },
+    {
+      "path": "tools/havenline/production/validate_integration_scope.py",
+      "exists": true,
+      "bytes": 4540,
+      "sha256": "763af6035aa0250ae5a041fba6de2b3e6e07c76e8cd3e0998cae34963af31af3"
+    },
+    {
+      "path": "tools/havenline/production/validate_migration.py",
+      "exists": true,
+      "bytes": 57383,
+      "sha256": "0026c28d418dab71c7a69d7e35b3d0603e3bc2e489cfc2061a74b2ddc21caf68"
+    },
+    {
+      "path": "tools/havenline/production/validate_migration_scope.py",
+      "exists": true,
+      "bytes": 4307,
+      "sha256": "c8a8670eef60f3a9b2c35debf462751d4b502246c2e142bfd381f8e2364fc838"
+    },
+    {
+      "path": "tools/havenline/production/validate_repair_cycle.py",
+      "exists": true,
+      "bytes": 6378,
+      "sha256": "e4418d8bcf9a9178e8419cf07c504a895d09a1e573ba17dd64dca6f7411a220d"
+    },
+    {
+      "path": "tools/havenline/production/verify_python_repair_bindings.py",
+      "exists": true,
+      "bytes": 17488,
+      "sha256": "80c6d58393f49f1eb8792b86dd1addc797a0a5077346947ecc573208f2b6e8a1"
+    },
+    {
+      "path": "tools/havenline/production/workstream.py",
+      "exists": true,
+      "bytes": 16222,
+      "sha256": "9ff5b8a2044bc0cc88a0a24cb440db3b6ec3ce66bdc1345299d88c6792a4ad01"
+    }
+  ],
+  "python_read_paths": [
+    "Docs/Production/ACTOR_CAPABILITY_MATRIX.json",
+    "Docs/Production/ANIMATION_ACTION_MATRIX.json",
+    "Docs/Production/APPROVAL_INVALIDATIONS.json",
+    "Docs/Production/CAPABILITY_STATUS.json",
+    "Docs/Production/CONTRACT_REGISTRY.json",
+    "Docs/Production/CRITIC_EXECUTION.json",
+    "Docs/Production/CRITIC_MATRIX.json",
+    "Docs/Production/CURRENT_GAMEPLAY_SOURCE.json",
+    "Docs/Production/Completeness/2026-11-27/ACTORS_COMBAT_GAPS.json",
+    "Docs/Production/Completeness/2026-11-27/LATEST_SOURCE_DELTA.json",
+    "Docs/Production/Completeness/2026-11-27/PROGRESSION_ECONOMY_GAPS.json",
+    "Docs/Production/Completeness/2026-11-27/SOURCE_BINDINGS.json",
+    "Docs/Production/Completeness/2026-11-27/TASK_COMPLETENESS_T01_T80.json",
+    "Docs/Production/Completeness/2026-11-27/TASK_COMPLETENESS_T01_T80.md",
+    "Docs/Production/Completeness/2026-11-27/TRANSACTIONS_AND_RECOVERY.json",
+    "Docs/Production/DEPENDENCY_GRAPH.json",
+    "Docs/Production/DEVICE_LAYOUT_MATRIX.json",
+    "Docs/Production/EARLY_CANARY_POLICY.json",
+    "Docs/Production/Evidence/T03/TASK_PACKET.md",
+    "Docs/Production/Evidence/T06/TASK_PACKET.md",
+    "Docs/Production/Evidence/T07/TASK_PACKET.md",
+    "Docs/Production/Evidence/T08/TASK_PACKET.md",
+    "Docs/Production/Evidence/T09/TASK_PACKET.md",
+    "Docs/Production/FORWARD_EXECUTION_PROFILES.json",
+    "Docs/Production/FORWARD_GATE_RUNNERS.json",
+    "Docs/Production/GAMEPLAY_DEPTH_CONTRACT.json",
+    "Docs/Production/GAME_MASTER_ACCOUNT_STANDARD.md",
+    "Docs/Production/GAME_MASTER_POLICY.json",
+    "Docs/Production/GameplayDepth/2026-11-27/ACTORS_MOTION_REQUIREMENTS.json",
+    "Docs/Production/GameplayDepth/2026-11-27/RESOURCE_VALUE_LEDGER.json",
+    "Docs/Production/PARALLEL_PREPARATION_POLICY.json",
+    "Docs/Production/PATH_OWNERSHIP.json",
+    "Docs/Production/POST_LAUNCH_ROADMAP.md",
+    "Docs/Production/PRODUCTION_SCHEDULER_POLICY.json",
+    "Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json",
+    "Docs/Production/RESOURCE_ACTION_REGISTRY.json",
+    "Docs/Production/T04/TASK_PACKET.md",
+    "Docs/Production/T05/TASK_PACKET.md",
+    "Docs/Production/T06/TASK_PACKET.md",
+    "Docs/Production/T07/TASK_PACKET.md",
+    "Docs/Production/T08/TASK_PACKET.md",
+    "Docs/Production/T09/TASK_PACKET.md",
+    "Docs/Production/T10/TASK_PACKET.md",
+    "Docs/Production/T11/TASK_PACKET.md",
+    "Docs/Production/T12/TASK_PACKET.md",
+    "Docs/Production/T13/TASK_PACKET.md",
+    "Docs/Production/TASK_CAPABILITY_MATRIX.json",
+    "Docs/Production/TASK_GRADUATION_POLICY.json",
+    "Docs/Production/V32_FORWARD_PREP_ROADMAP.json",
+    "Docs/Production/WHOLE_GAME_COMPLETENESS.json",
+    "Docs/Production/WORKSTREAM_REGISTRY.json",
+    "Docs/Production/task-gates.json",
+    "tools/havenline/production/__pycache__/architecture_v3.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/architecture_v31.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/architecture_v32.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/authority_consistency.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/branch_budget.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/change_impact.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/ci_toolchain_lock.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/completeness.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/contract_compatibility.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/control_plane_lineage.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/critic_profile.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/critical_path_scheduler.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/device_matrix.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/evidence_retention.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/external_readiness.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/factory_observer_contract.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/failure_intelligence.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/failure_learning.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/flake_intelligence.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/forward_execution.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/forward_prep_contract.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/forward_task_control.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/gameplay_depth.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/gate_fingerprint.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/gate_result_recorder.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/lib.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/mutation_canary.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/opening_loop_canary.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/parallel_preparation_planner.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/performance_ledger.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/pipeline_telemetry.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/preactivation_feasibility.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/prepare_specialist_runtime.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/proof_invalidation.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/reference_acceptance.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/reference_style_lock.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/resource_actor_contract.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/rolling_canary.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/runtime_dependency_learning.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/shipping_visual_gate.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/synthetic_merge_forecast.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/task_graduation_gate.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/task_packet.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/task_state_snapshot.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/timeout_stage_plan.cpython-312.pyc",
+    "tools/havenline/production/__pycache__/v32_forward_prep_harness.cpython-312.pyc",
+    "tools/havenline/production/architecture_v3.py",
+    "tools/havenline/production/architecture_v31.py",
+    "tools/havenline/production/architecture_v32.py",
+    "tools/havenline/production/authority_consistency.py",
+    "tools/havenline/production/blocker_family_gate.py",
+    "tools/havenline/production/branch_budget.py",
+    "tools/havenline/production/builder_repair_gate.py",
+    "tools/havenline/production/c0_root_cause_advisor.py",
+    "tools/havenline/production/change_impact.py",
+    "tools/havenline/production/ci_toolchain_lock.py",
+    "tools/havenline/production/closure_validator.py",
+    "tools/havenline/production/collect_artifact_diagnostics.py",
+    "tools/havenline/production/collect_failure_job_logs.py",
+    "tools/havenline/production/completeness.py",
+    "tools/havenline/production/contract_compatibility.py",
+    "tools/havenline/production/control_plane_lineage.py",
+    "tools/havenline/production/critic_harness.py",
+    "tools/havenline/production/critic_invalidation.py",
+    "tools/havenline/production/critic_package_preflight.py",
+    "tools/havenline/production/critic_profile.py",
+    "tools/havenline/production/critical_path_scheduler.py",
+    "tools/havenline/production/device_matrix.py",
+    "tools/havenline/production/domain_safeguard_gate.py",
+    "tools/havenline/production/evaluate_visual_quorum.py",
+    "tools/havenline/production/evidence_capture.py",
+    "tools/havenline/production/evidence_packager.py",
+    "tools/havenline/production/evidence_retention.py",
+    "tools/havenline/production/execution_checkpoint.py",
+    "tools/havenline/production/external_readiness.py",
+    "tools/havenline/production/factory_closeout_gate.py",
+    "tools/havenline/production/factory_observer.py",
+    "tools/havenline/production/factory_observer_contract.py",
+    "tools/havenline/production/failure_intelligence.py",
+    "tools/havenline/production/failure_learning.py",
+    "tools/havenline/production/flake_intelligence.py",
+    "tools/havenline/production/forward_execution.py",
+    "tools/havenline/production/forward_prep_contract.py",
+    "tools/havenline/production/forward_prep_packet.py",
+    "tools/havenline/production/forward_task_control.py",
+    "tools/havenline/production/game_master_contract.py",
+    "tools/havenline/production/gameplay_depth.py",
+    "tools/havenline/production/gate_fingerprint.py",
+    "tools/havenline/production/gate_result_recorder.py",
+    "tools/havenline/production/lib.py",
+    "tools/havenline/production/motion_capture.py",
+    "tools/havenline/production/mutation_canary.py",
+    "tools/havenline/production/opening_loop_canary.py",
+    "tools/havenline/production/parallel_preparation_planner.py",
+    "tools/havenline/production/performance_ledger.py",
+    "tools/havenline/production/pipeline_telemetry.py",
+    "tools/havenline/production/preactivation_candidate.py",
+    "tools/havenline/production/preactivation_feasibility.py",
+    "tools/havenline/production/prepare_specialist_runtime.py",
+    "tools/havenline/production/proof_invalidation.py",
+    "tools/havenline/production/reference_acceptance.py",
+    "tools/havenline/production/reference_style_lock.py",
+    "tools/havenline/production/regression_runner.py",
+    "tools/havenline/production/repair_sufficiency_critic.py",
+    "tools/havenline/production/repair_t03_river_gate_readability_v2.py",
+    "tools/havenline/production/resource_actor_contract.py",
+    "tools/havenline/production/review_t03_iteration7_visual_group.py",
+    "tools/havenline/production/review_t03_iteration8c_final.py",
+    "tools/havenline/production/review_t03_iteration9_final.py",
+    "tools/havenline/production/review_t03_performance_local.py",
+    "tools/havenline/production/review_t03_repair_c6.py",
+    "tools/havenline/production/review_t03_repair_c6_retry.py",
+    "tools/havenline/production/review_t03_repair_visual.py",
+    "tools/havenline/production/review_t03_repair_visual_shard_wrapper.py",
+    "tools/havenline/production/review_task03_strict_v2_wrapper.py",
+    "tools/havenline/production/review_visual_supplement.py",
+    "tools/havenline/production/rolling_canary.py",
+    "tools/havenline/production/runtime_dependency_learning.py",
+    "tools/havenline/production/save_state_matrix.py",
+    "tools/havenline/production/security_exploit_harness.py",
+    "tools/havenline/production/shipping_visual_gate.py",
+    "tools/havenline/production/specialist_critic_runner.py",
+    "tools/havenline/production/specialist_evidence_manifest.py",
+    "tools/havenline/production/specialist_runtime_smoke.py",
+    "tools/havenline/production/synthetic_merge_forecast.py",
+    "tools/havenline/production/task_graduation_gate.py",
+    "tools/havenline/production/task_packet.py",
+    "tools/havenline/production/task_state_snapshot.py",
+    "tools/havenline/production/test_visual_quorum.py",
+    "tools/havenline/production/tests/security_mock_adapter.py",
+    "tools/havenline/production/tests/test_agent_execution_loop_guard.py",
+    "tools/havenline/production/tests/test_architecture_release_lock.py",
+    "tools/havenline/production/tests/test_architecture_v3.py",
+    "tools/havenline/production/tests/test_architecture_v31.py",
+    "tools/havenline/production/tests/test_architecture_v32.py",
+    "tools/havenline/production/tests/test_bounded_visual_owner_route.py",
+    "tools/havenline/production/tests/test_c0_builder.py",
+    "tools/havenline/production/tests/test_c0_governance.py",
+    "tools/havenline/production/tests/test_candidate_reconcile.py",
+    "tools/havenline/production/tests/test_closure_resource_actor.py",
+    "tools/havenline/production/tests/test_completeness.py",
+    "tools/havenline/production/tests/test_critic_loop_regressions.py",
+    "tools/havenline/production/tests/test_critic_profile.py",
+    "tools/havenline/production/tests/test_critic_runtime_cache.py",
+    "tools/havenline/production/tests/test_factory_closeout_gate.py",
+    "tools/havenline/production/tests/test_factory_observation_consumers.py",
+    "tools/havenline/production/tests/test_factory_observer.py",
+    "tools/havenline/production/tests/test_failure_intelligence_packet.py",
+    "tools/havenline/production/tests/test_failure_job_log_collection.py",
+    "tools/havenline/production/tests/test_forward_acceptance_policy.py",
+    "tools/havenline/production/tests/test_forward_execution.py",
+    "tools/havenline/production/tests/test_forward_review_evidence.py",
+    "tools/havenline/production/tests/test_future_prep_packets.py",
+    "tools/havenline/production/tests/test_gameplay_depth.py",
+    "tools/havenline/production/tests/test_governance.py",
+    "tools/havenline/production/tests/test_governance_scope_routing.py",
+    "tools/havenline/production/tests/test_integration_scope.py",
+    "tools/havenline/production/tests/test_migration_scope.py",
+    "tools/havenline/production/tests/test_opening_loop_canary.py",
+    "tools/havenline/production/tests/test_performance_review_transport.py",
+    "tools/havenline/production/tests/test_preactivation_candidate.py",
+    "tools/havenline/production/tests/test_production_governance_v32_consumer.py",
+    "tools/havenline/production/tests/test_proof_invalidation_diff.py",
+    "tools/havenline/production/tests/test_python_repair_bindings.py",
+    "tools/havenline/production/tests/test_reference_acceptance.py",
+    "tools/havenline/production/tests/test_reference_style_lock.py",
+    "tools/havenline/production/tests/test_repair_cycle.py",
+    "tools/havenline/production/tests/test_repair_sufficiency_critic.py",
+    "tools/havenline/production/tests/test_resource_actor_contract.py",
+    "tools/havenline/production/tests/test_shipping_visual_gate.py",
+    "tools/havenline/production/tests/test_specialist_critic_runner.py",
+    "tools/havenline/production/tests/test_specialist_safeguards.py",
+    "tools/havenline/production/tests/test_t03_reference_materializer.py",
+    "tools/havenline/production/tests/test_t05_completion.py",
+    "tools/havenline/production/tests/test_t05_materializer_raw_bytes.py",
+    "tools/havenline/production/tests/test_t10_activation_validation.py",
+    "tools/havenline/production/tests/test_v32_forward_prep_harness.py",
+    "tools/havenline/production/tests/test_workstream_status_authority.py",
+    "tools/havenline/production/timeout_stage_plan.py",
+    "tools/havenline/production/v32_assignment_claim.py",
+    "tools/havenline/production/v32_forward_prep_harness.py",
+    "tools/havenline/production/validate_architecture_release_lock.py",
+    "tools/havenline/production/validate_architecture_v32_t09.py",
+    "tools/havenline/production/validate_architecture_v32_t10.py",
+    "tools/havenline/production/validate_critic_readiness.py",
+    "tools/havenline/production/validate_integration_scope.py",
+    "tools/havenline/production/validate_migration.py",
+    "tools/havenline/production/validate_migration_scope.py",
+    "tools/havenline/production/validate_repair_cycle.py",
+    "tools/havenline/production/verify_python_repair_bindings.py",
+    "tools/havenline/production/workstream.py"
+  ],
+  "packets": [
+    {
+      "task_id": "T01",
+      "failure": null,
+      "stdout": "Docs/Production/Evidence/T01/TASK_PACKET.md\n",
+      "events": [
+        {
+          "stage": "resource_schema_start"
+        },
+        {
+          "stage": "resource_schema_result",
+          "errors": []
+        },
+        {
+          "stage": "completeness_start"
+        },
+        {
+          "stage": "completeness_return"
+        },
+        {
+          "stage": "intercepted_mkdir",
+          "path": "/workspace/scratch/e15437dc7c94/HAVENLINE-completeness/Docs/Production/Evidence/T01"
+        },
+        {
+          "stage": "intercepted_write_text",
+          "path": "/workspace/scratch/e15437dc7c94/HAVENLINE-completeness/Docs/Production/Evidence/T01/TASK_PACKET.md"
+        }
+      ],
+      "intercepted_mkdir_calls": [
+        "/workspace/scratch/e15437dc7c94/HAVENLINE-completeness/Docs/Production/Evidence/T01"
+      ],
+      "intercepted_write_count": 1,
+      "output": {
+        "path": "/workspace/scratch/e15437dc7c94/gameplay-gap-drafts/PacketVerification/R2/T01.TASK_PACKET.md",
+        "exists": true,
+        "bytes": 7104,
+        "sha256": "cf15cc7d8e4202ffcab51d765d8ff3b6dc8ffef605775958ce056a5f7197fd14"
+      },
+      "expected_cg_ids": [
+        "CG15",
+        "CG16"
+      ],
+      "actual_cg_ids": [
+        "CG15",
+        "CG16"
+      ],
+      "expected_gd_ids": [],
+      "actual_gd_ids": [],
+      "expected_cd_ids": [],
+      "actual_cd_ids": []
+    },
+    {
+      "task_id": "T23",
+      "failure": null,
+      "stdout": "Docs/Production/Evidence/T23/TASK_PACKET.md\n",
+      "events": [
+        {
+          "stage": "resource_schema_start"
+        },
+        {
+          "stage": "resource_schema_result",
+          "errors": []
+        },
+        {
+          "stage": "completeness_start"
+        },
+        {
+          "stage": "completeness_return"
+        },
+        {
+          "stage": "intercepted_mkdir",
+          "path": "/workspace/scratch/e15437dc7c94/HAVENLINE-completeness/Docs/Production/Evidence/T23"
+        },
+        {
+          "stage": "intercepted_write_text",
+          "path": "/workspace/scratch/e15437dc7c94/HAVENLINE-completeness/Docs/Production/Evidence/T23/TASK_PACKET.md"
+        }
+      ],
+      "intercepted_mkdir_calls": [
+        "/workspace/scratch/e15437dc7c94/HAVENLINE-completeness/Docs/Production/Evidence/T23"
+      ],
+      "intercepted_write_count": 1,
+      "output": {
+        "path": "/workspace/scratch/e15437dc7c94/gameplay-gap-drafts/PacketVerification/R2/T23.TASK_PACKET.md",
+        "exists": true,
+        "bytes": 34341,
+        "sha256": "94ae0cf4a83075cb64543b9e916ea1b9837ae2665636531de18f36543a6e4dd8"
+      },
+      "expected_cg_ids": [
+        "CG02",
+        "CG03",
+        "CG04",
+        "CG05",
+        "CG06",
+        "CG07",
+        "CG09",
+        "CG10",
+        "CG11",
+        "CG12",
+        "CG13",
+        "CG14",
+        "CG15",
+        "CG16",
+        "CG18",
+        "CG19",
+        "CG20",
+        "CG21",
+        "CG22"
+      ],
+      "actual_cg_ids": [
+        "CG02",
+        "CG03",
+        "CG04",
+        "CG05",
+        "CG06",
+        "CG07",
+        "CG09",
+        "CG10",
+        "CG11",
+        "CG12",
+        "CG13",
+        "CG14",
+        "CG15",
+        "CG16",
+        "CG18",
+        "CG19",
+        "CG20",
+        "CG21",
+        "CG22"
+      ],
+      "expected_gd_ids": [
+        "GD01",
+        "GD02",
+        "GD03",
+        "GD04",
+        "GD05",
+        "GD06",
+        "GD07",
+        "GD08",
+        "GD09",
+        "GD10",
+        "GD11",
+        "GD12",
+        "GD13",
+        "GD14",
+        "GD15",
+        "GD16"
+      ],
+      "actual_gd_ids": [
+        "GD01",
+        "GD02",
+        "GD03",
+        "GD04",
+        "GD05",
+        "GD06",
+        "GD07",
+        "GD08",
+        "GD09",
+        "GD10",
+        "GD11",
+        "GD12",
+        "GD13",
+        "GD14",
+        "GD15",
+        "GD16"
+      ],
+      "expected_cd_ids": [
+        "CD01",
+        "CD02",
+        "CD03",
+        "CD04",
+        "CD05",
+        "CD06",
+        "CD07",
+        "CD08",
+        "CD09",
+        "CD10",
+        "CD12"
+      ],
+      "actual_cd_ids": [
+        "CD01",
+        "CD02",
+        "CD03",
+        "CD04",
+        "CD05",
+        "CD06",
+        "CD07",
+        "CD08",
+        "CD09",
+        "CD10",
+        "CD12"
+      ]
+    },
+    {
+      "task_id": "T26",
+      "failure": null,
+      "stdout": "Docs/Production/Evidence/T26/TASK_PACKET.md\n",
+      "events": [
+        {
+          "stage": "resource_schema_start"
+        },
+        {
+          "stage": "resource_schema_result",
+          "errors": []
+        },
+        {
+          "stage": "completeness_start"
+        },
+        {
+          "stage": "completeness_return"
+        },
+        {
+          "stage": "intercepted_mkdir",
+          "path": "/workspace/scratch/e15437dc7c94/HAVENLINE-completeness/Docs/Production/Evidence/T26"
+        },
+        {
+          "stage": "intercepted_write_text",
+          "path": "/workspace/scratch/e15437dc7c94/HAVENLINE-completeness/Docs/Production/Evidence/T26/TASK_PACKET.md"
+        }
+      ],
+      "intercepted_mkdir_calls": [
+        "/workspace/scratch/e15437dc7c94/HAVENLINE-completeness/Docs/Production/Evidence/T26"
+      ],
+      "intercepted_write_count": 1,
+      "output": {
+        "path": "/workspace/scratch/e15437dc7c94/gameplay-gap-drafts/PacketVerification/R2/T26.TASK_PACKET.md",
+        "exists": true,
+        "bytes": 23079,
+        "sha256": "cb9bf57c9ec986163926ecb107e85a1ba5c0229775f3eaee1b8b35ab5837b86e"
+      },
+      "expected_cg_ids": [
+        "CG01",
+        "CG03",
+        "CG04",
+        "CG05",
+        "CG07",
+        "CG13",
+        "CG14",
+        "CG15",
+        "CG16"
+      ],
+      "actual_cg_ids": [
+        "CG01",
+        "CG03",
+        "CG04",
+        "CG05",
+        "CG07",
+        "CG13",
+        "CG14",
+        "CG15",
+        "CG16"
+      ],
+      "expected_gd_ids": [
+        "GD07",
+        "GD08",
+        "GD09",
+        "GD11",
+        "GD12"
+      ],
+      "actual_gd_ids": [
+        "GD07",
+        "GD08",
+        "GD09",
+        "GD11",
+        "GD12"
+      ],
+      "expected_cd_ids": [
+        "CD01",
+        "CD02",
+        "CD04",
+        "CD05",
+        "CD06",
+        "CD07"
+      ],
+      "actual_cd_ids": [
+        "CD01",
+        "CD02",
+        "CD04",
+        "CD05",
+        "CD06",
+        "CD07"
+      ]
+    },
+    {
+      "task_id": "T27",
+      "failure": null,
+      "stdout": "Docs/Production/Evidence/T27/TASK_PACKET.md\n",
+      "events": [
+        {
+          "stage": "resource_schema_start"
+        },
+        {
+          "stage": "resource_schema_result",
+          "errors": []
+        },
+        {
+          "stage": "completeness_start"
+        },
+        {
+          "stage": "completeness_return"
+        },
+        {
+          "stage": "intercepted_mkdir",
+          "path": "/workspace/scratch/e15437dc7c94/HAVENLINE-completeness/Docs/Production/Evidence/T27"
+        },
+        {
+          "stage": "intercepted_write_text",
+          "path": "/workspace/scratch/e15437dc7c94/HAVENLINE-completeness/Docs/Production/Evidence/T27/TASK_PACKET.md"
+        }
+      ],
+      "intercepted_mkdir_calls": [
+        "/workspace/scratch/e15437dc7c94/HAVENLINE-completeness/Docs/Production/Evidence/T27"
+      ],
+      "intercepted_write_count": 1,
+      "output": {
+        "path": "/workspace/scratch/e15437dc7c94/gameplay-gap-drafts/PacketVerification/R2/T27.TASK_PACKET.md",
+        "exists": true,
+        "bytes": 23138,
+        "sha256": "dba6338d5d8593d900aad86e3fe17db8488f59306b96b39d11fc14ab9e9c5f82"
+      },
+      "expected_cg_ids": [
+        "CG01",
+        "CG03",
+        "CG04",
+        "CG05",
+        "CG07",
+        "CG13",
+        "CG14",
+        "CG15",
+        "CG16"
+      ],
+      "actual_cg_ids": [
+        "CG01",
+        "CG03",
+        "CG04",
+        "CG05",
+        "CG07",
+        "CG13",
+        "CG14",
+        "CG15",
+        "CG16"
+      ],
+      "expected_gd_ids": [
+        "GD07",
+        "GD08",
+        "GD09",
+        "GD11",
+        "GD12"
+      ],
+      "actual_gd_ids": [
+        "GD07",
+        "GD08",
+        "GD09",
+        "GD11",
+        "GD12"
+      ],
+      "expected_cd_ids": [
+        "CD01",
+        "CD02",
+        "CD04",
+        "CD05",
+        "CD06",
+        "CD07"
+      ],
+      "actual_cd_ids": [
+        "CD01",
+        "CD02",
+        "CD04",
+        "CD05",
+        "CD06",
+        "CD07"
+      ]
+    },
+    {
+      "task_id": "T33",
+      "failure": null,
+      "stdout": "Docs/Production/Evidence/T33/TASK_PACKET.md\n",
+      "events": [
+        {
+          "stage": "resource_schema_start"
+        },
+        {
+          "stage": "resource_schema_result",
+          "errors": []
+        },
+        {
+          "stage": "completeness_start"
+        },
+        {
+          "stage": "completeness_return"
+        },
+        {
+          "stage": "intercepted_mkdir",
+          "path": "/workspace/scratch/e15437dc7c94/HAVENLINE-completeness/Docs/Production/Evidence/T33"
+        },
+        {
+          "stage": "intercepted_write_text",
+          "path": "/workspace/scratch/e15437dc7c94/HAVENLINE-completeness/Docs/Production/Evidence/T33/TASK_PACKET.md"
+        }
+      ],
+      "intercepted_mkdir_calls": [
+        "/workspace/scratch/e15437dc7c94/HAVENLINE-completeness/Docs/Production/Evidence/T33"
+      ],
+      "intercepted_write_count": 1,
+      "output": {
+        "path": "/workspace/scratch/e15437dc7c94/gameplay-gap-drafts/PacketVerification/R2/T33.TASK_PACKET.md",
+        "exists": true,
+        "bytes": 26660,
+        "sha256": "6fe4dad486845c983da8847654c67c022eb0ea2fd940fc62fc842469fc2cec9f"
+      },
+      "expected_cg_ids": [
+        "CG02",
+        "CG03",
+        "CG05",
+        "CG08",
+        "CG09",
+        "CG10",
+        "CG11",
+        "CG15",
+        "CG16",
+        "CG19",
+        "CG20",
+        "CG21",
+        "CG22"
+      ],
+      "actual_cg_ids": [
+        "CG02",
+        "CG03",
+        "CG05",
+        "CG08",
+        "CG09",
+        "CG10",
+        "CG11",
+        "CG15",
+        "CG16",
+        "CG19",
+        "CG20",
+        "CG21",
+        "CG22"
+      ],
+      "expected_gd_ids": [
+        "GD01",
+        "GD04",
+        "GD05",
+        "GD08",
+        "GD13",
+        "GD14",
+        "GD15",
+        "GD16"
+      ],
+      "actual_gd_ids": [
+        "GD01",
+        "GD04",
+        "GD05",
+        "GD08",
+        "GD13",
+        "GD14",
+        "GD15",
+        "GD16"
+      ],
+      "expected_cd_ids": [
+        "CD01",
+        "CD02",
+        "CD03",
+        "CD04",
+        "CD05",
+        "CD08",
+        "CD09",
+        "CD11",
+        "CD12"
+      ],
+      "actual_cd_ids": [
+        "CD01",
+        "CD02",
+        "CD03",
+        "CD04",
+        "CD05",
+        "CD08",
+        "CD09",
+        "CD11",
+        "CD12"
+      ]
+    },
+    {
+      "task_id": "T43",
+      "failure": null,
+      "stdout": "Docs/Production/Evidence/T43/TASK_PACKET.md\n",
+      "events": [
+        {
+          "stage": "resource_schema_start"
+        },
+        {
+          "stage": "resource_schema_result",
+          "errors": []
+        },
+        {
+          "stage": "completeness_start"
+        },
+        {
+          "stage": "completeness_return"
+        },
+        {
+          "stage": "intercepted_mkdir",
+          "path": "/workspace/scratch/e15437dc7c94/HAVENLINE-completeness/Docs/Production/Evidence/T43"
+        },
+        {
+          "stage": "intercepted_write_text",
+          "path": "/workspace/scratch/e15437dc7c94/HAVENLINE-completeness/Docs/Production/Evidence/T43/TASK_PACKET.md"
+        }
+      ],
+      "intercepted_mkdir_calls": [
+        "/workspace/scratch/e15437dc7c94/HAVENLINE-completeness/Docs/Production/Evidence/T43"
+      ],
+      "intercepted_write_count": 1,
+      "output": {
+        "path": "/workspace/scratch/e15437dc7c94/gameplay-gap-drafts/PacketVerification/R2/T43.TASK_PACKET.md",
+        "exists": true,
+        "bytes": 20805,
+        "sha256": "1231d0f44be7968ad1bd5e387cc260496fe3c425bfb3f7afce03cadddbcc5f59"
+      },
+      "expected_cg_ids": [
+        "CG03",
+        "CG05",
+        "CG06",
+        "CG12",
+        "CG15",
+        "CG16",
+        "CG20",
+        "CG21",
+        "CG22",
+        "CG23"
+      ],
+      "actual_cg_ids": [
+        "CG03",
+        "CG05",
+        "CG06",
+        "CG12",
+        "CG15",
+        "CG16",
+        "CG20",
+        "CG21",
+        "CG22",
+        "CG23"
+      ],
+      "expected_gd_ids": [
+        "GD02",
+        "GD04",
+        "GD15"
+      ],
+      "actual_gd_ids": [
+        "GD02",
+        "GD04",
+        "GD15"
+      ],
+      "expected_cd_ids": [
+        "CD01",
+        "CD02",
+        "CD03",
+        "CD04",
+        "CD05",
+        "CD08",
+        "CD09",
+        "CD12"
+      ],
+      "actual_cd_ids": [
+        "CD01",
+        "CD02",
+        "CD03",
+        "CD04",
+        "CD05",
+        "CD08",
+        "CD09",
+        "CD12"
+      ]
+    },
+    {
+      "task_id": "T44",
+      "failure": null,
+      "stdout": "Docs/Production/Evidence/T44/TASK_PACKET.md\n",
+      "events": [
+        {
+          "stage": "resource_schema_start"
+        },
+        {
+          "stage": "resource_schema_result",
+          "errors": []
+        },
+        {
+          "stage": "completeness_start"
+        },
+        {
+          "stage": "completeness_return"
+        },
+        {
+          "stage": "intercepted_mkdir",
+          "path": "/workspace/scratch/e15437dc7c94/HAVENLINE-completeness/Docs/Production/Evidence/T44"
+        },
+        {
+          "stage": "intercepted_write_text",
+          "path": "/workspace/scratch/e15437dc7c94/HAVENLINE-completeness/Docs/Production/Evidence/T44/TASK_PACKET.md"
+        }
+      ],
+      "intercepted_mkdir_calls": [
+        "/workspace/scratch/e15437dc7c94/HAVENLINE-completeness/Docs/Production/Evidence/T44"
+      ],
+      "intercepted_write_count": 1,
+      "output": {
+        "path": "/workspace/scratch/e15437dc7c94/gameplay-gap-drafts/PacketVerification/R2/T44.TASK_PACKET.md",
+        "exists": true,
+        "bytes": 26994,
+        "sha256": "0f2ea58921003b5bed28258fd1e58f86178ee33e4b0afbba57b61bc593838931"
+      },
+      "expected_cg_ids": [
+        "CG04",
+        "CG07",
+        "CG08",
+        "CG09",
+        "CG10",
+        "CG15",
+        "CG16",
+        "CG19"
+      ],
+      "actual_cg_ids": [
+        "CG04",
+        "CG07",
+        "CG08",
+        "CG09",
+        "CG10",
+        "CG15",
+        "CG16",
+        "CG19"
+      ],
+      "expected_gd_ids": [
+        "GD01",
+        "GD03",
+        "GD05",
+        "GD07",
+        "GD08",
+        "GD09",
+        "GD10",
+        "GD11",
+        "GD12",
+        "GD13",
+        "GD14",
+        "GD16"
+      ],
+      "actual_gd_ids": [
+        "GD01",
+        "GD03",
+        "GD05",
+        "GD07",
+        "GD08",
+        "GD09",
+        "GD10",
+        "GD11",
+        "GD12",
+        "GD13",
+        "GD14",
+        "GD16"
+      ],
+      "expected_cd_ids": [
+        "CD01",
+        "CD02",
+        "CD06",
+        "CD07",
+        "CD08",
+        "CD11",
+        "CD12"
+      ],
+      "actual_cd_ids": [
+        "CD01",
+        "CD02",
+        "CD06",
+        "CD07",
+        "CD08",
+        "CD11",
+        "CD12"
+      ]
+    },
+    {
+      "task_id": "T58",
+      "failure": null,
+      "stdout": "Docs/Production/Evidence/T58/TASK_PACKET.md\n",
+      "events": [
+        {
+          "stage": "resource_schema_start"
+        },
+        {
+          "stage": "resource_schema_result",
+          "errors": []
+        },
+        {
+          "stage": "completeness_start"
+        },
+        {
+          "stage": "completeness_return"
+        },
+        {
+          "stage": "intercepted_mkdir",
+          "path": "/workspace/scratch/e15437dc7c94/HAVENLINE-completeness/Docs/Production/Evidence/T58"
+        },
+        {
+          "stage": "intercepted_write_text",
+          "path": "/workspace/scratch/e15437dc7c94/HAVENLINE-completeness/Docs/Production/Evidence/T58/TASK_PACKET.md"
+        }
+      ],
+      "intercepted_mkdir_calls": [
+        "/workspace/scratch/e15437dc7c94/HAVENLINE-completeness/Docs/Production/Evidence/T58"
+      ],
+      "intercepted_write_count": 1,
+      "output": {
+        "path": "/workspace/scratch/e15437dc7c94/gameplay-gap-drafts/PacketVerification/R2/T58.TASK_PACKET.md",
+        "exists": true,
+        "bytes": 20202,
+        "sha256": "4e4d5b5212d7ec9cad4b05189b510a79a28a5dab0787ee69e6172b222471160e"
+      },
+      "expected_cg_ids": [
+        "CG05",
+        "CG11",
+        "CG15",
+        "CG16",
+        "CG17",
+        "CG18",
+        "CG23"
+      ],
+      "actual_cg_ids": [
+        "CG05",
+        "CG11",
+        "CG15",
+        "CG16",
+        "CG17",
+        "CG18",
+        "CG23"
+      ],
+      "expected_gd_ids": [
+        "GD06",
+        "GD12",
+        "GD17"
+      ],
+      "actual_gd_ids": [
+        "GD06",
+        "GD12",
+        "GD17"
+      ],
+      "expected_cd_ids": [
+        "CD04",
+        "CD05",
+        "CD10"
+      ],
+      "actual_cd_ids": [
+        "CD04",
+        "CD05",
+        "CD10"
+      ]
+    },
+    {
+      "task_id": "T70",
+      "failure": null,
+      "stdout": "Docs/Production/Evidence/T70/TASK_PACKET.md\n",
+      "events": [
+        {
+          "stage": "resource_schema_start"
+        },
+        {
+          "stage": "resource_schema_result",
+          "errors": []
+        },
+        {
+          "stage": "completeness_start"
+        },
+        {
+          "stage": "completeness_return"
+        },
+        {
+          "stage": "intercepted_mkdir",
+          "path": "/workspace/scratch/e15437dc7c94/HAVENLINE-completeness/Docs/Production/Evidence/T70"
+        },
+        {
+          "stage": "intercepted_write_text",
+          "path": "/workspace/scratch/e15437dc7c94/HAVENLINE-completeness/Docs/Production/Evidence/T70/TASK_PACKET.md"
+        }
+      ],
+      "intercepted_mkdir_calls": [
+        "/workspace/scratch/e15437dc7c94/HAVENLINE-completeness/Docs/Production/Evidence/T70"
+      ],
+      "intercepted_write_count": 1,
+      "output": {
+        "path": "/workspace/scratch/e15437dc7c94/gameplay-gap-drafts/PacketVerification/R2/T70.TASK_PACKET.md",
+        "exists": true,
+        "bytes": 32886,
+        "sha256": "1c483f8bfe184f36c4993b3281bc0a8c899e8fed4006c7bd5bdb862d1ffe8bf3"
+      },
+      "expected_cg_ids": [
+        "CG01",
+        "CG15",
+        "CG16",
+        "CG17",
+        "CG20",
+        "CG21",
+        "CG22",
+        "CG23",
+        "CG24"
+      ],
+      "actual_cg_ids": [
+        "CG01",
+        "CG15",
+        "CG16",
+        "CG17",
+        "CG20",
+        "CG21",
+        "CG22",
+        "CG23",
+        "CG24"
+      ],
+      "expected_gd_ids": [
+        "GD01",
+        "GD02",
+        "GD03",
+        "GD04",
+        "GD05",
+        "GD06",
+        "GD07",
+        "GD08",
+        "GD09",
+        "GD10",
+        "GD11",
+        "GD12",
+        "GD13",
+        "GD14",
+        "GD15",
+        "GD16",
+        "GD17",
+        "GD18"
+      ],
+      "actual_gd_ids": [
+        "GD01",
+        "GD02",
+        "GD03",
+        "GD04",
+        "GD05",
+        "GD06",
+        "GD07",
+        "GD08",
+        "GD09",
+        "GD10",
+        "GD11",
+        "GD12",
+        "GD13",
+        "GD14",
+        "GD15",
+        "GD16",
+        "GD17",
+        "GD18"
+      ],
+      "expected_cd_ids": [
+        "CD04",
+        "CD05",
+        "CD08",
+        "CD09",
+        "CD10",
+        "CD12"
+      ],
+      "actual_cd_ids": [
+        "CD04",
+        "CD05",
+        "CD08",
+        "CD09",
+        "CD10",
+        "CD12"
+      ]
+    }
+  ],
+  "negative_probes": [
+    {
+      "task_id": "T26",
+      "failure": {
+        "type": "SystemExit",
+        "message": "Invalid resource/actor declarations: required pet fox missing named attack profile fox_attack; attack-capable actor fox has no explicit attack animation profile; T26 required_profiles_by_task references unknown profile fox_attack; T31 required_profiles_by_task references unknown profile fox_attack; T26 required_attack_profiles_by_task references unknown profile fox_attack"
+      },
+      "stdout": "",
+      "events": [
+        {
+          "stage": "resource_schema_start"
+        },
+        {
+          "stage": "resource_schema_result",
+          "errors": [
+            "required pet fox missing named attack profile fox_attack",
+            "attack-capable actor fox has no explicit attack animation profile",
+            "T26 required_profiles_by_task references unknown profile fox_attack",
+            "T31 required_profiles_by_task references unknown profile fox_attack",
+            "T26 required_attack_profiles_by_task references unknown profile fox_attack"
+          ]
+        }
+      ],
+      "intercepted_mkdir_calls": [],
+      "intercepted_write_count": 0,
+      "probe": "removed_fox_attack",
+      "mutation_scope": "Deep copy of loaded data only; no file or registry changed."
+    },
+    {
+      "task_id": "T70",
+      "failure": {
+        "type": "ValueError",
+        "message": "Invalid completeness contract: 100 distinct authored outcomes required"
+      },
+      "stdout": "",
+      "events": [
+        {
+          "stage": "resource_schema_start"
+        },
+        {
+          "stage": "resource_schema_result",
+          "errors": []
+        },
+        {
+          "stage": "completeness_start"
+        }
+      ],
+      "intercepted_mkdir_calls": [],
+      "intercepted_write_count": 0,
+      "probe": "missing_level_099_outcome",
+      "mutation_scope": "Deep copy of loaded data only; no file or registry changed."
+    }
+  ],
+  "checks": [
+    {
+      "check": "T01: main returned successfully",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T01: exactly one packet write captured",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T01: exact applicable CG IDs",
+      "passed": true,
+      "details": {
+        "expected": [
+          "CG15",
+          "CG16"
+        ],
+        "actual": [
+          "CG15",
+          "CG16"
+        ]
+      }
+    },
+    {
+      "check": "T01: exact applicable GD IDs retained",
+      "passed": true,
+      "details": {
+        "expected": [],
+        "actual": []
+      }
+    },
+    {
+      "check": "T01: exact applicable selected CD IDs",
+      "passed": true,
+      "details": {
+        "expected": [],
+        "actual": []
+      }
+    },
+    {
+      "check": "T01: CD behavior supersession with unproved evidence",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T01: current source selector is required reading",
+      "passed": true,
+      "details": "Packet references the current selector; branch/head/project/scene are dereferenced and verified separately below, not falsely claimed embedded in packet text."
+    },
+    {
+      "check": "T01: unrounded reference minimum and exact-10 gates retained",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T01: no new activation or runtime approval",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T23: main returned successfully",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T23: exactly one packet write captured",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T23: exact applicable CG IDs",
+      "passed": true,
+      "details": {
+        "expected": [
+          "CG02",
+          "CG03",
+          "CG04",
+          "CG05",
+          "CG06",
+          "CG07",
+          "CG09",
+          "CG10",
+          "CG11",
+          "CG12",
+          "CG13",
+          "CG14",
+          "CG15",
+          "CG16",
+          "CG18",
+          "CG19",
+          "CG20",
+          "CG21",
+          "CG22"
+        ],
+        "actual": [
+          "CG02",
+          "CG03",
+          "CG04",
+          "CG05",
+          "CG06",
+          "CG07",
+          "CG09",
+          "CG10",
+          "CG11",
+          "CG12",
+          "CG13",
+          "CG14",
+          "CG15",
+          "CG16",
+          "CG18",
+          "CG19",
+          "CG20",
+          "CG21",
+          "CG22"
+        ]
+      }
+    },
+    {
+      "check": "T23: exact applicable GD IDs retained",
+      "passed": true,
+      "details": {
+        "expected": [
+          "GD01",
+          "GD02",
+          "GD03",
+          "GD04",
+          "GD05",
+          "GD06",
+          "GD07",
+          "GD08",
+          "GD09",
+          "GD10",
+          "GD11",
+          "GD12",
+          "GD13",
+          "GD14",
+          "GD15",
+          "GD16"
+        ],
+        "actual": [
+          "GD01",
+          "GD02",
+          "GD03",
+          "GD04",
+          "GD05",
+          "GD06",
+          "GD07",
+          "GD08",
+          "GD09",
+          "GD10",
+          "GD11",
+          "GD12",
+          "GD13",
+          "GD14",
+          "GD15",
+          "GD16"
+        ]
+      }
+    },
+    {
+      "check": "T23: exact applicable selected CD IDs",
+      "passed": true,
+      "details": {
+        "expected": [
+          "CD01",
+          "CD02",
+          "CD03",
+          "CD04",
+          "CD05",
+          "CD06",
+          "CD07",
+          "CD08",
+          "CD09",
+          "CD10",
+          "CD12"
+        ],
+        "actual": [
+          "CD01",
+          "CD02",
+          "CD03",
+          "CD04",
+          "CD05",
+          "CD06",
+          "CD07",
+          "CD08",
+          "CD09",
+          "CD10",
+          "CD12"
+        ]
+      }
+    },
+    {
+      "check": "T23: CD behavior supersession with unproved evidence",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T23: current source selector is required reading",
+      "passed": true,
+      "details": "Packet references the current selector; branch/head/project/scene are dereferenced and verified separately below, not falsely claimed embedded in packet text."
+    },
+    {
+      "check": "T23: unrounded reference minimum and exact-10 gates retained",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T23: no new activation or runtime approval",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T26: main returned successfully",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T26: exactly one packet write captured",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T26: exact applicable CG IDs",
+      "passed": true,
+      "details": {
+        "expected": [
+          "CG01",
+          "CG03",
+          "CG04",
+          "CG05",
+          "CG07",
+          "CG13",
+          "CG14",
+          "CG15",
+          "CG16"
+        ],
+        "actual": [
+          "CG01",
+          "CG03",
+          "CG04",
+          "CG05",
+          "CG07",
+          "CG13",
+          "CG14",
+          "CG15",
+          "CG16"
+        ]
+      }
+    },
+    {
+      "check": "T26: exact applicable GD IDs retained",
+      "passed": true,
+      "details": {
+        "expected": [
+          "GD07",
+          "GD08",
+          "GD09",
+          "GD11",
+          "GD12"
+        ],
+        "actual": [
+          "GD07",
+          "GD08",
+          "GD09",
+          "GD11",
+          "GD12"
+        ]
+      }
+    },
+    {
+      "check": "T26: exact applicable selected CD IDs",
+      "passed": true,
+      "details": {
+        "expected": [
+          "CD01",
+          "CD02",
+          "CD04",
+          "CD05",
+          "CD06",
+          "CD07"
+        ],
+        "actual": [
+          "CD01",
+          "CD02",
+          "CD04",
+          "CD05",
+          "CD06",
+          "CD07"
+        ]
+      }
+    },
+    {
+      "check": "T26: CD behavior supersession with unproved evidence",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T26: current source selector is required reading",
+      "passed": true,
+      "details": "Packet references the current selector; branch/head/project/scene are dereferenced and verified separately below, not falsely claimed embedded in packet text."
+    },
+    {
+      "check": "T26: unrounded reference minimum and exact-10 gates retained",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T26: no new activation or runtime approval",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T27: main returned successfully",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T27: exactly one packet write captured",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T27: exact applicable CG IDs",
+      "passed": true,
+      "details": {
+        "expected": [
+          "CG01",
+          "CG03",
+          "CG04",
+          "CG05",
+          "CG07",
+          "CG13",
+          "CG14",
+          "CG15",
+          "CG16"
+        ],
+        "actual": [
+          "CG01",
+          "CG03",
+          "CG04",
+          "CG05",
+          "CG07",
+          "CG13",
+          "CG14",
+          "CG15",
+          "CG16"
+        ]
+      }
+    },
+    {
+      "check": "T27: exact applicable GD IDs retained",
+      "passed": true,
+      "details": {
+        "expected": [
+          "GD07",
+          "GD08",
+          "GD09",
+          "GD11",
+          "GD12"
+        ],
+        "actual": [
+          "GD07",
+          "GD08",
+          "GD09",
+          "GD11",
+          "GD12"
+        ]
+      }
+    },
+    {
+      "check": "T27: exact applicable selected CD IDs",
+      "passed": true,
+      "details": {
+        "expected": [
+          "CD01",
+          "CD02",
+          "CD04",
+          "CD05",
+          "CD06",
+          "CD07"
+        ],
+        "actual": [
+          "CD01",
+          "CD02",
+          "CD04",
+          "CD05",
+          "CD06",
+          "CD07"
+        ]
+      }
+    },
+    {
+      "check": "T27: CD behavior supersession with unproved evidence",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T27: current source selector is required reading",
+      "passed": true,
+      "details": "Packet references the current selector; branch/head/project/scene are dereferenced and verified separately below, not falsely claimed embedded in packet text."
+    },
+    {
+      "check": "T27: unrounded reference minimum and exact-10 gates retained",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T27: no new activation or runtime approval",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T33: main returned successfully",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T33: exactly one packet write captured",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T33: exact applicable CG IDs",
+      "passed": true,
+      "details": {
+        "expected": [
+          "CG02",
+          "CG03",
+          "CG05",
+          "CG08",
+          "CG09",
+          "CG10",
+          "CG11",
+          "CG15",
+          "CG16",
+          "CG19",
+          "CG20",
+          "CG21",
+          "CG22"
+        ],
+        "actual": [
+          "CG02",
+          "CG03",
+          "CG05",
+          "CG08",
+          "CG09",
+          "CG10",
+          "CG11",
+          "CG15",
+          "CG16",
+          "CG19",
+          "CG20",
+          "CG21",
+          "CG22"
+        ]
+      }
+    },
+    {
+      "check": "T33: exact applicable GD IDs retained",
+      "passed": true,
+      "details": {
+        "expected": [
+          "GD01",
+          "GD04",
+          "GD05",
+          "GD08",
+          "GD13",
+          "GD14",
+          "GD15",
+          "GD16"
+        ],
+        "actual": [
+          "GD01",
+          "GD04",
+          "GD05",
+          "GD08",
+          "GD13",
+          "GD14",
+          "GD15",
+          "GD16"
+        ]
+      }
+    },
+    {
+      "check": "T33: exact applicable selected CD IDs",
+      "passed": true,
+      "details": {
+        "expected": [
+          "CD01",
+          "CD02",
+          "CD03",
+          "CD04",
+          "CD05",
+          "CD08",
+          "CD09",
+          "CD11",
+          "CD12"
+        ],
+        "actual": [
+          "CD01",
+          "CD02",
+          "CD03",
+          "CD04",
+          "CD05",
+          "CD08",
+          "CD09",
+          "CD11",
+          "CD12"
+        ]
+      }
+    },
+    {
+      "check": "T33: CD behavior supersession with unproved evidence",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T33: current source selector is required reading",
+      "passed": true,
+      "details": "Packet references the current selector; branch/head/project/scene are dereferenced and verified separately below, not falsely claimed embedded in packet text."
+    },
+    {
+      "check": "T33: unrounded reference minimum and exact-10 gates retained",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T33: no new activation or runtime approval",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T43: main returned successfully",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T43: exactly one packet write captured",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T43: exact applicable CG IDs",
+      "passed": true,
+      "details": {
+        "expected": [
+          "CG03",
+          "CG05",
+          "CG06",
+          "CG12",
+          "CG15",
+          "CG16",
+          "CG20",
+          "CG21",
+          "CG22",
+          "CG23"
+        ],
+        "actual": [
+          "CG03",
+          "CG05",
+          "CG06",
+          "CG12",
+          "CG15",
+          "CG16",
+          "CG20",
+          "CG21",
+          "CG22",
+          "CG23"
+        ]
+      }
+    },
+    {
+      "check": "T43: exact applicable GD IDs retained",
+      "passed": true,
+      "details": {
+        "expected": [
+          "GD02",
+          "GD04",
+          "GD15"
+        ],
+        "actual": [
+          "GD02",
+          "GD04",
+          "GD15"
+        ]
+      }
+    },
+    {
+      "check": "T43: exact applicable selected CD IDs",
+      "passed": true,
+      "details": {
+        "expected": [
+          "CD01",
+          "CD02",
+          "CD03",
+          "CD04",
+          "CD05",
+          "CD08",
+          "CD09",
+          "CD12"
+        ],
+        "actual": [
+          "CD01",
+          "CD02",
+          "CD03",
+          "CD04",
+          "CD05",
+          "CD08",
+          "CD09",
+          "CD12"
+        ]
+      }
+    },
+    {
+      "check": "T43: CD behavior supersession with unproved evidence",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T43: current source selector is required reading",
+      "passed": true,
+      "details": "Packet references the current selector; branch/head/project/scene are dereferenced and verified separately below, not falsely claimed embedded in packet text."
+    },
+    {
+      "check": "T43: unrounded reference minimum and exact-10 gates retained",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T43: no new activation or runtime approval",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T44: main returned successfully",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T44: exactly one packet write captured",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T44: exact applicable CG IDs",
+      "passed": true,
+      "details": {
+        "expected": [
+          "CG04",
+          "CG07",
+          "CG08",
+          "CG09",
+          "CG10",
+          "CG15",
+          "CG16",
+          "CG19"
+        ],
+        "actual": [
+          "CG04",
+          "CG07",
+          "CG08",
+          "CG09",
+          "CG10",
+          "CG15",
+          "CG16",
+          "CG19"
+        ]
+      }
+    },
+    {
+      "check": "T44: exact applicable GD IDs retained",
+      "passed": true,
+      "details": {
+        "expected": [
+          "GD01",
+          "GD03",
+          "GD05",
+          "GD07",
+          "GD08",
+          "GD09",
+          "GD10",
+          "GD11",
+          "GD12",
+          "GD13",
+          "GD14",
+          "GD16"
+        ],
+        "actual": [
+          "GD01",
+          "GD03",
+          "GD05",
+          "GD07",
+          "GD08",
+          "GD09",
+          "GD10",
+          "GD11",
+          "GD12",
+          "GD13",
+          "GD14",
+          "GD16"
+        ]
+      }
+    },
+    {
+      "check": "T44: exact applicable selected CD IDs",
+      "passed": true,
+      "details": {
+        "expected": [
+          "CD01",
+          "CD02",
+          "CD06",
+          "CD07",
+          "CD08",
+          "CD11",
+          "CD12"
+        ],
+        "actual": [
+          "CD01",
+          "CD02",
+          "CD06",
+          "CD07",
+          "CD08",
+          "CD11",
+          "CD12"
+        ]
+      }
+    },
+    {
+      "check": "T44: CD behavior supersession with unproved evidence",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T44: current source selector is required reading",
+      "passed": true,
+      "details": "Packet references the current selector; branch/head/project/scene are dereferenced and verified separately below, not falsely claimed embedded in packet text."
+    },
+    {
+      "check": "T44: unrounded reference minimum and exact-10 gates retained",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T44: no new activation or runtime approval",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T44: stronger regional C5 applies to approved-clip reuse without new-clip requirement",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T58: main returned successfully",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T58: exactly one packet write captured",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T58: exact applicable CG IDs",
+      "passed": true,
+      "details": {
+        "expected": [
+          "CG05",
+          "CG11",
+          "CG15",
+          "CG16",
+          "CG17",
+          "CG18",
+          "CG23"
+        ],
+        "actual": [
+          "CG05",
+          "CG11",
+          "CG15",
+          "CG16",
+          "CG17",
+          "CG18",
+          "CG23"
+        ]
+      }
+    },
+    {
+      "check": "T58: exact applicable GD IDs retained",
+      "passed": true,
+      "details": {
+        "expected": [
+          "GD06",
+          "GD12",
+          "GD17"
+        ],
+        "actual": [
+          "GD06",
+          "GD12",
+          "GD17"
+        ]
+      }
+    },
+    {
+      "check": "T58: exact applicable selected CD IDs",
+      "passed": true,
+      "details": {
+        "expected": [
+          "CD04",
+          "CD05",
+          "CD10"
+        ],
+        "actual": [
+          "CD04",
+          "CD05",
+          "CD10"
+        ]
+      }
+    },
+    {
+      "check": "T58: CD behavior supersession with unproved evidence",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T58: current source selector is required reading",
+      "passed": true,
+      "details": "Packet references the current selector; branch/head/project/scene are dereferenced and verified separately below, not falsely claimed embedded in packet text."
+    },
+    {
+      "check": "T58: unrounded reference minimum and exact-10 gates retained",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T58: no new activation or runtime approval",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T70: main returned successfully",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T70: exactly one packet write captured",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T70: exact applicable CG IDs",
+      "passed": true,
+      "details": {
+        "expected": [
+          "CG01",
+          "CG15",
+          "CG16",
+          "CG17",
+          "CG20",
+          "CG21",
+          "CG22",
+          "CG23",
+          "CG24"
+        ],
+        "actual": [
+          "CG01",
+          "CG15",
+          "CG16",
+          "CG17",
+          "CG20",
+          "CG21",
+          "CG22",
+          "CG23",
+          "CG24"
+        ]
+      }
+    },
+    {
+      "check": "T70: exact applicable GD IDs retained",
+      "passed": true,
+      "details": {
+        "expected": [
+          "GD01",
+          "GD02",
+          "GD03",
+          "GD04",
+          "GD05",
+          "GD06",
+          "GD07",
+          "GD08",
+          "GD09",
+          "GD10",
+          "GD11",
+          "GD12",
+          "GD13",
+          "GD14",
+          "GD15",
+          "GD16",
+          "GD17",
+          "GD18"
+        ],
+        "actual": [
+          "GD01",
+          "GD02",
+          "GD03",
+          "GD04",
+          "GD05",
+          "GD06",
+          "GD07",
+          "GD08",
+          "GD09",
+          "GD10",
+          "GD11",
+          "GD12",
+          "GD13",
+          "GD14",
+          "GD15",
+          "GD16",
+          "GD17",
+          "GD18"
+        ]
+      }
+    },
+    {
+      "check": "T70: exact applicable selected CD IDs",
+      "passed": true,
+      "details": {
+        "expected": [
+          "CD04",
+          "CD05",
+          "CD08",
+          "CD09",
+          "CD10",
+          "CD12"
+        ],
+        "actual": [
+          "CD04",
+          "CD05",
+          "CD08",
+          "CD09",
+          "CD10",
+          "CD12"
+        ]
+      }
+    },
+    {
+      "check": "T70: CD behavior supersession with unproved evidence",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T70: current source selector is required reading",
+      "passed": true,
+      "details": "Packet references the current selector; branch/head/project/scene are dereferenced and verified separately below, not falsely claimed embedded in packet text."
+    },
+    {
+      "check": "T70: unrounded reference minimum and exact-10 gates retained",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "T70: no new activation or runtime approval",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "removed_fox_attack: rejected by expected gate",
+      "passed": true,
+      "details": {
+        "type": "SystemExit",
+        "message": "Invalid resource/actor declarations: required pet fox missing named attack profile fox_attack; attack-capable actor fox has no explicit attack animation profile; T26 required_profiles_by_task references unknown profile fox_attack; T31 required_profiles_by_task references unknown profile fox_attack; T26 required_attack_profiles_by_task references unknown profile fox_attack"
+      }
+    },
+    {
+      "check": "removed_fox_attack: no packet write attempted",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "removed_fox_attack: no packet directory creation attempted",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "removed_fox_attack: expected gate order",
+      "passed": true,
+      "details": [
+        {
+          "stage": "resource_schema_start"
+        },
+        {
+          "stage": "resource_schema_result",
+          "errors": [
+            "required pet fox missing named attack profile fox_attack",
+            "attack-capable actor fox has no explicit attack animation profile",
+            "T26 required_profiles_by_task references unknown profile fox_attack",
+            "T31 required_profiles_by_task references unknown profile fox_attack",
+            "T26 required_attack_profiles_by_task references unknown profile fox_attack"
+          ]
+        }
+      ]
+    },
+    {
+      "check": "missing_level_099_outcome: rejected by expected gate",
+      "passed": true,
+      "details": {
+        "type": "ValueError",
+        "message": "Invalid completeness contract: 100 distinct authored outcomes required"
+      }
+    },
+    {
+      "check": "missing_level_099_outcome: no packet write attempted",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "missing_level_099_outcome: no packet directory creation attempted",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "missing_level_099_outcome: expected gate order",
+      "passed": true,
+      "details": [
+        {
+          "stage": "resource_schema_start"
+        },
+        {
+          "stage": "resource_schema_result",
+          "errors": []
+        },
+        {
+          "stage": "completeness_start"
+        }
+      ]
+    },
+    {
+      "check": "Current selector uses requested newer Codex source",
+      "passed": true,
+      "details": {
+        "schema_version": 1,
+        "selection_date": "2026-11-27",
+        "repository": "ksolo21-web/HAVENLINE",
+        "selected_branch": "trial/world-one-expansion-2026-11-26",
+        "observed_head": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+        "project": "HavenlineLevel1/project.godot",
+        "main_scene": "res://field_opening.tscn",
+        "source_basis": "User-selected newer Codex foundation; preserve the3fad source audit and add the fixed2f46 source/Build13 receipt delta. Resolve live head/ownership before implementation.",
+        "before_editing": [
+          "Resolve the selected branch live head.",
+          "Reconcile active owner, authorized paths and permitted task scope.",
+          "Pin the actual candidate and evidence; do not assume this observed head is still latest."
+        ],
+        "main_source_role": "Preserved consolidation snapshot and forward planning, not a merge of the newer gameplay source.",
+        "historical_branch": "alfred/level-1-replacement",
+        "historical_snapshot": "2706cd6b0c6bfa7b4e8ad31d792a365aaf456d08",
+        "historical_role": "Preserved alternative/checkpoint; not the default continuation target.",
+        "runtime_approval_allowed": false,
+        "ownership_reassignment_allowed": false,
+        "gameplay_merge_performed": false,
+        "workflow_activation_allowed": false,
+        "project_source": {
+          "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+          "path": "HavenlineLevel1/project.godot",
+          "sha256": "c8a12b96cc7c2580b60d896965d77ac0c69dfeec1adcf8e2963710018b878137",
+          "bytes": 1056,
+          "git_blob_sha": "93d049d9d842a97e1ce1b2f8d5ef54c8878979fd",
+          "url": "https://github.com/ksolo21-web/HAVENLINE/blob/2f46e72e300a719f34ca9b0e9b718282a5a88ddd/HavenlineLevel1/project.godot"
+        },
+        "audited_baseline_head": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+        "reported_gameplay_source_commit": "2654f5019b7212968d28600cb071bf1c231c9030",
+        "latest_source_note": "Docs/Production/Completeness/2026-11-27/LATEST_SOURCE_DELTA.json",
+        "reported_build": 13,
+        "reported_build_is_final_game_approval": false
+      }
+    },
+    {
+      "check": "Source selector does not authorize runtime, reassignment, merge or workflow activation",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "Policy keeps >=9.9 unrounded and stronger exact10 with mandatory independent evidence",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "R1 script, reports and captures preserved byte-identically",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "Latest source note passes actual source/receipt-boundary validator",
+      "passed": true,
+      "details": []
+    },
+    {
+      "check": "Latest selector retains explicit Build13 non-approval and note linkage",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "Exact expanded source universe contains152 distinct bound entries",
+      "passed": true,
+      "details": {
+        "count": 152,
+        "identity_sha256": "81045962596de729e0996296a2f6faa7849c7d957ebac37a3683c5e86dafd54a"
+      }
+    },
+    {
+      "check": "Reported Build13 measurements remain unexecuted by this audit",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "Actual updated completeness check verifies all152 sources without runtime approval",
+      "passed": true,
+      "details": {
+        "passed": true,
+        "scope": "Bounded plan/source/task-projection validation only",
+        "runtime_approval_allowed": false,
+        "runtime_tested": false,
+        "game_score": null,
+        "requirements": 24,
+        "selected_decisions": 12,
+        "defined_tasks": 70,
+        "undefined_tasks": 10,
+        "authored_level_outcomes": 100,
+        "pet_species": 7,
+        "transaction_boundaries": 10,
+        "preserved_deep_audit_source": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+        "latest_evidence_cutoff": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+        "reported_build13_game_source": "2654f5019b7212968d28600cb071bf1c231c9030",
+        "sources_verified": 152,
+        "sources_required": 152,
+        "errors": []
+      }
+    },
+    {
+      "check": "All existing canonical packet bytes and requested output absences unchanged",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "No unexpected canonical packet created",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "All guarded generator/helper sources and contract inputs unchanged",
+      "passed": true,
+      "details": null
+    },
+    {
+      "check": "No direct candidate filesystem mutation attempted",
+      "passed": true,
+      "details": []
+    }
+  ],
+  "limitations": [
+    "Captured packets are prospective output; historical canonical packets remain unchanged.",
+    "Current source selection is dereferenced from the required selector file: audited baseline3fad812, observed cutoff2f46e72 and reported Build13 source2654f50 remain separate. No live branch fetch or gameplay editing performed.",
+    "The updated completeness source validator was run for152 source bindings; reported Build13 gameplay tests and media playback were not reexecuted.",
+    "Dates in captured packet bodies are the real generator timestamps and are included in raw output hashes.",
+    "Path.mkdir and Path.write_text were intercepted for every main call; a separate audit hook blocked direct candidate mutations.",
+    "The older GD decision wording remains historical; the following CD section explicitly supersedes those open behavior choices.",
+    "Static declaration and fail-fast checks do not prove pet attacks, 100 levels, animation, economy balance, runtime safety or reference-match scores."
+  ]
+}

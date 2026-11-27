@@ -3,6 +3,34 @@ from __future__ import annotations
 import argparse, json, os, pathlib, shlex, subprocess
 from lib import ROOT, DOCS, load_json, sha256_file
 
+def validate_layout_definition(matrix):
+    """Reject omitted/duplicated or mislabeled fixtures before an adapter can pass."""
+    errors=[]
+    expected=['phone_16_9','phone_20_9','tablet_16_10','tablet_4_3','foldable_outer','foldable_inner']
+    states=matrix.get('states',[])
+    if [s.get('id') for s in states]!=expected:
+        errors.append('layout matrix must contain all six distinct named states')
+    if matrix.get('landscape_required') is not True:
+        errors.append('landscape is a required product contract')
+    ratios={'phone_16_9':16/9,'phone_20_9':20/9,'tablet_16_10':16/10,'tablet_4_3':4/3}
+    for state in states:
+        size=state.get('logical_size',[])
+        if len(size)!=2 or any(type(n) is not int or n<=0 for n in size):
+            errors.append(f"{state.get('id')}: two positive integer dimensions required")
+            continue
+        width,height=size
+        if width<=height: errors.append(f"{state.get('id')}: landscape dimensions required")
+        target=ratios.get(state.get('id'))
+        # Native 2732x2048 is a slightly rounded 4:3 panel, not an invalid fixture.
+        if target is not None and abs(width/height-target)/target>0.002:
+            errors.append(f"{state.get('id')}: dimensions do not match the named aspect ratio")
+    checks={'safe_area','primary_joystick_reach','text_readability','touch_target_size',
+            'camera_world_scale','HUD_no_clipping','menu_scrollability','resize_transition',
+            'lifecycle_resume','save_continuity'}
+    if not checks.issubset(set(matrix.get('checks',[]))):
+        errors.append('layout matrix is missing a required functional check')
+    return errors
+
 def main():
     ap=argparse.ArgumentParser()
     ap.add_argument("--candidate",required=True);ap.add_argument("--task",required=True)
@@ -10,6 +38,9 @@ def main():
     ap.add_argument("--out",required=True)
     a=ap.parse_args()
     matrix=load_json(DOCS/"DEVICE_LAYOUT_MATRIX.json")
+    definition_errors=validate_layout_definition(matrix)
+    if definition_errors:
+        raise SystemExit('Invalid layout definition: '+'; '.join(definition_errors))
     out=(ROOT/a.out).resolve();out.mkdir(parents=True,exist_ok=True)
     rows=[];fail=[]
     for state in matrix["states"]:

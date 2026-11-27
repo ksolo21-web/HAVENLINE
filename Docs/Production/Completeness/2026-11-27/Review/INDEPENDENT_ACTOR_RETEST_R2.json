@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/depth_critic",
+  "reviewed_at_utc": "2026-11-27T12:17:02.940040+00:00",
+  "review_scope": "Retest of two actor-draft corrections; whole-candidate review still pending",
+  "artifact_hashes": {
+    "ACTORS_COMBAT_GAPS.json": "1381d120f20f323141997ac0846dc6a3f2503fb20e3815567c10082cb7a6cd42",
+    "ACTORS_COMBAT_GAPS.md": "5735f528b2711d3aedf695f4cc8c1429ea145ec94f35a5dd980df840a38023e2"
+  },
+  "prior_review": "INDEPENDENT_ACTOR_REVIEW_R1.json",
+  "retests": [
+    {
+      "finding": "ACR01",
+      "passed": true,
+      "evidence": "PA05 explicitly preserves T07 human-selector scope and authorized scope process; ACG07 owners now T23/T31; T07 is consumer only; exact T07 scope added as S18."
+    },
+    {
+      "finding": "ACR02",
+      "passed": true,
+      "evidence": "PA11, ACG06 and PC10 allow explicit unsupported environments with useful safe alternatives, retain real attack across applicable progression and prohibit extra facilities/gear solely for matrix coverage."
+    }
+  ],
+  "source_checks": {
+    "count": 18,
+    "all_sha256_match": true
+  },
+  "status": "REQUESTED_DRAFT_CORRECTIONS_PASSED",
+  "score": null,
+  "whole_candidate_approval": false,
+  "runtime_approval_allowed": false
+}

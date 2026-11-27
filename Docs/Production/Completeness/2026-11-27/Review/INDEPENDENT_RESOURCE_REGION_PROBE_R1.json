@@ -1,0 +1,65 @@
+{
+  "reviewer": "/root/depth_critic",
+  "at_utc": "2026-11-27T12:31:13.616730+00:00",
+  "source_sha256": "dc8b40ef2683ee2ae9a78b6d01a0608d7d7435385757e7969f1e2ce10d3ffa01",
+  "probe": "New region resource has valid distinct player/helper/survivor profiles; manifest omits player/helper and claims no animation delta",
+  "expected": "Reject omitted applicable new player/helper profile coverage; do not permit new action profile introduction to evade required motion gate",
+  "actual": {
+    "task_id": "T44",
+    "candidate_commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "applicable": true,
+    "validation_kind": "DECLARED_RESOURCE_ACTOR_COVERAGE",
+    "validator_sha256": "dc8b40ef2683ee2ae9a78b6d01a0608d7d7435385757e7969f1e2ce10d3ffa01",
+    "approval_allowed": false,
+    "runtime_approval_allowed": false,
+    "motion_evidence_verified": false,
+    "registry_hashes": {
+      "resource_action_registry": "8e9feba3a92972b10ac7dc8589e43bd0f988c2981ffe0fcace2edb1100e3bd9d",
+      "actor_capability_matrix": "f319469be543267c6a21988d6b23f915550bd01c7d8513516b7410915680b1bf",
+      "animation_action_matrix": "57df079f213a88e58b87e01aa7b520ca2fe4d98a41368307fdbba433a57d46e5"
+    },
+    "errors": [],
+    "c5_required": true,
+    "required_motion_critics": [
+      "C5"
+    ],
+    "required_resources": [
+      "fish",
+      "fuel",
+      "metal",
+      "new_region_item",
+      "stone",
+      "wheat",
+      "wood"
+    ],
+    "required_actors": [
+      "brown_bear",
+      "fox",
+      "gray_wolf",
+      "guardian_dog",
+      "male_lion",
+      "owl",
+      "rescued_survivor_helper",
+      "white_tiger"
+    ],
+    "required_animation_profiles": [
+      "bear_attack",
+      "critic_new_survivor_mine",
+      "dog_attack",
+      "fox_attack",
+      "human_survivor_chop",
+      "human_survivor_crop_harvest",
+      "human_survivor_dismantle",
+      "human_survivor_fish",
+      "human_survivor_mine",
+      "lion_attack",
+      "owl_attack",
+      "tiger_attack",
+      "wolf_attack"
+    ],
+    "deferred_resource_profiles": [],
+    "passed": true
+  },
+  "negative_probe_passed": false,
+  "runtime_approval_allowed": false
+}

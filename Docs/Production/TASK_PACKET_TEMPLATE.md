@@ -74,6 +74,17 @@ Resolve the task's forward addendum using `python3 tools/havenline/production/ga
 
 Owner/consumer labels do not create dependency edges or change frozen historical scope. Introducing tasks resolve their own resource/job obligations before integration; T33/T31 later reconcile/integrate. The planning checker cannot certify runtime or approve a task. Use existing change/scope processes for changes to previously approved work.
 
+## Current selected decisions and gap closure
+
+Run `python3 tools/havenline/production/completeness.py task TASK_ID` and follow [COMPLETENESS_STANDARD.md](COMPLETENESS_STANDARD.md).
+
+- Applicable CG owner/consumer obligations and selected CD decisions:
+- Current source selector, live head and ownership reconciliation:
+- Relevant authored level outcomes, pet attack/specialty/render bindings and transaction boundaries:
+- Remaining numeric tuning, implementation evidence and known defects:
+
+Selected CD behavior supersedes earlier D01–D05 open behavior wording. This is forward planning, not task activation or gameplay approval; retain frozen scope and existing dependencies.
+
 ## Resource / tool / actor / animation contract
 Mark REQUIRED or N/A from `RESOURCE_ACTION_REGISTRY.json`.
 
@@ -93,9 +104,9 @@ Rules:
 - No resource may enter production without a valid collection method/tool/action.
 - Human helpers/survivors require role-distinct work/combat animations.
 - Animals may not use human-tool fallbacks.
-- Combat-capable animals require species-specific attack animations.
+- All seven pets require real species-specific attacks plus useful specialties; support-only fox/owl cannot pass.
 - T44-T52 must register every newly introduced biome resource before `INTEGRATION_READY`.
-- C5 is additionally mandatory for T09/T16/T19/T21/T23 and for T44-T52 whenever `animation_delta=true`.
+- C5 is mandatory for T09/T16/T19/T21/T23 and all seven pet attacks. In T44–T52, new actions or evaluated resource profiles require regional contact/use-state review even with approved clip reuse; `animation_delta=false` cannot waive it.
 - The already assigned T05 frozen scope is not expanded by this forward standard.
 
 Run:

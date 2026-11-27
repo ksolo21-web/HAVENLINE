@@ -1,0 +1,1573 @@
+{
+  "schema_version": 1,
+  "contract_id": "HAVENLINE_WHOLE_GAME_COMPLETENESS_2026_11_27",
+  "base_commit": "fd2e12c8734f49cda7eb3bbf97887406bd03a704",
+  "observed_gameplay_source": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+  "scope": "Forward closure of known specification/integration gaps against the existing launch contract; not a claim that every unknown defect is found or runtime is complete.",
+  "runtime_approval_allowed": false,
+  "game_score": null,
+  "task_ids": [
+    "T01",
+    "T02",
+    "T03",
+    "T04",
+    "T05",
+    "T06",
+    "T07",
+    "T08",
+    "T09",
+    "T10",
+    "T11",
+    "T12",
+    "T13",
+    "T14",
+    "T15",
+    "T16",
+    "T17",
+    "T18",
+    "T19",
+    "T20",
+    "T21",
+    "T22",
+    "T23",
+    "T24",
+    "T25",
+    "T26",
+    "T27",
+    "T28",
+    "T29",
+    "T30",
+    "T31",
+    "T32",
+    "T33",
+    "T34",
+    "T35",
+    "T36",
+    "T37",
+    "T38",
+    "T39",
+    "T40",
+    "T41",
+    "T42",
+    "T43",
+    "T44",
+    "T45",
+    "T46",
+    "T47",
+    "T48",
+    "T49",
+    "T50",
+    "T51",
+    "T52",
+    "T53",
+    "T54",
+    "T55",
+    "T56",
+    "T57",
+    "T58",
+    "T59",
+    "T60",
+    "T61",
+    "T62",
+    "T63",
+    "T64",
+    "T65",
+    "T66",
+    "T67",
+    "T68",
+    "T69",
+    "T70"
+  ],
+  "undefined_task_ids": [
+    "T71",
+    "T72",
+    "T73",
+    "T74",
+    "T75",
+    "T76",
+    "T77",
+    "T78",
+    "T79",
+    "T80"
+  ],
+  "status_vocabulary": {
+    "selected_design": "Behavior deliberately chosen for forward implementation; numeric tuning/native assets/runtime remain unproved.",
+    "existing_contract": "Requirement already existed; this audit links its cross-system evidence rather than inventing a missing feature.",
+    "source_gap": "Missing source stays unresolved and cannot pass by prose."
+  },
+  "game_fit_tests": [
+    "Strengthens the move/work/carry/deliver/transform/rescue/defend loop or necessary reliability/accessibility.",
+    "Uses simple contextual controls and visible, understandable outcomes.",
+    "Preserves a realistic free route and meaningful earned resource purpose.",
+    "Uses credible species/environment behavior and selected GitHub art.",
+    "Fits measured mobile CPU/GPU/memory and sustained performance requirements.",
+    "Does not import explicit post-launch features or new mandatory currency/maintenance systems."
+  ],
+  "decisions": [
+    {
+      "id": "CD01",
+      "title": "Readable danger with protected earned progress",
+      "owner_tasks": [
+        "T13",
+        "T21",
+        "T22",
+        "T33"
+      ],
+      "status": "SELECTED_FORWARD_DESIGN_IMPLEMENTATION_AND_TUNING_UNPROVED",
+      "selected_behavior": "Normal play protects owned inventory, earned cash, purchased items, levels, plots, rescued identities and pet upgrades. The permanent camp interior is a sanctuary. Outside it, enemies can hurt field actors and interrupt gathering, deliveries and exposed forward production. A disabled forward machine or route pauses its service until a free player/worker repair interaction completes; no plot de-level, stored-stock destruction, repair invoice, or loss while absent. The player avoids being driven back, an interrupted expedition, temporarily unavailable companions, and interrupted exposed operations. Threats are visibly warned and recoverable. Leaving a known encounter resets its unearned enemy progress; no kill/loot reward comes from a reset. First-time construction or reconstruction of an unowned derelict site has its declared project bill; repairing damage to an already owned working site does not charge materials or cash. Sanctuary interior actors cannot attack out while immune. A perimeter defense is eligible to engage its declared outside approach only within the exposed defense rules; customers wait safely when routes are disrupted.",
+      "remaining_evidence_or_tuning": [
+        "Enemy health/damage/cadence, warning windows and repair duration require owner tuning and repeated-failure playtests.",
+        "Prove safe-boundary crossing, return routes and no safe-zone reward farming."
+      ],
+      "supersedes_prior_open_decisions": [
+        "D01"
+      ],
+      "runtime_approval_allowed": false
+    },
+    {
+      "id": "CD02",
+      "title": "Player, pet and survivor recovery",
+      "owner_tasks": [
+        "T13",
+        "T21",
+        "T23"
+      ],
+      "status": "SELECTED_FORWARD_DESIGN_IMPLEMENTATION_AND_TUNING_UNPROVED",
+      "selected_behavior": "At zero health the player returns to the last restored safe camp, or the guaranteed safe arrival anchor before any camp is restored, at full current health with controls/camera restored and owned cargo/progression intact. Pets and survivors outside sanctuary visibly retreat when possible; if downed they are evacuated to that camp and temporarily unavailable for their task. A short free care interaction by the player or an available survivor restores them; if all helpers are unavailable the player can always perform it. No permanent death, roster deletion, paid revive, compulsory medicine, hunger, stamina, cold or oxygen meter. Preserve typed cargo in that actor's recovery custody and return it exactly once; do not duplicate it into world drops. Suspended jobs release transient reservations and revalidate after care.",
+      "remaining_evidence_or_tuning": [
+        "Freeze non-punitive care time/health tuning and actor-specific retreat/evacuation presentation.",
+        "Test all actors down, repeated failure, care interruption, reserved payment and full destination."
+      ],
+      "supersedes_prior_open_decisions": [
+        "D01"
+      ],
+      "runtime_approval_allowed": false
+    },
+    {
+      "id": "CD03",
+      "title": "Survivors share the player's logical carrying policy",
+      "owner_tasks": [
+        "T08",
+        "T23",
+        "T31",
+        "T33"
+      ],
+      "status": "SELECTED_FORWARD_DESIGN_IMPLEMENTATION_AND_TUNING_UNPROVED",
+      "selected_behavior": "Every survivor uses unlimited logical mixed inventory, matching the player. Visible stacks are aggregated representations with truthful quantities; rendered mesh count is never cargo capacity. An authorized job reserves a bounded bill/target quantity and duration, so unlimited capacity cannot create infinite harvesting, overbuying or never-ending trips. All survivors can perform all ordinary physical task families with reachable suitable equipment; specialization changes preference/efficiency and never blocks baseline competence. Include every plot family, conveyors included, and ordinary earned-cash purchases. No autonomous premium, real-money or entitlement purchase.",
+      "remaining_evidence_or_tuning": [
+        "Demonstrate early/middle/late mixed-load throughput and large-count storage/save behavior.",
+        "Tune trip batch amounts, transfer cadence and optional efficiency upgrades without reducing logical capacity."
+      ],
+      "supersedes_prior_open_decisions": [
+        "D02"
+      ],
+      "runtime_approval_allowed": false
+    },
+    {
+      "id": "CD04",
+      "title": "Owned pets, active expedition and useful reserve",
+      "owner_tasks": [
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T31",
+        "T56"
+      ],
+      "status": "SELECTED_FORWARD_DESIGN_IMPLEMENTATION_AND_TUNING_UNPROVED",
+      "selected_behavior": "All seven pets are permanent ownable companions and all seven attack. Select up to three pets for a field expedition; reserve pets receive useful eligible safe-camp/local assignments and retain combat roles in suitable areas. When no eligible safe job exists, a truthful ready/rest state is valid; guarding an invulnerable empty interior does not count as a completed useful job. Select up to two survivors as field escorts from the working population; this expedition limit does not cap separately assigned local workers. Camp survivors remain useful in their assigned jobs; no device-specific logical worker cap or paid active slot is introduced. Switching at a safe camp is free and first settles cargo/jobs; injury, attack recovery and cooldown state persist, so switching cannot heal or reset attacks. Offscreen active-session work uses the same conserved job ledger; unseen combat never fabricates kills or loot. All owned workers are represented by the authored rescue/content roster, rather than unlimited procedural spawning.",
+      "remaining_evidence_or_tuning": [
+        "Three pets/two escorts are initial authored design limits, not measured performance claims; prove the exact busy-scene population.",
+        "T31/T56 must bind the actual authored per-region survivor census and test every active assignment, including offscreen-to-visible handoff."
+      ],
+      "supersedes_prior_open_decisions": [
+        "D04"
+      ],
+      "runtime_approval_allowed": false
+    },
+    {
+      "id": "CD05",
+      "title": "Simple goals and useful autonomous decisions",
+      "owner_tasks": [
+        "T23",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T31"
+      ],
+      "status": "SELECTED_FORWARD_DESIGN_IMPLEMENTATION_AND_TUNING_UNPROVED",
+      "selected_behavior": "Use one contextual goal/assignment choice, one recall/return choice and optional priority selection. Default priority is explicit recall/safety, immediate threat to the protected actor/area, authorized selected hostile, assigned defense/hunt, then safe opportunistic attack. Keep valid work/targets stable, reserve approach space and resources, and release stale claims. Worker spending is limited to an approved goal, ordinary resource/cash budget and protected reserve; changed price or revoked budget stops before the next debit with a clear reason. T07 remains the frozen human-context selector; pet/job arbitration belongs to the species/T31 owners and does not silently extend T07 scope.",
+      "remaining_evidence_or_tuning": [
+        "Test blocked route, depletion, full storage, budget revocation, simultaneous last plot payment, recall and resumption with bounded retry.",
+        "Measure decision cost and useful job completion; navigation avoidance alone is not intelligence."
+      ],
+      "supersedes_prior_open_decisions": [],
+      "runtime_approval_allowed": false
+    },
+    {
+      "id": "CD06",
+      "title": "Bounded combat roster and contextual weapon progression",
+      "owner_tasks": [
+        "T21",
+        "T22",
+        "T13"
+      ],
+      "status": "SELECTED_FORWARD_DESIGN_IMPLEMENTATION_AND_TUNING_UNPROVED",
+      "selected_behavior": "The selected core combat families are a pursuing hostile wolf, a close raider, a visibly telegraphed heavy ice brute, a ranged rival rifleman, a lane-pressure hooded swarmer and a hooded siege boss that combines readable established threats. Use their existing selected GitHub sheets. These six define the launch behavioral roster; regional art variants must keep explicit identity/source and habitat compatibility, not make a polar animal live in lava. Select the Tundra Stag as the authored hunt source and preserve current hostile-wolf meat drops; owned pets are never prey. Boar and other additional wildlife concepts remain reserve. Other enemy and meat render concepts remain preserved reserve, not mandatory encounters or currencies. Player weapons have two contextual families: the existing axe for close work/defense and an authored spear for longer-reach defense, earned at the Level9 defense goal. Free earned-material tiers improve each; no action bar, compulsory ammo wallet or paid-only counter. The axe sheet is direct reference; the existing spear-raider gear sheet is a proportion starting point, not an approved player rig or motion.",
+      "remaining_evidence_or_tuning": [
+        "Bind exact hostile/hunt IDs, habitats, unlock rows, HP/damage, contact profiles and useful counterplay.",
+        "Create and review any missing player spear and regional variant native assets against the selected references; no static render grants animation approval.",
+        "Every biome uses only habitat-appropriate selected encounters or explicitly reviewed variants; new archetypes require a scoped decision rather than automatic concept activation."
+      ],
+      "supersedes_prior_open_decisions": [],
+      "runtime_approval_allowed": false
+    },
+    {
+      "id": "CD07",
+      "title": "Physical regional continuity",
+      "owner_tasks": [
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52",
+        "T53"
+      ],
+      "status": "SELECTED_FORWARD_DESIGN_IMPLEMENTATION_AND_TUNING_UNPROVED",
+      "selected_behavior": "Keep the same move, gather, visibly carry, deliver, transform, rescue and defend loop across ten connected regions. Underwater work uses protected dry habitats/tunnels and authored accessible work sites; the owl remains on suitable air routes/staging. Sky play uses walkable connected platforms/bridges; quadrupeds do not fly. Volcanic and swamp areas use restored safe lanes and appropriate reachable work surfaces. Every species retains useful combat in applicable regions and useful safe work when a region is unsuitable. Travel preserves identity/cargo/jobs and offers a free return to the last safe restored camp. Regional art never implies a new oxygen/heat/poison maintenance meter. Playable underwater travel and work remain on dry protected routes/positions; appropriate gear reaches salvage without mandatory swimming. Each earlier region owner implements its own local arrival/return contract before its integration; T53 later integrates shared transport and is not an added backward prerequisite.",
+      "remaining_evidence_or_tuning": [
+        "Prove actual routes, terrain contact, target reach, transport and no stranding in each region.",
+        "The regional outcome matrix selects content; missing native assets and motion remain unproved."
+      ],
+      "supersedes_prior_open_decisions": [
+        "D04"
+      ],
+      "runtime_approval_allowed": false
+    },
+    {
+      "id": "CD08",
+      "title": "Material, money and concept identity",
+      "owner_tasks": [
+        "T09",
+        "T16",
+        "T19",
+        "T21",
+        "T33",
+        "T34",
+        "T37"
+      ],
+      "status": "SELECTED_FORWARD_DESIGN_IMPLEMENTATION_AND_TUNING_UNPROVED",
+      "selected_behavior": "Adopt the dated progression/economy value-chain decisions as the forward selected design. Coal is an earned physical fuel input, metal is ore feedstock, and steel is a processed material; slate, planks and blocks have named construction uses. Existing money is the single ordinary earned currency regardless of till/pocket/house custody. Use Gems as the display name for the one primary premium currency, canonical premium_gems, with explicit migration if an existing selected runtime wallet uses another ID; do not create a second wallet. XP is progression and VIP is a permanent entitlement. Launch events grant existing resources, money and explicit rewards; no event token wallet. Rendered containers and meat variants do not automatically create new inventory/currency IDs. Unselected concepts remain preserved reserve.",
+      "remaining_evidence_or_tuning": [
+        "Bind recipe quantities, prices, rates, identifiers and migration to actual producer code before integration.",
+        "Run free-player reachable progression, surplus/shortage and conversion-cycle tests; no claims of numeric balance from this plan."
+      ],
+      "supersedes_prior_open_decisions": [
+        "D03",
+        "D05"
+      ],
+      "runtime_approval_allowed": false
+    },
+    {
+      "id": "CD09",
+      "title": "Played time, server time and absence",
+      "owner_tasks": [
+        "T14",
+        "T37",
+        "T41",
+        "T43"
+      ],
+      "status": "SELECTED_FORWARD_DESIGN_IMPLEMENTATION_AND_TUNING_UNPROVED",
+      "selected_behavior": "Launch ordinary world simulation pauses when the app backgrounds or closes. Resume the saved state without absence damage, missing cargo or invented offline income. Offscreen work may continue only while the game is active and the same authoritative job ledger advances. Local played time governs ordinary machine/actor animation and recovery. Server time governs live event availability, purchases and entitlements; changing the device clock never creates rewards or extends an event. Core ordinary play and recovery remain usable offline; server-only grants/purchases stay visibly pending or unavailable until verified. No speculative reward replay on reconnect. Launch event objective participation requires verified connection. While offline, the event clearly pauses objective credit and consumes no event-specific inputs; ordinary core activities continue. Until a server completion receipt exists the UI says pending, never earned. A server-verified completion before expiry creates a durable earned claim that remains deliverable after expiry; a lost response or reconnect grants it exactly once. An uncompleted expired objective grants nothing.",
+      "remaining_evidence_or_tuning": [
+        "Test background/kill at every pre/post-commit boundary, older save migration, account change and cloud conflict.",
+        "Event end while absent must preserve committed rewards and reject unearned expired rewards."
+      ],
+      "supersedes_prior_open_decisions": [],
+      "runtime_approval_allowed": false
+    },
+    {
+      "id": "CD10",
+      "title": "Landscape and distinct device layouts",
+      "owner_tasks": [
+        "T04",
+        "T55",
+        "T58"
+      ],
+      "status": "SELECTED_FORWARD_DESIGN_IMPLEMENTATION_AND_TUNING_UNPROVED",
+      "selected_behavior": "Retain the requested landscape game. Shipping configuration supports both landscape rotations and must not expose unsupported portrait gameplay. Godot SCREEN_SENSOR_LANDSCAPE=4 is the baseline setting; platform export/orientation settings must agree. The observed current source uses orientation6 and needs owner implementation reconciliation. Correct the phone16:9 logical test fixture to1920x1080; keep the separate20:9 fixture2400x1080. Test fold/unfold, safe areas, suspended input and restored state in supported landscape layouts. Layout dimensions are not native4K performance evidence.",
+      "remaining_evidence_or_tuning": [
+        "Physical phone/tablet/foldable tests and the actual shipping orientation/export configuration remain unproved.",
+        "T68/T69 retain exact-source sustained native>=3840x2160 and>=60FPS certification."
+      ],
+      "supersedes_prior_open_decisions": [],
+      "runtime_approval_allowed": false
+    },
+    {
+      "id": "CD11",
+      "title": "A complete Level100 ending within launch scope",
+      "owner_tasks": [
+        "T12",
+        "T52",
+        "T62"
+      ],
+      "status": "SELECTED_FORWARD_DESIGN_IMPLEMENTATION_AND_TUNING_UNPROVED",
+      "selected_behavior": "Author one useful outcome for each Level1–100 within the existing ten bands. Level100 completes the restored connected camp/route network, shows an earned conclusion/celebration and lets the player continue existing production, exploration and launch events. Do not add Level101, new regions, a new mastery-contract system, decoration, co-op or additional Level100 activity families as1.0 blockers. Prior T12 structural role IDs and T10/T11 binding receipts remain intact; new outcome rows are content decisions, not activation or proof.",
+      "remaining_evidence_or_tuning": [
+        "Freeze attainable costs/rewards and pacing with first-time and returning free-player sessions.",
+        "Prove an uninterrupted complete route and persistent final state."
+      ],
+      "supersedes_prior_open_decisions": [],
+      "runtime_approval_allowed": false
+    },
+    {
+      "id": "CD12",
+      "title": "Fair launch events, commerce and diagnostics",
+      "owner_tasks": [
+        "T34",
+        "T35",
+        "T36",
+        "T37",
+        "T38",
+        "T39",
+        "T40",
+        "T41",
+        "T42",
+        "T43"
+      ],
+      "status": "SELECTED_FORWARD_DESIGN_IMPLEMENTATION_AND_TUNING_UNPROVED",
+      "selected_behavior": "Keep the existing FirstThaw/weekly/seasonal frameworks and pre-approved components. Events are optional and cannot be required to repair a base-game shortage or recover a companion. Reject schedules with unavailable resources, locations, companions or time; use server-time expiry, exactly-once grants, kill switch and rollback. Preserve permanent transparent VIP, advertised purchase value, verified restoration and a realistic$0 Level1–100 route. Challenge difficulty never reads spending. Diagnostics observe stuck jobs, missing transfers, save conflicts and performance without becoming gameplay authority or collecting unnecessary personal information. Earned but unclaimed event rewards survive expiry when a completion receipt was committed before expiry. Network interruption between that receipt and grant is resolved by the same durable claim key, not by current event visibility.",
+      "remaining_evidence_or_tuning": [
+        "Run actual purchase restore/refund/reconnect, expired events, disabled server components, diagnostics failure and privacy/security cases.",
+        "Validation-only owners route repairs to implementing tasks; they do not build fixes during release certification."
+      ],
+      "supersedes_prior_open_decisions": [],
+      "runtime_approval_allowed": false
+    }
+  ],
+  "requirements": [
+    {
+      "id": "CG01",
+      "title": "Every pet attacks and contributes a specialty",
+      "classification": "USER_CLARIFICATION",
+      "owner_tasks": [
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30"
+      ],
+      "consumer_tasks": [
+        "T21",
+        "T31",
+        "T32",
+        "T62",
+        "T67",
+        "T70"
+      ],
+      "selected_action": "Adopt all12 PA rules and seven species/profile/render rows. Support-only fox or owl fails.",
+      "decision_ids": [
+        "CD04",
+        "CD05"
+      ],
+      "existing_requirement_ids": [
+        "GD07",
+        "GD09"
+      ],
+      "acceptance_checks": [
+        "Seven real positive-damage attack demonstrations.",
+        "Each species also completes its useful job; miss/interrupt/recall/return and later suitable-region use are proven."
+      ],
+      "specification_status": "SELECTED_OR_EXISTING_CONTRACT_BOUND",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration."
+    },
+    {
+      "id": "CG02",
+      "title": "All-task survivors and large mixed carrying",
+      "classification": "SELECTED_DESIGN",
+      "owner_tasks": [
+        "T08",
+        "T23",
+        "T31"
+      ],
+      "consumer_tasks": [
+        "T09",
+        "T10",
+        "T11",
+        "T16",
+        "T17",
+        "T18",
+        "T19",
+        "T20",
+        "T22",
+        "T33",
+        "T53",
+        "T62",
+        "T67"
+      ],
+      "selected_action": "Use player-like unlimited logical cargo and all ordinary physical job families, including all authorized plots/conveyors and ordinary-cash buying; retain budgets and equipment truth.",
+      "decision_ids": [
+        "CD03",
+        "CD05"
+      ],
+      "existing_requirement_ids": [
+        "GD03",
+        "GD04",
+        "GD05"
+      ],
+      "acceptance_checks": [
+        "All ten human task families demonstrated.",
+        "Large mixed load conserved through service/payment/combat/reload.",
+        "No basic-AI paygate or autonomous premium spend."
+      ],
+      "specification_status": "SELECTED_OR_EXISTING_CONTRACT_BOUND",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration."
+    },
+    {
+      "id": "CG03",
+      "title": "Stakes, sanctuary and recoverable actors",
+      "classification": "SELECTED_DESIGN",
+      "owner_tasks": [
+        "T13",
+        "T21",
+        "T22",
+        "T23"
+      ],
+      "consumer_tasks": [
+        "T03",
+        "T10",
+        "T11",
+        "T14",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T31",
+        "T33",
+        "T43",
+        "T62"
+      ],
+      "selected_action": "Protect earned inventory/progress; expose field actors and forward operations to warned, recoverable interruption. Care/recovery is always free and attainable.",
+      "decision_ids": [
+        "CD01",
+        "CD02"
+      ],
+      "existing_requirement_ids": [
+        "GD01",
+        "GD02",
+        "GD08"
+      ],
+      "acceptance_checks": [
+        "Zone-by-actor attackability, boundary and repeat-failure tests.",
+        "All down/retreat/cargo/payment states recover without duplication or permanent loss."
+      ],
+      "specification_status": "SELECTED_OR_EXISTING_CONTRACT_BOUND",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration."
+    },
+    {
+      "id": "CG04",
+      "title": "Combat roster, useful counters and equipment",
+      "classification": "SELECTED_DESIGN",
+      "owner_tasks": [
+        "T21",
+        "T22"
+      ],
+      "consumer_tasks": [
+        "T06",
+        "T09",
+        "T13",
+        "T23",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52",
+        "T59",
+        "T60",
+        "T61",
+        "T67"
+      ],
+      "selected_action": "Use selected bounded hostile/hunt/weapon roster and existing GitHub art. New variants require declared source and proof; extra HP alone is not a distinct enemy behavior.",
+      "decision_ids": [
+        "CD06"
+      ],
+      "existing_requirement_ids": [
+        "GD08",
+        "GD11",
+        "GD14"
+      ],
+      "acceptance_checks": [
+        "Real telegraph/contact/miss/recovery/counterplay per selected enemy and weapon.",
+        "Friendly pets and rescue candidates never become hunt drops.",
+        "No protected-actor attack exploit or reset loot at sanctuary; exposed perimeter defenses follow their declared valid domain."
+      ],
+      "specification_status": "SELECTED_OR_EXISTING_CONTRACT_BOUND",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration."
+    },
+    {
+      "id": "CG05",
+      "title": "Useful active team and reserve population",
+      "classification": "SELECTED_DESIGN",
+      "owner_tasks": [
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T31"
+      ],
+      "consumer_tasks": [
+        "T14",
+        "T23",
+        "T33",
+        "T43",
+        "T53",
+        "T56",
+        "T58",
+        "T68",
+        "T69"
+      ],
+      "selected_action": "Three field pets and two survivor escorts, with useful camp assignments and conserved offscreen active-session work. Ownership, deployment and injury are separate states.",
+      "decision_ids": [
+        "CD04"
+      ],
+      "existing_requirement_ids": [
+        "GD06",
+        "GD07",
+        "GD17"
+      ],
+      "acceptance_checks": [
+        "Swap at safe camp with cargo/injury/recovery preserved.",
+        "No cooldown reset, cloned actor or invented unseen combat rewards.",
+        "Actual population census and sustained busy-scene proof."
+      ],
+      "specification_status": "SELECTED_OR_EXISTING_CONTRACT_BOUND",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration."
+    },
+    {
+      "id": "CG06",
+      "title": "Work-combat-payment handoffs",
+      "classification": "EXISTING_CONTRACT_INTEGRATION",
+      "owner_tasks": [
+        "T21",
+        "T23",
+        "T31"
+      ],
+      "consumer_tasks": [
+        "T07",
+        "T08",
+        "T10",
+        "T11",
+        "T14",
+        "T17",
+        "T18",
+        "T22",
+        "T43",
+        "T67"
+      ],
+      "selected_action": "Secure incompatible tools/cargo, suspend or complete the current atomic job, fight, then revalidate and resume useful work.",
+      "decision_ids": [
+        "CD03",
+        "CD05",
+        "CD09"
+      ],
+      "existing_requirement_ids": [
+        "GD04",
+        "GD06",
+        "GD11"
+      ],
+      "acceptance_checks": [
+        "Before/after contact, debit, delivery, production and defeat save-interruption cases.",
+        "Revoked budget, depleted target and full destination cannot lose/duplicate value or thrash."
+      ],
+      "specification_status": "SELECTED_OR_EXISTING_CONTRACT_BOUND",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration."
+    },
+    {
+      "id": "CG07",
+      "title": "Ten regions and credible animal access",
+      "classification": "SELECTED_DESIGN",
+      "owner_tasks": [
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52",
+        "T53"
+      ],
+      "consumer_tasks": [
+        "T08",
+        "T10",
+        "T21",
+        "T23",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T31",
+        "T54",
+        "T62"
+      ],
+      "selected_action": "Bind each region to a concrete production/traversal payoff and supported actor routes; unsuitable pet environments use useful safe assignments.",
+      "decision_ids": [
+        "CD07"
+      ],
+      "existing_requirement_ids": [
+        "GD03",
+        "GD07",
+        "GD17"
+      ],
+      "acceptance_checks": [
+        "Ten-band goals and actor travel/work/attack applicability.",
+        "Free return, no stranded cargo, no underwater owl or flying quadruped."
+      ],
+      "specification_status": "SELECTED_OR_EXISTING_CONTRACT_BOUND",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration."
+    },
+    {
+      "id": "CG08",
+      "title": "One authored outcome at every level",
+      "classification": "MISSING_AUTHORED_CONTENT",
+      "owner_tasks": [
+        "T12",
+        "T32",
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52"
+      ],
+      "consumer_tasks": [
+        "T10",
+        "T11",
+        "T13",
+        "T33",
+        "T62",
+        "T63",
+        "T67"
+      ],
+      "selected_action": "Use100 concrete forward outcomes, preserving T12 IDs/cadence and existing T10/T11 resolution; freeze prices/rewards through owner playtests.",
+      "decision_ids": [
+        "CD11"
+      ],
+      "existing_requirement_ids": [
+        "GD16",
+        "GD18"
+      ],
+      "acceptance_checks": [
+        "Every Level1–100 has a tangible useful payoff.",
+        "No circular unlock/input or paid/event prerequisite.",
+        "Level100 conclusion and existing-loop continuation."
+      ],
+      "specification_status": "SELECTED_OR_EXISTING_CONTRACT_BOUND",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration."
+    },
+    {
+      "id": "CG09",
+      "title": "Materials, money and real demand",
+      "classification": "SELECTED_DESIGN",
+      "owner_tasks": [
+        "T09",
+        "T16",
+        "T17",
+        "T19",
+        "T21",
+        "T33",
+        "T34"
+      ],
+      "consumer_tasks": [
+        "T08",
+        "T10",
+        "T11",
+        "T12",
+        "T18",
+        "T22",
+        "T23",
+        "T31",
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52",
+        "T53",
+        "T62",
+        "T63"
+      ],
+      "selected_action": "Bind actual raw/product/currency IDs to named uses; coal/slate/metal/planks/blocks and cash receive real spending/processing sinks. Concepts have explicit selected/alias/reserve roles.",
+      "decision_ids": [
+        "CD08"
+      ],
+      "existing_requirement_ids": [
+        "GD13",
+        "GD14",
+        "GD15"
+      ],
+      "acceptance_checks": [
+        "Useful source-to-use-to-payoff loop for every shipped ID.",
+        "One ordinary currency and one primary premium currency; custody locations are not wallets.",
+        "No fake aliases or recipe facts inferred from art."
+      ],
+      "specification_status": "SELECTED_OR_EXISTING_CONTRACT_BOUND",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration."
+    },
+    {
+      "id": "CG10",
+      "title": "Shortage, surplus and renewable recovery",
+      "classification": "EXISTING_CONTRACT_INTEGRATION",
+      "owner_tasks": [
+        "T12",
+        "T13",
+        "T33"
+      ],
+      "consumer_tasks": [
+        "T09",
+        "T16",
+        "T17",
+        "T18",
+        "T19",
+        "T21",
+        "T23",
+        "T31",
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52",
+        "T62",
+        "T63",
+        "T67"
+      ],
+      "selected_action": "Each progression dependency has reachable free sources, renewable or sufficient finite supply, useful surplus disposition and conserved conversions.",
+      "decision_ids": [
+        "CD01",
+        "CD08",
+        "CD12"
+      ],
+      "existing_requirement_ids": [
+        "GD13",
+        "GD16"
+      ],
+      "acceptance_checks": [
+        "Zero-stock, depleted-source, repeated-failure and no-worker routes.",
+        "No infinite profitable conversion, stranded paid balance or compulsory event input."
+      ],
+      "specification_status": "SELECTED_OR_EXISTING_CONTRACT_BOUND",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration."
+    },
+    {
+      "id": "CG11",
+      "title": "Learnability and simple controls across systems",
+      "classification": "EXISTING_CONTRACT_INTEGRATION",
+      "owner_tasks": [
+        "T07",
+        "T12",
+        "T55"
+      ],
+      "consumer_tasks": [
+        "T04",
+        "T08",
+        "T13",
+        "T17",
+        "T21",
+        "T23",
+        "T31",
+        "T33",
+        "T54",
+        "T58",
+        "T62"
+      ],
+      "selected_action": "Teach one useful loop at first use; show next goal, material purpose, threat consequence, helper intent and denial reason in context. Retain one primary movement control and concise deliberate choices.",
+      "decision_ids": [
+        "CD05"
+      ],
+      "existing_requirement_ids": [
+        "GD06",
+        "GD16"
+      ],
+      "acceptance_checks": [
+        "Fresh, returning and resumed player comprehension.",
+        "Busy camp selection, cancel, auto-interaction and accessible critical cues without required dashboard use."
+      ],
+      "specification_status": "SELECTED_OR_EXISTING_CONTRACT_BOUND",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration."
+    },
+    {
+      "id": "CG12",
+      "title": "Durable atomic progress and clock policy",
+      "classification": "SELECTED_DESIGN",
+      "owner_tasks": [
+        "T14",
+        "T41",
+        "T43"
+      ],
+      "consumer_tasks": [
+        "T08",
+        "T10",
+        "T11",
+        "T17",
+        "T18",
+        "T21",
+        "T23",
+        "T31",
+        "T34",
+        "T35",
+        "T37",
+        "T38",
+        "T39",
+        "T40",
+        "T67"
+      ],
+      "selected_action": "Apply the transaction/clock matrix to cargo, plots, machines, damage, rewards, recovery, events and purchases; app-background simulation pauses.",
+      "decision_ids": [
+        "CD09"
+      ],
+      "existing_requirement_ids": [
+        "GD04",
+        "GD06",
+        "GD15"
+      ],
+      "acceptance_checks": [
+        "Precommit/postcommit kill and resume at every value boundary.",
+        "Migration/conflict/account isolation and reconnect preserve exactly one valid outcome.",
+        "No absence penalty, invented offline income or device-clock reward."
+      ],
+      "specification_status": "SELECTED_OR_EXISTING_CONTRACT_BOUND",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration."
+    },
+    {
+      "id": "CG13",
+      "title": "Smart actors under congestion and change",
+      "classification": "EXISTING_CONTRACT_INTEGRATION",
+      "owner_tasks": [
+        "T23",
+        "T31"
+      ],
+      "consumer_tasks": [
+        "T03",
+        "T07",
+        "T15",
+        "T18",
+        "T20",
+        "T21",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T53",
+        "T56",
+        "T67"
+      ],
+      "selected_action": "Reserve jobs and approach lanes; bound retries, detect unreachable/depleted/full targets, keep priorities stable and explain a useful fallback. Navigation/avoidance alone does not satisfy smart behavior.",
+      "decision_ids": [
+        "CD05"
+      ],
+      "existing_requirement_ids": [
+        "GD06",
+        "GD17"
+      ],
+      "acceptance_checks": [
+        "Two workers competing for final resources/payment.",
+        "Narrow gate, moving target, broken route, full store, changed goal and path recovery.",
+        "No actor stuck idle when valid authorized work exists, no target thrashing or unbounded per-frame path replanning."
+      ],
+      "specification_status": "SELECTED_OR_EXISTING_CONTRACT_BOUND",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration."
+    },
+    {
+      "id": "CG14",
+      "title": "Complete action, machine and sound states",
+      "classification": "EXISTING_CONTRACT_EVIDENCE",
+      "owner_tasks": [
+        "T06",
+        "T09",
+        "T16",
+        "T18",
+        "T19",
+        "T21",
+        "T22",
+        "T23",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T53",
+        "T54"
+      ],
+      "consumer_tasks": [
+        "T05",
+        "T08",
+        "T10",
+        "T11",
+        "T15",
+        "T17",
+        "T20",
+        "T31",
+        "T55",
+        "T59",
+        "T60",
+        "T61",
+        "T62",
+        "T67"
+      ],
+      "selected_action": "Prove complete start/work/contact/success/miss/blocked/empty/full/cancel/recovery transitions for every applicable actor, machine, tool and transport. Use actual clip/contact/audio bindings.",
+      "decision_ids": [],
+      "existing_requirement_ids": [
+        "GD09",
+        "GD10",
+        "GD11",
+        "GD12"
+      ],
+      "acceptance_checks": [
+        "Full cycles and transitions from meaningful angles, feet/toes/knees, attachments and clipping.",
+        "Actual sound listening in busy play; mute/reduced-motion equivalents.",
+        "No success sound or transfer effect for denied/replayed transaction."
+      ],
+      "specification_status": "SELECTED_OR_EXISTING_CONTRACT_BOUND",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration."
+    },
+    {
+      "id": "CG15",
+      "title": "Reference and render fidelity at every use state",
+      "classification": "EXISTING_CONTRACT_EVIDENCE",
+      "owner_tasks": [
+        "T04",
+        "T59",
+        "T60",
+        "T61"
+      ],
+      "consumer_tasks": [
+        "T01",
+        "T02",
+        "T03",
+        "T05",
+        "T06",
+        "T07",
+        "T08",
+        "T09",
+        "T10",
+        "T11",
+        "T12",
+        "T13",
+        "T14",
+        "T15",
+        "T16",
+        "T17",
+        "T18",
+        "T19",
+        "T20",
+        "T21",
+        "T22",
+        "T23",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T31",
+        "T32",
+        "T33",
+        "T34",
+        "T35",
+        "T36",
+        "T37",
+        "T38",
+        "T39",
+        "T40",
+        "T41",
+        "T42",
+        "T43",
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52",
+        "T53",
+        "T54",
+        "T55",
+        "T56",
+        "T57",
+        "T58",
+        "T62",
+        "T63",
+        "T64",
+        "T65",
+        "T66",
+        "T67",
+        "T68",
+        "T69",
+        "T70"
+      ],
+      "selected_action": "Use pinned selected GitHub references with explicit observed/authored/inferred distinctions. Current candidate must meet>=9.9 reference dimensions and every stronger exact10 visual rule; historical static scores do not pass runtime.",
+      "decision_ids": [],
+      "existing_requirement_ids": [
+        "GD18"
+      ],
+      "acceptance_checks": [
+        "Exact image/model/rig/scene/clip/source identity.",
+        "Actual matched-camera play and full motion evidence; no average hides a failed area.",
+        "Missing source or tiny unidentified figure stays unresolved rather than guessed."
+      ],
+      "specification_status": "SELECTED_OR_EXISTING_CONTRACT_BOUND",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration."
+    },
+    {
+      "id": "CG16",
+      "title": "One unambiguous gameplay continuation source",
+      "classification": "ACTUAL_DOCUMENTATION_DEFECT",
+      "owner_tasks": [
+        "T70"
+      ],
+      "consumer_tasks": [
+        "T01",
+        "T02",
+        "T03",
+        "T04",
+        "T05",
+        "T06",
+        "T07",
+        "T08",
+        "T09",
+        "T10",
+        "T11",
+        "T12",
+        "T13",
+        "T14",
+        "T15",
+        "T16",
+        "T17",
+        "T18",
+        "T19",
+        "T20",
+        "T21",
+        "T22",
+        "T23",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T31",
+        "T32",
+        "T33",
+        "T34",
+        "T35",
+        "T36",
+        "T37",
+        "T38",
+        "T39",
+        "T40",
+        "T41",
+        "T42",
+        "T43",
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52",
+        "T53",
+        "T54",
+        "T55",
+        "T56",
+        "T57",
+        "T58",
+        "T59",
+        "T60",
+        "T61",
+        "T62",
+        "T63",
+        "T64",
+        "T65",
+        "T66",
+        "T67",
+        "T68",
+        "T69"
+      ],
+      "selected_action": "Use CURRENT_GAMEPLAY_SOURCE.json and corrected root entrypoints: newer Codex field project; main/alfred commands are explicitly historical. Resolve actual live head and owner before edits.",
+      "decision_ids": [],
+      "existing_requirement_ids": [],
+      "acceptance_checks": [
+        "Entry-point guidance agrees on branch/project/scene.",
+        "No runtime merge, branch reassignment or historical receipt rewrite."
+      ],
+      "specification_status": "SELECTED_OR_EXISTING_CONTRACT_BOUND",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration."
+    },
+    {
+      "id": "CG17",
+      "title": "Landscape, real aspect-ratio coverage and device truth",
+      "classification": "ACTUAL_TEST_DATA_DEFECT",
+      "owner_tasks": [
+        "T04",
+        "T55",
+        "T58"
+      ],
+      "consumer_tasks": [
+        "T56",
+        "T62",
+        "T67",
+        "T68",
+        "T69",
+        "T70"
+      ],
+      "selected_action": "Correct phone16:9 dimensions and validate profile identity/aspect before running adapters; bind landscape configuration to shipping source.",
+      "decision_ids": [
+        "CD10"
+      ],
+      "existing_requirement_ids": [
+        "GD17"
+      ],
+      "acceptance_checks": [
+        "Distinct16:9/20:9 states, tablet native rounding tolerated, fold/resume/save/input cases.",
+        "Unsupported portrait cannot leak into release.",
+        "Layout test success never certifies physical native4K60."
+      ],
+      "specification_status": "SELECTED_OR_EXISTING_CONTRACT_BOUND",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration."
+    },
+    {
+      "id": "CG18",
+      "title": "Accessibility across actual play states",
+      "classification": "EXISTING_CONTRACT_INTEGRATION",
+      "owner_tasks": [
+        "T55"
+      ],
+      "consumer_tasks": [
+        "T04",
+        "T07",
+        "T08",
+        "T13",
+        "T17",
+        "T21",
+        "T23",
+        "T31",
+        "T37",
+        "T53",
+        "T54",
+        "T58",
+        "T62",
+        "T67"
+      ],
+      "selected_action": "Apply existing readable text/contrast/non-color cues/touch size/reduced motion/subtitles/input preferences to threats, helper intent, resource purpose, care, payments and event expiry. Persist preferences.",
+      "decision_ids": [
+        "CD10"
+      ],
+      "existing_requirement_ids": [
+        "GD12",
+        "GD17"
+      ],
+      "acceptance_checks": [
+        "First-use/busy-camp/denied/resume states readable muted and reduced-motion.",
+        "Quality/orientation/fold changes preserve hit targets and input release; no hidden critical cue."
+      ],
+      "specification_status": "SELECTED_OR_EXISTING_CONTRACT_BOUND",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration."
+    },
+    {
+      "id": "CG19",
+      "title": "Challenge and free progression remain fair",
+      "classification": "EXISTING_CONTRACT_INTEGRATION",
+      "owner_tasks": [
+        "T13",
+        "T33",
+        "T63"
+      ],
+      "consumer_tasks": [
+        "T12",
+        "T21",
+        "T22",
+        "T23",
+        "T31",
+        "T34",
+        "T36",
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52",
+        "T62",
+        "T64"
+      ],
+      "selected_action": "Preserve spend-blind challenge and useful free workers/pets; complexity comes from readable combinations, routes and decisions, with optional risks and attainable recovery.",
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD08",
+        "CD12"
+      ],
+      "existing_requirement_ids": [
+        "GD16"
+      ],
+      "acceptance_checks": [
+        "Novice/returning/optimized and repeated-failure sessions through100.",
+        "No paid counter/competence, energy wall, compulsory event grind or deliberate F2P misery."
+      ],
+      "specification_status": "SELECTED_OR_EXISTING_CONTRACT_BOUND",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration."
+    },
+    {
+      "id": "CG20",
+      "title": "Purchase and entitlement integrity",
+      "classification": "EXISTING_CONTRACT_INTEGRATION",
+      "owner_tasks": [
+        "T34",
+        "T35",
+        "T36",
+        "T41",
+        "T43"
+      ],
+      "consumer_tasks": [
+        "T17",
+        "T23",
+        "T31",
+        "T33",
+        "T37",
+        "T64",
+        "T66",
+        "T67",
+        "T70"
+      ],
+      "selected_action": "Retain verified server grants, one premium wallet, permanent VIP, restore/refund consistency and explicit user purchases. Autonomous helpers only spend authorized ordinary value.",
+      "decision_ids": [
+        "CD08",
+        "CD12"
+      ],
+      "existing_requirement_ids": [
+        "GD15"
+      ],
+      "acceptance_checks": [
+        "Duplicate/reconnect/refund/account-change and offline pending states.",
+        "No currency or entitlement issued from local replay; no compulsory paid recovery."
+      ],
+      "specification_status": "SELECTED_OR_EXISTING_CONTRACT_BOUND",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration."
+    },
+    {
+      "id": "CG21",
+      "title": "LiveOps fits reachable game state",
+      "classification": "EXISTING_CONTRACT_INTEGRATION",
+      "owner_tasks": [
+        "T37",
+        "T38",
+        "T39",
+        "T40"
+      ],
+      "consumer_tasks": [
+        "T12",
+        "T23",
+        "T31",
+        "T33",
+        "T41",
+        "T43",
+        "T54",
+        "T55",
+        "T65",
+        "T67",
+        "T70"
+      ],
+      "selected_action": "Retain launch event families, use existing reward currencies, validate availability/prerequisites/timing and preserve earned rewards through expiry/kill-switch/rollback.",
+      "decision_ids": [
+        "CD09",
+        "CD12"
+      ],
+      "existing_requirement_ids": [
+        "GD15",
+        "GD16"
+      ],
+      "acceptance_checks": [
+        "Impossible event/resource/pet/region prerequisite rejected.",
+        "Duplicate grant, event end while absent, reconnect, collision and rollback rehearsed."
+      ],
+      "specification_status": "SELECTED_OR_EXISTING_CONTRACT_BOUND",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration."
+    },
+    {
+      "id": "CG22",
+      "title": "Security and useful diagnostics without gameplay dependence",
+      "classification": "EXISTING_CONTRACT_INTEGRATION",
+      "owner_tasks": [
+        "T41",
+        "T42",
+        "T43"
+      ],
+      "consumer_tasks": [
+        "T14",
+        "T17",
+        "T23",
+        "T31",
+        "T33",
+        "T34",
+        "T35",
+        "T37",
+        "T38",
+        "T66",
+        "T67",
+        "T70"
+      ],
+      "selected_action": "Observe failed jobs, transfers, saves and performance with minimal-purpose data; enforce server/account boundaries without letting analytics or diagnostics decide gameplay state.",
+      "decision_ids": [
+        "CD09",
+        "CD12"
+      ],
+      "existing_requirement_ids": [],
+      "acceptance_checks": [
+        "Diagnostics disabled/failing cannot corrupt play.",
+        "Exploit tests include duplicated contact/rewards/payments, time manipulation and account leakage.",
+        "Existing privacy/retention/redaction and GM isolation retained."
+      ],
+      "specification_status": "SELECTED_OR_EXISTING_CONTRACT_BOUND",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration."
+    },
+    {
+      "id": "CG23",
+      "title": "Evidence-bound integrated release",
+      "classification": "EXISTING_CONTRACT_EVIDENCE",
+      "owner_tasks": [
+        "T62",
+        "T63",
+        "T64",
+        "T65",
+        "T66",
+        "T67",
+        "T68",
+        "T69",
+        "T70"
+      ],
+      "consumer_tasks": [
+        "T31",
+        "T32",
+        "T42",
+        "T43",
+        "T54",
+        "T55",
+        "T56",
+        "T58"
+      ],
+      "selected_action": "Keep final candidates immutable and exact-source-bound; integrate full-route, free progression, commerce, events, exploit, regression and physical device evidence. Route repairs to owners and reopen affected approvals.",
+      "decision_ids": [],
+      "existing_requirement_ids": [
+        "GD18"
+      ],
+      "acceptance_checks": [
+        "Fresh install/update/reinstall/migration/recovery for the actual signed candidate.",
+        "All mandatory evidence and independent scores pass; planning checks cannot certify play."
+      ],
+      "specification_status": "SELECTED_OR_EXISTING_CONTRACT_BOUND",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration."
+    },
+    {
+      "id": "CG24",
+      "title": "Undefined task IDs and remaining source custody",
+      "classification": "SOURCE_GAP",
+      "owner_tasks": [
+        "T70"
+      ],
+      "consumer_tasks": [],
+      "selected_action": "T01–T70 are the70 authentic definitions. Preserve T71–T80 as SOURCE_NOT_FOUND; do not invent tasks. Levels71–80 remain real content owned byT50. Privately held complete original-video/editable-source custody remains unverified.",
+      "decision_ids": [],
+      "existing_requirement_ids": [],
+      "acceptance_checks": [
+        "70 task definitions/dependencies/status/ownership retained byte-exact.",
+        "Ten undefined requested IDs remain explicit with no fabricated scope or activation."
+      ],
+      "specification_status": "SOURCE_NOT_FOUND_NOT_CLOSED",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration."
+    }
+  ],
+  "detail_files": {
+    "actors": "Docs/Production/Completeness/2026-11-27/ACTORS_COMBAT_GAPS.json",
+    "economy": "Docs/Production/Completeness/2026-11-27/PROGRESSION_ECONOMY_GAPS.json",
+    "transactions": "Docs/Production/Completeness/2026-11-27/TRANSACTIONS_AND_RECOVERY.json"
+  },
+  "prior_decision_dispositions": [
+    {
+      "prior_id": "D01",
+      "new_decisions": [
+        "CD01",
+        "CD02"
+      ],
+      "status": "BEHAVIOR_SELECTED_NUMERIC_TUNING_AND_RUNTIME_PROOF_OPEN"
+    },
+    {
+      "prior_id": "D02",
+      "new_decisions": [
+        "CD03"
+      ],
+      "status": "BEHAVIOR_SELECTED_NUMERIC_TUNING_AND_RUNTIME_PROOF_OPEN"
+    },
+    {
+      "prior_id": "D03",
+      "new_decisions": [
+        "CD08"
+      ],
+      "status": "BEHAVIOR_SELECTED_NUMERIC_TUNING_AND_RUNTIME_PROOF_OPEN"
+    },
+    {
+      "prior_id": "D04",
+      "new_decisions": [
+        "CD04",
+        "CD07"
+      ],
+      "status": "BEHAVIOR_SELECTED_NUMERIC_TUNING_AND_RUNTIME_PROOF_OPEN"
+    },
+    {
+      "prior_id": "D05",
+      "new_decisions": [
+        "CD08"
+      ],
+      "status": "BEHAVIOR_SELECTED_NUMERIC_TUNING_AND_RUNTIME_PROOF_OPEN"
+    }
+  ],
+  "scope_preservation": [
+    "No existing task definition/dependency/status/ownership change.",
+    "No runtime file/active branch/workflow change.",
+    "No retroactive approval; historical and rejected evidence retained.",
+    "No T71–T80 invention and no post-launch feature added as release blocker."
+  ],
+  "implementation_order": [
+    {
+      "milestone": "M1",
+      "action": "Resolve live Codex head/owner; retain reference/rig/source bindings and apply current forward gates.",
+      "depends_on": []
+    },
+    {
+      "milestone": "M2",
+      "action": "Preserve the existing DAG: shared typed custody, plot/production interfaces and T21 combat/contact/defeat prerequisites precede dependent T23 survivor runtime. Implement and prove those feature-local prerequisites; independent drafting/preparation may run in parallel.",
+      "depends_on": [
+        "M1"
+      ]
+    },
+    {
+      "milestone": "M3",
+      "action": "With its original prerequisites satisfied, prove the T23 survivor work/cargo/authorized-payment/recovery loop. Each pet owner proves attack plus specialty using the shared combat truths; each producer proves its own selected value chain before later reconciliation.",
+      "depends_on": [
+        "M2"
+      ]
+    },
+    {
+      "milestone": "M4",
+      "action": "T31/T32 integrate busy population, recovery, simple controls and actual Level1–10; later owners build selected100 outcomes/region contracts using existing task prerequisites.",
+      "depends_on": [
+        "M3"
+      ]
+    },
+    {
+      "milestone": "M5",
+      "action": "Run whole-route, free-economy, commerce, LiveOps, security, accessibility, regression and sustained physical device acceptance on exact candidate.",
+      "depends_on": [
+        "M4"
+      ]
+    }
+  ],
+  "milestone_note": "These explain implementation sequence; they do not add graph edges, activate tasks or require every M2 system before standalone preparation.",
+  "selected_policy": {
+    "all_seven_pets_attack": true,
+    "survivor_logical_capacity": "UNLIMITED_MIXED_SAME_AS_PLAYER",
+    "field_pet_limit": 3,
+    "field_survivor_escort_limit": 2,
+    "local_worker_limit_is_not_field_escort_limit": true,
+    "owned_inventory_loss_on_down": 0,
+    "background_simulation": "PAUSED",
+    "offline_income": false,
+    "ordinary_currency_id": "money",
+    "premium_currency_id": "premium_gems",
+    "launch_event_currency": null,
+    "event_progress": "SERVER_VERIFIED_CONNECTION_REQUIRED",
+    "earned_event_claim_survives_expiry": true,
+    "orientation": "LANDSCAPE_BOTH_ROTATIONS",
+    "post_launch_features_added_to_release": false
+  }
+}

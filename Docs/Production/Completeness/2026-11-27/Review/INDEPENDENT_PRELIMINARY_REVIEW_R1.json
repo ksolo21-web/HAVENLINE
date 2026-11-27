@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/depth_critic",
+  "review_time_utc": "2026-11-27T12:36:14.508210+00:00",
+  "baseline_commit": "fd2e12c8734f49cda7eb3bbf97887406bd03a704",
+  "scope": "Preliminary actual-candidate design and validator review; files still being integrated, no final freeze/score",
+  "snapshot_note": "Snapshots captured during this preliminary review after source reads; specific observed findings and subsequent repairs are distinguished. Final exact-byte approval remains pending.",
+  "sources": [
+    {
+      "path": "Docs/Production/WHOLE_GAME_COMPLETENESS.json",
+      "snapshot": "/workspace/scratch/e15437dc7c94/gameplay-gap-drafts/PreliminaryReviewR1/WHOLE_GAME_COMPLETENESS.json",
+      "sha256": "9631402de5ee40b7569b4df6268328c524264fa83f2f49266022bea8ebb2119b"
+    },
+    {
+      "path": "Docs/Production/Completeness/2026-11-27/ACTORS_COMBAT_GAPS.json",
+      "snapshot": "/workspace/scratch/e15437dc7c94/gameplay-gap-drafts/PreliminaryReviewR1/ACTORS_COMBAT_GAPS.json",
+      "sha256": "7a231b1b53fcb1541bb26eea301d0dc007f93b4254a7453b8cea98b42ee707fb"
+    },
+    {
+      "path": "Docs/Production/Completeness/2026-11-27/TRANSACTIONS_AND_RECOVERY.json",
+      "snapshot": "/workspace/scratch/e15437dc7c94/gameplay-gap-drafts/PreliminaryReviewR1/TRANSACTIONS_AND_RECOVERY.json",
+      "sha256": "64a1d5832202d0157a517acd407e4141446f907fe32d95738e1f4946434dae32"
+    },
+    {
+      "path": "builder draft PROGRESSION_ECONOMY_GAPS.json",
+      "snapshot": "/workspace/scratch/e15437dc7c94/gameplay-gap-drafts/PreliminaryReviewR1/PROGRESSION_ECONOMY_GAPS.json",
+      "sha256": "d74cbdc7a4460b7b7960432a82fbea4f0efd40156bd0fc4407df1cffd4299f91"
+    }
+  ],
+  "selected_decisions_read": 12,
+  "core_requirements_read": 24,
+  "transaction_rows_read": 10,
+  "progression_outcomes_read": 100,
+  "findings": [
+    {
+      "id": "PR01",
+      "area": "CD09 / event_reward",
+      "finding": "Offline event participation and earned-but-unclaimed-at-expiry behavior were left as pending-or-unavailable alternatives.",
+      "required_fix": "Select an explicit online verification/claim policy; preserve a verified completion claim across expiry and lost commit response; keep core offline play usable.",
+      "status": "ROOT_ACCEPTED_REPAIR_PENDING_RETEST"
+    },
+    {
+      "id": "PR02",
+      "area": "CD04 / CG13",
+      "finding": "No permanently idle actor and always-useful reserve wording can reject legitimate rest/no-eligible-job state and pretend a guard inside an invulnerable camp is necessarily useful.",
+      "required_fix": "Distinguish selected expedition pets, escort survivors, independently assigned local workers and valid ready/rest states. Stuck idle only fails when valid authorized work exists.",
+      "status": "ROOT_ACCEPTED_REPAIR_PENDING_RETEST"
+    },
+    {
+      "id": "PR03",
+      "area": "M2/M3 implementation order",
+      "finding": "The selected milestone sequence puts a survivor loop/stakes before the T21 combat foundation, although T23 depends on T21.",
+      "required_fix": "Put T21 shared combat/contact prerequisites before survivor production integration; independent preparation may continue. Preserve DAG.",
+      "status": "ROOT_ACCEPTED_REPAIR_PENDING_RETEST"
+    },
+    {
+      "id": "PR04",
+      "area": "CD02 / PE08 / Level1-3",
+      "finding": "Last restored safe camp differs from nearest established safe point, and neither defines early zero-health recovery before the first restored camp at Level3.",
+      "required_fix": "Choose one return rule, retain a guaranteed initial recovery anchor, restore a playable health/control state, and leave exact HP/care duration as honest tuning.",
+      "status": "SENT_TO_ROOT_AND_ECONOMY"
+    },
+    {
+      "id": "PR05",
+      "area": "PE10 owner mapping",
+      "finding": "Worker reservations/scheduling are still assigned to T07 despite its frozen human-selector scope and actor draft correction.",
+      "required_fix": "Use worker/job owners; T07 is an authorized shared-control integration consumer.",
+      "status": "SENT_TO_ECONOMY"
+    },
+    {
+      "id": "PR06",
+      "area": "Levels75/95/98",
+      "finding": "Level95 and98 currently read as implementation/acceptance demonstrations rather than specific player outcomes; Level75 unconditionally invokes pet defense while pet availability is marked optional.",
+      "required_fix": "Bind95/98 to actual existing-scope world changes or objective receipts. Clarify the no-deployed-pet equivalent for75 or deliberately select and disclose a free companion prerequisite.",
+      "status": "SENT_TO_ROOT_AND_ECONOMY"
+    },
+    {
+      "id": "PR07",
+      "area": "CD07 versus underwater region details",
+      "finding": "Root selected protected dry underwater routes while detail text introduces swimming/work approaches where needed.",
+      "required_fix": "Reconcile the actual selected locomotion/work policy; do not silently add a swimming/gear system under a dry-route decision.",
+      "status": "SENT_TO_ROOT_AND_ECONOMY"
+    },
+    {
+      "id": "PR08",
+      "area": "PE12 / T53",
+      "finding": "The global transport owner is later than all region tasks; detail must not make T53 implementation a backward prerequisite for their local entrances/exits.",
+      "required_fix": "State that each introducing region authors/proves its local transition interface and T53 integrates the complete network afterward.",
+      "status": "SENT_TO_ROOT"
+    },
+    {
+      "id": "PR09",
+      "area": "resource_actor_contract.py acquisition action map",
+      "finding": "New map used chop\u2192chop and fishing\u2192fish but canonical actions are gather_wood/fishing, rejecting valid untouched registries. Independent run recorded34 methods with25 failures including subtests.",
+      "required_fix": "Correct code alias mapping, preserve registry bytes, retain reject and rerun.",
+      "status": "BUILDER_REPAIRED_PENDING_INDEPENDENT_RETEST",
+      "evidence": "INDEPENDENT_VALIDATOR_TEST_RUN_R1.json"
+    },
+    {
+      "id": "PR10",
+      "area": "T44 resource profile coverage / C5",
+      "finding": "A new regional resource with valid new human profiles passed while omitting player/helper coverage; human-only scope also skipped C5 when animation_delta=false.",
+      "required_fix": "Derive applicable phase-specific profile coverage and require truthful regional contact review without forcing new clips or backward T09 dependencies.",
+      "status": "BUILDER_REPAIRED_PENDING_INDEPENDENT_RETEST",
+      "evidence": [
+        "INDEPENDENT_RESOURCE_REGION_PROBE_R1.json",
+        "INDEPENDENT_RESOURCE_REGION_PROBE_R2.json"
+      ]
+    }
+  ],
+  "positive_observations": [
+    "All seven pets must cause useful legitimate damage; specialties remain additional value.",
+    "Protected earned value, free recovery, simple controls and no mandatory new survival meters fit the existing ordinary-play scope.",
+    "Unlimited logical worker cargo is explicitly a new selected forward rule, with bounded job reservations/visuals.",
+    "No obvious commodity unlock cycle found in the100 outcome ordering; resource first-source/use timing still needs actual quantities and runtime tests.",
+    "Optional premium identity, render reserve and no new launch event token avoid unnecessary economy proliferation.",
+    "Every core row preserves unproved implementation state and undefinedT71\u2013T80 remain open."
+  ],
+  "plan_score": null,
+  "game_score": null,
+  "approval_allowed": false,
+  "runtime_approval_allowed": false,
+  "next_action": "Inspect repairs and final integrated helper/navigation/economy, run focused independent probes, then review final freeze against18mandatorychecks."
+}

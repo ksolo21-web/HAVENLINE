@@ -1,0 +1,94 @@
+{
+  "reviewer": "/root/depth_critic",
+  "validator_sha256": "dd75a19c54be90dc98b2846b40acf38e6666efada4a264471f29f02721d8a510",
+  "probe": "T44 introduces new resource-specific human profiles, omits new player/helper coverage, declares no animation delta and does not claim pets",
+  "manifest": {
+    "candidate_commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "resource_actor_contract": {
+      "introduced_resource_ids": [
+        "new_region_item"
+      ],
+      "resource_ids_covered": [
+        "wood",
+        "stone",
+        "metal",
+        "fuel",
+        "fish",
+        "wheat",
+        "new_region_item"
+      ],
+      "actor_keys_covered": [
+        "core_human_companion",
+        "player_lead",
+        "rescued_survivor_helper"
+      ],
+      "animation_profiles_covered": [
+        "human_player_chop",
+        "human_helper_chop",
+        "human_survivor_chop",
+        "human_player_mine",
+        "human_helper_mine",
+        "human_survivor_mine",
+        "human_player_attack",
+        "human_helper_attack",
+        "human_survivor_attack",
+        "human_player_dismantle",
+        "human_helper_dismantle",
+        "human_survivor_dismantle",
+        "human_player_fish",
+        "human_helper_fish",
+        "human_survivor_fish",
+        "human_player_crop_harvest",
+        "human_helper_crop_harvest",
+        "human_survivor_crop_harvest",
+        "human_survivor_build",
+        "human_survivor_repair",
+        "human_survivor_guard",
+        "critic_new_survivor_mine"
+      ],
+      "animation_delta": false
+    }
+  },
+  "actual": {
+    "task_id": "T44",
+    "candidate_commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "applicable": true,
+    "validation_kind": "DECLARED_RESOURCE_ACTOR_COVERAGE",
+    "validator_sha256": "dd75a19c54be90dc98b2846b40acf38e6666efada4a264471f29f02721d8a510",
+    "approval_allowed": false,
+    "runtime_approval_allowed": false,
+    "motion_evidence_verified": false,
+    "registry_hashes": {
+      "resource_action_registry": "8e9feba3a92972b10ac7dc8589e43bd0f988c2981ffe0fcace2edb1100e3bd9d",
+      "actor_capability_matrix": "f319469be543267c6a21988d6b23f915550bd01c7d8513516b7410915680b1bf",
+      "animation_action_matrix": "57df079f213a88e58b87e01aa7b520ca2fe4d98a41368307fdbba433a57d46e5"
+    },
+    "errors": [],
+    "c5_required": false,
+    "required_motion_critics": [],
+    "required_resources": [
+      "fish",
+      "fuel",
+      "metal",
+      "new_region_item",
+      "stone",
+      "wheat",
+      "wood"
+    ],
+    "required_actors": [
+      "rescued_survivor_helper"
+    ],
+    "required_animation_profiles": [
+      "critic_new_survivor_mine",
+      "human_survivor_chop",
+      "human_survivor_crop_harvest",
+      "human_survivor_dismantle",
+      "human_survivor_fish",
+      "human_survivor_mine"
+    ],
+    "deferred_resource_profiles": [],
+    "passed": true
+  },
+  "negative_probe_passed": false,
+  "runtime_approval_allowed": false
+}

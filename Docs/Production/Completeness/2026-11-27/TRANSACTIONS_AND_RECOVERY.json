@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "runtime_approval_allowed": false,
+  "decision": "CD09",
+  "rows": [
+    {
+      "id": "cargo_transfer",
+      "owner_tasks": [
+        "T08",
+        "T23",
+        "T31"
+      ],
+      "before_commit": "Reserve typed quantity and source/destination identity; visible hands/load match custody.",
+      "commit_authority": "One transfer event atomically debits source and credits destination.",
+      "after_commit": "Receipt persists; later animation completes presentation only.",
+      "interruption_recovery": "Before commit release/revalidate claim; after commit replay receipt without second debit/credit. Full/changed destination retains source cargo.",
+      "clock": "ACTIVE_PLAY",
+      "runtime_test_status": "NOT_RUN"
+    },
+    {
+      "id": "plot_purchase",
+      "owner_tasks": [
+        "T10",
+        "T11",
+        "T23"
+      ],
+      "before_commit": "Check approved goal, price version, prerequisite, ordinary budget and protected reserve; reserve remaining bill only.",
+      "commit_authority": "Atomic contribution ledger; final concurrent contribution activates plot once.",
+      "after_commit": "Plot identity, contribution and construction state persist together.",
+      "interruption_recovery": "Refund uncommitted reservation; keep committed progress. Revoked budget stops new debit. Never create a second plot or spend premium.",
+      "clock": "ACTIVE_PLAY",
+      "runtime_test_status": "NOT_RUN"
+    },
+    {
+      "id": "machine_recipe",
+      "owner_tasks": [
+        "T16",
+        "T18",
+        "T19"
+      ],
+      "before_commit": "Reserve available inputs and output slot; recipe/ID/version known.",
+      "commit_authority": "Input debit and job identity persist atomically; completion creates output once.",
+      "after_commit": "Output custody remains machine until valid collection.",
+      "interruption_recovery": "Restore committed job phase; no repeated input debit/output grant. Blocked output pauses without deleting inputs/product.",
+      "clock": "ACTIVE_PLAY_PAUSES_IN_BACKGROUND",
+      "runtime_test_status": "NOT_RUN"
+    },
+    {
+      "id": "sale_and_cash",
+      "owner_tasks": [
+        "T17"
+      ],
+      "before_commit": "Customer order, goods custody and agreed ordinary price reserved.",
+      "commit_authority": "Goods handoff and earned cash receipt commit once.",
+      "after_commit": "Cash moves till→carrier→house by conserved transfer; these are custody, not currencies. Ordinary cash accounting includes committed spending, so earned/granted cash equals custody balances plus committed outflow; new spending cannot reappear in a derived till.",
+      "interruption_recovery": "Resume correct side of receipt. No unpaid duplicated goods or cash. Cancelled/expired uncommitted order preserves owned stock.",
+      "clock": "ACTIVE_PLAY",
+      "runtime_test_status": "NOT_RUN"
+    },
+    {
+      "id": "attack_contact",
+      "owner_tasks": [
+        "T21",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30"
+      ],
+      "before_commit": "Stable target/faction/alive/range/occlusion and attack-instance/contact-group checked.",
+      "commit_authority": "One valid contact group applies authoritative damage at actual contact.",
+      "after_commit": "Hit/reaction presentation follows; recovery/cooldown persists.",
+      "interruption_recovery": "Uncommitted cancelled/missed hit causes no damage; committed contact cannot be repeated by reload, overlap or actor swap.",
+      "clock": "ACTIVE_PLAY",
+      "runtime_test_status": "NOT_RUN"
+    },
+    {
+      "id": "defeat_reward",
+      "owner_tasks": [
+        "T21",
+        "T33"
+      ],
+      "before_commit": "Target is an eligible hostile/hunt source, never friendly/rescue identity.",
+      "commit_authority": "Unique defeat transition and reward identity claim once.",
+      "after_commit": "Drop/reward custody and enemy cleared state persist.",
+      "interruption_recovery": "Simultaneous allies/reload cannot duplicate drop/XP/cash. Leash/reset/evacuation produces no kill reward.",
+      "clock": "ACTIVE_PLAY",
+      "runtime_test_status": "NOT_RUN"
+    },
+    {
+      "id": "actor_recovery",
+      "owner_tasks": [
+        "T13",
+        "T23",
+        "T31"
+      ],
+      "before_commit": "Downed/retreating identity and conserved cargo move to recovery custody; stale job claims release. Before any restored camp exists, the guaranteed arrival anchor remains a valid recovery destination.",
+      "commit_authority": "Free care completion restores that identity once.",
+      "after_commit": "Revalidate suspended job, gear, destination and budget; choose useful fallback if changed. Player return restores full current health and usable controls/camera.",
+      "interruption_recovery": "Kill during evacuation/care returns the same actor/cargo to one valid state; all-helpers-down remains recoverable by player.",
+      "clock": "ACTIVE_PLAY_PAUSES_IN_BACKGROUND",
+      "runtime_test_status": "NOT_RUN"
+    },
+    {
+      "id": "region_travel",
+      "owner_tasks": [
+        "T32",
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52"
+      ],
+      "before_commit": "The introducing region owns its local arrival/return/custody contract before its integration, using its existing prerequisites. Validate unlocked local route, suitable destination/staging and party/cargo snapshot. T53/T43 later reconcile shared transport/cloud behavior; they are not added backward prerequisites.",
+      "commit_authority": "One transition journal binds origin/destination and owned identities.",
+      "after_commit": "Arrive safely and revalidate destination jobs; free return route remains.",
+      "interruption_recovery": "Interrupted load resumes either committed destination or saved origin, never duplicated companions or stranded inventory.",
+      "clock": "ACTIVE_PLAY",
+      "runtime_test_status": "NOT_RUN",
+      "later_integration_tasks": [
+        "T53",
+        "T43"
+      ]
+    },
+    {
+      "id": "event_reward",
+      "owner_tasks": [
+        "T37",
+        "T38",
+        "T41",
+        "T43"
+      ],
+      "before_commit": "Verified connection, server time and eligible event/version/objective/prerequisites required. Offline event credit pauses with an explicit notice; no event inputs are consumed. Core ordinary offline play continues.",
+      "commit_authority": "Server completion receipt before expiry atomically creates a durable earned reward claim; unique claim key grants it once.",
+      "after_commit": "Earned claim remains deliverable after event expiry/kill switch. UI shows earned only after the completion receipt; earlier network work is pending.",
+      "interruption_recovery": "If the receipt committed but its response was lost, reconnect resolves the same claim and grants once, even after expiry. Without a verified completion receipt there is no earned reward; expired uncompleted objectives grant nothing. Rollback cannot erase legitimate committed entitlement.",
+      "clock": "SERVER_TIME",
+      "runtime_test_status": "NOT_RUN"
+    },
+    {
+      "id": "purchase_entitlement",
+      "owner_tasks": [
+        "T34",
+        "T35",
+        "T36",
+        "T41",
+        "T43"
+      ],
+      "before_commit": "Explicit player purchase; store/server receipt and account verified.",
+      "commit_authority": "Server receipt ID grants premium/entitlement once.",
+      "after_commit": "Permanent VIP and advertised items retain restore/refund policy.",
+      "interruption_recovery": "Pending/duplicate/refund/account-change uses verified receipt state; no local fabricated grant or helper-initiated purchase.",
+      "clock": "SERVER_TIME",
+      "runtime_test_status": "NOT_RUN"
+    }
+  ],
+  "save_contract": "Durable atomic journal/snapshot and recoverable version migration; UI lifecycle state alone is not durable inventory. Core local play remains usable offline; server-authoritative value remains pending/unavailable until verified."
+}

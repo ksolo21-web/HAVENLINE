@@ -1,0 +1,138 @@
+{
+  "reviewer": "/root/depth_critic",
+  "recorded_at_utc": "2026-11-27T12:46:07.530837+00:00",
+  "scope": "Actual task_packet.main read-only interception; canonical packet bytes preserved; no task or game approval",
+  "task_packet_sha256": "a7c1f8e931a8ba22e3bbee28d87dbb410439a60291d86c27f61cde2a096857bf",
+  "checks_passed": 2,
+  "checks_total": 9,
+  "rows": [
+    {
+      "task": "T09",
+      "checks": {
+        "one_expected_write": true,
+        "current_gap_ids_present": true,
+        "earlier_GD_requirements_retained": false,
+        "current_CD_decisions_present": true,
+        "nonactivating_boundary": true,
+        "strict_reference_policy": true,
+        "canonical_packet_unchanged": true
+      },
+      "passed": false,
+      "canonical_before_sha256": "c563783c659e16a22d83cc855d84e20b4c5e54ad4041bceb34cd1e34400b2654",
+      "canonical_after_sha256": "c563783c659e16a22d83cc855d84e20b4c5e54ad4041bceb34cd1e34400b2654",
+      "captured_packet_sha256": "9515873c376bf65fdcdd8106c079f96e21f7a5fa1121a99e8cd6386e2a3ba7ba"
+    },
+    {
+      "task": "T23",
+      "checks": {
+        "one_expected_write": true,
+        "current_gap_ids_present": true,
+        "earlier_GD_requirements_retained": false,
+        "current_CD_decisions_present": true,
+        "nonactivating_boundary": true,
+        "strict_reference_policy": true,
+        "canonical_packet_unchanged": true
+      },
+      "passed": false,
+      "canonical_before_sha256": null,
+      "canonical_after_sha256": null,
+      "captured_packet_sha256": "5240e51d576cc8ab04bea2eb95fd8232e5aab57a033c91b697f5c92f85809ace"
+    },
+    {
+      "task": "T27",
+      "checks": {
+        "one_expected_write": true,
+        "current_gap_ids_present": true,
+        "earlier_GD_requirements_retained": false,
+        "current_CD_decisions_present": true,
+        "nonactivating_boundary": true,
+        "strict_reference_policy": true,
+        "canonical_packet_unchanged": true
+      },
+      "passed": false,
+      "canonical_before_sha256": null,
+      "canonical_after_sha256": null,
+      "captured_packet_sha256": "7fc52991240e1f8a0107b71bd235c3e4e9938083c0136eff05d24f125f11a0c4"
+    },
+    {
+      "task": "T44",
+      "checks": {
+        "one_expected_write": true,
+        "current_gap_ids_present": true,
+        "earlier_GD_requirements_retained": false,
+        "current_CD_decisions_present": true,
+        "nonactivating_boundary": true,
+        "strict_reference_policy": true,
+        "regional_contact_C5_without_new_clip": true,
+        "canonical_packet_unchanged": true
+      },
+      "passed": false,
+      "canonical_before_sha256": null,
+      "canonical_after_sha256": null,
+      "captured_packet_sha256": "1e5d06ecbca3f2aaf0a5c901f5c8d3e1e6eb036694fad596dfeb02fda12cb6f1"
+    },
+    {
+      "task": "T53",
+      "checks": {
+        "one_expected_write": true,
+        "current_gap_ids_present": true,
+        "earlier_GD_requirements_retained": false,
+        "current_CD_decisions_present": true,
+        "nonactivating_boundary": true,
+        "strict_reference_policy": true,
+        "canonical_packet_unchanged": true
+      },
+      "passed": false,
+      "canonical_before_sha256": null,
+      "canonical_after_sha256": null,
+      "captured_packet_sha256": "b86b83ab4deda780ae3dc07086ecb474dda99e490f68b9e0323b57521fdaffcc"
+    },
+    {
+      "task": "T58",
+      "checks": {
+        "one_expected_write": true,
+        "current_gap_ids_present": true,
+        "earlier_GD_requirements_retained": false,
+        "current_CD_decisions_present": true,
+        "nonactivating_boundary": true,
+        "strict_reference_policy": true,
+        "canonical_packet_unchanged": true
+      },
+      "passed": false,
+      "canonical_before_sha256": null,
+      "canonical_after_sha256": null,
+      "captured_packet_sha256": "57d931447b59acab0b981c286282b118ee0491be49c27fa2f55d6e151df0d45f"
+    },
+    {
+      "task": "T70",
+      "checks": {
+        "one_expected_write": true,
+        "current_gap_ids_present": true,
+        "earlier_GD_requirements_retained": false,
+        "current_CD_decisions_present": true,
+        "nonactivating_boundary": true,
+        "strict_reference_policy": true,
+        "canonical_packet_unchanged": true
+      },
+      "passed": false,
+      "canonical_before_sha256": null,
+      "canonical_after_sha256": null,
+      "captured_packet_sha256": "2cee1e02b322c69dc3bbc727eec1c1f402f3b1fd48059eea7d74d70e4ff89a69"
+    },
+    {
+      "name": "undefined_task_rejected",
+      "passed": true,
+      "rejected": true,
+      "writes_intercepted": 0,
+      "error": "unknown task T71"
+    },
+    {
+      "name": "missing_pet_attack_stops_packet",
+      "passed": true,
+      "rejected": true,
+      "writes_intercepted": 0,
+      "error": "Invalid resource/actor declarations: required pet fox must retain attack_allowed=true"
+    }
+  ],
+  "runtime_approval_allowed": false
+}

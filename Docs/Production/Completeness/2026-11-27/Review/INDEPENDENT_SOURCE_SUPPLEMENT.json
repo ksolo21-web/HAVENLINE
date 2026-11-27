@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/depth_critic",
+  "reviewed_at_utc": "2026-11-27T12:18:42.631056+00:00",
+  "sources": [
+    {
+      "commit": "fd2e12c8734f49cda7eb3bbf97887406bd03a704",
+      "path": "Docs/Production/DEVICE_LAYOUT_MATRIX.json",
+      "sha256": "685d10d507a2017aa7718c9c6e721023287f5dae45c008470e0659f067c2378d",
+      "git_blob": "b0e5fd4c5035fcd0d65bd0a9f2c88e1d3f7f6672"
+    },
+    {
+      "commit": "fd2e12c8734f49cda7eb3bbf97887406bd03a704",
+      "path": "Docs/Design/ReferenceVideoLock/REFERENCE_VIDEO_LOCK.md",
+      "sha256": "e26c8b9eef9e403965d324fb32192f74ee9dc97dbdb1d1f202a163826cdae9b0",
+      "git_blob": "3e6dca9e74916419024ec67a0aec63c8fa0b762d"
+    },
+    {
+      "commit": "fd2e12c8734f49cda7eb3bbf97887406bd03a704",
+      "path": "Docs/Design/ReferenceVideoLock/reference-video-sources.json",
+      "sha256": "e271986bcbf319b7dd3c94bee0813e8cbd7caa4699781096c3f68e701f295d01",
+      "git_blob": "258eaf40fb4f49385664cd4473f63178f0e4bad9"
+    },
+    {
+      "commit": "fd2e12c8734f49cda7eb3bbf97887406bd03a704",
+      "path": "Docs/Production/T04/FROZEN_SCOPE.md",
+      "sha256": "1ac93980cee30de1c17b19be0fa436731d4901cca6005730afc5a375efe216aa",
+      "git_blob": "76363276f4c60b100f0d858aa874ab0012982aa3"
+    },
+    {
+      "commit": "fd2e12c8734f49cda7eb3bbf97887406bd03a704",
+      "path": "tools/havenline/production/resource_actor_contract.py",
+      "sha256": "cfc0c671b98763e4f52b8e5384ef438d4dacf84100db336f2a3c38b7ae3453fd",
+      "git_blob": "8afa1ecab3ddfaed50bc70d4e2109333b048e225"
+    }
+  ],
+  "observations": [
+    {
+      "id": "F15",
+      "finding": "Canonical source explicitly preserves requested landscape; the reference lock requires recomposition of portrait footage into landscape and T04 requires landscape aspect ratios. Reviewed archived T55/T58 general portrait/landscape layout wording does not override this.",
+      "disposition": "Choosing canonical landscape in the forward plan resolves the recorded conflict without inventing portrait shipping approval. Current 3fad configuration discrepancy must remain an implementation gap until repaired/tested; no runtime edit is approved by this review."
+    },
+    {
+      "id": "F16",
+      "finding": "DEVICE_LAYOUT_MATRIX labels phone_16_9 but gives [2400,1080], identical to phone_20_9. That ratio is20:9.",
+      "disposition": "A narrowly scoped correction to [1920,1080] and a focused label/ratio check are justified. Keep state identity and other device obligations; tolerate real tablet4:3 dimension rounding (2732x2048) and preserve physical native4K certification separation."
+    },
+    {
+      "id": "F17",
+      "finding": "Baseline resource_actor_contract.validate_schema does not resolve every resource animation reference; T23_FREEZE_REQUIRED in production-ready metal/fuel is not one of placeholder_tokens. It currently misses known unresolved future survivor profiles.",
+      "disposition": "A dependency-aware cross-reference repair must expose unresolved ownership without making the earlier resource producer depend on T23. Missing or wrong ready profile/actor references must fail when applicable; schema validation remains distinct from animation/runtime proof."
+    }
+  ],
+  "score": null,
+  "candidate_approval": false,
+  "runtime_approval_allowed": false
+}

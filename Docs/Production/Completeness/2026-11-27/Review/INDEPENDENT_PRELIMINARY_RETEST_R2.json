@@ -1,0 +1,338 @@
+{
+  "reviewer": "/root/depth_critic",
+  "recorded_at_utc": "2026-11-27T12:47:15.153618+00:00",
+  "scope": "Actual selected design integration and known code-defect retest; final exact package freeze not reviewed here",
+  "review_round": 2,
+  "prior_review": "INDEPENDENT_PRELIMINARY_REVIEW_R1.json",
+  "checks_passed": 10,
+  "checks_total": 10,
+  "rows": [
+    {
+      "finding_id": "PR01",
+      "title": "Offline event input and earned expiry claims",
+      "status": "CORRECTED_AND_RETESTED",
+      "passed": true,
+      "actual_evidence": {
+        "CD09": "Launch ordinary world simulation pauses when the app backgrounds or closes. Resume the saved state without absence damage, missing cargo or invented offline income. Offscreen work may continue only while the game is active and the same authoritative job ledger advances. Local played time governs ordinary machine/actor animation and recovery. Server time governs live event availability, purchases and entitlements; changing the device clock never creates rewards or extends an event. Core ordinary play and recovery remain usable offline; server-only grants/purchases stay visibly pending or unavailable until verified. No speculative reward replay on reconnect. Launch event objective participation requires verified connection. While offline, the event clearly pauses objective credit and consumes no event-specific inputs; ordinary core activities continue. Until a server completion receipt exists the UI says pending, never earned. A server-verified completion before expiry creates a durable earned claim that remains deliverable after expiry; a lost response or reconnect grants it exactly once. An uncompleted expired objective grants nothing.",
+        "event_reward": {
+          "id": "event_reward",
+          "owner_tasks": [
+            "T37",
+            "T38",
+            "T41",
+            "T43"
+          ],
+          "before_commit": "Verified connection, server time and eligible event/version/objective/prerequisites required. Offline event credit pauses with an explicit notice; no event inputs are consumed. Core ordinary offline play continues.",
+          "commit_authority": "Server completion receipt before expiry atomically creates a durable earned reward claim; unique claim key grants it once.",
+          "after_commit": "Earned claim remains deliverable after event expiry/kill switch. UI shows earned only after the completion receipt; earlier network work is pending.",
+          "interruption_recovery": "If the receipt committed but its response was lost, reconnect resolves the same claim and grants once, even after expiry. Without a verified completion receipt there is no earned reward; expired uncompleted objectives grant nothing. Rollback cannot erase legitimate committed entitlement.",
+          "clock": "SERVER_TIME",
+          "runtime_test_status": "NOT_RUN"
+        }
+      }
+    },
+    {
+      "finding_id": "PR02",
+      "title": "Valid resting states and local population versus escorts",
+      "status": "CORRECTED_AND_RETESTED",
+      "passed": true,
+      "actual_evidence": {
+        "CD04": "All seven pets are permanent ownable companions and all seven attack. Select up to three pets for a field expedition; reserve pets receive useful eligible safe-camp/local assignments and retain combat roles in suitable areas. When no eligible safe job exists, a truthful ready/rest state is valid; guarding an invulnerable empty interior does not count as a completed useful job. Select up to two survivors as field escorts from the working population; this expedition limit does not cap separately assigned local workers. Camp survivors remain useful in their assigned jobs; no device-specific logical worker cap or paid active slot is introduced. Switching at a safe camp is free and first settles cargo/jobs; injury, attack recovery and cooldown state persist, so switching cannot heal or reset attacks. Offscreen active-session work uses the same conserved job ledger; unseen combat never fabricates kills or loot. All owned workers are represented by the authored rescue/content roster, rather than unlimited procedural spawning.",
+        "CG13": [
+          "Two workers competing for final resources/payment.",
+          "Narrow gate, moving target, broken route, full store, changed goal and path recovery.",
+          "No actor stuck idle when valid authorized work exists, no target thrashing or unbounded per-frame path replanning."
+        ]
+      }
+    },
+    {
+      "finding_id": "PR03",
+      "title": "T21 prerequisite before dependent survivor integration",
+      "status": "CORRECTED_AND_RETESTED",
+      "passed": true,
+      "actual_evidence": [
+        {
+          "milestone": "M1",
+          "action": "Resolve live Codex head/owner; retain reference/rig/source bindings and apply current forward gates.",
+          "depends_on": []
+        },
+        {
+          "milestone": "M2",
+          "action": "Preserve the existing DAG: shared typed custody, plot/production interfaces and T21 combat/contact/defeat prerequisites precede dependent T23 survivor runtime. Implement and prove those feature-local prerequisites; independent drafting/preparation may run in parallel.",
+          "depends_on": [
+            "M1"
+          ]
+        },
+        {
+          "milestone": "M3",
+          "action": "With its original prerequisites satisfied, prove the T23 survivor work/cargo/authorized-payment/recovery loop. Each pet owner proves attack plus specialty using the shared combat truths; each producer proves its own selected value chain before later reconciliation.",
+          "depends_on": [
+            "M2"
+          ]
+        },
+        {
+          "milestone": "M4",
+          "action": "T31/T32 integrate busy population, recovery, simple controls and actual Level1\u201310; later owners build selected100 outcomes/region contracts using existing task prerequisites.",
+          "depends_on": [
+            "M3"
+          ]
+        },
+        {
+          "milestone": "M5",
+          "action": "Run whole-route, free-economy, commerce, LiveOps, security, accessibility, regression and sustained physical device acceptance on exact candidate.",
+          "depends_on": [
+            "M4"
+          ]
+        }
+      ]
+    },
+    {
+      "finding_id": "PR04",
+      "title": "Last camp and initial safe recovery fallback",
+      "status": "CORRECTED_AND_RETESTED",
+      "passed": true,
+      "actual_evidence": {
+        "CD02": "At zero health the player returns to the last restored safe camp, or the guaranteed safe arrival anchor before any camp is restored, at full current health with controls/camera restored and owned cargo/progression intact. Pets and survivors outside sanctuary visibly retreat when possible; if downed they are evacuated to that camp and temporarily unavailable for their task. A short free care interaction by the player or an available survivor restores them; if all helpers are unavailable the player can always perform it. No permanent death, roster deletion, paid revive, compulsory medicine, hunger, stamina, cold or oxygen meter. Preserve typed cargo in that actor's recovery custody and return it exactly once; do not duplicate it into world drops. Suspended jobs release transient reservations and revalidate after care.",
+        "actor_recovery": {
+          "id": "actor_recovery",
+          "owner_tasks": [
+            "T13",
+            "T23",
+            "T31"
+          ],
+          "before_commit": "Downed/retreating identity and conserved cargo move to recovery custody; stale job claims release. Before any restored camp exists, the guaranteed arrival anchor remains a valid recovery destination.",
+          "commit_authority": "Free care completion restores that identity once.",
+          "after_commit": "Revalidate suspended job, gear, destination and budget; choose useful fallback if changed. Player return restores full current health and usable controls/camera.",
+          "interruption_recovery": "Kill during evacuation/care returns the same actor/cargo to one valid state; all-helpers-down remains recoverable by player.",
+          "clock": "ACTIVE_PLAY_PAUSES_IN_BACKGROUND",
+          "runtime_test_status": "NOT_RUN"
+        }
+      }
+    },
+    {
+      "finding_id": "PR05",
+      "title": "Scheduling ownership preserves T07 human-context scope",
+      "status": "CORRECTED_AND_RETESTED",
+      "passed": true,
+      "actual_evidence": {
+        "id": "PE10",
+        "title": "Make shortage recovery and competing demand deliberate",
+        "owner": [
+          "T23"
+        ],
+        "consumers": [
+          "T07",
+          "T10",
+          "T18",
+          "T31",
+          "T33"
+        ],
+        "evidence": [
+          "Docs/Production/GAMEPLAY_DEPTH_STANDARD.md",
+          "Docs/Production/GameplayDepth/2026-11-27/CURRENT_BRANCH_NOTE.json"
+        ],
+        "gap": "Priority and reserve fields are required, but minimum viable recovery and actual reservation policy are not a concrete gameplay loop.",
+        "decision": "Player pins a bounded project; workers reserve its cost while preserving other explicit player reservations and food-service commitments. Default gathering stops at actual destination demand. Wrong/full/blocked delivery retains cargo and reassigns useful work. Shortage never disables the last free basic tool/source/return route, care or restoration after damage.",
+        "depends": [
+          "PE04",
+          "PE05",
+          "PE06",
+          "PE08"
+        ],
+        "action": "Implement worker job reservation and priority under T23: immediate safety and owned-cargo custody, explicit player goal, production/order shortages, then routine collection. Use stable tie-breaks and visible wait reasons. T07 consumes the approved integration for player context selection; its frozen selector scope does not own worker scheduling.",
+        "evidence_required": [
+          "Shared resource contested by construction, plot and customer; restoration after damage remains free",
+          "no starvation, deadlock or repeated expensive task oscillation",
+          "free recovery from combined low stock and disabled forward site"
+        ],
+        "remaining": "Reserve quantities/throughput measured and job-owner implementation tested."
+      }
+    },
+    {
+      "finding_id": "PR06",
+      "title": "Real late campaign outcomes and optional-pet path",
+      "status": "CORRECTED_AND_RETESTED",
+      "passed": true,
+      "actual_evidence": {
+        "L75": {
+          "level": 75,
+          "level_id": "t12.level.075",
+          "band": "band_ruins",
+          "content_owner": "T50",
+          "title": "Coordinate a joint repair",
+          "outcome": "Have capable survivors complete a player-approved free physical repair while the player or available workers protect the reachable approach; deployed pets can assist if present.",
+          "requires": [
+            "t12.level.074"
+          ],
+          "role": "mid_band_capability",
+          "visible_hook_required": false,
+          "major_milestone": false,
+          "level1_intrinsic_ready_preserved": false,
+          "optional_companion_availability": [],
+          "status": "AUTHORED_DESIGN_FOR_CURRENT_PLAN_FREEZE_NOT_RUNTIME_COMPLETION",
+          "exact_producer_receipt_binding": "TO_BE_BOUND_BY_IMPLEMENTING_OWNER_NOT_INVENTED",
+          "required_deployed_pet": false
+        },
+        "L95": {
+          "level": 95,
+          "level_id": "t12.level.095",
+          "band": "band_alien",
+          "content_owner": "T52",
+          "title": "Fit the second relay loading frame",
+          "outcome": "Use the disclosed steel, plank and elective harness-retrofit project cost to put the second relay loading frame into service; crews can move actual build stock from the arrival platform to its named worksite.",
+          "requires": [
+            "t12.level.094"
+          ],
+          "role": "mid_band_capability",
+          "visible_hook_required": false,
+          "major_milestone": false,
+          "level1_intrinsic_ready_preserved": false,
+          "optional_companion_availability": [],
+          "status": "AUTHORED_DESIGN_FOR_CURRENT_PLAN_FREEZE_NOT_RUNTIME_COMPLETION",
+          "exact_producer_receipt_binding": "TO_BE_BOUND_BY_IMPLEMENTING_OWNER_NOT_INVENTED",
+          "completion_condition": "The named loading-frame project is committed once and its arrival-to-worksite goods route is available; exact runtime receipt binding remains implementation work.",
+          "required_deployed_pet": false
+        },
+        "L98": {
+          "level": 98,
+          "level_id": "t12.level.098",
+          "band": "band_alien",
+          "content_owner": "T52",
+          "title": "Supply the final connection crew",
+          "outcome": "Bring the disclosed block, plank and steel load from connected camps to the final connection site, fulfill its existing meal-service order and reserve the delivered construction stock; the stocked site is ready for the final build.",
+          "requires": [
+            "t12.level.097"
+          ],
+          "role": "mastery_integration",
+          "visible_hook_required": false,
+          "major_milestone": false,
+          "level1_intrinsic_ready_preserved": false,
+          "optional_companion_availability": [],
+          "status": "AUTHORED_DESIGN_FOR_CURRENT_PLAN_FREEZE_NOT_RUNTIME_COMPLETION",
+          "exact_producer_receipt_binding": "TO_BE_BOUND_BY_IMPLEMENTING_OWNER_NOT_INVENTED",
+          "completion_condition": "The final site accepts its disclosed construction reservation and the existing meal order is fulfilled once with the normal payment receipt; exact runtime producer IDs remain implementation work.",
+          "required_deployed_pet": false
+        },
+        "unchanged_100_goals_from_independently_reviewed_economy": true
+      }
+    },
+    {
+      "finding_id": "PR07",
+      "title": "Underwater uses dry accessible work",
+      "status": "CORRECTED_AND_RETESTED",
+      "passed": true,
+      "actual_evidence": {
+        "CD07": "Keep the same move, gather, visibly carry, deliver, transform, rescue and defend loop across ten connected regions. Underwater work uses protected dry habitats/tunnels and authored accessible work sites; the owl remains on suitable air routes/staging. Sky play uses walkable connected platforms/bridges; quadrupeds do not fly. Volcanic and swamp areas use restored safe lanes and appropriate reachable work surfaces. Every species retains useful combat in applicable regions and useful safe work when a region is unsuitable. Travel preserves identity/cargo/jobs and offers a free return to the last safe restored camp. Regional art never implies a new oxygen/heat/poison maintenance meter. Playable underwater travel and work remain on dry protected routes/positions; appropriate gear reaches salvage without mandatory swimming. Each earlier region owner implements its own local arrival/return contract before its integration; T53 later integrates shared transport and is not an added backward prerequisite.",
+        "economy_100_goal_parity": true
+      }
+    },
+    {
+      "finding_id": "PR08",
+      "title": "Local region transactions precede later integration",
+      "status": "CORRECTED_AND_RETESTED",
+      "passed": true,
+      "actual_evidence": {
+        "region_travel": {
+          "id": "region_travel",
+          "owner_tasks": [
+            "T32",
+            "T44",
+            "T45",
+            "T46",
+            "T47",
+            "T48",
+            "T49",
+            "T50",
+            "T51",
+            "T52"
+          ],
+          "before_commit": "The introducing region owns its local arrival/return/custody contract before its integration, using its existing prerequisites. Validate unlocked local route, suitable destination/staging and party/cargo snapshot. T53/T43 later reconcile shared transport/cloud behavior; they are not added backward prerequisites.",
+          "commit_authority": "One transition journal binds origin/destination and owned identities.",
+          "after_commit": "Arrive safely and revalidate destination jobs; free return route remains.",
+          "interruption_recovery": "Interrupted load resumes either committed destination or saved origin, never duplicated companions or stranded inventory.",
+          "clock": "ACTIVE_PLAY",
+          "runtime_test_status": "NOT_RUN",
+          "later_integration_tasks": [
+            "T53",
+            "T43"
+          ]
+        },
+        "PE12": {
+          "id": "PE12",
+          "title": "Make the world connected rather than ten reset economies",
+          "owner": [
+            "T32",
+            "T44",
+            "T45",
+            "T46",
+            "T47",
+            "T48",
+            "T49",
+            "T50",
+            "T51",
+            "T52"
+          ],
+          "consumers": [
+            "T12",
+            "T14",
+            "T53"
+          ],
+          "evidence": [
+            "Docs/Production/T12/LEVEL_CADENCE_BLUEPRINT.md",
+            "Docs/Production/ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.json"
+          ],
+          "gap": "Ten connected bands and transport are promised, but ownership, cargo, service and revisit continuity are not authored across the whole route.",
+          "decision": "Retain one player/workforce/pet ownership and core resource economy across persistent camps. Each new band supplies a safe arrival/return dock before risky work. Finished older camps remain useful sources/destinations, not wiped tutorials. Fixed transport modes automatically load/depart/arrive/unload under simple contextual use.",
+          "depends": [
+            "PE01",
+            "PE03",
+            "PE08",
+            "PE11"
+          ],
+          "action": "Each introducing region owner implements its own safe entry/return anchor, local transition, capacity fallback and exact cargo/job custody contract when that region is built. T53 later reconciles the completed local contracts into the full transport network. Bind physical entry, safe exit, camera and actor state locally first; do not make a later T53 task a backward prerequisite for earlier regions.",
+          "evidence_required": [
+            "Roundtrip across all nine band boundaries",
+            "save/reload midtrip",
+            "full destination/blocked arrival fallback",
+            "no duplicate cargo or compulsory regrind"
+          ],
+          "remaining": "Transport implementation and full-world play evidence.",
+          "integration_owner": [
+            "T53"
+          ]
+        }
+      }
+    },
+    {
+      "finding_id": "PR09",
+      "title": "Canonical action names and current closure evaluation",
+      "status": "CORRECTED_AND_RETESTED",
+      "passed": true,
+      "actual_evidence": {
+        "test_receipt": "INDEPENDENT_VALIDATOR_TEST_RUN_R2.json",
+        "tests": 39,
+        "validator_sha256": "7a637cdfd2f31231de355a79c207fb01da9909a06f7984c4ccc0445e2454a434"
+      }
+    },
+    {
+      "finding_id": "PR10",
+      "title": "Resource-derived profiles and regional contact cannot be waived",
+      "status": "CORRECTED_AND_RETESTED",
+      "passed": true,
+      "actual_evidence": {
+        "probe_receipt": "INDEPENDENT_RESOURCE_REGION_RETEST_R4.json",
+        "checks_passed": 6,
+        "checks_total": 6
+      }
+    }
+  ],
+  "candidate_file_sha256": {
+    "Docs/Production/WHOLE_GAME_COMPLETENESS.json": "94c2f7137eb31bacd9c393fa54605fccf16079d538ce9547ecb9f00915acc4db",
+    "Docs/Production/Completeness/2026-11-27/TRANSACTIONS_AND_RECOVERY.json": "030c0b7f7dd317ae59529b6f624f742c53e5f77c6fcc012768f575a88fcfc04e",
+    "Docs/Production/Completeness/2026-11-27/PROGRESSION_ECONOMY_GAPS.json": "606741b00a1caa6aa8639748105a8b7ac4f2a9a592b262a5114f8efe2bef23d4",
+    "tools/havenline/production/resource_actor_contract.py": "7a637cdfd2f31231de355a79c207fb01da9909a06f7984c4ccc0445e2454a434",
+    "tools/havenline/production/closure_validator.py": "467a68c72a563cf46dd8d46a0e95039749c4f503b647671906248c862f85a9fd"
+  },
+  "final_score": null,
+  "runtime_approval_allowed": false
+}

@@ -1,0 +1,1719 @@
+{
+  "schema_version": 1,
+  "audit_kind": "bounded_read_only_source_delta",
+  "status": "SOURCE_AND_RECEIPT_METADATA_INSPECTED_NOT_RUNTIME_APPROVED",
+  "planning_main_baseline": "fd2e12c8734f49cda7eb3bbf97887406bd03a704",
+  "prior_audited_gameplay_source": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+  "reviewed_gameplay_source": "2654f5019b7212968d28600cb071bf1c231c9030",
+  "fixed_review_cutoff": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+  "cutoff_rule": "Do not chase subsequent active branch changes; preserve the prior 3fad audit and add this separate current-source note.",
+  "repository_url": "https://github.com/ksolo21-web/HAVENLINE",
+  "commits": [
+    {
+      "sha": "2654f5019b7212968d28600cb071bf1c231c9030",
+      "subject": "Use the compact explorer roster and collect cash directly from warehouse shelves"
+    },
+    {
+      "sha": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+      "subject": "Record Build 13 camp and field playtest"
+    }
+  ],
+  "diff": {
+    "mode": "git diff --no-renames",
+    "changed_paths": 1016,
+    "status_counts": {
+      "A": 983,
+      "D": 12,
+      "M": 21
+    },
+    "qa_paths": 949,
+    "runtime_paths": 67,
+    "runtime_changed_paths": [
+      {
+        "status": "D",
+        "path": "HavenlineLevel1/assets/characters/Character2.glb"
+      },
+      {
+        "status": "D",
+        "path": "HavenlineLevel1/assets/characters/Character2.glb.import"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/assets/characters/Character2Compact.glb"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/assets/characters/Character2Compact.glb.import"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/assets/characters/Character2Compact_0.jpg"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/assets/characters/Character2Compact_0.jpg.import"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/assets/characters/Character2Compact_1.png"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/assets/characters/Character2Compact_1.png.import"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/assets/characters/Character2Compact_2.png"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/assets/characters/Character2Compact_2.png.import"
+      },
+      {
+        "status": "D",
+        "path": "HavenlineLevel1/assets/characters/Character2_0.png"
+      },
+      {
+        "status": "D",
+        "path": "HavenlineLevel1/assets/characters/Character2_0.png.import"
+      },
+      {
+        "status": "D",
+        "path": "HavenlineLevel1/assets/characters/Character3.glb"
+      },
+      {
+        "status": "D",
+        "path": "HavenlineLevel1/assets/characters/Character3.glb.import"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/assets/characters/Character3Compact.glb"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/assets/characters/Character3Compact.glb.import"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/assets/characters/Character3Compact_0.jpg"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/assets/characters/Character3Compact_0.jpg.import"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/assets/characters/Character3Compact_1.png"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/assets/characters/Character3Compact_1.png.import"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/assets/characters/Character3Compact_2.png"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/assets/characters/Character3Compact_2.png.import"
+      },
+      {
+        "status": "D",
+        "path": "HavenlineLevel1/assets/characters/Character3_0.png"
+      },
+      {
+        "status": "D",
+        "path": "HavenlineLevel1/assets/characters/Character3_0.png.import"
+      },
+      {
+        "status": "D",
+        "path": "HavenlineLevel1/assets/characters/Character4.glb"
+      },
+      {
+        "status": "D",
+        "path": "HavenlineLevel1/assets/characters/Character4.glb.import"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/assets/characters/Character4Compact.glb"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/assets/characters/Character4Compact.glb.import"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/assets/characters/Character4Compact_0.jpg"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/assets/characters/Character4Compact_0.jpg.import"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/assets/characters/Character4Compact_1.png"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/assets/characters/Character4Compact_1.png.import"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/assets/characters/Character4Compact_2.png"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/assets/characters/Character4Compact_2.png.import"
+      },
+      {
+        "status": "D",
+        "path": "HavenlineLevel1/assets/characters/Character4_0.png"
+      },
+      {
+        "status": "D",
+        "path": "HavenlineLevel1/assets/characters/Character4_0.png.import"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/assets/field_ui/camp_portrait_c2.png"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/assets/field_ui/camp_portrait_c2.png.import"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/assets/field_ui/camp_portrait_c3.png"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/assets/field_ui/camp_portrait_c3.png.import"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/assets/field_ui/camp_portrait_c4.png"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/assets/field_ui/camp_portrait_c4.png.import"
+      },
+      {
+        "status": "M",
+        "path": "HavenlineLevel1/field_camp_dock.gd"
+      },
+      {
+        "status": "M",
+        "path": "HavenlineLevel1/field_carry.gd"
+      },
+      {
+        "status": "M",
+        "path": "HavenlineLevel1/field_conveyor_aisles.gd"
+      },
+      {
+        "status": "M",
+        "path": "HavenlineLevel1/field_depot.gd"
+      },
+      {
+        "status": "M",
+        "path": "HavenlineLevel1/field_encounters.gd"
+      },
+      {
+        "status": "M",
+        "path": "HavenlineLevel1/field_enemy.gd"
+      },
+      {
+        "status": "M",
+        "path": "HavenlineLevel1/field_glove_clearance.gd"
+      },
+      {
+        "status": "M",
+        "path": "HavenlineLevel1/field_goods_exchange.gd"
+      },
+      {
+        "status": "M",
+        "path": "HavenlineLevel1/field_hud.gd"
+      },
+      {
+        "status": "M",
+        "path": "HavenlineLevel1/field_opening.gd"
+      },
+      {
+        "status": "M",
+        "path": "HavenlineLevel1/field_player_wardrobe.gd"
+      },
+      {
+        "status": "M",
+        "path": "HavenlineLevel1/field_save.gd"
+      },
+      {
+        "status": "M",
+        "path": "HavenlineLevel1/field_settlement_loop.gd"
+      },
+      {
+        "status": "M",
+        "path": "HavenlineLevel1/field_storage_house.gd"
+      },
+      {
+        "status": "M",
+        "path": "HavenlineLevel1/gait_motor.gd"
+      },
+      {
+        "status": "M",
+        "path": "HavenlineLevel1/qa_field_pack_bounds.gd"
+      },
+      {
+        "status": "M",
+        "path": "HavenlineLevel1/tests/qa_approach_edges.gd"
+      },
+      {
+        "status": "M",
+        "path": "HavenlineLevel1/tests/qa_camp_layout.gd"
+      },
+      {
+        "status": "M",
+        "path": "HavenlineLevel1/tests/qa_level1_completion.gd"
+      },
+      {
+        "status": "M",
+        "path": "HavenlineLevel1/tests/qa_personal_goods.gd"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/tests/qa_shelf_walk.gd"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/tests/qa_shelf_walk.gd.uid"
+      },
+      {
+        "status": "M",
+        "path": "HavenlineLevel1/tests/qa_warehouse_controls.gd"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/tests/qa_wolf_gate_passage.gd"
+      },
+      {
+        "status": "A",
+        "path": "HavenlineLevel1/tests/qa_wolf_gate_passage.gd.uid"
+      }
+    ],
+    "full_changed_path_list_included": false
+  },
+  "code_to_cutoff_binding": {
+    "changed_paths": 949,
+    "all_changes_under_new_qa_package": true,
+    "source_tree_at_2654": "992ff7068090c7a98bc8be966bfba24f936d7a78",
+    "source_tree_at_2f46": "992ff7068090c7a98bc8be966bfba24f936d7a78",
+    "identical": true
+  },
+  "independent_source_hash_checks": {
+    "selected_files": 27,
+    "matches_to_Reviewed_files_manifest": 27,
+    "checks": [
+      {
+        "path": "HavenlineLevel1/field_camp_dock.gd",
+        "declared_sha256": "05a49dada73e6bc65f6d028db191678456d130291fa17c98ed16c9203c210cf0",
+        "actual_sha256": "05a49dada73e6bc65f6d028db191678456d130291fa17c98ed16c9203c210cf0",
+        "matched": true
+      },
+      {
+        "path": "HavenlineLevel1/field_carry.gd",
+        "declared_sha256": "7b8212c85af49d69391710081f89a0d1e6b8bc9f744a7d41bf65e0f1d49c146e",
+        "actual_sha256": "7b8212c85af49d69391710081f89a0d1e6b8bc9f744a7d41bf65e0f1d49c146e",
+        "matched": true
+      },
+      {
+        "path": "HavenlineLevel1/field_conveyor_aisles.gd",
+        "declared_sha256": "046848dbe4333420b57e41052e5790d6f32610980040254dbf6a6a2695dee5f3",
+        "actual_sha256": "046848dbe4333420b57e41052e5790d6f32610980040254dbf6a6a2695dee5f3",
+        "matched": true
+      },
+      {
+        "path": "HavenlineLevel1/field_depot.gd",
+        "declared_sha256": "f7ea8c1f5edc3b31d7be4f515e7d65564b12fba41a4a7f0b10c6adfe1b253cdb",
+        "actual_sha256": "f7ea8c1f5edc3b31d7be4f515e7d65564b12fba41a4a7f0b10c6adfe1b253cdb",
+        "matched": true
+      },
+      {
+        "path": "HavenlineLevel1/field_encounters.gd",
+        "declared_sha256": "e5ee56b58e66b3178f8cc032b378193f7c7e773508b6033a5df34b6b68ffe240",
+        "actual_sha256": "e5ee56b58e66b3178f8cc032b378193f7c7e773508b6033a5df34b6b68ffe240",
+        "matched": true
+      },
+      {
+        "path": "HavenlineLevel1/field_enemy.gd",
+        "declared_sha256": "66ef417e4a594ebbd7e0a8dca8b577c482305a3aba49e158d94176fdf50a44f0",
+        "actual_sha256": "66ef417e4a594ebbd7e0a8dca8b577c482305a3aba49e158d94176fdf50a44f0",
+        "matched": true
+      },
+      {
+        "path": "HavenlineLevel1/field_glove_clearance.gd",
+        "declared_sha256": "3b2c1ec61689dc172900c72d19dc28491e7643e3d7cb88fdf03ab044a7b69041",
+        "actual_sha256": "3b2c1ec61689dc172900c72d19dc28491e7643e3d7cb88fdf03ab044a7b69041",
+        "matched": true
+      },
+      {
+        "path": "HavenlineLevel1/field_goods_exchange.gd",
+        "declared_sha256": "de9c8c225604445ab2f6852b0045e9775abd0c8f95174650a63bc4e583da5409",
+        "actual_sha256": "de9c8c225604445ab2f6852b0045e9775abd0c8f95174650a63bc4e583da5409",
+        "matched": true
+      },
+      {
+        "path": "HavenlineLevel1/field_hud.gd",
+        "declared_sha256": "1da1e8254d30a261fc901748618cd9d2a68fa48418f273c8d49a1476ab3ceda1",
+        "actual_sha256": "1da1e8254d30a261fc901748618cd9d2a68fa48418f273c8d49a1476ab3ceda1",
+        "matched": true
+      },
+      {
+        "path": "HavenlineLevel1/field_opening.gd",
+        "declared_sha256": "fbf55a0fb457db36b0b04725192c2fb7c05a062ce7d2f8c42aa58a6408a58686",
+        "actual_sha256": "fbf55a0fb457db36b0b04725192c2fb7c05a062ce7d2f8c42aa58a6408a58686",
+        "matched": true
+      },
+      {
+        "path": "HavenlineLevel1/field_player_wardrobe.gd",
+        "declared_sha256": "81331b7afd0105bee24efca27a059f026816e40b898a6aa16bcdc6e68187933a",
+        "actual_sha256": "81331b7afd0105bee24efca27a059f026816e40b898a6aa16bcdc6e68187933a",
+        "matched": true
+      },
+      {
+        "path": "HavenlineLevel1/field_save.gd",
+        "declared_sha256": "a96586b538307cc45be2bdda5cb56213447e0de101b76075d5cd03091f912ec3",
+        "actual_sha256": "a96586b538307cc45be2bdda5cb56213447e0de101b76075d5cd03091f912ec3",
+        "matched": true
+      },
+      {
+        "path": "HavenlineLevel1/field_settlement_loop.gd",
+        "declared_sha256": "d72e8085687f24da6a118b0256ed36d9edf5fe7a000cc158e523c4ec6d01b91b",
+        "actual_sha256": "d72e8085687f24da6a118b0256ed36d9edf5fe7a000cc158e523c4ec6d01b91b",
+        "matched": true
+      },
+      {
+        "path": "HavenlineLevel1/field_storage_house.gd",
+        "declared_sha256": "82c05042fbfe54763c0bb6f897f4a3407e39701db705fe71df2d816a473b4185",
+        "actual_sha256": "82c05042fbfe54763c0bb6f897f4a3407e39701db705fe71df2d816a473b4185",
+        "matched": true
+      },
+      {
+        "path": "HavenlineLevel1/gait_motor.gd",
+        "declared_sha256": "60afa5b663929b4bdce9af4b19be24d92d722c0ad0f83af4f758d3d839bf3232",
+        "actual_sha256": "60afa5b663929b4bdce9af4b19be24d92d722c0ad0f83af4f758d3d839bf3232",
+        "matched": true
+      },
+      {
+        "path": "HavenlineLevel1/field_survivor.gd",
+        "declared_sha256": "c2c7d9b368ee59d2dfbb691daa6bce2a1b750494da16b346d4cb01d1bcb8696f",
+        "actual_sha256": "c2c7d9b368ee59d2dfbb691daa6bce2a1b750494da16b346d4cb01d1bcb8696f",
+        "matched": true
+      },
+      {
+        "path": "HavenlineLevel1/field_owl.gd",
+        "declared_sha256": "ed476d1ebc69d658aab8d66bc5f0c76f3da7168783bf5a3ba296cd0a89428376",
+        "actual_sha256": "ed476d1ebc69d658aab8d66bc5f0c76f3da7168783bf5a3ba296cd0a89428376",
+        "matched": true
+      },
+      {
+        "path": "HavenlineLevel1/field_inventory.gd",
+        "declared_sha256": "e29ceacd0006b8697731911ac69bee6c75e49dccebf012ec2fd1465f507af773",
+        "actual_sha256": "e29ceacd0006b8697731911ac69bee6c75e49dccebf012ec2fd1465f507af773",
+        "matched": true
+      },
+      {
+        "path": "HavenlineLevel1/field_settlement.gd",
+        "declared_sha256": "29081375e0f121b3b366c0c7bcbafdd971fc237de8f6f482cabcd1129838f27e",
+        "actual_sha256": "29081375e0f121b3b366c0c7bcbafdd971fc237de8f6f482cabcd1129838f27e",
+        "matched": true
+      },
+      {
+        "path": "HavenlineLevel1/field_progression.gd",
+        "declared_sha256": "395f8ef3129b107357bfad280aee07f7beec4c1de6a77c8fdabc3ef6d59f3a62",
+        "actual_sha256": "395f8ef3129b107357bfad280aee07f7beec4c1de6a77c8fdabc3ef6d59f3a62",
+        "matched": true
+      },
+      {
+        "path": "HavenlineLevel1/field_crew.gd",
+        "declared_sha256": "369296fdfe74f36e6171f9f313e7a91e359c4b6289247a98ed1a34432f6fc886",
+        "actual_sha256": "369296fdfe74f36e6171f9f313e7a91e359c4b6289247a98ed1a34432f6fc886",
+        "matched": true
+      },
+      {
+        "path": "HavenlineLevel1/field_worksites.gd",
+        "declared_sha256": "2e71383ad3741770e83afefd534b9df5237a1341366d5c1e0750c525ead2b803",
+        "actual_sha256": "2e71383ad3741770e83afefd534b9df5237a1341366d5c1e0750c525ead2b803",
+        "matched": true
+      },
+      {
+        "path": "HavenlineLevel1/field_lifecycle.gd",
+        "declared_sha256": "60df9234222b8c25ad5f99fa9561de12a3455fd386c4bbba8b1cdce603495a7c",
+        "actual_sha256": "60df9234222b8c25ad5f99fa9561de12a3455fd386c4bbba8b1cdce603495a7c",
+        "matched": true
+      },
+      {
+        "path": "HavenlineLevel1/field_goods_pack.gd",
+        "declared_sha256": "4e477f221db507956829d5c4ff063b6c7a948b42aa9d6672d9305c142973e499",
+        "actual_sha256": "4e477f221db507956829d5c4ff063b6c7a948b42aa9d6672d9305c142973e499",
+        "matched": true
+      },
+      {
+        "path": "HavenlineLevel1/project.godot",
+        "declared_sha256": "c8a12b96cc7c2580b60d896965d77ac0c69dfeec1adcf8e2963710018b878137",
+        "actual_sha256": "c8a12b96cc7c2580b60d896965d77ac0c69dfeec1adcf8e2963710018b878137",
+        "matched": true
+      },
+      {
+        "path": "HavenlineLevel1/field_opening.tscn",
+        "declared_sha256": "3c96bf2883747ed3c9d3f7a5f9736d78b9804e39720cb0e27cee1b189eeabfc5",
+        "actual_sha256": "3c96bf2883747ed3c9d3f7a5f9736d78b9804e39720cb0e27cee1b189eeabfc5",
+        "matched": true
+      },
+      {
+        "path": "HavenlineLevel1/field_hearth_fire.gd",
+        "declared_sha256": "4fc5b0800eda58b8560eacf8cb79d2236b4f0250e07208cee5839cd5bd2dd166",
+        "actual_sha256": "4fc5b0800eda58b8560eacf8cb79d2236b4f0250e07208cee5839cd5bd2dd166",
+        "matched": true
+      }
+    ]
+  },
+  "source_file_pairs": [
+    {
+      "path": "HavenlineLevel1/field_camp_dock.gd",
+      "baseline": {
+        "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+        "path": "HavenlineLevel1/field_camp_dock.gd",
+        "git_blob": "4200cb255b6bbb65149e63f575c816fd36e38372",
+        "sha256": "debaaa6694a3a63504d230a1b18413501085111220035415e54c4460f284f143",
+        "bytes": 21997
+      },
+      "cutoff": {
+        "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+        "path": "HavenlineLevel1/field_camp_dock.gd",
+        "git_blob": "cbeb22ef1172926fa54efb19abe61ce3ef772f8b",
+        "sha256": "05a49dada73e6bc65f6d028db191678456d130291fa17c98ed16c9203c210cf0",
+        "bytes": 19205
+      },
+      "byte_identical": false
+    },
+    {
+      "path": "HavenlineLevel1/field_carry.gd",
+      "baseline": {
+        "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+        "path": "HavenlineLevel1/field_carry.gd",
+        "git_blob": "7b940fdaec0a0ca73f5777af4726faf38344cdc7",
+        "sha256": "f0f90ac603415be6cbd0d861f69f8d1443ed2ffb9b957e2b0407c9977925b253",
+        "bytes": 27640
+      },
+      "cutoff": {
+        "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+        "path": "HavenlineLevel1/field_carry.gd",
+        "git_blob": "f7a7f49b375010df6464d2f1b903c8423c9ffa73",
+        "sha256": "7b8212c85af49d69391710081f89a0d1e6b8bc9f744a7d41bf65e0f1d49c146e",
+        "bytes": 29020
+      },
+      "byte_identical": false
+    },
+    {
+      "path": "HavenlineLevel1/field_conveyor_aisles.gd",
+      "baseline": {
+        "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+        "path": "HavenlineLevel1/field_conveyor_aisles.gd",
+        "git_blob": "214580ff22f190c7a8095c49b5715dfc1ddb1fb2",
+        "sha256": "c1261ac88e2909c42b6cae5b3881f1eb2f143c2d1da67d869434782a6930b2a1",
+        "bytes": 9478
+      },
+      "cutoff": {
+        "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+        "path": "HavenlineLevel1/field_conveyor_aisles.gd",
+        "git_blob": "faedc07acf42db5d45f872755dffcf6f88d73dad",
+        "sha256": "046848dbe4333420b57e41052e5790d6f32610980040254dbf6a6a2695dee5f3",
+        "bytes": 9709
+      },
+      "byte_identical": false
+    },
+    {
+      "path": "HavenlineLevel1/field_depot.gd",
+      "baseline": {
+        "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+        "path": "HavenlineLevel1/field_depot.gd",
+        "git_blob": "c2063e7bee2aaba267e1d55c684b19221bd44a62",
+        "sha256": "6f512477e05430ecf55d50421dabc90a87894261c6d655f57eb54dea572cff43",
+        "bytes": 6284
+      },
+      "cutoff": {
+        "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+        "path": "HavenlineLevel1/field_depot.gd",
+        "git_blob": "9e5abb8d25debb481f2820e72419f7d66565cc7d",
+        "sha256": "f7ea8c1f5edc3b31d7be4f515e7d65564b12fba41a4a7f0b10c6adfe1b253cdb",
+        "bytes": 6459
+      },
+      "byte_identical": false
+    },
+    {
+      "path": "HavenlineLevel1/field_encounters.gd",
+      "baseline": {
+        "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+        "path": "HavenlineLevel1/field_encounters.gd",
+        "git_blob": "fb157aedb35cf713d1245dfb917867a556b3932e",
+        "sha256": "1f96e9b48b1659ebcc703d017ec8fd7bfbfa8e0008d803eb9926b8d5c34bc1a6",
+        "bytes": 8573
+      },
+      "cutoff": {
+        "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+        "path": "HavenlineLevel1/field_encounters.gd",
+        "git_blob": "ab78ca217f84a08a2ceaebe553f720d71ab3edd7",
+        "sha256": "e5ee56b58e66b3178f8cc032b378193f7c7e773508b6033a5df34b6b68ffe240",
+        "bytes": 9248
+      },
+      "byte_identical": false
+    },
+    {
+      "path": "HavenlineLevel1/field_enemy.gd",
+      "baseline": {
+        "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+        "path": "HavenlineLevel1/field_enemy.gd",
+        "git_blob": "cfef6b4de2d744ce16d1676e931aaf206cfc1c26",
+        "sha256": "837cc947c8f52a8b39f67524e548863f4b4d2bcb82478aa077425e00d3490731",
+        "bytes": 13437
+      },
+      "cutoff": {
+        "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+        "path": "HavenlineLevel1/field_enemy.gd",
+        "git_blob": "2e43f3c75e04a3da51871703f98ed6ef66ac6fa1",
+        "sha256": "66ef417e4a594ebbd7e0a8dca8b577c482305a3aba49e158d94176fdf50a44f0",
+        "bytes": 14731
+      },
+      "byte_identical": false
+    },
+    {
+      "path": "HavenlineLevel1/field_glove_clearance.gd",
+      "baseline": {
+        "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+        "path": "HavenlineLevel1/field_glove_clearance.gd",
+        "git_blob": "c2345e2098ca853acaab8b6a689b74add0839095",
+        "sha256": "bb1fb441a4b375f45c8c0ece9d51ba54e769de273cf5862694d05f9a25547fb0",
+        "bytes": 2802
+      },
+      "cutoff": {
+        "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+        "path": "HavenlineLevel1/field_glove_clearance.gd",
+        "git_blob": "35d579f205668087fd6475562522694a7331769d",
+        "sha256": "3b2c1ec61689dc172900c72d19dc28491e7643e3d7cb88fdf03ab044a7b69041",
+        "bytes": 3635
+      },
+      "byte_identical": false
+    },
+    {
+      "path": "HavenlineLevel1/field_goods_exchange.gd",
+      "baseline": {
+        "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+        "path": "HavenlineLevel1/field_goods_exchange.gd",
+        "git_blob": "b5c94779c203384d99f9b860135f4e490cfb2783",
+        "sha256": "09b2b6f07bb2f3bc820024f8d98d347dfa738d0160ad5f9f1b27a6d2f8d069ae",
+        "bytes": 7743
+      },
+      "cutoff": {
+        "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+        "path": "HavenlineLevel1/field_goods_exchange.gd",
+        "git_blob": "e403f92e56d1105c4cd917e7e67dbfaa7f02897e",
+        "sha256": "de9c8c225604445ab2f6852b0045e9775abd0c8f95174650a63bc4e583da5409",
+        "bytes": 11893
+      },
+      "byte_identical": false
+    },
+    {
+      "path": "HavenlineLevel1/field_hud.gd",
+      "baseline": {
+        "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+        "path": "HavenlineLevel1/field_hud.gd",
+        "git_blob": "77b79dd75478d40049be48ae4135b70bb3e38b5e",
+        "sha256": "8495671347ce814daa77569299ddafb29d1d74903979e2bd6b0bb3236e6bb030",
+        "bytes": 21205
+      },
+      "cutoff": {
+        "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+        "path": "HavenlineLevel1/field_hud.gd",
+        "git_blob": "abd350107aa8c723dba3178435a072491cbe042e",
+        "sha256": "1da1e8254d30a261fc901748618cd9d2a68fa48418f273c8d49a1476ab3ceda1",
+        "bytes": 21506
+      },
+      "byte_identical": false
+    },
+    {
+      "path": "HavenlineLevel1/field_opening.gd",
+      "baseline": {
+        "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+        "path": "HavenlineLevel1/field_opening.gd",
+        "git_blob": "d92185586e194ce51a515e71a9f5fb5fca1dbc4f",
+        "sha256": "109b58f9418cf413af20d060794d38ee8a2c3e97a24b2bba88e099e9e1c4ea5e",
+        "bytes": 41852
+      },
+      "cutoff": {
+        "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+        "path": "HavenlineLevel1/field_opening.gd",
+        "git_blob": "4549f13a0aff0c35a38960c9cae819ad96329be2",
+        "sha256": "fbf55a0fb457db36b0b04725192c2fb7c05a062ce7d2f8c42aa58a6408a58686",
+        "bytes": 42405
+      },
+      "byte_identical": false
+    },
+    {
+      "path": "HavenlineLevel1/field_player_wardrobe.gd",
+      "baseline": {
+        "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+        "path": "HavenlineLevel1/field_player_wardrobe.gd",
+        "git_blob": "e1edd8878d6c6790a7048c9f9b3a3e9f7a5d5cad",
+        "sha256": "f2f1d50f992641392a0c2a5f2ad797aaebd3588e48b33fa10bb8130934aebaa6",
+        "bytes": 12117
+      },
+      "cutoff": {
+        "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+        "path": "HavenlineLevel1/field_player_wardrobe.gd",
+        "git_blob": "a2d6e86607eb6cdde8a7683a4c773f92bae8ad73",
+        "sha256": "81331b7afd0105bee24efca27a059f026816e40b898a6aa16bcdc6e68187933a",
+        "bytes": 10983
+      },
+      "byte_identical": false
+    },
+    {
+      "path": "HavenlineLevel1/field_save.gd",
+      "baseline": {
+        "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+        "path": "HavenlineLevel1/field_save.gd",
+        "git_blob": "eacc67c49ed70472ab9e7a876b86214225acb865",
+        "sha256": "4c76f1bc9db2b69502ae9a275a52dce3a4fd703a14c5646ebe49d6d52f15632a",
+        "bytes": 8897
+      },
+      "cutoff": {
+        "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+        "path": "HavenlineLevel1/field_save.gd",
+        "git_blob": "96b886729aa50723a0bebfe85ce71ae85b4539d8",
+        "sha256": "a96586b538307cc45be2bdda5cb56213447e0de101b76075d5cd03091f912ec3",
+        "bytes": 9055
+      },
+      "byte_identical": false
+    },
+    {
+      "path": "HavenlineLevel1/field_settlement_loop.gd",
+      "baseline": {
+        "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+        "path": "HavenlineLevel1/field_settlement_loop.gd",
+        "git_blob": "686a0f52d9ca068e9de97859a32ee7342cf1af10",
+        "sha256": "3cc62800d9533de2a43b22da38af8a29e53bc848a80ec86738aa5b937722058e",
+        "bytes": 19393
+      },
+      "cutoff": {
+        "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+        "path": "HavenlineLevel1/field_settlement_loop.gd",
+        "git_blob": "f542e36146b1fcfe2b0a8a1b12f58c931cec670a",
+        "sha256": "d72e8085687f24da6a118b0256ed36d9edf5fe7a000cc158e523c4ec6d01b91b",
+        "bytes": 19435
+      },
+      "byte_identical": false
+    },
+    {
+      "path": "HavenlineLevel1/field_storage_house.gd",
+      "baseline": {
+        "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+        "path": "HavenlineLevel1/field_storage_house.gd",
+        "git_blob": "7e9fae5958aba25bb873b545fd5dd4fea2be6e63",
+        "sha256": "ec355df4544a68ebf0b58eae92642d13d745493ef267fa2c8bf8a7bd3008ed7a",
+        "bytes": 9676
+      },
+      "cutoff": {
+        "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+        "path": "HavenlineLevel1/field_storage_house.gd",
+        "git_blob": "ac00ac544a9f349986bae2bd9f8bdc9b4a26ae7b",
+        "sha256": "82c05042fbfe54763c0bb6f897f4a3407e39701db705fe71df2d816a473b4185",
+        "bytes": 10094
+      },
+      "byte_identical": false
+    },
+    {
+      "path": "HavenlineLevel1/gait_motor.gd",
+      "baseline": {
+        "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+        "path": "HavenlineLevel1/gait_motor.gd",
+        "git_blob": "0e2a5afb8a319f24b263b64268568024bd825ccc",
+        "sha256": "cdcc701a1ad9c35993a04e4e93728280e9efd69f8ff900f9bc66168bc4cdea25",
+        "bytes": 30796
+      },
+      "cutoff": {
+        "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+        "path": "HavenlineLevel1/gait_motor.gd",
+        "git_blob": "897fd8ad5e26ff2575a8cf58f2a60f9d90eb0676",
+        "sha256": "60afa5b663929b4bdce9af4b19be24d92d722c0ad0f83af4f758d3d839bf3232",
+        "bytes": 30840
+      },
+      "byte_identical": false
+    },
+    {
+      "path": "HavenlineLevel1/field_survivor.gd",
+      "baseline": {
+        "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+        "path": "HavenlineLevel1/field_survivor.gd",
+        "git_blob": "a7c2c73007acc1c015958b80fdb4de79847c07f2",
+        "sha256": "c2c7d9b368ee59d2dfbb691daa6bce2a1b750494da16b346d4cb01d1bcb8696f",
+        "bytes": 37860
+      },
+      "cutoff": {
+        "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+        "path": "HavenlineLevel1/field_survivor.gd",
+        "git_blob": "a7c2c73007acc1c015958b80fdb4de79847c07f2",
+        "sha256": "c2c7d9b368ee59d2dfbb691daa6bce2a1b750494da16b346d4cb01d1bcb8696f",
+        "bytes": 37860
+      },
+      "byte_identical": true
+    },
+    {
+      "path": "HavenlineLevel1/field_owl.gd",
+      "baseline": {
+        "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+        "path": "HavenlineLevel1/field_owl.gd",
+        "git_blob": "e2dbe6f5eec6f8fa01328985327a3c3408f7b9d8",
+        "sha256": "ed476d1ebc69d658aab8d66bc5f0c76f3da7168783bf5a3ba296cd0a89428376",
+        "bytes": 18510
+      },
+      "cutoff": {
+        "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+        "path": "HavenlineLevel1/field_owl.gd",
+        "git_blob": "e2dbe6f5eec6f8fa01328985327a3c3408f7b9d8",
+        "sha256": "ed476d1ebc69d658aab8d66bc5f0c76f3da7168783bf5a3ba296cd0a89428376",
+        "bytes": 18510
+      },
+      "byte_identical": true
+    },
+    {
+      "path": "HavenlineLevel1/field_inventory.gd",
+      "baseline": {
+        "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+        "path": "HavenlineLevel1/field_inventory.gd",
+        "git_blob": "425c8c52644e28366bc27f73cc207f8986f772e1",
+        "sha256": "e29ceacd0006b8697731911ac69bee6c75e49dccebf012ec2fd1465f507af773",
+        "bytes": 13922
+      },
+      "cutoff": {
+        "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+        "path": "HavenlineLevel1/field_inventory.gd",
+        "git_blob": "425c8c52644e28366bc27f73cc207f8986f772e1",
+        "sha256": "e29ceacd0006b8697731911ac69bee6c75e49dccebf012ec2fd1465f507af773",
+        "bytes": 13922
+      },
+      "byte_identical": true
+    },
+    {
+      "path": "HavenlineLevel1/field_settlement.gd",
+      "baseline": {
+        "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+        "path": "HavenlineLevel1/field_settlement.gd",
+        "git_blob": "a2ea4fe7384fa40b5df08c4907ac87a022121377",
+        "sha256": "29081375e0f121b3b366c0c7bcbafdd971fc237de8f6f482cabcd1129838f27e",
+        "bytes": 10703
+      },
+      "cutoff": {
+        "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+        "path": "HavenlineLevel1/field_settlement.gd",
+        "git_blob": "a2ea4fe7384fa40b5df08c4907ac87a022121377",
+        "sha256": "29081375e0f121b3b366c0c7bcbafdd971fc237de8f6f482cabcd1129838f27e",
+        "bytes": 10703
+      },
+      "byte_identical": true
+    },
+    {
+      "path": "HavenlineLevel1/field_progression.gd",
+      "baseline": {
+        "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+        "path": "HavenlineLevel1/field_progression.gd",
+        "git_blob": "868267f8406c9d516e515b30edf96b255987e10e",
+        "sha256": "395f8ef3129b107357bfad280aee07f7beec4c1de6a77c8fdabc3ef6d59f3a62",
+        "bytes": 4053
+      },
+      "cutoff": {
+        "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+        "path": "HavenlineLevel1/field_progression.gd",
+        "git_blob": "868267f8406c9d516e515b30edf96b255987e10e",
+        "sha256": "395f8ef3129b107357bfad280aee07f7beec4c1de6a77c8fdabc3ef6d59f3a62",
+        "bytes": 4053
+      },
+      "byte_identical": true
+    },
+    {
+      "path": "HavenlineLevel1/field_crew.gd",
+      "baseline": {
+        "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+        "path": "HavenlineLevel1/field_crew.gd",
+        "git_blob": "ad26fabd3fca25d6330ceeb62f687f09f6a39bc6",
+        "sha256": "369296fdfe74f36e6171f9f313e7a91e359c4b6289247a98ed1a34432f6fc886",
+        "bytes": 1217
+      },
+      "cutoff": {
+        "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+        "path": "HavenlineLevel1/field_crew.gd",
+        "git_blob": "ad26fabd3fca25d6330ceeb62f687f09f6a39bc6",
+        "sha256": "369296fdfe74f36e6171f9f313e7a91e359c4b6289247a98ed1a34432f6fc886",
+        "bytes": 1217
+      },
+      "byte_identical": true
+    },
+    {
+      "path": "HavenlineLevel1/field_worksites.gd",
+      "baseline": {
+        "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+        "path": "HavenlineLevel1/field_worksites.gd",
+        "git_blob": "735edab1d5228591a734e1a6e9d2cad642e7d33a",
+        "sha256": "2e71383ad3741770e83afefd534b9df5237a1341366d5c1e0750c525ead2b803",
+        "bytes": 6147
+      },
+      "cutoff": {
+        "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+        "path": "HavenlineLevel1/field_worksites.gd",
+        "git_blob": "735edab1d5228591a734e1a6e9d2cad642e7d33a",
+        "sha256": "2e71383ad3741770e83afefd534b9df5237a1341366d5c1e0750c525ead2b803",
+        "bytes": 6147
+      },
+      "byte_identical": true
+    },
+    {
+      "path": "HavenlineLevel1/field_lifecycle.gd",
+      "baseline": {
+        "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+        "path": "HavenlineLevel1/field_lifecycle.gd",
+        "git_blob": "cc801c34665740f523e18cc7a7da0ffaf95fcc25",
+        "sha256": "60df9234222b8c25ad5f99fa9561de12a3455fd386c4bbba8b1cdce603495a7c",
+        "bytes": 9394
+      },
+      "cutoff": {
+        "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+        "path": "HavenlineLevel1/field_lifecycle.gd",
+        "git_blob": "cc801c34665740f523e18cc7a7da0ffaf95fcc25",
+        "sha256": "60df9234222b8c25ad5f99fa9561de12a3455fd386c4bbba8b1cdce603495a7c",
+        "bytes": 9394
+      },
+      "byte_identical": true
+    },
+    {
+      "path": "HavenlineLevel1/field_goods_pack.gd",
+      "baseline": {
+        "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+        "path": "HavenlineLevel1/field_goods_pack.gd",
+        "git_blob": "4d89ee02173a6e796728e58beae20b751d20a4ce",
+        "sha256": "4e477f221db507956829d5c4ff063b6c7a948b42aa9d6672d9305c142973e499",
+        "bytes": 2524
+      },
+      "cutoff": {
+        "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+        "path": "HavenlineLevel1/field_goods_pack.gd",
+        "git_blob": "4d89ee02173a6e796728e58beae20b751d20a4ce",
+        "sha256": "4e477f221db507956829d5c4ff063b6c7a948b42aa9d6672d9305c142973e499",
+        "bytes": 2524
+      },
+      "byte_identical": true
+    },
+    {
+      "path": "HavenlineLevel1/project.godot",
+      "baseline": {
+        "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+        "path": "HavenlineLevel1/project.godot",
+        "git_blob": "93d049d9d842a97e1ce1b2f8d5ef54c8878979fd",
+        "sha256": "c8a12b96cc7c2580b60d896965d77ac0c69dfeec1adcf8e2963710018b878137",
+        "bytes": 1056
+      },
+      "cutoff": {
+        "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+        "path": "HavenlineLevel1/project.godot",
+        "git_blob": "93d049d9d842a97e1ce1b2f8d5ef54c8878979fd",
+        "sha256": "c8a12b96cc7c2580b60d896965d77ac0c69dfeec1adcf8e2963710018b878137",
+        "bytes": 1056
+      },
+      "byte_identical": true
+    },
+    {
+      "path": "HavenlineLevel1/field_opening.tscn",
+      "baseline": {
+        "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+        "path": "HavenlineLevel1/field_opening.tscn",
+        "git_blob": "202546f4fbc2b51b383a95ca1b2338e6e83c1702",
+        "sha256": "3c96bf2883747ed3c9d3f7a5f9736d78b9804e39720cb0e27cee1b189eeabfc5",
+        "bytes": 193
+      },
+      "cutoff": {
+        "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+        "path": "HavenlineLevel1/field_opening.tscn",
+        "git_blob": "202546f4fbc2b51b383a95ca1b2338e6e83c1702",
+        "sha256": "3c96bf2883747ed3c9d3f7a5f9736d78b9804e39720cb0e27cee1b189eeabfc5",
+        "bytes": 193
+      },
+      "byte_identical": true
+    },
+    {
+      "path": "HavenlineLevel1/field_hearth_fire.gd",
+      "baseline": {
+        "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+        "path": "HavenlineLevel1/field_hearth_fire.gd",
+        "git_blob": "639e67fa81745bc3b8ee82f6a0d4e020d8c9ffbf",
+        "sha256": "4fc5b0800eda58b8560eacf8cb79d2236b4f0250e07208cee5839cd5bd2dd166",
+        "bytes": 2127
+      },
+      "cutoff": {
+        "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+        "path": "HavenlineLevel1/field_hearth_fire.gd",
+        "git_blob": "639e67fa81745bc3b8ee82f6a0d4e020d8c9ffbf",
+        "sha256": "4fc5b0800eda58b8560eacf8cb79d2236b4f0250e07208cee5839cd5bd2dd166",
+        "bytes": 2127
+      },
+      "byte_identical": true
+    }
+  ],
+  "receipt_file_pins": [
+    {
+      "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+      "path": "Docs/QA/Camp-Field-2026-11-27/README.md",
+      "git_blob": "e54b62c2f4983850b7b959b10fb93c70cc37663c",
+      "sha256": "76eac6a6564c11f6cd113a9d12d01c64cbbf5bedda6e341968244d429e578a20",
+      "bytes": 5194
+    },
+    {
+      "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+      "path": "Docs/QA/Camp-Field-2026-11-27/Verification/Android.json",
+      "git_blob": "c759767df62570e290f1c3bda02f6a1071d47e2c",
+      "sha256": "2c80c1e1e5952e63d1b2f135f58d0805cd0eda66984b44a089966f6c6a6cd9b2",
+      "bytes": 1803
+    },
+    {
+      "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+      "path": "Docs/QA/Camp-Field-2026-11-27/Verification/Native/Native-results.json",
+      "git_blob": "53b56f934793b167680e2a19699f253e2b409f2e",
+      "sha256": "88962be221dcf27189ed55b4ea8139e12f7722e0e90db638c34a639feeb80dc3",
+      "bytes": 429456
+    },
+    {
+      "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+      "path": "Docs/QA/Camp-Field-2026-11-27/Verification/Completion/Completion-results.json",
+      "git_blob": "78ff931fabd36cf928684f625719f0e063faf16c",
+      "sha256": "db3d14683bc1bbe4ad999b06db5e5942cbe7d60464d66d4a36712a9b8bfd7b69",
+      "bytes": 177147
+    },
+    {
+      "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+      "path": "Docs/QA/Camp-Field-2026-11-27/Verification/Signed-goods.json",
+      "git_blob": "cf7f58d0020927accfffbe94509ce95799b8b477",
+      "sha256": "fd453e02102f4e057fb2c39f5f17d9e9ffbfe9fe08e62528718100385258da33",
+      "bytes": 12485
+    },
+    {
+      "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+      "path": "Docs/QA/Camp-Field-2026-11-27/Verification/Signed-shelf-walk.json",
+      "git_blob": "2e5ae3ccbee62c68db8da860f91a5f826e8839ee",
+      "sha256": "83090bdb9faf3f33c64974d8dcdee4e8ebc8b1476e2aa8813816e51fe2b440b0",
+      "bytes": 7868
+    },
+    {
+      "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+      "path": "Docs/QA/Camp-Field-2026-11-27/Verification/Signed-controls.json",
+      "git_blob": "1685a541ba19cc12b8ecf7a443ccb7906b7a9d24",
+      "sha256": "5275c39abd2223b8d43af6a1d641c9603cee76ae56f500df68a601ad4bf07d84",
+      "bytes": 1309
+    },
+    {
+      "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+      "path": "Docs/QA/Camp-Field-2026-11-27/Source/Reviewed-files.json",
+      "git_blob": "98f9524e4ed939adc293d9e489e068e662ef2b0a",
+      "sha256": "60e52a14064a92980f71146b4a8c5924563608c5415d95e481ecea64270caeb1",
+      "bytes": 77647
+    },
+    {
+      "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+      "path": "Docs/QA/Camp-Field-2026-11-27/Camp/Independent-camp-review.json",
+      "git_blob": "799cf5f61713dee811e3a8b310764ebe2297548d",
+      "sha256": "5ef9908afa93d554de4d9e8ecdec7b9fd2e3b7008373dbefe5da47f695b5a21f",
+      "bytes": 1309
+    },
+    {
+      "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+      "path": "Docs/QA/Camp-Field-2026-11-27/Camp/Release-check/Pinned-source-and-results.json",
+      "git_blob": "8fb76695a80f8607483c6bef0f01e7128fb13010",
+      "sha256": "2e4fce00731a0a526dfcaab88a348499fff7a3afbdbcf1e887728b2b3822f9c3",
+      "bytes": 9534
+    },
+    {
+      "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+      "path": "Docs/QA/Camp-Field-2026-11-27/References/Verdict.json",
+      "git_blob": "17047655f2b25a315c6a9a685bcd90b7059504f5",
+      "sha256": "e89949d47237db5771f30f4e4938ee7c5555bb4a6605d6f93769c0a429ea39e5",
+      "bytes": 14242
+    },
+    {
+      "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+      "path": "Docs/QA/Camp-Field-2026-11-27/References/Independent-review.md",
+      "git_blob": "b77a80fec7ccb5baa716af80f8c1c8d290396687",
+      "sha256": "a15b658002cebb2d10dcece39da257d9400c034b2a08ea6c42b433ea403ff854",
+      "bytes": 7745
+    },
+    {
+      "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+      "path": "Docs/QA/Camp-Field-2026-11-27/References/Sources.json",
+      "git_blob": "c7d99b2ae29017877b07482a7c386a02a3e773d9",
+      "sha256": "59c9c24e3ba08f06b68457f25faca12c147bf2ed4ddecf6a3498206c65b04e64",
+      "bytes": 5035
+    },
+    {
+      "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+      "path": "Docs/QA/Camp-Field-2026-11-27/References/Rigs/Rig-release-gates.json",
+      "git_blob": "702c7258f6d31acf873771bf9419892ffca25ef2",
+      "sha256": "2133f448196913663133148dc4f7d872c638b881cbcceaf60282769a1f6b413a",
+      "bytes": 1133
+    },
+    {
+      "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+      "path": "Docs/QA/Camp-Field-2026-11-27/Motion/Readme.md",
+      "git_blob": "a2f542d2a4374f7115a52d76204ad2902702e301",
+      "sha256": "5d80d57531393432c6621a05b3a1cdec715bc9f64d0ab49dc11deff1c95fd7f0",
+      "bytes": 3657
+    },
+    {
+      "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+      "path": "Docs/QA/Camp-Field-2026-11-27/Crew/Field-notes.md",
+      "git_blob": "000439ab4ac7e7482739ad8c7364ccce2e3af9b2",
+      "sha256": "f0589e5c32a59f284cbdc2a0888ec52d38b621d03920223e5c10513126b2108e",
+      "bytes": 5638
+    }
+  ],
+  "reference_lock_pin": {
+    "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+    "path": "Docs/Design/ReferenceVideoLock/reference-video-sources.json",
+    "git_blob": "258eaf40fb4f49385664cd4473f63178f0e4bad9",
+    "sha256": "e271986bcbf319b7dd3c94bee0813e8cbd7caa4699781096c3f68e701f295d01",
+    "bytes": 2897
+  },
+  "reported_build13": {
+    "source": "2654f5019b7212968d28600cb071bf1c231c9030",
+    "scene": "res://field_opening.tscn",
+    "apk_sha256": "af81181c81bc623310b00680ea4467615c6f9ffd4c21c1197bc75aff3b71bd75",
+    "apk_bytes": 253643210,
+    "version": 13,
+    "package": "com.havenline.levelonesettlementtrial",
+    "physical_fold7_test": "unmeasured",
+    "native_suites": 69,
+    "native_runs": 92,
+    "native_reported_passed": true,
+    "completion_launches": 16,
+    "completion_assertions_in_rows": 222,
+    "completion_reported_passed": true,
+    "signed_shelf_assertions": 41,
+    "signed_shelf_runtime": "Desktop headless, executing verified resources from the signed Android package",
+    "signed_shelf_reported_passed": true,
+    "feature_scores": {
+      "pickup": 9.5,
+      "storehouse": 9.5,
+      "economy": 9.5,
+      "worker": 9.5,
+      "owl": 9.5,
+      "counter": 9.5,
+      "tower": 9.5,
+      "warehouse_retrieval": 9.9,
+      "extreme_load_visibility": 9.9
+    },
+    "locomotion_scores": {
+      "C1": 9.9,
+      "C2": 9.9,
+      "C3": 9.9,
+      "C4": 9.9,
+      "Forester": 9.9
+    },
+    "review_class": "Scoped playtest checkpoint. Latest main requires independent per-dimension reapproval, 9.9 reference-sensitive and exact 10 for designated final visual critics. A tested feature score does not close a shipping task.",
+    "camp_review_candidate": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+    "camp_review_threshold": 9.5,
+    "camp_binding_filmed_source": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+    "camp_binding_release_source": "2654f5019b7212968d28600cb071bf1c231c9030",
+    "all_values_are_reported_not_reexecuted": true
+  },
+  "reference_custody": {
+    "tree_media_or_archive_paths": 139,
+    "new_media_paths": 40,
+    "new_media_git_blobs": [
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/Camp/Paid-ballista-1x-and-2x.mp4",
+        "git_blob": "076611049d27ceeca68dc7e4c21b13faf4503365",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/Crew/Owl-gate-patrol.mp4",
+        "git_blob": "24424ebe5ddc2f4f05e457003c499a05800f7ae1",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/Crew/Worker-returns.mp4",
+        "git_blob": "4f45b6705f041971b517a58142a72076f632fc1e",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/Economy/Counter-normal.mp4",
+        "git_blob": "e93bdbdd2ded543a94178e4ca825236d0b1d6d2c",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/Economy/Counter-pinch.mp4",
+        "git_blob": "fdce835188e80ccb33934f80172ce23906f65f65",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/Economy/Walk-to-cash-normal.mp4",
+        "git_blob": "46845c3ba3cc35db32d6d2e31b4cd37fe7883aca",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/Economy/Walk-to-cash-pinch.mp4",
+        "git_blob": "9f9dc63f5115f11cdde12b5215a4af372ba11534",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/Field/East-gate-live-wolf.mp4",
+        "git_blob": "45541300f4fc5acba8acb69893cf2794f4509440",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/Field/Field-pickups.mp4",
+        "git_blob": "e62e7eafa19bf918fd10f02b312f1299f5fcd381",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/Field/Storehouse-deposit.mp4",
+        "git_blob": "55dc89b9111b28abc9477641649944f1d610fcd2",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/Motion/C1-six-angle.mp4",
+        "git_blob": "2570caf0370a51b6fc6fd08b4143cb2566b44355",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/Motion/C1-source-and-field-run.mp4",
+        "git_blob": "3852495f0906b6e86810ff71c85a1ea6206dab3a",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/Motion/Character-1-field-and-pinch.mp4",
+        "git_blob": "4b301f735ce4a4ad91cc521b33b29b9085f5a613",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/Motion/Corrected-players/C2-field-playback.mp4",
+        "git_blob": "03d06aad30640b63a001c81787a90397e6687d78",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/Motion/Corrected-players/C3-field-playback.mp4",
+        "git_blob": "4c7a29280d49a7d8a6486a25bdc515158dff9360",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/Motion/Corrected-players/C4-field-playback.mp4",
+        "git_blob": "681d3664f64c1e82b13ba83783213aad92101162",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/Motion/Forester-field-and-pinch.mp4",
+        "git_blob": "5cd9f76f8a8e29c81fa38a0f5f65bb984ad38e8d",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/Motion/Forester-six-angle.mp4",
+        "git_blob": "c846fcd936d4333b89876aaa94b839f0a42616f4",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/Motion/Forester-six-view-stride.mp4",
+        "git_blob": "42fe33e82566dfe6ba4d43ba770afc975fd75924",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/Motion/Superseded-alternate-rig-trial/C2-field-playback.mp4",
+        "git_blob": "7e547d07790f58b64208ddc5450cd1ea454b0486",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/Motion/Superseded-alternate-rig-trial/C2-six-angle.mp4",
+        "git_blob": "a6012a5e3c02027149d517a54ea07a05ef6fa109",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/Motion/Superseded-alternate-rig-trial/C3-field-playback.mp4",
+        "git_blob": "275e38c03d67c9a2c578be09279343cb6c400a74",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/Motion/Superseded-alternate-rig-trial/C3-six-angle.mp4",
+        "git_blob": "38d3c305b67cc2c2288ad49726e3987d92fc0ccf",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/Motion/Superseded-alternate-rig-trial/C4-field-playback.mp4",
+        "git_blob": "18ec79f71667ee24dbe91c96e507da9fe4baec74",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/Motion/Superseded-alternate-rig-trial/C4-six-angle.mp4",
+        "git_blob": "f40eebc0cd58d52db051c18f12b32f50676ab585",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/Motion/Superseded-alternate-rig-trial/Character-4-field-and-pinch.mp4",
+        "git_blob": "bbdc424ee4a7bc8aeb9f2ed934df5f77c0ed151d",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/Motion/Superseded-alternate-rig-trial/Character-4-six-view-stride.mp4",
+        "git_blob": "52a3849dbd215c6d03e268f27f4f324f13637d9f",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/Play/Camp-field-playtest.mp4",
+        "git_blob": "ec24a4d031768f17bf6171e9393fc5fee55ef7c8",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/References/Rigs/Current-compact/Before-transition-correction/C2-empty-independent-motion.mp4",
+        "git_blob": "dec3991c8695f64c5a39f029d1bf49ce524e1e76",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/References/Rigs/Current-compact/Before-transition-correction/C2-loaded-independent-motion.mp4",
+        "git_blob": "ca7cbb1d3ce1d327209f1c406932fa2ba2bd6a07",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/References/Rigs/Current-compact/Before-transition-correction/C3-empty-independent-motion.mp4",
+        "git_blob": "731612c6063588a5568f87a0bfd251f542e63aee",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/References/Rigs/Current-compact/Before-transition-correction/C3-loaded-independent-motion.mp4",
+        "git_blob": "8872c36381ba1c20026d616425138f5fd62ddb19",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/References/Rigs/Current-compact/Before-transition-correction/C4-empty-independent-motion.mp4",
+        "git_blob": "48401fd0dc243460b257457c100618abb987829e",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/References/Rigs/Current-compact/Before-transition-correction/C4-loaded-independent-motion.mp4",
+        "git_blob": "c9f2d47a290730cecafea2c471ed45ee828bdc2d",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/References/Rigs/Current-compact/C2-empty-independent-motion.mp4",
+        "git_blob": "77c28877aa59fff19540ae967607aa7f3ec69792",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/References/Rigs/Current-compact/C2-loaded-independent-motion.mp4",
+        "git_blob": "2ed36a95133409d03b255d1a14401d2856c98181",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/References/Rigs/Current-compact/C3-empty-independent-motion.mp4",
+        "git_blob": "527697273891de3a5ae23bcad703952a8e3b6b01",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/References/Rigs/Current-compact/C3-loaded-independent-motion.mp4",
+        "git_blob": "811a213473b6193162afbe26acd5bd5451a6ecfe",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/References/Rigs/Current-compact/C4-empty-independent-motion.mp4",
+        "git_blob": "63e96af3f56431ca94c4e2cf366ffba680e2a26e",
+        "kind": "blob"
+      },
+      {
+        "path": "Docs/QA/Camp-Field-2026-11-27/References/Rigs/Current-compact/C4-loaded-independent-motion.mp4",
+        "git_blob": "e01c294be5e62e35c8e242081b10ad32f4baf95d",
+        "kind": "blob"
+      }
+    ],
+    "full_recording_filenames_checked": [
+      "Screen_Recording_20260817_124839_YouTube.mp4",
+      "Screen_Recording_20260817_124510_YouTube.mp4",
+      "exactb.mp4",
+      "ad-3.mp4",
+      "ad-1.mp4"
+    ],
+    "matching_full_recording_paths": [],
+    "new_source_metadata": {
+      "motion": {
+        "media": "exactb.mp4",
+        "file_sha256": "359ec8ca5215c0178e1d0b81542ab0a73db937bfc4faf3bbd059fd1893698193",
+        "source": "https://www.sprites.ai/whiteout-survival-ads/ad/1133260751579588",
+        "native_fps": 30,
+        "frames": [
+          21,
+          23,
+          30,
+          36,
+          42,
+          48,
+          54,
+          58
+        ],
+        "seconds": [
+          0.7,
+          0.7666666666666667,
+          1.0,
+          1.2,
+          1.4,
+          1.6,
+          1.8,
+          1.9333333333333333
+        ],
+        "proof": "Owner-B-run.jpg"
+      },
+      "counter_cash": {
+        "media": "exactb.mp4",
+        "file_sha256": "359ec8ca5215c0178e1d0b81542ab0a73db937bfc4faf3bbd059fd1893698193",
+        "source": "https://www.sprites.ai/whiteout-survival-ads/ad/1133260751579588",
+        "native_fps": 30,
+        "frames": [
+          627,
+          630,
+          633,
+          636,
+          639,
+          642,
+          649,
+          658
+        ],
+        "seconds": [
+          20.9,
+          21.0,
+          21.1,
+          21.2,
+          21.3,
+          21.4,
+          21.633333333333333,
+          21.933333333333334
+        ],
+        "proof": "Owner-B-deposit.jpg"
+      },
+      "tower": {
+        "media": "exactb.mp4",
+        "file_sha256": "359ec8ca5215c0178e1d0b81542ab0a73db937bfc4faf3bbd059fd1893698193",
+        "source": "https://www.sprites.ai/whiteout-survival-ads/ad/1133260751579588",
+        "native_fps": 30,
+        "frames": [
+          1262,
+          1272,
+          1283,
+          1290,
+          1303,
+          1311,
+          1324,
+          1335
+        ],
+        "seconds": [
+          42.06666666666667,
+          42.4,
+          42.766666666666666,
+          43.0,
+          43.43333333333333,
+          43.7,
+          44.13333333333333,
+          44.5
+        ],
+        "proof": "Owner-B-threat-side.jpg"
+      },
+      "worker": {
+        "media": "ad-3.mp4",
+        "file_sha256": "9ffcc3d213d3758c91dcbbe2ae5ba13e4b503dc740cc61cc47f616a4fb6b114e",
+        "source": "https://shuhang-resouce.oss-ap-southeast-1.aliyuncs.com/Video/Google/31ddbce7f04880b46db6de718128ee8b.mp4",
+        "native_fps": 24,
+        "frames": [
+          688,
+          693,
+          697,
+          703,
+          708,
+          712,
+          718,
+          724
+        ],
+        "seconds": [
+          28.666666666666668,
+          28.875,
+          29.041666666666668,
+          29.291666666666668,
+          29.5,
+          29.666666666666668,
+          29.916666666666668,
+          30.166666666666668
+        ],
+        "proof": "Working-and-returning.jpg"
+      },
+      "free_run": {
+        "media": "ad-1.mp4",
+        "file_sha256": "1443d6f98fc264d800f6af5809c9e06b0bf6bb4090ecba0d0542829762fb0421",
+        "source": "Docs/QA/Camp-Layout-2026-11-27/Run/Recorded-ad-frames.json",
+        "native_fps": 30,
+        "frames": [
+          224,
+          226,
+          229,
+          232,
+          235,
+          238,
+          241,
+          245
+        ],
+        "seconds": [
+          7.466666666666667,
+          7.533333333333333,
+          7.633333333333334,
+          7.733333333333333,
+          7.833333333333333,
+          7.933333333333334,
+          8.033333333333333,
+          8.166666666666666
+        ],
+        "proof": "Run-support-and-lift.jpg"
+      }
+    },
+    "locked_owner_recordings": [
+      {
+        "id": "A",
+        "filename": "Screen_Recording_20260817_124839_YouTube.mp4",
+        "conversation_file_id": "file_00000000f36c81f5bed89613ab4ae05d",
+        "sha256": "62f7cfe644de3826cfdd6d91bc23c0ab8d9e4fde3e175c90f762e604547bb0ca",
+        "bytes": 74486197,
+        "duration_seconds": 62.551689,
+        "width": 1080,
+        "height": 2520,
+        "has_audio": false,
+        "selected_seek_seconds": [
+          0,
+          3,
+          5,
+          7,
+          9,
+          11,
+          13,
+          16,
+          20,
+          24,
+          28,
+          32,
+          35,
+          37,
+          40,
+          43,
+          47,
+          50,
+          53,
+          56,
+          60
+        ],
+        "notes": "Fishing, food production, crowds, helpers and reinvestment. Approximately 59 seconds onward repeats earlier footage; not a gameplay reset."
+      },
+      {
+        "id": "B",
+        "filename": "Screen_Recording_20260817_124510_YouTube.mp4",
+        "conversation_file_id": "file_00000000359881f5ba922247378c4f07",
+        "sha256": "4c9051cbea6df0efa3e7288b13b6d17da46e857274869b0b43d2f96ff6cc79d2",
+        "bytes": 74298526,
+        "duration_seconds": 58.755567,
+        "width": 1080,
+        "height": 2520,
+        "has_audio": true,
+        "selected_seek_seconds": [
+          0,
+          2,
+          4,
+          6,
+          8,
+          10,
+          12,
+          14,
+          16,
+          18,
+          20,
+          24,
+          28,
+          30,
+          32,
+          34,
+          36,
+          40,
+          44,
+          48,
+          50,
+          52,
+          56
+        ],
+        "notes": "Harvesting, hunting, camp, customer supply and defenses. Approximately 53 seconds onward is non-gameplay promotional material. Audio not audited."
+      }
+    ],
+    "media_downloaded_or_played_back_by_this_audit": false
+  },
+  "findings": [
+    {
+      "id": "LSD01",
+      "topic": "Release/source binding",
+      "classification": "new_reported_evidence",
+      "finding": "Build 13 records exact game source 2654f501, whose HavenlineLevel1 tree is byte-identical to the 2f46 cutoff; 2f46 adds the QA package. Android package hash and signing results are reported, not independently replayed or downloaded in this audit.",
+      "evidence": [
+        "Docs/QA/Camp-Field-2026-11-27/Verification/Android.json",
+        "Docs/QA/Camp-Field-2026-11-27/Source/Reviewed-files.json",
+        "Docs/QA/Camp-Field-2026-11-27/README.md"
+      ],
+      "effect": "Use Build 13 as the newest located reported playtest receipt at this cutoff; retain Build 11 and 3fad audit as historical evidence."
+    },
+    {
+      "id": "LSD02",
+      "topic": "Physical warehouse withdrawal",
+      "classification": "new_source_behavior",
+      "finding": "Whole-shelf withdrawal replaces amount-based UI withdrawal. The actor stops at an interior stocked bay for 0.17 seconds, or taps nearby visible stock; ten raw/product/cash bays are mapped. The quantity dialog and remote withdrawal choices are removed. Existing withdrawal protection preserves collected stock for the visit. Door unloading and interior collection have distinct approach tests; stockroom movement is slowed and valid saved interior positions are retained.",
+      "evidence": [
+        "HavenlineLevel1/field_goods_exchange.gd",
+        "HavenlineLevel1/field_camp_dock.gd",
+        "HavenlineLevel1/field_depot.gd",
+        "HavenlineLevel1/field_storage_house.gd",
+        "HavenlineLevel1/field_opening.gd",
+        "HavenlineLevel1/field_conveyor_aisles.gd",
+        "Docs/QA/Camp-Field-2026-11-27/Verification/Signed-shelf-walk.json"
+      ],
+      "effect": "Credit more direct in-world interaction and reported signed-resource shelf checks. This adds transfer usability, not a cash-consuming economic sink."
+    },
+    {
+      "id": "LSD03",
+      "topic": "Cargo capacity and display",
+      "classification": "new_source_behavior_with_preserved_policy",
+      "finding": "Player PACK_TOP changes from 9.8 to 1.86 and presentation fits objective/status regions and rack corners. Overflow maps to the last modeled packet while ledger quantities remain exact. No new logical player inventory cap is introduced in these diffs. Worker load still uses six raw types and a per-type 500 displayed-unit ceiling; field_survivor and settlement definitions are unchanged.",
+      "evidence": [
+        "HavenlineLevel1/field_carry.gd",
+        "HavenlineLevel1/field_inventory.gd",
+        "HavenlineLevel1/field_settlement.gd",
+        "HavenlineLevel1/field_survivor.gd",
+        "Docs/QA/Camp-Field-2026-11-27/Crew/Field-notes.md",
+        "Docs/QA/Camp-Field-2026-11-27/References/Independent-review.md"
+      ],
+      "effect": "Credit compact readable cargo presentation and newly reported large-load evidence. Preserve unlimited logical player inventory. The selected CD03 requirement for unlimited logical mixed survivor cargo remains unproved in implementation; current source still has its per-type ceiling. Do not report the worker as a single-item helper."
+    },
+    {
+      "id": "LSD04",
+      "topic": "Survivor jobs and plot funding",
+      "classification": "unchanged_source_and_new_receipts",
+      "finding": "Survivor routing, mixed-load work, customer priority, and job families are unchanged from 3fad. Newly committed crew receipts describe service, mixed returns, moved equipment and early construction. worker_payment still rejects Progress.LINES before using _pay_from; the two conveyors remain excluded.",
+      "evidence": [
+        "HavenlineLevel1/field_survivor.gd",
+        "HavenlineLevel1/field_inventory.gd",
+        "HavenlineLevel1/field_progression.gd",
+        "HavenlineLevel1/field_worksites.gd",
+        "Docs/QA/Camp-Field-2026-11-27/Crew/Field-notes.md"
+      ],
+      "effect": "Credit reported worker demonstrations. Do not mark complete all-task survivor parity, delegated spending controls, future human task families, or universal construction assistance."
+    },
+    {
+      "id": "LSD05",
+      "topic": "Pet combat and hostile gate behavior",
+      "classification": "mixed_new_enemy_source_and_unchanged_companion_source",
+      "finding": "Owl combat and crew ownership source are byte-identical to 3fad. New receipts report actual owl talon contacts and separate roost purchases. Hostile wolves gain open-gate shoulder steering and temporary player-body collision exceptions, restored after separation/reset; jaw/tool reach remains the intended contact authority. This is hostile enemy behavior, not implementation of the friendly gray-wolf companion or all seven pets.",
+      "evidence": [
+        "HavenlineLevel1/field_owl.gd",
+        "HavenlineLevel1/field_crew.gd",
+        "HavenlineLevel1/field_enemy.gd",
+        "HavenlineLevel1/field_encounters.gd",
+        "Docs/QA/Camp-Field-2026-11-27/Crew/Field-notes.md"
+      ],
+      "effect": "Credit source-level doorway accommodation and reported owl evidence; retain all-seven attack and distinct useful specialty requirements and motion/identity gates."
+    },
+    {
+      "id": "LSD06",
+      "topic": "Economy and useful sinks",
+      "classification": "unchanged_economic_gap",
+      "finding": "Earned cash already existed at 3fad. This delta makes cash shelf retrieval physical and direct. The same 13 progression offers consume wood/stone/meat; no cash, coal, slate, metal, plank or block sink is added in the reviewed source delta. Product/cash movement is not terminal consumption.",
+      "evidence": [
+        "HavenlineLevel1/field_progression.gd",
+        "HavenlineLevel1/field_goods_exchange.gd",
+        "HavenlineLevel1/field_settlement_loop.gd",
+        "HavenlineLevel1/field_inventory.gd"
+      ],
+      "effect": "Keep the purpose/sink design requirements open for implementation. Do not describe cash as merely decorative, nor claim transfers resolve reward value."
+    },
+    {
+      "id": "LSD07",
+      "topic": "Stakes, hearth and drop recovery",
+      "classification": "unchanged_policy_source",
+      "finding": "The reviewed player-hit/return/hearth sections are unchanged: camp rejects player damage; zero HP returns to safe_start and restores health, while paid hopper stock and machine work remain in the ledger. No carried resource/product/cash/plot/companion debit is added in this delta. Gradual camp healing still requires the fired hearth. Loose field-drop lifetime remains 100 played seconds in unchanged lifecycle code.",
+      "evidence": [
+        "HavenlineLevel1/field_opening.gd",
+        "HavenlineLevel1/field_settlement_loop.gd",
+        "HavenlineLevel1/field_lifecycle.gd",
+        "HavenlineLevel1/field_hearth_fire.gd"
+      ],
+      "effect": "Do not imply implementation of the newly selected safer loss/recovery design or any new harsh/premium/permanent-death penalty. Continue to distinguish current expiry from future recovery policy."
+    },
+    {
+      "id": "LSD08",
+      "topic": "Roster, rigs and save integrity",
+      "classification": "new_source_behavior_and_reported_motion_review",
+      "finding": "Three compact replacement character models, fitted same-name joint mapping, support-foot/hip/pack adjustments, safer unit-scale wrist rotation, and matching HUD portraits replace the older alternate-rig path. Save fast-path now compares the last verified payload revision rather than the mutable current revision. Source and declared review records credit these corrections; this audit did not inspect model pixels, complete animation cycles or execute save tests.",
+      "evidence": [
+        "HavenlineLevel1/field_player_wardrobe.gd",
+        "HavenlineLevel1/field_glove_clearance.gd",
+        "HavenlineLevel1/gait_motor.gd",
+        "HavenlineLevel1/field_hud.gd",
+        "HavenlineLevel1/field_save.gd",
+        "Docs/QA/Camp-Field-2026-11-27/References/Rigs/Rig-release-gates.json"
+      ],
+      "effect": "Credit source corrections and reported 9.9 movement reviews without granting exact-10 final visual/C5 approval."
+    },
+    {
+      "id": "LSD09",
+      "topic": "Project scene, orientation and device proof",
+      "classification": "unchanged_configuration_and_explicit_unmeasured_hardware",
+      "finding": "project.godot and field_opening.tscn are byte-identical. Main scene remains res://field_opening.tscn, configured viewport 1280x720, canvas_items/expand and window/handheld/orientation=6. This audit does not infer measured device behavior from that enum. Build 13 explicitly marks physical Fold7 testing unmeasured; its signed shelf replay runs on desktop headless resources, not the phone.",
+      "evidence": [
+        "HavenlineLevel1/project.godot",
+        "HavenlineLevel1/field_opening.tscn",
+        "Docs/QA/Camp-Field-2026-11-27/Verification/Android.json",
+        "Docs/QA/Camp-Field-2026-11-27/Verification/Signed-shelf-walk.json"
+      ],
+      "effect": "Keep physical orientation/input/frame-time/4K and sustained device acceptance unproved."
+    },
+    {
+      "id": "LSD10",
+      "topic": "Review thresholds and footage binding",
+      "classification": "reported_scoped_checkpoint_not_final_acceptance",
+      "finding": "Camp Independent-camp-review is bound to 3fad with threshold9.5 and 9.5 counter/ballista scores. The release binding records identical exhibit files and a current-source native rerun. The broader Verdict binds 2654, reports seven feature scopes at9.5, shelf/pack at9.9, and five locomotion rigs at9.9; it explicitly states that final per-dimension9.9/exact10 reapproval is separate.",
+      "evidence": [
+        "Docs/QA/Camp-Field-2026-11-27/Camp/Independent-camp-review.json",
+        "Docs/QA/Camp-Field-2026-11-27/Camp/Release-check/Pinned-source-and-results.json",
+        "Docs/QA/Camp-Field-2026-11-27/References/Verdict.json",
+        "Docs/QA/Camp-Field-2026-11-27/References/Independent-review.md"
+      ],
+      "effect": "Preserve raw reported passes as checkpoint evidence. Do not round, average, retag or inherit them as current task closure."
+    },
+    {
+      "id": "LSD11",
+      "topic": "Reference-video custody",
+      "classification": "additional_provenance_but_complete_originals_not_located",
+      "finding": "New reference metadata identifies exactb.mp4 and two supplemental ads by SHA256, native FPS, frames and seconds, with committed still proofs/comparison films. Full-tree path inventory finds neither locked original owner recording filename nor these three full source-film filenames. The new exactb hash differs from locked original B; it is traceability for that retrieved source, not byte custody of the locked original recording. Existing locked excerpts remain present.",
+      "evidence": [
+        "Docs/QA/Camp-Field-2026-11-27/References/Sources.json",
+        "Docs/Design/ReferenceVideoLock/reference-video-sources.json"
+      ],
+      "effect": "Credit added provenance and excerpts. Use the bounded statement that complete originals were not located in this Git tree; do not assert all reference footage unavailable. No media was played back in this audit."
+    }
+  ],
+  "approval": {
+    "runtime_approved": false,
+    "motion_approved": false,
+    "visual_approved": false,
+    "device_approved": false,
+    "task_closure_approved": false
+  },
+  "boundaries": [
+    "No runtime execution, motion playback, model-image review or APK/device validation was performed for this delta.",
+    "Source hash and Git object checks establish identity, not behavior.",
+    "No candidate, task states, canonical data, historical evidence, active branch or remote was edited. Git object retrieval only may occur on partial-clone reads.",
+    "New QA package statements retain their reported scope and source; they are not independently reproduced results."
+  ]
+}

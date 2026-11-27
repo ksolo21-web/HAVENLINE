@@ -98,7 +98,7 @@ Assigned production tasks:
 - T30 Brown bear
 - T31 integrated companion jobs/population safety
 
-Every combat-capable animal must have a species-specific attack profile.
+All seven pets must retain a real species-specific attack and a useful specialty. Fox and owl cannot become support-only. Each needs valid target/contact damage, miss, interruption, recall, recovery and return-to-work evidence; a flag or static profile is not runtime proof.
 
 Required attack languages:
 - dog: lunge/bite/intercept;
@@ -142,9 +142,9 @@ The existing T01-T70 numbering remains unchanged. These requirements are mandato
 
 C5 Motion/Rigging remains mandatory where already assigned.
 
-This standard additionally requires C5 for T09, T16, T19, T21 and T23.
+This standard additionally requires C5 for T09, T16, T19, T21 and T23, and preserves mandatory C5 for all seven pet attack tasks T24–T30.
 
-For T44-T52, C5 becomes mandatory whenever the candidate introduces a new actor action or animation profile.
+For T44–T52, C5 is mandatory for a new actor action/animation profile and whenever the current evaluator derives a non-placeholder resource action profile from evaluated required/upstream/ready, introduced or explicitly covered resources (`regional_resource_contact`). This is a deliberately stronger forward contact/use-state review for regional geometry, even if `animation_delta=false` or a previously approved clip is reused. Reuse does not require a new clip.
 
 ## Candidate contract proof
 
@@ -160,7 +160,7 @@ Applicable candidates must populate `resource_actor_contract` in their candidate
 - animation_delta;
 - validator output path/hash.
 
-The closure validator must fail an applicable task when this proof is missing, stale, incomplete, or inconsistent with the current registry files.
+The closure validator reruns the current authoritative evaluator against the actual manifest and current registries. A passed stored receipt cannot override a failed current check. It fails missing, stale, incomplete or inconsistent proof. Required player/helper/survivor profiles derive from evaluated resources as well as the task profile list; arbitrary/unknown coverage cannot satisfy them. Only the explicitly phase-deferred T23 survivor field may remain pending in an earlier T09 check; T23 and applicable integrations must resolve it.
 
 ## Fail-closed rules
 

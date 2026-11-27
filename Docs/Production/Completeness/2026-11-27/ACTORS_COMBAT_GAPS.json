@@ -1,0 +1,2314 @@
+{
+  "schema_version": 1,
+  "audit_id": "HAVENLINE_ACTORS_COMBAT_DELTA_2026_11_27",
+  "base_commit": "fd2e12c8734f49cda7eb3bbf97887406bd03a704",
+  "observed_gameplay_source_commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+  "scope": "PLANNING_DELTA_AND_BOUNDED_SOURCE_OBSERVATION_ONLY",
+  "publication_state": "INTEGRATED_FORWARD_REQUIREMENTS_WITH_SELECTED_DECISIONS",
+  "game_approval_allowed": false,
+  "runtime_approval_allowed": false,
+  "runtime_score": null,
+  "current_user_requirement": "All seven pets must still attack, alongside their useful specialties; close remaining game-plan gaps coherently without weakening Havenline fit.",
+  "source_precedence": "fd2e12c is the reviewed main plan. 3fad812 is the separately recorded gameplay source; it supersedes the historical Build 11 actor/economy observations only as documented. This is not a claim that the live gameplay branch cannot have advanced.",
+  "sources": [
+    {
+      "id": "S01",
+      "commit": "fd2e12c8734f49cda7eb3bbf97887406bd03a704",
+      "path": "AGENTS.md",
+      "git_blob_sha": "2547fe924e748c5b11a9f43ef50d5963ad307037",
+      "sha256": "0bf015d25e2d77c6b047545319cbbbe28e86e90e00e9b16079b84ed69e0086f4",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/fd2e12c8734f49cda7eb3bbf97887406bd03a704/AGENTS.md"
+    },
+    {
+      "id": "S02",
+      "commit": "fd2e12c8734f49cda7eb3bbf97887406bd03a704",
+      "path": "Docs/Production/HAVENLINE_BUILD_PLAN_V2.md",
+      "git_blob_sha": "b7485b15eac90208a52dab97d37c656907a00245",
+      "sha256": "1e8a527e1089cfec878575f08471b2ec7b37cca33ba3af91f6b946477bf8e56a",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/fd2e12c8734f49cda7eb3bbf97887406bd03a704/Docs/Production/HAVENLINE_BUILD_PLAN_V2.md"
+    },
+    {
+      "id": "S03",
+      "commit": "fd2e12c8734f49cda7eb3bbf97887406bd03a704",
+      "path": "Docs/Production/GAMEPLAY_DEPTH_STANDARD.md",
+      "git_blob_sha": "18e5fe2c0df21854b012a44f3b119ab2f094a90c",
+      "sha256": "31d383807d6c14653edb46e1bd3122f76af42575c4c79fe2eb2447be166c4105",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/fd2e12c8734f49cda7eb3bbf97887406bd03a704/Docs/Production/GAMEPLAY_DEPTH_STANDARD.md"
+    },
+    {
+      "id": "S04",
+      "commit": "fd2e12c8734f49cda7eb3bbf97887406bd03a704",
+      "path": "Docs/Production/GAMEPLAY_DEPTH_CONTRACT.json",
+      "git_blob_sha": "d19daf4e4a0a8de64ef15507b92fea7643818ee9",
+      "sha256": "199f1d0af2c8c7726f0025c842afe140ec76ae272b7235b309cc97f6464128c0",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/fd2e12c8734f49cda7eb3bbf97887406bd03a704/Docs/Production/GAMEPLAY_DEPTH_CONTRACT.json"
+    },
+    {
+      "id": "S05",
+      "commit": "fd2e12c8734f49cda7eb3bbf97887406bd03a704",
+      "path": "Docs/Production/ACTOR_CAPABILITY_MATRIX.json",
+      "git_blob_sha": "08ca48a8294261b1cba9fd9289620d1fc7939a9c",
+      "sha256": "f319469be543267c6a21988d6b23f915550bd01c7d8513516b7410915680b1bf",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/fd2e12c8734f49cda7eb3bbf97887406bd03a704/Docs/Production/ACTOR_CAPABILITY_MATRIX.json"
+    },
+    {
+      "id": "S06",
+      "commit": "fd2e12c8734f49cda7eb3bbf97887406bd03a704",
+      "path": "Docs/Production/ANIMATION_ACTION_MATRIX.json",
+      "git_blob_sha": "1cb372d6a0f02d899a807e0a41bd1eea2a0ab7cb",
+      "sha256": "57df079f213a88e58b87e01aa7b520ca2fe4d98a41368307fdbba433a57d46e5",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/fd2e12c8734f49cda7eb3bbf97887406bd03a704/Docs/Production/ANIMATION_ACTION_MATRIX.json"
+    },
+    {
+      "id": "S07",
+      "commit": "fd2e12c8734f49cda7eb3bbf97887406bd03a704",
+      "path": "Docs/Production/RESOURCE_TOOL_ACTOR_STANDARD.md",
+      "git_blob_sha": "b3a25d4463a93b7fbf94bd75725debbb3616453a",
+      "sha256": "c5adc4719e34e59d66cb57c2983a89c7da0bb1dbb9700601c273b091158dd773",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/fd2e12c8734f49cda7eb3bbf97887406bd03a704/Docs/Production/RESOURCE_TOOL_ACTOR_STANDARD.md"
+    },
+    {
+      "id": "S08",
+      "commit": "fd2e12c8734f49cda7eb3bbf97887406bd03a704",
+      "path": "Docs/Production/GameplayDepth/2026-11-27/ACTORS_MOTION_REQUIREMENTS.json",
+      "git_blob_sha": "733923361e11141e1435e5de73f78ee0a1e289c0",
+      "sha256": "9fa0c4e40f432b2f2e53669a7697a131edfca5a3f635e471b84740e323fe540c",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/fd2e12c8734f49cda7eb3bbf97887406bd03a704/Docs/Production/GameplayDepth/2026-11-27/ACTORS_MOTION_REQUIREMENTS.json"
+    },
+    {
+      "id": "S09",
+      "commit": "fd2e12c8734f49cda7eb3bbf97887406bd03a704",
+      "path": "Docs/Production/ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md",
+      "git_blob_sha": "0e87f2ccef3dd00572b64f1054e52c0052e4d3b6",
+      "sha256": "ac0614ce4231ad510ec02c7a8fb85d08dee4dcb8c7990ea6f6f8a3d5475d8453",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/fd2e12c8734f49cda7eb3bbf97887406bd03a704/Docs/Production/ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md"
+    },
+    {
+      "id": "S10",
+      "commit": "fd2e12c8734f49cda7eb3bbf97887406bd03a704",
+      "path": "Docs/Production/ReferenceRefresh/2026-11-27/RENDER_CATALOGUE.md",
+      "git_blob_sha": "86a7eda2ea455b7f2da68d88bfe2af3e1e7e33a2",
+      "sha256": "6d1c4622e0def96f54a3c9abc9da1bf9b47d7d3bac19fa8ff1fca729f2ae5978",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/fd2e12c8734f49cda7eb3bbf97887406bd03a704/Docs/Production/ReferenceRefresh/2026-11-27/RENDER_CATALOGUE.md"
+    },
+    {
+      "id": "S11",
+      "commit": "fd2e12c8734f49cda7eb3bbf97887406bd03a704",
+      "path": "Docs/Production/ReferenceRefresh/2026-11-27/REFERENCE_RESEARCH.md",
+      "git_blob_sha": "03be69f09672e6211a6199c32133e3980ece5a37",
+      "sha256": "b1d5a5038f9c18e276d5c743d9e7e7a1370c40539db2b19cf129a1cdfbbaa278",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/fd2e12c8734f49cda7eb3bbf97887406bd03a704/Docs/Production/ReferenceRefresh/2026-11-27/REFERENCE_RESEARCH.md"
+    },
+    {
+      "id": "S12",
+      "commit": "fd2e12c8734f49cda7eb3bbf97887406bd03a704",
+      "path": "Docs/Production/DEPENDENCY_GRAPH.json",
+      "git_blob_sha": "93836ccac725bcef484c14c855e8bce9ae4502ad",
+      "sha256": "ec288e511af2ad220234fe7fcd50d6bfabbe275edd1ddc8d4b11bbdb7af82459",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/fd2e12c8734f49cda7eb3bbf97887406bd03a704/Docs/Production/DEPENDENCY_GRAPH.json"
+    },
+    {
+      "id": "S13",
+      "commit": "fd2e12c8734f49cda7eb3bbf97887406bd03a704",
+      "path": "Docs/Production/GameplayDepth/2026-11-27/CURRENT_BRANCH_NOTE.md",
+      "git_blob_sha": "55ed3acb50c9d094392bd51981fe573eae36d09a",
+      "sha256": "b739261339d581bd7189facbbb04b50d66b73c85cb0fd9844264a9c39e94523b",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/fd2e12c8734f49cda7eb3bbf97887406bd03a704/Docs/Production/GameplayDepth/2026-11-27/CURRENT_BRANCH_NOTE.md"
+    },
+    {
+      "id": "S14",
+      "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "path": "HavenlineLevel1/field_owl.gd",
+      "git_blob_sha": "e2dbe6f5eec6f8fa01328985327a3c3408f7b9d8",
+      "sha256": "ed476d1ebc69d658aab8d66bc5f0c76f3da7168783bf5a3ba296cd0a89428376",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/3fad812b384335bd8ca9b5e47dc9d9557110eb4a/HavenlineLevel1/field_owl.gd"
+    },
+    {
+      "id": "S15",
+      "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "path": "HavenlineLevel1/field_opening.gd",
+      "git_blob_sha": "d92185586e194ce51a515e71a9f5fb5fca1dbc4f",
+      "sha256": "109b58f9418cf413af20d060794d38ee8a2c3e97a24b2bba88e099e9e1c4ea5e",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/3fad812b384335bd8ca9b5e47dc9d9557110eb4a/HavenlineLevel1/field_opening.gd"
+    },
+    {
+      "id": "S16",
+      "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "path": "HavenlineLevel1/field_enemy.gd",
+      "git_blob_sha": "cfef6b4de2d744ce16d1676e931aaf206cfc1c26",
+      "sha256": "837cc947c8f52a8b39f67524e548863f4b4d2bcb82478aa077425e00d3490731",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/3fad812b384335bd8ca9b5e47dc9d9557110eb4a/HavenlineLevel1/field_enemy.gd"
+    },
+    {
+      "id": "S17",
+      "commit": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+      "path": "HavenlineLevel1/field_survivor.gd",
+      "git_blob_sha": "a7c2c73007acc1c015958b80fdb4de79847c07f2",
+      "sha256": "c2c7d9b368ee59d2dfbb691daa6bce2a1b750494da16b346d4cb01d1bcb8696f",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/3fad812b384335bd8ca9b5e47dc9d9557110eb4a/HavenlineLevel1/field_survivor.gd"
+    },
+    {
+      "id": "S18",
+      "commit": "fd2e12c8734f49cda7eb3bbf97887406bd03a704",
+      "path": "Docs/Production/T07/FROZEN_SCOPE.md",
+      "git_blob_sha": "6df60db08b789f82767cb8fd65122d645ff48ca9",
+      "sha256": "0ddcbc2bd066ac8aec366084a229b46363531c1afae421b3c7d16cf6388bb770",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/fd2e12c8734f49cda7eb3bbf97887406bd03a704/Docs/Production/T07/FROZEN_SCOPE.md"
+    }
+  ],
+  "already_covered": [
+    {
+      "id": "C01",
+      "coverage": "All seven species already have attack_allowed=true and an explicit required attack profile.",
+      "source_refs": [
+        "S05",
+        "S06"
+      ],
+      "scope": "Existing commitment; the new user instruction removes any support-only interpretation."
+    },
+    {
+      "id": "C02",
+      "coverage": "Complete human task-family assistance, substantial mixed loads, delegated ordinary-resource/cash plot spending, protected reserves and no autonomous premium spend.",
+      "source_refs": [
+        "S03",
+        "S04",
+        "S08"
+      ],
+      "scope": "GD03–GD05 and AC01–AC03 already cover the requirement; capacity tuning and production proof remain open."
+    },
+    {
+      "id": "C03",
+      "coverage": "Fourteen AI obligations cover eligibility, stable priorities, reservations, preemption, route/target recovery, custody, save continuity and truthful intent.",
+      "source_refs": [
+        "S04",
+        "S08"
+      ],
+      "scope": "GD06 already establishes intelligent behavior; this delta specifies combat/job boundary cases."
+    },
+    {
+      "id": "C04",
+      "coverage": "Species-distinct useful jobs, friendly identity, complete actor/equipment/enemy action states and real audio listening.",
+      "source_refs": [
+        "S03",
+        "S04",
+        "S06"
+      ],
+      "scope": "GD07–GD12 already cover usefulness and full presentation. Existing profiles are required, not certified clips."
+    },
+    {
+      "id": "C05",
+      "coverage": "Late-region compatibility, free-player usefulness, integrated population/device evidence and current reference acceptance.",
+      "source_refs": [
+        "S01",
+        "S03",
+        "S04",
+        "S09"
+      ],
+      "scope": "GD17–GD18 and the task crosswalk cover whole-game obligations; the missing region/species decisions must now be bound explicitly."
+    }
+  ],
+  "bounded_current_source_credit": [
+    {
+      "id": "O01",
+      "finding": "The observed 3fad812 owl source already has takeoff/follow/bank/windup/dive/strike/recover/land/perched states; it selects eligible outside-camp enemies, checks owner distance, intersects actual claw segments with the target surface, and submits a real damage contact.",
+      "source_refs": [
+        "S14",
+        "S15"
+      ],
+      "locators": [
+        "field_owl.gd::_eligible/_nearest/advance/_dive/permits_contact",
+        "field_opening.gd::owl_contact"
+      ],
+      "limit": "Source grounding for the current owl only. No playback, contact quality, full target roster, device performance or seven-pet integration approval."
+    },
+    {
+      "id": "O02",
+      "finding": "The observed hostile-wolf source contains pursuit/leash, brace, bite contact, recovery, hit reception and encounter reset behavior.",
+      "source_refs": [
+        "S16"
+      ],
+      "locators": [
+        "field_enemy.gd::advance/_attack_pose/receive_hit/reset_encounter"
+      ],
+      "limit": "A reviewed hostile-wolf implementation is not the friendly gray wolf and does not prove the complete enemy roster or polished weapon progression."
+    },
+    {
+      "id": "O03",
+      "finding": "The observed survivor source already schedules an early customer-service opportunity, rotates camp duties, gathers mixed resources during a bounded field shift and streams typed cargo back to storage.",
+      "source_refs": [
+        "S13",
+        "S17"
+      ],
+      "locators": [
+        "field_survivor.gd::_leave_shelf/_continue_field_shift/_go_home_bulk/_unload_stream"
+      ],
+      "limit": "Credit this groundwork. It does not prove every future physical task, final worker capacity policy, combat interruption or population-scale intelligence."
+    }
+  ],
+  "all_pets_attack_contract": {
+    "requirement_state": "USER_REQUIRED_AND_ADOPTED_FORWARD_CONTRACT",
+    "required_pet_count": 7,
+    "required_actor_ids": [
+      "guardian_dog",
+      "gray_wolf",
+      "fox",
+      "owl",
+      "male_lion",
+      "white_tiger",
+      "brown_bear"
+    ],
+    "all_seven_simultaneously_active_is_not_implied": true,
+    "rules": [
+      {
+        "id": "PA01",
+        "title": "Seven real combat participants",
+        "requirement": "Every one of guardian_dog, gray_wolf, fox, owl, male_lion, white_tiger and brown_bear retains an unlocked, usable species-specific attack. Scouting, warning, retrieval, hauling and other specialties are additional value; they cannot replace attack or turn fox/owl into support-only pets.",
+        "origin": "CURRENT_USER_REQUIREMENT"
+      },
+      {
+        "id": "PA02",
+        "title": "Useful attack outcome",
+        "requirement": "Every species has at least one ordinary eligible-hostile scenario in which a valid attack inflicts real positive damage and helps the player. Cosmetic swipes, an unused animation, a statistics-only aura, a warning marker or merely being marked attack_allowed do not pass. Exact damage and cadence require balanced actor/target evidence.",
+        "origin": "EXPLICIT_ACCEPTANCE_DETAIL"
+      },
+      {
+        "id": "PA03",
+        "title": "Complete attack state and contact",
+        "requirement": "Bind ready/approach/anticipation/commit/contact-or-miss/recovery/return, interruption and resume to the actual species rig. Each intentional contact group has an authoritative attack-instance/event identity; repeat overlap, extra claws, animation callbacks or reload cannot duplicate that group. An intentionally multi-hit attack must declare its separate groups. A miss, invalid target or cancellation before contact causes no damage.",
+        "origin": "EXPLICIT_ACCEPTANCE_DETAIL"
+      },
+      {
+        "id": "PA04",
+        "title": "Legitimate targets and friendly identity",
+        "requirement": "Select and revalidate a living eligible hostile or explicitly authorized hunt target by stable identity, faction, current state and environment. Player, companions, workers, customers and rescue candidates are not ordinary hostile/loot targets. A hostile wolf or wildlife meat concept cannot supply a friendly-pet identity or drop policy. All pet kills use the shared exactly-once defeat/reward pipeline.",
+        "origin": "EXISTING_COMMITMENT_REFINED"
+      },
+      {
+        "id": "PA05",
+        "title": "Stable and readable priorities",
+        "requirement": "Preserve the simple-control and priority language of T07. Its frozen human-context selector does not automatically own animal behavior: species and T31 owners author pet/job arbitration, and any shared-selector change uses the existing authorized scope process. Recommended arbitration is: a current recall/retreat or safety constraint; an immediate threat to the assigned protected ally/area; an authorized player-selected reachable hostile; the assigned defense/hunt objective; then a safe opportunistic hostile. Keep a valid target until a meaningful priority/eligibility change; distribute useful engagement space instead of seven pets repeatedly switching to the nearest enemy.",
+        "origin": "RECOMMENDED_AUTHORED_POLICY"
+      },
+      {
+        "id": "PA06",
+        "title": "Physical range, pursuit and return",
+        "requirement": "Freeze sensed area, line-of-approach/occlusion, actual strike reach, safe route, pursuit leash, disengagement and return point for each profile. Damage must agree with visible contact, target size and obstructions. Do not teleport, clip through gates/walls, use omniscient targeting, chase indefinitely, or obtain a free attack through a sanctuary boundary. Failure to reach a target produces a truthful alternate/return state.",
+        "origin": "EXPLICIT_ACCEPTANCE_DETAIL"
+      },
+      {
+        "id": "PA07",
+        "title": "Recall, preemption and useful resumption",
+        "requirement": "Recall prevents acquiring or extending a pursuit. Before a valid contact commit, a cancellable attack exits without damage; after a committed contact it exits at the authored safe boundary without repeating damage. Immediate defensive contact during withdrawal is permitted only when it does not countermand the return order. Store the suspended job and revalidate its target, reservation, destination, budget and cargo before resuming or choosing another useful job.",
+        "origin": "EXPLICIT_ACCEPTANCE_DETAIL"
+      },
+      {
+        "id": "PA08",
+        "title": "Cargo and tools remain truthful",
+        "requirement": "A pet or survivor switching from carrying/working to combat first uses an authored compatible handling transition. A mouth/talon already holding cargo cannot silently keep that cargo while performing an incompatible bite/strike. Secure, hand off or explicitly set down typed owned cargo with recovery custody; never erase or duplicate it. A construction payment or machine transfer commits once or remains uncommitted.",
+        "origin": "EXISTING_COMMITMENT_REFINED"
+      },
+      {
+        "id": "PA09",
+        "title": "Coordinated attacks and fair rewards",
+        "requirement": "Use shared engagement-space/target state with bounded reservations and cleanup. Multiple allies may attack one durable enemy when appropriate, but contact validation, overkill, simultaneous defeat and reward generation stay authoritative. No repeated kill reward, friendly body-block trap, endless stun loop if control effects are selected, or camera-filling overlap. Defense structures and pets cooperate through the same target truths.",
+        "origin": "EXPLICIT_ACCEPTANCE_DETAIL"
+      },
+      {
+        "id": "PA10",
+        "title": "Recoverable actor lifecycle",
+        "requirement": "Select explicit hurt, retreat, incapacitation-if-used, help/recovery and return-to-job rules shared with the loss/recovery decision. Recommended ordinary-play policy preserves named pet/survivor identity and progress, with free attainable recovery and no autonomous premium revive. The contract must expose what the player protects; invulnerable helpers and destructible helpers are different rules and must not be mixed accidentally.",
+        "origin": "RECOMMENDED_AUTHORED_POLICY"
+      },
+      {
+        "id": "PA11",
+        "title": "Progression and environment continuity",
+        "requirement": "Every species retains a real usable attack throughout applicable progression; this does not require each animal to fight in every region or terrain cell. Region owners bind safe deployment, reachable attacks, local target compatibility, transport, return and cargo continuity. An unsuitable environment may have an explicit inapplicable combat disposition with a useful safe alternative assignment and a retained combat role elsewhere in the progression. Use already selected compatible routes/staging or appropriate equipment only where it fits the region; do not invent new facilities/gear merely to fill a matrix, ordinary owl underwater flight, quadruped free flight or invisible remote damage. No silent conversion of a species to support-only and no mandatory paid environmental competence.",
+        "origin": "EXPLICIT_ACCEPTANCE_DETAIL"
+      },
+      {
+        "id": "PA12",
+        "title": "Actual evidence, current standard",
+        "requirement": "Bind each species to the existing selected GitHub sheet and actual mesh/rig/profile/scene. Prove successful attack, miss, interrupted attack, target loss, recall, return-to-specialty and a later-region use case with exact-source full-cycle multi-angle playback and actual sound listening. Shared busy-scene/device evidence is additional. Historical 9.3/9.4 reference-sheet scores do not grant current approval; retain current reference >=9.9 and stronger exact-10 visual requirements.",
+        "origin": "EXISTING_COMMITMENT_REFINED"
+      }
+    ],
+    "species": [
+      {
+        "actor_id": "guardian_dog",
+        "owner_task": "T24",
+        "integration_task": "T31",
+        "attack_required": true,
+        "registered_attack_allowed": true,
+        "registered_capabilities": [
+          "follow",
+          "guard",
+          "attack",
+          "intercept",
+          "track",
+          "retrieve_light"
+        ],
+        "attack_capability_token": "attack",
+        "attack_profile": "dog_attack",
+        "existing_motion_language": "lunge_bite_intercept",
+        "additional_specialty_recommendation": "Close escort and recovery of eligible light cargo.",
+        "mandatory_combat_scenario": "An enemy closes on an assigned carrier; the dog visibly lunges/bites, causes valid damage, then returns to escort without stealing the carried load.",
+        "render_starting_points": [
+          {
+            "archive_id": "baseline-equipment-cast-companions",
+            "image_id": "pet_dog_01",
+            "path": "Docs/Design/RenderArchive/2026-11-23/selected/animal-companions/pet_dog_01.png",
+            "sha256": "eb473ec644445b0b4c38ed7ee1c6db512dd3a94be6b0347b5ee43073ad4490cf",
+            "git_blob_sha": "27f18dc67f9b52d7462085f8ea93a14f79f9a4eb",
+            "url": "https://github.com/ksolo21-web/HAVENLINE/blob/a868ae89cdf2f120b478aa0a48fff35e09cc465c/Docs/Design/RenderArchive/2026-11-23/selected/animal-companions/pet_dog_01.png"
+          }
+        ],
+        "reference_origin": "AUTHORED_HAVENLINE_SCOPE_NOT_DIRECT_PET_VIDEO_OBSERVATION",
+        "implementation_state": "NOT_CERTIFIED_BY_THIS_AUDIT"
+      },
+      {
+        "actor_id": "gray_wolf",
+        "owner_task": "T25",
+        "integration_task": "T31",
+        "attack_required": true,
+        "registered_attack_allowed": true,
+        "registered_capabilities": [
+          "follow",
+          "guard",
+          "attack",
+          "hunt",
+          "track",
+          "retrieve_light"
+        ],
+        "attack_capability_token": "attack",
+        "attack_profile": "wolf_attack",
+        "existing_motion_language": "pursuit_pounce_bite",
+        "additional_specialty_recommendation": "Tracking and bounded pursuit of eligible threats or authorized prey.",
+        "mandatory_combat_scenario": "Pursue an eligible hostile, pounce/bite with real contact, break off at the safe leash and return. Repeat with a friendly same-species actor present and prove identity separation.",
+        "render_starting_points": [
+          {
+            "archive_id": "baseline-equipment-cast-companions",
+            "image_id": "pet_wolf_01",
+            "path": "Docs/Design/RenderArchive/2026-11-23/selected/animal-companions/pet_wolf_01.png",
+            "sha256": "fce42b24c4885ed5d816b47f35c40877c646c9946dfcc707a277d4c58faadff2",
+            "git_blob_sha": "639ce1efa707430c7cbbc497868ac3440a976a80",
+            "url": "https://github.com/ksolo21-web/HAVENLINE/blob/a868ae89cdf2f120b478aa0a48fff35e09cc465c/Docs/Design/RenderArchive/2026-11-23/selected/animal-companions/pet_wolf_01.png"
+          }
+        ],
+        "reference_origin": "AUTHORED_HAVENLINE_SCOPE_NOT_DIRECT_PET_VIDEO_OBSERVATION",
+        "implementation_state": "NOT_CERTIFIED_BY_THIS_AUDIT"
+      },
+      {
+        "actor_id": "fox",
+        "owner_task": "T26",
+        "integration_task": "T31",
+        "attack_required": true,
+        "registered_attack_allowed": true,
+        "registered_capabilities": [
+          "follow",
+          "scout",
+          "attack",
+          "retrieve_light"
+        ],
+        "attack_capability_token": "attack",
+        "attack_profile": "fox_attack",
+        "existing_motion_language": "dart_pounce_bite",
+        "additional_specialty_recommendation": "Agile ground scouting and suitable light retrieval.",
+        "mandatory_combat_scenario": "Dart into a legitimate opening, pounce/bite for meaningful damage and disengage. Demonstrate the attack during ordinary play; a fox that only fetches, warns or evades fails.",
+        "render_starting_points": [
+          {
+            "archive_id": "baseline-equipment-cast-companions",
+            "image_id": "pet_fox_01",
+            "path": "Docs/Design/RenderArchive/2026-11-23/selected/animal-companions/pet_fox_01.png",
+            "sha256": "93916095213a3c4fd6822f1594cd5a5b6d85a1b8ceb7e1d50c91ca05655aa038",
+            "git_blob_sha": "9bf66368d0d4c04da5b768255d075239bd2586b8",
+            "url": "https://github.com/ksolo21-web/HAVENLINE/blob/a868ae89cdf2f120b478aa0a48fff35e09cc465c/Docs/Design/RenderArchive/2026-11-23/selected/animal-companions/pet_fox_01.png"
+          }
+        ],
+        "reference_origin": "AUTHORED_HAVENLINE_SCOPE_NOT_DIRECT_PET_VIDEO_OBSERVATION",
+        "implementation_state": "NOT_CERTIFIED_BY_THIS_AUDIT"
+      },
+      {
+        "actor_id": "owl",
+        "owner_task": "T27",
+        "integration_task": "T31",
+        "attack_required": true,
+        "registered_attack_allowed": true,
+        "registered_capabilities": [
+          "follow_air",
+          "scout",
+          "aerial_attack",
+          "retrieve_light"
+        ],
+        "attack_capability_token": "aerial_attack",
+        "attack_profile": "owl_attack",
+        "existing_motion_language": "aerial_dive_talon_strike",
+        "additional_specialty_recommendation": "Aerial reconnaissance, warning and suitable light retrieval.",
+        "mandatory_combat_scenario": "Take off, bank/anticipate, dive and strike with actual talon contact, recover in clear air and return/perch. A circling bird with a damage timer or a warning-only owl fails.",
+        "render_starting_points": [
+          {
+            "archive_id": "baseline-equipment-cast-companions",
+            "image_id": "pet_owl_01",
+            "path": "Docs/Design/RenderArchive/2026-11-23/selected/animal-companions/pet_owl_01.png",
+            "sha256": "0ae787ef27d7961ad3c8f760275c514457326b0a0aac9a371dd1470085529cd8",
+            "git_blob_sha": "db465610eb61d155a7ae0876b624fa625361a19f",
+            "url": "https://github.com/ksolo21-web/HAVENLINE/blob/a868ae89cdf2f120b478aa0a48fff35e09cc465c/Docs/Design/RenderArchive/2026-11-23/selected/animal-companions/pet_owl_01.png"
+          }
+        ],
+        "reference_origin": "AUTHORED_HAVENLINE_SCOPE_NOT_DIRECT_PET_VIDEO_OBSERVATION",
+        "implementation_state": "NOT_CERTIFIED_BY_THIS_AUDIT"
+      },
+      {
+        "actor_id": "male_lion",
+        "owner_task": "T28",
+        "integration_task": "T31",
+        "attack_required": true,
+        "registered_attack_allowed": true,
+        "registered_capabilities": [
+          "follow",
+          "guard",
+          "attack",
+          "hunt",
+          "intercept"
+        ],
+        "attack_capability_token": "attack",
+        "attack_profile": "lion_attack",
+        "existing_motion_language": "charge_pounce_claw_bite",
+        "additional_specialty_recommendation": "Defense of an exposed approach and protection of working allies.",
+        "mandatory_combat_scenario": "Commit visibly to a charge/pounce/claw/bite against an eligible threat, apply authored contact damage and recover with believable mass. Keep mane, turning and ally clearance readable.",
+        "render_starting_points": [
+          {
+            "archive_id": "baseline-equipment-cast-companions",
+            "image_id": "pet_lion_01",
+            "path": "Docs/Design/RenderArchive/2026-11-23/selected/animal-companions/pet_lion_01.png",
+            "sha256": "5c9d5b6726ed2301e023e3fa9d2031f9d01680d444938ff67ba348cf1acc0eb5",
+            "git_blob_sha": "50f99b6abdf3681aafc5e7ffbb7a84285145512b",
+            "url": "https://github.com/ksolo21-web/HAVENLINE/blob/a868ae89cdf2f120b478aa0a48fff35e09cc465c/Docs/Design/RenderArchive/2026-11-23/selected/animal-companions/pet_lion_01.png"
+          }
+        ],
+        "reference_origin": "AUTHORED_HAVENLINE_SCOPE_NOT_DIRECT_PET_VIDEO_OBSERVATION",
+        "implementation_state": "NOT_CERTIFIED_BY_THIS_AUDIT"
+      },
+      {
+        "actor_id": "white_tiger",
+        "owner_task": "T29",
+        "integration_task": "T31",
+        "attack_required": true,
+        "registered_attack_allowed": true,
+        "registered_capabilities": [
+          "follow",
+          "guard",
+          "attack",
+          "hunt",
+          "intercept"
+        ],
+        "attack_capability_token": "attack",
+        "attack_profile": "tiger_attack",
+        "existing_motion_language": "low_ambush_pounce_claw_bite",
+        "additional_specialty_recommendation": "Focused flanking and interception.",
+        "mandatory_combat_scenario": "Use a reachable approach for a low ambush/pounce/claw/bite; no teleport flank. Show distinct timing/posture from the lion and return to its assigned objective.",
+        "render_starting_points": [
+          {
+            "archive_id": "baseline-equipment-cast-companions",
+            "image_id": "pet_tiger_01",
+            "path": "Docs/Design/RenderArchive/2026-11-23/selected/animal-companions/pet_tiger_01.png",
+            "sha256": "44283f10feda7e8e916a9eeb14e110ab756ff9ded24d51281e710cd3f361d936",
+            "git_blob_sha": "391a13f778edd500e277b19fcb03706d80f933ec",
+            "url": "https://github.com/ksolo21-web/HAVENLINE/blob/a868ae89cdf2f120b478aa0a48fff35e09cc465c/Docs/Design/RenderArchive/2026-11-23/selected/animal-companions/pet_tiger_01.png"
+          }
+        ],
+        "reference_origin": "AUTHORED_HAVENLINE_SCOPE_NOT_DIRECT_PET_VIDEO_OBSERVATION",
+        "implementation_state": "NOT_CERTIFIED_BY_THIS_AUDIT"
+      },
+      {
+        "actor_id": "brown_bear",
+        "owner_task": "T30",
+        "integration_task": "T31",
+        "attack_required": true,
+        "registered_attack_allowed": true,
+        "registered_capabilities": [
+          "follow",
+          "guard",
+          "attack",
+          "intercept",
+          "heavy_haul",
+          "obstacle_break"
+        ],
+        "attack_capability_token": "attack",
+        "attack_profile": "bear_attack",
+        "existing_motion_language": "heavy_charge_swipe_bite",
+        "additional_specialty_recommendation": "Approved heavy hauling/obstacle work plus protection.",
+        "mandatory_combat_scenario": "Secure an incompatible heavy load, charge/swipe/bite with weight-aware contact and damage, then reclaim or deliver conserved cargo. Slow mass must not stall the whole control loop.",
+        "render_starting_points": [
+          {
+            "archive_id": "baseline-equipment-cast-companions",
+            "image_id": "pet_bear_01",
+            "path": "Docs/Design/RenderArchive/2026-11-23/selected/animal-companions/pet_bear_01.png",
+            "sha256": "7fd1fcfb469d4772ba04222fc92cdbe12fe0bef265d26cc7688a0bb8465d96e6",
+            "git_blob_sha": "4c57fff1e26cfe7bd029ce6c684ee9aed4dbeed4",
+            "url": "https://github.com/ksolo21-web/HAVENLINE/blob/a868ae89cdf2f120b478aa0a48fff35e09cc465c/Docs/Design/RenderArchive/2026-11-23/selected/animal-companions/pet_bear_01.png"
+          }
+        ],
+        "reference_origin": "AUTHORED_HAVENLINE_SCOPE_NOT_DIRECT_PET_VIDEO_OBSERVATION",
+        "implementation_state": "NOT_CERTIFIED_BY_THIS_AUDIT"
+      }
+    ],
+    "required_attack_record_fields": [
+      "actor_id",
+      "profile_id",
+      "equipment_or_species_variant",
+      "eligible_target_policy",
+      "attack_instance_id",
+      "contact_group_id",
+      "target_id",
+      "damage_rule",
+      "contact_geometry",
+      "anticipation_commit_and_recovery",
+      "miss_cancel_recall",
+      "range_leash_return",
+      "suspended_job_and_cargo_disposition",
+      "defeat_reward_commit_id",
+      "save_resume_rule",
+      "region_applicability",
+      "source_render_rig_clip_binding",
+      "audio_event_and_accessible_equivalent"
+    ],
+    "numeric_values_not_invented": [
+      "Damage/health/cadence",
+      "Sensing/strike/pursuit/return distances",
+      "Active team/population counts",
+      "Recovery timing/costs",
+      "Unlock levels/upgrade curves",
+      "Worker capacity/throughput"
+    ]
+  },
+  "gap_register": [
+    {
+      "id": "ACG01",
+      "classification": "CURRENT_USER_CLARIFICATION",
+      "title": "All seven attacks are non-optional",
+      "baseline_finding": "Seven attack flags and seven required profiles already exist. The role table can still be read as fox/owl support-only, and no single explicit seven-species attack acceptance row prevents that interpretation.",
+      "required_disposition": "Adopt PA01–PA12 and seven species scenarios; strengthen GD07/task projections to require real attack plus useful specialty for every species.",
+      "owner_tasks": [
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30"
+      ],
+      "consumer_tasks": [
+        "T21",
+        "T31",
+        "T32",
+        "T62",
+        "T67",
+        "T70"
+      ],
+      "source_refs": [
+        "S03",
+        "S04",
+        "S05",
+        "S06",
+        "S08"
+      ],
+      "existing_coverage": [
+        "GD07",
+        "GD09",
+        "GD11",
+        "AC06",
+        "AC08"
+      ],
+      "closure_evidence": [
+        "Seven exact actor/profile rows; attack removal or support-only substitution fails planning validation.",
+        "Seven real ordinary-play successful-damage demonstrations plus miss/recall/return cases; no untested species averaged away."
+      ],
+      "fits_havenline_when": "Each animal feels useful and distinct while the player retains simple movement/context controls.",
+      "parameters_still_requiring_tuning": [],
+      "dependency_handling": "Use existing owner prerequisites. Freeze feature-local contracts before that feature integrates; T31/T33 reconcile later. No new dependency edge or task activation is created by this audit.",
+      "planning_status": "BOUND_TO_SELECTED_WHOLE_GAME_DECISIONS_OR_EXISTING_EVIDENCE_REQUIREMENT",
+      "implementation_status": "UNPROVED_BY_THIS_AUDIT",
+      "decision_precedence": "WHOLE_GAME_COMPLETENESS.json deliberately selects behavior; any earlier draft recommendation/open-choice wording is baseline history. Tuning and runtime proof remain open."
+    },
+    {
+      "id": "ACG02",
+      "classification": "EXISTING_OPEN_DESIGN",
+      "title": "Freeze the hostile, prey and weapon roster",
+      "baseline_finding": "T21 reference crosswalk explicitly leaves the complete handheld weapon-upgrade roster unresolved and separates observed hostiles, authored invader concepts, huntable wildlife and pets.",
+      "required_disposition": "Bind each selected hostile/prey/weapon to an actual ID, source/render disposition, action profile, unlock, target eligibility, useful combat purpose, reachable counterplay and resource/reward lifecycle. Unselected art remains a concept; do not create an enemy or weapon solely to fill a render list.",
+      "owner_tasks": [
+        "T21"
+      ],
+      "consumer_tasks": [
+        "T06",
+        "T07",
+        "T09",
+        "T13",
+        "T22",
+        "T23",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T33",
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52"
+      ],
+      "source_refs": [
+        "S02",
+        "S07",
+        "S09",
+        "S11",
+        "S16"
+      ],
+      "existing_coverage": [
+        "GD08",
+        "GD11",
+        "GD13",
+        "GD14"
+      ],
+      "closure_evidence": [
+        "Selected ID/profile/target/unlock matrix with exact render bindings.",
+        "Each selected archetype creates a readable response beyond additional HP; player weapon/tool switch and damage use actual contact."
+      ],
+      "fits_havenline_when": "Combat protects and supplies the visible camp loop; weapon choice/progression does not create button-heavy RPG combat.",
+      "parameters_still_requiring_tuning": [
+        "Selected roster and unlock sequence",
+        "Damage/reach/cadence and reward values"
+      ],
+      "dependency_handling": "Use existing owner prerequisites. Freeze feature-local contracts before that feature integrates; T31/T33 reconcile later. No new dependency edge or task activation is created by this audit.",
+      "planning_status": "BOUND_TO_SELECTED_WHOLE_GAME_DECISIONS_OR_EXISTING_EVIDENCE_REQUIREMENT",
+      "implementation_status": "UNPROVED_BY_THIS_AUDIT",
+      "decision_precedence": "WHOLE_GAME_COMPLETENESS.json deliberately selects behavior; any earlier draft recommendation/open-choice wording is baseline history. Tuning and runtime proof remain open."
+    },
+    {
+      "id": "ACG03",
+      "classification": "EXISTING_OPEN_DESIGN",
+      "title": "Resolve sanctuary, exposure and defense together",
+      "baseline_finding": "The observed current source rejects hits in camp. The gameplay-depth standard proposes recoverable damage/disruption to routes and operations, but does not freeze the exact attackable domains or their boundary rules.",
+      "required_disposition": "Publish one zone/target policy for player, survivors, pets, customers, defenses and production. Preserve current safe-camp behavior unless the owning task explicitly replaces it with a selected readable rule. Define threat warning, reachable response, maximum exposure, retreat and free recovery; prevent damage crossing protected geometry and permanent safe-zone reward farming.",
+      "owner_tasks": [
+        "T13",
+        "T21",
+        "T22"
+      ],
+      "consumer_tasks": [
+        "T03",
+        "T07",
+        "T10",
+        "T11",
+        "T23",
+        "T31",
+        "T32",
+        "T33",
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52"
+      ],
+      "source_refs": [
+        "S03",
+        "S04",
+        "S13",
+        "S15",
+        "S16"
+      ],
+      "existing_coverage": [
+        "GD01",
+        "GD02",
+        "GD08",
+        "GD11"
+      ],
+      "closure_evidence": [
+        "Zone-by-actor attackability table with source-accurate protection and defense-resupply rules.",
+        "Boundary crossing, expanding camp, returning worker, tower/pet overlap, new player and repeated-failure sessions."
+      ],
+      "fits_havenline_when": "Danger is visible and recoverable while the camp remains understandable; the design does not silently add destructive raids or absence punishment.",
+      "parameters_still_requiring_tuning": [
+        "Attackable domains",
+        "Exposure and recovery limits",
+        "Spawn/pursuit/return parameters"
+      ],
+      "dependency_handling": "Use existing owner prerequisites. Freeze feature-local contracts before that feature integrates; T31/T33 reconcile later. No new dependency edge or task activation is created by this audit.",
+      "planning_status": "BOUND_TO_SELECTED_WHOLE_GAME_DECISIONS_OR_EXISTING_EVIDENCE_REQUIREMENT",
+      "implementation_status": "UNPROVED_BY_THIS_AUDIT",
+      "decision_precedence": "WHOLE_GAME_COMPLETENESS.json deliberately selects behavior; any earlier draft recommendation/open-choice wording is baseline history. Tuning and runtime proof remain open."
+    },
+    {
+      "id": "ACG04",
+      "classification": "EXISTING_OPEN_DESIGN",
+      "title": "Define companion injury and rescue lifecycle",
+      "baseline_finding": "D01 recommends recoverable loss and protection of named companions; actual pet/survivor health, incapacitation, help, return and repeat-failure states remain owner decisions.",
+      "required_disposition": "Select a common lifecycle with actor-specific presentation. Recommended normal play retains named identities, earned upgrades and bought entitlements; use readable retreat/incapacitation if chosen and an attainable free recovery action. Specify what happens to cargo, reserved work, escorts and purchased plots at every transition. A pet cannot be simultaneously treated as invulnerable support and injured population.",
+      "owner_tasks": [
+        "T13",
+        "T21",
+        "T23"
+      ],
+      "consumer_tasks": [
+        "T14",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T31",
+        "T33",
+        "T43",
+        "T54",
+        "T55"
+      ],
+      "source_refs": [
+        "S03",
+        "S04",
+        "S08",
+        "S13"
+      ],
+      "existing_coverage": [
+        "GD01",
+        "GD02",
+        "GD06",
+        "GD08"
+      ],
+      "closure_evidence": [
+        "Actor lifecycle/cargo/recovery state table and exact persistence events.",
+        "Down/retreat during carry, rescue, payment and region transfer; repeat failure and interrupted recovery without duplicate penalties/rewards."
+      ],
+      "fits_havenline_when": "The player has people and pets worth protecting without a maintenance dashboard, permanent surprise loss or a paid revive trap.",
+      "parameters_still_requiring_tuning": [
+        "Whether incapacitation is used",
+        "Recovery action, time and limits",
+        "Health/protection scaling"
+      ],
+      "dependency_handling": "Use existing owner prerequisites. Freeze feature-local contracts before that feature integrates; T31/T33 reconcile later. No new dependency edge or task activation is created by this audit.",
+      "planning_status": "BOUND_TO_SELECTED_WHOLE_GAME_DECISIONS_OR_EXISTING_EVIDENCE_REQUIREMENT",
+      "implementation_status": "UNPROVED_BY_THIS_AUDIT",
+      "decision_precedence": "WHOLE_GAME_COMPLETENESS.json deliberately selects behavior; any earlier draft recommendation/open-choice wording is baseline history. Tuning and runtime proof remain open."
+    },
+    {
+      "id": "ACG05",
+      "classification": "EXISTING_OPEN_DESIGN",
+      "title": "Owned roster, active deployment and switching",
+      "baseline_finding": "D04 explicitly leaves active population/team limits and offscreen work unresolved. All seven owning an attack does not establish that seven pets are simultaneously active.",
+      "required_disposition": "Separate permanently owned identities from active assignments. Select understandable active-team rules and return/switch/transport behavior. Preserve health/recovery, cargo, job and attack-instance state through switching; do not permit infinite attack/cooldown resets. Offscreen jobs, if selected, use source-conserving simulation and cannot invent combat rewards.",
+      "owner_tasks": [
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T31"
+      ],
+      "consumer_tasks": [
+        "T14",
+        "T23",
+        "T33",
+        "T43",
+        "T53",
+        "T55",
+        "T56",
+        "T58"
+      ],
+      "source_refs": [
+        "S03",
+        "S04",
+        "S08",
+        "S12"
+      ],
+      "existing_coverage": [
+        "GD06",
+        "GD07",
+        "GD17"
+      ],
+      "closure_evidence": [
+        "Owned/active/assigned/returning state model and selected population limits.",
+        "Switch at windup/contact/recovery, with cargo, after reload and during travel; prove no duplicate actor/reward or reset exploit."
+      ],
+      "fits_havenline_when": "A small contextual roster/goal choice creates useful team tradeoffs without mandatory micromanagement or seven overlapping visual attacks.",
+      "parameters_still_requiring_tuning": [
+        "Active pet/worker counts",
+        "Switching and offscreen policy"
+      ],
+      "dependency_handling": "Use existing owner prerequisites. Freeze feature-local contracts before that feature integrates; T31/T33 reconcile later. No new dependency edge or task activation is created by this audit.",
+      "planning_status": "BOUND_TO_SELECTED_WHOLE_GAME_DECISIONS_OR_EXISTING_EVIDENCE_REQUIREMENT",
+      "implementation_status": "UNPROVED_BY_THIS_AUDIT",
+      "decision_precedence": "WHOLE_GAME_COMPLETENESS.json deliberately selects behavior; any earlier draft recommendation/open-choice wording is baseline history. Tuning and runtime proof remain open."
+    },
+    {
+      "id": "ACG06",
+      "classification": "EXISTING_OPEN_DESIGN",
+      "title": "Late-region actor and attack compatibility",
+      "baseline_finding": "T44–T52 and T53 require actor/environment compatibility but have no complete chosen species/region deployment matrix in the reviewed actor sources.",
+      "required_disposition": "For frozen, forest, desert, underwater, sky, volcanic, swamp, ruins, underground and alien bands, bind each introduced human task and each pet to safe travel/work/attack applicability. Where a species cannot sensibly fight, record the reason and a useful safe alternative assignment; preserve its real usable attack across applicable progression. Use compatible routes/staging/equipment already selected for the region or justified by its gameplay, not a new facility or feature solely to complete the matrix.",
+      "owner_tasks": [
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52",
+        "T53"
+      ],
+      "consumer_tasks": [
+        "T08",
+        "T21",
+        "T22",
+        "T23",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T31",
+        "T32",
+        "T33",
+        "T54",
+        "T62",
+        "T63"
+      ],
+      "source_refs": [
+        "S02",
+        "S03",
+        "S04",
+        "S08",
+        "S09",
+        "S12"
+      ],
+      "existing_coverage": [
+        "GD03",
+        "GD07",
+        "GD08",
+        "GD09",
+        "GD17"
+      ],
+      "closure_evidence": [
+        "Ten-band actor/task/target/travel applicability matrix with explicit supported route or justified useful alternative assignment.",
+        "Every species demonstrates real usable combat across applicable progression; unsuitable regions may be explicitly inapplicable with useful safe alternatives. Transitions conserve identity/cargo/jobs."
+      ],
+      "fits_havenline_when": "The world changes what the player plans and equips, without changing the core move/work/carry/defend loop or forcing every animal into every terrain cell.",
+      "parameters_still_requiring_tuning": [
+        "Selected region adapters and compatible routes",
+        "Protection and travel requirements"
+      ],
+      "dependency_handling": "Use existing owner prerequisites. Freeze feature-local contracts before that feature integrates; T31/T33 reconcile later. No new dependency edge or task activation is created by this audit.",
+      "planning_status": "BOUND_TO_SELECTED_WHOLE_GAME_DECISIONS_OR_EXISTING_EVIDENCE_REQUIREMENT",
+      "implementation_status": "UNPROVED_BY_THIS_AUDIT",
+      "decision_precedence": "WHOLE_GAME_COMPLETENESS.json deliberately selects behavior; any earlier draft recommendation/open-choice wording is baseline history. Tuning and runtime proof remain open."
+    },
+    {
+      "id": "ACG07",
+      "classification": "IMPLEMENTATION_EVIDENCE_GAP",
+      "title": "Combat must safely interrupt and resume useful work",
+      "baseline_finding": "GD04–GD06 already require reservations, preemption, budget withdrawal and conservation. The inspected survivor source contains real service/gathering work, but no whole-game proof of every combat/work/transaction boundary is supplied by this audit.",
+      "required_disposition": "Use the existing shared job state and typed custody contract for the complete combat transition. Revalidate ownership, work target, destination capacity, tool readiness, budget and navigation before returning. If the former job is no longer valid, release claims and select a useful authorized replacement with a short truthful reason.",
+      "owner_tasks": [
+        "T23",
+        "T31"
+      ],
+      "consumer_tasks": [
+        "T07",
+        "T08",
+        "T09",
+        "T10",
+        "T11",
+        "T14",
+        "T16",
+        "T17",
+        "T18",
+        "T19",
+        "T20",
+        "T21",
+        "T22",
+        "T43"
+      ],
+      "source_refs": [
+        "S03",
+        "S04",
+        "S08",
+        "S17",
+        "S18"
+      ],
+      "existing_coverage": [
+        "GD04",
+        "GD05",
+        "GD06",
+        "AC03",
+        "AC04",
+        "AC05",
+        "AC08"
+      ],
+      "closure_evidence": [
+        "AC03–AC05/AC08 extended at each precommit/postcommit boundary for work→fight→return.",
+        "Enemy during mixed delivery, plot last-payment race, storage full, revoked budget, claimed/depleted target and save/reload; exact conservation and no thrashing."
+      ],
+      "fits_havenline_when": "Smart helpers actually finish jobs and protect the camp; the user should not repeatedly rescue broken AI logic.",
+      "parameters_still_requiring_tuning": [],
+      "dependency_handling": "Use existing owner prerequisites. Freeze feature-local contracts before that feature integrates; T31/T33 reconcile later. No new dependency edge or task activation is created by this audit.",
+      "planning_status": "BOUND_TO_SELECTED_WHOLE_GAME_DECISIONS_OR_EXISTING_EVIDENCE_REQUIREMENT",
+      "implementation_status": "UNPROVED_BY_THIS_AUDIT",
+      "decision_precedence": "WHOLE_GAME_COMPLETENESS.json deliberately selects behavior; any earlier draft recommendation/open-choice wording is baseline history. Tuning and runtime proof remain open."
+    },
+    {
+      "id": "ACG08",
+      "classification": "EXISTING_OPEN_DESIGN",
+      "title": "Survivor readiness and useful capacity progression",
+      "baseline_finding": "Complete human task families and no permanent specialization bans are already binding. D02 has not selected future worker logical capacity/scaling; current source supports six raw load kinds and mixed shifts, not a universal full-game capacity policy. The current-source note also records that worker_payment still excludes the conveyor offers, which requires reconciliation with authorized all-plot assistance.",
+      "required_disposition": "Freeze one visible readiness/upgrade model for all physical human work families, including future production, service, rescue/care, transport and every authorized plot type. Training/equipment/safety gates are achievable; specialization changes effectiveness and preference. Choose substantial mixed carrying using trip throughput, keep unlimited logical player inventory and separate visual stack count from owned quantity.",
+      "owner_tasks": [
+        "T08",
+        "T23",
+        "T31"
+      ],
+      "consumer_tasks": [
+        "T09",
+        "T10",
+        "T11",
+        "T16",
+        "T17",
+        "T18",
+        "T19",
+        "T20",
+        "T21",
+        "T22",
+        "T33",
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52",
+        "T53"
+      ],
+      "source_refs": [
+        "S03",
+        "S04",
+        "S08",
+        "S13",
+        "S17"
+      ],
+      "existing_coverage": [
+        "GD03",
+        "GD04",
+        "GD05",
+        "GD06",
+        "AC01",
+        "AC02",
+        "AC11"
+      ],
+      "closure_evidence": [
+        "Readiness/physical-task matrix, substantial-load capacity decision and shared schema.",
+        "Player versus worker route/throughput comparisons at early/mid/late stages; every selected plot type and future work family demonstrated."
+      ],
+      "fits_havenline_when": "Workers become visibly more effective while a few goals/priorities remain enough; no skill tree or new stamina/hunger chore is implied.",
+      "parameters_still_requiring_tuning": [
+        "Worker logical capacity and scaling",
+        "Training/equipment prerequisites and useful throughput targets"
+      ],
+      "dependency_handling": "Use existing owner prerequisites. Freeze feature-local contracts before that feature integrates; T31/T33 reconcile later. No new dependency edge or task activation is created by this audit.",
+      "planning_status": "BOUND_TO_SELECTED_WHOLE_GAME_DECISIONS_OR_EXISTING_EVIDENCE_REQUIREMENT",
+      "implementation_status": "UNPROVED_BY_THIS_AUDIT",
+      "decision_precedence": "WHOLE_GAME_COMPLETENESS.json deliberately selects behavior; any earlier draft recommendation/open-choice wording is baseline history. Tuning and runtime proof remain open."
+    },
+    {
+      "id": "ACG09",
+      "classification": "EXISTING_OPEN_DESIGN",
+      "title": "Keep every companion useful through Level 100",
+      "baseline_finding": "D04 role parameters and GD16 free-player progression require balance proof, but the selected role/counter/threat curves are not frozen by the actor registries.",
+      "required_disposition": "Keep a real basic attack and useful specialty for each species across eligible milestones. Compare measured safety, meaningful damage, delivery or discovery value against an idle companion. Introduce enemy combinations and environmental decisions rather than only health inflation. Ensure helpers reduce repetition without erasing player route, expansion and threat-response decisions.",
+      "owner_tasks": [
+        "T13",
+        "T21",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T31",
+        "T33"
+      ],
+      "consumer_tasks": [
+        "T12",
+        "T32",
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52",
+        "T62",
+        "T63",
+        "T64"
+      ],
+      "source_refs": [
+        "S02",
+        "S03",
+        "S04",
+        "S08",
+        "S09"
+      ],
+      "existing_coverage": [
+        "GD07",
+        "GD11",
+        "GD16",
+        "AC06",
+        "AC11"
+      ],
+      "closure_evidence": [
+        "Early/mid/late free-player scenarios for every species and selected mixed team.",
+        "No species becomes support-only/obsolete through scaling; no single team trivializes all threats; counterplay remains visible."
+      ],
+      "fits_havenline_when": "Unlocks broaden useful choices and visible progress; they do not force replacing a favorite pet or paying for basic competence.",
+      "parameters_still_requiring_tuning": [
+        "Damage/health/ability/upgrade curves",
+        "Target interactions and encounter mixes"
+      ],
+      "dependency_handling": "Use existing owner prerequisites. Freeze feature-local contracts before that feature integrates; T31/T33 reconcile later. No new dependency edge or task activation is created by this audit.",
+      "planning_status": "BOUND_TO_SELECTED_WHOLE_GAME_DECISIONS_OR_EXISTING_EVIDENCE_REQUIREMENT",
+      "implementation_status": "UNPROVED_BY_THIS_AUDIT",
+      "decision_precedence": "WHOLE_GAME_COMPLETENESS.json deliberately selects behavior; any earlier draft recommendation/open-choice wording is baseline history. Tuning and runtime proof remain open."
+    },
+    {
+      "id": "ACG10",
+      "classification": "IMPLEMENTATION_EVIDENCE_GAP",
+      "title": "Bind complete action coverage to real clips and equipment",
+      "baseline_finding": "GD09–GD12 already require full state/transition coverage and listening. The 36-profile registry and REQUIRED_NOT_YET_PROVEN flags remain a requirements inventory; historical unresolved survivor profiles cannot establish final coverage.",
+      "required_disposition": "Each introducing owner resolves every applicable actor/tool/cargo/enemy/equipment state to a real clip/mechanism and authoritative event. Maintain distinct human role motion, species-specific attacks, full contact/recovery and partial/blocked/interrupted states. Justified static/shared motion is allowed where it is an explicit fit; final attack/work placeholders are not.",
+      "owner_tasks": [
+        "T06",
+        "T21",
+        "T22",
+        "T23",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T31",
+        "T54"
+      ],
+      "consumer_tasks": [
+        "T05",
+        "T08",
+        "T09",
+        "T10",
+        "T11",
+        "T15",
+        "T16",
+        "T17",
+        "T18",
+        "T19",
+        "T20",
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52",
+        "T53",
+        "T55",
+        "T59",
+        "T60",
+        "T61",
+        "T67"
+      ],
+      "source_refs": [
+        "S03",
+        "S04",
+        "S05",
+        "S06",
+        "S07",
+        "S08"
+      ],
+      "existing_coverage": [
+        "GD09",
+        "GD10",
+        "GD11",
+        "GD12",
+        "AC07",
+        "AC08",
+        "AC09",
+        "AC12"
+      ],
+      "closure_evidence": [
+        "Action/transition→clip/mechanism→event→source-bound capture coverage, with unresolved profile references blocking applicable production proof.",
+        "Full cycles and interruptions from useful angles; feet/hands/paws/wings/tool/cargo contact; actual listening and muted/reduced-motion equivalent."
+      ],
+      "fits_havenline_when": "Everything doing meaningful work visibly performs that work; variety reflects task and anatomy instead of random animation noise.",
+      "parameters_still_requiring_tuning": [],
+      "dependency_handling": "Use existing owner prerequisites. Freeze feature-local contracts before that feature integrates; T31/T33 reconcile later. No new dependency edge or task activation is created by this audit.",
+      "planning_status": "BOUND_TO_SELECTED_WHOLE_GAME_DECISIONS_OR_EXISTING_EVIDENCE_REQUIREMENT",
+      "implementation_status": "UNPROVED_BY_THIS_AUDIT",
+      "decision_precedence": "WHOLE_GAME_COMPLETENESS.json deliberately selects behavior; any earlier draft recommendation/open-choice wording is baseline history. Tuning and runtime proof remain open."
+    },
+    {
+      "id": "ACG11",
+      "classification": "IMPLEMENTATION_EVIDENCE_GAP",
+      "title": "Prove coordinated combat at real population scale",
+      "baseline_finding": "GD17/AC10 already require busy-shift/device evidence. A single owl attacking one wolf is not evidence of all pet/human/enemy/defense combinations or target-device budgets.",
+      "required_disposition": "Run representative bounded teams alongside machines, large carriers, customers and hostiles. Coordinate approach space, gates and danger cues; preserve damage/transaction truth if visuals or decision frequency scale. Reset/disconnect/pause cannot duplicate combat rewards or strand jobs. Diagnose bounded stuck/abandoned-job failures without spending-based adaptation.",
+      "owner_tasks": [
+        "T31",
+        "T32",
+        "T56",
+        "T58"
+      ],
+      "consumer_tasks": [
+        "T03",
+        "T07",
+        "T13",
+        "T15",
+        "T21",
+        "T22",
+        "T23",
+        "T42",
+        "T43",
+        "T53",
+        "T54",
+        "T55",
+        "T62",
+        "T67",
+        "T68",
+        "T69",
+        "T70"
+      ],
+      "source_refs": [
+        "S03",
+        "S04",
+        "S08",
+        "S12"
+      ],
+      "existing_coverage": [
+        "GD06",
+        "GD12",
+        "GD17",
+        "AC04",
+        "AC05",
+        "AC09",
+        "AC10"
+      ],
+      "closure_evidence": [
+        "Busy-shift continuous session with combat/work/recall/routing/save cases and attributable failures.",
+        "Actual source-bound target-device frame, CPU/GPU/memory, collision/readability and listening results; declared budgets and active counts."
+      ],
+      "fits_havenline_when": "The camp stays lively and readable without blocking its own gates or hiding danger under effects and sound.",
+      "parameters_still_requiring_tuning": [],
+      "dependency_handling": "Use existing owner prerequisites. Freeze feature-local contracts before that feature integrates; T31/T33 reconcile later. No new dependency edge or task activation is created by this audit.",
+      "planning_status": "BOUND_TO_SELECTED_WHOLE_GAME_DECISIONS_OR_EXISTING_EVIDENCE_REQUIREMENT",
+      "implementation_status": "UNPROVED_BY_THIS_AUDIT",
+      "decision_precedence": "WHOLE_GAME_COMPLETENESS.json deliberately selects behavior; any earlier draft recommendation/open-choice wording is baseline history. Tuning and runtime proof remain open."
+    },
+    {
+      "id": "ACG12",
+      "classification": "EXPLICIT_REQUIREMENT_REFINEMENT",
+      "title": "Separate contact, reward and save authority",
+      "baseline_finding": "AC08 and GD08 already demand authoritative contact and legitimate loot. The observed owl/wolf paths contain local protection, but the full-game multi-actor attack/defeat/loot/swap/resume contract must be common.",
+      "required_disposition": "Bind stable attacker/target/attack/contact-group/defeat/reward identities and a single authority for each commit. Save/reload or region transport restores committed outcomes once; uncommitted animation can restart/cancel without phantom damage. Concurrent final strikes, target removal and active-pet switching cannot multiply drops or XP.",
+      "owner_tasks": [
+        "T14",
+        "T21",
+        "T31"
+      ],
+      "consumer_tasks": [
+        "T08",
+        "T09",
+        "T13",
+        "T22",
+        "T23",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T33",
+        "T43",
+        "T53",
+        "T62",
+        "T67"
+      ],
+      "source_refs": [
+        "S04",
+        "S08",
+        "S14",
+        "S15",
+        "S16"
+      ],
+      "existing_coverage": [
+        "GD06",
+        "GD08",
+        "GD09",
+        "AC08"
+      ],
+      "closure_evidence": [
+        "Concurrent pet/player/tower last-hit and one defeat/reward transaction.",
+        "Save before/after contact, before/after defeat, during recall/swap/travel and with a vanished target; exact once-only outcomes and no stale actor IDs."
+      ],
+      "fits_havenline_when": "Visible contact earns an honest result while interruption and recovery cannot steal progress or create free infinite rewards.",
+      "parameters_still_requiring_tuning": [],
+      "dependency_handling": "Use existing owner prerequisites. Freeze feature-local contracts before that feature integrates; T31/T33 reconcile later. No new dependency edge or task activation is created by this audit.",
+      "planning_status": "BOUND_TO_SELECTED_WHOLE_GAME_DECISIONS_OR_EXISTING_EVIDENCE_REQUIREMENT",
+      "implementation_status": "UNPROVED_BY_THIS_AUDIT",
+      "decision_precedence": "WHOLE_GAME_COMPLETENESS.json deliberately selects behavior; any earlier draft recommendation/open-choice wording is baseline history. Tuning and runtime proof remain open."
+    }
+  ],
+  "acceptance_scenarios": [
+    {
+      "id": "PC01",
+      "name": "Seven-species ordinary attack",
+      "required_demonstration": "For each of seven species, show one normal eligible-hostile hit with positive authoritative damage, a miss, full recovery and its additional useful specialty.",
+      "primary_gap": "ACG01",
+      "status": "NOT_RUN_AGAINST_ACTUAL_GAME"
+    },
+    {
+      "id": "PC02",
+      "name": "Target and friendly identity",
+      "required_demonstration": "Place friendly same-species actors, workers, customers, rescue candidates, eligible prey and hostiles together; only explicit legitimate targets can take attack damage or produce selected loot.",
+      "primary_gap": "ACG02",
+      "status": "NOT_RUN_AGAINST_ACTUAL_GAME"
+    },
+    {
+      "id": "PC03",
+      "name": "Recall at every attack phase",
+      "required_demonstration": "Recall during approach, windup, contact and recovery; stop new pursuit, preserve committed damage once, return without target-thrashing and resume/reassign a valid useful job.",
+      "primary_gap": "ACG07",
+      "status": "NOT_RUN_AGAINST_ACTUAL_GAME"
+    },
+    {
+      "id": "PC04",
+      "name": "Geometry and boundary",
+      "required_demonstration": "Use moving/small/large targets, occluded routes, a closing gate, sanctuary edge and vanished target; valid contact is visible and unreachable targets are safely abandoned.",
+      "primary_gap": "ACG03",
+      "status": "NOT_RUN_AGAINST_ACTUAL_GAME"
+    },
+    {
+      "id": "PC05",
+      "name": "Work interruption and cargo",
+      "required_demonstration": "Interrupt heavy/mixed cargo, talon/mouth retrieval, cooking, rescue and a last plot payment; every unit and unspent budget remains accounted for through fight and return.",
+      "primary_gap": "ACG07",
+      "status": "NOT_RUN_AGAINST_ACTUAL_GAME"
+    },
+    {
+      "id": "PC06",
+      "name": "Shared defeat and recovery",
+      "required_demonstration": "Player, pet and tower strike the last HP concurrently; persist one defeat/reward, reload and repeat around the commit boundary, with no duplicate loot/XP or lost valid result.",
+      "primary_gap": "ACG12",
+      "status": "NOT_RUN_AGAINST_ACTUAL_GAME"
+    },
+    {
+      "id": "PC07",
+      "name": "Roster switch and save",
+      "required_demonstration": "Switch active pets with health/recovery/cargo/work/attack state and pause/reload/travel; preserve owned identity, no attack-reset exploit and no duplicated actor.",
+      "primary_gap": "ACG05",
+      "status": "NOT_RUN_AGAINST_ACTUAL_GAME"
+    },
+    {
+      "id": "PC08",
+      "name": "All human task families",
+      "required_demonstration": "Run qualified survivors through all physical work families, every authorized plot type, substantial mixed loads and late-region jobs using minimal goals; no unexplained permanent specialization ban.",
+      "primary_gap": "ACG08",
+      "status": "NOT_RUN_AGAINST_ACTUAL_GAME"
+    },
+    {
+      "id": "PC09",
+      "name": "Actor recovery",
+      "required_demonstration": "Apply the selected pet/survivor hurt/retreat/down/recovery rule while an escort/cargo/plot job is active; retain identity/entitlements and demonstrate attainable free recovery.",
+      "primary_gap": "ACG04",
+      "status": "NOT_RUN_AGAINST_ACTUAL_GAME"
+    },
+    {
+      "id": "PC10",
+      "name": "All region bands",
+      "required_demonstration": "Verify each region/species applicability disposition: real combat where suitable, explicit useful safe alternatives where unsuitable, and conserved arrival/return/cargo. Every species keeps a real usable attack across applicable progression; do not force every species into every region or add facilities merely to fill the matrix.",
+      "primary_gap": "ACG06",
+      "status": "NOT_RUN_AGAINST_ACTUAL_GAME"
+    },
+    {
+      "id": "PC11",
+      "name": "Early/mid/late value",
+      "required_demonstration": "Compare each species and selected mixed teams with an idle companion in ordinary free-player play; measure safety/damage/throughput or discovery while preserving player decisions.",
+      "primary_gap": "ACG09",
+      "status": "NOT_RUN_AGAINST_ACTUAL_GAME"
+    },
+    {
+      "id": "PC12",
+      "name": "Busy scene with actual motion and listening",
+      "required_demonstration": "Run the selected population on target devices through complete combat/work transitions, crowded gates, machines and customers; inspect multi-angle motion/contact, actual audio and muted/reduced-motion readability.",
+      "primary_gap": "ACG11",
+      "status": "NOT_RUN_AGAINST_ACTUAL_GAME"
+    }
+  ],
+  "task_mapping": {
+    "T03": {
+      "name": "Fences, gates and navigable work lanes",
+      "existing_dependencies": [
+        "T02"
+      ],
+      "owns_gap_ids": [],
+      "consumes_gap_ids": [
+        "ACG03",
+        "ACG11"
+      ]
+    },
+    "T05": {
+      "name": "Production station and prop kit",
+      "existing_dependencies": [
+        "T03"
+      ],
+      "owns_gap_ids": [],
+      "consumes_gap_ids": [
+        "ACG10"
+      ]
+    },
+    "T06": {
+      "name": "Character 1 complete movement/interactions",
+      "existing_dependencies": [
+        "T03"
+      ],
+      "owns_gap_ids": [
+        "ACG10"
+      ],
+      "consumes_gap_ids": [
+        "ACG02"
+      ]
+    },
+    "T07": {
+      "name": "Havenline Simple Control & Context Director",
+      "existing_dependencies": [
+        "T04",
+        "T06"
+      ],
+      "owns_gap_ids": [],
+      "consumes_gap_ids": [
+        "ACG02",
+        "ACG03",
+        "ACG07",
+        "ACG11"
+      ]
+    },
+    "T08": {
+      "name": "Visible inventory, physical carrying and transfers",
+      "existing_dependencies": [
+        "T05",
+        "T06",
+        "T07"
+      ],
+      "owns_gap_ids": [
+        "ACG08"
+      ],
+      "consumes_gap_ids": [
+        "ACG06",
+        "ACG07",
+        "ACG10",
+        "ACG12"
+      ]
+    },
+    "T09": {
+      "name": "Harvesting and automatic acquisition",
+      "existing_dependencies": [
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "owns_gap_ids": [],
+      "consumes_gap_ids": [
+        "ACG02",
+        "ACG07",
+        "ACG08",
+        "ACG10",
+        "ACG12"
+      ]
+    },
+    "T10": {
+      "name": "World Transformation Framework",
+      "existing_dependencies": [
+        "T05",
+        "T08",
+        "T09"
+      ],
+      "owns_gap_ids": [],
+      "consumes_gap_ids": [
+        "ACG03",
+        "ACG07",
+        "ACG08",
+        "ACG10"
+      ]
+    },
+    "T11": {
+      "name": "Camp construction and visual upgrade system",
+      "existing_dependencies": [
+        "T05",
+        "T10"
+      ],
+      "owns_gap_ids": [],
+      "consumes_gap_ids": [
+        "ACG03",
+        "ACG07",
+        "ACG08",
+        "ACG10"
+      ]
+    },
+    "T12": {
+      "name": "Level 1–100 progression architecture",
+      "existing_dependencies": [
+        "T07",
+        "T08",
+        "T10",
+        "T11"
+      ],
+      "owns_gap_ids": [],
+      "consumes_gap_ids": [
+        "ACG09"
+      ]
+    },
+    "T13": {
+      "name": "Progressive Difficulty & spend-blind Challenge Director",
+      "existing_dependencies": [
+        "T12"
+      ],
+      "owns_gap_ids": [
+        "ACG03",
+        "ACG04",
+        "ACG09"
+      ],
+      "consumes_gap_ids": [
+        "ACG02",
+        "ACG11",
+        "ACG12"
+      ]
+    },
+    "T14": {
+      "name": "Save-state/versioning foundation",
+      "existing_dependencies": [
+        "T08",
+        "T10",
+        "T12"
+      ],
+      "owns_gap_ids": [
+        "ACG12"
+      ],
+      "consumes_gap_ids": [
+        "ACG04",
+        "ACG05",
+        "ACG07"
+      ]
+    },
+    "T15": {
+      "name": "Customer/NPC models, crowds and routing",
+      "existing_dependencies": [
+        "T04",
+        "T05",
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "owns_gap_ids": [],
+      "consumes_gap_ids": [
+        "ACG10",
+        "ACG11"
+      ]
+    },
+    "T16": {
+      "name": "Fishing and initial food processing",
+      "existing_dependencies": [
+        "T08",
+        "T09",
+        "T15"
+      ],
+      "owns_gap_ids": [],
+      "consumes_gap_ids": [
+        "ACG07",
+        "ACG08",
+        "ACG10"
+      ]
+    },
+    "T17": {
+      "name": "Customer service, physical payment and reinvestment",
+      "existing_dependencies": [
+        "T15",
+        "T16"
+      ],
+      "owns_gap_ids": [],
+      "consumes_gap_ids": [
+        "ACG07",
+        "ACG08",
+        "ACG10"
+      ]
+    },
+    "T18": {
+      "name": "Mechanized fishing, conveyors and helpers",
+      "existing_dependencies": [
+        "T16",
+        "T17"
+      ],
+      "owns_gap_ids": [],
+      "consumes_gap_ids": [
+        "ACG07",
+        "ACG08",
+        "ACG10"
+      ]
+    },
+    "T19": {
+      "name": "Wheat/additional food production",
+      "existing_dependencies": [
+        "T16",
+        "T18"
+      ],
+      "owns_gap_ids": [],
+      "consumes_gap_ids": [
+        "ACG07",
+        "ACG08",
+        "ACG10"
+      ]
+    },
+    "T20": {
+      "name": "Road and vehicle customer service",
+      "existing_dependencies": [
+        "T15",
+        "T17"
+      ],
+      "owns_gap_ids": [],
+      "consumes_gap_ids": [
+        "ACG07",
+        "ACG08",
+        "ACG10"
+      ]
+    },
+    "T21": {
+      "name": "Visible hostiles, hunting and weapon progression",
+      "existing_dependencies": [
+        "T06",
+        "T07",
+        "T08",
+        "T09",
+        "T13"
+      ],
+      "owns_gap_ids": [
+        "ACG02",
+        "ACG03",
+        "ACG04",
+        "ACG09",
+        "ACG10",
+        "ACG12"
+      ],
+      "consumes_gap_ids": [
+        "ACG01",
+        "ACG06",
+        "ACG07",
+        "ACG08",
+        "ACG11"
+      ]
+    },
+    "T22": {
+      "name": "Working defensive structures",
+      "existing_dependencies": [
+        "T11",
+        "T21"
+      ],
+      "owns_gap_ids": [
+        "ACG03",
+        "ACG10"
+      ],
+      "consumes_gap_ids": [
+        "ACG02",
+        "ACG06",
+        "ACG07",
+        "ACG08",
+        "ACG11",
+        "ACG12"
+      ]
+    },
+    "T23": {
+      "name": "Survivor rescue and basic survivor identity",
+      "existing_dependencies": [
+        "T06",
+        "T07",
+        "T14",
+        "T21"
+      ],
+      "owns_gap_ids": [
+        "ACG04",
+        "ACG07",
+        "ACG08",
+        "ACG10"
+      ],
+      "consumes_gap_ids": [
+        "ACG02",
+        "ACG03",
+        "ACG05",
+        "ACG06",
+        "ACG11",
+        "ACG12"
+      ]
+    },
+    "T24": {
+      "name": "Guardian dog",
+      "existing_dependencies": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "owns_gap_ids": [
+        "ACG01",
+        "ACG05",
+        "ACG09",
+        "ACG10"
+      ],
+      "consumes_gap_ids": [
+        "ACG02",
+        "ACG04",
+        "ACG06",
+        "ACG12"
+      ]
+    },
+    "T25": {
+      "name": "Gray wolf",
+      "existing_dependencies": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "owns_gap_ids": [
+        "ACG01",
+        "ACG05",
+        "ACG09",
+        "ACG10"
+      ],
+      "consumes_gap_ids": [
+        "ACG02",
+        "ACG04",
+        "ACG06",
+        "ACG12"
+      ]
+    },
+    "T26": {
+      "name": "Fox",
+      "existing_dependencies": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "owns_gap_ids": [
+        "ACG01",
+        "ACG05",
+        "ACG09",
+        "ACG10"
+      ],
+      "consumes_gap_ids": [
+        "ACG02",
+        "ACG04",
+        "ACG06",
+        "ACG12"
+      ]
+    },
+    "T27": {
+      "name": "Owl",
+      "existing_dependencies": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "owns_gap_ids": [
+        "ACG01",
+        "ACG05",
+        "ACG09",
+        "ACG10"
+      ],
+      "consumes_gap_ids": [
+        "ACG02",
+        "ACG04",
+        "ACG06",
+        "ACG12"
+      ]
+    },
+    "T28": {
+      "name": "Male lion",
+      "existing_dependencies": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "owns_gap_ids": [
+        "ACG01",
+        "ACG05",
+        "ACG09",
+        "ACG10"
+      ],
+      "consumes_gap_ids": [
+        "ACG02",
+        "ACG04",
+        "ACG06",
+        "ACG12"
+      ]
+    },
+    "T29": {
+      "name": "White tiger",
+      "existing_dependencies": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "owns_gap_ids": [
+        "ACG01",
+        "ACG05",
+        "ACG09",
+        "ACG10"
+      ],
+      "consumes_gap_ids": [
+        "ACG02",
+        "ACG04",
+        "ACG06",
+        "ACG12"
+      ]
+    },
+    "T30": {
+      "name": "Brown bear",
+      "existing_dependencies": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "owns_gap_ids": [
+        "ACG01",
+        "ACG05",
+        "ACG09",
+        "ACG10"
+      ],
+      "consumes_gap_ids": [
+        "ACG02",
+        "ACG04",
+        "ACG06",
+        "ACG12"
+      ]
+    },
+    "T31": {
+      "name": "Integrated companion jobs and population safety",
+      "existing_dependencies": [
+        "T15",
+        "T23",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30"
+      ],
+      "owns_gap_ids": [
+        "ACG05",
+        "ACG07",
+        "ACG08",
+        "ACG09",
+        "ACG10",
+        "ACG11",
+        "ACG12"
+      ],
+      "consumes_gap_ids": [
+        "ACG01",
+        "ACG03",
+        "ACG04",
+        "ACG06"
+      ]
+    },
+    "T32": {
+      "name": "Complete frozen-region Level 1–10 production progression",
+      "existing_dependencies": [
+        "T12",
+        "T13",
+        "T14",
+        "T16",
+        "T17",
+        "T18",
+        "T19",
+        "T20",
+        "T21",
+        "T22",
+        "T23",
+        "T31"
+      ],
+      "owns_gap_ids": [
+        "ACG11"
+      ],
+      "consumes_gap_ids": [
+        "ACG01",
+        "ACG03",
+        "ACG06",
+        "ACG09"
+      ]
+    },
+    "T33": {
+      "name": "Core economy & F2P progression model",
+      "existing_dependencies": [
+        "T12",
+        "T17",
+        "T18",
+        "T19",
+        "T20",
+        "T32"
+      ],
+      "owns_gap_ids": [
+        "ACG09"
+      ],
+      "consumes_gap_ids": [
+        "ACG02",
+        "ACG03",
+        "ACG04",
+        "ACG05",
+        "ACG06",
+        "ACG08",
+        "ACG12"
+      ]
+    },
+    "T42": {
+      "name": "Privacy-respecting telemetry, difficulty analytics and crash diagnostics",
+      "existing_dependencies": [
+        "T13",
+        "T14",
+        "T37",
+        "T41"
+      ],
+      "owns_gap_ids": [],
+      "consumes_gap_ids": [
+        "ACG11"
+      ]
+    },
+    "T43": {
+      "name": "Identity, cloud continuity and recovery",
+      "existing_dependencies": [
+        "T14",
+        "T41"
+      ],
+      "owns_gap_ids": [],
+      "consumes_gap_ids": [
+        "ACG04",
+        "ACG05",
+        "ACG07",
+        "ACG11",
+        "ACG12"
+      ]
+    },
+    "T44": {
+      "name": "Connected forest region / approximately Levels 11–20",
+      "existing_dependencies": [
+        "T32",
+        "T43"
+      ],
+      "owns_gap_ids": [
+        "ACG06"
+      ],
+      "consumes_gap_ids": [
+        "ACG02",
+        "ACG03",
+        "ACG08",
+        "ACG09",
+        "ACG10"
+      ]
+    },
+    "T45": {
+      "name": "Connected desert region / approximately Levels 21–30",
+      "existing_dependencies": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "owns_gap_ids": [
+        "ACG06"
+      ],
+      "consumes_gap_ids": [
+        "ACG02",
+        "ACG03",
+        "ACG08",
+        "ACG09",
+        "ACG10"
+      ]
+    },
+    "T46": {
+      "name": "Connected underwater region / approximately Levels 31–40",
+      "existing_dependencies": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "owns_gap_ids": [
+        "ACG06"
+      ],
+      "consumes_gap_ids": [
+        "ACG02",
+        "ACG03",
+        "ACG08",
+        "ACG09",
+        "ACG10"
+      ]
+    },
+    "T47": {
+      "name": "Connected sky region / approximately Levels 41–50",
+      "existing_dependencies": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "owns_gap_ids": [
+        "ACG06"
+      ],
+      "consumes_gap_ids": [
+        "ACG02",
+        "ACG03",
+        "ACG08",
+        "ACG09",
+        "ACG10"
+      ]
+    },
+    "T48": {
+      "name": "Connected volcanic region / approximately Levels 51–60",
+      "existing_dependencies": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "owns_gap_ids": [
+        "ACG06"
+      ],
+      "consumes_gap_ids": [
+        "ACG02",
+        "ACG03",
+        "ACG08",
+        "ACG09",
+        "ACG10"
+      ]
+    },
+    "T49": {
+      "name": "Connected swamp region / approximately Levels 61–70",
+      "existing_dependencies": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "owns_gap_ids": [
+        "ACG06"
+      ],
+      "consumes_gap_ids": [
+        "ACG02",
+        "ACG03",
+        "ACG08",
+        "ACG09",
+        "ACG10"
+      ]
+    },
+    "T50": {
+      "name": "Connected ruins region / approximately Levels 71–80",
+      "existing_dependencies": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "owns_gap_ids": [
+        "ACG06"
+      ],
+      "consumes_gap_ids": [
+        "ACG02",
+        "ACG03",
+        "ACG08",
+        "ACG09",
+        "ACG10"
+      ]
+    },
+    "T51": {
+      "name": "Connected underground region / approximately Levels 81–90",
+      "existing_dependencies": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "owns_gap_ids": [
+        "ACG06"
+      ],
+      "consumes_gap_ids": [
+        "ACG02",
+        "ACG03",
+        "ACG08",
+        "ACG09",
+        "ACG10"
+      ]
+    },
+    "T52": {
+      "name": "Connected alien region / approximately Levels 91–100",
+      "existing_dependencies": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "owns_gap_ids": [
+        "ACG06"
+      ],
+      "consumes_gap_ids": [
+        "ACG02",
+        "ACG03",
+        "ACG08",
+        "ACG09",
+        "ACG10"
+      ]
+    },
+    "T53": {
+      "name": "Transportation and inter-region continuity",
+      "existing_dependencies": [
+        "T43",
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52"
+      ],
+      "owns_gap_ids": [
+        "ACG06"
+      ],
+      "consumes_gap_ids": [
+        "ACG05",
+        "ACG08",
+        "ACG10",
+        "ACG11",
+        "ACG12"
+      ]
+    },
+    "T54": {
+      "name": "Day/night, weather, audio and final game feedback",
+      "existing_dependencies": [
+        "T32",
+        "T53"
+      ],
+      "owns_gap_ids": [
+        "ACG10"
+      ],
+      "consumes_gap_ids": [
+        "ACG04",
+        "ACG06",
+        "ACG11"
+      ]
+    },
+    "T55": {
+      "name": "Accessibility and control customization",
+      "existing_dependencies": [
+        "T07",
+        "T43"
+      ],
+      "owns_gap_ids": [],
+      "consumes_gap_ids": [
+        "ACG04",
+        "ACG05",
+        "ACG10",
+        "ACG11"
+      ]
+    },
+    "T56": {
+      "name": "Performance/Quality/Balanced/Battery player modes",
+      "existing_dependencies": [
+        "T42",
+        "T54",
+        "T55"
+      ],
+      "owns_gap_ids": [
+        "ACG11"
+      ],
+      "consumes_gap_ids": [
+        "ACG05"
+      ]
+    },
+    "T58": {
+      "name": "Phone/tablet/foldable functional acceptance",
+      "existing_dependencies": [
+        "T43",
+        "T54",
+        "T55",
+        "T56"
+      ],
+      "owns_gap_ids": [
+        "ACG11"
+      ],
+      "consumes_gap_ids": [
+        "ACG05"
+      ]
+    },
+    "T59": {
+      "name": "Character 2 final rigging and motion review",
+      "existing_dependencies": [
+        "T58"
+      ],
+      "owns_gap_ids": [],
+      "consumes_gap_ids": [
+        "ACG10"
+      ]
+    },
+    "T60": {
+      "name": "Character 3 final rigging and motion review",
+      "existing_dependencies": [
+        "T58"
+      ],
+      "owns_gap_ids": [],
+      "consumes_gap_ids": [
+        "ACG10"
+      ]
+    },
+    "T61": {
+      "name": "Character 4 final rigging and motion review",
+      "existing_dependencies": [
+        "T58"
+      ],
+      "owns_gap_ids": [],
+      "consumes_gap_ids": [
+        "ACG10"
+      ]
+    },
+    "T62": {
+      "name": "Complete Level 1–100 progression acceptance",
+      "existing_dependencies": [
+        "T33",
+        "T36",
+        "T40",
+        "T43",
+        "T53",
+        "T54",
+        "T58",
+        "T59",
+        "T60",
+        "T61"
+      ],
+      "owns_gap_ids": [],
+      "consumes_gap_ids": [
+        "ACG01",
+        "ACG06",
+        "ACG09",
+        "ACG11",
+        "ACG12"
+      ]
+    },
+    "T63": {
+      "name": "$0 lifelong-F2P player completion test",
+      "existing_dependencies": [
+        "T33",
+        "T62"
+      ],
+      "owns_gap_ids": [],
+      "consumes_gap_ids": [
+        "ACG06",
+        "ACG09"
+      ]
+    },
+    "T64": {
+      "name": "Purchase-value/fairness test",
+      "existing_dependencies": [
+        "T35",
+        "T36",
+        "T62",
+        "T63"
+      ],
+      "owns_gap_ids": [],
+      "consumes_gap_ids": [
+        "ACG09"
+      ]
+    },
+    "T67": {
+      "name": "Full-game reference/regression acceptance",
+      "existing_dependencies": [
+        "T62",
+        "T63",
+        "T64",
+        "T65",
+        "T66"
+      ],
+      "owns_gap_ids": [],
+      "consumes_gap_ids": [
+        "ACG01",
+        "ACG10",
+        "ACG11",
+        "ACG12"
+      ]
+    },
+    "T68": {
+      "name": "Sustained native 4K/60 phone evidence",
+      "existing_dependencies": [
+        "T67"
+      ],
+      "owns_gap_ids": [],
+      "consumes_gap_ids": [
+        "ACG11"
+      ]
+    },
+    "T69": {
+      "name": "Sustained native 4K/60 tablet/foldable evidence",
+      "existing_dependencies": [
+        "T67"
+      ],
+      "owns_gap_ids": [],
+      "consumes_gap_ids": [
+        "ACG11"
+      ]
+    },
+    "T70": {
+      "name": "Final production release handoff",
+      "existing_dependencies": [
+        "T68",
+        "T69"
+      ],
+      "owns_gap_ids": [],
+      "consumes_gap_ids": [
+        "ACG01",
+        "ACG11"
+      ]
+    }
+  },
+  "integration_order": [
+    "Add the explicit seven-attacking-pets invariant and per-species acceptance to current planning projections, preserving existing role/animation contracts.",
+    "T21/T13 owners freeze selected target/weapon/zone/recovery interfaces; pet and survivor owners author their feature-local use cases against those interfaces without adding backward dependencies.",
+    "Prove one conserved survivor work→combat→return loop and one contact-authoritative pet attack loop, then all seven species individually.",
+    "T31 combines selected teams/jobs/targets/defenses and T33 checks early-to-late usefulness; every region binds deployment and action compatibility before its own integration.",
+    "Run current-source complete motion/listening, persistence, multi-actor adversarial, full progression and target-device evidence before any game approval."
+  ],
+  "non_expansion_limits": [
+    "No new tasks T71–T80, invented dependency edges, reassigned ownership or changed task statuses.",
+    "No new button-heavy combat, mandatory management dashboard, co-op/guild warfare, random permanent specialization exclusions or hunger/stamina chore system.",
+    "No new enemy, weapon, recipe, special status effect or equipment item solely because an art sheet exists.",
+    "No mandatory paid basic AI, pet attack, free recovery or environmental competence.",
+    "No fresh visual, animation, audio, runtime, balance, whole-game or device approval; source checks and planning coverage only."
+  ],
+  "whole_game_decision_authority": "Docs/Production/WHOLE_GAME_COMPLETENESS.json"
+}

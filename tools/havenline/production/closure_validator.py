@@ -9,6 +9,7 @@ from critic_profile import resolve_critic
 from reference_style_lock import style_lock_required, validate_manifest as validate_reference_style_lock
 from reference_acceptance import binding_errors, declared_reference_dimensions, final_rule, load_json_strict as load_json, nonapproving_scope_errors, record_errors, required_final_critics, strict_json_loads
 from shipping_visual_gate import active_invalidation, effective_approval, validate_signoff
+from resource_actor_contract import evaluate_task as evaluate_resource_actor_task, VALIDATION_KIND as RESOURCE_ACTOR_VALIDATION_KIND
 
 ALL_GATES=[f"G{i}" for i in range(1,15)]
 RESOURCE_REGISTRY=DOCS/"RESOURCE_ACTION_REGISTRY.json"
@@ -53,6 +54,65 @@ def has_placeholder(value,tokens):
     if isinstance(value,list):return any(has_placeholder(v,tokens) for v in value)
     if isinstance(value,dict):return any(has_placeholder(v,tokens) for v in value.values())
     return False
+
+def validate_current_resource_actor_contract(task,manifest):
+    """Re-evaluate current declarations; a saved PASS cannot waive new failures.
+
+    This is only the resource/actor part of closure. Actual motion reviews,
+    source evidence and all other final gates remain mandatory in main().
+    Historical receipts are read-only and are never rewritten here.
+    """
+    errors=[]
+    try:
+        current=evaluate_resource_actor_task(task,manifest)
+    except (OSError,ValueError,KeyError,TypeError,AttributeError) as exc:
+        return {"applicable":True,"c5_required":True,"passed":False,
+                "errors":["current resource/actor evaluation unavailable: "+str(exc)]}
+    errors += ["current resource/actor contract: "+str(message) for message in current.get("errors",[])]
+    if current.get("passed") is not True:
+        errors.append("current resource/actor evaluation did not pass")
+    contract=manifest.get("resource_actor_contract",{})
+    if not isinstance(contract,dict):
+        contract={}
+        errors.append("resource/actor contract must be an object")
+    if current.get("applicable") is True:
+        if contract.get("applicable") is not True:errors.append("resource/actor contract not marked applicable")
+        if contract.get("validation_passed") is not True:errors.append("resource/actor contract validation not passed")
+        registry_hashes=contract.get("registry_hashes",{})
+        if not isinstance(registry_hashes,dict):
+            errors.append("resource/actor registry_hashes must be an object")
+            registry_hashes={}
+        for key,value in current.get("registry_hashes",{}).items():
+            if registry_hashes.get(key)!=value:
+                errors.append("resource/actor registry hash mismatch: "+key)
+        proof_path=contract.get("validator_output_path")
+        proof_hash=contract.get("validator_output_sha256")
+        if not proof_path or not proof_hash:
+            errors.append("resource/actor validator proof missing")
+        else:
+            try:
+                fp=(ROOT/proof_path).resolve()
+                if not fp.is_file() or sha256_file(fp)!=proof_hash:
+                    errors.append("resource/actor validator proof hash mismatch")
+                else:
+                    proof=load_json(fp)
+                    if proof.get("passed") is not True or proof.get("task_id")!=task:
+                        errors.append("resource/actor validator proof failed/stale")
+                    if proof.get("candidate_commit")!=manifest.get("candidate_commit"):
+                        errors.append("resource/actor validator candidate mismatch")
+                    if proof.get("schema_only") is True or proof.get("validation_kind")!=RESOURCE_ACTOR_VALIDATION_KIND:
+                        errors.append("resource/actor proof is not current candidate coverage evaluation")
+                    if proof.get("validator_sha256")!=current.get("validator_sha256"):
+                        errors.append("resource/actor validator implementation is stale")
+                    if proof.get("registry_hashes")!=current.get("registry_hashes"):
+                        errors.append("resource/actor validator proof registry hashes are stale")
+            except (OSError,ValueError,KeyError,TypeError,AttributeError) as exc:
+                errors.append("invalid resource/actor validator proof: "+str(exc))
+    elif contract.get("applicable") is True:
+        errors.append("resource/actor contract incorrectly marked applicable for task")
+    return {"applicable":current.get("applicable") is True,
+            "c5_required":current.get("c5_required") is True,
+            "passed":not errors,"errors":errors}
 
 RAW_ACCEPTANCE_RULE=">9.0 unrounded in every mandatory dimension; no averaging; zero mandatory defects"
 
@@ -316,63 +376,9 @@ def main():
         if durable_index.get("task_id")!=task or durable_index.get("candidate_commit")!=candidate:
             errors.append("durable evidence index source/task mismatch")
 
-    policy=resources.get("task_policy",{})
-    contract_applicable=task in policy.get("applicable_tasks",[])
-    contract=d.get("resource_actor_contract",{})
-    contract_c5_required=False
-    if contract_applicable:
-        if contract.get("applicable") is not True:errors.append("resource/actor contract not marked applicable")
-        if contract.get("validation_passed") is not True:errors.append("resource/actor contract validation not passed")
-        expected_hashes={
-            "resource_action_registry":sha256_file(RESOURCE_REGISTRY),
-            "actor_capability_matrix":sha256_file(ACTOR_MATRIX),
-            "animation_action_matrix":sha256_file(ANIMATION_MATRIX),
-        }
-        got_hashes=contract.get("registry_hashes",{})
-        for key,value in expected_hashes.items():
-            if got_hashes.get(key)!=value:errors.append("resource/actor registry hash mismatch: "+key)
-
-        introduced=set(contract.get("introduced_resource_ids",[]))
-        covered_resources=set(contract.get("resource_ids_covered",[]))
-        tokens=resources.get("placeholder_tokens",[])
-        required_resources=set(policy.get("resource_resolution_tasks",{}).get(task,[]))
-        for rid in sorted(required_resources|introduced):
-            row=resources.get("resources",{}).get(rid)
-            if not row:
-                errors.append("unregistered resource: "+rid);continue
-            if row.get("production_ready") is not True:errors.append("resource not production_ready: "+rid)
-            if has_placeholder(row,tokens):errors.append("resource still unresolved: "+rid)
-            if rid not in covered_resources:errors.append("resource missing contract coverage: "+rid)
-
-        covered_actors=set(contract.get("actor_keys_covered",[]))
-        for actor_key in actors.get("required_actor_keys_by_task",{}).get(task,[]):
-            if actor_key not in covered_actors:errors.append("actor capability missing contract coverage: "+actor_key)
-
-        covered_profiles=set(contract.get("animation_profiles_covered",[]))
-        for profile_id in animations.get("required_profiles_by_task",{}).get(task,[]):
-            if profile_id not in covered_profiles:errors.append("animation profile missing contract coverage: "+profile_id)
-
-        animation_delta=bool(contract.get("animation_delta"))
-        contract_c5_required=(task in policy.get("always_motion_critic_tasks",[]) or
-            (task in policy.get("conditional_motion_critic_tasks",[]) and animation_delta))
-
-        proof_path=contract.get("validator_output_path")
-        proof_hash=contract.get("validator_output_sha256")
-        if not proof_path or not proof_hash:
-            errors.append("resource/actor validator proof missing")
-        else:
-            fp=(ROOT/proof_path).resolve()
-            if not fp.exists() or sha256_file(fp)!=proof_hash:
-                errors.append("resource/actor validator proof hash mismatch")
-            else:
-                proof=load_json(fp)
-                if proof.get("passed") is not True or proof.get("task_id")!=task:
-                    errors.append("resource/actor validator proof failed/stale")
-                proof_candidate=proof.get("candidate_commit")
-                if proof_candidate and proof_candidate!=candidate:
-                    errors.append("resource/actor validator candidate mismatch")
-    elif contract and contract.get("applicable") is True:
-        errors.append("resource/actor contract incorrectly marked applicable for task")
+    resource_actor_check=validate_current_resource_actor_contract(task,d)
+    errors += resource_actor_check["errors"]
+    contract_c5_required=resource_actor_check["c5_required"]
 
     gm_task_policy=gm_policy.get("task_policy",{})
     gm_applicable=task in gm_task_policy.get("applicable_tasks",[])

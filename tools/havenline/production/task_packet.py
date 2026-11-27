@@ -6,6 +6,8 @@ from forward_execution import resolve_task
 from critic_profile import resolve_critic
 from reference_acceptance import final_rule,required_final_critics
 from gameplay_depth import task_section as gameplay_depth_section
+from completeness import task_section as completeness_section
+from resource_actor_contract import validate_schema as validate_resource_actor_schema
 from architecture_v3 import task_readiness
 from architecture_v31 import task_readiness as task_readiness_v31
 from architecture_v32 import readiness as task_readiness_v32
@@ -23,6 +25,8 @@ def main():
     if len(sys.argv)!=2:raise SystemExit("usage: task_packet.py T04")
     task_id=sys.argv[1].upper();graph=load_json(DOCS/"DEPENDENCY_GRAPH.json");registry=load_json(DOCS/"WORKSTREAM_REGISTRY.json");ownership=load_json(DOCS/"PATH_OWNERSHIP.json");critics=load_json(DOCS/"CRITIC_MATRIX.json");execution=load_json(DOCS/"CRITIC_EXECUTION.json");task_gates=load_json(DOCS/"task-gates.json")
     resources=load_json(RESOURCE_REGISTRY);actors=load_json(ACTOR_MATRIX);animations=load_json(ANIMATION_MATRIX)
+    schema_errors=validate_resource_actor_schema(resources,actors,animations)
+    if schema_errors:raise SystemExit('Invalid resource/actor declarations: '+'; '.join(schema_errors))
     if task_id not in graph["tasks"]:raise SystemExit(f"unknown task {task_id}")
     task=graph["tasks"][task_id];ws=next((w for w in registry["workstreams"] if w["task_id"]==task_id),None)
     owned=expand_alias(ws.get("owned_paths",[]),ownership) if ws else [];protected=expand_alias(ws.get("protected_paths",[]),ownership) if ws else []
@@ -77,7 +81,7 @@ Required APPROVED upstream tasks: {', '.join(task['dependencies']) or 'none'}
         text+=f"- Actor capability keys this task must prove: {', '.join(ra) or 'none predeclared'}\n"
         text+=f"- Animation profiles this task must prove: {', '.join(rp) or 'none predeclared'}\n"
         text+="- Run `python3 tools/havenline/production/resource_actor_contract.py --task %s --manifest <candidate-manifest> --output <proof.json>` before closure.\n" % task_id
-        if conditional_c5:text+="- C5 becomes mandatory if this candidate introduces any new actor action or animation profile (`animation_delta=true`).\n"
+        if conditional_c5:text+="- C5 is mandatory for new actor actions/profiles or evaluated resource action profiles requiring regional contact/use-state review (`regional_resource_contact`), including approved-clip reuse. `animation_delta=false` cannot waive actual regional contact proof; reuse does not require a new clip.\n"
     else:
         text+="\n## Resource / tool / actor / animation contract\n- N/A for this task under the current forward policy. Do not expand frozen scope merely because the contract exists.\n"
 
@@ -174,6 +178,7 @@ Required APPROVED upstream tasks: {', '.join(task['dependencies']) or 'none'}
             text+="- C0 automatically stages unverified failure-learning proposals. They remain advisory/non-authoritative until a verified post-repair proof plus explicit integration-owner disposition promotes one into `FAILURE_INTELLIGENCE.json`.\n"
             text+="- Parallel preparation of later tasks is encouraged only inside GREEN/YELLOW boundaries; it never grants integration or approval.\n"
     text+=gameplay_depth_section(task_id)
+    text+=completeness_section(task_id)
     text+="\n\n## Current score policy\n"+final_rule()+"\n"
     text+="""
 

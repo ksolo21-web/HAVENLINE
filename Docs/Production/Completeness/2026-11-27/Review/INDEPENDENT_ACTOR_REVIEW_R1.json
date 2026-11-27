@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/depth_critic",
+  "reviewed_at_utc": "2026-11-27T12:16:26.441876+00:00",
+  "review_scope": "Actor draft preintegration review, not a final candidate approval",
+  "artifact_hashes": {
+    "ACTORS_COMBAT_GAPS.json": "2fb4d12de577f4c500a2fa83a2c83e4a27819e3248a4ebc3c791bca80791360d",
+    "ACTORS_COMBAT_GAPS.md": "78f4bff5e6177d7997b3354a6abe3ce24ad766664e182337d42fb632e5af19e4"
+  },
+  "status": "CHANGES_REQUESTED_PREINTEGRATION",
+  "score": null,
+  "mandatory_final_checks": "Pending final candidate",
+  "source_verification": {
+    "sources": 17,
+    "all_exact_hashes_match": true,
+    "receipt": "INDEPENDENT_ACTOR_SOURCE_CHECK.json",
+    "direct_source_observations": [
+      "3fad field_owl._eligible/_nearest/_dive perform bounded target selection and actual claw intersection",
+      "3fad field_opening.owl_contact invokes receive_hit(1,at) after owned-owl/target/contact validation",
+      "3fad field_enemy.receive_hit decreases HP and emits defeat only at zero; hostile source is not friendly wolf proof"
+    ]
+  },
+  "findings": [
+    {
+      "id": "ACR01",
+      "severity": "required_clarification",
+      "location": "PA05 and ACG07 task ownership",
+      "finding": "T07 frozen scope is a human-context selector and excludes animal behavior. Wording could imply an existing pet-goal/AI interface or silently assign pet arbitration to an approved task.",
+      "required_disposition": "Preserve simple-control/priority language; species and T31 own pet/job arbitration; shared-selector changes use the existing scope/change-request process.",
+      "builder_response": "Accepted, repair in progress."
+    },
+    {
+      "id": "ACR02",
+      "severity": "required_scope_clarification",
+      "location": "PA11 / PC10 / ACG06",
+      "finding": "Every species attacking in every region band would overstate the user instruction and could force impossible locomotion or extra staging/equipment just to populate a matrix.",
+      "required_disposition": "Use explicit regional applicability and useful safe alternatives while preserving every species actual attack through applicable progression; no forced owl underwater combat or new equipment solely for table completeness.",
+      "builder_response": "Accepted, repair in progress."
+    }
+  ],
+  "runtime_approval_allowed": false,
+  "game_approval_allowed": false
+}

@@ -6,9 +6,15 @@
 
 Read the [current T01–T80 reference/render refresh](TASK_PLAN_REFRESH_2026-11-27.md) before new task implementation or review. Its [task-by-task crosswalk](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md) attaches current source observations, pinned GitHub renders, task-specific proof and next actions to all 80 requested IDs. T01–T70 retain their original definitions/dependencies; T71–T80 remain `SOURCE_NOT_FOUND` and are not invented work.
 
-The newest observed Codex evidence is Build 11, game source `989edd9283148e9f712387fb937ea36038cbd9d2`; [exact receipt and limits](ReferenceRefresh/2026-11-27/LATEST_BUILD_EVIDENCE.json). Continue from the newer Codex foundation with current ownership and source identity. The migration checkpoint/table below is historical, not today's lifecycle: T01–T11 have historical completion records, while current candidates and seven preserved visual holds require scoped reconciliation. No old approval automatically passes new assets.
+The earlier reference refresh pinned Build 11, game source `989edd9283148e9f712387fb937ea36038cbd9d2`; [exact receipt and limits](ReferenceRefresh/2026-11-27/LATEST_BUILD_EVIDENCE.json). Continue from the newer Codex foundation with current ownership and source identity. The migration checkpoint/table below is historical, not today's lifecycle: T01–T11 have historical completion records, while current candidates and seven preserved visual holds require scoped reconciliation. No old approval automatically passes new assets.
 
 Use the selected GitHub renders as exact design inputs, with image/model/scene hashes and actual in-game comparisons. The ordinary critic floor remains ≥9.5; **the requested 9.9 match is attained only when every applicable reference-comparison dimension reaches ≥9.9**, all mandatory evidence passes, and stronger exact-10 C1 style/reference requirements remain satisfied. [Match rules and enforcement gaps](TASK_PLAN_REFRESH_2026-11-27.md#what-99-matching-means) prevent archive/static-art scores or stale validator passes from becoming runtime approvals.
+
+## Current whole-game gap closure
+
+The [latest observed Build13/source delta](Completeness/2026-11-27/LATEST_SOURCE_DELTA.md) preserves the3fad deep audit and records game source `2654f5019b7212968d28600cb071bf1c231c9030`, evidence cutoff `2f46e72e300a719f34ca9b0e9b718282a5a88ddd`. Newly available reported tests and scoped9.5/9.9 reviews are credited with their exact limits; current final reference>=9.9 and stronger exact10 requirements remain.
+
+Use [COMPLETENESS_STANDARD.md](COMPLETENESS_STANDARD.md), [WHOLE_GAME_COMPLETENESS.json](WHOLE_GAME_COMPLETENESS.json), the [compact T01–T80 map](Completeness/2026-11-27/TASK_COMPLETENESS_T01_T80.md), and [CURRENT_GAMEPLAY_SOURCE.json](CURRENT_GAMEPLAY_SOURCE.json). Twelve selected CD decisions now resolve the prior D01–D05 behavior choices; all runtime evidence and numeric tuning remain open. The plan includes 100 authored progression outcomes, explicit value-chain choices, recoverable stakes, player-like logical survivor cargo, all-seven-pet attack requirements, ten transaction boundaries and landscape reconciliation. Existing task definitions/dependencies/statuses/ownership and historical receipts remain unchanged.
 
 ## Migration checkpoint (historical snapshot)
 
@@ -39,7 +45,7 @@ Launch remains Level 1–100 across a connected world, with practical visual pro
 
 The [gameplay-depth standard](GAMEPLAY_DEPTH_STANDARD.md) and [machine-readable requirements](GAMEPLAY_DEPTH_CONTRACT.json) add the current user requirements for meaningful player risk, smart and useful survivors/pets, all-human-task survivor assistance including delegated plot purchases and large mixed loads, full actor/equipment/enemy animation, and worthwhile materials/currencies. Use the [T01–T80 responsibility crosswalk](GameplayDepth/2026-11-27/TASK_GAMEPLAY_DEPTH_T01_T80.md) and [source audit](GameplayDepth/2026-11-27/README.md) with each forward task packet.
 
-These are forward requirements, not an assertion that the full game already implements them. Proposed loss policies, capacities, recipes, pet balance and currency names remain explicit owner decisions. Existing task definitions, dependency edges, statuses, ownership, historical evidence and stronger reference gates remain intact. Introducing tasks must prove useful resource/job contracts before their own integration; T33 and T31 later reconcile and integrate them, avoiding a backward dependency on those later tasks.
+These are forward requirements, not an assertion that the full game already implements them. The current CD decisions select the forward loss/recovery, carrying, recipe identities, pet-team and currency direction; owners still freeze numerical tuning and prove implementation. Earlier D01–D05 proposal wording is retained in its dated audit. Existing task definitions, dependency edges, statuses, ownership, historical evidence and stronger reference gates remain intact. Introducing tasks must prove useful resource/job contracts before their own integration; T33 and T31 later reconcile and integrate them, avoiding a backward dependency on those later tasks.
 
 ## Automatic resource / tool / actor / animation contract
 
@@ -54,11 +60,11 @@ No production resource may become valid without a registered acquisition method,
 
 Human helpers and rescued survivors may gather, carry, deposit, build, repair, guard and attack when their registered role permits it, but they must use role-distinct authored work/combat motion rather than simply replaying the selected player's animation. Logical impacts remain synchronized to the same authoritative gameplay beat.
 
-All seven animal companion tasks require species-appropriate motion. Combat-capable companions require species-specific attack animation; animals do not silently use human tools. T27 additionally requires authored owl flight, takeoff, landing, wing-clearance, aerial navigation and dive-attack proof.
+All seven animal companion tasks require species-appropriate motion and real useful attacks alongside their specialties. Every species, including fox and owl, requires authoritative contact/damage, miss, interruption, recall, recovery and return-to-job evidence. Animals do not silently use human tools. T27 additionally requires authored owl flight, takeoff, landing, wing-clearance, aerial navigation and dive-attack proof.
 
 The existing orbiting/swiveling placeholder gather/attack presentation is explicitly non-final: T09 owns removal/replacement of the gathering-side presentation, while T21 owns removal/replacement of the combat-side presentation and weapon progression. T06 and T59-T61 prove character-specific tool/weapon contact and motion compatibility.
 
-This contract is fail-closed in task-packet generation and candidate closure. C5 Motion/Rigging becomes additionally mandatory for T09, T16, T19, T21 and T23, and for T44-T52 whenever a candidate introduces a new actor action or animation profile.
+This contract is fail-closed in task-packet generation and candidate closure. C5 Motion/Rigging remains mandatory for T09, T16, T19, T21, T23 and all seven pet attacks. For T44–T52 it is also required whenever evaluated resource action profiles require regional contact/use-state review, including approved-clip reuse, or a new action/profile is introduced. The current evaluator derives actual profile coverage and reruns at closure; a stored passing receipt cannot waive a current failure. See the forward standard for the phase-safe T23 deferral.
 
 **Non-disruption:** T05 was already assigned before this contract. Its frozen scope is not expanded or invalidated. If a later harvesting/combat task requires a physical tool asset T05 did not author, the later task owns it within authorized paths or raises a structured change request.
 

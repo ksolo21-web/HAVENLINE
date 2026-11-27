@@ -1,0 +1,316 @@
+{
+  "schema_version": 1,
+  "reviewer": {
+    "agent": "/root/depth_critic",
+    "role": "Separate independent read-only critic",
+    "candidate_author": false,
+    "candidate_files_edited": false,
+    "method": "Read original sources and actual outputs; raise concrete defects; independently inspect repairs; run focused tests and negative probes; verify staged freeze."
+  },
+  "reviewed_at_utc": "2026-11-27T13:10:09.945148+00:00",
+  "scope": "Whole-game forward design, source provenance/routing, task projections and planning/closure validators only",
+  "base_commit": "fd2e12c8734f49cda7eb3bbf97887406bd03a704",
+  "candidate_freeze_path": "Docs/Production/Completeness/2026-11-27/CANDIDATE_FREEZE.json",
+  "candidate_freeze_sha256": "730290094a7a9c54d836cfda72af36ca1eb87a722f962c47b1d9b7dd91bf90d1",
+  "frozen_files": 124,
+  "frozen_bytes": 2703397,
+  "disposition": "PASS_FOR_BOUNDED_PLANNING_AND_TOOLING_PUBLICATION",
+  "planning_artifact_score": 10.0,
+  "required_score_floor": 9.9,
+  "all_mandatory_checks_passed": true,
+  "mandatory_checks_passed": 18,
+  "mandatory_checks_total": 18,
+  "unresolved_mandatory_defects": [],
+  "checks": [
+    {
+      "id": "GC01",
+      "title": "Exact sources and coherent current-source navigation",
+      "mandatory": true,
+      "status": "PASS",
+      "evidence_and_reason": "The current selector and entrypoints distinguish main baseline fd2, deep-audit baseline3fad, observed evidence cutoff2f46 and reported Build13 game source2654.152 exact source bindings and the new source note pass. Older Alfred launch instructions are explicitly historical; live head and owner must be resolved before gameplay changes.",
+      "repository_evidence_relative_to_package": [
+        "../../CURRENT_GAMEPLAY_SOURCE.json",
+        "SOURCE_BINDINGS.json",
+        "LATEST_SOURCE_DELTA.md",
+        "Review/INDEPENDENT_LATEST_NOTE_REVIEW.json"
+      ]
+    },
+    {
+      "id": "GC02",
+      "title": "Bounded whole-game coverage",
+      "mandatory": true,
+      "status": "PASS",
+      "evidence_and_reason": "All70 authentic task definitions remain byte-identical and receive current gap dispositions. The map preserves ten undefined requested IDs as SOURCE_NOT_FOUND. The requirement universe is explicit and does not assert that unknown future defects or implemented gameplay are complete.",
+      "repository_evidence_relative_to_package": [
+        "TASK_COMPLETENESS_T01_T80.json",
+        "../../WHOLE_GAME_COMPLETENESS.json",
+        "Review/Final/INDEPENDENT_FINAL_FREEZE_RETEST_R2.json"
+      ]
+    },
+    {
+      "id": "GC03",
+      "title": "All seven pets really attack",
+      "mandatory": true,
+      "status": "PASS",
+      "evidence_and_reason": "All seven exact species retain named species-appropriate real attack, positive damage/contact, miss, interruption, recovery and recall requirements. Owl aerial combat is explicit; scouting cannot replace an attack and animals cannot use a human-tool fallback. The current evaluator and closure reject erased capabilities/profiles.",
+      "repository_evidence_relative_to_package": [
+        "ACTORS_COMBAT_GAPS.json",
+        "Review/INDEPENDENT_ACTOR_RETEST_R2.json",
+        "Review/INDEPENDENT_VALIDATOR_TEST_RUN_R2.json"
+      ]
+    },
+    {
+      "id": "GC04",
+      "title": "Distinct useful companions within the same game",
+      "mandatory": true,
+      "status": "PASS",
+      "evidence_and_reason": "Species retain distinct attacks and useful specialties, friendly/hostile/loot identity, leash and target-loss behavior.Three field pets and two survivor escorts are selected design limits; local workers are separate. Rest is valid without eligible safe work. Unsuitable environments permit safe alternatives, with real combat retained across applicable progression.",
+      "repository_evidence_relative_to_package": [
+        "../../COMPLETENESS_STANDARD.md",
+        "ACTORS_COMBAT_GAPS.json",
+        "Review/INDEPENDENT_PRELIMINARY_RETEST_R2.json"
+      ]
+    },
+    {
+      "id": "GC05",
+      "title": "Survivor assistance and transaction integrity",
+      "mandatory": true,
+      "status": "PASS",
+      "evidence_and_reason": "All ten physical work families include mixed hauling, service, production, ordinary-cash purchases and every plot family including conveyors. CD03 selects unlimited logical mixed cargo like the player. Bounded jobs, approved budgets/reserves, revoked authority, changed prices, competing contributions and exactly-once custody are required; premium/real-money spending stays player-controlled.",
+      "repository_evidence_relative_to_package": [
+        "ACTORS_COMBAT_GAPS.json",
+        "../../WHOLE_GAME_COMPLETENESS.json",
+        "TRANSACTIONS_AND_RECOVERY.json"
+      ]
+    },
+    {
+      "id": "GC06",
+      "title": "Readable stakes and viable recovery",
+      "mandatory": true,
+      "status": "PASS",
+      "evidence_and_reason": "Owned value is protected. Warned field danger can interrupt trips/work and temporarily disable actors or exposed operations. Recovery uses the last restored camp or initial safe anchor, restores playable player state and preserves cargo; care and owned-site damage restoration are free. Sanctuary attack exploits, reset loot, compounded shortage and repeat-failure recovery have explicit checks.",
+      "repository_evidence_relative_to_package": [
+        "../../COMPLETENESS_STANDARD.md",
+        "../../WHOLE_GAME_COMPLETENESS.json",
+        "Review/INDEPENDENT_PRELIMINARY_RETEST_R2.json"
+      ]
+    },
+    {
+      "id": "GC07",
+      "title": "Complete bounded resource/currency purpose",
+      "mandatory": true,
+      "status": "PASS",
+      "evidence_and_reason": "The22 decisions cover selected raw/product/currency/project/container roles and all33 render concepts exactly once through selected/alias/reserve dispositions. Ordinary cash custody is one currency; committed outflow is included so spending cannot reappear at the till. One premium currency, XP and permanent VIP retain distinct meanings. New sinks/recipes remain selected design with numeric balance unproved.",
+      "repository_evidence_relative_to_package": [
+        "PROGRESSION_ECONOMY_GAPS.json",
+        "Review/INDEPENDENT_ECONOMY_COVERAGE_CHECK.json",
+        "TRANSACTIONS_AND_RECOVERY.json"
+      ]
+    },
+    {
+      "id": "GC08",
+      "title": "Learnability, simple controls and readability",
+      "mandatory": true,
+      "status": "PASS",
+      "evidence_and_reason": "First-use, returning/resumed, denied and busy-camp states must explain next action, costs, danger and helper intent. Contextual movement/actions remain simple; T07 human-context scope is preserved and pet/job arbitration has proper owners. Landscape is selected explicitly, without inferring actual device behavior from a setting.",
+      "repository_evidence_relative_to_package": [
+        "../../COMPLETENESS_STANDARD.md",
+        "../../WHOLE_GAME_COMPLETENESS.json",
+        "Review/INDEPENDENT_EXTERNAL_SOURCE_CHECK.json"
+      ]
+    },
+    {
+      "id": "GC09",
+      "title": "Full behavior presentation",
+      "mandatory": true,
+      "status": "PASS",
+      "evidence_and_reason": "The plan covers applicable action/machine/transport start, work, contact, success, miss, empty/full/blocked, cancellation, recovery and transition states. Actual complete-cycle/multi-angle motion and audio listening remain mandatory. Regional contact C5 cannot be waived by false animation_delta or approved-clip reuse, while reused clips do not need to be recreated.",
+      "repository_evidence_relative_to_package": [
+        "ACTORS_COMBAT_GAPS.json",
+        "../../RESOURCE_TOOL_ACTOR_STANDARD.md",
+        "Review/INDEPENDENT_RESOURCE_REGION_RETEST_R4.json"
+      ]
+    },
+    {
+      "id": "GC10",
+      "title": "Persistence, offline time and reconnection",
+      "mandatory": true,
+      "status": "PASS",
+      "evidence_and_reason": "Ten transaction boundaries specify precommit/commit/postcommit recovery. Ordinary simulation pauses in background; core play/recovery stays offline. Event participation requires verified connection and no offline event-input spending. Verified completion creates a durable claim that survives expiry and lost response; reconnect grants once. Migration/conflict/account isolation remain required.",
+      "repository_evidence_relative_to_package": [
+        "TRANSACTIONS_AND_RECOVERY.json",
+        "../../WHOLE_GAME_COMPLETENESS.json",
+        "Review/INDEPENDENT_PRELIMINARY_RETEST_R2.json"
+      ]
+    },
+    {
+      "id": "GC11",
+      "title": "Accessibility and device behavior",
+      "mandatory": true,
+      "status": "PASS",
+      "evidence_and_reason": "Existing accessibility preferences and functional device obligations apply to the new loops. The16:9 fixture is corrected to1920x1080 and validated separately from20:9, while native tablet rounding is accepted. Landscape/fold/resume/quality/input and sustained native4K60 require real target-device evidence; new Build13 receipts explicitly leave physical testing unmeasured.",
+      "repository_evidence_relative_to_package": [
+        "../../DEVICE_LAYOUT_MATRIX.json",
+        "../../WHOLE_GAME_COMPLETENESS.json",
+        "LATEST_SOURCE_DELTA.md",
+        "Review/Final/INDEPENDENT_FINAL_TOOL_RUN.json"
+      ]
+    },
+    {
+      "id": "GC12",
+      "title": "Progression, regions and scope coherence",
+      "mandatory": true,
+      "status": "PASS",
+      "evidence_and_reason": "All100 authored outcomes preserve the original T12 identities, bands, owners, dependency keys and cadence. Late levels now produce useful world outcomes rather than QA-only chores. Main progression needs no deployed pet. Dry underwater routes, credible sky/terrain access, free returns and local-first transport avoid impossible actor assumptions and backward dependencies. Post-launch scope remains unchanged.",
+      "repository_evidence_relative_to_package": [
+        "PROGRESSION_ECONOMY_GAPS.json",
+        "Review/INDEPENDENT_ECONOMY_RETEST_R2.json",
+        "Review/INDEPENDENT_PRELIMINARY_RETEST_R2.json"
+      ]
+    },
+    {
+      "id": "GC13",
+      "title": "Commerce, LiveOps and security",
+      "mandatory": true,
+      "status": "PASS",
+      "evidence_and_reason": "The selected single premium wallet, permanent VIP, explicit player purchases, free Level1–100 route and spend-blind challenge retain existing authority. Optional events cannot fix a compulsory base-game shortage. Feasibility, server time, durable earned claims, duplicate grants, refunds/restore, kill switch and rollback are connected to current jobs and economy.",
+      "repository_evidence_relative_to_package": [
+        "../../WHOLE_GAME_COMPLETENESS.json",
+        "TRANSACTIONS_AND_RECOVERY.json",
+        "PROGRESSION_ECONOMY_GAPS.json"
+      ]
+    },
+    {
+      "id": "GC14",
+      "title": "Diagnostics and release recovery",
+      "mandatory": true,
+      "status": "PASS",
+      "evidence_and_reason": "Existing minimal-purpose data, privacy/retention/redaction and GM isolation are preserved. Job, transfer, save, route and performance symptoms have owners while telemetry failure cannot govern play. Exact-source/signature/install/update/recovery and all final tests remain required; certification tasks route repairs to implementing owners.",
+      "repository_evidence_relative_to_package": [
+        "../../WHOLE_GAME_COMPLETENESS.json",
+        "../../COMPLETENESS_STANDARD.md",
+        "Review/Final/INDEPENDENT_FINAL_FREEZE_RETEST_R2.json"
+      ]
+    },
+    {
+      "id": "GC15",
+      "title": "Honest decision closure",
+      "mandatory": true,
+      "status": "PASS",
+      "evidence_and_reason": "Twelve CD behavior choices explicitly supersede the five earlier open behavior decisions. Numeric tuning, native assets, exact producer receipts and actual runtime evidence stay open with task owners. The latest note credits current source and reported checkpoint tests without converting9.5/9.9 scoped receipts into new game, motion, hardware or release approval.",
+      "repository_evidence_relative_to_package": [
+        "../../WHOLE_GAME_COMPLETENESS.json",
+        "LATEST_SOURCE_DELTA.md",
+        "Review/INDEPENDENT_LATEST_RECEIPT_CHECK.json"
+      ]
+    },
+    {
+      "id": "GC16",
+      "title": "Task ownership and dependency preservation",
+      "mandatory": true,
+      "status": "PASS",
+      "evidence_and_reason": "Fourteen live scope checks pass: graph, statuses, ownership, task directories, canonical packets, reference/animation/resource registries, archives, prior audit packages, invalidations and workflows are preserved. T21 precedes dependent T23 integration; local region owners precede later T53/T43 reconciliation; T07 is not silently expanded. No runtime changes or branch merges are part of this candidate.",
+      "repository_evidence_relative_to_package": [
+        "Review/Final/INDEPENDENT_FINAL_FREEZE_RETEST_R2.json",
+        "Review/INDEPENDENT_PRELIMINARY_RETEST_R2.json",
+        "TRANSACTIONS_AND_RECOVERY.json"
+      ]
+    },
+    {
+      "id": "GC17",
+      "title": "Useful fail-closed plan checks",
+      "mandatory": true,
+      "status": "PASS",
+      "evidence_and_reason": "The independent final run passes69 focused Python tests, current152-source validation and preserved49-source depth validation. Independent negative probes reject missing regional profiles even with omitted introduction flags and preserve early task deferrals. Actual packet main calls were intercepted safely; R2 records9 captures and2 invalid-data rejections with103 checks, while canonical packet/input hashes stay unchanged.",
+      "repository_evidence_relative_to_package": [
+        "Review/Final/INDEPENDENT_FINAL_TOOL_RUN.json",
+        "Review/INDEPENDENT_RESOURCE_REGION_RETEST_R4.json",
+        "Review/INDEPENDENT_TASK_PACKET_RETEST_R2.json",
+        "Review/PacketVerification/R2/PACKET_VERIFICATION_REPORT.json"
+      ]
+    },
+    {
+      "id": "GC18",
+      "title": "Frozen actual output and retained review history",
+      "mandatory": true,
+      "status": "PASS",
+      "evidence_and_reason": "All124 frozen files match worktree and staged index bytes, lengths and modes against the named freeze.191 relative-link occurrences resolve in the worktree/index or to the two deliberately excluded final receipts. Failed reviews/probes and corrected critic fixtures are preserved. This verdict approves only the reviewed local planning/tooling package; root publication and remote readback remain separate.",
+      "repository_evidence_relative_to_package": [
+        "CANDIDATE_FREEZE.json",
+        "Review/Final/INDEPENDENT_FINAL_FREEZE_RETEST_R2.json",
+        "Review/INDEPENDENT_PRELIMINARY_REVIEW_R1.json",
+        "Review/INDEPENDENT_PRELIMINARY_RETEST_R2.json"
+      ]
+    }
+  ],
+  "independent_final_evidence": [
+    {
+      "source_filename": "INDEPENDENT_FINAL_TOOL_RUN.json",
+      "intended_repository_path": "Docs/Production/Completeness/2026-11-27/Review/Final/INDEPENDENT_FINAL_TOOL_RUN.json",
+      "bytes": 21291,
+      "sha256": "9f54b992e4450055baa6d524855134c4cd711f713122d2acf9d08b11983042a3"
+    },
+    {
+      "source_filename": "INDEPENDENT_FINAL_FREEZE_CHECK.json",
+      "intended_repository_path": "Docs/Production/Completeness/2026-11-27/Review/Final/INDEPENDENT_FINAL_FREEZE_CHECK.json",
+      "bytes": 65348,
+      "sha256": "664912ef7f96c52dba82e0b61f143349620e7b911daee6cff11a09b9369c316b"
+    },
+    {
+      "source_filename": "INDEPENDENT_FINAL_FREEZE_RETEST_R2.json",
+      "intended_repository_path": "Docs/Production/Completeness/2026-11-27/Review/Final/INDEPENDENT_FINAL_FREEZE_RETEST_R2.json",
+      "bytes": 67873,
+      "sha256": "394a80ca627de349084d310affe6ecf6bcc63956c07987bb84fff1aa63cc9b79"
+    }
+  ],
+  "verification_summary": {
+    "focused_python_tests_passed": 69,
+    "focused_python_tests_total": 69,
+    "current_source_files_verified": 152,
+    "current_source_files_required": 152,
+    "preserved_depth_source_files_verified": 49,
+    "preservation_checks_passed": 14,
+    "preservation_checks_total": 14,
+    "frozen_file_index_worktree_matches": 124,
+    "relative_link_occurrences_checked": 191,
+    "sparse_index_targets_confirmed": 17,
+    "final_receipt_targets_pending_root_copy": [
+      "FINAL_REVIEW.md",
+      "PUBLICATION.json"
+    ],
+    "preliminary_findings_corrected_and_retested": 10,
+    "independent_resource_negative_and_control_probes_passed": 6,
+    "independent_resource_negative_and_control_probes_total": 6,
+    "actual_packet_R2_reported_checks_passed": 103,
+    "actual_packet_R2_reported_checks_total": 103,
+    "packet_main_captures_in_R2": 9,
+    "packet_invalid_data_rejections_in_R2": 2
+  },
+  "preserved_rejected_evidence": [
+    "Review/INDEPENDENT_PRELIMINARY_REVIEW_R1.json",
+    "Review/INDEPENDENT_VALIDATOR_TEST_RUN_R1.json",
+    "Review/INDEPENDENT_RESOURCE_REGION_PROBE_R1.json",
+    "Review/INDEPENDENT_RESOURCE_REGION_PROBE_R2.json",
+    "Review/ACTOR_VALIDATOR_REPAIR_REJECTED_R1.json",
+    "Review/ACTOR_VALIDATOR_REPAIR_REJECTED_R2.json",
+    "Review/INDEPENDENT_RESOURCE_REGION_RETEST_R3.json",
+    "Review/INDEPENDENT_TASK_PACKET_RETEST.json",
+    "Review/LatestSourceR1/LATEST_SOURCE_DELTA.json",
+    "Review/PacketVerification/R1/",
+    "Review/Final/INDEPENDENT_FINAL_FREEZE_CHECK.json"
+  ],
+  "limits": [
+    "This is a score for the completed, bounded forward-plan/source-routing/validator artifact. It is not a game-quality, reference-match, animation, audio, balance, hardware, service or release score.",
+    "Numeric recipes, prices, rates, pacing, complete producer bindings, native regional assets and full integrated Level1–100 gameplay remain implementation and acceptance work under existing owners.",
+    "All-seven pet attacks/specialties, unlimited logical survivor cargo, all-task assistance, free recovery and full state/motion/audio requirements are selected forward behavior, not certified runtime delivery.",
+    "The Build13 values are recorded prior reports: game source2654; evidence cutoff2f46; camp footage3fad. No APK, video, native game or physical device was executed or reviewed for acceptance by this critic.",
+    "Authentic T71–T80 definitions remain unlocated. Complete original video custody remains unverified; locked excerpts, new still proofs, comparison clips and source metadata exist. No unknown-global-gap closure is claimed.",
+    "The current reference>=9.9 per-dimension rules and stronger exact10 visual gates remain binding; historical or scoped scores cannot approve changed candidates.",
+    "Remote publication/readback and preservation of independently advancing branches were not performed by this critic. Root must finish the expected-parent publication and exact-tree readback, then record the result without changing frozen substantive files."
+  ],
+  "runtime_tested_by_this_review": false,
+  "runtime_approval_allowed": false,
+  "game_score": null,
+  "publication_observed_by_this_critic": false,
+  "next_action": "Root copies the exact final verdict and three raw independent final receipts into excluded metadata paths, verifies freeze preservation, publishes with expected main parent and reads back the exact repository tree."
+}

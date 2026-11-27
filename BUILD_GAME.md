@@ -6,7 +6,13 @@
 
 ## Current plan and Codex evidence
 
-Use the [2026-11-27 task-plan refresh](Docs/Production/TASK_PLAN_REFRESH_2026-11-27.md), [all T01–T80 requirements](Docs/Production/ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md), and [pinned GitHub render catalogue](Docs/Production/ReferenceRefresh/2026-11-27/RENDER_CATALOGUE.md) before new work. The newest verified receipt found is **Codex Build 11**, source `989edd9283148e9f712387fb937ea36038cbd9d2`, scene `res://field_opening.tscn`; [exact package and review scope](Docs/Production/ReferenceRefresh/2026-11-27/LATEST_BUILD_EVIDENCE.json). Main and the older active-source instructions below remain preserved snapshots/branches; this documentation does not merge or reset current gameplay. Follow the newer Codex foundation with its actual owner/source binding. Historical task states are not current candidate approvals.
+**Latest observed update:** [Build13 and the fixed2f46 source delta](Docs/Production/Completeness/2026-11-27/LATEST_SOURCE_DELTA.md) records physical shelf/cash collection, roster/cargo corrections and new scoped evidence. Its reported game source is `2654f5019b7212968d28600cb071bf1c231c9030`; cutoff `2f46e72e300a719f34ca9b0e9b718282a5a88ddd` adds the QA package. The APK/media were not replayed by this planning audit;9.5 checkpoints and scoped9.9 reports do not substitute for current final gates.
+
+Use the [2026-11-27 task-plan refresh](Docs/Production/TASK_PLAN_REFRESH_2026-11-27.md), [all T01–T80 requirements](Docs/Production/ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md), and [pinned GitHub render catalogue](Docs/Production/ReferenceRefresh/2026-11-27/RENDER_CATALOGUE.md) before new work. The earlier reference refresh pinned **Codex Build 11**, source `989edd9283148e9f712387fb937ea36038cbd9d2`, scene `res://field_opening.tscn`; [exact package and review scope](Docs/Production/ReferenceRefresh/2026-11-27/LATEST_BUILD_EVIDENCE.json). Main and the older active-source instructions below remain preserved snapshots/branches; this documentation does not merge or reset current gameplay. Follow the newer Codex foundation with its actual owner/source binding. Historical task states are not current candidate approvals.
+
+## Current whole-game decisions and gap closure
+
+Use the [completeness standard](Docs/Production/COMPLETENESS_STANDARD.md), [24 gap dispositions and 12 selected decisions](Docs/Production/WHOLE_GAME_COMPLETENESS.json), and [T01–T80 task map](Docs/Production/Completeness/2026-11-27/TASK_COMPLETENESS_T01_T80.md). These select all-seven-pet combat, capable survivors with player-like logical carrying, recoverable stakes, 100 authored outcomes, material uses, clocks and landscape behavior. They supersede the prior D01–D05 open behavior choices while retaining unproved tuning and runtime evidence.
 
 ## Whole-game stakes, companions and resource value
 
@@ -14,13 +20,15 @@ Use the [gameplay-depth standard](Docs/Production/GAMEPLAY_DEPTH_STANDARD.md) an
 
 ## Active source
 
-The gameplay-depth audit also records the newer observed `trial/world-one-expansion-2026-11-26` source at `3fad812b384335bd8ca9b5e47dc9d9557110eb4a`: [bounded current-source changes and evidence](Docs/Production/GameplayDepth/2026-11-27/CURRENT_BRANCH_NOTE.md). It supersedes the relevant Build 11 cash/carry/drop/hearth observations, without claiming a new validated build or merging that branch into main.
+The preserved gameplay-depth baseline records the then-observed `trial/world-one-expansion-2026-11-26` source at `3fad812b384335bd8ca9b5e47dc9d9557110eb4a`: [bounded current-source changes and evidence](Docs/Production/GameplayDepth/2026-11-27/CURRENT_BRANCH_NOTE.md). It supersedes the relevant Build 11 cash/carry/drop/hearth observations, without claiming a new validated build or merging that branch into main.
 
-Continue Level 1 development on **alfred/level-1-replacement**. The consolidated source snapshot is **2706cd6b0c6bfa7b4e8ad31d792a365aaf456d08**; the active branch may advance independently. Always resolve its actual head before starting another change.
+**Continue gameplay from the newer Codex foundation:** [CURRENT_GAMEPLAY_SOURCE.json](Docs/Production/CURRENT_GAMEPLAY_SOURCE.json) selects `trial/world-one-expansion-2026-11-26`, observed at `2f46e72e300a719f34ca9b0e9b718282a5a88ddd` (Build13 reported game source `2654f5019b7212968d28600cb071bf1c231c9030`), project `HavenlineLevel1/project.godot`, main scene `res://field_opening.tscn`. Resolve its live head and active owner before editing. The selector grants no ownership change or new build approval.
+
+The `alfred/level-1-replacement` snapshot at `2706cd6b0c6bfa7b4e8ad31d792a365aaf456d08` is preserved historical recovery material. The commands below belong to that checkpoint and do not launch the selected newer field build.
 
 The full game plan is [HAVENLINE_BUILD_PLAN_V2.md](Docs/Production/HAVENLINE_BUILD_PLAN_V2.md). [REPOSITORY_INDEX.md](REPOSITORY_INDEX.md) links the preserved task plans, completion records and reference material. The dated task-custody index explains historical status disagreements without rewriting the original records.
 
-## Open the Level 1 checkpoint
+## Open the historical Level 1 checkpoint
 
 Prerequisites declared by the preserved project: Python 3.11 or later, Git LFS for historical LFS-backed references, and Godot 4.7.2.
 
@@ -31,11 +39,11 @@ From the repository root:
 
 The hydration script verifies all four studio assets and reconstructs the exact furnace GLB from the three tracked parts. Open **HavenlineLevel1/project.godot** in Godot 4.7.2.
 
-For the current combined river, camp, HUD and Character 1 preview, use the fresh disposable checkout and isolated-profile procedure in [HavenlineLevel1/README.md](HavenlineLevel1/README.md). Its exact scene is [integrated_opening.tscn](HavenlineLevel1/previews/integrated_opening.tscn). In that isolated desktop runner, launch it explicitly with:
+For the preserved combined river, camp, HUD and Character 1 preview, use the fresh disposable checkout and isolated-profile procedure in [HavenlineLevel1/README.md](HavenlineLevel1/README.md). Its exact scene is [integrated_opening.tscn](HavenlineLevel1/previews/integrated_opening.tscn). In that isolated desktop runner, launch it explicitly with:
 
     godot --path HavenlineLevel1 --scene res://previews/integrated_opening.tscn
 
-Pressing F5 runs the deliberately unchanged V8 default scene, res://opening.tscn. It does not select the current combined preview. Preserve this source setting; consolidation does not change the game's main scene.
+Pressing F5 runs the deliberately unchanged V8 default scene, res://opening.tscn. It does not select the combined checkpoint preview or the newer Codex field build. Preserve this source setting; consolidation does not change the game's main scene.
 
 A disposable headless import uses:
 
@@ -45,7 +53,7 @@ Read [HavenlineLevel1/README.md](HavenlineLevel1/README.md) and [ONE_CAMP_DESIGN
 
 ## Preserve the two source roles
 
-**HavenlineLevel1/** is the current isolated replacement. **HavenlineGodot/** remains the preserved prior integration source. Do not replace current Level 1 files with older runtime files simply because a historical task record says approved.
+On main, **HavenlineLevel1/** is the preserved replacement checkpoint and **HavenlineGodot/** is the preserved prior integration source. The selected newer Codex branch uses the same Level 1 project path with its own field scene; follow the selector, not a historical filename alone. Do not replace current Level 1 files with older runtime files simply because a historical task record says approved.
 
 Historical T01–T11 closeout records, active visual holds and later prepared task packets stay distinct. After Level 1 is accepted, review T01–T11 against actual current evidence before continuing the task plan. Archival preparation does not activate later runtime tasks.
 

@@ -1,0 +1,93 @@
+{
+  "reviewer": "/root/depth_critic",
+  "recorded_at_utc": "2026-11-27T12:58:37.715665+00:00",
+  "scope": "Independent review of actual source-delta note and raw identity/metadata, no game, APK, video, model or device approval",
+  "artifacts_sha256": {
+    "LATEST_SOURCE_DELTA.json": "2b85baada01d1a193e9aecc65b9e2a787aa9dfd508dd31d4115fac59122b6b98",
+    "LATEST_SOURCE_DELTA.md": "b01267d036352820cd749901b94def6b48ff1f786d4a4e4f70e28f5acdc735fa"
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "checks": [
+    {
+      "name": "exact_source_and_receipt_pins",
+      "passed": true,
+      "details": {
+        "checked": 71,
+        "mismatches": []
+      }
+    },
+    {
+      "name": "independent_prior_source_overlap",
+      "passed": true,
+      "details": {
+        "independently_read_pairs": 17
+      }
+    },
+    {
+      "name": "changed_tree_scope",
+      "passed": true,
+      "details": {
+        "total": 1016,
+        "qa": 949,
+        "game": 67,
+        "counts": {
+          "A": 983,
+          "D": 12,
+          "M": 21
+        }
+      }
+    },
+    {
+      "name": "reported_release_game_tree_matches_cutoff",
+      "passed": true,
+      "details": {
+        "release_tree": "992ff7068090c7a98bc8be966bfba24f936d7a78",
+        "cutoff_tree": "992ff7068090c7a98bc8be966bfba24f936d7a78"
+      }
+    },
+    {
+      "name": "reported_check_counts",
+      "passed": true,
+      "details": {
+        "completion_assertions": 222,
+        "signed_shelf_assertions": 41,
+        "not_executed_here": true
+      }
+    },
+    {
+      "name": "bounded_media_path_inventory",
+      "passed": true,
+      "details": {
+        "tested_filenames": [
+          "Screen_Recording_20260817_124839_YouTube.mp4",
+          "Screen_Recording_20260817_124510_YouTube.mp4",
+          "exactb.mp4",
+          "ad-3.mp4",
+          "ad-1.mp4"
+        ],
+        "matching_names": [],
+        "new_package_mp4_paths": 40,
+        "archive_contents_and_other_locations_not_claimed_examined": true
+      }
+    },
+    {
+      "name": "selected_capacity_wording_corrected",
+      "passed": true,
+      "details": "Credit compact readable cargo presentation and newly reported large-load evidence. Preserve unlimited logical player inventory. The selected CD03 requirement for unlimited logical mixed survivor cargo remains unproved in implementation; current source still has its per-type ceiling. Do not report the worker as a single-item helper."
+    },
+    {
+      "name": "honest_nonapproval_and_reported_receipts",
+      "passed": true,
+      "details": {
+        "runtime_approved": false,
+        "motion_approved": false,
+        "visual_approved": false,
+        "device_approved": false,
+        "task_closure_approved": false
+      }
+    }
+  ],
+  "runtime_approval_allowed": false,
+  "game_score": null
+}

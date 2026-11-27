@@ -1,0 +1,243 @@
+{
+  "schema_version": 1,
+  "scope": "PRODUCTION_VALIDATOR_REPAIR_ONLY",
+  "base_commit": "fd2e12c8734f49cda7eb3bbf97887406bd03a704",
+  "candidate_root": "/workspace/scratch/e15437dc7c94/HAVENLINE-completeness",
+  "recorded_at_utc": "2026-11-27T12:29:49.378243+00:00",
+  "runtime_approval_allowed": false,
+  "game_approval_allowed": false,
+  "motion_evidence_reviewed": false,
+  "assigned_changed_files": [
+    {
+      "path": "tools/havenline/production/resource_actor_contract.py",
+      "change": "MODIFIED",
+      "base_sha256": "cfc0c671b98763e4f52b8e5384ef438d4dacf84100db336f2a3c38b7ae3453fd",
+      "candidate_sha256": "7a637cdfd2f31231de355a79c207fb01da9909a06f7984c4ccc0445e2454a434"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_resource_actor_contract.py",
+      "change": "MODIFIED",
+      "base_sha256": "477b9c948a504a692c2d8f8bb5158bcbbedcde67ff1ff2784e39d23ab7f02ea5",
+      "candidate_sha256": "9198ad00426cb0a63a1b43a8854ba1ee5ffa682162d46d454e894fad863a626a"
+    },
+    {
+      "path": "tools/havenline/production/closure_validator.py",
+      "change": "MODIFIED",
+      "base_sha256": "a56a51f46d67553ad97dfb7eb2ecd6769b89b140b5ea1d7dbc091d23ea0edf95",
+      "candidate_sha256": "467a68c72a563cf46dd8d46a0e95039749c4f503b647671906248c862f85a9fd"
+    },
+    {
+      "path": "tools/havenline/production/tests/test_closure_resource_actor.py",
+      "change": "NEW_TEST",
+      "base_sha256": null,
+      "candidate_sha256": "6f2846a1b806ac5bd2605ae8cbe8981a5bee9d0136680c762df7bc08c92df935"
+    }
+  ],
+  "canonical_sources_unchanged": [
+    {
+      "path": "Docs/Production/RESOURCE_ACTION_REGISTRY.json",
+      "unchanged": true,
+      "sha256": "8e9feba3a92972b10ac7dc8589e43bd0f988c2981ffe0fcace2edb1100e3bd9d"
+    },
+    {
+      "path": "Docs/Production/ACTOR_CAPABILITY_MATRIX.json",
+      "unchanged": true,
+      "sha256": "f319469be543267c6a21988d6b23f915550bd01c7d8513516b7410915680b1bf"
+    },
+    {
+      "path": "Docs/Production/ANIMATION_ACTION_MATRIX.json",
+      "unchanged": true,
+      "sha256": "57df079f213a88e58b87e01aa7b520ca2fe4d98a41368307fdbba433a57d46e5"
+    },
+    {
+      "path": "Docs/Production/DEPENDENCY_GRAPH.json",
+      "unchanged": true,
+      "sha256": "ec288e511af2ad220234fe7fcd50d6bfabbe275edd1ddc8d4b11bbdb7af82459"
+    },
+    {
+      "path": "Docs/Production/WORKSTREAM_REGISTRY.json",
+      "unchanged": true,
+      "sha256": "786f0a03a6a1b95cc0a5603d5fa7a8d1bc7979f18ee4a4a3ee6fe494af73633c"
+    },
+    {
+      "path": "Docs/Production/PATH_OWNERSHIP.json",
+      "unchanged": true,
+      "sha256": "bc55662e329a6f871f66d98ec66dc392d65843aa7ed3cfaa468e747aff1fe4d3"
+    },
+    {
+      "path": "Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json",
+      "unchanged": true,
+      "sha256": "c34c0cbe5b6d473be40ee5f0f0e08aab8f6ff42f97cfe2e7c93b2694e4dbaf43"
+    }
+  ],
+  "diff_whitespace_clean": true,
+  "tests": [
+    {
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/havenline/production/tests",
+        "-p",
+        "test_resource_actor_contract.py",
+        "-v"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "test_count": 30,
+      "output": "test_T09_deferral_is_reported_without_claiming_survivor_motion (test_resource_actor_contract.ResourceActorContractTests.test_T09_deferral_is_reported_without_claiming_survivor_motion) ... ok\ntest_T09_introduction_does_not_require_future_helper_or_survivor_motion (test_resource_actor_contract.ResourceActorContractTests.test_T09_introduction_does_not_require_future_helper_or_survivor_motion) ... ok\ntest_T23_and_integrations_reject_current_survivor_placeholders (test_resource_actor_contract.ResourceActorContractTests.test_T23_and_integrations_reject_current_survivor_placeholders) ... ok\ntest_T23_does_not_freeze_future_fish_or_crop_resources (test_resource_actor_contract.ResourceActorContractTests.test_T23_does_not_freeze_future_fish_or_crop_resources) ... ok\ntest_T32_does_not_add_backward_dependency_on_unready_later_region_resource (test_resource_actor_contract.ResourceActorContractTests.test_T32_does_not_add_backward_dependency_on_unready_later_region_resource) ... ok\ntest_all_pet_attack_permissions_are_strictly_required (test_resource_actor_contract.ResourceActorContractTests.test_all_pet_attack_permissions_are_strictly_required) ... ok\ntest_an_alternative_attack_does_not_replace_named_species_profile (test_resource_actor_contract.ResourceActorContractTests.test_an_alternative_attack_does_not_replace_named_species_profile) ... ok\ntest_deferral_cannot_move_to_another_field_or_owner (test_resource_actor_contract.ResourceActorContractTests.test_deferral_cannot_move_to_another_field_or_owner) ... ok\ntest_erasing_task_requirements_cannot_waive_pet_attacks (test_resource_actor_contract.ResourceActorContractTests.test_erasing_task_requirements_cannot_waive_pet_attacks) ... ok\ntest_every_pet_keeps_its_attack_capability_and_owl_is_aerial (test_resource_actor_contract.ResourceActorContractTests.test_every_pet_keeps_its_attack_capability_and_owl_is_aerial) ... ok\ntest_future_unregistered_resource_fails_closed (test_resource_actor_contract.ResourceActorContractTests.test_future_unregistered_resource_fails_closed) ... ok\ntest_integrated_pet_coverage_requires_each_attack (test_resource_actor_contract.ResourceActorContractTests.test_integrated_pet_coverage_requires_each_attack) ... ok\ntest_malformed_coverage_or_delta_cannot_be_truthy_proof (test_resource_actor_contract.ResourceActorContractTests.test_malformed_coverage_or_delta_cannot_be_truthy_proof) ... ok\ntest_pass_is_declared_coverage_not_motion_or_game_approval (test_resource_actor_contract.ResourceActorContractTests.test_pass_is_declared_coverage_not_motion_or_game_approval) ... ok\ntest_pet_capability_and_requirement_lists_cannot_be_substring_strings (test_resource_actor_contract.ResourceActorContractTests.test_pet_capability_and_requirement_lists_cannot_be_substring_strings) ... ok\ntest_pet_task_requires_species_actor_and_animation_profiles (test_resource_actor_contract.ResourceActorContractTests.test_pet_task_requires_species_actor_and_animation_profiles) ... ok\ntest_region_cannot_omit_new_profile_coverage_by_omitting_introduced_list (test_resource_actor_contract.ResourceActorContractTests.test_region_cannot_omit_new_profile_coverage_by_omitting_introduced_list) ... ok\ntest_region_contact_review_cannot_be_waived_by_false_delta_or_clip_reuse (test_resource_actor_contract.ResourceActorContractTests.test_region_contact_review_cannot_be_waived_by_false_delta_or_clip_reuse) ... ok\ntest_region_resource_requires_all_three_actual_human_profile_declarations (test_resource_actor_contract.ResourceActorContractTests.test_region_resource_requires_all_three_actual_human_profile_declarations) ... ok\ntest_resource_profile_references_must_exist_and_match_actor (test_resource_actor_contract.ResourceActorContractTests.test_resource_profile_references_must_exist_and_match_actor) ... ok\ntest_roster_cannot_omit_any_of_the_seven_species (test_resource_actor_contract.ResourceActorContractTests.test_roster_cannot_omit_any_of_the_seven_species) ... ok\ntest_schema_is_internally_consistent (test_resource_actor_contract.ResourceActorContractTests.test_schema_is_internally_consistent) ... ok\ntest_seven_pet_tasks_require_motion_critic_even_without_delta_flag (test_resource_actor_contract.ResourceActorContractTests.test_seven_pet_tasks_require_motion_critic_even_without_delta_flag) ... ok\ntest_survivor_freeze_cannot_be_faked_with_an_unrelated_survivor_action (test_resource_actor_contract.ResourceActorContractTests.test_survivor_freeze_cannot_be_faked_with_an_unrelated_survivor_action) ... ok\ntest_t05_is_not_retroactively_expanded (test_resource_actor_contract.ResourceActorContractTests.test_t05_is_not_retroactively_expanded) ... ok\ntest_t09_fails_closed_when_fuel_evidence_is_missing (test_resource_actor_contract.ResourceActorContractTests.test_t09_fails_closed_when_fuel_evidence_is_missing) ... ok\ntest_t09_frozen_registry_passes_with_complete_candidate_coverage (test_resource_actor_contract.ResourceActorContractTests.test_t09_frozen_registry_passes_with_complete_candidate_coverage) ... ok\ntest_unknown_coverage_and_supplied_stale_hashes_fail (test_resource_actor_contract.ResourceActorContractTests.test_unknown_coverage_and_supplied_stale_hashes_fail) ... ok\ntest_upstream_resource_cannot_evade_T23_by_clearing_ready_flag (test_resource_actor_contract.ResourceActorContractTests.test_upstream_resource_cannot_evade_T23_by_clearing_ready_flag) ... ok\ntest_wrong_actor_action_or_missing_motion_language_is_invalid (test_resource_actor_contract.ResourceActorContractTests.test_wrong_actor_action_or_missing_motion_language_is_invalid) ... ok\n\n----------------------------------------------------------------------\nRan 30 tests in 0.075s\n\nOK\n",
+      "output_sha256": "03381a877fc670ef1fff7f2857f3a451786a7b56297e58356318a06df8659c21"
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/havenline/production/tests",
+        "-p",
+        "test_closure_resource_actor.py",
+        "-v"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "test_count": 9,
+      "output": "test_missing_current_evaluator_data_fails_closed (test_closure_resource_actor.ClosureResourceActorTests.test_missing_current_evaluator_data_fails_closed) ... ok\ntest_motion_critic_requirement_reaches_closure_for_every_species (test_closure_resource_actor.ClosureResourceActorTests.test_motion_critic_requirement_reaches_closure_for_every_species) ... ok\ntest_omitted_candidate_identity_or_schema_receipt_cannot_approve_coverage (test_closure_resource_actor.ClosureResourceActorTests.test_omitted_candidate_identity_or_schema_receipt_cannot_approve_coverage) ... ok\ntest_passed_receipt_cannot_waive_missing_named_pet_attack_profile (test_closure_resource_actor.ClosureResourceActorTests.test_passed_receipt_cannot_waive_missing_named_pet_attack_profile) ... ok\ntest_passed_receipt_cannot_waive_removed_pet_attack_capability (test_closure_resource_actor.ClosureResourceActorTests.test_passed_receipt_cannot_waive_removed_pet_attack_capability) ... ok\ntest_passed_receipt_cannot_waive_unresolved_required_survivor_profiles (test_closure_resource_actor.ClosureResourceActorTests.test_passed_receipt_cannot_waive_unresolved_required_survivor_profiles) ... ok\ntest_phase_valid_T09_still_passes_this_component_with_current_receipt (test_closure_resource_actor.ClosureResourceActorTests.test_phase_valid_T09_still_passes_this_component_with_current_receipt) ... ok\ntest_stale_validator_implementation_or_registry_binding_is_rejected (test_closure_resource_actor.ClosureResourceActorTests.test_stale_validator_implementation_or_registry_binding_is_rejected) ... ok\ntest_unrelated_T05_scope_is_not_retroactively_expanded (test_closure_resource_actor.ClosureResourceActorTests.test_unrelated_T05_scope_is_not_retroactively_expanded) ... ok\n\n----------------------------------------------------------------------\nRan 9 tests in 0.033s\n\nOK\n",
+      "output_sha256": "33c644d8c2106e7f184c406e05fb73aedb6d61df4e86727566a307c9a7e5b648"
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/havenline/production/tests",
+        "-p",
+        "test_reference_acceptance.py",
+        "-v"
+      ],
+      "returncode": 0,
+      "passed": true,
+      "test_count": 18,
+      "output": "test_additional_reference_declaration_can_only_tighten (test_reference_acceptance.ReferenceAcceptanceTests.test_additional_reference_declaration_can_only_tighten) ... ok\ntest_current_policy_binding_is_mandatory (test_reference_acceptance.ReferenceAcceptanceTests.test_current_policy_binding_is_mandatory) ... ok\ntest_current_policy_is_valid_and_preserves_stronger_visual_rules (test_reference_acceptance.ReferenceAcceptanceTests.test_current_policy_is_valid_and_preserves_stronger_visual_rules) ... ok\ntest_final_dispositions_require_explicit_pass_and_strict_booleans (test_reference_acceptance.ReferenceAcceptanceTests.test_final_dispositions_require_explicit_pass_and_strict_booleans) ... ok\ntest_forward_raw_receipt_validates_current_threshold_and_binding (test_reference_acceptance.ReferenceAcceptanceTests.test_forward_raw_receipt_validates_current_threshold_and_binding) ... ok\ntest_high_scores_do_not_hide_missing_evidence_or_defects (test_reference_acceptance.ReferenceAcceptanceTests.test_high_scores_do_not_hide_missing_evidence_or_defects) ... ok\ntest_historical_receipt_requires_exact_bytes_and_never_approves (test_reference_acceptance.ReferenceAcceptanceTests.test_historical_receipt_requires_exact_bytes_and_never_approves) ... ok\ntest_historical_scope_cannot_be_relabelled_with_current_policy (test_reference_acceptance.ReferenceAcceptanceTests.test_historical_scope_cannot_be_relabelled_with_current_policy) ... ok\ntest_interim_9_5_remains_non_approving (test_reference_acceptance.ReferenceAcceptanceTests.test_interim_9_5_remains_non_approving) ... ok\ntest_invalid_numeric_scores_fail_without_exceptions (test_reference_acceptance.ReferenceAcceptanceTests.test_invalid_numeric_scores_fail_without_exceptions) ... ok\ntest_missing_extra_or_duplicate_dimensions_fail (test_reference_acceptance.ReferenceAcceptanceTests.test_missing_extra_or_duplicate_dimensions_fail) ... ok\ntest_new_review_of_old_candidate_still_requires_current_policy (test_reference_acceptance.ReferenceAcceptanceTests.test_new_review_of_old_candidate_still_requires_current_policy) ... ok\ntest_non_reference_floor_is_9_5 (test_reference_acceptance.ReferenceAcceptanceTests.test_non_reference_floor_is_9_5) ... ok\ntest_one_weak_dimension_cannot_be_hidden_by_an_average (test_reference_acceptance.ReferenceAcceptanceTests.test_one_weak_dimension_cannot_be_hidden_by_an_average) ... ok\ntest_reference_floor_is_9_9_and_cannot_round_up (test_reference_acceptance.ReferenceAcceptanceTests.test_reference_floor_is_9_9_and_cannot_round_up) ... ok\ntest_required_critics_add_motion_and_style_without_mutating_history (test_reference_acceptance.ReferenceAcceptanceTests.test_required_critics_add_motion_and_style_without_mutating_history) ... ok\ntest_strict_forward_json_rejects_duplicate_keys_and_constants (test_reference_acceptance.ReferenceAcceptanceTests.test_strict_forward_json_rejects_duplicate_keys_and_constants) ... ok\ntest_weaker_or_unavailable_policy_fails_closed (test_reference_acceptance.ReferenceAcceptanceTests.test_weaker_or_unavailable_policy_fails_closed) ... ok\n\n----------------------------------------------------------------------\nRan 18 tests in 0.017s\n\nOK\n",
+      "output_sha256": "4839549bb22dfaed4e503c181036e3293cf1ee1416815fa70cdf10cb549de3ea"
+    }
+  ],
+  "tests_passed": 57,
+  "all_focused_suites_passed": true,
+  "repair_summary": [
+    "Canonical seven-species presence, attack flag, attack capability, species identity, named attack-profile identity/action/motion declaration and owning-task requirement lists now fail closed; owl accepts aerial_attack without a human attack capability.",
+    "Pet owning tasks and integrated pet coverage require the canonical attacks and propagate C5 using the current task/critic policies; declared profile presence remains separate from motion review.",
+    "Task-freeze placeholders are recognized even if configurable tokens omit them. Only the exact survivor_animation_profile=T23_FREEZE_REQUIRED field is deferred before its owner phase; invalid owner/field/unknown or wrong-actor/action bindings reject.",
+    "T23, T31 and region integration require ready and already-upstream resource survivor bindings. Existing dependency ancestry preserves T09-before-T23 and T23-before-fishing/crop scope; T32 does not pull in unready later-region resources. Full-game acceptance checks all canonical registered resources.",
+    "Introducing resources derive player coverage plus human roles already required by that task; early T09 does not acquire a future T31-helper or T23-survivor prerequisite. Region/T32/full integration derive all applicable human resource profiles directly. T44\u2013T52 require C5 whenever this evaluation yields resource action profiles, including existing-clip reuse, false animation_delta and an omitted introduction list; the reason is regional_resource_contact.",
+    "Unknown/invalid coverage, duplicate IDs, malformed animation_delta and supplied stale registry hashes reject. The first evaluator run emits current hashes if no input binding was supplied; terminal closure still requires exact bindings.",
+    "Closure now reruns the current evaluator on the actual manifest and uses its C5 requirement. Stored receipts must also bind exact candidate, current validator implementation and current registries, and must be coverage evaluation rather than schema-only. Passed historical/stale output cannot waive a live failure.",
+    "All remaining closure retention, critic, current acceptance, source/signoff, gate and historical-integrity checks are preserved. Historical receipt bytes and canonical task authorities were not edited."
+  ],
+  "phase_examples": {
+    "T09": "PASS for complete declared acquisition coverage, with metal/fuel survivor fields explicitly deferred to T23; no survivor motion claim.",
+    "T23": "FAIL on current unresolved metal/fuel survivor markers; future unready fish/wheat do not create backward prerequisites.",
+    "T31_T44_T52_and_final_integration": "FAIL when applicable survivor fields remain unresolved, even if a stored validator receipt says passed.",
+    "T24_T30": "Every species retains a canonical real-attack requirement and C5; declared coverage success is not actual attack or rig proof.",
+    "T05": "Unrelated frozen scope remains non-applicable when current registries are otherwise valid."
+  },
+  "independent_review": {
+    "reviewer": "/root/depth_critic",
+    "status": "PASS_BOUNDED_FOUR_FILE_CODE_RETEST",
+    "scope": "Assigned production-validator repair only; whole-candidate integration and runtime remain unapproved.",
+    "focused_tests_passed": 57,
+    "additional_independent_probes_passed": 6,
+    "additional_independent_probes_total": 6,
+    "no_remaining_substantive_blocker_reported": true,
+    "receipts": [
+      {
+        "path": "INDEPENDENT_VALIDATOR_TEST_RUN_R2.json",
+        "sha256": "f0e4006817cd31e2e55dc6ef9c2c562b565b700427585bf102595131c844d017",
+        "reviewer": "/root/depth_critic"
+      },
+      {
+        "path": "INDEPENDENT_ACCEPTANCE_TEST_RUN.json",
+        "sha256": "3a40940b0e27f2965b4e1c41947d85003519490f4a410219152c7c78cadef874",
+        "reviewer": "/root/depth_critic"
+      },
+      {
+        "path": "INDEPENDENT_RESOURCE_REGION_RETEST_R4.json",
+        "sha256": "cf80388c15ae9d949229f8b570e03f05870bc80bda1af2ce9ea1a3ea6b4e1e6c",
+        "reviewer": "/root/depth_critic"
+      }
+    ],
+    "runtime_approval_allowed": false,
+    "whole_candidate_approval_allowed": false
+  },
+  "limits": [
+    "No runtime, assets, canonical resource/actor/animation registry, task dependencies/states or remote branches changed.",
+    "No actual clips, gameplay, audio playback, balance, Android build or device run was performed.",
+    "The placeholder definitions remain pending production owner work; this repair blocks false approval and does not invent or complete survivor assets.",
+    "The standalone evaluator validates supplied registry hashes when present; terminal closure requires the binding, current receipt and all other existing final evidence."
+  ],
+  "preserved_rejected_runs": [
+    {
+      "path": "ACTOR_VALIDATOR_REPAIR_REJECTED_R1.json",
+      "sha256": "819a895bb8498a2ab1d878136f47e1543a046cd2f1f8663c4d701c46efa09038"
+    },
+    {
+      "path": "ACTOR_VALIDATOR_REPAIR_REJECTED_R2.json",
+      "sha256": "da67e036c2518e8d115f0280a2518c9e3573ef7a862fc5b1cb77a3dbb360c794"
+    }
+  ],
+  "repair_history": [
+    {
+      "finding": "Acquisition-action aliases initially followed profile-name verbs instead of canonical action values.",
+      "fix": "Use chop\u2192gather_wood and fishing\u2192fishing; preserve unchanged registry and rerun tests.",
+      "state": "FIXED_RETEST_PASSED"
+    },
+    {
+      "finding": "Independent regional probe found missing derived player/helper profile coverage and false-delta C5 waiver for newly introduced resources.",
+      "fix": "Derive all applicable regional human profiles, preserve early producer role phases, and require C5 for actual regional resource action coverage even if the introduction list is omitted; allow existing clips.",
+      "state": "FIXED_INDEPENDENT_RETEST_PASSED"
+    },
+    {
+      "finding": "Regional human-only test fixture inadvertently claimed all animal profiles.",
+      "fix": "Restrict the fixture to declared human actors/profiles; do not weaken validator identity checks.",
+      "state": "FIXED_RETEST_PASSED"
+    }
+  ],
+  "source_freeze": {
+    "frozen_at_utc": "2026-11-27T12:38:54.015425+00:00",
+    "sha256_by_path": {
+      "tools/havenline/production/resource_actor_contract.py": "7a637cdfd2f31231de355a79c207fb01da9909a06f7984c4ccc0445e2454a434",
+      "tools/havenline/production/tests/test_resource_actor_contract.py": "9198ad00426cb0a63a1b43a8854ba1ee5ffa682162d46d454e894fad863a626a",
+      "tools/havenline/production/closure_validator.py": "467a68c72a563cf46dd8d46a0e95039749c4f503b647671906248c862f85a9fd",
+      "tools/havenline/production/tests/test_closure_resource_actor.py": "6f2846a1b806ac5bd2605ae8cbe8981a5bee9d0136680c762df7bc08c92df935"
+    },
+    "unchanged_during_final_focused_run": true,
+    "status": "FOCUSED_TESTED_AND_INDEPENDENTLY_RETESTED"
+  },
+  "regional_C5_forward_floor": {
+    "accepted_by_parent": true,
+    "task_ids": [
+      "T44",
+      "T45",
+      "T46",
+      "T47",
+      "T48",
+      "T49",
+      "T50",
+      "T51",
+      "T52"
+    ],
+    "condition": "At least one non-placeholder resource action profile is derived from the evaluated required/upstream/ready/introduced/covered resource rows.",
+    "reason": "regional_resource_contact",
+    "animation_delta_false_does_not_waive": true,
+    "omitted_introduced_ids_do_not_waive": true,
+    "existing_clip_reuse_allowed": true,
+    "new_clip_required": false,
+    "purpose": "Review actual acquisition contact and use states in the new regional geometry/environment."
+  },
+  "last_updated_at_utc": "2026-11-27T12:44:20.878584+00:00"
+}

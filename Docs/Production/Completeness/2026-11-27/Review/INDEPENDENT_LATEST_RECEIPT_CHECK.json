@@ -1,0 +1,129 @@
+{
+  "reviewer": "/root/depth_critic",
+  "recorded_at_utc": "2026-11-27T12:55:03.072871+00:00",
+  "observed_commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+  "recorded_build_source": "2654f5019b7212968d28600cb071bf1c231c9030",
+  "scope": "Bounded independent reading of newly available source/package/review metadata; no APK execution, video playback, rig or game acceptance",
+  "sources": [
+    {
+      "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+      "path": "Docs/QA/Camp-Field-2026-11-27/Verification/Android.json",
+      "bytes": 1803,
+      "sha256": "2c80c1e1e5952e63d1b2f135f58d0805cd0eda66984b44a089966f6c6a6cd9b2"
+    },
+    {
+      "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+      "path": "Docs/QA/Camp-Field-2026-11-27/Verification/Native/Native-results.json",
+      "bytes": 429456,
+      "sha256": "88962be221dcf27189ed55b4ea8139e12f7722e0e90db638c34a639feeb80dc3"
+    },
+    {
+      "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+      "path": "Docs/QA/Camp-Field-2026-11-27/Verification/Completion/Completion-results.json",
+      "bytes": 177147,
+      "sha256": "db3d14683bc1bbe4ad999b06db5e5942cbe7d60464d66d4a36712a9b8bfd7b69"
+    },
+    {
+      "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+      "path": "Docs/QA/Camp-Field-2026-11-27/Verification/Signed-shelf-walk.json",
+      "bytes": 7868,
+      "sha256": "83090bdb9faf3f33c64974d8dcdee4e8ebc8b1476e2aa8813816e51fe2b440b0"
+    },
+    {
+      "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+      "path": "Docs/QA/Camp-Field-2026-11-27/Source/Reviewed-files.json",
+      "bytes": 77647,
+      "sha256": "60e52a14064a92980f71146b4a8c5924563608c5415d95e481ecea64270caeb1"
+    },
+    {
+      "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+      "path": "Docs/QA/Camp-Field-2026-11-27/Camp/Independent-camp-review.json",
+      "bytes": 1309,
+      "sha256": "5ef9908afa93d554de4d9e8ecdec7b9fd2e3b7008373dbefe5da47f695b5a21f"
+    },
+    {
+      "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+      "path": "Docs/QA/Camp-Field-2026-11-27/Camp/Release-check/Pinned-source-and-results.json",
+      "bytes": 9534,
+      "sha256": "2e4fce00731a0a526dfcaab88a348499fff7a3afbdbcf1e887728b2b3822f9c3"
+    },
+    {
+      "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+      "path": "Docs/QA/Camp-Field-2026-11-27/References/Verdict.json",
+      "bytes": 14242,
+      "sha256": "e89949d47237db5771f30f4e4938ee7c5555bb4a6605d6f93769c0a429ea39e5"
+    },
+    {
+      "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+      "path": "Docs/QA/Camp-Field-2026-11-27/References/Independent-review.md",
+      "bytes": 7745,
+      "sha256": "a15b658002cebb2d10dcece39da257d9400c034b2a08ea6c42b433ea403ff854"
+    },
+    {
+      "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+      "path": "Docs/QA/Camp-Field-2026-11-27/References/Sources.json",
+      "bytes": 5035,
+      "sha256": "59c9c24e3ba08f06b68457f25faca12c147bf2ed4ddecf6a3498206c65b04e64"
+    },
+    {
+      "commit": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+      "path": "Docs/QA/Camp-Field-2026-11-27/References/Rigs/Rig-release-gates.json",
+      "bytes": 1133,
+      "sha256": "2133f448196913663133148dc4f7d872c638b881cbcceaf60282769a1f6b413a"
+    }
+  ],
+  "checks_passed": 6,
+  "checks_total": 6,
+  "checks": [
+    {
+      "id": "LR01",
+      "passed": true,
+      "finding": "Recorded Build13 Android package binds source2654 and a shared package digest. Package bytes/signature were not independently executed or verified in this review."
+    },
+    {
+      "id": "LR02",
+      "passed": true,
+      "finding": "Recorded receipts state69 native suites/92 runs and16 completion processes passed. These are existing receipt reports, not newly run tests or whole-game release proof."
+    },
+    {
+      "id": "LR03",
+      "passed": true,
+      "finding": "Camp clips retain filmed3fad identity; source-binding note separately targets release2654 and claims identical presented files. Do not relabel footage as wholly filmed on release2654."
+    },
+    {
+      "id": "LR04",
+      "passed": true,
+      "finding": "Seven feature scores remain9.5; two named features and five named rigs report9.9. The receipt explicitly retains current per-dimension>=9.9 and designated exact10 final review. No scoped number grants global game approval."
+    },
+    {
+      "id": "LR05",
+      "passed": true,
+      "finding": "Physical target-device/sustained native4K60 remain unmeasured. Desktop tests from signed resources are not hardware execution."
+    },
+    {
+      "id": "LR06",
+      "passed": true,
+      "finding": "New reference-source metadata supplies distinct file identities and excerpts; it does not by itself establish complete locked original-video custody or replace prior reference locks."
+    }
+  ],
+  "recorded_scores": {
+    "pickup": 9.5,
+    "storehouse": 9.5,
+    "economy": 9.5,
+    "worker": 9.5,
+    "owl": 9.5,
+    "counter": 9.5,
+    "tower": 9.5,
+    "warehouse_retrieval": 9.9,
+    "extreme_load_visibility": 9.9
+  },
+  "recorded_rig_scores": {
+    "C1": 9.9,
+    "C2": 9.9,
+    "C3": 9.9,
+    "C4": 9.9,
+    "Forester": 9.9
+  },
+  "runtime_approval_allowed": false,
+  "game_score": null
+}

@@ -4,13 +4,16 @@
 
 For new reviews, changed candidates and reapprovals, read `Docs/Production/REFERENCE_ACCEPTANCE_STANDARD.md` and use `REFERENCE_ACCEPTANCE_POLICY.json`. Reference-sensitive final dimensions must be >=9.9 unrounded; preserve all existing exact-10 visual requirements. A reference-sensitive 9.5 result is an interim checkpoint and cannot approve a task. Run the current forward gates on the exact candidate; preserve historical receipts, rejected evidence and active invalidations. This instruction authorizes no gameplay ownership change or archived-workflow activation.
 
+For new planning and implementation, also read `Docs/Production/COMPLETENESS_STANDARD.md` and `WHOLE_GAME_COMPLETENESS.json`. All seven pets require real attacks plus useful specialties. Current selected CD decisions supersede only the older D01–D05 open behavior choices; numeric tuning and runtime evidence remain unproved.
+
 Kaleb authorized consolidation without disrupting active work and required preservation of the build plan, all task-plan material, references and renders.
 
 ## Source and work ownership
 
-- Active Level 1 work continues on alfred/level-1-replacement. This snapshot imports its files at 2706cd6b0c6bfa7b4e8ad31d792a365aaf456d08.
+- For gameplay continuation, use `Docs/Production/CURRENT_GAMEPLAY_SOURCE.json`: the user-selected newer Codex foundation is `trial/world-one-expansion-2026-11-26`, observed at `2f46e72e300a719f34ca9b0e9b718282a5a88ddd` (Build13 reported game source `2654f5019b7212968d28600cb071bf1c231c9030`), project `HavenlineLevel1/project.godot`, scene `res://field_opening.tscn`. Resolve its actual live head and active ownership before editing.
+- `alfred/level-1-replacement` and its imported `2706cd6b0c6bfa7b4e8ad31d792a365aaf456d08` files are preserved historical checkpoints, not the default continuation target. Main has not merged the newer gameplay source.
 - Resolve the current live branch head and its active ownership before modifying production work. This consolidation does not claim or reassign gameplay paths.
-- Read BUILD_GAME.md and REPOSITORY_INDEX.md first for navigation. The original full build plan and production policy files remain unchanged.
+- Read BUILD_GAME.md and REPOSITORY_INDEX.md first for navigation. The full build plan, forward policies and historical source records remain retained with their distinct authority.
 - Preserve all original task closeouts, current visual holds, reference locks, original assets and failed/rejected evidence. Do not normalize stale narrative status text into new approvals.
 - The authentic plan defines T01–T70; T71–T80 remain a documented missing-source question. Never invent those tasks or renumber existing work.
 - Production changes must follow the preserved task-specific instructions and current user scope. This snapshot is not a new gameplay, art, rigging, performance or release approval.
