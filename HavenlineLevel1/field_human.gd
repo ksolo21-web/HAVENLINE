@@ -71,6 +71,25 @@ func configure(id: String) -> void:
 				frames.append(sample)
 	pose("idle",0)
 
+func travel_pose(phase: float, pace: float, loaded: bool) -> void:
+	if not forester_gait: return
+	pose("travel",phase)
+	var u := phase*TAU
+	var stride := cos(u)
+	var run := smoothstep(.85,5.8,pace)
+	var power := smoothstep(0.,.8,pace)
+	var forward := lerpf(.05,.16,run)*power
+	_bend("Pelvis",forward*.4,-.105*stride*power,.017*sin(u)*power)
+	_bend("Chest",forward,.15*stride*power,-.025*sin(u)*power)
+	_bend("Head",-forward*.57,-.055*stride*power)
+	for side in ["L","R"]:
+		var sign_x := 1. if side == "L" else -1.
+		var sweep := stride*sign_x
+		var arm_swing := lerpf(.32,.72,run)*(.78 if loaded else 1.)
+		_bend("UpperArm."+side,arm_swing*sweep*power,-.035*sign_x,-.06*sign_x)
+		_bend("Forearm."+side,-.21-run*.50+.16*sweep*power)
+	forester_gait.update(phase,pace > .035,pace)
+
 func _bend(bone: String, x: float, y: float = 0, z: float = 0) -> void:
 	skeleton.set_bone_pose_rotation(bones[bone],Quaternion.from_euler(Vector3(x,y,z)))
 
@@ -98,6 +117,7 @@ func pose(action: String, phase: float) -> void:
 			_bend("UpperArm."+side,-.92*reach,.09*sign_x*reach,-.14*sign_x*reach)
 			_bend("Forearm."+side,-.18-.63*reach,-.24*sign_x*reach,.11*sign_x*reach)
 		return
+	if mode == "travel": return
 	var moving := mode in ["walk","carry"]
 	var stride := sin(angle) if moving else 0.
 	var sway := cos(angle) if moving else 0.

@@ -29,6 +29,9 @@ const AXE_HEAD := Vector3(-.15,.65,0)
 const PICK_HEAD := Vector3(0,.67,0)
 var locomotion = Locomotion.new()
 var actor: Node3D
+var perimeter: Node3D
+var safe_planes := PackedVector3Array()
+var model_boxes := {}
 var slots: Array[Dictionary] = []
 var count := 1
 var reach_scale := 1.0
@@ -48,6 +51,7 @@ var hit_travel := Vector3.ZERO
 
 func install(scene: Node, hero: Node3D, _unused) -> bool:
 	actor = hero.get_parent()
+	if "field_env" in scene: perimeter = scene.field_env
 	for i in 3:
 		var axe := AXE.instantiate() as Node3D
 		var pick := PICK.instantiate() as Node3D
@@ -55,9 +59,24 @@ func install(scene: Node, hero: Node3D, _unused) -> bool:
 		scene.add_child(axe)
 		scene.add_child(pick)
 		scene.add_child(trail)
+		if i == 0:
+			model_boxes.axe = _bounds(axe)
+			model_boxes.pickaxe = _bounds(pick)
 		slots.append({"axe":axe,"pickaxe":pick,"trail":trail,"before":Transform3D.IDENTITY,"after":Transform3D.IDENTITY,"spokes":PackedVector3Array()})
 	rest()
 	return locomotion.bind(hero)
+
+func _bounds(tool: Node3D) -> AABB:
+	var combined := AABB()
+	var first := true
+	var parts := tool.find_children("*","MeshInstance3D",true,false)
+	if tool is MeshInstance3D: parts.append(tool)
+	for part: MeshInstance3D in parts:
+		var local := tool.global_transform.affine_inverse()*part.global_transform
+		var box := local*part.get_aabb()
+		combined = box if first else combined.merge(box)
+		first = false
+	return combined
 
 func show_tools() -> void:
 	for i in slots.size():
@@ -110,8 +129,44 @@ func _tool_transform(center: Vector3, radial: Vector3) -> Transform3D:
 	var head := PICK_HEAD if pick else AXE_HEAD
 	return Transform3D(basis, center + radial - basis * head)
 
+func _clear_pose(center: Vector3, radial: Vector3) -> Transform3D:
+	var pose_at := _tool_transform(center,radial)
+	if safe_planes.is_empty(): return pose_at
+	var head: Vector3 = PICK_HEAD if equipped=="pickaxe" else AXE_HEAD
+	var box: AABB = model_boxes[equipped]
+	# Turn the rigid shaft along the boards as the head reaches the wall.
+	# Keep the outward half of the stroke and the model's dimensions unchanged.
+	var tuck := 0.
+	for plane in safe_planes:
+		var normal := Vector3(plane.x,0.,plane.y)
+		var head_clear := normal.dot(center+radial)-plane.z
+		tuck = maxf(tuck,(1.-smoothstep(-.55,.64,head_clear))*smoothstep(.05,.72,-normal.dot(radial.normalized())))
+	if tuck>0.:
+		var tangent := radial.rotated(Vector3.UP,PI*.5).normalized()
+		var turned := radial.rotated(Vector3.UP,tuck*1.24)
+		pose_at = _tool_transform(center,turned)
+		pose_at.origin = center+radial+tangent*(.46*tuck)-pose_at.basis*head
+	var half := box.size*.5
+	# Project the whole measured mesh, including the butt and blade corners.
+	# More than one plane can be active alongside a post or between open leaves.
+	for iteration in 5:
+		var corrected := false
+		for plane in safe_planes:
+			var n := Vector3(plane.x,0.,plane.y)
+			var extent := half.x*absf(n.dot(pose_at.basis.x))+half.y*absf(n.dot(pose_at.basis.y))+half.z*absf(n.dot(pose_at.basis.z))
+			var push := plane.z + extent - n.dot(pose_at*box.get_center())
+			if push>.0001:
+				pose_at.origin += n*push
+				corrected = true
+		if not corrected: break
+	return pose_at
+
+func _exposed(point: Vector3) -> bool:
+	return not perimeter or safe_planes.is_empty() or perimeter.travel_clear(actor.global_position,point,0.)
+
 func pose(origin := Vector3.INF) -> void:
 	last_origin = actor.global_position if not origin.is_finite() else origin
+	if perimeter: safe_planes = perimeter.orbit_planes(last_origin,maximum_radius()+.44)
 	var center := last_origin + Vector3.UP*height
 	var distal := PICK_OUTER if equipped=="pickaxe" else AXE_OUTER
 	for i in count:
@@ -119,7 +174,7 @@ func pose(origin := Vector3.INF) -> void:
 		var phase := TAU*(elapsed/PERIOD + float(i)/count)
 		var radial := offset(phase)
 		var node: Node3D = s[equipped]
-		node.global_transform = _tool_transform(center, radial)
+		node.global_transform = _clear_pose(center,radial)
 		s.after = node.global_transform
 		if i == 0: current_tip = node.to_global(distal)
 		var points := PackedVector3Array()
@@ -127,9 +182,12 @@ func pose(origin := Vector3.INF) -> void:
 		for j in range(Trail.SEGMENTS+1):
 			var behind := deg_to_rad(57.0)*float(j)/Trail.SEGMENTS
 			var r := offset(phase-behind)
-			points.append(center+r+Vector3.UP*.002)
+			var point := center+r
+			if not safe_planes.is_empty():
+				point = _clear_pose(center,r)*(PICK_HEAD if equipped=="pickaxe" else AXE_HEAD)
+			points.append(point+Vector3.UP*.002)
 			axes.append(r.normalized())
-		s.trail.redraw(points,axes,TRAIL_WIDTH)
+		s.trail.redraw(points,axes,TRAIL_WIDTH,safe_planes)
 
 func advance(dt: float, at := Vector3.INF) -> void:
 	if not active: return
@@ -161,7 +219,7 @@ func advance(dt: float, at := Vector3.INF) -> void:
 			var origin := start_origin.lerp(at,t)
 			var center := origin + Vector3.UP * lerpf(initial_height,height,t)
 			var r := offset(phi + travel*t) * lerpf(initial_scale,reach_scale,t) / reach_scale
-			var tip := _tool_transform(center,r) * distal
+			var tip := _clear_pose(center,r) * distal
 			points.append(Vector3(center.x,tip.y,center.z))
 			points.append(tip)
 		slot.spokes = points
@@ -212,7 +270,7 @@ func crosses_surface(part: MeshInstance3D, mesh: TriangleMesh) -> bool:
 		var after: Transform3D = local * slots[i].after
 		var points: PackedVector3Array = slots[i].spokes
 		var spoke_hit := _spoke_contact(mesh,part,local,points)
-		if spoke_hit.is_finite():
+		if spoke_hit.is_finite() and _exposed(part.to_global(spoke_hit)):
 			hit_geometry = part
 			hit_position = part.to_global(spoke_hit)
 			hit_travel = after * (PICK_TIP if equipped=="pickaxe" else AXE_EDGE) - before * (PICK_TIP if equipped=="pickaxe" else AXE_EDGE)
@@ -220,7 +278,7 @@ func crosses_surface(part: MeshInstance3D, mesh: TriangleMesh) -> bool:
 			return true
 		for p: Vector3 in samples:
 			var intersection := mesh.intersect_segment(before*p,after*p)
-			if not intersection.is_empty():
+			if not intersection.is_empty() and _exposed(part.to_global(intersection.position)):
 				hit_geometry = part
 				hit_position = part.to_global(intersection.position)
 				hit_travel = part.global_basis*((after*p)-(before*p))

@@ -10,6 +10,7 @@ const COOK_SECONDS: float = Rules.CYCLE_SECONDS.meat
 var world
 var works
 var transfers
+var conveyors
 var cooking: float:
 	get:
 		return float(world.inventory.settlement.work_seconds.meat) if world else 0.0
@@ -40,6 +41,9 @@ func install(host: Node3D) -> void:
 	transfers = Transfers.new()
 	add_child(transfers)
 	transfers.setup(world)
+	conveyors=preload("res://field_conveyors.gd").new()
+	add_child(conveyors)
+	conveyors.setup(world,self)
 	world.counter.set_active(world.inventory.complete(Progress.SECOND), int(world.inventory.settlement.served))
 	sync()
 	announced_finish = ready()
@@ -69,6 +73,7 @@ func advance(dt: float) -> void:
 	# Existing jobs advance even when nobody is on an apron. A new handoff enters
 	# the hopper after this step, so a late delivery cannot earn a head start.
 	_advance_production(dt)
+	if _simulation_active(): conveyors.advance(dt)
 	works.advance(dt)
 	if can_transact(): collect_meal()
 	var progress := _present_production(dt)
@@ -118,7 +123,7 @@ func deliver_worker_wood() -> bool:
 	if not can_transact() or not world.inventory.storage_open("wood") or not world.survivor.at_wood_receiver(): return false
 	var journal: Dictionary = world.inventory.settlement
 	var token: String = journal.worker_carry_token
-	if token.is_empty() or world.inventory.collected.has(token) or world.inventory.collected.size() >= world.inventory.MAX_COUNT:
+	if token.is_empty() or world.inventory.collected.has(token):
 		return false
 	world.inventory.collected[token] = "wood"
 	world.inventory.stored.wood += 1
@@ -128,7 +133,7 @@ func deliver_worker_wood() -> bool:
 	return commit_receipt("worker_delivery",world.depot.bins.wood.global_position)
 
 func available_to_feeder(kind: String) -> bool:
-	return can_transact() and kind in Rules.KINDS and world.inventory.is_machine_owned(kind) and int(world.inventory.settlement.hoppers[kind]) + world.carry.incoming(kind,kind) < Rules.HOPPER_CAPACITY
+	return can_transact() and kind in Rules.KINDS and world.inventory.is_machine_owned(kind) and int(world.inventory.settlement.hoppers[kind])+int(world.inventory.settlement.line_load[kind])+world.carry.incoming(kind,kind) < Rules.HOPPER_CAPACITY
 
 func _running(kind: String) -> bool:
 	var journal: Dictionary = world.inventory.settlement
@@ -138,6 +143,7 @@ func _running(kind: String) -> bool:
 func advance_unattended(dt: float) -> void:
 	if not _simulation_active(): return
 	_advance_production(dt)
+	conveyors.advance(dt)
 	world.opening_hud.settlement_status(world.inventory.settlement,_present_production(dt))
 
 func _can_cook() -> bool:
@@ -211,10 +217,15 @@ func collect_worker_meal() -> bool:
 
 func serve(order: int) -> bool:
 	if not can_transact() or not world.counter.awaiting_payment(order): return false
+	var journal: Dictionary = world.inventory.settlement
+	if world.counter.belt_serving:
+		if not world.inventory.complete(Progress.FOOD_LINE) or journal.counter_stock < 1 or journal.served+1!=order: return false
+		journal.counter_stock-=1
+		journal.served+=1
+		return commit_receipt("meal_served",world.counter.payment_rest.global_position)
 	var worker: bool = world.counter.worker_serving
 	var at: Vector3 = world.survivor.actor.global_position if worker else world.actor.global_position
 	if not world.counter.at_service(at): return false
-	var journal: Dictionary = world.inventory.settlement
 	if not world.inventory.complete(Progress.SECOND) or journal.served + 1 != order or int(journal.worker_meal if worker else journal.held_meal) != 1: return false
 	if worker: journal.worker_meal = 0
 	else: journal.held_meal = 0
@@ -227,6 +238,7 @@ func enter_next_level() -> bool:
 	return commit_receipt("next_level",world.actor.global_position)
 
 func handle_input(event: InputEvent) -> bool:
+	if conveyors and conveyors.menu.handle(event):return true
 	var button: Button = world.opening_hud.level_continue
 	if event is InputEventScreenDrag and finger != -1 and event.index == finger: return true
 	if event is InputEventScreenTouch and finger != -1 and event.index == finger:
@@ -246,6 +258,7 @@ func handle_input(event: InputEvent) -> bool:
 	return false
 
 func hint(previous: String, danger: bool) -> String:
+	if conveyors and not conveyors.menu.selected.is_empty() and world.inventory.offer_open(conveyors.menu.selected):return world.build_hint(conveyors.menu.selected)
 	var journal: Dictionary = world.inventory.settlement
 	if journal.level == 2 and world.next_project.is_empty():
 		return "Level 2 preview · All Level 1 plots complete. The camp is open."
@@ -268,7 +281,7 @@ func hint(previous: String, danger: bool) -> String:
 		target = world.counter.service_point.global_position
 	elif Rules.waiting_meals(journal) > 0:
 		hint_ = "Collect a roast from the cooker outfeed."
-		target = world.lakeshore.OUTPUT_APRON
+		target = world.lakeshore.output_apron_position()
 	elif hot:
 		hint_ = "Cooking  ·  The roast will wait at the outfeed."
 	elif not journal.rescued:
@@ -276,7 +289,7 @@ func hint(previous: String, danger: bool) -> String:
 		target = works.PLOT_AT if not journal.survivor_paid else world.survivor.RESCUE
 	elif journal.served == 0:
 		hint_ = "Take meat to the camp cooker inlet." if world.inventory.carried.meat > 0 else "Hunt for meat to load the camp cooker."
-		if world.inventory.carried.meat > 0: target = world.lakeshore.APRON
+		if world.inventory.carried.meat > 0: target = world.lakeshore.apron_position()
 	elif not world.inventory.complete(Progress.TOWER) or not world.inventory.complete(Progress.AXES):
 		return previous
 	elif journal.processed_wood == 0:

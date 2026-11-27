@@ -27,6 +27,7 @@ var owl
 var survivor
 var counter
 var settlement_loop
+var camp_layout
 var previous_dry_position := Vector3.INF
 var world_landscape
 var tracks
@@ -79,7 +80,15 @@ func create_opening_hud() -> OpeningHUD:
 
 func move_actor(input: Vector2, dt: float) -> float:
 	# The drag supplies a heading. Any deliberate displacement requests a run.
+	if camp_layout and camp_layout.active: input = Vector2.ZERO
 	var heading := input.normalized() if input.length_squared() > RUN_STICK_DEAD_ZONE * RUN_STICK_DEAD_ZONE else Vector2.ZERO
+	if field_env and field_env.perimeter_stage > 0:
+		var right := camera.global_basis.x
+		var near := right.cross(Vector3.UP)
+		var wish := right*heading.x + near*heading.y
+		for gate in gates:
+			wish = gate.passage_heading(actor.global_position,wish)
+		heading = Vector2(wish.dot(right),wish.dot(near))
 	return gait_motor.step(self, heading, dt)
 
 func _ready() -> void:
@@ -110,6 +119,7 @@ func _ready() -> void:
 	tracks.register_actor(actor,"human",1.0,gait_motor.snow_contact_points)
 	add_child(carry)
 	carry.setup(inventory, actor, FieldArt.make)
+	carry.travel_clear = Callable(field_env,"travel_clear")
 	add_child(depot)
 	depot.install(self)
 	carry.define_receiver(HEARTH_OFFER, field_env.buy_anchor)
@@ -160,6 +170,14 @@ func _ready() -> void:
 	settlement_loop = preload("res://field_settlement_loop.gd").new()
 	add_child(settlement_loop)
 	settlement_loop.install(self)
+	camp_layout = preload("res://field_camp_layout.gd").new()
+	camp_layout.install(self)
+	if not camp_layout.restore(inventory.world_state.get("layout", {})):
+		persist_blocked = true
+		persist_error = "Saved camp layout could not be restored."
+	elif inventory.world_state.has("layout") and not inventory.world_state.layout.is_empty():
+		lifecycle._restore_actor(inventory.world_state.get("player"),int(inventory.world_state.version))
+		_clear_paid_machine_site()
 	previous_dry_position = actor.position
 	field_ready = true
 	var home_compass := preload("res://field_navigation.gd").new()
@@ -304,11 +322,15 @@ func unload_resource_source(id: String) -> void:
 func _configure_stem(tree: ResourceTreeScript) -> void:
 	tree.regrows = false
 	tree.fall_away = true
+	tree.safe_fall = Callable(field_env,"tree_fall_direction")
 	for marker in tree._marks:
 		marker.queue_free()
 	tree._marks.clear()
 
 func _input(event: InputEvent) -> void:
+	if field_ready and camp_layout.handle_input(event):
+		get_viewport().set_input_as_handled()
+		return
 	if field_ready and settlement_loop.handle_input(event):
 		return
 	if event is InputEventKey and event.physical_keycode == KEY_U:
@@ -407,15 +429,23 @@ func _make_drops(kind: String, origin: Vector3, amount: int) -> void:
 		_place_drop(token,kind,origin+Vector3.UP*.29,end,angle*.75,0)
 	_event("drop_"+kind,origin)
 
+func loose_clearance(kind: String) -> float:
+	# A resting piece needs room for its actual model on the snow and for its
+	# first pickup frame. Otherwise an item against a wall can never be lifted.
+	return maxf(float(FieldArt.WIDTHS[kind])*.50,float(carry.WIDTH[kind])*.38)+.012
+
 func _place_drop(token: String, kind: String, start: Vector3, end: Vector3, yaw: float, age: float) -> void:
 	if drops.has(token) or inventory.collected.has(token): return
 	if drops.size()>=lifecycle.DROP_CAP: _remove_drop(drops.keys()[0])
+	var radius := loose_clearance(kind)
+	start = field_env.safe_drop_origin(start,radius)
+	end = field_env.clip_travel(start,end,radius)
 	var item := FieldArt.make(kind)
 	if not item: return
 	add_child(item)
 	item.position=start
 	item.rotation.y=yaw
-	drops[token]={"mesh":item,"kind":kind,"at":end,"from":start,"age":age}
+	drops[token]={"mesh":item,"kind":kind,"at":end,"from":start,"age":age,"wall_revision":field_env.wall_revision}
 
 func _remove_drop(token: String) -> void:
 	if not drops.has(token): return
@@ -432,8 +462,16 @@ func _step_drops(dt: float) -> void:
 			continue
 		var t := clampf(float(drop.age)/.3,0.0,1.0)
 		var unit: Node3D = drop.mesh
-		unit.position = (drop.from as Vector3).lerp(drop.at,t)+Vector3.UP*.30*sin(t*PI)
-		if t == 1.0 and reset_time <= 0.0 and actor.position.distance_to(unit.position) <= PICKUP_RADIUS:
+		if t>=1. and drop.wall_revision != field_env.wall_revision:
+			drop.at = field_env.safe_drop_origin(drop.at,loose_clearance(drop.kind))
+		drop.wall_revision = field_env.wall_revision
+		var next := (drop.from as Vector3).lerp(drop.at,t)+Vector3.UP*.30*sin(t*PI)
+		if t < 1. and not field_env.travel_clear(unit.position,next,loose_clearance(drop.kind)):
+			drop.from = field_env.safe_drop_origin(unit.position,loose_clearance(drop.kind))
+			drop.at = Vector3(drop.from.x,0.,drop.from.z)
+			next = drop.at
+		unit.position = next
+		if t == 1.0 and reset_time <= 0.0 and actor.position.distance_to(unit.position) <= PICKUP_RADIUS and field_env.travel_clear(actor.position,unit.position,.06):
 			if carry.pickup(token,drop.kind,unit.position,unit.global_rotation.y):
 				unit.queue_free()
 				drops.erase(token)
@@ -530,7 +568,9 @@ func step_technical_gates(dt: float) -> void:
 	gate_button.hide()
 	for gate in gates:
 		var previous := gate.angle
-		gate.advance_automatic(dt,actor.global_position,float(layout.actor_radius),helper,bystanders)
+		var bird := Vector3.INF
+		if is_instance_valid(owl) and owl.gate_request == gate: bird=owl.global_position
+		gate.advance_automatic(dt,actor.global_position,float(layout.actor_radius),helper,bystanders,bird)
 		if gate.interaction_in_range(actor.global_position):
 			nearest_gate = gate
 		if not field_ready or is_equal_approx(gate.angle,previous): continue
@@ -616,7 +656,7 @@ func _physics_process(dt: float) -> void:
 			_event("reveal", Vector3.ZERO)
 	_step_receivers()
 	settlement_loop.advance(dt)
-	sound.set_hearth_proximity(clampf(1.0-actor.position.length()/7.0,0.0,1.0) if camp_active else 0.0)
+	sound.set_hearth_proximity(clampf(1.0-actor.global_position.distance_to(field_env.hearth_footprint.global_position)/7.0,0.0,1.0) if camp_active else 0.0)
 	var music := "camp" if inside else ("threat" if danger else "field")
 	if current_music != music:
 		current_music = music
@@ -780,7 +820,7 @@ func orbit_permitted_at(world_position: Vector3) -> bool:
 	return not field_env.is_inside_camp(world_position)
 
 func _step_receivers() -> void:
-	if reveal_countdown >= 0.: return
+	if reveal_countdown >= 0. or (camp_layout and camp_layout.active): return
 	var at := actor.global_position
 	var depot_target: String = depot.target_at(at) if camp_active and field_env.is_inside_camp(at) else ""
 	var selected := depot_target
@@ -788,6 +828,7 @@ func _step_receivers() -> void:
 	if not selected.is_empty():
 		best = Reach.plot_distance(depot.upgrade_mark,at) if depot.on_upgrade_side(at) else depot.loading_distance(at)
 	for id: String in inventory.costs:
+		if id in Progress.LINES and not offer_floors[id].visible:continue
 		if id in Progress.STORAGE or (not exit_required.has(id) and not inventory.offer_open(id)): continue
 		var anchor: Node3D = carry.receivers[id]
 		var distance := Reach.plot_distance(anchor,at)
@@ -840,7 +881,8 @@ func _refresh_field() -> void:
 	var left: int = inventory.remaining(HEARTH_OFFER).wood
 	field_env.set_payment_progress(1.0 - float(left) / inventory.costs[HEARTH_OFFER].wood)
 	for id in offer_floors:
-		offer_floors[id].set_due(inventory,id,camp_active and inventory.offer_open(id))
+		var chosen:bool = id not in Progress.LINES or (settlement_loop and settlement_loop.conveyors and settlement_loop.conveyors.menu.selected==id)
+		offer_floors[id].set_due(inventory,id,camp_active and chosen and inventory.offer_open(id))
 	last_notice = ""
 	_refresh_hud_field(current_music == "threat")
 

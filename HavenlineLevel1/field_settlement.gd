@@ -8,6 +8,9 @@ const WORKER_LOAD := {"wood":0,"stone":0,"meat":0,"coal":0,"slate":0,"metal":0}
 const WORKER_LIMIT := 500 / preload("res://field_progression.gd").UNITS_PER_BUNDLE
 const HOPPER_CAPACITY := 4
 const ROAST_RACK_CAPACITY := 4
+const COUNTER_RACK_CAPACITY := 2
+const LINE_EMPTY := {"wood":0,"stone":0,"meat":0,"meal":0}
+const LINE_CLOCK := {"wood":0.,"stone":0.,"meat":0.,"meal":0.}
 const CYCLE_SECONDS := {"wood":1.45, "stone":1.45, "meat":1.65}
 const EMPTY := {
 	"survivor_paid":false, "survivor_wood":0, "processed_wood":0, "processed_stone":0,
@@ -16,8 +19,8 @@ const EMPTY := {
 	"hoppers":{"wood":0, "stone":0, "meat":0},
 	"work_seconds":{"wood":0.0, "stone":0.0, "meat":0.0}, "held_meal":0, "worker_supply":"",
 	"worker_load":WORKER_LOAD,"worker_meal":0,
+	"line_load":LINE_EMPTY, "line_progress":LINE_CLOCK, "counter_stock":0,
 }
-const MAX_UNITS := 1000000
 
 # An unserved v4 roast was already on the player's hand. Preserve its location.
 static func from_legacy(previous: Variant) -> Variant:
@@ -30,6 +33,7 @@ static func from_legacy(previous: Variant) -> Variant:
 	var updated: Dictionary = EMPTY.duplicate(true)
 	updated.merge(previous.duplicate(true), true)
 	updated.held_meal = in_hand
+	for key in ["line_load","line_progress","counter_stock"]: updated.erase(key)
 	return updated
 
 static func from_pre_worker(previous: Variant) -> Variant:
@@ -39,11 +43,21 @@ static func from_pre_worker(previous: Variant) -> Variant:
 	if not next.has("worker_meal"): next.worker_meal = 0
 	return next
 
+static func from_pre_conveyors(previous: Variant) -> Variant:
+	if not previous is Dictionary: return null
+	for key in ["line_load","line_progress","counter_stock"]:
+		if previous.has(key): return null
+	var next: Dictionary = previous.duplicate(true)
+	next.line_load=LINE_EMPTY.duplicate()
+	next.line_progress=LINE_CLOCK.duplicate()
+	next.counter_stock=0
+	return next
+
 static func _count(value: Variant) -> bool:
-	return (value is int or value is float) and is_finite(float(value)) and value == int(value) and value >= 0 and value <= MAX_UNITS
+	return (value is int or value is float) and is_finite(float(value)) and value == int(value) and value >= 0
 
 static func waiting_meals(state: Dictionary) -> int:
-	return int(state.cooked) - int(state.served) - int(state.held_meal) - int(state.get("worker_meal",0))
+	return int(state.cooked) - int(state.served) - int(state.held_meal) - int(state.get("worker_meal",0)) - int(state.get("line_load",LINE_EMPTY).meal) - int(state.get("counter_stock",0))
 
 
 static func is_wood_drop(token: String) -> bool:
@@ -59,6 +73,19 @@ static func valid(state: Variant, paid_order: Array, credits: Dictionary, surviv
 		var value: Variant = state.get(key)
 		if not _count(value):
 			return false
+	if not _count(state.get("counter_stock")) or state.counter_stock > COUNTER_RACK_CAPACITY: return false
+	for column in ["line_load","line_progress"]:
+		if not state.get(column) is Dictionary or state[column].size()!=LINE_EMPTY.size() or not state[column].has_all(LINE_EMPTY.keys()): return false
+	for lane:String in LINE_EMPTY:
+		var amount:Variant=state.line_load[lane]
+		var t:Variant=state.line_progress[lane]
+		if not _count(amount) or amount>1 or not (t is float or t is int) or not is_finite(t) or t<0. or t>1.: return false
+		if amount==0 and t!=0.:return false
+		if amount>0:
+			if lane=="meal" and not "meal_conveyor" in paid_order: return false
+			if lane!="meal" and (not "supply_conveyors" in paid_order or not preload("res://field_progression.gd").MACHINES[lane] in paid_order): return false
+	if state.counter_stock>0 and not "meal_conveyor" in paid_order:return false
+	if state.counter_stock+state.line_load.meal>COUNTER_RACK_CAPACITY:return false
 	if (state.level != 1 and state.level != 2) or (state.held_meal > 1 or state.worker_meal > 1) or waiting_meals(state) < 0 or waiting_meals(state) > ROAST_RACK_CAPACITY:
 		return false
 	if not state.get("worker_load") is Dictionary or state.worker_load.size() != WORKER_LOAD.size() or not state.worker_load.has_all(WORKER_LOAD.keys()): return false
@@ -74,7 +101,7 @@ static func valid(state: Variant, paid_order: Array, credits: Dictionary, surviv
 	for kind: String in KINDS:
 		var units: Variant = state.hoppers[kind]
 		var elapsed: Variant = state.work_seconds[kind]
-		if not _count(units) or units > HOPPER_CAPACITY: return false
+		if not _count(units) or units + state.line_load[kind] > HOPPER_CAPACITY: return false
 		if not (elapsed is float or elapsed is int) or not is_finite(float(elapsed)) or elapsed < 0 or elapsed > CYCLE_SECONDS[kind]: return false
 		if units == 0 and elapsed != 0: return false
 		if units > 0 and "expansion_2" not in paid_order: return false

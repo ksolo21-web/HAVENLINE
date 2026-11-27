@@ -14,7 +14,6 @@ const MINERALS := ["coal", "slate", "metal"]
 const KINDS := ["wood", "stone", "meat", "coal", "slate", "metal"]
 const EMPTY := {"wood":0, "stone":0, "meat":0, "coal":0, "slate":0, "metal":0}
 const TITLES := {"wood":"Wood", "stone":"Stone", "meat":"Meat", "coal":"Coal", "slate":"Slate", "metal":"Metal ore"}
-const MAX_COUNT := 1000000
 
 var configured_costs := {}
 var costs := {}
@@ -47,7 +46,7 @@ func configure(offers: Dictionary) -> bool:
 	return true
 
 func collect(source_token: String, kind: String) -> bool:
-	if source_token.is_empty() or collected.has(source_token) or kind not in KINDS or collected.size() >= MAX_COUNT:
+	if source_token.is_empty() or collected.has(source_token) or kind not in KINDS:
 		return false
 	collected[source_token] = kind
 	carried[kind] += 1
@@ -65,8 +64,7 @@ func payment(id: String, kind: String, from_storage: bool, amount := 1) -> bool:
 	return _pay_from(stored if from_storage else carried,id,kind,amount)
 
 func worker_payment(id: String, kind: String, amount: int) -> bool:
-	# Only finish a contract already started by the player.
-	if not paid.has(id) or not paid[id].values().any(func(n): return n > 0): return false
+	if not settlement.rescued or id in Progress.LINES: return false
 	return _pay_from(settlement.worker_load,id,kind,amount)
 
 func _pay_from(stock: Dictionary, id: String, kind: String, amount: int) -> bool:
@@ -116,7 +114,7 @@ func complete(id: String) -> bool:
 func snapshot() -> Dictionary:
 	var state := {"version": 1, "collected": collected.duplicate(), "carried": carried.duplicate(), "stored": stored.duplicate(), "paid": paid.duplicate(true)}
 	if staged:
-		state.version = 7
+		state.version = 8
 		state.legacy_level2 = legacy_level2
 		state.legacy_prices = legacy_prices.duplicate()
 		state.build_order = build_order.duplicate()
@@ -128,16 +126,17 @@ func snapshot() -> Dictionary:
 static func _natural(value: Variant) -> bool:
 	if typeof(value) != TYPE_INT and typeof(value) != TYPE_FLOAT:
 		return false
-	return value >= 0 and value <= MAX_COUNT and value == int(value)
+	return value >= 0 and is_finite(float(value)) and value == int(value)
 
 func restore(data: Variant) -> bool:
 	if not data is Dictionary: return false
 	var old: bool = data.get("version") == 1
-	var current: bool = data.get("version") == 6 or data.get("version") == 7
+	var version:Variant=data.get("version")
+	var current:bool = version==6 or version==7 or version==8
 	var has_settlement: bool = current or data.get("version") == 4 or data.get("version") == 5
 	if old:
 		if data.size() != 5: return false
-	elif not staged or (data.get("version") != 2 and data.get("version") != 3 and not has_settlement) or data.size() != (11 if data.get("version") == 7 else (10 if current else (9 if has_settlement else 8))):
+	elif not staged or (data.get("version") != 2 and data.get("version") != 3 and not has_settlement) or data.size() != (11 if version==7 or version==8 else (10 if current else (9 if has_settlement else 8))):
 		return false
 	for key in ["collected", "carried", "stored", "paid"]:
 		if not data.get(key) is Dictionary:
@@ -164,7 +163,12 @@ func restore(data: Variant) -> bool:
 			incoming[id] = {}
 			for kind in costs[id]:
 				incoming[id][kind] = 0
-	if data.collected.size() > MAX_COUNT or incoming.size() != costs.size():
+	if staged and not old and int(data.version) < 8:
+		for id: String in Progress.LINES:
+			if incoming.has(id): return false
+			incoming[id]={}
+			for kind: String in costs[id]: incoming[id][kind]=0
+	if incoming.size() != costs.size():
 		return false
 	# Older field saves contain exactly three balances. Expand both tables
 	# together, after validating their original keys and conservation.
@@ -213,8 +217,10 @@ func restore(data: Variant) -> bool:
 		next_settlement = Settlement.from_legacy(next_settlement)
 	if has_settlement and data.version < 7:
 		next_settlement = Settlement.from_pre_worker(next_settlement)
+	if has_settlement and data.version < 8:
+		next_settlement = Settlement.from_pre_conveyors(next_settlement)
 	var old_preview := false
-	if data.version == 7:
+	if version==7 or version==8:
 		if not data.get("legacy_level2") is bool: return false
 		old_preview = data.legacy_level2
 	elif has_settlement and next_settlement is Dictionary:
@@ -224,7 +230,7 @@ func restore(data: Variant) -> bool:
 	if old_preview and next_settlement.level != 2: return false
 	if next_settlement.level == 2 and not old_preview and not Settlement.ready_to_continue(next_settlement,order): return false
 	for kind: String in Settlement.KINDS:
-		balances[kind] -= int(next_settlement.hoppers[kind])
+		balances[kind] -= int(next_settlement.hoppers[kind]) + int(next_settlement.line_load[kind])
 	for kind: String in KINDS:
 		balances[kind] -= int(next_settlement.worker_load[kind])
 	if next_settlement.worker_supply != "": balances[next_settlement.worker_supply] -= 1
@@ -271,6 +277,9 @@ func restore(data: Variant) -> bool:
 			if Settlement.EMPTY[key] is int: settlement[key] = int(settlement[key])
 		for kind: String in KINDS:
 			settlement.worker_load[kind] = int(settlement.worker_load[kind])
+		for lane: String in Settlement.LINE_EMPTY:
+			settlement.line_load[lane] = int(settlement.line_load[lane])
+			settlement.line_progress[lane] = float(settlement.line_progress[lane])
 		for kind: String in Settlement.KINDS:
 			settlement.hoppers[kind] = int(settlement.hoppers[kind])
 			settlement.work_seconds[kind] = float(settlement.work_seconds[kind])

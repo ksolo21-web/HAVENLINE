@@ -13,6 +13,7 @@ const APPROACH_DEPTH := 3.15
 const CLEAR_DELAY := .80
 var swing_direction := 1.
 var clear_time := 0.
+var approach_side := 0.
 var gate_id := ""
 var active := false
 var target_open := false
@@ -57,6 +58,7 @@ func set_earned(earned: bool) -> void:
 	if active == earned:
 		return
 	active = earned
+	approach_side = 0.
 	clear_time = 0.
 	swing_direction = 1.
 	target_open = false
@@ -97,6 +99,30 @@ func advance(dt: float, feet: Vector3, capsule_radius: float) -> void:
 func _near_aperture(at:Vector3) -> bool:
 	return absf(at.x)<=HALF_SPAN+.08 and absf(at.z)<=APPROACH_DEPTH
 
+# Keep a committed diagonal runner in the clear width until both hinged
+# leaves are behind the capsule. A turn away, lateral run or release cancels it.
+func passage_heading(feet: Vector3, wish: Vector3) -> Vector3:
+	var at := to_local(feet)
+	var local := global_basis.inverse()*wish
+	if not active or absf(local.z)<.50 or absf(at.z)>APPROACH_DEPTH+.15:
+		approach_side = 0.
+		return wish
+	if approach_side != 0. and (local.z*approach_side >= 0. or at.z*approach_side < -LEAF_LENGTH-.55):
+		approach_side = 0.
+	if approach_side == 0.:
+		if at.z*local.z >= 0. or absf(at.x)>2.85: return wish
+		var projected := at.x-at.z*local.x/local.z
+		if absf(projected) > HALF_SPAN+.12: return wish
+		approach_side = signf(at.z)
+	var forward := -approach_side
+	# Aim at an interior point ahead; allow a straight, slightly off-centre
+	# approach when the handle and shoulder both clear the open panel.
+	var lookahead := maxf(.42,at.z*approach_side+.68)
+	var preferred := at.x + local.x/maxf(.1,absf(local.z))*lookahead
+	var lane := clampf(preferred,-.48,.48)
+	var slope := clampf((lane-at.x)/lookahead,-.98,.98)
+	return (global_basis*Vector3(slope,0.,forward)).normalized()
+
 func _leaf_clearance(at:Vector2,side:float,radians:float) -> float:
 	var hinge := Vector2(side*HALF_SPAN,0.)
 	var tip := hinge + Vector2(-side*cos(radians),-swing_direction*sin(radians))*LEAF_LENGTH
@@ -117,16 +143,18 @@ func _safe_step(at:Vector3,radius:float,next_angle:float) -> bool:
 			return false
 	return true
 
-func advance_automatic(dt:float,player:Vector3,radius:float,helper:Vector3,bystanders:Array[Vector4]) -> void:
+func advance_automatic(dt:float,player:Vector3,radius:float,helper:Vector3,bystanders:Array[Vector4],pet := Vector3.INF) -> void:
 	if not active: return
 	var local_player := to_local(player)
 	var local_helper := to_local(helper) if helper.is_finite() else Vector3.INF
 	var player_near := _near_aperture(local_player)
 	var helper_near := _near_aperture(local_helper)
-	if player_near or helper_near:
+	var local_pet := to_local(pet) if pet.is_finite() else Vector3.INF
+	var pet_near := _near_aperture(local_pet)
+	if player_near or helper_near or pet_near:
 		if is_zero_approx(angle):
 			# Each pair opens away from its first arriving traveler.
-			var first := local_player if player_near else local_helper
+			var first := local_player if player_near else (local_helper if helper_near else local_pet)
 			swing_direction = -1. if first.z < 0. else 1.
 		target_open = true
 		clear_time = 0.
@@ -134,17 +162,25 @@ func advance_automatic(dt:float,player:Vector3,radius:float,helper:Vector3,bysta
 		clear_time += dt
 		if clear_time >= CLEAR_DELAY:
 			target_open = false
-	var next := move_toward(angle,PI*.5 if target_open else 0.,minf(dt,.02)*SWING_SPEED)
+	var goal := PI*.5 if target_open else 0.
+	var remaining := clampf(dt,0.,.10)
 	holding_for_occupancy = false
-	if is_equal_approx(next,angle): return
-	holding_for_occupancy = not _safe_step(local_player,radius,next) or (local_helper.is_finite() and not _safe_step(local_helper,.38,next))
-	if not holding_for_occupancy:
-		for visitor:Vector4 in bystanders:
-			if not _safe_step(to_local(Vector3(visitor.x,visitor.y,visitor.z)),visitor.w,next):
-				holding_for_occupancy = true
-				break
-	if not holding_for_occupancy:
+	while remaining>.000001 and not is_equal_approx(goal,angle):
+		var step := minf(remaining,1./60.)
+		var next := move_toward(angle,goal,step*SWING_SPEED)
+		var blocked := not _safe_step(local_player,radius,next)
+		blocked = blocked or (local_helper.is_finite() and not _safe_step(local_helper,.38,next))
+		blocked = blocked or (pet_near and not _safe_step(local_pet,.12,next))
+		if not blocked:
+			for visitor:Vector4 in bystanders:
+				if not _safe_step(to_local(Vector3(visitor.x,visitor.y,visitor.z)),visitor.w,next):
+					blocked = true
+					break
+		if blocked:
+			holding_for_occupancy = true
+			break
 		angle = next
+		remaining -= step
 		_update_hinges()
 
 func _update_hinges() -> void:

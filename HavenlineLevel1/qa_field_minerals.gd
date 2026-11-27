@@ -57,7 +57,7 @@ func old_profile(directory:String) -> void:
 	var state:=ledger.snapshot()
 	state.version=2
 	state.erase("legacy_level2")
-	for id: String in Rules.MACHINES.values(): state.paid.erase(id)
+	for id: String in Rules.MACHINES.values() + Rules.LINES: state.paid.erase(id)
 	state.erase("legacy_prices")
 	state.erase("settlement")
 	for kind in Inventory.MINERALS:
@@ -100,6 +100,7 @@ func run() -> void:
 	check("normal scene save loaded",not world.persist_blocked)
 	if "--mineral-migrate" in args:
 		check("existing native receipts and zero minerals",ledger.complete("storage_wood") and Inventory.MINERALS.all(func(k):return ledger.carried[k]==0 and ledger.stored[k]==0))
+		world.actor.global_position=Vector3(2,0,1)
 		var before: Dictionary=ledger.paid.duplicate(true)
 		for kind: String in SAMPLES:
 			check(kind+" alone cannot pay for ordinary construction",not ledger.payment("expansion_2",kind,false))
@@ -111,6 +112,7 @@ func run() -> void:
 		check("pickup preserves all existing receipts",before==ledger.paid)
 		if not ledger.complete("storage_stone"):
 			check("starter alone cannot bank ore",Inventory.MINERALS.all(func(k):return not world.carry.deposit_storage(k)))
+			world.actor.global_position=world.depot.upgrade_mark.global_position+Vector3(0,0,.60)
 			var attempts := 0
 			for raw: String in ledger.remaining("storage_stone"):
 				var remaining:int = ledger.remaining("storage_stone")[raw]
@@ -140,7 +142,7 @@ func run() -> void:
 		var unchanged:=ledger.snapshot()
 		check("missing new balance rejected atomically",not ledger.restore(damaged) and ledger.snapshot()==unchanged)
 	else:
-		check("normal scene restored paid original order",ledger.complete("storage_stone") and ledger.snapshot().version==7)
+		check("normal scene restored paid original order",ledger.complete("storage_stone") and ledger.snapshot().version==8)
 		for kind: String in SAMPLES:
 			check(kind+" typed balances reopen",ledger.carried[kind]==1 and ledger.stored[kind]==SAMPLES[kind]-1 and ledger.collected["mine-qa-"+kind+"0"]==kind and ledger.storage_open(kind))
 			check(kind+" repeated token rejected",not world.carry.pickup("mine-qa-"+kind+"0",kind,Vector3.ZERO))

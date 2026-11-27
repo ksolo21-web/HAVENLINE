@@ -6,22 +6,28 @@ const SECOND := "expansion_2"
 const TOWER := "watchtower"
 const AXES := "orbit_upgrade"
 const MACHINES := {"wood":"saw_bench", "stone":"quarry_drill", "meat":"camp_cooker"}
+const FOOD_LINE := "meal_conveyor"
+const SUPPLY_LINE := "supply_conveyors"
+const LINES := [FOOD_LINE,SUPPLY_LINE]
 const STORAGE := ["storage_wood", "storage_stone", "storage_meat"]
 const PREREQUISITES := {
 	"center_hearth": [], "expansion_1": ["center_hearth"],
 	"storage_wood": ["expansion_1"], "storage_stone": ["expansion_1"], "storage_meat": ["expansion_1"],
 	"expansion_2": STORAGE, "watchtower": ["expansion_2"], "orbit_upgrade": ["expansion_2"],
-	"camp_cooker": ["expansion_2"], "saw_bench": ["camp_cooker"], "quarry_drill": ["saw_bench"]
+	"camp_cooker": ["expansion_2"], "saw_bench": ["camp_cooker"], "quarry_drill": ["saw_bench"],
+	"meal_conveyor": ["camp_cooker"], "supply_conveyors": ["camp_cooker","storage_meat"]
 }
 const TITLES := {
 	"center_hearth":"Build hearth", "expansion_1":"Expand camp", "expansion_2":"Expand east",
 	"storage_wood":"Build storehouse", "storage_stone":"Reinforce storehouse", "storage_meat":"Advance storehouse",
 	"watchtower":"Build watchtower", "orbit_upgrade":"Equip extra axes",
-	"camp_cooker":"Build cooker", "saw_bench":"Build saw bench", "quarry_drill":"Build quarry drill"
+	"camp_cooker":"Build cooker", "saw_bench":"Build saw bench", "quarry_drill":"Build quarry drill",
+	"meal_conveyor":"Automate meal service", "supply_conveyors":"Connect storehouse supply"
 }
 const POSITIONS := {"expansion_1":Vector2(2.6,-1.5), "expansion_2":Vector2(2.6,-1.5),
 	"watchtower":Vector2(8.1,-2.4), "orbit_upgrade":Vector2(7.6,2.9),
-	"camp_cooker":Vector2(-.10,-6.24), "saw_bench":Vector2(-3.43,-6.17), "quarry_drill":Vector2(7.55,-5.68)}
+	"camp_cooker":Vector2(-.10,-6.24), "saw_bench":Vector2(-3.43,-6.17), "quarry_drill":Vector2(7.55,-5.68),
+	"meal_conveyor":Vector2(3.65,-5.30), "supply_conveyors":Vector2(.25,-3.85)}
 
 # Receipts, carry meshes and machine inputs are physical bundles. Each bundle
 # contains ten raw units; a tree/bank awards three bundles, a wolf two.
@@ -34,7 +40,8 @@ const OFFERS := {
 	"storage_wood":{"wood":10}, "storage_stone":{"wood":8,"stone":6}, "storage_meat":{"wood":7,"meat":5},
 	"expansion_2":{"wood":15,"stone":10},
 	"camp_cooker":{"wood":12,"stone":8}, "saw_bench":{"wood":14,"stone":6}, "quarry_drill":{"wood":10,"stone":12},
-	"watchtower":{"wood":12,"stone":10}, "orbit_upgrade":{"stone":6,"meat":4}
+	"watchtower":{"wood":12,"stone":10}, "orbit_upgrade":{"stone":6,"meat":4},
+	"meal_conveyor":{"wood":10,"stone":6}, "supply_conveyors":{"wood":16,"stone":12}
 }
 
 static func units(bundles: int) -> int:
@@ -77,7 +84,7 @@ static func next_storage(ledger) -> String:
 static func next_build(ledger) -> String:
 	var first := ""
 	for id: String in OFFERS:
-		if not ledger.offer_open(id): continue
+		if id in LINES or not ledger.offer_open(id): continue
 		if first.is_empty(): first = id
 		for paid in ledger.paid[id].values():
 			if paid > 0: return id

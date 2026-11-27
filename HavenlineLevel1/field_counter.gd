@@ -34,6 +34,7 @@ var sale_order := 0
 var sale_elapsed := 0.0
 var sale_committed := false
 var worker_serving := false
+var belt_serving := false
 var worker_palm: BoneAttachment3D
 var worker_roast: Node3D
 var worker_origin := Vector3.ZERO
@@ -104,7 +105,7 @@ func set_active(enabled: bool, last_served: int) -> void:
 	visible = enabled
 	guard.collision_layer = 1 if enabled else 0
 	if enabled:
-		position = Vector3(CENTER_X,0,world.field_env.COURTS.back().y)
+		position = Vector3(world.field_env.counter_center_x,0,world.field_env.COURTS.back().y)
 		next_order = last_served + 1
 		arrival_clock = 0.0
 		return
@@ -113,6 +114,17 @@ func set_active(enabled: bool, last_served: int) -> void:
 			visitor.body.queue_free()
 		group.clear()
 	_clear_presentations()
+
+# Keep visitors on their feet while the service bay changes. The queue walks
+# to its new north-wall slot through the ordinary arrival and serving loop.
+func move_to_bay(x:float) -> void:
+	var shift := Vector3(x-global_position.x,0,0)
+	global_position += shift
+	for group: Array in [queue,leaving]:
+		for visitor: Dictionary in group:
+			visitor.body.global_position -= shift
+	world.field_env.counter_center_x = x
+	world.field_env.set_perimeter(world.field_env.perimeter_stage,false,true)
 
 func _clear_presentations() -> void:
 	if is_instance_valid(meal): meal.queue_free()
@@ -182,7 +194,9 @@ func _admit() -> void:
 func _step_visitor(entry: Dictionary, target: Vector3, dt: float) -> bool:
 	var visitor: Node3D = entry.body
 	var old := visitor.position
-	visitor.position = old.move_toward(target,APPROACH_SPEED*dt)
+	var next := old.move_toward(target,APPROACH_SPEED*dt)
+	if world.field_env.travel_clear(to_global(old),to_global(next),.21):
+		visitor.position = next
 	var step := visitor.position - old
 	var moving := step.length_squared() > .000001
 	if moving:
@@ -257,10 +271,15 @@ func _show_worker_meal(dt: float) -> void:
 	worker_transfer = minf(1.0,worker_transfer+dt/.25)
 	worker_roast.global_position = _arc(worker_origin,_worker_meal_point(),worker_transfer,.18)
 
+func delivery_position(slot:int=0) -> Vector3:
+	return to_global(Vector3(-.75,1.09,.20+.34*slot))
+
 func _server_position() -> Vector3:
+	if belt_serving:return service_point.global_position
 	return world.survivor.actor.global_position if worker_serving else world.actor.global_position
 
 func _server_hand() -> Vector3:
+	if belt_serving:return payment_rest.global_position+global_basis*Vector3(-.26,.08,.30)
 	return _worker_meal_point() if worker_serving else _carried_meal_point()
 
 func _guest_palm(entry: Dictionary, side: String) -> Vector3:
@@ -297,6 +316,12 @@ func _update_carried(dt: float, ready: bool) -> void:
 	meal.global_rotation.y = world.actor.global_rotation.y + .25
 
 func _finish_worker_presentation(cancelled: bool) -> void:
+	if belt_serving:
+		if cancelled and is_instance_valid(meal):meal.queue_free()
+		meal=parked_player_meal
+		parked_player_meal=null
+		belt_serving=false
+		return
 	if not worker_serving: return
 	if cancelled:
 		worker_roast = meal
@@ -309,7 +334,7 @@ func _finish_worker_presentation(cancelled: bool) -> void:
 func _serve(dt: float) -> void:
 	sale_elapsed += dt
 	if not sale_committed:
-		if not at_service(_server_position()) or (not worker_serving and world.player_hp <= 0) or not front_ready(sale_order):
+		if not at_service(_server_position()) or (not worker_serving and not belt_serving and world.player_hp <= 0) or not front_ready(sale_order):
 			sale_order = 0
 			meal_origin = meal.global_position
 			collect_time = 0.
@@ -356,7 +381,7 @@ func advance(dt: float) -> void:
 		return
 	_walk_queue(dt)
 	if sale_order != 0:
-		if worker_serving and is_instance_valid(parked_player_meal): parked_player_meal.global_position = _carried_meal_point()
+		if (worker_serving or belt_serving) and is_instance_valid(parked_player_meal): parked_player_meal.global_position = _carried_meal_point()
 		if not worker_serving: _show_worker_meal(dt)
 		_serve(dt)
 		return
@@ -368,11 +393,18 @@ func advance(dt: float) -> void:
 	if not front_ready(order): return
 	var player_ready: bool = ready and collect_time >= 1. and world.player_hp > 0 and at_service(world.actor.global_position)
 	if not player_ready:
-		if ledger.get("worker_meal",0) != 1 or worker_transfer < 1. or not at_service(world.survivor.actor.global_position): return
-		worker_serving = true
-		parked_player_meal = meal
-		meal = worker_roast
-		worker_roast = null
+		var worker_ready:bool=ledger.get("worker_meal",0)==1 and worker_transfer>=1. and at_service(world.survivor.actor.global_position)
+		if not worker_ready and ledger.get("counter_stock",0)==0:return
+		parked_player_meal=meal
+		if worker_ready:
+			worker_serving=true
+			meal=worker_roast
+			worker_roast=null
+		else:
+			belt_serving=true
+			meal=make_meal()
+			add_child(meal)
+			meal.global_position=delivery_position()
 	sale_order = order
 	sale_elapsed = 0.0
 	exchange_origin = meal.global_position

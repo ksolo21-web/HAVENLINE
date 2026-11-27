@@ -79,7 +79,7 @@ func snapshot() -> Dictionary:
 		ground.append([id,d.kind,at.x,at.z,maxf(0.0,DROP_LIFETIME_SECONDS-float(d.age))])
 	var player := {"x":world.actor.position.x,"z":world.actor.position.z,"yaw":world.actor.rotation.y,
 		"hp":world.player_hp,"camp_heal_elapsed":world.camp_heal_elapsed,"protection_left":world.player_invulnerability,"fall_left":world.reset_time}
-	return {"version":VERSION,"player":player,"cooling":cooling.duplicate(),"partial":partial.duplicate(),"drops":ground,"serial":world.drop_id,"pack":world.encounters.snapshot()}
+	return {"version":VERSION,"layout":world.camp_layout.snapshot() if world.camp_layout else {}, "player":player,"cooling":cooling.duplicate(),"partial":partial.duplicate(),"drops":ground,"serial":world.drop_id,"pack":world.encounters.snapshot()}
 
 static func _number(v: Variant) -> bool:
 	return (v is float or v is int) and is_finite(float(v))
@@ -118,7 +118,7 @@ func _restore_actor(state: Variant, version: int = VERSION) -> void:
 				if pos.z > bounds[3]: pos.z = maxf(pos.z,bounds[3]+clear)
 				if pos.z < bounds[1]:
 					# The final service counter projects farther than the fence.
-					if world.field_env.perimeter_stage == 3 and absf(pos.x-world.field_env.CounterLayout.CENTER_X) < world.field_env.CounterLayout.HALF_BAY+clear:
+					if world.field_env.perimeter_stage == 3 and absf(pos.x-world.field_env.counter_center_x) < world.field_env.CounterLayout.HALF_BAY+clear:
 						clear += .9
 					pos.z = minf(pos.z,bounds[1]-clear)
 	if world.camp_active:

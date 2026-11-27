@@ -139,8 +139,19 @@ func at_output(at:Vector3) -> bool:
 	# completed order. The visual goods still travel to their own trays.
 	return at_cooker(at)
 
+func apron_position() -> Vector3:
+	return guard.global_position + APRON - COOKER_AT
+
+func output_apron_position() -> Vector3:
+	return guard.global_position + OUTPUT_APRON - COOKER_AT
+
+func move_cooker(at:Vector3) -> void:
+	guard.global_position = at
+	cooker.global_position = at + Vector3.UP*.024
+
 func _footprint(radius:float) -> Rect2:
-	return Rect2(Vector2(COOKER_AT.x,COOKER_AT.z)+BODY.position,BODY.size).grow(radius)
+	var at := guard.position if not guard.is_inside_tree() else guard.global_position
+	return Rect2(Vector2(at.x,at.z)+BODY.position,BODY.size).grow(radius)
 
 func reserves(at:Vector3) -> bool:
 	var p := Vector2(at.x,at.z)

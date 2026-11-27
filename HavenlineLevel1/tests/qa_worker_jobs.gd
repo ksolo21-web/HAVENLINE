@@ -136,29 +136,31 @@ func test_capacity() -> void:
 	var before: Dictionary=book.stored.duplicate()
 	for frame in 75: tick(1./60.)
 	for kind: String in book.KINDS:
-		var outbound := 1+int(book.settlement.worker_load[kind]) if book.settlement.worker_supply == kind else 0
+		var outbound := int(book.settlement.worker_load[kind]) + (1 if book.settlement.worker_supply == kind else 0)
 		check(book.stored[kind]+outbound == before[kind]+50 and (book.settlement.worker_load[kind]==0 or outbound>0),"bulk shelf delivery "+kind)
 	check(copy.restore(book.snapshot()),"bulk transfer balanced after landing")
 
 func test_assistance() -> void:
 	var book = game.inventory
 	worker.actor.position = game.depot.APRON
-	check(not worker._prepare_assistance(),"worker cannot start an unpurchased project")
+	var reserved: Dictionary = book.carried.duplicate()
+	check(book.paid[game.Progress.TOWER].values().all(func(v):return v==0),"tower starts without any player contribution")
 	var tower = game.Progress.TOWER
 	for kind: String in book.remaining(tower):
 		for i in book.remaining(tower)[kind]:
 			book.collect("assistance-%s-%d"%[kind,i],kind)
-		if kind == "wood": book.payment(tower,kind,false,1)
+		
 		var remaining := int(book.remaining(tower)[kind])
 		book.deposit(kind,remaining)
-	check(worker._prepare_assistance(),"worker takes an already-open commission at the storehouse")
+	check(worker._prepare_assistance(),"worker initiates an unstarted plot from earned stock")
 	var before: Dictionary = book.settlement.worker_load.duplicate()
 	check(before.wood > 0 and before.stone > 0 and before.meat == 0,"takes only the outstanding timber and stone from stock")
 	for i in 1500:
 		tick(1./60.)
 		if book.complete(tower): break
-	check(book.complete(tower),"worker physically finishes the owner's partially funded tower")
+	check(book.complete(tower),"worker physically starts and finishes the tower unassisted")
 	check(book.build_order.count(tower)==1 and book.settlement.worker_load.wood == 0,"one tower receipt and materials consumed once")
+	check(book.carried==reserved,"player backpack balances untouched")
 	var copy=game.Inventory.new()
 	check(copy.configure(book.configured_costs) and copy.restore(book.snapshot()),"assisted purchase round-trips without fictitious resource income")
 
@@ -191,6 +193,38 @@ func watch_counter() -> void:
 	for i in 28: await physics_frame
 	game.set_physics_process(false)
 	check(game.actor.position.distance_to(target)<.75 and not game.counter.at_service(game.actor.position),"normal phone stick reached viewing aisle outside cashier zone")
+
+func test_relocation() -> void:
+	var moved := {}
+	var journal: Dictionary = game.inventory.settlement
+	for frame in 60*145:
+		tick(1./60.)
+		var id := ""
+		var at := Vector2.ZERO
+		if worker.phase=="carrying":
+			id="storage_wood"
+			at=Vector2(4.50,-2.50)
+		elif worker.phase=="supply_out" and journal.worker_supply=="meat":
+			id="camp_cooker"
+			at=Vector2(4.75,2.75)
+		elif worker.phase=="meal_serve" and not game.counter.worker_serving:
+			id="north_counter"
+			at=Vector2(4.,-9.)
+		if id!="" and not moved.has(id):
+			var layout=game.camp_layout
+			var old:Vector2=layout.center(id)
+			moved[id]=layout.relocate(id,at)
+			if not moved[id]:
+				print("Relocation ",id,": ",layout.reason(id,at)," at ",at)
+			observations[id]={"old":str(old),"new":str(layout.center(id)),"worker":str(worker.actor.position)}
+			check(moved[id] and layout.center(id).distance_to(old)>1.,"paid "+id+" moved during the worker's actual route")
+		if journal.served>0 or game.persist_blocked: break
+	check(journal.worker_deliveries>0 and moved.get("storage_wood",false),"credited earned logs at relocated door")
+	check(journal.cooked>0 and moved.get("camp_cooker",false),"fed meat, cooked and collected a meal at relocated cooker")
+	check(journal.served>0 and moved.get("north_counter",false) and not game.counter.at_service(game.actor.position),"served waiting customer at relocated counter with player elsewhere")
+	var restored=game.Inventory.new()
+	check(not game.persist_blocked and restored.configure(game.inventory.configured_costs) and restored.restore(game.inventory.snapshot()),"conserved all shelf, hopper and customer receipts after moves")
+	observations["relocated"]=moved
 
 func simulate(stop: String) -> void:
 	var journal: Dictionary = game.inventory.settlement
@@ -231,9 +265,9 @@ func simulate(stop: String) -> void:
 func run() -> void:
 	var args:=OS.get_cmdline_user_args()
 	var mode: String = args[-1] if not args.is_empty() else ""
-	if not mode in ["jobs","capacity","interrupt","service","assist"]:
+	if not mode in ["jobs","capacity","interrupt","service","assist","relocate"]:
 		var status:=0
-		for group in [["jobs"],["capacity"],["assist"],["interrupt","service"]]:
+		for group in [["jobs"],["capacity"],["assist"],["relocate"],["interrupt","service"]]:
 			var directory:=Session.make_directory()
 			for step: String in group:
 				if status==0: status=Session.child(SELF,directory,step)
@@ -254,6 +288,8 @@ func run() -> void:
 		test_assistance()
 	elif mode == "capacity":
 		await test_capacity()
+	elif mode == "relocate":
+		test_relocation()
 	else:
 		if mode=="service":
 			check(game.inventory.settlement.worker_meal==1 and worker.phase=="meal_serve","cold load retains cooked order in worker hands")

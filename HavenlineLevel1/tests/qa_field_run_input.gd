@@ -33,6 +33,43 @@ func local_joint(skeleton: Skeleton3D, joint: String) -> Vector3:
 	var bone := skeleton.find_bone(joint)
 	return world.actor.to_local(skeleton.to_global(skeleton.get_bone_global_pose(bone).origin))
 
+# Align each measured gait cycle to the actual player's descending left boot.
+# At 60 Hz a steady run spans ~33 frames, so each phase has finite precision.
+func check_knee_sequence(clearances: Array[float], knee: Array[float], roll: Array[float]) -> void:
+	var landings: Array[int] = []
+	var raised := false
+	for tick in clearances.size():
+		if clearances[tick] > .05:
+			raised = true
+		elif raised and clearances[tick] < .008:
+			raised = false
+			landings.append(tick)
+	var phases: Array = []
+	var sequence_ok := landings.size() >= 2
+	for step in range(1, landings.size()):
+		var start := landings[step - 1]
+		var ticks := landings[step] - start
+		var load_window := knee.slice(start, start + roundi(.26 * ticks))
+		var swing_window := knee.slice(start + roundi(.43 * ticks), start + roundi(.88 * ticks))
+		var load_flex: float = load_window.max()
+		var load_phase := float(load_window.find(load_flex)) / ticks
+		var swing_flex: float = swing_window.max()
+		var swing_phase := float(roundi(.43 * ticks) + swing_window.find(swing_flex)) / ticks
+		var push: float = knee.slice(start + roundi(.24 * ticks), start + roundi(.38 * ticks)).min()
+		var toe_roll: float = roll.slice(start + roundi(.16 * ticks), start + roundi(.33 * ticks)).max()
+		var early_fold: float = knee[start + roundi(.40 * ticks)]
+		var middle_fold: float = knee[start + roundi(.50 * ticks)]
+		var trailing_fold: float = knee[start + roundi(.80 * ticks)]
+		phases.append({"loaded_deg":load_flex, "loaded_cycle":load_phase, "push_deg":push,
+			"recovery_deg":swing_flex, "recovery_cycle":swing_phase, "heel_above_toe_m":toe_roll,
+			"knee_at_40_deg":early_fold, "knee_at_50_deg":middle_fold, "knee_at_80_deg":trailing_fold})
+		sequence_ok = sequence_ok and load_flex > 30. and load_flex < 55. and load_phase >= .075 and load_phase <= .235
+		sequence_ok = sequence_ok and push < 27. and push < load_flex - 12. and toe_roll > .012
+		sequence_ok = sequence_ok and early_fold < 56. and middle_fold > early_fold + 12. and middle_fold < 91. and trailing_fold > 67.
+		sequence_ok = sequence_ok and swing_flex > 95. and swing_flex < 135. and swing_phase >= .59 and swing_phase <= .79
+	movement["measured_stride_phases"] = phases
+	checks["knee yields under load, extends at toe-off, then folds during recovery"] = sequence_ok
+
 func inspect_stride() -> void:
 	var skeleton: Skeleton3D = world.gait_motor.skeleton
 	var slips: Array[float] = []
@@ -45,6 +82,9 @@ func inspect_stride() -> void:
 	var supported_ticks := 0
 	var print_count := 0
 	var highest_print_contact := 0.0
+	var left_heights: Array[float] = []
+	var left_knee: Array[float] = []
+	var heel_toe_roll: Array[float] = []
 	var sample_started: float = world.tracks.clock
 	var foot_spreads: Array[float] = []
 	var previous_depths := Vector2.ZERO
@@ -61,11 +101,16 @@ func inspect_stride() -> void:
 		var feet: PackedVector3Array = world.gait_motor._contacts()
 		var lowest := INF
 		var lifted_left := INF
+		var heel := INF
+		var toe := INF
 		for i in feet.size():
 			var height: float = feet[i].y - world.actor.global_position.y
 			lowest = minf(lowest, height)
 			if Vector3(world.gait_motor.samples[i][0]).x > 0:
 				lifted_left = minf(lifted_left, height)
+				var rest: Vector3 = world.gait_motor.samples[i][0]
+				if rest.z < -.045: heel = minf(heel, height)
+				if rest.z > .095: toe = minf(toe, height)
 			if not prev.is_empty() and height < .008 and prev[i].y - world.actor.global_position.y < .008:
 				slips.append((feet[i] - prev[i]).slide(Vector3.UP).length() * 60.)
 		# Check only newly stamped player treads, while their skinned vertices
@@ -97,6 +142,12 @@ func inspect_stride() -> void:
 		previous_depths = depths
 		min_foot = minf(min_foot,foot_z)
 		max_foot = maxf(max_foot,foot_z)
+		var thigh := local_joint(skeleton,"Thigh.L")
+		var shin := local_joint(skeleton,"Shin.L")
+		var ankle := local_joint(skeleton,"Foot.L")
+		left_knee.append(180.0-rad_to_deg((thigh-shin).angle_to(ankle-shin)))
+		left_heights.append(lifted_left)
+		heel_toe_roll.append(heel-toe)
 		var hand := local_joint(skeleton,"Hand.L")
 		var elbow := local_joint(skeleton,"Forearm.L")
 		var shoulder := local_joint(skeleton,"UpperArm.L")
@@ -118,6 +169,7 @@ func inspect_stride() -> void:
 	for spread in foot_spreads:
 		split_ticks = split_ticks + 1 if spread >= .85 * widest else 0
 		longest_split = maxi(longest_split, split_ticks)
+	check_knee_sequence(left_heights,left_knee,heel_toe_roll)
 	movement["longest_broad_split_s"] = float(longest_split) / Engine.physics_ticks_per_second
 	movement["longest_two_boot_hold_s"] = float(longest_still) / Engine.physics_ticks_per_second
 	checks["boots keep moving through the airborne exchange"] = movement.longest_broad_split_s < .12 and longest_still <= 1

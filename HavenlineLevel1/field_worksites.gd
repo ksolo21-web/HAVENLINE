@@ -60,7 +60,7 @@ func demand(site: String, kind: String) -> int:
 	if kind != _raw(site) or not world.settlement_loop.can_transact() or site != _site(): return 0
 	var journal: Dictionary = world.inventory.settlement
 	if site == "survivor_plot": return world.inventory.survivor_cost - int(journal.survivor_wood)
-	return world.settlement_loop.Rules.HOPPER_CAPACITY - int(journal.hoppers[kind])
+	return world.settlement_loop.Rules.HOPPER_CAPACITY - int(journal.hoppers[kind]) - int(journal.line_load[kind])
 
 func advance(_dt: float) -> void:
 	refresh()

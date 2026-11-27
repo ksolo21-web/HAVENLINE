@@ -5,7 +5,7 @@ const Profile = preload("res://opening_save.gd")
 const Inventory = preload("res://field_inventory.gd")
 const PRIMARY := "field-inventory-v1.json"
 const LOCK := "field-inventory-v1.lock"
-const MAX_BYTES := 32 * 1024 * 1024
+const COMPRESS_AT := 256 * 1024
 const APP_DIRECTORY := "Havenline-Level-1-Settlement-Trial"
 var native_profile := false
 var guard := Profile.new()
@@ -44,8 +44,15 @@ func _safe() -> bool:
 
 func _read(inventory: Inventory, path: String) -> Dictionary:
 	var f := FileAccess.open(path, FileAccess.READ)
-	if not f or f.get_length() > MAX_BYTES:
+	if not f:
 		return {}
+	# Small and historical slots are plain JSON. Large receipt histories use
+	# Godot's seekable block compression under the same atomic save contract.
+	if f.get_buffer(4).get_string_from_ascii() == "GCPF":
+		f = FileAccess.open_compressed(path, FileAccess.READ, FileAccess.COMPRESSION_ZSTD)
+		if not f: return {}
+	else:
+		f.seek(0)
 	var parsed := JSON.new()
 	if parsed.parse(f.get_as_text()) != OK:
 		return {}
@@ -152,10 +159,15 @@ func _write_locked(inventory: Inventory) -> Error:
 	# The stage lives inside the owned lock directory. Only the verified stage
 	# replaces PRIMARY, in a single same-filesystem rename.
 	var stage := directory.path_join(LOCK).path_join("inventory.stage")
-	var file := FileAccess.open(stage, FileAccess.WRITE)
+	var envelope := JSON.stringify({"format":1,"sha256":digest,"payload":payload})
+	var file: FileAccess
+	if envelope.length() >= COMPRESS_AT:
+		file = FileAccess.open_compressed(stage, FileAccess.WRITE, FileAccess.COMPRESSION_ZSTD)
+	else:
+		file = FileAccess.open(stage, FileAccess.WRITE)
 	if not file:
 		return FileAccess.get_open_error()
-	file.store_string(JSON.stringify({"format":1,"sha256":digest,"payload":payload}))
+	file.store_string(envelope)
 	file.flush()
 	var error := file.get_error()
 	file.close()

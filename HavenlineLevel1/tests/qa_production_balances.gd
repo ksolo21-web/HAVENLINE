@@ -85,7 +85,7 @@ func _initialize() -> void:
 	var old_prices := Progress.old_offers()
 	# The station purchases did not exist in v4. Return those debits to the
 	# earned stock before recreating its actual eight-offer ledger.
-	for id: String in Progress.MACHINES.values():
+	for id: String in Progress.MACHINES.values()+Progress.LINES:
 		for kind: String in old.paid[id]:
 			old.carried[kind] += old.paid[id][kind]
 		old.paid.erase(id)

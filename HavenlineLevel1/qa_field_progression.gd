@@ -122,7 +122,8 @@ func _former_recipes() -> Dictionary:
 func historical_snapshot(book: Inventory) -> Dictionary:
 	var state := book.snapshot()
 	state.erase("legacy_level2")
-	for id in Rules.MACHINES.values(): state.paid.erase(id)
+	for id in Rules.MACHINES.values()+Rules.LINES: state.paid.erase(id)
+	for key in ["line_load","line_progress","counter_stock"]: state.settlement.erase(key)
 	state.settlement.erase("worker_load")
 	state.settlement.erase("worker_meal")
 	return state

@@ -20,6 +20,8 @@ var shoulders := PackedInt32Array()
 var elbows := PackedInt32Array()
 var wrists := PackedInt32Array()
 var flight_fade: ShaderMaterial
+var perimeter_route := preload("res://field_pack_route.gd").new()
+var gate_request: Node3D
 var perch_fade: ShaderMaterial
 var previous_flight := -1.0
 var claw_binds := PackedVector3Array()
@@ -151,7 +153,55 @@ func _turn(direction: Vector3, dt: float) -> void:
 	if direction.x*direction.x+direction.z*direction.z > .003:
 		rotation.y = rotate_toward(rotation.y,atan2(direction.x,direction.z),dt*6.9)
 
+func _outward(gate: Node3D) -> Vector3:
+	return gate.global_basis.z.slide(Vector3.UP).normalized()
+
+func _post_entry(gate: Node3D) -> Vector3:
+	return gate.to_global(Vector3(-float(gate.HALF_SPAN)-.15,2.40,0)) + _outward(gate)*.85
+
+func _outside_waypoint(goal: Vector3) -> Vector3:
+	var env = world.field_env
+	# The post top is a landing surface. Take off along its outside face, and
+	# approach that same face before folding the wings for a landing.
+	for gate: Node3D in world.gates:
+		var post := gate.to_global(Vector3(-float(gate.HALF_SPAN)-.15,1.718,0))
+		var entry := _post_entry(gate)
+		var out := _outward(gate)
+		var here := (global_position-post).slide(Vector3.UP)
+		var there := (goal-post).slide(Vector3.UP)
+		var landing := there.length_squared() < .03
+		if absf(here.dot(out.cross(Vector3.UP))) < .19 and absf(here.dot(out)) < .91 and global_position.y > 1.6:
+			if landing: return goal
+			if here.dot(out)<.70: return entry
+		if landing: goal = entry
+	if env.travel_clear(global_position,goal,.12): return goal
+	# A growing camp may enclose a bird already in flight. It can request the
+	# same auto gate while approaching its centre line; closed leaves still block it.
+	if env.is_inside_camp(global_position):
+		if env.is_inside_camp(goal): return env.clip_travel(global_position,goal,.12)
+		var closest: Node3D = world.gates[0]
+		for gate: Node3D in world.gates:
+			if gate.global_position.distance_to(global_position)+gate.global_position.distance_to(goal) < closest.global_position.distance_to(global_position)+closest.global_position.distance_to(goal):
+				closest = gate
+		gate_request = closest
+		var line := closest.global_position
+		line.y = maxf(global_position.y,1.85)
+		var entry := line-_outward(closest)*.82
+		var exit := line+_outward(closest)*.86
+		if (global_position-line).slide(Vector3.UP).length()<.88 and env.travel_clear(global_position,exit,.12): return exit
+		return entry if env.travel_clear(global_position,entry,.12) else env.clip_travel(global_position,entry,.12)
+	# Exterior flight rounds the nearest real fence corner instead of cutting
+	# through the camp to the next post or through a wall during a hunting bank.
+	perimeter_route.configure(world,.32)
+	var navigation := perimeter_route.route(Vector2(global_position.x,global_position.z),Vector2(goal.x,goal.z))
+	if not navigation.is_empty():
+		var next := Vector3(navigation[0].x,goal.y,navigation[0].y)
+		return env.clip_travel(global_position,next,.12)
+	return env.clip_travel(global_position,goal,.12)
+
 func _fly(goal: Vector3, speed: float, dt: float) -> void:
+	if world.field_env.has_method("travel_clear") and world.field_env.perimeter_stage>0:
+		goal = _outside_waypoint(goal)
 	_turn(goal-global_position,dt)
 	global_position = global_position.move_toward(goal,speed*dt)
 
@@ -184,6 +234,7 @@ func advance(delta: float) -> void:
 		state = "locked"
 		target = null
 		return
+	gate_request = null
 	var player: Vector3 = world.actor.global_position
 	var inside: bool = world.field_env.is_inside_camp(player)
 	var old_post := post_index
@@ -223,7 +274,7 @@ func advance(delta: float) -> void:
 		if state in ["perched","land"]: _switch("takeoff")
 		match state:
 			"takeoff":
-				_fly(_perch()+Vector3(-.22,1.03,.34),4.4,dt)
+				_fly(_post_entry(world.gates[post_index])+Vector3.UP*.15,4.4,dt)
 				if age>=.30:
 					var seen := watch_target if watch_target else _nearest()
 					if seen and cooldown <= 0: _start_intercept(seen)
@@ -243,7 +294,7 @@ func advance(delta: float) -> void:
 					if global_position.distance_to(staging)<.12 and age>.20: _switch("windup")
 				elif state == "windup":
 					var crest: Vector3 = target.global_position+approach+Vector3.UP*.24*sin(.5*PI*age/WINDUP)
-					global_position = global_position.move_toward(crest,4.0*dt)
+					_fly(crest,4.,dt)
 					_turn(target.global_position-global_position,dt*1.7)
 					if age>=WINDUP:
 						dive_length = maxf(.65,claw_tip(1).distance_to(_back(target)))

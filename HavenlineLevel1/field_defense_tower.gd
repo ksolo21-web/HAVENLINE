@@ -1,10 +1,12 @@
 extends Node3D
 ## Only a paid tower fires. Flight resolves against the same living enemy it targeted.
 const EAST_SITE := Vector3(8.1,0,-2.4)
+const FOOTPRINT := Rect2(-.98,-.98,1.96,2.04)
 const REACH := 13.0
 const RELOAD := 1.65
 const BOLT_SPEED := 13.0
 var world: Node3D
+var guard := StaticBody3D.new()
 var art: Node3D
 var active := false
 var presented := false
@@ -15,6 +17,16 @@ var flights: Array[Dictionary] = []
 func setup(host: Node3D) -> void:
 	world=host
 	position=EAST_SITE
+	var shape := CollisionShape3D.new()
+	var base := BoxShape3D.new()
+	base.size = Vector3(FOOTPRINT.size.x,1.75,FOOTPRINT.size.y)
+	shape.shape = base
+	shape.position = Vector3(FOOTPRINT.get_center().x,.875,FOOTPRINT.get_center().y)
+	guard.add_child(shape)
+	guard.name = "TowerFootings"
+	guard.collision_layer = 0
+	guard.collision_mask = 0
+	add_child(guard)
 	if ResourceLoader.exists("res://field_tower_art.gd"):
 		art=load("res://field_tower_art.gd").new()
 		add_child(art)
@@ -33,6 +45,15 @@ func nearest() -> Node3D:
 func advance(dt: float, paid: bool) -> void:
 	if active!=paid:
 		active=paid
+		guard.collision_layer = 1 if paid else 0
+		# The offer lies at the tower's future feet. Give the purchaser a
+		# solid stance on the camp-facing side as the foundation rises.
+		if paid:
+			var p:Vector3 = to_local(world.actor.global_position)
+			var span := FOOTPRINT.grow(float(world.layout.actor_radius)+.05)
+			if span.has_point(Vector2(p.x,p.z)):
+				p.x=span.position.x-.01
+				world.actor.global_position=to_global(p)
 		if art:
 			art.visible=paid
 			raising=0.0 if paid and presented else 1.0

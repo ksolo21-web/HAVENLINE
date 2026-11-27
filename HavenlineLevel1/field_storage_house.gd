@@ -18,6 +18,7 @@ var tier := 0
 var open_amount := 0.0
 var inside_view := false
 var doors_open := false
+var supply_door_hold:=0.0
 var collision: StaticBody3D
 var parts := {}
 var shelves: Array[Label3D] = []
@@ -87,6 +88,8 @@ func _physics_process(delta:float) -> void:
 		doors_open=absf(p.x)<2.18 and p.z> -1.44 and p.z<3.99
 	else:
 		doors_open=absf(p.x)<1.56 and p.z> -1.10 and p.z<3.70
+	supply_door_hold=maxf(0.,supply_door_hold-delta)
+	doors_open=doors_open or supply_door_hold>0.
 	if inside_view:
 		inside_view=absf(p.x)<2.03 and p.z> -1.25 and p.z<3.26
 	else:

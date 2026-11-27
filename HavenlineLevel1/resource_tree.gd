@@ -30,6 +30,10 @@ var settle_clock := 0.0
 var fall_direction := FALL_DIR
 var fall_reach := 2.4
 var fall_away := false
+var safe_fall: Callable
+var crown_size := Vector2.ZERO # radius and height at the mesh's native unit scale
+static var shape_cache := {}
+
 var blocked := false
 var regrows := false
 var starter_credit_seen := false
@@ -43,6 +47,7 @@ func build(source_mesh: PackedScene, allow_regrowth := false) -> void:
 	add_child(_pivot)
 	var tree := source_mesh.instantiate() as Node3D
 	_pivot.add_child(tree)
+	crown_size = native_shape(source_mesh,tree)
 	tree.scale = Vector3.ONE * TREE_SCALE
 	for i in range(2):
 		var mark := MeshInstance3D.new()
@@ -56,6 +61,24 @@ func build(source_mesh: PackedScene, allow_regrowth := false) -> void:
 		_pivot.add_child(mark)
 		mark.hide()
 		_marks.append(mark)
+
+static func native_shape(scene: PackedScene, tree: Node3D) -> Vector2:
+	if shape_cache.has(scene.resource_path): return shape_cache[scene.resource_path]
+	var size := Vector2.ZERO
+	for part: MeshInstance3D in tree.find_children("*","MeshInstance3D",true,false):
+		var to_root := part.transform
+		var parent := part.get_parent()
+		while parent is Node3D and parent != tree:
+			to_root = (parent as Node3D).transform*to_root
+			parent = parent.get_parent()
+		for surface in part.mesh.get_surface_count():
+			var points: PackedVector3Array = part.mesh.surface_get_arrays(surface)[Mesh.ARRAY_VERTEX]
+			for v in points:
+				var p := to_root*v
+				size.x = maxf(size.x,Vector2(p.x,p.z).length())
+				size.y = maxf(size.y,p.y)
+	shape_cache[scene.resource_path] = size
+	return size
 
 func can_address(feet: Vector3, facing: Vector3) -> bool:
 	if phase != "rooted":
@@ -86,6 +109,9 @@ func strike(source: String, sequence: int, feet: Vector3, facing: Vector3, trave
 			var away := global_position - feet
 			away.y = 0.0
 			if away.length_squared() > .0001: fall_direction = away.normalized()
+		if safe_fall.is_valid():
+			var size := crown_size*TREE_SCALE*global_basis.get_scale().abs().x
+			fall_direction = safe_fall.call(global_position,fall_direction,size.y,size.x)
 		phase = "falling"
 	return true
 

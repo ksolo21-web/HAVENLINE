@@ -6,6 +6,8 @@ const INK := Color("#193851")
 const TEAL := Color("#31596d")
 const ATLAS = preload("res://assets/field_ui/camp_goods.png")
 const TILE := 144
+const CONVEYOR_MARK = preload("res://assets/conveyors/conveyor_mark.png")
+const LINE_TITLES := ["Automate meal service","Connect storehouse supply"]
 const ART := {
 	"Build hearth": 0,
 	"Expand camp": 1,
@@ -110,7 +112,7 @@ func natural_width() -> float:
 
 
 func art_width() -> float:
-	return 65. if ART.has(heading) else 0.
+	return 65. if ART.has(heading) or heading in LINE_TITLES else 0.
 
 
 func cost_positions(width: float) -> Array[Vector2]:
@@ -143,10 +145,14 @@ func _draw() -> void:
 		return
 	var text_x := PAD + 5. * (1. - intro)
 	var height := size.y
-	if ART.has(heading):
-		var index: int = ART[heading]
-		var region := Rect2((index % 4) * TILE, (index / 4) * TILE, TILE, TILE)
-		draw_texture_rect_region(ATLAS, Rect2(Vector2(4, 2), Vector2(66, 66)), region)
+	if art_width()>0.:
+		var art_rect:=Rect2(Vector2(4,2),Vector2(66,66))
+		if heading in LINE_TITLES:
+			draw_texture_rect(CONVEYOR_MARK,art_rect,false)
+		else:
+			var index: int = ART[heading]
+			var region := Rect2((index % 4) * TILE, (index / 4) * TILE, TILE, TILE)
+			draw_texture_rect_region(ATLAS, art_rect, region)
 		draw_line(Vector2(72, 11), Vector2(72, height - 11), Color("#d6c9a4"), 1.5, true)
 		text_x += 65.
 	draw_string(

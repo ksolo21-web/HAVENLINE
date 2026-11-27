@@ -19,15 +19,8 @@ func fund(id: String) -> void:
 		for i in int(game.inventory.remaining(id)[kind]):
 			check(game.inventory.collect("supply-%s-%s-%d" % [id,kind,i],kind) and game.inventory.payment(id,kind,false),"fund "+id)
 
-func to_shelf(kind: String, count: int) -> void:
-	for i in count:
-		check(game.inventory.collect("supply-stock-%s-%d" % [kind,i],kind) and game.inventory.deposit(kind),"store "+kind)
-
-func reserve(kind: String) -> int:
-	return int(game.inventory.remaining("watchtower").get(kind,0))+int(game.inventory.remaining("orbit_upgrade").get(kind,0))
-
 func pickup() -> void:
-	for id in ["center_hearth","expansion_1","storage_wood","storage_stone","storage_meat","expansion_2","camp_cooker","saw_bench","quarry_drill"]: fund(id)
+	for id in ["center_hearth","expansion_1","storage_wood","storage_stone","storage_meat","expansion_2","camp_cooker","saw_bench","quarry_drill","watchtower","orbit_upgrade"]: fund(id)
 	game._apply_hearth(true,false)
 	for i in game.inventory.survivor_cost: game.inventory.collect("supply-rescue-%d"%i,"wood")
 	game.inventory.carried.wood -= game.inventory.survivor_cost
@@ -35,10 +28,7 @@ func pickup() -> void:
 	journal.survivor_wood = game.inventory.survivor_cost
 	journal.survivor_paid = true
 	journal.rescued = true
-	to_shelf("wood",reserve("wood"))
-	to_shelf("meat",reserve("meat"))
-	to_shelf("stone",reserve("stone"))
-	check(game.survivor._next_supply().is_empty(),"reserve all unpaid tower and axe costs")
+	check(game.survivor._next_supply().is_empty(),"empty shelves cannot fund a worker dispatch")
 	game.inventory.collect("extra-stone","stone")
 	game.inventory.deposit("stone")
 	game._inventory_changed()
@@ -47,17 +37,17 @@ func pickup() -> void:
 	for i in 300:
 		game.survivor.advance(1./60.)
 		if game.survivor.phase == "supply_out": break
-	check(journal.worker_supply=="stone" and game.inventory.stored.stone==reserve("stone"),"physical withdrawal debits one stone and persists cargo")
-	check(game.survivor.actor.position.distance_to(game.depot.APRON)<.03,"survivor walked to the loading door")
+	check(journal.worker_supply=="stone" and game.inventory.stored.stone==0,"physical withdrawal debits one stone and persists cargo")
+	check(game.survivor.actor.position.distance_to(game.depot.apron.global_position)<.03,"survivor walked to the loading door")
 	check(game.survivor.supply_model.get_child_count()>0,"worker carries the stone asset")
-	for i in 60: game.survivor.advance(1./60.)
-	check(game.survivor.actor.position.distance_to(game.depot.APRON)>1.5 and journal.hoppers.stone==0,"hopper remains empty while survivor crosses camp")
+	for i in 24: game.survivor.advance(1./60.)
+	check(game.survivor.actor.position.distance_to(game.depot.apron.global_position)>.35 and journal.hoppers.stone==0,"hopper remains empty while survivor crosses camp")
 	game._persist_world()
 
 func delivery(full: bool) -> void:
 	var worker = game.survivor
 	var journal: Dictionary = game.inventory.settlement
-	check(journal.worker_supply=="stone" and worker.phase=="supply_out" and game.inventory.stored.stone==reserve("stone"),"cold load resumes one paid unit")
+	check(journal.worker_supply=="stone" and worker.phase=="supply_out" and game.inventory.stored.stone==0,"cold load resumes one paid unit")
 	if full:
 		for i in 4:
 			game.inventory.collect("full-hopper-%d"%i,"stone")
@@ -75,20 +65,20 @@ func delivery(full: bool) -> void:
 		lane_clear = lane_clear and game.field_env.is_inside_camp(pos) and not in_house_wall
 		if worker.phase == "supply_unload":
 			reached_input = true
-			entered_bay = pos.distance_to(game.processors.APRONS.stone)<.04
+			entered_bay = pos.distance_to(game.processors.apron_position("stone"))<.04
 		if journal.worker_supply=="": break
 	check(reached_input and entered_bay and lane_clear,"real survivor carried stone around the house to drill")
 	check(journal.worker_supply=="","in-transit receipt clears once")
 	var restored = game.Inventory.new()
 	check(restored.configure(game.inventory.costs) and restored.restore(game.inventory.snapshot()),"all material conserved after delivery")
 	if full:
-		check(worker.actor.position.distance_to(game.depot.APRON)<.04,"full hopper sends survivor back to the loading door")
-		check(game.inventory.stored.stone==reserve("stone")+1 and journal.hoppers.stone==4,"full hopper returns exactly one stone to shelf")
+		check(worker.actor.position.distance_to(game.depot.apron.global_position)<.04,"full hopper sends survivor back to the loading door")
+		check(game.inventory.stored.stone==1 and journal.hoppers.stone==4,"full hopper returns exactly one stone to shelf")
 	else:
-		check(game.inventory.stored.stone==reserve("stone") and journal.hoppers.stone==1,"completed trip feeds one stone without player input")
+		check(game.inventory.stored.stone==0 and journal.hoppers.stone==1,"completed trip feeds one stone without player input")
 		for i in 92: game.settlement_loop.advance_unattended(1./60.)
 		check(journal.hoppers.stone==0 and journal.processed_stone==1,"autonomous drill finishes delivered stone once")
-	check(game.inventory.stored.wood==reserve("wood") and game.inventory.stored.meat==reserve("meat"),"other shelf balances unchanged")
+	check(game.inventory.stored.wood==0 and game.inventory.stored.meat==0,"other shelf balances unchanged")
 
 func run() -> void:
 	var args := OS.get_cmdline_user_args()

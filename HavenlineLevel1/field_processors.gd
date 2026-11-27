@@ -141,7 +141,11 @@ static func reveal(machine: Node3D) -> void:
 		lift.chain().tween_callback(beam.queue_free)
 
 func input_position(kind:String) -> Vector3:
-	return to_global(CENTERS[kind]+INPUT[kind]+Vector3.UP*.025)
+	return machines[kind].to_global(INPUT[kind])
+
+func apron_position(kind:String) -> Vector3:
+	var at:Vector3 = machines[kind].global_position + APRONS[kind] - CENTERS[kind]
+	return Vector3(at.x,0,at.z)
 
 func output_position(kind:String) -> Vector3:
 	return trays[kind].global_position
@@ -205,7 +209,7 @@ func tick(dt:float) -> void:
 
 func _rect(kind:String,radius:float) -> Rect2:
 	var rect:Rect2=FOOTPRINT[kind]
-	var c:Vector3=CENTERS[kind]
+	var c:Vector3=machines[kind].global_position
 	return Rect2(rect.position+Vector2(c.x,c.z),rect.size).grow(radius)
 
 func reserves(at:Vector3) -> bool:
@@ -213,7 +217,7 @@ func reserves(at:Vector3) -> bool:
 	var p:=Vector2(at.x,at.z)
 	for kind:String in APRONS:
 		if not world.inventory.is_machine_owned(kind): continue
-		if _rect(kind,.35).has_point(p) or at.distance_to(APRONS[kind])<=ACCESS_RADIUS:return true
+		if _rect(kind,.35).has_point(p) or at.distance_to(apron_position(kind))<=ACCESS_RADIUS:return true
 	return false
 
 func constrain_motion(from:Vector3,to:Vector3,radius:float) -> Vector3:

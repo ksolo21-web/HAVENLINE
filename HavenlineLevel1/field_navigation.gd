@@ -71,7 +71,7 @@ func _process(_dt: float) -> void:
 	refresh()
 
 func refresh() -> void:
-	if not world.field_ready or world.closing or world.persist_blocked or world.player_hp<=0 or world.reset_time>0:
+	if not world.field_ready or (world.camp_layout and world.camp_layout.active) or world.closing or world.persist_blocked or world.player_hp<=0 or world.reset_time>0:
 		hide()
 		return
 	var feet: Vector3 = world.actor.global_position

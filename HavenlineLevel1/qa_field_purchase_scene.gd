@@ -66,7 +66,7 @@ func run() -> void:
 		var expected_order := [Rules.HEARTH,Rules.FIRST]+sequence+[Rules.SECOND,Rules.TOWER,Rules.AXES] + ([] if "--native-resume-legacy" in OS.get_cmdline_user_args() else ["camp_cooker","saw_bench","quarry_drill"])
 		check("Independent native app slot reopened",game.field_save.native_profile and not game.persist_blocked)
 		check("Purchased projects restored in their original order",game.inventory.build_order==expected_order)
-		check("Restored court has one advanced storehouse and all paid bays",game.field_env.perimeter_stage==3 and game.depot.house.tier==3 and game.depot.bins.values().all(func(a):return a.visible) and game.offer_floors.values().all(func(f):return f.visible==game.inventory.offer_open(f.shown_id)))
+		check("Restored court has one advanced storehouse and all paid bays",game.field_env.perimeter_stage==3 and game.depot.house.tier==3 and game.depot.bins.values().all(func(a):return a.visible) and game.offer_floors.values().all(func(f):return f.visible==(f.shown_id not in Rules.LINES and game.inventory.offer_open(f.shown_id))))
 		print(JSON.stringify({"native_restart":checks}))
 		game.sound.stop_playback()
 		game.queue_free()
@@ -122,7 +122,7 @@ func run() -> void:
 	approach(Rules.AXES,190)
 	for id: String in ["camp_cooker","saw_bench","quarry_drill"]:
 		approach(id,160)
-	check("All construction is paid and offerings retire",game.inventory.build_order==[Rules.HEARTH,Rules.FIRST,"storage_wood","storage_stone","storage_meat",Rules.SECOND,Rules.TOWER,Rules.AXES,"camp_cooker","saw_bench","quarry_drill"] and game.offer_floors.values().all(func(f):return not f.visible))
+	check("Paid construction retires and automation remains an optional purchase",game.inventory.build_order==[Rules.HEARTH,Rules.FIRST,"storage_wood","storage_stone","storage_meat",Rules.SECOND,Rules.TOWER,Rules.AXES,"camp_cooker","saw_bench","quarry_drill"] and game.offer_floors.keys().all(func(id):return id in Rules.LINES or not game.offer_floors[id].visible) and Rules.LINES.all(func(id):return not game.inventory.complete(id)))
 	check("Existing unit flights and authored purchase cues executed",launched>0 and game.events.any(func(e):return e.event=="spend_meat") and game.events.filter(func(e):return e.event=="purchase").size()==11)
 	var loader=game.FieldSave.new()
 	var restored=game.Inventory.new()

@@ -47,15 +47,19 @@ func _show_pine(row: Dictionary, show: bool) -> void:
 		local.origin.y -= 12.0
 	batch.multimesh.set_instance_transform(row.index,local)
 
-func refresh_camp(animate: bool) -> void:
+func refresh_camp(_animate: bool) -> void:
 	for row in records:
-		var occupied: bool = world.field_env.occupies_camp_ground(row.transform.origin)
+		var size: Vector2 = world.field_env.pine_shapes[row.variant]
+		var at: Transform3D = row.transform
+		var radius := (size.x+.18*size.y)*at.basis.get_scale().abs().x
+		var occupied: bool = world.field_env.occupies_camp_ground(at.origin,radius)
 		if (world.lakeshore and world.lakeshore.reserves(row.transform.origin)) or (world.processors and world.processors.reserves(row.transform.origin)):
 			occupied = true
 		if occupied == row.get("occupied",false): continue
 		row["occupied"] = occupied
 		if occupied and is_instance_valid(row.live):
-			world.retire_tree(row.live,animate)
+			row.live.hide()
+			world.retire_tree(row.live,false)
 			row.live = null
 		_show_pine(row,not occupied)
 	last_scan = Vector3.INF

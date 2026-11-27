@@ -29,12 +29,15 @@ const CounterLayout = preload("res://field_counter.gd")
 # The last purchase opens a work aisle along the north wall. The gates and
 # the main lanes to the storehouse, hearth and eastern defense stay in place.
 const COURTS := [Vector4(-5,-4,5,4),Vector4(-5.5,-5.5,7.5,5),Vector4(-5.5,-9,10,5.4)]
+var counter_center_x := CounterLayout.CENTER_X
 var perimeter_stage := -1
+var wall_revision := 0
 var palisades: MultiMeshInstance3D
 var perimeter_tween: Tween
 var camp_state := -1
 var palette := {}
 var canopy_materials := {}
+var pine_shapes: Array[Vector2] = []
 var resource_sightline := preload("res://field_resource_sightline.gd").new()
 var seasonal_pines: Array[Node3D] = []
 # Trees on the future storage ground merge with the permanent north/west woodline.
@@ -138,6 +141,7 @@ func install_walls() -> void:
 	for i in world.layout.walls_xz.size():
 		world.camp_colliders[i].get_child(0).hide()
 	for gate in world.gates:
+		gate.hinge_moved.connect(func(_angle: float): wall_revision+=1)
 		for i in 2:
 			var leaf: AnimatableBody3D = gate._leaf_bodies[i]
 			for child in leaf.get_children():
@@ -176,19 +180,138 @@ func is_inside_camp(pos: Vector3) -> bool:
 	var r: Vector4 = COURTS[perimeter_stage-1]
 	return pos.x >= r.x and pos.x <= r.z and pos.z >= r.y and pos.z <= r.w
 
-# Keep crown skirts clear of the stockplots, walls and both swinging entrances.
-func occupies_camp_ground(pos: Vector3) -> bool:
+# Sweep the entire horizontal segment, including both actual moving gate leaves.
+# A large timestep or a long transfer must obey the same fence as a small step.
+func travel_clear(from: Vector3, to: Vector3, radius := 0.) -> bool:
+	if perimeter_stage < 1: return true
+	var a := Vector2(from.x, from.z)
+	var b := Vector2(to.x, to.z)
+	radius = maxf(0., radius)
+	for row: Array in world.layout.walls_xz:
+		var center := Vector2(row[0],row[1])
+		var half := Vector2(float(row[2]),float(row[3]))*.5
+		if _intersects_box(a,b, center-half-Vector2.ONE*radius, center+half+Vector2.ONE*radius):
+			return false
+	for gate in world.gates:
+		var local_a: Vector3 = gate.to_local(from)
+		var local_b: Vector3 = gate.to_local(to)
+		var u := Vector2(local_a.x,local_a.z)
+		var v := Vector2(local_b.x,local_b.z)
+		var limit: float = radius + gate.LEAF_DEPTH*.5
+		if not _intersects_box(u,v,Vector2(-gate.HALF_SPAN,-gate.LEAF_LENGTH)-Vector2.ONE*limit,Vector2(gate.HALF_SPAN,gate.LEAF_LENGTH)+Vector2.ONE*limit):
+			continue
+		for side: float in [-1.,1.]:
+			var hinge := Vector2(side*gate.HALF_SPAN,0.)
+			var tip := hinge + Vector2(-side*cos(gate.angle),-gate.swing_direction*sin(gate.angle))*float(gate.LEAF_LENGTH)
+			if u.is_equal_approx(v):
+				if u.distance_squared_to(Geometry2D.get_closest_point_to_segment(u,hinge,tip)) <= limit*limit: return false
+			else:
+				var closest := Geometry2D.get_closest_points_between_segments(u,v,hinge,tip)
+				if closest[0].distance_squared_to(closest[1]) <= limit*limit: return false
+	return true
+
+# Supporting planes bound a convex, walkable pocket on the runner's side
+# of the nearby timber. The orbit takes one snapshot per pose, not a physics
+# raycast per vertex. An open door contributes its rotated leaves only.
+func orbit_planes(feet: Vector3, reach: float) -> PackedVector3Array:
+	var planes := PackedVector3Array()
+	if perimeter_stage < 1: return planes
+	var rect: Vector4 = COURTS[perimeter_stage-1]
+	if feet.x < rect.x-reach or feet.x>rect.z+reach or feet.z<rect.y-reach or feet.z>rect.w+reach: return planes
+	var p := Vector2(feet.x,feet.z)
+	for row: Array in world.layout.walls_xz:
+		var center := Vector2(row[0],row[1])
+		var half := Vector2(row[2],row[3])*.5
+		_add_orbit_plane(planes,p,p.clamp(center-half,center+half),0.,reach)
+	for gate in world.gates:
+		var local:Vector3=gate.to_local(feet)
+		if absf(local.x)>reach+gate.HALF_SPAN or absf(local.z)>reach+gate.LEAF_LENGTH: continue
+		for side:float in [-1.,1.]:
+			var hinge:=Vector2(side*gate.HALF_SPAN,0.)
+			var tip:=hinge+Vector2(-side*cos(gate.angle),-gate.swing_direction*sin(gate.angle))*float(gate.LEAF_LENGTH)
+			var point:=Geometry2D.get_closest_point_to_segment(Vector2(local.x,local.z),hinge,tip)
+			var nearest:Vector3=gate.to_global(Vector3(point.x,0,point.y))
+			_add_orbit_plane(planes,p,Vector2(nearest.x,nearest.z),gate.LEAF_DEPTH*.5,reach)
+	return planes
+
+func _add_orbit_plane(planes: PackedVector3Array,p:Vector2,point:Vector2,thickness:float,reach:float) -> void:
+	var direction:=p-point
+	var d:=direction.length()
+	if d>=reach+thickness or d<.00001:return
+	var n:=direction/d
+	planes.append(Vector3(n.x,n.y,n.dot(point)+thickness+.04))
+
+func _intersects_box(a: Vector2,b: Vector2,low: Vector2,high: Vector2) -> bool:
+	var delta := b-a
+	var enter := 0.
+	var leave := 1.
+	for axis in 2:
+		if absf(delta[axis]) < .000001:
+			if a[axis] < low[axis] or a[axis] > high[axis]: return false
+		else:
+			var first := (low[axis]-a[axis])/delta[axis]
+			var last := (high[axis]-a[axis])/delta[axis]
+			enter = maxf(enter,minf(first,last))
+			leave = minf(leave,maxf(first,last))
+			if enter > leave: return false
+	return true
+
+# Bound the canopy during its largest hit recoil, as well as the fence's width.
+func occupies_camp_ground(pos: Vector3, crown_radius := .17) -> bool:
 	if perimeter_stage < 1: return false
 	var r: Vector4 = COURTS[perimeter_stage-1]
-	if perimeter_stage == 3 and pos.x >= CounterLayout.CENTER_X-1.25 and pos.x <= CounterLayout.CENTER_X+3.54 and pos.z >= r.y-8.25 and pos.z < r.y:
-		return true
-	return pos.x >= r.x-.32 and pos.x <= r.z+.32 and pos.z >= r.y-.32 and pos.z <= r.w+.32
+	var p := Vector2(pos.x,pos.z)
+	if perimeter_stage == 3:
+		var queue := Rect2(Vector2(counter_center_x-1.25,r.y-8.25),Vector2(4.79,8.25)).grow(crown_radius)
+		if queue.has_point(p): return true
+	var nearest := p.clamp(Vector2(r.x,r.y),Vector2(r.z,r.w))
+	if p.distance_to(nearest) <= crown_radius+.19: return true
+	for gate in world.gates:
+		var at: Vector3 = gate.to_local(pos)
+		if absf(at.x) < gate.HALF_SPAN+crown_radius and absf(at.z) < 2.15+crown_radius: return true
+	return false
 
-func set_perimeter(stage: int, animate: bool) -> void:
+func tree_fall_direction(at: Vector3,wanted: Vector3,height: float,radius: float) -> Vector3:
+	if perimeter_stage < 1: return wanted
+	var r: Vector4 = COURTS[perimeter_stage-1]
+	var p := Vector2(at.x,at.z)
+	var normal := p-p.clamp(Vector2(r.x,r.y),Vector2(r.z,r.w))
+	if normal.is_zero_approx(): return wanted
+	var ray := Vector2(wanted.x,wanted.z)*height
+	var margin := Vector2.ONE*(radius+.19)
+	if not _intersects_box(p,p+ray,Vector2(r.x,r.y)-margin,Vector2(r.z,r.w)+margin): return wanted
+	return Vector3(normal.x,0,normal.y).normalized()
+
+func safe_drop_origin(p: Vector3, radius: float) -> Vector3:
+	if travel_clear(p,p,radius): return p
+	# A purchase can move a wall onto an existing loose resource. Return it to
+	# the nearest clear spot on its own side, retaining its unique receipt.
+	var inside := is_inside_camp(p)
+	for ring in range(1,17):
+		for i in 16:
+			var direction := Vector2.RIGHT.rotated(TAU*i/16.)
+			var q := p + Vector3(direction.x,0,direction.y)*(.12*ring)
+			if is_inside_camp(q)==inside and travel_clear(q,q,radius): return q
+	return p
+
+func clip_travel(from: Vector3,to: Vector3,radius: float) -> Vector3:
+	if travel_clear(from,to,radius): return to
+	var safe := 0.
+	var blocked := 1.
+	for i in 12:
+		var fraction := (safe+blocked)*.5
+		if travel_clear(from,from.lerp(to,fraction),radius): safe=fraction
+		else: blocked=fraction
+	var stop := from.lerp(to,safe)
+	stop.y = to.y
+	return stop
+
+func set_perimeter(stage: int, animate: bool, refresh_wall := false) -> void:
 	stage = clampi(stage,0,COURTS.size())
-	if stage == perimeter_stage: return
+	if stage == perimeter_stage and not refresh_wall: return
 	var previous := perimeter_stage
 	perimeter_stage = stage
+	wall_revision += 1
 	var r: Vector4 = COURTS[maxi(0,stage-1)]
 	# Wall bodies retain their identity so restore and proximity checks keep
 	# using the same six collision shapes and the same two independent gates.
@@ -216,7 +339,7 @@ func set_perimeter(stage: int, animate: bool) -> void:
 		# palisade at the two fixed timber posts when the customer counter opens.
 		var spans := [Vector2(-length*.5,length*.5)]
 		if i == 4 and stage == 3:
-			var dock_offset := CounterLayout.CENTER_X-float(row[0])
+			var dock_offset := counter_center_x-float(row[0])
 			spans = [Vector2(-length*.5,dock_offset-CounterLayout.HALF_BAY),Vector2(dock_offset+CounterLayout.HALF_BAY,length*.5)]
 		for span: Vector2 in spans:
 			var width := span.y-span.x
@@ -254,6 +377,26 @@ func set_perimeter(stage: int, animate: bool) -> void:
 		snow.set_shader_parameter("court_center",center)
 	if world.forest and not world.forest.records.is_empty():
 		world.forest.refresh_camp(animate)
+	if stage>0:
+		# The first playable pine originally stood against the expanding south
+		# wall. Keep its harvest ID, notches and five-second regrowth countdown.
+		if world.resource_tree:
+			var starter: Node3D = world.resource_tree
+			var radius: float = (starter.crown_size.x+.18*starter.crown_size.y)*starter.TREE_SCALE
+			if occupies_camp_ground(starter.position,radius):
+				starter.position.z = maxf(starter.position.z,r.w+radius+.35)
+				starter.position.x = minf(starter.position.x,-world.gates[0].HALF_SPAN-radius-.22)
+		for tree: Node3D in world.trees:
+			if tree.phase == "falling" and not tree.is_queued_for_deletion():
+				var size: Vector2 = tree.crown_size*tree.TREE_SCALE*tree.global_basis.get_scale().abs().x
+				tree.fall_direction = tree_fall_direction(tree.position,tree.fall_direction,size.y,size.x)
+				var fraction: float = tree.falling_clock/tree.FALL_SECONDS
+				tree._pose(tree.FALL_MAX*fraction*fraction)
+		for drop: Dictionary in world.drops.values():
+			var radius: float = world.loose_clearance(drop.kind)
+			var start := safe_drop_origin(drop.from,radius)
+			drop.from = start
+			drop.at = clip_travel(start,drop.at,radius)
 	perimeter_changed.emit()
 
 func install_hearth() -> void:
@@ -387,6 +530,7 @@ func install_woods() -> void:
 		transforms[i%3].append(Transform3D(basis,Vector3(at.x,0,at.y)))
 	for variant in 3:
 		var tree: Node3D = world.CONIFERS[variant].instantiate()
+		pine_shapes.append(preload("res://resource_tree.gd").native_shape(world.CONIFERS[variant],tree))
 		var parts: Array[MeshInstance3D] = []
 		world.meshes(tree,parts)
 		for part in parts:
@@ -535,7 +679,8 @@ func set_built(built: bool, animate := true) -> void:
 	set_perimeter(maxi(1,perimeter_stage) if built else 0,animate)
 	if built:
 		for tree in seasonal_pines:
-			world.retire_tree(tree,animate)
+			tree.hide()
+			world.retire_tree(tree,false)
 		seasonal_pines.clear()
 	world.purchase_pad_view.hide()
 	buy_anchor.visible = not built

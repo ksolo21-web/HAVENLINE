@@ -72,6 +72,7 @@ var worksite_demand: Callable
 var worksite_land: Callable
 var _landing_at_worksite := {}
 var worksite_goal: Callable
+var travel_clear: Callable
 var tier_height := {"wood":.13, "stone":.11, "meat":.145, "coal":.15, "slate":.12, "metal":.16}
 
 func setup(ledger: Inventory, character: Node3D, item_factory: Callable) -> void:
@@ -375,8 +376,13 @@ func sync(_animate := false) -> void:
 		frame.visible = loaded
 		_fit_shelves(seated)
 
+func _clear_segment(start: Vector3, end: Vector3, kind: String) -> bool:
+	return not travel_clear.is_valid() or travel_clear.call(start, end, float(WIDTH[kind]) * .38)
+
 func pickup(token: String, kind: String, start: Vector3, start_yaw := 0.0) -> bool:
 	if kind not in Inventory.KINDS or token.is_empty() or inventory.collected.has(token):
+		return false
+	if not _clear_segment(start, _place(HAND, kind, int(inventory.carried[kind])), kind):
 		return false
 	var unit := _piece(kind)
 	if not unit:
@@ -425,6 +431,9 @@ func _send(kind: String, source: String, dest: String, dest_index: int, amount :
 		var carried_unit: Node3D = pool[_hand_slot(kind, source_index)]
 		start = carried_unit.global_position
 		start_yaw = carried_unit.global_rotation.y
+	if not _clear_segment(start, _place(dest,kind,dest_index), kind):
+		unit.free()
+		return false
 	var start_scale := storage_unit_scale * StockLayout.width(kind, source_index) / float(WIDTH[kind]) if source == STOCK else 1.0
 	var end_scale := storage_unit_scale * StockLayout.width(kind, dest_index) / float(WIDTH[kind]) if dest == STOCK else 1.0
 	cooldown = INTERVAL if dest == STOCK else PAYMENT_INTERVAL
@@ -478,7 +487,15 @@ func advance(delta: float) -> void:
 		var dest := _place(flight.to, flight.kind, index)
 		var arc := .20 if flight.to == HAND else .40
 		var unit: Node3D = flight.mesh
-		unit.global_position = (flight.start as Vector3).lerp(dest, t) + Vector3.UP * (4.0*t*(1.0-t)*arc)
+		var next := (flight.start as Vector3).lerp(dest, t) + Vector3.UP * (4.0*t*(1.0-t)*arc)
+		if not _clear_segment(unit.global_position,next,flight.kind):
+			# Outgoing receipts remain at their source until landing. Pickups
+			# already belong to the pack and settle into its existing lane.
+			flights.erase(flight)
+			unit.queue_free()
+			sync(true)
+			continue
+		unit.global_position = next
 		unit.scale = Vector3.ONE * lerpf(flight.scale_start, flight.scale_end, t)
 		unit.global_rotation.y = lerp_angle(flight.start_yaw, _heading(flight.to, flight.kind, index), t)
 		if t >= 1.0:
@@ -587,7 +604,7 @@ func _plan_visit(dest: String) -> void:
 		total += from_shelf
 	if total == 0: return
 	# The normal 52-piece reference stress load still shows one real mesh
-	# per bundle. Legacy stockpiles can contain up to a million receipts.
+	# per bundle. Large stockpiles group into a bounded number of visible packets.
 	# Reserve a remainder slot for each material/source pair in those loads.
 	var group := 1
 	if total > MAX_BATCH_PIECES:
