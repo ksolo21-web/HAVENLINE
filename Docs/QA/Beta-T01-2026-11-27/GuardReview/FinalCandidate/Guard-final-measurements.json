@@ -1,0 +1,163 @@
+{
+  "guard_overlay_meshes": 1,
+  "poses": [
+    {
+      "frame": "Turn--47-1x",
+      "guard_screen": "(431.5831, 363.3837)",
+      "mask_bytes_steady": true,
+      "mask_pixels_sha256": "1b3fc58b92d07d42a1889a26123db1aab01ad68a1ac52ffb3ed0612e87faad70",
+      "mask_size": "(360, 480)",
+      "view_size": 13.0,
+      "visible_object_id_px": 1484,
+      "covered_object_id_px": 12,
+      "cyan_on_visible_id_px": 1,
+      "cyan_on_covered_id_px": 1,
+      "any_rgb_difference_visible_id_px": 1,
+      "exposed_rgb_changes": [
+        {
+          "pixel_xy": [
+            444,
+            365
+          ],
+          "without_overlay": [
+            11,
+            6,
+            4
+          ],
+          "with_overlay": [
+            25,
+            33,
+            35
+          ]
+        }
+      ]
+    },
+    {
+      "frame": "Turn--47-2x",
+      "guard_screen": "(503.1661, 246.7675)",
+      "mask_bytes_steady": true,
+      "mask_pixels_sha256": "a2d4846bb8943996fe95afa3455846b0a76405fd433d626da7ee8321f3e73bd7",
+      "mask_size": "(360, 480)",
+      "view_size": 6.5,
+      "visible_object_id_px": 6115,
+      "covered_object_id_px": 45,
+      "cyan_on_visible_id_px": 0,
+      "cyan_on_covered_id_px": 13,
+      "any_rgb_difference_visible_id_px": 0,
+      "exposed_rgb_changes": []
+    },
+    {
+      "frame": "Turn-+49-1x",
+      "guard_screen": "(470.1727, 325.7473)",
+      "mask_bytes_steady": true,
+      "mask_pixels_sha256": "ee1484277f4ae673b126c954288a62b3fdb3c53ef068923116eb4ac2966656e6",
+      "mask_size": "(360, 480)",
+      "view_size": 13.0,
+      "visible_object_id_px": 1324,
+      "covered_object_id_px": 336,
+      "cyan_on_visible_id_px": 0,
+      "cyan_on_covered_id_px": 267,
+      "any_rgb_difference_visible_id_px": 0,
+      "exposed_rgb_changes": []
+    },
+    {
+      "frame": "Turn-+49-2x",
+      "guard_screen": "(580.3454, 171.4946)",
+      "mask_bytes_steady": true,
+      "mask_pixels_sha256": "8daf117f2e089e2b0a63138ed5cbedbd76bb0745abc6cb1be11dfddd7147e0ac",
+      "mask_size": "(360, 480)",
+      "view_size": 6.5,
+      "visible_object_id_px": 5437,
+      "covered_object_id_px": 1337,
+      "cyan_on_visible_id_px": 0,
+      "cyan_on_covered_id_px": 1192,
+      "any_rgb_difference_visible_id_px": 0,
+      "exposed_rgb_changes": []
+    }
+  ],
+  "tower_meshes": [
+    {
+      "emissive": false,
+      "overlay": false,
+      "part": "Footings",
+      "transparent": 0
+    },
+    {
+      "emissive": false,
+      "overlay": false,
+      "part": "Cabin",
+      "transparent": 0
+    },
+    {
+      "emissive": false,
+      "overlay": false,
+      "part": "EmplacementDeck",
+      "transparent": 0
+    },
+    {
+      "emissive": false,
+      "overlay": false,
+      "part": "Turntable",
+      "transparent": 0
+    },
+    {
+      "emissive": false,
+      "overlay": false,
+      "part": "BowStock",
+      "transparent": 0
+    },
+    {
+      "emissive": false,
+      "overlay": false,
+      "part": "LoadedQuarrel",
+      "transparent": 0
+    },
+    {
+      "emissive": false,
+      "overlay": false,
+      "part": "GunnerTread",
+      "transparent": 0
+    },
+    {
+      "emissive": false,
+      "overlay": false,
+      "part": "RightWindlass",
+      "transparent": 0
+    },
+    {
+      "emissive": false,
+      "overlay": false,
+      "part": "RightWindlassHandle",
+      "transparent": 0
+    },
+    {
+      "emissive": false,
+      "overlay": false,
+      "part": "LeftBreechControl",
+      "transparent": 0
+    },
+    {
+      "emissive": false,
+      "overlay": false,
+      "part": "LeftBreechControlHandle",
+      "transparent": 0
+    }
+  ],
+  "roles": {
+    "implementation": "/root",
+    "independent_reference_review": "/root/raid"
+  },
+  "tested_source_sha256": {
+    "field_guard_sightline.gd": "901c0589dd3b995cccbbdaf4143536ee8453dd132b187f8d7ee0f173d1dab5cb",
+    "field_tower_art.gd": "486246cd44d436846258df3b95d52c261bfa16949f4848248f818b1072baf46a",
+    "assets/field_world/guard_depth_mask.gdshader": "f1d746f1253c02dc248f7aea43845289c89f3d5e1e1193c36a6d763b824363c0",
+    "assets/field_world/guard_sightline.gdshader": "10ad8eae7134963d4f63cd3c54b9c97e338c5ec972797a8ba3035703fd9ec30b"
+  },
+  "renderer": "Godot 4.7.2 desktop OpenGL compatibility with Mesa llvmpipe; 720\u00d7960, isolated paid east camp",
+  "all_tower_meshes_opaque_nonemissive": true,
+  "exposed_guard_all_views_pixel_identical": false,
+  "mask_refresh_at_two_bearings_and_two_zooms": true,
+  "independent_visual_score": 9.5,
+  "scope": "Guard sightline, tower opacity, and mask response to changes in aim or zoom at the tested gameplay position",
+  "coverage_score_requirement_exclusion": "Character and survivor animation have a separate 9.9 target."
+}
