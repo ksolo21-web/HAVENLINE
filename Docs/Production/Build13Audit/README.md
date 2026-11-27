@@ -48,6 +48,20 @@ Raids should be hard, beatable, and survivable. A player who uses the warning to
 
 Test the full countdown and verify that the camp takes no raid damage before it expires. Start outside camp, return by different gates, resume during the countdown, successfully defend with earned equipment, and test retreat and recovery after a breach. T54 and T55 cover the warning's sound and readability.
 
+### Proposed raid frequency · T13 playtest tuning
+
+Use the following active-play intervals for the opening camp. Each interval is measured to the start of the attack and includes the full five-minute warning.
+
+| Case | Warning | Earliest attack |
+|---|---|---|
+| First raid | After 20 minutes of active play with basic camp defenses available to build. | 25 minutes after that defense unlock. |
+| After a successful defense | 40–55 minutes after the last raid ends. | 45–60 minutes after the last raid ends. |
+| After a failed defense | At least 55 minutes after the last raid ends. | At least 60 minutes after the last raid ends. |
+
+Select the repeat interval once and save it. If the camp is ineligible when the warning becomes due, wait until it qualifies and give the full warning then. Allow one pending or active raid at a time in the opening. Begin the next interval only after the current raid ends. Pause the clocks out of active play and resume from the recorded time. Regional cadence can be evaluated with longer playtests.
+
+Test a short opening session, a long session with successive wins, and a failed defense followed by rebuilding. Check for a meaningful preparation window and enough time afterward to explore, gather and repair. Tune strength, composition and attack patterns with progression before shortening the intervals. The five-minute warning is an owner requirement. These intervals are the initial playtest proposal.
+
 ## Recommended order after authorization
 
 | Order | Scope and acceptance |
