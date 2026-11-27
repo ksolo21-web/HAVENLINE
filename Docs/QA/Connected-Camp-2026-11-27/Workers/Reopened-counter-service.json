@@ -1,0 +1,330 @@
+{
+  "runtime": "Godot 4.7.2 native Linux, cold disposable saves for all branches and the same save reused for interruption and re-open. All normal worker motion, order reservations, and counters exercised.",
+  "unaltered_test": "res://tests/qa_worker_jobs.gd",
+  "test_sha256": "9d08ed43d96d38bb5ed23cf2c29db1b69827cf174df34569befbc4fd14d54b7f",
+  "before_commit": "402c6e785beb33b48830d0314b7e2ab0199bfc53",
+  "failed_before": [
+    "open second customer order sends the worker to the movable storage door",
+    "worker physically claims exactly the second guest's meal",
+    "belt and worker fulfilled two physical customer orders exactly once"
+  ],
+  "old_worker_suite_log_sha256": "a80ee3d7bba36f76a9f63372b73fae032df4c8a7e4bc6f8fc7a8cbe64b35348b",
+  "normal_worker_suite_log_sha256": "6f1cddf9e67303c5223c843b3139677d7d8930829bfea7cf69d7ebc5cb857123",
+  "fix_sha256": "af24dec7c6a0b5100951e7c98b06c34c8d36a9e21db45ae6909a83a4435d2a21",
+  "cause": "The public counter stance was calculated before the counter opened. The inner physical route cache ignored the active state, so the survivor saw no reachable counter despite a second waiting guest and one stored roast. Both orders were left to the belt. The network now includes the counter state in its cache key.",
+  "pre_fix_time_trace": [
+    {
+      "aisle_stances": "{ \"store\": (-3.05, 0.0, -1.23), \"meat\": (-1.93, 0.0, -6.69), \"cooker_output\": (1.99, 0.0, -7.53), \"stone\": (7.73, 0.0, -5.289999), \"wood\": (-4.03, 0.0, -6.13) }",
+      "at": "(-3.05, 0.009, -1.18)",
+      "buffer": 0,
+      "can_fetch": false,
+      "counter": "(inf, inf, inf)",
+      "door": "(-3.05, 0.0, -1.23)",
+      "held": 0,
+      "inbound": 1,
+      "line": "",
+      "meals": 1,
+      "names": [
+        1,
+        2
+      ],
+      "orders_paid": 0,
+      "phase": "waiting_storage",
+      "queue": 2,
+      "route": "[(-4.54, 0.0, 9.04)]",
+      "unclaimed": 1,
+      "where": "before selection"
+    },
+    {
+      "aisle_stances": "{ \"store\": (-3.05, 0.0, -1.23), \"meat\": (-1.93, 0.0, -6.69), \"cooker_output\": (1.99, 0.0, -7.53), \"stone\": (7.73, 0.0, -5.289999), \"wood\": (-4.03, 0.0, -6.13) }",
+      "at": "(-3.05, 0.009, -1.18)",
+      "buffer": 0,
+      "can_fetch": false,
+      "counter": "(inf, inf, inf)",
+      "door": "(-3.05, 0.0, -1.23)",
+      "held": 0,
+      "inbound": 1,
+      "line": "",
+      "meals": 1,
+      "names": [
+        1,
+        2
+      ],
+      "orders_paid": 0,
+      "phase": "supply_pickup",
+      "queue": 2,
+      "route": "[(-3.05, 0.0, -1.23)]",
+      "unclaimed": 1,
+      "where": "after selection"
+    },
+    {
+      "aisle_stances": "{ \"store\": (-3.05, 0.0, -1.23), \"meat\": (-1.93, 0.0, -6.69), \"cooker_output\": (1.99, 0.0, -7.53), \"stone\": (7.73, 0.0, -5.289999), \"wood\": (-4.03, 0.0, -6.13) }",
+      "at": "(-4.573742, 0.009, -5.351671)",
+      "buffer": 0,
+      "can_fetch": false,
+      "counter": "(inf, inf, inf)",
+      "door": "(-3.05, 0.0, -1.23)",
+      "held": 0,
+      "inbound": 1,
+      "line": "",
+      "meals": 1,
+      "names": [
+        1,
+        2
+      ],
+      "orders_paid": 0,
+      "phase": "supply_out",
+      "queue": 2,
+      "route": "[(-4.03, 0.0, -6.13)]",
+      "unclaimed": 1,
+      "where": "after claim"
+    },
+    {
+      "aisle_stances": "{ \"store\": (-3.05, 0.0, -1.23), \"meat\": (-1.93, 0.0, -6.69), \"cooker_output\": (1.99, 0.0, -7.53), \"stone\": (7.73, 0.0, -5.289999), \"wood\": (-4.03, 0.0, -6.13) }",
+      "at": "(-4.533437, 0.009, 9.045678)",
+      "buffer": 0,
+      "can_fetch": false,
+      "counter": "(inf, inf, inf)",
+      "door": "(-3.05, 0.0, -1.23)",
+      "held": 0,
+      "inbound": 0,
+      "line": "",
+      "meals": 0,
+      "names": [
+        2,
+        3,
+        4
+      ],
+      "orders_paid": 2,
+      "phase": "chopping",
+      "queue": 3,
+      "route": "[]",
+      "unclaimed": 2,
+      "where": "after 40s"
+    }
+  ],
+  "fixed_time_trace": [
+    {
+      "aisle_stances": "{ \"store\": (-3.05, 0.0, -1.23), \"counter\": (3.81, 0.0, -7.67), \"stone\": (7.73, 0.0, -5.289999), \"wood\": (-4.03, 0.0, -6.13), \"meat\": (-1.93, 0.0, -6.55), \"cooker_output\": (0.59, 0.0, -8.37) }",
+      "at": "(-3.05, 0.009, -1.18)",
+      "buffer": 0,
+      "can_fetch": true,
+      "counter": "(3.81, 0.0, -7.67)",
+      "door": "(-3.05, 0.0, -1.23)",
+      "held": 0,
+      "inbound": 1,
+      "line": "",
+      "meals": 1,
+      "names": [
+        1,
+        2
+      ],
+      "orders_paid": 0,
+      "phase": "waiting_storage",
+      "queue": 2,
+      "route": "[(-4.54, 0.0, 9.04)]",
+      "unclaimed": 1,
+      "where": "before selection"
+    },
+    {
+      "aisle_stances": "{ \"store\": (-3.05, 0.0, -1.23), \"counter\": (3.81, 0.0, -7.67), \"stone\": (7.73, 0.0, -5.289999), \"wood\": (-4.03, 0.0, -6.13), \"meat\": (-1.93, 0.0, -6.55), \"cooker_output\": (0.59, 0.0, -8.37) }",
+      "at": "(-3.05, 0.009, -1.18)",
+      "buffer": 0,
+      "can_fetch": true,
+      "counter": "(3.81, 0.0, -7.67)",
+      "door": "(-3.05, 0.0, -1.23)",
+      "held": 0,
+      "inbound": 1,
+      "line": "",
+      "meals": 1,
+      "names": [
+        1,
+        2
+      ],
+      "orders_paid": 0,
+      "phase": "meal_collect",
+      "queue": 2,
+      "route": "[(-3.05, 0.0, -1.23)]",
+      "unclaimed": 1,
+      "where": "after selection"
+    },
+    {
+      "aisle_stances": "{ \"store\": (-3.05, 0.0, -1.23), \"counter\": (3.81, 0.0, -7.67), \"stone\": (7.73, 0.0, -5.289999), \"wood\": (-4.03, 0.0, -6.13), \"meat\": (-1.93, 0.0, -6.55), \"cooker_output\": (0.59, 0.0, -8.37) }",
+      "at": "(-3.05, 0.009, -1.220541)",
+      "buffer": 0,
+      "can_fetch": false,
+      "counter": "(3.81, 0.0, -7.67)",
+      "door": "(-3.05, 0.0, -1.23)",
+      "held": 1,
+      "inbound": 1,
+      "line": "",
+      "meals": 0,
+      "names": [
+        1,
+        2
+      ],
+      "orders_paid": 0,
+      "phase": "meal_serve",
+      "queue": 2,
+      "route": "[]",
+      "unclaimed": 0,
+      "where": "after claim"
+    },
+    {
+      "aisle_stances": "{ \"store\": (-3.05, 0.0, -1.23), \"counter\": (3.81, 0.0, -7.67), \"stone\": (7.73, 0.0, -5.289999), \"wood\": (-4.03, 0.0, -6.13), \"meat\": (-1.93, 0.0, -6.55), \"cooker_output\": (0.59, 0.0, -8.37) }",
+      "at": "(3.810336, 0.009, -7.6685)",
+      "buffer": 0,
+      "can_fetch": false,
+      "counter": "(3.81, 0.0, -7.67)",
+      "door": "(-3.05, 0.0, -1.23)",
+      "held": 0,
+      "inbound": 0,
+      "line": "",
+      "meals": 0,
+      "names": [
+        2,
+        3,
+        4
+      ],
+      "orders_paid": 2,
+      "phase": "meal_serve",
+      "queue": 3,
+      "route": "[]",
+      "unclaimed": 2,
+      "where": "after 40s"
+    }
+  ],
+  "phase_summaries": {
+    "jobs": {
+      "checks_passed": 9,
+      "checks": [
+        "paid helper physically rescued",
+        "player stayed clear during survivor work",
+        "worker jobs maintained valid save",
+        "standing tree harvested and physically delivered",
+        "worker supplied independently purchased saw and drill",
+        "worker supplied paid cooker and served the waiting customer",
+        "worker visibly mined a real bank",
+        "worker returning with physically collected resource drops",
+        "gather, production and customer payments conserved"
+      ],
+      "errors": [],
+      "simulated_s": 95.6166666666625,
+      "cash": 1,
+      "worker_carrying_roast": 0
+    },
+    "capacity": {
+      "checks_passed": 23,
+      "checks": [
+        "paid helper physically rescued",
+        "500 raw wood cap",
+        "own visible rack lane wood",
+        "500 raw stone cap",
+        "own visible rack lane stone",
+        "500 raw meat cap",
+        "own visible rack lane meat",
+        "500 raw coal cap",
+        "own visible rack lane coal",
+        "500 raw slate cap",
+        "own visible rack lane slate",
+        "500 raw metal cap",
+        "own visible rack lane metal",
+        "one excess pickup of every family stays on snow",
+        "all six independent full loads conserve receipts",
+        "501+ units cannot restore as a valid load",
+        "bulk shelf delivery wood",
+        "bulk shelf delivery stone",
+        "bulk shelf delivery meat",
+        "bulk shelf delivery coal",
+        "bulk shelf delivery slate",
+        "bulk shelf delivery metal",
+        "bulk transfer balanced after landing"
+      ],
+      "errors": [],
+      "simulated_s": 1.25,
+      "cash": 0,
+      "worker_carrying_roast": 0
+    },
+    "assist": {
+      "checks_passed": 8,
+      "checks": [
+        "paid helper physically rescued",
+        "tower starts without any player contribution",
+        "worker initiates an unstarted plot from earned stock",
+        "takes only the outstanding timber and stone from stock",
+        "worker physically starts and finishes the tower unassisted",
+        "one tower receipt and materials consumed once",
+        "player backpack balances untouched",
+        "assisted purchase round-trips without fictitious resource income"
+      ],
+      "errors": [],
+      "simulated_s": 4.78333333333332,
+      "cash": 0,
+      "worker_carrying_roast": 0
+    },
+    "relocate": {
+      "checks_passed": 8,
+      "checks": [
+        "paid helper physically rescued",
+        "paid storage_wood moved during the worker's actual route",
+        "paid camp_cooker moved during the worker's actual route",
+        "paid north_counter moved during the worker's actual route",
+        "credited earned logs at relocated door",
+        "fed meat, cooked and collected a meal at relocated cooker",
+        "served waiting customer at relocated counter with player elsewhere",
+        "conserved all shelf, hopper and customer receipts after moves"
+      ],
+      "errors": [],
+      "simulated_s": 107.699999999995,
+      "cash": 1,
+      "worker_carrying_roast": 0
+    },
+    "stored_meal": {
+      "checks_passed": 8,
+      "checks": [
+        "paid helper physically rescued",
+        "two cooked meals landed in the separate prepared-food bay",
+        "stock stays on its shelf while there are no customer orders",
+        "first guest already covered by a real belt reservation cannot draw another meal",
+        "open second customer order sends the worker to the movable storage door",
+        "worker physically claims exactly the second guest's meal",
+        "belt and worker fulfilled two physical customer orders exactly once",
+        "stored-meal service conserved all paid resources"
+      ],
+      "errors": [],
+      "simulated_s": 6.48333333333332,
+      "cash": 2,
+      "worker_carrying_roast": 0
+    },
+    "interrupt": {
+      "checks_passed": 5,
+      "checks": [
+        "paid helper physically rescued",
+        "before counter payment no cash granted",
+        "player stayed clear during survivor work",
+        "worker jobs maintained valid save",
+        "survivor independently collected the cooked order"
+      ],
+      "errors": [],
+      "simulated_s": 94.6333333333292,
+      "cash": 0,
+      "worker_carrying_roast": 1
+    },
+    "service": {
+      "checks_passed": 4,
+      "checks": [
+        "cold load retains cooked order in worker hands",
+        "player stayed clear during survivor work",
+        "worker jobs maintained valid save",
+        "resumed helper served one physical guest and collected cash once"
+      ],
+      "errors": [],
+      "simulated_s": 3.66666666666666,
+      "cash": 1,
+      "worker_carrying_roast": 0
+    }
+  },
+  "total_checks": 65,
+  "total_failures": 0,
+  "engine_messages": []
+}

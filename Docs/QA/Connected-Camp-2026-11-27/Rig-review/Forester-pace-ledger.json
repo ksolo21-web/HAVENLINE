@@ -1,0 +1,61 @@
+{
+  "scope": "Ordinary survivor working travel at two speeds, including carrying, foraging, mining approach and supplies. The source survivor model has 18 weighted joints and procedural gait with no embedded animation clips. Other camp actions and bespoke attack animation are outside this review.",
+  "critic_score": 9.5,
+  "threshold": 9.5,
+  "actor_sha256": "8768255badde45f66114c5fefbada73771873558ce117b8360bf4cea96acc88c",
+  "gait_sha256": "7734d249ee0aa960140530403db610ca89faf67e53a68abba30e1d2f5db4ed32",
+  "field_worker_sha256": "25977e73e1cd755d85354226eea9a9eb01cc4a6e9f1d9e3fb3c8b7062fad8102",
+  "checks": [
+    {
+      "check": "Original survivor is the live weighted mesh",
+      "result": "PASS",
+      "evidence": [
+        "Forester-observations.json",
+        "Forester-2.8-six-views.jpg",
+        "Forester-3.6-six-views.jpg"
+      ]
+    },
+    {
+      "check": "Carrying and ordinary empty travel differ in the live camp",
+      "result": "PASS",
+      "evidence": [
+        "Forester-loaded-route.mp4",
+        "Forester-observations.json",
+        "../Workers/Loaded-timber-comparison.mp4",
+        "../Workers/Empty-mining-comparison.mp4"
+      ]
+    },
+    {
+      "check": "Knee yields during loading, reaches, folds in flight and extends to the next contact",
+      "result": "PASS",
+      "evidence": [
+        "Forester-observations.json",
+        "Forester-2.8-six-views.jpg",
+        "Forester-3.6-six-views.jpg"
+      ]
+    },
+    {
+      "check": "Actual native sole has one cyclic support window and forward rolling contact",
+      "result": "PASS",
+      "evidence": [
+        "Forester-observations.json"
+      ]
+    },
+    {
+      "check": "Side and rear feet remain legible on the actual ordinary hauling route",
+      "result": "PASS",
+      "evidence": [
+        "Forester-loaded-route.mp4"
+      ]
+    },
+    {
+      "check": "Camera-observed worker movements are consistent with the short archived fish-service shot",
+      "result": "PASS",
+      "evidence": [
+        "Source-working-delivery-consecutive.jpg",
+        "Reference-provenance.json",
+        "../Workers/Reference-worker-routes.json"
+      ]
+    }
+  ]
+}

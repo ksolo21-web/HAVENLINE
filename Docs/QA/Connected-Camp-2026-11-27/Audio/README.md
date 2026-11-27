@@ -1,0 +1,16 @@
+# Audio in the connected camp
+
+A loaded conveyor produces a low motor hum with a repeating roller pulse. Moving closer brings it up on the ambience control. One mechanical stem covers all eight routes so a busy camp does not bury the cash register or an incoming attack. The industrial parts share the original Havenline field, camp and threat arrangements. The new Foley and motor recordings were synthesized for this build.
+
+| Cue | Cause in play | Mix and visible action |
+| --- | --- | --- |
+| Motor | At least one real consignment is moving on a connected lane | Proximity gain falls to silence at 14 m. The ambience fader, pause and mute apply. When goods stop, the sound fades. A new dispatch does not restart the loop. |
+| Hold | A paid route disconnects, its receiving stock is full, or a physical load reaches a blocked mouth | A single two-part relay knock. The load stays reserved. During a service-buffer hold the gate lowers. The HUD names a disconnected line. |
+| Restart | A previously observed hold clears | A short motor run-up. A restored checkpoint adopts its initial state silently. Repeated ticks in the same state emit no extra cue. |
+| Dispatch and arrival | The inventory saves a real release or delivery | A dispatch reuses carry Foley. Delivery uses the matching wood, stone or food contact sound, and the store or hopper count changes once. |
+| Staff handoff | A server brings the meal to the worktop and the customer leaves with it | A soft dish and glove sound follows the visible exchange. The register has its own paper-cash cue on committed payment. An unsuccessful transaction awards no payment. |
+| Work in progress | The cooker, saw or drill starts a real cycle | The griddle, saw and drill each use distinct existing work and output sounds. Looming threats and successful payments have reserved voice capacity. |
+
+The regression test auditions each individual cue at the real mixer, measures the motor alone while running and after stopping, exercises music transitions and verifies master mute. Two production playbacks covering 18 seconds of game time start from independent copies of a paid Build 9 camp. Each starts with a staged pack of 17 wood bundles, 17 stone bundles and 18 meat bundles (520 displayed material units). Stepping into the storage apron releases 52 distinct visible transfers while the kitchen, workshop and order queue run. The event logs record actual dispatches, machine outputs and payments alongside the audio. [Production playback](Production.flac) · [Production events](Production.json) · [Muted playback](Muted.flac) · [Muted events](Muted.json) · [Mixer regression](../Verification/Native/qa_field_audio_playback-1.log)
+
+The signed-package exercise uses the desktop Godot mixer. Listening on Galaxy Z Fold7 speakers in cover and unfolded modes, listening on headphones, and hardware output interruptions remain open. The wider Level 1 listening checklist includes a 50-item transfer during competing threat and purchase cues. [Current audio acceptance criteria](https://github.com/ksolo21-web/HAVENLINE/blob/eb4086621efd72b170876e8aae84610e170302ae/Docs/Production/HAVENLINE_BUILD_PLAN_V2.md#t54--music-sound-effects-and-event-coverage)

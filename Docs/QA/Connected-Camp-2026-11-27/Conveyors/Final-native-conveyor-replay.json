@@ -1,0 +1,3271 @@
+{
+  "engine": "Godot 4.7.2, native Linux headless trial after warehouse integration",
+  "checks_passed": 102,
+  "checks_failed": 0,
+  "launches": 13,
+  "all_launches_succeeded": true,
+  "runs": [
+    {
+      "name": "initial",
+      "script": "tests/qa_paid_conveyors.gd",
+      "fixture": "Build8-paid-workshops.json",
+      "return_code": 0,
+      "success": true,
+      "diagnostics": [],
+      "report": {
+        "checks": {
+          "base food purchase installs serial storage and request links": true,
+          "both purchases install all eight typed routes": true,
+          "food line does not activate raw line": true,
+          "food sale is a real paid counter exchange": true,
+          "meal_conveyor physically available": true,
+          "meal_conveyor purchased through actual plot": true,
+          "normalized partial paths persisted": true,
+          "opened valid isolated save": true,
+          "real roast reaches paying non-player customer": true,
+          "real v7 unlocked buildings and no gifted lines": true,
+          "side docks dispatch without swinging the pedestrian doors": true,
+          "supply_conveyors physically available": true,
+          "supply_conveyors purchased through actual plot": true,
+          "unpaid belts never move stock": true
+        },
+        "phase": "initial",
+        "receipts": [
+          {
+            "blocks": 0,
+            "cash": 1,
+            "cooked": 1,
+            "counter_stock": 0,
+            "hoppers": {
+              "meat": 0,
+              "stone": 0,
+              "wood": 1
+            },
+            "in_transit": {
+              "blocks": 0,
+              "meal": 0,
+              "meal_to_store": 0,
+              "meat": 1,
+              "planks": 0,
+              "stone": 1,
+              "stored_meal": 0,
+              "wood": 0
+            },
+            "planks": 0,
+            "product_store": {
+              "blocks": 0,
+              "meal": 0,
+              "planks": 0
+            },
+            "progress": {
+              "blocks": 0.0,
+              "meal": 0.0,
+              "meal_to_store": 0.0,
+              "meat": 0.758618955563488,
+              "planks": 0.0,
+              "stone": 0.0410885639626075,
+              "stored_meal": 0.0,
+              "wood": 0.0
+            },
+            "rack": 0,
+            "stored": {
+              "coal": 0,
+              "meat": 5,
+              "metal": 0,
+              "slate": 0,
+              "stone": 2,
+              "wood": 2
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "interrupt",
+      "script": "tests/qa_paid_conveyors.gd",
+      "fixture": "Build8-paid-workshops.json",
+      "return_code": 0,
+      "success": true,
+      "diagnostics": [],
+      "report": {
+        "checks": {
+          "acquire competing lock": true,
+          "cold start restores moving load": true,
+          "opened valid isolated save": true,
+          "previous durable bytes stay intact": true,
+          "rejected landing pauses safely": true
+        },
+        "phase": "interrupt",
+        "receipts": []
+      }
+    },
+    {
+      "name": "finish",
+      "script": "tests/qa_paid_conveyors.gd",
+      "fixture": "Build8-paid-workshops.json",
+      "return_code": 0,
+      "success": true,
+      "diagnostics": [],
+      "report": {
+        "checks": {
+          "entire path conserved all goods": true,
+          "failed landing can be retried from saved input": true,
+          "idle empty lines cannot pay twice": true,
+          "one purchased input meal per completed order": true,
+          "opened valid isolated save": true,
+          "wood, stone and meals finish offscreen and earn cash": true
+        },
+        "phase": "finish",
+        "receipts": [
+          {
+            "blocks": 3,
+            "cash": 7,
+            "cooked": 7,
+            "counter_stock": 0,
+            "hoppers": {
+              "meat": 0,
+              "stone": 0,
+              "wood": 0
+            },
+            "in_transit": {
+              "blocks": 0,
+              "meal": 0,
+              "meal_to_store": 0,
+              "meat": 0,
+              "planks": 0,
+              "stone": 0,
+              "stored_meal": 0,
+              "wood": 0
+            },
+            "planks": 3,
+            "product_store": {
+              "blocks": 3,
+              "meal": 0,
+              "planks": 3
+            },
+            "progress": {
+              "blocks": 0.0,
+              "meal": 0.0,
+              "meal_to_store": 0.0,
+              "meat": 0.0,
+              "planks": 0.0,
+              "stone": 0.0,
+              "stored_meal": 0.0,
+              "wood": 0.0
+            },
+            "rack": 0,
+            "stored": {
+              "coal": 0,
+              "meat": 0,
+              "metal": 0,
+              "slate": 0,
+              "stone": 0,
+              "wood": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "cold",
+      "script": "tests/qa_paid_conveyors.gd",
+      "fixture": "Build8-paid-workshops.json",
+      "return_code": 0,
+      "success": true,
+      "diagnostics": [],
+      "report": {
+        "checks": {
+          "earned cash and both purchases survive restart": true,
+          "idle storehouse cannot create extra product": true,
+          "opened valid isolated save": true
+        },
+        "phase": "cold",
+        "receipts": []
+      }
+    },
+    {
+      "name": "graph",
+      "script": "tests/qa_connected_camp_lines.gd",
+      "fixture": "Build9-raw-in-flight.json",
+      "return_code": 0,
+      "success": true,
+      "diagnostics": [],
+      "report": {
+        "checks": {
+          "all eight docked typed routes exist": true,
+          "committed final receipts round trip": true,
+          "cooker, fresh/stored dispatch and staff preserve one roast per sale": true,
+          "finished timber and dressed stone arrive into different storage bays": true,
+          "genuine v8 airborne inventory remains owned": true,
+          "long planks stay aligned on the exterior rollers": true,
+          "no cash, fuel, furnace, raw-ore or decorative stations receive generic outputs": true,
+          "no duplicate work remains in transit": true,
+          "source save opens": true
+        },
+        "mode": "graph",
+        "transitions": [
+          {
+            "event": "resumed three v8 dispatches",
+            "state": {
+              "blocks": 0,
+              "cash": 1,
+              "cooked": 1,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 0,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 0,
+                "stone": 1,
+                "stored_meal": 0,
+                "wood": 1
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 0,
+              "product_store": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.0481084777357289,
+                "planks": 0.0,
+                "stone": 0.0269578571382833,
+                "stored_meal": 0.0,
+                "wood": 0.0412039255102681
+              },
+              "rack": 0,
+              "remaining_orders": 0,
+              "stored": {
+                "coal": 0,
+                "meat": 5,
+                "metal": 0,
+                "slate": 0,
+                "stone": 2,
+                "wood": 2
+              }
+            },
+            "tick": 0
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 0,
+              "cash": 1,
+              "cooked": 1,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 0,
+                "stone": 0,
+                "wood": 1
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 0,
+                "stone": 1,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 0,
+              "product_store": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.722436438236607,
+                "planks": 0.0,
+                "stone": 0.543499804096777,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "remaining_orders": 3,
+              "stored": {
+                "coal": 0,
+                "meat": 5,
+                "metal": 0,
+                "slate": 0,
+                "stone": 2,
+                "wood": 2
+              }
+            },
+            "tick": 177
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 0,
+              "cash": 1,
+              "cooked": 1,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 1,
+                "stone": 0,
+                "wood": 1
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 0,
+                "planks": 0,
+                "stone": 1,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 0,
+              "product_store": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.0,
+                "planks": 0.0,
+                "stone": 0.75774731618752,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "remaining_orders": 3,
+              "stored": {
+                "coal": 0,
+                "meat": 5,
+                "metal": 0,
+                "slate": 0,
+                "stone": 2,
+                "wood": 2
+              }
+            },
+            "tick": 250
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 0,
+              "cash": 1,
+              "cooked": 1,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 1,
+                "stone": 0,
+                "wood": 1
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 0,
+                "stone": 1,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 0,
+              "product_store": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.0,
+                "planks": 0.0,
+                "stone": 0.760682213613421,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "remaining_orders": 3,
+              "stored": {
+                "coal": 0,
+                "meat": 4,
+                "metal": 0,
+                "slate": 0,
+                "stone": 2,
+                "wood": 2
+              }
+            },
+            "tick": 251
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 0,
+              "cash": 1,
+              "cooked": 1,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 1,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 1,
+                "stone": 1,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 1,
+              "product_store": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.0536397241307518,
+                "planks": 0.0,
+                "stone": 0.801770777576029,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "remaining_orders": 3,
+              "stored": {
+                "coal": 0,
+                "meat": 4,
+                "metal": 0,
+                "slate": 0,
+                "stone": 2,
+                "wood": 2
+              }
+            },
+            "tick": 265
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 0,
+              "cash": 1,
+              "cooked": 1,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 1,
+                "stone": 1,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 1,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 1,
+              "product_store": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.314175527051546,
+                "planks": 0.682798371205397,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "remaining_orders": 3,
+              "stored": {
+                "coal": 0,
+                "meat": 4,
+                "metal": 0,
+                "slate": 0,
+                "stone": 2,
+                "wood": 2
+              }
+            },
+            "tick": 333
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 0,
+              "cash": 1,
+              "cooked": 1,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 1,
+                "stone": 1,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 1,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 1
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 1,
+              "product_store": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.318006935918029,
+                "planks": 0.692839523723123,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "remaining_orders": 3,
+              "stored": {
+                "coal": 0,
+                "meat": 4,
+                "metal": 0,
+                "slate": 0,
+                "stone": 2,
+                "wood": 1
+              }
+            },
+            "tick": 334
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 0,
+              "cash": 1,
+              "cooked": 2,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 0,
+                "stone": 1,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 1,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 1,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 1
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 1,
+              "product_store": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.379309477781745,
+                "planks": 0.853497964006746,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0874045255316704
+              },
+              "rack": 0,
+              "remaining_orders": 2,
+              "stored": {
+                "coal": 0,
+                "meat": 4,
+                "metal": 0,
+                "slate": 0,
+                "stone": 2,
+                "wood": 1
+              }
+            },
+            "tick": 350
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 0,
+              "cash": 1,
+              "cooked": 2,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 0,
+                "stone": 1,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 1,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 1
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 1,
+              "product_store": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 1
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.220235447931991,
+                "meal_to_store": 0.0,
+                "meat": 0.436780610778979,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.169346268217611
+              },
+              "rack": 0,
+              "remaining_orders": 2,
+              "stored": {
+                "coal": 0,
+                "meat": 4,
+                "metal": 0,
+                "slate": 0,
+                "stone": 2,
+                "wood": 1
+              }
+            },
+            "tick": 365
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 0,
+              "cash": 1,
+              "cooked": 2,
+              "counter_stock": 1,
+              "hoppers": {
+                "meat": 0,
+                "stone": 1,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 1
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 1,
+              "product_store": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 1
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.64367668956902,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.464336541886998
+              },
+              "rack": 0,
+              "remaining_orders": 2,
+              "stored": {
+                "coal": 0,
+                "meat": 4,
+                "metal": 0,
+                "slate": 0,
+                "stone": 2,
+                "wood": 1
+              }
+            },
+            "tick": 419
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 1,
+              "cash": 1,
+              "cooked": 2,
+              "counter_stock": 1,
+              "hoppers": {
+                "meat": 0,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 1,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 1
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 1,
+              "product_store": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 1
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.651339507301985,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.475262107578457
+              },
+              "rack": 0,
+              "remaining_orders": 2,
+              "stored": {
+                "coal": 0,
+                "meat": 4,
+                "metal": 0,
+                "slate": 0,
+                "stone": 2,
+                "wood": 1
+              }
+            },
+            "tick": 421
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 1,
+              "cash": 2,
+              "cooked": 2,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 1,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 1,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 0,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 1
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 1,
+              "product_store": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 1
+              },
+              "progress": {
+                "blocks": 0.206531825899022,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.0,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.977838129385564
+              },
+              "rack": 0,
+              "remaining_orders": 2,
+              "stored": {
+                "coal": 0,
+                "meat": 4,
+                "metal": 0,
+                "slate": 0,
+                "stone": 2,
+                "wood": 1
+              }
+            },
+            "tick": 513
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 1,
+              "cash": 2,
+              "cooked": 2,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 1,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 1,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 1
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 1,
+              "product_store": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 1
+              },
+              "progress": {
+                "blocks": 0.208776737050098,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.0,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.983300912231294
+              },
+              "rack": 0,
+              "remaining_orders": 2,
+              "stored": {
+                "coal": 0,
+                "meat": 3,
+                "metal": 0,
+                "slate": 0,
+                "stone": 2,
+                "wood": 1
+              }
+            },
+            "tick": 514
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 1,
+              "cash": 2,
+              "cooked": 2,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 1,
+                "stone": 0,
+                "wood": 1
+              },
+              "in_transit": {
+                "blocks": 1,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 0,
+                "stone": 1,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 1,
+              "product_store": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 1
+              },
+              "progress": {
+                "blocks": 0.217756381654404,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.0153256354659291,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "remaining_orders": 2,
+              "stored": {
+                "coal": 0,
+                "meat": 3,
+                "metal": 0,
+                "slate": 0,
+                "stone": 1,
+                "wood": 1
+              }
+            },
+            "tick": 518
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 1,
+              "cash": 2,
+              "cooked": 3,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 0,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 1,
+                "meal": 1,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 0,
+                "stone": 1,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 1
+              },
+              "planks": 2,
+              "product_store": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 1
+              },
+              "progress": {
+                "blocks": 0.431022941006655,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.379309477781745,
+                "planks": 0.0,
+                "stone": 0.27881525546055,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "remaining_orders": 2,
+              "stored": {
+                "coal": 0,
+                "meat": 3,
+                "metal": 0,
+                "slate": 0,
+                "stone": 1,
+                "wood": 1
+              }
+            },
+            "tick": 613
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 1,
+              "cash": 2,
+              "cooked": 3,
+              "counter_stock": 1,
+              "hoppers": {
+                "meat": 0,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 1,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 0,
+                "stone": 1,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 1
+              },
+              "planks": 2,
+              "product_store": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 1
+              },
+              "progress": {
+                "blocks": 0.58592181043092,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.64367668956902,
+                "planks": 0.0,
+                "stone": 0.481323177847687,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "remaining_orders": 2,
+              "stored": {
+                "coal": 0,
+                "meat": 3,
+                "metal": 0,
+                "slate": 0,
+                "stone": 1,
+                "wood": 1
+              }
+            },
+            "tick": 682
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 1,
+              "cash": 3,
+              "cooked": 3,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 1,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 1,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 0,
+                "planks": 0,
+                "stone": 1,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 1
+              },
+              "planks": 2,
+              "product_store": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 1
+              },
+              "progress": {
+                "blocks": 0.79694345863209,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.0,
+                "planks": 0.0,
+                "stone": 0.757203535882341,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "remaining_orders": 2,
+              "stored": {
+                "coal": 0,
+                "meat": 3,
+                "metal": 0,
+                "slate": 0,
+                "stone": 1,
+                "wood": 1
+              }
+            },
+            "tick": 776
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 1,
+              "cash": 3,
+              "cooked": 3,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 1,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 1,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 0,
+                "stone": 1,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 1
+              },
+              "planks": 2,
+              "product_store": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 1
+              },
+              "progress": {
+                "blocks": 0.799188369783167,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.0,
+                "planks": 0.0,
+                "stone": 0.760138433308242,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "remaining_orders": 2,
+              "stored": {
+                "coal": 0,
+                "meat": 2,
+                "metal": 0,
+                "slate": 0,
+                "stone": 1,
+                "wood": 1
+              }
+            },
+            "tick": 777
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 1,
+              "cash": 3,
+              "cooked": 3,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 1,
+                "stone": 1,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 1,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 1
+              },
+              "planks": 2,
+              "product_store": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 1
+              },
+              "progress": {
+                "blocks": 0.983271084171422,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.314175527051546,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "remaining_orders": 3,
+              "stored": {
+                "coal": 0,
+                "meat": 2,
+                "metal": 0,
+                "slate": 0,
+                "stone": 1,
+                "wood": 1
+              }
+            },
+            "tick": 859
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 1,
+              "cash": 3,
+              "cooked": 3,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 1,
+                "stone": 1,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 1,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 1
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 1
+              },
+              "planks": 2,
+              "product_store": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 1
+              },
+              "progress": {
+                "blocks": 0.985515995322498,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.318006935918029,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "remaining_orders": 3,
+              "stored": {
+                "coal": 0,
+                "meat": 2,
+                "metal": 0,
+                "slate": 0,
+                "stone": 1,
+                "wood": 0
+              }
+            },
+            "tick": 860
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 1,
+              "cash": 3,
+              "cooked": 3,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 1,
+                "stone": 1,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 1
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 1
+              },
+              "planks": 2,
+              "product_store": {
+                "blocks": 1,
+                "meal": 0,
+                "planks": 1
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.344826797983404,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0382394799201058
+              },
+              "rack": 0,
+              "remaining_orders": 3,
+              "stored": {
+                "coal": 0,
+                "meat": 2,
+                "metal": 0,
+                "slate": 0,
+                "stone": 1,
+                "wood": 0
+              }
+            },
+            "tick": 867
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 1,
+              "cash": 3,
+              "cooked": 3,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 1,
+                "stone": 1,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 1,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 1
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 2,
+              "product_store": {
+                "blocks": 1,
+                "meal": 0,
+                "planks": 1
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.348658206849887,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0437022627658352
+              },
+              "rack": 0,
+              "remaining_orders": 3,
+              "stored": {
+                "coal": 0,
+                "meat": 2,
+                "metal": 0,
+                "slate": 0,
+                "stone": 1,
+                "wood": 0
+              }
+            },
+            "tick": 868
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 1,
+              "cash": 3,
+              "cooked": 4,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 0,
+                "stone": 1,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 1,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 1,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 1
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 2,
+              "product_store": {
+                "blocks": 1,
+                "meal": 0,
+                "planks": 1
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.379309477781745,
+                "planks": 0.0803292201418115,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0874045255316704
+              },
+              "rack": 0,
+              "remaining_orders": 2,
+              "stored": {
+                "coal": 0,
+                "meat": 2,
+                "metal": 0,
+                "slate": 0,
+                "stone": 1,
+                "wood": 0
+              }
+            },
+            "tick": 876
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 1,
+              "cash": 3,
+              "cooked": 4,
+              "counter_stock": 1,
+              "hoppers": {
+                "meat": 0,
+                "stone": 1,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 1,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 1
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 2,
+              "product_store": {
+                "blocks": 1,
+                "meal": 0,
+                "planks": 1
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.64367668956902,
+                "planks": 0.773168743864935,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.464336541886998
+              },
+              "rack": 0,
+              "remaining_orders": 2,
+              "stored": {
+                "coal": 0,
+                "meat": 2,
+                "metal": 0,
+                "slate": 0,
+                "stone": 1,
+                "wood": 0
+              }
+            },
+            "tick": 945
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 2,
+              "cash": 3,
+              "cooked": 4,
+              "counter_stock": 1,
+              "hoppers": {
+                "meat": 0,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 1,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 1
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 2,
+              "product_store": {
+                "blocks": 1,
+                "meal": 0,
+                "planks": 2
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.731799093498112,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.589980547338775
+              },
+              "rack": 0,
+              "remaining_orders": 2,
+              "stored": {
+                "coal": 0,
+                "meat": 2,
+                "metal": 0,
+                "slate": 0,
+                "stone": 1,
+                "wood": 0
+              }
+            },
+            "tick": 968
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 2,
+              "cash": 4,
+              "cooked": 4,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 1,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 1,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 0,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 1
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 2,
+              "product_store": {
+                "blocks": 1,
+                "meal": 0,
+                "planks": 2
+              },
+              "progress": {
+                "blocks": 0.159388691726419,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.0,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.977838129385564
+              },
+              "rack": 0,
+              "remaining_orders": 2,
+              "stored": {
+                "coal": 0,
+                "meat": 2,
+                "metal": 0,
+                "slate": 0,
+                "stone": 1,
+                "wood": 0
+              }
+            },
+            "tick": 1039
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 2,
+              "cash": 4,
+              "cooked": 4,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 1,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 1,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 1
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 2,
+              "product_store": {
+                "blocks": 1,
+                "meal": 0,
+                "planks": 2
+              },
+              "progress": {
+                "blocks": 0.161633602877495,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.0,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.983300912231294
+              },
+              "rack": 0,
+              "remaining_orders": 2,
+              "stored": {
+                "coal": 0,
+                "meat": 1,
+                "metal": 0,
+                "slate": 0,
+                "stone": 1,
+                "wood": 0
+              }
+            },
+            "tick": 1040
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 2,
+              "cash": 4,
+              "cooked": 4,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 1,
+                "stone": 0,
+                "wood": 1
+              },
+              "in_transit": {
+                "blocks": 1,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 0,
+                "stone": 1,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 2,
+              "product_store": {
+                "blocks": 1,
+                "meal": 0,
+                "planks": 2
+              },
+              "progress": {
+                "blocks": 0.170613247481801,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.0153256354659291,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "remaining_orders": 2,
+              "stored": {
+                "coal": 0,
+                "meat": 1,
+                "metal": 0,
+                "slate": 0,
+                "stone": 0,
+                "wood": 0
+              }
+            },
+            "tick": 1044
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 2,
+              "cash": 4,
+              "cooked": 5,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 0,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 1,
+                "meal": 1,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 0,
+                "stone": 1,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 1
+              },
+              "planks": 3,
+              "product_store": {
+                "blocks": 1,
+                "meal": 0,
+                "planks": 2
+              },
+              "progress": {
+                "blocks": 0.383879806834052,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.379309477781745,
+                "planks": 0.0,
+                "stone": 0.27881525546055,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "remaining_orders": 2,
+              "stored": {
+                "coal": 0,
+                "meat": 1,
+                "metal": 0,
+                "slate": 0,
+                "stone": 0,
+                "wood": 0
+              }
+            },
+            "tick": 1139
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 2,
+              "cash": 4,
+              "cooked": 5,
+              "counter_stock": 1,
+              "hoppers": {
+                "meat": 0,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 1,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 0,
+                "stone": 1,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 1
+              },
+              "planks": 3,
+              "product_store": {
+                "blocks": 1,
+                "meal": 0,
+                "planks": 2
+              },
+              "progress": {
+                "blocks": 0.538778676258318,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.64367668956902,
+                "planks": 0.0,
+                "stone": 0.481323177847687,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "remaining_orders": 2,
+              "stored": {
+                "coal": 0,
+                "meat": 1,
+                "metal": 0,
+                "slate": 0,
+                "stone": 0,
+                "wood": 0
+              }
+            },
+            "tick": 1208
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 2,
+              "cash": 5,
+              "cooked": 5,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 1,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 1,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 0,
+                "planks": 0,
+                "stone": 1,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 1
+              },
+              "planks": 3,
+              "product_store": {
+                "blocks": 1,
+                "meal": 0,
+                "planks": 2
+              },
+              "progress": {
+                "blocks": 0.749800324459489,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.0,
+                "planks": 0.0,
+                "stone": 0.757203535882341,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "remaining_orders": 2,
+              "stored": {
+                "coal": 0,
+                "meat": 1,
+                "metal": 0,
+                "slate": 0,
+                "stone": 0,
+                "wood": 0
+              }
+            },
+            "tick": 1302
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 2,
+              "cash": 5,
+              "cooked": 5,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 1,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 1,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 0,
+                "stone": 1,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 1
+              },
+              "planks": 3,
+              "product_store": {
+                "blocks": 1,
+                "meal": 0,
+                "planks": 2
+              },
+              "progress": {
+                "blocks": 0.752045235610565,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.0,
+                "planks": 0.0,
+                "stone": 0.760138433308242,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "remaining_orders": 2,
+              "stored": {
+                "coal": 0,
+                "meat": 0,
+                "metal": 0,
+                "slate": 0,
+                "stone": 0,
+                "wood": 0
+              }
+            },
+            "tick": 1303
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 2,
+              "cash": 5,
+              "cooked": 5,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 1,
+                "stone": 1,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 1,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 1
+              },
+              "planks": 3,
+              "product_store": {
+                "blocks": 1,
+                "meal": 0,
+                "planks": 2
+              },
+              "progress": {
+                "blocks": 0.93612794999882,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.314175527051546,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "remaining_orders": 3,
+              "stored": {
+                "coal": 0,
+                "meat": 0,
+                "metal": 0,
+                "slate": 0,
+                "stone": 0,
+                "wood": 0
+              }
+            },
+            "tick": 1385
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 2,
+              "cash": 5,
+              "cooked": 6,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 0,
+                "stone": 1,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 1,
+                "meal": 1,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 1
+              },
+              "planks": 3,
+              "product_store": {
+                "blocks": 1,
+                "meal": 0,
+                "planks": 2
+              },
+              "progress": {
+                "blocks": 0.974291439567117,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.379309477781745,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "remaining_orders": 2,
+              "stored": {
+                "coal": 0,
+                "meat": 0,
+                "metal": 0,
+                "slate": 0,
+                "stone": 0,
+                "wood": 0
+              }
+            },
+            "tick": 1402
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 2,
+              "cash": 5,
+              "cooked": 6,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 0,
+                "stone": 1,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 1,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 1
+              },
+              "planks": 3,
+              "product_store": {
+                "blocks": 2,
+                "meal": 0,
+                "planks": 2
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.176188358345593,
+                "meal_to_store": 0.0,
+                "meat": 0.425286384179532,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "remaining_orders": 2,
+              "stored": {
+                "coal": 0,
+                "meat": 0,
+                "metal": 0,
+                "slate": 0,
+                "stone": 0,
+                "wood": 0
+              }
+            },
+            "tick": 1414
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 2,
+              "cash": 5,
+              "cooked": 6,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 0,
+                "stone": 1,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 1,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 1,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 3,
+              "product_store": {
+                "blocks": 2,
+                "meal": 0,
+                "planks": 2
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.190870721541059,
+                "meal_to_store": 0.0,
+                "meat": 0.429117793046014,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "remaining_orders": 2,
+              "stored": {
+                "coal": 0,
+                "meat": 0,
+                "metal": 0,
+                "slate": 0,
+                "stone": 0,
+                "wood": 0
+              }
+            },
+            "tick": 1415
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 2,
+              "cash": 5,
+              "cooked": 6,
+              "counter_stock": 1,
+              "hoppers": {
+                "meat": 0,
+                "stone": 1,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 1,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 3,
+              "product_store": {
+                "blocks": 2,
+                "meal": 0,
+                "planks": 2
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.64367668956902,
+                "planks": 0.56230454099268,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "remaining_orders": 2,
+              "stored": {
+                "coal": 0,
+                "meat": 0,
+                "metal": 0,
+                "slate": 0,
+                "stone": 0,
+                "wood": 0
+              }
+            },
+            "tick": 1471
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 3,
+              "cash": 5,
+              "cooked": 6,
+              "counter_stock": 1,
+              "hoppers": {
+                "meat": 0,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "output_rack": {
+                "blocks": 1,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 3,
+              "product_store": {
+                "blocks": 2,
+                "meal": 0,
+                "planks": 3
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.81225867969424,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "remaining_orders": 2,
+              "stored": {
+                "coal": 0,
+                "meat": 0,
+                "metal": 0,
+                "slate": 0,
+                "stone": 0,
+                "wood": 0
+              }
+            },
+            "tick": 1515
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 3,
+              "cash": 5,
+              "cooked": 6,
+              "counter_stock": 1,
+              "hoppers": {
+                "meat": 0,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 1,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 3,
+              "product_store": {
+                "blocks": 2,
+                "meal": 0,
+                "planks": 3
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.816090088560722,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "remaining_orders": 2,
+              "stored": {
+                "coal": 0,
+                "meat": 0,
+                "metal": 0,
+                "slate": 0,
+                "stone": 0,
+                "wood": 0
+              }
+            },
+            "tick": 1516
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 3,
+              "cash": 6,
+              "cooked": 6,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 1,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 1,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 0,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 3,
+              "product_store": {
+                "blocks": 2,
+                "meal": 0,
+                "planks": 3
+              },
+              "progress": {
+                "blocks": 0.11000064640274,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.0,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "remaining_orders": 2,
+              "stored": {
+                "coal": 0,
+                "meat": 0,
+                "metal": 0,
+                "slate": 0,
+                "stone": 0,
+                "wood": 0
+              }
+            },
+            "tick": 1565
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 3,
+              "cash": 6,
+              "cooked": 7,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 0,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 1,
+                "meal": 1,
+                "meal_to_store": 0,
+                "meat": 0,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 3,
+              "product_store": {
+                "blocks": 2,
+                "meal": 0,
+                "planks": 3
+              },
+              "progress": {
+                "blocks": 0.334491761510373,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.0,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "remaining_orders": 1,
+              "stored": {
+                "coal": 0,
+                "meat": 0,
+                "metal": 0,
+                "slate": 0,
+                "stone": 0,
+                "wood": 0
+              }
+            },
+            "tick": 1665
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 3,
+              "cash": 6,
+              "cooked": 7,
+              "counter_stock": 1,
+              "hoppers": {
+                "meat": 0,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 1,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 0,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 3,
+              "product_store": {
+                "blocks": 2,
+                "meal": 0,
+                "planks": 3
+              },
+              "progress": {
+                "blocks": 0.48939063093464,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.0,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "remaining_orders": 2,
+              "stored": {
+                "coal": 0,
+                "meat": 0,
+                "metal": 0,
+                "slate": 0,
+                "stone": 0,
+                "wood": 0
+              }
+            },
+            "tick": 1734
+          },
+          {
+            "event": "ownership changes",
+            "state": {
+              "blocks": 3,
+              "cash": 7,
+              "cooked": 7,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 0,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 0,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 3,
+              "product_store": {
+                "blocks": 3,
+                "meal": 0,
+                "planks": 3
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.0,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "remaining_orders": 3,
+              "stored": {
+                "coal": 0,
+                "meat": 0,
+                "metal": 0,
+                "slate": 0,
+                "stone": 0,
+                "wood": 0
+              }
+            },
+            "tick": 1962
+          }
+        ]
+      }
+    },
+    {
+      "name": "pressure",
+      "script": "tests/qa_connected_camp_lines.gd",
+      "fixture": "Build9-settled.json",
+      "return_code": 0,
+      "success": true,
+      "diagnostics": [],
+      "report": {
+        "checks": {
+          "cleared cooker can release the next roast to a different branch": true,
+          "first real arriving shopper can draw from a full prepared bay": true,
+          "forged overlapping food sources rejected": true,
+          "forged warehouse capacity rejected": true,
+          "freed prepared capacity accepts exactly one surplus": true,
+          "full house and outlets stay a valid conserved checkpoint": true,
+          "full prepared inventory holds compatible cooker output": true,
+          "no order leaves prepared goods at their source": true,
+          "reserved portion lands at the real guarded buffer": true,
+          "second fresh order waits behind surplus leaving the same cooker throat": true,
+          "source save opens": true,
+          "stone backed up outfeed prevents a new work cycle": true,
+          "stone full typed store holds the original product at source": true,
+          "stone stored location and outlet remain separate": true,
+          "two sources cannot own the same fresh/stored merge": true,
+          "wood backed up outfeed prevents a new work cycle": true,
+          "wood full typed store holds the original product at source": true,
+          "wood stored location and outlet remain separate": true,
+          "work restarts after a cooked rack slot is freed": true
+        },
+        "mode": "pressure",
+        "transitions": [
+          {
+            "event": "backpressure and selective demand",
+            "state": {
+              "blocks": 55,
+              "cash": 7,
+              "cooked": 17,
+              "counter_stock": 1,
+              "hoppers": {
+                "meat": 2,
+                "stone": 2,
+                "wood": 2
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 1,
+                "meal_to_store": 1,
+                "meat": 0,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "output_rack": {
+                "blocks": 7,
+                "meal": 2,
+                "planks": 7
+              },
+              "planks": 55,
+              "product_store": {
+                "blocks": 48,
+                "meal": 5,
+                "planks": 48
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0506826784483001,
+                "meat": 0.0,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 2,
+              "remaining_orders": 0,
+              "stored": {
+                "coal": 0,
+                "meat": 0,
+                "metal": 0,
+                "slate": 0,
+                "stone": 0,
+                "wood": 0
+              }
+            },
+            "tick": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "relocate",
+      "script": "tests/qa_connected_camp_lines.gd",
+      "fixture": "Build9-raw-in-flight.json",
+      "return_code": 0,
+      "success": true,
+      "diagnostics": [],
+      "report": {
+        "checks": {
+          "disconnected lane is visible to HUD and unavailable for dispatch": true,
+          "found legal relocation obstructing a utility rail": true,
+          "input is genuinely travelling before its port is disconnected": true,
+          "normally placed storehouse can disconnect a paid line": true,
+          "source save opens": true,
+          "stranded load pauses without spending again": true
+        },
+        "mode": "relocate",
+        "transitions": [
+          {
+            "event": "cut route",
+            "state": {
+              "blocks": 0,
+              "cash": 1,
+              "cooked": 1,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 0,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 0,
+                "stone": 1,
+                "stored_meal": 0,
+                "wood": 1
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 0,
+              "product_store": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.904856581488806,
+                "planks": 0.0,
+                "stone": 0.0269578571382833,
+                "stored_meal": 0.0,
+                "wood": 0.0412039255102681
+              },
+              "rack": 0,
+              "remaining_orders": 2,
+              "stored": {
+                "coal": 0,
+                "meat": 5,
+                "metal": 0,
+                "slate": 0,
+                "stone": 2,
+                "wood": 2
+              }
+            },
+            "tick": 120
+          }
+        ]
+      }
+    },
+    {
+      "name": "reconnect",
+      "script": "tests/qa_connected_camp_lines.gd",
+      "fixture": "Build9-raw-in-flight.json",
+      "return_code": 0,
+      "success": true,
+      "diagnostics": [],
+      "report": {
+        "checks": {
+          "closed app and fresh launch did not debit again or bank movement": true,
+          "original rail reconnects without resetting ownership": true,
+          "paused bundle reaches its proper paid machine": true,
+          "physical disconnection survives restart": true,
+          "relocated house can be restored": true,
+          "source save opens": true
+        },
+        "mode": "reconnect",
+        "transitions": [
+          {
+            "event": "reconnected",
+            "state": {
+              "blocks": 0,
+              "cash": 2,
+              "cooked": 3,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 0,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 1,
+                "meal_to_store": 0,
+                "meat": 1,
+                "planks": 1,
+                "stone": 1,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 1,
+              "product_store": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.587294527818643,
+                "meal_to_store": 0.0,
+                "meat": 0.533144952681649,
+                "planks": 0.0,
+                "stone": 0.799680707879441,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "remaining_orders": 2,
+              "stored": {
+                "coal": 0,
+                "meat": 3,
+                "metal": 0,
+                "slate": 0,
+                "stone": 2,
+                "wood": 2
+              }
+            },
+            "tick": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "legacy",
+      "script": "tests/qa_connected_camp_lines.gd",
+      "fixture": "Build9-serial-upgrade-in-flight.json",
+      "return_code": 0,
+      "success": true,
+      "diagnostics": [],
+      "report": {
+        "checks": {
+          "idle outbound legacy reservation cannot repeat": true,
+          "migrated roast reaches staffed counter and pays exactly once": true,
+          "only the paid serial path is installed": true,
+          "source save opens": true,
+          "v8 partly delivered direct roast preserved under serial installation": true
+        },
+        "mode": "legacy",
+        "transitions": [
+          {
+            "event": "settled legacy food delivery",
+            "state": {
+              "blocks": 0,
+              "cash": 1,
+              "cooked": 1,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 0,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 0,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "output_rack": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "planks": 0,
+              "product_store": {
+                "blocks": 0,
+                "meal": 0,
+                "planks": 0
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.0,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 0,
+              "remaining_orders": 3,
+              "stored": {
+                "coal": 0,
+                "meat": 0,
+                "metal": 0,
+                "slate": 0,
+                "stone": 0,
+                "wood": 0
+              }
+            },
+            "tick": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "growth",
+      "script": "tests/qa_paid_conveyors.gd",
+      "fixture": "Build8-cooker-only.json",
+      "return_code": 0,
+      "success": true,
+      "diagnostics": [],
+      "report": {
+        "checks": {
+          "genuine new kitchen has no free saw or drill": true,
+          "new saw connects without rebuying supply": true,
+          "next quarry connects to the existing supply purchase": true,
+          "opened valid isolated save": true,
+          "quarry_drill has a public payment edge beside the live tracks": true,
+          "quarry_drill physically available": true,
+          "quarry_drill purchased through actual plot": true,
+          "saw_bench has a public payment edge beside the live tracks": true,
+          "saw_bench physically available": true,
+          "saw_bench purchased through actual plot": true,
+          "supply_conveyors physically available": true,
+          "supply_conveyors purchased through actual plot": true,
+          "unowned outbuildings remain disconnected": true
+        },
+        "phase": "growth",
+        "receipts": [
+          {
+            "pack": {
+              "coal": 0,
+              "meat": 0,
+              "metal": 0,
+              "slate": 0,
+              "stone": 0,
+              "wood": 0
+            },
+            "paid": {
+              "stone": 6,
+              "wood": 14
+            },
+            "paying_floor": [
+              -5.00318384170532,
+              -4.80768775939941
+            ],
+            "station": "saw_bench",
+            "touch_start": [
+              1.14999997615814,
+              0.899999976158142
+            ]
+          },
+          {
+            "pack": {
+              "coal": 0,
+              "meat": 0,
+              "metal": 0,
+              "slate": 0,
+              "stone": 0,
+              "wood": 0
+            },
+            "paid": {
+              "stone": 12,
+              "wood": 10
+            },
+            "paying_floor": [
+              5.83222818374634,
+              -5.15449190139771
+            ],
+            "station": "quarry_drill",
+            "touch_start": [
+              -4.60000038146973,
+              -5.19841575622559
+            ]
+          },
+          {
+            "blocks": 1,
+            "cash": 0,
+            "cooked": 4,
+            "counter_stock": 0,
+            "hoppers": {
+              "meat": 3,
+              "stone": 0,
+              "wood": 0
+            },
+            "in_transit": {
+              "blocks": 1,
+              "meal": 0,
+              "meal_to_store": 0,
+              "meat": 0,
+              "planks": 0,
+              "stone": 0,
+              "stored_meal": 0,
+              "wood": 1
+            },
+            "planks": 2,
+            "product_store": {
+              "blocks": 0,
+              "meal": 0,
+              "planks": 0
+            },
+            "progress": {
+              "blocks": 0.0,
+              "meal": 0.0,
+              "meal_to_store": 0.0,
+              "meat": 0.0,
+              "planks": 0.0,
+              "stone": 0.0,
+              "stored_meal": 0.0,
+              "wood": 0.354902922367597
+            },
+            "rack": 4,
+            "stored": {
+              "coal": 0,
+              "meat": 0,
+              "metal": 0,
+              "slate": 0,
+              "stone": 2,
+              "wood": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "relocate",
+      "script": "tests/qa_paid_conveyors.gd",
+      "fixture": "Build8-paid-workshops.json",
+      "return_code": 0,
+      "success": true,
+      "diagnostics": [],
+      "report": {
+        "checks": {
+          "all six outputs return to typed stock after moving without a duplicate": true,
+          "meat route remains inside the paid walls": true,
+          "moved the paid saw mid-dispatch": true,
+          "moving actual timber exists": true,
+          "opened valid isolated save": true,
+          "raw supply alone cannot sell a meal": true,
+          "remaining distance targets the new real hopper": true,
+          "stone route remains inside the paid walls": true,
+          "supply_conveyors physically available": true,
+          "supply_conveyors purchased through actual plot": true,
+          "wood route remains inside the paid walls": true
+        },
+        "phase": "relocate",
+        "receipts": [
+          {
+            "active_fraction": 0.101983598381493,
+            "new_saw": [
+              3.5699999332428,
+              2.65000009536743
+            ],
+            "old_saw": [
+              -3.4300000667572,
+              -7.34999990463257
+            ],
+            "state": {
+              "blocks": 3,
+              "cash": 0,
+              "cooked": 4,
+              "counter_stock": 0,
+              "hoppers": {
+                "meat": 3,
+                "stone": 0,
+                "wood": 0
+              },
+              "in_transit": {
+                "blocks": 0,
+                "meal": 0,
+                "meal_to_store": 0,
+                "meat": 0,
+                "planks": 0,
+                "stone": 0,
+                "stored_meal": 0,
+                "wood": 0
+              },
+              "planks": 3,
+              "product_store": {
+                "blocks": 3,
+                "meal": 0,
+                "planks": 3
+              },
+              "progress": {
+                "blocks": 0.0,
+                "meal": 0.0,
+                "meal_to_store": 0.0,
+                "meat": 0.0,
+                "planks": 0.0,
+                "stone": 0.0,
+                "stored_meal": 0.0,
+                "wood": 0.0
+              },
+              "rack": 4,
+              "stored": {
+                "coal": 0,
+                "meat": 0,
+                "metal": 0,
+                "slate": 0,
+                "stone": 0,
+                "wood": 0
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "lock",
+      "script": "tests/qa_conveyor_cash_retry.gd",
+      "fixture": "Before-customer-two.json",
+      "return_code": 0,
+      "success": true,
+      "diagnostics": [],
+      "report": {
+        "checks": {
+          "acquire competing lock": true,
+          "entered real pending FIFO exchange": true,
+          "rejected sale cannot add cash or debit the durable counter item": true
+        },
+        "phase": "sale_lock",
+        "receipts": [
+          {
+            "blocks": 0,
+            "cash": 1,
+            "cooked": 2,
+            "counter_stock": 1,
+            "hoppers": {
+              "meat": 1,
+              "stone": 0,
+              "wood": 0
+            },
+            "in_transit": {
+              "blocks": 0,
+              "meal": 0,
+              "meal_to_store": 0,
+              "meat": 1,
+              "planks": 0,
+              "stone": 1,
+              "stored_meal": 0,
+              "wood": 0
+            },
+            "planks": 1,
+            "product_store": {
+              "blocks": 0,
+              "meal": 0,
+              "planks": 1
+            },
+            "progress": {
+              "blocks": 0.0,
+              "meal": 0.0,
+              "meal_to_store": 0.0,
+              "meat": 0.0,
+              "planks": 0.0,
+              "stone": 0.714149403687052,
+              "stored_meal": 0.0,
+              "wood": 0.0
+            },
+            "rack": 0,
+            "stored": {
+              "coal": 0,
+              "meat": 3,
+              "metal": 0,
+              "slate": 0,
+              "stone": 2,
+              "wood": 2
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "retry",
+      "script": "tests/qa_conveyor_cash_retry.gd",
+      "fixture": "Before-customer-two.json",
+      "return_code": 0,
+      "success": true,
+      "diagnostics": [],
+      "report": {
+        "checks": {
+          "load failed counter sale as unpaid": true,
+          "original queued second meal sold once and last orders clear": true
+        },
+        "phase": "sale_retry",
+        "receipts": [
+          {
+            "blocks": 3,
+            "cash": 7,
+            "cooked": 7,
+            "counter_stock": 0,
+            "hoppers": {
+              "meat": 0,
+              "stone": 0,
+              "wood": 0
+            },
+            "in_transit": {
+              "blocks": 1,
+              "meal": 0,
+              "meal_to_store": 0,
+              "meat": 0,
+              "planks": 0,
+              "stone": 0,
+              "stored_meal": 0,
+              "wood": 0
+            },
+            "planks": 3,
+            "product_store": {
+              "blocks": 2,
+              "meal": 0,
+              "planks": 3
+            },
+            "progress": {
+              "blocks": 0.0448982230215264,
+              "meal": 0.0,
+              "meal_to_store": 0.0,
+              "meat": 0.0,
+              "planks": 0.0,
+              "stone": 0.0,
+              "stored_meal": 0.0,
+              "wood": 0.0
+            },
+            "rack": 0,
+            "stored": {
+              "coal": 0,
+              "meat": 0,
+              "metal": 0,
+              "slate": 0,
+              "stone": 0,
+              "wood": 0
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "warehouse_sha256": "f4a582edfac06278ac2d48f0ba727c2e4f3c91abb7d4937c2f243cb16226bde4",
+  "equipment_route_test_sha256": "41cf256b060c68aa7bb3b6aee3fc8fbc65e400877fc84d285b8f4f95c2981ebf"
+}

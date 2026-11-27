@@ -1,0 +1,374 @@
+{
+	"checks": [
+		"paid helper physically rescued",
+		"paid storage_wood moved during the worker's actual route",
+		"paid camp_cooker moved during the worker's actual route",
+		"paid north_counter moved during the worker's actual route",
+		"credited earned logs at relocated door",
+		"fed meat, cooked and collected a meal at relocated cooker",
+		"served waiting customer at relocated counter with player elsewhere",
+		"conserved all shelf, hopper and customer receipts after moves"
+	],
+	"elapsed": 107.699999999995,
+	"errors": [],
+	"ledger": {
+		"cooked": 2,
+		"counter_stock": 0,
+		"dispatch_cursor": 0,
+		"held_meal": 0,
+		"hoppers": {
+			"meat": 0,
+			"stone": 0,
+			"wood": 0
+		},
+		"level": 1,
+		"line_load": {
+			"blocks": 0,
+			"meal": 0,
+			"meal_to_store": 0,
+			"meat": 0,
+			"planks": 0,
+			"stone": 0,
+			"stored_meal": 0,
+			"wood": 0
+		},
+		"line_progress": {
+			"blocks": 0.0,
+			"meal": 0.0,
+			"meal_to_store": 0.0,
+			"meat": 0.0,
+			"planks": 0.0,
+			"stone": 0.0,
+			"stored_meal": 0.0,
+			"wood": 0.0
+		},
+		"owl_hits": 0,
+		"processed_stone": 4,
+		"processed_wood": 4,
+		"product_store": {
+			"blocks": 0,
+			"meal": 0,
+			"planks": 0
+		},
+		"rescued": true,
+		"served": 1,
+		"survivor_paid": true,
+		"survivor_wood": 8,
+		"work_seconds": {
+			"meat": 0.0,
+			"stone": 0.0,
+			"wood": 0.0
+		},
+		"worker_carry_token": "",
+		"worker_deliveries": 2,
+		"worker_load": {
+			"coal": 0,
+			"meat": 0,
+			"metal": 0,
+			"slate": 0,
+			"stone": 0,
+			"wood": 0
+		},
+		"worker_meal": 0,
+		"worker_receipts": [
+			"wood-2",
+			"wood-8"
+		],
+		"worker_supply": ""
+	},
+	"mode": "relocate",
+	"observations": {
+		"camp_cooker": {
+			"new": "(4.75, 2.75)",
+			"old": "(-0.1, -7.22)",
+			"worker": "(4.495297, 0.0, -0.228021)"
+		},
+		"north_counter": {
+			"new": "(4.0, -9.0)",
+			"old": "(2.8, -9.0)",
+			"worker": "(5.692639, 0.0, 3.909403)"
+		},
+		"relocated": {
+			"camp_cooker": true,
+			"north_counter": true,
+			"storage_wood": true
+		},
+		"storage_wood": {
+			"new": "(4.5, -2.5)",
+			"old": "(-3.05, -3.45)",
+			"worker": "(-4.217173, 0.0, 9.295733)"
+		}
+	},
+	"phases": [
+		{
+			"phase": "to_tree",
+			"second": 0.02,
+			"x": -5.09890842437744,
+			"z": 9.89832401275635
+		},
+		{
+			"phase": "work_ready",
+			"second": 0.62,
+			"x": -4.54562187194824,
+			"z": 9.04863357543945
+		},
+		{
+			"phase": "chopping",
+			"second": 0.63,
+			"x": -4.54562187194824,
+			"z": 9.04863357543945
+		},
+		{
+			"phase": "work_ready",
+			"second": 2.2,
+			"x": -4.54562187194824,
+			"z": 9.04863357543945
+		},
+		{
+			"phase": "chopping",
+			"second": 2.22,
+			"x": -4.54562187194824,
+			"z": 9.04863357543945
+		},
+		{
+			"phase": "work_ready",
+			"second": 3.78,
+			"x": -4.54562187194824,
+			"z": 9.04863357543945
+		},
+		{
+			"phase": "chopping",
+			"second": 3.8,
+			"x": -4.54562187194824,
+			"z": 9.04863357543945
+		},
+		{
+			"phase": "falling",
+			"second": 5.37,
+			"x": -4.54562187194824,
+			"z": 9.04863357543945
+		},
+		{
+			"phase": "pickup",
+			"second": 5.38,
+			"x": -4.54562187194824,
+			"z": 9.04863357543945
+		},
+		{
+			"phase": "carrying",
+			"second": 5.65,
+			"x": -4.21717309951782,
+			"z": 9.29573345184326
+		},
+		{
+			"phase": "unload",
+			"second": 13.42,
+			"x": 4.49358654022217,
+			"z": -0.227304622530937
+		},
+		{
+			"phase": "bin_delivery",
+			"second": 13.7,
+			"x": 4.49358654022217,
+			"z": -0.227304622530937
+		},
+		{
+			"phase": "supply_out",
+			"second": 14.0,
+			"x": 4.49358654022217,
+			"z": -0.227304622530937
+		},
+		{
+			"phase": "supply_unload",
+			"second": 17.68,
+			"x": -2.97421073913574,
+			"z": -5.87491750717163
+		},
+		{
+			"phase": "supply_back",
+			"second": 18.35,
+			"x": -2.97421073913574,
+			"z": -5.87491750717163
+		},
+		{
+			"phase": "mining_approach",
+			"second": 21.4,
+			"x": 4.49836730957031,
+			"z": -0.230661302804947
+		},
+		{
+			"phase": "mining",
+			"second": 29.47,
+			"x": -6.72447109222412,
+			"z": 3.88772869110107
+		},
+		{
+			"phase": "foraging",
+			"second": 34.17,
+			"x": -6.72447109222412,
+			"z": 3.88772869110107
+		},
+		{
+			"phase": "bulk_return",
+			"second": 34.88,
+			"x": -5.91913557052612,
+			"z": 2.53306794166565
+		},
+		{
+			"phase": "bin_delivery",
+			"second": 45.07,
+			"x": 4.48733282089233,
+			"z": -0.224692553281784
+		},
+		{
+			"phase": "supply_out",
+			"second": 45.42,
+			"x": 4.49931907653809,
+			"z": -0.229714632034302
+		},
+		{
+			"phase": "supply_unload",
+			"second": 48.13,
+			"x": 7.79784250259399,
+			"z": -5.26651525497437
+		},
+		{
+			"phase": "supply_back",
+			"second": 48.8,
+			"x": 7.79784250259399,
+			"z": -5.26651525497437
+		},
+		{
+			"phase": "to_tree",
+			"second": 51.28,
+			"x": 4.50393486022949,
+			"z": -0.23157300055027
+		},
+		{
+			"phase": "work_ready",
+			"second": 58.4,
+			"x": -4.53000068664551,
+			"z": 9.04870700836182
+		},
+		{
+			"phase": "chopping",
+			"second": 58.42,
+			"x": -4.53000068664551,
+			"z": 9.04870700836182
+		},
+		{
+			"phase": "work_ready",
+			"second": 59.98,
+			"x": -4.53000068664551,
+			"z": 9.04870700836182
+		},
+		{
+			"phase": "chopping",
+			"second": 60.0,
+			"x": -4.53000068664551,
+			"z": 9.04870700836182
+		},
+		{
+			"phase": "work_ready",
+			"second": 61.57,
+			"x": -4.53000068664551,
+			"z": 9.04870700836182
+		},
+		{
+			"phase": "chopping",
+			"second": 61.58,
+			"x": -4.53000068664551,
+			"z": 9.04870700836182
+		},
+		{
+			"phase": "falling",
+			"second": 63.15,
+			"x": -4.53000068664551,
+			"z": 9.04870700836182
+		},
+		{
+			"phase": "pickup",
+			"second": 63.17,
+			"x": -4.53000068664551,
+			"z": 9.04870700836182
+		},
+		{
+			"phase": "carrying",
+			"second": 63.43,
+			"x": -4.20828104019165,
+			"z": 9.30187511444092
+		},
+		{
+			"phase": "unload",
+			"second": 71.2,
+			"x": 4.49529695510864,
+			"z": -0.228021129965782
+		},
+		{
+			"phase": "bin_delivery",
+			"second": 71.48,
+			"x": 4.49529695510864,
+			"z": -0.228021129965782
+		},
+		{
+			"phase": "supply_out",
+			"second": 71.78,
+			"x": 4.49529695510864,
+			"z": -0.228021129965782
+		},
+		{
+			"phase": "supply_unload",
+			"second": 74.15,
+			"x": 3.80310893058777,
+			"z": 3.90844130516052
+		},
+		{
+			"phase": "supply_back",
+			"second": 74.48,
+			"x": 3.80310893058777,
+			"z": 3.90844130516052
+		},
+		{
+			"phase": "mining_approach",
+			"second": 76.55,
+			"x": 4.49434947967529,
+			"z": -0.222254931926727
+		},
+		{
+			"phase": "mining",
+			"second": 84.63,
+			"x": -6.7244725227356,
+			"z": 3.88771510124207
+		},
+		{
+			"phase": "foraging",
+			"second": 89.33,
+			"x": -6.7244725227356,
+			"z": 3.88771510124207
+		},
+		{
+			"phase": "bulk_return",
+			"second": 90.05,
+			"x": -5.91914081573486,
+			"z": 2.5330765247345
+		},
+		{
+			"phase": "bin_delivery",
+			"second": 100.23,
+			"x": 4.48733329772949,
+			"z": -0.22469274699688
+		},
+		{
+			"phase": "meal_collect",
+			"second": 100.58,
+			"x": 4.49931955337524,
+			"z": -0.229714810848236
+		},
+		{
+			"phase": "meal_serve",
+			"second": 102.77,
+			"x": 5.69263935089111,
+			"z": 3.90940308570862
+		}
+	]
+}

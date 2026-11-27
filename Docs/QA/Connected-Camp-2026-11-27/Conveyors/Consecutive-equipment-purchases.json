@@ -1,0 +1,327 @@
+{
+  "source_fixture": "Fixtures/Build8-cooker-only.json",
+  "input": "Native phone touch at 60 physics steps/second in the regular orthographic gameplay camera. The player starts in the central public camp. Each test leg places the exact listed materials into the backpack. Steering follows the public walking route. Reaching the labeled pad starts the normal transfer, debits the pack and saves the purchase. The second route begins on the completed saw pad.",
+  "goal_note": "reachable_stance is the intended candidate on the mat, a carrier can start paying sooner from any other legal edge. Samples include the actual movement and tender target.",
+  "movements": [
+    {
+      "arrived": true,
+      "artwork_at": "(-3.43, 0.009, -6.17)",
+      "carried_after": {
+        "coal": 0,
+        "meat": 0,
+        "metal": 0,
+        "slate": 0,
+        "stone": 0,
+        "wood": 0
+      },
+      "cost": {
+        "stone": 6,
+        "wood": 14
+      },
+      "id": "saw_bench",
+      "initial_carried": {
+        "coal": 0,
+        "meat": 0,
+        "metal": 0,
+        "slate": 0,
+        "stone": 6,
+        "wood": 14
+      },
+      "moved_ticks": 115,
+      "old_straight_physically_clear": false,
+      "old_straight_starts_in_rail": false,
+      "paid": {
+        "stone": 6,
+        "wood": 14
+      },
+      "reachable_stance": "(-1.79, 0.0, -5.009999)",
+      "start": "(1.15, 0.0, 0.9)",
+      "trace": [
+        [
+          0,
+          1.15051400661469,
+          0.906368136405945,
+          "",
+          {
+            "stone": 6,
+            "wood": 14
+          }
+        ],
+        [
+          35,
+          -1.16260802745819,
+          0.562645614147186,
+          "",
+          {
+            "stone": 6,
+            "wood": 14
+          }
+        ],
+        [
+          70,
+          -4.18260049819946,
+          -1.4782897233963,
+          "storage",
+          {
+            "stone": 6,
+            "wood": 14
+          }
+        ],
+        [
+          105,
+          -5.01515674591064,
+          -4.70421171188354,
+          "storage",
+          {
+            "stone": 6,
+            "wood": 14
+          }
+        ],
+        [
+          140,
+          -4.95797348022461,
+          -5.19841575622559,
+          "saw_bench",
+          {
+            "stone": 0,
+            "wood": 5
+          }
+        ]
+      ],
+      "first_tick_with_real_tender_target": [
+        140,
+        -4.95797348022461,
+        -5.19841575622559,
+        "saw_bench",
+        {
+          "stone": 0,
+          "wood": 5
+        }
+      ]
+    },
+    {
+      "arrived": true,
+      "artwork_at": "(7.55, 0.009, -5.68)",
+      "carried_after": {
+        "coal": 0,
+        "meat": 0,
+        "metal": 0,
+        "slate": 0,
+        "stone": 0,
+        "wood": 0
+      },
+      "cost": {
+        "stone": 12,
+        "wood": 10
+      },
+      "id": "quarry_drill",
+      "initial_carried": {
+        "coal": 0,
+        "meat": 0,
+        "metal": 0,
+        "slate": 0,
+        "stone": 12,
+        "wood": 10
+      },
+      "moved_ticks": 118,
+      "old_straight_physically_clear": true,
+      "old_straight_starts_in_rail": false,
+      "paid": {
+        "stone": 12,
+        "wood": 10
+      },
+      "reachable_stance": "(5.91, 0.0, -5.15)",
+      "start": "(-4.6, 0.0, -5.198416)",
+      "trace": [
+        [
+          0,
+          -4.59926605224609,
+          -5.20476245880127,
+          "storage",
+          {
+            "stone": 12,
+            "wood": 10
+          }
+        ],
+        [
+          35,
+          -1.86557388305664,
+          -5.55706119537354,
+          "",
+          {
+            "stone": 12,
+            "wood": 10
+          }
+        ],
+        [
+          70,
+          1.77542662620544,
+          -5.36940670013428,
+          "",
+          {
+            "stone": 12,
+            "wood": 10
+          }
+        ],
+        [
+          105,
+          5.41625452041626,
+          -5.17852210998535,
+          "",
+          {
+            "stone": 12,
+            "wood": 10
+          }
+        ],
+        [
+          140,
+          6.22490692138672,
+          -5.13180780410767,
+          "quarry_drill",
+          {
+            "stone": 4,
+            "wood": 1
+          }
+        ]
+      ],
+      "first_tick_with_real_tender_target": [
+        140,
+        6.22490692138672,
+        -5.13180780410767,
+        "quarry_drill",
+        {
+          "stone": 4,
+          "wood": 1
+        }
+      ]
+    }
+  ],
+  "final_order": [
+    "center_hearth",
+    "expansion_1",
+    "storage_wood",
+    "storage_stone",
+    "storage_meat",
+    "expansion_2",
+    "watchtower",
+    "orbit_upgrade",
+    "camp_cooker",
+    "supply_conveyors",
+    "saw_bench",
+    "quarry_drill"
+  ],
+  "final_saw_output_before_quarry_reveal": 1,
+  "final_test_sha256": "41cf256b060c68aa7bb3b6aee3fc8fbc65e400877fc84d285b8f4f95c2981ebf",
+  "rerunnable_native_test": {
+    "checks": {
+      "genuine new kitchen has no free saw or drill": true,
+      "new saw connects without rebuying supply": true,
+      "next quarry connects to the existing supply purchase": true,
+      "opened valid isolated save": true,
+      "quarry_drill has a public payment edge beside the live tracks": true,
+      "quarry_drill physically available": true,
+      "quarry_drill purchased through actual plot": true,
+      "saw_bench has a public payment edge beside the live tracks": true,
+      "saw_bench physically available": true,
+      "saw_bench purchased through actual plot": true,
+      "supply_conveyors physically available": true,
+      "supply_conveyors purchased through actual plot": true,
+      "unowned outbuildings remain disconnected": true
+    },
+    "phase": "growth",
+    "receipts": [
+      {
+        "pack": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 0
+        },
+        "paid": {
+          "stone": 6,
+          "wood": 14
+        },
+        "paying_floor": [
+          -5.00318384170532,
+          -4.80768775939941
+        ],
+        "station": "saw_bench",
+        "touch_start": [
+          1.14999997615814,
+          0.899999976158142
+        ]
+      },
+      {
+        "pack": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 0
+        },
+        "paid": {
+          "stone": 12,
+          "wood": 10
+        },
+        "paying_floor": [
+          5.83222818374634,
+          -5.15449190139771
+        ],
+        "station": "quarry_drill",
+        "touch_start": [
+          -4.60000038146973,
+          -5.19841575622559
+        ]
+      },
+      {
+        "blocks": 1,
+        "cash": 0,
+        "cooked": 4,
+        "counter_stock": 0,
+        "hoppers": {
+          "meat": 3,
+          "stone": 0,
+          "wood": 0
+        },
+        "in_transit": {
+          "blocks": 1,
+          "meal": 0,
+          "meal_to_store": 0,
+          "meat": 0,
+          "planks": 0,
+          "stone": 0,
+          "stored_meal": 0,
+          "wood": 1
+        },
+        "planks": 2,
+        "product_store": {
+          "blocks": 0,
+          "meal": 0,
+          "planks": 0
+        },
+        "progress": {
+          "blocks": 0.0,
+          "meal": 0.0,
+          "meal_to_store": 0.0,
+          "meat": 0.0,
+          "planks": 0.0,
+          "stone": 0.0,
+          "stored_meal": 0.0,
+          "wood": 0.354902922367597
+        },
+        "rack": 4,
+        "stored": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 2,
+          "wood": 0
+        }
+      }
+    ]
+  }
+}

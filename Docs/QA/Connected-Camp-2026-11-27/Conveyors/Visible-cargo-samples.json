@@ -1,0 +1,61 @@
+{
+  "samples": [
+    {
+      "category": "Raw supply",
+      "model": "wood",
+      "first_frame": 30,
+      "last_frame": 33,
+      "native_crop_xywh": [
+        165,
+        39,
+        178,
+        75
+      ],
+      "first_visible_support": 250,
+      "last_visible_support": 302
+    },
+    {
+      "category": "Finished material",
+      "model": "blocks",
+      "first_frame": 33,
+      "last_frame": 42,
+      "native_crop_xywh": [
+        549,
+        292,
+        178,
+        75
+      ],
+      "first_visible_support": 303,
+      "last_visible_support": 365
+    },
+    {
+      "category": "Fresh cooked order",
+      "model": "meal",
+      "first_frame": 21,
+      "last_frame": 24,
+      "native_crop_xywh": [
+        435,
+        167,
+        178,
+        75
+      ],
+      "first_visible_support": 179,
+      "last_visible_support": 181
+    },
+    {
+      "category": "Counter exchange",
+      "model": "serving",
+      "first_frame": 42,
+      "last_frame": 45,
+      "native_crop_xywh": [
+        457,
+        105,
+        178,
+        75
+      ],
+      "first_visible_support": 187,
+      "last_visible_support": 187
+    }
+  ],
+  "method": "Every third frame was rendered a second time from the same camera without the in-flight objects and active serving/cash props. Each sample measures a non-overlapping projected object silhouette from uncompressed same-tick buffers (RGB max-channel difference > 0.065). The illustrated crops come from original gameplay with everything enabled."
+}

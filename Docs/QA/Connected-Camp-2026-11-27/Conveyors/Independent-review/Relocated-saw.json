@@ -1,0 +1,71 @@
+{
+  "placement": {
+    "accepted": true,
+    "lines_after": [
+      "stored_meal",
+      "meal_to_store",
+      "meal",
+      "stone",
+      "wood",
+      "meat"
+    ],
+    "new": "(3.57, 2.65)",
+    "old": "(-3.43, -7.35)",
+    "real_service_floor": {
+      "cooker_output": "(0.17, 0.0, -6.13)",
+      "counter": "(3.95, 0.0, -7.53)",
+      "meat": "(-1.09, 0.0, -6.13)",
+      "stone": "(7.73, 0.0, -5.289999)",
+      "store": "(-3.05, 0.0, -1.23)",
+      "wood": "(3.95, 0.0, 4.23)"
+    },
+    "reason": "",
+    "transit_stock_unchanged": true
+  },
+  "legs": [
+    {
+      "arrived": true,
+      "begin": "(-3.05, 0.0, -1.23)",
+      "end_tick": 159,
+      "first": "(-0.95, 0.0, -2.07)",
+      "goto": "(-1.09, 0.0, -6.13)",
+      "last": "(-1.087351, 0.0, -6.121938)",
+      "last_waypoint": "(-1.09, 0.0, -6.13)",
+      "start_tick": 0,
+      "tag": "shelf_to_cooker"
+    },
+    {
+      "arrived": true,
+      "begin": "(-1.087351, 0.0, -6.121938)",
+      "end_tick": 602,
+      "first": "(0.73, 0.0, -4.17)",
+      "goto": "(3.95, 0.0, -7.53)",
+      "last": "(3.951962, 0.0, -7.530494)",
+      "last_waypoint": "(3.95, 0.0, -7.53)",
+      "start_tick": 159,
+      "tag": "cooker_to_counter"
+    },
+    {
+      "arrived": true,
+      "begin": "(3.951962, 0.0, -7.530494)",
+      "end_tick": 1114,
+      "first": "(5.21, 0.0, -7.809999)",
+      "goto": "(-3.05, 0.0, -1.23)",
+      "last": "(-3.043918, 0.0, -1.232116)",
+      "last_waypoint": "(-3.05, 0.0, -1.23)",
+      "start_tick": 602,
+      "tag": "counter_to_store"
+    },
+    {
+      "arrived": true,
+      "begin": "(-3.043918, 0.0, -1.232116)",
+      "end_tick": 1380,
+      "first": "(-0.67, 0.0, -1.789999)",
+      "goto": "(3.95, 0.0, 4.23)",
+      "last": "(3.941136, 0.0, 4.228335)",
+      "last_waypoint": "(3.95, 0.0, 4.23)",
+      "start_tick": 1114,
+      "tag": "store_to_saw"
+    }
+  ]
+}

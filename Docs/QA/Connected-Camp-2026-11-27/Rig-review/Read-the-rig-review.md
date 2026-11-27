@@ -1,0 +1,23 @@
+# Havenline Level 1 character rig review
+
+| Scope | Independent result | Requested threshold |
+| --- | ---: | ---: |
+| Character 1 gameplay running | 9.9/10 | 9.9 |
+| Character 1 exported rig across all four clips | 9.5/10 | 9.5 |
+| Male survivor’s ordinary loaded and empty travel | 9.5/10 | 9.5 |
+
+## Character 1
+
+Build 9 deserved a second look. Its knees bent forward in steady travel, but the thigh reached behind the body and the broad shoe spread under a short coat made the leg look reversed. An intermediate Build 10 also had a genuine backwards-knee defect during braking. For four frames one knee jumped behind the hip-to-ankle line. The final controller keeps the kneecap facing forward through that stop. [Before](Player-brake-before.jpg) · [After](Player-brake-after.jpg)
+
+The compact character still covers 6.25 metres per second. His feet now take about 287 steps per minute, up from 221. The thigh swings about 21° back and 42° forward. The knee yields under load, straightens for push-off, then the heel folds behind the hip before swinging through. Seven measured contacts displaced a single original tread point by 1.0–3.4 mm while that point remained on the snow. The character settled with a forward-facing knee on both sides across a 545-tick run, turn and stop and 26 additional stops. [Normal and pinched gameplay](Player-normal-and-loaded.mp4) · [Camera and control receipts](Player-camera-and-controls.json) · [Same-point support measurements](Player-ground-contact.json) · [Stop trials](Player-stop-phases.json)
+
+The reference comparison uses the native 30 fps version of the blue-tree creative. Five saved owner frames register to the same action about half a second later on the owner’s clock. On the first snow run the trailing boot passes beneath the coat at frames 23, 30, 36, 42, 48 and 54. At the gate, similar open-stride poses recur at 415 and 427. These passages support approximately 4.3–5.0 visible steps per second. The source parka covers the knee and its near mitten briefly overlaps the forward shoe. We compared the visible foot rhythm, push-off, forward recovery and travel heading. We checked the body’s hidden joint direction against its actual skeleton and independent human-motion records. The grade expresses a critic’s judgement of that motion. [Reference at native rate and one-third speed](Owner-B-gate-real-and-slow.mp4) · [Matched angle at normal zoom](Owner-B-and-Character1-1x.mp4) · [Matched angle at pinch zoom](Owner-B-and-Character1-2x.mp4) · [Source registration](../References/B-frame-registration.json) · [Human measurement method](Independent-human-thigh-motion.json)
+
+The 4K camera check caught four additional silver fasteners on the inner boots. On a previous candidate the two upper silver patches stretched up to 3.7 times along one axis. The final skin weights keep the original fasteners and surrounding leather together through all four clips. The complete measured leather patches retain both rest dimensions. At the largest sampled intersection between lower garment surfaces the visible boot still has a continuous shaft and intact fasteners. At that pose two triangles share a 42.46 mm intersection line along the garments. [Earlier hardware](Rig/Before-medial-metal-projection.jpg) · [Corrected hardware at the 4K pinched camera](Rig/Native-medial-metal-projection.jpg) · [Complete original tab regions](Rig/Complete-medial-tab-regions.jpg) · [Seam witnesses](Rig/Original-surface-witnesses.jpg)
+
+## Survivor
+
+The same timber delivery now takes 6.20 seconds instead of 3.48. A worker with stock cruises at 2.8 m/s. An empty worker cruises at 3.6 m/s on the way to an assignment. An independent six-second haul contains 120 distinct camera frames. A separate 1,500-tick camp run confirms the loaded and empty limits on the integrated source. In both gaits the skinned boot rolls from heel to toe and has one continuous support interval around the clip boundary. [Native loaded route](Forester-loaded-route.mp4) · [Before and after on the same routes](../Workers/Matched-route-timing.json) · [Independent surface and route measurements](Forester-observations.json)
+
+The physical checks cover the GLB, its 64 skin joints and four embedded clips. The gameplay checks use Godot's real field scene and touch controls. The 4K close-ups render measured in-game poses at the projected densities of a 2160 × 3840 viewport. These scores cover animation and presentation. Galaxy Z Fold 7 performance, APK installation and the rest of Level 1 require their own results. [Candidate identities](Rig-source-digests.json) · [Evidence ledger](Character-1-ledger.json) · [Validator result](Character-1-gate.json)

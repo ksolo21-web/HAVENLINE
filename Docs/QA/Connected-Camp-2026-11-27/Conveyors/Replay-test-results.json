@@ -1,0 +1,69 @@
+{
+  "launches": 5,
+  "checks_passed": 30,
+  "checks_failed": 0,
+  "scn_imported_from": "f4a582edfac06278ac2d48f0ba727c2e4f3c91abb7d4937c2f243cb16226bde4",
+  "engine_diagnostics": [],
+  "runs": [
+    {
+      "fixture": "Before-customer-two.json",
+      "case": "qa_conveyor_cash_retry --lock",
+      "checks": {
+        "acquire competing lock": true,
+        "entered real pending FIFO exchange": true,
+        "rejected sale cannot add cash or debit the durable counter item": true
+      }
+    },
+    {
+      "fixture": "Before-customer-two.json",
+      "case": "qa_conveyor_cash_retry --retry",
+      "checks": {
+        "load failed counter sale as unpaid": true,
+        "original queued second meal sold once and last orders clear": true
+      }
+    },
+    {
+      "fixture": "Build9-settled.json",
+      "case": "qa_workshop_floor_access --walk-forester",
+      "checks": {
+        "cooker to counter clears the installed machinery and rails": true,
+        "cooker to counter reaches the real service spot on foot": true,
+        "counter to store clears the installed machinery and rails": true,
+        "counter to store reaches the real service spot on foot": true,
+        "paid warehouse exposes an accessible material apron": true,
+        "saw to drill clears the installed machinery and rails": true,
+        "saw to drill reaches the real service spot on foot": true,
+        "store to cooker clears the installed machinery and rails": true,
+        "store to cooker reaches the real service spot on foot": true,
+        "store to saw clears the installed machinery and rails": true,
+        "store to saw reaches the real service spot on foot": true
+      }
+    },
+    {
+      "fixture": "Build9-settled.json",
+      "case": "qa_workshop_floor_access",
+      "checks": {
+        "meat chooses its own inlet at the overlapping floor": true,
+        "meat physically arrives in its own paid inlet": true,
+        "meat pickup is owned": true,
+        "real cook and saw have a shared standing area with physical body clearance": true,
+        "wood chooses its own inlet at the overlapping floor": true,
+        "wood physically arrives in its own paid inlet": true,
+        "wood pickup is owned": true
+      }
+    },
+    {
+      "fixture": "Build8-paid-workshops.json",
+      "case": "qa_workshop_floor_access",
+      "checks": {
+        "meat chooses its own inlet at the overlapping floor": true,
+        "meat physically arrives in its own paid inlet": true,
+        "meat pickup is owned": true,
+        "real cook and saw have a shared standing area with physical body clearance": true,
+        "wood chooses its own inlet at the overlapping floor": true,
+        "wood physically arrives in its own paid inlet": true,
+        "wood pickup is owned": true
+      }
+    }
+  ]
+}
