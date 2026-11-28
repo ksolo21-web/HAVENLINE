@@ -85,10 +85,13 @@ func snapshot() -> Dictionary:
 static func _number(v: Variant) -> bool:
 	return (v is float or v is int) and is_finite(float(v))
 
+func _closed_boundary_clearance() -> float:
+	return float(world.layout.actor_radius) + float(world.field_env.FENCE_DEPTH)*.5 + .025
+
 func _near_closed_boundary(p: Vector3) -> bool:
 	if not world.camp_active: return false
 	var r:Array=world.layout.camp_rect_xz
-	var pad:=float(world.layout.actor_radius)+.22
+	var pad:=_closed_boundary_clearance()
 	var along_x:bool=p.x>=r[0]-pad and p.x<=r[2]+pad
 	var along_z:bool=p.z>=r[1]-pad and p.z<=r[3]+pad
 	return (along_x and minf(absf(p.z-r[1]),absf(p.z-r[3]))<pad) or (along_z and minf(absf(p.x-r[0]),absf(p.x-r[2]))<pad)
@@ -112,7 +115,7 @@ func _restore_actor(state: Variant, version: int = VERSION) -> void:
 				# Gates load closed. Push an exterior save back onto snow instead
 				# of moving an injured traveller across the fence into sanctuary.
 				var bounds: Array = world.layout.camp_rect_xz
-				var clear := float(world.layout.actor_radius)+.23
+				var clear := _closed_boundary_clearance()
 				pos = candidate
 				if pos.x < bounds[0]: pos.x = minf(pos.x,bounds[0]-clear)
 				if pos.x > bounds[2]: pos.x = maxf(pos.x,bounds[2]+clear)

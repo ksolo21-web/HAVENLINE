@@ -83,6 +83,19 @@ func load_worker() -> void:
 		game.inventory.settlement.worker_load[material] = 6
 	worker._sync_pack()
 
+func reopen_wall_positions() -> void:
+	var court: Vector4 = game.field_env.COURTS[2]
+	var prior_clearance := .56
+	var sides := [Vector3(-5.8,0,court.w),Vector3(court.z,0,-4.8),Vector3(court.x,0,-2.8),Vector3(-6.8,0,court.y)]
+	var directions := [Vector3.BACK,Vector3.RIGHT,Vector3.LEFT,Vector3.FORWARD]
+	for i in sides.size():
+		for side in [-1.,1.]:
+			var legacy: Vector3 = sides[i] + directions[i]*prior_clearance*side
+			game.lifecycle._restore_actor({"x":legacy.x,"z":legacy.z,"hp":17})
+			var restored: Vector3 = game.actor.global_position
+			check(game.field_env.travel_clear(restored,restored,float(game.layout.actor_radius)) and game.field_env.is_inside_camp(restored) == (side < 0.) and game.player_hp == 17,
+				"legacy save beside wall %d recovers to its own side %s" % [i,side])
+
 func run() -> void:
 	game = load("res://field_opening.tscn").instantiate()
 	root.add_child(game)
@@ -99,6 +112,7 @@ func run() -> void:
 			for side in [1.,-1.]: await worker_cross(gate,side,loaded)
 	for gate in game.gates:
 		for side in [1.,-1.]: await opposing_cross(gate,side)
+	reopen_wall_positions()
 	var recovered = game.Inventory.new()
 	check(recovered.configure(game.inventory.configured_costs) and recovered.restore(game.inventory.snapshot()),"congestion preserves the live mixed cargo ledger")
 	print("CAMP_GATE_ROUTES ",JSON.stringify({"checks":checks,"errors":errors,"transits":transits}))
