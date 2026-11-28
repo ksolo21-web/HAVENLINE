@@ -95,6 +95,10 @@ func run()->void:
 	root.add_child(field);camera=field.camera
 	origin=root.get_visible_rect().size*Vector2(.30,.72)
 	for i in 4:await physics_frame
+	if OS.get_environment("HL_GATE_LOADED") == "1":
+		for kind in ["wood","stone","meat"]:
+			for unit in 6: field.inventory.collect("gate-cargo-%s-%d" % [kind,unit],kind)
+		field.carry.sync()
 	var stg:=OS.get_environment("HL_GATE_STAGE").to_int()
 	var only:=not media.is_empty() or OS.get_environment("HL_GATE_SINGLE")=="1"
 	for stage in [1,2,3]:
@@ -115,7 +119,7 @@ func run()->void:
 						await travel(stage,g,side,sign_x,entry,only)
 	var blocked:=samples.filter(func(pass_sample):return not pass_sample.crossed or pass_sample.reset_seen or pass_sample.solid_crossings>0 or pass_sample.seam_step>.24 or pass_sample.lateral_at_plane==null or absf(pass_sample.lateral_at_plane)>1.05)
 	print("PERIMETER_ROUTE ",JSON.stringify(samples))
-	print("GATE_CONTROLS cases=",samples.size()," failed=",blocked.size())
+	print("GATE_CONTROLS cases=",samples.size()," failed=",blocked.size()," cargo=",JSON.stringify(field.inventory.carried))
 	field.set_physics_process(false);field.carry.set_physics_process(false)
 	await Profile.drain_field_audio(self,field)
 	field.queue_free()

@@ -655,7 +655,7 @@ func _player_hit(amount: int, attacker: Node3D = null) -> void:
 
 func step_technical_gates(dt: float) -> void:
 	var helper := Vector3.INF
-	if survivor and is_instance_valid(survivor.actor):
+	if survivor and survivor.can_defend():
 		helper = survivor.actor.global_position
 	var bystanders: Array[Vector4] = []
 	for wolf in enemies:
@@ -934,6 +934,23 @@ func constrain_private_snow_travel() -> void:
 				actor.global_position = network.constrain_motion(previous_dry_position,actor.global_position,float(layout.actor_radius))
 		if counter and counter.active:
 			actor.global_position = counter.constrain_actor(previous_dry_position,actor.global_position,float(layout.actor_radius))
+		_keep_gate_travelers_apart()
+
+func _keep_gate_travelers_apart() -> void:
+	if not camp_active or not survivor or not survivor.can_defend(): return
+	var worker: Vector3 = survivor.actor.global_position
+	var separation := .71
+	var after := (actor.global_position-worker).slide(Vector3.UP)
+	if after.length_squared() >= separation*separation: return
+	var before := (previous_dry_position-worker).slide(Vector3.UP)
+	if after.length_squared() >= before.length_squared(): return
+	for gate in gates:
+		if not gate.active: continue
+		var at: Vector3 = gate.to_local(worker)
+		if absf(at.x) > gate.HALF_SPAN or absf(at.z) > gate.APPROACH_DEPTH: continue
+		actor.global_position = previous_dry_position
+		actor.velocity = actor.velocity.slide(before.normalized())
+		return
 
 func orbit_permitted_at(world_position: Vector3) -> bool:
 	return not snow_truck.mounted and not field_env.is_inside_camp(world_position)

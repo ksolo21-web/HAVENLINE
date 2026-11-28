@@ -29,6 +29,7 @@ const CounterLayout = preload("res://field_counter.gd")
 # The last purchase opens a work aisle along the north wall. The gates and
 # the main lanes to the storehouse, hearth and eastern defense stay in place.
 const COURTS := [Vector4(-5,-4,5,4),Vector4(-5.5,-5.5,7.5,5),Vector4(-10,-9,10,5.4)]
+const FENCE_DEPTH := .60
 var counter_center_x := CounterLayout.CENTER_X
 var perimeter_stage := -1
 var wall_revision := 0
@@ -148,16 +149,16 @@ func donor_mesh(source: Mesh) -> MeshInstance3D:
 		if not palette.has(code):
 			var ink := ShaderMaterial.new()
 			ink.shader = TIMBER
-			var colors := {"timber_dark":"aa7039","iron":"343640","brass":"c69655","snow":"e8f2f6","blue":"455966","rope":"f2d299","timber":"ffffff"}
+			var colors := {"timber_dark":"af7740","iron":"343640","brass":"c69655","snow":"e8f2f6","blue":"455966","rope":"efd0a1","timber":"ffffff"}
 			ink.set_shader_parameter("base_color",Color(colors.get(code,"85614a")))
 			ink.set_shader_parameter("detail_strength",.012)
 			if code in ["timber","timber_dark"]:
 				ink.set_shader_parameter("ground_bounce",.43)
 				ink.set_shader_parameter("emission_color",Vector3(.048,.033,.017))
 			if code == "snow":
-				ink.set_shader_parameter("emission_color",Vector3(.29,.34,.40))
+				ink.set_shader_parameter("emission_color",Vector3(.16,.188,.218))
 			elif code == "rope":
-				ink.set_shader_parameter("emission_color",Vector3(.28,.216,.14))
+				ink.set_shader_parameter("emission_color",Vector3(.118,.080,.046))
 			elif code == "iron":
 				ink.set_shader_parameter("emission_color",Vector3(.038,.041,.046))
 			if code == "timber":
@@ -380,16 +381,16 @@ func set_perimeter(stage: int, animate: bool, refresh_wall := false) -> void:
 	# using the same six collision shapes and the same two independent gates.
 	var gap := float(world.gates[0].HALF_SPAN)
 	var rows := [
-		[(r.x-gap)*.5,r.w,-gap-r.x,.30],[(gap+r.z)*.5,r.w,r.z-gap,.30],
-		[r.z,(r.y-gap)*.5,.30,-gap-r.y],[r.z,(gap+r.w)*.5,.30,r.w-gap],
-		[(r.x+r.z)*.5,r.y,r.z-r.x,.30],[r.x,(r.y+r.w)*.5,.30,r.w-r.y]
+		[(r.x-gap)*.5,r.w,-gap-r.x,FENCE_DEPTH],[(gap+r.z)*.5,r.w,r.z-gap,FENCE_DEPTH],
+		[r.z,(r.y-gap)*.5,FENCE_DEPTH,-gap-r.y],[r.z,(gap+r.w)*.5,FENCE_DEPTH,r.w-gap],
+		[(r.x+r.z)*.5,r.y,r.z-r.x,FENCE_DEPTH],[r.x,(r.y+r.w)*.5,FENCE_DEPTH,r.w-r.y]
 	]
 	garage_wall_half.collision_layer = 0
 	if stage == 3 and world.inventory.complete("snow_garage"):
 		var left: float = world.snow_truck.GARAGE_X-world.snow_truck.HALF_DOOR
 		var right: float = world.snow_truck.GARAGE_X+world.snow_truck.HALF_DOOR
-		rows[1] = [(gap+left)*.5,r.w,left-gap,.30]
-		rows.append([(right+r.z)*.5,r.w,r.z-right,.30])
+		rows[1] = [(gap+left)*.5,r.w,left-gap,FENCE_DEPTH]
+		rows.append([(right+r.z)*.5,r.w,r.z-right,FENCE_DEPTH])
 	world.layout.camp_rect_xz = [r.x,r.y,r.z,r.w]
 	world.layout.walls_xz = rows
 	world.layout.gates[0].center_xz = [0.,r.w]

@@ -156,13 +156,9 @@ func at_wood_receiver() -> bool:
 	return phase == "unload" and actor.global_position.distance_to(_shelf_apron()) < .23
 
 func _begin_inbound(carrying: bool) -> void:
-	var portal: Vector3 = world.gates[0].position
-	var approach := Vector3(0,0,portal.z+GATE_LANDING)
-	route = _outdoor_path(actor.position,approach)
-	route.append(Vector3(0,0,portal.z-GATE_LANDING))
-	route.append(Vector3(-2.65,0,2.14))
-	if carrying and world.inventory.storage_open("wood"): route.append(_shelf_apron())
-	else: route.append(READY)
+	var destination := _shelf_apron() if carrying and world.inventory.storage_open("wood") else READY
+	route = _camp_route(actor.global_position,destination)
+	if route.is_empty(): route.assign([destination])
 	phase = "carrying" if carrying else "first_walk"
 
 func _sync_pack() -> void:
@@ -180,15 +176,11 @@ func _sync_pack() -> void:
 	actor.bundle.hide()
 
 func _begin_outbound() -> bool:
-	var portal: Vector3 = world.gates[0].position
-	var staging := Vector3(portal.x,0,portal.z+GATE_LANDING)
+	var staging: Vector3 = world.gates[0].to_global(Vector3(0,0,GATE_LANDING))
 	var outside := _in_work_area(actor.global_position)
 	var start := actor.global_position if outside else staging
 	if not _choose_tree(start): return false
-	route.clear()
-	if not outside:
-		route.assign([Vector3(-2.65,0,2.14),Vector3(portal.x,0,portal.z-GATE_LANDING),staging])
-	route.append_array(timber_approach)
+	if not _dispatch_field_route(timber_approach): return false
 	phase="to_tree"
 	return true
 
@@ -417,6 +409,25 @@ func _can_deliver_counter() -> bool:
 func _worker_cash() -> int:
 	return int(world.inventory.settlement.get("market",{}).get("worker_cash",0))
 
+func _yield_at_gate(from: Vector3, to: Vector3) -> Vector3:
+	if not world.camp_active: return Vector3.INF
+	for gate in world.gates:
+		if not gate.active: continue
+		var worker: Vector3 = gate.to_local(from)
+		if absf(worker.x) > gate.HALF_SPAN or absf(worker.z) <= .22 or absf(worker.z) > GATE_LANDING+.35: continue
+		var goal: Vector3 = gate.to_local(to)
+		if worker.z * goal.z >= 0.0 or absf(goal.x) > .10: continue
+		var player: Vector3 = gate.to_local(world.actor.global_position)
+		if absf(player.x) > .67 or absf(player.z) > GATE_LANDING+.47: continue
+		var side := signf(worker.z)
+		var approaching: bool = world.actor.velocity.dot(gate.global_basis.z) * side > .15
+		var through_lane := player.z * side
+		if through_lane < -1.10 and not approaching: continue
+		var turnout := Vector3(side*.78,0.,side*GATE_LANDING)
+		if absf(worker.z) < gate.LEAF_LENGTH + FOOT_RADIUS + .12: turnout.x = worker.x
+		return gate.to_global(turnout)
+	return Vector3.INF
+
 func _walk(destination: Vector3, dt: float, carrying := false) -> bool:
 	var before := actor.global_position
 	if not destination.is_finite():
@@ -426,7 +437,10 @@ func _walk(destination: Vector3, dt: float, carrying := false) -> bool:
 	destination.y = before.y
 	var waypoint := destination
 	var network = _paid_walkways()
-	if world.camp_active and world.field_env.is_inside_camp(before) and world.field_env.is_inside_camp(destination) and world.camp_layout:
+	var turnout := _yield_at_gate(before,destination)
+	if turnout.is_finite():
+		waypoint = turnout
+	elif world.camp_active and world.field_env.is_inside_camp(before) and world.field_env.is_inside_camp(destination) and world.camp_layout:
 		if network:
 			waypoint = network.walker_waypoint(before,destination)
 			if not waypoint.is_finite(): waypoint = before
@@ -610,8 +624,7 @@ func _begin_hunt(origin: Vector3) -> bool:
 	if not _in_work_area(wildlife.global_position): return false
 	hunt_goal = wildlife.approach_from(origin)
 	var approach := _outdoor_path(origin,hunt_goal)
-	if approach.is_empty(): return false
-	route.append_array(approach)
+	if not _dispatch_field_route(approach): return false
 	hunt_replans = 0
 	hunt_retry = 0.0
 	phase = "hunt_approach"
@@ -921,29 +934,25 @@ func _start_field_job() -> void:
 	priority_order_available=true
 	shift_seconds=0.
 	if world.inventory.settlement.worker_deliveries == 0 and world.inventory.storage_open("wood") and _begin_outbound(): return
-	# Dispatch through the south gate. Restrict the worker's range to its camp
-	# work area so the actor and assignments survive player-centred streaming.
-	var portal: Vector3 = world.gates[0].position
 	var outside := _in_work_area(actor.global_position)
-	var staging := actor.global_position if outside else Vector3(portal.x,0,portal.z+GATE_LANDING)
+	var staging: Vector3 = actor.global_position if outside else world.gates[0].to_global(Vector3(0,0,GATE_LANDING))
 	var target := _closest_drop(staging)
 	assigned_bank = _choose_bank(staging)
 	route.clear()
-	if not outside: route.assign([Vector3(-2.65,0,2.14),Vector3(portal.x,0,portal.z-GATE_LANDING),staging])
 	for offset in FIELD_DUTIES.size():
 		var duty: String = FIELD_DUTIES[field_cursor]
 		field_cursor = (field_cursor+1)%FIELD_DUTIES.size()
 		match duty:
 			"forage":
 				if target.is_empty(): continue
+				if not _dispatch_field_route(_outdoor_path(staging,world.drops[target].at)): continue
 				forage_token = target
-				route.append_array(_outdoor_path(staging,world.drops[target].at))
 				phase = "foraging"
 			"hunt":
 				if not _begin_hunt(staging): continue
 			"mining":
 				if not is_instance_valid(assigned_bank): continue
-				route.append_array(bank_approach)
+				if not _dispatch_field_route(bank_approach): continue
 				phase = "mining_approach"
 			"wood":
 				if not _begin_outbound(): continue
@@ -955,6 +964,45 @@ func _start_field_job() -> void:
 
 func _in_work_area(point: Vector3) -> bool:
 	return not world.field_env.is_inside_camp(point)
+
+func _dispatch_field_route(outdoors: Array[Vector3]) -> bool:
+	if outdoors.is_empty(): return false
+	var origin := actor.global_position
+	if _in_work_area(origin):
+		route = outdoors.duplicate()
+	else:
+		var preserve_pine_approach := PINE_APPROACH in outdoors
+		route = _camp_route(origin,PINE_APPROACH if preserve_pine_approach else outdoors[-1])
+		if preserve_pine_approach and not route.is_empty(): route.append(outdoors[-1])
+	return not route.is_empty()
+
+func _camp_route(from: Vector3, to: Vector3) -> Array[Vector3]:
+	var outbound := not _in_work_area(from)
+	if outbound and not _in_work_area(to): return [to]
+	if not outbound and _in_work_area(to): return _outdoor_path(from,to)
+	var best: Array[Vector3] = []
+	var distance := INF
+	for gate in world.gates:
+		if not gate.active: continue
+		var inside: Vector3 = gate.to_global(Vector3(0.,0.,-GATE_LANDING))
+		var outside: Vector3 = gate.to_global(Vector3(0.,0.,GATE_LANDING))
+		var external := _outdoor_path(outside,to) if outbound else _outdoor_path(from,outside)
+		if external.is_empty(): continue
+		var interior := from if outbound else to
+		var cost := interior.distance_to(inside) + GATE_LANDING*2.
+		var previous := outside if outbound else from
+		for point in external:
+			cost += previous.distance_to(point)
+			previous = point
+		if cost >= distance: continue
+		distance = cost
+		if outbound:
+			best = [inside,outside]
+			best.append_array(external)
+		else:
+			best = external
+			best.append_array([inside,to])
+	return best
 
 func resource_observer() -> Vector3:
 	return actor.global_position if can_defend() else Vector3.INF
@@ -978,11 +1026,15 @@ func _outdoor_path(from: Vector3, to: Vector3) -> Array[Vector3]:
 	outdoor_route.update(world,a)
 	if not _clear_outdoor_leg(a,b):
 		var corners: PackedVector2Array = outdoor_route.points.duplicate()
-		# The swinging leaves occupy either side of the gate, even fully open.
-		var mouth: Vector3 = world.gates[0].position
-		corners.append(Vector2(mouth.x,mouth.z+GATE_LANDING))
-		corners.append(Vector2(mouth.x-2.,mouth.z+GATE_LANDING))
-		corners.append(Vector2(mouth.x+2.,mouth.z+GATE_LANDING))
+		# Stay past the swinging leaves before turning along the exterior wall.
+		for gate in world.gates:
+			if not gate.active: continue
+			for lateral in [0.0,-2.0,2.0]:
+				var mouth: Vector3 = gate.to_global(Vector3(lateral,0.,GATE_LANDING))
+				corners.append(Vector2(mouth.x,mouth.z))
+		for endpoint in [a,b]:
+			var dry: Vector2 = world.river.shore_detour(endpoint,FOOT_RADIUS+.015)
+			if not dry.is_equal_approx(endpoint): corners.append(dry)
 		corners.append(a)
 		corners.append(b)
 		var graph := AStar2D.new()

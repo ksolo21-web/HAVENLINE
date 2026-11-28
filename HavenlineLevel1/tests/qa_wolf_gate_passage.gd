@@ -23,7 +23,7 @@ func run() -> void:
 		pay(id)
 	for tick in 6:
 		await physics_frame
-	var gate = field.gates[1]
+	var gate = field.gates[0 if OS.get_environment("HAVENLINE_THREAT_GATE") == "south" else 1]
 	var hunter_at: Vector3 = gate.to_global(Vector3(0,0,2.1))
 	# Restore a valid encounter with an alpha parked at the outer lip.
 	# The other live pack members start far enough outside to identify the
@@ -113,7 +113,7 @@ func run() -> void:
 	checks["runner and wolf respect solid fence and safe camp"] = healthy_in_camp and not hunter_crossed_fence and solid_crossings == 0
 	checks["open-field torso regains normal collision"] = exited_well and not exception_at_exit
 	checks["same live hunter can pursue and damage the runner"] = witnessed_bites > 0 and bite_cost >= preload("res://field_enemy.gd").BOSS_BITE_DAMAGE and hp_at_first_bite < field.MAX_HP and not field.field_env.is_inside_camp(bite_position)
-	print("LIVE_GATE_HUNTER ",JSON.stringify({"checks":checks,"metrics":{"ticks_to_5_2m":ticks_to_far,"maximum_still_ticks":max_still,"maximum_step_m":peak_step,"nearest_m":nearest,"solid_crossings":solid_crossings,"wolf_bites":witnessed_bites,"hp_lost_to_this_wolf":bite_cost,"hp_after_first_bite":hp_at_first_bite,"max_hp":field.MAX_HP,"wolves":field.enemies.size()}}))
+	print("LIVE_GATE_HUNTER ",JSON.stringify({"gate":gate.gate_id,"checks":checks,"metrics":{"ticks_to_5_2m":ticks_to_far,"maximum_still_ticks":max_still,"maximum_step_m":peak_step,"nearest_m":nearest,"solid_crossings":solid_crossings,"wolf_bites":witnessed_bites,"hp_lost_to_this_wolf":bite_cost,"hp_after_first_bite":hp_at_first_bite,"max_hp":field.MAX_HP,"wolves":field.enemies.size()}}))
 	field.set_physics_process(false)
 	field.carry.set_physics_process(false)
 	await Profile.drain_field_audio(self,field)

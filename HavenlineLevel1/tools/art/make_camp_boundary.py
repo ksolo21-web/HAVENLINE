@@ -178,7 +178,7 @@ for i in range(8):
 # 71% of crown height, leaving a longer section of clear wood between.
 for level in (.164,.94):
     rail_z=.172
-    panel.tube([(-1.30,level,rail_z),(1.30,level,rail_z)],.074,"timber_dark",sides=12)
+    panel.tube([(-1.30,level,rail_z),(1.30,level,rail_z)],.082,"timber_dark",sides=12)
     for i in range(8):
         center=-1.30+(i+.5)*.325
         for handed in (-1,1):
@@ -193,7 +193,7 @@ for level in (.164,.94):
                 # Offset one overpass so the two plies visibly interlock.
                 z=rail_z+(.100+.025*(handed>0))*cos(angle)
                 path.append((x,y,z))
-            panel.tube(path,.029,"rope",True,9)
+            panel.tube(path,.024,"rope",True,9)
     # The reverse of the lashings follows the outside curve of each stock,
     # then dips into the narrowing at the seam before crossing the next.
     for i in range(8):
@@ -204,7 +204,7 @@ for level in (.164,.94):
             dx=(t-.5)*.325
             z=-max(.097,(.177**2-dx**2)**.5)-.018
             path.append((center+dx,level+.010*cos(2*pi*t+i*.14),z))
-        panel.tube(path,.029,"rope",True,6)
+        panel.tube(path,.024,"rope",True,6)
 panel.save()
 
 leaf=TimberKit("snowbound_gate_leaf")
@@ -231,9 +231,9 @@ for i in range(25):
     t=i/24
     x=(t-.5)*1.124
     end=min(1.,t*14.,(1.-t)*14.)
-    center=1.329+.007*sin(2*pi*t+.2)+.006*cos(4*pi*t-.6)
-    height=(.032+.007*cos(3*pi*t))*(.64+.36*end)
-    width=(.116+.004*cos(4*pi*t+.3))*(.8+.20*end)
+    center=1.320+.006*sin(2*pi*t+.2)+.006*cos(7*pi*t-.6)
+    height=(.030+.008*cos(5*pi*t)+.004*sin(9*pi*t))*(.53+.47*end)
+    width=(.107+.008*cos(6*pi*t+.3))*(.78+.22*end)
     ring=[]
     for j in range(14):
         angle=2*pi*j/14
@@ -249,7 +249,7 @@ leaf.save()
 
 post=TimberKit("snowbound_gate_post")
 post.upright(0,0,[(-.02,.203),(.12,.211),(1.40,.202),(1.473,.18),(1.53,.141)],"timber",sides=12)
-post.cap(0,0,.207,1.62,.85)
+post.cap(0,0,.207,1.57,.85,pointed=True)
 post.rope_turns(0,0,.211,.21)
 post.rope_turns(0,0,.207,1.19)
 post.save()
