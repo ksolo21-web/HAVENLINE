@@ -135,13 +135,16 @@ func demand(site: String, kind: String) -> int:
 	if world.encounters.is_machine_down(kind): return 0
 	return world.settlement_loop.Rules.HOPPER_CAPACITY - int(journal.hoppers[kind]) - int(journal.line_load[kind])
 
-func advance(_dt: float) -> void:
+func advance(_dt: float, selected: Variant = null) -> void:
 	refresh()
 	if not manual_machine.is_empty() and not can_operate(manual_machine):manual_machine=""
 	if nearer_plot:
 		cancel()
 		return
 	var site := _site()
+	if selected != null and selected != "work:"+site:
+		cancel()
+		return
 	if active != site: cancel()
 	if site.is_empty() or not world.settlement_loop.can_transact(): return
 	var kind := _raw(site)

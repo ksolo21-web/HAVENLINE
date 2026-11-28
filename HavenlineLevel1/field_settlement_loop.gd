@@ -76,18 +76,25 @@ func sync() -> void:
 	world.opening_hud.reflow()
 
 func advance(dt: float) -> void:
+	world.context.tick(world,dt)
+	var selected: String = world.context.selected()
+	world.context.dispatching = true
 	world.survivor.advance(dt)
+	world.context.dispatching = false
 	world.owl.advance(dt)
 	# Existing jobs advance even when nobody is on an apron. A new handoff enters
 	# the hopper after this step, so a late delivery cannot earn a head start.
 	_advance_production(dt)
+	world._step_receivers(selected)
 	# A carrier at the station can take a finished lot before the unattended
 	# outfeed reserves it; both draw from the same available output.
-	if can_transact(): exchange.at_station()
+	if can_transact() and selected.begins_with("work:"): exchange.at_station(selected.trim_prefix("work:"))
 	if _simulation_active(): conveyors.advance(dt)
 	_update_belt_mix()
-	works.advance(dt)
-	if can_transact(): exchange.visit(dt)
+	works.advance(dt,selected)
+	if can_transact(): exchange.visit(dt,selected)
+	if selected.begins_with("repair:"):
+		world.encounters.raids.sites.repair(selected.trim_prefix("repair:"))
 	var progress := _present_production(dt)
 	world.counter.set_active(world.inventory.complete(Progress.SECOND),int(world.inventory.settlement.served))
 	if can_transact(): world.counter.advance(dt)

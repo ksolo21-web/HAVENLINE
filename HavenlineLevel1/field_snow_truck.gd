@@ -10,11 +10,12 @@ const GARAGE_X := 5.85
 const HALF_DOOR := 1.44
 const BAY_WIDTH := 1.40
 const BAY_DEPTH := 5.18
+const VEHICLE_STOP_LAYER := 2
 const FRONT := 2.38
 const BACK := 1.48
 const BODY_FRONT := 1.67
 const HALF_WIDTH := 1.18
-const WRECK_REACH := 2.15
+const BOARDING_REACH := 1.40
 const BLADE_HALF_SPAN := .55
 const BLADE_HEIGHT := .21
 const BLADE_DEPTH := -1.78
@@ -29,6 +30,7 @@ var body: CharacterBody3D
 var garage: Node3D
 var art: Node3D
 var door: StaticBody3D
+var rear_stop: StaticBody3D
 var control: HBoxContainer
 var hud: VBoxContainer
 var status: Label
@@ -38,6 +40,9 @@ var stow: Button
 var mounted := false
 var opening := 0.0
 var drive_speed := 0.0
+var wants_to_exit_bay := false
+var bay_approach := ""
+var bay_reverse := false
 var wheel_angle := 0.0
 var blade_angle := 0.0
 var track_distance := 0.0
@@ -64,10 +69,13 @@ func install(host) -> void:
 	door = _wall(Vector3(0,1.12,0),Vector3(HALF_DOOR*2.0,2.24,.20))
 	_wall(Vector3(-1.61,1.12,2.60),Vector3(.27,2.24,5.20))
 	_wall(Vector3(1.61,1.12,2.60),Vector3(.27,2.24,5.20))
+	rear_stop = _wall(Vector3(0,1.12,BAY_DEPTH+.10),Vector3(3.22,2.24,.20))
+	rear_stop.name = "TruckOnlyBayStop"
+	rear_stop.collision_mask = 0
 	body = CharacterBody3D.new()
 	body.name = "DriveableSnowTruck"
 	body.motion_mode = CharacterBody3D.MOTION_MODE_FLOATING
-	body.collision_mask = 1
+	body.collision_mask = 1 | VEHICLE_STOP_LAYER
 	body.collision_layer = 0
 	add_child(body)
 	var shape := BoxShape3D.new()
@@ -78,7 +86,7 @@ func install(host) -> void:
 	body.add_child(hull)
 	collision_probe = PhysicsShapeQueryParameters3D.new()
 	collision_probe.shape = shape
-	collision_probe.collision_mask = 1
+	collision_probe.collision_mask = body.collision_mask
 	collision_probe.exclude = [body.get_rid(),world.actor.get_rid()]
 	var player_shape := CapsuleShape3D.new()
 	player_shape.height = 1.32
@@ -197,6 +205,8 @@ func _river_clearance(basis: Basis) -> float:
 
 func restore_scene() -> void:
 	if not is_instance_valid(body): return
+	wants_to_exit_bay = false
+	bay_approach = ""
 	garage.visible = ready_garage()
 	var v := state()
 	var has_wreck := not String(v.get("wreck","")).is_empty()
@@ -206,6 +216,12 @@ func restore_scene() -> void:
 	if at.size() == 3:
 		body.position = Vector3(float(at[0]),0,float(at[1]))
 		body.rotation.y = float(at[2])
+		if garage.visible and body.visible:
+			var local := garage.to_local(body.position)
+			var hull := _garage_hull(body.position,body.basis)
+			if absf(local.x)<BAY_WIDTH and local.z>0. and local.z<BAY_DEPTH and hull.end.y>BAY_DEPTH:
+				body.position -= garage.global_basis.z * (hull.end.y-BAY_DEPTH)
+				record_position()
 		if world.river and body.visible:
 			body.position = world.river.safe_feet(body.position,_river_clearance(body.basis))
 			v.park = [body.position.x,body.position.z,body.rotation.y]
@@ -213,7 +229,7 @@ func restore_scene() -> void:
 		_set_parked_transform()
 	for child in garage.get_children():
 		if child is StaticBody3D:
-			child.collision_layer = 1 if garage.visible else 0
+			child.collision_layer = (VEHICLE_STOP_LAYER if child == rear_stop else 1) if garage.visible else 0
 	if has_wreck:
 		Art.set_damage(art,1.)
 		Art.set_load(art,{})
@@ -264,6 +280,8 @@ func _dismount() -> void:
 	world.hero_model.show()
 	world.carry.rack.show()
 	drive_speed = 0.0
+	wants_to_exit_bay = false
+	bay_approach = ""
 	track_distance = 0.0
 	world.clear_touch()
 	if world.tracks: world.tracks.reset_actor(world.actor)
@@ -279,7 +297,7 @@ func interact() -> bool:
 		_dismount()
 		_commit()
 		return true
-	if world.actor.position.distance_to(body.position) > WRECK_REACH: return false
+	if not _in_boarding_reach():return false
 	var v := state()
 	if v.is_empty(): return false
 	if not String(v.wreck).is_empty():
@@ -321,7 +339,7 @@ func repair_or_replace() -> bool:
 	return true
 
 func load_player_goods() -> void:
-	if mounted or world.persist_blocked or not body.visible or world.actor.position.distance_to(body.position)>WRECK_REACH: return
+	if mounted or world.persist_blocked or not _in_boarding_reach():return
 	if state().get("wreck","")!="":return
 	var did_load := false
 	for kind in world.inventory.KINDS:
@@ -339,9 +357,72 @@ func _hull_inside(test: Callable) -> bool:
 
 func parked() -> bool:
 	if not body.visible or not ready_garage() or absf(drive_speed)>.07:return false
-	return _hull_inside(func(point:Vector3):
-		var local := garage.to_local(point)
-		return absf(local.x)<=BAY_WIDTH and local.z>=.15 and local.z<=BAY_DEPTH)
+	return _inside_bay(_garage_hull(body.position,body.basis))
+
+func _garage_hull(at: Vector3, axes: Basis) -> Rect2:
+	var start := garage.to_local(at)
+	var basis := garage.global_basis.inverse() * axes
+	var middle := start + basis.z * ((BACK - FRONT) * .5)
+	var half_length := (FRONT + BACK) * .5
+	var half := Vector2(absf(basis.x.x),absf(basis.x.z)) * HALF_WIDTH
+	half += Vector2(absf(basis.z.x),absf(basis.z.z)) * half_length
+	return Rect2(Vector2(middle.x,middle.z)-half,half*2.)
+
+func _inside_bay(hull: Rect2) -> bool:
+	return hull.position.x >= -BAY_WIDTH and hull.end.x <= BAY_WIDTH and hull.position.y >= .15 and hull.end.y <= BAY_DEPTH+.002
+
+func _near_pedestrian_gate() -> bool:
+	for gate in world.gates:
+		var at: Vector3 = gate.to_local(body.position)
+		if absf(at.x) <= gate.HALF_SPAN + HALF_WIDTH and absf(at.z) <= gate.APPROACH_DEPTH + FRONT:
+			return true
+	return false
+
+func _limit_bay_step(before: Vector3) -> void:
+	if not garage.visible: return
+	var previous := _garage_hull(before,body.basis)
+	var next := _garage_hull(body.position,body.basis)
+	# The steel blade extends beyond the chassis collider. Keep its visible
+	# envelope behind the rear boundary in either docking orientation.
+	if previous.position.y >= BAY_DEPTH or next.end.y <= BAY_DEPTH: return
+	if next.position.x >= HALF_DOOR or next.end.x <= -HALF_DOOR: return
+	if next.end.y <= previous.end.y: return
+	body.position -= garage.global_basis.z * minf(next.end.y-BAY_DEPTH,next.end.y-previous.end.y)
+	drive_speed = 0.
+	body.velocity = Vector3.ZERO
+
+func _dock_guidance(at: Vector3, wish: Vector3, requested: bool) -> Dictionary:
+	var inward := garage.global_basis.z
+	var local_wish := garage.global_basis.inverse()*wish
+	if not garage.visible or at.z>=BAY_DEPTH or at.z<=-9. or absf(at.x)>=3.15:
+		bay_approach = ""
+		return {}
+	if at.z>=.30 and bay_approach.is_empty():return {}
+	if not requested:
+		return {}
+	var keeping_alignment := bay_approach=="enter" and at.z>=-.20
+	if local_wish.z<(.15 if keeping_alignment else .62):
+		bay_approach = ""
+		return {}
+	var forward := -body.global_basis.z
+	var aligned := absf(forward.dot(inward))>.9999 and absf(at.x)<.12
+	if bay_approach.is_empty():
+		bay_reverse = forward.dot(inward)<0.
+		bay_approach = "enter" if aligned else ("clear" if _garage_hull(body.position,body.basis).end.y>-.64 else "center")
+	if bay_approach=="clear":
+		if _garage_hull(body.position,body.basis).end.y>-.75:
+			return {"wish":forward if bay_reverse else -forward,"reverse":not bay_reverse,"turn_only":false}
+		bay_approach = "center"
+	if bay_approach=="center":
+		if absf(at.x)>=.07 or at.z> -2.96:
+			var stage := garage.to_global(Vector3(0,0,-3.68))
+			var speed_limit := sqrt(34. * body.position.distance_to(stage))
+			return {"wish":body.position.direction_to(stage),"reverse":bay_reverse,"turn_only":false,"speed_limit":speed_limit}
+		bay_approach = "align"
+	if bay_approach=="align" and absf(forward.dot(inward))<.99998:
+		return {"wish":inward,"reverse":bay_reverse,"turn_only":true}
+	bay_approach = "enter"
+	return {"wish":inward,"reverse":bay_reverse,"turn_only":false}
 
 func intersects_closed_door(a:Vector3,b:Vector3,radius:float) -> bool:
 	if not garage.visible or door.collision_layer==0: return false
@@ -353,10 +434,13 @@ func _step_door(dt:float) -> void:
 	if not garage.visible:return
 	var actor_at := garage.to_local(world.actor.position)
 	var truck_at := garage.to_local(body.position)
-	var player_near := absf(actor_at.x)<2.0 and absf(actor_at.z)<(5.0 if mounted else 1.55)
-	var truck_at_threshold: bool = body.visible and state().get("wreck","")=="" and absf(truck_at.x)<2.3 and absf(truck_at.z)<2.44
+	var player_near := not mounted and absf(actor_at.x)<2.0 and absf(actor_at.z)<1.55
+	var hull := _garage_hull(body.position,body.basis)
+	var truck_at_threshold: bool = body.visible and state().get("wreck","")=="" and hull.intersects(Rect2(-HALF_DOOR,-.15,HALF_DOOR*2.,.30),true)
+	var approaching := mounted and absf(truck_at.x)<2.3 and absf(truck_at.z)<5.0 and not _inside_bay(hull)
+	var departing := mounted and wants_to_exit_bay and absf(truck_at.x)<2.3 and truck_at.z>=0. and truck_at.z<BAY_DEPTH
 	var before := opening
-	opening = move_toward(opening,1. if player_near or truck_at_threshold else 0.,dt*2.85)
+	opening = move_toward(opening,1. if player_near or truck_at_threshold or approaching or departing else 0.,dt*2.85)
 	var was_open := door.collision_layer==0
 	door.collision_layer = 0 if opening >= .94 or (was_open and truck_at_threshold) else 1
 	if was_open != (door.collision_layer==0):
@@ -369,6 +453,18 @@ func _step_door(dt:float) -> void:
 func nearest_hull_point(point: Vector3) -> Vector3:
 	var local := body.to_local(point)
 	return body.to_global(Vector3(clampf(local.x,-HALF_WIDTH,HALF_WIDTH),0.,clampf(local.z,-BODY_FRONT,BACK)))
+
+func _in_boarding_reach() -> bool:
+	if not body.visible:return false
+	var feet: Vector3 = world.actor.global_position
+	var edge := nearest_hull_point(feet)
+	if feet.distance_squared_to(edge)>BOARDING_REACH*BOARDING_REACH:return false
+	if garage.visible:
+		var local := garage.to_local(feet)
+		var hull := garage.to_local(edge)
+		if absf(local.x)>HALF_DOOR and local.z>0. and local.z<BAY_DEPTH and absf(hull.x)<HALF_DOOR and hull.z>0. and hull.z<BAY_DEPTH:
+			return false
+	return world.field_env.travel_clear(feet,edge)
 
 func _keep_enemies_from_pushing() -> void:
 	var exclude: Array[RID] = [body.get_rid(),world.actor.get_rid()]
@@ -391,13 +487,15 @@ func drive(input:Vector2,dt:float) -> void:
 	var wish := (right*input.x+camera_depth*input.y).normalized()
 	var requested := input.length()>.11
 	var at := garage.to_local(body.position)
-	if requested and absf(at.x)<2.15 and at.z<-.40 and at.z>-8.9:
-		var requested_local := garage.global_basis.inverse()*wish
-		if requested_local.z>.87:
-			var guide := garage.to_global(Vector3(0,0,2.72))
-			wish = (guide-body.position).normalized()
+	var local_wish := garage.global_basis.inverse()*wish
+	wants_to_exit_bay = requested and local_wish.z < -.30
+	var guide := _dock_guidance(at,wish,requested)
+	if not guide.is_empty(): wish = guide.wish
 	var forward := -body.global_basis.z
-	var backwards := requested and absf(at.x)<2.15 and absf(at.z)<9.0 and forward.dot(wish)<-.72
+	var turning_near_gate := requested and _near_pedestrian_gate()
+	var backing_area := (absf(at.x)<2.15 and absf(at.z)<9.0) or turning_near_gate
+	var backwards := requested and backing_area and forward.dot(wish)<(-.48 if turning_near_gate else -.72)
+	if not guide.is_empty(): backwards = guide.reverse
 	if requested:
 		var face := -wish if backwards else wish
 		var heading := atan2(-face.x,-face.z)
@@ -405,13 +503,18 @@ func drive(input:Vector2,dt:float) -> void:
 		var basis := Basis(Vector3.UP,trial)
 		collision_probe.transform = Transform3D(basis,body.position+basis*Vector3(0,.72,(BACK-BODY_FRONT)*.5))
 		var river_clear: bool = not world.river or world.river.is_dry(Vector2(body.position.x,body.position.z),_river_clearance(basis))
-		if river_clear and world.get_world_3d().direct_space_state.intersect_shape(collision_probe,1).is_empty():
+		var proposed := _garage_hull(body.position,basis)
+		var current := _garage_hull(body.position,body.basis)
+		var turns_past_back := garage.visible and current.position.y < BAY_DEPTH and current.end.y > 0. and absf(at.x) < HALF_DOOR and proposed.end.y > maxf(BAY_DEPTH,current.end.y)
+		if river_clear and not turns_past_back and world.get_world_3d().direct_space_state.intersect_shape(collision_probe,1).is_empty():
 			body.rotation.y = trial
 	var target_speed := 0.0
-	if requested and not wish.is_zero_approx():
+	if requested and not wish.is_zero_approx() and not guide.get("turn_only",false):
 		var alignment := maxf(0.0,(-body.global_basis.z).dot(wish)*(-1. if backwards else 1.))
 		target_speed = (-REVERSE_SPEED if backwards else MAX_SPEED)*input.length()*alignment
 		if absf(at.x)<2.0 and absf(at.z)<5.35: target_speed = clampf(target_speed,-3.45,3.45)
+		var guidance_limit := float(guide.get("speed_limit",MAX_SPEED))
+		target_speed = clampf(target_speed,-guidance_limit,guidance_limit)
 	drive_speed = move_toward(drive_speed,target_speed, dt*(17.0 if requested else 22.0))
 	var previous := body.position
 	body.velocity = -body.global_basis.z*drive_speed
@@ -420,6 +523,7 @@ func drive(input:Vector2,dt:float) -> void:
 	var safe:Vector3 = world.lakeshore.constrain_motion(previous,body.position,HALF_WIDTH) if world.lakeshore else body.position
 	if world.river: safe = world.river.constrain_motion(previous,safe,_river_clearance(body.basis))
 	if not safe.is_equal_approx(body.position): body.position = safe
+	_limit_bay_step(previous)
 	var advanced := body.position.distance_to(previous)
 	if world.tracks and advanced > .001:
 		track_distance += advanced
@@ -551,7 +655,7 @@ func step(dt:float) -> void:
 			world._event("truck_unload",garage.to_global(PARK),"deposit_wood")
 		park_elapsed = 0.0
 		cargo = state().get("cargo",{})
-	var near: bool = world.actor.position.distance_to(body.position)<=WRECK_REACH
+	var near := _in_boarding_reach()
 	var near_bay: bool = world.actor.position.distance_to(garage.to_global(PARK))<4.0
 	var wreck := String(v.get("wreck",""))
 	var recovering: bool = wreck=="inside" and not v.get("salvage",{}).is_empty()

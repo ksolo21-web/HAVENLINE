@@ -290,12 +290,12 @@ func visit_counter(worker: bool, at: Vector3) -> bool:
 func collect_station(raw:String)->bool:
 	return world.settlement_loop.works.can_operate(raw) and _pickup_machine(raw)
 
-func at_station()->bool:
+func at_station(selected := "")->bool:
 	var at:Vector3=world.actor.global_position
-	var raw:=_machine_at(at)
+	var raw:=_machine_at(at) if selected.is_empty() else selected
 	return not raw.is_empty() and world.settlement_loop.works.automatic_handoff(raw) and collect_station(raw)
 
-func visit(dt:float)->void:
+func visit(dt:float, selected: Variant = null)->void:
 	var j:Dictionary=world.inventory.settlement
 	world.carry.storage_protected=j.withdrawn
 	var at:Vector3=world.actor.global_position
@@ -303,10 +303,10 @@ func visit(dt:float)->void:
 		j.withdrawn.clear()
 		world._inventory_changed()
 		if world.persist_blocked:return
-	if world.depot.house.on_walkable_aisle(at,float(world.layout.actor_radius)):_walk_pickup(dt)
+	if (selected==null or selected=="shelf") and world.depot.house.on_walkable_aisle(at,float(world.layout.actor_radius)):_walk_pickup(dt)
 	else:
 		sampled_bay=""
 		responded=false
 		still_seconds=0.
-	if world.counter.at_service(at):visit_counter(false,at)
-	elif _machine_at(at).is_empty() and at_loading_area() and world.depot.target_at(at)==world.carry.STOCK:_deposit()
+	if (selected==null or selected=="counter") and world.counter.at_service(at):visit_counter(false,at)
+	elif (selected=="pad:"+world.carry.STOCK or (selected==null and _machine_at(at).is_empty())) and at_loading_area() and world.depot.target_at(at)==world.carry.STOCK:_deposit()

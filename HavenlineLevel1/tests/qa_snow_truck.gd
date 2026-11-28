@@ -77,6 +77,22 @@ func _blade_checks() -> void:
 	field.encounters._remove(wolf)
 	truck.attack_delay = 0.
 
+func _gate_escape() -> void:
+	var gate: Node3D = field.gates[0]
+	truck.body.position = gate.to_global(Vector3(1.14,0.,-3.5))
+	truck.body.rotation.y = gate.rotation.y + PI
+	truck.drive_speed = 0.
+	var inward := gate.global_basis.z
+	await _hold(inward,65)
+	var corner: Vector3 = gate.to_local(truck.body.position)
+	await _hold(-inward,45)
+	var cleared: Vector3 = gate.to_local(truck.body.position)
+	_assert("returns steering control after contacting a gate corner",cleared.z < corner.z - 1.1)
+	_assert("vehicle cannot shortcut through the pedestrian gate corner",corner.z < -.15)
+	truck.body.position = truck.garage.to_global(Vector3(0,0,-4.8))
+	truck.body.rotation.y = truck.garage.rotation.y
+	truck.drive_speed = 0.
+
 func run() -> void:
 	field = load("res://field_opening.tscn").instantiate()
 	root.add_child(field)
@@ -135,6 +151,11 @@ func run() -> void:
 	print("SNOW TRUCK IN ",truck.body.position, " parked=",truck.parked()," door=",truck.opening)
 	_assert("reverse returns into garage and parks",truck.parked())
 	_assert("park transfers the entire cargo once",truck.state().cargo.is_empty() and field.inventory.stored.wood==stock_before+1 and field.inventory.stored.metal==metal_before+8 and not field.persist_blocked)
+	await _hold(Vector3.FORWARD,125)
+	var limit: Rect2 = truck._garage_hull(truck.body.position,truck.body.basis)
+	_assert("held throttle docks fully and stops at rear while mounted",truck.mounted and truck.parked() and limit.end.y <= truck.BAY_DEPTH+.002 and limit.end.y>=truck.BAY_DEPTH-.08)
+	_assert("shutter closes after the entire vehicle clears the opening",is_zero_approx(truck.opening) and truck.door.collision_layer!=0)
+	_assert("remaining docked cannot credit the same cargo again",field.inventory.stored.wood==stock_before+1 and field.inventory.stored.metal==metal_before+8)
 	await _key()
 	_assert("restored player controls and backpack",not truck.mounted and field.hero_model.visible and field.carry.rack.visible and field.actor.collision_layer!=0)
 	field.inventory.vehicle_collect("truck-native-salvage","stone")
@@ -149,11 +170,14 @@ func run() -> void:
 		for count in field.inventory.costs.snow_truck[kind]:
 			field.inventory.collect("truck-replacement-%s-%d"%[kind,count],kind)
 	_assert("affordable replacement at the garage",truck.repair_or_replace() and truck.state().hp==truck.MAX_HP and truck.state().purchases==2)
-	await physics_frame
+	field.actor.global_position=truck._exit_position()
+	field.actor.velocity=Vector3.ZERO
+	for frame in 4:await physics_frame
 	await _key()
 	_assert("can drive the replacement truck",truck.mounted)
 	await _hold(Vector3.BACK,104)
 	_assert("replacement is completely outside camp",truck.body.position.z > 8.)
+	await _gate_escape()
 	_assert("replacement takes cargo before wreck",field.inventory.vehicle_collect("truck-native-lost","coal"))
 	var fatal_contact := false
 	for count in 48:

@@ -69,6 +69,7 @@ var reveal_countdown := -1.0
 var flash: ColorRect
 var player_wardrobe = preload("res://field_player_wardrobe.gd").new()
 var character_motion := preload("res://field_character_motion.gd").new()
+var context := preload("res://field_context.gd").new()
 var hero_model: Node3D
 var last_good: Dictionary
 var moving_gates := {}
@@ -93,6 +94,7 @@ func create_opening_hud() -> OpeningHUD:
 
 func set_player_character(number: int) -> bool:
 	if not field_ready or not player_wardrobe.choose(number):return false
+	context.reset()
 	character_motion.cancel()
 	gait_motor.field_launch_enabled = player_wardrobe.number == 1
 	gait_motor.launch_remaining = 0.
@@ -739,6 +741,7 @@ func _physics_process(dt: float) -> void:
 	forest.advance(dt)
 	var last_turn: int = character_kit.turn_id
 	if reset_time > 0:
+		context.reset()
 		if owl:owl.advance(dt)
 		if not persist_blocked: settlement_loop.advance_unattended(dt)
 		var fall := smoothstep(0.0,.44,1.05-reset_time)
@@ -802,7 +805,6 @@ func _physics_process(dt: float) -> void:
 			reveal_countdown = -1.0
 			_apply_hearth(true,true)
 			_event("reveal", Vector3.ZERO)
-	_step_receivers()
 	settlement_loop.advance(dt)
 	_step_character_motion(dt)
 	sound.set_hearth_proximity(clampf(1.0-actor.global_position.distance_to(field_env.hearth_footprint.global_position)/7.0,0.0,1.0) if camp_active else 0.0)
@@ -821,14 +823,17 @@ func _step_character_motion(dt: float) -> void:
 		character_motion.cancel()
 		return
 	var transferring := false
+	var selected := context.selected()
 	for flight: Dictionary in carry.flights:
 		if flight.from != carry.HAND: continue
 		var dest: String = flight.to
+		if selected != "pad:"+dest and selected != dest: continue
 		var at: Vector3 = carry._place(dest, flight.kind, int(flight.index))
-		# The raw packet follows its existing transfer route. The gesture
-		# anticipates the first arrival, then recovers across staggered packets.
-		if character_motion.action in [&"", &"deposit"]:
-			character_motion.aim(&"deposit", at, true)
+		var gesture := &"build" if context.descriptor.kind == "build" else &"deposit"
+		# The journal confirms contact. Only the selected in-flight handoff
+		# provides an anticipatory gesture to the existing T06 motion solver.
+		if character_motion.action in [&"", gesture]:
+			character_motion.aim(gesture, at, true)
 		transferring = true
 		break
 	character_motion.advance(dt, gait_motor.last_travel_speed, transferring)
@@ -1030,37 +1035,19 @@ func _keep_gate_travelers_apart() -> void:
 func orbit_permitted_at(world_position: Vector3) -> bool:
 	return not snow_truck.mounted and not field_env.is_inside_camp(world_position)
 
-func _step_receivers() -> void:
-	if snow_truck.mounted or reveal_countdown >= 0. or (camp_layout and camp_layout.active): return
-	var at := actor.global_position
-	var depot_target: String = depot.target_at(at) if camp_active and field_env.is_inside_camp(at) else ""
-	var selected := depot_target
-	var best := INF
-	if not selected.is_empty():
-		best = Reach.plot_distance(depot.upgrade_mark,at) if selected == depot.offer and depot.on_upgrade_side(at) else depot.loading_distance(at)
-	for id: String in inventory.costs:
-		if id in Progress.LINES and not offer_floors[id].visible:continue
-		if id in Progress.STORAGE or (not exit_required.has(id) and not inventory.offer_open(id)): continue
-		var anchor: Node3D = carry.receivers[id]
-		var distance := Reach.plot_distance(anchor,at)
-		if distance > Reach.NEAR:
-			exit_required.erase(id)
-			continue
-		if exit_required.has(id) or not inventory.offer_open(id): continue
-		if id in [Progress.GARAGE,Progress.TRUCK] and not _can_fund_vehicle_offer(id): continue
-		if camp_active and not field_env.is_inside_camp(at): continue
-		if distance < best:
-			best = distance
-			selected = id
-	if settlement_loop and settlement_loop.works:
-		var machines = settlement_loop.works
-		var working_distance: float = machines.handoff_distance(at) if not selected.is_empty() else INF
-		machines.nearer_plot = not selected.is_empty() and best <= working_distance
-		if working_distance < best:
-			selected = ""
+func _step_receivers(action_id: Variant = null) -> void:
+	if action_id == null:
+		context.tick(self,1. / Engine.physics_ticks_per_second)
+		action_id = context.selected()
+	var id := String(action_id)
+	var selected := id.trim_prefix("pad:") if id.begins_with("pad:") else ""
+	var depot_target: String = context.depot_target
 	if selected != carry.visit_target and not carry.visit_target.begins_with("work:"):
 		carry.stop_visit(carry.visit_target)
-	depot.step(at,selected if selected == depot_target else "")
+	# The completed loading visit stays visible until the runner actually
+	# leaves the apron. No new packet starts once the last bundle is loaded.
+	if not (selected.is_empty() and depot_target==carry.STOCK and depot.visit=="load"):
+		depot.step(actor.global_position,selected if selected == depot_target else "")
 	if not selected.is_empty() and selected != depot_target:
 		carry.visit(selected)
 
@@ -1139,6 +1126,8 @@ func _refresh_hud_field(danger: bool) -> void:
 		if depot.apron.visible and (depot.at_apron(actor.position) or depot.at_loading_area(actor.position) or (depot.upgrade_mark.visible and depot.on_upgrade_side(actor.position))): hint = depot.hint()
 	if settlement_loop and not persist_blocked and reset_time <= 0:
 		hint = settlement_loop.hint(hint,false)
+		var focus := context.feedback(self)
+		if not focus.is_empty(): hint = focus
 	opening_hud.set_threat(danger and not persist_blocked and reset_time <= 0)
 	var notice := str(inventory.carried.values()) + hint
 	if notice == last_notice: return
@@ -1159,6 +1148,7 @@ func build_hint(id: String) -> String:
 
 # Scene callbacks conclude a physical transfer and save its receipt before celebrating it.
 func rescue_survivor() -> bool:
+	if context.dispatching and context.selected() != "survivor": return false
 	if not settlement_loop.rescue(): return false
 	present_character_contact(&"rescue", survivor.actor.global_position)
 	return true
