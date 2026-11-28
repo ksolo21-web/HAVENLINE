@@ -1,0 +1,21 @@
+# Independent review of the bank pine canopy
+
+**Verdict for the recorded canopy defect: PASS.** The three revised Havenline pine variants show distinct, irregular pale snow faces over cool recessed branch shelves. The joined rounded shoulders and thin cyan bands that caused the earlier finding are gone from the tested view. At default framing and actual two-finger 2× zoom the snow remains readable across the mid and lower tiers. Character 1, the axe and the approach remain clear near the bank in the tested path. This verdict covers the three bank assets and the named visual finding.
+
+I first rejected the geometry-only draft because it produced equally lit ripples. The next tint draft hid too much snow along the lower shelves. I inspected the final same-camera comparison and the three native 720×1680 files generated after importing the final GLBs through Godot. The runtime observer reported nine passing checks, including the tracked source hashes, 115 active bank placements across the three variants and promotion of the approached bank tree into an interactive harvest tree. The route uses touch input from a staged starting position near the founding plot.
+
+I compared the candidate with the locked A at 00:05 and B at 00:02 and 00:06 frames for broad snow faces, stepped separation and navigation readability. Havenline's atlas supplies the original irregular snow pads and branch identity. The previous generated Meshy reference is documented in the T01 provenance. The deployed repair reshapes the existing three bank GLBs. [Selected Havenline design](https://github.com/ksolo21-web/HAVENLINE/blob/a868ae89cdf2f120b478aa0a48fff35e09cc465c/Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-biomes-forest-lake.png) · [Locked B footage extraction](https://github.com/ksolo21-web/HAVENLINE/blob/f55128d744d3ac610dc6667673c9d040770a9da2/Docs/Production/T05/ReferenceFrames/B-006.00.png)
+
+The independent GLB comparison found zero new collapsed or inverted triangles across the 28,080 crown and lip triangles, with zero separation at each variant's 363 shared seam vertex pairs. Trunk geometry, index buffers, UVs, texture bytes and vertex alpha match the prior asset. Overall bounding dimensions and radial reach agree within 0.25 mm native. Bounds metadata and the normalized normal/tangent bases passed. SHA-256 of the three rendered GLBs, in variant order:
+
+- `b5b941eaad71191f981ded98e0bf21bbffb8c2ea6460e6c9342fed4cc7c6b3f5`
+- `24658dfb86517932b74a4a9b1e9796dd0eee615049ce8a89cc066f1d49ab35c1`
+- `e57f1756b509e028b3da2e96ddb4c9f6c53ee5cb18ca1d6508866b413a98578c`
+
+I queried GitHub for exact runtime commit `0f64bb2775e39c94df9d36e91019b5418ae6cc0f` and verified its only three changed paths are the reviewed bank GLBs. The three remote Git blobs are `5ce24bbbe5e45ae3b6c002ba87f3386526ac486b`, `230cfc101d0375513556a28ee75195bb7769457a`, and `206cdcfd6fce99ccb8614eba802768106222402f`. All match local file content. The preceding project tree `883ef00b5ca5b9c7df6f2e30d15a21094b599b2d` equals the previously reviewed T07 project tree. [Exact runtime commit](https://github.com/ksolo21-web/HAVENLINE/commit/0f64bb2775e39c94df9d36e91019b5418ae6cc0f)
+
+The four regression suites passed. Forest clearance in the three tested camp expansion stages stayed above 0.52 m. The worker struck three distinct trees and completed five timber and six stone deposits while the player remained inactive. Camera composition and the snow truck route also passed.
+
+I decoded the whole native H.264 approach and pinch clip with no errors. Its 85 consecutive 540×1260 frames at 30 fps cover 2.833 seconds with zero reported sampling gaps. The motion fixture passed 10 checks. Across 10 ordered samples from this playback I saw the bank retain its asymmetric snow faces and distinct tiers as the player approached, the nearby tree became interactive, and the camera pinched to 2×. The player's silhouette stayed readable along the route. The clip SHA-256 is `c3705ea8f1559d515581ac256b16ef08dcfa3b3ad828149d8a0e6168ab27f773`.
+
+The final source still needs its separately scoped whole-frame and shipping approval through the project gates. This review supplies no aggregate game score. The recorded native images are scoped viewport and interaction evidence, using the software renderer.
