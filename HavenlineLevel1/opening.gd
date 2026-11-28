@@ -248,7 +248,7 @@ func setup_camp() -> void:
 			var marker_at := at + axis * float(gate.clear_span) * .52 * float(side)
 			marker_at.y = .72
 			var marker := Node3D.new()
-			marker.name = String(gate.id) + "-technical-marker"
+			marker.name = "%s-technical-marker-%d" % [gate.id, side]
 			camp_built.add_child(marker)
 			marker.position = marker_at
 			marker.add_child(_fit_boundary(TRIAL_POST,Vector3(.20,1.44,.20)))

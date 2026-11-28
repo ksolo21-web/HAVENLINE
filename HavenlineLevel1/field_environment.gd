@@ -518,10 +518,13 @@ func canopy_ink(material: Material) -> Material:
 		var skirt := material.resource_name.to_lower() == "lip"
 		var bank := material.resource_path.begins_with("res://assets/reference_forest/bank_pine_")
 		if bank:
-			# Wide pale snow faces sit above the shaded slate-blue branches.
-			shaded.albedo_color *= Color(.53,.60,.73) if skirt else Color(.85,.90,.92)
-			shaded.emission = Color("679acf")
-			shaded.emission_energy_multiplier = .24 if skirt else .43
+			# Keep the original maps while softening relief and cooling the dense snow banks.
+			shaded.normal_scale = .30
+			shaded.metallic_specular = .04
+			shaded.roughness = 1.0
+			shaded.albedo_color *= Color(.58,.61,.66) if skirt else Color(.76,.75,.74)
+			shaded.emission = Color("a0b5cf")
+			shaded.emission_energy_multiplier = .30 if skirt else .42
 		else:
 			shaded.albedo_color *= Color(.44,.51,.66) if skirt else Color(.62,.63,.72)
 			shaded.emission = Color("4973b0") if skirt else Color("4c79bc")

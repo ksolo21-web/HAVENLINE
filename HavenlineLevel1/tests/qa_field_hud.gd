@@ -51,6 +51,9 @@ func run() -> void:
 		},
 		true
 	)
+	balances.market.sold.meal = 10
+	balances.market.earned = 10
+	balances.market.counter_cash = 8
 	hud.settlement_status(balances, .5)
 	hud.set_health(23, 30)
 	hud.set_threat(true)
