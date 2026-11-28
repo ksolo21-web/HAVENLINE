@@ -1,0 +1,36 @@
+{
+  "candidate": "cd4eedcedd03c71ac29253fa906e30984d4481e1",
+  "engine": "Godot 4.7.2 headless on shared Linux desktop",
+  "fixture": "One paid camp and the existing paid survivor. Same route, simulation step and station order for both appearances. Times cover the fixture simulation step, not a rendered frame.",
+  "replay_step_hz": 60,
+  "measurements": {
+    "forester": {
+      "median_us": 1229,
+      "p95_us": 1879,
+      "p99_us": 5742,
+      "paid_camp": true,
+      "paid_station_phase_frames": 411,
+      "samples": 2640,
+      "static_end": 925646064.0,
+      "static_start": 925154892.0,
+      "valid_ledger": true,
+      "worker": "Forester",
+      "worker_actor_nodes": 6
+    },
+    "c1-companion": {
+      "median_us": 1421,
+      "p95_us": 1945,
+      "p99_us": 3795,
+      "paid_camp": true,
+      "paid_station_phase_frames": 411,
+      "samples": 2640,
+      "static_end": 926092446.0,
+      "static_start": 925706464.0,
+      "valid_ledger": true,
+      "worker": "Character 1",
+      "worker_actor_nodes": 7
+    }
+  },
+  "p95_companion_minus_forester_us": 66,
+  "hardware_certification": "Out of scope under the owner waiver"
+}
