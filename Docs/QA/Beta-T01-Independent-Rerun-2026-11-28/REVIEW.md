@@ -2,6 +2,12 @@
 
 T01 passed the fresh scoped beta review after fixing touch feedback at the screen edges. The November 28 GitHub preflight resolved the active beta, the latest draft task plan and the tree-reference checkpoint. The newer T06 additions leave the T01 gameplay scope as forest traversal, sightlines, harvest, regrowth and the controls used in the field. The tree checkpoint describes static evidence, so the replay uses the beta's installed pine assets. [Exact runtime](https://github.com/ksolo21-web/HAVENLINE/commit/434a4c97227ef7bd4726fd85a2c416d5a5c07657) · [Draft task plan](https://github.com/ksolo21-web/HAVENLINE/pull/109) · [Tree asset checkpoint](https://github.com/ksolo21-web/HAVENLINE/commit/379818f18369765fc992dae8d541abd87f7a5b7d)
 
+## Formal critic disposition
+
+**BLOCKED for final approval on runtime `434a4c97227ef7bd4726fd85a2c416d5a5c07657`.** The fresh verdict covers the gameplay and accessibility scenarios recorded below. The required C1 reference-fidelity and C2 technical/visual integrity reviews still need current, complete independent score records for this runtime. The accessibility safeguard passed. The rerun assigned no formal C11 visual score. [Independent rerun](independent-review.md) · [Accessibility safeguard](accessibility-gate.json)
+
+The current policy requires at least 9.9 unrounded for each final reference-sensitive dimension and exact 10 where the stronger mandatory visual gates apply, including C1 and C2. Historical reviews retain their own candidate identities. The C6 performance review is scheduled with the T10 integrated build. Final approval requires the remaining mandatory evidence and owner sign-off. [Current critic standard](https://github.com/ksolo21-web/HAVENLINE/blob/a4e643aeb563b6f9cfda8b840c0651d13326eec8/Docs/Production/REFERENCE_ACCEPTANCE_STANDARD.md)
+
 ## Fixed and retested
 
 Dragging near an edge used to draw the joystick ring partly outside the window. The corrected control places the whole ring, arrow marks and movable thumb inside the usable area. The world receives the original touch origin and drag vector, preserving the same steering. The field touch/resume suite now guards against the clipping. [Cover before](screenshots/cover-before.jpg) · [Cover after](screenshots/cover-after.jpg) · [Unfolded before](screenshots/unfolded-before.jpg) · [Unfolded after](screenshots/unfolded-after.jpg)
