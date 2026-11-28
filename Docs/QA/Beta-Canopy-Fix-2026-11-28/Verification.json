@@ -1,0 +1,179 @@
+{
+  "base": "45d2614bf0e3910de56c760c37a8c1cf3c2fec71",
+  "runtime": "0f64bb2775e39c94df9d36e91019b5418ae6cc0f",
+  "assets": {
+    "bank_pine_1.glb": {
+      "input": "9da3d7b12fdeaf5c8b955705ef273fdf8fc12a2218bfeeb0de3ffcd2f42933c3",
+      "output": "b5b941eaad71191f981ded98e0bf21bbffb8c2ea6460e6c9342fed4cc7c6b3f5"
+    },
+    "bank_pine_2.glb": {
+      "input": "cbf78015988f097e7b0dbfe8dae7aac2dddd79869b1a04536dd9c24eea4c0a32",
+      "output": "24658dfb86517932b74a4a9b1e9796dd0eee615049ce8a89cc066f1d49ab35c1"
+    },
+    "bank_pine_3.glb": {
+      "input": "61996d4bdcde9fbf04b6f86f7ec5d09092a3c23b61e150f494fba18e5014fedd",
+      "output": "e57f1756b509e028b3da2e96ddb4c9f6c53ee5cb18ca1d6508866b413a98578c"
+    }
+  },
+  "checks": {
+    "01-Grove-normal uses the full gameplay raster": true,
+    "02-Grove-approach uses the full gameplay raster": true,
+    "03-Grove-pinch uses the full gameplay raster": true,
+    "bank 1 is instanced from the tracked GLB": true,
+    "bank 2 is instanced from the tracked GLB": true,
+    "bank 3 is instanced from the tracked GLB": true,
+    "near grove switches to the same harvest asset": true,
+    "standard touch reached the bank": true,
+    "standard two-finger pinch reached two-times zoom": true
+  },
+  "capture_views": {
+    "01-Grove-normal": {
+      "camera": [
+        10.075291633606,
+        17.8405017852783,
+        18.4880218505859
+      ],
+      "player": [
+        0.0,
+        0.0160000007599592,
+        2.73000001907349
+      ],
+      "raster": [
+        720,
+        1680
+      ],
+      "zoom": 1.0
+    },
+    "02-Grove-approach": {
+      "camera": [
+        11.9279956817627,
+        17.8405017852783,
+        14.9351530075073
+      ],
+      "player": [
+        2.35264587402344,
+        0.0160000007599592,
+        -1.66754841804504
+      ],
+      "raster": [
+        720,
+        1680
+      ],
+      "zoom": 1.0
+    },
+    "03-Grove-pinch": {
+      "camera": [
+        12.4709739685059,
+        17.8405017852783,
+        16.0313568115234
+      ],
+      "player": [
+        2.35264587402344,
+        0.0160000007599592,
+        -1.66754841804504
+      ],
+      "raster": [
+        720,
+        1680
+      ],
+      "zoom": 2.0
+    }
+  },
+  "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+  "regression_codes": {
+    "qa_forest_perimeter_safety": 0,
+    "qa_worker_harvest": 0,
+    "qa_field_camera_composition": 0,
+    "qa_snow_truck": 0
+  },
+  "motion": {
+    "video": {
+      "codec_name": "h264",
+      "width": 540,
+      "height": 1260,
+      "r_frame_rate": "30/1",
+      "duration": "2.833333",
+      "nb_frames": "85"
+    },
+    "sha256": "c3705ea8f1559d515581ac256b16ef08dcfa3b3ad828149d8a0e6168ab27f773",
+    "runtime": {
+      "captures": {
+        "01-Grove-normal": {
+          "camera": [
+            10.075291633606,
+            17.8405017852783,
+            18.4880218505859
+          ],
+          "player": [
+            0.0,
+            0.0160000007599592,
+            2.73000001907349
+          ],
+          "raster": [
+            540,
+            1260
+          ],
+          "zoom": 1.0
+        },
+        "03-Grove-pinch": {
+          "camera": [
+            12.5472116470337,
+            17.8405017852783,
+            16.0177307128906
+          ],
+          "player": [
+            2.39057612419128,
+            0.0160000007599592,
+            -1.76456379890442
+          ],
+          "raster": [
+            540,
+            1260
+          ],
+          "zoom": 2.0
+        }
+      },
+      "checks": {
+        "01-Grove-normal uses the full gameplay raster": true,
+        "03-Grove-pinch uses the full gameplay raster": true,
+        "bank 1 is instanced from the tracked GLB": true,
+        "bank 2 is instanced from the tracked GLB": true,
+        "bank 3 is instanced from the tracked GLB": true,
+        "continuous gameplay capture connected": true,
+        "near grove switches to the same harvest asset": true,
+        "retained at least two seconds of consecutive gameplay": true,
+        "standard touch reached the bank": true,
+        "standard two-finger pinch reached two-times zoom": true
+      },
+      "movie_frames": 85,
+      "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+      "sample_gaps": 0,
+      "sources": {
+        "res://assets/reference_forest/bank_pine_1.glb": {
+          "active_rows": 47,
+          "extent": [
+            1.35519301891327,
+            2.9893479347229
+          ],
+          "sha256": "b5b941eaad71191f981ded98e0bf21bbffb8c2ea6460e6c9342fed4cc7c6b3f5"
+        },
+        "res://assets/reference_forest/bank_pine_2.glb": {
+          "active_rows": 35,
+          "extent": [
+            1.27503252029419,
+            2.79005432128906
+          ],
+          "sha256": "24658dfb86517932b74a4a9b1e9796dd0eee615049ce8a89cc066f1d49ab35c1"
+        },
+        "res://assets/reference_forest/bank_pine_3.glb": {
+          "active_rows": 33,
+          "extent": [
+            1.42129826545715,
+            3.18863677978516
+          ],
+          "sha256": "e57f1756b509e028b3da2e96ddb4c9f6c53ee5cb18ca1d6508866b413a98578c"
+        }
+      }
+    }
+  }
+}
