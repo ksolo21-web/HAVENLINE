@@ -1,0 +1,245 @@
+{
+  "schema_version": 1,
+  "review_id": "HAVENLINE-publication-final-independent-art-commit",
+  "reviewer": "/root/independent_critic",
+  "reviewed_utc": "2026-11-28T04:07:38.822Z",
+  "verdict": "APPROVED_IMMUTABLE_ART_COMMIT_PUBLICATION",
+  "score": 10,
+  "scope": "Live publication custody for immutable art commit d268499d942a9961463cec64c1812da40d56539a. This is a separate publication check after the static artwork and PDF/PNG export reviews; it does not claim native models, animation or runtime machinery.",
+  "independence": "The critic independently called live GitHub GET endpoints for the branch ref, art/base commits and both complete recursive trees. The critic did not create the published Git objects or move any ref.",
+  "verified_utc": "2026-11-28T04:05:53.294Z",
+  "repository": "ksolo21-web/HAVENLINE",
+  "branch": "art/resources-processing-machines-2026-11-27",
+  "live_observed_ref": "refs/heads/art/resources-processing-machines-2026-11-27",
+  "published_art_commit": "d268499d942a9961463cec64c1812da40d56539a",
+  "published_art_tree": "521e4d7948a7d54c16a7114df7ed7d30f47a53b2",
+  "base_commit": "79973ab632a0916acec9a6ddad7895f1243a4713",
+  "base_tree": "d19a105b9fb2c2ae36dfa09fee67804c950b4ff5",
+  "frozen_manifest_path": "/workspace/scratch/59f000bd1476/publishing/FINAL_TREE_INPUTS.json",
+  "frozen_manifest_sha256": "70307dda45110ebe5d88f67a26494618067af3547ba7ccde04a46a18fe1fad64",
+  "live_calls": [
+    "Git ref GET",
+    "Art Git commit GET",
+    "Base Git commit GET",
+    "Art recursive tree GET",
+    "Base recursive tree GET"
+  ],
+  "trees_truncated": false,
+  "art_tree_entries": 9502,
+  "base_tree_entries": 8943,
+  "art_leaves": 5367,
+  "base_leaves": 4848,
+  "desired_file_count": 521,
+  "desired_file_identity_matches": 521,
+  "new_leaf_count": 519,
+  "original_nonchanged_leaves_preserved": 4846,
+  "existing_modified_paths": [
+    "BUILD_GAME.md",
+    "REPOSITORY_INDEX.md"
+  ],
+  "unexpected_new_leaf_count": 0,
+  "workflow_changes": 0,
+  "non_art_file_changes": 0,
+  "failures": [],
+  "status": "PASS_REMOTE_ART_COMMIT_CUSTODY",
+  "dimension_scores": {
+    "live_ref_and_commit_identity": 10,
+    "base_parent_and_tree_binding": 10,
+    "frozen_521_file_mapping": 10,
+    "full_original_tree_preservation": 10,
+    "art_only_scope": 10,
+    "selected_image_body_custody": 10
+  },
+  "live_read_endpoints": [
+    "https://api.github.com/repos/ksolo21-web/HAVENLINE/git/ref/heads/art/resources-processing-machines-2026-11-27",
+    "https://api.github.com/repos/ksolo21-web/HAVENLINE/git/commits/d268499d942a9961463cec64c1812da40d56539a",
+    "https://api.github.com/repos/ksolo21-web/HAVENLINE/git/commits/79973ab632a0916acec9a6ddad7895f1243a4713",
+    "https://api.github.com/repos/ksolo21-web/HAVENLINE/git/trees/521e4d7948a7d54c16a7114df7ed7d30f47a53b2?recursive=1",
+    "https://api.github.com/repos/ksolo21-web/HAVENLINE/git/trees/d19a105b9fb2c2ae36dfa09fee67804c950b4ff5?recursive=1"
+  ],
+  "body_readback": {
+    "network_download_owner": "/root/resource_inventory",
+    "network_method": "Unauthenticated public HTTPS at the immutable art commit; no local Git object substitution.",
+    "network_receipt": "/workspace/scratch/59f000bd1476/publishing/REMOTE_SELECTED_BODY_READBACK.json",
+    "network_receipt_sha256": "ebe01cc2ba81f714caf96eff309b6e69943dab9d0b53a5eef9540b3c5989babf",
+    "critic_verification": "Critic independently rehashed retained response bodies downloaded by resource_inventory; critic live network verification separately covers ref/commit/full trees.",
+    "checked": 15,
+    "matched": 15,
+    "total_bytes": 26991808,
+    "errors": [],
+    "files": [
+      {
+        "repository_path": "Docs/Design/ProcessingMachines/2026-11-27/selected/01-coal-smelter.png",
+        "bytes": 1862521,
+        "sha256": "8854449024635d0cdec080002e3e02578783e62f13193d9ce25b3bc1de7bf2cc",
+        "git_blob": "488e0eb7c2aed9aef66513860b2b671f855f5e6a",
+        "downloaded_body_decodes": true,
+        "matches_frozen_manifest": true
+      },
+      {
+        "repository_path": "Docs/Design/ProcessingMachines/2026-11-27/selected/02-metalworking-bench.png",
+        "bytes": 1873983,
+        "sha256": "adbb3b40df55e2f94c1b981e5ff1e7b327bc32a44e5a8f0a7db39ea8a8b80459",
+        "git_blob": "4e076c067947915f4de0c55a295f632e23962b9d",
+        "downloaded_body_decodes": true,
+        "matches_frozen_manifest": true
+      },
+      {
+        "repository_path": "Docs/Design/ProcessingMachines/2026-11-27/selected/03-steel-forge.png",
+        "bytes": 1958621,
+        "sha256": "8a303f4eedc43bb80eb578222933ce8ccf44df7187ee649afe65bb7112cf9104",
+        "git_blob": "5e55a01ee4c0b43a9d08cae188d8f9e33bb0c9c9",
+        "downloaded_body_decodes": true,
+        "matches_frozen_manifest": true
+      },
+      {
+        "repository_path": "Docs/Design/ProcessingMachines/2026-11-27/selected/04-assembly-bench.png",
+        "bytes": 1960203,
+        "sha256": "f3d79d455002fc0aa0eac3ee7a4a2b09c6d89554088e5605b98e4ad1b3409d2c",
+        "git_blob": "7ca8f6e29749e422288bab9be20395ec886a7cee",
+        "downloaded_body_decodes": true,
+        "matches_frozen_manifest": true
+      },
+      {
+        "repository_path": "Docs/Design/ProcessingMachines/2026-11-27/selected/05-manual-oil-pump.png",
+        "bytes": 1970430,
+        "sha256": "285bf9e642014da08dd46a3d55d1b0c43639d3af7580bd49e11da3c4750a801c",
+        "git_blob": "bd91e945ea215f232ccb89880afd49d98d69fb5a",
+        "downloaded_body_decodes": true,
+        "matches_frozen_manifest": true
+      },
+      {
+        "repository_path": "Docs/Design/ProcessingMachines/2026-11-27/selected/06-coal-refinery.png",
+        "bytes": 2020242,
+        "sha256": "7fe6e92cbe1f1456faccddb8a68f50d3be369bb91ac7b269e873e726244292f4",
+        "git_blob": "3ccefa3c8f0756b261f492781f09ec7b68b420d9",
+        "downloaded_body_decodes": true,
+        "matches_frozen_manifest": true
+      },
+      {
+        "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/crude-oil.png",
+        "bytes": 1716503,
+        "sha256": "3730c25937d77fb630b13839ee77438ac8e669944f99df71861f6b4ae5392a9b",
+        "git_blob": "7aa7fd133f8681de0038059eff81a9de866a5b9e",
+        "downloaded_body_decodes": true,
+        "matches_frozen_manifest": true
+      },
+      {
+        "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/drive-assembly.png",
+        "bytes": 1685336,
+        "sha256": "69646d6f98f24001a9fe87b658a17d13af1c15407174e1bcc26146298e6eef93",
+        "git_blob": "6072aa01f55399c743b066f70a50a25b7727dc91",
+        "downloaded_body_decodes": true,
+        "matches_frozen_manifest": true
+      },
+      {
+        "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/gems.png",
+        "bytes": 1626289,
+        "sha256": "8ab6b87da0a5fae16f9be6288d784a256098d56ca407c8110fc38e2fd8448864",
+        "git_blob": "f0a3a06d91d8086e20bde5da489c2b30fa7f7c88",
+        "downloaded_body_decodes": true,
+        "matches_frozen_manifest": true
+      },
+      {
+        "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/iron-bars.png",
+        "bytes": 1602730,
+        "sha256": "df6093297abc33498f2d13b28a301a736f3fefa1625021c05831feeb5c2e86ea",
+        "git_blob": "4e7e11601c78ff78122b5a09169679ee0753c67b",
+        "downloaded_body_decodes": true,
+        "matches_frozen_manifest": true
+      },
+      {
+        "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/mechanical-parts.png",
+        "bytes": 1765937,
+        "sha256": "80dea343f57bccedf02731fefe4e8ca3cff1c437cb258576d691c20b8885397f",
+        "git_blob": "7a36497192bc5d064df91cb48410d48134377c16",
+        "downloaded_body_decodes": true,
+        "matches_frozen_manifest": true
+      },
+      {
+        "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/mobility-assembly.png",
+        "bytes": 1772081,
+        "sha256": "69cfd1e68e6bb6a5618745c49ee2d29b0b11657a7d4eb57c2f2bd63594953eaf",
+        "git_blob": "d853ae4f24b0bfbe41105f132647f439d7579be9",
+        "downloaded_body_decodes": true,
+        "matches_frozen_manifest": true
+      },
+      {
+        "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/relay-component.png",
+        "bytes": 1703940,
+        "sha256": "fe6b8228890fe9e55001b7ebc5392c37e0b9f20af28f7ca8a8e6196b70fe6aa2",
+        "git_blob": "012c98098d7c8792fbd06f4dfd61e3f951f8a96a",
+        "downloaded_body_decodes": true,
+        "matches_frozen_manifest": true
+      },
+      {
+        "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/sheet-metal.png",
+        "bytes": 1652415,
+        "sha256": "b463a0af9aebc6190f81ea9937c3fdf613ae517d0bf86c7ce752ac49bdcc40c1",
+        "git_blob": "f66cdc1ffbd49d7a081249ca0a2f944af1477f61",
+        "downloaded_body_decodes": true,
+        "matches_frozen_manifest": true
+      },
+      {
+        "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/stone-blocks.png",
+        "bytes": 1820577,
+        "sha256": "1e3fabe7593b89df90e67b4aa2f216e4b9c4414ec9f64d1260f72a9fef8aea19",
+        "git_blob": "b596ca8474a546f75d80164e5eb3fa15da22b6e7",
+        "downloaded_body_decodes": true,
+        "matches_frozen_manifest": true
+      }
+    ]
+  },
+  "archived_evidence": [
+    {
+      "path": "/workspace/scratch/59f000bd1476/publishing/FINAL_TREE_INPUTS.json",
+      "bytes": 175789,
+      "sha256": "70307dda45110ebe5d88f67a26494618067af3547ba7ccde04a46a18fe1fad64"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/publishing/ART_TREE_READBACK.json",
+      "bytes": 2817133,
+      "sha256": "8479516a23acf9c764f177e1148e2b5f700fd6797e298b408e8a13b9411f80e3"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/publishing/BASE_TREE_READBACK.json",
+      "bytes": 2644803,
+      "sha256": "ad174029ee85bd75bbd6aa8037940f5d78f12243036eb3ddb019327ec99cfa17"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/publishing/ART_PUBLICATION_READBACK.json",
+      "bytes": 814,
+      "sha256": "15557be8c958a7c8270f743971aba020509420f3a1047c31ec6c42a36a30bf53"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/publishing/REMOTE_SELECTED_BODY_READBACK.json",
+      "bytes": 28177,
+      "sha256": "ebe01cc2ba81f714caf96eff309b6e69943dab9d0b53a5eef9540b3c5989babf"
+    }
+  ],
+  "post_art_commit_receipt_preparation": {
+    "separate_metadata_commit_planned": true,
+    "current_local_metadata_changes_not_part_of_frozen_art_commit": [
+      "Docs/Design/ProcessingMachines/2026-11-27/ACCEPTANCE_CHECKLIST.json",
+      "Docs/Design/ProcessingMachines/2026-11-27/CHECKPOINT.json",
+      "Docs/Design/ProcessingMachines/2026-11-27/README.md",
+      "Docs/Design/ResourceTurnarounds/2026-11-27-completion/README.md",
+      "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/CHECKPOINT.json",
+      "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/README.md"
+    ],
+    "interpretation": "These acknowledged local status/navigation updates belong to the later receipt commit. They are not compared as replacement bytes for the frozen immutable art commit and are not art-custody failures.",
+    "later_receipt_commit_approved_by_this_record": false
+  },
+  "open_mandatory_defects": [],
+  "missing_mandatory_evidence": [],
+  "excluded_claims": [
+    "Final user signoff",
+    "Native shared 3D meshes",
+    "Calibrated 3D cameras",
+    "Complete animation cycles",
+    "Runtime recipes or machine behavior",
+    "Browser gallery layout",
+    "Any later commit not identified in this record"
+  ],
+  "reopen_rule": "The exact art-commit approval remains valid if a later receipt-only fast-forward leaves the approved art and evidence unchanged. A changed selected image, frozen art artifact or newly observed defect reopens the affected checks. Later receipt commit identity requires its own readback."
+}

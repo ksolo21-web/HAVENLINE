@@ -1,6 +1,6 @@
 {
   "scope": "Six new static machine concept render families",
-  "planning_status": "STATIC_ART_AND_EXPORT_REVIEW_COMPLETE",
+  "planning_status": "ALL_SCOPED_RENDER_DELIVERY_CHECKS_PASS",
   "static_requirements": [
     {
       "id": "S01",
@@ -150,8 +150,12 @@
     {
       "id": "D03",
       "requirement": "Isolated art branch published with preserved source tree and exact artifact readback.",
-      "status": "PENDING_REMOTE_PUBLICATION",
-      "evidence": []
+      "status": "PASS",
+      "evidence": [
+        "PUBLICATION_READBACK.json",
+        "reviews/PUBLICATION_FINAL_REVIEW.json",
+        "evidence/publication/REMOTE_SELECTED_BODY_READBACK.json"
+      ]
     }
   ]
 }

@@ -57,6 +57,10 @@ The metalworking bench supports two recipes, and the assembly bench supports two
 
 The combined artbook contains 18 pages and all 15 selected sheets. The companion ZIP contains the original PNGs, a relative HTML gallery, the recipe graph and review records. [Export identity and reproduction](EXPORT_MANIFEST.json) · [Independent export review](reviews/EXPORT_FINAL_REVIEW.md). All 18 PDF pages passed actual visual inspection; all 15 PNGs and embedded PDF images preserve the selected originals.
 
+## Publication
+
+The reviewed artwork, source recipes, complete revision history and export evidence are published on `art/resources-processing-machines-2026-11-27`. [Verified delivery commit and preservation checks](PUBLICATION_READBACK.json) · [Independent publication review](reviews/PUBLICATION_FINAL_REVIEW.md). Earlier review files and frozen manifests retain their dated stage status; the current checkpoint and publication receipt supersede earlier pending-publication notes.
+
 ## Custody and next implementation step
 
 All original prompts, rejected attempts, repair iterations and actual critic evidence are preserved. The review selected revisions 3 / 5 / 3 / 4 / 5 / 2 in the gallery order. Exact file identity and review bindings are in the manifests.

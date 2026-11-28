@@ -10,7 +10,7 @@ The preserved **33 earlier sheets plus these nine make 42 resource sheets / 336 
 
 The fresh critic inspected all nine full sheets, all 72 illustrated views and 18 closeups. Every required scoped dimension scored 10.0 with no open mandatory defect. These scores approve the stated raster concept scope only. The printed angles describe an illustrated orbit; they do not prove calibrated cameras or shared native 3D geometry. Models, animation, recipes, balance and runtime integration remain outside this art approval.
 
-**Publication status:** pending the root delivery step and remote verification.
+**Publication status:** published and verified with the six processing-machine sheets. [Exact remote delivery evidence](../../ProcessingMachines/2026-11-27/PUBLICATION_READBACK.json). The byte manifest and raw reviews are frozen stage records; their earlier publication-pending fields are superseded by this receipt and the current checkpoint.
 
 ## Full resource sheets
 
@@ -98,4 +98,4 @@ The copied inventory audit is the unchanged initial inspection snapshot. Its sta
 - [Original rejected and repaired attempts](../2026-11-27-industrial/attempts/) remain available unchanged.
 - [Original independent reviews](../2026-11-27-industrial/reviews/) include the restored final R3 pass.
 - [Fresh evidence custody](EVIDENCE_CUSTODY.json) maps the raw review’s source paths to unchanged repository copies.
-- [Current checkpoint](../2026-11-27-industrial/CHECKPOINT.json) records the completed static-art milestone and the remaining publication check.
+- [Current checkpoint](../2026-11-27-industrial/CHECKPOINT.json) records the completed static-art and verified publication milestones.

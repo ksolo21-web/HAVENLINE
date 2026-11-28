@@ -1,6 +1,6 @@
 # Havenline — industrial resource concept turnarounds
 
-**Nine selected sheets / 72 illustrated views are complete and freshly independently reviewed.** All nine selected PNGs remain byte-identical to their retained repaired candidates. Every required scoped dimension scored 10.0, with no open mandatory defect. Publication and remote verification are pending.
+**Nine selected sheets / 72 illustrated views are complete and freshly independently reviewed.** All nine selected PNGs remain byte-identical to their retained repaired candidates. Every required scoped dimension scored 10.0, with no open mandatory defect. Publication and exact remote tree verification are complete. [Readback evidence](../../ProcessingMachines/2026-11-27/PUBLICATION_READBACK.json).
 
 [Browse all nine full sheets](../2026-11-27-completion/README.md) · [Selected byte manifest](../2026-11-27-completion/RESOURCE_SELECTED_MANIFEST.json) · [Fresh independent review](../2026-11-27-completion/reviews/RESOURCE_SELECTED_FRESH_REVIEW.md) · [Resource/machine map](../2026-11-27-completion/RESOURCE_MACHINE_MAP.md)
 

@@ -1,0 +1,4185 @@
+{
+  "schema_version": 1,
+  "captured_utc": "2026-11-28T04:00:34.591381+00:00",
+  "repository": "ksolo21-web/HAVENLINE",
+  "local_repo": "/workspace/scratch/59f000bd1476/HAVENLINE-processors",
+  "branch": "art/resources-processing-machines-2026-11-27",
+  "base_commit": "79973ab632a0916acec9a6ddad7895f1243a4713",
+  "base_tree": "d19a105b9fb2c2ae36dfa09fee67804c950b4ff5",
+  "file_count": 521,
+  "source_bytes": 195070345,
+  "existing_files_modified": [
+    "BUILD_GAME.md",
+    "REPOSITORY_INDEX.md"
+  ],
+  "files": [
+    {
+      "path": "BUILD_GAME.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9ac94cc217c6fa9005131cd54a775750db3909f3",
+      "sha256": "5042ca6a9b81c1fd3da9ba06ec06938aff90d104053c26e63d4dc5985b66f04d",
+      "bytes": 9253
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/ACCEPTANCE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "761d12ce8f58eaa660582d22750462fbf64d9dce",
+      "sha256": "7088bb1f35e6dfe5369802401170272faaf3bfb3fc5dede8af05c282b22c810c",
+      "bytes": 2732
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/ACCEPTANCE_CHECKLIST.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7cfcfab23f2d35352c9823e6ae062609af9055bb",
+      "sha256": "1dee509a84be80011d94228538ce8a83735b8e5e44d5a998134aa73cbb1731e2",
+      "bytes": 5735
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/CHECKPOINT.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "545ba9a11677efa73ddc70ce6874390e8f88e503",
+      "sha256": "d3df0731490b624491a7ef7d3469fa080699842ca77286793564a9e036dc870f",
+      "bytes": 1558
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/EVIDENCE_CUSTODY.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6e436a41a6b2a531bc99fe418d61d8133a45ed0e",
+      "sha256": "29f591c9c31d117452970bfb1c4754f458aac25edf67ee2c59e60e9fbd731df2",
+      "bytes": 70928
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/EXPORT_MANIFEST.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e02ca3181d6a285a4585ec9dc71f0f2e12df5406",
+      "sha256": "35e668bbb623dfda91d0a3ed7d2a11f9f58613f7517703059f285f9395c02c36",
+      "bytes": 12615
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/FINAL_EXPORT_SELECTION.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6fe92167eb3a8433be87b595552b24acd460ce06",
+      "sha256": "5fb18c94781571228431ad498042f499684bc60c6e5f3e55729cd68f11dcedcc",
+      "bytes": 9826
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/GENERATION_PROVENANCE.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2f0d94423ea42742353cfbcdb0ab2f58954efc05",
+      "sha256": "f8c954a7f73a5a9cac1ebb42a508a2640c2ace772c91187d93f428909ce47889",
+      "bytes": 7223
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/MACHINE_PROMPTS.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "172d2572e64befadec124b48e964e40f86714cef",
+      "sha256": "7c132e6cd37f1cf4ff7d48831ca742ee61681c782aa47b45a6cf0ee66718ff67",
+      "bytes": 27014
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/MACHINE_PROMPTS_04_06_RESOURCE_ALIGNED.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9e2f14291f63ad8ff607d69d14eb0a474cdd04f8",
+      "sha256": "168f63d3e2970caf47f2a0a748c7ddcb9662f869558b69eed1c1ddb3f9977786",
+      "bytes": 15668
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/MACHINE_SELECTED_MANIFEST.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1bb03f571c21e83994cc2a86f2bb8790bccff87c",
+      "sha256": "7576981934469810a3d0835f6c4fa591b8704328f074029d84d1d5fc8cfbb880",
+      "bytes": 4844
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/MATERIAL_GRAPH_CHECK.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ff1fc4ae766fce6a8f9c5e4f7f3954ea2a9d424e",
+      "sha256": "32df6a019b710b84dd1a6b18ec4e1505a684ab8aa7585ac41004b64746a65361",
+      "bytes": 2149
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/PACKAGE_VALIDATION.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1406193ce29353486c8ad6783a0c59d7de3e3dcc",
+      "sha256": "9e20df27b81c8fbc5f17e5f81832fe2b244189f2e2728dbded010ad4958afd34",
+      "bytes": 259
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/PROCESSING_COVERAGE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "580297cd01c4ae0d3d07097db51d4e8586568f08",
+      "sha256": "4c1d6cec366f374cebf471f810b910e10d4f155ed511420ee8741f46b3d95802",
+      "bytes": 9726
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/PROCESSING_MACHINE_MAP.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d41c03dd732866711fc88e438af4afec41f22047",
+      "sha256": "9f67860b73ac927d483f08b3df6f098311a759386697891938bbf5283a93c0c0",
+      "bytes": 19799
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d46f93da9abb98ccf5e4b98acf7f3da44206ba94",
+      "sha256": "eaf53383a6bb857b04cac8080a9afa6ceb73b8698c26f0c13bded46283758735",
+      "bytes": 3480
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/REPAIR_R2_INPUTS_FIRST3.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ab43ae87a1269337edcadfffa530bfa4084c296f",
+      "sha256": "bb9ab0ff270a4be47b558824e8961d499c9bbdf5b4b5eea29a4d2b45f68b62e3",
+      "bytes": 5566
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/REPAIR_R2_INPUTS_NEXT3.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e2e658c6aced68648f76d02934423ce0bc2865a3",
+      "sha256": "fa34a0ae2f4f51573d4ff5b5c08034191a414151a7bbb32dc776a40e43ed4e1f",
+      "bytes": 5125
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/REPAIR_R3_INPUTS_04_05.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "23a1b6aaea37f30d76fd9614d8dda7d7de5ee9ad",
+      "sha256": "34db504e52c77275655c21fb36c9242be3c6cdb3050a328f29892728376754d4",
+      "bytes": 2771
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/REPAIR_R3_INPUTS_FIRST3.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "914bf2312be15f5babf5b4ec67c0e554ea64449d",
+      "sha256": "8c375d6b5d0c55fb624796e79bc6211954f2e72d0af3234a767abf53fd63dbe7",
+      "bytes": 3569
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/REPAIR_R4_INPUTS.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "356b5ea4d8d2f697bcd06f504037892428f541a5",
+      "sha256": "97ef3950ee6bbdf91feee505ee8198b10dde1f0927694cb452bc954639f67e80",
+      "bytes": 5944
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/REPAIR_R5_INPUTS.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "67d96606d9776eaded266ad5393bca6ef639b85d",
+      "sha256": "74b2e24dd5ad2796224fe198500a8ed155c1823674d0c6ae0a11c85ff58c966c",
+      "bytes": 3193
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/SELECTED_DESIGN_NOTES.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9855db06a05a57c5228341bbe7404d5eca51399a",
+      "sha256": "46ffe46415d71165ca4c00901f9193befab402da22882372e1d1c3f2677843c1",
+      "bytes": 3979
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/attempts/01-coal-smelter-r1.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "319882d9fffb51dcc0cba6ff2fb335547c7dcb5d",
+      "sha256": "b09c011a49c32a02bd9b3d2d0e82cc2b9f1c1a7b4bd361f0fdee0976d26df183",
+      "bytes": 1808788
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/attempts/01-coal-smelter-r2.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ce64da36902a13a205b91b920ef2f2ee1dbd1b00",
+      "sha256": "88b4d4df1035868b51864991c22a6b78ad4abf66e0def8b91c966a9d53866c8d",
+      "bytes": 1884014
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/attempts/01-coal-smelter-r3.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "488e0eb7c2aed9aef66513860b2b671f855f5e6a",
+      "sha256": "8854449024635d0cdec080002e3e02578783e62f13193d9ce25b3bc1de7bf2cc",
+      "bytes": 1862521
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/attempts/02-metalworking-bench-r1.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "57808093d9eb8a28e96dabb5df03f17bbe462cc3",
+      "sha256": "a58b3e88ed28c88d4ab329bd551a5854e1d20cdb16450ed0e61ac1c9bdd1e89e",
+      "bytes": 1883018
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/attempts/02-metalworking-bench-r2.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "54e3a351140f7a0e9c5d050521ea1ec159b98283",
+      "sha256": "760115ed00f71be0efa7990ae33a6e6d08ea0857ccd8df7080c610bcbcb43bf9",
+      "bytes": 1912473
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/attempts/02-metalworking-bench-r3.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b05f08d4c729a1180279e1d796dd83af2351b994",
+      "sha256": "51f56ed12ad35d6226a5fd4ee27de5356ef5ad22e61b14dbede6c2e6e32b228c",
+      "bytes": 1858901
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/attempts/02-metalworking-bench-r4.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8328b10dddf2edac372c883e58a02db0dd4e2a99",
+      "sha256": "d7f38d518ea6a1a6c3c313a2ac10443d98e8d7ee0a4dfa9ab9c0a869b1d3736b",
+      "bytes": 1876984
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/attempts/02-metalworking-bench-r5.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4e076c067947915f4de0c55a295f632e23962b9d",
+      "sha256": "adbb3b40df55e2f94c1b981e5ff1e7b327bc32a44e5a8f0a7db39ea8a8b80459",
+      "bytes": 1873983
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/attempts/03-steel-forge-r1.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e1c779534d59d87b6afe875864c235b691cf7735",
+      "sha256": "94554ecda4b4e0e79cb9442d7e99bb69b568e289a54259a0075c4af44aa188c5",
+      "bytes": 1902900
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/attempts/03-steel-forge-r2.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0c1d6a640d3c910d344d3325e065d4de57120ca0",
+      "sha256": "b8154f0811d0c017e4032fb8ecddd91aeb7cf1f3e85620a005c95fd62bd99cab",
+      "bytes": 1987601
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/attempts/03-steel-forge-r3.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5e55a01ee4c0b43a9d08cae188d8f9e33bb0c9c9",
+      "sha256": "8a303f4eedc43bb80eb578222933ce8ccf44df7187ee649afe65bb7112cf9104",
+      "bytes": 1958621
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/attempts/04-assembly-bench-r1.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ed4752a0dd226b751983d5cf47a3c4dc1f539252",
+      "sha256": "596454f4b800dfd70c28dddedfbc883e882c333de1ee02bba93330d781481186",
+      "bytes": 1995291
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/attempts/04-assembly-bench-r2.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1f42246f4e69c5e2fc68562f5f41efca25c3c6e5",
+      "sha256": "1e6c2fa966ebabab555c61770055db12e5568d22e5ec284733be42197f3b9c98",
+      "bytes": 1936891
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/attempts/04-assembly-bench-r3.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0a2b1e8cd2d6e0271cabe36b8373e31366134d59",
+      "sha256": "70b0e568c125f849d0cb3ca6b030ef5d83fc6e5d4326a48a7a45fdda0e0c58b2",
+      "bytes": 1953903
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/attempts/04-assembly-bench-r4.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7ca8f6e29749e422288bab9be20395ec886a7cee",
+      "sha256": "f3d79d455002fc0aa0eac3ee7a4a2b09c6d89554088e5605b98e4ad1b3409d2c",
+      "bytes": 1960203
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/attempts/05-manual-oil-pump-r1.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ccef29594544688e800a5248780c75de25acbed6",
+      "sha256": "a225928d181878d12d383b526ff36dc61edbb9654de2d3f3e27e075e23cd0833",
+      "bytes": 1931068
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/attempts/05-manual-oil-pump-r2.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7a16679a219e7ffa922d3264ee42fd3b997743ba",
+      "sha256": "5c1410739230151c8f6695d82fdb8e52b492622db88325d73adb2f14ac13d120",
+      "bytes": 1927422
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/attempts/05-manual-oil-pump-r3.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b020cda899e9f1632832bfe24663b2196db34457",
+      "sha256": "54f5e73c4a0065cbc9e7ae0944edaffe4f6805c0326ef87f7a4b3e0d20cbfdbc",
+      "bytes": 1930687
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/attempts/05-manual-oil-pump-r4.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1dc2d375fd48a110be2732dc2e3291d6428d8c1c",
+      "sha256": "f580f337a8081c2a5c4cd62730046378d0e6f831bb0052c41acd326a36f98ef5",
+      "bytes": 1948385
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/attempts/05-manual-oil-pump-r5.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bd91e945ea215f232ccb89880afd49d98d69fb5a",
+      "sha256": "285bf9e642014da08dd46a3d55d1b0c43639d3af7580bd49e11da3c4750a801c",
+      "bytes": 1970430
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/attempts/06-coal-refinery-r1.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fe1876c155c9fd84a3c495ea0da981b8bcdec6b5",
+      "sha256": "a8e3d28f5e1e90bbda369a04a78ed203eef06b7df2fbc2ab58442fc3a2279890",
+      "bytes": 2029212
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/attempts/06-coal-refinery-r2.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3ccefa3c8f0756b261f492781f09ec7b68b420d9",
+      "sha256": "7fe6e92cbe1f1456faccddb8a68f50d3be369bb91ac7b269e873e726244292f4",
+      "bytes": 2020242
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/01-coal-smelter-r1-front0.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8c6b0bf767623947dcbfc67bcf44d852b9b30c09",
+      "sha256": "12f5b8ca6c644ad73511e55c0bfafbb50d37de2e623f886708b45880df9dec04",
+      "bytes": 179902
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/01-coal-smelter-r1-front_left315.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7b6465e922423aecfb71e7542073572503b35910",
+      "sha256": "e2f57225951a08dba215cda5135d4ea765ab88b150dba7ab7c734021bbc24931",
+      "bytes": 190087
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/01-coal-smelter-r1-front_right45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "778da95f9d9393b57572aa8e87f0c1c76162db33",
+      "sha256": "9d29dc3524c10a82cde6f0385fd4d890ce6b608fcf48913acba561ac22e8003e",
+      "bytes": 185981
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/01-coal-smelter-r1-left270.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d9dc93637bbd1e639ce99f2b0a3845db6deb65b3",
+      "sha256": "550ac02b5454ab979c64d4a2d2fb231036e7a4edde807074e346c9465455add0",
+      "bytes": 182329
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/01-coal-smelter-r1-rear180.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2aa68db6d680e24fed595b7f4177391f682b09cf",
+      "sha256": "e6cd0e08e99d13f156302478d582c2ed4c9a374293688762195d88f2a5355fe7",
+      "bytes": 175849
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/01-coal-smelter-r1-rear_left225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "06871b99c47f892264d1a908e3761a42163e89b2",
+      "sha256": "aa638a00a9166875d41b7975bc94ba22bd6ca8a1e3726a60aefabbd357cb23fd",
+      "bytes": 187183
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/01-coal-smelter-r1-rear_right135.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6fe9a912bf36e8aeb971b167c4c89fdd3aa2e816",
+      "sha256": "ceffaff4e810fbeee4d08600523bf5d0e9ae09cf9dc5d49c49e214742f7897b9",
+      "bytes": 177364
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/01-coal-smelter-r1-right90.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ed194c5ae9c0ca1256f9fb6b035ca91164546573",
+      "sha256": "44bc1f404c61c4a626d61ef568a9d590226f83b239783e4a61c1cf7396a9c4be",
+      "bytes": 167822
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/02-metalworking-bench-r1-front0.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ac4ca8717ce4326779f7b8d7d2857661f0de79ab",
+      "sha256": "5a92b1edb85e9b42043944833a2952803f2ce520b3136d3b2bf86c76e378a955",
+      "bytes": 185926
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/02-metalworking-bench-r1-front_left315.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8228649d486416ed2368e95b8468fe047dd026f0",
+      "sha256": "9b7456df875966b6d270f3ba56b1e3cf11867afed7e967e260e3a3abcea64868",
+      "bytes": 206304
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/02-metalworking-bench-r1-front_right45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d29ffd7c3379e1570732a695ccdcd5bff8886a6c",
+      "sha256": "ce7ec7dac71d9c266e8e46c8074138620e0a442f7efa2781562708b87c98cff1",
+      "bytes": 200602
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/02-metalworking-bench-r1-left270.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "39ef51dc94f9aa4cd286e5e4c5bcad101360fba0",
+      "sha256": "31798d10b7f45595ef54cd46f3702cbb575d4d9dde426c410e083b4ea3b16f91",
+      "bytes": 177841
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/02-metalworking-bench-r1-rear180.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "81a28ea960dc85ac7fbed83d99344c1d9f5f16bc",
+      "sha256": "e646f289fd7bf0b8a9d64c07ca15843734e0fe76d8ee122a42c1e4e6df4d03d5",
+      "bytes": 187997
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/02-metalworking-bench-r1-rear_left225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4ea5a5736c71882ea9d770f89d5ab615cb966fe7",
+      "sha256": "1a1bdde7026fda15acf31ea5962c6607c7e6cb49e913b32321da8ac94c71afcb",
+      "bytes": 197800
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/02-metalworking-bench-r1-rear_right135.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "72945a9c9121236e837088f7cfd71ed86a1af2cd",
+      "sha256": "282b700b2291b2d549da267026559a17a87dc231559eb3eacf6577f0050dfa2c",
+      "bytes": 192090
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/02-metalworking-bench-r1-right90.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cb9c0086ce3e8b3b6ddefa290571eac16de86990",
+      "sha256": "7911ac77431cf81d85a858346b4f94cdc0dab6fb116cc2c4b0971fb19e39aafb",
+      "bytes": 169075
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/03-steel-forge-r1-front0.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2129171157284d243bf6a1075e2f892605fb4dfa",
+      "sha256": "0c2e846f7f6da776e8a02c54ce31526463ba393c4cd867df9e12581ccd8bc14f",
+      "bytes": 184220
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/03-steel-forge-r1-front_left315.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "707a0632ea4cdd48b76f782efe27cebe169e3c27",
+      "sha256": "ca122f6bc152565d7ceee04d72533aa039ac2330e6624934e3092475140f40fe",
+      "bytes": 206000
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/03-steel-forge-r1-front_right45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0dbdf3b054c51a57860f7f595042960a63a8fbd3",
+      "sha256": "5b50312b089a278e7c23ecde9d254633e8b1fa86495232d4b031456e71684994",
+      "bytes": 195255
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/03-steel-forge-r1-left270.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "79b6fd3201c23bd3bed8256df8b9ea33b137167f",
+      "sha256": "275bf561f3edcdbd3906c9962461c93b5f9fc56c468e88524f8d63fe72373c00",
+      "bytes": 183193
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/03-steel-forge-r1-rear180.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2c0a0ca4e1dbe55fa885ff5229e789f36a455cc9",
+      "sha256": "e74ae39ff801048b1c174d6d1c87a516f978b8011b4384f73d710f34390101a2",
+      "bytes": 187152
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/03-steel-forge-r1-rear_left225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c07161b8fabb5a3eeba7fe15d5c3075de2f7c340",
+      "sha256": "2defea58fe7545541a351e1f9d1cbf1a98f4e8ae956a03eca7aebc2327164830",
+      "bytes": 193640
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/03-steel-forge-r1-rear_right135.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "615c3301cab04d6f445863b92133973929c36317",
+      "sha256": "2eddfa5c9a021a47f02e5a0adf483e2f92c389569f3d90954272e3c6ce7ff668",
+      "bytes": 188260
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/03-steel-forge-r1-right90.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f641ddea936714cdcbae637953247f7144ec4f2b",
+      "sha256": "95330cda6fc464c7aa95de778c15ac360f9a091295486534f751496011fe3aa5",
+      "bytes": 172564
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/04-assembly-bench-r1-front0.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7b83022059917bf2b09f5c3e6ffdbfa700877ae3",
+      "sha256": "e1bbbbe7ab8aeca6439c3383282c795bd3e767146704d1af2457000b0dfbfb33",
+      "bytes": 213421
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/04-assembly-bench-r1-front_left315.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "af01d6f2f490855a4a19f2c0f304b5fbc24175a5",
+      "sha256": "0e3a6126dd3a477b6bea3ad6bf621a9f1b25ea2a197faa2e6ab9245aeac67dd4",
+      "bytes": 228537
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/04-assembly-bench-r1-front_right45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4cb59d6a66023e00238408b76809c4903c675242",
+      "sha256": "f6f6ea5438295dbc15f8ffe7b262b8836526953ed320a333bc311a89cddcc333",
+      "bytes": 235753
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/04-assembly-bench-r1-left270.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "32ec56edc35dee38223a1eb97b5998f014ef030a",
+      "sha256": "b780990f3626165b799625eba636f6b88a019fa104e0b8334467c37d12551761",
+      "bytes": 134579
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/04-assembly-bench-r1-rear180.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7b24ceee22466aae7575a1a809bdd90bf2d60569",
+      "sha256": "acb58d53ca5271c940fa2fc07922a34e124e387cda9f281cae9a1f3c85f3901e",
+      "bytes": 203973
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/04-assembly-bench-r1-rear_left225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e9a4089e97cf841467b872ad31cd69a10a4c6e7f",
+      "sha256": "fa488ebae78a8b6e8d27a497897709a84182dd25e198e4da6af943c5ee611070",
+      "bytes": 217611
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/04-assembly-bench-r1-rear_right135.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "195f8f0f7abcb2ad75fd5cb27f8a6de09b03087e",
+      "sha256": "80bc58048644961ad6190b16fffd04fdc9d9f78d051e2055b0f6ecacb50426dd",
+      "bytes": 225929
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/04-assembly-bench-r1-right90.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c2fc17fc8fd108b2aa4aba9f4ad90add7337306b",
+      "sha256": "ecff6e9bf23a596b3f7a8d0087c5f281b4a3c19a8be3d9d4ee70e6582241350b",
+      "bytes": 142991
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/05-manual-oil-pump-r1-front0.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "51d5f115ffd25478aa19be47afabbc9fef9423a6",
+      "sha256": "e9a2cdc58a78a9f3857995965f96b6de885822c5d6c2875c9b28fc180a807c60",
+      "bytes": 194541
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/05-manual-oil-pump-r1-front_left315.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "321480b9b8bae40b9b7e91448c17181b4e012108",
+      "sha256": "9e8c1dbf3513acc395962f0b391ce1c699f48c13c5a5b0623193523e0b1e56cc",
+      "bytes": 198134
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/05-manual-oil-pump-r1-front_right45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1f987cb8803753ecb124810d1914c5b2b06f807b",
+      "sha256": "afa76974a695cd058b22eaa7fe4d518bdebde578af372485123939c9c9fbe66c",
+      "bytes": 202760
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/05-manual-oil-pump-r1-left270.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2f4deb65ea5d21565de3f2ebf72e90d2eb8287ce",
+      "sha256": "2f3e3f7f849db7e781a8b749ab83edff14dc3c814028d4cf0b65ee9ced785d9f",
+      "bytes": 197911
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/05-manual-oil-pump-r1-rear180.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "deb5c7727ea59f4974807dc47484abc2728904bb",
+      "sha256": "e2cafd89fb2eca076c8a79805e3aedf513023b654f220f49dc2075a593b9ad7f",
+      "bytes": 171955
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/05-manual-oil-pump-r1-rear_left225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f4c799054a4359edacb3136c54953e7575254ea7",
+      "sha256": "23f4a0ce6996a7b86560055ec3af25cafa79734cc914edccd1b71067de593596",
+      "bytes": 198206
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/05-manual-oil-pump-r1-rear_right135.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8af2dc4bf5f871541c56f98c5eee398172a9b553",
+      "sha256": "e9831c592b8e4e48b2a6767f20813b7970ff18cbb99a9d138356f6c1b2b8d40e",
+      "bytes": 197779
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/05-manual-oil-pump-r1-right90.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3165048d10107d34c244abd0067373eb1e1c412e",
+      "sha256": "eb0c51a4cb662ff5d99cd611ba5e2a1919bece1afc90ac200ef8d21bb10701b8",
+      "bytes": 199527
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/06-coal-refinery-r1-front0.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fa7db33733b7b7b330f7eae68a46c458ff0f79b3",
+      "sha256": "a7c3c6e60ec721bb78ebb2663dba9dfddf5635838b3c777d62eb54445b0081ea",
+      "bytes": 210588
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/06-coal-refinery-r1-front_left315.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8516682b5fe18167261cbb6a7c9e1612da435773",
+      "sha256": "86a3afc11787ef06e95d35b48d44564653b62c1975643c98626592b08d983b7b",
+      "bytes": 214116
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/06-coal-refinery-r1-front_right45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0a05a9475cd05e60f03dc73179bec960ff55665c",
+      "sha256": "643ba42beb33e77e764a59d93d768ef69b892db5d54cfc6ed3dcea05f3234804",
+      "bytes": 213374
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/06-coal-refinery-r1-left270.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7349506b23a5205185c678ff70a903ff5c9995a8",
+      "sha256": "aceae33c77bbfbafba51d63619e80f952703e48d1b35a6375efa9c4aa8a7266f",
+      "bytes": 189062
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/06-coal-refinery-r1-rear180.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2c533169072d5d9bf6a2427bea8bff8ffe1aacaa",
+      "sha256": "8419b2368ca83bab92c09bacedfe24ecd34ad3f8e8a0ca949c87a216069982d5",
+      "bytes": 213597
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/06-coal-refinery-r1-rear_left225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f3d3f43ad03cab386fd4496286d14b282ef4a30f",
+      "sha256": "27a29be5e01ffef226f3f997a4c6dad139d61f47cf4cca530a53ec9bc57db7a4",
+      "bytes": 208820
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/06-coal-refinery-r1-rear_right135.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d0be2e54acf8802c9147b718455fdc83f92a2800",
+      "sha256": "26ffb453a83760be96765746a3d6a22d8b4bc0b8a061c2d5f815b17c7a3f9321",
+      "bytes": 210770
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/06-coal-refinery-r1-right90.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e7df3ccd6d970150affbf8fc5014311e1b6a3e82",
+      "sha256": "c97ef6087ec6fb5279821e5b0104f0f5859866ed7d2535abc0c8558b7412e6f1",
+      "bytes": 191284
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/identities-next3.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4131665c67caf4348d65a07d321ae5211f7af936",
+      "sha256": "af9d31aaf79a46211d38859dc17930271c3ee73d47a3b944edd81d6919732d4e",
+      "bytes": 3465
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r1-closeups/identities.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f2803d63fe2170ec9bdfa162de0ac448eaa19eb5",
+      "sha256": "e49883ec5d1118752da40d6f32deb600e91aa967f5355c1a01c211e4373e6159",
+      "bytes": 3456
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/01-coal-smelter-r2-front0.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "65f73870faa78bc47f16d31c0bc3ab3eb01951ed",
+      "sha256": "a565c66cc186a21f16089d18e858d4d11441b05a2089d6fce1a7fea3422f2c29",
+      "bytes": 188009
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/01-coal-smelter-r2-front_left315.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c07d9d6c635ba8e441fb0e55461a1ee8ce9f4755",
+      "sha256": "9b58a51e387a12e40079d44395c4186bd3e958b95078f26f3f91ef2cb47e359b",
+      "bytes": 188014
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/01-coal-smelter-r2-front_right45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "255b793d65864ecf54345a149bfe537116fb1c2a",
+      "sha256": "aa59565023881a863af2a816c9217083a07871018d6aaf4f75e3bbcd6ee95f34",
+      "bytes": 194460
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/01-coal-smelter-r2-left270.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9944eae815dede1f76d957113abde4cd0ce287d0",
+      "sha256": "a88f3b484cf10cb1bea9eb9103de917f93e168a8bf40cbfe99df6867acb69e15",
+      "bytes": 180285
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/01-coal-smelter-r2-rear180.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2b7689d6c485b42593f21cbdc099018ba0f32db5",
+      "sha256": "a4e5b4477e80872b21f12f71fce7a9b7a7b7c0e489474fe681671ec78b629627",
+      "bytes": 172887
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/01-coal-smelter-r2-rear_left225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "13c43ce998acb2483b9ec1583c0e6476e4108c95",
+      "sha256": "679bde4d2b4e90aea5c2ec0696f3d18dac6c747a2bdd05ae5d4e19e5e9849bec",
+      "bytes": 184496
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/01-coal-smelter-r2-rear_right135.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "15681a1fccaffe8ea4c77a3c0604ad02c4e8b2fd",
+      "sha256": "29544f1e7d4ea267b8e2f10354a2c7ec190d2bb72d196130acaefb3ce44247d0",
+      "bytes": 185966
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/01-coal-smelter-r2-right90.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "37ffa18fb6c9c6bf1bce2296b0a560db4295e8ce",
+      "sha256": "ae4b618da25136c81370302f9731ccdc07bef41c326193107f49b66517ffc318",
+      "bytes": 175124
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/02-metalworking-bench-r2-front0.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1c100304feca2dccea0c49ee8004343575e1f920",
+      "sha256": "d829e6dbbc75b1dbba99a60ab0d8c9656dee942b30c470d6bb277d1c8adfa1ed",
+      "bytes": 192808
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/02-metalworking-bench-r2-front_left315.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "97b0d74b3acf8b983ce9ff3e7292c1a7e3f0cc6a",
+      "sha256": "9300fc980f2c6d23db0d7fbce14f77d78ae219cb2680379e9cc74fc948dda375",
+      "bytes": 206672
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/02-metalworking-bench-r2-front_right45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "11bb9e5505a8587552caa293b3ffc9867534f7f5",
+      "sha256": "419d7f3f33830acc92fbe1fa6546e4177a48ffa745df927762ed594015a0a13e",
+      "bytes": 207919
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/02-metalworking-bench-r2-left270.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4b034df2b20c83a3f1cc9281d94bb5fda7541be1",
+      "sha256": "72c610de8b81655a9f6ebd237f24cfcb2f9557beee2a6321eb950f6f9f33ac64",
+      "bytes": 156596
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/02-metalworking-bench-r2-rear180.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "86aeea82fb65a49b3fc3c88c92d9b8815092a16f",
+      "sha256": "152365e9eb82a5ca273d45063321fad9cbe6e8b7573f3618e49cb71fe58c9d6f",
+      "bytes": 186314
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/02-metalworking-bench-r2-rear_left225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1682b98d8b186d3e2f718edd1d9093519ac6c2e0",
+      "sha256": "50f984ed210db709eef9e06b6ac23e6303cf9225b9819dedde465ac88c9985a8",
+      "bytes": 197900
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/02-metalworking-bench-r2-rear_right135.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2f8ea900feeafc869e740025b7668a3ae5252952",
+      "sha256": "8d31ba55806ec17a400d2b4a7264445b4eb81c430d58614f3f6e4ea9d4b8eefe",
+      "bytes": 200050
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/02-metalworking-bench-r2-right90.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "56d739814f474726ef2157064de601dde3d9bc04",
+      "sha256": "08f0c7bda63a43b38ea93b2395ac9cf634c8eb799098331047776056a2cc5c60",
+      "bytes": 156109
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/03-steel-forge-r2-front0.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0fb461591bc0cc5ba351d0b6d49b0400dbafc679",
+      "sha256": "35267e65eff9ad2fd1269f3a9fd659d6494495729cf5890465bd40bb10305e9c",
+      "bytes": 193511
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/03-steel-forge-r2-front_left315.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d0859f7a4f4a60ca2ac21d88f6f670f4b843debc",
+      "sha256": "d0d74223df7afa475b6c0028503e2b680fdd07c16e0b15dab24d3d8b3658b1bc",
+      "bytes": 209187
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/03-steel-forge-r2-front_right45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fbff2038bdbb6e0fa12cb70c48e2bd8ba19cb646",
+      "sha256": "ef1fbf6823d77d0f0ebf7edb68759726354419de1e2b639164169af96ecfa044",
+      "bytes": 206208
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/03-steel-forge-r2-left270.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "03c3967bf8b8eda4b25541daa2e6460986e2f442",
+      "sha256": "31f6ab4038e49f27a6dd83a54fe351861e72f4097aaef31cbdcea4c21669073e",
+      "bytes": 186890
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/03-steel-forge-r2-rear180.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "217c0d493c7eba5a0995750e5bf74d03ff58bc66",
+      "sha256": "97f25645b3b4dc7e57721958775738919381a5a056d225e7b8fa138141211014",
+      "bytes": 188235
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/03-steel-forge-r2-rear_left225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "25569fb204f3e37024a3d76d6e4d7b3754f91da0",
+      "sha256": "36da46e5f134ad38e880439b8f6f6e0fb0f90ee0caf3bd09f160babfe74fba04",
+      "bytes": 194661
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/03-steel-forge-r2-rear_right135.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a2eccb9841f01e51e855e14b85acc55f3d1149b4",
+      "sha256": "1b18b8fdaf378864e5b4858aad08d67ac97e91ff1c2cfa819c341d60ed2e5c7d",
+      "bytes": 197969
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/03-steel-forge-r2-right90.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f10cf719e7bfcdb052eca533cda85970e41b1a41",
+      "sha256": "ec07b1be63912861d2affbcd0f0c97aaa9406c6d881e143516bbb182bf512413",
+      "bytes": 182803
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/04-assembly-bench-r2-front0.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "75d26c93270e398b51150cff867b79af735dbf12",
+      "sha256": "ed80be91a82805709b820e3b87273aa8fa127ab62efc7b31bc549f2f4e52f7f0",
+      "bytes": 201415
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/04-assembly-bench-r2-front_left315.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e5b671f06ec205fac5a9dd5e07fb986eed2bea80",
+      "sha256": "9201c436285d0454603b531b9010a26e9b846d7a5d06b0330424c587e7db20d1",
+      "bytes": 222242
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/04-assembly-bench-r2-front_right45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "413cd2745ec1204b44578bb540efce6beff6f91c",
+      "sha256": "137fbafa6001c77f27724238cfba625b490cbe683b9d3da012745be6ed9a124c",
+      "bytes": 222623
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/04-assembly-bench-r2-left270.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5d7cba1a5db77e9191986d4256e129c91c9073c8",
+      "sha256": "2f1f6328611eb8bad580073cbf50c90eae04979598787c6384c402c8b679a0d8",
+      "bytes": 130678
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/04-assembly-bench-r2-rear180.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0bd5891346f3fd7ee791513ecdc8025a08e6e37e",
+      "sha256": "b7f250aabe0c99ad836a72eb80bff9e07d04145b40ff23599547e4e14773fece",
+      "bytes": 194208
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/04-assembly-bench-r2-rear_left225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9ef74193092c9ee21a567553faba5a69eebc0f27",
+      "sha256": "fa0de5901fa080d22850836dd4ba1a4fd019990da03aa77de7bad35b01d90a9d",
+      "bytes": 207160
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/04-assembly-bench-r2-rear_right135.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ef96e281d8eaa0b09cc7d5f5f21b1792c2f47c5d",
+      "sha256": "8388560e5a5cd7dda5f2c3ecd492b9762f43a2842ba543bfdd98470644867307",
+      "bytes": 213946
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/04-assembly-bench-r2-right90.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0b62ae596374182909c3d52e51cdbb3f3ceec5bd",
+      "sha256": "b25fe0b68687c79e742ecfbc859426f8d0e0cc20d9c890584b16835a7ba5fd50",
+      "bytes": 135344
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/05-manual-oil-pump-r2-front0.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "54de3dd6b52e3158f8ec345d2247a93bd30331e0",
+      "sha256": "17f471a20891bbbe389c7c1c1948de627bf13b606779231735070c8f36af8815",
+      "bytes": 175405
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/05-manual-oil-pump-r2-front_left315.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5cb68f03f721cd5291e4cbd53f5d95bb4da36c41",
+      "sha256": "d1a8c6fc34de79e3c92409c142516a7f496671095d2f4e34e18d0d9a07669500",
+      "bytes": 194207
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/05-manual-oil-pump-r2-front_right45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c87d364da29a1a96998386a4e816dd85decb8a86",
+      "sha256": "a25b12972585388b5d956a16b86e50fe08933cb2e48333e4ebf0e4fb8da060c6",
+      "bytes": 194085
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/05-manual-oil-pump-r2-left270.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "224efe9897ade7bece3acee51ec7b471fd6e96a3",
+      "sha256": "4b36c218177d3a43a8bac3be7e25cf88cb3ec451c8189e6949ee4c8266bac54b",
+      "bytes": 194267
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/05-manual-oil-pump-r2-rear180.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3a6b6713140cc8a2e68a6d3c5e0620a4a5c8ed82",
+      "sha256": "ebbaa4d567f0f73b0a327bcb4bd04b92f268d24de3971e55eac8950b39538f2b",
+      "bytes": 177282
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/05-manual-oil-pump-r2-rear_left225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b47039b1bfeaebc15fa4751ce55349043465eb10",
+      "sha256": "132e59643043d41d704dc46608b77d6f031d3c3645cf4081f6d0317beed867f0",
+      "bytes": 202318
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/05-manual-oil-pump-r2-rear_right135.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dcbabe41f70a170966da91372b4f41762dc394dc",
+      "sha256": "283f952913171f6cddadec13895627f275e13c9d366eeb7b7320c630c25ab8a9",
+      "bytes": 196584
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/05-manual-oil-pump-r2-right90.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "57e10a667083ba35297fac694c97e84dcd145230",
+      "sha256": "9d91cfe96847e14a9a5065012e34be72a9324c1dd57baf2d39e28cc794f2eb1e",
+      "bytes": 195897
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/06-coal-refinery-r2-front0.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "995fbc8aed74906e29adcfba10267e2a59c3cb3c",
+      "sha256": "d477b86dc36a4a5c0369a73deeb99a0903a6ca7bb4eba4d25474394cad40349b",
+      "bytes": 207911
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/06-coal-refinery-r2-front_left315.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "072fb2ab80b355f93d2b0eaa477499532435b6a6",
+      "sha256": "1d2505ca912d05238620469d44f99afeee7fd823d1f3b0e8e80c40d9a6f2ad18",
+      "bytes": 211744
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/06-coal-refinery-r2-front_right45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "115bc2552c4221a634c7d91c2abd071abd5436f4",
+      "sha256": "73242dd62e1236756ff1127db07fb4f1277c2806921bf377687a9bfd1018b2e4",
+      "bytes": 211184
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/06-coal-refinery-r2-left270.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bef5285138ca56176470f6bb603c9abb15d05c47",
+      "sha256": "7f5607c4889406c046836ac2fba07b170b533880649283428fd4ae72ddaf1d56",
+      "bytes": 184646
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/06-coal-refinery-r2-rear180.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ed77f3c65c39ac623baaaebadcd61a919be4b24d",
+      "sha256": "93e1d50b462e25734e1683c06e02b7f40572d91a84959fba7e73cfe838d3ef17",
+      "bytes": 209756
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/06-coal-refinery-r2-rear_left225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fcaf0cd654eacfa086aa7b484a175b04044b9f36",
+      "sha256": "aba6597a1eb80ca8418df399dfc2f8c9e80e56ef6ac29d78472f627ef38ffc1d",
+      "bytes": 203918
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/06-coal-refinery-r2-rear_right135.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5c89336c7465fd9ecbce425a077b682d623e30dc",
+      "sha256": "c1cd283f608c8371929437cfaac4075ddb7e84794e2d62910fa559406aff474f",
+      "bytes": 207763
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/06-coal-refinery-r2-right90.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3cfa70ae68f71f20c121ef7e5d600ffe0df2b731",
+      "sha256": "e2481421796674de06a9a5490efe945141733b8e03c0391bc8d9740f4546671a",
+      "bytes": 187890
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/assembly-front-output-detail.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c1365f33be3a5a50dfbdb2ddbae125206508ba42",
+      "sha256": "5da6d38c8fee79a4220e58f2298896162d20d65dc0d7dcffc88cee7e8e7fb4d4",
+      "bytes": 171185
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/identities-first3.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "68ee7e1479c1c8a2d82eb80107bad81153c59e6d",
+      "sha256": "55f4990b8583fb01b020c4d7d255ea1e3cb17a43bb30f32a1f07ae81389f8f5b",
+      "bytes": 3456
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/identities-next3.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d9280691dfea88e4ea36eaa553b0a7bdc1a4d35b",
+      "sha256": "c799b26632164e74e2cc5e5952644fe4bd8ac193d038dbf83578e49017683e6e",
+      "bytes": 3465
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r2-closeups/smelter-45-rear-nub-detail.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "afbe8f1d186db284711fdca445210c0d25b80c99",
+      "sha256": "7901f9c34be5df6c038c26bcbf6117e229439e8d6bcfa7aae9f07d68245f675a",
+      "bytes": 63283
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/01-coal-smelter-r3-front0.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7cae92bfc57e2b0e20c8fba8b74f1d1da44475ea",
+      "sha256": "ddf94643c078df9f09fb5fb8e5a313ca0fa77f41a93ec50b2d85b9cd20e9789f",
+      "bytes": 180727
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/01-coal-smelter-r3-front_left315.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a502f6662509e35f76b437108932177e4be88a7b",
+      "sha256": "3eba9fb5efc997f819a8f44b1e9438b9a544b8f9281f76761559b1c8bd0939b9",
+      "bytes": 186900
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/01-coal-smelter-r3-front_right45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7925a6dbdc8144a53a6d9dab72f07aab633e9f65",
+      "sha256": "cfc841406db9f20d84176858c249fbf2a6774e62c4e048b8b47d38130d57e926",
+      "bytes": 185345
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/01-coal-smelter-r3-left270.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e0a52e48584873c412165202abc89e1211d06f42",
+      "sha256": "c00eb864a62db9a101108e829d4bac8a6fa3521244dd1f354480a5c2c0e4749f",
+      "bytes": 178423
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/01-coal-smelter-r3-rear180.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "31c293a03581259d66689dd757923a6719ee50b7",
+      "sha256": "080ec4b9881d333a11ebc765cd1a88595519630c95afe5927353795758fdb741",
+      "bytes": 171147
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/01-coal-smelter-r3-rear_left225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c6a0a42f465659d7d1f73a11002a4a36e59ef7d7",
+      "sha256": "542686512d168c3dd804b4d3af26dbeb82ae442a27268a3c4b9d8785a24d2f30",
+      "bytes": 182930
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/01-coal-smelter-r3-rear_right135.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b87b955b96810388c27eed89ad1d30b175dec5e3",
+      "sha256": "f7dc238a4f61d8f812a6c24b9d043fff6688237eb0bc202bfc7db8709922c0b6",
+      "bytes": 177380
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/01-coal-smelter-r3-right90.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0bfddda106ac7f68a232f865b394dd534b9d16d8",
+      "sha256": "03af89da0693a637db3805cd1c45ad7e39072169d3d13bf1776786b40e10dad5",
+      "bytes": 166895
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/02-metalworking-bench-r3-front0.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dcb72fb7378275984d2431377d892593690e7c5a",
+      "sha256": "b0a35bb2f27af943984cc1d3a969fed65a6a5523dddb5e24615af63767920c09",
+      "bytes": 184324
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/02-metalworking-bench-r3-front_left315.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c6d981d04c9f3b12962064ae6fdbbf8554208a8b",
+      "sha256": "cf91cab22b1e0094a35d747141872dcfecda967af6514fb7410b5f2dbda5c94c",
+      "bytes": 199325
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/02-metalworking-bench-r3-front_right45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e5c934a7203b040c15f356e2a895272f0ae81f2f",
+      "sha256": "2292c137dd1077d38518e93d9f888eac97094abaf2ed7511d33cb31ccc0c11c7",
+      "bytes": 198765
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/02-metalworking-bench-r3-left270.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f6ce6ced9e91606a3798c0ba982ea1371cc96cee",
+      "sha256": "c06402a7f7748a332f8bdc385b126bc3196a7c0cef79f37a0aeeafad2dc2f16f",
+      "bytes": 150827
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/02-metalworking-bench-r3-rear180.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9780d392bad0a7506cfc8c6265e05186aad5932e",
+      "sha256": "65134788c7cb8da2ebcbff87f478bb2d4500dca32b3e3f25f076c74340225319",
+      "bytes": 177673
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/02-metalworking-bench-r3-rear_left225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "28bb0a248ca716f1ebea4db90f328f9e858acccf",
+      "sha256": "743e44f7ba10257b7c311ece6bd8b2ccd63670ea71f4355c7207740359553cb1",
+      "bytes": 189637
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/02-metalworking-bench-r3-rear_right135.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2c9c7b9d4f56b89c2cfd9b45d8c4fc1c7de2fa1f",
+      "sha256": "3e8201082da35d84c92e1fc0bf262883f22142df859de81d72907f01e9207a68",
+      "bytes": 189683
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/02-metalworking-bench-r3-right90.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7f8a7f631bdfbd447567e346bc27921e8f169a4a",
+      "sha256": "5af18dfd7db6ddf2128e62b0d810f4c2e6b3eb95ac7b46676c494355aeb7be08",
+      "bytes": 148491
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/03-steel-forge-r3-front0.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e8d3607bdb0a28675eb0a7023ec23f91455a8178",
+      "sha256": "48d00e5c4a402d301c062df9e332a17b18c34b093ff7225da8c3445e5866428c",
+      "bytes": 186652
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/03-steel-forge-r3-front_left315.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "89f8fc7f5b3813296521f7c5049dc1f50a6bbf2a",
+      "sha256": "a33dbbf759ad6637a7213802aed39dac402d807658c77b7830d36419dd640171",
+      "bytes": 204844
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/03-steel-forge-r3-front_right45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "799561f4977084c7400d3f5cdd767004f0bf5471",
+      "sha256": "886e75690e46a4b3b25daf90ddb21c4b867cffb42c0e08d12a7f0e34439abdf9",
+      "bytes": 200605
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/03-steel-forge-r3-left270.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ad1db4e7fa6afe48b3f4558862116811e029b68c",
+      "sha256": "6ba2ae7fbf12296591e9052cd7eb456676081925dee95f8c7dd04733a7b0378c",
+      "bytes": 181540
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/03-steel-forge-r3-rear180.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2d68c74c23b7d3d87ca05bcb4169976097b96479",
+      "sha256": "4a537217cc0f5ecf3226207d664aeb6acdb4593456cde86d3ac079950b3e0e35",
+      "bytes": 182205
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/03-steel-forge-r3-rear_left225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3bfc5be6ada80f424e261f54553a4fa38c01c770",
+      "sha256": "1b30a88852a61f37fb4e05f33ad46dcec0d0f94fc7c1f3681122831e7c7fef52",
+      "bytes": 191978
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/03-steel-forge-r3-rear_right135.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2d04638efcfb8373cef15543e06dba2a7937b302",
+      "sha256": "78f3fcd8171eacf36f3667a07d89bdee7ea83dde509118d1af868b8f039d18ee",
+      "bytes": 191407
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/03-steel-forge-r3-right90.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "066d0359e8e4cbe85253970da04e0b4436bfbc7c",
+      "sha256": "1c91d89cc9a8af6443108fdd8c7ebebc741cdfd4fb745ae949fd33fe310b31f6",
+      "bytes": 177071
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/04-assembly-bench-r3-front0.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9466261a1c27801ccb311c5722fe56990d13110d",
+      "sha256": "d64dbaa7605ca7e926af2c39384cf00791be83ebd01a8fb3cbabff75f75b38dd",
+      "bytes": 206690
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/04-assembly-bench-r3-front_left315.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e068c8d05d53a8b3764d8eeed13e2bec8777dfe7",
+      "sha256": "8c5802bf01e8b1ae4e505e15e778d03c0a9eb731dd8da67b82da012c52b3c118",
+      "bytes": 222192
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/04-assembly-bench-r3-front_right45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9e61b6fcd5f160cee81e292f165ddacd2db01a97",
+      "sha256": "093447307f8984328a644ef2c77d772c9165b113fca4746e61723e1ece229a53",
+      "bytes": 226635
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/04-assembly-bench-r3-left270.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ffb9d1ad45c14edcee5eca36c4342b585465349f",
+      "sha256": "1ee22d76a2d1ef45a4a6d8789d23d5106f207184aecb0c9e08d9f2f3c9cc7f52",
+      "bytes": 130911
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/04-assembly-bench-r3-rear180.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a049767601ed8630e068a6c291fe4b2a05e1c495",
+      "sha256": "f3c52951d27a7eeac1d1aae30a57d85d7b84cd8e5d058aea2be481fea0e88251",
+      "bytes": 194704
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/04-assembly-bench-r3-rear_left225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "af3cb5ef1281f8f82eea06c203b756db617e21b7",
+      "sha256": "f8322f2feed3b36b6ff679e9a695bb3284b3f114d19ea71eeab444124c3c5063",
+      "bytes": 206351
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/04-assembly-bench-r3-rear_right135.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cf54a28719630db29a36144f464ae1f1c4f1cc30",
+      "sha256": "3b18f96cb1e34e9c12a326dd38adf537c1cd168d5aca592aa220858a0661318a",
+      "bytes": 216834
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/04-assembly-bench-r3-right90.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ff10a7dcd9f359cd8f335e04248d97887c1096f3",
+      "sha256": "828988837fb67c71ca5f785527843fec409203d8aa328730e48ffdc424a93e2d",
+      "bytes": 138084
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/05-manual-oil-pump-r3-front0.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d92d6fcb722bd0b245d7113102b3d2f2cb80b154",
+      "sha256": "3b86308ea5585f0c84812774b44de325fa1f9c7cf81db481b53fade55140d27f",
+      "bytes": 173921
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/05-manual-oil-pump-r3-front_left315.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "70ceec8dd2838ee7f37a3a414be1743dd30c9eba",
+      "sha256": "1c5938258f2c52cb0aa58eab28656c86790be4feae46e40fadb20d760a9ef25e",
+      "bytes": 191374
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/05-manual-oil-pump-r3-front_right45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "02bd95c402aa168e7e72566b836ac183cf8583d0",
+      "sha256": "8c2c6d3e6e6728ec26375ed2f09cde2d532e73a070b9616bca13d9456573822c",
+      "bytes": 190709
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/05-manual-oil-pump-r3-left270.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f991c63aeb1a2169e91efb358fdf3d9afb5005cb",
+      "sha256": "999e47e09bb5f6ecdbb7ab3eec6af0bde30155041dfb6f6dee60006fb64764f2",
+      "bytes": 194571
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/05-manual-oil-pump-r3-rear180.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "05b7341990366ff737cbd976a23da1158a5a2452",
+      "sha256": "17433b7f1761fee23e1e880431c4f1604b679df9d5f07933dd3d20b2e965dfd7",
+      "bytes": 173428
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/05-manual-oil-pump-r3-rear_left225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cc3a7c778498f008070cd8dcb52ffda965ee56b2",
+      "sha256": "70fd8d73dc3b616ea4e0649647a9a61d8153ce6cad0cc612bd5b31bffde9fae2",
+      "bytes": 198686
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/05-manual-oil-pump-r3-rear_right135.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f2fff6fa6c0a743b47d4a0e464b8787ecdce669e",
+      "sha256": "f6c2c8c3ee089d3be4e5030b3c1ba37e3c6e49cbe208a90dd3e2e73023145f78",
+      "bytes": 191806
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/05-manual-oil-pump-r3-right90.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "40136625a25f9027b63a48ea2edba7f3723046ae",
+      "sha256": "d79ebb053944624ad3ac42dba24eb7bd3205091c538f4be73735cac648f7c3d5",
+      "bytes": 194153
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/bench-gear-front0-detail.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "10b997b12c54064870972662ff73ef70a764e1c9",
+      "sha256": "eec655af7b117354e15460f71854003c0bc51edb724a2dbaf97728d562b892c5",
+      "bytes": 98266
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/bench-gear-front315-detail.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a480d3b375a85e5bcf0980e8293ac5886f3a5475",
+      "sha256": "1b71d281e43dfd72ca3b7a38d894f99b7e929c72cd638f952420eb6113f129d5",
+      "bytes": 106597
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/bench-gear-front45-detail.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "eb06de287e3506c874ff29fd096f1be9836a8cef",
+      "sha256": "d7bba5463ac51635a7e5570eca0aea4a05b3c64b4167e3a94527227c31c08299",
+      "bytes": 104180
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/identities-first3.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "db0125872c6676f5028347d3aeb277c7551b2b1e",
+      "sha256": "e269c882e98eee2e588d988e92fae735d68d0248c0cb10a05560a57c21f1df6b",
+      "bytes": 3456
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/identities-next2.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "016106f4b225884e3a85aab9966afefef08138d1",
+      "sha256": "1de45621444a00c665b3ceaa6d2f0b55d006c3d0dc22dc67b62fdc48be1b6796",
+      "bytes": 2320
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/pump-front-feed-detail.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "46da7970c7bc4b8f8cb50ce156ba78431786f74f",
+      "sha256": "b4e3c727e6a561469902b7539124fa1613f1512856052c2980343ca64bc8cfc0",
+      "bytes": 250539
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/pump-frontleft-feed-detail.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0f629a082f411b81f51d2884f30fc8fcb7053364",
+      "sha256": "0c7cb1c801a1d36430acc0b3a996f5fd8168c9fd734945f78c6c849360f86364",
+      "bytes": 267187
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r3-closeups/pump-left-feed-detail.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7d36ee028eafb91b1b4346bfd33f453e85e9b012",
+      "sha256": "b59e22698c5c8a8d579ac2433d49287c08d53615bde332b25ba0371c107674f6",
+      "bytes": 271228
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r4-closeups/02-metalworking-bench-r4-front0.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d069d8898fa4f29dbe865eb882ee179a544be304",
+      "sha256": "ce1dce3e7d1272b673ee4b125852fd7f2a0391f31accf39a48305a75f9122857",
+      "bytes": 188059
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r4-closeups/02-metalworking-bench-r4-front_left315.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d0f68d52a2b5b38855c4a18952a810a552d7ffab",
+      "sha256": "9de2ab4686c9446f5856c6b99699df747b4d0ee8c7665f0b3f77172b580b551c",
+      "bytes": 202225
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r4-closeups/02-metalworking-bench-r4-front_right45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "85a4c76f02ed72002179859582d6220492b74d0c",
+      "sha256": "cde247a2652ac36458a2639d66f59182353da14a6ce82469dadc34d4102c3bc1",
+      "bytes": 201589
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r4-closeups/02-metalworking-bench-r4-left270.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5bd583a78896c1a8654f4e3df962a46b03a413a0",
+      "sha256": "5c78fde6e7539d352c416fbe0dcc34eca0fda6a4581daa23fce244bb643f2269",
+      "bytes": 152589
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r4-closeups/02-metalworking-bench-r4-rear180.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f6380be6393937741ceab961e1ac7f07fbd4702f",
+      "sha256": "e45c85637b33935da4b01982c15c31a77a17e8c3878173b0637f080175d022d7",
+      "bytes": 179558
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r4-closeups/02-metalworking-bench-r4-rear_left225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "474b7c9cb13141faa7836c39d159a18cbd46bb1e",
+      "sha256": "cae2a2f7af616e8248fc26544ebae6f4dddf15816a249f1ab6bdf4c290d8be3a",
+      "bytes": 192076
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r4-closeups/02-metalworking-bench-r4-rear_right135.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9ffc1ffb6635bce3f846cf6c56d60dd4b69d15ce",
+      "sha256": "ec3e83b13a08e62ed960326495426b4ddb524598840488f8e4600ce3408c8d37",
+      "bytes": 191923
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r4-closeups/02-metalworking-bench-r4-right90.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "55348bf28f26035923624d78543e551a447986bb",
+      "sha256": "507860b7e803daefad72b93320ab33b5747e6de9587c1ffabaf6b1708f8c28d2",
+      "bytes": 150245
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r4-closeups/04-assembly-bench-r4-front0.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bc72f6d5789f59ab18953b0befbbc28b48eef1e3",
+      "sha256": "99f84effffe59583b7ac4ed6b4d638330ad4a3f3fdf5207c4f6e965c5e643723",
+      "bytes": 209692
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r4-closeups/04-assembly-bench-r4-front_left315.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "506c974243383f7fd676c82afe93d716f06b3541",
+      "sha256": "7c239bc882cba559e6a85ccb1e1342848648d05339e6d7161ef8054444712c84",
+      "bytes": 224172
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r4-closeups/04-assembly-bench-r4-front_right45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0c8608a4c199036d354a9d33f0a6d274b3d16f22",
+      "sha256": "08b65ee5fb9586b6e108cf61e8ce354421057eda6cb3f234a16daa2dc3732425",
+      "bytes": 227587
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r4-closeups/04-assembly-bench-r4-left270.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "93e999765b96777b87a73fe903d3dbeb65a0372e",
+      "sha256": "99a7cf1a37f617d97daa373ea16db5e633abf93a8854ff679283e7dfcbf1fc6c",
+      "bytes": 133336
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r4-closeups/04-assembly-bench-r4-rear180.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0977fd67478bf41ed35a2c12f0f507352c2ed9a1",
+      "sha256": "e66af14eefcf67723f85eff812c66ce2cf0f9cd2aeeff9067928e458e64dbe01",
+      "bytes": 196714
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r4-closeups/04-assembly-bench-r4-rear_left225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "83180d8a51dcfd13b7045d4e6006454af7d943c7",
+      "sha256": "68630a915595dec674eb93106e904407bb33ec799c45aa374fe4258481143640",
+      "bytes": 207018
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r4-closeups/04-assembly-bench-r4-rear_right135.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "449abb455d8da76278819915960ed023ac218021",
+      "sha256": "e6ad54a57b08bd2989465231f9721ef5e91bbc63c630bb539dc04ac9383a6517",
+      "bytes": 217647
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r4-closeups/04-assembly-bench-r4-right90.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "230fe245b389cbd88961cb46f24071bfbb9aa465",
+      "sha256": "ac003abb92c42361ff4bc06015be8e72e4222b46894293c0b5e24ce08aa70265",
+      "bytes": 139347
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r4-closeups/05-manual-oil-pump-r4-front0.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "098b01519646bf34e2d7b24e89ab2958f21b0c0b",
+      "sha256": "0faa177c94d582cc4864c3df8ebc04c4e80ef2900ab24b794a4b8728ad14bd55",
+      "bytes": 173559
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r4-closeups/05-manual-oil-pump-r4-front_left315.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "936739df25db64f462845670e064d689b2ed67ab",
+      "sha256": "3cd327440e614d07a51d4bd9c39f6c22e3d998ed6870d4c2b840953475256c7e",
+      "bytes": 193517
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r4-closeups/05-manual-oil-pump-r4-front_right45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7c797d9f6436d569ff552672f1e926ec5f8107ec",
+      "sha256": "75609478c1e173b17d90ee35561e5b9fecc75ac2c7abc6253139475f52077202",
+      "bytes": 196232
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r4-closeups/05-manual-oil-pump-r4-left270.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5ee86726c936cb23efff7364d09ef1f7d324768d",
+      "sha256": "9856d0864c38dfe0da5b2e9a9a8ef8f206fc8d6afc06a39977ab7c5e374ea72e",
+      "bytes": 196794
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r4-closeups/05-manual-oil-pump-r4-rear180.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "005452ae2264c80d12dd869557a48ad28fc3160d",
+      "sha256": "2726e9f50ded146a1eeb5042279ceded64ca25882de4ec05470ed9b056a9fee1",
+      "bytes": 176437
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r4-closeups/05-manual-oil-pump-r4-rear_left225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3c4b9cd4681bd01462d1284e8550cbd5bbf7f793",
+      "sha256": "7a5f120197be1a944c131f79e901d08277856d72fa13a6b4c11080df6669676c",
+      "bytes": 201141
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r4-closeups/05-manual-oil-pump-r4-rear_right135.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1b6ac63db1943a02efc81b34d9c99ac275d0fdfa",
+      "sha256": "b9a92c327cb26a11a74ab76b69a7ce86b99e1c03f579ab76056cb6d4036e920e",
+      "bytes": 193795
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r4-closeups/05-manual-oil-pump-r4-right90.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6d2dd8f0ad585d5c518e045617d1764718116c9d",
+      "sha256": "20e40fb4170b97c2a271c75b670149ac83b6cf94b8229ac7642bb89e57e67089",
+      "bytes": 196072
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r4-closeups/bench-right-stock-detail.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "748679e333e4f7394b76dd5aff88e5a3ffbc3ec8",
+      "sha256": "9b5cfd3c58f173465a103610be9470e6c9557c4201a3ca72a742e28ffa90bafc",
+      "bytes": 78389
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r4-closeups/identities-final3.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ff36c8cc8fd66a3d25a9b9c9e1088fea89a95cd1",
+      "sha256": "ac57a37cfa4e7d0b45bd09240c6a35f9c317233400bae6a9541e2f7ff2fb8228",
+      "bytes": 3510
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r4-closeups/pump-front-feed-detail.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "832cb95f92b4e8bbb37d1a11463d5c118f3032b0",
+      "sha256": "c154b8f1b29304e9e14c2d0e2742f14d8c4d8a8f0b6fac91569fb116a5daa5c6",
+      "bytes": 354242
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r4-closeups/pump-front45-feed-detail.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2d3ddab2b1d791184509e3bbcacd43446aa65f8e",
+      "sha256": "66186d5aa5bb52117c4f6dc23e58f6767602f5796098275c757adbbd3997a41d",
+      "bytes": 274039
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r5-closeups/02-metalworking-bench-r5-front0.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0951a06cf920fa42b7cc3fac82d8b47d71901da5",
+      "sha256": "637431d8c565330f1660274a75527ed997344cf3b44ba75f21bbf2b107d155ca",
+      "bytes": 184632
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r5-closeups/02-metalworking-bench-r5-front_left315.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "312f4dbaeac4a2129fa710442a68665b1c1875ca",
+      "sha256": "81eaa0895849f1c54fd8f9f0fd558859b04c748612ca26531c3bf7b23b0a5a4e",
+      "bytes": 199380
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r5-closeups/02-metalworking-bench-r5-front_right45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "408fe5eadca1ea86348c4f03407e5a98635a3cc3",
+      "sha256": "85c56f8cdaf5d0da1468c4079b7b0e38bbc2531ce6a011583d1b0a6e81a25cda",
+      "bytes": 198208
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r5-closeups/02-metalworking-bench-r5-left270.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "01d9db34ce125a60854ef45514207d192b62a41a",
+      "sha256": "b1a8c7faac520538398ddfbfa828e74c4657a98952e9acf6b414fc2a4b1054f3",
+      "bytes": 151129
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r5-closeups/02-metalworking-bench-r5-rear180.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5fdccdbda753b33309a2191236af7833c616b334",
+      "sha256": "5adc9d089aa89f4958a251c658526973b1a10610f029eb93bfa83d7fb0482cb0",
+      "bytes": 178652
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r5-closeups/02-metalworking-bench-r5-rear_left225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9e15870b132ca7c22c4d0d96a50be74d4bbd9c2c",
+      "sha256": "d48061bfbcb282d7a181e77eb528248094e804a4da650fef9d93519549b00dd2",
+      "bytes": 189487
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r5-closeups/02-metalworking-bench-r5-rear_right135.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "74a9665f9f76dcac84a5fd061767f3050ec7c7f3",
+      "sha256": "589254406675036030b6b8e6eacfc51261583cd6f2ec963b4e955de5d4264eca",
+      "bytes": 188774
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r5-closeups/02-metalworking-bench-r5-right90.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3ad5b45027c477e0eb65d4ec7c070c62844e2c6c",
+      "sha256": "3570726ff42890163b6899253a37f86e05982add4c266c84651f3a3be018fa99",
+      "bytes": 148404
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r5-closeups/05-manual-oil-pump-r5-front0.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "eef960215a547a9e8b4098538ff97ec8614508c0",
+      "sha256": "b537c6a35760cb1638e238a3a426bf76f58f206d85f370e00f8b2d7c0d7c02c8",
+      "bytes": 175919
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r5-closeups/05-manual-oil-pump-r5-front_left315.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "587ad0406f392c4473b74893d6033a529e67c9f5",
+      "sha256": "85919f9e44e758862f006b6b07dcd32395a5526ebecf43f63bbf0b6167698bb5",
+      "bytes": 197126
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r5-closeups/05-manual-oil-pump-r5-front_right45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1a619df35fc5c42a5860c48d756060de12ecbe03",
+      "sha256": "9fae59332adb4cfd6259e618955a2163c1c405a1f5b4271f72276fdba6ed4b5b",
+      "bytes": 199463
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r5-closeups/05-manual-oil-pump-r5-left270.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "27506ec99b4ac2c3ff82430368b953d68e0f399d",
+      "sha256": "535eefcff411a7f15b4fc04e850944cf3384f0e24a923d994fa56e68213834fe",
+      "bytes": 200028
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r5-closeups/05-manual-oil-pump-r5-rear180.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9225157b29f3e38e820578c08bbd5280035f1648",
+      "sha256": "f65288e7c6019744212036fff7080ee339403df5ea35ffd1c520741d7776278f",
+      "bytes": 180478
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r5-closeups/05-manual-oil-pump-r5-rear_left225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "179987c7dbf19d024817dc05d7ff694f0b9967c9",
+      "sha256": "b9801a41317daf560b6ef1d9096db82d176055cbb7c7b95b7baa65b7a11fee47",
+      "bytes": 204345
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r5-closeups/05-manual-oil-pump-r5-rear_right135.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7a868bd284da14296087bb6261eef0c22070c508",
+      "sha256": "cc1604bc4def557334ba0cd6e565d6fc626c187ded3843ec8d0ac57a3a0b8e1a",
+      "bytes": 196805
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r5-closeups/05-manual-oil-pump-r5-right90.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a23ace6a673f40a3fbbbe50928a37caf5d76d72d",
+      "sha256": "f1c01b7e4662ac57e94c375277bc60c2691fb6e4d20debf5a26884cd833f52c7",
+      "bytes": 198974
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r5-closeups/bench-right-stock-detail.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "45a58bd0a18ced51a09cc821761650896d791888",
+      "sha256": "01327cfbd1a80baa3cb324561a53cfc0120274d93ca23c8a91db436c5200e65e",
+      "bytes": 94783
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r5-closeups/identities-final2.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a152951965ae6d6b8ee8e1e537a45d32ea2eb4e9",
+      "sha256": "0aaced07584d3342b895d3a372730eb48c30a11a34bd847c45aae6bd66e0caed",
+      "bytes": 2356
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r5-closeups/pump-front-feed-detail.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c8b8109968b92e2b4713edde41ff565212b36d21",
+      "sha256": "b8f85b293e518e18dc26e270e6abc4d9bb8ca77e568e26980ac39538e801685f",
+      "bytes": 354683
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/machine-r5-closeups/pump-front45-feed-detail.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e4a7c3cbc38acb067ebcf7207e415892eb6cb97e",
+      "sha256": "5a45ce574a7ff7e33c177525a971ad9b6a2ac5be4f4cfedd78345302f21c17d4",
+      "bytes": 281041
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/selected-gear-source-crops/SOURCE_CROP_PROVENANCE.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0e9f7451ead813edaf4cd70265bda93fccdc9a7d",
+      "sha256": "b59315e1990aaf38a2dd34467906606c535fd9d33e22177dfd18243bc7d72143",
+      "bytes": 1482
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/selected-gear-source-crops/mechanical-parts-front0-source-crop.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3188699982962a7bb4c6227e1d4593e27f7dfd67",
+      "sha256": "03163d96bda39892f90c2299c0e80e12e4c49e9ccb8f1dfab0ce8c327f98e502",
+      "bytes": 127794
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/selected-gear-source-crops/mechanical-parts-front_left315-source-crop.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d71473aed73a63064418408daf4239a3edcec669",
+      "sha256": "5d2df4f6d197cc5ffd2b5e868582ec6b0a627b6430a92d6309f5a022f5540385",
+      "bytes": 125038
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/critic/selected-gear-source-crops/mechanical-parts-front_right45-source-crop.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d7c1b63c243ed4fc810fb688e8b29e2e98babfc8",
+      "sha256": "b543c071881dc706ab7b4e2bb697a46b19052d61afc43526146e449d1fbf93a1",
+      "bytes": 118925
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/export/BUILD_VALIDATION.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ebedb15ef54563355d8f9705175e1b6c0c114b07",
+      "sha256": "c2fee58652ddee4735be02143c15d2ee97e87b5a6c0645957e8aa4fe27bcf3ee",
+      "bytes": 868
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/export/EXPORT_CUSTODY_CHECKS.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d71af0e0027a3be5188c39954a9ae9e41fa647c5",
+      "sha256": "c0b8e1a0c36453c76abd76aee83e80b95d6bdc7dfb0512a8af2e149a0089b017",
+      "bytes": 14073
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/export/EXPORT_LAYOUT_REVIEW.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ed4d392bd500ce1190365ed20fe407cc8baccd80",
+      "sha256": "b5d5f159bbbdf68bd996548095d6eab7434dbfb64c18f572f013d8673a94b8ef",
+      "bytes": 7534
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/export/PDF_STRUCTURAL_CHECKS.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "58a30d87169a1cca8bebf45ca2713dd0204e4ed1",
+      "sha256": "ec988bb353e26200740d4619ff46f2600459de57b21b3d148ee9df56c20b2b5b",
+      "bytes": 3956
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/export/pdf-pages/page-01.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b943160bea270c4d03459bcfccae6a7cd0d08555",
+      "sha256": "7b137f79c8bb31d71387cc4d0e85b4141abbde60f6f7f156fa4d3537822593bb",
+      "bytes": 451253
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/export/pdf-pages/page-02.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3cddda6b57fbd2a85f6ab1fd31e9ad1fa869ef12",
+      "sha256": "868a84f6fccdab31df76b4d0675fc95e041817162288479bc085dac4647a07be",
+      "bytes": 706674
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/export/pdf-pages/page-03.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "34f06f8087d991fbf77e1577744c9009359b3ee7",
+      "sha256": "801600754e03b957e1a8c099d101106f1a38b01fb90e13532bb76cfb742ec0e7",
+      "bytes": 743197
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/export/pdf-pages/page-04.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3a92449cfef3418b314c602ac2d5ac278b8efedf",
+      "sha256": "95cb9271ff263f28275b45fb07f17583f6f95f393ee533a3e9bf7bc9e109a812",
+      "bytes": 847195
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/export/pdf-pages/page-05.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9fd117e535c4c861d5804ba54670b7c0518ab354",
+      "sha256": "4a7d096880494fcd823c9f2e02bd272e1e74e7a9ecbc99b13355b36c36e5746e",
+      "bytes": 789134
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/export/pdf-pages/page-06.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "93e82c9a6c8a501d06baab8e7d38d2498db56481",
+      "sha256": "abb9738e6fa812dec3b347eb0210fd6c54d6e8f3fe6ccdc456bfe2596d8c43db",
+      "bytes": 845286
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/export/pdf-pages/page-07.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7a2acd1870360ad9f8b70d5209001de9285452b9",
+      "sha256": "8e8d2b181cce35c355396e691a3e94147d74f41944f44c57564a4b321aedf6df",
+      "bytes": 826897
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/export/pdf-pages/page-08.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c1a2bf50c02258f996b62151a8daf042e56f6108",
+      "sha256": "0ecce9e904e938e78f76cf038dc83d5993076dd33bdacd2c0d7eb9df4745dab4",
+      "bytes": 828121
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/export/pdf-pages/page-09.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ff6e460b396bac36eb122c2cc89e8254e989bc96",
+      "sha256": "ac92cdbbdfee697e628f2bb501cbba40e7f9775b79c61acb70e8f14eb36d8775",
+      "bytes": 763453
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/export/pdf-pages/page-10.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3155755dca75c55fbf0cfc65b09c8f079d056122",
+      "sha256": "5ac1d2a1d67765f7d4df90069ec103a4cedaed9b509d33657b4d10e95701587e",
+      "bytes": 799441
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/export/pdf-pages/page-11.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "52bdbb5dbe8f00b787a59addbb78cb1346aa053e",
+      "sha256": "c96649974c1fd027ceaa033ec4d967037b2e9ef438616bfe4d9b67090e4c69d3",
+      "bytes": 929601
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/export/pdf-pages/page-12.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "aafdb0d113e7053c3e3cabd3178ffce80eb1c7e4",
+      "sha256": "74bfd95cb89a166edea1a9a47fb307d3906a95c1e2d7c3663e22cf68e3199c16",
+      "bytes": 947866
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/export/pdf-pages/page-13.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9be14c451ff622b6465d522ecbd4595c038e182c",
+      "sha256": "723cce4ece1ea26b23ebc60d1089db034f68f098716cb69cc0c70ac6f4aa9ccc",
+      "bytes": 975589
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/export/pdf-pages/page-14.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "97aa60741747811c0d12eb80ddad2162febcdf72",
+      "sha256": "f7fcdb0251eaff5a8e9d88554b9eb60e851ca7594864a5cae86ed621817b1c89",
+      "bytes": 999374
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/export/pdf-pages/page-15.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "187a1a578b56a172c840f31e72a9b5fde75d621f",
+      "sha256": "ce9eb303f65f5c5fb18c6a18b9c7275658fb1579b77436ef765d3c60ef7a1e5a",
+      "bytes": 1006764
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/export/pdf-pages/page-16.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8b4f02dae795b4500c4f8b6dd65fa6f2df0f4090",
+      "sha256": "a1f32156fd75d354b408dec8305b280d889d440d68f511b78c470f687918e69c",
+      "bytes": 1012645
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/export/pdf-pages/page-17.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5c215b55a61c8afa9785c25ae07876f8ef63a5ff",
+      "sha256": "0b19d2c77df8fc8240ca7639e8d9d4144560c2b669f425d27c353931bf46d6a3",
+      "bytes": 100426
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/evidence/export/pdf-pages/page-18.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cd0bba3597048fc2449c6c2bfe72db3dc63a0583",
+      "sha256": "e3277f148617b7d55bfe5188f5803b588b36c99b4e7c24504829d4d4ad784cc8",
+      "bytes": 139525
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/history/planning-ACCEPTANCE_CHECKLIST.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "879af5f61eb52b2cd94ef544b844dc33a6b5a8ee",
+      "sha256": "0fd88d5ec66b13a218acb169dff565d67dc899abf179f45bd75fb365b6b8662e",
+      "bytes": 3399
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/history/planning-CHECKPOINT.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9d624d337c5f44bbfc362aa22e4f190cbbddb44e",
+      "sha256": "4ef2c2c4821b844f2957062599933fd6861669a8881ef2d62c8edf7a691bb194",
+      "bytes": 1301
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/prompts/01-coal-smelter-r1.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9c658a888c47f91bc70c568f3ba43fe26850fd54",
+      "sha256": "300de00863d34359977ec441710326f2af5125cf8342faea05c35cc86136eb9e",
+      "bytes": 2879
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/prompts/01-coal-smelter-r2.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2aaf98bcc04ec5445aa74ea56c6e421e41d32177",
+      "sha256": "46bc3376b0bff31c13bc38e555ee224918d4f66b469f4bb028fd90826841ad61",
+      "bytes": 1024
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/prompts/01-coal-smelter-r3.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a49c7c55d3cff0ca51fd80984afc7a6ec8a80767",
+      "sha256": "791e198017ec09f5220a9b7a3f0bae548174ddf4fc6b1ee20368f7e439735740",
+      "bytes": 622
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/prompts/02-metalworking-bench-r1.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5a88d70fa13acd485fd805805f1d2450c2c6471b",
+      "sha256": "971ea479e1133f68f0d308294bbb3e4f1ff8a7aa2936c4de1faeb031c405271d",
+      "bytes": 2975
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/prompts/02-metalworking-bench-r2.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fd96074de61c47341a3fe9051b2253c7c9a96d3a",
+      "sha256": "c969cf87835f736c29b39aa7d01f25c69c884a32d7be1fa301a4476e862226c7",
+      "bytes": 1606
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/prompts/02-metalworking-bench-r3.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5605c94d56342b1f7cf89cb48e811a8700173727",
+      "sha256": "ad5274a08f7e02f06b658f50baceaa476a26995af0bc5f9fc1b57f5519d02a9d",
+      "bytes": 1224
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/prompts/02-metalworking-bench-r4.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "556ace6d68d7fdec9ca759a1ca181d34af72b4ad",
+      "sha256": "d0ea36a43557f2486319e9efadf6c4d1684f8567ea289ca88cca2e3d68efa78f",
+      "bytes": 1368
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/prompts/02-metalworking-bench-r5.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7d43cec7411681c67f8cdfd323e15cded0328dc4",
+      "sha256": "d17cd3b19d445aa8cde8ea5a81f8183fd08df971b14ae108e7c56b9e5baea5e0",
+      "bytes": 829
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/prompts/03-steel-forge-r1.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d29333f77660562d84724745a75a9a60c909ee23",
+      "sha256": "7f404ac26a784c5a5c48b0af1c1f5e3f7872890622e623412752f975a0202bc8",
+      "bytes": 2830
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/prompts/03-steel-forge-r2.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2a5b967d083823d33c2a6b06a9c03fa484cfcf23",
+      "sha256": "ed1df1cd094adb8c227fe507ef1362ca0ea27e1db04dc79c0462e90d43da4c42",
+      "bytes": 1569
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/prompts/03-steel-forge-r3.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ff521411d2c8bcb9e4d0622fc8a05f67f55f899d",
+      "sha256": "411d1c7e918efb67b19ff34f28124f375e903e451868a1c9ec54d6a9dba57d45",
+      "bytes": 922
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/prompts/04-assembly-bench-r1.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3fd5ef991ea9a4650beccae4a8c646c5f87b91c2",
+      "sha256": "1ac14ebcf494ef2a5e51999f9484ec565deb35a967fa9aab5f824ee75af28b4a",
+      "bytes": 3314
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/prompts/04-assembly-bench-r2.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8e237851ad1e4c2717d14b891692d731b6cc9c10",
+      "sha256": "5fbc398718fa67c1172ad03c3c5a4072ed8565a9805d09e4301f0dab293d8b89",
+      "bytes": 1023
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/prompts/04-assembly-bench-r3.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f57626d0886976a6baf123028e348dcbda0b45be",
+      "sha256": "abcbe834a490db7c2252a6d8cf39bb5e30e6d9691194236c2f0301d3dee54f6d",
+      "bytes": 999
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/prompts/04-assembly-bench-r4.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "73f3577f80740ca44afd55ce5b3527ae827d0dd4",
+      "sha256": "133b494bb588f2e0dbaa50e73c1dab014f3ec126c5e19c99f9512ea0ad3c522d",
+      "bytes": 1511
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/prompts/05-manual-oil-pump-r1.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "12c8c8fc55881a3f72d94046766c8ccaca458c1b",
+      "sha256": "ac2b718aaed2b84731f76cbad64830090286ba1dfc6a085bd0e70ab06c430e89",
+      "bytes": 3283
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/prompts/05-manual-oil-pump-r2.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e6ce887df65f9224940693e9ffb625194f63950e",
+      "sha256": "d6d6304a43b3aa0209fb3d510bde5b1d0ec2864e6cec7131d3e132fc889ce7c7",
+      "bytes": 2055
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/prompts/05-manual-oil-pump-r3.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "79ea740ac5d5f9c212fa3313b7c4e23432ccf965",
+      "sha256": "73a3b0a67f9af1ebdb32023ae0d7acecc982d2b38e7370ba266519efd42166b7",
+      "bytes": 1191
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/prompts/05-manual-oil-pump-r4.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e06c0c9a55d3b4083388476e14b7900a47af9066",
+      "sha256": "6915eff054fde31cfe7eb46bd5872b1c88cdb04c84d33712ec0de739bf7ca650",
+      "bytes": 1320
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/prompts/05-manual-oil-pump-r5.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "64dc88a549e619705351c7d5df2269186584df94",
+      "sha256": "02f6c053effd6a3eccdb3d3e8613c8c495ba04bc6ee40312bbc8be12be8f331f",
+      "bytes": 1711
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/prompts/06-coal-refinery-r1.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b0a057105fd1d7783028d49e11cbdafa45ba97d9",
+      "sha256": "e0b2174c17f9a4539288e40d31bb236e0a587d76211242c146846094ed04903e",
+      "bytes": 3463
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/prompts/06-coal-refinery-r2.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "82849aab2b382a737f3e97030f2ff0335acd7620",
+      "sha256": "cd7530b22e820df0741676d9bdab3dcdde3d0b75ac2ccaeb3ea34cc2b094c683",
+      "bytes": 1033
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/references/cooker_processor.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "714b04b471f9bf563a2bbab6fda16311aab2bcc2",
+      "sha256": "773a82fdba15a3992dd547e7208d5affed12e94de235caea90115dfd0a8bbbe6",
+      "bytes": 1870569
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/references/gear-closeups/SOURCE_CROP_PROVENANCE.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0e9f7451ead813edaf4cd70265bda93fccdc9a7d",
+      "sha256": "b59315e1990aaf38a2dd34467906606c535fd9d33e22177dfd18243bc7d72143",
+      "bytes": 1482
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/references/gear-closeups/mechanical-parts-front0-source-crop.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3188699982962a7bb4c6227e1d4593e27f7dfd67",
+      "sha256": "03163d96bda39892f90c2299c0e80e12e4c49e9ccb8f1dfab0ce8c327f98e502",
+      "bytes": 127794
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/references/gear-closeups/mechanical-parts-front_left315-source-crop.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d71473aed73a63064418408daf4239a3edcec669",
+      "sha256": "5d2df4f6d197cc5ffd2b5e868582ec6b0a627b6430a92d6309f5a022f5540385",
+      "bytes": 125038
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/references/gear-closeups/mechanical-parts-front_right45-source-crop.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d7c1b63c243ed4fc810fb688e8b29e2e98babfc8",
+      "sha256": "b543c071881dc706ab7b4e2bb697a46b19052d61afc43526146e449d1fbf93a1",
+      "bytes": 118925
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/references/intake_machine.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "aa80af7d53f6d70d42f3c4ee1b2101effe66a27f",
+      "sha256": "679ba934bd50fc71bdc090dc64d7e314e0a28fd062d0ff4393214986b6143f4c",
+      "bytes": 1812711
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/references/quarry_drill_station.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b0c6b17f4278736778a29e68f90765f22568e3d6",
+      "sha256": "ca532628e80dcc8e2af4b60d787393777718ba4d50b65ac9e799cd40d823463d",
+      "bytes": 2089932
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/references/resource-identities/fuel.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ac409458a51373a09abb3874dc2f82a28eecca2a",
+      "sha256": "c9a17187e1009b9d466b024608a28887b86b7746da3aae8b378e6caee649c306",
+      "bytes": 1722442
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/references/resource-identities/metal-ore.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c3bdeddef77ddf35f1a32bfc598bea809bb816c8",
+      "sha256": "9e6965c343e017052d14800a7c3d3673ec396552e1f648cac15e7fb26a5b4d4a",
+      "bytes": 1731700
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/references/resource-identities/steel.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8030843df6055046f23b908c5c5c98c4aa6ceb33",
+      "sha256": "905c74c92209963de34f80efca33408af2738f761ff6c82abe2fefff8f0a4347",
+      "bytes": 1583424
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/references/saw_station.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9ecc552e030a45cbe80fbeae7cdf3b3b6c846ebc",
+      "sha256": "8191ba20d0cec7c92c22d35c5befa87c53b8c894ca94341681b3c16834e24d15",
+      "bytes": 1916624
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/reviews/EXPORT_FINAL_REVIEW.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dfa84f4bd757ac06564664f7bcd82d16e4815328",
+      "sha256": "062aea2395142e127e1deb7451546e3f0df5fc423b8a1086e9a1a86c66e892db",
+      "bytes": 17374
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/reviews/EXPORT_FINAL_REVIEW.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "91dd4beb300208eaff445de61de86154258622e7",
+      "sha256": "f96b3e6e6c1487007dbe528c5cb4ef3ec0f3571e9195a5b93b1a64dc3b20018e",
+      "bytes": 2733
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/reviews/MACHINE_FINAL_REVIEW.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3c11b59980dc98eec3bf6aea48cc2d453975fc68",
+      "sha256": "5ddeb4b75285ba64a5231cb857eca105e30c035c1e8e8edd46ffb4afb31c62f7",
+      "bytes": 17783
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/reviews/MACHINE_FINAL_REVIEW.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "117ac716abdb393c5b527c3fc21804263e483843",
+      "sha256": "cd0c546bc917857ab26decb5806185aa1b7b7064466f22a395c72e528d190d85",
+      "bytes": 6885
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/reviews/MACHINE_R1_FIRST3_REVIEW.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "81913b3b07caf6945e519bcc4461e9462a3e1565",
+      "sha256": "25d488537b8f5292815ebc0aa3509464c6fc46f32d372d047506b4c6846cbadf",
+      "bytes": 11414
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/reviews/MACHINE_R1_FIRST3_REVIEW.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f7a3f2fb455738bd59d4f27c84c641c9a3488128",
+      "sha256": "29a497c6589a1c562b379500da31985e77520cede19d5d46eca26f51c95dd7cd",
+      "bytes": 2888
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/reviews/MACHINE_R1_NEXT3_REVIEW.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "63142a939f6af62e22fbc8c19f0e2ef9c6d5f0e0",
+      "sha256": "07fb0c8adff3f1de79a944625955173492525306dfa0d112709eb42123a2eebd",
+      "bytes": 11834
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/reviews/MACHINE_R1_NEXT3_REVIEW.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7dc1be0318622d29c175c80db80a0fe742255d8b",
+      "sha256": "b73e3fd4c8d277badcab02a2491686e78865f6454768ac5b8c9abd22c5d2cea9",
+      "bytes": 2977
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/reviews/MACHINE_R2_FIRST3_REVIEW.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7164a7a32e0e3a95eb4de65ad6d50cc35ab85022",
+      "sha256": "3769803c13a69cfe45d94d94986b6f8976a778b1a58ec3c60637c79383e9b482",
+      "bytes": 9554
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/reviews/MACHINE_R2_NEXT3_REVIEW.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "00496d9ab373a7d307e51d71e7b3f2a692bd4a0e",
+      "sha256": "e2131db96654c581bb24fadb8ab9243041d99724661364ff1206f24af7e46e2b",
+      "bytes": 10481
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/reviews/MACHINE_R2_NEXT3_REVIEW.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ba62d08fdaa28bac23d2182001ab41497b07a60c",
+      "sha256": "290d5d62f044bf1e8230b9dba8faf368722b4a3f3e4388fa9bad2843ac6348e0",
+      "bytes": 2974
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/reviews/MACHINE_R3_FIRST3_REVIEW.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "74cf9ae0bf0e0a0206877418e670ed6d8dbd8d6a",
+      "sha256": "c234c23260de3b1153b75d2c1e13befc6a00dbe58d674bcc78a60b3a70f15850",
+      "bytes": 9924
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/reviews/MACHINE_R3_FIRST3_REVIEW.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3e867202d14adeb8d9c0829f3709b45f54a3794a",
+      "sha256": "e90f420f42ff41cc43c2d6953dacd535592c0fe4ffb730e40b8eb517af8e7d36",
+      "bytes": 2521
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/reviews/MACHINE_R3_NEXT2_REVIEW.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "55bf171bbc569ce99359712763bdbefa8ba1e19b",
+      "sha256": "3cd6d6ee540ec26dd377cb10a3e5e93685609c94994dce9b9eeb815819556ff2",
+      "bytes": 7292
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/reviews/MACHINE_R3_NEXT2_REVIEW.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e05eac64080ffef58702132e74e7972670724f54",
+      "sha256": "9245e8ff1cb3cd7c43f593fe394f79c2a7ef4797d10270953a46a5b85f04610f",
+      "bytes": 1870
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/reviews/MACHINE_R4_REVIEW.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7a5bac5cce3363d2f797a9ec90954db96e3084ac",
+      "sha256": "26256f3901157058b6c4f48929788ea62f00a8d7ba243e407cf4aececc9991d7",
+      "bytes": 10605
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/reviews/MACHINE_R4_REVIEW.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0b0b9a0b90c32fb80ad452ba3fdba646f6202d7e",
+      "sha256": "0ca74dcadd528f005fe5bfb84ffe3cad5a8eab7369c2ded9ccf1004ab2a21177",
+      "bytes": 2605
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/reviews/MACHINE_R5_REVIEW.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9224742022644d0233a06cf6b4956b2250e5fbe6",
+      "sha256": "0a85376252be1278c49a39e669966dee6cab79bb5669df623d9b696d58b45d03",
+      "bytes": 6410
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/reviews/MACHINE_R5_REVIEW.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a46f9366d191c911fdfde234db886d199b977135",
+      "sha256": "776cb1110aff1ba3e94ca009d3a0c8fd954989c5bc120ec49d544b4c56d8ad77",
+      "bytes": 1280
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/selected/01-coal-smelter.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "488e0eb7c2aed9aef66513860b2b671f855f5e6a",
+      "sha256": "8854449024635d0cdec080002e3e02578783e62f13193d9ce25b3bc1de7bf2cc",
+      "bytes": 1862521
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/selected/02-metalworking-bench.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4e076c067947915f4de0c55a295f632e23962b9d",
+      "sha256": "adbb3b40df55e2f94c1b981e5ff1e7b327bc32a44e5a8f0a7db39ea8a8b80459",
+      "bytes": 1873983
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/selected/03-steel-forge.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5e55a01ee4c0b43a9d08cae188d8f9e33bb0c9c9",
+      "sha256": "8a303f4eedc43bb80eb578222933ce8ccf44df7187ee649afe65bb7112cf9104",
+      "bytes": 1958621
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/selected/04-assembly-bench.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7ca8f6e29749e422288bab9be20395ec886a7cee",
+      "sha256": "f3d79d455002fc0aa0eac3ee7a4a2b09c6d89554088e5605b98e4ad1b3409d2c",
+      "bytes": 1960203
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/selected/05-manual-oil-pump.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bd91e945ea215f232ccb89880afd49d98d69fb5a",
+      "sha256": "285bf9e642014da08dd46a3d55d1b0c43639d3af7580bd49e11da3c4750a801c",
+      "bytes": 1970430
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/selected/06-coal-refinery.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3ccefa3c8f0756b261f492781f09ec7b68b420d9",
+      "sha256": "7fe6e92cbe1f1456faccddb8a68f50d3be369bb91ac7b269e873e726244292f4",
+      "bytes": 2020242
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/tools/EXPORT_README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "68b395cde264010124ad7a619bc9aaa99802acb9",
+      "sha256": "e7caddf6793ae6474fba92a73130fd88ef45c755791669185f22f67f5d313aff",
+      "bytes": 2676
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/tools/build_render_pack.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0a197e4cabc3bd688414fd0a3dbd2fd9e963de83",
+      "sha256": "575bb7919cb4d847daa95b928b19826e64ecc8ea46231525074389d9511b9341",
+      "bytes": 25652
+    },
+    {
+      "path": "Docs/Design/ProcessingMachines/2026-11-27/tools/verify_render_package.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3b44f9ed4ddc83af40f05e3702f4f0cb26129635",
+      "sha256": "936d6a11e24235363e113aec87070d93e0ca9048258de2ccadb15b1b8a207045",
+      "bytes": 3888
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/EVIDENCE_CUSTODY.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6e5acb0cb6262efc318273bde969f4cdaa21f280",
+      "sha256": "a35dd2d36c0380b2d254ba9dd6d47f05d81b4114d06192be3754051de279ad83",
+      "bytes": 17743
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bd649fed8ebcd18b1abb1f0366bd5ea63e872465",
+      "sha256": "489d02b235ab0afbd0eec63bee03e1199e4badf4620c1a988466284a58dfac74",
+      "bytes": 6094
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/RESOURCE_CUSTODY_VALIDATION.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9ba4e8d9e4102ddcf37dc5b7f57770e9c1609abf",
+      "sha256": "c1565673c62adee9f9523935b4c6286b780e7b6072231d656643397330a020e6",
+      "bytes": 899
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/RESOURCE_MACHINE_MAP.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d4859de769fcc79d0ee1f2413def96c9e77f790a",
+      "sha256": "285c28498375375a3a82147a4b9ff8bc5ef8a11175c566066edef5ebd6fd1dbb",
+      "bytes": 14572
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/RESOURCE_MACHINE_MAP.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9d51f73483952c2f2b6d9c9c7e405fd5df2687a5",
+      "sha256": "39a5916e8c164f2162c50279518ea001c25e60caa8e021697a13ab60443c5f3c",
+      "bytes": 5747
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/RESOURCE_SELECTED_MANIFEST.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4614f3f2b6abef3b11a75b8798c24833a3c1bbce",
+      "sha256": "ca98df3328ed1ebefa8f8d4d2d4a626acc4b97a739a773ba04b3609ea93d978a",
+      "bytes": 24557
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/audit/RESOURCE_INVENTORY_AUDIT.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2fcf90a8bb4a0f05e08b18afa5f21df4de120b09",
+      "sha256": "ba9eab6314042d370d5fb0c435f5f5cf2859037896d2b2ebabcb007e36ae5bf7",
+      "bytes": 32370
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/audit/RESOURCE_INVENTORY_AUDIT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f86eb7cb910ce1358e62eb0f7e4a986cb9aaa154",
+      "sha256": "d268c9fc980e1894d189da8c7477a6876b708c53d18b0d1154f8eadffae202ea",
+      "bytes": 4505
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/evidence/resource-closeups/crude-oil-front_right_45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8682d3fac997b185f7d948572e13c05d90574055",
+      "sha256": "12faf766b477778109bd560555c864a84f987f8e782df05ce23d86778ae219ed",
+      "bytes": 156308
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/evidence/resource-closeups/crude-oil-rear_left_225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2fe9cd4b62bc4cbf2b9667e90feb3c81d2bb7318",
+      "sha256": "2e1fa63e77381aa80fe3b01cb44b95be62c6f95d26a8a5e84586efff39196d15",
+      "bytes": 160459
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/evidence/resource-closeups/drive-assembly-front_right_45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7317d6af19b682b8f67fb586c3cd9427237ea38a",
+      "sha256": "8283504141fdc7b575e1bbaba164fe084182206106a9ee0db72f41446ad20b10",
+      "bytes": 151652
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/evidence/resource-closeups/drive-assembly-rear_left_225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "176181a4775012c936ecc8304917267d1d4294eb",
+      "sha256": "5fcb7ac19427e8fe685c553c3dd3533e7e5eff86fd5af9ea4ef09532199cb207",
+      "bytes": 155040
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/evidence/resource-closeups/gems-front_right_45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f2549aa0b6c19b742ae0aa7be7002f1e758f2954",
+      "sha256": "1c9d71310a5e009fc38212ce05ef3cb03603ccf7a03ebf01a9cbbfaacc4f2c8b",
+      "bytes": 150753
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/evidence/resource-closeups/gems-rear_left_225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "31db7c21eed482f371a78db10e8c322ae286f420",
+      "sha256": "09c30bcba8bb3932b55585a563c7c964fb5aac509715e950eac923922ea6de0e",
+      "bytes": 154226
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/evidence/resource-closeups/identities.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c2e4e3eea08414b327802b0fddb6851af1a552e4",
+      "sha256": "e83123a34f0c822d893f9589f66a482961d98f256ba6cd9db3dca39e434251ec",
+      "bytes": 4995
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/evidence/resource-closeups/iron-bars-front_right_45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "771b7ded1c219351aad89cb356459010a49d2b53",
+      "sha256": "920defd8ca27d669f89dc4d2a773b3478889f370ddd64e0a2c34276d68e56a18",
+      "bytes": 135913
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/evidence/resource-closeups/iron-bars-rear_left_225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7a7b7005ed58e57ac75583a03a267f152d79ac99",
+      "sha256": "e559f95d15acf5029bf2e3169a2f659fbc37d7f183fd99035eaa5bc8e84f79df",
+      "bytes": 140291
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/evidence/resource-closeups/mechanical-parts-front_right_45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b4c9514784d4f935148f3265cff931728edbd2ac",
+      "sha256": "e8f02c24f4b4e30de1c8deed027f4614fe4e25d65289eaf9e30937f2a88d1240",
+      "bytes": 161203
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/evidence/resource-closeups/mechanical-parts-rear_left_225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4a045e550c3891bc14ca8121e8c66948c9879f56",
+      "sha256": "1a017a48568b13308ea39d40a0d6a52cad48d1a25f2f4f151699babd5ef3ae2b",
+      "bytes": 164408
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/evidence/resource-closeups/mobility-assembly-front_right_45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e917dfa958777e85eb0f79bad2c30a749bd91d53",
+      "sha256": "8e890d5af6cdfb57a60e9dac76a8e76588dc0b38284871a63c72054afd9969a5",
+      "bytes": 166506
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/evidence/resource-closeups/mobility-assembly-rear_left_225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1869fad7c2fdebdd3d68af9d77ff1045ef098d5a",
+      "sha256": "b17a32e6efd72521e02af0fb18876935e688764658a9f3e3545e7474fd0b288d",
+      "bytes": 169840
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/evidence/resource-closeups/relay-component-front_right_45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ac20562949d0ab0b14db6f7f1c135aa5f0c74842",
+      "sha256": "98976b5a10d4c0681db354d933baa6d4959686553f3369563ec1d8f0cd82deaa",
+      "bytes": 157602
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/evidence/resource-closeups/relay-component-rear_left_225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "08f9688932c4c367890ee0baa2fb827654e43ec5",
+      "sha256": "855b82e7800494e67795ef73a6f65f5b446776d98d206db63fac921243546699",
+      "bytes": 159249
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/evidence/resource-closeups/sheet-metal-front_right_45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a12a187ea6d6bc3dd0f946ad79b68b5e9e071a02",
+      "sha256": "c16cbaa406e0feab855d62f0c7133401bf612cc2ad3bf913ea8250bb2b907ea1",
+      "bytes": 144208
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/evidence/resource-closeups/sheet-metal-rear_left_225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1a3fc4f7b0ad664875abdc1d0e2db8038a79fbf5",
+      "sha256": "74aad0d6028bb16d3e83fecebdec36c4724f17ac294a381cf64decf707801a62",
+      "bytes": 150329
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/evidence/resource-closeups/stone-blocks-front_right_45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "505874e61f30884c654856bed792895af6ae4052",
+      "sha256": "29ac5c6f4a5220a43d112f18e8065d5b93371636c28d5c3d83a07b9a566a5b83",
+      "bytes": 164871
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/evidence/resource-closeups/stone-blocks-rear_left_225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7462cdc66911c02291f13be00ac3ecb921ca2aa2",
+      "sha256": "7b13b5f4fe8187fa8a5c5156490e81be759f2ab8205ff2f073811d4bcea72ba2",
+      "bytes": 170411
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/reviews/RESOURCE_SELECTED_FRESH_REVIEW.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "64f38d37899cb49323a80fc6ef0ca09ae1b604dc",
+      "sha256": "d80b4b09fadf32e1a93e385d55fa0cc53529ce1cd3d0981a5d2ca95081eeffe6",
+      "bytes": 18810
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/reviews/RESOURCE_SELECTED_FRESH_REVIEW.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a2987ddd7d6f4252c8482ad5a83ce636b4b200ff",
+      "sha256": "f4e21575f3dc8275a26f649d6d249b105ea760f1a847d28a33a9413cb26c8627",
+      "bytes": 2844
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/sources/02-stone.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c2a7e1a7cb2caa8fb1dc80699b5d02604adadbe1",
+      "sha256": "5360d9d44ed505f48c788b870e322105edce48c726525252d0e884549800016e",
+      "bytes": 1744944
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/sources/04-steel.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8030843df6055046f23b908c5c5c98c4aa6ceb33",
+      "sha256": "905c74c92209963de34f80efca33408af2738f761ff6c82abe2fefff8f0a4347",
+      "bytes": 1583424
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/sources/06-fuel.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ac409458a51373a09abb3874dc2f82a28eecca2a",
+      "sha256": "c9a17187e1009b9d466b024608a28887b86b7746da3aae8b378e6caee649c306",
+      "bytes": 1722442
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/sources/REFERENCE_ACCEPTANCE_POLICY.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1b4e9417de1375f654c66a984731545f4bfed7b3",
+      "sha256": "c34c0cbe5b6d473be40ee5f0f0e08aab8f6ff42f97cfe2e7c93b2694e4dbaf43",
+      "bytes": 12510
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/sources/RESOURCE_CHAINS.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4397f5039fe379fea54dd73f0628de39d60b25ba",
+      "sha256": "75400530bc38b937a697d0a88091c0c60373b8b94913a3c818083af7e68cf555",
+      "bytes": 24951
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/sources/WORLD_VEHICLES.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "97ab3042aba6dc6ef1eaeaecd6ee5f5cf8ec5eae",
+      "sha256": "7a4441c1a4149d89ab61a15cfcd88c16e64c2e74133df5940138f3b5e6cfc7f7",
+      "bytes": 19811
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/.gitattributes",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a6d322e2421786609eb5624709d7f9a20ebaede5",
+      "sha256": "7905ccb8ce09737a8e59604754f30513e29879e69285d6f849b1215bdc9fbce8",
+      "bytes": 33
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/ACCEPTANCE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8d4aac1b4b480b0361cfa755c7b4133c50e3be59",
+      "sha256": "313e0058da2866874a32e147e7f7b3647ffdbb105bbd909a638c921cfa6e5172",
+      "bytes": 6020
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/AUTHORING_VALIDATION.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d793dbd4c9157d0e440a5c4a39836c5e9471a2d4",
+      "sha256": "12122a8c76b52dd2bd5ce90849f674d2c5ffb68af86e98ce8519b0549f949f85",
+      "bytes": 22859
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/CHECKPOINT.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d6e1d14327fbf88c0f05dec66ff9c8ed05199a52",
+      "sha256": "17d2f793bc7a8b8141587b454217c6c50a9474e3afccac7c4d8d3325df4503c3",
+      "bytes": 2465
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/DESIGN_NOTES.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e71f27b56c3fefba704e116eda79ff36c6fe7e81",
+      "sha256": "3ec52f7bbb2bbffd62569f3225c610accb9c98bb2b7a993486205bc764c49ed5",
+      "bytes": 9325
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/GENERATION_PROVENANCE.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5ab0a2050efe661b94ed627cb3f20f382917f125",
+      "sha256": "a914f9d319259d60d2a21b88e8fca553a683d428ba9563640fff72d2232aa44a",
+      "bytes": 15909
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "960a66a94a1d49b8e8d28d1de919676e5ec33d3e",
+      "sha256": "950a7c1add7dcf75db2ec4890fe027737c914e261e96c0a8f636a6254d970f7d",
+      "bytes": 2288
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/RESOURCE_RENDER_GAP_AUDIT.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f83bdea796a4b49f85de2e4df107c63514565011",
+      "sha256": "cf531b12e24a297f6206bcff1b26c3aa62ede8ec064ccca34b0a25805e71ada5",
+      "bytes": 35421
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/RESOURCE_ROSTER.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3a87f7e01418b73f3ad9dc47bbaa65d2d13da25e",
+      "sha256": "3b577c41d90f19a324b882e9991ccb7e99e48a52c35e1c839309b93b65b94d59",
+      "bytes": 19464
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/01-iron-bars-r1.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4241b8058a91eb5defd6b80a512ee1d4205fbf63",
+      "sha256": "b0daf5fff1302d0729424edf89530c6415196fd8f3420b2cb4315f1c5d11a568",
+      "bytes": 1546534
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/01-iron-bars-r2.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4e7e11601c78ff78122b5a09169679ee0753c67b",
+      "sha256": "df6093297abc33498f2d13b28a301a736f3fefa1625021c05831feeb5c2e86ea",
+      "bytes": 1602730
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/02-sheet-metal-r1.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b87cb18febe276cb12aa5528bc7bc68b88718de7",
+      "sha256": "da34a69696264ff1039f56c76120c8a1a62492e2444c41f0871dc5b59c9b265b",
+      "bytes": 1636308
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/02-sheet-metal-r2.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7950b31dbe22321a933ff03291f8cb3f4ba5b8f4",
+      "sha256": "efcd74cbcbe3ea72ab9330b3c7484095648c851e893dbe7e74b5c8da678ae9e1",
+      "bytes": 1650516
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/02-sheet-metal-r3.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f66cdc1ffbd49d7a081249ca0a2f944af1477f61",
+      "sha256": "b463a0af9aebc6190f81ea9937c3fdf613ae517d0bf86c7ce752ac49bdcc40c1",
+      "bytes": 1652415
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/03-mechanical-parts-r1.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "94e4531b793c8824bc1d185d659590cd524a7852",
+      "sha256": "b30c7e2b6ac751a2089adc3faa98cfaa8272d04148fdc01a11d4c014f0ceedf5",
+      "bytes": 1741799
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/03-mechanical-parts-r2.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c4c1aae12dd6f3d09a56a00ad23a1626ef5d2f34",
+      "sha256": "e3f9cc29800832861c04bc60ee3b4cc78aac4dd5c444e91876384a5ff1161a27",
+      "bytes": 1763850
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/03-mechanical-parts-r3.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7a36497192bc5d064df91cb48410d48134377c16",
+      "sha256": "80dea343f57bccedf02731fefe4e8ca3cff1c437cb258576d691c20b8885397f",
+      "bytes": 1765937
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/04-drive-assembly-r1.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6a92ca000863a545f3393ff9e62ca16ffcb3c8d4",
+      "sha256": "04fe734fffa5541d9cfb40697c3c63b5dae19bafc2a1e9f949d7de50ab1ba98f",
+      "bytes": 1602915
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/04-drive-assembly-r2.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ea2ec23890fa1f4e3e574ea94f12ec4872e76433",
+      "sha256": "fa0bc395580697bb3933039d3d61d8a2d0cbf5eaf407cc9d9fa5916e3ef2d118",
+      "bytes": 1676519
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/04-drive-assembly-r3.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6072aa01f55399c743b066f70a50a25b7727dc91",
+      "sha256": "69646d6f98f24001a9fe87b658a17d13af1c15407174e1bcc26146298e6eef93",
+      "bytes": 1685336
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/05-mobility-assembly-r1.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "970f4ef376006f207a56b2e7166ec0ef952c7987",
+      "sha256": "5556e76b2c109903c5288c6a6d3350bdd05d725223391e3f82180d14199d0af3",
+      "bytes": 1754447
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/05-mobility-assembly-r2.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d853ae4f24b0bfbe41105f132647f439d7579be9",
+      "sha256": "69cfd1e68e6bb6a5618745c49ee2d29b0b11657a7d4eb57c2f2bd63594953eaf",
+      "bytes": 1772081
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/06-crude-oil-r1.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a5b5917586440b897e24f51ea1725731db9d5b0f",
+      "sha256": "6b15de1d273949521cb303a6a23ed31f7fcbc19bcfac95b038adf906a9b87fb0",
+      "bytes": 1703357
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/06-crude-oil-r2.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "45dd28229cc61245b7c1801ecefbf0a7f9d8f8c2",
+      "sha256": "001047121f97ffcbbc32c55617728f796d276790b046c2403afbdadcfa36e702",
+      "bytes": 1746547
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/06-crude-oil-r3.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7aa7fd133f8681de0038059eff81a9de866a5b9e",
+      "sha256": "3730c25937d77fb630b13839ee77438ac8e669944f99df71861f6b4ae5392a9b",
+      "bytes": 1716503
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/07-stone-blocks-r1.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b37c2e7099b5e6a33419d7da6e2ef5c5a6f2b9c2",
+      "sha256": "6ddfff179408d81e78c473b6dca57ca03b20f0ae20d48d75605ebbfa50742854",
+      "bytes": 1821533
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/07-stone-blocks-r2.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b596ca8474a546f75d80164e5eb3fa15da22b6e7",
+      "sha256": "1e3fabe7593b89df90e67b4aa2f216e4b9c4414ec9f64d1260f72a9fef8aea19",
+      "bytes": 1820577
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/08-gems-r1.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f0a3a06d91d8086e20bde5da489c2b30fa7f7c88",
+      "sha256": "8ab6b87da0a5fae16f9be6288d784a256098d56ca407c8110fc38e2fd8448864",
+      "bytes": 1626289
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/09-relay-component-r1.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "eb42044d2ecc0a231d749cf99492a4d278c8d4ae",
+      "sha256": "9c8bf38fc1d087aae1be3514006bf26b9abdf21790dd3456811e20cdff7ee22b",
+      "bytes": 1703152
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/09-relay-component-r2.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6e572b602711f04c3d197995a5a58e66402466ab",
+      "sha256": "3a1c9fd4ff7138654a0879514b201535940f4e4f4c3f7542026b0f48415228e6",
+      "bytes": 1723448
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/09-relay-component-r3.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "012c98098d7c8792fbd06f4dfd61e3f951f8a96a",
+      "sha256": "fe6b8228890fe9e55001b7ebc5392c37e0b9f20af28f7ca8a8e6196b70fe6aa2",
+      "bytes": 1703940
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/EVIDENCE_MAP.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d2e9a884a3fbb9a2aaeb57ad1cd74e0bfb458e45",
+      "sha256": "9af264f5342d4b49184a11b3e6f3f2b5dd7a437cbe70d4899645fe1b18fd315e",
+      "bytes": 33394
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/identities-r3-02-03-r2-07-09.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6e3c2bfdf4a09edffee0da527ad281118cf50ef9",
+      "sha256": "4987a173ee4a69f41e99c12800cbeaf81940da7248960ac2436cdc0b1927e586",
+      "bytes": 1377
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/identities-r3-04-06-09.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f087ea97860706706e6316260010ceaf98f8450a",
+      "sha256": "d1a8cb9e3118cef3ca8d37b6600f0d55e6f3d51781750be432adb9e0178d3a75",
+      "bytes": 1031
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/01-iron-bars-r1-front_right_45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e727e7671fb588cf67eedc0e601c057c2a024453",
+      "sha256": "4db4d56a4494498558c7a3b642aa1c5502bf5e06a3641fcc2ab355510fdfce8a",
+      "bytes": 109010
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/01-iron-bars-r1-rear_left_225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6326706b2426c7b7dbea9cfe3b21f89296cceae3",
+      "sha256": "6371e410aff1a4ef2813439ac509c0b3b7eff9fde53ba5486531264e7f095740",
+      "bytes": 116286
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/01-iron-bars-r1-rear_right_135.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3c118e08d2bc573a219700e13eefedcd49fd6eee",
+      "sha256": "4003b19096d92dee46a20101ab268b4965903c89cb47ede74418b16ea34a5f37",
+      "bytes": 107834
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/02-sheet-metal-r1-front_right_45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0dd276c8607530de6ff7869b551a6f0007cdd50d",
+      "sha256": "6a88d80c2d63dafa7d2e0895ac7f8e458be1fcaba7686c55bf049df5cd559510",
+      "bytes": 120377
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/02-sheet-metal-r1-rear_left_225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cc6107fdc11f88a20068ebd55f2d291183c7015c",
+      "sha256": "8a81a3219e97c30523612642f2971d8c1c7be37f7c454a6f3a8e2ebdff19fef1",
+      "bytes": 128027
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/02-sheet-metal-r1-rear_right_135.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bc0fc5f1f0715add651410727f84787e1bb2da0b",
+      "sha256": "885f04da34e7189609444d020c21423f6c0d8ef705ed0172ec587bb04340b4a2",
+      "bytes": 120387
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/03-mechanical-parts-r1-left_profile_270.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3bbe9f38508998b82bdd90a948c5d9b6d48a92aa",
+      "sha256": "b3e346482eccb8abd55d530805f3f9da15f4a47003fc128d56fb85ce6e9d7a9e",
+      "bytes": 101259
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/03-mechanical-parts-r1-rear_180.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5caccf8bd9997c940ff26afaa8c6621f8a90c2ae",
+      "sha256": "cbd4d61c07cc17ef34e54389f9a99a5f438ff564d7f9165fa4855d0eaf575b8a",
+      "bytes": 140021
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/03-mechanical-parts-r1-rear_left_225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "db7563eb181a930c411550a27634084eaa18bd2a",
+      "sha256": "d69ebe2566f74a9a2851d4d1baf43a913cdca84165e7527196519397f00fbb28",
+      "bytes": 136707
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/03-mechanical-parts-r1-right_profile_90.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a4fb8f28728f6af68d86bedc85054243e40c789b",
+      "sha256": "490c4e595a5e303804465e43d520ab979620d7ad43e29ceffba26ced45e3705c",
+      "bytes": 101090
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/04-drive-assembly-r1-front_left_315.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2e43a48cc1ea294f818c29f5511f57a888b66208",
+      "sha256": "cc4fa29c727cab8084ad23ec4792a02e951e305bb7caeb068f149a5d63814bce",
+      "bytes": 126705
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/04-drive-assembly-r1-front_right_45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a056b78fccbf8dccf1ed56c5baa7e784a34c0899",
+      "sha256": "f766ee87456e3689103bbe2f6ebb789e4c78343550be29d354d46e0ae87c77f6",
+      "bytes": 123048
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/04-drive-assembly-r1-rear_left_225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "274555aa7aa9475906e18afd88a0ccc900a2b96a",
+      "sha256": "00ad78809b8d180aa820423a04482cf0157f0042468849b4b9e9b18877292ddb",
+      "bytes": 125408
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/04-drive-assembly-r1-rear_right_135.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "33ea0dfe60b27391893354dea9ebb049791a7c31",
+      "sha256": "40ca0b4e024e505ec12e942df01b779598bad553a28858cc93f673fc1a483e0b",
+      "bytes": 123639
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/04-drive-assembly-r1-right_90.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6d6cc0d9f58ace7cdab14bcce3fa7c63bf440a80",
+      "sha256": "c567e9446d3c01bdb02a6488e84a4c2e8e4d9932f24b2f64471dbc3975d63edb",
+      "bytes": 114164
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/05-mobility-assembly-r1-front_left_315.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a4cbdb94748d6b8f64ef7c4d7aea3d793fa64cca",
+      "sha256": "cb8ee407df49402e63f3ef09d9d028341ed0f706570251aa9a1d69999edf16ee",
+      "bytes": 151265
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/05-mobility-assembly-r1-front_right_45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fa85dd8c0786255ef9e661d6aa1002d6d71ad055",
+      "sha256": "583b903f447d98042917fc15999d9225865438685845c8ceffb64a2f99525228",
+      "bytes": 145609
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/05-mobility-assembly-r1-rear_left_225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0ce43ae1bb175d55767e22e91d30ce6d4a606711",
+      "sha256": "3e2eaf1ef050c956482a308153b458dedbd9bd18ed98e01630d334bb319c5256",
+      "bytes": 149093
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/05-mobility-assembly-r1-rear_right_135.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ebb0e5dea388f299095e2debcd6f28f714a32e43",
+      "sha256": "11973e1d343089adc2cc17c0f4a92f91e430bdb361b54b8b2e8cbd7d448a5f6f",
+      "bytes": 146089
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/05-mobility-assembly-r1-right_90.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e76c9ce7f7b65b1e86851c9e3106f5cd986be90d",
+      "sha256": "b78a33597c8e363156bca3428cef35996712abecba3bee361148bfddcb1af62f",
+      "bytes": 128342
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/06-crude-oil-r1-front_left_315.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a5c37a1050a1f5d4bac57194d0a26c2829bb7eea",
+      "sha256": "073a13894b1466c6e228ca5efc0cbe384e2f86df28aa08df0f7712abd6a86f45",
+      "bytes": 147406
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/06-crude-oil-r1-front_left_315_full_detail.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "929720f88e7b374f7e199f06687941c763cd69e2",
+      "sha256": "9c1bf80a7ade3974efe9c233e6b44c0f61ed72177895660027669d136731a393",
+      "bytes": 148873
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/06-crude-oil-r1-front_right_45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "88f203a5902a08f5fc8b4cf78560da5d19e94e13",
+      "sha256": "e5caffa3423e7162253cdc941e7420530378db0b75305228eef9f34be88453fb",
+      "bytes": 138788
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/06-crude-oil-r1-rear_left_225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "52dbc0987789d77d9c68d5bebf26210227179a42",
+      "sha256": "d08de27fde889b7608859f98fd8278ef7467ea831a17c316df52f157e2c68404",
+      "bytes": 143521
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/06-crude-oil-r1-rear_left_225_full_detail.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4cbd09fbfd04e87e69b672a80eeeb8fe48524c22",
+      "sha256": "db837a5c9f2ce21e2c7d11e5db51fb8a76a1ea0ddf5c21e4196e007ac4abcee0",
+      "bytes": 147710
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/06-crude-oil-r1-rear_right_135.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5ad0e53da304f598b4aaa6b72dacdc06ff9402de",
+      "sha256": "2b604f883c70f42f3c180e97ef9f2c1ef268012dd38798e86c8cda1e1dbd65ac",
+      "bytes": 140295
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/06-crude-oil-r1-right_90.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c4e97cf26933027b28701119bb17a7fe06b32f05",
+      "sha256": "031443e752834605f9d55a2def4760da7a966a78cd54fe0c9700251da227ddab",
+      "bytes": 135707
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/07-stone-blocks-r1-front_right_45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a92765432fa0266095c43943c99ef8cb2cfd3ae3",
+      "sha256": "c8c0267f4a8acf65dcb3c22c869df6119272121718fc8c8b08460ee2a22bb71b",
+      "bytes": 140033
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/07-stone-blocks-r1-rear_left_225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5956366091f722bae7bb949b43f3576226d67a34",
+      "sha256": "3718f645e46b24041ae7486703b3f659fa97cc02a902a98e684d41cb6088f322",
+      "bytes": 139069
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/07-stone-blocks-r1-right_90.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a09064d2afb6828afd27f5fc5356956336592a11",
+      "sha256": "e5678485625c6de6995dbeaf306bda7f762f2ef3b5265365ae060e69fdb4427b",
+      "bytes": 116374
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/08-gems-r1-front_right_45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "46747b255eaa6ebc5e457057774ab80f7c679805",
+      "sha256": "33d5f341dc897617168847baa6896f82fce743b5d795f896bb731978be339721",
+      "bytes": 119967
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/08-gems-r1-rear_left_225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2d086a2ab99c9e854c89a881d35dd16badbf19c2",
+      "sha256": "388bc11078dd41adac5dd84b20339a8ca089ff48baf3fe60d7822c2eecd95ec4",
+      "bytes": 119527
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/08-gems-r1-right_90.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3cfaff3c1b29aa9aaf8f65411527567d23248f61",
+      "sha256": "9552d2b9b220e3d2b2b09a6ed59b10f5591162ce40d22cb94e77c9b9ef74a092",
+      "bytes": 95924
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/09-relay-component-r1-front_right_45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4ace3eeee870b36b2180b4e0ab88c5fd69629a0d",
+      "sha256": "b4f6d9bbac1aa2dbea9f1dac5fac9cc6419a0bf8b48a1f62d29acd4a9f813717",
+      "bytes": 133959
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/09-relay-component-r1-rear_left_225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "04b984f161e4c8c06a0f416c7e885c00b6013748",
+      "sha256": "12cf82d63cec7ef741315242dfa51229d730ce07e8b1014fd3ed8de8f815c2a2",
+      "bytes": 133250
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/09-relay-component-r1-right_90.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bd2296f9b604a50d8f8ec402f710149ce5dd1a13",
+      "sha256": "f5c016acbdebdf995ff71fd1b09a01929b186aa5b202d3042eb7bbb329e4cb7a",
+      "bytes": 98428
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/identities-04-06.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ce3263ec675f8f56d3904cd22902117e1ebe6ebb",
+      "sha256": "11c504d1e92d3a834852ca21719ec295ff0d32c8a36a937db4c744e4a1bbd4bd",
+      "bytes": 1033
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/identities-07-09.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f540a8984a9257854a3b49bca9f0d6d1c8ac15e2",
+      "sha256": "0f3296c87d16dde6cd39d8f8022f88eb211b905678d4fd561b72f65e7f9dc158",
+      "bytes": 1024
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r1/identities.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "54227dd8cb518ebd88b44375da933fc4e2701b2a",
+      "sha256": "96bc30b463907932aca67eded5a62c49c7778911383707295b3f0bb48e3c7949",
+      "bytes": 1029
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r2/01-iron-bars-r2-front_right_45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8358b1174fcc5782fd27eafaca4c4cb5d4b086a6",
+      "sha256": "45201e881c361bb0593b167843eadb0cd17b3f8b544064f710718f13c1ca15cf",
+      "bytes": 102636
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r2/01-iron-bars-r2-rear_left_225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "46e37c0d0de2c8e3ad6ddeee908b6e3d812020e5",
+      "sha256": "2410d5221ce6d60d4327a4457827fedb467ca93aa06d1b79f9536069e13e67b9",
+      "bytes": 110995
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r2/02-sheet-metal-r2-front_right_45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6e08f77b298091975b7b34c174b8ebb83d3c253f",
+      "sha256": "ddefd3588a8e7c126b77702cf5c88e8bf5ab63280868c9bb252d97d5dae556d2",
+      "bytes": 106898
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r2/02-sheet-metal-r2-rear_left_225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bc5c4ee3dec7206752facbdd4285003cd96eddd6",
+      "sha256": "7c552c2d5d447fb8e789a38e4834305b2e0180a253cd3fca859123d8a1d595c8",
+      "bytes": 115650
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r2/03-mechanical-parts-r2-left_profile_270.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0176ad6d3c51baee968327cba52155b80e5f1e71",
+      "sha256": "bcc82d07b07c51d6ad3e852eaf393a303766189dbbcd05f0e4588e5b391df0cf",
+      "bytes": 102079
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r2/03-mechanical-parts-r2-rear_left_225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d54c2b7434d9aeb7c14133e0abd2eec5902ac1c5",
+      "sha256": "0a112bb69bea3ad28f21badafe4ffe13a50631d47a63ab9176930dad5842fd94",
+      "bytes": 137499
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r2/03-mechanical-parts-r2-right_profile_90.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "642f6277d5fac076d98c9ce26b5e3be2bcb7ecf3",
+      "sha256": "04470bde74de28b02f9556189f232b453352c856b897eb044a2f5744ef0dc7d2",
+      "bytes": 101869
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r2/04-drive-assembly-r2-rear_left_225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fab29ce1d57a3f74b58b5464d5a3b5b1cad64549",
+      "sha256": "8401d46a3737116d5b213e67b6260d7f6e0dafb415db7e2ce9f0b315963cfbc9",
+      "bytes": 127851
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r2/04-drive-assembly-r2-rear_right_135.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bf3677127b1b24fb76d71f4ad483c861da9349e6",
+      "sha256": "9fca4a96527901915a5dfed60b2e726a0a51bbbf67442e2910bca41d9f83f703",
+      "bytes": 128044
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r2/05-mobility-assembly-r2-rear_left_225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "982d89a75e89dc687986e4c0bbb9b77a3018497e",
+      "sha256": "3c70ce333f1ce197703b0ce306628a91d7a72d43786a892d4e91d8db5b85b00d",
+      "bytes": 144287
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r2/05-mobility-assembly-r2-rear_right_135.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cb7e3c393c44050e5c04f60671a08a9037f5e698",
+      "sha256": "863a282d955b2fe1149cc20c49353f5d1d1a06eca74095d989a7ab3304a4352c",
+      "bytes": 143183
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r2/06-crude-oil-r2-left_270_lid.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "34b62899d0ec78937fd8e5e24e77016238478dfd",
+      "sha256": "3e67f35357e39a8eb64283e205ac80bec8f5aaa6b4eec21b571e82708e8289cd",
+      "bytes": 24740
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r2/06-crude-oil-r2-rear_left_225_lid.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a755909f7b90b5e12cb8b672c12d03e10fae2c6a",
+      "sha256": "8edaf585c8deb31724ba83ca86c07f49b20c7684e788f528193234ff23c50964",
+      "bytes": 24829
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r2/06-crude-oil-r2-rear_right_135_lid.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8d4350e3a6f5968a3dcb551431f7d7fe5964d948",
+      "sha256": "03844acd50843d7fde24abf07bb8b23ac9068e2058f3f4c63e92b9ef598bac5d",
+      "bytes": 24959
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r2/07-stone-blocks-r2-front_right_45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "63496128637d97379de88bcd45ce933e2edabbb6",
+      "sha256": "f7454983861050147e8921128a3c0542899c5d55e1ca75895b0f744487c4a0a6",
+      "bytes": 133270
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r2/07-stone-blocks-r2-rear_left_225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5b8555914b925bb1c39771dd7d018bc24913a2dd",
+      "sha256": "827d9fa1e9f56707b368b2bf927b8a432665098f50939764d7f1577b00b9789e",
+      "bytes": 145228
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r2/09-relay-component-r2-front_right_45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "078f73dcd0b815e1bb8ea3664de1568c8c97f51f",
+      "sha256": "45c34202f836cbe798e555a64f209f1354b0ae6bd0b131699cc8ac7cd6ffda5c",
+      "bytes": 129907
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r2/09-relay-component-r2-rear_left_225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "09a0b18ee36b79a1350cea486bb37503575428f1",
+      "sha256": "7b9547d61118d005ef6e867807a62b8d51a651de1aefcbd4013ab357a8da439c",
+      "bytes": 138508
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r2/identities-01-03.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "012948416de03002a7d882b92dd125c21b96cafa",
+      "sha256": "8af1699bb75aeb6f6fb4feb27d7e3d841e9c54ab8c411fbffd1e98e424f32b08",
+      "bytes": 1029
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r2/identities-04-06.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "93ca5038ef1c917668fe787a985a3e4958ad3575",
+      "sha256": "4b3af33e0f833a16c9711020e9e3f5b720d0dd1a732bd7a4e6255df4c551e3d8",
+      "bytes": 1033
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r3/02-sheet-metal-r3-front_right_45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4619be9647945e32ffa2a8193c05711b21900ff4",
+      "sha256": "b9ec4ded0bf5585537980d5421efa54f9e881d2fdcbd39e95e495909668245ba",
+      "bytes": 116261
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r3/02-sheet-metal-r3-rear_left_225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c2b8adefe0908b41dae3ef5efc119ee0b8e66132",
+      "sha256": "f755ad8f5cf0c1936cd7b77a14b019bee74404347fb5838e1244d8914bc7cc71",
+      "bytes": 130677
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r3/03-mechanical-parts-r3-front_right_45.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bf539ffbe9ef3c5d5e268ba66edf7bbce5f9ccc1",
+      "sha256": "3cac12ac8be8d40d5608865a9a81c40a5942d5c26e4f6813ae29215d83220d5e",
+      "bytes": 126766
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r3/03-mechanical-parts-r3-rear_left_225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e5a8cecc11f68c9793b12a4c51da284874f5cb14",
+      "sha256": "d483f485a0a002860cf8784e9ea26ceb4be08b86aa03f4a5eca3327761860391",
+      "bytes": 139258
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r3/04-drive-assembly-r3-rear_left_225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "95ca20a83b5332b2da67788146170464221320a0",
+      "sha256": "b098b54884c220f8138eb42c307974d1864879f243a93c8f303b9536662af3c6",
+      "bytes": 127942
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r3/04-drive-assembly-r3-rear_right_135.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "74d11858b5b520acfa2faa448abe3caf455d52de",
+      "sha256": "b329cdfb79b0790fbe23594d5e064d1d2f6b947c87f1289b4e2a3e7ddf49dbd9",
+      "bytes": 127948
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r3/06-crude-oil-r3-left_270_lid.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fe6646b8bc0d8677d802e495217840c38a759da3",
+      "sha256": "06a75dafbbe7836472ff80d4d386c9a711abad68a42b69410951336b6bd89389",
+      "bytes": 23825
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r3/06-crude-oil-r3-rear_left_225_lid.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fb6e0830f442fb8e0aa358f6ddbb33e1b0eb12bc",
+      "sha256": "4a89e36b9386bb6c5220d89a25d5d68a87ba6afb8921bbcf4e4e6181a203941d",
+      "bytes": 24211
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r3/06-crude-oil-r3-rear_right_135_lid.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "691fa2996c15a346f5290e620b1db7756bfe161a",
+      "sha256": "d33f9bf8e2c5bf05a9b712c4208c4b80655cc108ac83fb372764b9bff4f2d906",
+      "bytes": 24054
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r3/09-relay-component-r3-rear_left_225.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "39e30c41bb6481f5684a9347081df24263cf4c0f",
+      "sha256": "76a7c4e82e5a574eddf5ed0260c75110e249586cd33e19e73110093df6678b22",
+      "bytes": 133855
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/r3/09-relay-component-r3-rear_right_135.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a1f5cf5943ce2a7fa06454f10a71abac2faef2da",
+      "sha256": "1e93751c8e0f08c3753bc68b3821290b6466cdc65400c7d5235654164a2b6487",
+      "bytes": 134406
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/references/02-stone.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c2a7e1a7cb2caa8fb1dc80699b5d02604adadbe1",
+      "sha256": "5360d9d44ed505f48c788b870e322105edce48c726525252d0e884549800016e",
+      "bytes": 1744944
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/references/04-steel.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8030843df6055046f23b908c5c5c98c4aa6ceb33",
+      "sha256": "905c74c92209963de34f80efca33408af2738f761ff6c82abe2fefff8f0a4347",
+      "bytes": 1583424
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/references/05-metal-ore.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c3bdeddef77ddf35f1a32bfc598bea809bb816c8",
+      "sha256": "9e6965c343e017052d14800a7c3d3673ec396552e1f648cac15e7fb26a5b4d4a",
+      "bytes": 1731700
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/references/06-fuel.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ac409458a51373a09abb3874dc2f82a28eecca2a",
+      "sha256": "c9a17187e1009b9d466b024608a28887b86b7746da3aae8b378e6caee649c306",
+      "bytes": 1722442
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/references/13-coal.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e2e0e11613a65ad01d3aa3255317a3de3bd89ba9",
+      "sha256": "860f781f8ac7425e4a7899d1f9748a5e1e5dc920ae33862a7b6180f244703b5d",
+      "bytes": 1543857
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/evidence/critic/references/identities.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "19e4964465519d469ec804a0849aff4b6cd1f90e",
+      "sha256": "7f9589a1ccd0bff95c4a7e4ecd7599f84e588d71a9936554e2a47bd556b2ae49",
+      "bytes": 1872
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/history/prior-incomplete-checkpoint/CHECKPOINT.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "79d6a4d6e36a2f69c7bccec2b3c3262d4c59f3d8",
+      "sha256": "13d1f08461c2d69f0a50c1c875aa479a89ee97bcb3ee7def4f795e3609668634",
+      "bytes": 1336
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/history/prior-incomplete-checkpoint/PRESERVATION.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f448a512e73575c315812164c1df651537ec5531",
+      "sha256": "5d4056f011b3ba4bf6acb2d7f31edbc4fc23278cb6aea2c51ab2f61b039a71d5",
+      "bytes": 1132
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/history/prior-incomplete-checkpoint/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c2b5d980eb3d44aeb13c7e9855fa6903eec92139",
+      "sha256": "60ff15241624c38b8ce32758394671f6c7655011a33485e365579e70370afdf8",
+      "bytes": 2583
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/prompts/01-iron-bars-r1.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "14ae4d8bd81bdfce54b1fb23d4d828ffd931f72b",
+      "sha256": "dc06486fcd95a460b5b4eeeaefd66c06e2b463c78a7872410f4098641e3517c0",
+      "bytes": 2349
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/prompts/01-iron-bars-r2.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "874d504faff466a005dea042eb30030d19abf10e",
+      "sha256": "a8b436ee91def5a7e6fb31a0dbb58f4661dfd04f71f2d8ea013c44a60947b21e",
+      "bytes": 1632
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/prompts/02-sheet-metal-r1.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "beca24ac3ad9779fe11ba12f7701e02f5a50d192",
+      "sha256": "2234cf66ff75f7becd675d8810b5245ee0e8e9358114d97d011e957d5e767eba",
+      "bytes": 2409
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/prompts/02-sheet-metal-r2.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "740eca28a00cbe95b2ff49521978da2f9aa99673",
+      "sha256": "53db69b1e1c34f7eebbf58fa15baa36a98a0b7151e323ccd3d97f3f690507169",
+      "bytes": 1095
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/prompts/02-sheet-metal-r3.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e2ae64e13e4c1697154535cb7c7d8451f6072859",
+      "sha256": "00ad1e1ea7357e6cca95f9cf19d4d744e2fa57e1d1e6b1439f5e67753a076f36",
+      "bytes": 1077
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/prompts/03-mechanical-parts-r1.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6551d5341e22fc310778c183d3d433da1fb4e3a3",
+      "sha256": "72afc01844605b2ff8e9eb6c0d396b59c8825729f6416b399337d8db5cc52cf0",
+      "bytes": 2538
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/prompts/03-mechanical-parts-r2.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "95fe068ea7572ca855186b1e260ce310fee6cf75",
+      "sha256": "fb44949532486748774a902ca65190950dbc05f52732dc0951772f35cbdbc2c8",
+      "bytes": 1361
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/prompts/03-mechanical-parts-r3.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0615d8da383771118a552f3c93f46b3b1d202941",
+      "sha256": "70c167eb47af079ddd727e225e325f094ee7f4755aef8858faa14991b751f879",
+      "bytes": 1114
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/prompts/04-drive-assembly-r1.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b665be78993cccf46998443ec06d9d84a0a088e4",
+      "sha256": "efbf0c6c66bcb0eedab9577057eec31281691a370f826847d8e4cd973a7300a0",
+      "bytes": 2798
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/prompts/04-drive-assembly-r2.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "37c54ff8b3087794a2ef111000bdc28baabab686",
+      "sha256": "16c497a3dca26e532288193a3139c1fd7a569a2c75769a81d01702c439893b72",
+      "bytes": 1403
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/prompts/04-drive-assembly-r3.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "28924c05d0e3382d08b99f0bcc41a1493561d895",
+      "sha256": "3e03c84c5615d686d0ee7c6aacabfb42726ed292c18a73211c23a1dc36c89b15",
+      "bytes": 988
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/prompts/05-mobility-assembly-r1.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "289f5a67e7455bcf4c0f9ead1ee9d9b8cafea910",
+      "sha256": "48b5a4ed1dde79d2704d49ce36d889409b454fc201c250a2d9d558b3611459a0",
+      "bytes": 2946
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/prompts/05-mobility-assembly-r2.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2d1314a252a2657f08d54d9de987ac0ed8e69fdd",
+      "sha256": "73869e156a2871db21af8cf1608850dd9020412c7139812e56d89d720a8553e6",
+      "bytes": 981
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/prompts/06-crude-oil-r1.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cc2604d2d3985f3949a9239260e045cf8fcee31b",
+      "sha256": "8167f1df38b0e956c4afddd66ee21003b596deb4b33890c4f300ebf734f77948",
+      "bytes": 2875
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/prompts/06-crude-oil-r2.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b02ab55a9a3817b179b1b8c7ef8c9b5e15b090fa",
+      "sha256": "102cc620ad40df43150becd8e1e2ddf179a2f18fe649fba5ce1bccf6c0a25b4c",
+      "bytes": 1534
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/prompts/06-crude-oil-r3.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "926c1a72c34b542d2ede6e554287d0cf7b7deb5b",
+      "sha256": "824826f13f18a2dce44f20224f996331c6e25858fc5bbaa7607676988fed5b18",
+      "bytes": 1117
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/prompts/07-stone-blocks-r1.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ca2d2b9f1000cc0bbb31e9464b9bc0e16e5f19b5",
+      "sha256": "f6d39f627d25da64e9ba0a269d48e1636d8cbec9f7027b20ea8c2cebe15ecf1b",
+      "bytes": 3468
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/prompts/07-stone-blocks-r2.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f045969ad41373a146294df952cdb2d37c6413b4",
+      "sha256": "99de5dc286fa54fe6c850cdf4b8653ddb3c3d9a4be9ff4ac709df95e519a1fde",
+      "bytes": 894
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/prompts/08-gems-r1.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "15d2b2ebf1cd9ed1f7251c89c0eb49138db33c15",
+      "sha256": "6b97fce917ae1f46ede6f95e6ea70fd2b69d07534023bc9f45dd74c5f970da5d",
+      "bytes": 3577
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/prompts/09-relay-component-r1.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b69a126c00b043368dd78d24175292a6fbdabcc6",
+      "sha256": "625b68835a3286eb1bbe3bc22ebedbee08f74d7eb52e25432fc0ca7fe4cf6b76",
+      "bytes": 4308
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/prompts/09-relay-component-r2.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "235d9f99b0e93368d0030bc0e348d273eeb371e7",
+      "sha256": "295f692f63f3e14a736d13d0cd87948fe2bd7a0446c15603378af326029ebc92",
+      "bytes": 1156
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/prompts/09-relay-component-r3.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b99dd9ba19328bb015f329d7621d04d48dbf3627",
+      "sha256": "be6adc592727c4f550394501acdffcf586d0a7a3c6241a58b62a20f0d817e476",
+      "bytes": 1154
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/reviews/INITIAL_REFERENCE_REVIEW.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3e8e19d0a1db4bd66959b59e60beb35d2bd82487",
+      "sha256": "d43ddbd7411463f071b8df428012681775e24e19162046a73aa9d030f9b8463a",
+      "bytes": 4289
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/reviews/OWNER_SELECTION_REVIEW.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "03bcae1a744f50f39d54f46a393593201b913792",
+      "sha256": "62559fb05f0b8ce7f46ca52fdebc14d5ec25113d685725fe6d7e3cb8ae13f114",
+      "bytes": 1648
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/reviews/REVIEW_R1_04_06.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f7e9e53882a91ba37cc13378ef19ff2c7805d045",
+      "sha256": "f0dc1d58ef8f37c3fcc69804494fe59ff9a27a76a2eda627ec99fa07594c0b71",
+      "bytes": 8214
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/reviews/REVIEW_R1_07_09.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a5f8f17957feeb13e38eb66305c8c492fdd0d8f7",
+      "sha256": "53c01142f8e7528e23139561a3eab98a00b22d5a3cd2a4bbbaf3d7913e496c11",
+      "bytes": 7963
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/reviews/REVIEW_R1_FIRST3.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a2a15e01c6defbf8075f54d9e98f6ce3ae5b063d",
+      "sha256": "76b407d021170a8eb59b6ed48fce7d33452ef7a91c4f9c5d2c42bd298d470f30",
+      "bytes": 8398
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/reviews/REVIEW_R2_01_03.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "58ad11a941957f4d8faa5f22055e634d3ae8879a",
+      "sha256": "92674e88874d842069a53f90512c664948b312151ddf969a9f8359d649730605",
+      "bytes": 7283
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/reviews/REVIEW_R2_04_06.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "94053b264235edb6aa6444ac5dace1c43da2239b",
+      "sha256": "486b577ea59a6b7214a628ad2e2575f1702a1cf5154c8b33020068b0a2f2c070",
+      "bytes": 7569
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/reviews/REVIEW_R3_02_03_R2_07_09.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "96d19072f126bb80ae7b7f0e56d75703312f2d32",
+      "sha256": "379f736a52928f477adf3ce93b147d9b1a54d2f857401d12180e21d4345a395d",
+      "bytes": 8386
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/reviews/REVIEW_R3_04_06_09.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "91f0bc89cc5e8f2effec5c67e91157bcbc973fee",
+      "sha256": "4a80e6f5480c790960d50aabecfb382131699ff8de77faea222eddf669e60853",
+      "bytes": 6459
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/crude-oil.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7aa7fd133f8681de0038059eff81a9de866a5b9e",
+      "sha256": "3730c25937d77fb630b13839ee77438ac8e669944f99df71861f6b4ae5392a9b",
+      "bytes": 1716503
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/drive-assembly.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6072aa01f55399c743b066f70a50a25b7727dc91",
+      "sha256": "69646d6f98f24001a9fe87b658a17d13af1c15407174e1bcc26146298e6eef93",
+      "bytes": 1685336
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/gems.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f0a3a06d91d8086e20bde5da489c2b30fa7f7c88",
+      "sha256": "8ab6b87da0a5fae16f9be6288d784a256098d56ca407c8110fc38e2fd8448864",
+      "bytes": 1626289
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/iron-bars.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4e7e11601c78ff78122b5a09169679ee0753c67b",
+      "sha256": "df6093297abc33498f2d13b28a301a736f3fefa1625021c05831feeb5c2e86ea",
+      "bytes": 1602730
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/mechanical-parts.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7a36497192bc5d064df91cb48410d48134377c16",
+      "sha256": "80dea343f57bccedf02731fefe4e8ca3cff1c437cb258576d691c20b8885397f",
+      "bytes": 1765937
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/mobility-assembly.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d853ae4f24b0bfbe41105f132647f439d7579be9",
+      "sha256": "69cfd1e68e6bb6a5618745c49ee2d29b0b11657a7d4eb57c2f2bd63594953eaf",
+      "bytes": 1772081
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/relay-component.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "012c98098d7c8792fbd06f4dfd61e3f951f8a96a",
+      "sha256": "fe6b8228890fe9e55001b7ebc5392c37e0b9f20af28f7ca8a8e6196b70fe6aa2",
+      "bytes": 1703940
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/sheet-metal.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f66cdc1ffbd49d7a081249ca0a2f944af1477f61",
+      "sha256": "b463a0af9aebc6190f81ea9937c3fdf613ae517d0bf86c7ce752ac49bdcc40c1",
+      "bytes": 1652415
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/stone-blocks.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b596ca8474a546f75d80164e5eb3fa15da22b6e7",
+      "sha256": "1e3fabe7593b89df90e67b4aa2f216e4b9c4414ec9f64d1260f72a9fef8aea19",
+      "bytes": 1820577
+    },
+    {
+      "path": "REPOSITORY_INDEX.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9a0beb4a5b56aa842663bce34c5b2a898e624654",
+      "sha256": "fdb5c5298e14031a17ffbc08a14d1740014dd924c1ae231022032a8bef6742b3",
+      "bytes": 7890
+    }
+  ]
+}
