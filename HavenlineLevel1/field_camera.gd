@@ -6,6 +6,7 @@ const FOLLOW_RATE := 8.6
 const VELOCITY_RATE := 10.0
 const LEAD_SECONDS := .35
 const MAX_LEAD_METRES := 2.1
+const FOLLOW_SPEED_LIMIT := 10.5
 const DISCONTINUITY_METRES := 4.5
 const TARGET_RANGE := 6.8
 
@@ -187,4 +188,5 @@ func update(world, dt: float) -> void:
 	var shift := desired if warp or not from.is_finite() else from.lerp(desired,1.0-exp(-FOLLOW_RATE*time))
 	var permitted := _limits(lead,view)
 	if permitted.has_area(): shift = shift.clamp(permitted.position,permitted.end)
-	camera.global_position = base + basis.x*shift.x - ground_up*(shift.y/ground_up.length_squared())
+	var next := base + basis.x*shift.x - ground_up*(shift.y/ground_up.length_squared())
+	camera.global_position = next if warp else camera.global_position.move_toward(next,FOLLOW_SPEED_LIMIT*time)

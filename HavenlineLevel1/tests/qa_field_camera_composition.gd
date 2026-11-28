@@ -97,6 +97,17 @@ func run() -> void:
 		if is_instance_valid(source) and source.visible:
 			await pose(source.global_position + basis.x*2.72 + Vector3.BACK*.78)
 			record("plot %s pinch" % str(screen),2.,basis,PackedVector3Array([source.global_position]),1)
+	field.set_zoom_ratio(1.)
+	for direction in [-1.0,1.0]:
+		var origin_ := Vector3(-4.0*direction,0,2.7)
+		await pose(origin_)
+		var fastest := 0.0
+		for tick in 75:
+			var before := camera.global_position
+			field.actor.global_position = origin_+Vector3(direction,0,0)*float(tick)*6.25/60.0
+			field.follow_camera(1.0/60.0)
+			fastest = maxf(fastest,before.distance_to(camera.global_position))
+		checks["context changes stay smooth toward %s" % str(direction)] = fastest < .18
 	var from_counter := camera.global_position
 	await pose(Vector3(-38.,0.,19.))
 	checks["leaving every action clears the last context and follows the new position"] = camera.global_position.distance_to(from_counter)>15. and visible(field.actor.global_position)
