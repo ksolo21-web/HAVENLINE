@@ -1,0 +1,118 @@
+{
+  "reviewer_agent": "/root/requirements_critic",
+  "round": 1,
+  "scope": "Actual static visual concepts only",
+  "checklist_version": 2,
+  "evidence": [
+    {
+      "label": "original",
+      "path": "/workspace/scratch/9c51da47f878/havenline-ui-concepts-2026-11-26/renders/ui-camp-hud-r2.png",
+      "sha256": "1e8da0ac20132462efa49af4b534dd80d3b7b42500eb039debb670def5ee1ab0",
+      "viewed": true
+    },
+    {
+      "label": "aurora",
+      "path": "/workspace/scratch/d9b3074da1a3/generated_images/exec-5a07a3e7-b9ef-4045-8264-e5324d97473f.png",
+      "sha256": "c53817a45ba8c46af74342b1f2a15dc442df8c98ca4e00a26c64801c72431b81",
+      "viewed": true
+    },
+    {
+      "label": "ember",
+      "path": "/workspace/scratch/d9b3074da1a3/generated_images/exec-b353c03d-36ba-45a7-9da8-fa311cecbae9.png",
+      "sha256": "15469c3845c247aa3cdbff58fd983176b6a6e7eb5793879a9d4b41d622482b1f",
+      "viewed": true
+    },
+    {
+      "label": "alpine",
+      "path": "/workspace/scratch/d9b3074da1a3/generated_images/exec-8feaeaa6-273a-40f5-8a01-3ca878a98c7e.png",
+      "sha256": "feff78aa09e1451ae4dada570a9a000f973c85d4c84945f449bbe5c933cbc9d3",
+      "viewed": true
+    }
+  ],
+  "board_scores": {
+    "aurora": {
+      "dimensions": {
+        "UI01": 10,
+        "UI02": 9.2,
+        "UI03": 9.6,
+        "UI04": 9.5,
+        "UI05": 9.5,
+        "UI06": 9.7,
+        "UI07": 9.4,
+        "UI08": 10,
+        "UI09": 8.5
+      },
+      "minimum_score": 8.5,
+      "verdict": "FIX_REQUIRED"
+    },
+    "ember": {
+      "dimensions": {
+        "UI01": 10,
+        "UI02": 9.6,
+        "UI03": 9.7,
+        "UI04": 9.6,
+        "UI05": 9.3,
+        "UI06": 9.6,
+        "UI07": 9.6,
+        "UI08": 10,
+        "UI09": 8.7
+      },
+      "minimum_score": 8.7,
+      "verdict": "FIX_REQUIRED"
+    },
+    "alpine": {
+      "dimensions": {
+        "UI01": 10,
+        "UI02": 9.4,
+        "UI03": 9.7,
+        "UI04": 9.7,
+        "UI05": 9.7,
+        "UI06": 9.7,
+        "UI07": 9.5,
+        "UI08": 10,
+        "UI09": 9.3
+      },
+      "minimum_score": 9.3,
+      "verdict": "PASS_CONCEPT"
+    }
+  },
+  "package_verdict": "FIX_REQUIRED_TWO_OF_THREE_DIRECTIONS",
+  "ranking": [
+    "alpine",
+    "ember",
+    "aurora"
+  ],
+  "mandatory_checks_failed": [
+    {
+      "board": "aurora",
+      "check": "UI09",
+      "defect": "Thick white bevel/highlight, glossy translucent pills and raised controls resemble a familiar glossy casual-game skin; not a convincing modernization over the flatter original.",
+      "repair": "Remove in-game HAVENLINE/Camp brand card; use compact avatar/status. Flatten surfaces, use hairline or absent borders and restrained shadows, tighten status organization, and retain one vivid Build accent."
+    },
+    {
+      "board": "ember",
+      "check": "UI09",
+      "defect": "Double silver perimeter and framed/gradient gray controls give the otherwise useful dark rail/dock direction a dated chrome-widget appearance.",
+      "repair": "Keep rail-to-bottom-dock adaptation, but remove metallic/raised outlines. Use flat matte charcoal surfaces, quiet dividers/spacing and one warm primary Build accent. Preserve readable map expansion affordance."
+    }
+  ],
+  "alpine_minor_refinement": "Optional polish: slightly reduce pill-edge sheen and shadows while preserving warm cream/sage softness and dark-on-gold primary action. No blocking visual defect was found within this concept scope.",
+  "verified_visual_observations": [
+    "All three actual boards show landscape and portrait arrangements.",
+    "Minimap labels and outward expansion arrows are visible in both views of all boards.",
+    "No visible UI cutoff or collision between controls was found.",
+    "Both camp gates/openings and the centered furnace are retained in all views.",
+    "Gameplay remains broadly visible and the primary Build action is clear.",
+    "All three reduce the original bottom navigation density; Ember changes the navigation structure most."
+  ],
+  "scope_limits": {
+    "runtime_responsiveness_tested": false,
+    "touch_interaction_tested": false,
+    "measured_safe_area_tested": false,
+    "expanded_map_state_required": false,
+    "native_game_rendering_certified": false,
+    "publication_performed": false
+  },
+  "format_caveat": "Landscape concept frames are around 4:3 rather than matching the portrait phone aspect after rotation. This is an acknowledged illustrative-format limit, not device responsiveness proof or a failed concept requirement.",
+  "next_action": "Repair Aurora and Ember, retain Alpine as the current strongest passing direction, then inspect the actual revised images and compare all three again."
+}

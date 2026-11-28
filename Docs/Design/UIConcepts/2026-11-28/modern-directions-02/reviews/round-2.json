@@ -1,0 +1,178 @@
+{
+  "reviewer_agent": "/root/requirements_critic",
+  "round": 2,
+  "checklist_version": 2,
+  "scope": "Three actual static UI concept boards, each with portrait and landscape plus a minimap expansion affordance",
+  "package_verdict": "PASS_ALL_THREE_STATIC_VISUAL_CONCEPTS",
+  "known_blocking_visual_concept_defects": [],
+  "original_reference": {
+    "path": "/workspace/scratch/9c51da47f878/havenline-ui-concepts-2026-11-26/renders/ui-camp-hud-r2.png",
+    "sha256": "1e8da0ac20132462efa49af4b534dd80d3b7b42500eb039debb670def5ee1ab0",
+    "pixel_size": [
+      1672,
+      941
+    ],
+    "actual_image_inspected": true
+  },
+  "final_candidates": {
+    "aurora": {
+      "label": "01 / AURORA",
+      "revision": 2,
+      "path": "/workspace/scratch/d9b3074da1a3/generated_images/exec-f384e131-5987-4184-938b-4f714a511469.png",
+      "sha256": "da550f37e7039fabdb4b9d002f87c8a88d3b7ac35de239bb75185a3caa81c4d2",
+      "pixel_size": [
+        1536,
+        1024
+      ],
+      "bytes": 1983438,
+      "actual_image_inspected": true,
+      "layouts_inspected": [
+        "landscape",
+        "portrait"
+      ],
+      "static_concept_dimension_scores": {
+        "UI01": 10,
+        "UI02": 9.6,
+        "UI03": 9.7,
+        "UI04": 9.7,
+        "UI05": 9.7,
+        "UI06": 9.7,
+        "UI07": 9.5,
+        "UI09": 9.5
+      },
+      "minimum_static_concept_score": 9.5,
+      "bounded_reference_preservation": {
+        "check": "UI08",
+        "shared_stylized_winter_camp_identity": 10,
+        "two_open_gateways": 10,
+        "centered_furnace_and_recognizable_camp_arrangement": 10,
+        "minimum_score": 10,
+        "scope": "Visible concept structure and stylized identity compared with supplied original, not pixel identity, native asset, rig or runtime approval"
+      },
+      "mandatory_concept_checks_pass": true,
+      "verdict": "PASS_STATIC_CONCEPT"
+    },
+    "ember": {
+      "label": "02 / EMBER",
+      "revision": 2,
+      "path": "/workspace/scratch/d9b3074da1a3/generated_images/exec-314cadd4-40fd-44d9-9a7c-570add7e16df.png",
+      "sha256": "63e8950b934d990748f1d1011b784d690b44e9aee22c7ce0d3d636f6541c9580",
+      "pixel_size": [
+        1536,
+        1024
+      ],
+      "bytes": 1988613,
+      "actual_image_inspected": true,
+      "layouts_inspected": [
+        "landscape",
+        "portrait"
+      ],
+      "static_concept_dimension_scores": {
+        "UI01": 10,
+        "UI02": 9.8,
+        "UI03": 9.7,
+        "UI04": 9.7,
+        "UI05": 9.3,
+        "UI06": 9.7,
+        "UI07": 9.7,
+        "UI09": 9.5
+      },
+      "minimum_static_concept_score": 9.3,
+      "bounded_reference_preservation": {
+        "check": "UI08",
+        "shared_stylized_winter_camp_identity": 10,
+        "two_open_gateways": 10,
+        "centered_furnace_and_recognizable_camp_arrangement": 10,
+        "minimum_score": 10,
+        "scope": "Visible concept structure and stylized identity compared with supplied original, not pixel identity, native asset, rig or runtime approval"
+      },
+      "mandatory_concept_checks_pass": true,
+      "verdict": "PASS_STATIC_CONCEPT"
+    },
+    "alpine": {
+      "label": "03 / ALPINE",
+      "revision": 1,
+      "path": "/workspace/scratch/d9b3074da1a3/generated_images/exec-8feaeaa6-273a-40f5-8a01-3ca878a98c7e.png",
+      "sha256": "feff78aa09e1451ae4dada570a9a000f973c85d4c84945f449bbe5c933cbc9d3",
+      "pixel_size": [
+        1536,
+        1024
+      ],
+      "bytes": 2374303,
+      "actual_image_inspected": true,
+      "layouts_inspected": [
+        "landscape",
+        "portrait"
+      ],
+      "static_concept_dimension_scores": {
+        "UI01": 10,
+        "UI02": 9.4,
+        "UI03": 9.7,
+        "UI04": 9.7,
+        "UI05": 9.7,
+        "UI06": 9.7,
+        "UI07": 9.5,
+        "UI09": 9.3
+      },
+      "minimum_static_concept_score": 9.3,
+      "bounded_reference_preservation": {
+        "check": "UI08",
+        "shared_stylized_winter_camp_identity": 10,
+        "two_open_gateways": 10,
+        "centered_furnace_and_recognizable_camp_arrangement": 10,
+        "minimum_score": 10,
+        "scope": "Visible concept structure and stylized identity compared with supplied original, not pixel identity, native asset, rig or runtime approval"
+      },
+      "mandatory_concept_checks_pass": true,
+      "verdict": "PASS_STATIC_CONCEPT"
+    }
+  },
+  "repairs": [
+    {
+      "board": "aurora",
+      "rejected_path": "/workspace/scratch/d9b3074da1a3/generated_images/exec-5a07a3e7-b9ef-4045-8264-e5324d97473f.png",
+      "repaired_path": "/workspace/scratch/d9b3074da1a3/generated_images/exec-f384e131-5987-4184-938b-4f714a511469.png",
+      "original_defect": "Excessive gloss/bevel, repeated large in-game HAVENLINE/Camp brand card; weak modernization over original.",
+      "observed_repair": "Brand card removed; compact avatar/status bar; flatter surfaces and simpler analog joystick; dark type on apricot Build action; original camp composition and clear map expansion preserved.",
+      "status": "CLOSED_BY_ACTUAL_IMAGE_REVIEW",
+      "rejected_sha256": "c53817a45ba8c46af74342b1f2a15dc442df8c98ca4e00a26c64801c72431b81"
+    },
+    {
+      "board": "ember",
+      "rejected_path": "/workspace/scratch/d9b3074da1a3/generated_images/exec-b353c03d-36ba-45a7-9da8-fa311cecbae9.png",
+      "repaired_path": "/workspace/scratch/d9b3074da1a3/generated_images/exec-314cadd4-40fd-44d9-9a7c-570add7e16df.png",
+      "original_defect": "Double silver perimeter and raised/framed gray controls created a chrome-widget appearance.",
+      "observed_repair": "Metal rims and bevels removed; matte charcoal rail/tray, quieter separators and flat primary action retained with the distinctive orientation reflow.",
+      "status": "CLOSED_BY_ACTUAL_IMAGE_REVIEW",
+      "rejected_sha256": "15469c3845c247aa3cdbff58fd983176b6a6e7eb5793879a9d4b41d622482b1f"
+    }
+  ],
+  "set_comparison": {
+    "aurora": "Cleanest contemporary light treatment and the most direct response to the modernization brief.",
+    "ember": "Most structurally distinct; organized dark landscape rail becomes a portrait bottom tray.",
+    "alpine": "Calmest and warmest presentation, with cream/sage grouping and dark-on-gold Build."
+  },
+  "reviewer_preference": {
+    "choice": "aurora",
+    "reason": "Best fit to the explicit more-modern, simple and easy-to-read brief after the repair.",
+    "authority": "Reviewer taste only; not an owner selection or implementation mandate"
+  },
+  "accepted_tradeoffs": [
+    "Ember allocates a dedicated slice of landscape width to its rail; it still leaves the camp and routes visible.",
+    "Alpine intentionally retains soft, cozy rounded surfaces rather than the flatter visual language of Aurora.",
+    "Concept frame ratios are illustrative, not evidence of same-device orientation behavior."
+  ],
+  "approval_limits": {
+    "owner_selected_direction": null,
+    "production_ui_approved": false,
+    "runtime_responsiveness_tested": false,
+    "touch_interaction_tested": false,
+    "measured_safe_insets_tested": false,
+    "expanded_map_state_tested": false,
+    "native_game_rendering_certified": false,
+    "physical_device_tested": false,
+    "publication_performed": false
+  },
+  "scoring_rule": "Minimum mandatory static-concept dimension must be strictly above 9.0, all scoped checks pass, target 10; no averaging. Bounded reference-preservation comparisons are separately scored 10 for every final direction. These are reviewer judgments, not mathematical similarity measures.",
+  "next_action": "Present the three repaired concept choices with their differing strengths and scope limits. No further optional testing is needed for this static concept deliverable."
+}

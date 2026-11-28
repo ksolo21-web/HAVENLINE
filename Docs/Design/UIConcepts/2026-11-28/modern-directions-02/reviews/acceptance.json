@@ -1,0 +1,83 @@
+{
+  "version": 2,
+  "scope": "Independent visual-concept review of three new HAVENLINE UI boards, each showing landscape and portrait layouts, a minimap and an unambiguous expansion affordance",
+  "reviewer_agent": "/root/requirements_critic",
+  "required_board_count": 3,
+  "requirements": [
+    {
+      "id": "UI01",
+      "check": "Three actual image boards are supplied and inspected; every board shows landscape and portrait, a minimap and an unambiguous expansion affordance.",
+      "status": "PASSED_STATIC_CONCEPT_IN_ROUND_2"
+    },
+    {
+      "id": "UI02",
+      "check": "Each direction is materially distinct in composition, visual language or navigation treatment; differences go beyond accent-color swaps.",
+      "status": "PASSED_STATIC_CONCEPT_IN_ROUND_2"
+    },
+    {
+      "id": "UI03",
+      "check": "A clear primary movement/action hierarchy supports Havenline's simple automatic gameplay; no distracting proliferation of combat buttons or unexplained competing calls to action.",
+      "status": "PASSED_STATIC_CONCEPT_IN_ROUND_2"
+    },
+    {
+      "id": "UI04",
+      "check": "Essential status, navigation, minimap, legend and map-return affordances are legible at a plausible device viewing size; no garbled prominent labels.",
+      "status": "PASSED_STATIC_CONCEPT_IN_ROUND_2"
+    },
+    {
+      "id": "UI05",
+      "check": "HUD leaves broad, readable gameplay space and the player, immediate route, gates and camp interaction cues are not buried behind panels.",
+      "status": "PASSED_STATIC_CONCEPT_IN_ROUND_2"
+    },
+    {
+      "id": "UI06",
+      "check": "Visible UI stays within safe-looking margins without cutoffs, collisions, overlapping touch controls or edge-trapped close/back controls.",
+      "status": "PASSED_STATIC_CONCEPT_IN_ROUND_2"
+    },
+    {
+      "id": "UI07",
+      "check": "Portrait and landscape are coherent adaptations of the same direction with reflowed groups, readable scale and no squeezed landscape layout.",
+      "status": "PASSED_STATIC_CONCEPT_IN_ROUND_2"
+    },
+    {
+      "id": "UI08",
+      "check": "The shared stylized winter camp remains recognizable across all boards, including two gates/openings and a centered furnace; UI comparisons do not depend on replacing the game world.",
+      "status": "PASSED_STATIC_CONCEPT_IN_ROUND_2"
+    },
+    {
+      "id": "UI09",
+      "check": "Overall presentation is modern, creative, visually captivating and comfortable to look at through balanced contrast, disciplined color, clean spacing and restrained effects.",
+      "status": "PASSED_STATIC_CONCEPT_IN_ROUND_2"
+    }
+  ],
+  "evidence_required": [
+    "Actual original generated image for every board",
+    "Full-board visual inspection",
+    "Readable UI/details inspection at available source resolution",
+    "Comparison across all three directions"
+  ],
+  "scoring": {
+    "range": [
+      0,
+      10
+    ],
+    "pass_requires": "Every mandatory visual-concept check passes and every reviewed mandatory dimension scores strictly above 9.0",
+    "target": 10,
+    "averaging_failed_checks_allowed": false,
+    "unseen_or_untested_score": null
+  },
+  "limits": {
+    "runtime_responsiveness_tested": false,
+    "touch_interaction_tested": false,
+    "actual_safe_insets_measured": false,
+    "native_game_rendering_certified": false,
+    "publication_authorized": false,
+    "expanded_map_state_reviewed": false
+  },
+  "next_action": "Present the three final visual concepts; keep runtime and owner-selection boundaries explicit.",
+  "scope_clarification": {
+    "source": "Parent clarification after first actual board",
+    "meaning": "Only a visible minimap expansion control is required for this concept comparison. An expanded-map screen, interactive prototype and real-device rotation proof were never required for these boards.",
+    "thresholds_changed": false
+  }
+}
