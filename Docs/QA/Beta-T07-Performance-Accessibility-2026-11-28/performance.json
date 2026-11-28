@@ -1,0 +1,514 @@
+{
+  "candidate_commit": "14db14ee243f4718fadf93f2c881869be1736025",
+  "cpu_render_disabled": {
+    "busy": true,
+    "checks": {
+      "one active worker completed the normal rescue": true,
+      "paid fixture camp_cooker": true,
+      "paid fixture center_hearth": true,
+      "paid fixture expansion_1": true,
+      "paid fixture expansion_2": true,
+      "paid fixture orbit_upgrade": true,
+      "paid fixture quarry_drill": true,
+      "paid fixture saw_bench": true,
+      "paid fixture snow_garage": true,
+      "paid fixture snow_truck": true,
+      "paid fixture storage_meat": true,
+      "paid fixture storage_stone": true,
+      "paid fixture storage_wood": true,
+      "paid fixture watchtower": true
+    },
+    "msaa_enum": 2,
+    "native": false,
+    "profile": "Ultra",
+    "raster": [
+      64,
+      64
+    ],
+    "renderer": "",
+    "routes": {
+      "east_patrol": {
+        "active_3d_physics_bodies": 1.0,
+        "active_character_bodies_upper_bound": 1,
+        "actors": {
+          "customers": 3,
+          "owl": 0,
+          "rescued_survivor": true,
+          "survivor_phase": "supply_back",
+          "wolves": 0
+        },
+        "all_physics_bodies_upper_bound": 28,
+        "gaps": 0,
+        "headless_tick_wall_ms_p95": 7.663,
+        "position": [
+          13.0612354278564,
+          0.00800000037997961,
+          1.77389764785767
+        ],
+        "resident_process_mb": -1.0,
+        "ticks": 360,
+        "unoccluded_tree_material_upper_bound": 128,
+        "visible_tree_rigs_upper_bound": 7
+      },
+      "south_approach": {
+        "active_3d_physics_bodies": 4.0,
+        "active_character_bodies_upper_bound": 1,
+        "actors": {
+          "customers": 3,
+          "owl": 0,
+          "rescued_survivor": true,
+          "survivor_phase": "chopping",
+          "wolves": 3
+        },
+        "all_physics_bodies_upper_bound": 31,
+        "gaps": 0,
+        "headless_tick_wall_ms_p95": 3.01,
+        "position": [
+          0.0773989409208298,
+          0.00800000037997961,
+          -1.17479538917542
+        ],
+        "resident_process_mb": -1.0,
+        "ticks": 360,
+        "unoccluded_tree_material_upper_bound": 120,
+        "visible_tree_rigs_upper_bound": 10
+      },
+      "work_aisle": {
+        "active_3d_physics_bodies": 6.0,
+        "active_character_bodies_upper_bound": 1,
+        "actors": {
+          "customers": 3,
+          "owl": 0,
+          "rescued_survivor": true,
+          "survivor_phase": "carrying",
+          "wolves": 3
+        },
+        "all_physics_bodies_upper_bound": 31,
+        "gaps": 0,
+        "headless_tick_wall_ms_p95": 3.565,
+        "position": [
+          3.55818319320679,
+          0.00800000037997961,
+          3.5398097038269
+        ],
+        "resident_process_mb": -1.0,
+        "ticks": 360,
+        "unoccluded_tree_material_upper_bound": 120,
+        "visible_tree_rigs_upper_bound": 10
+      }
+    },
+    "scale_3d": 1.0,
+    "source": {
+      "field": "c50dd20cc06b52b7dc70de233ea153c857ab554a9c42fdf9af096beaf361f5ae",
+      "selector": "b7855c39ff2807c1d50f2cfa20bc5316543a8bf7027c64be6f4072a3028d6a79"
+    },
+    "static_engine_mb": 835.69204044342
+  },
+  "formal_specialist_score": null,
+  "hardware_waived_for_beta": true,
+  "headless_simulation_wall_ms_p95_max": 7.663,
+  "method": {
+    "frame_sample": "Three live camera positions per fresh scene with six rendered frames each, and a paid camp with active survivor, customers and a seeded wolf encounter. CPU sampled separately over 1,080 fixed simulation ticks.",
+    "memory": "Godot texture allocations plus Linux kernel /proc VmHWM for each isolated profile process. ABI numbers carry the repository's MB field names; measured units are MiB.",
+    "previous_export_bytes": 258467431,
+    "previous_export_runtime": "0f64bb2775e39c94df9d36e91019b5418ae6cc0f",
+    "renderer": "Godot 4.7.2 OpenGL Compatibility with Mesa llvmpipe",
+    "unmeasured": [
+      "physical GPU frame time",
+      "physical-device sustained fps, thermal behavior and battery",
+      "exact candidate hosted export download size"
+    ]
+  },
+  "profiles": {
+    "High": {
+      "busy": true,
+      "checks": {
+        "one active worker completed the normal rescue": true,
+        "paid fixture camp_cooker": true,
+        "paid fixture center_hearth": true,
+        "paid fixture expansion_1": true,
+        "paid fixture expansion_2": true,
+        "paid fixture orbit_upgrade": true,
+        "paid fixture quarry_drill": true,
+        "paid fixture saw_bench": true,
+        "paid fixture snow_garage": true,
+        "paid fixture snow_truck": true,
+        "paid fixture storage_meat": true,
+        "paid fixture storage_stone": true,
+        "paid fixture storage_wood": true,
+        "paid fixture watchtower": true
+      },
+      "msaa_enum": 1,
+      "native": true,
+      "observed_maxima": {
+        "all_physics_bodies_upper_bound": 32,
+        "draw_calls": 730.0,
+        "renderer_texture_memory_mib": 928.910124778748,
+        "software_process_rss_hwm_mib": 2715.4296875,
+        "submitted_primitives": 1156419.0,
+        "unoccluded_tree_material_upper_bound": 123,
+        "visible_tree_rigs_upper_bound": 11
+      },
+      "profile": "High",
+      "raster": [
+        3840,
+        2160
+      ],
+      "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+      "routes": {
+        "east_patrol": {
+          "active_3d_physics_bodies": 2.0,
+          "active_character_bodies_upper_bound": 1,
+          "active_draw_frames": 6,
+          "actors": {
+            "customers": 3,
+            "owl": 0,
+            "rescued_survivor": true,
+            "survivor_phase": "chopping",
+            "wolves": 4
+          },
+          "all_physics_bodies_upper_bound": 32,
+          "peak_draw_calls": 730.0,
+          "peak_renderer_texture_mb": 928.243458747864,
+          "peak_submitted_primitives": 1136211.0,
+          "position": [
+            11.3999996185303,
+            0.00800000037997961,
+            0.945277750492096
+          ],
+          "resident_process_mb": -1.0,
+          "software_render_submission_ms_p95": 4813.907,
+          "unoccluded_tree_material_upper_bound": 123,
+          "visible_tree_rigs_upper_bound": 11
+        },
+        "south_approach": {
+          "active_3d_physics_bodies": 5.0,
+          "active_character_bodies_upper_bound": 1,
+          "active_draw_frames": 6,
+          "actors": {
+            "customers": 2,
+            "owl": 0,
+            "rescued_survivor": true,
+            "survivor_phase": "to_tree",
+            "wolves": 4
+          },
+          "all_physics_bodies_upper_bound": 32,
+          "peak_draw_calls": 711.0,
+          "peak_renderer_texture_mb": 928.906218528748,
+          "peak_submitted_primitives": 1107584.0,
+          "position": [
+            0.0,
+            0.00800000037997961,
+            5.94527769088745
+          ],
+          "resident_process_mb": -1.0,
+          "software_render_submission_ms_p95": 5176.33,
+          "unoccluded_tree_material_upper_bound": 116,
+          "visible_tree_rigs_upper_bound": 10
+        },
+        "work_aisle": {
+          "active_3d_physics_bodies": 3.0,
+          "active_character_bodies_upper_bound": 1,
+          "active_draw_frames": 6,
+          "actors": {
+            "customers": 3,
+            "owl": 0,
+            "rescued_survivor": true,
+            "survivor_phase": "chopping",
+            "wolves": 4
+          },
+          "all_physics_bodies_upper_bound": 32,
+          "peak_draw_calls": 718.0,
+          "peak_renderer_texture_mb": 928.910124778748,
+          "peak_submitted_primitives": 1156419.0,
+          "position": [
+            1.72000002861023,
+            0.00800000037997961,
+            1.84527778625488
+          ],
+          "resident_process_mb": -1.0,
+          "software_render_submission_ms_p95": 4595.597,
+          "unoccluded_tree_material_upper_bound": 117,
+          "visible_tree_rigs_upper_bound": 11
+        }
+      },
+      "scale_3d": 1.0,
+      "source": {
+        "field": "c50dd20cc06b52b7dc70de233ea153c857ab554a9c42fdf9af096beaf361f5ae",
+        "selector": "b7855c39ff2807c1d50f2cfa20bc5316543a8bf7027c64be6f4072a3028d6a79"
+      },
+      "static_engine_mb": 101.863321304321
+    },
+    "Low": {
+      "busy": true,
+      "checks": {
+        "one active worker completed the normal rescue": true,
+        "paid fixture camp_cooker": true,
+        "paid fixture center_hearth": true,
+        "paid fixture expansion_1": true,
+        "paid fixture expansion_2": true,
+        "paid fixture orbit_upgrade": true,
+        "paid fixture quarry_drill": true,
+        "paid fixture saw_bench": true,
+        "paid fixture snow_garage": true,
+        "paid fixture snow_truck": true,
+        "paid fixture storage_meat": true,
+        "paid fixture storage_stone": true,
+        "paid fixture storage_wood": true,
+        "paid fixture watchtower": true
+      },
+      "msaa_enum": 0,
+      "native": true,
+      "observed_maxima": {
+        "all_physics_bodies_upper_bound": 32,
+        "draw_calls": 720.0,
+        "renderer_texture_memory_mib": 824.100554466248,
+        "software_process_rss_hwm_mib": 2385.39453125,
+        "submitted_primitives": 1060106.0,
+        "unoccluded_tree_material_upper_bound": 123,
+        "visible_tree_rigs_upper_bound": 11
+      },
+      "profile": "Low",
+      "raster": [
+        3840,
+        2160
+      ],
+      "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+      "routes": {
+        "east_patrol": {
+          "active_3d_physics_bodies": 2.0,
+          "active_character_bodies_upper_bound": 1,
+          "active_draw_frames": 6,
+          "actors": {
+            "customers": 3,
+            "owl": 0,
+            "rescued_survivor": true,
+            "survivor_phase": "chopping",
+            "wolves": 4
+          },
+          "all_physics_bodies_upper_bound": 32,
+          "peak_draw_calls": 720.0,
+          "peak_renderer_texture_mb": 823.433888435364,
+          "peak_submitted_primitives": 1013590.0,
+          "position": [
+            11.3999996185303,
+            0.00800000037997961,
+            0.945277750492096
+          ],
+          "resident_process_mb": -1.0,
+          "software_render_submission_ms_p95": 838.009,
+          "unoccluded_tree_material_upper_bound": 123,
+          "visible_tree_rigs_upper_bound": 11
+        },
+        "south_approach": {
+          "active_3d_physics_bodies": 5.0,
+          "active_character_bodies_upper_bound": 1,
+          "active_draw_frames": 6,
+          "actors": {
+            "customers": 2,
+            "owl": 0,
+            "rescued_survivor": true,
+            "survivor_phase": "to_tree",
+            "wolves": 4
+          },
+          "all_physics_bodies_upper_bound": 32,
+          "peak_draw_calls": 707.0,
+          "peak_renderer_texture_mb": 824.096648216248,
+          "peak_submitted_primitives": 1013802.0,
+          "position": [
+            0.0,
+            0.00800000037997961,
+            5.94527769088745
+          ],
+          "resident_process_mb": -1.0,
+          "software_render_submission_ms_p95": 817.944,
+          "unoccluded_tree_material_upper_bound": 116,
+          "visible_tree_rigs_upper_bound": 10
+        },
+        "work_aisle": {
+          "active_3d_physics_bodies": 3.0,
+          "active_character_bodies_upper_bound": 1,
+          "active_draw_frames": 6,
+          "actors": {
+            "customers": 3,
+            "owl": 0,
+            "rescued_survivor": true,
+            "survivor_phase": "chopping",
+            "wolves": 4
+          },
+          "all_physics_bodies_upper_bound": 32,
+          "peak_draw_calls": 715.0,
+          "peak_renderer_texture_mb": 824.100554466248,
+          "peak_submitted_primitives": 1060106.0,
+          "position": [
+            1.72000002861023,
+            0.00800000037997961,
+            1.84527778625488
+          ],
+          "resident_process_mb": -1.0,
+          "software_render_submission_ms_p95": 742.976,
+          "unoccluded_tree_material_upper_bound": 117,
+          "visible_tree_rigs_upper_bound": 11
+        }
+      },
+      "scale_3d": 0.75,
+      "source": {
+        "field": "c50dd20cc06b52b7dc70de233ea153c857ab554a9c42fdf9af096beaf361f5ae",
+        "selector": "b7855c39ff2807c1d50f2cfa20bc5316543a8bf7027c64be6f4072a3028d6a79"
+      },
+      "static_engine_mb": 101.754182815552
+    },
+    "Ultra": {
+      "busy": true,
+      "checks": {
+        "one active worker completed the normal rescue": true,
+        "paid fixture camp_cooker": true,
+        "paid fixture center_hearth": true,
+        "paid fixture expansion_1": true,
+        "paid fixture expansion_2": true,
+        "paid fixture orbit_upgrade": true,
+        "paid fixture quarry_drill": true,
+        "paid fixture saw_bench": true,
+        "paid fixture snow_garage": true,
+        "paid fixture snow_truck": true,
+        "paid fixture storage_meat": true,
+        "paid fixture storage_stone": true,
+        "paid fixture storage_wood": true,
+        "paid fixture watchtower": true
+      },
+      "msaa_enum": 2,
+      "native": true,
+      "observed_maxima": {
+        "all_physics_bodies_upper_bound": 32,
+        "draw_calls": 729.0,
+        "renderer_texture_memory_mib": 1054.97262477875,
+        "software_process_rss_hwm_mib": 2787.109375,
+        "submitted_primitives": 1319686.0,
+        "unoccluded_tree_material_upper_bound": 123,
+        "visible_tree_rigs_upper_bound": 11
+      },
+      "profile": "Ultra",
+      "raster": [
+        3840,
+        2160
+      ],
+      "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+      "routes": {
+        "east_patrol": {
+          "active_3d_physics_bodies": 2.0,
+          "active_character_bodies_upper_bound": 1,
+          "active_draw_frames": 6,
+          "actors": {
+            "customers": 3,
+            "owl": 0,
+            "rescued_survivor": true,
+            "survivor_phase": "chopping",
+            "wolves": 4
+          },
+          "all_physics_bodies_upper_bound": 32,
+          "peak_draw_calls": 729.0,
+          "peak_renderer_texture_mb": 1054.30595874786,
+          "peak_submitted_primitives": 1212436.0,
+          "position": [
+            11.3999996185303,
+            0.00800000037997961,
+            0.945277750492096
+          ],
+          "resident_process_mb": -1.0,
+          "software_render_submission_ms_p95": 5095.024,
+          "unoccluded_tree_material_upper_bound": 123,
+          "visible_tree_rigs_upper_bound": 11
+        },
+        "south_approach": {
+          "active_3d_physics_bodies": 5.0,
+          "active_character_bodies_upper_bound": 1,
+          "active_draw_frames": 6,
+          "actors": {
+            "customers": 2,
+            "owl": 0,
+            "rescued_survivor": true,
+            "survivor_phase": "to_tree",
+            "wolves": 4
+          },
+          "all_physics_bodies_upper_bound": 32,
+          "peak_draw_calls": 710.0,
+          "peak_renderer_texture_mb": 1054.96871852875,
+          "peak_submitted_primitives": 1193787.0,
+          "position": [
+            0.0,
+            0.00800000037997961,
+            5.94527769088745
+          ],
+          "resident_process_mb": -1.0,
+          "software_render_submission_ms_p95": 7681.608,
+          "unoccluded_tree_material_upper_bound": 116,
+          "visible_tree_rigs_upper_bound": 10
+        },
+        "work_aisle": {
+          "active_3d_physics_bodies": 3.0,
+          "active_character_bodies_upper_bound": 1,
+          "active_draw_frames": 6,
+          "actors": {
+            "customers": 3,
+            "owl": 0,
+            "rescued_survivor": true,
+            "survivor_phase": "chopping",
+            "wolves": 4
+          },
+          "all_physics_bodies_upper_bound": 32,
+          "peak_draw_calls": 718.0,
+          "peak_renderer_texture_mb": 1054.97262477875,
+          "peak_submitted_primitives": 1319686.0,
+          "position": [
+            1.72000002861023,
+            0.00800000037997961,
+            1.84527778625488
+          ],
+          "resident_process_mb": -1.0,
+          "software_render_submission_ms_p95": 6404.122,
+          "unoccluded_tree_material_upper_bound": 117,
+          "visible_tree_rigs_upper_bound": 11
+        }
+      },
+      "scale_3d": 1.0,
+      "source": {
+        "field": "c50dd20cc06b52b7dc70de233ea153c857ab554a9c42fdf9af096beaf361f5ae",
+        "selector": "b7855c39ff2807c1d50f2cfa20bc5316543a8bf7027c64be6f4072a3028d6a79"
+      },
+      "static_engine_mb": 101.492143630981
+    }
+  },
+  "ultra_ceiling_proposal": {
+    "canonical_policy_changed": false,
+    "engineering_frame_ms_with_20_percent_reserve": {
+      "120_fps": 6.666666666666667,
+      "60_fps": 13.333333333333334
+    },
+    "maximum_total_frame_ms": {
+      "120_fps": 8.333333333333334,
+      "60_fps": 16.666666666666668
+    },
+    "native_3d_output_px": [
+      3840,
+      2160
+    ],
+    "native_render_scale": 1.0,
+    "observed": {
+      "draw_calls": 729.0,
+      "process_memory_mb": 2787.109375,
+      "texture_gpu_memory_mb": 1054.97262477875
+    },
+    "percent_remaining_of_proposed": {
+      "draw_calls": 24.062499999999996,
+      "process_memory_mb": 22.234671456473208,
+      "texture_gpu_memory_mb": 25.072966990145595
+    },
+    "proposed": {
+      "draw_calls": 960,
+      "process_memory_mb": 3584,
+      "texture_gpu_memory_mb": 1408
+    },
+    "source_of_existing_numeric_ceilings": "https://github.com/ksolo21-web/HAVENLINE/commit/e1b25edc31a290ff158eefb5e694d95cf87b4757",
+    "status": "provisional_for_beta_lab_planning"
+  }
+}

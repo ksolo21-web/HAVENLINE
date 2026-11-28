@@ -1,0 +1,1277 @@
+{
+  "candidate_commit": "14db14ee243f4718fadf93f2c881869be1736025",
+  "color_only_critical_cues": false,
+  "controller_rationale": "The current Level 1 beta playtest targets direct touch and desktop movement keys. Controller navigation is outside this beta's tested input contract.",
+  "controller_state": "explicitly_out_of_scope_with_rationale",
+  "device_states_passed": [
+    "phone",
+    "tablet",
+    "folded",
+    "unfolded"
+  ],
+  "evaluation_scope": "Viewport and touch emulation plus software-rendered desktop witnesses. No physical-device certification.",
+  "gameplay_regressions": {
+    "qa_camp_raid": 0,
+    "qa_field_camera_composition": 0,
+    "qa_field_camp_controls": 0,
+    "qa_field_context": 0,
+    "qa_field_hud": 0,
+    "qa_field_touch_resume": 0,
+    "qa_forest_perimeter_safety": 0,
+    "qa_offsite_camp": 0,
+    "qa_snow_truck": 0
+  },
+  "joystick_layout_adaptive": true,
+  "minimum_touch_target_dp": 48.0,
+  "minimum_touch_target_dp_raw": 47.9999923706055,
+  "native_checks": {
+    "checks": {
+      "Done closes placement with touch": true,
+      "High sampling and render scale step 1": true,
+      "Low sampling and render scale step 2": true,
+      "Move equipment opens layout with a reachable Done button": true,
+      "Ultra sampling and render scale step 0": true,
+      "Ultra sampling and render scale step 3": true,
+      "actual right-thumb movement starts and releases cleanly": true,
+      "configured resting stick is reachable on the right": true,
+      "damage remains clear without strobe": true,
+      "damaged gate available for repair fixture": true,
+      "foldable_unfolded_portrait can close the Accessibility sheet": true,
+      "foldable_unfolded_portrait large HUD changes actual stretch scale": true,
+      "foldable_unfolded_portrait menu and HUD fit the tested safe canvas": true,
+      "foldable_unfolded_portrait no compass covers Accessibility": true,
+      "foldable_unfolded_portrait open Accessibility with touch": true,
+      "foldable_unfolded_portrait open Camp with touch": true,
+      "foldable_unfolded_portrait restore standard HUD": true,
+      "foldable_unfolded_portrait visible touch targets meet the design 48 dp": true,
+      "foldable_unfolded_portrait_large menu and HUD fit the tested safe canvas": true,
+      "foldable_unfolded_portrait_large visible touch targets meet the design 48 dp": true,
+      "gear selects High step 1": true,
+      "gear selects Low step 2": true,
+      "gear selects Ultra step 0": true,
+      "gear selects Ultra step 3": true,
+      "live repair is visible and funded": true,
+      "native screenshot foldable_unfolded_portrait-large": true,
+      "native screenshot foldable_unfolded_portrait-standard": true,
+      "native screenshot muted-damage-caption": true,
+      "native screenshot portrait_cover-large": true,
+      "native screenshot portrait_cover-standard": true,
+      "outside the repair target has no charge": true,
+      "portrait_cover can close the Accessibility sheet": true,
+      "portrait_cover large HUD changes actual stretch scale": true,
+      "portrait_cover menu and HUD fit the tested safe canvas": true,
+      "portrait_cover no compass covers Accessibility": true,
+      "portrait_cover open Accessibility with touch": true,
+      "portrait_cover open Camp with touch": true,
+      "portrait_cover restore standard HUD": true,
+      "portrait_cover visible touch targets meet the design 48 dp": true,
+      "portrait_cover_large menu and HUD fit the tested safe canvas": true,
+      "portrait_cover_large visible touch targets meet the design 48 dp": true,
+      "preferences reload independently of camp save": true,
+      "raid caption visible with sound muted": true,
+      "reduced-motion build can be funded": true,
+      "reduced-motion reveals hearth without optional tween": true,
+      "repair touch target meets 48 dp and clears dock": true,
+      "the repair accepts touch near the top edge and consumes the exact bill": true,
+      "toggled captions through visible menu": true,
+      "toggled reduced_motion through visible menu": true,
+      "toggled right_stick through visible menu": true
+    },
+    "layouts": {
+      "foldable_unfolded_portrait": {
+        "canvas_scale": "(1.166667, 1.167286)",
+        "emulated_insets": "(0.0, 0.0, 0.0, 0.0)",
+        "emulated_pixels_per_dp": 2.0,
+        "hud_contained": true,
+        "min_target_dp": 47.9999923706055,
+        "raster": [
+          840,
+          942
+        ],
+        "safe_targets": true,
+        "targets": {
+          "Build. View available plots and camp equipment.": [
+            94.3133239746094,
+            48.0254859924316
+          ],
+          "Camp": [
+            85.1731948852539,
+            48.0254974365234
+          ],
+          "Close details": [
+            47.9999923706055,
+            48.0254974365234
+          ],
+          "Gameplay captions  \u00b7  Off": [
+            254.916656494141,
+            48.4423789978027
+          ],
+          "Graphics quality, Ultra. Tap to switch.": [
+            56.0,
+            56.0297393798828
+          ],
+          "HUD size  \u00b7  Standard": [
+            254.916656494141,
+            48.4423789978027
+          ],
+          "Joystick side  \u00b7  Left": [
+            254.916656494141,
+            48.4423789978027
+          ],
+          "Reduced motion  \u00b7  Off": [
+            254.916656494141,
+            48.4423789978027
+          ],
+          "Storage": [
+            100.115859985352,
+            48.0254974365234
+          ],
+          "Survivors": [
+            113.564270019531,
+            48.0254974365234
+          ],
+          "View carried resources and workshop stock": [
+            148.166656494141,
+            48.0254974365234
+          ]
+        },
+        "viewport": "(720.0, 807.0)"
+      },
+      "foldable_unfolded_portrait_large": {
+        "actual_canvas_scale": "(1.341667, 1.342379)",
+        "canvas_scale": "(1.341667, 1.342379)",
+        "emulated_insets": "(0.0, 0.0, 0.0, 0.0)",
+        "emulated_pixels_per_dp": 2.0,
+        "hud_contained": true,
+        "min_target_dp": 50.9833297729492,
+        "raster": [
+          840,
+          942
+        ],
+        "safe_targets": true,
+        "targets": {
+          "Build. View available plots and camp equipment.": [
+            93.6553344726562,
+            51.0104103088379
+          ],
+          "Camp": [
+            84.2136001586914,
+            51.0104103088379
+          ],
+          "Close details": [
+            50.9833297729492,
+            51.0104103088379
+          ],
+          "Gameplay captions  \u00b7  Off": [
+            293.154144287109,
+            51.0104103088379
+          ],
+          "Graphics quality, Ultra. Tap to switch.": [
+            64.3999938964844,
+            64.4342041015625
+          ],
+          "HUD size  \u00b7  Large": [
+            293.154144287109,
+            51.0104103088379
+          ],
+          "Joystick side  \u00b7  Left": [
+            293.154144287109,
+            51.0104103088379
+          ],
+          "Reduced motion  \u00b7  Off": [
+            293.154144287109,
+            51.0104103088379
+          ],
+          "Storage": [
+            98.987922668457,
+            51.0104103088379
+          ],
+          "Survivors": [
+            112.284812927246,
+            51.0104103088379
+          ],
+          "View carried resources and workshop stock": [
+            170.391662597656,
+            51.0104103088379
+          ]
+        },
+        "viewport": "(626.087, 701.7391)"
+      },
+      "portrait_cover": {
+        "canvas_scale": "(0.75, 0.75)",
+        "emulated_insets": "(0.0, 0.0, 0.0, 0.0)",
+        "emulated_pixels_per_dp": 1.5,
+        "hud_contained": true,
+        "min_target_dp": 48.0,
+        "raster": [
+          540,
+          1260
+        ],
+        "safe_targets": true,
+        "targets": {
+          "Build. View available plots and camp equipment.": [
+            80.8399963378906,
+            48.0
+          ],
+          "Camp": [
+            73.0055999755859,
+            48.0
+          ],
+          "Close details": [
+            48.0,
+            48.0
+          ],
+          "Gameplay captions  \u00b7  Off": [
+            218.5,
+            48.0
+          ],
+          "Graphics quality, Ultra. Tap to switch.": [
+            48.0,
+            48.0
+          ],
+          "HUD size  \u00b7  Standard": [
+            218.5,
+            48.0
+          ],
+          "Joystick side  \u00b7  Left": [
+            218.5,
+            48.0
+          ],
+          "Reduced motion  \u00b7  Off": [
+            218.5,
+            48.0
+          ],
+          "Storage": [
+            85.8135986328125,
+            48.0
+          ],
+          "Survivors": [
+            97.3407974243164,
+            48.0
+          ],
+          "View carried resources and workshop stock": [
+            127.0,
+            48.0
+          ]
+        },
+        "viewport": "(720.0, 1680.0)"
+      },
+      "portrait_cover_large": {
+        "actual_canvas_scale": "(0.8625, 0.8625)",
+        "canvas_scale": "(0.8625, 0.8625)",
+        "emulated_insets": "(0.0, 0.0, 0.0, 0.0)",
+        "emulated_pixels_per_dp": 1.5,
+        "hud_contained": true,
+        "min_target_dp": 55.1999969482422,
+        "raster": [
+          540,
+          1260
+        ],
+        "safe_targets": true,
+        "targets": {
+          "Build. View available plots and camp equipment.": [
+            80.2760009765625,
+            55.1999969482422
+          ],
+          "Camp": [
+            72.1830902099609,
+            55.1999969482422
+          ],
+          "Close details": [
+            55.1999969482422,
+            55.1999969482422
+          ],
+          "Gameplay captions  \u00b7  Off": [
+            251.274978637695,
+            55.1999969482422
+          ],
+          "Graphics quality, Ultra. Tap to switch.": [
+            55.1999969482422,
+            55.1999969482422
+          ],
+          "HUD size  \u00b7  Large": [
+            251.274978637695,
+            55.1999969482422
+          ],
+          "Joystick side  \u00b7  Left": [
+            251.274978637695,
+            55.1999969482422
+          ],
+          "Reduced motion  \u00b7  Off": [
+            251.274978637695,
+            55.1999969482422
+          ],
+          "Storage": [
+            84.846794128418,
+            55.1999969482422
+          ],
+          "Survivors": [
+            96.2441329956055,
+            55.1999969482422
+          ],
+          "View carried resources and workshop stock": [
+            146.049987792969,
+            55.1999969482422
+          ]
+        },
+        "viewport": "(626.087, 1460.87)"
+      }
+    },
+    "scope": {
+      "controller": "The Level 1 trial targets touch and keyboard",
+      "physical_certification": false,
+      "raster_emulation": true
+    }
+  },
+  "reduced_motion_supported": true,
+  "screenshots_sha256": {
+    "screenshots/foldable_unfolded_portrait-large.jpg": "b30fd6e726152ea7a0243b819a4ef0b766bbed00d5545bcc9c3a3d1138bc504f",
+    "screenshots/foldable_unfolded_portrait-standard.jpg": "dfb0cf14275f208f749df5b37886405838a5cf944a225e7fa41256cc183f414a",
+    "screenshots/muted-damage-caption.jpg": "af4927e51e9164a2b88fc7c5eebd73efb7897f9207815a3a493259ea0d3a452d",
+    "screenshots/portrait_cover-large.jpg": "128adb74278fab3bc7164fd6feedc95eabf62a5efd5621c8a95b97e62d17adc2",
+    "screenshots/portrait_cover-standard.jpg": "4f39b755417b0df7c9d4a135f19c12974245891f27575c870af55d5008bf28c4"
+  },
+  "simulated_checks": {
+    "checks": {
+      "Done closes placement with touch": true,
+      "High sampling and render scale step 1": true,
+      "Low sampling and render scale step 2": true,
+      "Move equipment opens layout with a reachable Done button": true,
+      "Ultra sampling and render scale step 0": true,
+      "Ultra sampling and render scale step 3": true,
+      "actual right-thumb movement starts and releases cleanly": true,
+      "configured resting stick is reachable on the right": true,
+      "damage remains clear without strobe": true,
+      "damaged gate available for repair fixture": true,
+      "foldable_inner can close the Accessibility sheet": true,
+      "foldable_inner large HUD changes actual stretch scale": true,
+      "foldable_inner menu and HUD fit the tested safe canvas": true,
+      "foldable_inner no compass covers Accessibility": true,
+      "foldable_inner open Accessibility with touch": true,
+      "foldable_inner open Camp with touch": true,
+      "foldable_inner restore standard HUD": true,
+      "foldable_inner visible touch targets meet the design 48 dp": true,
+      "foldable_inner_large menu and HUD fit the tested safe canvas": true,
+      "foldable_inner_large visible touch targets meet the design 48 dp": true,
+      "foldable_outer can close the Accessibility sheet": true,
+      "foldable_outer large HUD changes actual stretch scale": true,
+      "foldable_outer menu and HUD fit the tested safe canvas": true,
+      "foldable_outer no compass covers Accessibility": true,
+      "foldable_outer open Accessibility with touch": true,
+      "foldable_outer open Camp with touch": true,
+      "foldable_outer restore standard HUD": true,
+      "foldable_outer visible touch targets meet the design 48 dp": true,
+      "foldable_outer_large menu and HUD fit the tested safe canvas": true,
+      "foldable_outer_large visible touch targets meet the design 48 dp": true,
+      "gear selects High step 1": true,
+      "gear selects Low step 2": true,
+      "gear selects Ultra step 0": true,
+      "gear selects Ultra step 3": true,
+      "live repair is visible and funded": true,
+      "outside the repair target has no charge": true,
+      "phone_16_9 can close the Accessibility sheet": true,
+      "phone_16_9 large HUD changes actual stretch scale": true,
+      "phone_16_9 menu and HUD fit the tested safe canvas": true,
+      "phone_16_9 no compass covers Accessibility": true,
+      "phone_16_9 open Accessibility with touch": true,
+      "phone_16_9 open Camp with touch": true,
+      "phone_16_9 restore standard HUD": true,
+      "phone_16_9 visible touch targets meet the design 48 dp": true,
+      "phone_16_9_large menu and HUD fit the tested safe canvas": true,
+      "phone_16_9_large visible touch targets meet the design 48 dp": true,
+      "phone_20_9 can close the Accessibility sheet": true,
+      "phone_20_9 large HUD changes actual stretch scale": true,
+      "phone_20_9 menu and HUD fit the tested safe canvas": true,
+      "phone_20_9 no compass covers Accessibility": true,
+      "phone_20_9 open Accessibility with touch": true,
+      "phone_20_9 open Camp with touch": true,
+      "phone_20_9 restore standard HUD": true,
+      "phone_20_9 visible touch targets meet the design 48 dp": true,
+      "phone_20_9_large menu and HUD fit the tested safe canvas": true,
+      "phone_20_9_large visible touch targets meet the design 48 dp": true,
+      "portrait_cover can close the Accessibility sheet": true,
+      "portrait_cover large HUD changes actual stretch scale": true,
+      "portrait_cover menu and HUD fit the tested safe canvas": true,
+      "portrait_cover no compass covers Accessibility": true,
+      "portrait_cover open Accessibility with touch": true,
+      "portrait_cover open Camp with touch": true,
+      "portrait_cover restore standard HUD": true,
+      "portrait_cover visible touch targets meet the design 48 dp": true,
+      "portrait_cover_large menu and HUD fit the tested safe canvas": true,
+      "portrait_cover_large visible touch targets meet the design 48 dp": true,
+      "preferences reload independently of camp save": true,
+      "raid caption visible with sound muted": true,
+      "reduced-motion build can be funded": true,
+      "reduced-motion reveals hearth without optional tween": true,
+      "repair touch target meets 48 dp and clears dock": true,
+      "tablet_16_10 can close the Accessibility sheet": true,
+      "tablet_16_10 large HUD changes actual stretch scale": true,
+      "tablet_16_10 menu and HUD fit the tested safe canvas": true,
+      "tablet_16_10 no compass covers Accessibility": true,
+      "tablet_16_10 open Accessibility with touch": true,
+      "tablet_16_10 open Camp with touch": true,
+      "tablet_16_10 restore standard HUD": true,
+      "tablet_16_10 visible touch targets meet the design 48 dp": true,
+      "tablet_16_10_large menu and HUD fit the tested safe canvas": true,
+      "tablet_16_10_large visible touch targets meet the design 48 dp": true,
+      "tablet_4_3 can close the Accessibility sheet": true,
+      "tablet_4_3 large HUD changes actual stretch scale": true,
+      "tablet_4_3 menu and HUD fit the tested safe canvas": true,
+      "tablet_4_3 no compass covers Accessibility": true,
+      "tablet_4_3 open Accessibility with touch": true,
+      "tablet_4_3 open Camp with touch": true,
+      "tablet_4_3 restore standard HUD": true,
+      "tablet_4_3 visible touch targets meet the design 48 dp": true,
+      "tablet_4_3_large menu and HUD fit the tested safe canvas": true,
+      "tablet_4_3_large visible touch targets meet the design 48 dp": true,
+      "the repair accepts touch near the top edge and consumes the exact bill": true,
+      "toggled captions through visible menu": true,
+      "toggled reduced_motion through visible menu": true,
+      "toggled right_stick through visible menu": true
+    },
+    "layouts": {
+      "foldable_inner": {
+        "canvas_scale": "(2.456062, 2.455555)",
+        "emulated_insets": "(0.0, 0.0, 0.0, 0.0)",
+        "emulated_pixels_per_dp": 2.5,
+        "hud_contained": true,
+        "min_target_dp": 74.6488800048828,
+        "raster": [
+          2208,
+          1768
+        ],
+        "safe_targets": true,
+        "targets": {
+          "Build. View available plots and camp equipment.": [
+            193.537704467773,
+            74.6488800048828
+          ],
+          "Camp": [
+            176.394393920898,
+            74.6488800048828
+          ],
+          "Close details": [
+            74.6642913818359,
+            74.6488800048828
+          ],
+          "Gameplay captions  \u00b7  Off": [
+            429.319671630859,
+            74.6488800048828
+          ],
+          "Graphics quality, Ultra. Tap to switch.": [
+            94.3127899169922,
+            94.293327331543
+          ],
+          "HUD size  \u00b7  Standard": [
+            429.319671630859,
+            74.6488800048828
+          ],
+          "Joystick side  \u00b7  Left": [
+            429.319671630859,
+            74.6488800048828
+          ],
+          "Reduced motion  \u00b7  Off": [
+            429.319671630859,
+            74.6488800048828
+          ],
+          "Storage": [
+            207.340789794922,
+            74.6488800048828
+          ],
+          "Survivors": [
+            235.192535400391,
+            74.6488800048828
+          ],
+          "View carried resources and workshop stock": [
+            249.535934448242,
+            74.6488800048828
+          ]
+        },
+        "viewport": "(899.0, 720.0)"
+      },
+      "foldable_inner_large": {
+        "actual_canvas_scale": "(2.824472, 2.823889)",
+        "canvas_scale": "(2.824472, 2.823889)",
+        "emulated_insets": "(0.0, 0.0, 0.0, 0.0)",
+        "emulated_pixels_per_dp": 2.5,
+        "hud_contained": true,
+        "min_target_dp": 85.8462142944336,
+        "raster": [
+          2208,
+          1768
+        ],
+        "safe_targets": true,
+        "targets": {
+          "Build. View available plots and camp equipment.": [
+            199.056015014648,
+            85.8462142944336
+          ],
+          "Camp": [
+            180.169525146484,
+            85.8462142944336
+          ],
+          "Close details": [
+            85.8639373779297,
+            85.8462142944336
+          ],
+          "Gameplay captions  \u00b7  Off": [
+            493.717681884766,
+            85.8462142944336
+          ],
+          "Graphics quality, Ultra. Tap to switch.": [
+            108.459716796875,
+            108.43733215332
+          ],
+          "HUD size  \u00b7  Large": [
+            493.717681884766,
+            85.8462142944336
+          ],
+          "Joystick side  \u00b7  Left": [
+            493.717681884766,
+            85.8462142944336
+          ],
+          "Reduced motion  \u00b7  Off": [
+            493.717681884766,
+            85.8462142944336
+          ],
+          "Storage": [
+            211.778198242188,
+            85.8462142944336
+          ],
+          "Survivors": [
+            240.225997924805,
+            85.8462142944336
+          ],
+          "View carried resources and workshop stock": [
+            286.966339111328,
+            85.8462142944336
+          ]
+        },
+        "viewport": "(781.7391, 626.087)"
+      },
+      "foldable_outer": {
+        "canvas_scale": "(1.5, 1.5)",
+        "emulated_insets": "(0.0, 0.0, 0.0, 0.0)",
+        "emulated_pixels_per_dp": 3.0,
+        "hud_contained": true,
+        "min_target_dp": 48.0,
+        "raster": [
+          2520,
+          1080
+        ],
+        "safe_targets": true,
+        "targets": {
+          "Build. View available plots and camp equipment.": [
+            98.5,
+            48.0
+          ],
+          "Camp": [
+            89.7750015258789,
+            48.0
+          ],
+          "Close details": [
+            48.0,
+            48.0
+          ],
+          "Gameplay captions  \u00b7  Off": [
+            218.5,
+            48.0
+          ],
+          "Graphics quality, Ultra. Tap to switch.": [
+            48.0,
+            48.0
+          ],
+          "HUD size  \u00b7  Standard": [
+            218.5,
+            48.0
+          ],
+          "Joystick side  \u00b7  Left": [
+            218.5,
+            48.0
+          ],
+          "Reduced motion  \u00b7  Off": [
+            218.5,
+            48.0
+          ],
+          "Storage": [
+            105.525001525879,
+            48.0
+          ],
+          "Survivors": [
+            119.699989318848,
+            48.0
+          ],
+          "View carried resources and workshop stock": [
+            127.0,
+            48.0
+          ]
+        },
+        "viewport": "(1680.0, 720.0)"
+      },
+      "foldable_outer_large": {
+        "actual_canvas_scale": "(1.725, 1.725)",
+        "canvas_scale": "(1.725, 1.725)",
+        "emulated_insets": "(0.0, 0.0, 0.0, 0.0)",
+        "emulated_pixels_per_dp": 3.0,
+        "hud_contained": true,
+        "min_target_dp": 48.0,
+        "raster": [
+          2520,
+          1080
+        ],
+        "safe_targets": true,
+        "targets": {
+          "Build. View available plots and camp equipment.": [
+            113.274993896484,
+            48.0000038146973
+          ],
+          "Camp": [
+            103.241241455078,
+            48.0
+          ],
+          "Close details": [
+            48.0000038146973,
+            48.0
+          ],
+          "Gameplay captions  \u00b7  Off": [
+            251.274978637695,
+            48.2999992370605
+          ],
+          "Graphics quality, Ultra. Tap to switch.": [
+            55.1999969482422,
+            55.1999969482422
+          ],
+          "HUD size  \u00b7  Large": [
+            251.274978637695,
+            48.2999992370605
+          ],
+          "Joystick side  \u00b7  Left": [
+            251.274978637695,
+            48.2999992370605
+          ],
+          "Reduced motion  \u00b7  Off": [
+            251.274978637695,
+            48.2999992370605
+          ],
+          "Storage": [
+            121.35375213623,
+            48.0
+          ],
+          "Survivors": [
+            137.654983520508,
+            48.0
+          ],
+          "View carried resources and workshop stock": [
+            146.049987792969,
+            48.0
+          ]
+        },
+        "viewport": "(1460.87, 626.087)"
+      },
+      "phone_16_9": {
+        "canvas_scale": "(1.5, 1.5)",
+        "emulated_insets": "(0.0, 0.0, 0.0, 0.0)",
+        "emulated_pixels_per_dp": 2.5,
+        "hud_contained": true,
+        "min_target_dp": 48.0,
+        "raster": [
+          1920,
+          1080
+        ],
+        "safe_targets": true,
+        "targets": {
+          "Build. View available plots and camp equipment.": [
+            118.199996948242,
+            48.0
+          ],
+          "Camp": [
+            107.730003356934,
+            48.0
+          ],
+          "Close details": [
+            48.0,
+            48.0
+          ],
+          "Gameplay captions  \u00b7  Off": [
+            262.200012207031,
+            48.0
+          ],
+          "Graphics quality, Ultra. Tap to switch.": [
+            57.5999984741211,
+            57.5999984741211
+          ],
+          "HUD size  \u00b7  Standard": [
+            262.200012207031,
+            48.0
+          ],
+          "Joystick side  \u00b7  Left": [
+            262.200012207031,
+            48.0
+          ],
+          "Reduced motion  \u00b7  Off": [
+            262.200012207031,
+            48.0
+          ],
+          "Storage": [
+            126.630004882812,
+            48.0
+          ],
+          "Survivors": [
+            143.639984130859,
+            48.0
+          ],
+          "View carried resources and workshop stock": [
+            152.399993896484,
+            48.0
+          ]
+        },
+        "viewport": "(1280.0, 720.0)"
+      },
+      "phone_16_9_large": {
+        "actual_canvas_scale": "(1.725, 1.725)",
+        "canvas_scale": "(1.725, 1.725)",
+        "emulated_insets": "(0.0, 0.0, 0.0, 0.0)",
+        "emulated_pixels_per_dp": 2.5,
+        "hud_contained": true,
+        "min_target_dp": 52.4399948120117,
+        "raster": [
+          1920,
+          1080
+        ],
+        "safe_targets": true,
+        "targets": {
+          "Build. View available plots and camp equipment.": [
+            135.93000793457,
+            52.4399948120117
+          ],
+          "Camp": [
+            123.889503479004,
+            52.4399948120117
+          ],
+          "Close details": [
+            52.4400024414062,
+            52.4399948120117
+          ],
+          "Gameplay captions  \u00b7  Off": [
+            301.529998779297,
+            52.4399948120117
+          ],
+          "Graphics quality, Ultra. Tap to switch.": [
+            66.2400054931641,
+            66.2399978637695
+          ],
+          "HUD size  \u00b7  Large": [
+            301.529998779297,
+            52.4399948120117
+          ],
+          "Joystick side  \u00b7  Left": [
+            301.529998779297,
+            52.4399948120117
+          ],
+          "Reduced motion  \u00b7  Off": [
+            301.529998779297,
+            52.4399948120117
+          ],
+          "Storage": [
+            145.624496459961,
+            52.4399948120117
+          ],
+          "Survivors": [
+            165.186004638672,
+            52.4399948120117
+          ],
+          "View carried resources and workshop stock": [
+            175.259994506836,
+            52.4399948120117
+          ]
+        },
+        "viewport": "(1113.043, 626.087)"
+      },
+      "phone_20_9": {
+        "canvas_scale": "(1.5, 1.5)",
+        "emulated_insets": "(94.0, 30.0, 38.0, 24.0)",
+        "emulated_pixels_per_dp": 3.0,
+        "hud_contained": true,
+        "min_target_dp": 48.0,
+        "raster": [
+          2400,
+          1080
+        ],
+        "safe_targets": true,
+        "targets": {
+          "Build. View available plots and camp equipment.": [
+            98.5,
+            48.0
+          ],
+          "Camp": [
+            89.7750015258789,
+            48.0
+          ],
+          "Close details": [
+            48.0,
+            48.0
+          ],
+          "Gameplay captions  \u00b7  Off": [
+            218.5,
+            48.0
+          ],
+          "Graphics quality, Ultra. Tap to switch.": [
+            48.0,
+            48.0
+          ],
+          "HUD size  \u00b7  Standard": [
+            218.5,
+            48.0
+          ],
+          "Joystick side  \u00b7  Left": [
+            218.5,
+            48.0
+          ],
+          "Reduced motion  \u00b7  Off": [
+            218.5,
+            48.0
+          ],
+          "Storage": [
+            105.525001525879,
+            48.0
+          ],
+          "Survivors": [
+            119.699989318848,
+            48.0
+          ],
+          "View carried resources and workshop stock": [
+            127.0,
+            48.0
+          ]
+        },
+        "viewport": "(1600.0, 720.0)"
+      },
+      "phone_20_9_large": {
+        "actual_canvas_scale": "(1.725, 1.725)",
+        "canvas_scale": "(1.725, 1.725)",
+        "emulated_insets": "(94.0, 30.0, 38.0, 24.0)",
+        "emulated_pixels_per_dp": 3.0,
+        "hud_contained": true,
+        "min_target_dp": 48.0,
+        "raster": [
+          2400,
+          1080
+        ],
+        "safe_targets": true,
+        "targets": {
+          "Build. View available plots and camp equipment.": [
+            113.275001525879,
+            48.0000038146973
+          ],
+          "Camp": [
+            103.241249084473,
+            48.0
+          ],
+          "Close details": [
+            48.0000038146973,
+            48.0
+          ],
+          "Gameplay captions  \u00b7  Off": [
+            251.275009155273,
+            48.2999992370605
+          ],
+          "Graphics quality, Ultra. Tap to switch.": [
+            55.2000007629395,
+            55.1999931335449
+          ],
+          "HUD size  \u00b7  Large": [
+            251.275009155273,
+            48.2999992370605
+          ],
+          "Joystick side  \u00b7  Left": [
+            251.275009155273,
+            48.2999992370605
+          ],
+          "Reduced motion  \u00b7  Off": [
+            251.275009155273,
+            48.2999992370605
+          ],
+          "Storage": [
+            121.35375213623,
+            48.0
+          ],
+          "Survivors": [
+            137.654998779297,
+            48.0
+          ],
+          "View carried resources and workshop stock": [
+            146.050003051758,
+            48.0
+          ]
+        },
+        "viewport": "(1391.304, 626.087)"
+      },
+      "portrait_cover": {
+        "canvas_scale": "(0.75, 0.75)",
+        "emulated_insets": "(0.0, 0.0, 0.0, 0.0)",
+        "emulated_pixels_per_dp": 1.5,
+        "hud_contained": true,
+        "min_target_dp": 48.0,
+        "raster": [
+          540,
+          1260
+        ],
+        "safe_targets": true,
+        "targets": {
+          "Build. View available plots and camp equipment.": [
+            80.8399963378906,
+            48.0
+          ],
+          "Camp": [
+            73.0055999755859,
+            48.0
+          ],
+          "Close details": [
+            48.0,
+            48.0
+          ],
+          "Gameplay captions  \u00b7  Off": [
+            218.5,
+            48.0
+          ],
+          "Graphics quality, Ultra. Tap to switch.": [
+            48.0,
+            48.0
+          ],
+          "HUD size  \u00b7  Standard": [
+            218.5,
+            48.0
+          ],
+          "Joystick side  \u00b7  Left": [
+            218.5,
+            48.0
+          ],
+          "Reduced motion  \u00b7  Off": [
+            218.5,
+            48.0
+          ],
+          "Storage": [
+            85.8135986328125,
+            48.0
+          ],
+          "Survivors": [
+            97.3407974243164,
+            48.0
+          ],
+          "View carried resources and workshop stock": [
+            127.0,
+            48.0
+          ]
+        },
+        "viewport": "(720.0, 1680.0)"
+      },
+      "portrait_cover_large": {
+        "actual_canvas_scale": "(0.8625, 0.8625)",
+        "canvas_scale": "(0.8625, 0.8625)",
+        "emulated_insets": "(0.0, 0.0, 0.0, 0.0)",
+        "emulated_pixels_per_dp": 1.5,
+        "hud_contained": true,
+        "min_target_dp": 55.1999969482422,
+        "raster": [
+          540,
+          1260
+        ],
+        "safe_targets": true,
+        "targets": {
+          "Build. View available plots and camp equipment.": [
+            80.2760009765625,
+            55.1999969482422
+          ],
+          "Camp": [
+            72.1830902099609,
+            55.1999969482422
+          ],
+          "Close details": [
+            55.1999969482422,
+            55.1999969482422
+          ],
+          "Gameplay captions  \u00b7  Off": [
+            251.274978637695,
+            55.1999969482422
+          ],
+          "Graphics quality, Ultra. Tap to switch.": [
+            55.1999969482422,
+            55.1999969482422
+          ],
+          "HUD size  \u00b7  Large": [
+            251.274978637695,
+            55.1999969482422
+          ],
+          "Joystick side  \u00b7  Left": [
+            251.274978637695,
+            55.1999969482422
+          ],
+          "Reduced motion  \u00b7  Off": [
+            251.274978637695,
+            55.1999969482422
+          ],
+          "Storage": [
+            84.846794128418,
+            55.1999969482422
+          ],
+          "Survivors": [
+            96.2441329956055,
+            55.1999969482422
+          ],
+          "View carried resources and workshop stock": [
+            146.049987792969,
+            55.1999969482422
+          ]
+        },
+        "viewport": "(626.087, 1460.87)"
+      },
+      "tablet_16_10": {
+        "canvas_scale": "(2.222222, 2.222222)",
+        "emulated_insets": "(0.0, 0.0, 0.0, 0.0)",
+        "emulated_pixels_per_dp": 2.0,
+        "hud_contained": true,
+        "min_target_dp": 84.444450378418,
+        "raster": [
+          2560,
+          1600
+        ],
+        "safe_targets": true,
+        "targets": {
+          "Build. View available plots and camp equipment.": [
+            218.888900756836,
+            84.444450378418
+          ],
+          "Camp": [
+            199.500015258789,
+            84.444450378418
+          ],
+          "Close details": [
+            84.444450378418,
+            84.444450378418
+          ],
+          "Gameplay captions  \u00b7  Off": [
+            485.555572509766,
+            84.444450378418
+          ],
+          "Graphics quality, Ultra. Tap to switch.": [
+            106.66667175293,
+            106.66667175293
+          ],
+          "HUD size  \u00b7  Standard": [
+            485.555572509766,
+            84.444450378418
+          ],
+          "Joystick side  \u00b7  Left": [
+            485.555572509766,
+            84.444450378418
+          ],
+          "Reduced motion  \u00b7  Off": [
+            485.555572509766,
+            84.444450378418
+          ],
+          "Storage": [
+            234.500015258789,
+            84.444450378418
+          ],
+          "Survivors": [
+            266.0,
+            84.444450378418
+          ],
+          "View carried resources and workshop stock": [
+            282.222229003906,
+            84.444450378418
+          ]
+        },
+        "viewport": "(1152.0, 720.0)"
+      },
+      "tablet_16_10_large": {
+        "actual_canvas_scale": "(2.555556, 2.555556)",
+        "canvas_scale": "(2.555556, 2.555556)",
+        "emulated_insets": "(0.0, 0.0, 0.0, 0.0)",
+        "emulated_pixels_per_dp": 2.0,
+        "hud_contained": true,
+        "min_target_dp": 97.1111145019531,
+        "raster": [
+          2560,
+          1600
+        ],
+        "safe_targets": true,
+        "targets": {
+          "Build. View available plots and camp equipment.": [
+            251.722229003906,
+            97.1111145019531
+          ],
+          "Camp": [
+            229.425003051758,
+            97.1111145019531
+          ],
+          "Close details": [
+            97.1111145019531,
+            97.1111145019531
+          ],
+          "Gameplay captions  \u00b7  Off": [
+            558.388916015625,
+            97.1111145019531
+          ],
+          "Graphics quality, Ultra. Tap to switch.": [
+            122.66667175293,
+            122.66667175293
+          ],
+          "HUD size  \u00b7  Large": [
+            558.388916015625,
+            97.1111145019531
+          ],
+          "Joystick side  \u00b7  Left": [
+            558.388916015625,
+            97.1111145019531
+          ],
+          "Reduced motion  \u00b7  Off": [
+            558.388916015625,
+            97.1111145019531
+          ],
+          "Storage": [
+            269.675018310547,
+            97.1111145019531
+          ],
+          "Survivors": [
+            305.899993896484,
+            97.1111145019531
+          ],
+          "View carried resources and workshop stock": [
+            324.555572509766,
+            97.1111145019531
+          ]
+        },
+        "viewport": "(1001.739, 626.087)"
+      },
+      "tablet_4_3": {
+        "canvas_scale": "(2.845833, 2.844445)",
+        "emulated_insets": "(0.0, 0.0, 0.0, 0.0)",
+        "emulated_pixels_per_dp": 2.0,
+        "hud_contained": true,
+        "min_target_dp": 108.088890075684,
+        "raster": [
+          2732,
+          2048
+        ],
+        "safe_targets": true,
+        "targets": {
+          "Build. View available plots and camp equipment.": [
+            280.314575195312,
+            108.088890075684
+          ],
+          "Camp": [
+            255.48469543457,
+            108.088890075684
+          ],
+          "Close details": [
+            108.141662597656,
+            108.088890075684
+          ],
+          "Gameplay captions  \u00b7  Off": [
+            621.814575195312,
+            108.088890075684
+          ],
+          "Graphics quality, Ultra. Tap to switch.": [
+            136.600006103516,
+            136.533340454102
+          ],
+          "HUD size  \u00b7  Standard": [
+            621.814575195312,
+            108.088890075684
+          ],
+          "Joystick side  \u00b7  Left": [
+            621.814575195312,
+            108.088890075684
+          ],
+          "Reduced motion  \u00b7  Off": [
+            621.814575195312,
+            108.088890075684
+          ],
+          "Storage": [
+            300.306549072266,
+            108.088890075684
+          ],
+          "Survivors": [
+            340.646240234375,
+            108.088890075684
+          ],
+          "View carried resources and workshop stock": [
+            361.420837402344,
+            108.088890075684
+          ]
+        },
+        "viewport": "(960.0, 720.0)"
+      },
+      "tablet_4_3_large": {
+        "actual_canvas_scale": "(3.272708, 3.271111)",
+        "canvas_scale": "(3.272708, 3.271111)",
+        "emulated_insets": "(0.0, 0.0, 0.0, 0.0)",
+        "emulated_pixels_per_dp": 2.0,
+        "hud_contained": true,
+        "min_target_dp": 124.302215576172,
+        "raster": [
+          2732,
+          2048
+        ],
+        "safe_targets": true,
+        "targets": {
+          "Build. View available plots and camp equipment.": [
+            308.704620361328,
+            124.302215576172
+          ],
+          "Camp": [
+            279.876586914062,
+            124.302215576172
+          ],
+          "Close details": [
+            124.362907409668,
+            124.302215576172
+          ],
+          "Gameplay captions  \u00b7  Off": [
+            715.086730957031,
+            124.302215576172
+          ],
+          "Graphics quality, Ultra. Tap to switch.": [
+            157.089996337891,
+            157.013336181641
+          ],
+          "HUD size  \u00b7  Large": [
+            715.086730957031,
+            124.302215576172
+          ],
+          "Joystick side  \u00b7  Left": [
+            715.086730957031,
+            124.302215576172
+          ],
+          "Reduced motion  \u00b7  Off": [
+            715.086730957031,
+            124.302215576172
+          ],
+          "Storage": [
+            328.977722167969,
+            124.302215576172
+          ],
+          "Survivors": [
+            373.168792724609,
+            124.302215576172
+          ],
+          "View carried resources and workshop stock": [
+            415.633941650391,
+            124.302215576172
+          ]
+        },
+        "viewport": "(834.7827, 626.087)"
+      }
+    },
+    "scope": {
+      "controller": "The Level 1 trial targets touch and keyboard",
+      "physical_certification": false,
+      "raster_emulation": true
+    }
+  },
+  "subtitle_scope": "Text captions for important gameplay audio cues in the Level 1 trial",
+  "subtitles_supported": true,
+  "text_readability_passed": true,
+  "ui_scaling_supported": true
+}
