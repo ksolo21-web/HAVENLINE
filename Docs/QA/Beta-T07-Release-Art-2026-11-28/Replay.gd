@@ -108,6 +108,11 @@ func context_route() -> void:
 		if revealed and frames >= 180:break
 	await frame_for(3)
 	_assert("re-entry finishes payment and camp reveal exactly once",revealed and field.inventory.complete("center_hearth") and field.inventory.build_order.count("center_hearth")==1)
+	_assert("both sides of each older gate are hidden during the reveal", gate_markers_hidden())
+
+func gate_markers_hidden() -> bool:
+	var markers: Array[Node] = field.camp_built.find_children("*-technical-marker-*", "Node3D", false, false)
+	return markers.size() == field.gates.size()*2 and markers.all(func(marker: Node3D) -> bool: return not marker.visible)
 
 func truck_route() -> void:
 	for id in ["center_hearth","expansion_1","storage_wood","storage_stone","storage_meat","expansion_2","snow_garage","snow_truck"]:
@@ -202,7 +207,7 @@ func run() -> void:
 	if capture_kind=="context": await pinch_view()
 	var result := {"mode":capture_kind,"renderer":RenderingServer.get_video_adapter_name(),"viewport":[root.size.x,root.size.y],
 		"frames":frames,"rendered_video_frames":video_frames,"video_sample_stride":frame_step,"first_physics_frame":start_tick,"last_physics_frame":previous_tick,"nonconsecutive_physics_samples":skipped_ticks,
-		"checks":checks,"events":capture_events,"source":{"context":FileAccess.get_sha256("res://field_context_director.gd"),"truck":FileAccess.get_sha256("res://field_snow_truck.gd")}}
+		"checks":checks,"events":capture_events,"source":{"context":FileAccess.get_sha256("res://field_context_director.gd"),"truck":FileAccess.get_sha256("res://field_snow_truck.gd"),"opening":FileAccess.get_sha256("res://opening.gd"),"field_art":FileAccess.get_sha256("res://field_environment.gd")}}
 	var trace := FileAccess.open(run_at.path_join("Gameplay.json"),FileAccess.WRITE)
 	trace.store_string(JSON.stringify(result,"  "))
 	trace.close()

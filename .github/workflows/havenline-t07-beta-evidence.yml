@@ -3,7 +3,7 @@ name: Havenline T07 beta evidence
 on:
   push:
     branches: [review/beta-t07-context-2026-11-28]
-    paths: [.github/workflows/havenline-t07-beta-evidence.yml]
+    paths: [".github/workflows/havenline-t07-beta-evidence.yml", "HavenlineLevel1/**"]
 
 permissions:
   contents: read
@@ -86,6 +86,8 @@ jobs:
           trap 'kill "$encoder" 2>/dev/null || true' EXIT
           xvfb-run -a --server-args="-screen 0 3840x2160x24" godot --path HavenlineLevel1 --rendering-method gl_compatibility --windowed --resolution 3840x2160 --disable-render-loop --audio-driver Dummy --fixed-fps 60 --script "$PWD/Docs/QA/Beta-T07-Release-Art-2026-11-28/Replay.gd" -- "--l1-disposable-profile=$profile" > t07-evidence/Playback.log 2>&1
           wait "$encoder"
+          test -s t07-evidence/Gameplay.json
+          grep -q '"both sides of each older gate are hidden during the reveal": true' t07-evidence/Gameplay.json
           ffprobe -v error -show_entries stream=width,height,r_frame_rate,duration,nb_frames -of json t07-evidence/Gameplay.mp4 > t07-evidence/Video.json
       - name: Retain build and replay evidence
         if: always()
