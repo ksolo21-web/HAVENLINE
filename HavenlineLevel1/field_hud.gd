@@ -94,7 +94,7 @@ var threat_chip := Panel.new()
 var quality_help := Label.new()
 var quality_fade: Tween
 var quality_initialized := false
-var was_ultra := true
+var graphics_profile := ""
 var health_tween: Tween
 var hit_tween: Tween
 var shown_hp:=-1
@@ -104,6 +104,64 @@ var shown_balances: Array[int] = []
 var shown_level:=-1
 var quality:Button
 var display_mark:=DisplayMark.new()
+var reduced_motion:=false
+var event_caption: Label
+var caption_timer: Tween
+
+func set_reduced_motion(enabled: bool) -> void:
+	reduced_motion=enabled
+	ticket.reduced_motion=enabled
+	if enabled:
+		if health_tween: health_tween.kill()
+		if is_instance_valid(health_trail): health_trail.value=health_bar.value
+		if ticket.intro_tween: ticket.intro_tween.kill()
+		ticket.intro=1.
+		ticket.queue_redraw()
+		for kind: String in pulses:
+			(pulses[kind] as Tween).kill()
+			cells[kind].modulate=Color.WHITE
+		pulses.clear()
+
+func _pixels_per_dp() -> float:
+	return maxf(1.,DisplayServer.screen_get_dpi()/160.) if OS.has_feature("mobile") else 1.
+
+func min_touch_canvas() -> float:
+	# The headless driver uses a 64 px dummy surface until a test sets a raster.
+	if DisplayServer.get_name()=="headless" and get_window().size==Vector2i(64,64):
+		return 48.
+	var scale:=get_viewport().get_stretch_transform().get_scale().abs()
+	return 48.*_pixels_per_dp()/maxf(.01,minf(scale.x,scale.y))
+
+func show_event_caption(message: String) -> void:
+	if not event_caption:
+		event_caption=Label.new()
+		event_caption.name="GameplayCaption"
+		_type(event_caption,26,WHITE)
+		event_caption.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
+		event_caption.vertical_alignment=VERTICAL_ALIGNMENT_CENTER
+		event_caption.add_theme_stylebox_override("normal",_skin(NAVY,ICE,11))
+		add_child(event_caption)
+	if caption_timer: caption_timer.kill()
+	event_caption.text=message
+	event_caption.accessibility_name=message
+	event_caption.show()
+	_place_event_caption()
+	caption_timer=create_tween()
+	caption_timer.tween_interval(2.2)
+	caption_timer.tween_callback(event_caption.hide)
+
+func hide_event_caption() -> void:
+	if caption_timer: caption_timer.kill()
+	if event_caption: event_caption.hide()
+
+func _place_event_caption() -> void:
+	if not event_caption or not event_caption.visible: return
+	var safe:=_safe_rect()
+	var width:=minf(safe.size.x-8.,maxf(210.,event_caption.get_minimum_size().x+30.))
+	event_caption.size=Vector2(width,48.)
+	var dock_height:float=camp_dock.touch_height(safe) if camp_dock else 76.
+	event_caption.position=Vector2(safe.get_center().x-width*.5,safe.end.y-maxf(195.,dock_height+128.))
+
 
 func set_character_portrait(number:int)->void:
 	portrait.texture=PORTRAITS.get(number,FACE)
@@ -304,10 +362,13 @@ func set_health(amount:int,maximum:int) -> void:
 	health_bar.value=amount
 	health_fill.bg_color=RUBY if amount*3<=maximum else HEALTH
 	if before>amount:
-		health_trail.value=maxf(before,health_trail.value)
-		health_tween=create_tween()
-		health_tween.tween_interval(.18)
-		health_tween.tween_property(health_trail,"value",float(amount),.43)
+		if reduced_motion:
+			health_trail.value=amount
+		else:
+			health_trail.value=maxf(before,health_trail.value)
+			health_tween=create_tween()
+			health_tween.tween_interval(.18)
+			health_tween.tween_property(health_trail,"value",float(amount),.43)
 		if hit_tween:hit_tween.kill()
 		damage_text.text="−%d"%(before-amount)
 		damage_text.modulate.a=1.
@@ -341,7 +402,7 @@ func field_status(counts:Dictionary,message:String) -> void:
 		var amount:Label=numbers[kind]
 		var next:=str(Ledger.Progress.units(counts.get(kind,0)))
 		if amount.text!=next:
-			if int(next)>int(amount.text):
+			if int(next)>int(amount.text) and not reduced_motion:
 				if pulses.has(kind): (pulses[kind] as Tween).kill()
 				var cell:Control=cells[kind]
 				cell.modulate=Color(1.24,1.19,.80)
@@ -400,15 +461,17 @@ func settlement_status(journal:Dictionary,activity:float) -> void:
 	operation.visible=activity>0
 	reflow()
 
+func _platform_safe_area() -> Rect2:
+	return Rect2(DisplayServer.get_display_safe_area()) if OS.has_feature("mobile") else Rect2()
+
 func _safe_rect() -> Rect2:
 	var area:=get_viewport_rect()
-	if OS.has_feature("mobile"):
-		var window_size:=Vector2(get_window().size)
-		var window_origin:=Vector2(get_window().position)
-		var pixels:=Rect2(DisplayServer.get_display_safe_area()).intersection(Rect2(window_origin,window_size))
-		if pixels.has_area() and window_size.x>0 and window_size.y>0:
-			var ratio:=area.size/window_size
-			area=Rect2(area.position+(pixels.position-window_origin)*ratio,pixels.size*ratio)
+	var window_size:=Vector2(get_window().size)
+	var window_origin:=Vector2(get_window().position)
+	var pixels:=_platform_safe_area().intersection(Rect2(window_origin,window_size))
+	if pixels.has_area() and window_size.x>0 and window_size.y>0:
+		var ratio:=area.size/window_size
+		area=Rect2(area.position+(pixels.position-window_origin)*ratio,pixels.size*ratio)
 	return area.grow(-EDGE)
 
 func _anchor_right(control:Control,right:float,y:float,width:float) -> void:
@@ -418,7 +481,8 @@ func _anchor_right(control:Control,right:float,y:float,width:float) -> void:
 	control.scale=Vector2.ONE*factor
 	control.position=Vector2(right-natural.x*factor,y)
 
-func position_quality_button(button:Button,ultra:bool) -> void:
+func position_quality_button(button:Button,ultra:bool,profile_name:="") -> void:
+	var setting:=profile_name if not profile_name.is_empty() else ("Ultra" if ultra else "Standard")
 	if not is_instance_valid(quality):
 		quality=button
 		display_mark.mouse_filter=Control.MOUSE_FILTER_IGNORE
@@ -439,10 +503,9 @@ func position_quality_button(button:Button,ultra:bool) -> void:
 		quality.add_child(quality_help)
 		quality_help.hide()
 	quality.text=""
-	var setting:="Ultra" if ultra else "Standard"
 	quality.accessibility_name="Graphics quality, "+setting+". Tap to switch."
 	quality.tooltip_text=quality.accessibility_name
-	if quality_initialized and was_ultra!=ultra:
+	if quality_initialized and graphics_profile!=setting:
 		if quality_fade:quality_fade.kill()
 		quality_help.text=setting
 		quality_help.modulate.a=1.
@@ -451,13 +514,18 @@ func position_quality_button(button:Button,ultra:bool) -> void:
 		quality_fade.tween_interval(1.1)
 		quality_fade.tween_property(quality_help,"modulate:a",0.,.25)
 		quality_fade.tween_callback(quality_help.hide)
-	was_ultra=ultra
+	graphics_profile=setting
 	quality_initialized=true
 	var safe:=_safe_rect()
-	quality.size=Vector2(96,96)
-	quality.position=Vector2(safe.end.x-quality.size.x,safe.position.y)
+	_place_quality(safe)
 	quality_help.size=Vector2(74,28)
 	quality_help.position=Vector2(-12,64)
+
+func _place_quality(safe: Rect2) -> void:
+	var edge:=maxf(96.,min_touch_canvas())
+	quality.size=Vector2.ONE*edge
+	quality.position=Vector2(safe.end.x-edge,safe.position.y)
+	display_mark.position=Vector2(32.,20.)+Vector2.ONE*(edge-96.)*.5
 
 func reflow() -> void:
 	if not is_instance_valid(row) or not is_instance_valid(level_continue):
@@ -491,7 +559,7 @@ func reflow() -> void:
 	damage_text.add_theme_color_override("font_outline_color",Color("#542b28"))
 	damage_text.add_theme_constant_override("outline_size",4)
 	var resource_width:=maxf(120.,width-hero_width-106.)
-	var rail_right:=right-99.
+	var rail_right:=right-maxf(96.,min_touch_canvas())-3.
 	var groups:Array[HBoxContainer]=[row,stock_row,mineral_row]
 	var full_width:=0.
 	var extras:=0
@@ -566,8 +634,11 @@ func reflow() -> void:
 	gate.size=Vector2(200,54)
 	tree.position=gate.position+Vector2(0,60)
 	tree.size=gate.size
-	level_continue.size=Vector2(187,82)
-	level_continue.position=safe.end-Vector2(187,167)
+	var touch_goal:=min_touch_canvas()
+	level_continue.size=Vector2(maxf(187.,touch_goal),maxf(82.,touch_goal))
+	var dock_height:float=camp_dock.touch_height(safe) if camp_dock else 76.
+	level_continue.position=safe.end-Vector2(level_continue.size.x,maxf(167.,dock_height+level_continue.size.y+9.))
 	if is_instance_valid(quality):
-		quality.position=Vector2(safe.end.x-quality.size.x,top.y)
+		_place_quality(safe)
+	_place_event_caption()
 	if is_instance_valid(camp_dock):camp_dock.reflow()

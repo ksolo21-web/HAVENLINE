@@ -4,6 +4,7 @@ const Typeface = preload("res://assets/field_ui/type/BarlowSemiCondensed-SemiBol
 var panel := Panel.new()
 var notice := Label.new()
 var repair := Button.new()
+var repair_finger := -1
 
 func _ready() -> void:
 	name = "CampRaidHUD"
@@ -39,8 +40,26 @@ func _reflow() -> void:
 	var ticket_bottom: float = hud.objective.position.y + hud.objective.size.y
 	panel.position = Vector2(safe.position.x, maxf(ticket_bottom + 61., safe.position.y + 177.))
 	notice.size = panel.size
-	repair.size = Vector2(minf(safe.size.x - 30., 304.), 44.)
-	repair.position = Vector2(safe.get_center().x - repair.size.x * .5, safe.end.y - 151.)
+	repair.size = Vector2(minf(safe.size.x - 30., 304.), maxf(48.,hud.min_touch_canvas()))
+	var dock_height: float = hud.camp_dock.touch_height(safe)
+	var from_bottom := maxf(151.,dock_height+repair.size.y+12.)
+	if hud.level_continue.visible:
+		from_bottom = maxf(from_bottom,safe.end.y-hud.level_continue.position.y+repair.size.y+12.)
+	repair.position = Vector2(safe.get_center().x - repair.size.x * .5, safe.end.y - from_bottom)
+
+func handle_touch(event: InputEvent) -> bool:
+	if not (event is InputEventScreenTouch or event is InputEventScreenDrag): return false
+	if event.index==repair_finger:
+		if event is InputEventScreenTouch and (not event.pressed or event.canceled):
+			repair_finger=-1
+			if not event.canceled and repair.is_visible_in_tree() and not repair.disabled and repair.get_global_rect().has_point(event.position):
+				repair.pressed.emit()
+		return true
+	if event is InputEventScreenTouch and event.pressed and not event.canceled and repair_finger==-1:
+		if repair.is_visible_in_tree() and not repair.disabled and repair.get_global_rect().has_point(event.position):
+			repair_finger=event.index
+			return true
+	return false
 
 func display(text: String, repair_text: String, can_repair: bool) -> void:
 	if notice.text != text or repair.visible == repair_text.is_empty():
@@ -49,5 +68,6 @@ func display(text: String, repair_text: String, can_repair: bool) -> void:
 		notice.text = text
 	panel.visible = not text.is_empty()
 	repair.text = repair_text
+	repair.accessibility_name = repair_text
 	repair.visible = not repair_text.is_empty()
 	repair.disabled = not can_repair

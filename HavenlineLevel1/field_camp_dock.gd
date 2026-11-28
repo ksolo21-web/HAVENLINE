@@ -201,10 +201,17 @@ func refresh()->void:
 			lines.append("%d cooked meat   ·   $%d"%[hand.meal,hand.money])
 			description="\n".join(lines)
 			list.append(_entry("Storage details","storage_details"))
+		"Accessibility":
+			title.text="Accessibility"
+			list.append(_entry("HUD size  ·  "+("Large" if world.access.values.large_ui else "Standard"),"access:large_ui"))
+			list.append(_entry("Reduced motion  ·  "+("On" if world.access.values.reduced_motion else "Off"),"access:reduced_motion"))
+			list.append(_entry("Gameplay captions  ·  "+("On" if world.access.values.captions else "Off"),"access:captions"))
+			list.append(_entry("Joystick side  ·  "+("Right" if world.access.values.right_stick else "Left"),"access:right_stick"))
 		"Camp":
 			title.text="Snow camp" if world.camp_active else "Found your camp"
 			description="Level %d  •  %d camp purchases"%[journal.level,book.build_order.size()]
 			list.append(_entry("Guide to camp" if world.camp_active else "Find the hearth plot","home"))
+			list.append(_entry("Accessibility","accessibility"))
 			if world.camp_active:list.append(_entry("Move equipment","move"))
 			if book.complete(P.SECOND):
 				list.append(_entry("Workshops","workshops"))
@@ -310,7 +317,7 @@ func refresh()->void:
 	var target:=touch_height(safe)
 	var description_height:=0. if description.is_empty() else 30.*description.split("\n").size()+7.
 	if description.length()>45 and not description.contains("\n"):description_height+=24.
-	var usable:=safe.size.y-170.-maxf(63.,target)-description_height
+	var usable:=safe.size.y-target-30.-maxf(63.,target)-description_height
 	var slots:=maxi(2,floori(usable/(maxf(57.,target)+5.)))
 	if list.size()>slots:
 		var per_page:=slots-1
@@ -353,6 +360,18 @@ func refresh()->void:
 	reflow()
 
 func choose(id:String)->void:
+	if id=="accessibility":
+		toggle("Accessibility")
+		active_tab="Camp"
+		world.clear_touch()
+		reflow()
+		return
+	if id.begins_with("access:"):
+		if world.change_accessibility(id.get_slice(":",1)):
+			refresh()
+		else:
+			hud.show_event_caption("Settings could not be saved")
+		return
 	if id in ["companion_0", "companion_1"]:
 		if world.set_companion_character(id == "companion_1"): refresh()
 		return
@@ -433,7 +452,7 @@ func tracked_point()->Vector3:
 	return node.global_position if is_instance_valid(node) else Vector3.INF
 
 func touch_height(safe:Rect2)->float:
-	return 96. if safe.size.y>safe.size.x*1.65 else 76.
+	return maxf(hud.min_touch_canvas(),96. if safe.size.y>safe.size.x*1.65 else 76.)
 
 func reflow()->void:
 	if not hud or not is_instance_valid(build) or not nav.is_inside_tree():return
@@ -482,9 +501,9 @@ func reflow()->void:
 		if subtitle.text.length()>45 and not subtitle.text.contains("\n"):desc_height+=24.
 	var row_height:=maxf(57.,target)
 	var height:=head_height+desc_height+commands.size()*(row_height+5.)+14.
-	height=minf(height,safe.size.y-156.)
+	height=minf(height,safe.size.y-target-12.)
 	var left:=nav.position.x if tab!="Build" else build.position.x+build.size.x-panel_w
-	sheet.position=Vector2(clampf(left,safe.position.x,safe.end.x-panel_w),nav.position.y-height-12.)
+	sheet.position=Vector2(clampf(left,safe.position.x,safe.end.x-panel_w),safe.end.y-target-height-12.)
 	sheet.size=Vector2(panel_w,height)
 	title.position=Vector2(20,9)
 	close.position=Vector2(panel_w-target,0.)
@@ -540,5 +559,9 @@ func handle(event:InputEvent)->bool:
 	if build.get_global_rect().has_point(pt):finger=idx;toggle("Build");return true
 	for key:String in tabs:
 		if tabs[key].get_global_rect().has_point(pt):finger=idx;toggle(key);return true
+	if tab=="Accessibility":
+		finger=idx
+		dismiss()
+		return true
 	if not tab.is_empty():dismiss()
 	return false

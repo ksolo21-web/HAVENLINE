@@ -10,6 +10,7 @@ const FieldArt = preload("res://field_art.gd")
 const FieldEnvironment = preload("res://field_environment.gd")
 const FieldEnemy = preload("res://field_enemy.gd")
 const FieldAudio = preload("res://field_audio.gd")
+var access := preload("res://field_accessibility.gd").new()
 const FieldSave = preload("res://field_save.gd")
 
 const HEARTH_OFFER := "center_hearth"
@@ -118,6 +119,7 @@ func player_character() -> int:
 func move_actor(input: Vector2, dt: float) -> float:
 	# The drag supplies a heading. Any deliberate displacement requests a run.
 	if camp_layout and camp_layout.active: input = Vector2.ZERO
+	if field_ready and opening_hud.camp_dock.tab=="Accessibility": input=Vector2.ZERO
 	if snow_truck.mounted:
 		snow_truck.drive(input,dt)
 		return 0.0
@@ -142,11 +144,14 @@ func move_actor(input: Vector2, dt: float) -> float:
 	return gait_motor.step(self, heading, dt, smoothstep(0., 12., float(carried_units)))
 
 func _ready() -> void:
+	graphics.field_presets=true
 	super()
 	character_kit.locomotion.use_field_run()
 	gait_motor.use_field_run()
 	lifecycle.world = self
 	encounters.setup(self)
+	access.load_preferences()
+	_apply_hud_scale()
 	inventory.configure(Progress.offers())
 	persist_requested = true
 	if not field_save.configure(OS.get_cmdline_user_args()):
@@ -244,6 +249,7 @@ func _ready() -> void:
 			tracks.reset_actor(actor)
 	previous_dry_position = actor.position
 	field_ready = true
+	opening_hud.set_reduced_motion(access.values.reduced_motion)
 	add_child(snow_truck)
 	snow_truck.install(self)
 	field_env.perimeter_changed.connect(camp_layout.place_vehicle_offers)
@@ -280,6 +286,9 @@ func _release_field_gestures() -> void:
 	clear_touch()
 	settlement_loop.finger = -1
 	snow_truck.held_buttons.clear()
+	opening_hud.camp_dock.finger=-2
+	var notice: Control = encounters.raids.sites.notice
+	if is_instance_valid(notice): notice.repair_finger=-1
 
 func _close_field() -> void:
 	if closing: return
@@ -402,12 +411,21 @@ func _configure_stem(tree: ResourceTreeScript) -> void:
 	tree._marks.clear()
 
 func _input(event: InputEvent) -> void:
+	if field_ready and opening_hud.camp_dock.tab=="Accessibility":
+		if opening_hud.camp_dock.handle(event) or event is InputEventScreenTouch or event is InputEventScreenDrag or event is InputEventMouse or event is InputEventKey:
+			get_viewport().set_input_as_handled()
+			return
 	if field_ready and snow_truck.handle_input(event):
 		get_viewport().set_input_as_handled()
 		return
 	if field_ready and opening_hud.camp_dock.handle(event):
 		get_viewport().set_input_as_handled()
 		return
+	if field_ready:
+		var notice: Control = encounters.raids.sites.notice
+		if is_instance_valid(notice) and notice.handle_touch(event):
+			get_viewport().set_input_as_handled()
+			return
 	if field_ready and camp_layout.handle_input(event):
 		get_viewport().set_input_as_handled()
 		return
@@ -642,7 +660,8 @@ func _combat_number(at: Vector3, message: String, color: Color, target: Node3D =
 		number.add_to_group(group)
 	number.position = at
 	var tween := number.create_tween().set_parallel(true)
-	tween.tween_property(number,"position",at+Vector3.UP*.60,.56).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	if not access.values.reduced_motion:
+		tween.tween_property(number,"position",at+Vector3.UP*.60,.56).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	tween.tween_property(number,"modulate:a",0.0,.27).set_delay(.29)
 	tween.tween_property(number,"outline_modulate:a",0.0,.27).set_delay(.29)
 	tween.chain().tween_callback(number.queue_free)
@@ -690,7 +709,7 @@ func _player_hit(amount: int, attacker: Node3D = null) -> void:
 	opening_hud.set_health(player_hp,MAX_HP)
 	hurt_time = RECOIL_SECONDS
 	player_invulnerability = 1.0
-	flash.color.a = .33
+	flash.color.a = 0.0 if access.values.reduced_motion else .33
 	_event("player_hurt",actor.position)
 	if player_hp == 0:
 		settlement_loop.cancel_cooking()
@@ -747,7 +766,7 @@ func _physics_process(dt: float) -> void:
 		var fall := smoothstep(0.0,.44,1.05-reset_time)
 		hero_model.rotation.z = -recoil_side*1.43*fall
 		hero_model.rotation.x = -.20*fall
-		flash.color.a = move_toward(flash.color.a,.09,dt*.52)
+		flash.color.a = 0.0 if access.values.reduced_motion else move_toward(flash.color.a,.09,dt*.52)
 		reset_time = maxf(0.0,reset_time-dt)
 		actor.velocity = Vector3.ZERO
 		clear_touch()
@@ -782,7 +801,8 @@ func _physics_process(dt: float) -> void:
 	rescue_time = maxf(0.0,rescue_time-dt)
 	var hit_fraction := hurt_time / RECOIL_SECONDS
 	var recoil := smoothstep(0, .15, 1.0-hit_fraction) * smoothstep(0, .88, hit_fraction)
-	gait_motor.apply_hit_pose(hero_model, impact_lean.y*.30*recoil+.18*smoothstep(0,.32,rescue_time), -impact_lean.x*.33*recoil)
+	if not access.values.reduced_motion:
+		gait_motor.apply_hit_pose(hero_model, impact_lean.y*.30*recoil+.18*smoothstep(0,.32,rescue_time), -impact_lean.x*.33*recoil)
 	player_wardrobe.update_pose(dt)
 	sound.set_listener_position(actor.position)
 	if character_kit.active and character_kit.turn_id != last_turn and not first_physics:
@@ -888,8 +908,24 @@ func _disable_worn_shadow(part: Node) -> void:
 	for child in part.get_children():
 		_disable_worn_shadow(child)
 
+func _apply_hud_scale() -> void:
+	var scale_factor:=1.15 if access.values.large_ui else 1.0
+	if not is_equal_approx(get_window().content_scale_factor,scale_factor):
+		get_window().content_scale_factor=scale_factor
+
+func change_accessibility(key: String) -> bool:
+	if access.toggle(key)!=OK: return false
+	_apply_hud_scale()
+	opening_hud.set_reduced_motion(access.values.reduced_motion)
+	if access.values.reduced_motion: flash.color.a=0.
+	if not access.values.captions: opening_hud.hide_event_caption()
+	opening_hud.reflow()
+	return true
+
 func _event(id: String, at: Vector3, audio_id := "") -> void:
 	_record_field_event(id,at)
+	if access.values.captions and access.CAPTIONS.has(id):
+		opening_hud.show_event_caption(access.CAPTIONS[id])
 	sound.emit_event(id if audio_id.is_empty() else audio_id,at)
 
 func _record_field_event(id: String, at: Vector3) -> void:
@@ -952,7 +988,7 @@ func _finish_purchase(id: String) -> void:
 	else:
 		if id not in Progress.STORAGE: exit_required[id] = true
 		if id in [Progress.FIRST,Progress.SECOND]:
-			field_env.set_perimeter(Progress.stage(inventory),true)
+			field_env.set_perimeter(Progress.stage(inventory),not access.values.reduced_motion)
 			if not orbit_permitted_at(actor.global_position): character_kit.rest()
 			if tracks: tracks.refresh_surface()
 		elif id==Progress.GARAGE:
@@ -996,7 +1032,7 @@ func _apply_hearth(built: bool, animate: bool) -> void:
 		actor.global_position = field_env.clear_hearth_footprint(actor.global_position)
 	var burned: bool = encounters.has_method("is_structure_down") and encounters.is_structure_down("furnace")
 	field_env.set_built(built and not burned,animate)
-	field_env.set_perimeter(Progress.stage(inventory) if built else 0,animate)
+	field_env.set_perimeter(Progress.stage(inventory) if built else 0,animate and not access.values.reduced_motion)
 	if tracks: tracks.refresh_surface()
 	if built and not orbit_permitted_at(actor.global_position): character_kit.rest()
 	if field_ready: _refresh_field()

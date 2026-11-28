@@ -97,7 +97,7 @@ func _input(event: InputEvent) -> void:
 				hud_fingers[event.index] = true
 				if trial_camera.fingers.is_empty() and hud_fingers.size() == 1:
 					if quality_hit:
-						graphics.set_ultra(not graphics.ultra)
+						graphics.cycle_preset()
 					else:
 						super(event)
 				return
@@ -117,7 +117,7 @@ func _input(event: InputEvent) -> void:
 			set_zoom_ratio(get_zoom_ratio() * pow(step, event.factor if event.factor > 0 else 1.0))
 			return
 		if event.button_index == MOUSE_BUTTON_LEFT and graphics.quality_button.get_global_rect().has_point(event.position):
-			graphics.set_ultra(not graphics.ultra)
+			graphics.cycle_preset()
 			return
 	if event is InputEventMagnifyGesture and trial_camera.fingers.is_empty():
 		set_zoom_ratio(get_zoom_ratio() * event.factor)

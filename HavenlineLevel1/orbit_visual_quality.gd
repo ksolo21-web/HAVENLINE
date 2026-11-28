@@ -1,6 +1,10 @@
 extends Node
 ## Render policy scoped to the orbit trial. The window keeps its native size.
 var ultra := true
+enum Preset { ULTRA, HIGH, LOW }
+const PRESET_NAMES := ["Ultra", "High", "Low"]
+var field_presets := false
+var preset := Preset.ULTRA
 var last_window_size := Vector2i.ZERO
 var quality_button := Button.new()
 var lights: Array[Node] = []
@@ -10,6 +14,7 @@ var scene: Node3D
 var original_canvas := Vector2i.ZERO
 var original_aspect := Window.CONTENT_SCALE_ASPECT_KEEP
 var original_orientation := DisplayServer.SCREEN_LANDSCAPE
+var shadow_modes := {}
 
 func install(world: Node3D, hud: Control) -> void:
 	scene = world
@@ -19,6 +24,8 @@ func install(world: Node3D, hud: Control) -> void:
 		original_orientation = DisplayServer.screen_get_orientation()
 		DisplayServer.screen_set_orientation(DisplayServer.SCREEN_SENSOR)
 	lights = scene.find_children("*", "DirectionalLight3D", true, false)
+	for light: DirectionalLight3D in lights:
+		shadow_modes[light] = light.directional_shadow_mode
 	for geometry: MeshInstance3D in scene.find_children("*", "MeshInstance3D", true, false):
 		configure_mesh(geometry)
 	get_tree().node_added.connect(on_node_added)
@@ -29,7 +36,7 @@ func install(world: Node3D, hud: Control) -> void:
 	quality_button.add_theme_font_size_override("font_size", 18)
 	hud.add_child(quality_button)
 	get_viewport().size_changed.connect(refresh_window)
-	set_ultra(true)
+	set_preset(Preset.ULTRA)
 
 func on_node_added(node: Node) -> void:
 	if node is MeshInstance3D and scene.is_ancestor_of(node):
@@ -66,17 +73,24 @@ func configure_mesh(geometry: MeshInstance3D) -> void:
 		if material != source:
 			geometry.set_surface_override_material(i, material)
 
-func set_ultra(enabled: bool) -> void:
-	ultra = enabled
-	get_viewport().msaa_3d = Viewport.MSAA_4X if enabled else Viewport.MSAA_DISABLED
-	get_viewport().mesh_lod_threshold = .5 if enabled else 1.0
+func cycle_preset() -> void:
+	set_preset((preset + 1) % (PRESET_NAMES.size() if field_presets else 2))
+
+func preset_name() -> String:
+	return "Standard" if not field_presets and not ultra else PRESET_NAMES[preset]
+
+func set_preset(next: Preset) -> void:
+	preset = next
+	ultra = preset == Preset.ULTRA
+	get_viewport().mesh_lod_threshold = [.5, 1.0, 1.5][preset]
 	for light: DirectionalLight3D in lights:
-		light.directional_shadow_max_distance = 36.0 if enabled else 64.0
+		light.directional_shadow_mode = DirectionalLight3D.SHADOW_ORTHOGONAL if preset == Preset.LOW else shadow_modes[light]
+		light.directional_shadow_max_distance = [36., 30. if field_presets else 64., 22.][preset]
 		# Snow receives scattered light even under the boots and weapon.
-		light.shadow_opacity = 0.74 if enabled else 1.0
+		light.shadow_opacity = .74 if field_presets or ultra else 1.0
 	for material: BaseMaterial3D in originals:
-		material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC if enabled else originals[material]
-	quality_button.text = "Graphics · Ultra" if enabled else "Graphics · Standard"
+		material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC if ultra else originals[material]
+	quality_button.text = "Graphics · " + preset_name()
 	refresh_window()
 
 func refresh_window() -> void:
@@ -101,13 +115,15 @@ func refresh_window() -> void:
 	# Bound the 3D draw area to a 4K envelope, including rotated displays.
 	var limit := Vector2(3840, 2160) if window_px.x >= window_px.y else Vector2(2160, 3840)
 	var ratio := minf(1.0, minf(limit.x / maxf(1, window_px.x), limit.y / maxf(1, window_px.y)))
-	viewport.scaling_3d_scale = ratio
+	viewport.scaling_3d_scale = ratio * (.75 if preset == Preset.LOW else 1.0)
+	var high_sampling := Viewport.MSAA_2X if field_presets else Viewport.MSAA_DISABLED
+	viewport.msaa_3d = [Viewport.MSAA_4X, high_sampling, Viewport.MSAA_DISABLED][preset]
 	var canvas := viewport.get_visible_rect()
 	quality_button.size = Vector2(180, 48)
 	quality_button.position = canvas.end - quality_button.size - Vector2(16,16)
 	var hud := quality_button.get_parent()
 	if hud and hud.has_method("position_quality_button"):
-		hud.position_quality_button(quality_button,ultra)
+		hud.position_quality_button(quality_button,ultra,preset_name())
 
 
 func _exit_tree() -> void:

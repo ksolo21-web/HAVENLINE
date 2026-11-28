@@ -168,6 +168,9 @@ func _style_truck_button(button:Button,fill:Color,edge:Color,ink:Color) -> void:
 func _place_hud() -> void:
 	if not is_instance_valid(hud) or not hud.is_visible_in_tree():return
 	var safe:Rect2 = world.opening_hud._safe_rect()
+	var target: float=world.opening_hud.min_touch_canvas()
+	action.custom_minimum_size=Vector2(maxf(134.,target),maxf(56.,target))
+	stow.custom_minimum_size=Vector2(maxf(108.,target),maxf(56.,target))
 	var natural := hud.get_combined_minimum_size()
 	var width := maxf(252.,natural.x)
 	var above_dock:float = world.opening_hud.camp_dock.touch_height(safe)

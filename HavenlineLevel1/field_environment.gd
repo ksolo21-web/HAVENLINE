@@ -808,6 +808,7 @@ func set_upgrade_payment(remaining: Dictionary) -> void:
 	upgrade_anchor.hide()
 
 func set_built(built: bool, animate := true) -> void:
+	animate=animate and not world.access.values.reduced_motion
 	if camp_state == int(built): return
 	camp_state = int(built)
 	hearth_fire.set_fired(built)

@@ -83,7 +83,8 @@ func sync() -> void:
 	var host=layout.world
 	var safe:Rect2=host.opening_hud._safe_rect()
 	launcher.hide()
-	launcher.size=Vector2(93,50)
+	var target: float=host.opening_hud.min_touch_canvas()
+	launcher.size=Vector2(maxf(93.,target),maxf(50.,target))
 	var continued:bool = host.opening_hud.level_continue and host.opening_hud.level_continue.visible
 	launcher.position=Vector2(safe.end.x-launcher.size.x,safe.end.y-(225. if continued else 131.))
 	for node in [done,rail,caption,tray,hint]: node.visible=active
@@ -99,7 +100,7 @@ func sync() -> void:
 	rail.size=Vector2(maxf(163.,caption.get_minimum_size().x+30.),55.)
 	caption.position=rail.position+Vector2(15,0)
 	caption.size=rail.size-Vector2(30,0)
-	done.size=Vector2(88,53)
+	done.size=Vector2(maxf(88.,target),maxf(53.,target))
 	done.position=Vector2(safe.end.x-done.size.x,safe.position.y)
 	var label:="Select a building to move"
 	if selected:
@@ -109,13 +110,13 @@ func sync() -> void:
 			label="Ready to place" if layout.candidate_reason.is_empty() else layout.candidate_reason
 	hint.text=label
 	hint.add_theme_color_override("font_color",Color("#9a3e2d") if layout.preview_set and not layout.candidate_reason.is_empty() else INK)
-	back.size=Vector2(111,54)
-	place.size=Vector2(135,54)
+	back.size=Vector2(maxf(111.,target),maxf(54.,target))
+	place.size=Vector2(maxf(135.,target),maxf(54.,target))
 	place.position=Vector2(safe.end.x-place.size.x,safe.end.y-place.size.y)
 	back.position=Vector2((place.position.x-10. if place.visible else safe.end.x)-back.size.x,safe.end.y-back.size.y)
 	var room:float=back.position.x-safe.position.x-16. if selected else safe.size.x
 	var w:=minf(hint.get_minimum_size().x+32.,safe.size.x)
-	var extra:=64. if room<w else 0.
+	var extra:=back.size.y+10. if room<w else 0.
 	tray.size=Vector2(w,52)
 	tray.position=Vector2(safe.position.x,safe.end.y-tray.size.y-extra)
 	hint.position=tray.position+Vector2(16,0)

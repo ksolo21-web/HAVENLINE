@@ -34,6 +34,7 @@ var remaining := RegEx.new()
 var route := RegEx.new()
 var fallback := false
 var intro := 1.0
+var reduced_motion := false
 var intro_tween: Tween
 
 
@@ -76,7 +77,7 @@ func set_message(message: String, artwork: Dictionary) -> void:
 	if fallback:
 		heading = raw
 		costs.clear()
-	if previous != heading and not previous.is_empty() and not fallback:
+	if not reduced_motion and previous != heading and not previous.is_empty() and not fallback:
 		if intro_tween:
 			intro_tween.kill()
 		intro = 0.

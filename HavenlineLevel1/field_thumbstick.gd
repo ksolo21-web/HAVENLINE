@@ -27,7 +27,8 @@ func _process(_delta: float) -> void:
 			hide()
 			return
 		var area:Rect2=hud._safe_rect()
-		position=Vector2(area.position.x+65.,area.end.y-135.)
+		var edge_x:=area.end.x-65. if world.access.values.right_stick else area.position.x+65.
+		position=Vector2(edge_x,area.end.y-maxf(135.,hud.camp_dock.touch_height(area)+58.))
 		resting=true
 		offset=Vector2.ZERO
 		queue_redraw()
