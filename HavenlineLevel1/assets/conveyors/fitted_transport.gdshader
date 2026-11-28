@@ -13,6 +13,7 @@ uniform float source_width=.48;
 uniform float source_run=1.;
 uniform float source_rise=0.;
 uniform float source_foot=-.38;
+uniform bool receiving_machine=false;
 uniform bool curved=false;
 uniform bool left_handed=false;
 uniform float source_radius=.45;
@@ -29,8 +30,10 @@ vec3 fitted(vec3 p,vec4 equipment) {
 	float run=max(.01,equipment.b*4.);
 	float flags=floor(equipment.a*255.+.5);
 	float steps=mod(flags,128.);
-	float width_from=socket_width+floor(steps/8.)*width_step;
-	float width_to=socket_width+mod(steps,8.)*width_step;
+	float unit=receiving_machine?.265:width_step;
+	float origin_width=receiving_machine?.44:socket_width;
+	float width_from=origin_width+floor(steps/8.)*unit;
+	float width_to=origin_width+mod(steps,8.)*unit;
 	if(foot_piece && curved) {
 		p.xz=support_center+(p.xz-support_center)*1.25;
 	} else if(foot_piece && end_supports) {

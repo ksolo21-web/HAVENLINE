@@ -15,9 +15,12 @@ func run() -> void:
 	e.boss_chance=.18
 	for wolf in field.enemies.duplicate(): e._remove(wolf)
 	await process_frame
-	var permanent: Array = field.tracks.living.keys()
-	var expected: Array = [field.actor,field.survivor.actor]
-	var correct_actors: bool = permanent.size() == expected.size() and expected.all(func(a):return permanent.has(a))
+	# The southern stag is a persistent, tracked prey actor. Only the wolves
+	# belong to the wave and should disappear at the end of each encounter.
+	var permanent := {field.actor:"human",field.survivor.actor:"human",field.survivor.wildlife:"stag"}
+	var persistent_surfaces: Array = field.surfaces.keys()
+	var correct_actors := _preserves_trackers(field,permanent)
+	var cleanup_failures := 0
 	var corners: Array[Vector3]=[Vector3.ZERO,Vector3(510,0,510),Vector3(-510,0,510),Vector3(510,0,-510),Vector3(-510,0,-510)]
 	var total:=0
 	var alphas:=0
@@ -49,8 +52,17 @@ func run() -> void:
 		field._step_drops(101)
 		await process_frame
 		await process_frame
-		if field.get_tree().get_nodes_in_group("swirl_hostiles").size()>0 or field.tracks.living.size()!=permanent.size() or not permanent.all(func(a):return field.tracks.living.has(a)):ok=false
-	var summary={"passed":ok and total==deaths and duplicate_loot==0 and peak<=4 and alphas>0 and alphas<200 and e.wave==starting_wave+200,"native_waves":e.wave-starting_wave,"actual_wolves":total,"actual_deaths":deaths,"actual_alphas":alphas,"peak_live":peak,"duplicate_loot":duplicate_loot,"orphan_wolves":field.get_tree().get_nodes_in_group("swirl_hostiles").size(),"remaining_trackers":field.tracks.living.size(),"preserved_player_and_survivor":correct_actors}
+		correct_actors = _preserves_trackers(field,permanent) and correct_actors
+		if field.enemy != null or not field.get_tree().get_nodes_in_group("swirl_hostiles").is_empty() or not field.drops.is_empty():
+			cleanup_failures += 1
+		elif field.surfaces.size()!=persistent_surfaces.size() or not persistent_surfaces.all(func(body):return field.surfaces.has(body)):
+			cleanup_failures += 1
+	var summary={"passed":ok and correct_actors and cleanup_failures==0 and total==deaths and duplicate_loot==0 and peak<=4 and alphas>0 and alphas<200 and e.wave==starting_wave+200,"native_waves":e.wave-starting_wave,"actual_wolves":total,"actual_deaths":deaths,"actual_alphas":alphas,"peak_live":peak,"duplicate_loot":duplicate_loot,"orphan_wolves":field.get_tree().get_nodes_in_group("swirl_hostiles").size(),"remaining_trackers":field.tracks.living.size(),"preserved_player_and_survivor":correct_actors,"preserved_prey_tracker":correct_actors,"failed_cleanup_cycles":cleanup_failures}
 	print("ENCOUNTER_STRESS ",JSON.stringify(summary))
 	await preload("res://tests/lifecycle_test_profile.gd").drain_field_audio(self, field)
 	quit(0 if summary.passed else 1)
+
+func _preserves_trackers(field: Node3D, expected: Dictionary) -> bool:
+	var living: Dictionary = field.tracks.living
+	return living.size()==expected.size() and expected.keys().all(func(actor):
+		return is_instance_valid(actor) and actor.is_inside_tree() and living.has(actor) and living[actor].species==expected[actor])

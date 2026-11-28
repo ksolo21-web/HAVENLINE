@@ -2,8 +2,8 @@ extends Node3D
 ## Four fixed bays underneath the raw-material tiers. Every visible piece is
 ## the real station output or register bundle; balances remain in the journal.
 const Art = preload("res://field_art.gd")
-const BAYS := {"planks": -.405, "blocks": -.135, "meal": .135, "money": .405}
-const WIDTH := .251
+const BAYS := {"planks": -.486, "blocks": -.162, "meal": .162, "money": .486}
+const WIDTH := .304
 const FLOOR := .585
 const CEILING := .888
 const DEPTH := -.72

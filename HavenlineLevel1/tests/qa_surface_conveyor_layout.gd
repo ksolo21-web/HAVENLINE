@@ -80,7 +80,7 @@ func check_fitted_width(network) -> void:
 	var kit=network.art.fitted
 	var broadest:=0.
 	var widened:=0
-	for family:String in kit.values:
+	for family:String in ["straight","corner","left_corner","incline"]:
 		for data:Color in kit.values[family]:
 			var widths:=roundi(data.a*255.)%128
 			var start:=floori(widths/8.)
@@ -141,11 +141,36 @@ func run() -> void:
 	var player_approach:Vector3=world.counter.service_point.global_position
 	var pickup:Vector3=network.counter_buffer_position(0)
 	check("both food lines end at the separate self-service pickup",network.routes.meal[-1].is_equal_approx(pickup) and network.routes.stored_meal[-1].is_equal_approx(pickup) and pickup.distance_to(player_approach)>.6)
-	var rear_dispatch:PackedVector3Array=network.routes.stored_meal
-	var arrival:=rear_dispatch[-2].direction_to(pickup)
-	var upstream:Vector3=network.counter_buffer_position(1)-pickup
-	check("finished stock takes one quarter-turn into the broad eastbound receiver",arrival.dot(Vector3.RIGHT)>.99 and readings.default.stored_meal.bend_degrees<92. and network.gauge.fitted_width(pickup)>=1.)
-	check("two distinct counter portions sit on the same rollers as arriving goods",world.counter.stock_position("meal",0).is_equal_approx(pickup) and world.counter.stock_position("meal",1).is_equal_approx(pickup+upstream) and upstream.dot(arrival)<-.44)
+	var apparatus=network.receiver
+	check("normal paid counter mounts the industrial receiver",apparatus!=null)
+	if apparatus:
+		var has_heads:bool=network.art.fitted.counts.get("receiver_straight",0)==2 and network.art.fitted.counts.get("receiver_incline",0)==3
+		check("two individually driven D01 heads lead to one descending D01 bed",has_heads and apparatus.inlet("meal").distance_to(apparatus.inlet("stored_meal"))>1.)
+		for lane:String in ["meal","stored_meal"]:
+			var path:PackedVector3Array=network.routes[lane]
+			var high=apparatus.travel(lane)[2]
+			check(lane+" travels through its own high mouth then the common stock platform",apparatus.inlet(lane) in path and high in path and high.y-pickup.y>.62 and path[-1].is_equal_approx(pickup))
+		var occupied:={}
+		var sold:int=world.inventory.settlement.market.sold.meal
+		for rank in belts.buffer_capacity():
+			var slot:Vector3=world.counter.stock_position("meal",rank)
+			occupied[slot]=true
+			check("stock "+str(rank)+" is grounded in its own actual queue cell",slot.is_equal_approx(apparatus.slot(apparatus.position_in_queue(rank,sold))) and is_equal_approx(slot.y,apparatus.STOCK_Y) and apparatus.inset(slot))
+		check("eight unique places in four real rows and two columns",occupied.size()==8 and absf(apparatus.slot(0).z-apparatus.slot(1).z)>apparatus.ROAST and apparatus.slot(0).distance_to(apparatus.slot(6))>1.80)
+		check("stock guard is wider than two metres and reserves its true floor",network.gauge.fitted_width(pickup)>2.4 and not network.aisles.disc_clear(apparatus.shell.get_center(),.31))
+		var edge:Vector3=apparatus.point(3.,0.,apparatus.WIDTH*.5)
+		var approach:Vector3=edge+Vector3.BACK*.50
+		var attempted:Vector3=edge+Vector3.FORWARD*2.8
+		var contact:Vector3=network.constrain_motion(approach,attempted,.31)
+		check("a real player step cannot tunnel through the raised cabinet",contact.z>edge.z+.30 and contact.z<approach.z and network.aisles.disc_clear(Vector2(contact.x,contact.z),.31))
+		readings["industrial receiver"]={"outer_m":apparatus.WIDTH,"length_m":apparatus.LENGTH,"intake_span_m":apparatus.inlet("meal").distance_to(apparatus.inlet("stored_meal")),"intake_high_m":1.33,"stock_y_m":apparatus.STOCK_Y,"portion_m":apparatus.ROAST,"slots":occupied.size()}
+	var art=preload("res://field_art.gd")
+	for raw:String in ["wood","stone","meat"]:
+		var raw_bounds:AABB=art.source_bounds[raw]
+		var cross_width:=.45*raw_bounds.size.z/maxf(raw_bounds.size.x,raw_bounds.size.z)
+		var socket_width:float=network.gauge.SOCKET
+		check(raw+" cargo clears the standard warehouse throat",cross_width<socket_width)
+		readings[raw+" cargo"]={"width_across_deck_m":cross_width,"port_m":socket_width}
 	var mills=world.processors
 	check("saw and quarry share the storehouse utility wing",mills.machines.wood.global_position.distance_to(world.depot.house.global_position)<6.5 and mills.machines.stone.global_position.distance_to(world.depot.house.global_position)<6.5)
 	var layout=world.camp_layout
@@ -162,7 +187,7 @@ func run() -> void:
 	var counter_shift:=Vector2(4.,counter_before.y)
 	check("owned counter can move along its north fence",layout.relocate("north_counter",counter_shift))
 	belts.refresh_paths()
-	var unloaded:Vector3=world.counter.stock_position("meal",0)
+	var unloaded:Vector3=network.counter_buffer_position(0)
 	check("actual saved bay carries its stock deck, both food paths and six usable stations",layout.snapshot().get("north_counter")==[counter_shift.x,counter_shift.y] and network.routes.size()==8 and network.aisles.services.size()==6 and network.routes.meal[-1].is_equal_approx(unloaded) and network.routes.stored_meal[-1].is_equal_approx(unloaded))
 	world.set_physics_process(false)
 	await Session.drain_field_audio(self,world)

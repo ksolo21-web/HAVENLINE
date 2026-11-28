@@ -152,7 +152,7 @@ func _meal_received(_order: int) -> void:
 func _update_belt_mix() -> void:
 	var gain := 0.0
 	var journal: Dictionary = world.inventory.settlement
-	var blocked: bool = not conveyors.blocked_lane.is_empty() or journal.counter_stock >= Rules.COUNTER_RACK_CAPACITY
+	var blocked: bool = not conveyors.blocked_lane.is_empty() or journal.counter_stock >= conveyors.buffer_capacity()
 	if _simulation_active():
 		for lane: String in conveyors.goods:
 			if journal.line_load[lane] == 0: continue

@@ -113,7 +113,14 @@ func _sample(lane:String,progress:float)->Vector3:
 	return route[-1]
 
 func _place_cargo(lane:String,unit:Node3D,t:float)->void:
-	if lane in ["meal","stored_meal"] and world.inventory.settlement.counter_stock>0:
+	var serving:=lane in ["meal","stored_meal"]
+	var station=network.receiver if serving else null
+	var rank:int=world.inventory.settlement.counter_stock
+	if station:
+		# Only the free tail of the assigned column moves. A stopped portion
+		# never travels through the one already waiting in front of it.
+		t*=1.-station.ROW_PITCH*clampi(rank/2,0,3)/lengths[lane]
+	elif serving and rank>0:
 		# Stop the next portion behind the occupied slot. Leave the rest of
 		# the route on the same centerline used for its reservation clock.
 		var reserved:float=network.counter_buffer_position(0).distance_to(network.counter_buffer_position(1))
@@ -127,7 +134,12 @@ func _place_cargo(lane:String,unit:Node3D,t:float)->void:
 	if absf(tangent.y)>flat.length():tangent=flat
 	var long_axis:=tangent.normalized()
 	var across:=long_axis.cross(Vector3.UP).normalized()
-	unit.global_basis=Basis(long_axis,across.cross(long_axis).normalized(),across)
+	var basis:=Basis(long_axis,across.cross(long_axis).normalized(),across)
+	if station and station.inset(unit.global_position):
+		var arrival_slot:int=world.inventory.settlement.market.sold.meal+world.inventory.settlement.counter_stock
+		basis=station.cargo_basis(unit.global_position,tangent).scaled(Vector3.ONE*station.stock_scale(unit.global_position))
+		unit.global_position=station.freight_position(unit.global_position,arrival_slot)
+	unit.global_basis=basis
 
 func _demand(j:Dictionary)->int:
 	var orders:=0
@@ -143,8 +155,11 @@ func _demand(j:Dictionary)->int:
 func unclaimed_orders()->int:
 	return _demand(world.inventory.settlement)
 
+func buffer_capacity() -> int:
+	return network.receiver.CAPACITY if network and network.receiver else Rules.COUNTER_RACK_CAPACITY
+
 func _buffer_needs_meal(j:Dictionary)->bool:
-	return world.counter.active and j.counter_stock < Rules.COUNTER_RACK_CAPACITY and not Logistics.merge_busy(j)
+	return world.counter.active and j.counter_stock < buffer_capacity() and not Logistics.merge_busy(j)
 
 func _launch(lane:String)->bool:
 	var book=world.inventory
@@ -180,11 +195,13 @@ func _launch(lane:String)->bool:
 func _arrive(lane:String)->bool:
 	var j:Dictionary=world.inventory.settlement
 	if j.line_load[lane]!=1 or j.line_progress[lane]<1.:return false
+	var destination:Vector3=paths[lane][-1]
 	if lane in Logistics.RAW:
 		if world.encounters.is_machine_down(lane) or j.hoppers[lane]>=Rules.HOPPER_CAPACITY:return false
 		j.hoppers[lane]+=1
 	elif lane=="meal" or lane=="stored_meal":
-		if j.counter_stock>=Rules.COUNTER_RACK_CAPACITY:return false
+		if j.counter_stock>=buffer_capacity():return false
+		if network.receiver:destination=network.counter_buffer_position(network.receiver.position_in_queue(j.counter_stock,j.market.sold.meal))
 		Market.add_to_counter(j,"meal",1)
 	else:
 		var product: String="meal" if lane=="meal_to_store" else lane
@@ -193,7 +210,7 @@ func _arrive(lane:String)->bool:
 	j.line_load[lane]=0
 	j.line_progress[lane]=0.
 	var kind:String=Logistics.INPUT_FOR.get(lane,lane if lane in Logistics.RAW else "meat")
-	return loop.commit_receipt("conveyor_delivery",paths[lane][-1],"deposit_"+kind)
+	return loop.commit_receipt("conveyor_delivery",destination,"deposit_"+kind)
 
 func advance(dt:float)->void:
 	if not world.inventory.complete(Progress.SUPPLY_LINE) and not world.inventory.complete(Progress.FOOD_LINE):
@@ -219,7 +236,7 @@ func present()->void:
 		unit.visible=j.line_load[lane]>0 and lengths.get(lane,0.)>0.
 		if unit.visible:_place_cargo(lane,unit,float(j.line_progress[lane]))
 	network.present_lifts(goods)
-	network.set_buffer_full(j.counter_stock>=Rules.COUNTER_RACK_CAPACITY)
+	network.set_buffer_full(j.counter_stock>=buffer_capacity())
 	for product:String in SHELVES:
 		var bay:Node3D=shelf_items[product]
 		bay.visible=world.depot.house.is_interior_visible()

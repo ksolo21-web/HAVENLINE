@@ -507,6 +507,7 @@ func fund_opening_receiver(_receiver_id: Variant = null, _material_id: Variant =
 	return false
 
 func _make_drops(kind: String, origin: Vector3, amount: int) -> void:
+	var spread := maxf(.48, float(FieldArt.GROUND_WIDTHS[kind])*.98) if amount > 1 else .48
 	for i in amount:
 		drop_id += 1
 		var token := "%s-%d" % [kind,drop_id]
@@ -514,22 +515,25 @@ func _make_drops(kind: String, origin: Vector3, amount: int) -> void:
 			drop_id += 1
 			token = "%s-%d" % [kind,drop_id]
 		var angle := float(i) * TAU / amount + .7
-		var end := origin+Vector3(cos(angle),0,sin(angle))*(.48+.15*float(i%2))
+		var end := origin+Vector3(cos(angle),0,sin(angle))*(spread+.15*float(i%2))
 		_place_drop(token,kind,origin+Vector3.UP*.29,end,angle*.75,0)
 	_event("drop_"+kind,origin)
 
 func loose_clearance(kind: String) -> float:
 	# A resting piece needs room for its actual model on the snow and for its
 	# first pickup frame. Otherwise an item against a wall can never be lifted.
-	return maxf(float(FieldArt.WIDTHS[kind])*.50,float(carry.WIDTH[kind])*.38)+.012
+	var width: float = FieldArt.GROUND_WIDTHS[kind]
+	var dimensions: AABB = FieldArt.source_bounds.get(kind,AABB(Vector3.ZERO,Vector3.ONE))
+	var plan := Vector2(dimensions.size.x,dimensions.size.z)
+	return maxf(width*.50*plan.length()/maxf(plan.x,plan.y),float(carry.WIDTH[kind])*.38)+.012
 
 func _place_drop(token: String, kind: String, start: Vector3, end: Vector3, yaw: float, age: float) -> void:
 	if drops.has(token) or inventory.collected.has(token): return
+	var item := FieldArt.make(kind,FieldArt.GROUND_WIDTHS[kind])
+	if not item: return
 	var radius := loose_clearance(kind)
 	start = field_env.safe_drop_origin(start,radius)
 	end = field_env.clip_travel(start,end,radius)
-	var item := FieldArt.make(kind)
-	if not item: return
 	add_child(item)
 	item.position=start
 	item.rotation.y=yaw

@@ -9,17 +9,17 @@ const FieldArt = preload("res://field_art.gd")
 const FRAME_PATH := "res://assets/field_pack/carry_frame.glb"
 const WORN_RESOURCE := preload("res://assets/field_pack/worn_resource.gdshader")
 const RACK_SHADER := preload("res://assets/field_pack/portable_material.gdshader")
-const WIDTH := {"wood":.42, "stone":.32, "meat":.23, "coal":.20, "slate":.205, "metal":.20}
+const WIDTH := {"wood":.49, "stone":.36, "meat":.29, "coal":.255, "slate":.25, "metal":.255}
 # Permanent bays keep unlike resources off one another even when a neighboring
 # bay empties. The wide timber bay has two side-by-side, bark-outward packets
 # per course; the other five bays each hold one vertical stack.
-const BAY_X := {"wood":0.0, "slate":-.565, "coal":-.455, "metal":-.165, "meat":.135, "stone":.48}
+const BAY_X := {"wood":0.0, "slate":-.642, "coal":-.48, "metal":-.181, "meat":.135, "stone":.521}
 const OUTER_ROW := ["coal", "metal", "meat", "stone"]
-const INNER_Z := -.635
-const OUTER_Z := -.965
+const INNER_Z := -.585
+const OUTER_Z := -.938
 const PACK_BASE := .91
 const INNER_RISE := .10
-const TIMBER_PAIR_X := .212
+const TIMBER_PAIR_X := .249
 const MAX_LAYERS := 24
 const BEARER := preload("res://assets/field_pack/pack_bearer.tres")
 const SHELF_SCENE := preload("res://assets/field_pack/expedition_shelf.glb")
@@ -32,10 +32,6 @@ const SEND_TIME := 0.28
 # exact ledger quantities and use the last modeled packet in their own bay.
 const PACK_TOP := 1.86
 const TOP_MARGIN := .20
-# Rack-space footprint of the shelves plus the rotated resource packets.
-const RACK_CENTER_Z := -.795
-const RACK_HALF_WIDTH := .71
-const RACK_HALF_DEPTH := .355
 const HAND := "carry"
 const STOCK := "storage"
 
@@ -58,8 +54,7 @@ var braces: Array[MeshInstance3D] = []
 var shelves: Array[MeshInstance3D] = []
 var presented := {}
 var planned_counts := {}
-var minimum_headroom := 0
-var maximum_headroom := 2147483647
+var display_clearance := {}
 var pieces := {}
 var flights: Array[Dictionary] = []
 var cooldown := 0.0
@@ -221,29 +216,38 @@ func _fit_shelves(counts: Dictionary) -> void:
 			braces[row*2+side].transform = Transform3D(basis,(heel+seat)*.5)
 
 
-func _headroom_bucket() -> int:
+func _headroom_bucket(kind: String) -> int:
 	var room := visual_top - PACK_BASE
 	if not fit_to_viewport:
 		return maxi(1, floori(room * 100.0))
 	var camera := get_viewport().get_camera_3d()
 	if camera:
-		var base := rack.global_position + Vector3.UP * PACK_BASE
+		var center := _pack_position(kind,0)
+		center.y = PACK_BASE
+		var half_size: Vector3 = measured[kind]*.5
+		if kind == "wood":
+			center.x = 0.
+			half_size.x += TIMBER_PAIR_X
+		else:
+			# Packet headings alternate between ±2 degrees around the bay.
+			half_size += Vector3(half_size.z,0,half_size.x)*sin(deg_to_rad(2.))
+		var base := rack.to_global(center)
 		var projected_base := camera.unproject_position(base)
 		var y := projected_base.y
 		var pixels_per_metre := y - camera.unproject_position(base + Vector3.UP).y
 		if pixels_per_metre > .001:
 			var view_up := camera.global_basis.y
 			var rack_up := rack.global_basis.transposed()*view_up
-			# Footprint of the two shelves and all rotated packets in rack space.
-			# Only the corner projecting upwards can reduce HUD clearance.
-			var edge := rack_up.z * RACK_CENTER_Z + absf(rack_up.x) * RACK_HALF_WIDTH + absf(rack_up.z) * RACK_HALF_DEPTH
+			# Each row projects differently at the fixed camera. Use the actual
+			# packet footprint so a distant bay cannot hide a neighboring stack.
+			var edge := rack_up.abs().dot(Vector3(half_size.x,0,half_size.z))
 			var safe_y := get_viewport().get_visible_rect().size.y * TOP_MARGIN
 			if objective_card and top_status and objective_card.is_visible_in_tree():
 				var ticket := objective_card.get_global_transform_with_canvas() * Rect2(Vector2.ZERO, objective_card.size)
 				var right := rack.global_basis.transposed() * camera.global_basis.x
 				var pixels_per_horizontal_metre := pixels_per_metre / view_up.y
-				var center_x := projected_base.x + right.z * RACK_CENTER_Z * pixels_per_horizontal_metre
-				var span_x := (absf(right.x) * RACK_HALF_WIDTH + absf(right.z) * RACK_HALF_DEPTH) * pixels_per_horizontal_metre
+				var center_x := projected_base.x
+				var span_x := right.abs().dot(Vector3(half_size.x,0,half_size.z))*pixels_per_horizontal_metre
 				# Outside the objective, only the upper resource rail needs clearance.
 				if center_x - span_x > ticket.end.x or center_x + span_x < ticket.position.x:
 					var status_rect := top_status.get_global_transform_with_canvas() * Rect2(Vector2.ZERO, top_status.size)
@@ -252,23 +256,21 @@ func _headroom_bucket() -> int:
 	return maxi(1, floori(room * 100.0))
 
 func _layout_pack(counts: Dictionary) -> void:
-	var room := _headroom_bucket() / 100.0
-	minimum_headroom = 0
-	maximum_headroom = 2147483647
+	display_clearance.clear()
 	for kind: String in Inventory.KINDS:
 		if counts[kind] <= 0:
 			presented[kind] = 0
 			continue
+		var room := _headroom_bucket(kind) / 100.0
 		var units_per_layer := 2 if kind == "wood" else 1
 		var layers := ceili(float(counts[kind]) / units_per_layer)
 		var first_top := float(measured[kind].y) + (0.0 if kind in OUTER_ROW else INNER_RISE)
 		var step := float(tier_height[kind])
 		var visible_layers := clampi(1 + floori((room - first_top) / step), 1, mini(layers, MAX_LAYERS))
 		presented[kind] = mini(counts[kind], visible_layers * units_per_layer)
-		if visible_layers > 1:
-			minimum_headroom = maxi(minimum_headroom, ceili((first_top + (visible_layers - 1) * step) * 100.0))
-		if visible_layers < mini(layers, MAX_LAYERS):
-			maximum_headroom = mini(maximum_headroom, ceili((first_top + visible_layers * step) * 100.0) - 1)
+		var minimum := ceili((first_top + (visible_layers - 1) * step) * 100.0) if visible_layers > 1 else 0
+		var maximum := ceili((first_top + visible_layers * step) * 100.0) - 1 if visible_layers < mini(layers, MAX_LAYERS) else 2147483647
+		display_clearance[kind] = Vector2i(minimum,maximum)
 
 func _hand_slot(kind: String, logical_index: int) -> int:
 	return clampi(logical_index, 0, maxi(0, int(presented.get(kind, 0)) - 1))
@@ -446,7 +448,7 @@ func pickup_nearby(candidates: Array) -> Array[String]:
 				visual.free()
 				continue
 			var idx := int(inventory.carried[kind])-count-_outstanding(kind,HAND,true)
-			_start(visual,kind,"",HAND,first.at,idx,PICKUP_TIME,float(FieldArt.WIDTHS[kind])/float(WIDTH[kind]),1.,first.yaw,count,false)
+			_start(visual,kind,"",HAND,first.at,idx,PICKUP_TIME,float(FieldArt.GROUND_WIDTHS[kind])/float(WIDTH[kind]),1.,first.yaw,count,false)
 	if not accepted.is_empty(): sync(true)
 	return accepted
 
@@ -519,10 +521,13 @@ func advance(delta: float) -> void:
 	clock += delta
 	# The rack follows the actor without touching its nodes. Only a projection
 	# that changes a lane's visible count needs to reposition/show its pool.
-	if frame and frame.visible:
-		var limit := _headroom_bucket()
-		if limit < minimum_headroom or limit > maximum_headroom:
-			sync()
+	if frame and frame.visible and fit_to_viewport:
+		for kind: String in display_clearance:
+			var room := _headroom_bucket(kind)
+			var limits: Vector2i = display_clearance[kind]
+			if room < limits.x or room > limits.y:
+				sync()
+				break
 	cooldown = maxf(0.0, cooldown - delta)
 	var rack_changed := false
 	var shelf_landings := PackedStringArray()

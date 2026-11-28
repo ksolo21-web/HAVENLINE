@@ -8,6 +8,24 @@ uniform sampler2D packed_surface : hint_default_white, filter_linear_mipmap, rep
 uniform sampler2D feather_normals : hint_normal, filter_linear_mipmap, repeat_enable;
 uniform float coverage : hint_range(0.0,1.0) = 1.0;
 uniform bool folded = false;
+uniform float lookout_yaw = 0.0;
+
+void vertex() {
+	if (folded && abs(lookout_yaw) > .001) {
+		// Leave the bedroll and chest straps on the seated body. The high
+		// front feather collar eases into the rotation at the original neck.
+		float head = smoothstep(.416, .493, VERTEX.y) * smoothstep(.035, .145, VERTEX.z);
+		float angle = lookout_yaw * head;
+		float c = cos(angle);
+		float s = sin(angle);
+		mat2 twist = mat2(vec2(c, -s), vec2(s, c));
+		vec2 neck = vec2(-.02, .173);
+		VERTEX.xz = neck + twist * (VERTEX.xz - neck);
+		NORMAL.xz = twist * NORMAL.xz;
+		TANGENT.xz = twist * TANGENT.xz;
+		BINORMAL.xz = twist * BINORMAL.xz;
+	}
+}
 
 void fragment() {
 	if (coverage < 1.0) {

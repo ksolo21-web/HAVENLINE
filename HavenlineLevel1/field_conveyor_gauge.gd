@@ -5,6 +5,7 @@ const SOCKET := .484
 const WIDTH_STEP := .10
 const FREIGHT := .984
 const FOOD := 1.184
+var receiver
 var boxes:Array[Rect2]=[]
 var ends:Array[Vector3]=[]
 var turns:Array[Vector4]=[]
@@ -50,6 +51,7 @@ static func width_step(width:float) -> int:
 	return clampi(floori((width-SOCKET+.001)/WIDTH_STEP),0,7)
 
 func fitted_width(p:Vector3) -> float:
+	if receiver and receiver.inset(p):return receiver.WIDTH
 	return SOCKET+width_step(at(p))*WIDTH_STEP
 
 static func _cell(p:Vector3) -> Vector2i:return Vector2i(floori(p.x),floori(p.z))

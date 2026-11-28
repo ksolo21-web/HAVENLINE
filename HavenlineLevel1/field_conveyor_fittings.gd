@@ -207,6 +207,31 @@ func place_corner(path:PackedVector3Array,first:int,clear_pier:Callable) -> int:
 	_place("corner",path[first],path[last],forward,radius,angle>0,cut)
 	return last
 
+# Original ribbed D01 inclines and straight heads sit inside the manufacturer's
+# larger casting. These batches omit their ordinary floor legs; the receiver
+# has a full cobalt cabinet and a shared set of boots underneath.
+func receiver_span(a:Vector3,b:Vector3,from_width:float,to_width:float) -> void:
+	var original:="incline" if absf(b.y-a.y)>.055 else "straight"
+	if not meshes.has(original):return
+	var key:="receiver_"+original
+	if not meshes.has(key):
+		var donor:ArrayMesh=meshes[original].duplicate()
+		for i in donor.get_surface_count():
+			var mat:ShaderMaterial=donor.surface_get_material(i).duplicate()
+			mat.set_shader_parameter("receiving_machine",true)
+			donor.surface_set_material(i,mat)
+		meshes[key]=donor
+		transforms[key]=[]
+		values[key]=[]
+		counts[key]=0
+	var delta:=_flat(b)-_flat(a)
+	var forward:=_dir(delta.normalized())
+	transforms[key].append(Transform3D(Basis(Vector3.UP.cross(forward),Vector3.UP,forward),Vector3(a.x,0,a.z)))
+	var start:=clampi(roundi((from_width-.44)/.265),0,7)
+	var end:=clampi(roundi((to_width-.44)/.265),0,7)
+	values[key].append(Color(a.y/4.,b.y/4.,delta.length()/4.,float(128+8*start+end)/255.))
+	counts[key]+=1
+
 func finish() -> void:
 	for family:String in meshes:
 		var placements:Array=transforms[family]

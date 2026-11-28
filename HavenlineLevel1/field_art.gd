@@ -14,6 +14,7 @@ const PATHS := {
 	"slate": "res://assets/field/slate.glb",
 }
 const WIDTHS := {"money": .26, "meal": .36, "planks": .48, "blocks": .39, "wood": .53, "stone": .40, "meat": .39, "wolf": 2.4, "coal": .39, "metal": .42, "slate": .47}
+const GROUND_WIDTHS := {"wood": .64, "stone": .54, "meat": .53, "coal": .50, "metal": .53, "slate": .59}
 static var source_bounds := {}
 static var source_scenes := {}
 

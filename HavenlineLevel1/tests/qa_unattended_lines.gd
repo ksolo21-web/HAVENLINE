@@ -37,15 +37,16 @@ func run() -> void:
 		check("no counter line creates an unpaid sale",j.served==0 and j.counter_stock==0 and field.counter.queue.is_empty())
 	elif mode=="stock":
 		check("meal-only install automatically feeds and empties the cooker",b.line_live("meat") and b.line_live("meal_to_store") and b.line_live("stored_meal") and not b.line_live("wood"))
-		var staged := await until(func():return j.counter_stock==2 and j.product_store.meal==5 and j.cooked==7,6500)
-		check("empty public counter fills both slots without an order or staff handoff",staged and field.counter.queue.is_empty() and field.counter.sale_order==0 and j.served==0)
+		var expected:=mini(7,b.buffer_capacity())
+		var staged := await until(func():return j.counter_stock==expected and j.product_store.meal==7-expected and j.cooked==7,6500)
+		check("unattended public counter automatically stocks all available portions up to its capacity",staged and field.counter.queue.is_empty() and field.counter.sale_order==0 and j.served==0)
 		check("unattended serial line accounts for six raw portions and the original roast",book.stored.meat==0 and j.hoppers.meat==0 and j.line_load==Logistics.TRANSIT and Logistics.rack(j,"meat")==0 and j.product_store.meal+j.counter_stock==7)
 		check("unconnected timber and stone remain untouched",book.stored.wood==3 and book.stored.stone==3)
 		await ticks(90)
-		check("full counter holds stock without selling or dispatching twice",j.counter_stock==2 and j.product_store.meal==5 and j.served==0)
+		check("counter holds stock without selling or dispatching twice",j.counter_stock==mini(7,b.buffer_capacity()) and j.product_store.meal==7-mini(7,b.buffer_capacity()) and j.served==0)
 		field._checkpoint_lifecycle()
 	elif mode=="cold":
-		check("cold launch restored the full buffer and separate shelf",j.counter_stock==2 and j.product_store.meal==5 and j.cooked==7 and j.served==0)
+		check("cold launch restored the actual receiver and separate shelf",j.counter_stock==mini(7,b.buffer_capacity()) and j.product_store.meal==7-mini(7,b.buffer_capacity()) and j.cooked==7 and j.served==0)
 		field.counter.arrival_clock=0.
 		check("seven real customers collected and paid once",await until(func():return j.served==7,7400))
 		await ticks(120)

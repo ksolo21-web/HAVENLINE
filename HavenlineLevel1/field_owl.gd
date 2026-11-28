@@ -28,6 +28,7 @@ var perimeter_route := preload("res://field_pack_route.gd").new()
 var gate_request: Node3D
 var perch_fade: ShaderMaterial
 var previous_flight := -1.0
+var lookout_yaw := 0.0
 var claw_binds := PackedVector3Array()
 var claw_tucks := PackedVector3Array()
 var claw_reaches := PackedVector3Array()
@@ -160,6 +161,17 @@ func permits_contact(wolf: Node3D, at: Vector3) -> bool:
 func _turn(direction: Vector3, dt: float) -> void:
 	if direction.x*direction.x+direction.z*direction.z > .003:
 		rotation.y = rotate_toward(rotation.y,atan2(direction.x,direction.z),dt*6.9)
+
+func _watch_perch(dt: float) -> void:
+	var gate: Node3D = world.gates[post_index]
+	var outward := _outward(gate)
+	_turn(outward,dt*.29)
+	# Survey the outside shoulder of the occupied post. Only the head
+	# scans this arc, so the folded wings, pack and claws hold their seat.
+	var glance := outward-gate.global_basis.x*(.76+.46*sin(elapsed*1.12))
+	var aim := angle_difference(rotation.y,atan2(glance.x,glance.z))
+	lookout_yaw = move_toward(lookout_yaw,clampf(aim,-1.,1.),dt*1.9)
+	perch_fade.set_shader_parameter("lookout_yaw",lookout_yaw)
 
 func _outward(gate: Node3D) -> Vector3:
 	return gate.global_basis.z.slide(Vector3.UP).normalized()
@@ -328,12 +340,7 @@ func advance(delta: float) -> void:
 			if global_position.distance_to(perch) < .025: _switch("perched")
 		if state == "perched":
 			global_position=perch
-			# A perched owl watches the live approach beyond its gate. It can
-			# acknowledge a passing worker without turning its back to the field.
-			var gate: Node3D = world.gates[post_index]
-			var outward := (gate.global_position-world.global_position).slide(Vector3.UP).normalized()
-			var worker := (world.actor.global_position-perch).slide(Vector3.UP).normalized() as Vector3
-			_turn(outward + worker*.36,dt*.29)
+			_watch_perch(dt)
 	else:
 		if state in ["perched","land"]: _switch("takeoff")
 		match state:
@@ -428,6 +435,9 @@ func _dive(dt: float) -> void:
 	else: _recover()
 
 func _pose(dt: float, travel: float = 0.) -> void:
+	if state != "perched" and not is_zero_approx(lookout_yaw):
+		lookout_yaw = move_toward(lookout_yaw,0.,dt*2.9)
+		perch_fade.set_shader_parameter("lookout_yaw",lookout_yaw)
 	var extended := 0.0 if state=="perched" else 1.0
 	if state == "land": extended = clampf(global_position.distance_to(_perch())*1.65,.12,1.)
 	var frequency := 3.05 if state in ["recover","takeoff","land"] else 1.85

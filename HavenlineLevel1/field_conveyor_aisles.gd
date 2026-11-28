@@ -11,6 +11,7 @@ var boundary:=Rect2()
 var rail_cells:Dictionary={}
 var buildings:Array[Rect2]=[]
 var hearth:=Rect2()
+var stock_machine:=Rect2()
 var services:Dictionary={}
 var paths:Dictionary={}
 var public_cells:Dictionary={}
@@ -29,6 +30,9 @@ func install(host,routes:Dictionary,gauge) -> void:
 	buildings=world.camp_layout.obstacles()
 	hearth=world.camp_layout.footprint("center_hearth",world.camp_layout.center("center_hearth"))
 	buildings.erase(hearth)
+	if gauge.receiver:
+		stock_machine=gauge.receiver.shell
+		buildings.append(stock_machine)
 	for path:PackedVector3Array in routes.values():
 		path=Walk.resample(path)
 		for i in range(1,path.size()):
@@ -141,6 +145,7 @@ func _escape(start:Vector2,aim:Vector2) -> Vector2:
 	return result
 
 func disc_clear(p:Vector2,radius:float) -> bool:
+	if stock_machine.has_area() and p.distance_squared_to(p.clamp(stock_machine.position,stock_machine.end))<radius*radius:return false
 	for seg:Array in rail_cells.get(_bucket(p),[]):
 		var radius2:=pow(radius+float(seg[2]),2)
 		if p.distance_squared_to(_closest(p,seg[0],seg[1]))<radius2:return false
@@ -157,6 +162,30 @@ func line_clear(a:Vector2,b:Vector2,radius:float,bodies:=false) -> bool:
 func constrain(from:Vector3,to:Vector3,radius:float) -> Vector3:
 	if rail_cells.is_empty():return to
 	var p:=Walk.flat(to)
+	if stock_machine.has_area():
+		var before:=Walk.flat(from)
+		var sweep:=Rect2(before,Vector2.ZERO).expand(p).grow(radius+.002)
+		if sweep.intersects(stock_machine):
+			# Follow the outside of the cabinet even for a long joystick frame.
+			var segments:=maxi(1,ceili(before.distance_to(p)/.10))
+			var delta:Vector2=(p-before)/segments
+			p=before
+			for step in segments:
+				p+=delta
+				var closest:=p.clamp(stock_machine.position,stock_machine.end)
+				var outward:=p-closest
+				if outward.length_squared()>=radius*radius:continue
+				if outward.length_squared()<.000001:
+					var middle:=p-stock_machine.get_center()
+					var depth:=stock_machine.size*.5-middle.abs()
+					if depth.x<depth.y:
+						outward=Vector2.RIGHT if middle.x>=0 else Vector2.LEFT
+						closest.x=stock_machine.end.x if middle.x>=0 else stock_machine.position.x
+					else:
+						outward=Vector2.DOWN if middle.y>=0 else Vector2.UP
+						closest.y=stock_machine.end.y if middle.y>=0 else stock_machine.position.y
+				p=closest+outward.normalized()*(radius+.003)
+			to=Vector3(p.x,to.y,p.y)
 	if disc_clear(p,radius):return to
 	var previous:=Walk.flat(from)
 	var result:=p

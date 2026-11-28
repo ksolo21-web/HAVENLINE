@@ -21,6 +21,8 @@ var gauge
 var lifts:Dictionary={}
 # Serve from the right-hand end of the sales bay when it fits. A previously
 # placed workshop may require the other end of its existing counter.
+const Receiver = preload("res://field_conveyor_receiver.gd")
+var receiver
 var receive_from_east := false
 var stop_arm:Node3D
 var red_lamp:Node3D
@@ -31,6 +33,7 @@ func install(host) -> void:
 	name="ConnectedCampTransport"
 
 func counter_buffer_position(index:int=0) -> Vector3:
+	if receiver:return receiver.slot(index)
 	var end := Vector3(-.64,.85,1.45) if receive_from_east else Vector3(1.12,.85,1.75)
 	var upstream := Vector3.RIGHT if receive_from_east else Vector3.LEFT
 	return world.counter.global_position+end+upstream*.51*clampi(index,0,2)
@@ -107,7 +110,12 @@ func _machine(kind:String,inbound:bool,deck:float) -> PackedVector3Array:
 	apron.y=deck
 	return PackedVector3Array([port,apron])
 
-func _counter() -> PackedVector3Array:
+func _counter(lane:String,deck:float) -> PackedVector3Array:
+	if receiver:
+		var lip:Vector3=receiver.inlet(lane)
+		var approach:Vector3=lip-receiver.flow*.44
+		approach.y=deck
+		return PackedVector3Array([lip,approach])
 	var end:=counter_buffer_position(0)
 	var apron := end+Vector3.RIGHT*1.17 if receive_from_east else end+Vector3.LEFT*.95
 	return PackedVector3Array([end,apron])
@@ -115,8 +123,8 @@ func _counter() -> PackedVector3Array:
 func _terminals(lane:String,deck:float) -> Array[PackedVector3Array]:
 	match lane:
 		"meal_to_store":return [_machine("meat",false,deck),_warehouse("meal",true,deck)]
-		"stored_meal":return [_warehouse("meal",false,deck),_counter()]
-		"meal":return [_machine("meat",false,deck),_counter()]
+		"stored_meal":return [_warehouse("meal",false,deck),_counter(lane,deck)]
+		"meal":return [_machine("meat",false,deck),_counter(lane,deck)]
 		"planks":return [_machine("wood",false,deck),_warehouse("wood",true,deck)]
 		"blocks":return [_machine("stone",false,deck),_warehouse("stone",true,deck)]
 	return [_warehouse(lane,false,deck),_machine(lane,true,deck)]
@@ -163,6 +171,8 @@ func _plan(live_lanes:Array,ordering:Array,boxes:Array[Rect2],court:Rect2) -> Ar
 				# Finished food moves along the back of the work row.
 				# Bound each trunk by its two service-side sockets.
 				var edge:=maxf(start[-1].z,end[-1].z)+.05
+				if receiver and lane!="meal_to_store" and receiver.flow.x<0:
+					edge=maxf(edge,receiver.shell.end.y+.42)
 				lane_court.end=Vector2(court.end.x,minf(court.end.y,edge))
 			var leave:=Planner.xz(start[-1]-start[-2]).normalized()
 			var arrive:=Planner.xz(end[-1]-end[-2]).normalized()
@@ -196,6 +206,7 @@ func rebuild(live_lanes:Array) -> Dictionary:
 		child.queue_free()
 	routes={}
 	lifts.clear()
+	receiver=null
 	crossings=null
 	aisles=null
 	stop_arm=null
@@ -222,20 +233,35 @@ func rebuild(live_lanes:Array) -> Dictionary:
 	work_area=work_area.grow(.83).intersection(court)
 	var best_from_east := false
 	var needs_pickup := "meal" in live_lanes or "stored_meal" in live_lanes
-	for east in [false,true]:
-		receive_from_east=east
+	var best_receiver
+	var options:Array=[]
+	if needs_pickup:
+		for offset:float in [.40,-.8,1.60,-2.0]:
+			for direction:Vector3 in [Vector3.RIGHT,Vector3.LEFT]:
+				var machine:=Receiver.new()
+				if machine.position_for(world,direction,offset):options.append(machine)
+	options.append_array([false,true])
+	for option in options:
+		receiver=option if option is Receiver else null
+		receive_from_east=option==true if option is bool else false
+		var obstacles:=boxes.duplicate()
+		if receiver:obstacles.append(receiver.shell.grow(Planner.PAD))
+
 		for allowed:Rect2 in [work_area,court]:
 			for order:Array in priorities:
-				var candidate:=_plan(live_lanes,order,boxes,allowed)
+				var candidate:=_plan(live_lanes,order,obstacles,allowed)
 				if not crossings or candidate[0].size()>routes.size():
 					routes=candidate[0]
 					crossings=candidate[1]
-					best_from_east=east
+					best_from_east=receive_from_east
+					best_receiver=receiver
 				if routes.size()==live_lanes.size():break
 			if routes.size()==live_lanes.size():break
 		if routes.size()==live_lanes.size() or not needs_pickup:break
 	receive_from_east=best_from_east
+	receiver=best_receiver
 	gauge=preload("res://field_conveyor_gauge.gd").new()
+	gauge.receiver=receiver
 	gauge.setup(world,routes,counter_buffer_position(0))
 	art.gauge=gauge
 	art.fitted.gauge=gauge
@@ -253,6 +279,7 @@ func rebuild(live_lanes:Array) -> Dictionary:
 			if modeled_ports.has(mouth):continue
 			modeled_ports[mouth]=true
 			if mouth.is_equal_approx(counter_buffer_position(0)):continue
+			if receiver and (mouth.is_equal_approx(receiver.inlet("meal")) or mouth.is_equal_approx(receiver.inlet("stored_meal"))):continue
 			var outward:Vector3=terminal[1]-mouth
 			outward.y=0
 			if mouth.distance_to(world.depot.house.global_position)<2.2:
@@ -292,12 +319,23 @@ func rebuild(live_lanes:Array) -> Dictionary:
 		var junction:=_machine("meat",false,.85)
 		art.component("Diverter",junction[-1],Vector3.RIGHT)
 
+	if receiver:
+		receiver.build(art)
+		for lane:String in ["meal","stored_meal"]:
+			if not routes.has(lane):continue
+			var complete:PackedVector3Array=routes[lane]
+			complete.append_array(receiver.travel(lane).slice(1))
+			routes[lane]=complete
 	if "stored_meal" in routes or "meal" in routes:
 		var pickup:=counter_buffer_position(0)
 		var flow:=Vector3.LEFT if receive_from_east else Vector3.RIGHT
-		art.component("Pickup",pickup,flow,Vector3(gauge.fitted_width(pickup)/Geometry.Fittings.WIDTH,1.,1.))
+		if not receiver:art.component("Pickup",pickup,flow,Vector3(gauge.fitted_width(pickup)/Geometry.Fittings.WIDTH,1.,1.))
 		var distance_to_gate:=1.01 if receive_from_east else .82
 		var gate:=pickup-flow*distance_to_gate
+		if receiver:
+			pickup=receiver.point(receiver.LENGTH,.68)
+			gate=receiver.point(2.46,receiver.STOCK_Y)
+			flow=receiver.flow
 		var width_scale:float=gauge.fitted_width(gate)/Geometry.Fittings.WIDTH
 		art.component("StopPost",gate,flow,Vector3(width_scale,1.,1.))
 		green_lamp=art.movable("ClearLamp",gate,flow,width_scale)

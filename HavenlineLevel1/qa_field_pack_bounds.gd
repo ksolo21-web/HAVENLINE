@@ -180,7 +180,7 @@ func run() -> void:
 	var old_pos: Vector3 = wood[1].position
 	check(carry.pickup("switch-to-mixed", "stone", Vector3(2,0,1), .85), "typed stone pickup reserves the other column")
 	var entering: Dictionary = carry.flights[0]
-	check(is_equal_approx(entering.mesh.rotation.y,.85) and is_equal_approx(entering.mesh.scale.x,Art.WIDTHS.stone/Carry.WIDTH.stone), "flight starts at the real dropped heading and size")
+	check(is_equal_approx(entering.mesh.rotation.y,.85) and is_equal_approx(entering.mesh.scale.x,Art.GROUND_WIDTHS.stone/Carry.WIDTH.stone), "flight starts at the real dropped heading and size")
 	check(wood[1].position.is_equal_approx(old_pos), "an incoming stone leaves the wood course in its bay")
 	carry.advance(.4)
 	check(wood[1].position.is_equal_approx(old_pos) and entering.mesh.global_transform.is_equal_approx(top("stone").global_transform), "mixed pickup reaches its separate physical slot")

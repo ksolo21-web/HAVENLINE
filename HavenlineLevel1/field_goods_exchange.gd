@@ -10,6 +10,8 @@ const Cash=preload("res://assets/customer_counter/banded_notes.glb")
 # The rear-right rack in camp_storehouse.glb has a horizontal shelf at .745 m.
 const CASH_BAY:=Vector3(1.15,.746,-.77)
 const MAX_SHELF_NOTES=8
+const CASH_SHELF_SCALE := .72
+const CASH_FLIGHT_SCALE := 1.16
 var cash_bay:=Node3D.new()
 var shelf_notes:Array[Node3D]=[]
 var last_shelf_count:=-1
@@ -54,8 +56,8 @@ func present_cash()->void:
 	while shelf_notes.size()<amount:
 		var index:=shelf_notes.size()
 		var note:Node3D=Cash.instantiate()
-		note.scale=Vector3.ONE*.60
-		note.position=Vector3((index%2-.5)*.222,.102*floori(index/4.),(floori(index/2.)%2-.5)*.135)
+		note.scale=Vector3.ONE*CASH_SHELF_SCALE
+		note.position=Vector3((index%2-.5)*.259,.124*floori(index/4.),(floori(index/2.)%2-.5)*.145)
 		cash_bay.add_child(note)
 		shelf_notes.append(note)
 	for index in shelf_notes.size():
@@ -74,7 +76,9 @@ func _draw(kind:String,amount:int,local_point:Vector3,to_pack:bool,actor:Node3D=
 	var count:=mini(mini(amount,MAX_PER_STREAM),MAX_FLYING-flights.size())
 	for i in count:
 		var mesh:Node3D
-		if kind=="money":mesh=Cash.instantiate()
+		if kind=="money":
+			mesh=Cash.instantiate()
+			mesh.scale=Vector3.ONE*CASH_FLIGHT_SCALE
 		elif RAW_FOR.has(kind):mesh=Models.FINISHED[RAW_FOR[kind]].instantiate()
 		else:mesh=Art.make(kind,.46)
 		add_child(mesh)
