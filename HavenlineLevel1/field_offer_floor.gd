@@ -10,6 +10,7 @@ var floor_art
 var ink: ShaderMaterial
 var corners: StandardMaterial3D
 var platform: MeshInstance3D
+var emblem: Marker3D
 
 func install(environment, id: String, at: Vector3) -> void:
 	install_custom(environment,id,at,Progress.TITLES[id],Progress.offers({})[id].keys())
@@ -20,8 +21,6 @@ func install_custom(environment, id:String, at:Vector3, caption:String, kinds:Ar
 	name = "Offer_" + id
 	position = at + Vector3.UP * .009
 	scale = Vector3(.86,1,.86)
-	_set_platform(id)
-	StationPad.glyph_socket(self)
 	for part in environment.buy_anchor.get_children():
 		if part is MeshInstance3D and part.name in [&"Gray",&"Brackets"]:
 			var mesh := part.duplicate() as MeshInstance3D
@@ -34,10 +33,11 @@ func install_custom(environment, id:String, at:Vector3, caption:String, kinds:Ar
 				corners = mesh.material_override.duplicate()
 				mesh.material_override = corners
 				corners.albedo_color = Color("f8fbff")
-	title = environment.flat_label(self,Vector3(0,StationPad.FACE_Y+.008,-.19),.0061)
+	_set_platform(id)
+	title = environment.flat_label(self,Vector3(0,StationPad.FACE_Y+.008,-.70),.0061)
 	title.text = caption
 	title.modulate = Color.WHITE
-	price = environment.cost_row(self,kinds,.47)
+	price = environment.cost_row(self,kinds,.58)
 	price.position.y += StationPad.FACE_Y
 	hide()
 
@@ -56,24 +56,28 @@ func _set_platform(id: String) -> void:
 		platform.queue_free()
 	platform = StationPad.create(role)
 	add_child(platform)
+	StationPad.ground_color(ink,role)
+	if is_instance_valid(emblem):
+		remove_child(emblem)
+		emblem.queue_free()
+	emblem = StationPad.glyph_socket(self,role)
+	emblem.visible = not is_instance_valid(icon)
 
 func _install_glyph(id: String) -> void:
+	shown_id = id
+	if id != Progress.AXES and not Progress.MACHINES.values().has(id): return
 	icon = Sprite3D.new()
-	icon.texture = preload("res://assets/field_camp/orbit_upgrade.svg") if id == Progress.AXES else preload("res://assets/field_camp/hearth_mark.svg")
-	if id in Progress.LINES:
-		icon.texture=preload("res://assets/conveyors/conveyor_mark.png")
+	icon.texture = preload("res://assets/field_camp/orbit_upgrade.svg")
 	if Progress.MACHINES.values().has(id):
 		var glyphs := {"camp_cooker":preload("res://assets/paid_workshops/cooker_processor_mark.png"), "saw_bench":preload("res://assets/paid_workshops/saw_station_mark.png"), "quarry_drill":preload("res://assets/paid_workshops/quarry_drill_station_mark.png")}
 		icon.texture = glyphs[id]
 	icon.axis = Vector3.AXIS_Y
 	icon.pixel_size = .0038 if id == Progress.AXES else .0044
-	if id in Progress.MACHINES.values() or id in Progress.LINES: icon.pixel_size = .009
+	if Progress.MACHINES.values().has(id): icon.pixel_size = .009
 	icon.position = Vector3(0,StationPad.FACE_Y+.012,-.19)
 	icon.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(icon)
-	title.position.z = -.70
-	price.position.z = .58
-	shown_id = id
+	emblem.hide()
 
 func change_project(id: String, ledger) -> void:
 	if id == shown_id: return

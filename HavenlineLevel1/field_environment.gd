@@ -722,7 +722,7 @@ func install_payment(anchor:Node3D, upgrade:bool) -> void:
 	var at := UPGRADE if upgrade else BUY
 	anchor.position = Vector3(at.x,.008,at.y)
 	anchor.add_child(StationPad.create("upgrade" if upgrade else "build"))
-	StationPad.glyph_socket(anchor)
+	StationPad.glyph_socket(anchor,"upgrade" if upgrade else "build",false)
 	if upgrade: anchor.scale = Vector3(.84,1.,.84)
 	for role in ["gray","brackets"]:
 		var brush := SurfaceTool.new()
@@ -756,7 +756,7 @@ func install_payment(anchor:Node3D, upgrade:bool) -> void:
 		if role=="gray":
 			var fill := ShaderMaterial.new()
 			fill.shader = FILL
-			fill.set_shader_parameter("grounded",Color("9eabb6") if not upgrade else Color("5d5147"))
+			StationPad.ground_color(fill,"upgrade" if upgrade else "build")
 			fill.set_shader_parameter("funded",Color("3bc615"))
 			payment_ink["upgrade" if upgrade else "buy"] = fill
 			mark.material_override = fill

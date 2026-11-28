@@ -117,9 +117,10 @@ func run() -> void:
 	for role: String in Pads.COLORS:
 		var pad := Pads.create(role)
 		var source := "res://field_station_pad.gd"
+		var frame: Vector2 = Pads.FRAME[role]
 		var entry := {"id":"pad_"+role,"asset":source,"sha256":FileAccess.get_sha256(source),
 			"next_use":role+" ground marking","fit":"shallow deck with original interactive face lifted above bevel",
-			"footprint":[-1.487,-1.236,2.974,2.472],"approach_width":.78,
+			"footprint":[-frame.x,-frame.y,frame.x*2.,frame.y*2.],"approach_width":.78,
 			"sockets":attach({"IconSocket":Vector3(0,Pads.FACE_Y+.012,-Pads.SLOT_WIDTH)}),
 			"trim":Pads.COLORS[role].to_html(false)}
 		_inventory(pad,entry)

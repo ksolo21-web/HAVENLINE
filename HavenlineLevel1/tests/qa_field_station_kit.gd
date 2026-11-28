@@ -44,12 +44,16 @@ func run() -> void:
 	full.free()
 	empty.free()
 	var net := {}
+	var pad_icons := Node3D.new()
 	for role: String in Pads.COLORS:
 		var deck := Pads.create(role)
+		var stamp := Pads.glyph_socket(pad_icons,role).get_node("InlaidPurpose") as MeshInstance3D
+		checks[role+" has a real readable inlay mesh at the icon socket"] = stamp.get_aabb().size.x>.5 and stamp.get_aabb().size.z>.37
 		net[deck.mesh.resource_name+str(Pads.SILHOUETTES[role])+Pads.COLORS[role].to_html()] = true
 		checks[role+" deck retains a positive shallow side wall"] = 			deck.get_aabb().size.y>.03 and deck.get_aabb().size.y<Pads.FACE_Y
 		deck.free()
 	checks["six distinguishable pad silhouettes and finishes"] = net.size()==6
+	pad_icons.free()
 	var anchor: Node3D = field.field_env.buy_anchor
 	checks["visible founding plot keeps existing payment and reach surfaces"] = 		anchor.has_node("Gray") and anchor.has_node("Brackets") and anchor.has_node("Platform") and anchor.has_node("IconSocket")
 	var active_border: MeshInstance3D = anchor.get_node("Brackets")
