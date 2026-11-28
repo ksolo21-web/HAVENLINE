@@ -1,5 +1,9 @@
 # HAVENLINE consolidation entrypoint
 
+## Check GitHub before starting a task
+
+Before starting or resuming any Havenline task, check GitHub for relevant changes to the task plan, the selected gameplay source and the owner's design notes and renders. Check open planning PRs alongside the current plan. Record the commit refs that apply, then start from the current scope and source.
+
 ## Latest owner additions — Aurora and a living winter world
 
 Read the [Aurora, wildlife, day/night and natural-movement plan](Docs/Production/LIVING_WORLD_UI_PLAN.md) and [30-row contract](Docs/Production/LIVING_WORLD_UI_PLAN.json) before conflicting older control/roster guidance. Aurora Light/Dark and touch-anywhere movement are selected; the latest owner correction allows a visible joystick without requiring movement to start on it. Add distinct enemy roles, nonaggressive huntable winter wildlife, different day/night populations, more aggressive night hostiles and natural animal/survivor movement. Dark UI does not set world time. Keep all seven attacking/useful pets, multiple pets/survivors and the current 10×50 World 1-first scope.

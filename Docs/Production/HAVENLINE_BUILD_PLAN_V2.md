@@ -1,5 +1,7 @@
 # HAVENLINE BUILD PLAN V2 — Controlled Parallel Production
 
+Before starting or resuming a task, follow the [GitHub pre-task check](../../AGENTS.md#check-github-before-starting-a-task).
+
 ## Latest owner additions — Aurora and a living winter world
 
 Read the [Aurora, wildlife, day/night and natural-movement plan](LIVING_WORLD_UI_PLAN.md) and [30-row contract](LIVING_WORLD_UI_PLAN.json) before conflicting older control/roster guidance. Aurora Light/Dark and touch-anywhere movement are selected; the latest owner correction allows a visible joystick without requiring movement to start on it. Add distinct enemy roles, nonaggressive huntable winter wildlife, different day/night populations, more aggressive night hostiles and natural animal/survivor movement. Dark UI does not set world time. Keep all seven attacking/useful pets, multiple pets/survivors and the current 10×50 World 1-first scope.
@@ -130,7 +132,7 @@ The forward critic harness, specialist runner, closure and visual/style checks u
 | T03 | Fences, gates and navigable work lanes | APPROVED | [T03 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t03) |
 | T04 | Reference camera and automatic screen composition | APPROVED | [T04 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t04) |
 | T05 | Production station and prop kit | APPROVED | [T05 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t05) |
-| T06 | Character 1 complete movement/interactions | APPROVED | [T06 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t06) |
+| T06 | Character 1 complete movement/interactions | APPROVED | [T06 foundation](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t06) · [Forward playable roster and vehicle pairings](T06/PLAYABLE_ROSTER_AND_VEHICLES.md) |
 | T07 | Havenline Simple Control & Context Director | APPROVED | [T07 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t07) |
 | T08 | Visible inventory, physical carrying and transfers | APPROVED | [T08 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t08) |
 | T09 | Harvesting and automatic acquisition | APPROVED | [T09 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t09) |
