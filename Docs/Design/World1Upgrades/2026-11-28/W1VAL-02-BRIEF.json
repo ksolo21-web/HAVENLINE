@@ -1,0 +1,135 @@
+{
+  "id": "W1VAL-02",
+  "family_ids": [
+    "camp_fence",
+    "guard_tower",
+    "defense_platform"
+  ],
+  "title": "Working defensive wall and guard tower progression",
+  "status": "DRAFT_FOR_INDEPENDENT_REVIEW_NOT_SELECTED",
+  "retained_base": "Retain accepted fence and defense-platform concepts. Available fortress-watchtower and reinforced-palisade sheets are related authored references, not proof of fidelity to unrecovered guard_tower/ballista_tower images. Unseen original images are excluded.",
+  "stages": [
+    {
+      "stage_id": "boundary_and_guard_tower__guardwalk",
+      "name": "GUARDWALK DEFENSE",
+      "baseline_limitation": "A plain boundary can delay an enemy but offers limited protected movement, reachable attack position and supply workflow.",
+      "appearance_change": "A substantial timber palisade on a low stone footing, an outward-facing spike skirt, broad interior guardwalk with a camp-side stair and a braced raised guard platform carrying a hand-loaded mechanical ballista.",
+      "purchase_value": "Finite stronger barrier protection, actual contact deterrence at outward spikes and an elevated manned outward firing position. Inner walk lets a repair/resupply worker reach the tower without standing outside the defense.",
+      "input_processing_output": "A living assigned operator cocks/aims/fires the ballista; a living supply worker brings crafted bolt stock from the reachable workshop chain to the inner rack. Each valid shot consumes one authored ammunition unit and creates one bounded projectile/contact event; no free refill or invisible damage.",
+      "jobs": "Operate, reload, guard, repair and resupply through reachable interior approach positions. No unstaffed fire.",
+      "footprint_ports_clearance": "A paid outward spike apron plus inward guardwalk/stair strip. Keep two existing ordinary bidirectional pedestrian gates and their approaches; this module adds no new opening. Spikes and weapon sweep never intrude into either gate path.",
+      "tradeoff": "Spikes engage only actual eligible exterior contact; guards need an available position, ammunition and line of fire. A breach opens real collision. Construction and damage repairs consume reachable materials.",
+      "requirements": [
+        "Bounded HP, damage/breach and purchased-tier boundary reconstruction",
+        "Shared target/provocation rules and friendly-safety firing arc",
+        "Living operator and reload reservations with reachable stair/guardwalk",
+        "Explicit proposed crafted-bolt recipe and inventory-ID registration before runtime",
+        "Manual cock/load/fire/full-cycle motion and contact proof"
+      ]
+    },
+    {
+      "stage_id": "boundary_and_guard_tower__bolt_bastion",
+      "name": "BOLT BASTION",
+      "baseline_limitation": "Open timber platforms expose operators and hand-loading limits sustained defense while multiple approaches need repair.",
+      "appearance_change": "A much heavier stone-and-blue bastion with a wider protected guardwalk, covered inner ammunition staging, a manual ammo hoist and a larger manually operated repeating-ballista frame with a visible bolt cassette and side crank. Outward buttresses/spikes remain outside the traffic corridor.",
+      "purchase_value": "A real loaded-bolt magazine reduces repeated manual loading interruption while finite ammunition lasts; a protected resupply route and improved structural protection keep the tower useful under pressure. No claimed damage/range multiplier.",
+      "input_processing_output": "Worker delivers existing crafted bolt stock to the inside base rack, hand hoist moves that owned stock to the deck rack, operator loads the finite cassette and fires only within the outward arc. Empty cassette blocks fire until a real reload commits.",
+      "jobs": "Separate living guard/operator, reload and repair reservations can operate together with distinct safe stations; firing and hoist travel do not cross the pedestrian stair.",
+      "footprint_ports_clearance": "Expanded purchased bastion base, inner supply platform and wider walk. Mechanical bow sweep faces away from the camp; no muzzle/arm sweep through walls, gates, workers or animals.",
+      "tradeoff": "Larger construction/repair and ammunition-production demand; exposed firing arc and empty-magazine pauses remain exploitable. Finite protection, no electric field or automatic immortal turret.",
+      "requirements": [
+        "Magazine custody/empty/reload state bound to exact ammunition stock",
+        "Safe concurrent operator, hoist and repair jobs",
+        "Expanded footprint and exterior attack-arc checks",
+        "Breach, ruin, recoverable ammunition and tower rebuild lifecycle",
+        "Scene combat/playback, real sound and dense-team pathing proof"
+      ]
+    }
+  ],
+  "proposed_ammunition_contract": {
+    "status": "EXPLICIT_NEW_CONTENT_PROPOSAL_NOT_REGISTERED_OR_APPROVED",
+    "candidate_id": "PROPOSED_DEFENSE_BOLT",
+    "recipe": "Existing planks plus existing mechanical_parts become simple wooden-shaft metal-head bolts at an attainable workshop/manual crafting station. Exact recipe quantities, output count and cost remain tuning decisions.",
+    "reachable_chain": [
+      "wood -> saw_bench -> planks",
+      "metal + coal -> coal_smelter -> iron_bars",
+      "iron_bars -> hand_metal_bench -> mechanical_parts",
+      "planks + mechanical_parts -> proposed workshop bolt recipe"
+    ],
+    "gate": "Define real item/recipe/projectile IDs, affordability and manual bootstrap route before ballista runtime adoption. No ammunition may appear for free; no new gunpowder or electricity chain is assumed."
+  },
+  "ordered_inputs": [
+    {
+      "repository_path": "Docs/Design/StructureReferences/2026-11-25/selected/fence-cardinal.png",
+      "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/a868ae89cdf2f120b478aa0a48fff35e09cc465c/Docs/Design/StructureReferences/2026-11-25/selected/fence-cardinal.png",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-structures-2026-11-25/archive-repo/Docs/Design/StructureReferences/2026-11-25/selected/fence-cardinal.png",
+      "role": "Exact accepted base fence identity and scale, kept as an ancestor not overwritten.",
+      "bytes": 1794624,
+      "sha256": "d616f90b5c0c98a02cafe93b8cfbb114280dc2c5ee74f26cf0e34b41dae1e734",
+      "git_blob_sha1": "0f6fcd42f4dd078bc70dc89266b8dc30f8ea85cf",
+      "identity_basis": "LOCAL_BYTES"
+    },
+    {
+      "repository_path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-reinforced-palisades.png",
+      "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/a868ae89cdf2f120b478aa0a48fff35e09cc465c/Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-reinforced-palisades.png",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-repo/Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-reinforced-palisades.png",
+      "role": "Related selected timber defensive form/material reference; new guardwalk and spike arrangement are authored here.",
+      "bytes": 1969824,
+      "sha256": "fae26f92530f32c35b74a4b3152af8345adbd8c6e134744ed719d547f3ac8051",
+      "git_blob_sha1": "eafc9f3c55663de5293c9ce9e2c9800382951b07",
+      "identity_basis": "LOCAL_BYTES"
+    },
+    {
+      "repository_path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/defense-platform-turnaround.png",
+      "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/a868ae89cdf2f120b478aa0a48fff35e09cc465c/Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/defense-platform-turnaround.png",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-repo/Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/defense-platform-turnaround.png",
+      "role": "Selected accessible defense-platform family reference; preserve readable usable floor and access logic.",
+      "bytes": 1894922,
+      "sha256": "f8570231d40fcea9d6628b23838b71880de6d8226d6856eff33167c7504941d0",
+      "git_blob_sha1": "69cc35e63ef361a9bd1057b46b6c78e3127955ed",
+      "identity_basis": "LOCAL_BYTES"
+    },
+    {
+      "repository_path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-fortress-watchtowers.png",
+      "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/a868ae89cdf2f120b478aa0a48fff35e09cc465c/Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-fortress-watchtowers.png",
+      "local_path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-repo/Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-fortress-watchtowers.png",
+      "role": "Related future tower architecture reference only. Atlas alternatives are not assigned equipment levels or World 1 unlocks.",
+      "bytes": 2035964,
+      "sha256": "9781d9d5a8b0a5d05f64fcf9a4abdae3b11344ba1034a1468d8f136266ced112",
+      "git_blob_sha1": "466b20c49473b988ac664bfdd1303c38e7dd5e31",
+      "identity_basis": "LOCAL_BYTES"
+    }
+  ],
+  "prompt": "Create a strong HAVENLINE World 1 authored upgrade proposal, matching supplied selected references in stylized rounded 3D craft, warm orange timber, deep blue steel, rounded gray hardware and soft sculpted snow. Meaningful new functional structures, no recolor/brackets-only upgrade. Clean navy studio background and large readable objects. Exactly TWO rows by THREE roomy columns. Each row is one coherent new stage shown in front/exterior three-quarter, true opposite rear/interior three-quarter, and a functional cutaway/detail of that same design. No level numbers, prices, stat multipliers or implementation claims. Short stage/view labels and footer AUTHORED UPGRADE PROPOSAL. HEADER HAVENLINE / WALL AND GUARD TOWER. TOP ROW label GUARDWALK DEFENSE. Create one short coherent wall-and-tower module: thick timber palisade, low masonry footing, outward spike skirt, a broad protected interior guardwalk, a clearly usable staircase on the CAMP side, and a raised braced timber firing deck. On the firing deck place one unmistakable hand-loaded mechanical ballista, with transverse bow arms, a straight bolt guide, manual cocking crank, an operator standing space behind it and a small inner bolt rack. Weapon points away from camp. BOTTOM ROW label BOLT BASTION. Create the substantial later version: heavier masonry-and-blue tower and buttresses, a wider protected guardwalk, a roofed inner ammunition platform, a small hand-operated ammo hoist, and a more capable manually operated repeating ballista with a clearly visible finite bolt cassette, cocking mechanism and clear operator/reload positions. Same material family, but an obvious larger structural and functional upgrade. Show correct-sized wooden-shaft metal-head bolts only in actual racks/cassette. No people are required; unobstructed human-sized access spaces must be credible. For each row show EXTERIOR: the outward spike/weapon side, INTERIOR: the true opposite side exposing the camp-side stair, safe walk and reload access, FUNCTION: a close cutaway/angled view of the same firing deck and supply path. The third view must not grow extra weapons or swap the stair side. Keep firing sweep entirely outward and physically clear of walls; spikes do not point into the camp. This is a modular wall section, not an enclosing full camp: do not add a gate, third pedestrian opening, decorative door in a solid wall, electric glow or powered laser. Preserve the game rule that the two existing pedestrian gates and their approaches remain untouched at placement. The source watchtower sheet supplies material vocabulary only; this is a new authored functional tower, not a reconstruction of an unavailable original.",
+  "acceptance_checks": [
+    "Wall/tower upgrades add readable protection, access and actual attack hardware",
+    "Exterior/interior geometry and stair positions agree across views",
+    "Outward weapon arc and spikes clear all friendly approaches",
+    "Inner stair/walk/reload path is physically continuous",
+    "Repeating mechanism uses finite visible bolts and a real manual cock/load/fire system",
+    "No free fire, power system, ammo chain approval or numeric balance claim",
+    "Both ordinary pedestrian gate routes remain a placement requirement",
+    "Unretrieved old guard_tower and ballista_tower images are not claimed as inspected evidence"
+  ],
+  "equipment_level_binding": null,
+  "world_level_binding": null,
+  "prices_rates_and_capacities": "TUNING_PENDING_NO_APPROVED_VALUES",
+  "runtime_approval_claimed": false,
+  "referenced_image_paths": [
+    "/workspace/scratch/9c51da47f878/havenline-structures-2026-11-25/archive-repo/Docs/Design/StructureReferences/2026-11-25/selected/fence-cardinal.png",
+    "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-repo/Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-reinforced-palisades.png",
+    "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-repo/Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/defense-platform-turnaround.png",
+    "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-repo/Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-fortress-watchtowers.png"
+  ],
+  "generation_status": {
+    "full_armed_sheet": "BLOCKED_BY_IMAGE_TOOL_MODERATION_NO_OUTPUT",
+    "source": "Root reported image-generation rejection on 2026-11-28.",
+    "limited_architecture_alternative": "A separate unarmed protective-architecture sheet may show wall, guardwalk, stairs and closed empty mount. It cannot satisfy the requested armed tower appearance gate.",
+    "owner_attack_requirement_retained": true,
+    "full_armed_visual_approval": false
+  }
+}

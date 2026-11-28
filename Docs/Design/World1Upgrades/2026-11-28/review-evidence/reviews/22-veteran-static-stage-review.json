@@ -1,0 +1,115 @@
+{
+  "reviewer": "/root/world1_upgrade_critic",
+  "date": "2026-11-28",
+  "scope": "VETERAN_CREW_AUTHORED_STATIC_THREE_VIEW_STAGE_ONLY",
+  "id": "W1VAL-03B",
+  "status": "PASS_SCOPED_STATIC_CONCEPT_REVIEW",
+  "score": 9.9,
+  "files": [
+    {
+      "path": "generated/w1val-03b-gear-r4.png",
+      "sha256": "324f3149e54b1e4e32c65820065e52c35c75ee24740e2052b4292e86d3096a70"
+    },
+    {
+      "path": "generated/w1val-03b-use-r1.png",
+      "sha256": "765240fca9c899c0fca764e94724596bf0dd57a6ebc30b2b903e7d592b70e6f4"
+    }
+  ],
+  "use_invocation": {
+    "path": "prompts/w1val-03b-use-r1-invocation.json",
+    "sha256": "282aa9d2b36250bb0d30838624072849119dc2cdf32405c4a9770179d09e6be7"
+  },
+  "master_receipt": "20-veteran-master-r4-review.json",
+  "mandatory_checks": {
+    "master_passed": 12,
+    "master_required": 12,
+    "use_passed": 12,
+    "use_required": 12,
+    "total_passed": 24,
+    "total_required": 24
+  },
+  "use_checks": [
+    {
+      "id": "U01",
+      "check": "Exactly the same five specified individuals, no extra or cloned actor",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    },
+    {
+      "id": "U02",
+      "check": "Selected compact human body/head/limb proportions and facial identities",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    },
+    {
+      "id": "U03",
+      "check": "Dog/wolf/owl species forms, fur/feather identities and natural anatomy",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    },
+    {
+      "id": "U04",
+      "check": "Veteran stage gear retained from the exact reviewed front/rear master",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    },
+    {
+      "id": "U05",
+      "check": "Selected orange timber/rope/snow fence identity retained",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    },
+    {
+      "id": "U06",
+      "check": "Existing bound plank unit and real reachable tools, no invented goods or scale inflation",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    },
+    {
+      "id": "U07",
+      "check": "Plausible gloved tool grip and visible hammer-to-fixing contact with supporting hand",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    },
+    {
+      "id": "U08",
+      "check": "Complete grounded human boots, distinct pet paws and owl perch grip",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    },
+    {
+      "id": "U09",
+      "check": "Human joints, pet jaws/legs and open owl wing roots/flight feathers remain clear",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    },
+    {
+      "id": "U10",
+      "check": "Separate useful repair, guarding, watch and warning positions without blocked routes",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    },
+    {
+      "id": "U11",
+      "check": "Readable use composition with matching stage style and no anatomy hidden by props",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    },
+    {
+      "id": "U12",
+      "check": "Honest authored static-use labeling, no numerical or native behavior claim",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    }
+  ],
+  "evidence": [
+    "Actual entire front/rear master and final use image",
+    "Exact selected fence source re-opened",
+    "Actual repair-hand contact and open-wing owl closeups",
+    "Original five actor source images and selected02/04 unit sources already directly inspected",
+    "Exact four-input use invocation with reviewed master hash"
+  ],
+  "dimensions": {
+    "source_identity_and_anatomy": 9.9,
+    "stage_gear_continuity": 9.9,
+    "work_object_and_resource_fidelity": 9.9,
+    "actual_static_hand_tool_and_ground_contacts": 9.9,
+    "joint_wing_and_workflow_clearance": 9.9,
+    "purposeful_simultaneous_roles": 9.9,
+    "style_and_readability": 9.9,
+    "scope_and_claim_boundaries": 10
+  },
+  "known_unapproved_static_deviations": [],
+  "owner_new_design_approval": false,
+  "native_approval": false,
+  "whole_task_complete": false,
+  "boundary": "This completes the authored static stage evidence only: front, rear and separate use scene. It does not prove runtime protection/damage, repair/reservations, AI target choices, actual attack contacts, animation/full motion clearance, sound, balance, unlock availability or owner selection. Those remain separate gates."
+}

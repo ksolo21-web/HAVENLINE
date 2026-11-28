@@ -1,0 +1,2112 @@
+{
+  "schema_version": 1,
+  "base_commit": "fd2e12c8734f49cda7eb3bbf97887406bd03a704",
+  "runtime_approval_allowed": false,
+  "rows": [
+    {
+      "task_id": "T01",
+      "name": "Reference snow-covered trees and forest framing",
+      "dependencies_preserved": [],
+      "owned_gap_ids": [],
+      "consumer_gap_ids": [
+        "CG15",
+        "CG16"
+      ],
+      "decision_ids": [],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T02",
+      "name": "Terrain, snow, warm work-floor and lakeshore",
+      "dependencies_preserved": [
+        "T01"
+      ],
+      "owned_gap_ids": [],
+      "consumer_gap_ids": [
+        "CG15",
+        "CG16"
+      ],
+      "decision_ids": [],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T03",
+      "name": "Fences, gates and navigable work lanes",
+      "dependencies_preserved": [
+        "T02"
+      ],
+      "owned_gap_ids": [],
+      "consumer_gap_ids": [
+        "CG03",
+        "CG13",
+        "CG15",
+        "CG16"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD05"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T04",
+      "name": "Reference camera and automatic screen composition",
+      "dependencies_preserved": [
+        "T03"
+      ],
+      "owned_gap_ids": [
+        "CG15",
+        "CG17"
+      ],
+      "consumer_gap_ids": [
+        "CG11",
+        "CG16",
+        "CG18"
+      ],
+      "decision_ids": [
+        "CD05",
+        "CD10"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T05",
+      "name": "Production station and prop kit",
+      "dependencies_preserved": [
+        "T03"
+      ],
+      "owned_gap_ids": [],
+      "consumer_gap_ids": [
+        "CG14",
+        "CG15",
+        "CG16"
+      ],
+      "decision_ids": [],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T06",
+      "name": "Character 1 complete movement/interactions",
+      "dependencies_preserved": [
+        "T03"
+      ],
+      "owned_gap_ids": [
+        "CG14"
+      ],
+      "consumer_gap_ids": [
+        "CG04",
+        "CG15",
+        "CG16"
+      ],
+      "decision_ids": [
+        "CD06"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T07",
+      "name": "Havenline Simple Control & Context Director",
+      "dependencies_preserved": [
+        "T04",
+        "T06"
+      ],
+      "owned_gap_ids": [
+        "CG11"
+      ],
+      "consumer_gap_ids": [
+        "CG06",
+        "CG13",
+        "CG15",
+        "CG16",
+        "CG18"
+      ],
+      "decision_ids": [
+        "CD03",
+        "CD05",
+        "CD09",
+        "CD10"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T08",
+      "name": "Visible inventory, physical carrying and transfers",
+      "dependencies_preserved": [
+        "T05",
+        "T06",
+        "T07"
+      ],
+      "owned_gap_ids": [
+        "CG02"
+      ],
+      "consumer_gap_ids": [
+        "CG06",
+        "CG07",
+        "CG09",
+        "CG11",
+        "CG12",
+        "CG14",
+        "CG15",
+        "CG16",
+        "CG18"
+      ],
+      "decision_ids": [
+        "CD03",
+        "CD05",
+        "CD07",
+        "CD08",
+        "CD09",
+        "CD10"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T09",
+      "name": "Harvesting and automatic acquisition",
+      "dependencies_preserved": [
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "owned_gap_ids": [
+        "CG09",
+        "CG14"
+      ],
+      "consumer_gap_ids": [
+        "CG02",
+        "CG04",
+        "CG10",
+        "CG15",
+        "CG16"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD03",
+        "CD05",
+        "CD06",
+        "CD08",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T10",
+      "name": "World Transformation Framework",
+      "dependencies_preserved": [
+        "T05",
+        "T08",
+        "T09"
+      ],
+      "owned_gap_ids": [],
+      "consumer_gap_ids": [
+        "CG02",
+        "CG03",
+        "CG06",
+        "CG07",
+        "CG08",
+        "CG09",
+        "CG12",
+        "CG14",
+        "CG15",
+        "CG16"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD03",
+        "CD05",
+        "CD07",
+        "CD08",
+        "CD09",
+        "CD11"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T11",
+      "name": "Camp construction and visual upgrade system",
+      "dependencies_preserved": [
+        "T05",
+        "T10"
+      ],
+      "owned_gap_ids": [],
+      "consumer_gap_ids": [
+        "CG02",
+        "CG03",
+        "CG06",
+        "CG08",
+        "CG09",
+        "CG12",
+        "CG14",
+        "CG15",
+        "CG16"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD03",
+        "CD05",
+        "CD08",
+        "CD09",
+        "CD11"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T12",
+      "name": "Level 1\u2013100 progression architecture",
+      "dependencies_preserved": [
+        "T07",
+        "T08",
+        "T10",
+        "T11"
+      ],
+      "owned_gap_ids": [
+        "CG08",
+        "CG10",
+        "CG11"
+      ],
+      "consumer_gap_ids": [
+        "CG09",
+        "CG15",
+        "CG16",
+        "CG19",
+        "CG21"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD05",
+        "CD08",
+        "CD09",
+        "CD11",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T13",
+      "name": "Progressive Difficulty & spend-blind Challenge Director",
+      "dependencies_preserved": [
+        "T12"
+      ],
+      "owned_gap_ids": [
+        "CG03",
+        "CG10",
+        "CG19"
+      ],
+      "consumer_gap_ids": [
+        "CG04",
+        "CG08",
+        "CG11",
+        "CG15",
+        "CG16",
+        "CG18"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD05",
+        "CD06",
+        "CD08",
+        "CD10",
+        "CD11",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T14",
+      "name": "Save-state/versioning foundation",
+      "dependencies_preserved": [
+        "T08",
+        "T10",
+        "T12"
+      ],
+      "owned_gap_ids": [
+        "CG12"
+      ],
+      "consumer_gap_ids": [
+        "CG03",
+        "CG05",
+        "CG06",
+        "CG15",
+        "CG16",
+        "CG22"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD03",
+        "CD04",
+        "CD05",
+        "CD09",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T15",
+      "name": "Customer/NPC models, crowds and routing",
+      "dependencies_preserved": [
+        "T04",
+        "T05",
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "owned_gap_ids": [],
+      "consumer_gap_ids": [
+        "CG13",
+        "CG14",
+        "CG15",
+        "CG16"
+      ],
+      "decision_ids": [
+        "CD05"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T16",
+      "name": "Fishing and initial food processing",
+      "dependencies_preserved": [
+        "T08",
+        "T09",
+        "T15"
+      ],
+      "owned_gap_ids": [
+        "CG09",
+        "CG14"
+      ],
+      "consumer_gap_ids": [
+        "CG02",
+        "CG10",
+        "CG15",
+        "CG16"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD03",
+        "CD05",
+        "CD08",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T17",
+      "name": "Customer service, physical payment and reinvestment",
+      "dependencies_preserved": [
+        "T15",
+        "T16"
+      ],
+      "owned_gap_ids": [
+        "CG09"
+      ],
+      "consumer_gap_ids": [
+        "CG02",
+        "CG06",
+        "CG10",
+        "CG11",
+        "CG12",
+        "CG14",
+        "CG15",
+        "CG16",
+        "CG18",
+        "CG20",
+        "CG22"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD03",
+        "CD05",
+        "CD08",
+        "CD09",
+        "CD10",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T18",
+      "name": "Mechanized fishing, conveyors and helpers",
+      "dependencies_preserved": [
+        "T16",
+        "T17"
+      ],
+      "owned_gap_ids": [
+        "CG14"
+      ],
+      "consumer_gap_ids": [
+        "CG02",
+        "CG06",
+        "CG09",
+        "CG10",
+        "CG12",
+        "CG13",
+        "CG15",
+        "CG16"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD03",
+        "CD05",
+        "CD08",
+        "CD09",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T19",
+      "name": "Wheat/additional food production",
+      "dependencies_preserved": [
+        "T16",
+        "T18"
+      ],
+      "owned_gap_ids": [
+        "CG09",
+        "CG14"
+      ],
+      "consumer_gap_ids": [
+        "CG02",
+        "CG10",
+        "CG15",
+        "CG16"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD03",
+        "CD05",
+        "CD08",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T20",
+      "name": "Road and vehicle customer service",
+      "dependencies_preserved": [
+        "T15",
+        "T17"
+      ],
+      "owned_gap_ids": [],
+      "consumer_gap_ids": [
+        "CG02",
+        "CG13",
+        "CG14",
+        "CG15",
+        "CG16"
+      ],
+      "decision_ids": [
+        "CD03",
+        "CD05"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T21",
+      "name": "Visible hostiles, hunting and weapon progression",
+      "dependencies_preserved": [
+        "T06",
+        "T07",
+        "T08",
+        "T09",
+        "T13"
+      ],
+      "owned_gap_ids": [
+        "CG03",
+        "CG04",
+        "CG06",
+        "CG09",
+        "CG14"
+      ],
+      "consumer_gap_ids": [
+        "CG01",
+        "CG07",
+        "CG10",
+        "CG11",
+        "CG12",
+        "CG13",
+        "CG15",
+        "CG16",
+        "CG18",
+        "CG19"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD03",
+        "CD04",
+        "CD05",
+        "CD06",
+        "CD07",
+        "CD08",
+        "CD09",
+        "CD10",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T22",
+      "name": "Working defensive structures",
+      "dependencies_preserved": [
+        "T11",
+        "T21"
+      ],
+      "owned_gap_ids": [
+        "CG03",
+        "CG04",
+        "CG14"
+      ],
+      "consumer_gap_ids": [
+        "CG02",
+        "CG06",
+        "CG09",
+        "CG15",
+        "CG16",
+        "CG19"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD03",
+        "CD05",
+        "CD06",
+        "CD08",
+        "CD09",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T23",
+      "name": "Survivor rescue and basic survivor identity",
+      "dependencies_preserved": [
+        "T06",
+        "T07",
+        "T14",
+        "T21"
+      ],
+      "owned_gap_ids": [
+        "CG02",
+        "CG03",
+        "CG06",
+        "CG13",
+        "CG14"
+      ],
+      "consumer_gap_ids": [
+        "CG04",
+        "CG05",
+        "CG07",
+        "CG09",
+        "CG10",
+        "CG11",
+        "CG12",
+        "CG15",
+        "CG16",
+        "CG18",
+        "CG19",
+        "CG20",
+        "CG21",
+        "CG22"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD03",
+        "CD04",
+        "CD05",
+        "CD06",
+        "CD07",
+        "CD08",
+        "CD09",
+        "CD10",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T24",
+      "name": "Guardian dog",
+      "dependencies_preserved": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "owned_gap_ids": [
+        "CG01",
+        "CG05",
+        "CG14"
+      ],
+      "consumer_gap_ids": [
+        "CG03",
+        "CG04",
+        "CG07",
+        "CG13",
+        "CG15",
+        "CG16"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD04",
+        "CD05",
+        "CD06",
+        "CD07"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T25",
+      "name": "Gray wolf",
+      "dependencies_preserved": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "owned_gap_ids": [
+        "CG01",
+        "CG05",
+        "CG14"
+      ],
+      "consumer_gap_ids": [
+        "CG03",
+        "CG04",
+        "CG07",
+        "CG13",
+        "CG15",
+        "CG16"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD04",
+        "CD05",
+        "CD06",
+        "CD07"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T26",
+      "name": "Fox",
+      "dependencies_preserved": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "owned_gap_ids": [
+        "CG01",
+        "CG05",
+        "CG14"
+      ],
+      "consumer_gap_ids": [
+        "CG03",
+        "CG04",
+        "CG07",
+        "CG13",
+        "CG15",
+        "CG16"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD04",
+        "CD05",
+        "CD06",
+        "CD07"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T27",
+      "name": "Owl",
+      "dependencies_preserved": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "owned_gap_ids": [
+        "CG01",
+        "CG05",
+        "CG14"
+      ],
+      "consumer_gap_ids": [
+        "CG03",
+        "CG04",
+        "CG07",
+        "CG13",
+        "CG15",
+        "CG16"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD04",
+        "CD05",
+        "CD06",
+        "CD07"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T28",
+      "name": "Male lion",
+      "dependencies_preserved": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "owned_gap_ids": [
+        "CG01",
+        "CG05",
+        "CG14"
+      ],
+      "consumer_gap_ids": [
+        "CG03",
+        "CG04",
+        "CG07",
+        "CG13",
+        "CG15",
+        "CG16"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD04",
+        "CD05",
+        "CD06",
+        "CD07"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T29",
+      "name": "White tiger",
+      "dependencies_preserved": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "owned_gap_ids": [
+        "CG01",
+        "CG05",
+        "CG14"
+      ],
+      "consumer_gap_ids": [
+        "CG03",
+        "CG04",
+        "CG07",
+        "CG13",
+        "CG15",
+        "CG16"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD04",
+        "CD05",
+        "CD06",
+        "CD07"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T30",
+      "name": "Brown bear",
+      "dependencies_preserved": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "owned_gap_ids": [
+        "CG01",
+        "CG05",
+        "CG14"
+      ],
+      "consumer_gap_ids": [
+        "CG03",
+        "CG04",
+        "CG07",
+        "CG13",
+        "CG15",
+        "CG16"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD04",
+        "CD05",
+        "CD06",
+        "CD07"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T31",
+      "name": "Integrated companion jobs and population safety",
+      "dependencies_preserved": [
+        "T15",
+        "T23",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30"
+      ],
+      "owned_gap_ids": [
+        "CG02",
+        "CG05",
+        "CG06",
+        "CG13"
+      ],
+      "consumer_gap_ids": [
+        "CG01",
+        "CG03",
+        "CG07",
+        "CG09",
+        "CG10",
+        "CG11",
+        "CG12",
+        "CG14",
+        "CG15",
+        "CG16",
+        "CG18",
+        "CG19",
+        "CG20",
+        "CG21",
+        "CG22",
+        "CG23"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD03",
+        "CD04",
+        "CD05",
+        "CD07",
+        "CD08",
+        "CD09",
+        "CD10",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T32",
+      "name": "Complete frozen-region Level 1\u201310 production progression",
+      "dependencies_preserved": [
+        "T12",
+        "T13",
+        "T14",
+        "T16",
+        "T17",
+        "T18",
+        "T19",
+        "T20",
+        "T21",
+        "T22",
+        "T23",
+        "T31"
+      ],
+      "owned_gap_ids": [
+        "CG08"
+      ],
+      "consumer_gap_ids": [
+        "CG01",
+        "CG15",
+        "CG16",
+        "CG23"
+      ],
+      "decision_ids": [
+        "CD04",
+        "CD05",
+        "CD11"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T33",
+      "name": "Core economy & F2P progression model",
+      "dependencies_preserved": [
+        "T12",
+        "T17",
+        "T18",
+        "T19",
+        "T20",
+        "T32"
+      ],
+      "owned_gap_ids": [
+        "CG09",
+        "CG10",
+        "CG19"
+      ],
+      "consumer_gap_ids": [
+        "CG02",
+        "CG03",
+        "CG05",
+        "CG08",
+        "CG11",
+        "CG15",
+        "CG16",
+        "CG20",
+        "CG21",
+        "CG22"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD03",
+        "CD04",
+        "CD05",
+        "CD08",
+        "CD09",
+        "CD11",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T34",
+      "name": "Server-authoritative premium economy",
+      "dependencies_preserved": [
+        "T14",
+        "T33"
+      ],
+      "owned_gap_ids": [
+        "CG09",
+        "CG20"
+      ],
+      "consumer_gap_ids": [
+        "CG12",
+        "CG15",
+        "CG16",
+        "CG19",
+        "CG22"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD08",
+        "CD09",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T35",
+      "name": "Store, billing and entitlement system",
+      "dependencies_preserved": [
+        "T34"
+      ],
+      "owned_gap_ids": [
+        "CG20"
+      ],
+      "consumer_gap_ids": [
+        "CG12",
+        "CG15",
+        "CG16",
+        "CG22"
+      ],
+      "decision_ids": [
+        "CD08",
+        "CD09",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T36",
+      "name": "Permanent VIP system",
+      "dependencies_preserved": [
+        "T35"
+      ],
+      "owned_gap_ids": [
+        "CG20"
+      ],
+      "consumer_gap_ids": [
+        "CG15",
+        "CG16",
+        "CG19"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD08",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T37",
+      "name": "LiveOps Director",
+      "dependencies_preserved": [
+        "T12",
+        "T14",
+        "T33",
+        "T34"
+      ],
+      "owned_gap_ids": [
+        "CG21"
+      ],
+      "consumer_gap_ids": [
+        "CG12",
+        "CG15",
+        "CG16",
+        "CG18",
+        "CG20",
+        "CG22"
+      ],
+      "decision_ids": [
+        "CD08",
+        "CD09",
+        "CD10",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T38",
+      "name": "Automatic Event Composer & Validator",
+      "dependencies_preserved": [
+        "T37"
+      ],
+      "owned_gap_ids": [
+        "CG21"
+      ],
+      "consumer_gap_ids": [
+        "CG12",
+        "CG15",
+        "CG16",
+        "CG22"
+      ],
+      "decision_ids": [
+        "CD09",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T39",
+      "name": "The First Thaw launch event",
+      "dependencies_preserved": [
+        "T32",
+        "T33",
+        "T38"
+      ],
+      "owned_gap_ids": [
+        "CG21"
+      ],
+      "consumer_gap_ids": [
+        "CG12",
+        "CG15",
+        "CG16"
+      ],
+      "decision_ids": [
+        "CD09",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T40",
+      "name": "Weekly/seasonal/holiday/sales rotations",
+      "dependencies_preserved": [
+        "T38",
+        "T39"
+      ],
+      "owned_gap_ids": [
+        "CG21"
+      ],
+      "consumer_gap_ids": [
+        "CG12",
+        "CG15",
+        "CG16"
+      ],
+      "decision_ids": [
+        "CD09",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T41",
+      "name": "Anti-cheat and economic-security foundation",
+      "dependencies_preserved": [
+        "T14",
+        "T34",
+        "T35",
+        "T36",
+        "T37",
+        "T38"
+      ],
+      "owned_gap_ids": [
+        "CG12",
+        "CG20",
+        "CG22"
+      ],
+      "consumer_gap_ids": [
+        "CG15",
+        "CG16",
+        "CG21"
+      ],
+      "decision_ids": [
+        "CD08",
+        "CD09",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T42",
+      "name": "Privacy-respecting telemetry, difficulty analytics and crash diagnostics",
+      "dependencies_preserved": [
+        "T13",
+        "T14",
+        "T37",
+        "T41"
+      ],
+      "owned_gap_ids": [
+        "CG22"
+      ],
+      "consumer_gap_ids": [
+        "CG15",
+        "CG16",
+        "CG23"
+      ],
+      "decision_ids": [
+        "CD09",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T43",
+      "name": "Identity, cloud continuity and recovery",
+      "dependencies_preserved": [
+        "T14",
+        "T41"
+      ],
+      "owned_gap_ids": [
+        "CG12",
+        "CG20",
+        "CG22"
+      ],
+      "consumer_gap_ids": [
+        "CG03",
+        "CG05",
+        "CG06",
+        "CG15",
+        "CG16",
+        "CG21",
+        "CG23"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD03",
+        "CD04",
+        "CD05",
+        "CD08",
+        "CD09",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T44",
+      "name": "Connected forest region / approximately Levels 11\u201320",
+      "dependencies_preserved": [
+        "T32",
+        "T43"
+      ],
+      "owned_gap_ids": [
+        "CG07",
+        "CG08"
+      ],
+      "consumer_gap_ids": [
+        "CG04",
+        "CG09",
+        "CG10",
+        "CG15",
+        "CG16",
+        "CG19"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD06",
+        "CD07",
+        "CD08",
+        "CD11",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T45",
+      "name": "Connected desert region / approximately Levels 21\u201330",
+      "dependencies_preserved": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "owned_gap_ids": [
+        "CG07",
+        "CG08"
+      ],
+      "consumer_gap_ids": [
+        "CG04",
+        "CG09",
+        "CG10",
+        "CG15",
+        "CG16",
+        "CG19"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD06",
+        "CD07",
+        "CD08",
+        "CD11",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T46",
+      "name": "Connected underwater region / approximately Levels 31\u201340",
+      "dependencies_preserved": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "owned_gap_ids": [
+        "CG07",
+        "CG08"
+      ],
+      "consumer_gap_ids": [
+        "CG04",
+        "CG09",
+        "CG10",
+        "CG15",
+        "CG16",
+        "CG19"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD06",
+        "CD07",
+        "CD08",
+        "CD11",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T47",
+      "name": "Connected sky region / approximately Levels 41\u201350",
+      "dependencies_preserved": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "owned_gap_ids": [
+        "CG07",
+        "CG08"
+      ],
+      "consumer_gap_ids": [
+        "CG04",
+        "CG09",
+        "CG10",
+        "CG15",
+        "CG16",
+        "CG19"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD06",
+        "CD07",
+        "CD08",
+        "CD11",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T48",
+      "name": "Connected volcanic region / approximately Levels 51\u201360",
+      "dependencies_preserved": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "owned_gap_ids": [
+        "CG07",
+        "CG08"
+      ],
+      "consumer_gap_ids": [
+        "CG04",
+        "CG09",
+        "CG10",
+        "CG15",
+        "CG16",
+        "CG19"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD06",
+        "CD07",
+        "CD08",
+        "CD11",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T49",
+      "name": "Connected swamp region / approximately Levels 61\u201370",
+      "dependencies_preserved": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "owned_gap_ids": [
+        "CG07",
+        "CG08"
+      ],
+      "consumer_gap_ids": [
+        "CG04",
+        "CG09",
+        "CG10",
+        "CG15",
+        "CG16",
+        "CG19"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD06",
+        "CD07",
+        "CD08",
+        "CD11",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T50",
+      "name": "Connected ruins region / approximately Levels 71\u201380",
+      "dependencies_preserved": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "owned_gap_ids": [
+        "CG07",
+        "CG08"
+      ],
+      "consumer_gap_ids": [
+        "CG04",
+        "CG09",
+        "CG10",
+        "CG15",
+        "CG16",
+        "CG19"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD06",
+        "CD07",
+        "CD08",
+        "CD11",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T51",
+      "name": "Connected underground region / approximately Levels 81\u201390",
+      "dependencies_preserved": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "owned_gap_ids": [
+        "CG07",
+        "CG08"
+      ],
+      "consumer_gap_ids": [
+        "CG04",
+        "CG09",
+        "CG10",
+        "CG15",
+        "CG16",
+        "CG19"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD06",
+        "CD07",
+        "CD08",
+        "CD11",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T52",
+      "name": "Connected alien region / approximately Levels 91\u2013100",
+      "dependencies_preserved": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "owned_gap_ids": [
+        "CG07",
+        "CG08"
+      ],
+      "consumer_gap_ids": [
+        "CG04",
+        "CG09",
+        "CG10",
+        "CG15",
+        "CG16",
+        "CG19"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD06",
+        "CD07",
+        "CD08",
+        "CD11",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T53",
+      "name": "Transportation and inter-region continuity",
+      "dependencies_preserved": [
+        "T43",
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52"
+      ],
+      "owned_gap_ids": [
+        "CG07",
+        "CG14"
+      ],
+      "consumer_gap_ids": [
+        "CG02",
+        "CG05",
+        "CG09",
+        "CG13",
+        "CG15",
+        "CG16",
+        "CG18"
+      ],
+      "decision_ids": [
+        "CD03",
+        "CD04",
+        "CD05",
+        "CD07",
+        "CD08",
+        "CD10"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T54",
+      "name": "Day/night, weather, audio and final game feedback",
+      "dependencies_preserved": [
+        "T32",
+        "T53"
+      ],
+      "owned_gap_ids": [
+        "CG14"
+      ],
+      "consumer_gap_ids": [
+        "CG07",
+        "CG11",
+        "CG15",
+        "CG16",
+        "CG18",
+        "CG21",
+        "CG23"
+      ],
+      "decision_ids": [
+        "CD05",
+        "CD07",
+        "CD09",
+        "CD10",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T55",
+      "name": "Accessibility and control customization",
+      "dependencies_preserved": [
+        "T07",
+        "T43"
+      ],
+      "owned_gap_ids": [
+        "CG11",
+        "CG17",
+        "CG18"
+      ],
+      "consumer_gap_ids": [
+        "CG14",
+        "CG15",
+        "CG16",
+        "CG21",
+        "CG23"
+      ],
+      "decision_ids": [
+        "CD05",
+        "CD09",
+        "CD10",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T56",
+      "name": "Performance/Quality/Balanced/Battery player modes",
+      "dependencies_preserved": [
+        "T42",
+        "T54",
+        "T55"
+      ],
+      "owned_gap_ids": [],
+      "consumer_gap_ids": [
+        "CG05",
+        "CG13",
+        "CG15",
+        "CG16",
+        "CG17",
+        "CG23"
+      ],
+      "decision_ids": [
+        "CD04",
+        "CD05",
+        "CD10"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T57",
+      "name": "Basic shareable milestone system",
+      "dependencies_preserved": [
+        "T12",
+        "T43"
+      ],
+      "owned_gap_ids": [],
+      "consumer_gap_ids": [
+        "CG15",
+        "CG16"
+      ],
+      "decision_ids": [],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T58",
+      "name": "Phone/tablet/foldable functional acceptance",
+      "dependencies_preserved": [
+        "T43",
+        "T54",
+        "T55",
+        "T56"
+      ],
+      "owned_gap_ids": [
+        "CG17"
+      ],
+      "consumer_gap_ids": [
+        "CG05",
+        "CG11",
+        "CG15",
+        "CG16",
+        "CG18",
+        "CG23"
+      ],
+      "decision_ids": [
+        "CD04",
+        "CD05",
+        "CD10"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T59",
+      "name": "Character 2 final rigging and motion review",
+      "dependencies_preserved": [
+        "T58"
+      ],
+      "owned_gap_ids": [
+        "CG15"
+      ],
+      "consumer_gap_ids": [
+        "CG04",
+        "CG14",
+        "CG16"
+      ],
+      "decision_ids": [
+        "CD06"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T60",
+      "name": "Character 3 final rigging and motion review",
+      "dependencies_preserved": [
+        "T58"
+      ],
+      "owned_gap_ids": [
+        "CG15"
+      ],
+      "consumer_gap_ids": [
+        "CG04",
+        "CG14",
+        "CG16"
+      ],
+      "decision_ids": [
+        "CD06"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T61",
+      "name": "Character 4 final rigging and motion review",
+      "dependencies_preserved": [
+        "T58"
+      ],
+      "owned_gap_ids": [
+        "CG15"
+      ],
+      "consumer_gap_ids": [
+        "CG04",
+        "CG14",
+        "CG16"
+      ],
+      "decision_ids": [
+        "CD06"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T62",
+      "name": "Complete Level 1\u2013100 progression acceptance",
+      "dependencies_preserved": [
+        "T33",
+        "T36",
+        "T40",
+        "T43",
+        "T53",
+        "T54",
+        "T58",
+        "T59",
+        "T60",
+        "T61"
+      ],
+      "owned_gap_ids": [
+        "CG23"
+      ],
+      "consumer_gap_ids": [
+        "CG01",
+        "CG02",
+        "CG03",
+        "CG07",
+        "CG08",
+        "CG09",
+        "CG10",
+        "CG11",
+        "CG14",
+        "CG15",
+        "CG16",
+        "CG17",
+        "CG18",
+        "CG19"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD03",
+        "CD04",
+        "CD05",
+        "CD07",
+        "CD08",
+        "CD10",
+        "CD11",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T63",
+      "name": "$0 lifelong-F2P player completion test",
+      "dependencies_preserved": [
+        "T33",
+        "T62"
+      ],
+      "owned_gap_ids": [
+        "CG19",
+        "CG23"
+      ],
+      "consumer_gap_ids": [
+        "CG08",
+        "CG09",
+        "CG10",
+        "CG15",
+        "CG16"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD08",
+        "CD11",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T64",
+      "name": "Purchase-value/fairness test",
+      "dependencies_preserved": [
+        "T35",
+        "T36",
+        "T62",
+        "T63"
+      ],
+      "owned_gap_ids": [
+        "CG23"
+      ],
+      "consumer_gap_ids": [
+        "CG15",
+        "CG16",
+        "CG19",
+        "CG20"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD08",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T65",
+      "name": "Full LiveOps launch rehearsal",
+      "dependencies_preserved": [
+        "T39",
+        "T40",
+        "T62",
+        "T64"
+      ],
+      "owned_gap_ids": [
+        "CG23"
+      ],
+      "consumer_gap_ids": [
+        "CG15",
+        "CG16",
+        "CG21"
+      ],
+      "decision_ids": [
+        "CD09",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T66",
+      "name": "Security/exploit attack review",
+      "dependencies_preserved": [
+        "T41",
+        "T43",
+        "T65"
+      ],
+      "owned_gap_ids": [
+        "CG23"
+      ],
+      "consumer_gap_ids": [
+        "CG15",
+        "CG16",
+        "CG20",
+        "CG22"
+      ],
+      "decision_ids": [
+        "CD08",
+        "CD09",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T67",
+      "name": "Full-game reference/regression acceptance",
+      "dependencies_preserved": [
+        "T62",
+        "T63",
+        "T64",
+        "T65",
+        "T66"
+      ],
+      "owned_gap_ids": [
+        "CG23"
+      ],
+      "consumer_gap_ids": [
+        "CG01",
+        "CG02",
+        "CG04",
+        "CG06",
+        "CG08",
+        "CG10",
+        "CG12",
+        "CG13",
+        "CG14",
+        "CG15",
+        "CG16",
+        "CG17",
+        "CG18",
+        "CG20",
+        "CG21",
+        "CG22"
+      ],
+      "decision_ids": [
+        "CD01",
+        "CD03",
+        "CD04",
+        "CD05",
+        "CD06",
+        "CD08",
+        "CD09",
+        "CD10",
+        "CD11",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T68",
+      "name": "Sustained native 4K/60 phone evidence",
+      "dependencies_preserved": [
+        "T67"
+      ],
+      "owned_gap_ids": [
+        "CG23"
+      ],
+      "consumer_gap_ids": [
+        "CG05",
+        "CG15",
+        "CG16",
+        "CG17"
+      ],
+      "decision_ids": [
+        "CD04",
+        "CD10"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T69",
+      "name": "Sustained native 4K/60 tablet/foldable evidence",
+      "dependencies_preserved": [
+        "T67"
+      ],
+      "owned_gap_ids": [
+        "CG23"
+      ],
+      "consumer_gap_ids": [
+        "CG05",
+        "CG15",
+        "CG16",
+        "CG17"
+      ],
+      "decision_ids": [
+        "CD04",
+        "CD10"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T70",
+      "name": "Final production release handoff",
+      "dependencies_preserved": [
+        "T68",
+        "T69"
+      ],
+      "owned_gap_ids": [
+        "CG16",
+        "CG23",
+        "CG24"
+      ],
+      "consumer_gap_ids": [
+        "CG01",
+        "CG15",
+        "CG17",
+        "CG20",
+        "CG21",
+        "CG22"
+      ],
+      "decision_ids": [
+        "CD04",
+        "CD05",
+        "CD08",
+        "CD09",
+        "CD10",
+        "CD12"
+      ],
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T71",
+      "status": "SOURCE_NOT_FOUND",
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T72",
+      "status": "SOURCE_NOT_FOUND",
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T73",
+      "status": "SOURCE_NOT_FOUND",
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T74",
+      "status": "SOURCE_NOT_FOUND",
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T75",
+      "status": "SOURCE_NOT_FOUND",
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T76",
+      "status": "SOURCE_NOT_FOUND",
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T77",
+      "status": "SOURCE_NOT_FOUND",
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T78",
+      "status": "SOURCE_NOT_FOUND",
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T79",
+      "status": "SOURCE_NOT_FOUND",
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    },
+    {
+      "task_id": "T80",
+      "status": "SOURCE_NOT_FOUND",
+      "runtime_activation_allowed": false,
+      "runtime_approval_allowed": false
+    }
+  ]
+}

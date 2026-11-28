@@ -1,0 +1,1173 @@
+{
+  "schema_version": 2,
+  "contract_id": "HAVENLINE_WORLD_PROGRESSION_10X50_2026_11_28",
+  "source_graph": {
+    "commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+    "path": "Docs/Production/DEPENDENCY_GRAPH.json",
+    "git_blob_sha": "93836ccac725bcef484c14c855e8bce9ae4502ad"
+  },
+  "classification_meaning": {
+    "direct_change": "A scope/range/release-boundary requirement is explicitly revised. This does not activate the task or edit its current dependency graph.",
+    "indirect_verification": "Original task purpose remains; verify the new progression, upgrade and release context before integration.",
+    "no_identified_change": "No direct change to the core task contract was identified by this correction. Normal integration/asset-change checks still apply.",
+    "source_missing": "No authentic recovered task definition; no invented replacement."
+  },
+  "counts": {
+    "indirect_verification": 22,
+    "direct_change": 41,
+    "no_identified_change": 7,
+    "source_missing": 10
+  },
+  "task_ids_preserved": true,
+  "dependencies_preserved": true,
+  "ownership_reassigned": false,
+  "historical_approvals_preserved": true,
+  "rows": [
+    {
+      "task_id": "T01",
+      "source_name": "Reference snow-covered trees and forest framing",
+      "forward_scope_title": "Reference snow-covered trees and forest framing",
+      "disposition": "indirect_verification",
+      "current_scope": "Keep the approved tree identity; check later World 1 clearing/routes and harvesting visibility across fifty levels. No automatic tree upgrade ladder.",
+      "dependencies_preserved": [],
+      "source_lifecycle_snapshot": "APPROVED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T02",
+      "source_name": "Terrain, snow, warm work-floor and lakeshore",
+      "forward_scope_title": "Terrain, snow, warm work-floor and lakeshore",
+      "disposition": "indirect_verification",
+      "current_scope": "Reconcile World 1 expansion/shoreline/routes and purchased camp-floor changes across fifty levels; preserve snow outside camp.",
+      "dependencies_preserved": [
+        "T01"
+      ],
+      "source_lifecycle_snapshot": "APPROVED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T03",
+      "source_name": "Fences, gates and navigable work lanes",
+      "forward_scope_title": "Fences, gates and navigable work lanes",
+      "disposition": "direct_change",
+      "current_scope": "Author visibly substantial fence/gate upgrades tied to actual defense, breach resistance and any explicitly designed attack/guard-support capability. Upgraded geometry may expand when costs, attack coverage, repair and both bidirectional routes are mapped; preserve the selected baseline.",
+      "dependencies_preserved": [
+        "T02"
+      ],
+      "source_lifecycle_snapshot": "APPROVED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T04",
+      "source_name": "Reference camera and automatic screen composition",
+      "forward_scope_title": "Reference camera and automatic screen composition",
+      "disposition": "indirect_verification",
+      "current_scope": "Recheck normal/pinch camera, UI and scene readability at early/mid/late World 1 and around larger upgraded equipment.",
+      "dependencies_preserved": [
+        "T03"
+      ],
+      "source_lifecycle_snapshot": "APPROVED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T05",
+      "source_name": "Production station and prop kit",
+      "forward_scope_title": "Production station and prop kit",
+      "disposition": "direct_change",
+      "current_scope": "Add source-bound World1 appearance/capability upgrade designs for production stations, storage house and relevant equipment. Show meaningful input/working/output hardware; footprint/ports may change with real functional value and clearance. Preserve baseline approvals; this forward scope does not activate a builder.",
+      "dependencies_preserved": [
+        "T03"
+      ],
+      "source_lifecycle_snapshot": "APPROVED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T06",
+      "source_name": "Character 1 complete movement/interactions",
+      "forward_scope_title": "Character 1 complete movement/interactions",
+      "disposition": "no_identified_change",
+      "current_scope": "Character 1 identity, rig and motion foundation remain unchanged; this progression correction does not authorize a new body or costume ladder.",
+      "dependencies_preserved": [
+        "T03"
+      ],
+      "source_lifecycle_snapshot": "APPROVED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T07",
+      "source_name": "Havenline Simple Control & Context Director",
+      "forward_scope_title": "Havenline Simple Control & Context Director",
+      "disposition": "indirect_verification",
+      "current_scope": "Preserve simple contextual controls across expanded upgrade and vehicle choices; prove driver entry/exit and on-foot recovery without permanent button proliferation.",
+      "dependencies_preserved": [
+        "T04",
+        "T06"
+      ],
+      "source_lifecycle_snapshot": "APPROVED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T08",
+      "source_name": "Visible inventory, physical carrying and transfers",
+      "forward_scope_title": "Visible inventory, physical carrying and transfers",
+      "disposition": "direct_change",
+      "current_scope": "Preserve exact mixed cargo and selected resource-unit scale while multiple survivors/pets and machines share upgraded storage/counter routes. New handling/throughput access must not be sold as fake extra capacity where logical inventory is unlimited.",
+      "dependencies_preserved": [
+        "T05",
+        "T06",
+        "T07"
+      ],
+      "source_lifecycle_snapshot": "APPROVED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T09",
+      "source_name": "Harvesting and automatic acquisition",
+      "forward_scope_title": "Harvesting and automatic acquisition",
+      "disposition": "indirect_verification",
+      "current_scope": "Revalidate World 1 attainable wood/stone/ore/coal/oil gathering, registered tools, vehicle contact, renewable recovery and mining-region eligibility.",
+      "dependencies_preserved": [
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "source_lifecycle_snapshot": "APPROVED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T10",
+      "source_name": "World Transformation Framework",
+      "forward_scope_title": "World Transformation Framework",
+      "disposition": "indirect_verification",
+      "current_scope": "Map new plots/appearance stages and reachable changing bills to exactly-once transforms; preserve partial payments and old accepted quotes.",
+      "dependencies_preserved": [
+        "T05",
+        "T08",
+        "T09"
+      ],
+      "source_lifecycle_snapshot": "APPROVED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T11",
+      "source_name": "Camp construction and visual upgrade system",
+      "forward_scope_title": "Camp construction and visual upgrade system",
+      "disposition": "direct_change",
+      "current_scope": "Bind each substantial visual upgrade—including storage house—to a real useful production, handling, resilience or defense gain and attainable cost. Allow documented footprint/port changes with route/relocation proof. Preserve paid repair, Level1 replacement and furnace recovery rules.",
+      "dependencies_preserved": [
+        "T05",
+        "T10"
+      ],
+      "source_lifecycle_snapshot": "APPROVED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T12",
+      "source_name": "Level 1–100 progression architecture",
+      "forward_scope_title": "Ten-world progression architecture — 50 local levels per world",
+      "disposition": "direct_change",
+      "current_scope": "Own ten worlds×50 local levels and versioned progression identity. Every upgrade milestone must map visible change to an authored capability worth purchasing; world levels, equipment levels and visual stages remain distinct. Do not invent caps or500 outcomes.",
+      "dependencies_preserved": [
+        "T07",
+        "T08",
+        "T10",
+        "T11"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T13",
+      "source_name": "Progressive Difficulty & spend-blind Challenge Director",
+      "forward_scope_title": "Progressive Difficulty & spend-blind Challenge Director",
+      "disposition": "direct_change",
+      "current_scope": "Re-author challenge for fifty local levels, stronger earned defenses and simultaneous companions without spend inputs. Preserve the full five-minute active warning, feasible recovery and readable distinct attacks; no arbitrary stats inflation or unmeasured population-cap claim.",
+      "dependencies_preserved": [
+        "T12"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T14",
+      "source_name": "Save-state/versioning foundation",
+      "forward_scope_title": "Save-state/versioning foundation",
+      "disposition": "indirect_verification",
+      "current_scope": "Design and prove old-to-new world/local save migration, accepted quote stability, completed milestone preservation, update availability and rollback.",
+      "dependencies_preserved": [
+        "T08",
+        "T10",
+        "T12"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T15",
+      "source_name": "Customer/NPC models, crowds and routing",
+      "forward_scope_title": "Customer/NPC models, crowds and routing",
+      "disposition": "indirect_verification",
+      "current_scope": "Recheck customer/worker density, queues and routes as World 1 adds products, counter variants and enlarged camp stages.",
+      "dependencies_preserved": [
+        "T04",
+        "T05",
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T16",
+      "source_name": "Fishing and initial food processing",
+      "forward_scope_title": "Fishing and initial food processing",
+      "disposition": "direct_change",
+      "current_scope": "Design meaningful fishing/food-processor upgrades with actual acquisition, intake, processing and output gains, appropriate actions and clear routes. Numeric recipes/rates and new unlocks require authoring/tuning; fishing does not automatically move into the Level1 opening.",
+      "dependencies_preserved": [
+        "T08",
+        "T09",
+        "T15"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T17",
+      "source_name": "Customer service, physical payment and reinvestment",
+      "forward_scope_title": "Customer service, physical payment and reinvestment",
+      "disposition": "direct_change",
+      "current_scope": "Make counter upgrades visibly useful through authored mixed-product handling, customer pickup/cash separation and service flow. Support multiple unlocked survivor logistics without duplicate stock/payment; no spawned cashier and no fake unlimited-capacity purchase.",
+      "dependencies_preserved": [
+        "T15",
+        "T16"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T18",
+      "source_name": "Mechanized fishing, conveyors and helpers",
+      "forward_scope_title": "Mechanized fishing, conveyors and helpers",
+      "disposition": "direct_change",
+      "current_scope": "Tie conveyor/machine/storage connections to real production input/output and handling improvements. Preserve selected belt/resource unit scale; parallel runs or moved ports require documented function, cost, clearance, full/blocked/resumed and exact shared-cargo tests.",
+      "dependencies_preserved": [
+        "T16",
+        "T17"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T19",
+      "source_name": "Wheat/additional food production",
+      "forward_scope_title": "Wheat/additional food production",
+      "disposition": "direct_change",
+      "current_scope": "Give crop and food-chain upgrades meaningful visible production changes tied to authored inputs, processing/output and helper actions. Validate actual value and resource identity; do not infer fixed unlocks or recipe ratios from decorative variants.",
+      "dependencies_preserved": [
+        "T16",
+        "T18"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T20",
+      "source_name": "Road and vehicle customer service",
+      "forward_scope_title": "Road and vehicle customer service",
+      "disposition": "indirect_verification",
+      "current_scope": "Recheck road/vehicle-customer unlocks and traffic with the expanded camp and drivable snow truck; customer vehicles and the owned truck remain distinct systems.",
+      "dependencies_preserved": [
+        "T15",
+        "T17"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T21",
+      "source_name": "Visible hostiles, hunting and weapon progression",
+      "forward_scope_title": "Visible hostiles, hunting and weapon progression",
+      "disposition": "direct_change",
+      "current_scope": "Support useful weapon/attack progression and multiple friendly fighters with correct target eligibility, contact, interruption and resource drops. Upgrade presentation must reflect real authored capability; retain survivor provocation, pet attacks and truck-contact boundaries.",
+      "dependencies_preserved": [
+        "T06",
+        "T07",
+        "T08",
+        "T09",
+        "T13"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T22",
+      "source_name": "Working defensive structures",
+      "forward_scope_title": "Working defensive structures",
+      "disposition": "direct_change",
+      "current_scope": "Give guard towers and defensive structures substantial visible upgrades tied to authored protection/attack capability. Prove targeting, real firing/contact, supply rules, range/coverage, friendly safety, damage and paid recovery; no unsupported damage or invulnerability claims.",
+      "dependencies_preserved": [
+        "T11",
+        "T21"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T23",
+      "source_name": "Survivor rescue and basic survivor identity",
+      "forward_scope_title": "Survivor rescue and basic survivor identity",
+      "disposition": "direct_change",
+      "current_scope": "Support multiple living survivors working/defending/attacking simultaneously with visible useful equipment/capability progression. Include hauling, stocking, cash, authorized buying/building/repair/healing, role-specific motions, reservations, budgets and casualty/replacement continuity.",
+      "dependencies_preserved": [
+        "T06",
+        "T07",
+        "T14",
+        "T21"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T24",
+      "source_name": "Guardian dog",
+      "forward_scope_title": "Guardian dog",
+      "disposition": "direct_change",
+      "current_scope": "Preserve guardian dog identity and species actions while defining useful visible work/protection/attack upgrades. Support multiple active pets with distinct living instances and jobs; numeric deployment caps and new unlock levels are not fixed by this package.",
+      "dependencies_preserved": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T25",
+      "source_name": "Gray wolf",
+      "forward_scope_title": "Gray wolf",
+      "disposition": "direct_change",
+      "current_scope": "Preserve gray wolf identity/pursuit/pounce/bite while binding visible upgrades to useful attack/specialty value and multi-pet coordination. Reconcile availability; do not claim staged team limits are measured performance.",
+      "dependencies_preserved": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T26",
+      "source_name": "Fox",
+      "forward_scope_title": "Fox",
+      "disposition": "direct_change",
+      "current_scope": "Preserve fox identity/scouting/retrieval/attack and authored later-world availability. Any upgrade needs real useful capability and species-specific visuals; simultaneous multi-pet support does not automatically unlock the fox in World1.",
+      "dependencies_preserved": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T27",
+      "source_name": "Owl",
+      "forward_scope_title": "Owl",
+      "disposition": "direct_change",
+      "current_scope": "Preserve owl flight, clearance, scouting/retrieval and dive/talon actions. Visible gear/capability upgrades must remain airborne-functional and useful with other active pets/survivors; no false fixed cap or new unlock approval.",
+      "dependencies_preserved": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T28",
+      "source_name": "Male lion",
+      "forward_scope_title": "Male lion",
+      "disposition": "direct_change",
+      "current_scope": "Preserve lion identity and later-world intent while requiring worthwhile visual attack/work upgrades and concurrent-actor integration. No new World1 acquisition, numeric damage value or model stage is silently approved.",
+      "dependencies_preserved": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T29",
+      "source_name": "White tiger",
+      "forward_scope_title": "White tiger",
+      "disposition": "direct_change",
+      "current_scope": "Preserve white tiger identity, distinct attack motion and later-world intent. Upgrade value/appearance must support actual capability and multiple actors without duplicate targets or false acquisition/cap approval.",
+      "dependencies_preserved": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T30",
+      "source_name": "Brown bear",
+      "forward_scope_title": "Brown bear",
+      "disposition": "direct_change",
+      "current_scope": "Preserve bear identity, heavy hauling and approved obstacle/attack actions. Define useful visual/capability gains for concurrent actors under its authored availability; do not invent a World1 unlock or universal tool permission.",
+      "dependencies_preserved": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T31",
+      "source_name": "Integrated companion jobs and population safety",
+      "forward_scope_title": "Integrated companion jobs and population safety",
+      "disposition": "direct_change",
+      "current_scope": "Prove multiple pets and multiple survivors simultaneously active, beyond roster ownership: useful distinct jobs/attacks/guard roles, recall, stable targets, reservations, budgets, pathing, deadlock recovery, casualty and save/offscreen handoffs. Preserve prior3-pet/2-escort staged proposal separately from local workers; no new cap is ratified.",
+      "dependencies_preserved": [
+        "T15",
+        "T23",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T32",
+      "source_name": "Complete frozen-region Level 1–10 production progression",
+      "forward_scope_title": "Complete World 1 Frozen Home Camp — local Levels 1–50",
+      "disposition": "direct_change",
+      "current_scope": "Deliver complete World1 local Levels1–50 with worthwhile visual/functional upgrades, an explicitly upgraded storage house, stronger authored defenses, multiple active pets/survivors, and garage/truck/material/fuel integration. Preserve the continuous sandbox and initial-release evidence boundary.",
+      "dependencies_preserved": [
+        "T12",
+        "T13",
+        "T14",
+        "T16",
+        "T17",
+        "T18",
+        "T19",
+        "T20",
+        "T21",
+        "T22",
+        "T23",
+        "T31"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T33",
+      "source_name": "Core economy & F2P progression model",
+      "forward_scope_title": "World1 economy and future connected-campaign F2P progression",
+      "disposition": "direct_change",
+      "current_scope": "Demonstrate purchase value and attainable costs for production input/output, storage handling, defense/attack and actor capability upgrades across World1. Respect unlimited logical inventory; measure bottleneck/time/resource/recovery benefits without automatic fivefold grind or new approved stats.",
+      "dependencies_preserved": [
+        "T12",
+        "T17",
+        "T18",
+        "T19",
+        "T20",
+        "T32"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T34",
+      "source_name": "Server-authoritative premium economy",
+      "forward_scope_title": "Server-authoritative premium economy",
+      "disposition": "no_identified_change",
+      "current_scope": "Server-authoritative premium balances and audited grants remain the same core contract; no new currency or paid gate follows from the level-count change.",
+      "dependencies_preserved": [
+        "T14",
+        "T33"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T35",
+      "source_name": "Store, billing and entitlement system",
+      "forward_scope_title": "Store, billing and entitlement system",
+      "disposition": "no_identified_change",
+      "current_scope": "Billing, restoration and entitlement rules remain unchanged; this package does not add a SKU or change prices.",
+      "dependencies_preserved": [
+        "T34"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T36",
+      "source_name": "Permanent VIP system",
+      "forward_scope_title": "Permanent VIP system",
+      "disposition": "no_identified_change",
+      "current_scope": "Permanent public VIP and the two-owner Game Master policy remain unchanged; no new VIP tier is introduced by fifty local levels.",
+      "dependencies_preserved": [
+        "T35"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T37",
+      "source_name": "LiveOps Director",
+      "forward_scope_title": "LiveOps Director",
+      "disposition": "indirect_verification",
+      "current_scope": "Ensure events only select released worlds and obtainable resources; preserve time, rewards, owner controls and kill switch.",
+      "dependencies_preserved": [
+        "T12",
+        "T14",
+        "T33",
+        "T34"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T38",
+      "source_name": "Automatic Event Composer & Validator",
+      "forward_scope_title": "Automatic Event Composer & Validator",
+      "disposition": "indirect_verification",
+      "current_scope": "Validate event prerequisites against released-world availability and world/local progression; future-world content cannot create impossible launch events.",
+      "dependencies_preserved": [
+        "T37"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T39",
+      "source_name": "The First Thaw launch event",
+      "forward_scope_title": "The First Thaw launch event",
+      "disposition": "indirect_verification",
+      "current_scope": "Reconcile First Thaw objectives and rewards with the initial World 1 release and revised local milestones; preserve its named event and free-player feasibility.",
+      "dependencies_preserved": [
+        "T32",
+        "T33",
+        "T38"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T40",
+      "source_name": "Weekly/seasonal/holiday/sales rotations",
+      "forward_scope_title": "Weekly/seasonal/holiday/sales rotations",
+      "disposition": "indirect_verification",
+      "current_scope": "Scope recurring events/sales to released content; later-world updates require their own validated content availability and reward paths.",
+      "dependencies_preserved": [
+        "T38",
+        "T39"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T41",
+      "source_name": "Anti-cheat and economic-security foundation",
+      "forward_scope_title": "Anti-cheat and economic-security foundation",
+      "disposition": "indirect_verification",
+      "current_scope": "Audit migration/update-boundary, world-unlock and duplicate reward/value paths without changing the security foundation or owner authorization policy.",
+      "dependencies_preserved": [
+        "T14",
+        "T34",
+        "T35",
+        "T36",
+        "T37",
+        "T38"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T42",
+      "source_name": "Privacy-respecting telemetry, difficulty analytics and crash diagnostics",
+      "forward_scope_title": "Privacy-respecting telemetry, difficulty analytics and crash diagnostics",
+      "disposition": "indirect_verification",
+      "current_scope": "Separate world index, local level, equipment tier and release version in diagnostics; do not contaminate free-player evidence with owner grants.",
+      "dependencies_preserved": [
+        "T13",
+        "T14",
+        "T37",
+        "T41"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T43",
+      "source_name": "Identity, cloud continuity and recovery",
+      "forward_scope_title": "Identity, cloud continuity and recovery",
+      "disposition": "indirect_verification",
+      "current_scope": "Prove cloud recovery/conflicts across world-update availability and new progression identity; preserve account/entitlement ownership and two owner slots.",
+      "dependencies_preserved": [
+        "T14",
+        "T41"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T44",
+      "source_name": "Connected forest region / approximately Levels 11–20",
+      "forward_scope_title": "World 2 Forest and Lakeshore — local Levels 1–50",
+      "disposition": "direct_change",
+      "current_scope": "Own World 2 Forest and Lakeshore local Levels 1–50 as a later connected update. Earlier global 11–20 is historical, not the current world range. No detailed new unlock schedule is authored here.",
+      "dependencies_preserved": [
+        "T32",
+        "T43"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T45",
+      "source_name": "Connected desert region / approximately Levels 21–30",
+      "forward_scope_title": "World 3 Desert Canyons — local Levels 1–50",
+      "disposition": "direct_change",
+      "current_scope": "Own World 3 Desert Canyons local Levels 1–50 as a later connected update. Earlier global 21–30 is historical, not the current world range. No detailed new unlock schedule is authored here.",
+      "dependencies_preserved": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T46",
+      "source_name": "Connected underwater region / approximately Levels 31–40",
+      "forward_scope_title": "World 4 Underwater Refuges — local Levels 1–50",
+      "disposition": "direct_change",
+      "current_scope": "Own World 4 Underwater Refuges local Levels 1–50 as a later connected update. Earlier global 31–40 is historical, not the current world range. No detailed new unlock schedule is authored here.",
+      "dependencies_preserved": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T47",
+      "source_name": "Connected sky region / approximately Levels 41–50",
+      "forward_scope_title": "World 5 Sky Islands — local Levels 1–50",
+      "disposition": "direct_change",
+      "current_scope": "Own World 5 Sky Islands local Levels 1–50 as a later connected update. Earlier global 41–50 is historical, not the current world range. No detailed new unlock schedule is authored here.",
+      "dependencies_preserved": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T48",
+      "source_name": "Connected volcanic region / approximately Levels 51–60",
+      "forward_scope_title": "World 6 Volcanic Forge — local Levels 1–50",
+      "disposition": "direct_change",
+      "current_scope": "Own World 6 Volcanic Forge local Levels 1–50 as a later connected update. Earlier global 51–60 is historical, not the current world range. No detailed new unlock schedule is authored here.",
+      "dependencies_preserved": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T49",
+      "source_name": "Connected swamp region / approximately Levels 61–70",
+      "forward_scope_title": "World 7 Swamp Boardwalks — local Levels 1–50",
+      "disposition": "direct_change",
+      "current_scope": "Own World 7 Swamp Boardwalks local Levels 1–50 as a later connected update. Earlier global 61–70 is historical, not the current world range. No detailed new unlock schedule is authored here.",
+      "dependencies_preserved": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T50",
+      "source_name": "Connected ruins region / approximately Levels 71–80",
+      "forward_scope_title": "World 8 Ruined Settlement — local Levels 1–50",
+      "disposition": "direct_change",
+      "current_scope": "Own World 8 Ruined Settlement local Levels 1–50 as a later connected update. Earlier global 71–80 is historical, not the current world range. No detailed new unlock schedule is authored here.",
+      "dependencies_preserved": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T51",
+      "source_name": "Connected underground region / approximately Levels 81–90",
+      "forward_scope_title": "World 9 Underground Mines — local Levels 1–50",
+      "disposition": "direct_change",
+      "current_scope": "Own World 9 Underground Mines local Levels 1–50 as a later connected update. Earlier global 81–90 is historical, not the current world range. No detailed new unlock schedule is authored here.",
+      "dependencies_preserved": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T52",
+      "source_name": "Connected alien region / approximately Levels 91–100",
+      "forward_scope_title": "World 10 Alien Frontier — local Levels 1–50",
+      "disposition": "direct_change",
+      "current_scope": "Own World 10 Alien Frontier local Levels 1–50 as a later connected update. Earlier global 91–100 is historical, not the current world range. No detailed new unlock schedule is authored here.",
+      "dependencies_preserved": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T53",
+      "source_name": "Transportation and inter-region continuity",
+      "forward_scope_title": "World1 local transport and later inter-world continuity",
+      "disposition": "direct_change",
+      "current_scope": "Split current World 1 local vehicle/route integration from later inter-world travel. Keep the full connected transport contract as worlds release; no premature access to unreleased worlds.",
+      "dependencies_preserved": [
+        "T43",
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T54",
+      "source_name": "Day/night, weather, audio and final game feedback",
+      "forward_scope_title": "Day/night, weather, audio and final game feedback",
+      "disposition": "indirect_verification",
+      "current_scope": "Cover real upgrade/production input-output, storage handling, multi-actor work/attack/recall/casualty, vehicle and defense events with verified audio and equivalent muted cues; preserve the current full music/SFX scope.",
+      "dependencies_preserved": [
+        "T32",
+        "T53"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T55",
+      "source_name": "Accessibility and control customization",
+      "forward_scope_title": "Accessibility and control customization",
+      "disposition": "direct_change",
+      "current_scope": "Make upgrade gains/costs and multiple living actor assignments, HP, work/attack states and recall choices readable at normal gameplay scale. Preserve simple controls, muted cues, accessibility and no cluttered permanent management UI.",
+      "dependencies_preserved": [
+        "T07",
+        "T43"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T56",
+      "source_name": "Performance/Quality/Balanced/Battery player modes",
+      "forward_scope_title": "Performance/Quality/Balanced/Battery player modes",
+      "disposition": "indirect_verification",
+      "current_scope": "Measure late-World1 upgraded equipment and simultaneous active pets/survivors in all four modes. Rendering/animation optimization cannot silently remove logical workers or active capabilities; prior team limits are not performance evidence.",
+      "dependencies_preserved": [
+        "T42",
+        "T54",
+        "T55"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T57",
+      "source_name": "Basic shareable milestone system",
+      "forward_scope_title": "Basic shareable milestone system",
+      "disposition": "indirect_verification",
+      "current_scope": "Use truthful world/local milestone identities in shared output; do not label World 1 Level 50 as completed five-hundred-level campaign.",
+      "dependencies_preserved": [
+        "T12",
+        "T43"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T58",
+      "source_name": "Phone/tablet/foldable functional acceptance",
+      "forward_scope_title": "Phone/tablet/foldable functional acceptance",
+      "disposition": "indirect_verification",
+      "current_scope": "Test upgraded production/storage/defense layouts, multi-actor controls and busy scenarios on real phones/tablets/foldables, with live fold/resume and readable normal/pinch views.",
+      "dependencies_preserved": [
+        "T43",
+        "T54",
+        "T55",
+        "T56"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T59",
+      "source_name": "Character 2 final rigging and motion review",
+      "forward_scope_title": "Character 2 final rigging and motion review",
+      "disposition": "no_identified_change",
+      "current_scope": "Character 2 final rig/motion identity remains unchanged; actual future equipment/appearance variants will trigger their normal compatibility proof.",
+      "dependencies_preserved": [
+        "T58"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T60",
+      "source_name": "Character 3 final rigging and motion review",
+      "forward_scope_title": "Character 3 final rigging and motion review",
+      "disposition": "no_identified_change",
+      "current_scope": "Character 3 final rig/motion identity remains unchanged; the count correction alone does not authorize a new visual form.",
+      "dependencies_preserved": [
+        "T58"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T61",
+      "source_name": "Character 4 final rigging and motion review",
+      "forward_scope_title": "Character 4 final rigging and motion review",
+      "disposition": "no_identified_change",
+      "current_scope": "Character 4 final rig/motion identity remains unchanged; retain existing reference/contact/full-cycle requirements.",
+      "dependencies_preserved": [
+        "T58"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T62",
+      "source_name": "Complete Level 1–100 progression acceptance",
+      "forward_scope_title": "Release-scoped progression and full ten-world campaign acceptance",
+      "disposition": "direct_change",
+      "current_scope": "Verify released World1 fifty-level progression with actual worthwhile upgrades, storage input/output, multiple simultaneous pets/survivors and combined production/defense/recovery. Later full500-position acceptance remains separate; concepts and planned stats do not pass native integration.",
+      "dependencies_preserved": [
+        "T33",
+        "T36",
+        "T40",
+        "T43",
+        "T53",
+        "T54",
+        "T58",
+        "T59",
+        "T60",
+        "T61"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T63",
+      "source_name": "$0 lifelong-F2P player completion test",
+      "forward_scope_title": "Released-world and full-campaign $0 completion test",
+      "disposition": "direct_change",
+      "current_scope": "Prove a realistic zero-payment completion path for every released scope, beginning with World 1 fifty levels; later verify the complete five-hundred-level campaign with ordinary players.",
+      "dependencies_preserved": [
+        "T33",
+        "T62"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T64",
+      "source_name": "Purchase-value/fairness test",
+      "forward_scope_title": "Purchase-value/fairness test",
+      "disposition": "indirect_verification",
+      "current_scope": "Recheck purchase/VIP value against revised World 1 progression and later content availability; preserve paid entitlements and normal-player fairness.",
+      "dependencies_preserved": [
+        "T35",
+        "T36",
+        "T62",
+        "T63"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T65",
+      "source_name": "Full LiveOps launch rehearsal",
+      "forward_scope_title": "World1 launch and later-update LiveOps rehearsal",
+      "disposition": "direct_change",
+      "current_scope": "Rehearse launch events against World 1-only released content, then rehearse each later-world update; full campaign availability is not falsely claimed at initial release.",
+      "dependencies_preserved": [
+        "T39",
+        "T40",
+        "T62",
+        "T64"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T66",
+      "source_name": "Security/exploit attack review",
+      "forward_scope_title": "Security/exploit attack review",
+      "disposition": "indirect_verification",
+      "current_scope": "Attack world/update unlocks, save migrations, quoted demand, vehicle cargo/fuel and revised progression rewards in addition to existing exploit surfaces.",
+      "dependencies_preserved": [
+        "T41",
+        "T43",
+        "T65"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T67",
+      "source_name": "Full-game reference/regression acceptance",
+      "forward_scope_title": "Released-content and later full-campaign reference/regression acceptance",
+      "disposition": "direct_change",
+      "current_scope": "Review exact released-content visual and functional upgrades, storage house and concurrent actor scenarios against selected baselines and current value requirements. Prior cosmetic candidate/review cannot approve the revised scope; retain all stronger reference gates.",
+      "dependencies_preserved": [
+        "T62",
+        "T63",
+        "T64",
+        "T65",
+        "T66"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T68",
+      "source_name": "Sustained native 4K/60 phone evidence",
+      "forward_scope_title": "Sustained native4K/60 phone evidence for each affected release",
+      "disposition": "direct_change",
+      "current_scope": "Certify the exact World 1 release on physical phones under representative finished World 1 load; recertify affected later releases. Native 4K/60 and sustained evidence requirements are unchanged.",
+      "dependencies_preserved": [
+        "T67"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T69",
+      "source_name": "Sustained native 4K/60 tablet/foldable evidence",
+      "forward_scope_title": "Sustained native4K/60 tablet/foldable evidence for each affected release",
+      "disposition": "direct_change",
+      "current_scope": "Certify the exact World 1 release on physical tablets/foldables with live folding; retain native 4K/60 requirements and recertification for affected content updates.",
+      "dependencies_preserved": [
+        "T67"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T70",
+      "source_name": "Final production release handoff",
+      "forward_scope_title": "World1 release handoff and later connected-update handoffs",
+      "disposition": "direct_change",
+      "current_scope": "Create a World 1 release handoff with an explicit shipped-content manifest and later-update plan, while preserving mandatory gates and separate full-campaign obligations. Reconcile the existing dependency graph before approval.",
+      "dependencies_preserved": [
+        "T68",
+        "T69"
+      ],
+      "source_lifecycle_snapshot": "LOCKED",
+      "source_lifecycle_is_current_candidate_approval": false,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T71",
+      "source_name": null,
+      "disposition": "source_missing",
+      "current_scope": "No authentic recovered task definition; no title, owner, dependency or new work is invented.",
+      "dependencies_preserved": null,
+      "source_lifecycle_snapshot": null,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T72",
+      "source_name": null,
+      "disposition": "source_missing",
+      "current_scope": "No authentic recovered task definition; no title, owner, dependency or new work is invented.",
+      "dependencies_preserved": null,
+      "source_lifecycle_snapshot": null,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T73",
+      "source_name": null,
+      "disposition": "source_missing",
+      "current_scope": "No authentic recovered task definition; no title, owner, dependency or new work is invented.",
+      "dependencies_preserved": null,
+      "source_lifecycle_snapshot": null,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T74",
+      "source_name": null,
+      "disposition": "source_missing",
+      "current_scope": "No authentic recovered task definition; no title, owner, dependency or new work is invented.",
+      "dependencies_preserved": null,
+      "source_lifecycle_snapshot": null,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T75",
+      "source_name": null,
+      "disposition": "source_missing",
+      "current_scope": "No authentic recovered task definition; no title, owner, dependency or new work is invented.",
+      "dependencies_preserved": null,
+      "source_lifecycle_snapshot": null,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T76",
+      "source_name": null,
+      "disposition": "source_missing",
+      "current_scope": "No authentic recovered task definition; no title, owner, dependency or new work is invented.",
+      "dependencies_preserved": null,
+      "source_lifecycle_snapshot": null,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T77",
+      "source_name": null,
+      "disposition": "source_missing",
+      "current_scope": "No authentic recovered task definition; no title, owner, dependency or new work is invented.",
+      "dependencies_preserved": null,
+      "source_lifecycle_snapshot": null,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T78",
+      "source_name": null,
+      "disposition": "source_missing",
+      "current_scope": "No authentic recovered task definition; no title, owner, dependency or new work is invented.",
+      "dependencies_preserved": null,
+      "source_lifecycle_snapshot": null,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T79",
+      "source_name": null,
+      "disposition": "source_missing",
+      "current_scope": "No authentic recovered task definition; no title, owner, dependency or new work is invented.",
+      "dependencies_preserved": null,
+      "source_lifecycle_snapshot": null,
+      "candidate_task_activation": false
+    },
+    {
+      "task_id": "T80",
+      "source_name": null,
+      "disposition": "source_missing",
+      "current_scope": "No authentic recovered task definition; no title, owner, dependency or new work is invented.",
+      "dependencies_preserved": null,
+      "source_lifecycle_snapshot": null,
+      "candidate_task_activation": false
+    }
+  ],
+  "revision": "FUNCTIONAL_UPGRADE_VALUE_AND_MULTIPLE_ACTORS",
+  "owner_steering_ids": [
+    "S01",
+    "U02",
+    "U03"
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "reviewer": "/root/world1_upgrade_critic",
+  "date": "2026-11-28",
+  "scope": "ACTUAL_TRAINED_CREW_SEPARATE_STATIC_USE_SCENE_RETEST",
+  "id": "W1VAL-03A-USE-r2",
+  "status": "REPAIR_REQUIRED",
+  "score": 8.5,
+  "image": {
+    "path": "generated/w1val-03a-use-r2.png",
+    "sha256": "b21a271bd5cbeb56fd3a11b42530100f8b081e6254dd3cdf996a877ccbf8a405"
+  },
+  "invocation": {
+    "path": "prompts/w1val-03a-use-r2-invocation.json",
+    "sha256": "133d8cb9896212c75f3605378a9ca508abac1a30a15fe7bb17c0c519aa84d204"
+  },
+  "matching_master": {
+    "path": "generated/w1val-03a-gear-r2.png",
+    "sha256": "9e17e265acdd6172ee2802b08cd1f8af582ad74e5e312c91ea9e4748f9f5861b"
+  },
+  "resolved": [
+    {
+      "id": "CREW-USE-R01",
+      "result": "One blade remains and the crank is directly attached to its actual axle; invented second blade/shaft housing removed."
+    },
+    {
+      "id": "CREW-USE-R02",
+      "result": "Compact selected human body proportions restored in the working pose; no longer elongated male torso/legs."
+    }
+  ],
+  "findings": [
+    {
+      "id": "CREW-USE-R04",
+      "gate": "clear safe non-operating hand contact",
+      "observed": "The non-cranking glove is hidden directly behind the left blade teeth and axle. A clear safe support/rest contact cannot be established from the actual image.",
+      "repair": "Move the entire non-operating hand to a visible rest on his thigh or a genuinely clear outer table corner, away from cutter and drive, preserving the correct gripping hand."
+    },
+    {
+      "id": "CREW-USE-R03",
+      "gate": "complete supplier boot visibility and ground contact",
+      "observed": "The supplier left boot remains bisected by the rear cradle upright. Toe and side fragments are visible, but its full silhouette is hidden.",
+      "repair": "Shift the cradle farther left or reposition the supplier so both complete boots are separately visible while both hands keep plausible log support."
+    }
+  ],
+  "evidence": [
+    "Whole actual use-r2 image",
+    "reviews/w1val-03a-use-r2-contact-inspection.png",
+    "reviews/w1val-03a-use-r2-supplier-inspection.png",
+    "Exact five-reference repair invocation"
+  ],
+  "next_repair_scope": "Consolidate only these two contact/visibility changes. Preserve correct anatomy, one blade/direct drive, exact five identities, gear, units, distinct roles and composition.",
+  "final_crew_stage_approval": false,
+  "owner_new_design_approval": false,
+  "native_approval": false,
+  "whole_task_complete": false
+}

@@ -1,0 +1,198 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/planning_package_critic",
+  "review_type": "GENUINELY_SEPARATE_INDEPENDENT_PLANNING_CONTENT_REVIEW",
+  "date": "2026-11-28",
+  "scope": "Planning subpackage and four current-entrypoint candidates only; no rendered-image, native gameplay, motion, audio, balance, physical-device, publication or shipping approval.",
+  "candidate_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+  "candidate_commit": null,
+  "candidate_identity_kind": "EXACT_LOCAL_CANDIDATE_SHA256_MANIFEST_PENDING_PUBLISHED_COMMIT_READBACK",
+  "policy_binding": {
+    "policy_id": "havenline-reference-acceptance-2026-11-27",
+    "policy_sha256": "140a80fb86955b1c98ac91e62202072e7b745b7e1cda0f2cf810e7baa6f753a8",
+    "standard_sha256": "a39c5dd5a7bcf5d1bda7002da9ac71240e53272865442c48cea46f55c17760a0",
+    "applicable_rule": "All mandatory planning checks must pass; reference/source fidelity at least9.9 with no averaging. Exact10 is used only where every applicable content/source comparison passed. No visual or task closure is inferred."
+  },
+  "independence": {
+    "builder": "/root/world_progression_audit",
+    "reviewer_did_not_edit_builder_files": true,
+    "validation_run_on_review_copy": true,
+    "prior_critic_numbers_not_used_as_substitute": true
+  },
+  "verification": {
+    "structural_validator": {
+      "passed": 33,
+      "required": 33,
+      "exit_code": 0,
+      "candidate_receipt_reproduced_exactly": true
+    },
+    "local_source_hashes": {
+      "passed": 50,
+      "required": 50
+    },
+    "task_name_dependency_status_projection": {
+      "passed": 70,
+      "required": 70
+    },
+    "canonical_entrypoint_captures": {
+      "passed": 4,
+      "required": 4
+    },
+    "unchanged_table_rows": {
+      "passed": 29,
+      "required": 29
+    },
+    "historical_migration_states": {
+      "passed": 70,
+      "required": 70
+    },
+    "history_sections": {
+      "passed": 2,
+      "required": 2
+    },
+    "prior_candidate_files": {
+      "passed": 13,
+      "required": 13
+    },
+    "pinned_remote_source_files": {
+      "passed": 6,
+      "required": 6,
+      "S07_retrieved_directly": true,
+      "S02_S06_capture_transform": "remove exactly one appended LF to recover canonical GitHub bytes"
+    }
+  },
+  "evidence_files": [
+    "plan-independent-source-checks.json",
+    "plan-independent-preservation-checks.json",
+    "plan-independent-pinned-source-identity.json",
+    "plan-independent-S07-fetch.json",
+    "plan-independent-work/verifier.stdout.txt",
+    "plan-independent-work-r2/verifier.stdout.txt"
+  ],
+  "not_tested_or_approved": [
+    "All actual upgrade images and armed-tower illustration",
+    "Native500-position progression or even50 authored World1 outcomes",
+    "Implemented production rates, buffer sizes, upgrade costs or attack statistics",
+    "Multi-actor gameplay,motion,audio or physical-device behavior",
+    "GitHub publication/readback and active-branch preservation",
+    "Any production-task activation,task closure,owner art selection or shipping approval"
+  ],
+  "future_publication_gate": "Root must publish the exact reviewed bytes to an isolated branch, bind the resulting commit and verify blob/readback/active-branch preservation before claiming publication. Material content changes reopen affected review.",
+  "revision": "r2",
+  "verdict": "PLANNING_CONTENT_READY_FOR_ISOLATED_PUBLICATION",
+  "planning_content_pass": true,
+  "candidate_files_sha256": {
+    "AGENTS.md": "bb944e2552a6fe3005b4640b1b0d9bfb71b7b8abe6b8016e1ed0ede51342a852",
+    "BUILD_GAME.md": "dc5682c23c5406dea50d7600efe22ab2afa62338b118f3359380faffca2ac468",
+    "Docs/Design/World1Upgrades/2026-11-28/owner-instructions/2026-11-28-upgrade-value.json": "90d0903598dafa004ac41dfea91e3b084103aec1e1031f93c571e4657c18589c",
+    "Docs/Production/HAVENLINE_BUILD_PLAN_V2.md": "8e68051ab66c17397344e8fdb096510103f958c1742db6459b13ecaaf85afe45",
+    "Docs/Production/WorldProgression/2026-11-28-10x50/CHECKPOINT.json": "e604ef185ae0d29dead5237c180f7d1b8aa4a45858827e8efed630d8741e1f5a",
+    "Docs/Production/WorldProgression/2026-11-28-10x50/CURRENT_WORLD_PLAN.md": "a451cc0d5d2349138d1f961a4c2aaf4cdf2eaa5e9099f8c5bb2048073ec0ef77",
+    "Docs/Production/WorldProgression/2026-11-28-10x50/MIGRATION_REQUIREMENTS.md": "d545a03cb0d9c70886d08770bfc16f44b93e9885e34c0b53641e77666d3ec697",
+    "Docs/Production/WorldProgression/2026-11-28-10x50/SOURCE_EVIDENCE.json": "1a7d0d203d4ba5717a5bf1bb2280b41c62dac0e4f27b4febc8e507598bb535f8",
+    "Docs/Production/WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.json": "28900ac11ca9d6b0dc4c7188aef623d6a8b96bf8ae52f03ddfa3080769c5c475",
+    "Docs/Production/WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md": "be44f2d00d1c78a69b1ed0031a87116b69196e84199f58d44f02f223b8a4f5f0",
+    "Docs/Production/WorldProgression/2026-11-28-10x50/VALIDATION.json": "11164c26f399bd59cd80e8310775c6703fa555964fcdb582525107ea48815991",
+    "Docs/Production/WorldProgression/2026-11-28-10x50/WORLD_PROGRESSION_CONTRACT.json": "dc14be6be6093851355d79ef095fd5a1de72520b9fbdf65d9cf4ce89422a6fa1",
+    "Docs/Production/WorldProgression/2026-11-28-10x50/verify_plan.py": "e479c8f04378ba371e2333789320c672a28822dd79eb844abec632da7e4238c3",
+    "REPOSITORY_INDEX.md": "13b3b8b5913bd4393144193d35e664ae22d1dede1f2d9f48dcd16155cbab919e"
+  },
+  "mandatory_checks": [
+    {
+      "id": "P01",
+      "name": "Exact owner scope and 10×50 mapping",
+      "pass": true,
+      "evidence": "Ten worlds, local1–50 each,500 planned positions; actual count instruction retained; T12/T32 and T44–T52 correctly mapped."
+    },
+    {
+      "id": "P02",
+      "name": "Release and identity boundary",
+      "pass": true,
+      "evidence": "World1 release and later connected updates remain distinct; world/local identity and ordinal are proposed; UI/save migration remains unimplemented."
+    },
+    {
+      "id": "P03",
+      "name": "Authentic task preservation",
+      "pass": true,
+      "evidence": "All70 graph names/dependency arrays/status snapshots match independent source comparison; T71–T80 remain undefined; no task activation or ownership change."
+    },
+    {
+      "id": "P04",
+      "name": "Historical record preservation",
+      "pass": true,
+      "evidence": "29 unaffected table rows,70 migration states,two history sections and prior13-file candidate manifest remain preserved."
+    },
+    {
+      "id": "P05",
+      "name": "Source custody and precedence",
+      "pass": true,
+      "evidence": "50/50 local source SHA-256 and Git blob hashes match; six pinned GitHub source file identities verified; owner quotes retained; staged bytes not falsely called main-published."
+    },
+    {
+      "id": "P06",
+      "name": "Production and upgrade value scope",
+      "pass": true,
+      "evidence": "Substantial visual change, actual I/O/working hardware, conserved stock, attainable bills, bottlenecks and useful measured benefit required; no fake rates/yields/skins-per-level."
+    },
+    {
+      "id": "P07",
+      "name": "Storage-house semantics",
+      "pass": true,
+      "evidence": "Storage explicitly included. Existing actor unlimited carrying is separated from warehouse storage contract; real handling/routing/resilience value is required; no invented capacity sale."
+    },
+    {
+      "id": "P08",
+      "name": "Defense, survivors and pets",
+      "pass": true,
+      "evidence": "Fence/tower attack/defense and actor capability improvements required. Simultaneous living actors, jobs/targets/reservations/budgets/recall/casualty/save continuity are explicit."
+    },
+    {
+      "id": "P09",
+      "name": "Numeric policy and geometry boundaries",
+      "pass": true,
+      "evidence": "Prior3-pet/2-escort source retained as unintegrated starting policy; no new cap/unlock approval. Upgraded geometry/ports may expand with mapped function/cost/clearances while unit scale and gates remain protected."
+    },
+    {
+      "id": "P10",
+      "name": "Vehicle conflict handling",
+      "pass": true,
+      "evidence": "Low fuel requirement is carried forward; partial versus whole-load unloading and in-camp blade exception conflict remain explicit, without falsely choosing one or changing runtime."
+    },
+    {
+      "id": "P11",
+      "name": "Migration and acceptance completeness",
+      "pass": true,
+      "evidence": "Actual100/99 validators, ten-level bands and dynamic economy risk are named. Preserved saves/quotes/recovery and release-gate reconciliation remain required; no500-outcome/native/shipping claim."
+    },
+    {
+      "id": "P12",
+      "name": "Accurate edit boundary",
+      "pass": true,
+      "evidence": "Corrected boundary names dated planning directory,four isolated entrypoints and accompanying design component, with no gameplay source edits."
+    }
+  ],
+  "dimension_scores": {
+    "owner_scope_fidelity": 10.0,
+    "task_and_history_preservation": 10.0,
+    "source_custody_and_precedence": 10.0,
+    "migration_and_dependency_completeness": 10.0,
+    "upgrade_value_and_actor_requirements": 10.0,
+    "storage_contract_accuracy": 10.0,
+    "documentation_boundary_accuracy": 10.0
+  },
+  "findings": [
+    {
+      "id": "PPC-01",
+      "severity": "mandatory_correction",
+      "status": "CLOSED_BY_ROOT_REPAIR_AND_INDEPENDENT_RETEST",
+      "file": "Docs/Production/WorldProgression/2026-11-28-10x50/MIGRATION_REQUIREMENTS.md",
+      "repair_sha256": "d545a03cb0d9c70886d08770bfc16f44b93e9885e34c0b53641e77666d3ec697",
+      "retest": "Read corrected Boundary; only MIGRATION_REQUIREMENTS.md and VALIDATION.json changed since r1 snapshot. Independent review-copy verifier repeated33/33 and reproduces exact updated receipt."
+    }
+  ],
+  "all_mandatory_checks_pass": true,
+  "overall_score": 10.0,
+  "score_is_game_score": false,
+  "unresolved_mandatory_planning_defects": [],
+  "supersedes_for_planning_content_only": "plan-independent-r1.json"
+}

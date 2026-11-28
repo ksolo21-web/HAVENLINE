@@ -1,0 +1,3082 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/planning_package_critic",
+  "scope": "Independent source, input-map, link and read-only verifier evidence; no art/native/publication approval.",
+  "source_and_verifier_checks": {
+    "manifest_fingerprint": {
+      "sha256": "b2201cdc8dd4053c885fb0c2633f54822470c82c640689cae1500663ebb38d2b",
+      "git_blob_sha1": "354d34511aae6fc46ceb3947e9e0b31d4d510192",
+      "bytes": 9343
+    },
+    "verifier_runs": [
+      {
+        "mode": "preservation",
+        "exit_code": 0,
+        "result": {
+          "scope": "Supplemental source/code/package preservation only",
+          "checks_passed": 139,
+          "checks_required": 139,
+          "failures": [],
+          "pending_finalization_files": [
+            "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+            "Docs/Design/World1Upgrades/2026-11-28/review-evidence/ARTIFACT_INVENTORY.json",
+            "Docs/Design/World1Upgrades/2026-11-28/review-evidence/ASSEMBLY_RECEIPT.json",
+            "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/final/root-review-status-overrides.json",
+            "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/final/PUBLICATION_STATUS.json"
+          ],
+          "require_finalized": false,
+          "files_written": 0,
+          "art_selection_claimed": false,
+          "runtime_approval_claimed": false,
+          "publication_or_whole_task_approval_claimed": false
+        },
+        "stderr": ""
+      },
+      {
+        "mode": "require-finalized",
+        "exit_code": 1,
+        "result": {
+          "scope": "Supplemental source/code/package preservation only",
+          "checks_passed": 139,
+          "checks_required": 140,
+          "failures": [
+            "All final assembly and root checkpoint files exist"
+          ],
+          "pending_finalization_files": [
+            "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+            "Docs/Design/World1Upgrades/2026-11-28/review-evidence/ARTIFACT_INVENTORY.json",
+            "Docs/Design/World1Upgrades/2026-11-28/review-evidence/ASSEMBLY_RECEIPT.json",
+            "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/final/root-review-status-overrides.json",
+            "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/final/PUBLICATION_STATUS.json"
+          ],
+          "require_finalized": true,
+          "files_written": 0,
+          "art_selection_claimed": false,
+          "runtime_approval_claimed": false,
+          "publication_or_whole_task_approval_claimed": false
+        },
+        "stderr": ""
+      }
+    ],
+    "all_package_files_unchanged": true,
+    "package_files_before": 86,
+    "package_files_after": 86,
+    "source_rows": [
+      {
+        "path": "Docs/Production/COMPLETENESS_STANDARD.md",
+        "original_local_bytes_match": true,
+        "pinned_blob": "2563b86fe3eadba40cbb98383a31629c69c039dd",
+        "declared_blob": "f2a1130b011ce3ba554529f3fccda03fd4b91297",
+        "declared_exact_at_base": false,
+        "actual_exact_at_base": false,
+        "classification_matches": true,
+        "runtime_integration_claimed": false,
+        "snapshot_path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/COMPLETENESS_STANDARD.md",
+        "snapshot_exact": true,
+        "difference_reason_matches": true
+      },
+      {
+        "path": "Docs/Production/DEPENDENCY_GRAPH.json",
+        "original_local_bytes_match": true,
+        "pinned_blob": "93836ccac725bcef484c14c855e8bce9ae4502ad",
+        "declared_blob": "93836ccac725bcef484c14c855e8bce9ae4502ad",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      },
+      {
+        "path": "Docs/Production/FORWARD_EXECUTION_PROFILES.json",
+        "original_local_bytes_match": true,
+        "pinned_blob": "8fbc7b3ed898d92f53fcbfa281308b98613fdc0e",
+        "declared_blob": "8fbc7b3ed898d92f53fcbfa281308b98613fdc0e",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      },
+      {
+        "path": "Docs/Production/GAMEPLAY_DEPTH_CONTRACT.json",
+        "original_local_bytes_match": true,
+        "pinned_blob": "d19daf4e4a0a8de64ef15507b92fea7643818ee9",
+        "declared_blob": "24928092580d474b79b828aa2f45a267a2f01065",
+        "declared_exact_at_base": false,
+        "actual_exact_at_base": false,
+        "classification_matches": true,
+        "runtime_integration_claimed": false,
+        "snapshot_path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/GAMEPLAY_DEPTH_CONTRACT.json",
+        "snapshot_exact": true,
+        "difference_reason_matches": true
+      },
+      {
+        "path": "Docs/Production/GAMEPLAY_DEPTH_STANDARD.md",
+        "original_local_bytes_match": true,
+        "pinned_blob": "18e5fe2c0df21854b012a44f3b119ab2f094a90c",
+        "declared_blob": "475340a61a73d655ce4d2f5ef270d23a9ed03dc3",
+        "declared_exact_at_base": false,
+        "actual_exact_at_base": false,
+        "classification_matches": true,
+        "runtime_integration_claimed": false,
+        "snapshot_path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/GAMEPLAY_DEPTH_STANDARD.md",
+        "snapshot_exact": true,
+        "difference_reason_matches": true
+      },
+      {
+        "path": "Docs/Production/GAMEPLAY_RULES_CONTRACT.json",
+        "original_local_bytes_match": true,
+        "pinned_blob": null,
+        "declared_blob": "09ee54dc2f0662dc1ee52915250e15fc2bfa0381",
+        "declared_exact_at_base": false,
+        "actual_exact_at_base": false,
+        "classification_matches": true,
+        "runtime_integration_claimed": false,
+        "snapshot_path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/GAMEPLAY_RULES_CONTRACT.json",
+        "snapshot_exact": true,
+        "difference_reason_matches": true
+      },
+      {
+        "path": "Docs/Production/GAMEPLAY_RULES_STANDARD.md",
+        "original_local_bytes_match": true,
+        "pinned_blob": null,
+        "declared_blob": "f7feec0aabdba96450c43ff71ba2f869a50f4314",
+        "declared_exact_at_base": false,
+        "actual_exact_at_base": false,
+        "classification_matches": true,
+        "runtime_integration_claimed": false,
+        "snapshot_path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/GAMEPLAY_RULES_STANDARD.md",
+        "snapshot_exact": true,
+        "difference_reason_matches": true
+      },
+      {
+        "path": "Docs/Production/GameplayRules/2026-11-27/ACTORS_COMBAT_GAPS.json",
+        "original_local_bytes_match": true,
+        "pinned_blob": null,
+        "declared_blob": "29766c9bfcfe5c231decb05a634ecd29621bf777",
+        "declared_exact_at_base": false,
+        "actual_exact_at_base": false,
+        "classification_matches": true,
+        "runtime_integration_claimed": false,
+        "snapshot_path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/GameplayRules/2026-11-27/ACTORS_COMBAT_GAPS.json",
+        "snapshot_exact": true,
+        "difference_reason_matches": true
+      },
+      {
+        "path": "Docs/Production/GameplayRules/2026-11-27/ACTORS_MOTION_REQUIREMENTS.json",
+        "original_local_bytes_match": true,
+        "pinned_blob": null,
+        "declared_blob": "04a947408c2ff259f267dd59fa079fad4fc3bf54",
+        "declared_exact_at_base": false,
+        "actual_exact_at_base": false,
+        "classification_matches": true,
+        "runtime_integration_claimed": false,
+        "snapshot_path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/GameplayRules/2026-11-27/ACTORS_MOTION_REQUIREMENTS.json",
+        "snapshot_exact": true,
+        "difference_reason_matches": true
+      },
+      {
+        "path": "Docs/Production/GameplayRules/2026-11-27/PROGRESSION_ECONOMY_GAPS.json",
+        "original_local_bytes_match": true,
+        "pinned_blob": null,
+        "declared_blob": "3a431a8e4b9f1a35e63637e04ad70207e20325e4",
+        "declared_exact_at_base": false,
+        "actual_exact_at_base": false,
+        "classification_matches": true,
+        "runtime_integration_claimed": false,
+        "snapshot_path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/GameplayRules/2026-11-27/PROGRESSION_ECONOMY_GAPS.json",
+        "snapshot_exact": true,
+        "difference_reason_matches": true
+      },
+      {
+        "path": "Docs/Production/GameplayRules/2026-11-27/PROGRESSION_ECONOMY_GAPS.md",
+        "original_local_bytes_match": true,
+        "pinned_blob": null,
+        "declared_blob": "58c0646597944ac839c4e6f54f9452a3b9a8fd03",
+        "declared_exact_at_base": false,
+        "actual_exact_at_base": false,
+        "classification_matches": true,
+        "runtime_integration_claimed": false,
+        "snapshot_path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/GameplayRules/2026-11-27/PROGRESSION_ECONOMY_GAPS.md",
+        "snapshot_exact": true,
+        "difference_reason_matches": true
+      },
+      {
+        "path": "Docs/Production/GameplayRules/2026-11-27/Review/Final/WORLD_PROGRESSION_FINAL_SOURCE_ADDENDUM.md",
+        "original_local_bytes_match": true,
+        "pinned_blob": null,
+        "declared_blob": "7d0c6019347ae04f3d1ad78485e53bd28bbaffc4",
+        "declared_exact_at_base": false,
+        "actual_exact_at_base": false,
+        "classification_matches": true,
+        "runtime_integration_claimed": false,
+        "snapshot_path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/GameplayRules/2026-11-27/Review/Final/WORLD_PROGRESSION_FINAL_SOURCE_ADDENDUM.md",
+        "snapshot_exact": true,
+        "difference_reason_matches": true
+      },
+      {
+        "path": "Docs/Production/GameplayRules/2026-11-27/TASK_COMPLETENESS_T01_T80.json",
+        "original_local_bytes_match": true,
+        "pinned_blob": null,
+        "declared_blob": "8c0fd87433eea51b055bc16c953a1ab515ea1172",
+        "declared_exact_at_base": false,
+        "actual_exact_at_base": false,
+        "classification_matches": true,
+        "runtime_integration_claimed": false,
+        "snapshot_path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/GameplayRules/2026-11-27/TASK_COMPLETENESS_T01_T80.json",
+        "snapshot_exact": true,
+        "difference_reason_matches": true
+      },
+      {
+        "path": "Docs/Production/GameplayRules/2026-11-27/TASK_COMPLETENESS_T01_T80.md",
+        "original_local_bytes_match": true,
+        "pinned_blob": null,
+        "declared_blob": "ef5d40740c9e46e143bf6aa6e4a0481e1db36fb5",
+        "declared_exact_at_base": false,
+        "actual_exact_at_base": false,
+        "classification_matches": true,
+        "runtime_integration_claimed": false,
+        "snapshot_path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/GameplayRules/2026-11-27/TASK_COMPLETENESS_T01_T80.md",
+        "snapshot_exact": true,
+        "difference_reason_matches": true
+      },
+      {
+        "path": "Docs/Production/GameplayRules/2026-11-27/TASK_GAMEPLAY_DEPTH_T01_T80.json",
+        "original_local_bytes_match": true,
+        "pinned_blob": null,
+        "declared_blob": "e594c67c4d9a8853adea6cc4dc284286a1d9ab72",
+        "declared_exact_at_base": false,
+        "actual_exact_at_base": false,
+        "classification_matches": true,
+        "runtime_integration_claimed": false,
+        "snapshot_path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/GameplayRules/2026-11-27/TASK_GAMEPLAY_DEPTH_T01_T80.json",
+        "snapshot_exact": true,
+        "difference_reason_matches": true
+      },
+      {
+        "path": "Docs/Production/GameplayRules/2026-11-27/TASK_GAMEPLAY_DEPTH_T01_T80.md",
+        "original_local_bytes_match": true,
+        "pinned_blob": null,
+        "declared_blob": "57dc4019d710eba8422dc163d2a02113a9e38628",
+        "declared_exact_at_base": false,
+        "actual_exact_at_base": false,
+        "classification_matches": true,
+        "runtime_integration_claimed": false,
+        "snapshot_path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/GameplayRules/2026-11-27/TASK_GAMEPLAY_DEPTH_T01_T80.md",
+        "snapshot_exact": true,
+        "difference_reason_matches": true
+      },
+      {
+        "path": "Docs/Production/GameplayRules/2026-11-27/TASK_GAMEPLAY_RULES_T01_T80.json",
+        "original_local_bytes_match": true,
+        "pinned_blob": null,
+        "declared_blob": "7cae5272fe34ac3e6ae69b9c8607d6b49249b257",
+        "declared_exact_at_base": false,
+        "actual_exact_at_base": false,
+        "classification_matches": true,
+        "runtime_integration_claimed": false,
+        "snapshot_path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/GameplayRules/2026-11-27/TASK_GAMEPLAY_RULES_T01_T80.json",
+        "snapshot_exact": true,
+        "difference_reason_matches": true
+      },
+      {
+        "path": "Docs/Production/GameplayRules/2026-11-27/TASK_GAMEPLAY_RULES_T01_T80.md",
+        "original_local_bytes_match": true,
+        "pinned_blob": null,
+        "declared_blob": "d67cb2aea73ba328ab5bc2caaef436dd1f954b46",
+        "declared_exact_at_base": false,
+        "actual_exact_at_base": false,
+        "classification_matches": true,
+        "runtime_integration_claimed": false,
+        "snapshot_path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/GameplayRules/2026-11-27/TASK_GAMEPLAY_RULES_T01_T80.md",
+        "snapshot_exact": true,
+        "difference_reason_matches": true
+      },
+      {
+        "path": "Docs/Production/HAVENLINE_BUILD_PLAN_V2.md",
+        "original_local_bytes_match": true,
+        "pinned_blob": "8c76426bde92d0e6e040ddb13e186e2ccfa20e7a",
+        "declared_blob": "07b1634993e6bbc8766cb424c2bccd99fc69d033",
+        "declared_exact_at_base": false,
+        "actual_exact_at_base": false,
+        "classification_matches": true,
+        "runtime_integration_claimed": false,
+        "snapshot_path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/HAVENLINE_BUILD_PLAN_V2.md",
+        "snapshot_exact": true,
+        "difference_reason_matches": true
+      },
+      {
+        "path": "Docs/Production/RESOURCE_TOOL_ACTOR_STANDARD.md",
+        "original_local_bytes_match": true,
+        "pinned_blob": "613217428d6a2035e6112c745a8cfc4087d1fb80",
+        "declared_blob": "613217428d6a2035e6112c745a8cfc4087d1fb80",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      },
+      {
+        "path": "Docs/Production/ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.json",
+        "original_local_bytes_match": true,
+        "pinned_blob": "ee7af7341c6590056e48eab6753e50d4817298fc",
+        "declared_blob": "ee7af7341c6590056e48eab6753e50d4817298fc",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      },
+      {
+        "path": "Docs/Production/ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md",
+        "original_local_bytes_match": true,
+        "pinned_blob": "0e87f2ccef3dd00572b64f1054e52c0052e4d3b6",
+        "declared_blob": "0e87f2ccef3dd00572b64f1054e52c0052e4d3b6",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      },
+      {
+        "path": "Docs/Production/T12/ACCEPTANCE_TRACEABILITY.json",
+        "original_local_bytes_match": true,
+        "pinned_blob": "24c83fe0ed2f31215e94d27a6fef788de74dbef8",
+        "declared_blob": "24c83fe0ed2f31215e94d27a6fef788de74dbef8",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      },
+      {
+        "path": "Docs/Production/T12/AUTHORING_BLUEPRINT.json",
+        "original_local_bytes_match": true,
+        "pinned_blob": "4e5ca32e1dacb5cba2120575d2885036b96e3e7e",
+        "declared_blob": "4e5ca32e1dacb5cba2120575d2885036b96e3e7e",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      },
+      {
+        "path": "Docs/Production/T12/BINDING_SLOT_CATALOG.json",
+        "original_local_bytes_match": true,
+        "pinned_blob": "e09c8f774ba844eb1b04158eb94aa492cdbdfa67",
+        "declared_blob": "e09c8f774ba844eb1b04158eb94aa492cdbdfa67",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      },
+      {
+        "path": "Docs/Production/T12/DOWNSTREAM_CONSUMER_CONTRACT.json",
+        "original_local_bytes_match": true,
+        "pinned_blob": "46d8c6c265f7c17922ec9fdc8a9c52ef924b0882",
+        "declared_blob": "46d8c6c265f7c17922ec9fdc8a9c52ef924b0882",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      },
+      {
+        "path": "Docs/Production/T12/FACT_SLOT_BINDING_INDEX_TEMPLATE.json",
+        "original_local_bytes_match": true,
+        "pinned_blob": "5ac8b6029ec03b075b6e2ea650f2fd6d0bd531fe",
+        "declared_blob": "5ac8b6029ec03b075b6e2ea650f2fd6d0bd531fe",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      },
+      {
+        "path": "Docs/Production/T12/FROZEN_SCOPE.md",
+        "original_local_bytes_match": true,
+        "pinned_blob": "abb0455c788aa4161df9e91b1c083ce22b9461ae",
+        "declared_blob": "abb0455c788aa4161df9e91b1c083ce22b9461ae",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      },
+      {
+        "path": "Docs/Production/T12/LEVEL_1_100_MATRIX.json",
+        "original_local_bytes_match": true,
+        "pinned_blob": "dc59620cc40d17512b4e5cb03164bb13ac3f5b42",
+        "declared_blob": "dc59620cc40d17512b4e5cb03164bb13ac3f5b42",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      },
+      {
+        "path": "Docs/Production/T12/LEVEL_CADENCE_BLUEPRINT.md",
+        "original_local_bytes_match": true,
+        "pinned_blob": "1d00075adbf3aa1197aa51eb0b944088fcc8e482",
+        "declared_blob": "1d00075adbf3aa1197aa51eb0b944088fcc8e482",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      },
+      {
+        "path": "Docs/Production/T12/PREBUILD_CONTRACT.json",
+        "original_local_bytes_match": true,
+        "pinned_blob": "4965a32e4b1bfa1e22706912e1c2afa999ab1045",
+        "declared_blob": "4965a32e4b1bfa1e22706912e1c2afa999ab1045",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      },
+      {
+        "path": "Docs/Production/T12/PROGRESSION_DATA_SCHEMA.json",
+        "original_local_bytes_match": true,
+        "pinned_blob": "9077e245f3e3728751431282e02ad9e98a906558",
+        "declared_blob": "9077e245f3e3728751431282e02ad9e98a906558",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      },
+      {
+        "path": "Docs/Production/T12/RUNTIME_INTERFACE_CONTRACT.json",
+        "original_local_bytes_match": true,
+        "pinned_blob": "a696f5c33339361169e01fc03aaa7e648526b325",
+        "declared_blob": "a696f5c33339361169e01fc03aaa7e648526b325",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      },
+      {
+        "path": "Docs/Production/T12/TASK_PACKET.md",
+        "original_local_bytes_match": true,
+        "pinned_blob": "51648549d3fbe3ec44135b5a16f1bfa1934f779e",
+        "declared_blob": "51648549d3fbe3ec44135b5a16f1bfa1934f779e",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      },
+      {
+        "path": "Docs/Production/T13/T12_CONSUMER_BINDING.json",
+        "original_local_bytes_match": true,
+        "pinned_blob": "434b08a5d327a08606f056ae20cd54bf76b8e6fc",
+        "declared_blob": "434b08a5d327a08606f056ae20cd54bf76b8e6fc",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      },
+      {
+        "path": "Docs/Production/TASK_SCOPE_OVERRIDES.json",
+        "original_local_bytes_match": true,
+        "pinned_blob": "aa4bb0fbc15bcd90b8de018efc69ba34989425bc",
+        "declared_blob": "aa4bb0fbc15bcd90b8de018efc69ba34989425bc",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      },
+      {
+        "path": "Docs/Production/V32_FORWARD_PREP_ROADMAP.json",
+        "original_local_bytes_match": true,
+        "pinned_blob": "603d4b0cbce05a709dcff2e48c8696804c6bd0c6",
+        "declared_blob": "603d4b0cbce05a709dcff2e48c8696804c6bd0c6",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      },
+      {
+        "path": "Docs/Production/WHOLE_GAME_COMPLETENESS.json",
+        "original_local_bytes_match": true,
+        "pinned_blob": "9550ef456e6e90a14cb3d1baf04ffae636651a49",
+        "declared_blob": "65ce5c455e57efde2d36f1ff6dc34a0017228bfd",
+        "declared_exact_at_base": false,
+        "actual_exact_at_base": false,
+        "classification_matches": true,
+        "runtime_integration_claimed": false,
+        "snapshot_path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/WHOLE_GAME_COMPLETENESS.json",
+        "snapshot_exact": true,
+        "difference_reason_matches": true
+      },
+      {
+        "path": "tools/havenline/gameplay_rules/dynamic_economy.gd",
+        "original_local_bytes_match": true,
+        "pinned_blob": null,
+        "declared_blob": "eab47fd63fc239fbd7937c023a33a6f364da1da3",
+        "declared_exact_at_base": false,
+        "actual_exact_at_base": false,
+        "classification_matches": true,
+        "runtime_integration_claimed": false,
+        "snapshot_path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/tools/havenline/gameplay_rules/dynamic_economy.gd",
+        "snapshot_exact": true,
+        "difference_reason_matches": true
+      },
+      {
+        "path": "tools/havenline/production/completeness.py",
+        "original_local_bytes_match": true,
+        "pinned_blob": "8a72e946c3147f2cbb8d824c466a4b82c24a5458",
+        "declared_blob": "29fca6c94724503d0ab41886a81575c3101cd3cd",
+        "declared_exact_at_base": false,
+        "actual_exact_at_base": false,
+        "classification_matches": true,
+        "runtime_integration_claimed": false,
+        "snapshot_path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/tools/havenline/production/completeness.py",
+        "snapshot_exact": true,
+        "difference_reason_matches": true
+      },
+      {
+        "path": "tools/havenline/task12/fuzz_progression_contract.py",
+        "original_local_bytes_match": true,
+        "pinned_blob": "0d5c42dfbf3f1d71982d1d4a704024d06e396f98",
+        "declared_blob": "0d5c42dfbf3f1d71982d1d4a704024d06e396f98",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      },
+      {
+        "path": "tools/havenline/task12/materialize_progression_data.py",
+        "original_local_bytes_match": true,
+        "pinned_blob": "fd7b7a6739319f539af4dc0e9e2b64689db54a65",
+        "declared_blob": "fd7b7a6739319f539af4dc0e9e2b64689db54a65",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      },
+      {
+        "path": "tools/havenline/task12/prepare_activation.py",
+        "original_local_bytes_match": true,
+        "pinned_blob": "786da91f5d0e02822d8190f79b95d2b43b3d278f",
+        "declared_blob": "786da91f5d0e02822d8190f79b95d2b43b3d278f",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      },
+      {
+        "path": "tools/havenline/task12/reference_progression_oracle.py",
+        "original_local_bytes_match": true,
+        "pinned_blob": "f8cab2866c70b366e8cfbf0fb3adab0167af700b",
+        "declared_blob": "f8cab2866c70b366e8cfbf0fb3adab0167af700b",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      },
+      {
+        "path": "tools/havenline/task12/validate_authoring_blueprint.py",
+        "original_local_bytes_match": true,
+        "pinned_blob": "5d066fcb7ce88f65ffa0eccd413236729e2895d8",
+        "declared_blob": "5d066fcb7ce88f65ffa0eccd413236729e2895d8",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      },
+      {
+        "path": "tools/havenline/task12/validate_data_schema.py",
+        "original_local_bytes_match": true,
+        "pinned_blob": "1f0bad0520da4096a0f2545868fd270ce70a0f07",
+        "declared_blob": "1f0bad0520da4096a0f2545868fd270ce70a0f07",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      },
+      {
+        "path": "tools/havenline/task12/validate_downstream_contract.py",
+        "original_local_bytes_match": true,
+        "pinned_blob": "68b21e257725443af9748fcd1e9590d584f76caf",
+        "declared_blob": "68b21e257725443af9748fcd1e9590d584f76caf",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      },
+      {
+        "path": "tools/havenline/task12/validate_fact_slot_binding_index.py",
+        "original_local_bytes_match": true,
+        "pinned_blob": "6fde3f395807046328fa381a47f81d64872e87d0",
+        "declared_blob": "6fde3f395807046328fa381a47f81d64872e87d0",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      },
+      {
+        "path": "tools/havenline/task12/validate_level_matrix.py",
+        "original_local_bytes_match": true,
+        "pinned_blob": "d6b91f1db1bcd6273b2d4c9eefc9d1454d755da7",
+        "declared_blob": "d6b91f1db1bcd6273b2d4c9eefc9d1454d755da7",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      },
+      {
+        "path": "tools/havenline/task12/validate_progression_contract.py",
+        "original_local_bytes_match": true,
+        "pinned_blob": "eee025180033121ca947ce3570b0d38c279df1a0",
+        "declared_blob": "eee025180033121ca947ce3570b0d38c279df1a0",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      },
+      {
+        "path": "tools/havenline/task12/validate_runtime_interface.py",
+        "original_local_bytes_match": true,
+        "pinned_blob": "f1b268a6481be6dcabb4dc3548463bfe2c663248",
+        "declared_blob": "f1b268a6481be6dcabb4dc3548463bfe2c663248",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      },
+      {
+        "path": "tools/havenline/task12/validate_traceability.py",
+        "original_local_bytes_match": true,
+        "pinned_blob": "5d6d3f8403af15ca923b9737ad0ef8d9376229e0",
+        "declared_blob": "5d6d3f8403af15ca923b9737ad0ef8d9376229e0",
+        "declared_exact_at_base": true,
+        "actual_exact_at_base": true,
+        "classification_matches": true,
+        "runtime_integration_claimed": false
+      }
+    ],
+    "source_summary": {
+      "records": 52,
+      "all_original_bytes_match": true,
+      "all_base_classifications_match": true,
+      "staged": 20,
+      "all_staged_bytes_match": true,
+      "all_difference_reasons_match": true,
+      "pinned": 32
+    },
+    "inherited_targets": [
+      {
+        "path": "Docs/Design/CharacterTurnarounds",
+        "exists_at_base": true,
+        "object_type": "tree"
+      },
+      {
+        "path": "Docs/Design/InvaderTurnarounds",
+        "exists_at_base": true,
+        "object_type": "tree"
+      },
+      {
+        "path": "Docs/Design/ReferenceVideoLock/REFERENCE_VIDEO_LOCK.md",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "Docs/Design/ReferenceVideoLock/reference-video-sources.json",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "Docs/Design/RenderArchive",
+        "exists_at_base": true,
+        "object_type": "tree"
+      },
+      {
+        "path": "Docs/Design/ResourceTurnarounds",
+        "exists_at_base": true,
+        "object_type": "tree"
+      },
+      {
+        "path": "Docs/Opening-Recovery/README.md",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "Docs/Production/APPROVAL_INVALIDATIONS.json",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "Docs/Production/COMPLETENESS_STANDARD.md",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "Docs/Production/CURRENT_GAMEPLAY_SOURCE.json",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "Docs/Production/Completeness/2026-11-27/ACTORS_COMBAT_GAPS.md",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "Docs/Production/Completeness/2026-11-27/LATEST_SOURCE_DELTA.md",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "Docs/Production/Completeness/2026-11-27/PROGRESSION_ECONOMY_GAPS.md",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "Docs/Production/Completeness/2026-11-27/TASK_COMPLETENESS_T01_T80.md",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "Docs/Production/DEPENDENCY_GRAPH.json",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "Docs/Production/GAMEPLAY_DEPTH_CONTRACT.json",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "Docs/Production/GAMEPLAY_DEPTH_STANDARD.md",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "Docs/Production/GameplayDepth/2026-11-27/CURRENT_BRANCH_NOTE.md",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "Docs/Production/GameplayDepth/2026-11-27/README.md",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "Docs/Production/GameplayDepth/2026-11-27/TASK_GAMEPLAY_DEPTH_T01_T80.md",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "Docs/Production/PATH_OWNERSHIP.json",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "Docs/Production/REFERENCE_ACCEPTANCE_STANDARD.md",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "Docs/Production/REFERENCE_STYLE_LOCK.json",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "Docs/Production/ReferenceRefresh/2026-11-27/LATEST_BUILD_EVIDENCE.json",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "Docs/Production/ReferenceRefresh/2026-11-27/RENDER_CATALOGUE.md",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "Docs/Production/ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "Docs/Production/T01_T11_PRODUCTION_RECONCILIATION_2026-11-27.md",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "Docs/Production/TASK_PLAN_REFRESH_2026-11-27.md",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "Docs/Production/WHOLE_GAME_COMPLETENESS.json",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "Docs/Production/WORKSTREAM_REGISTRY.json",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "Docs/RepositoryArchive/MEDIA_CUSTODY.json",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "Docs/RepositoryArchive/Plans/README.md",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "Docs/RepositoryArchive/Plans/REFERENCE_CUSTODY.md",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "Docs/RepositoryArchive/Plans/TASK_CUSTODY_T01_T80.md",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "Docs/RepositoryArchive/SOURCE_SNAPSHOT.json",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "HavenlineLevel1/README.md",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "HavenlineLevel1/docs/ONE_CAMP_DESIGN.md",
+        "exists_at_base": true,
+        "object_type": "blob"
+      },
+      {
+        "path": "HavenlineLevel1/previews/integrated_opening.tscn",
+        "exists_at_base": true,
+        "object_type": "blob"
+      }
+    ],
+    "inherited_targets_summary": {
+      "count": 39,
+      "all_exist": true
+    },
+    "harness_correction": "Initial test compared absence reason against ABSENT_AT_BASE; the declared schema label is PATH_ABSENT_AT_BASE. Corrected the expected label. All source classifications and byte hashes were already correct; no package files changed."
+  },
+  "input_and_portability_checks": {
+    "map_fingerprint": {
+      "sha256": "1f06a8893f864ba2a3f3daa5c559f7556a3a1d3656d6bcdf44ec1d17f8c5f9b0",
+      "git_blob_sha1": "980e4b85d71688728907a183f36fe6ed53346241",
+      "bytes": 212187
+    },
+    "summary": {
+      "request_count": 38,
+      "all_request_checks": true,
+      "input_count": 47,
+      "resolution_counts": {
+        "PINNED_SOURCE_FETCH_METADATA": 22,
+        "GENERATED_IMAGE_RETAINED_BY_FINAL_ASSEMBLY": 24,
+        "ALREADY_IN_PACKAGE": 1
+      },
+      "all_input_checks": true,
+      "catalog_count": 112,
+      "all_catalog_checks": true,
+      "catalog_explicit_blob_ids": 108,
+      "all_history_records_preserved": true,
+      "input_set_equals_union_of_requests": true,
+      "requests_currently_outside_recorded_snapshot": [],
+      "no_extra_request_claims": true
+    },
+    "requests": [
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/01-counter-r1.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/01-counter-r2.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/02-cooker-r1.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/03-saw-r1.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1up-04-r1.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1up-05-r1.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1up-06-r1.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-01-r1-invocation.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-01-r2-invocation.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-01-r3-invocation.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-01-r4-invocation.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-01-r5-invocation.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-01-r6-invocation.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-02-architecture-r1-invocation.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-02-architecture-r2-invocation.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-02-architecture-r3-invocation.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-02-architecture-r4-invocation.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-02-architecture-r5-invocation.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-02-r1-invocation.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-03a-gear-r1-invocation.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-03a-gear-r2-invocation.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-03a-r1-invocation.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-03a-use-r1-invocation.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-03a-use-r2-invocation.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-03a-use-r3-invocation.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-03a-use-r4-invocation.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-03a-use-r5-invocation.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-03b-gear-r1-invocation.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-03b-gear-r2-invocation.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-03b-gear-r3-invocation.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-03b-gear-r4-invocation.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-03b-r1-invocation.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-03b-use-r1-invocation.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-04-r1-invocation.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-04-r2-invocation.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-04-r3-invocation.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-04-r4-invocation.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-04-r5-invocation.json",
+        "fingerprint_matches": true,
+        "declared_inputs_match": true,
+        "actual_prompt_record": true,
+        "planned_record_path_safe": true
+      }
+    ],
+    "inputs": [
+      {
+        "path": "/workspace/scratch/9c51da47f878/havenline-structures-2026-11-25/archive-repo/Docs/Design/StructureReferences/2026-11-25/selected/customer-counter-cardinal.png",
+        "resolution": "PINNED_SOURCE_FETCH_METADATA",
+        "fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "metadata_same_bytes": true,
+        "url_exact": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/package/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/17-conveyor-counter.png",
+        "resolution": "PINNED_SOURCE_FETCH_METADATA",
+        "fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "metadata_same_bytes": true,
+        "url_exact": true,
+        "verification_method": "PINNED_GITHUB_API_DIRECTORY_LISTING"
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/generated/01-counter-r1.png",
+        "resolution": "GENERATED_IMAGE_RETAINED_BY_FINAL_ASSEMBLY",
+        "fingerprint_matches": true,
+        "planned_path_correct": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/HAVENLINE-conveyors/Docs/Design/RenderArchive/2026-11-23/selected/equipment/cooker_processor.png",
+        "resolution": "PINNED_SOURCE_FETCH_METADATA",
+        "fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "metadata_same_bytes": true,
+        "url_exact": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/package/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/13-conveyor-food-machines.png",
+        "resolution": "PINNED_SOURCE_FETCH_METADATA",
+        "fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "metadata_same_bytes": true,
+        "url_exact": true,
+        "verification_method": "PINNED_GITHUB_API_DIRECTORY_LISTING"
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/HAVENLINE-conveyors/Docs/Design/RenderArchive/2026-11-23/selected/equipment/saw_station.png",
+        "resolution": "PINNED_SOURCE_FETCH_METADATA",
+        "fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "metadata_same_bytes": true,
+        "url_exact": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/HAVENLINE-conveyors/Docs/Design/RenderArchive/2026-11-23/selected/equipment/quarry_drill_station.png",
+        "resolution": "PINNED_SOURCE_FETCH_METADATA",
+        "fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "metadata_same_bytes": true,
+        "url_exact": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/package/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/02-core-resources-approved.png",
+        "resolution": "PINNED_SOURCE_FETCH_METADATA",
+        "fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "metadata_same_bytes": true,
+        "url_exact": true,
+        "verification_method": "PINNED_GITHUB_API_DIRECTORY_LISTING"
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/package/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/01-conveyor-approved.png",
+        "resolution": "PINNED_SOURCE_FETCH_METADATA",
+        "fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "metadata_same_bytes": true,
+        "url_exact": true,
+        "verification_method": "PINNED_GITHUB_API_DIRECTORY_LISTING"
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/HAVENLINE-conveyors/Docs/Design/RenderArchive/2026-11-23/selected/equipment/intake_machine.png",
+        "resolution": "PINNED_SOURCE_FETCH_METADATA",
+        "fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "metadata_same_bytes": true,
+        "url_exact": true
+      },
+      {
+        "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-repo/Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-wheat-harvester.png",
+        "resolution": "PINNED_SOURCE_FETCH_METADATA",
+        "fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "metadata_same_bytes": true,
+        "url_exact": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/generated/w1val-01-r1.png",
+        "resolution": "GENERATED_IMAGE_RETAINED_BY_FINAL_ASSEMBLY",
+        "fingerprint_matches": true,
+        "planned_path_correct": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/package/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/04-processed-resources.png",
+        "resolution": "PINNED_SOURCE_FETCH_METADATA",
+        "fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "metadata_same_bytes": true,
+        "url_exact": true,
+        "verification_method": "PINNED_GITHUB_API_DIRECTORY_LISTING"
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/generated/w1val-01-r2.png",
+        "resolution": "GENERATED_IMAGE_RETAINED_BY_FINAL_ASSEMBLY",
+        "fingerprint_matches": true,
+        "planned_path_correct": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/generated/w1val-01-r3.png",
+        "resolution": "GENERATED_IMAGE_RETAINED_BY_FINAL_ASSEMBLY",
+        "fingerprint_matches": true,
+        "planned_path_correct": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/generated/w1val-01-r4.png",
+        "resolution": "GENERATED_IMAGE_RETAINED_BY_FINAL_ASSEMBLY",
+        "fingerprint_matches": true,
+        "planned_path_correct": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/generated/w1val-01-r5.png",
+        "resolution": "GENERATED_IMAGE_RETAINED_BY_FINAL_ASSEMBLY",
+        "fingerprint_matches": true,
+        "planned_path_correct": true
+      },
+      {
+        "path": "/workspace/scratch/9c51da47f878/havenline-structures-2026-11-25/archive-repo/Docs/Design/StructureReferences/2026-11-25/selected/fence-cardinal.png",
+        "resolution": "PINNED_SOURCE_FETCH_METADATA",
+        "fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "metadata_same_bytes": true,
+        "url_exact": true
+      },
+      {
+        "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-repo/Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/defense-platform-turnaround.png",
+        "resolution": "PINNED_SOURCE_FETCH_METADATA",
+        "fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "metadata_same_bytes": true,
+        "url_exact": true
+      },
+      {
+        "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-repo/Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-fortress-watchtowers.png",
+        "resolution": "PINNED_SOURCE_FETCH_METADATA",
+        "fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "metadata_same_bytes": true,
+        "url_exact": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/generated/w1val-02-architecture-r1.png",
+        "resolution": "GENERATED_IMAGE_RETAINED_BY_FINAL_ASSEMBLY",
+        "fingerprint_matches": true,
+        "planned_path_correct": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/generated/w1val-02-architecture-r2.png",
+        "resolution": "GENERATED_IMAGE_RETAINED_BY_FINAL_ASSEMBLY",
+        "fingerprint_matches": true,
+        "planned_path_correct": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/generated/w1val-02-architecture-r3.png",
+        "resolution": "GENERATED_IMAGE_RETAINED_BY_FINAL_ASSEMBLY",
+        "fingerprint_matches": true,
+        "planned_path_correct": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/generated/w1val-02-architecture-r4.png",
+        "resolution": "GENERATED_IMAGE_RETAINED_BY_FINAL_ASSEMBLY",
+        "fingerprint_matches": true,
+        "planned_path_correct": true
+      },
+      {
+        "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-repo/Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-reinforced-palisades.png",
+        "resolution": "PINNED_SOURCE_FETCH_METADATA",
+        "fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "metadata_same_bytes": true,
+        "url_exact": true
+      },
+      {
+        "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-repo/Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/survivor-male-01-pose.png",
+        "resolution": "PINNED_SOURCE_FETCH_METADATA",
+        "fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "metadata_same_bytes": true,
+        "url_exact": true
+      },
+      {
+        "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-repo/Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/survivor-female-01-pose.png",
+        "resolution": "PINNED_SOURCE_FETCH_METADATA",
+        "fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "metadata_same_bytes": true,
+        "url_exact": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/HAVENLINE-conveyors/Docs/Design/RenderArchive/2026-11-23/selected/animal-companions/pet_dog_01.png",
+        "resolution": "PINNED_SOURCE_FETCH_METADATA",
+        "fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "metadata_same_bytes": true,
+        "url_exact": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/HAVENLINE-conveyors/Docs/Design/RenderArchive/2026-11-23/selected/animal-companions/pet_wolf_01.png",
+        "resolution": "PINNED_SOURCE_FETCH_METADATA",
+        "fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "metadata_same_bytes": true,
+        "url_exact": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/HAVENLINE-conveyors/Docs/Design/RenderArchive/2026-11-23/selected/animal-companions/pet_owl_01.png",
+        "resolution": "PINNED_SOURCE_FETCH_METADATA",
+        "fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "metadata_same_bytes": true,
+        "url_exact": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/generated/w1val-03a-gear-r1.png",
+        "resolution": "GENERATED_IMAGE_RETAINED_BY_FINAL_ASSEMBLY",
+        "fingerprint_matches": true,
+        "planned_path_correct": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/generated/w1val-03a-gear-r2.png",
+        "resolution": "GENERATED_IMAGE_RETAINED_BY_FINAL_ASSEMBLY",
+        "fingerprint_matches": true,
+        "planned_path_correct": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/generated/w1val-03a-use-r1.png",
+        "resolution": "GENERATED_IMAGE_RETAINED_BY_FINAL_ASSEMBLY",
+        "fingerprint_matches": true,
+        "planned_path_correct": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/generated/w1val-03b-gear-r1.png",
+        "resolution": "GENERATED_IMAGE_RETAINED_BY_FINAL_ASSEMBLY",
+        "fingerprint_matches": true,
+        "planned_path_correct": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/generated/w1val-03b-gear-r2.png",
+        "resolution": "GENERATED_IMAGE_RETAINED_BY_FINAL_ASSEMBLY",
+        "fingerprint_matches": true,
+        "planned_path_correct": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/generated/w1val-03b-gear-r3.png",
+        "resolution": "GENERATED_IMAGE_RETAINED_BY_FINAL_ASSEMBLY",
+        "fingerprint_matches": true,
+        "planned_path_correct": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/generated/w1val-03b-gear-r4.png",
+        "resolution": "GENERATED_IMAGE_RETAINED_BY_FINAL_ASSEMBLY",
+        "fingerprint_matches": true,
+        "planned_path_correct": true
+      },
+      {
+        "path": "/workspace/scratch/9c51da47f878/havenline-storage-house-2026-11-26/archive-repo/Docs/Design/StructureReferences/2026-11-26/upgradeable-storage-house/selected/storage-house-advanced.png",
+        "resolution": "PINNED_SOURCE_FETCH_METADATA",
+        "fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "metadata_same_bytes": true,
+        "url_exact": true
+      },
+      {
+        "path": "/workspace/scratch/9c51da47f878/havenline-storage-house-2026-11-26/archive-repo/Docs/Design/StructureReferences/2026-11-26/upgradeable-storage-house/selected/storage-house-organization.png",
+        "resolution": "PINNED_SOURCE_FETCH_METADATA",
+        "fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "metadata_same_bytes": true,
+        "url_exact": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/generated/w1val-04-r1.png",
+        "resolution": "GENERATED_IMAGE_RETAINED_BY_FINAL_ASSEMBLY",
+        "fingerprint_matches": true,
+        "planned_path_correct": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/generated/w1val-04-r2.png",
+        "resolution": "GENERATED_IMAGE_RETAINED_BY_FINAL_ASSEMBLY",
+        "fingerprint_matches": true,
+        "planned_path_correct": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/generated/w1val-04-r3.png",
+        "resolution": "GENERATED_IMAGE_RETAINED_BY_FINAL_ASSEMBLY",
+        "fingerprint_matches": true,
+        "planned_path_correct": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/layout-contracts/storage-port-contract.png",
+        "resolution": "ALREADY_IN_PACKAGE",
+        "fingerprint_matches": true,
+        "packaged_bytes_match": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/generated/w1val-04-r4.png",
+        "resolution": "GENERATED_IMAGE_RETAINED_BY_FINAL_ASSEMBLY",
+        "fingerprint_matches": true,
+        "planned_path_correct": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/generated/w1val-03a-use-r2.png",
+        "resolution": "GENERATED_IMAGE_RETAINED_BY_FINAL_ASSEMBLY",
+        "fingerprint_matches": true,
+        "planned_path_correct": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/generated/w1val-03a-use-r3.png",
+        "resolution": "GENERATED_IMAGE_RETAINED_BY_FINAL_ASSEMBLY",
+        "fingerprint_matches": true,
+        "planned_path_correct": true
+      },
+      {
+        "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/generated/w1val-03a-use-r4.png",
+        "resolution": "GENERATED_IMAGE_RETAINED_BY_FINAL_ASSEMBLY",
+        "fingerprint_matches": true,
+        "planned_path_correct": true
+      }
+    ],
+    "catalog": [
+      {
+        "path": "Docs/Design/ProcessingMachines/2026-11-27/PROCESSING_COVERAGE.md",
+        "commit": "2fc474bbbb03d9a242b216d33e8588e028de4ce5",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "580297cd01c4ae0d3d07097db51d4e8586568f08",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/ProcessingMachines/2026-11-27/PROCESSING_MACHINE_MAP.json",
+        "commit": "2fc474bbbb03d9a242b216d33e8588e028de4ce5",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "d41c03dd732866711fc88e438af4afec41f22047",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/ProcessingMachines/2026-11-27/SELECTED_DESIGN_NOTES.md",
+        "commit": "2fc474bbbb03d9a242b216d33e8588e028de4ce5",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "9855db06a05a57c5228341bbe7404d5eca51399a",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/ProcessingMachines/2026-11-27/selected/01-coal-smelter.png",
+        "commit": "2fc474bbbb03d9a242b216d33e8588e028de4ce5",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "488e0eb7c2aed9aef66513860b2b671f855f5e6a",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/ProcessingMachines/2026-11-27/selected/02-metalworking-bench.png",
+        "commit": "2fc474bbbb03d9a242b216d33e8588e028de4ce5",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "4e076c067947915f4de0c55a295f632e23962b9d",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/ProcessingMachines/2026-11-27/selected/03-steel-forge.png",
+        "commit": "2fc474bbbb03d9a242b216d33e8588e028de4ce5",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "5e55a01ee4c0b43a9d08cae188d8f9e33bb0c9c9",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/ProcessingMachines/2026-11-27/selected/04-assembly-bench.png",
+        "commit": "2fc474bbbb03d9a242b216d33e8588e028de4ce5",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "7ca8f6e29749e422288bab9be20395ec886a7cee",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/ProcessingMachines/2026-11-27/selected/05-manual-oil-pump.png",
+        "commit": "2fc474bbbb03d9a242b216d33e8588e028de4ce5",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "bd91e945ea215f232ccb89880afd49d98d69fb5a",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/ProcessingMachines/2026-11-27/selected/06-coal-refinery.png",
+        "commit": "2fc474bbbb03d9a242b216d33e8588e028de4ce5",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "3ccefa3c8f0756b261f492781f09ec7b68b420d9",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/RenderArchive/2026-11-23/selected/animal-companions/pet_bear_01.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "4c57fff1e26cfe7bd029ce6c684ee9aed4dbeed4",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/RenderArchive/2026-11-23/selected/animal-companions/pet_dog_01.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "27f18dc67f9b52d7462085f8ea93a14f79f9a4eb",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/RenderArchive/2026-11-23/selected/animal-companions/pet_fox_01.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "9bf66368d0d4c04da5b768255d075239bd2586b8",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/RenderArchive/2026-11-23/selected/animal-companions/pet_lion_01.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "50f99b6abdf3681aafc5e7ffbb7a84285145512b",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/RenderArchive/2026-11-23/selected/animal-companions/pet_owl_01.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "db465610eb61d155a7ae0876b624fa625361a19f",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/RenderArchive/2026-11-23/selected/animal-companions/pet_tiger_01.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "391a13f778edd500e277b19fcb03706d80f933ec",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/RenderArchive/2026-11-23/selected/animal-companions/pet_wolf_01.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "639ce1efa707430c7cbbc497868ac3440a976a80",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/axe.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "32913b38e794d7ee2b8e9e9e95d1f605952a016d",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/cooker_processor.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "714b04b471f9bf563a2bbab6fda16311aab2bcc2",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/furnace_level_01.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "6021a356712b04d1d2885b008ee95ddfa26db2a8",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/intake_machine.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "aa80af7d53f6d70d42f3c4ee1b2101effe66a27f",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/quarry_drill_station.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "b0c6b17f4278736778a29e68f90765f22568e3d6",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/saw_station.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "9ecc552e030a45cbe80fbeae7cdf3b3b6c846ebc",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/01-conveyor-approved.png",
+        "commit": "b3da3c639c068aeb4b19f037a602d5d5f6ba5aee",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "ea8c73784f87abcbfa70064055b795ac0eeaa568",
+        "explicit_git_blob_sha1_present": true,
+        "verification_method": "PINNED_GITHUB_API_DIRECTORY_LISTING"
+      },
+      {
+        "path": "Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/02-core-resources-approved.png",
+        "commit": "b3da3c639c068aeb4b19f037a602d5d5f6ba5aee",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "4b1e57bf49a1f0b80cd87225c20fb8141ea84c51",
+        "explicit_git_blob_sha1_present": true,
+        "verification_method": "PINNED_GITHUB_API_DIRECTORY_LISTING"
+      },
+      {
+        "path": "Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/04-processed-resources.png",
+        "commit": "b3da3c639c068aeb4b19f037a602d5d5f6ba5aee",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "c31a9a6f1f43980813a580318908dfb6bc7c5e55",
+        "explicit_git_blob_sha1_present": true,
+        "verification_method": "PINNED_GITHUB_API_DIRECTORY_LISTING"
+      },
+      {
+        "path": "Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/05-assemblies-and-valuables.png",
+        "commit": "b3da3c639c068aeb4b19f037a602d5d5f6ba5aee",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "cb1f637bf8f709fbcf3dbb1efdd7f9711ec706e7",
+        "explicit_git_blob_sha1_present": true,
+        "verification_method": "PINNED_GITHUB_API_DIRECTORY_LISTING"
+      },
+      {
+        "path": "Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/13-conveyor-food-machines.png",
+        "commit": "b3da3c639c068aeb4b19f037a602d5d5f6ba5aee",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "65dc2185b79f6172d54cce0732ee91cc37da90a2",
+        "explicit_git_blob_sha1_present": true,
+        "verification_method": "PINNED_GITHUB_API_DIRECTORY_LISTING"
+      },
+      {
+        "path": "Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/17-conveyor-counter.png",
+        "commit": "b3da3c639c068aeb4b19f037a602d5d5f6ba5aee",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "c8341fb3666976dbed72368593f671241a1e6c65",
+        "explicit_git_blob_sha1_present": true,
+        "verification_method": "PINNED_GITHUB_API_DIRECTORY_LISTING"
+      },
+      {
+        "path": "Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/17b-material-counter.png",
+        "commit": "b3da3c639c068aeb4b19f037a602d5d5f6ba5aee",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "527895e922aa3871b5839eb822d5f57c79a8ccfe",
+        "explicit_git_blob_sha1_present": true,
+        "verification_method": "PINNED_GITHUB_API_DIRECTORY_LISTING"
+      },
+      {
+        "path": "Docs/Design/CharacterTurnarounds/2026-11-24/reference-style-01/selected/character-2-cardinal.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "e9bf687d5be70791da87cb875ec49a2f4c8c7a61",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/CharacterTurnarounds/2026-11-24/reference-style-01/selected/character-2-diagonal.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "87c3735e2b789baaad00c90efb29fbcc5b031e49",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/CharacterTurnarounds/2026-11-24/reference-style-01/selected/character-2-hands.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "6f2d4e0bdfd32f739ca3ea897c66f164c54fe33f",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/CharacterTurnarounds/2026-11-24/reference-style-01/selected/character-3-cardinal.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "3247e6702ee3d4180be656b6b6f284e94fdcd872",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/CharacterTurnarounds/2026-11-24/reference-style-01/selected/character-3-diagonal.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "1fc12ce0d38191f428f5814184a2ba609659ee6a",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/CharacterTurnarounds/2026-11-24/reference-style-01/selected/character-3-hands.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "852d81632148294abdcee09676eaee83e4248508",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/CharacterTurnarounds/2026-11-24/reference-style-01/selected/character-4-cardinal.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "050c39241fd50edc2adcbd9165b2c0df7a1d2a81",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/CharacterTurnarounds/2026-11-24/reference-style-01/selected/character-4-diagonal.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "1b93298afa737437ca32640abeaf735e2dabd2c3",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/CharacterTurnarounds/2026-11-24/reference-style-01/selected/character-4-hands.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "eefba71970cb6c610cc00b30df848e040a9870bc",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/CharacterTurnarounds/2026-11-26/character-1-design-18617/selected/character-1-cardinal.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "cff669a48d58e286016088546cd8bd27085f8a26",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/CharacterTurnarounds/2026-11-26/character-1-design-18617/selected/character-1-hands.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "ec559b89477fa385520b705612b538da0f384666",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/CharacterTurnarounds/2026-11-26/character-1-design-18617/selected/character-1-oblique.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "904aea772a7bab33a6479fe02dc277c96cc3b540",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/README.md",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "b15712ac5ca85d0fd0d59fe04318936926939145",
+        "explicit_git_blob_sha1_present": false
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/audit/world/source-selected-status.json",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "6c7be79a4d4c5d16abff3dfbd2514a1bcde73691",
+        "explicit_git_blob_sha1_present": false
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/audit/world/world-gap-matrix.json",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "3660e06ef7510e25b0ee47ca5d34038a6116dcb1",
+        "explicit_git_blob_sha1_present": false
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/customer-female-01-hands.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "8b6919690a4243bbdb462819a7d8a927330442e2",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/customer-female-01-pose.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "ecd87890c24a24765e768c3f6c2a50d8b20a321d",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/customer-female-02-hands.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "1540e09d519cdb82c26f6985a6ee4f4bbe22ac85",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/customer-female-02-pose.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "8a2ee848a6920fb42964536d8ce9d594406b7759",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/customer-male-01-hands.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "8b151d48bd6f79ac8309eddea6811a768fe29826",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/customer-male-01-pose.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "62f10921b82c9cb5e5a3ccfc5945039b7eeb0098",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/customer-male-02-hands.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "162ec0fdd1751ccebbd92d80acb2551db68295a9",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/customer-male-02-pose.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "5f62109ac06d29ac16427bf7d33c043a4d7cdac4",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/defense-platform-details.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "567fc9edcf7d48f6a588bcc14975b194619040a8",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/defense-platform-turnaround.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "69cc35e63ef361a9bd1057b46b6c78e3127955ed",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/survivor-female-01-hands.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "c5b98d658bdc054760f10bc94911ae180aa5acd6",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/survivor-female-01-pose.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "99d981f07a438bd4ec73d9dc4dbb9b11c97792c9",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/survivor-male-01-hands.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "6a8ec0ff0f2b4e004f08f65b859d9e200e2c4ee3",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/survivor-male-01-pose.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "58571632555de98fa3d0ae1ae416a5cedcb26265",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-archer-towers.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "05fa8ca3cc37d1bd84e1732b339f8e99b1aa16cc",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-atlas-storage.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "26479d5bffb0d144b1cdd129145f4bdbfa4ee1f2",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-biomes-canyon-cliffs.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "4b99a734568f0b9b74ca0da83088b888b195b3d7",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-biomes-forest-lake.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "f71b2188bfe10b1f740ae96cbb1433876e7cffb8",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-biomes-mines.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "ed07ddfc41d51139bb06190956577aa90ef500c4",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-bridges.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "6d81fc22ee96d048a566fc8bbbb6c4a0fa623fd1",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-bunkhouse.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "9f94c7c3a3ef337a90ca22f534f65765fdc75af4",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-cabins.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "4393b198d6d4d3e4117bfcc051d955f89e790d47",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-camp-tiles.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "a7d89586da6d3cb2c9b39ed533004963b0f1a65a",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-cannon-towers.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "789afa2ef8bdde8473fe7e9b3adb34bd31d99329",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-cold-storage-shed.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "334a3f60b8bee8a469a8ec913a4dd92930159297",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-cookhouse.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "6bb4141c6108ecd8ca084cc8a51eb2edf4b65f19",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-crystal.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "343484ae9eac03930b61ab6dd7467e2719d552cb",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-dog-kennels.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "d7335594ce41012dd9239a18da8938a3ff3cb975",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-fish-hut.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "5f0a12e49296bd24fd8a03ed4951677ac0219179",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-fortress-gates-closed.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "a1b8b3dc61596c5c6d4b372b887f4b07f46a26ff",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-fortress-gates-open.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "b8db2e7bbd9f51b6b84fd6d59c9edd7db0eea84b",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-fortress-walls.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "0f406713c8f35cda4b2805609e71694eb0ef5b3e",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-fortress-watchtowers.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "466b20c49473b988ac664bfdd1303c38e7dd5e31",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-greenhouse.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "1ca4cb1f247205e482bb5c184419ce0623bfe331",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-herbs.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "a334e95abb27af017be659ba067eb375af42a9c6",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-improved-gatehouse.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "cf0320d4f9ba6fcc30abba46c8990b05cb5841be",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-late-furnaces.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "554d49803b3582f7e95a026e3e3278dcaba82e91",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-medical-atlas.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "1a5902bb517768a21e840e6d4c0469e3c4e0abf8",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-medical-early.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "3ea1acfdd64123bf89f8a2345970cda3030d3caf",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-reinforced-palisades.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "eafc9f3c55663de5293c9ce9e2c9800382951b07",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-spike-barricade.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "fc26dea7a145f14dbfebd30d402ae8855122d0e8",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-stockpile-shelter.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "5e3aa492a70ee0db629845e1f353b44f561ef722",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-survivor-tents.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "5cce6e0f6f3e6e37bdb5771e49967d0f615dc101",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-wheat-harvester.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "05b526adbab2d7e60369ae24db1cb2791571c659",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-wheat-processor.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "6de3800775394ac202acfd84b8c7e42b14f3cc89",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-worker-huts.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "f2335ef0bccd0d2d4313a091ea9e86b811efd53e",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-workshop.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "3cde39641204b74656844b900c50b2e1454c3696",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/world-render-catalog.json",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "f9398b138ec80075114d02fd585ab6c596964bc3",
+        "explicit_git_blob_sha1_present": false
+      },
+      {
+        "path": "Docs/Design/StructureReferences/2026-11-26/upgradeable-storage-house/selected/storage-house-advanced.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "7a7d7c915aac8863bbe0e3c41e46764e369b14a1",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/StructureReferences/2026-11-26/upgradeable-storage-house/selected/storage-house-organization.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "82a15b0fc6d1342b56986aa567b397edd4c7764e",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/StructureReferences/2026-11-26/upgradeable-storage-house/selected/storage-house-reinforced.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "f42eae459faef9b281bbb3376e1dc29061863e0c",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/StructureReferences/2026-11-26/upgradeable-storage-house/selected/storage-house-starter.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "e3e3a4e89f8afce2d2ba01347c83ff895552e53e",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/StructureReferences/2026-11-25/selected/customer-counter-cardinal.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "28de551254813f51db75539b95f966f2ca929cbc",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/StructureReferences/2026-11-25/selected/customer-counter-details.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "93a8564a6f87419246dc409ecc7210067e269ff2",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/StructureReferences/2026-11-25/selected/customer-counter-oblique.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "0ba20bf5531fbde9d8ab02a3e45a6921db4d0652",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/StructureReferences/2026-11-25/selected/fence-cardinal.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "0f6fcd42f4dd078bc70dc89266b8dc30f8ea85cf",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/StructureReferences/2026-11-25/selected/fence-details.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "f1fd9c0830a8258713cd04b846c37d86ab8822c9",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/StructureReferences/2026-11-25/selected/fence-oblique.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "2435b605089a027668497722eea8b5175aa93930",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/StructureReferences/2026-11-25/selected/gates-cardinal.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "00babe94f2a20cb72e57a44c137ac936a4d431c8",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/StructureReferences/2026-11-25/selected/gates-oblique.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "35550038a93f0c13c2a5cdeecbef3228be97e2d6",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/StructureReferences/2026-11-25/selected/gates-states.png",
+        "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "d8673ebf3b66b2416239c8701f10b88839f73623",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/SnowTruckGarage/2026-11-27/README.md",
+        "commit": "201dcbe4fad5037a33bd619b59285a1ef91599d8",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "30b429d190ad5b4ccaf048b1209d1a3392798153",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/SnowTruckGarage/2026-11-27/selected/snow-truck-360.png",
+        "commit": "201dcbe4fad5037a33bd619b59285a1ef91599d8",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "fa4795cc9a8802c4233dd54268d45641f6194573",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Design/SnowTruckGarage/2026-11-27/selected/snow-truck-garage-360.png",
+        "commit": "201dcbe4fad5037a33bd619b59285a1ef91599d8",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "e8859665ed0b2a8b4cc3cd609d8c28aabd0c8ddc",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Production/SNOW_TRUCK_GARAGE.md",
+        "commit": "69bd3eb921ce18838795b3ce21b232ec6e3b54b6",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "b94aaa080cb5fdde49a58b241dd37281710b5e35",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Production/VEHICLE_ECONOMY.md",
+        "commit": "69bd3eb921ce18838795b3ce21b232ec6e3b54b6",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "1fcd0f58f4938ab1ac92255f7035334f6e073122",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/ECONOMY_DESIGN.md",
+        "commit": "69bd3eb921ce18838795b3ce21b232ec6e3b54b6",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "9b77325b1ba07425626a4588f0bb28c42fee3234",
+        "explicit_git_blob_sha1_present": true
+      },
+      {
+        "path": "Docs/Production/VehicleEconomy/2026-11-27/RESOURCE_CHAINS.json",
+        "commit": "69bd3eb921ce18838795b3ce21b232ec6e3b54b6",
+        "local_fingerprint_matches": true,
+        "pinned_blob_matches": true,
+        "url_exact": true,
+        "computed_git_blob_sha1": "4397f5039fe379fea54dd73f0628de39d60b25ba",
+        "explicit_git_blob_sha1_present": true
+      }
+    ],
+    "history": [
+      {
+        "path": "history/GENERATION_INPUT_RESOLUTION-35-requests.json",
+        "fingerprint": {
+          "sha256": "a6ae5ce1518510952d53c2cf1aa6cd05ed45d8bff6f81ff2d7ffe9da6cd8ff4a",
+          "git_blob_sha1": "13421423aff4adc0ee21892b46f0e8c4a2e784fd",
+          "bytes": 207132
+        },
+        "request_count": 35,
+        "input_count": 44,
+        "all_prior_requests_unchanged": true,
+        "all_prior_inputs_unchanged": true
+      },
+      {
+        "path": "history/GENERATION_INPUT_RESOLUTION-37-requests.json",
+        "fingerprint": {
+          "sha256": "5f234cc73c1ec451ce40c7036f9a03a245709fca78e9b91a577efddcaffedbbd",
+          "git_blob_sha1": "3e6d4b89fbc43a7a97805eec0f74584fdd0a303b",
+          "bytes": 210652
+        },
+        "request_count": 37,
+        "input_count": 46,
+        "all_prior_requests_unchanged": true,
+        "all_prior_inputs_unchanged": true
+      }
+    ],
+    "remote_completion_note": "Seven catalog objects from b3da3c6 were absent in the local clone. Their exact blob identities were independently confirmed using the pinned GitHub directory listing, covering five current image inputs. No source metadata changed."
+  },
+  "package_link_and_scope_checks": {
+    "checks": {
+      "helper_exact_reviewed_bytes": true,
+      "no_pngs_duplicated_in_supplement": true,
+      "original_56_package_bindings_match": true,
+      "gallery_preview_exact_audited_snapshot": true,
+      "planned_links_checked": 68,
+      "all_planned_links_resolve": true,
+      "inert_template_no_designations": true,
+      "plan_source_records_count": 50
+    },
+    "links": [
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "README.md",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/README.md",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "PURCHASE_VALUE_UPGRADE_PLAN.md",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/PURCHASE_VALUE_UPGRADE_PLAN.md",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/candidates/superseded-unselected/01-counter-r1.png",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/superseded-unselected/01-counter-r1.png",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/candidates/superseded-unselected/02-cooker-r1.png",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/superseded-unselected/02-cooker-r1.png",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/candidates/superseded-unselected/03-saw-r1.png",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/superseded-unselected/03-saw-r1.png",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/candidates/superseded-unselected/w1up-04-r1.png",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/superseded-unselected/w1up-04-r1.png",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/candidates/superseded-unselected/w1up-05-r1.png",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/superseded-unselected/w1up-05-r1.png",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/candidates/superseded-unselected/w1up-06-r1.png",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/superseded-unselected/w1up-06-r1.png",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/candidates/iterations/w1val-01-r1.png",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-01-r1.png",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/06-value-saw-storage-r1-independent-review.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/06-value-saw-storage-r1-independent-review.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/candidates/iterations/w1val-01-r2.png",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-01-r2.png",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/08-value-saw-storage-r2-retest.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/08-value-saw-storage-r2-retest.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/candidates/iterations/w1val-01-r3.png",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-01-r3.png",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/11-value-saw-storage-r3-retest.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/11-value-saw-storage-r3-retest.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/candidates/iterations/w1val-01-r4.png",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-01-r4.png",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/13-value-saw-storage-r4-retest.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/13-value-saw-storage-r4-retest.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/candidates/iterations/w1val-01-r5.png",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-01-r5.png",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/candidates/iterations/w1val-02-architecture-r1.png",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-02-architecture-r1.png",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/architecture-r1-independent.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r1-independent.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/candidates/iterations/w1val-02-architecture-r2.png",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-02-architecture-r2.png",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/architecture-r2-independent.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r2-independent.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/candidates/iterations/w1val-02-architecture-r3.png",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-02-architecture-r3.png",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/architecture-r3-independent.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r3-independent.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/candidates/iterations/w1val-03a-gear-r1.png",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03a-gear-r1.png",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/12-crew-intermediate-r1-review.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/12-crew-intermediate-r1-review.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/candidates/iterations/w1val-03a-gear-r2.png",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03a-gear-r2.png",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/14-crew-intermediate-r2-review.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/14-crew-intermediate-r2-review.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/candidates/iterations/w1val-03b-gear-r1.png",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03b-gear-r1.png",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/12-crew-intermediate-r1-review.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/12-crew-intermediate-r1-review.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/candidates/iterations/w1val-03b-gear-r2.png",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03b-gear-r2.png",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/14-crew-intermediate-r2-review.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/14-crew-intermediate-r2-review.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/candidates/iterations/w1val-04-r1.png",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-04-r1.png",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/06-value-saw-storage-r1-independent-review.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/06-value-saw-storage-r1-independent-review.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/candidates/iterations/w1val-04-r2.png",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-04-r2.png",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/08-value-saw-storage-r2-retest.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/08-value-saw-storage-r2-retest.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/candidates/iterations/w1val-04-r3.png",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-04-r3.png",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/11-value-saw-storage-r3-retest.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/11-value-saw-storage-r3-retest.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/candidates/iterations/w1val-04-r4.png",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-04-r4.png",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/13-value-saw-storage-r4-retest.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/13-value-saw-storage-r4-retest.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/prompts/w1val-02-r1-tool-rejection.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-02-r1-tool-rejection.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/prompts/w1val-03-r1-input-limit.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-03-r1-input-limit.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/01-art-first3-r1-rejected.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/01-art-first3-r1-rejected.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/03-priority-value-pre-generation-review.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/03-priority-value-pre-generation-review.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/04-saw-storage-brief-preflight.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/04-saw-storage-brief-preflight.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/05-plan-independent-structural-rerun.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/05-plan-independent-structural-rerun.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/05-plan-source-and-preservation-verification.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/05-plan-source-and-preservation-verification.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/06-value-saw-storage-r1-independent-review.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/06-value-saw-storage-r1-independent-review.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/07-defense-crew-full-matrix-preflight.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/07-defense-crew-full-matrix-preflight.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/08-value-saw-storage-r2-retest.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/08-value-saw-storage-r2-retest.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/09-value-design-document-independent-review.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/09-value-design-document-independent-review.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/10-value-design-reference-chain-review.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/10-value-design-reference-chain-review.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/11-value-saw-storage-r3-retest.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/11-value-saw-storage-r3-retest.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/12-crew-intermediate-r1-review.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/12-crew-intermediate-r1-review.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/13-value-saw-storage-r4-retest.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/13-value-saw-storage-r4-retest.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/14-crew-intermediate-r2-review.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/14-crew-intermediate-r2-review.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/15-value-design-separate-use-presentation-review.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/15-value-design-separate-use-presentation-review.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/CHECKPOINT.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/CHECKPOINT.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/architecture-r1-independent.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r1-independent.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/architecture-r2-independent.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r2-independent.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/architecture-r3-independent.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r3-independent.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/assembly-helper-independent-evidence.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/assembly-helper-independent-evidence.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/assembly-helper-independent-r1.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/assembly-helper-independent-r1.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/assembly-helper-independent-r2.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/assembly-helper-independent-r2.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/assembly-helper-independent-r3.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/assembly-helper-independent-r3.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/plan-independent-r1.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/plan-independent-r1.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/reviews/plan-independent-r2.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/plan-independent-r2.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/ARTIFACT_INVENTORY.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/ARTIFACT_INVENTORY.json",
+        "planned_exists": true
+      },
+      {
+        "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+        "target": "review-evidence/ASSEMBLY_RECEIPT.json",
+        "resolved": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/ASSEMBLY_RECEIPT.json",
+        "planned_exists": true
+      }
+    ]
+  },
+  "final_supplemental_checks": {
+    "source_coverage": {
+      "all_50_plan_sources_preserved": true,
+      "extra_source_paths": [
+        "Docs/Production/GAMEPLAY_RULES_CONTRACT.json",
+        "Docs/Production/GameplayRules/2026-11-27/ACTORS_COMBAT_GAPS.json"
+      ],
+      "nonpinned_of_plan50": 18,
+      "total_staged": 20
+    },
+    "runs": [
+      {
+        "mode": "preservation-after-root-preparation",
+        "exit_code": 0,
+        "result": {
+          "scope": "Supplemental source/code/package preservation only",
+          "checks_passed": 139,
+          "checks_required": 139,
+          "failures": [],
+          "pending_finalization_files": [
+            "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+            "Docs/Design/World1Upgrades/2026-11-28/review-evidence/ARTIFACT_INVENTORY.json",
+            "Docs/Design/World1Upgrades/2026-11-28/review-evidence/ASSEMBLY_RECEIPT.json"
+          ],
+          "require_finalized": false,
+          "files_written": 0,
+          "art_selection_claimed": false,
+          "runtime_approval_claimed": false,
+          "publication_or_whole_task_approval_claimed": false
+        },
+        "stderr": ""
+      },
+      {
+        "mode": "require-finalized-after-root-preparation",
+        "exit_code": 1,
+        "result": {
+          "scope": "Supplemental source/code/package preservation only",
+          "checks_passed": 139,
+          "checks_required": 140,
+          "failures": [
+            "All final assembly and root checkpoint files exist"
+          ],
+          "pending_finalization_files": [
+            "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+            "Docs/Design/World1Upgrades/2026-11-28/review-evidence/ARTIFACT_INVENTORY.json",
+            "Docs/Design/World1Upgrades/2026-11-28/review-evidence/ASSEMBLY_RECEIPT.json"
+          ],
+          "require_finalized": true,
+          "files_written": 0,
+          "art_selection_claimed": false,
+          "runtime_approval_claimed": false,
+          "publication_or_whole_task_approval_claimed": false
+        },
+        "stderr": ""
+      }
+    ],
+    "candidate_hashes": {
+      "RESUMPTION_MANIFEST.json": "b2201cdc8dd4053c885fb0c2633f54822470c82c640689cae1500663ebb38d2b",
+      "GENERATION_INPUT_RESOLUTION.json": "1f06a8893f864ba2a3f3daa5c559f7556a3a1d3656d6bcdf44ec1d17f8c5f9b0"
+    },
+    "root_preparation_files": {
+      "status_sha256": "1861bcf38d3f23db468a1525b37e225b97903da7356432f98229d1cba60a7b40",
+      "override_sha256": "3cc8da405f1e60ea8eab1939fb798fe9f576d0d51b54badfb821ee330e26a55a",
+      "status_keys": [
+        "schema_version",
+        "authority",
+        "scope",
+        "world_plan",
+        "static_art",
+        "crew_pairs",
+        "design_document_review",
+        "planning_review",
+        "publication",
+        "source_scope",
+        "remaining",
+        "owner_selected",
+        "native_approved",
+        "whole_task_complete"
+      ],
+      "override_candidate_count": 7
+    },
+    "original56_unchanged": true
+  },
+  "pinned_conveyor_source_api_evidence": {
+    "source_url": "https://api.github.com/repos/ksolo21-web/HAVENLINE/contents/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected?ref=b3da3c639c068aeb4b19f037a602d5d5f6ba5aee",
+    "commit": "b3da3c639c068aeb4b19f037a602d5d5f6ba5aee",
+    "method": "Read-only GitHub connector directory listing; exact pinned commit. Local clone lacked this commit object.",
+    "entries": [
+      {
+        "path": "Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/01-conveyor-approved.png",
+        "git_blob_sha1": "ea8c73784f87abcbfa70064055b795ac0eeaa568",
+        "bytes": 2060476,
+        "html_url": "https://github.com/ksolo21-web/HAVENLINE/blob/b3da3c639c068aeb4b19f037a602d5d5f6ba5aee/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/01-conveyor-approved.png"
+      },
+      {
+        "path": "Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/02-core-resources-approved.png",
+        "git_blob_sha1": "4b1e57bf49a1f0b80cd87225c20fb8141ea84c51",
+        "bytes": 1696844,
+        "html_url": "https://github.com/ksolo21-web/HAVENLINE/blob/b3da3c639c068aeb4b19f037a602d5d5f6ba5aee/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/02-core-resources-approved.png"
+      },
+      {
+        "path": "Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/04-processed-resources.png",
+        "git_blob_sha1": "c31a9a6f1f43980813a580318908dfb6bc7c5e55",
+        "bytes": 1862096,
+        "html_url": "https://github.com/ksolo21-web/HAVENLINE/blob/b3da3c639c068aeb4b19f037a602d5d5f6ba5aee/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/04-processed-resources.png"
+      },
+      {
+        "path": "Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/05-assemblies-and-valuables.png",
+        "git_blob_sha1": "cb1f637bf8f709fbcf3dbb1efdd7f9711ec706e7",
+        "bytes": 1813334,
+        "html_url": "https://github.com/ksolo21-web/HAVENLINE/blob/b3da3c639c068aeb4b19f037a602d5d5f6ba5aee/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/05-assemblies-and-valuables.png"
+      },
+      {
+        "path": "Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/13-conveyor-food-machines.png",
+        "git_blob_sha1": "65dc2185b79f6172d54cce0732ee91cc37da90a2",
+        "bytes": 1947727,
+        "html_url": "https://github.com/ksolo21-web/HAVENLINE/blob/b3da3c639c068aeb4b19f037a602d5d5f6ba5aee/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/13-conveyor-food-machines.png"
+      },
+      {
+        "path": "Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/17-conveyor-counter.png",
+        "git_blob_sha1": "c8341fb3666976dbed72368593f671241a1e6c65",
+        "bytes": 1878007,
+        "html_url": "https://github.com/ksolo21-web/HAVENLINE/blob/b3da3c639c068aeb4b19f037a602d5d5f6ba5aee/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/17-conveyor-counter.png"
+      },
+      {
+        "path": "Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/17b-material-counter.png",
+        "git_blob_sha1": "527895e922aa3871b5839eb822d5f57c79a8ccfe",
+        "bytes": 1858822,
+        "html_url": "https://github.com/ksolo21-web/HAVENLINE/blob/b3da3c639c068aeb4b19f037a602d5d5f6ba5aee/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/17b-material-counter.png"
+      }
+    ]
+  }
+}

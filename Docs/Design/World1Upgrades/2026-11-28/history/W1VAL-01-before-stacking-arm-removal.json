@@ -1,0 +1,115 @@
+{
+  "id": "W1VAL-01",
+  "family_ids": [
+    "saw_bench"
+  ],
+  "title": "Sawmill: real feed, processing and dispatch progression",
+  "status": "DRAFT_FOR_INDEPENDENT_REVIEW_NOT_SELECTED",
+  "supersedes_planning_brief": "W1UP-03",
+  "retained_base": "Selected hand-cranked timber saw station remains the historical base; uninspected lumber_mill/steam_saw archive images are not used as visual evidence.",
+  "stages": [
+    {
+      "stage_id": "saw_bench__feed_mill",
+      "name": "FEED MILL",
+      "baseline_limitation": "One small worktable requires repeated loading, clamping and loose plank collection.",
+      "appearance_change": "Long timber-and-blue mill bed, elevated raw-log cradle and metering gate, captive moving clamp, guarded circular cutting head, long plank outfeed and a finished-stack cradle. One reachable manual crank drives the cutter and mechanically linked feed rollers.",
+      "purchase_value": "A real buffered feed-and-cut cycle reduces repeated handling stops and presents one reachable output pickup point. The exact measured gain is pending.",
+      "input_processing_output": "Existing wood enters at the mill left end, waits in a raw cradle, moves through one clamped cutting head and leaves as existing planks at the right end. No new product or changed recipe yield.",
+      "jobs": "Bulk supply at the left cradle; operate/clear at the front controls; collect the right finished stack without crossing the cutting path.",
+      "footprint_ports_clearance": "A purchased longitudinal extension beyond the base table. Left raw receiving, right plank discharge, front continuous worker service lane; rear mechanical access remains clear.",
+      "tradeoff": "Requires a larger plot and paid construction; it can starve if wood is not supplied or stop if the finished cradle is blocked.",
+      "requirements": [
+        "Existing wood-to-planks recipe and conserved typed buffers",
+        "Reachable existing wood/planks/metal component construction chain with a raw bootstrap bill if needed",
+        "Visible feed/contact/cut/output/blocked/damage states",
+        "One real manual-crank workstation with linked roller/cutter operation; idle without an assigned living operator. No new power or fuel commodity."
+      ]
+    },
+    {
+      "stage_id": "saw_bench__parallel_sawmill",
+      "name": "PARALLEL SAWMILL",
+      "baseline_limitation": "A single cutting cell remains the bottleneck while harvesting and orders grow.",
+      "appearance_change": "A broad twin-bay timber mill frame with two parallel log-feed beds and two distinct guarded saw heads, a shared raised receiving rack, independent finished-plank cradles, a small stacking arm with a visible reachable manual hand-winch and a partial snow canopy.",
+      "purchase_value": "Two independently reserved cutting jobs can run concurrently and dispatch separately; one blocked outfeed need not stop the other. This is proposed concurrency, not an automatic double-yield claim.",
+      "input_processing_output": "Two left-side raw cradles feed two parallel cutting beds; two right-side plank cradles remain distinct. Each job consumes its own real wood and commits only its own planks.",
+      "jobs": "Two independently staffed manual-crank workstations operate separate cutting cells: the front cell crank faces the front service walk; the rear cell crank faces the rear service walk. Reach the rear walk by an exterior end bypass outside the cutting and material-transfer aprons. No crossing between blades.",
+      "footprint_ports_clearance": "Wider purchased mill yard with separate outward front and rear service walks, fixed left receiving and right dispatch aprons, and an exterior end bypass outside all blade/feed/output sweeps. Each independent crank is reachable from its own outward walk; neither operator crosses another lane.",
+      "tradeoff": "Larger bill, greater wood demand and higher repair burden; useful concurrency requires supply and clear destinations. No free output while a lane is empty.",
+      "requirements": [
+        "Independent cell reservations and per-job input/output receipts",
+        "Mass balance and blocked-output backpressure per lane",
+        "Multiple living-worker assignments with shared destination reservations",
+        "Expanded collision footprint, pathfinding and belt-port layout preview before purchase",
+        "Each cell is manually driven by its own assigned eligible living operator; an unstaffed cell remains idle. A blocked/full output holds only its affected lane.",
+        "Stacking arm moves only through its reachable hand-winch while a living assigned operator works; its sweep stays outside worker aisles. The first-stage output is a fixed gravity/collection cradle."
+      ]
+    }
+  ],
+  "ordered_inputs": [
+    {
+      "repository_path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/saw_station.png",
+      "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/a868ae89cdf2f120b478aa0a48fff35e09cc465c/Docs/Design/RenderArchive/2026-11-23/selected/equipment/saw_station.png",
+      "local_path": "/workspace/scratch/9a64cbeeb049/HAVENLINE-conveyors/Docs/Design/RenderArchive/2026-11-23/selected/equipment/saw_station.png",
+      "role": "Exact selected base saw family; keep its timber, circular cutting language and recognizable hand controls while authoring substantial new machinery.",
+      "bytes": 1916624,
+      "sha256": "8191ba20d0cec7c92c22d35c5befa87c53b8c894ca94341681b3c16834e24d15",
+      "git_blob_sha1": "9ecc552e030a45cbe80fbeae7cdf3b3b6c846ebc",
+      "identity_basis": "LOCAL_BYTES"
+    },
+    {
+      "repository_path": "Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/02-core-resources-approved.png",
+      "commit": "b3da3c639c068aeb4b19f037a602d5d5f6ba5aee",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/b3da3c639c068aeb4b19f037a602d5d5f6ba5aee/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/02-core-resources-approved.png",
+      "local_path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/package/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/02-core-resources-approved.png",
+      "role": "Owner-selected ordinary raw-resource and cash scale. This sheet does not establish the processed plank or fuel identity; use selected 04 for those.",
+      "bytes": 1696844,
+      "sha256": "de3e99e6602e18ee5e2d4619e3761964d6ccab2af8a2ee55b17b0ab3fb316da7",
+      "git_blob_sha1": "4b1e57bf49a1f0b80cd87225c20fb8141ea84c51",
+      "identity_basis": "LOCAL_BYTES"
+    },
+    {
+      "repository_path": "Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/01-conveyor-approved.png",
+      "commit": "b3da3c639c068aeb4b19f037a602d5d5f6ba5aee",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/b3da3c639c068aeb4b19f037a602d5d5f6ba5aee/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/01-conveyor-approved.png",
+      "local_path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/package/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/01-conveyor-approved.png",
+      "role": "Owner-selected unchanged external belt scale and orange/yellow roller identity; do not enlarge or redesign belts.",
+      "bytes": 2060476,
+      "sha256": "25d9b7f98f5d9407c240a8f0b242bbba6775d0e7fb60cbc720d526514d309249",
+      "git_blob_sha1": "ea8c73784f87abcbfa70064055b795ac0eeaa568",
+      "identity_basis": "LOCAL_BYTES"
+    },
+    {
+      "local_path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/package/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/04-processed-resources.png",
+      "repository": "ksolo21-web/HAVENLINE",
+      "commit": "b3da3c639c068aeb4b19f037a602d5d5f6ba5aee",
+      "repository_path": "Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/04-processed-resources.png",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/b3da3c639c068aeb4b19f037a602d5d5f6ba5aee/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/04-processed-resources.png",
+      "sha256": "7f500471166c172a3d849cc2be4956b700418b2e66d42af678976817fb5f1cc8",
+      "git_blob_sha1": "c31a9a6f1f43980813a580318908dfb6bc7c5e55",
+      "bytes": 1862096,
+      "role": "Selected processed resources, including existing planks, meal and fuel forms. Preserve each pictured product identity and approved unit size."
+    }
+  ],
+  "prompt": "Create a strong HAVENLINE World 1 purchase-value upgrade concept sheet, using the supplied references as the retained base identity and scale anchors. Chunky rounded stylized 3D mobile-game art: warm orange timber, deep blue painted metal, rounded gray hardware and softly sculpted snow. Clean navy studio ground, controlled lighting and clear silhouettes. The upgrades must visibly add working structure and a useful operation, not just thicker brackets or a recolor. Make EXACTLY two rows by three roomy columns, six substantial panels. Top row is the first new proposal; bottom row is the later new proposal. Within each row show the SAME physical design in exterior front three-quarter, genuine opposite rear three-quarter, and an open/cutaway functional view. Keep a consistent scale and physical coordinate system within each row. The functional view is the same object with roof/guard hidden, never an extra design. Preserve approved ordinary resource size and standard conveyor width/height. Bigger buildings and new ports are authored upgrades with clear purchased ground area, not enlarged resources or a new belt skin. Do not show the old base as a newly designed third stage. Titles and short stage/view labels only; no numerical levels, prices, yields, capacity or rate claims. Footer: AUTHORED UPGRADE PROPOSAL. No workers, UI, magic energy, electric fields or unsupported fuel system. This is proposed design, not proof of runtime implementation. HEADER: HAVENLINE / SAWMILL PROGRESSION. TOP ROW label FEED MILL. Build one visibly elongated log-feed mill: left raw-log cradle with a real metering gate -> captive clamped feed bed -> one guarded circular cutting head -> right plank stack cradle. Include one front-side manual crank physically linked to the cutter and feed rollers and clear continuous front service lane. Its long mechanical feed bed and fixed gravity collection cradle must be large readable additions to the original small saw table. BOTTOM ROW label PARALLEL SAWMILL. Build a substantially wider twin-bay lumber works with TWO parallel feed beds, TWO guarded circular saw heads, TWO independent plank outfeed cradles, a shared raised receiving rack and one small stacking arm operated by a clearly reachable manual hand-winch. Give each cutting lane its own OUTWARD-FACING manual crank and independently staffed workstation: front lane crank on the front face to the front service walk, rear lane crank on the rear face to the rear service walk. A safe outer end bypass lies beyond cutting and material-transfer paths; no operator crosses between blades. There is no automatic or unexplained power. Give it a partial timber canopy and blue structural frames, keeping both complete material paths visible. Both lanes enter from the same left receiving side and discharge to the same right dispatch side in every view; front and rear are distinct unobstructed outward worker-control aisles for their respective cells; the front remains the single-cell control aisle in FEED MILL. Show clear ground aprons and an explicit empty gap between the parallel work cells. Place only a few correctly scaled raw wood logs at infeed and existing plank stacks at outfeed. Guards and frame cannot block these paths. Third panel of each row is a cutaway from above and the front, revealing the actual clamp/blade/output relationship, with exactly the same machine as the other two views. Short view captions FRONT / REAR / FUNCTION. Do not depict a generic steam factory, floating planks, decorative gears without a path, extra recipes or a claim of more planks from the same wood. Full output holds only its affected lane; the picture should show separate output cradles rather than a shared blocked bottleneck. The small stacking arm has a visible manual hand-winch at a reachable safe control position; do not imply an unexplained motor. Its sweep stays within the output cradle, clear of all walking lanes.",
+  "acceptance_checks": [
+    "Large silhouette and structural change between retained base, Feed Mill and Parallel Sawmill",
+    "One coherent cell in Feed Mill; exactly two independent coherent cells in Parallel Sawmill",
+    "Same geometry, feed sides and output sides across three views of each stage",
+    "Actual raw wood -> cutting -> plank path readable without relying on arrows",
+    "Footprint growth and front/service clearance visible",
+    "Approved resource/belt scale retained",
+    "No new rate/yield/price/capacity or runtime approval claim",
+    "Two-cell cranks face outward to separate front/rear walks; rear drive is visibly real and reachable without crossing a cutting lane."
+  ],
+  "equipment_level_binding": null,
+  "world_level_binding": null,
+  "prices_rates_and_capacities": "TUNING_PENDING_NO_APPROVED_VALUES",
+  "runtime_approval_claimed": false,
+  "referenced_image_paths": [
+    "/workspace/scratch/9a64cbeeb049/HAVENLINE-conveyors/Docs/Design/RenderArchive/2026-11-23/selected/equipment/saw_station.png",
+    "/workspace/scratch/9a64cbeeb049/conveyor-continuation/package/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/02-core-resources-approved.png",
+    "/workspace/scratch/9a64cbeeb049/conveyor-continuation/package/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/01-conveyor-approved.png",
+    "/workspace/scratch/9a64cbeeb049/conveyor-continuation/package/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/04-processed-resources.png"
+  ]
+}

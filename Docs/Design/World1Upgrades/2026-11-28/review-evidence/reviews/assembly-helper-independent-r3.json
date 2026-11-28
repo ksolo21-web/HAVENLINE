@@ -1,0 +1,196 @@
+{
+  "schema_version": 1,
+  "review_id": "HAVENLINE_ASSEMBLY_HELPER_R3_INDEPENDENT",
+  "reviewer": "/root/planning_package_critic",
+  "reviewed_utc": "2026-11-28T12:26:30.122720+00:00",
+  "scope": "Exact assembly helper source and actual dry-run behavior only. Ready for root-owned local assembly; applied evidence integrity must be verified after --apply. No art selection, native, full-task or remote publication approval.",
+  "candidate": {
+    "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/assemble_review_package.py",
+    "sha256": "8b8000db00d9bc3ac36328834bf32328fbdc4d9fa94242ac5bb7f3e0e356e688"
+  },
+  "verdict": "PASS_HELPER_SOURCE_AND_DRY_RUN_SCOPE",
+  "pass": true,
+  "all_mandatory_checks_pass": true,
+  "score": 10.0,
+  "dimension_scores": {
+    "frozen_file_preservation": 10.0,
+    "raw_history_and_failure_retention": 10.0,
+    "copy_selection_and_exclusions": 10.0,
+    "root_override_hash_guards": 10.0,
+    "missing_hash_current_status_binding": 10.0,
+    "actual_review_schema_extraction": 10.0,
+    "dry_run_truthfulness": 10.0
+  },
+  "mandatory_gates": [
+    {
+      "id": "H01",
+      "check": "all_inventory_artifact_source_hashes_match",
+      "pass": true
+    },
+    {
+      "id": "H02",
+      "check": "all_six_superseded_preserved",
+      "pass": true
+    },
+    {
+      "id": "H03",
+      "check": "all_currently_applicable_observations_hash_bound",
+      "pass": true
+    },
+    {
+      "id": "H04",
+      "check": "no_owner_native_positive_flags",
+      "pass": true
+    },
+    {
+      "id": "H05",
+      "check": "four_only_nested_work_logs",
+      "pass": true
+    },
+    {
+      "id": "H06",
+      "check": "both_tool_error_records_retained",
+      "pass": true
+    },
+    {
+      "id": "H07",
+      "check": "armed_not_approved_in_preview",
+      "pass": true
+    },
+    {
+      "id": "H08",
+      "check": "no_best_designation_without_explicit_override",
+      "pass": true
+    },
+    {
+      "id": "H09",
+      "check": "wrong_hash_override_rejected",
+      "pass": true
+    },
+    {
+      "id": "H10",
+      "check": "best_without_override_rejected",
+      "pass": true
+    },
+    {
+      "id": "H11",
+      "check": "top_native_positive_rejected",
+      "pass": true
+    },
+    {
+      "id": "H12",
+      "check": "candidate_native_positive_rejected",
+      "pass": true
+    },
+    {
+      "id": "H13",
+      "check": "fresh_frozen_design_baseline_preserved",
+      "pass": true
+    },
+    {
+      "id": "H14",
+      "check": "dry_run_success_all_package_hashes_unchanged",
+      "pass": true
+    },
+    {
+      "id": "H15",
+      "check": "evidence_destination_not_created",
+      "pass": true
+    },
+    {
+      "id": "H16",
+      "check": "missing_hash_not_promoted",
+      "pass": true
+    },
+    {
+      "id": "H17",
+      "check": "unbound_history_and_reported_score_preserved",
+      "pass": true
+    },
+    {
+      "id": "H18",
+      "check": "matching_hash_status_still_applies",
+      "pass": true
+    },
+    {
+      "id": "H19",
+      "check": "mismatching_hash_not_promoted",
+      "pass": true
+    },
+    {
+      "id": "H20",
+      "check": "matching_root_override_still_applies",
+      "pass": true
+    },
+    {
+      "id": "H21",
+      "check": "actual_nested_findings_and_hashes_preserved",
+      "pass": true
+    },
+    {
+      "id": "H22",
+      "check": "explicit_intermediate_master_scores_preserved",
+      "pass": true
+    }
+  ],
+  "gate_counts": {
+    "passed": 22,
+    "total": 22
+  },
+  "prior_findings": [
+    {
+      "id": "AS-01",
+      "status": "CLOSED",
+      "evidence": "Independent no-hash and mismatched-hash fixtures retain history without promoting current status/score. Matching exact-hash reviews and root overrides remain usable."
+    },
+    {
+      "id": "AS-02",
+      "status": "CLOSED",
+      "evidence": "All four actual saw/storage r4 and crew r2 records preserve exact hashes, statuses, node-level findings and explicit scoped scores. Actual dry-run output confirms the corrected projection."
+    }
+  ],
+  "findings": [],
+  "dry_run": {
+    "package_files_before": 56,
+    "package_files_after": 56,
+    "all_package_hashes_unchanged": true,
+    "frozen_design_files": 29,
+    "baseline_note": "Fresh baseline after root-authorized crew presentation amendments completed; amendments are outside helper execution.",
+    "no_review_evidence_destination_created": true,
+    "counts": {
+      "source_files": 132,
+      "source_bytes": 69839817,
+      "generated_pngs": 22,
+      "superseded_unselected_studies": 6,
+      "invocation_records": 31,
+      "tool_error_records": 2,
+      "review_reports": 39,
+      "crop_pngs": 32,
+      "verifier_logs": 4,
+      "retained_prior_evidence_files": 0
+    },
+    "applied": false,
+    "remote_writes": false
+  },
+  "evidence": [
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/reviews/assembly-helper-independent-evidence.json",
+      "sha256": "8a3757d17337d90a1ff704dedfd42b68448d894650e9c1c57bb40df9ede694d5"
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/reviews/assembly-independent-work/assembly-r3.json",
+      "sha256": "d35bfa5e71ab2476a8d8048f780ab7906cb680057d42b0655134c66a67ec86f9"
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/reviews/assembly-independent-work/assembly-r3-REVIEW_GALLERY.preview.md",
+      "sha256": "1d05a1744af7704f402141b676d8585aba91784093951d111c80543e97e890fb"
+    }
+  ],
+  "next_action": "Root may use this exact helper with final exact-hash status overrides. After applying, verify copied bytes, manifest/gallery links and current frozen-file baseline. Preserve earlier rejection reports.",
+  "not_approved": [
+    "Execution of --apply has not occurred in this review",
+    "Final assembled archive bytes or remote publication",
+    "Any image selection or whole defense/crew/storage task completion",
+    "Native gameplay, balance, animation, audio or device evidence"
+  ]
+}

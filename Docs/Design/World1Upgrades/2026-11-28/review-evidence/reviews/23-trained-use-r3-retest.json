@@ -1,0 +1,48 @@
+{
+  "reviewer": "/root/world1_upgrade_critic",
+  "date": "2026-11-28",
+  "scope": "ACTUAL_TRAINED_CREW_STATIC_USE_SCENE_RETEST",
+  "id": "W1VAL-03A-USE-r3",
+  "status": "REPAIR_REQUIRED",
+  "score": 9.0,
+  "image": {
+    "path": "generated/w1val-03a-use-r3.png",
+    "sha256": "d15947a883d5733eb48135d789fe33200dc4d78013a20c2434ea40a17688916d"
+  },
+  "invocation": {
+    "path": "prompts/w1val-03a-use-r3-invocation.json",
+    "sha256": "32815e562300c2d829cdf3cff0d9a17c369a90c28947f844c99ad28d4033ed1c"
+  },
+  "matching_master": {
+    "path": "generated/w1val-03a-gear-r2.png",
+    "sha256": "9e17e265acdd6172ee2802b08cd1f8af582ad74e5e312c91ea9e4748f9f5861b"
+  },
+  "resolved": [
+    {
+      "id": "CREW-USE-R03",
+      "result": "Both supplier boots now have uninterrupted silhouettes and visible ground contact, with the narrowed cradle to their left."
+    },
+    {
+      "id": "CREW-USE-R04",
+      "result": "A full glove now rests visibly on the operator thigh, away from blade and shaft."
+    }
+  ],
+  "findings": [
+    {
+      "id": "CREW-USE-R05",
+      "gate": "actual visible operating grip",
+      "observed": "The model moved the previously visible crank hand to the thigh. The machine-side forearm/glove is now hidden against the waist behind the crank free-end grip; no fingers visibly wrap that handle.",
+      "repair": "Keep the thigh hand. Bring the other forearm/glove into clear view, naturally wrapped around the short grip at the free end of the bent crank arm. Do not grip the long shaft or blade, change the direct drive, or add an extra hand."
+    }
+  ],
+  "evidence": [
+    "Actual whole use-r3 image",
+    "reviews/w1val-03a-use-r3-grip-inspection.png",
+    "Exact narrow repair invocation"
+  ],
+  "next_repair_scope": "One remaining grip visibility/contact repair only; preserve all corrected machine, bodies, feet, goods and other actor details.",
+  "final_crew_stage_approval": false,
+  "owner_new_design_approval": false,
+  "native_approval": false,
+  "whole_task_complete": false
+}

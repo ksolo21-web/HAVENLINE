@@ -1,0 +1,245 @@
+{
+  "schema_version": 1,
+  "review_id": "HAVENLINE_ASSEMBLY_HELPER_R2_INDEPENDENT",
+  "reviewer": "/root/planning_package_critic",
+  "reviewed_utc": "2026-11-28T12:22:36.008814+00:00",
+  "scope": "Assembly helper source and actual dry-run behavior only; no apply or publication approval.",
+  "candidate": {
+    "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/assemble_review_package.py",
+    "sha256": "85e72e675837c1c9daf32e901b5f5f38761a7bfc7bde67444be8e972595d7d58"
+  },
+  "verdict": "REPAIR_REQUIRED_ACTUAL_REVIEW_SCHEMA_SUPPORT",
+  "pass": false,
+  "all_mandatory_checks_pass": false,
+  "score": 8.0,
+  "dimension_scores": {
+    "frozen_file_preservation": 10.0,
+    "raw_history_and_failure_retention": 10.0,
+    "copy_selection_and_exclusions": 10.0,
+    "root_override_hash_guards": 10.0,
+    "missing_hash_current_status_binding": 10.0,
+    "actual_review_schema_extraction": 8.0,
+    "dry_run_truthfulness": 10.0
+  },
+  "mandatory_gates": [
+    {
+      "id": "H01",
+      "check": "all_inventory_artifact_source_hashes_match",
+      "pass": true
+    },
+    {
+      "id": "H02",
+      "check": "all_six_superseded_preserved",
+      "pass": true
+    },
+    {
+      "id": "H03",
+      "check": "all_actual_observations_bound",
+      "pass": false
+    },
+    {
+      "id": "H04",
+      "check": "no_owner_native_positive_flags",
+      "pass": true
+    },
+    {
+      "id": "H05",
+      "check": "four_only_nested_work_logs",
+      "pass": true
+    },
+    {
+      "id": "H06",
+      "check": "both_tool_error_records_retained",
+      "pass": true
+    },
+    {
+      "id": "H07",
+      "check": "armed_not_approved_in_preview",
+      "pass": true
+    },
+    {
+      "id": "H08",
+      "check": "no_current_best_without_root_override",
+      "pass": true
+    },
+    {
+      "id": "H09",
+      "check": "wrong_hash_override_rejected",
+      "pass": true
+    },
+    {
+      "id": "H10",
+      "check": "best_without_override_rejected",
+      "pass": true
+    },
+    {
+      "id": "H11",
+      "check": "top_native_positive_rejected",
+      "pass": true
+    },
+    {
+      "id": "H12",
+      "check": "candidate_native_positive_rejected",
+      "pass": true
+    },
+    {
+      "id": "H13",
+      "check": "frozen_23_files_receipt_preserved",
+      "pass": true
+    },
+    {
+      "id": "H14",
+      "check": "dry_run_success_all_package_hashes_unchanged",
+      "pass": true
+    },
+    {
+      "id": "H15",
+      "check": "evidence_destination_still_absent",
+      "pass": true
+    },
+    {
+      "id": "H16",
+      "check": "missing_hash_not_promoted",
+      "pass": true
+    },
+    {
+      "id": "H17",
+      "check": "unbound_history_and_reported_score_preserved",
+      "pass": true
+    },
+    {
+      "id": "H18",
+      "check": "matching_hash_status_still_applies",
+      "pass": true
+    },
+    {
+      "id": "H19",
+      "check": "mismatching_hash_not_promoted",
+      "pass": true
+    },
+    {
+      "id": "H20",
+      "check": "matching_root_override_still_applies",
+      "pass": true
+    },
+    {
+      "id": "H21",
+      "check": "actual_nested_findings_preserved",
+      "pass": false
+    },
+    {
+      "id": "H22",
+      "check": "explicit_intermediate_master_scores_preserved",
+      "pass": false
+    }
+  ],
+  "gate_counts": {
+    "passed": 19,
+    "total": 22
+  },
+  "prior_findings": [
+    {
+      "id": "AS-01",
+      "status": "CLOSED",
+      "evidence": "No-hash and mismatched-hash fixtures retain history without promoting status/score. A matching actual report hash and an exact-hash root override both still apply."
+    }
+  ],
+  "findings": [
+    {
+      "id": "AS-02",
+      "status": "OPEN",
+      "severity": "BLOCKING_FOR_HELPER_APPROVAL",
+      "finding": "New actual reviews use results[].image.sha256, node.findings and intermediate_master_score. The helper recognizes image paths for candidate IDs but does not recognize the matching image hash in that same image object; all four records from reviews 13/14 are incorrectly labeled unbound. Node-level findings are omitted and explicit crew intermediate scores are dropped.",
+      "repair": "Add node.image as an explicit image hash container; preserve node.findings; support intermediate_master_score as an explicit scoped score. Keep the fixed no-hash applicability rule.",
+      "impact": "The helper does not falsely approve an image, but its current-status/score/finding projection is incomplete despite available exact evidence. Raw source reports remain copied."
+    }
+  ],
+  "schema_comparison": [
+    {
+      "candidate_id": "w1val-01-r4",
+      "source_report": "13-value-saw-storage-r4-retest.json",
+      "exact_source_image_sha256": "08e16d94f7b681026988d57597613f75b548d9a4f406c039ece46f99f0606490",
+      "extracted_image_sha256": null,
+      "source_findings_count": 1,
+      "extracted_findings_count": 0,
+      "source_explicit_score": 7.5,
+      "extracted_score": 7.5
+    },
+    {
+      "candidate_id": "w1val-04-r4",
+      "source_report": "13-value-saw-storage-r4-retest.json",
+      "exact_source_image_sha256": "a695115d5d670bf3cf4f11b8db98ee40192badb0319290200571af1d39b06364",
+      "extracted_image_sha256": null,
+      "source_findings_count": 2,
+      "extracted_findings_count": 0,
+      "source_explicit_score": 8.5,
+      "extracted_score": 8.5
+    },
+    {
+      "candidate_id": "w1val-03a-gear-r2",
+      "source_report": "14-crew-intermediate-r2-review.json",
+      "exact_source_image_sha256": "9e17e265acdd6172ee2802b08cd1f8af582ad74e5e312c91ea9e4748f9f5861b",
+      "extracted_image_sha256": null,
+      "source_findings_count": 0,
+      "extracted_findings_count": 0,
+      "source_explicit_score": 9.9,
+      "extracted_score": null
+    },
+    {
+      "candidate_id": "w1val-03b-gear-r2",
+      "source_report": "14-crew-intermediate-r2-review.json",
+      "exact_source_image_sha256": "4672c3801114738cccddacc8fc16afff5defc52f0a32ca93f119dd02f9390050",
+      "extracted_image_sha256": null,
+      "source_findings_count": 1,
+      "extracted_findings_count": 0,
+      "source_explicit_score": 9.5,
+      "extracted_score": null
+    }
+  ],
+  "dry_run": {
+    "exit_code": 0,
+    "package_files_before": 50,
+    "package_files_after": 50,
+    "all_package_hashes_unchanged": true,
+    "no_review_evidence_destination": true,
+    "counts": {
+      "source_files": 128,
+      "source_bytes": 69824919,
+      "generated_pngs": 22,
+      "superseded_unselected_studies": 6,
+      "invocation_records": 29,
+      "tool_error_records": 2,
+      "review_reports": 37,
+      "crop_pngs": 32,
+      "verifier_logs": 4,
+      "retained_prior_evidence_files": 0
+    }
+  },
+  "evidence": [
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/reviews/assembly-independent-work/assembly-r2.json",
+      "sha256": "164615fca526cc70b0077306f94e476ae006d1c2b516c33d3f6bb72067453375"
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/reviews/assembly-independent-work/assembly-r2-REVIEW_GALLERY.preview.md",
+      "sha256": "e706a639115ec4812f38869247b20fccdcfe7e2a3071caa5d4126b71ec3bfe9e"
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/reviews/assembly-independent-work/independent-checks-r2.json",
+      "sha256": "e68af6690e99d41a8bc68a4150f82c92ecb341c4a8737c3636c1f2639111ad9c"
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/reviews/assembly-independent-work/dry-run-r2.stdout.txt",
+      "sha256": "86ee00aa744be4a936e6fa151d7e64b32960ad344482feb5b689092224d30c7f"
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/reviews/assembly-independent-work/dry-run-r2.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/reviews/assembly-independent-work/assemble_review_package-r2-reviewed.py",
+      "sha256": "85e72e675837c1c9daf32e901b5f5f38761a7bfc7bde67444be8e972595d7d58"
+    }
+  ],
+  "next_action": "Builder adds small explicit schema support; independent critic retests actual review projections and prior guard cases. Do not --apply."
+}

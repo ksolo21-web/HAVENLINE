@@ -1,0 +1,52 @@
+{
+  "reviewer": "/root/world1_upgrade_critic",
+  "date": "2026-11-28",
+  "scope": "ACTUAL_TRAINED_CREW_STATIC_USE_SCENE_RETEST",
+  "id": "W1VAL-03A-USE-r4",
+  "status": "REPAIR_REQUIRED",
+  "score": 9.0,
+  "image": {
+    "path": "generated/w1val-03a-use-r4.png",
+    "sha256": "cb8d23ca5b16395a39f3ce428f123005027dde56700af15d0ad6e099360973ad"
+  },
+  "invocation": {
+    "path": "prompts/w1val-03a-use-r4-invocation.json",
+    "sha256": "9c02c95f41fc7a2b45bfab186a82df4b32b5827a7d5223335ff03bd477f03d8f"
+  },
+  "matching_master": {
+    "path": "generated/w1val-03a-gear-r2.png",
+    "sha256": "9e17e265acdd6172ee2802b08cd1f8af582ad74e5e312c91ea9e4748f9f5861b"
+  },
+  "resolved": [
+    {
+      "id": "CREW-USE-R05",
+      "result": "Machine-side glove now visibly wraps a short grip, while the other hand stays on the thigh."
+    }
+  ],
+  "findings": [
+    {
+      "id": "CREW-USE-R06",
+      "gate": "same selected offset crank topology",
+      "observed": "The repair removes the visible bent crank arm. The long blade axle now meets the middle of a vertical black handgrip, reading as a centered T-handle rather than the source offset crank with a parallel free-end grip.",
+      "repair": "Retain the clear glove and safe thigh hand, but restore a visibly offset crank arm between axle and held short grip, with the grip parallel to the axle as in the exact selected source. Preserve all other corrected scene details."
+    }
+  ],
+  "evidence": [
+    "Actual whole use-r4 image",
+    "reviews/w1val-03a-use-r4-grip-inspection.png",
+    "Selected source eight-view saw",
+    "Actual prior r3 showing the bent crank arm"
+  ],
+  "next_repair_scope": "Only source drive geometry plus its physically consistent hand grip. All other current static scene checks remain satisfied.",
+  "independent_corroboration": {
+    "reviewer": "/root/planning_package_critic",
+    "method": "Direct source-first inspection of original eight-view saw, actual whole use-r4 and actual grip crop.",
+    "finding": "Confirmed source radial offset arm plus parallel free-end grip; r4 straight shaft ends at middle of vertical T-handle. No offset arm is visually evidenced; clear grip does not resolve source geometry.",
+    "files_edited": false,
+    "source": "Actual sibling message received during current review."
+  },
+  "final_crew_stage_approval": false,
+  "owner_new_design_approval": false,
+  "native_approval": false,
+  "whole_task_complete": false
+}

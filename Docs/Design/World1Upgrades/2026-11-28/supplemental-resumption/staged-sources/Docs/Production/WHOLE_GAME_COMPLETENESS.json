@@ -1,0 +1,2140 @@
+{
+  "schema_version": 2,
+  "contract_id": "HAVENLINE_WHOLE_GAME_COMPLETENESS_2026_11_27",
+  "base_commit": "fd2e12c8734f49cda7eb3bbf97887406bd03a704",
+  "observed_gameplay_source": "3fad812b384335bd8ca9b5e47dc9d9557110eb4a",
+  "scope": "Forward closure of known specification/integration gaps against the existing launch contract; not a claim that every unknown defect is found or runtime is complete.",
+  "runtime_approval_allowed": false,
+  "game_score": null,
+  "task_ids": [
+    "T01",
+    "T02",
+    "T03",
+    "T04",
+    "T05",
+    "T06",
+    "T07",
+    "T08",
+    "T09",
+    "T10",
+    "T11",
+    "T12",
+    "T13",
+    "T14",
+    "T15",
+    "T16",
+    "T17",
+    "T18",
+    "T19",
+    "T20",
+    "T21",
+    "T22",
+    "T23",
+    "T24",
+    "T25",
+    "T26",
+    "T27",
+    "T28",
+    "T29",
+    "T30",
+    "T31",
+    "T32",
+    "T33",
+    "T34",
+    "T35",
+    "T36",
+    "T37",
+    "T38",
+    "T39",
+    "T40",
+    "T41",
+    "T42",
+    "T43",
+    "T44",
+    "T45",
+    "T46",
+    "T47",
+    "T48",
+    "T49",
+    "T50",
+    "T51",
+    "T52",
+    "T53",
+    "T54",
+    "T55",
+    "T56",
+    "T57",
+    "T58",
+    "T59",
+    "T60",
+    "T61",
+    "T62",
+    "T63",
+    "T64",
+    "T65",
+    "T66",
+    "T67",
+    "T68",
+    "T69",
+    "T70"
+  ],
+  "undefined_task_ids": [
+    "T71",
+    "T72",
+    "T73",
+    "T74",
+    "T75",
+    "T76",
+    "T77",
+    "T78",
+    "T79",
+    "T80"
+  ],
+  "status_vocabulary": {
+    "selected_design": "Behavior deliberately chosen for forward implementation; numeric tuning/native assets/runtime remain unproved.",
+    "existing_contract": "Requirement already existed; this audit links its cross-system evidence rather than inventing a missing feature.",
+    "source_gap": "Missing source stays unresolved and cannot pass by prose."
+  },
+  "game_fit_tests": [
+    "Strengthens the move/work/carry/deliver/transform/rescue/defend loop or necessary reliability/accessibility.",
+    "Uses simple contextual controls and visible, understandable outcomes.",
+    "Preserves a realistic free route and meaningful earned resource purpose.",
+    "Uses credible species/environment behavior and selected GitHub art.",
+    "Fits measured mobile CPU/GPU/memory and sustained performance requirements.",
+    "Does not import explicit post-launch features or new mandatory currency/maintenance systems."
+  ],
+  "decisions": [
+    {
+      "id": "CD01",
+      "title": "Danger can kill companions and destroy the camp",
+      "owner_tasks": [
+        "T13",
+        "T21",
+        "T22",
+        "T33"
+      ],
+      "status": "SELECTED_FORWARD_DESIGN_IMPLEMENTATION_AND_TUNING_UNPROVED",
+      "selected_behavior": "Survivors and pets can die; fences, gates and every placed equipment class have finite HP and can be destroyed. Camp coordinates do not grant immunity. Intact defenses and actual defenders create safety. Enemy target priority follows current U3: player/pets/camp are eligible targets and unprovoked survivors are ineligible as direct targets while a valid defender is nearby; a provoking survivor may receive retaliation; both player and eligible defending pets being far enables all characters and destructible camp equipment as targets. Persistent typed salvage preserves contents; account levels and paid entitlements are not silently erased. Offline/background simulation remains paused, with no absence raids.",
+      "remaining_evidence_or_tuning": [
+        "Enemy health/damage/cadence, warning windows and repair duration require owner tuning and repeated-failure playtests.",
+        "Prove defender-priority and breached-boundary crossing, return routes and no boundary, distance or retreat reward farming.",
+        "Implementing owners bind the current rule to real source, contact, animation, persistence and native assets.",
+        "Measure actual quantities, timing, HP, distance and repeated-loss recovery with free-player routes.",
+        "Standalone native rule checks do not approve actual scene behavior, audio, balance or physical devices."
+      ],
+      "supersedes_prior_open_decisions": [
+        "D01"
+      ],
+      "runtime_approval_allowed": false,
+      "current_rule_ids": [
+        "GR07",
+        "GR08",
+        "GR09",
+        "GR12",
+        "GR13"
+      ]
+    },
+    {
+      "id": "CD02",
+      "title": "Paid companion replacement and equipment recovery",
+      "owner_tasks": [
+        "T13",
+        "T21",
+        "T23"
+      ],
+      "status": "SELECTED_FORWARD_DESIGN_IMPLEMENTATION_AND_TUNING_UNPROVED",
+      "selected_behavior": "Player down retains the prior no-owned-inventory-debit policy and returns to a valid safe recovery anchor with working controls. Companion death tombstones the live instance and requires an ordinary earnable-resource/cash replacement purchase; no free care revival or automatic respawn. A new instance preserves earned companion level/XP/skills and account unlocks, with estate cargo claimed separately once. Repair plots charge material appropriate to asset, tier and missing HP. Fence/gate reconstruction restores purchased tier; other destroyed equipment is rebought at level1 with later upgrades re-earned. Furnace destruction invokes affected-camp blackout and a substantial manually reachable raw recovery bill. The player can recover with no helpers, machines, cash or stock. Preserve the baseline no compulsory hunger, stamina, cold or oxygen maintenance meters. Living-actor care cannot resurrect a tombstoned companion.",
+      "remaining_evidence_or_tuning": [
+        "Freeze health, warning, retreat, ordinary replacement/rebuild bills and actor-specific death/estate/replacement presentation with repeated-loss free-player measurements.",
+        "Test all companions dead, repeated failure, living-actor care interruption, reserved payment and full destination; a dead instance cannot be revived by care.",
+        "Implementing owners bind the current rule to real source, contact, animation, persistence and native assets.",
+        "Measure actual quantities, timing, HP, distance and repeated-loss recovery with free-player routes.",
+        "Standalone native rule checks do not approve actual scene behavior, audio, balance or physical devices."
+      ],
+      "supersedes_prior_open_decisions": [
+        "D01"
+      ],
+      "runtime_approval_allowed": false,
+      "current_rule_ids": [
+        "GR10",
+        "GR11",
+        "GR12",
+        "GR13",
+        "GR14",
+        "GR15"
+      ]
+    },
+    {
+      "id": "CD03",
+      "title": "Unlimited logical survivor carrying and complete useful jobs",
+      "owner_tasks": [
+        "T08",
+        "T23",
+        "T31",
+        "T33"
+      ],
+      "status": "SELECTED_FORWARD_DESIGN_IMPLEMENTATION_AND_TUNING_UNPROVED",
+      "selected_behavior": "Every survivor uses unlimited logical mixed inventory, matching the player. Visible stacks are aggregated representations with truthful quantities; rendered mesh count is never cargo capacity. An authorized job reserves a bounded bill/target quantity and duration, so unlimited capacity cannot create infinite harvesting, overbuying or never-ending trips. All survivors can perform all ordinary physical task families with reachable suitable equipment; specialization changes preference/efficiency and never blocks baseline competence. Include every plot family, conveyors included, and ordinary earned-cash purchases. No autonomous premium, real-money or entitlement purchase. Current U3 amendment: Every unlocked survivor uses unlimited logical mixed raw/product/ordinary-cash custody like the player. Visible stacks aggregate true quantities. Bounded authorized job quantities, budgets and destinations prevent endless harvesting or overbuying. Survivors harvest, hunt, carry, process/restock, bulk-stock customer counters, collect/deposit all available cash, fund every ordinary plot including conveyors, build/repair, rescue, coordinate, travel and perform authorized combat. Basic competence is not paid; suitable equipment and reachable routes remain prerequisites. No autonomous premium or real-money purchase.",
+      "remaining_evidence_or_tuning": [
+        "Demonstrate early/middle/late mixed-load throughput and large-count storage/save behavior.",
+        "Tune trip batch amounts, transfer cadence and optional efficiency upgrades without reducing logical capacity.",
+        "Implementing owners bind the current rule to real source, contact, animation, persistence and native assets.",
+        "Measure actual quantities, timing, HP, distance and repeated-loss recovery with free-player routes.",
+        "Standalone native rule checks do not approve actual scene behavior, audio, balance or physical devices."
+      ],
+      "supersedes_prior_open_decisions": [
+        "D02"
+      ],
+      "runtime_approval_allowed": false,
+      "current_rule_ids": [
+        "GR01",
+        "GR02",
+        "GR04",
+        "GR05",
+        "GR06"
+      ]
+    },
+    {
+      "id": "CD04",
+      "title": "Owned roster, living deployments and paid losses",
+      "owner_tasks": [
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T31",
+        "T56"
+      ],
+      "status": "SELECTED_FORWARD_DESIGN_IMPLEMENTATION_AND_TUNING_UNPROVED",
+      "selected_behavior": "All seven pet species remain permanently unlockable; their live instances can die and require ordinary paid replacement. All seven attack. Select up to three pets for a field expedition; reserve pets receive useful eligible safe-camp/local assignments and retain combat roles in suitable areas. When no eligible safe job exists, a truthful ready/rest state is valid; guarding an empty area without actual protection value does not count as a completed useful job. Select up to two survivors as field escorts from the working population; this expedition limit does not cap separately assigned local workers. Camp survivors remain useful in their assigned jobs; no device-specific logical worker cap or paid active slot is introduced. Switching at a safe camp is free and first settles cargo/jobs; injury, attack recovery and cooldown state persist, so switching cannot heal or reset attacks. Offscreen active-session work uses the same conserved job ledger; unseen combat never fabricates kills or loot. All owned workers are represented by the authored rescue/content roster, rather than unlimited procedural spawning. Current U3 amendment: All seven species remain available through ordinary progression and all seven attack plus perform a useful specialty. Keep the selected starting expedition of up to three pets and two survivor escorts; local workers are separate. Ownership/unlock and a live deployed instance are distinct: a dead, undeployed or absent roster entry cannot defend a camp. Assign eligible living reserve companions useful local work or defense; honest ready/rest is valid when no job exists. Free team switching does not revive a dead instance, move estate cargo, heal damage or reset attack recovery. Paid replacement is the only return from companion death.",
+      "remaining_evidence_or_tuning": [
+        "Three pets/two escorts are initial authored design limits, not measured performance claims; prove the exact busy-scene population.",
+        "T31/T56 must bind the actual authored per-region survivor census and test every active assignment, including offscreen-to-visible handoff.",
+        "Implementing owners bind the current rule to real source, contact, animation, persistence and native assets.",
+        "Measure actual quantities, timing, HP, distance and repeated-loss recovery with free-player routes.",
+        "Standalone native rule checks do not approve actual scene behavior, audio, balance or physical devices."
+      ],
+      "supersedes_prior_open_decisions": [
+        "D04"
+      ],
+      "runtime_approval_allowed": false,
+      "current_rule_ids": [
+        "GR02",
+        "GR06",
+        "GR07",
+        "GR08",
+        "GR12"
+      ]
+    },
+    {
+      "id": "CD05",
+      "title": "Simple assignments with coherent threat and job decisions",
+      "owner_tasks": [
+        "T23",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T31"
+      ],
+      "status": "SELECTED_FORWARD_DESIGN_IMPLEMENTATION_AND_TUNING_UNPROVED",
+      "selected_behavior": "Use one contextual goal/assignment choice, one recall/return choice and optional priority selection. Default priority is explicit recall/safety, immediate threat to the protected actor/area, authorized selected hostile, assigned defense/hunt, then safe opportunistic attack. Keep valid work/targets stable, reserve approach space and resources, and release stale claims. Worker spending is limited to an approved goal, ordinary resource/cash budget and protected reserve; a changed target generation, invalid acquisition path or revoked budget stops before the next debit with a clear reason; accepted quote amounts cannot silently change. T07 remains the frozen human-context selector; pet/job arbitration belongs to the species/T31 owners and does not silently extend T07 scope. Current U3 amendment: Use contextual goal/assignment, recall and useful priorities. Survivors may initiate assigned hunts or attacks under latest U3; the earlier self-defense-only restriction is withdrawn. Identity and explicit huntability prevent attacking owned pets/customers. Enemies use stable reachable target priority, per-enemy provocation and saved distance hysteresis. Preserve reservations, authorized ordinary budgets and clear blocked reasons. Bulk counter service belongs to customer pickup plus player/unlocked-survivor stocking/cash jobs, never an auto-spawned attendant. T07 human-context scope remains preserved; species/job owners implement their own arbitration.",
+      "remaining_evidence_or_tuning": [
+        "Test blocked route, depletion, full storage, budget revocation, simultaneous last plot payment, recall and resumption with bounded retry.",
+        "Measure decision cost and useful job completion; navigation avoidance alone is not intelligence.",
+        "Implementing owners bind the current rule to real source, contact, animation, persistence and native assets.",
+        "Measure actual quantities, timing, HP, distance and repeated-loss recovery with free-player routes.",
+        "Standalone native rule checks do not approve actual scene behavior, audio, balance or physical devices."
+      ],
+      "supersedes_prior_open_decisions": [],
+      "runtime_approval_allowed": false,
+      "current_rule_ids": [
+        "GR01",
+        "GR05",
+        "GR06",
+        "GR07",
+        "GR08",
+        "GR16"
+      ]
+    },
+    {
+      "id": "CD06",
+      "title": "Bounded combat roster and contextual weapon progression",
+      "owner_tasks": [
+        "T21",
+        "T22",
+        "T13"
+      ],
+      "status": "SELECTED_FORWARD_DESIGN_IMPLEMENTATION_AND_TUNING_UNPROVED",
+      "selected_behavior": "The selected core combat families are a pursuing hostile wolf, a close raider, a visibly telegraphed heavy ice brute, a ranged rival rifleman, a lane-pressure hooded swarmer and a hooded siege boss that combines readable established threats. Use their existing selected GitHub sheets. These six define the launch behavioral roster; regional art variants must keep explicit identity/source and habitat compatibility, not make a polar animal live in lava. Select the Tundra Stag as the authored hunt source and preserve current hostile-wolf meat drops; owned pets are never prey. Boar and other additional wildlife concepts remain reserve. Other enemy and meat render concepts remain preserved reserve, not mandatory encounters or currencies. Player weapons have two contextual families: the existing axe for close work/defense and an authored spear for longer-reach defense, earned at the Level9 defense goal. Free earned-material tiers improve each; no action bar, compulsory ammo wallet or paid-only counter. The axe sheet is direct reference; the existing spear-raider gear sheet is a proportion starting point, not an approved player rig or motion.",
+      "remaining_evidence_or_tuning": [
+        "Bind exact hostile/hunt IDs, habitats, unlock rows, HP/damage, contact profiles and useful counterplay.",
+        "Create and review any missing player spear and regional variant native assets against the selected references; no static render grants animation approval.",
+        "Every biome uses only habitat-appropriate selected encounters or explicitly reviewed variants; new archetypes require a scoped decision rather than automatic concept activation."
+      ],
+      "supersedes_prior_open_decisions": [],
+      "runtime_approval_allowed": false,
+      "current_rule_ids": [
+        "GR06",
+        "GR07",
+        "GR09"
+      ]
+    },
+    {
+      "id": "CD07",
+      "title": "Physical regional continuity",
+      "owner_tasks": [
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52",
+        "T53"
+      ],
+      "status": "SELECTED_FORWARD_DESIGN_IMPLEMENTATION_AND_TUNING_UNPROVED",
+      "selected_behavior": "Keep the same move, gather, visibly carry, deliver, transform, rescue and defend loop across ten connected regions. Underwater work uses protected dry habitats/tunnels and authored accessible work sites; the owl remains on suitable air routes/staging. Sky play uses walkable connected platforms/bridges; quadrupeds do not fly. Volcanic and swamp areas use restored safe lanes and appropriate reachable work surfaces. Every species retains useful combat in applicable regions and useful safe work when a region is unsuitable. Travel preserves identity/cargo/jobs and offers a free return to the last safe restored camp. Regional art never implies a new oxygen/heat/poison maintenance meter. Playable underwater travel and work remain on dry protected routes/positions; appropriate gear reaches salvage without mandatory swimming. Each earlier region owner implements its own local arrival/return contract before its integration; T53 later integrates shared transport and is not an added backward prerequisite. Camp return is revalidated against actual destruction/raid state; choose a valid recovery anchor rather than teleport into a destroyed unsafe site. A pet on safe staging is still a real damageable actor, with eligibility and evacuation appropriate to that location.",
+      "remaining_evidence_or_tuning": [
+        "Prove actual routes, terrain contact, target reach, transport and no stranding in each region.",
+        "The regional outcome matrix selects content; missing native assets and motion remain unproved."
+      ],
+      "supersedes_prior_open_decisions": [
+        "D04"
+      ],
+      "runtime_approval_allowed": false,
+      "current_rule_ids": [
+        "GR08",
+        "GR15"
+      ]
+    },
+    {
+      "id": "CD08",
+      "title": "Purposeful materials and dynamic reachable economy",
+      "owner_tasks": [
+        "T09",
+        "T16",
+        "T19",
+        "T21",
+        "T33",
+        "T34",
+        "T37"
+      ],
+      "status": "SELECTED_FORWARD_DESIGN_IMPLEMENTATION_AND_TUNING_UNPROVED",
+      "selected_behavior": "Adopt the dated progression/economy value-chain decisions as the forward selected design. Coal is an earned physical fuel input, metal is ore feedstock, and steel is a processed material; slate, planks and blocks have named construction uses. Existing money is the single ordinary earned currency regardless of till/pocket/house custody. Use Gems as the display name for the one primary premium currency, canonical premium_gems, with explicit migration if an existing selected runtime wallet uses another ID; do not create a second wallet. XP is progression and VIP is a permanent entitlement. Launch events grant existing resources, money and explicit rewards; no event token wallet. Rendered containers and meat variants do not automatically create new inventory/currency IDs. Unselected concepts remain preserved reserve. Current U3 amendment: Retain the selected physical raw/product value chains and one ordinary Cash wallet (money) with distinct custody locations; one optional premium Gems wallet (premium_gems), XP progression and permanent VIP entitlement. Customer baskets combine explicitly processed products from operating sources or constructively reachable purchasable/rebuildable plots. Plot/upgrade material mix and quantity depend on authored progression and target tier. Prove complete source/recipe/quantity/bill dependencies without unearned order payout or circular self-funding. Persist accepted quotes and contributions; re-evaluate reachability after destruction. Cash spending includes committed outflow so derived receipts cannot recreate spent money. Launch events add no new token wallet.",
+      "remaining_evidence_or_tuning": [
+        "Bind recipe quantities, prices, rates, identifiers and migration to actual producer code before integration.",
+        "Run free-player reachable progression, surplus/shortage and conversion-cycle tests; no claims of numeric balance from this plan.",
+        "Implementing owners bind the current rule to real source, contact, animation, persistence and native assets.",
+        "Measure actual quantities, timing, HP, distance and repeated-loss recovery with free-player routes.",
+        "Standalone native rule checks do not approve actual scene behavior, audio, balance or physical devices."
+      ],
+      "supersedes_prior_open_decisions": [
+        "D03",
+        "D05"
+      ],
+      "runtime_approval_allowed": false,
+      "current_rule_ids": [
+        "GR03",
+        "GR04",
+        "GR05",
+        "GR10",
+        "GR11",
+        "GR18"
+      ]
+    },
+    {
+      "id": "CD09",
+      "title": "Active-world continuity and paused absence",
+      "owner_tasks": [
+        "T14",
+        "T37",
+        "T41",
+        "T43"
+      ],
+      "status": "SELECTED_FORWARD_DESIGN_IMPLEMENTATION_AND_TUNING_UNPROVED",
+      "selected_behavior": "Launch ordinary world simulation pauses when the app backgrounds or closes. Resume the saved state without absence damage, missing cargo or invented offline income. Offscreen work may continue only while the game is active and the same authoritative job ledger advances. Local played time governs ordinary machine/actor animation and recovery. Server time governs live event availability, purchases and entitlements; changing the device clock never creates rewards or extends an event. Core ordinary play and recovery remain usable offline; server-only grants/purchases stay visibly pending or unavailable until verified. No speculative reward replay on reconnect. Launch event objective participation requires verified connection. While offline, the event clearly pauses objective credit and consumes no event-specific inputs; ordinary core activities continue. Until a server completion receipt exists the UI says pending, never earned. A server-verified completion before expiry creates a durable earned claim that remains deliverable after expiry; a lost response or reconnect grants it exactly once. An uncompleted expired objective grants nothing. Current U3 amendment: Ordinary simulation pauses while backgrounded or closed; no absence damage or invented offline income. During active play, rendering distance or region unload cannot despawn logical raids, heal enemies or erase structure/companion damage. Preserve quotes, reservations, encounter budgets, tombstones, target/provocation and typed salvage. Core manual play/recovery remains offline. Server time governs events/purchases; verified earned-before-expiry claims survive expiry and deliver once, while offline event participation pauses visibly without spending event inputs. A destroyed producer or blacked-out camp requires current acquisition revalidation.",
+      "remaining_evidence_or_tuning": [
+        "Test background/kill at every pre/post-commit boundary, older save migration, account change and cloud conflict.",
+        "Event end while absent must preserve committed rewards and reject unearned expired rewards.",
+        "Implementing owners bind the current rule to real source, contact, animation, persistence and native assets.",
+        "Measure actual quantities, timing, HP, distance and repeated-loss recovery with free-player routes.",
+        "Standalone native rule checks do not approve actual scene behavior, audio, balance or physical devices."
+      ],
+      "supersedes_prior_open_decisions": [],
+      "runtime_approval_allowed": false,
+      "current_rule_ids": [
+        "GR05",
+        "GR08",
+        "GR13",
+        "GR14",
+        "GR17"
+      ]
+    },
+    {
+      "id": "CD10",
+      "title": "Landscape and distinct device layouts",
+      "owner_tasks": [
+        "T04",
+        "T55",
+        "T58"
+      ],
+      "status": "SELECTED_FORWARD_DESIGN_IMPLEMENTATION_AND_TUNING_UNPROVED",
+      "selected_behavior": "Retain the requested landscape game. Shipping configuration supports both landscape rotations and must not expose unsupported portrait gameplay. Godot SCREEN_SENSOR_LANDSCAPE=4 is the baseline setting; platform export/orientation settings must agree. The observed current source uses orientation6 and needs owner implementation reconciliation. Correct the phone16:9 logical test fixture to1920x1080; keep the separate20:9 fixture2400x1080. Test fold/unfold, safe areas, suspended input and restored state in supported landscape layouts. Layout dimensions are not native4K performance evidence.",
+      "remaining_evidence_or_tuning": [
+        "Physical phone/tablet/foldable tests and the actual shipping orientation/export configuration remain unproved.",
+        "T68/T69 retain exact-source sustained native>=3840x2160 and>=60FPS certification."
+      ],
+      "supersedes_prior_open_decisions": [],
+      "runtime_approval_allowed": false,
+      "current_rule_ids": [
+        "GR19"
+      ]
+    },
+    {
+      "id": "CD11",
+      "title": "A complete Level100 ending within launch scope",
+      "owner_tasks": [
+        "T12",
+        "T52",
+        "T62"
+      ],
+      "status": "SELECTED_FORWARD_DESIGN_IMPLEMENTATION_AND_TUNING_UNPROVED",
+      "selected_behavior": "Author one useful outcome for each Level1–100 within the existing ten bands. Level100 completes the restored connected camp/route network, shows an earned conclusion/celebration and lets the player continue existing production, exploration and launch events. Do not add Level101, new regions, a new mastery-contract system, decoration, co-op or additional Level100 activity families as1.0 blockers. Prior T12 structural role IDs and T10/T11 binding receipts remain intact; new outcome rows are content decisions, not activation or proof. Customer mixes and project/upgrade bills use current constructive reachability and progression rules. Revised outcomes remove automatic staffing and free-damage-restoration assumptions.",
+      "remaining_evidence_or_tuning": [
+        "Freeze attainable costs/rewards and pacing with first-time and returning free-player sessions.",
+        "Prove an uninterrupted complete route and persistent final state."
+      ],
+      "supersedes_prior_open_decisions": [],
+      "runtime_approval_allowed": false,
+      "current_rule_ids": [
+        "GR03",
+        "GR04",
+        "GR18"
+      ]
+    },
+    {
+      "id": "CD12",
+      "title": "Fair losses, transparent purchases and feasible events",
+      "owner_tasks": [
+        "T34",
+        "T35",
+        "T36",
+        "T37",
+        "T38",
+        "T39",
+        "T40",
+        "T41",
+        "T42",
+        "T43"
+      ],
+      "status": "SELECTED_FORWARD_DESIGN_IMPLEMENTATION_AND_TUNING_UNPROVED",
+      "selected_behavior": "Keep the existing FirstThaw/weekly/seasonal frameworks and pre-approved components. Events are optional and cannot be required to repair a base-game shortage or recover a companion. Reject schedules with unavailable resources, locations, companions or time; use server-time expiry, exactly-once grants, kill switch and rollback. Preserve permanent transparent VIP, advertised purchase value, verified restoration and a realistic$0 Level1–100 route. Challenge difficulty never reads spending. Diagnostics observe stuck jobs, missing transfers, save conflicts and performance without becoming gameplay authority or collecting unnecessary personal information. Earned but unclaimed event rewards survive expiry when a completion receipt was committed before expiry. Network interruption between that receipt and grant is resolved by the same durable claim key, not by current event visibility. Current U3 amendment: Companion replacement and damaged-camp recovery are meaningful ordinary-resource/cash costs within a measured $0 Level1–100 route. A previously purchased permanent entitlement is not charged again merely because an instance died. Challenge and price generation never read paid history/VIP or punish current wealth. Existing optional launch events require attainable sources and pause/cancel safely when their required site is unavailable; they cannot be the only recovery path. Preserve verified grants, kill switch/rollback and minimal-purpose diagnostics. No forced revive sale, ad, energy meter or compulsory wait is introduced.",
+      "remaining_evidence_or_tuning": [
+        "Run actual purchase restore/refund/reconnect, expired events, disabled server components, diagnostics failure and privacy/security cases.",
+        "Validation-only owners route repairs to implementing tasks; they do not build fixes during release certification.",
+        "Implementing owners bind the current rule to real source, contact, animation, persistence and native assets.",
+        "Measure actual quantities, timing, HP, distance and repeated-loss recovery with free-player routes.",
+        "Standalone native rule checks do not approve actual scene behavior, audio, balance or physical devices."
+      ],
+      "supersedes_prior_open_decisions": [],
+      "runtime_approval_allowed": false,
+      "current_rule_ids": [
+        "GR12",
+        "GR14",
+        "GR15",
+        "GR17",
+        "GR18"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "id": "CG01",
+      "title": "Every pet attacks and contributes a specialty",
+      "classification": "USER_CLARIFICATION",
+      "owner_tasks": [
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30"
+      ],
+      "consumer_tasks": [
+        "T21",
+        "T31",
+        "T32",
+        "T62",
+        "T67",
+        "T70"
+      ],
+      "selected_action": "Adopt all12 PA rules and seven species/profile/render rows. Support-only fox or owl fails. Current U3 additions: Latest U3 permits survivors to initiate eligible assigned hunts and attacks. Distinguish explicitly huntable wildlife, invaders, customers, companions and friendlies by identity/role rather than art. Owned pets are never prey. Attacking an enemy makes that survivor eligible for that enemy's retaliation. Pets and survivors can die. Death tombstones the live instance, cancels its attacks/jobs/reservations and requires an ordinary earnable-resource/cash replacement purchase. A new instance is created once; preserve earned companion level/XP/skills, account unlocks and permanent paid entitlements because the user only required equipment level resets. No free care revival or automatic respawn. Run reusable native rule logic and adversarial transaction/recovery scenarios, then integrate it with the actual Godot scene, actors, persistence, navigation, contact events and art. Native headless rule tests do not certify 3D motion, actual physical contacts, all100 producer bindings, sound, physical devices or final reference quality.",
+      "decision_ids": [
+        "CD04",
+        "CD05"
+      ],
+      "existing_requirement_ids": [
+        "GD07",
+        "GD09"
+      ],
+      "acceptance_checks": [
+        "Seven real positive-damage attack demonstrations.",
+        "Each species also completes its useful job; miss/interrupt/recall/return and later suitable-region use are proven.",
+        "Assigned hunt with real tool/contact/cargo return",
+        "Retaliation after an initiated attack including a legitimate miss",
+        "No attack against a friendly or owned pet",
+        "Hunt/work/escape/recall transition without cargo loss",
+        "Each species and survivor reaches death and stops all contact/work",
+        "Replacement is unavailable until full valid bill commits",
+        "Replayed purchase creates exactly one new instance",
+        "Dead actor estate is not cloned into replacement inventory",
+        "Exact source/module/fixture/test binding",
+        "Actual scene integration and played full loops",
+        "Per-dimension reference>=9.9 plus stronger exact10 material gates",
+        "Physical sustained performance and release evidence remains required",
+        "T05/T18 conveyor appearance remains reopened: compare pinned transport/camp sheets at matched gameplay scale, normal and2x, including supported corners/inclines, rails/supports/rollers/drive details, loaded deck contact and clear gates/aisles in default/relocated empty/moving/full states"
+      ],
+      "specification_status": "SELECTED_CURRENT_USER_RULES_RUNTIME_EVIDENCE_OPEN",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration.",
+      "current_gameplay_rule_ids": [
+        "GR06",
+        "GR12",
+        "GR19"
+      ]
+    },
+    {
+      "id": "CG02",
+      "title": "All-task survivors and large mixed carrying",
+      "classification": "SELECTED_DESIGN",
+      "owner_tasks": [
+        "T08",
+        "T23",
+        "T31"
+      ],
+      "consumer_tasks": [
+        "T09",
+        "T10",
+        "T11",
+        "T16",
+        "T17",
+        "T18",
+        "T19",
+        "T20",
+        "T22",
+        "T33",
+        "T53",
+        "T62",
+        "T67"
+      ],
+      "selected_action": "Use player-like unlimited logical cargo and all ordinary physical job families, including all authorized plots/conveyors and ordinary-cash buying; retain budgets and equipment truth. Current U3 additions: An unlocked survivor or player bulk deposits each requested processed type onto separate typed stock stacks. Customers take their own reserved basket and leave physical cash in a separate cash zone. Stock, a conveyor, or a customer queue must never create a cashier, register or extra serving NPC. Player and unlocked survivors share unlimited logical mixed raw, processed and ordinary-money custody. A worker can bulk collect cash and deposit it at a valid destination. Useful job amounts and destinations bound work; rendered pile count is not capacity. Material types, mix and quantities vary by authored progression band, target class/tier and accessible economy. No purchase/upgrade bill may depend solely on its own output or a descendant that it enables. Use attainable alternative materials or a bootstrap bill when recovery removes a producer. Latest U3 permits survivors to initiate eligible assigned hunts and attacks. Distinguish explicitly huntable wildlife, invaders, customers, companions and friendlies by identity/role rather than art. Owned pets are never prey. Attacking an enemy makes that survivor eligible for that enemy's retaliation.",
+      "decision_ids": [
+        "CD03",
+        "CD05"
+      ],
+      "existing_requirement_ids": [
+        "GD03",
+        "GD04",
+        "GD05"
+      ],
+      "acceptance_checks": [
+        "All ten human task families demonstrated.",
+        "Large mixed load conserved through service/payment/combat/reload.",
+        "No basic-AI paygate or autonomous premium spend.",
+        "Bulk mixed-stock delivery with no attendant spawn",
+        "Customer-owned pickup and payment full motion",
+        "Separate stock and money pile geometry",
+        "No raw item accepted as a processed product by implicit alias",
+        "Player-only meat/cooked-goods opening works before T16 fishing and later T17 service extensions; stage shared custody/quotes through existing ownership without inventing dependency edges",
+        "Manual, survivor and conveyor deliveries share destination admission/reservations; private unassigned carried stock is not promised to an order; actual reserved goods count; visual mesh count and a belt-only cap cannot create inconsistent bulk-delivery rules",
+        "Large mixed raw/product/cash job and visible aggregation",
+        "Bulk counter cash to survivor to storage",
+        "Cancelled/full/blocked/destroyed destination recovery",
+        "No phantom helper or unpaid basic competence",
+        "Early/mid/late actual bill and source paths",
+        "No purchase-history/VIP/wealth-based difficulty",
+        "Target output and circular prerequisite negative cases",
+        "Realistic measured free-player cost/throughput before game approval",
+        "Assigned hunt with real tool/contact/cargo return",
+        "Retaliation after an initiated attack including a legitimate miss",
+        "No attack against a friendly or owned pet",
+        "Hunt/work/escape/recall transition without cargo loss"
+      ],
+      "specification_status": "SELECTED_CURRENT_USER_RULES_RUNTIME_EVIDENCE_OPEN",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration.",
+      "current_gameplay_rule_ids": [
+        "GR01",
+        "GR02",
+        "GR04",
+        "GR06"
+      ]
+    },
+    {
+      "id": "CG03",
+      "title": "Stakes, sanctuary and recoverable actors",
+      "classification": "SELECTED_DESIGN",
+      "owner_tasks": [
+        "T13",
+        "T21",
+        "T22",
+        "T23"
+      ],
+      "consumer_tasks": [
+        "T03",
+        "T10",
+        "T11",
+        "T14",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T31",
+        "T33",
+        "T43",
+        "T62"
+      ],
+      "selected_action": "Preserve account unlocks, player-owned inventory and earned progression while exposing actors and placed camp equipment to warned, real damage. Companions can die and require ordinary paid replacement; damaged structures require paid material repairs, and destroyed equipment restarts at level1. Camp safety comes from actual defenders and intact defenses, not coordinate immunity. Recovery remains constructively attainable without real-money payment. Current U3 additions: While the player or an eligible living defending pet is within the camp's defense range, enemies target eligible reachable player/pet/camp objectives. An unprovoked survivor is ineligible as a direct target, including when every preferred target is absent or blocked. Seek a valid approach or blocking defense instead. An enemy may directly retaliate against the survivor that attacks it; both player and eligible defending pets being far permits unrestricted targets. This does not grant collateral damage immunity: an actual valid contact can still hurt a survivor. When both player and defending pets are beyond the warned defense boundary, hostile encounter policy permits all characters and destructible camp structures as targets. Hysteresis stabilizes the boundary. Distance-based rendering or region unloading cannot delete the logical encounter, heal enemies or fabricate offscreen loot. Ordinary simulation pauses while backgrounded/closed. Fences and gates have substantial authored HP but can be breached. Every placed camp/field equipment class has HP and damaged/destroyed states. Breaches change collision and pathing at the actual commit. Interior safety comes from intact defenses, defenders and enemy behavior; standing inside camp is not permanent invulnerability. Repair plots quote materials appropriate to asset/tier and missing HP. A repair job has a fixed authorized HP/material budget; new damage cannot be erased for free. Fence/gate ruins may be reconstructed through the repair plot at their purchased tier. Uncommitted escrow returns safely when the asset generation changes. Non-boundary equipment at zero HP becomes a ruin. Rebuy through the appropriate plot using a new generation and level 1 equipment. Account progression and known recipes remain unlocked, but lost equipment upgrades must be purchased again. Persist destruction; cancel/refund only uncommitted work, not already consumed production or repairs. Pets and survivors can die. Death tombstones the live instance, cancels its attacks/jobs/reservations and requires an ordinary earnable-resource/cash replacement purchase. A new instance is created once; preserve earned companion level/XP/skills, account unlocks and permanent paid entitlements because the user only required equipment level resets. No free care revival or automatic respawn. Furnace destruction puts that camp into blackout: pause automated production, new customer admission and ordinary non-recovery worker jobs; preserve already committed value. Rebuild the furnace at level1 with a substantial progression/lost-tier raw-material bill, then re-earn upgrades. Manual gathering, recovery jobs, salvage/cash collection, combat and construction remain possible. Retain permanent baseline player gathering capability and a reachable renewable manual wood/stone path. Recovery bills cannot require a destroyed producer, new customer payout, premium purchase or companion. A finite saved siege objective/attack budget ends in retreat after core defeat without a victory reward; scheduled new camp raids pause through reconstruction, while roaming threats remain real. Scheduled raids require a full five-minute (300 active seconds) warning naming the threatened camp, with a saved 5:00 countdown, sound and equivalent muted cue; no scheduled-raid damage occurs before it expires. If admission is due while ineligible, wait and then give the full warning. This does not cancel real roaming threats.",
+      "decision_ids": [
+        "CD01",
+        "CD02"
+      ],
+      "existing_requirement_ids": [
+        "GD01",
+        "GD02",
+        "GD08"
+      ],
+      "acceptance_checks": [
+        "Zone-by-actor attackability, boundary and repeat-failure tests.",
+        "All down/death/retreat/cargo/payment states preserve exactly one declared outcome, persistent salvage and account entitlements; ordinary replacement is paid and equipment-level loss is explicit.",
+        "Player near/pet far and player far/pet near truth-table cases",
+        "Per-enemy provocation, not global unearned aggression",
+        "Dead/undeployed/nondefending pet cannot protect by roster flag",
+        "No sanctuary-coordinate immunity or infinite health reset",
+        "Near defender plus only an unprovoked survivor reachable yields no direct survivor target; provocation or both-far changes eligibility",
+        "Both-far eligibility includes exposed survivors and visitors",
+        "Camp distance warning and enemy approach tell",
+        "Active-session offscreen continuity and restored target state",
+        "No infinite raid generation merely from leaving a region",
+        "Starting world admission policy: one scheduled camp siege from warned admission through committed strikes/retreat until durable completion; persist exact camp/warning/encounter identity across travel; no new scheduled admission at blackout camps; real roaming threats remain valid",
+        "Actual attacks can damage and breach both gates and fence segments",
+        "All placed equipment census has HP/ruin/content disposition",
+        "Collision/route/nav update agrees with destruction",
+        "No invisible barrier or damage through an intact obstruction",
+        "Low/medium/severe damage produces coherent material/quantity differences",
+        "Concurrent damage during repair and paid-HP budget accounting",
+        "Destroyed fence/gate reconstructs purchased tier",
+        "No health or cost reset through repair cancellation/save",
+        "Damage reaches zero exactly once and old machine cannot operate",
+        "Paid rebuild produces level1 with new generation",
+        "Upgrade quote cannot restore a destroyed old generation",
+        "No automatic rebuild on save restore or player return",
+        "Each species and survivor reaches death and stops all contact/work",
+        "Replacement is unavailable until full valid bill commits",
+        "Replayed purchase creates exactly one new instance",
+        "Dead actor estate is not cloned into replacement inventory",
+        "Visible/audible core failure and clear recovery objective",
+        "No post-destruction machine output or new customer sale fabrication",
+        "Rebuild works with no companions, machines, cash or stock",
+        "Restoration resumes valid jobs once with no duplicate output",
+        "All placed equipment and companions gone, zero stock/cash recovery trace",
+        "Simultaneous multi-camp damage is scoped and recoverable",
+        "No victory/loot/progression for deliberately losing or unloading",
+        "No hidden compulsory wait, energy, ad or payment wall",
+        "Full five-minute (300 active seconds) named-camp warning before any scheduled-raid damage; visible 5:00 countdown plus audible and muted-equivalent cues; save/resume preserves remaining time; delayed ineligible admission starts a fresh full warning; verify outside-camp returns through both gates",
+        "Persist the scheduled-raid origin on admitted enemies and damage events; pending warning cannot be bypassed by relabelling a scheduled attacker as a roaming threat"
+      ],
+      "specification_status": "SELECTED_CURRENT_USER_RULES_RUNTIME_EVIDENCE_OPEN",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration.",
+      "current_gameplay_rule_ids": [
+        "GR07",
+        "GR08",
+        "GR09",
+        "GR10",
+        "GR11",
+        "GR12",
+        "GR14",
+        "GR15"
+      ]
+    },
+    {
+      "id": "CG04",
+      "title": "Combat roster, useful counters and equipment",
+      "classification": "SELECTED_DESIGN",
+      "owner_tasks": [
+        "T21",
+        "T22"
+      ],
+      "consumer_tasks": [
+        "T06",
+        "T09",
+        "T13",
+        "T23",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52",
+        "T59",
+        "T60",
+        "T61",
+        "T67"
+      ],
+      "selected_action": "Use selected bounded hostile/hunt/weapon roster and existing GitHub art. New variants require declared source and proof; extra HP alone is not a distinct enemy behavior. Current U3 additions: Latest U3 permits survivors to initiate eligible assigned hunts and attacks. Distinguish explicitly huntable wildlife, invaders, customers, companions and friendlies by identity/role rather than art. Owned pets are never prey. Attacking an enemy makes that survivor eligible for that enemy's retaliation. While the player or an eligible living defending pet is within the camp's defense range, enemies target eligible reachable player/pet/camp objectives. An unprovoked survivor is ineligible as a direct target, including when every preferred target is absent or blocked. Seek a valid approach or blocking defense instead. An enemy may directly retaliate against the survivor that attacks it; both player and eligible defending pets being far permits unrestricted targets. This does not grant collateral damage immunity: an actual valid contact can still hurt a survivor. Fences and gates have substantial authored HP but can be breached. Every placed camp/field equipment class has HP and damaged/destroyed states. Breaches change collision and pathing at the actual commit. Interior safety comes from intact defenses, defenders and enemy behavior; standing inside camp is not permanent invulnerability.",
+      "decision_ids": [
+        "CD06"
+      ],
+      "existing_requirement_ids": [
+        "GD08",
+        "GD11",
+        "GD14"
+      ],
+      "acceptance_checks": [
+        "Real telegraph/contact/miss/recovery/counterplay per selected enemy and weapon.",
+        "Friendly pets and rescue candidates never become hunt drops.",
+        "No target-priority, intact-boundary, offscreen reset or retaliation exploit; perimeter defenses follow their declared valid domain and finite damage state.",
+        "Assigned hunt with real tool/contact/cargo return",
+        "Retaliation after an initiated attack including a legitimate miss",
+        "No attack against a friendly or owned pet",
+        "Hunt/work/escape/recall transition without cargo loss",
+        "Player near/pet far and player far/pet near truth-table cases",
+        "Per-enemy provocation, not global unearned aggression",
+        "Dead/undeployed/nondefending pet cannot protect by roster flag",
+        "No sanctuary-coordinate immunity or infinite health reset",
+        "Near defender plus only an unprovoked survivor reachable yields no direct survivor target; provocation or both-far changes eligibility",
+        "Actual attacks can damage and breach both gates and fence segments",
+        "All placed equipment census has HP/ruin/content disposition",
+        "Collision/route/nav update agrees with destruction",
+        "No invisible barrier or damage through an intact obstruction"
+      ],
+      "specification_status": "SELECTED_CURRENT_USER_RULES_RUNTIME_EVIDENCE_OPEN",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration.",
+      "current_gameplay_rule_ids": [
+        "GR06",
+        "GR07",
+        "GR09"
+      ]
+    },
+    {
+      "id": "CG05",
+      "title": "Useful active team and reserve population",
+      "classification": "SELECTED_DESIGN",
+      "owner_tasks": [
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T31"
+      ],
+      "consumer_tasks": [
+        "T14",
+        "T23",
+        "T33",
+        "T43",
+        "T53",
+        "T56",
+        "T58",
+        "T68",
+        "T69"
+      ],
+      "selected_action": "Three field pets and two survivor escorts, with useful camp assignments and conserved offscreen active-session work. Ownership, live-instance mortality, deployment and injury are separate states. Current U3 additions: Player and unlocked survivors share unlimited logical mixed raw, processed and ordinary-money custody. A worker can bulk collect cash and deposit it at a valid destination. Useful job amounts and destinations bound work; rendered pile count is not capacity. While the player or an eligible living defending pet is within the camp's defense range, enemies target eligible reachable player/pet/camp objectives. An unprovoked survivor is ineligible as a direct target, including when every preferred target is absent or blocked. Seek a valid approach or blocking defense instead. An enemy may directly retaliate against the survivor that attacks it; both player and eligible defending pets being far permits unrestricted targets. This does not grant collateral damage immunity: an actual valid contact can still hurt a survivor. When both player and defending pets are beyond the warned defense boundary, hostile encounter policy permits all characters and destructible camp structures as targets. Hysteresis stabilizes the boundary. Distance-based rendering or region unloading cannot delete the logical encounter, heal enemies or fabricate offscreen loot. Ordinary simulation pauses while backgrounded/closed. Pets and survivors can die. Death tombstones the live instance, cancels its attacks/jobs/reservations and requires an ordinary earnable-resource/cash replacement purchase. A new instance is created once; preserve earned companion level/XP/skills, account unlocks and permanent paid entitlements because the user only required equipment level resets. No free care revival or automatic respawn. Scheduled raids require a full five-minute (300 active seconds) warning naming the threatened camp, with a saved 5:00 countdown, sound and equivalent muted cue; no scheduled-raid damage occurs before it expires. If admission is due while ineligible, wait and then give the full warning. This does not cancel real roaming threats.",
+      "decision_ids": [
+        "CD04"
+      ],
+      "existing_requirement_ids": [
+        "GD06",
+        "GD07",
+        "GD17"
+      ],
+      "acceptance_checks": [
+        "Swap at safe camp with cargo/injury/recovery preserved.",
+        "No cooldown reset, cloned actor or invented unseen combat rewards.",
+        "Actual population census and sustained busy-scene proof.",
+        "Large mixed raw/product/cash job and visible aggregation",
+        "Bulk counter cash to survivor to storage",
+        "Cancelled/full/blocked/destroyed destination recovery",
+        "No phantom helper or unpaid basic competence",
+        "Player near/pet far and player far/pet near truth-table cases",
+        "Per-enemy provocation, not global unearned aggression",
+        "Dead/undeployed/nondefending pet cannot protect by roster flag",
+        "No sanctuary-coordinate immunity or infinite health reset",
+        "Near defender plus only an unprovoked survivor reachable yields no direct survivor target; provocation or both-far changes eligibility",
+        "Both-far eligibility includes exposed survivors and visitors",
+        "Camp distance warning and enemy approach tell",
+        "Active-session offscreen continuity and restored target state",
+        "No infinite raid generation merely from leaving a region",
+        "Starting world admission policy: one scheduled camp siege from warned admission through committed strikes/retreat until durable completion; persist exact camp/warning/encounter identity across travel; no new scheduled admission at blackout camps; real roaming threats remain valid",
+        "Each species and survivor reaches death and stops all contact/work",
+        "Replacement is unavailable until full valid bill commits",
+        "Replayed purchase creates exactly one new instance",
+        "Dead actor estate is not cloned into replacement inventory",
+        "Full five-minute (300 active seconds) named-camp warning before any scheduled-raid damage; visible 5:00 countdown plus audible and muted-equivalent cues; save/resume preserves remaining time; delayed ineligible admission starts a fresh full warning; verify outside-camp returns through both gates",
+        "Persist the scheduled-raid origin on admitted enemies and damage events; pending warning cannot be bypassed by relabelling a scheduled attacker as a roaming threat"
+      ],
+      "specification_status": "SELECTED_CURRENT_USER_RULES_RUNTIME_EVIDENCE_OPEN",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration.",
+      "current_gameplay_rule_ids": [
+        "GR02",
+        "GR07",
+        "GR08",
+        "GR12"
+      ]
+    },
+    {
+      "id": "CG06",
+      "title": "Work-combat-payment handoffs",
+      "classification": "EXISTING_CONTRACT_INTEGRATION",
+      "owner_tasks": [
+        "T21",
+        "T23",
+        "T31"
+      ],
+      "consumer_tasks": [
+        "T07",
+        "T08",
+        "T10",
+        "T11",
+        "T14",
+        "T17",
+        "T18",
+        "T22",
+        "T43",
+        "T67"
+      ],
+      "selected_action": "Secure incompatible tools/cargo, suspend or complete the current atomic job, fight, then revalidate and resume useful work. Current U3 additions: An unlocked survivor or player bulk deposits each requested processed type onto separate typed stock stacks. Customers take their own reserved basket and leave physical cash in a separate cash zone. Stock, a conveyor, or a customer queue must never create a cashier, register or extra serving NPC. Persist quote ID, generation, catalogue version, progression snapshot, item quantities, payout and committed contributions. Keep accepted/part-paid quotes stable through ordinary progression. Revalidate feasibility on material changes; cancel only uncommitted work with conserved escrow. Reject request-ID reuse with a different payload. Dead companion cargo and destroyed equipment/counter/storage contents move once into persistent typed salvage custody. Recovering that cache is a real reachable job. Already sold customer goods are no longer player stock and do not become resale loot on visitor death. All ownership remains single-valued across transitions.",
+      "decision_ids": [
+        "CD03",
+        "CD05",
+        "CD09"
+      ],
+      "existing_requirement_ids": [
+        "GD04",
+        "GD06",
+        "GD11"
+      ],
+      "acceptance_checks": [
+        "Before/after contact, debit, delivery, production and defeat save-interruption cases.",
+        "Revoked budget, depleted target and full destination cannot lose/duplicate value or thrash.",
+        "Bulk mixed-stock delivery with no attendant spawn",
+        "Customer-owned pickup and payment full motion",
+        "Separate stock and money pile geometry",
+        "No raw item accepted as a processed product by implicit alias",
+        "Player-only meat/cooked-goods opening works before T16 fishing and later T17 service extensions; stage shared custody/quotes through existing ownership without inventing dependency edges",
+        "Manual, survivor and conveyor deliveries share destination admission/reservations; private unassigned carried stock is not promised to an order; actual reserved goods count; visual mesh count and a belt-only cap cannot create inconsistent bulk-delivery rules",
+        "Reload/cancel cannot reroll prices or rewards",
+        "Concurrent partial funding and final payment commit once",
+        "Whole basket reservation then goods/cash atomic commit",
+        "Save interruption and replay before/after every value boundary",
+        "A now-unobtainable unpaid customer order may retire once from trusted revisioned world plus actual owned/reserved custody, without payout or loss; reserved/settled/still-feasible orders reject retirement; durable retired identity and next ordinal allow a reachable successor without ordinary cancellation/reload reroll",
+        "Death during travel, deposit and counter service",
+        "Counter/warehouse/conveyor destruction with stock and cash",
+        "Salvage claim replay/reload and full destination recovery",
+        "No simultaneously owned cache and carried inventory"
+      ],
+      "specification_status": "SELECTED_CURRENT_USER_RULES_RUNTIME_EVIDENCE_OPEN",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration.",
+      "current_gameplay_rule_ids": [
+        "GR01",
+        "GR05",
+        "GR13"
+      ]
+    },
+    {
+      "id": "CG07",
+      "title": "Ten regions and credible animal access",
+      "classification": "SELECTED_DESIGN",
+      "owner_tasks": [
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52",
+        "T53"
+      ],
+      "consumer_tasks": [
+        "T08",
+        "T10",
+        "T21",
+        "T23",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T31",
+        "T54",
+        "T62"
+      ],
+      "selected_action": "Bind each region to a concrete production/traversal payoff and supported actor routes; unsuitable pet environments use useful safe assignments. Current U3 additions: When both player and defending pets are beyond the warned defense boundary, hostile encounter policy permits all characters and destructible camp structures as targets. Hysteresis stabilizes the boundary. Distance-based rendering or region unloading cannot delete the logical encounter, heal enemies or fabricate offscreen loot. Ordinary simulation pauses while backgrounded/closed. Retain permanent baseline player gathering capability and a reachable renewable manual wood/stone path. Recovery bills cannot require a destroyed producer, new customer payout, premium purchase or companion. A finite saved siege objective/attack budget ends in retreat after core defeat without a victory reward; scheduled new camp raids pause through reconstruction, while roaming threats remain real. Scheduled raids require a full five-minute (300 active seconds) warning naming the threatened camp, with a saved 5:00 countdown, sound and equivalent muted cue; no scheduled-raid damage occurs before it expires. If admission is due while ineligible, wait and then give the full warning. This does not cancel real roaming threats.",
+      "decision_ids": [
+        "CD07"
+      ],
+      "existing_requirement_ids": [
+        "GD03",
+        "GD07",
+        "GD17"
+      ],
+      "acceptance_checks": [
+        "Ten-band goals and actor travel/work/attack applicability.",
+        "Free return, no stranded cargo, no underwater owl or flying quadruped.",
+        "Both-far eligibility includes exposed survivors and visitors",
+        "Camp distance warning and enemy approach tell",
+        "Active-session offscreen continuity and restored target state",
+        "No infinite raid generation merely from leaving a region",
+        "Starting world admission policy: one scheduled camp siege from warned admission through committed strikes/retreat until durable completion; persist exact camp/warning/encounter identity across travel; no new scheduled admission at blackout camps; real roaming threats remain valid",
+        "All placed equipment and companions gone, zero stock/cash recovery trace",
+        "Simultaneous multi-camp damage is scoped and recoverable",
+        "No victory/loot/progression for deliberately losing or unloading",
+        "No hidden compulsory wait, energy, ad or payment wall",
+        "Full five-minute (300 active seconds) named-camp warning before any scheduled-raid damage; visible 5:00 countdown plus audible and muted-equivalent cues; save/resume preserves remaining time; delayed ineligible admission starts a fresh full warning; verify outside-camp returns through both gates",
+        "Persist the scheduled-raid origin on admitted enemies and damage events; pending warning cannot be bypassed by relabelling a scheduled attacker as a roaming threat"
+      ],
+      "specification_status": "SELECTED_CURRENT_USER_RULES_RUNTIME_EVIDENCE_OPEN",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration.",
+      "current_gameplay_rule_ids": [
+        "GR08",
+        "GR15"
+      ]
+    },
+    {
+      "id": "CG08",
+      "title": "One authored outcome at every level",
+      "classification": "MISSING_AUTHORED_CONTENT",
+      "owner_tasks": [
+        "T12",
+        "T32",
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52"
+      ],
+      "consumer_tasks": [
+        "T10",
+        "T11",
+        "T13",
+        "T33",
+        "T62",
+        "T63",
+        "T67"
+      ],
+      "selected_action": "Use100 concrete forward outcomes, preserving T12 IDs/cadence and existing T10/T11 resolution; freeze prices/rewards through owner playtests. Current U3 additions: New customer baskets may combine processed products from operating unlocked producers or genuinely reachable purchasable/rebuildable producer paths. Prove unlock, route, raw source, tool, recipe, plot bill, capacity and quantity dependencies without assuming this order's unearned payout. Mere ownership or a render is insufficient. Material types, mix and quantities vary by authored progression band, target class/tier and accessible economy. No purchase/upgrade bill may depend solely on its own output or a descendant that it enables. Use attainable alternative materials or a bootstrap bill when recovery removes a producer. Use progression, unlocked opportunity and selected equipment tier to author demand mixes, amounts, repair/replacement bills and encounter pressure. Do not price by current wallet size, paid history or VIP. Optional events do not repair a mandatory shortage. Preserve an achievable $0 route including repeated losses.",
+      "decision_ids": [
+        "CD11"
+      ],
+      "existing_requirement_ids": [
+        "GD16",
+        "GD18"
+      ],
+      "acceptance_checks": [
+        "Every Level1–100 has a tangible useful payoff.",
+        "No circular unlock/input or paid/event prerequisite.",
+        "Level100 conclusion and existing-loop continuation.",
+        "Combination basket with a purchasable precursor producer",
+        "Reject self/indirect producer-cost cycles",
+        "Reject nonexistent/locked/one-time exhausted sources",
+        "Re-evaluate reachability after destruction and preserve unsettled goods",
+        "Early/mid/late actual bill and source paths",
+        "No purchase-history/VIP/wealth-based difficulty",
+        "Target output and circular prerequisite negative cases",
+        "Realistic measured free-player cost/throughput before game approval",
+        "Deterministic progression-band and unlock changes",
+        "Same progression/target/seed yields same quote despite wealth/payment history",
+        "Measured repeated-loss recovery and useful survivor throughput",
+        "Counter offer cancellation cannot farm rewards or free rerolls",
+        "Opening cadence is a playtest proposal: first warning/attack20/25 active minutes after basic-defense unlock, after a win40–55/45–60 minutes after authoritative encounter end, after a loss>=55/>=60 minutes; choose and save repeat interval once, pause background, allow one pending/active raid, and use actual win/loss outcome rather than generic retreat receipt",
+        "Prepared defense with ordinarily obtainable stage-appropriate gear must be beatable; prove short session, successive wins, failed defense, real retreat and raw rebuild; tune strength/composition/patterns before reducing proposed intervals"
+      ],
+      "specification_status": "SELECTED_CURRENT_USER_RULES_RUNTIME_EVIDENCE_OPEN",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration.",
+      "current_gameplay_rule_ids": [
+        "GR03",
+        "GR04",
+        "GR18"
+      ]
+    },
+    {
+      "id": "CG09",
+      "title": "Materials, money and real demand",
+      "classification": "SELECTED_DESIGN",
+      "owner_tasks": [
+        "T09",
+        "T16",
+        "T17",
+        "T19",
+        "T21",
+        "T33",
+        "T34"
+      ],
+      "consumer_tasks": [
+        "T08",
+        "T10",
+        "T11",
+        "T12",
+        "T18",
+        "T22",
+        "T23",
+        "T31",
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52",
+        "T53",
+        "T62",
+        "T63"
+      ],
+      "selected_action": "Bind actual raw/product/currency IDs to named uses; coal/slate/metal/planks/blocks and cash receive real spending/processing sinks. Concepts have explicit selected/alias/reserve roles. Current U3 additions: New customer baskets may combine processed products from operating unlocked producers or genuinely reachable purchasable/rebuildable producer paths. Prove unlock, route, raw source, tool, recipe, plot bill, capacity and quantity dependencies without assuming this order's unearned payout. Mere ownership or a render is insufficient. Material types, mix and quantities vary by authored progression band, target class/tier and accessible economy. No purchase/upgrade bill may depend solely on its own output or a descendant that it enables. Use attainable alternative materials or a bootstrap bill when recovery removes a producer. Persist quote ID, generation, catalogue version, progression snapshot, item quantities, payout and committed contributions. Keep accepted/part-paid quotes stable through ordinary progression. Revalidate feasibility on material changes; cancel only uncommitted work with conserved escrow. Reject request-ID reuse with a different payload. Use progression, unlocked opportunity and selected equipment tier to author demand mixes, amounts, repair/replacement bills and encounter pressure. Do not price by current wallet size, paid history or VIP. Optional events do not repair a mandatory shortage. Preserve an achievable $0 route including repeated losses.",
+      "decision_ids": [
+        "CD08"
+      ],
+      "existing_requirement_ids": [
+        "GD13",
+        "GD14",
+        "GD15"
+      ],
+      "acceptance_checks": [
+        "Useful source-to-use-to-payoff loop for every shipped ID.",
+        "One ordinary currency and one primary premium currency; custody locations are not wallets.",
+        "No fake aliases or recipe facts inferred from art.",
+        "Ordinary cash conservation includes committed spending: cash sources equal till+pocket+house+committed outflow, so a new debit cannot reappear in a derived till balance.",
+        "Combination basket with a purchasable precursor producer",
+        "Reject self/indirect producer-cost cycles",
+        "Reject nonexistent/locked/one-time exhausted sources",
+        "Re-evaluate reachability after destruction and preserve unsettled goods",
+        "Early/mid/late actual bill and source paths",
+        "No purchase-history/VIP/wealth-based difficulty",
+        "Target output and circular prerequisite negative cases",
+        "Realistic measured free-player cost/throughput before game approval",
+        "Reload/cancel cannot reroll prices or rewards",
+        "Concurrent partial funding and final payment commit once",
+        "Whole basket reservation then goods/cash atomic commit",
+        "Save interruption and replay before/after every value boundary",
+        "A now-unobtainable unpaid customer order may retire once from trusted revisioned world plus actual owned/reserved custody, without payout or loss; reserved/settled/still-feasible orders reject retirement; durable retired identity and next ordinal allow a reachable successor without ordinary cancellation/reload reroll",
+        "Deterministic progression-band and unlock changes",
+        "Same progression/target/seed yields same quote despite wealth/payment history",
+        "Measured repeated-loss recovery and useful survivor throughput",
+        "Counter offer cancellation cannot farm rewards or free rerolls",
+        "Opening cadence is a playtest proposal: first warning/attack20/25 active minutes after basic-defense unlock, after a win40–55/45–60 minutes after authoritative encounter end, after a loss>=55/>=60 minutes; choose and save repeat interval once, pause background, allow one pending/active raid, and use actual win/loss outcome rather than generic retreat receipt",
+        "Prepared defense with ordinarily obtainable stage-appropriate gear must be beatable; prove short session, successive wins, failed defense, real retreat and raw rebuild; tune strength/composition/patterns before reducing proposed intervals"
+      ],
+      "specification_status": "SELECTED_CURRENT_USER_RULES_RUNTIME_EVIDENCE_OPEN",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration.",
+      "current_gameplay_rule_ids": [
+        "GR03",
+        "GR04",
+        "GR05",
+        "GR18"
+      ]
+    },
+    {
+      "id": "CG10",
+      "title": "Shortage, surplus and renewable recovery",
+      "classification": "EXISTING_CONTRACT_INTEGRATION",
+      "owner_tasks": [
+        "T12",
+        "T13",
+        "T33"
+      ],
+      "consumer_tasks": [
+        "T09",
+        "T16",
+        "T17",
+        "T18",
+        "T19",
+        "T21",
+        "T23",
+        "T31",
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52",
+        "T62",
+        "T63",
+        "T67"
+      ],
+      "selected_action": "Each progression dependency has reachable free sources, renewable or sufficient finite supply, useful surplus disposition and conserved conversions. Current U3 additions: New customer baskets may combine processed products from operating unlocked producers or genuinely reachable purchasable/rebuildable producer paths. Prove unlock, route, raw source, tool, recipe, plot bill, capacity and quantity dependencies without assuming this order's unearned payout. Mere ownership or a render is insufficient. Repair plots quote materials appropriate to asset/tier and missing HP. A repair job has a fixed authorized HP/material budget; new damage cannot be erased for free. Fence/gate ruins may be reconstructed through the repair plot at their purchased tier. Uncommitted escrow returns safely when the asset generation changes. Non-boundary equipment at zero HP becomes a ruin. Rebuy through the appropriate plot using a new generation and level 1 equipment. Account progression and known recipes remain unlocked, but lost equipment upgrades must be purchased again. Persist destruction; cancel/refund only uncommitted work, not already consumed production or repairs. Furnace destruction puts that camp into blackout: pause automated production, new customer admission and ordinary non-recovery worker jobs; preserve already committed value. Rebuild the furnace at level1 with a substantial progression/lost-tier raw-material bill, then re-earn upgrades. Manual gathering, recovery jobs, salvage/cash collection, combat and construction remain possible. Retain permanent baseline player gathering capability and a reachable renewable manual wood/stone path. Recovery bills cannot require a destroyed producer, new customer payout, premium purchase or companion. A finite saved siege objective/attack budget ends in retreat after core defeat without a victory reward; scheduled new camp raids pause through reconstruction, while roaming threats remain real.",
+      "decision_ids": [
+        "CD01",
+        "CD08",
+        "CD12"
+      ],
+      "existing_requirement_ids": [
+        "GD13",
+        "GD16"
+      ],
+      "acceptance_checks": [
+        "Zero-stock, depleted-source, repeated-failure and no-worker routes.",
+        "No infinite profitable conversion, stranded paid balance or compulsory event input.",
+        "Combination basket with a purchasable precursor producer",
+        "Reject self/indirect producer-cost cycles",
+        "Reject nonexistent/locked/one-time exhausted sources",
+        "Re-evaluate reachability after destruction and preserve unsettled goods",
+        "Low/medium/severe damage produces coherent material/quantity differences",
+        "Concurrent damage during repair and paid-HP budget accounting",
+        "Destroyed fence/gate reconstructs purchased tier",
+        "No health or cost reset through repair cancellation/save",
+        "Damage reaches zero exactly once and old machine cannot operate",
+        "Paid rebuild produces level1 with new generation",
+        "Upgrade quote cannot restore a destroyed old generation",
+        "No automatic rebuild on save restore or player return",
+        "Visible/audible core failure and clear recovery objective",
+        "No post-destruction machine output or new customer sale fabrication",
+        "Rebuild works with no companions, machines, cash or stock",
+        "Restoration resumes valid jobs once with no duplicate output",
+        "All placed equipment and companions gone, zero stock/cash recovery trace",
+        "Simultaneous multi-camp damage is scoped and recoverable",
+        "No victory/loot/progression for deliberately losing or unloading",
+        "No hidden compulsory wait, energy, ad or payment wall"
+      ],
+      "specification_status": "SELECTED_CURRENT_USER_RULES_RUNTIME_EVIDENCE_OPEN",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration.",
+      "current_gameplay_rule_ids": [
+        "GR03",
+        "GR10",
+        "GR11",
+        "GR14",
+        "GR15"
+      ]
+    },
+    {
+      "id": "CG11",
+      "title": "Learnability and simple controls across systems",
+      "classification": "EXISTING_CONTRACT_INTEGRATION",
+      "owner_tasks": [
+        "T07",
+        "T12",
+        "T55"
+      ],
+      "consumer_tasks": [
+        "T04",
+        "T08",
+        "T13",
+        "T17",
+        "T21",
+        "T23",
+        "T31",
+        "T33",
+        "T54",
+        "T58",
+        "T62"
+      ],
+      "selected_action": "Teach one useful loop at first use; show next goal, material purpose, threat consequence, helper intent and denial reason in context. Retain one primary movement control and concise deliberate choices. Current U3 additions: An unlocked survivor or player bulk deposits each requested processed type onto separate typed stock stacks. Customers take their own reserved basket and leave physical cash in a separate cash zone. Stock, a conveyor, or a customer queue must never create a cashier, register or extra serving NPC. Show stock type/quantity, requested combination, actual costs, separate cash, worker intent, priority warning, damage severity, death, ruin, replacement and restoration. Every interaction has applicable approach/contact/commit/blocked/cancel/recovery motion and sound; physical pickups and money placement correspond to real ledger changes.",
+      "decision_ids": [
+        "CD05"
+      ],
+      "existing_requirement_ids": [
+        "GD06",
+        "GD16"
+      ],
+      "acceptance_checks": [
+        "Fresh, returning and resumed player comprehension.",
+        "Busy camp selection, cancel, auto-interaction and accessible critical cues without required dashboard use.",
+        "Bulk mixed-stock delivery with no attendant spawn",
+        "Customer-owned pickup and payment full motion",
+        "Separate stock and money pile geometry",
+        "No raw item accepted as a processed product by implicit alias",
+        "Player-only meat/cooked-goods opening works before T16 fishing and later T17 service extensions; stage shared custody/quotes through existing ownership without inventing dependency edges",
+        "Manual, survivor and conveyor deliveries share destination admission/reservations; private unassigned carried stock is not promised to an order; actual reserved goods count; visual mesh count and a belt-only cap cannot create inconsistent bulk-delivery rules",
+        "Full cycles/transitions with meaningful multi-angle closeups",
+        "Listen to busy service/siege/blackout/restoration sound",
+        "Muted/non-color/reduced-motion readability",
+        "No success cue on denied, aborted or replayed operation",
+        "Concurrent Build13 audit: both-gate player-chosen routes, loaded/unloaded turns and yielding, service faces, default/relocated equipment, actual listening and muted equivalents; fixed-input tests alone do not establish uncoached play"
+      ],
+      "specification_status": "SELECTED_CURRENT_USER_RULES_RUNTIME_EVIDENCE_OPEN",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration.",
+      "current_gameplay_rule_ids": [
+        "GR01",
+        "GR16"
+      ]
+    },
+    {
+      "id": "CG12",
+      "title": "Durable atomic progress and clock policy",
+      "classification": "SELECTED_DESIGN",
+      "owner_tasks": [
+        "T14",
+        "T41",
+        "T43"
+      ],
+      "consumer_tasks": [
+        "T08",
+        "T10",
+        "T11",
+        "T17",
+        "T18",
+        "T21",
+        "T23",
+        "T31",
+        "T34",
+        "T35",
+        "T37",
+        "T38",
+        "T39",
+        "T40",
+        "T67"
+      ],
+      "selected_action": "Apply the transaction/clock matrix to cargo, plots, machines, damage, rewards, recovery, events and purchases; app-background simulation pauses. Current U3 additions: Persist quote ID, generation, catalogue version, progression snapshot, item quantities, payout and committed contributions. Keep accepted/part-paid quotes stable through ordinary progression. Revalidate feasibility on material changes; cancel only uncommitted work with conserved escrow. Reject request-ID reuse with a different payload. When both player and defending pets are beyond the warned defense boundary, hostile encounter policy permits all characters and destructible camp structures as targets. Hysteresis stabilizes the boundary. Distance-based rendering or region unloading cannot delete the logical encounter, heal enemies or fabricate offscreen loot. Ordinary simulation pauses while backgrounded/closed. Pets and survivors can die. Death tombstones the live instance, cancels its attacks/jobs/reservations and requires an ordinary earnable-resource/cash replacement purchase. A new instance is created once; preserve earned companion level/XP/skills, account unlocks and permanent paid entitlements because the user only required equipment level resets. No free care revival or automatic respawn. Dead companion cargo and destroyed equipment/counter/storage contents move once into persistent typed salvage custody. Recovering that cache is a real reachable job. Already sold customer goods are no longer player stock and do not become resale loot on visitor death. All ownership remains single-valued across transitions. Migrate old saves preserving earned goods, existing companions/levels, quotes, purchases and paid entitlements. Remove only the obsolete attendant role; preserve customer identity assets. Introduce HP/death/generation ledgers without retroactive deaths or charging old completed work. Existing derived cash needs spent-outflow accounting before new spending. Scheduled raids require a full five-minute (300 active seconds) warning naming the threatened camp, with a saved 5:00 countdown, sound and equivalent muted cue; no scheduled-raid damage occurs before it expires. If admission is due while ineligible, wait and then give the full warning. This does not cancel real roaming threats.",
+      "decision_ids": [
+        "CD09"
+      ],
+      "existing_requirement_ids": [
+        "GD04",
+        "GD06",
+        "GD15"
+      ],
+      "acceptance_checks": [
+        "Precommit/postcommit kill and resume at every value boundary.",
+        "Migration/conflict/account isolation and reconnect preserve exactly one valid outcome.",
+        "No absence penalty, invented offline income or device-clock reward.",
+        "Reload/cancel cannot reroll prices or rewards",
+        "Concurrent partial funding and final payment commit once",
+        "Whole basket reservation then goods/cash atomic commit",
+        "Save interruption and replay before/after every value boundary",
+        "A now-unobtainable unpaid customer order may retire once from trusted revisioned world plus actual owned/reserved custody, without payout or loss; reserved/settled/still-feasible orders reject retirement; durable retired identity and next ordinal allow a reachable successor without ordinary cancellation/reload reroll",
+        "Both-far eligibility includes exposed survivors and visitors",
+        "Camp distance warning and enemy approach tell",
+        "Active-session offscreen continuity and restored target state",
+        "No infinite raid generation merely from leaving a region",
+        "Starting world admission policy: one scheduled camp siege from warned admission through committed strikes/retreat until durable completion; persist exact camp/warning/encounter identity across travel; no new scheduled admission at blackout camps; real roaming threats remain valid",
+        "Each species and survivor reaches death and stops all contact/work",
+        "Replacement is unavailable until full valid bill commits",
+        "Replayed purchase creates exactly one new instance",
+        "Dead actor estate is not cloned into replacement inventory",
+        "Death during travel, deposit and counter service",
+        "Counter/warehouse/conveyor destruction with stock and cash",
+        "Salvage claim replay/reload and full destination recovery",
+        "No simultaneously owned cache and carried inventory",
+        "Build13 old save to current rules roundtrip",
+        "App kill before/after sale, repair, death, replacement and furnace commit",
+        "Stale/cloud-conflicting epoch cannot resurrect an old actor or structure",
+        "Corrupt payload, duplicate request and fabricated client event rejected",
+        "Full five-minute (300 active seconds) named-camp warning before any scheduled-raid damage; visible 5:00 countdown plus audible and muted-equivalent cues; save/resume preserves remaining time; delayed ineligible admission starts a fresh full warning; verify outside-camp returns through both gates",
+        "Persist the scheduled-raid origin on admitted enemies and damage events; pending warning cannot be bypassed by relabelling a scheduled attacker as a roaming threat"
+      ],
+      "specification_status": "SELECTED_CURRENT_USER_RULES_RUNTIME_EVIDENCE_OPEN",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration.",
+      "current_gameplay_rule_ids": [
+        "GR05",
+        "GR08",
+        "GR12",
+        "GR13",
+        "GR17"
+      ]
+    },
+    {
+      "id": "CG13",
+      "title": "Smart actors under congestion and change",
+      "classification": "EXISTING_CONTRACT_INTEGRATION",
+      "owner_tasks": [
+        "T23",
+        "T31"
+      ],
+      "consumer_tasks": [
+        "T03",
+        "T07",
+        "T15",
+        "T18",
+        "T20",
+        "T21",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T53",
+        "T56",
+        "T67"
+      ],
+      "selected_action": "Reserve jobs and approach lanes; bound retries, detect unreachable/depleted/full targets, keep priorities stable and explain a useful fallback. Navigation/avoidance alone does not satisfy smart behavior. Current U3 additions: Player and unlocked survivors share unlimited logical mixed raw, processed and ordinary-money custody. A worker can bulk collect cash and deposit it at a valid destination. Useful job amounts and destinations bound work; rendered pile count is not capacity. Latest U3 permits survivors to initiate eligible assigned hunts and attacks. Distinguish explicitly huntable wildlife, invaders, customers, companions and friendlies by identity/role rather than art. Owned pets are never prey. Attacking an enemy makes that survivor eligible for that enemy's retaliation. While the player or an eligible living defending pet is within the camp's defense range, enemies target eligible reachable player/pet/camp objectives. An unprovoked survivor is ineligible as a direct target, including when every preferred target is absent or blocked. Seek a valid approach or blocking defense instead. An enemy may directly retaliate against the survivor that attacks it; both player and eligible defending pets being far permits unrestricted targets. This does not grant collateral damage immunity: an actual valid contact can still hurt a survivor. When both player and defending pets are beyond the warned defense boundary, hostile encounter policy permits all characters and destructible camp structures as targets. Hysteresis stabilizes the boundary. Distance-based rendering or region unloading cannot delete the logical encounter, heal enemies or fabricate offscreen loot. Ordinary simulation pauses while backgrounded/closed. Scheduled raids require a full five-minute (300 active seconds) warning naming the threatened camp, with a saved 5:00 countdown, sound and equivalent muted cue; no scheduled-raid damage occurs before it expires. If admission is due while ineligible, wait and then give the full warning. This does not cancel real roaming threats.",
+      "decision_ids": [
+        "CD05"
+      ],
+      "existing_requirement_ids": [
+        "GD06",
+        "GD17"
+      ],
+      "acceptance_checks": [
+        "Two workers competing for final resources/payment.",
+        "Narrow gate, moving target, broken route, full store, changed goal and path recovery.",
+        "No actor stuck idle when valid authorized work exists, no target thrashing or unbounded per-frame path replanning.",
+        "Large mixed raw/product/cash job and visible aggregation",
+        "Bulk counter cash to survivor to storage",
+        "Cancelled/full/blocked/destroyed destination recovery",
+        "No phantom helper or unpaid basic competence",
+        "Assigned hunt with real tool/contact/cargo return",
+        "Retaliation after an initiated attack including a legitimate miss",
+        "No attack against a friendly or owned pet",
+        "Hunt/work/escape/recall transition without cargo loss",
+        "Player near/pet far and player far/pet near truth-table cases",
+        "Per-enemy provocation, not global unearned aggression",
+        "Dead/undeployed/nondefending pet cannot protect by roster flag",
+        "No sanctuary-coordinate immunity or infinite health reset",
+        "Near defender plus only an unprovoked survivor reachable yields no direct survivor target; provocation or both-far changes eligibility",
+        "Both-far eligibility includes exposed survivors and visitors",
+        "Camp distance warning and enemy approach tell",
+        "Active-session offscreen continuity and restored target state",
+        "No infinite raid generation merely from leaving a region",
+        "Starting world admission policy: one scheduled camp siege from warned admission through committed strikes/retreat until durable completion; persist exact camp/warning/encounter identity across travel; no new scheduled admission at blackout camps; real roaming threats remain valid",
+        "Full five-minute (300 active seconds) named-camp warning before any scheduled-raid damage; visible 5:00 countdown plus audible and muted-equivalent cues; save/resume preserves remaining time; delayed ineligible admission starts a fresh full warning; verify outside-camp returns through both gates",
+        "Persist the scheduled-raid origin on admitted enemies and damage events; pending warning cannot be bypassed by relabelling a scheduled attacker as a roaming threat"
+      ],
+      "specification_status": "SELECTED_CURRENT_USER_RULES_RUNTIME_EVIDENCE_OPEN",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration.",
+      "current_gameplay_rule_ids": [
+        "GR02",
+        "GR06",
+        "GR07",
+        "GR08"
+      ]
+    },
+    {
+      "id": "CG14",
+      "title": "Complete action, machine and sound states",
+      "classification": "EXISTING_CONTRACT_EVIDENCE",
+      "owner_tasks": [
+        "T06",
+        "T09",
+        "T16",
+        "T18",
+        "T19",
+        "T21",
+        "T22",
+        "T23",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T53",
+        "T54"
+      ],
+      "consumer_tasks": [
+        "T05",
+        "T08",
+        "T10",
+        "T11",
+        "T15",
+        "T17",
+        "T20",
+        "T31",
+        "T55",
+        "T59",
+        "T60",
+        "T61",
+        "T62",
+        "T67"
+      ],
+      "selected_action": "Prove complete start/work/contact/success/miss/blocked/empty/full/cancel/recovery transitions for every applicable actor, machine, tool and transport. Use actual clip/contact/audio bindings. Current U3 additions: An unlocked survivor or player bulk deposits each requested processed type onto separate typed stock stacks. Customers take their own reserved basket and leave physical cash in a separate cash zone. Stock, a conveyor, or a customer queue must never create a cashier, register or extra serving NPC. Fences and gates have substantial authored HP but can be breached. Every placed camp/field equipment class has HP and damaged/destroyed states. Breaches change collision and pathing at the actual commit. Interior safety comes from intact defenses, defenders and enemy behavior; standing inside camp is not permanent invulnerability. Repair plots quote materials appropriate to asset/tier and missing HP. A repair job has a fixed authorized HP/material budget; new damage cannot be erased for free. Fence/gate ruins may be reconstructed through the repair plot at their purchased tier. Uncommitted escrow returns safely when the asset generation changes. Non-boundary equipment at zero HP becomes a ruin. Rebuy through the appropriate plot using a new generation and level 1 equipment. Account progression and known recipes remain unlocked, but lost equipment upgrades must be purchased again. Persist destruction; cancel/refund only uncommitted work, not already consumed production or repairs. Pets and survivors can die. Death tombstones the live instance, cancels its attacks/jobs/reservations and requires an ordinary earnable-resource/cash replacement purchase. A new instance is created once; preserve earned companion level/XP/skills, account unlocks and permanent paid entitlements because the user only required equipment level resets. No free care revival or automatic respawn. Furnace destruction puts that camp into blackout: pause automated production, new customer admission and ordinary non-recovery worker jobs; preserve already committed value. Rebuild the furnace at level1 with a substantial progression/lost-tier raw-material bill, then re-earn upgrades. Manual gathering, recovery jobs, salvage/cash collection, combat and construction remain possible. Show stock type/quantity, requested combination, actual costs, separate cash, worker intent, priority warning, damage severity, death, ruin, replacement and restoration. Every interaction has applicable approach/contact/commit/blocked/cancel/recovery motion and sound; physical pickups and money placement correspond to real ledger changes.",
+      "decision_ids": [],
+      "existing_requirement_ids": [
+        "GD09",
+        "GD10",
+        "GD11",
+        "GD12"
+      ],
+      "acceptance_checks": [
+        "Full cycles and transitions from meaningful angles, feet/toes/knees, attachments and clipping.",
+        "Actual sound listening in busy play; mute/reduced-motion equivalents.",
+        "No success sound or transfer effect for denied/replayed transaction.",
+        "Bulk mixed-stock delivery with no attendant spawn",
+        "Customer-owned pickup and payment full motion",
+        "Separate stock and money pile geometry",
+        "No raw item accepted as a processed product by implicit alias",
+        "Player-only meat/cooked-goods opening works before T16 fishing and later T17 service extensions; stage shared custody/quotes through existing ownership without inventing dependency edges",
+        "Manual, survivor and conveyor deliveries share destination admission/reservations; private unassigned carried stock is not promised to an order; actual reserved goods count; visual mesh count and a belt-only cap cannot create inconsistent bulk-delivery rules",
+        "Actual attacks can damage and breach both gates and fence segments",
+        "All placed equipment census has HP/ruin/content disposition",
+        "Collision/route/nav update agrees with destruction",
+        "No invisible barrier or damage through an intact obstruction",
+        "Low/medium/severe damage produces coherent material/quantity differences",
+        "Concurrent damage during repair and paid-HP budget accounting",
+        "Destroyed fence/gate reconstructs purchased tier",
+        "No health or cost reset through repair cancellation/save",
+        "Damage reaches zero exactly once and old machine cannot operate",
+        "Paid rebuild produces level1 with new generation",
+        "Upgrade quote cannot restore a destroyed old generation",
+        "No automatic rebuild on save restore or player return",
+        "Each species and survivor reaches death and stops all contact/work",
+        "Replacement is unavailable until full valid bill commits",
+        "Replayed purchase creates exactly one new instance",
+        "Dead actor estate is not cloned into replacement inventory",
+        "Visible/audible core failure and clear recovery objective",
+        "No post-destruction machine output or new customer sale fabrication",
+        "Rebuild works with no companions, machines, cash or stock",
+        "Restoration resumes valid jobs once with no duplicate output",
+        "Full cycles/transitions with meaningful multi-angle closeups",
+        "Listen to busy service/siege/blackout/restoration sound",
+        "Muted/non-color/reduced-motion readability",
+        "No success cue on denied, aborted or replayed operation",
+        "Concurrent Build13 audit: both-gate player-chosen routes, loaded/unloaded turns and yielding, service faces, default/relocated equipment, actual listening and muted equivalents; fixed-input tests alone do not establish uncoached play"
+      ],
+      "specification_status": "SELECTED_CURRENT_USER_RULES_RUNTIME_EVIDENCE_OPEN",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration.",
+      "current_gameplay_rule_ids": [
+        "GR01",
+        "GR09",
+        "GR10",
+        "GR11",
+        "GR12",
+        "GR14",
+        "GR16"
+      ]
+    },
+    {
+      "id": "CG15",
+      "title": "Reference and render fidelity at every use state",
+      "classification": "EXISTING_CONTRACT_EVIDENCE",
+      "owner_tasks": [
+        "T04",
+        "T59",
+        "T60",
+        "T61"
+      ],
+      "consumer_tasks": [
+        "T01",
+        "T02",
+        "T03",
+        "T05",
+        "T06",
+        "T07",
+        "T08",
+        "T09",
+        "T10",
+        "T11",
+        "T12",
+        "T13",
+        "T14",
+        "T15",
+        "T16",
+        "T17",
+        "T18",
+        "T19",
+        "T20",
+        "T21",
+        "T22",
+        "T23",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T31",
+        "T32",
+        "T33",
+        "T34",
+        "T35",
+        "T36",
+        "T37",
+        "T38",
+        "T39",
+        "T40",
+        "T41",
+        "T42",
+        "T43",
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52",
+        "T53",
+        "T54",
+        "T55",
+        "T56",
+        "T57",
+        "T58",
+        "T62",
+        "T63",
+        "T64",
+        "T65",
+        "T66",
+        "T67",
+        "T68",
+        "T69",
+        "T70"
+      ],
+      "selected_action": "Use pinned selected GitHub references with explicit observed/authored/inferred distinctions. Current candidate must meet>=9.9 reference dimensions and every stronger exact10 visual rule; historical static scores do not pass runtime. Current U3 additions: Run reusable native rule logic and adversarial transaction/recovery scenarios, then integrate it with the actual Godot scene, actors, persistence, navigation, contact events and art. Native headless rule tests do not certify 3D motion, actual physical contacts, all100 producer bindings, sound, physical devices or final reference quality.",
+      "decision_ids": [],
+      "existing_requirement_ids": [
+        "GD18"
+      ],
+      "acceptance_checks": [
+        "Exact image/model/rig/scene/clip/source identity.",
+        "Actual matched-camera play and full motion evidence; no average hides a failed area.",
+        "Missing source or tiny unidentified figure stays unresolved rather than guessed.",
+        "Exact source/module/fixture/test binding",
+        "Actual scene integration and played full loops",
+        "Per-dimension reference>=9.9 plus stronger exact10 material gates",
+        "Physical sustained performance and release evidence remains required",
+        "T05/T18 conveyor appearance remains reopened: compare pinned transport/camp sheets at matched gameplay scale, normal and2x, including supported corners/inclines, rails/supports/rollers/drive details, loaded deck contact and clear gates/aisles in default/relocated empty/moving/full states"
+      ],
+      "specification_status": "SELECTED_CURRENT_USER_RULES_RUNTIME_EVIDENCE_OPEN",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration.",
+      "current_gameplay_rule_ids": [
+        "GR19"
+      ]
+    },
+    {
+      "id": "CG16",
+      "title": "One unambiguous gameplay continuation source",
+      "classification": "ACTUAL_DOCUMENTATION_DEFECT",
+      "owner_tasks": [
+        "T70"
+      ],
+      "consumer_tasks": [
+        "T01",
+        "T02",
+        "T03",
+        "T04",
+        "T05",
+        "T06",
+        "T07",
+        "T08",
+        "T09",
+        "T10",
+        "T11",
+        "T12",
+        "T13",
+        "T14",
+        "T15",
+        "T16",
+        "T17",
+        "T18",
+        "T19",
+        "T20",
+        "T21",
+        "T22",
+        "T23",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T31",
+        "T32",
+        "T33",
+        "T34",
+        "T35",
+        "T36",
+        "T37",
+        "T38",
+        "T39",
+        "T40",
+        "T41",
+        "T42",
+        "T43",
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52",
+        "T53",
+        "T54",
+        "T55",
+        "T56",
+        "T57",
+        "T58",
+        "T59",
+        "T60",
+        "T61",
+        "T62",
+        "T63",
+        "T64",
+        "T65",
+        "T66",
+        "T67",
+        "T68",
+        "T69"
+      ],
+      "selected_action": "Use CURRENT_GAMEPLAY_SOURCE.json and corrected root entrypoints: newer Codex field project; main/alfred commands are explicitly historical. Resolve actual live head and owner before edits. Current U3 additions: Migrate old saves preserving earned goods, existing companions/levels, quotes, purchases and paid entitlements. Remove only the obsolete attendant role; preserve customer identity assets. Introduce HP/death/generation ledgers without retroactive deaths or charging old completed work. Existing derived cash needs spent-outflow accounting before new spending. Run reusable native rule logic and adversarial transaction/recovery scenarios, then integrate it with the actual Godot scene, actors, persistence, navigation, contact events and art. Native headless rule tests do not certify 3D motion, actual physical contacts, all100 producer bindings, sound, physical devices or final reference quality. Use latest U3 before U2/U1 where they conflict. Current user rules supersede earlier free repairs/free companion revival/permanent sanctuary and static service assumptions. Current task packets must project these rules without contradictory old instructions. Preserve historical audits, all70 task IDs/edges/owners, art and unresolved T71–T80 source gaps.",
+      "decision_ids": [],
+      "existing_requirement_ids": [],
+      "acceptance_checks": [
+        "Entry-point guidance agrees on branch/project/scene.",
+        "No runtime merge, branch reassignment or historical receipt rewrite.",
+        "Build13 old save to current rules roundtrip",
+        "App kill before/after sale, repair, death, replacement and furnace commit",
+        "Stale/cloud-conflicting epoch cannot resurrect an old actor or structure",
+        "Corrupt payload, duplicate request and fabricated client event rejected",
+        "Exact source/module/fixture/test binding",
+        "Actual scene integration and played full loops",
+        "Per-dimension reference>=9.9 plus stronger exact10 material gates",
+        "Physical sustained performance and release evidence remains required",
+        "T05/T18 conveyor appearance remains reopened: compare pinned transport/camp sheets at matched gameplay scale, normal and2x, including supported corners/inclines, rails/supports/rollers/drive details, loaded deck contact and clear gates/aisles in default/relocated empty/moving/full states",
+        "Latest correction survives docs and actual packet generation",
+        "All100 outcomes and task mappings agree with new rules",
+        "Historical package/registry/media preservation",
+        "Source roles stay maina4e baseline/gameplay2f46 and no task approval is invented"
+      ],
+      "specification_status": "SELECTED_CURRENT_USER_RULES_RUNTIME_EVIDENCE_OPEN",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration.",
+      "current_gameplay_rule_ids": [
+        "GR17",
+        "GR19",
+        "GR20"
+      ]
+    },
+    {
+      "id": "CG17",
+      "title": "Landscape, real aspect-ratio coverage and device truth",
+      "classification": "ACTUAL_TEST_DATA_DEFECT",
+      "owner_tasks": [
+        "T04",
+        "T55",
+        "T58"
+      ],
+      "consumer_tasks": [
+        "T56",
+        "T62",
+        "T67",
+        "T68",
+        "T69",
+        "T70"
+      ],
+      "selected_action": "Correct phone16:9 dimensions and validate profile identity/aspect before running adapters; bind landscape configuration to shipping source. Current U3 additions: Run reusable native rule logic and adversarial transaction/recovery scenarios, then integrate it with the actual Godot scene, actors, persistence, navigation, contact events and art. Native headless rule tests do not certify 3D motion, actual physical contacts, all100 producer bindings, sound, physical devices or final reference quality.",
+      "decision_ids": [
+        "CD10"
+      ],
+      "existing_requirement_ids": [
+        "GD17"
+      ],
+      "acceptance_checks": [
+        "Distinct16:9/20:9 states, tablet native rounding tolerated, fold/resume/save/input cases.",
+        "Unsupported portrait cannot leak into release.",
+        "Layout test success never certifies physical native4K60.",
+        "Exact source/module/fixture/test binding",
+        "Actual scene integration and played full loops",
+        "Per-dimension reference>=9.9 plus stronger exact10 material gates",
+        "Physical sustained performance and release evidence remains required",
+        "T05/T18 conveyor appearance remains reopened: compare pinned transport/camp sheets at matched gameplay scale, normal and2x, including supported corners/inclines, rails/supports/rollers/drive details, loaded deck contact and clear gates/aisles in default/relocated empty/moving/full states"
+      ],
+      "specification_status": "SELECTED_CURRENT_USER_RULES_RUNTIME_EVIDENCE_OPEN",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration.",
+      "current_gameplay_rule_ids": [
+        "GR19"
+      ]
+    },
+    {
+      "id": "CG18",
+      "title": "Accessibility across actual play states",
+      "classification": "EXISTING_CONTRACT_INTEGRATION",
+      "owner_tasks": [
+        "T55"
+      ],
+      "consumer_tasks": [
+        "T04",
+        "T07",
+        "T08",
+        "T13",
+        "T17",
+        "T21",
+        "T23",
+        "T31",
+        "T37",
+        "T53",
+        "T54",
+        "T58",
+        "T62",
+        "T67"
+      ],
+      "selected_action": "Apply existing readable text/contrast/non-color cues/touch size/reduced motion/subtitles/input preferences to threats, helper intent, resource purpose, living-actor care, death/replacement, payments and event expiry. Persist preferences. Current U3 additions: Show stock type/quantity, requested combination, actual costs, separate cash, worker intent, priority warning, damage severity, death, ruin, replacement and restoration. Every interaction has applicable approach/contact/commit/blocked/cancel/recovery motion and sound; physical pickups and money placement correspond to real ledger changes.",
+      "decision_ids": [
+        "CD10"
+      ],
+      "existing_requirement_ids": [
+        "GD12",
+        "GD17"
+      ],
+      "acceptance_checks": [
+        "First-use/busy-camp/denied/resume states readable muted and reduced-motion.",
+        "Quality/orientation/fold changes preserve hit targets and input release; no hidden critical cue.",
+        "Full cycles/transitions with meaningful multi-angle closeups",
+        "Listen to busy service/siege/blackout/restoration sound",
+        "Muted/non-color/reduced-motion readability",
+        "No success cue on denied, aborted or replayed operation",
+        "Concurrent Build13 audit: both-gate player-chosen routes, loaded/unloaded turns and yielding, service faces, default/relocated equipment, actual listening and muted equivalents; fixed-input tests alone do not establish uncoached play"
+      ],
+      "specification_status": "SELECTED_CURRENT_USER_RULES_RUNTIME_EVIDENCE_OPEN",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration.",
+      "current_gameplay_rule_ids": [
+        "GR16"
+      ]
+    },
+    {
+      "id": "CG19",
+      "title": "Challenge and free progression remain fair",
+      "classification": "EXISTING_CONTRACT_INTEGRATION",
+      "owner_tasks": [
+        "T13",
+        "T33",
+        "T63"
+      ],
+      "consumer_tasks": [
+        "T12",
+        "T21",
+        "T22",
+        "T23",
+        "T31",
+        "T34",
+        "T36",
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52",
+        "T62",
+        "T64"
+      ],
+      "selected_action": "Preserve spend-blind challenge and useful free workers/pets; complexity comes from readable combinations, routes and decisions, with optional risks and attainable recovery. Current U3 additions: Retain permanent baseline player gathering capability and a reachable renewable manual wood/stone path. Recovery bills cannot require a destroyed producer, new customer payout, premium purchase or companion. A finite saved siege objective/attack budget ends in retreat after core defeat without a victory reward; scheduled new camp raids pause through reconstruction, while roaming threats remain real. Use progression, unlocked opportunity and selected equipment tier to author demand mixes, amounts, repair/replacement bills and encounter pressure. Do not price by current wallet size, paid history or VIP. Optional events do not repair a mandatory shortage. Preserve an achievable $0 route including repeated losses.",
+      "decision_ids": [
+        "CD01",
+        "CD02",
+        "CD08",
+        "CD12"
+      ],
+      "existing_requirement_ids": [
+        "GD16"
+      ],
+      "acceptance_checks": [
+        "Novice/returning/optimized and repeated-failure sessions through100.",
+        "No paid counter/competence, energy wall, compulsory event grind or deliberate F2P misery.",
+        "All placed equipment and companions gone, zero stock/cash recovery trace",
+        "Simultaneous multi-camp damage is scoped and recoverable",
+        "No victory/loot/progression for deliberately losing or unloading",
+        "No hidden compulsory wait, energy, ad or payment wall",
+        "Deterministic progression-band and unlock changes",
+        "Same progression/target/seed yields same quote despite wealth/payment history",
+        "Measured repeated-loss recovery and useful survivor throughput",
+        "Counter offer cancellation cannot farm rewards or free rerolls",
+        "Opening cadence is a playtest proposal: first warning/attack20/25 active minutes after basic-defense unlock, after a win40–55/45–60 minutes after authoritative encounter end, after a loss>=55/>=60 minutes; choose and save repeat interval once, pause background, allow one pending/active raid, and use actual win/loss outcome rather than generic retreat receipt",
+        "Prepared defense with ordinarily obtainable stage-appropriate gear must be beatable; prove short session, successive wins, failed defense, real retreat and raw rebuild; tune strength/composition/patterns before reducing proposed intervals"
+      ],
+      "specification_status": "SELECTED_CURRENT_USER_RULES_RUNTIME_EVIDENCE_OPEN",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration.",
+      "current_gameplay_rule_ids": [
+        "GR15",
+        "GR18"
+      ]
+    },
+    {
+      "id": "CG20",
+      "title": "Purchase and entitlement integrity",
+      "classification": "EXISTING_CONTRACT_INTEGRATION",
+      "owner_tasks": [
+        "T34",
+        "T35",
+        "T36",
+        "T41",
+        "T43"
+      ],
+      "consumer_tasks": [
+        "T17",
+        "T23",
+        "T31",
+        "T33",
+        "T37",
+        "T64",
+        "T66",
+        "T67",
+        "T70"
+      ],
+      "selected_action": "Retain verified server grants, one premium wallet, permanent VIP, restore/refund consistency and explicit user purchases. Autonomous helpers only spend authorized ordinary value. Current U3 additions: Pets and survivors can die. Death tombstones the live instance, cancels its attacks/jobs/reservations and requires an ordinary earnable-resource/cash replacement purchase. A new instance is created once; preserve earned companion level/XP/skills, account unlocks and permanent paid entitlements because the user only required equipment level resets. No free care revival or automatic respawn. Migrate old saves preserving earned goods, existing companions/levels, quotes, purchases and paid entitlements. Remove only the obsolete attendant role; preserve customer identity assets. Introduce HP/death/generation ledgers without retroactive deaths or charging old completed work. Existing derived cash needs spent-outflow accounting before new spending. Use progression, unlocked opportunity and selected equipment tier to author demand mixes, amounts, repair/replacement bills and encounter pressure. Do not price by current wallet size, paid history or VIP. Optional events do not repair a mandatory shortage. Preserve an achievable $0 route including repeated losses.",
+      "decision_ids": [
+        "CD08",
+        "CD12"
+      ],
+      "existing_requirement_ids": [
+        "GD15"
+      ],
+      "acceptance_checks": [
+        "Duplicate/reconnect/refund/account-change and offline pending states.",
+        "No currency or entitlement issued from local replay; no compulsory real-money recovery.",
+        "Each species and survivor reaches death and stops all contact/work",
+        "Replacement is unavailable until full valid bill commits",
+        "Replayed purchase creates exactly one new instance",
+        "Dead actor estate is not cloned into replacement inventory",
+        "Build13 old save to current rules roundtrip",
+        "App kill before/after sale, repair, death, replacement and furnace commit",
+        "Stale/cloud-conflicting epoch cannot resurrect an old actor or structure",
+        "Corrupt payload, duplicate request and fabricated client event rejected",
+        "Deterministic progression-band and unlock changes",
+        "Same progression/target/seed yields same quote despite wealth/payment history",
+        "Measured repeated-loss recovery and useful survivor throughput",
+        "Counter offer cancellation cannot farm rewards or free rerolls",
+        "Opening cadence is a playtest proposal: first warning/attack20/25 active minutes after basic-defense unlock, after a win40–55/45–60 minutes after authoritative encounter end, after a loss>=55/>=60 minutes; choose and save repeat interval once, pause background, allow one pending/active raid, and use actual win/loss outcome rather than generic retreat receipt",
+        "Prepared defense with ordinarily obtainable stage-appropriate gear must be beatable; prove short session, successive wins, failed defense, real retreat and raw rebuild; tune strength/composition/patterns before reducing proposed intervals"
+      ],
+      "specification_status": "SELECTED_CURRENT_USER_RULES_RUNTIME_EVIDENCE_OPEN",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration.",
+      "current_gameplay_rule_ids": [
+        "GR12",
+        "GR17",
+        "GR18"
+      ]
+    },
+    {
+      "id": "CG21",
+      "title": "LiveOps fits reachable game state",
+      "classification": "EXISTING_CONTRACT_INTEGRATION",
+      "owner_tasks": [
+        "T37",
+        "T38",
+        "T39",
+        "T40"
+      ],
+      "consumer_tasks": [
+        "T12",
+        "T23",
+        "T31",
+        "T33",
+        "T41",
+        "T43",
+        "T54",
+        "T55",
+        "T65",
+        "T67",
+        "T70"
+      ],
+      "selected_action": "Retain launch event families, use existing reward currencies, validate availability/prerequisites/timing and preserve earned rewards through expiry/kill-switch/rollback. Current U3 additions: New customer baskets may combine processed products from operating unlocked producers or genuinely reachable purchasable/rebuildable producer paths. Prove unlock, route, raw source, tool, recipe, plot bill, capacity and quantity dependencies without assuming this order's unearned payout. Mere ownership or a render is insufficient. Use progression, unlocked opportunity and selected equipment tier to author demand mixes, amounts, repair/replacement bills and encounter pressure. Do not price by current wallet size, paid history or VIP. Optional events do not repair a mandatory shortage. Preserve an achievable $0 route including repeated losses.",
+      "decision_ids": [
+        "CD09",
+        "CD12"
+      ],
+      "existing_requirement_ids": [
+        "GD15",
+        "GD16"
+      ],
+      "acceptance_checks": [
+        "Impossible event/resource/pet/region prerequisite rejected.",
+        "Duplicate grant, event end while absent, reconnect, collision and rollback rehearsed.",
+        "Combination basket with a purchasable precursor producer",
+        "Reject self/indirect producer-cost cycles",
+        "Reject nonexistent/locked/one-time exhausted sources",
+        "Re-evaluate reachability after destruction and preserve unsettled goods",
+        "Deterministic progression-band and unlock changes",
+        "Same progression/target/seed yields same quote despite wealth/payment history",
+        "Measured repeated-loss recovery and useful survivor throughput",
+        "Counter offer cancellation cannot farm rewards or free rerolls",
+        "Opening cadence is a playtest proposal: first warning/attack20/25 active minutes after basic-defense unlock, after a win40–55/45–60 minutes after authoritative encounter end, after a loss>=55/>=60 minutes; choose and save repeat interval once, pause background, allow one pending/active raid, and use actual win/loss outcome rather than generic retreat receipt",
+        "Prepared defense with ordinarily obtainable stage-appropriate gear must be beatable; prove short session, successive wins, failed defense, real retreat and raw rebuild; tune strength/composition/patterns before reducing proposed intervals"
+      ],
+      "specification_status": "SELECTED_CURRENT_USER_RULES_RUNTIME_EVIDENCE_OPEN",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration.",
+      "current_gameplay_rule_ids": [
+        "GR03",
+        "GR18"
+      ]
+    },
+    {
+      "id": "CG22",
+      "title": "Security and useful diagnostics without gameplay dependence",
+      "classification": "EXISTING_CONTRACT_INTEGRATION",
+      "owner_tasks": [
+        "T41",
+        "T42",
+        "T43"
+      ],
+      "consumer_tasks": [
+        "T14",
+        "T17",
+        "T23",
+        "T31",
+        "T33",
+        "T34",
+        "T35",
+        "T37",
+        "T38",
+        "T66",
+        "T67",
+        "T70"
+      ],
+      "selected_action": "Observe failed jobs, transfers, saves and performance with minimal-purpose data; enforce server/account boundaries without letting analytics or diagnostics decide gameplay state. Current U3 additions: Persist quote ID, generation, catalogue version, progression snapshot, item quantities, payout and committed contributions. Keep accepted/part-paid quotes stable through ordinary progression. Revalidate feasibility on material changes; cancel only uncommitted work with conserved escrow. Reject request-ID reuse with a different payload. Migrate old saves preserving earned goods, existing companions/levels, quotes, purchases and paid entitlements. Remove only the obsolete attendant role; preserve customer identity assets. Introduce HP/death/generation ledgers without retroactive deaths or charging old completed work. Existing derived cash needs spent-outflow accounting before new spending.",
+      "decision_ids": [
+        "CD09",
+        "CD12"
+      ],
+      "existing_requirement_ids": [],
+      "acceptance_checks": [
+        "Diagnostics disabled/failing cannot corrupt play.",
+        "Exploit tests include duplicated contact/rewards/payments, time manipulation and account leakage.",
+        "Existing privacy/retention/redaction and GM isolation retained.",
+        "Reload/cancel cannot reroll prices or rewards",
+        "Concurrent partial funding and final payment commit once",
+        "Whole basket reservation then goods/cash atomic commit",
+        "Save interruption and replay before/after every value boundary",
+        "A now-unobtainable unpaid customer order may retire once from trusted revisioned world plus actual owned/reserved custody, without payout or loss; reserved/settled/still-feasible orders reject retirement; durable retired identity and next ordinal allow a reachable successor without ordinary cancellation/reload reroll",
+        "Build13 old save to current rules roundtrip",
+        "App kill before/after sale, repair, death, replacement and furnace commit",
+        "Stale/cloud-conflicting epoch cannot resurrect an old actor or structure",
+        "Corrupt payload, duplicate request and fabricated client event rejected"
+      ],
+      "specification_status": "SELECTED_CURRENT_USER_RULES_RUNTIME_EVIDENCE_OPEN",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration.",
+      "current_gameplay_rule_ids": [
+        "GR05",
+        "GR17"
+      ]
+    },
+    {
+      "id": "CG23",
+      "title": "Evidence-bound integrated release",
+      "classification": "EXISTING_CONTRACT_EVIDENCE",
+      "owner_tasks": [
+        "T62",
+        "T63",
+        "T64",
+        "T65",
+        "T66",
+        "T67",
+        "T68",
+        "T69",
+        "T70"
+      ],
+      "consumer_tasks": [
+        "T31",
+        "T32",
+        "T42",
+        "T43",
+        "T54",
+        "T55",
+        "T56",
+        "T58"
+      ],
+      "selected_action": "Keep final candidates immutable and exact-source-bound; integrate full-route, free progression, commerce, events, exploit, regression and physical device evidence. Route repairs to owners and reopen affected approvals. Current U3 additions: Run reusable native rule logic and adversarial transaction/recovery scenarios, then integrate it with the actual Godot scene, actors, persistence, navigation, contact events and art. Native headless rule tests do not certify 3D motion, actual physical contacts, all100 producer bindings, sound, physical devices or final reference quality.",
+      "decision_ids": [],
+      "existing_requirement_ids": [
+        "GD18"
+      ],
+      "acceptance_checks": [
+        "Fresh install/update/reinstall/migration/recovery for the actual signed candidate.",
+        "All mandatory evidence and independent scores pass; planning checks cannot certify play.",
+        "Exact source/module/fixture/test binding",
+        "Actual scene integration and played full loops",
+        "Per-dimension reference>=9.9 plus stronger exact10 material gates",
+        "Physical sustained performance and release evidence remains required",
+        "T05/T18 conveyor appearance remains reopened: compare pinned transport/camp sheets at matched gameplay scale, normal and2x, including supported corners/inclines, rails/supports/rollers/drive details, loaded deck contact and clear gates/aisles in default/relocated empty/moving/full states"
+      ],
+      "specification_status": "SELECTED_CURRENT_USER_RULES_RUNTIME_EVIDENCE_OPEN",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration.",
+      "current_gameplay_rule_ids": [
+        "GR19"
+      ]
+    },
+    {
+      "id": "CG24",
+      "title": "Undefined task IDs and remaining source custody",
+      "classification": "SOURCE_GAP",
+      "owner_tasks": [
+        "T70"
+      ],
+      "consumer_tasks": [],
+      "selected_action": "T01–T70 are the70 authentic definitions. Preserve T71–T80 as SOURCE_NOT_FOUND; do not invent tasks. Levels71–80 remain real content owned byT50. Privately held complete original-video/editable-source custody remains unverified.",
+      "decision_ids": [],
+      "existing_requirement_ids": [],
+      "acceptance_checks": [
+        "70 task definitions/dependencies/status/ownership retained byte-exact.",
+        "Ten undefined requested IDs remain explicit with no fabricated scope or activation."
+      ],
+      "specification_status": "SOURCE_NOT_FOUND_NOT_CLOSED",
+      "implementation_evidence_status": "NOT_CERTIFIED_BY_THIS_AUDIT",
+      "dependency_rule": "Responsibilities only; preserve existing graph, ownership and frozen scope. Introducing owners freeze local contracts before later integration.",
+      "current_gameplay_rule_ids": [
+        "GR20"
+      ]
+    }
+  ],
+  "detail_files": {
+    "actors": "Docs/Production/GameplayRules/2026-11-27/ACTORS_COMBAT_GAPS.json",
+    "economy": "Docs/Production/GameplayRules/2026-11-27/PROGRESSION_ECONOMY_GAPS.json",
+    "transactions": "Docs/Production/GameplayRules/2026-11-27/TRANSACTIONS_AND_RECOVERY.json",
+    "latest_source": "Docs/Production/Completeness/2026-11-27/LATEST_SOURCE_DELTA.json",
+    "current_gameplay_rules": "Docs/Production/GAMEPLAY_RULES_CONTRACT.json",
+    "supersession": "Docs/Production/GameplayRules/2026-11-27/SUPERSESSION.json"
+  },
+  "prior_decision_dispositions": [
+    {
+      "prior_id": "D01",
+      "new_decisions": [
+        "CD01",
+        "CD02"
+      ],
+      "status": "BEHAVIOR_SELECTED_NUMERIC_TUNING_AND_RUNTIME_PROOF_OPEN"
+    },
+    {
+      "prior_id": "D02",
+      "new_decisions": [
+        "CD03"
+      ],
+      "status": "BEHAVIOR_SELECTED_NUMERIC_TUNING_AND_RUNTIME_PROOF_OPEN"
+    },
+    {
+      "prior_id": "D03",
+      "new_decisions": [
+        "CD08"
+      ],
+      "status": "BEHAVIOR_SELECTED_NUMERIC_TUNING_AND_RUNTIME_PROOF_OPEN"
+    },
+    {
+      "prior_id": "D04",
+      "new_decisions": [
+        "CD04",
+        "CD07"
+      ],
+      "status": "BEHAVIOR_SELECTED_NUMERIC_TUNING_AND_RUNTIME_PROOF_OPEN"
+    },
+    {
+      "prior_id": "D05",
+      "new_decisions": [
+        "CD08"
+      ],
+      "status": "BEHAVIOR_SELECTED_NUMERIC_TUNING_AND_RUNTIME_PROOF_OPEN"
+    }
+  ],
+  "scope_preservation": [
+    "No existing task definition/dependency/status/ownership change.",
+    "No runtime file/active branch/workflow change.",
+    "No retroactive approval; historical and rejected evidence retained.",
+    "No T71–T80 invention and no post-launch feature added as release blocker."
+  ],
+  "implementation_order": [
+    "Counter/typed custody/quotes and feasible recovery foundation.",
+    "Shared combat target/HP/generation/cargo-estate interfaces, then companion and structure mortality.",
+    "Bulk survivor jobs, counter customer motion/payment, breaches, repair/rebuy plots and furnace blackout.",
+    "Actual scene/source save migration and busy opening loop, then all100 outcomes/regions and final native/reference/device gates."
+  ],
+  "milestone_note": "These explain implementation sequence; they do not add graph edges, activate tasks or require every M2 system before standalone preparation.",
+  "selected_policy": {
+    "all_seven_pets_attack": true,
+    "survivor_logical_capacity": "UNLIMITED_MIXED_SAME_AS_PLAYER",
+    "field_pet_limit": 3,
+    "field_survivor_escort_limit": 2,
+    "local_worker_limit_is_not_field_escort_limit": true,
+    "owned_inventory_loss_on_down": 0,
+    "background_simulation": "PAUSED",
+    "offline_income": false,
+    "ordinary_currency_id": "money",
+    "premium_currency_id": "premium_gems",
+    "launch_event_currency": null,
+    "event_progress": "SERVER_VERIFIED_CONNECTION_REQUIRED",
+    "earned_event_claim_survives_expiry": true,
+    "orientation": "LANDSCAPE_BOTH_ROTATIONS",
+    "post_launch_features_added_to_release": false,
+    "counter_service": "CUSTOMER_SELF_SERVICE_BULK_TYPED_STOCK_AND_SEPARATE_CASH",
+    "spawn_counter_attendant": false,
+    "cash_register_required": false,
+    "dynamic_progression_quotes": true,
+    "constructive_acquisition_proof_required": true,
+    "survivors_may_hunt": true,
+    "survivors_may_initiate_authorized_attacks": true,
+    "survivor_self_defense_only": false,
+    "far_condition": "PLAYER_AND_ALL_ELIGIBLE_LIVING_DEFENDING_PETS_ARE_FAR",
+    "provoked_survivor_retaliation": true,
+    "permanent_camp_coordinate_immunity": false,
+    "companions_can_die": true,
+    "companion_replacement": "ORDINARY_PAID_NEW_INSTANCE",
+    "free_companion_revive": false,
+    "companion_earned_level_preserved": true,
+    "all_placed_equipment_destructible": true,
+    "repair_cost": "ASSET_MATERIAL_TIER_MISSING_HP_AND_PROGRESSION",
+    "boundary_reconstruction_level": "PURCHASED_TIER",
+    "destroyed_equipment_rebuild_level": 1,
+    "furnace_destruction": "AFFECTED_CAMP_BLACKOUT_AND_LEVEL1_REBUILD",
+    "death_and_ruin_cargo": "PERSISTENT_TYPED_SALVAGE"
+  },
+  "observed_gameplay_source_role": "Preserved deep-audit baseline; latest observed source and evidence use the separate pinned delta.",
+  "latest_observed_gameplay_source": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+  "reported_build13_game_source": "2654f5019b7212968d28600cb071bf1c231c9030",
+  "current_source_precedence": "Current U3 gameplay rules supersede conflicting earlier selected behavior. The preserved3fad source audit, Build13 game source2654 and QA cutoff2f46 retain their exact observed scope; no game branch is merged or approved.",
+  "current_rule_revision_base": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+  "current_rule_authority": "Docs/Production/GAMEPLAY_RULES_CONTRACT.json",
+  "latest_user_correction": "U3",
+  "prior_frozen_package_role": "Historical selected design and audit; conflicting behavior is superseded by the current user rules."
+}

@@ -1,0 +1,13 @@
+{
+  "scope": "Remove unintended generated Python bytecode from publication staging only",
+  "cause": "Independent archive-link audit imported the preserved helper and generated a bytecode cache; publisher correctly rejected the cache as non-UTF8.",
+  "removed_path": "supplemental-resumption/tools/__pycache__/assemble_review_package.cpython-312.pyc",
+  "removed_sha256": "9b43d636f7dd781b87bd0d923a7f62f6fc493d8f4e43dae1abbd269ee6d3cf5e",
+  "removed_bytes": 44306,
+  "source_helper_modified": false,
+  "original_package_sources_modified": false,
+  "prior_assembly_receipt": "supplemental-resumption/history/ASSEMBLY_RECEIPT-before-generated-cache-cleanup.json",
+  "prior_receipt_sha256": "5d1dbb18091018194a850d0557c194577276482f0b6a5ea78a350fd8b247bbdd",
+  "replacement": "Reassemble only after this cleanup; use replacement receipt for final archive verification.",
+  "prevention": "Disable Python bytecode when importing preserved package tools; final audit uses direct file reads."
+}

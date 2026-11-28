@@ -1,0 +1,119 @@
+{
+  "reviewer": "/root/world1_upgrade_critic",
+  "date": "2026-11-28",
+  "scope": "TRAINED_CREW_AUTHORED_STATIC_THREE_VIEW_STAGE_ONLY",
+  "id": "W1VAL-03A",
+  "status": "PASS_SCOPED_STATIC_CONCEPT_REVIEW",
+  "score": 9.9,
+  "files": [
+    {
+      "path": "generated/w1val-03a-gear-r2.png",
+      "sha256": "9e17e265acdd6172ee2802b08cd1f8af582ad74e5e312c91ea9e4748f9f5861b"
+    },
+    {
+      "path": "generated/w1val-03a-use-r5.png",
+      "sha256": "addb2c53ae4b03db36d5fd420b2d314fcfdea1bff5daa7cdf28af1f489cef816"
+    }
+  ],
+  "use_invocation": {
+    "path": "prompts/w1val-03a-use-r5-invocation.json",
+    "sha256": "a50945dd263eec0e9b12f76cbfe771904e8d4854b308c5127f46c8b09a2b4cf7"
+  },
+  "master_receipt": "14-crew-intermediate-r2-review.json, result W1VAL-03A-GEAR-r2 only",
+  "mandatory_checks": {
+    "master_passed": 12,
+    "master_required": 12,
+    "use_passed": 12,
+    "use_required": 12,
+    "total_passed": 24,
+    "total_required": 24
+  },
+  "use_checks": [
+    {
+      "id": "U01",
+      "check": "Exactly the same five specified individuals, no extra or cloned actor",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    },
+    {
+      "id": "U02",
+      "check": "Selected compact human body/head/limb proportions and facial identities",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    },
+    {
+      "id": "U03",
+      "check": "Dog/wolf/owl species forms, fur/feather identities and natural anatomy",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    },
+    {
+      "id": "U04",
+      "check": "Trained stage gear retained from the exact reviewed front/rear master",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    },
+    {
+      "id": "U05",
+      "check": "Selected one-blade timber saw with short axle, visible offset arm and parallel free-end grip",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    },
+    {
+      "id": "U06",
+      "check": "Actual raw supply distinct from current bound finished plank units; no invented resource or scale inflation",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    },
+    {
+      "id": "U07",
+      "check": "Visible natural crank-handle grip, safe free hand and plausible supplier log support",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    },
+    {
+      "id": "U08",
+      "check": "Both complete human boots and ground contact, distinct pet paws and owl perch grip",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    },
+    {
+      "id": "U09",
+      "check": "Human joints and pet jaws/legs/wing roots remain clear of props and mechanisms",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    },
+    {
+      "id": "U10",
+      "check": "Separate useful operation, supply, guarding and scouting positions without blocked routes",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    },
+    {
+      "id": "U11",
+      "check": "Readable full use composition with matching stage style and corrected occlusions",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    },
+    {
+      "id": "U12",
+      "check": "Honest authored static-use labeling, no numerical or native behavior claim",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    }
+  ],
+  "evidence": [
+    "Actual entire retained A-r2 front/rear master and actual final use-r5 image",
+    "Actual enlarged final crank/contact inspection",
+    "Exact selected one-blade saw eight-view source",
+    "Original five actor and current02/04 unit sources previously directly inspected",
+    "Actual source-bound use/repair invocation lineage"
+  ],
+  "resolved_final_blocker": {
+    "id": "CREW-USE-R06",
+    "result": "Short axle, separate diagonal offset arm, and lower parallel grip are all visibly real in r5; the operating glove wraps the grip without hiding the arm. The safe thigh hand and fully visible supplier boots remain."
+  },
+  "dimensions": {
+    "source_identity_and_anatomy": 9.9,
+    "stage_gear_continuity": 9.9,
+    "work_object_and_resource_fidelity": 9.9,
+    "actual_static_hand_tool_and_ground_contacts": 9.9,
+    "joint_and_workflow_clearance": 9.9,
+    "purposeful_simultaneous_roles": 9.9,
+    "style_and_readability": 9.9,
+    "scope_and_claim_boundaries": 10
+  },
+  "known_unapproved_static_deviations": [],
+  "owner_new_design_approval": false,
+  "native_approval": false,
+  "whole_task_complete": false,
+  "boundary": "This completes the authored static stage evidence only: front, rear and separate use scene. It does not prove native throughput, inventory reservations, guard/scout logic, actual combat contacts, animation/full motion clearance, sound, balance, unlock availability or owner selection. Those remain separate gates."
+}

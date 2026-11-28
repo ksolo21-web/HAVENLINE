@@ -1,0 +1,249 @@
+{
+  "schema_version": 1,
+  "review_id": "HAVENLINE_ARCHITECTURE_R5_INDEPENDENT",
+  "reviewer": "/root/planning_package_critic",
+  "reviewed_utc": "2026-11-28T12:36:33.083311+00:00",
+  "scope": "Static limited unarmed protective-architecture concept only. This fallback cannot satisfy the owner armed-attack visual requirement or approve a full defense task.",
+  "verdict": "PASS_LIMITED_UNARMED_ARCHITECTURE_CONCEPT",
+  "all_mandatory_checks_pass": true,
+  "pass": true,
+  "architecture_scope_score": 10.0,
+  "full_defense_task_score": null,
+  "score_method": "Each applicable static architecture dimension meets the exact-10 reference threshold and all 14 mandatory checks pass. No averaging or rounding; broader armed/native requirements remain outside this limited pass.",
+  "reference_gate": {
+    "policy_id": "havenline-reference-acceptance-2026-11-27",
+    "policy_sha256": "140a80fb86955b1c98ac91e62202072e7b745b7e1cda0f2cf810e7baa6f753a8",
+    "strongest_applicable_visual_threshold": 10.0,
+    "no_averaging": true,
+    "no_rounding_up": true
+  },
+  "candidate": {
+    "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/generated/w1val-02-architecture-r5.png",
+    "sha256": "d5ce6b614c358ca32e6c0b0c52382a6c014e62303fe0aafbad6a3b4e1f5e2af5",
+    "image_size": [
+      1536,
+      1024
+    ]
+  },
+  "invocation": {
+    "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/prompts/w1val-02-architecture-r5-invocation.json",
+    "sha256": "1b7a8983815a704e2b374c0df25275ffb50a4d3b9ecab4920dc7cbaf30444356",
+    "status": "LIMITED_PROTECTIVE_ARCHITECTURE_ONLY_ARMED_VISUAL_REMAINS_BLOCKED"
+  },
+  "edit_reference": {
+    "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/generated/w1val-02-architecture-r4.png",
+    "sha256": "693236b85b6c42c7556402e9eabf2302ec3fe869b42d61edfaacd027d50708b5",
+    "actual_image_viewed": true,
+    "hash_unchanged": true
+  },
+  "sources_inspected": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-structures-2026-11-25/archive-repo/Docs/Design/StructureReferences/2026-11-25/selected/fence-cardinal.png",
+      "sha256": "d616f90b5c0c98a02cafe93b8cfbb114280dc2c5ee74f26cf0e34b41dae1e734",
+      "role": "Existing family/source vocabulary; new expanded geometry explicitly authored",
+      "actual_image_viewed": true,
+      "hash_unchanged_at_r5": true
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-repo/Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/defense-platform-turnaround.png",
+      "sha256": "f8570231d40fcea9d6628b23838b71880de6d8226d6856eff33167c7504941d0",
+      "role": "Existing family/source vocabulary; new expanded geometry explicitly authored",
+      "actual_image_viewed": true,
+      "hash_unchanged_at_r5": true
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-missing-renders-2026-11-27/archive-repo/Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-fortress-watchtowers.png",
+      "sha256": "9781d9d5a8b0a5d05f64fcf9a4abdae3b11344ba1034a1468d8f136266ced112",
+      "role": "Existing family/source vocabulary; new expanded geometry explicitly authored",
+      "actual_image_viewed": true,
+      "hash_unchanged_at_r5": true
+    }
+  ],
+  "inspections": [
+    "Entire original 6-panel r5 image",
+    "Guardwalk interior closeup",
+    "Guardwalk access closeup",
+    "Fortified lookout interior closeup",
+    "Fortified lookout access closeup",
+    "Fortified lookout foreground rail interior detail",
+    "Fortified lookout foreground rail access detail"
+  ],
+  "crop_manifest": {
+    "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/reviews/architecture-r5-crop-evidence.json",
+    "sha256": "74a483c9bdd22420e43876db73b958b100d8d063bcb3a9bf415047b769c3f00e",
+    "candidate_edited_by_critic": false
+  },
+  "dimension_scores": {
+    "reference_material_and_style_family": 10.0,
+    "silhouette_progression": 10.0,
+    "cross_view_stage_identity": 10.0,
+    "framing_and_label_readability": 10.0,
+    "stair_landing_walkway_readability": 10.0,
+    "observation_platform_access": 10.0,
+    "occupied_space_clearance_and_entry_clarity": 10.0,
+    "outer_edge_protection_and_rail_layout": 10.0,
+    "limited_scope_truthfulness": 10.0
+  },
+  "mandatory_gates": [
+    {
+      "id": "A01",
+      "check": "Actual candidate, exact prompt and all supplied source images inspected",
+      "pass": true,
+      "evidence": "R5 full candidate and exact invocation inspected; r4 actual edit reference and all original source images previously viewed, with unchanged hashes verified."
+    },
+    {
+      "id": "A02",
+      "check": "Six panels with exterior, opposite interior and high access views for both stages",
+      "pass": true
+    },
+    {
+      "id": "A03",
+      "check": "Source material/palette/snow family preserved within explicitly authored geometry adaptations",
+      "pass": true
+    },
+    {
+      "id": "A04",
+      "check": "Substantial architectural silhouette/material progression rather than recolor only",
+      "pass": true
+    },
+    {
+      "id": "A05",
+      "check": "Staircase to open landing to main walkway is readable in both stages",
+      "pass": true
+    },
+    {
+      "id": "A06",
+      "check": "Guardwalk observation platform continuously accessible and visibly usable",
+      "pass": true,
+      "evidence": "AR-01 closed: upper equipment pedestal removed; a single floor visibly connects main walk and observation deck."
+    },
+    {
+      "id": "A07",
+      "check": "Fortified lookout has unambiguous walkway entry and occupied-space clearance",
+      "pass": true,
+      "evidence": "AR-02 closed for static concept readability: flush opening and raised posts show a broad occupied entry. Native dimensional/headroom verification remains outside this approval scope."
+    },
+    {
+      "id": "A08",
+      "check": "No new gate, wall doorway or extra camp entrance shown",
+      "pass": true
+    },
+    {
+      "id": "A09",
+      "check": "Closed supply crates/alcove and empty observation equipment scope retained",
+      "pass": true
+    },
+    {
+      "id": "A10",
+      "check": "No weapons, ammunition, combat, targets, injuries, stats or level claims",
+      "pass": true
+    },
+    {
+      "id": "A11",
+      "check": "Objects fully framed; labels are readable and geometry is inspectable",
+      "pass": true
+    },
+    {
+      "id": "A12",
+      "check": "Meaningful full-frame plus interior/access closeups actually reviewed",
+      "pass": true
+    },
+    {
+      "id": "R01",
+      "check": "Repair preserves a consistent physical rail layout across exterior, interior and access views",
+      "pass": true,
+      "evidence": "The added snow-capped midpoint upright is now present in the ACCESS foreground roofed-lookout rail, matching the two-span INTERIOR rail. Same physical structure and perimeter arrangement remain readable across all six views."
+    },
+    {
+      "id": "R02",
+      "check": "Exterior occupied deck edges retain low protective rails; only internal connector and stair-top entry are open",
+      "pass": true,
+      "evidence": "All four previously missing perimeter sections remain protected; only stair-top entrances and internal floor-to-floor circulation stay open."
+    }
+  ],
+  "gate_counts": {
+    "original_gates_passed": 12,
+    "original_gates_total": 12,
+    "regression_gates_passed": 2,
+    "regression_gates_total": 2,
+    "all_gates_passed": 14,
+    "all_gates_total": 14
+  },
+  "prior_findings": [
+    {
+      "id": "AR-01",
+      "status": "CLOSED_FOR_STATIC_CONCEPT",
+      "evidence": "One flush Guardwalk observation floor remains continuously accessible; inaccessible upper pedestal is absent."
+    },
+    {
+      "id": "AR-02",
+      "status": "CLOSED_FOR_STATIC_CONCEPT",
+      "evidence": "Roofed lookout entry remains broad and open with raised posts and visibly adequate static headroom; native dimensions are untested."
+    },
+    {
+      "id": "AR-03",
+      "status": "CLOSED_FOR_STATIC_CONCEPT",
+      "evidence": "Foreground perimeter rail layouts now match, including the one snow-capped midpoint upright between the front roof posts in INTERIOR and ACCESS."
+    },
+    {
+      "id": "AR-04",
+      "status": "CLOSED_FOR_STATIC_CONCEPT",
+      "evidence": "All requested outer perimeter edges retain raised low rails without blocking stairs or internal deck connections."
+    }
+  ],
+  "findings": [],
+  "positive_evidence": [
+    "All five repair targets are resolved in the actual r5 output.",
+    "Staircase to open landing to main walk to observation deck is visible and continuous in both stages.",
+    "Roofed lookout retains raised posts, clear entry and visible static occupied-space clearance.",
+    "All exposed outside deck edges retain low protective rails; the internal connection remains open.",
+    "Orange timber, blue roof/metal, rounded stone and snow remain in the source family, with a substantial Guardwalk-to-Fortified Lookout silhouette change.",
+    "The same wall, stairs, raised deck and separate ground supply alcove remain coherent across exterior, interior and high access views.",
+    "All source hashes and the retained r4 edit-reference hash remain unchanged."
+  ],
+  "not_approved": [
+    "Owner armed-tower attack visual requirement; generator block remains unresolved",
+    "Native collision, pathfinding, dimensions, HP, protection values or attack behavior",
+    "Production-task completion, owner art selection, playable animation, audio, device or shipping readiness"
+  ],
+  "next_action": "Retain this exact r5 image and report as a passed limited unarmed architecture concept. Keep the armed illustration, owner selection and native/full-task gates separate. Root may assemble it with truthful exact-hash scoped status; verify copied archive bytes after application.",
+  "repair_targets": {
+    "remaining": []
+  },
+  "repaired_targets": [
+    {
+      "id": "P01",
+      "status": "CLOSED",
+      "evidence": "Guardwalk foreground rail extends to the stair-top side post."
+    },
+    {
+      "id": "P02",
+      "status": "CLOSED",
+      "evidence": "Interior roofed deck has the complete foreground rail."
+    },
+    {
+      "id": "P03",
+      "status": "CLOSED",
+      "evidence": "Interior adjoining main-walk segment has a raised rail."
+    },
+    {
+      "id": "P04",
+      "status": "CLOSED",
+      "evidence": "Access roofed deck has the complete foreground rail."
+    },
+    {
+      "id": "P05",
+      "status": "CLOSED",
+      "evidence": "One midpoint upright now divides the ACCESS foreground roofed-deck rail into two spans, matching INTERIOR."
+    }
+  ],
+  "approval_boundaries": {
+    "static_unarmed_architecture_concept_pass": true,
+    "owner_selected": false,
+    "armed_attack_visual_pass": false,
+    "armed_attack_visual_status": "TOOL_BLOCKED_NO_ARMED_ILLUSTRATION_APPROVAL",
+    "native_approved": false,
+    "whole_task_complete": false,
+    "no_structural_regression_observed": true
+  }
+}

@@ -1,0 +1,2946 @@
+{
+  "checks": {
+    "exact_expected_receipt": true,
+    "all_206_artifacts_match": true,
+    "no_duplicate_or_uninventoried_evidence_files": true,
+    "all_relative_links_exist": true,
+    "seven_current_statuses_and_bindings_match": true,
+    "all_four_historical_trained_rejections_explicit": true,
+    "six_superseded_studies_remain_unselected": true,
+    "raw_override_matches_receipt_and_inventory": true,
+    "original_56_package_bindings_preserved": true,
+    "all_generated_and_packaged_input_paths_resolve": true,
+    "all_38_prompt_records_preserved": true,
+    "strict_finalized_verifier_pass": true,
+    "cache_absent": true,
+    "first_receipt_and_override_retained_in_history": true,
+    "read_only_verification_unchanged_package": true,
+    "scope_flags_remain_false": true,
+    "armed_gate_remains_blocked": true,
+    "actual_apply_no_remote_claim": true,
+    "counts_match_actual_inventory": true,
+    "no_assembly_warnings": true,
+    "all_receipt_frozen_design_bindings_preserved": true,
+    "only_root_final_staging_metadata_added": true
+  },
+  "passed": 22,
+  "required": 22,
+  "snapshot_hashes": {
+    "ARTIFACT_INVENTORY.json": "0e0711d2aae292faed4c53c67e8a2fe7d449f721fe4371da82bcd220e8cc6e00",
+    "ASSEMBLY_RECEIPT.json": "f3be599fa7f18aa6473dd0cefdefdfaaa34e512a47be695a83102fda6dac58f4",
+    "REVIEW_GALLERY.md": "b116d179daca922bdc0aa70a6f3e08ecef2a47be1023d886d2a2b3e48a297ede",
+    "root-review-status-overrides.json": "f8939da44d3fd776b777287c1f5f9c619c77c1080522b3cff6230d36d5d8e49b",
+    "PUBLICATION_STATUS.json": "1861bcf38d3f23db468a1525b37e225b97903da7356432f98229d1cba60a7b40",
+    "RESUMPTION_MANIFEST.json": "b2201cdc8dd4053c885fb0c2633f54822470c82c640689cae1500663ebb38d2b",
+    "GENERATION_INPUT_RESOLUTION.json": "1f06a8893f864ba2a3f3daa5c559f7556a3a1d3656d6bcdf44ec1d17f8c5f9b0",
+    "WORLD1_UPGRADE_REVIEW.md": "8a26eb2800bc2d7d8d9926d0dc866b5612db4a139db81283a46fd5a50a11e927"
+  },
+  "artifact_count": 206,
+  "evidence_file_count": 208,
+  "frozen_design_count": 66,
+  "package_file_count": 303,
+  "link_count": 130,
+  "link_counts_by_source": {
+    "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md": 106,
+    "WORLD1_UPGRADE_REVIEW.md": 5,
+    "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/README.md": 10,
+    "Docs/Design/World1Upgrades/2026-11-28/README.md": 9
+  },
+  "verifier_result": {
+    "scope": "Supplemental source/code/package preservation only",
+    "checks_passed": 142,
+    "checks_required": 142,
+    "failures": [],
+    "pending_finalization_files": [],
+    "require_finalized": true,
+    "files_written": 0,
+    "art_selection_claimed": false,
+    "runtime_approval_claimed": false,
+    "publication_or_whole_task_approval_claimed": false
+  },
+  "artifacts": [
+    {
+      "path": "review-evidence/candidates/superseded-unselected/01-counter-r1.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/superseded-unselected/02-cooker-r1.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/superseded-unselected/03-saw-r1.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/superseded-unselected/w1up-04-r1.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/superseded-unselected/w1up-05-r1.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/superseded-unselected/w1up-06-r1.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/iterations/w1val-01-r1.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/iterations/w1val-01-r2.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/iterations/w1val-01-r3.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/iterations/w1val-01-r4.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/iterations/w1val-01-r5.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/iterations/w1val-01-r6.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/iterations/w1val-02-architecture-r1.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/iterations/w1val-02-architecture-r2.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/iterations/w1val-02-architecture-r3.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/iterations/w1val-02-architecture-r4.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/iterations/w1val-02-architecture-r5.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/iterations/w1val-03a-gear-r1.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/iterations/w1val-03a-gear-r2.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/iterations/w1val-03a-use-r1.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/iterations/w1val-03a-use-r2.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/iterations/w1val-03a-use-r3.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/iterations/w1val-03a-use-r4.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/iterations/w1val-03a-use-r5.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/iterations/w1val-03b-gear-r1.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/iterations/w1val-03b-gear-r2.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/iterations/w1val-03b-gear-r3.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/iterations/w1val-03b-gear-r4.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/iterations/w1val-03b-use-r1.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/iterations/w1val-04-r1.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/iterations/w1val-04-r2.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/iterations/w1val-04-r3.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/iterations/w1val-04-r4.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/candidates/iterations/w1val-04-r5.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "generated_candidate",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/prompts/01-counter-r1.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/01-counter-r2.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/02-cooker-r1.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/03-saw-r1.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/generation-receipts.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/priority-value-contract.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1up-04-r1.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1up-05-r1.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1up-06-r1.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-01-r1-invocation.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-01-r2-invocation.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-01-r3-invocation.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-01-r4-invocation.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-01-r5-invocation.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-01-r6-invocation.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-02-architecture-r1-invocation.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-02-architecture-r2-invocation.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-02-architecture-r3-invocation.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-02-architecture-r4-invocation.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-02-architecture-r5-invocation.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-02-r1-invocation.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-02-r1-tool-rejection.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-03-r1-input-limit.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-03a-gear-r1-invocation.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-03a-gear-r2-invocation.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-03a-r1-invocation.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-03a-use-r1-invocation.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-03a-use-r2-invocation.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-03a-use-r3-invocation.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-03a-use-r4-invocation.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-03a-use-r5-invocation.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-03b-gear-r1-invocation.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-03b-gear-r2-invocation.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-03b-gear-r3-invocation.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-03b-gear-r4-invocation.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-03b-r1-invocation.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-03b-use-r1-invocation.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-04-r1-invocation.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-04-r2-invocation.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-04-r3-invocation.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-04-r4-invocation.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/prompts/w1val-04-r5-invocation.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "prompt_or_error_record"
+    },
+    {
+      "path": "review-evidence/reviews/00-independent-review-plan.md",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/01-art-first3-r1-rejected.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/01-art-first3-r1-rejected.md",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/02-owner-value-correction-and-review-reset.md",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/03-priority-value-pre-generation-input.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/03-priority-value-pre-generation-review.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/04-saw-storage-brief-preflight.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/05-plan-independent-structural-rerun.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/05-plan-source-and-preservation-verification.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/06-value-saw-storage-r1-independent-review.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/07-defense-crew-full-matrix-preflight.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/08-value-saw-storage-r2-retest.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/09-value-design-document-independent-review.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/10-value-design-reference-chain-review.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/11-value-saw-storage-r3-retest.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/12-crew-intermediate-r1-review.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/13-value-saw-storage-r4-retest.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/14-crew-intermediate-r2-review.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/15-value-design-separate-use-presentation-review.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/16-storage-r5-static-concept-review.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/17-veteran-master-r3-retest.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/18-saw-r6-static-concept-review.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/19-trained-use-r1-independent-review.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/20-veteran-master-r4-review.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/21-trained-use-r2-retest.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/22-veteran-static-stage-review.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/23-trained-use-r3-retest.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/24-trained-use-r4-retest.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/25-trained-static-stage-review.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/ART_REVIEW_INDEX.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/CHECKPOINT.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r1-crop-evidence.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r1-guardwalk-access-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r1-guardwalk-interior-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r1-independent.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r1-independent.md",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r1-lookout-access-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r1-lookout-interior-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r2-crop-evidence.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r2-guardwalk-access-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r2-guardwalk-interior-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r2-independent.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r2-independent.md",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r2-lookout-access-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r2-lookout-interior-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r3-crop-evidence.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r3-guardwalk-access-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r3-guardwalk-interior-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r3-independent.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r3-independent.md",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r3-lookout-access-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r3-lookout-interior-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r4-crop-evidence.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r4-guardwalk-access-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r4-guardwalk-interior-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r4-independent.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r4-independent.md",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r4-lookout-access-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r4-lookout-interior-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r4-lookout-rail-access-detail.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r4-lookout-rail-interior-detail.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r5-crop-evidence.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r5-guardwalk-access-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r5-guardwalk-interior-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r5-independent.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r5-independent.md",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r5-lookout-access-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r5-lookout-interior-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r5-lookout-rail-access-detail-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/architecture-r5-lookout-rail-interior-detail-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/assembly-helper-independent-evidence.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/assembly-helper-independent-r1.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/assembly-helper-independent-r1.md",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/assembly-helper-independent-r2.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/assembly-helper-independent-r2.md",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/assembly-helper-independent-r3.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/assembly-helper-independent-r3.md",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/counter-bottom-brace-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/counter-top-left-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/counter-top-rear-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/crew-human-proportion-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/crew-owl-fixture-r2-r3-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/crew-trained-master-use-proportion-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/plan-independent-pinned-source-identity.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/plan-independent-preservation-checks.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/plan-independent-r1.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/plan-independent-r1.md",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/plan-independent-r2.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/plan-independent-r2.md",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/plan-independent-source-checks.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/publication-planner-independent-evidence.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/publication-planner-independent-r1.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/publication-planner-independent-r1.md",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/publication-planner-independent-r2.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/publication-planner-independent-r2.md",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/supplemental-resumption-independent-evidence.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/supplemental-resumption-independent-r1.json",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/supplemental-resumption-independent-r1.md",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "review_report"
+    },
+    {
+      "path": "review-evidence/reviews/w1val-01-r1-lower-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/w1val-01-r1-topright-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/w1val-01-r2-lower-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/w1val-01-r4-function-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/w1val-01-r4-rear-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/w1val-03a-gear-r1-rear-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/w1val-03a-gear-r2-front-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/w1val-03a-gear-r2-rear-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/w1val-03a-use-r1-machine-contact-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/w1val-03a-use-r1-supplier-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/w1val-03a-use-r2-contact-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/w1val-03a-use-r2-supplier-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/w1val-03a-use-r3-grip-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/w1val-03a-use-r4-grip-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/w1val-03a-use-r5-grip-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/w1val-03b-gear-r1-rear-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/w1val-03b-gear-r2-front-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/w1val-03b-gear-r2-rear-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/w1val-03b-gear-r3-owl-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/w1val-03b-gear-r4-owl-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/w1val-03b-use-r1-owl-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/w1val-03b-use-r1-repair-contact-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/w1val-04-r1-lower-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/w1val-04-r1-topright-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/w1val-04-r2-lower-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/w1val-04-r4-function-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/w1val-04-r4-rear-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/reviews/w1val-04-r5-cutaway-inspection.png",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "crop_evidence",
+      "png_dimensions_match": true
+    },
+    {
+      "path": "review-evidence/verifiers/plan-independent-work/verifier.stdout.txt",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "verifier_log"
+    },
+    {
+      "path": "review-evidence/verifiers/plan-independent-work/verifier.stderr.txt",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "verifier_log"
+    },
+    {
+      "path": "review-evidence/verifiers/plan-independent-work-r2/verifier.stdout.txt",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "verifier_log"
+    },
+    {
+      "path": "review-evidence/verifiers/plan-independent-work-r2/verifier.stderr.txt",
+      "inside_evidence": true,
+      "fingerprint_matches": true,
+      "source_bytes_match": true,
+      "kind": "verifier_log"
+    }
+  ],
+  "links": [
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "README.md",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/README.md"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "PURCHASE_VALUE_UPGRADE_PLAN.md",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/PURCHASE_VALUE_UPGRADE_PLAN.md"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-04-r5.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-04-r5.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-01-r6.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-01-r6.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-02-architecture-r5.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-02-architecture-r5.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-03a-gear-r2.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03a-gear-r2.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-03a-use-r5.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03a-use-r5.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-03b-gear-r4.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03b-gear-r4.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-03b-use-r1.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03b-use-r1.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/superseded-unselected/01-counter-r1.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/superseded-unselected/01-counter-r1.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/superseded-unselected/02-cooker-r1.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/superseded-unselected/02-cooker-r1.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/superseded-unselected/03-saw-r1.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/superseded-unselected/03-saw-r1.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/superseded-unselected/w1up-04-r1.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/superseded-unselected/w1up-04-r1.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/superseded-unselected/w1up-05-r1.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/superseded-unselected/w1up-05-r1.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/superseded-unselected/w1up-06-r1.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/superseded-unselected/w1up-06-r1.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-01-r1.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-01-r1.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/06-value-saw-storage-r1-independent-review.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/06-value-saw-storage-r1-independent-review.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-01-r2.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-01-r2.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/08-value-saw-storage-r2-retest.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/08-value-saw-storage-r2-retest.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-01-r3.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-01-r3.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/11-value-saw-storage-r3-retest.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/11-value-saw-storage-r3-retest.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-01-r4.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-01-r4.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/13-value-saw-storage-r4-retest.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/13-value-saw-storage-r4-retest.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-01-r5.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-01-r5.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-01-r6.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-01-r6.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-02-architecture-r1.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-02-architecture-r1.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/architecture-r1-independent.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r1-independent.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-02-architecture-r2.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-02-architecture-r2.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/architecture-r2-independent.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r2-independent.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-02-architecture-r3.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-02-architecture-r3.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/architecture-r3-independent.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r3-independent.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-02-architecture-r4.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-02-architecture-r4.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/architecture-r4-independent.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r4-independent.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-02-architecture-r5.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-02-architecture-r5.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-03a-gear-r1.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03a-gear-r1.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/12-crew-intermediate-r1-review.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/12-crew-intermediate-r1-review.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-03a-gear-r2.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03a-gear-r2.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-03a-use-r1.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03a-use-r1.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-03a-use-r2.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03a-use-r2.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-03a-use-r3.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03a-use-r3.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-03a-use-r4.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03a-use-r4.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-03a-use-r5.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03a-use-r5.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-03b-gear-r1.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03b-gear-r1.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/12-crew-intermediate-r1-review.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/12-crew-intermediate-r1-review.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-03b-gear-r2.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03b-gear-r2.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/14-crew-intermediate-r2-review.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/14-crew-intermediate-r2-review.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-03b-gear-r3.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03b-gear-r3.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/17-veteran-master-r3-retest.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/17-veteran-master-r3-retest.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-03b-gear-r4.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03b-gear-r4.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-03b-use-r1.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03b-use-r1.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-04-r1.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-04-r1.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/06-value-saw-storage-r1-independent-review.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/06-value-saw-storage-r1-independent-review.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-04-r2.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-04-r2.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/08-value-saw-storage-r2-retest.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/08-value-saw-storage-r2-retest.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-04-r3.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-04-r3.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/11-value-saw-storage-r3-retest.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/11-value-saw-storage-r3-retest.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-04-r4.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-04-r4.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/13-value-saw-storage-r4-retest.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/13-value-saw-storage-r4-retest.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/candidates/iterations/w1val-04-r5.png",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-04-r5.png"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/prompts/w1val-02-r1-tool-rejection.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-02-r1-tool-rejection.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/prompts/w1val-03-r1-input-limit.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-03-r1-input-limit.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/01-art-first3-r1-rejected.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/01-art-first3-r1-rejected.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/03-priority-value-pre-generation-review.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/03-priority-value-pre-generation-review.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/04-saw-storage-brief-preflight.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/04-saw-storage-brief-preflight.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/05-plan-independent-structural-rerun.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/05-plan-independent-structural-rerun.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/05-plan-source-and-preservation-verification.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/05-plan-source-and-preservation-verification.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/06-value-saw-storage-r1-independent-review.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/06-value-saw-storage-r1-independent-review.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/07-defense-crew-full-matrix-preflight.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/07-defense-crew-full-matrix-preflight.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/08-value-saw-storage-r2-retest.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/08-value-saw-storage-r2-retest.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/09-value-design-document-independent-review.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/09-value-design-document-independent-review.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/10-value-design-reference-chain-review.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/10-value-design-reference-chain-review.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/11-value-saw-storage-r3-retest.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/11-value-saw-storage-r3-retest.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/12-crew-intermediate-r1-review.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/12-crew-intermediate-r1-review.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/13-value-saw-storage-r4-retest.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/13-value-saw-storage-r4-retest.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/14-crew-intermediate-r2-review.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/14-crew-intermediate-r2-review.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/15-value-design-separate-use-presentation-review.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/15-value-design-separate-use-presentation-review.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/16-storage-r5-static-concept-review.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/16-storage-r5-static-concept-review.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/17-veteran-master-r3-retest.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/17-veteran-master-r3-retest.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/18-saw-r6-static-concept-review.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/18-saw-r6-static-concept-review.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/19-trained-use-r1-independent-review.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/19-trained-use-r1-independent-review.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/20-veteran-master-r4-review.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/20-veteran-master-r4-review.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/21-trained-use-r2-retest.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/21-trained-use-r2-retest.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/22-veteran-static-stage-review.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/22-veteran-static-stage-review.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/23-trained-use-r3-retest.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/23-trained-use-r3-retest.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/24-trained-use-r4-retest.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/24-trained-use-r4-retest.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/25-trained-static-stage-review.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/25-trained-static-stage-review.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/ART_REVIEW_INDEX.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/ART_REVIEW_INDEX.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/CHECKPOINT.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/CHECKPOINT.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/architecture-r1-independent.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r1-independent.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/architecture-r2-independent.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r2-independent.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/architecture-r3-independent.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r3-independent.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/architecture-r4-independent.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r4-independent.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/architecture-r5-independent.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r5-independent.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/assembly-helper-independent-evidence.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/assembly-helper-independent-evidence.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/assembly-helper-independent-r1.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/assembly-helper-independent-r1.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/assembly-helper-independent-r2.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/assembly-helper-independent-r2.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/assembly-helper-independent-r3.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/assembly-helper-independent-r3.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/plan-independent-r1.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/plan-independent-r1.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/plan-independent-r2.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/plan-independent-r2.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/publication-planner-independent-evidence.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/publication-planner-independent-evidence.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/publication-planner-independent-r1.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/publication-planner-independent-r1.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/publication-planner-independent-r2.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/publication-planner-independent-r2.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/supplemental-resumption-independent-evidence.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/supplemental-resumption-independent-evidence.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/reviews/supplemental-resumption-independent-r1.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/supplemental-resumption-independent-r1.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/ARTIFACT_INVENTORY.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/ARTIFACT_INVENTORY.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "target": "review-evidence/ASSEMBLY_RECEIPT.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/review-evidence/ASSEMBLY_RECEIPT.json"
+    },
+    {
+      "source": "WORLD1_UPGRADE_REVIEW.md",
+      "target": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md"
+    },
+    {
+      "source": "WORLD1_UPGRADE_REVIEW.md",
+      "target": "Docs/Design/World1Upgrades/2026-11-28/PURCHASE_VALUE_UPGRADE_PLAN.md",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/PURCHASE_VALUE_UPGRADE_PLAN.md"
+    },
+    {
+      "source": "WORLD1_UPGRADE_REVIEW.md",
+      "target": "Docs/Production/WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Production/WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md"
+    },
+    {
+      "source": "WORLD1_UPGRADE_REVIEW.md",
+      "target": "Docs/Production/WorldProgression/2026-11-28-10x50/CURRENT_WORLD_PLAN.md",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Production/WorldProgression/2026-11-28-10x50/CURRENT_WORLD_PLAN.md"
+    },
+    {
+      "source": "WORLD1_UPGRADE_REVIEW.md",
+      "target": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/final/PUBLICATION_STATUS.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/final/PUBLICATION_STATUS.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/README.md",
+      "target": "../README.md",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/README.md"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/README.md",
+      "target": "../../../../Production/WorldProgression/2026-11-28-10x50/CURRENT_WORLD_PLAN.md",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Production/WorldProgression/2026-11-28-10x50/CURRENT_WORLD_PLAN.md"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/README.md",
+      "target": "../REVIEW_GALLERY.md",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/README.md",
+      "target": "RESUMPTION_MANIFEST.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/RESUMPTION_MANIFEST.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/README.md",
+      "target": "SOURCE_PRESERVATION_MANIFEST.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/SOURCE_PRESERVATION_MANIFEST.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/README.md",
+      "target": "GENERATION_INPUT_RESOLUTION.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/GENERATION_INPUT_RESOLUTION.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/README.md",
+      "target": "PUBLICATION_AUDIT.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/PUBLICATION_AUDIT.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/README.md",
+      "target": "tools/assemble_review_package.py",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/tools/assemble_review_package.py"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/README.md",
+      "target": "tools/review_status_overrides.template.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/tools/review_status_overrides.template.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/README.md",
+      "target": "tools/verify_resumption.py",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/tools/verify_resumption.py"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/README.md",
+      "target": "PURCHASE_VALUE_UPGRADE_PLAN.md",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/PURCHASE_VALUE_UPGRADE_PLAN.md"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/README.md",
+      "target": "PURCHASE_VALUE_UPGRADE_PLAN.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/PURCHASE_VALUE_UPGRADE_PLAN.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/README.md",
+      "target": "W1VAL-01-BRIEF.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/W1VAL-01-BRIEF.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/README.md",
+      "target": "W1VAL-02-BRIEF.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/W1VAL-02-BRIEF.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/README.md",
+      "target": "W1VAL-03-BRIEF.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/W1VAL-03-BRIEF.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/README.md",
+      "target": "W1VAL-04-BRIEF.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/W1VAL-04-BRIEF.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/README.md",
+      "target": "VALUE_SOURCE_MANIFEST.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/VALUE_SOURCE_MANIFEST.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/README.md",
+      "target": "VALUE_DESIGN_VALIDATION.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/VALUE_DESIGN_VALIDATION.json"
+    },
+    {
+      "source": "Docs/Design/World1Upgrades/2026-11-28/README.md",
+      "target": "VALUE_DESIGN_STATUS.json",
+      "inside_package": true,
+      "exists": true,
+      "resolved": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/VALUE_DESIGN_STATUS.json"
+    }
+  ],
+  "current_seven": [
+    {
+      "id": "w1val-04-r5",
+      "image_hash_bound": true,
+      "report_hash_bound": true,
+      "report_mentions_exact_image_hash": true,
+      "status_matches_override": true,
+      "scope_matches_override": true,
+      "status_is_explicitly_scoped_unselected": true,
+      "no_owner_native_claim": true,
+      "display_in_gallery": true,
+      "root_score_matches_binding": true,
+      "report_status": "PASS_SCOPED_STATIC_CONCEPT_REVIEW",
+      "report_scope": "STORAGE_TWO_PROPOSED_STAGES_SIX_STATIC_VIEWS_ONLY"
+    },
+    {
+      "id": "w1val-01-r6",
+      "image_hash_bound": true,
+      "report_hash_bound": true,
+      "report_mentions_exact_image_hash": true,
+      "status_matches_override": true,
+      "scope_matches_override": true,
+      "status_is_explicitly_scoped_unselected": true,
+      "no_owner_native_claim": true,
+      "display_in_gallery": true,
+      "root_score_matches_binding": true,
+      "report_status": "PASS_SCOPED_STATIC_CONCEPT_REVIEW",
+      "report_scope": "SAW_TWO_PROPOSED_STAGES_SIX_STATIC_VIEWS_ONLY"
+    },
+    {
+      "id": "w1val-02-architecture-r5",
+      "image_hash_bound": true,
+      "report_hash_bound": true,
+      "report_mentions_exact_image_hash": true,
+      "status_matches_override": true,
+      "scope_matches_override": true,
+      "status_is_explicitly_scoped_unselected": true,
+      "no_owner_native_claim": true,
+      "display_in_gallery": true,
+      "root_score_matches_binding": true,
+      "report_status": "PASS_LIMITED_UNARMED_ARCHITECTURE_CONCEPT",
+      "report_scope": "Static limited unarmed protective-architecture concept only. This fallback cannot satisfy the owner armed-attack visual requirement or approve a full defense task."
+    },
+    {
+      "id": "w1val-03a-gear-r2",
+      "image_hash_bound": true,
+      "report_hash_bound": true,
+      "report_mentions_exact_image_hash": true,
+      "status_matches_override": true,
+      "scope_matches_override": true,
+      "status_is_explicitly_scoped_unselected": true,
+      "no_owner_native_claim": true,
+      "display_in_gallery": true,
+      "root_score_matches_binding": true,
+      "report_status": "PASS_SCOPED_STATIC_CONCEPT_REVIEW",
+      "report_scope": "TRAINED_CREW_AUTHORED_STATIC_THREE_VIEW_STAGE_ONLY"
+    },
+    {
+      "id": "w1val-03a-use-r5",
+      "image_hash_bound": true,
+      "report_hash_bound": true,
+      "report_mentions_exact_image_hash": true,
+      "status_matches_override": true,
+      "scope_matches_override": true,
+      "status_is_explicitly_scoped_unselected": true,
+      "no_owner_native_claim": true,
+      "display_in_gallery": true,
+      "root_score_matches_binding": true,
+      "report_status": "PASS_SCOPED_STATIC_CONCEPT_REVIEW",
+      "report_scope": "TRAINED_CREW_AUTHORED_STATIC_THREE_VIEW_STAGE_ONLY"
+    },
+    {
+      "id": "w1val-03b-gear-r4",
+      "image_hash_bound": true,
+      "report_hash_bound": true,
+      "report_mentions_exact_image_hash": true,
+      "status_matches_override": true,
+      "scope_matches_override": true,
+      "status_is_explicitly_scoped_unselected": true,
+      "no_owner_native_claim": true,
+      "display_in_gallery": true,
+      "root_score_matches_binding": true,
+      "report_status": "PASS_SCOPED_STATIC_CONCEPT_REVIEW",
+      "report_scope": "VETERAN_CREW_AUTHORED_STATIC_THREE_VIEW_STAGE_ONLY"
+    },
+    {
+      "id": "w1val-03b-use-r1",
+      "image_hash_bound": true,
+      "report_hash_bound": true,
+      "report_mentions_exact_image_hash": true,
+      "status_matches_override": true,
+      "scope_matches_override": true,
+      "status_is_explicitly_scoped_unselected": true,
+      "no_owner_native_claim": true,
+      "display_in_gallery": true,
+      "root_score_matches_binding": true,
+      "report_status": "PASS_SCOPED_STATIC_CONCEPT_REVIEW",
+      "report_scope": "VETERAN_CREW_AUTHORED_STATIC_THREE_VIEW_STAGE_ONLY"
+    }
+  ],
+  "historical_four": [
+    {
+      "id": "w1val-03a-use-r1",
+      "status_repair_required": true,
+      "image_matches": true,
+      "report_matches": true,
+      "raw_status_preserved": true,
+      "actual_status": "REPAIR_REQUIRED_HISTORICAL_ITERATION_NOT_SELECTED"
+    },
+    {
+      "id": "w1val-03a-use-r2",
+      "status_repair_required": true,
+      "image_matches": true,
+      "report_matches": true,
+      "raw_status_preserved": true,
+      "actual_status": "REPAIR_REQUIRED_HISTORICAL_ITERATION_NOT_SELECTED"
+    },
+    {
+      "id": "w1val-03a-use-r3",
+      "status_repair_required": true,
+      "image_matches": true,
+      "report_matches": true,
+      "raw_status_preserved": true,
+      "actual_status": "REPAIR_REQUIRED_HISTORICAL_ITERATION_NOT_SELECTED"
+    },
+    {
+      "id": "w1val-03a-use-r4",
+      "status_repair_required": true,
+      "image_matches": true,
+      "report_matches": true,
+      "raw_status_preserved": true,
+      "actual_status": "REPAIR_REQUIRED_HISTORICAL_ITERATION_NOT_SELECTED"
+    }
+  ],
+  "packaged_inputs": [
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/superseded-unselected/01-counter-r1.png",
+      "hash_match": true,
+      "git_blob_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-01-r1.png",
+      "hash_match": true,
+      "git_blob_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-01-r2.png",
+      "hash_match": true,
+      "git_blob_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-01-r3.png",
+      "hash_match": true,
+      "git_blob_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-01-r4.png",
+      "hash_match": true,
+      "git_blob_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-01-r5.png",
+      "hash_match": true,
+      "git_blob_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-02-architecture-r1.png",
+      "hash_match": true,
+      "git_blob_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-02-architecture-r2.png",
+      "hash_match": true,
+      "git_blob_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-02-architecture-r3.png",
+      "hash_match": true,
+      "git_blob_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-02-architecture-r4.png",
+      "hash_match": true,
+      "git_blob_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03a-gear-r1.png",
+      "hash_match": true,
+      "git_blob_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03a-gear-r2.png",
+      "hash_match": true,
+      "git_blob_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03a-use-r1.png",
+      "hash_match": true,
+      "git_blob_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03b-gear-r1.png",
+      "hash_match": true,
+      "git_blob_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03b-gear-r2.png",
+      "hash_match": true,
+      "git_blob_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03b-gear-r3.png",
+      "hash_match": true,
+      "git_blob_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03b-gear-r4.png",
+      "hash_match": true,
+      "git_blob_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-04-r1.png",
+      "hash_match": true,
+      "git_blob_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-04-r2.png",
+      "hash_match": true,
+      "git_blob_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-04-r3.png",
+      "hash_match": true,
+      "git_blob_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/layout-contracts/storage-port-contract.png",
+      "hash_match": true,
+      "git_blob_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-04-r4.png",
+      "hash_match": true,
+      "git_blob_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03a-use-r2.png",
+      "hash_match": true,
+      "git_blob_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03a-use-r3.png",
+      "hash_match": true,
+      "git_blob_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03a-use-r4.png",
+      "hash_match": true,
+      "git_blob_match": true
+    }
+  ],
+  "requests": [
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/01-counter-r1.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/01-counter-r2.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/02-cooker-r1.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/03-saw-r1.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1up-04-r1.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1up-05-r1.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1up-06-r1.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-01-r1-invocation.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-01-r2-invocation.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-01-r3-invocation.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-01-r4-invocation.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-01-r5-invocation.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-01-r6-invocation.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-02-architecture-r1-invocation.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-02-architecture-r2-invocation.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-02-architecture-r3-invocation.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-02-architecture-r4-invocation.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-02-architecture-r5-invocation.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-02-r1-invocation.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-03a-gear-r1-invocation.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-03a-gear-r2-invocation.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-03a-r1-invocation.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-03a-use-r1-invocation.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-03a-use-r2-invocation.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-03a-use-r3-invocation.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-03a-use-r4-invocation.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-03a-use-r5-invocation.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-03b-gear-r1-invocation.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-03b-gear-r2-invocation.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-03b-gear-r3-invocation.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-03b-gear-r4-invocation.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-03b-r1-invocation.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-03b-use-r1-invocation.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-04-r1-invocation.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-04-r2-invocation.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-04-r3-invocation.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-04-r4-invocation.json",
+      "hash_match": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-04-r5-invocation.json",
+      "hash_match": true
+    }
+  ],
+  "cache_paths": [],
+  "receipt_counts": {
+    "source_files": 206,
+    "source_bytes": 110874091,
+    "generated_pngs": 34,
+    "superseded_unselected_studies": 6,
+    "invocation_records": 38,
+    "tool_error_records": 2,
+    "review_reports": 68,
+    "crop_pngs": 58,
+    "verifier_logs": 4,
+    "retained_prior_evidence_files": 0
+  },
+  "post_receipt_additions": {
+    "supplemental-resumption/final/BINARY_BLOB_STAGING.json": "7012f836433c0e61b994d5dd02b35b9664abad4894f7e19eb87b4ebf03ac9939"
+  },
+  "harness_refinements": [
+    "The first predicate expected the bare string REPAIR_REQUIRED. Root correctly used the more explicit REPAIR_REQUIRED_HISTORICAL_ITERATION_NOT_SELECTED; exact image/report hashes and original statuses were already correct.",
+    "The first frozen-set predicate disallowed any additive metadata. All 65 receipt-bound files are unchanged; the only later addition is root-owned final/BINARY_BLOB_STAGING.json. It is identified and hashed separately, not counted as an assembled artifact or silently folded into the receipt."
+  ],
+  "receipt_frozen_file_count": 65,
+  "reviewed_utc": "2026-11-28T12:59:23.323955+00:00"
+}

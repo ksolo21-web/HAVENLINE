@@ -1,0 +1,71 @@
+{
+  "reviewer": "/root/world1_upgrade_critic",
+  "date": "2026-11-28",
+  "scope": "ACTUAL_STATIC_IMAGE_RETEST",
+  "reviewed": 2,
+  "passed": 0,
+  "owner_selection": false,
+  "native_approval": false,
+  "evidence": [
+    "Actual full r4 sheets",
+    "Actual lower REAR and FUNCTION/CUTAWAY inspection crops",
+    "Separately authored exact storage-port layout diagram; no changes made to candidate image bytes"
+  ],
+  "results": [
+    {
+      "id": "W1VAL-01-r4",
+      "status": "REPAIR_REQUIRED",
+      "score": 7.5,
+      "image": {
+        "path": "generated/w1val-01-r4.png",
+        "sha256": "08e16d94f7b681026988d57597613f75b548d9a4f406c039ece46f99f0606490"
+      },
+      "resolved": [
+        "Optional gantry remains removed",
+        "Opposite raw-input and finished-output ends remain correctly distinguished",
+        "Outside service walks and independent fixed output cradles retained"
+      ],
+      "findings": [
+        {
+          "id": "VAL01-R07",
+          "gate": "same functional machine across three views",
+          "observed": "Lower REAR foreground cell has a low sunken head and its complete upper clamped-log/feed assembly is absent compared with FRONT/FUNCTION. An inner-gap-facing crank remains on the farther cell fascia.",
+          "repair": "Use the previous complete r3 rear-cell geometry as the reference for this pane only. Restore two same-height complete cutting/clamp/feed assemblies. Remove the inner-gap crank; retain the rear cell crank on the foreground exterior fascia facing its service deck."
+        }
+      ],
+      "clarification": "FUNCTION upper ball-ended handle is not evidence of the low fascia drive crank. A correctly placed low far-side crank may be occluded from the front camera if the true rear view proves its presence and coherent attachment."
+    },
+    {
+      "id": "W1VAL-04-r4",
+      "status": "REPAIR_REQUIRED",
+      "score": 8.5,
+      "image": {
+        "path": "generated/w1val-04-r4.png",
+        "sha256": "a695115d5d670bf3cf4f11b8db98ee40192badb0319290200571af1d39b06364"
+      },
+      "resolved": [
+        "Receiving opening now faces the genuine left side wall",
+        "No forest-through-rear tunnel",
+        "Front doorway circulation, left hoist with manual chain, separated right fuel and selected bound plank/orange fuel identities retained"
+      ],
+      "findings": [
+        {
+          "id": "VAL04-R07",
+          "gate": "clear actual receiving threshold",
+          "observed": "Crate/box remains inside the receiving aperture in both cutaway stages. The mandatory clear walk-through connection from side apron to left internal stock area is not shown.",
+          "repair": "Move crates into the left stock area away from the receiving threshold; show continuous empty floor from apron through the side opening."
+        },
+        {
+          "id": "VAL04-R08",
+          "gate": "one coherent port topology in all views",
+          "observed": "Both upper and lower REAR panels have an open stocked bay under the right-hand rear roof/gable, coplanar with the principal rear wall. This is an extra rear opening and contradicts the solid rear wall of the exact layout contract.",
+          "repair": "Close the rear bay plane in both stages with matching blue wall panels while preserving the receiving port on its adjacent perpendicular side wall."
+        }
+      ],
+      "layout_contract": {
+        "path": "package/Docs/Design/World1Upgrades/2026-11-28/layout-contracts/storage-port-contract.png",
+        "sha256": "34149fbec556866395633e1148de621385e316af00c28665bc8955b4f6db3a1b"
+      }
+    }
+  ]
+}

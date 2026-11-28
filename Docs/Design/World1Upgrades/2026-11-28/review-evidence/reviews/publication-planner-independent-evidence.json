@@ -1,0 +1,2491 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/world1_upgrade_inventory",
+  "scope": "Exact root-authored publication planner source and local disposable clean-package manifest behavior only; no remote tree preservation/branch/art approval.",
+  "observed_utc": "2026-11-28T12:53:22.246525+00:00",
+  "tool_sha256": "b52dda12c99ef594dc2db586ac7097ce44a0eff05b4399f803690213f43daeef",
+  "exact_command": [
+    "python",
+    "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/reviews/publication-planner-independent-work/package/Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/tools/build_publication_plan.py",
+    "--package",
+    "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/reviews/publication-planner-independent-work/package",
+    "--output",
+    "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/reviews/publication-planner-independent-work/clean-output",
+    "--parent",
+    "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+    "--base-tree",
+    "e90a363ec6465f773dad85ec07206b926f19317e",
+    "--branch",
+    "review/publication-planner-disposable-audit"
+  ],
+  "checks": {
+    "actual_clean_disposable_manifest_run_succeeded": true,
+    "repeat_run_with_identical_inputs_byte_deterministic": true,
+    "disposable_package_bytes_unchanged": true,
+    "every_package_file_listed_once": true,
+    "all_overlay_paths_relative_and_no_parent_traversal": true,
+    "all_overlay_items_add_or_replace_no_deletions": true,
+    "parent_base_tree_branch_metadata_exact": true,
+    "all_sha256_git_blob_and_lengths_exact": true,
+    "all_binary_entries_use_exact_blob_sha": true,
+    "all_utf8_text_roundtrips_byte_exact": true,
+    "output_inside_package_rejected_before_creation": true,
+    "reviewed_tool_bytes_unchanged": true,
+    "no_bytecode_repeat_identical": true,
+    "root_staging_generated_cache_removed": true,
+    "root_tool_still_matches_reviewed_source": true
+  },
+  "file_count": 294,
+  "binary_files": 93,
+  "text_files": 201,
+  "batch_count": 27,
+  "batch_bytes": [
+    17793,
+    238221,
+    246925,
+    119764,
+    249041,
+    66030,
+    236796,
+    125851,
+    473522,
+    244957,
+    244892,
+    240393,
+    244714,
+    80870,
+    217289,
+    236072,
+    166412,
+    125534,
+    214155,
+    265593,
+    143141,
+    2085313,
+    1426022,
+    219578,
+    245754,
+    217469,
+    131486
+  ],
+  "max_batch_bytes": 2085313,
+  "oversized_single_entry_batches": [
+    {
+      "entries": 1,
+      "bytes": 473522
+    },
+    {
+      "entries": 1,
+      "bytes": 265593
+    },
+    {
+      "entries": 1,
+      "bytes": 2085313
+    },
+    {
+      "entries": 1,
+      "bytes": 1426022
+    }
+  ],
+  "per_file_checks": [
+    {
+      "path": "AGENTS.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "BUILD_GAME.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/INVENTORY_VALIDATION.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/PURCHASE_VALUE_UPGRADE_PLAN.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/PURCHASE_VALUE_UPGRADE_PLAN.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/README.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/UPGRADE_RENDER_BRIEFS.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/UPGRADE_RENDER_BRIEFS.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/UPGRADE_SOURCE_MANIFEST.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/VALUE_DESIGN_STATUS.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/VALUE_DESIGN_VALIDATION.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/VALUE_SOURCE_MANIFEST.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/W1VAL-01-BRIEF.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/W1VAL-02-BRIEF.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/W1VAL-03-BRIEF.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/W1VAL-04-BRIEF.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/WORLD1_UPGRADE_CENSUS.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/WORLD1_UPGRADE_CENSUS.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/history/W1VAL-01-before-stacking-arm-removal.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/history/W1VAL-03-before-reference-chain.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/history/before-reference-chain-VALUE_DESIGN_STATUS.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/history/before-reference-chain-VALUE_DESIGN_VALIDATION.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/history/crew-presentation-before-separate-use-scenes/PURCHASE_VALUE_UPGRADE_PLAN.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/history/crew-presentation-before-separate-use-scenes/PURCHASE_VALUE_UPGRADE_PLAN.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/history/crew-presentation-before-separate-use-scenes/README.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/history/crew-presentation-before-separate-use-scenes/VALUE_DESIGN_STATUS.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/history/crew-presentation-before-separate-use-scenes/VALUE_DESIGN_VALIDATION.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/history/crew-presentation-before-separate-use-scenes/W1VAL-03-BRIEF.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/layout-contracts/storage-port-contract.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/layout-contracts/storage-port-contract.svg",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/owner-instructions/2026-11-28-upgrade-value.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/ARTIFACT_INVENTORY.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/ASSEMBLY_RECEIPT.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-01-r1.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-01-r2.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-01-r3.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-01-r4.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-01-r5.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-01-r6.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-02-architecture-r1.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-02-architecture-r2.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-02-architecture-r3.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-02-architecture-r4.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-02-architecture-r5.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03a-gear-r1.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03a-gear-r2.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03a-use-r1.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03a-use-r2.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03a-use-r3.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03a-use-r4.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03a-use-r5.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03b-gear-r1.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03b-gear-r2.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03b-gear-r3.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03b-gear-r4.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-03b-use-r1.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-04-r1.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-04-r2.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-04-r3.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-04-r4.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/iterations/w1val-04-r5.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/superseded-unselected/01-counter-r1.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/superseded-unselected/02-cooker-r1.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/superseded-unselected/03-saw-r1.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/superseded-unselected/w1up-04-r1.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/superseded-unselected/w1up-05-r1.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/candidates/superseded-unselected/w1up-06-r1.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/01-counter-r1.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/01-counter-r2.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/02-cooker-r1.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/03-saw-r1.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/generation-receipts.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/priority-value-contract.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1up-04-r1.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1up-05-r1.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1up-06-r1.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-01-r1-invocation.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-01-r2-invocation.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-01-r3-invocation.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-01-r4-invocation.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-01-r5-invocation.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-01-r6-invocation.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-02-architecture-r1-invocation.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-02-architecture-r2-invocation.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-02-architecture-r3-invocation.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-02-architecture-r4-invocation.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-02-architecture-r5-invocation.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-02-r1-invocation.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-02-r1-tool-rejection.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-03-r1-input-limit.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-03a-gear-r1-invocation.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-03a-gear-r2-invocation.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-03a-r1-invocation.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-03a-use-r1-invocation.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-03a-use-r2-invocation.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-03a-use-r3-invocation.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-03a-use-r4-invocation.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-03a-use-r5-invocation.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-03b-gear-r1-invocation.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-03b-gear-r2-invocation.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-03b-gear-r3-invocation.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-03b-gear-r4-invocation.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-03b-r1-invocation.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-03b-use-r1-invocation.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-04-r1-invocation.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-04-r2-invocation.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-04-r3-invocation.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-04-r4-invocation.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/prompts/w1val-04-r5-invocation.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/00-independent-review-plan.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/01-art-first3-r1-rejected.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/01-art-first3-r1-rejected.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/02-owner-value-correction-and-review-reset.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/03-priority-value-pre-generation-input.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/03-priority-value-pre-generation-review.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/04-saw-storage-brief-preflight.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/05-plan-independent-structural-rerun.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/05-plan-source-and-preservation-verification.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/06-value-saw-storage-r1-independent-review.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/07-defense-crew-full-matrix-preflight.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/08-value-saw-storage-r2-retest.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/09-value-design-document-independent-review.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/10-value-design-reference-chain-review.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/11-value-saw-storage-r3-retest.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/12-crew-intermediate-r1-review.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/13-value-saw-storage-r4-retest.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/14-crew-intermediate-r2-review.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/15-value-design-separate-use-presentation-review.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/16-storage-r5-static-concept-review.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/17-veteran-master-r3-retest.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/18-saw-r6-static-concept-review.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/19-trained-use-r1-independent-review.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/20-veteran-master-r4-review.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/21-trained-use-r2-retest.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/22-veteran-static-stage-review.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/23-trained-use-r3-retest.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/24-trained-use-r4-retest.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/25-trained-static-stage-review.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/ART_REVIEW_INDEX.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/CHECKPOINT.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r1-crop-evidence.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r1-guardwalk-access-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r1-guardwalk-interior-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r1-independent.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r1-independent.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r1-lookout-access-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r1-lookout-interior-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r2-crop-evidence.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r2-guardwalk-access-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r2-guardwalk-interior-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r2-independent.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r2-independent.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r2-lookout-access-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r2-lookout-interior-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r3-crop-evidence.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r3-guardwalk-access-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r3-guardwalk-interior-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r3-independent.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r3-independent.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r3-lookout-access-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r3-lookout-interior-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r4-crop-evidence.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r4-guardwalk-access-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r4-guardwalk-interior-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r4-independent.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r4-independent.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r4-lookout-access-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r4-lookout-interior-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r4-lookout-rail-access-detail.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r4-lookout-rail-interior-detail.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r5-crop-evidence.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r5-guardwalk-access-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r5-guardwalk-interior-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r5-independent.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r5-independent.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r5-lookout-access-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r5-lookout-interior-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r5-lookout-rail-access-detail-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/architecture-r5-lookout-rail-interior-detail-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/assembly-helper-independent-evidence.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/assembly-helper-independent-r1.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/assembly-helper-independent-r1.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/assembly-helper-independent-r2.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/assembly-helper-independent-r2.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/assembly-helper-independent-r3.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/assembly-helper-independent-r3.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/counter-bottom-brace-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/counter-top-left-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/counter-top-rear-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/crew-human-proportion-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/crew-owl-fixture-r2-r3-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/crew-trained-master-use-proportion-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/plan-independent-pinned-source-identity.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/plan-independent-preservation-checks.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/plan-independent-r1.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/plan-independent-r1.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/plan-independent-r2.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/plan-independent-r2.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/plan-independent-source-checks.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/supplemental-resumption-independent-evidence.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/supplemental-resumption-independent-r1.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/supplemental-resumption-independent-r1.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/w1val-01-r1-lower-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/w1val-01-r1-topright-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/w1val-01-r2-lower-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/w1val-01-r4-function-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/w1val-01-r4-rear-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/w1val-03a-gear-r1-rear-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/w1val-03a-gear-r2-front-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/w1val-03a-gear-r2-rear-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/w1val-03a-use-r1-machine-contact-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/w1val-03a-use-r1-supplier-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/w1val-03a-use-r2-contact-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/w1val-03a-use-r2-supplier-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/w1val-03a-use-r3-grip-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/w1val-03a-use-r4-grip-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/w1val-03a-use-r5-grip-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/w1val-03b-gear-r1-rear-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/w1val-03b-gear-r2-front-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/w1val-03b-gear-r2-rear-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/w1val-03b-gear-r3-owl-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/w1val-03b-gear-r4-owl-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/w1val-03b-use-r1-owl-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/w1val-03b-use-r1-repair-contact-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/w1val-04-r1-lower-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/w1val-04-r1-topright-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/w1val-04-r2-lower-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/w1val-04-r4-function-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/w1val-04-r4-rear-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/reviews/w1val-04-r5-cutaway-inspection.png",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": true,
+      "text_roundtrip_exact": null
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/verifiers/plan-independent-work/verifier.stderr.txt",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/verifiers/plan-independent-work/verifier.stdout.txt",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/verifiers/plan-independent-work-r2/verifier.stderr.txt",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/review-evidence/verifiers/plan-independent-work-r2/verifier.stdout.txt",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/GENERATION_INPUT_RESOLUTION.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/PUBLICATION_AUDIT.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/README.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/RESUMPTION_MANIFEST.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/SOURCE_PRESERVATION_MANIFEST.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/final/PUBLICATION_STATUS.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/final/root-review-status-overrides.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/history/GENERATION_INPUT_RESOLUTION-35-requests.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/history/GENERATION_INPUT_RESOLUTION-37-requests.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/COMPLETENESS_STANDARD.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/GAMEPLAY_DEPTH_CONTRACT.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/GAMEPLAY_DEPTH_STANDARD.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/GAMEPLAY_RULES_CONTRACT.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/GAMEPLAY_RULES_STANDARD.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/GameplayRules/2026-11-27/ACTORS_COMBAT_GAPS.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/GameplayRules/2026-11-27/ACTORS_MOTION_REQUIREMENTS.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/GameplayRules/2026-11-27/PROGRESSION_ECONOMY_GAPS.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/GameplayRules/2026-11-27/PROGRESSION_ECONOMY_GAPS.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/GameplayRules/2026-11-27/Review/Final/WORLD_PROGRESSION_FINAL_SOURCE_ADDENDUM.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/GameplayRules/2026-11-27/TASK_COMPLETENESS_T01_T80.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/GameplayRules/2026-11-27/TASK_COMPLETENESS_T01_T80.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/GameplayRules/2026-11-27/TASK_GAMEPLAY_DEPTH_T01_T80.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/GameplayRules/2026-11-27/TASK_GAMEPLAY_DEPTH_T01_T80.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/GameplayRules/2026-11-27/TASK_GAMEPLAY_RULES_T01_T80.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/GameplayRules/2026-11-27/TASK_GAMEPLAY_RULES_T01_T80.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/HAVENLINE_BUILD_PLAN_V2.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/Docs/Production/WHOLE_GAME_COMPLETENESS.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/tools/havenline/gameplay_rules/dynamic_economy.gd",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/staged-sources/tools/havenline/production/completeness.py",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/tools/assemble_review_package.py",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/tools/build_publication_plan.py",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/tools/review_status_overrides.template.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/tools/verify_resumption.py",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Production/HAVENLINE_BUILD_PLAN_V2.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Production/WorldProgression/2026-11-28-10x50/CHECKPOINT.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Production/WorldProgression/2026-11-28-10x50/CURRENT_WORLD_PLAN.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Production/WorldProgression/2026-11-28-10x50/History/2026-11-28-before-functional-value/DISPOSITION.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Production/WorldProgression/2026-11-28-10x50/History/2026-11-28-before-functional-value/entrypoints/AGENTS.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Production/WorldProgression/2026-11-28-10x50/History/2026-11-28-before-functional-value/entrypoints/BUILD_GAME.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Production/WorldProgression/2026-11-28-10x50/History/2026-11-28-before-functional-value/entrypoints/Docs/Production/HAVENLINE_BUILD_PLAN_V2.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Production/WorldProgression/2026-11-28-10x50/History/2026-11-28-before-functional-value/entrypoints/REPOSITORY_INDEX.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Production/WorldProgression/2026-11-28-10x50/History/2026-11-28-before-functional-value/planning/CHECKPOINT.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Production/WorldProgression/2026-11-28-10x50/History/2026-11-28-before-functional-value/planning/CURRENT_WORLD_PLAN.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Production/WorldProgression/2026-11-28-10x50/History/2026-11-28-before-functional-value/planning/MIGRATION_REQUIREMENTS.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Production/WorldProgression/2026-11-28-10x50/History/2026-11-28-before-functional-value/planning/SOURCE_EVIDENCE.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Production/WorldProgression/2026-11-28-10x50/History/2026-11-28-before-functional-value/planning/TASK_SCOPE_DELTA_T01_T80.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Production/WorldProgression/2026-11-28-10x50/History/2026-11-28-before-functional-value/planning/TASK_SCOPE_DELTA_T01_T80.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Production/WorldProgression/2026-11-28-10x50/History/2026-11-28-before-functional-value/planning/VALIDATION.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Production/WorldProgression/2026-11-28-10x50/History/2026-11-28-before-functional-value/planning/WORLD_PROGRESSION_CONTRACT.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Production/WorldProgression/2026-11-28-10x50/History/2026-11-28-before-functional-value/planning/verify_plan.py",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Production/WorldProgression/2026-11-28-10x50/MIGRATION_REQUIREMENTS.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Production/WorldProgression/2026-11-28-10x50/SOURCE_EVIDENCE.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Production/WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Production/WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Production/WorldProgression/2026-11-28-10x50/VALIDATION.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Production/WorldProgression/2026-11-28-10x50/WORLD_PROGRESSION_CONTRACT.json",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "Docs/Production/WorldProgression/2026-11-28-10x50/verify_plan.py",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "REPOSITORY_INDEX.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    },
+    {
+      "path": "WORLD1_UPGRADE_REVIEW.md",
+      "sha256_matches": true,
+      "git_blob_matches": true,
+      "bytes_match": true,
+      "binary_binding_matches": null,
+      "text_roundtrip_exact": true
+    }
+  ],
+  "output_hashes": {
+    "batch-010.json": "ddc23d169f55feef07db2f892f7740dcc8690a7d72c01e431f42d4de783c4725",
+    "batch-016.json": "cb2abaa1309157af0564a162adbe39c7ed668590c551c93c4bd6344ab0f378c7",
+    "batch-013.json": "ddc56eba92500dfdd55a57af7e7fc3e0f899fba1a6fbedc821b341f20b9edee9",
+    "batch-011.json": "f4439242463b7d2a970b2cd9ba5079bc5f93384422a78c4deedc993e3d97ed35",
+    "batch-008.json": "2bec980dc855b3eadd20a6cea5b649c57fce9c884a7563a6bc6b3b49c2ddf265",
+    "batch-000.json": "4e260a332f20d834360f36bcba1b26e2c54974c9d204febb74c18eea6fe56daa",
+    "batch-004.json": "06f084f7887252757a4a7ff35279e1c4c8ef0ccd20c3626d7bb9a8347e1295ff",
+    "batch-019.json": "01a01d12524c978931f185d7b11bb9910e35c12ee628f685a101ce4d486924c6",
+    "batch-017.json": "edf17847c582edcc6970785af002a7360246f1c881075d4741a62d4a6db279fc",
+    "MANIFEST.json": "be4070b30c3d6f9bffa00d8229eae62dc8025af5cb088f892df3f33884390ce0",
+    "batch-009.json": "cfafdc8557281f18292c3d45909785663840b5a0a7aa0c56566bb197a2655ea7",
+    "batch-007.json": "7d9c0d9355faa0b143fa563c205f733c0d3ec7e20095aecb04094e645b4004f1",
+    "batch-024.json": "03bd3a2e5f3ae45ed0b0392029f4912c9652233704196bfcd2388ccec9ba23e0",
+    "batch-018.json": "29b6a75bcc2ca2e485f7aed8b4e79aecc04fdea1f06026f52a064b498e3c787e",
+    "batch-002.json": "4c9b53444f7e118c2aaf1b00902219b32b0e80decb1221360d698299800d3dd3",
+    "batch-014.json": "b33546c78d84b294d43bfad87d0bb6b599c22c7e2084c9503178a3ca2c261e6f",
+    "batch-012.json": "e1ef1f3901990dc4d0e15fbd381ec640f9702e0bfdc80a43a960520fe3850605",
+    "batch-003.json": "1c0ec7d6dde68844d36834359dd465739e3740a473baecb20850923bcc92c18f",
+    "batch-006.json": "8f844978310d4f1fa727f500c3a5a2f0d3ed4f8d980720221965fcbade8e21a2",
+    "batch-005.json": "e07029ed3e75d00792fd2fa30601c496a69f7a247e477314f05c24990cf709da",
+    "batch-020.json": "3384e7b5f3be7f4bba79773918b93769e6295725b1846c23fa867e711888a5bd",
+    "batch-022.json": "68f3491e91a22401d314e82db2d42df56663af0c3dc24ba803bd6dfb1017af58",
+    "batch-025.json": "a3b409a6d42538f12d21b9c5bd748a2072eb67e25b32bffe8d87e22c1d2acefc",
+    "batch-021.json": "9739196f516ef6d37dee62f50db5c0bab3cd73c3db802236d4d58dbce111aea3",
+    "batch-001.json": "939a90c4dbb5bfb886d1424c88e2424af994b9ae30645216dad053dd5b9f1a57",
+    "batch-015.json": "7a8b2882fb9110b54b8693fae888fc822afeda5c9521d5e13fc2e6c1c6a4d194",
+    "batch-026.json": "3510f944c52a76a9ff83b0551f1a953af6c671d4b3c85def77f257c1f5813a5e",
+    "batch-023.json": "9f75a7ea25e540cb0aede47f4eb03b725a8c51b9593366ca74e95c6827fd298e"
+  },
+  "guard_exit_code": 1,
+  "disposable_repair": "Moved only generated .pyc cache out of disposable package; root publication staging was not changed.",
+  "root_staging_cache_absent": true,
+  "caller_requirements": [
+    "Chain tree batches: first base_tree is exact recorded base; each later batch uses the previous returned tree, so earlier overlay additions survive.",
+    "Upload each binary file and verify returned Git blob SHA before sending its sha tree entry.",
+    "Consume only batches listed in MANIFEST.json; do not glob stale output batches from a reused directory.",
+    "The 250000-byte batching target is soft: large individual UTF-8 files remain larger single-entry batches. Confirm the publication transport accepts their actual sizes.",
+    "Verify the complete resulting remote base+overlay path/mode/blob map before creating the isolated review branch; this local tool cannot prove remote preservation."
+  ],
+  "remote_write_performed": false,
+  "original_frozen_documents_edited": false,
+  "art_native_or_whole_task_approval": false,
+  "last_retest_utc": "2026-11-28T12:54:21.831505+00:00",
+  "retest_environment": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  }
+}

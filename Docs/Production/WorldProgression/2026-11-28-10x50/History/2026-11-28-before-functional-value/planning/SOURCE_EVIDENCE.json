@@ -1,0 +1,684 @@
+{
+  "schema_version": 1,
+  "observed_date": "2026-11-28",
+  "repository": "ksolo21-web/HAVENLINE",
+  "remote_sources": [
+    {
+      "id": "S01",
+      "kind": "CURRENT_USER_INSTRUCTION",
+      "observed_date": "2026-11-28",
+      "content": "T12 and T32 changed. we are doing 10 worlds  50 levels each other tasks may have changed too. we may need more level upgrade renders for all the things that can lvl up and chnage appearences in world 1 for now.",
+      "verbatim": true,
+      "supports": [
+        "10 worlds",
+        "50 local levels each",
+        "T12/T32 correction",
+        "World 1 appearance-upgrade focus"
+      ],
+      "limitation": "Does not define asset caps, equipment-level mappings, concrete unlock levels or a global display convention."
+    },
+    {
+      "id": "S02",
+      "kind": "PINNED_GITHUB_PRIMARY",
+      "commit": "5862b89c1663cacc0cbb84bfaba438d1459cfdb6",
+      "path": "Docs/Production/Build13Audit/World-Progression.md",
+      "git_blob_sha": "50f385143944833d9108da781c0058ed5ee9908a",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/5862b89c1663cacc0cbb84bfaba438d1459cfdb6/Docs/Production/Build13Audit/World-Progression.md",
+      "supports": [
+        "World 1 launch and later connected world updates",
+        "Existing world themes/order and T32/T44–T52 owners",
+        "Five World 1 planning groups",
+        "Garage/truck owner requirements"
+      ],
+      "disposition": "Its tentative count is superseded by S01; its old ten-level table stays historical. Unload and in-camp blade policy conflict with S04 and are not settled here."
+    },
+    {
+      "id": "S03",
+      "kind": "PINNED_GITHUB_PRIMARY",
+      "commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "path": "Docs/Production/DEPENDENCY_GRAPH.json",
+      "git_blob_sha": "93836ccac725bcef484c14c855e8bce9ae4502ad",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/a4e643aeb563b6f9cfda8b840c0651d13326eec8/Docs/Production/DEPENDENCY_GRAPH.json",
+      "supports": [
+        "70 task identities",
+        "Existing task dependencies and lifecycle snapshot"
+      ],
+      "disposition": "Original names/dependency arrays are preserved in the delta; new scope text does not activate or approve tasks."
+    },
+    {
+      "id": "S04",
+      "kind": "PINNED_GITHUB_PRIMARY",
+      "commit": "69bd3eb921ce18838795b3ce21b232ec6e3b54b6",
+      "path": "Docs/Production/VehicleEconomy/2026-11-27/SUPERSESSION.md",
+      "git_blob_sha": "409367d6acb0fe2d84a47fa420094db7df35ac04",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/69bd3eb921ce18838795b3ce21b232ec6e3b54b6/Docs/Production/VehicleEconomy/2026-11-27/SUPERSESSION.md",
+      "supports": [
+        "Owner-selected low fuel use",
+        "Iron bars/sheet metal, coal/oil, costly processed construction",
+        "Fuel separate from cargo",
+        "Preservation of accepted quotes and earlier proofs"
+      ],
+      "disposition": "Fuel requirement corroborates the later owner expansion and remains fixed. Partial/whole-load and general in-camp blade conflict with S02 remains explicitly unresolved."
+    },
+    {
+      "id": "S05",
+      "kind": "PINNED_GITHUB_PRIMARY",
+      "commit": "69bd3eb921ce18838795b3ce21b232ec6e3b54b6",
+      "path": "Docs/Production/SnowTruckGarage/2026-11-27/REQUIREMENTS.json",
+      "git_blob_sha": "a9f90f236b0aaf36033fcf0a70869bfdc97e1c54",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/69bd3eb921ce18838795b3ce21b232ec6e3b54b6/Docs/Production/SnowTruckGarage/2026-11-27/REQUIREMENTS.json",
+      "supports": [
+        "Garage-first vehicle requirement",
+        "Typed unlimited cargo",
+        "Outside loss versus inside salvage",
+        "HP, repair, paid replacement and recovery boundaries"
+      ],
+      "disposition": "Preserved source; do not reissue its old no-fuel boundary as current."
+    },
+    {
+      "id": "S06",
+      "kind": "PINNED_GITHUB_PRIMARY",
+      "commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "path": "Docs/Production/HAVENLINE_BUILD_PLAN_V2.md",
+      "git_blob_sha": "8c76426bde92d0e6e040ddb13e186e2ccfa20e7a",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/a4e643aeb563b6f9cfda8b840c0651d13326eec8/Docs/Production/HAVENLINE_BUILD_PLAN_V2.md",
+      "supports": [
+        "Historical 100-level task plan",
+        "T71–T80 missing-source boundary",
+        "Existing reference/audio/device release requirements"
+      ],
+      "disposition": "Current 10×50 scope supersedes level counts; stronger acceptance obligations and history remain intact."
+    },
+    {
+      "id": "S07",
+      "kind": "PINNED_GITHUB_PRIMARY",
+      "commit": "5862b89c1663cacc0cbb84bfaba438d1459cfdb6",
+      "path": "Docs/Production/Build13Audit/README.md",
+      "git_blob_sha": "f51feb0e4b242516ae082ba24877ed7d614bff04",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/5862b89c1663cacc0cbb84bfaba438d1459cfdb6/Docs/Production/Build13Audit/README.md",
+      "supports": [
+        "World 1 release direction",
+        "Requirement to reconcile old progression architecture",
+        "Build 13 source/approval limits"
+      ],
+      "disposition": "Audit statements that leave already owner-selected fuel/casualty/furnace choices open do not automatically repeal independent later requirements; competing sources need scoped reconciliation."
+    }
+  ],
+  "local_source_root": "/workspace/scratch/e15437dc7c94/HAVENLINE-gameplay-rules",
+  "local_source_records": [
+    {
+      "path": "Docs/Production/COMPLETENESS_STANDARD.md",
+      "sha256": "af11f8e4d3763a22a25ca892ed7085488dfe611a3483421a18014165ed7795c8",
+      "git_blob_sha": "f2a1130b011ce3ba554529f3fccda03fd4b91297",
+      "bytes": 14832,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/DEPENDENCY_GRAPH.json",
+      "sha256": "ec288e511af2ad220234fe7fcd50d6bfabbe275edd1ddc8d4b11bbdb7af82459",
+      "git_blob_sha": "93836ccac725bcef484c14c855e8bce9ae4502ad",
+      "bytes": 25651,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/FORWARD_EXECUTION_PROFILES.json",
+      "sha256": "0d1d0f963a5854adaa060a851732e404f9b3b10f851306cb80e9ea41b07ece11",
+      "git_blob_sha": "8fbc7b3ed898d92f53fcbfa281308b98613fdc0e",
+      "bytes": 14270,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/GAMEPLAY_DEPTH_CONTRACT.json",
+      "sha256": "b5c0bb4417eeefc49a12497d0387319ad5e491a243f5b04bab1bc2ab87d7e4b8",
+      "git_blob_sha": "24928092580d474b79b828aa2f45a267a2f01065",
+      "bytes": 76941,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/GAMEPLAY_DEPTH_STANDARD.md",
+      "sha256": "2cf823c510fe64071e433b6f60e8d2a89887938ce0dd5b8cf89348c14ded23ff",
+      "git_blob_sha": "475340a61a73d655ce4d2f5ef270d23a9ed03dc3",
+      "bytes": 21427,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/GAMEPLAY_RULES_STANDARD.md",
+      "sha256": "b1dcab519fe32639ca9014962f10d9c65fa384eb60d88e4ca14ea3254cbc9423",
+      "git_blob_sha": "f7feec0aabdba96450c43ff71ba2f869a50f4314",
+      "bytes": 20025,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/GameplayRules/2026-11-27/PROGRESSION_ECONOMY_GAPS.json",
+      "sha256": "ea7fb8fc295d151883f4bc78db581d6ab7674a25ca7ec4f006ecfee0dabdabad",
+      "git_blob_sha": "3a431a8e4b9f1a35e63637e04ad70207e20325e4",
+      "bytes": 247570,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/GameplayRules/2026-11-27/PROGRESSION_ECONOMY_GAPS.md",
+      "sha256": "ec8583ec6a2847dcd55ee2d193e05b11443c556ec4fe227c3d24e735ca663178",
+      "git_blob_sha": "58c0646597944ac839c4e6f54f9452a3b9a8fd03",
+      "bytes": 80051,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/GameplayRules/2026-11-27/Review/Final/WORLD_PROGRESSION_FINAL_SOURCE_ADDENDUM.md",
+      "sha256": "d65afe92ddda48a9855ad9ba188cf5e0cf55344614d3a25d907913c624d0940e",
+      "git_blob_sha": "7d0c6019347ae04f3d1ad78485e53bd28bbaffc4",
+      "bytes": 4249,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/GameplayRules/2026-11-27/TASK_COMPLETENESS_T01_T80.json",
+      "sha256": "3e1072311f3205f0809ee3d1dee3e12b40958b02bf919a0aa4ce98e2fb79314d",
+      "git_blob_sha": "8c0fd87433eea51b055bc16c953a1ab515ea1172",
+      "bytes": 41078,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/GameplayRules/2026-11-27/TASK_COMPLETENESS_T01_T80.md",
+      "sha256": "4bd41db5e3c93513c97fe190c9603835bcf09337753da487bcbe8c7b46f82b4e",
+      "git_blob_sha": "ef5d40740c9e46e143bf6aa6e4a0481e1db36fb5",
+      "bytes": 10403,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/GameplayRules/2026-11-27/TASK_GAMEPLAY_DEPTH_T01_T80.json",
+      "sha256": "35df135690e23286f9a11ae20a2c16a33c3ca8cc98f85e47956f85d8a5751306",
+      "git_blob_sha": "e594c67c4d9a8853adea6cc4dc284286a1d9ab72",
+      "bytes": 1988335,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/GameplayRules/2026-11-27/TASK_GAMEPLAY_DEPTH_T01_T80.md",
+      "sha256": "dfe8bb1b2a960d52e54f752a2c70dec65e7e324a12dfcc0250ec75ce969725ef",
+      "git_blob_sha": "57dc4019d710eba8422dc163d2a02113a9e38628",
+      "bytes": 1423836,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/GameplayRules/2026-11-27/TASK_GAMEPLAY_RULES_T01_T80.json",
+      "sha256": "0e24a1a052ce73a26bf3f742b0b5c3b10712ca22db8be41cd7534848883f8d40",
+      "git_blob_sha": "7cae5272fe34ac3e6ae69b9c8607d6b49249b257",
+      "bytes": 31805,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/GameplayRules/2026-11-27/TASK_GAMEPLAY_RULES_T01_T80.md",
+      "sha256": "20e100c7d3a1a68641828e89999db2d47ab94e107fa2ff8770bbb449fc87c915",
+      "git_blob_sha": "d67cb2aea73ba328ab5bc2caaef436dd1f954b46",
+      "bytes": 6656,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/HAVENLINE_BUILD_PLAN_V2.md",
+      "sha256": "023a2b393ada77665b8a3279f682e719aee7e861c7413258b392800e51f91fc1",
+      "git_blob_sha": "07b1634993e6bbc8766cb424c2bccd99fc69d033",
+      "bytes": 35978,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/RESOURCE_TOOL_ACTOR_STANDARD.md",
+      "sha256": "b0ffece181dbcde1e51a0760d5cc924fb65516d9d79e68ea6185cb7759514ef0",
+      "git_blob_sha": "613217428d6a2035e6112c745a8cfc4087d1fb80",
+      "bytes": 9334,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.json",
+      "sha256": "def7ae413b9c4b96d857fe19eb142bf9afb684e2a891bd7c36795393ebfc3516",
+      "git_blob_sha": "ee7af7341c6590056e48eab6753e50d4817298fc",
+      "bytes": 267802,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md",
+      "sha256": "ac0614ce4231ad510ec02c7a8fb85d08dee4dcb8c7990ea6f6f8a3d5475d8453",
+      "git_blob_sha": "0e87f2ccef3dd00572b64f1054e52c0052e4d3b6",
+      "bytes": 115959,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/T12/ACCEPTANCE_TRACEABILITY.json",
+      "sha256": "1c1539aa327cbef13959b149d584ef332a3a8a604b4bc49fc261a1284af4b972",
+      "git_blob_sha": "24c83fe0ed2f31215e94d27a6fef788de74dbef8",
+      "bytes": 14449,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/T12/AUTHORING_BLUEPRINT.json",
+      "sha256": "21985948e8aa33ee3c8b2e8d96ab0b093b98abf291090c4e3f21c690005bb629",
+      "git_blob_sha": "4e5ca32e1dacb5cba2120575d2885036b96e3e7e",
+      "bytes": 130209,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/T12/BINDING_SLOT_CATALOG.json",
+      "sha256": "fc4322287e07125d311b09a88a2f30899a962909920b42eea2885ec6a6ad85f6",
+      "git_blob_sha": "e09c8f774ba844eb1b04158eb94aa492cdbdfa67",
+      "bytes": 54326,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/T12/DOWNSTREAM_CONSUMER_CONTRACT.json",
+      "sha256": "39006a1f43b1a131d9714a564e26bf28c04f63ddbbd5d6743058968d35dda4cf",
+      "git_blob_sha": "46d8c6c265f7c17922ec9fdc8a9c52ef924b0882",
+      "bytes": 5571,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/T12/FACT_SLOT_BINDING_INDEX_TEMPLATE.json",
+      "sha256": "48dd7c404b7370db75e578dc5a1b779f3464ab4409d3a1d0cbba109d7ededa14",
+      "git_blob_sha": "5ac8b6029ec03b075b6e2ea650f2fd6d0bd531fe",
+      "bytes": 41856,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/T12/FROZEN_SCOPE.md",
+      "sha256": "d97ea29238ec65300bbefe0399f4dc2f26936f27d595b5ee1aea563bff01fdb9",
+      "git_blob_sha": "abb0455c788aa4161df9e91b1c083ce22b9461ae",
+      "bytes": 10072,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/T12/LEVEL_1_100_MATRIX.json",
+      "sha256": "60a35569de5c2fe4de2f15e83207d8efa002749c3afe830650cc93623fbae64b",
+      "git_blob_sha": "dc59620cc40d17512b4e5cb03164bb13ac3f5b42",
+      "bytes": 31919,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/T12/LEVEL_CADENCE_BLUEPRINT.md",
+      "sha256": "5acb33351d8d85366a8be97e680cd196b1e914e9e5602fa9d0703e7f2fa5f242",
+      "git_blob_sha": "1d00075adbf3aa1197aa51eb0b944088fcc8e482",
+      "bytes": 6466,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/T12/PREBUILD_CONTRACT.json",
+      "sha256": "052302e67fbfc692558270675d96e180ad8cbe4f1334aa146efdc6cb284cf229",
+      "git_blob_sha": "4965a32e4b1bfa1e22706912e1c2afa999ab1045",
+      "bytes": 11255,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/T12/PROGRESSION_DATA_SCHEMA.json",
+      "sha256": "51ddae64f1611a06fbfcbcc787847b231c5579ba2214f08695b61e8c8869ef4e",
+      "git_blob_sha": "9077e245f3e3728751431282e02ad9e98a906558",
+      "bytes": 6963,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/T12/RUNTIME_INTERFACE_CONTRACT.json",
+      "sha256": "1923f678f35bb52787e64095d33e60b29c6725a00394da2742d55f17ac8e520c",
+      "git_blob_sha": "a696f5c33339361169e01fc03aaa7e648526b325",
+      "bytes": 13517,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/T12/TASK_PACKET.md",
+      "sha256": "811892e8edee76011fa0a012c178dbd215a6cad157858027e15b567c51c666e0",
+      "git_blob_sha": "51648549d3fbe3ec44135b5a16f1bfa1934f779e",
+      "bytes": 14152,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/T13/T12_CONSUMER_BINDING.json",
+      "sha256": "3f2f5e457241db37b95394a62bd9795db34e32d047ed724291cc6f2245d25bbc",
+      "git_blob_sha": "434b08a5d327a08606f056ae20cd54bf76b8e6fc",
+      "bytes": 781,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/TASK_SCOPE_OVERRIDES.json",
+      "sha256": "ccd6263aae8af5c3fc21d00792484c8610fc1eb14d44f5aca663fff91b9227af",
+      "git_blob_sha": "aa4bb0fbc15bcd90b8de018efc69ba34989425bc",
+      "bytes": 3481,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/V32_FORWARD_PREP_ROADMAP.json",
+      "sha256": "66c63381598505983195afc6ebf7bac6d29159947973b7ee50a27b497ef22326",
+      "git_blob_sha": "603d4b0cbce05a709dcff2e48c8696804c6bd0c6",
+      "bytes": 17114,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "Docs/Production/WHOLE_GAME_COMPLETENESS.json",
+      "sha256": "8ff395ac47c0fea4f97c3fc970d3c95bb2a669496bc1564b05e9ba7e6401a4d2",
+      "git_blob_sha": "65ce5c455e57efde2d36f1ff6dc34a0017228bfd",
+      "bytes": 133442,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "tools/havenline/gameplay_rules/dynamic_economy.gd",
+      "sha256": "0cf7a03cff95faf67b150fd5de13272df8750439dd924a423303494144580262",
+      "git_blob_sha": "eab47fd63fc239fbd7937c023a33a6f364da1da3",
+      "bytes": 41105,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "tools/havenline/production/completeness.py",
+      "sha256": "ad4c2ce8c13a83963d83531bfb63b23b5ae10240ace3a6137740f840c95dcf60",
+      "git_blob_sha": "29fca6c94724503d0ab41886a81575c3101cd3cd",
+      "bytes": 24709,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "tools/havenline/task12/fuzz_progression_contract.py",
+      "sha256": "25e30d2b9498a2f7f3feaf7402c2b3de0d10ed9985d7295c8006ce8ceed4203f",
+      "git_blob_sha": "0d5c42dfbf3f1d71982d1d4a704024d06e396f98",
+      "bytes": 11854,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "tools/havenline/task12/materialize_progression_data.py",
+      "sha256": "c1b8df8ba50b39cc31e8ff61bc0555932f5292a1363a13e6adc08bdb714285ea",
+      "git_blob_sha": "fd7b7a6739319f539af4dc0e9e2b64689db54a65",
+      "bytes": 14530,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "tools/havenline/task12/prepare_activation.py",
+      "sha256": "196923f6588d2b237ff827971df977e76c563101eed9b44b8822f6337107a48c",
+      "git_blob_sha": "786da91f5d0e02822d8190f79b95d2b43b3d278f",
+      "bytes": 50052,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "tools/havenline/task12/reference_progression_oracle.py",
+      "sha256": "cb01d111eeffe984eb86a7d4c83896cb8a24ac0dcd2f5cf83429fd8aa6dc26aa",
+      "git_blob_sha": "f8cab2866c70b366e8cfbf0fb3adab0167af700b",
+      "bytes": 5118,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "tools/havenline/task12/validate_authoring_blueprint.py",
+      "sha256": "53d155c2ffa4f20460654d85de0f63579ee81ebf376ddfe2e9fdefc01eb390ac",
+      "git_blob_sha": "5d066fcb7ce88f65ffa0eccd413236729e2895d8",
+      "bytes": 13582,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "tools/havenline/task12/validate_data_schema.py",
+      "sha256": "bd7e49f43766cfd5d7b6bce4365b86f9940a15a1add2f3d8a6c78081ca75a9f0",
+      "git_blob_sha": "1f0bad0520da4096a0f2545868fd270ce70a0f07",
+      "bytes": 11421,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "tools/havenline/task12/validate_downstream_contract.py",
+      "sha256": "298d4dc29ba56cbfaa1e1b7abb2ff225c8b553f2948679738378e169d0501049",
+      "git_blob_sha": "68b21e257725443af9748fcd1e9590d584f76caf",
+      "bytes": 4812,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "tools/havenline/task12/validate_fact_slot_binding_index.py",
+      "sha256": "c9f2f282b8294f27746ca7d5e90aae17873aa2b0b9dc4f036b0e3198fd454ffa",
+      "git_blob_sha": "6fde3f395807046328fa381a47f81d64872e87d0",
+      "bytes": 15349,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "tools/havenline/task12/validate_level_matrix.py",
+      "sha256": "ab1b5b72d9f5548acd1aa8d27751e2aa6aa4b271b9775701e3ac55a757099136",
+      "git_blob_sha": "d6b91f1db1bcd6273b2d4c9eefc9d1454d755da7",
+      "bytes": 8770,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "tools/havenline/task12/validate_progression_contract.py",
+      "sha256": "01de099862baadae06e89393436e79e522dbd9e1c584d79bee1a51368971b1b3",
+      "git_blob_sha": "eee025180033121ca947ce3570b0d38c279df1a0",
+      "bytes": 23907,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "tools/havenline/task12/validate_runtime_interface.py",
+      "sha256": "bd8c4008f294fa74d6aeb028e234c0d0740c5221f092a2837e035f0a2adc9516",
+      "git_blob_sha": "f1b268a6481be6dcabb4dc3548463bfe2c663248",
+      "bytes": 14811,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    },
+    {
+      "path": "tools/havenline/task12/validate_traceability.py",
+      "sha256": "da196c614c8f1ea4be4b3aa6cb223e60362c5049ffb192eb39060bd9f76e1d38",
+      "git_blob_sha": "5d6d3f8403af15ca923b9737ad0ef8d9376229e0",
+      "bytes": 5143,
+      "source_type": "LOCAL_READ_ONLY_WORKTREE_BYTES",
+      "worktree_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "base_commit_is_not_asserted_to_contain_staged_bytes": true
+    }
+  ],
+  "source_precedence": {
+    "fixed_count": "S01 overrides tentative S02 and old S06 count.",
+    "world_release_direction": "Carry forward S02/S07 World 1 first; all later worlds remain in planned scope.",
+    "fuel": "Owner-confirmed low-use requirement carried by S04 is fixed; no-fuel/open-fuel wording is stale.",
+    "vehicle_conflicts": "S02 and S04 disagree on partial/whole-load and general in-camp blade policy. This package preserves both and makes no runtime choice.",
+    "historical_receipts": "Frozen source addenda, old audits, rejected candidates and old acceptance receipts retain their original bytes and meaning."
+  },
+  "no_500_authored_outcomes_found": true,
+  "migration_ledger": {
+    "forward_document_paths": [
+      "Docs/Production/HAVENLINE_BUILD_PLAN_V2.md",
+      "Docs/Production/DEPENDENCY_GRAPH.json",
+      "Docs/Production/TASK_SCOPE_OVERRIDES.json",
+      "Docs/Production/RESOURCE_TOOL_ACTOR_STANDARD.md",
+      "Docs/Production/FORWARD_EXECUTION_PROFILES.json",
+      "Docs/Production/V32_FORWARD_PREP_ROADMAP.json",
+      "Docs/Production/COMPLETENESS_STANDARD.md",
+      "Docs/Production/WHOLE_GAME_COMPLETENESS.json",
+      "Docs/Production/GAMEPLAY_DEPTH_STANDARD.md",
+      "Docs/Production/GAMEPLAY_DEPTH_CONTRACT.json",
+      "Docs/Production/ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.json",
+      "Docs/Production/ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md",
+      "Docs/Production/GameplayRules/2026-11-27/PROGRESSION_ECONOMY_GAPS.json",
+      "Docs/Production/GameplayRules/2026-11-27/PROGRESSION_ECONOMY_GAPS.md",
+      "Docs/Production/GameplayRules/2026-11-27/TASK_GAMEPLAY_RULES_T01_T80.json",
+      "Docs/Production/GameplayRules/2026-11-27/TASK_GAMEPLAY_RULES_T01_T80.md",
+      "Docs/Production/GameplayRules/2026-11-27/TASK_COMPLETENESS_T01_T80.json",
+      "Docs/Production/GameplayRules/2026-11-27/TASK_COMPLETENESS_T01_T80.md",
+      "Docs/Production/GameplayRules/2026-11-27/TASK_GAMEPLAY_DEPTH_T01_T80.json",
+      "Docs/Production/GameplayRules/2026-11-27/TASK_GAMEPLAY_DEPTH_T01_T80.md"
+    ],
+    "t12_data_contract_paths": [
+      "Docs/Production/T12/LEVEL_1_100_MATRIX.json",
+      "Docs/Production/T12/AUTHORING_BLUEPRINT.json",
+      "Docs/Production/T12/BINDING_SLOT_CATALOG.json",
+      "Docs/Production/T12/FACT_SLOT_BINDING_INDEX_TEMPLATE.json",
+      "Docs/Production/T12/PROGRESSION_DATA_SCHEMA.json",
+      "Docs/Production/T12/RUNTIME_INTERFACE_CONTRACT.json",
+      "Docs/Production/T12/DOWNSTREAM_CONSUMER_CONTRACT.json",
+      "Docs/Production/T12/PREBUILD_CONTRACT.json",
+      "Docs/Production/T12/ACCEPTANCE_TRACEABILITY.json",
+      "Docs/Production/T12/LEVEL_CADENCE_BLUEPRINT.md",
+      "Docs/Production/T12/FROZEN_SCOPE.md",
+      "Docs/Production/T12/TASK_PACKET.md",
+      "Docs/Production/T13/T12_CONSUMER_BINDING.json"
+    ],
+    "implementation_paths": [
+      "tools/havenline/task12/validate_level_matrix.py",
+      "tools/havenline/task12/validate_progression_contract.py",
+      "tools/havenline/task12/validate_authoring_blueprint.py",
+      "tools/havenline/task12/validate_fact_slot_binding_index.py",
+      "tools/havenline/task12/validate_downstream_contract.py",
+      "tools/havenline/task12/validate_runtime_interface.py",
+      "tools/havenline/task12/validate_data_schema.py",
+      "tools/havenline/task12/validate_traceability.py",
+      "tools/havenline/task12/reference_progression_oracle.py",
+      "tools/havenline/task12/materialize_progression_data.py",
+      "tools/havenline/task12/prepare_activation.py",
+      "tools/havenline/task12/fuzz_progression_contract.py",
+      "tools/havenline/production/completeness.py",
+      "tools/havenline/gameplay_rules/dynamic_economy.gd"
+    ]
+  },
+  "public_sources_fetched_directly": true,
+  "source_paths_modified": false,
+  "entrypoint_updates": {
+    "source_root": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/source-main",
+    "source_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+    "files": [
+      {
+        "path": "AGENTS.md",
+        "candidate_sha256": "2daecd46200117c2c4bea6f0e831f2797ec2a683494fab4b30e58f48101b180a",
+        "change": "Current10×50/World1-release pointers and current scope wording; historical source/ownership/workflow instructions preserved.",
+        "capture_sha256": "4b21acf3c0c12e4cca29568629fab670c61ad0ca8180c7e04a4eaf2b637c0c5f",
+        "capture_git_blob_sha": "78efb8bb5159c14d6181b0138d96fdec02d1c2a9",
+        "source_sha256": "0a91e9b9fc1d1051c3182a4194bac034f779d15739d980f8ee73ddfdcede506e",
+        "source_git_blob_sha": "1d1ae175a967e77db51729e6fa3a581683240e51",
+        "capture_transform": "The source-main materialization appended exactly one final LF. Removing that LF reproduces the exact GitHub blob."
+      },
+      {
+        "path": "BUILD_GAME.md",
+        "candidate_sha256": "1d1599a67809a0e5a3b8baad117a15ddae132c0718d93cc4b459598019e2ed40",
+        "change": "Current10×50/World1-release pointers and current scope wording; historical source/ownership/workflow instructions preserved.",
+        "capture_sha256": "5c6d492e0e61553f13a01e7e2e22f860e0bc88c1f9c82be0a7d59836305e29f9",
+        "capture_git_blob_sha": "a034fb24d7f304f1247678a8f14df7bba8b42223",
+        "source_sha256": "c31ace382b2097bb04e549469f34c196b2325a749afa4a1f3f08ad62980392cb",
+        "source_git_blob_sha": "c4a29285625cc7106f68fe4c25e26af910979adf",
+        "capture_transform": "The source-main materialization appended exactly one final LF. Removing that LF reproduces the exact GitHub blob."
+      },
+      {
+        "path": "REPOSITORY_INDEX.md",
+        "candidate_sha256": "ddb493fc2e20e0fad72af2ebe49d346d19ee9f07dd0c455338602afb5e7fe023",
+        "change": "Current10×50/World1-release pointers and current scope wording; historical source/ownership/workflow instructions preserved.",
+        "capture_sha256": "98d8edd33585ccadf19a6168d7a1c8e9ec279521ec59f8400ab93e93eab290fe",
+        "capture_git_blob_sha": "bdc1f0cfeece8ca962dbf3392132a788572d9b77",
+        "source_sha256": "8407ed400676482ec62979ff2ae33dd1b0172393fa4e8ebc6f6fbdbb7214ad5d",
+        "source_git_blob_sha": "eb02c7bd6ba079aed19ef885741594061d43c0c5",
+        "capture_transform": "The source-main materialization appended exactly one final LF. Removing that LF reproduces the exact GitHub blob."
+      },
+      {
+        "path": "Docs/Production/HAVENLINE_BUILD_PLAN_V2.md",
+        "candidate_sha256": "f865bcab1635c04b0917160df5c0873296b2977a1769452301916e23771bc5e7",
+        "change": "Current10×50/World1-release pointers and current scope wording; historical source/ownership/workflow instructions preserved.",
+        "capture_sha256": "c931fcca7644ef4a424470407a2ff08f15502a151bccc62406ad12758a4282ca",
+        "capture_git_blob_sha": "491bb0afc2f12fbba18ba35756d8077a15f1b63a",
+        "source_sha256": "fb03ed677461488e611bd1037876c91f57c3858509969426e2ecc6b7899eba3e",
+        "source_git_blob_sha": "8c76426bde92d0e6e040ddb13e186e2ccfa20e7a",
+        "capture_transform": "The source-main materialization appended exactly one final LF. Removing that LF reproduces the exact GitHub blob."
+      }
+    ],
+    "all_edits_in_isolated_package": true,
+    "history_sections": {
+      "migration": {
+        "start": "## Migration checkpoint (historical snapshot)",
+        "end": "## Permanent Havenline product contract",
+        "sha256": "d512e2e5646672bf1852b53864ff73a35773faa6ee238304045837daa9cc8e5c",
+        "exact": true
+      },
+      "wave": {
+        "start": "## Wave checkpoint after T10 approval",
+        "end": "## Evidence and review",
+        "sha256": "df4b73b105d6d6420e475d4f8795aa1da6428dd5f32e7e28b42d28e1562043a3",
+        "exact": true
+      }
+    },
+    "all70_migration_state_cells_preserved": true,
+    "migration_state_projection_sha256": "066cbbfb25df04fb331f24c9db220e205c1e6ac1e3fca7816c030bdaca93b45e",
+    "current_gameplay_source_selector_edited": false,
+    "dependency_graph_edited": false,
+    "workflows_edited": false,
+    "canonical_source_hashes_directly_verified": true,
+    "unchanged_50_production_rows_sha256": "f5bb13c83462ce9d90072724a903bbeadd873b4223caceedd022e8312ec6772d"
+  }
+}

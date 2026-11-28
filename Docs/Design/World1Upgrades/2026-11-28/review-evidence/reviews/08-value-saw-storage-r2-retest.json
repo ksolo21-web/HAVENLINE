@@ -1,0 +1,51 @@
+{
+  "reviewer": "/root/world1_upgrade_critic",
+  "scope": "ACTUAL_STATIC_IMAGE_RETEST",
+  "date": "2026-11-28",
+  "passed": 0,
+  "reviewed": 2,
+  "results": [
+    {
+      "id": "W1VAL-01-r2",
+      "status": "REJECTED_REPAIR_REQUIRED",
+      "score": 7.0,
+      "resolved": [
+        "Finished plank bundle identity improved",
+        "Rear outer crank and deck introduced in rear view",
+        "Manual gantry winch visibly added"
+      ],
+      "remaining": [
+        {
+          "id": "VAL01-R04",
+          "observed": "Rear-stageB receiving end shows finished plank bundles where front/function show raw log intake, and gantry remains on screen-right instead of rotating to the output end.",
+          "repair": "Fix physical I/O across all views; remove optional gantry if chosen and bind that design change consistently."
+        },
+        {
+          "id": "VAL01-R05",
+          "observed": "Rear-side deck/drive exists in rear panel but disappears from the function geometry.",
+          "repair": "Preserve full outer rear service access and independently driven second cell; use meaningful cutaway/side angle rather than force a hidden crank to show from an impossible front angle."
+        }
+      ],
+      "image_sha256": "8fb9da09d4d581490c21675c30e8e3192e3e92e4c627126e7cfac26f46ac5190"
+    },
+    {
+      "id": "W1VAL-04-r2",
+      "status": "REPAIR_REQUIRED",
+      "score": 8.5,
+      "resolved": [
+        "False rear central doors removed",
+        "Selected goods identity substantially corrected",
+        "Hoist relocated to left stock route",
+        "Reachable hand-chain mechanism visible in cutaway"
+      ],
+      "remaining": [
+        {
+          "id": "VAL04-R05",
+          "observed": "In both cutaways, RECEIVING label remains over a stack/shelf against solid wall; actual connection from exterior receiving apron is absent.",
+          "repair": "Show the matching physical left-wall opening/threshold empty enough to reveal a usable incoming path into stock, separate from reserved dispatch and central pedestrian aisle."
+        }
+      ],
+      "image_sha256": "32dbd8598d757058f22eca856c5dbe18f292273b9bd303623fb4d2b47736a7fe"
+    }
+  ]
+}

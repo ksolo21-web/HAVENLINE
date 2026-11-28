@@ -1,0 +1,101 @@
+{
+  "reviewer": "/root/world1_upgrade_critic",
+  "date": "2026-11-28",
+  "scope": "SAW_TWO_PROPOSED_STAGES_SIX_STATIC_VIEWS_ONLY",
+  "id": "W1VAL-01-r6",
+  "status": "PASS_SCOPED_STATIC_CONCEPT_REVIEW",
+  "score": 9.9,
+  "mandatory_checks": {
+    "passed": 9,
+    "required": 9
+  },
+  "checks": [
+    {
+      "id": "SAW01",
+      "check": "Large silhouette and structural change between retained base, Feed Mill and Parallel Sawmill",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    },
+    {
+      "id": "SAW02",
+      "check": "One coherent cell in Feed Mill; exactly two independent coherent cells in Parallel Sawmill",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    },
+    {
+      "id": "SAW03",
+      "check": "Same geometry, feed sides and output sides across three views of each stage",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    },
+    {
+      "id": "SAW04",
+      "check": "Actual raw wood -> cutting -> plank path readable without relying on arrows",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    },
+    {
+      "id": "SAW05",
+      "check": "Footprint growth and front/service clearance visible",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    },
+    {
+      "id": "SAW06",
+      "check": "Approved resource/belt scale retained",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    },
+    {
+      "id": "SAW07",
+      "check": "No new rate/yield/price/capacity or runtime approval claim",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    },
+    {
+      "id": "SAW08",
+      "check": "Two-cell cranks face outward to separate front/rear walks; rear drive is visibly real and reachable without crossing a cutting lane.",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    },
+    {
+      "id": "SAW09",
+      "check": "No stacking arm, gantry or hoist; real fixed output cradles in all views.",
+      "status": "PASS_STATIC_CONCEPT_SCOPE"
+    }
+  ],
+  "image": {
+    "path": "generated/w1val-01-r6.png",
+    "sha256": "3fb9d49862fc60d23e421861eeced95944b48e02571d3ea4e34653a831186b42"
+  },
+  "invocation": {
+    "path": "prompts/w1val-01-r6-invocation.json",
+    "sha256": "a8efa7b2e7796d9151c5feeba1b1e392d00d25b4902259a9fb87899483abf2f8"
+  },
+  "brief": {
+    "path": "package/Docs/Design/World1Upgrades/2026-11-28/W1VAL-01-BRIEF.json",
+    "sha256": "0b766eb438426b4ec2328506e9fc97dfa0bc83d6a1c641dcf7643acb9e741a83"
+  },
+  "evidence": [
+    "Actual entire r6 six-panel board",
+    "Selected source saw eight-view sheet re-opened",
+    "Prior actual multi-angle r1-r4 review and current04 resource source"
+  ],
+  "resolved": [
+    {
+      "id": "VAL01-R06",
+      "result": "Rear-lane crank is on its actual outer fascia and reachable from exterior service deck; no inner-gap crank remains."
+    },
+    {
+      "id": "VAL01-R07",
+      "result": "Lower REAR now has exactly two complete same-design cutting/clamp/feed assemblies. No sunken incomplete cell or spurious third head is present."
+    }
+  ],
+  "dimensions": {
+    "source_identity_and_style": 9.9,
+    "meaningful_stage_silhouette_and_purchase_value": 9.9,
+    "static_cell_topology_and_crossview_consistency": 9.9,
+    "raw_feed_cutting_and_finished_output_readability": 9.9,
+    "independent_manual_drive_and_operator_access": 9.9,
+    "selected_resource_identity_and_scale": 9.9,
+    "composition_and_legibility": 9.9,
+    "scope_and_claim_boundaries": 10
+  },
+  "known_unapproved_static_deviations": [],
+  "owner_new_design_approval": false,
+  "native_approval": false,
+  "whole_task_complete": false,
+  "boundary": "Scoped authored static-concept review only. Exact native drive linkage, per-cell blocking, rates, staffing, collision, animation and balance remain untested. A correctly occluded far-side low crank need not appear through the front of the machine; its placement is proved by the opposite rear view."
+}

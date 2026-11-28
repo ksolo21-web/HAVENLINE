@@ -1,0 +1,57 @@
+{
+  "reviewer": "/root/world1_upgrade_critic",
+  "date": "2026-11-28",
+  "scope": "ACTUAL_TRAINED_CREW_SEPARATE_STATIC_USE_SCENE",
+  "id": "W1VAL-03A-USE-r1",
+  "status": "REPAIR_REQUIRED",
+  "score": 7.5,
+  "image": {
+    "path": "generated/w1val-03a-use-r1.png",
+    "sha256": "7cb510bbf9b3ad1bb12211fee61787b840da8d42429458eca6775b9a19367b5c"
+  },
+  "invocation": {
+    "path": "prompts/w1val-03a-use-r1-invocation.json",
+    "sha256": "e8a093fe40ab24f67a03a70c285ed06877c674f0f49d593cff3638a3deb510e2"
+  },
+  "matching_master": {
+    "path": "generated/w1val-03a-gear-r2.png",
+    "sha256": "9e17e265acdd6172ee2802b08cd1f8af582ad74e5e312c91ea9e4748f9f5861b"
+  },
+  "positives": [
+    "Exactly the five specified source identities with useful separate operator, supply and protection/scouting positions",
+    "Hands visibly contact crank/support and the raw log on a separate waiting cradle",
+    "Processed bound plank units are separate from raw feed",
+    "Dog is outside the machine controls, wolf watches a different approach and owl grips a separate perch"
+  ],
+  "findings": [
+    {
+      "id": "CREW-USE-R01",
+      "gate": "exact selected base saw topology and drive",
+      "observed": "The worktable has two circular blades. Its crank is mounted on a different left-side shaft housing instead of the source single blade/hub drive relationship.",
+      "repair": "Restore the exact source one-blade table and same blade-axis crank attachment. Reposition the operating hand/body as needed to reach the true source handle rather than moving the drive into an invented machine."
+    },
+    {
+      "id": "CREW-USE-R02",
+      "gate": "same compact master anatomy in the posed view",
+      "observed": "Normalized actual crop comparison shows the male has a smaller head relative to total body height and longer torso/legs than the reviewed A r2 master; the bent stance does not account for this elongation.",
+      "repair": "Restore the actual master large-head compact torso/limb proportions in the work pose; preserve both survivor body identities during the repair."
+    },
+    {
+      "id": "CREW-USE-R03",
+      "gate": "complete use-state lower-body/contact visibility",
+      "observed": "The female supplier left boot and lower leg are hidden by the waiting cradle.",
+      "repair": "Move the cradle slightly to one side or reposition the supplier so both legs/boots and their ground contact remain visible while both hands keep plausible log support."
+    }
+  ],
+  "evidence": [
+    "Whole actual use image",
+    "Actual saw contact and supplier closeups",
+    "Original selected saw source sheet",
+    "reviews/crew-trained-master-use-proportion-inspection.png"
+  ],
+  "final_crew_stage_approval": false,
+  "owner_new_design_approval": false,
+  "native_approval": false,
+  "whole_task_complete": false,
+  "boundary": "The separate master remains scoped-ready. This rejected use scene does not invalidate its good front/rear gear, but the crew stage cannot pass until the matching use scene meets source anatomy, machine geometry and contact gates."
+}

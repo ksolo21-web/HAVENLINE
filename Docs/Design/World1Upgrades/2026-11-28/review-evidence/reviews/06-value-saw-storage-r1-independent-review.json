@@ -1,0 +1,121 @@
+{
+  "reviewer": "/root/world1_upgrade_critic",
+  "review_type": "INDEPENDENT_ACTUAL_STATIC_IMAGES",
+  "date": "2026-11-28",
+  "scope": "Authored concept art only; no owner, model, rig, motion, gameplay, balance, device or shipping approval.",
+  "mandatory_threshold": "Every mandatory gate plus each reference-sensitive dimension >=9.9; stronger exact10 requirements retained. Failed areas are not averaged away.",
+  "input_files": {
+    "generated/w1val-01-r1.png": "92b1db7d5c6d0e32ea4a60438dee9b7bff49168c69f712843574716953129fb6",
+    "generated/w1val-04-r1.png": "90e8f15e338584af7cbb0c3f72dd2feb9a329699b306da6d5eb92c906a075a6f",
+    "package/Docs/Design/World1Upgrades/2026-11-28/W1VAL-01-BRIEF.json": "ff5da953ee0f2d0a70e7caf0cf3c61e828a8625ad3653a60496ade433ae6aff7",
+    "package/Docs/Design/World1Upgrades/2026-11-28/W1VAL-04-BRIEF.json": "ce54d2078eb84ace241da1754131480f50be7379a50292c60c4b6a68d4dd7531"
+  },
+  "results": [
+    {
+      "id": "W1VAL-01-r1",
+      "path": "generated/w1val-01-r1.png",
+      "status": "REJECTED_REPAIR_REQUIRED",
+      "score": 7.0,
+      "positive_observations": [
+        "One-cell versus two-cell growth is substantial and easily read.",
+        "Raw receiving, cutting beds and plank outfeeds are visible.",
+        "Rear views are actual opposite views with input/output screen positions reversed coherently.",
+        "Timber/blue/orange family is retained; added footprint is justified by proposed capability."
+      ],
+      "mandatory_findings": [
+        {
+          "id": "VAL01-R01",
+          "gate": "independent cell operation and safe staffing",
+          "observed": "Both Parallel Sawmill cranks are mounted on the foreground bed fascia. The rear cutting cell has no legible independent drive or safe workstation.",
+          "repair": "Show a separate mechanical drive and reachable operator position for each cutting cell, with shafts/linkage unambiguous in the function view and no approach crossing a cutting lane."
+        },
+        {
+          "id": "VAL01-R02",
+          "gate": "physical stacking mechanism",
+          "observed": "The articulated output arm has a claw and joints but no hand winch, cable path or reachable manual actuation.",
+          "repair": "Add the brief-required visible hand winch and coherent cable/linkage to the output-only arm; preserve clear operator and pedestrian space."
+        },
+        {
+          "id": "VAL01-R03",
+          "gate": "selected resource identity and ordinary unit scale",
+          "observed": "Finished output is rendered as loose broad flat plank stacks. The selected04 planks are a small ordinary bound plank unit. The r1 execution lacked selected04.",
+          "repair": "Use selected04 for finished-unit identity and size; show intermediate cutting pieces only as processing contents, and a clear packing/collection point for actual output units."
+        }
+      ],
+      "dimensions": {
+        "substantial_purchase_value_visible": 9.2,
+        "family_style": 9.9,
+        "cross_view_structure": 9.2,
+        "functional_drive_and_operator_access": 5.0,
+        "selected_resource_identity": 6.5,
+        "presentation_readability": 9.5
+      },
+      "evidence": [
+        "Full1536x1024 board",
+        "reviews/w1val-01-r1-lower-inspection.png",
+        "reviews/w1val-01-r1-topright-inspection.png",
+        "Selected saw base previously inspected; selected04 reopened for direct comparison"
+      ]
+    },
+    {
+      "id": "W1VAL-04-r1",
+      "path": "generated/w1val-04-r1.png",
+      "status": "REJECTED_REPAIR_REQUIRED",
+      "score": 6.0,
+      "positive_observations": [
+        "Clear growth from compact house into receiving/dispatch warehouse then much larger logistics hall.",
+        "Recognizable central house facade retained in front exteriors.",
+        "Front central access apron and separated named receiving/dispatch zones show intended useful change."
+      ],
+      "mandatory_findings": [
+        {
+          "id": "VAL04-R01",
+          "gate": "same building across views",
+          "observed": "Both roof-off cutaways put the central front blue doors on the back wall. Both opposite rear exteriors have solid wall in that position.",
+          "repair": "Remove false rear doors, retain a solid back wall and show the actual front facade peeled away/open with the original front doorway threshold. Preserve a walkable interior central aisle."
+        },
+        {
+          "id": "VAL04-R02",
+          "gate": "functional loading route",
+          "observed": "The logistics hoist sits over an additional front-right ordinary-cargo tray beside fuel, detached from the brief front-left dispatch route. No useful hoist transfer path is visible.",
+          "repair": "Place the hand hoist on a coherent receiving/stock/reserved-dispatch route, or explicitly author and approve a compatible separate loading job before depiction. Keep fuel and pedestrian aisle separate."
+        },
+        {
+          "id": "VAL04-R03",
+          "gate": "real manual operation and cross-view mechanism",
+          "observed": "Front hoist has large end wheels while cutaway changes to a central trolley; neither makes a reachable manual actuator and its working route clear.",
+          "repair": "Show one consistent rail/trolley/hand-crank or pull-chain mechanism and reachable operating position in both views; safe travel cannot cut through the pedestrian aisle."
+        },
+        {
+          "id": "VAL04-R04",
+          "gate": "selected resource identity",
+          "observed": "Fuel is rendered as red cubes; source04 is an orange handled X-panel can. Generic jars and pink slabs also substitute for selected current goods.",
+          "repair": "Use selected02/04 resource identities and ordinary size throughout. Keep old architecture reference for architecture, not superseded resource identities."
+        },
+        {
+          "id": "VAL04-R05",
+          "gate": "receiving/dispatch connectivity",
+          "observed": "Receiving is an exterior open bay but becomes a label above stocked shelves in the cutaway; true ingress and solid rear-wall relationships are not demonstrated.",
+          "repair": "Fix one physical bay opening and show a clear incoming path to typed stock, distinct reserved outgoing positions and intact pedestrian route across all views."
+        }
+      ],
+      "dimensions": {
+        "substantial_purchase_value_visible": 9.0,
+        "family_style": 9.9,
+        "cross_view_structure": 5.5,
+        "loading_operation_and_route": 5.5,
+        "selected_resource_identity": 5.5,
+        "presentation_readability": 9.4
+      },
+      "evidence": [
+        "Full1536x1024 board",
+        "reviews/w1val-04-r1-lower-inspection.png",
+        "reviews/w1val-04-r1-topright-inspection.png",
+        "Selected advanced storage/organization references previously inspected; selected04 reopened"
+      ]
+    }
+  ],
+  "passed": 0,
+  "reviewed": 2,
+  "next_action": "Repair actual candidates then re-inspect whole boards plus meaningful mechanism/layout closeups; do not choose from prompts alone."
+}

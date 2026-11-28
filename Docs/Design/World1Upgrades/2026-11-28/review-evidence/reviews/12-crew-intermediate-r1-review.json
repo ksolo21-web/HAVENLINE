@@ -1,0 +1,73 @@
+{
+  "reviewer": "/root/world1_upgrade_critic",
+  "date": "2026-11-28",
+  "scope": "ACTUAL_INTERMEDIATE_TWO_VIEW_CREW_MASTERS_ONLY",
+  "final_crew_art_approval": false,
+  "teamwork_panel": "MISSING_BY_INTERMEDIATE_DESIGN",
+  "passed_masters": 0,
+  "reviewed_masters": 2,
+  "results": [
+    {
+      "id": "W1VAL-03A-GEAR-r1",
+      "status": "REPAIR_BEFORE_TEAMWORK_EDIT",
+      "intermediate_master_score": 7.0,
+      "positives": [
+        "All five source individuals recognizable by face/hair/fur/feathers",
+        "Useful stronger fitted work/protective kits visibly differ from baseline",
+        "Owl has a compact replacement fixture rather than large old bedroll"
+      ],
+      "findings": [
+        {
+          "id": "CREW-R01",
+          "gate": "full anatomy and attachments visible",
+          "observed": "Dog hides most male legs/boots and wolf obscures female lower-body regions in both group views.",
+          "repair": "Space all five individuals in a readable side-by-side arrangement, with complete human legs/boots and all pets unobscured; preserve ordinary source scale."
+        },
+        {
+          "id": "CREW-R02",
+          "gate": "selected human body proportions",
+          "observed": "Human silhouettes are elongated with relatively smaller heads and longer torso/legs than selected compact survivor references. Occlusion further prevents anatomy verification.",
+          "repair": "Restore source oversized-head/compact-torso-and-limb proportions while keeping authored protective work equipment."
+        }
+      ],
+      "sha256": "9c8f094fb18738818ee04307441802cf531e3627f18232a63f89f2378781ae6f"
+    },
+    {
+      "id": "W1VAL-03B-GEAR-r1",
+      "status": "REPAIR_BEFORE_TEAMWORK_EDIT",
+      "intermediate_master_score": 8.0,
+      "positives": [
+        "Side-by-side composition makes human feet and pet bodies legible",
+        "Recognizable five individual source identities",
+        "Substantial working armor/gear progression and real secured tool placements"
+      ],
+      "findings": [
+        {
+          "id": "CREW-R02",
+          "gate": "selected human body proportions",
+          "observed": "At normalized full-body height, heads are smaller and body/leg proportions longer than exact source sheets.",
+          "repair": "Restore source compact human proportions, retaining the useful armor and tools."
+        },
+        {
+          "id": "CREW-R03",
+          "gate": "authored owl rig continuity",
+          "observed": "Owl still carries a cylindrical bedroll, contradicting explicit compact detachable flight-work fixture replacement.",
+          "repair": "Use the declared compact fitted dorsal/breast work rig; preserve face/plumage/scarf and keep wing roots, primary feathers and talons free."
+        }
+      ],
+      "sha256": "d7801502dcde39908b9d04fa044c994792f9417ae24efaeccafc3fa7e612743f"
+    }
+  ],
+  "evidence": [
+    "Five exact original actor images directly viewed",
+    "Full actual two-view masters",
+    "reviews/crew-human-proportion-inspection.png"
+  ],
+  "review_boundary": "No animation, rig, contact, teamwork operation, native game or owner selection is approved; final three-panel edits remain required.",
+  "independent_corroboration": {
+    "reviewer": "/root/planning_package_critic",
+    "evidence": "Direct message after original-source-first inspection of both selected survivor sheets and W1VAL-03B-gear-r1 actual board.",
+    "result": "Confirmed smaller head-to-body proportion, longer legs and taller torso silhouette than compact source; recognizable face/beard/braids/color family does not resolve body drift. Armor bulk alone is insufficient explanation.",
+    "art_approval_issued": false
+  }
+}

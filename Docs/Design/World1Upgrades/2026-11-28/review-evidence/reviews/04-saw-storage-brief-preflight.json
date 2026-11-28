@@ -1,0 +1,37 @@
+{
+  "review_id": "W1-SAW-STORAGE-PREFLIGHT-02",
+  "reviewer": "/root/world1_upgrade_critic",
+  "scope": "Authored design readiness only; no actual new art supplied",
+  "inputs": [
+    {
+      "file": "package/Docs/Design/World1Upgrades/2026-11-28/W1VAL-01-BRIEF.json",
+      "sha256": "297d6c299793b08e23eb2c6b9f066901b19805e43fe0e9884325373993a4ff8c",
+      "snapshot": "reviews/04-prefight-input-W1VAL-01-BRIEF.json"
+    },
+    {
+      "file": "package/Docs/Design/World1Upgrades/2026-11-28/W1VAL-04-BRIEF.json",
+      "sha256": "5efa241c6f7188eda9ddef7213df8ce70cbbda338f2e9ff55f89c0f81cd9eb33",
+      "snapshot": "reviews/04-prefight-input-W1VAL-04-BRIEF.json"
+    }
+  ],
+  "resolved_previous_findings": [
+    "Manual drive and per-lane staffing/blocking are explicit",
+    "Storage custody states share one conserved ledger",
+    "Garage-first deposit and VC01 remain outside the new warehouse handoff modes",
+    "Central pedestrian doors and aisle remain available"
+  ],
+  "remaining_refinements": [
+    {
+      "id": "VALUE-PRE-03",
+      "text": "Name an accessible manual hand-winch/linked drive for the optional stacking arm, or replace unexplained stackers with fixed collection cradles."
+    },
+    {
+      "id": "VALUE-PRE-04",
+      "text": "Add current selected04 processed resources as actual image input for planks/meal/fuel; source02 does not contain those forms. Correct its source role."
+    }
+  ],
+  "render_quality_score": null,
+  "runtime_score": null,
+  "owner_selected": false,
+  "next_action": "Check the two text refinements, then inspect actual renders."
+}

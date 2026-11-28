@@ -2,9 +2,19 @@
 
 **Authoritative production plan.** This plan supersedes `Docs/Production/Archive/SEQUENTIAL_REPAIR_PLAN.pre-v2.2026-09-11.md` for forward production governance. The archived plan remains byte-identical to the pre-migration source and is retained for audit/recovery.
 
+## Current world plan and upgrade references — 2026-11-28
+
+**Current owner direction: ten worlds, fifty local levels each, five hundred planned level positions.** Initial release is **World 1 Frozen Home Camp, local Levels 1–50**. Worlds 2–10 follow as connected updates. This supersedes older active references to a 100-level launch or a ten-level World 1.
+
+Read the [current world plan](WorldProgression/2026-11-28-10x50/CURRENT_WORLD_PLAN.md), [world contract](WorldProgression/2026-11-28-10x50/WORLD_PROGRESSION_CONTRACT.json), and complete [T01–T80 scope delta](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) / [JSON](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.json). Original task names, dependencies and lifecycle snapshots remain recorded in that delta. The table below uses current scope names while preserving historical migration states. No owner, dependency, task state or gameplay source is changed here.
+
+World 1 appearance-upgrade references are the current art focus. Keep selected baseline designs and resource/conveyor scale; equipment levels and appearance stages are distinct from world levels. No new asset caps or unlock levels are inferred. [Migration requirements](WorldProgression/2026-11-28-10x50/MIGRATION_REQUIREMENTS.md) record the actual schemas, validators, saves and release gates needing a coherent versioned change. The original100 outcomes remain preserved content inputs; this correction does not manufacture500 outcomes or approve the game.
+
+**Latest upgrade-value direction:** upgrades must show substantial appearance changes tied to real production input/output, defense/attack or useful work gains worth purchasing. The storage house is explicitly included. Multiple pets and multiple survivors must operate simultaneously with meaningful jobs and combat roles. Preserve baseline designs and ordinary resource/conveyor unit scale; upgraded footprint, silhouette and ports may change when benefit, attainable cost and safe routes are mapped. Cosmetic reinforcement alone is insufficient. New stats, asset caps, unlock levels and numeric actor limits remain unapproved; the prior staged three-pet/two-escort policy is retained for reconciliation with a separate local workforce. See the current world contract for exact owner messages and approval limits.
+
 ## Current research and render requirements — 2026-11-27
 
-Read the [current T01–T80 reference/render refresh](TASK_PLAN_REFRESH_2026-11-27.md) before new task implementation or review. Its [task-by-task crosswalk](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md) attaches current source observations, pinned GitHub renders, task-specific proof and next actions to all 80 requested IDs. T01–T70 retain their original definitions/dependencies; T71–T80 remain `SOURCE_NOT_FOUND` and are not invented work.
+Read the [current T01–T80 reference/render refresh](TASK_PLAN_REFRESH_2026-11-27.md) before new task implementation or review. Its [task-by-task crosswalk](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md) attaches current source observations, pinned GitHub renders, task-specific proof and next actions to all 80 requested IDs. T01–T70 retain their IDs and dependencies; current scope revisions are in the 10×50 delta above. T71–T80 remain `SOURCE_NOT_FOUND` and are not invented work.
 
 The earlier reference refresh pinned Build 11, game source `989edd9283148e9f712387fb937ea36038cbd9d2`; [exact receipt and limits](ReferenceRefresh/2026-11-27/LATEST_BUILD_EVIDENCE.json). Continue from the newer Codex foundation with current ownership and source identity. The migration checkpoint/table below is historical, not today's lifecycle: T01–T11 have historical completion records, while current candidates and seven preserved visual holds require scoped reconciliation. No old approval automatically passes new assets.
 
@@ -14,7 +24,7 @@ Use the selected GitHub renders as exact design inputs, with image/model/scene h
 
 The [latest observed Build13/source delta](Completeness/2026-11-27/LATEST_SOURCE_DELTA.md) preserves the3fad deep audit and records game source `2654f5019b7212968d28600cb071bf1c231c9030`, evidence cutoff `2f46e72e300a719f34ca9b0e9b718282a5a88ddd`. Newly available reported tests and scoped9.5/9.9 reviews are credited with their exact limits; current final reference>=9.9 and stronger exact10 requirements remain.
 
-Use [COMPLETENESS_STANDARD.md](COMPLETENESS_STANDARD.md), [WHOLE_GAME_COMPLETENESS.json](WHOLE_GAME_COMPLETENESS.json), the [compact T01–T80 map](Completeness/2026-11-27/TASK_COMPLETENESS_T01_T80.md), and [CURRENT_GAMEPLAY_SOURCE.json](CURRENT_GAMEPLAY_SOURCE.json). Twelve selected CD decisions now resolve the prior D01–D05 behavior choices; all runtime evidence and numeric tuning remain open. The plan includes 100 authored progression outcomes, explicit value-chain choices, recoverable stakes, player-like logical survivor cargo, all-seven-pet attack requirements, ten transaction boundaries and landscape reconciliation. Existing task definitions/dependencies/statuses/ownership and historical receipts remain unchanged.
+Use [COMPLETENESS_STANDARD.md](COMPLETENESS_STANDARD.md), [WHOLE_GAME_COMPLETENESS.json](WHOLE_GAME_COMPLETENESS.json), the [compact T01–T80 map](Completeness/2026-11-27/TASK_COMPLETENESS_T01_T80.md), and [CURRENT_GAMEPLAY_SOURCE.json](CURRENT_GAMEPLAY_SOURCE.json). Twelve selected CD decisions now resolve the prior D01–D05 behavior choices; all runtime evidence and numeric tuning remain open. The dated plan retains 100 prior-layout authored outcomes, explicit value-chain choices, recoverable stakes, player-like logical survivor cargo, all-seven-pet attack requirements, ten transaction boundaries and landscape reconciliation. The current 10×50 contract supersedes the earlier progression counts/ranges; those100 outcomes are reusable inputs, not a complete500-level campaign. Existing task IDs/dependencies/statuses/ownership and historical receipts remain unchanged.
 
 ## Migration checkpoint (historical snapshot)
 
@@ -39,7 +49,7 @@ Havenline stays simple and immediately enjoyable. Its permanent gameplay languag
 
 Controls remain one primary movement joystick with auto collect, auto gather/harvest, auto attack, contextual unloading/deposit, contextual rescue/interactions, and only minimal deliberate-choice controls. Do not turn Havenline into button-heavy RPG combat, 4X warfare, complicated manual inventory, mandatory multiplayer, guild warfare, global free-text chat, unrestricted building, or an energy-wall game.
 
-Launch remains Level 1–100 across a connected world, with practical visual progression every level, noticeable visual improvement at least every ~3 levels, major milestones approximately every 10 levels, spend-blind adaptive Challenge Director, seven companions (guardian dog, gray wolf, fox, owl, male lion, white tiger, brown bear), weather/day-night, survivor rescue/workers, production, defense, physical carrying, world transformation, monetization/VIP, LiveOps, security, adaptive phone/tablet/foldable support, and the existing final native-4K/60 physical-device target.
+The campaign plan is ten connected worlds with fifty local levels each. Initial release delivers World 1 Frozen Home Camp, local Levels1–50; Worlds2–10 arrive through later connected updates. Every authored level still needs a practical payoff and meaningful visible progression. Reconcile the earlier approximately-three-level visual cadence and ten-level milestone targets against the fifty-level World1 design; those targets do not assign asset caps or fixed new unlocks. Preserve the spend-blind adaptive Challenge Director, seven companions (guardian dog, gray wolf, fox, owl, male lion, white tiger, brown bear), weather/day-night, survivor rescue/workers, production, defense, physical carrying, world transformation, monetization/VIP, LiveOps, security, adaptive phone/tablet/foldable support, and existing native-4K/60 physical-device target. Each release must pass its applicable finished-content gates; full five-hundred-position campaign acceptance remains a later obligation, with explicit dependency reconciliation before any release approval.
 
 ## Whole-game stakes, capable companions and resource value
 
@@ -70,7 +80,7 @@ This contract is fail-closed in task-packet generation and candidate closure. C5
 
 ## Monetization and LiveOps rules
 
-No energy wall, mandatory payment, fake discount, hidden spend-based difficulty, or intentionally miserable F2P path. Challenge Director may never consume purchase history, VIP, or spend signals. Purchases retain advertised value. Use one primary premium currency. VIP is permanent and transparent. Level 1–100 must remain realistically completable at $0. Launch LiveOps includes The First Thaw, weekly gameplay and sale rotation, seasonal/holiday frameworks, server-authoritative time, automatic validated scheduling, pre-approved composition, and a remote kill switch.
+No energy wall, mandatory payment, fake discount, hidden spend-based difficulty, or intentionally miserable F2P path. Challenge Director may never consume purchase history, VIP, or spend signals. Purchases retain advertised value. Use one primary premium currency. VIP is permanent and transparent. World 1 local Levels1–50 must remain realistically completable at $0; the same requirement applies to later released worlds and eventually the complete ten-world campaign. Launch LiveOps includes The First Thaw, weekly gameplay and sale rotation, seasonal/holiday frameworks, server-authoritative time, automatic validated scheduling, pre-approved composition, and a remote kill switch.
 
 ## Controlled parallel-production model
 
@@ -111,41 +121,43 @@ The forward critic harness, specialist runner, closure and visual/style checks u
 
 ## Production sequence
 
-| ID | Production task | State at migration (historical) | Current research / render requirements |
+Current scope names reflect the 10×50 correction. Original names and dependencies are preserved in the [scope delta](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.json); historical migration states below are unchanged and do not approve the new scope. Use the current delta with dated reference requirements.
+
+| ID | Current production scope | State at migration (historical) | Current scope / preserved reference requirements |
 |---|---|---|---|
 | T01 | Reference snow-covered trees and forest framing | APPROVED | [T01 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t01) |
 | T02 | Terrain, snow, warm work-floor and lakeshore | APPROVED | [T02 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t02) |
-| T03 | Fences, gates and navigable work lanes | APPROVED | [T03 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t03) |
+| T03 | Fences, gates and navigable work lanes | APPROVED | [Current T03 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T03 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t03) |
 | T04 | Reference camera and automatic screen composition | APPROVED | [T04 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t04) |
-| T05 | Production station and prop kit | APPROVED | [T05 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t05) |
+| T05 | Production station and prop kit | APPROVED | [Current T05 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T05 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t05) |
 | T06 | Character 1 complete movement/interactions | APPROVED | [T06 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t06) |
 | T07 | Havenline Simple Control & Context Director | APPROVED | [T07 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t07) |
-| T08 | Visible inventory, physical carrying and transfers | APPROVED | [T08 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t08) |
+| T08 | Visible inventory, physical carrying and transfers | APPROVED | [Current T08 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T08 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t08) |
 | T09 | Harvesting and automatic acquisition | APPROVED | [T09 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t09) |
 | T10 | World Transformation Framework | APPROVED | [T10 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t10) |
-| T11 | Camp construction and visual upgrade system | PREPARED | [T11 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t11) |
-| T12 | Level 1–100 progression architecture | LOCKED | [T12 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t12) |
-| T13 | Progressive Difficulty & spend-blind Challenge Director | LOCKED | [T13 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t13) |
+| T11 | Camp construction and visual upgrade system | PREPARED | [Current T11 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T11 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t11) |
+| T12 | Ten-world progression architecture — 50 local levels per world | LOCKED | [Current T12 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T12 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t12) |
+| T13 | Progressive Difficulty & spend-blind Challenge Director | LOCKED | [Current T13 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T13 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t13) |
 | T14 | Save-state/versioning foundation | LOCKED | [T14 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t14) |
 | T15 | Customer/NPC models, crowds and routing | LOCKED | [T15 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t15) |
-| T16 | Fishing and initial food processing | LOCKED | [T16 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t16) |
-| T17 | Customer service, physical payment and reinvestment | LOCKED | [T17 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t17) |
-| T18 | Mechanized fishing, conveyors and helpers | LOCKED | [T18 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t18) |
-| T19 | Wheat/additional food production | LOCKED | [T19 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t19) |
+| T16 | Fishing and initial food processing | LOCKED | [Current T16 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T16 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t16) |
+| T17 | Customer service, physical payment and reinvestment | LOCKED | [Current T17 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T17 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t17) |
+| T18 | Mechanized fishing, conveyors and helpers | LOCKED | [Current T18 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T18 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t18) |
+| T19 | Wheat/additional food production | LOCKED | [Current T19 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T19 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t19) |
 | T20 | Road and vehicle customer service | LOCKED | [T20 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t20) |
-| T21 | Visible hostiles, hunting and weapon progression | LOCKED | [T21 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t21) |
-| T22 | Working defensive structures | LOCKED | [T22 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t22) |
-| T23 | Survivor rescue and basic survivor identity | LOCKED | [T23 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t23) |
-| T24 | Guardian dog | LOCKED | [T24 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t24) |
-| T25 | Gray wolf | LOCKED | [T25 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t25) |
-| T26 | Fox | LOCKED | [T26 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t26) |
-| T27 | Owl | LOCKED | [T27 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t27) |
-| T28 | Male lion | LOCKED | [T28 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t28) |
-| T29 | White tiger | LOCKED | [T29 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t29) |
-| T30 | Brown bear | LOCKED | [T30 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t30) |
-| T31 | Integrated companion jobs and population safety | LOCKED | [T31 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t31) |
-| T32 | Complete frozen-region Level 1–10 production progression | LOCKED | [T32 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t32) |
-| T33 | Core economy & F2P progression model | LOCKED | [T33 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t33) |
+| T21 | Visible hostiles, hunting and weapon progression | LOCKED | [Current T21 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T21 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t21) |
+| T22 | Working defensive structures | LOCKED | [Current T22 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T22 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t22) |
+| T23 | Survivor rescue and basic survivor identity | LOCKED | [Current T23 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T23 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t23) |
+| T24 | Guardian dog | LOCKED | [Current T24 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T24 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t24) |
+| T25 | Gray wolf | LOCKED | [Current T25 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T25 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t25) |
+| T26 | Fox | LOCKED | [Current T26 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T26 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t26) |
+| T27 | Owl | LOCKED | [Current T27 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T27 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t27) |
+| T28 | Male lion | LOCKED | [Current T28 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T28 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t28) |
+| T29 | White tiger | LOCKED | [Current T29 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T29 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t29) |
+| T30 | Brown bear | LOCKED | [Current T30 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T30 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t30) |
+| T31 | Integrated companion jobs and population safety | LOCKED | [Current T31 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T31 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t31) |
+| T32 | Complete World 1 Frozen Home Camp — local Levels 1–50 | LOCKED | [Current T32 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T32 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t32) |
+| T33 | World1 economy and future connected-campaign F2P progression | LOCKED | [Current T33 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T33 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t33) |
 | T34 | Server-authoritative premium economy | LOCKED | [T34 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t34) |
 | T35 | Store, billing and entitlement system | LOCKED | [T35 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t35) |
 | T36 | Permanent VIP system | LOCKED | [T36 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t36) |
@@ -156,33 +168,33 @@ The forward critic harness, specialist runner, closure and visual/style checks u
 | T41 | Anti-cheat and economic-security foundation | LOCKED | [T41 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t41) |
 | T42 | Privacy-respecting telemetry, difficulty analytics and crash diagnostics | LOCKED | [T42 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t42) |
 | T43 | Identity, cloud continuity and recovery | LOCKED | [T43 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t43) |
-| T44 | Connected forest region / approximately Levels 11–20 | LOCKED | [T44 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t44) |
-| T45 | Connected desert region / approximately Levels 21–30 | LOCKED | [T45 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t45) |
-| T46 | Connected underwater region / approximately Levels 31–40 | LOCKED | [T46 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t46) |
-| T47 | Connected sky region / approximately Levels 41–50 | LOCKED | [T47 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t47) |
-| T48 | Connected volcanic region / approximately Levels 51–60 | LOCKED | [T48 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t48) |
-| T49 | Connected swamp region / approximately Levels 61–70 | LOCKED | [T49 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t49) |
-| T50 | Connected ruins region / approximately Levels 71–80 | LOCKED | [T50 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t50) |
-| T51 | Connected underground region / approximately Levels 81–90 | LOCKED | [T51 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t51) |
-| T52 | Connected alien region / approximately Levels 91–100 | LOCKED | [T52 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t52) |
-| T53 | Transportation and inter-region continuity | LOCKED | [T53 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t53) |
+| T44 | World 2 Forest and Lakeshore — local Levels 1–50 | LOCKED | [Current T44 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T44 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t44) |
+| T45 | World 3 Desert Canyons — local Levels 1–50 | LOCKED | [Current T45 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T45 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t45) |
+| T46 | World 4 Underwater Refuges — local Levels 1–50 | LOCKED | [Current T46 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T46 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t46) |
+| T47 | World 5 Sky Islands — local Levels 1–50 | LOCKED | [Current T47 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T47 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t47) |
+| T48 | World 6 Volcanic Forge — local Levels 1–50 | LOCKED | [Current T48 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T48 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t48) |
+| T49 | World 7 Swamp Boardwalks — local Levels 1–50 | LOCKED | [Current T49 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T49 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t49) |
+| T50 | World 8 Ruined Settlement — local Levels 1–50 | LOCKED | [Current T50 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T50 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t50) |
+| T51 | World 9 Underground Mines — local Levels 1–50 | LOCKED | [Current T51 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T51 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t51) |
+| T52 | World 10 Alien Frontier — local Levels 1–50 | LOCKED | [Current T52 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T52 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t52) |
+| T53 | World1 local transport and later inter-world continuity | LOCKED | [Current T53 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T53 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t53) |
 | T54 | Day/night, weather, [music, SFX and event coverage](#t54--music-sound-effects-and-event-coverage) | LOCKED (full-world); audio coverage required for Level 1 acceptance | [T54 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t54) |
-| T55 | Accessibility and control customization | LOCKED | [T55 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t55) |
+| T55 | Accessibility and control customization | LOCKED | [Current T55 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T55 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t55) |
 | T56 | Performance/Quality/Balanced/Battery player modes | LOCKED | [T56 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t56) |
 | T57 | Basic shareable milestone system | LOCKED | [T57 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t57) |
 | T58 | Phone/tablet/foldable functional acceptance | LOCKED | [T58 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t58) |
 | T59 | Character 2 final rigging and motion review | LOCKED | [T59 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t59) |
 | T60 | Character 3 final rigging and motion review | LOCKED | [T60 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t60) |
 | T61 | Character 4 final rigging and motion review | LOCKED | [T61 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t61) |
-| T62 | Complete Level 1–100 progression acceptance | LOCKED | [T62 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t62) |
-| T63 | $0 lifelong-F2P player completion test | LOCKED | [T63 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t63) |
+| T62 | Release-scoped progression and full ten-world campaign acceptance | LOCKED | [Current T62 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T62 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t62) |
+| T63 | Released-world and full-campaign $0 completion test | LOCKED | [Current T63 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T63 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t63) |
 | T64 | Purchase-value/fairness test | LOCKED | [T64 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t64) |
-| T65 | Full LiveOps launch rehearsal | LOCKED | [T65 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t65) |
+| T65 | World1 launch and later-update LiveOps rehearsal | LOCKED | [Current T65 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T65 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t65) |
 | T66 | Security/exploit attack review | LOCKED | [T66 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t66) |
-| T67 | Full-game reference/regression acceptance | LOCKED | [T67 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t67) |
-| T68 | Sustained native 4K/60 phone evidence | LOCKED | [T68 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t68) |
-| T69 | Sustained native 4K/60 tablet/foldable evidence | LOCKED | [T69 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t69) |
-| T70 | Final production release handoff | LOCKED | [T70 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t70) |
+| T67 | Released-content and later full-campaign reference/regression acceptance | LOCKED | [Current T67 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T67 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t67) |
+| T68 | Sustained native4K/60 phone evidence for each affected release | LOCKED | [Current T68 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T68 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t68) |
+| T69 | Sustained native4K/60 tablet/foldable evidence for each affected release | LOCKED | [Current T69 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T69 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t69) |
+| T70 | World1 release handoff and later connected-update handoffs | LOCKED | [Current T70 scope](WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.md) · [T70 preserved references](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t70) |
 
 Detailed dependencies and critic applicability are machine-authoritative in `DEPENDENCY_GRAPH.json` and `CRITIC_MATRIX.json`. Mandatory forward scope overlays for resource/tool/actor/animation behavior are machine-authoritative in `TASK_SCOPE_OVERRIDES.json` and the three contract registries. T01–T10 accepted records remain authoritative; T10 closure is recorded in `Docs/Production/T10/verified-completion.json`.
 
@@ -234,11 +246,13 @@ Applicable resource/tool/actor tasks must additionally prove actual tool contact
 
 ## Performance rule
 
-A task can fail even when visually excellent if it consumes an unsustainable share of the full-game budget. Early performance evidence protects headroom but cannot certify physical performance. Only T68/T69 can certify sustained native internal >=3840×2160 at >=60 FPS on representative physical phone/tablet/foldable hardware under completed-game load.
+A task can fail even when visually excellent if it consumes an unsustainable share of the full-game budget. Early performance evidence protects headroom but cannot certify physical performance. Only T68/T69 can certify sustained native internal >=3840×2160 at >=60 FPS on representative physical phone/tablet/foldable hardware under finished load for the exact released content set. World1 certification must cover representative late-world conditions; affected later updates require renewed evidence. This scope clarification lowers no resolution, frame-rate, duration or physical-device requirement.
 
-## Post-launch roadmap — outside release-critical T01–T70
+## Later connected worlds and optional post-launch roadmap
 
-- more Level-100 activities.
+Worlds2–10 and their fifty local levels remain planned connected updates under T44–T52. They are distinct from the optional additions below. Current release gates must be reconciled explicitly; future worlds are neither deleted nor falsely marked complete.
+
+- additional activities beyond a released world’s authored milestones.
 - new event families.
 - richer secrets.
 - more companion cosmetics/interactions.
@@ -248,7 +262,8 @@ A task can fail even when visually excellent if it consumes an unsustainable sha
 - asynchronous friends/Haven visits.
 - community projects.
 - optional future 2–4-player co-op.
-- new regions/expansions.
-- future level-cap increase only when meaningful new progression exists.
+- additional regions/expansions beyond the planned ten worlds.
+- future local-level-cap increases beyond the planned fifty only when meaningful new progression exists.
 
-These are not Havenline 1.0 dependencies and must not leak into release-critical scope without a new approved plan revision.
+These optional additions are not introduced as World1 release dependencies by the 10×50 correction. They require their own approved scope revision. The planned Worlds2–10 continue under the explicit connected-update roadmap.
+

@@ -1,0 +1,161 @@
+{
+  "review_id": "W1-UPGRADE-ART-R1-FIRST3",
+  "reviewer": "/root/world1_upgrade_critic",
+  "independent": true,
+  "review_scope": "Authored static appearance proposals only",
+  "policy_id": "havenline-reference-acceptance-2026-11-27",
+  "policy_sha256": "140a80fb86955b1c98ac91e62202072e7b745b7e1cda0f2cf810e7baa6f753a8",
+  "acceptance": "Reference-sensitive dimensions >=9.9 unrounded; stronger exact-10 where applicable; no mandatory defect may be averaged away.",
+  "actual_inspection": "Full original source images and full generated boards, with enlarged counter tray/brace inspection crops. No prompt-only pass.",
+  "candidates": [
+    {
+      "candidate": "generated/01-counter-r1.png",
+      "sha256": "4076f8745a8368cd21a0ce22b2996b68fce342917e858302b8ad79ecc0373488",
+      "prompt_path": "prompts/01-counter-r1.json",
+      "prompt_sha256": "c5fc798a72a73ea608fe3e82f44243f4c1c644bed506226c178c4174dac98cd6",
+      "source_images_inspected": [
+        {
+          "path": "/workspace/scratch/9c51da47f878/havenline-structures-2026-11-25/archive-repo/Docs/Design/StructureReferences/2026-11-25/selected/customer-counter-cardinal.png",
+          "sha256": "46309b01e07a15db044518fcf47b93dbd6741a3786a04135e88b3bb4e85158fb"
+        },
+        {
+          "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/package/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/17-conveyor-counter.png",
+          "sha256": "10676f8021a20caea31413e13a4463950cfbae583a9dc0fb0aff8e4018d4fccd"
+        }
+      ],
+      "verdict": "REPAIR_REQUIRED",
+      "score": 8.8,
+      "score_is_percent_similarity": false,
+      "dimension_scores": {
+        "retained_family_identity": 10.0,
+        "visual_language": 10.0,
+        "cross_view_consistency": 8.8,
+        "scale_and_access_readability": 9.9,
+        "stage_difference_readability": 10.0,
+        "meaningful_view_coverage": 9.9
+      },
+      "issues": [
+        {
+          "id": "W1AR-01",
+          "location": "Both rows, front versus rear food trays",
+          "finding": "The tall divider at each tray\u2019s physical left end in the front view becomes a broad short near-edge wall in the rear view instead of rotating to the corresponding screen-right end. The tray/divider topology is not consistent.",
+          "repair": "Use the selected shallow tray design consistently, or show each divider at its correct rotated position. Keep cash and goods on the existing opposite physical ends."
+        },
+        {
+          "id": "W1AR-DOC",
+          "location": "Generated stage labels versus UPGRADE_RENDER_BRIEFS.json",
+          "finding": "Actual generator prompts and images name stages REINFORCED and ADVANCED; the separately authored inventory briefs give longer stage names and differing wording.",
+          "repair": "Record a final deliberate mapping or update the briefs/manifest to the actual selected authored stage names. Do not label an unreviewed image as a different named stage."
+        }
+      ],
+      "positive_findings": [
+        "No register, till, cashier or new payment terminal visible.",
+        "Both stages retain the timber table identity; advanced blue underframe is a readable proposed material change.",
+        "Cash/goods ends reverse on screen appropriately between front and rear.",
+        "Three panels per row are present, with close corner/material detail. Advanced front/rear bottom treatments can intentionally differ; their distinction must be recorded."
+      ]
+    },
+    {
+      "candidate": "generated/02-cooker-r1.png",
+      "sha256": "2280dfe5a77bc9309c94a0cb51d023b5c4f3b8ecc3a457f149ce3218878dc08b",
+      "prompt_path": "prompts/02-cooker-r1.json",
+      "prompt_sha256": "1be1fd27dc9730821f698e3d02060ddf0ba606bc9749fa0525bb09199c6f21a6",
+      "source_images_inspected": [
+        {
+          "path": "/workspace/scratch/9a64cbeeb049/HAVENLINE-conveyors/Docs/Design/RenderArchive/2026-11-23/selected/equipment/cooker_processor.png",
+          "sha256": "773a82fdba15a3992dd547e7208d5affed12e94de235caea90115dfd0a8bbbe6"
+        },
+        {
+          "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/package/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/13-conveyor-food-machines.png",
+          "sha256": "1d079c46d5c9e4a38bcf72095094157de4bede8f4ed93c8dbf99e400b3206dc6"
+        }
+      ],
+      "verdict": "REPAIR_REQUIRED",
+      "score": 4.0,
+      "score_is_percent_similarity": false,
+      "dimension_scores": {
+        "retained_family_identity": 9.8,
+        "visual_language": 10.0,
+        "cross_view_consistency": 4.0,
+        "functional_ports_and_trays": 5.0,
+        "stage_difference_readability": 10.0,
+        "meaningful_view_coverage": 6.0
+      },
+      "issues": [
+        {
+          "id": "W1AR-02",
+          "location": "Top middle and bottom middle rear panels",
+          "finding": "Rear service faces are shown, but raw remains screen-left and cooked remains screen-right just as in the front views. This swaps the machine\u2019s physical input and output. Rear output containers also change from metal trays to timber boxes.",
+          "repair": "Render the actual back: cooked output screen-left, raw input screen-right, with the same side vessel, pipe, tray materials and physical attachment positions as the front."
+        },
+        {
+          "id": "W1AR-03",
+          "location": "Third column, both rows",
+          "finding": "The panel called FUNCTIONAL SIDE is a straight front view of the same firebox and both side trays. It does not establish a distinct functional-side/detail relationship.",
+          "repair": "Provide a genuine functional-side detail, correctly oriented to the same model, showing the handoff/chamber/service relationship without moving ports."
+        },
+        {
+          "id": "W1AR-DOC",
+          "location": "Brief labels",
+          "finding": "Generated Reinforced/Advanced names differ from inventory brief stage names.",
+          "repair": "Align selected-image manifest and briefs after visual repairs."
+        }
+      ],
+      "positive_findings": [
+        "Both rows remain recognizable cooker-family concepts with one centered chimney and a front firebox.",
+        "Material style, proposed reinforcement, snow treatment and broad stage readability are coherent.",
+        "No levels, costs, new recipes or runtime claim are printed."
+      ]
+    },
+    {
+      "candidate": "generated/03-saw-r1.png",
+      "sha256": "c5b4619b05f26cf998e5cb746c8d6da273d4f6e34757222064151d3b97c838f5",
+      "prompt_path": "prompts/03-saw-r1.json",
+      "prompt_sha256": "01a56f251bf87e93dcbacdc4190d7f13a0c74dc1e2ab0e64a23b8da5da4231a1",
+      "source_images_inspected": [
+        {
+          "path": "/workspace/scratch/9a64cbeeb049/HAVENLINE-conveyors/Docs/Design/RenderArchive/2026-11-23/selected/equipment/saw_station.png",
+          "sha256": "8191ba20d0cec7c92c22d35c5befa87c53b8c894ca94341681b3c16834e24d15"
+        }
+      ],
+      "verdict": "REPAIR_REQUIRED",
+      "score": 4.0,
+      "score_is_percent_similarity": false,
+      "dimension_scores": {
+        "retained_family_identity": 9.8,
+        "visual_language": 10.0,
+        "cross_view_consistency": 4.0,
+        "cutting_head_topology": 4.0,
+        "stage_difference_readability": 10.0,
+        "meaningful_view_coverage": 5.0
+      },
+      "issues": [
+        {
+          "id": "W1AR-04",
+          "location": "Middle column, both rows",
+          "finding": "The purported REAR THREE-QUARTER panels still put the visible blade face and crank in front of the log. They are additional front views. Actual rear/clamp coverage is missing.",
+          "repair": "Use a true opposite rear view: log/clamp foreground and cutter/crank on the correct far side, consistent with the selected baseline."
+        },
+        {
+          "id": "W1AR-05",
+          "location": "Right side-detail column, both rows",
+          "finding": "An edge-on vertical blade strip appears beside a broad semicircular toothed form facing the side camera. The cutting head is drawn as two incompatible perpendicular forms rather than one coherent disk/guard.",
+          "repair": "Keep one blade disk and its guard on one plane, with a single consistent crank axis. Side view should show the correctly edge-on assembly and clearance to the log."
+        },
+        {
+          "id": "W1AR-DOC",
+          "location": "Brief labels",
+          "finding": "Generated Reinforced/Advanced names differ from inventory brief stage names.",
+          "repair": "Align selected-image manifest and briefs after visual repairs."
+        }
+      ],
+      "positive_findings": [
+        "Both rows preserve the compact timber saw table, upper clamp, log and under-table plank family.",
+        "Blue reinforcement/guard changes are visibly distinct between rows.",
+        "No new engine, fuel requirement or producer is asserted by text."
+      ]
+    }
+  ],
+  "runtime_model_animation_device_owner_approval": false,
+  "summary": "0 of 3 candidates pass. Retain all rejected r1 images and this report; repair and review changed candidates."
+}

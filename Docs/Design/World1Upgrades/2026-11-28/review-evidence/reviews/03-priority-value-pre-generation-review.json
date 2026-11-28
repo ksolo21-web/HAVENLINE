@@ -1,0 +1,33 @@
+{
+  "review_id": "W1-PRIORITY-VALUE-PREGEN-01",
+  "reviewer": "/root/world1_upgrade_critic",
+  "independent": true,
+  "scope": "Design-readiness review of authored sawmill/storage proposal before rendering",
+  "source_sha256": "c1221300f6549b670dbba8cf41603bd938e4007994728e4f12aefceab19612a2",
+  "art_score": null,
+  "runtime_score": null,
+  "owner_approval": false,
+  "verdict": "SUITABLE_DIRECTION_WITH_TWO_CONCRETE_REFINEMENTS",
+  "findings": [
+    {
+      "id": "VALUE-PRE-01",
+      "family": "sawmill",
+      "issue": "Drive/crew semantics remain too open to verify two lanes as functioning work cells.",
+      "required_refinement": "Retain a reachable hand crank and visibly linked feed drive in the buffered stage. Declare the parallel-stage drive/worker model explicitly; two independently staffed manual stations is a coherent no-new-fuel proposal. Queue/stop each blocked lane without destroying stock. No new recipe yield is inferred."
+    },
+    {
+      "id": "VALUE-PRE-02",
+      "family": "storage_house",
+      "issue": "New physical receiving/reservation/dispatch spaces need unambiguous stock custody and relation to garage deposit.",
+      "required_refinement": "Keep one conserved stock ledger with inbound/unaccepted, owned/reserved and outbound states distinguished. Cancellation returns reservations; no stock is credited twice. The new warehouse docks do not replace garage-first truck deposit or resolve VC01. Show the continuous internal aisle and accessible pedestrian route in a roof-off/plan evidence view."
+    }
+  ],
+  "positive_findings": [
+    "Buffered-feed stage buys less repetitive loading interruption; parallel stage creates distinct work-cell/labor opportunities.",
+    "Real input waiting racks, guarded cutting paths and downstream plank collection are visible mechanisms rather than ornament.",
+    "Storage starts from existing mixed typed storage competence and adds separated receiving/dispatch plus protected coordinated staging.",
+    "Expanded footprints/ports are allowed with explicit routing and scale constraints.",
+    "Costs, rates, capacities, unlocks, deployment caps and native behavior are not falsely declared approved."
+  ],
+  "next_action": "Render the refined candidates and independently inspect actual evidence. Passing this design-readiness review would not pass art, animation, runtime, balance or owner selection."
+}

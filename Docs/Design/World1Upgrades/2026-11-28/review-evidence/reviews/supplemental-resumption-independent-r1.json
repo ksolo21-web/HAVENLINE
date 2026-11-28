@@ -1,0 +1,190 @@
+{
+  "schema_version": 1,
+  "review_id": "HAVENLINE_SUPPLEMENTAL_RESUMPTION_INDEPENDENT_R1",
+  "reviewer": "/root/planning_package_critic",
+  "reviewed_utc": "2026-11-28T12:50:35.839123+00:00",
+  "scope": "Additive source/input resumption package before archive assembly only. No art selection, native, complete-task or remote publication approval.",
+  "verdict": "PASS_SUPPLEMENTAL_PRESERVATION_SCOPE_READY_FOR_ASSEMBLY",
+  "pass": true,
+  "all_mandatory_scoped_checks_pass": true,
+  "score": 10.0,
+  "candidate": {
+    "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/package/Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption",
+    "manifest_sha256": "b2201cdc8dd4053c885fb0c2633f54822470c82c640689cae1500663ebb38d2b",
+    "input_map_sha256": "1f06a8893f864ba2a3f3daa5c559f7556a3a1d3656d6bcdf44ec1d17f8c5f9b0",
+    "source_preservation_manifest_sha256": "89c89e30a818b8e4e8c5e7891c6ea9b771f2004f7d3e9fde8d9dffcbc9ff3a34",
+    "verifier_sha256": "9869c0d6db50fca7dd3fc3ec617ec0f69c02ec039ded28f0539bf823964543c8"
+  },
+  "dimension_scores": {
+    "source_identity_and_preservation": 10.0,
+    "pinned_source_recoverability": 10.0,
+    "input_resolution_and_history": 10.0,
+    "read_only_verification_and_truthful_finalization": 10.0,
+    "bounded_storage_and_prior_file_preservation": 10.0,
+    "navigation_and_resumption_instructions": 10.0,
+    "scope_boundaries": 10.0
+  },
+  "mandatory_checks": [
+    {
+      "id": "S01",
+      "check": "Actual preservation verifier completes all 139 required preservation checks",
+      "pass": true
+    },
+    {
+      "id": "S02",
+      "check": "All 20 staged snapshots exactly match original local source bytes",
+      "pass": true
+    },
+    {
+      "id": "S03",
+      "check": "All 52 classifications independently match actual Git objects at the pinned base",
+      "pass": true
+    },
+    {
+      "id": "S04",
+      "check": "All 50 planning source records plus only the two stated additional contracts are preserved",
+      "pass": true
+    },
+    {
+      "id": "S05",
+      "check": "Staged sources remain passive evidence with no runtime integration claim",
+      "pass": true
+    },
+    {
+      "id": "S06",
+      "check": "All 56 prior package file hashes remain unchanged",
+      "pass": true
+    },
+    {
+      "id": "S07",
+      "check": "All 38 exact request records and reference declarations match actual files",
+      "pass": true
+    },
+    {
+      "id": "S08",
+      "check": "All 47 input paths resolve to exact bytes and equal the request reference union",
+      "pass": true
+    },
+    {
+      "id": "S09",
+      "check": "All 112 published source-catalog entries match local bytes and independently verified commit/blob identities",
+      "pass": true
+    },
+    {
+      "id": "S10",
+      "check": "Both 35-request and 37-request historical maps preserve their prior entries unchanged",
+      "pass": true
+    },
+    {
+      "id": "S11",
+      "check": "Preserved helper is the exact independently reviewed 8b8000db version",
+      "pass": true
+    },
+    {
+      "id": "S12",
+      "check": "Override template contains no candidate status or best-draft designation",
+      "pass": true
+    },
+    {
+      "id": "S13",
+      "check": "Actual verifier runs do not modify package bytes",
+      "pass": true
+    },
+    {
+      "id": "S14",
+      "check": "Finalized mode refuses missing assembly files instead of claiming completion",
+      "pass": true
+    },
+    {
+      "id": "S15",
+      "check": "All 39 inherited navigation targets exist at the actual pinned commit",
+      "pass": true
+    },
+    {
+      "id": "S16",
+      "check": "All 68 audited planned gallery/report links resolve and preview bytes match the audited snapshot",
+      "pass": true
+    },
+    {
+      "id": "S17",
+      "check": "No source image duplication is introduced by the supplement",
+      "pass": true
+    },
+    {
+      "id": "S18",
+      "check": "Input map covers every request currently present and excludes receipt containers",
+      "pass": true
+    }
+  ],
+  "check_counts": {
+    "independent_scoped_passed": 18,
+    "independent_scoped_required": 18,
+    "existing_verifier_passed": 139,
+    "existing_verifier_required": 139
+  },
+  "findings": [],
+  "source_summary": {
+    "records": 52,
+    "planning_sources": 50,
+    "planning_staged_sources": 18,
+    "additional_staged_sources": [
+      "Docs/Production/GAMEPLAY_RULES_CONTRACT.json",
+      "Docs/Production/GameplayRules/2026-11-27/ACTORS_COMBAT_GAPS.json"
+    ],
+    "staged_total": 20,
+    "staged_bytes": 4564444,
+    "pinned_metadata_only": 32,
+    "request_records": 38,
+    "unique_input_paths": 47,
+    "input_categories": {
+      "PINNED_SOURCE_FETCH_METADATA": 22,
+      "GENERATED_IMAGE_RETAINED_BY_FINAL_ASSEMBLY": 24,
+      "ALREADY_IN_PACKAGE": 1
+    },
+    "published_catalog_records": 112
+  },
+  "verification_note": "Local Git independently resolved all 52 planning/staged source classifications and 39 inherited targets. Seven catalog sources at b3da3c6 were absent from the local clone; their blob identities were verified through a read-only GitHub API listing at that exact commit. No metadata changes were necessary. Four catalog entries omit an explicit Git blob ID but their computed local blob identity matches the pinned object.",
+  "root_preparation_observed": {
+    "status_sha256": "1861bcf38d3f23db468a1525b37e225b97903da7356432f98229d1cba60a7b40",
+    "override_sha256": "3cc8da405f1e60ea8eab1939fb798fe9f576d0d51b54badfb821ee330e26a55a",
+    "status_keys": [
+      "schema_version",
+      "authority",
+      "scope",
+      "world_plan",
+      "static_art",
+      "crew_pairs",
+      "design_document_review",
+      "planning_review",
+      "publication",
+      "source_scope",
+      "remaining",
+      "owner_selected",
+      "native_approved",
+      "whole_task_complete"
+    ],
+    "override_candidate_count": 7
+  },
+  "pending_archive_finalization": [
+    "Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md",
+    "Docs/Design/World1Upgrades/2026-11-28/review-evidence/ARTIFACT_INVENTORY.json",
+    "Docs/Design/World1Upgrades/2026-11-28/review-evidence/ASSEMBLY_RECEIPT.json"
+  ],
+  "strict_finalized_mode_pass": false,
+  "strict_finalized_mode_expected_at_this_stage": false,
+  "evidence": {
+    "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/reviews/supplemental-resumption-independent-evidence.json",
+    "sha256": "452af9c83673f486eb78ea9b32764afa49c135d925e83b7cad690f1ac791a775"
+  },
+  "not_executed": [
+    "Assembly --apply",
+    "Remote publication",
+    "Staged gameplay code execution"
+  ],
+  "not_approved": [
+    "Any art or owner selection",
+    "Native gameplay, motion, audio, device or shipping readiness",
+    "Actual copied archive bytes or remote publication"
+  ],
+  "next_action": "Root can apply the exact reviewed assembly helper and exact raw overrides. Then independently verify actual archive file hashes and links and rerun verify_resumption.py --require-finalized. Preserve all prior evidence and source bytes."
+}

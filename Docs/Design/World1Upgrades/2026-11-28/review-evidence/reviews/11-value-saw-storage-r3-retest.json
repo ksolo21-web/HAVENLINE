@@ -1,0 +1,44 @@
+{
+  "reviewer": "/root/world1_upgrade_critic",
+  "date": "2026-11-28",
+  "scope": "ACTUAL_STATIC_IMAGE_RETEST",
+  "passed": 0,
+  "reviewed": 2,
+  "results": [
+    {
+      "id": "W1VAL-01-r3",
+      "status": "REPAIR_REQUIRED",
+      "score": 8.0,
+      "resolved": [
+        "Optional gantry removed consistently",
+        "Finished units and raw receiving end correctly distinguished",
+        "Far exterior service deck now appears in function view"
+      ],
+      "remaining": [
+        {
+          "id": "VAL01-R06",
+          "observed": "Far-lane crank in function faces into the central gap while its assigned operating walk is outside at back. Rear panel also includes a second crank facing the inner gap.",
+          "repair": "Delete inner-gap crank(s). Put the rear-lane control on its far exterior fascia, reachable only from the rear outer deck. Rear view can demonstrate it fully; no impossible front visibility is required."
+        }
+      ],
+      "image_sha256": "70b758f95638037f39c1b05690802a03f9d63d658050328ca457bfe99979d5d7"
+    },
+    {
+      "id": "W1VAL-04-r3",
+      "status": "REPAIR_REQUIRED",
+      "score": 8.5,
+      "resolved": [
+        "Receiving threshold is visibly empty",
+        "Otherr2 fixes retained"
+      ],
+      "remaining": [
+        {
+          "id": "VAL04-R06",
+          "observed": "Receiving doorway/sign plane still faces front/back rather than lying in the angled left-wall plane. Forest seen through the front exterior bay implies a rear through-opening that contradicts the solid rear exterior.",
+          "repair": "Author one consistent receiving entrance with a real exterior-apron-to-interior-floor path, and match all views. Either a real side-wall door or explicitly revised separated front-left bay is acceptable. Do not cure the contradictory geometry only by relabeling or hiding trees."
+        }
+      ],
+      "image_sha256": "bbba87f79a9f0af720c90a7c8a8587265a73fe53586e070aece091b7e80c4295"
+    }
+  ]
+}

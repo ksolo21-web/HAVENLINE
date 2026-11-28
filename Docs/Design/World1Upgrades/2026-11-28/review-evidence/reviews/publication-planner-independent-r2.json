@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/world1_upgrade_inventory",
+  "scope": "Exact root-authored publication planner source and local disposable clean-package manifest behavior only; no remote tree preservation/branch/art approval.",
+  "status": "SCOPED_TOOL_SOURCE_AND_CLEAN_DISPOSABLE_MANIFEST_PASS",
+  "score": 10.0,
+  "checks_passed": 15,
+  "checks_required": 15,
+  "tool_repository_path": "Docs/Design/World1Upgrades/2026-11-28/supplemental-resumption/tools/build_publication_plan.py",
+  "tool_sha256": "b52dda12c99ef594dc2db586ac7097ce44a0eff05b4399f803690213f43daeef",
+  "checks": {
+    "actual_clean_disposable_manifest_run_succeeded": true,
+    "repeat_run_with_identical_inputs_byte_deterministic": true,
+    "disposable_package_bytes_unchanged": true,
+    "every_package_file_listed_once": true,
+    "all_overlay_paths_relative_and_no_parent_traversal": true,
+    "all_overlay_items_add_or_replace_no_deletions": true,
+    "parent_base_tree_branch_metadata_exact": true,
+    "all_sha256_git_blob_and_lengths_exact": true,
+    "all_binary_entries_use_exact_blob_sha": true,
+    "all_utf8_text_roundtrips_byte_exact": true,
+    "output_inside_package_rejected_before_creation": true,
+    "reviewed_tool_bytes_unchanged": true,
+    "no_bytecode_repeat_identical": true,
+    "root_staging_generated_cache_removed": true,
+    "root_tool_still_matches_reviewed_source": true
+  },
+  "actual_fixture": {
+    "file_count": 294,
+    "binary_files": 93,
+    "text_files": 201,
+    "batch_count": 27,
+    "max_batch_bytes": 2085313
+  },
+  "findings": [
+    {
+      "id": "PP-01",
+      "status": "CLOSED_FOR_LOCAL_PLANNER_RETEST",
+      "resolution": "Root removed the nonpublication generated .pyc cache; the same unmodified planner succeeds on clean copied inputs. The initial failed-run report remains retained. Final replacement assembly receipt is a separate planning-critic gate."
+    }
+  ],
+  "caller_requirements": [
+    "Chain tree batches: first base_tree is exact recorded base; each later batch uses the previous returned tree, so earlier overlay additions survive.",
+    "Upload each binary file and verify returned Git blob SHA before sending its sha tree entry.",
+    "Consume only batches listed in MANIFEST.json; do not glob stale output batches from a reused directory.",
+    "The 250000-byte batching target is soft: large individual UTF-8 files remain larger single-entry batches. Confirm the publication transport accepts their actual sizes.",
+    "Verify the complete resulting remote base+overlay path/mode/blob map before creating the isolated review branch; this local tool cannot prove remote preservation."
+  ],
+  "raw_evidence": {
+    "path": "reviews/publication-planner-independent-evidence.json",
+    "sha256": "1f6d8d56c3ba11ef0d1f511cd9e87b81c924d94e5ceed7da3b02c6f3f5ba28dc"
+  },
+  "scope_exclusions": [
+    "No remote blob upload, tree creation, complete remote base+overlay comparison or branch creation was performed by this reviewer.",
+    "No approval of art selection, native gameplay or whole task.",
+    "Final package/assembly-receipt review remains owned by the planning critic."
+  ],
+  "remote_write_performed": false,
+  "frozen_document_edited": false
+}

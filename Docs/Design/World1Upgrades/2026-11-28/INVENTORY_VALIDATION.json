@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "scope": "Inventory and prompt structural/source verification only; not image or runtime approval",
+  "checks": {
+    "distinct_families": true,
+    "all_requested_briefs_mapped": true,
+    "exact_two_new_stages_per_family": true,
+    "exact_three_views_per_stage": true,
+    "numeric_equipment_and_world_bindings_unset": true,
+    "existing_furnace_ten_and_storage_three_retained": true,
+    "conveyor_excluded_from_new_generation": true,
+    "actor_upgrade_skins_not_invented": true,
+    "all_local_source_hashes_match": true,
+    "truck_four_wheels_corrected": true,
+    "mechanics_scope_does_not_revoke_historical_approval": true,
+    "vehicle_conflicts_explicit_and_separate_from_settled_low_fuel": true,
+    "unique_family_scoped_stage_ids": true,
+    "first_three_execution_display_labels_match": true,
+    "planning_and_actual_execution_provenance_distinguished": true,
+    "revised_stage_labels_and_execution_hashes_match": true
+  },
+  "counts": {
+    "families": 99,
+    "briefs": 15,
+    "new_named_visual_stages": 30,
+    "requested_views": 90,
+    "generation_input_images": 22,
+    "text_sources": 9
+  },
+  "errors": [],
+  "independent_review_status": "PENDING"
+}

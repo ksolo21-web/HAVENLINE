@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "review_id": "HAVENLINE_ASSEMBLY_HELPER_R1_INDEPENDENT",
+  "reviewer": "/root/planning_package_critic",
+  "reviewed_utc": "2026-11-28T12:19:32.634843+00:00",
+  "scope": "Assembly helper source and actual dry-run behavior only; no --apply executed, no copied-evidence or publication approval.",
+  "verdict": "REPAIR_REQUIRED_MISSING_HASH_APPLICABILITY",
+  "pass": false,
+  "all_mandatory_checks_pass": false,
+  "score": 8.0,
+  "candidate": {
+    "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/assemble_review_package.py",
+    "sha256": "dc97e0297c2ae223a04a80ab764aa606a7daf2ac239a9dbf4e1e2bf5b313f87e"
+  },
+  "counts": {
+    "source_files": 120,
+    "source_bytes": 67689996,
+    "generated_pngs": 21,
+    "superseded_unselected_studies": 6,
+    "invocation_records": 26,
+    "tool_error_records": 2,
+    "review_reports": 33,
+    "crop_pngs": 32,
+    "verifier_logs": 4,
+    "retained_prior_evidence_files": 0
+  },
+  "dimension_scores": {
+    "frozen_file_preservation": 10.0,
+    "history_and_failure_retention": 10.0,
+    "copy_selection_and_exclusions": 10.0,
+    "root_override_hash_guards": 10.0,
+    "missing_hash_current_status_binding": 8.0,
+    "dry_run_truthfulness": 10.0
+  },
+  "mandatory_gates": [
+    {
+      "id": "H01",
+      "check": "all_inventory_artifact_source_hashes_match",
+      "pass": true
+    },
+    {
+      "id": "H02",
+      "check": "all_six_superseded_preserved",
+      "pass": true
+    },
+    {
+      "id": "H03",
+      "check": "all_actual_observations_bound",
+      "pass": true
+    },
+    {
+      "id": "H04",
+      "check": "no_owner_native_positive_flags",
+      "pass": true
+    },
+    {
+      "id": "H05",
+      "check": "four_only_nested_work_logs",
+      "pass": true
+    },
+    {
+      "id": "H06",
+      "check": "both_tool_error_records_retained",
+      "pass": true
+    },
+    {
+      "id": "H07",
+      "check": "armed_not_approved_in_preview",
+      "pass": true
+    },
+    {
+      "id": "H08",
+      "check": "no_current_best_without_root_override",
+      "pass": true
+    },
+    {
+      "id": "H09",
+      "check": "wrong_hash_override_rejected",
+      "pass": true
+    },
+    {
+      "id": "H10",
+      "check": "best_without_override_rejected",
+      "pass": true
+    },
+    {
+      "id": "H11",
+      "check": "top_native_positive_rejected",
+      "pass": true
+    },
+    {
+      "id": "H12",
+      "check": "candidate_native_positive_rejected",
+      "pass": true
+    },
+    {
+      "id": "H13",
+      "check": "frozen_23_files_receipt_preserved",
+      "pass": true
+    },
+    {
+      "id": "H14",
+      "check": "Actual dry run leaves all package file hashes unchanged",
+      "pass": true
+    },
+    {
+      "id": "H15",
+      "check": "Actual dry run does not create review-evidence destination",
+      "pass": true
+    },
+    {
+      "id": "H16",
+      "check": "Missing image hash cannot promote a report status or score to current bytes",
+      "pass": false,
+      "finding_id": "AS-01"
+    }
+  ],
+  "gate_counts": {
+    "passed": 15,
+    "total": 16
+  },
+  "findings": [
+    {
+      "id": "AS-01",
+      "status": "OPEN",
+      "severity": "BLOCKING_FOR_HELPER_APPROVAL",
+      "finding": "review_observations sets applies_to_current_bytes to true when the report has no image hash. A concrete fixture using candidate ID, explicit SCOPED_REVIEW_PASS and score 10 but no image hash was then promoted into current_status and explicit_review_score. That makes an unbound historical statement applicable to current bytes without evidence.",
+      "repair": "Require an explicit image hash equal to the current candidate hash for applicability. Keep the unbound observation in history; a current status can be supplied by an exact-hash root override.",
+      "current_real_data_impact": "All actual observed review entries in the tested inventory had matching image hashes, so no current real candidate status was found falsely promoted."
+    }
+  ],
+  "evidence": [
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/reviews/assembly-independent-work/assembly-r1.json",
+      "sha256": "0e778036c203a321adf1f70a31efc77ce252651f4859f63b8d811a805ad15224"
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/reviews/assembly-independent-work/assembly-r1-REVIEW_GALLERY.preview.md",
+      "sha256": "8ac5ad1b990197701de77777c5f7923bfdbf1b6b1be575f2cfebb8f17ef5237c"
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/reviews/assembly-independent-work/independent-checks-r1.json",
+      "sha256": "8ff42c905055eb178edf229d2594244c0e40c9a7bec7040770e3adc53d150c7a"
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/reviews/assembly-independent-work/remaining-checks-r1.json",
+      "sha256": "ec6e5eb25613eec6ac77548eb48d6ccfb41ce09e798da66ef7ef833588462edb"
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/reviews/assembly-independent-work/dry-run.stdout.txt",
+      "sha256": "e85650e5c14181f5dfad1f84d31dacef375f5b1be02adaf1fc22df61b6f4754d"
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/reviews/assembly-independent-work/dry-run.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "package_preservation": {
+    "files_before": 50,
+    "files_after": 50,
+    "all_hashes_unchanged": true,
+    "frozen_design_files_unchanged": 23
+  },
+  "not_executed": [
+    "--apply",
+    "remote publication"
+  ],
+  "next_action": "Builder repairs AS-01; independent critic reruns status-binding fixture and actual dry run without applying the archive."
+}

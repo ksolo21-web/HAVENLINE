@@ -1,0 +1,320 @@
+{
+  "schema_version": 1,
+  "review_id": "HAVENLINE_POST_APPLY_ARCHIVE_INDEPENDENT_R1",
+  "reviewer": "/root/planning_package_critic",
+  "reviewed_utc": "2026-11-28T12:59:23.327897+00:00",
+  "scope": "Actual clean local assembled review archive, copied artifact identity, navigation, explicit status provenance and source preservation only. No new art review, owner selection, native implementation, whole-task or remote publication approval.",
+  "verdict": "PASS_POST_APPLY_LOCAL_ARCHIVE_INTEGRITY",
+  "pass": true,
+  "all_mandatory_scoped_checks_pass": true,
+  "score": 10.0,
+  "dimension_scores": {
+    "exact_copied_artifact_integrity": 10.0,
+    "gallery_and_navigation_resolution": 10.0,
+    "current_review_status_and_scope_provenance": 10.0,
+    "historical_rejection_and_tool_error_preservation": 10.0,
+    "source_and_frozen_file_preservation": 10.0,
+    "finalized_resumption_validation": 10.0,
+    "read_only_review_and_scope_truthfulness": 10.0
+  },
+  "snapshot_hashes": {
+    "ARTIFACT_INVENTORY.json": "0e0711d2aae292faed4c53c67e8a2fe7d449f721fe4371da82bcd220e8cc6e00",
+    "ASSEMBLY_RECEIPT.json": "f3be599fa7f18aa6473dd0cefdefdfaaa34e512a47be695a83102fda6dac58f4",
+    "REVIEW_GALLERY.md": "b116d179daca922bdc0aa70a6f3e08ecef2a47be1023d886d2a2b3e48a297ede",
+    "root-review-status-overrides.json": "f8939da44d3fd776b777287c1f5f9c619c77c1080522b3cff6230d36d5d8e49b",
+    "PUBLICATION_STATUS.json": "1861bcf38d3f23db468a1525b37e225b97903da7356432f98229d1cba60a7b40",
+    "RESUMPTION_MANIFEST.json": "b2201cdc8dd4053c885fb0c2633f54822470c82c640689cae1500663ebb38d2b",
+    "GENERATION_INPUT_RESOLUTION.json": "1f06a8893f864ba2a3f3daa5c559f7556a3a1d3656d6bcdf44ec1d17f8c5f9b0",
+    "WORLD1_UPGRADE_REVIEW.md": "8a26eb2800bc2d7d8d9926d0dc866b5612db4a139db81283a46fd5a50a11e927"
+  },
+  "mandatory_checks": [
+    {
+      "id": "P01",
+      "check": "exact_expected_receipt",
+      "pass": true
+    },
+    {
+      "id": "P02",
+      "check": "all_206_artifacts_match",
+      "pass": true
+    },
+    {
+      "id": "P03",
+      "check": "no_duplicate_or_uninventoried_evidence_files",
+      "pass": true
+    },
+    {
+      "id": "P04",
+      "check": "all_relative_links_exist",
+      "pass": true
+    },
+    {
+      "id": "P05",
+      "check": "seven_current_statuses_and_bindings_match",
+      "pass": true
+    },
+    {
+      "id": "P06",
+      "check": "all_four_historical_trained_rejections_explicit",
+      "pass": true
+    },
+    {
+      "id": "P07",
+      "check": "six_superseded_studies_remain_unselected",
+      "pass": true
+    },
+    {
+      "id": "P08",
+      "check": "raw_override_matches_receipt_and_inventory",
+      "pass": true
+    },
+    {
+      "id": "P09",
+      "check": "original_56_package_bindings_preserved",
+      "pass": true
+    },
+    {
+      "id": "P10",
+      "check": "all_generated_and_packaged_input_paths_resolve",
+      "pass": true
+    },
+    {
+      "id": "P11",
+      "check": "all_38_prompt_records_preserved",
+      "pass": true
+    },
+    {
+      "id": "P12",
+      "check": "strict_finalized_verifier_pass",
+      "pass": true
+    },
+    {
+      "id": "P13",
+      "check": "cache_absent",
+      "pass": true
+    },
+    {
+      "id": "P14",
+      "check": "first_receipt_and_override_retained_in_history",
+      "pass": true
+    },
+    {
+      "id": "P15",
+      "check": "read_only_verification_unchanged_package",
+      "pass": true
+    },
+    {
+      "id": "P16",
+      "check": "scope_flags_remain_false",
+      "pass": true
+    },
+    {
+      "id": "P17",
+      "check": "armed_gate_remains_blocked",
+      "pass": true
+    },
+    {
+      "id": "P18",
+      "check": "actual_apply_no_remote_claim",
+      "pass": true
+    },
+    {
+      "id": "P19",
+      "check": "counts_match_actual_inventory",
+      "pass": true
+    },
+    {
+      "id": "P20",
+      "check": "no_assembly_warnings",
+      "pass": true
+    },
+    {
+      "id": "P21",
+      "check": "all_receipt_frozen_design_bindings_preserved",
+      "pass": true
+    },
+    {
+      "id": "P22",
+      "check": "only_root_final_staging_metadata_added",
+      "pass": true
+    }
+  ],
+  "check_counts": {
+    "independent_passed": 22,
+    "independent_required": 22,
+    "finalized_verifier_passed": 142,
+    "finalized_verifier_required": 142
+  },
+  "actual_archive_counts": {
+    "copied_artifacts": 206,
+    "evidence_files_including_inventory_and_receipt": 208,
+    "generated_images": 34,
+    "superseded_unselected_images": 6,
+    "invocation_records": 38,
+    "tool_error_records": 2,
+    "review_reports": 68,
+    "inspection_crop_pngs": 58,
+    "verifier_logs": 4,
+    "relative_links_checked": 130,
+    "receipt_frozen_design_files_preserved": 65,
+    "original_package_bindings_preserved": 56
+  },
+  "current_seven": [
+    {
+      "id": "w1val-04-r5",
+      "image_hash_bound": true,
+      "report_hash_bound": true,
+      "report_mentions_exact_image_hash": true,
+      "status_matches_override": true,
+      "scope_matches_override": true,
+      "status_is_explicitly_scoped_unselected": true,
+      "no_owner_native_claim": true,
+      "display_in_gallery": true,
+      "root_score_matches_binding": true,
+      "report_status": "PASS_SCOPED_STATIC_CONCEPT_REVIEW",
+      "report_scope": "STORAGE_TWO_PROPOSED_STAGES_SIX_STATIC_VIEWS_ONLY"
+    },
+    {
+      "id": "w1val-01-r6",
+      "image_hash_bound": true,
+      "report_hash_bound": true,
+      "report_mentions_exact_image_hash": true,
+      "status_matches_override": true,
+      "scope_matches_override": true,
+      "status_is_explicitly_scoped_unselected": true,
+      "no_owner_native_claim": true,
+      "display_in_gallery": true,
+      "root_score_matches_binding": true,
+      "report_status": "PASS_SCOPED_STATIC_CONCEPT_REVIEW",
+      "report_scope": "SAW_TWO_PROPOSED_STAGES_SIX_STATIC_VIEWS_ONLY"
+    },
+    {
+      "id": "w1val-02-architecture-r5",
+      "image_hash_bound": true,
+      "report_hash_bound": true,
+      "report_mentions_exact_image_hash": true,
+      "status_matches_override": true,
+      "scope_matches_override": true,
+      "status_is_explicitly_scoped_unselected": true,
+      "no_owner_native_claim": true,
+      "display_in_gallery": true,
+      "root_score_matches_binding": true,
+      "report_status": "PASS_LIMITED_UNARMED_ARCHITECTURE_CONCEPT",
+      "report_scope": "Static limited unarmed protective-architecture concept only. This fallback cannot satisfy the owner armed-attack visual requirement or approve a full defense task."
+    },
+    {
+      "id": "w1val-03a-gear-r2",
+      "image_hash_bound": true,
+      "report_hash_bound": true,
+      "report_mentions_exact_image_hash": true,
+      "status_matches_override": true,
+      "scope_matches_override": true,
+      "status_is_explicitly_scoped_unselected": true,
+      "no_owner_native_claim": true,
+      "display_in_gallery": true,
+      "root_score_matches_binding": true,
+      "report_status": "PASS_SCOPED_STATIC_CONCEPT_REVIEW",
+      "report_scope": "TRAINED_CREW_AUTHORED_STATIC_THREE_VIEW_STAGE_ONLY"
+    },
+    {
+      "id": "w1val-03a-use-r5",
+      "image_hash_bound": true,
+      "report_hash_bound": true,
+      "report_mentions_exact_image_hash": true,
+      "status_matches_override": true,
+      "scope_matches_override": true,
+      "status_is_explicitly_scoped_unselected": true,
+      "no_owner_native_claim": true,
+      "display_in_gallery": true,
+      "root_score_matches_binding": true,
+      "report_status": "PASS_SCOPED_STATIC_CONCEPT_REVIEW",
+      "report_scope": "TRAINED_CREW_AUTHORED_STATIC_THREE_VIEW_STAGE_ONLY"
+    },
+    {
+      "id": "w1val-03b-gear-r4",
+      "image_hash_bound": true,
+      "report_hash_bound": true,
+      "report_mentions_exact_image_hash": true,
+      "status_matches_override": true,
+      "scope_matches_override": true,
+      "status_is_explicitly_scoped_unselected": true,
+      "no_owner_native_claim": true,
+      "display_in_gallery": true,
+      "root_score_matches_binding": true,
+      "report_status": "PASS_SCOPED_STATIC_CONCEPT_REVIEW",
+      "report_scope": "VETERAN_CREW_AUTHORED_STATIC_THREE_VIEW_STAGE_ONLY"
+    },
+    {
+      "id": "w1val-03b-use-r1",
+      "image_hash_bound": true,
+      "report_hash_bound": true,
+      "report_mentions_exact_image_hash": true,
+      "status_matches_override": true,
+      "scope_matches_override": true,
+      "status_is_explicitly_scoped_unselected": true,
+      "no_owner_native_claim": true,
+      "display_in_gallery": true,
+      "root_score_matches_binding": true,
+      "report_status": "PASS_SCOPED_STATIC_CONCEPT_REVIEW",
+      "report_scope": "VETERAN_CREW_AUTHORED_STATIC_THREE_VIEW_STAGE_ONLY"
+    }
+  ],
+  "historical_trained_use_rejections": [
+    {
+      "id": "w1val-03a-use-r1",
+      "status_repair_required": true,
+      "image_matches": true,
+      "report_matches": true,
+      "raw_status_preserved": true,
+      "actual_status": "REPAIR_REQUIRED_HISTORICAL_ITERATION_NOT_SELECTED"
+    },
+    {
+      "id": "w1val-03a-use-r2",
+      "status_repair_required": true,
+      "image_matches": true,
+      "report_matches": true,
+      "raw_status_preserved": true,
+      "actual_status": "REPAIR_REQUIRED_HISTORICAL_ITERATION_NOT_SELECTED"
+    },
+    {
+      "id": "w1val-03a-use-r3",
+      "status_repair_required": true,
+      "image_matches": true,
+      "report_matches": true,
+      "raw_status_preserved": true,
+      "actual_status": "REPAIR_REQUIRED_HISTORICAL_ITERATION_NOT_SELECTED"
+    },
+    {
+      "id": "w1val-03a-use-r4",
+      "status_repair_required": true,
+      "image_matches": true,
+      "report_matches": true,
+      "raw_status_preserved": true,
+      "actual_status": "REPAIR_REQUIRED_HISTORICAL_ITERATION_NOT_SELECTED"
+    }
+  ],
+  "findings": [],
+  "observed_additive_metadata_outside_receipt": {
+    "supplemental-resumption/final/BINARY_BLOB_STAGING.json": "7012f836433c0e61b994d5dd02b35b9664abad4894f7e19eb87b4ebf03ac9939"
+  },
+  "cleanup_history": "The first assembly included a generated Python cache caused by a critic helper import. Root removed only that cache, preserved the original receipt/override and cleanup explanation, then reapplied. This review binds only the clean replacement receipt; no cache exists and no earlier source bytes were changed.",
+  "source_scope": "All 38 prompt records, all 24 generated input iterations plus the existing layout input, all 65 receipt-frozen files and all 56 original package bindings match. The supplemental verifier passes --require-finalized with no pending files. Earlier supplemental source verification remains bound to unchanged manifest/input-map hashes.",
+  "publication_boundary": "PUBLICATION_STATUS remains a truthful immutable preparation record. Actual remote commit/tree verification belongs to the later PUBLICATION_RECEIPT, which is not approved here. Root-owned binary staging metadata was observed as an additive final file; its remote staging claims are outside this archive-identity pass.",
+  "evidence": {
+    "path": "/workspace/scratch/9a64cbeeb049/world1-upgrade-expansion/reviews/post-apply-archive-independent-evidence.json",
+    "sha256": "add6518ba164b42f1180379b650d905c59b805aab2076554cc8e06091413ec49"
+  },
+  "instructions_for_recording": "Root may copy this report and its compact evidence into supplemental/final without reassembling or changing the verified ARTIFACT_INVENTORY/ASSEMBLY_RECEIPT. Such additions should be included in the later full publication manifest.",
+  "not_executed": [
+    "Archive mutation or reassembly by this critic",
+    "Remote publication",
+    "Package-tool imports during this final audit"
+  ],
+  "not_approved": [
+    "Owner artwork selection",
+    "Whole World 1 appearance coverage or task completion",
+    "Armed-tower visual requirement",
+    "Native gameplay, balance, motion/audio, physical-device or shipping readiness",
+    "Remote publication/readback"
+  ]
+}
