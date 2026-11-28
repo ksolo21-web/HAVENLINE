@@ -64,7 +64,7 @@ func refresh_camp(_animate: bool) -> void:
 			row.live.hide()
 			world.retire_tree(row.live,false)
 			row.live = null
-		_show_pine(row,not occupied)
+		_show_pine(row,not occupied and not is_instance_valid(row.live) and world.is_source_available(row.id))
 	last_scan = Vector3.INF
 
 func _open_pine(row: Dictionary) -> void:

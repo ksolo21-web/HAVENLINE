@@ -14,6 +14,7 @@ var world
 var hud
 var needle := Polygon2D.new()
 var label := Label.new()
+var route_width := 0.0
 var meters := -1
 var destination := ""
 var octant := -1
@@ -32,7 +33,8 @@ func install(host, owner_hud) -> void:
 		for digit in 10:
 			var example := "%s  %s m" % [title,str(digit).repeat(4)]
 			longest = maxf(longest,TYPE.get_string_size(example,HORIZONTAL_ALIGNMENT_LEFT,-1,TYPE_SIZE).x)
-	size = Vector2(LABEL_LEFT+ceilf(longest)+LABEL_RIGHT,PANEL_HEIGHT)
+	route_width = LABEL_LEFT+ceilf(longest)+LABEL_RIGHT
+	size = Vector2(route_width,PANEL_HEIGHT)
 	var skin := StyleBoxFlat.new()
 	skin.bg_color = Color("#214359ee")
 	skin.border_color = Color("#a3bbc1")
@@ -108,9 +110,10 @@ func refresh() -> void:
 			needle.rotation=bearing.angle()
 			var caption:String=hud.camp_dock.tracking_name
 			label.text="%s  %d m"%[caption,roundi(distance)]
-			size.x=maxf(194.,label.get_theme_font("font").get_string_size(label.text,HORIZONTAL_ALIGNMENT_LEFT,-1,TYPE_SIZE).x+LABEL_LEFT+LABEL_RIGHT)
+			size.x=maxf(route_width,ceilf(TYPE.get_string_size(label.text,HORIZONTAL_ALIGNMENT_LEFT,-1,TYPE_SIZE).x)+LABEL_LEFT+LABEL_RIGHT)
 			label.size.x=size.x-LABEL_LEFT-LABEL_RIGHT
 			label.accessibility_name=label.text
+			destination=""
 			reflow()
 			show()
 			return
@@ -154,7 +157,7 @@ func _show_route(feet: Vector3, next_name: String) -> void:
 		destination = next_name
 		meters = next_meters
 		label.text = "%s  %d m"%[destination,meters]
-		size.x = maxf(194.,label.get_theme_font("font").get_string_size(label.text,HORIZONTAL_ALIGNMENT_LEFT,-1,TYPE_SIZE).x+LABEL_LEFT+LABEL_RIGHT)
+		size.x = route_width
 		label.size.x = size.x-LABEL_LEFT-LABEL_RIGHT
 		octant = -1
 	if octant!=next_octant:

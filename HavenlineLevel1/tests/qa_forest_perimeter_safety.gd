@@ -74,6 +74,31 @@ func test_stage(stage:int) -> void:
 	expect(not world.field_env.travel_clear(g.to_global(Vector3(-1.19,0,-.5)),g.to_global(Vector3(1.19,0,-.5)),.13),"open leaf body ignored")
 	rows.append({"stage":stage,"visible_batch_or_harvest":visible_count,"of_which_live":visible_live,"independent_stems":measured,"smallest_crown_clearance_m":min_clear,"drop_outside_wall_m":r.x-landed.x})
 
+func test_unreserved_cooling_pine() -> void:
+	# This authored bank crosses the queue footprint when the north counter
+	# moves left. Moving the counter back must not resume the tree early.
+	var id := "grove@-3000,-18550"
+	var target: Dictionary
+	for row: Dictionary in world.forest.records:
+		if row.id == id:
+			target = row
+			break
+	expect(not target.is_empty() and not target.get("occupied",false),"north queue fixture starts with a free pine")
+	if target.is_empty(): return
+	if not is_instance_valid(target.live): world.forest._open_pine(target)
+	world.lifecycle.deplete(target.live)
+	var original: Vector2 = world.camp_layout.center("north_counter")
+	var alternate := Vector2(-4.5,original.y)
+	expect(world.camp_layout.relocate("north_counter",alternate) and target.occupied,"legal counter move reserves the depleted pine")
+	expect(world.camp_layout.relocate("north_counter",original) and not target.occupied,"legal return frees the depleted pine site")
+	expect(not target.proxy_visible and not world.is_source_available(id),"freed site must not display a standing tree during cooldown")
+	world.lifecycle.advance(4.99)
+	world.forest.advance(.20)
+	expect(not target.proxy_visible and not world.is_source_available(id),"freed site still respects the five-second timer")
+	world.lifecycle.advance(.02)
+	world.forest.advance(.20)
+	expect(target.proxy_visible and world.is_source_available(id),"same distant pine reappears after five seconds")
+
 func run()->void:
 	world = load("res://field_opening.tscn").instantiate()
 	root.add_child(world)
@@ -107,6 +132,7 @@ func run()->void:
 	expect(tree.phase=="credited" and not world.is_source_available(tree_id),"wood regrew early")
 	world.lifecycle.advance(.02)
 	expect(tree.phase=="rooted" and world.is_source_available(tree_id) and row_clear(tree.position,crown,r),"regrowth crossed perimeter")
+	test_unreserved_cooling_pine()
 	var receipt={"scene":"res://field_opening.tscn","stages":rows,"failures":failures}
 	print("FOREST_PERIMETER ",JSON.stringify(receipt))
 	world.set_physics_process(false)
