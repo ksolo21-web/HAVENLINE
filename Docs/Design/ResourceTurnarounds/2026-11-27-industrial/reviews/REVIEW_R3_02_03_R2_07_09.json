@@ -1,0 +1,207 @@
+{
+  "review_id": "HAVENLINE-resource-render-independent-critic-R3-02-03-R2-07-09",
+  "reviewer": "/root/resource_critic",
+  "reviewed_utc": "2026-11-28T02:51:48.531432+00:00",
+  "scope": "Fresh exact-byte actual-pixel authored raster concept retest. Does not assert editable3D/native runtime/reference-video/animation/device acceptance.",
+  "threshold": "Strictly above9.0 and all mandatory scoped checks passed.",
+  "prior_raw_reviews": [
+    "REVIEW_R2_01_03.json",
+    "REVIEW_R1_07_09.json"
+  ],
+  "reviews": [
+    {
+      "resource_id": "sheet_metal",
+      "identity": {
+        "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-resource-gap-fill/Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/02-sheet-metal-r3.png",
+        "sha256": "b463a0af9aebc6190f81ea9937c3fdf613ae517d0bf86c7ce752ac49bdcc40c1",
+        "bytes": 1652415,
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB"
+      },
+      "score": 10.0,
+      "verdict": "PASS_SCOPED_RASTER_CONCEPT",
+      "checks": {
+        "all_eight_cells_present": true,
+        "all_eight_angle_labels_readable": true,
+        "full_silhouettes_with_safe_margins": true,
+        "material_identity_unambiguous": true,
+        "unintended_props_or_obstructing_text": false,
+        "cross_sheet_typography_consistent": true,
+        "raster_concept_scope_only": true,
+        "native_3d_or_gameplay_approval": false,
+        "correct_view_azimuths": true,
+        "major_geometry_and_proportion_consistent": true,
+        "single_thin_sheet_identity": true
+      },
+      "resolved_defects": [
+        "R1-SHEET-01",
+        "R2-SHEET-01"
+      ],
+      "open_mandatory_defects": [],
+      "observations": [
+        "225 retains the corrected descending-right azimuth and now recovers the broader width-to-length proportion of45.",
+        "The single thin silver sheet stays consistent through the full orbit with clean full framing."
+      ],
+      "inspected_evidence": [
+        "Full1536x1024 R3 sheet",
+        "r3/02-sheet-metal-r3-rear_left_225.png"
+      ]
+    },
+    {
+      "resource_id": "mechanical_parts",
+      "identity": {
+        "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-resource-gap-fill/Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/03-mechanical-parts-r3.png",
+        "sha256": "80dea343f57bccedf02731fefe4e8ca3cff1c437cb258576d691c20b8885397f",
+        "bytes": 1765937,
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB"
+      },
+      "score": 10.0,
+      "verdict": "PASS_SCOPED_RASTER_CONCEPT",
+      "checks": {
+        "all_eight_cells_present": true,
+        "all_eight_angle_labels_readable": true,
+        "full_silhouettes_with_safe_margins": true,
+        "material_identity_unambiguous": true,
+        "unintended_props_or_obstructing_text": false,
+        "cross_sheet_typography_consistent": true,
+        "raster_concept_scope_only": true,
+        "native_3d_or_gameplay_approval": false,
+        "correct_view_azimuths": true,
+        "major_geometry_and_count_consistent": true,
+        "eight_teeth_one_bore_and_two_face_hubs_consistent": true
+      },
+      "resolved_defects": [
+        "R1-GEAR-01",
+        "R1-GEAR-02"
+      ],
+      "open_mandatory_defects": [],
+      "observations": [
+        "225 now matches the45 geometric direction, showing the near face/hub toward image left and thickness toward image right.",
+        "Both side profiles retain the previously repaired symmetric hub extensions.",
+        "Eight teeth, one bore, metal material and consistent scale remain supported through the eight views."
+      ],
+      "inspected_evidence": [
+        "Full1536x1024 R3 sheet",
+        "r3/03-mechanical-parts-r3-rear_left_225.png"
+      ]
+    },
+    {
+      "resource_id": "blocks",
+      "display_name": "Stone blocks",
+      "identity": {
+        "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-resource-gap-fill/Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/07-stone-blocks-r2.png",
+        "sha256": "1e3fabe7593b89df90e67b4aa2f216e4b9c4414ec9f64d1260f72a9fef8aea19",
+        "bytes": 1820577,
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB"
+      },
+      "score": 10.0,
+      "verdict": "PASS_SCOPED_RASTER_CONCEPT",
+      "checks": {
+        "all_eight_cells_present": true,
+        "all_eight_angle_labels_readable": true,
+        "full_silhouettes_with_safe_margins": true,
+        "material_identity_unambiguous": true,
+        "unintended_props_or_obstructing_text": false,
+        "cross_sheet_typography_consistent": true,
+        "raster_concept_scope_only": true,
+        "native_3d_or_gameplay_approval": false,
+        "correct_view_azimuths": true,
+        "major_geometry_and_proportion_consistent": true,
+        "dressed_stone_distinct_from_raw_stone": true
+      },
+      "resolved_defects": [
+        "R1-BLOCKS-01"
+      ],
+      "open_mandatory_defects": [],
+      "observations": [
+        "225 now uses the correct descending-right projection, matching45 in shape/proportion.",
+        "One stable2:1:1 dressed masonry block remains evident in all views.",
+        "Worked warm gray stone identity stays distinct from irregular raw stone and processed metal."
+      ],
+      "inspected_evidence": [
+        "Full1536x1024 R2 sheet",
+        "r2/07-stone-blocks-r2-rear_left_225.png"
+      ]
+    },
+    {
+      "resource_id": "relay_component",
+      "identity": {
+        "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-resource-gap-fill/Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/09-relay-component-r2.png",
+        "sha256": "3a1c9fd4ff7138654a0879514b201535940f4e4f4c3f7542026b0f48415228e6",
+        "bytes": 1723448,
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB"
+      },
+      "score": 8.9,
+      "verdict": "REJECT_REPAIR_REQUIRED",
+      "checks": {
+        "all_eight_cells_present": true,
+        "all_eight_angle_labels_readable": true,
+        "full_silhouettes_with_safe_margins": true,
+        "material_identity_unambiguous": true,
+        "unintended_props_or_obstructing_text": false,
+        "cross_sheet_typography_consistent": true,
+        "raster_concept_scope_only": true,
+        "native_3d_or_gameplay_approval": false,
+        "body_view_azimuths_correct": true,
+        "front_rear_and_vent_landmarks_correct": true,
+        "three_vent_ribs_consistent": true,
+        "top_handle_orientation_tracks_body": false
+      },
+      "resolved_defects": [
+        "R1-RELAY-01"
+      ],
+      "open_mandatory_defects": [
+        {
+          "id": "R2-RELAY-01",
+          "gate": "R04",
+          "severity": "mandatory",
+          "observation": "Although225 cassette/body orientation is corrected, the single lifting bridge and its supports retain the old rising-right diagonal. The body long edge descends toward image right, while the handle grip rises, twisting the bridge across the roof instead of keeping it along the long body axis. Native45/225 crops show the contradiction.",
+          "repair": "In225 only, rotate/reconstruct the complete lifting bridge and its two integrated supports so its long grip descends toward image right, matching the45 geometric orientation and open-gap shape. Preserve225 rear connector, visible left vent at image right, three ribs and body outline."
+        }
+      ],
+      "positive_observations": [
+        "Correct225 rear connector wall and visible left vent now occupy the required sides.",
+        "No extra vent rib or handle count defect; the one remaining issue is handle orientation."
+      ],
+      "inspected_evidence": [
+        "Full1536x1024 R2 sheet",
+        "r2/09-relay-component-r2-front_right_45.png",
+        "r2/09-relay-component-r2-rear_left_225.png"
+      ]
+    }
+  ],
+  "approved_resource_ids_in_batch": [
+    "sheet_metal",
+    "mechanical_parts",
+    "blocks"
+  ],
+  "pending_resource_ids_in_batch": [
+    "relay_component"
+  ],
+  "approved_resource_ids_cumulative": [
+    "iron_bars",
+    "sheet_metal",
+    "mechanical_parts",
+    "traction_kit",
+    "blocks",
+    "premium_gems"
+  ],
+  "approved_resource_count_cumulative": 6,
+  "all_nine_package_approved": false,
+  "retest_required": "Fresh exact-byte review of relay225 handle orientation; other pending drive/crude repairs remain in separate report."
+}

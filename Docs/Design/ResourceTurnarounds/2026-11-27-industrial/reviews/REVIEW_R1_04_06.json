@@ -1,0 +1,169 @@
+{
+  "review_id": "HAVENLINE-resource-render-independent-critic-R1-04-06",
+  "reviewer": "/root/resource_critic",
+  "reviewed_utc": "2026-11-28T02:41:31.086969+00:00",
+  "scope": "Independent actual-pixel critique of authored raster eight-direction concept sheets. Not editable 3D/native gameplay/animation/economy/device/reference-video approval.",
+  "threshold": "Strictly above 9.0 with every mandatory scoped check passed; no averaging.",
+  "source_review": "INITIAL_REFERENCE_REVIEW.json",
+  "reviews": [
+    {
+      "resource_id": "drive_assembly",
+      "identity": {
+        "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-resource-gap-fill/Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/04-drive-assembly-r1.png",
+        "sha256": "04fe734fffa5541d9cfb40697c3c63b5dae19bafc2a1e9f949d7de50ab1ba98f",
+        "bytes": 1602915,
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB"
+      },
+      "score": 8.2,
+      "verdict": "REJECT_REPAIR_REQUIRED",
+      "checks": {
+        "all_eight_cells_present": true,
+        "all_eight_angle_labels_readable": true,
+        "full_silhouettes_with_safe_margins": true,
+        "material_identity_unambiguous": true,
+        "unintended_props_or_obstructing_text": false,
+        "cross_sheet_typography_consistent": true,
+        "raster_concept_scope_only": true,
+        "native_3d_or_gameplay_approval": false,
+        "correct_view_azimuths": false,
+        "major_part_count_consistent": true
+      },
+      "defects": [
+        {
+          "id": "R1-DRIVE-01",
+          "gate": "R03/R04",
+          "severity": "mandatory",
+          "observation": "Rear-right 135 repeats the 45 degree projection: the near shaft/end is at image right with the long wall to its left. At 135 the near shaft/end must be at image left with the rear long wall to its right.",
+          "repair": "Correct rear-right 135 so the near shaft points down-left and the rear long wall extends up-right."
+        },
+        {
+          "id": "R1-DRIVE-02",
+          "gate": "R03/R04",
+          "severity": "mandatory",
+          "observation": "Rear-left 225 repeats the 315 degree projection: near shaft/end at image left. At 225, near shaft/end must be at image right, matching the 45 degree geometric projection for this symmetric module.",
+          "repair": "Correct rear-left 225 so the near shaft points down-right and the rear long wall extends up-left."
+        }
+      ],
+      "positive_observations": [
+        "Two coaxial shafts, four top cover bolts and four-corner feet are consistent with ordinary visibility/occlusion.",
+        "Top orange cover stays on top; blue ribbed housing reads as a complete gearbox.",
+        "Clear component identity distinct from the gear and axle module."
+      ],
+      "inspected_evidence": [
+        "Full 1536x1024 sheet",
+        "r1/04-drive-assembly-r1-rear_right_135.png",
+        "r1/04-drive-assembly-r1-rear_left_225.png"
+      ]
+    },
+    {
+      "resource_id": "traction_kit",
+      "display_name": "Mobility assembly",
+      "identity": {
+        "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-resource-gap-fill/Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/05-mobility-assembly-r1.png",
+        "sha256": "5556e76b2c109903c5288c6a6d3350bdd05d725223391e3f82180d14199d0af3",
+        "bytes": 1754447,
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB"
+      },
+      "score": 8.6,
+      "verdict": "REJECT_REPAIR_REQUIRED",
+      "checks": {
+        "all_eight_cells_present": true,
+        "all_eight_angle_labels_readable": true,
+        "full_silhouettes_with_safe_margins": true,
+        "material_identity_unambiguous": true,
+        "unintended_props_or_obstructing_text": false,
+        "cross_sheet_typography_consistent": true,
+        "raster_concept_scope_only": true,
+        "native_3d_or_gameplay_approval": false,
+        "correct_view_azimuths": false,
+        "major_part_count_consistent": true,
+        "six_hub_bolts_visible_on_faces": true
+      },
+      "defects": [
+        {
+          "id": "R1-MOBILITY-01",
+          "gate": "R03/R04",
+          "severity": "mandatory",
+          "observation": "Rear-left 225 repeats the 135/315 projection with the near outer hub on the left. For this symmetric module it should match the opposite 45 degree projection, near hub on the right.",
+          "repair": "Render 225 with near hub to image right and the axle receding up-left; preserve the opposite rear view of the same bracket/block."
+        }
+      ],
+      "positive_observations": [
+        "Two hub flanges with six bolts per outward face, one axle, one center orange sleeve, one bracket and one wooden mounting sleeper remain readable.",
+        "Far hub offset above the near hub in end views is consistent with elevated camera occlusion, not a defect.",
+        "Rounded blue/silver engineering and warm wood match the presentation language."
+      ],
+      "inspected_evidence": [
+        "Full 1536x1024 sheet",
+        "r1/05-mobility-assembly-r1-right_90.png"
+      ]
+    },
+    {
+      "resource_id": "crude_oil",
+      "identity": {
+        "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-resource-gap-fill/Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/06-crude-oil-r1.png",
+        "sha256": "6b15de1d273949521cb303a6a23ed31f7fcbc19bcfac95b038adf906a9b87fb0",
+        "bytes": 1703357,
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB"
+      },
+      "score": 7.8,
+      "verdict": "REJECT_REPAIR_REQUIRED",
+      "checks": {
+        "all_eight_cells_present": true,
+        "all_eight_angle_labels_readable": true,
+        "full_silhouettes_with_safe_margins": true,
+        "material_identity_unambiguous": true,
+        "unintended_props_or_obstructing_text": false,
+        "cross_sheet_typography_consistent": true,
+        "raster_concept_scope_only": true,
+        "native_3d_or_gameplay_approval": false,
+        "correct_view_azimuths": false,
+        "major_part_count_consistent": true,
+        "markings_and_bung_track_same_physical_positions": false,
+        "distinct_from_existing_fuel": true
+      },
+      "defects": [
+        {
+          "id": "R1-CRUDE-01",
+          "gate": "R03/R04",
+          "severity": "mandatory",
+          "observation": "Rear-left 225 shows the rear drop label on image right, same as 135/315, instead of the image-left foreshortened rear label required at 225.",
+          "repair": "Move the 225 rear label to the image-left curved side of the band, with appropriate perspective."
+        },
+        {
+          "id": "R1-CRUDE-02",
+          "gate": "R04",
+          "severity": "mandatory",
+          "observation": "The single off-center front-side bung changes physical side across the orbit. Given the front label at 0, 90/135 should put that bung leftward; 225/270/315 should put it rightward. Current 90/135 place it rightward and current 225/270/315 leftward. Front0 near-center, rear180 far-center and front-right45 near-left are broadly correct.",
+          "repair": "Track the one bung on the same front-facing physical radius throughout: near-center0, near-left45, left90, far-left135, far-center180, far-right225, right270, near-right315."
+        }
+      ],
+      "positive_observations": [
+        "Single dark cylindrical drum with two raised reinforcing hoops, top/bottom rims, one visible bung per view and continuous orange band.",
+        "Crude is unambiguously different from the existing orange rectangular fuel jerrycan.",
+        "Front/rear oil-drop labels contain no unrequested lettering, and all objects are fully framed."
+      ],
+      "inspected_evidence": [
+        "Full 1536x1024 sheet",
+        "r1/06-crude-oil-r1-front_right_45.png",
+        "r1/06-crude-oil-r1-right_90.png",
+        "r1/06-crude-oil-r1-rear_left_225_full_detail.png",
+        "r1/06-crude-oil-r1-front_left_315_full_detail.png"
+      ]
+    }
+  ],
+  "overall_verdict": "NO_NEW_SHEET_APPROVED_IN_THIS_REVIEW",
+  "retest_required": "Preserve R1 attempts and this raw record. Review corrected new-byte candidates in full and detail with exact new SHA256."
+}

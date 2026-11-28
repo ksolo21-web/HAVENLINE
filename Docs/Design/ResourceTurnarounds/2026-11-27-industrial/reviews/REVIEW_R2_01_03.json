@@ -1,0 +1,164 @@
+{
+  "review_id": "HAVENLINE-resource-render-independent-critic-R2-01-03",
+  "reviewer": "/root/resource_critic",
+  "reviewed_utc": "2026-11-28T02:45:15.381205+00:00",
+  "scope": "Fresh actual-pixel full-sheet and closeup retest of authored raster concepts only. Does not replace stronger final gameplay/reference/native approval gates.",
+  "threshold": "Strictly above9 with every mandatory scoped check passed.",
+  "prior_raw_review": "REVIEW_R1_FIRST3.json",
+  "reviews": [
+    {
+      "resource_id": "iron_bars",
+      "identity": {
+        "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-resource-gap-fill/Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/01-iron-bars-r2.png",
+        "sha256": "df6093297abc33498f2d13b28a301a736f3fefa1625021c05831feeb5c2e86ea",
+        "bytes": 1602730,
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB"
+      },
+      "score": 10.0,
+      "verdict": "PASS_SCOPED_RASTER_CONCEPT",
+      "checks": {
+        "all_eight_cells_present": true,
+        "all_eight_angle_labels_readable": true,
+        "full_silhouettes_with_safe_margins": true,
+        "material_identity_unambiguous": true,
+        "unintended_props_or_obstructing_text": false,
+        "cross_sheet_typography_consistent": true,
+        "raster_concept_scope_only": true,
+        "native_3d_or_gameplay_approval": false,
+        "correct_view_azimuths": true,
+        "major_geometry_and_count_consistent": true,
+        "distinct_from_existing_steel": true
+      },
+      "resolved_defects": [
+        "R1-IRON-01",
+        "R1-IRON-02",
+        "R1-IRON-03"
+      ],
+      "open_mandatory_defects": [],
+      "observations": [
+        "225 now has the correct descending-right long-axis projection; all eight directions form a coherent orbit for the symmetric bar.",
+        "Large rock-like face fractures and bronze edge treatment are replaced by continuous dark satin metallic surfaces with restrained small forging/brushed marks.",
+        "Modern sans typography now matches the set.",
+        "Long dark square-section iron bar is distinct from existing bright squat recessed-top steel ingot."
+      ],
+      "inspected_evidence": [
+        "Full 1536x1024 R2 sheet",
+        "r2/01-iron-bars-r2-rear_left_225.png"
+      ],
+      "scope_limit": "Approval is for the authored raster concept, not dimensional calibration or any native asset."
+    },
+    {
+      "resource_id": "sheet_metal",
+      "identity": {
+        "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-resource-gap-fill/Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/02-sheet-metal-r2.png",
+        "sha256": "efcd74cbcbe3ea72ab9330b3c7484095648c851e893dbe7e74b5c8da678ae9e1",
+        "bytes": 1650516,
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB"
+      },
+      "score": 8.9,
+      "verdict": "REJECT_REPAIR_REQUIRED",
+      "checks": {
+        "all_eight_cells_present": true,
+        "all_eight_angle_labels_readable": true,
+        "full_silhouettes_with_safe_margins": true,
+        "material_identity_unambiguous": true,
+        "unintended_props_or_obstructing_text": false,
+        "cross_sheet_typography_consistent": true,
+        "raster_concept_scope_only": true,
+        "native_3d_or_gameplay_approval": false,
+        "correct_view_azimuths": true,
+        "major_geometry_and_proportion_consistent": false
+      },
+      "resolved_defects": [
+        "R1-SHEET-01"
+      ],
+      "open_mandatory_defects": [
+        {
+          "id": "R2-SHEET-01",
+          "gate": "R04",
+          "severity": "mandatory",
+          "observation": "Corrected 225 degree projection introduces a visibly slimmer/longer panel than the equivalent 45 degree projection. Both should depict the same symmetric unmarked rectangular sheet at the same elevation; the new outline differs in width-to-length proportion.",
+          "inspection_estimate": "Approximate projected edge-length ratio from manually observed corners is 3.36 at225 versus2.71 at45, about24 percent higher. This is an image-space comparison, not a claim of calibrated physical dimensions.",
+          "repair": "Keep the corrected 225 diagonal but match its outline, width-to-length proportion and scale to the 45 degree panel, preserving the single thin silver plate."
+        }
+      ],
+      "positive_observations": [
+        "Orientation sign is now correct.",
+        "Material, thin edge, one-object count, typography and full framing remain strong."
+      ],
+      "inspected_evidence": [
+        "Full 1536x1024 R2 sheet",
+        "r2/02-sheet-metal-r2-front_right_45.png",
+        "r2/02-sheet-metal-r2-rear_left_225.png"
+      ]
+    },
+    {
+      "resource_id": "mechanical_parts",
+      "identity": {
+        "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-resource-gap-fill/Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/03-mechanical-parts-r2.png",
+        "sha256": "e3f9cc29800832861c04bc60ee3b4cc78aac4dd5c444e91876384a5ff1161a27",
+        "bytes": 1763850,
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB"
+      },
+      "score": 8.7,
+      "verdict": "REJECT_REPAIR_REQUIRED",
+      "checks": {
+        "all_eight_cells_present": true,
+        "all_eight_angle_labels_readable": true,
+        "full_silhouettes_with_safe_margins": true,
+        "material_identity_unambiguous": true,
+        "unintended_props_or_obstructing_text": false,
+        "cross_sheet_typography_consistent": true,
+        "raster_concept_scope_only": true,
+        "native_3d_or_gameplay_approval": false,
+        "correct_view_azimuths": false,
+        "major_geometry_and_count_consistent": true,
+        "both_hub_extensions_visible_in_profiles": true,
+        "eight_tooth_count_supported": true
+      },
+      "resolved_defects": [
+        "R1-GEAR-02"
+      ],
+      "open_mandatory_defects": [
+        {
+          "id": "R1-GEAR-01",
+          "gate": "R03/R04",
+          "severity": "mandatory",
+          "observation": "225 still faces the same image-right direction as 135/315. It must match the opposite image-left face/45-degree geometry for this symmetrically faced gear.",
+          "repair": "Change only 225 to match the 45-degree geometric direction: near circular face and raised hub toward image left, disk thickness visible toward image right. Retain eight teeth, bore, both-face hubs and already corrected profiles."
+        }
+      ],
+      "positive_observations": [
+        "90 and270 now show matching hub extensions on both sides of the disk, consistent with front/rear faces.",
+        "Tooth count, metal materials, labels and framing remain coherent."
+      ],
+      "inspected_evidence": [
+        "Full 1536x1024 R2 sheet",
+        "r2/03-mechanical-parts-r2-right_profile_90.png",
+        "r2/03-mechanical-parts-r2-left_profile_270.png",
+        "r2/03-mechanical-parts-r2-rear_left_225.png"
+      ]
+    }
+  ],
+  "approved_resource_ids": [
+    "iron_bars"
+  ],
+  "pending_resource_ids_in_batch": [
+    "sheet_metal",
+    "mechanical_parts"
+  ],
+  "all_nine_package_approved": false,
+  "retest_required": "Fresh exact-byte review of repaired sheet-metal225 and mechanical-parts225 candidates; preserve R1/R2 attempts and raw reviews."
+}

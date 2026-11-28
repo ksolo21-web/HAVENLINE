@@ -1,0 +1,130 @@
+{
+  "review_id": "HAVENLINE-machine-independent-R3-next2",
+  "reviewer": "/root/independent_critic",
+  "reviewed_utc": "2026-11-28T03:44:17.312931+00:00",
+  "scope": "Actual pixels, complete eight intended views per sheet plus named closeup details; static illustrated concept only, not native-mesh, animation or runtime approval.",
+  "threshold": "Exact10 on mandatory scoped dimensions and no unresolved mandatory defects.",
+  "approved_this_batch": 0,
+  "reviewed_revisions": 2,
+  "reviews": [
+    {
+      "machine_id": "04-assembly-bench",
+      "identity": {
+        "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ProcessingMachines/2026-11-27/attempts/04-assembly-bench-r3.png",
+        "sha256": "70b0e568c125f849d0cb3ca6b030ef5d83fc6e5d4326a48a7a45fdda0e0c58b2",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB",
+        "crops": [
+          "/workspace/scratch/59f000bd1476/critic/machine-r3-closeups/04-assembly-bench-r3-front0.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r3-closeups/04-assembly-bench-r3-front_right45.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r3-closeups/04-assembly-bench-r3-right90.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r3-closeups/04-assembly-bench-r3-rear_right135.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r3-closeups/04-assembly-bench-r3-rear180.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r3-closeups/04-assembly-bench-r3-rear_left225.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r3-closeups/04-assembly-bench-r3-left270.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r3-closeups/04-assembly-bench-r3-front_left315.png"
+        ]
+      },
+      "score": 8.5,
+      "dimension_scores": {
+        "eight_views_and_labels": 10.0,
+        "major_geometry_consistency": 10.0,
+        "visual_language": 10.0,
+        "selected_resource_identity": 8.5,
+        "thermal_material_placement": 10.0,
+        "framing": 10.0,
+        "unintended_props": 10.0,
+        "fixed_input_output_flow": 10.0
+      },
+      "verdict": "REPAIR_REQUIRED",
+      "full_eight_view_retest": true,
+      "inspected_closeups": [
+        "/workspace/scratch/59f000bd1476/critic/machine-r3-closeups/04-assembly-bench-r3-front0.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r3-closeups/04-assembly-bench-r3-front_right45.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r3-closeups/04-assembly-bench-r3-front_left315.png"
+      ],
+      "resolved_defects": [],
+      "open_defects": [
+        {
+          "id": "M04-R3-GEAR",
+          "severity": "major",
+          "finding": "The gear in the front middle parts bin remains many fine teeth at0/45/315, visibly unlike the selected8 broad-tooth gear with raised hub. The R3 gear edit did not meet the frozen resource identity.",
+          "repair": "Replace only the three visible gear tokens using the tight original selected-source gear crops; exactly8 broad rounded lobes and8 broad gaps, raised silver hub around one bore. Preserve corrected output gearbox and entire machine orbit."
+        }
+      ],
+      "missing_evidence": {
+        "mandatory_static_concept": [],
+        "native_mesh": null,
+        "animation_cycle": null,
+        "runtime_processing": null
+      },
+      "new_runtime_claims": false
+    },
+    {
+      "machine_id": "05-manual-oil-pump",
+      "identity": {
+        "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ProcessingMachines/2026-11-27/attempts/05-manual-oil-pump-r3.png",
+        "sha256": "54f5e73c4a0065cbc9e7ae0944edaffe4f6805c0326ef87f7a4b3e0d20cbfdbc",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB",
+        "crops": [
+          "/workspace/scratch/59f000bd1476/critic/machine-r3-closeups/05-manual-oil-pump-r3-front0.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r3-closeups/05-manual-oil-pump-r3-front_right45.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r3-closeups/05-manual-oil-pump-r3-right90.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r3-closeups/05-manual-oil-pump-r3-rear_right135.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r3-closeups/05-manual-oil-pump-r3-rear180.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r3-closeups/05-manual-oil-pump-r3-rear_left225.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r3-closeups/05-manual-oil-pump-r3-left270.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r3-closeups/05-manual-oil-pump-r3-front_left315.png"
+        ]
+      },
+      "score": 8.5,
+      "dimension_scores": {
+        "eight_views_and_labels": 10.0,
+        "major_geometry_consistency": 8.5,
+        "visual_language": 10.0,
+        "selected_resource_identity": 10.0,
+        "thermal_material_placement": 10.0,
+        "framing": 10.0,
+        "unintended_props": 10.0,
+        "fixed_input_output_flow": 8.5
+      },
+      "verdict": "REPAIR_REQUIRED",
+      "full_eight_view_retest": true,
+      "inspected_closeups": [
+        "/workspace/scratch/59f000bd1476/critic/machine-r3-closeups/05-manual-oil-pump-r3-front0.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r3-closeups/05-manual-oil-pump-r3-front_right45.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r3-closeups/05-manual-oil-pump-r3-rear_left225.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r3-closeups/05-manual-oil-pump-r3-left270.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r3-closeups/05-manual-oil-pump-r3-front_left315.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r3-closeups/pump-front-feed-detail.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r3-closeups/pump-left-feed-detail.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r3-closeups/pump-frontleft-feed-detail.png"
+      ],
+      "resolved_defects": [
+        "M05-R2-FEED: partly resolved; continuous correct tank/wellhead connection visible270/315 but inconsistent endpoints elsewhere."
+      ],
+      "open_defects": [
+        {
+          "id": "M05-R3-FEED-ENDPOINT",
+          "severity": "major",
+          "finding": "The added fixed feed is connected to the low blue buffer at270/315, but front0 visibly enters the lower wall of the amber crude barrel. The new wellhead/rock outlet also faces front in0/45 while it faces physical left in270/315; this is not one rotated fixed route. Enlarged pixels resolve the front0 barrel wall coupling, so it is not merely occlusion.",
+          "repair": "Use270/315 as the fixed physical route reference. Correct0 and45 so the same LEFT-side outlet and pipe rotate naturally, side-on/partly occluded where appropriate; bypass the crude barrel and visibly terminate at the blue-buffer low inlet. Keep the barrel lower wall intact, separate filling tap unchanged, and preserve the correct overall orbit/linkage."
+        }
+      ],
+      "missing_evidence": {
+        "mandatory_static_concept": [],
+        "native_mesh": null,
+        "animation_cycle": null,
+        "runtime_processing": null
+      },
+      "new_runtime_claims": false
+    }
+  ]
+}

@@ -1,0 +1,198 @@
+{
+  "review_id": "HAVENLINE-processing-machine-independent-R1-first3",
+  "reviewer": "/root/independent_critic",
+  "reviewed_utc": "2026-11-28T03:27:42.934082+00:00",
+  "scope": "Actual-pixel static generated concept sheets only. All eight full-sheet views inspected; meaningful closeups reviewed where specified. No native mesh, rig, animation, economy or runtime approval.",
+  "requirements_path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ProcessingMachines/2026-11-27/ACCEPTANCE.md",
+  "requirements_sha256": "7088bb1f35e6dfe5369802401170272faaf3bfb3fc5dede8af05c282b22c810c",
+  "prompt_path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ProcessingMachines/2026-11-27/MACHINE_PROMPTS.json",
+  "prompt_sha256": "7c132e6cd37f1cf4ff7d48831ca742ee61681c782aa47b45a6cf0ee66718ff67",
+  "threshold": "Exact10 for each mandatory scoped visual dimension; zero open mandatory defects.",
+  "approved_count": 0,
+  "reviewed_count": 3,
+  "required_machine_count": 6,
+  "reviews": [
+    {
+      "machine_id": "01-coal-smelter",
+      "identity": {
+        "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ProcessingMachines/2026-11-27/attempts/01-coal-smelter-r1.png",
+        "sha256": "b09c011a49c32a02bd9b3d2d0e82cc2b9f1c1a7b4bd361f0fdee0976d26df183",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB",
+        "crops": [
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/01-coal-smelter-r1-front0.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/01-coal-smelter-r1-front_right45.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/01-coal-smelter-r1-right90.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/01-coal-smelter-r1-rear_right135.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/01-coal-smelter-r1-rear180.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/01-coal-smelter-r1-rear_left225.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/01-coal-smelter-r1-left270.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/01-coal-smelter-r1-front_left315.png"
+        ]
+      },
+      "verdict": "REPAIR_REQUIRED",
+      "score": 7.5,
+      "dimension_scores": {
+        "eight_views_and_labels": 10.0,
+        "major_geometry_consistency": 10.0,
+        "visual_language": 10.0,
+        "selected_resource_identity": 7.5,
+        "thermal_material_placement": 10.0,
+        "framing": 10.0
+      },
+      "reviewed_evidence": [
+        "Full1536x1024 sheet",
+        "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/01-coal-smelter-r1-right90.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/01-coal-smelter-r1-rear_right135.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/01-coal-smelter-r1-rear180.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/01-coal-smelter-r1-rear_left225.png"
+      ],
+      "defects": [
+        {
+          "id": "M01-R1-RESOURCE",
+          "severity": "major",
+          "evidence": "All output tray views and ore-hopper views.",
+          "finding": "Pale short ingots differ from selected long dark-charcoal iron bars; rust-brown ore sample differs from selected dark mineral ore token.",
+          "repair": "Retain machine geometry and eight viewpoints. Use exactly three dark-charcoal long rectangular iron bars with square ends and satin metal; replace visible ore with dark rough stone bearing silver mineral patches/warm vein like selected metal ore."
+        }
+      ],
+      "full_native_motion_reviewed": false
+    },
+    {
+      "machine_id": "02-metalworking-bench",
+      "identity": {
+        "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ProcessingMachines/2026-11-27/attempts/02-metalworking-bench-r1.png",
+        "sha256": "a58b3e88ed28c88d4ab329bd551a5854e1d20cdb16450ed0e61ac1c9bdd1e89e",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB",
+        "crops": [
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/02-metalworking-bench-r1-front0.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/02-metalworking-bench-r1-front_right45.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/02-metalworking-bench-r1-right90.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/02-metalworking-bench-r1-rear_right135.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/02-metalworking-bench-r1-rear180.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/02-metalworking-bench-r1-rear_left225.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/02-metalworking-bench-r1-left270.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/02-metalworking-bench-r1-front_left315.png"
+        ]
+      },
+      "verdict": "REPAIR_REQUIRED",
+      "score": 7.5,
+      "dimension_scores": {
+        "eight_views_and_labels": 8.0,
+        "major_geometry_consistency": 7.5,
+        "visual_language": 10.0,
+        "selected_resource_identity": 7.5,
+        "thermal_material_placement": 10.0,
+        "framing": 10.0
+      },
+      "reviewed_evidence": [
+        "Full1536x1024 sheet",
+        "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/02-metalworking-bench-r1-right90.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/02-metalworking-bench-r1-rear_right135.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/02-metalworking-bench-r1-rear180.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/02-metalworking-bench-r1-rear_left225.png"
+      ],
+      "defects": [
+        {
+          "id": "M02-R1-REAR225",
+          "severity": "major",
+          "evidence": "Rear-left225 versus rear-right135 panels.",
+          "finding": "Rear-left225 repeats the rear-right diagonal: rear lower panel remains image-right rather than image-left.",
+          "repair": "Render actual rear-left orbit. Back panel projects toward image-left; actual left end with crank faces image-right. Preserve actual front/rear surfaces; do not mirror details arbitrarily."
+        },
+        {
+          "id": "M02-R1-SHELF",
+          "severity": "major",
+          "evidence": "Rear180 versus rear-right135 and rear-left225.",
+          "finding": "Input bar shelf jumps from rear-left behind rollers to beneath the press in rear180. Bundle quantity is also inconsistent.",
+          "repair": "Fix one input shelf behind the rollers at machine rear-left, visible at image-right in rear180; show exactly three bars throughout, respecting ordinary occlusion."
+        },
+        {
+          "id": "M02-R1-RESOURCE",
+          "severity": "major",
+          "evidence": "Input bar bundle and front mechanical-parts tray.",
+          "finding": "Input bars are pale and output gear has many thin teeth rather than selected dark iron and chunky eight-tooth parts token.",
+          "repair": "Use selected dark-charcoal long iron bars and selected eight-chunky-tooth blue-gray gear. Maintain sheet as thin silver plate."
+        }
+      ],
+      "full_native_motion_reviewed": false
+    },
+    {
+      "machine_id": "03-steel-forge",
+      "identity": {
+        "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ProcessingMachines/2026-11-27/attempts/03-steel-forge-r1.png",
+        "sha256": "94554ecda4b4e0e79cb9442d7e99bb69b568e289a54259a0075c4af44aa188c5",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB",
+        "crops": [
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/03-steel-forge-r1-front0.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/03-steel-forge-r1-front_right45.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/03-steel-forge-r1-right90.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/03-steel-forge-r1-rear_right135.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/03-steel-forge-r1-rear180.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/03-steel-forge-r1-rear_left225.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/03-steel-forge-r1-left270.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/03-steel-forge-r1-front_left315.png"
+        ]
+      },
+      "verdict": "REPAIR_REQUIRED",
+      "score": 7.0,
+      "dimension_scores": {
+        "eight_views_and_labels": 8.0,
+        "major_geometry_consistency": 7.0,
+        "visual_language": 10.0,
+        "selected_resource_identity": 7.0,
+        "thermal_material_placement": 8.0,
+        "framing": 10.0
+      },
+      "reviewed_evidence": [
+        "Full1536x1024 sheet",
+        "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/03-steel-forge-r1-right90.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/03-steel-forge-r1-rear_right135.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/03-steel-forge-r1-rear180.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/03-steel-forge-r1-rear_left225.png"
+      ],
+      "defects": [
+        {
+          "id": "M03-R1-REAR225",
+          "severity": "major",
+          "evidence": "Rear-left225 versus rear-right135.",
+          "finding": "Rear-left225 shows back panel on image-right, repeating the wrong oblique orientation.",
+          "repair": "Actual225 view must show back panel toward image-left and machine left side (coal hopper/input charge) toward image-right."
+        },
+        {
+          "id": "M03-R1-SIDES",
+          "severity": "major",
+          "evidence": "Rear180, side profiles and rear obliques.",
+          "finding": "Rear180 puts coal hopper image-left and bellows image-right although prescribed coal is rear-left and wheel rear-right. Other views establish opposite physical positions.",
+          "repair": "Keep chimney/wheel on machine rear-right (image-left from180), hopper on machine rear-left (image-right from180); preserve left iron input/right steel outlet throughout."
+        },
+        {
+          "id": "M03-R1-HOT",
+          "severity": "major",
+          "evidence": "Chimney cap all views; input ledge front and side views.",
+          "finding": "Snow sits on the heated exhaust cap. Wood charge shelf contacts heated inlet path.",
+          "repair": "Remove all chimney and hot chamber snow; keep cold stone-corner snow. Replace wooden input ledge with metal/refractory."
+        },
+        {
+          "id": "M03-R1-RESOURCE",
+          "severity": "major",
+          "evidence": "Iron charge ledge and steel output trays all views.",
+          "finding": "Pale inputs and dark blue rectangular outputs reverse approved iron/steel material language; output quantity changes3 to4.",
+          "repair": "Exactly3 dark-charcoal long iron bars in; exactly3 squat polished blue-silver trapezoid steel ingots with recessed top out, consistently positioned through orbit."
+        }
+      ],
+      "full_native_motion_reviewed": false
+    }
+  ]
+}

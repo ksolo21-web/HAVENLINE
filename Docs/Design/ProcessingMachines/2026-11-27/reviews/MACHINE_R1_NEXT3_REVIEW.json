@@ -1,0 +1,197 @@
+{
+  "review_id": "HAVENLINE-processing-machine-independent-R1-next3",
+  "reviewer": "/root/independent_critic",
+  "reviewed_utc": "2026-11-28T03:32:01.020322+00:00",
+  "scope": "Actual-pixel static generated concept sheets only. All eight full-sheet views inspected; named closeups reviewed. No native mesh, rig, animation, economy or runtime approval.",
+  "requirements_path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ProcessingMachines/2026-11-27/ACCEPTANCE.md",
+  "requirements_sha256": "7088bb1f35e6dfe5369802401170272faaf3bfb3fc5dede8af05c282b22c810c",
+  "prompt_hashes": {
+    "04-assembly-bench": "1ac14ebcf494ef2a5e51999f9484ec565deb35a967fa9aab5f824ee75af28b4a",
+    "05-manual-oil-pump": "ac2b718aaed2b84731f76cbad64830090286ba1dfc6a085bd0e70ab06c430e89",
+    "06-coal-refinery": "e0b2174c17f9a4539288e40d31bb236e0a587d76211242c146846094ed04903e"
+  },
+  "threshold": "Exact10 for each mandatory scoped visual dimension; zero open mandatory defects.",
+  "reviewed_machine_count_cumulative": 6,
+  "approved_machine_count_cumulative": 0,
+  "reviews": [
+    {
+      "machine_id": "04-assembly-bench",
+      "identity": {
+        "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ProcessingMachines/2026-11-27/attempts/04-assembly-bench-r1.png",
+        "sha256": "596454f4b800dfd70c28dddedfbc883e882c333de1ee02bba93330d781481186",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB",
+        "crops": [
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/04-assembly-bench-r1-front0.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/04-assembly-bench-r1-front_right45.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/04-assembly-bench-r1-right90.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/04-assembly-bench-r1-rear_right135.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/04-assembly-bench-r1-rear180.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/04-assembly-bench-r1-rear_left225.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/04-assembly-bench-r1-left270.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/04-assembly-bench-r1-front_left315.png"
+        ]
+      },
+      "verdict": "REPAIR_REQUIRED",
+      "score": 8.5,
+      "dimension_scores": {
+        "eight_views_and_labels": 10.0,
+        "major_geometry_consistency": 10.0,
+        "visual_language": 10.0,
+        "selected_resource_identity": 8.5,
+        "thermal_material_placement": 10.0,
+        "framing": 10.0
+      },
+      "reviewed_evidence": [
+        "Full1536x1024 sheet",
+        "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/04-assembly-bench-r1-front0.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/04-assembly-bench-r1-right90.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/04-assembly-bench-r1-rear_right135.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/04-assembly-bench-r1-rear_left225.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/04-assembly-bench-r1-left270.png"
+      ],
+      "defects": [
+        {
+          "id": "M04-R1-RESOURCE",
+          "severity": "major",
+          "evidence": "Front0, front-right45, rear135 and selected drive-assembly resource.",
+          "finding": "Completed output gearbox has about seven narrow long-wall ribs rather than selected three broad ribs. Front parts-bin gear has many small teeth rather than selected chunky eight-tooth gear.",
+          "repair": "Match selected final output: three broad vertical ribs per long gearbox wall, orange four-bolt top, paired end shafts and mounting feet. Show an eight-tooth gear token in parts bin. Preserve actual machine topology, viewpoints and input shelves."
+        }
+      ],
+      "observations": [
+        "Rear-left225 correctly opposes rear-right135: back panel recedes toward image-left while left material rack faces image-right. Do not mirror or reverse the panel.",
+        "Single hoist/jig/output cradle and ordered material rack remain coherent."
+      ],
+      "full_native_motion_reviewed": false
+    },
+    {
+      "machine_id": "05-manual-oil-pump",
+      "identity": {
+        "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ProcessingMachines/2026-11-27/attempts/05-manual-oil-pump-r1.png",
+        "sha256": "a225928d181878d12d383b526ff36dc61edbb9654de2d3f3e27e075e23cd0833",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB",
+        "crops": [
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/05-manual-oil-pump-r1-front0.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/05-manual-oil-pump-r1-front_right45.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/05-manual-oil-pump-r1-right90.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/05-manual-oil-pump-r1-rear_right135.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/05-manual-oil-pump-r1-rear180.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/05-manual-oil-pump-r1-rear_left225.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/05-manual-oil-pump-r1-left270.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/05-manual-oil-pump-r1-front_left315.png"
+        ]
+      },
+      "verdict": "REPAIR_REQUIRED",
+      "score": 5.0,
+      "dimension_scores": {
+        "eight_views_and_labels": 5.0,
+        "major_geometry_consistency": 6.0,
+        "visual_language": 10.0,
+        "selected_resource_identity": 9.5,
+        "thermal_material_placement": 10.0,
+        "framing": 10.0
+      },
+      "reviewed_evidence": [
+        "Full1536x1024 sheet",
+        "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/05-manual-oil-pump-r1-front0.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/05-manual-oil-pump-r1-right90.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/05-manual-oil-pump-r1-rear_right135.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/05-manual-oil-pump-r1-rear_left225.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/05-manual-oil-pump-r1-left270.png"
+      ],
+      "defects": [
+        {
+          "id": "M05-R1-FRONT",
+          "severity": "major",
+          "evidence": "Front0 compared with right90 and rear180.",
+          "finding": "Front0 is almost broadside to walking beam, repeating a side view. It is not the end-on horsehead/wellhead front defined by beam geometry.",
+          "repair": "Show true front0 aligned along beam, horsehead/wellhead centered in front, beam receding behind it, fixed left buffer and right rear crank in correct lateral places."
+        },
+        {
+          "id": "M05-R1-SIDES",
+          "severity": "major",
+          "evidence": "Right90, left270 and rear-left225.",
+          "finding": "Left buffer drum/spout appears near camera in both side profiles; rear-left225 hides that left-side buffer behind frame although it should be nearest. Crank and buffer do not remain on consistent physical sides.",
+          "repair": "Fix buffer/spout/dock permanently at physical LEFT, crank/flywheel at REAR RIGHT. Right90 looks toward right-hand crank with left buffer behind A-frame; left270 sees buffer near and crank far. Rear-left225 must reveal buffer side while rear-right135 reveals crank side. Track fixed pipe/wellhead, beam angle and filled barrel through remaining views."
+        }
+      ],
+      "observations": [
+        "Manual crank and closed pipework communicate fuel-free startup; no added motor, fuel tank or electrical cable.",
+        "Current barrel is recognizably dark crude with amber band; topology/viewpoint repair remains the blocker."
+      ],
+      "full_native_motion_reviewed": false
+    },
+    {
+      "machine_id": "06-coal-refinery",
+      "identity": {
+        "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ProcessingMachines/2026-11-27/attempts/06-coal-refinery-r1.png",
+        "sha256": "a8e3d28f5e1e90bbda369a04a78ed203eef06b7df2fbc2ab58442fc3a2279890",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB",
+        "crops": [
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/06-coal-refinery-r1-front0.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/06-coal-refinery-r1-front_right45.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/06-coal-refinery-r1-right90.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/06-coal-refinery-r1-rear_right135.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/06-coal-refinery-r1-rear180.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/06-coal-refinery-r1-rear_left225.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/06-coal-refinery-r1-left270.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/06-coal-refinery-r1-front_left315.png"
+        ]
+      },
+      "verdict": "REPAIR_REQUIRED",
+      "score": 8.5,
+      "dimension_scores": {
+        "eight_views_and_labels": 10.0,
+        "major_geometry_consistency": 10.0,
+        "visual_language": 10.0,
+        "selected_resource_identity": 8.5,
+        "thermal_material_placement": 10.0,
+        "framing": 10.0
+      },
+      "reviewed_evidence": [
+        "Full1536x1024 sheet",
+        "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/06-coal-refinery-r1-front0.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/06-coal-refinery-r1-right90.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/06-coal-refinery-r1-rear_right135.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/06-coal-refinery-r1-rear_left225.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r1-closeups/06-coal-refinery-r1-left270.png"
+      ],
+      "defects": [
+        {
+          "id": "M06-R1-FUEL",
+          "severity": "major",
+          "evidence": "Front0/front-right45/right90 and existing selected06-fuel.png.",
+          "finding": "Finished orange fuel can is squat with oversized central drop label; selected resource is taller with clear broad X above small low label. X embossing exists in closeup, contrary to initial full-sheet concern of absence.",
+          "repair": "Use the selected tall rounded orange jerrycan silhouette, prominent X with lower cream-drop label, gray base reinforcement, integrated handle and silver offset cap. Keep same fixed outlet tray and coherent viewpoint rotation."
+        }
+      ],
+      "observations": [
+        "Rear-left225 properly exposes the near raw-input drum/main-vessel side, while135 exposes condenser side. No whole-panel handedness reversal is required.",
+        "Distinct crude/coal/fuel ports, sealed upper bridge, two vessel sizes, hot snow-free piping and rear service access remain readable."
+      ],
+      "full_native_motion_reviewed": false
+    }
+  ],
+  "adjudications": [
+    {
+      "claim": "Assembly/refinery225 may be wrong-handed",
+      "disposition": "Not confirmed; crop evidence shows correct opposing viewpoint. No defect recorded."
+    },
+    {
+      "claim": "Refinery can lacks X reinforcement",
+      "disposition": "Corrected after closeup: faint/partly label-obscured X exists. Defect concerns selected silhouette/label placement, not absent X."
+    }
+  ]
+}

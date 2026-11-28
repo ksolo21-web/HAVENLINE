@@ -1,0 +1,181 @@
+{
+  "review_id": "HAVENLINE-machine-independent-R2-first3",
+  "reviewer": "/root/independent_critic",
+  "reviewed_utc": "2026-11-28T03:34:18.716502+00:00",
+  "scope": "Fresh actual-pixel static concept retest of all8 views per changed sheet and named closeups. No native geometry/animation/runtime approval.",
+  "threshold": "Exact10 on mandatory scoped visual checks; zero unresolved mandatory defects.",
+  "approved_machine_count": 0,
+  "reviewed_revisions": 3,
+  "reviews": [
+    {
+      "machine_id": "01-coal-smelter",
+      "identity": {
+        "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ProcessingMachines/2026-11-27/attempts/01-coal-smelter-r2.png",
+        "sha256": "88b4d4df1035868b51864991c22a6b78ad4abf66e0def8b91c966a9d53866c8d",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB",
+        "crops": [
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/01-coal-smelter-r2-front0.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/01-coal-smelter-r2-front_right45.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/01-coal-smelter-r2-right90.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/01-coal-smelter-r2-rear_right135.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/01-coal-smelter-r2-rear180.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/01-coal-smelter-r2-rear_left225.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/01-coal-smelter-r2-left270.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/01-coal-smelter-r2-front_left315.png"
+        ]
+      },
+      "score": 9.7,
+      "verdict": "REPAIR_REQUIRED",
+      "full_eight_view_retest": true,
+      "inspected_closeups": [
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/01-coal-smelter-r2-front0.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/01-coal-smelter-r2-front_right45.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/01-coal-smelter-r2-rear_right135.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/01-coal-smelter-r2-rear_left225.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/01-coal-smelter-r2-left270.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/smelter-45-rear-nub-detail.png"
+      ],
+      "resolved_or_partly_resolved_defects": [
+        "M01-R1-RESOURCE"
+      ],
+      "open_defects": [
+        {
+          "id": "M01-R2-STRAY",
+          "severity": "minor_but_mandatory_cleanup",
+          "finding": "Small rusty-brown angular rock remnant remains behind dome just left of chimney in45 view at approximately(630,178)-(650,200), outside the fixed left ore hopper. Enlarged actual-pixel crop confirms matte rock-like remnant.",
+          "repair": "Remove only this stray remnant and restore clean navy gap/appropriate housing edge. Keep corrected dark mineral ore and3 dark iron bars."
+        }
+      ],
+      "new_runtime_claims": false,
+      "dimension_scores": {
+        "eight_views_and_labels": 10.0,
+        "major_geometry_consistency": 10.0,
+        "visual_language": 10.0,
+        "selected_resource_identity": 10.0,
+        "thermal_material_placement": 10.0,
+        "framing": 10.0,
+        "unintended_props": 9.7
+      }
+    },
+    {
+      "machine_id": "02-metalworking-bench",
+      "identity": {
+        "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ProcessingMachines/2026-11-27/attempts/02-metalworking-bench-r2.png",
+        "sha256": "760115ed00f71be0efa7990ae33a6e6d08ea0857ccd8df7080c610bcbcb43bf9",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB",
+        "crops": [
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/02-metalworking-bench-r2-front0.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/02-metalworking-bench-r2-front_right45.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/02-metalworking-bench-r2-right90.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/02-metalworking-bench-r2-rear_right135.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/02-metalworking-bench-r2-rear180.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/02-metalworking-bench-r2-rear_left225.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/02-metalworking-bench-r2-left270.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/02-metalworking-bench-r2-front_left315.png"
+        ]
+      },
+      "score": 8.5,
+      "verdict": "REPAIR_REQUIRED",
+      "full_eight_view_retest": true,
+      "inspected_closeups": [
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/02-metalworking-bench-r2-front0.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/02-metalworking-bench-r2-front_right45.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/02-metalworking-bench-r2-rear_right135.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/02-metalworking-bench-r2-rear_left225.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/02-metalworking-bench-r2-left270.png"
+      ],
+      "resolved_or_partly_resolved_defects": [
+        "M02-R1-REAR225",
+        "M02-R1-SHELF:position_only"
+      ],
+      "open_defects": [
+        {
+          "id": "M02-R2-GEAR",
+          "severity": "major",
+          "finding": "Mechanical-parts token in front tray still has many thin teeth in0/45/315 views, unlike selected8 chunky teeth.",
+          "repair": "Replace gear in these visible views with the selected eight-tooth token; retain bolt/bracket and tray."
+        },
+        {
+          "id": "M02-R2-COUNT135",
+          "severity": "major",
+          "finding": "Rear-right135 iron bundle retains5 bars (2 atop3) while180/225 now show3.",
+          "repair": "Only135 bundle needs3 total dark iron bars; preserve physical shelf and all camera geometry."
+        }
+      ],
+      "new_runtime_claims": false,
+      "dimension_scores": {
+        "eight_views_and_labels": 10.0,
+        "major_geometry_consistency": 8.5,
+        "visual_language": 10.0,
+        "selected_resource_identity": 8.5,
+        "thermal_material_placement": 10.0,
+        "framing": 10.0,
+        "unintended_props": 10.0
+      }
+    },
+    {
+      "machine_id": "03-steel-forge",
+      "identity": {
+        "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ProcessingMachines/2026-11-27/attempts/03-steel-forge-r2.png",
+        "sha256": "b8154f0811d0c017e4032fb8ecddd91aeb7cf1f3e85620a005c95fd62bd99cab",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB",
+        "crops": [
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/03-steel-forge-r2-front0.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/03-steel-forge-r2-front_right45.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/03-steel-forge-r2-right90.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/03-steel-forge-r2-rear_right135.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/03-steel-forge-r2-rear180.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/03-steel-forge-r2-rear_left225.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/03-steel-forge-r2-left270.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/03-steel-forge-r2-front_left315.png"
+        ]
+      },
+      "score": 8.5,
+      "verdict": "REPAIR_REQUIRED",
+      "full_eight_view_retest": true,
+      "inspected_closeups": [
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/03-steel-forge-r2-front0.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/03-steel-forge-r2-front_right45.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/03-steel-forge-r2-rear_right135.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/03-steel-forge-r2-rear_left225.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/03-steel-forge-r2-left270.png"
+      ],
+      "resolved_or_partly_resolved_defects": [
+        "M03-R1-REAR225:camera_only",
+        "M03-R1-SIDES:rear180",
+        "M03-R1-HOT",
+        "M03-R1-RESOURCE"
+      ],
+      "open_defects": [
+        {
+          "id": "M03-R2-HOPPER225",
+          "severity": "major",
+          "finding": "Corrected225 view omits the rear-left coal hopper and its chute entirely although that near left/rear side is visible; it remains present in180/270/315.",
+          "repair": "Restore the same coal hopper at physical rear-left, visible between rear maintenance face and left charge shelf in225; preserve true225 camera, input/output resources and other repaired details."
+        }
+      ],
+      "new_runtime_claims": false,
+      "dimension_scores": {
+        "eight_views_and_labels": 10.0,
+        "major_geometry_consistency": 8.5,
+        "visual_language": 10.0,
+        "selected_resource_identity": 10.0,
+        "thermal_material_placement": 10.0,
+        "framing": 10.0,
+        "unintended_props": 10.0
+      }
+    }
+  ]
+}

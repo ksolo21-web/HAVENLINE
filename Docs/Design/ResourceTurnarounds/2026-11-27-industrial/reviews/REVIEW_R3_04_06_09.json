@@ -1,0 +1,158 @@
+{
+  "review_id": "HAVENLINE-resource-render-independent-critic-R3-04-06-09",
+  "reviewer": "/root/resource_critic",
+  "reviewed_utc": "2026-11-28T02:53:32.490401+00:00",
+  "scope": "Fresh actual-pixel authored raster concept retest only. Does not replace or claim stronger native/gameplay/reference-video/animation/device approval.",
+  "threshold": "Strictly above9.0 with every mandatory scoped visual check passed.",
+  "prior_raw_reviews": [
+    "REVIEW_R2_04_06.json",
+    "REVIEW_R3_02_03_R2_07_09.json"
+  ],
+  "reviews": [
+    {
+      "resource_id": "drive_assembly",
+      "identity": {
+        "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-resource-gap-fill/Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/04-drive-assembly-r3.png",
+        "sha256": "69646d6f98f24001a9fe87b658a17d13af1c15407174e1bcc26146298e6eef93",
+        "bytes": 1685336,
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB"
+      },
+      "score": 10.0,
+      "verdict": "PASS_SCOPED_RASTER_CONCEPT",
+      "checks": {
+        "all_eight_cells_present": true,
+        "all_eight_angle_labels_readable": true,
+        "correct_view_azimuths": true,
+        "major_geometry_and_count_consistent": true,
+        "full_silhouettes_with_safe_margins": true,
+        "material_identity_unambiguous": true,
+        "unintended_props_or_obstructing_text": false,
+        "cross_sheet_typography_consistent": true,
+        "raster_concept_scope_only": true,
+        "native_3d_or_gameplay_approval": false,
+        "three_ribs_on_visible_long_walls": true,
+        "two_shafts_four_cover_bolts_and_corner_feet_consistent": true
+      },
+      "resolved_defects": [
+        "R1-DRIVE-01",
+        "R1-DRIVE-02",
+        "R2-DRIVE-01"
+      ],
+      "open_mandatory_defects": [],
+      "observations": [
+        "135 and225 retain corrected opposing rear azimuths and now each show exactly three vertical ribs.",
+        "Full-sheet retest retains two shafts, four top cover bolts and corner mounting feet with ordinary occlusion.",
+        "Blue housing/orange cover/silver hardware and framing remain coherent."
+      ],
+      "inspected_evidence": [
+        "Full1536x1024 R3 sheet",
+        "r3/04-drive-assembly-r3-rear_right_135.png",
+        "r3/04-drive-assembly-r3-rear_left_225.png"
+      ]
+    },
+    {
+      "resource_id": "crude_oil",
+      "identity": {
+        "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-resource-gap-fill/Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/06-crude-oil-r3.png",
+        "sha256": "3730c25937d77fb630b13839ee77438ac8e669944f99df71861f6b4ae5392a9b",
+        "bytes": 1716503,
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB"
+      },
+      "score": 10.0,
+      "verdict": "PASS_SCOPED_RASTER_CONCEPT",
+      "checks": {
+        "all_eight_cells_present": true,
+        "all_eight_angle_labels_readable": true,
+        "correct_view_azimuths": true,
+        "major_geometry_and_count_consistent": true,
+        "full_silhouettes_with_safe_margins": true,
+        "material_identity_unambiguous": true,
+        "unintended_props_or_obstructing_text": false,
+        "cross_sheet_typography_consistent": true,
+        "raster_concept_scope_only": true,
+        "native_3d_or_gameplay_approval": false,
+        "drop_label_orientation_correct": true,
+        "single_bung_tracks_front_physical_radius": true,
+        "distinct_from_existing_fuel": true
+      },
+      "resolved_defects": [
+        "R1-CRUDE-01",
+        "R1-CRUDE-02",
+        "R2-CRUDE-01"
+      ],
+      "open_mandatory_defects": [],
+      "observations": [
+        "225 bung now occupies the far-right lid arc, mirroring135 far-left and clearly differing in depth from270 right.",
+        "Single bung follows the same physical front-side radius throughout all eight views.",
+        "Opposite front/rear labels, continuous band, two hoops and one dark drum remain consistent.",
+        "Crude drum stays distinct from the existing orange fuel jerrycan."
+      ],
+      "inspected_evidence": [
+        "Full1536x1024 R3 sheet",
+        "r3/06-crude-oil-r3-rear_right_135_lid.png",
+        "r3/06-crude-oil-r3-rear_left_225_lid.png",
+        "r3/06-crude-oil-r3-left_270_lid.png"
+      ]
+    },
+    {
+      "resource_id": "relay_component",
+      "identity": {
+        "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-resource-gap-fill/Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/09-relay-component-r3.png",
+        "sha256": "fe6b8228890fe9e55001b7ebc5392c37e0b9f20af28f7ca8a8e6196b70fe6aa2",
+        "bytes": 1703940,
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB"
+      },
+      "score": 10.0,
+      "verdict": "PASS_SCOPED_RASTER_CONCEPT",
+      "checks": {
+        "all_eight_cells_present": true,
+        "all_eight_angle_labels_readable": true,
+        "correct_view_azimuths": true,
+        "major_geometry_and_count_consistent": true,
+        "full_silhouettes_with_safe_margins": true,
+        "material_identity_unambiguous": true,
+        "unintended_props_or_obstructing_text": false,
+        "cross_sheet_typography_consistent": true,
+        "raster_concept_scope_only": true,
+        "native_3d_or_gameplay_approval": false,
+        "front_rear_and_vent_landmarks_correct": true,
+        "three_vent_ribs_consistent": true,
+        "single_top_bridge_orientation_tracks_body": true
+      },
+      "resolved_defects": [
+        "R1-RELAY-01",
+        "R2-RELAY-01"
+      ],
+      "open_mandatory_defects": [],
+      "observations": [
+        "225 bridge and both supports now use the same descending-right direction as the body long axis and45 geometric orientation.",
+        "225 retains rear connector on long face and the visible left vent at image right; all front/rear/side landmarks remain on their intended physical faces.",
+        "One handle with open gap, three ribs per visible vent, gray armor and cyan front slot remain coherent."
+      ],
+      "inspected_evidence": [
+        "Full1536x1024 R3 sheet",
+        "r3/09-relay-component-r3-rear_left_225.png"
+      ]
+    }
+  ],
+  "approved_resource_ids_in_batch": [
+    "drive_assembly",
+    "crude_oil",
+    "relay_component"
+  ],
+  "approved_resource_count_cumulative": 9,
+  "all_nine_visual_candidates_approved": true,
+  "package_delivery_approval": "PENDING_FINAL_SELECTED_COPY_AND_PACKAGE_FREEZE_REMOTE_VERIFICATION"
+}

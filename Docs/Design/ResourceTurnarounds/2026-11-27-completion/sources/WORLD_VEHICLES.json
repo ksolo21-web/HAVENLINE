@@ -1,0 +1,308 @@
+{
+  "schema_version": 1,
+  "status": "nine_authored_vehicle_design_proposals_not_shipped_models_or_world_unlocks",
+  "scope": "Existing Worlds2\u201310 themes and T44\u2013T52; World1 snow truck remains separate.",
+  "source_audit": "SOURCE_AUDIT.json",
+  "resource_contract": "RESOURCE_CHAINS.json",
+  "common_rules": {
+    "acquisition": "World-specific reachable source/producer/route/return and fitting garage-or-dock capability before purchase. No fixed level or automatic global unlock.",
+    "construction": "Each fixture bill uses shared meaningful processed materials; all starter fuel is paid. Existing accepted quotes and owned vehicles are grandfathered.",
+    "cargo": "Same any-resource unlimited exact-count policy; dock to linked working all-resource warehouse for atomic full transfer or whole-load HOLD. No ordinary cargo exclusion for new recipe items.",
+    "stakes": "HP and actual collisions; outside ordinary cargo/tank loss; inside typed salvage. Personal driver inventory follows separate preserved-inventory recovery. No vehicle destruction immunity.",
+    "fuel": "Shared low-consumption fixture from RESOURCE_CHAINS; later-world tool grants must map to real active work. Free fuel, idle drain and fuel-gated last recovery route are forbidden.",
+    "presentation": "Readable Havenline stylization, concrete silhouettes, distinct useful locomotion/tools, visible cab access, sensible contact and stow states. Reference art is a proposal, not motion or device approval.",
+    "working_tool": "Eligible target contact only, bounded work and deterministic receipts. Safe default camp travel; hostile-defense use needs explicit contact/clearance rules. Stop tools to dock, refuel, service and exit.",
+    "finite_project_custody": "Forward authored design: relay_component is a portable serialized finite objective component. Relay Rover can haul it on deck and install it. It follows the same outside-vehicle cargo-loss rule; no protected cargo exception or free return to storage. After loss, the associated restored worksite can fabricate a paid replacement for that same objective serial from attainable ordinary shared materials. One active instance per objective serial plus a permanent one-install tombstone prevents farming or duplicate installation; loss never resets installed progress. Exact replacement inputs/amounts are pending balance and integration proof, not an implemented recipe. Source evidence establishes only finite project identity, so this new portable design must not silently reclassify any existing save. No vehicle bill uses relay_component.",
+    "current_concept_evidence": {
+      "views": [
+        "front",
+        "rear",
+        "left side",
+        "right side",
+        "three-quarter",
+        "one at-work view"
+      ],
+      "scope": "Static authored concept evidence only; source-bound visual review recorded separately by root. It does not establish actual steering, clearances, service, complete cycles or all task states."
+    },
+    "native_production_evidence": {
+      "status": "pending_not_proven_by_static_concepts",
+      "scope": "Actual native normal-gameplay, overhead/clearance and meaningful additional views, full turning/route traversal, stowed/deployed tool cycles, entry/exit/dock/service/refuel, contact, blocked/resumed and save states. Full evidence planned for implementation; these are not extra mandatory concept-sheet views in this iteration."
+    },
+    "relay_component_lifecycle": {
+      "authority": "Authored forward selection aligned with the selected deck-carried module and installation view; supersedes the earlier fixed-site nonportable proposal.",
+      "identity": "Stable objective_serial plus unique instance_generation. At most one active uninstalled instance across player/worker/vehicle/warehouse/drop/escrow custody. A serial-to-custody overlay and the corresponding counted item must change in one whole-world transaction; quantity-only aggregation cannot discard serial identity.",
+      "transport_and_loss": "The module is portable cargo. Normal physical transfer preserves the active instance. Destruction outside camp atomically marks the carried instance lost, removes it from vehicle custody and consumes its active-instance right; no salvage/recovery of that lost generation and no free banking. Other cargo and tank loss remain unchanged.",
+      "paid_replacement": "Only an uninstalled objective whose prior active instance is proven lost may admit a frozen paid replacement quote. The associated restored worksite consumes the complete ordinary-material bill and creates the next instance_generation of the same objective_serial once. Reserve the replacement right across contributions/crafting/output custody, and reject stale retries or a second active quote. Site repair, inputs and manual return must remain attainable without that missing module or the lost vehicle.",
+      "replacement_bill_status": "Pending authored quantities and feasibility/balance evidence. Use useful existing shared materials such as sheet_metal, steel and mechanical_parts after actual source/producer proof; these are candidates, not an implicit executable recipe. No premium payment, extra currency or relay_component input is required.",
+      "installation": "A successful installation atomically consumes the active instance, records the one-install tombstone and advances that objective once. Installed progress remains installed after later vehicle loss or site damage; ordinary paid site repair does not generate another component or repeat the reward.",
+      "interrupted_lift": "Before installation commit, ownership remains in its actual source cargo/worksite-transfer escrow; after commit, the installed objective owns the result. Restore the physical pose to that saved owner. Interruption never produces both an installed module and a cargo copy; destruction while still vehicle-owned applies ordinary outside loss.",
+      "anti_farming": "No sell/trade/craft-to-currency use and no repeat reward for the finite module. Replacement never issues a different objective, duplicates an installed one or increases the finite objective count. Multiple objectives have distinct serials and independent one-active/one-install proofs.",
+      "save_migration": "Source only declares a finite project object. Inspect existing saves first; preserve their actual portable/structural identity and custody through an explicit versioned migration or source-owned adapter. Do not silently reclassify or create replacement stock.",
+      "runtime_status": "Not implemented or approved by the current fuel/material component. Requires full-world custody, loss, paid replacement, worksite restoration, interrupted transfer and duplicate-install tests."
+    }
+  },
+  "vehicles": [
+    {
+      "world": 2,
+      "world_theme": "Forest and lakeshore",
+      "authentic_task": "T44",
+      "vehicle_id": "timber_forwarder",
+      "display_name": "Timber Forwarder",
+      "build_profile": "timber_forwarder_v1",
+      "locomotion": "Articulated six-wheel forwarder",
+      "working_tool": "Hydraulic timber grapple and guarded saw",
+      "recurring_useful_jobs": [
+        "Cut and collect reachable timber on forest lanes",
+        "Load mixed wood, planks and ordinary construction supplies for recurring bridges and repairs"
+      ],
+      "route_and_capability_constraints": [
+        "Dense forest service lanes and stable lakeshore landings",
+        "Restore clearance and turning pocket before quote"
+      ],
+      "status": "authored_design_proposal",
+      "runtime_integration": "not_implemented_by_this_package",
+      "numeric_tuning": "unbalanced_fixture",
+      "native_production_use_views_pending": [
+        "Guarded saw lowered and stopped in service bay",
+        "Grapple lifting a real timber bundle",
+        "Articulation and six wheel contacts"
+      ],
+      "current_concept_view_contract": "common_rules.current_concept_evidence",
+      "native_production_status": "blocked_pending_model_motion_world_and_device_evidence"
+    },
+    {
+      "world": 3,
+      "world_theme": "Desert canyons",
+      "authentic_task": "T45",
+      "vehicle_id": "canyon_breaker",
+      "display_name": "Canyon Breaker",
+      "build_profile": "canyon_breaker_v1",
+      "locomotion": "Low crawler with two broad tracks",
+      "working_tool": "Front hydraulic rock breaker and four stabilizer feet, one front and one rear per side",
+      "recurring_useful_jobs": [
+        "Break eligible stone, slate and ore workfaces",
+        "Carry masonry and reinforcement stock to protected freight routes and paid repairs"
+      ],
+      "route_and_capability_constraints": [
+        "Sheltered switchbacks, restored bridges and workface apron",
+        "No cliff climbing or bypass of route restoration"
+      ],
+      "status": "authored_design_proposal",
+      "runtime_integration": "not_implemented_by_this_package",
+      "numeric_tuning": "unbalanced_fixture",
+      "native_production_use_views_pending": [
+        "Breaker braced against eligible rock",
+        "Stabilizers deployed with clearance",
+        "Tracks at full steering radius"
+      ],
+      "current_concept_view_contract": "common_rules.current_concept_evidence",
+      "native_production_status": "blocked_pending_model_motion_world_and_device_evidence",
+      "authored_visual_adaptation": "Front-right cab as rendered; four stabilizer feet match the two side mounting positions per side. Preserve the selected studio chassis/cab/hopper in work-state repairs."
+    },
+    {
+      "world": 4,
+      "world_theme": "Underwater refuges",
+      "authentic_task": "T46",
+      "vehicle_id": "reef_salvager",
+      "display_name": "Reef Salvager",
+      "build_profile": "reef_salvager_v1",
+      "locomotion": "Sealed dry-cab four-wheel salvage crawler",
+      "working_tool": "Telescoping lift and grapple reaching flooded workfaces",
+      "recurring_useful_jobs": [
+        "Lift marked metal/fuel salvage from flooded workface to protected loading dock",
+        "Carry blocks, planks and steel for dry habitat/pump restoration and repeat supply work"
+      ],
+      "route_and_capability_constraints": [
+        "Protected dry underwater dock routes and habitats",
+        "Driver and companions stay on dry safe positions; arm reaches water",
+        "No required swimming or oxygen meter"
+      ],
+      "status": "authored_design_proposal",
+      "runtime_integration": "not_implemented_by_this_package",
+      "numeric_tuning": "unbalanced_fixture",
+      "native_production_use_views_pending": [
+        "Sealed cab and four wheel contacts",
+        "Long arm reaching a flooded workface from dry dock",
+        "Raised load and safe stowed return pose"
+      ],
+      "current_concept_view_contract": "common_rules.current_concept_evidence",
+      "native_production_status": "blocked_pending_model_motion_world_and_device_evidence"
+    },
+    {
+      "world": 5,
+      "world_theme": "Sky islands",
+      "authentic_task": "T47",
+      "vehicle_id": "skybridge_carrier",
+      "display_name": "Skybridge Carrier",
+      "build_profile": "skybridge_carrier_v1",
+      "locomotion": "Rail-guided carrier with captive under-rail rollers",
+      "working_tool": "Folding freight crane",
+      "recurring_useful_jobs": [
+        "Carry planks, steel and ordinary supplies across restored bridge links",
+        "Lift freight to fixed platforms for repeating route maintenance and resupply"
+      ],
+      "route_and_capability_constraints": [
+        "Existing fixed bridges, captive rail and lifts",
+        "Restore continuous return route and safe pet/driver staging",
+        "No flight, hover or wing unlock"
+      ],
+      "status": "authored_design_proposal",
+      "runtime_integration": "not_implemented_by_this_package",
+      "numeric_tuning": "unbalanced_fixture",
+      "native_production_use_views_pending": [
+        "Captive roller engagement under the rail",
+        "Crane deployed on braced platform",
+        "Crane stowed through bridge clearance"
+      ],
+      "current_concept_view_contract": "common_rules.current_concept_evidence",
+      "native_production_status": "blocked_pending_model_motion_world_and_device_evidence"
+    },
+    {
+      "world": 6,
+      "world_theme": "Volcanic forge",
+      "authentic_task": "T48",
+      "vehicle_id": "forge_hauler",
+      "display_name": "Forge Hauler",
+      "build_profile": "forge_hauler_v1",
+      "locomotion": "Heat-shielded six-wheel ore hauler",
+      "working_tool": "Wide front mineral scoop on twin short hydraulic arms",
+      "recurring_useful_jobs": [
+        "Collect eligible ore and coal from protected extraction aprons",
+        "Supply steel/blocks/slate to repeated forge, causeway and equipment repair projects"
+      ],
+      "route_and_capability_constraints": [
+        "Protected causeways and sheltered work islands",
+        "Warned vent routes and cooling/service staging",
+        "No immunity to lava or mandatory heat meter"
+      ],
+      "status": "authored_design_proposal",
+      "runtime_integration": "not_implemented_by_this_package",
+      "numeric_tuning": "unbalanced_fixture",
+      "native_production_use_views_pending": [
+        "Heat-shielded cab and all six wheel contacts",
+        "Wide front scoop contacting eligible mineral bank on twin short arms",
+        "Loaded haul through sheltered causeway"
+      ],
+      "current_concept_view_contract": "common_rules.current_concept_evidence",
+      "native_production_status": "blocked_pending_model_motion_world_and_device_evidence"
+    },
+    {
+      "world": 7,
+      "world_theme": "Swamp",
+      "authentic_task": "T49",
+      "vehicle_id": "marsh_skiff",
+      "display_name": "Marsh Skiff",
+      "build_profile": "marsh_skiff_v1",
+      "locomotion": "Shallow-water pontoon cargo skiff",
+      "working_tool": "Guarded twin stern drives and folding cargo winch",
+      "recurring_useful_jobs": [
+        "Ferry timber, fish and ordinary supplies over marked cargo crossings",
+        "Winch supply bundles onto stable landings for recurring boardwalk/platform repair"
+      ],
+      "route_and_capability_constraints": [
+        "Fixed marked shallow crossings, stable docks and known return anchor",
+        "Controls constrained to authored safe water route; no arbitrary deep-water escape",
+        "People/pets board dry and retain useful safe staging"
+      ],
+      "status": "authored_design_proposal",
+      "runtime_integration": "not_implemented_by_this_package",
+      "numeric_tuning": "unbalanced_fixture",
+      "native_production_use_views_pending": [
+        "Both guarded stern drives and pontoons",
+        "Winch lifting at stable landing",
+        "Safe boarding and docking pose"
+      ],
+      "current_concept_view_contract": "common_rules.current_concept_evidence",
+      "native_production_status": "blocked_pending_model_motion_world_and_device_evidence"
+    },
+    {
+      "world": 8,
+      "world_theme": "Ruined settlements",
+      "authentic_task": "T50",
+      "vehicle_id": "ruin_reclaimer",
+      "display_name": "Ruin Reclaimer",
+      "build_profile": "ruin_reclaimer_v1",
+      "locomotion": "Compact four-wheel demolition loader",
+      "working_tool": "Hydraulic jaws and rubble bucket",
+      "recurring_useful_jobs": [
+        "Break eligible abandoned rubble and recover marked salvage",
+        "Move blocks, planks, slate and steel to repeated gate/workshop restoration"
+      ],
+      "route_and_capability_constraints": [
+        "Restored streets and cleared work zones",
+        "Target ownership/protection forbids incidental destruction of friendly buildings"
+      ],
+      "status": "authored_design_proposal",
+      "runtime_integration": "not_implemented_by_this_package",
+      "numeric_tuning": "unbalanced_fixture",
+      "native_production_use_views_pending": [
+        "Jaws closing onto and gripping eligible supported rubble, with actual contact",
+        "Bucket loaded with typed salvage",
+        "Tight turn and supported tire contacts"
+      ],
+      "current_concept_view_contract": "common_rules.current_concept_evidence",
+      "native_production_status": "blocked_pending_model_motion_world_and_device_evidence",
+      "authored_visual_adaptation": "Partly open jaws in the selected travel view are an illustrative stowed pose. The working grip must close the jaws onto supported rubble; the travel image does not prove a complete stow/grip transition or service clearance."
+    },
+    {
+      "world": 9,
+      "world_theme": "Underground mines",
+      "authentic_task": "T51",
+      "vehicle_id": "mine_mole",
+      "display_name": "Mine Mole",
+      "build_profile": "mine_mole_v1",
+      "locomotion": "Low-profile rail service locomotive",
+      "working_tool": "Horizontal front cutting drum and open ore hopper",
+      "recurring_useful_jobs": [
+        "Mine eligible ore, coal, stone and slate at rail workfaces",
+        "Deliver steel, blocks and repair supplies to recurring support/light/lift jobs"
+      ],
+      "route_and_capability_constraints": [
+        "Authored rails, mine lifts and alternate pedestrian escape",
+        "Warned blockages and measured tunnel clearances",
+        "No people on conveyors; belts remain cargo transport"
+      ],
+      "status": "authored_design_proposal",
+      "runtime_integration": "not_implemented_by_this_package",
+      "numeric_tuning": "unbalanced_fixture",
+      "native_production_use_views_pending": [
+        "Horizontal drum contacting eligible mine workface",
+        "Rail wheel engagement and low roof clearance",
+        "Stopped machine with safe driver exit"
+      ],
+      "current_concept_view_contract": "common_rules.current_concept_evidence",
+      "native_production_status": "blocked_pending_model_motion_world_and_device_evidence",
+      "authored_visual_adaptation": "Open ore hopper as shown in the selected concept; visible fill is an aggregate depiction and never the unlimited logical cargo capacity."
+    },
+    {
+      "world": 10,
+      "world_theme": "Alien frontier",
+      "authentic_task": "T52",
+      "vehicle_id": "relay_rover",
+      "display_name": "Relay Rover",
+      "build_profile": "relay_rover_v1",
+      "locomotion": "Articulated six-wheel service rover",
+      "working_tool": "Precision lifting arm and stabilizing outriggers",
+      "recurring_useful_jobs": [
+        "Haul and install finite serialized relay components between restored worksites",
+        "Continue hauling ordinary construction, fuel and repair stocks after network completion"
+      ],
+      "route_and_capability_constraints": [
+        "Fixed arrival/return anchors and restored supply routes",
+        "No new currency or vehicle-payment requirement for relay_component",
+        "Portable module follows outside cargo loss; a restored worksite offers attainable paid replacement for the same objective serial, without duplicate active instances or installation"
+      ],
+      "status": "authored_design_proposal",
+      "runtime_integration": "not_implemented_by_this_package",
+      "numeric_tuning": "unbalanced_fixture",
+      "native_production_use_views_pending": [
+        "Serialized relay module secured on deck, lifted into the worksite and committed to one installation",
+        "Stabilizers safely deployed",
+        "Articulated ordinary cargo-hauling return pose"
+      ],
+      "current_concept_view_contract": "common_rules.current_concept_evidence",
+      "native_production_status": "blocked_pending_model_motion_world_and_device_evidence",
+      "authored_visual_adaptation": "Selected turnaround carries one relay module on deck; selected work view installs it. This depicts the forward portable serialized cargo design, not protected or endlessly farmable cargo."
+    }
+  ]
+}

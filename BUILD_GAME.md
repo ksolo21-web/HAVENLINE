@@ -1,5 +1,9 @@
 # Build and continue Havenline
 
+## Resource and processor render completion
+
+[Selected resources](Docs/Design/ResourceTurnarounds/2026-11-27-completion/README.md) and [six processing-machine turnarounds](Docs/Design/ProcessingMachines/2026-11-27/README.md) provide the completed industrial art concepts, exact recipe mapping, original revisions and independent static reviews. These authored reference sheets do not change the current game build or certify native assets and animation.
+
 ## App icon refresh
 
 [Named hearth icon and Android export artwork](Docs/Design/AppIcon/2026-11-27/README.md) provides the new HAVENLINE icon, actual-size/mask review and exact integration settings. This isolated artwork package does not change the actively maintained gameplay branch or any historical build evidence.

@@ -1,0 +1,188 @@
+{
+  "review_id": "HAVENLINE-machine-independent-R4-final3-candidates",
+  "reviewer": "/root/independent_critic",
+  "reviewed_utc": "2026-11-28T03:49:13.395114+00:00",
+  "scope": "Fresh actual pixels; complete eight intended views per candidate plus named closeups. Static illustrated concept only, no actual mesh/animation/runtime approval.",
+  "threshold": "Exact10 on every mandatory scoped dimension with zero unresolved mandatory defects.",
+  "approved_this_batch": 1,
+  "reviewed_revisions": 3,
+  "reviews": [
+    {
+      "machine_id": "02-metalworking-bench",
+      "identity": {
+        "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ProcessingMachines/2026-11-27/attempts/02-metalworking-bench-r4.png",
+        "sha256": "d7f38d518ea6a1a6c3c313a2ac10443d98e8d7ee0a4dfa9ab9c0a869b1d3736b",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB",
+        "crops": [
+          "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/02-metalworking-bench-r4-front0.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/02-metalworking-bench-r4-front_right45.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/02-metalworking-bench-r4-right90.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/02-metalworking-bench-r4-rear_right135.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/02-metalworking-bench-r4-rear180.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/02-metalworking-bench-r4-rear_left225.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/02-metalworking-bench-r4-left270.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/02-metalworking-bench-r4-front_left315.png"
+        ]
+      },
+      "score": 8.5,
+      "dimension_scores": {
+        "eight_views_and_labels": 10.0,
+        "major_geometry_consistency": 8.5,
+        "visual_language": 10.0,
+        "selected_resource_identity": 10.0,
+        "thermal_material_placement": 10.0,
+        "framing": 10.0,
+        "unintended_props": 10.0,
+        "fixed_input_output_flow": 10.0
+      },
+      "verdict": "REPAIR_REQUIRED",
+      "full_eight_view_retest": true,
+      "inspected_closeups": [
+        "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/02-metalworking-bench-r4-front0.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/02-metalworking-bench-r4-front_right45.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/02-metalworking-bench-r4-right90.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/02-metalworking-bench-r4-left270.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/02-metalworking-bench-r4-front_left315.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/bench-right-stock-detail.png"
+      ],
+      "resolved_defects": [
+        "M02-R3-GEAR: exactly8 broad teeth, one bore and projecting hub now readable in0/45/315. No clipping with press/tray found in those obliques."
+      ],
+      "open_defects": [
+        {
+          "id": "M02-R4-UPRIGHT90",
+          "severity": "major",
+          "finding": "The gear changed from a low lying token to a large upright token in0/45/315, but RIGHT90 still has the original low tray with bolt/bracket and no upright gear edge/hub. The new gear sits forward of the press and rises above the tray, so this changed pose must be visible edge-on in90.",
+          "repair": "Propagate the new selected gear upright pose toRIGHT90 only: show narrow toothed rim and hub in the front output tray, preserving clear press/tray separation. Preserve the approved0/45/315 gear and all other machine details."
+        }
+      ],
+      "missing_evidence": {
+        "mandatory_static_concept": [],
+        "native_mesh": null,
+        "animation_cycle": null,
+        "runtime_processing": null
+      },
+      "new_runtime_claims": false
+    },
+    {
+      "machine_id": "04-assembly-bench",
+      "identity": {
+        "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ProcessingMachines/2026-11-27/attempts/04-assembly-bench-r4.png",
+        "sha256": "f3d79d455002fc0aa0eac3ee7a4a2b09c6d89554088e5605b98e4ad1b3409d2c",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB",
+        "crops": [
+          "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/04-assembly-bench-r4-front0.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/04-assembly-bench-r4-front_right45.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/04-assembly-bench-r4-right90.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/04-assembly-bench-r4-rear_right135.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/04-assembly-bench-r4-rear180.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/04-assembly-bench-r4-rear_left225.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/04-assembly-bench-r4-left270.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/04-assembly-bench-r4-front_left315.png"
+        ]
+      },
+      "score": 10.0,
+      "dimension_scores": {
+        "eight_views_and_labels": 10.0,
+        "major_geometry_consistency": 10.0,
+        "visual_language": 10.0,
+        "selected_resource_identity": 10.0,
+        "thermal_material_placement": 10.0,
+        "framing": 10.0,
+        "unintended_props": 10.0,
+        "fixed_input_output_flow": 10.0
+      },
+      "verdict": "APPROVED_STATIC_CONCEPT",
+      "full_eight_view_retest": true,
+      "inspected_closeups": [
+        "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/04-assembly-bench-r4-front0.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/04-assembly-bench-r4-front_right45.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/04-assembly-bench-r4-right90.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/04-assembly-bench-r4-rear_left225.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/04-assembly-bench-r4-left270.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/04-assembly-bench-r4-front_left315.png"
+      ],
+      "resolved_defects": [
+        "M04-R3-GEAR: selected8 broad-tooth token with raised hub now consistent at0/45/315; it fits the front bin, no clipping or output/gantry/camera regression."
+      ],
+      "open_defects": [],
+      "missing_evidence": {
+        "mandatory_static_concept": [],
+        "native_mesh": null,
+        "animation_cycle": null,
+        "runtime_processing": null
+      },
+      "new_runtime_claims": false
+    },
+    {
+      "machine_id": "05-manual-oil-pump",
+      "identity": {
+        "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ProcessingMachines/2026-11-27/attempts/05-manual-oil-pump-r4.png",
+        "sha256": "f580f337a8081c2a5c4cd62730046378d0e6f831bb0052c41acd326a36f98ef5",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB",
+        "crops": [
+          "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/05-manual-oil-pump-r4-front0.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/05-manual-oil-pump-r4-front_right45.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/05-manual-oil-pump-r4-right90.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/05-manual-oil-pump-r4-rear_right135.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/05-manual-oil-pump-r4-rear180.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/05-manual-oil-pump-r4-rear_left225.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/05-manual-oil-pump-r4-left270.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/05-manual-oil-pump-r4-front_left315.png"
+        ]
+      },
+      "score": 8.5,
+      "dimension_scores": {
+        "eight_views_and_labels": 10.0,
+        "major_geometry_consistency": 8.5,
+        "visual_language": 10.0,
+        "selected_resource_identity": 10.0,
+        "thermal_material_placement": 10.0,
+        "framing": 10.0,
+        "unintended_props": 10.0,
+        "fixed_input_output_flow": 8.5
+      },
+      "verdict": "REPAIR_REQUIRED",
+      "full_eight_view_retest": true,
+      "inspected_closeups": [
+        "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/05-manual-oil-pump-r4-front0.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/05-manual-oil-pump-r4-front_right45.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/05-manual-oil-pump-r4-rear_left225.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/05-manual-oil-pump-r4-left270.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/05-manual-oil-pump-r4-front_left315.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/pump-front-feed-detail.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r4-closeups/pump-front45-feed-detail.png"
+      ],
+      "resolved_defects": [
+        "M05-R3-FEED-ENDPOINT: barrel wall penetration/front-facing wellhead flange removed;270/315 valid low blue-buffer feed retained."
+      ],
+      "open_defects": [
+        {
+          "id": "M05-R4-COUPLINGS",
+          "severity": "major",
+          "finding": "At0 the new low visible pipe bends up into the existing high filling pipe/upper blue-tank port, unlike the separate low feed shown270/315. At45 the upper silver outlet stub stops beside/above the orange-valve spout, leaving a visible navy gap rather than a joined short elbow.",
+          "repair": "Repair only0/45 pipework to rotate the valid270/315 arrangement: one separate fixed wellhead-to-LOW-blue-buffer feed, plus one connected HIGH-blue-buffer-to-orange-valve barrel filling line. Preserve intact barrel and the corrected left outlet/overall orbit. At0 do not tee the feed into the high filling pipe; at45 join upper outlet to valve body with its short sealed elbow."
+        }
+      ],
+      "missing_evidence": {
+        "mandatory_static_concept": [],
+        "native_mesh": null,
+        "animation_cycle": null,
+        "runtime_processing": null
+      },
+      "new_runtime_claims": false
+    }
+  ]
+}

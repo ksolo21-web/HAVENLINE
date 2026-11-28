@@ -1,0 +1,445 @@
+{
+  "schema_version": 1,
+  "scope": "Authored static-art render planning; no runtime, balance, source ownership or existing approval changes",
+  "new_machine_count": 6,
+  "source_recipe_numbers_status": "Unbalanced fixtures copied unchanged; units preserve source denomination rules. Not litres, physical stack counts or final game prices.",
+  "style": "Havenline chunky rounded stylized 3D; blue/orange machinery, warm timber, gray/steel parts, restrained snow on cold surfaces; navy backdrop; no photoreal grit or generic primitive substitutes.",
+  "sources": [
+    {
+      "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-resource-gap-fill/Docs/Production/VehicleEconomy/2026-11-27/RESOURCE_CHAINS.json",
+      "sha256": "75400530bc38b937a697d0a88091c0c60373b8b94913a3c818083af7e68cf555"
+    },
+    {
+      "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-resource-gap-fill/Docs/Production/VehicleEconomy/2026-11-27/ECONOMY_DESIGN.md",
+      "sha256": "5df99eaa0273ddbab30b0f80458b91a34725eb2d717875918f0a3f7dbf8d58ff"
+    },
+    {
+      "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-resource-gap-fill/Docs/Production/Completeness/2026-11-27/PROGRESSION_ECONOMY_GAPS.md",
+      "sha256": "2d968ead013f112f6c2546031cb2fd35cf43eb234f47855c73cd3e0b9ee048ac"
+    },
+    {
+      "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-resource-gap-fill/Docs/Production/ReferenceRefresh/2026-11-27/RENDER_CATALOGUE.md",
+      "sha256": "6d1c4622e0def96f54a3c9abc9da1bf9b47d7d3bac19fa8ff1fca729f2ae5978"
+    }
+  ],
+  "new_machines": [
+    {
+      "id": "coal_smelter",
+      "scope": "new_static_machine_concept",
+      "source_producer": {
+        "id": "coal_smelter",
+        "construction_bill": {
+          "planks": "20",
+          "blocks": "24",
+          "stone": "12"
+        },
+        "requires_producers": [
+          "saw_bench",
+          "quarry_drill"
+        ],
+        "unlocks_resource_sources": [],
+        "site": "inside_expanded_camp",
+        "construction_vehicle_fuel_required": false,
+        "operation_vehicle_fuel_required": false,
+        "quantity_status": "authored_numeric_fixture"
+      },
+      "recipes": [
+        {
+          "id": "smelt_iron",
+          "producer": "coal_smelter",
+          "inputs": {
+            "metal": "2",
+            "coal": "1"
+          },
+          "output": {
+            "iron_bars": "2"
+          },
+          "status": "authored_numeric_fixture",
+          "vehicle_fuel_required": false
+        }
+      ],
+      "name": "Coal smelter",
+      "silhouette": "Tall rounded stone-lined melting chamber; blue cool outer panels, orange feed lever, short broad chimney. Low separate coal drawer and higher ore chute. A cast-bar cooling tray exits on the opposite side. Four chunky stone feet, snow only on cold edges.",
+      "ports": [
+        "ore input chute accepting metal only",
+        "separate low coal drawer",
+        "bar output tray accepting iron_bars only",
+        "front worker control and clear reach area",
+        "side/rear service panel"
+      ],
+      "animation_intent": {
+        "off": "Door closed, no feed, dim firebed.",
+        "working": "Worker tips ore, coal drawer closes, bellows compress, fire brightens, casting lip tips into a mold, bars cool then move to the tray.",
+        "blocked_output": "Finish only into reserved output capacity; hold completed bars safely, close feed, pause subsequent batches.",
+        "jammed_or_damaged": "Stop feed/bellows, preserve in-flight job custody; visibly bent chute or cracked outer panel with no invisible throughput."
+      },
+      "visual_constraints": [
+        "Not the central camp furnace; separate plot and distinct industrial silhouette.",
+        "Do not depict engine, petrol tank, electric grid or steel prerequisite.",
+        "Coal drawer, ore inlet and cast outlet must not exchange sides between angles."
+      ]
+    },
+    {
+      "id": "hand_metal_bench",
+      "scope": "new_static_machine_concept",
+      "source_producer": {
+        "id": "hand_metal_bench",
+        "construction_bill": {
+          "planks": "16",
+          "blocks": "12",
+          "iron_bars": "12"
+        },
+        "requires_producers": [
+          "coal_smelter"
+        ],
+        "unlocks_resource_sources": [],
+        "site": "inside_expanded_camp",
+        "construction_vehicle_fuel_required": false,
+        "operation_vehicle_fuel_required": false,
+        "quantity_status": "authored_numeric_fixture"
+      },
+      "recipes": [
+        {
+          "id": "form_sheet",
+          "producer": "hand_metal_bench",
+          "inputs": {
+            "iron_bars": "2"
+          },
+          "output": {
+            "sheet_metal": "2"
+          },
+          "status": "authored_numeric_fixture",
+          "vehicle_fuel_required": false
+        },
+        {
+          "id": "machine_parts",
+          "producer": "hand_metal_bench",
+          "inputs": {
+            "iron_bars": "2"
+          },
+          "output": {
+            "mechanical_parts": "2"
+          },
+          "status": "authored_numeric_fixture",
+          "vehicle_fuel_required": false
+        }
+      ],
+      "name": "Metal forming and parts bench",
+      "silhouette": "One broad warm-timber workbench with stone footings and blue iron frame. Hand flywheel drives two compact visible rollers; an adjacent screw press has interchangeable mechanical-parts die. Orange handles, guarded drive gears, bar rack at entry, flat sheet tray and compact parts bin at exit.",
+      "ports": [
+        "single iron-bar feed rack",
+        "sheet-output flat tray",
+        "parts-output short bin",
+        "front clear handwheel/press operator position",
+        "conveyor couplers on feed and output sides without blocking operator"
+      ],
+      "animation_intent": {
+        "off": "Rollers and screw press stop; selected recipe jig is visible.",
+        "working": "Sheet mode: crank turns, bar feeds into rollers, a flat sheet exits. Parts mode: bar clamps into parts jig, lever/press stroke forms a part, part enters bin. Only the selected mode consumes stock.",
+        "blocked_output": "Stop before consuming the next batch if its typed output tray is full.",
+        "jammed_or_damaged": "Handwheel stops, stock remains clamped visibly, broken guard or bent guide communicates failure; repair cannot duplicate reserved inputs."
+      },
+      "visual_constraints": [
+        "One producer with two recipes, not two additional mandatory buildings.",
+        "Show both output forms separately; never use a sheet tray full of gears.",
+        "No automatic electrical motor or fuel tank as a bootstrap dependency."
+      ]
+    },
+    {
+      "id": "steel_forge",
+      "scope": "new_static_machine_concept",
+      "source_producer": {
+        "id": "steel_forge",
+        "construction_bill": {
+          "blocks": "24",
+          "iron_bars": "16",
+          "sheet_metal": "8"
+        },
+        "requires_producers": [
+          "hand_metal_bench"
+        ],
+        "unlocks_resource_sources": [],
+        "site": "inside_expanded_camp",
+        "construction_vehicle_fuel_required": false,
+        "operation_vehicle_fuel_required": false,
+        "quantity_status": "authored_numeric_fixture"
+      },
+      "recipes": [
+        {
+          "id": "refine_steel",
+          "producer": "steel_forge",
+          "inputs": {
+            "iron_bars": "2",
+            "coal": "1"
+          },
+          "output": {
+            "steel": "1"
+          },
+          "status": "authored_numeric_fixture",
+          "vehicle_fuel_required": false
+        }
+      ],
+      "name": "Steel refining forge",
+      "silhouette": "Squat broad insulated forge with heavy rounded stone base, deep blue hood, orange bellows lever and crucible cradle. Iron-bar cradle at entry, separate coal hopper, low dark-steel ingot cooling rack at exit. Visually broader and lower than ore smelter.",
+      "ports": [
+        "iron-bar feed cradle",
+        "separate coal hopper",
+        "steel output cooling rack",
+        "front controls and safe work apron",
+        "service access"
+      ],
+      "animation_intent": {
+        "off": "Crucible upright, bellows still, dark cooling rack.",
+        "working": "Bars load, coal feeds, bellows move, crucible tilts through a bounded pour, steel ingot moves to cooling rack.",
+        "blocked_output": "Hold completed batch in reserved safe output; pause new feed.",
+        "jammed_or_damaged": "Latch/hood visibly damaged, crucible secured, cycle stops and conserved job remains pending."
+      },
+      "visual_constraints": [
+        "Input iron bars plus coal; do not depict raw ore as this current recipe input.",
+        "Steel remains a branch for reinforcement, not mandatory before every sheet or part.",
+        "No long swords/anvils presented as additional inventory output."
+      ]
+    },
+    {
+      "id": "assembly_bench",
+      "scope": "new_static_machine_concept",
+      "source_producer": {
+        "id": "assembly_bench",
+        "construction_bill": {
+          "planks": "20",
+          "blocks": "16",
+          "iron_bars": "20",
+          "sheet_metal": "12",
+          "mechanical_parts": "12"
+        },
+        "requires_producers": [
+          "steel_forge"
+        ],
+        "unlocks_resource_sources": [],
+        "site": "inside_expanded_camp",
+        "construction_vehicle_fuel_required": false,
+        "operation_vehicle_fuel_required": false,
+        "quantity_status": "authored_numeric_fixture"
+      },
+      "recipes": [
+        {
+          "id": "assemble_drive",
+          "producer": "assembly_bench",
+          "inputs": {
+            "steel": "4",
+            "mechanical_parts": "6",
+            "sheet_metal": "2"
+          },
+          "output": {
+            "drive_assembly": "1"
+          },
+          "status": "authored_numeric_fixture",
+          "vehicle_fuel_required": false
+        },
+        {
+          "id": "assemble_mobility",
+          "producer": "assembly_bench",
+          "inputs": {
+            "steel": "2",
+            "mechanical_parts": "4",
+            "planks": "2"
+          },
+          "output": {
+            "traction_kit": "1"
+          },
+          "status": "authored_numeric_fixture",
+          "vehicle_fuel_required": false
+        }
+      ],
+      "name": "Vehicle assembly bench",
+      "silhouette": "Wide reinforced blue and timber assembly table on four stone footings with a compact orange gantry hoist, central assembly jig and guarded hand winch. Three separated inbound parts bays, broad output cradle. Show a drive assembly and mobility module as different selectable jobs.",
+      "ports": [
+        "steel staging bay",
+        "mechanical-parts tray",
+        "sheet-metal/plank recipe-specific staging bay",
+        "wide completed-assembly output cradle",
+        "front worker aisle and accessible hoist control"
+      ],
+      "animation_intent": {
+        "off": "Hoist parked, jig empty or reserved work visible.",
+        "working": "Hoist lowers heavy core into jig, worker fits casing and parts, clamps close and open, finished selected assembly slides into output cradle. Mobility job fits hub/rollers and timber/steel supports rather than silently becoming another engine.",
+        "blocked_output": "Completed assembly remains in owned cradle; no second job consumes inputs until output space is available.",
+        "jammed_or_damaged": "Hoist safely parked/locked, damaged jig visible, assembly stays owned with no duplicated or lost recipe commit."
+      },
+      "visual_constraints": [
+        "Drive uses steel + mechanical_parts + sheet_metal.",
+        "Mobility uses steel + mechanical_parts + planks.",
+        "Do not invent rubber, copper, batteries, electronics or a full vehicle as recipe output."
+      ]
+    },
+    {
+      "id": "manual_oil_pump",
+      "scope": "new_static_machine_concept",
+      "source_producer": {
+        "id": "manual_oil_pump",
+        "construction_bill": {
+          "planks": "16",
+          "blocks": "12",
+          "iron_bars": "12",
+          "mechanical_parts": "8"
+        },
+        "requires_producers": [
+          "hand_metal_bench"
+        ],
+        "unlocks_resource_sources": [
+          "crude_oil"
+        ],
+        "site": "outside_camp_reachable_manual_oil_site",
+        "construction_vehicle_fuel_required": false,
+        "operation_vehicle_fuel_required": false,
+        "quantity_status": "authored_numeric_fixture"
+      },
+      "recipes": [],
+      "name": "Manual oil pump",
+      "silhouette": "Compact hand-lever pump on an outside-camp snow-covered stone pad. Broad blue piston cylinder, orange handle, short timber/iron braced mast, visible crank linkage and sealed crude collection drum with a capped hose coupling. No vehicle engine or pumpjack motor.",
+      "ports": [
+        "anchored extraction stem into an eligible crude deposit",
+        "sealed crude_oil collection coupling",
+        "front reachable hand lever",
+        "detachable drum pickup area and walking return route"
+      ],
+      "animation_intent": {
+        "off": "Handle rests, cylinder still, hose sealed.",
+        "working": "Worker loads body weight into each full lever stroke; piston linkage reciprocates and sealed drum fill cue advances in step with committed extraction.",
+        "blocked_output": "Handle locks neutrally when crude collection capacity is full or source unavailable.",
+        "jammed_or_damaged": "Linkage visibly disengages, leak-free capped outlet, extraction stops; deposit and drum ownership remain conserved."
+      },
+      "visual_constraints": [
+        "This is extraction, not conversion of an inventory item into oil.",
+        "Outside camp, reachable on foot before owning a truck.",
+        "No fuel consumption and no fuel requirement to build first instance.",
+        "No duplicate empty-drum inventory, infinite free oil or gas/oil explosion claim."
+      ]
+    },
+    {
+      "id": "coal_refinery",
+      "scope": "new_static_machine_concept",
+      "source_producer": {
+        "id": "coal_refinery",
+        "construction_bill": {
+          "blocks": "32",
+          "sheet_metal": "24",
+          "iron_bars": "16",
+          "mechanical_parts": "12"
+        },
+        "requires_producers": [
+          "manual_oil_pump",
+          "hand_metal_bench"
+        ],
+        "unlocks_resource_sources": [],
+        "site": "inside_expanded_camp",
+        "construction_vehicle_fuel_required": false,
+        "operation_vehicle_fuel_required": false,
+        "quantity_status": "authored_numeric_fixture"
+      },
+      "recipes": [
+        {
+          "id": "refine_fuel",
+          "producer": "coal_refinery",
+          "inputs": {
+            "crude_oil": "10",
+            "coal": "1"
+          },
+          "output": {
+            "fuel": "10"
+          },
+          "status": "authored_numeric_fixture",
+          "vehicle_fuel_required": false
+        }
+      ],
+      "name": "Coal-fired fuel refinery",
+      "silhouette": "Compact rounded blue still with short tall distillation vessel, insulated orange heat door over a stone firebox, arcing condenser pipe and shorter sealed collection vessel. Crude-drum coupling at one side, separate coal drawer, distinct clean-fuel can filling bay opposite. Stone blocks separate hot zones from timber edging.",
+      "ports": [
+        "sealed crude_oil input drum coupling",
+        "separate coal drawer",
+        "fuel output filling nozzle with can cradle",
+        "front controls and manual refuel pickup access",
+        "rear service and condenser access"
+      ],
+      "animation_intent": {
+        "off": "Coal door closed, fill valve closed, gauges at rest.",
+        "working": "Crude valve opens, coal heat glows, bounded condenser/fill indicators move, fuel nozzle fills a closed handled can.",
+        "blocked_output": "Stop accepting crude/coal before a new batch when no output capacity; keep completed owned fuel in reserved sealed vessel.",
+        "jammed_or_damaged": "Close intake/fill valves, stop batch, reveal damaged pipe bracket or housing; preserve resources and do not run a fake success loop."
+      },
+      "visual_constraints": [
+        "Inputs crude_oil and coal; output fuel. No mandatory petrol-powered pump.",
+        "Clearly separate crude collection drum and clean fuel can using silhouette and symbols, not color alone.",
+        "No extra waste/byproduct inventory or real-world petroleum engineering claims."
+      ]
+    }
+  ],
+  "existing_reuse": [
+    {
+      "id": "camp_cooker",
+      "input_ids": [
+        "meat"
+      ],
+      "output_ids": [
+        "meal"
+      ],
+      "render": "https://github.com/ksolo21-web/HAVENLINE/blob/a868ae89cdf2f120b478aa0a48fff35e09cc465c/Docs/Design/RenderArchive/2026-11-23/selected/equipment/cooker_processor.png",
+      "reuse": "Existing eight-view cooker/processor. Do not redesign. Meat cooking is current design; exact active recipe amounts outside industrial graph."
+    },
+    {
+      "id": "saw_bench",
+      "input_ids": [
+        "wood"
+      ],
+      "output_ids": [
+        "planks"
+      ],
+      "render": "https://github.com/ksolo21-web/HAVENLINE/blob/a868ae89cdf2f120b478aa0a48fff35e09cc465c/Docs/Design/RenderArchive/2026-11-23/selected/equipment/saw_station.png",
+      "reuse": "Existing eight-view saw; optional lumber_mill variant also archived."
+    },
+    {
+      "id": "quarry_drill",
+      "input_ids": [
+        "stone"
+      ],
+      "output_ids": [
+        "blocks"
+      ],
+      "render": "https://github.com/ksolo21-web/HAVENLINE/blob/a868ae89cdf2f120b478aa0a48fff35e09cc465c/Docs/Design/RenderArchive/2026-11-23/selected/equipment/quarry_drill_station.png",
+      "reuse": "Existing quarry machine reference; modern recipe graph calls this stone-to-blocks. Historical extraction appearance alone does not prove the transformation cycle."
+    },
+    {
+      "id": "fish_processor",
+      "input_ids": [
+        "fish"
+      ],
+      "output_ids": [
+        "cooked_fish"
+      ],
+      "render": "https://github.com/ksolo21-web/HAVENLINE/blob/a868ae89cdf2f120b478aa0a48fff35e09cc465c/Docs/Design/RenderArchive/2026-11-23/selected/equipment/cooker_processor.png",
+      "reuse": "Existing cooker/intake plus conveyor fish route. Whole-fish output; do not create mandatory fillet intermediate."
+    },
+    {
+      "id": "wheat_food_processor",
+      "input_ids": [
+        "wheat"
+      ],
+      "output_ids": [
+        "bread"
+      ],
+      "render": "https://github.com/ksolo21-web/HAVENLINE/blob/a868ae89cdf2f120b478aa0a48fff35e09cc465c/Docs/Design/MissingRenderCoverage/2026-11-27/coverage-completion-01/selected/world-wheat-processor.png",
+      "reuse": "Existing rendered direct wheat-to-bread machine. No mandatory flour item."
+    }
+  ],
+  "common_ports_rule": "Manual handoff remains reachable; conveyors are optional typed transfers at designated input/output sockets, not a prerequisite to first use. Bulk delivery preserves individual resource identities and reserved recipe input/output custody.",
+  "excluded_new_machine_economies": [
+    "Separate flour mill and flour inventory",
+    "Leather tannery/leather stock; hide currently goes to harness projects directly",
+    "Slate-tile production stock; slate has direct construction uses",
+    "Gems production machine; premium_gems is optional currency",
+    "Relay-component factory; finite project component supply not established as a recipe",
+    "Rubber/copper/battery/electronics factories",
+    "Drying racks or species-cut products as new mandatory economy"
+  ],
+  "existing_approval_boundary": "Retain original selected render reviews and scores. A historical9.4 or9.8 remains historical, not a newly certified9.9. Current selected-source binding and final gates still apply at integration."
+}

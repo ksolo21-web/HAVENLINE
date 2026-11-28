@@ -1,5 +1,9 @@
 # HAVENLINE repository navigation
 
+## Resource and processor render completion
+
+[Selected resources](Docs/Design/ResourceTurnarounds/2026-11-27-completion/README.md) and [six processing-machine turnarounds](Docs/Design/ProcessingMachines/2026-11-27/README.md) provide the completed industrial art concepts, exact recipe mapping, original revisions and independent static reviews. These authored reference sheets do not change the current game build or certify native assets and animation.
+
 ## App icon refresh
 
 [Named hearth icon](Docs/Design/AppIcon/2026-11-27/README.md) includes the selected color master, adaptive layers, monochrome version, rejected/repaired layouts, independent review and integration settings for the active game's next build.

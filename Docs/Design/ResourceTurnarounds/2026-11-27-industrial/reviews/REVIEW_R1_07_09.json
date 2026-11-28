@@ -1,0 +1,170 @@
+{
+  "review_id": "HAVENLINE-resource-render-independent-critic-R1-07-09",
+  "reviewer": "/root/resource_critic",
+  "reviewed_utc": "2026-11-28T02:48:13.504899+00:00",
+  "scope": "Independent actual-pixel authored raster concept review; native3D/runtime/gameplay/reference/device gates remain unclaimed.",
+  "threshold": "Strictly above9.0 and all mandatory scoped checks passed.",
+  "reviews": [
+    {
+      "resource_id": "blocks",
+      "display_name": "Stone blocks",
+      "identity": {
+        "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-resource-gap-fill/Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/07-stone-blocks-r1.png",
+        "sha256": "6ddfff179408d81e78c473b6dca57ca03b20f0ae20d48d75605ebbfa50742854",
+        "bytes": 1821533,
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB"
+      },
+      "score": 8.6,
+      "verdict": "REJECT_REPAIR_REQUIRED",
+      "checks": {
+        "all_eight_cells_present": true,
+        "all_eight_angle_labels_readable": true,
+        "full_silhouettes_with_safe_margins": true,
+        "material_identity_unambiguous": true,
+        "unintended_props_or_obstructing_text": false,
+        "cross_sheet_typography_consistent": true,
+        "raster_concept_scope_only": true,
+        "native_3d_or_gameplay_approval": false,
+        "correct_view_azimuths": false,
+        "major_part_count_consistent": true,
+        "dressed_stone_distinct_from_raw_stone": true
+      },
+      "defects": [
+        {
+          "id": "R1-BLOCKS-01",
+          "gate": "R03/R04",
+          "severity": "mandatory",
+          "observation": "225 has the same rising-right long-axis direction as135/315, with the near square end at image left. It should match the45 geometric direction with the near end at image right.",
+          "repair": "Correct only225 to show the rear long face to image left and near left square end to image right, retaining the2:1:1 proportions, warm dressed-stone material and bevels."
+        }
+      ],
+      "positive_observations": [
+        "Single regular masonry block per view; recognizable worked stone instead of raw irregular rock.",
+        "Warm gray fine-grained stone, full framing and clean labels are coherent."
+      ],
+      "inspected_evidence": [
+        "Full1536x1024 sheet",
+        "r1/07-stone-blocks-r1-rear_left_225.png"
+      ]
+    },
+    {
+      "resource_id": "premium_gems",
+      "display_name": "Gems",
+      "identity": {
+        "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-resource-gap-fill/Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/08-gems-r1.png",
+        "sha256": "8ab6b87da0a5fae16f9be6288d784a256098d56ca407c8110fc38e2fd8448864",
+        "bytes": 1626289,
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB"
+      },
+      "score": 10.0,
+      "verdict": "PASS_SCOPED_RASTER_CONCEPT",
+      "checks": {
+        "all_eight_cells_present": true,
+        "all_eight_angle_labels_readable": true,
+        "full_silhouettes_with_safe_margins": true,
+        "material_identity_unambiguous": true,
+        "unintended_props_or_obstructing_text": false,
+        "cross_sheet_typography_consistent": true,
+        "raster_concept_scope_only": true,
+        "native_3d_or_gameplay_approval": false,
+        "correct_view_azimuths": true,
+        "major_cut_and_count_consistent": true,
+        "stable_grounding_supported": true,
+        "single_currency_presentation_without_mining_or_price_props": true
+      },
+      "open_mandatory_defects": [],
+      "observations": [
+        "45/225 share the correct symmetric descending-right geometry;135/315 share the opposite direction;0/180 and90/270 retain matching opposite-view silhouettes.",
+        "One translucent saturated cyan gem per panel with consistent clipped corners, broad facets and shallow base contact; no cluster, matrix, pedestal, extra glow or labels.",
+        "Refraction/highlight variations are plausible for authored crystal views and do not alter the major facet cut.",
+        "Object identity is a premium currency render; source authority and roster explicitly keep it separate from mineable materials and do not set a price."
+      ],
+      "inspected_evidence": [
+        "Full1536x1024 sheet",
+        "r1/08-gems-r1-front_right_45.png",
+        "r1/08-gems-r1-rear_left_225.png"
+      ],
+      "scope_limit": "Authored raster concept approval only, not gemstone engineering or production/native currency approval."
+    },
+    {
+      "resource_id": "relay_component",
+      "identity": {
+        "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-resource-gap-fill/Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/09-relay-component-r1.png",
+        "sha256": "9c8bf38fc1d087aae1be3514006bf26b9abdf21790dd3456811e20cdff7ee22b",
+        "bytes": 1703152,
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB"
+      },
+      "score": 8.6,
+      "verdict": "REJECT_REPAIR_REQUIRED",
+      "checks": {
+        "all_eight_cells_present": true,
+        "all_eight_angle_labels_readable": true,
+        "full_silhouettes_with_safe_margins": true,
+        "material_identity_unambiguous": true,
+        "unintended_props_or_obstructing_text": false,
+        "cross_sheet_typography_consistent": true,
+        "raster_concept_scope_only": true,
+        "native_3d_or_gameplay_approval": false,
+        "correct_view_azimuths": false,
+        "major_part_count_consistent": true,
+        "front_rear_landmarks_on_designated_faces": true,
+        "three_vent_ribs_consistent_in_visible_views": true,
+        "single_top_lifting_bridge_consistent": true,
+        "compatible_with_selected_rover_studio_cargo_language": true
+      },
+      "defects": [
+        {
+          "id": "R1-RELAY-01",
+          "gate": "R03/R04",
+          "severity": "mandatory",
+          "observation": "225 incorrectly repeats135: visible near vent/end is at image left and the rear connector wall is to the right. Correct225 should show the rear connector long wall to image left and left vent/end to image right.",
+          "repair": "Reverse225 geometric diagonal while retaining the rear connector rather than cyan front slot, the left vent with three ribs, and the single top bridge."
+        }
+      ],
+      "clarified_nondefects": [
+        {
+          "hypothesis": "45 degree vent might contain four ribs.",
+          "inspection_result": "Native crop shows exactly three raised horizontal bars/ribs. The lower chamfer and dark panel border are not an extra rib. No rib-count defect is recorded."
+        }
+      ],
+      "positive_observations": [
+        "Cyan front slot stays on the front-facing views; dark rear connector stays on rear-facing views.",
+        "Gray armored cassette, cyan display slot and dark inset vents fit the selected Relay Rover studio cargo language; unseen rear construction remains authored.",
+        "One lifting bridge, three ribs per visible vent and full silhouettes remain coherent."
+      ],
+      "additional_reference": {
+        "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-resource-gap-fill/Docs/Design/WorldVehicles/2026-11-27/renders/w10-relay-rover-r2.png",
+        "sha256": "227c277f7cd2b28d1ef5acd473324d2ff1063f370d30ae7465de92d58d4c78ac",
+        "actual_pixels_viewed": true
+      },
+      "inspected_evidence": [
+        "Full1536x1024 sheet",
+        "r1/09-relay-component-r1-front_right_45.png",
+        "r1/09-relay-component-r1-right_90.png",
+        "r1/09-relay-component-r1-rear_left_225.png",
+        "Selected Relay Rover R2 fullsheet for cargo language"
+      ]
+    }
+  ],
+  "approved_resource_ids_in_batch": [
+    "premium_gems"
+  ],
+  "pending_resource_ids_in_batch": [
+    "blocks",
+    "relay_component"
+  ],
+  "all_nine_package_approved": false,
+  "retest_required": "Fresh exact-byte review of corrected blocks225 and relay225. Preserve raw attempts and reports."
+}

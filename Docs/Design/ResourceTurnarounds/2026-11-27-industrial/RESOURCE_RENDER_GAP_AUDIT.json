@@ -1,0 +1,806 @@
+{
+  "schema_version": 1,
+  "audit_date_user_timezone": "2026-11-27",
+  "captured_utc": "2026-11-28T02:31:45.844548+00:00",
+  "auditor": "/root/resource_audit",
+  "task": "Audit the remaining Havenline resource concept renders without duplicating preserved art",
+  "source_bindings": [
+    {
+      "commit": "79973ab632a0916acec9a6ddad7895f1243a4713",
+      "path": "Docs/Production/VehicleEconomy/2026-11-27/RESOURCE_CHAINS.json",
+      "bytes": 24951,
+      "sha256": "75400530bc38b937a697d0a88091c0c60373b8b94913a3c818083af7e68cf555",
+      "git_blob": "4397f5039fe379fea54dd73f0628de39d60b25ba"
+    },
+    {
+      "commit": "79973ab632a0916acec9a6ddad7895f1243a4713",
+      "path": "Docs/Production/VehicleEconomy/2026-11-27/WORLD_VEHICLES.json",
+      "bytes": 19811,
+      "sha256": "7a4441c1a4149d89ab61a15cfcd88c16e64c2e74133df5940138f3b5e6cfc7f7",
+      "git_blob": "97ab3042aba6dc6ef1eaeaecd6ee5f5cf8ec5eae"
+    },
+    {
+      "commit": "79973ab632a0916acec9a6ddad7895f1243a4713",
+      "path": "Docs/Production/Completeness/2026-11-27/PROGRESSION_ECONOMY_GAPS.json",
+      "bytes": 191722,
+      "sha256": "606741b00a1caa6aa8639748105a8b7ac4f2a9a592b262a5114f8efe2bef23d4",
+      "git_blob": "62fc259a9558161338342e2f55b36c3d1a1f7e72"
+    },
+    {
+      "commit": "79973ab632a0916acec9a6ddad7895f1243a4713",
+      "path": "Docs/Production/GameplayDepth/2026-11-27/RESOURCE_VALUE_LEDGER.json",
+      "bytes": 50620,
+      "sha256": "b5edec82cd6cfbe61e99bca58d3d9603ce2d34f6cda1b29737e3a01f1bac6f10",
+      "git_blob": "7fe36e3ac2baf694144af094e390419b5f556c07"
+    },
+    {
+      "commit": "79973ab632a0916acec9a6ddad7895f1243a4713",
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/delivery-manifest.json",
+      "bytes": 25505,
+      "sha256": "dd6d37c55982543fc3672105d8bfe351bbe2f3040e5286233f9610d975860842",
+      "git_blob": "a9c838e4dd5cd6d5869ae4c7f45c2805a7ccfb40"
+    },
+    {
+      "commit": "79973ab632a0916acec9a6ddad7895f1243a4713",
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/delivery-manifest.json",
+      "bytes": 59079,
+      "sha256": "7814781fe08911c4e5eba8408907de150229237a052069e0ed773d4697eab238",
+      "git_blob": "aa6d78c155dd205483479923599d95eb038efdb7"
+    }
+  ],
+  "refs": {
+    "repo_base": "79973ab632a0916acec9a6ddad7895f1243a4713",
+    "current_relevant_remote_refs_observed": {
+      "art/resource-turnarounds-2026-11-23": "25b4ec6dd407c1c2530a3781527df64eabb63b99",
+      "art/missing-renders-2026-11-27": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+      "feature/vehicle-economy-world-fleet-2026-11-27": "69bd3eb921ce18838795b3ce21b232ec6e3b54b6",
+      "planning/build-13-audit": "5862b89c1663cacc0cbb84bfaba438d1459cfdb6",
+      "trial/world-one-expansion-2026-11-26": "fad3af0a45e94262737077ae513827b5042adb41"
+    }
+  },
+  "counts": {
+    "existing_resource_sheets": 33,
+    "existing_illustrated_views": 264,
+    "existing_current_identity_coverage": 18,
+    "existing_variant_or_reserve_sheets": 15,
+    "selected_identity_union": 27,
+    "required_new_sheets": 9,
+    "ordinary_new_material_component_sheets": 7,
+    "currency_sheets": 1,
+    "finite_project_object_sheets": 1,
+    "new_illustrated_views_planned": 72
+  },
+  "missing_render_roster": [
+    {
+      "ordinal": 1,
+      "id": "iron_bars",
+      "display_name": "Iron bars",
+      "kind": "processed",
+      "render_gap": "No standalone selected eight-view resource sheet in the audited design tree",
+      "authority": [
+        {
+          "source": "Docs/Production/VehicleEconomy/2026-11-27/RESOURCE_CHAINS.json",
+          "anchor": "resources.iron_bars"
+        }
+      ],
+      "render_design_note": "Dull iron bar/billet bundle; distinguish from the existing polished blue-silver trapezoid steel ingot. Not a second raw-ore balance.",
+      "status": "REQUIRED_ART_NOT_YET_GENERATED",
+      "production_approval": false
+    },
+    {
+      "ordinal": 2,
+      "id": "sheet_metal",
+      "display_name": "Sheet metal",
+      "kind": "processed",
+      "render_gap": "No standalone selected eight-view resource sheet in the audited design tree",
+      "authority": [
+        {
+          "source": "Docs/Production/VehicleEconomy/2026-11-27/RESOURCE_CHAINS.json",
+          "anchor": "resources.sheet_metal"
+        }
+      ],
+      "render_design_note": "A few flat metal sheets with readable layered edges; one ordinary processed resource, not separate steel-plate and iron-sheet IDs.",
+      "status": "REQUIRED_ART_NOT_YET_GENERATED",
+      "production_approval": false
+    },
+    {
+      "ordinal": 3,
+      "id": "mechanical_parts",
+      "display_name": "Mechanical parts",
+      "kind": "component",
+      "render_gap": "No standalone selected eight-view resource sheet in the audited design tree",
+      "authority": [
+        {
+          "source": "Docs/Production/VehicleEconomy/2026-11-27/RESOURCE_CHAINS.json",
+          "anchor": "resources.mechanical_parts"
+        }
+      ],
+      "render_design_note": "A stable small set of gears, bolts and bearings in a carried tray; aggregate component item, not additional individual fastener currencies.",
+      "status": "REQUIRED_ART_NOT_YET_GENERATED",
+      "production_approval": false
+    },
+    {
+      "ordinal": 4,
+      "id": "drive_assembly",
+      "display_name": "Drive assembly",
+      "kind": "component",
+      "render_gap": "No standalone selected eight-view resource sheet in the audited design tree",
+      "authority": [
+        {
+          "source": "Docs/Production/VehicleEconomy/2026-11-27/RESOURCE_CHAINS.json",
+          "anchor": "resources.drive_assembly"
+        }
+      ],
+      "render_design_note": "Compact enclosed motor/gearbox module with readable mounting feet and output shaft; authored game component, not a mechanically certified engine.",
+      "status": "REQUIRED_ART_NOT_YET_GENERATED",
+      "production_approval": false
+    },
+    {
+      "ordinal": 5,
+      "id": "traction_kit",
+      "display_name": "Mobility assembly",
+      "kind": "component",
+      "render_gap": "No standalone selected eight-view resource sheet in the audited design tree",
+      "authority": [
+        {
+          "source": "Docs/Production/VehicleEconomy/2026-11-27/RESOURCE_CHAINS.json",
+          "anchor": "resources.traction_kit"
+        }
+      ],
+      "render_design_note": "Display name Mobility assembly. General movement-module resource used for wheel/track/rail/marine variants; preserve traction_kit ledger key.",
+      "status": "REQUIRED_ART_NOT_YET_GENERATED",
+      "production_approval": false
+    },
+    {
+      "ordinal": 6,
+      "id": "crude_oil",
+      "display_name": "Crude oil",
+      "kind": "raw",
+      "render_gap": "No standalone selected eight-view resource sheet in the audited design tree",
+      "authority": [
+        {
+          "source": "Docs/Production/VehicleEconomy/2026-11-27/RESOURCE_CHAINS.json",
+          "anchor": "resources.crude_oil"
+        }
+      ],
+      "render_design_note": "Distinct sealed drum/canister shape from the existing orange fuel jerrycan. Raw liquid represented by its carried container, not a separate container stock.",
+      "status": "REQUIRED_ART_NOT_YET_GENERATED",
+      "production_approval": false
+    },
+    {
+      "ordinal": 7,
+      "id": "blocks",
+      "display_name": "Stone blocks",
+      "kind": "processed",
+      "render_gap": "No standalone selected eight-view resource sheet in the audited design tree",
+      "authority": [
+        {
+          "source": "Docs/Production/VehicleEconomy/2026-11-27/RESOURCE_CHAINS.json",
+          "anchor": "resources.blocks"
+        }
+      ],
+      "render_design_note": "Dressed stone masonry blocks, clearly different from existing rough stone. No separate brick inventory invented.",
+      "status": "REQUIRED_ART_NOT_YET_GENERATED",
+      "production_approval": false
+    },
+    {
+      "ordinal": 8,
+      "id": "premium_gems",
+      "display_name": "Gems",
+      "kind": "currency",
+      "render_gap": "No standalone selected eight-view resource sheet in the audited design tree",
+      "authority": [
+        {
+          "source": "Docs/Production/Completeness/2026-11-27/PROGRESSION_ECONOMY_GAPS.json",
+          "anchor": "resource_value_decisions.premium_gems"
+        }
+      ],
+      "render_design_note": "Single selected premium currency Gems. New art does not establish SKU prices, paid progression, exchange rates or a mineable gem resource.",
+      "status": "REQUIRED_ART_NOT_YET_GENERATED",
+      "production_approval": false
+    },
+    {
+      "ordinal": 9,
+      "id": "relay_component",
+      "display_name": "Relay component",
+      "kind": "finite_project_object",
+      "render_gap": "No standalone selected eight-view resource sheet in the audited design tree",
+      "authority": [
+        {
+          "source": "Docs/Production/Completeness/2026-11-27/PROGRESSION_ECONOMY_GAPS.json",
+          "anchor": "resource_value_decisions.relay_component"
+        },
+        {
+          "source": "Docs/Production/VehicleEconomy/2026-11-27/WORLD_VEHICLES.json",
+          "anchor": "vehicles.world10 / portable serialized relay cargo"
+        }
+      ],
+      "render_design_note": "Finite serialized World10 project module, not a currency or ordinary endless mine resource. Base on selected Relay Rover cargo cassette; full unseen geometry is authored clarification.",
+      "status": "REQUIRED_ART_NOT_YET_GENERATED",
+      "production_approval": false
+    }
+  ],
+  "existing_identity_coverage": [
+    {
+      "id": "wood",
+      "art_id": "wood",
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/01-wood.png",
+      "git_blob": "c94ba1d94a3d7fdbb5c9cc096c5b3f30eb180cb4",
+      "mapping": "Existing identity or explicit forward art alias"
+    },
+    {
+      "id": "stone",
+      "art_id": "stone",
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/02-stone.png",
+      "git_blob": "c2a7e1a7cb2caa8fb1dc80699b5d02604adadbe1",
+      "mapping": "Existing identity or explicit forward art alias"
+    },
+    {
+      "id": "metal",
+      "art_id": "metal_ore",
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/05-metal-ore.png",
+      "git_blob": "c3bdeddef77ddf35f1a32bfc598bea809bb816c8",
+      "mapping": "Stable saved key metal; latest selected display Iron ore. Existing metal-ore art reused; display migration remains runtime work."
+    },
+    {
+      "id": "coal",
+      "art_id": "coal",
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/13-coal.png",
+      "git_blob": "e2e0e11613a65ad01d3aa3255317a3de3bd89ba9",
+      "mapping": "Existing identity or explicit forward art alias"
+    },
+    {
+      "id": "steel",
+      "art_id": "steel",
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/04-steel.png",
+      "git_blob": "8030843df6055046f23b908c5c5c98c4aa6ceb33",
+      "mapping": "Existing identity or explicit forward art alias"
+    },
+    {
+      "id": "slate",
+      "art_id": "slate",
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/03-slate.png",
+      "git_blob": "5280b3c6a69b01b39a1f5577686162228b177008",
+      "mapping": "Existing identity or explicit forward art alias"
+    },
+    {
+      "id": "planks",
+      "art_id": "timber_planks",
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/17-timber-planks.png",
+      "git_blob": "a5228c65e84b1a617d821701680483a959694a41",
+      "mapping": "Existing timber_planks art maps to planks."
+    },
+    {
+      "id": "fuel",
+      "art_id": "fuel",
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/06-fuel.png",
+      "git_blob": "ac409458a51373a09abb3874dc2f82a28eecca2a",
+      "mapping": "Existing identity or explicit forward art alias"
+    },
+    {
+      "id": "meat",
+      "art_id": "meat",
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/07-meat.png",
+      "git_blob": "12dd418cf4ed3e38770a67442bb39beb6cf9180b",
+      "mapping": "Existing identity or explicit forward art alias"
+    },
+    {
+      "id": "meal",
+      "art_id": "cooked_game_meat",
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/12-cooked-game-meat.png",
+      "git_blob": "4734e01e81a8237e1316948f776ea74b73f85f01",
+      "mapping": "Existing cooked_game_meat art maps to meal."
+    },
+    {
+      "id": "fish",
+      "art_id": "fish",
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/08-fish.png",
+      "git_blob": "e69e7fa6d68c2a112e8b12e9ae69e567e7a5c1fd",
+      "mapping": "Existing identity or explicit forward art alias"
+    },
+    {
+      "id": "cooked_fish",
+      "art_id": "cooked_fish",
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/15-cooked-fish.png",
+      "git_blob": "1ef176e0f029f0bcc7d249e0b3de632b9ddebbfa",
+      "mapping": "Existing identity or explicit forward art alias"
+    },
+    {
+      "id": "wheat",
+      "art_id": "wheat",
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/09-wheat.png",
+      "git_blob": "a87813358bad204455a32ab6f68bfbebfd28426c",
+      "mapping": "Existing identity or explicit forward art alias"
+    },
+    {
+      "id": "bread",
+      "art_id": "cooked_food",
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/10-cooked-food.png",
+      "git_blob": "2579fbaee59b771c9956d72dd580255498ade402",
+      "mapping": "Bread-like cooked_food art; distinct from meat meal."
+    },
+    {
+      "id": "hide",
+      "art_id": "hide",
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/19-hide.png",
+      "git_blob": "467d026b3e091a970a52d95352335c545bc65d42",
+      "mapping": "Existing identity or explicit forward art alias"
+    },
+    {
+      "id": "fur",
+      "art_id": "fur",
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/20-fur.png",
+      "git_blob": "de2c7f0f38f633e0336380337cdb42628ca1b026",
+      "mapping": "Existing identity or explicit forward art alias"
+    },
+    {
+      "id": "money",
+      "art_id": "money",
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/11-money.png",
+      "git_blob": "74fe2dd9fcca9e2ad8e266b89d7bba61f5c8df21",
+      "mapping": "Existing identity or explicit forward art alias"
+    },
+    {
+      "id": "cargo",
+      "art_id": "cargo",
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/12-cargo.png",
+      "git_blob": "0f00f3467086f520c62d4304a8900775e55e02f1",
+      "mapping": "Container presentation only, not another economic resource."
+    }
+  ],
+  "all_33_existing_sheets": [
+    {
+      "art_id": "wood",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/01-wood.png",
+      "git_blob": "c94ba1d94a3d7fdbb5c9cc096c5b3f30eb180cb4",
+      "recorded_sha256": "3b528ed8c5485f4c7433cb82223c7eb8081e5858bf5f90f7222778106719641b",
+      "recorded_bytes": 1830563,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.4,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "stone",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/02-stone.png",
+      "git_blob": "c2a7e1a7cb2caa8fb1dc80699b5d02604adadbe1",
+      "recorded_sha256": "5360d9d44ed505f48c788b870e322105edce48c726525252d0e884549800016e",
+      "recorded_bytes": 1744944,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.2,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "slate",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/03-slate.png",
+      "git_blob": "5280b3c6a69b01b39a1f5577686162228b177008",
+      "recorded_sha256": "651269f18342422fb7aeac236e61c4b7b59c325040dc2a7b71d446afa2c37b64",
+      "recorded_bytes": 1679538,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.3,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "steel",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/04-steel.png",
+      "git_blob": "8030843df6055046f23b908c5c5c98c4aa6ceb33",
+      "recorded_sha256": "905c74c92209963de34f80efca33408af2738f761ff6c82abe2fefff8f0a4347",
+      "recorded_bytes": 1583424,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.5,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "metal_ore",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/05-metal-ore.png",
+      "git_blob": "c3bdeddef77ddf35f1a32bfc598bea809bb816c8",
+      "recorded_sha256": "9e6965c343e017052d14800a7c3d3673ec396552e1f648cac15e7fb26a5b4d4a",
+      "recorded_bytes": 1731700,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.3,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "fuel",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/06-fuel.png",
+      "git_blob": "ac409458a51373a09abb3874dc2f82a28eecca2a",
+      "recorded_sha256": "c9a17187e1009b9d466b024608a28887b86b7746da3aae8b378e6caee649c306",
+      "recorded_bytes": 1722442,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.5,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "meat",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/07-meat.png",
+      "git_blob": "12dd418cf4ed3e38770a67442bb39beb6cf9180b",
+      "recorded_sha256": "29671642ed2fbb9d4a7e39b34923f3b9576ee95282ffcea5bb5c16b4f3496254",
+      "recorded_bytes": 1686291,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.3,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "fish",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/08-fish.png",
+      "git_blob": "e69e7fa6d68c2a112e8b12e9ae69e567e7a5c1fd",
+      "recorded_sha256": "b62af41e1c8e96ecd37016ded5b74f3ae34e5beb3fd3d2ad11b02d4498e80901",
+      "recorded_bytes": 1706103,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.4,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "wheat",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/09-wheat.png",
+      "git_blob": "a87813358bad204455a32ab6f68bfbebfd28426c",
+      "recorded_sha256": "ba766eb586fdfbbb459dae6193091f1c9f68c9439f52685351322828102f80ff",
+      "recorded_bytes": 1742411,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.3,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "cooked_food",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/10-cooked-food.png",
+      "git_blob": "2579fbaee59b771c9956d72dd580255498ade402",
+      "recorded_sha256": "ba237b6ecadaba5d8f9ae8f6d55ad5814fdfad5a263617f2d2e0553067dbc815",
+      "recorded_bytes": 1615427,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.4,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "money",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/11-money.png",
+      "git_blob": "74fe2dd9fcca9e2ad8e266b89d7bba61f5c8df21",
+      "recorded_sha256": "ad719c6bda631bfbbb56dcb47b1c70fba31502cd9a82768637fb0632f8f48bae",
+      "recorded_bytes": 1723964,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.4,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "cargo",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/12-cargo.png",
+      "git_blob": "0f00f3467086f520c62d4304a8900775e55e02f1",
+      "recorded_sha256": "507ee9985dff799b67c1d82d6217ece5e834d786f53771e3abebfe41196c2809",
+      "recorded_bytes": 1949728,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.5,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "coal",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/13-coal.png",
+      "git_blob": "e2e0e11613a65ad01d3aa3255317a3de3bd89ba9",
+      "recorded_sha256": "860f781f8ac7425e4a7899d1f9748a5e1e5dc920ae33862a7b6180f244703b5d",
+      "recorded_bytes": 1543857,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.3,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "deer_meat",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/01-deer-meat.png",
+      "git_blob": "3811a730e2898605a0f12ea095fc5154eb894208",
+      "recorded_sha256": "db54049e15db3e9a38232781f36e17d02dcc5ced1a6f7bd083af6abbfefc1d78",
+      "recorded_bytes": 1476935,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.4,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "boar_meat",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/02-boar-meat.png",
+      "git_blob": "551e5d784d988d486554b08c178d5d8215963239",
+      "recorded_sha256": "6a9d06d3a6553c6ac3ecf4a443f9fc4bf9de5926a5f62f55386991cd03b1f637",
+      "recorded_bytes": 1669651,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.4,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "rabbit_meat",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/03-rabbit-meat.png",
+      "git_blob": "a7c18a70b15bbdb8e2aedc751f80fdd09f5ee324",
+      "recorded_sha256": "38ca37808c4f8e16e090f25c92b1fec7a2fbba5db42e6621152c1e9df796a4e1",
+      "recorded_bytes": 1609278,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.2,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "moose_meat",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/04-moose-meat.png",
+      "git_blob": "efd01d83cae06d9d1dff5f6eba6959fdb1a8c18d",
+      "recorded_sha256": "fdacd8301b8ed9dbe2be1c1f08eddb2f30f988931454656873c2cf570df172e8",
+      "recorded_bytes": 1651023,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.2,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "squirrel_meat",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/05-squirrel-meat.png",
+      "git_blob": "313efa28de4cbc2950ea1b46ad6ef27e7649b499",
+      "recorded_sha256": "e5503021e745122f97b5e00c4e4665e924f2e145a987f0aecf6e33471bea8946",
+      "recorded_bytes": 1635640,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.4,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "wild_bear_meat",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/06-wild-bear-meat.png",
+      "git_blob": "d221d4e1e9b3409502c63884ff067362fc62de48",
+      "recorded_sha256": "e0aaab670cb14ac858bf0188bcbde965829baaec8d02e982138156d9a3fb669b",
+      "recorded_bytes": 1574420,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.5,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "wild_wolf_meat",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/07-wild-wolf-meat.png",
+      "git_blob": "570a0316e935f1492f914de9639db37bddb8a57f",
+      "recorded_sha256": "8355dfdd8138108ab0ea9e8780ceb6eae5ce3a55182b1abc9fabfeee8902444a",
+      "recorded_bytes": 1646236,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.5,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "wild_fox_meat",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/08-wild-fox-meat.png",
+      "git_blob": "390eef42d91cdea496f5dd8696b7ab3ba9f66e89",
+      "recorded_sha256": "6387f2532dfa7568012ffa18c6fc9adb034007ee24bacc08a1cb1221ce065c16",
+      "recorded_bytes": 1528852,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.3,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "lynx_meat",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/09-lynx-meat.png",
+      "git_blob": "0ed492a32019479b9be86c2109bde15385184c5d",
+      "recorded_sha256": "8f42dcf699d8194718a0459721ac8935a32f64a803c5620de5b1d9b59eed35c6",
+      "recorded_bytes": 1724068,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.4,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "wolverine_meat",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/10-wolverine-meat.png",
+      "git_blob": "0d75ef644cd1ef0819f37b43e6cfa57785856003",
+      "recorded_sha256": "3419cc2f6df2fb8f985b46033735956176358ab475634cb3bca2c816a3f7ad2d",
+      "recorded_bytes": 1568562,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.5,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "processed_meat_portion",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/11-processed-meat-portion.png",
+      "git_blob": "6c54f1be64b52ffd28a41e587060f8ee71c211d2",
+      "recorded_sha256": "0832968c2a7d3562b7a62caa5a4335c904b520edba7394b16d37e90b2010551e",
+      "recorded_bytes": 1614989,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.4,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "cooked_game_meat",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/12-cooked-game-meat.png",
+      "git_blob": "4734e01e81a8237e1316948f776ea74b73f85f01",
+      "recorded_sha256": "9e18c914d25135cac8bb574d462bc627ee21102cae844cd77dfe10567c6eab33",
+      "recorded_bytes": 1767320,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.4,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "dried_meat",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/13-dried-meat.png",
+      "git_blob": "33bf4a241a6d1df8b6f45bdf8d68f2cef8a980cc",
+      "recorded_sha256": "3afb830bf28725de6d5265b9675d6f9fe9dec1cc8770eace80812ef4498424da",
+      "recorded_bytes": 1658280,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.2,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "prepared_fish_fillet",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/14-prepared-fish-fillet.png",
+      "git_blob": "958895f09cbe60973c00046f389d0a1bcf33f438",
+      "recorded_sha256": "4013e8900958c4d31611fa663b3b4799bf71f164e150932d245eadf33b003ea2",
+      "recorded_bytes": 1681343,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.3,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "cooked_fish",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/15-cooked-fish.png",
+      "git_blob": "1ef176e0f029f0bcc7d249e0b3de632b9ddebbfa",
+      "recorded_sha256": "f05750afdd656c4aa2f9fae322bfea019ce55b1a6474d57a86cef14444a3cdb5",
+      "recorded_bytes": 1699586,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.5,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "dried_fish",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/16-dried-fish.png",
+      "git_blob": "a696fb34c3962ea95d156d68b7c5cc763486f61e",
+      "recorded_sha256": "9991f21d19cbaee9f76527bda21bd5add8c19ec468fdb77d9beffdd23a685b38",
+      "recorded_bytes": 1748028,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.3,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "timber_planks",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/17-timber-planks.png",
+      "git_blob": "a5228c65e84b1a617d821701680483a959694a41",
+      "recorded_sha256": "122191d8f989aa3b739e7db9e2d76e8907493034004105ee14a023917ebf62c5",
+      "recorded_bytes": 1603628,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.5,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "split_firewood",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/18-split-firewood.png",
+      "git_blob": "44d01752e80d31af1694f07b6e2cd378f0e803ac",
+      "recorded_sha256": "64a866fffab5200234265ae1217070432d0a9cb491c8a468042c14a00949f06f",
+      "recorded_bytes": 1709900,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.4,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "hide",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/19-hide.png",
+      "git_blob": "467d026b3e091a970a52d95352335c545bc65d42",
+      "recorded_sha256": "c368be726122e041832c5ded3f197a83e54a42b68b79958cf11f7d178616d1bb",
+      "recorded_bytes": 1694994,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.4,
+      "current_runtime_or_reference_approval_claimed": false
+    },
+    {
+      "art_id": "fur",
+      "repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/20-fur.png",
+      "git_blob": "de2c7f0f38f633e0336380337cdb42628ca1b026",
+      "recorded_sha256": "f056da43eb6845742d211ade47ecd1ac9441d610b3c6fa5ed4ecb91e3e2dc06d",
+      "recorded_bytes": 1536703,
+      "illustrated_views": 8,
+      "coverage_status": "existing_historical_concept_reference",
+      "historical_concept_score": 9.5,
+      "current_runtime_or_reference_approval_claimed": false
+    }
+  ],
+  "preserved_variant_or_reserve_art_ids": [
+    "deer_meat",
+    "boar_meat",
+    "rabbit_meat",
+    "moose_meat",
+    "squirrel_meat",
+    "wild_bear_meat",
+    "wild_wolf_meat",
+    "wild_fox_meat",
+    "lynx_meat",
+    "wolverine_meat",
+    "processed_meat_portion",
+    "dried_meat",
+    "prepared_fish_fillet",
+    "dried_fish",
+    "split_firewood"
+  ],
+  "coverage_boundaries": {
+    "art_presence_and_git_blob_custody_verified_for_all_33": true,
+    "all_33_reopened_for_new_visual_approval": false,
+    "pixels_inspected_in_this_audit": [
+      "metal_ore",
+      "coal",
+      "steel",
+      "fuel",
+      "relay_rover_selected_r2"
+    ],
+    "native_mesh_geometry_or_runtime_approval": false,
+    "current_rules_sources_override_only_relevant_old_design_choices": true
+  },
+  "runtime_read_only_observation": {
+    "commit": "fad3af0a45e94262737077ae513827b5042adb41",
+    "path": "HavenlineLevel1/field_inventory.gd",
+    "raw_kinds": [
+      "wood",
+      "stone",
+      "meat",
+      "coal",
+      "slate",
+      "metal"
+    ],
+    "raw_metal_title": "Metal ore",
+    "hand_goods_visible": [
+      "planks",
+      "blocks",
+      "meal",
+      "money"
+    ],
+    "new_vehicle_chain_runtime_implementation_claimed": false
+  },
+  "related_assets_not_in_resource_scope": [
+    {
+      "type": "acquisition_nodes",
+      "items": [
+        "iron-ore deposit specific source states",
+        "coal seam/deposit source states",
+        "reachable oil well/manual-pump source states"
+      ],
+      "note": "Existing ore/coal resource sheets do not prove complete native extraction-node states."
+    },
+    {
+      "type": "equipment",
+      "items": [
+        "coal smelter",
+        "hand metal bench",
+        "steel forge",
+        "assembly bench",
+        "manual oil pump",
+        "coal refinery"
+      ],
+      "note": "These are machines/worksites, not additional resource IDs. This nine-resource-art package does not claim their render or runtime completion."
+    }
+  ],
+  "do_not_invent": [
+    "iron_ore as second saved raw balance",
+    "rubber/copper/electronics required currencies",
+    "flour intermediate",
+    "leather intermediate",
+    "charcoal",
+    "extra steel plates/rods/nails inventory IDs",
+    "new world-specific ore families",
+    "unbounded relay currency",
+    "extra launch event token"
+  ],
+  "relay_shape_reference": {
+    "path": "Docs/Design/WorldVehicles/2026-11-27/renders/w10-relay-rover-r2.png",
+    "commit": "79973ab632a0916acec9a6ddad7895f1243a4713",
+    "observation": "Main cargo views show compact gray armored beveled box, top lifting bridge/recess, bright cyan horizontal window and dark side vents. Work-view illustration is more rounded; no shared-mesh equivalence is claimed.",
+    "new_design_boundary": "Standalone rear/side connectors and consistent full geometry are authored clarification of the module; preserve old vehicle artwork."
+  }
+}

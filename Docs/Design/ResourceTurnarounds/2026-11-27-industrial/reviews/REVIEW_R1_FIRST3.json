@@ -1,0 +1,176 @@
+{
+  "review_id": "HAVENLINE-resource-render-independent-critic-R1-first3",
+  "reviewer": "/root/resource_critic",
+  "reviewed_utc": "2026-11-28T02:37:40.959526+00:00",
+  "scope": "Independent actual-pixel critique of authored raster eight-direction concept sheets. Not an editable 3D, native gameplay, animation, economy, device or reference-video approval.",
+  "threshold": "Pass strictly above 9.0 and every mandatory scoped check passed. No score averaging.",
+  "source_review": "INITIAL_REFERENCE_REVIEW.json",
+  "reviews": [
+    {
+      "resource_id": "iron_bars",
+      "identity": {
+        "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-resource-gap-fill/Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/01-iron-bars-r1.png",
+        "sha256": "b0daf5fff1302d0729424edf89530c6415196fd8f3420b2cb4315f1c5d11a568",
+        "bytes": 1546534,
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB"
+      },
+      "score": 8.0,
+      "verdict": "REJECT_REPAIR_REQUIRED",
+      "checks": {
+        "all_eight_cells_present": true,
+        "all_eight_angle_labels_readable": true,
+        "full_silhouettes_with_safe_margins": true,
+        "unintended_props_or_obstructing_text": false,
+        "raster_concept_scope_only": true,
+        "native_3d_or_gameplay_approval": false,
+        "correct_view_azimuths": false,
+        "material_identity_unambiguous": false,
+        "cross_sheet_typography_consistent": false
+      },
+      "defects": [
+        {
+          "id": "R1-IRON-01",
+          "gate": "R03/R04",
+          "severity": "mandatory",
+          "observation": "The rear-left 225 degree panel has its square end at the left and long axis rising to the right, matching 135/315. For this front-long-face symmetric bar, 225 must have the opposite diagonal, matching the 45 degree geometric projection.",
+          "repair": "Regenerate the 225 degree view with the long face on the left and left-end square face on the right, long axis descending to the right."
+        },
+        {
+          "id": "R1-IRON-02",
+          "gate": "R05/R06",
+          "severity": "mandatory",
+          "observation": "Large polygonal fracture-like facets over the broad faces and warm bronze bevels make this read as a carved dark stone block. Its rectangular shape differentiates it from the existing recessed-top steel ingot, but the iron material is insufficiently clear.",
+          "repair": "Use continuous dark iron satin faces, smaller subtle forged surface marks, and restrained cool metallic highlights, retaining the long square-section forged bar."
+        },
+        {
+          "id": "R1-IRON-03",
+          "gate": "R05",
+          "severity": "consistency",
+          "observation": "Title and angle labels use a prominent serif face unlike the established modern sans treatment and the neighboring new sheets.",
+          "repair": "Use the same bold sans-serif ivory type treatment as the set."
+        }
+      ],
+      "positive_observations": [
+        "One bar in every cell; no count drift.",
+        "Readable labels and full object framing.",
+        "Proportions and identity are visually distinct from existing squat polished steel ingot."
+      ],
+      "inspected_evidence": [
+        "Full 1536x1024 sheet",
+        "r1/01-iron-bars-r1-rear_left_225.png"
+      ]
+    },
+    {
+      "resource_id": "sheet_metal",
+      "identity": {
+        "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-resource-gap-fill/Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/02-sheet-metal-r1.png",
+        "sha256": "da34a69696264ff1039f56c76120c8a1a62492e2444c41f0871dc5b59c9b265b",
+        "bytes": 1636308,
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB"
+      },
+      "score": 8.6,
+      "verdict": "REJECT_REPAIR_REQUIRED",
+      "checks": {
+        "all_eight_cells_present": true,
+        "all_eight_angle_labels_readable": true,
+        "full_silhouettes_with_safe_margins": true,
+        "unintended_props_or_obstructing_text": false,
+        "raster_concept_scope_only": true,
+        "native_3d_or_gameplay_approval": false,
+        "correct_view_azimuths": false,
+        "material_identity_unambiguous": true,
+        "cross_sheet_typography_consistent": true
+      },
+      "defects": [
+        {
+          "id": "R1-SHEET-01",
+          "gate": "R03/R04",
+          "severity": "mandatory",
+          "observation": "Rear-left 225 degrees repeats the rising-right diagonal of rear-right 135/front-left 315. With the same unmarked rectangular plate, its geometry should match the descending-right diagonal of 45 degrees instead.",
+          "repair": "Regenerate only the 225 degree object with the correct opposite diagonal while preserving the flat thin single-panel design, material and label."
+        }
+      ],
+      "positive_observations": [
+        "All views show one coherent thin sheet, not a thick slab or stack.",
+        "Brushed silver material reads clearly as processed metal.",
+        "Full silhouette and clean labels, all eight cells present."
+      ],
+      "inspected_evidence": [
+        "Full 1536x1024 sheet",
+        "r1/02-sheet-metal-r1-front_right_45.png",
+        "r1/02-sheet-metal-r1-rear_left_225.png"
+      ]
+    },
+    {
+      "resource_id": "mechanical_parts",
+      "identity": {
+        "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-resource-gap-fill/Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/03-mechanical-parts-r1.png",
+        "sha256": "b30c7e2b6ac751a2089adc3faa98cfaa8272d04148fdc01a11d4c014f0ceedf5",
+        "bytes": 1741799,
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB"
+      },
+      "score": 8.2,
+      "verdict": "REJECT_REPAIR_REQUIRED",
+      "checks": {
+        "all_eight_cells_present": true,
+        "all_eight_angle_labels_readable": true,
+        "full_silhouettes_with_safe_margins": true,
+        "unintended_props_or_obstructing_text": false,
+        "raster_concept_scope_only": true,
+        "native_3d_or_gameplay_approval": false,
+        "correct_view_azimuths": false,
+        "major_part_geometry_consistent": false,
+        "material_identity_unambiguous": true,
+        "eight_tooth_count_supported": true,
+        "cross_sheet_typography_consistent": true
+      },
+      "defects": [
+        {
+          "id": "R1-GEAR-01",
+          "gate": "R03/R04",
+          "severity": "mandatory",
+          "observation": "Rear-left 225 degrees shows its face aimed the same direction as rear-right 135/front-left 315, instead of the opposite 45-degree projection for the symmetrically faced gear.",
+          "repair": "Correct the 225 degree projection to the 45 degree geometric direction, preserving the opposite rear face and matching symmetric construction."
+        },
+        {
+          "id": "R1-GEAR-02",
+          "gate": "R04",
+          "severity": "mandatory",
+          "observation": "Front and rear panels both show a projecting central hub, but right 90 degrees shows a left-only hub and left 270 degrees a right-only hub. At a true edge view both opposite-face hub extensions must be visible; this is not ordinary occlusion.",
+          "repair": "Render both 90 and 270 profiles with matching hub extensions on both sides of the gear disk, consistent with the front/rear and 3/4 face construction."
+        }
+      ],
+      "positive_observations": [
+        "Eight chunky teeth are readable in front and rear; major silhouette and bore are clear.",
+        "Blue-gray body and silver machined surfaces fit the established art language.",
+        "Gear is recognizably a component token, with no stray tray or unrelated props."
+      ],
+      "inspected_evidence": [
+        "Full 1536x1024 sheet",
+        "r1/03-mechanical-parts-r1-right_profile_90.png",
+        "r1/03-mechanical-parts-r1-left_profile_270.png",
+        "r1/03-mechanical-parts-r1-rear_180.png"
+      ]
+    }
+  ],
+  "package_gates": {
+    "coverage_9_of_9": "PENDING",
+    "owner_icon_exact_selection_package": "PENDING",
+    "old_33_frozen_blobs_unchanged": "PENDING",
+    "remote_git_complete_and_no_lfs_pointer": "PENDING"
+  },
+  "overall_verdict": "NO_NEW_SHEET_APPROVED_IN_THIS_REVIEW",
+  "retest_required": "Fresh actual-pixel inspection and exact SHA256 for each repaired candidate. Preserve these source attempts and this raw record."
+}

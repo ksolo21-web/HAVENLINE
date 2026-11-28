@@ -1,0 +1,178 @@
+{
+  "review_id": "HAVENLINE-resource-render-independent-critic-R2-04-06",
+  "reviewer": "/root/resource_critic",
+  "reviewed_utc": "2026-11-28T02:50:18.680475+00:00",
+  "scope": "Fresh actual-pixel full-sheet and native-detail retest for authored raster concepts. Native/reference/runtime/device gates remain unclaimed.",
+  "threshold": "Strictly above9.0 with all mandatory scoped checks passed.",
+  "prior_raw_review": "REVIEW_R1_04_06.json",
+  "reviews": [
+    {
+      "resource_id": "drive_assembly",
+      "identity": {
+        "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-resource-gap-fill/Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/04-drive-assembly-r2.png",
+        "sha256": "fa0bc395580697bb3933039d3d61d8a2d0cbf5eaf407cc9d9fa5916e3ef2d118",
+        "bytes": 1676519,
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB"
+      },
+      "score": 8.7,
+      "verdict": "REJECT_REPAIR_REQUIRED",
+      "checks": {
+        "all_eight_cells_present": true,
+        "all_eight_angle_labels_readable": true,
+        "full_silhouettes_with_safe_margins": true,
+        "material_identity_unambiguous": true,
+        "unintended_props_or_obstructing_text": false,
+        "cross_sheet_typography_consistent": true,
+        "raster_concept_scope_only": true,
+        "native_3d_or_gameplay_approval": false,
+        "correct_view_azimuths": true,
+        "major_part_count_consistent": false,
+        "two_shafts_four_cover_bolts_and_corner_feet_consistent": true
+      },
+      "resolved_defects": [
+        "R1-DRIVE-01",
+        "R1-DRIVE-02"
+      ],
+      "open_mandatory_defects": [
+        {
+          "id": "R2-DRIVE-01",
+          "gate": "R04",
+          "severity": "mandatory",
+          "observation": "Both repaired long casing walls in135 and225 have four vertical raised ribs. Front0, rear180,45 and315 have three. Native crops confirm these are four separate ribs, not borders.",
+          "repair": "In135 and225 only, change each long casing wall to exactly three evenly spaced vertical ribs matching the other views. Keep corrected orientation, housing proportion, two shafts, four cover bolts and feet."
+        }
+      ],
+      "positive_observations": [
+        "Both defective rear azimuths are now corrected.",
+        "Metal, cover, shafts and full framing remain coherent."
+      ],
+      "inspected_evidence": [
+        "Full1536x1024 R2 sheet",
+        "r2/04-drive-assembly-r2-rear_right_135.png",
+        "r2/04-drive-assembly-r2-rear_left_225.png"
+      ]
+    },
+    {
+      "resource_id": "traction_kit",
+      "display_name": "Mobility assembly",
+      "identity": {
+        "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-resource-gap-fill/Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/05-mobility-assembly-r2.png",
+        "sha256": "69cfd1e68e6bb6a5618745c49ee2d29b0b11657a7d4eb57c2f2bd63594953eaf",
+        "bytes": 1772081,
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB"
+      },
+      "score": 10.0,
+      "verdict": "PASS_SCOPED_RASTER_CONCEPT",
+      "checks": {
+        "all_eight_cells_present": true,
+        "all_eight_angle_labels_readable": true,
+        "full_silhouettes_with_safe_margins": true,
+        "material_identity_unambiguous": true,
+        "unintended_props_or_obstructing_text": false,
+        "cross_sheet_typography_consistent": true,
+        "raster_concept_scope_only": true,
+        "native_3d_or_gameplay_approval": false,
+        "correct_view_azimuths": true,
+        "major_part_count_and_geometry_consistent": true,
+        "six_hub_bolts_consistent_on_outward_faces": true,
+        "stable_grounding_supported": true
+      },
+      "resolved_defects": [
+        "R1-MOBILITY-01"
+      ],
+      "open_mandatory_defects": [],
+      "observations": [
+        "225 now shares the correct45 geometric direction with the near hub on image right.",
+        "Two flanges, one axle, one orange center sleeve, one navy bracket and one timber sleeper remain stable.",
+        "Six bolts on outward hub faces are coherent through facing and oblique views; ordinary far-hub occlusion is supported.",
+        "The component remains visibly distinct from both the single gear and closed drive gearbox."
+      ],
+      "inspected_evidence": [
+        "Full1536x1024 R2 sheet",
+        "r2/05-mobility-assembly-r2-rear_left_225.png"
+      ],
+      "scope_limit": "Authored raster concept only; no compatibility proof for native wheel/track/rail/marine systems."
+    },
+    {
+      "resource_id": "crude_oil",
+      "identity": {
+        "path": "/workspace/scratch/e0eb4eeed6da/HAVENLINE-resource-gap-fill/Docs/Design/ResourceTurnarounds/2026-11-27-industrial/attempts/06-crude-oil-r2.png",
+        "sha256": "001047121f97ffcbbc32c55617728f796d276790b046c2403afbdadcfa36e702",
+        "bytes": 1746547,
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB"
+      },
+      "score": 8.9,
+      "verdict": "REJECT_REPAIR_REQUIRED",
+      "checks": {
+        "all_eight_cells_present": true,
+        "all_eight_angle_labels_readable": true,
+        "full_silhouettes_with_safe_margins": true,
+        "material_identity_unambiguous": true,
+        "unintended_props_or_obstructing_text": false,
+        "cross_sheet_typography_consistent": true,
+        "raster_concept_scope_only": true,
+        "native_3d_or_gameplay_approval": false,
+        "drop_label_orientation_correct": true,
+        "major_part_count_consistent": true,
+        "bung_tracks_same_physical_location": false,
+        "distinct_from_existing_fuel": true
+      },
+      "resolved_defects": [
+        "R1-CRUDE-01"
+      ],
+      "partially_resolved_defects": [
+        {
+          "id": "R1-CRUDE-02",
+          "corrected_angles": [
+            90,
+            135,
+            270,
+            315
+          ],
+          "remaining_angle": 225
+        }
+      ],
+      "open_mandatory_defects": [
+        {
+          "id": "R2-CRUDE-01",
+          "gate": "R04",
+          "severity": "mandatory",
+          "observation": "The225 bung now lies at the right/near part of the lid ellipse, approximately the same position as270. It must be on the far-right arc because the bung is attached to the front physical side opposite the rear-facing225 label. Native lid crops of135,225 and270 make this remaining depth error explicit.",
+          "repair": "Move the225 bung onto the far-right arc, mirroring the far-left location in135. Approximate image-space cap center target is x639,y578 instead of the current x653,y595. Preserve one bung, the corrected image-left rear label and all other cells."
+        }
+      ],
+      "positive_observations": [
+        "225 rear label now appears correctly on the image-left side.",
+        "The other seven bung positions now track the front-side radius coherently.",
+        "Container silhouette, band/hoop counts, materials and distinction from fuel remain clear."
+      ],
+      "inspected_evidence": [
+        "Full1536x1024 R2 sheet",
+        "r2/06-crude-oil-r2-rear_right_135_lid.png",
+        "r2/06-crude-oil-r2-rear_left_225_lid.png",
+        "r2/06-crude-oil-r2-left_270_lid.png"
+      ]
+    }
+  ],
+  "approved_resource_ids_in_batch": [
+    "traction_kit"
+  ],
+  "pending_resource_ids_in_batch": [
+    "drive_assembly",
+    "crude_oil"
+  ],
+  "all_nine_package_approved": false,
+  "retest_required": "Fresh exact-byte review of drive135/225 rib-count repair and crude225 far-arc bung repair. Preserve R1/R2 attempts and raw reports."
+}

@@ -1,0 +1,157 @@
+{
+  "scope": "Six new static machine concept render families",
+  "planning_status": "STATIC_ART_AND_EXPORT_REVIEW_COMPLETE",
+  "static_requirements": [
+    {
+      "id": "S01",
+      "requirement": "All six source producer IDs mapped to one selected machine design each.",
+      "status": "PASS",
+      "evidence": [
+        "reviews/MACHINE_FINAL_REVIEW.json",
+        "MACHINE_SELECTED_MANIFEST.json",
+        "PROCESSING_MACHINE_MAP.json",
+        "MATERIAL_GRAPH_CHECK.json"
+      ]
+    },
+    {
+      "id": "S02",
+      "requirement": "Actual selected sheets inspected in full; front, rear, both sides and useful obliques visible with matching orientation labels.",
+      "status": "PASS",
+      "evidence": [
+        "reviews/MACHINE_FINAL_REVIEW.json",
+        "MACHINE_SELECTED_MANIFEST.json"
+      ]
+    },
+    {
+      "id": "S03",
+      "requirement": "Machine geometry, port side, handle, chute, vessel and support count remain coherent across views.",
+      "status": "PASS",
+      "evidence": [
+        "reviews/MACHINE_FINAL_REVIEW.json",
+        "MACHINE_SELECTED_MANIFEST.json"
+      ]
+    },
+    {
+      "id": "S04",
+      "requirement": "Blue/orange, rounded stylized forms, warm timber/metal and snow treatment match relevant approved Havenline references.",
+      "status": "PASS",
+      "evidence": [
+        "reviews/MACHINE_FINAL_REVIEW.json",
+        "MACHINE_SELECTED_MANIFEST.json"
+      ]
+    },
+    {
+      "id": "S05",
+      "requirement": "Inputs and outputs have the selected resource identities; different liquids/components remain distinguishable.",
+      "status": "PASS",
+      "evidence": [
+        "reviews/MACHINE_FINAL_REVIEW.json",
+        "MACHINE_SELECTED_MANIFEST.json"
+      ]
+    },
+    {
+      "id": "S06",
+      "requirement": "Manual worker access and typed conveyor attachment intent are visible and physically plausible.",
+      "status": "PASS",
+      "evidence": [
+        "reviews/MACHINE_FINAL_REVIEW.json",
+        "MACHINE_SELECTED_MANIFEST.json"
+      ]
+    },
+    {
+      "id": "S07",
+      "requirement": "Coal smelter is distinguishable from central hearth and steel forge; no disguised duplicate family.",
+      "status": "PASS",
+      "evidence": [
+        "reviews/MACHINE_FINAL_REVIEW.json",
+        "MACHINE_SELECTED_MANIFEST.json"
+      ]
+    },
+    {
+      "id": "S08",
+      "requirement": "Hand metal bench and assembly bench keep their two selectable recipes without adding required buildings or materials.",
+      "status": "PASS",
+      "evidence": [
+        "reviews/MACHINE_FINAL_REVIEW.json",
+        "MACHINE_SELECTED_MANIFEST.json",
+        "PROCESSING_MACHINE_MAP.json",
+        "MATERIAL_GRAPH_CHECK.json"
+      ]
+    },
+    {
+      "id": "S09",
+      "requirement": "Oil pump is manually driven and outdoors; refinery has separate crude/coal input and fuel output.",
+      "status": "PASS",
+      "evidence": [
+        "reviews/MACHINE_FINAL_REVIEW.json",
+        "MACHINE_SELECTED_MANIFEST.json",
+        "PROCESSING_MACHINE_MAP.json",
+        "MATERIAL_GRAPH_CHECK.json"
+      ]
+    },
+    {
+      "id": "S10",
+      "requirement": "At least one useful port/tool closeup or readable full-resolution detail per machine; no obscured essential interfaces.",
+      "status": "PASS",
+      "evidence": [
+        "reviews/MACHINE_FINAL_REVIEW.json",
+        "MACHINE_SELECTED_MANIFEST.json"
+      ]
+    },
+    {
+      "id": "S11",
+      "requirement": "Independent critic evidence is bound to exact selected files, includes per-dimension scores, and all mandatory checks pass.",
+      "status": "PASS",
+      "evidence": [
+        "reviews/MACHINE_FINAL_REVIEW.json",
+        "MACHINE_SELECTED_MANIFEST.json"
+      ]
+    },
+    {
+      "id": "S12",
+      "requirement": "All originals/rejects/prompts/reference bindings retained; static review does not claim runtime or motion approval.",
+      "status": "PASS",
+      "evidence": [
+        "reviews/MACHINE_FINAL_REVIEW.json",
+        "MACHINE_SELECTED_MANIFEST.json",
+        "GENERATION_PROVENANCE.json",
+        "EVIDENCE_CUSTODY.json"
+      ]
+    }
+  ],
+  "future_implementation_checks": [
+    "Complete idle/start/work/output-full/jammed/damaged/repair or replacement transitions in real playback",
+    "No clipping at hands, tools, belts or resource transfer points",
+    "Every recipe consumes inputs and produces outputs exactly once across save/interruption",
+    "Resource source renewal and walkable fuel-free bootstrap in actual World1",
+    "Camp placement preserves initial scale, centered furnace and both usable gates",
+    "Relevant native device performance and accessibility evidence"
+  ],
+  "current_final_policy": "Per applicable reference dimension >=9.9 unrounded, stronger exact10 retained, all mandatory checks passed; absent evidence blocks approval.",
+  "reviewer": "/root/independent_critic",
+  "review_scope": "Static illustrated concept sheets and exact-file PDF/PNG export; no native model, animation or runtime implementation approval.",
+  "delivery_requirements": [
+    {
+      "id": "D01",
+      "requirement": "Nine resource sheets and six machine sheets retained as exact independently approved bytes.",
+      "status": "PASS",
+      "evidence": [
+        "PACKAGE_VALIDATION.json"
+      ]
+    },
+    {
+      "id": "D02",
+      "requirement": "All18 PDF pages rendered and independently inspected;15 ZIP images and15 embedded PDF images match originals.",
+      "status": "PASS",
+      "evidence": [
+        "reviews/EXPORT_FINAL_REVIEW.json"
+      ]
+    },
+    {
+      "id": "D03",
+      "requirement": "Isolated art branch published with preserved source tree and exact artifact readback.",
+      "status": "PENDING_REMOTE_PUBLICATION",
+      "evidence": []
+    }
+  ]
+}

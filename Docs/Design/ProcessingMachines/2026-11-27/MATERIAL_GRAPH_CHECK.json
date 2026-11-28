@@ -1,0 +1,69 @@
+{
+  "scope": "Declared material graph only; does not prove physical paths, game placement, resource renewal, quantities/balance or runtime implementation",
+  "source_sha256": "75400530bc38b937a697d0a88091c0c60373b8b94913a3c818083af7e68cf555",
+  "checks": {
+    "new_machine_count_six": true,
+    "all_nine_source_recipes_have_producer": true,
+    "all_source_recipes_have_attainable_inputs": true,
+    "all_producer_build_bills_acyclic": true,
+    "first_oil_uses_no_fuel": true,
+    "all_truck_bill_resources_in_attainable_set": true
+  },
+  "steps": [
+    {
+      "producer": "camp_cooker",
+      "construction_inputs_reachable": true,
+      "prerequisite_producers_reachable": true,
+      "fuel_free_bootstrap": true
+    },
+    {
+      "producer": "saw_bench",
+      "construction_inputs_reachable": true,
+      "prerequisite_producers_reachable": true,
+      "fuel_free_bootstrap": true
+    },
+    {
+      "producer": "quarry_drill",
+      "construction_inputs_reachable": true,
+      "prerequisite_producers_reachable": true,
+      "fuel_free_bootstrap": true
+    },
+    {
+      "producer": "coal_smelter",
+      "construction_inputs_reachable": true,
+      "prerequisite_producers_reachable": true,
+      "fuel_free_bootstrap": true
+    },
+    {
+      "producer": "hand_metal_bench",
+      "construction_inputs_reachable": true,
+      "prerequisite_producers_reachable": true,
+      "fuel_free_bootstrap": true
+    },
+    {
+      "producer": "steel_forge",
+      "construction_inputs_reachable": true,
+      "prerequisite_producers_reachable": true,
+      "fuel_free_bootstrap": true
+    },
+    {
+      "producer": "assembly_bench",
+      "construction_inputs_reachable": true,
+      "prerequisite_producers_reachable": true,
+      "fuel_free_bootstrap": true
+    },
+    {
+      "producer": "manual_oil_pump",
+      "construction_inputs_reachable": true,
+      "prerequisite_producers_reachable": true,
+      "fuel_free_bootstrap": true
+    },
+    {
+      "producer": "coal_refinery",
+      "construction_inputs_reachable": true,
+      "prerequisite_producers_reachable": true,
+      "fuel_free_bootstrap": true
+    }
+  ],
+  "result": "PASS"
+}

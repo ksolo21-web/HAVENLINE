@@ -1,0 +1,440 @@
+{
+  "schema_version": 1,
+  "scope": "Current selected identity families and authored processing routes. No new IDs, ratios, prices or runtime implementation.",
+  "source_chain": {
+    "path": "Docs/Design/ResourceTurnarounds/2026-11-27-completion/sources/RESOURCE_CHAINS.json",
+    "bytes": 24951,
+    "sha256": "75400530bc38b937a697d0a88091c0c60373b8b94913a3c818083af7e68cf555",
+    "git_blob_sha1": "4397f5039fe379fea54dd73f0628de39d60b25ba"
+  },
+  "family_count": 27,
+  "families": [
+    {
+      "id": "wood",
+      "display_name": "Wood",
+      "kind": "raw",
+      "source_or_process": "Registered trees and timber sources.",
+      "inputs": [],
+      "uses": [
+        "planks",
+        "bootstrap producers",
+        "furnace recovery"
+      ],
+      "art_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/01-wood.png",
+      "status": "live_build14",
+      "implemented_by_this_package": false
+    },
+    {
+      "id": "stone",
+      "display_name": "Stone",
+      "kind": "raw",
+      "source_or_process": "Registered stone deposits.",
+      "inputs": [],
+      "uses": [
+        "blocks",
+        "bootstrap producers",
+        "recovery construction"
+      ],
+      "art_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/02-stone.png",
+      "status": "live_build14",
+      "implemented_by_this_package": false
+    },
+    {
+      "id": "metal",
+      "display_name": "Iron ore",
+      "kind": "raw",
+      "source_or_process": "Registered ore mining.",
+      "inputs": [],
+      "uses": [
+        "iron_bars",
+        "retained legacy raw bills"
+      ],
+      "art_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/05-metal-ore.png",
+      "status": "live_build14_id_new_display_requires_catalog_migration",
+      "implemented_by_this_package": false
+    },
+    {
+      "id": "coal",
+      "display_name": "Coal",
+      "kind": "raw",
+      "source_or_process": "Registered coal mining.",
+      "inputs": [],
+      "uses": [
+        "iron smelting",
+        "steel refining",
+        "oil refining"
+      ],
+      "art_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/13-coal.png",
+      "status": "live_build14",
+      "implemented_by_this_package": false
+    },
+    {
+      "id": "steel",
+      "display_name": "Steel",
+      "kind": "processed",
+      "source_or_process": "steel_forge",
+      "inputs": [
+        "iron_bars",
+        "coal"
+      ],
+      "uses": [
+        "blades and reinforced chassis",
+        "drive assemblies",
+        "traction assemblies"
+      ],
+      "art_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/04-steel.png",
+      "status": "previously_authored_not_live_build14",
+      "implemented_by_this_package": false
+    },
+    {
+      "id": "slate",
+      "display_name": "Slate",
+      "kind": "raw",
+      "source_or_process": "Registered slate deposits.",
+      "inputs": [],
+      "uses": [
+        "weatherproof roofs",
+        "protected work surfaces"
+      ],
+      "art_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/03-slate.png",
+      "status": "live_build14",
+      "implemented_by_this_package": false
+    },
+    {
+      "id": "planks",
+      "display_name": "Planks",
+      "kind": "processed",
+      "source_or_process": "saw_bench",
+      "inputs": [
+        "wood"
+      ],
+      "uses": [
+        "garage structure",
+        "cargo floor",
+        "traction assembly",
+        "producer frames"
+      ],
+      "art_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/17-timber-planks.png",
+      "status": "live_build14",
+      "implemented_by_this_package": false
+    },
+    {
+      "id": "fuel",
+      "display_name": "Fuel",
+      "kind": "processed",
+      "source_or_process": "coal_refinery",
+      "inputs": [
+        "crude_oil",
+        "coal"
+      ],
+      "uses": [
+        "funded vehicle tank",
+        "ordinary refuelling",
+        "eligible future powered-work jobs"
+      ],
+      "art_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/06-fuel.png",
+      "status": "existing_design_salvage_id_new_refining_route",
+      "implemented_by_this_package": false
+    },
+    {
+      "id": "meat",
+      "display_name": "Meat",
+      "kind": "raw",
+      "source_or_process": "Retain current hostile-wolf drops and select Tundra Stag hunting; owned companions are never valid targets. Preserve all already-owned generic meat. Boar remains art reserve.",
+      "inputs": [],
+      "uses": [
+        "Cooked meal service and explicit rescue/roost supplies."
+      ],
+      "art_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/07-meat.png",
+      "status": "SELECT_SHARED_RAW_FOOD",
+      "implemented_by_this_package": false
+    },
+    {
+      "id": "meal",
+      "display_name": "Meal",
+      "kind": "processed",
+      "source_or_process": "camp_cooker",
+      "inputs": [
+        "meat"
+      ],
+      "uses": [
+        "Customer service and selected named supply objectives."
+      ],
+      "art_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/12-cooked-game-meat.png",
+      "status": "SELECT_PROCESSED_FOOD",
+      "implemented_by_this_package": false
+    },
+    {
+      "id": "fish",
+      "display_name": "Fish",
+      "kind": "raw",
+      "source_or_process": "Authored automatic fishing action.",
+      "inputs": [],
+      "uses": [
+        "Whole cooked-fish service branch."
+      ],
+      "art_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/08-fish.png",
+      "status": "SELECT_RAW_FOOD_T16",
+      "implemented_by_this_package": false
+    },
+    {
+      "id": "cooked_fish",
+      "display_name": "Cooked Fish",
+      "kind": "processed",
+      "source_or_process": "existing_intake_and_cooker_T16",
+      "inputs": [
+        "fish"
+      ],
+      "uses": [
+        "Eligible customer orders."
+      ],
+      "art_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/15-cooked-fish.png",
+      "status": "SELECT_PROCESSED_FOOD_T16",
+      "implemented_by_this_package": false
+    },
+    {
+      "id": "wheat",
+      "display_name": "Wheat",
+      "kind": "raw",
+      "source_or_process": "Registered crop harvesting.",
+      "inputs": [],
+      "uses": [
+        "Direct bread-like production input."
+      ],
+      "art_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/09-wheat.png",
+      "status": "SELECT_CROP_T19",
+      "implemented_by_this_package": false
+    },
+    {
+      "id": "bread",
+      "display_name": "Bread",
+      "kind": "processed",
+      "source_or_process": "existing_wheat_processor_T19",
+      "inputs": [
+        "wheat"
+      ],
+      "uses": [
+        "Eligible customer and mixed food orders."
+      ],
+      "art_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/10-cooked-food.png",
+      "status": "SELECT_AUTHORED_PRODUCT_T19",
+      "implemented_by_this_package": false
+    },
+    {
+      "id": "hide",
+      "display_name": "Hide",
+      "kind": "raw_byproduct",
+      "source_or_process": "Selected Tundra Stag byproduct; source/drop flags and quantities require authored evidence.",
+      "inputs": [],
+      "uses": [
+        "Harness construction and elective retrofitting for visible working equipment."
+      ],
+      "art_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/19-hide.png",
+      "status": "SELECT_BYPRODUCT_WHEN_SOURCE_REGISTERED",
+      "implemented_by_this_package": false
+    },
+    {
+      "id": "fur",
+      "display_name": "Fur",
+      "kind": "raw_byproduct",
+      "source_or_process": "Selected winter-stag byproduct or ordinary earned supply order; no owned-pet harvesting.",
+      "inputs": [],
+      "uses": [
+        "Specific cold-work clothing and shelter fittings."
+      ],
+      "art_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/20-fur.png",
+      "status": "SELECT_BYPRODUCT_WHEN_SOURCE_REGISTERED",
+      "implemented_by_this_package": false
+    },
+    {
+      "id": "money",
+      "display_name": "Cash",
+      "kind": "currency",
+      "source_or_process": "Exactly-once fulfilled service orders; custody in till, pocket or house.",
+      "inputs": [],
+      "uses": [
+        "Station improvements, mechanical add-ons, transport construction/services and optional efficiency specialization."
+      ],
+      "art_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/11-money.png",
+      "status": "ONE_ORDINARY_CURRENCY",
+      "implemented_by_this_package": false
+    },
+    {
+      "id": "cargo",
+      "display_name": "Cargo",
+      "kind": "container_presentation",
+      "source_or_process": "Typed goods grouped for physical transfer.",
+      "inputs": [],
+      "uses": [
+        "Preserve transport custody and legibility."
+      ],
+      "art_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/12-cargo.png",
+      "status": "CONTAINER_NOT_NEW_ECONOMY_ITEM",
+      "implemented_by_this_package": false
+    },
+    {
+      "id": "iron_bars",
+      "display_name": "Iron bars",
+      "kind": "processed",
+      "source_or_process": "coal_smelter",
+      "inputs": [
+        "metal",
+        "coal"
+      ],
+      "uses": [
+        "sheet metal",
+        "parts",
+        "steel",
+        "axles and producer frames"
+      ],
+      "art_path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/iron-bars.png",
+      "status": "new_authored_requires_registration",
+      "implemented_by_this_package": false
+    },
+    {
+      "id": "sheet_metal",
+      "display_name": "Sheet metal",
+      "kind": "processed",
+      "source_or_process": "hand_metal_bench",
+      "inputs": [
+        "iron_bars"
+      ],
+      "uses": [
+        "vehicle body panels",
+        "garage door",
+        "refinery casing"
+      ],
+      "art_path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/sheet-metal.png",
+      "status": "new_authored_requires_registration",
+      "implemented_by_this_package": false
+    },
+    {
+      "id": "mechanical_parts",
+      "display_name": "Mechanical parts",
+      "kind": "component",
+      "source_or_process": "hand_metal_bench",
+      "inputs": [
+        "iron_bars"
+      ],
+      "uses": [
+        "drive assemblies",
+        "traction assemblies",
+        "garage shutter",
+        "oil pump/refinery"
+      ],
+      "art_path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/mechanical-parts.png",
+      "status": "new_authored_requires_registration",
+      "implemented_by_this_package": false
+    },
+    {
+      "id": "drive_assembly",
+      "display_name": "Drive assembly",
+      "kind": "component",
+      "source_or_process": "assembly_bench",
+      "inputs": [
+        "steel",
+        "mechanical_parts",
+        "sheet_metal"
+      ],
+      "uses": [
+        "vehicle drive systems",
+        "powered lift/hauler rebuilds"
+      ],
+      "art_path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/drive-assembly.png",
+      "status": "new_authored_requires_registration",
+      "implemented_by_this_package": false
+    },
+    {
+      "id": "traction_kit",
+      "display_name": "Mobility assembly",
+      "kind": "component",
+      "source_or_process": "assembly_bench",
+      "inputs": [
+        "steel",
+        "mechanical_parts",
+        "planks"
+      ],
+      "uses": [
+        "wheel or track modules",
+        "captive rail bogies",
+        "marine propulsion fittings"
+      ],
+      "art_path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/mobility-assembly.png",
+      "status": "new_authored_requires_registration",
+      "implemented_by_this_package": false
+    },
+    {
+      "id": "crude_oil",
+      "display_name": "Crude oil",
+      "kind": "raw",
+      "source_or_process": "manual_oil_pump",
+      "inputs": [],
+      "uses": [
+        "fuel refining"
+      ],
+      "art_path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/crude-oil.png",
+      "status": "new_authored_requires_registration",
+      "implemented_by_this_package": false
+    },
+    {
+      "id": "blocks",
+      "display_name": "Stone blocks",
+      "kind": "processed",
+      "source_or_process": "quarry_drill",
+      "inputs": [
+        "stone"
+      ],
+      "uses": [
+        "garage foundations",
+        "smelter/refinery bases",
+        "safe route structures"
+      ],
+      "art_path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/stone-blocks.png",
+      "status": "live_build14",
+      "implemented_by_this_package": false
+    },
+    {
+      "id": "premium_gems",
+      "display_name": "Gems",
+      "kind": "currency",
+      "source_or_process": "Server-authoritative fixed disclosed grants/purchases.",
+      "inputs": [],
+      "uses": [
+        "Fixed optional catalogue content/value, separated from challenge and mandatory progress."
+      ],
+      "art_path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/gems.png",
+      "status": "SELECTED_SINGLE_PREMIUM_ID",
+      "implemented_by_this_package": false
+    },
+    {
+      "id": "relay_component",
+      "display_name": "Relay component",
+      "kind": "finite_project_object",
+      "source_or_process": "finite_relay_recovery_replacement_worksite_future",
+      "inputs": [],
+      "uses": [
+        "Complete the final relay connection under T52."
+      ],
+      "art_path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/relay-component.png",
+      "status": "FINITE_FINAL_REGION_PROJECT_OBJECT",
+      "implemented_by_this_package": false
+    }
+  ],
+  "machines_requiring_new_sheets": [
+    "coal_smelter",
+    "hand_metal_bench",
+    "steel_forge",
+    "assembly_bench",
+    "manual_oil_pump",
+    "coal_refinery"
+  ],
+  "route_caveats": [
+    "The listed source stock and recipes are preserved design selections, not a new runtime claim.",
+    "VehicleEconomy supersedes the older direct metal+coal steel wording through iron_bars; saved ore ID remains metal.",
+    "Hand metal bench has two recipes, not two compulsory intermediate wallets.",
+    "Manual pump and coal refinery bootstrap without vehicle fuel.",
+    "No machine manufactures ordinary money, premium Gems or cargo wrappers.",
+    "Finite relay recovery/replacement is later-world authored worksite scope; exact replacement quantities remain pending.",
+    "Existing fish and wheat processor references cover these food routes; no mandatory fillet/flour intermediates."
+  ]
+}

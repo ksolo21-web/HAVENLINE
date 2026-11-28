@@ -1,0 +1,190 @@
+{
+  "review_id": "HAVENLINE-machine-independent-R2-next3",
+  "reviewer": "/root/independent_critic",
+  "reviewed_utc": "2026-11-28T03:40:39.529950+00:00",
+  "scope": "Fresh actual-pixel static illustrated concept review, all eight intended directions per sheet and the listed enlarged crops. No shared native mesh, camera calibration, animation or runtime approval.",
+  "threshold": "Exact 10 on mandatory scoped visual checks and no unresolved mandatory defect. Scores are not averaged.",
+  "approved_this_batch": 1,
+  "reviewed_revisions": 3,
+  "reviews": [
+    {
+      "machine_id": "04-assembly-bench",
+      "identity": {
+        "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ProcessingMachines/2026-11-27/attempts/04-assembly-bench-r2.png",
+        "sha256": "1e6c2fa966ebabab555c61770055db12e5568d22e5ec284733be42197f3b9c98",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB",
+        "crops": [
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/04-assembly-bench-r2-front0.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/04-assembly-bench-r2-front_right45.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/04-assembly-bench-r2-right90.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/04-assembly-bench-r2-rear_right135.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/04-assembly-bench-r2-rear180.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/04-assembly-bench-r2-rear_left225.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/04-assembly-bench-r2-left270.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/04-assembly-bench-r2-front_left315.png"
+        ]
+      },
+      "score": 8.5,
+      "dimension_scores": {
+        "eight_views_and_labels": 10.0,
+        "major_geometry_consistency": 10.0,
+        "visual_language": 10.0,
+        "selected_resource_identity": 8.5,
+        "thermal_material_placement": 10.0,
+        "framing": 10.0,
+        "unintended_props": 10.0,
+        "fixed_input_output_flow": 10.0
+      },
+      "verdict": "REPAIR_REQUIRED",
+      "full_eight_view_retest": true,
+      "inspected_closeups": [
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/04-assembly-bench-r2-front0.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/04-assembly-bench-r2-front_right45.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/04-assembly-bench-r2-rear_right135.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/04-assembly-bench-r2-rear_left225.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/04-assembly-bench-r2-front_left315.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/assembly-front-output-detail.png"
+      ],
+      "resolved_defects": [
+        "M04-R1-RIBS: output broad faces now show three raised regions; center wider than flank ribs, no count blocker at this concept scale."
+      ],
+      "open_defects": [
+        {
+          "id": "M04-R2-GEAR",
+          "severity": "major",
+          "finding": "The front middle bin contains a many-fine-tooth gear in 0/45/315 instead of the selected eight chunky rounded-tooth mechanical-parts token.",
+          "repair": "Replace only those visible gears with the selected eight-tooth form, retaining bin and all corrected machine geometry."
+        }
+      ],
+      "missing_evidence": {
+        "mandatory_static_concept": [],
+        "native_mesh": null,
+        "animation_cycle": null,
+        "runtime_processing": null
+      },
+      "new_runtime_claims": false
+    },
+    {
+      "machine_id": "05-manual-oil-pump",
+      "identity": {
+        "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ProcessingMachines/2026-11-27/attempts/05-manual-oil-pump-r2.png",
+        "sha256": "5c1410739230151c8f6695d82fdb8e52b492622db88325d73adb2f14ac13d120",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB",
+        "crops": [
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/05-manual-oil-pump-r2-front0.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/05-manual-oil-pump-r2-front_right45.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/05-manual-oil-pump-r2-right90.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/05-manual-oil-pump-r2-rear_right135.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/05-manual-oil-pump-r2-rear180.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/05-manual-oil-pump-r2-rear_left225.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/05-manual-oil-pump-r2-left270.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/05-manual-oil-pump-r2-front_left315.png"
+        ]
+      },
+      "score": 8.5,
+      "dimension_scores": {
+        "eight_views_and_labels": 10.0,
+        "major_geometry_consistency": 10.0,
+        "visual_language": 10.0,
+        "selected_resource_identity": 10.0,
+        "thermal_material_placement": 10.0,
+        "framing": 10.0,
+        "unintended_props": 10.0,
+        "fixed_input_output_flow": 8.5
+      },
+      "verdict": "REPAIR_REQUIRED",
+      "full_eight_view_retest": true,
+      "inspected_closeups": [
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/05-manual-oil-pump-r2-front0.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/05-manual-oil-pump-r2-front_right45.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/05-manual-oil-pump-r2-rear_right135.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/05-manual-oil-pump-r2-rear180.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/05-manual-oil-pump-r2-rear_left225.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/05-manual-oil-pump-r2-left270.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/05-manual-oil-pump-r2-front_left315.png"
+      ],
+      "resolved_defects": [
+        "M05-R1-ORBIT: front end-on, correct physical left buffer and right crank, correct rear and opposing side visibility."
+      ],
+      "open_defects": [
+        {
+          "id": "M05-R2-FEED",
+          "severity": "major",
+          "finding": "The lower front wellhead has no visible fixed outlet-to-blue-buffer feed line in the reviewed 0/270/315 and rear obliques. Existing pipe from buffer visibly serves the separate barrel filling tap and descends to base; it does not visibly join the wellhead. This explicit original-brief coupling is missing.",
+          "repair": "Add one fixed gunmetal feed pipe from a side outlet on the lower wellhead around the inside-left base to a low blue-buffer inlet; show clear continuity at 0/270/315, below and clear of the moving rod/braces. Preserve corrected orbit, right crank linkage and distinct fill line."
+        }
+      ],
+      "missing_evidence": {
+        "mandatory_static_concept": [],
+        "native_mesh": null,
+        "animation_cycle": null,
+        "runtime_processing": null
+      },
+      "new_runtime_claims": false
+    },
+    {
+      "machine_id": "06-coal-refinery",
+      "identity": {
+        "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ProcessingMachines/2026-11-27/attempts/06-coal-refinery-r2.png",
+        "sha256": "7fe6e92cbe1f1456faccddb8a68f50d3be369bb91ac7b269e873e726244292f4",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "mode": "RGB",
+        "crops": [
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/06-coal-refinery-r2-front0.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/06-coal-refinery-r2-front_right45.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/06-coal-refinery-r2-right90.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/06-coal-refinery-r2-rear_right135.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/06-coal-refinery-r2-rear180.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/06-coal-refinery-r2-rear_left225.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/06-coal-refinery-r2-left270.png",
+          "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/06-coal-refinery-r2-front_left315.png"
+        ]
+      },
+      "score": 10.0,
+      "dimension_scores": {
+        "eight_views_and_labels": 10.0,
+        "major_geometry_consistency": 10.0,
+        "visual_language": 10.0,
+        "selected_resource_identity": 10.0,
+        "thermal_material_placement": 10.0,
+        "framing": 10.0,
+        "unintended_props": 10.0,
+        "fixed_input_output_flow": 10.0
+      },
+      "verdict": "APPROVED_STATIC_CONCEPT",
+      "full_eight_view_retest": true,
+      "inspected_closeups": [
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/06-coal-refinery-r2-front0.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/06-coal-refinery-r2-front_right45.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/06-coal-refinery-r2-right90.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/06-coal-refinery-r2-rear_right135.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/06-coal-refinery-r2-rear180.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/06-coal-refinery-r2-rear_left225.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/06-coal-refinery-r2-left270.png",
+        "/workspace/scratch/59f000bd1476/critic/machine-r2-closeups/06-coal-refinery-r2-front_left315.png"
+      ],
+      "resolved_defects": [
+        "M06-R1-FUEL: tall orange jerrycan, clear X reinforcement, small low cream drop label, offset silver cap and gray bottom reinforcement track across the visible angles."
+      ],
+      "open_defects": [],
+      "missing_evidence": {
+        "mandatory_static_concept": [],
+        "native_mesh": null,
+        "animation_cycle": null,
+        "runtime_processing": null
+      },
+      "new_runtime_claims": false
+    }
+  ]
+}
