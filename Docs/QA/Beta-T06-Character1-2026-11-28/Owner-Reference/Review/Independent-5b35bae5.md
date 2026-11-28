@@ -1,0 +1,14 @@
+# Havenline · Updated two-handed survivor retest
+
+**Hold · 8.9/10 against the 9.9/10 animation gate.** The left axe cuff clears at the measured distance beyond the grip. The pickaxe shaft still intersects the lower coat, and smaller cuff intersections remain on both tools.
+
+Reviewed exact source `5b35bae5154bef82b1a1ac85559ec105ba8c131b`. The previously reviewed player axes and the new material dimensions have unchanged script hashes relative to the preceding reviewed candidate. The native player route and compact-material findings carry to this source. [Source manifest](Candidate-5b35bae5.json) · [Player’s 11-check joystick run](Player/Player-axe.json) · [Compact material evidence](../Materials/Independent/Review.md)
+
+| Check | Independent result |
+| --- | --- |
+| Paid companion work and save | The actual scene passes **15/15** at 120 Hz, including three axe contacts, three mining contacts, resource deposit and reload. The axe and pickaxe remain separate approved held tools. Maximum two-hand anchor gaps are 23.36 and 23.46 mm respectively. [Live engine receipt](Companion-5b35bae5/Run.log) |
+| Planted companion turns | 452 pivot samples, at most 0.349 mm off the snow for the chosen support boot, about 0.001 mm horizontal support drift, and 0.011 mm maximum measured work-sole penetration. |
+| Axe geometry | 187 poses clear head, collar, torso, and legs. The outer left cuff clears throughout. The outer right cuff crosses the shaft in 11 phases, with up to four faces around phase .371. |
+| Pickaxe geometry | 187 poses clear head, collar, and legs. The outer left cuff crosses in five phases, with up to 14 faces at .398. The central coat still intersects pickaxe geometry within the two-handed span. This occurs in all 187 sampled phases and peaks at 151 torso-dominant faces around .640. The shaft triangles in that pose lie approximately 32.5–74.1 mm from the two grip centers. Character-local center is `(.036, .415, .337)` metres. This coat contact is evaluated without the grip radius exemption. [Full clearance trace](Companion-5b35bae5/Held-tool-120Hz.json.gz) |
+
+Four actual chop and four mining stages were captured at 1× and 2×, with six additional diagnostic bearings at the selected middle stages. The held shapes, supported boots, torso orientation and resource contacts remain legible. The rock and camera-facing sleeve can hide the central pick handle in the normal bearing. The full skinned-mesh sweep measures the remaining shaft-to-coat contact during recovery. These actual native captures use the 768 × 432 Godot OpenGL viewport with llvmpipe. [Chopping 1×](Companion-5b35bae5/chop-44-1x.jpg) · [Chopping 2×](Companion-5b35bae5/chop-44-2x.jpg) · [Mining 1×](Companion-5b35bae5/mine-61-1x.jpg) · [Mining 2×](Companion-5b35bae5/mine-61-2x.jpg) · [Capture metadata](Companion-5b35bae5/Held.json)
