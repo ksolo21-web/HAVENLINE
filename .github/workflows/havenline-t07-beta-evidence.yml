@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
       - name: Set up the pinned engine
         shell: bash
         run: |
@@ -27,18 +27,39 @@ jobs:
           unzip -q engine.zip
           mv Godot_v4.7.2-stable_linux.x86_64 godot
           echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
+      - name: Install the matching Linux export templates
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP"
+          curl -fsSLo templates.tpz --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_export_templates.tpz
+          echo 'f298490b8d44d934be425a5a65a51bf15f422428b229a06a6e11d9ffea248011  templates.tpz' | sha256sum -c -
+          target="${XDG_DATA_HOME:-$HOME/.local/share}/godot/export_templates/4.7.2.stable"
+          install -d "$target"
+          for template in linux_debug.x86_64 linux_release.x86_64; do
+            unzip -p templates.tpz "templates/$template" > "$target/$template"
+            test -s "$target/$template"
+          done
+          rm templates.tpz
       - name: Verify the exact project and make the review build
         shell: bash
         run: |
           set -euo pipefail
-          candidate="$(git rev-parse HEAD^)"
+          candidate="$(git rev-list -1 HEAD -- HavenlineLevel1)"
+          test -n "$candidate"
           git diff --exit-code "$candidate" HEAD -- HavenlineLevel1
           mkdir -p t07-evidence
           printf '%s\n' "$candidate" > t07-evidence/Candidate.txt
           git ls-tree -r "$candidate" HavenlineLevel1 > t07-evidence/Project-tree.txt
           sha256sum HavenlineLevel1/project.godot > t07-evidence/Project.sha256
-          godot --headless --path HavenlineLevel1 --editor --import > t07-evidence/Import.log 2>&1
-          godot --headless --path HavenlineLevel1 --export-pack "Linux World Review" "$PWD/t07-evidence/Havenline.pck" > t07-evidence/Export.log 2>&1
+          godot --headless --path HavenlineLevel1 --editor --import > t07-evidence/Import.log 2>&1 || {
+            tail -n 80 t07-evidence/Import.log
+            exit 1
+          }
+          godot --headless --path HavenlineLevel1 --export-pack "Linux World Review" "$PWD/t07-evidence/Havenline.pck" > t07-evidence/Export.log 2>&1 || {
+            tail -n 80 t07-evidence/Export.log
+            exit 1
+          }
           test -s t07-evidence/Havenline.pck
           sha256sum t07-evidence/Havenline.pck > t07-evidence/Pack.sha256
       - name: Run the offsite camp check
@@ -47,14 +68,14 @@ jobs:
           set -euo pipefail
           profile="$(mktemp -d /tmp/havenline-l1-v3-t07-offsite-XXXXXXXX)"
           printf 'HAVENLINE-ALFRED-V3-DISPOSABLE\n' > "$profile/L1-DISPOSABLE"
-          XDG_DATA_HOME="$profile/data" godot --headless --fixed-fps 60 --path HavenlineLevel1 --script res://tests/qa_offsite_camp.gd -- "--l1-disposable-profile=$profile" > t07-evidence/Offsite-camp.log 2>&1
+          XDG_CONFIG_HOME="$profile/config" XDG_DATA_HOME="$profile/data" godot --headless --fixed-fps 60 --path HavenlineLevel1 --script res://tests/qa_offsite_camp.gd -- "--l1-disposable-profile=$profile" > t07-evidence/Offsite-camp.log 2>&1
       - name: Record the actual gameplay approach and purchase
         shell: bash
         run: |
           set -euo pipefail
           profile="$(mktemp -d /tmp/havenline-l1-v3-t07-film-XXXXXXXX)"
           printf 'HAVENLINE-ALFRED-V3-DISPOSABLE\n' > "$profile/L1-DISPOSABLE"
-          export XDG_DATA_HOME="$profile/data" LIBGL_ALWAYS_SOFTWARE=1 LP_NUM_THREADS=4
+          export XDG_CONFIG_HOME="$profile/config" XDG_DATA_HOME="$profile/data" LIBGL_ALWAYS_SOFTWARE=1 LP_NUM_THREADS=4
           export T07_GAMEPLAY_RUN="$PWD/t07-evidence" T07_GAMEPLAY_MODE=context T07_FRAME_STEP=1 T07_FRAME_PORT=46578
           ffmpeg -y -nostdin -hide_banner -loglevel error -f image2pipe -framerate 60 -c:v mjpeg -i 'tcp://127.0.0.1:46578?listen=1' -c:v libx264 -threads 3 -preset veryfast -crf 25 -pix_fmt yuv420p -movflags +faststart t07-evidence/Gameplay.mp4 &
           encoder=$!
@@ -63,6 +84,7 @@ jobs:
           wait "$encoder"
           ffprobe -v error -show_entries stream=width,height,r_frame_rate,duration,nb_frames -of json t07-evidence/Gameplay.mp4 > t07-evidence/Video.json
       - name: Retain build and replay evidence
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: Havenline-T07-exact-build-and-replay
