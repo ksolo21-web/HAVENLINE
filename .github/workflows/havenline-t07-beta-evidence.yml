@@ -56,6 +56,10 @@ jobs:
             tail -n 80 t07-evidence/Import.log
             exit 1
           }
+          preset=Docs/QA/Beta-T07-Release-Art-2026-11-28/export_presets.cfg
+          test ! -e HavenlineLevel1/export_presets.cfg
+          cp "$preset" HavenlineLevel1/export_presets.cfg
+          sha256sum "$preset" > t07-evidence/Export-preset.sha256
           godot --headless --path HavenlineLevel1 --export-pack "Linux World Review" "$PWD/t07-evidence/Havenline.pck" > t07-evidence/Export.log 2>&1 || {
             tail -n 80 t07-evidence/Export.log
             exit 1
