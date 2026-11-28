@@ -91,20 +91,21 @@ func run() -> void:
 		await step_mine()
 		if first_release>=0 and clock>=first_release+33:break
 	var broken := first_release>=0
+	var expected_yield := 3 if baseline else 6
 	if not broken:image_pair("stalled")
 	assertions["three strikes from the original northern approach"]=broken and counts.get("impact_stone",0)==3
-	assertions["one physical break creates three unique stone pickups"]=broken and stone_ids.size()==3 and counts.get("deplete_stone",0)==1
+	assertions["one physical break creates the full stone yield"]=broken and stone_ids.size()==expected_yield and counts.get("deplete_stone",0)==1
 	if broken:
 		assertions["visible boulder and walking collision clear together"]=not visual_at_release.source_visible and visual_at_release.collision_layer==0
 		if not baseline:assertions["four pieces cut from the original bank separate"]=visual_at_release.cut_chunks==4
 		await walk_to(at)
 		for i in 24:await step_mine()
-		assertions["walking over the actual drops banks each stone once"]=field.inventory.carried.stone-initial_stock==3 and stone_ids.all(func(key):return field.inventory.collected.get(key)=="stone")
+		assertions["walking over the actual drops banks each stone once"]=field.inventory.carried.stone-initial_stock==expected_yield and stone_ids.all(func(key):return field.inventory.collected.get(key)=="stone")
 		image_pair("collected")
 		await walk_to(at+Vector2(0,4.25))
 		while clock<first_release+304:await step_mine()
 		assertions["bank reopens after 300 physical ticks"]=milestones.get("return",-1)-first_release==300
-		assertions["no second grant or retained collision during cooldown"]=counts.get("deplete_stone",0)==1 and typed_drops().is_empty() and field.inventory.carried.stone-initial_stock==3
+		assertions["no second grant or retained collision during cooldown"]=counts.get("deplete_stone",0)==1 and typed_drops().is_empty() and field.inventory.carried.stone-initial_stock==expected_yield
 	var record={"checks":assertions,"ticks":milestones,"source_id":mine.get_meta("field_source_id"),"at":[mine.position.x,mine.position.z],"working_position":[settled.x,settled.z],"source_at_release":visual_at_release,"events":counts,"inventory":field.inventory.carried,"renderer":RenderingServer.get_video_adapter_name(),"display_size":str(root.size),"frozen_reference":"25b4ec6/Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/02-stone.png"}
 	print("MINING_REPLAY ",JSON.stringify(record))
 	await Session.drain_field_audio(self,field)

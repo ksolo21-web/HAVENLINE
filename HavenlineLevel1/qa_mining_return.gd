@@ -4,6 +4,7 @@ extends SceneTree
 const Profile = preload("res://opening_save.gd")
 const Isolated = preload("res://tests/lifecycle_test_profile.gd")
 const MineKinds := preload("res://mining_resources.gd").KINDS
+const EXPECTED_YIELDS := {"stone": 6, "slate": 7, "metal": 8, "coal": 9}
 const FAR := Vector3(79,0,68)
 const SIDE := Vector3(.707107,0,-.707107)
 
@@ -68,6 +69,7 @@ func strike_until(id:String, kind:String, at:Vector3, hits:int) -> int:
 func examine(row:Dictionary, streamed:bool) -> void:
 	var id:String=row.id
 	var kind:String=row.kind
+	var expected := int(EXPECTED_YIELDS[kind])
 	var at:Vector3=row.position
 	var prefix:=id+" "
 	approach(at)
@@ -96,7 +98,7 @@ func examine(row:Dictionary, streamed:bool) -> void:
 	checks[prefix+"final contact releases four sections and clears intact source"]=working_face(id).fracture.shards.size()==4 and not working_face(id)._mesh.visible
 	var once:=observe_events("deplete_"+kind,at)==1
 	var duration:=float(world.lifecycle.cooling.get(id,-1.))
-	checks[prefix+"one typed three-unit yield"]=drops.size()==3 and once
+	checks[prefix+"one typed scarcity yield"]=drops.size()==expected and once
 	var unavailable:=true
 	var obstructed:=false
 	var regrowing:=false
@@ -143,11 +145,11 @@ func examine(row:Dictionary, streamed:bool) -> void:
 		var on_ground:=nearby_drops(kind,at)
 		second_yield=on_ground.filter(func(key):return not drops.has(key))
 		var original_accounted:=drops.all(func(key):return on_ground.has(key) or world.inventory.collected.get(key)==kind)
-		checks[prefix+"second fresh three-hit three-unit harvest"]=second==3 and second_yield.size()==3 and original_accounted and observe_events("deplete_"+kind,at)==1
+		checks[prefix+"second fresh three-hit scarcity yield"]=second==3 and second_yield.size()==expected and original_accounted and observe_events("deplete_"+kind,at)==1
 		move_to(at)
 		for i in 140: await physics_frame
 		var all_yield:=drops+second_yield
-		checks[prefix+"both yields enter typed inventory only once"]=all_yield.size()==6 and world.inventory.carried[kind]==start_amount+6 and all_yield.all(func(key):return world.inventory.collected.get(key)==kind) and nearby_drops(kind,at).is_empty()
+		checks[prefix+"both yields enter typed inventory only once"]=all_yield.size()==expected*2 and world.inventory.carried[kind]==start_amount+expected*2 and all_yield.all(func(key):return world.inventory.collected.get(key)==kind) and nearby_drops(kind,at).is_empty()
 	checks[prefix+"stored balance unchanged"]=world.inventory.stored==stock
 	evidence[id]={"kind":kind,"at":str(at),"natural_contacts":[hit_one,remaining],"first_yield_ids":drops,"second_yield_ids":second_yield,"initial_seconds":duration,"saved_remaining":prior_tick,"available_at_tick":tick_back,"return_mesh_visible":regrowing,"streamed_away":missing,"restored_before_available":loaded_back}
 
@@ -174,15 +176,28 @@ func legacy_save(remote_id: String) -> void:
 	var state:Dictionary=world.lifecycle.snapshot()
 	state.cooling={"starter-stone":29.,remote_id:31.0}
 	state.partial={}
+	var ordinary_ground := Vector3(-17.0,0.0,4.0)
+	var legacy_ids: Array[String] = []
+	for offset in 3:
+		state.serial+=1
+		var id := "stone-%d" % state.serial
+		legacy_ids.append(id)
+		state.drops.append([id,"stone",ordinary_ground.x+offset*.18,ordinary_ground.z,80.0])
+	legacy_ids.sort()
 	world.inventory.world_state=state
 	checks["writes legacy mine timers to disposable save"]=world.field_save.commit(world.inventory)==OK
 	reopen_from_disk()
 	checks["legacy starter and unloaded quarry restored at five seconds"]=world.lifecycle.cooling.get("starter-stone")==5.0 and world.lifecycle.cooling.get(remote_id)==5.0 and not world.is_source_available("starter-stone")
+	checks["legacy three-bundle source ground restored without retroactive reward"]=nearby_drops("stone",ordinary_ground)==legacy_ids
 	state.cooling={"starter-stone":.375,remote_id:2.7}
 	world.inventory.world_state=state
 	checks["writes short timers to disposable save"]=world.field_save.commit(world.inventory)==OK
 	reopen_from_disk()
 	checks["short saved timers retained"]=is_equal_approx(float(world.lifecycle.cooling.get("starter-stone",-1.)),.375) and is_equal_approx(float(world.lifecycle.cooling.get(remote_id,-1.)),2.7)
+	var start_stone: int=world.inventory.carried.stone
+	move_to(ordinary_ground)
+	for i in 20: await physics_frame
+	checks["historical loose bundles remain collectible exactly once"]=world.inventory.carried.stone==start_stone+3 and legacy_ids.all(func(id): return world.inventory.collected.get(id)=="stone") and nearby_drops("stone",ordinary_ground).is_empty()
 
 func run() -> void:
 	open_scene()
@@ -193,7 +208,7 @@ func run() -> void:
 	await examine({"id":"starter-stone","kind":"stone","position":world.resource_rock.position},false)
 	for kind in MineKinds:
 		if remote.has(kind): await examine(remote[kind],true)
-	if remote.has("stone"): legacy_save(remote.stone.id)
+	if remote.has("stone"): await legacy_save(remote.stone.id)
 	print(JSON.stringify({"physics_hz":Engine.physics_ticks_per_second,"checks":checks,"evidence":evidence}))
 	world.set_physics_process(false)
 	await Isolated.drain_field_audio(self,world)

@@ -1327,10 +1327,7 @@ func _step_mining(dt: float) -> void:
 				world._record_field_event("survivor_mine_contact",contact.position)
 				if assigned_bank.phase=="mined":
 					previous_bank=String(assigned_bank.get_meta("field_source_id"))
-					world._event("deplete_"+kind,assigned_bank.global_position)
-					world._make_drops(kind,assigned_bank.global_position,3)
-					world.lifecycle.deplete(assigned_bank)
-					world._checkpoint_lifecycle()
+					world.lifecycle.finish_harvest(assigned_bank)
 	if bank_swing<Human.CHOP_SECONDS: return
 	actor.work_strike_point=Vector3.INF
 	if assigned_bank.phase!="seated":

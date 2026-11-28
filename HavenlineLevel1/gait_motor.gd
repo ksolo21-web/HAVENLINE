@@ -5,6 +5,7 @@ const MAX_SPEED := 6.25
 const DEAD_ZONE := 0.035
 const MOVING_TURN := 5.9
 const PIVOT_TURN := 10.8
+const FIELD_LAUNCH_SECONDS := .16
 
 var top_speed := PREVIEW_TOP_SPEED
 var acceleration := 8.0
@@ -29,6 +30,7 @@ var travel_speed := 0.0
 var previous_command_speed := 0.0
 var releasing := false
 var leg_chains: Array = []
+var boot_cuffs: Array[int] = []
 
 # A grounded redirection starts on one boot. The second boot returns the actor
 # to the normal walk or neutral stance without dragging both soles together.
@@ -72,6 +74,12 @@ var bridge_origin := Transform3D.IDENTITY
 var bridge_toe := Transform3D.IDENTITY
 var initial_hold := 0.0
 var previous_request := false
+var field_launch_enabled := false
+var launch_remaining := 0.0
+var launch_boots: Array[Transform3D] = []
+var launch_toes: Array[Transform3D] = []
+var launch_support := 0
+var ground_grade := Vector2.ZERO
 
 
 func use_field_run() -> void:
@@ -93,6 +101,7 @@ func _toe_relative(side: int) -> Transform3D:
 
 
 func _prepare_steps(mode: String, heading: float) -> void:
+	launch_remaining = 0.0
 	action_elapsed = 0.0 if not procedural_steps_active else .08
 	bridge = false
 	releasing = false
@@ -180,21 +189,24 @@ func _brief_targets() -> void:
 		step_targets.append(endpoint * neutral_ankles[side])
 
 
-func _heights() -> Vector2:
+func _heights(on_grade := true) -> Vector2:
 	var h := Vector2(INF, INF)
 	var points := _contacts()
+	var origin: Vector3 = contact_world.actor.global_position
+	var grade := ground_grade if on_grade else Vector2.ZERO
 	for i in points.size():
 		var side := int(Vector3(samples[i][0]).x < 0)
-		h[side] = minf(h[side], points[i].y)
+		var delta := points[i] - origin
+		h[side] = minf(h[side], points[i].y - grade.dot(Vector2(delta.x, delta.z)))
 	return h
 
 
-func _place_boot(side: int, target: Transform3D, toe: Transform3D) -> void:
+func _place_boot(side: int, target: Transform3D, toe: Transform3D, limit_ankle := true) -> void:
 	var current := _boot_world(side)
 	_adjust_leg(leg_chains[side], target.origin - current.origin, 0.0, target.basis * toe.origin)
 	var boot := skeleton.get_bone_global_pose(leg_chains[side][2])
 	boot.basis = skeleton.global_basis.inverse() * target.basis
-	if top_speed == MAX_SPEED:
+	if top_speed == MAX_SPEED and limit_ankle:
 		# A planted winter boot can roll onto the heel or toe. Preserve the
 		# FieldRun ankle envelope as the hips pass over it during a fast turn.
 		var shin := skeleton.get_bone_global_pose(leg_chains[side][1])
@@ -206,6 +218,84 @@ func _place_boot(side: int, target: Transform3D, toe: Transform3D) -> void:
 		boot.basis = shin.basis * Basis.from_euler(angles, EULER_ORDER_ZYX).scaled_local(relative.get_scale())
 	skeleton.set_bone_global_pose(leg_chains[side][2], boot)
 	skeleton.set_bone_global_pose(leg_chains[side][3], boot * toe)
+
+
+func _begin_launch() -> void:
+	launch_boots = [_boot_world(0), _boot_world(1)]
+	launch_toes = [_toe_relative(0), _toe_relative(1)]
+	var ground := _heights()
+	launch_support = int(ground.y < ground.x - .001)
+	launch_remaining = FIELD_LAUNCH_SECONDS
+	contact_world.character_kit.locomotion.match_field_launch(launch_support)
+
+
+func support_action(world_offset: Vector3) -> Dictionary:
+	# The hips can load or shift between the boots without moving the capsule
+	# or dragging either outsole through a standing reach.
+	var boots := [_boot_world(0), _boot_world(1)]
+	var toes := [_toe_relative(0), _toe_relative(1)]
+	var bones: Array = [pelvis_index] + leg_chains[0] + leg_chains[1]
+	var base := {}
+	var scales := {}
+	var anchored_cuffs := {}
+	for joint in boot_cuffs:
+		bones.append(joint)
+		anchored_cuffs[joint] = skeleton.get_bone_global_pose(joint)
+	for joint: int in bones:
+		base[joint] = Transform3D(Basis(skeleton.get_bone_pose_rotation(joint)), skeleton.get_bone_pose_position(joint))
+		scales[joint] = skeleton.get_bone_pose_scale(joint)
+	var pelvis := skeleton.get_bone_global_pose(pelvis_index)
+	pelvis.origin += skeleton.global_basis.inverse() * world_offset
+	skeleton.set_bone_global_pose(pelvis_index, pelvis)
+	for side in 2: _place_boot(side, boots[side], toes[side], false)
+	# The trouser hem and fleece are shin children. During a planted crouch
+	# they stay with the boot's fit surfaces as the knee moves above them.
+	for joint in boot_cuffs: skeleton.set_bone_global_pose(joint, anchored_cuffs[joint])
+	for joint: int in bones: skeleton.set_bone_pose_scale(joint, scales[joint])
+	return base
+
+
+func _follow_grade() -> void:
+	var normal := Vector3(-ground_grade.x, 1., -ground_grade.y).normalized()
+	var pitch := Basis(Quaternion(Vector3.UP, normal))
+	var authored := _heights(false)
+	var origin: Vector3 = contact_world.actor.global_position
+	for side in 2:
+		var boot := _boot_world(side)
+		var toe := _toe_relative(side)
+		boot.basis = pitch * boot.basis
+		_place_boot(side, boot, toe, false)
+		# Preserve heel/toe roll and flight clearance measured along the route's
+		# surface. The terrain owner supplies the elevation of the capsule.
+		var wanted := maxf(origin.y + .0002, authored[side])
+		boot = _boot_world(side)
+		boot.origin.y += wanted - _heights()[side]
+		_place_boot(side, boot, toe, false)
+
+
+func _settle_launch(dt: float) -> void:
+	var elapsed := FIELD_LAUNCH_SECONDS - launch_remaining
+	for side in 2:
+		var authored := _boot_world(side)
+		var toe := _toe_relative(side)
+		var support_boot := side == launch_support
+		# Keep the first loaded outsole fixed while the free leg lifts.
+		# Then release the load progressively into the authored stride.
+		var release := smoothstep(.045 if support_boot else 0., FIELD_LAUNCH_SECONDS, elapsed)
+		var boot := launch_boots[side].interpolate_with(authored, release)
+		if not support_boot:
+			var swing := smoothstep(0., .067, elapsed) * (1. - smoothstep(.086, FIELD_LAUNCH_SECONDS, elapsed))
+			boot.origin.y += .066 * swing
+		# Both endpoint rotations come from the original clips. Preserve their
+		# world roll during the launch, including the neutral standing cuff.
+		var toe_target := launch_toes[side].interpolate_with(toe, release)
+		_place_boot(side, boot, toe_target, false)
+		var lift: float = contact_world.actor.global_position.y - _heights()[side]
+		if lift > .0008:
+			boot = _boot_world(side)
+			boot.origin.y += lift + .0002
+			_place_boot(side, boot, toe_target, false)
+	launch_remaining = maxf(0., launch_remaining - dt)
 
 
 func _play_steps(dt: float) -> void:
@@ -395,6 +485,9 @@ func _bind_soles(world: Node3D) -> void:
 	if skeleton:
 		contact_world = world
 		for side in [".L", ".R"]:
+			for cuff in ["BootFleece", "BootTrouserHem"]:
+				var index := skeleton.find_bone(cuff + side)
+				if index >= 0: boot_cuffs.append(index)
 			upper_arms.append(skeleton.find_bone("UpperArm"+side))
 			forearms.append(skeleton.find_bone("Forearm"+side))
 			glove_chains.append([upper_arms.back(),forearms.back(),skeleton.find_bone("Hand"+side)])
@@ -599,7 +692,7 @@ func _settle_support() -> void:
 			preload("res://field_glove_clearance.gd").set_joint_rotation(skeleton,upper_arms[side],arm.basis)
 	for chain: Array in glove_chains:
 		preload("res://field_glove_clearance.gd").solve(skeleton,contact_world.actor,chain)
-	if special.is_empty() and not bridge and not floor_pending:
+	if special.is_empty() and not bridge and not floor_pending and launch_remaining <= 0. and ground_grade.is_zero_approx():
 		return
 	# IK repositions and rotates the legs. Preserve the sampled local scales:
 	# repeatedly decomposing a world-space boot or toe transform can introduce
@@ -614,6 +707,10 @@ func _settle_support() -> void:
 		_play_steps(dt)
 	elif bridge:
 		_release_last_foot(dt)
+	elif launch_remaining > 0.:
+		_settle_launch(dt)
+	elif not ground_grade.is_zero_approx():
+		_follow_grade()
 	else:
 		var heights := _heights()
 		for side in 2:
@@ -644,7 +741,8 @@ func _settle_support() -> void:
 				support_step_serial += 1
 
 
-func step(world: Node3D, input: Vector2, dt: float, pack_load := 0.0) -> float:
+func step(world: Node3D, input: Vector2, dt: float, pack_load := 0.0, surface_grade := Vector2.ZERO) -> float:
+	ground_grade = surface_grade.limit_length(.25) if surface_grade.is_finite() else Vector2.ZERO
 	var body: CharacterBody3D = world.actor
 	var start := body.global_position
 	var previous_speed := body.velocity.slide(Vector3.UP).length()
@@ -668,6 +766,8 @@ func step(world: Node3D, input: Vector2, dt: float, pack_load := 0.0) -> float:
 			and forward.dot(wish) < .72
 		):
 			_prepare_steps("pivot", heading)
+		elif field_launch_enabled and skeleton and not previous_request and speed < .14 and not procedural_steps_active:
+			_begin_launch()
 		var crossing_to_run := previous_command_speed < 1.7 and requested >= 1.7 and speed < 1.45
 		var crossing_to_walk := previous_command_speed > 1.7 and requested <= 1.7 and speed > 1.85
 		if (

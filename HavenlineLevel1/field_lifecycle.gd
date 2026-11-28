@@ -3,6 +3,7 @@ extends RefCounted
 const WOOD_REGROW_SECONDS := preload("res://resource_tree.gd").REGROW_SECONDS
 const MiningResources = preload("res://mining_resources.gd")
 const Inventory = preload("res://field_inventory.gd")
+const HarvestYields = preload("res://field_harvest_yields.gd")
 const DROP_LIFETIME_SECONDS := 100.0
 const VERSION := 2
 const V1_PLAYER_MAX_HP := 4
@@ -43,6 +44,19 @@ func deplete(node: Node3D) -> void:
 	availability_revision += 1
 	cooling[id] = wood_seconds if kind == "wood" else mining_seconds
 	_set_available(node,false)
+
+func finish_harvest(node: Node3D) -> bool:
+	var id: String = node.get_meta("field_source_id", "")
+	var kind: String = node.get_meta("resource_kind", "")
+	var amount := int(HarvestYields.DEPOSITS.get(kind, 0))
+	var completed: bool = node.phase in ["falling", "ready_to_credit"] if kind == "wood" else node.phase == "mined"
+	if amount == 0 or not completed or loaded.get(id) != node or cooling.has(id):
+		return false
+	deplete(node)
+	world._event("deplete_"+kind,node.global_position)
+	world._make_drops(kind,node.global_position,amount)
+	world._checkpoint_lifecycle()
+	return not world.persist_blocked
 
 func _set_available(node: Node3D, available: bool) -> void:
 	if node.get_meta("resource_kind") == "wood":

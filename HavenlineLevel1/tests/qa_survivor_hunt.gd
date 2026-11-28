@@ -3,6 +3,7 @@ extends "res://tests/qa_worker_jobs.gd"
 ## visible hunt, loose drops, bounded worker carry, warehouse and cold restore.
 
 const HERE := "res://tests/qa_survivor_hunt.gd"
+const EXPECTED_STAG_YIELD := 4
 var view_record := OS.get_environment("HAVENLINE_HUNT_VIEW")
 var hunt_views := {}
 
@@ -82,15 +83,15 @@ func run() -> void:
 				await _game_views("Hunt-stock")
 			if transport_tick>=0:
 				warehouse_count=game.events.filter(func(event): return event.event=="deposit_meat").size()-prior_deposits
-			if warehouse_count==3:
+			if warehouse_count==EXPECTED_STAG_YIELD:
 				landing_tick=i
 				break
 		if game.persist_blocked:break
 	check(first_proactive>=0,"paid survivor proactively routes to prey")
 	check(first_hit>first_proactive,"native carried axe sweep hits after proactive pursuit")
-	check(kill_tick>first_hit and drops_at_death==3,"defeated stag produces one three-bundle meat reward")
-	check(transport_tick>kill_tick and cargo_peak==3,"real pickup packs on separate meat shelf, all three go home")
-	check(landing_tick>transport_tick and warehouse_count==3,"same native worker returns and stocks exactly three meat")
+	check(kill_tick>first_hit and drops_at_death==EXPECTED_STAG_YIELD,"defeated stag produces one four-bundle meat reward")
+	check(transport_tick>kill_tick and cargo_peak==EXPECTED_STAG_YIELD,"real pickup packs the entire yield on its meat shelf")
+	check(landing_tick>transport_tick and warehouse_count==EXPECTED_STAG_YIELD,"same native worker returns and stocks exactly four meat bundles")
 	check(game.inventory.carried.meat==0,"worker hunt credited no material to the distant player")
 	check(game.tracks.living[stag].feet.size()==4 and hoof_peak>0,"actual moving stag sampled four rig hooves and left cloven prints")
 	var saved = game.Inventory.new()

@@ -167,6 +167,8 @@ func receive(site: String, kind: String, amount: int) -> bool:
 		journal.hoppers[kind] += amount
 	var target := _goal(site)
 	var saved: bool = world.settlement_loop.commit_receipt(cue,target)
+	if saved:
+		world.present_character_contact(&"build" if cue == "purchase" else &"deposit", target)
 	if saved and site == Crew.OWL_PLOT and Crew.owns_owl(journal):
 		world._event("owl_equip",target)
 	refresh()

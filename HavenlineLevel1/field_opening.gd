@@ -5,6 +5,7 @@ const OfferFloor = preload("res://field_offer_floor.gd")
 const Inventory = preload("res://field_inventory.gd")
 const Carry = preload("res://field_carry.gd")
 const MiningResources = preload("res://mining_resources.gd")
+const HarvestYields = preload("res://field_harvest_yields.gd")
 const FieldArt = preload("res://field_art.gd")
 const FieldEnvironment = preload("res://field_environment.gd")
 const FieldEnemy = preload("res://field_enemy.gd")
@@ -67,6 +68,7 @@ var camp_active := false
 var reveal_countdown := -1.0
 var flash: ColorRect
 var player_wardrobe = preload("res://field_player_wardrobe.gd").new()
+var character_motion := preload("res://field_character_motion.gd").new()
 var hero_model: Node3D
 var last_good: Dictionary
 var moving_gates := {}
@@ -91,6 +93,9 @@ func create_opening_hud() -> OpeningHUD:
 
 func set_player_character(number: int) -> bool:
 	if not field_ready or not player_wardrobe.choose(number):return false
+	character_motion.cancel()
+	gait_motor.field_launch_enabled = player_wardrobe.number == 1
+	gait_motor.launch_remaining = 0.
 	opening_hud.set_character_portrait(player_wardrobe.number)
 	return true
 
@@ -167,7 +172,7 @@ func _ready() -> void:
 		offer_floors[id] = floor_mark
 		carry.define_receiver(id,floor_mark)
 	carry.inventory_changed.connect(_inventory_changed)
-	carry.purchase_completed.connect(_finish_purchase)
+	carry.purchase_completed.connect(_finish_player_purchase)
 	carry.unit_landed.connect(_landed)
 	add_child(sound)
 	flash = ColorRect.new()
@@ -176,6 +181,7 @@ func _ready() -> void:
 	flash.color = Color(0.47,0.085,0.07,0.0)
 	opening_hud.get_parent().add_child(flash)
 	hero_model = character_kit.locomotion.tree.get_parent()
+	character_motion.bind(actor, hero_model, gait_motor)
 	_disable_worn_shadow(hero_model)
 	_disable_worn_shadow(carry.rack)
 	last_good = inventory.snapshot()
@@ -231,6 +237,7 @@ func _ready() -> void:
 	camp_layout.layout_changed.connect(camp_layout.place_vehicle_offers)
 	camp_layout.place_vehicle_offers()
 	player_wardrobe.setup(self)
+	gait_motor.field_launch_enabled = player_wardrobe.number == 1
 	opening_hud.set_character_portrait(player_wardrobe.number)
 	var home_compass := preload("res://field_navigation.gd").new()
 	opening_hud.add_child(home_compass)
@@ -438,18 +445,17 @@ func accept_contact(body: Node3D) -> bool:
 	if body in trees:
 		lifecycle.record_strike(body)
 		_event("impact_wood",body.global_position)
+		present_character_contact(&"chop", body.global_position)
 	elif body in rocks:
 		var kind: String = body.get_meta("resource_kind")
 		lifecycle.record_strike(body)
 		_event("impact_"+kind,body.global_position)
-		if body.phase == "mined":
-			_event("deplete_"+kind,body.global_position)
-			_make_drops(kind,body.global_position,3)
-			lifecycle.deplete(body)
-			_checkpoint_lifecycle()
+		present_character_contact(&"mine", body.global_position)
+		if body.phase == "mined": lifecycle.finish_harvest(body)
 	else:
 		_event("player_attack",body.global_position)
 		_event("hit",body.global_position)
+		present_character_contact(&"attack_contact", body.global_position)
 	return true
 
 func truck_contact(body:Node3D, origin:Vector3, hit:Vector3) -> bool:
@@ -466,11 +472,7 @@ func truck_contact(body:Node3D, origin:Vector3, hit:Vector3) -> bool:
 		var kind: String = body.get_meta("resource_kind")
 		lifecycle.record_strike(body)
 		_event("impact_"+kind,hit)
-		if body.phase=="mined":
-			_event("deplete_"+kind,body.position)
-			_make_drops(kind,body.position,3)
-			lifecycle.deplete(body)
-			_checkpoint_lifecycle()
+		if body.phase=="mined": lifecycle.finish_harvest(body)
 		return true
 	if body is FieldEnemy and body in enemies and body.receive_hit(2,body.position-origin):
 		_event("player_attack",hit)
@@ -490,11 +492,7 @@ func step_tree(dt: float) -> void:
 			_credit_tree(tree)
 
 func _credit_tree(tree: ResourceTreeScript) -> void:
-	if not tree.phase in ["falling","ready_to_credit"]: return
-	_event("deplete_wood",tree.global_position)
-	_make_drops("wood",tree.global_position,3)
-	lifecycle.deplete(tree)
-	_checkpoint_lifecycle()
+	lifecycle.finish_harvest(tree)
 
 func _checkpoint_lifecycle() -> void:
 	if field_ready and persist_requested and not persist_blocked and has_method("_persist_world"):
@@ -507,7 +505,10 @@ func fund_opening_receiver(_receiver_id: Variant = null, _material_id: Variant =
 	return false
 
 func _make_drops(kind: String, origin: Vector3, amount: int) -> void:
-	var spread := maxf(.48, float(FieldArt.GROUND_WIDTHS[kind])*.98) if amount > 1 else .48
+	var width := float(FieldArt.GROUND_WIDTHS[kind])
+	var spread := maxf(.48, width*.98) if amount > 1 else .48
+	if amount > 5:
+		spread = maxf(spread, width*.90/(2.0*sin(PI/amount)))
 	for i in amount:
 		drop_id += 1
 		var token := "%s-%d" % [kind,drop_id]
@@ -585,7 +586,7 @@ func _wolf_defeated(at: Vector3, wolf: FieldEnemy) -> void:
 	_event("defeat",at)
 	_event("meat",at)
 	if wolf.is_boss: _event("boss_defeat",at)
-	_make_drops("meat",at,5 if wolf.is_boss else 2)
+	_make_drops("meat",at,HarvestYields.ALPHA_WOLF if wolf.is_boss else HarvestYields.WOLF)
 	_checkpoint_lifecycle()
 
 func _combat_number(at: Vector3, message: String, color: Color, target: Node3D = null, lane_side := 1.) -> void:
@@ -653,6 +654,7 @@ func _player_hit(amount: int, attacker: Node3D = null) -> void:
 		snow_truck.receive_damage(amount)
 		return
 	var loss := mini(player_hp, amount)
+	character_motion.cancel()
 	player_hp -= loss
 	camp_heal_elapsed = 0.0
 	impact_lean = Vector2(1,0)
@@ -710,6 +712,7 @@ func toggle_nearest_gate() -> void:
 
 func _physics_process(dt: float) -> void:
 	if not field_ready: return
+	character_motion.clear_pose()
 	gait_motor.clear_hit_pose(hero_model)
 	simulation_time += dt
 	if not persist_blocked: lifecycle.advance(dt)
@@ -781,12 +784,34 @@ func _physics_process(dt: float) -> void:
 			_event("reveal", Vector3.ZERO)
 	_step_receivers()
 	settlement_loop.advance(dt)
+	_step_character_motion(dt)
 	sound.set_hearth_proximity(clampf(1.0-actor.global_position.distance_to(field_env.hearth_footprint.global_position)/7.0,0.0,1.0) if camp_active else 0.0)
 	var music := "camp" if inside else ("threat" if danger else "field")
 	if current_music != music:
 		current_music = music
 		sound.set_music_state(music)
 	_refresh_hud_field(danger)
+
+func present_character_contact(action: StringName, target: Vector3) -> void:
+	if player_wardrobe.number == 1 and not snow_truck.mounted and reset_time <= 0. and not persist_blocked:
+		character_motion.contact(action, target)
+
+func _step_character_motion(dt: float) -> void:
+	if player_wardrobe.number != 1 or snow_truck.mounted or hurt_time > 0. or persist_blocked:
+		character_motion.cancel()
+		return
+	var transferring := false
+	for flight: Dictionary in carry.flights:
+		if flight.from != carry.HAND: continue
+		var dest: String = flight.to
+		var at: Vector3 = carry._place(dest, flight.kind, int(flight.index))
+		# The raw packet follows its existing transfer route. The gesture
+		# anticipates the first arrival, then recovers across staggered packets.
+		if character_motion.action in [&"", &"deposit"]:
+			character_motion.aim(&"deposit", at, true)
+		transferring = true
+		break
+	character_motion.advance(dt, gait_motor.last_travel_speed, transferring)
 
 func is_camp_healing() -> bool:
 	return player_hp > 0 and player_hp < MAX_HP and reset_time <= 0.0 and not persist_blocked and not closing and field_env.hearth_fire.fired and field_env.is_inside_camp(actor.global_position)
@@ -857,8 +882,10 @@ func _landed(kind: String, dest: String) -> void:
 			if not pending: _event("carry",actor.position)
 		"storage":
 			_event("deposit_"+kind,depot.bins[kind].global_position)
+			present_character_contact(&"deposit", depot.apron.global_position)
 		_:
 			_event("spend_"+kind,carry.receivers[dest].global_position)
+			present_character_contact(&"deposit", carry.receivers[dest].global_position)
 
 func _persist_world() -> void:
 	if not field_ready or persist_blocked: return
@@ -883,6 +910,11 @@ func _inventory_changed() -> void:
 		else:
 			last_good = field_save.committed_state
 	_refresh_field()
+
+func _finish_player_purchase(id: String) -> void:
+	if not persist_blocked:
+		present_character_contact(&"build", carry.receivers[id].global_position)
+	_finish_purchase(id)
 
 func _finish_purchase(id: String) -> void:
 	if persist_blocked: return
@@ -1107,7 +1139,9 @@ func build_hint(id: String) -> String:
 
 # Scene callbacks conclude a physical transfer and save its receipt before celebrating it.
 func rescue_survivor() -> bool:
-	return settlement_loop.rescue()
+	if not settlement_loop.rescue(): return false
+	present_character_contact(&"rescue", survivor.actor.global_position)
+	return true
 
 func claim_worker_wood(token: String) -> bool:
 	return settlement_loop.claim_worker_wood(token)

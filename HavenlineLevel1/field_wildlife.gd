@@ -3,6 +3,7 @@ extends Node3D
 ## separate controllers and never enter the worker's automatic hunting list.
 
 const StagArt := preload("res://assets/field/tundra_stag.glb")
+const HarvestYields := preload("res://field_harvest_yields.gd")
 const SOURCE_ID := "wildlife_tundra_stag"
 const HOME := Vector3(4.55, 0, 12.80)
 const MAX_HP := 3
@@ -76,7 +77,7 @@ func receive_hunting_contact(at: Vector3, origin: Vector3, damage := 1) -> bool:
 		down_age = 0.0
 		world.lifecycle.cooling[SOURCE_ID] = RETURN_DELAY
 		world._event("stag_harvest",global_position,"defeat")
-		world._make_drops("meat",global_position,3)
+		world._make_drops("meat",global_position,HarvestYields.TUNDRA_STAG)
 	world._checkpoint_lifecycle()
 	return not world.persist_blocked
 

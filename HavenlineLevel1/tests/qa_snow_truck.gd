@@ -123,7 +123,7 @@ func run() -> void:
 	steer(Vector2.ZERO)
 	for count in 29:await physics_frame
 	_assert("driven blades break a real metal bank",is_instance_valid(ore) and field.lifecycle.cooling.has("truck-test-ore"))
-	_assert("mined metal goes to truck exactly once",truck.state().cargo.get("metal",0)==3)
+	_assert("all eight metal bundles go to truck exactly once",truck.state().cargo.get("metal",0)==8)
 	var stock_before: int=field.inventory.stored.wood
 	var metal_before: int=field.inventory.stored.metal
 	steer(_heading(Vector3.FORWARD))
@@ -134,7 +134,7 @@ func run() -> void:
 	for count in 46:await physics_frame
 	print("SNOW TRUCK IN ",truck.body.position, " parked=",truck.parked()," door=",truck.opening)
 	_assert("reverse returns into garage and parks",truck.parked())
-	_assert("park transfers the entire cargo once",truck.state().cargo.is_empty() and field.inventory.stored.wood==stock_before+1 and field.inventory.stored.metal==metal_before+3 and not field.persist_blocked)
+	_assert("park transfers the entire cargo once",truck.state().cargo.is_empty() and field.inventory.stored.wood==stock_before+1 and field.inventory.stored.metal==metal_before+8 and not field.persist_blocked)
 	await _key()
 	_assert("restored player controls and backpack",not truck.mounted and field.hero_model.visible and field.carry.rack.visible and field.actor.collision_layer!=0)
 	field.inventory.vehicle_collect("truck-native-salvage","stone")

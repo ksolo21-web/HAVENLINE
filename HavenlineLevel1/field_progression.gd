@@ -35,7 +35,7 @@ const POSITIONS := {"expansion_1":Vector2(2.6,-1.5), "expansion_2":Vector2(2.6,-
 	"snow_garage":Vector2(4.2,4.0), "snow_truck":Vector2(3.0,2.8)}
 
 # Receipts, carry meshes and machine inputs are physical bundles. Each bundle
-# contains ten raw units; a tree/bank awards three bundles, a wolf two.
+# contains ten raw units. The source sets how many bundles it awards.
 const UNITS_PER_BUNDLE := 10
 const SURVIVOR := "survivor_plot"
 const SURVIVOR_BUNDLES := 8

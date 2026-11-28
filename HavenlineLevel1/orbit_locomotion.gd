@@ -49,7 +49,12 @@ func bind(visual: Node3D) -> bool:
 		graph.add_node(state, sample)
 		if state != "idle":
 			graph.add_node(state + "_rate", AnimationNodeTimeScale.new())
-			graph.connect_node(state + "_rate", 0, state)
+			if state == "run":
+				graph.add_node("run_seek", AnimationNodeTimeSeek.new())
+				graph.connect_node("run_seek", 0, state)
+				graph.connect_node("run_rate", 0, "run_seek")
+			else:
+				graph.connect_node(state + "_rate", 0, state)
 	var mix := AnimationNodeBlend2.new()
 	mix.sync = true
 	graph.add_node("gait", mix)
@@ -75,6 +80,12 @@ func use_field_run() -> void:
 	run_length = player.get_animation(run.animation).length
 	native_run_speed = FIELD_STRIDE_SPEED
 	run_only = true
+
+func match_field_launch(side: int) -> void:
+	if not run_only: return
+	# In the source clip this is the first neutral ankle over a loaded heel.
+	# The opposite leg reaches the equivalent pose half a cycle later.
+	tree.set("parameters/run_seek/seek_request", run_length * (.095 + .5 * side))
 
 func observe(planar_speed: float, grounded: bool, dt: float = -1.0) -> void:
 	if not is_instance_valid(tree): return

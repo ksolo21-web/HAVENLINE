@@ -120,7 +120,8 @@ func run() -> void:
 	check("partial_source_survives_stream",rock.strikes==2 and rock.phase=="seated")
 	var drops_before:int=f.drops.size()
 	check("third_hit_visual_depletion",f.accept_contact(rock) and rock.phase=="mined" and not f.is_source_available("qa-rock"))
-	check("one_source_three_fresh_drops",f.drops.size()==drops_before+3)
+	check("one_source_six_fresh_drops",f.drops.size()==drops_before+6)
+	check("repeated_depletion_cannot_grant_a_second_yield",not f.lifecycle.finish_harvest(rock) and f.drops.size()==drops_before+6)
 	f.unload_resource_source("qa-rock")
 	f.lifecycle.advance(4.9)
 	var cooldown_save:Dictionary=f.lifecycle.snapshot()
@@ -130,12 +131,12 @@ func run() -> void:
 	f.lifecycle.advance(.11)
 	check("exact_stone_timer_returns_actual_mesh",rock.phase=="seated" and rock._mesh.visible and rock.strikes==0)
 	var png=JSON.parse_string(JSON.stringify(cooldown_save))
-	check("json_lifecycle_resume",f.lifecycle.restore(png) and not f.is_source_available("qa-rock") and f.drops.size()==drops_before+3)
+	check("json_lifecycle_resume",f.lifecycle.restore(png) and not f.is_source_available("qa-rock") and f.drops.size()==drops_before+6)
 	f.lifecycle.advance(.11)
 	for i in 3:
 		rock.cooldown=0
 		f.accept_contact(rock)
-	check("regrown_round_new_loot",f.drops.size()==drops_before+6)
+	check("regrown_round_new_loot",f.drops.size()==drops_before+12)
 	var pine=f.add_resource_source("qa-pine","wood",Vector2(34,20))
 	f.actor.position=pine.position+Vector3.RIGHT*1.4
 	f.character_kit.equipped="axe"

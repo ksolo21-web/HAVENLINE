@@ -195,6 +195,7 @@ func repair(id: String) -> bool:
 		apply_condition()
 		return false
 	world._event("raid_site_repaired", site_position(id), "build")
+	world.present_character_contact(&"repair", repair_position(id))
 	flash_status(title(id) + " ready")
 	return true
 

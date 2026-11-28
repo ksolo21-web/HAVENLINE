@@ -245,6 +245,7 @@ func _deposit()->void:
 		else:j.product_store[kind]+=amount
 	if staged.is_empty():return
 	if not world.settlement_loop.commit_receipt("goods_stored",world.depot.apron.global_position,"deposit_wood"):return
+	world.present_character_contact(&"deposit", world.depot.apron.global_position)
 	for kind:String in staged:_draw(kind,staged[kind],_shelf(kind),false)
 
 func withdraw(kind:String)->bool:
@@ -288,6 +289,7 @@ func visit_counter(worker: bool, at: Vector3) -> bool:
 	var cue := "counter_pickup" if cash > 0 else "counter_dropoff"
 	var audio := "meal_served" if cash > 0 else "deposit_meat"
 	if not world.settlement_loop.commit_receipt(cue,counter.payment_rest.global_position,audio): return false
+	if not worker: world.present_character_contact(&"service", counter.payment_rest.global_position)
 	var carrier: Node3D = world.survivor.actor if worker else world.actor
 	if cash > 0: _draw("money",cash,counter.payment_rest.global_position,true,carrier)
 	for kind: String in delivered:
