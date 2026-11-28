@@ -1,0 +1,1640 @@
+{
+  "schema_version": 1,
+  "plan_id": "havenline-aurora-living-world-2026-11-28",
+  "scope": "Forward task-plan extension; no game source, task-state, dependency-edge, runtime asset or workflow change.",
+  "owner_quote": "How will this new UI effect the Task list? Lets also add more type of enemies and random winter none aggressive npc animals we can hunt too for meat. They move around none robotic like to look more natural. Day and Night should have different animals and enemies too. Night time enemies are more aggressive too. The survivors should move around too less robotic like to look more natural. How will this effect the task plan too? I ake it back about the onscreen joystick. it can be visible but the user can touch anywere to control if that makes sense. i think thats how it is currently in the test build.",
+  "owner_confirmed": [
+    "Aurora UI family",
+    "Matching dark theme",
+    "Visible on-screen joystick allowed; touch-anywhere movement retained",
+    "More enemy types",
+    "Random nonaggressive winter prey huntable for meat",
+    "Natural animal movement",
+    "Different day/night animals and enemies",
+    "More aggressive night enemies",
+    "Natural survivor movement"
+  ],
+  "authority": {
+    "latest_aurora_commit": "44f269f2a2028c51b90d22128d0e2bbf3c9ed999",
+    "latest_damage_targeting_raid_commit": "ee3ef9e38923a02c29512cc0652440c14ca3672b",
+    "latest_damage_targeting_raid_path": "Docs/Production/Build13Audit/README.md",
+    "documentation_parent": "0a7587cf3e89397a760be4b4c606c54ad09d0e02",
+    "scope_priority": "Latest owner directions control named conflicts; preserve historical evidence. Prior CD01/CD02 permanent sanctuary/free revival cannot override later casualty/breach/repurchase decisions.",
+    "authored_details": "Enemy role promotions, five new prey species, time bands, precise drag/release behavior and joystick feedback placement, appearance default and phase rollout are authored design proposals implementing requested outcomes, not separate owner quotations or final numeric tuning.",
+    "latest_control_correction": "I ake it back about the onscreen joystick. it can be visible but the user can touch anywere to control if that makes sense. i think thats how it is currently in the test build.",
+    "earlier_aurora_input_scope": "The Aurora family and Light/Dark selection remain current. The latest owner correction supersedes only the earlier ban on a visible joystick; retain the published no-joystick concepts as historical art references, not a visibility gate."
+  },
+  "world_scope": {
+    "worlds": 10,
+    "local_levels_per_world": 50,
+    "world1_first": true,
+    "new_parent_task_ids": [],
+    "undefined_tasks_preserved": "T71–T80 SOURCE_NOT_FOUND",
+    "all_actors_in_level1": false
+  },
+  "invariants": {
+    "pets": [
+      "guardian_dog",
+      "gray_wolf",
+      "fox",
+      "owl",
+      "male_lion",
+      "white_tiger",
+      "brown_bear"
+    ],
+    "all_pets_attack_and_have_specialties": true,
+    "multiple_pets_and_survivors": true,
+    "new_slot_caps": false,
+    "survivors_may_hunt": true,
+    "night_prey_remain_nonaggressive": true,
+    "theme_does_not_set_world_phase": true,
+    "scheduled_raid_warning_active_seconds": 300,
+    "raid_frequency_selected_here": false,
+    "ordinary_simulation_pauses_outside_active_play": true,
+    "latest_casualty_repurchase_policy_preserved": true,
+    "extra_casualty_costs_or_inventory_rules_selected_here": false,
+    "night_aggro_ignores_spending": true,
+    "visible_joystick_allowed": true,
+    "touch_anywhere_in_unclaimed_gameplay_required": true,
+    "movement_must_start_on_joystick": false
+  },
+  "existing_hostile_keys": [
+    "hostile-wolf",
+    "raider",
+    "ice-brute",
+    "rival-rifleman",
+    "hooded-swarmer",
+    "hooded-siege-boss"
+  ],
+  "added_hostile_candidates": [
+    {
+      "design_key": "shield-raider",
+      "name": "Shield Raider",
+      "category": "HOSTILE",
+      "proposal_status": "ADDED_AUTHORED_IMPLEMENTATION_CANDIDATE_NOT_RUNTIME_OR_ASSET_APPROVAL",
+      "existing_disposition": "EXPLICIT_RENDER_RESERVE_NOT_AUTOMATIC_LAUNCH",
+      "source": {
+        "render_pin": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/selected/shield-raider-turnaround.png",
+        "sha256": "578177b4b6de9093c5df3b5655998b42a4aef17d1666c734b35fab64694eebd9",
+        "source_render_id": "shield-raider-turnaround-r1"
+      },
+      "proposed_spawn_phases": [
+        "day",
+        "dusk"
+      ],
+      "behavior": "Front shield advance; committed hammer strike exposes a flank and recovery.",
+      "counterplay": "Move around facing or exploit recovery; never all-angle invulnerability.",
+      "meat_source": "NOT_AUTOMATICALLY_GRANTED",
+      "unlock_local_level": null
+    },
+    {
+      "design_key": "harpoon-hunter",
+      "name": "Harpoon Hunter",
+      "category": "HOSTILE",
+      "proposal_status": "ADDED_AUTHORED_IMPLEMENTATION_CANDIDATE_NOT_RUNTIME_OR_ASSET_APPROVAL",
+      "existing_disposition": "EXPLICIT_RENDER_RESERVE_NOT_AUTOMATIC_LAUNCH",
+      "source": {
+        "render_pin": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/selected/harpoon-hunter-turnaround.png",
+        "sha256": "1e25e1b578a0631f5de0d4c44dfc180415991f72bc577d7e7f5fbd7e83428fc3",
+        "source_render_id": "harpoon-hunter-turnaround-r1"
+      },
+      "proposed_spawn_phases": [
+        "dawn",
+        "day"
+      ],
+      "behavior": "Readable ranged tether lane with throw, retrieval and reposition cycle.",
+      "counterplay": "Cross the marked lane or break valid approach; any restraint is bounded and escapable.",
+      "meat_source": "NOT_AUTOMATICALLY_GRANTED",
+      "unlock_local_level": null
+    },
+    {
+      "design_key": "powder-sapper",
+      "name": "Powder Sapper",
+      "category": "HOSTILE",
+      "proposal_status": "ADDED_AUTHORED_IMPLEMENTATION_CANDIDATE_NOT_RUNTIME_OR_ASSET_APPROVAL",
+      "existing_disposition": "EXPLICIT_RENDER_RESERVE_NOT_AUTOMATIC_LAUNCH",
+      "source": {
+        "render_pin": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/selected/powder-sapper-turnaround.png",
+        "sha256": "b2891960f3792ad3443f157819503d010391ebf892d445e08fb2bee57115ddee",
+        "source_render_id": "powder-sapper-turnaround-r1"
+      },
+      "proposed_spawn_phases": [
+        "dusk",
+        "night"
+      ],
+      "behavior": "Visible fictional demolition setup against a legally eligible objective.",
+      "counterplay": "Interrupt setup through ordinary combat or leave the marked danger area.",
+      "meat_source": "NOT_AUTOMATICALLY_GRANTED",
+      "unlock_local_level": null
+    },
+    {
+      "design_key": "frost-stalker",
+      "name": "Frost Stalker",
+      "category": "HOSTILE",
+      "proposal_status": "ADDED_AUTHORED_IMPLEMENTATION_CANDIDATE_NOT_RUNTIME_OR_ASSET_APPROVAL",
+      "existing_disposition": "EXPLICIT_RENDER_RESERVE_NOT_AUTOMATIC_LAUNCH",
+      "source": {
+        "render_pin": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/selected/frost-stalker-turnaround.png",
+        "sha256": "f6453910e87076b31dd20a02ffa54d9e16d7f8203c09f77a1ab8c64f2b9615de",
+        "source_render_id": "frost-stalker-turnaround-r1"
+      },
+      "proposed_spawn_phases": [
+        "night"
+      ],
+      "behavior": "Low feline approach, reachable flank, anticipated pounce, missed-pounce recovery.",
+      "counterplay": "Read the wind-up and evade the committed path; no invisible contact or teleport.",
+      "meat_source": "NOT_AUTOMATICALLY_GRANTED",
+      "unlock_local_level": null
+    },
+    {
+      "design_key": "musk-ox-rampager",
+      "name": "Musk Ox Rampager",
+      "category": "HOSTILE",
+      "proposal_status": "ADDED_AUTHORED_IMPLEMENTATION_CANDIDATE_NOT_RUNTIME_OR_ASSET_APPROVAL",
+      "existing_disposition": "EXPLICIT_RENDER_RESERVE_NOT_AUTOMATIC_LAUNCH",
+      "source": {
+        "render_pin": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/selected/musk-ox-rampager-turnaround.png",
+        "sha256": "bf5191691a1274aecdf34ef228de8a273d64f6f225fbda28e1f4052345c304eb",
+        "source_render_id": "musk-ox-rampager-turnaround-r1"
+      },
+      "proposed_spawn_phases": [
+        "dawn",
+        "day"
+      ],
+      "behavior": "Heavy lane charge, limited turning and substantial weighted recovery.",
+      "counterplay": "Sidestep the committed lane and act during recovery.",
+      "meat_source": "NOT_AUTOMATICALLY_GRANTED",
+      "unlock_local_level": null
+    },
+    {
+      "design_key": "frostwing-raptor",
+      "name": "Frostwing Raptor",
+      "category": "HOSTILE",
+      "proposal_status": "ADDED_AUTHORED_IMPLEMENTATION_CANDIDATE_NOT_RUNTIME_OR_ASSET_APPROVAL",
+      "existing_disposition": "EXPLICIT_RENDER_RESERVE_NOT_AUTOMATIC_LAUNCH",
+      "source": {
+        "render_pin": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/selected/frostwing-raptor-turnaround.png",
+        "sha256": "17cfca8369bee4307647eaa729629843249684a848da40fea068d4166aaea720",
+        "source_render_id": "frostwing-raptor-turnaround-r1"
+      },
+      "proposed_spawn_phases": [
+        "day"
+      ],
+      "behavior": "Real circling/approach air path, readable dive and climb-out.",
+      "counterplay": "Move out of the committed dive; test wings, roofs and terrain clearance.",
+      "meat_source": "NOT_AUTOMATICALLY_GRANTED",
+      "unlock_local_level": null
+    },
+    {
+      "design_key": "armored-ram-sled",
+      "name": "Armored Ram Sled",
+      "category": "HOSTILE_MACHINE",
+      "proposal_status": "ADDED_AUTHORED_IMPLEMENTATION_CANDIDATE_NOT_RUNTIME_OR_ASSET_APPROVAL",
+      "existing_disposition": "EXPLICIT_RENDER_RESERVE_NOT_AUTOMATIC_LAUNCH",
+      "source": {
+        "render_pin": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/InvaderTurnarounds/2026-11-24/roster-expansion-02/selected/armored-ram-sled-turnaround.png",
+        "sha256": "db601515bb0eb3dc97ee02b01e97eb6506aab4e5d0dea18910c53647460c7998",
+        "source_render_id": "armored-ram-sled-turnaround-r1"
+      },
+      "proposed_spawn_phases": [
+        "night"
+      ],
+      "behavior": "Hostile machine approaches, performs a ram stroke, resets and repositions.",
+      "counterplay": "Exploit reset or divert a valid approach; camp raids still require full warning.",
+      "meat_source": false,
+      "unlock_local_level": null
+    },
+    {
+      "design_key": "rival-leader",
+      "name": "Rival Leader",
+      "category": "HOSTILE",
+      "proposal_status": "ADDED_AUTHORED_IMPLEMENTATION_CANDIDATE_NOT_RUNTIME_OR_ASSET_APPROVAL",
+      "existing_disposition": "EXPLICIT_RENDER_RESERVE_NOT_AUTOMATIC_LAUNCH",
+      "source": {
+        "render_pin": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/InvaderTurnarounds/2026-11-24/expansion/selected/rival-leader-turnaround.png",
+        "sha256": "450910b6c22e478c0c7bcb9027c645fe1d08335e4c16d70e90ebab79c46fcade",
+        "source_render_id": "rival-leader-turnaround-r1"
+      },
+      "proposed_spawn_phases": [
+        "dusk",
+        "night"
+      ],
+      "behavior": "Visible commands coordinate a finite eligible group and its approach angles.",
+      "counterplay": "Break formation or pressure the leader; no infinite summons or unexplained damage aura.",
+      "meat_source": "NOT_AUTOMATICALLY_GRANTED",
+      "unlock_local_level": null
+    }
+  ],
+  "passive_prey": [
+    {
+      "design_key": "tundra-stag",
+      "name": "Tundra Stag",
+      "category": "NONAGGRESSIVE_HUNTABLE_PREY",
+      "initiates_aggression": false,
+      "becomes_hostile_at_night": false,
+      "attack_retaliation": false,
+      "resource_family": "meat",
+      "proposed_spawn_phases": [
+        "dawn",
+        "day",
+        "dusk",
+        "night"
+      ],
+      "emphasis": "Day/dusk emphasis; low night overlap can preserve a common food route.",
+      "motion": "Graze, lift head, listen, curved walking, then bound toward cover.",
+      "relative_meat_role": "Medium",
+      "exact_yield": null,
+      "source": {
+        "render_pin": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+        "path": "Docs/Design/InvaderTurnarounds/2026-11-24/expansion/selected/tundra-stag-turnaround.png",
+        "sha256": "e1d4cde67ec69290e3227786a4f177d5a12fb02c585983420709caf62e3a235a",
+        "source_render_id": "tundra-stag-turnaround-r1"
+      },
+      "asset_status": "EXISTING_SELECTED_CONCEPT_NATIVE_PROOF_PENDING",
+      "unlock_local_level": null
+    },
+    {
+      "design_key": "snowshoe-hare",
+      "name": "Snowshoe Hare",
+      "category": "NONAGGRESSIVE_HUNTABLE_PREY",
+      "initiates_aggression": false,
+      "becomes_hostile_at_night": false,
+      "attack_retaliation": false,
+      "resource_family": "meat",
+      "proposed_spawn_phases": [
+        "dusk",
+        "night"
+      ],
+      "emphasis": "Dusk/night emphasis near forest cover.",
+      "motion": "Feed, sit alert, ear attention, hindquarter compression, bounding and grounded landings.",
+      "relative_meat_role": "Small",
+      "exact_yield": null,
+      "source": null,
+      "asset_status": "NEW_REFERENCE_MODEL_RIG_CLIPS_AUDIO_REQUIRED",
+      "unlock_local_level": null
+    },
+    {
+      "design_key": "rock-ptarmigan",
+      "name": "Rock Ptarmigan",
+      "category": "NONAGGRESSIVE_HUNTABLE_PREY",
+      "initiates_aggression": false,
+      "becomes_hostile_at_night": false,
+      "attack_retaliation": false,
+      "resource_family": "meat",
+      "proposed_spawn_phases": [
+        "day"
+      ],
+      "emphasis": "Daytime ground-bird encounters; existing individuals depart naturally at phase change.",
+      "motion": "Short steps, peck, scan, loose small groups and a supported escape flush.",
+      "relative_meat_role": "Small",
+      "exact_yield": null,
+      "source": null,
+      "asset_status": "NEW_REFERENCE_MODEL_RIG_CLIPS_AUDIO_REQUIRED",
+      "unlock_local_level": null
+    },
+    {
+      "design_key": "red-squirrel",
+      "name": "Red Squirrel",
+      "category": "NONAGGRESSIVE_HUNTABLE_PREY",
+      "initiates_aggression": false,
+      "becomes_hostile_at_night": false,
+      "attack_retaliation": false,
+      "resource_family": "meat",
+      "proposed_spawn_phases": [
+        "day"
+      ],
+      "emphasis": "Daytime woodland encounters.",
+      "motion": "Ground forage, pause, look, dart and climb on an authored reachable route.",
+      "relative_meat_role": "Very small; optional, never mandatory grinding",
+      "exact_yield": null,
+      "source": null,
+      "asset_status": "NEW_REFERENCE_MODEL_RIG_CLIPS_AUDIO_REQUIRED",
+      "unlock_local_level": null
+    },
+    {
+      "design_key": "woodland-caribou",
+      "name": "Woodland Caribou",
+      "category": "NONAGGRESSIVE_HUNTABLE_PREY",
+      "initiates_aggression": false,
+      "becomes_hostile_at_night": false,
+      "attack_retaliation": false,
+      "resource_family": "meat",
+      "proposed_spawn_phases": [
+        "dawn",
+        "day",
+        "dusk",
+        "night"
+      ],
+      "emphasis": "Dawn/day/dusk emphasis with some night overlap.",
+      "motion": "Small adult herds, spacing, snow foraging, walking arcs and staggered flight.",
+      "relative_meat_role": "Larger; tune hunt/return effort",
+      "exact_yield": null,
+      "source": null,
+      "asset_status": "NEW_REFERENCE_MODEL_RIG_CLIPS_AUDIO_REQUIRED",
+      "unlock_local_level": null
+    },
+    {
+      "design_key": "porcupine",
+      "name": "Porcupine",
+      "category": "NONAGGRESSIVE_HUNTABLE_PREY",
+      "initiates_aggression": false,
+      "becomes_hostile_at_night": false,
+      "attack_retaliation": false,
+      "resource_family": "meat",
+      "proposed_spawn_phases": [
+        "dusk",
+        "night"
+      ],
+      "emphasis": "Dusk/night encounters.",
+      "motion": "Slow weighted walk, sniff, feed, deliberate turns and supported escape.",
+      "relative_meat_role": "Small–medium",
+      "exact_yield": null,
+      "source": null,
+      "asset_status": "NEW_REFERENCE_MODEL_RIG_CLIPS_AUDIO_REQUIRED",
+      "unlock_local_level": null
+    }
+  ],
+  "time_design": {
+    "phases": [
+      "dawn",
+      "day",
+      "dusk",
+      "night"
+    ],
+    "time_bands_are_gameplay_proposals": true,
+    "exact_cycle_lengths": null,
+    "exact_spawn_weights": null,
+    "exact_population_budgets": null,
+    "phase_changes_preserve_active_actors": true,
+    "theme_preference_proposal": [
+      "System",
+      "Light",
+      "Dark"
+    ]
+  },
+  "requirements": [
+    {
+      "id": "UI01",
+      "title": "Selected Aurora family",
+      "tasks": [
+        "T04",
+        "T55"
+      ],
+      "requirement": "Implement the owner-selected Aurora floating HUD in matching Light and Dark themes. Preserve hierarchy, readable counts and equivalent access. Exact new artwork remains a reference proposal, not native UI approval.",
+      "acceptance": "Inspect native Light/Dark screens in day/night, portrait/landscape, enlarged text and busy camp states; no missing, overlapping or clipped critical controls.",
+      "status": "UNTESTED_FOR_NEW_RUNTIME_SCOPE"
+    },
+    {
+      "id": "UI02",
+      "title": "Touch-anywhere movement and input ownership",
+      "tasks": [
+        "T07",
+        "T06",
+        "T55",
+        "T58"
+      ],
+      "requirement": "A visible on-screen joystick is allowed. Movement must also start anywhere in the gameplay viewport not owned by UI, including over world objects; the player need not touch the joystick first. Proposed drag/release control retains one stable movement pointer, clear visible feedback and automatic actions. UI-started touches never become movement; release/cancel stops. Keep joystick feedback inside actual safe bounds without moving the logical touch origin or changing its movement vector.",
+      "acceptance": "Exercise movement started on and far outside the displayed joystick, both sides and all edges/corners of the play area, safe-inset feedback fit, UI/world multitouch, drag off buttons, map pan/pinch, release, focus loss and live rotate/fold/resize. No stuck movement, wrong actor action, accidental purchase or restored held pointer. A fresh touch is required after cancellation.",
+      "status": "UNTESTED_FOR_NEW_RUNTIME_SCOPE"
+    },
+    {
+      "id": "UI03",
+      "title": "Map and world knowledge",
+      "tasks": [
+        "T04",
+        "T07",
+        "T12",
+        "T14",
+        "T32"
+      ],
+      "requirement": "Carry forward NM01–NM07: minimap expands; real known POIs, live actor categories and valid waypoint directions. Day/night markers are truthful and do not reveal undiscovered enemies or remove fox/owl scouting value.",
+      "acceptance": "Open/pan/zoom/select/close/arrive with moving prey, enemies, pets and survivors; no ghost markers, unreachable route claims, duplicated map actors or touch leakage.",
+      "status": "UNTESTED_FOR_NEW_RUNTIME_SCOPE"
+    },
+    {
+      "id": "UI04",
+      "title": "Actual screen fit",
+      "tasks": [
+        "T04",
+        "T07",
+        "T58"
+      ],
+      "requirement": "Carry forward DS01–DS08 for actual window/safe insets, portrait and delivered landscape rotations, fold/resize and undistorted normal-scale gameplay. No extreme zoom or shrinking labels to fit.",
+      "acceptance": "Source-bound physical phone/tablet/Fold7-class cover/inner tests and complete transition recordings; verify actual touch alignment and state preservation, not screenshots alone.",
+      "status": "UNTESTED_FOR_NEW_RUNTIME_SCOPE"
+    },
+    {
+      "id": "UI05",
+      "title": "Theme and world time are independent",
+      "tasks": [
+        "T04",
+        "T14",
+        "T43",
+        "T54",
+        "T55"
+      ],
+      "requirement": "Aurora Dark changes interface appearance only. World time changes ecology, lighting and threat profiles. Neither changes the other. System/Light/Dark with System default is an authored preference proposal; decide device-local versus account-synced preference explicitly.",
+      "acceptance": "Test all four Light/Dark UI × day/night world combinations, save/resume and setting changes. No clock, RNG, threat, loot, weather or progression changes caused by theme switching.",
+      "status": "UNTESTED_FOR_NEW_RUNTIME_SCOPE"
+    },
+    {
+      "id": "UI06",
+      "title": "Forward packet and gate reconciliation",
+      "tasks": [
+        "T04",
+        "T07",
+        "T55",
+        "T58",
+        "T67"
+      ],
+      "requirement": "Update current packet/gate consumers to enforce one primary touch-anywhere movement input, allow visible joystick feedback and apply the current orientation scope. Preserve exact historical joystick/landscape receipts and stronger reference rules. This documentation does not wire those consumers.",
+      "acceptance": "Bind the latest correction in actual work packets; neither a fixed joystick activation region nor the superseded no-visible-joystick ban may gate new work. Test movement away from the joystick plus UI ownership; re-run affected current gates before integration rather than reuse old evidence alone.",
+      "status": "UNTESTED_FOR_NEW_RUNTIME_SCOPE"
+    },
+    {
+      "id": "EN01",
+      "title": "Meaningfully expanded enemy roster",
+      "tasks": [
+        "T21",
+        "T13",
+        "T22"
+      ],
+      "requirement": "Retain six selected hostile families and add eight authored role candidates from preserved reserve art. Each has distinct movement/attack decisions and readable counterplay, not only HP, scale or recolor. Freeze exact native identities and source bindings before implementation.",
+      "acceptance": "Demonstrate each introduced type in isolation and mixed encounters: approach, telegraph, attack, miss, interrupt, recovery, retreat/defeat and legal defensive interaction. Static art does not approve it.",
+      "status": "UNTESTED_FOR_NEW_RUNTIME_SCOPE"
+    },
+    {
+      "id": "EN02",
+      "title": "Night aggression without target-rule drift",
+      "tasks": [
+        "T13",
+        "T21",
+        "T23",
+        "T31"
+      ],
+      "requirement": "Night profiles can increase commitment, pursuit persistence and coordination within tuned budgets. Preserve player/pet priority, camp-assault targets, per-enemy survivor retaliation and the both-player-and-pets-too-far exception. Night never automatically broadens eligibility.",
+      "acceptance": "Prove near-player/unprovoked-survivor protection, attacker-specific retaliation, too-far eligibility, occlusion, blocked routes and retarget hysteresis in both phases. No omniscient tracking, wall hits, endless pursuit or unavoidable control locks.",
+      "status": "UNTESTED_FOR_NEW_RUNTIME_SCOPE"
+    },
+    {
+      "id": "EN03",
+      "title": "Real contacts and readable counterplay",
+      "tasks": [
+        "T21",
+        "T22",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30"
+      ],
+      "requirement": "Keep valid contact windows, attack IDs and exactly-once defeat/rewards. Preserve anticipation, misses and recovery under night aggression; finish committed attacks coherently across phase boundaries.",
+      "acceptance": "Check multiple hunters/attackers, late target loss, interruption, recall, load/save and phase changes. Airborne strikes need roof/terrain/wing clearance. Tethers/charges have reachable escapes and cannot track perfectly mid-commit.",
+      "status": "UNTESTED_FOR_NEW_RUNTIME_SCOPE"
+    },
+    {
+      "id": "EN04",
+      "title": "Raid origin and warning",
+      "tasks": [
+        "T13",
+        "T14",
+        "T21",
+        "T22",
+        "T54",
+        "T55"
+      ],
+      "requirement": "Every scheduled raid retains its encounter origin and a full 300 active-play seconds of named-camp warning before camp damage. Nighttime or ambient labels cannot bypass it. Ordinary field encounters cannot silently turn into unannounced camp-damage raids.",
+      "acceptance": "Test the full saved countdown from several routes, muted cues, resume and night transitions; no raid camp damage before expiry. Raid repeat intervals remain unselected playtest proposals.",
+      "status": "UNTESTED_FOR_NEW_RUNTIME_SCOPE"
+    },
+    {
+      "id": "WL01",
+      "title": "Separate passive winter prey",
+      "tasks": [
+        "T21",
+        "T12",
+        "T32"
+      ],
+      "requirement": "Plan six passive prey entries: retained Tundra Stag plus Snowshoe Hare, Rock Ptarmigan, Red Squirrel, Woodland Caribou and Porcupine. They forage/rest/notice/flee, never initiate aggression or turn hostile at night. Keep separate IDs/factions for pets, predators and prey.",
+      "acceptance": "Observe every introduced prey actor undisturbed, approached, hunted and at night. No camp assault, retaliation/quill damage or hostile patrol behavior. Owned pets, survivors, customers and rescue candidates are never prey.",
+      "status": "UNTESTED_FOR_NEW_RUNTIME_SCOPE"
+    },
+    {
+      "id": "WL02",
+      "title": "Varied but bounded encounters",
+      "tasks": [
+        "T13",
+        "T21",
+        "T14",
+        "T32"
+      ],
+      "requirement": "Use authored habitat, route, world/local-level and time-phase eligibility plus persistent encounter randomness. Spawn outside immediate view in valid space; preserve work lanes, gates and escape routes. Budget density without inventing device-dependent gameplay caps.",
+      "acceptance": "Replay seeds and save/resume; no visible pop-in, spawning inside structures/actors, blocked required route, reload reroll or unbounded accumulation. Essential meat remains attainable without rare-spawn luck.",
+      "status": "UNTESTED_FOR_NEW_RUNTIME_SCOPE"
+    },
+    {
+      "id": "WL03",
+      "title": "Purposeful wildlife activity",
+      "tasks": [
+        "T21",
+        "T31"
+      ],
+      "requirement": "Choose feeding, cover, resting, social spacing and escape destinations with varied dwell times and animation phases. Herd members respond independently with cohesion and separation. No constant random direction changes or synchronized cloned loops.",
+      "acceptance": "Play continuous undisturbed and startled groups through day/night changes and obstacles; inspect individual variety, coherent escape, reachable shelters and eventual settled behavior.",
+      "status": "UNTESTED_FOR_NEW_RUNTIME_SCOPE"
+    },
+    {
+      "id": "WL04",
+      "title": "Meat has a useful conserved path",
+      "tasks": [
+        "T08",
+        "T16",
+        "T17",
+        "T21",
+        "T33"
+      ],
+      "requirement": "Use the existing meat resource family; different animals do not create new currencies or mandatory rare ingredients. Bind quantities and native IDs later. Exactly-once defeat/drop, reservation, pickup, carry, storage, applicable cooking/service and payment remain conserved.",
+      "acceptance": "Test solo and concurrent hunters, interrupted pickup, loaded survivors, full destinations, death/despawn and reload around each commit. No double meat, vanished cargo or phantom reward; no new fish requirement in Level 1.",
+      "status": "UNTESTED_FOR_NEW_RUNTIME_SCOPE"
+    },
+    {
+      "id": "WL05",
+      "title": "Useful survivor and pet hunting",
+      "tasks": [
+        "T21",
+        "T23",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T31"
+      ],
+      "requirement": "Survivors may proactively hunt through authorized jobs; pets retain their combos and specialties. Separate an assigned hunt from random killing of every neutral animal. Use valid attack reach and a safe return; no infinite pursuit of unreachable climbing prey.",
+      "acceptance": "Test player-only opening, survivor hunt/collect/return, multi-pet assistance, recall, prey entering unreachable tree/terrain and job cancellation. Preserve typed cargo and release stale reservations.",
+      "status": "UNTESTED_FOR_NEW_RUNTIME_SCOPE"
+    },
+    {
+      "id": "CY01",
+      "title": "Different day and night populations",
+      "tasks": [
+        "T54",
+        "T13",
+        "T21",
+        "T12",
+        "T32"
+      ],
+      "requirement": "Author distinct day/night wildlife and enemy pools, with overlap where useful and dusk/dawn weighting transitions. Include actual membership differences, not only lighting or HP changes. All proposed time bands are game design choices, not claims of strict natural ecology.",
+      "acceptance": "At an eligible World 1 progression stage, show at least one day-emphasis/day-only and one night-emphasis/night-only prey and hostile type, with deterministic population eligibility records. Verify accessible meat in each phase.",
+      "status": "UNTESTED_FOR_NEW_RUNTIME_SCOPE"
+    },
+    {
+      "id": "CY02",
+      "title": "Continuous phase transitions",
+      "tasks": [
+        "T54",
+        "T21",
+        "T14",
+        "T31"
+      ],
+      "requirement": "Do not delete actors in view, in combat, reserved for a job, wounded or carrying committed loot when a phase changes. Let them complete/disengage and depart through valid routes; apply later decision profiles at safe state boundaries.",
+      "acceptance": "Record dusk and dawn during a hunt, melee contact, aerial dive, raid warning, active raid and worker delivery. No disappearing target, mid-strike speed jump, healed enemy, erased drop or timer restart.",
+      "status": "UNTESTED_FOR_NEW_RUNTIME_SCOPE"
+    },
+    {
+      "id": "CY03",
+      "title": "One saved active-play clock",
+      "tasks": [
+        "T14",
+        "T43",
+        "T54"
+      ],
+      "requirement": "Use a persistent ordinary game clock for phases and encounters; pause ordinary simulation when backgrounded/closed under the existing timing contract. System theme and phone wall-clock changes cannot create night loot or advance raid time. Bind modal/map pause behavior explicitly before integration.",
+      "acceptance": "Save/resume before and after phase boundaries; change device clock/theme, open/close map, rotate/fold and restore cloud state. No unintended phase skip, offline attack, reward replay or RNG reroll.",
+      "status": "UNTESTED_FOR_NEW_RUNTIME_SCOPE"
+    },
+    {
+      "id": "CY04",
+      "title": "Readable atmosphere and pressure",
+      "tasks": [
+        "T13",
+        "T54",
+        "T55"
+      ],
+      "requirement": "Day/night changes should be noticeable through lighting, silhouettes, ambience, species cues and warning feedback. Night enemies are more assertive but remain readable and beatable with obtainable gear. No paid-only counter or spending-based difficulty.",
+      "acceptance": "Listen to ambience/footsteps/calls/attacks and phase transitions during quiet and busy play; inspect muted equivalents, contrast and reduced motion. Verify retreat/rebuild access under the latest damage/casualty policy.",
+      "status": "UNTESTED_FOR_NEW_RUNTIME_SCOPE"
+    },
+    {
+      "id": "MO01",
+      "title": "Natural decisions, not jitter",
+      "tasks": [
+        "T21",
+        "T23",
+        "T31"
+      ],
+      "requirement": "Natural movement needs purposeful AI as well as animation: look toward destinations, choose curved feasible approaches, vary appropriate pauses and avoid repeated target switching. Preserve productive jobs instead of adding wandering that delays valid work.",
+      "acceptance": "Observe long mixed scenes with actual jobs and prey behavior. No mechanical patrol loop everywhere, random twitch turns, idle worker despite valid work or unbounded per-frame replanning.",
+      "status": "UNTESTED_FOR_NEW_RUNTIME_SCOPE"
+    },
+    {
+      "id": "MO02",
+      "title": "Species and load-specific locomotion",
+      "tasks": [
+        "T06",
+        "T21",
+        "T23",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30"
+      ],
+      "requirement": "Prove foot/hoof/paw planting, stride-speed matching, toe roll where appropriate, knee/hock bend, body weight, acceleration/deceleration, turn arcs and coherent gait transitions. Use specific carry/tool poses; no random joint noise.",
+      "acceptance": "Inspect full cycles at normal and slow playback, closeups and gameplay scale, front/rear/left/right/three-quarter. Reject skating, foot penetration, snapping, rigid whole-body spinning, hovering or cloned human motion for animals.",
+      "status": "UNTESTED_FOR_NEW_RUNTIME_SCOPE"
+    },
+    {
+      "id": "MO03",
+      "title": "Crowd routes and obstacle handling",
+      "tasks": [
+        "T03",
+        "T21",
+        "T23",
+        "T31"
+      ],
+      "requirement": "Use avoidance, approach reservations, yielding and bounded route recovery through both gates, around machines/counters/conveyors and on slopes. Flying/climbing actors need real supported routes and reachable state transitions.",
+      "acceptance": "Exercise two-way loaded traffic, prey fleeing across a worker route, multiple hunters, changed obstacles and blocked gates. No clipping, endless shuffle, spin, deadlock or teleporting to repair a route.",
+      "status": "UNTESTED_FOR_NEW_RUNTIME_SCOPE"
+    },
+    {
+      "id": "MO04",
+      "title": "Natural working survivors",
+      "tasks": [
+        "T23",
+        "T31",
+        "T06"
+      ],
+      "requirement": "Survivors look, turn, start and stop with weight; vary bounded idle/safe waiting only when no useful job is available. Cover haul, harvest, hunt, stock, cash collection, plot purchase, repair, guard and return-to-work with truthful intent.",
+      "acceptance": "Play unloaded/carrying/tool-ready movement and each introduced job transition; preserve two-handed grip where required, cargo custody, useful throughput and recoverable interruption. Later job integration does not erase the local survivor loop.",
+      "status": "UNTESTED_FOR_NEW_RUNTIME_SCOPE"
+    },
+    {
+      "id": "MO05",
+      "title": "Complete lifecycle motion",
+      "tasks": [
+        "T21",
+        "T23",
+        "T31"
+      ],
+      "requirement": "Include relevant idle/feed/alert/walk/run/bound/fly/land/turn/start/stop/flee/attack/miss/hit/interrupted/defeat states. Preserve latest casualty and replacement rules; exact unresolved cargo/upgrades/compensation terms stay open.",
+      "acceptance": "Verify transitions, blend continuity, grip, tail/ear/wing/gear clearance, body contact and actual effects. A walk clip or static 360 sheet cannot approve the full actor.",
+      "status": "UNTESTED_FOR_NEW_RUNTIME_SCOPE"
+    },
+    {
+      "id": "MO06",
+      "title": "Independent movement and sound evidence",
+      "tasks": [
+        "T06",
+        "T21",
+        "T23",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T54",
+        "T67"
+      ],
+      "requirement": "Require exact-source full sequences and multi-angle/close-up motion review, species-specific and crowd use states, plus actual audio listening. Retain rejected evidence, fix and retest; apply current 9.9 reference and stronger exact-10 gates.",
+      "acceptance": "Separate critic watches every required cycle/transition and listens to cues. Missing/untested views or states block affected runtime approval; a schema, screenshot or prior score cannot substitute.",
+      "status": "UNTESTED_FOR_NEW_RUNTIME_SCOPE"
+    },
+    {
+      "id": "IN01",
+      "title": "Persistent actor and encounter identity",
+      "tasks": [
+        "T14",
+        "T43",
+        "T21",
+        "T31"
+      ],
+      "requirement": "Save phase, encounter origin/RNG, actor identity/faction, job/target reservations, injuries/casualties, consumed contacts and defeat/loot ownership coherently. Never serialize a held input pointer as continuing movement.",
+      "acceptance": "Interrupt before/after spawn, contact, death, meat grant, pickup and phase shift; replay/recover once. Predators killing prey cannot fabricate player rewards without an explicitly authored custody rule.",
+      "status": "UNTESTED_FOR_NEW_RUNTIME_SCOPE"
+    },
+    {
+      "id": "IN02",
+      "title": "World 1-first integration without a circular gate",
+      "tasks": [
+        "T12",
+        "T32",
+        "T54",
+        "T21",
+        "T13"
+      ],
+      "requirement": "Keep ten worlds of fifty local levels and World 1 first. Freeze shared local time/encounter interfaces before actor implementation. Reconcile a scoped World 1 acceptance route because historical full T54/T58/T62 edges reach later-world T53. No graph edge or task state changes are made here.",
+      "acceptance": "Approve and bind the World 1 slice/dependency record before implementation acceptance; do not require the whole later campaign for first World 1 actors or silently claim the old DAG already enables release.",
+      "status": "UNTESTED_FOR_NEW_RUNTIME_SCOPE"
+    },
+    {
+      "id": "IN03",
+      "title": "Playable population and performance",
+      "tasks": [
+        "T31",
+        "T56",
+        "T58",
+        "T68",
+        "T69"
+      ],
+      "requirement": "Measure combined enemies, prey, all active pets/survivors, customers, machines, navigation, animation, lighting, map and audio. Presentation LOD may save cost without changing logical workers, loot or threat rules. No unapproved slots or species caps.",
+      "acceptance": "Run actual representative busy day/night scenes on target devices/quality modes; verify truthful offscreen-to-visible handoff. Native performance claims require existing physical evidence, not estimated FPS.",
+      "status": "UNTESTED_FOR_NEW_RUNTIME_SCOPE"
+    },
+    {
+      "id": "IN04",
+      "title": "Integrated scenario acceptance",
+      "tasks": [
+        "T58",
+        "T62",
+        "T63",
+        "T67",
+        "T70"
+      ],
+      "requirement": "Test native UI/control, meat loop, day/night, natural motion, raids, saves and recovery together. Retest affected historical approvals on the changed candidate without erasing the original records.",
+      "acceptance": "Run first-use, no-worker, crowded camp, dusk hunt, night raid, daylight return, low stock/rebuild, repeated failure, rotation/fold and muted cases with all relevant gates passed.",
+      "status": "UNTESTED_FOR_NEW_RUNTIME_SCOPE"
+    },
+    {
+      "id": "IN05",
+      "title": "Progression and economy remain attainable",
+      "tasks": [
+        "T12",
+        "T13",
+        "T32",
+        "T33",
+        "T63"
+      ],
+      "requirement": "Stage additions across World 1 local levels 1–50; not all actors arrive in the opening. Tune yield, rarity, effort, threat and recovery together. Keep obtainable sources/counters for current requests and repairs; no compulsory rare nocturnal prey or paid intelligence.",
+      "acceptance": "Simulate and play a free-player route including depleted stocks, bad random runs, night conditions, missing workers and repeated losses. Freeze numerical spawn/aggro/yield/unlock tuning only after evidence.",
+      "status": "UNTESTED_FOR_NEW_RUNTIME_SCOPE"
+    }
+  ],
+  "task_map": [
+    {
+      "task_id": "T03",
+      "recorded_title": "Fences, gates and navigable work lanes",
+      "recorded_dependencies": [
+        "T02"
+      ],
+      "historical_state": "APPROVED",
+      "requirements": [
+        "MO03"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": null
+    },
+    {
+      "task_id": "T04",
+      "recorded_title": "Reference camera and automatic screen composition",
+      "recorded_dependencies": [
+        "T03"
+      ],
+      "historical_state": "APPROVED",
+      "requirements": [
+        "UI01",
+        "UI03",
+        "UI04",
+        "UI05",
+        "UI06"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": null
+    },
+    {
+      "task_id": "T06",
+      "recorded_title": "Character 1 complete movement/interactions",
+      "recorded_dependencies": [
+        "T03"
+      ],
+      "historical_state": "APPROVED",
+      "requirements": [
+        "UI02",
+        "MO02",
+        "MO04",
+        "MO06"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": null
+    },
+    {
+      "task_id": "T07",
+      "recorded_title": "Havenline Simple Control & Context Director",
+      "recorded_dependencies": [
+        "T04",
+        "T06"
+      ],
+      "historical_state": "APPROVED",
+      "requirements": [
+        "UI02",
+        "UI03",
+        "UI04",
+        "UI06"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": null
+    },
+    {
+      "task_id": "T08",
+      "recorded_title": "Visible inventory, physical carrying and transfers",
+      "recorded_dependencies": [
+        "T05",
+        "T06",
+        "T07"
+      ],
+      "historical_state": "APPROVED",
+      "requirements": [
+        "WL04"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": null
+    },
+    {
+      "task_id": "T12",
+      "recorded_title": "Level 1–100 progression architecture",
+      "recorded_dependencies": [
+        "T07",
+        "T08",
+        "T10",
+        "T11"
+      ],
+      "historical_state": "LOCKED",
+      "requirements": [
+        "UI03",
+        "WL01",
+        "CY01",
+        "IN02",
+        "IN05"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": "10 worlds × 50 local levels"
+    },
+    {
+      "task_id": "T13",
+      "recorded_title": "Progressive Difficulty & spend-blind Challenge Director",
+      "recorded_dependencies": [
+        "T12"
+      ],
+      "historical_state": "LOCKED",
+      "requirements": [
+        "EN01",
+        "EN02",
+        "EN04",
+        "WL02",
+        "CY01",
+        "CY04",
+        "IN02",
+        "IN05"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": null
+    },
+    {
+      "task_id": "T14",
+      "recorded_title": "Save-state/versioning foundation",
+      "recorded_dependencies": [
+        "T08",
+        "T10",
+        "T12"
+      ],
+      "historical_state": "LOCKED",
+      "requirements": [
+        "UI03",
+        "UI05",
+        "EN04",
+        "WL02",
+        "CY02",
+        "CY03",
+        "IN01"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": null
+    },
+    {
+      "task_id": "T16",
+      "recorded_title": "Fishing and initial food processing",
+      "recorded_dependencies": [
+        "T08",
+        "T09",
+        "T15"
+      ],
+      "historical_state": "LOCKED",
+      "requirements": [
+        "WL04"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": null
+    },
+    {
+      "task_id": "T17",
+      "recorded_title": "Customer service, physical payment and reinvestment",
+      "recorded_dependencies": [
+        "T15",
+        "T16"
+      ],
+      "historical_state": "LOCKED",
+      "requirements": [
+        "WL04"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": null
+    },
+    {
+      "task_id": "T21",
+      "recorded_title": "Visible hostiles, hunting and weapon progression",
+      "recorded_dependencies": [
+        "T06",
+        "T07",
+        "T08",
+        "T09",
+        "T13"
+      ],
+      "historical_state": "LOCKED",
+      "requirements": [
+        "EN01",
+        "EN02",
+        "EN03",
+        "EN04",
+        "WL01",
+        "WL02",
+        "WL03",
+        "WL04",
+        "WL05",
+        "CY01",
+        "CY02",
+        "MO01",
+        "MO02",
+        "MO03",
+        "MO05",
+        "MO06",
+        "IN01",
+        "IN02"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": null
+    },
+    {
+      "task_id": "T22",
+      "recorded_title": "Working defensive structures",
+      "recorded_dependencies": [
+        "T11",
+        "T21"
+      ],
+      "historical_state": "LOCKED",
+      "requirements": [
+        "EN01",
+        "EN03",
+        "EN04"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": null
+    },
+    {
+      "task_id": "T23",
+      "recorded_title": "Survivor rescue and basic survivor identity",
+      "recorded_dependencies": [
+        "T06",
+        "T07",
+        "T14",
+        "T21"
+      ],
+      "historical_state": "LOCKED",
+      "requirements": [
+        "EN02",
+        "WL05",
+        "MO01",
+        "MO02",
+        "MO03",
+        "MO04",
+        "MO05",
+        "MO06"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": null
+    },
+    {
+      "task_id": "T24",
+      "recorded_title": "Guardian dog",
+      "recorded_dependencies": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "historical_state": "LOCKED",
+      "requirements": [
+        "EN03",
+        "WL05",
+        "MO02",
+        "MO06"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": null
+    },
+    {
+      "task_id": "T25",
+      "recorded_title": "Gray wolf",
+      "recorded_dependencies": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "historical_state": "LOCKED",
+      "requirements": [
+        "EN03",
+        "WL05",
+        "MO02",
+        "MO06"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": null
+    },
+    {
+      "task_id": "T26",
+      "recorded_title": "Fox",
+      "recorded_dependencies": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "historical_state": "LOCKED",
+      "requirements": [
+        "EN03",
+        "WL05",
+        "MO02",
+        "MO06"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": null
+    },
+    {
+      "task_id": "T27",
+      "recorded_title": "Owl",
+      "recorded_dependencies": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "historical_state": "LOCKED",
+      "requirements": [
+        "EN03",
+        "WL05",
+        "MO02",
+        "MO06"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": null
+    },
+    {
+      "task_id": "T28",
+      "recorded_title": "Male lion",
+      "recorded_dependencies": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "historical_state": "LOCKED",
+      "requirements": [
+        "EN03",
+        "WL05",
+        "MO02",
+        "MO06"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": null
+    },
+    {
+      "task_id": "T29",
+      "recorded_title": "White tiger",
+      "recorded_dependencies": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "historical_state": "LOCKED",
+      "requirements": [
+        "EN03",
+        "WL05",
+        "MO02",
+        "MO06"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": null
+    },
+    {
+      "task_id": "T30",
+      "recorded_title": "Brown bear",
+      "recorded_dependencies": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "historical_state": "LOCKED",
+      "requirements": [
+        "EN03",
+        "WL05",
+        "MO02",
+        "MO06"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": null
+    },
+    {
+      "task_id": "T31",
+      "recorded_title": "Integrated companion jobs and population safety",
+      "recorded_dependencies": [
+        "T15",
+        "T23",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30"
+      ],
+      "historical_state": "LOCKED",
+      "requirements": [
+        "EN02",
+        "WL03",
+        "WL05",
+        "CY02",
+        "MO01",
+        "MO03",
+        "MO04",
+        "MO05",
+        "IN01",
+        "IN03"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": null
+    },
+    {
+      "task_id": "T32",
+      "recorded_title": "Complete frozen-region Level 1–10 production progression",
+      "recorded_dependencies": [
+        "T12",
+        "T13",
+        "T14",
+        "T16",
+        "T17",
+        "T18",
+        "T19",
+        "T20",
+        "T21",
+        "T22",
+        "T23",
+        "T31"
+      ],
+      "historical_state": "LOCKED",
+      "requirements": [
+        "UI03",
+        "WL01",
+        "WL02",
+        "CY01",
+        "IN02",
+        "IN05"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": "World 1 local levels1–50"
+    },
+    {
+      "task_id": "T33",
+      "recorded_title": "Core economy & F2P progression model",
+      "recorded_dependencies": [
+        "T12",
+        "T17",
+        "T18",
+        "T19",
+        "T20",
+        "T32"
+      ],
+      "historical_state": "LOCKED",
+      "requirements": [
+        "WL04",
+        "IN05"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": null
+    },
+    {
+      "task_id": "T43",
+      "recorded_title": "Identity, cloud continuity and recovery",
+      "recorded_dependencies": [
+        "T14",
+        "T41"
+      ],
+      "historical_state": "LOCKED",
+      "requirements": [
+        "UI05",
+        "CY03",
+        "IN01"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": null
+    },
+    {
+      "task_id": "T54",
+      "recorded_title": "Day/night, weather, audio and final game feedback",
+      "recorded_dependencies": [
+        "T32",
+        "T53"
+      ],
+      "historical_state": "LOCKED",
+      "requirements": [
+        "UI05",
+        "EN04",
+        "CY01",
+        "CY02",
+        "CY03",
+        "CY04",
+        "MO06",
+        "IN02"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": null
+    },
+    {
+      "task_id": "T55",
+      "recorded_title": "Accessibility and control customization",
+      "recorded_dependencies": [
+        "T07",
+        "T43"
+      ],
+      "historical_state": "LOCKED",
+      "requirements": [
+        "UI01",
+        "UI02",
+        "UI05",
+        "UI06",
+        "EN04",
+        "CY04"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": null
+    },
+    {
+      "task_id": "T56",
+      "recorded_title": "Performance/Quality/Balanced/Battery player modes",
+      "recorded_dependencies": [
+        "T42",
+        "T54",
+        "T55"
+      ],
+      "historical_state": "LOCKED",
+      "requirements": [
+        "IN03"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": null
+    },
+    {
+      "task_id": "T58",
+      "recorded_title": "Phone/tablet/foldable functional acceptance",
+      "recorded_dependencies": [
+        "T43",
+        "T54",
+        "T55",
+        "T56"
+      ],
+      "historical_state": "LOCKED",
+      "requirements": [
+        "UI02",
+        "UI04",
+        "UI06",
+        "IN03",
+        "IN04"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": null
+    },
+    {
+      "task_id": "T62",
+      "recorded_title": "Complete Level 1–100 progression acceptance",
+      "recorded_dependencies": [
+        "T33",
+        "T36",
+        "T40",
+        "T43",
+        "T53",
+        "T54",
+        "T58",
+        "T59",
+        "T60",
+        "T61"
+      ],
+      "historical_state": "LOCKED",
+      "requirements": [
+        "IN04"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": "10 worlds × 50 local levels"
+    },
+    {
+      "task_id": "T63",
+      "recorded_title": "$0 lifelong-F2P player completion test",
+      "recorded_dependencies": [
+        "T33",
+        "T62"
+      ],
+      "historical_state": "LOCKED",
+      "requirements": [
+        "IN04",
+        "IN05"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": null
+    },
+    {
+      "task_id": "T67",
+      "recorded_title": "Full-game reference/regression acceptance",
+      "recorded_dependencies": [
+        "T62",
+        "T63",
+        "T64",
+        "T65",
+        "T66"
+      ],
+      "historical_state": "LOCKED",
+      "requirements": [
+        "UI06",
+        "MO06",
+        "IN04"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": null
+    },
+    {
+      "task_id": "T68",
+      "recorded_title": "Sustained native 4K/60 phone evidence",
+      "recorded_dependencies": [
+        "T67"
+      ],
+      "historical_state": "LOCKED",
+      "requirements": [
+        "IN03"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": null
+    },
+    {
+      "task_id": "T69",
+      "recorded_title": "Sustained native 4K/60 tablet/foldable evidence",
+      "recorded_dependencies": [
+        "T67"
+      ],
+      "historical_state": "LOCKED",
+      "requirements": [
+        "IN03"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": null
+    },
+    {
+      "task_id": "T70",
+      "recorded_title": "Final production release handoff",
+      "recorded_dependencies": [
+        "T68",
+        "T69"
+      ],
+      "historical_state": "LOCKED",
+      "requirements": [
+        "IN04"
+      ],
+      "new_scope_approval": "NOT_GRANTED",
+      "current_scope_override": null
+    }
+  ],
+  "forward_consumer_reconciliation": [
+    {
+      "path": "Docs/Production/HAVENLINE_BUILD_PLAN_V2.md",
+      "conflict": "joystick-only interpretation risk and old100-level product prose",
+      "action": "Current product prose updated by this plan; original history is retained in Git.",
+      "status": "DOCUMENTATION_UPDATED_RUNTIME_CONSUMPTION_PENDING"
+    },
+    {
+      "path": "Docs/Production/T07/FROZEN_SCOPE.md",
+      "conflict": "T07-R01 one-joystick contract",
+      "action": "Bind latest touch-anywhere activation with visible joystick allowed; preserve one primary movement input and accepted historical receipts.",
+      "status": "DOCUMENTED_FOLLOWUP_NOT_IMPLEMENTED"
+    },
+    {
+      "path": "Docs/Production/TASK_PACKET_TEMPLATE.md",
+      "conflict": "joystick presentation versus activation-area assumptions",
+      "action": "Bind the latest visible-allowed, touch-anywhere rule in forward packet generation before it certifies new work.",
+      "status": "DOCUMENTED_FOLLOWUP_NOT_IMPLEMENTED"
+    },
+    {
+      "path": "Docs/Production/DEVICE_LAYOUT_MATRIX.json",
+      "conflict": "primary_joystick_reach",
+      "action": "Keep visible-control fit checks and add movement-start coverage across the unclaimed play area, plus actual hit-testing.",
+      "status": "DOCUMENTED_FOLLOWUP_NOT_IMPLEMENTED"
+    },
+    {
+      "path": "Docs/Production/CRITIC_MATRIX.json",
+      "conflict": "one-joystick and layout dimensions",
+      "action": "Require touch-anywhere activation and UI ownership while allowing a visible joystick; retain other mandatory dimensions.",
+      "status": "DOCUMENTED_FOLLOWUP_NOT_IMPLEMENTED"
+    },
+    {
+      "path": "Docs/Production/CRITIC_EXECUTION.json",
+      "conflict": "joystick_layout",
+      "action": "Bind latest allowed visibility and required touch-anywhere activation; preserve original review provenance.",
+      "status": "DOCUMENTED_FOLLOWUP_NOT_IMPLEMENTED"
+    },
+    {
+      "path": "Docs/Production/ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.*",
+      "conflict": "dated joystick/orientation wording",
+      "action": "Use historical sources with current input/orientation overlays; neither a joystick pixel nor its absence proves touch-anywhere behavior.",
+      "status": "DOCUMENTED_FOLLOWUP_NOT_IMPLEMENTED"
+    },
+    {
+      "path": "Docs/Production/PET_COMBOS_MAP_DISPLAY.*",
+      "conflict": "DS06 joystick/map gesture wording",
+      "action": "Retain all 21 earlier obligations; test map gestures against touch-anywhere movement with visible joystick feedback allowed.",
+      "status": "DOCUMENTED_FOLLOWUP_NOT_IMPLEMENTED"
+    },
+    {
+      "path": "Docs/Production/WHOLE_GAME_COMPLETENESS.json",
+      "conflict": "CD06 six-hostile/one-prey limit; CD10 landscape; older CD01/CD02 casualty/sanctuary rules",
+      "action": "Latest explicit owner directions supersede only conflicting scope; other constraints remain.",
+      "status": "DOCUMENTED_FOLLOWUP_NOT_IMPLEMENTED"
+    },
+    {
+      "path": "Docs/Production/ACTOR_CAPABILITY_MATRIX.json",
+      "conflict": "older incomplete survivor hunt/work coverage",
+      "action": "Bind later owner hunting/all-task directions in current consumer before implementation acceptance.",
+      "status": "DOCUMENTED_FOLLOWUP_NOT_IMPLEMENTED"
+    },
+    {
+      "path": "Docs/Production/DEPENDENCY_GRAPH.json",
+      "conflict": "full T54 depends on T32/T53; later campaign reaches release gates",
+      "action": "Prepare an explicit World 1 slice/acceptance dependency proposal; do not silently rewrite or activate graph tasks.",
+      "status": "DOCUMENTED_FOLLOWUP_NOT_IMPLEMENTED"
+    },
+    {
+      "path": "Docs/Design/UIConcepts/2026-11-28/aurora-light-dark-touch-01/{requirements.json,DECISIONS_AND_INPUT.md}",
+      "source_commit": "44f269f2a2028c51b90d22128d0e2bbf3c9ed999",
+      "conflict": "earlier owner ban on visible joystick has been withdrawn",
+      "action": "Preserve the original art package and its review scope. Current implementation packets consume this latest correction; matching Aurora joystick feedback may be added without treating historical no-stick art as a veto.",
+      "status": "DOCUMENTED_FOLLOWUP_NOT_IMPLEMENTED"
+    }
+  ],
+  "milestones": [
+    {
+      "id": "P1",
+      "name": "Bind decisions and interfaces",
+      "depends_on": [],
+      "tasks": [
+        "T04",
+        "T07",
+        "T12",
+        "T13",
+        "T14",
+        "T21",
+        "T23",
+        "T31",
+        "T32",
+        "T54"
+      ],
+      "exit": "Exact source/owners, latest authority, actor categories, clock/encounter interfaces, target policy and forward-consumer reconciliation plan frozen."
+    },
+    {
+      "id": "P2_UI",
+      "name": "Aurora, touch-anywhere input and map",
+      "depends_on": [
+        "P1"
+      ],
+      "tasks": [
+        "T04",
+        "T07",
+        "T14",
+        "T55"
+      ],
+      "exit": "Native Light/Dark HUD and safe-window input/map behavior demonstrated, retaining automatic interactions."
+    },
+    {
+      "id": "P2_ACTORS",
+      "name": "Shared motion, one prey and one new hostile",
+      "depends_on": [
+        "P1"
+      ],
+      "tasks": [
+        "T06",
+        "T13",
+        "T21",
+        "T23",
+        "T31"
+      ],
+      "exit": "One end-to-end hunt/meat loop, one distinct new threat, and a natural loaded survivor loop using shared contact/custody contracts."
+    },
+    {
+      "id": "P3",
+      "name": "World 1 day/night vertical slice",
+      "depends_on": [
+        "P2_UI",
+        "P2_ACTORS"
+      ],
+      "tasks": [
+        "T13",
+        "T14",
+        "T21",
+        "T23",
+        "T31",
+        "T32",
+        "T54"
+      ],
+      "exit": "Distinct pools, phase transitions, higher night aggression, saved warning and a useful survivor hunt demonstrated together; formal World 1 dependency route reconciled."
+    },
+    {
+      "id": "P4",
+      "name": "Expand content through World 1",
+      "depends_on": [
+        "P3"
+      ],
+      "tasks": [
+        "T12",
+        "T21",
+        "T22",
+        "T23",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T31",
+        "T32",
+        "T33",
+        "T54"
+      ],
+      "exit": "Staged eight hostile roles and five new prey concepts receive assets, animation, audio, tuning and local-level availability as introduced; no all-at-once opening roster."
+    },
+    {
+      "id": "P5",
+      "name": "Integrated proof and release route",
+      "depends_on": [
+        "P4"
+      ],
+      "tasks": [
+        "T43",
+        "T55",
+        "T56",
+        "T58",
+        "T62",
+        "T63",
+        "T67",
+        "T68",
+        "T69",
+        "T70"
+      ],
+      "exit": "Relevant native, free-progression, motion/listening, device, save and performance gates passed on exact candidate; no gameplay approval from documentation."
+    }
+  ],
+  "dependency_note": "P-stage dependencies are a proposed implementation sequence, not mutations to the authentic task DAG. Feature-local time/encounter contracts precede dependent World 1 work; the full T54/later-world obligations remain. Formal scoped World 1 release reconciliation is required.",
+  "open_decisions": [
+    "Exact spawn weights, density, cycle duration, detection/pursuit tuning, attack cadence and yields",
+    "Local-level unlocks, added-actor native IDs, asset/rig/clip/audio acceptance",
+    "Theme preference local versus cloud scope and default",
+    "Exact joystick feedback placement and styling; touch-anywhere activation is required regardless of presentation",
+    "Exact casualty cargo, upgrades, compensation, furnace consequence and replacement accounting per latest separate decision record",
+    "Formal World 1 slice activation/acceptance dependency route",
+    "Predator-versus-prey reward ownership if that interaction is added"
+  ],
+  "runtime_status": "NOT_IMPLEMENTED_OR_RUNTIME_TESTED_BY_THIS_CHANGE",
+  "new_scope_runtime_approval": false,
+  "existing_runtime_may_have_partial_components": true,
+  "source_bindings": "LivingWorldUI/2026-11-28/SOURCE_BINDINGS.json",
+  "current_input_source_observation": {
+    "commit": "fad3af0a45e94262737077ae513827b5042adb41",
+    "evidence": "LivingWorldUI/2026-11-28/CURRENT_INPUT_SOURCE_AUDIT.json",
+    "status": "SOURCE_INSPECTED_NOT_RUNTIME_VALIDATED",
+    "summary": "The current source already displays a resting joystick hint and moves active feedback to the acquired touch origin. Touch-anywhere activation is compatible with the latest owner correction. Current feedback has no edge clamp; broad UI/multitouch/resize behavior and APK correspondence remain unverified here."
+  }
+}

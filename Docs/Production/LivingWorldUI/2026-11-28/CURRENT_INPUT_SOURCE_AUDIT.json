@@ -1,0 +1,211 @@
+{
+  "schema_version": 1,
+  "scope": "Current selected gameplay input source observation only; not runtime acceptance",
+  "reviewer_agent": "/root/map_screen_design",
+  "assembled_and_identity_verified_by": "/root",
+  "branch": "trial/world-one-expansion-2026-11-26",
+  "observed_commit": "fad3af0a45e94262737077ae513827b5042adb41",
+  "live_ref_check": "Fresh GitHub branch GET by /root/map_screen_design confirmed this head during the latest control-correction audit.",
+  "runtime_executed": false,
+  "tests_executed": false,
+  "apk_correspondence_verified": false,
+  "source_mutations": 0,
+  "observations": [
+    {
+      "id": "INPUT01",
+      "finding": "First eligible unclaimed touch records its actual position as movement origin; no fixed joystick-zone or left-side eligibility check. Drag determines heading.",
+      "files": [
+        "HavenlineLevel1/opening.gd",
+        "HavenlineLevel1/field_opening.gd"
+      ],
+      "functions": [
+        "_input",
+        "_physics_process",
+        "move_actor"
+      ]
+    },
+    {
+      "id": "INPUT02",
+      "finding": "Visible resting hint uses the lower-left safe rect. Active joystick centers on world.touch_origin; knob follows drag. The visual uses MOUSE_FILTER_IGNORE.",
+      "files": [
+        "HavenlineLevel1/field_thumbstick.gd"
+      ],
+      "functions": [
+        "_process",
+        "_draw",
+        "install"
+      ]
+    },
+    {
+      "id": "INPUT03",
+      "finding": "Vehicle, camp dock, camp layout and settlement handlers precede inherited movement. Inherited HUD controls reserve particular fingers. This is per-control routing, not proof of complete multi-pointer ownership.",
+      "files": [
+        "HavenlineLevel1/field_opening.gd",
+        "HavenlineLevel1/orbit_opening.gd",
+        "HavenlineLevel1/field_camp_dock.gd"
+      ],
+      "functions": [
+        "_input",
+        "handle"
+      ]
+    },
+    {
+      "id": "INPUT04",
+      "finding": "Second world touch starts pinch and clears movement; remaining pinch finger cannot become movement until all world fingers lift. Joystick hides during pinch.",
+      "files": [
+        "HavenlineLevel1/orbit_camera.gd",
+        "HavenlineLevel1/orbit_opening.gd",
+        "HavenlineLevel1/field_thumbstick.gd"
+      ],
+      "functions": [
+        "consume",
+        "_input",
+        "_process"
+      ]
+    },
+    {
+      "id": "INPUT05",
+      "finding": "Release/cancel clears movement. Resize clears movement/camera/inherited HUD state. Focus-loss/application-pause path additionally releases settlement and held vehicle input. Broader dock/layout/modal ownership still needs explicit acceptance.",
+      "files": [
+        "HavenlineLevel1/opening.gd",
+        "HavenlineLevel1/orbit_opening.gd",
+        "HavenlineLevel1/field_opening.gd"
+      ],
+      "functions": [
+        "clear_touch",
+        "_input",
+        "_notification"
+      ]
+    },
+    {
+      "id": "INPUT06",
+      "finding": "Project main scene selects field_opening.tscn and its field_opening.gd script. Existing touch-resume/run-input test definitions were read, not executed.",
+      "files": [
+        "HavenlineLevel1/project.godot",
+        "HavenlineLevel1/field_opening.tscn",
+        "HavenlineLevel1/tests/qa_field_touch_resume.gd",
+        "HavenlineLevel1/tests/qa_field_run_input.gd"
+      ]
+    }
+  ],
+  "acceptance_gaps": [
+    {
+      "id": "GAP01",
+      "finding": "The active 50-unit-radius joystick visual has no edge clamp and may extend outside visible/safe bounds near an edge.",
+      "required_followup": "UI02: demonstrate all-edge/corner touch origins with feedback inside actual safe bounds while preserving the logical origin/direction/speed."
+    },
+    {
+      "id": "GAP02",
+      "finding": "Camp dock stores one finger; another pointer may fall through while that slot is occupied.",
+      "required_followup": "UI02/UI03: mixed world/dock/map multitouch must not leak movement or trigger unintended actions."
+    },
+    {
+      "id": "GAP03",
+      "finding": "Quality control reserves its pointer but runs its action only with no world fingers; do not claim all UI controls are currently actionable during movement.",
+      "required_followup": "Bind and test intended concurrent-action policy; preserve ownership even when an action is deliberately unavailable."
+    },
+    {
+      "id": "GAP04",
+      "finding": "A press outside an open camp sheet dismisses it and returns false; that sheet is not a full-screen input barrier.",
+      "required_followup": "Expanded map and blocking modals need explicit pointer and pause policies, tested against world movement and purchases."
+    },
+    {
+      "id": "GAP05",
+      "finding": "Reset paths do not by source observation alone certify every held dock/layout/modal pointer or device transition.",
+      "required_followup": "Record actual rotation/fold/resize, release/cancel, focus-loss and resume tests on the implemented candidate."
+    }
+  ],
+  "source_files": [
+    {
+      "path": "HavenlineLevel1/field_thumbstick.gd",
+      "commit": "fad3af0a45e94262737077ae513827b5042adb41",
+      "git_blob_sha": "6ccfac9189617af110d2a3e87524ab48e9edc8d3",
+      "sha256": "294060dd43acf571650ee72e10f5158f47191535d5c9c2b2499b1b7dda10eea5",
+      "size_bytes": 1676,
+      "access": "EXACT_LOCAL_GIT_OBJECT_BYTES",
+      "source_review": "Reviewed by /root/map_screen_design; /root additionally read core movement/feedback excerpts and independently recomputed all listed identities."
+    },
+    {
+      "path": "HavenlineLevel1/opening.gd",
+      "commit": "fad3af0a45e94262737077ae513827b5042adb41",
+      "git_blob_sha": "ca66daae37d648dd67071f1b4d9a2ad08252529d",
+      "sha256": "ab2cb7d9cb4b1d7de14d572b6401e1b9a7dcbbd755973a5ce5b7f054f5a0188b",
+      "size_bytes": 19141,
+      "access": "EXACT_LOCAL_GIT_OBJECT_BYTES",
+      "source_review": "Reviewed by /root/map_screen_design; /root additionally read core movement/feedback excerpts and independently recomputed all listed identities."
+    },
+    {
+      "path": "HavenlineLevel1/orbit_opening.gd",
+      "commit": "fad3af0a45e94262737077ae513827b5042adb41",
+      "git_blob_sha": "51488e5bd8bf76ac428ade2f2fdb01dcd4fd70c7",
+      "sha256": "56bd836026496d4f1017fdc7d416b0ed3fc4b575788c2c85adca037473ba5521",
+      "size_bytes": 10613,
+      "access": "EXACT_LOCAL_GIT_OBJECT_BYTES",
+      "source_review": "Reviewed by /root/map_screen_design; /root additionally read core movement/feedback excerpts and independently recomputed all listed identities."
+    },
+    {
+      "path": "HavenlineLevel1/orbit_camera.gd",
+      "commit": "fad3af0a45e94262737077ae513827b5042adb41",
+      "git_blob_sha": "5dfe373767f026b33736d165944a9cd154041dcb",
+      "sha256": "a14dacbbfc207ed8e12a640ed6abe7203bd5aef42175dfc98ea53613103605b4",
+      "size_bytes": 1790,
+      "access": "EXACT_LOCAL_GIT_OBJECT_BYTES",
+      "source_review": "Reviewed by /root/map_screen_design; /root additionally read core movement/feedback excerpts and independently recomputed all listed identities."
+    },
+    {
+      "path": "HavenlineLevel1/field_opening.gd",
+      "commit": "fad3af0a45e94262737077ae513827b5042adb41",
+      "git_blob_sha": "e945d24f85ef711ffa81b8ad432585ea03ccae32",
+      "sha256": "917f9b23eae41c0edd79f1301ac445bcf9a4a06fbbb41f901ab91119a6e530f3",
+      "size_bytes": 45622,
+      "access": "EXACT_LOCAL_GIT_OBJECT_BYTES",
+      "source_review": "Reviewed by /root/map_screen_design; /root additionally read core movement/feedback excerpts and independently recomputed all listed identities."
+    },
+    {
+      "path": "HavenlineLevel1/field_camp_dock.gd",
+      "commit": "fad3af0a45e94262737077ae513827b5042adb41",
+      "git_blob_sha": "ea390ff917b88ef1890f17c79761d06577519cda",
+      "sha256": "a66e041ad44f774e594455822f7099e70b3de925e3d6dd96fb68e3230dd1e4ff",
+      "size_bytes": 22567,
+      "access": "EXACT_LOCAL_GIT_OBJECT_BYTES",
+      "source_review": "Reviewed by /root/map_screen_design; /root additionally read core movement/feedback excerpts and independently recomputed all listed identities."
+    },
+    {
+      "path": "HavenlineLevel1/tests/qa_field_touch_resume.gd",
+      "commit": "fad3af0a45e94262737077ae513827b5042adb41",
+      "git_blob_sha": "ba71439669cf4234ac216518277cba7cba43482c",
+      "sha256": "698b99246a60edac4bae891a1c52dddff8c664e0de0c3e6f857693b16ab435da",
+      "size_bytes": 2097,
+      "access": "EXACT_LOCAL_GIT_OBJECT_BYTES",
+      "source_review": "Reviewed by /root/map_screen_design; /root additionally read core movement/feedback excerpts and independently recomputed all listed identities."
+    },
+    {
+      "path": "HavenlineLevel1/tests/qa_field_run_input.gd",
+      "commit": "fad3af0a45e94262737077ae513827b5042adb41",
+      "git_blob_sha": "dfe7aa76c285c73219968365b9f6c38a4e5c82e4",
+      "sha256": "10a3789203d0ddc12f78bda10a5e2ee2a1ef1fddf266067b342964e2d0d1d54b",
+      "size_bytes": 18607,
+      "access": "EXACT_LOCAL_GIT_OBJECT_BYTES",
+      "source_review": "Reviewed by /root/map_screen_design; /root additionally read core movement/feedback excerpts and independently recomputed all listed identities."
+    },
+    {
+      "path": "HavenlineLevel1/project.godot",
+      "commit": "fad3af0a45e94262737077ae513827b5042adb41",
+      "git_blob_sha": "93d049d9d842a97e1ce1b2f8d5ef54c8878979fd",
+      "sha256": "c8a12b96cc7c2580b60d896965d77ac0c69dfeec1adcf8e2963710018b878137",
+      "size_bytes": 1056,
+      "access": "EXACT_LOCAL_GIT_OBJECT_BYTES",
+      "source_review": "Reviewed by /root/map_screen_design; /root additionally read core movement/feedback excerpts and independently recomputed all listed identities."
+    },
+    {
+      "path": "HavenlineLevel1/field_opening.tscn",
+      "commit": "fad3af0a45e94262737077ae513827b5042adb41",
+      "git_blob_sha": "202546f4fbc2b51b383a95ca1b2338e6e83c1702",
+      "sha256": "3c96bf2883747ed3c9d3f7a5f9736d78b9804e39720cb0e27cee1b189eeabfc5",
+      "size_bytes": 193,
+      "access": "EXACT_LOCAL_GIT_OBJECT_BYTES",
+      "source_review": "Reviewed by /root/map_screen_design; /root additionally read core movement/feedback excerpts and independently recomputed all listed identities."
+    }
+  ],
+  "conclusion": "Keep touch-anywhere movement with allowed visible movable joystick feedback. Preserve the existing control model, apply Aurora appearance, and prove the listed input/safe-feedback gaps before runtime approval."
+}

@@ -1,0 +1,42 @@
+{
+  "scope": "Documentation structure and preservation verification only",
+  "date": "2026-11-28",
+  "base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+  "candidate_manifest": "Docs/Production/PetMapDisplay/2026-11-28/CANDIDATE_FILES.json",
+  "candidate_manifest_sha256": "91486ed1d5118a814c52ebd2a1e170a4eb9b956d98a2aee8ffb523094e5ee01b",
+  "checks": {
+    "canonical_pet_actor_and_profile_set": "PASS_7_OF_7",
+    "task_order_T24_T30": "PASS",
+    "unique_combo_ids": "PASS_7_OF_7",
+    "required_requirement_ids": "PASS_21_OF_21",
+    "all_rows_have_existing_task_mapping": "PASS",
+    "all_task_ids_within_authentic_T01_T70": "PASS",
+    "runtime_rows_honestly_untested": "PASS_21_OF_21",
+    "world_count_10_times_50": "PASS",
+    "system_rotation_preference_preserved": "PASS",
+    "automation_limit_disclosed": "PASS",
+    "unchanged_original_entrypoint_bodies": "PASS_5_OF_5",
+    "new_relative_document_links": "PASS",
+    "frozen_candidate_file_hashes": "PASS_8_OF_8",
+    "git_diff_check": "PASS",
+    "changed_path_scope": "DOCUMENTATION_ONLY",
+    "base_operational_dotgithub_tree": "ABSENT"
+  },
+  "initial_validation_attempt": {
+    "result": "CHECK_SCRIPT_ASSERTION_FAILED",
+    "cause": "The original-body reconstruction assertion removed the wrong newline; candidate text was unchanged.",
+    "resolution": "Corrected only the validation reconstruction and reran; all five original bodies verified byte-identical.",
+    "product_defect_observed": false
+  },
+  "not_performed": [
+    "Runtime implementation",
+    "Engine import/build",
+    "Native animation playback",
+    "Audio listening",
+    "Rendered UI inspection",
+    "Phone/tablet/foldable tests",
+    "Runtime task-packet automation integration"
+  ],
+  "independent_review": "Separate report; builder checks do not self-approve",
+  "publication_status_at_this_receipt": "PENDING_REMOTE_VERIFICATION"
+}

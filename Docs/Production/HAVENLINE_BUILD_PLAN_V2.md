@@ -1,5 +1,19 @@
 # HAVENLINE BUILD PLAN V2 — Controlled Parallel Production
 
+Before starting or resuming a task, follow the [GitHub pre-task check](../../AGENTS.md#check-github-before-starting-a-task).
+
+## Latest owner additions — Aurora and a living winter world
+
+Read the [Aurora, wildlife, day/night and natural-movement plan](LIVING_WORLD_UI_PLAN.md) and [30-row contract](LIVING_WORLD_UI_PLAN.json) before conflicting older control/roster guidance. Aurora Light/Dark and touch-anywhere movement are selected; the latest owner correction allows a visible joystick without requiring movement to start on it. Add distinct enemy roles, nonaggressive huntable winter wildlife, different day/night populations, more aggressive night hostiles and natural animal/survivor movement. Dark UI does not set world time. Keep all seven attacking/useful pets, multiple pets/survivors and the current 10×50 World 1-first scope.
+
+The plan binds later Build13 owner targeting, casualties/repurchase, breach/equipment replacement and five-active-minute raid warning decisions; older sanctuary/no-death/free-repair clauses cannot override them. Open casualty/economy tuning stays open. This documentation preserves task IDs, states, dependencies, current gameplay ownership and all historical evidence. Forward packet/gate reconciliation and a scoped World 1 release route remain implementation obligations; no runtime or task approval is granted.
+
+## Current owner additions — November 28, 2026
+
+Read the [pet combos, navigation map and automatic screen-fit requirements](PET_COMBOS_MAP_DISPLAY.md) and [21-row contract](PET_COMBOS_MAP_DISPLAY.json) before older orientation/count-specific directions. Every one of the seven pets needs a fitting automatic attack combo and retains its useful specialty. A minimap must expand into a useful larger map. Game/UI layout must adapt to the actual phone window, portrait and landscape, cutouts/insets and live fold/resize changes. **This owner instruction supersedes the former landscape-only restriction for new work.** Historical receipts retain their original scope.
+
+The addendum preserves the current **10 worlds × 50 local levels**, World 1 first, and multiple useful pets/survivors. It maps the added requirements to existing tasks and records implementation/evidence as unverified. It changes no gameplay source/owner, task activation, dependency graph, assets or workflow. Existing packet/checker automation has not yet been wired to this addendum; old landscape-only checks cannot certify these features. See the addendum for exact precedence, source identities and next implementation steps.
+
 **Authoritative production plan.** This plan supersedes `Docs/Production/Archive/SEQUENTIAL_REPAIR_PLAN.pre-v2.2026-09-11.md` for forward production governance. The archived plan remains byte-identical to the pre-migration source and is retained for audit/recovery.
 
 ## Current research and render requirements — 2026-11-27
@@ -37,9 +51,9 @@ Havenline stays simple and immediately enjoyable. Its permanent gameplay languag
 
 **MOVE → AUTO-INTERACT → GATHER → VISIBLY CARRY → DELIVER → TRANSFORM → RESCUE → BUILD/UPGRADE → EXPLORE → DEFEND.**
 
-Controls remain one primary movement joystick with auto collect, auto gather/harvest, auto attack, contextual unloading/deposit, contextual rescue/interactions, and only minimal deliberate-choice controls. Do not turn Havenline into button-heavy RPG combat, 4X warfare, complicated manual inventory, mandatory multiplayer, guild warfare, global free-text chat, unrestricted building, or an energy-wall game.
+Controls use one primary touch-anywhere movement input; a visible joystick is allowed, and movement need not start on it. Preserve auto collect, auto gather/harvest, auto attack, contextual unloading/deposit, contextual rescue/interactions, and only minimal deliberate-choice controls. The authored drag/release and UI-pointer ownership details are in LIVING_WORLD_UI_PLAN.md; historical joystick receipts are preserved. Do not turn Havenline into button-heavy RPG combat, 4X warfare, complicated manual inventory, mandatory multiplayer, guild warfare, global free-text chat, unrestricted building, or an energy-wall game.
 
-Launch remains Level 1–100 across a connected world, with practical visual progression every level, noticeable visual improvement at least every ~3 levels, major milestones approximately every 10 levels, spend-blind adaptive Challenge Director, seven companions (guardian dog, gray wolf, fox, owl, male lion, white tiger, brown bear), weather/day-night, survivor rescue/workers, production, defense, physical carrying, world transformation, monetization/VIP, LiveOps, security, adaptive phone/tablet/foldable support, and the existing final native-4K/60 physical-device target.
+The current campaign plan is 10 worlds × 50 local levels, with World 1 built first and worthwhile visual/capability progression. Older 100-level milestone spacing is historical tuning, not a fixed unlock schedule for the current campaign. Preserve the spend-blind adaptive Challenge Director, seven companions (guardian dog, gray wolf, fox, owl, male lion, white tiger, brown bear), weather/day-night, survivor rescue/workers, production, defense, physical carrying, world transformation, monetization/VIP, LiveOps, security, adaptive phone/tablet/foldable support, and the existing final native-4K/60 physical-device target.
 
 ## Whole-game stakes, capable companions and resource value
 
@@ -118,7 +132,7 @@ The forward critic harness, specialist runner, closure and visual/style checks u
 | T03 | Fences, gates and navigable work lanes | APPROVED | [T03 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t03) |
 | T04 | Reference camera and automatic screen composition | APPROVED | [T04 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t04) |
 | T05 | Production station and prop kit | APPROVED | [T05 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t05) |
-| T06 | Character 1 complete movement/interactions | APPROVED | [T06 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t06) |
+| T06 | Character 1 complete movement/interactions | APPROVED | [T06 foundation](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t06) · [Forward playable roster and vehicle pairings](T06/PLAYABLE_ROSTER_AND_VEHICLES.md) |
 | T07 | Havenline Simple Control & Context Director | APPROVED | [T07 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t07) |
 | T08 | Visible inventory, physical carrying and transfers | APPROVED | [T08 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t08) |
 | T09 | Harvesting and automatic acquisition | APPROVED | [T09 requirements](ReferenceRefresh/2026-11-27/TASK_REFERENCE_MATRIX_T01_T80.md#t09) |

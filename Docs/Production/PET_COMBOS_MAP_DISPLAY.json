@@ -1,0 +1,795 @@
+{
+  "schema_version": 1,
+  "contract_id": "HAVENLINE_PET_COMBOS_MAP_DISPLAY_2026_11_28",
+  "date": "2026-11-28",
+  "scope": "Required forward design and task addendum; runtime not implemented or certified by this change",
+  "owner_instruction": "For Havenline, also pets should all have one attacking combo sequences that fits that pets. dont forget about the other pets too. we also need a mini map that be opened to a larger map to help with navigating and finding important thing. The game should be able to auto detect the users phone screen size and auto adjust to perfectly fit the screen no matter the orientation and prevent any of the UI or game from being cut off.",
+  "owner_instruction_verbatim": true,
+  "authority": {
+    "owner_required_outcomes": [
+      "Every pet has one fitting attacking combo",
+      "Minimap expands to a larger useful navigation map",
+      "Automatic phone/game/UI fit across sizes and orientations without cutoff"
+    ],
+    "authored_detail_status": "Combo choreography, map controls/markers and acceptance design implement owner outcomes; no separate owner approval or runtime completion is asserted",
+    "supersedes_forward": [
+      "WHOLE_GAME_COMPLETENESS.json decisions[CD10] landscape-only restriction",
+      "WHOLE_GAME_COMPLETENESS.json selected_policy.orientation=LANDSCAPE_BOTH_ROTATIONS",
+      "COMPLETENESS_STANDARD.md landscape-only paragraph",
+      "Older AGENTS landscape-only restriction",
+      "GAMEPLAY_RULES_CONTRACT.json semantic_contract.retained.landscape when consuming that separate branch"
+    ],
+    "historical_receipts_preserved": true
+  },
+  "world_scope": {
+    "world_count": 10,
+    "local_levels_per_world": 50,
+    "planned_level_positions": 500,
+    "initial_world": 1,
+    "global_ui_numbering": "NOT_SELECTED_HERE",
+    "new_pet_unlocks_or_team_caps_selected": false
+  },
+  "sources": {
+    "documentation_base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+    "world_plan_commit": "e9fe6c1bf28bef1dd630b73b33aceed43ef4f174",
+    "world_plan_path": "Docs/Production/WorldProgression/2026-11-28-10x50/WORLD_PROGRESSION_CONTRACT.json",
+    "observed_gameplay_branch": "trial/world-one-expansion-2026-11-26",
+    "observed_gameplay_head": "fad3af0a45e94262737077ae513827b5042adb41",
+    "gameplay_head_inspected_for_runtime": false
+  },
+  "preservation": {
+    "runtime_files_changed": false,
+    "assets_changed": false,
+    "workflow_changes": false,
+    "dependency_graph_changed": false,
+    "task_activation_changed": false,
+    "active_gameplay_owner_changed": false,
+    "approval_thresholds_lowered": false
+  },
+  "pet_combos": [
+    {
+      "task_id": "T24",
+      "actor_id": "guardian_dog",
+      "attack_profile": "dog_attack",
+      "name": "Guardian dog",
+      "combo_id": "guardian_dog_combo_01",
+      "definition_status": "AUTHORED_IMPLEMENTATION_SPECIFICATION",
+      "automatic_trigger": true,
+      "phases": [
+        "intercepting_lunge",
+        "bite_1",
+        "grounded_pivot",
+        "bite_2",
+        "guard_recovery"
+      ],
+      "damage_contact_groups": [
+        "bite_1",
+        "bite_2"
+      ],
+      "non_damage_phases": [
+        "intercepting_lunge",
+        "grounded_pivot",
+        "guard_recovery"
+      ],
+      "specialty_retained": "Escort/protect allies; suitable light retrieval",
+      "numeric_balance_status": "NOT_FROZEN",
+      "motion_evidence_status": "UNTESTED",
+      "runtime_approved": false
+    },
+    {
+      "task_id": "T25",
+      "actor_id": "gray_wolf",
+      "attack_profile": "wolf_attack",
+      "name": "Gray wolf",
+      "combo_id": "gray_wolf_combo_01",
+      "definition_status": "AUTHORED_IMPLEMENTATION_SPECIFICATION",
+      "automatic_trigger": true,
+      "phases": [
+        "pursuit",
+        "forward_pounce",
+        "bite_1",
+        "lateral_reposition",
+        "bite_2",
+        "recover"
+      ],
+      "damage_contact_groups": [
+        "bite_1",
+        "bite_2"
+      ],
+      "non_damage_phases": [
+        "pursuit",
+        "forward_pounce",
+        "lateral_reposition",
+        "recover"
+      ],
+      "specialty_retained": "Tracking and bounded pursuit of eligible targets",
+      "numeric_balance_status": "NOT_FROZEN",
+      "motion_evidence_status": "UNTESTED",
+      "runtime_approved": false
+    },
+    {
+      "task_id": "T26",
+      "actor_id": "fox",
+      "attack_profile": "fox_attack",
+      "name": "Fox",
+      "combo_id": "fox_combo_01",
+      "definition_status": "AUTHORED_IMPLEMENTATION_SPECIFICATION",
+      "automatic_trigger": true,
+      "phases": [
+        "side_dart",
+        "bite",
+        "springing_reposition",
+        "pounce_nip",
+        "disengage"
+      ],
+      "damage_contact_groups": [
+        "bite",
+        "pounce_nip"
+      ],
+      "non_damage_phases": [
+        "side_dart",
+        "springing_reposition",
+        "disengage"
+      ],
+      "specialty_retained": "Ground scouting and suitable light retrieval",
+      "numeric_balance_status": "NOT_FROZEN",
+      "motion_evidence_status": "UNTESTED",
+      "runtime_approved": false
+    },
+    {
+      "task_id": "T27",
+      "actor_id": "owl",
+      "attack_profile": "owl_attack",
+      "name": "Owl",
+      "combo_id": "owl_combo_01",
+      "definition_status": "AUTHORED_IMPLEMENTATION_SPECIFICATION",
+      "automatic_trigger": true,
+      "phases": [
+        "takeoff_if_grounded",
+        "bank",
+        "dive_talon_1",
+        "clear_air_turn",
+        "talon_pass_2",
+        "climb_recover"
+      ],
+      "damage_contact_groups": [
+        "dive_talon_1",
+        "talon_pass_2"
+      ],
+      "non_damage_phases": [
+        "takeoff_if_grounded",
+        "bank",
+        "clear_air_turn",
+        "climb_recover"
+      ],
+      "specialty_retained": "Aerial scouting, warnings and suitable retrieval",
+      "numeric_balance_status": "NOT_FROZEN",
+      "motion_evidence_status": "UNTESTED",
+      "runtime_approved": false
+    },
+    {
+      "task_id": "T28",
+      "actor_id": "male_lion",
+      "attack_profile": "lion_attack",
+      "name": "Male lion",
+      "combo_id": "male_lion_combo_01",
+      "definition_status": "AUTHORED_IMPLEMENTATION_SPECIFICATION",
+      "automatic_trigger": true,
+      "phases": [
+        "short_charge",
+        "heavy_pounce",
+        "forepaw_strike",
+        "bite_release",
+        "weighted_recovery"
+      ],
+      "damage_contact_groups": [
+        "forepaw_strike",
+        "bite_release"
+      ],
+      "non_damage_phases": [
+        "short_charge",
+        "heavy_pounce",
+        "weighted_recovery"
+      ],
+      "specialty_retained": "Exposed-approach defense and ally protection",
+      "numeric_balance_status": "NOT_FROZEN",
+      "motion_evidence_status": "UNTESTED",
+      "runtime_approved": false
+    },
+    {
+      "task_id": "T29",
+      "actor_id": "white_tiger",
+      "attack_profile": "tiger_attack",
+      "name": "White tiger",
+      "combo_id": "white_tiger_combo_01",
+      "definition_status": "AUTHORED_IMPLEMENTATION_SPECIFICATION",
+      "automatic_trigger": true,
+      "phases": [
+        "low_approach",
+        "lateral_pounce",
+        "claw_left",
+        "claw_right",
+        "bite_release",
+        "low_reset"
+      ],
+      "damage_contact_groups": [
+        "claw_left",
+        "claw_right",
+        "bite_release"
+      ],
+      "non_damage_phases": [
+        "low_approach",
+        "lateral_pounce",
+        "low_reset"
+      ],
+      "specialty_retained": "Reachable flank, ambush and interception",
+      "numeric_balance_status": "NOT_FROZEN",
+      "motion_evidence_status": "UNTESTED",
+      "runtime_approved": false
+    },
+    {
+      "task_id": "T30",
+      "actor_id": "brown_bear",
+      "attack_profile": "bear_attack",
+      "name": "Brown bear",
+      "combo_id": "brown_bear_combo_01",
+      "definition_status": "AUTHORED_IMPLEMENTATION_SPECIFICATION",
+      "automatic_trigger": true,
+      "phases": [
+        "heavy_rush",
+        "forepaw_swipe_1",
+        "forepaw_swipe_2",
+        "short_bite",
+        "weighted_reset"
+      ],
+      "damage_contact_groups": [
+        "forepaw_swipe_1",
+        "forepaw_swipe_2",
+        "short_bite"
+      ],
+      "non_damage_phases": [
+        "heavy_rush",
+        "weighted_reset"
+      ],
+      "specialty_retained": "Suitable heavy hauling and registered obstacle work",
+      "numeric_balance_status": "NOT_FROZEN",
+      "motion_evidence_status": "UNTESTED",
+      "runtime_approved": false
+    }
+  ],
+  "map": {
+    "views": [
+      "minimap",
+      "expanded_map"
+    ],
+    "default_orientation": "NORTH_UP_WITH_PLAYER_HEADING_ARROW",
+    "controls": [
+      "open",
+      "close",
+      "android_back",
+      "pan",
+      "zoom",
+      "recenter",
+      "select_waypoint",
+      "replace_waypoint",
+      "clear_waypoint",
+      "legend",
+      "filter_or_cluster"
+    ],
+    "categories": [
+      "player",
+      "camp_home",
+      "furnace",
+      "storage_house",
+      "production_machine",
+      "counter",
+      "gate",
+      "build_upgrade_site",
+      "vehicle_garage",
+      "resource_area",
+      "objective",
+      "rescue",
+      "survivor",
+      "active_pet",
+      "known_threat",
+      "recoverable_cargo"
+    ],
+    "marker_availability": "Only actual present and legitimately known content; preserve scouting value",
+    "expanded_map_simulation": "BIND_TO_CURRENT_EXPLICIT_MODAL_PAUSE_CONTRACT_BEFORE_INTEGRATION",
+    "auto_travel_added": false,
+    "fog_of_war_system_selected": false
+  },
+  "display": {
+    "required_orientation_policy": "PORTRAIT_AND_BOTH_LANDSCAPE_ROTATIONS_PLUS_INVERTED_PORTRAIT_WHERE_OS_SUPPORTED",
+    "respect_system_rotation_lock": true,
+    "measure_actual_window": true,
+    "updates_on": [
+      "startup",
+      "rotation",
+      "resize",
+      "fold_unfold",
+      "cover_inner_transition",
+      "system_bar_or_inset_change",
+      "resume"
+    ],
+    "safe_area_features": [
+      "cutouts",
+      "rounded_corners",
+      "status_navigation_task_bars",
+      "gesture_regions",
+      "occluding_or_separating_hinges"
+    ],
+    "layout_families": [
+      "compact_portrait",
+      "wide_landscape",
+      "large_screen"
+    ],
+    "render_and_input_transforms_agree": true,
+    "extreme_camera_zoom_allowed": false
+  },
+  "requirements": [
+    {
+      "id": "PC01",
+      "title": "Complete roster",
+      "requirement": "all seven species have their own combo definition, animation binding and useful specialty. Cosmetic variants use compatible species behavior without silently replacing the roster.",
+      "implementation_status": "REQUIRED_NOT_IMPLEMENTED_BY_THIS_CHANGE",
+      "evidence_status": "UNTESTED",
+      "runtime_approved": false,
+      "responsible_or_consumer_tasks": [
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T31",
+        "T67",
+        "T70"
+      ]
+    },
+    {
+      "id": "PC02",
+      "title": "Automatic, distinctive action",
+      "requirement": "separate posture, rhythm, anticipation and recovery fit each species. No human punching, identical retimed motion for every animal, orbiting damage object or teleporting to finish a combo. Upgrades preserve this identity while adding their separately defined, worthwhile capability/appearance gains.",
+      "implementation_status": "REQUIRED_NOT_IMPLEMENTED_BY_THIS_CHANGE",
+      "evidence_status": "UNTESTED",
+      "runtime_approved": false,
+      "responsible_or_consumer_tasks": [
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T67",
+        "T70"
+      ]
+    },
+    {
+      "id": "PC03",
+      "title": "Authoritative contacts",
+      "requirement": "every intended strike has its own contact group. The contact ledger applies each allowed hit once per attack instance, group and target; the damage window must match actual reach and contact. Multiple hitboxes cannot multiply one strike. Misses do no damage. Defeat/reward commits happen once even with several attackers.",
+      "implementation_status": "REQUIRED_NOT_IMPLEMENTED_BY_THIS_CHANGE",
+      "evidence_status": "UNTESTED",
+      "runtime_approved": false,
+      "responsible_or_consumer_tasks": [
+        "T21",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T67",
+        "T70"
+      ]
+    },
+    {
+      "id": "PC04",
+      "title": "Safe interruption",
+      "requirement": "revalidate target identity, hostility, life state, reach, route, sanctuary/attack domains and recall before each strike. On loss, obstruction, stun/down or recall, cancel safely or finish only the currently valid committed contact; do not deliver later damage to an invalid target. A new target requires a new validated engagement. Save/reload, pause/resume and team switching cannot replay consumed hits or erase recovery.",
+      "implementation_status": "REQUIRED_NOT_IMPLEMENTED_BY_THIS_CHANGE",
+      "evidence_status": "UNTESTED",
+      "runtime_approved": false,
+      "responsible_or_consumer_tasks": [
+        "T14",
+        "T21",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T31",
+        "T67",
+        "T70"
+      ]
+    },
+    {
+      "id": "PC05",
+      "title": "Useful concurrent pets",
+      "requirement": "multiple pets and survivors act together with shared engagement-space rules, stable priorities and safe paths. Secure mouth/talon cargo before incompatible strikes; never delete or duplicate cargo. Resume a valid job after combat. Prevent path deadlocks and unavoidable stun/control loops. Numerical balance remains to be tested.",
+      "implementation_status": "REQUIRED_NOT_IMPLEMENTED_BY_THIS_CHANGE",
+      "evidence_status": "UNTESTED",
+      "runtime_approved": false,
+      "responsible_or_consumer_tasks": [
+        "T21",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T31",
+        "T67",
+        "T70"
+      ]
+    },
+    {
+      "id": "PC06",
+      "title": "Full evidence",
+      "requirement": "review full cycles, misses, interruptions and transitions at normal speed and in slow playback, from front/rear/left/right/three-quarter, gameplay camera and contact closeups. Inspect feet/toes/knees, jaws, shoulders, tails, mane, wings and equipment clipping. Owl proof includes flight, takeoff, banking, each talon contact, wing clearance and landing. Listen to attack/impact/recovery audio and check equivalent visible feedback when muted. Still images do not approve motion.",
+      "implementation_status": "REQUIRED_NOT_IMPLEMENTED_BY_THIS_CHANGE",
+      "evidence_status": "UNTESTED",
+      "runtime_approved": false,
+      "responsible_or_consumer_tasks": [
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T54",
+        "T67",
+        "T70"
+      ]
+    },
+    {
+      "id": "NM01",
+      "title": "Open and close",
+      "requirement": "one obvious tap opens the map. Closing returns to the same game state and appropriate camera. Map touches, drags and pinches are consumed by the map and cannot move the player or trigger world purchases/interactions underneath it.",
+      "implementation_status": "REQUIRED_NOT_IMPLEMENTED_BY_THIS_CHANGE",
+      "evidence_status": "UNTESTED",
+      "runtime_approved": false,
+      "responsible_or_consumer_tasks": [
+        "T04",
+        "T07",
+        "T54",
+        "T67",
+        "T70"
+      ]
+    },
+    {
+      "id": "NM02",
+      "title": "Find important things",
+      "requirement": "when present in the current world, show camp/home and furnace; storage house; machines and counters; gates, build/upgrade sites; vehicles and garage; useful resource areas; objectives, rescues and survivors; active pets; known threats; and recoverable cargo. Marker registration belongs to the feature introducing the object. No placeholder destination is advertised as usable.",
+      "implementation_status": "REQUIRED_NOT_IMPLEMENTED_BY_THIS_CHANGE",
+      "evidence_status": "UNTESTED",
+      "runtime_approved": false,
+      "responsible_or_consumer_tasks": [
+        "T04",
+        "T32",
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52",
+        "T67",
+        "T70"
+      ]
+    },
+    {
+      "id": "NM03",
+      "title": "Readable live markers",
+      "requirement": "distinguish categories with shape/icon plus label, not color alone. Filter or cluster busy areas and reveal an individual item on selection. Track stable world/object/actor identities and authoritative positions. Update movement, resource depletion/regrowth, construction, recall/down/recovery and removal without ghost or duplicate markers. All seven pet species remain identifiable when active.",
+      "implementation_status": "REQUIRED_NOT_IMPLEMENTED_BY_THIS_CHANGE",
+      "evidence_status": "UNTESTED",
+      "runtime_approved": false,
+      "responsible_or_consumer_tasks": [
+        "T04",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30",
+        "T31",
+        "T32",
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52",
+        "T55",
+        "T67",
+        "T70"
+      ]
+    },
+    {
+      "id": "NM04",
+      "title": "Navigation",
+      "requirement": "select, replace or clear a waypoint; show useful direction/distance and arrival feedback. Directions must respect traversable connections, gates and world locks. A straight bearing is labeled as direction, never passed off as a valid route. An unreachable destination gives a clear unavailable/blocked reason; it does not guide through fences, water or unopened gates. This does not add automatic walking or teleportation.",
+      "implementation_status": "REQUIRED_NOT_IMPLEMENTED_BY_THIS_CHANGE",
+      "evidence_status": "UNTESTED",
+      "runtime_approved": false,
+      "responsible_or_consumer_tasks": [
+        "T04",
+        "T07",
+        "T32",
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52",
+        "T53",
+        "T54",
+        "T67",
+        "T70"
+      ]
+    },
+    {
+      "id": "NM05",
+      "title": "Truthful knowledge",
+      "requirement": "distinguish known/unavailable/locked/depleted/dangerous destinations. Reveal only information the game legitimately knows; hidden enemies and undiscovered loot do not become an omniscient overlay that removes owl/fox scouting value. A new fog-of-war or reveal-everything system is not implicitly approved.",
+      "implementation_status": "REQUIRED_NOT_IMPLEMENTED_BY_THIS_CHANGE",
+      "evidence_status": "UNTESTED",
+      "runtime_approved": false,
+      "responsible_or_consumer_tasks": [
+        "T32",
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52",
+        "T67",
+        "T70"
+      ]
+    },
+    {
+      "id": "NM06",
+      "title": "Lifecycle and map time",
+      "requirement": "preserve valid selection, filters and waypoint state across closing, resizing and save/reload. Clearly update or invalidate a moved, removed or other-world destination. The expanded map follows the current explicit modal pause contract: the implementing owner must bind and test that exact policy before integration. Map opening cannot reset combat, farm pause/resume rewards, silently grant invulnerability or alter timer/value rules. Existing app background behavior remains intact.",
+      "implementation_status": "REQUIRED_NOT_IMPLEMENTED_BY_THIS_CHANGE",
+      "evidence_status": "UNTESTED",
+      "runtime_approved": false,
+      "responsible_or_consumer_tasks": [
+        "T07",
+        "T14",
+        "T53",
+        "T67",
+        "T70"
+      ]
+    },
+    {
+      "id": "NM07",
+      "title": "World scope",
+      "requirement": "ship real authored World 1 map data with World 1. Use stable world IDs and local-level/progression state compatible with ten worlds of fifty local levels; this does not require 500 separate maps or decide global UI numbering. Later world owners provide their own real POIs and connections without blocking the first usable World 1 map.",
+      "implementation_status": "REQUIRED_NOT_IMPLEMENTED_BY_THIS_CHANGE",
+      "evidence_status": "UNTESTED",
+      "runtime_approved": false,
+      "responsible_or_consumer_tasks": [
+        "T12",
+        "T32",
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52",
+        "T53",
+        "T62",
+        "T67",
+        "T70"
+      ]
+    },
+    {
+      "id": "DS01",
+      "title": "Measure the current app window",
+      "requirement": "Read current usable dimensions, aspect ratio, scaling/density information and applicable safe insets/cutouts. Recalculate at startup and when the actual window changes. A phone model list or a single launch-time size measurement is insufficient.",
+      "implementation_status": "REQUIRED_NOT_IMPLEMENTED_BY_THIS_CHANGE",
+      "evidence_status": "UNTESTED",
+      "runtime_approved": false,
+      "responsible_or_consumer_tasks": [
+        "T04",
+        "T58",
+        "T67",
+        "T70"
+      ]
+    },
+    {
+      "id": "DS02",
+      "title": "Every delivered orientation",
+      "requirement": "Support portrait and both landscape rotations; support inverted portrait where the device/OS delivers it. Respect the user's system rotation preference. Keep project/export settings and runtime layout rules consistent. Record unsupported OS configurations honestly; do not claim they were tested or try to bypass the system rotation lock.",
+      "implementation_status": "REQUIRED_NOT_IMPLEMENTED_BY_THIS_CHANGE",
+      "evidence_status": "UNTESTED",
+      "runtime_approved": false,
+      "responsible_or_consumer_tasks": [
+        "T04",
+        "T58",
+        "T67",
+        "T70"
+      ]
+    },
+    {
+      "id": "DS03",
+      "title": "Safe and readable UI",
+      "requirement": "Keep HUD text, touch controls, minimap, dialogs, confirmations, notifications and map controls inside usable regions, clear of notches, camera holes, rounded corners, status/navigation/task bars and relevant gesture zones. Use distinct compact portrait, wide landscape and large-screen arrangements. Reflow or deliberately scroll secondary information while retaining reachable controls; shrinking everything until it is unreadable fails.",
+      "implementation_status": "REQUIRED_NOT_IMPLEMENTED_BY_THIS_CHANGE",
+      "evidence_status": "UNTESTED",
+      "runtime_approved": false,
+      "responsible_or_consumer_tasks": [
+        "T04",
+        "T55",
+        "T58",
+        "T67",
+        "T70"
+      ]
+    },
+    {
+      "id": "DS04",
+      "title": "Correct game framing",
+      "requirement": "Fit the complete render viewport without stretching or cropping the framebuffer. Adapt camera composition so the player, action/target cues and immediate routes remain readable at the approved gameplay scale. Respect the existing ban on extreme gameplay zoom. The larger world naturally extends beyond the camera; the required result is an undistorted, correctly fitted, usable game view. Edge-to-edge background decoration may extend behind system areas while essential content stays safe.",
+      "implementation_status": "REQUIRED_NOT_IMPLEMENTED_BY_THIS_CHANGE",
+      "evidence_status": "UNTESTED",
+      "runtime_approved": false,
+      "responsible_or_consumer_tasks": [
+        "T04",
+        "T58",
+        "T67",
+        "T70"
+      ]
+    },
+    {
+      "id": "DS05",
+      "title": "Folding and resizing",
+      "requirement": "Handle cover-to-inner and inner-to-cover transitions, fold/unfold, split-screen/window resizing where provided, system-bar changes and resume without requiring a restart. Treat a truly occluding or separating hinge according to platform-reported geometry; a non-occluding crease is not automatically a missing strip of pixels. Keep essential controls and immediate play out of an occluded region. If the engine cannot expose required hinge information, the implementing owner must supply the platform adapter and prove it.",
+      "implementation_status": "REQUIRED_NOT_IMPLEMENTED_BY_THIS_CHANGE",
+      "evidence_status": "UNTESTED",
+      "runtime_approved": false,
+      "responsible_or_consumer_tasks": [
+        "T04",
+        "T58",
+        "T67",
+        "T69",
+        "T70"
+      ]
+    },
+    {
+      "id": "DS06",
+      "title": "Input remains aligned",
+      "requirement": "Apply identical window/safe-area/scale transformations to rendering and hit testing. Cancel or release held joystick/map gestures safely during a layout change, then accept fresh input. No stuck movement, shifted buttons, accidental purchases or touches leaking into world actions.",
+      "implementation_status": "REQUIRED_NOT_IMPLEMENTED_BY_THIS_CHANGE",
+      "evidence_status": "UNTESTED",
+      "runtime_approved": false,
+      "responsible_or_consumer_tasks": [
+        "T07",
+        "T55",
+        "T58",
+        "T67",
+        "T70"
+      ]
+    },
+    {
+      "id": "DS07",
+      "title": "State survives",
+      "requirement": "Rotation, folding and resize preserve position, cargo, currency, pet/survivor identities, jobs, combat progress and committed contacts, progression, open-menu state and valid map destination. No duplicate grants, dropped cargo or resets. If the OS recreates the app, restore through the established save/lifecycle contract.",
+      "implementation_status": "REQUIRED_NOT_IMPLEMENTED_BY_THIS_CHANGE",
+      "evidence_status": "UNTESTED",
+      "runtime_approved": false,
+      "responsible_or_consumer_tasks": [
+        "T07",
+        "T14",
+        "T31",
+        "T58",
+        "T67",
+        "T70"
+      ]
+    },
+    {
+      "id": "DS08",
+      "title": "Accessibility and performance",
+      "requirement": "Preserve text/UI scaling and existing control preferences, readable touch targets, non-color cues, reduced-motion options and muted feedback. Display correctness cannot be traded for missing controls, altered logical actor counts or a different economy. Existing quality presets and performance gates remain applicable; layout screenshots do not certify sustained native performance.",
+      "implementation_status": "REQUIRED_NOT_IMPLEMENTED_BY_THIS_CHANGE",
+      "evidence_status": "UNTESTED",
+      "runtime_approved": false,
+      "responsible_or_consumer_tasks": [
+        "T55",
+        "T58",
+        "T67",
+        "T68",
+        "T69",
+        "T70"
+      ]
+    }
+  ],
+  "acceptance_scenarios": [
+    {
+      "id": "AS01",
+      "scope": "seven_pet_combos",
+      "steps": "Each species: useful positive damage, miss, interrupt, recall, recovery, cargo-safe transition, job return; full multi-angle playback and listening",
+      "status": "UNTESTED"
+    },
+    {
+      "id": "AS02",
+      "scope": "simultaneous_companions",
+      "steps": "Multiple pets plus survivors engage/work around gates and crowded approaches; no deadlock, duplicate damage/rewards or cargo loss",
+      "status": "UNTESTED"
+    },
+    {
+      "id": "AS03",
+      "scope": "map_navigation",
+      "steps": "Open, select landmark, waypoint, close, follow valid route, arrive; repeat blocked/unreachable/locked/depleted/removed/other-world target",
+      "status": "UNTESTED"
+    },
+    {
+      "id": "AS04",
+      "scope": "live_map_state",
+      "steps": "All registered marker categories and all seven pet types update correctly; filtering/clustering, changing actor state and resource regrowth; no omniscient hidden markers",
+      "status": "UNTESTED"
+    },
+    {
+      "id": "AS05",
+      "scope": "device_layout_matrix",
+      "steps": "Compact/tall phones,16:9,20:9,tablet4:3,narrow cover,near-square inner,arbitrary resizable window; all supported orientations, insets/hinges, enlarged text; game/map/menu/dialog",
+      "status": "UNTESTED"
+    },
+    {
+      "id": "AS06",
+      "scope": "live_transitions_and_input",
+      "steps": "Rotate/fold/resize during movement, carrying, pet attacks, map pan/zoom, confirmation, background/resume; matching touch transforms and no leaked/stuck input",
+      "status": "UNTESTED"
+    },
+    {
+      "id": "AS07",
+      "scope": "save_value_and_timers",
+      "steps": "Preserve combat contacts/recovery,cargo,currency,actors,jobs,progression and valid waypoints; bind modal pause rule; no replay/double reward or lifecycle exploit",
+      "status": "UNTESTED"
+    },
+    {
+      "id": "AS08",
+      "scope": "release_evidence",
+      "steps": "Exact source-bound actual renders/full motion and transition recordings, listening, named physical-device results, affected regression and existing specialist/performance gates",
+      "status": "UNTESTED"
+    }
+  ],
+  "automation_integration": {
+    "task_packet_auto_inclusion_implemented": false,
+    "old_landscape_checker_cannot_approve_new_scope": true,
+    "required_next_action": "Bind this addendum into current task packets and reconcile orientation/export/generator assertions under existing ownership before feature certification"
+  },
+  "review_boundary": {
+    "documentation_only": true,
+    "runtime_approved": false,
+    "runtime_score": null,
+    "device_approved": false,
+    "animation_approved": false,
+    "all_runtime_evidence_pending": true
+  },
+  "next_action": "Current source/owner binding, then shared contacts and species combos in parallel with responsive layout/input and World 1 map implementation; capture, independent critique, repair, retest"
+}

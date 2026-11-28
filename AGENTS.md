@@ -1,5 +1,21 @@
 # HAVENLINE consolidation entrypoint
 
+## Check GitHub before starting a task
+
+Before starting or resuming any Havenline task, check GitHub for relevant changes to the task plan, the selected gameplay source and the owner's design notes and renders. Check open planning PRs alongside the current plan. Record the commit refs that apply, then start from the current scope and source.
+
+## Latest owner additions — Aurora and a living winter world
+
+Read the [Aurora, wildlife, day/night and natural-movement plan](Docs/Production/LIVING_WORLD_UI_PLAN.md) and [30-row contract](Docs/Production/LIVING_WORLD_UI_PLAN.json) before conflicting older control/roster guidance. Aurora Light/Dark and touch-anywhere movement are selected; the latest owner correction allows a visible joystick without requiring movement to start on it. Add distinct enemy roles, nonaggressive huntable winter wildlife, different day/night populations, more aggressive night hostiles and natural animal/survivor movement. Dark UI does not set world time. Keep all seven attacking/useful pets, multiple pets/survivors and the current 10×50 World 1-first scope.
+
+The plan binds later Build13 owner targeting, casualties/repurchase, breach/equipment replacement and five-active-minute raid warning decisions; older sanctuary/no-death/free-repair clauses cannot override them. Open casualty/economy tuning stays open. This documentation preserves task IDs, states, dependencies, current gameplay ownership and all historical evidence. Forward packet/gate reconciliation and a scoped World 1 release route remain implementation obligations; no runtime or task approval is granted.
+
+## Current owner additions — November 28, 2026
+
+Read the [pet combos, navigation map and automatic screen-fit requirements](Docs/Production/PET_COMBOS_MAP_DISPLAY.md) and [21-row contract](Docs/Production/PET_COMBOS_MAP_DISPLAY.json) before older orientation/count-specific directions. Every one of the seven pets needs a fitting automatic attack combo and retains its useful specialty. A minimap must expand into a useful larger map. Game/UI layout must adapt to the actual phone window, portrait and landscape, cutouts/insets and live fold/resize changes. **This owner instruction supersedes the former landscape-only restriction for new work.** Historical receipts retain their original scope.
+
+The addendum preserves the current **10 worlds × 50 local levels**, World 1 first, and multiple useful pets/survivors. It maps the added requirements to existing tasks and records implementation/evidence as unverified. It changes no gameplay source/owner, task activation, dependency graph, assets or workflow. Existing packet/checker automation has not yet been wired to this addendum; old landscape-only checks cannot certify these features. See the addendum for exact precedence, source identities and next implementation steps.
+
 ## Current acceptance instruction
 
 For new reviews, changed candidates and reapprovals, read `Docs/Production/REFERENCE_ACCEPTANCE_STANDARD.md` and use `REFERENCE_ACCEPTANCE_POLICY.json`. Reference-sensitive final dimensions must be >=9.9 unrounded; preserve all existing exact-10 visual requirements. A reference-sensitive 9.5 result is an interim checkpoint and cannot approve a task. Run the current forward gates on the exact candidate; preserve historical receipts, rejected evidence and active invalidations. This instruction authorizes no gameplay ownership change or archived-workflow activation.
