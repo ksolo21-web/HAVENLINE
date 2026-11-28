@@ -1,0 +1,812 @@
+{
+  "reviewer": "/root/independent",
+  "baseline": "33c1855d249c8bf18f6ad49d2130b0b0c353e3dd",
+  "candidate": "89b6103c145d6837f4f76673c34c053530aa0a61",
+  "candidate_manifest": {
+    "path": "/tmp/havenline-t05-independent/C6-software/Candidate-frozen.json",
+    "sha256": "3ba17416b33ef276967ed418e1d3aabbff120740fa704b1b0c3ae09fe2d7ade2"
+  },
+  "renderer": "llvmpipe OpenGL Compatibility on Linux, 6 LLVMpipe worker threads, Xorg virtual display",
+  "counterbalanced_order": [
+    "baseline-a",
+    "candidate-a",
+    "candidate-b",
+    "baseline-b"
+  ],
+  "native_timing_gate": "Unscored: 4K baseline only produced eleven shoreline and six camp samples; no matching candidate long-run attempted on this source after discovery of a movement correction.",
+  "software_elapsed_gate": "Unscored: some sites below 24 sampled frames and substantial p95/p99 variation above the historical repeatability threshold. Physical device coverage was waived for this playtest.",
+  "software_runs": {
+    "baseline-a": {
+      "benchmark": {
+        "errors": [
+          "invalid timed benchmark camp"
+        ],
+        "fixed_fps_used": false,
+        "native": [
+          960,
+          540
+        ],
+        "render_scale": 1.0,
+        "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+        "samples": [
+          {
+            "camera": [
+              -18.0136833190918,
+              11.2003526687622,
+              26.3499279022217
+            ],
+            "draws_min": 241.0,
+            "draws_p50": 247.0,
+            "draws_p95": 248.0,
+            "draws_peak": 248.0,
+            "elapsed_s": 15.857555,
+            "feet": [
+              -24.6000003814697,
+              0.0,
+              16.0
+            ],
+            "fps": 1.51347417681982,
+            "frame_p50_ms": 653.823,
+            "frame_p95_ms": 793.103,
+            "frame_p99_ms": 801.418,
+            "frames": 24,
+            "logical": "(1280.0, 720.0)",
+            "native_retained": true,
+            "site": "shore",
+            "texture_p50_bytes": 735516156.0,
+            "texture_peak_bytes": 735516156.0,
+            "triangles_min": 401183.0,
+            "triangles_p50": 403019.0,
+            "triangles_p95": 403019.0,
+            "triangles_peak": 403019.0,
+            "viewport": "(960, 540)"
+          },
+          {
+            "camera": [
+              6.18631839752197,
+              11.2003526687622,
+              5.349928855896
+            ],
+            "draws_min": 495.0,
+            "draws_p50": 495.0,
+            "draws_p95": 495.0,
+            "draws_peak": 495.0,
+            "elapsed_s": 16.056188,
+            "feet": [
+              -0.400000005960464,
+              0.0,
+              -5.0
+            ],
+            "fps": 1.12106310663527,
+            "frame_p50_ms": 873.954,
+            "frame_p95_ms": 1132.228,
+            "frame_p99_ms": 1132.228,
+            "frames": 18,
+            "logical": "(1280.0, 720.0)",
+            "native_retained": true,
+            "site": "camp",
+            "texture_p50_bytes": 735516156.0,
+            "texture_peak_bytes": 735516156.0,
+            "triangles_min": 745445.0,
+            "triangles_p50": 745445.0,
+            "triangles_p95": 745445.0,
+            "triangles_peak": 745445.0,
+            "viewport": "(960, 540)"
+          }
+        ],
+        "warmup": {
+          "native_dimensions_and_scale_maintained": true,
+          "requested_seconds": 12.0,
+          "retained_seconds": 12.741506,
+          "samples": 8
+        }
+      },
+      "process": {
+        "elapsed_s": 70.80912095899112,
+        "max_rss_kib": 1995876,
+        "user_cpu_s": 174.259859,
+        "system_cpu_s": 6.473562,
+        "status": 1
+      },
+      "bound_inputs": [
+        {
+          "path": "/tmp/havenline-t05-independent/C6-software/baseline-a/Source-start.sha256",
+          "sha256": "2013e4c73d5509568143dc49cad8392fe834d1bcf22f19de17056399f3405c30"
+        },
+        {
+          "path": "/tmp/havenline-t05-independent/C6-software/baseline-a/Source-end.sha256",
+          "sha256": "2013e4c73d5509568143dc49cad8392fe834d1bcf22f19de17056399f3405c30"
+        },
+        {
+          "path": "/tmp/havenline-t05-independent/C6-software/baseline-a/Benchmark.json",
+          "sha256": "aa2423e3cd5d6ff5a4b6d99e35a8b68595040bdf11260952c707b041e664010c"
+        },
+        {
+          "path": "/tmp/havenline-t05-independent/C6-software/baseline-a/Process.json",
+          "sha256": "5d5c44fb2a050d06295c3390cb6fd5f7d98df140f26af2a95a71cd965c50a855"
+        },
+        {
+          "path": "/tmp/havenline-t05-independent/C6-software/baseline-a/Run.log",
+          "sha256": "1d7a1bcf40517b934a399e66e8ef28956c066f04c8672c19e9654732e8a86ff8"
+        }
+      ]
+    },
+    "candidate-a": {
+      "benchmark": {
+        "errors": [
+          "invalid timed benchmark shore",
+          "invalid timed benchmark camp"
+        ],
+        "fixed_fps_used": false,
+        "native": [
+          960,
+          540
+        ],
+        "render_scale": 1.0,
+        "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+        "samples": [
+          {
+            "camera": [
+              -18.0136833190918,
+              11.2003526687622,
+              26.3499279022217
+            ],
+            "draws_min": 249.0,
+            "draws_p50": 255.0,
+            "draws_p95": 256.0,
+            "draws_peak": 256.0,
+            "elapsed_s": 16.409773,
+            "feet": [
+              -24.6000003814697,
+              0.0,
+              16.0
+            ],
+            "fps": 1.2187859027666,
+            "frame_p50_ms": 798.94,
+            "frame_p95_ms": 930.81,
+            "frame_p99_ms": 1111.423,
+            "frames": 20,
+            "logical": "(1280.0, 720.0)",
+            "native_retained": true,
+            "site": "shore",
+            "texture_p50_bytes": 752293452.0,
+            "texture_peak_bytes": 752293452.0,
+            "triangles_min": 428503.0,
+            "triangles_p50": 430339.0,
+            "triangles_p95": 430339.0,
+            "triangles_peak": 430339.0,
+            "viewport": "(960, 540)"
+          },
+          {
+            "camera": [
+              6.18631839752197,
+              11.2003526687622,
+              5.349928855896
+            ],
+            "draws_min": 502.0,
+            "draws_p50": 502.0,
+            "draws_p95": 502.0,
+            "draws_peak": 502.0,
+            "elapsed_s": 16.134935,
+            "feet": [
+              -0.400000005960464,
+              0.0,
+              -5.0
+            ],
+            "fps": 1.11559172689571,
+            "frame_p50_ms": 866.367,
+            "frame_p95_ms": 1016.972,
+            "frame_p99_ms": 1016.972,
+            "frames": 18,
+            "logical": "(1280.0, 720.0)",
+            "native_retained": true,
+            "site": "camp",
+            "texture_p50_bytes": 752293452.0,
+            "texture_peak_bytes": 752293452.0,
+            "triangles_min": 747591.0,
+            "triangles_p50": 747591.0,
+            "triangles_p95": 747591.0,
+            "triangles_peak": 747591.0,
+            "viewport": "(960, 540)"
+          }
+        ],
+        "warmup": {
+          "native_dimensions_and_scale_maintained": true,
+          "requested_seconds": 12.0,
+          "retained_seconds": 12.714824,
+          "samples": 10
+        }
+      },
+      "process": {
+        "elapsed_s": 75.24411500501446,
+        "max_rss_kib": 2019964,
+        "user_cpu_s": 194.804721,
+        "system_cpu_s": 5.8785,
+        "status": 1
+      },
+      "bound_inputs": [
+        {
+          "path": "/tmp/havenline-t05-independent/C6-software/candidate-a/Source-start.sha256",
+          "sha256": "824c2623198ef96ec8c5c6241060a88658d3c7059e5d41b01b46190c1928cd92"
+        },
+        {
+          "path": "/tmp/havenline-t05-independent/C6-software/candidate-a/Source-end.sha256",
+          "sha256": "824c2623198ef96ec8c5c6241060a88658d3c7059e5d41b01b46190c1928cd92"
+        },
+        {
+          "path": "/tmp/havenline-t05-independent/C6-software/candidate-a/Benchmark.json",
+          "sha256": "ec44b56e34af46caf97d92bde83fe283d90626810de400aab6e25a672f5f5990"
+        },
+        {
+          "path": "/tmp/havenline-t05-independent/C6-software/candidate-a/Process.json",
+          "sha256": "8478627d42136cd0aecb3efafa0eb5b55abdc0365ca16ea8d5b15d1a342056bb"
+        },
+        {
+          "path": "/tmp/havenline-t05-independent/C6-software/candidate-a/Run.log",
+          "sha256": "b0187936ce3bbf334e88b8b7dbcd323aae593a425dd00c005a642b51f5e7b752"
+        }
+      ]
+    },
+    "candidate-b": {
+      "benchmark": {
+        "errors": [
+          "invalid timed benchmark camp"
+        ],
+        "fixed_fps_used": false,
+        "native": [
+          960,
+          540
+        ],
+        "render_scale": 1.0,
+        "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+        "samples": [
+          {
+            "camera": [
+              -18.0136833190918,
+              11.2003526687622,
+              26.3499279022217
+            ],
+            "draws_min": 249.0,
+            "draws_p50": 255.0,
+            "draws_p95": 256.0,
+            "draws_peak": 256.0,
+            "elapsed_s": 15.625063,
+            "feet": [
+              -24.6000003814697,
+              0.0,
+              16.0
+            ],
+            "fps": 1.53599380687297,
+            "frame_p50_ms": 646.974,
+            "frame_p95_ms": 691.328,
+            "frame_p99_ms": 693.555,
+            "frames": 24,
+            "logical": "(1280.0, 720.0)",
+            "native_retained": true,
+            "site": "shore",
+            "texture_p50_bytes": 752293452.0,
+            "texture_peak_bytes": 752293452.0,
+            "triangles_min": 428503.0,
+            "triangles_p50": 430339.0,
+            "triangles_p95": 430339.0,
+            "triangles_peak": 430339.0,
+            "viewport": "(960, 540)"
+          },
+          {
+            "camera": [
+              6.18631839752197,
+              11.2003526687622,
+              5.349928855896
+            ],
+            "draws_min": 502.0,
+            "draws_p50": 502.0,
+            "draws_p95": 502.0,
+            "draws_peak": 502.0,
+            "elapsed_s": 16.193361,
+            "feet": [
+              -0.400000005960464,
+              0.0,
+              -5.0
+            ],
+            "fps": 1.17332035023489,
+            "frame_p50_ms": 851.45,
+            "frame_p95_ms": 914.93,
+            "frame_p99_ms": 914.93,
+            "frames": 19,
+            "logical": "(1280.0, 720.0)",
+            "native_retained": true,
+            "site": "camp",
+            "texture_p50_bytes": 752293452.0,
+            "texture_peak_bytes": 752293452.0,
+            "triangles_min": 747591.0,
+            "triangles_p50": 747591.0,
+            "triangles_p95": 747591.0,
+            "triangles_peak": 747591.0,
+            "viewport": "(960, 540)"
+          }
+        ],
+        "warmup": {
+          "native_dimensions_and_scale_maintained": true,
+          "requested_seconds": 12.0,
+          "retained_seconds": 12.203444,
+          "samples": 12
+        }
+      },
+      "process": {
+        "elapsed_s": 68.98727701799362,
+        "max_rss_kib": 2020284,
+        "user_cpu_s": 204.018134,
+        "system_cpu_s": 5.859021,
+        "status": 1
+      },
+      "bound_inputs": [
+        {
+          "path": "/tmp/havenline-t05-independent/C6-software/candidate-b/Source-start.sha256",
+          "sha256": "824c2623198ef96ec8c5c6241060a88658d3c7059e5d41b01b46190c1928cd92"
+        },
+        {
+          "path": "/tmp/havenline-t05-independent/C6-software/candidate-b/Source-end.sha256",
+          "sha256": "824c2623198ef96ec8c5c6241060a88658d3c7059e5d41b01b46190c1928cd92"
+        },
+        {
+          "path": "/tmp/havenline-t05-independent/C6-software/candidate-b/Benchmark.json",
+          "sha256": "5b2d8d2ba27ff8d001f4c744660bd14519187d446065624f3ef07712a17d57f7"
+        },
+        {
+          "path": "/tmp/havenline-t05-independent/C6-software/candidate-b/Process.json",
+          "sha256": "4fef926552a04628b67555f6a018a09ff6384f48a959d840929ab27be525189b"
+        },
+        {
+          "path": "/tmp/havenline-t05-independent/C6-software/candidate-b/Run.log",
+          "sha256": "93db76ef4921954662b2db658237f0dba9d44048aad481953dab9340285fe0b2"
+        }
+      ]
+    },
+    "baseline-b": {
+      "benchmark": {
+        "errors": [
+          "invalid timed benchmark camp"
+        ],
+        "fixed_fps_used": false,
+        "native": [
+          960,
+          540
+        ],
+        "render_scale": 1.0,
+        "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+        "samples": [
+          {
+            "camera": [
+              -18.0136833190918,
+              11.2003526687622,
+              26.3499279022217
+            ],
+            "draws_min": 241.0,
+            "draws_p50": 247.0,
+            "draws_p95": 248.0,
+            "draws_peak": 248.0,
+            "elapsed_s": 11.411043,
+            "feet": [
+              -24.6000003814697,
+              0.0,
+              16.0
+            ],
+            "fps": 2.10322579627471,
+            "frame_p50_ms": 465.47,
+            "frame_p95_ms": 543.662,
+            "frame_p99_ms": 573.637,
+            "frames": 24,
+            "logical": "(1280.0, 720.0)",
+            "native_retained": true,
+            "site": "shore",
+            "texture_p50_bytes": 735516156.0,
+            "texture_peak_bytes": 735516156.0,
+            "triangles_min": 401183.0,
+            "triangles_p50": 403019.0,
+            "triangles_p95": 403019.0,
+            "triangles_peak": 403019.0,
+            "viewport": "(960, 540)"
+          },
+          {
+            "camera": [
+              6.18631839752197,
+              11.2003526687622,
+              5.349928855896
+            ],
+            "draws_min": 495.0,
+            "draws_p50": 495.0,
+            "draws_p95": 495.0,
+            "draws_peak": 495.0,
+            "elapsed_s": 16.318391,
+            "feet": [
+              -0.400000005960464,
+              0.0,
+              -5.0
+            ],
+            "fps": 1.16433047841543,
+            "frame_p50_ms": 855.179,
+            "frame_p95_ms": 925.344,
+            "frame_p99_ms": 925.344,
+            "frames": 19,
+            "logical": "(1280.0, 720.0)",
+            "native_retained": true,
+            "site": "camp",
+            "texture_p50_bytes": 735516156.0,
+            "texture_peak_bytes": 735516156.0,
+            "triangles_min": 745445.0,
+            "triangles_p50": 745445.0,
+            "triangles_p95": 745445.0,
+            "triangles_peak": 745445.0,
+            "viewport": "(960, 540)"
+          }
+        ],
+        "warmup": {
+          "native_dimensions_and_scale_maintained": true,
+          "requested_seconds": 12.0,
+          "retained_seconds": 12.329153,
+          "samples": 8
+        }
+      },
+      "process": {
+        "elapsed_s": 65.59245008198195,
+        "max_rss_kib": 1985060,
+        "user_cpu_s": 176.69915,
+        "system_cpu_s": 6.596054,
+        "status": 1
+      },
+      "bound_inputs": [
+        {
+          "path": "/tmp/havenline-t05-independent/C6-software/baseline-b/Source-start.sha256",
+          "sha256": "2013e4c73d5509568143dc49cad8392fe834d1bcf22f19de17056399f3405c30"
+        },
+        {
+          "path": "/tmp/havenline-t05-independent/C6-software/baseline-b/Source-end.sha256",
+          "sha256": "2013e4c73d5509568143dc49cad8392fe834d1bcf22f19de17056399f3405c30"
+        },
+        {
+          "path": "/tmp/havenline-t05-independent/C6-software/baseline-b/Benchmark.json",
+          "sha256": "f7ee717501dde2515f4c010932d42da750516a97b5cad170e8473434516eac7d"
+        },
+        {
+          "path": "/tmp/havenline-t05-independent/C6-software/baseline-b/Process.json",
+          "sha256": "3101c9bd2b79688a6637f975f8ddd7e38d5d19eb75aba78b8be331384f25e074"
+        },
+        {
+          "path": "/tmp/havenline-t05-independent/C6-software/baseline-b/Run.log",
+          "sha256": "a9f4854a188855e6eb74492c648f4b20ecbae8604874b1038f3fd52469068261"
+        }
+      ]
+    }
+  },
+  "software_comparison": {
+    "shore": {
+      "feet_m": [
+        -24.6000003814697,
+        0.0,
+        16.0
+      ],
+      "camera_m": [
+        -18.0136833190918,
+        11.2003526687622,
+        26.3499279022217
+      ],
+      "samples": [
+        24,
+        20,
+        24,
+        24
+      ],
+      "valid_repeated_counters": {
+        "draws_p50": {
+          "baseline": [
+            247.0,
+            247.0
+          ],
+          "candidate": [
+            255.0,
+            255.0
+          ],
+          "mean_delta": 8.0,
+          "ratio": 1.0323886639676114,
+          "baseline_repeat_spread": 0.0,
+          "candidate_repeat_spread": 0.0
+        },
+        "triangles_p50": {
+          "baseline": [
+            403019.0,
+            403019.0
+          ],
+          "candidate": [
+            430339.0,
+            430339.0
+          ],
+          "mean_delta": 27320.0,
+          "ratio": 1.0677883672978197,
+          "baseline_repeat_spread": 0.0,
+          "candidate_repeat_spread": 0.0
+        },
+        "texture_p50_bytes": {
+          "baseline": [
+            735516156.0,
+            735516156.0
+          ],
+          "candidate": [
+            752293452.0,
+            752293452.0
+          ],
+          "mean_delta": 16777296.0,
+          "ratio": 1.0228102345042167,
+          "baseline_repeat_spread": 0.0,
+          "candidate_repeat_spread": 0.0
+        },
+        "frame_p95_ms": {
+          "baseline": [
+            793.103,
+            543.662
+          ],
+          "candidate": [
+            930.81,
+            691.328
+          ],
+          "mean_delta": 142.68650000000002,
+          "ratio": 1.2134803050648395,
+          "baseline_repeat_spread": 0.37320097399318497,
+          "candidate_repeat_spread": 0.2952671104431312
+        },
+        "frame_p99_ms": {
+          "baseline": [
+            801.418,
+            573.637
+          ],
+          "candidate": [
+            1111.423,
+            693.555
+          ],
+          "mean_delta": 214.96150000000011,
+          "ratio": 1.3126587663766178,
+          "baseline_repeat_spread": 0.33130456599917835,
+          "candidate_repeat_spread": 0.46301727777291474
+        },
+        "fps": {
+          "baseline": [
+            1.51347417681982,
+            2.10322579627471
+          ],
+          "candidate": [
+            1.2187859027666,
+            1.53599380687297
+          ],
+          "mean_delta": -0.43096013172748004,
+          "ratio": 0.7616832278411301,
+          "baseline_repeat_spread": 0.3261269244572062,
+          "candidate_repeat_spread": 0.23029638485893517
+        }
+      }
+    },
+    "camp": {
+      "feet_m": [
+        -0.400000005960464,
+        0.0,
+        -5.0
+      ],
+      "camera_m": [
+        6.18631839752197,
+        11.2003526687622,
+        5.349928855896
+      ],
+      "samples": [
+        18,
+        18,
+        19,
+        19
+      ],
+      "valid_repeated_counters": {
+        "draws_p50": {
+          "baseline": [
+            495.0,
+            495.0
+          ],
+          "candidate": [
+            502.0,
+            502.0
+          ],
+          "mean_delta": 7.0,
+          "ratio": 1.0141414141414142,
+          "baseline_repeat_spread": 0.0,
+          "candidate_repeat_spread": 0.0
+        },
+        "triangles_p50": {
+          "baseline": [
+            745445.0,
+            745445.0
+          ],
+          "candidate": [
+            747591.0,
+            747591.0
+          ],
+          "mean_delta": 2146.0,
+          "ratio": 1.00287881735071,
+          "baseline_repeat_spread": 0.0,
+          "candidate_repeat_spread": 0.0
+        },
+        "texture_p50_bytes": {
+          "baseline": [
+            735516156.0,
+            735516156.0
+          ],
+          "candidate": [
+            752293452.0,
+            752293452.0
+          ],
+          "mean_delta": 16777296.0,
+          "ratio": 1.0228102345042167,
+          "baseline_repeat_spread": 0.0,
+          "candidate_repeat_spread": 0.0
+        },
+        "frame_p95_ms": {
+          "baseline": [
+            1132.228,
+            925.344
+          ],
+          "candidate": [
+            1016.972,
+            914.93
+          ],
+          "mean_delta": -62.835000000000036,
+          "ratio": 0.9389231579745447,
+          "baseline_repeat_spread": 0.20109527151419246,
+          "candidate_repeat_spread": 0.10563889886754092
+        },
+        "frame_p99_ms": {
+          "baseline": [
+            1132.228,
+            925.344
+          ],
+          "candidate": [
+            1016.972,
+            914.93
+          ],
+          "mean_delta": -62.835000000000036,
+          "ratio": 0.9389231579745447,
+          "baseline_repeat_spread": 0.20109527151419246,
+          "candidate_repeat_spread": 0.10563889886754092
+        },
+        "fps": {
+          "baseline": [
+            1.12106310663527,
+            1.16433047841543
+          ],
+          "candidate": [
+            1.11559172689571,
+            1.17332035023489
+          ],
+          "mean_delta": 0.0017592460399498133,
+          "ratio": 1.0015395562947735,
+          "baseline_repeat_spread": 0.03786426291137075,
+          "candidate_repeat_spread": 0.0504419753960571
+        }
+      }
+    }
+  },
+  "native_baseline_only": {
+    "measurements": {
+      "errors": [
+        "invalid timed benchmark shore",
+        "invalid timed benchmark camp"
+      ],
+      "fixed_fps_used": false,
+      "native": [
+        3840,
+        2160
+      ],
+      "render_scale": 1.0,
+      "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+      "samples": [
+        {
+          "camera": [
+            -18.0136833190918,
+            11.2003526687622,
+            26.3499279022217
+          ],
+          "draws_min": 241.0,
+          "draws_p50": 247.0,
+          "draws_p95": 248.0,
+          "draws_peak": 248.0,
+          "elapsed_s": 35.595454,
+          "feet": [
+            -24.6000003814697,
+            0.0,
+            16.0
+          ],
+          "fps": 0.309028225907724,
+          "frame_p50_ms": 3276.017,
+          "frame_p95_ms": 3487.054,
+          "frame_p99_ms": 3487.054,
+          "frames": 11,
+          "logical": "(1280.0, 720.0)",
+          "native_retained": true,
+          "site": "shore",
+          "texture_p50_bytes": 1089059324.0,
+          "texture_peak_bytes": 1089063420.0,
+          "triangles_min": 538607.0,
+          "triangles_p50": 538769.0,
+          "triangles_p95": 539049.0,
+          "triangles_peak": 539049.0,
+          "viewport": "(3840, 2160)"
+        },
+        {
+          "camera": [
+            6.18631839752197,
+            11.2003526687622,
+            5.349928855896
+          ],
+          "draws_min": 495.0,
+          "draws_p50": 495.0,
+          "draws_p95": 495.0,
+          "draws_peak": 495.0,
+          "elapsed_s": 38.690638,
+          "feet": [
+            -0.400000005960464,
+            0.0,
+            -5.0
+          ],
+          "fps": 0.155076274524085,
+          "frame_p50_ms": 6374.112,
+          "frame_p95_ms": 8119.362,
+          "frame_p99_ms": 8119.362,
+          "frames": 6,
+          "logical": "(1280.0, 720.0)",
+          "native_retained": true,
+          "site": "camp",
+          "texture_p50_bytes": 1089063420.0,
+          "texture_peak_bytes": 1089063420.0,
+          "triangles_min": 1114057.0,
+          "triangles_p50": 1114059.0,
+          "triangles_p95": 1114063.0,
+          "triangles_peak": 1114063.0,
+          "viewport": "(3840, 2160)"
+        }
+      ],
+      "warmup": {
+        "native_dimensions_and_scale_maintained": true,
+        "requested_seconds": 30.0,
+        "retained_seconds": 30.611843,
+        "samples": 7
+      }
+    },
+    "witness": {
+      "path": "/tmp/havenline-t05-independent/C6/baseline-a/Benchmark.json",
+      "sha256": "9910df7795b09a3dcb73fe4e2680c0421554fef037c50b41cea25428ad1e261c"
+    }
+  },
+  "static_budget": {
+    "draw_delta_max_measured": 8.0,
+    "primitive_delta_max_measured": 27320.0,
+    "nominal_new_shore_triangles": 29432,
+    "nominal_new_shore_materials": 4,
+    "texture_delta_renderer_bytes": 16777296.0,
+    "tracked_source_bytes_conservative_upper": 7612819,
+    "caps": {
+      "draws": 48,
+      "triangles": 180000,
+      "materials": 12,
+      "texture_bytes": 100663296,
+      "storage_delta_bytes": 15728640
+    },
+    "visual_fixture_no_new_physics_bodies_rigs_or_animation_players": true
+  },
+  "proof": [
+    {
+      "path": "/tmp/havenline-t05-independent/C6-software/Witness.sha256",
+      "sha256": "7f4fc93bd9615c4c6a135dc2edc4ba891665201b12ae215529350e3bc4783bf4"
+    },
+    {
+      "path": "/tmp/havenline-t05-independent/benchmark-software.gd",
+      "sha256": "749fd98c60e0fbb58e0b5dada7f3b5dd8a9b0575e1c832b90ae1bb2dab3ecc97"
+    },
+    {
+      "path": "/tmp/havenline-t05-independent/benchmark-4k.gd",
+      "sha256": "a73a3151ca61a67f5127069d36aaa35d95f5832e26e706ac57204dcc05aad72c"
+    }
+  ]
+}

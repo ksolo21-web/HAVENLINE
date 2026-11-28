@@ -1,0 +1,1658 @@
+{
+  "candidate": "40301ede83ba3b768d01b0c137220cfb65dbb2a7",
+  "build_owner": "/root",
+  "reviewer": "/root/independent",
+  "baseline": "33c1855d249c8bf18f6ad49d2130b0b0c353e3dd",
+  "source_verification": {
+    "path": "/tmp/havenline-t05/Candidate.json",
+    "sha256": "0935937a73b35d5bcc9a12411353723e2ba538df44d4f28f355fb6f8487be037"
+  },
+  "reference_proofs": {
+    "locked_original_A_and_B": {
+      "exact_packet_revision": "33c1855",
+      "verified": [
+        {
+          "family": "fishing",
+          "path": "reference/A-003.00.png",
+          "sha256": "1dc3c5c3572d49263c6eb8eb3116b44cd31fa17e2634caf1ed3b1a5860737b07",
+          "source_id": "A",
+          "source_video_sha256": "62f7cfe644de3826cfdd6d91bc23c0ab8d9e4fde3e175c90f762e604547bb0ca",
+          "seek_seconds": 3,
+          "git_path": "Docs/Production/T05/ReferenceFrames/A-003.00.png",
+          "git_blob": "1322a2a59a4c76508fe73b8b8569e1dc7f712ba4"
+        },
+        {
+          "family": "processing",
+          "path": "reference/A-016.00.png",
+          "sha256": "3afe3c0fe64702894b7cac3a0d1b271cac0b2d60e87490063a1def7ee111d5ba",
+          "source_id": "A",
+          "source_video_sha256": "62f7cfe644de3826cfdd6d91bc23c0ab8d9e4fde3e175c90f762e604547bb0ca",
+          "seek_seconds": 16,
+          "git_path": "Docs/Production/T05/ReferenceFrames/A-016.00.png",
+          "git_blob": "3c777d0f5a98f4a6c5fa2375cece92ca062f16ef"
+        },
+        {
+          "family": "pads",
+          "path": "reference/B-006.00.png",
+          "sha256": "fd59dfe77a27d0e690954e473f680b62e7ee5c496dcd0e6fab3cacb1692b16ea",
+          "source_id": "B",
+          "source_video_sha256": "4c9051cbea6df0efa3e7288b13b6d17da46e857274869b0b43d2f96ff6cc79d2",
+          "seek_seconds": 6,
+          "git_path": "Docs/Production/T05/ReferenceFrames/B-006.00.png",
+          "git_blob": "6ca9d5ccf5e1f62e553773aeaa8a1b41806a49c4"
+        },
+        {
+          "family": "hearth",
+          "path": "reference/B-008.00.png",
+          "sha256": "8544aee9feba9bdb5d3060ec8449bd2ba07f7ad4092c70599979120e3d09c65b",
+          "source_id": "B",
+          "source_video_sha256": "4c9051cbea6df0efa3e7288b13b6d17da46e857274869b0b43d2f96ff6cc79d2",
+          "seek_seconds": 8,
+          "git_path": "Docs/Production/T05/ReferenceFrames/B-008.00.png",
+          "git_blob": "eab2eee043335be52adf0f09bef937d870db282f"
+        },
+        {
+          "family": "counters",
+          "path": "reference/B-010.00.png",
+          "sha256": "10e434c1b949d18f76e9a510c8376895e4996413d7f8ae1b2f3df924aa848e8c",
+          "source_id": "B",
+          "source_video_sha256": "4c9051cbea6df0efa3e7288b13b6d17da46e857274869b0b43d2f96ff6cc79d2",
+          "seek_seconds": 10,
+          "git_path": "Docs/Production/T05/ReferenceFrames/B-010.00.png",
+          "git_blob": "f224cbd1539a19b89896560967191924b85a32d9"
+        },
+        {
+          "family": "resources",
+          "path": "reference/B-028.00.png",
+          "sha256": "3e983101885a727eb32fcc0d132fcacf8be8c439d2dfefcb267b45326065ee18",
+          "source_id": "B",
+          "source_video_sha256": "4c9051cbea6df0efa3e7288b13b6d17da46e857274869b0b43d2f96ff6cc79d2",
+          "seek_seconds": 28,
+          "git_path": "Docs/Production/T05/ReferenceFrames/B-028.00.png",
+          "git_blob": "3f6ea5d8dcd9c787b1bcbe22985438885f6c3487"
+        },
+        {
+          "family": "defense",
+          "path": "reference/B-048.00.png",
+          "sha256": "ccf9a3160f5ead3d472f7540ac980aa60116de609b94954c4b880cf76d78a6dc",
+          "source_id": "B",
+          "source_video_sha256": "4c9051cbea6df0efa3e7288b13b6d17da46e857274869b0b43d2f96ff6cc79d2",
+          "seek_seconds": 48,
+          "git_path": "Docs/Production/T05/ReferenceFrames/B-048.00.png",
+          "git_blob": "0e4351b9175f6421ad618e8f7b6ccd7e23bf69ac"
+        }
+      ]
+    },
+    "owner_kits": {
+      "exact_sheet_revision": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+      "verified": {
+        "Core": [
+          {
+            "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/furnace_level_01.png",
+            "git_blob": "6021a356712b04d1d2885b008ee95ddfa26db2a8",
+            "sha256": "e5b7f1f87fd668b435619c1c260e3bcdebfa0d21ad2978c08445205669addca5",
+            "resolution": [
+              1672,
+              941
+            ]
+          },
+          {
+            "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/cooker_processor.png",
+            "git_blob": "714b04b471f9bf563a2bbab6fda16311aab2bcc2",
+            "sha256": "773a82fdba15a3992dd547e7208d5affed12e94de235caea90115dfd0a8bbbe6",
+            "resolution": [
+              1536,
+              1024
+            ]
+          },
+          {
+            "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/saw_station.png",
+            "git_blob": "9ecc552e030a45cbe80fbeae7cdf3b3b6c846ebc",
+            "sha256": "8191ba20d0cec7c92c22d35c5befa87c53b8c894ca94341681b3c16834e24d15",
+            "resolution": [
+              1536,
+              1024
+            ]
+          },
+          {
+            "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/quarry_drill_station.png",
+            "git_blob": "b0c6b17f4278736778a29e68f90765f22568e3d6",
+            "sha256": "ca532628e80dcc8e2af4b60d787393777718ba4d50b65ac9e799cd40d823463d",
+            "resolution": [
+              1774,
+              887
+            ]
+          },
+          {
+            "path": "Docs/Design/StructureReferences/2026-11-25/selected/customer-counter-details.png",
+            "git_blob": "93a8564a6f87419246dc409ecc7210067e269ff2",
+            "sha256": "455defba0a6b24abb14536a24c2d999dd56540e4127481ced8072a37fc99cef4",
+            "resolution": [
+              1536,
+              1024
+            ]
+          },
+          {
+            "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/processing_counter.png",
+            "git_blob": "136955ac57afc0e9df04bf6f6091190909bfc3d6",
+            "sha256": "804b49559310dbbd46f1a7458c56c3f3a365cdecf86a506f0e7a071312a39015",
+            "resolution": [
+              1536,
+              1024
+            ]
+          }
+        ],
+        "Stations": [
+          {
+            "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/ballista_tower.png",
+            "git_blob": "c4dbfc2704d9685bf81e81b793a0cb71966f81e8",
+            "sha256": "5c4562ba169b7d89d1880a3a6d2dfc94ae4752381e7f410cab63b437af89cbf2",
+            "resolution": [
+              1774,
+              887
+            ]
+          },
+          {
+            "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/fishing_rack.png",
+            "git_blob": "756c307b8c1c5f38b307fa66ce64b0393d8a657d",
+            "sha256": "069c79b26c43bea7557f8d4b36b3b51e0e7693bc6a1fffdc3a513bd54e5dd46c",
+            "resolution": [
+              1536,
+              1024
+            ]
+          },
+          {
+            "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/intake_machine.png",
+            "git_blob": "aa80af7d53f6d70d42f3c4ee1b2101effe66a27f",
+            "sha256": "679ba934bd50fc71bdc090dc64d7e314e0a28fd062d0ff4393214986b6143f4c",
+            "resolution": [
+              1536,
+              1024
+            ]
+          },
+          {
+            "path": "Docs/Design/StructureReferences/2026-11-26/upgradeable-storage-house/selected/storage-house-starter.png",
+            "git_blob": "e3e3a4e89f8afce2d2ba01347c83ff895552e53e",
+            "sha256": "62f78575b7d928c3f3425fb0252b526b8b8f9b3e89a4600650d2576736732baf",
+            "resolution": [
+              1254,
+              1254
+            ]
+          },
+          {
+            "path": "Docs/Design/StructureReferences/2026-11-26/upgradeable-storage-house/selected/storage-house-organization.png",
+            "git_blob": "82a15b0fc6d1342b56986aa567b397edd4c7764e",
+            "sha256": "4f8df6ae1cf0c66eb2de1478a72c21db96bcf295dec17d072c3371e1737097c6",
+            "resolution": [
+              1254,
+              1254
+            ]
+          },
+          {
+            "path": "Docs/Design/ConveyorReferences/2026-11-26/connected-logistics-01/selected/conveyor-machines.png",
+            "git_blob": "c25ce57ba9db63ccc67bfbb179550663e07c8c3d",
+            "sha256": "db26196aa7568109018b94a5f71a8bd4965262e5938c54fce3c51d192f3460d2",
+            "resolution": [
+              1672,
+              941
+            ]
+          }
+        ]
+      }
+    },
+    "owner_stock_and_shore": {
+      "exact_sheet_revision": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+      "verified": {
+        "Resources": [
+          {
+            "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/01-wood.png",
+            "git_blob": "c94ba1d94a3d7fdbb5c9cc096c5b3f30eb180cb4",
+            "sha256": "3b528ed8c5485f4c7433cb82223c7eb8081e5858bf5f90f7222778106719641b",
+            "resolution": [
+              1536,
+              1024
+            ]
+          },
+          {
+            "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/02-stone.png",
+            "git_blob": "c2a7e1a7cb2caa8fb1dc80699b5d02604adadbe1",
+            "sha256": "5360d9d44ed505f48c788b870e322105edce48c726525252d0e884549800016e",
+            "resolution": [
+              1536,
+              1024
+            ]
+          },
+          {
+            "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/05-metal-ore.png",
+            "git_blob": "c3bdeddef77ddf35f1a32bfc598bea809bb816c8",
+            "sha256": "9e6965c343e017052d14800a7c3d3673ec396552e1f648cac15e7fb26a5b4d4a",
+            "resolution": [
+              1536,
+              1024
+            ]
+          },
+          {
+            "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/06-fuel.png",
+            "git_blob": "ac409458a51373a09abb3874dc2f82a28eecca2a",
+            "sha256": "c9a17187e1009b9d466b024608a28887b86b7746da3aae8b378e6caee649c306",
+            "resolution": [
+              1536,
+              1024
+            ]
+          },
+          {
+            "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/08-fish.png",
+            "git_blob": "e69e7fa6d68c2a112e8b12e9ae69e567e7a5c1fd",
+            "sha256": "b62af41e1c8e96ecd37016ded5b74f3ae34e5beb3fd3d2ad11b02d4498e80901",
+            "resolution": [
+              1536,
+              1024
+            ]
+          },
+          {
+            "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/10-cooked-food.png",
+            "git_blob": "2579fbaee59b771c9956d72dd580255498ade402",
+            "sha256": "ba237b6ecadaba5d8f9ae8f6d55ad5814fdfad5a263617f2d2e0553067dbc815",
+            "resolution": [
+              1536,
+              1024
+            ]
+          },
+          {
+            "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/11-money.png",
+            "git_blob": "74fe2dd9fcca9e2ad8e266b89d7bba61f5c8df21",
+            "sha256": "ad719c6bda631bfbbb56dcb47b1c70fba31502cd9a82768637fb0632f8f48bae",
+            "resolution": [
+              1536,
+              1024
+            ]
+          },
+          {
+            "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/12-cargo.png",
+            "git_blob": "0f00f3467086f520c62d4304a8900775e55e02f1",
+            "sha256": "507ee9985dff799b67c1d82d6217ece5e834d786f53771e3abebfe41196c2809",
+            "resolution": [
+              1536,
+              1024
+            ]
+          }
+        ],
+        "Shore": [
+          {
+            "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/fishing_rack.png",
+            "git_blob": "756c307b8c1c5f38b307fa66ce64b0393d8a657d",
+            "sha256": "069c79b26c43bea7557f8d4b36b3b51e0e7693bc6a1fffdc3a513bd54e5dd46c",
+            "resolution": [
+              1536,
+              1024
+            ]
+          },
+          {
+            "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/fishing_winch.png",
+            "git_blob": "5bec9685d56fa04eb012fb80b859f8e6def9dad2",
+            "sha256": "8b4f8a7fbe969f448ae10c7f33f498fb70dde80e466119c3b3539d9fa70963e1",
+            "resolution": [
+              1536,
+              1024
+            ]
+          },
+          {
+            "path": "Docs/Design/RenderArchive/2026-11-23/selected/equipment/fish_drying_rack.png",
+            "git_blob": "6db497ada855253a983cc6e4b91502301609bb66",
+            "sha256": "4e4f378da462ea681750b530d237008a3e0bdc85349fb59e3be1eb0f39577b56",
+            "resolution": [
+              1774,
+              887
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "critics": {
+    "C1": {
+      "reference_fidelity": 10,
+      "visual_language": 10,
+      "cross_view_consistency": 10
+    },
+    "C2": {
+      "geometry_contact": 10,
+      "clipping_seams": 10,
+      "intentional_gap_integrity": 10,
+      "cross_view_integrity": 10
+    },
+    "C6": {
+      "static_budgets": "passed for measured incremental draws/primitives/texture storage and nominal new inlet material/geometry",
+      "matched_final_live_frames": [
+        {
+          "site": "shore",
+          "rendered_draw_delta": 8,
+          "rendered_primitive_delta": 27320,
+          "texture_delta_bytes": 16777296,
+          "baseline": {
+            "camera_m": [
+              -18.0136833190918,
+              11.2003526687622,
+              26.3499279022217
+            ],
+            "draws": 241,
+            "player_m": [
+              -24.6000003814697,
+              0.0,
+              16.0
+            ],
+            "primitives": 399581,
+            "scale": 1.0,
+            "site": "shore",
+            "texture_bytes": 733775696,
+            "view_pixels": [
+              960,
+              540
+            ],
+            "zoom": 1.0
+          },
+          "candidate": {
+            "camera_m": [
+              -18.0136833190918,
+              11.2003526687622,
+              26.3499279022217
+            ],
+            "draws": 249,
+            "player_m": [
+              -24.6000003814697,
+              0.0,
+              16.0
+            ],
+            "primitives": 426901,
+            "scale": 1.0,
+            "site": "shore",
+            "texture_bytes": 750552992,
+            "view_pixels": [
+              960,
+              540
+            ],
+            "zoom": 1.0
+          }
+        },
+        {
+          "site": "camp",
+          "rendered_draw_delta": 7,
+          "rendered_primitive_delta": 2146,
+          "texture_delta_bytes": 16777296,
+          "baseline": {
+            "camera_m": [
+              6.18631839752197,
+              11.2003526687622,
+              5.349928855896
+            ],
+            "draws": 484,
+            "player_m": [
+              -0.400000005960464,
+              0.0,
+              -5.0
+            ],
+            "primitives": 721549,
+            "scale": 1.0,
+            "site": "camp",
+            "texture_bytes": 735512060,
+            "view_pixels": [
+              960,
+              540
+            ],
+            "zoom": 1.0
+          },
+          "candidate": {
+            "camera_m": [
+              6.18631839752197,
+              11.2003526687622,
+              5.349928855896
+            ],
+            "draws": 491,
+            "player_m": [
+              -0.400000005960464,
+              0.0,
+              -5.0
+            ],
+            "primitives": 723695,
+            "scale": 1.0,
+            "site": "camp",
+            "texture_bytes": 752289356,
+            "view_pixels": [
+              960,
+              540
+            ],
+            "zoom": 1.0
+          }
+        }
+      ],
+      "historical_counterbalanced_software_report": {
+        "path": "/tmp/havenline-t05-independent/C6-89b6103-review.json",
+        "sha256": "14eb23c0ae9a7a4f16a8feea8f970e08a4a6352d834520b1ece834328a861400"
+      },
+      "unscored": [
+        "frame-time certification",
+        "thermal risk",
+        "physical device performance"
+      ],
+      "reason": "The T04 native 4K baseline attempt was too sparsely sampled for a matched timed review. The 89b6103 candidate and baseline elapsed runs at 960\u00d7540 varied across repeats. Final 40301ede measures static submission and texture counts; its collision correction was not retimed. Physical-device testing was waived for this playtest."
+    }
+  },
+  "live_and_isolated_visuals": {
+    "gallery": {
+      "manifest": {
+        "path": "/tmp/havenline-t05/Closure-gallery/Gallery.json",
+        "sha256": "ed909f2d67fb9b97bb1467498b1df7fd76df6a852c87c3da2810bc96cca498df"
+      },
+      "source": {
+        "path": "/tmp/havenline-t05/Closure-gallery/Candidate.json",
+        "sha256": "0935937a73b35d5bcc9a12411353723e2ba538df44d4f28f355fb6f8487be037"
+      },
+      "images": [
+        {
+          "file": "Camp-stations-front.jpg",
+          "group": "Camp-stations",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "front",
+          "path": "/tmp/havenline-t05/Closure-gallery/Camp-stations-front.jpg",
+          "sha256": "57409f5b8365669b46f59679c05d07cf490b22d11b8a5b2476a8a275c37bbfbf"
+        },
+        {
+          "file": "Camp-stations-rear.jpg",
+          "group": "Camp-stations",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "rear",
+          "path": "/tmp/havenline-t05/Closure-gallery/Camp-stations-rear.jpg",
+          "sha256": "7e8882a40955a834c933802bd01851c21a1c6375f41276d937661601d15d4bd9"
+        },
+        {
+          "file": "Camp-stations-left.jpg",
+          "group": "Camp-stations",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "left",
+          "path": "/tmp/havenline-t05/Closure-gallery/Camp-stations-left.jpg",
+          "sha256": "3241c6c2f9df537be315b6957b88bf8c568af81f83c6af8276042ce96855e84d"
+        },
+        {
+          "file": "Camp-stations-right.jpg",
+          "group": "Camp-stations",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "right",
+          "path": "/tmp/havenline-t05/Closure-gallery/Camp-stations-right.jpg",
+          "sha256": "c7b896807293f86508b1fd067785c50510a134c9f8bb0d02d5673a64b0ddc425"
+        },
+        {
+          "file": "Camp-stations-three-quarter.jpg",
+          "group": "Camp-stations",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "three-quarter",
+          "path": "/tmp/havenline-t05/Closure-gallery/Camp-stations-three-quarter.jpg",
+          "sha256": "446bb63599983bfdf3d01e19426b8f7169808f163e00751deed8f4e6f1ba7657"
+        },
+        {
+          "file": "Camp-stations-overhead.jpg",
+          "group": "Camp-stations",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "overhead",
+          "path": "/tmp/havenline-t05/Closure-gallery/Camp-stations-overhead.jpg",
+          "sha256": "a8b053a129a97fe018db53e193137d9707ff4e9110a1a73d22aa77698a42ab6c"
+        },
+        {
+          "file": "Camp-service-front.jpg",
+          "group": "Camp-service",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "front",
+          "path": "/tmp/havenline-t05/Closure-gallery/Camp-service-front.jpg",
+          "sha256": "14db7cbb91391ff7a52d1e233b1a55b304927b36e2db21c20af5d95dad53b0f0"
+        },
+        {
+          "file": "Camp-service-rear.jpg",
+          "group": "Camp-service",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "rear",
+          "path": "/tmp/havenline-t05/Closure-gallery/Camp-service-rear.jpg",
+          "sha256": "e5108b35cf050992185107c9f3e0fbd8e07d6fb6f289354af7f52fd1e945408e"
+        },
+        {
+          "file": "Camp-service-left.jpg",
+          "group": "Camp-service",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "left",
+          "path": "/tmp/havenline-t05/Closure-gallery/Camp-service-left.jpg",
+          "sha256": "943733c2f41c2f8dc0cf76aa72b0e40bd6aca0f4567bffad9351d6c9e370772a"
+        },
+        {
+          "file": "Camp-service-right.jpg",
+          "group": "Camp-service",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "right",
+          "path": "/tmp/havenline-t05/Closure-gallery/Camp-service-right.jpg",
+          "sha256": "4ee2f86db94b59d94cbf78fe38063f77cef92157eaee4cfe657312bf4c80413f"
+        },
+        {
+          "file": "Camp-service-three-quarter.jpg",
+          "group": "Camp-service",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "three-quarter",
+          "path": "/tmp/havenline-t05/Closure-gallery/Camp-service-three-quarter.jpg",
+          "sha256": "568b0da4a3cbb8eb87912744419ec77292d4f1aa8dfad570476b16b525ce537d"
+        },
+        {
+          "file": "Camp-service-overhead.jpg",
+          "group": "Camp-service",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "overhead",
+          "path": "/tmp/havenline-t05/Closure-gallery/Camp-service-overhead.jpg",
+          "sha256": "8c273c2466c126cf990b22a3f18472724eb7a5c685f4c8817c2306a76e27706e"
+        },
+        {
+          "file": "Shore-front.jpg",
+          "group": "Shore",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "front",
+          "path": "/tmp/havenline-t05/Closure-gallery/Shore-front.jpg",
+          "sha256": "68ec2eca6fd76107cdf461fd577c59c771550074cb1af472314b92879787ee79"
+        },
+        {
+          "file": "Shore-rear.jpg",
+          "group": "Shore",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "rear",
+          "path": "/tmp/havenline-t05/Closure-gallery/Shore-rear.jpg",
+          "sha256": "fa06d66542c630b31021840047f06049cdddc165f982c1a4e76c5ed46ffc639b"
+        },
+        {
+          "file": "Shore-left.jpg",
+          "group": "Shore",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "left",
+          "path": "/tmp/havenline-t05/Closure-gallery/Shore-left.jpg",
+          "sha256": "ca2287596d19da1603145a3320c03101af1950e31ff98883bc04bc2002d7f5da"
+        },
+        {
+          "file": "Shore-right.jpg",
+          "group": "Shore",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "right",
+          "path": "/tmp/havenline-t05/Closure-gallery/Shore-right.jpg",
+          "sha256": "533147028465a49c9723b4f368e945305085ff2584c6c06055088a868381661d"
+        },
+        {
+          "file": "Shore-three-quarter.jpg",
+          "group": "Shore",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "three-quarter",
+          "path": "/tmp/havenline-t05/Closure-gallery/Shore-three-quarter.jpg",
+          "sha256": "d68ccf1a63c1b9f7d4adab4bd7535e9b791f37a2c1a178799407a539b6172450"
+        },
+        {
+          "file": "Shore-overhead.jpg",
+          "group": "Shore",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "overhead",
+          "path": "/tmp/havenline-t05/Closure-gallery/Shore-overhead.jpg",
+          "sha256": "db5d431ccd5910928460466d243fc647271b018189a9dbca9e0262031bc8b659"
+        },
+        {
+          "file": "Shore-night.jpg",
+          "group": "Shore",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "night lighting",
+          "path": "/tmp/havenline-t05/Closure-gallery/Shore-night.jpg",
+          "sha256": "91a37825c53ef4460aee25f3ee8b5b19bd9ee65a14217fb916dcdb35e45d7003"
+        },
+        {
+          "file": "Shore-low-visibility.jpg",
+          "group": "Shore",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "whiteout visibility",
+          "path": "/tmp/havenline-t05/Closure-gallery/Shore-low-visibility.jpg",
+          "sha256": "e4505d410bcefe8057648de97176e88b92811f23d6baae7331cb36fa7879f5b4"
+        },
+        {
+          "file": "Stock-front.jpg",
+          "group": "Stock",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "front",
+          "path": "/tmp/havenline-t05/Closure-gallery/Stock-front.jpg",
+          "sha256": "8a62d57b759f8add930e23d49953a4a18ede38431f5d940cf72ffa4a051fc386"
+        },
+        {
+          "file": "Stock-rear.jpg",
+          "group": "Stock",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "rear",
+          "path": "/tmp/havenline-t05/Closure-gallery/Stock-rear.jpg",
+          "sha256": "dcbe65ef61460e40ae258685898070c0a1740b56774b8e6b701329bff78664b2"
+        },
+        {
+          "file": "Stock-left.jpg",
+          "group": "Stock",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "left",
+          "path": "/tmp/havenline-t05/Closure-gallery/Stock-left.jpg",
+          "sha256": "9e3be7134ff5c8496f66adb12ed1c403c0817c71e9b09ffc29794bc55ba75194"
+        },
+        {
+          "file": "Stock-right.jpg",
+          "group": "Stock",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "right",
+          "path": "/tmp/havenline-t05/Closure-gallery/Stock-right.jpg",
+          "sha256": "a47b0251edf3e3eb82cb30e4d7c858e423f0c07e19d9e1c401e3ec90d02325c4"
+        },
+        {
+          "file": "Stock-three-quarter.jpg",
+          "group": "Stock",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "three-quarter",
+          "path": "/tmp/havenline-t05/Closure-gallery/Stock-three-quarter.jpg",
+          "sha256": "08d9839c08e9e5935cd0fda5129facb8ae05b8aa46a276e6514937d06d132e13"
+        },
+        {
+          "file": "Stock-overhead.jpg",
+          "group": "Stock",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "overhead",
+          "path": "/tmp/havenline-t05/Closure-gallery/Stock-overhead.jpg",
+          "sha256": "7e62602b7bdf816ac6e124a87cf13ef4eb8776241e012fd58d0cd49d90174c58"
+        },
+        {
+          "file": "Pads-front.jpg",
+          "group": "Pads",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "front",
+          "path": "/tmp/havenline-t05/Closure-gallery/Pads-front.jpg",
+          "sha256": "ac82e219108af7d05b937c21131a72c08926f57809102860a552a99ebd65f12d"
+        },
+        {
+          "file": "Pads-rear.jpg",
+          "group": "Pads",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "rear",
+          "path": "/tmp/havenline-t05/Closure-gallery/Pads-rear.jpg",
+          "sha256": "fa01373f13973f26793680ba9eb87a80c21400ed69ecc9ed6ca177920f76b78b"
+        },
+        {
+          "file": "Pads-left.jpg",
+          "group": "Pads",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "left",
+          "path": "/tmp/havenline-t05/Closure-gallery/Pads-left.jpg",
+          "sha256": "6cdd100ede0ddad23d264ea50478bf3400d0f9304b590010b46f2620cbb09731"
+        },
+        {
+          "file": "Pads-right.jpg",
+          "group": "Pads",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "right",
+          "path": "/tmp/havenline-t05/Closure-gallery/Pads-right.jpg",
+          "sha256": "7b37d03fa3f79c7b7efe7ccd1d83eccc63e2770f27d1740bcc2516415d2da56e"
+        },
+        {
+          "file": "Pads-three-quarter.jpg",
+          "group": "Pads",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "three-quarter",
+          "path": "/tmp/havenline-t05/Closure-gallery/Pads-three-quarter.jpg",
+          "sha256": "1f4d1185c47b569a92c9d9dc8df25a41245f18628aec9d7a954233a629d58c4a"
+        },
+        {
+          "file": "Pads-overhead.jpg",
+          "group": "Pads",
+          "pixels": [
+            1250,
+            720
+          ],
+          "scale": 1.0,
+          "view": "overhead",
+          "path": "/tmp/havenline-t05/Closure-gallery/Pads-overhead.jpg",
+          "sha256": "11e10553c384e85676d984404a7450f5270858ac835e8d8e92dfce1114bdef62"
+        }
+      ]
+    },
+    "4K": {
+      "manifest": {
+        "path": "/tmp/havenline-t05/Closure-4K/Capture.json",
+        "sha256": "2f38eeeabf481eb43acd47daeb263f6d97597a9ee6b829c0b55bd9eba52fd1e1"
+      },
+      "source": {
+        "path": "/tmp/havenline-t05/Closure-4K/Candidate.json",
+        "sha256": "0935937a73b35d5bcc9a12411353723e2ba538df44d4f28f355fb6f8487be037"
+      },
+      "images": [
+        {
+          "camera": [
+            6.19631862640381,
+            11.2003526687622,
+            5.30992889404297
+          ],
+          "draws": 518,
+          "feet": [
+            -0.389999985694885,
+            0.0,
+            -5.03999996185303
+          ],
+          "file": "4K-cooker-trays.jpg",
+          "scale": 1.0,
+          "size": [
+            3840,
+            2160
+          ],
+          "triangles": 998540,
+          "zoom": 1.0,
+          "path": "/tmp/havenline-t05/Closure-4K/4K-cooker-trays.jpg",
+          "sha256": "6a70cfa591d96d046b89a479040e226c0df71517ba083a698f8b8846b8733ad3"
+        },
+        {
+          "camera": [
+            1.15031814575195,
+            11.2253522872925,
+            6.04392910003662
+          ],
+          "draws": 441,
+          "feet": [
+            -5.43600034713745,
+            0.025000000372529,
+            -4.30599975585938
+          ],
+          "file": "4K-paid-workshops.jpg",
+          "scale": 1.0,
+          "size": [
+            3840,
+            2160
+          ],
+          "triangles": 982556,
+          "zoom": 1.0,
+          "path": "/tmp/havenline-t05/Closure-4K/4K-paid-workshops.jpg",
+          "sha256": "7300aeb1e04adc92a9b065721bcadc81f8e3a2ccb835cb15a77dadb4239b093d"
+        },
+        {
+          "camera": [
+            12.4863185882568,
+            11.2003526687622,
+            6.94992876052856
+          ],
+          "draws": 554,
+          "feet": [
+            5.90000009536743,
+            0.0,
+            -3.40000009536743
+          ],
+          "file": "4K-service-and-defense.jpg",
+          "scale": 1.0,
+          "size": [
+            3840,
+            2160
+          ],
+          "triangles": 1121127,
+          "zoom": 1.0,
+          "path": "/tmp/havenline-t05/Closure-4K/4K-service-and-defense.jpg",
+          "sha256": "0ece18b899bf8d6180dc4b32f59a3404077052f7a9eb244050079a197ee05da0"
+        }
+      ]
+    },
+    "shore-matrix": {
+      "manifest": {
+        "path": "/tmp/havenline-t05/Closure-shore-matrix/Capture.json",
+        "sha256": "90c75c4a9511a2d2ed171873db146aeb0b24267ea9dd389fa5caf6abc18eaeac"
+      },
+      "source": {
+        "path": "/tmp/havenline-t05/Closure-shore-matrix/Candidate.json",
+        "sha256": "0935937a73b35d5bcc9a12411353723e2ba538df44d4f28f355fb6f8487be037"
+      },
+      "images": [
+        {
+          "camera": [
+            -14.8636827468872,
+            11.2003526687622,
+            23.5199298858643
+          ],
+          "draws": 269,
+          "feet": [
+            -21.4500007629395,
+            0.0,
+            13.1700000762939
+          ],
+          "file": "Landscape-lakeshore.jpg",
+          "scale": 1.0,
+          "size": [
+            960,
+            540
+          ],
+          "triangles": 349467,
+          "zoom": 1.0,
+          "path": "/tmp/havenline-t05/Closure-shore-matrix/Landscape-lakeshore.jpg",
+          "sha256": "47ab8545afa4b740edfdbda8bbf44f51337d23ffd4986de27e4895d4c8beeae7"
+        },
+        {
+          "camera": [
+            -14.8636827468872,
+            11.2003526687622,
+            23.5199298858643
+          ],
+          "draws": 355,
+          "feet": [
+            -21.4500007629395,
+            0.0,
+            13.1700000762939
+          ],
+          "file": "Cover-rotated-bank.jpg",
+          "scale": 1.0,
+          "size": [
+            840,
+            360
+          ],
+          "triangles": 392194,
+          "zoom": 1.0,
+          "path": "/tmp/havenline-t05/Closure-shore-matrix/Cover-rotated-bank.jpg",
+          "sha256": "5896a529ba3748526ffc04c0b43e8a7f8cd4ae01aef96af53c0b186b7783b8f7"
+        },
+        {
+          "camera": [
+            -14.8636827468872,
+            11.2003526687622,
+            23.5199298858643
+          ],
+          "draws": 225,
+          "feet": [
+            -21.4500007629395,
+            0.0,
+            13.1700000762939
+          ],
+          "file": "Fold-inner-rotated-bank.jpg",
+          "scale": 1.0,
+          "size": [
+            546,
+            492
+          ],
+          "triangles": 291107,
+          "zoom": 1.0,
+          "path": "/tmp/havenline-t05/Closure-shore-matrix/Fold-inner-rotated-bank.jpg",
+          "sha256": "611027509b13419adde31a2ef5e2e918c8c43e90b615055b2ec0cdf0fec42150"
+        },
+        {
+          "camera": [
+            -14.8636827468872,
+            11.2003526687622,
+            23.5199298858643
+          ],
+          "draws": 235,
+          "feet": [
+            -21.4500007629395,
+            0.0,
+            13.1700000762939
+          ],
+          "file": "Tablet-bank.jpg",
+          "scale": 1.0,
+          "size": [
+            896,
+            672
+          ],
+          "triangles": 320173,
+          "zoom": 1.0,
+          "path": "/tmp/havenline-t05/Closure-shore-matrix/Tablet-bank.jpg",
+          "sha256": "e059a2a90088801c8fec730ff588151ea150d2e6f79587f827685b7a0030c999"
+        },
+        {
+          "camera": [
+            -11.3698110580444,
+            17.8245010375977,
+            29.0102958679199
+          ],
+          "draws": 244,
+          "feet": [
+            -21.4500007629395,
+            0.0,
+            13.1700000762939
+          ],
+          "file": "Cover-bank.jpg",
+          "scale": 1.0,
+          "size": [
+            360,
+            840
+          ],
+          "triangles": 281400,
+          "zoom": 1.0,
+          "path": "/tmp/havenline-t05/Closure-shore-matrix/Cover-bank.jpg",
+          "sha256": "eee5f524e2eecc5af1dc184afa424ccff783777ba58dc61e4493355e47d8cf30"
+        },
+        {
+          "camera": [
+            -14.576132774353,
+            11.7456331253052,
+            23.971794128418
+          ],
+          "draws": 225,
+          "feet": [
+            -21.4500007629395,
+            0.0,
+            13.1700000762939
+          ],
+          "file": "Fold-inner-bank.jpg",
+          "scale": 1.0,
+          "size": [
+            492,
+            546
+          ],
+          "triangles": 290161,
+          "zoom": 1.0,
+          "path": "/tmp/havenline-t05/Closure-shore-matrix/Fold-inner-bank.jpg",
+          "sha256": "2bff20ea0f19e8cd441e58e881df24ebcbcbcbfd161defe233ba029e55ee4f49"
+        },
+        {
+          "camera": [
+            -14.1796112060547,
+            11.7706327438354,
+            29.9827537536621
+          ],
+          "draws": 223,
+          "feet": [
+            -21.0535469055176,
+            0.025000000372529,
+            19.1808547973633
+          ],
+          "file": "Fold-inner-rod-rack-touch.jpg",
+          "scale": 1.0,
+          "size": [
+            492,
+            546
+          ],
+          "triangles": 288367,
+          "zoom": 1.0,
+          "path": "/tmp/havenline-t05/Closure-shore-matrix/Fold-inner-rod-rack-touch.jpg",
+          "sha256": "e2103589d5e3cce27244a48254f1670d7c4e18ae75f509fc66e67e8cb7ee246b"
+        },
+        {
+          "camera": [
+            -13.879807472229,
+            11.7706327438354,
+            30.4538726806641
+          ],
+          "draws": 209,
+          "feet": [
+            -21.0535469055176,
+            0.025000000372529,
+            19.1808547973633
+          ],
+          "file": "Fold-inner-rod-rack-2x.jpg",
+          "scale": 1.0,
+          "size": [
+            492,
+            546
+          ],
+          "triangles": 286359,
+          "zoom": 2.0,
+          "path": "/tmp/havenline-t05/Closure-shore-matrix/Fold-inner-rod-rack-2x.jpg",
+          "sha256": "49d8026cb8eccbf8fecf136c6bc7931676ac53f752f978c12ab6d325562e50e7"
+        },
+        {
+          "camera": [
+            -15.2136812210083,
+            11.2003526687622,
+            21.3499279022217
+          ],
+          "draws": 271,
+          "feet": [
+            -21.7999992370605,
+            0.0,
+            11.0
+          ],
+          "file": "Landscape-winch-processing.jpg",
+          "scale": 1.0,
+          "size": [
+            960,
+            540
+          ],
+          "triangles": 348883,
+          "zoom": 1.0,
+          "path": "/tmp/havenline-t05/Closure-shore-matrix/Landscape-winch-processing.jpg",
+          "sha256": "eb752b4fb0cba86f27cfec4f1051772d382024e22e02c3f333d18d64cbb99f53"
+        },
+        {
+          "camera": [
+            -14.9435214996338,
+            11.2003526687622,
+            21.7744655609131
+          ],
+          "draws": 207,
+          "feet": [
+            -21.7999992370605,
+            0.0,
+            11.0
+          ],
+          "file": "Landscape-winch-processing-2x.jpg",
+          "scale": 1.0,
+          "size": [
+            960,
+            540
+          ],
+          "triangles": 309352,
+          "zoom": 2.0,
+          "path": "/tmp/havenline-t05/Closure-shore-matrix/Landscape-winch-processing-2x.jpg",
+          "sha256": "ec84f0dcd3cec4da23a4c379eff173691d1687af94fdf20dcd944f002907b41e"
+        }
+      ]
+    },
+    "shore-detail": {
+      "manifest": {
+        "path": "/tmp/havenline-t05/Closure-shore-detail/Capture.json",
+        "sha256": "13c260ca67d67141396b7cb1eea348bffb9985c1ba283d688511cbb5444ee101"
+      },
+      "source": {
+        "path": "/tmp/havenline-t05/Closure-shore-detail/Candidate.json",
+        "sha256": "0935937a73b35d5bcc9a12411353723e2ba538df44d4f28f355fb6f8487be037"
+      },
+      "images": [
+        {
+          "camera": [
+            -17.2531337738037,
+            11.7456331253052,
+            31.1412010192871
+          ],
+          "draws": 214,
+          "feet": [
+            -24.1270694732666,
+            0.0,
+            20.3393001556396
+          ],
+          "file": "Fold-inner-rack-approach.jpg",
+          "scale": 1.0,
+          "size": [
+            492,
+            546
+          ],
+          "triangles": 276689,
+          "zoom": 1.0,
+          "path": "/tmp/havenline-t05/Closure-shore-detail/Fold-inner-rack-approach.jpg",
+          "sha256": "2e289a20e4b92e926b48f96f38b1c41606335572107ac0223836ee366c147a28"
+        },
+        {
+          "camera": [
+            -16.9536991119385,
+            11.7456331253052,
+            31.6117420196533
+          ],
+          "draws": 167,
+          "feet": [
+            -24.1270694732666,
+            0.0,
+            20.3393001556396
+          ],
+          "file": "Fold-inner-four-rods-2x.jpg",
+          "scale": 1.0,
+          "size": [
+            492,
+            546
+          ],
+          "triangles": 229755,
+          "zoom": 2.0,
+          "path": "/tmp/havenline-t05/Closure-shore-detail/Fold-inner-four-rods-2x.jpg",
+          "sha256": "33d92352ab2cc12a27938f7de3c7d969f508878c1862744b557b089d7deed043"
+        },
+        {
+          "camera": [
+            -17.8038635253906,
+            11.2003526687622,
+            17.7137432098389
+          ],
+          "draws": 240,
+          "feet": [
+            -24.3901805877686,
+            0.0,
+            7.36381387710571
+          ],
+          "file": "Landscape-catch-crate.jpg",
+          "scale": 1.0,
+          "size": [
+            960,
+            540
+          ],
+          "triangles": 313394,
+          "zoom": 1.0,
+          "path": "/tmp/havenline-t05/Closure-shore-detail/Landscape-catch-crate.jpg",
+          "sha256": "dd6e8ccd5e408d6f577a50414cc4f9411aa09a9cae283d24c191d23b88994b77"
+        },
+        {
+          "camera": [
+            -17.5340347290039,
+            11.2003526687622,
+            18.1377601623535
+          ],
+          "draws": 191,
+          "feet": [
+            -24.3901805877686,
+            0.0,
+            7.36381387710571
+          ],
+          "file": "Landscape-catch-crate-2x.jpg",
+          "scale": 1.0,
+          "size": [
+            960,
+            540
+          ],
+          "triangles": 279766,
+          "zoom": 2.0,
+          "path": "/tmp/havenline-t05/Closure-shore-detail/Landscape-catch-crate-2x.jpg",
+          "sha256": "1f4bd13cd7730f5e86e70ba797f5e80886fbed4f2495a2866fe355f6caa04429"
+        }
+      ]
+    },
+    "founding-plot": {
+      "manifest": {
+        "path": "/tmp/havenline-t05/Closure-founding-plot/Capture.json",
+        "sha256": "5d8516f0f790641fa1d66d23037bc0244a060302d7f8d21090995cc7ee6619ff"
+      },
+      "source": {
+        "path": "/tmp/havenline-t05/Closure-founding-plot/Candidate.json",
+        "sha256": "0935937a73b35d5bcc9a12411353723e2ba538df44d4f28f355fb6f8487be037"
+      },
+      "images": [
+        {
+          "camera": [
+            8.67685985565186,
+            11.7536334991455,
+            13.5012865066528
+          ],
+          "draws": 316,
+          "feet": [
+            2.34999990463257,
+            0.00800000037997961,
+            2.80000019073486
+          ],
+          "file": "Fold-inner-founding-pad.jpg",
+          "scale": 1.0,
+          "size": [
+            492,
+            546
+          ],
+          "triangles": 388127,
+          "zoom": 1.0,
+          "path": "/tmp/havenline-t05/Closure-founding-plot/Fold-inner-founding-pad.jpg",
+          "sha256": "4d25701fd6264359002c6c7cf898aa36b25b38227627a7626dc95df7f1f8ec12"
+        },
+        {
+          "camera": [
+            8.17975330352783,
+            11.7536334991455,
+            13.7526865005493
+          ],
+          "draws": 242,
+          "feet": [
+            2.34999990463257,
+            0.00800000037997961,
+            2.80000019073486
+          ],
+          "file": "Fold-inner-founding-pad-2x.jpg",
+          "scale": 1.0,
+          "size": [
+            492,
+            546
+          ],
+          "triangles": 335891,
+          "zoom": 2.0,
+          "path": "/tmp/havenline-t05/Closure-founding-plot/Fold-inner-founding-pad-2x.jpg",
+          "sha256": "a32c0d335820b7b0b9f0012d0b7dcaa94fdc7709d6fb8ceff1219ead875c3ae9"
+        }
+      ]
+    },
+    "camp-stations": {
+      "manifest": {
+        "path": "/tmp/havenline-t05/Closure-camp-stations/Capture.json",
+        "sha256": "401c374cf3aa124cec340fc7fe0e91f76cb4e8f55ac0a984ee23d16001cd0415"
+      },
+      "source": {
+        "path": "/tmp/havenline-t05/Closure-camp-stations/Candidate.json",
+        "sha256": "0935937a73b35d5bcc9a12411353723e2ba538df44d4f28f355fb6f8487be037"
+      },
+      "images": [
+        {
+          "camera": [
+            6.19631862640381,
+            11.2003526687622,
+            5.30992889404297
+          ],
+          "draws": 518,
+          "feet": [
+            -0.389999985694885,
+            0.0,
+            -5.03999996185303
+          ],
+          "file": "Landscape-kitchen-empty.jpg",
+          "scale": 1.0,
+          "size": [
+            960,
+            540
+          ],
+          "triangles": 733025,
+          "zoom": 1.0,
+          "path": "/tmp/havenline-t05/Closure-camp-stations/Landscape-kitchen-empty.jpg",
+          "sha256": "4298a9685b930d7b85cea78e7e7d659b06dcf922a5b3b9b723a8d9590dab1840"
+        },
+        {
+          "camera": [
+            1.15031814575195,
+            11.2253522872925,
+            6.04392910003662
+          ],
+          "draws": 441,
+          "feet": [
+            -5.43600034713745,
+            0.025000000372529,
+            -4.30599975585938
+          ],
+          "file": "Landscape-saw-drill-empty.jpg",
+          "scale": 1.0,
+          "size": [
+            960,
+            540
+          ],
+          "triangles": 694035,
+          "zoom": 1.0,
+          "path": "/tmp/havenline-t05/Closure-camp-stations/Landscape-saw-drill-empty.jpg",
+          "sha256": "b7981b0e14a68b6f263752f65da66dee6a6d16a2a30cd90cc263b05fdb2e1e3d"
+        },
+        {
+          "camera": [
+            12.686318397522,
+            11.2003526687622,
+            6.90992879867554
+          ],
+          "draws": 570,
+          "feet": [
+            6.09999990463257,
+            0.0,
+            -3.44000005722046
+          ],
+          "file": "Landscape-counter-and-tower.jpg",
+          "scale": 1.0,
+          "size": [
+            960,
+            540
+          ],
+          "triangles": 772970,
+          "zoom": 1.0,
+          "path": "/tmp/havenline-t05/Closure-camp-stations/Landscape-counter-and-tower.jpg",
+          "sha256": "1ada6c53cef81294eec8e1ea8b10c49f2ea4ddb30a13a5ebe8e51b7f3e4544b6"
+        },
+        {
+          "camera": [
+            6.19631862640381,
+            11.2003526687622,
+            5.30992889404297
+          ],
+          "draws": 540,
+          "feet": [
+            -0.389999985694885,
+            0.0,
+            -5.03999996185303
+          ],
+          "file": "Landscape-cooker-pinch-start.jpg",
+          "scale": 1.0,
+          "size": [
+            960,
+            540
+          ],
+          "triangles": 785547,
+          "zoom": 1.0,
+          "path": "/tmp/havenline-t05/Closure-camp-stations/Landscape-cooker-pinch-start.jpg",
+          "sha256": "cae4ae54bbc654f2dfd2c4bb45ba27d50155b2b88efe3102f44a5cedf633991a"
+        },
+        {
+          "camera": [
+            6.46647930145264,
+            11.2003526687622,
+            5.73446750640869
+          ],
+          "draws": 344,
+          "feet": [
+            -0.389999985694885,
+            0.0,
+            -5.03999996185303
+          ],
+          "file": "Landscape-cooker-2x.jpg",
+          "scale": 1.0,
+          "size": [
+            960,
+            540
+          ],
+          "triangles": 706151,
+          "zoom": 2.0,
+          "path": "/tmp/havenline-t05/Closure-camp-stations/Landscape-cooker-2x.jpg",
+          "sha256": "af43d65de82114734e29b8f913e3adae3eb61fde071e1ea821222332bbca87fd"
+        },
+        {
+          "camera": [
+            4.33790636062622,
+            11.2003526687622,
+            9.29690742492676
+          ],
+          "draws": 445,
+          "feet": [
+            -2.25,
+            0.0,
+            -1.04999995231628
+          ],
+          "file": "Tablet-work-camp.jpg",
+          "scale": 1.0,
+          "size": [
+            896,
+            672
+          ],
+          "triangles": 646437,
+          "zoom": 1.0,
+          "path": "/tmp/havenline-t05/Closure-camp-stations/Tablet-work-camp.jpg",
+          "sha256": "0fda9b6120e197a08c2c19e28b29b209280e49f9cce22d573c87c088f66ee809"
+        }
+      ]
+    },
+    "production-states": {
+      "manifest": {
+        "path": "/tmp/havenline-t05/Closure-production-states/Capture.json",
+        "sha256": "b3fca35a9c784737b435cf4e9e849ffe4417395e9239c5e876ab2a1a72454090"
+      },
+      "source": {
+        "path": "/tmp/havenline-t05/Closure-production-states/Candidate.json",
+        "sha256": "0935937a73b35d5bcc9a12411353723e2ba538df44d4f28f355fb6f8487be037"
+      },
+      "images": [
+        {
+          "camera": [
+            6.19631862640381,
+            11.2003526687622,
+            5.30992889404297
+          ],
+          "draws": 501,
+          "feet": [
+            -0.389999985694885,
+            0.0,
+            -5.03999996185303
+          ],
+          "file": "Cooker-empty.jpg",
+          "scale": 1.0,
+          "size": [
+            960,
+            540
+          ],
+          "triangles": 719023,
+          "zoom": 1.0,
+          "path": "/tmp/havenline-t05/Closure-production-states/Cooker-empty.jpg",
+          "sha256": "c0273271e14ea288002cce539badd533cfe8cfef5f5b1d25ce45ecbeaadceeb2"
+        },
+        {
+          "camera": [
+            6.19631862640381,
+            11.2003526687622,
+            5.30992889404297
+          ],
+          "draws": 508,
+          "feet": [
+            -0.389999985694885,
+            0.0,
+            -5.03999996185303
+          ],
+          "file": "Cooker-running.jpg",
+          "scale": 1.0,
+          "size": [
+            960,
+            540
+          ],
+          "triangles": 720507,
+          "zoom": 1.0,
+          "path": "/tmp/havenline-t05/Closure-production-states/Cooker-running.jpg",
+          "sha256": "2d938b6fed52aa6979ba56f6454f5ff792ef5cf6d5a404d8f51dd8166569fefc"
+        },
+        {
+          "camera": [
+            6.19631862640381,
+            11.2003526687622,
+            5.30992889404297
+          ],
+          "draws": 503,
+          "feet": [
+            -0.389999985694885,
+            0.0,
+            -5.03999996185303
+          ],
+          "file": "Cooker-full-stalled.jpg",
+          "scale": 1.0,
+          "size": [
+            960,
+            540
+          ],
+          "triangles": 712579,
+          "zoom": 1.0,
+          "path": "/tmp/havenline-t05/Closure-production-states/Cooker-full-stalled.jpg",
+          "sha256": "c042b7c1e2df0b12b3c1c6c9605df0ecc8d31bd9502527b5fbfcb007d063cc6c"
+        }
+      ]
+    }
+  },
+  "independent_dry_approach_checks": {
+    "rows": [
+      {
+        "name": "FishingRackFixture",
+        "passed_to_center": false,
+        "player_at": [
+          -21.7877616882324,
+          0.0,
+          19.9733772277832
+        ],
+        "remaining": 1.58400082588196,
+        "start": [
+          -21.0812187194824,
+          0.0,
+          20.26926612854
+        ],
+        "target": [
+          -23.248815536499,
+          0.025000000372529,
+          19.3615112304688
+        ]
+      },
+      {
+        "name": "FishingWinchFixture",
+        "passed_to_center": false,
+        "player_at": [
+          -23.8959217071533,
+          0.0,
+          13.7465667724609
+        ],
+        "remaining": 0.853999137878418,
+        "start": [
+          -22.5376415252686,
+          0.0,
+          14.3735389709473
+        ],
+        "target": [
+          -24.6713008880615,
+          0.025000000372529,
+          13.388653755188
+        ]
+      },
+      {
+        "name": "ProcessingCounterFixture",
+        "passed_to_center": false,
+        "player_at": [
+          -23.1040153503418,
+          0.0,
+          9.76095104217529
+        ],
+        "remaining": 0.714000761508942,
+        "start": [
+          -21.556022644043,
+          0.0,
+          9.23159885406494
+        ],
+        "target": [
+          -23.7796077728271,
+          0.025000000372529,
+          9.99197483062744
+        ]
+      },
+      {
+        "name": "FishCrateFixture",
+        "passed_to_center": false,
+        "player_at": [
+          -24.4969520568848,
+          0.0,
+          7.44805431365967
+        ],
+        "remaining": 0.684000194072723,
+        "start": [
+          -23.1890335083008,
+          0.0,
+          6.41611385345459
+        ],
+        "target": [
+          -25.0339374542236,
+          0.025000000372529,
+          7.87173223495483
+        ]
+      }
+    ],
+    "witness": {
+      "path": "/tmp/havenline-t05-independent/touch-final-40301/run.log",
+      "sha256": "1dc79634a24389e095978b254d1b85a3325ebb13dc39eb6749056c409722fb5c"
+    },
+    "source": {
+      "path": "/tmp/havenline-t05-independent/touch-final-40301/Source.sha256",
+      "sha256": "e1f1cb57808e031cfa5318d23deb7da6b3c5b72d26dbbc75f0ff1682896948be"
+    }
+  },
+  "motion_fixture": {
+    "path": "/tmp/havenline-t05-independent/wip-shore-touch.gd",
+    "sha256": "4157723ee3713883731300cbaa55462627bcca6027a0acfc57625b13dd18c5ae"
+  },
+  "static_fixture": {
+    "path": "/tmp/havenline-t05-independent/static-closure.gd",
+    "sha256": "0a07daf59e9535ed20b68499dc4128880311c5e7bed7c5b3c73e0864bd9f374c"
+  },
+  "official_station_regression": {
+    "path": "/tmp/havenline-t05/Closure-regression/qa_field_station_kit/run.log",
+    "sha256": "4929c9c57d28f03df3fadd6072a5d4201beba2381eda5b73a2a674a0006220eb"
+  }
+}
