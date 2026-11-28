@@ -1,0 +1,105 @@
+{
+  "adapter_sha256": "963e40757b4042a2361d57d03b61584fbe74d4c884e74c31b5c40b62e9c194f2",
+  "checks": {
+    "core_human_companion may deposit but cannot act as the player rescue": true,
+    "equal inputs use stable lexical identity": true,
+    "facing resolves equal eligible distances": true,
+    "focus clears beyond the release radius": true,
+    "hold and margin prevent an immediate nearby switch": true,
+    "malformed candidates and both duplicate identities are excluded": true,
+    "nonfinite preview fails closed": true,
+    "nonzero movement blocks an urgent action until stopping": true,
+    "once active, the same request cannot earn dwell twice": true,
+    "one authoritative camp purchase activates and future progress survives": true,
+    "only one primary on-foot movement binding remains": true,
+    "ordinary context waits stopped dwell": true,
+    "overflow caps evaluation without choosing by insertion order": true,
+    "purchase metadata cannot promote a candidate": true,
+    "readiness and presentation independently fail closed": true,
+    "real moving touch cannot start a plot payment": true,
+    "release margin keeps the same focus without out-of-range execution": true,
+    "rescued_survivor_helper may deposit but cannot act as the player rescue": true,
+    "selection and tokens are ephemeral across persisted progress": true,
+    "stopped dwell activates one canonical task": true,
+    "the same accessible joystick approach pays and builds after stopping": true,
+    "urgent rescue preempts ordinary work": true
+  },
+  "director_sha256": "b7855c39ff2807c1d50f2cfa20bc5316543a8bf7027c64be6f4072a3028d6a79",
+  "payment_captures": 0,
+  "performance": {},
+  "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+  "timeline": [
+    {
+      "actionable": false,
+      "apron_paid": 0,
+      "beat": "01-moving-near-plot",
+      "feet": [
+        -0.400000005960464,
+        0.00800000037997961,
+        2.41916680335999
+      ],
+      "hud": "Stop beside the plot to build",
+      "id": "pad:center_hearth",
+      "kind": "build",
+      "physics_frame": 11,
+      "progress": 0.0,
+      "state": "blocked_movement",
+      "token": 2
+    },
+    {
+      "actionable": true,
+      "apron_paid": 0,
+      "beat": "02-stopped-focus",
+      "feet": [
+        -0.400000005960464,
+        0.00800000037997961,
+        2.44527792930603
+      ],
+      "hud": "Build hearth · 200 wood",
+      "id": "pad:center_hearth",
+      "kind": "build",
+      "physics_frame": 21,
+      "progress": 0.0,
+      "state": "active",
+      "token": 2
+    },
+    {
+      "actionable": true,
+      "apron_paid": 0,
+      "beat": "03-paying",
+      "feet": [
+        -0.400000005960464,
+        0.00800000037997961,
+        2.44527792930603
+      ],
+      "hud": "Build hearth · 200 wood",
+      "id": "pad:center_hearth",
+      "kind": "build",
+      "physics_frame": 21,
+      "progress": 0.0,
+      "state": "active",
+      "token": 2
+    },
+    {
+      "actionable": false,
+      "apron_paid": 20,
+      "beat": "04-built-pinch",
+      "feet": [
+        -0.400000005960464,
+        0.00800000037997961,
+        2.44527792930603
+      ],
+      "hud": "Expand camp · 120 wood · 60 stone  → 5 m",
+      "id": "",
+      "kind": "",
+      "physics_frame": 104,
+      "progress": 0.0,
+      "state": "idle",
+      "token": 0
+    }
+  ],
+  "viewport": [
+    3840,
+    2160
+  ]
+}
