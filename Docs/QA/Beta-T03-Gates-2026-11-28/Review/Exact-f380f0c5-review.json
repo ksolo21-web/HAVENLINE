@@ -1,0 +1,1092 @@
+{
+  "task": "T03",
+  "assignment": {
+    "builder": "/root",
+    "reviewer": "/root/independent",
+    "independent": true
+  },
+  "candidate": "f380f0c5777de2a96367d99a229d97480b4aacb9",
+  "parent": "b48144a20f821cb265131bc90e48bc2256450a46",
+  "candidate_manifest_sha256": "17f4f2c1a803897a0179862613353f56f3b76606ae0f33a94fb2828547dd755f",
+  "review_phase": "exact candidate scoped visual and gate motion",
+  "unrounded": true,
+  "averaging_used": false,
+  "overall_score": null,
+  "scores": {
+    "C1": {
+      "reference_fidelity": 10,
+      "visual_language": 10,
+      "cross_view_consistency": 10
+    },
+    "C2": {
+      "geometry_contact": 10,
+      "clipping_seams": 10,
+      "intentional_gap_integrity": 10,
+      "cross_view_integrity": 10
+    },
+    "gate_motion_scope": {
+      "hinge_transition_and_attachment": 10,
+      "occupied_threshold_clearance": 10
+    }
+  },
+  "scoped_visual_defects": [],
+  "reference": {
+    "fidelity_source": {
+      "original_id": "B",
+      "B_sha256": "4c9051cbea6df0efa3e7288b13b6d17da46e857274869b0b43d2f96ff6cc79d2",
+      "RF02_windows_s": [
+        [
+          6,
+          10
+        ],
+        [
+          18,
+          22
+        ]
+      ],
+      "viewed_seconds": [
+        6,
+        8,
+        10
+      ],
+      "separately_viewed_motion_excerpt_s": [
+        13.667,
+        14.7
+      ],
+      "late_window_raw_viewed": false
+    },
+    "selected_owner_sheet_commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+    "selected_sheet_receipt_sha256": "5f97dcb788c1c845f9384acb5e95741a9cba76b106ae7cecf0ae3ddc4c581211",
+    "selected_sheet_board_sha256": "5562d12bd03cb921ee9385e064554448b8df0a4d31e0d04691e8c08971ea9bf8"
+  },
+  "native_images": [
+    {
+      "draw_calls": 374,
+      "file": "Court-fence.jpg",
+      "gate_states": {
+        "gate-east": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        },
+        "gate-south": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        }
+      },
+      "position": [
+        1.0,
+        0.0,
+        1.20000004768372
+      ],
+      "primitives": 548144,
+      "size": [
+        460,
+        760
+      ],
+      "zoom": 1.0,
+      "path": "final-native/Court-fence.jpg",
+      "sha256": "f69eb2c9241c6f6f994bd68f739cfe6160db4f6f7b6f485bfe77cbc30e5d0606"
+    },
+    {
+      "draw_calls": 377,
+      "file": "gate-south-closed-1x.jpg",
+      "gate_states": {
+        "gate-east": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        },
+        "gate-south": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        }
+      },
+      "position": [
+        0.0,
+        0.0,
+        6.8600001335144
+      ],
+      "primitives": 561257,
+      "size": [
+        460,
+        760
+      ],
+      "zoom": 1.0,
+      "path": "final-native/gate-south-closed-1x.jpg",
+      "sha256": "e1531de909387cc83d5abba65349e74a749bd5e67f9a8cae5aed750a97cadc25"
+    },
+    {
+      "draw_calls": 289,
+      "file": "gate-south-closed-2x.jpg",
+      "gate_states": {
+        "gate-east": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        },
+        "gate-south": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        }
+      },
+      "position": [
+        0.0,
+        0.0,
+        6.8600001335144
+      ],
+      "primitives": 522939,
+      "size": [
+        460,
+        760
+      ],
+      "zoom": 2.0,
+      "path": "final-native/gate-south-closed-2x.jpg",
+      "sha256": "fb6ff271c2d1b5da4065f0aa9006e371b986b9717d60e75924afb07a22f97be4"
+    },
+    {
+      "draw_calls": 289,
+      "file": "gate-south-open-2x.jpg",
+      "gate_states": {
+        "gate-east": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        },
+        "gate-south": {
+          "active": true,
+          "radians": 1.5707963267949,
+          "target_open": true
+        }
+      },
+      "position": [
+        0.0,
+        0.0,
+        6.8600001335144
+      ],
+      "primitives": 522939,
+      "size": [
+        460,
+        760
+      ],
+      "zoom": 2.0,
+      "path": "final-native/gate-south-open-2x.jpg",
+      "sha256": "d3b25e457d062b88cf4237a57629e7f734d97319a06c981dd33e76240edfb201"
+    },
+    {
+      "draw_calls": 377,
+      "file": "gate-south-open-1x.jpg",
+      "gate_states": {
+        "gate-east": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        },
+        "gate-south": {
+          "active": true,
+          "radians": 1.5707963267949,
+          "target_open": true
+        }
+      },
+      "position": [
+        0.0,
+        0.0,
+        6.8600001335144
+      ],
+      "primitives": 561257,
+      "size": [
+        460,
+        760
+      ],
+      "zoom": 1.0,
+      "path": "final-native/gate-south-open-1x.jpg",
+      "sha256": "5fe04104b1a954a744560a973600c070d510f15f0f33182ff433b7ba7b88e0c1"
+    },
+    {
+      "draw_calls": 317,
+      "file": "gate-south-inside-2x.jpg",
+      "gate_states": {
+        "gate-east": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        },
+        "gate-south": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        }
+      },
+      "position": [
+        0.219999998807907,
+        0.0,
+        3.82000017166138
+      ],
+      "primitives": 549475,
+      "size": [
+        460,
+        760
+      ],
+      "zoom": 2.0,
+      "path": "final-native/gate-south-inside-2x.jpg",
+      "sha256": "2939ee76e9e0f6a2286f041917b01bf1621ff90d0e3a1fd6cc7c3164f9480f85"
+    },
+    {
+      "draw_calls": 476,
+      "file": "gate-east-closed-1x.jpg",
+      "gate_states": {
+        "gate-east": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        },
+        "gate-south": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        }
+      },
+      "position": [
+        11.460000038147,
+        0.0,
+        -6.38186250512263e-08
+      ],
+      "primitives": 617634,
+      "size": [
+        460,
+        760
+      ],
+      "zoom": 1.0,
+      "path": "final-native/gate-east-closed-1x.jpg",
+      "sha256": "91dd067046883afc48b69689701f89954c44a2fdf06ed1580669036bedbe8b20"
+    },
+    {
+      "draw_calls": 409,
+      "file": "gate-east-closed-2x.jpg",
+      "gate_states": {
+        "gate-east": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        },
+        "gate-south": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        }
+      },
+      "position": [
+        11.460000038147,
+        0.0,
+        -6.38186250512263e-08
+      ],
+      "primitives": 637564,
+      "size": [
+        460,
+        760
+      ],
+      "zoom": 2.0,
+      "path": "final-native/gate-east-closed-2x.jpg",
+      "sha256": "efe3ccd6326ad40fd1fafd709e7e286f7dec75285d85ad4a759bcdcece63cb9d"
+    },
+    {
+      "draw_calls": 394,
+      "file": "gate-east-open-2x.jpg",
+      "gate_states": {
+        "gate-east": {
+          "active": true,
+          "radians": 1.5707963267949,
+          "target_open": true
+        },
+        "gate-south": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        }
+      },
+      "position": [
+        11.460000038147,
+        0.0,
+        -6.38186250512263e-08
+      ],
+      "primitives": 625119,
+      "size": [
+        460,
+        760
+      ],
+      "zoom": 2.0,
+      "path": "final-native/gate-east-open-2x.jpg",
+      "sha256": "cc1d99495c489c2eed246562a960e6d759f0a7409bec886d58dec6590f2211c3"
+    },
+    {
+      "draw_calls": 476,
+      "file": "gate-east-open-1x.jpg",
+      "gate_states": {
+        "gate-east": {
+          "active": true,
+          "radians": 1.5707963267949,
+          "target_open": true
+        },
+        "gate-south": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        }
+      },
+      "position": [
+        11.460000038147,
+        0.0,
+        -6.38186250512263e-08
+      ],
+      "primitives": 617634,
+      "size": [
+        460,
+        760
+      ],
+      "zoom": 1.0,
+      "path": "final-native/gate-east-open-1x.jpg",
+      "sha256": "24298392fdd7c15e8d689f7f285d0c91ac663579d88f17120fb2feac5db1d630"
+    },
+    {
+      "draw_calls": 386,
+      "file": "gate-east-inside-2x.jpg",
+      "gate_states": {
+        "gate-east": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        },
+        "gate-south": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        }
+      },
+      "position": [
+        8.42000007629395,
+        0.0,
+        -0.219999924302101
+      ],
+      "primitives": 639052,
+      "size": [
+        460,
+        760
+      ],
+      "zoom": 2.0,
+      "path": "final-native/gate-east-inside-2x.jpg",
+      "sha256": "8b68f7db6391d6af56f6668d9c7a2a86595e99dc423c0c286410d8a4c2c1959b"
+    },
+    {
+      "draw_calls": 265,
+      "file": "Fence-join-2x.jpg",
+      "gate_states": {
+        "gate-east": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        },
+        "gate-south": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        }
+      },
+      "position": [
+        -7.65000009536743,
+        0.0,
+        6.55000019073486
+      ],
+      "primitives": 513185,
+      "size": [
+        460,
+        760
+      ],
+      "zoom": 2.0,
+      "path": "final-native/Fence-join-2x.jpg",
+      "sha256": "6400eb2f239c2e07217a1551cebb572a9ed4fd70bac43cdd5461703fb1411a16"
+    },
+    {
+      "draw_calls": 532,
+      "file": "Court-fence.jpg",
+      "gate_states": {
+        "gate-east": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        },
+        "gate-south": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        }
+      },
+      "position": [
+        1.0,
+        0.0,
+        1.20000004768372
+      ],
+      "primitives": 949566,
+      "size": [
+        3840,
+        2160
+      ],
+      "zoom": 1.0,
+      "path": "final-4k/Court-fence.jpg",
+      "sha256": "3973432d718effa695962a032b782b0b9fe03e07147d2db571c87fa531eff318"
+    }
+  ],
+  "movie": {
+    "path": "/tmp/havenline-t03/final-replay/Loaded-two-gates.mp4",
+    "sha256": "32c10c1ceb6e8f1290181e993437c3d4da1d1446e0e066c102319c2c518964d5",
+    "actual_frames_independently_decoded": 38,
+    "capture_fps": 15,
+    "physics_fps": 60,
+    "apertures": [
+      {
+        "end_frame": 20,
+        "finish": [
+          0.106260575354099,
+          0.0,
+          -3.08917593955994
+        ],
+        "first_frame": 0,
+        "from_outside": true,
+        "gate": "gate-south",
+        "minimum_floor": 0.0,
+        "origin": [
+          0.0799999982118607,
+          0.0,
+          8.64000034332275
+        ],
+        "zoom": 1.0
+      },
+      {
+        "end_frame": 37,
+        "finish": [
+          0.0422610342502594,
+          0.0,
+          2.97979640960693
+        ],
+        "first_frame": 21,
+        "from_outside": false,
+        "gate": "gate-east",
+        "minimum_floor": 0.0,
+        "origin": [
+          6.76000022888184,
+          0.0,
+          -0.0799998566508293
+        ],
+        "zoom": 2.0
+      }
+    ]
+  },
+  "independent_touch_witnesses": {
+    "wall-final-run": {
+      "path": "/tmp/havenline-t03-independent/wall-final-run/test.log",
+      "sha256": "49290e9aa4b4bfc03ade79328ba49be28db65c4e501eec693ca92b27436e12f9",
+      "source_sha256_index": "5b95688bebb61c4d4d01047e87b8fa22c869ad1208216d8c65164cbdba101358",
+      "observations": {
+        "contacts": [
+          {
+            "colliders": [
+              "@StaticBody3D@8"
+            ],
+            "end": [
+              -5.80000019073486,
+              0.0,
+              6.00972557067871
+            ],
+            "fence_collider": true,
+            "forward_progress": 1.54027462005615,
+            "initial": [
+              -5.80000019073486,
+              0.0,
+              7.55000019073486
+            ],
+            "no_through": true,
+            "outside": true,
+            "stop_clearance": 0.609725475311279,
+            "wall": "south-west"
+          },
+          {
+            "colliders": [
+              "@StaticBody3D@8"
+            ],
+            "end": [
+              -5.80000019073486,
+              0.0,
+              4.78986835479736
+            ],
+            "fence_collider": true,
+            "forward_progress": 1.53986835479736,
+            "initial": [
+              -5.80000019073486,
+              0.0,
+              3.25
+            ],
+            "no_through": true,
+            "outside": false,
+            "stop_clearance": 0.610131740570068,
+            "wall": "south-west"
+          },
+          {
+            "colliders": [
+              "@StaticBody3D@14"
+            ],
+            "end": [
+              10.6101293563843,
+              0.0,
+              -5.80000019073486
+            ],
+            "fence_collider": true,
+            "forward_progress": 1.539870262146,
+            "initial": [
+              12.1499996185303,
+              0.0,
+              -5.80000019073486
+            ],
+            "no_through": true,
+            "outside": true,
+            "stop_clearance": 0.610129356384277,
+            "wall": "east-north"
+          },
+          {
+            "colliders": [
+              "@StaticBody3D@14"
+            ],
+            "end": [
+              9.38987064361572,
+              0.0,
+              -5.80000019073486
+            ],
+            "fence_collider": true,
+            "forward_progress": 1.53987073898315,
+            "initial": [
+              7.84999990463257,
+              0.0,
+              -5.80000019073486
+            ],
+            "no_through": true,
+            "outside": false,
+            "stop_clearance": 0.610129356384277,
+            "wall": "east-north"
+          },
+          {
+            "colliders": [
+              "@StaticBody3D@23"
+            ],
+            "end": [
+              -10.6097221374512,
+              0.0,
+              -2.09999990463257
+            ],
+            "fence_collider": true,
+            "forward_progress": 1.5402774810791,
+            "initial": [
+              -12.1499996185303,
+              0.0,
+              -2.09999990463257
+            ],
+            "no_through": true,
+            "outside": true,
+            "stop_clearance": 0.609722137451172,
+            "wall": "west"
+          },
+          {
+            "colliders": [
+              "@StaticBody3D@23"
+            ],
+            "end": [
+              -9.39027786254883,
+              0.0,
+              -2.09999990463257
+            ],
+            "fence_collider": true,
+            "forward_progress": 1.54027795791626,
+            "initial": [
+              -7.84999990463257,
+              0.0,
+              -2.09999990463257
+            ],
+            "no_through": true,
+            "outside": false,
+            "stop_clearance": 0.609722137451172,
+            "wall": "west"
+          },
+          {
+            "colliders": [
+              "@StaticBody3D@20"
+            ],
+            "end": [
+              -6.69999980926514,
+              0.0,
+              -9.61012935638428
+            ],
+            "fence_collider": true,
+            "forward_progress": 1.539870262146,
+            "initial": [
+              -6.69999980926514,
+              0.0,
+              -11.1499996185303
+            ],
+            "no_through": true,
+            "outside": true,
+            "stop_clearance": 0.610129356384277,
+            "wall": "north-west"
+          },
+          {
+            "colliders": [
+              "@StaticBody3D@20"
+            ],
+            "end": [
+              -6.69999980926514,
+              0.0,
+              -8.38986873626709
+            ],
+            "fence_collider": true,
+            "forward_progress": 1.53986883163452,
+            "initial": [
+              -6.69999980926514,
+              0.0,
+              -6.84999990463257
+            ],
+            "no_through": true,
+            "outside": false,
+            "stop_clearance": 0.61013126373291,
+            "wall": "north-west"
+          }
+        ],
+        "depth": 0.6,
+        "radius": 0.31,
+        "stage": 3,
+        "valid": true
+      }
+    },
+    "load-final-run": {
+      "path": "/tmp/havenline-t03-independent/load-final-run/test.log",
+      "sha256": "337761eff059e77ad515187a0baf0923a38baffffbe99033e266750b90148a33",
+      "source_sha256_index": "5b95688bebb61c4d4d01047e87b8fa22c869ad1208216d8c65164cbdba101358",
+      "observations": {
+        "end": {
+          "coal": 0,
+          "meat": 9,
+          "metal": 0,
+          "slate": 0,
+          "stone": 8,
+          "wood": 8
+        },
+        "extra_picked": {
+          "meat": 2
+        },
+        "in_hand_unchanged_modulo_pickups": false,
+        "initial": {
+          "coal": 0,
+          "meat": 0,
+          "metal": 0,
+          "slate": 0,
+          "stone": 0,
+          "wood": 0
+        },
+        "ledger_conserved": true,
+        "loaded": {
+          "coal": 0,
+          "meat": 8,
+          "metal": 0,
+          "slate": 0,
+          "stone": 8,
+          "wood": 8
+        },
+        "passed": true,
+        "routes": [
+          {
+            "advance": 4.93,
+            "crossed": true,
+            "end": "(0.0, 0.0, -1.731383)",
+            "from": 1,
+            "gate": "gate-south",
+            "held": 0,
+            "lateral_at_plane": 0.0,
+            "peak_step": 0.104,
+            "reset_seen": false,
+            "seam_step": 0.104,
+            "sign": 1,
+            "solid_crossings": 0,
+            "stage": 3,
+            "stationary_obstacles": [],
+            "still": 0,
+            "style": "straight-full",
+            "ticks": 55
+          },
+          {
+            "advance": 5.41,
+            "crossed": true,
+            "end": "(-0.256083, 0.0, -1.656717)",
+            "from": 1,
+            "gate": "gate-south",
+            "held": 0,
+            "lateral_at_plane": 0.24,
+            "peak_step": 0.104,
+            "reset_seen": false,
+            "seam_step": 0.104,
+            "sign": 1,
+            "solid_crossings": 0,
+            "stage": 3,
+            "stationary_obstacles": [],
+            "still": 0,
+            "style": "diagonal-full",
+            "ticks": 62
+          },
+          {
+            "advance": 4.93,
+            "crossed": true,
+            "end": "(0.0, 0.0, -1.731383)",
+            "from": 1,
+            "gate": "gate-south",
+            "held": 0,
+            "lateral_at_plane": 0.0,
+            "peak_step": 0.104,
+            "reset_seen": false,
+            "seam_step": 0.104,
+            "sign": -1,
+            "solid_crossings": 0,
+            "stage": 3,
+            "stationary_obstacles": [],
+            "still": 0,
+            "style": "straight-full",
+            "ticks": 55
+          },
+          {
+            "advance": 5.41,
+            "crossed": true,
+            "end": "(0.256083, 0.0, -1.656717)",
+            "from": 1,
+            "gate": "gate-south",
+            "held": 0,
+            "lateral_at_plane": -0.24,
+            "peak_step": 0.104,
+            "reset_seen": false,
+            "seam_step": 0.104,
+            "sign": -1,
+            "solid_crossings": 0,
+            "stage": 3,
+            "stationary_obstacles": [],
+            "still": 0,
+            "style": "diagonal-full",
+            "ticks": 62
+          },
+          {
+            "advance": 4.93,
+            "crossed": true,
+            "end": "(0.0, 0.0, 1.731385)",
+            "from": -1,
+            "gate": "gate-south",
+            "held": 0,
+            "lateral_at_plane": 0.0,
+            "peak_step": 0.104,
+            "reset_seen": false,
+            "seam_step": 0.104,
+            "sign": 1,
+            "solid_crossings": 0,
+            "stage": 3,
+            "stationary_obstacles": [],
+            "still": 0,
+            "style": "straight-full",
+            "ticks": 55
+          },
+          {
+            "advance": 5.41,
+            "crossed": true,
+            "end": "(-0.256084, 0.0, 1.656718)",
+            "from": -1,
+            "gate": "gate-south",
+            "held": 0,
+            "lateral_at_plane": 0.24,
+            "peak_step": 0.104,
+            "reset_seen": false,
+            "seam_step": 0.104,
+            "sign": 1,
+            "solid_crossings": 0,
+            "stage": 3,
+            "stationary_obstacles": [],
+            "still": 0,
+            "style": "diagonal-full",
+            "ticks": 62
+          },
+          {
+            "advance": 4.93,
+            "crossed": true,
+            "end": "(0.0, 0.0, 1.731385)",
+            "from": -1,
+            "gate": "gate-south",
+            "held": 0,
+            "lateral_at_plane": 0.0,
+            "peak_step": 0.104,
+            "reset_seen": false,
+            "seam_step": 0.104,
+            "sign": -1,
+            "solid_crossings": 0,
+            "stage": 3,
+            "stationary_obstacles": [],
+            "still": 0,
+            "style": "straight-full",
+            "ticks": 55
+          },
+          {
+            "advance": 5.41,
+            "crossed": true,
+            "end": "(0.256083, 0.0, 1.656718)",
+            "from": -1,
+            "gate": "gate-south",
+            "held": 0,
+            "lateral_at_plane": -0.24,
+            "peak_step": 0.104,
+            "reset_seen": false,
+            "seam_step": 0.104,
+            "sign": -1,
+            "solid_crossings": 0,
+            "stage": 3,
+            "stationary_obstacles": [],
+            "still": 0,
+            "style": "diagonal-full",
+            "ticks": 62
+          },
+          {
+            "advance": 4.93,
+            "crossed": true,
+            "end": "(0.000001, 0.0, -1.731401)",
+            "from": 1,
+            "gate": "gate-east",
+            "held": 0,
+            "lateral_at_plane": 0.0,
+            "peak_step": 0.104,
+            "reset_seen": false,
+            "seam_step": 0.104,
+            "sign": 1,
+            "solid_crossings": 0,
+            "stage": 3,
+            "stationary_obstacles": [],
+            "still": 0,
+            "style": "straight-full",
+            "ticks": 55
+          },
+          {
+            "advance": 5.41,
+            "crossed": true,
+            "end": "(-0.256083, 0.0, -1.656736)",
+            "from": 1,
+            "gate": "gate-east",
+            "held": 0,
+            "lateral_at_plane": 0.24,
+            "peak_step": 0.104,
+            "reset_seen": false,
+            "seam_step": 0.104,
+            "sign": 1,
+            "solid_crossings": 0,
+            "stage": 3,
+            "stationary_obstacles": [],
+            "still": 0,
+            "style": "diagonal-full",
+            "ticks": 62
+          },
+          {
+            "advance": 4.93,
+            "crossed": true,
+            "end": "(0.000001, 0.0, -1.731401)",
+            "from": 1,
+            "gate": "gate-east",
+            "held": 0,
+            "lateral_at_plane": 0.0,
+            "peak_step": 0.104,
+            "reset_seen": false,
+            "seam_step": 0.104,
+            "sign": -1,
+            "solid_crossings": 0,
+            "stage": 3,
+            "stationary_obstacles": [],
+            "still": 0,
+            "style": "straight-full",
+            "ticks": 55
+          },
+          {
+            "advance": 5.41,
+            "crossed": true,
+            "end": "(0.256084, 0.0, -1.656736)",
+            "from": 1,
+            "gate": "gate-east",
+            "held": 0,
+            "lateral_at_plane": -0.24,
+            "peak_step": 0.104,
+            "reset_seen": false,
+            "seam_step": 0.104,
+            "sign": -1,
+            "solid_crossings": 0,
+            "stage": 3,
+            "stationary_obstacles": [],
+            "still": 0,
+            "style": "diagonal-full",
+            "ticks": 62
+          },
+          {
+            "advance": 4.93,
+            "crossed": true,
+            "end": "(-0.000001, 0.0, 1.7314)",
+            "from": -1,
+            "gate": "gate-east",
+            "held": 0,
+            "lateral_at_plane": 0.0,
+            "peak_step": 0.104,
+            "reset_seen": false,
+            "seam_step": 0.104,
+            "sign": 1,
+            "solid_crossings": 0,
+            "stage": 3,
+            "stationary_obstacles": [],
+            "still": 0,
+            "style": "straight-full",
+            "ticks": 55
+          },
+          {
+            "advance": 5.42,
+            "crossed": true,
+            "end": "(-0.396101, 0.0, 1.66612)",
+            "from": -1,
+            "gate": "gate-east",
+            "held": 0,
+            "lateral_at_plane": 0.09,
+            "peak_step": 0.104,
+            "reset_seen": false,
+            "seam_step": 0.104,
+            "sign": 1,
+            "solid_crossings": 0,
+            "stage": 3,
+            "stationary_obstacles": [],
+            "still": 0,
+            "style": "diagonal-full",
+            "ticks": 63
+          },
+          {
+            "advance": 4.93,
+            "crossed": true,
+            "end": "(-0.000001, 0.0, 1.7314)",
+            "from": -1,
+            "gate": "gate-east",
+            "held": 0,
+            "lateral_at_plane": 0.0,
+            "peak_step": 0.104,
+            "reset_seen": false,
+            "seam_step": 0.104,
+            "sign": -1,
+            "solid_crossings": 0,
+            "stage": 3,
+            "stationary_obstacles": [],
+            "still": 0,
+            "style": "straight-full",
+            "ticks": 55
+          },
+          {
+            "advance": 5.41,
+            "crossed": true,
+            "end": "(0.256082, 0.0, 1.656733)",
+            "from": -1,
+            "gate": "gate-east",
+            "held": 0,
+            "lateral_at_plane": -0.24,
+            "peak_step": 0.104,
+            "reset_seen": false,
+            "seam_step": 0.104,
+            "sign": -1,
+            "solid_crossings": 0,
+            "stage": 3,
+            "stationary_obstacles": [],
+            "still": 0,
+            "style": "diagonal-full",
+            "ticks": 62
+          }
+        ]
+      }
+    },
+    "full-cycle-run": {
+      "path": "/tmp/havenline-t03-independent/full-cycle-run/test.log",
+      "sha256": "516916a6e6c0499a1f155572a163f4817667a64f02cc7679ffa8e48448eac143",
+      "source_sha256_index": "5b95688bebb61c4d4d01047e87b8fa22c869ad1208216d8c65164cbdba101358",
+      "observations": {
+        "cycles": [
+          {
+            "first_close_tick": 118,
+            "first_open_tick": 9,
+            "first_tick_beyond_approach": 71,
+            "gate": "gate-south",
+            "last_depth_m": 4.16638374328613,
+            "latched_at_start": true,
+            "latched_end_tick": 158,
+            "max_open_rad": 1.5707963267949,
+            "max_step_rad": 0.0383333333333333,
+            "outside_start": true,
+            "valid": true
+          },
+          {
+            "first_close_tick": 118,
+            "first_open_tick": 9,
+            "first_tick_beyond_approach": 71,
+            "gate": "gate-south",
+            "last_depth_m": 4.16638803482056,
+            "latched_at_start": true,
+            "latched_end_tick": 158,
+            "max_open_rad": 1.5707963267949,
+            "max_step_rad": 0.0383333333333333,
+            "outside_start": false,
+            "valid": true
+          },
+          {
+            "first_close_tick": 118,
+            "first_open_tick": 9,
+            "first_tick_beyond_approach": 71,
+            "gate": "gate-east",
+            "last_depth_m": 4.16639947891235,
+            "latched_at_start": true,
+            "latched_end_tick": 158,
+            "max_open_rad": 1.5707963267949,
+            "max_step_rad": 0.0383333333333333,
+            "outside_start": true,
+            "valid": true
+          },
+          {
+            "first_close_tick": 118,
+            "first_open_tick": 9,
+            "first_tick_beyond_approach": 71,
+            "gate": "gate-east",
+            "last_depth_m": 4.16640567779541,
+            "latched_at_start": true,
+            "latched_end_tick": 158,
+            "max_open_rad": 1.5707963267949,
+            "max_step_rad": 0.0383333333333333,
+            "outside_start": false,
+            "valid": true
+          }
+        ],
+        "passed": true
+      }
+    }
+  },
+  "crew_congestion": {
+    "path": "/tmp/havenline-t03/final-tests/qa_camp_gate_routes/test.log",
+    "sha256": "0c4e71b571ecff3ac99ce3b754ddbf2bd85d0ae8212aec5033b868f3884e5a23",
+    "checks": 14,
+    "transits": 12,
+    "opposition_spacing_m": [
+      0.740950644016266,
+      0.741722106933594,
+      0.741731882095337,
+      0.740948557853699
+    ]
+  },
+  "disclosure": [
+    "Scope is f380 Level 1 two-gate fence and work circulation. Historical six-portal T03 and accepted T02 scores are retained.",
+    "B 18–22 source is documented, not directly decoded here. No whole-reference claim outside the scoped grade.",
+    "The two rendered shots cover opening and traversal; independent native trace proves automatic closure. Gate-only review does not certify humanoid motion or all C5 dimensions.",
+    "llvmpipe native capture. Geometry and draw counts are local observations only. No Fold or formal performance score is assigned."
+  ]
+}

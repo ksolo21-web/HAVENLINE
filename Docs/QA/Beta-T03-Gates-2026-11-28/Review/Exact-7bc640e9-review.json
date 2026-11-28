@@ -1,0 +1,579 @@
+{
+  "candidate": "7bc640e931b5b2487c07ac9a3ac4053e240e7d69",
+  "parent": "f380f0c5777de2a96367d99a229d97480b4aacb9",
+  "reviewer": {
+    "builder": "/root",
+    "reviewer": "/root/independent",
+    "independent": true
+  },
+  "candidate_manifest_sha256": "dcadb07023a54f776d31f6cb3f938c630de1602e408def397cc96365f6849363",
+  "exact_git_delta": {
+    "field_lifecycle.gd": {
+      "previous_sha256": null,
+      "current_sha256": "ff9343869ca72a9905ed912d7412b34b7c8cc1e85c2c9a5dc7691ce3c68b98b5"
+    },
+    "tests/qa_camp_gate_routes.gd": {
+      "previous_sha256": "96d6a5269efe0df14fc58784e63eeff7dce3e2c862d6d1e8d37437aeba0e7294",
+      "current_sha256": "afdafee44dc553f8229badca6d01e6688a32654786a11e5216e13c696be78f66"
+    }
+  },
+  "reviewed_predecessor_receipt_sha256": "0c37f238ccaf93f49e194f75bfb198c60074e6b9ab5959796065b02fcb042e58",
+  "baseline_reference_coverage": {
+    "fidelity_source": {
+      "original_id": "B",
+      "B_sha256": "4c9051cbea6df0efa3e7288b13b6d17da46e857274869b0b43d2f96ff6cc79d2",
+      "RF02_windows_s": [
+        [
+          6,
+          10
+        ],
+        [
+          18,
+          22
+        ]
+      ],
+      "viewed_seconds": [
+        6,
+        8,
+        10
+      ],
+      "separately_viewed_motion_excerpt_s": [
+        13.667,
+        14.7
+      ],
+      "late_window_raw_viewed": false
+    },
+    "selected_owner_sheet_commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+    "selected_sheet_receipt_sha256": "5f97dcb788c1c845f9384acb5e95741a9cba76b106ae7cecf0ae3ddc4c581211",
+    "selected_sheet_board_sha256": "5562d12bd03cb921ee9385e064554448b8df0a4d31e0d04691e8c08971ea9bf8"
+  },
+  "scoped_exact_scores": {
+    "C1": {
+      "reference_fidelity": 10,
+      "visual_language": 10,
+      "cross_view_consistency": 10
+    },
+    "C2": {
+      "geometry_contact": 10,
+      "clipping_seams": 10,
+      "intentional_gap_integrity": 10,
+      "cross_view_integrity": 10
+    },
+    "gate_motion_scope": {
+      "hinge_transition_and_attachment": 10,
+      "occupied_threshold_clearance": 10
+    }
+  },
+  "no_unresolved_scoped_visual_defects": true,
+  "averaged": false,
+  "new_frames_source_and_gate_state_verified": [
+    {
+      "draw_calls": 395,
+      "file": "Court-fence.jpg",
+      "gate_states": {
+        "gate-east": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        },
+        "gate-south": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        }
+      },
+      "position": [
+        1.0,
+        0.0,
+        1.20000004768372
+      ],
+      "primitives": 567202,
+      "size": [
+        460,
+        760
+      ],
+      "zoom": 1.0,
+      "path": "save-final-native/Court-fence.jpg",
+      "sha256": "927790fddc2c060ecf55915a529c77f39ce13dabd461cbe7978509962325df8c",
+      "prior_image_sha256": "f69eb2c9241c6f6f994bd68f739cfe6160db4f6f7b6f485bfe77cbc30e5d0606",
+      "bytes_equal": false
+    },
+    {
+      "draw_calls": 379,
+      "file": "gate-south-closed-1x.jpg",
+      "gate_states": {
+        "gate-east": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        },
+        "gate-south": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        }
+      },
+      "position": [
+        0.0,
+        0.0,
+        6.8600001335144
+      ],
+      "primitives": 561709,
+      "size": [
+        460,
+        760
+      ],
+      "zoom": 1.0,
+      "path": "save-final-native/gate-south-closed-1x.jpg",
+      "sha256": "1894d85470a90a86855fde310a74f7ccf182530214217efa2327c081453b4897",
+      "prior_image_sha256": "e1531de909387cc83d5abba65349e74a749bd5e67f9a8cae5aed750a97cadc25",
+      "bytes_equal": false
+    },
+    {
+      "draw_calls": 291,
+      "file": "gate-south-closed-2x.jpg",
+      "gate_states": {
+        "gate-east": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        },
+        "gate-south": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        }
+      },
+      "position": [
+        0.0,
+        0.0,
+        6.8600001335144
+      ],
+      "primitives": 523391,
+      "size": [
+        460,
+        760
+      ],
+      "zoom": 2.0,
+      "path": "save-final-native/gate-south-closed-2x.jpg",
+      "sha256": "299c7fc148eca6d62d9320ea4c037a489909eeb244fc87fcf7755cb0a5a0e4ff",
+      "prior_image_sha256": "fb6ff271c2d1b5da4065f0aa9006e371b986b9717d60e75924afb07a22f97be4",
+      "bytes_equal": false
+    },
+    {
+      "draw_calls": 291,
+      "file": "gate-south-open-2x.jpg",
+      "gate_states": {
+        "gate-east": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        },
+        "gate-south": {
+          "active": true,
+          "radians": 1.5707963267949,
+          "target_open": true
+        }
+      },
+      "position": [
+        0.0,
+        0.0,
+        6.8600001335144
+      ],
+      "primitives": 523391,
+      "size": [
+        460,
+        760
+      ],
+      "zoom": 2.0,
+      "path": "save-final-native/gate-south-open-2x.jpg",
+      "sha256": "392c3883ba92b9ec37ab07700dac74b4ae22390897002f00b71428660a41bd83",
+      "prior_image_sha256": "d3b25e457d062b88cf4237a57629e7f734d97319a06c981dd33e76240edfb201",
+      "bytes_equal": false
+    },
+    {
+      "draw_calls": 379,
+      "file": "gate-south-open-1x.jpg",
+      "gate_states": {
+        "gate-east": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        },
+        "gate-south": {
+          "active": true,
+          "radians": 1.5707963267949,
+          "target_open": true
+        }
+      },
+      "position": [
+        0.0,
+        0.0,
+        6.8600001335144
+      ],
+      "primitives": 561709,
+      "size": [
+        460,
+        760
+      ],
+      "zoom": 1.0,
+      "path": "save-final-native/gate-south-open-1x.jpg",
+      "sha256": "83d0ff03e39e07aa6f363f33102700c0ff6abcb62a5f3712b5c320bdb524e36e",
+      "prior_image_sha256": "5fe04104b1a954a744560a973600c070d510f15f0f33182ff433b7ba7b88e0c1",
+      "bytes_equal": false
+    },
+    {
+      "draw_calls": 319,
+      "file": "gate-south-inside-2x.jpg",
+      "gate_states": {
+        "gate-east": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        },
+        "gate-south": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        }
+      },
+      "position": [
+        0.219999998807907,
+        0.0,
+        3.82000017166138
+      ],
+      "primitives": 549927,
+      "size": [
+        460,
+        760
+      ],
+      "zoom": 2.0,
+      "path": "save-final-native/gate-south-inside-2x.jpg",
+      "sha256": "ebcf5d760166b3d4ba1d1dddf868f3e6a5e73f768614682d7d1c08106f855a10",
+      "prior_image_sha256": "2939ee76e9e0f6a2286f041917b01bf1621ff90d0e3a1fd6cc7c3164f9480f85",
+      "bytes_equal": false
+    },
+    {
+      "draw_calls": 480,
+      "file": "gate-east-closed-1x.jpg",
+      "gate_states": {
+        "gate-east": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        },
+        "gate-south": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        }
+      },
+      "position": [
+        11.460000038147,
+        0.0,
+        -6.38186250512263e-08
+      ],
+      "primitives": 618092,
+      "size": [
+        460,
+        760
+      ],
+      "zoom": 1.0,
+      "path": "save-final-native/gate-east-closed-1x.jpg",
+      "sha256": "5b10aa92b1581f97533993a09963b4a8980cb63a7f6dadc22baa32f81d682ac8",
+      "prior_image_sha256": "91dd067046883afc48b69689701f89954c44a2fdf06ed1580669036bedbe8b20",
+      "bytes_equal": false
+    },
+    {
+      "draw_calls": 413,
+      "file": "gate-east-closed-2x.jpg",
+      "gate_states": {
+        "gate-east": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        },
+        "gate-south": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        }
+      },
+      "position": [
+        11.460000038147,
+        0.0,
+        -6.38186250512263e-08
+      ],
+      "primitives": 638022,
+      "size": [
+        460,
+        760
+      ],
+      "zoom": 2.0,
+      "path": "save-final-native/gate-east-closed-2x.jpg",
+      "sha256": "6f6522f1192ff4da9ec0d3cbe3d81ac89b7cea95fbc461f95198b148f1ed157a",
+      "prior_image_sha256": "efe3ccd6326ad40fd1fafd709e7e286f7dec75285d85ad4a759bcdcece63cb9d",
+      "bytes_equal": false
+    },
+    {
+      "draw_calls": 398,
+      "file": "gate-east-open-2x.jpg",
+      "gate_states": {
+        "gate-east": {
+          "active": true,
+          "radians": 1.5707963267949,
+          "target_open": true
+        },
+        "gate-south": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        }
+      },
+      "position": [
+        11.460000038147,
+        0.0,
+        -6.38186250512263e-08
+      ],
+      "primitives": 625577,
+      "size": [
+        460,
+        760
+      ],
+      "zoom": 2.0,
+      "path": "save-final-native/gate-east-open-2x.jpg",
+      "sha256": "67f73e36fe8211721089afb286c64cd24db6f0565d5ed83d1cc777fb786ec25a",
+      "prior_image_sha256": "cc1d99495c489c2eed246562a960e6d759f0a7409bec886d58dec6590f2211c3",
+      "bytes_equal": false
+    },
+    {
+      "draw_calls": 480,
+      "file": "gate-east-open-1x.jpg",
+      "gate_states": {
+        "gate-east": {
+          "active": true,
+          "radians": 1.5707963267949,
+          "target_open": true
+        },
+        "gate-south": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        }
+      },
+      "position": [
+        11.460000038147,
+        0.0,
+        -6.38186250512263e-08
+      ],
+      "primitives": 618092,
+      "size": [
+        460,
+        760
+      ],
+      "zoom": 1.0,
+      "path": "save-final-native/gate-east-open-1x.jpg",
+      "sha256": "72b794b83fc54e6f9018e48354ee70aa28386c969736faf54fd6addd975a154d",
+      "prior_image_sha256": "24298392fdd7c15e8d689f7f285d0c91ac663579d88f17120fb2feac5db1d630",
+      "bytes_equal": false
+    },
+    {
+      "draw_calls": 390,
+      "file": "gate-east-inside-2x.jpg",
+      "gate_states": {
+        "gate-east": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        },
+        "gate-south": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        }
+      },
+      "position": [
+        8.42000007629395,
+        0.0,
+        -0.219999924302101
+      ],
+      "primitives": 639510,
+      "size": [
+        460,
+        760
+      ],
+      "zoom": 2.0,
+      "path": "save-final-native/gate-east-inside-2x.jpg",
+      "sha256": "6790097af60d994b3db2cbd177ead5b6302d21ea8da6884019da1d24b8294945",
+      "prior_image_sha256": "8b68f7db6391d6af56f6668d9c7a2a86595e99dc423c0c286410d8a4c2c1959b",
+      "bytes_equal": false
+    },
+    {
+      "draw_calls": 267,
+      "file": "Fence-join-2x.jpg",
+      "gate_states": {
+        "gate-east": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        },
+        "gate-south": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        }
+      },
+      "position": [
+        -7.65000009536743,
+        0.0,
+        6.55000019073486
+      ],
+      "primitives": 513637,
+      "size": [
+        460,
+        760
+      ],
+      "zoom": 2.0,
+      "path": "save-final-native/Fence-join-2x.jpg",
+      "sha256": "bedfa6f0328afc5b5fff699e6802bfdca6ec9dfa8952b578d39e1f5174175ed4",
+      "prior_image_sha256": "6400eb2f239c2e07217a1551cebb572a9ed4fd70bac43cdd5461703fb1411a16",
+      "bytes_equal": false
+    },
+    {
+      "draw_calls": 532,
+      "file": "Court-fence.jpg",
+      "gate_states": {
+        "gate-east": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        },
+        "gate-south": {
+          "active": true,
+          "radians": 0.0,
+          "target_open": false
+        }
+      },
+      "position": [
+        1.0,
+        0.0,
+        1.20000004768372
+      ],
+      "primitives": 949566,
+      "size": [
+        3840,
+        2160
+      ],
+      "zoom": 1.0,
+      "path": "save-final-4k/Court-fence.jpg",
+      "sha256": "197a9688bd7f99dabd538257bbf8df9deef0aaa1f3df7f6506615a678ee36ca1",
+      "prior_image_sha256": "3973432d718effa695962a032b782b0b9fe03e07147d2db571c87fa531eff318",
+      "bytes_equal": false
+    }
+  ],
+  "motion_inherited_from": {
+    "candidate": "f380f0c5777de2a96367d99a229d97480b4aacb9",
+    "movie_path": "/tmp/havenline-t03/final-replay/Loaded-two-gates.mp4",
+    "sha256": "32c10c1ceb6e8f1290181e993437c3d4da1d1446e0e066c102319c2c518964d5",
+    "actually_decoded_frames": 38,
+    "footage_scope": "Two continuous 60 Hz simulation sequences sampled at 15 fps, south inbound 1× and east outbound 2×, from closed through opening and traversal. Rendered segments end before re-latching. 4 prior exact independent full-cycle touch traces cover automatic closure, with gate and route/render source unchanged.",
+    "prior_full_cycle_trace": "/tmp/havenline-t03-independent/full-cycle-run/test.log"
+  },
+  "exact_runtime_scope": {
+    "new_worker_plus_legacy_check_receipt": {
+      "path": "/tmp/havenline-t03/final-save-routes/test.log",
+      "sha256": "4fcccdc6caa7570cff89322ebd4ec1d2a658af0f2bd10048cb09969922cf96cb",
+      "checks": 22,
+      "errors": [],
+      "legacy_wall_checks": [
+        "legacy save beside wall 0 recovers to its own side -1.0",
+        "legacy save beside wall 0 recovers to its own side 1.0",
+        "legacy save beside wall 1 recovers to its own side -1.0",
+        "legacy save beside wall 1 recovers to its own side 1.0",
+        "legacy save beside wall 2 recovers to its own side -1.0",
+        "legacy save beside wall 2 recovers to its own side 1.0",
+        "legacy save beside wall 3 recovers to its own side -1.0",
+        "legacy save beside wall 3 recovers to its own side 1.0"
+      ]
+    },
+    "cold_old_position_round_trip": {
+      "source_digest_file_sha256": "e0929f724b6e01faeee74af5205e0819aebd1647815fcc676818060c2807e1a8",
+      "programme_sha256": "ca0e73a7232804f46dd5a570ebbd21ac613bd11d9a9f596550c127f91af8ddda",
+      "fixtures": [
+        {
+          "path": "/tmp/havenline-t03-independent/cold-save/inside-record.log",
+          "sha256": "7071c3752facd5c324e350bda564415c5e2afe2bff3880617c775f687ef8c8f5",
+          "observation": {
+            "cargo": 3,
+            "checks": {
+              "camp_stage_3": true,
+              "disk_ledger_written": true,
+              "old_unsafe_location_encoded": true,
+              "profile_opened": true
+            },
+            "health": 17,
+            "phase": "record",
+            "pos": "(-5.8, 0.0, 4.84)",
+            "side": "inside"
+          }
+        },
+        {
+          "path": "/tmp/havenline-t03-independent/cold-save/inside-reopen.log",
+          "sha256": "eacb5e80eee6e26771daa18086006af0cf63685f82c679e3bc1d95483a60c083",
+          "observation": {
+            "cargo": 3,
+            "checks": {
+              "camp_stage_3": true,
+              "legal_physical_side": true,
+              "old_health_yaw_and_cargo_retained": true,
+              "old_paid_status_unsullied": true,
+              "outdoor_clearance_keeps_old_lateral_coordinate": true,
+              "profile_opened": true
+            },
+            "health": 17,
+            "phase": "reopen",
+            "pos": "(1.72, 0.0, 1.8)",
+            "side": "inside"
+          }
+        },
+        {
+          "path": "/tmp/havenline-t03-independent/cold-save/outside-record.log",
+          "sha256": "783c8688ce05b463e9d86a08e970d3c2b587477a38d16a17702749a9eed05419",
+          "observation": {
+            "cargo": 3,
+            "checks": {
+              "camp_stage_3": true,
+              "disk_ledger_written": true,
+              "old_unsafe_location_encoded": true,
+              "profile_opened": true
+            },
+            "health": 17,
+            "phase": "record",
+            "pos": "(-5.8, 0.0, 5.96)",
+            "side": "outside"
+          }
+        },
+        {
+          "path": "/tmp/havenline-t03-independent/cold-save/outside-reopen.log",
+          "sha256": "e5fbbd4b8d0bd05343f1d88059a1f827230e17c5fee8fbe41c9efb3f120f54d1",
+          "observation": {
+            "cargo": 3,
+            "checks": {
+              "camp_stage_3": true,
+              "legal_physical_side": true,
+              "old_health_yaw_and_cargo_retained": true,
+              "old_paid_status_unsullied": true,
+              "outdoor_clearance_keeps_old_lateral_coordinate": true,
+              "profile_opened": true
+            },
+            "health": 17,
+            "phase": "reopen",
+            "pos": "(-5.8, 0.0, 6.035)",
+            "side": "outside"
+          }
+        }
+      ]
+    }
+  },
+  "exceptions": "Later RF02 B 18–22 remains documented but unviewed. New direct 1×, 2×, and native 4K stills match prior scored art visually. No aggregate C1/C2 rounding. Formal C5 humanoid, C6 measured workload and Fold hardware remain unscored."
+}

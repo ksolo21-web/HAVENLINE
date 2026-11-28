@@ -1,0 +1,9 @@
+# Havenline T03 final candidate review
+
+Exact `7bc640e931b5b2487c07ac9a3ac4053e240e7d69` updates older save recovery beside the widened fence. The production comparison with `f380f0c5` adds one shared save-load clearance calculation that uses the existing capsule radius and fence thickness. Its only other change is fixture coverage for older positions. The reviewed runtime gate, fence, material and route source stays byte-identical. [Exact source and checks](./Exact-7bc640e9-review.json)
+
+I decoded thirteen new native stills including both actual closed and open gates at 1× and 2×, and a native 3840 × 2160 court view. The gate-angle stamps, camera anchors and zoom match the earlier captures. The JPG bytes differ, and the reviewed visual geometry and materials match. **C1 remains 10/10 on all three dimensions, and C2 remains 10/10 on all four.** The scoped gate-motion scores remain 10/10. The earlier 38 directly decoded movie frames cover opening and passage at both gates. The separate four full-cycle real touch traces also reach automatic re-latching. [New state comparisons](./Exact-save-final-board.jpg)
+
+The exact 22-check gate and worker suite passes. Its eight older positions stay on their original side with unchanged HP and no boundary intersection. I also wrote two full disk saves at the older 0.56 m clearance and cold-opened them in separate Godot processes. The exterior player kept the same lateral coordinate and moved to 0.635 m from the fence center. The interior player reloaded at the existing safe camp start. Both kept 17 HP, their yaw, three carried wood units and the paid expansions and cooker. [Cold file and current native receipts](./Exact-7bc640e9-review.json)
+
+Later RF02 footage at 18–22 seconds remains documented without direct playback. The scores apply to the scoped visual and gate work. Fold hardware, formal workload and humanoid motion remain unscored.

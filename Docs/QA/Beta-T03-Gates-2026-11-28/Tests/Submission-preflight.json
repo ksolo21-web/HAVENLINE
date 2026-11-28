@@ -1,0 +1,43 @@
+{
+  "candidate": "7bc640e931b5b2487c07ac9a3ac4053e240e7d69",
+  "source_policy": "a4e643aeb563b6f9cfda8b840c0651d13326eec8:Docs/Production/PERFORMANCE_BUDGETS.json",
+  "comparison_scene": "Purchased stage-three camp, both gates in scene, ordinary camera at (1, 0, 1.2), zoom 1",
+  "governed_soft_budgets": {
+    "draw_calls": 650,
+    "visible_triangles": 2000000
+  },
+  "scoped_submission_preflight": "PASS",
+  "capture_measurements": {
+    "before": {
+      "draw_calls": 374,
+      "submitted_primitives": 547932,
+      "pixels": [
+        460,
+        760
+      ],
+      "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+      "render_scale": 1.0
+    },
+    "final-native": {
+      "draw_calls": 395,
+      "submitted_primitives": 567202,
+      "pixels": [
+        460,
+        760
+      ],
+      "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+      "render_scale": 1.0
+    },
+    "final-4k": {
+      "draw_calls": 532,
+      "submitted_primitives": 949566,
+      "pixels": [
+        3840,
+        2160
+      ],
+      "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+      "render_scale": 1.0
+    }
+  },
+  "performance_scope": "Frame submission counts. Physical testing waived for the current playtest. Sustained frame time, thermals and complete C6 profile remain unscored."
+}
