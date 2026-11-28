@@ -2,11 +2,9 @@ extends Node3D
 
 const House = preload("res://field_storage_house.gd")
 const Rules = preload("res://field_progression.gd")
-const Layout = preload("res://field_stock_layout.gd")
 const Offer = preload("res://field_offer_floor.gd")
 const SITE := Vector3(-3.05,0,-3.45)
 const APRON := Vector3(-3.05,0,-1.18)
-const BIN_SCALE := .38
 const BALANCE_PIXEL_SIZE := .0046
 const Reach = preload("res://field_reach.gd")
 # Outer faces of the authored storehouse walls, in its local floor plane.
@@ -55,10 +53,12 @@ func install(host) -> void:
 	upgrade_mark.name = "StorehouseUpgradePlot"
 	for id: String in Rules.STORAGE:
 		world.carry.define_receiver(id,apron if id == Rules.STORAGE[0] else upgrade_mark)
-	world.carry.set_storage_layout(landing_position,BIN_SCALE)
+	world.carry.set_storage_layout(landing_position)
 
 func landing_position(kind: String, index: int) -> Vector3:
-	return bins[kind].to_global(Layout.position(kind,index)*BIN_SCALE)
+	var size: Vector3 = world.FieldArt.unit_extents(kind)
+	var bay: Node3D = bins[kind]
+	return bay.to_global(Vector3.UP * index * size.y)
 
 func at_apron(at: Vector3) -> bool:
 	return Reach.plot_distance(apron,at) <= Reach.NEAR

@@ -50,6 +50,7 @@ var last_origin := Vector3.ZERO
 var sweep_cache := {}
 var current_tip := Vector3.ZERO
 var height := .89
+var axe_ground_pass := false
 var hit_geometry: MeshInstance3D
 var hit_position := Vector3.ZERO
 var hit_travel := Vector3.ZERO
@@ -134,7 +135,7 @@ func begin(tool: String) -> void:
 	for s in slots: s.before=s.after
 
 func desired_height() -> float:
-	return .28 if equipped=="pickaxe" else .89
+	return .28 if equipped == "pickaxe" or axe_ground_pass else .89
 
 func offset(angle: float) -> Vector3:
 	return (CAMERA_RIGHT*(sin(angle)*RADIUS_SIDE) + CAMERA_NEAR*(cos(angle)*RADIUS_DEPTH)) * reach_scale

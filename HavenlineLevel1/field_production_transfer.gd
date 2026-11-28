@@ -2,10 +2,7 @@ extends Node3D
 ## Goods on the machine remain in the station's own space throughout the cycle.
 ## The settlement journal exclusively owns quantities, pickup, and payments.
 const Art = preload("res://field_art.gd")
-const DISH = preload("res://assets/customer_counter/cooked_game_meat.glb")
-const PLANKS = preload("res://assets/shore_workshops/finished_planks.glb")
-const BLOCK = preload("res://assets/shore_workshops/dressed_block.glb")
-const FINISHED = {"wood": PLANKS, "stone": BLOCK, "meat": DISH}
+const FINISHED := {"wood": "planks", "stone": "blocks", "meat": "meal"}
 
 # Visible mouths of the saw blade, drill bit, and cooker chamber.
 const TOOL = {
@@ -58,7 +55,7 @@ func setup(host) -> void:
 			inlets[kind] = machine.to_local(world.processors.input_position(kind))
 			outlets[kind] = tray.position
 		raw_goods[kind] = _mount(machine, Art.make(kind), "MovingInput")
-		finished_goods[kind] = _mount(machine, FINISHED[kind].instantiate(), "MovingOutput")
+		finished_goods[kind] = _mount(machine, Art.make(FINISHED[kind]), "MovingOutput")
 
 
 func _mount(machine: Node3D, art: Node3D, label: String) -> Node3D:
@@ -69,7 +66,8 @@ func _mount(machine: Node3D, art: Node3D, label: String) -> Node3D:
 
 
 func _meal_slot(index: int) -> Vector3:
-	return Vector3(0, floori(index / 2.0) * .265, (-.145 if index % 2 == 0 else .145))
+	var size := Art.unit_extents("meal")
+	return Vector3(0., floori(index / 2.0) * size.y, (index % 2 - .5) * (size.z + .012))
 
 
 func set_raw_stock(amount: int) -> void:
@@ -77,10 +75,10 @@ func set_raw_stock(amount: int) -> void:
 	shown_raw = amount
 	while raw_tray.get_child_count() < amount:
 		var i := raw_tray.get_child_count()
-		var cut := Art.make("meat",.47)
+		var cut := Art.make("meat")
 		raw_tray.add_child(cut)
-		cut.position = Vector3(0.,floori(i/2.)*.105,(i%2-.5)*.26)
-		cut.rotation.y = .11 if i%2 else -.11
+		var size := Art.unit_extents("meat")
+		cut.position = Vector3(0., floori(i / 2.) * size.y, (i % 2 - .5) * (size.z + .012))
 	for i in raw_tray.get_child_count(): raw_tray.get_child(i).visible = i < amount
 
 func set_meal_stock(amount: int) -> void:
@@ -89,7 +87,7 @@ func set_meal_stock(amount: int) -> void:
 		return
 	shown_meals = total
 	while meal_rack.get_child_count() < total:
-		var item: Node3D = DISH.instantiate()
+		var item := Art.make("meal")
 		item.name = "Portion%d" % (meal_rack.get_child_count() + 1)
 		item.position = _meal_slot(meal_rack.get_child_count())
 		meal_rack.add_child(item)

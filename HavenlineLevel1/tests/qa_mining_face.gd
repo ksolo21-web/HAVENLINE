@@ -16,6 +16,7 @@ var photographed := {}
 var stone_ids := []
 var initial_stock := 0
 var visual_at_release := {}
+var all_strikes_use_orbiting_axes := true
 
 func image_pair(label: String) -> void:
 	if images.is_empty() or photographed.has(label):return
@@ -39,6 +40,10 @@ func step_mine() -> void:
 		counts[evt.event] = counts.get(evt.event,0)+1
 	if mine.strikes != previous and mine.strikes in [1,2]:
 		var tag := "contact-"+str(mine.strikes)
+		var kit = field.character_kit
+		all_strikes_use_orbiting_axes = all_strikes_use_orbiting_axes and kit.active and kit.equipped == "axe"
+		for slot: Dictionary in kit.slots:
+			all_strikes_use_orbiting_axes = all_strikes_use_orbiting_axes and not slot.pickaxe.visible
 		milestones[tag] = clock
 		assertions[tag+" grants no stone"] = typed_drops().is_empty() and int(field.inventory.carried.stone) == initial_stock
 		image_pair(tag)
@@ -91,6 +96,8 @@ func run() -> void:
 		await step_mine()
 		if first_release>=0 and clock>=first_release+33:break
 	var broken := first_release>=0
+	if not baseline:
+		assertions["the player's automatic axes mine without an orbiting pickaxe"] = broken and all_strikes_use_orbiting_axes
 	var expected_yield := 3 if baseline else 6
 	if not broken:image_pair("stalled")
 	assertions["three strikes from the original northern approach"]=broken and counts.get("impact_stone",0)==3

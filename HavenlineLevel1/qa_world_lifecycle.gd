@@ -111,7 +111,7 @@ func run() -> void:
 	var p:=Vector2(31,20)
 	var rock=f.add_resource_source("qa-rock","stone",p)
 	f.actor.position=rock.position+Vector3.RIGHT*1.4
-	f.character_kit.equipped="pickaxe"
+	f.character_kit.equipped = f.selected_tool()
 	for i in 2:
 		rock.cooldown=0
 		check("stone_hit_"+str(i),f.accept_contact(rock))

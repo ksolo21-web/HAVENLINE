@@ -13,10 +13,20 @@ const PATHS := {
 	"metal": "res://assets/field/metal.glb",
 	"slate": "res://assets/field/slate.glb",
 }
-const WIDTHS := {"money": .26, "meal": .36, "planks": .48, "blocks": .39, "wood": .53, "stone": .40, "meat": .39, "wolf": 2.4, "coal": .39, "metal": .42, "slate": .47}
-const GROUND_WIDTHS := {"wood": .64, "stone": .54, "meat": .53, "coal": .50, "metal": .53, "slate": .59}
+# Compact item sizing from the owner's R4 core and selected raw/processed sheets.
+# Normalize the longest horizontal side once in model space.
+const WIDTHS := {"money": .44, "meal": .46, "planks": .48, "blocks": .48, "wood": .46, "stone": .50, "meat": .45, "wolf": 2.4, "coal": .53, "metal": .51, "slate": .59}
+const GROUND_WIDTHS := {"wood": WIDTHS.wood, "stone": WIDTHS.stone, "meat": WIDTHS.meat, "coal": WIDTHS.coal, "metal": WIDTHS.metal, "slate": WIDTHS.slate}
 static var source_bounds := {}
 static var source_scenes := {}
+
+static func unit_extents(kind: String) -> Vector3:
+	if not source_bounds.has(kind):
+		var probe := make(kind)
+		if not probe: return Vector3.ZERO
+		probe.free()
+	var raw: Vector3 = source_bounds[kind].size
+	return raw * (float(WIDTHS[kind]) / maxf(.0001, maxf(raw.x, raw.z)))
 
 static func _bounds(node: Node, parent_xform: Transform3D, found: Array[AABB]) -> void:
 	var transform := parent_xform

@@ -232,11 +232,18 @@ func _step_character(dt: float, speed: float) -> void:
 		left -= step
 		character_kit.finish_turn()
 
+func orbit_can_contact(body: Node3D) -> bool:
+	if body is ResourceRockScript:
+		return character_kit.equipped == "pickaxe"
+	if body is ResourceTreeScript:
+		return character_kit.equipped == "axe"
+	return true
+
 func _resolve_swirl_contacts() -> void:
 	for body: Node3D in surfaces:
 		if character_kit.hit_this_turn.has(body) or not reachable(body):
 			continue
-		if (body is ResourceRockScript and character_kit.equipped != "pickaxe") or (body is ResourceTreeScript and character_kit.equipped != "axe"):
+		if not orbit_can_contact(body):
 			continue
 		var part: MeshInstance3D = surfaces[body][0]
 		var mesh: TriangleMesh = surfaces[body][1]

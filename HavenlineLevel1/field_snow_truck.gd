@@ -518,13 +518,7 @@ func collect_drops(rows:Array[Dictionary]) -> void:
 func _show_unload(cargo:Dictionary) -> void:
 	var exchange = world.settlement_loop.exchange
 	for kind: String in cargo:
-		var parcel: Node3D
-		if kind=="money":
-			parcel = exchange.Cash.instantiate()
-		elif exchange.RAW_FOR.has(kind):
-			parcel = exchange.Models.FINISHED[exchange.RAW_FOR[kind]].instantiate()
-		else:
-			parcel = LooseArt.make(kind,.37)
+		var parcel := LooseArt.make(kind)
 		if not is_instance_valid(parcel):continue
 		add_child(parcel)
 		var origin := body.to_global(Vector3(0,1.45,.8))

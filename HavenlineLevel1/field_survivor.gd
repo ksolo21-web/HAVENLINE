@@ -118,7 +118,7 @@ func setup(host: Node3D) -> void:
 	pack.visual_top = 1.50*2.30/.80
 	pack.fit_to_viewport = false
 	pack.setup(pack_view,actor,world.FieldArt.make)
-	pack.rack.scale = Vector3.ONE*.80
+	pack.rack.scale = Vector3.ONE
 	_sync_pack()
 	var journal: Dictionary = world.inventory.settlement
 	camp_cursor = posmod(int(journal.served)+int(journal.processed_wood)+int(journal.processed_stone),CAMP_DUTIES.size())
@@ -263,7 +263,7 @@ func _next_supply() -> String:
 	return ""
 
 func _begin_supply_run(kind: String) -> void:
-	supply_model = world.FieldArt.make(kind,.43)
+	supply_model = world.FieldArt.make(kind)
 	actor.add_child(supply_model)
 	supply_model.hide()
 	_sync_pack()
@@ -1397,7 +1397,7 @@ func _unload_stream(dt: float) -> void:
 		var packet := unload_packets[next_packet]
 		next_packet += 1
 		var kind: String = packet.kind
-		var item: Node3D = world.FieldArt.make(kind,.37)
+		var item: Node3D = world.FieldArt.make(kind)
 		add_child(item)
 		item.global_position = _rack_from(kind)
 		delivery_stream.append({"kind":kind,"amount":packet.amount,"mesh":item,"from":item.global_position,"age":0.0})
@@ -1476,7 +1476,7 @@ func _deliver_to_plot(dt: float) -> void:
 		if spend_kind.is_empty():
 			_stop_plot_work()
 			return
-		transfer_mesh = world.FieldArt.make(spend_kind,.38)
+		transfer_mesh = world.FieldArt.make(spend_kind)
 		add_child(transfer_mesh)
 		waiting = 0.
 	waiting += dt

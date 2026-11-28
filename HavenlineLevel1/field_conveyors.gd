@@ -5,12 +5,7 @@ const Rules=preload("res://field_settlement.gd")
 const Logistics=preload("res://field_logistics.gd")
 const Progress=preload("res://field_progression.gd")
 const Art=preload("res://field_art.gd")
-const Dish=preload("res://assets/customer_counter/cooked_game_meat.glb")
-const Products={
-	"planks":preload("res://assets/shore_workshops/finished_planks.glb"),
-	"blocks":preload("res://assets/shore_workshops/dressed_block.glb"),
-	"meal":Dish,"stored_meal":Dish,"meal_to_store":Dish
-}
+const PRODUCT_FORM := {"stored_meal": "meal", "meal_to_store": "meal"}
 const LANES=Logistics.LANES
 const SPEED:=3.6
 const COOKER_HEADWAY:=.62
@@ -38,7 +33,7 @@ func setup(host,settlement)->void:
 	add_child(network)
 	network.install(world)
 	for lane:String in LANES:
-		var item:Node3D=Products[lane].instantiate() if Products.has(lane) else Art.make(lane,.45)
+		var item: Node3D = Art.make(PRODUCT_FORM.get(lane, lane))
 		item.name=lane.capitalize()+"InTransit"
 		add_child(item)
 		item.hide()
@@ -49,11 +44,11 @@ func setup(host,settlement)->void:
 		world.depot.house.add_child(bay)
 		bay.position=SHELVES[product]
 		shelf_items[product]=bay
+		var size := Art.unit_extents(product)
 		for i in 4:
-			var item:Node3D=Products[product].instantiate()
+			var item := Art.make(product)
 			bay.add_child(item)
-			item.scale*=.40
-			item.position=Vector3(0,(i/2)*.095,(i%2-.5)*.17)
+			item.position = Vector3(0., floori(i / 2.) * size.y, (i % 2 - .5) * (size.z + .015))
 			item.hide()
 
 func buffer_position(slot:int=0)->Vector3:
@@ -137,7 +132,7 @@ func _place_cargo(lane:String,unit:Node3D,t:float)->void:
 	var basis:=Basis(long_axis,across.cross(long_axis).normalized(),across)
 	if station and station.inset(unit.global_position):
 		var arrival_slot:int=world.inventory.settlement.market.sold.meal+world.inventory.settlement.counter_stock
-		basis=station.cargo_basis(unit.global_position,tangent).scaled(Vector3.ONE*station.stock_scale(unit.global_position))
+		basis=station.cargo_basis(unit.global_position,tangent)
 		unit.global_position=station.freight_position(unit.global_position,arrival_slot)
 	unit.global_basis=basis
 

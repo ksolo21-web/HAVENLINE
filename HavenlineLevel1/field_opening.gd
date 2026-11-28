@@ -422,22 +422,30 @@ func _site_starter_quarry() -> void:
 		resource_rock.position = Vector3(-2.3,0.,11.75)
 
 func selected_tool() -> String:
-	# Select against the bank face. Using its centre drops the pick on the
-	# outer edge of real strikes, especially when a pine is also in reach.
+	return "axe"
+
+func orbit_can_contact(_body: Node3D) -> bool:
+	return character_kit.equipped == "axe"
+
+func _step_character(dt: float, speed: float) -> void:
+	character_kit.axe_ground_pass = quarry_in_reach()
+	super(dt, speed)
+
+func quarry_in_reach() -> bool:
+	# Sweep close to a reachable bank without changing the player's weapon.
 	for rock in rocks:
 		if not reachable(rock): continue
 		var part: MeshInstance3D = surfaces[rock][0]
 		var bounds: AABB = part.global_transform * part.mesh.get_aabb()
 		var nearest: Vector3 = actor.global_position.clamp(bounds.position,bounds.end)
 		if field_env.travel_clear(actor.global_position,nearest):
-			return "pickaxe"
-	return super()
+			return true
+	return false
 
 func accept_contact(body: Node3D) -> bool:
 	if not field_ready or persist_blocked or reset_time > 0:
 		return false
-	if body in trees and character_kit.equipped != "axe": return false
-	if body in rocks and character_kit.equipped != "pickaxe": return false
+	if character_kit.equipped != "axe": return false
 	var landed := false
 	if body in trees:
 		tree_input_sequence += 1

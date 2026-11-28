@@ -5,7 +5,7 @@ const Character = preload("res://assets/characters/Character1Fresh.glb")
 const Motion = preload("res://field_character_motion.gd")
 const WorkSwing = preload("res://forester_work_swing.gd")
 const AXE_GRIPS := [Vector3(.392,-.19,0.), Vector3(.447,-.73,0.)]
-const PICK_GRIPS := WorkSwing.PICK_GRIPS
+const PICK_GRIPS := [WorkSwing.PICK_GRIPS[1], WorkSwing.PICK_GRIPS[0]]
 var actor: Node3D
 var model: Node3D
 var gait = preload("res://gait_motor.gd").new()
@@ -65,13 +65,16 @@ func clear_tool_path(tool: Node3D, mining: bool, progress: float) -> void:
 	var hold_axis := (grip_center - tip).normalized()
 	basis *= Basis(hold_axis, deg_to_rad(-52. if mining else 40.))
 	if mining:
-		basis = Basis(Vector3.FORWARD, -.28) * Basis(Vector3.RIGHT, .26) * basis
+		var seated := smoothstep(.545, .60, phase) * (1. - smoothstep(.68, .77, phase))
+		basis = Basis(Vector3.UP, .18 * seated) * Basis(Vector3.FORWARD, -.28) * Basis(Vector3.RIGHT, .26) * basis
 	else:
-		basis = Basis(Vector3.UP, .22) * basis
+		var cutting := smoothstep(.31, .39, phase) * (1. - smoothstep(.64, .73, phase))
+		basis = Basis(Vector3.UP, .22 - .14 * cutting) * Basis(Vector3.RIGHT, -.18 * cutting) * basis
 	if mining:
 		var parked := 1. - smoothstep(.48, .585, phase) + smoothstep(.69, .78, phase)
 		var lift := smoothstep(.06, .29, phase) * (1. - smoothstep(.36, .49, phase))
-		var ready := Vector3(.10, .62 + .13 * lift, .40) + basis * (tip - grip_center)
+		var settle := smoothstep(.37, .404, phase) * (1. - smoothstep(.43, .48, phase))
+		var ready := Vector3(.10 + .024 * settle, .62 + .13 * lift, .40 + .020 * settle) + basis * (tip - grip_center)
 		point = point.lerp(ready, parked)
 	tool.transform = Transform3D(basis, point - basis * tip)
 
@@ -112,7 +115,7 @@ func advance(dt: float, job: String, landed: bool) -> void:
 		elif not landed:
 			last_contact = &""
 		motion.pose(Motion.select(0., actor.rotation.y, actor.rotation.y, cue, progress, Motion.COMPANION), .55, actor.work_strike_point)
-		motion.grip_tool(actor.mining_tool if mining else actor.tool, PICK_GRIPS if mining else AXE_GRIPS, .28 if mining else .21, mining)
+		motion.grip_tool(actor.mining_tool if mining else actor.tool, PICK_GRIPS if mining else AXE_GRIPS, .28 if mining else .21, mining, phase)
 	else:
 		cue = motion.action
 		motion.advance(dt, speed, false, Motion.COMPANION)

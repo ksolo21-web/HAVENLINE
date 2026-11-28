@@ -4,7 +4,7 @@ extends RefCounted
 const WIDTH := 2.48
 const LENGTH := 4.93
 const INLET_SEPARATION := .59
-const ROAST := .89
+const ROAST := preload("res://field_art.gd").WIDTHS.meal
 const CAPACITY := 8
 const ROW_PITCH := .61
 const STOCK_Y := .66
@@ -70,9 +70,6 @@ func position_in_queue(rank:int,sold:int) -> int:
 func at_pickup(feet:Vector3) -> bool:
 	var u:=along(feet)
 	return u>2.35 and u<LENGTH+.83 and absf(feet.z-origin.z)<WIDTH*.5+.76
-
-func stock_scale(at:Vector3) -> float:
-	return lerpf(1.,ROAST/.44,smoothstep(-.05,.55,along(at)))
 
 func build(art) -> void:
 	var chassis=preload("res://field_conveyor_receiver_art.gd").new()

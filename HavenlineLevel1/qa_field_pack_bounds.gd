@@ -42,6 +42,12 @@ func margin(kind: String) -> float:
 			edge=minf(edge,camera.unproject_position(vertex).y)
 	return edge/view.size.y
 
+func capacity_at_crown(kind: String) -> int:
+	var seat := carry._pack_position(kind, 0).y
+	var packet_height := Art.unit_extents(kind).y
+	var layers := floori((Carry.PACK_TOP - seat + .0001) / packet_height)
+	return layers * (2 if kind == "wood" else 1)
+
 func check_distinct_bays() -> void:
 	var footprint := {}
 	for kind: String in Ledger.KINDS:
@@ -124,7 +130,10 @@ func run() -> void:
 						lowest=minf(lowest,margin(kind))
 						check(item != null and item.global_position.is_equal_approx(carry._place("carry",kind,amount-1)),kind+" visible representative")
 						var shown := visible_count(kind)
-						check(shown==amount if amount==3 else shown<=amount,kind+" preserves ordinary loads")
+						var capacity := mini(amount, capacity_at_crown(kind))
+						check(shown > 0 and shown <= capacity, kind+" fits the load without changing unit size")
+						if amount == 3 and ratio == 1.:
+							check(shown == capacity, kind+" uses the available shelf space at baseline zoom")
 						var geometry_top:float = item.position.y+carry.measured[kind].y
 						check(geometry_top<=Carry.PACK_TOP+.001,kind+" keeps the top of the actual mesh at the standing keeper's crown")
 						if amount>=37:
@@ -180,7 +189,7 @@ func run() -> void:
 	var old_pos: Vector3 = wood[1].position
 	check(carry.pickup("switch-to-mixed", "stone", Vector3(2,0,1), .85), "typed stone pickup reserves the other column")
 	var entering: Dictionary = carry.flights[0]
-	check(is_equal_approx(entering.mesh.rotation.y,.85) and is_equal_approx(entering.mesh.scale.x,Art.GROUND_WIDTHS.stone/Carry.WIDTH.stone), "flight starts at the real dropped heading and size")
+	check(is_equal_approx(entering.mesh.rotation.y, .85) and entering.mesh.scale.is_equal_approx(Vector3.ONE), "flight retains the actual drop heading, width and height")
 	check(wood[1].position.is_equal_approx(old_pos), "an incoming stone leaves the wood course in its bay")
 	carry.advance(.4)
 	check(wood[1].position.is_equal_approx(old_pos) and entering.mesh.global_transform.is_equal_approx(top("stone").global_transform), "mixed pickup reaches its separate physical slot")
@@ -224,7 +233,7 @@ func run() -> void:
 		for i in 3:
 			check(carry.pickup("mixed-%s-%d" % [kind,i],kind,bin.position), kind+" pickup earned")
 			carry.advance(.5)
-		check(visible_count(kind)==3,kind+" three transfers seated")
+		check(book.carried[kind] == 3 and visible_count(kind) == mini(3, capacity_at_crown(kind)), kind+" three receipts and all fitting packets seated")
 	for kind: String in Ledger.KINDS:
 		var departing := top(kind).global_transform
 		check(carry.deposit_storage(kind),kind+" deposit dispatched")

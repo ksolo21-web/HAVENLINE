@@ -8,7 +8,6 @@ const Art = preload("res://field_art.gd")
 const COUNTER = preload("res://assets/customer_counter/self_service_counter.glb")
 const ORDER_PLATE = preload("res://assets/customer_counter/order_plate.svg")
 const ORDER_ITEM = preload("res://assets/customer_counter/roast_order.png")
-const MONEY = preload("res://assets/customer_counter/banded_notes.glb")
 const CENTER_X := 2.8
 const HALF_BAY := 1.825
 const HALF_DEPTH := .955
@@ -241,7 +240,7 @@ func _step_visitor(entry: Dictionary, target: Vector3, dt: float) -> bool:
 	if entry.has("food"):
 		for i in entry.food.size():
 			var food: Node3D = entry.food[i]
-			food.global_position = _guest_palm(entry,"right") + visitor.global_basis * Vector3(-.15,.01+i*.075,.04)
+			food.global_position = _guest_palm(entry,"right") + visitor.global_basis * Vector3(-.15,.01 + float(food.get_meta("buyer_stack", 0.)),.04)
 	return visitor.position.is_equal_approx(target)
 
 func _walk_queue(dt: float) -> void:
@@ -293,7 +292,8 @@ func _board_stock(kind: String, slot: int) -> Vector3:
 	var x := -1.16
 	if kind == "planks": x = -.52
 	elif kind == "blocks": x = .14
-	return to_global(Vector3(x + .19 * (slot % 2), 1.088 + .11 * floori(slot/2.), .075 + .035 * (slot % 2)))
+	var size := Art.unit_extents(kind)
+	return to_global(Vector3(x, 1.088 + size.y * slot, .075))
 
 func _guest_palm(entry: Dictionary, side: String) -> Vector3:
 	var palm := entry[side] as BoneAttachment3D
@@ -328,6 +328,7 @@ func _prepare_sale(order: Dictionary) -> void:
 	sale_order = int(order.id)
 	sale_elapsed = 0.
 	paid_amount = int(order.price)
+	var stack_height := 0.
 	for kind: String in Market.PRODUCTS:
 		for slot in int(order.goods.get(kind, 0)):
 			var from_belt:=kind=="meal" and _has_serving_belt()
@@ -337,7 +338,9 @@ func _prepare_sale(order: Dictionary) -> void:
 				# on its rollers throughout a mixed or partial basket sale.
 				var available:=clampi(Market.available(world.inventory.settlement,kind),1,4)
 				source_slot=maxi(0,available-1-slot)
-			var item := Art.make(kind, _meal_width() if from_belt else .33)
+			var item := Art.make(kind)
+			item.set_meta("buyer_stack", stack_height)
+			stack_height += Art.unit_extents(kind).y
 			item.hide()
 			add_child(item)
 			item.global_position = stock_position(kind,source_slot)
@@ -353,16 +356,14 @@ func _present_from_receiver(visual:Dictionary,buyer:Dictionary,index:int) -> voi
 	var piece:Node3D=visual.item
 	var front:Vector3=food_rest.global_position+Vector3(.12*index,.04+.10*index,-.39)
 	var body:Node3D=buyer.body
-	var hand:=_guest_palm(buyer,"right")+body.global_basis*Vector3(-.15,.01+.075*index,.04)
+	var hand:=_guest_palm(buyer,"right")+body.global_basis*Vector3(-.15,.01 + float(piece.get_meta("buyer_stack", 0.)),.04)
 	var elapsed:=maxf(0.,sale_elapsed-index*.04)
 	var on_board:=FOOD_TO_BOARD+EXCHANGE_TIME*.36
 	if elapsed<on_board:
 		var ratio:=elapsed/on_board
 		piece.global_position=_arc(visual.source,front,ratio,.32)
-		piece.scale=Vector3.ONE*lerpf(1.,.64,smoothstep(.62,1.,ratio))
 	else:
 		piece.global_position=_arc(front,hand,(elapsed-on_board)/(.38*EXCHANGE_TIME),.17)
-		piece.scale=Vector3.ONE*.64
 	piece.show()
 
 func _serve(dt: float) -> void:
@@ -379,8 +380,7 @@ func _serve(dt: float) -> void:
 			_clear_presentations()
 			return
 		sale_committed = true
-		cash = MONEY.instantiate()
-		cash.scale=Vector3.ONE*1.30
+		cash = Art.make("money")
 		add_child(cash)
 		exchange_event.emit("counter_trade",food_rest.global_position)
 	var t := clampf((sale_elapsed-FOOD_TO_BOARD)/EXCHANGE_TIME,0,1)
@@ -390,7 +390,7 @@ func _serve(dt: float) -> void:
 		var visual: Dictionary = sale_goods[i]
 		var piece: Node3D = visual.item
 		piece.show()
-		var destination := _guest_palm(buyer,"right") + body.global_basis * Vector3(-.15,.01+.075*i,.04)
+		var destination := _guest_palm(buyer,"right") + body.global_basis * Vector3(-.15,.01 + float(piece.get_meta("buyer_stack", 0.)),.04)
 		var stock:Vector3=visual.source
 		var reach := (t-.12-i*.065)/.49
 		if visual.receiver_meal:
@@ -425,22 +425,18 @@ func cash_in_exchange() -> int:
 	return paid_amount if (sale_elapsed-FOOD_TO_BOARD)/EXCHANGE_TIME<.48 else 0
 
 func show_cash(balance: int) -> void:
-	var visible_count := clampi(balance-cash_in_exchange(),0,8) if active else 0
+	var visible_count := clampi(balance-cash_in_exchange(),0,2) if active else 0
 	while cash_pile.size() < visible_count:
-		var note: Node3D = MONEY.instantiate()
+		var note := Art.make("money")
 		note.name = "CounterCash"
-		note.scale = Vector3.ONE*1.04
 		add_child(note)
 		cash_pile.append(note)
 	for i in cash_pile.size():
 		var note: Node3D = cash_pile[i]
 		note.visible = i < visible_count
 		if note.visible:
-			note.position = payment_rest.position + Vector3(.29*(i%2)-.065,.115*floori(i/4.),.20*(floori(i/2.)%2)-.025)
-
-func _meal_width() -> float:
-	var station=world.settlement_loop.conveyors.network.receiver
-	return station.ROAST if station else .44
+			var size := Art.unit_extents("money")
+			note.position = payment_rest.position + Vector3(0., size.y * i, 0.)
 
 func show_goods(journal: Dictionary) -> void:
 	var serving:=_has_serving_belt()
@@ -454,7 +450,7 @@ func show_goods(journal: Dictionary) -> void:
 		# piece; the stock behind it advances one row in that column.
 		var needed:int=capacity if wide and count>0 else count
 		while pile.size()<needed:
-			var resource:=Art.make(kind,.29)
+			var resource := Art.make(kind)
 			resource.name="Counter"+kind.capitalize()
 			resource.hide()
 			add_child(resource)
@@ -475,7 +471,6 @@ func show_goods(journal: Dictionary) -> void:
 				else:
 					piece.global_position=target
 				piece.rotation.y=-PI*.5 if wide else 0.
-				piece.scale=Vector3.ONE*(_meal_width()/.29 if kind=="meal" and serving else 1.)
 			piece.visible=visible_piece
 
 func advance(dt: float) -> void:

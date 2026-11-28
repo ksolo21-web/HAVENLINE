@@ -57,7 +57,7 @@ func configure(id: String) -> void:
 		mining_tool = ApprovedTools.PICK.instantiate()
 		add_child(mining_tool)
 		mining_tool.hide()
-		bundle = preload("res://field_art.gd").make("wood",.46)
+		bundle = preload("res://field_art.gd").make("wood")
 		add_child(bundle)
 		bundle.position = Vector3(0,.58,.235)
 		bundle.hide()

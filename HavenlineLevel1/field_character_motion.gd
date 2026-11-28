@@ -264,7 +264,7 @@ func _pose_arm(chain: Array, axes: Basis, wrist: Vector3, side: float, weight: f
 	_solve_arm(chain, hand.origin.lerp(desired, weight), outside, weight, axes.x * side)
 	GloveClearance.solve(rig, actor, chain)
 
-func grip_tool(tool: Node3D, grips: Array, brace_limit: float, mining: bool) -> void:
+func grip_tool(tool: Node3D, grips: Array, brace_limit: float, mining: bool, phase: float) -> void:
 	var axes := (rig.global_basis.inverse() * actor.global_basis).orthonormalized()
 	# Keep the head and hood back while the shoulders feed the shaft forward.
 	var lean := Basis(axes.x, -.35)
@@ -280,9 +280,10 @@ func grip_tool(tool: Node3D, grips: Array, brace_limit: float, mining: bool) -> 
 		var across := -sign_x * hold.y
 		var fingers := (palm - shoulder).slide(across).normalized()
 		# Cross the wrist around the shaft rather than send the cuff along it.
-		var wrist_roll := .58
+		var roll_during_cut := smoothstep(.32, .40, phase) * (1. - smoothstep(.66, .75, phase))
+		var wrist_roll := .58 if mining else .58
 		if side == 1:
-			wrist_roll = .89 if mining else -.90
+			wrist_roll = .89 if mining else -.90 + .25 * roll_during_cut
 		fingers = fingers.rotated(across, wrist_roll)
 		var frame := Basis(across, fingers, across.cross(fingers))
 		wrists.append(palm - frame.y * .05)
@@ -322,10 +323,11 @@ func grip_tool(tool: Node3D, grips: Array, brace_limit: float, mining: bool) -> 
 		var upper := rig.get_bone_global_pose(chain[0]).origin
 		var away := (upper - handle_center).slide(shaft).normalized()
 		var bend := axes * Vector3(sign_x, -.74, .08) + away * 2.1
-		_solve_arm(chain, wrists[side], bend, 1., axes.x * sign_x)
+		var sleeve_roll := -.62 if not mining and side == 0 else 0.
+		_solve_arm(chain, wrists[side], bend, 1., axes.x * sign_x, sleeve_roll)
 		_rotate(chain[2], hand_frames[side])
 
-func _solve_arm(chain: Array, wrist: Vector3, elbow_hint: Vector3, weight: float, lateral: Vector3) -> void:
+func _solve_arm(chain: Array, wrist: Vector3, elbow_hint: Vector3, weight: float, lateral: Vector3, cuff_roll := 0.) -> void:
 	var upper := rig.get_bone_global_pose(chain[0])
 	var lower := rig.get_bone_global_pose(chain[1])
 	var hand := rig.get_bone_global_pose(chain[2])
@@ -369,7 +371,10 @@ func _solve_arm(chain: Array, wrist: Vector3, elbow_hint: Vector3, weight: float
 	var shoulder_turn := Quaternion(upper.origin.direction_to(lower.origin), upper.origin.direction_to(elbow))
 	var elbow_turn := Quaternion(lower.origin.direction_to(hand.origin), elbow.direction_to(endpoint))
 	_rotate(chain[0], Basis(shoulder_turn) * upper.basis)
-	_rotate(chain[1], Basis(elbow_turn) * lower.basis)
+	var cuff := Basis(elbow_turn) * lower.basis
+	if not is_zero_approx(cuff_roll):
+		cuff = Basis(elbow.direction_to(endpoint), cuff_roll) * cuff
+	_rotate(chain[1], cuff)
 	_rotate(chain[2], Basis(elbow_turn) * hand.basis)
 
 func sockets() -> Dictionary:

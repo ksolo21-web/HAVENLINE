@@ -166,11 +166,22 @@ func run() -> void:
 		readings["industrial receiver"]={"outer_m":apparatus.WIDTH,"length_m":apparatus.LENGTH,"intake_span_m":apparatus.inlet("meal").distance_to(apparatus.inlet("stored_meal")),"intake_high_m":1.33,"stock_y_m":apparatus.STOCK_Y,"portion_m":apparatus.ROAST,"slots":occupied.size()}
 	var art=preload("res://field_art.gd")
 	for raw:String in ["wood","stone","meat"]:
-		var raw_bounds:AABB=art.source_bounds[raw]
-		var cross_width:=.45*raw_bounds.size.z/maxf(raw_bounds.size.x,raw_bounds.size.z)
+		var size: Vector3 = art.unit_extents(raw)
+		var cross_width := size.z
 		var socket_width:float=network.gauge.SOCKET
 		check(raw+" cargo clears the standard warehouse throat",cross_width<socket_width)
 		readings[raw+" cargo"]={"width_across_deck_m":cross_width,"port_m":socket_width}
+	var live_unit: Node3D = belts.goods.meal
+	var shelf_unit: Node3D = belts.shelf_items.meal.get_child(0)
+	var size: Vector3 = art.unit_extents("meal")
+	var invariant := true
+	for progress: float in [.01, .15, .38, .58, .83, .99]:
+		belts._place_cargo("meal", live_unit, progress)
+		var scale_factor: float = live_unit.get_node("GroundedModel").scale.x
+		invariant = invariant and live_unit.global_basis.get_scale().is_equal_approx(Vector3.ONE)
+		invariant = invariant and is_equal_approx(scale_factor, shelf_unit.get_node("GroundedModel").scale.x)
+	check("the same roast size clears the full conveyor and appears on the warehouse shelf", invariant and is_equal_approx(size.x, .46))
+	readings["fixed meal extent"] = str(size)
 	var mills=world.processors
 	check("saw and quarry share the storehouse utility wing",mills.machines.wood.global_position.distance_to(world.depot.house.global_position)<6.5 and mills.machines.stone.global_position.distance_to(world.depot.house.global_position)<6.5)
 	var layout=world.camp_layout

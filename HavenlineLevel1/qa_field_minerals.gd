@@ -31,7 +31,8 @@ func carried_units_are_separate(world) -> bool:
 				return false
 			families[seat] = kind
 			displayed += 1
-		if displayed != int(world.inventory.carried[kind]):
+		var logical: int = world.inventory.carried[kind]
+		if displayed != mini(logical, int(world.carry.presented.get(kind, 0))) or (logical > 0 and displayed == 0):
 			return false
 	return true
 

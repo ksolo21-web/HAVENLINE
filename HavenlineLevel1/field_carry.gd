@@ -9,21 +9,20 @@ const FieldArt = preload("res://field_art.gd")
 const FRAME_PATH := "res://assets/field_pack/carry_frame.glb"
 const WORN_RESOURCE := preload("res://assets/field_pack/worn_resource.gdshader")
 const RACK_SHADER := preload("res://assets/field_pack/portable_material.gdshader")
-const WIDTH := {"wood":.49, "stone":.36, "meat":.29, "coal":.255, "slate":.25, "metal":.255}
+const WIDTH := FieldArt.GROUND_WIDTHS
 # Permanent bays keep unlike resources off one another even when a neighboring
 # bay empties. The wide timber bay has two side-by-side, bark-outward packets
 # per course; the other five bays each hold one vertical stack.
-const BAY_X := {"wood":0.0, "slate":-.642, "coal":-.48, "metal":-.181, "meat":.135, "stone":.521}
-const OUTER_ROW := ["coal", "metal", "meat", "stone"]
+const BAY_X := {"wood": 0., "slate": -.80, "coal": .78, "metal": -.56, "meat": 0., "stone": .53}
+const OUTER_ROW := ["metal", "meat", "stone"]
 const INNER_Z := -.585
-const OUTER_Z := -.938
+const OUTER_Z := -1.085
 const PACK_BASE := .91
 const INNER_RISE := .10
 const TIMBER_PAIR_X := .249
 const MAX_LAYERS := 24
 const BEARER := preload("res://assets/field_pack/pack_bearer.tres")
 const SHELF_SCENE := preload("res://assets/field_pack/expedition_shelf.glb")
-const StockLayout = preload("res://field_stock_layout.gd")
 const INTERVAL := 0.16
 const PAYMENT_INTERVAL := 4.0 / 60.0
 const PICKUP_TIME := 0.29
@@ -42,7 +41,6 @@ var top_status: Control
 var inventory: Inventory
 var actor: Node3D
 var factory: Callable
-var storage_unit_scale := 1.0
 var storage_layout: Callable
 var storage_anchors := {}
 var receivers := {}
@@ -162,8 +160,7 @@ func define_receiver(id: String, anchor: Node3D) -> void:
 	if inventory.costs.has(id) and id not in [HAND, STOCK]:
 		receivers[id] = anchor
 
-func set_storage_layout(layout: Callable, unit_scale := 1.0) -> void:
-	storage_unit_scale = unit_scale
+func set_storage_layout(layout: Callable) -> void:
 	storage_layout = layout
 	sync()
 
@@ -275,17 +272,25 @@ func _layout_pack(counts: Dictionary) -> void:
 func _hand_slot(kind: String, logical_index: int) -> int:
 	return clampi(logical_index, 0, maxi(0, int(presented.get(kind, 0)) - 1))
 
+func _stock_capacity(kind: String) -> int:
+	return maxi(1, floori(.46 / float(measured[kind].y)))
+
 func _visible_units(kind: String, count: int, location: String) -> int:
+	if count <= 0:
+		return 0
 	if location == STOCK:
-		return mini(count, StockLayout.CENTERS[kind].size())
+		return mini(count, _stock_capacity(kind))
 	return mini(count, int(presented.get(kind, 0)))
 
+func _stock_slot(kind: String, index: int) -> int:
+	return clampi(index, 0, _stock_capacity(kind) - 1)
+
 func _floor_position(kind: String, index: int) -> Vector3:
-	var slot := StockLayout.slot(kind, index)
+	var slot := _stock_slot(kind, index)
 	if storage_layout.is_valid():
 		return storage_layout.call(kind, slot)
 	var anchor: Node3D = storage_anchors[kind]
-	return anchor.to_global(StockLayout.position(kind, slot))
+	return anchor.to_global(Vector3.UP * slot * float(measured[kind].y))
 
 func _outstanding(kind: String, endpoint: String, outgoing: bool) -> int:
 	var n := 0
@@ -337,7 +342,7 @@ func _pack_yaw(kind: String, index: int) -> float:
 func _heading(endpoint: String, kind: String, index: int) -> float:
 	if endpoint == HAND:
 		return actor.global_rotation.y + _pack_yaw(kind, _hand_slot(kind,index))
-	return _tier_yaw(kind, StockLayout.slot(kind, index)) if endpoint == STOCK else 0.0
+	return _tier_yaw(kind, _stock_slot(kind, index)) if endpoint == STOCK else 0.0
 
 func _place(position_id: String, kind: String, n: int) -> Vector3:
 	if position_id == HAND:
@@ -402,7 +407,6 @@ func sync(_animate := false) -> void:
 					else:
 						unit.global_position = _floor_position(kind, i)
 						unit.global_rotation.y = _heading(STOCK, kind, i)
-						unit.scale = Vector3.ONE * (storage_unit_scale * StockLayout.width(kind, i) / float(WIDTH[kind]))
 			pieces[key] = pool
 	if frame:
 		finished_goods.raw_frame_loaded = loaded
@@ -448,7 +452,7 @@ func pickup_nearby(candidates: Array) -> Array[String]:
 				visual.free()
 				continue
 			var idx := int(inventory.carried[kind])-count-_outstanding(kind,HAND,true)
-			_start(visual,kind,"",HAND,first.at,idx,PICKUP_TIME,float(FieldArt.GROUND_WIDTHS[kind])/float(WIDTH[kind]),1.,first.yaw,count,false)
+			_start(visual,kind,"",HAND,first.at,idx,PICKUP_TIME,first.yaw,count,false)
 	if not accepted.is_empty(): sync(true)
 	return accepted
 
@@ -491,19 +495,16 @@ func _send(kind: String, source: String, dest: String, dest_index: int, amount :
 	if not _clear_segment(start, _place(dest,kind,dest_index), kind):
 		unit.free()
 		return false
-	var start_scale := storage_unit_scale * StockLayout.width(kind, source_index) / float(WIDTH[kind]) if source == STOCK else 1.0
-	var end_scale := storage_unit_scale * StockLayout.width(kind, dest_index) / float(WIDTH[kind]) if dest == STOCK else 1.0
 	cooldown = INTERVAL if dest == STOCK else PAYMENT_INTERVAL
 	var duration := HOPPER_FLIGHT if dest in ["work:wood", "work:stone", "work:meat"] else SEND_TIME
-	_start(unit, kind, source, dest, start, dest_index, duration, start_scale, end_scale, start_yaw,amount)
+	_start(unit, kind, source, dest, start, dest_index, duration, start_yaw,amount)
 	return true
 
-func _start(unit: Node3D, kind: String, source: String, dest: String, start: Vector3, index: int, duration: float, scale_start: float, scale_end: float, start_yaw: float, amount := 1, refresh := true) -> void:
+func _start(unit: Node3D, kind: String, source: String, dest: String, start: Vector3, index: int, duration: float, start_yaw: float, amount := 1, refresh := true) -> void:
 	add_child(unit)
 	unit.global_position = start
 	unit.global_rotation.y = start_yaw
-	unit.scale = Vector3.ONE * scale_start
-	flights.append({"units":amount,"mesh":unit, "kind":kind, "from":source, "to":dest, "start":start, "index":index, "t":0.0, "duration":duration, "scale_start":scale_start, "scale_end":scale_end, "start_yaw":start_yaw})
+	flights.append({"units":amount,"mesh":unit, "kind":kind, "from":source, "to":dest, "start":start, "index":index, "t":0.0, "duration":duration, "start_yaw":start_yaw})
 	if refresh: sync(true)
 
 func cancel_transfers() -> void:
@@ -558,7 +559,6 @@ func advance(delta: float) -> void:
 			sync(true)
 			continue
 		unit.global_position = next
-		unit.scale = Vector3.ONE * lerpf(flight.scale_start, flight.scale_end, t)
 		unit.global_rotation.y = lerp_angle(flight.start_yaw, _heading(flight.to, flight.kind, index), t)
 		if t >= 1.0:
 			if flight.to == HAND or flight.to == STOCK:
