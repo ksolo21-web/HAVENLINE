@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "review_session_workspace": "/workspace/scratch/9a64cbeeb049",
+  "recorded_utc": "2026-11-28T06:22:50.224805+00:00",
+  "role": "Independent read-only publication-custody reviewer; no Git mutations performed.",
+  "status": "PASS_EXACT_STATIC_PUBLICATION_CUSTODY",
+  "score": 10,
+  "all_mandatory_checks_in_this_scope_pass": true,
+  "scores": {
+    "live_ref_and_commit_identity": 10,
+    "expected_package_tree_identity": 10,
+    "parent_blob_preservation": 10,
+    "selected_art_pdf_and_review_binding_identity": 10,
+    "public_qualification_language": 10,
+    "review_bound_failed_evidence_custody": 10
+  },
+  "score_is_not_an_average": true,
+  "scope": "Exact published static-reference package at commit 8779a5bf66b49262d87ee6d55069c4d0712e5180. This report is not an approval of a later metadata child until its delta/readback is separately verified, and is not native gameplay approval.",
+  "repository": "ksolo21-web/HAVENLINE",
+  "branch": "art/conveyor-reference-scale-2026-11-27",
+  "live_ref_observed": "8779a5bf66b49262d87ee6d55069c4d0712e5180",
+  "commit": "8779a5bf66b49262d87ee6d55069c4d0712e5180",
+  "tree": "6d9981c8b7d2a8bafe877614a4e39efe43f62590",
+  "parent": "2fc474bbbb03d9a242b216d33e8588e028de4ce5",
+  "parent_tree": "acd72b1cb75178b4463122515e7bed70c794faba",
+  "publication_verified": true,
+  "runtime_approved": false,
+  "whole_task_runtime_complete": false,
+  "independent_checks": {
+    "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/REMOTE_PUBLICATION_CHECKS.json",
+    "sha256": "d3eae5be2b02f948b622ee697fa3ace47986863faee5b92d2057bbd0953030f9",
+    "bytes": 245678
+  },
+  "local_publish_manifest": {
+    "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/publish/tree-plan/MANIFEST.json",
+    "sha256": "18246e986f42fee29c845374bb27f210a644eec7641f2c6726c699b1ab9c7b48",
+    "bytes": 240748
+  },
+  "counts": {
+    "package_paths_expected": 711,
+    "remote_package_paths": 711,
+    "remote_package_git_blob_and_size_matches": 711,
+    "local_package_sha256_and_git_blob_rehash_matches": 711,
+    "parent_blobs": 5374,
+    "parent_blobs_unchanged": 5374,
+    "unexpected_added_blobs_outside_art_package": 0,
+    "root_workflow_paths": 0,
+    "selected_png_sheets": 26,
+    "static_coverage_approved": 36,
+    "static_coverage_required": 36
+  },
+  "remote_key_readbacks": [
+    "Live refs/heads/art/conveyor-reference-scale-2026-11-27",
+    "Exact commit object and parent commit object",
+    "Complete untruncated new and base recursive Git trees",
+    "GALLERY.md exact text matches locally reviewed gallery",
+    "SELECTED_ASSET_MANIFEST.json retains 26 selected / 36 approved static rows / runtime false",
+    "F01_FINAL_REVIEW.json retains exact final PNG and PDF hashes and static scope",
+    "N02_R7_REVIEW.json retains exact selected network hash and static scope",
+    "README.md distinguishes 34 carried approvals, 2 fresh repairs and unproved native integration/behavior"
+  ],
+  "key_bindings": {
+    "four_view_png_sha256": "224218e78d7e6803fc207bd582a5be90a3aeea10413b755189ab8fa4c61fb294",
+    "four_view_pdf_sha256": "8f5c039b89f66268824b26b77f59f6c14c71f49d07fb865d49bd568380d0b27a",
+    "expanded_network_png_sha256": "9c59d798f09a1a90834bb706b6fcc983b358424ee9591ed5c8c75c91ba77111a",
+    "selected_manifest_sha256": "89d6d8482201e3c256fde59651e103c602ab6517fcd973e333cc65e1994e7aef",
+    "F01_raw_review_sha256": "d81d453479895b3a81758ac3fbb044e1c65a3602c8ca2e2c720db5ba2172bbf2",
+    "N02_raw_review_sha256": "5170b0b3ec104be5c7de0f20e21a5ff8cf8edabb304bbc949332840157455638"
+  },
+  "historical_diagnostic_disposition": {
+    "recovery_record": {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/publish/recovered-original-evidence/RECOVERY_RECORD.json",
+      "sha256": "4f85960e90cab4aff471bec79abdb99923610b78c0ac6a7c41cd7abdd587b962",
+      "bytes": 1457
+    },
+    "review_required_screenshot_sha256": "7df224d05655d3ce651170abb41dc8e2036cbfe948948627c810682e21897d3b",
+    "review_required_screenshot_bytes": 3988095,
+    "preserved_rejected_pdf_sha256": "be2ab5c0a1ff7a79202104cdeb49de03281721b9bf4c37a792c71fa0a52478ba",
+    "committed_review_required_screenshot_git_blob_sha1": "17610c21bb3aa6ae1053556e594c158b10b4ec41",
+    "review_binding_satisfied": true,
+    "separate_unbound_intermediate_snapshot_sha256": "45e7b35006c248937f926738a4c274559e2228da3d3f0d34465d476da41b85be",
+    "separate_unbound_intermediate_snapshot_status": "UNRESOLVED; not the raw rejected-document review binding. Do not claim that distinct diagnostic intermediate was retained.",
+    "scope_disposition": "The required rejected PDF review and its actual bound screenshot remain available exactly. The unresolved unbound scan is disclosed, not substituted for required evidence."
+  },
+  "defects": [],
+  "permitted_followup_without_art_rescore": {
+    "scope": "Add source/publishing custody evidence and metadata in a normal child of the observed commit using an expected-head lease. This report remains scoped to the exact observed commit.",
+    "allowed_additions": [
+      "This remote review and checks, delivery/readback receipts",
+      "Exact existing R9 input reference images with source map",
+      "Old PDF diagnostic recovery record and exact already-bound evidence custody",
+      "Final publication checkpoint and root package hash-manifest refresh"
+    ],
+    "conditions": [
+      "Keep all 26 selected images, PDF, source map, raw artistic reviews, gallery and core selected/coverage manifest bytes unchanged.",
+      "Preserve all 5374 parent blobs.",
+      "Verify the child diff contains only the declared custody/metadata paths and verify live ref and remote blobs after update.",
+      "Retain runtime_approved false and explicit unproved implementation scope."
+    ],
+    "pending_child_commit_verified": false
+  },
+  "browser_rendering_claimed": false,
+  "native_behavior_review_claimed": false
+}
