@@ -33,8 +33,8 @@ const PATHS := {
 		[Vector3(.19,-.73,.60), Vector3(.21,-.68,.66), Vector3(22,4,3)],
 	],
 	&"dismantle": [
-		[Vector3(-.10,-.51,.70), Vector3(.28,-.64,.55), Vector3(7,-8,0)],
-		[Vector3(-.08,-.48,.79), Vector3(-.28,-.44,.80), Vector3(16,8,3)],
+		[Vector3(-.10,-.51,.70), Vector3(.35,-.62,.58), Vector3(7,-8,0)],
+		[Vector3(-.08,-.48,.79), Vector3(.12,-.42,.88), Vector3(16,8,3)],
 		[Vector3(-.08,-.56,.67), Vector3(.55,-.35,.41), Vector3(2,-18,-8)],
 	],
 	&"deposit": [
@@ -45,12 +45,12 @@ const PATHS := {
 	&"build": [
 		[Vector3(.10,-.83,.38), Vector3(.21,.28,.64), Vector3(-2,-10,-4)],
 		[Vector3(.21,-.75,.46), Vector3(.08,-.50,.80), Vector3(15,7,3)],
-		[Vector3(.07,-.82,.38), Vector3(.10,-.52,.66), Vector3(8,8,3)],
+		[Vector3(.20,-.79,.47), Vector3(.10,-.52,.66), Vector3(8,8,3)],
 	],
 	&"repair": [
-		[Vector3(.29,-.56,.57), Vector3(.12,-.85,.30), Vector3(4,13,2)],
-		[Vector3(-.17,-.26,.85), Vector3(.02,-.80,.39), Vector3(9,-10,-4)],
-		[Vector3(-.11,-.33,.76), Vector3(.07,-.85,.34), Vector3(7,-4,-2)],
+		[Vector3(.29,-.56,.57), Vector3(.34,-.78,.38), Vector3(4,13,2)],
+		[Vector3(-.17,-.26,.85), Vector3(.33,-.75,.48), Vector3(9,-10,-4)],
+		[Vector3(-.11,-.33,.76), Vector3(.38,-.78,.42), Vector3(7,-4,-2)],
 	],
 	&"rescue": [
 		[Vector3(.17,-.75,.54), Vector3(.19,-.78,.51), Vector3(20,0,0)],
@@ -63,9 +63,9 @@ const PATHS := {
 		[Vector3(.15,-.70,.49), Vector3(.14,-.33,.85), Vector3(6,8,2)],
 	],
 	&"attack_contact": [
-		[Vector3(.08,-.42,.70), Vector3(.12,-.37,.64), Vector3(-5,-21,-7)],
-		[Vector3(-.04,-.54,.69), Vector3(-.18,-.30,.92), Vector3(11,20,9)],
-		[Vector3(.00,-.55,.63), Vector3(-.19,-.48,.79), Vector3(10,22,10)],
+		[Vector3(.08,-.42,.70), Vector3(.42,-.35,.68), Vector3(-5,-21,-7)],
+		[Vector3(-.04,-.54,.69), Vector3(.31,-.25,.89), Vector3(11,20,9)],
+		[Vector3(.00,-.55,.63), Vector3(.06,-.44,.83), Vector3(10,22,10)],
 	],
 }
 const BODY_WEIGHT := {
@@ -214,8 +214,11 @@ func _sample(key: StringName, phase: float, at: Vector3) -> Array:
 		if Vector2(towards.x, towards.z).length_squared() > .04:
 			chest.y += clampf(rad_to_deg(atan2(towards.x, towards.z)), -23., 23.) * .62
 	var shift: Array = BODY_WEIGHT[key]
+	var cuff_relax := 0.
+	if key == &"build":
+		cuff_relax = smoothstep(.16, .25, phase) * (1. - smoothstep(.35, .45, phase))
 	return [path[lo][0].lerp(path[hi][0],t), path[lo][1].lerp(path[hi][1],t), chest,
-		shift[lo].lerp(shift[hi],t), smoothstep(0., float(spec[1]), phase) * (1. - smoothstep(float(spec[3]), 1., phase))]
+		shift[lo].lerp(shift[hi],t), smoothstep(0., float(spec[1]), phase) * (1. - smoothstep(float(spec[3]), 1., phase)), cuff_relax]
 
 func pose(state: Dictionary, weight := 1., at := Vector3.INF, prior := {}) -> void:
 	if not state.has("phase") or rig == null or weight <= .001: return
@@ -228,7 +231,9 @@ func pose(state: Dictionary, weight := 1., at := Vector3.INF, prior := {}) -> vo
 		var old_weight := float(old[4]) * float(prior.weight) * (1. - fade)
 		window *= fade
 		if old_weight + window > .001:
-			for i in 4: keys[i] = old[i].lerp(keys[i], window / (old_weight + window))
+			var mix := window / (old_weight + window)
+			for i in 4: keys[i] = old[i].lerp(keys[i], mix)
+			keys[5] = lerpf(float(old[5]), float(keys[5]), mix)
 		window += old_weight
 	if window < .001: return
 	var crouch := window * (1. - smoothstep(.15, 1.65, float(state.speed)))
@@ -244,7 +249,8 @@ func pose(state: Dictionary, weight := 1., at := Vector3.INF, prior := {}) -> vo
 	_rotate(neck, glance * rig.get_bone_global_pose(neck).basis)
 	for side in 2:
 		var wrist: Vector3 = keys[side]
-		_pose_arm(arms[side], axes, wrist, 1. if side == 0 else -1., window)
+		var cuff_relax := float(keys[5]) if side == 0 else 0.
+		_pose_arm(arms[side], axes, wrist, 1. if side == 0 else -1., window, cuff_relax)
 
 func _rotate(joint: int, basis: Basis) -> void:
 	if not original_rotations.has(joint):
@@ -252,7 +258,7 @@ func _rotate(joint: int, basis: Basis) -> void:
 	var parent := rig.get_bone_global_pose(rig.get_bone_parent(joint)).basis.orthonormalized()
 	rig.set_bone_pose_rotation(joint, (parent.transposed() * basis.orthonormalized()).get_rotation_quaternion())
 
-func _pose_arm(chain: Array, axes: Basis, wrist: Vector3, side: float, weight: float) -> void:
+func _pose_arm(chain: Array, axes: Basis, wrist: Vector3, side: float, weight: float, cuff_relax := 0.) -> void:
 	var upper := rig.get_bone_global_pose(chain[0])
 	var lower := rig.get_bone_global_pose(chain[1])
 	var hand := rig.get_bone_global_pose(chain[2])
@@ -262,7 +268,12 @@ func _pose_arm(chain: Array, axes: Basis, wrist: Vector3, side: float, weight: f
 	var low := smoothstep(.24, .74, -wrist.y)
 	var outside := axes * Vector3(side, lerpf(-.63, -.32, low), lerpf(-.27, .46, low))
 	_solve_arm(chain, hand.origin.lerp(desired, weight), outside, weight, axes.x * side)
+	# Keep the relaxed wrist aligned when clearance opens the build sleeve.
+	var local_grip := rig.get_bone_pose_rotation(chain[2])
 	GloveClearance.solve(rig, actor, chain)
+	if cuff_relax > .001:
+		var fitted_grip := rig.get_bone_pose_rotation(chain[2])
+		rig.set_bone_pose_rotation(chain[2], fitted_grip.slerp(local_grip, cuff_relax))
 
 func grip_tool(tool: Node3D, grips: Array, brace_limit: float, mining: bool, phase: float) -> void:
 	var axes := (rig.global_basis.inverse() * actor.global_basis).orthonormalized()
@@ -281,9 +292,9 @@ func grip_tool(tool: Node3D, grips: Array, brace_limit: float, mining: bool, pha
 		var fingers := (palm - shoulder).slide(across).normalized()
 		# Cross the wrist around the shaft rather than send the cuff along it.
 		var roll_during_cut := smoothstep(.32, .40, phase) * (1. - smoothstep(.66, .75, phase))
-		var wrist_roll := .58 if mining else .58
+		var wrist_roll := .58
 		if side == 1:
-			wrist_roll = .89 if mining else -.90 + .25 * roll_during_cut
+			wrist_roll = .89 if mining else -.90 + .70 * roll_during_cut
 		fingers = fingers.rotated(across, wrist_roll)
 		var frame := Basis(across, fingers, across.cross(fingers))
 		wrists.append(palm - frame.y * .05)
@@ -323,7 +334,12 @@ func grip_tool(tool: Node3D, grips: Array, brace_limit: float, mining: bool, pha
 		var upper := rig.get_bone_global_pose(chain[0]).origin
 		var away := (upper - handle_center).slide(shaft).normalized()
 		var bend := axes * Vector3(sign_x, -.74, .08) + away * 2.1
-		var sleeve_roll := -.62 if not mining and side == 0 else 0.
+		var cuff_turn := smoothstep(.48, .525, phase) * (1. - smoothstep(.575, .62, phase))
+		var sleeve_roll := 0.
+		if mining and side == 1:
+			sleeve_roll = -.24 * cuff_turn
+		elif not mining and side == 0:
+			sleeve_roll = -.62
 		_solve_arm(chain, wrists[side], bend, 1., axes.x * sign_x, sleeve_roll)
 		_rotate(chain[2], hand_frames[side])
 

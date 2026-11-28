@@ -43,8 +43,7 @@ func contact(action: StringName, at: Vector3) -> void:
 	motion.contact(action, at)
 
 func clear_tool_path(tool: Node3D, mining: bool, progress: float) -> void:
-	# Use a wider cutting plane for the larger hood. Rotate around the actual
-	# cutting point so its resource contact stays authoritative.
+	# Keep the visible edge at the contact point used by the field worker.
 	var phase := clampf(progress, 0., 1.)
 	var impact := smoothstep(.35, .56, phase) * (1. - smoothstep(.72, .91, phase))
 	var direction := .16 * impact
@@ -53,29 +52,30 @@ func clear_tool_path(tool: Node3D, mining: bool, progress: float) -> void:
 	var grip_center: Vector3 = (grips[0] + grips[1]) * .5
 	var point := tool.transform * tip
 	var basis := Basis(Vector3.UP, direction) * Basis(Vector3.RIGHT, -.10 * impact) * tool.basis
+	var wind := smoothstep(.07, .31, phase) * (1. - smoothstep(.38, .60, phase)) if mining else 0.
 	if mining:
-		# A flanking stance lets the tool travel beside the higher hood.
-		# Its cutting axis stays level while the shaft winds up and releases.
-		var x := Vector3(-.98, 0., -.20).normalized()
-		var y := basis.y.slide(x).normalized()
-		basis = Basis(x, y, x.cross(y)).scaled(basis.get_scale())
-	# Fit the held tool to the compact gloves. The visible blade and the
-	# geometry used for contact still share this exact transform.
-	basis = basis.scaled(Vector3.ONE * (.68 if mining else .76))
-	var hold_axis := (grip_center - tip).normalized()
-	basis *= Basis(hold_axis, deg_to_rad(-52. if mining else 40.))
-	if mining:
-		var seated := smoothstep(.545, .60, phase) * (1. - smoothstep(.68, .77, phase))
-		basis = Basis(Vector3.UP, .18 * seated) * Basis(Vector3.FORWARD, -.28) * Basis(Vector3.RIGHT, .26) * basis
+		# The cut runs beside the leading shoulder. Keep the shaft more
+		# upright so the lower grip never requires threading it past the belt.
+		var tooth_axis := Vector3(-.94, .47, -.24).normalized()
+		var press := smoothstep(.40, .60, phase) * (1. - smoothstep(.70, .85, phase))
+		var handle_axis := Vector3(-.06, 1., .035 - .12 * press).slide(tooth_axis).normalized()
+		# Raise the pick outside the shoulder and square its tooth before contact.
+		var swing := Basis(Vector3.RIGHT, -.21 * wind) * Basis(Vector3.FORWARD, -.35 * wind)
+		basis = (swing * Basis(tooth_axis, handle_axis, tooth_axis.cross(handle_axis))).scaled(tool.basis.get_scale() * .58)
 	else:
+		basis = basis.scaled(Vector3.ONE * .76)
+		basis *= Basis((grip_center - tip).normalized(), deg_to_rad(40.))
 		var cutting := smoothstep(.31, .39, phase) * (1. - smoothstep(.64, .73, phase))
 		basis = Basis(Vector3.UP, .22 - .14 * cutting) * Basis(Vector3.RIGHT, -.18 * cutting) * basis
 	if mining:
-		var parked := 1. - smoothstep(.48, .585, phase) + smoothstep(.69, .78, phase)
+		var parked := 1. - smoothstep(.44, .56, phase) + smoothstep(.69, .78, phase)
 		var lift := smoothstep(.06, .29, phase) * (1. - smoothstep(.36, .49, phase))
 		var settle := smoothstep(.37, .404, phase) * (1. - smoothstep(.43, .48, phase))
-		var ready := Vector3(.10 + .024 * settle, .62 + .13 * lift, .40 + .020 * settle) + basis * (tip - grip_center)
+		var ready := Vector3(.10 + .024 * settle, .62 + .13 * lift, .52 + .020 * settle) + basis * (tip - grip_center)
+		# The hands carry the arc from the guard into the cutting plane.
+		ready += Vector3(.10, .185, .015) * wind
 		point = point.lerp(ready, parked)
+		point.y += .15 * wind * (1. - parked)
 	tool.transform = Transform3D(basis, point - basis * tip)
 
 func advance(dt: float, job: String, landed: bool) -> void:
@@ -115,7 +115,7 @@ func advance(dt: float, job: String, landed: bool) -> void:
 		elif not landed:
 			last_contact = &""
 		motion.pose(Motion.select(0., actor.rotation.y, actor.rotation.y, cue, progress, Motion.COMPANION), .55, actor.work_strike_point)
-		motion.grip_tool(actor.mining_tool if mining else actor.tool, PICK_GRIPS if mining else AXE_GRIPS, .28 if mining else .21, mining, phase)
+		motion.grip_tool(actor.mining_tool if mining else actor.tool, PICK_GRIPS if mining else AXE_GRIPS, .32 if mining else .21, mining, phase)
 	else:
 		cue = motion.action
 		motion.advance(dt, speed, false, Motion.COMPANION)

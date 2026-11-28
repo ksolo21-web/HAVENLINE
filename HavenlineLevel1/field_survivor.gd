@@ -173,6 +173,16 @@ func set_core_appearance(enabled: bool) -> bool:
 	if world.tracks.living.has(actor):
 		world.tracks.living[actor].sole_sample = Callable(core_motion.gait, "snow_contact_points") if enabled else Callable()
 		world.tracks.reset_actor(actor)
+	if phase in ["mining", "mining_approach"] and is_instance_valid(assigned_bank):
+		# Re-enter the working stance for the new body. An accepted strike
+		# remains on the bank and its existing receipt is never issued again.
+		actor.work_strike_point = Vector3.INF
+		actor.pose("idle", 0.)
+		route = _bank_path(assigned_bank, actor.global_position)
+		if route.is_empty():
+			_go_home_bulk()
+		else:
+			phase = "mining_approach"
 	return true
 
 func _motion_contact(action: StringName, at: Vector3) -> void:
@@ -1134,7 +1144,10 @@ func _work_face(site: Node3D, feet: Vector3, mining: bool) -> Vector3:
 		if result.is_empty(): continue
 		var face := geometry.to_global(result.position)
 		var depth := feet.distance_to(Vector3(face.x,feet.y,face.z))
-		if depth<.25 or depth>(.79 if mining else .87): continue
+		var companion_pick := mining and is_instance_valid(core_motion)
+		var near := .60 if companion_pick else .25
+		var far := 1.08 if companion_pick else (.79 if mining else .87)
+		if depth < near or depth > far: continue
 		if not _travel_clear(feet,face,.035): continue
 		return face+toward*(.13 if mining else .052)
 	return Vector3.INF
@@ -1197,22 +1210,27 @@ func _choose_bank(origin: Vector3) -> Node3D:
 		if kind!="stone": score+=80.0
 		if bank.get_meta("field_source_id")==previous_bank: score+=32.0
 		if score>=best: continue
-		var from_bank: Vector3 = bank.position.direction_to(origin)
-		var viable: Array[Vector3] = []
-		for radius: float in [1.39,1.33,1.26,1.14,.97]:
-			for octant: int in [0,1,-1,2,-2,3,-3,4]:
-				var stance: Vector3 = bank.position+from_bank.rotated(Vector3.UP,octant*PI/4)*radius
-				if not _in_work_area(stance) or not _work_face(bank,stance,true).is_finite(): continue
-				outdoor_route.update(world,Vector2(origin.x,origin.z))
-				if outdoor_route.fence.grow(-outdoor_route.CLEARANCE+.39).has_point(Vector2(stance.x,stance.z)): continue
-				viable = _outdoor_path(origin,stance)
-				if not viable.is_empty(): break
-			if not viable.is_empty(): break
+		var viable := _bank_path(bank, origin)
 		if viable.is_empty(): continue
 		best=score
 		selected=bank
 		bank_approach=viable
 	return selected
+
+func _bank_path(bank: Node3D, origin: Vector3) -> Array[Vector3]:
+	var from_bank := bank.global_position.direction_to(origin).slide(Vector3.UP).normalized()
+	if from_bank.is_zero_approx(): from_bank = Vector3.BACK
+	var radii := [1.66, 1.60, 1.54, 1.48, 1.39] if core_motion else [1.39, 1.33, 1.26, 1.14, .97]
+	outdoor_route.update(world, Vector2(origin.x, origin.z))
+	var blocked_side: Rect2 = outdoor_route.fence.grow(-outdoor_route.CLEARANCE + .39)
+	for radius: float in radii:
+		for octant: int in [0, 1, -1, 2, -2, 3, -3, 4]:
+			var stance := bank.global_position + from_bank.rotated(Vector3.UP, octant * PI / 4.) * radius
+			if not _in_work_area(stance) or not _work_face(bank, stance, true).is_finite(): continue
+			if blocked_side.has_point(Vector2(stance.x, stance.z)): continue
+			var path := _outdoor_path(origin, stance)
+			if not path.is_empty(): return path
+	return []
 
 func worker_space(kind: String) -> int:
 	if kind not in RAW_RULES.WORKER_LOAD: return 0
