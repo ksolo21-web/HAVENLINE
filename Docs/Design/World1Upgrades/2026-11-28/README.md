@@ -2,12 +2,16 @@
 
 The active direction is **substantial appearance changes tied to useful production, handling, protection, attack and crew improvements**. The owner now specifies **10 worlds with 50 levels each**, asks for multiple pets and survivors together, and explicitly includes the storage house. World levels, equipment levels and appearance milestones remain separate.
 
+## Current roster addition
+
+Read the [Tumbler and Midnight Man addendum](roster-additions/tumbler-midnight-man/README.md) before treating the retained census as complete current coverage. It registers two additional source-bound families, taking tracked coverage from **99 to 101**, while retaining the **27 authored ladders, 54 stage proposals and seven reviewed images** below. Tumbler is assigned to World 1 by its source; Midnight Man is a new playable identity with world availability and unlock still unassigned. Neither addition inherits an old visual or runtime approval. The addendum also scopes the old generic vehicle-baseline wording specifically to the Snow Truck and binds Tumbler to its separate published design.
+
 ## Active documents
 
 | File | Purpose |
 |---|---|
 | [Purchase-value plan](PURCHASE_VALUE_UPGRADE_PLAN.md) | Readable design proposal: 27 ladders and 54 substantial stages, with retained baselines, working value, material/job flow, space and tradeoffs. |
-| [Machine-readable plan](PURCHASE_VALUE_UPGRADE_PLAN.json) | The complete 99-family disposition crosswalk, implementation dependencies, source identities and unresolved registration work. The 99 records are not 99 approved upgradeable objects. |
+| [Machine-readable plan](PURCHASE_VALUE_UPGRADE_PLAN.json) | The retained 99-family disposition crosswalk, implementation dependencies, source identities and unresolved registration work. Read with the two-record roster addendum; family records are not approved upgradeable objects. |
 | [Sawmill brief](W1VAL-01-BRIEF.json) | Buffered feed and independent manually driven cutting cells; fixed output cradles, clear front/rear operator walks. |
 | [Defense brief](W1VAL-02-BRIEF.json) | Wall/guardwalk and manual finite-ammunition tower proposal. The requested armed image is tool-blocked; the requirement remains open. |
 | [Crew briefs](W1VAL-03-BRIEF.json) | Two crew stage sets, each retaining its full-resolution front/rear master and a separate full-resolution teamwork scene, with exact survivor/pet identities and referenced work objects. |

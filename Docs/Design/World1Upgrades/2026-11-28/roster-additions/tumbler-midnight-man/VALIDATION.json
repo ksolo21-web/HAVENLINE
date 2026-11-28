@@ -1,0 +1,311 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-28",
+  "scope": "Exact-source and structural validation of the additive planning package only. This is not native, visual or release acceptance.",
+  "checks_passed": 16,
+  "checks_required": 16,
+  "all_passed": true,
+  "checks": [
+    {
+      "check": "Exact source-text capture and delta bindings",
+      "passed": true,
+      "detail": "Four UTF-8 source files match Git blob identity, byte length and SHA256."
+    },
+    {
+      "check": "Current source-manifest hash binding",
+      "passed": true,
+      "detail": "The delta binds the current manifest including inherited-source pins."
+    },
+    {
+      "check": "Pinned source tree evidence",
+      "passed": true,
+      "detail": "Four source texts and two image references match complete source Git trees; no image visual review claimed."
+    },
+    {
+      "check": "Inherited planning-source identities",
+      "passed": true,
+      "detail": "Prior census, value plan, task delta and world contract remain exact inherited Git blobs."
+    },
+    {
+      "check": "Historical local package preservation",
+      "passed": true,
+      "detail": {
+        "prior_files": 308,
+        "unchanged_files": 305,
+        "permitted_navigation_changes": [
+          "WORLD1_UPGRADE_REVIEW.md",
+          "Docs/Design/World1Upgrades/2026-11-28/README.md",
+          "Docs/Production/WorldProgression/2026-11-28-10x50/CURRENT_WORLD_PLAN.md"
+        ],
+        "missing": []
+      }
+    },
+    {
+      "check": "Original Git blob preservation",
+      "passed": true,
+      "detail": "305 original non-navigation files independently checked against parent Git blobs before publication."
+    },
+    {
+      "check": "Additive family arithmetic",
+      "passed": true,
+      "detail": "99 inherited records plus two distinct source records; no claim all101 are confirmed World1 unlocks."
+    },
+    {
+      "check": "Category and playable counts",
+      "passed": true,
+      "detail": "Two vehicles,11 human actors,five playable identities; original four identities retained."
+    },
+    {
+      "check": "Retained authored coverage",
+      "passed": true,
+      "detail": "No additional authored ladder/stage/render or conditional-brief count is inferred."
+    },
+    {
+      "check": "Inherited snapshot hashes",
+      "passed": true,
+      "detail": "Census, value-plan and task-delta SHA256 bindings match actual bytes."
+    },
+    {
+      "check": "Existing task crosswalk",
+      "passed": true,
+      "detail": {
+        "mapped_tasks": 35,
+        "mismatches": []
+      }
+    },
+    {
+      "check": "Explicit assignment gap without invented identity",
+      "passed": true,
+      "detail": "Named unassigned work item, local planning IDs only; T71–T80 remain source gaps."
+    },
+    {
+      "check": "Source-defined mechanics and unresolved settings",
+      "passed": true,
+      "detail": "Published10-target/3-second volley values retained; unspecified power/capacity/control/availability values stay open."
+    },
+    {
+      "check": "Baseline versus future purchase value",
+      "passed": true,
+      "detail": "Future value briefs must demonstrate gains beyond the source baseline; no new tiers/prices authored."
+    },
+    {
+      "check": "Planning versus native approval boundary",
+      "passed": true,
+      "detail": "Future visual/model/action/device gates remain open; document review is scoped to the exact addendum."
+    },
+    {
+      "check": "Readable navigation and local document links",
+      "passed": true,
+      "detail": {
+        "broken_links": [],
+        "documents_checked": 4
+      }
+    }
+  ],
+  "source_snapshot_checks": [
+    {
+      "id": "tumbler_design",
+      "git_blob_sha": "00341d02d2793e516de708c3a9abead0a7259ef6",
+      "sha256": "85902bf6eccec39a4c0dd5adef2416f86ab2f62ac438b4fe63dcf92864177e70",
+      "bytes": 1588,
+      "passed": true
+    },
+    {
+      "id": "vehicle_economy_context",
+      "git_blob_sha": "4a74384aa40faf571a1bbaf4a335553049570b36",
+      "sha256": "ee404b2691a73a64e7698cb2556421430369b9279ffe6f9a2c6c1333f9ee4eb6",
+      "bytes": 3067,
+      "passed": true
+    },
+    {
+      "id": "midnight_man_design",
+      "git_blob_sha": "c4b0366d5a3a4d6ecf95d805977918cf5155c8b7",
+      "sha256": "42a9f5fb29f6c848b167ce11f016b24820ae3d098bef408e19dbd980a6e0f8d3",
+      "bytes": 1598,
+      "passed": true
+    },
+    {
+      "id": "playable_roster",
+      "git_blob_sha": "5903ecb99bcd4158676c37e96c26599a003b4e50",
+      "sha256": "58010624421f45ac392d5f01415c6929e6ecd13df7d7031fdf33e294e217cf0e",
+      "bytes": 296,
+      "passed": true
+    }
+  ],
+  "source_tree_checks": [
+    {
+      "id": "tumbler_design",
+      "commit": "5b5ae75a6bd74d708eceb6d8a4837d977bcd5cb3",
+      "tree": "3de94b77df357adaa6be88c4d9b5fb9dbee4a475",
+      "path": "Docs/Design/WorldVehicles/2026-11-28/README.md",
+      "expected_git_blob_sha": "00341d02d2793e516de708c3a9abead0a7259ef6",
+      "observed_git_blob_sha": "00341d02d2793e516de708c3a9abead0a7259ef6",
+      "type": "blob",
+      "bytes": 1588,
+      "pass": true
+    },
+    {
+      "id": "vehicle_economy_context",
+      "commit": "5b5ae75a6bd74d708eceb6d8a4837d977bcd5cb3",
+      "tree": "3de94b77df357adaa6be88c4d9b5fb9dbee4a475",
+      "path": "Docs/Production/VEHICLE_ECONOMY.md",
+      "expected_git_blob_sha": "4a74384aa40faf571a1bbaf4a335553049570b36",
+      "observed_git_blob_sha": "4a74384aa40faf571a1bbaf4a335553049570b36",
+      "type": "blob",
+      "bytes": 3067,
+      "pass": true
+    },
+    {
+      "id": "midnight_man_design",
+      "commit": "527175227fe323d866109853e7217c6505cff080",
+      "tree": "8c2cec18428fdc7b83cb98d823d2d3f9cc00b41a",
+      "path": "Docs/Design/CharacterTurnarounds/2026-11-28/midnight-man/README.md",
+      "expected_git_blob_sha": "c4b0366d5a3a4d6ecf95d805977918cf5155c8b7",
+      "observed_git_blob_sha": "c4b0366d5a3a4d6ecf95d805977918cf5155c8b7",
+      "type": "blob",
+      "bytes": 1598,
+      "pass": true
+    },
+    {
+      "id": "playable_roster",
+      "commit": "527175227fe323d866109853e7217c6505cff080",
+      "tree": "8c2cec18428fdc7b83cb98d823d2d3f9cc00b41a",
+      "path": "Docs/Design/CharacterTurnarounds/PLAYABLE_ROSTER.md",
+      "expected_git_blob_sha": "5903ecb99bcd4158676c37e96c26599a003b4e50",
+      "observed_git_blob_sha": "5903ecb99bcd4158676c37e96c26599a003b4e50",
+      "type": "blob",
+      "bytes": 296,
+      "pass": true
+    },
+    {
+      "id": "tumbler_turnaround",
+      "commit": "5b5ae75a6bd74d708eceb6d8a4837d977bcd5cb3",
+      "tree": "3de94b77df357adaa6be88c4d9b5fb9dbee4a475",
+      "path": "Docs/Design/WorldVehicles/2026-11-28/tumbler-360.jpg",
+      "expected_git_blob_sha": "1876c71a0a030bca994d091b0eb32e510e4c2cd7",
+      "observed_git_blob_sha": "1876c71a0a030bca994d091b0eb32e510e4c2cd7",
+      "type": "blob",
+      "bytes": 492941,
+      "pass": true
+    },
+    {
+      "id": "midnight_man_turnaround",
+      "commit": "527175227fe323d866109853e7217c6505cff080",
+      "tree": "8c2cec18428fdc7b83cb98d823d2d3f9cc00b41a",
+      "path": "Docs/Design/CharacterTurnarounds/2026-11-28/midnight-man/midnight-man-360.jpg",
+      "expected_git_blob_sha": "dd865628f1d90138ae0c99bbf000c14c0315f79f",
+      "observed_git_blob_sha": "dd865628f1d90138ae0c99bbf000c14c0315f79f",
+      "type": "blob",
+      "bytes": 376955,
+      "pass": true
+    }
+  ],
+  "inherited_source_checks": [
+    {
+      "id": "prior_census",
+      "passed": true,
+      "git_blob_sha": "b382aa628815b69974842f2127a63af7b3f1fd49"
+    },
+    {
+      "id": "prior_value_plan",
+      "passed": true,
+      "git_blob_sha": "0e587c113e7fdc961facc843dff2b95064f95906"
+    },
+    {
+      "id": "prior_task_delta",
+      "passed": true,
+      "git_blob_sha": "91ffc0bc2214333724923d879878b2ad4f8d9476"
+    },
+    {
+      "id": "prior_world_contract",
+      "passed": true,
+      "git_blob_sha": "2bb31ad71b2f7d406a4c6740a6b6b60932041f9a"
+    }
+  ],
+  "preservation": {
+    "preserved_local_files": 305,
+    "mismatches": [],
+    "allowed_navigation_changes": [
+      "WORLD1_UPGRADE_REVIEW.md",
+      "Docs/Design/World1Upgrades/2026-11-28/README.md",
+      "Docs/Production/WorldProgression/2026-11-28-10x50/CURRENT_WORLD_PLAN.md"
+    ],
+    "parent_commit": "e9fe6c1bf28bef1dd630b73b33aceed43ef4f174",
+    "parent_tree": "dac8b56e44ff90b49e2bf96a97e63388f01bcc7e",
+    "parent_file_count": 4662,
+    "all_passed": true
+  },
+  "prepublication_branch_heads": {
+    "main": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+    "art/world1-upgrades-50-levels-2026-11-28": "e9fe6c1bf28bef1dd630b73b33aceed43ef4f174",
+    "feature/vehicle-economy-world-fleet-2026-11-27": "5b5ae75a6bd74d708eceb6d8a4837d977bcd5cb3",
+    "review/beta-t07-context-2026-11-28": "527175227fe323d866109853e7217c6505cff080",
+    "planning/build-13-audit": "5862b89c1663cacc0cbb84bfaba438d1459cfdb6",
+    "trial/world-one-expansion-2026-11-26": "fad3af0a45e94262737077ae513827b5042adb41"
+  },
+  "candidate_bindings": [
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/README.md",
+      "sha256": "d2225dc42943f74e9d89021b63054fafb29abc04360c746e87a03befa6f3f218",
+      "git_blob_sha": "9772ed601e31e288d799fd8d7d0c58bd33b14904",
+      "bytes": 4651
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/roster-additions/tumbler-midnight-man/README.md",
+      "sha256": "3a9b3806c0ee9a92ec9ca75271cf5d30f870367f136ff7c251b513a8d0e6ffab",
+      "git_blob_sha": "b45b68c8c1f122113019a66283d91e13198139c6",
+      "bytes": 6926
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/roster-additions/tumbler-midnight-man/SCOPE_DELTA.json",
+      "sha256": "6d375c403d8569b7708c3832d2ea678312c9bfe1eb7bb5f0b663227dd6203565",
+      "git_blob_sha": "af2b2dbe180b99fcff714f413a012ea7224f91df",
+      "bytes": 54134
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/roster-additions/tumbler-midnight-man/SOURCE_MANIFEST.json",
+      "sha256": "7b220fca0af0b77a7a8c3d969a20fdca81d2ceb2d7363d93bbe0c6638f4fc80a",
+      "git_blob_sha": "62569a2df1985230c2b19c2baef4ae7c3385e812",
+      "bytes": 7882
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/roster-additions/tumbler-midnight-man/source-text/MIDNIGHT_MAN_README.txt",
+      "sha256": "42a9f5fb29f6c848b167ce11f016b24820ae3d098bef408e19dbd980a6e0f8d3",
+      "git_blob_sha": "c4b0366d5a3a4d6ecf95d805977918cf5155c8b7",
+      "bytes": 1598
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/roster-additions/tumbler-midnight-man/source-text/PLAYABLE_ROSTER.txt",
+      "sha256": "58010624421f45ac392d5f01415c6929e6ecd13df7d7031fdf33e294e217cf0e",
+      "git_blob_sha": "5903ecb99bcd4158676c37e96c26599a003b4e50",
+      "bytes": 296
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/roster-additions/tumbler-midnight-man/source-text/TUMBLER_README.txt",
+      "sha256": "85902bf6eccec39a4c0dd5adef2416f86ab2f62ac438b4fe63dcf92864177e70",
+      "git_blob_sha": "00341d02d2793e516de708c3a9abead0a7259ef6",
+      "bytes": 1588
+    },
+    {
+      "path": "Docs/Design/World1Upgrades/2026-11-28/roster-additions/tumbler-midnight-man/source-text/VEHICLE_ECONOMY.txt",
+      "sha256": "ee404b2691a73a64e7698cb2556421430369b9279ffe6f9a2c6c1333f9ee4eb6",
+      "git_blob_sha": "4a74384aa40faf571a1bbaf4a335553049570b36",
+      "bytes": 3067
+    },
+    {
+      "path": "Docs/Production/WorldProgression/2026-11-28-10x50/CURRENT_WORLD_PLAN.md",
+      "sha256": "4c885d245f45a2a32f21beaf2a4a55fc394377a5d8113e78b4045f6e3dcfd3c5",
+      "git_blob_sha": "b7c63c61e308a90fb90de6ca6d9100bf2add9963",
+      "bytes": 13242
+    },
+    {
+      "path": "WORLD1_UPGRADE_REVIEW.md",
+      "sha256": "10afa2b61c1605b6442b07ef844338942ee6cf7ed650e28a45405b04c0f44f04",
+      "git_blob_sha": "9b14e11f6cc6f25eba408a34c0e9786d6770024f",
+      "bytes": 3369
+    }
+  ],
+  "independent_review_receipt": "INDEPENDENT_REVIEW.json",
+  "publication_receipt": "PUBLICATION_RECEIPT.json",
+  "future_scope_status": "Appearance/value briefs, actual image review, implementation, motion/audio and native release gates remain open."
+}

@@ -2,6 +2,12 @@
 
 The current plan is **10 worlds with 50 levels each**. This dated package proposes visible upgrades tied to production, material handling, protection, attack and useful work by multiple survivors and pets. The storage house is included as a priority upgrade family.
 
+## New roster additions — Tumbler and Midnight Man
+
+The [source-bound roster addendum](Docs/Design/World1Upgrades/2026-11-28/roster-additions/tumbler-midnight-man/README.md) adds **Tumbler**, a World 1 vehicle concept, and **Midnight Man**, a planned fifth playable identity. Midnight Man's exact world availability and unlock remain unassigned. The tracked planning scope is now **101 family records: the retained 99 plus these two additions**. These records are not a count of approved upgradeable objects or confirmed World 1 unlocks.
+
+The reviewed package below still contains **27 authored upgrade ladders, 54 proposed stages and seven presentation files**. The new additions require their own upgrade-value briefs, appearance registration and native acceptance. Their published turnaround references are linked in the addendum; the earlier seven-image reviews do not approve them. Read the addendum with the historical task delta: it maps Tumbler to T53 and records the missing dedicated implementation/review assignment for Midnight Man without inventing a numbered task.
+
 ## Review the work
 
 - [Open the seven-image review gallery](Docs/Design/World1Upgrades/2026-11-28/REVIEW_GALLERY.md).

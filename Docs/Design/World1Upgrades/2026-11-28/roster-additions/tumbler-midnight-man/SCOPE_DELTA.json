@@ -1,0 +1,1253 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-28",
+  "scope": "Additive source-bound planning reconciliation for two new design identities. No historical census/ladders/receipts, native assets, gameplay code or task graph is edited.",
+  "status": "SOURCE_BOUND_ADDITIVE_PLANNING_DELTA_SEPARATE_REVIEW_RECEIPT",
+  "owner_addition": {
+    "text": "I added a new World 1 vehicle (Tumbler) and 1 new playable Character (Midnight Man)",
+    "source": "Current conversation, owner instruction",
+    "interpretation": "Tumbler is explicitly assigned to World 1. Midnight Man is a new playable identity; the exact release/world availability and unlock remain unbound in the published design."
+  },
+  "source_manifest": "SOURCE_MANIFEST.json",
+  "source_manifest_sha256_at_authoring": "7b220fca0af0b77a7a8c3d969a20fdca81d2ceb2d7363d93bbe0c6638f4fc80a",
+  "source_text_bindings": [
+    {
+      "source_id": "tumbler_design",
+      "commit": "5b5ae75a6bd74d708eceb6d8a4837d977bcd5cb3",
+      "repository_path": "Docs/Design/WorldVehicles/2026-11-28/README.md",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/5b5ae75a6bd74d708eceb6d8a4837d977bcd5cb3/Docs/Design/WorldVehicles/2026-11-28/README.md",
+      "snapshot_path": "source-text/TUMBLER_README.txt",
+      "sha256": "85902bf6eccec39a4c0dd5adef2416f86ab2f62ac438b4fe63dcf92864177e70",
+      "git_blob_sha1": "00341d02d2793e516de708c3a9abead0a7259ef6",
+      "bytes": 1588,
+      "verification": "EXACT_SOURCE_TEXT_READ_AND_GIT_BLOB_VERIFIED",
+      "runtime_approval": false
+    },
+    {
+      "source_id": "vehicle_economy_context",
+      "commit": "5b5ae75a6bd74d708eceb6d8a4837d977bcd5cb3",
+      "repository_path": "Docs/Production/VEHICLE_ECONOMY.md",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/5b5ae75a6bd74d708eceb6d8a4837d977bcd5cb3/Docs/Production/VEHICLE_ECONOMY.md",
+      "snapshot_path": "source-text/VEHICLE_ECONOMY.txt",
+      "sha256": "ee404b2691a73a64e7698cb2556421430369b9279ffe6f9a2c6c1333f9ee4eb6",
+      "git_blob_sha1": "4a74384aa40faf571a1bbaf4a335553049570b36",
+      "bytes": 3067,
+      "verification": "EXACT_SOURCE_TEXT_READ_AND_GIT_BLOB_VERIFIED",
+      "runtime_approval": false
+    },
+    {
+      "source_id": "midnight_man_design",
+      "commit": "527175227fe323d866109853e7217c6505cff080",
+      "repository_path": "Docs/Design/CharacterTurnarounds/2026-11-28/midnight-man/README.md",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/527175227fe323d866109853e7217c6505cff080/Docs/Design/CharacterTurnarounds/2026-11-28/midnight-man/README.md",
+      "snapshot_path": "source-text/MIDNIGHT_MAN_README.txt",
+      "sha256": "42a9f5fb29f6c848b167ce11f016b24820ae3d098bef408e19dbd980a6e0f8d3",
+      "git_blob_sha1": "c4b0366d5a3a4d6ecf95d805977918cf5155c8b7",
+      "bytes": 1598,
+      "verification": "EXACT_SOURCE_TEXT_READ_AND_GIT_BLOB_VERIFIED",
+      "runtime_approval": false
+    },
+    {
+      "source_id": "playable_roster",
+      "commit": "527175227fe323d866109853e7217c6505cff080",
+      "repository_path": "Docs/Design/CharacterTurnarounds/PLAYABLE_ROSTER.md",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/527175227fe323d866109853e7217c6505cff080/Docs/Design/CharacterTurnarounds/PLAYABLE_ROSTER.md",
+      "snapshot_path": "source-text/PLAYABLE_ROSTER.txt",
+      "sha256": "58010624421f45ac392d5f01415c6929e6ecd13df7d7031fdf33e294e217cf0e",
+      "git_blob_sha1": "5903ecb99bcd4158676c37e96c26599a003b4e50",
+      "bytes": 296,
+      "verification": "EXACT_SOURCE_TEXT_READ_AND_GIT_BLOB_VERIFIED",
+      "runtime_approval": false
+    }
+  ],
+  "reference_images": [
+    {
+      "id": "tumbler_turnaround",
+      "repository": "ksolo21-web/HAVENLINE",
+      "commit": "5b5ae75a6bd74d708eceb6d8a4837d977bcd5cb3",
+      "path": "Docs/Design/WorldVehicles/2026-11-28/tumbler-360.jpg",
+      "git_blob_sha": "1876c71a0a030bca994d091b0eb32e510e4c2cd7",
+      "bytes": 492941,
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/5b5ae75a6bd74d708eceb6d8a4837d977bcd5cb3/Docs/Design/WorldVehicles/2026-11-28/tumbler-360.jpg",
+      "source_description": "Eight-view turnaround and rear cargo hatch",
+      "retrieval_evidence": "Path/blob/size verified in complete source Git tree; not downloaded or visually reviewed in this reconciliation.",
+      "reused_prior_visual_approval": false,
+      "new_visual_review_performed": false,
+      "visual_inspection_in_this_delta": false,
+      "new_approval_in_this_delta": false
+    },
+    {
+      "id": "midnight_man_turnaround",
+      "repository": "ksolo21-web/HAVENLINE",
+      "commit": "527175227fe323d866109853e7217c6505cff080",
+      "path": "Docs/Design/CharacterTurnarounds/2026-11-28/midnight-man/midnight-man-360.jpg",
+      "git_blob_sha": "dd865628f1d90138ae0c99bbf000c14c0315f79f",
+      "bytes": 376955,
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/527175227fe323d866109853e7217c6505cff080/Docs/Design/CharacterTurnarounds/2026-11-28/midnight-man/midnight-man-360.jpg",
+      "source_description": "Eight-view turnaround",
+      "retrieval_evidence": "Path/blob/size verified in complete source Git tree; not downloaded or visually reviewed in this reconciliation.",
+      "reused_prior_visual_approval": false,
+      "new_visual_review_performed": false,
+      "visual_inspection_in_this_delta": false,
+      "new_approval_in_this_delta": false
+    }
+  ],
+  "prior_snapshot": {
+    "review_commit": "e9fe6c1bf28bef1dd630b73b33aceed43ef4f174",
+    "census_path": "../../WORLD1_UPGRADE_CENSUS.json",
+    "census_sha256": "2e97ff167b5a27c236b5ef3423446ca485b1f2facc6e90dff3d0cd6e7362966c",
+    "value_plan_path": "../../PURCHASE_VALUE_UPGRADE_PLAN.json",
+    "value_plan_sha256": "df9707201bed100380da0f3444b0ffcfa3654b9128e56a79d590d3bd27ba3688",
+    "family_records": 99,
+    "authored_value_ladders": 27,
+    "stage_proposals": 54,
+    "presentation_files": 7,
+    "view_panels": 24,
+    "historical_conditional_briefs": 38,
+    "all_historical_files_and_receipts_preserved": true
+  },
+  "reconciled_tracked_scope": {
+    "family_records": 101,
+    "category_counts": {
+      "equipment": 42,
+      "human_actor": 11,
+      "companion": 7,
+      "building": 2,
+      "building_or_equipment": 31,
+      "resource": 2,
+      "environment": 2,
+      "boundary": 2,
+      "vehicle": 2
+    },
+    "vehicle_families": 2,
+    "human_actor_families": 11,
+    "playable_identity_families": 5,
+    "new_family_records": 2,
+    "new_families_upgrade_disposition_pending": 2,
+    "retained_authored_value_ladders": 27,
+    "retained_stage_proposals": 54,
+    "retained_presentation_files": 7,
+    "retained_view_panels": 24,
+    "historical_conditional_briefs_unchanged": 38,
+    "new_upgrade_tiers_authored": 0,
+    "new_images_generated": 0,
+    "new_images_visually_reviewed": 0,
+    "family_count_is_not_approved_upgrade_count": true,
+    "all_tracked_records_are_confirmed_world1_unlocks": false
+  },
+  "planning_identity_policy": {
+    "namespace": "THIS_ADDITIVE_PLANNING_DELTA_ONLY",
+    "local_family_ids": [
+      "tumbler",
+      "midnight_man"
+    ],
+    "canonical_runtime_ids_defined": false,
+    "runtime_roster_slots_added": false
+  },
+  "additions": [
+    {
+      "local_planning_family_id": "tumbler",
+      "display_name": "Tumbler",
+      "category": "vehicle",
+      "role": "Planned armored player-driven resource hauler",
+      "canonical_runtime_id": null,
+      "source_ids": [
+        "tumbler_design",
+        "vehicle_economy_context"
+      ],
+      "world1_confirmed": true,
+      "world_index_from_source": 1,
+      "unlock_level": null,
+      "source_status": "PLANNED_CONCEPT_NOT_A_PLAYABLE_VEHICLE",
+      "upgrade_disposition": "PENDING_SOURCE_FAITHFUL_VALUE_BRIEF_NO_TIERS_AUTHORED",
+      "source_defined_baseline": {
+        "cutters": "Twin flat horizontal spinning front discs: attack eligible in-game enemies, cut trees and break all mineable rocks; retain the existing paid-camp cutter safety rule.",
+        "volley": {
+          "targeting": "Automatic acquisition of distinct eligible in-game enemies",
+          "max_distinct_targets": 10,
+          "launch": "Explicit player Launch input required; no automatic launch",
+          "projectiles": "Homing missiles track their assigned targets",
+          "shared_cooldown_seconds": 3,
+          "cooldown_start": "After a successful volley",
+          "status": "PUBLISHED_DESIGN_BASELINE_NOT_NATIVE_PROOF"
+        },
+        "cargo": {
+          "visible_design": "Armored rear hatch above the turbine",
+          "inherited_rules": [
+            "Typed vehicle custody",
+            "Exactly-once warehouse unloading",
+            "Existing inside/outside wreck rules"
+          ],
+          "render_examples_are_capacity_limit": false,
+          "capacity": null,
+          "unlimited_capacity_inherited_from_snow_truck": false
+        }
+      },
+      "open_decisions": [
+        "Unlock level",
+        "Cost/acquisition/recovery fixtures",
+        "Vehicle power source",
+        "Balance",
+        "Final runtime assets",
+        "Native garage/storage fit and adapter behavior",
+        "VC01/VC02 precedence remains unresolved"
+      ],
+      "power_source": null,
+      "snow_truck_fuel_inherited": false,
+      "replaces_snow_truck": false,
+      "baseline_abilities_are_new_upgrade_gains": false
+    },
+    {
+      "local_planning_family_id": "midnight_man",
+      "display_name": "Midnight Man",
+      "aliases": [
+        "Man"
+      ],
+      "category": "human_actor",
+      "role": "Planned playable character",
+      "canonical_runtime_id": null,
+      "source_ids": [
+        "midnight_man_design",
+        "playable_roster"
+      ],
+      "world1_confirmed": false,
+      "world_index_from_source": null,
+      "availability_status": "WORLD_RELEASE_AND_UNLOCK_NOT_ASSIGNED_BY_SOURCE",
+      "unlock_level": null,
+      "source_status": "PLANNED_PLAYABLE_CONCEPT_NO_MODEL_RIG_RUNTIME_SLOT_UNLOCK_OR_BALANCE_APPROVAL",
+      "upgrade_disposition": "PENDING_SOURCE_FAITHFUL_VALUE_BRIEF_NO_TIERS_AUTHORED",
+      "source_defined_baseline": {
+        "batarangs": {
+          "tool_behavior": "Character-specific throws rather than orbiting tools",
+          "targeting": "Auto-target eligible enemies, trees or mineable rocks for damage, chopping or mining respectively",
+          "throw_trigger": null,
+          "target_priority": null,
+          "cadence": null
+        },
+        "combo_concepts": [
+          {
+            "name": "Sweep",
+            "sequence": [
+              "Jab",
+              "Cross",
+              "Sweeping kick"
+            ],
+            "purpose": "Push back nearby enemies"
+          },
+          {
+            "name": "Breakthrough",
+            "sequence": [
+              "Advancing punch",
+              "Rising knee",
+              "Heavy stomp"
+            ],
+            "purpose": "Stagger a durable single target"
+          },
+          {
+            "name": "Rebound",
+            "status": "PROPOSED_FINISHER",
+            "sequence": [
+              "Side-step kick",
+              "Spinning backfist",
+              "Auto-targeted batarang"
+            ],
+            "purpose": "Create space and finish at range",
+            "hybrid_or_all_melee": "UNRESOLVED"
+          }
+        ]
+      },
+      "open_decisions": [
+        "Throw trigger",
+        "Target priority",
+        "Cadence",
+        "Damage",
+        "Range",
+        "Controls",
+        "World/release availability",
+        "Unlock placement",
+        "Rebound hybrid versus all-melee",
+        "Final runtime model/rig/assets",
+        "Dedicated implementation/review assignment"
+      ],
+      "replaces_existing_four_leads": false,
+      "is_survivor_or_companion": false,
+      "changes_standard_player_orbiting_axes": false,
+      "changes_survivor_two_handed_tools": false,
+      "baseline_abilities_are_new_upgrade_gains": false
+    }
+  ],
+  "baseline_precedence": {
+    "old_generic_vehicle_baseline_is_scoped_to": "snow_truck",
+    "historical_text_rewritten": false,
+    "tumbler_inherits_only_source_named_rules": [
+      "Paid-camp cutter safety",
+      "Typed vehicle custody",
+      "Exactly-once warehouse unloading",
+      "Existing inside/outside wreck rules"
+    ],
+    "tumbler_does_not_automatically_inherit": [
+      "Snow Truck fuel/power source",
+      "Unlimited cargo capacity",
+      "Snow Truck hull/axle/blade geometry",
+      "Confirmed garage fit",
+      "Any specific unlock or purchase/upgrade bill"
+    ],
+    "vehicle_conflicts_retained": [
+      {
+        "id": "VC01",
+        "issue": "Partial versus whole-load warehouse transfer/source precedence remains unresolved; exactly-once custody does not settle that policy."
+      },
+      {
+        "id": "VC02",
+        "issue": "General in-camp blade use versus deliberately authorized defense remains unresolved; retaining named paid-camp cutter safety does not silently settle the wider rule."
+      }
+    ],
+    "existing_settlement_requirements": [
+      "10 worlds with 50 local levels each",
+      "Storage-house upgrade value and typed receiving/dispatch handling",
+      "Multiple pets and multiple survivors with distinct living roles",
+      "Historical three-pet/two-survivor-escort staged proposal, separate from local workers, not newly ratified",
+      "Selected ordinary conveyor/resource unit scale",
+      "Existing 10 furnace forms and three storehouse stages",
+      "Paid loss/recovery boundaries"
+    ]
+  },
+  "requirements": [
+    {
+      "id": "RA01",
+      "name": "Distinct additive identities",
+      "text": "Track local planning IDs tumbler and midnight_man as two additional families; Man is an alias, not a third family. No canonical runtime IDs are assigned.",
+      "mandatory": true
+    },
+    {
+      "id": "RA02",
+      "name": "Availability boundary",
+      "text": "Tumbler is explicitly World 1. Midnight Man is a planned playable lead with world/release availability and unlock pending.",
+      "mandatory": true
+    },
+    {
+      "id": "RA03",
+      "name": "Historical preservation",
+      "text": "Retain the prior 99-family, 27-ladder, 54-stage, seven-image, 24-panel snapshot and all its receipts. Keep the historical 38 conditional briefs distinct from two new upgrade-disposition-pending families.",
+      "mandatory": true
+    },
+    {
+      "id": "RA04",
+      "name": "Source-defined Tumbler baseline",
+      "text": "Retain twin horizontal flat front cutters, eligible enemy/tree/all-mineable contact, named paid-camp cutter safety, explicit player Launch, up to 10 distinct eligible enemies, assigned-target homing, and one shared 3-second cooldown after a successful volley.",
+      "mandatory": true
+    },
+    {
+      "id": "RA05",
+      "name": "Source-defined Tumbler custody",
+      "text": "Retain the armored rear hatch above the turbine, typed custody, exactly-once warehouse unload and existing inside/outside wreck rules. Logs/crate imagery is not a capacity specification.",
+      "mandatory": true
+    },
+    {
+      "id": "RA06",
+      "name": "No unspecified vehicle inheritance",
+      "text": "Scope old generic vehicle baseline prose to Snow Truck. Do not infer Tumbler fuel/power source, unlimited capacity, hull/garage fit, unlock, price or balance. VC01/VC02 remain unresolved.",
+      "mandatory": true
+    },
+    {
+      "id": "RA07",
+      "name": "Source-defined Midnight Man baseline",
+      "text": "Keep his auto-targeted batarangs and the Sweep, Breakthrough and proposed Rebound sequences character-specific; do not change standard player orbiting axes or survivor two-handed tools.",
+      "mandatory": true
+    },
+    {
+      "id": "RA08",
+      "name": "Open character controls",
+      "text": "Throw trigger, target priority, cadence, damage, range, controls and unlock remain open; Rebound hybrid versus all-melee remains undecided.",
+      "mandatory": true
+    },
+    {
+      "id": "RA09",
+      "name": "Real future purchase value",
+      "text": "Any later upgrade proposal must name the existing baseline limitation, an actual additional capability or measurable gain, its visible mechanism, input/action/output flow, footprint/access consequences, requirements and tradeoff. Existing baseline abilities cannot be sold as newly unlocked upgrades.",
+      "mandatory": true
+    },
+    {
+      "id": "RA10",
+      "name": "No new tiers or balance figures",
+      "text": "This delta defines no equipment level, appearance tier, new price, damage/range number, fuel/capacity figure or unlock level. The 10-target limit and 3-second cooldown are quoted source design values, not new authored tuning.",
+      "mandatory": true
+    },
+    {
+      "id": "RA11",
+      "name": "Task identity preservation",
+      "text": "Keep exact existing T01-T80 names and dependency arrays. Create only a named local unassigned Midnight Man implementation/review work item, not an invented T-number or reused Character 1-4 gate.",
+      "mandatory": true
+    },
+    {
+      "id": "RA12",
+      "name": "Native evidence remains separate",
+      "text": "Before gameplay support, require source-specific actual models/rigs/actions, normal-camera footage, target and custody/event tests, audio and applicable reference/device gates. No art/native/release approval is claimed.",
+      "mandatory": true
+    },
+    {
+      "id": "RA13",
+      "name": "Existing settlement scope",
+      "text": "Preserve 10 worlds x 50 levels, storage-house purchase value, multiple pets/survivors, paid loss/recovery boundaries and selected ordinary conveyor/resource unit scale.",
+      "mandatory": true
+    },
+    {
+      "id": "RA14",
+      "name": "Image evidence limit",
+      "text": "The two new JPG references are pinned by Git tree identity only in this reconciliation. No new image was generated or visually inspected, and no prior image score is reused.",
+      "mandatory": true
+    }
+  ],
+  "task_scope_reconciliation": {
+    "existing_task_delta_path": "../../../../../Production/WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.json",
+    "existing_task_delta_sha256": "28900ac11ca9d6b0dc4c7188aef623d6a8b96bf8ae52f03ddfa3080769c5c475",
+    "task_ids_renumbered": false,
+    "existing_names_changed": false,
+    "dependency_arrays_changed": false,
+    "ownership_reassigned": false,
+    "tasks_activated": false,
+    "mappings": [
+      {
+        "task_id": "T03",
+        "exact_existing_name": "Fences, gates and navigable work lanes",
+        "existing_forward_scope_title": "Fences, gates and navigable work lanes",
+        "existing_dependencies": [
+          "T02"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "compatibility",
+        "proposed_scope_delta": "Both pedestrian camp routes and paid-camp boundaries must remain usable with Tumbler cutter/hull clearance; do not infer garage fit from a name.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T04",
+        "exact_existing_name": "Reference camera and automatic screen composition",
+        "existing_forward_scope_title": "Reference camera and automatic screen composition",
+        "existing_dependencies": [
+          "T03"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "compatibility",
+        "proposed_scope_delta": "Verify Tumbler target/volley/cargo state and Midnight Man windup/contact/recovery readability at the normal and permitted pinch camera.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T06",
+        "exact_existing_name": "Character 1 complete movement/interactions",
+        "existing_forward_scope_title": "Character 1 complete movement/interactions",
+        "existing_dependencies": [
+          "T03"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "shared_foundation_only",
+        "proposed_scope_delta": "Verify reusable player movement/interaction compatibility without changing Character 1 identity or treating its receipt as Midnight Man approval.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T07",
+        "exact_existing_name": "Havenline Simple Control & Context Director",
+        "existing_forward_scope_title": "Havenline Simple Control & Context Director",
+        "existing_dependencies": [
+          "T04",
+          "T06"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "interaction_contract",
+        "proposed_scope_delta": "Bind Tumbler explicit Launch input and cooldown feedback. Midnight Man throw trigger, target priority and cadence require decisions; do not infer auto-throw from auto-targeting.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T08",
+        "exact_existing_name": "Visible inventory, physical carrying and transfers",
+        "existing_forward_scope_title": "Visible inventory, physical carrying and transfers",
+        "existing_dependencies": [
+          "T05",
+          "T06",
+          "T07"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "typed_custody",
+        "proposed_scope_delta": "Bind Tumbler rear-hatch typed resource custody and exactly-once transfer; validate one accepted Midnight Man harvest event produces one receipt. Capacity is not inferred from render contents.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T09",
+        "exact_existing_name": "Harvesting and automatic acquisition",
+        "existing_forward_scope_title": "Harvesting and automatic acquisition",
+        "existing_dependencies": [
+          "T06",
+          "T07",
+          "T08"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "harvesting_contract",
+        "proposed_scope_delta": "Cover Tumbler cutters against every mineable type, including slate and coal, and Midnight Man batarangs against eligible trees/rocks. Use registered runtime target/resource IDs; this delta creates none.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T11",
+        "exact_existing_name": "Camp construction and visual upgrade system",
+        "existing_forward_scope_title": "Camp construction and visual upgrade system",
+        "existing_dependencies": [
+          "T05",
+          "T10"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "appearance_value_registration",
+        "proposed_scope_delta": "Prepare future source-faithful appearance/value briefs and actual purchased-footprint compatibility only after gains beyond each published baseline are authored. No upgrade tiers are added here.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T12",
+        "exact_existing_name": "Level 1–100 progression architecture",
+        "existing_forward_scope_title": "Ten-world progression architecture — 50 local levels per world",
+        "existing_dependencies": [
+          "T07",
+          "T08",
+          "T10",
+          "T11"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "progression_registration",
+        "proposed_scope_delta": "Register two distinct design identities; Tumbler is World 1, Midnight Man availability/unlock remains pending. Keep 10 worlds x 50 local levels; no new runtime IDs or numeric unlocks are assigned.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T13",
+        "exact_existing_name": "Progressive Difficulty & spend-blind Challenge Director",
+        "existing_forward_scope_title": "Progressive Difficulty & spend-blind Challenge Director",
+        "existing_dependencies": [
+          "T12"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "future_balance_verification",
+        "proposed_scope_delta": "Evaluate the published vehicle volley and character kit against the spend-blind challenge contract when implemented; do not invent damage, protection or range values.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T14",
+        "exact_existing_name": "Save-state/versioning foundation",
+        "existing_forward_scope_title": "Save-state/versioning foundation",
+        "existing_dependencies": [
+          "T08",
+          "T10",
+          "T12"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "save_migration",
+        "proposed_scope_delta": "Plan distinct vehicle/playable identity, selection, typed custody, cooldown and accepted-event persistence adapters; test blocked transfer and save/reload without duplicated cargo/harvest.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T20",
+        "exact_existing_name": "Road and vehicle customer service",
+        "existing_forward_scope_title": "Road and vehicle customer service",
+        "existing_dependencies": [
+          "T15",
+          "T17"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "traffic_compatibility_only",
+        "proposed_scope_delta": "Check Tumbler with customer traffic. This task retains customer-vehicle responsibility and does not become the owned-vehicle implementation task.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T21",
+        "exact_existing_name": "Visible hostiles, hunting and weapon progression",
+        "existing_forward_scope_title": "Visible hostiles, hunting and weapon progression",
+        "existing_dependencies": [
+          "T06",
+          "T07",
+          "T08",
+          "T09",
+          "T13"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "combat_contract",
+        "proposed_scope_delta": "Bind Tumbler cutter contacts, manual up-to-10-target homing volley and successful-volley 3-second shared cooldown; bind the character-specific batarang and three source combo concepts without settling their open controls/balance.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T23",
+        "exact_existing_name": "Survivor rescue and basic survivor identity",
+        "existing_forward_scope_title": "Survivor rescue and basic survivor identity",
+        "existing_dependencies": [
+          "T06",
+          "T07",
+          "T14",
+          "T21"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "preserved_actor_boundary",
+        "proposed_scope_delta": "Midnight Man is a playable lead, not a rescued survivor. Preserve survivor identities and two-handed tools.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T31",
+        "exact_existing_name": "Integrated companion jobs and population safety",
+        "existing_forward_scope_title": "Integrated companion jobs and population safety",
+        "existing_dependencies": [
+          "T15",
+          "T23",
+          "T24",
+          "T25",
+          "T26",
+          "T27",
+          "T28",
+          "T29",
+          "T30"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "companion_compatibility_only",
+        "proposed_scope_delta": "Verify the chosen player/vehicle against existing companion routes, jobs and commands where affected. Do not count Midnight Man as a survivor or change the separate prior expedition-policy proposal.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T32",
+        "exact_existing_name": "Complete frozen-region Level 1–10 production progression",
+        "existing_forward_scope_title": "Complete World 1 Frozen Home Camp — local Levels 1–50",
+        "existing_dependencies": [
+          "T12",
+          "T13",
+          "T14",
+          "T16",
+          "T17",
+          "T18",
+          "T19",
+          "T20",
+          "T21",
+          "T22",
+          "T23",
+          "T31"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "world1_content_reconciliation",
+        "proposed_scope_delta": "Add the planned Tumbler baseline to World 1 scope. Midnight Man enters World 1 acceptance only if a later source explicitly assigns him to that release.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T33",
+        "exact_existing_name": "Core economy & F2P progression model",
+        "existing_forward_scope_title": "World1 economy and future connected-campaign F2P progression",
+        "existing_dependencies": [
+          "T12",
+          "T17",
+          "T18",
+          "T19",
+          "T20",
+          "T32"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "future_economy_contract",
+        "proposed_scope_delta": "Resolve attainable source-backed acquisition, repair/recovery and any later upgrade bills. Published baseline attacks/cargo are not newly purchased upgrade benefits; no prices or power source are defined here.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T41",
+        "exact_existing_name": "Anti-cheat and economic-security foundation",
+        "existing_forward_scope_title": "Anti-cheat and economic-security foundation",
+        "existing_dependencies": [
+          "T14",
+          "T34",
+          "T35",
+          "T36",
+          "T37",
+          "T38"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "identity_and_value_integrity",
+        "proposed_scope_delta": "Audit any future asset selection, custody, successful-volley and accepted-event persistence paths without activating premium economy changes.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T42",
+        "exact_existing_name": "Privacy-respecting telemetry, difficulty analytics and crash diagnostics",
+        "existing_forward_scope_title": "Privacy-respecting telemetry, difficulty analytics and crash diagnostics",
+        "existing_dependencies": [
+          "T13",
+          "T14",
+          "T37",
+          "T41"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "diagnostic_compatibility",
+        "proposed_scope_delta": "Keep new design/asset identity and source version distinguishable in later evidence; do not use owner grants or concept text as ordinary-player proof.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T43",
+        "exact_existing_name": "Identity, cloud continuity and recovery",
+        "existing_forward_scope_title": "Identity, cloud continuity and recovery",
+        "existing_dependencies": [
+          "T14",
+          "T41"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "continuity",
+        "proposed_scope_delta": "Preserve accepted ownership, selected playable identity and cargo/event state across cloud restoration; canonical runtime/save IDs remain to be assigned by implementation owners.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T53",
+        "exact_existing_name": "Transportation and inter-region continuity",
+        "existing_forward_scope_title": "World1 local transport and later inter-world continuity",
+        "existing_dependencies": [
+          "T43",
+          "T44",
+          "T45",
+          "T46",
+          "T47",
+          "T48",
+          "T49",
+          "T50",
+          "T51",
+          "T52"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "primary_owned_vehicle_scope",
+        "proposed_scope_delta": "Own Tumbler local transport/route integration alongside, not in place of, Snow Truck. Reconcile its World 1 gate separately from later inter-world travel; preserve the existing dependency array until an authorized graph revision.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T54",
+        "exact_existing_name": "Day/night, weather, audio and final game feedback",
+        "existing_forward_scope_title": "Day/night, weather, audio and final game feedback",
+        "existing_dependencies": [
+          "T32",
+          "T53"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "future_presentation_evidence",
+        "proposed_scope_delta": "Require actual cutter/volley/hatch and batarang/three-combo motion/audio evidence with equivalent muted cues; static source sheets do not satisfy it.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T55",
+        "exact_existing_name": "Accessibility and control customization",
+        "existing_forward_scope_title": "Accessibility and control customization",
+        "existing_dependencies": [
+          "T07",
+          "T43"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "control_accessibility",
+        "proposed_scope_delta": "Preserve simple controls and accessible target/cooldown/status feedback. Tumbler Launch is explicit; Midnight Man control decisions remain unapproved.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T56",
+        "exact_existing_name": "Performance/Quality/Balanced/Battery player modes",
+        "existing_forward_scope_title": "Performance/Quality/Balanced/Battery player modes",
+        "existing_dependencies": [
+          "T42",
+          "T54",
+          "T55"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "future_population_performance",
+        "proposed_scope_delta": "Measure actual added vehicle/character effects alongside production, storage, pets and survivors in all four existing modes; no new population cap is implied.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T58",
+        "exact_existing_name": "Phone/tablet/foldable functional acceptance",
+        "existing_forward_scope_title": "Phone/tablet/foldable functional acceptance",
+        "existing_dependencies": [
+          "T43",
+          "T54",
+          "T55",
+          "T56"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "future_device_acceptance",
+        "proposed_scope_delta": "Verify actual interactions, camera readability, interruption/resume and physical phone/tablet/foldable behavior for whichever release includes each asset.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T59",
+        "exact_existing_name": "Character 2 final rigging and motion review",
+        "existing_forward_scope_title": "Character 2 final rigging and motion review",
+        "existing_dependencies": [
+          "T58"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "preserve_existing_character_gate",
+        "proposed_scope_delta": "Retain Character 2 identity and its dedicated review; do not reuse or rename it as Midnight Man acceptance.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T60",
+        "exact_existing_name": "Character 3 final rigging and motion review",
+        "existing_forward_scope_title": "Character 3 final rigging and motion review",
+        "existing_dependencies": [
+          "T58"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "preserve_existing_character_gate",
+        "proposed_scope_delta": "Retain Character 3 identity and its dedicated review; do not reuse or rename it as Midnight Man acceptance.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T61",
+        "exact_existing_name": "Character 4 final rigging and motion review",
+        "existing_forward_scope_title": "Character 4 final rigging and motion review",
+        "existing_dependencies": [
+          "T58"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "preserve_existing_character_gate",
+        "proposed_scope_delta": "Retain Character 4 identity and its dedicated review; do not reuse or rename it as Midnight Man acceptance.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T62",
+        "exact_existing_name": "Complete Level 1–100 progression acceptance",
+        "existing_forward_scope_title": "Release-scoped progression and full ten-world campaign acceptance",
+        "existing_dependencies": [
+          "T33",
+          "T36",
+          "T40",
+          "T43",
+          "T53",
+          "T54",
+          "T58",
+          "T59",
+          "T60",
+          "T61"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "future_release_acceptance",
+        "proposed_scope_delta": "Include exact source-bound new content when released and require the newly assigned Midnight Man rig/action gate; the previous character receipts do not cover him.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T63",
+        "exact_existing_name": "$0 lifelong-F2P player completion test",
+        "existing_forward_scope_title": "Released-world and full-campaign $0 completion test",
+        "existing_dependencies": [
+          "T33",
+          "T62"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "future_f2p_acceptance",
+        "proposed_scope_delta": "Verify ordinary-player reachability for the final approved acquisition/unlock scope; no cost or release placement is invented by this delta.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T64",
+        "exact_existing_name": "Purchase-value/fairness test",
+        "existing_forward_scope_title": "Purchase-value/fairness test",
+        "existing_dependencies": [
+          "T35",
+          "T36",
+          "T62",
+          "T63"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "future_value_acceptance",
+        "proposed_scope_delta": "Test a later paid upgrade against its published baseline, actual gain, visible mechanism and attainable cost; do not sell Tumbler cutters/volley/cargo or Midnight Man basic kit as new abilities.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T66",
+        "exact_existing_name": "Security/exploit attack review",
+        "existing_forward_scope_title": "Security/exploit attack review",
+        "existing_dependencies": [
+          "T41",
+          "T43",
+          "T65"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "future_regression",
+        "proposed_scope_delta": "Test launch-without-input, cooldown bypass, duplicate target assignment, duplicate harvest/cargo receipts, blocked unloading and save/reload in the native implementation.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T67",
+        "exact_existing_name": "Full-game reference/regression acceptance",
+        "existing_forward_scope_title": "Released-content and later full-campaign reference/regression acceptance",
+        "existing_dependencies": [
+          "T62",
+          "T63",
+          "T64",
+          "T65",
+          "T66"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "future_reference_acceptance",
+        "proposed_scope_delta": "Review the exact new identities and implemented behavior against their own pinned references. The prior seven-image receipt remains limited to its historical assets.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T68",
+        "exact_existing_name": "Sustained native 4K/60 phone evidence",
+        "existing_forward_scope_title": "Sustained native4K/60 phone evidence for each affected release",
+        "existing_dependencies": [
+          "T67"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "future_release_device_gate",
+        "proposed_scope_delta": "Include the actual release content in sustained native phone evidence; no prior device pass is extended by this document.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T69",
+        "exact_existing_name": "Sustained native 4K/60 tablet/foldable evidence",
+        "existing_forward_scope_title": "Sustained native4K/60 tablet/foldable evidence for each affected release",
+        "existing_dependencies": [
+          "T67"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "future_release_device_gate",
+        "proposed_scope_delta": "Include the actual release content in sustained native tablet/foldable evidence; no prior device pass is extended by this document.",
+        "task_activated_by_this_delta": false
+      },
+      {
+        "task_id": "T70",
+        "exact_existing_name": "Final production release handoff",
+        "existing_forward_scope_title": "World1 release handoff and later connected-update handoffs",
+        "existing_dependencies": [
+          "T68",
+          "T69"
+        ],
+        "dependency_array_changed": false,
+        "ownership_reassigned": false,
+        "impact_kind": "future_release_handoff",
+        "proposed_scope_delta": "List the exact included assets, sources and remaining gates in the release manifest; planned design membership is not runtime support.",
+        "task_activated_by_this_delta": false
+      }
+    ],
+    "dedicated_midnight_man_work_item": {
+      "local_work_item_name": "Midnight Man implementation and independent rig/action review",
+      "local_only": true,
+      "canonical_task_id": null,
+      "assigned_owner": null,
+      "status": "UNASSIGNED_NAMED_WORK_ITEM",
+      "reason": "T06 names Character 1, while T59-T61 name Characters 2-4; none supplies the new lead a dedicated implementation/acceptance receipt.",
+      "interfaces_to_reconcile": [
+        "T06",
+        "T07",
+        "T08",
+        "T09",
+        "T14",
+        "T21",
+        "T43"
+      ],
+      "future_acceptance_consumers": [
+        "T58",
+        "T62",
+        "T67"
+      ],
+      "new_graph_edges_created": false
+    },
+    "t53_dependency_boundary": "Existing T53 depends on T43 and T44-T52. Reconcile a World 1 local transport release gate explicitly without silently editing that array or requiring all later worlds merely to register Tumbler.",
+    "undefined_task_numbers_retained": [
+      "T71",
+      "T72",
+      "T73",
+      "T74",
+      "T75",
+      "T76",
+      "T77",
+      "T78",
+      "T79",
+      "T80"
+    ],
+    "undefined_numbers_used_for_new_assets": false,
+    "premium_billing_tasks_automatically_changed": false
+  },
+  "next_deliverables": [
+    {
+      "id": "ND01",
+      "name": "Inspect and register the two exact source turnarounds",
+      "depends_on": [
+        "M1"
+      ],
+      "outputs": [
+        "Source-image identity/readability review against pinned Git blobs",
+        "Source-specific geometry/identity notes"
+      ],
+      "limits": "No image approval is inherited from the prior seven-file snapshot."
+    },
+    {
+      "id": "ND02",
+      "name": "Tumbler baseline, appearance and functional-value brief",
+      "depends_on": [
+        "ND01"
+      ],
+      "outputs": [
+        "Source-faithful hull/cutter/volley/cargo view-and-state requirements",
+        "Actual storage receiving/dispatch and garage/camp clearance compatibility plan",
+        "Baseline-versus-proposed-gain table for any later justified appearance stages"
+      ],
+      "baseline_exclusion": "Cutters, manual up-to-10-target homing volley and cargo already belong to the published baseline and cannot be presented as newly unlocked upgrade benefits.",
+      "numeric_tiers_stats_prices_authored": false
+    },
+    {
+      "id": "ND03",
+      "name": "Midnight Man identity, gear, motion and functional-value brief",
+      "depends_on": [
+        "ND01"
+      ],
+      "outputs": [
+        "Distinct playable identity/gear reference requirements",
+        "Rig and full-cycle Sweep/Breakthrough/Rebound/throw evidence plan",
+        "Combat/harvest target-selection and one-receipt-per-accepted-event contract",
+        "Baseline-versus-proposed-gain table for any later justified appearance stages"
+      ],
+      "baseline_exclusion": "Batarangs and the three combo concepts already belong to the baseline kit. Future upgrade value requires an additional justified gain and visible mechanism.",
+      "numeric_tiers_stats_prices_authored": false
+    },
+    {
+      "id": "ND04",
+      "name": "Runtime ownership and open-policy decisions",
+      "depends_on": [
+        "M1"
+      ],
+      "outputs": [
+        "Explicit dedicated Midnight Man implementation/review assignment",
+        "Canonical runtime/save identity and release availability binding",
+        "Tumbler power/capacity/fit/cost decisions and VC01/VC02 reconciliation",
+        "Midnight Man trigger/priority/cadence/control and Rebound decision"
+      ],
+      "limits": "These are future owner/implementation decisions, not inferred approvals in this delta."
+    }
+  ],
+  "milestones": [
+    {
+      "id": "M1",
+      "name": "Source capture and additive scope reconciliation",
+      "depends_on": [],
+      "status": "SOURCE_INPUTS_AND_DELTA_AUTHORED_SEE_SEPARATE_REVIEW_RECEIPT",
+      "evidence": [
+        "SOURCE_MANIFEST.json",
+        "source-text/TUMBLER_README.txt",
+        "source-text/VEHICLE_ECONOMY.txt",
+        "source-text/MIDNIGHT_MAN_README.txt",
+        "source-text/PLAYABLE_ROSTER.txt"
+      ]
+    },
+    {
+      "id": "M2",
+      "name": "Inspect baselines and author source-faithful appearance/value briefs",
+      "depends_on": [
+        "M1"
+      ],
+      "status": "PENDING",
+      "deliverables": [
+        "ND01",
+        "ND02",
+        "ND03"
+      ]
+    },
+    {
+      "id": "M3",
+      "name": "Assign runtime ownership and settle prerequisite policy",
+      "depends_on": [
+        "M1"
+      ],
+      "status": "PENDING",
+      "deliverables": [
+        "ND04"
+      ]
+    },
+    {
+      "id": "M4",
+      "name": "Implement and capture native models, actions, custody and controls",
+      "depends_on": [
+        "M2",
+        "M3"
+      ],
+      "status": "FUTURE_IMPLEMENTATION_NOT_PERFORMED_BY_THIS_DELTA"
+    },
+    {
+      "id": "M5",
+      "name": "Independent exact-release reference/value/device acceptance",
+      "depends_on": [
+        "M4"
+      ],
+      "status": "FUTURE_UNTESTED"
+    }
+  ],
+  "acceptance_checklist": [
+    {
+      "id": "AC01",
+      "requirement": "Four exact source-text snapshots match their manifest Git blobs.",
+      "status": "PASS_DOCUMENT_EVIDENCE",
+      "source_or_evidence_ids": [
+        "tumbler_design",
+        "vehicle_economy_context",
+        "midnight_man_design",
+        "playable_roster"
+      ],
+      "mandatory": true
+    },
+    {
+      "id": "AC02",
+      "requirement": "Counts reconcile 99+2=101; vehicles 1+1=2; human actors 10+1=11; playable identities 4+1=5; old ladders/stages/images/panels remain unchanged.",
+      "status": "PASS_DOCUMENT_EVIDENCE",
+      "source_or_evidence_ids": [],
+      "mandatory": true
+    },
+    {
+      "id": "AC03",
+      "requirement": "Every mapped task name and dependency array matches the retained task delta; no new Txx or runtime ID is assigned.",
+      "status": "PASS_DOCUMENT_EVIDENCE",
+      "source_or_evidence_ids": [],
+      "mandatory": true
+    },
+    {
+      "id": "AC04",
+      "requirement": "Independent review checks this additive delta against exact source snapshots and preservation boundaries.",
+      "status": "EXACT_CANDIDATE_RESULT_RECORDED_SEPARATELY",
+      "source_or_evidence_ids": [],
+      "mandatory": true,
+      "receipt": "INDEPENDENT_REVIEW.json"
+    },
+    {
+      "id": "AC05",
+      "requirement": "Inspect the two actual pinned reference images before making visual-identity or modeling claims.",
+      "status": "PENDING_VISUAL_INSPECTION",
+      "source_or_evidence_ids": [
+        "tumbler_turnaround",
+        "midnight_man_turnaround"
+      ],
+      "mandatory": true
+    },
+    {
+      "id": "AC06",
+      "requirement": "Future appearance/value briefs distinguish real additional gains from published baseline abilities, with explicit mechanisms, requirements, tradeoffs and access/flow.",
+      "status": "PENDING_FUTURE_BRIEFS",
+      "source_or_evidence_ids": [],
+      "mandatory": true
+    },
+    {
+      "id": "AC07",
+      "requirement": "Tumbler cutters show valid contacts against eligible enemies, trees and every mineable type including slate and coal, while retaining paid-camp cutter safety.",
+      "status": "UNTESTED_NATIVE",
+      "source_or_evidence_ids": [],
+      "mandatory": true
+    },
+    {
+      "id": "AC08",
+      "requirement": "Tumbler volley tests cover 0/1/10/>10 eligible enemies, distinct assignments, assigned-target homing, no launch without player input and the shared 3-second cooldown after successful volleys.",
+      "status": "UNTESTED_NATIVE",
+      "source_or_evidence_ids": [],
+      "mandatory": true
+    },
+    {
+      "id": "AC09",
+      "requirement": "Tumbler typed cargo, blocked unload, exactly-once warehouse receipt and inside/outside wreck handling remain conserved through save/reload; no render-derived capacity or unspecified power system is assumed.",
+      "status": "UNTESTED_NATIVE",
+      "source_or_evidence_ids": [],
+      "mandatory": true
+    },
+    {
+      "id": "AC10",
+      "requirement": "Actual Tumbler hull/cutter/hatch envelope and garage/storage receiving/dispatch paths fit with service access and both pedestrian camp routes preserved.",
+      "status": "PENDING_SOURCE_GEOMETRY_AND_NATIVE_LAYOUT",
+      "source_or_evidence_ids": [],
+      "mandatory": true
+    },
+    {
+      "id": "AC11",
+      "requirement": "Midnight Man throw control/priority/cadence and Rebound hybrid-versus-melee decision are explicitly authored before final animation/control acceptance.",
+      "status": "PENDING_DESIGN_DECISIONS",
+      "source_or_evidence_ids": [],
+      "mandatory": true
+    },
+    {
+      "id": "AC12",
+      "requirement": "An actual Midnight Man rig plus full Sweep, Breakthrough, Rebound and throw clips show windup/contact/recovery at normal native camera; review all meaningful angles, contacts and full cycles.",
+      "status": "UNTESTED_NATIVE",
+      "source_or_evidence_ids": [],
+      "mandatory": true
+    },
+    {
+      "id": "AC13",
+      "requirement": "Midnight Man chooses eligible combat/harvest targets and produces one harvest receipt per accepted event, including interruption and save/reload regression.",
+      "status": "UNTESTED_NATIVE",
+      "source_or_evidence_ids": [],
+      "mandatory": true
+    },
+    {
+      "id": "AC14",
+      "requirement": "Four existing leads, standard orbiting axes, survivor two-handed tools and separate pet/survivor roles remain unchanged in the released candidate.",
+      "status": "UNTESTED_NATIVE",
+      "source_or_evidence_ids": [],
+      "mandatory": true
+    },
+    {
+      "id": "AC15",
+      "requirement": "Canonical identity, availability, acquisition/recovery and balance decisions are source-bound; Midnight Man has an explicitly assigned implementation/review owner without repurposing T59-T61.",
+      "status": "PENDING_OWNER_AND_RUNTIME_BINDING",
+      "source_or_evidence_ids": [],
+      "mandatory": true
+    },
+    {
+      "id": "AC16",
+      "requirement": "The exact release containing each asset passes applicable reference, ordinary-player economy, audio, accessibility, performance and physical-device gates; prior receipts are not extended.",
+      "status": "UNTESTED_RELEASE",
+      "source_or_evidence_ids": [],
+      "mandatory": true
+    }
+  ],
+  "resumable_next_action": {
+    "current_milestone": "M1",
+    "next": "Read INDEPENDENT_REVIEW.json and PUBLICATION_RECEIPT.json for the exact-candidate review and publication status. Continue with pinned-image inspection and ND02/ND03 source-faithful appearance/value briefs; resolve ND04 ownership and open policy in parallel. No upgrade tiers are assumed approved.",
+    "owner_of_source_capture_navigation_verification_publication": "root",
+    "this_agent_owned_files": [
+      "README.md",
+      "SCOPE_DELTA.json"
+    ],
+    "do_not_resume_as": "Do not treat planning IDs as runtime IDs, source art as an inspected/approved model, baseline abilities as new paid tiers, or Midnight Man as a survivor/confirmed World 1 unlock."
+  },
+  "approval_boundary": {
+    "new_art_generated": false,
+    "new_images_visually_inspected": false,
+    "new_model_or_rig_integrated": false,
+    "new_runtime_roster_slot": false,
+    "new_upgrade_tiers": false,
+    "new_numeric_unlocks": false,
+    "native_gameplay_tested": false,
+    "art_owner_selection": false,
+    "prior_seven_image_review_extended": false,
+    "release_approval": false,
+    "whole_task_complete": false,
+    "independent_document_review": "EXACT_CANDIDATE_RESULT_IN_SEPARATE_INDEPENDENT_REVIEW_JSON"
+  }
+}

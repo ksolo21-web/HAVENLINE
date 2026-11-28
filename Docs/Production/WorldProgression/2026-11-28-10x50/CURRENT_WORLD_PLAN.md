@@ -4,6 +4,8 @@
 
 **The owner has fixed the campaign structure at 10 worlds × 50 local levels = 500 planned level positions.** T12 and T32 must no longer be summarized as a 100-level campaign and a 10-level opening world. This package records forward planning and World1 meaningful visual/functional upgrade scope, including the storage house and multiple simultaneously active pets/survivors. It does not implement the progression or approve the game.
 
+The [Tumbler and Midnight Man roster addendum](../../../Design/World1Upgrades/2026-11-28/roster-additions/tumbler-midnight-man/README.md) is the current additive scope update. Tumbler is a newly documented World 1 vehicle; Midnight Man is a planned fifth playable identity whose exact world availability and unlock remain unassigned. Their source-bound records, task impacts and open acceptance gates supplement the original task delta and world contract. Existing generic truck/vehicle precedence describes the **Snow Truck**; apply only the separately sourced Tumbler contract to the new vehicle. The addendum preserves the 10 × 50 structure and does not create unlock levels, new numbered tasks or native approval.
+
 The current separate [World-Progression source](https://github.com/ksolo21-web/HAVENLINE/blob/5862b89c1663cacc0cbb84bfaba438d1459cfdb6/Docs/Production/Build13Audit/World-Progression.md) already selects World 1 as the initial release and later connected updates for Worlds 2–10. Its earlier tentative fifty-level wording is superseded by the owner's latest fixed-count instruction. Its old ten-level bands are preserved as historical design inputs, not current ranges.
 
 ## Worlds and task ownership

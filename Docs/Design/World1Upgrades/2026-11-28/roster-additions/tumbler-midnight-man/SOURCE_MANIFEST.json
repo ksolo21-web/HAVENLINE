@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-28",
+  "scope": "Two additive source-bound planning records; no new rendered or native evidence.",
+  "prior_review_commit": "e9fe6c1bf28bef1dd630b73b33aceed43ef4f174",
+  "owner_addition": {
+    "text": "I added a new World 1 vehicle (Tumbler) and 1 new playable Character (Midnight Man)",
+    "source": "Current conversation, owner instruction",
+    "interpretation": "Tumbler is explicitly assigned to World 1. Midnight Man is a new playable identity; the exact release/world availability and unlock remain unbound in the published design."
+  },
+  "sources": [
+    {
+      "id": "tumbler_design",
+      "repository": "ksolo21-web/HAVENLINE",
+      "branch_at_observation": "feature/vehicle-economy-world-fleet-2026-11-27",
+      "commit": "5b5ae75a6bd74d708eceb6d8a4837d977bcd5cb3",
+      "path": "Docs/Design/WorldVehicles/2026-11-28/README.md",
+      "git_blob_sha": "00341d02d2793e516de708c3a9abead0a7259ef6",
+      "local_snapshot": "source-text/TUMBLER_README.txt",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/5b5ae75a6bd74d708eceb6d8a4837d977bcd5cb3/Docs/Design/WorldVehicles/2026-11-28/README.md",
+      "evidence_type": "exact_source_text",
+      "runtime_approval": false
+    },
+    {
+      "id": "vehicle_economy_context",
+      "repository": "ksolo21-web/HAVENLINE",
+      "branch_at_observation": "feature/vehicle-economy-world-fleet-2026-11-27",
+      "commit": "5b5ae75a6bd74d708eceb6d8a4837d977bcd5cb3",
+      "path": "Docs/Production/VEHICLE_ECONOMY.md",
+      "git_blob_sha": "4a74384aa40faf571a1bbaf4a335553049570b36",
+      "local_snapshot": "source-text/VEHICLE_ECONOMY.txt",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/5b5ae75a6bd74d708eceb6d8a4837d977bcd5cb3/Docs/Production/VEHICLE_ECONOMY.md",
+      "evidence_type": "exact_source_text",
+      "runtime_approval": false
+    },
+    {
+      "id": "midnight_man_design",
+      "repository": "ksolo21-web/HAVENLINE",
+      "branch_at_observation": "review/beta-t07-context-2026-11-28",
+      "commit": "527175227fe323d866109853e7217c6505cff080",
+      "path": "Docs/Design/CharacterTurnarounds/2026-11-28/midnight-man/README.md",
+      "git_blob_sha": "c4b0366d5a3a4d6ecf95d805977918cf5155c8b7",
+      "local_snapshot": "source-text/MIDNIGHT_MAN_README.txt",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/527175227fe323d866109853e7217c6505cff080/Docs/Design/CharacterTurnarounds/2026-11-28/midnight-man/README.md",
+      "evidence_type": "exact_source_text",
+      "runtime_approval": false
+    },
+    {
+      "id": "playable_roster",
+      "repository": "ksolo21-web/HAVENLINE",
+      "branch_at_observation": "review/beta-t07-context-2026-11-28",
+      "commit": "527175227fe323d866109853e7217c6505cff080",
+      "path": "Docs/Design/CharacterTurnarounds/PLAYABLE_ROSTER.md",
+      "git_blob_sha": "5903ecb99bcd4158676c37e96c26599a003b4e50",
+      "local_snapshot": "source-text/PLAYABLE_ROSTER.txt",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/527175227fe323d866109853e7217c6505cff080/Docs/Design/CharacterTurnarounds/PLAYABLE_ROSTER.md",
+      "evidence_type": "exact_source_text",
+      "runtime_approval": false
+    }
+  ],
+  "image_references": [
+    {
+      "id": "tumbler_turnaround",
+      "repository": "ksolo21-web/HAVENLINE",
+      "commit": "5b5ae75a6bd74d708eceb6d8a4837d977bcd5cb3",
+      "path": "Docs/Design/WorldVehicles/2026-11-28/tumbler-360.jpg",
+      "git_blob_sha": "1876c71a0a030bca994d091b0eb32e510e4c2cd7",
+      "bytes": 492941,
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/5b5ae75a6bd74d708eceb6d8a4837d977bcd5cb3/Docs/Design/WorldVehicles/2026-11-28/tumbler-360.jpg",
+      "source_description": "Eight-view turnaround and rear cargo hatch",
+      "retrieval_evidence": "Path/blob/size verified in complete source Git tree; not downloaded or visually reviewed in this reconciliation.",
+      "reused_prior_visual_approval": false,
+      "new_visual_review_performed": false
+    },
+    {
+      "id": "midnight_man_turnaround",
+      "repository": "ksolo21-web/HAVENLINE",
+      "commit": "527175227fe323d866109853e7217c6505cff080",
+      "path": "Docs/Design/CharacterTurnarounds/2026-11-28/midnight-man/midnight-man-360.jpg",
+      "git_blob_sha": "dd865628f1d90138ae0c99bbf000c14c0315f79f",
+      "bytes": 376955,
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/527175227fe323d866109853e7217c6505cff080/Docs/Design/CharacterTurnarounds/2026-11-28/midnight-man/midnight-man-360.jpg",
+      "source_description": "Eight-view turnaround",
+      "retrieval_evidence": "Path/blob/size verified in complete source Git tree; not downloaded or visually reviewed in this reconciliation.",
+      "reused_prior_visual_approval": false,
+      "new_visual_review_performed": false
+    }
+  ],
+  "preservation_policy": "Original source text is captured byte-for-byte in .txt files. Relative links inside these snapshots retain their original source meaning; use the pinned source URLs and image_references to open their original repository context. Existing references are bound by Git blob SHA, not granted new art approval.",
+  "runtime_scope": {
+    "model_integration": false,
+    "animation_approval": false,
+    "gameplay_approval": false,
+    "new_level_unlocks": false,
+    "new_upgrade_tiers": false,
+    "existing_seven_image_review_extended": false
+  },
+  "inherited_planning_sources": [
+    {
+      "id": "prior_census",
+      "repository": "ksolo21-web/HAVENLINE",
+      "commit": "e9fe6c1bf28bef1dd630b73b33aceed43ef4f174",
+      "path": "Docs/Design/World1Upgrades/2026-11-28/WORLD1_UPGRADE_CENSUS.json",
+      "git_blob_sha": "b382aa628815b69974842f2127a63af7b3f1fd49",
+      "purpose": "99 inherited family identities and category counts",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/e9fe6c1bf28bef1dd630b73b33aceed43ef4f174/Docs/Design/World1Upgrades/2026-11-28/WORLD1_UPGRADE_CENSUS.json",
+      "preserved_unchanged": true
+    },
+    {
+      "id": "prior_value_plan",
+      "repository": "ksolo21-web/HAVENLINE",
+      "commit": "e9fe6c1bf28bef1dd630b73b33aceed43ef4f174",
+      "path": "Docs/Design/World1Upgrades/2026-11-28/PURCHASE_VALUE_UPGRADE_PLAN.json",
+      "git_blob_sha": "0e587c113e7fdc961facc843dff2b95064f95906",
+      "purpose": "27 authored ladders, 54 stage proposals, seven presentation files and retained value requirements",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/e9fe6c1bf28bef1dd630b73b33aceed43ef4f174/Docs/Design/World1Upgrades/2026-11-28/PURCHASE_VALUE_UPGRADE_PLAN.json",
+      "preserved_unchanged": true
+    },
+    {
+      "id": "prior_task_delta",
+      "repository": "ksolo21-web/HAVENLINE",
+      "commit": "e9fe6c1bf28bef1dd630b73b33aceed43ef4f174",
+      "path": "Docs/Production/WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.json",
+      "git_blob_sha": "91ffc0bc2214333724923d879878b2ad4f8d9476",
+      "purpose": "Existing task names, dependency arrays and historical lifecycle snapshots",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/e9fe6c1bf28bef1dd630b73b33aceed43ef4f174/Docs/Production/WorldProgression/2026-11-28-10x50/TASK_SCOPE_DELTA_T01_T80.json",
+      "preserved_unchanged": true
+    },
+    {
+      "id": "prior_world_contract",
+      "repository": "ksolo21-web/HAVENLINE",
+      "commit": "e9fe6c1bf28bef1dd630b73b33aceed43ef4f174",
+      "path": "Docs/Production/WorldProgression/2026-11-28-10x50/WORLD_PROGRESSION_CONTRACT.json",
+      "git_blob_sha": "2bb31ad71b2f7d406a4c6740a6b6b60932041f9a",
+      "purpose": "10-by-50 world structure, source precedence and unresolved migration decisions",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/e9fe6c1bf28bef1dd630b73b33aceed43ef4f174/Docs/Production/WorldProgression/2026-11-28-10x50/WORLD_PROGRESSION_CONTRACT.json",
+      "preserved_unchanged": true
+    }
+  ]
+}
