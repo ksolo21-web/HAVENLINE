@@ -1,0 +1,597 @@
+{
+  "candidate": "42c8d275d2d72a46094e48930fe38d83ee61868e",
+  "task": "T07",
+  "builder": "Codex",
+  "independent_reviewer": "gameplay_review",
+  "effective_visual_approval": false,
+  "source_audit": {
+    "files": 203,
+    "findings": 0
+  },
+  "regressions": {
+    "qa_snow_truck": 0,
+    "qa_offsite_camp": 0,
+    "qa_camp_raid": 0,
+    "qa_surface_conveyor_layout": 0,
+    "qa_field_context": 0,
+    "qa_storage_stream": 0,
+    "qa_field_purchase_scene": 0,
+    "qa_field_minerals": 0,
+    "qa_field_save": 0,
+    "qa_worker_jobs": 0,
+    "qa_camp_gate_routes": 0,
+    "qa_field_hud": 0,
+    "qa_production_balances": 0
+  },
+  "controls": {
+    "approach entered plot reach on actual thumbstick": true,
+    "boardable with the regular input action": true,
+    "both legacy posts on either side of both openings stay hidden at reveal": true,
+    "cancel keeps existing credit and permits no new spending": true,
+    "dismount restores the pedestrian gate compass": true,
+    "green focus precedes first launched parcel and receipt": true,
+    "legacy gate markers are explicitly hidden before paying": true,
+    "mounted compass still routes around fence from east": true,
+    "moving approach cannot show the authorized highlight or pay": true,
+    "moving clears focus color and preserves paid fill": true,
+    "outside mounted compass directs to usable garage opening": true,
+    "parked truck has no redundant return compass": true,
+    "prepared paid expansion_1": true,
+    "prepared paid expansion_2": true,
+    "prepared paid snow_garage": true,
+    "prepared paid snow_truck": true,
+    "prepared paid storage_meat": true,
+    "prepared paid storage_stone": true,
+    "prepared paid storage_wood": true,
+    "re-entry completes just one legitimate purchase": true
+  },
+  "hud": {
+    "cover alert legible over its own surface": true,
+    "cover all earned goods have distinct authored icons": true,
+    "cover bounds clear play and respect visible canvas": true,
+    "cover goal is clear of the graphics switch": true,
+    "cover graphics accessible without competing label": true,
+    "cover illustrations keep a gap before each quantity": true,
+    "cover keeps recovery message visible": true,
+    "cover last material clears next-upgrade caption during entrance": true,
+    "cover no blank stock when a worker is serving": true,
+    "cover purchase card has correct quantities and illustration": true,
+    "cover shows price and reference art for Build cooker": true,
+    "cover shows price and reference art for Build quarry drill": true,
+    "cover shows price and reference art for Build saw bench": true,
+    "cover six typed shelf balances and next upgrade remain readable": true,
+    "inner alert legible over its own surface": true,
+    "inner all earned goods have distinct authored icons": true,
+    "inner bounds clear play and respect visible canvas": true,
+    "inner goal is clear of the graphics switch": true,
+    "inner graphics accessible without competing label": true,
+    "inner illustrations keep a gap before each quantity": true,
+    "inner keeps recovery message visible": true,
+    "inner last material clears next-upgrade caption during entrance": true,
+    "inner no blank stock when a worker is serving": true,
+    "inner purchase card has correct quantities and illustration": true,
+    "inner shows price and reference art for Build cooker": true,
+    "inner shows price and reference art for Build quarry drill": true,
+    "inner shows price and reference art for Build saw bench": true,
+    "inner six typed shelf balances and next upgrade remain readable": true,
+    "landscape alert legible over its own surface": true,
+    "landscape all earned goods have distinct authored icons": true,
+    "landscape bounds clear play and respect visible canvas": true,
+    "landscape goal is clear of the graphics switch": true,
+    "landscape graphics accessible without competing label": true,
+    "landscape illustrations keep a gap before each quantity": true,
+    "landscape keeps recovery message visible": true,
+    "landscape last material clears next-upgrade caption during entrance": true,
+    "landscape no blank stock when a worker is serving": true,
+    "landscape purchase card has correct quantities and illustration": true,
+    "landscape shows price and reference art for Build cooker": true,
+    "landscape shows price and reference art for Build quarry drill": true,
+    "landscape shows price and reference art for Build saw bench": true,
+    "landscape six typed shelf balances and next upgrade remain readable": true,
+    "unearned finished goods hidden": true,
+    "worker and player-held meals stay off the tray count": true
+  },
+  "offsite": {
+    "build_order": [
+      "center_hearth",
+      "expansion_1",
+      "storage_wood",
+      "storage_stone",
+      "storage_meat",
+      "expansion_2",
+      "camp_cooker",
+      "saw_bench",
+      "quarry_drill",
+      "watchtower",
+      "orbit_upgrade",
+      "meal_conveyor"
+    ],
+    "checks": [
+      "paid helper physically rescued",
+      "player actually outside the raid's unattended radius",
+      "conveyor starts unselected",
+      "offsite transactions remained save-valid",
+      "survivor repaired the paid gate with one exact bill",
+      "survivor fed and cleared both unconnected workshops",
+      "survivor stocked counter and banked customer cash through real receipts",
+      "unselected conveyor spent nothing",
+      "player stayed away and their backpack remained intact",
+      "survivor undertook the selected conveyor project",
+      "revoking permission stops tender before any debit",
+      "selected conveyor built by survivor once without the player returning",
+      "worker, stock, sales, repairs and plots conserve the saved balance"
+    ],
+    "elapsed": 222.033333333402,
+    "failures": [],
+    "hoppers": {
+      "meat": 0,
+      "stone": 0,
+      "wood": 0
+    },
+    "house_cash": 8,
+    "observed_phases": [
+      "to_tree",
+      "work_ready",
+      "chopping",
+      "falling",
+      "pickup",
+      "carrying",
+      "unload",
+      "bin_delivery",
+      "repair_site",
+      "mining_approach",
+      "mining",
+      "foraging",
+      "bulk_return",
+      "supply_out",
+      "supply_unload",
+      "supply_back",
+      "meal_collect",
+      "meal_serve",
+      "supply_pickup",
+      "collect_output",
+      "hunt_approach"
+    ],
+    "player_position": "(32.0, 0.0, 26.0)",
+    "product_stock": {
+      "blocks": 3,
+      "meal": 0,
+      "planks": 8
+    },
+    "repair_spend": {
+      "stone": 1,
+      "wood": 2
+    },
+    "sales": 8,
+    "save_error": "",
+    "worker_phase": "assist_plot",
+    "workshop_output": [
+      8,
+      4
+    ]
+  },
+  "truck": {
+    "a fresh camp boots": true,
+    "affordable replacement at the garage": true,
+    "all eight metal bundles go to truck exactly once": true,
+    "blade cooldown prevents a duplicate hit": true,
+    "can drive the replacement truck": true,
+    "central leading edge chops a rooted pine": true,
+    "central leading edge damages a wolf once": true,
+    "central leading edge mines a bank": true,
+    "driven blades break a real metal bank": true,
+    "durable owned truck starts at full health": true,
+    "garage and truck begin locked": true,
+    "garage replaces a fence section and keeps both walk gates": true,
+    "ground pickup goes into truck, not player pack": true,
+    "held throttle docks fully and stops at rear while mounted": true,
+    "interior wreck retains salvage": true,
+    "lethal contact applies after damage cooldown": true,
+    "mounted using player input": true,
+    "moving truck leaves paired treads outside camp": true,
+    "normal thumbstick drives out through garage": true,
+    "outside loss survives cold reload": true,
+    "outside wreck loses cargo without salvage": true,
+    "outside wreck position survives cold reload": true,
+    "park transfers the entire cargo once": true,
+    "pay separate garage offer": true,
+    "pay separate truck offer": true,
+    "recover interior cargo exactly once": true,
+    "remaining docked cannot credit the same cargo again": true,
+    "replacement is completely outside camp": true,
+    "replacement takes cargo before wreck": true,
+    "restored player controls and backpack": true,
+    "returns steering control after contacting a gate corner": true,
+    "reverse returns into garage and parks": true,
+    "save remains usable after all truck operations": true,
+    "setup: center_hearth": true,
+    "setup: expansion_1": true,
+    "setup: expansion_2": true,
+    "setup: storage_meat": true,
+    "setup: storage_stone": true,
+    "setup: storage_wood": true,
+    "shutter closes after the entire vehicle clears the opening": true,
+    "side blade still chops and a target beyond reach stays untouched": true,
+    "truck stays locked until garage is built": true,
+    "vehicle cannot shortcut through the pedestrian gate corner": true,
+    "whole new truck is parked in the bay": true
+  },
+  "simulated_viewports": {
+    "checks": {
+      "entered the camp by the south gate using standard touch input": true,
+      "foldable-open-camp native raster matches requested size": true,
+      "foldable-open-camp screenshot saved successfully": true,
+      "folded-cover-camp native raster matches requested size": true,
+      "folded-cover-camp screenshot saved successfully": true,
+      "funded camp_cooker": true,
+      "funded center_hearth": true,
+      "funded expansion_1": true,
+      "funded expansion_2": true,
+      "funded quarry_drill": true,
+      "funded saw_bench": true,
+      "funded snow_garage": true,
+      "funded snow_truck": true,
+      "funded storage_meat": true,
+      "funded storage_stone": true,
+      "funded storage_wood": true,
+      "funded watchtower": true,
+      "phone-tall-opening native raster matches requested size": true,
+      "phone-tall-opening screenshot saved successfully": true,
+      "tablet-camp native raster matches requested size": true,
+      "tablet-camp screenshot saved successfully": true
+    },
+    "field_art": "9ff09d2db8ad2f91a1d4b9268bb1541cc2da79b84236c499d35ae3f090ecf9d9",
+    "layouts": {
+      "foldable-open-camp": {
+        "draw_calls": 551,
+        "objects": 669,
+        "primitives": 790508,
+        "raster": [
+          840,
+          942
+        ],
+        "texture_memory_mb": 724.696562767029
+      },
+      "folded-cover-camp": {
+        "draw_calls": 564,
+        "objects": 682,
+        "primitives": 724774,
+        "raster": [
+          540,
+          1260
+        ],
+        "texture_memory_mb": 720.05016040802
+      },
+      "phone-tall-opening": {
+        "draw_calls": 294,
+        "objects": 396,
+        "primitives": 382401,
+        "raster": [
+          540,
+          1260
+        ],
+        "texture_memory_mb": 718.080107688904
+      },
+      "tablet-camp": {
+        "draw_calls": 584,
+        "objects": 702,
+        "primitives": 849782,
+        "raster": [
+          1024,
+          768
+        ],
+        "texture_memory_mb": 724.136626243591
+      }
+    },
+    "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)"
+  },
+  "headless_gameplay_timing": {
+    "fixtures": {
+      "funded camp_cooker": true,
+      "funded center_hearth": true,
+      "funded expansion_1": true,
+      "funded expansion_2": true,
+      "funded orbit_upgrade": true,
+      "funded quarry_drill": true,
+      "funded saw_bench": true,
+      "funded snow_garage": true,
+      "funded snow_truck": true,
+      "funded storage_meat": true,
+      "funded storage_stone": true,
+      "funded storage_wood": true,
+      "funded watchtower": true
+    },
+    "nodes": 1146.0,
+    "renderer": "",
+    "routes": {
+      "east_return": {
+        "context_states": {
+          "blocked_movement": 154,
+          "idle": 146
+        },
+        "samples": 300,
+        "skipped_simulation_ticks": 0,
+        "wall_ms_per_headless_tick": {
+          "max": 13.039,
+          "median": 2.69,
+          "p95": 3.246
+        }
+      },
+      "south_near": {
+        "context_states": {
+          "blocked_movement": 27,
+          "idle": 273
+        },
+        "samples": 300,
+        "skipped_simulation_ticks": 0,
+        "wall_ms_per_headless_tick": {
+          "max": 10.817,
+          "median": 2.023,
+          "p95": 2.92
+        }
+      },
+      "workshops": {
+        "context_states": {
+          "idle": 300
+        },
+        "samples": 300,
+        "skipped_simulation_ticks": 0,
+        "wall_ms_per_headless_tick": {
+          "max": 13.916,
+          "median": 1.997,
+          "p95": 3.698
+        }
+      }
+    },
+    "source": {
+      "director": "b7855c39ff2807c1d50f2cfa20bc5316543a8bf7027c64be6f4072a3028d6a79",
+      "field": "c9eda033250abbba1c6ce0daf5935d2045fb18a61b2dc8170a83b5216b4bdb26"
+    },
+    "static_memory_mb": 833.669506072998
+  },
+  "hosted_run": {
+    "conclusion": "success",
+    "databaseId": 46146893415,
+    "headSha": "2fa63a2488cc1c79680fc7b19421665213923b0b",
+    "jobs": [
+      {
+        "completedAt": "2026-11-28T13:11:24Z",
+        "conclusion": "success",
+        "databaseId": 140984805451,
+        "name": "replay",
+        "startedAt": "2026-11-28T12:53:40Z",
+        "status": "completed",
+        "steps": [
+          {
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Set up the pinned engine",
+            "number": 3,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Install the matching Linux export templates",
+            "number": 4,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Verify the exact project and make the review build",
+            "number": 5,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Run the offsite camp check",
+            "number": 6,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Record the actual gameplay approach and purchase",
+            "number": 7,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Retain build and replay evidence",
+            "number": 8,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 16,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 17,
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/ksolo21-web/HAVENLINE/actions/runs/46146893415/job/140984805451"
+      }
+    ],
+    "status": "completed",
+    "updatedAt": "2026-11-28T13:11:24Z",
+    "url": "https://github.com/ksolo21-web/HAVENLINE/actions/runs/46146893415",
+    "artifact": {
+      "id": 15264472970,
+      "name": "Havenline-T07-exact-build-and-replay",
+      "size_in_bytes": 258373344,
+      "digest": "sha256:fe945cbf146f5c8f74aacfc7510b55f167815e22b373e9be42814364b74449d7",
+      "expired": false
+    },
+    "runtime": "42c8d275d2d72a46094e48930fe38d83ee61868e"
+  },
+  "open_release_evidence": [
+    "C1 pine tier silhouette and whole-frame fidelity",
+    "complete C6 and C11 evidence and independent review",
+    "owner visual approval"
+  ],
+  "physical_device_review": "waived for this beta by owner",
+  "native_4k_replay": {
+    "sha256": "a73c7d0a0f8750e5d566bee021b661a9ee8a47f8b747f438dc5113f96727bc85",
+    "video": {
+      "codec_name": "h264",
+      "width": 3840,
+      "height": 2160,
+      "r_frame_rate": "60/1",
+      "duration": "3.050000",
+      "nb_frames": "183"
+    },
+    "gameplay": {
+      "checks": {
+        "both sides of each older gate are hidden during the reveal": true,
+        "moving approach never funded the plot": true,
+        "moving away never added a payment beyond launched parcels": true,
+        "ordinary pinch reaches a two-times view": true,
+        "re-entry finishes payment and camp reveal exactly once": true,
+        "stopping launched parcels and paid first receipt": true,
+        "turns green before the first flight or receipt": true
+      },
+      "events": [
+        {
+          "context": "active",
+          "frame": 0,
+          "physics_frame": 61,
+          "player_position": [
+            0.0,
+            0.00800000037997961,
+            4.57999992370605
+          ],
+          "plot_due": 20,
+          "shutter": 0.0,
+          "state": "01-approach",
+          "truck_position": [
+            5.84999990463257,
+            0.0,
+            2.6800000667572
+          ]
+        },
+        {
+          "context": "blocked_movement",
+          "frame": 2,
+          "physics_frame": 63,
+          "player_position": [
+            -2.85605605832018e-09,
+            0.00800000037997961,
+            4.56083345413208
+          ],
+          "plot_due": 20,
+          "shutter": 0.0,
+          "state": "02-moving-plot-focus",
+          "truck_position": [
+            5.84999990463257,
+            0.0,
+            2.6800000667572
+          ]
+        },
+        {
+          "context": "acquiring",
+          "frame": 37,
+          "physics_frame": 98,
+          "player_position": [
+            -3.59608719691096e-07,
+            0.00800000037997961,
+            2.17194390296936
+          ],
+          "plot_due": 20,
+          "shutter": 0.0,
+          "state": "02b-ready-before-payment",
+          "truck_position": [
+            5.84999990463257,
+            0.0,
+            2.6800000667572
+          ]
+        },
+        {
+          "context": "active",
+          "frame": 44,
+          "physics_frame": 105,
+          "player_position": [
+            -3.59608719691096e-07,
+            0.00800000037997961,
+            2.17194390296936
+          ],
+          "plot_due": 20,
+          "shutter": 0.0,
+          "state": "03-packets-launched",
+          "truck_position": [
+            5.84999990463257,
+            0.0,
+            2.6800000667572
+          ]
+        },
+        {
+          "context": "blocked_movement",
+          "frame": 60,
+          "physics_frame": 121,
+          "player_position": [
+            -3.59608719691096e-07,
+            0.00800000037997961,
+            2.17194390296936
+          ],
+          "plot_due": 19,
+          "shutter": 0.0,
+          "state": "04-release-and-move",
+          "truck_position": [
+            5.84999990463257,
+            0.0,
+            2.6800000667572
+          ]
+        },
+        {
+          "context": "idle",
+          "frame": 137,
+          "physics_frame": 198,
+          "player_position": [
+            0.198129326105118,
+            0.00800000037997961,
+            2.20121622085571
+          ],
+          "plot_due": 0,
+          "shutter": 0.0,
+          "state": "05-camp-reveal",
+          "truck_position": [
+            5.84999990463257,
+            0.0,
+            2.6800000667572
+          ]
+        }
+      ],
+      "first_physics_frame": 61,
+      "frames": 183,
+      "last_physics_frame": 243,
+      "mode": "context",
+      "nonconsecutive_physics_samples": 0,
+      "rendered_video_frames": 183,
+      "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+      "source": {
+        "context": "b7855c39ff2807c1d50f2cfa20bc5316543a8bf7027c64be6f4072a3028d6a79",
+        "field_art": "9ff09d2db8ad2f91a1d4b9268bb1541cc2da79b84236c499d35ae3f090ecf9d9",
+        "opening": "bdd763d70766fa3d1031f71bbaf9ce1173c38a05c83b9e577fa73e372f84d280",
+        "truck": "31650144e9df1823d689b13526b751a06f7cbacb6171e483631b0c2ef3986d23"
+      },
+      "video_sample_stride": 1,
+      "viewport": [
+        3840,
+        2160
+      ]
+    }
+  }
+}
