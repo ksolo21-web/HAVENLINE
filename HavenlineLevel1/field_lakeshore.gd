@@ -212,6 +212,14 @@ func _keep_clear(p: Vector2, fixture: Node3D, radius: float) -> Vector2:
 	var result := fixture.to_global(Vector3(clear.x,0.,clear.y))
 	return Vector2(result.x,result.z)
 
+func _fixture_at(point: Vector2, fixtures: Array[Node3D], radius: float) -> Node3D:
+	for fixture in fixtures:
+		var deck: Rect2 = fixture.get_meta(&"station_footprint")
+		var local := fixture.to_local(Vector3(point.x,fixture.global_position.y,point.y))
+		if deck.grow(radius).has_point(Vector2(local.x,local.z)):
+			return fixture
+	return null
+
 func constrain_motion(from:Vector3,to:Vector3,radius:float) -> Vector3:
 	var begin := Vector2(from.x,from.z)
 	var end := Vector2(to.x,to.z)
@@ -227,13 +235,24 @@ func constrain_motion(from:Vector3,to:Vector3,radius:float) -> Vector3:
 	if available and station.has_point(current):
 		# A previous build could save here before this work bay existed.
 		current.y = station.end.y+.004
+	var embedded := _fixture_at(current,shore_bodies,radius)
+	if embedded:
+		# An older save can place the player on a newly installed base. All
+		# four approach sockets sit clear of both the water and adjacent bases.
+		var dry: Vector3 = embedded.get_node("DryApproach").global_position
+		current = Vector2(dry.x,dry.z)
 	for i in n:
+		var last_safe := current
 		current += d
 		if near_lake: current = _push_dry(current,radius)
 		if available: current = _push_station(current,station)
 		for fixture in shore_bodies:
 			current = _keep_clear(current,fixture,radius)
-		if not shore_bodies.is_empty(): current = _push_dry(current,radius)
+		if not shore_bodies.is_empty():
+			var dry := _push_dry(current,radius)
+			# The narrow strip behind a fixture may fit its feet but not
+			# a capsule. Reject the step if drying it would reenter a base.
+			current = last_safe if _fixture_at(dry,shore_bodies,radius) else dry
 	return Vector3(current.x,to.y,current.y)
 
 func _build_inlet() -> void:

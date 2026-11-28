@@ -28,6 +28,9 @@ func run() -> void:
 		var stopped: Vector3 = field.lakeshore.constrain_motion(spot.global_position,center,radius)
 		var local := fixture.to_local(stopped)
 		checks[prefix+" stops a capsule before solid structure"] = not deck.grow(radius-.006).has_point(Vector2(local.x,local.z))
+		var displaced: Vector3 = field.lakeshore.constrain_motion(center,center,radius)
+		var recovery := fixture.to_local(displaced)
+		checks[prefix+" recovers a previous save without a blocked capsule"] = 			not deck.grow(radius-.006).has_point(Vector2(recovery.x,recovery.z))
 		checks[prefix+" small valid approach stays available"] = 			field.lakeshore.constrain_motion(spot.global_position,spot.global_position,radius).distance_to(spot.global_position)<.012
 		var boxes: Array[AABB] = []
 		var fitted: Node3D = fixture.get_child(0)
@@ -60,7 +63,32 @@ func run() -> void:
 	var expected_height := Pads.FACE_Y+.002
 	checks["interactive outline is raised above visual deck without changing its flat extent"] = 		is_equal_approx(active_border.get_aabb().position.y,expected_height) and 		active_border.get_aabb().size.x>2.85 and active_border.get_aabb().size.z>2.30
 	checks["existing oven raw and hot trays retain their geometry-aligned placement"] = 		field.lakeshore.cooker_input.position.x<-.8 and field.lakeshore.cooker_output.position.x>.8
-	print(JSON.stringify({"suite":"field_station_kit","checks":checks}))
+	var routes := shoreline_routes(field,inlet,radius)
+	checks["cardinal and diagonal approach steps stay on dry ground and out of fixture bases"] = routes.touches==0 and routes.water==0 and routes.steps>6000
+	print(JSON.stringify({"suite":"field_station_kit","shoreline_routes":routes,"checks":checks}))
 	await Session.drain_field_audio(self,field)
 	field.free()
 	quit(int(false in checks.values()))
+
+func shoreline_routes(field, inlet: Node3D, radius: float) -> Dictionary:
+	var starts := 0
+	var attempts := 0
+	var overlaps := 0
+	var wet := 0
+	for fixture: Node3D in inlet.get_children():
+		var deck: Rect2 = fixture.get_meta(&"station_footprint")
+		var center := fixture.to_global(Vector3(deck.get_center().x,0,deck.get_center().y))
+		for angle in 16:
+			var facing := TAU*float(angle)/16.
+			var direction := Vector3(cos(facing),0,sin(facing))
+			for distance: float in [2.7,4.3,6.2]:
+				var at := center+direction*distance
+				if field.lakeshore.constrain_motion(at,at,radius).distance_to(at)>.025: continue
+				starts += 1
+				for i in ceili((distance+2.0)/.102):
+					at = field.lakeshore.constrain_motion(at,at-direction*.102,radius)
+					attempts += 1
+					if field.lakeshore._fixture_at(Vector2(at.x,at.z),field.lakeshore._shore_bodies(Rect2(Vector2(at.x,at.z),Vector2.ZERO).grow(.01),radius),radius-.012):
+						overlaps += 1
+					if Geometry2D.is_point_in_polygon(Vector2(at.x,at.z),field.lakeshore.shore): wet += 1
+	return {"starts":starts,"steps":attempts,"touches":overlaps,"water":wet}
