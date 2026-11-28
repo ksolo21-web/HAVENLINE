@@ -1,0 +1,269 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/tree_source_audit",
+  "scope": "Source census wording, coverage arithmetic, original-source integrity and publication-safe exact crop selection only. No generated-art/fidelity/model approval.",
+  "independence": {
+    "separate_from_census_and_package_builder": true,
+    "authored_some_underlying_source_audits": true,
+    "disclosure": "This reviewer previously authored A, terminal-B and initial-crop observations. It independently verifies root’s consolidated census and current package hashes; this is not a blind second visual census or an art review."
+  },
+  "verdict": "PASS_SCOPED_SOURCE_PROVENANCE_REVIEW",
+  "score": 10.0,
+  "score_scope": "This bounded source/provenance review only. Open art/hidden-geometry gates cannot inherit this score.",
+  "checks_passed": 12,
+  "checks_required": 12,
+  "checks": [
+    {
+      "id": "SP01",
+      "check": "Original source identity",
+      "passed": true,
+      "evidence": "Both actual MP4 SHA256/byte lengths match their source reports and the original reference lock."
+    },
+    {
+      "id": "SP02",
+      "check": "Coverage arithmetic",
+      "passed": true,
+      "evidence": "63 A samples +27 B-main samples +6 B-terminal samples =96 source/time pairs, with no B-window overlap."
+    },
+    {
+      "id": "SP03",
+      "check": "Retained sample-frame integrity",
+      "passed": true,
+      "evidence": {
+        "verified_sample_files": 96,
+        "mismatches": []
+      }
+    },
+    {
+      "id": "SP04",
+      "check": "Census report references resolve",
+      "passed": true,
+      "evidence": "All three named source audit reports exist."
+    },
+    {
+      "id": "SP05",
+      "check": "Sampled versus continuous coverage boundary",
+      "passed": true,
+      "evidence": "96 samples are not called continuous analysis or every decoded frame."
+    },
+    {
+      "id": "SP06",
+      "check": "Two appearances without invented mesh/species counts",
+      "passed": true,
+      "evidence": "TREE-A broad-tab and TREE-B narrow-notch are separate appearance targets, not proven original mesh/species counts."
+    },
+    {
+      "id": "SP07",
+      "check": "No third observed wording",
+      "passed": true,
+      "evidence": "No third observed IN SAMPLED FOOTAGE agrees with all source reports; an absolute no-third-anywhere claim would exceed evidence."
+    },
+    {
+      "id": "SP08",
+      "check": "Terminal content accurately bounded",
+      "passed": true,
+      "evidence": "B53 retains same conifers; B54 transition; B55–58 promotional content adds no tree target. Exact cut frame not claimed."
+    },
+    {
+      "id": "SP09",
+      "check": "Eight source crops remain exact original pixels",
+      "passed": true,
+      "evidence": "8/8 crop SHA256, source-frame SHA256 and exact pixel-rectangle comparisons pass; no resampling or synthesis."
+    },
+    {
+      "id": "SP10",
+      "check": "Census uses exactly the clean crop set",
+      "passed": true,
+      "evidence": "All eight referenced original/variation crops are present and are the previously inspected clean set."
+    },
+    {
+      "id": "SP11",
+      "check": "Staged source crops match approved source bytes",
+      "passed": true,
+      "evidence": "All eight staged package source crops match the exact source crops."
+    },
+    {
+      "id": "SP12",
+      "check": "Hidden-face and native-count limits retained",
+      "passed": true,
+      "evidence": "Census does not certify unseen surfaces,100%360 identity or original asset count from prior native three-model inventory."
+    }
+  ],
+  "supported_user_wording": "Two reference appearances; no third observed in the sampled footage. The underlying original mesh count cannot be proved from these recordings.",
+  "source_identity_checks": [
+    {
+      "source": "A",
+      "filename": "Screen_Recording_20260817_124839_YouTube.mp4",
+      "observed_sha256": "62f7cfe644de3826cfdd6d91bc23c0ab8d9e4fde3e175c90f762e604547bb0ca",
+      "locked_sha256": "62f7cfe644de3826cfdd6d91bc23c0ab8d9e4fde3e175c90f762e604547bb0ca",
+      "bytes": 74486197,
+      "passed": true
+    },
+    {
+      "source": "B",
+      "filename": "Screen_Recording_20260817_124510_YouTube.mp4",
+      "observed_sha256": "4c9051cbea6df0efa3e7288b13b6d17da46e857274869b0b43d2f96ff6cc79d2",
+      "locked_sha256": "4c9051cbea6df0efa3e7288b13b6d17da46e857274869b0b43d2f96ff6cc79d2",
+      "bytes": 74298526,
+      "passed": true
+    }
+  ],
+  "sample_integrity": {
+    "verified": 96,
+    "mismatches": [],
+    "sorted_binding_list_sha256": "d557d1e21239d013b922e82ca4bc6f27bae745736f9569289c59fe9b6870c9ed"
+  },
+  "publishable_clean_source_crops": [
+    {
+      "path": "source-crops/01-b40-individual-tree.png",
+      "sha256": "020b517edce42cb931d0edc034c460ab96ac2758babc3eeb4f5cdfb223770853",
+      "pixel_and_hash_passed": true,
+      "publishable_without_phone_youtube_or_creator_ui": true,
+      "visual_ui_basis": "Previously inspected actual crop; current bytes match that source audit and pixel rectangle."
+    },
+    {
+      "path": "source-crops/02-b20-individual-tree.png",
+      "sha256": "ce9e7a8a50a53b913f8a2b79a2d57563ec7c8a5b9e4001bd90842f8bcc117b7e",
+      "pixel_and_hash_passed": true,
+      "publishable_without_phone_youtube_or_creator_ui": true,
+      "visual_ui_basis": "Previously inspected actual crop; current bytes match that source audit and pixel rectangle."
+    },
+    {
+      "path": "source-crops/03-b40-forest-group.png",
+      "sha256": "e469e3867172047cd21f0bfcc1b4bcb643f1fbbf66e0ba86123fa66d2fe5ea95",
+      "pixel_and_hash_passed": true,
+      "publishable_without_phone_youtube_or_creator_ui": true,
+      "visual_ui_basis": "Previously inspected actual crop; current bytes match that source audit and pixel rectangle."
+    },
+    {
+      "path": "source-crops/04-b30-forest-edge.png",
+      "sha256": "c430b3e16087f649fcaf1b0526f3a00a182c036930bb211607cdabb68cb898ac",
+      "pixel_and_hash_passed": true,
+      "publishable_without_phone_youtube_or_creator_ui": true,
+      "visual_ui_basis": "Previously inspected actual crop; current bytes match that source audit and pixel rectangle."
+    },
+    {
+      "path": "source-a-audit/crops/A52-background-pointed-three-tier.png",
+      "sha256": "0ca4b70bf13f27e411873cc12d34ef913832b1311ccde610fb17bb6bab948f42",
+      "pixel_and_hash_passed": true,
+      "publishable_without_phone_youtube_or_creator_ui": true,
+      "visual_ui_basis": "Previously inspected actual crop; current bytes match that source audit and pixel rectangle."
+    },
+    {
+      "path": "source-a-audit/crops/A24-foreground-round-perspective.png",
+      "sha256": "da799f40fa9dc994eef11b502536a60d3e627974e69c6198cdb229cafaf201c9",
+      "pixel_and_hash_passed": true,
+      "publishable_without_phone_youtube_or_creator_ui": true,
+      "visual_ui_basis": "Previously inspected actual crop; current bytes match that source audit and pixel rectangle."
+    },
+    {
+      "path": "source-a-audit/crops/A24-smaller-three-tier.png",
+      "sha256": "6bdb30d35ff48b5ebae565ddef4cc73a25e47dfd9a0d424dc6be3d96635fb28b",
+      "pixel_and_hash_passed": true,
+      "publishable_without_phone_youtube_or_creator_ui": true,
+      "visual_ui_basis": "Previously inspected actual crop; current bytes match that source audit and pixel rectangle."
+    },
+    {
+      "path": "source-a-audit/crops/A61-shoreline-three-tier.png",
+      "sha256": "d495a8dbff34c5a31305fa9c8ad1770abe5308e227ea420e924feedf912311da",
+      "pixel_and_hash_passed": true,
+      "publishable_without_phone_youtube_or_creator_ui": true,
+      "visual_ui_basis": "Previously inspected actual crop; current bytes match that source audit and pixel rectangle."
+    }
+  ],
+  "staged_crop_checks": [
+    {
+      "path": "source-crops/01-b40-individual-tree.png",
+      "present": true,
+      "identical": true
+    },
+    {
+      "path": "source-crops/02-b20-individual-tree.png",
+      "present": true,
+      "identical": true
+    },
+    {
+      "path": "source-crops/03-b40-forest-group.png",
+      "present": true,
+      "identical": true
+    },
+    {
+      "path": "source-crops/04-b30-forest-edge.png",
+      "present": true,
+      "identical": true
+    },
+    {
+      "path": "source-a-audit/crops/A52-background-pointed-three-tier.png",
+      "present": true,
+      "identical": true
+    },
+    {
+      "path": "source-a-audit/crops/A24-foreground-round-perspective.png",
+      "present": true,
+      "identical": true
+    },
+    {
+      "path": "source-a-audit/crops/A24-smaller-three-tier.png",
+      "present": true,
+      "identical": true
+    },
+    {
+      "path": "source-a-audit/crops/A61-shoreline-three-tier.png",
+      "present": true,
+      "identical": true
+    }
+  ],
+  "do_not_publish_as_clean_source_assets": [
+    "Raw source-frames and source-a-audit/frames",
+    "Raw species-audit-b/frames and source-b-end-audit/frames",
+    "Timeline/contact sheets that retain phone, YouTube, creator or other source interface overlays",
+    "Unreviewed species-audit-b/closeups as a blanket set; some overlap source HUD/YouTube UI"
+  ],
+  "publishable_text_evidence": "Census and source audit reports/hashes may accompany the eight clean crops; retain raw analysis evidence separately. This review does not assess publication of unrelated generated candidate images.",
+  "open_checks": [
+    {
+      "id": "OPEN01",
+      "state": "UNVERIFIED",
+      "requirement": "Original hidden/back/underside geometry and literal100percent360 identity remain unproved."
+    },
+    {
+      "id": "OPEN02",
+      "state": "SEPARATE_REVIEW_REQUIRED",
+      "requirement": "Generated turnaround appearance fidelity and cross-view consistency need their own actual-art review."
+    },
+    {
+      "id": "OPEN03",
+      "state": "NOT_ESTABLISHED",
+      "requirement": "Source mesh/species count and every intervening decoded-frame content are not asserted by sampled census."
+    }
+  ],
+  "reviewed_file_bindings": [
+    {
+      "path": "TREE_APPEARANCE_CENSUS.json",
+      "sha256": "915582a2cb4e6e436034854a72d4343bd1fadc401f398e7391d51944da6e2262"
+    },
+    {
+      "path": "SOURCE_OBSERVATIONS.json",
+      "sha256": "26934dbffdc58c913ac307f178473c7733cd8726b79b14a731dcfcb54be6cf41"
+    },
+    {
+      "path": "SOURCE_OBSERVATIONS-A-AUDIT.json",
+      "sha256": "5293425f6e59127f39841a50cafa6fe1a49c77eb03e88f00b586f401ae4359d2"
+    },
+    {
+      "path": "SOURCE_OBSERVATIONS-B-END.json",
+      "sha256": "dc5e5cdade528622978245dc556979dd45a3b7528637f204d8c5485bca39bbc1"
+    },
+    {
+      "path": "species-audit-b/TREE_DESIGN_AUDIT_B.json",
+      "sha256": "dfa5d0e7198de23c4c7a7e1509f95c40a478389654b6ee354d4baa9d94e93ce0"
+    },
+    {
+      "path": "species-audit-b/FRAME_MANIFEST.json",
+      "sha256": "9629054fac88340678c13cae230ee9bfbb223b25de5528b5552d2b8744b19ad9"
+    }
+  ],
+  "art_fidelity_approval": false,
+  "native_or_release_approval": false,
+  "publication_performed": false
+}

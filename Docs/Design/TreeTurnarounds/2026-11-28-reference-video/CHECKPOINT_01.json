@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "checkpoint": 1,
+  "date": "2026-11-28",
+  "original_requests": [
+    "i need 360 view of the trees from the reference video 100% match",
+    "is there 2 different trees in the reference videos or just 1. i would need all if them if its 2 or more"
+  ],
+  "overall_status": "IN_PROGRESS_NOT_COMPLETE",
+  "scope_preserved": true,
+  "appearance_targets": 2,
+  "additional_appearance_found_in_sampled_footage": false,
+  "original_mesh_count": "UNPROVED",
+  "completed_evidence": {
+    "original_videos_hash_verified": 2,
+    "sampled_frames": 96,
+    "clean_exact_crops": 8,
+    "generated_originals_preserved": 12,
+    "appearance_targets_with_eight_view_drafts": 2,
+    "B_r5_source_visible_static_checks": "13/13; scoped9.9 pass only",
+    "source_custody_checks": "12/12; bounded10.0 only"
+  },
+  "milestones": [
+    {
+      "id": "M1",
+      "status": "VERIFIED",
+      "name": "Recover exact original recordings",
+      "depends_on": []
+    },
+    {
+      "id": "M2",
+      "status": "VERIFIED_SAMPLED_SCOPE",
+      "name": "Audit distinguishable tree appearances in both recordings",
+      "depends_on": [
+        "M1"
+      ]
+    },
+    {
+      "id": "M3",
+      "status": "BOTH_DRAFTS_RENDERED_NOT_ALL_APPROVED",
+      "name": "Eight views for each supported appearance",
+      "depends_on": [
+        "M2"
+      ]
+    },
+    {
+      "id": "M4",
+      "status": "B_SCOPED_PASS_A_CONTROLLED_RECONSTRUCTION_IN_PROGRESS",
+      "name": "Independent critique, repair, retest",
+      "depends_on": [
+        "M3"
+      ]
+    },
+    {
+      "id": "M5",
+      "status": "CHECKPOINT_PREPARED_FOR_GITHUB",
+      "name": "Preserve all outputs, evidence and current limits",
+      "depends_on": [
+        "M4"
+      ]
+    }
+  ],
+  "mandatory_open_checks": [
+    "A visible upper/middle alignment must match original A61 within a source-bound visual review.",
+    "A eight-view middle-hem geometry requires correction and fresh all-angle review.",
+    "Original hidden360geometry unverified; current images cannot certify original mesh identity.",
+    "A native calibration is authorized and underway but not yet reviewed by this checkpoint."
+  ],
+  "next_action": {
+    "builder": "tree_source_audit",
+    "critic": "world1_upgrade_inventory",
+    "action": "Build a task-local Blender source-facing A calibration with controlled geometry; review actual rendered pixels before eight-angle expansion.",
+    "workspace": "reconstruction-a/",
+    "production_mutation_authorized_or_performed": false
+  },
+  "references": [
+    "REQUIREMENTS.json",
+    "TREE_APPEARANCE_CENSUS.json",
+    "CANDIDATE_INDEX.json",
+    "ACCEPTANCE_CONTEXT.json",
+    "reviews/source-package-review.json",
+    "reviews/tree-A-source-facing-r3-review.json",
+    "reviews/tree-B-360-r5-review.json"
+  ],
+  "full_task_approval": false,
+  "original_100_percent_360_certified": false,
+  "historical_receipts_or_source_locks_changed": false
+}

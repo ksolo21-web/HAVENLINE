@@ -1,0 +1,248 @@
+{
+  "reviewer": "/root/world1_upgrade_critic",
+  "date": "2026-11-28",
+  "scope": "SOURCE_B_KNOWN_THREE_TIER_APPEARANCE_ONLY",
+  "candidate": {
+    "path": "candidates/tree-B-360-r4.png",
+    "sha256": "409b0ded06e8d4a1a672d181d61cecd4c4dd7831ee1388b9a7a77f71bf1edac3",
+    "native_dimensions": [
+      1536,
+      1024
+    ],
+    "is_4k": false,
+    "candidate_bytes_resized_or_edited_by_critic": false
+  },
+  "status": "REPAIR_REQUIRED_BOUNDED_VIEW_AND_LABEL_FIX",
+  "visible_reference_fidelity_score": 9.9,
+  "static_angle_consistency_score": 9.2,
+  "angle_score_scope": "All eight static panels inspected. Structure, scale, palette and grounding are coherent, but 90/270-degree cap/crease treatment is too planar and slab-like relative to the integrated sculpted source-facing crown. No canonical rear notch arrangement or underlying mesh is asserted.",
+  "source_visible_checks": {
+    "passed": 11,
+    "required": 13,
+    "all_scores_must_be_at_least": 9.9,
+    "results": [
+      {
+        "id": "T01",
+        "check": "Eight complete legible azimuth views",
+        "score": 10,
+        "status": "PASS"
+      },
+      {
+        "id": "T02",
+        "check": "Consistent elevated camera, scale and lighting",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "T03",
+        "check": "Exactly three tiers with pointed top",
+        "score": 10,
+        "status": "PASS"
+      },
+      {
+        "id": "T04",
+        "check": "Source-facing 0-degree silhouette and pointed cap/shoulder",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "T05",
+        "check": "Source-facing visible angular rim and unequal cuts",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "T06",
+        "check": "Integrated sculpted crown volume and consistent surface character in all eight views",
+        "score": 9.2,
+        "status": "REPAIR"
+      },
+      {
+        "id": "T07",
+        "check": "Source overlap and blue occlusion treatment",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "T08",
+        "check": "Pale icy cyan and blue crown palette",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "T09",
+        "check": "Tiny short red-brown trunk",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "T10",
+        "check": "Grounded tree and restrained cool contact shadow",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "T11",
+        "check": "No added green needles, bark, ornaments or tiers",
+        "score": 10,
+        "status": "PASS"
+      },
+      {
+        "id": "T12",
+        "check": "Clean legible view labels and complete silhouettes",
+        "score": 9.0,
+        "status": "REPAIR"
+      },
+      {
+        "id": "T13",
+        "check": "Reconstruction label and no false source-verified rear claim",
+        "score": 10,
+        "status": "PASS"
+      }
+    ],
+    "scope": "Mixed source-visible and static-sheet gates; only the source-facing region has direct original geometry evidence."
+  },
+  "findings": [
+    {
+      "id": "B-R4-01",
+      "priority": 1,
+      "observed": "At 90 degrees the upper cap has a broad triangular side-plane reading, with one long almost apex-to-rim edge replacing the visible shoulder transition. At 270 degrees the cap and middle skirt show a pronounced central folded-ridge treatment. Compared with 0 degrees and the anchor, these views read more like folded slabs than one integrated smooth sculpted crown. This is a raster volume/style inconsistency, not a claim about an inspected mesh.",
+      "repair": "Confine repair to 90/270-degree crown volume and surface treatment. Retain the pointed straight-sided upper cone and small stepped shoulder, but make the shoulder/flare continue as believable connected volume around the sides. Reduce the broad triangular slab and sharp folded-center reading using consistent continuous surfaces and restrained facet shading. Keep three tiers, heights, irregular inferred notch positions, trunk and grounding. Do not invent a required original rear notch pattern."
+    },
+    {
+      "id": "B-R4-02",
+      "priority": 2,
+      "observed": "The zero glyph under the first panel is a filled oval at native size. The degree glyph is readable, but the numeral lacks its open counter.",
+      "repair": "Replace only this label with a clean normal 0-degree label using an open-counter zero matching the other view labels."
+    }
+  ],
+  "evidence": {
+    "source_frames_directly_inspected": [
+      "source-frames/B-002.00.png",
+      "source-frames/B-006.00.png"
+    ],
+    "source_crops": [
+      {
+        "path": "source-crops/01-b40-individual-tree.png",
+        "sha256": "020b517edce42cb931d0edc034c460ab96ac2758babc3eeb4f5cdfb223770853",
+        "native_dimensions": [
+          185,
+          250
+        ]
+      },
+      {
+        "path": "source-crops/02-b20-individual-tree.png",
+        "sha256": "ce9e7a8a50a53b913f8a2b79a2d57563ec7c8a5b9e4001bd90842f8bcc117b7e",
+        "native_dimensions": [
+          160,
+          205
+        ]
+      },
+      {
+        "path": "source-crops/03-b40-forest-group.png",
+        "sha256": "e469e3867172047cd21f0bfcc1b4bcb643f1fbbf66e0ba86123fa66d2fe5ea95",
+        "native_dimensions": [
+          480,
+          380
+        ]
+      },
+      {
+        "path": "source-crops/04-b30-forest-edge.png",
+        "sha256": "c430b3e16087f649fcaf1b0526f3a00a182c036930bb211607cdabb68cb898ac",
+        "native_dimensions": [
+          595,
+          320
+        ]
+      }
+    ],
+    "candidate_full_sheet": true,
+    "all_eight_angle_crops_directly_inspected": true,
+    "angle_crops": [
+      "reviews/r4-angle-000.png",
+      "reviews/r4-angle-045.png",
+      "reviews/r4-angle-090.png",
+      "reviews/r4-angle-135.png",
+      "reviews/r4-angle-180.png",
+      "reviews/r4-angle-225.png",
+      "reviews/r4-angle-270.png",
+      "reviews/r4-angle-315.png"
+    ],
+    "source_size_comparison": "reviews/r4-source-size-comparison.png",
+    "inspection_enlargement_only": "reviews/r4-comparison-inspection-2x-nearest.png",
+    "comparison_boundary": "B20 selected tree box [8,9,151,194], accepted anchor [248,146,983,1108], and R4 zero-degree [98,116,361,447] are uniformly normalized to the selected B20 height for visual inspection. Bounds are approximate. The 2x nearest-neighbor enlargement adds no source information and does not modify the candidate.",
+    "label_closeup": "reviews/r4-label-000.png",
+    "accepted_anchor": {
+      "path": "candidates/tree-B-source-facing-r1.png",
+      "sha256": "b25f070e1ff29771541913f77ca30b1e32c0f3599e5cdc3cd805d9979776154b",
+      "scoped_receipt": "reviews/tree-B-source-facing-r1-review.json"
+    },
+    "corroborating_group_directly_inspected": "source-crops/03-b40-forest-group.png"
+  },
+  "full_360_source_coverage": {
+    "status": "UNVERIFIED",
+    "all_source_angles_observed": false,
+    "hidden_rear_geometry_verified": false,
+    "source_verified_100_percent_match": false,
+    "reason": "Selected footage does not show an orbit around one identified tree. Hidden-side geometry in the sheet is reconstructed; no source100-percent claim is supported."
+  },
+  "overall_task_complete": false,
+  "separate_appearance_targets": "This receipt addresses B only. Separate A appearance review is owned by another critic; no exact species or mesh-family count is asserted here.",
+  "targeted_edit_prompt": "Edit only the 90-degree and 270-degree tree crown surface/volume treatment and the first label in this sheet. Preserve the exact 0-degree source-facing tree and the other six tree views, layout, scale, background and footer. In 90 and 270, retain the straight pointed upper cone, source-family stepped shoulder, three closely overlapping skirts and irregular inferred rim cuts. Make the cap shoulder/flare a connected sculpted volume around the sides instead of a broad triangular slab with a long apex-to-rim edge. Remove the pronounced folded-center ridge/plane reading in the 270-degree cap and middle skirt; use continuous integrated snow surfaces and restrained facet shading consistent with the 0-degree anchor. Do not smooth away the angular silhouette, introduce bell-shaped caps, widen the V cuts, or prescribe a canonical unseen notch pattern. Keep trunk, grounding and dimensions. Replace the filled first numeral with a normal open-counter 0-degree label matching the other labels. Retain honest reconstruction wording.",
+  "prior_revision_retest": [
+    {
+      "finding": "B-R3-01 and B-R3-02",
+      "status": "RESOLVED_BY_SOURCE_FIRST_ANCHOR_AND_RETAINED_AT_R4_ZERO_VIEW",
+      "detail": "The corrected source-facing cap contour and unequal rim arrangement are preserved."
+    }
+  ],
+  "iteration_assessment": {
+    "source_first_expansion_success": "Source-facing identity improvements retained.",
+    "bounded_fix_reasonable": true,
+    "recommended_next_action": "One narrow edit of 90/270-degree crown surface/volume treatment plus the zero label; preserve the exact 0-degree tree and the other six views. Then retest actual output.",
+    "not_a_request_for": "A canonical original rear notch pattern, newly discovered species, or a false one-mesh certification.",
+    "unavoidable_limit": "Even a repaired coherent reconstruction cannot prove original hidden geometry from this footage."
+  },
+  "visible_reference_fidelity_scope": "The clearly visible source-facing 0-degree profile and rim, compared with the scoped-pass anchor and B20/B40. This score does not extend source verification to unseen sides.",
+  "angle_observations": [
+    {
+      "degrees": 0,
+      "status": "SOURCE_VISIBLE_PASS",
+      "note": "Accepted cap and unequal front rim preserved; label separately fails."
+    },
+    {
+      "degrees": 45,
+      "status": "STATIC_PASS",
+      "note": "Three tiers, scale, trunk, irregular rim and palette remain coherent."
+    },
+    {
+      "degrees": 90,
+      "status": "REPAIR",
+      "note": "Broad triangular cap side-plane and missing shoulder reading on one side."
+    },
+    {
+      "degrees": 135,
+      "status": "STATIC_PASS",
+      "note": "Three-tier reconstruction remains consistent; original unseen arrangement unverified."
+    },
+    {
+      "degrees": 180,
+      "status": "STATIC_PASS",
+      "note": "Three-tier reconstruction remains consistent; original rear arrangement unverified."
+    },
+    {
+      "degrees": 225,
+      "status": "STATIC_PASS",
+      "note": "Three-tier reconstruction remains consistent; original unseen arrangement unverified."
+    },
+    {
+      "degrees": 270,
+      "status": "REPAIR",
+      "note": "Cap and middle skirt have pronounced folded-center plane/ridge treatment."
+    },
+    {
+      "degrees": 315,
+      "status": "STATIC_PASS",
+      "note": "Three-tier reconstruction remains consistent; original unseen arrangement unverified."
+    }
+  ]
+}

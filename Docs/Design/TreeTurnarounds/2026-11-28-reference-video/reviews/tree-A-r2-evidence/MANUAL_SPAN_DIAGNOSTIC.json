@@ -1,0 +1,37 @@
+{
+  "purpose": "Approximate image-space diagnostic for targeted repair, not canonical asset measurements or pixel-exact geometry proof.",
+  "method": "Manually identified horizontal silhouette extents of upper cap and lower skirt in the actual images; approximate +/-3 pixel boundary uncertainty. No perspective calibration.",
+  "samples": [
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/tree-360-reference/candidates/tree-A-360-r2.png",
+      "view_degrees": 0,
+      "upper_cap_x_span_approx": [
+        146,
+        295
+      ],
+      "lower_skirt_x_span_approx": [
+        95,
+        344
+      ],
+      "upper_width_px_approx": 149,
+      "lower_width_px_approx": 249,
+      "lower_to_upper_width_ratio_approx": 1.67
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/tree-360-reference/source-a-audit/crops/A61-shoreline-three-tier.png",
+      "upper_cap_x_span_approx": [
+        44,
+        168
+      ],
+      "lower_skirt_x_span_approx": [
+        28,
+        211
+      ],
+      "upper_width_px_approx": 124,
+      "lower_width_px_approx": 183,
+      "lower_to_upper_width_ratio_approx": 1.48
+    }
+  ],
+  "interpretation": "At the intended A61-like source camera, r2 has excessive lower flare relative to its upper cap. About 10-12 percent less lower-skirt width is a starting repair guide; verify visually against original pixels rather than treating these measurements as exact dimensions.",
+  "limitations": "Camera orientation/perspective, blur and source compression affect spans. A24 uses a steeper camera; no conclusion is made from total tree width/height alone. A52 corroborates the narrower relative flare qualitatively but is not assigned a numerical ratio here."
+}

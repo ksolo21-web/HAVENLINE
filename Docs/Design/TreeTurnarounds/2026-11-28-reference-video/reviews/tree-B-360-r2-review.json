@@ -1,0 +1,205 @@
+{
+  "reviewer": "/root/world1_upgrade_critic",
+  "date": "2026-11-28",
+  "scope": "SOURCE_B_KNOWN_THREE_TIER_APPEARANCE_ONLY",
+  "candidate": {
+    "path": "candidates/tree-B-360-r2.png",
+    "sha256": "19033db145cabdfa8ec34222fe2bccc5ef742214d1b4f5841f7340ae1dd1cc4e",
+    "native_dimensions": [
+      1672,
+      941
+    ],
+    "is_4k": false,
+    "candidate_bytes_resized_or_edited_by_critic": false
+  },
+  "status": "REPAIR_REQUIRED",
+  "visible_reference_fidelity_score": 8.8,
+  "static_angle_consistency_score": 9.9,
+  "angle_score_scope": "All eight static panels directly inspected: coherent three-tier structure, camera, apparent scale, palette and grounding, with no observed contradictory tier or trunk. This is not verification of a single underlying mesh, exact azimuth increments, or hidden source geometry.",
+  "source_visible_checks": {
+    "passed": 11,
+    "required": 13,
+    "all_scores_must_be_at_least": 9.9,
+    "results": [
+      {
+        "id": "T01",
+        "check": "Eight complete legible azimuth views",
+        "score": 10,
+        "status": "PASS"
+      },
+      {
+        "id": "T02",
+        "check": "Consistent elevated camera, scale and lighting",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "T03",
+        "check": "Exactly three tiers with pointed top",
+        "score": 10,
+        "status": "PASS"
+      },
+      {
+        "id": "T04",
+        "check": "Primary B20 silhouette: width/height and pointed upper-cone shoulder",
+        "score": 9.1,
+        "status": "REPAIR"
+      },
+      {
+        "id": "T05",
+        "check": "Source angular rim segments and visibly deep narrow V incisions",
+        "score": 8.2,
+        "status": "REPAIR"
+      },
+      {
+        "id": "T06",
+        "check": "Smooth integrated snow crown, not curled paper flaps",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "T07",
+        "check": "Source overlap and blue occlusion treatment",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "T08",
+        "check": "Pale icy cyan and blue crown palette",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "T09",
+        "check": "Tiny short red-brown trunk",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "T10",
+        "check": "Grounded tree and restrained cool contact shadow",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "T11",
+        "check": "No added green needles, bark, ornaments or tiers",
+        "score": 10,
+        "status": "PASS"
+      },
+      {
+        "id": "T12",
+        "check": "Readable full silhouettes and view labels",
+        "score": 10,
+        "status": "PASS"
+      },
+      {
+        "id": "T13",
+        "check": "Reconstruction label and no false source-verified rear claim",
+        "score": 10,
+        "status": "PASS"
+      }
+    ]
+  },
+  "findings": [
+    {
+      "id": "B-R2-01",
+      "priority": 1,
+      "observed": "R2 removes the curled tabs, but turns the middle and lowest rims into almost continuous elliptical bell curves with shallow small nicks. The primary B20 tree has recognizable angular edge runs and deeper narrow V incisions, especially on the middle skirt. This difference is clear in the comparison at matched visible height.",
+      "repair": "Retain solid integrated snow. Restore uneven angular rim segments and visibly deeper NARROW V incisions, especially on the middle skirt. Do not restore broad wedge gaps or outward-curled wafer flaps. Use the B20 visible rim as the front-facing anchor and rotate one fixed repaired arrangement through the remaining views."
+    },
+    {
+      "id": "B-R2-02",
+      "priority": 2,
+      "observed": "The primary candidate remains a little broader at fixed visible height than B20. Its upper cone also transitions into a smoothly concave bell; B20 retains straighter pointed upper sides and a more distinct shoulder transition. Approximate visible raster landmarks are source near 1.3 height/width versus candidate near 1.2; these are not mesh measurements.",
+      "repair": "Modestly narrow the crown at fixed total height, retaining the compact broad character. Make the upper pointed portion straighter and its transition into the flared top skirt a little more distinct. Do not turn it into a tall generic pine."
+    }
+  ],
+  "evidence": {
+    "source_frames_directly_inspected": [
+      "source-frames/B-002.00.png",
+      "source-frames/B-006.00.png"
+    ],
+    "source_crops": [
+      {
+        "path": "source-crops/01-b40-individual-tree.png",
+        "sha256": "020b517edce42cb931d0edc034c460ab96ac2758babc3eeb4f5cdfb223770853",
+        "native_dimensions": [
+          185,
+          250
+        ]
+      },
+      {
+        "path": "source-crops/02-b20-individual-tree.png",
+        "sha256": "ce9e7a8a50a53b913f8a2b79a2d57563ec7c8a5b9e4001bd90842f8bcc117b7e",
+        "native_dimensions": [
+          160,
+          205
+        ]
+      },
+      {
+        "path": "source-crops/03-b40-forest-group.png",
+        "sha256": "e469e3867172047cd21f0bfcc1b4bcb643f1fbbf66e0ba86123fa66d2fe5ea95",
+        "native_dimensions": [
+          480,
+          380
+        ]
+      },
+      {
+        "path": "source-crops/04-b30-forest-edge.png",
+        "sha256": "c430b3e16087f649fcaf1b0526f3a00a182c036930bb211607cdabb68cb898ac",
+        "native_dimensions": [
+          595,
+          320
+        ]
+      }
+    ],
+    "candidate_full_sheet": true,
+    "all_eight_angle_crops_directly_inspected": true,
+    "angle_crops": [
+      "reviews/r2-angle-000.png",
+      "reviews/r2-angle-045.png",
+      "reviews/r2-angle-090.png",
+      "reviews/r2-angle-135.png",
+      "reviews/r2-angle-180.png",
+      "reviews/r2-angle-225.png",
+      "reviews/r2-angle-270.png",
+      "reviews/r2-angle-315.png"
+    ],
+    "source_size_comparison": "reviews/r2-source-size-comparison.png",
+    "inspection_enlargement_only": "reviews/r2-comparison-inspection-3x-nearest.png",
+    "comparison_boundary": "The B20 inspection selects visible tree bounds approximately at source crop box [8,9,151,194]; R2 selects [115,78,374,388] from the full sheet, then scales the candidate to the same inspection height. Neighbor fragments and antialiasing limit precision. Enlargement is inspection-only and adds no source detail; candidate bytes remain unchanged."
+  },
+  "full_360_source_coverage": {
+    "status": "UNVERIFIED",
+    "all_source_angles_observed": false,
+    "hidden_rear_geometry_verified": false,
+    "source_verified_100_percent_match": false,
+    "reason": "Selected footage does not show an orbit around one identified tree. Hidden-side geometry in the sheet is reconstructed; no source100-percent claim is supported."
+  },
+  "overall_task_complete": false,
+  "separate_appearance_targets": "This receipt addresses B only. Separate A appearance review is owned by another critic; no exact species or mesh-family count is asserted here.",
+  "targeted_edit_prompt": "Edit the same B-R2 eight-view reconstruction using the B20 primary crop and B40 corroboration. Keep R2 integrated solid snow surfaces, three close-overlapping tiers, tiny red-brown trunk, elevated camera, equal scale, labels and reconstruction footer. Restore the source angular rim segments, with deeper NARROW V incisions especially on the middle tier; the current almost circular bell rims and tiny shallow nicks are too smooth. Do not reintroduce broad wedge holes, projecting wafer flaps or curled edges. Modestly narrow the tree at fixed total height toward B20, while keeping its compact broad character. Give the upper pointed cone straighter sides and a more distinct shoulder transition into its flared skirt. Treat the repaired rim arrangement as one fixed asset rotated through all eight angles. No extra tiers, green needles, exposed branches, bark or ornaments. Preserve native-resolution honesty; hidden angles remain reference-based reconstruction.",
+  "prior_revision_retest": [
+    {
+      "finding": "B-R1-01",
+      "status": "RESOLVED_IN_STATIC_IMAGES",
+      "detail": "Outward paper-like curled tabs no longer drive the silhouette."
+    },
+    {
+      "finding": "B-R1-02",
+      "status": "OVER_CORRECTED_REPAIR_REQUIRED",
+      "detail": "Broad wedge openings reduced, but angular rim runs and source slit depth were also smoothed away."
+    },
+    {
+      "finding": "B-R1-03",
+      "status": "NO_REMAINING_INDEPENDENT_BLOCKER_OBSERVED",
+      "detail": "Keep the current close overlap while repairing the rim; no additional tier-spacing redesign is requested."
+    },
+    {
+      "finding": "B-R1-04",
+      "status": "STILL_OPEN",
+      "detail": "The modest narrowing was not incorporated into this candidate."
+    }
+  ]
+}

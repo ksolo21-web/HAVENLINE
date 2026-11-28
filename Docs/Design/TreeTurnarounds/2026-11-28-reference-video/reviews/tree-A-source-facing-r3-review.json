@@ -1,0 +1,206 @@
+{
+  "schema_version": "1.0",
+  "review_id": "TREE-A-SOURCE-FACING-R3-INDEPENDENT-RETEST",
+  "reviewer_agent": "/root/world1_upgrade_inventory",
+  "independent_of_generation": true,
+  "scope": "Actual single visible-source-face r3 retest, plus retention checkpoint. No hidden geometry, eight-view acceptance, common-mesh, native/runtime or owner selection approval.",
+  "candidate": {
+    "path": "/workspace/scratch/9a64cbeeb049/tree-360-reference/candidates/tree-A-source-facing-r3.png",
+    "sha256": "b0ee9f0feb92b8a794a08718346fe3e24233f059c03a091e6d9036a3fd98a2f5",
+    "bytes": 1562837,
+    "dimensions_pixels": [
+      1254,
+      1254
+    ],
+    "mode": "RGB"
+  },
+  "prior_reviews": [
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/tree-360-reference/reviews/tree-A-source-facing-r1-review.json",
+      "sha256": "ffd406dc1497fc160a6801aeaefc0b6caa68f55ed3413e2ccf0643dc32b24577",
+      "preserved": true
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/tree-360-reference/reviews/tree-A-source-facing-r2-review.json",
+      "sha256": "bfaaa80e1beeef533fac2976bccb995c061007e5903658ba3744200b18bd7a33",
+      "preserved": true
+    }
+  ],
+  "sources": [
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/tree-360-reference/source-a-audit/crops/A61-shoreline-three-tier.png",
+      "sha256": "d495a8dbff34c5a31305fa9c8ad1770abe5308e227ea420e924feedf912311da",
+      "dimensions_pixels": [
+        240,
+        360
+      ],
+      "role": "Primary visible face and projected asymmetry",
+      "visually_inspected": true
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/tree-360-reference/source-a-audit/crops/A52-background-pointed-three-tier.png",
+      "sha256": "0ca4b70bf13f27e411873cc12d34ef913832b1311ccde610fb17bb6bab948f42",
+      "dimensions_pixels": [
+        185,
+        275
+      ],
+      "role": "Corroborating family, tiers, cuts and material; a different visible projection, not a reason to average away A61 asymmetry",
+      "visually_inspected": true
+    }
+  ],
+  "inspection": {
+    "actual_full_candidate_inspected": true,
+    "same_registration_comparison": "/workspace/scratch/9a64cbeeb049/tree-360-reference/reviews/tree-A-source-facing-r3-evidence/a61-r1-r3-alignment-comparison.png",
+    "evidence_manifest": "/workspace/scratch/9a64cbeeb049/tree-360-reference/reviews/tree-A-source-facing-r3-evidence/EVIDENCE_MANIFEST.json",
+    "method": "Exactly the r2 review registration: uniform scale272/976, paste(-53,-11) on240x360 canvas, then2x nearest display. No individual tier alignment, warping or source modification."
+  },
+  "verdict": "FAIL_VISIBLE_GATE_STOP_OFFSET_RETRIES",
+  "selected": false,
+  "approved": false,
+  "task_complete": false,
+  "scores": {
+    "visible_source_face_fidelity": 9.4,
+    "overall_scoped": 9.4,
+    "reference_sensitive_target": 9.9,
+    "turnaround_consistency": null,
+    "hidden_source_geometry": null,
+    "basis": "Scoped visual judgment; visible registration failure prevents approval. No score waiver for repeated attempts."
+  },
+  "mandatory_checks": [
+    {
+      "id": "SF01",
+      "requirement": "Exact candidate bytes and native dimensions",
+      "result": "PASS",
+      "evidence": "Expected SHA256 verified; native1254x1254 RGB."
+    },
+    {
+      "id": "SF02",
+      "requirement": "Correct single visible-face scope and labeling",
+      "result": "PASS",
+      "evidence": "Source-facing reconstruction study; no claim of a completed turnaround."
+    },
+    {
+      "id": "SF03",
+      "requirement": "Three overlapping tiers, pointed cap and blue family",
+      "result": "PASS",
+      "evidence": "All defining family components are retained."
+    },
+    {
+      "id": "SF04",
+      "requirement": "Specific unequal cuts and angular plate ends",
+      "result": "PASS",
+      "evidence": "The new source-first tree replaces the inherited generic fan construction with the source-like uneven plate ends, deep middle cuts and short side incisions."
+    },
+    {
+      "id": "SF05",
+      "requirement": "Relative tier heights and crown widths",
+      "result": "PASS",
+      "evidence": "Height-matched comparison is close in cap/middle/lower proportions; no renewed over-flare blocker."
+    },
+    {
+      "id": "SF06",
+      "requirement": "Projected crown placement relative to A61 lower skirt and trunk",
+      "result": "FAIL",
+      "evidence": "The r3 apex returns close to r1\u2019s centered position rather than A61\u2019s left offset. Upper-cap body and middle contour also lie slightly farther right thanr1. The source-facing registration remains unmet."
+    },
+    {
+      "id": "SF07",
+      "requirement": "Restrained blue shading and pale highlights",
+      "result": "PASS",
+      "evidence": "Color and broad surface treatment are close at source display scale. Exact original shader is not certified."
+    },
+    {
+      "id": "SF08",
+      "requirement": "Relative outline width at matched display scale",
+      "result": "PASS",
+      "evidence": "The high-resolution outline looks bold at native enlargement, but it is not disproportionately heavy after uniform height matching. No outline-thinning repair is requested."
+    },
+    {
+      "id": "SF09",
+      "requirement": "Short red-brown trunk and ground contact",
+      "result": "PASS",
+      "evidence": "Trunk length, color and visible attachment remain source-like."
+    },
+    {
+      "id": "SF10",
+      "requirement": "Complete clean asset presentation",
+      "result": "PASS",
+      "evidence": "Tip, all skirt edges and trunk are visible; source video UI and unrelated props are absent."
+    }
+  ],
+  "mandatory_summary": {
+    "passed": 9,
+    "failed": 1,
+    "total": 10,
+    "all_mandatory_passed": false
+  },
+  "finding_retest": [
+    {
+      "id": "A-SF-01",
+      "status": "OPEN_RETRY_LOOP_STOPPED",
+      "title": "A61 projected upper-crown and middle placement still not matched",
+      "actual_observation": "R3 moves back fromr2\u2019s excessive left offset to a nearly centered apex, close tor1. At source/trunk registration the apex is approximatelyx115-116 instead ofA61\u2019s x95. Upper-cap body and middle contour are also slightly farther right thanr1, so this is not the best retained anchor.",
+      "preserved_gains": "Source-specific plate cuts, relative tier dimensions, blue material, outline width and short trunk remain useful. The error is visible projected placement, not a demand to certify unseen geometry.",
+      "measurement_limit": "Approximate manually observed image locations, with several pixels of source blur/camera uncertainty. The discrepancy remains larger than that uncertainty. No canonical asset coordinates are inferred.",
+      "evidence": [
+        "tree-A-source-facing-r3-evidence/a61-r1-r3-alignment-comparison.png",
+        "../source-a-audit/crops/A61-shoreline-three-tier.png"
+      ],
+      "required_method_change": "Stop image-generation offset retries. Establish the visible contours and tier placement in a controllable source-overlay/vector or native geometry workflow; for a trustworthy turnaround, use one controlled mesh and render its views. Keep hidden surfaces labeled as reconstruction."
+    }
+  ],
+  "best_retained_drafts": [
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/tree-360-reference/candidates/tree-A-source-facing-r1.png",
+      "sha256": "ef1e827596e4df677f4346d87341b6dd659cd0096e543de7377374a5672cc32d",
+      "dimensions_pixels": [
+        1254,
+        1254
+      ],
+      "review_path": "/workspace/scratch/9a64cbeeb049/tree-360-reference/reviews/tree-A-source-facing-r1-review.json",
+      "review_sha256": "ffd406dc1497fc160a6801aeaefc0b6caa68f55ed3413e2ccf0643dc32b24577",
+      "scope": "Single visible-face anchor",
+      "reviewed_visible_fidelity_score": 9.6,
+      "best_retained_draft_within_scope": true,
+      "selected": false,
+      "approved": false,
+      "open_issue": "A61 upper-cap/apex projected left offset is not matched."
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/tree-360-reference/candidates/tree-A-360-r3.png",
+      "sha256": "f2145a70c13e4660729d8a35c93561e591f7d9f9e765f6e5675dcef29ed23e8f",
+      "dimensions_pixels": [
+        1536,
+        1024
+      ],
+      "review_path": "/workspace/scratch/9a64cbeeb049/tree-360-reference/reviews/tree-A-r3-review.json",
+      "review_sha256": "82da475296fd9d1146a88462a21ee290f2754636967192ad9990e075a68056c5",
+      "scope": "Eight-view reconstruction draft",
+      "reviewed_visible_fidelity_score": 9.5,
+      "best_retained_draft_within_scope": true,
+      "selected": false,
+      "approved": false,
+      "open_issue": "Inherited long convex middle hems remain; unseen geometry/common mesh are unverified."
+    }
+  ],
+  "resumable_checkpoint": {
+    "state": "VISIBLE_SOURCE_GATE_OPEN_CONTROLLABLE_CONSTRUCTION_NEEDED",
+    "stop_now": "No further near-identical imagegen left/right offset retries and no turnaround expansion from an unapproved anchor.",
+    "primary_source": "/workspace/scratch/9a64cbeeb049/tree-360-reference/source-a-audit/crops/A61-shoreline-three-tier.png",
+    "corroboration": "/workspace/scratch/9a64cbeeb049/tree-360-reference/source-a-audit/crops/A52-background-pointed-three-tier.png",
+    "next_action": "Construct or adjust the A61 visible silhouette and exact projected tier placement using editable geometry/paths with a fixed reference-camera overlay. Use the retained r1 anchor only as a draft/identity aid, not as source authority.",
+    "dependency_order": [
+      "Fix controllable visible-face geometry/registration against original pixels",
+      "Independently review the actual visible-face render at>=9.9 with all mandatory checks",
+      "Render eight meaningful angles from one controlled asset and inspect continuity",
+      "Keep any unobserved source surfaces explicitly reconstructed; exact original hidden geometry requires original asset evidence"
+    ],
+    "acceptance_unchanged": "No complete/approved/selected claim until each relevant gate passes. Original100-percent hidden-geometry identity remains unverified, even if visible-source fidelity passes."
+  },
+  "limits": [
+    "Source footage is compressed and does not expose every surface; exact original mesh/shader and100-percent hidden geometry remain unverified.",
+    "A single visible-face result cannot verify rotation consistency.",
+    "This anchor is not yet approved to propagate because A-SF-01 remains open.",
+    "All prior artifacts/reports and source/candidate bytes are preserved."
+  ]
+}

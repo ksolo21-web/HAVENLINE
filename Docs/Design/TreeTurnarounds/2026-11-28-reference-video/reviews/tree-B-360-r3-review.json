@@ -1,0 +1,222 @@
+{
+  "reviewer": "/root/world1_upgrade_critic",
+  "date": "2026-11-28",
+  "scope": "SOURCE_B_KNOWN_THREE_TIER_APPEARANCE_ONLY",
+  "candidate": {
+    "path": "candidates/tree-B-360-r3.png",
+    "sha256": "b81ed7d4f98d441bd5162735a7f431ab5a5bac952e09a1a66a3f3fce0a027e27",
+    "native_dimensions": [
+      1672,
+      941
+    ],
+    "is_4k": false,
+    "candidate_bytes_resized_or_edited_by_critic": false
+  },
+  "status": "REPAIR_REQUIRED",
+  "visible_reference_fidelity_score": 9.3,
+  "static_angle_consistency_score": 9.9,
+  "angle_score_scope": "All eight static panels directly inspected: coherent three-tier structure, camera, apparent scale, palette and grounding, with no observed contradictory tier or trunk. This is not verification of a single underlying mesh, exact azimuth increments, or hidden source geometry.",
+  "source_visible_checks": {
+    "passed": 11,
+    "required": 13,
+    "all_scores_must_be_at_least": 9.9,
+    "results": [
+      {
+        "id": "T01",
+        "check": "Eight complete legible azimuth views",
+        "score": 10,
+        "status": "PASS"
+      },
+      {
+        "id": "T02",
+        "check": "Consistent elevated camera, scale and lighting",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "T03",
+        "check": "Exactly three tiers with pointed top",
+        "score": 10,
+        "status": "PASS"
+      },
+      {
+        "id": "T04",
+        "check": "Primary B20 silhouette: width/height and pointed upper-cone shoulder",
+        "score": 9.4,
+        "status": "REPAIR",
+        "subchecks": {
+          "width_height": "PASS_AT_VISIBLE_REFERENCE_PRECISION",
+          "upper_cap_contour": "REPAIR"
+        }
+      },
+      {
+        "id": "T05",
+        "check": "Source angular rim segments and narrow V-incision depth/placement",
+        "score": 9.3,
+        "status": "REPAIR",
+        "subchecks": {
+          "angular_segments": "MATERIALLY_IMPROVED",
+          "narrow_incision_depth": "MATERIALLY_IMPROVED",
+          "source_facing_lobe_and_cut_arrangement": "REPAIR"
+        }
+      },
+      {
+        "id": "T06",
+        "check": "Smooth integrated snow crown, not curled paper flaps",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "T07",
+        "check": "Source overlap and blue occlusion treatment",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "T08",
+        "check": "Pale icy cyan and blue crown palette",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "T09",
+        "check": "Tiny short red-brown trunk",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "T10",
+        "check": "Grounded tree and restrained cool contact shadow",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "T11",
+        "check": "No added green needles, bark, ornaments or tiers",
+        "score": 10,
+        "status": "PASS"
+      },
+      {
+        "id": "T12",
+        "check": "Readable full silhouettes and view labels",
+        "score": 10,
+        "status": "PASS"
+      },
+      {
+        "id": "T13",
+        "check": "Reconstruction label and no false source-verified rear claim",
+        "score": 10,
+        "status": "PASS"
+      }
+    ]
+  },
+  "findings": [
+    {
+      "id": "B-R3-01",
+      "priority": 1,
+      "observed": "R3 now has a close broad-to-height silhouette, but the upper cap still flares through a smooth concave bell transition. The primary B20 reference has a straighter pointed upper profile with a more distinct, irregular shoulder transition. This residual is visible in the matched-height B20/R2/R3 comparison; it is not a request to narrow the tree further.",
+      "repair": "For a source-first reference-facing master, follow the actual B20 point-to-shoulder contour. Preserve the R3 overall width and three-tier height proportions. Do not replace the upper cap with a generic symmetric bell."
+    },
+    {
+      "id": "B-R3-02",
+      "priority": 1,
+      "observed": "The middle rim is more angular and its narrow cuts are deeper than R2, but the source-facing lobe lengths and cut-depth rhythm remain more regular than the uneven B20 rim. The source has different-length edge runs and unequal notch depths; the candidate supplies a repeated generic cut pattern. The repaired narrow-cut character is useful, but does not establish a 9.9 source-facing match.",
+      "repair": "Anchor the reference-facing master to B20 visible edge landmarks and unequal lobe lengths/cut depths, rather than applying a uniform deeper-notch rule. Keep integrated snow surfaces; no broad wedges or paper curls. Retain uncertainty where a source edge is occluded."
+    }
+  ],
+  "evidence": {
+    "source_frames_directly_inspected": [
+      "source-frames/B-002.00.png",
+      "source-frames/B-006.00.png"
+    ],
+    "source_crops": [
+      {
+        "path": "source-crops/01-b40-individual-tree.png",
+        "sha256": "020b517edce42cb931d0edc034c460ab96ac2758babc3eeb4f5cdfb223770853",
+        "native_dimensions": [
+          185,
+          250
+        ]
+      },
+      {
+        "path": "source-crops/02-b20-individual-tree.png",
+        "sha256": "ce9e7a8a50a53b913f8a2b79a2d57563ec7c8a5b9e4001bd90842f8bcc117b7e",
+        "native_dimensions": [
+          160,
+          205
+        ]
+      },
+      {
+        "path": "source-crops/03-b40-forest-group.png",
+        "sha256": "e469e3867172047cd21f0bfcc1b4bcb643f1fbbf66e0ba86123fa66d2fe5ea95",
+        "native_dimensions": [
+          480,
+          380
+        ]
+      },
+      {
+        "path": "source-crops/04-b30-forest-edge.png",
+        "sha256": "c430b3e16087f649fcaf1b0526f3a00a182c036930bb211607cdabb68cb898ac",
+        "native_dimensions": [
+          595,
+          320
+        ]
+      }
+    ],
+    "candidate_full_sheet": true,
+    "all_eight_angle_crops_directly_inspected": true,
+    "angle_crops": [
+      "reviews/r3-angle-000.png",
+      "reviews/r3-angle-045.png",
+      "reviews/r3-angle-090.png",
+      "reviews/r3-angle-135.png",
+      "reviews/r3-angle-180.png",
+      "reviews/r3-angle-225.png",
+      "reviews/r3-angle-270.png",
+      "reviews/r3-angle-315.png"
+    ],
+    "source_size_comparison": "reviews/r3-source-size-comparison.png",
+    "inspection_enlargement_only": "reviews/r3-comparison-inspection-2x-nearest.png",
+    "comparison_boundary": "B20 selected visible-tree box [8,9,151,194] is compared with R2 [115,78,374,388] and R3 [125,80,365,390], each candidate resized for inspection to the same selected source height. These are approximate visual bounds, not a calibrated mesh measurement. Neighbor fragments, occlusion and antialiasing limit exact contour recovery. The 2x nearest-neighbor enlargement adds no detail and is not a higher-resolution deliverable."
+  },
+  "full_360_source_coverage": {
+    "status": "UNVERIFIED",
+    "all_source_angles_observed": false,
+    "hidden_rear_geometry_verified": false,
+    "source_verified_100_percent_match": false,
+    "reason": "Selected footage does not show an orbit around one identified tree. Hidden-side geometry in the sheet is reconstructed; no source100-percent claim is supported."
+  },
+  "overall_task_complete": false,
+  "separate_appearance_targets": "This receipt addresses B only. Separate A appearance review is owned by another critic; no exact species or mesh-family count is asserted here.",
+  "targeted_edit_prompt": "Create one isolated reference-facing B tree master using original B20 as the primary visible contour reference and B40 only as corroboration. Preserve the compact three-tier icy-blue tree, the R3 approximately matched width/height, close overlaps, smooth integrated snow and tiny red-brown trunk. Follow B20 actual point-to-shoulder contour: straighter pointed upper sides with the reference shoulder changes, not a generic smoothly concave bell flare. Follow the visible B20 middle-rim lobe lengths and unequal narrow V-cut depths/positions, rather than a regular repeated notch sequence. Do not add paper curls, broad wedges, needles, bark, ornaments or tiers. Keep the source elevated camera and ordinary soft cool grounding. Do not infer precision for occluded edge portions. Review this source-facing master before building additional angles; later hidden angles must remain explicitly reconstructed.",
+  "prior_revision_retest": [
+    {
+      "finding": "B-R2-01",
+      "status": "PARTIALLY_REPAIRED",
+      "detail": "Middle-rim angularity and narrow-cut depth improved substantially; exact visible arrangement remains open."
+    },
+    {
+      "finding": "B-R2-02",
+      "status": "PARTIALLY_REPAIRED",
+      "detail": "Width/height is now close. The upper cap still has the persistent smooth bell transition."
+    },
+    {
+      "finding": "B-R1-01",
+      "status": "RESOLUTION_RETAINED",
+      "detail": "No return of the outward curled wafer flaps observed; angular side corners are not treated as curls."
+    }
+  ],
+  "iteration_assessment": {
+    "progress_stalled_completely": false,
+    "meaningful_R3_gains": [
+      "Overall width/height now close to the primary reference",
+      "Angular middle-rim segments restored",
+      "Narrow V cuts visibly deeper",
+      "Integrated surfaces retained"
+    ],
+    "persistent_issue": "The upper cap retains the smooth bell transition across successive sheet edits.",
+    "recommended_next_action": "Build and inspect one source-first reference-facing tree master from B20 with B40 corroboration before expanding that master into an eight-view reconstruction.",
+    "why": "The remaining work is matching visible contour landmarks and irregular rim arrangement, which can be judged clearly in one large source-facing image. Repeated global sheet edits have preserved the generic master cap.",
+    "further_narrowing_requested": false
+  }
+}

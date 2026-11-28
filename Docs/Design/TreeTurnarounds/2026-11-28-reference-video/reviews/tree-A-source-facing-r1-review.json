@@ -1,0 +1,173 @@
+{
+  "schema_version": "1.0",
+  "review_id": "TREE-A-SOURCE-FACING-R1-INDEPENDENT",
+  "reviewer_agent": "/root/world1_upgrade_inventory",
+  "independent_of_generation": true,
+  "scope": "Single source-facing tree only. No hidden-angle, eight-view, common-mesh, native/runtime or owner-selection approval.",
+  "candidate": {
+    "path": "/workspace/scratch/9a64cbeeb049/tree-360-reference/candidates/tree-A-source-facing-r1.png",
+    "sha256": "ef1e827596e4df677f4346d87341b6dd659cd0096e543de7377374a5672cc32d",
+    "bytes": 1502815,
+    "dimensions_pixels": [
+      1254,
+      1254
+    ],
+    "mode": "RGB"
+  },
+  "sources": [
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/tree-360-reference/source-a-audit/crops/A61-shoreline-three-tier.png",
+      "sha256": "d495a8dbff34c5a31305fa9c8ad1770abe5308e227ea420e924feedf912311da",
+      "dimensions_pixels": [
+        240,
+        360
+      ],
+      "role": "Primary visible face and projected asymmetry",
+      "visually_inspected": true
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/tree-360-reference/source-a-audit/crops/A52-background-pointed-three-tier.png",
+      "sha256": "0ca4b70bf13f27e411873cc12d34ef913832b1311ccde610fb17bb6bab948f42",
+      "dimensions_pixels": [
+        185,
+        275
+      ],
+      "role": "Corroborating family, tiers, cuts and material; a different visible projection, not a reason to average away A61 asymmetry",
+      "visually_inspected": true
+    }
+  ],
+  "inspection": {
+    "full_candidate_inspected": true,
+    "source_scale_comparison": "/workspace/scratch/9a64cbeeb049/tree-360-reference/reviews/tree-A-source-facing-r1-evidence/source-scale-comparison.png",
+    "native_rim_crops_inspected": [
+      "upper-rim.png",
+      "middle-rim.png"
+    ],
+    "lower_skirt_trunk_inspected_in_full_image_and_scaled_comparison": true,
+    "evidence_manifest": "/workspace/scratch/9a64cbeeb049/tree-360-reference/reviews/tree-A-source-facing-r1-evidence/EVIDENCE_MANIFEST.json",
+    "scaling_method": "One uniform scale only, approximately272/976, aligning candidate/source tip-to-trunk display height. Source comparison is then shown2x nearest-neighbor; no calibrated perspective claim. Original files remain unchanged."
+  },
+  "verdict": "REVISE_PROJECTED_UPPER_CROWN_POSITION",
+  "selected": false,
+  "approved": false,
+  "scores": {
+    "visible_source_face_fidelity": 9.6,
+    "overall_scoped": 9.6,
+    "reference_sensitive_target": 9.9,
+    "turnaround_consistency": null,
+    "hidden_source_geometry": null,
+    "basis": "Scoped visual judgment, not a percent match. One mandatory failure prevents pass."
+  },
+  "mandatory_checks": [
+    {
+      "id": "SF01",
+      "requirement": "Exact candidate bytes and native dimensions",
+      "result": "PASS",
+      "evidence": "Expected SHA256; native1254x1254 RGB, not4K."
+    },
+    {
+      "id": "SF02",
+      "requirement": "Correct single visible-face scope and labeling",
+      "result": "PASS",
+      "evidence": "Source-facing reconstruction study; no claim of a completed turnaround."
+    },
+    {
+      "id": "SF03",
+      "requirement": "Three overlapping tiers, pointed cap and blue family",
+      "result": "PASS",
+      "evidence": "All defining family components are retained."
+    },
+    {
+      "id": "SF04",
+      "requirement": "Specific unequal cuts and angular plate ends",
+      "result": "PASS",
+      "evidence": "The new source-first tree replaces the inherited generic fan construction with the source-like uneven plate ends, deep middle cuts and short side incisions."
+    },
+    {
+      "id": "SF05",
+      "requirement": "Relative tier heights and crown widths",
+      "result": "PASS",
+      "evidence": "Height-matched comparison is close in cap/middle/lower proportions; no renewed over-flare blocker."
+    },
+    {
+      "id": "SF06",
+      "requirement": "Projected upper-cap/apex position relative to lower skirt and trunk",
+      "result": "FAIL",
+      "evidence": "A-SF-01: the anchor recenters A61\u2019s upper crown/apex. The original face has a substantially larger left offset."
+    },
+    {
+      "id": "SF07",
+      "requirement": "Restrained blue shading and pale highlights",
+      "result": "PASS",
+      "evidence": "Color and broad surface treatment are close at source display scale. Exact original shader is not certified."
+    },
+    {
+      "id": "SF08",
+      "requirement": "Relative outline width at matched display scale",
+      "result": "PASS",
+      "evidence": "The high-resolution outline looks bold at native enlargement, but it is not disproportionately heavy after uniform height matching. No outline-thinning repair is requested."
+    },
+    {
+      "id": "SF09",
+      "requirement": "Short red-brown trunk and ground contact",
+      "result": "PASS",
+      "evidence": "Trunk length, color and visible attachment remain source-like."
+    },
+    {
+      "id": "SF10",
+      "requirement": "Complete clean asset presentation",
+      "result": "PASS",
+      "evidence": "Tip, all skirt edges and trunk are visible; source video UI and unrelated props are absent."
+    }
+  ],
+  "mandatory_summary": {
+    "passed": 9,
+    "failed": 1,
+    "total": 10,
+    "all_mandatory_passed": false
+  },
+  "prior_issue_disposition": {
+    "generic_rim_geometry": "Resolved for this new visible face. The source-first method produces distinctly more source-specific cuts/plate ends than the old sheet. This does not retroactively approve the old180/225-degree drawings or establish unseen rims.",
+    "relative_lower_flare": "Source-like in this anchor; preserve.",
+    "contour_material": "Acceptable at matched source display scale; preserve rather than reopening the old whole-sheet style complaint."
+  },
+  "findings": [
+    {
+      "id": "A-SF-01",
+      "status": "OPEN",
+      "severity": "BLOCKING_FOR_VISIBLE_SOURCE_FIDELITY",
+      "title": "Restore the A61 upper-crown/apex offset instead of centering the tree",
+      "observation": "In A61, the apex and upper crown project clearly to the left of the trunk/lower skirt. The new anchor moves them closer to the trunk centerline. The source-scale comparison shows this even though total height and lower-skirt placement are aligned.",
+      "approximate_image_space_diagnostic": {
+        "source_a61_apex_x": 95,
+        "source_a61_trunk_outline_center_x_approx_range": [
+          118,
+          120
+        ],
+        "source_apex_left_offset_px_approx_range": [
+          20,
+          24
+        ],
+        "candidate_apex_left_offset_at_source_scale_px_approx_range": [
+          4,
+          5
+        ],
+        "upper_cap_body_offset_difference_at_source_scale_px_approx": 12,
+        "uncertainty": "Manual outline/blur interpretation, several source pixels. These are projected-image guides, not canonical geometry, exact camera calibration or game dimensions. The early rough17-18px estimate is superseded by this refined20-24px range."
+      },
+      "targeted_fix": "Keep lower skirt, trunk, tier heights, cut specificity, shading and relative outline width. Match A61\u2019s projected upper-cap body position farther left, with the apex also more left-offset than the body. Use the original pixels as authority. Do not blanket-translate the middle tier based only on the less certain overlap comparison, and do not average A52\u2019s different projection into the A61 source face.",
+      "mechanism_limit": "The imagery does not establish how much of the offset comes from original geometry versus camera/azimuth. The requested fix is the visible A61 projection, not an invented canonical bend.",
+      "evidence": [
+        "tree-A-source-facing-r1-evidence/source-scale-comparison.png",
+        "../source-a-audit/crops/A61-shoreline-three-tier.png"
+      ]
+    }
+  ],
+  "next_action": "Make one localized source-facing alignment repair on this stronger anchor, then retest it against A61 before generating another eight-view sheet. No further broad rim/material redesign is warranted.",
+  "limits": [
+    "Source footage is compressed and does not expose every surface; exact original mesh/shader and100-percent hidden geometry remain unverified.",
+    "A single visible-face result cannot verify rotation consistency.",
+    "This anchor is not yet approved to propagate because A-SF-01 remains open.",
+    "All prior artifacts/reports and source/candidate bytes are preserved."
+  ]
+}

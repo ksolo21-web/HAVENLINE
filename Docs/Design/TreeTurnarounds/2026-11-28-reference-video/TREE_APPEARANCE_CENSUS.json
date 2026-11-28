@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-28",
+  "owner_scope": "All distinct trees visible in both supplied reference videos.",
+  "coverage_result": {
+    "render_targets": 2,
+    "additional_tree_appearance_found": false,
+    "source_mesh_count": "NOT_ESTABLISHED_FROM_FOOTAGE",
+    "separate_species_count": "NOT_ESTABLISHED_FROM_FOOTAGE",
+    "summary": "Preserve two source appearance targets, one for each recording. Both are three-tier icy-blue snow conifers; the recordings do not establish whether the appearance differences come from separate original meshes or source geometry/camera/shading variants."
+  },
+  "appearance_targets": [
+    {
+      "id": "TREE-A",
+      "label": "Fishing/camp recording — broad-tab appearance",
+      "source": "A",
+      "features": [
+        "Three overlapping snow-blue tiers",
+        "Pointed crown in the clear A52/A61 views",
+        "Broad angular or slab-like cut tabs and visible thin dark contour edges",
+        "Tiny dark red-brown trunk"
+      ],
+      "best_original_crops": [
+        "source-a-audit/crops/A61-shoreline-three-tier.png",
+        "source-a-audit/crops/A52-background-pointed-three-tier.png"
+      ],
+      "variation_evidence": [
+        "source-a-audit/crops/A24-foreground-round-perspective.png",
+        "source-a-audit/crops/A24-smaller-three-tier.png"
+      ],
+      "separate_turnaround_required": true
+    },
+    {
+      "id": "TREE-B",
+      "label": "Forest/harvesting recording — narrow-notch appearance",
+      "source": "B",
+      "features": [
+        "Three closely overlapping snow-blue tiers",
+        "Compact, broad crown with a sharp upper point",
+        "Narrow V-cut skirt edges with smooth sculpted blue surfaces",
+        "Tiny short red-brown trunk"
+      ],
+      "best_original_crops": [
+        "source-crops/02-b20-individual-tree.png",
+        "source-crops/01-b40-individual-tree.png"
+      ],
+      "variation_evidence": [
+        "source-crops/03-b40-forest-group.png",
+        "source-crops/04-b30-forest-edge.png"
+      ],
+      "separate_turnaround_required": true
+    }
+  ],
+  "not_separate_targets": [
+    {
+      "observation": "Round-looking foreground A trees",
+      "reason": "Clear A24 original pixels show three tiers; the apparent roundness changes with the steeper viewpoint. No separate two-tier tree was established."
+    },
+    {
+      "observation": "Small, wide or differently shaded B trees",
+      "reason": "The sampled intact examples retain the same three-tier cut-skirt construction. Scale, shading and occlusion do not independently establish another design."
+    }
+  ],
+  "sampled_coverage": {
+    "A": {
+      "samples": 63,
+      "seconds": "0 through 62, at one-second intervals",
+      "report": "SOURCE_OBSERVATIONS-A-AUDIT.json"
+    },
+    "B": {
+      "main_samples": 27,
+      "seconds": "0 through 52, at two-second intervals",
+      "report": "species-audit-b/TREE_DESIGN_AUDIT_B.json",
+      "end_samples": 6,
+      "end_seconds": "53 through 58, at one-second intervals",
+      "end_report": "SOURCE_OBSERVATIONS-B-END.json"
+    },
+    "total_sampled_frames": 96,
+    "continuous_full_frame_analysis_claimed": false
+  },
+  "approval_boundary": {
+    "all_source_hidden_sides_verified": false,
+    "full_360_exact_match_certified": false,
+    "existing_native_pine_model_count_used_as_source_evidence": false
+  }
+}

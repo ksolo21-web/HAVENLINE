@@ -1,0 +1,195 @@
+{
+  "reviewer": "/root/world1_upgrade_critic",
+  "date": "2026-11-28",
+  "scope": "SOURCE_B_KNOWN_THREE_TIER_APPEARANCE_ONLY",
+  "candidate": {
+    "path": "candidates/tree-360-r1.png",
+    "sha256": "4dbaba4c3e5a1bb4e5dff897bc43c3fe9d1e540a0263e7abdeb3c8ffd6c6b07c",
+    "native_dimensions": [
+      1672,
+      941
+    ],
+    "is_4k": false,
+    "candidate_bytes_resized_or_edited_by_critic": false
+  },
+  "status": "REPAIR_REQUIRED",
+  "visible_reference_fidelity_score": 8.6,
+  "static_angle_consistency_score": 9.9,
+  "angle_score_scope": "Eight readable, coherent static reconstruction views with consistent three-tier architecture/camera/scale. This does not certify a single underlying mesh or hidden source geometry.",
+  "source_visible_checks": {
+    "passed": 9,
+    "required": 13,
+    "all_scores_must_be_at_least": 9.9,
+    "results": [
+      {
+        "id": "T01",
+        "check": "Eight complete legible azimuth views",
+        "score": 10,
+        "status": "PASS"
+      },
+      {
+        "id": "T02",
+        "check": "Consistent elevated camera, scale and lighting",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "T03",
+        "check": "Exactly three tiers with pointed top",
+        "score": 10,
+        "status": "PASS"
+      },
+      {
+        "id": "T04",
+        "check": "Primary B20 visible height/width silhouette",
+        "score": 9.4,
+        "status": "REPAIR"
+      },
+      {
+        "id": "T05",
+        "check": "Source narrow V-incision rim character",
+        "score": 8.4,
+        "status": "REPAIR"
+      },
+      {
+        "id": "T06",
+        "check": "Smooth integrated snow crown, not curled paper flaps",
+        "score": 8.2,
+        "status": "REPAIR"
+      },
+      {
+        "id": "T07",
+        "check": "Source overlap and blue occlusion treatment",
+        "score": 9.2,
+        "status": "REPAIR"
+      },
+      {
+        "id": "T08",
+        "check": "Pale icy cyan and blue crown palette",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "T09",
+        "check": "Tiny short red-brown trunk",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "T10",
+        "check": "Grounded tree and restrained cool contact shadow",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "T11",
+        "check": "No added green needles, bark, ornaments or tiers",
+        "score": 10,
+        "status": "PASS"
+      },
+      {
+        "id": "T12",
+        "check": "Readable full silhouettes and view labels",
+        "score": 10,
+        "status": "PASS"
+      },
+      {
+        "id": "T13",
+        "check": "Reconstruction label and no false source-verified rear claim",
+        "score": 10,
+        "status": "PASS"
+      }
+    ]
+  },
+  "findings": [
+    {
+      "id": "B-R1-01",
+      "priority": 1,
+      "observed": "Side tier lobes curl outward as thin cut-paper tabs, especially in0/45/90/315-degree views. Source crowns are smoother integrated sculpted surfaces.",
+      "repair": "Remove curled/flapping side tips and exposed wafer-like edges while retaining crisp thin rims."
+    },
+    {
+      "id": "B-R1-02",
+      "priority": 1,
+      "observed": "Middle/lower rim openings and projecting lobe corners are broader wedge shapes than the narrow slit-like V cuts in the primary B20 tree.",
+      "repair": "Narrow V openings; make the lowest tier a softer rounded apron with subtler slots. Do not turn cuts into puffy rounded icing."
+    },
+    {
+      "id": "B-R1-03",
+      "priority": 2,
+      "observed": "Broad soft dark under-tier bands exaggerate the impression of separated lids compared with source blue occlusion seams. Basic tier proportions are already close.",
+      "repair": "Use closer visual overlap and narrower source-like blue seams; keep this adjustment modest and preserve full tree height."
+    },
+    {
+      "id": "B-R1-04",
+      "priority": 2,
+      "observed": "Manual raster landmarks put B20 near1.3 total visible height/maximum crown width, while candidate0-degree view is nearer1.2. These are approximate pixel judgments, not mesh measurements.",
+      "repair": "Modestly narrow the candidate at fixed height toward the primary B20 profile; retain broad compact character and do not make a tall generic pine."
+    }
+  ],
+  "evidence": {
+    "source_frames_directly_inspected": [
+      "source-frames/B-002.00.png",
+      "source-frames/B-006.00.png"
+    ],
+    "source_crops": [
+      {
+        "path": "source-crops/01-b40-individual-tree.png",
+        "sha256": "020b517edce42cb931d0edc034c460ab96ac2758babc3eeb4f5cdfb223770853",
+        "native_dimensions": [
+          185,
+          250
+        ]
+      },
+      {
+        "path": "source-crops/02-b20-individual-tree.png",
+        "sha256": "ce9e7a8a50a53b913f8a2b79a2d57563ec7c8a5b9e4001bd90842f8bcc117b7e",
+        "native_dimensions": [
+          160,
+          205
+        ]
+      },
+      {
+        "path": "source-crops/03-b40-forest-group.png",
+        "sha256": "e469e3867172047cd21f0bfcc1b4bcb643f1fbbf66e0ba86123fa66d2fe5ea95",
+        "native_dimensions": [
+          480,
+          380
+        ]
+      },
+      {
+        "path": "source-crops/04-b30-forest-edge.png",
+        "sha256": "c430b3e16087f649fcaf1b0526f3a00a182c036930bb211607cdabb68cb898ac",
+        "native_dimensions": [
+          595,
+          320
+        ]
+      }
+    ],
+    "candidate_full_sheet": true,
+    "all_eight_angle_crops_directly_inspected": true,
+    "angle_crops": [
+      "reviews/r1-angle-000.png",
+      "reviews/r1-angle-045.png",
+      "reviews/r1-angle-090.png",
+      "reviews/r1-angle-135.png",
+      "reviews/r1-angle-180.png",
+      "reviews/r1-angle-225.png",
+      "reviews/r1-angle-270.png",
+      "reviews/r1-angle-315.png"
+    ],
+    "source_size_comparison": "reviews/r1-source-size-comparison.png",
+    "inspection_enlargement_only": "reviews/r1-comparison-inspection-2x-nearest.png",
+    "comparison_boundary": "Inspection comparison preserves source pixels and downsizes candidate to the source crop height. Crop margins differ, so aspect comments use approximate visible-tree landmarks, not raw crop dimensions. Enlarged inspection output is not a higher-resolution deliverable."
+  },
+  "full_360_source_coverage": {
+    "status": "UNVERIFIED",
+    "all_source_angles_observed": false,
+    "hidden_rear_geometry_verified": false,
+    "source_verified_100_percent_match": false,
+    "reason": "Selected footage does not show an orbit around one identified tree. Hidden-side geometry in the sheet is reconstructed; no source100-percent claim is supported."
+  },
+  "overall_task_complete": false,
+  "separate_appearance_targets": "This receipt addresses B only. Separate A appearance review is owned by another critic; no exact species or mesh-family count is asserted here.",
+  "targeted_edit_prompt": "Edit the SAME eight-view B sheet using B20 as primary and B40 as corroboration. Preserve eight angles, elevated camera, three tiers, pointed top, tiny trunk and labels. Remove outward-curled paper-like side tabs; keep smooth integrated snow surfaces. Use narrow V incisions rather than broad wedge openings, with a softer rounded lowest apron and subtler slots. Reduce broad soft under-tier shadow bands toward narrow blue source seams; keep overlap adjustments modest. Preserve total height and modestly narrow toward the primary B20 silhouette. No puffiness, needles, branches, textures, ornaments or extra tiers. All eight views must be rotations of one fixed repaired rim/notch arrangement. Retain honest reconstruction labeling and native-resolution reporting."
+}

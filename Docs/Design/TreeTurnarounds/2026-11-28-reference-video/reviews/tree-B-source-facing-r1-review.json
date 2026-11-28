@@ -1,0 +1,180 @@
+{
+  "reviewer": "/root/world1_upgrade_critic",
+  "date": "2026-11-28",
+  "scope": "SINGLE_SOURCE_FACING_B_ANCHOR_CLEARLY_VISIBLE_SOURCE_REGIONS_ONLY",
+  "candidate": {
+    "path": "candidates/tree-B-source-facing-r1.png",
+    "sha256": "b25f070e1ff29771541913f77ca30b1e32c0f3599e5cdc3cd805d9979776154b",
+    "native_dimensions": [
+      1254,
+      1254
+    ],
+    "is_4k": false,
+    "candidate_bytes_resized_or_edited_by_critic": false
+  },
+  "status": "PASS_SCOPED_SOURCE_VISIBLE_ANCHOR",
+  "source_visible_fidelity_score": 9.9,
+  "static_eight_angle_consistency_score": null,
+  "approval_boundary": "Independent critic pass for the single reference-facing reconstruction at the detail supported by the supplied source pixels. This is not owner approval, pixel identity, certification of occluded edges, a multi-angle pass, a model/runtime pass, or full-task completion.",
+  "source_visible_checks": {
+    "passed": 12,
+    "required": 12,
+    "minimum_score": 9.9,
+    "results": [
+      {
+        "id": "S01",
+        "check": "Source-facing elevated view and compact width/height",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "S02",
+        "check": "Exactly three overlapping crown tiers",
+        "score": 10,
+        "status": "PASS"
+      },
+      {
+        "id": "S03",
+        "check": "Straight pointed upper cap and stepped shoulder",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "S04",
+        "check": "Unequal visible upper-rim lobe lengths and V cuts",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "S05",
+        "check": "Unequal visible middle-rim edge runs and cut-depth rhythm",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "S06",
+        "check": "Visible tier proportions and close overlap",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "S07",
+        "check": "Integrated smooth sculpted crown surfaces without paper curls",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "S08",
+        "check": "Source icy-cyan upper highlight and blue lower crowns",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "S09",
+        "check": "Tiny short red-brown trunk from primary B20",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "S10",
+        "check": "No invented needles, bark, ornaments, branches or extra tiers",
+        "score": 10,
+        "status": "PASS"
+      },
+      {
+        "id": "S11",
+        "check": "Full source-facing subject readable and grounded",
+        "score": 9.9,
+        "status": "PASS"
+      },
+      {
+        "id": "S12",
+        "check": "Honest source-facing reconstruction label",
+        "score": 10,
+        "status": "PASS"
+      }
+    ]
+  },
+  "resolved_findings": [
+    {
+      "id": "B-R3-01",
+      "status": "RESOLVED_IN_OBSERVABLE_SOURCE_REGIONS",
+      "evidence": "The smooth bell transition is replaced by straight pointed upper sides and the distinct shoulder steps seen in B20."
+    },
+    {
+      "id": "B-R3-02",
+      "status": "RESOLVED_IN_OBSERVABLE_SOURCE_REGIONS",
+      "evidence": "Visible upper and middle lobe lengths, unequal cuts and angular edge runs now closely follow B20 rather than a regular repeated notch pattern."
+    }
+  ],
+  "new_actionable_source_visible_defects": [],
+  "observations": [
+    "The approximate compact height/width and relative tier boundaries agree closely after uniform size normalization.",
+    "Source-facing cap and middle-rim landmark placement is substantially closer than the previous eight-view sheet.",
+    "B20 is the authority for the red-brown trunk; B40 corroborates crown family and smooth blue material.",
+    "No further appearance repair is requested before building the multi-angle candidate from this anchor."
+  ],
+  "evidence": {
+    "source_crops": [
+      {
+        "path": "source-crops/02-b20-individual-tree.png",
+        "sha256": "ce9e7a8a50a53b913f8a2b79a2d57563ec7c8a5b9e4001bd90842f8bcc117b7e",
+        "native_dimensions": [
+          160,
+          205
+        ],
+        "role": "PRIMARY_VISIBLE_PROFILE"
+      },
+      {
+        "path": "source-crops/01-b40-individual-tree.png",
+        "sha256": "020b517edce42cb931d0edc034c460ab96ac2758babc3eeb4f5cdfb223770853",
+        "native_dimensions": [
+          185,
+          250
+        ],
+        "role": "CORROBORATION"
+      }
+    ],
+    "full_candidate_directly_inspected": true,
+    "detail_crops_directly_inspected": [
+      "reviews/b-anchor-r1-cap-detail.png",
+      "reviews/b-anchor-r1-middle-detail.png"
+    ],
+    "tree_crop": "reviews/b-anchor-r1-tree-crop.png",
+    "normalized_comparison": "reviews/b-anchor-r1-source-size-comparison.png",
+    "inspection_enlargement_only": "reviews/b-anchor-r1-comparison-inspection-3x-nearest.png",
+    "comparison_method": "B20 selected tree box [8,9,151,194] remains original pixels. Candidate box [248,146,983,1108] is uniformly reduced to the same selected source height for inspection. The comparison is then enlarged 3x with nearest-neighbor sampling solely to inspect existing pixels. This adds no detail, does not alter the candidate, and is not a higher-resolution deliverable.",
+    "inspection_is_not_pixel_identity_measurement": true
+  },
+  "unverified_evidence": [
+    {
+      "scope": "Source side edges covered by neighboring trees",
+      "status": "UNVERIFIED",
+      "reason": "The footage crop does not separate all those edge portions from overlapping source objects."
+    },
+    {
+      "scope": "Partly occluded lowest rim",
+      "status": "UNVERIFIED",
+      "reason": "Foreground/neighbor coverage prevents an exact contour claim across the entire lower edge."
+    },
+    {
+      "scope": "Other azimuths and hidden geometry",
+      "status": "NOT_REVIEWED_FOR_THIS_ANCHOR",
+      "reason": "This artifact contains one view and the source does not establish a complete orbit around one identified tree."
+    },
+    {
+      "scope": "Underlying mesh, native rig/runtime, or exact angular increments",
+      "status": "NOT_PROVIDED",
+      "reason": "A raster reconstruction does not verify these properties."
+    }
+  ],
+  "recommended_next_action": "Preserve this exact anchor and construct the eight-view reconstruction from it; then independently review all eight views against this anchor and the original source crops. Continue labeling hidden views as reconstructed.",
+  "full_360_source_coverage": {
+    "status": "UNVERIFIED",
+    "all_source_angles_observed": false,
+    "hidden_rear_geometry_verified": false,
+    "source_verified_100_percent_match": false
+  },
+  "overall_task_complete": false,
+  "separate_appearance_targets": "B appearance only; A remains separately reviewed. No species or mesh-count claim."
+}

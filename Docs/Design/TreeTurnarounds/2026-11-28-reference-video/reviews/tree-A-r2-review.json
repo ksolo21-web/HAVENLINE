@@ -1,0 +1,236 @@
+{
+  "schema_version": "1.0",
+  "review_id": "TREE-A-R2-INDEPENDENT-RETEST",
+  "reviewer_agent": "/root/world1_upgrade_inventory",
+  "independent_of_generation": true,
+  "scope": "Actual Reference A r2 static eight-view output and source comparison; not a prompt-only review or hidden-source/mesh/runtime approval.",
+  "candidate": {
+    "path": "/workspace/scratch/9a64cbeeb049/tree-360-reference/candidates/tree-A-360-r2.png",
+    "sha256": "f6764a85ee6e82e6c7339ed6efbb8966b62f02fe37a8b587784ec26b972dd506",
+    "bytes": 1675280,
+    "dimensions_pixels": [
+      1536,
+      1024
+    ],
+    "mode": "RGB",
+    "native_resolution_claim": "1536x1024; not 4K"
+  },
+  "prior_review": {
+    "json": "/workspace/scratch/9a64cbeeb049/tree-360-reference/reviews/tree-A-r1-review.json",
+    "sha256": "b11d7e93f6dc0d06530089784fc8d26f14777f26a9ed06d6d70a2259ef323630",
+    "md": "/workspace/scratch/9a64cbeeb049/tree-360-reference/reviews/tree-A-r1-review.md",
+    "md_sha256": "13f2ab75eca83f3355dc54ec47485a0c73c3bd04959c9600110e524420f38ea4",
+    "preserved_unchanged": true
+  },
+  "sources": [
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/tree-360-reference/source-a-audit/crops/A61-shoreline-three-tier.png",
+      "sha256": "d495a8dbff34c5a31305fa9c8ad1770abe5308e227ea420e924feedf912311da",
+      "dimensions_pixels": [
+        240,
+        360
+      ],
+      "role": "Primary clear whole-tree source newly available after r1 generation; visible taper, tabs, contour and trunk.",
+      "visually_inspected": true
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/tree-360-reference/source-a-audit/crops/A52-background-pointed-three-tier.png",
+      "sha256": "0ca4b70bf13f27e411873cc12d34ef913832b1311ccde610fb17bb6bab948f42",
+      "dimensions_pixels": [
+        185,
+        275
+      ],
+      "role": "Generation primary; visible pointed cap, overlapping tiers and tiny trunk.",
+      "visually_inspected": true
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/tree-360-reference/source-a-audit/crops/A24-foreground-round-perspective.png",
+      "sha256": "da799f40fa9dc994eef11b502536a60d3e627974e69c6198cdb229cafaf201c9",
+      "dimensions_pixels": [
+        242,
+        257
+      ],
+      "role": "Steeper source camera; close evidence of broad flat polygonal cut tabs and dark thin contour.",
+      "visually_inspected": true
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/tree-360-reference/source-a-audit/crops/A24-smaller-three-tier.png",
+      "sha256": "6bdb30d35ff48b5ebae565ddef4cc73a25e47dfd9a0d424dc6be3d96635fb28b",
+      "dimensions_pixels": [
+        173,
+        204
+      ],
+      "role": "Corroborating whole-tree architecture from a steeper camera.",
+      "visually_inspected": true
+    }
+  ],
+  "inspection": {
+    "full_sheet": true,
+    "angles_inspected_degrees": [
+      0,
+      45,
+      90,
+      135,
+      180,
+      225,
+      270,
+      315
+    ],
+    "native_pixel_closeup_manifest": "/workspace/scratch/9a64cbeeb049/tree-360-reference/reviews/tree-A-r2-evidence/CROP_EVIDENCE.json",
+    "source_comparison": "/workspace/scratch/9a64cbeeb049/tree-360-reference/reviews/tree-A-r2-evidence/visible-source-comparison.png",
+    "manual_span_diagnostic": "/workspace/scratch/9a64cbeeb049/tree-360-reference/reviews/tree-A-r2-evidence/MANUAL_SPAN_DIAGNOSTIC.json",
+    "source_crops_inspected": 4,
+    "operations": "Native-pixel crops/contact arrangement only; candidate and source files unchanged."
+  },
+  "verdict": "REVISE",
+  "selected": false,
+  "approved": false,
+  "scores": {
+    "visible_source_fidelity": 9.2,
+    "static_same_asset_angle_coherence": 9.4,
+    "presentation": 9.8,
+    "overall_scoped": 9.2,
+    "reference_sensitive_target": 9.9,
+    "score_basis": "Scoped visual judgments, not percent matches. A score above 9.0 does not override the 9.9 target or failed mandatory checks."
+  },
+  "mandatory_checks": [
+    {
+      "id": "A01",
+      "requirement": "Candidate identity and native dimensions",
+      "result": "PASS",
+      "evidence": "Exact SHA256 verified; native 1536 x 1024 RGB."
+    },
+    {
+      "id": "A02",
+      "requirement": "All eight requested azimuth labels and images",
+      "result": "PASS",
+      "evidence": "0, 45, 90, 135, 180, 225, 270 and 315 degrees are present and separately inspected."
+    },
+    {
+      "id": "A03",
+      "requirement": "Complete silhouettes with visible short trunks",
+      "result": "PASS",
+      "evidence": "No clipped tips, skirts or trunks; no occluding reference UI."
+    },
+    {
+      "id": "A04",
+      "requirement": "Exactly three overlapping blue canopy tiers in every view",
+      "result": "PASS",
+      "evidence": "All eight drawings retain the defining three-tier construction."
+    },
+    {
+      "id": "A05",
+      "requirement": "Family palette and trunk identity",
+      "result": "PASS",
+      "evidence": "Icy-blue crowns and short red-brown trunk are retained; no green foliage or new decoration."
+    },
+    {
+      "id": "A06",
+      "requirement": "Broad cut-tab family rather than many small teeth",
+      "result": "PASS",
+      "evidence": "Family-level character is recognizably Reference A; this does not establish exact tab geometry."
+    },
+    {
+      "id": "A07",
+      "requirement": "Visible-source cut-rim geometry fidelity",
+      "result": "FAIL",
+      "evidence": "F01 improved but open: 180/225-degree middle rims still form long smooth convex hems around the central V, rather than distinctly broken flat polygonal plate ends."
+    },
+    {
+      "id": "A08",
+      "requirement": "Visible-source contour and surface treatment",
+      "result": "PASS",
+      "evidence": "F02 closed at this static visual scope: r2 has visibly thinner/lighter contours and clearer planar highlights. Exact shader identity remains outside available evidence."
+    },
+    {
+      "id": "A09",
+      "requirement": "Pointed upper cap rather than round bush",
+      "result": "PASS",
+      "evidence": "The cap remains clearly pointed in all eight views."
+    },
+    {
+      "id": "A10",
+      "requirement": "Plausible static cross-view family, scale and tier consistency",
+      "result": "PASS",
+      "evidence": "No missing tier or gross size/identity jump was found. Exact rotating notch topology is not established by this static-sheet check."
+    },
+    {
+      "id": "A11",
+      "requirement": "Honest reconstruction labeling",
+      "result": "PASS",
+      "evidence": "Footer says reconstruction from reference footage; sheet makes no 4K or 100-percent original-geometry claim."
+    },
+    {
+      "id": "A12",
+      "requirement": "Clean asset-sheet presentation",
+      "result": "PASS",
+      "evidence": "Readable labels, generous separation and neutral background; no added ground props or video interface."
+    },
+    {
+      "id": "A13",
+      "requirement": "Source-like relative crown widths at the visible source face",
+      "result": "FAIL",
+      "evidence": "F03: r2 0-degree lower skirt flares proportionally farther past the upper cap than the clear A61/A52 reference; approximate manual span comparison is recorded separately."
+    }
+  ],
+  "mandatory_summary": {
+    "passed": 11,
+    "failed": 2,
+    "total": 13,
+    "all_mandatory_passed": false
+  },
+  "finding_retest": [
+    {
+      "id": "F01",
+      "previous_status": "OPEN",
+      "status": "IMPROVED_BUT_OPEN",
+      "title": "Some middle-tier tab ends still read as smooth convex fans",
+      "actual_change": "R2 introduces clearer corners and flatter individual tabs compared with r1.",
+      "remaining_observation": "At 180 and 225 degrees, the two main middle-tier hems on either side of the central V still sweep in long smooth convex arcs. The original A crops establish a more broken, planar plate-edge treatment. This is an edge-style observation, not a claim to know the unseen source notch positions.",
+      "targeted_fix": "Change those long curved hems into a few visibly straight unequal plate-edge segments with crisp joins; carry the same authored topology through adjacent views. Retain the current restrained material/contour treatment.",
+      "candidate_evidence": [
+        "tree-A-r2-evidence/candidate-A-180.png",
+        "tree-A-r2-evidence/candidate-A-225.png"
+      ],
+      "source_evidence": [
+        "../source-a-audit/crops/A24-foreground-round-perspective.png",
+        "../source-a-audit/crops/A61-shoreline-three-tier.png"
+      ]
+    },
+    {
+      "id": "F02",
+      "previous_status": "OPEN",
+      "status": "CLOSED_FOR_STATIC_VISUAL_SCOPE",
+      "title": "Heavy contour and overly soft surface treatment",
+      "actual_change": "Contours are visibly lighter/thinner and cap/fan surfaces now have clearer broad planar light changes. This resolves the concrete r1 illustration-treatment complaint; no further broad shader-style rewrite is requested.",
+      "remaining_limit": "This does not certify the original game shader, normals or hidden surfaces."
+    },
+    {
+      "id": "F03",
+      "previous_status": "NOT_PREVIOUSLY_MEASURED",
+      "status": "OPEN",
+      "title": "Lower skirt is over-flared relative to the upper cap",
+      "observation": "The native-pixel 0-degree/source comparison shows the lower skirt substantially wider relative to its cap than A61/A52. Approximate manual spans yield lower-to-cap width about 1.67 in r2 versus about 1.48 in A61. This comparison is more specific than overall width/height, which remains camera-sensitive.",
+      "targeted_fix": "Keep upper-cap height/identity and reduce the lower flare by roughly 10-12 percent as a starting guide; adjust the middle flare only mildly to follow A61. Preserve three tiers and short trunk. Use source pixels for final judgment rather than converting the diagnostic into a game dimension.",
+      "candidate_evidence": [
+        "tree-A-r2-evidence/candidate-A-000.png",
+        "tree-A-r2-evidence/visible-source-comparison.png",
+        "tree-A-r2-evidence/MANUAL_SPAN_DIAGNOSTIC.json"
+      ],
+      "source_evidence": [
+        "../source-a-audit/crops/A61-shoreline-three-tier.png",
+        "../source-a-audit/crops/A52-background-pointed-three-tier.png"
+      ]
+    }
+  ],
+  "cross_view_finding": "All eight views remain plausibly one design family, with three tiers and consistent approximate scale/trunk. No conclusive impossible geometry jump is asserted. Exact common-mesh notch topology remains unverified.",
+  "limits": [
+    "Do not call overall width alone a proven defect: A24 has a much steeper apparent camera than A61/A52, and source perspective changes the apparent height/width.",
+    "No conclusive impossible cross-view geometry was established. The sheet is visually plausible as one family, but its notch topology cannot be proven to arise from a single rotating 3D mesh.",
+    "Original footage does not expose every hidden surface at every azimuth. The unseen side drawings are coherent reconstruction proposals and cannot receive 100-percent source-geometry certification.",
+    "Video compression, source pixel count and different rendered presentation prevent an honest pixel-identical or exact-shader certification.",
+    "No source asset, runtime model, rig, native scene, gameplay-scale or owner-selection approval is included."
+  ],
+  "next_action": "Preserve r1/r2. Make one geometric correction only: match A61 relative crown widths and flatten the remaining long convex middle hems. Keep the now-improved surface treatment and all eight views. Retest exact output bytes and all open findings.",
+  "acceptance": "All mandatory checks pass and visible-source fidelity at least9.9. Full100-percent hidden-angle source identity cannot be certified from this footage."
+}

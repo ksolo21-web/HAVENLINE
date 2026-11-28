@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-28",
+  "project": "Havenline",
+  "owner_requests": [
+    "i need 360 view of the trees from the reference video 100% match",
+    "is there 2 different trees in the reference videos or just 1. i would need all if them if its 2 or more"
+  ],
+  "scope": "Inspect both original recordings, identify every distinguishable tree design/appearance variant supported by their pixels, and create a separate eight-view turnaround for each confirmed distinct design. Do not infer source-model count from Havenline's existing three pine models.",
+  "source_videos": [
+    {
+      "id": "A",
+      "filename": "Screen_Recording_20260817_124839_YouTube.mp4",
+      "sha256": "62f7cfe644de3826cfdd6d91bc23c0ab8d9e4fde3e175c90f762e604547bb0ca"
+    },
+    {
+      "id": "B",
+      "filename": "Screen_Recording_20260817_124510_YouTube.mp4",
+      "sha256": "4c9051cbea6df0efa3e7288b13b6d17da46e857274869b0b43d2f96ff6cc79d2"
+    }
+  ],
+  "output_contract": {
+    "views_per_design": 8,
+    "azimuth_labels": [
+      0,
+      45,
+      90,
+      135,
+      180,
+      225,
+      270,
+      315
+    ],
+    "angle_convention": "0 degrees is a chosen reference-facing convention, not a known original model axis.",
+    "camera": "Fixed elevated near-orthographic source-like camera within each sheet.",
+    "same_asset_across_views": true,
+    "all_visible_types_required": true,
+    "native_resolution_to_report": true,
+    "upscaled_output_is_native": false,
+    "source_overlay_ui_in_deliverable": false
+  },
+  "acceptance_checks": [
+    "Original source bytes verified against authoritative reference lock.",
+    "Both videos audited for distinguishable tree designs; scale, rotation, occlusion and camera pitch are not automatically counted as new designs.",
+    "Direct source crops for every depicted design, with timestamps, crop coordinates and hashes.",
+    "Observed silhouette, tier count/proportions, skirt notch character, source colors, tiny trunk and smooth rendering style matched.",
+    "Eight clearly labeled full views per design, preserving consistent geometry/material/scale and grounded contact shadows.",
+    "Separate critic inspects actual full sheets, all view crops, source comparisons and relevant closeups; known defects repaired and retested.",
+    "Every generated revision and its status preserved in GitHub; no old source/model approval silently reused.",
+    "A literal 100-percent match is not certified for unobserved geometry or visibly imperfect reconstruction."
+  ],
+  "evidence_boundary": "The inspected B footage does not expose a full orbit of one identified tree. Hidden sides are reconstructed unless additional original evidence establishes them; this constraint does not waive the user's requested match target.",
+  "milestones": [
+    {
+      "id": "M1",
+      "name": "Recover exact original recordings",
+      "status": "VERIFIED",
+      "depends_on": []
+    },
+    {
+      "id": "M2",
+      "name": "Audit all tree designs in both recordings",
+      "status": "IN_PROGRESS",
+      "depends_on": [
+        "M1"
+      ]
+    },
+    {
+      "id": "M3",
+      "name": "Generate eight views for each supported design",
+      "status": "FIRST_B_CANDIDATE_GENERATED_NOT_APPROVED",
+      "depends_on": [
+        "M2"
+      ]
+    },
+    {
+      "id": "M4",
+      "name": "Independent critique, repair and retest",
+      "status": "IN_PROGRESS_FOR_FIRST_B_CANDIDATE",
+      "depends_on": [
+        "M3"
+      ]
+    },
+    {
+      "id": "M5",
+      "name": "Preserve reviewed outputs and evidence in GitHub",
+      "status": "PENDING",
+      "depends_on": [
+        "M4"
+      ]
+    }
+  ],
+  "final_match_approval": false,
+  "native_asset_integration": false
+}

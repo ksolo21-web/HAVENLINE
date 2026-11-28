@@ -1,0 +1,238 @@
+{
+  "schema_version": "1.0",
+  "review_id": "TREE-A-R3-INDEPENDENT-RETEST",
+  "reviewer_agent": "/root/world1_upgrade_inventory",
+  "independent_of_generation": true,
+  "scope": "Actual Reference A r3 static eight-view retest against original A61/A52/A24 pixels. No hidden-source geometry, common mesh, native/runtime or owner-selection approval.",
+  "candidate": {
+    "path": "/workspace/scratch/9a64cbeeb049/tree-360-reference/candidates/tree-A-360-r3.png",
+    "sha256": "f2145a70c13e4660729d8a35c93561e591f7d9f9e765f6e5675dcef29ed23e8f",
+    "bytes": 1696137,
+    "dimensions_pixels": [
+      1536,
+      1024
+    ],
+    "mode": "RGB",
+    "native_resolution_claim": "1536x1024; not4K"
+  },
+  "prior_reviews": [
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/tree-360-reference/reviews/tree-A-r1-review.json",
+      "sha256": "b11d7e93f6dc0d06530089784fc8d26f14777f26a9ed06d6d70a2259ef323630",
+      "preserved": true
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/tree-360-reference/reviews/tree-A-r2-review.json",
+      "sha256": "26fb21bc300ab26d113ebd0bffd4bf95a15bf13bcb5b58cd50b4d8381e910b5e",
+      "preserved": true
+    }
+  ],
+  "sources": [
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/tree-360-reference/source-a-audit/crops/A61-shoreline-three-tier.png",
+      "sha256": "d495a8dbff34c5a31305fa9c8ad1770abe5308e227ea420e924feedf912311da",
+      "dimensions_pixels": [
+        240,
+        360
+      ],
+      "role": "Primary clear whole-tree source newly available after r1 generation; visible taper, tabs, contour and trunk.",
+      "visually_inspected": true
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/tree-360-reference/source-a-audit/crops/A52-background-pointed-three-tier.png",
+      "sha256": "0ca4b70bf13f27e411873cc12d34ef913832b1311ccde610fb17bb6bab948f42",
+      "dimensions_pixels": [
+        185,
+        275
+      ],
+      "role": "Generation primary; visible pointed cap, overlapping tiers and tiny trunk.",
+      "visually_inspected": true
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/tree-360-reference/source-a-audit/crops/A24-foreground-round-perspective.png",
+      "sha256": "da799f40fa9dc994eef11b502536a60d3e627974e69c6198cdb229cafaf201c9",
+      "dimensions_pixels": [
+        242,
+        257
+      ],
+      "role": "Steeper source camera; close evidence of broad flat polygonal cut tabs and dark thin contour.",
+      "visually_inspected": true
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/tree-360-reference/source-a-audit/crops/A24-smaller-three-tier.png",
+      "sha256": "6bdb30d35ff48b5ebae565ddef4cc73a25e47dfd9a0d424dc6be3d96635fb28b",
+      "dimensions_pixels": [
+        173,
+        204
+      ],
+      "role": "Corroborating whole-tree architecture from a steeper camera.",
+      "visually_inspected": true
+    }
+  ],
+  "inspection": {
+    "full_sheet": true,
+    "all_angles_inspected_degrees": [
+      0,
+      45,
+      90,
+      135,
+      180,
+      225,
+      270,
+      315
+    ],
+    "source_crop_count": 4,
+    "native_pixel_crop_manifest": "/workspace/scratch/9a64cbeeb049/tree-360-reference/reviews/tree-A-r3-evidence/CROP_EVIDENCE.json",
+    "comparisons": [
+      "/workspace/scratch/9a64cbeeb049/tree-360-reference/reviews/tree-A-r3-evidence/r2-r3-source-proportions.png",
+      "/workspace/scratch/9a64cbeeb049/tree-360-reference/reviews/tree-A-r3-evidence/r2-r3-middle-hem-comparison.png"
+    ],
+    "candidate_and_sources_unchanged": true
+  },
+  "verdict": "REVISE_SOURCE_FIRST_REBUILD_RECOMMENDED",
+  "selected": false,
+  "approved": false,
+  "scores": {
+    "visible_source_fidelity": 9.5,
+    "static_same_asset_angle_coherence": 9.4,
+    "presentation": 9.8,
+    "overall_scoped": 9.5,
+    "reference_sensitive_target": 9.9,
+    "score_basis": "Scoped visual judgment, not percent match. One failed mandatory check prevents pass despite score above9.0."
+  },
+  "mandatory_checks": [
+    {
+      "id": "A01",
+      "requirement": "Candidate identity and native dimensions",
+      "result": "PASS",
+      "evidence": "Exact SHA256 verified; native 1536 x 1024 RGB."
+    },
+    {
+      "id": "A02",
+      "requirement": "All eight requested azimuth labels and images",
+      "result": "PASS",
+      "evidence": "0, 45, 90, 135, 180, 225, 270 and 315 degrees are present and separately inspected."
+    },
+    {
+      "id": "A03",
+      "requirement": "Complete silhouettes with visible short trunks",
+      "result": "PASS",
+      "evidence": "No clipped tips, skirts or trunks; no occluding reference UI."
+    },
+    {
+      "id": "A04",
+      "requirement": "Exactly three overlapping blue canopy tiers in every view",
+      "result": "PASS",
+      "evidence": "All eight drawings retain the defining three-tier construction."
+    },
+    {
+      "id": "A05",
+      "requirement": "Family palette and trunk identity",
+      "result": "PASS",
+      "evidence": "Icy-blue crowns and short red-brown trunk are retained; no green foliage or new decoration."
+    },
+    {
+      "id": "A06",
+      "requirement": "Broad cut-tab family rather than many small teeth",
+      "result": "PASS",
+      "evidence": "Family-level character is recognizably Reference A; this does not establish exact tab geometry."
+    },
+    {
+      "id": "A07",
+      "requirement": "Visible-source cut-rim geometry fidelity",
+      "result": "FAIL",
+      "evidence": "F01 remains: the180/225-degree middle hems retain nearly the same broad convex two-lobe rim as r2. Mild narrowing did not establish the requested unequal flat plate-edge profile."
+    },
+    {
+      "id": "A08",
+      "requirement": "Visible-source contour and surface treatment",
+      "result": "PASS",
+      "evidence": "F02 remains closed: thinner contour and restrained planar light changes are preserved; exact shader identity is not certified."
+    },
+    {
+      "id": "A09",
+      "requirement": "Pointed upper cap rather than round bush",
+      "result": "PASS",
+      "evidence": "The cap remains clearly pointed in all eight views."
+    },
+    {
+      "id": "A10",
+      "requirement": "Plausible static cross-view family, scale and tier consistency",
+      "result": "PASS",
+      "evidence": "No missing tier or gross size/identity jump was found. Exact rotating notch topology is not established by this static-sheet check."
+    },
+    {
+      "id": "A11",
+      "requirement": "Honest reconstruction labeling",
+      "result": "PASS",
+      "evidence": "Footer says reconstruction from reference footage; sheet makes no 4K or 100-percent original-geometry claim."
+    },
+    {
+      "id": "A12",
+      "requirement": "Clean asset-sheet presentation",
+      "result": "PASS",
+      "evidence": "Readable labels, generous separation and neutral background; no added ground props or video interface."
+    },
+    {
+      "id": "A13",
+      "requirement": "Source-like relative crown widths at the visible source face",
+      "result": "PASS",
+      "evidence": "F03 closed within this image-space check: the narrowed lower skirt is now source-like relative to the cap; approximate lower-to-cap width1.45 versus A61about1.48, subject to source/camera limits."
+    }
+  ],
+  "mandatory_summary": {
+    "passed": 12,
+    "failed": 1,
+    "total": 13,
+    "all_mandatory_passed": false
+  },
+  "finding_retest": [
+    {
+      "id": "F01",
+      "previous_status": "IMPROVED_BUT_OPEN",
+      "status": "OPEN_CORRECTION_STALLED",
+      "title": "Long convex middle hems are still the inherited r2 shape",
+      "actual_output_observation": "At180 and225degrees, the main middle rim remains a broad pair of convex hems around one centralV. The r2/r3 native-pixel comparison shows only slight narrowing/edge shifts, not a materially source-matched replacement with unequal straight polygonal plate ends. SourceA24 shows distinctly straighter plate-edge runs and angular corner changes. This is a visible edge-treatment issue; no hidden source notch location is asserted.",
+      "evidence": [
+        "tree-A-r3-evidence/r2-r3-middle-hem-comparison.png",
+        "tree-A-r3-evidence/candidate-A-180.png",
+        "tree-A-r3-evidence/candidate-A-225.png",
+        "../source-a-audit/crops/A24-foreground-round-perspective.png"
+      ],
+      "targeted_fix": "Establish one source-first A61 visible-face tree with the actual uneven plate-end and notch profile, using A52 andA24 only as corroboration. Review that single source face before extending it into an eight-view reconstruction. Preserve the now-correct general crown proportions/material; do not spend another identical whole-sheet edit on vague angularity."
+    },
+    {
+      "id": "F02",
+      "previous_status": "CLOSED_FOR_STATIC_VISUAL_SCOPE",
+      "status": "REMAINS_CLOSED",
+      "title": "Contour and material",
+      "actual_output_observation": "The thinner restrained edge and broad planar shading fromr2 are retained; no regression requiring a broad style change was found. Original shader identity remains unknown."
+    },
+    {
+      "id": "F03",
+      "previous_status": "OPEN",
+      "status": "CLOSED_FOR_IMAGE_SPACE_SILHOUETTE_CHECK",
+      "title": "Excess relative lower flare",
+      "actual_output_observation": "The lower crown is visibly narrowed while the upper cap and tree height remain. Approximate lower-to-cap width is now1.45 versus about1.48 inA61, within the limits of this manual/perspective-dependent guide.",
+      "evidence": [
+        "tree-A-r3-evidence/r2-r3-source-proportions.png",
+        "tree-A-r3-evidence/MANUAL_SPAN_RETEST.json"
+      ]
+    }
+  ],
+  "cross_view_coherence": "All eight views retain three tiers, pointed cap, tiny trunk and plausible approximate scale. No conclusive impossible geometry jump is asserted; eight illustrations do not verify a common3Dmesh or exact rotational topology.",
+  "edit_series_assessment": {
+    "whole_series_stalled": false,
+    "f01_specific_progress_stalled": true,
+    "reason": "R2 materially improved contour/material; R3 materially corrected lower flare. However, the inherited middle-hem geometry survived two focused edits with minimal change. Further near-identical sheet-edit calls have weak evidence of resolving that remaining mismatch.",
+    "recommendation": "Stop full-sheet repetition and rebuild one visible tree from the original source pixels first. This is a method change for the remaining reference match, not a new species or lowered requirement.",
+    "next_review_gate": "The single visible-face candidate must match source canopy contours, unequal plate ends/notches, proportions and trunk at>=9.9before eight-view expansion. Full100-percent unseen original geometry remains unverified."
+  },
+  "limitations": [
+    "Source footage does not show every hidden surface; no literal100-percent hidden-geometry certification is possible from these frames.",
+    "No common mesh, native turntable, runtime size, collider, shader or owner-selection approval is included.",
+    "Manual pixel spans are approximate diagnostics; camera perspective and compression are not calibrated.",
+    "R3is a better draft thanr2 but remains below the active reference-sensitive target."
+  ],
+  "next_action": "Preserve allr1-r3 artifacts/reviews. Use originalA61 primary,A52/A24 corroboration for a new single-tree visible-face reconstruction. Review source match before generating another complete eight-view sheet."
+}
