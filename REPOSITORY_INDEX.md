@@ -49,3 +49,8 @@ For the preserved earlier gameplay source `3fad812b384335bd8ca9b5e47dc9d9557110e
 The selected newer Codex branch continues separately; the older `alfred/level-1-replacement` branch remains a preserved alternative, not the default continuation source. Historical `HavenlineGodot/`, task branches and all source/evidence identities remain available. Source snapshots under `Docs/RepositoryArchive/Plans/<commit>/` are archival records; packet presence does not confer readiness or authority.
 
 The source documents contain different historical checkpoints. Preserve them: AGENTS checkpoint prose stops at T09, build-plan prose says T10 approved/T11 prepared, while the current registry and task-local closure records preserve T01–T11 historical approvals. The visual-invalidation ledger remains separate. Neither those historical approvals nor this navigation index approve the changed Level 1 build.
+
+## Animated intro v2
+
+[Havenline intro v2](Docs/Design/AnimatedIntro/2026-11-28/README.md) is the 23.5s vertical (720×1280) animated intro, with an H.264 master and a Godot-playable Theora (`.ogv`) copy. It is not wired into a game scene yet.
+
