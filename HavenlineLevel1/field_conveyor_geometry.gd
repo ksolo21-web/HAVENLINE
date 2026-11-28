@@ -1,4 +1,5 @@
 extends Node3D
+const Finish = preload("res://field_finishes.gd")
 ## The chosen transport sheet uses cylindrical charcoal rollers, continuous
 ## enameled sideguards, bright coupling collars and perforated steel trestles.
 ## The fitted kit is instanced in batches. A curved guard is a continuous
@@ -17,8 +18,8 @@ var used:Dictionary={}
 var runs:Dictionary={}
 var orange:=SurfaceTool.new()
 var under:=SurfaceTool.new()
-var guard_mat:=StandardMaterial3D.new()
-var frame_mat:=StandardMaterial3D.new()
+var guard_mat := Finish.paint(Color("#fa851f"),.43,.10)
+var frame_mat := Finish.paint(Color("#303942"),.46,.38)
 var sections:=0
 var carriage_index:Dictionary={}
 
@@ -30,14 +31,6 @@ func setup() -> void:
 	for piece:MeshInstance3D in prototype.find_children("*","MeshInstance3D",true,false):
 		kit[String(piece.name)]=piece.mesh
 	prototype.free()
-	guard_mat.albedo_color=Color("#fa851f")
-	guard_mat.metallic=.10
-	guard_mat.roughness=.43
-	guard_mat.cull_mode=BaseMaterial3D.CULL_BACK
-	frame_mat.albedo_color=Color("#303942")
-	frame_mat.metallic=.38
-	frame_mat.roughness=.46
-	frame_mat.cull_mode=BaseMaterial3D.CULL_DISABLED
 	for target in [orange,under]:target.begin(Mesh.PRIMITIVE_TRIANGLES)
 
 static func direction(forward:Vector3) -> Basis:

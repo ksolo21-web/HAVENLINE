@@ -2,6 +2,7 @@ extends Node3D
 ## One independent, conservative double-leaf technical gate; never grants progress.
 signal hinge_moved(radians: float)
 
+const LEAF_ART := preload("res://assets/field_camp/opening_gate_leaf.obj")
 const HALF_SPAN := 1.20
 const LEAF_LENGTH := 1.18
 const LEAF_DEPTH := 0.14
@@ -45,13 +46,9 @@ func build(id: String) -> void:
 		shape.shape = box
 		body.add_child(shape)
 		var mesh := MeshInstance3D.new()
-		var panel := BoxMesh.new()
-		panel.size = box.size
-		var tint := StandardMaterial3D.new()
-		tint.albedo_color = Color("#795b46")
-		tint.roughness = 0.92
-		mesh.material_override = tint
-		mesh.mesh = panel
+		mesh.mesh = LEAF_ART
+		mesh.scale = box.size/LEAF_ART.get_aabb().size
+		mesh.position = -LEAF_ART.get_aabb().get_center()*mesh.scale
 		body.add_child(mesh)
 	visible = false
 

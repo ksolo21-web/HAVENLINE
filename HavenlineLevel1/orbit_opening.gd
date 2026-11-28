@@ -12,7 +12,7 @@ func move_actor(input: Vector2, dt: float) -> float:
 const Orbit = preload("res://weapon_orbit.gd")
 const FRESH_HERO = preload("res://assets/characters/Character1Fresh.glb")
 @export var upgraded_orbit := false
-const SNOW_STONE := preload("res://assets/reference_forest/mine-stone.glb")
+const SNOW_STONE = ResourceRockScript.STONE_BANK
 var surfaces := {}
 var contacts: Array[Dictionary] = []
 
@@ -48,17 +48,7 @@ func _ready() -> void:
 			surfaces[resource_tree] = [part, trunk]
 			break
 	# Keep hits on the visible native rock surface, including after depletion reduces its size.
-	var mount := Node3D.new()
-	resource_rock.add_child(mount)
-	mount.scale = Vector3.ONE * ResourceRockScript.BANK_SCALE
-	var stone := SNOW_STONE.instantiate() as Node3D
-	mount.add_child(stone)
-	var rock_part := stone as MeshInstance3D
-	if rock_part == null:
-		rock_part = stone.find_children("*", "MeshInstance3D", true, false)[0]
-	resource_rock._mesh.queue_free()
-	resource_rock._mesh = rock_part
-	rock_part.position.y = -rock_part.mesh.get_aabb().position.y
+	var rock_part: MeshInstance3D = resource_rock._mesh
 	resource_rock.attach_bank_body()
 	surfaces[resource_rock] = [rock_part, rock_part.mesh.generate_triangle_mesh()]
 	opening_hud.show_status(0, "Approach a resource to gather.")

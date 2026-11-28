@@ -1,4 +1,5 @@
 extends RefCounted
+const Finish = preload("res://field_finishes.gd")
 ## Shallow deck below the original interactive face. Its thickness is visual only.
 const FACE_Y := .039
 const COLORS := {
@@ -48,8 +49,8 @@ const STROKES := {
 }
 const SLOT_WIDTH := .22
 static var decks := {}
-static var paint: StandardMaterial3D
-static var stamp_paint: StandardMaterial3D
+static var paint: ShaderMaterial
+static var stamp_paint: ShaderMaterial
 static var stamps := {}
 
 static func bracket_color(focused: bool) -> Color:
@@ -84,11 +85,8 @@ static func _strip(tool: SurfaceTool, outer: PackedVector3Array, inner: PackedVe
 
 static func _deck(role: String) -> ArrayMesh:
 	if paint == null:
-		paint = StandardMaterial3D.new()
-		paint.vertex_color_use_as_albedo = true
-		paint.vertex_color_is_srgb = true
-		paint.roughness = .86
-		paint.cull_mode = BaseMaterial3D.CULL_DISABLED
+		paint = Finish.paint(Color.WHITE,.86)
+		paint.set_shader_parameter("vertex_paint",true)
 	var trim: Color = COLORS[role]
 	var corner: Vector2 = SILHOUETTES[role]
 	var tool := SurfaceTool.new()
@@ -132,10 +130,7 @@ static func glyph_socket(parent: Node3D, role: String, with_emblem := true) -> M
 
 static func _stamp(role: String) -> ArrayMesh:
 	if stamp_paint == null:
-		stamp_paint = StandardMaterial3D.new()
-		stamp_paint.albedo_color = Color("#fff1d8")
-		stamp_paint.cull_mode = BaseMaterial3D.CULL_DISABLED
-		stamp_paint.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		stamp_paint = Finish.tinted(Finish.INK,Color("#fff1d8"))
 	var tool := SurfaceTool.new()
 	tool.begin(Mesh.PRIMITIVE_TRIANGLES)
 	for stroke in STROKES[role]:

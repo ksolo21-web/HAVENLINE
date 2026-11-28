@@ -8,7 +8,7 @@ var price: Node3D
 var shown_id := ""
 var floor_art
 var ink: ShaderMaterial
-var corners: StandardMaterial3D
+var corners: ShaderMaterial
 var platform: MeshInstance3D
 var emblem: Marker3D
 var payment_focus := false
@@ -34,7 +34,7 @@ func install_custom(environment, id:String, at:Vector3, caption:String, kinds:Ar
 			else:
 				corners = mesh.material_override.duplicate()
 				mesh.material_override = corners
-				corners.albedo_color = Color("f8fbff")
+				corners.set_shader_parameter("pigment",StationPad.bracket_color(false))
 	_set_platform(id)
 	title = environment.flat_label(self,Vector3(0,StationPad.FACE_Y+.008,-.70),.0061)
 	title.text = caption
@@ -113,7 +113,7 @@ func set_payment_focus(focused: bool, worker := false) -> void:
 	else:
 		if payment_focus == focused: return
 		payment_focus = focused
-	corners.albedo_color = StationPad.bracket_color(payment_focus or worker_payment_focus)
+	corners.set_shader_parameter("pigment",StationPad.bracket_color(payment_focus or worker_payment_focus))
 
 func set_depot(ledger, id: String, owns_bays: bool) -> void:
 	# The completed house supplies the loading mat in its own authored model.

@@ -88,7 +88,7 @@ func _initialize() -> void:
 	check(s.commit(inv) == OK and not DirAccess.dir_exists_absolute(dead), "dead writer recovered")
 	check(not FileAccess.file_exists(path.path_join(Profile.PRIMARY)), "legacy opening slot untouched")
 	var child: Array = []
-	var status := OS.execute(OS.get_executable_path(), PackedStringArray(["--headless","--path",ProjectSettings.globalize_path("res://"),"--script","res://qa_field_save.gd","--",Profile.FLAG+path,"--verify-restart"]),child,true)
+	var status := OS.execute(OS.get_executable_path(), PackedStringArray(["--headless","--path",ProjectSettings.globalize_path("res://project.godot").get_base_dir(),"--script","res://tests/qa_field_save.gd","--",Profile.FLAG+path,"--verify-restart"]),child,true)
 	check(status == 0, "new process reopens exact typed partial")
 	DirAccess.make_dir_absolute(dead)
 	var active := dead.path_join("owner-"+str(OS.get_process_id()))

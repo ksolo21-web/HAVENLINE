@@ -81,7 +81,7 @@ func setup(host: Node3D) -> void:
 	hide()
 
 func _plumage_material(mesh: MeshInstance3D, is_folded: bool) -> ShaderMaterial:
-	var imported: StandardMaterial3D = mesh.get_active_material(0)
+	var imported: BaseMaterial3D = mesh.get_active_material(0)
 	var mat := ShaderMaterial.new()
 	mat.shader = PlumageShader
 	mat.set_shader_parameter("feather_color",imported.albedo_texture)

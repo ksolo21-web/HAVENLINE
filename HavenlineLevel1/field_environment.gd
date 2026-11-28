@@ -1,4 +1,5 @@
 extends Node3D
+const Finish = preload("res://field_finishes.gd")
 
 signal perimeter_changed
 
@@ -125,10 +126,8 @@ func install(host: Node3D) -> void:
 	if get_parent() == null: world.add_child(self)
 	var snow_mesh: MeshInstance3D = world.get_node("SnowGround_NoPaintedPaths").find_children("*","MeshInstance3D", false, false)[0]
 	# Extend the visible snow beneath the boundary drifts. The travel collider retains the playable extent.
-	var snow_box := snow_mesh.mesh as BoxMesh
-	if snow_box:
-		var backdrop_width := 2.0 * (float(world.layout.snow_extent_half) + 76.0)
-		snow_box.size = Vector3(backdrop_width, snow_box.size.y, backdrop_width)
+	var backdrop_width := 2.0 * (float(world.layout.snow_extent_half) + 76.0)
+	snow_mesh.scale = Vector3(backdrop_width,1.,backdrop_width)
 	snow.shader = SNOW
 	snow_mesh.material_override = snow
 	world.camp_built.get_node("CampOnlySurface").hide()
@@ -512,10 +511,10 @@ func clear_hearth_footprint(at: Vector3) -> Vector3:
 	return Vector3(center.x + outward.x*radius,at.y,center.z + outward.y*radius)
 
 func canopy_ink(material: Material) -> Material:
-	if not material is StandardMaterial3D or material.has_meta(&"snow_pine_tinted") or material.resource_name.to_lower() not in ["crown","lip"]:
+	if not material is BaseMaterial3D or material.has_meta(&"snow_pine_tinted") or material.resource_name.to_lower() not in ["crown","lip"]:
 		return material
 	if not canopy_materials.has(material):
-		var shaded := material.duplicate() as StandardMaterial3D
+		var shaded := material.duplicate() as BaseMaterial3D
 		var skirt := material.resource_name.to_lower() == "lip"
 		var bank := material.resource_path.begins_with("res://assets/reference_forest/bank_pine_")
 		if bank:
@@ -747,10 +746,6 @@ func install_payment(anchor:Node3D, upgrade:bool) -> void:
 				var pivot := Vector2(.506,.506)
 				point = point.sign()*(pivot+Vector2(.035,.035)+(centerline-pivot)*1.04+(uv-centerline)*2.65)
 			brush.add_vertex(Vector3(point.x*2.64,layer,-point.y*2.18))
-		var ink := StandardMaterial3D.new()
-		ink.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-		ink.cull_mode = BaseMaterial3D.CULL_DISABLED
-		ink.albedo_color = Color({"gray":"51bd37","brackets":"5be72e"}[role])
 		var mark := MeshInstance3D.new()
 		mark.name = role.capitalize()
 		mark.mesh = brush.commit()
@@ -762,7 +757,7 @@ func install_payment(anchor:Node3D, upgrade:bool) -> void:
 			payment_ink["upgrade" if upgrade else "buy"] = fill
 			mark.material_override = fill
 		else:
-			ink.albedo_color = Color("f8fbff")
+			var ink := Finish.tinted(Finish.INK,StationPad.bracket_color(false))
 			payment_brackets["upgrade" if upgrade else "buy"] = ink
 			mark.material_override = ink
 		mark.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
@@ -800,7 +795,7 @@ func set_payment_progress(fraction:float, receiver: String = "buy") -> void:
 func set_hearth_payment_focus(focused: bool) -> void:
 	if focused == hearth_payment_focus: return
 	hearth_payment_focus = focused
-	payment_brackets.buy.albedo_color = StationPad.bracket_color(focused)
+	payment_brackets.buy.set_shader_parameter("pigment",StationPad.bracket_color(focused))
 
 func set_upgrade_payment(remaining: Dictionary) -> void:
 	var stone := int(remaining.get("stone",0))

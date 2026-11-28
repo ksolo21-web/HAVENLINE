@@ -1,17 +1,13 @@
 extends RefCounted
+const Finish = preload("res://field_finishes.gd")
 ## Cast cowl and powder-coated cabinet around original D01 rollers, gearboxes,
 ## bolted collars and feet. The visible shelves carry the same physical queue.
 var station
 var kit
 var surfaces:Dictionary={}
 
-func _paint(color:String,metal:float,rough:float) -> StandardMaterial3D:
-	var m:=StandardMaterial3D.new()
-	m.albedo_color=Color(color)
-	m.metallic=metal
-	m.roughness=rough
-	m.cull_mode=BaseMaterial3D.CULL_DISABLED
-	return m
+func _paint(color:String,metal:float,rough:float) -> ShaderMaterial:
+	return Finish.paint(Color(color),rough,metal)
 
 func _quad(st:SurfaceTool,a:Vector3,b:Vector3,c:Vector3,d:Vector3,inside:Vector3) -> void:
 	var normal:Vector3=(b-a).cross(c-a).normalized()

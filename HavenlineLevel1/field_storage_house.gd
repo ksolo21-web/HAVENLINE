@@ -54,13 +54,13 @@ func _ready() -> void:
 		elif mesh_part is MeshInstance3D:
 			var id:=String(mesh_part.name)
 			dock_meshes[id]=mesh_part.mesh
-			var original:StandardMaterial3D=mesh_part.mesh.surface_get_material(0)
+			var original:BaseMaterial3D=mesh_part.mesh.surface_get_material(0)
 			var paint:=ShaderMaterial.new()
 			paint.shader=PLACARD_SHADER
 			paint.set_shader_parameter("original_paint",original.albedo_texture)
 			dock_paints[id]=paint
 	library.free()
-	var paint:StandardMaterial3D=parts.BackWall.mesh.surface_get_material(0)
+	var paint:BaseMaterial3D=parts.BackWall.mesh.surface_get_material(0)
 	hatch_material.shader=HATCH_SHADER
 	hatch_material.set_shader_parameter("painted_timber",paint.albedo_texture)
 	collision=StaticBody3D.new()

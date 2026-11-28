@@ -8,9 +8,9 @@ const CONFIRM_TINT := Color("#54af3b")
 const PENDING_TINT_WEIGHT := 0.32
 var installed := false
 var _model: Node3D
-var _paint: Array[StandardMaterial3D] = []
+var _paint: Array[BaseMaterial3D] = []
 var _idle: Array[Color] = []
-var _deck_paint: StandardMaterial3D
+var _deck_paint: BaseMaterial3D
 var _deck_idle: Color
 var _action: Label3D
 var _cost: Label3D
@@ -51,22 +51,22 @@ func install(source: PackedScene) -> bool:
 		instance.free()
 		return false
 	var deck := meshes["PurchaseDeck_Surface"] as MeshInstance3D
-	var deck_base := deck.mesh.surface_get_material(0) as StandardMaterial3D
+	var deck_base := deck.mesh.surface_get_material(0) as BaseMaterial3D
 	if deck_base == null:
 		instance.free()
 		return false
-	_deck_paint = deck_base.duplicate() as StandardMaterial3D
+	_deck_paint = deck_base.duplicate() as BaseMaterial3D
 	_deck_idle = _deck_paint.albedo_color
 	deck.set_surface_override_material(0, _deck_paint)
 	for tag in INLAYS:
 		var inlay := meshes[tag] as MeshInstance3D
-		var base := inlay.mesh.surface_get_material(0) as StandardMaterial3D
+		var base := inlay.mesh.surface_get_material(0) as BaseMaterial3D
 		if base == null:
 			_paint.clear()
 			_idle.clear()
 			instance.free()
 			return false
-		var paint := base.duplicate() as StandardMaterial3D
+		var paint := base.duplicate() as BaseMaterial3D
 		_idle.append(paint.albedo_color)
 		inlay.set_surface_override_material(0, paint)
 		_paint.append(paint)

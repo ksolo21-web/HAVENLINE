@@ -78,7 +78,7 @@ func orchestrate() -> void:
 	old_profile(profile)
 	for mode in ["--mineral-migrate","--mineral-reopen"]:
 		var out := []
-		var code:=OS.execute(OS.get_executable_path(),PackedStringArray(["--headless","--path",ProjectSettings.globalize_path("res://"),"--script","res://qa_field_minerals.gd","--",Store.Profile.FLAG+profile,mode]),out,true)
+		var code:=OS.execute(OS.get_executable_path(),PackedStringArray(["--headless","--path",ProjectSettings.globalize_path("res://project.godot").get_base_dir(),"--script","res://tests/qa_field_minerals.gd","--",Store.Profile.FLAG+profile,mode]),out,true)
 		for line in out: print(line)
 		check(mode,code==0)
 	print(JSON.stringify(checks))

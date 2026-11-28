@@ -133,7 +133,7 @@ func _dress_carried_resource(unit: Node) -> void:
 		return
 	for part: MeshInstance3D in unit.find_children("*", "MeshInstance3D", true, false):
 		for i in part.mesh.get_surface_count():
-			var source := part.get_active_material(i) as StandardMaterial3D
+			var source := part.get_active_material(i) as BaseMaterial3D
 			if not source:
 				continue
 			if not worn_materials.has(source):

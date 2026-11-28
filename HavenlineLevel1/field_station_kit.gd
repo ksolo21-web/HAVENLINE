@@ -82,7 +82,7 @@ static func instantiate(id: String) -> Node3D:
 		# The bundled supply props carry linear GLTF paint colors. Godot
 		# imports the channel but leaves its material flag off.
 		for mesh: MeshInstance3D in model.find_children("*","MeshInstance3D",true,false):
-			var material := mesh.get_active_material(0) as StandardMaterial3D
+			var material := mesh.get_active_material(0) as BaseMaterial3D
 			if material != null and material.resource_name == "Havenline Supply Paint":
 				material.vertex_color_use_as_albedo = true
 		var combined := boxes[0]

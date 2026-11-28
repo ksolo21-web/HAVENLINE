@@ -111,11 +111,10 @@ func _build_smoke() -> void:
 	ramp.gradient=gradient
 	plume.color_ramp=ramp
 	smoke.process_material=plume
-	var puff:=QuadMesh.new()
-	puff.size=Vector2.ONE
+	var puff: ArrayMesh = preload("res://assets/field_finishes/combustion_canvas.tres").duplicate()
 	var material:=ShaderMaterial.new()
 	material.shader=preload("res://assets/lakeshore/hearth_smoke.gdshader")
-	puff.material=material
+	puff.surface_set_material(0,material)
 	smoke.draw_pass_1=puff
 	smoke.emitting=false
 

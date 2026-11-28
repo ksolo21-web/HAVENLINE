@@ -1,5 +1,6 @@
 extends Node3D
 ## Mining surface used by the starter quarry and streamed mineral deposits.
+const STONE_BANK := preload("res://assets/reference_forest/mine-stone.glb")
 const BANK_SCALE := 1.156
 const ROCK_ID := "stone-a"
 const MIN_REACH := 0.52
@@ -55,19 +56,15 @@ func show_return(remaining: float) -> void:
 		set_size(lerpf(0.02, 1.0, smoothstep(0.0, RETURN_SECONDS, RETURN_SECONDS - remaining)))
 
 func build() -> void:
-	_mesh = MeshInstance3D.new()
-	var rock := SphereMesh.new()
-	rock.radius = 0.34
-	rock.height = 0.52
-	rock.radial_segments = 18
-	rock.rings = 10
-	_mesh.mesh = rock
-	_mesh.position = Vector3(0.0, 0.28, 0.0)
-	var shade := StandardMaterial3D.new()
-	shade.albedo_color = Color("#6e675f")
-	shade.roughness = 0.92
-	_mesh.material_override = shade
-	add_child(_mesh)
+	var mount := Node3D.new()
+	add_child(mount)
+	mount.scale = Vector3.ONE * BANK_SCALE
+	var stone := STONE_BANK.instantiate() as Node3D
+	mount.add_child(stone)
+	_mesh = stone as MeshInstance3D
+	if _mesh == null:
+		_mesh = stone.find_children("*","MeshInstance3D",true,false)[0]
+	set_size(1.0)
 
 func can_address(feet: Vector3, facing: Vector3) -> bool:
 	if phase != "seated":

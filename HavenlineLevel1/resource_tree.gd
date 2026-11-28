@@ -1,4 +1,5 @@
 extends Node3D
+const Finish = preload("res://field_finishes.gd")
 ## A successful axe contact drives one recoil, chip burst and notch.
 const TREE_ID := "wood-a"
 const TREE_SCALE := 0.69
@@ -19,8 +20,12 @@ var burst_elapsed := .56
 var chips: Array[MeshInstance3D] = []
 var chip_origins: Array[Vector3] = []
 var chip_velocities: Array[Vector3] = []
-static var splinter: Mesh
-static var powder: Mesh
+const SPLINTER := preload("res://assets/field_finishes/timber_splinter.tres")
+const POWDER := preload("res://assets/field_finishes/loose_powder.tres")
+const NOTCH := preload("res://assets/field_finishes/bark_notch.tres")
+static var splinter_paint: ShaderMaterial
+static var powder_paint: ShaderMaterial
+static var notch_paint: ShaderMaterial
 var phase := "rooted"
 var strikes := 0
 var last_sequence := 0
@@ -51,13 +56,11 @@ func build(source_mesh: PackedScene, allow_regrowth := false) -> void:
 	tree.scale = Vector3.ONE * TREE_SCALE
 	for i in range(2):
 		var mark := MeshInstance3D.new()
-		var chip := BoxMesh.new()
-		chip.size = Vector3(0.035, 0.045, 0.15 - .025 * float(i))
-		mark.mesh = chip
-		mark.position = Vector3(.132, .56 - .12 * float(i), .02)
-		var color := StandardMaterial3D.new()
-		color.albedo_color = Color("#594131")
-		mark.material_override = color
+		mark.mesh = NOTCH
+		mark.scale.z = 1.0 - .16 * float(i)
+		mark.position = Vector3(.151,.56 - .12 * float(i),.02)
+		if not notch_paint: notch_paint = Finish.paint(Color("#594131"),.94)
+		mark.material_override = notch_paint
 		_pivot.add_child(mark)
 		mark.hide()
 		_marks.append(mark)
@@ -207,30 +210,16 @@ func _pose(radians: float) -> void:
 	_pivot.basis = Basis(Vector3.UP.cross(local_direction).normalized(), radians)
 
 func _emit_chips(hit_at: Vector3) -> void:
-	if not splinter:
-		var sliver := PrismMesh.new()
-		sliver.size = Vector3(.055,.078,.032)
-		var wood := StandardMaterial3D.new()
-		wood.albedo_color = Color("d79b58")
-		wood.roughness = .92
-		sliver.material = wood
-		splinter = sliver
-		var flake := SphereMesh.new()
-		flake.radius = .042
-		flake.height = .058
-		flake.radial_segments = 8
-		flake.rings = 3
-		var white := StandardMaterial3D.new()
-		white.albedo_color = Color("e1f1ff")
-		white.roughness = .96
-		flake.material = white
-		powder = flake
+	if not splinter_paint:
+		splinter_paint = Finish.paint(Color("d79b58"),.92)
+		powder_paint = Finish.paint(Color("e1f1ff"),.96)
 	var incoming := (global_basis.inverse()*recoil_direction).normalized()
 	var side := Vector3.UP.cross(incoming)
 	if chips.is_empty():
 		for i in 7:
 			var chip := MeshInstance3D.new()
-			chip.mesh = splinter if i < 3 else powder
+			chip.mesh = SPLINTER if i < 3 else POWDER
+			chip.material_override = splinter_paint if i < 3 else powder_paint
 			chip.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 			add_child(chip)
 			chips.append(chip)

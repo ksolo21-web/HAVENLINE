@@ -1,4 +1,5 @@
 extends Node3D
+const Finish = preload("res://field_finishes.gd")
 const Ledger = preload("res://opening_ledger.gd")
 const Save = preload("res://opening_save.gd")
 const Gate = preload("res://technical_gate.gd")
@@ -48,26 +49,44 @@ var touch_now := Vector2.ZERO
 func point(csv: Array, height := 0.0) -> Vector3:
 	return Vector3(float(csv[0]), height, float(csv[1]))
 
-func block(parent: Node3D, dims: Vector3, at: Vector3, color: Color, solid := false) -> Node3D:
+const SNOW_SURFACE := preload("res://assets/field_finishes/snow_surface.tres")
+const TRIAL_FENCE := preload("res://assets/field_camp/opening_fence_panel.obj")
+const TRIAL_POST := preload("res://assets/field_camp/gate_post.obj")
+
+func floor_at(parent: Node3D, dims: Vector3, at: Vector3, color: Color, solid := false) -> Node3D:
 	var body: Node3D = StaticBody3D.new() if solid else Node3D.new()
 	parent.add_child(body)
 	body.position = at
-	var vis := MeshInstance3D.new()
-	var mesh := BoxMesh.new()
-	mesh.size = dims
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = color
-	mat.roughness = 0.94
-	vis.material_override = mat
-	vis.mesh = mesh
-	body.add_child(vis)
-	if solid:
-		var c := CollisionShape3D.new()
-		var b := BoxShape3D.new()
-		b.size = dims
-		c.shape = b
-		body.add_child(c)
+	var surface := MeshInstance3D.new()
+	surface.mesh = SNOW_SURFACE
+	surface.material_override = Finish.paint(color,.94)
+	surface.position.y = dims.y*.5
+	surface.scale = Vector3(dims.x,1.,dims.z)
+	body.add_child(surface)
+	if solid: _add_collision(body,dims)
 	return body
+
+func _add_collision(body: Node3D, dims: Vector3) -> void:
+	var collision := CollisionShape3D.new()
+	var box := BoxShape3D.new()
+	box.size = dims
+	collision.shape = box
+	body.add_child(collision)
+
+func _install_fence_block(dims: Vector3, at: Vector3) -> StaticBody3D:
+	var wall := StaticBody3D.new()
+	camp_built.add_child(wall)
+	wall.position = at
+	wall.add_child(_fit_boundary(TRIAL_FENCE,dims))
+	_add_collision(wall,dims)
+	return wall
+
+func _fit_boundary(mesh: Mesh, dims: Vector3) -> MeshInstance3D:
+	var piece := MeshInstance3D.new()
+	piece.mesh = mesh
+	piece.scale = dims/mesh.get_aabb().size
+	piece.position = -mesh.get_aabb().get_center()*piece.scale
+	return piece
 
 func meshes(node: Node, out: Array[MeshInstance3D]) -> void:
 	if node is MeshInstance3D and node.mesh:
@@ -110,7 +129,7 @@ func _ready() -> void:
 	world_light.shadow_enabled = true
 	add_child(world_light)
 	var snow_width := float(layout.snow_extent_half) * 2.0
-	var external_snow := block(self, Vector3(snow_width, 0.30, snow_width), Vector3(0, -0.15, 0), Color("#d7e5ed"), true)
+	var external_snow := floor_at(self, Vector3(snow_width, 0.30, snow_width), Vector3(0, -0.15, 0), Color("#d7e5ed"), true)
 	external_snow.name = "SnowGround_NoPaintedPaths"
 	setup_exterior_conifers()
 	camp_built = Node3D.new()
@@ -212,9 +231,9 @@ func setup_camp() -> void:
 	var w := float(r[2]) - float(r[0])
 	var d := float(r[3]) - float(r[1])
 	var ctr := Vector3((float(r[2]) + float(r[0])) * 0.5, 0.006, (float(r[3]) + float(r[1])) * 0.5)
-	block(camp_built, Vector3(w, .012, d), ctr, Color("#68747a")).name = "CampOnlySurface"
+	floor_at(camp_built, Vector3(w, .012, d), ctr, Color("#68747a")).name = "CampOnlySurface"
 	for row in layout.walls_xz:
-		var wall := block(camp_built, Vector3(float(row[2]), .95, float(row[3])), Vector3(float(row[0]), .475, float(row[1])), Color("#5d5148"), true) as StaticBody3D
+		var wall := _install_fence_block(Vector3(float(row[2]),.95,float(row[3])),Vector3(float(row[0]),.475,float(row[1])))
 		camp_colliders.append(wall)
 	for gate in layout.gates:
 		var at := point(gate.center_xz)
@@ -228,7 +247,11 @@ func setup_camp() -> void:
 		for side in [-1, 1]:
 			var marker_at := at + axis * float(gate.clear_span) * .52 * float(side)
 			marker_at.y = .72
-			block(camp_built, Vector3(.20, 1.44, .20), marker_at, Color("#47687a")).name = String(gate.id) + "-technical-marker"
+			var marker := Node3D.new()
+			marker.name = String(gate.id) + "-technical-marker"
+			camp_built.add_child(marker)
+			marker.position = marker_at
+			marker.add_child(_fit_boundary(TRIAL_POST,Vector3(.20,1.44,.20)))
 	var vessel_root := Node3D.new()
 	vessel_root.name = "CenteredHearth_StudioTrialOnly"
 	camp_built.add_child(vessel_root)

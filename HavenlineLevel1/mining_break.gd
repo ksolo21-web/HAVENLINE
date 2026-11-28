@@ -1,4 +1,5 @@
 extends RefCounted
+const Finish = preload("res://field_finishes.gd")
 ## The authored bank stays the strike surface until the finishing contact.
 ## Its four cut sections retain the bank's actual exterior materials and UVs.
 const SEAM := preload("res://assets/mining_fracture/working_face.gdshader")
@@ -46,9 +47,7 @@ func separate(part: MeshInstance3D, kind: String) -> void:
 	debris = PIECES[kind].instantiate()
 	part.get_parent().add_child(debris)
 	debris.transform = part.transform
-	var interior := StandardMaterial3D.new()
-	interior.albedo_color = FRESH_FACE[kind]
-	interior.roughness = .96
+	var interior := Finish.paint(FRESH_FACE[kind],.96)
 	var bank_center := part.mesh.get_aabb().get_center()
 	for shard: MeshInstance3D in debris.find_children("*","MeshInstance3D",true,false):
 		for surface in shard.mesh.get_surface_count():

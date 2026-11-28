@@ -4,7 +4,7 @@ uniform sampler2D track_mask : filter_linear_mipmap, repeat_disable;
 varying vec4 stamp;
 void vertex() { stamp = INSTANCE_CUSTOM; }
 void fragment() {
-	// PlaneMesh UV.y grows towards +Z; the atlas toes are at the top.
+	// Snow surface UV.y grows towards +Z; the atlas toes are at the top.
 	vec2 uv = vec2(UV.x, 1.0-UV.y);
 	if (stamp.z > .5) { uv.x = 1.0 - uv.x; }
 	float toe = length(vec2((abs(uv.x - .5) - mix(.122,.178,uv.y)) * 7.45,(uv.y - .48) * 2.75));

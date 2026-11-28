@@ -12,7 +12,7 @@ static func make_directory() -> String:
 
 static func child(script:String,directory:String,step:String) -> int:
 	var out: Array=[]
-	var args:=PackedStringArray(["--headless","--fixed-fps","60","--path",ProjectSettings.globalize_path("res://"),"--script",script,"--",Profile.FLAG+directory,step])
+	var args:=PackedStringArray(["--headless","--fixed-fps","60","--path",ProjectSettings.globalize_path("res://project.godot").get_base_dir(),"--script",script,"--",Profile.FLAG+directory,step])
 	var code:=OS.execute(OS.get_executable_path(),args,out,true)
 	for message in out: print(String(message).strip_edges())
 	return code

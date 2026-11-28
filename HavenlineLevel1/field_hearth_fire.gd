@@ -2,6 +2,7 @@ extends Node3D
 ## Fire and draft fitted to the two real openings in the recovered stone shell.
 
 const FLAME := preload("res://assets/field_camp/hearth_flame.gdshader")
+const FLAME_CANVAS := preload("res://assets/field_finishes/combustion_canvas.tres")
 const BED := preload("res://assets/field_camp/hearth_coals.gdshader")
 const DRAFT := preload("res://assets/field_camp/hearth_draft.gdshader")
 
@@ -24,13 +25,12 @@ func install(shell: Node3D, light: OmniLight3D) -> void:
 	set_fired(false)
 
 func _effect(part_name: String, shader: Shader, size: Vector2, at: Vector3) -> MeshInstance3D:
-	var face := QuadMesh.new()
-	face.size = size
 	var ink := ShaderMaterial.new()
 	ink.shader = shader
 	var part := MeshInstance3D.new()
 	part.name = part_name
-	part.mesh = face
+	part.mesh = FLAME_CANVAS
+	part.scale = Vector3(size.x,size.y,1.0)
 	part.position = at
 	part.material_override = ink
 	part.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF

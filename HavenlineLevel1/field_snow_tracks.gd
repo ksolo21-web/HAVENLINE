@@ -16,15 +16,14 @@ var chunks := {}
 var total := 0
 var mask: Callable
 var material := ShaderMaterial.new()
-var plane := PlaneMesh.new()
+var plane: ArrayMesh = preload("res://assets/field_finishes/snow_surface.tres").duplicate()
 var next_trim := 0.0
 
 func _init() -> void:
 	process_physics_priority = 90
 	material.shader = preload("res://assets/field_world/snow_print.gdshader")
 	material.set_shader_parameter("track_mask",preload("res://assets/field_world/snow_prints.png"))
-	plane.size = Vector2.ONE
-	plane.material = material
+	plane.surface_set_material(0,material)
 
 func _ready() -> void:
 	get_tree().node_added.connect(_discover_survivor)

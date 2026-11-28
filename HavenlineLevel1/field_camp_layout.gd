@@ -1,4 +1,5 @@
 extends Node3D
+const Finish = preload("res://field_finishes.gd")
 ## Player-owned building positions are absolute XZ coordinates in the level.
 ## The original building nodes continue owning their receivers, stock and state.
 signal layout_changed
@@ -27,7 +28,7 @@ var original := {}
 var overlay
 var map_camera := Camera3D.new()
 var ghost := Node3D.new()
-var ghost_material := StandardMaterial3D.new()
+var ghost_material := Finish.tinted(Finish.PREVIEW,Color.WHITE)
 var pointer := -2
 var start_pointer := Vector2.ZERO
 var dragging := false
@@ -48,9 +49,6 @@ func install(host) -> void:
 	add_child(ghost)
 	ghost.name = "BuildingPreview"
 	ghost.hide()
-	ghost_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA_DEPTH_PRE_PASS
-	ghost_material.roughness = .77
-	ghost_material.cull_mode = BaseMaterial3D.CULL_DISABLED
 	map_camera.name = "LayoutCamera"
 	map_camera.projection = Camera3D.PROJECTION_ORTHOGONAL
 	map_camera.keep_aspect = Camera3D.KEEP_HEIGHT
@@ -489,7 +487,7 @@ func _update_ghost() -> void:
 	ghost.visible = active and not chosen.is_empty() and preview_set
 	if not ghost.visible: return
 	ghost.global_position = on_ground(candidate)
-	ghost_material.albedo_color = Color("#69dbaaaa") if candidate_reason.is_empty() else Color("#ff866c98")
+	ghost_material.set_shader_parameter("pigment",Color("#69dbaaaa") if candidate_reason.is_empty() else Color("#ff866c98"))
 
 func preview(at:Vector2) -> void:
 	if chosen.is_empty(): return

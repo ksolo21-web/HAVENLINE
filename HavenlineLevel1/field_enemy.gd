@@ -1,4 +1,5 @@
 extends Node3D
+const Finish = preload("res://field_finishes.gd")
 
 signal player_hit(damage: int)
 signal damaged(amount: int)
@@ -73,7 +74,7 @@ var waypoints := PackedVector2Array()
 var configured := false
 var active := true
 static var _surface_cache: Dictionary = {}
-var _tint: StandardMaterial3D
+var _tint: ShaderMaterial
 
 func _init() -> void:
 	add_to_group("swirl_hostiles")
@@ -131,11 +132,7 @@ func _setup_visual() -> void:
 	health_bar.pixel_size *= 1.32 if is_boss else 1.0
 	add_child(health_bar)
 	_refresh_health()
-	_tint = StandardMaterial3D.new()
-	_tint.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	_tint.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	_tint.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
-	_tint.albedo_color = Color(1.0,.36,.18,.36)
+	_tint = Finish.tinted(Finish.FLASH,Color(1.0,.36,.18,.36))
 	_play("Idle")
 
 func _refresh_health() -> void:

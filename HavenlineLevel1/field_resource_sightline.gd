@@ -9,7 +9,7 @@ var last_eye := Vector3.INF
 var last_ultra := true
 var worker_feet := Vector3.INF
 
-func _cutaway(source: StandardMaterial3D) -> ShaderMaterial:
+func _cutaway(source: BaseMaterial3D) -> ShaderMaterial:
 	if not materials.has(source):
 		var paint := ShaderMaterial.new()
 		paint.shader = CUTAWAY
@@ -72,7 +72,7 @@ func update(world: Node3D) -> void:
 
 	if world.graphics.ultra != last_ultra:
 		last_ultra = world.graphics.ultra
-		for source: StandardMaterial3D in materials:
+		for source: BaseMaterial3D in materials:
 			materials[source].set_shader_parameter("ultra_filter", source.texture_filter == BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC)
 	for source in world.surfaces:
 		if not source.has_meta("field_source_id"):
@@ -89,7 +89,7 @@ func update(world: Node3D) -> void:
 			var originals := []
 			for i in part.mesh.get_surface_count():
 				originals.append(part.get_surface_override_material(i))
-				var material := part.get_active_material(i) as StandardMaterial3D
+				var material := part.get_active_material(i) as BaseMaterial3D
 				if material:
 					part.set_surface_override_material(i, _cutaway(material))
 			opened[part] = originals

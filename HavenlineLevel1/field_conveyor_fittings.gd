@@ -26,8 +26,8 @@ func install() -> void:
 		for family:String in ["straight","corner","incline"]:
 			if not contents.has(family):continue
 			var entry:Dictionary=contents[family]
-			var path:String=entry.file
-			if not path.begins_with("res://"):path=BASE+path
+			var path: String = entry.file
+			if not path.is_absolute_path(): path = BASE.path_join(path)
 			if not ResourceLoader.exists(path):continue
 			var instance:Node3D=(load(path) as PackedScene).instantiate()
 			var metal:=ArrayMesh.new()
@@ -60,7 +60,7 @@ static func _bake(node:Node,outer:Transform3D,combined:ArrayMesh,entry:Dictionar
 			var mat:=ShaderMaterial.new()
 			mat.shader=SHADER
 			var original:Material=node.get_active_material(i)
-			if original is StandardMaterial3D:
+			if original is BaseMaterial3D:
 				mat.set_shader_parameter("pigment_map",original.albedo_texture)
 				mat.set_shader_parameter("tint",original.albedo_color)
 				mat.set_shader_parameter("metalness",original.metallic)
