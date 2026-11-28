@@ -228,6 +228,7 @@ func _present_production(dt: float) -> float:
 			world.processors.set_running(kind,running)
 	world.processors.tick(dt)
 	world.lakeshore.tick(dt)
+	world.river.tick(dt)
 	return progress
 
 func cook() -> bool:

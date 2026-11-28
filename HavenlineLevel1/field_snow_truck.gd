@@ -190,6 +190,11 @@ func can_build() -> bool:
 func ready_garage() -> bool:
 	return world.inventory.complete(Progress.GARAGE)
 
+func _river_clearance(basis: Basis) -> float:
+	# The fore-aft chassis needs more lateral clearance while turning across
+	# the ice. A truck facing along the crossing still fits its full body.
+	return maxf(HALF_WIDTH,HALF_WIDTH*absf(basis.x.x) + BODY_FRONT*absf(basis.z.x))
+
 func restore_scene() -> void:
 	if not is_instance_valid(body): return
 	garage.visible = ready_garage()
@@ -201,6 +206,9 @@ func restore_scene() -> void:
 	if at.size() == 3:
 		body.position = Vector3(float(at[0]),0,float(at[1]))
 		body.rotation.y = float(at[2])
+		if world.river and body.visible:
+			body.position = world.river.safe_feet(body.position,_river_clearance(body.basis))
+			v.park = [body.position.x,body.position.z,body.rotation.y]
 	else:
 		_set_parked_transform()
 	for child in garage.get_children():
@@ -239,6 +247,7 @@ func _exit_position() -> Vector3:
 	for offset in [Vector3(1.64,0,0), Vector3(-1.64,0,0), Vector3(0,0,2.05), Vector3(0,0,-2.94)]:
 		var feet: Vector3 = body.to_global(offset)
 		if world.field_env.is_inside_camp(feet) != inside: continue
+		if world.river and not world.river.is_dry(Vector2(feet.x,feet.z),float(world.layout.actor_radius)): continue
 		eject_probe.transform = Transform3D(Basis.IDENTITY,feet+Vector3.UP*.85)
 		if world.get_world_3d().direct_space_state.intersect_shape(eject_probe,1).is_empty():
 			return feet
@@ -395,7 +404,8 @@ func drive(input:Vector2,dt:float) -> void:
 		var trial := rotate_toward(body.rotation.y,heading,dt*2.85)
 		var basis := Basis(Vector3.UP,trial)
 		collision_probe.transform = Transform3D(basis,body.position+basis*Vector3(0,.72,(BACK-BODY_FRONT)*.5))
-		if world.get_world_3d().direct_space_state.intersect_shape(collision_probe,1).is_empty():
+		var river_clear: bool = not world.river or world.river.is_dry(Vector2(body.position.x,body.position.z),_river_clearance(basis))
+		if river_clear and world.get_world_3d().direct_space_state.intersect_shape(collision_probe,1).is_empty():
 			body.rotation.y = trial
 	var target_speed := 0.0
 	if requested and not wish.is_zero_approx():
@@ -408,6 +418,7 @@ func drive(input:Vector2,dt:float) -> void:
 	if absf(drive_speed)>.001: body.move_and_slide()
 	body.position.y = 0.
 	var safe:Vector3 = world.lakeshore.constrain_motion(previous,body.position,HALF_WIDTH) if world.lakeshore else body.position
+	if world.river: safe = world.river.constrain_motion(previous,safe,_river_clearance(body.basis))
 	if not safe.is_equal_approx(body.position): body.position = safe
 	var advanced := body.position.distance_to(previous)
 	if world.tracks and advanced > .001:

@@ -78,7 +78,8 @@ func snapshot() -> Dictionary:
 		ground.append([id,d.kind,at.x,at.z,maxf(0.0,DROP_LIFETIME_SECONDS-float(d.age))])
 	var player := {"x":world.actor.position.x,"z":world.actor.position.z,"yaw":world.actor.rotation.y,
 		"hp":world.player_hp,"camp_heal_elapsed":world.camp_heal_elapsed,"protection_left":world.player_invulnerability,"fall_left":world.reset_time}
-	return {"version":VERSION,"previous_kitchen_site":world.camp_layout != null and world.camp_layout.previous_kitchen_site,
+	return {"version":VERSION,"river_layout":world.river.LAYOUT_VERSION,"river_time":world.river.flow_time,
+		"previous_kitchen_site":world.camp_layout != null and world.camp_layout.previous_kitchen_site,
 		"layout":world.camp_layout.snapshot() if world.camp_layout else {}, "player":player,"cooling":cooling.duplicate(),"partial":partial.duplicate(),"drops":ground,"serial":world.drop_id,"pack":world.encounters.snapshot()}
 
 static func _number(v: Variant) -> bool:
@@ -125,6 +126,7 @@ func _restore_actor(state: Variant, version: int = VERSION) -> void:
 		pos = world.field_env.clear_hearth_footprint(pos)
 	if world.counter and world.counter.active:
 		pos = world.counter.constrain_actor(pos,pos,float(world.layout.actor_radius))
+	if world.river: pos = world.river.safe_feet(pos,float(world.layout.actor_radius))
 	world.actor.position=pos
 	world.actor.velocity=Vector3.ZERO
 	if _number(state.get("yaw")): world.actor.rotation.y=wrapf(float(state.yaw),-PI,PI)
@@ -156,6 +158,8 @@ func _saved_source_kind(id: String, node) -> String:
 func restore(data: Dictionary) -> bool:
 	if data.is_empty(): return true
 	if (data.get("version") != 1 and data.get("version") != VERSION) or not data.get("cooling") is Dictionary or not data.get("drops") is Array or not data.get("pack") is Dictionary: return false
+	var river_time: Variant = data.get("river_time",0.)
+	if data.get("river_layout",world.river.LAYOUT_VERSION) != world.river.LAYOUT_VERSION or not _number(river_time) or river_time < 0.0 or river_time >= 400.0: return false
 	if not _number(data.get("serial")) or data.serial < 0 or data.serial != int(data.serial) or data.serial > 9007199254740991: return false
 	if data.cooling.size() > 8192: return false
 	for key in data.cooling:
@@ -170,6 +174,8 @@ func restore(data: Dictionary) -> bool:
 	for id in hits:
 		if not id is String or id.is_empty() or id in data.cooling or not _number(hits[id]) or hits[id]!=int(hits[id]) or int(hits[id]) not in [1,2]: return false
 	if not world.encounters.restore(data.pack): return false
+	world.river.flow_time = float(river_time)
+	world.river.tick(0.0)
 	for id in cooling:
 		if is_instance_valid(loaded.get(id)): _set_available(loaded[id],true)
 	for id in partial:

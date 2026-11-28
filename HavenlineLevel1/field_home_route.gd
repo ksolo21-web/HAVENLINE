@@ -14,8 +14,11 @@ var fence := Rect2()
 var fence_outline := PackedVector2Array()
 var lake_bounds := Rect2()
 var bank := PackedVector2Array()
+var river: Node3D
+var actor_radius := .31
 var last_feet := Vector2.INF
 var via := -1
+var shore_detour := Vector2.INF
 var direction_target := Vector2.ZERO
 var distance := 0.
 var gate_index := -1
@@ -30,6 +33,7 @@ func _crosses(a: Vector2, b: Vector2, outline: PackedVector2Array) -> bool:
 	return false
 
 func _clear(a: Vector2,b: Vector2) -> bool:
+	if river and not river.travel_clear(a,b,actor_radius): return false
 	var span := Rect2(a,Vector2.ZERO).expand(b)
 	if stage>0 and span.intersects(fence,true) and _crosses(a,b,fence_outline):
 		return false
@@ -62,6 +66,9 @@ func _rebuild(world, perimeter_stage: int, active_gates: int) -> void:
 				bank = shore[0]
 				lake_bounds = world.lakeshore.bounds.grow(float(world.layout.actor_radius)+.04)
 		points.append_array(_rect_vertices(lake_bounds.grow(.65)))
+	river = world.river
+	actor_radius = float(world.layout.actor_radius)
+	if river: points.append_array(river.navigation_points(actor_radius))
 	var graph := AStar2D.new()
 	for i in points.size(): graph.add_point(i,points[i])
 	for i in points.size():
@@ -107,6 +114,7 @@ func update(world, feet: Vector2) -> bool:
 		last_feet = start
 		var best := INF
 		via = -1
+		shore_detour = Vector2.INF
 		for i in points.size():
 			if exit_id[i]<0: continue
 			if i>=goal_count and start.distance_squared_to(points[i])<.16*.16: continue
@@ -114,8 +122,22 @@ func update(world, feet: Vector2) -> bool:
 			if total<best and _clear(start,points[i]):
 				best = total
 				via = i
+		if via < 0 and river:
+			var detour: Vector2 = river.shore_detour(start,actor_radius)
+			if start.distance_squared_to(detour) > .16*.16 and _clear(start,detour):
+				for i in points.size():
+					if exit_id[i] < 0: continue
+					var total := detour.distance_to(points[i])+float(cost[i])
+					if total < best and _clear(detour,points[i]):
+						best = total
+						via = i
+						shore_detour = detour
 	if via < 0: return false
 	gate_index = exit_id[via] if stage>0 else -1
+	if shore_detour.is_finite():
+		direction_target = shore_detour
+		distance = feet.distance_to(shore_detour)+shore_detour.distance_to(points[via])+float(cost[via])
+		return true
 	direction_target = points[via]
 	distance = feet.distance_to(points[via])+float(cost[via])
 	if via < goal_count and stage>0:

@@ -298,13 +298,23 @@ func restore(p: Dictionary) -> bool:
 	raids.sync_paid_layout = not raids.clock.condition.is_empty() and not world.camp_layout
 	for row in p.live:
 		var point := Vector3(row[3],0,row[4])
-		if not outside(point,1.975 if row[1] else 1.25): continue
-		var wolf = _add(point,row[1],int(row[0]),Vector3(row[5],0,row[6]))
+		var anchor := Vector3(row[5],0,row[6])
+		var radius := 1.975 if row[1] else 1.25
+		if world.river:
+			point = world.river.safe_feet(point,radius)
+			anchor = world.river.safe_feet(anchor,radius)
+		if not outside(point,radius): continue
+		var wolf = _add(point,row[1],int(row[0]),anchor)
 		wolf.hp=int(row[2])
 		wolf._refresh_health()
 	for row in active_raid:
 		var at := Vector3(row[3],0,row[4])
-		var wolf := _add(at,row[1],int(row[0]),Vector3(row[5],0,row[6]),true)
+		var home := Vector3(row[5],0,row[6])
+		if world.river:
+			var radius := 1.975 if row[1] else 1.25
+			at = world.river.safe_feet(at,radius)
+			home = world.river.safe_feet(home,radius)
+		var wolf := _add(at,row[1],int(row[0]),home,true)
 		wolf.hp=int(row[2])
 		wolf._refresh_health()
 	raids.reconcile_perimeter()

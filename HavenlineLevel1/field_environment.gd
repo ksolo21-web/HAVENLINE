@@ -233,10 +233,11 @@ func is_inside_camp(pos: Vector3) -> bool:
 # Sweep the entire horizontal segment, including both actual moving gate leaves.
 # A large timestep or a long transfer must obey the same fence as a small step.
 func travel_clear(from: Vector3, to: Vector3, radius := 0.) -> bool:
-	if perimeter_stage < 1: return true
 	var a := Vector2(from.x, from.z)
 	var b := Vector2(to.x, to.z)
 	radius = maxf(0., radius)
+	if world.river and not world.river.travel_clear(a,b,radius): return false
+	if perimeter_stage < 1: return true
 	for i in world.layout.walls_xz.size():
 		if world.encounters.has_method("wall_breached") and world.encounters.wall_breached(i):continue
 		var row: Array = world.layout.walls_xz[i]
@@ -344,6 +345,7 @@ func tree_fall_direction(at: Vector3,wanted: Vector3,height: float,radius: float
 	return Vector3(normal.x,0,normal.y).normalized()
 
 func safe_drop_origin(p: Vector3, radius: float) -> Vector3:
+	if world.river: p = world.river.safe_feet(p,radius)
 	if travel_clear(p,p,radius): return p
 	# A purchase can move a wall onto an existing loose resource. Return it to
 	# the nearest clear spot on its own side, retaining its unique receipt.

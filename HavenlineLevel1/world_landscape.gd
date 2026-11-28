@@ -18,6 +18,7 @@ var templates: Array = []
 var district := FastNoiseLite.new()
 var center_chunk := Vector2i(99999, 99999)
 var retained_worker_chunks: Array[Vector2i] = []
+var river_positions := {}
 var limit: int
 var next_scan := 0.0
 
@@ -29,6 +30,7 @@ func install(world: Node3D) -> void:
 	district.seed = WORLD_SEED
 	district.noise_type = FastNoiseLite.TYPE_SIMPLEX_SMOOTH
 	district.frequency = 0.027
+	_resolve_river_positions()
 	for pine: PackedScene in host.CONIFERS:
 		templates.append(_template(pine, false))
 	templates.append(_template(host.SNOW_STONE, true))
@@ -58,6 +60,10 @@ func _build_outer_drifts(extent: float) -> void:
 			for band in offsets.size():
 				var xz := ray * (extent + offsets[band] * ridge_depth)
 				var height := heights[band] * (1.0 + wave*.78 + local_drift*.55)
+				if host.river and host.river.reserves(xz):
+					# End the snow ridge at the river outlet. The shared bank
+					# section draws the visible shore through this gap.
+					height = minf(height,host.river.WATER_HEIGHT-.015)
 				vertices.append(Vector3(xz.x,height,xz.y))
 	var bands := offsets.size()
 	for column in subdivisions*4:
@@ -228,7 +234,7 @@ func _set_proxy(chunk: Dictionary, row: Dictionary, shown: bool) -> void:
 func _outside_opening(at: Vector2) -> bool:
 	return maxf(absf(at.x), absf(at.y)) > OPENING_RADIUS
 
-func describe_chunk(key: Vector2i) -> Array[Dictionary]:
+func _seeded_chunk(key: Vector2i) -> Array[Dictionary]:
 	var rng := RandomNumberGenerator.new()
 	# String hashing is stable across fresh processes and negative cell coordinates.
 	rng.seed = ("%s/%s/%s" % [WORLD_SEED, key.x, key.y]).sha256_text().left(15).hex_to_int()
@@ -251,10 +257,73 @@ func describe_chunk(key: Vector2i) -> Array[Dictionary]:
 			if rocks.any(func(p: Vector2): return p.distance_squared_to(at)<9.0): continue
 			rows.append(_source(key, "wood", z*8+x, at, rng.randi_range(0, 2), rng))
 	_append_district_bank(key, origin, rows)
+	return rows
+
+func describe_chunk(key: Vector2i) -> Array[Dictionary]:
+	var rows := _seeded_chunk(key)
 	# Filter after the seeded draws so existing deposits elsewhere keep their poses.
 	if host and host.lakeshore:
 		rows.assign(rows.filter(func(row): return not host.lakeshore.reserves(row.position) and (not host.processors or not host.processors.reserves(row.position))))
+	for row in rows:
+		if river_positions.has(row.id): row.position = river_positions[row.id]
 	return rows
+
+func _resolve_river_positions() -> void:
+	var river = host.river
+	if not river: return
+	var occupied := {}
+	var pending: Array[Dictionary] = []
+	var low := floori((river.corridor_min - 32.0)/CHUNK_METRES)
+	var high := floori((river.corridor_max + 32.0)/CHUNK_METRES)
+	for z in range(low,high+1):
+		for x in range(-limit,limit):
+			for row in _seeded_chunk(Vector2i(x,z)):
+				var at := Vector2(row.position.x,row.position.z)
+				if river.reserves(at,1.5): pending.append(row)
+				else: _occupy_bank(occupied,at,row.kind)
+	# Larger deposits keep their standard approach clearance. Settle them
+	# first, then move smaller banks and trees around those reserved positions.
+	pending.sort_custom(func(a,b):
+		return _bank_spacing(a.kind) > _bank_spacing(b.kind) or (_bank_spacing(a.kind) == _bank_spacing(b.kind) and a.id < b.id))
+	for row in pending:
+		var start := Vector2(row.position.x,row.position.z)
+		var target: Vector2 = _free_river_bank(river,occupied,start,row.kind)
+		river_positions[row.id] = Vector3(target.x,0.0,target.y)
+		_occupy_bank(occupied,target,row.kind)
+
+func _bank_spacing(kind: String) -> float:
+	if kind in DISTRICT_MINERALS: return BANK_CLEARANCE
+	return 2.1 if kind == "stone" else 1.55
+
+func _river_bin(at: Vector2) -> Vector2i:
+	return Vector2i(floori(at.x/4.0),floori(at.y/4.0))
+
+func _occupy_bank(occupied: Dictionary, at: Vector2, kind: String) -> void:
+	var cell := _river_bin(at)
+	if not occupied.has(cell): occupied[cell] = []
+	occupied[cell].append(Vector3(at.x,_bank_spacing(kind),at.y))
+
+func _bank_clear(occupied: Dictionary, at: Vector2, spacing: float) -> bool:
+	var cell := _river_bin(at)
+	for z in range(-1,2):
+		for x in range(-1,2):
+			for neighbor: Vector3 in occupied.get(cell+Vector2i(x,z),[]):
+				if at.distance_squared_to(Vector2(neighbor.x,neighbor.z)) < pow(maxf(spacing,neighbor.y),2.0): return false
+	return true
+
+func _free_river_bank(river: Node3D, occupied: Dictionary, start: Vector2, kind: String) -> Vector2:
+	var spacing := _bank_spacing(kind)
+	var shore: Vector2 = river.resource_bank_position(start,1.65)
+	var side := signf(shore.y - start.y)
+	for row in 16:
+		for offset in [0.0,-1.8,1.8,-3.6,3.6,-5.4,5.4]:
+			var at := shore + Vector2(offset,side*float(row)*1.7)
+			at.x = clampf(at.x,-river.half_map+1.2,river.half_map-1.2)
+			if kind in DISTRICT_MINERALS and at.length_squared() < FIRST_MINERAL_RADIUS*FIRST_MINERAL_RADIUS: continue
+			if river.reserves(at,1.5) or not _bank_clear(occupied,at,spacing): continue
+			return at
+	assert(false,"No compatible dry bank placement for a protected source")
+	return shore
 
 func _append_district_bank(key: Vector2i, origin: Vector2, rows: Array[Dictionary]) -> void:
 	# Append from an independent RNG stream so legacy stone and timber positions,

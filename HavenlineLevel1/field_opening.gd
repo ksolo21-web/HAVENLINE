@@ -22,6 +22,7 @@ const CAMP_HEAL_INTERVAL := 1.0
 const CAMP_HEAL_HP := 3
 const UPGRADE_GLINT = preload("res://assets/field_ui/upgrade_glint.svg")
 var lakeshore
+var river := preload("res://field_river.gd").new()
 var processors
 var owl
 var survivor
@@ -137,6 +138,8 @@ func _ready() -> void:
 	purchase_pad_view.hide()
 	add_child(field_env)
 	field_env.install(self)
+	add_child(river)
+	river.install(self,field_env.snow)
 	tracks = preload("res://field_snow_tracks.gd").new()
 	add_child(tracks)
 	tracks.configure(func(pos:Vector3): return not field_env.is_inside_camp(pos))
@@ -921,6 +924,7 @@ func _apply_hearth(built: bool, animate: bool) -> void:
 func constrain_private_snow_travel() -> void:
 	super()
 	if lakeshore and previous_dry_position.is_finite():
+		actor.global_position = river.constrain_motion(previous_dry_position,actor.global_position,float(layout.actor_radius))
 		actor.global_position = lakeshore.constrain_motion(previous_dry_position, actor.global_position, float(layout.actor_radius))
 		if processors:
 			actor.global_position = processors.constrain_motion(previous_dry_position,actor.global_position,float(layout.actor_radius))

@@ -92,6 +92,8 @@ func run() -> void:
 	var original = land.get_script().new()
 	original.district = land.district
 	var shoreline_only := true
+	var river_clear := true
+	var moved_to_bank := 0
 	var reserved := []
 	var unique := {}
 	var maximum := 0
@@ -110,6 +112,19 @@ func run() -> void:
 					var nearby := Rect2(-55,-4,44,41).has_point(Vector2(row.position.x,row.position.z))
 					shoreline_only = shoreline_only and nearby and row.kind in ["wood","stone"]
 				else:
+					var at := Vector2(row.position.x,row.position.z)
+					if world.river.reserves(at,1.5):
+						var target: Vector3 = land.river_positions.get(row.id,Vector3.INF)
+						if target.is_finite():
+							var original_bank: Vector2 = world.river.banks_at(at.x)
+							var new_bank: Vector2 = world.river.banks_at(target.x)
+							var original_side := at.y - (original_bank.x+original_bank.y)*.5
+							var next_side := target.z - (new_bank.x+new_bank.y)*.5
+							river_clear = river_clear and signf(original_side)==signf(next_side) and not world.river.reserves(Vector2(target.x,target.z),1.5)
+							row.position = target
+							moved_to_bank += 1
+						else:
+							river_clear = false
 					expected.append(row)
 			shoreline_only = shoreline_only and rows == expected
 			maximum = maxi(maximum,rows.size())
@@ -130,7 +145,9 @@ func run() -> void:
 				unique[row.id]=true
 	original.free()
 	report["reserved_shoreline_ids"] = reserved
-	check("Only sources in the authored exterior inlet are displaced",not reserved.is_empty() and shoreline_only)
+	check("Prior inlet exclusion and all other seeded source IDs are preserved",not reserved.is_empty() and shoreline_only)
+	check("Every affected river source remains above water on its own bank",moved_to_bank > 0 and river_clear)
+	report["river_relocated_sources"] = moved_to_bank
 	report["nearest_minerals"] = nearest
 	report["census"] = {"resources":counts,"wood":counts.wood,"stone":counts.stone,"distinct_ids":unique.size(),"populated_chunks":occupied,"min_sources":minimum,"max_sources":maximum}
 	check("All 1,024 chunks contain usable resources",occupied == 1024)
@@ -143,8 +160,10 @@ func run() -> void:
 	for kind: String in nearest:
 		await check_bank_streaming(land, nearest[kind], kind)
 	var collision: StaticBody3D = world.get_node("SnowGround_NoPaintedPaths")
-	var shape: BoxShape3D = collision.find_children("*","CollisionShape3D",false,false)[0].shape
-	check("Ground collider is 1,024 metres square",shape.size.x == 1024.0 and shape.size.z == 1024.0)
+	var shape: ConcavePolygonShape3D = collision.find_children("*","CollisionShape3D",false,false)[0].shape
+	var ground_bounds := AABB()
+	for point in shape.get_faces(): ground_bounds = ground_bounds.expand(point)
+	check("Dry ground collider still reaches all 1,024 metres",ground_bounds.position.x == -512.0 and ground_bounds.end.x == 512.0 and ground_bounds.position.z == -512.0 and ground_bounds.end.z == 512.0)
 	var normals = land.get_node("BoundarySnowDrifts").mesh.surface_get_arrays(0)[Mesh.ARRAY_NORMAL]
 	var lit := Vector3.ZERO
 	for n: Vector3 in normals: lit += n

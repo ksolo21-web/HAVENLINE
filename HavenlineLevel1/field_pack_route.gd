@@ -8,6 +8,8 @@ var fence := Rect2()
 var stage := -1
 var bank := PackedVector2Array()
 var bank_bounds := Rect2()
+var river: Node3D
+var actor_radius := 0.0
 
 func _corners(r: Rect2) -> PackedVector2Array:
 	return PackedVector2Array([r.position,Vector2(r.end.x,r.position.y),r.end,Vector2(r.position.x,r.end.y)])
@@ -16,6 +18,8 @@ func configure(world, size: float) -> void:
 	var current: int = world.field_env.perimeter_stage
 	if stage == current and (not bank.is_empty() or not world.lakeshore): return
 	stage = current
+	river = world.river
+	actor_radius = size
 	if world.lakeshore and bank.is_empty():
 		var polys: Array[PackedVector2Array] = Geometry2D.offset_polygon(world.lakeshore.shore,size,Geometry2D.JOIN_ROUND)
 		if not polys.is_empty():
@@ -37,6 +41,9 @@ func configure(world, size: float) -> void:
 	for box in bounds:
 		for p in _corners(box.grow(.20)):
 			if is_clear_ground(p): graph.add_point(graph.get_available_point_id(),p)
+	if river:
+		for p: Vector2 in river.navigation_points(size):
+			if is_clear_ground(p): graph.add_point(graph.get_available_point_id(),p)
 	var ids := graph.get_point_ids()
 	for i in ids.size():
 		for j in i:
@@ -44,9 +51,11 @@ func configure(world, size: float) -> void:
 				graph.connect_points(ids[i],ids[j])
 
 func is_clear_ground(p: Vector2) -> bool:
+	if river and not river.is_dry(p,actor_radius): return false
 	return (not fence.has_area() or not fence.has_point(p)) and (bank.is_empty() or not bank_bounds.has_point(p) or not Geometry2D.is_point_in_polygon(p,bank))
 
 func clear_segment(a: Vector2,b: Vector2) -> bool:
+	if river and not river.travel_clear(a,b,actor_radius): return false
 	var span := Rect2(a,Vector2.ZERO).expand(b).grow(.001)
 	for i in obstacles.size():
 		if not span.intersects(bounds[i],true): continue
@@ -57,6 +66,7 @@ func clear_segment(a: Vector2,b: Vector2) -> bool:
 	return true
 
 func _stand_off(at: Vector2) -> Vector2:
+	if river: at = river.dry_position(at,actor_radius)
 	# Players can stand directly outside a wall or at the water's edge closer
 	# than a wolf's shoulder width. Aim for the nearest dry position on that face.
 	for i in obstacles.size():
@@ -81,12 +91,19 @@ func route(a: Vector2,goal: Vector2) -> PackedVector2Array:
 	graph.add_point(start,a)
 	var end := graph.get_available_point_id()
 	graph.add_point(end,b)
+	var temporary := PackedInt32Array([start,end])
+	if river:
+		for endpoint in [a,b]:
+			var detour: Vector2 = river.shore_detour(endpoint,actor_radius)
+			if not detour.is_equal_approx(endpoint) and is_clear_ground(detour) and clear_segment(endpoint,detour):
+				var id := graph.get_available_point_id()
+				graph.add_point(id,detour)
+				temporary.append(id)
 	for id in graph.get_point_ids():
-		if id in [start,end]: continue
 		var vertex := graph.get_point_position(id)
-		if clear_segment(a,vertex): graph.connect_points(start,id)
-		if clear_segment(b,vertex): graph.connect_points(end,id)
+		for endpoint in temporary:
+			if endpoint != id and not graph.are_points_connected(endpoint,id) and clear_segment(graph.get_point_position(endpoint),vertex):
+				graph.connect_points(endpoint,id)
 	var path := graph.get_point_path(start,end)
-	graph.remove_point(end)
-	graph.remove_point(start)
+	for id in temporary: graph.remove_point(id)
 	return path.slice(1) if path.size()>1 else PackedVector2Array()
