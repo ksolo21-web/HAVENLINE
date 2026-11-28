@@ -1,0 +1,2145 @@
+{
+  "reviewer": "/root/independent",
+  "builder": "/root",
+  "source": {
+    "candidate": "186be990414a16f6a7b6c81285685e408a0005c2",
+    "parent": "e35d319408b76eb9b8559b77f05647c35b0333c2",
+    "playtest_baseline": "72943be8c9aeada45b0cade2bbab6a64cd007421",
+    "tree": "ce612236a5c3354bfb28d2a99aa6b2ca6c7a6b8c",
+    "runtime_files_compared": 774,
+    "changed_source_sha256": {
+      "field_opening.gd": "d37d385e2ca3f030ec02be6563c4f88c55694b6e15d3614243d92662f9e09a13",
+      "opening.gd": "04f29f0d13719f389c26c01b3ac2fad6b4eca1b17bb4fc47a061a9debaf17f0d",
+      "field_camera.gd": "14d28981f474080da84ab333321df5c86c4f014119fc4c6189dce07647c84e34",
+      "field_camera.gd.uid": "9d0ac5126904984712ea953e4e5d42edee49d13a98d0ebfbeae84c6fe0b375a5",
+      "tests/qa_field_camera_composition.gd": "fb4c4ec42b0f96fe13973d85b85db0bc40db946ffe1177eb6552bfcc5265c730",
+      "tests/qa_field_camera_composition.gd.uid": "582524c9989d6cba67881551536a4934ad45380ba17fe792564fe18fd0a30a26"
+    },
+    "T03_review_source": "7bc640e931b5b2487c07ac9a3ac4053e240e7d69",
+    "historical_T04_reference_source": "e08fd37e9a999d878644c03089c4b4b253bd7472",
+    "orientation": "sensor portrait and landscape, short-edge scale",
+    "camera": {
+      "projection": "orthographic",
+      "short_axis_span_m": 13,
+      "maximum_pinch": 2,
+      "angle": [
+        7,
+        11,
+        11
+      ]
+    }
+  },
+  "candidate_manifest": {
+    "path": "/tmp/havenline-t04/Candidate.json",
+    "sha256": "c93e60bc2a50a6b7db0f40b8858c70eaaec5aac95d17fe012a4b816253241a62"
+  },
+  "required_scope": {
+    "task_matrix": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+    "gameplay_reference_raster_seconds": [
+      6,
+      8,
+      10
+    ],
+    "locked_B_video_sha256": "4c9051cbea6df0efa3e7288b13b6d17da46e857274869b0b43d2f96ff6cc79d2",
+    "matched_reference_restored_frame_inputs": [
+      {
+        "path": "/tmp/hvn-charref/B-006.00.png",
+        "sha256": "fd59dfe77a27d0e690954e473f680b62e7ee5c496dcd0e6fab3cacb1692b16ea"
+      },
+      {
+        "path": "/tmp/camp-ref-review/B-008.jpg",
+        "sha256": "62b206e1d10db696a57f38aa28cd68cdf987137149635284e48ac8aeabbb3d25"
+      },
+      {
+        "path": "/tmp/camp-ref-review/B-010.jpg",
+        "sha256": "17517598980db51777834cbb390d8fd8cdb1c5c3762579931d640688428796c8"
+      }
+    ],
+    "owner_render_inputs": {
+      "commit": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+      "readback": [
+        {
+          "name": "Character 1 cardinal r2",
+          "repo_path": "Docs/Design/CharacterTurnarounds/2026-11-26/character-1-design-18617/selected/character-1-cardinal.png",
+          "blob_sha1": "cff669a48d58e286016088546cd8bd27085f8a26",
+          "sha256": "9423a17e8143e0278205704c6888a00d68a40e3bb5c9d33d4f1b56f7bec15195",
+          "resolution": [
+            1254,
+            1254
+          ]
+        },
+        {
+          "name": "Camp HUD r2",
+          "repo_path": "Docs/Design/UIConcepts/2026-11-26/modern-directions-01/selected/ui-camp-hud.png",
+          "blob_sha1": "e1ad9148c3ad6a775c35197e91d9aa9bebc8441f",
+          "sha256": "1e8da0ac20132462efa49af4b534dd80d3b7b42500eb039debb670def5ee1ab0",
+          "resolution": [
+            1672,
+            941
+          ]
+        }
+      ]
+    },
+    "older_T04_landscape_scope": "e08fd37e9a999d878644c03089c4b4b253bd7472",
+    "Build11_adaptive_HUD_scope": "989edd9283148e9f712387fb937ea36038cbd9d2"
+  },
+  "independent_findings": {
+    "C1": {
+      "reference_fidelity": 10,
+      "visual_language": 10,
+      "cross_view_consistency": 10
+    },
+    "C2": {
+      "geometry_contact": 10,
+      "clipping_seams": 10,
+      "intentional_gap_integrity": 10,
+      "cross_view_integrity": 10
+    },
+    "camera_motion": {
+      "status": "reviewed",
+      "two_gate_physics_witness": "pass",
+      "tracking_and_gate_transition": 10
+    },
+    "mandatory_visual_failures_in_inspected_composition": [],
+    "not_scored": [
+      "C6 hardware and full-runtime performance",
+      "general character rigging"
+    ],
+    "scope_limits": [
+      "Locked B18–22 window provenance is documented. No direct pixels were available for this interval.",
+      "Native viewport sizes model supported mobile shapes. Physical Fold and device QA were waived for the playtest.",
+      "Farther from the active service area, the retained exact manual comparison covers the Cover and Inner formats.",
+      "The pre-existing 43/44 field HUD suite has the same tray-count assertion failure before and after this camera change."
+    ]
+  },
+  "native_capture_groups": {
+    "failures": [],
+    "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+    "views": [
+      {
+        "actor_short_axis_height": 0.102889845106337,
+        "camera_position": [
+          3.2967848777771,
+          17.8335018157959,
+          10.2658843994141
+        ],
+        "draw_calls": 385,
+        "feet": [
+          -6.25524091720581,
+          0.00899999961256981,
+          -5.73030185699463
+        ],
+        "file": "Cover-plot-1x.jpg",
+        "lead_screen": [
+          0.540714144706726,
+          0.553229093551636
+        ],
+        "native_pixels": [
+          360,
+          840
+        ],
+        "primitives": 513488,
+        "queue": 1,
+        "render_scale": 1.0,
+        "scene": "next plot",
+        "target_screen": [
+          [
+            0.363695949316025,
+            0.539240002632141
+          ]
+        ],
+        "visible_compass": false,
+        "zoom": 1.0,
+        "path": "/tmp/havenline-t04/smooth-native/Cover-plot-1x.jpg",
+        "sha256": "92481685156f8b66c9eb00a398db6b44d69c1a6215b3c62ef94aaa675acca3d6"
+      },
+      {
+        "actor_short_axis_height": 0.205779690212674,
+        "camera_position": [
+          3.34320783615112,
+          17.8335018157959,
+          11.6302328109741
+        ],
+        "draw_calls": 284,
+        "feet": [
+          -6.25524091720581,
+          0.00899999961256981,
+          -5.73030185699463
+        ],
+        "file": "Cover-plot-2x.jpg",
+        "lead_screen": [
+          0.688092887401581,
+          0.556460082530975
+        ],
+        "native_pixels": [
+          360,
+          840
+        ],
+        "primitives": 472503,
+        "queue": 2,
+        "render_scale": 1.0,
+        "scene": "next plot",
+        "target_screen": [
+          [
+            0.334056407213211,
+            0.528481960296631
+          ]
+        ],
+        "visible_compass": false,
+        "zoom": 2.0,
+        "path": "/tmp/havenline-t04/smooth-native/Cover-plot-2x.jpg",
+        "sha256": "1128e9dd70db26f73df2b8c9aa25a3e671f8541b6ee389f9eeaebd1ab993469e"
+      },
+      {
+        "actor_short_axis_height": 0.102889929877387,
+        "camera_position": [
+          13.3303422927856,
+          17.8245010375977,
+          8.14717960357666
+        ],
+        "draw_calls": 481,
+        "feet": [
+          3.58999991416931,
+          0.0,
+          -6.98000001907349
+        ],
+        "file": "Cover-queue-1x.jpg",
+        "lead_screen": [
+          0.492604702711105,
+          0.566665172576904
+        ],
+        "native_pixels": [
+          360,
+          840
+        ],
+        "primitives": 627989,
+        "queue": 3,
+        "render_scale": 1.0,
+        "scene": "actual counter service",
+        "target_screen": [
+          [
+            0.524758219718933,
+            0.49420753121376
+          ],
+          [
+            0.590835273265839,
+            0.455432951450348
+          ],
+          [
+            0.638327956199646,
+            0.434808105230331
+          ],
+          [
+            0.685820877552032,
+            0.41418319940567
+          ]
+        ],
+        "visible_compass": false,
+        "zoom": 1.0,
+        "path": "/tmp/havenline-t04/smooth-native/Cover-queue-1x.jpg",
+        "sha256": "21c12c805e15d0d2834034f74eee3a4e96586fbcc2d2db1678e9092c447bb746"
+      },
+      {
+        "actor_short_axis_height": 0.205779690212674,
+        "camera_position": [
+          13.9616928100586,
+          17.8245010375977,
+          9.13930130004883
+        ],
+        "draw_calls": 401,
+        "feet": [
+          3.58999991416931,
+          0.0,
+          -6.98000001907349
+        ],
+        "file": "Cover-queue-2x.jpg",
+        "lead_screen": [
+          0.485209226608276,
+          0.583332359790802
+        ],
+        "native_pixels": [
+          360,
+          840
+        ],
+        "primitives": 672551,
+        "queue": 3,
+        "render_scale": 1.0,
+        "scene": "actual counter service",
+        "target_screen": [
+          [
+            0.549516379833221,
+            0.438417017459869
+          ],
+          [
+            0.681670427322388,
+            0.360867977142334
+          ],
+          [
+            0.776655912399292,
+            0.319618195295334
+          ],
+          [
+            0.871641635894775,
+            0.278368324041367
+          ]
+        ],
+        "visible_compass": false,
+        "zoom": 2.0,
+        "path": "/tmp/havenline-t04/smooth-native/Cover-queue-2x.jpg",
+        "sha256": "831fbb877f5cbb259af698ed45ff598d8c0c3e496cf0bd4e61ccc79abc1dcf7f"
+      },
+      {
+        "actor_short_axis_height": 0.102889887491862,
+        "camera_position": [
+          0.0906060934066772,
+          11.7546329498291,
+          5.22760438919067
+        ],
+        "draw_calls": 289,
+        "feet": [
+          -6.25524091720581,
+          0.00899999961256981,
+          -5.73030185699463
+        ],
+        "file": "Inner-plot-1x.jpg",
+        "lead_screen": [
+          0.540714204311371,
+          0.556789577007294
+        ],
+        "native_pixels": [
+          492,
+          546
+        ],
+        "primitives": 461383,
+        "queue": 3,
+        "render_scale": 1.0,
+        "scene": "next plot",
+        "target_screen": [
+          [
+            0.363695979118347,
+            0.527375817298889
+          ]
+        ],
+        "visible_compass": false,
+        "zoom": 1.0,
+        "path": "/tmp/havenline-t04/smooth-native/Inner-plot-1x.jpg",
+        "sha256": "d6c41afef4ed105f39501d79d59d19d5af690a365aaffc7449b13e1ea93feb4b"
+      },
+      {
+        "actor_short_axis_height": 0.205779817369249,
+        "camera_position": [
+          -0.194054186344147,
+          11.7546329498291,
+          6.07168006896973
+        ],
+        "draw_calls": 229,
+        "feet": [
+          -6.25524091720581,
+          0.00899999961256981,
+          -5.73030185699463
+        ],
+        "file": "Inner-plot-2x.jpg",
+        "lead_screen": [
+          0.68809312582016,
+          0.563581168651581
+        ],
+        "native_pixels": [
+          492,
+          546
+        ],
+        "primitives": 432347,
+        "queue": 3,
+        "render_scale": 1.0,
+        "scene": "next plot",
+        "target_screen": [
+          [
+            0.334056556224823,
+            0.504753589630127
+          ]
+        ],
+        "visible_compass": false,
+        "zoom": 2.0,
+        "path": "/tmp/havenline-t04/smooth-native/Inner-plot-2x.jpg",
+        "sha256": "e8ba53c785a92b48dc1e9ebfe3678aa7f775f3636285209b83bbbb456869822b"
+      },
+      {
+        "actor_short_axis_height": 0.102889887491862,
+        "camera_position": [
+          10.1241636276245,
+          11.7456331253052,
+          3.10889911651611
+        ],
+        "draw_calls": 433,
+        "feet": [
+          3.58999991416931,
+          0.0,
+          -6.98000001907349
+        ],
+        "file": "Inner-queue-1x.jpg",
+        "lead_screen": [
+          0.492604702711105,
+          0.585040807723999
+        ],
+        "native_pixels": [
+          492,
+          546
+        ],
+        "primitives": 655726,
+        "queue": 3,
+        "render_scale": 1.0,
+        "scene": "actual counter service",
+        "target_screen": [
+          [
+            0.524758219718933,
+            0.432689219713211
+          ],
+          [
+            0.590835213661194,
+            0.351160705089569
+          ],
+          [
+            0.638328015804291,
+            0.307794153690338
+          ],
+          [
+            0.685820877552032,
+            0.264427602291107
+          ]
+        ],
+        "visible_compass": false,
+        "zoom": 1.0,
+        "path": "/tmp/havenline-t04/smooth-native/Inner-queue-1x.jpg",
+        "sha256": "bcf17ce91d1b2037f0862aa3a3e2642129ef30720cf74fb5bb72b548691cd2de"
+      },
+      {
+        "actor_short_axis_height": 0.205779817369249,
+        "camera_position": [
+          9.50901222229004,
+          11.7456331253052,
+          2.14222979545593
+        ],
+        "draw_calls": 249,
+        "feet": [
+          3.58999991416931,
+          0.0,
+          -6.98000001907349
+        ],
+        "file": "Inner-queue-2x.jpg",
+        "lead_screen": [
+          0.485209107398987,
+          0.772511899471283
+        ],
+        "native_pixels": [
+          492,
+          546
+        ],
+        "primitives": 579879,
+        "queue": 3,
+        "render_scale": 1.0,
+        "scene": "actual counter service",
+        "target_screen": [
+          [
+            0.549516141414642,
+            0.46780851483345
+          ],
+          [
+            0.681670129299164,
+            0.304751515388489
+          ],
+          [
+            0.776655852794647,
+            0.218018472194672
+          ],
+          [
+            0.871641457080841,
+            0.131285458803177
+          ]
+        ],
+        "visible_compass": false,
+        "zoom": 2.0,
+        "path": "/tmp/havenline-t04/smooth-native/Inner-queue-2x.jpg",
+        "sha256": "31edf5198e03c77a8d8820926716b10cdc69d764fe995877506b948e1ac00ff7"
+      },
+      {
+        "actor_short_axis_height": 0.102889845106337,
+        "camera_position": [
+          -0.197011262178421,
+          11.2093524932861,
+          4.775634765625
+        ],
+        "draw_calls": 296,
+        "feet": [
+          -6.25524091720581,
+          0.00899999961256981,
+          -5.73030185699463
+        ],
+        "file": "Tablet-plot-1x.jpg",
+        "lead_screen": [
+          0.530535638332367,
+          0.557534515857697
+        ],
+        "native_pixels": [
+          896,
+          672
+        ],
+        "primitives": 491752,
+        "queue": 3,
+        "render_scale": 1.0,
+        "scene": "next plot",
+        "target_screen": [
+          [
+            0.397771954536438,
+            0.524893403053284
+          ]
+        ],
+        "visible_compass": false,
+        "zoom": 1.0,
+        "path": "/tmp/havenline-t04/smooth-native/Tablet-plot-1x.jpg",
+        "sha256": "796f58eae95c2d61a6ce2d1062c45b7e71d66ebeb02f4f55a31682665a128d32"
+      },
+      {
+        "actor_short_axis_height": 0.205779774983724,
+        "camera_position": [
+          0.0735677480697632,
+          11.2093524932861,
+          5.20083045959473
+        ],
+        "draw_calls": 237,
+        "feet": [
+          -6.25524091720581,
+          0.00899999961256981,
+          -5.73030185699463
+        ],
+        "file": "Tablet-plot-2x.jpg",
+        "lead_screen": [
+          0.561071336269379,
+          0.565070986747742
+        ],
+        "native_pixels": [
+          896,
+          672
+        ],
+        "primitives": 427779,
+        "queue": 3,
+        "render_scale": 1.0,
+        "scene": "next plot",
+        "target_screen": [
+          [
+            0.295543998479843,
+            0.499788701534271
+          ]
+        ],
+        "visible_compass": false,
+        "zoom": 2.0,
+        "path": "/tmp/havenline-t04/smooth-native/Tablet-plot-2x.jpg",
+        "sha256": "ba8934bacc367f753312894b03eb62fe62f51fbf67938ee95bed686f98340c13"
+      },
+      {
+        "actor_short_axis_height": 0.102889887491862,
+        "camera_position": [
+          9.83654594421387,
+          11.2003526687622,
+          2.65692901611328
+        ],
+        "draw_calls": 445,
+        "feet": [
+          3.58999991416931,
+          0.0,
+          -6.98000001907349
+        ],
+        "file": "Tablet-queue-1x.jpg",
+        "lead_screen": [
+          0.494453489780426,
+          0.588885605335236
+        ],
+        "native_pixels": [
+          896,
+          672
+        ],
+        "primitives": 711550,
+        "queue": 3,
+        "render_scale": 1.0,
+        "scene": "actual counter service",
+        "target_screen": [
+          [
+            0.518568634986877,
+            0.419817596673965
+          ],
+          [
+            0.568126440048218,
+            0.329343646764755
+          ],
+          [
+            0.603745996952057,
+            0.281218856573105
+          ],
+          [
+            0.639365613460541,
+            0.233094066381454
+          ]
+        ],
+        "visible_compass": false,
+        "zoom": 1.0,
+        "path": "/tmp/havenline-t04/smooth-native/Tablet-queue-1x.jpg",
+        "sha256": "6eb3bc02b8c74b98dcdc808536d8d3692613ab8897347ccfc7c757a24caa15a1"
+      },
+      {
+        "actor_short_axis_height": 0.205779774983724,
+        "camera_position": [
+          8.92525863647461,
+          11.2003526687622,
+          1.22490572929382
+        ],
+        "draw_calls": 237,
+        "feet": [
+          3.58999991416931,
+          0.0,
+          -6.98000001907349
+        ],
+        "file": "Tablet-queue-2x.jpg",
+        "lead_screen": [
+          0.488906979560852,
+          0.846160531044006
+        ],
+        "native_pixels": [
+          896,
+          672
+        ],
+        "primitives": 676779,
+        "queue": 3,
+        "render_scale": 1.0,
+        "scene": "actual counter service",
+        "target_screen": [
+          [
+            0.5371373295784,
+            0.508024632930756
+          ],
+          [
+            0.636252760887146,
+            0.327076613903046
+          ],
+          [
+            0.707492053508759,
+            0.230827033519745
+          ],
+          [
+            0.778731226921082,
+            0.134577453136444
+          ]
+        ],
+        "visible_compass": false,
+        "zoom": 2.0,
+        "path": "/tmp/havenline-t04/smooth-native/Tablet-queue-2x.jpg",
+        "sha256": "c8ee463acdad12056bb27ec359068aace7db1feac2a5c34db3eaf4ad95127ff6"
+      },
+      {
+        "actor_short_axis_height": 0.102889887491862,
+        "camera_position": [
+          9.83618068695068,
+          11.2003526687622,
+          2.65635585784912
+        ],
+        "draw_calls": 457,
+        "feet": [
+          3.58999991416931,
+          0.0,
+          -6.98000001907349
+        ],
+        "file": "Phone-16x9-queue-1x.jpg",
+        "lead_screen": [
+          0.495840162038803,
+          0.588919222354889
+        ],
+        "native_pixels": [
+          960,
+          540
+        ],
+        "primitives": 685380,
+        "queue": 3,
+        "render_scale": 1.0,
+        "scene": "actual counter service",
+        "target_screen": [
+          [
+            0.51392650604248,
+            0.419851332902908
+          ],
+          [
+            0.551094830036163,
+            0.329377353191376
+          ],
+          [
+            0.577809512615204,
+            0.281252562999725
+          ],
+          [
+            0.604524254798889,
+            0.233127757906914
+          ]
+        ],
+        "visible_compass": false,
+        "zoom": 1.0,
+        "path": "/tmp/havenline-t04/smooth-native/Phone-16x9-queue-1x.jpg",
+        "sha256": "bf92e424f32e65cdd620f11a7bcc15860fa5d977464030e81523923795cdc3b5"
+      },
+      {
+        "actor_short_axis_height": 0.205779732598199,
+        "camera_position": [
+          9.24514293670654,
+          11.2003526687622,
+          1.72758197784424
+        ],
+        "draw_calls": 257,
+        "feet": [
+          3.58999991416931,
+          0.0,
+          -6.98000001907349
+        ],
+        "file": "Phone-16x9-queue-2x.jpg",
+        "lead_screen": [
+          0.491680324077606,
+          0.787051558494568
+        ],
+        "native_pixels": [
+          960,
+          540
+        ],
+        "primitives": 641743,
+        "queue": 3,
+        "render_scale": 1.0,
+        "scene": "actual counter service",
+        "target_screen": [
+          [
+            0.527853012084961,
+            0.44891569018364
+          ],
+          [
+            0.602189660072327,
+            0.267967790365219
+          ],
+          [
+            0.655619084835052,
+            0.171718209981918
+          ],
+          [
+            0.709048509597778,
+            0.0754686295986176
+          ]
+        ],
+        "visible_compass": false,
+        "zoom": 2.0,
+        "path": "/tmp/havenline-t04/smooth-native/Phone-16x9-queue-2x.jpg",
+        "sha256": "a97c702ea58edd675564cbb8ceb7ae9a4395159584fb104f0b06fe30e5157f6a"
+      },
+      {
+        "actor_short_axis_height": 0.102889887491862,
+        "camera_position": [
+          9.83632278442383,
+          11.2003526687622,
+          2.656578540802
+        ],
+        "draw_calls": 465,
+        "feet": [
+          3.58999991416931,
+          0.0,
+          -6.98000001907349
+        ],
+        "file": "Phone-20x9-queue-1x.jpg",
+        "lead_screen": [
+          0.496672093868256,
+          0.588906168937683
+        ],
+        "native_pixels": [
+          1000,
+          450
+        ],
+        "primitives": 641448,
+        "queue": 3,
+        "render_scale": 1.0,
+        "scene": "actual counter service",
+        "target_screen": [
+          [
+            0.511141180992126,
+            0.41983824968338
+          ],
+          [
+            0.540875852108002,
+            0.329364240169525
+          ],
+          [
+            0.562247574329376,
+            0.281239479780197
+          ],
+          [
+            0.583619356155396,
+            0.233114659786224
+          ]
+        ],
+        "visible_compass": false,
+        "zoom": 1.0,
+        "path": "/tmp/havenline-t04/smooth-native/Phone-20x9-queue-1x.jpg",
+        "sha256": "86e9a30b242ea64ee96e357f94ad6fcd26560aad78817e35dc48d5cdbd39da4d"
+      },
+      {
+        "actor_short_axis_height": 0.205779732598199,
+        "camera_position": [
+          9.24514293670654,
+          11.2003526687622,
+          1.72758197784424
+        ],
+        "draw_calls": 271,
+        "feet": [
+          3.58999991416931,
+          0.0,
+          -6.98000001907349
+        ],
+        "file": "Phone-20x9-queue-2x.jpg",
+        "lead_screen": [
+          0.493344277143478,
+          0.787051558494568
+        ],
+        "native_pixels": [
+          1000,
+          450
+        ],
+        "primitives": 627917,
+        "queue": 3,
+        "render_scale": 1.0,
+        "scene": "actual counter service",
+        "target_screen": [
+          [
+            0.522282421588898,
+            0.44891569018364
+          ],
+          [
+            0.581751704216003,
+            0.267967790365219
+          ],
+          [
+            0.624495267868042,
+            0.171718209981918
+          ],
+          [
+            0.667238771915436,
+            0.0754686295986176
+          ]
+        ],
+        "visible_compass": false,
+        "zoom": 2.0,
+        "path": "/tmp/havenline-t04/smooth-native/Phone-20x9-queue-2x.jpg",
+        "sha256": "e02a5c968d31e4811bb67c91df83a1723f939050798ba72edcab58e05a8ccaa0"
+      },
+      {
+        "actor_short_axis_height": 0.102889845106337,
+        "camera_position": [
+          9.83632278442383,
+          11.2003526687622,
+          2.656578540802
+        ],
+        "draw_calls": 440,
+        "feet": [
+          3.58999991416931,
+          0.0,
+          -6.98000001907349
+        ],
+        "file": "Tablet-16x10-queue-1x.jpg",
+        "lead_screen": [
+          0.495377898216248,
+          0.588906168937683
+        ],
+        "native_pixels": [
+          960,
+          600
+        ],
+        "primitives": 679202,
+        "queue": 3,
+        "render_scale": 1.0,
+        "scene": "actual counter service",
+        "target_screen": [
+          [
+            0.515473902225494,
+            0.41983824968338
+          ],
+          [
+            0.556771993637085,
+            0.329364269971848
+          ],
+          [
+            0.58645498752594,
+            0.281239539384842
+          ],
+          [
+            0.616137981414795,
+            0.233114689588547
+          ]
+        ],
+        "visible_compass": false,
+        "zoom": 1.0,
+        "path": "/tmp/havenline-t04/smooth-native/Tablet-16x10-queue-1x.jpg",
+        "sha256": "2ab9efc2afc289dbb8e0ebf68ba9f1714f86b0485c3e528797be02f2c26cec4b"
+      },
+      {
+        "actor_short_axis_height": 0.205779732598199,
+        "camera_position": [
+          9.24514293670654,
+          11.2003526687622,
+          1.72758197784424
+        ],
+        "draw_calls": 239,
+        "feet": [
+          3.58999991416931,
+          0.0,
+          -6.98000001907349
+        ],
+        "file": "Tablet-16x10-queue-2x.jpg",
+        "lead_screen": [
+          0.490755915641785,
+          0.787051558494568
+        ],
+        "native_pixels": [
+          960,
+          600
+        ],
+        "primitives": 601861,
+        "queue": 3,
+        "render_scale": 1.0,
+        "scene": "actual counter service",
+        "target_screen": [
+          [
+            0.530947804450989,
+            0.44891569018364
+          ],
+          [
+            0.613544046878815,
+            0.267967820167542
+          ],
+          [
+            0.672910034656525,
+            0.171718239784241
+          ],
+          [
+            0.732276082038879,
+            0.0754686892032623
+          ]
+        ],
+        "visible_compass": false,
+        "zoom": 2.0,
+        "path": "/tmp/havenline-t04/smooth-native/Tablet-16x10-queue-2x.jpg",
+        "sha256": "ed28914216a556673f0668dc623ed02e51eb69e5c1ccc543c91335ea03a0fc87"
+      },
+      {
+        "actor_short_axis_height": 0.102889887491862,
+        "camera_position": [
+          9.83632278442383,
+          11.2003526687622,
+          2.656578540802
+        ],
+        "draw_calls": 465,
+        "feet": [
+          3.58999991416931,
+          0.0,
+          -6.98000001907349
+        ],
+        "file": "Fold-cover-rotated-queue-1x.jpg",
+        "lead_screen": [
+          0.496830582618713,
+          0.588906168937683
+        ],
+        "native_pixels": [
+          840,
+          360
+        ],
+        "primitives": 625010,
+        "queue": 3,
+        "render_scale": 1.0,
+        "scene": "actual counter service",
+        "target_screen": [
+          [
+            0.510610699653625,
+            0.41983824968338
+          ],
+          [
+            0.538929402828217,
+            0.329364240169525
+          ],
+          [
+            0.559283435344696,
+            0.281239479780197
+          ],
+          [
+            0.579637467861176,
+            0.233114659786224
+          ]
+        ],
+        "visible_compass": false,
+        "zoom": 1.0,
+        "path": "/tmp/havenline-t04/smooth-native/Fold-cover-rotated-queue-1x.jpg",
+        "sha256": "b085d550db97133f80b8089232276278d1d3e0206f6b42aa30b240ad11024dfe"
+      },
+      {
+        "actor_short_axis_height": 0.205779732598199,
+        "camera_position": [
+          9.24514293670654,
+          11.2003526687622,
+          1.72758197784424
+        ],
+        "draw_calls": 271,
+        "feet": [
+          3.58999991416931,
+          0.0,
+          -6.98000001907349
+        ],
+        "file": "Fold-cover-rotated-queue-2x.jpg",
+        "lead_screen": [
+          0.493661195039749,
+          0.787051558494568
+        ],
+        "native_pixels": [
+          840,
+          360
+        ],
+        "primitives": 581647,
+        "queue": 3,
+        "render_scale": 1.0,
+        "scene": "actual counter service",
+        "target_screen": [
+          [
+            0.521221339702606,
+            0.44891569018364
+          ],
+          [
+            0.577858746051788,
+            0.267967790365219
+          ],
+          [
+            0.618566870689392,
+            0.171718209981918
+          ],
+          [
+            0.659274995326996,
+            0.0754686295986176
+          ]
+        ],
+        "visible_compass": false,
+        "zoom": 2.0,
+        "path": "/tmp/havenline-t04/smooth-native/Fold-cover-rotated-queue-2x.jpg",
+        "sha256": "fdd43a786d4997bcf848de02e0b1f8f902a8ee01fd168d8efcfd5445c95a609b"
+      },
+      {
+        "actor_short_axis_height": 0.102889887491862,
+        "camera_position": [
+          9.83632278442383,
+          11.2003526687622,
+          2.656578540802
+        ],
+        "draw_calls": 411,
+        "feet": [
+          3.58999991416931,
+          0.0,
+          -6.98000001907349
+        ],
+        "file": "Fold-inner-rotated-queue-1x.jpg",
+        "lead_screen": [
+          0.493335872888565,
+          0.588906168937683
+        ],
+        "native_pixels": [
+          546,
+          492
+        ],
+        "primitives": 638194,
+        "queue": 3,
+        "render_scale": 1.0,
+        "scene": "actual counter service",
+        "target_screen": [
+          [
+            0.522310256958008,
+            0.41983824968338
+          ],
+          [
+            0.581853985786438,
+            0.329364240169525
+          ],
+          [
+            0.62465101480484,
+            0.281239479780197
+          ],
+          [
+            0.667447984218597,
+            0.233114659786224
+          ]
+        ],
+        "visible_compass": false,
+        "zoom": 1.0,
+        "path": "/tmp/havenline-t04/smooth-native/Fold-inner-rotated-queue-1x.jpg",
+        "sha256": "fdd2c3b1f24b184933543a98b7c469e1939005c6486686474deb30ef1309d1e6"
+      },
+      {
+        "actor_short_axis_height": 0.205779774983724,
+        "camera_position": [
+          8.97907829284668,
+          11.2003526687622,
+          1.19065713882446
+        ],
+        "draw_calls": 235,
+        "feet": [
+          3.58999991416931,
+          0.0,
+          -6.98000001907349
+        ],
+        "file": "Fold-inner-rotated-queue-2x.jpg",
+        "lead_screen": [
+          0.477827847003937,
+          0.846160531044006
+        ],
+        "native_pixels": [
+          546,
+          492
+        ],
+        "primitives": 577297,
+        "queue": 3,
+        "render_scale": 1.0,
+        "scene": "actual counter service",
+        "target_screen": [
+          [
+            0.535776555538177,
+            0.508024573326111
+          ],
+          [
+            0.654864072799683,
+            0.32707667350769
+          ],
+          [
+            0.740458071231842,
+            0.23082709312439
+          ],
+          [
+            0.826052188873291,
+            0.134577512741089
+          ]
+        ],
+        "visible_compass": false,
+        "zoom": 2.0,
+        "path": "/tmp/havenline-t04/smooth-native/Fold-inner-rotated-queue-2x.jpg",
+        "sha256": "9fc2eca1fa5a5b73a3a6fa312385200fb83cfc5e660eb77f73d03304a76c67ca"
+      },
+      {
+        "actor_short_axis_height": 0.102889887491862,
+        "camera_position": [
+          9.83620166778564,
+          11.2003526687622,
+          2.6563413143158
+        ],
+        "draw_calls": 453,
+        "feet": [
+          3.58999991416931,
+          0.0,
+          -6.98000001907349
+        ],
+        "file": "4K-queue-1x.jpg",
+        "lead_screen": [
+          0.495839059352875,
+          0.588919341564178
+        ],
+        "native_pixels": [
+          3840,
+          2160
+        ],
+        "primitives": 1014878,
+        "queue": 3,
+        "render_scale": 1.0,
+        "scene": "actual counter service",
+        "target_screen": [
+          [
+            0.513925433158875,
+            0.419851392507553
+          ],
+          [
+            0.551093697547913,
+            0.329377382993698
+          ],
+          [
+            0.577808499336243,
+            0.281252592802048
+          ],
+          [
+            0.604523122310638,
+            0.233127802610397
+          ]
+        ],
+        "visible_compass": false,
+        "zoom": 1.0,
+        "path": "/tmp/havenline-t04/smooth-native/4K-queue-1x.jpg",
+        "sha256": "ddd7fd6e6ef02339fcb92a4180e8faa5c7e5cc6ab0502f677e1de2176067fc51"
+      },
+      {
+        "actor_short_axis_height": 0.205779732598199,
+        "camera_position": [
+          9.24514293670654,
+          11.2003526687622,
+          1.72758197784424
+        ],
+        "draw_calls": 255,
+        "feet": [
+          3.58999991416931,
+          0.0,
+          -6.98000001907349
+        ],
+        "file": "4K-queue-2x.jpg",
+        "lead_screen": [
+          0.491680324077606,
+          0.787051558494568
+        ],
+        "native_pixels": [
+          3840,
+          2160
+        ],
+        "primitives": 850067,
+        "queue": 3,
+        "render_scale": 1.0,
+        "scene": "actual counter service",
+        "target_screen": [
+          [
+            0.527853012084961,
+            0.44891569018364
+          ],
+          [
+            0.602189660072327,
+            0.267967790365219
+          ],
+          [
+            0.655619084835052,
+            0.171718209981918
+          ],
+          [
+            0.709048509597778,
+            0.0754686295986176
+          ]
+        ],
+        "visible_compass": false,
+        "zoom": 2.0,
+        "path": "/tmp/havenline-t04/smooth-native/4K-queue-2x.jpg",
+        "sha256": "9d8bf28b895acf6a04d3100777d935c92a082c8e5ffd74cedc8b1f40fe9634a7"
+      },
+      {
+        "actor_short_axis_height": 0.102889845106337,
+        "camera_position": [
+          13.3303918838501,
+          17.8245010375977,
+          8.87971782684326
+        ],
+        "draw_calls": 493,
+        "feet": [
+          3.58999991416931,
+          0.0,
+          -6.03000020980835
+        ],
+        "file": "Approach-Cover-queue-1x.jpg",
+        "lead_screen": [
+          0.4836206138134,
+          0.570564746856689
+        ],
+        "native_pixels": [
+          360,
+          840
+        ],
+        "primitives": 630494,
+        "queue": 3,
+        "render_scale": 1.0,
+        "scene": "counter approach",
+        "target_screen": [
+          [
+            0.555007517337799,
+            0.481069028377533
+          ],
+          [
+            0.62108439207077,
+            0.442294597625732
+          ],
+          [
+            0.668577253818512,
+            0.421669661998749
+          ],
+          [
+            0.716070055961609,
+            0.401044756174088
+          ]
+        ],
+        "visible_compass": false,
+        "zoom": 1.0,
+        "path": "/tmp/havenline-t04/smooth-native/Approach-Cover-queue-1x.jpg",
+        "sha256": "9edbc2628f3cb5c7a76af288d25869b64861caae7891b14547b40ac38fbc3d40"
+      },
+      {
+        "actor_short_axis_height": 0.205779690212674,
+        "camera_position": [
+          14.1711978912354,
+          17.8245010375977,
+          9.73748016357422
+        ],
+        "draw_calls": 402,
+        "feet": [
+          3.58999991416931,
+          0.0,
+          -6.03000020980835
+        ],
+        "file": "Approach-Cover-queue-2x.jpg",
+        "lead_screen": [
+          0.42895770072937,
+          0.591169774532318
+        ],
+        "native_pixels": [
+          360,
+          840
+        ],
+        "primitives": 673606,
+        "queue": 3,
+        "render_scale": 1.0,
+        "scene": "counter approach",
+        "target_screen": [
+          [
+            0.571730971336365,
+            0.412178486585617
+          ],
+          [
+            0.703885018825531,
+            0.334629505872726
+          ],
+          [
+            0.79887068271637,
+            0.293379634618759
+          ],
+          [
+            0.893856406211853,
+            0.252129852771759
+          ]
+        ],
+        "visible_compass": false,
+        "zoom": 2.0,
+        "path": "/tmp/havenline-t04/smooth-native/Approach-Cover-queue-2x.jpg",
+        "sha256": "73a227a0614903ea6eb2058595f7b7952252a9ded0cb351b28e8d716194dd31f"
+      },
+      {
+        "actor_short_axis_height": 0.102889929877387,
+        "camera_position": [
+          10.1242303848267,
+          11.7456331253052,
+          3.84033060073853
+        ],
+        "draw_calls": 440,
+        "feet": [
+          3.58999991416931,
+          0.0,
+          -6.03000020980835
+        ],
+        "file": "Approach-Inner-queue-1x.jpg",
+        "lead_screen": [
+          0.483573824167252,
+          0.593281447887421
+        ],
+        "native_pixels": [
+          492,
+          546
+        ],
+        "primitives": 653476,
+        "queue": 3,
+        "render_scale": 1.0,
+        "scene": "counter approach",
+        "target_screen": [
+          [
+            0.554960608482361,
+            0.405105292797089
+          ],
+          [
+            0.621037542819977,
+            0.323576807975769
+          ],
+          [
+            0.668530344963074,
+            0.280210256576538
+          ],
+          [
+            0.716023147106171,
+            0.236843779683113
+          ]
+        ],
+        "visible_compass": false,
+        "zoom": 1.0,
+        "path": "/tmp/havenline-t04/smooth-native/Approach-Inner-queue-1x.jpg",
+        "sha256": "dcc20570f646bbd82f512f98566d71ac6c1344c48a07b597796e5463821fc526"
+      },
+      {
+        "actor_short_axis_height": 0.205779859754774,
+        "camera_position": [
+          9.3872013092041,
+          11.7456331253052,
+          2.21977472305298
+        ],
+        "draw_calls": 237,
+        "feet": [
+          3.58999991416931,
+          0.0,
+          -6.03000020980835
+        ],
+        "file": "Approach-Inner-queue-2x.jpg",
+        "lead_screen": [
+          0.428957968950272,
+          0.844158709049225
+        ],
+        "native_pixels": [
+          492,
+          546
+        ],
+        "primitives": 579169,
+        "queue": 3,
+        "render_scale": 1.0,
+        "scene": "counter approach",
+        "target_screen": [
+          [
+            0.571731328964233,
+            0.467806488275528
+          ],
+          [
+            0.7038853764534,
+            0.304749399423599
+          ],
+          [
+            0.798871040344238,
+            0.218016356229782
+          ],
+          [
+            0.893856704235077,
+            0.131283342838287
+          ]
+        ],
+        "visible_compass": false,
+        "zoom": 2.0,
+        "path": "/tmp/havenline-t04/smooth-native/Approach-Inner-queue-2x.jpg",
+        "sha256": "c97d57fb98701ad7c48b4e8d6494d1191939e3402ee9c7af8940c71985bb191e"
+      }
+    ],
+    "measurements": {
+      "path": "/tmp/havenline-t04/smooth-native/Measurements.json",
+      "sha256": "e3d54333c049b5884806db1f6b69d7fce04f12468c8dc7e50390df780db6fd97"
+    },
+    "runtime_digests": {
+      "path": "/tmp/havenline-t04/smooth-native/Source.sha256",
+      "sha256": "9dc2ab8353045c63b860a90aaca29ffc09ef4892037ce75cce21076a3ca4298c"
+    }
+  },
+  "independent_opposite_headings": {
+    "baseline": {
+      "camera_size": 13.0,
+      "orientation_fixed": true,
+      "runs": [
+        {
+          "heading_x": -1.0,
+          "released_feet_uv": "(0.499946, 0.499978)",
+          "run_samples": [
+            {
+              "feet_uv": [
+                0.456522107124329,
+                0.482158929109573
+              ],
+              "look_ahead_relative_to_feet_m": -0.669951379299164,
+              "real_speed": 6.2500011920929,
+              "tick": 40,
+              "travel_m": 3.47305631637573
+            },
+            {
+              "feet_uv": [
+                0.456082165241241,
+                0.481978386640549
+              ],
+              "look_ahead_relative_to_feet_m": -0.676730513572693,
+              "real_speed": 6.24999761581421,
+              "tick": 61,
+              "travel_m": 5.66055631637573
+            },
+            {
+              "feet_uv": [
+                0.45606404542923,
+                0.481970936059952
+              ],
+              "look_ahead_relative_to_feet_m": -0.677010297775269,
+              "real_speed": 6.25000476837158,
+              "tick": 72,
+              "travel_m": 6.80638980865479
+            },
+            {
+              "feet_uv": [
+                0.456060528755188,
+                0.481969505548477
+              ],
+              "look_ahead_relative_to_feet_m": -0.677063465118408,
+              "real_speed": 6.25000476837158,
+              "tick": 81,
+              "travel_m": 7.7438907623291
+            }
+          ]
+        },
+        {
+          "heading_x": 1.0,
+          "released_feet_uv": "(0.500054, 0.500022)",
+          "run_samples": [
+            {
+              "feet_uv": [
+                0.543477833271027,
+                0.517840981483459
+              ],
+              "look_ahead_relative_to_feet_m": -0.669951379299164,
+              "real_speed": 6.2500011920929,
+              "tick": 40,
+              "travel_m": 3.47305631637573
+            },
+            {
+              "feet_uv": [
+                0.543917775154114,
+                0.518021464347839
+              ],
+              "look_ahead_relative_to_feet_m": -0.676730036735535,
+              "real_speed": 6.24999761581421,
+              "tick": 61,
+              "travel_m": 5.66055631637573
+            },
+            {
+              "feet_uv": [
+                0.543935835361481,
+                0.518028914928436
+              ],
+              "look_ahead_relative_to_feet_m": -0.677009344100952,
+              "real_speed": 6.25000476837158,
+              "tick": 72,
+              "travel_m": 6.80638980865479
+            },
+            {
+              "feet_uv": [
+                0.543939352035522,
+                0.518030345439911
+              ],
+              "look_ahead_relative_to_feet_m": -0.677063465118408,
+              "real_speed": 6.25000476837158,
+              "tick": 81,
+              "travel_m": 7.7438907623291
+            }
+          ]
+        }
+      ],
+      "size": "(720.0, 720.0)",
+      "stage": 3
+    },
+    "candidate": {
+      "failures": [],
+      "frames": 56,
+      "logical_size": "(720.0, 1189.0)",
+      "physical_pixels": [
+        460,
+        760
+      ],
+      "physics_fps": 60,
+      "segments": [
+        {
+          "context_at_largest_step": "[]",
+          "first_frame": 0,
+          "heading_x": -1.0,
+          "largest_camera_step_m": 0.175000235438347,
+          "largest_step_tick": 70,
+          "last_frame": 27,
+          "samples": [
+            {
+              "look_ahead_m": 0.82860255241394,
+              "tick": 0,
+              "travel_m": 0.00638890266418457
+            },
+            {
+              "look_ahead_m": 0.829545259475708,
+              "tick": 4,
+              "travel_m": 0.0958335399627686
+            },
+            {
+              "look_ahead_m": 0.892444372177124,
+              "tick": 8,
+              "travel_m": 0.287500619888306
+            },
+            {
+              "look_ahead_m": 1.02068734169006,
+              "tick": 12,
+              "travel_m": 0.581389188766479
+            },
+            {
+              "look_ahead_m": 1.19846057891846,
+              "tick": 16,
+              "travel_m": 0.973055839538574
+            },
+            {
+              "look_ahead_m": 1.40425682067871,
+              "tick": 20,
+              "travel_m": 1.38972282409668
+            },
+            {
+              "look_ahead_m": 1.56396961212158,
+              "tick": 24,
+              "travel_m": 1.80638980865479
+            },
+            {
+              "look_ahead_m": 1.65558755397797,
+              "tick": 28,
+              "travel_m": 2.22305631637573
+            },
+            {
+              "look_ahead_m": 1.67406642436981,
+              "tick": 32,
+              "travel_m": 2.63972282409668
+            },
+            {
+              "look_ahead_m": 1.64266514778137,
+              "tick": 36,
+              "travel_m": 3.05638957023621
+            },
+            {
+              "look_ahead_m": 1.58314752578735,
+              "tick": 40,
+              "travel_m": 3.47305631637573
+            },
+            {
+              "look_ahead_m": 1.49131190776825,
+              "tick": 44,
+              "travel_m": 3.88972306251526
+            },
+            {
+              "look_ahead_m": 1.30708420276642,
+              "tick": 48,
+              "travel_m": 4.30638980865479
+            },
+            {
+              "look_ahead_m": 1.06178283691406,
+              "tick": 52,
+              "travel_m": 4.72305631637573
+            },
+            {
+              "look_ahead_m": 0.782056570053101,
+              "tick": 56,
+              "travel_m": 5.13972282409668
+            },
+            {
+              "look_ahead_m": 0.482928991317749,
+              "tick": 60,
+              "travel_m": 5.55638980865479
+            },
+            {
+              "look_ahead_m": 0.172864198684692,
+              "tick": 64,
+              "travel_m": 5.97305583953857
+            },
+            {
+              "look_ahead_m": -0.143364667892456,
+              "tick": 68,
+              "travel_m": 6.38972282409668
+            },
+            {
+              "look_ahead_m": -0.0175635814666748,
+              "tick": 72,
+              "travel_m": 6.80638980865479
+            },
+            {
+              "look_ahead_m": 0.25835919380188,
+              "tick": 76,
+              "travel_m": 7.22305679321289
+            },
+            {
+              "look_ahead_m": 0.53617262840271,
+              "tick": 80,
+              "travel_m": 7.639723777771
+            },
+            {
+              "look_ahead_m": 0.888645172119141,
+              "tick": 84,
+              "travel_m": 7.98305749893188
+            },
+            {
+              "look_ahead_m": 1.39515972137451,
+              "tick": 88,
+              "travel_m": 8.13083457946777
+            },
+            {
+              "look_ahead_m": 1.56755304336548,
+              "tick": 92,
+              "travel_m": 8.1372241973877
+            },
+            {
+              "look_ahead_m": 1.4762134552002,
+              "tick": 96,
+              "travel_m": 8.1372241973877
+            },
+            {
+              "look_ahead_m": 1.32609891891479,
+              "tick": 100,
+              "travel_m": 8.1372241973877
+            },
+            {
+              "look_ahead_m": 1.19084882736206,
+              "tick": 104,
+              "travel_m": 8.1372241973877
+            },
+            {
+              "look_ahead_m": 1.08861780166626,
+              "tick": 108,
+              "travel_m": 8.1372241973877
+            }
+          ]
+        },
+        {
+          "context_at_largest_step": "[[P: (2.085354, 0.971067), S: (3.702911, 2.418442)]]",
+          "first_frame": 28,
+          "heading_x": 1.0,
+          "largest_camera_step_m": 0.175000429153442,
+          "largest_step_tick": 36,
+          "last_frame": 55,
+          "samples": [
+            {
+              "look_ahead_m": -0.851090669631958,
+              "tick": 0,
+              "travel_m": 0.00638890266418457
+            },
+            {
+              "look_ahead_m": -0.860063314437866,
+              "tick": 4,
+              "travel_m": 0.0958335399627686
+            },
+            {
+              "look_ahead_m": -0.792649507522583,
+              "tick": 8,
+              "travel_m": 0.287500619888306
+            },
+            {
+              "look_ahead_m": -0.638705492019653,
+              "tick": 12,
+              "travel_m": 0.581389188766479
+            },
+            {
+              "look_ahead_m": -0.411730289459229,
+              "tick": 16,
+              "travel_m": 0.973055839538574
+            },
+            {
+              "look_ahead_m": -0.137412071228027,
+              "tick": 20,
+              "travel_m": 1.38972282409668
+            },
+            {
+              "look_ahead_m": 0.144795417785645,
+              "tick": 24,
+              "travel_m": 1.80638980865479
+            },
+            {
+              "look_ahead_m": 0.42732560634613,
+              "tick": 28,
+              "travel_m": 2.22305631637573
+            },
+            {
+              "look_ahead_m": 0.710071444511414,
+              "tick": 32,
+              "travel_m": 2.63972282409668
+            },
+            {
+              "look_ahead_m": 0.992993652820587,
+              "tick": 36,
+              "travel_m": 3.05638957023621
+            },
+            {
+              "look_ahead_m": 1.25728559494019,
+              "tick": 40,
+              "travel_m": 3.47305631637573
+            },
+            {
+              "look_ahead_m": 1.38580882549286,
+              "tick": 44,
+              "travel_m": 3.88972306251526
+            },
+            {
+              "look_ahead_m": 1.41643154621124,
+              "tick": 48,
+              "travel_m": 4.30638980865479
+            },
+            {
+              "look_ahead_m": 1.39187479019165,
+              "tick": 52,
+              "travel_m": 4.72305631637573
+            },
+            {
+              "look_ahead_m": 1.33621382713318,
+              "tick": 56,
+              "travel_m": 5.13972282409668
+            },
+            {
+              "look_ahead_m": 1.26302552223206,
+              "tick": 60,
+              "travel_m": 5.55638980865479
+            },
+            {
+              "look_ahead_m": 1.17995524406433,
+              "tick": 64,
+              "travel_m": 5.97305583953857
+            },
+            {
+              "look_ahead_m": 1.09131693840027,
+              "tick": 68,
+              "travel_m": 6.38972282409668
+            },
+            {
+              "look_ahead_m": 0.99953818321228,
+              "tick": 72,
+              "travel_m": 6.80638980865479
+            },
+            {
+              "look_ahead_m": 0.905990362167358,
+              "tick": 76,
+              "travel_m": 7.22305679321289
+            },
+            {
+              "look_ahead_m": 0.811444997787476,
+              "tick": 80,
+              "travel_m": 7.639723777771
+            },
+            {
+              "look_ahead_m": 0.758286952972412,
+              "tick": 84,
+              "travel_m": 7.98305749893188
+            },
+            {
+              "look_ahead_m": 0.640982151031494,
+              "tick": 88,
+              "travel_m": 8.13083457946777
+            },
+            {
+              "look_ahead_m": 0.36812162399292,
+              "tick": 92,
+              "travel_m": 8.1372241973877
+            },
+            {
+              "look_ahead_m": 0.0258193016052246,
+              "tick": 96,
+              "travel_m": 8.1372241973877
+            },
+            {
+              "look_ahead_m": -0.265748500823975,
+              "tick": 100,
+              "travel_m": 8.1372241973877
+            },
+            {
+              "look_ahead_m": -0.480728626251221,
+              "tick": 104,
+              "travel_m": 8.1372241973877
+            },
+            {
+              "look_ahead_m": -0.62790060043335,
+              "tick": 108,
+              "travel_m": 8.1372241973877
+            }
+          ]
+        }
+      ]
+    },
+    "fixtures": [
+      {
+        "path": "/tmp/havenline-t04-independent/measure-camera-touch.gd",
+        "sha256": "229ef7ff30b0a49f11b9d308bbb9289c07a9be8e4ec6b51d18df00dbaad744e8"
+      },
+      {
+        "path": "/tmp/havenline-t04-independent/measure-matched-drift.gd",
+        "sha256": "c9e0913b61380f8a6dd09e1817cae0d00576239d8f9d55e8403f420bf4c644c4"
+      }
+    ],
+    "evidence": [
+      {
+        "path": "/tmp/havenline-t04-independent/touch-baseline/test.log",
+        "sha256": "d005491cbd0361b0240952f2bc40518216715ccc8f8846642bd9d74c0229572f"
+      },
+      {
+        "path": "/tmp/havenline-t04-independent/touch-baseline/Source.sha256",
+        "sha256": "f55a69fac2726dbcd70a8131ca7b7ac05c94b947ff66efd8b9f286151a94f13d"
+      },
+      {
+        "path": "/tmp/havenline-t04-independent/motion-cap/test.log",
+        "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+      },
+      {
+        "path": "/tmp/havenline-t04-independent/motion-cap/Source.sha256",
+        "sha256": "a25f8168a6db50f662c026673de9328d29881be290edb87576e6fb2f171b25fe"
+      }
+    ],
+    "candidate_measurement": {
+      "path": "/tmp/havenline-t04-independent/motion-cap/Movement.json",
+      "sha256": "df3586aad0a812f43975ea2e7dd23c469a2ace3c5a6ae00d71f6a2a6d0543f1c"
+    }
+  },
+  "independent_gate_touch": {
+    "measurements": [
+      {
+        "camera_basis_fixed": true,
+        "feet_in_view": true,
+        "foot_y_range": [
+          0.549044847488403,
+          0.582560241222382
+        ],
+        "gate": "gate-south",
+        "gate_open_peak": 1.5707963267949,
+        "local_end": [
+          0.0800006091594696,
+          0.0,
+          -3.04555106163025
+        ],
+        "logical": "(720.0, 1680.0)",
+        "max_camera_screen_travel_normalized_short_axis_per_tick": 0.0102629134288201,
+        "physical_pixels": [
+          360,
+          840
+        ],
+        "samples": [
+          {
+            "angle": 1.53333333333333,
+            "extra_screen_step": 0.000515042231059991,
+            "gate_local": [
+              0.0799999982118607,
+              0.0,
+              3.4186110496521
+            ],
+            "tick": 0,
+            "y": 0.549044847488403
+          },
+          {
+            "angle": 1.5707963267949,
+            "extra_screen_step": 0.00928778144029471,
+            "gate_local": [
+              0.0799999982118607,
+              0.0,
+              2.84361124038696
+            ],
+            "tick": 12,
+            "y": 0.566147089004517
+          },
+          {
+            "angle": 1.5707963267949,
+            "extra_screen_step": 0.00849115905853418,
+            "gate_local": [
+              0.0799999982118607,
+              0.0,
+              1.61861228942871
+            ],
+            "tick": 24,
+            "y": 0.579984784126282
+          },
+          {
+            "angle": 1.5707963267949,
+            "extra_screen_step": 0.00553861260414124,
+            "gate_local": [
+              0.0799999982118607,
+              0.0,
+              0.368614196777344
+            ],
+            "tick": 36,
+            "y": 0.582118630409241
+          },
+          {
+            "angle": 1.5707963267949,
+            "extra_screen_step": 0.00486310800680747,
+            "gate_local": [
+              0.0799999982118607,
+              0.0,
+              -0.881383895874023
+            ],
+            "tick": 48,
+            "y": 0.578316688537598
+          },
+          {
+            "angle": 1.5707963267949,
+            "extra_screen_step": 0.00474220686233961,
+            "gate_local": [
+              0.0799999758601189,
+              0.0,
+              -2.13138389587402
+            ],
+            "tick": 60,
+            "y": 0.573403000831604
+          }
+        ],
+        "zoom": 1.0
+      },
+      {
+        "camera_basis_fixed": true,
+        "feet_in_view": true,
+        "foot_y_range": [
+          0.494829952716827,
+          0.627819001674652
+        ],
+        "gate": "gate-east",
+        "gate_open_peak": 1.5707963267949,
+        "local_end": [
+          0.0799996852874756,
+          0.0,
+          3.04556846618652
+        ],
+        "logical": "(720.0, 799.0)",
+        "max_camera_screen_travel_normalized_short_axis_per_tick": 0.0238983654058897,
+        "physical_pixels": [
+          492,
+          546
+        ],
+        "samples": [
+          {
+            "angle": 0.0,
+            "extra_screen_step": 0.000505486861444437,
+            "gate_local": [
+              0.0799999982118607,
+              0.0,
+              -3.41861152648926
+            ],
+            "tick": 0,
+            "y": 0.550133764743805
+          },
+          {
+            "angle": 0.191666666666667,
+            "extra_screen_step": 0.0211314857006073,
+            "gate_local": [
+              0.0799999758601189,
+              0.0,
+              -2.84361171722412
+            ],
+            "tick": 12,
+            "y": 0.524219274520874
+          },
+          {
+            "angle": 0.651666666666667,
+            "extra_screen_step": 0.0197420028539804,
+            "gate_local": [
+              0.0799999237060547,
+              0.0,
+              -1.61861133575439
+            ],
+            "tick": 24,
+            "y": 0.500044167041779
+          },
+          {
+            "angle": 1.11166666666667,
+            "extra_screen_step": 0.0134828893037943,
+            "gate_local": [
+              0.0799998641014099,
+              0.0,
+              -0.368607521057129
+            ],
+            "tick": 36,
+            "y": 0.495088040828705
+          },
+          {
+            "angle": 1.5707963267949,
+            "extra_screen_step": 0.00828381742422397,
+            "gate_local": [
+              0.0799998119473457,
+              0.0,
+              0.881396293640137
+            ],
+            "tick": 48,
+            "y": 0.567789435386658
+          },
+          {
+            "angle": 1.5707963267949,
+            "extra_screen_step": 0.0022297385506905,
+            "gate_local": [
+              0.0799998268485069,
+              0.0,
+              2.1314001083374
+            ],
+            "tick": 60,
+            "y": 0.604025721549988
+          }
+        ],
+        "zoom": 2.0
+      }
+    ],
+    "fixture": {
+      "path": "/tmp/havenline-t04-independent/measure-gate-camera.gd",
+      "sha256": "4eee3d6bcf1dad9dd5ca919fc1a671e7888fce51d41521812b4586f40a58123a"
+    },
+    "evidence": [
+      {
+        "path": "/tmp/havenline-t04-independent/gate-cap/test.log",
+        "sha256": "193938da612459cb56b1ae084bea407c78cb569f920c82205f6784576f12e057"
+      },
+      {
+        "path": "/tmp/havenline-t04-independent/gate-cap/Source.sha256",
+        "sha256": "a25f8168a6db50f662c026673de9328d29881be290edb87576e6fb2f171b25fe"
+      }
+    ]
+  },
+  "regression_proofs": [
+    {
+      "path": "/tmp/havenline-t04/smooth-tests/results-camera.txt",
+      "sha256": "e24fa0a4e4aa515b6e0833f41922f0d670c6cf673a13f93962dc90d5867749ab"
+    },
+    {
+      "path": "/tmp/havenline-t04/smooth-tests/results-world.txt",
+      "sha256": "2db7a874b49b7e42d791b047541388d11c68e0fbae135c670a8d026fadbabab4"
+    },
+    {
+      "path": "/tmp/havenline-t04/smooth-tests/qa_field_camera_composition/test.log",
+      "sha256": "0352f6f21f4ed4488147a3d390cfd77aa2a5b48d2e8b5ca35f0c00430bbfc61b"
+    },
+    {
+      "path": "/tmp/havenline-t04/smooth-tests/qa_field_hud/test.log",
+      "sha256": "34e09e32d37e2f2090c70307ef7275dc1473956b2746a7b3d9cb172309c4283f"
+    },
+    {
+      "path": "/tmp/havenline-t04/legacy-hud.log",
+      "sha256": "34e09e32d37e2f2090c70307ef7275dc1473956b2746a7b3d9cb172309c4283f"
+    }
+  ],
+  "independent_native_motion": {
+    "measurements": {
+      "path": "/tmp/havenline-t04/smooth-motion/Movement.json",
+      "sha256": "f7ac6547482667f93533225a38f4644e6f36573b7872bda53deb03cdfd4cfa24"
+    },
+    "runtime_digests": {
+      "path": "/tmp/havenline-t04/smooth-motion/Source.sha256",
+      "sha256": "9dc2ab8353045c63b860a90aaca29ffc09ef4892037ce75cce21076a3ca4298c"
+    },
+    "film": {
+      "path": "/tmp/havenline-t04/smooth-motion/Camera-movement.mp4",
+      "sha256": "b2bec006a8005c318c21e451a610c848a40317b517608ef63504842298c8087f"
+    },
+    "decoded_review": {
+      "sha256": "b2bec006a8005c318c21e451a610c848a40317b517608ef63504842298c8087f",
+      "frames_decoded": 56,
+      "display_window_px": [
+        460,
+        760
+      ],
+      "display_fps": 15,
+      "physics_fps": 60,
+      "segments": [
+        {
+          "heading": "west",
+          "frames": [
+            0,
+            27
+          ]
+        },
+        {
+          "heading": "east",
+          "frames": [
+            28,
+            55
+          ]
+        }
+      ],
+      "review": [
+        "Decoded both takes directly from the final MP4 and inspected sequential frames through steering, context entry/exit and release.",
+        "The player, perimeter and relevant next plot remain readable during running and stop. Track follows without the large previous one-frame target correction.",
+        "The take boundary is the cut between the two intentional opposite-heading trials.",
+        "Gate crossings were independently sampled every 60 Hz physics tick in the live gameplay scene."
+      ],
+      "thumbnail_boards": [
+        "/tmp/havenline-t04-independent/Exact-motion-west.jpg",
+        "/tmp/havenline-t04-independent/Exact-motion-east.jpg"
+      ]
+    }
+  }
+}
