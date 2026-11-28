@@ -264,6 +264,9 @@ func refresh()->void:
 				var duty:=str(world.survivor.phase).replace("_"," ").capitalize()
 				description=duty+"  •  "+str(journal.worker_deliveries)+" deliveries"
 				list.append(_entry("Find survivor","worker"))
+				if world.player_character() != 1 and world.survivor.can_defend():
+					var selected: bool = world.player_wardrobe.companion_selected
+					list.append(_entry("Use forester" if selected else "Use Character 1", "companion_0" if selected else "companion_1"))
 			elif journal.survivor_paid:
 				description="Rescue is funded. Meet the survivor in the field."
 				list.append(_entry("Find survivor","worker"))
@@ -350,6 +353,9 @@ func refresh()->void:
 	reflow()
 
 func choose(id:String)->void:
+	if id in ["companion_0", "companion_1"]:
+		if world.set_companion_character(id == "companion_1"): refresh()
+		return
 	if id=="list_next":
 		list_page+=1
 		refresh()

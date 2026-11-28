@@ -228,6 +228,40 @@ func _begin_launch() -> void:
 	launch_remaining = FIELD_LAUNCH_SECONDS
 	contact_world.character_kit.locomotion.match_field_launch(launch_support)
 
+func follow_pivot(boots: Array[Transform3D], toes: Array[Transform3D], heading: float, first: int, step: float) -> void:
+	# A route may already own the heading and two stepping beats. Seat this
+	# rig against that same plan using its own ankle and toe rest poses.
+	var body: Node3D = contact_world.actor
+	var finish := Transform3D(Basis(Vector3.UP, heading), body.global_position)
+	var support_side := 1 - first if step < 1. else first
+	var support_boot := boots[support_side] if step < 1. else finish * neutral_ankles[support_side]
+	for side in 2:
+		var t := smoothstep(0., 1., clampf(step - (0. if side == first else 1.), 0., 1.))
+		var goal := boots[side].interpolate_with(finish * neutral_ankles[side], t)
+		goal.origin.y += .077 * sin(PI * t)
+		var toe := toes[side].interpolate_with(neutral_toes[side], t)
+		_place_boot(side, goal, toe, false)
+		var correction := body.global_position.y - _heights()[side]
+		if correction > .0008 or (side == support_side and absf(correction) > .0008):
+			goal = _boot_world(side)
+			goal.origin.y += correction + .0003
+			_place_boot(side, goal, toe, false)
+	var gap := _heights()[support_side] - body.global_position.y
+	var planted := _boot_world(support_side)
+	var slip := (planted.origin - support_boot.origin).slide(Vector3.UP)
+	if gap > .0015 or slip.length_squared() > .000004:
+		var chain: Array = leg_chains[support_side]
+		var floor_boot := planted
+		var toes_on_floor := _toe_relative(support_side)
+		floor_boot.origin -= slip + Vector3.UP * (gap - .00025)
+		var hip := skeleton.to_global(skeleton.get_bone_global_pose(chain[0]).origin)
+		var knee := skeleton.to_global(skeleton.get_bone_global_pose(chain[1]).origin)
+		var reach := hip.distance_to(knee) + knee.distance_to(planted.origin) - .0015
+		var beyond := maxf(0., hip.distance_to(floor_boot.origin) - reach)
+		if beyond > .001:
+			support_action(hip.direction_to(floor_boot.origin) * minf(.12, beyond + .002))
+		_place_boot(support_side, floor_boot, toes_on_floor, false)
+
 
 func support_action(world_offset: Vector3) -> Dictionary:
 	# The hips can load or shift between the boots without moving the capsule
@@ -449,9 +483,10 @@ func _release_last_foot(dt: float) -> void:
 	bridge_time += dt
 
 
-func _bind_soles(world: Node3D) -> void:
+func _bind_soles(world: Node3D, visual: Node3D = null) -> void:
 	var body: Node3D = world.actor
-	for part: MeshInstance3D in body.find_children("*", "MeshInstance3D", true, false):
+	var source := visual if visual else body
+	for part: MeshInstance3D in source.find_children("*", "MeshInstance3D", true, false):
 		if not part.skin:
 			continue
 		skeleton = part.get_node(part.skeleton)

@@ -14,6 +14,7 @@ var visual: Node3D
 var target: Skeleton3D
 var number := 1
 var settings_path := ""
+var companion_selected := false
 var mapping: Array = []
 var feet: Array = []
 var arms: Array = []
@@ -35,7 +36,16 @@ func setup(host: Node3D) -> void:
 	settings_path = "user://field-player.cfg" if world.field_save.native_profile else world.field_save.directory.path_join("field-player.cfg")
 	var prefs := ConfigFile.new()
 	if prefs.load(settings_path) == OK:
+		companion_selected = prefs.get_value("player", "character_one_companion", false) == true
 		choose(int(prefs.get_value("player","character",1)),false)
+
+func choose_companion(enabled: bool) -> bool:
+	var prefs := ConfigFile.new()
+	prefs.load(settings_path)
+	prefs.set_value("player", "character_one_companion", enabled)
+	if prefs.save(settings_path) != OK: return false
+	companion_selected = enabled
+	return true
 
 func choose(id: int, persist := true) -> bool:
 	if id == number: return true
@@ -81,6 +91,7 @@ func choose(id: int, persist := true) -> bool:
 			return false
 	if persist:
 		var prefs := ConfigFile.new()
+		prefs.load(settings_path)
 		prefs.set_value("player","character",id)
 		if prefs.save(settings_path) != OK:
 			if next: next.queue_free()

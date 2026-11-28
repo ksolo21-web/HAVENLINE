@@ -18,6 +18,7 @@ const FOOT_RADIUS := .25
 const SUPPLIES := ["wood","stone","meat"]
 var world
 var actor: Node3D
+var core_motion: Node3D
 var tree
 var phase := "waiting_rescue"
 var contacts := 0
@@ -146,6 +147,36 @@ func setup(host: Node3D) -> void:
 
 func at_rescue(at: Vector3) -> bool:
 	return phase == "waiting_rescue" and world.inventory.settlement.get("survivor_paid",false) and at.distance_to(actor.global_position) <= 1.46
+
+func sync_core_appearance() -> void:
+	var wanted: bool = world.player_wardrobe.companion_selected and world.player_character() != 1 and can_defend()
+	set_core_appearance(wanted)
+
+func set_core_appearance(enabled: bool) -> bool:
+	if enabled == is_instance_valid(core_motion): return true
+	if enabled:
+		var display := preload("res://field_companion_motion.gd").new()
+		display.name = "Character1Companion"
+		actor.add_child(display)
+		if not display.bind(world, actor):
+			display.queue_free()
+			return false
+		core_motion = display
+		actor.tool_pose = Callable(display, "clear_tool_path")
+		actor.body_model.hide()
+	else:
+		actor.tool_pose = Callable()
+		core_motion.hide()
+		core_motion.queue_free()
+		core_motion = null
+		actor.body_model.show()
+	if world.tracks.living.has(actor):
+		world.tracks.living[actor].sole_sample = Callable(core_motion.gait, "snow_contact_points") if enabled else Callable()
+		world.tracks.reset_actor(actor)
+	return true
+
+func _motion_contact(action: StringName, at: Vector3) -> void:
+	if core_motion: core_motion.contact(action, at)
 
 func can_claim(token: String) -> bool:
 	if phase != "pickup" or token != pickup_token or not world.drops.has(token) or not is_instance_valid(tree): return false
@@ -490,20 +521,28 @@ func advance(dt: float) -> void:
 	wildlife.advance(dt,hunter)
 	var journal: Dictionary = world.inventory.settlement
 	if journal.rescued and not Crew.survivor_alive(journal):
+		if core_motion: core_motion.start_frame()
 		_advance_fallen(dt)
+		if core_motion: core_motion.advance(dt, "fallen", false)
 		return
 	if phase == "fallen":
 		_return_replacement()
+		sync_core_appearance()
+	if core_motion: core_motion.start_frame()
 	hit_flare = maxf(0.0,hit_flare-dt)
 	health_label.visible = hit_flare>0.0
 	actor.forester_gait.pivot_frame = false
-	if not _defend(dt): _advance_tasks(dt)
+	var defending := _defend(dt)
+	if not defending: _advance_tasks(dt)
 	if actor.mode=="travel" and not actor.forester_gait.pivot_frame:
 		actor.forester_gait.settle_contact(dt,actor)
 	else:
 		actor.forester_gait.previous_points.clear()
 		actor.forester_gait.marker.fill(-1)
 		actor.forester_gait.correction.fill(Vector3.ZERO)
+	if core_motion:
+		var struck := defend_landed if defending else (hunt_contacted if phase == "hunt_strike" else (bank_hit if actor.mode == "mine" else swing_landed))
+		core_motion.advance(dt, "defend" if defending else phase, struck)
 
 func can_defend() -> bool:
 	return is_instance_valid(actor) and actor.is_visible_in_tree() and Crew.survivor_alive(world.inventory.settlement)
@@ -716,6 +755,8 @@ func _advance_tasks(dt: float) -> void:
 			step_cycle=fposmod(step_cycle+dt*.45,1)
 			actor.pose("idle",step_cycle)
 			if at_rescue(world.actor.global_position) and world.rescue_survivor():
+				sync_core_appearance()
+				_motion_contact(&"rescue",world.actor.global_position)
 				_begin_outbound()
 				if phase=="waiting_rescue": phase="waiting_storage"
 		"first_walk":
@@ -749,7 +790,8 @@ func _advance_tasks(dt: float) -> void:
 			if _walk_route(dt,false):
 				actor.rotation.y = PI
 				actor.pose("receive",.48 if world.counter.sale_order != 0 else .22)
-				world.settlement_loop.worker_stock_counter()
+				if world.settlement_loop.worker_stock_counter():
+					_motion_contact(&"service",world.counter.payment_rest.global_position)
 				_sync_pack()
 				_return_to_shelf()
 		"hunt_approach","hunt_strike","hunt_pickup":
@@ -830,6 +872,7 @@ func _advance_tasks(dt: float) -> void:
 				pack.sync(true)
 			actor.bundle.global_position = receipt_departure.lerp(target,u)+Vector3.UP*.28*sin(u*PI)
 			if u >= 1. and world.receive_worker_wood():
+				_motion_contact(&"deposit", target)
 				actor.bundle.hide()
 				pack.rack.show()
 				_sync_pack()
@@ -1278,6 +1321,9 @@ func _work_field(dt: float) -> void:
 			if not _source_available(assigned_bank,"seated"):
 				_go_home_bulk()
 			elif _walk_route(dt,false):
+				if core_motion:
+					var facing := actor.global_position.direction_to(assigned_bank.global_position)
+					if actor.forester_gait.turn_towards(actor, atan2(facing.x, facing.z) - .74, dt, true): return
 				failed_swings=0
 				_begin_mining()
 		"mining":
@@ -1298,7 +1344,7 @@ func _begin_mining() -> void:
 	_face_site(assigned_bank)
 	# A slight working flank lets the full pick travel beside his head while
 	# both boots stay planted and the cutting point still reaches the bank.
-	actor.rotation.y-=.35
+	actor.rotation.y -= .74 if core_motion else .35
 	actor.work_strike_point=aim
 	bank_swing=0.0
 	bank_hit=false
@@ -1369,6 +1415,7 @@ func _unload_stream(dt: float) -> void:
 		delivery_stream.erase(transfer)
 		_sync_pack()
 		if not world.settlement_loop.commit_receipt("deposit_"+kind,target): return
+		_motion_contact(&"deposit",target)
 	if next_packet == unload_packets.size() and delivery_stream.is_empty(): _leave_shelf()
 
 func _still_due(id: String, kind: String) -> int:
@@ -1440,7 +1487,11 @@ func _deliver_to_plot(dt: float) -> void:
 	if amount > 0 and book.worker_payment(assisted_plot,spend_kind,amount):
 		_sync_pack()
 		if not world.settlement_loop.commit_receipt("spend_"+spend_kind,pad.global_position): return
-		if book.complete(assisted_plot): world._finish_purchase(assisted_plot)
+		if book.complete(assisted_plot):
+			world._finish_purchase(assisted_plot)
+			_motion_contact(&"build",pad.global_position)
+		else:
+			_motion_contact(&"deposit",pad.global_position)
 	transfer_mesh.queue_free()
 	transfer_mesh = null
 	spend_kind = ""

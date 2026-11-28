@@ -24,13 +24,13 @@ const CLIPS := {
 const PATHS := {
 	&"chop": [
 		[Vector3(-.13,.03,.84), Vector3(.39,.25,.76), Vector3(-6,-14,-5)],
-		[Vector3(-.20,-.62,.73), Vector3(-.18,-.40,.84), Vector3(16,8,5)],
-		[Vector3(-.04,-.78,.56), Vector3(-.20,-.58,.74), Vector3(19,12,7)],
+		[Vector3(.25,-.57,.75), Vector3(-.12,-.38,.88), Vector3(16,8,5)],
+		[Vector3(.26,-.70,.60), Vector3(-.04,-.54,.79), Vector3(19,12,7)],
 	],
 	&"mine": [
 		[Vector3(.26,.21,.78), Vector3(.30,.29,.78), Vector3(-10,-4,-2)],
-		[Vector3(-.12,-.72,.62), Vector3(-.05,-.68,.64), Vector3(24,2,2)],
-		[Vector3(-.06,-.76,.60), Vector3(-.04,-.74,.60), Vector3(22,4,3)],
+		[Vector3(.17,-.69,.64), Vector3(.19,-.66,.69), Vector3(24,2,2)],
+		[Vector3(.19,-.73,.60), Vector3(.21,-.68,.66), Vector3(22,4,3)],
 	],
 	&"dismantle": [
 		[Vector3(-.10,-.51,.70), Vector3(.28,-.64,.55), Vector3(7,-8,0)],
@@ -38,13 +38,13 @@ const PATHS := {
 		[Vector3(-.08,-.56,.67), Vector3(.55,-.35,.41), Vector3(2,-18,-8)],
 	],
 	&"deposit": [
-		[Vector3(-.06,-.64,.63), Vector3(-.04,-.63,.65), Vector3(4,0,0)],
-		[Vector3(-.15,-.34,.81), Vector3(-.12,-.36,.82), Vector3(12,2,0)],
-		[Vector3(-.05,-.42,.76), Vector3(-.02,-.42,.74), Vector3(8,2,0)],
+		[Vector3(.23,-.58,.66), Vector3(.22,-.58,.67), Vector3(4,0,0)],
+		[Vector3(.07,-.32,.87), Vector3(.10,-.34,.89), Vector3(12,2,0)],
+		[Vector3(.16,-.40,.80), Vector3(.16,-.40,.80), Vector3(8,2,0)],
 	],
 	&"build": [
 		[Vector3(.10,-.83,.38), Vector3(.21,.28,.64), Vector3(-2,-10,-4)],
-		[Vector3(.08,-.77,.46), Vector3(-.30,-.54,.76), Vector3(15,7,3)],
+		[Vector3(.21,-.75,.46), Vector3(.08,-.50,.80), Vector3(15,7,3)],
 		[Vector3(.07,-.82,.38), Vector3(.10,-.52,.66), Vector3(8,8,3)],
 	],
 	&"repair": [
@@ -54,13 +54,13 @@ const PATHS := {
 	],
 	&"rescue": [
 		[Vector3(.17,-.75,.54), Vector3(.19,-.78,.51), Vector3(20,0,0)],
-		[Vector3(-.16,-.64,.71), Vector3(-.08,-.68,.71), Vector3(24,4,1)],
-		[Vector3(-.15,-.27,.79), Vector3(-.08,-.30,.82), Vector3(8,4,1)],
+		[Vector3(.13,-.61,.75), Vector3(.20,-.64,.73), Vector3(24,4,1)],
+		[Vector3(.04,-.27,.84), Vector3(.08,-.30,.85), Vector3(8,4,1)],
 	],
 	&"service": [
-		[Vector3(.07,-.79,.34), Vector3(-.17,-.56,.65), Vector3(2,-6,-3)],
-		[Vector3(-.07,-.68,.51), Vector3(-.13,-.22,.91), Vector3(8,10,3)],
-		[Vector3(.00,-.70,.49), Vector3(-.12,-.33,.81), Vector3(6,8,2)],
+		[Vector3(.17,-.79,.34), Vector3(.17,-.52,.68), Vector3(2,-6,-3)],
+		[Vector3(.14,-.68,.52), Vector3(.14,-.22,.91), Vector3(8,10,3)],
+		[Vector3(.15,-.70,.49), Vector3(.14,-.33,.85), Vector3(6,8,2)],
 	],
 	&"attack_contact": [
 		[Vector3(.08,-.42,.70), Vector3(.12,-.37,.64), Vector3(-5,-21,-7)],
@@ -93,6 +93,7 @@ var spine := -1
 var neck := -1
 var arms: Array = []
 var original_rotations: Dictionary = {}
+var original_positions: Dictionary = {}
 var action: StringName = &""
 var seconds := 0.0
 var visual_weight := 0.0
@@ -128,6 +129,9 @@ static func select(speed: float, facing: float, requested_facing: float, context
 	return {"action": gait, "turn": 0 if degrees < 12. else (30 if degrees < 60. else (90 if degrees < 135. else 180)), "side": signf(rotation)}
 
 func clear_pose() -> void:
+	for joint: int in original_positions:
+		rig.set_bone_pose_position(joint, original_positions[joint])
+	original_positions.clear()
 	for joint: int in original_rotations:
 		rig.set_bone_pose_rotation(joint, original_rotations[joint])
 	original_rotations.clear()
@@ -176,7 +180,7 @@ func contact(new_action: StringName, at: Vector3) -> void:
 	has_contact = true
 	transfer = false
 
-func advance(dt: float, speed: float, transferring: bool) -> void:
+func advance(dt: float, speed: float, transferring: bool, role := LEAD) -> void:
 	if action.is_empty() or rig == null: return
 	var clip: Array = CLIPS[action]
 	var duration: float = clip[0]
@@ -189,7 +193,7 @@ func advance(dt: float, speed: float, transferring: bool) -> void:
 	var limit: float = duration if has_contact else duration * maxf(float(clip[1]), float(clip[2]) - .025)
 	var phase := seconds / duration
 	visual_weight = lerpf(visual_weight, gain, 1. - exp(-18. * dt))
-	pose(select(speed, actor.rotation.y, actor.rotation.y, action, phase, LEAD), visual_weight, target, previous_action)
+	pose(select(speed, actor.rotation.y, actor.rotation.y, action, phase, role), visual_weight, target, previous_action)
 	if not previous_action.is_empty():
 		previous_action.elapsed += dt
 		if previous_action.elapsed > .105: previous_action.clear()
@@ -252,31 +256,121 @@ func _pose_arm(chain: Array, axes: Basis, wrist: Vector3, side: float, weight: f
 	var upper := rig.get_bone_global_pose(chain[0])
 	var lower := rig.get_bone_global_pose(chain[1])
 	var hand := rig.get_bone_global_pose(chain[2])
+	var span := upper.origin.distance_to(lower.origin) + lower.origin.distance_to(hand.origin)
+	var desired := upper.origin + axes * Vector3(wrist.x * side, wrist.y, wrist.z) * span
+	# Low work passes the belt with the elbow in front of the coat's flank.
+	var low := smoothstep(.24, .74, -wrist.y)
+	var outside := axes * Vector3(side, lerpf(-.63, -.32, low), lerpf(-.27, .46, low))
+	_solve_arm(chain, hand.origin.lerp(desired, weight), outside, weight, axes.x * side)
+	GloveClearance.solve(rig, actor, chain)
+
+func grip_tool(tool: Node3D, grips: Array, brace_limit: float, mining: bool) -> void:
+	var axes := (rig.global_basis.inverse() * actor.global_basis).orthonormalized()
+	# Keep the head and hood back while the shoulders feed the shaft forward.
+	var lean := Basis(axes.x, -.35)
+	_rotate(spine, lean * rig.get_bone_global_pose(spine).basis)
+	_rotate(neck, Basis(axes.x, .11) * rig.get_bone_global_pose(neck).basis)
+	var hold := (rig.global_basis.inverse() * tool.global_basis).orthonormalized()
+	var wrists: Array[Vector3] = []
+	var hand_frames: Array[Basis] = []
+	for side in 2:
+		var sign_x := 1. if side == 0 else -1.
+		var palm := rig.to_local(tool.to_global(grips[side]))
+		var shoulder := rig.get_bone_global_pose(arms[side][0]).origin
+		var across := -sign_x * hold.y
+		var fingers := (palm - shoulder).slide(across).normalized()
+		# Cross the wrist around the shaft rather than send the cuff along it.
+		var wrist_roll := .58
+		if side == 1:
+			wrist_roll = .89 if mining else -.90
+		fingers = fingers.rotated(across, wrist_roll)
+		var frame := Basis(across, fingers, across.cross(fingers))
+		wrists.append(palm - frame.y * .05)
+		hand_frames.append(frame)
+	# The same world-space contact path serves both human rigs. Fit Character
+	# 1's stance toward the shaft wherever its arm would otherwise overreach.
+	# The grounded hip solver preserves both boots and their cuffs.
+	var brace := Vector3.ZERO
+	for pass_ in 3:
+		for side in 2:
+			var chain: Array = arms[side]
+			var upper := rig.get_bone_global_pose(chain[0]).origin
+			var forearm := rig.get_bone_global_pose(chain[1]).origin
+			var hand := rig.get_bone_global_pose(chain[2]).origin
+			var reach := upper.distance_to(forearm) + forearm.distance_to(hand) - .009
+			var needed := wrists[side] - upper - brace
+			brace += needed - needed.limit_length(reach)
+	var shift := (rig.global_basis * brace).limit_length(brace_limit)
+	if support_motor and shift.length_squared() > .000001:
+		shift.y = minf(0., shift.y)
+		var forward := actor.global_basis.z.normalized()
+		# Reach with the shoulders over a braced waist. Pulling the whole
+		# body forward traps the back end of the shaft against the belt.
+		var lean_depth := clampf(shift.dot(forward) * .72, 0., .125)
+		var upper_offset := forward * lean_depth
+		support_base.merge(support_motor.support_action(shift - upper_offset))
+		if lean_depth > .001:
+			original_positions[spine] = rig.get_bone_pose_position(spine)
+			var parent := rig.get_bone_global_pose(rig.get_bone_parent(spine)).basis
+			var local := (rig.global_basis * parent).inverse() * upper_offset
+			rig.set_bone_pose_position(spine, original_positions[spine] + local)
+	var handle_center := rig.to_local(tool.to_global((grips[0] + grips[1]) * .5))
+	var shaft := (hold * Vector3(grips[1] - grips[0])).normalized()
+	for side in 2:
+		var chain: Array = arms[side]
+		var sign_x := 1. if side == 0 else -1.
+		var upper := rig.get_bone_global_pose(chain[0]).origin
+		var away := (upper - handle_center).slide(shaft).normalized()
+		var bend := axes * Vector3(sign_x, -.74, .08) + away * 2.1
+		_solve_arm(chain, wrists[side], bend, 1., axes.x * sign_x)
+		_rotate(chain[2], hand_frames[side])
+
+func _solve_arm(chain: Array, wrist: Vector3, elbow_hint: Vector3, weight: float, lateral: Vector3) -> void:
+	var upper := rig.get_bone_global_pose(chain[0])
+	var lower := rig.get_bone_global_pose(chain[1])
+	var hand := rig.get_bone_global_pose(chain[2])
 	var a := upper.origin.distance_to(lower.origin)
 	var b := lower.origin.distance_to(hand.origin)
 	if minf(a, b) < .001: return
 	var span := a + b
-	var desired := upper.origin + axes * Vector3(wrist.x * side, wrist.y, wrist.z) * span
-	var travel := hand.origin.lerp(desired, weight) - upper.origin
+	var travel := wrist - upper.origin
 	var direction := travel.normalized()
 	if direction.is_zero_approx(): return
 	var reach := clampf(travel.length(), absf(a - b) + .0001, span - .0001)
 	var along := (a * a - b * b + reach * reach) / (2. * reach)
 	var original_pole := (lower.origin - upper.origin).slide(direction).normalized()
-	var outside := (axes * Vector3(side, -.63, -.27)).slide(direction).normalized()
+	var outside := elbow_hint.slide(direction).normalized()
 	# A linear pole blend can cross zero and flip the mitten through the coat.
 	# Keep the authored elbow on the same side of its bend plane through entry.
 	var blend := weight * smoothstep(-.95, -.30, original_pole.dot(outside))
 	var pole := original_pole.lerp(outside, blend).normalized()
 	if pole.length_squared() < .001: pole = outside
-	var elbow := upper.origin + direction * along + pole * sqrt(maxf(0., a * a - along * along))
+	var center := upper.origin + direction * along
+	var radius := sqrt(maxf(0., a * a - along * along))
+	var outward := lateral.slide(direction)
+	if radius * outward.length() > .001:
+		var opening := outward.normalized()
+		var local := actor.to_local(rig.to_global(center + pole * radius))
+		# An elbow can follow a forward hand yet pinch into the belt with its
+		# inner sleeve. Keep the bony center outside the flanks, fading toward
+		# the shoulder where the coat pieces are sewn together.
+		var flank := smoothstep(.43, .56, local.y) * (1. - smoothstep(.78, .94, local.y))
+		var width := .385 - .030 * smoothstep(.24, .48, absf(local.z))
+		var existing := pole.dot(opening)
+		var gain := smoothstep(.02, .73, weight) * flank
+		var extra := maxf(0., width - absf(local.x)) * gain
+		var adjusted := clampf(existing + extra / (radius * outward.length()), -.985, .985)
+		if adjusted > existing and existing < .985:
+			var tangent := pole.slide(opening).normalized()
+			if tangent.is_zero_approx(): tangent = direction.cross(opening)
+			pole = opening * adjusted + tangent * sqrt(1. - adjusted * adjusted)
+	var elbow := center + pole * radius
 	var endpoint := upper.origin + direction * reach
 	var shoulder_turn := Quaternion(upper.origin.direction_to(lower.origin), upper.origin.direction_to(elbow))
 	var elbow_turn := Quaternion(lower.origin.direction_to(hand.origin), elbow.direction_to(endpoint))
 	_rotate(chain[0], Basis(shoulder_turn) * upper.basis)
 	_rotate(chain[1], Basis(elbow_turn) * lower.basis)
 	_rotate(chain[2], Basis(elbow_turn) * hand.basis)
-	GloveClearance.solve(rig, actor, chain)
 
 func sockets() -> Dictionary:
 	var left := _palm(0)

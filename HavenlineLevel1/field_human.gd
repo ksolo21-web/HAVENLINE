@@ -15,15 +15,19 @@ var tool: Node3D
 var bundle: Node3D
 var bones := {}
 var mode := ""
+var pose_progress := 0.0
+var body_model: Node3D
 var identity := ""
 var forester_gait: RefCounted
 var work_strike_point := Vector3.INF
+var tool_pose: Callable
 
 func configure(id: String) -> void:
 	if not PORTRAITS.has(id) or skeleton: return
 	identity = id
 	var model: Node3D = PORTRAITS[id].instantiate()
 	add_child(model)
+	body_model = model
 	skeleton = model.find_children("*","Skeleton3D",true,false)[0]
 	var surface: MeshInstance3D = model.find_children("*","MeshInstance3D",true,false)[0]
 	for index in surface.mesh.get_surface_count():
@@ -85,6 +89,7 @@ func _bend(bone: String, x: float, y: float = 0, z: float = 0) -> void:
 
 func pose(action: String, phase: float) -> void:
 	if not skeleton: return
+	pose_progress = phase
 	if action != mode:
 		skeleton.reset_bone_poses()
 		mode = action
@@ -95,7 +100,9 @@ func pose(action: String, phase: float) -> void:
 	if mode in ["chop","mine"]:
 		if not forester_gait: return
 		var target := to_local(work_strike_point) if work_strike_point.is_finite() else Vector3(0,.96,.64)
-		WorkSwing.drive(self,mining_tool if mode=="mine" else tool,phase,mode=="mine",target)
+		var held := mining_tool if mode == "mine" else tool
+		WorkSwing.drive(self,held,phase,mode=="mine",target)
+		if tool_pose.is_valid(): tool_pose.call(held, mode == "mine", phase)
 		return
 	if mode == "receive":
 		var reach := sin(clampf(phase,0.,1.)*PI)

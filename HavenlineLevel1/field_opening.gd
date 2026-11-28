@@ -96,7 +96,18 @@ func set_player_character(number: int) -> bool:
 	character_motion.cancel()
 	gait_motor.field_launch_enabled = player_wardrobe.number == 1
 	gait_motor.launch_remaining = 0.
+	survivor.sync_core_appearance()
 	opening_hud.set_character_portrait(player_wardrobe.number)
+	return true
+
+func set_companion_character(enabled: bool) -> bool:
+	if not field_ready or persist_blocked or player_character() == 1 or not survivor.can_defend(): return false
+	var before: bool = player_wardrobe.companion_selected
+	if enabled and not survivor.set_core_appearance(true): return false
+	if not player_wardrobe.choose_companion(enabled):
+		survivor.set_core_appearance(before)
+		return false
+	survivor.sync_core_appearance()
 	return true
 
 func player_character() -> int:
@@ -237,6 +248,7 @@ func _ready() -> void:
 	camp_layout.layout_changed.connect(camp_layout.place_vehicle_offers)
 	camp_layout.place_vehicle_offers()
 	player_wardrobe.setup(self)
+	survivor.sync_core_appearance()
 	gait_motor.field_launch_enabled = player_wardrobe.number == 1
 	opening_hud.set_character_portrait(player_wardrobe.number)
 	var home_compass := preload("res://field_navigation.gd").new()
