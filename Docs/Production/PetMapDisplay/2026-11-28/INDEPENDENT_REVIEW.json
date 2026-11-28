@@ -1,0 +1,106 @@
+{
+  "reviewer_agent": "/root/requirements_critic",
+  "review_type": "Genuinely separate documentation review in the callable agent runtime",
+  "review_round": 1,
+  "date": "2026-11-28",
+  "base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+  "reviewed_candidate_tree": "53f9fbf6f70b29103c404612c75536461d79f671",
+  "reviewed_files": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "e80e7962952289cbe65605e9d5dc868a729a9f0582d4d012173113ec7b64c85b",
+      "bytes": 4956
+    },
+    {
+      "path": "BUILD_GAME.md",
+      "sha256": "3f26a5a164b7ed9d570bdca7ef1d6d2c30816d2566f59bdbd9202ea95f896510",
+      "bytes": 9105
+    },
+    {
+      "path": "REPOSITORY_INDEX.md",
+      "sha256": "09f28b4751048c0b1cde243c3c3cc6afb29dbaac8e767b2e0543a3f0ac269d2d",
+      "bytes": 7867
+    },
+    {
+      "path": "Docs/Production/HAVENLINE_BUILD_PLAN_V2.md",
+      "sha256": "67fe096dc732a2cede063a9623e6453e35fbc12d0861ebdf2846d88026215132",
+      "bytes": 36728
+    },
+    {
+      "path": "Docs/Production/COMPLETENESS_STANDARD.md",
+      "sha256": "8aea3ec19031f29100ddc1fb9065246d7b345490b653726c562e8404578842e0",
+      "bytes": 14694
+    },
+    {
+      "path": "Docs/Production/PET_COMBOS_MAP_DISPLAY.md",
+      "sha256": "e0fb0118a58289b4334c1f2ca5164c0138a4a03be4d016dc625a6821f0357a62",
+      "bytes": 19786
+    },
+    {
+      "path": "Docs/Production/PET_COMBOS_MAP_DISPLAY.json",
+      "sha256": "a5f7567aed7bfae5a73f5340d76495884833dced1c69856bacb6dcee80d9924b",
+      "bytes": 29738
+    },
+    {
+      "path": "Docs/Production/PetMapDisplay/2026-11-28/README.md",
+      "sha256": "317f4fec376d422beab446fca4bff8d94713ec128e2833519522cccd16f14345",
+      "bytes": 2094
+    },
+    {
+      "path": "Docs/Production/PetMapDisplay/2026-11-28/CANDIDATE_FILES.json",
+      "sha256": "91486ed1d5118a814c52ebd2a1e170a4eb9b956d98a2aee8ffb523094e5ee01b"
+    }
+  ],
+  "dimension_scores": {
+    "owner_requirement_coverage": 10,
+    "seven_pet_roster_and_combo_design": 10,
+    "navigation_map_requirements": 10,
+    "responsive_display_and_orientation_requirements": 10,
+    "source_precedence_and_task_compatibility": 10,
+    "historical_and_runtime_preservation": 10,
+    "document_consistency_and_links": 10,
+    "evidence_honesty_and_resumption": 10
+  },
+  "minimum_content_score": 10,
+  "verdict": "PASS_DOCUMENTATION_CONTENT_READY_FOR_PUBLICATION",
+  "known_content_defects": [],
+  "checks": {
+    "canonical_species_and_attack_profiles": 7,
+    "distinct_automatic_combos": 7,
+    "requirement_texts_consistent_between_json_and_markdown": 21,
+    "existing_entrypoint_bodies_preserved_exactly": 5,
+    "manifest_file_hashes_verified": 8,
+    "new_local_links_verified": 20,
+    "staged_files_inspected": 9,
+    "git_diff_check": "PASS",
+    "base_operational_github_tree_absent": true,
+    "runtime_assets_workflow_or_dependency_changes": false
+  },
+  "publication_verification": {
+    "status": "PENDING",
+    "intended_action": "Expected-parent fast-forward documentation commit to main",
+    "expected_parent": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+    "complete_documentation_delivery_approved": false,
+    "next_check": "Read exact remote commit/tree and verify all reviewed files; confirm active gameplay/art refs preserved"
+  },
+  "runtime_review": {
+    "score": null,
+    "approved": false,
+    "animation_reviewed": false,
+    "device_behavior_reviewed": false,
+    "gameplay_implemented_or_tested_by_this_change": false,
+    "all_21_runtime_requirements": "UNTESTED"
+  },
+  "limits": [
+    "This pass approves the actual requirement documents only.",
+    "The map pause policy must be bound to the actual existing modal policy before implementation integration.",
+    "Existing packet/checker integration is explicitly not implemented; historical landscape-only checks cannot approve the new scope.",
+    "Publication remains a pending mandatory step; no published-result claim is approved yet."
+  ],
+  "supplemental_evidence_review": {
+    "path": "Docs/Production/PetMapDisplay/2026-11-28/DOCUMENT_VALIDATION.json",
+    "sha256": "5a693b3c4dc1b6bf559e96c6a9cdb7cf906748648e67da32bf3652841ef0cea8",
+    "result": "PASS",
+    "notes": "Builder receipt inspected after initial staged tree freeze. It matches the reproduced checks, transparently retains the initial validation-script assertion failure, and leaves publication/runtime evidence pending. All eight payload manifest hashes reverified unchanged."
+  }
+}

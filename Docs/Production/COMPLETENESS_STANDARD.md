@@ -1,5 +1,11 @@
 # Havenline — whole-game completeness and selected decisions
 
+## Current owner additions — November 28, 2026
+
+Read the [pet combos, navigation map and automatic screen-fit requirements](PET_COMBOS_MAP_DISPLAY.md) and [21-row contract](PET_COMBOS_MAP_DISPLAY.json) before older orientation/count-specific directions. Every one of the seven pets needs a fitting automatic attack combo and retains its useful specialty. A minimap must expand into a useful larger map. Game/UI layout must adapt to the actual phone window, portrait and landscape, cutouts/insets and live fold/resize changes. **This owner instruction supersedes the former landscape-only restriction for new work.** Historical receipts retain their original scope.
+
+The addendum preserves the current **10 worlds × 50 local levels**, World 1 first, and multiple useful pets/survivors. It maps the added requirements to existing tasks and records implementation/evidence as unverified. It changes no gameplay source/owner, task activation, dependency graph, assets or workflow. Existing packet/checker automation has not yet been wired to this addendum; old landscape-only checks cannot certify these features. See the addendum for exact precedence, source identities and next implementation steps.
+
 **Every pet attacks.** Guardian dog, gray wolf, fox, owl, lion, tiger and bear each need a useful, species-specific attack **and** a useful specialty. A scout, fetcher or warning effect cannot replace combat. This forward standard turns the known game-design gaps into selected behavior, task responsibilities and evidence requirements. It does not claim the game is finished or that an audit can discover every future defect.
 
 The authoritative decisions and gap rows are in [WHOLE_GAME_COMPLETENESS.json](WHOLE_GAME_COMPLETENESS.json). Read the [dated package](Completeness/2026-11-27/README.md), [all-task map](Completeness/2026-11-27/TASK_COMPLETENESS_T01_T80.md), and [current gameplay source selector](CURRENT_GAMEPLAY_SOURCE.json). The previous [gameplay-depth standard](GAMEPLAY_DEPTH_STANDARD.md) remains binding. The selected CD decisions supersede its **open behavior choices D01–D05**, while preserving the old audit as evidence of what was known then. Numerical tuning and runtime acceptance remain open.

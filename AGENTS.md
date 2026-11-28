@@ -1,5 +1,11 @@
 # HAVENLINE consolidation entrypoint
 
+## Current owner additions — November 28, 2026
+
+Read the [pet combos, navigation map and automatic screen-fit requirements](Docs/Production/PET_COMBOS_MAP_DISPLAY.md) and [21-row contract](Docs/Production/PET_COMBOS_MAP_DISPLAY.json) before older orientation/count-specific directions. Every one of the seven pets needs a fitting automatic attack combo and retains its useful specialty. A minimap must expand into a useful larger map. Game/UI layout must adapt to the actual phone window, portrait and landscape, cutouts/insets and live fold/resize changes. **This owner instruction supersedes the former landscape-only restriction for new work.** Historical receipts retain their original scope.
+
+The addendum preserves the current **10 worlds × 50 local levels**, World 1 first, and multiple useful pets/survivors. It maps the added requirements to existing tasks and records implementation/evidence as unverified. It changes no gameplay source/owner, task activation, dependency graph, assets or workflow. Existing packet/checker automation has not yet been wired to this addendum; old landscape-only checks cannot certify these features. See the addendum for exact precedence, source identities and next implementation steps.
+
 ## Current acceptance instruction
 
 For new reviews, changed candidates and reapprovals, read `Docs/Production/REFERENCE_ACCEPTANCE_STANDARD.md` and use `REFERENCE_ACCEPTANCE_POLICY.json`. Reference-sensitive final dimensions must be >=9.9 unrounded; preserve all existing exact-10 visual requirements. A reference-sensitive 9.5 result is an interim checkpoint and cannot approve a task. Run the current forward gates on the exact candidate; preserve historical receipts, rejected evidence and active invalidations. This instruction authorizes no gameplay ownership change or archived-workflow activation.

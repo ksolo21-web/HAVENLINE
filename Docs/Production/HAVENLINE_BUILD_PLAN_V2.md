@@ -1,5 +1,11 @@
 # HAVENLINE BUILD PLAN V2 — Controlled Parallel Production
 
+## Current owner additions — November 28, 2026
+
+Read the [pet combos, navigation map and automatic screen-fit requirements](PET_COMBOS_MAP_DISPLAY.md) and [21-row contract](PET_COMBOS_MAP_DISPLAY.json) before older orientation/count-specific directions. Every one of the seven pets needs a fitting automatic attack combo and retains its useful specialty. A minimap must expand into a useful larger map. Game/UI layout must adapt to the actual phone window, portrait and landscape, cutouts/insets and live fold/resize changes. **This owner instruction supersedes the former landscape-only restriction for new work.** Historical receipts retain their original scope.
+
+The addendum preserves the current **10 worlds × 50 local levels**, World 1 first, and multiple useful pets/survivors. It maps the added requirements to existing tasks and records implementation/evidence as unverified. It changes no gameplay source/owner, task activation, dependency graph, assets or workflow. Existing packet/checker automation has not yet been wired to this addendum; old landscape-only checks cannot certify these features. See the addendum for exact precedence, source identities and next implementation steps.
+
 **Authoritative production plan.** This plan supersedes `Docs/Production/Archive/SEQUENTIAL_REPAIR_PLAN.pre-v2.2026-09-11.md` for forward production governance. The archived plan remains byte-identical to the pre-migration source and is retained for audit/recovery.
 
 ## Current research and render requirements — 2026-11-27
