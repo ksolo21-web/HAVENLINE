@@ -46,6 +46,17 @@ func run() -> void:
 	press(3,origin)
 	drag(3,origin+Vector2(72,0))
 	checks["same Android finger ID can steer after resume"] = game.touch_id == 3 and game.touch_now.distance_to(game.touch_origin) == 72
+	game.clear_touch()
+	var hud: Control = game.opening_hud
+	var safe: Rect2 = hud._safe_rect()
+	var edge := Vector2(safe.position.x + 2.0, safe.get_center().y)
+	press(7, edge)
+	drag(7, edge + Vector2(82.0, 0.0))
+	for i in 3: await process_frame
+	var stick: Control = hud.get_node("MovementThumbstick")
+	var rim := Rect2(stick.position - Vector2.ONE * 52.0, Vector2.ONE * 104.0)
+	checks["edge feedback remains fully visible"] = stick.visible and safe.encloses(rim)
+	checks["edge feedback leaves the drag origin and delta intact"] = game.touch_id == 7 and game.touch_origin.is_equal_approx(edge) and game.touch_now.is_equal_approx(edge + Vector2(82.0, 0.0))
 	print(JSON.stringify({"suite":"touch_resume","checks":checks}))
 	await Session.drain_field_audio(self,game)
 	game.queue_free()
