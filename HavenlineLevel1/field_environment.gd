@@ -14,6 +14,7 @@ const HINGE := preload("res://assets/field_camp/snowbound_hinges.obj")
 const KEEPER := preload("res://assets/field_camp/snowbound_latch_keeper.obj")
 const BOLT := preload("res://assets/field_camp/snowbound_sliding_bolt.obj")
 const HEARTH := preload("res://assets/field_camp/furnace.glb")
+const StationPad := preload("res://field_station_pad.gd")
 const SNOW := preload("res://assets/field_camp/field_snow.gdshader")
 const TIMBER := preload("res://assets/field_camp/t03_boundary_v2.gdshader")
 const GRAIN := preload("res://assets/field_camp/golden_timber_grain.png")
@@ -720,11 +721,13 @@ func install_payment(anchor:Node3D, upgrade:bool) -> void:
 	add_child(anchor)
 	var at := UPGRADE if upgrade else BUY
 	anchor.position = Vector3(at.x,.008,at.y)
+	anchor.add_child(StationPad.create("upgrade" if upgrade else "build"))
+	StationPad.glyph_socket(anchor)
 	if upgrade: anchor.scale = Vector3(.84,1.,.84)
 	for role in ["gray","brackets"]:
 		var brush := SurfaceTool.new()
 		brush.begin(Mesh.PRIMITIVE_TRIANGLES)
-		var layer := 0. if role=="gray" else .002
+		var layer := StationPad.FACE_Y + (0. if role=="gray" else .002)
 		for p in data.vertices[role]:
 			brush.set_normal(Vector3.UP)
 			var point := Vector2(float(p[0]),float(p[2]))
@@ -768,10 +771,10 @@ func install_payment(anchor:Node3D, upgrade:bool) -> void:
 		icon.texture = preload("res://assets/field_camp/orbit_upgrade.svg")
 		icon.axis = Vector3.AXIS_Y
 		icon.pixel_size = .005
-		icon.position = Vector3(0,.006,-.24)
+		icon.position = Vector3(0,StationPad.FACE_Y+.006,-.24)
 		icon.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		anchor.add_child(icon)
-		upgrade_label = flat_label(anchor,Vector3(0,.007,.53),.0068)
+		upgrade_label = flat_label(anchor,Vector3(0,StationPad.FACE_Y+.007,.53),.0068)
 		set_upgrade_payment(Progress.OFFERS[Progress.AXES])
 	else:
 		var castle := Sprite3D.new()
@@ -779,10 +782,11 @@ func install_payment(anchor:Node3D, upgrade:bool) -> void:
 		castle.axis = Vector3.AXIS_Y
 		castle.texture = preload("res://assets/field_camp/hearth_mark.svg")
 		castle.pixel_size = .0084
-		castle.position = Vector3(0,.006,-.29)
+		castle.position = Vector3(0,StationPad.FACE_Y+.006,-.29)
 		castle.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		anchor.add_child(castle)
 		payment_costs = cost_row(anchor,["wood"],.49)
+		payment_costs.position.y += StationPad.FACE_Y
 		show_costs(payment_costs,Progress.OFFERS[Progress.HEARTH])
 
 func set_payment(remaining: Dictionary) -> void:

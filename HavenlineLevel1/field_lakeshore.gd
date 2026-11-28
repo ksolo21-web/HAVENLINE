@@ -2,6 +2,7 @@ extends Node3D
 ## Authored river cross-sections form the closed inlet; movement uses the same wet outline.
 const Reach = preload("res://field_reach.gd")
 const Workshops = preload("res://field_processors.gd")
+const StationKit = preload("res://field_station_kit.gd")
 var world
 const River=preload("res://assets/lakeshore/river_geometry.gd")
 const Cooker=preload("res://assets/paid_workshops/cooker_processor.glb")
@@ -15,6 +16,7 @@ const SECTIONS:=108
 var cooker_input:Marker3D
 var cooker_output:Marker3D
 var cooker:Node3D
+var inlet_fixtures:Node3D
 var saw:Node3D
 var fire:=OmniLight3D.new()
 var smoke:GPUParticles3D
@@ -43,6 +45,7 @@ func setup(host:Node3D) -> void:
 	world=host
 	name="WestInletAndCampKitchen"
 	_build_inlet()
+	inlet_fixtures = StationKit.install_inlet(self,shore)
 	cooker=Cooker.instantiate()
 	cooker.name="CampCooker"
 	add_child(cooker)
@@ -180,7 +183,7 @@ func _push_dry(p:Vector2,radius:float) -> Vector2:
 	return near+outward*(radius+.007)
 
 func _push_station(p:Vector2,box:Rect2) -> Vector2:
-	if not available or not box.has_point(p):
+	if not box.has_point(p):
 		return p
 	var c := p - box.get_center()
 	var overlap := box.size*.5-c.abs()
@@ -190,13 +193,33 @@ func _push_station(p:Vector2,box:Rect2) -> Vector2:
 		p.y = box.end.y+.004 if c.y >= 0. else box.position.y-.004
 	return p
 
+func _shore_bodies(search: Rect2, radius: float) -> Array[Node3D]:
+	var nearby: Array[Node3D] = []
+	if not is_instance_valid(inlet_fixtures) or not search.intersects(bounds.grow(4.0+radius)):
+		return nearby
+	for fixture: Node3D in inlet_fixtures.get_children():
+		var at := Vector2(fixture.global_position.x,fixture.global_position.z)
+		var band := Rect2(at,Vector2.ZERO).grow(1.9+radius)
+		if search.intersects(band): nearby.append(fixture)
+	return nearby
+
+func _keep_clear(p: Vector2, fixture: Node3D, radius: float) -> Vector2:
+	var deck: Rect2 = fixture.get_meta(&"station_footprint")
+	var q := fixture.to_local(Vector3(p.x,fixture.global_position.y,p.y))
+	var original := Vector2(q.x,q.z)
+	var clear := _push_station(original,deck.grow(radius))
+	if clear == original: return p
+	var result := fixture.to_global(Vector3(clear.x,0.,clear.y))
+	return Vector2(result.x,result.z)
+
 func constrain_motion(from:Vector3,to:Vector3,radius:float) -> Vector3:
 	var begin := Vector2(from.x,from.z)
 	var end := Vector2(to.x,to.z)
 	var station := _footprint(radius)
 	var search := Rect2(begin,Vector2.ZERO).expand(end).grow(.01)
 	var near_lake := search.intersects(bounds.grow(radius+.05))
-	if not near_lake and not (available and search.intersects(station)):
+	var shore_bodies := _shore_bodies(search,radius)
+	if not near_lake and shore_bodies.is_empty() and not (available and search.intersects(station)):
 		return to
 	var n := maxi(1,ceili(begin.distance_to(end)/.18))
 	var d := (end-begin)/float(n)
@@ -207,7 +230,10 @@ func constrain_motion(from:Vector3,to:Vector3,radius:float) -> Vector3:
 	for i in n:
 		current += d
 		if near_lake: current = _push_dry(current,radius)
-		current = _push_station(current,station)
+		if available: current = _push_station(current,station)
+		for fixture in shore_bodies:
+			current = _keep_clear(current,fixture,radius)
+		if not shore_bodies.is_empty(): current = _push_dry(current,radius)
 	return Vector3(current.x,to.y,current.y)
 
 func _build_inlet() -> void:

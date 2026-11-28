@@ -1,7 +1,7 @@
 extends Node3D
 
 const Progress = preload("res://field_progression.gd")
-const HUD = preload("res://field_hud.gd")
+const StationPad = preload("res://field_station_pad.gd")
 var title: Label3D
 var icon: Sprite3D
 var price: Node3D
@@ -9,6 +9,7 @@ var shown_id := ""
 var floor_art
 var ink: ShaderMaterial
 var corners: StandardMaterial3D
+var platform: MeshInstance3D
 
 func install(environment, id: String, at: Vector3) -> void:
 	install_custom(environment,id,at,Progress.TITLES[id],Progress.offers({})[id].keys())
@@ -19,6 +20,8 @@ func install_custom(environment, id:String, at:Vector3, caption:String, kinds:Ar
 	name = "Offer_" + id
 	position = at + Vector3.UP * .009
 	scale = Vector3(.86,1,.86)
+	_set_platform(id)
+	StationPad.glyph_socket(self)
 	for part in environment.buy_anchor.get_children():
 		if part is MeshInstance3D and part.name in [&"Gray",&"Brackets"]:
 			var mesh := part.duplicate() as MeshInstance3D
@@ -31,11 +34,28 @@ func install_custom(environment, id:String, at:Vector3, caption:String, kinds:Ar
 				corners = mesh.material_override.duplicate()
 				mesh.material_override = corners
 				corners.albedo_color = Color("f8fbff")
-	title = environment.flat_label(self,Vector3(0,.008,-.19),.0061)
+	title = environment.flat_label(self,Vector3(0,StationPad.FACE_Y+.008,-.19),.0061)
 	title.text = caption
 	title.modulate = Color.WHITE
 	price = environment.cost_row(self,kinds,.47)
+	price.position.y += StationPad.FACE_Y
 	hide()
+
+func _set_platform(id: String) -> void:
+	var role := "build"
+	if id == Progress.AXES or id in ["storage_stone","storage_meat"]:
+		role = "upgrade"
+	elif id in Progress.LINES:
+		role = "input" if id == Progress.SUPPLY_LINE else "output"
+	elif id in Progress.STORAGE:
+		role = "stock"
+	elif id.begins_with("repair_"):
+		role = "payment"
+	if platform != null:
+		remove_child(platform)
+		platform.queue_free()
+	platform = StationPad.create(role)
+	add_child(platform)
 
 func _install_glyph(id: String) -> void:
 	icon = Sprite3D.new()
@@ -48,7 +68,7 @@ func _install_glyph(id: String) -> void:
 	icon.axis = Vector3.AXIS_Y
 	icon.pixel_size = .0038 if id == Progress.AXES else .0044
 	if id in Progress.MACHINES.values() or id in Progress.LINES: icon.pixel_size = .009
-	icon.position = Vector3(0,.012,-.19)
+	icon.position = Vector3(0,StationPad.FACE_Y+.012,-.19)
 	icon.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(icon)
 	title.position.z = -.70
@@ -59,9 +79,11 @@ func change_project(id: String, ledger) -> void:
 	if id == shown_id: return
 	shown_id = id
 	title.text = Progress.TITLES[id]
+	_set_platform(id)
 	remove_child(price)
 	price.queue_free()
 	price = floor_art.cost_row(self,ledger.costs[id].keys(),.58)
+	price.position.y += StationPad.FACE_Y
 
 func set_due(ledger, id: String, active: bool) -> void:
 	visible = active
