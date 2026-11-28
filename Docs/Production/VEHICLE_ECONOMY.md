@@ -6,6 +6,7 @@ The user's fuel instruction supersedes the earlier package's no-fuel scope decis
 
 ## Read and review
 
+- [World 1 vehicle list: snow truck and Tumbler](../Design/WorldVehicles/2026-11-28/README.md)
 - [Practical production and vehicle design](VehicleEconomy/2026-11-27/ECONOMY_DESIGN.md)
 - [Resource chains, construction profiles and denomination rules](VehicleEconomy/2026-11-27/RESOURCE_CHAINS.json)
 - [Nine world-specific vehicle designs](VehicleEconomy/2026-11-27/WORLD_VEHICLES.json)
