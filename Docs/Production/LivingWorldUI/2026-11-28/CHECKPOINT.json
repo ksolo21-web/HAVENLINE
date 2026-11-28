@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "snapshot_kind": "PREPUBLICATION_DOCUMENTATION_HANDOFF",
+  "project": "HAVENLINE",
+  "plan": "Docs/Production/LIVING_WORLD_UI_PLAN.json",
+  "base_commit": "0a7587cf3e89397a760be4b4c606c54ad09d0e02",
+  "target_branch": "docs/pet-combos-navigation-display-2026-11-28",
+  "target_pr": 109,
+  "scope": "Extend the existing draft planning PR; do not merge, modify gameplay, promote task states, alter dependency edges or claim runtime approval.",
+  "latest_controls": "Visible joystick allowed; movement begins anywhere on UI-unclaimed gameplay. Historical no-joystick clause superseded.",
+  "requirements": 30,
+  "mapped_existing_task_ids": 34,
+  "earlier_pet_map_display_requirements_retained": 21,
+  "milestones": [
+    {
+      "id": "M1",
+      "name": "Source and authority audit",
+      "status": "COMPLETE"
+    },
+    {
+      "id": "M2",
+      "name": "Plan and exact task crosswalk",
+      "status": "COMPLETE"
+    },
+    {
+      "id": "M3",
+      "name": "Independent document critique and retest",
+      "status": "SEE_INDEPENDENT_REVIEW_FILES"
+    },
+    {
+      "id": "M4",
+      "name": "Expected-head publication and remote identity verification",
+      "status": "VERIFY_REMOTE_REF_AND_PR_RECEIPT_AFTER_THIS_SNAPSHOT"
+    }
+  ],
+  "document_validation": "VALIDATION.json",
+  "independent_review": "INDEPENDENT_REVIEW.md and INDEPENDENT_REVIEW.json",
+  "runtime_approval": false,
+  "open_runtime_work": "All 30 new obligations plus retained pet/map/display work require introducing-task implementation and actual evidence. Source partial components are not freshly certified.",
+  "next_actions": [
+    "Complete independent hash-bound document review and any required fixes.",
+    "Publish the exact reviewed tree to PR109 branch using an expected-head fast-forward and verify identities.",
+    "Bind the published contract to current implementation packets/owners; reconcile World 1 scoped dependencies and input consumers.",
+    "Build parallel native Aurora/control/map and representative prey/enemy/survivor slices, then integrate day/night before expanding content."
+  ],
+  "required_gate_evidence": [
+    "Native UI touch ownership, safe feedback, actual-window orientation/fold transitions",
+    "Distinct day/night encounter memberships and fair stronger night hostiles",
+    "End-to-end conserved meat and useful survivor/pet hunting",
+    "Full multi-angle motion sequences, transitions, contact closeups and actual audio playback",
+    "Save/reload/RNG/raid-origin/countdown continuity, attainable free-player progression and mixed-population performance"
+  ],
+  "source_roles": "Main, existing plan, current gameplay and art branches remain separately bound; implementation must re-resolve live source and ownership."
+}

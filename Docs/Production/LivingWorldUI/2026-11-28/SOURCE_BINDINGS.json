@@ -1,0 +1,376 @@
+{
+  "schema_version": 1,
+  "project": "HAVENLINE",
+  "date": "2026-11-28",
+  "purpose": "Source custody for the current Living World and selected Aurora task-plan addendum; no runtime, animation, audio or device approval.",
+  "writer_agent": "/root/map_screen_design",
+  "repository": "ksolo21-web/HAVENLINE",
+  "candidate_parent": "0a7587cf3e89397a760be4b4c606c54ad09d0e02",
+  "owner_instructions": [
+    {
+      "id": "CURRENT_LIVING_WORLD_AND_TASK_PLAN",
+      "quote": "How will this new UI effect the Task list? Lets also add more type of enemies and random winter none aggressive npc animals we can hunt too for meat. They move around none robotic like to look more natural. Day and Night should have different animals and enemies too. Night time enemies are more aggressive too. The survivors should move around too less robotic like to look more natural. How will this effect the task plan too? I ake it back about the onscreen joystick. it can be visible but the user can touch anywere to control if that makes sense. i think thats how it is currently in the test build.",
+      "verbatim": true,
+      "provenance": "Exact latest owner message in this active conversation, including the correction permitting a visible joystick; copied by /root."
+    },
+    {
+      "id": "SELECTED_AURORA_INPUT",
+      "quote": "Aurora. But lets make a dark them for it too. We dont a on-screen joystick. the user can touch anywhere",
+      "verbatim": true,
+      "provenance": "Exact owner text in remotely read AURORA_REQUIREMENTS and AURORA_DECISIONS_INPUT.",
+      "current_scope": "Aurora and Light/Dark remain selected; its no-visible-joystick clause is superseded by CURRENT_LIVING_WORLD_AND_TASK_PLAN."
+    }
+  ],
+  "authority_notes": [
+    "Current owner outcomes extend existing task IDs; preserve T01-T70 and leave T71-T80 undefined.",
+    "Current 10x50 and World1-first scope supersedes old100-level and old10-level-World1 counts without silently rewriting dependency edges.",
+    "Selected Aurora Light/Dark remains current. The latest owner permits visible joystick feedback and requires movement from anywhere on unclaimed gameplay; this supersedes the prior no-stick restriction. Exact drag/release mechanics, feedback placement and System default remain labeled proposals.",
+    "Existing portrait/landscape and map addendum remains required; old landscape-only, joystick-region-only or superseded no-visible-joystick checks cannot certify changed candidates.",
+    "Build13 owner decisions supersede conflicting older no-death, blanket sanctuary and free-repair clauses only within their recorded scope. Open decisions remain open.",
+    "Light/Dark UI appearance is separate from actual world day/night and weather.",
+    "Current source observations are not behavioral tests; retain selected newer Codex field foundation and resolve its live owner before implementation."
+  ],
+  "local_parent_sources": [
+    {
+      "id": "PLAN_DEPENDENCIES",
+      "commit": "0a7587cf3e89397a760be4b4c606c54ad09d0e02",
+      "path": "Docs/Production/DEPENDENCY_GRAPH.json",
+      "size_bytes": 25651,
+      "git_blob_sha": "93836ccac725bcef484c14c855e8bce9ae4502ad",
+      "sha256": "ec288e511af2ad220234fe7fcd50d6bfabbe275edd1ddc8d4b11bbdb7af82459",
+      "access": "LOCAL_GIT_OBJECT_BYTES",
+      "remote_content_reread_in_this_binding_run": false,
+      "role": "Canonical existing task IDs, titles and dependency edges; historical count-bearing titles require current-world overlay."
+    },
+    {
+      "id": "BUILD_PLAN",
+      "commit": "0a7587cf3e89397a760be4b4c606c54ad09d0e02",
+      "path": "Docs/Production/HAVENLINE_BUILD_PLAN_V2.md",
+      "size_bytes": 36728,
+      "git_blob_sha": "bf13eda8abe9340cd85f3f2d0ac35b0bf154344c",
+      "sha256": "67fe096dc732a2cede063a9623e6453e35fbc12d0861ebdf2846d88026215132",
+      "access": "LOCAL_GIT_OBJECT_BYTES",
+      "remote_content_reread_in_this_binding_run": false,
+      "role": "Preserved build plan; later owner scope supersedes older counts and orientation clauses and clarifies touch-anywhere activation with a visible joystick allowed."
+    },
+    {
+      "id": "WHOLE_GAME_COMPLETENESS",
+      "commit": "0a7587cf3e89397a760be4b4c606c54ad09d0e02",
+      "path": "Docs/Production/WHOLE_GAME_COMPLETENESS.json",
+      "size_bytes": 60244,
+      "git_blob_sha": "9550ef456e6e90a14cb3d1baf04ffae636651a49",
+      "sha256": "b66ee9db0aa34c664b491425fcb67637a745a9080b19cdb0989eb2e19c6abef1",
+      "access": "LOCAL_GIT_OBJECT_BYTES",
+      "remote_content_reread_in_this_binding_run": false,
+      "role": "Selected baseline decisions and gaps; later owner corrections take precedence over conflicting recovery, count and orientation clauses."
+    },
+    {
+      "id": "COMPLETENESS_STANDARD",
+      "commit": "0a7587cf3e89397a760be4b4c606c54ad09d0e02",
+      "path": "Docs/Production/COMPLETENESS_STANDARD.md",
+      "size_bytes": 14694,
+      "git_blob_sha": "29cc99fe3ef9bf5b198e7ffe826d274cf86cf58a",
+      "sha256": "8aea3ec19031f29100ddc1fb9065246d7b345490b653726c562e8404578842e0",
+      "access": "LOCAL_GIT_OBJECT_BYTES",
+      "remote_content_reread_in_this_binding_run": false,
+      "role": "Baseline completeness obligations; no automatic current-runtime approval."
+    },
+    {
+      "id": "ORIGINAL_PET_MAP_DISPLAY_CONTRACT",
+      "commit": "0a7587cf3e89397a760be4b4c606c54ad09d0e02",
+      "path": "Docs/Production/PET_COMBOS_MAP_DISPLAY.json",
+      "size_bytes": 29738,
+      "git_blob_sha": "e56a73aa83a849e5477d7e9d2c396121519422da",
+      "sha256": "a5f7567aed7bfae5a73f5340d76495884833dced1c69856bacb6dcee80d9924b",
+      "access": "LOCAL_GIT_OBJECT_BYTES",
+      "remote_content_reread_in_this_binding_run": false,
+      "role": "Original forward requirements and scope boundary; retain all 21 obligations with latest touch-anywhere activation and visible joystick allowed."
+    },
+    {
+      "id": "ORIGINAL_PET_MAP_DISPLAY_NOTES",
+      "commit": "0a7587cf3e89397a760be4b4c606c54ad09d0e02",
+      "path": "Docs/Production/PET_COMBOS_MAP_DISPLAY.md",
+      "size_bytes": 19786,
+      "git_blob_sha": "ec65a8071929f8d1ecfc9188b17645418b766d85",
+      "sha256": "e0fb0118a58289b4334c1f2ca5164c0138a4a03be4d016dc625a6821f0357a62",
+      "access": "LOCAL_GIT_OBJECT_BYTES",
+      "remote_content_reread_in_this_binding_run": false,
+      "role": "Original forward requirements and scope boundary; retain all 21 obligations with latest touch-anywhere activation and visible joystick allowed."
+    },
+    {
+      "id": "ENEMY_WILDLIFE_ECONOMY_ROSTER",
+      "commit": "0a7587cf3e89397a760be4b4c606c54ad09d0e02",
+      "path": "Docs/Production/Completeness/2026-11-27/PROGRESSION_ECONOMY_GAPS.json",
+      "size_bytes": 191722,
+      "git_blob_sha": "62fc259a9558161338342e2f55b36c3d1a1f7e72",
+      "sha256": "606741b00a1caa6aa8639748105a8b7ac4f2a9a592b262a5114f8efe2bef23d4",
+      "access": "LOCAL_GIT_OBJECT_BYTES",
+      "remote_content_reread_in_this_binding_run": false,
+      "role": "enemy_roster_recommendation and hunting_roster distinguish selected families, prey and reserve concepts; designs are not runtime proof."
+    },
+    {
+      "id": "ACTOR_CAPABILITIES",
+      "commit": "0a7587cf3e89397a760be4b4c606c54ad09d0e02",
+      "path": "Docs/Production/ACTOR_CAPABILITY_MATRIX.json",
+      "size_bytes": 4704,
+      "git_blob_sha": "08ca48a8294261b1cba9fd9289620d1fc7939a9c",
+      "sha256": "f319469be543267c6a21988d6b23f915550bd01c7d8513516b7410915680b1bf",
+      "access": "LOCAL_GIT_OBJECT_BYTES",
+      "remote_content_reread_in_this_binding_run": false,
+      "role": "Baseline actor capability identities; later authorized survivor hunting is not prohibited by stale omissions."
+    },
+    {
+      "id": "ANIMATION_ACTIONS",
+      "commit": "0a7587cf3e89397a760be4b4c606c54ad09d0e02",
+      "path": "Docs/Production/ANIMATION_ACTION_MATRIX.json",
+      "size_bytes": 6639,
+      "git_blob_sha": "1cb372d6a0f02d899a807e0a41bd1eea2a0ab7cb",
+      "sha256": "57df079f213a88e58b87e01aa7b520ca2fe4d98a41368307fdbba433a57d46e5",
+      "access": "LOCAL_GIT_OBJECT_BYTES",
+      "remote_content_reread_in_this_binding_run": false,
+      "role": "Actor-specific motion profiles and action contracts; no actual cycle approval by file presence."
+    },
+    {
+      "id": "ACTORS_COMBAT_GAPS",
+      "commit": "0a7587cf3e89397a760be4b4c606c54ad09d0e02",
+      "path": "Docs/Production/Completeness/2026-11-27/ACTORS_COMBAT_GAPS.json",
+      "size_bytes": 87046,
+      "git_blob_sha": "1d6c00eeb477b6012268c8913274504eafcb519e",
+      "sha256": "7a231b1b53fcb1541bb26eea301d0dc007f93b4254a7453b8cea98b42ee707fb",
+      "access": "LOCAL_GIT_OBJECT_BYTES",
+      "remote_content_reread_in_this_binding_run": false,
+      "role": "Existing useful companions, attacks, contact and motion gaps; later casualty corrections control conflicts."
+    },
+    {
+      "id": "ACTORS_MOTION_REQUIREMENTS",
+      "commit": "0a7587cf3e89397a760be4b4c606c54ad09d0e02",
+      "path": "Docs/Production/GameplayDepth/2026-11-27/ACTORS_MOTION_REQUIREMENTS.json",
+      "size_bytes": 81201,
+      "git_blob_sha": "733923361e11141e1435e5de73f78ee0a1e289c0",
+      "sha256": "9fa0c4e40f432b2f2e53669a7697a131edfca5a3f635e471b84740e323fe540c",
+      "access": "LOCAL_GIT_OBJECT_BYTES",
+      "remote_content_reread_in_this_binding_run": false,
+      "role": "Preserved full-state actor/motion planning requirements; not evidence of current animation implementation."
+    },
+    {
+      "id": "RESOURCE_TOOL_ACTOR_STANDARD",
+      "commit": "0a7587cf3e89397a760be4b4c606c54ad09d0e02",
+      "path": "Docs/Production/RESOURCE_TOOL_ACTOR_STANDARD.md",
+      "size_bytes": 9334,
+      "git_blob_sha": "613217428d6a2035e6112c745a8cfc4087d1fb80",
+      "sha256": "b0ffece181dbcde1e51a0760d5cc924fb65516d9d79e68ea6185cb7759514ef0",
+      "access": "LOCAL_GIT_OBJECT_BYTES",
+      "remote_content_reread_in_this_binding_run": false,
+      "role": "Existing resource, tool, actor identity and motion obligations."
+    },
+    {
+      "id": "RESOURCE_ACTION_REGISTRY",
+      "commit": "0a7587cf3e89397a760be4b4c606c54ad09d0e02",
+      "path": "Docs/Production/RESOURCE_ACTION_REGISTRY.json",
+      "size_bytes": 4578,
+      "git_blob_sha": "fc867dfbb9bdd25627838e18e3b817287e69dcca",
+      "sha256": "8e9feba3a92972b10ac7dc8589e43bd0f988c2981ffe0fcace2edb1100e3bd9d",
+      "access": "LOCAL_GIT_OBJECT_BYTES",
+      "remote_content_reread_in_this_binding_run": false,
+      "role": "Existing typed resource/action permissions and producer/consumer identities."
+    },
+    {
+      "id": "ANIMAL_ROSTER_CORRECTION",
+      "commit": "0a7587cf3e89397a760be4b4c606c54ad09d0e02",
+      "path": "Docs/AI/AnimalRosterCorrection.md",
+      "size_bytes": 3139,
+      "git_blob_sha": "56a9384317d91d651f24dc8287f95077411de3a7",
+      "sha256": "33a737d67f15be2d51e49abd7d85545858198025fafeb7ca7f5076ef98730c41",
+      "access": "LOCAL_GIT_OBJECT_BYTES",
+      "remote_content_reread_in_this_binding_run": false,
+      "role": "Preserved pet roster correction; allied pets remain distinct from wildlife and hostile animals."
+    },
+    {
+      "id": "GAMEPLAY_SOURCE_SELECTOR",
+      "commit": "0a7587cf3e89397a760be4b4c606c54ad09d0e02",
+      "path": "Docs/Production/CURRENT_GAMEPLAY_SOURCE.json",
+      "size_bytes": 1988,
+      "git_blob_sha": "b94d8e86308a1a6d6e8100c6e645e81be71c8305",
+      "sha256": "7ea51243c3a91855ab505812ad945e8b6654b9bfef48d6f107109e65b5136213",
+      "access": "LOCAL_GIT_OBJECT_BYTES",
+      "remote_content_reread_in_this_binding_run": false,
+      "role": "Selects newer Codex field foundation; embedded observation is older than separately observed live head and does not approve it."
+    },
+    {
+      "id": "DEVICE_LAYOUT_MATRIX",
+      "commit": "0a7587cf3e89397a760be4b4c606c54ad09d0e02",
+      "path": "Docs/Production/DEVICE_LAYOUT_MATRIX.json",
+      "size_bytes": 1454,
+      "git_blob_sha": "e3b34d87e9097062c68a38b40d5e1b1855206584",
+      "sha256": "c9d67d4642dfe7ca16c398db8241cdf5e58ed9db69f315bd7117ec9018e24a7a",
+      "access": "LOCAL_GIT_OBJECT_BYTES",
+      "remote_content_reread_in_this_binding_run": false,
+      "role": "Existing device matrix; visible joystick reach and old orientation assumptions need forward-consumer reconciliation."
+    },
+    {
+      "id": "TASK_PACKET_TEMPLATE",
+      "commit": "0a7587cf3e89397a760be4b4c606c54ad09d0e02",
+      "path": "Docs/Production/TASK_PACKET_TEMPLATE.md",
+      "size_bytes": 9857,
+      "git_blob_sha": "8251a0b22ca368bf93609eb2aaa73976b7d3ae5e",
+      "sha256": "0ec2651e1cc62c103bd4e975a7a6f4a2f4e8e3b3a9f8b5e3316170b9f66df4cc",
+      "access": "LOCAL_GIT_OBJECT_BYTES",
+      "remote_content_reread_in_this_binding_run": false,
+      "role": "Existing template contains older joystick language; preserve history and update future packet consumption explicitly."
+    },
+    {
+      "id": "CRITIC_MATRIX",
+      "commit": "0a7587cf3e89397a760be4b4c606c54ad09d0e02",
+      "path": "Docs/Production/CRITIC_MATRIX.json",
+      "size_bytes": 13119,
+      "git_blob_sha": "951ad69f874f7465fd522cc5f58a521654914218",
+      "sha256": "62468d79e4350df45997fadd86a5d29f8fe75b5acb7607d5bfe24b7c86dc0d2d",
+      "access": "LOCAL_GIT_OBJECT_BYTES",
+      "remote_content_reread_in_this_binding_run": false,
+      "role": "Existing critic obligations; relevant forward input dimensions must reflect current owner scope."
+    },
+    {
+      "id": "CRITIC_EXECUTION",
+      "commit": "0a7587cf3e89397a760be4b4c606c54ad09d0e02",
+      "path": "Docs/Production/CRITIC_EXECUTION.json",
+      "size_bytes": 10093,
+      "git_blob_sha": "5050de3e22462227e82f0a8d0e62f1eb3674d41f",
+      "sha256": "1c97f8bd42cac7b445f69d2cbd378a90011357ee293ec82488caeff7f3048717",
+      "access": "LOCAL_GIT_OBJECT_BYTES",
+      "remote_content_reread_in_this_binding_run": false,
+      "role": "Existing reviewer execution dimensions, including older joystick labels; no reviewer execution claimed."
+    }
+  ],
+  "remote_read_sources": [
+    {
+      "id": "AURORA_REQUIREMENTS",
+      "commit": "44f269f2a2028c51b90d22128d0e2bbf3c9ed999",
+      "path": "Docs/Design/UIConcepts/2026-11-28/aurora-light-dark-touch-01/requirements.json",
+      "size_bytes": 5301,
+      "git_blob_sha": "287644dd2ad8abe839ab3f29c2904b7b04588715",
+      "sha256": "50ede44ac4b68a475ad0c7386095fc23dac7dc43a621112cf71aa7431baf5a19",
+      "access": "REMOTE_GITHUB_FETCH_FILE_COMPLETE_UTF8",
+      "remote_content_reread_in_this_binding_run": true,
+      "role": "Selected Aurora family and Light/Dark references. Its earlier no-visible-joystick clause is superseded by the latest owner correction; precise new artwork remains pending owner review."
+    },
+    {
+      "id": "AURORA_DECISIONS_INPUT",
+      "commit": "44f269f2a2028c51b90d22128d0e2bbf3c9ed999",
+      "path": "Docs/Design/UIConcepts/2026-11-28/aurora-light-dark-touch-01/DECISIONS_AND_INPUT.md",
+      "size_bytes": 2616,
+      "git_blob_sha": "d1e1159f58dc8ac5816cbdc32cabac7feb5c5984",
+      "sha256": "8bcb020f3b6d62d43dc6e1f45e7caefd222fd246231d0ca8dc110c69042f3ac2",
+      "access": "REMOTE_GITHUB_FETCH_FILE_COMPLETE_UTF8",
+      "remote_content_reread_in_this_binding_run": true,
+      "role": "Historical owner quote and separately labeled drag/release, pointer-ownership and appearance proposals. Latest owner correction now permits a visible joystick."
+    },
+    {
+      "id": "AURORA_PROVENANCE",
+      "commit": "44f269f2a2028c51b90d22128d0e2bbf3c9ed999",
+      "path": "Docs/Design/UIConcepts/2026-11-28/aurora-light-dark-touch-01/provenance.json",
+      "size_bytes": 4211,
+      "git_blob_sha": "ae9df09ab62404cb364f1e33bec28efdf26770a3",
+      "sha256": "3440329c979a21791847d08d120fa784583f97fb2d72c687e3590f8099847912",
+      "access": "REMOTE_GITHUB_FETCH_FILE_COMPLETE_UTF8",
+      "remote_content_reread_in_this_binding_run": true,
+      "role": "Published image/source identity metadata and static review boundary."
+    },
+    {
+      "id": "BUILD13_OWNER_DECISIONS",
+      "commit": "ee3ef9e38923a02c29512cc0652440c14ca3672b",
+      "path": "Docs/Production/Build13Audit/README.md",
+      "size_bytes": 14125,
+      "git_blob_sha": "28e35e26dd78611d8fc1f9cfa010e4bd8dd32b51",
+      "sha256": "5e8a1dae2a0d3aeb12636787d78b5e436836c2477f1955347e37a71236c32634",
+      "access": "REMOTE_GITHUB_FETCH_FILE_COMPLETE_UTF8",
+      "remote_content_reread_in_this_binding_run": true,
+      "role": "Later recorded owner decisions on lethal companion casualties/repurchase, breach, equipment Level1 replacement, targeting and five-minute scheduled raid warning; unresolved custody/upgrades/compensation and furnace penalty stay open."
+    },
+    {
+      "id": "WORLD_10X50_CONTRACT",
+      "commit": "e9fe6c1bf28bef1dd630b73b33aceed43ef4f174",
+      "path": "Docs/Production/WorldProgression/2026-11-28-10x50/WORLD_PROGRESSION_CONTRACT.json",
+      "size_bytes": 22635,
+      "git_blob_sha": "2bb31ad71b2f7d406a4c6740a6b6b60932041f9a",
+      "sha256": "dc14be6be6093851355d79ef095fd5a1de72520b9fbdf65d9cf4ce89422a6fa1",
+      "access": "REMOTE_GITHUB_FETCH_FILE_COMPLETE_UTF8",
+      "remote_content_reread_in_this_binding_run": true,
+      "role": "Current ten worlds x fifty local levels, World1 first, simultaneous useful pets/survivors and meaningful upgrade value; no new numeric cap or all500 authored-outcome claim."
+    }
+  ],
+  "aurora_image_bindings": [
+    {
+      "id": "aurora-light-r1",
+      "commit": "44f269f2a2028c51b90d22128d0e2bbf3c9ed999",
+      "path": "Docs/Design/UIConcepts/2026-11-28/aurora-light-dark-touch-01/generated/aurora-light-r1.png",
+      "size_bytes": 1964480,
+      "git_blob_sha": "cae4aacd6e98853f28a96b7f7f125d996c2f75b7",
+      "sha256": "7506311bea37d96ccfc6c352d81959294cd8b5e0238f1035bc287beb5314d4fa",
+      "access": "LOCAL_IMAGE_BYTES_MATCH_REMOTE_GITHUB_DIRECTORY_BLOB_AND_REMOTE_PROVENANCE",
+      "remote_binary_downloaded_in_this_binding_run": false,
+      "local_bytes_verified_against_remote_metadata": true,
+      "pixel_inspection_in_this_binding_run": false,
+      "owner_exact_art_approval": "PENDING",
+      "runtime_approval": false,
+      "input_visibility_scope": "Historical no-joystick artwork; not a current ban on matching visible movement feedback."
+    },
+    {
+      "id": "aurora-dark-r1",
+      "commit": "44f269f2a2028c51b90d22128d0e2bbf3c9ed999",
+      "path": "Docs/Design/UIConcepts/2026-11-28/aurora-light-dark-touch-01/generated/aurora-dark-r1.png",
+      "size_bytes": 1981659,
+      "git_blob_sha": "b11696cbeeb0bc821f3cca4bdbba4054da242901",
+      "sha256": "5037f995918e78937faff216857aba1cfd8757432cb2fa9ee37f34ab9a3c1cdc",
+      "access": "LOCAL_IMAGE_BYTES_MATCH_REMOTE_GITHUB_DIRECTORY_BLOB_AND_REMOTE_PROVENANCE",
+      "remote_binary_downloaded_in_this_binding_run": false,
+      "local_bytes_verified_against_remote_metadata": true,
+      "pixel_inspection_in_this_binding_run": false,
+      "owner_exact_art_approval": "PENDING",
+      "runtime_approval": false,
+      "input_visibility_scope": "Historical no-joystick artwork; not a current ban on matching visible movement feedback."
+    }
+  ],
+  "observed_refs": [
+    {
+      "ref": "refs/heads/main",
+      "commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+      "verification": "Live ref verification reported by /root in this session; not independently repeated by this source-binding writer.",
+      "behavior_tested": false
+    },
+    {
+      "ref": "refs/heads/docs/pet-combos-navigation-display-2026-11-28",
+      "commit": "0a7587cf3e89397a760be4b4c606c54ad09d0e02",
+      "pull_request": 109,
+      "pr_state": "OPEN_DRAFT_UNMERGED_AT_ROOT_OBSERVATION",
+      "verification": "Live ref/PR verification reported by /root; local HEAD and parent file identities independently bound here.",
+      "behavior_tested": false
+    },
+    {
+      "ref": "refs/heads/trial/world-one-expansion-2026-11-26",
+      "commit": "fad3af0a45e94262737077ae513827b5042adb41",
+      "role": "SELECTED_NEWER_GAMEPLAY_FOUNDATION_OBSERVED_HEAD",
+      "verification": "Root live-ref observation followed by a fresh GitHub ref read and bounded input-source review by /root/map_screen_design; exact source-file identities separately bound in CURRENT_INPUT_SOURCE_AUDIT.json. No behavioral execution.",
+      "behavior_tested": false
+    }
+  ],
+  "verification_boundary": {
+    "local_files_bound_from_exact_parent_git_objects": true,
+    "remote_utf8_bytes_hashed_and_checked_against_returned_git_blob_sha": true,
+    "image_bytes_locally_hashed_and_matched_to_remote_directory_and_provenance": true,
+    "fresh_image_pixel_review": false,
+    "runtime_executed": false,
+    "animation_playback_reviewed": false,
+    "audio_listened": false,
+    "physical_device_tested": false,
+    "publication_performed_by_this_writer": false,
+    "only_written_path": "Docs/Production/LivingWorldUI/2026-11-28/SOURCE_BINDINGS.json",
+    "current_input_source_review": "Bounded source inspection recorded separately; all runtime/device flags remain false."
+  },
+  "amended_by": "/root — latest owner control correction",
+  "current_input_source_audit": {
+    "path": "Docs/Production/LivingWorldUI/2026-11-28/CURRENT_INPUT_SOURCE_AUDIT.json",
+    "sha256": "c7e9c7c88472b1413f448717e010f895bc197c8ccb7250d43d715d34641d30b6",
+    "observed_commit": "fad3af0a45e94262737077ae513827b5042adb41",
+    "runtime_executed": false
+  }
+}
