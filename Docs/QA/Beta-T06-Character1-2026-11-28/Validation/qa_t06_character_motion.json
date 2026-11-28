@@ -1,0 +1,227 @@
+{
+  "checks": {
+    "attack_contact_continuous_recovery": true,
+    "attack_contact_readable_grounded_work": true,
+    "attack_contact_two_roles": true,
+    "bilateral_sockets": true,
+    "build_continuous_recovery": true,
+    "build_readable_grounded_work": true,
+    "build_two_roles": true,
+    "chop_continuous_recovery": true,
+    "chop_readable_grounded_work": true,
+    "chop_two_roles": true,
+    "deposit_continuous_recovery": true,
+    "deposit_readable_grounded_work": true,
+    "deposit_to_build_blends": true,
+    "deposit_two_roles": true,
+    "dismantle_continuous_recovery": true,
+    "dismantle_readable_grounded_work": true,
+    "dismantle_two_roles": true,
+    "frozen_character_source": true,
+    "idle_walk_run_api": true,
+    "launch_still_moves": true,
+    "launch_support_continuity": true,
+    "launch_with_takeoff": true,
+    "mine_continuous_recovery": true,
+    "mine_readable_grounded_work": true,
+    "mine_two_roles": true,
+    "motion_cannot_award_or_save": true,
+    "one_shot_matches_receipt_and_recovers": true,
+    "repair_continuous_recovery": true,
+    "repair_readable_grounded_work": true,
+    "repair_two_roles": true,
+    "rescue_continuous_recovery": true,
+    "rescue_readable_grounded_work": true,
+    "rescue_two_roles": true,
+    "run_grade": true,
+    "service_continuous_recovery": true,
+    "service_readable_grounded_work": true,
+    "service_two_roles": true,
+    "turn_-179": true,
+    "turn_-30": true,
+    "turn_-90": true,
+    "turn_179": true,
+    "turn_30": true,
+    "turn_90": true,
+    "walk_grade": true,
+    "walk_level": true
+  },
+  "metrics": {
+    "attack_contact": {
+      "contact_local": [
+        -0.205295562744141,
+        0.807688057422638,
+        0.587502479553223
+      ],
+      "contact_phase": 0.48,
+      "largest_per_tick_m": 0.056628379970789,
+      "max_boot_error_m": 5.39897519047372e-06,
+      "max_cuff_error_m": 3.60718928504866e-07,
+      "max_hand_motion_m": 0.505297660827637,
+      "min_palm_gap_m": 0.61364871263504,
+      "socket": "forward_impact"
+    },
+    "build": {
+      "contact_local": [
+        -0.137195587158203,
+        0.698402106761932,
+        0.483264923095703
+      ],
+      "contact_phase": 0.57,
+      "largest_per_tick_m": 0.0498514734208584,
+      "max_boot_error_m": 5.3974495131115e-06,
+      "max_cuff_error_m": 3.61641070867336e-07,
+      "max_hand_motion_m": 0.479180514812469,
+      "min_palm_gap_m": 0.607647359371185,
+      "socket": "right_hand"
+    },
+    "chop": {
+      "contact_local": [
+        0.0211067199707031,
+        0.709479331970215,
+        0.470859527587891
+      ],
+      "contact_phase": 0.55,
+      "largest_per_tick_m": 0.0446202009916306,
+      "max_boot_error_m": 4.27822897108854e-06,
+      "max_cuff_error_m": 4.10255779570434e-07,
+      "max_hand_motion_m": 0.511437475681305,
+      "min_palm_gap_m": 0.376840531826019,
+      "socket": "two_hand"
+    },
+    "deposit": {
+      "contact_local": [
+        -0.0413017272949219,
+        0.8100426197052,
+        0.467964172363281
+      ],
+      "contact_phase": 0.56,
+      "largest_per_tick_m": 0.0237936712801456,
+      "max_boot_error_m": 4.26740234615863e-06,
+      "max_cuff_error_m": 2.15423582972107e-07,
+      "max_hand_motion_m": 0.453050404787064,
+      "min_palm_gap_m": 0.324952006340027,
+      "socket": "carry"
+    },
+    "deposit_to_build_max_hand_delta_m": 0.011607276275754,
+    "dismantle": {
+      "contact_local": [
+        -0.114849090576172,
+        0.733457982540131,
+        0.512725830078125
+      ],
+      "contact_phase": 0.6,
+      "largest_per_tick_m": 0.0624120645225048,
+      "max_boot_error_m": 5.40233713763882e-06,
+      "max_cuff_error_m": 4.6725298830097e-07,
+      "max_hand_motion_m": 0.513211488723755,
+      "min_palm_gap_m": 0.296879976987839,
+      "socket": "right_hand"
+    },
+    "launch_distance_m": 0.742706179618835,
+    "launch_max_ground_point_m_per_tick": 0.00510466564446688,
+    "mine": {
+      "contact_local": [
+        -0.0287551879882812,
+        0.555925130844116,
+        0.429272651672363
+      ],
+      "contact_phase": 0.58,
+      "largest_per_tick_m": 0.0383597388863564,
+      "max_boot_error_m": 6.88055479258765e-06,
+      "max_cuff_error_m": 7.16031422598462e-07,
+      "max_hand_motion_m": 0.41969633102417,
+      "min_palm_gap_m": 0.467656642198563,
+      "socket": "two_hand"
+    },
+    "pose_cpu_p95_us": 134,
+    "pose_samples": 972,
+    "repair": {
+      "contact_local": [
+        0.133033752441406,
+        0.815223634243011,
+        0.517641067504883
+      ],
+      "contact_phase": 0.54,
+      "largest_per_tick_m": 0.0361710600554943,
+      "max_boot_error_m": 4.26988117396832e-06,
+      "max_cuff_error_m": 2.67495551042884e-07,
+      "max_hand_motion_m": 0.477111160755157,
+      "min_palm_gap_m": 0.735311627388,
+      "socket": "left_hand"
+    },
+    "rescue": {
+      "contact_local": [
+        -0.0398826599121094,
+        0.546613752841949,
+        0.457389831542969
+      ],
+      "contact_phase": 0.62,
+      "largest_per_tick_m": 0.0348741970956326,
+      "max_boot_error_m": 5.39768234375515e-06,
+      "max_cuff_error_m": 9.29263933358015e-07,
+      "max_hand_motion_m": 0.441725641489029,
+      "min_palm_gap_m": 0.363399118185043,
+      "socket": "rescue"
+    },
+    "run_grade": {
+      "grade": [
+        -0.100000001490116,
+        -0.0399999991059303
+      ],
+      "min_m": [
+        0.000790774822235107,
+        0.000463604927062988
+      ],
+      "supported_samples": 102,
+      "swing_m": [
+        0.139501094818115,
+        0.138744831085205
+      ]
+    },
+    "service": {
+      "contact_local": [
+        -0.218944549560547,
+        0.88689786195755,
+        0.521914482116699
+      ],
+      "contact_phase": 0.58,
+      "largest_per_tick_m": 0.0383373945951462,
+      "max_boot_error_m": 4.26850283474778e-06,
+      "max_cuff_error_m": 1.70062662618875e-07,
+      "max_hand_motion_m": 0.466709554195404,
+      "min_palm_gap_m": 0.705117702484131,
+      "socket": "right_hand"
+    },
+    "walk_grade": {
+      "grade": [
+        0.100000001490116,
+        0.0399999991059303
+      ],
+      "min_m": [
+        0.000200100243091583,
+        0.000221952795982361
+      ],
+      "supported_samples": 245,
+      "swing_m": [
+        0.0812339931726456,
+        0.0815733224153519
+      ]
+    },
+    "walk_level": {
+      "grade": [
+        0.0,
+        0.0
+      ],
+      "min_m": [
+        -0.000135941489133984,
+        0.000311172334477305
+      ],
+      "supported_samples": 245,
+      "swing_m": [
+        0.0804809182882309,
+        0.0810993537306786
+      ]
+    }
+  }
+}

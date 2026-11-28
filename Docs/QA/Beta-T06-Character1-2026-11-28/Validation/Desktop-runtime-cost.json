@@ -1,0 +1,31 @@
+{
+  "candidate": "5443762f3bf3d99bf1d4110826632da150006aae",
+  "baseline": "4f42f873e16c7cec137b1ba4598fba3ad2be8964",
+  "scope": "Fixed-step headless desktop software microbenchmark. Identical open-field setup with encounter generation paused. 120 warm-up frames then 480 sampled frames. Eight motion contact cues in the candidate. The CPU frame intervals include scheduler time, and measure neither native GPU FPS nor a busy camp.",
+  "baseline_sample": {
+    "active_bodies_after_warmup": 1,
+    "active_bodies_at_end": 1,
+    "cues": 0,
+    "frames": 480,
+    "headless_frame_median_ms": 1.3,
+    "headless_frame_p95_ms": 1.67,
+    "headless_wall_ms": 672.209,
+    "memory_at_end_bytes": 872332609.0,
+    "memory_at_start_bytes": 872070621.0,
+    "nodes_after_warmup": 999,
+    "nodes_at_end": 1011
+  },
+  "candidate_sample": {
+    "active_bodies_after_warmup": 1,
+    "active_bodies_at_end": 1,
+    "cues": 8,
+    "frames": 480,
+    "headless_frame_median_ms": 1.303,
+    "headless_frame_p95_ms": 1.649,
+    "headless_wall_ms": 651.569,
+    "memory_at_end_bytes": 872608283.0,
+    "memory_at_start_bytes": 872346083.0,
+    "nodes_after_warmup": 999,
+    "nodes_at_end": 1011
+  }
+}
