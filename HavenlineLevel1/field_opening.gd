@@ -78,6 +78,13 @@ var simulation_time := 0.0
 var last_notice := ""
 var next_project := ""
 var current_music := ""
+var field_camera = preload("res://field_camera.gd").new()
+
+func follow_camera(dt: float) -> void:
+	if field_ready and is_instance_valid(camera) and camera.current:
+		field_camera.update(self,dt)
+	else:
+		super(dt)
 
 func create_opening_hud() -> OpeningHUD:
 	return preload("res://field_hud.gd").new()

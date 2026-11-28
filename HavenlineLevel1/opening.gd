@@ -293,7 +293,7 @@ func _physics_process(dt: float) -> void:
 	direction = direction.limit_length()
 	var gait_speed := move_actor(direction, dt)
 	step_technical_gates(dt)
-	camera.position = camera.position.lerp(actor.position + camera_follow_offset, minf(dt * 8.0, 1.0))
+	follow_camera(dt)
 	step_tree(dt)
 	_step_character(dt, gait_speed)
 	if persist_blocked:
@@ -305,6 +305,9 @@ func _physics_process(dt: float) -> void:
 		if marker.visible and actor.position.distance_to(point(row.xz)) < .68:
 			_collect_wood_source(String(row.id))
 	fund_opening_receiver(Ledger.OFFER, "wood")
+
+func follow_camera(dt: float) -> void:
+	camera.position = camera.position.lerp(actor.position + camera_follow_offset, minf(dt * 8.0, 1.0))
 
 func move_actor(direction: Vector2, _dt: float) -> float:
 	var flat := Vector3(direction.x, 0, direction.y).rotated(Vector3.UP, atan2(7.0, 11.0))
