@@ -1,0 +1,226 @@
+{
+  "reviewer_agent": "/root/requirements_critic",
+  "scope": "Actual Aurora Light and Dark static image concepts plus exact decision/input notes; no runtime or publication review",
+  "verdict": "PASS_BOTH_THEMES_ALL_FOUR_LAYOUTS_AND_CORRECTED_NOTES",
+  "known_blocking_scoped_defects": [],
+  "owner_confirmed": {
+    "selected_ui_family": "Aurora",
+    "selected_source_revision": "Aurora r2",
+    "add_matching_dark_theme": true,
+    "no_on_screen_joystick": true,
+    "touch_anywhere_control": true
+  },
+  "owner_instruction_exact": "Aurora. But lets make a dark them for it too. We dont a on-screen joystick. the user can touch anywhere",
+  "new_light_dark_art_owner_approval": "PENDING",
+  "new_art_owner_approval_required_to_present_requested_concepts": false,
+  "notes_review": {
+    "path": "/workspace/scratch/d9b3074da1a3/havenline-aurora-light-dark-2026-11-28/requirements.json",
+    "sha256": "50ede44ac4b68a475ad0c7386095fc23dac7dc43a621112cf71aa7431baf5a19",
+    "score": 10,
+    "verdict": "PASS",
+    "corrected_movement_interpretation": "Touch and drag anywhere in the gameplay viewport not owned by UI, including over world objects, establishes an invisible origin; drag direction controls movement. Release stops movement. No visible joystick appears. No empty-ground restriction or fixed thumb zone.",
+    "input_details_status": "PROPOSED_INTERPRETATION_NOT_RUNTIME_IMPLEMENTED",
+    "appearance_default_status": "DESIGN_PROPOSAL_NOT_OWNER_SPECIFIED_OR_IMPLEMENTED",
+    "checks": [
+      "Confirmed Aurora selection accurately recorded",
+      "No-visible-joystick and touch-anywhere requirements accurately recorded",
+      "Dragging, release, pointer ownership and System default explicitly labeled authored proposals",
+      "UI-owned input excluded from movement",
+      "No empty-ground or fixed-thumb-zone restriction",
+      "Runtime unimplemented and new artwork owner-review pending are explicit"
+    ]
+  },
+  "reference": {
+    "path": "/workspace/scratch/d9b3074da1a3/generated_images/exec-f384e131-5987-4184-938b-4f714a511469.png",
+    "sha256": "da550f37e7039fabdb4b9d002f87c8a88d3b7ac35de239bb75185a3caa81c4d2",
+    "local_source_hash_verified": true,
+    "remote_git_archive_verified_by_this_review": false
+  },
+  "boards": {
+    "light": {
+      "path": "/workspace/scratch/d9b3074da1a3/generated_images/exec-cebd96c8-1211-4b2e-abbd-14d24c4fa86b.png",
+      "sha256": "7506311bea37d96ccfc6c352d81959294cd8b5e0238f1035bc287beb5314d4fa",
+      "pixel_size": [
+        1536,
+        1024
+      ],
+      "bytes": 1964480,
+      "actual_image_viewed": true,
+      "layout_checks": {
+        "landscape": {
+          "no_visible_movement_joystick_disc_ring_or_direction_pad": true,
+          "no_fake_hand_finger_touch_origin_or_drag_trail_overlay": true,
+          "natural_visible_world_where_joystick_was_removed": true,
+          "selected_aurora_floating_panel_identity": true,
+          "daylight_world_preserved": true,
+          "resource_counts_correct_and_readable": {
+            "wood": 640,
+            "stone": 240,
+            "food": 128,
+            "fuel": 36
+          },
+          "key_controls_visible": [
+            "status",
+            "objective",
+            "Camp",
+            "Build",
+            "minimap",
+            "map_expansion_arrow"
+          ],
+          "no_visible_control_overlap": true,
+          "no_visible_control_cutoff": true,
+          "safe_looking_visible_margins": true,
+          "open_gate_passages_visible": 2,
+          "centered_furnace_visible": true
+        },
+        "portrait": {
+          "no_visible_movement_joystick_disc_ring_or_direction_pad": true,
+          "no_fake_hand_finger_touch_origin_or_drag_trail_overlay": true,
+          "natural_visible_world_where_joystick_was_removed": true,
+          "selected_aurora_floating_panel_identity": true,
+          "daylight_world_preserved": true,
+          "resource_counts_correct_and_readable": {
+            "wood": 640,
+            "stone": 240,
+            "food": 128,
+            "fuel": 36
+          },
+          "key_controls_visible": [
+            "status",
+            "objective",
+            "Camp",
+            "Build",
+            "minimap",
+            "map_expansion_arrow"
+          ],
+          "no_visible_control_overlap": true,
+          "no_visible_control_cutoff": true,
+          "safe_looking_visible_margins": true,
+          "open_gate_passages_visible": 2,
+          "centered_furnace_visible": true
+        }
+      },
+      "static_concept_scores": {
+        "requested_theme_and_joystick_removal": 10,
+        "visual_hierarchy_and_readability": 10,
+        "natural_gameplay_space_and_visible_fit": 10,
+        "theme_coherence_and_comfort": 10
+      },
+      "bounded_reference_preservation_scores": {
+        "selected_aurora_family": 10,
+        "recognizable_daylight_world": 10,
+        "two_open_gates_and_centered_furnace": 10,
+        "same_resource_counts_and_key_controls": 10
+      },
+      "minimum_static_concept_score": 10,
+      "minimum_bounded_reference_score": 10,
+      "verdict": "PASS_SCOPED_STATIC_CONCEPT"
+    },
+    "dark": {
+      "path": "/workspace/scratch/d9b3074da1a3/generated_images/exec-1bc532a1-408b-4933-86a3-d227b823dfe3.png",
+      "sha256": "5037f995918e78937faff216857aba1cfd8757432cb2fa9ee37f34ab9a3c1cdc",
+      "pixel_size": [
+        1536,
+        1024
+      ],
+      "bytes": 1981659,
+      "actual_image_viewed": true,
+      "layout_checks": {
+        "landscape": {
+          "no_visible_movement_joystick_disc_ring_or_direction_pad": true,
+          "no_fake_hand_finger_touch_origin_or_drag_trail_overlay": true,
+          "natural_visible_world_where_joystick_was_removed": true,
+          "selected_aurora_floating_panel_identity": true,
+          "daylight_world_preserved": true,
+          "resource_counts_correct_and_readable": {
+            "wood": 640,
+            "stone": 240,
+            "food": 128,
+            "fuel": 36
+          },
+          "key_controls_visible": [
+            "status",
+            "objective",
+            "Camp",
+            "Build",
+            "minimap",
+            "map_expansion_arrow"
+          ],
+          "no_visible_control_overlap": true,
+          "no_visible_control_cutoff": true,
+          "safe_looking_visible_margins": true,
+          "open_gate_passages_visible": 2,
+          "centered_furnace_visible": true
+        },
+        "portrait": {
+          "no_visible_movement_joystick_disc_ring_or_direction_pad": true,
+          "no_fake_hand_finger_touch_origin_or_drag_trail_overlay": true,
+          "natural_visible_world_where_joystick_was_removed": true,
+          "selected_aurora_floating_panel_identity": true,
+          "daylight_world_preserved": true,
+          "resource_counts_correct_and_readable": {
+            "wood": 640,
+            "stone": 240,
+            "food": 128,
+            "fuel": 36
+          },
+          "key_controls_visible": [
+            "status",
+            "objective",
+            "Camp",
+            "Build",
+            "minimap",
+            "map_expansion_arrow"
+          ],
+          "no_visible_control_overlap": true,
+          "no_visible_control_cutoff": true,
+          "safe_looking_visible_margins": true,
+          "open_gate_passages_visible": 2,
+          "centered_furnace_visible": true
+        }
+      },
+      "static_concept_scores": {
+        "requested_theme_and_joystick_removal": 10,
+        "visual_hierarchy_and_readability": 10,
+        "natural_gameplay_space_and_visible_fit": 10,
+        "theme_coherence_and_comfort": 10
+      },
+      "bounded_reference_preservation_scores": {
+        "selected_aurora_family": 10,
+        "recognizable_daylight_world": 10,
+        "two_open_gates_and_centered_furnace": 10,
+        "same_resource_counts_and_key_controls": 10
+      },
+      "minimum_static_concept_score": 10,
+      "minimum_bounded_reference_score": 10,
+      "verdict": "PASS_SCOPED_STATIC_CONCEPT"
+    }
+  },
+  "repairs": [
+    {
+      "type": "notes_only",
+      "finding": "The original phrase unoccupied gameplay space could imply an empty-ground requirement.",
+      "actual_fix_verified": "Replaced with anywhere in the gameplay viewport not owned by UI, including over world objects; expressly no empty-ground restriction or fixed thumb zone.",
+      "status": "CLOSED",
+      "image_repair_required": false
+    }
+  ],
+  "reviewed_evidence_counts": {
+    "actual_theme_images": 2,
+    "actual_layout_views": 4,
+    "corrected_notes_file": 1
+  },
+  "scoring_interpretation": "10 means no known defect against this bounded static concept and notes scope. It is not mathematical visual similarity, product perfection or approval of untested functionality. Every mandatory scoped check passed; no averaging was used.",
+  "limits": {
+    "runtime_score": null,
+    "runtime_implemented_or_tested": false,
+    "actual_touch_anywhere_behavior_tested": false,
+    "expanded_map_interaction_tested": false,
+    "real_device_safe_insets_measured": false,
+    "fold_rotation_or_resize_tested": false,
+    "native_game_assets_or_rendering_certified": false,
+    "owner_new_art_approval_claimed": false,
+    "publication_performed_by_reviewer": false
+  },
+  "next_action": "Present and archive the exact requested concept outputs within the parent task authorization; keep owner family selection, new-art review and runtime implementation distinct."
+}

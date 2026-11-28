@@ -1,0 +1,113 @@
+{
+  "project": "HAVENLINE",
+  "date": "2026-11-28",
+  "scope": "Selected Aurora visual refinement: Light and Dark concept boards plus forward design/input requirements. No native runtime implementation in this package.",
+  "owner_instruction_exact": "Aurora. But lets make a dark them for it too. We dont a on-screen joystick. the user can touch anywhere",
+  "owner_confirmed": {
+    "selected_ui_family": "Aurora",
+    "selected_source_revision": "Aurora r2",
+    "add_matching_dark_theme": true,
+    "no_on_screen_joystick": true,
+    "touch_anywhere_control": true
+  },
+  "selected_source": {
+    "path": "/workspace/scratch/d9b3074da1a3/generated_images/exec-f384e131-5987-4184-938b-4f714a511469.png",
+    "sha256": "da550f37e7039fabdb4b9d002f87c8a88d3b7ac35de239bb75185a3caa81c4d2",
+    "git_commit": "b02eb61d256fb12c9e2abae8857a2fbb089300f4",
+    "repository_path": "Docs/Design/UIConcepts/2026-11-28/modern-directions-02/generated/aurora-r2.png"
+  },
+  "requirements": [
+    {
+      "id": "AU01",
+      "requirement": "Aurora is the owner-selected visual family; retain its sparse floating HUD and hierarchy."
+    },
+    {
+      "id": "AU02",
+      "requirement": "Produce matching Light and Dark concept boards, each with landscape and portrait compositions."
+    },
+    {
+      "id": "AU03",
+      "requirement": "Remove every visible fixed/floating joystick, directional pad, movement-origin dot, thumb ring or drag trail from all four views."
+    },
+    {
+      "id": "AU04",
+      "requirement": "Keep the former joystick area as unobstructed game world; retain modest Camp and primary Build controls."
+    },
+    {
+      "id": "AU05",
+      "requirement": "Dark theme changes UI surfaces/text; preserve the same daylight world, character, buildings, camera, resources and camp lighting."
+    },
+    {
+      "id": "AU06",
+      "requirement": "Keep readable status/objective/resource counts and clearly labeled minimap expansion in both themes/orientations."
+    },
+    {
+      "id": "AU07",
+      "requirement": "No visible overlapping or clipped controls; retain safe-looking margins and open central gameplay."
+    },
+    {
+      "id": "AU08",
+      "requirement": "Preserve stylized blue-orange winter camp, centered furnace and two open gate passages."
+    },
+    {
+      "id": "AU09",
+      "requirement": "Record touch-anywhere as owner direction; explicitly identify proposed drag/release/ownership details as implementation interpretation."
+    },
+    {
+      "id": "AU10",
+      "requirement": "Preserve all old concepts and generated revisions; distinguish owner family selection from approval of new art or runtime."
+    }
+  ],
+  "proposed_input_interpretation": {
+    "movement": "Touch and drag anywhere in the gameplay viewport not owned by UI, including over world objects, establishes an invisible origin; drag direction controls movement. Release stops movement. No visible joystick appears. No empty-ground restriction or fixed thumb zone.",
+    "tap_behavior": "A tap without meaningful drag should not cause unintended walking; dead-zone and response tuning remain unfixed.",
+    "exclusions": "Touches beginning on buttons, status/menu interactions, minimap, expanded map or modal UI are owned by that UI and do not initiate movement.",
+    "multitouch": "One stable movement pointer may coexist with a separate eligible nonmodal UI pointer; pointers do not change ownership when crossing a control boundary.",
+    "cancellation": "Release, OS touch cancellation, focus loss, rotation, fold/resize or blocking modal opening clears movement immediately. Fresh touch required to resume.",
+    "automatic_actions": "Existing automatic/contextual gathering and attacking retained; no new tap-to-destination pathfinding implied.",
+    "first_use_hint": "Optional dismissible first-use cue: Drag anywhere to move. No permanent movement overlay.",
+    "status": "PROPOSED_INTERPRETATION_NOT_RUNTIME_IMPLEMENTED"
+  },
+  "proposed_appearance_setting": {
+    "choices": [
+      "System",
+      "Light",
+      "Dark"
+    ],
+    "default": "System",
+    "status": "DESIGN_PROPOSAL_NOT_OWNER_SPECIFIED_OR_IMPLEMENTED"
+  },
+  "supersession": "This owner selection and no-visible-joystick direction supersede the earlier unselected-option state and visible-joystick concept guidance for new UI work. Historical files remain unchanged.",
+  "review": {
+    "independent_actual_image_review_required": true,
+    "minimum_static_concept_score_strictly_above": 9,
+    "target": 10,
+    "all_mandatory_checks_required": true,
+    "runtime_or_owner_new_art_approval_implied": false
+  },
+  "runtime_status": "UNIMPLEMENTED_AND_UNTESTED",
+  "new_theme_art_owner_approval": "PENDING",
+  "milestones": [
+    {
+      "id": 1,
+      "name": "Record selection and design/input requirements",
+      "status": "complete"
+    },
+    {
+      "id": 2,
+      "name": "Create matching Light and Dark without joystick",
+      "status": "complete"
+    },
+    {
+      "id": 3,
+      "name": "Independent critique, repair and retest",
+      "status": "in_progress"
+    },
+    {
+      "id": 4,
+      "name": "Archive exact outputs and present",
+      "status": "pending"
+    }
+  ],
+  "next_action": "Compare actual Light and Dark boards independently, then archive exact outputs and the owner selection."
+}

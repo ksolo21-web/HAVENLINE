@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "reviewer_agent": "/root/requirements_critic",
+  "scope": "Independent review of Aurora Light and Aurora Dark static UI concept boards, each with landscape and portrait, plus accurate decision/input notes",
+  "owner_decisions": {"selected_direction":"Aurora","visible_on_screen_joystick_allowed":false,"requested_input":"Touch anywhere","matching_dark_theme_requested":true},
+  "reference_image": "/workspace/scratch/d9b3074da1a3/generated_images/exec-f384e131-5987-4184-938b-4f714a511469.png",
+  "expected_resource_counts": {"wood":640,"stone":240,"food":128,"fuel":36},
+  "requirements": [
+    {"id":"AT01","check":"Inspect both actual theme boards and all four landscape/portrait views; no prompt-only approval.","status":"WAITING_FOR_IMAGES"},
+    {"id":"AT02","check":"Both themes retain the recognizable selected Aurora r2 floating-panel family and simple visual hierarchy.","status":"WAITING_FOR_IMAGES"},
+    {"id":"AT03","check":"No visible fixed or floating movement joystick, movement disc/ring, directional movement arrows, fake finger/hand or touch overlay remains in any view. Map heading and expansion arrows remain allowed and required where applicable.","status":"WAITING_FOR_IMAGES"},
+    {"id":"AT04","check":"Dark theme changes UI chrome without turning the camp into a nighttime or heavily darkened world; both themes show the same recognizable daylight scene.","status":"WAITING_FOR_IMAGES"},
+    {"id":"AT05","check":"Wood 640, stone 240, food 128 and fuel 36 are identical and legible across both themes and orientations.","status":"WAITING_FOR_IMAGES"},
+    {"id":"AT06","check":"Key status, objective, Camp, Build, minimap and unambiguous map-expansion affordance remain visible and legible.","status":"WAITING_FOR_IMAGES"},
+    {"id":"AT07","check":"UI has safe-looking margins, no visible cutoff or colliding controls, and broad natural gameplay space where the joystick was removed.","status":"WAITING_FOR_IMAGES"},
+    {"id":"AT08","check":"The original stylized winter-camp identity, two open gate passages and centered furnace remain recognizable in all four views.","status":"WAITING_FOR_IMAGES"},
+    {"id":"AT09","check":"Light and dark themes are coherent, modern, comfortable and easy to scan; dark labels/icons have clear visual contrast over the daylight game.","status":"WAITING_FOR_IMAGES"},
+    {"id":"AT10","check":"Decision/input notes accurately record the confirmed Aurora selection and no-joystick/touch-anywhere request; new light/dark artwork is not described as owner-approved, and a drag-input scheme is labeled an authored interpretation rather than already-built behavior.","status":"WAITING_FOR_NOTES"}
+  ],
+  "scoring": {"range":[0,10],"pass_requires":"Every mandatory scoped check passes and every mandatory reviewed dimension is strictly above 9.0","target":10,"reference_preservation_scored_separately":true,"averaging_failures_allowed":false,"untested_score":null},
+  "limitations": {"runtime_implemented":false,"touch_interaction_tested":false,"real_safe_insets_measured":false,"rotation_or_fold_tested":false,"native_game_rendering_approved":false,"new_theme_art_owner_approved":false,"publication_authorized":false},
+  "next_action": "Wait for actual image paths and decision/input notes, inspect all views, report exact defects and repairs, then review corrected outputs if needed."
+}
