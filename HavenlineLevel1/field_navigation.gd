@@ -28,7 +28,7 @@ func install(host, owner_hud) -> void:
 	# The covered and unfolded displays use the same logical font. Keep a stable
 	# width for every bearing, including the full unit after four-digit distances.
 	var longest := 0.
-	for title: String in ["Camp gate", "Camp plot"]:
+	for title: String in ["Camp gate", "Camp plot", "Snow garage"]:
 		for digit in 10:
 			var example := "%s  %s m" % [title,str(digit).repeat(4)]
 			longest = maxf(longest,TYPE.get_string_size(example,HORIZONTAL_ALIGNMENT_LEFT,-1,TYPE_SIZE).x)
@@ -73,6 +73,13 @@ func refresh() -> void:
 		hide()
 		return
 	var feet: Vector3 = world.actor.global_position
+	if world.snow_truck.mounted:
+		feet = world.snow_truck.body.global_position
+		if world.snow_truck.parked() or not route.update(world,Vector2(feet.x,feet.z),true):
+			hide()
+		else:
+			_show_route(feet,"Snow garage")
+		return
 	var selected:Vector3=hud.camp_dock.tracked_point()
 	if selected.is_finite():
 		if feet.distance_to(selected)<1.65:
@@ -133,18 +140,22 @@ func refresh() -> void:
 	if hud.ticket.guide_supplies_bearing == world.camp_active:
 		hud.ticket.guide_supplies_bearing=not world.camp_active
 		hud.reflow()
+	_show_route(feet,"Camp gate" if world.camp_active else "Camp plot")
+
+func _show_route(feet: Vector3, next_name: String) -> void:
 	var aim := Vector3(route.direction_target.x,feet.y,route.direction_target.y)
 	var camera: Camera3D = world.camera
 	var angle := (camera.unproject_position(aim)-camera.unproject_position(feet)).angle()
 	if absf(angle_difference(needle.rotation,angle))>.003: needle.rotation = angle
 	var next_meters := maxi(1,roundi(route.distance))
-	var next_name := "Camp gate" if world.camp_active else "Camp plot"
 	var next_octant := posmod(roundi(angle/(PI/4.)),8)
 	reflow()
 	if destination!=next_name or meters!=next_meters:
 		destination = next_name
 		meters = next_meters
 		label.text = "%s  %d m"%[destination,meters]
+		size.x = maxf(194.,label.get_theme_font("font").get_string_size(label.text,HORIZONTAL_ALIGNMENT_LEFT,-1,TYPE_SIZE).x+LABEL_LEFT+LABEL_RIGHT)
+		label.size.x = size.x-LABEL_LEFT-LABEL_RIGHT
 		octant = -1
 	if octant!=next_octant:
 		octant=next_octant

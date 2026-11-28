@@ -110,16 +110,17 @@ func _nearby_damaged_site() -> String:
 	return chosen
 
 func _nearby_repair_valid(id: String, bill: Dictionary) -> bool:
+	return _can_repair(id,bill,world.actor.global_position,world.inventory.carried)
+
+func _can_repair(id: String, bill: Dictionary, at: Vector3, stock: Dictionary) -> bool:
 	if id.is_empty() or bill.is_empty() or world.persist_blocked or world.reset_time > 0.:
 		return false
-	if not world.field_env.is_inside_camp(world.actor.global_position):
+	if not world.field_env.is_inside_camp(at):
 		return false
 	if id.begins_with("fence-") and director.is_down(id) and _breach_occupied(FENCE_IDS.find(id)):
 		return false
-	# Funds are physical carried raw goods. The authorization is checked again
-	# when the player accepts the actual visible quote.
-	return world.actor.global_position.distance_squared_to(repair_position(id)) <= 1.95 * 1.95 and bill.keys().all(
-			func(kind: String): return int(world.inventory.carried.get(kind, 0)) >= int(bill[kind]))
+	return at.distance_squared_to(repair_position(id)) <= 1.95 * 1.95 and bill.keys().all(
+			func(kind: String): return int(stock.get(kind, 0)) >= int(bill[kind]))
 
 func _breach_occupied(index: int) -> bool:
 	var row: Array = world.layout.walls_xz[index]
@@ -184,9 +185,21 @@ func repair(id: String) -> bool:
 	var bill: Dictionary = director.repair_bill(id)
 	if not _nearby_repair_valid(id, bill):
 		return false
+	if not _commit_repair(id,bill,world.inventory.carried): return false
+	world.present_character_contact(&"repair", repair_position(id))
+	return true
+
+func worker_repair(id: String) -> bool:
+	if director.phase == "attack" or not world.survivor.can_defend(): return false
+	var bill: Dictionary = director.repair_bill(id)
+	var stock: Dictionary = world.inventory.settlement.worker_load
+	if not _can_repair(id,bill,world.survivor.actor.global_position,stock): return false
+	return _commit_repair(id,bill,stock)
+
+func _commit_repair(id: String, bill: Dictionary, stock: Dictionary) -> bool:
 	var checkpoint: Dictionary = director.snapshot()
 	for kind: String in bill:
-		world.inventory.carried[kind] -= int(bill[kind])
+		stock[kind] -= int(bill[kind])
 	director.finish_repair(id)
 	apply_condition()
 	world._checkpoint_lifecycle()
@@ -195,7 +208,6 @@ func repair(id: String) -> bool:
 		apply_condition()
 		return false
 	world._event("raid_site_repaired", site_position(id), "build")
-	world.present_character_contact(&"repair", repair_position(id))
 	flash_status(title(id) + " ready")
 	return true
 

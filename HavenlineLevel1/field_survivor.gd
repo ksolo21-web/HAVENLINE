@@ -46,12 +46,15 @@ var previous_tree := ""
 var previous_bank := ""
 var work_clock := 0.0
 var deferred_sources := {}
-const CAMP_DUTIES := ["serve","assist","feed","field"]
+const CAMP_DUTIES := ["serve","assist","feed","collect","field"]
 const FIELD_DUTIES := ["mining","wood","forage","hunt"]
 var camp_cursor := 0
 var priority_order_available := true
 var field_cursor := 0
 var assisted_plot := ""
+var output_pickup := ""
+var output_cursor := 0
+var repair_job := ""
 var transfer_mesh: Node3D
 var spend_kind := ""
 var delivery_stream: Array[Dictionary] = []
@@ -127,7 +130,7 @@ func setup(host: Node3D) -> void:
 	if journal.rescued and not Crew.survivor_alive(journal):
 		phase = "fallen"
 		actor.hide()
-	elif _has_finished_goods():
+	elif int(journal.worker_meal)>0:
 		restored_service = "cooker_output"
 		actor.position = _cooked_apron()
 		_go_to_counter()
@@ -138,6 +141,9 @@ func setup(host: Node3D) -> void:
 	elif not world.inventory.settlement.worker_carry_token.is_empty():
 		actor.position = STANCE
 		_begin_inbound(true)
+	elif _has_finished_goods() or _worker_cash()>0:
+		actor.position = READY
+		_return_to_shelf()
 	elif world.inventory.settlement.worker_load.values().any(func(n): return n > 0):
 		actor.position = READY
 		_begin_bin_delivery()
@@ -301,6 +307,7 @@ func _leave_shelf() -> void:
 	if _worker_cash()>0:
 		world.settlement_loop.worker_bank_cash()
 		_sync_pack()
+	if _prepare_repair(): return
 	# Reserve one early service opportunity per field shift. A visible customer
 	# can be served from stored meat before the porter sets out on a long haul.
 	# Ordinary rotation still supplies the saw, quarry and construction plots.
@@ -328,6 +335,8 @@ func _leave_shelf() -> void:
 					return
 			"assist":
 				if _prepare_assistance(): return
+			"collect":
+				if _begin_output_pickup(): return
 			"feed":
 				var kind := _next_supply()
 				if not kind.is_empty():
@@ -336,6 +345,59 @@ func _leave_shelf() -> void:
 			"field":
 				_start_field_job()
 				return
+
+func _begin_output_pickup() -> bool:
+	var outputs := ["wood","stone"]
+	for offset in outputs.size():
+		var index := (output_cursor+offset)%outputs.size()
+		var raw: String = outputs[index]
+		if world.settlement_loop.worker_finished_output(raw)<=0: continue
+		var apron := _supply_apron(raw)
+		if not apron.is_finite(): continue
+		output_cursor = (index+1)%outputs.size()
+		output_pickup = raw
+		route.assign([apron])
+		phase = "collect_output"
+		return true
+	return false
+
+func _prepare_repair() -> bool:
+	var sites = world.encounters.raids.sites
+	if sites.director.phase == "attack": return false
+	var book = world.inventory
+	for id: String in sites.director.condition:
+		var at: Vector3 = sites.repair_position(id)
+		if not at.is_finite() or not world.field_env.is_inside_camp(at): continue
+		var bill: Dictionary = sites.director.repair_bill(id)
+		if bill.is_empty(): continue
+		var load := {}
+		for kind: String in bill:
+			var due: int = maxi(0,int(bill[kind])-int(book.settlement.worker_load.get(kind,0)))
+			if due > mini(worker_space(kind),world.carry.available_on_shelf(kind)): break
+			load[kind] = due
+		if load.size() != bill.size(): continue
+		for kind: String in load:
+			book.stored[kind] -= load[kind]
+			book.settlement.worker_load[kind] += load[kind]
+		repair_job = id
+		route.assign([at])
+		phase = "repair_site"
+		_sync_pack()
+		world.settlement_loop.commit_receipt("worker_pickup",actor.global_position)
+		return true
+	return false
+
+func _deliver_repair(dt: float) -> void:
+	var sites = world.encounters.raids.sites
+	var at: Vector3 = sites.repair_position(repair_job)
+	if sites.director.phase != "attack" and at.is_finite() and not sites.director.repair_bill(repair_job).is_empty():
+		route.assign([at])
+		if not _walk_route(dt,true): return
+		if sites.worker_repair(repair_job):
+			_motion_contact(&"repair",at)
+			_sync_pack()
+	repair_job = ""
+	_begin_bin_delivery()
 
 func _load_hopper_stock(kind: String) -> void:
 	dispatch_count = (SUPPLIES.find(kind)+1)%SUPPLIES.size()
@@ -543,7 +605,10 @@ func advance(dt: float) -> void:
 	health_label.visible = hit_flare>0.0
 	actor.forester_gait.pivot_frame = false
 	var defending := _defend(dt)
-	if not defending: _advance_tasks(dt)
+	if defending and phase == "assist_plot":
+		_pause_plot_transfer()
+	elif not defending:
+		_advance_tasks(dt)
 	if actor.mode=="travel" and not actor.forester_gait.pivot_frame:
 		actor.forester_gait.settle_contact(dt,actor)
 	else:
@@ -577,6 +642,7 @@ func apply_enemy_contact(attacker: Node3D, damage: int) -> bool:
 		phase = "fallen"
 		fallen_elapsed = 0.0
 		defender = null
+		_pause_plot_transfer()
 		if is_instance_valid(transfer_mesh): transfer_mesh.queue_free()
 		if is_instance_valid(supply_model): supply_model.queue_free()
 		for flight: Dictionary in delivery_stream:
@@ -783,6 +849,23 @@ func _advance_tasks(dt: float) -> void:
 				else:
 					route.assign([_shelf_apron()])
 					phase = "supply_pickup"
+		"collect_output":
+			if world.settlement_loop.worker_finished_output(output_pickup)<=0:
+				_return_to_shelf()
+				return
+			var apron := _supply_apron(output_pickup)
+			if not apron.is_finite():
+				_return_to_shelf()
+				return
+			route.assign([apron])
+			if _walk_route(dt,false):
+				actor.pose("receive",.48)
+				if world.settlement_loop.collect_worker_output(output_pickup):
+					_motion_contact(&"deposit",world.processors.output_position(output_pickup))
+				_sync_pack()
+				_return_to_shelf()
+		"repair_site":
+			_deliver_repair(dt)
 		"meal_collect":
 			if not _can_fetch_meal():
 				_return_to_shelf()
@@ -1449,7 +1532,7 @@ func _prepare_assistance(use_shelf := true) -> bool:
 		if id != candidates[0]: candidates.append(id)
 	for id: String in candidates:
 		if not book.offer_open(id): continue
-		if id in world.Progress.LINES: continue # Conveyors are player-selected enhancements.
+		if not _plot_authorized(id): continue
 		if id in ["snow_garage","snow_truck"]: continue # Vehicle purchase is an explicit player project.
 		var pad: Node3D = world.carry.receivers.get(id)
 		if not pad or not pad.is_visible_in_tree(): continue
@@ -1473,9 +1556,12 @@ func _prepare_assistance(use_shelf := true) -> bool:
 		return true
 	return false
 
+func _plot_authorized(id: String) -> bool:
+	return id not in world.Progress.LINES or world.settlement_loop.conveyors.menu.selected == id
+
 func _deliver_to_plot(dt: float) -> void:
 	var book = world.inventory
-	if not book.offer_open(assisted_plot):
+	if not book.offer_open(assisted_plot) or not _plot_authorized(assisted_plot):
 		_stop_plot_work()
 		return
 	var pad: Node3D = world.carry.receivers[assisted_plot]
@@ -1483,8 +1569,9 @@ func _deliver_to_plot(dt: float) -> void:
 	if assisted_plot in world.Progress.MACHINES.values():
 		stance = _supply_apron(world.Progress.MACHINES.find_key(assisted_plot))
 	route.assign([stance])
-	if not _walk_route(dt,true): return
-	if not _travel_clear(actor.position,pad.global_position,.035): return
+	if not _walk_route(dt,true) or not _travel_clear(actor.position,pad.global_position,.035):
+		_pause_plot_transfer()
+		return
 	if not is_instance_valid(transfer_mesh):
 		var due: Dictionary = book.remaining(assisted_plot)
 		for kind: String in due:
@@ -1497,12 +1584,14 @@ func _deliver_to_plot(dt: float) -> void:
 		transfer_mesh = world.FieldArt.make(spend_kind)
 		add_child(transfer_mesh)
 		waiting = 0.
+	pad.set_payment_focus(true,true)
+	transfer_mesh.show()
 	waiting += dt
 	var t := clampf(waiting/.25,0,1)
 	transfer_mesh.global_position = _rack_from(spend_kind).lerp(pad.global_position+Vector3.UP*.12,t)+Vector3.UP*.32*sin(PI*t)
 	if t < 1: return
 	var amount := mini(_still_due(assisted_plot,spend_kind),int(book.settlement.worker_load[spend_kind]))
-	if amount > 0 and book.worker_payment(assisted_plot,spend_kind,amount):
+	if amount > 0 and book.worker_payment(assisted_plot,spend_kind,amount,_plot_authorized(assisted_plot)):
 		_sync_pack()
 		if not world.settlement_loop.commit_receipt("spend_"+spend_kind,pad.global_position): return
 		if book.complete(assisted_plot):
@@ -1514,7 +1603,13 @@ func _deliver_to_plot(dt: float) -> void:
 	transfer_mesh = null
 	spend_kind = ""
 
+func _pause_plot_transfer() -> void:
+	var pad: Node3D = world.carry.receivers.get(assisted_plot)
+	if is_instance_valid(pad): pad.set_payment_focus(false,true)
+	if is_instance_valid(transfer_mesh): transfer_mesh.hide()
+
 func _stop_plot_work() -> void:
+	_pause_plot_transfer()
 	if is_instance_valid(transfer_mesh): transfer_mesh.queue_free()
 	transfer_mesh = null
 	spend_kind = ""

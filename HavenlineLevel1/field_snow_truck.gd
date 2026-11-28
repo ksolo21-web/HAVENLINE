@@ -24,6 +24,7 @@ const MAX_SPEED := 8.2
 const REVERSE_SPEED := 4.2
 const TRACK_SPACING := .61
 const PARK := Vector3(0,0,2.72)
+const GARAGE_ALIGNMENT_POINT := Vector3(0,0,-3.68)
 
 var world
 var body: CharacterBody3D
@@ -197,6 +198,16 @@ func can_build() -> bool:
 
 func ready_garage() -> bool:
 	return world.inventory.complete(Progress.GARAGE)
+
+func garage_return_approach() -> Vector3:
+	return garage.to_global(GARAGE_ALIGNMENT_POINT)
+
+func garage_return_park() -> Vector3:
+	return garage.to_global(PARK)
+
+func garage_return_aligned() -> bool:
+	var at := garage.to_local(body.global_position)
+	return absf(at.x) < .55 and at.z > GARAGE_ALIGNMENT_POINT.z-.2 and at.z < BAY_DEPTH
 
 func _river_clearance(basis: Basis) -> float:
 	# The fore-aft chassis needs more lateral clearance while turning across
@@ -415,7 +426,7 @@ func _dock_guidance(at: Vector3, wish: Vector3, requested: bool) -> Dictionary:
 		bay_approach = "center"
 	if bay_approach=="center":
 		if absf(at.x)>=.07 or at.z> -2.96:
-			var stage := garage.to_global(Vector3(0,0,-3.68))
+			var stage := garage_return_approach()
 			var speed_limit := sqrt(34. * body.position.distance_to(stage))
 			return {"wish":body.position.direction_to(stage),"reverse":bay_reverse,"turn_only":false,"speed_limit":speed_limit}
 		bay_approach = "align"

@@ -180,8 +180,8 @@ func payment(id: String, kind: String, from_storage: bool, amount := 1) -> bool:
 	if from_storage and not storage_open(kind): return false
 	return _pay_from(stored if from_storage else carried,id,kind,amount)
 
-func worker_payment(id: String, kind: String, amount: int) -> bool:
-	if not settlement.rescued or id in Progress.LINES: return false
+func worker_payment(id: String, kind: String, amount: int, line_authorized := false) -> bool:
+	if not settlement.rescued or (id in Progress.LINES and not line_authorized): return false
 	return _pay_from(settlement.worker_load,id,kind,amount)
 
 func _pay_from(stock: Dictionary, id: String, kind: String, amount: int) -> bool:

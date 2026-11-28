@@ -311,6 +311,27 @@ func collect_worker_meal() -> bool:
 	journal.worker_meal += moved
 	return commit_receipt("pickup_partial",at)
 
+func worker_finished_output(raw: String) -> int:
+	if raw not in ["wood","stone"] or not world.inventory.complete("storage_wood"): return 0
+	if not _producer_usable(raw): return 0
+	var product: String = Rules.Logistics.PRODUCT[raw]
+	if conveyors.line_live(product): return 0
+	return mini(Rules.Logistics.rack(world.inventory.settlement,raw),
+		Rules.WORKER_PRODUCT_LIMIT - Market.worker_stock(world.inventory.settlement,product))
+
+func collect_worker_output(raw: String) -> bool:
+	if not _worker_can_trade(): return false
+	var quantity := worker_finished_output(raw)
+	if quantity <= 0: return false
+	var at: Vector3 = world.survivor.actor.global_position
+	if world.processors.at_station(at) != raw: return false
+	var product: String = Rules.Logistics.PRODUCT[raw]
+	var outlet: Vector3 = world.processors.output_position(raw)
+	Market.add_to_worker(world.inventory.settlement,product,quantity)
+	if not commit_receipt("product_pickup",outlet,"pickup_full"): return false
+	exchange.draw_worker_transfer(product,quantity,outlet,true)
+	return true
+
 func worker_stock_counter() -> bool:
 	if not _worker_can_trade(): return false
 	var at: Vector3 = world.survivor.actor.global_position
@@ -342,7 +363,7 @@ func worker_bank_unrequested_goods() -> bool:
 		Market.add_to_worker(journal,kind,-amount)
 		journal.product_store[kind] += amount
 		moved[kind] = amount
-	if moved.is_empty() or not commit_receipt("goods_stored",at): return false
+	if moved.is_empty() or not commit_receipt("goods_stored",at,"deposit_wood"): return false
 	for kind: String in moved:
 		exchange.draw_worker_transfer(kind,moved[kind],exchange._shelf(kind),false)
 	return true

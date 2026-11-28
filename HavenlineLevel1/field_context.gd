@@ -8,11 +8,14 @@ var director := Director.new()
 var descriptor: Dictionary = {}
 var depot_target := ""
 var dispatching := false
+var focused_plot: Node3D
+var focused_hearth: Node3D
 
 func reset() -> void:
 	director.reset()
 	descriptor.clear()
 	depot_target = ""
+	_set_plot_focus(null,null)
 
 func selected() -> String:
 	return String(descriptor.get("id","")) if descriptor.get("actionable",false) else ""
@@ -73,6 +76,7 @@ func tick(world, dt: float) -> void:
 	var present := is_instance_valid(player) and player.is_visible_in_tree() and is_instance_valid(display) and display.is_visible_in_tree()
 	if not present:
 		descriptor = director.advance(dt,Vector2.ZERO,Vector2.ZERO,Vector2.ZERO,Vector2.ZERO,PLAYER,rows,false,false)
+		_set_plot_focus(null,null)
 		return
 	if ready and present:
 		_candidates(world,player.global_position,rows)
@@ -80,6 +84,33 @@ func tick(world, dt: float) -> void:
 	# The warehouse receives immediately at a stable stop so its existing
 	# four transfer waves keep their full timing. It is still a single focus.
 	descriptor = director.advance(dt,_flat(player.global_position),_flat(player.global_basis.z),move,_flat(player.velocity),PLAYER,rows,present,ready,"deposit:pad:"+world.carry.STOCK)
+
+	_preview_plot(world)
+
+func _preview_plot(world) -> void:
+	var plot: Node3D
+	var hearth: Node3D
+	if descriptor.get("kind") == "build" and descriptor.get("state") in ["acquiring","active"]:
+		var id: String = descriptor.id
+		if id == "pad:" + world.HEARTH_OFFER:
+			hearth = world.field_env
+		elif id.begins_with("pad:"):
+			plot = world.carry.receivers.get(id.trim_prefix("pad:"))
+		elif id == "work:survivor_plot":
+			plot = world.settlement_loop.works.plot
+		elif id == "work:owl_roost":
+			plot = world.settlement_loop.works.owl_plot
+	_set_plot_focus(plot,hearth)
+
+func _set_plot_focus(plot: Node3D, hearth: Node3D) -> void:
+	if focused_plot != plot:
+		if is_instance_valid(focused_plot): focused_plot.set_payment_focus(false)
+		focused_plot = plot
+		if is_instance_valid(plot): plot.set_payment_focus(true)
+	if focused_hearth != hearth:
+		if is_instance_valid(focused_hearth): focused_hearth.set_hearth_payment_focus(false)
+		focused_hearth = hearth
+		if is_instance_valid(hearth): hearth.set_hearth_payment_focus(true)
 
 func _candidates(world, feet: Vector3, rows: Array) -> void:
 	var loop = world.settlement_loop

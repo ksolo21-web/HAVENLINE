@@ -22,6 +22,8 @@ var shore_detour := Vector2.INF
 var direction_target := Vector2.ZERO
 var distance := 0.
 var gate_index := -1
+var vehicle_route := false
+var route_clearance := CLEARANCE
 
 func _rect_vertices(r: Rect2) -> PackedVector2Array:
 	return PackedVector2Array([r.position, Vector2(r.end.x,r.position.y), r.end, Vector2(r.position.x,r.end.y)])
@@ -39,9 +41,13 @@ func _clear(a: Vector2,b: Vector2) -> bool:
 		return false
 	return bank.is_empty() or not span.intersects(lake_bounds,true) or not _crosses(a,b,bank)
 
-func _rebuild(world, perimeter_stage: int, active_gates: int) -> void:
+func _rebuild(world, perimeter_stage: int, active_gates: int, vehicle: bool) -> void:
 	stage = perimeter_stage
 	gate_mask = active_gates
+	vehicle_route = vehicle
+	actor_radius = world.snow_truck.HALF_WIDTH if vehicle else float(world.layout.actor_radius)
+	route_clearance = maxf(CLEARANCE,actor_radius+.12)
+	var garage_tail := 0.
 	last_feet = Vector2.INF
 	via = -1
 	points.clear()
@@ -51,23 +57,26 @@ func _rebuild(world, perimeter_stage: int, active_gates: int) -> void:
 		goal_count = 1
 	else:
 		var bounds: Vector4 = world.field_env.COURTS[stage-1]
-		fence = Rect2(bounds.x,bounds.y,bounds.z-bounds.x,bounds.w-bounds.y).grow(CLEARANCE)
+		fence = Rect2(bounds.x,bounds.y,bounds.z-bounds.x,bounds.w-bounds.y).grow(route_clearance)
 		fence_outline = _rect_vertices(fence)
-		for i in world.gates.size():
-			var pos: Vector3 = world.gates[i].global_position
-			var outward := Vector2.DOWN if i==0 else Vector2.RIGHT
-			points.append(Vector2(pos.x,pos.z)+outward*GATE_APPROACH)
-		goal_count = world.gates.size()
+		if vehicle:
+			var approach: Vector3 = world.snow_truck.garage_return_approach()
+			points.append(Vector2(approach.x,approach.z))
+			garage_tail = approach.distance_to(world.snow_truck.garage_return_park())
+		else:
+			for i in world.gates.size():
+				var pos: Vector3 = world.gates[i].global_position
+				var outward := Vector2.DOWN if i==0 else Vector2.RIGHT
+				points.append(Vector2(pos.x,pos.z)+outward*GATE_APPROACH)
+		goal_count = points.size()
 		points.append_array(_rect_vertices(fence.grow(.18)))
 	if world.lakeshore:
-		if bank.is_empty():
-			var shore: Array[PackedVector2Array] = Geometry2D.offset_polygon(world.lakeshore.shore,float(world.layout.actor_radius))
-			if not shore.is_empty():
-				bank = shore[0]
-				lake_bounds = world.lakeshore.bounds.grow(float(world.layout.actor_radius)+.04)
+		var shore: Array[PackedVector2Array] = Geometry2D.offset_polygon(world.lakeshore.shore,actor_radius)
+		if not shore.is_empty():
+			bank = shore[0]
+			lake_bounds = world.lakeshore.bounds.grow(actor_radius+.04)
 		points.append_array(_rect_vertices(lake_bounds.grow(.65)))
 	river = world.river
-	actor_radius = float(world.layout.actor_radius)
 	if river: points.append_array(river.navigation_points(actor_radius))
 	var graph := AStar2D.new()
 	for i in points.size(): graph.add_point(i,points[i])
@@ -83,7 +92,7 @@ func _rebuild(world, perimeter_stage: int, active_gates: int) -> void:
 			if stage>0 and not (gate_mask & (1<<goal)): continue
 			var path := graph.get_point_path(i,goal)
 			if path.is_empty(): continue
-			var length := GATE_APPROACH if stage>0 else 0.
+			var length := garage_tail if vehicle else (GATE_APPROACH if stage>0 else 0.)
 			for j in range(1,path.size()): length += path[j-1].distance_to(path[j])
 			if length < cost[i]:
 				cost[i] = length
@@ -93,7 +102,7 @@ func _outside_for_routing(feet: Vector2) -> Vector2:
 	if stage==0 or not fence.has_point(feet): return feet
 	# An actor physically touching the outer wall starts inside our planning clearance.
 	# Project them to the same exterior face rather than drawing a shortcut across camp.
-	var actual := fence.grow(-CLEARANCE)
+	var actual := fence.grow(-route_clearance)
 	var p := feet
 	if feet.x <= actual.position.x: p.x = fence.position.x-.01
 	if feet.x >= actual.end.x: p.x = fence.end.x+.01
@@ -101,13 +110,22 @@ func _outside_for_routing(feet: Vector2) -> Vector2:
 	if feet.y >= actual.end.y: p.y = fence.end.y+.01
 	return p
 
-func update(world, feet: Vector2) -> bool:
+func update(world, feet: Vector2, vehicle := false) -> bool:
 	var active := 0
-	if world.camp_active:
+	if vehicle:
+		if not world.snow_truck.ready_garage(): return false
+		active = 1
+		if world.snow_truck.garage_return_aligned():
+			var park: Vector3 = world.snow_truck.garage_return_park()
+			direction_target = Vector2(park.x,park.z)
+			distance = feet.distance_to(direction_target)
+			gate_index = -1
+			return true
+	elif world.camp_active:
 		for i in world.gates.size():
 			if world.gates[i].active: active |= 1<<i
 	var current_stage: int = world.field_env.perimeter_stage if world.camp_active else 0
-	if current_stage != stage or active != gate_mask: _rebuild(world,current_stage,active)
+	if current_stage != stage or active != gate_mask or vehicle != vehicle_route: _rebuild(world,current_stage,active,vehicle)
 	if stage > 0 and active == 0: return false
 	var start := _outside_for_routing(feet)
 	if not last_feet.is_finite() or start.distance_squared_to(last_feet)>.19*.19:
@@ -133,14 +151,14 @@ func update(world, feet: Vector2) -> bool:
 						via = i
 						shore_detour = detour
 	if via < 0: return false
-	gate_index = exit_id[via] if stage>0 else -1
+	gate_index = exit_id[via] if stage>0 and not vehicle else -1
 	if shore_detour.is_finite():
 		direction_target = shore_detour
 		distance = feet.distance_to(shore_detour)+shore_detour.distance_to(points[via])+float(cost[via])
 		return true
 	direction_target = points[via]
 	distance = feet.distance_to(points[via])+float(cost[via])
-	if via < goal_count and stage>0:
+	if via < goal_count and stage>0 and not vehicle:
 		var center: Vector3 = world.gates[gate_index].global_position
 		var gate := Vector2(center.x,center.z)
 		var outwards := (points[via]-gate).normalized()

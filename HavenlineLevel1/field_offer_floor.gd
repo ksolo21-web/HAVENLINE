@@ -11,6 +11,8 @@ var ink: ShaderMaterial
 var corners: StandardMaterial3D
 var platform: MeshInstance3D
 var emblem: Marker3D
+var payment_focus := false
+var worker_payment_focus := false
 
 func install(environment, id: String, at: Vector3) -> void:
 	install_custom(environment,id,at,Progress.TITLES[id],Progress.offers({})[id].keys())
@@ -103,7 +105,15 @@ func set_due(ledger, id: String, active: bool) -> void:
 
 func set_fill(fraction: float) -> void:
 	ink.set_shader_parameter("paid",fraction)
-	corners.albedo_color = Color("5be72e") if fraction > 0. else Color("f8fbff")
+
+func set_payment_focus(focused: bool, worker := false) -> void:
+	if worker:
+		if worker_payment_focus == focused: return
+		worker_payment_focus = focused
+	else:
+		if payment_focus == focused: return
+		payment_focus = focused
+	corners.albedo_color = StationPad.bracket_color(payment_focus or worker_payment_focus)
 
 func set_depot(ledger, id: String, owns_bays: bool) -> void:
 	# The completed house supplies the loading mat in its own authored model.

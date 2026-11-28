@@ -25,6 +25,7 @@ var upgrade_label: Label3D
 var upgrade_pending := true
 var payment_ink := {}
 var payment_brackets := {}
+var hearth_payment_focus := false
 var payment_costs: Node3D
 const CounterLayout = preload("res://field_counter.gd")
 # The last purchase opens a work aisle along the north wall. The gates and
@@ -795,7 +796,11 @@ func set_payment(remaining: Dictionary) -> void:
 func set_payment_progress(fraction:float, receiver: String = "buy") -> void:
 	if payment_ink.has(receiver):
 		payment_ink[receiver].set_shader_parameter("paid",clampf(fraction,0,1))
-		payment_brackets[receiver].albedo_color = Color("5be72e") if fraction > 0. else Color("f8fbff")
+
+func set_hearth_payment_focus(focused: bool) -> void:
+	if focused == hearth_payment_focus: return
+	hearth_payment_focus = focused
+	payment_brackets.buy.albedo_color = StationPad.bracket_color(focused)
 
 func set_upgrade_payment(remaining: Dictionary) -> void:
 	var stone := int(remaining.get("stone",0))

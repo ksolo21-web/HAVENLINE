@@ -52,6 +52,9 @@ static var paint: StandardMaterial3D
 static var stamp_paint: StandardMaterial3D
 static var stamps := {}
 
+static func bracket_color(focused: bool) -> Color:
+	return Color("#5be72e") if focused else Color("#f8fbff")
+
 static func create(role: String) -> MeshInstance3D:
 	if not decks.has(role):
 		decks[role] = _deck(role)
