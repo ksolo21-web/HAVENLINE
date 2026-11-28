@@ -1,0 +1,386 @@
+{
+  "candidate": "ecd2dd37",
+  "baseline": "c9d5e3f9c",
+  "prior_candidate": "181ffbb7",
+  "builder": "belt_layout",
+  "independent_reference_reviewer": "independent",
+  "sources": [
+    {
+      "subject": "A16",
+      "rev": "33c1855d249c8bf18f6ad49d2130b0b0c353e3dd",
+      "path": "Docs/Production/T05/ReferenceFrames/A-016.00.png",
+      "git_blob": "3c777d0f5a98f4a6c5fa2375cece92ca062f16ef",
+      "sha256": "3afe3c0fe64702894b7cac3a0d1b271cac0b2d60e87490063a1def7ee111d5ba",
+      "original_px": [
+        1080,
+        2520
+      ]
+    },
+    {
+      "subject": "D01-transport",
+      "rev": "e501bea5ed9e6f8737abb5b39799cade78b22af1",
+      "path": "Docs/Design/ConveyorReferences/2026-11-26/connected-logistics-01/selected/conveyor-transport.png",
+      "git_blob": "b8577b5369bfc6e8296ba636ac5b31d60a354e37",
+      "sha256": "bcb4eb8ac4a65127ed4e2df847959a75d0d4ca1c01db674b7c9bd9354088e2bf",
+      "original_px": [
+        1672,
+        941
+      ]
+    },
+    {
+      "subject": "D06-camp",
+      "rev": "e501bea5ed9e6f8737abb5b39799cade78b22af1",
+      "path": "Docs/Design/ConveyorReferences/2026-11-26/connected-logistics-01/selected/conveyor-camp.png",
+      "git_blob": "290b76a16e097e2d502fdf75f3c971939bd7e7bf",
+      "sha256": "b32b19d3d8050712eff2d00191afa7f8270d77f0f6b623ed74d69090a159ebea",
+      "original_px": [
+        1672,
+        941
+      ]
+    },
+    {
+      "subject": "D03-machines",
+      "rev": "a868ae89cdf2f120b478aa0a48fff35e09cc465c",
+      "path": "Docs/Design/ConveyorReferences/2026-11-26/connected-logistics-01/selected/conveyor-machines.png",
+      "git_blob": "c25ce57ba9db63ccc67bfbb179550663e07c8c3d",
+      "sha256": "db26196aa7568109018b94a5f71a8bd4965262e5938c54fce3c51d192f3460d2",
+      "original_px": [
+        1672,
+        941
+      ]
+    }
+  ],
+  "owner_reference_dimensions": {
+    "A-016.00": {
+      "outer_rail_px": 115,
+      "dark_tread_px": 87,
+      "worker_visible_height_px_range": [
+        91,
+        100
+      ],
+      "roast_px_range": [
+        48,
+        53
+      ],
+      "role": "Dedicated double-inlet machine with a blue stock buffer. The camp utility and dispatch topology differs from this specialized shot."
+    },
+    "D06": {
+      "visible_mouth_px_range": [
+        34,
+        39
+      ],
+      "visible_gate_px_range": [
+        73,
+        80
+      ],
+      "approximate_projected_ratio": [
+        0.43,
+        0.53
+      ]
+    }
+  },
+  "source": {
+    "field_conveyor_gauge.gd": {
+      "sha256": "1727016e1d4abc82246fe50bc01b12d29b563ad51e39abc328afc891e5836564",
+      "181ffbb7_sha256": "664361e3cb584aeb2a5a51d65046bdc9e62eea8d4e008ebfca5598b5708dc0d2"
+    },
+    "field_conveyor_network.gd": {
+      "sha256": "54a889b2a5199351ea382e20d5422d1e7b77659641e56861feb7b8d8ee078e70",
+      "181ffbb7_sha256": "c63cad233eb1c7679baa8e2118087ccb883636e68969a3cce13fee84b8f074fb"
+    },
+    "field_conveyors.gd": {
+      "sha256": "0683fca3c0a3d85b1fa10f0f7d3803389d4ea74faaed366bdf23781e3ff54e53",
+      "181ffbb7_sha256": "801656326c637918f0048ce629cc637484048f4301c97522b7ccf482ba6a3266"
+    },
+    "field_counter.gd": {
+      "sha256": "d7aa82cefb7ee107ca50430b805cf690fe8ba1f3d1fc1a140d6d909cc0882dda",
+      "181ffbb7_sha256": "ee650ac77ecc470fd8d88f92c54779c76fa37e63ff19f7a13e13eaf794d0e097"
+    },
+    "assets/conveyors/fitted_transport.gdshader": {
+      "sha256": "c778a25ea929029ebc507aff583120a52629a2f4f60edd18c1a3dead43e5ed97",
+      "181ffbb7_sha256": "47dc1e05637077d502ea8958d83cf4652dd093b35fef3ce438fcbf965cd06f21"
+    },
+    "tests/qa_surface_conveyor_layout.gd": {
+      "sha256": "75fcc2223a5dc903a7aff1f5e3218394acd63abf9f36e09ecea1d1da6b33a991",
+      "181ffbb7_sha256": "7ba8ca7188ea275b6ba95d4424bbf3626457d5794a4cc8731770278f392705d3"
+    }
+  },
+  "rendered_deck": {
+    "kit_origin": "previously purchased D01 Meshy modules, zero new generations",
+    "sections_by_type": {
+      "corner": 11,
+      "incline": 7,
+      "left_corner": 3,
+      "straight": 32
+    },
+    "module_count": 53,
+    "exterior_width_min_m": 0.484,
+    "exterior_width_max_m": 1.084,
+    "sections_at_least_0_784m": 22,
+    "pickup_physical_width_m": 1.084,
+    "pickup_to_2_4m_gate": 0.45167,
+    "exterior_8_directions_sum_m": 53.12932759057728,
+    "envelope_weighted_mean_m": 0.6422209341522257,
+    "per_lane": {
+      "blocks": {
+        "length": 5.72783627361059,
+        "length_over_.80": 1.97511662046115,
+        "mean": 0.687598946392659,
+        "peak": 0.982999420166016
+      },
+      "meal": {
+        "length": 3.25736510008574,
+        "length_over_.80": 0.420000076293945,
+        "mean": 0.589481949017232,
+        "peak": 1.10696680545807
+      },
+      "meal_to_store": {
+        "length": 10.7284569889307,
+        "length_over_.80": 2.03589640543574,
+        "mean": 0.611799199414282,
+        "peak": 1.12185438871384
+      },
+      "meat": {
+        "length": 4.54139181133359,
+        "length_over_.80": 0.109366695086161,
+        "mean": 0.570060616325804,
+        "peak": 0.821111637353897
+      },
+      "planks": {
+        "length": 6.4316317513585,
+        "length_over_.80": 2.03669987916946,
+        "mean": 0.683022325474893,
+        "peak": 0.984
+      },
+      "stone": {
+        "length": 7.558686055243,
+        "length_over_.80": 2.13600031534831,
+        "mean": 0.642354652277228,
+        "peak": 0.984
+      },
+      "stored_meal": {
+        "length": 9.95028231292964,
+        "length_over_.80": 2.19734206825796,
+        "mean": 0.633937870971311,
+        "peak": 1.10130050182343
+      },
+      "wood": {
+        "length": 4.93367729708552,
+        "length_over_.80": 1.93317483613888,
+        "mean": 0.720245375320778,
+        "peak": 0.984
+      }
+    }
+  },
+  "paid_food_network": {
+    "cooker_to_counter_m": {
+      "before": 4.13227079808712,
+      "after": 3.25736510008574
+    },
+    "store_to_counter_m": {
+      "before": 10.6777625642717,
+      "after": 9.95028231292963
+    },
+    "store_to_counter_heading_change_degrees": {
+      "before": 269.999995560603,
+      "after": 89.9999952474022
+    },
+    "visually_parked_meal_distance_from_actual_discharge_m": {
+      "before": 1.48918402194977,
+      "after": 0.0
+    },
+    "second_stock_stops_behind_first_m": 0.51
+  },
+  "checks": {
+    "proposal-receiving-tests.log": {
+      "sha256": "298709206335a090c60173de074179133ed17ffdda74d1d490fcc6b466e4a74c",
+      "check_count": 27,
+      "failed": []
+    },
+    "proposal-connected-final.log": {
+      "sha256": "6e40282f7715dd919ce51e36b6530fb72964338f6add49ac60ae3ceae8f0231c",
+      "check_count": 9,
+      "failed": []
+    },
+    "proposal-unattended-final.log": {
+      "sha256": "837fe5dd2efe6b7863aad011f04aa8b8052c316ece642a446d0d12063c425ae9",
+      "check_count": 10,
+      "failed": []
+    },
+    "proposal-strip-only.log": {
+      "sha256": "90b54394246c03b2eb4925e352d335895a2d9be4cc9f412ddd81688e18bce0cc",
+      "check_count": 11,
+      "failed": [],
+      "trips": {
+        "cooker to counter": {
+          "reached": true,
+          "blocked_steps": 0,
+          "metres": 6.468,
+          "seconds": 3.1
+        },
+        "counter to store": {
+          "reached": true,
+          "blocked_steps": 0,
+          "metres": 10.512,
+          "seconds": 4.8167
+        },
+        "saw to drill": {
+          "reached": true,
+          "blocked_steps": 0,
+          "metres": 7.3736,
+          "seconds": 3.7
+        },
+        "store to cooker": {
+          "reached": true,
+          "blocked_steps": 0,
+          "metres": 5.5909,
+          "seconds": 2.7833
+        },
+        "store to saw": {
+          "reached": true,
+          "blocked_steps": 0,
+          "metres": 11.9072,
+          "seconds": 4.4333
+        }
+      }
+    },
+    "proposed-custom-retest.log": {
+      "sha256": "b2dbfafc3e71a1f139811945e0d2f9127ba841b9cc73f02b05255735591c974c",
+      "check_count": 11,
+      "failed": [],
+      "trips": {
+        "cooker to counter": {
+          "reached": true,
+          "blocked_steps": 0,
+          "metres": 6.8827,
+          "seconds": 3.5167
+        },
+        "counter to store": {
+          "reached": true,
+          "blocked_steps": 0,
+          "metres": 12.0033,
+          "seconds": 5.35
+        },
+        "saw to drill": {
+          "reached": true,
+          "blocked_steps": 0,
+          "metres": 13.8492,
+          "seconds": 6.0167
+        },
+        "store to cooker": {
+          "reached": true,
+          "blocked_steps": 0,
+          "metres": 14.3815,
+          "seconds": 5.9333
+        },
+        "store to saw": {
+          "reached": true,
+          "blocked_steps": 0,
+          "metres": 9.5004,
+          "seconds": 4.4667
+        }
+      }
+    },
+    "proposal-legacy.log": {
+      "sha256": "6af980bf55610eff1bd8a4251d753f0ee22fcc8b28b5ac358bd8f4f4d4b2ac91",
+      "check_count": 5,
+      "failed": []
+    }
+  },
+  "normal_and_pinch_stock": {
+    "engine": "Godot 4.7.2 desktop OpenGL 4.5 llvmpipe",
+    "resolution": [
+      960,
+      540
+    ],
+    "original": {
+      "Receiving-hot-1x.jpg": "2fda8b67e86210a6a6c9b6703699f80488b6fb6a202befaf07effacd6e4312a4",
+      "Receiving-hot-2x.jpg": "d5f402803a17a701028bfeae6980c843170a3a423c9dee7e3c3759c54d8fe74f",
+      "Two-portions-1x.jpg": "3f57b52967642cf21d561ec0f960b4c210c682c4e7275826e80a41399d9fd69e",
+      "Two-portions-2x.jpg": "bdaec9303d20df9bbc4ba410c52443abe3ac8da4b83027c622c7ec6c5df5cb8c",
+      "Collection-2x.jpg": "ba1ef9a7d47f48b2fa75066e54001d96065e289bf746e8285f6d39c3bdeb0708",
+      "Stock.json": "797fa5347e4dc181da38c18c9b85666fc7b3542f3a3e98b14210b01ba2a480b4"
+    },
+    "final": {
+      "Receiving-hot-1x.jpg": "8ee93fcdc4a69686cf7829264425dfb43dc230cbf3c9d7698696a468ec38ba76",
+      "Receiving-hot-2x.jpg": "6d9e570d9fea8cf1039bd784740e3123d0d8593412d75799c5b1b1a1a1e3df77",
+      "Two-portions-1x.jpg": "a666b5fa96379587f23b37a8f790e864d3f487b9481ce60a0418d0bd831bf0f7",
+      "Two-portions-2x.jpg": "0299c9633c1d9c85f574af70acd079f89ff569e70fce2869bf5910f165b3acd0",
+      "Collection-2x.jpg": "eb6bae1aaf9bf922632519ff9f0dd3a0c7731d2a8315928bd06e3338bf45c897",
+      "Stock.json": "259df1eade0e903aedc936233d155e5dd58a055c8fcc70ba42f75ab4dccb00ae"
+    },
+    "original_film": "Stock-original",
+    "final_film": "Stock-receiving-final",
+    "normal_views": "Belts-right-end",
+    "real_stock_and_sale": true
+  },
+  "counter_relocation": {
+    "every_valid_north_bay_x": [
+      -4.5,
+      -4.0,
+      -3.5,
+      -3.0,
+      -2.5,
+      -2.0,
+      -1.5,
+      -1.0,
+      -0.5,
+      0.0,
+      0.5,
+      1.0,
+      1.5,
+      2.0,
+      2.5,
+      3.0,
+      3.5,
+      4.0,
+      4.5,
+      5.0,
+      5.5,
+      6.0,
+      6.5,
+      7.0,
+      7.5
+    ],
+    "count": 25,
+    "all_before_and_after_eight_physical_routes": true,
+    "all_before_and_after_six_services": true,
+    "all_final_visible_stock_tracks_discharge_within_1um": true,
+    "cold_restart": {
+      "center": 4.0,
+      "counter_reachable": true,
+      "gauge": 1.084,
+      "mouth_direction": "(1.0, 0.0, 0.0)",
+      "routes": [
+        "blocks",
+        "meal",
+        "meal_to_store",
+        "meat",
+        "planks",
+        "stone",
+        "stored_meal",
+        "wood"
+      ],
+      "services": 6,
+      "slots": [
+        "(5.12, 0.85, -7.25)",
+        "(4.61, 0.85, -7.25)"
+      ],
+      "source_to_actual_handler_m": 4.76837158203125e-07,
+      "world_saved": {
+        "north_counter": [
+          4.0,
+          -9.0
+        ]
+      }
+    },
+    "logs": {
+      "reloc-final-change.log": "1a155b70eb903d4a12cde4d4b70599e9d3285724ea65ac9d8045aa5cf1949ac1",
+      "reloc-final-reload.log": "7b61ace82c148c99f02caab451bc4ea6222c1ed44b79385f13d80a22b23389a4",
+      "reloc-t05-change.log": "31116b07bdddb14eeaf68276d323b703abdabf688f938c4fecf2efab79798f7a",
+      "reloc-t05-reload.log": "4a4ae3a99a37e079727d004f6a5fedf118fefbdb65b06705811e4da31e9ccd93"
+    }
+  },
+  "typed_checks_total": 73,
+  "baseline_calibration": "A16 is a dedicated industrial dual-inlet. D06 camp has an open walking court and modest storage/food mouths. Current geometry uses both references while preserving the eight separately purchased/typed exterior paths."
+}

@@ -1,0 +1,17 @@
+# Havenline conveyor and owl reference setup
+
+Independent reviewer `/root/independent`. Playtest base evidence head `c9d5e3f9c588dbd2cff2a0def7744978be3f06a4`. The owner asked for less undersized, more reference-faithful conveyors and a larger pet with a better attack. The current progression exposes the expedition owl. I verified the exact Git blobs in the input receipt. [Reference hashes and paths](./Authority.json)
+
+## Conveyor route dimensions
+
+Locked reference A16 shows a wide angled dual-inlet flow feeding a blue stock buffer. Its orange side covers, yellow safety ledges, large zinc shoulder fittings and dark rollers are distinct at the fixed view. On the 720-pixel detail crop, a same-line roller section spans about 87 pixels between `(365,336)` and `(442,377)`. Its outer orange rail span is about 115 pixels between `(348,335)` and `(451,386)`. The nearby blue worker's visible hat-to-sole extent is about 91–100 pixels, and the roast occupies about 48–53 pixels across the tread. These are screen-space estimates from one specialized machine, so perspective/pose and role limit extrapolation to ordinary camp routes. [Locked A16 detail](./A16-region-review.jpg)
+
+The pinned Havenline D01 transport sheet uses broad continuous orange fascia, charcoal rollers, cobalt or blue motor/end hoods, bright zinc joining bands and substantial rectangular trestles. D06 shows medium-width routes with distinct IN, OUT and pickup faces inside two clear gates. Its projected warehouse mouths are approximately 34–39 pixels across compared with 73–80 pixels across the depicted gates. D03 shows the distinct supply and output collars. The later self-service requirement supersedes the register drawn in the camp sheet. [D01 transport](./D01-transport.jpg) · [D06 camp](./D06-camp.jpg) · [D03 machine connections](./D03-machines.jpg)
+
+The existing fitted belt routes use 0.484 m deck width, 0.244 m collision half-width and 0.493 m crossing separation. Under the fixed view those decks project to roughly 0.29–0.36 player heights by bearing. Widen the visibly paid belt, increase fascia and collar readability, retain supporting geometry under the cargo, and test the new occupied envelope with both gate lanes, work aisles, named machine ports and relocations. Planned transport histories or runway graphics alone do not prove freight moves through the paid network.
+
+## Owl form and behavior
+
+The selected eight-view turnaround is at `01664a73ddf5087f17f7e159fa0b6b4ed71367b5`, blob `db465610eb61d155a7ae0876b624fa625361a19f`. It establishes white and umber layered feathers, amber eyes and ear tufts, cobalt scarf with orange trim, roll pack and leather gear. It does not establish a hero-size ratio, flight feather opening or an attack. The reviewed locked video snippets contain no owl attack. [Selected owl](./Owl.jpg)
+
+At the exact baseline, the flight mesh is 1.056882 m wide at rest and both folded and unfolded meshes are 0.675 m high. The perched lateral model width is 0.445073 m. Hero nominal height is 1.75 m. This makes rest body height about 39% of hero height; an enlargement around 1.30–1.36× would place it around 50–52% without inventing a reference ratio. Retain planted claws on the gate, clear the gate panels and fence, scan a genuine owned takeoff and wind-up, and require an animated talon sweep instead of proximity damage. Verify one hit receipt, enemy reaction, release and separation, recovery, cooldown and safe-camp recall from live gameplay.

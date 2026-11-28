@@ -1,0 +1,758 @@
+{
+  "commit": "ecd2dd37156b72f507a85d2c35be1950979fa3a8",
+  "base": "c9d5e3f9c588dbd2cff2a0def7744978be3f06a4",
+  "candidate_manifest": {
+    "file": "/tmp/havenline-transport-owl/Candidate.json",
+    "sha256": "274eb6bbf4a585efb93aaa343fbe00bf56ec1354131cb8e35c33b666fce4b266",
+    "bytes": 1610
+  },
+  "visual_and_runtime_scope": "Read per-criterion scores and excluded device coverage in paired reviewer Markdown.",
+  "receipts": {
+    "Belts-right-end": {
+      "verified_source": {
+        "field_conveyor_aisles.gd": "1b629ca8282e7ec0ac9c14c21c9a219bdaa8231462a674b8d7993be514efa633",
+        "field_conveyor_crossings.gd": "14e56ad3501e690954cfee46e9efb2b805fa253417874f97cef0ddd4c3e28be5",
+        "field_conveyor_fittings.gd": "fd954dfa83e973487a2f21e25d08e4c991a2213f523be34f820e98599bdf6ca6",
+        "field_conveyor_gauge.gd": "1727016e1d4abc82246fe50bc01b12d29b563ad51e39abc328afc891e5836564",
+        "field_conveyor_geometry.gd": "a329a5ccea4fa4fbd04e3b199a8e92b34960944f010c271e63cf032ec4a362c6",
+        "field_conveyor_network.gd": "54a889b2a5199351ea382e20d5422d1e7b77659641e56861feb7b8d8ee078e70",
+        "field_conveyor_planner.gd": "8d98448b269aeca8aab35f740223997e71ab62f19d8cbb42154a9709e7e6ed3b",
+        "field_conveyor_route.gd": "57ff32f5e5e39631bf7858dfb58744d4d67762722bd9b134a2a0a76a743b9f4d",
+        "field_conveyors.gd": "0683fca3c0a3d85b1fa10f0f7d3803389d4ea74faaed366bdf23781e3ff54e53",
+        "assets/conveyors/fitted_transport.gdshader": "c778a25ea929029ebc507aff583120a52629a2f4f60edd18c1a3dead43e5ed97",
+        "field_counter.gd": "d7aa82cefb7ee107ca50430b805cf690fe8ba1f3d1fc1a140d6d909cc0882dda"
+      },
+      "evidence": [
+        {
+          "file": "/tmp/havenline-transport-owl/Belts-right-end/Cooker-1x.jpg",
+          "sha256": "66543e03a64853c2de015755b6458783fab62b433da44bbd2746609fab5ad5d8",
+          "bytes": 162591,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Belts-right-end/Cooker-2x.jpg",
+          "sha256": "ce24eeb8fd7e847723cb2d8ee3f782b430e4043de0a00e9c8885e408c9d53b35",
+          "bytes": 171952,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Belts-right-end/Cooker-to-counter.jpg",
+          "sha256": "11ad8190adf6fa9f9c124e44e15633a3538376073736036cc064cb759585e387",
+          "bytes": 169445,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Belts-right-end/Native.log",
+          "sha256": "052211730d2e6bad1bb27d0ba1621ed54bb0ef792b898c4c8600ed8b3be20a67",
+          "bytes": 368
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Belts-right-end/Public-floor.jpg",
+          "sha256": "e03fb252e47b372e41f19af0d3a7546917370a08cae5423330b8df984eb8f42c",
+          "bytes": 173153,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Belts-right-end/Source.sha256",
+          "sha256": "c6c7249c8ee5034b6c8bb778823e5e70084e132be0d49ba288e8537a6a6a7402",
+          "bytes": 1421
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Belts-right-end/Transport.json",
+          "sha256": "7f856f3adf8c545ce3f2a6f465b99fc4f5e4a5d1d3a03cc68a2d92b05abadfbd",
+          "bytes": 4659
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Belts-right-end/Warehouse-feed-1x.jpg",
+          "sha256": "174cd9a7bf971e5d6ea7164d2430f7d55d2ac1c36123b760b880ccac4b756b1e",
+          "bytes": 186854,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Belts-right-end/Warehouse-feed-2x.jpg",
+          "sha256": "9b4796838edc40b7ee00afa3008845e8ba36401daa3a9325e6bbb86d0246e402",
+          "bytes": 167334,
+          "dimensions": [
+            960,
+            540
+          ]
+        }
+      ]
+    },
+    "Stock-receiving-final": {
+      "verified_source": {
+        "field_conveyor_aisles.gd": "1b629ca8282e7ec0ac9c14c21c9a219bdaa8231462a674b8d7993be514efa633",
+        "field_conveyor_crossings.gd": "14e56ad3501e690954cfee46e9efb2b805fa253417874f97cef0ddd4c3e28be5",
+        "field_conveyor_fittings.gd": "fd954dfa83e973487a2f21e25d08e4c991a2213f523be34f820e98599bdf6ca6",
+        "field_conveyor_gauge.gd": "1727016e1d4abc82246fe50bc01b12d29b563ad51e39abc328afc891e5836564",
+        "field_conveyor_geometry.gd": "a329a5ccea4fa4fbd04e3b199a8e92b34960944f010c271e63cf032ec4a362c6",
+        "field_conveyor_network.gd": "54a889b2a5199351ea382e20d5422d1e7b77659641e56861feb7b8d8ee078e70",
+        "field_conveyor_planner.gd": "8d98448b269aeca8aab35f740223997e71ab62f19d8cbb42154a9709e7e6ed3b",
+        "field_conveyor_route.gd": "57ff32f5e5e39631bf7858dfb58744d4d67762722bd9b134a2a0a76a743b9f4d",
+        "field_conveyors.gd": "0683fca3c0a3d85b1fa10f0f7d3803389d4ea74faaed366bdf23781e3ff54e53",
+        "assets/conveyors/fitted_transport.gdshader": "c778a25ea929029ebc507aff583120a52629a2f4f60edd18c1a3dead43e5ed97"
+      },
+      "evidence": [
+        {
+          "file": "/tmp/havenline-transport-owl/Stock-receiving-final/Collection-2x.jpg",
+          "sha256": "eb6bae1aaf9bf922632519ff9f0dd3a0c7731d2a8315928bd06e3338bf45c897",
+          "bytes": 149606,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Stock-receiving-final/Native.log",
+          "sha256": "052211730d2e6bad1bb27d0ba1621ed54bb0ef792b898c4c8600ed8b3be20a67",
+          "bytes": 368
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Stock-receiving-final/Receiving-hot-1x.jpg",
+          "sha256": "8ee93fcdc4a69686cf7829264425dfb43dc230cbf3c9d7698696a468ec38ba76",
+          "bytes": 165078,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Stock-receiving-final/Receiving-hot-2x.jpg",
+          "sha256": "6d9e570d9fea8cf1039bd784740e3123d0d8593412d75799c5b1b1a1a1e3df77",
+          "bytes": 147249,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Stock-receiving-final/Source.sha256",
+          "sha256": "37d457c150a15c163984d3b4b40f1d9d03a0ff6ef56b65874f0cf4ed2b117770",
+          "bytes": 1199
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Stock-receiving-final/Stock.json",
+          "sha256": "259df1eade0e903aedc936233d155e5dd58a055c8fcc70ba42f75ab4dccb00ae",
+          "bytes": 4112
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Stock-receiving-final/Two-portions-1x.jpg",
+          "sha256": "a666b5fa96379587f23b37a8f790e864d3f487b9481ce60a0418d0bd831bf0f7",
+          "bytes": 165172,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Stock-receiving-final/Two-portions-2x.jpg",
+          "sha256": "0299c9633c1d9c85f574af70acd079f89ff569e70fce2869bf5910f165b3acd0",
+          "bytes": 147199,
+          "dimensions": [
+            960,
+            540
+          ]
+        }
+      ]
+    },
+    "Owl-release": {
+      "verified_source": {
+        "field_owl.gd": "13ef6562e362df60ce14186976ef1048a3e28680e1c0028575c134c45a7408d3",
+        "field_enemy.gd": "3455a7879dcbe400056ecf135f2a33c0baea923ee395f3ea5d3148ccb3737dfd",
+        "field_opening.gd": "1e592b3c98f332034f0c77af24d3ed9db592841eb6271354acf85ea876cf9c59"
+      },
+      "evidence": [
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Frames.json",
+          "sha256": "063ece91926ad12e11a15c603872d3bb2cef3bb5db5f90cc40c6a286989e6be2",
+          "bytes": 27348
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Native.log",
+          "sha256": "75381c3167d9b0596e6cb720053b6e39c482c7e623a367071d01be431158c320",
+          "bytes": 872
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Owl-gate-intercept.mp4",
+          "sha256": "a3ea6a6ded3a21c376e9e96c1732c60eb75fb01dfd084dc62a10ac0bde5672a2",
+          "bytes": 1231302
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Patrol.json",
+          "sha256": "20e009b93bed2ea703c5dcfa13188d5c505c445bd3b4c53d55ebcc74ff368a02",
+          "bytes": 23293
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Perch-1x.jpg",
+          "sha256": "dc7a11c2739d604e348851d903848271f1e0edd297419ae6fd79380846e271e8",
+          "bytes": 129150,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-000.jpg",
+          "sha256": "0231f4aa608b9c894cb6623f9d98c7b6f8a54cd80236b9de7a33d6dd95d82d3f",
+          "bytes": 129057,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-001.jpg",
+          "sha256": "ba6e8e291525e6f7a8be4ab6adb4c23a85085ffe1222fb0421d0b2321bf5b67a",
+          "bytes": 128150,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-002.jpg",
+          "sha256": "b230e127c2156b78e9af7ef712c7e3c69e69eec138546d3d3c5244ec0ee29e61",
+          "bytes": 125982,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-003.jpg",
+          "sha256": "54601b6ba055cccecbcda48bc050449e1bc93b05f97a9ac549091a165431d673",
+          "bytes": 123449,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-004.jpg",
+          "sha256": "8e6228006c6675f1c2fe41d5f8fe85607462033ee1fb37880998e06b71a5d4b3",
+          "bytes": 120646,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-005.jpg",
+          "sha256": "059c671bcc2da383bca65d723916f129110f268f204e72f6c0b859988383d459",
+          "bytes": 119100,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-006.jpg",
+          "sha256": "0c05c97a05c89eeeb4ea69fc9a76f3a1d01ee89434d273acbca75640cc3808bf",
+          "bytes": 118044,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-007.jpg",
+          "sha256": "c9109c21641ff4c2f0db0728d6c01716b1b39a55b494ed564e438b422b6eebda",
+          "bytes": 118930,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-008.jpg",
+          "sha256": "6145482c569f2a3f1176fb2dac764923712edae1caf223c2ece480fedf51e6a4",
+          "bytes": 119689,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-009.jpg",
+          "sha256": "598781a710f6683680249aeb8456c580852f9aaab00fc4be5f3ded28440a5b20",
+          "bytes": 120436,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-010.jpg",
+          "sha256": "3a7ce028d916d08caa46860f0bc38b692a1f4c6161fd3b09e3a3004079812adb",
+          "bytes": 121059,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-011.jpg",
+          "sha256": "e352d312ac922ddea73c4a0b72b5efd482eff58b8bb0b68b7e54d27876163292",
+          "bytes": 121828,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-012.jpg",
+          "sha256": "9d2533004e54f10e030b6db2fdb26317175916afeccccc7d469e23f52d96cb3b",
+          "bytes": 122300,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-013.jpg",
+          "sha256": "19e6c2ea6f7a8593c288259e8ed0c4004d258250ea59b0e98577dbb81db51a2d",
+          "bytes": 122601,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-014.jpg",
+          "sha256": "bde26360df2ee4c4fa7d12fcac8359d23ab4b1f55da7bd1046a1bdfb2aa66339",
+          "bytes": 122434,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-015.jpg",
+          "sha256": "2518289b50247027a96c11b478208db787447470dc57d541b523a1471c02096b",
+          "bytes": 122437,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-016.jpg",
+          "sha256": "4c375d206622a931ab5f7fa5c7b83fd1db48ddbecc3b4b259022eaab2004f121",
+          "bytes": 122587,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-017.jpg",
+          "sha256": "62fa2813dc7aa3f47ba53bf62a7d0e9da048ff7048f3ffe1ef1fb54c070f55be",
+          "bytes": 122771,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-018.jpg",
+          "sha256": "cdfedee6e72aa70034dc5d082c3a9b93ceb7d504954f9793b430066a32284fea",
+          "bytes": 122955,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-019.jpg",
+          "sha256": "8caf765b47c7a17446bb1bad4916c594fd05eb3ec5bf2ca4a682de6ca1666718",
+          "bytes": 122975,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-020.jpg",
+          "sha256": "412365898897f9b34baec2bd4bbdf3a70967db25628bc2e97d50c7c26aeeb7d5",
+          "bytes": 124336,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-021.jpg",
+          "sha256": "c334beed2b19df87cbeeffca9a9016fe7d47d2917c3c3712b9015c9eacf4489c",
+          "bytes": 124304,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-022.jpg",
+          "sha256": "6e11f8fb10a6b51d68d828cd959ce8bc4a08b3ff0880ab799dc7a6ae1b2a7674",
+          "bytes": 123335,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-023.jpg",
+          "sha256": "38cb7d40b5f4f5e5ae77fa2f94245ee2e625486c3df96e8cb124e28e396e3414",
+          "bytes": 124234,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-024.jpg",
+          "sha256": "3e6b3f0cebe7924bdb40d65c378edfeb4855a2d6f51a2995972fa004ee5d3a36",
+          "bytes": 124197,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-025.jpg",
+          "sha256": "ea12c05e9c8abfa3aa1c9e2e8f1c573a6e6359b791d39d96c895d670bf2ea2d0",
+          "bytes": 123293,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-026.jpg",
+          "sha256": "5be73affa404350bd866ccb38da7815b35592ae9244edd956fcaed6f4373f1bd",
+          "bytes": 123582,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-027.jpg",
+          "sha256": "c4e43084d619cfdc48c9d9cc2c4fa8058fb4f064d168492736740f71048c5ec2",
+          "bytes": 123493,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-028.jpg",
+          "sha256": "a825ab6346a898869c125cff27dd7e60a656331a36cbc61bc94a2e26f24cb384",
+          "bytes": 123408,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-029.jpg",
+          "sha256": "ca27248f8204b4eaf6a002eabd8261a4d1b2082cda08b610b5e35d9ce9a152e5",
+          "bytes": 123283,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-030.jpg",
+          "sha256": "c8f9c67ef80be7ec9b462104dd7f8dc044388e10aec203135ab3d9c33e4137e8",
+          "bytes": 123146,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-031.jpg",
+          "sha256": "297f143131138cfd74adc52ab6dda4e846c99aeb2b1f7a19b3500f57f91ea0cb",
+          "bytes": 122951,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-032.jpg",
+          "sha256": "f2a0b77c6cf1e31c6b21cdcfc73c0bc6af9f268559cd7bacce26940d6483c70c",
+          "bytes": 123278,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-033.jpg",
+          "sha256": "7a8e5935cfb61fcfbac0bb9ae437ae6d2ca6c241a736523bda5e9ab9624e590f",
+          "bytes": 123558,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-034.jpg",
+          "sha256": "156cfc4a76bf3ed74189f1e2400fdd055b3815dee9aa5587cc9e5ea2eba48c4b",
+          "bytes": 123553,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-035.jpg",
+          "sha256": "eb9fa76b9ecd8fa21bced93434694521ed0dbc8c3ec8bc99710ad2d172a061b2",
+          "bytes": 123648,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-036.jpg",
+          "sha256": "853532ebb4255ff33c2893f4c1a1c5e4021ad0b7a097eeacfcd46fdd74372a76",
+          "bytes": 123482,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-037.jpg",
+          "sha256": "1f77ed65d369f5f3abd9593295799d536264afeb893af31efab1d2ab43619abc",
+          "bytes": 123553,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-038.jpg",
+          "sha256": "1396b20a1550bf1246bdd5136c56d1a8e168c3d7caf3e3365836e6da6d56a4a1",
+          "bytes": 123447,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-039.jpg",
+          "sha256": "e215273442aed010583251b63fa6cb496cc86d8476ae63f4605e1cb977c32232",
+          "bytes": 123058,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-040.jpg",
+          "sha256": "ed95a21b88f73f93061a25d8a80b2e37e09755e4935fda07ba0bb2d67f18f4d6",
+          "bytes": 122907,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Sequence-041.jpg",
+          "sha256": "4e73fdc20a19702ee24d7ba3fc46db4b1924ef2f04a2529cb38dc8ee4c42e1a7",
+          "bytes": 122960,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Source.sha256",
+          "sha256": "0ed474143e2df2783cc8e4889024a1353760f4ceddacb07c230d7563c558ee5c",
+          "bytes": 297
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Talons-1x.jpg",
+          "sha256": "7de8d3d9d52c9c8b07d26f5315a37e08279758a416f9d3a203b9472203b154ee",
+          "bytes": 124397,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Owl-release/Talons-2x.jpg",
+          "sha256": "8e0ff0950ae5e76e84fffb0b9633e144b006aa4793c20f3f2bea17c817b866ef",
+          "bytes": 115744,
+          "dimensions": [
+            960,
+            540
+          ]
+        }
+      ]
+    },
+    "Field-release": {
+      "verified_source": {
+        "field_owl.gd": "13ef6562e362df60ce14186976ef1048a3e28680e1c0028575c134c45a7408d3",
+        "field_enemy.gd": "3455a7879dcbe400056ecf135f2a33c0baea923ee395f3ea5d3148ccb3737dfd",
+        "field_opening.gd": "1e592b3c98f332034f0c77af24d3ed9db592841eb6271354acf85ea876cf9c59"
+      },
+      "evidence": [
+        {
+          "file": "/tmp/havenline-transport-owl/Field-release/Bank-2x.jpg",
+          "sha256": "062371c6b94fe1effbb456a84603884329237e55ec474f5c235b400cff622570",
+          "bytes": 86770,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Field-release/Dive-2x.jpg",
+          "sha256": "4d2417d45a38613a413dc2347e3d8c1c8e83195a07885582c9c47a4b0e053a65",
+          "bytes": 90165,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Field-release/Field-attack.json",
+          "sha256": "085148b5cabac338e2391ad4574c86ffc40097edc26d2ddcca4f65173109419e",
+          "bytes": 3505
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Field-release/Native.log",
+          "sha256": "052211730d2e6bad1bb27d0ba1621ed54bb0ef792b898c4c8600ed8b3be20a67",
+          "bytes": 368
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Field-release/Recover-2x.jpg",
+          "sha256": "4e83ca02cd3f728ee45d04a25c5a10c9b738d86739c98c019e46f4ef722776b7",
+          "bytes": 89183,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Field-release/Source.sha256",
+          "sha256": "0ed474143e2df2783cc8e4889024a1353760f4ceddacb07c230d7563c558ee5c",
+          "bytes": 297
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Field-release/Strike-1x.jpg",
+          "sha256": "d433c80d65b365ab1be80de0591a7888e8297c780a844b0224095341f31da790",
+          "bytes": 114617,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Field-release/Strike-2x.jpg",
+          "sha256": "8f914ff0853cea01b0c540edc688b50d2c574efa12f2e28c19d3c7491008f644",
+          "bytes": 90439,
+          "dimensions": [
+            960,
+            540
+          ]
+        },
+        {
+          "file": "/tmp/havenline-transport-owl/Field-release/Windup-2x.jpg",
+          "sha256": "a4b53d0eccb71c57e1ba2904ef65b721f4822565d8a211944fa7012ecb9ec3e3",
+          "bytes": 89024,
+          "dimensions": [
+            960,
+            540
+          ]
+        }
+      ]
+    }
+  },
+  "supporting_files": [
+    {
+      "file": "/tmp/havenline-conveyor-owl-independent/Authority.json",
+      "sha256": "e062fc8b162f9811962a3affbe02599033a0c5f28100e9eab8e3fb1fe4131fc9",
+      "bytes": 1902
+    },
+    {
+      "file": "/tmp/havenline-conveyor-owl-independent/Release-feedback-comparison.jpg",
+      "sha256": "162dccfd4a0f5928538b21e0b7b9ea5931a4aa187e31417261bde24eb16d5b56",
+      "bytes": 35128
+    },
+    {
+      "file": "/tmp/havenline-conveyor-owl-independent/Release-1x-native-owl-phases.jpg",
+      "sha256": "2add6c4ad54912981a6c073912178f15113a6ff2f1696f5e9197a4c9bf8775a5",
+      "bytes": 95211
+    },
+    {
+      "file": "/tmp/havenline-conveyor-owl-independent/Exact-181ffbb7-review.json",
+      "sha256": "a67ed5c1580dc2375ac171dfb91030658c664f0e8cce4b1d84dfa955daec1ae2",
+      "bytes": 26203
+    },
+    {
+      "file": "/tmp/havenline-conveyor-owl-independent/Exact-ecd2dd37-review.md",
+      "sha256": "93cc1663af52151dd4b639ad1966a06fc55413a1782654acc9c16d47ba2079ef",
+      "bytes": 4744
+    },
+    {
+      "file": "/tmp/havenline-conveyor-owl-independent/Exact-ecd2dd37-conveyor-board.jpg",
+      "sha256": "82aa166eabfac35e6003349d811580b6fc0da115afe23073694e47c01e669922",
+      "bytes": 123578
+    },
+    {
+      "file": "/tmp/havenline-conveyor-owl-independent/Right-end-stock-comparison.jpg",
+      "sha256": "65eb43417a32f63100d2dff3a6f8502ce74f5ebc91eee30fa15b349c0d1a3ea3",
+      "bytes": 142010
+    },
+    {
+      "file": "/tmp/hl16belt/Receiving-deck-source.json",
+      "sha256": "d82d022d9072c9e6a18d632dd67dd4ce089983b799b5b35f6e4e7e9ea9352017",
+      "bytes": 1272
+    },
+    {
+      "file": "/tmp/hl16belt/proposed-custom-retest.log",
+      "sha256": "b2dbfafc3e71a1f139811945e0d2f9127ba841b9cc73f02b05255735591c974c",
+      "bytes": 24421
+    },
+    {
+      "file": "/tmp/hl16belt/proposal-strip-only.log",
+      "sha256": "90b54394246c03b2eb4925e352d335895a2d9be4cc9f412ddd81688e18bce0cc",
+      "bytes": 18939
+    },
+    {
+      "file": "/tmp/havenline-transport-owl/qa/release-owl/Summary.json",
+      "sha256": "d4a2819f4cd0b292619f59446629330205acc423e23a92ade220e8cff98be41a",
+      "bytes": 299
+    },
+    {
+      "file": "/tmp/havenline-transport-owl/qa/encounter-baseline/Run.log",
+      "sha256": "5562896244920848c4ad960fd5d42a3e7cfb2ac74d7b7c17f1d1da83ca9f5d76",
+      "bytes": 370
+    },
+    {
+      "file": "/tmp/havenline-transport-owl/qa/final/qa_encounter_waves/run.log",
+      "sha256": "5562896244920848c4ad960fd5d42a3e7cfb2ac74d7b7c17f1d1da83ca9f5d76",
+      "bytes": 370
+    }
+  ]
+}
